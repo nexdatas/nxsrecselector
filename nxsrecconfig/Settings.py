@@ -47,7 +47,7 @@ class Settings(object):
         self.componentsFromMntGrp = False
         
         ## Configuration Server device name
-        self.configDevice = None
+        self.configDevice = ''
 
         ## Configuration Server variables
         self.configVariables = ''
@@ -78,7 +78,7 @@ class Settings(object):
         self.timeZone = 'Europe/Berlin'
 
         ## NeXus Data Writer device
-        self.writerDevice = None
+        self.writerDevice = ''
 
     ## mandatory components
     def mandatoryComponents(self):
