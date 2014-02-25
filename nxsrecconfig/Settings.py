@@ -21,7 +21,7 @@
 """  NeXus Sardana Recorder Settings implementation """
 
 import json
-
+import PyTango
 
 ## NeXus Sardana Recorder settings
 class Settings(object):
@@ -33,6 +33,7 @@ class Settings(object):
 
         ## selected components
         self.components = ''
+
         ## selected datasources
         self.dataSources = ''
         
@@ -41,14 +42,10 @@ class Settings(object):
 
         ## appending new entries to existing file
         self.appendEntry = False
-
         
         ## select components from the active measurement group
         self.componentsFromMntGrp = False
         
-        ## Configuration Server device name
-        self.configDevice = ''
-
         ## Configuration Server variables
         self.configVariables = ''
 
@@ -77,18 +74,106 @@ class Settings(object):
         ## timezone
         self.timeZone = 'Europe/Berlin'
 
+
+        ## tango database
+        self.__db = PyTango.Database()
+
+
+        ## Configuration Server device name
+        self.__configDevice = ''
+
+        ## config server proxy
+        self.__configProxy = None
+
         ## NeXus Data Writer device
-        self.writerDevice = ''
+        self.__writerDevice = ''
+
+        ## config writer proxy
+        self.__writerProxy = None
+
+
+    ## get method for configDevice attribute
+    # \returns name of configDevice           
+    def __getConfigDevice(self):
+        if not self.__configDevice:
+            self.__configDevice = self.__findDevice("NXSConfigServer")
+        return self.__configDevice
+
+    ## set method for configDevice attribute
+    # \param name of configDevice           
+    def __setConfigDevice(self, name):
+        if name:
+            self.__configDevice = name
+        else:
+            self.__configDevice = self.__findDevice("NXSConfigServer")
+
+
+    ## del method for configDevice attribute
+    def __delConfigDevice(self):
+        del self.__configDevice 
+
+
+    ## the json data string
+    configDevice = property(__getConfigDevice, __setConfigDevice, __delConfigDevice, 
+                       doc = 'configuration server device name')
+
+
+
+
+
+
+    ## get method for writerDevice attribute
+    # \returns name of writerDevice           
+    def __getWriterDevice(self):
+        if not self.__writerDevice:
+            self.__writerDevice = self.__findDevice("NXSDataWriter")
+        return self.__writerDevice
+
+    ## set method for writerDevice attribute
+    # \param name of writerDevice           
+    def __setWriterDevice(self, name):
+        if name:
+            self.__writerDevice = name
+        else:
+            self.__writerDevice = self.__findDevice("NXSDataWriter")
+
+
+    ## del method for writerDevice attribute
+    def __delWriterDevice(self):
+        del self.__writerDevice 
+
+
+    ## the json data string
+    writerDevice = property(__getWriterDevice, __setWriterDevice, __delWriterDevice, 
+                       doc = 'writeruration server device name')
+
+    ## find device
+    # \param name device class name
+    def __findDevice(self, name):        
+        servers = self.__db.get_device_exported_for_class(
+            name).value_string
+        if len(servers):
+            return servers[0]                
+
+
+    ## executes command on configuration server    
+    def __configCommand(self, command):
+        if not self.__configDevice:
+            self.__getConfigDevice()
+        self.__configProxy = PyTango.DeviceProxy(self.__configDevice)
+        self.__configProxy.Open()
+        res = getattr(self.__configProxy, command)()
+        return res
+        
 
     ## mandatory components
     def mandatoryComponents(self):
-        return []
-        
+        return self.__configCommand("MandatoryComponents")
 
     ## available components
     def availableComponents(self):
-        return []
+        return self.__configCommand("AvailableComponents")
 
     ## available datasources
     def availableDataSources(self):
-        return []
+        return self.__configCommand("AvailableDataSources")
