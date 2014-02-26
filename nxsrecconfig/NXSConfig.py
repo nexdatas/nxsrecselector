@@ -109,7 +109,7 @@ class NXSRecSettings(PyTango.Device_4Impl):
 #------------------------------------------------------------------
     def read_Components(self, attr):
         print >> self.log_info, "In ", self.get_name(), "::read_Components()"
-        attr.set_value(self.stg.state["components"])
+        attr.set_value(self.stg.state["Components"])
 
 
 #------------------------------------------------------------------
@@ -117,15 +117,15 @@ class NXSRecSettings(PyTango.Device_4Impl):
 #------------------------------------------------------------------
     def write_Components(self, attr):
         print >> self.log_info, "In ", self.get_name(), "::write_Components()"
-        self.stg.state["components"] = attr.get_write_value()
-        print >> self.log_info, "Attribute value = %s" % self.stg.state["components"]
+        self.stg.state["Components"] = attr.get_write_value()
+        print >> self.log_info, "Attribute value = %s" % self.stg.state["Components"]
 
 #------------------------------------------------------------------
 #    Read AutomaticComponents attribute
 #------------------------------------------------------------------
     def read_AutomaticComponents(self, attr):
         print >> self.log_info, "In ", self.get_name(), "::read_AutomaticComponents()"
-        attr.set_value(self.stg.state["automaticComponents"])
+        attr.set_value(self.stg.state["AutomaticComponents"])
 
 
 #------------------------------------------------------------------
@@ -133,8 +133,8 @@ class NXSRecSettings(PyTango.Device_4Impl):
 #------------------------------------------------------------------
     def write_AutomaticComponents(self, attr):
         print >> self.log_info, "In ", self.get_name(), "::write_AutomaticComponents()"
-        self.stg.state["automaticComponents"] = attr.get_write_value()
-        print >> self.log_info, "Attribute value = %s" % self.stg.state["automaticComponents"]
+        self.stg.state["AutomaticComponents"] = attr.get_write_value()
+        print >> self.log_info, "Attribute value = %s" % self.stg.state["AutomaticComponents"]
 
 
 
@@ -176,7 +176,7 @@ class NXSRecSettings(PyTango.Device_4Impl):
 #------------------------------------------------------------------
     def read_DataRecord(self, attr):
         print >> self.log_info, "In ", self.get_name(), "::read_DataRecord()"
-        attr.set_value(self.stg.state["dataRecord"])
+        attr.set_value(self.stg.state["DataRecord"])
 
 
 #------------------------------------------------------------------
@@ -184,15 +184,15 @@ class NXSRecSettings(PyTango.Device_4Impl):
 #------------------------------------------------------------------
     def write_DataRecord(self, attr):
         print >> self.log_info, "In ", self.get_name(), "::write_DataRecord()"
-        self.stg.state["dataRecord"] = attr.get_write_value()
-        print >> self.log_info, "Attribute value = %s" % self.stg.state["dataRecord"]
+        self.stg.state["DataRecord"] = attr.get_write_value()
+        print >> self.log_info, "Attribute value = %s" % self.stg.state["DataRecord"]
 
 #------------------------------------------------------------------
 #    Read DataSources attribute
 #------------------------------------------------------------------
     def read_DataSources(self, attr):
         print >> self.log_info, "In ", self.get_name(), "::read_DataSources()"
-        attr.set_value(self.stg.state["dataSources"])
+        attr.set_value(self.stg.state["DataSources"])
 
 
 #------------------------------------------------------------------
@@ -200,8 +200,8 @@ class NXSRecSettings(PyTango.Device_4Impl):
 #------------------------------------------------------------------
     def write_DataSources(self, attr):
         print >> self.log_info, "In ", self.get_name(), "::write_DataSources()"
-        self.stg.state["dataSources"] = attr.get_write_value()
-        print >> self.log_info, "Attribute value = %s" % self.stg.state["dataSources"]
+        self.stg.state["DataSources"] = attr.get_write_value()
+        print >> self.log_info, "Attribute value = %s" % self.stg.state["DataSources"]
 
 
 #------------------------------------------------------------------
@@ -209,7 +209,7 @@ class NXSRecSettings(PyTango.Device_4Impl):
 #------------------------------------------------------------------
     def read_AppendEntry(self, attr):
         print >> self.log_info, "In ", self.get_name(), "::read_AppendEntry()"
-        attr.set_value(self.stg.state["appendEntry"])
+        attr.set_value(self.stg.state["AppendEntry"])
 
 
 #------------------------------------------------------------------
@@ -217,8 +217,8 @@ class NXSRecSettings(PyTango.Device_4Impl):
 #------------------------------------------------------------------
     def write_AppendEntry(self, attr):
         print >> self.log_info, "In ", self.get_name(), "::write_AppendEntry()"
-        self.stg.state["appendEntry"] = attr.get_write_value()
-        print >> self.log_info, "Attribute value = %s" % self.stg.state["appendEntry"]
+        self.stg.state["AppendEntry"] = attr.get_write_value()
+        print >> self.log_info, "Attribute value = %s" % self.stg.state["AppendEntry"]
         
 
 #------------------------------------------------------------------
@@ -226,7 +226,7 @@ class NXSRecSettings(PyTango.Device_4Impl):
 #------------------------------------------------------------------
     def read_ComponentsFromMntGrp(self, attr):
         print >> self.log_info, "In ", self.get_name(), "::read_ComponentsFromMntGrp()"
-        attr.set_value(self.stg.state["componentsFromMntGrp"])
+        attr.set_value(self.stg.state["ComponentsFromMntGrp"])
 
 
 #------------------------------------------------------------------
@@ -234,8 +234,8 @@ class NXSRecSettings(PyTango.Device_4Impl):
 #------------------------------------------------------------------
     def write_ComponentsFromMntGrp(self, attr):
         print >> self.log_info, "In ", self.get_name(), "::write_ComponentsFromMntGrp()"
-        self.stg.state["componentsFromMntGrp"] = attr.get_write_value()
-        print >> self.log_info, "Attribute value = %s" % self.stg.state["componentsFromMntGrp"]
+        self.stg.state["ComponentsFromMntGrp"] = attr.get_write_value()
+        print >> self.log_info, "Attribute value = %s" % self.stg.state["ComponentsFromMntGrp"]
 
 
 #------------------------------------------------------------------
@@ -243,7 +243,7 @@ class NXSRecSettings(PyTango.Device_4Impl):
 #------------------------------------------------------------------
     def read_DynamicComponents(self, attr):
         print >> self.log_info, "In ", self.get_name(), "::read_DynamicComponents()"
-        attr.set_value(self.stg.state["dynamicComponents"])
+        attr.set_value(self.stg.state["DynamicComponents"])
 
 
 #------------------------------------------------------------------
@@ -251,8 +251,8 @@ class NXSRecSettings(PyTango.Device_4Impl):
 #------------------------------------------------------------------
     def write_DynamicComponents(self, attr):
         print >> self.log_info, "In ", self.get_name(), "::write_DynamicComponents()"
-        self.stg.state["dynamicComponents"] = attr.get_write_value()
-        print >> self.log_info, "Attribute value = %s" % self.stg.state["dynamicComponents"]
+        self.stg.state["DynamicComponents"] = attr.get_write_value()
+        print >> self.log_info, "Attribute value = %s" % self.stg.state["DynamicComponents"]
 
 
 #------------------------------------------------------------------
@@ -260,15 +260,15 @@ class NXSRecSettings(PyTango.Device_4Impl):
 #------------------------------------------------------------------
     def read_DynamicLinks(self, attr):
         print >> self.log_info, "In ", self.get_name(), "::read_DynamicLinks()"
-        attr.set_value(self.stg.state["dynamicLinks"])
+        attr.set_value(self.stg.state["DynamicLinks"])
 
 #------------------------------------------------------------------
 #    Write DynamicLinks attribute
 #------------------------------------------------------------------
     def write_DynamicLinks(self, attr):
         print >> self.log_info, "In ", self.get_name(), "::write_DynamicLinks()"
-        self.stg.state["dynamicLinks"] = attr.get_write_value()
-        print >> self.log_info, "Attribute value = %s" % self.stg.state["dynamicLinks"]
+        self.stg.state["DynamicLinks"] = attr.get_write_value()
+        print >> self.log_info, "Attribute value = %s" % self.stg.state["DynamicLinks"]
 
 
 #------------------------------------------------------------------
@@ -276,7 +276,7 @@ class NXSRecSettings(PyTango.Device_4Impl):
 #------------------------------------------------------------------
     def read_DynamicPath(self, attr):
         print >> self.log_info, "In ", self.get_name(), "::read_DynamicPath()"
-        attr.set_value(self.stg.state["dynamicPath"])
+        attr.set_value(self.stg.state["DynamicPath"])
 
 
 #------------------------------------------------------------------
@@ -284,8 +284,8 @@ class NXSRecSettings(PyTango.Device_4Impl):
 #------------------------------------------------------------------
     def write_DynamicPath(self, attr):
         print >> self.log_info, "In ", self.get_name(), "::write_DynamicPath()"
-        self.stg.state["dynamicPath"] = attr.get_write_value()
-        print >> self.log_info, "Attribute value = %s" % self.stg.state["dynamicPath"]
+        self.stg.state["DynamicPath"] = attr.get_write_value()
+        print >> self.log_info, "Attribute value = %s" % self.stg.state["DynamicPath"]
 
 
 #------------------------------------------------------------------
@@ -293,7 +293,7 @@ class NXSRecSettings(PyTango.Device_4Impl):
 #------------------------------------------------------------------
     def read_ConfigVariables(self, attr):
         print >> self.log_info, "In ", self.get_name(), "::read_ConfigVariables()"
-        attr.set_value(self.stg.state["configVariables"])
+        attr.set_value(self.stg.state["ConfigVariables"])
 
 
 #------------------------------------------------------------------
@@ -301,25 +301,8 @@ class NXSRecSettings(PyTango.Device_4Impl):
 #------------------------------------------------------------------
     def write_ConfigVariables(self, attr):
         print >> self.log_info, "In ", self.get_name(), "::write_ConfigVariables()"
-        self.stg.state["configVariables"] = attr.get_write_value()
-        print >> self.log_info, "Attribute value = %s" % self.stg.state["configVariables"]
-
-
-#------------------------------------------------------------------
-#    Read ScanFile attribute
-#------------------------------------------------------------------
-    def read_ScanFile(self, attr):
-        print >> self.log_info, "In ", self.get_name(), "::read_ScanFile()"
-        attr.set_value(self.stg.state["scanFile"])
-
-
-#------------------------------------------------------------------
-#    Write ScanFile attribute
-#------------------------------------------------------------------
-    def write_ScanFile(self, attr):
-        print >> self.log_info, "In ", self.get_name(), "::write_ScanFile()"
-        self.stg.state["scanFile"] = attr.get_write_value()
-        print >> self.log_info, "Attribute value = %s" % self.stg.state["scanFile"]
+        self.stg.state["ConfigVariables"] = attr.get_write_value()
+        print >> self.log_info, "Attribute value = %s" % self.stg.state["ConfigVariables"]
 
 
 #------------------------------------------------------------------
@@ -339,63 +322,11 @@ class NXSRecSettings(PyTango.Device_4Impl):
         print >> self.log_info, "Attribute value = %s" % self.stg.configFile
 
 
-#------------------------------------------------------------------
-#    Read ScanDir attribute
-#------------------------------------------------------------------
-    def read_ScanDir(self, attr):
-        print >> self.log_info, "In ", self.get_name(), "::read_ScanDir()"
-        attr.set_value(self.stg.state["scanDir"])
-
-
-#------------------------------------------------------------------
-#    Write ScanDir attribute
-#------------------------------------------------------------------
-    def write_ScanDir(self, attr):
-        print >> self.log_info, "In ", self.get_name(), "::write_ScanDir()"
-        self.stg.state["scanDir"] = attr.get_write_value()
-        print >> self.log_info, "Attribute value = %s" % self.stg.state["scanDir"]
-
-
-#------------------------------------------------------------------
-#    Read ScanID attribute
-#------------------------------------------------------------------
-    def read_ScanID(self, attr):
-        print >> self.log_info, "In ", self.get_name(), "::read_ScanID()"
-        attr.set_value(self.stg.state["scanID"])
-
-
-#------------------------------------------------------------------
-#    Write ScanID attribute
-#------------------------------------------------------------------
-    def write_ScanID(self, attr):
-        print >> self.log_info, "In ", self.get_name(), "::write_ScanID()"
-        self.stg.state["scanID"] = attr.get_write_value()
-        print >> self.log_info, "Attribute value = %s" % self.stg.state["scanID"]
-
-
-#------------------------------------------------------------------
-#    Read ActiveMntGrp attribute
-#------------------------------------------------------------------
-    def read_ActiveMntGrp(self, attr):
-        print >> self.log_info, "In ", self.get_name(), "::read_ActiveMntGrp()"
-        attr.set_value(self.stg.state["activeMntGrp"])
-
-
-#------------------------------------------------------------------
-#    Write ActiveMntGrp attribute
-#------------------------------------------------------------------
-    def write_ActiveMntGrp(self, attr):
-        print >> self.log_info, "In ", self.get_name(), "::write_ActiveMntGrp()"
-        self.stg.state["activeMntGrp"] = attr.get_write_value()
-        print >> self.log_info, "Attribute value = %s" % self.stg.state["activeMntGrp"]
-
-
-#------------------------------------------------------------------
 #    Read TimeZone attribute
 #------------------------------------------------------------------
     def read_TimeZone(self, attr):
         print >> self.log_info, "In ", self.get_name(), "::read_TimeZone()"
-        attr.set_value(self.stg.state["timeZone"])
+        attr.set_value(self.stg.state["TimeZone"])
 
 
 #------------------------------------------------------------------
@@ -403,8 +334,8 @@ class NXSRecSettings(PyTango.Device_4Impl):
 #------------------------------------------------------------------
     def write_TimeZone(self, attr):
         print >> self.log_info, "In ", self.get_name(), "::write_TimeZone()"
-        self.stg.state["timeZone"] = attr.get_write_value()
-        print >> self.log_info, "Attribute value = %s" % self.stg.state["timeZone"]
+        self.stg.state["TimeZone"] = attr.get_write_value()
+        print >> self.log_info, "Attribute value = %s" % self.stg.state["TimeZone"]
 
 
 
@@ -426,7 +357,15 @@ class NXSRecSettings(PyTango.Device_4Impl):
             "::LoadConfiguration()"
         try:
             self.set_state(PyTango.DevState.RUNNING)
-            argout = self.stg.loadConfiguration()
+            self.stg.loadConfiguration()
+            
+#            ## updating memorized attributes
+#            print "'%s'" % str(self.get_name())
+#            dp = PyTango.DeviceProxy(str(self.get_name()))
+#            for var in self.stg.state.keys():
+#                if hasattr(dp, var):
+#                    print "Var: ", var, self.stg.state[var]
+#                    dp.var = self.stg.state[var]
             self.set_state(PyTango.DevState.ON)
         finally:
             if self.get_state() == PyTango.DevState.RUNNING:
@@ -453,7 +392,7 @@ class NXSRecSettings(PyTango.Device_4Impl):
             "::SaveConfiguration()"
         try:
             self.set_state(PyTango.DevState.RUNNING)
-            argout = self.stg.saveConfiguration()
+            self.stg.saveConfiguration()
             self.set_state(PyTango.DevState.ON)
         finally:
             if self.get_state() == PyTango.DevState.RUNNING:
@@ -709,15 +648,6 @@ class NXSRecSettingsClass(PyTango.DeviceClass):
                 'Memorized':"true",
                 'Display level':PyTango.DispLevel.EXPERT,
             } ],
-        'ScanFile':
-            [[PyTango.DevString,
-            PyTango.SCALAR,
-            PyTango.READ_WRITE],
-            {
-                'label':"Scan File",
-                'description':"scan file",
-                'Memorized':"true",
-            } ],
         'ConfigFile':
             [[PyTango.DevString,
             PyTango.SCALAR,
@@ -725,33 +655,6 @@ class NXSRecSettingsClass(PyTango.DeviceClass):
             {
                 'label':"Config File",
                 'description':"config file",
-                'Memorized':"true",
-            } ],
-        'ScanDir':
-            [[PyTango.DevString,
-            PyTango.SCALAR,
-            PyTango.READ_WRITE],
-            {
-                'label':"Scan Directory",
-                'description':"scan directory",
-                'Memorized':"true",
-            } ],
-        'ScanID':
-            [[PyTango.DevLong64,
-            PyTango.SCALAR,
-            PyTango.READ_WRITE],
-            {
-                'label':"Scan ID",
-                'description':"scan ID",
-                'Memorized':"true",
-            } ],
-        'ActiveMntGrp':
-            [[PyTango.DevString,
-            PyTango.SCALAR,
-            PyTango.READ_WRITE],
-            {
-                'label':"Active Measurement Group",
-                'description':"active measurement group",
                 'Memorized':"true",
             } ],
         'TimeZone':

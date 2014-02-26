@@ -35,51 +35,37 @@ class Settings(object):
         self.state = {}
 
         ## selected components
-        self.state["components"] = ''
+        self.state["Components"] = ''
 
         ## group of components available for automatic selection
-        self.state["automaticComponents"] = ''
+        self.state["AutomaticComponents"] = ''
 
         ## selected datasources
-        self.state["dataSources"] = ''
+        self.state["DataSources"] = ''
         
-        ## active measurement group
-        self.state["activeMntGrp"] = ''
-
         ## appending new entries to existing file
-        self.state["appendEntry"] = False
+        self.state["AppendEntry"] = False
         
         ## select components from the active measurement group
-        self.state["componentsFromMntGrp"] = False
+        self.state["ComponentsFromMntGrp"] = False
         
         ## Configuration Server variables
-        self.state["configVariables"] = ''
+        self.state["ConfigVariables"] = ''
 
         ## JSON with Client Data Record
-        self.state["dataRecord"] = ''
+        self.state["DataRecord"] = ''
 
         ## create dynamic components
-        self.state["dynamicComponents"] = True
+        self.state["DynamicComponents"] = True
 
         ## create links for dynamic components
-        self.state["dynamicLinks"] = True
+        self.state["DynamicLinks"] = True
 
         ## path for dynamic components
-        self.state["dynamicPath"] = '/entry$var.serialno:NXentry/NXinstrument/NXcollection'
-        
-
-        ## scan directory
-        self.state["scanDir"] = '/tmp/'
-        
-        ## scan file
-        self.state["scanFile"] = 'test.nxs'
-
-        ## scan file
-        self.state["scanID"] = 1
+        self.state["DynamicPath"] = '/entry$var.serialno:NXentry/NXinstrument/NXcollection'
 
         ## timezone
-        self.state["timeZone"] = 'Europe/Berlin'
-
+        self.state["TimeZone"] = 'Europe/Berlin'
 
         ## configuration file
         self.configFile = '/tmp/nxsrecconfig.cfg'
@@ -89,13 +75,13 @@ class Settings(object):
 
 
         ## Configuration Server device name
-        self.state["configDevice"] = ''
+        self.state["ConfigDevice"] = ''
 
         ## config server proxy
         self.__configProxy = None
 
         ## NeXus Data Writer device
-        self.state["writerDevice"] = ''
+        self.state["WriterDevice"] = ''
 
         ## config writer proxy
         self.__writerProxy = None
@@ -104,22 +90,22 @@ class Settings(object):
     ## get method for configDevice attribute
     # \returns name of configDevice           
     def __getConfigDevice(self):
-        if "configDevice" not in self.state or not self.state["configDevice"]:
-            self.state["configDevice"] = self.__findDevice("NXSConfigServer")
-        return self.state["configDevice"]
+        if "ConfigDevice" not in self.state or not self.state["ConfigDevice"]:
+            self.state["ConfigDevice"] = self.__findDevice("NXSConfigServer")
+        return self.state["ConfigDevice"]
 
     ## set method for configDevice attribute
     # \param name of configDevice           
     def __setConfigDevice(self, name):
         if name:
-            self.state["configDevice"] = name
+            self.state["ConfigDevice"] = name
         else:
-            self.state["configDevice"] = self.__findDevice("NXSConfigServer")
+            self.state["ConfigDevice"] = self.__findDevice("NXSConfigServer")
 
 
     ## del method for configDevice attribute
     def __delConfigDevice(self):
-        self.state.pop("configDevice")
+        self.state.pop("ConfigDevice")
 
 
     ## the json data string
@@ -131,27 +117,27 @@ class Settings(object):
     ## get method for writerDevice attribute
     # \returns name of writerDevice           
     def __getWriterDevice(self):
-        if "writerDevice" not in self.state or not self.state["writerDevice"]:
-            self.state["writerDevice"] = self.__findDevice("NXSDataWriter")
-        return self.state["writerDevice"]
+        if "writerDevice" not in self.state or not self.state["WriterDevice"]:
+            self.state["WriterDevice"] = self.__findDevice("NXSDataWriter")
+        return self.state["WriterDevice"]
 
     ## set method for writerDevice attribute
     # \param name of writerDevice           
     def __setWriterDevice(self, name):
         if name:
-            self.state["writerDevice"] = name
+            self.state["WriterDevice"] = name
         else:
-            self.state["writerDevice"] = self.__findDevice("NXSDataWriter")
+            self.state["WriterDevice"] = self.__findDevice("NXSDataWriter")
 
 
     ## del method for writerDevice attribute
     def __delWriterDevice(self):
-        self.state.pop("writerDevice")
+        self.state.pop("WriterDevice")
 
 
     ## the json data string
     writerDevice = property(__getWriterDevice, __setWriterDevice, __delWriterDevice, 
-                       doc = 'writer device name')
+                       doc = 'Writer device name')
 
 
 
@@ -195,9 +181,9 @@ class Settings(object):
 
     ## executes command on configuration server    
     def __configCommand(self, command):
-        if "configDevice" not in self.state or not self.state["configDevice"]:
+        if "configDevice" not in self.state or not self.state["ConfigDevice"]:
             self.__getConfigDevice()
-        self.__configProxy = PyTango.DeviceProxy(self.state["configDevice"])
+        self.__configProxy = PyTango.DeviceProxy(self.state["ConfigDevice"])
         self.__configProxy.Open()
         res = getattr(self.__configProxy, command)()
         return res
