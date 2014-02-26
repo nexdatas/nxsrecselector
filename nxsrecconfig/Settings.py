@@ -31,62 +31,71 @@ class Settings(object):
         ## Tango server
         self.__server = server
 
+        ## server configuration dictionary
+        self.state = {}
+
         ## selected components
-        self.components = ''
+        self.state["components"] = ''
+
+        ## group of components available for automatic selection
+        self.state["automaticComponents"] = ''
 
         ## selected datasources
-        self.dataSources = ''
+        self.state["dataSources"] = ''
         
         ## active measurement group
-        self.activeMntGrp = ''
+        self.state["activeMntGrp"] = ''
 
         ## appending new entries to existing file
-        self.appendEntry = False
+        self.state["appendEntry"] = False
         
         ## select components from the active measurement group
-        self.componentsFromMntGrp = False
+        self.state["componentsFromMntGrp"] = False
         
         ## Configuration Server variables
-        self.configVariables = ''
+        self.state["configVariables"] = ''
 
         ## JSON with Client Data Record
-        self.dataRecord = ''
+        self.state["dataRecord"] = ''
 
         ## create dynamic components
-        self.dynamicComponents = True
+        self.state["dynamicComponents"] = True
 
         ## create links for dynamic components
-        self.dynamicLinks = True
+        self.state["dynamicLinks"] = True
 
         ## path for dynamic components
-        self.dynamicPath = '/entry$var.serialno:NXentry/NXinstrument/NXcollection'
+        self.state["dynamicPath"] = '/entry$var.serialno:NXentry/NXinstrument/NXcollection'
         
 
         ## scan directory
-        self.scanDir = '/tmp/'
+        self.state["scanDir"] = '/tmp/'
         
         ## scan file
-        self.scanFile = 'test.nxs'
+        self.state["scanFile"] = 'test.nxs'
 
         ## scan file
-        self.scanID = 1
+        self.state["scanID"] = 1
 
         ## timezone
-        self.timeZone = 'Europe/Berlin'
+        self.state["timeZone"] = 'Europe/Berlin'
 
+
+        ## configuration file
+        self.configFile = '/tmp/nxsrecconfig.cfg'
 
         ## tango database
         self.__db = PyTango.Database()
 
 
         ## Configuration Server device name
-        self.__configDevice = ''
+        self.state["configDevice"] = ''
 
         ## config server proxy
         self.__configProxy = None
 
         ## NeXus Data Writer device
-        self.__writerDevice = ''
+        self.state["writerDevice"] = ''
 
         ## config writer proxy
         self.__writerProxy = None
@@ -95,27 +104,54 @@ class Settings(object):
     ## get method for configDevice attribute
     # \returns name of configDevice           
     def __getConfigDevice(self):
-        if not self.__configDevice:
-            self.__configDevice = self.__findDevice("NXSConfigServer")
-        return self.__configDevice
+        if "configDevice" not in self.state or not self.state["configDevice"]:
+            self.state["configDevice"] = self.__findDevice("NXSConfigServer")
+        return self.state["configDevice"]
 
     ## set method for configDevice attribute
     # \param name of configDevice           
     def __setConfigDevice(self, name):
         if name:
-            self.__configDevice = name
+            self.state["configDevice"] = name
         else:
-            self.__configDevice = self.__findDevice("NXSConfigServer")
+            self.state["configDevice"] = self.__findDevice("NXSConfigServer")
 
 
     ## del method for configDevice attribute
     def __delConfigDevice(self):
-        del self.__configDevice 
+        self.state.pop("configDevice")
 
 
     ## the json data string
     configDevice = property(__getConfigDevice, __setConfigDevice, __delConfigDevice, 
                        doc = 'configuration server device name')
+
+
+
+    ## get method for writerDevice attribute
+    # \returns name of writerDevice           
+    def __getWriterDevice(self):
+        if "writerDevice" not in self.state or not self.state["writerDevice"]:
+            self.state["writerDevice"] = self.__findDevice("NXSDataWriter")
+        return self.state["writerDevice"]
+
+    ## set method for writerDevice attribute
+    # \param name of writerDevice           
+    def __setWriterDevice(self, name):
+        if name:
+            self.state["writerDevice"] = name
+        else:
+            self.state["writerDevice"] = self.__findDevice("NXSDataWriter")
+
+
+    ## del method for writerDevice attribute
+    def __delWriterDevice(self):
+        self.state.pop("writerDevice")
+
+
+    ## the json data string
+    writerDevice = property(__getWriterDevice, __setWriterDevice, __delWriterDevice, 
+                       doc = 'writer device name')
 
 
 
@@ -147,6 +183,7 @@ class Settings(object):
     writerDevice = property(__getWriterDevice, __setWriterDevice, __delWriterDevice, 
                        doc = 'writeruration server device name')
 
+
     ## find device
     # \param name device class name
     def __findDevice(self, name):        
@@ -158,9 +195,9 @@ class Settings(object):
 
     ## executes command on configuration server    
     def __configCommand(self, command):
-        if not self.__configDevice:
+        if "configDevice" not in self.state or not self.state["configDevice"]:
             self.__getConfigDevice()
-        self.__configProxy = PyTango.DeviceProxy(self.__configDevice)
+        self.__configProxy = PyTango.DeviceProxy(self.state["configDevice"])
         self.__configProxy.Open()
         res = getattr(self.__configProxy, command)()
         return res
@@ -177,3 +214,14 @@ class Settings(object):
     ## available datasources
     def availableDataSources(self):
         return self.__configCommand("AvailableDataSources")
+
+
+    ## save configuration
+    def saveConfiguration(self):
+        fl = open(self.configFile, "w+")
+        json.dump(self.state, fl)
+
+    ## load configuration
+    def loadConfiguration(self):
+        fl = open(self.configFile, "r")
+        self.state = json.load(fl)
