@@ -359,13 +359,15 @@ class NXSRecSettings(PyTango.Device_4Impl):
             self.set_state(PyTango.DevState.RUNNING)
             self.stg.loadConfiguration()
             
-#            ## updating memorized attributes
-#            print "'%s'" % str(self.get_name())
-#            dp = PyTango.DeviceProxy(str(self.get_name()))
-#            for var in self.stg.state.keys():
-#                if hasattr(dp, var):
-#                    print "Var: ", var, self.stg.state[var]
-#                    dp.var = self.stg.state[var]
+            ## updating memorized attributes
+            dp = PyTango.DeviceProxy(str(self.get_name()))
+            for var in self.stg.state.keys():
+                if hasattr(dp, var):
+                    if isinstance(self.stg.state[var], unicode):
+                        dp.write_attribute(str(var), str(self.stg.state[var]))
+                    else:
+                        dp.write_attribute(str(var), self.stg.state[var])
+
             self.set_state(PyTango.DevState.ON)
         finally:
             if self.get_state() == PyTango.DevState.RUNNING:
