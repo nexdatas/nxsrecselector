@@ -34,14 +34,22 @@ class Settings(object):
         ## server configuration dictionary
         self.state = {}
 
-        ## selected components
-        self.state["Components"] = ''
+        ## group of electable components
+        self.state["ComponentGroup"] = '{}'
 
-        ## group of components available for automatic selection
-        self.state["AutomaticComponents"] = ''
+        ## group of automatic components describing instrument state
+        self.state["AutomaticComponentGroup"] = '{}'
+
+        ## automatic datasources
+        self.state["AutomaticDataSources"] = '[]'
+
 
         ## selected datasources
-        self.state["DataSources"] = ''
+        self.state["DataSourceGroup"] = '{}'
+
+        ## group of optional components available for automatic selection
+        self.state["OptionalComponents"] = ''
+
         
         ## appending new entries to existing file
         self.state["AppendEntry"] = False
@@ -100,6 +108,28 @@ class Settings(object):
 
         ## config writer proxy
         self.__writerProxy = None
+
+    def components(self):
+        cps = json.loads(self.state["ComponentGroup"])
+        if isinstance(cps, dict):
+            return [cp for cp in cps.keys() if cps[cp]]
+        else:
+            return []
+
+    def automaticComponents(self):
+        cps = json.loads(self.state["AutomaticComponentGroup"])
+        if isinstance(cps, dict):
+            return [cp for cp in cps.keys() if cps[cp]]
+        else:
+            return []
+        
+
+    def dataSources(self):
+        dss = json.loads(self.state["DataSourceGroup"])
+        if isinstance(dss, dict):
+            return [ds for ds in dss.keys() if dss[ds]]
+        else:
+            return []
 
 
     ## get method for configDevice attribute

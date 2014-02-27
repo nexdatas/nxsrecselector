@@ -109,32 +109,65 @@ class NXSRecSettings(PyTango.Device_4Impl):
 #------------------------------------------------------------------
     def read_Components(self, attr):
         print >> self.log_info, "In ", self.get_name(), "::read_Components()"
-        attr.set_value(self.stg.state["Components"])
+        attr.set_value(self.stg.components())
 
 
 #------------------------------------------------------------------
-#    Write Components attribute
+#    Read ComponentGroup attribute
 #------------------------------------------------------------------
-    def write_Components(self, attr):
-        print >> self.log_info, "In ", self.get_name(), "::write_Components()"
-        self.stg.state["Components"] = attr.get_write_value()
-        print >> self.log_info, "Attribute value = %s" % self.stg.state["Components"]
+    def read_ComponentGroup(self, attr):
+        print >> self.log_info, "In ", self.get_name(), "::read_ComponentGroup()"
+        attr.set_value(self.stg.state["ComponentGroup"])
+
+
+#------------------------------------------------------------------
+#    Write ComponentGroup attribute
+#------------------------------------------------------------------
+    def write_ComponentGroup(self, attr):
+        print >> self.log_info, "In ", self.get_name(), "::write_ComponentGroup()"
+        self.stg.state["ComponentGroup"] = attr.get_write_value()
+        print >> self.log_info, "Attribute value = %s" % self.stg.state["ComponentGroup"]
+
+#------------------------------------------------------------------
+#    Read AutomaticComponentGroup attribute
+#------------------------------------------------------------------
+    def read_AutomaticComponentGroup(self, attr):
+        print >> self.log_info, "In ", self.get_name(), "::read_AutomaticComponentGroup()"
+        attr.set_value(self.stg.state["AutomaticComponentGroup"])
+
+
+#------------------------------------------------------------------
+#    Write AutomaticComponentGroup attribute
+#------------------------------------------------------------------
+    def write_AutomaticComponentGroup(self, attr):
+        print >> self.log_info, "In ", self.get_name(), "::write_AutomaticComponentGroup()"
+        self.stg.state["AutomaticComponentGroup"] = attr.get_write_value()
+        print >> self.log_info, "Attribute value = %s" % self.stg.state["AutomaticComponentGroup"]
+
 
 #------------------------------------------------------------------
 #    Read AutomaticComponents attribute
 #------------------------------------------------------------------
     def read_AutomaticComponents(self, attr):
         print >> self.log_info, "In ", self.get_name(), "::read_AutomaticComponents()"
-        attr.set_value(self.stg.state["AutomaticComponents"])
+        attr.set_value(self.stg.automaticComponents())
 
 
 #------------------------------------------------------------------
-#    Write ComponentGroup attribute
+#    Read OptionalComponents attribute
 #------------------------------------------------------------------
-    def write_AutomaticComponents(self, attr):
-        print >> self.log_info, "In ", self.get_name(), "::write_AutomaticComponents()"
-        self.stg.state["AutomaticComponents"] = attr.get_write_value()
-        print >> self.log_info, "Attribute value = %s" % self.stg.state["AutomaticComponents"]
+    def read_OptionalComponents(self, attr):
+        print >> self.log_info, "In ", self.get_name(), "::read_OptionalComponents()"
+        attr.set_value(self.stg.state["OptionalComponents"])
+
+
+#------------------------------------------------------------------
+#    Write OptionalComponents attribute
+#------------------------------------------------------------------
+    def write_OptionalComponents(self, attr):
+        print >> self.log_info, "In ", self.get_name(), "::write_OptionalComponents()"
+        self.stg.state["OptionalComponents"] = attr.get_write_value()
+        print >> self.log_info, "Attribute value = %s" % self.stg.state["OptionalComponents"]
 
 
 
@@ -284,16 +317,42 @@ class NXSRecSettings(PyTango.Device_4Impl):
 #------------------------------------------------------------------
     def read_DataSources(self, attr):
         print >> self.log_info, "In ", self.get_name(), "::read_DataSources()"
-        attr.set_value(self.stg.state["DataSources"])
+        attr.set_value(self.stg.dataSources())
 
 
 #------------------------------------------------------------------
-#    Write DataSources attribute
+#    Read DataSourceGroup attribute
 #------------------------------------------------------------------
-    def write_DataSources(self, attr):
-        print >> self.log_info, "In ", self.get_name(), "::write_DataSources()"
-        self.stg.state["DataSources"] = attr.get_write_value()
-        print >> self.log_info, "Attribute value = %s" % self.stg.state["DataSources"]
+    def read_DataSourceGroup(self, attr):
+        print >> self.log_info, "In ", self.get_name(), "::read_DataSources()"
+        attr.set_value(self.stg.state["DataSourceGroup"])
+
+
+
+#------------------------------------------------------------------
+#    Write DataSourceGroup attribute
+#------------------------------------------------------------------
+    def write_DataSourceGroup(self, attr):
+        print >> self.log_info, "In ", self.get_name(), "::write_DataSourceGroup()"
+        self.stg.state["DataSourceGroup"] = attr.get_write_value()
+        print >> self.log_info, "Attribute value = %s" % self.stg.state["DataSourceGroup"]
+
+#------------------------------------------------------------------
+#    Read AutomaticDataSources attribute
+#------------------------------------------------------------------
+    def read_AutomaticDataSources(self, attr):
+        print >> self.log_info, "In ", self.get_name(), "::read_AutomaticDataSources()"
+        attr.set_value(self.stg.state["AutomaticDataSources"])
+
+
+
+#------------------------------------------------------------------
+#    Write AutomaticDataSources attribute
+#------------------------------------------------------------------
+    def write_AutomaticDataSources(self, attr):
+        print >> self.log_info, "In ", self.get_name(), "::write_AutomaticDataSources()"
+        self.stg.state["AutomaticDataSources"] = attr.get_write_value()
+        print >> self.log_info, "Attribute value = %s" % self.stg.state["AutomaticDataSources"]
 
 
 #------------------------------------------------------------------
@@ -663,21 +722,47 @@ class NXSRecSettingsClass(PyTango.DeviceClass):
     attr_list = {
         'Components':
             [[PyTango.DevString,
-            PyTango.SCALAR,
-            PyTango.READ_WRITE],
+            PyTango.SPECTRUM,
+            PyTango.READ, 10000],
             {
                 'label':"Selected Components",
                 'description':"JSON list of Selected Components",
+            } ],
+        'ComponentGroup':
+            [[PyTango.DevString,
+            PyTango.SCALAR,
+            PyTango.READ_WRITE],
+            {
+                'label':"Components Group",
+                'description':"JSON dict of Components for Selection",
+                'Memorized':"true",
+                'Display level':PyTango.DispLevel.EXPERT,
+            } ],
+        'AutomaticComponentGroup':
+            [[PyTango.DevString,
+            PyTango.SCALAR,
+            PyTango.READ_WRITE],
+            {
+                'label':"Automatic Components Group",
+                'description':"JSON dict with selection of automatic components",
                 'Memorized':"true",
                 'Display level':PyTango.DispLevel.EXPERT,
             } ],
         'AutomaticComponents':
             [[PyTango.DevString,
+            PyTango.SPECTRUM,
+            PyTango.READ, 10000],
+            {
+                'label':"Automatic Components",
+                'description':"JSON list of automatic components",
+            } ],
+        'OptionalComponents':
+            [[PyTango.DevString,
             PyTango.SCALAR,
             PyTango.READ_WRITE],
             {
-                'label':"Automatic Components",
-                'description':"JSON list of components available for automatic selection",
+                'label':"Optional Components Group",
+                'description':"JSON list of optional components available for automatic selection",
                 'Memorized':"true",
                 'Display level':PyTango.DispLevel.EXPERT,
             } ],
@@ -761,11 +846,29 @@ class NXSRecSettingsClass(PyTango.DeviceClass):
             } ],
         'DataSources':
             [[PyTango.DevString,
-            PyTango.SCALAR,
-            PyTango.READ_WRITE],
+            PyTango.SPECTRUM,
+            PyTango.READ, 10000],
             {
                 'label':"Selected Datasources",
                 'description':"JSON list of Selected Datasources",
+            } ],
+        'DataSourceGroup':
+            [[PyTango.DevString,
+            PyTango.SCALAR,
+            PyTango.READ_WRITE],
+            {
+                'label':"Datasources Group",
+                'description':"JSON dict of DataSources for selection",
+                'Memorized':"true",
+                'Display level':PyTango.DispLevel.EXPERT,
+            } ],
+        'AutomaticDataSources':
+            [[PyTango.DevString,
+            PyTango.SCALAR,
+            PyTango.READ_WRITE],
+            {
+                'label':"Automatic DataSources",
+                'description':"JSON list of Automatic DataSources",
                 'Memorized':"true",
                 'Display level':PyTango.DispLevel.EXPERT,
             } ],
@@ -813,6 +916,7 @@ class NXSRecSettingsClass(PyTango.DeviceClass):
                 'label':"Path for Dynamic Components",
                 'description':"path for dynamic components",
                 'Memorized':"true",
+                'Display level':PyTango.DispLevel.EXPERT,
             } ],
         'ConfigVariables':
             [[PyTango.DevString,
