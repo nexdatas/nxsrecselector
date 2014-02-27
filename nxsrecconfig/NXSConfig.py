@@ -187,6 +187,44 @@ class NXSRecSettings(PyTango.Device_4Impl):
         self.stg.state["DataRecord"] = attr.get_write_value()
         print >> self.log_info, "Attribute value = %s" % self.stg.state["DataRecord"]
 
+
+
+#------------------------------------------------------------------
+#    Read LabelPaths attribute
+#------------------------------------------------------------------
+    def read_LabelPaths(self, attr):
+        print >> self.log_info, "In ", self.get_name(), "::read_LabelPaths()"
+        attr.set_value(self.stg.state["LabelPaths"])
+
+
+#------------------------------------------------------------------
+#    Write LabelPaths attribute
+#------------------------------------------------------------------
+    def write_LabelPaths(self, attr):
+        print >> self.log_info, "In ", self.get_name(), "::write_LabelPaths()"
+        self.stg.state["LabelPaths"] = attr.get_write_value()
+        print >> self.log_info, "Attribute value = %s" % self.stg.state["LabelPaths"]
+
+
+
+
+#------------------------------------------------------------------
+#    Read DataSourceLabels attribute
+#------------------------------------------------------------------
+    def read_DataSourceLabels(self, attr):
+        print >> self.log_info, "In ", self.get_name(), "::read_DataSourceLabels()"
+        attr.set_value(self.stg.state["DataSourceLabels"])
+
+
+#------------------------------------------------------------------
+#    Write DataSourceLabels attribute
+#------------------------------------------------------------------
+    def write_DataSourceLabels(self, attr):
+        print >> self.log_info, "In ", self.get_name(), "::write_DataSourceLabels()"
+        self.stg.state["DataSourceLabels"] = attr.get_write_value()
+        print >> self.log_info, "Attribute value = %s" % self.stg.state["DataSourceLabels"]
+
+
 #------------------------------------------------------------------
 #    Read DataSources attribute
 #------------------------------------------------------------------
@@ -411,6 +449,35 @@ class NXSRecSettings(PyTango.Device_4Impl):
 
 
 #------------------------------------------------------------------
+#    DataSourcePath command:
+#
+#    Description: Returns a NeXus path of a given datasource
+#                
+#    argout: DevString    datasource name
+#    argout: DevString    NeXus path
+#------------------------------------------------------------------
+    def DataSourcePath(self, argin):
+        print >> self.log_info, "In ", self.get_name(), \
+            "::DataSourcePath()"
+        try:
+            self.set_state(PyTango.DevState.RUNNING)
+            argout = str(self.stg.dataSourcePath(argin))
+            self.set_state(PyTango.DevState.ON)
+        finally:
+            if self.get_state() == PyTango.DevState.RUNNING:
+                self.set_state(PyTango.DevState.ON)
+        
+        return argout
+
+
+#---- AvailableComponents command State Machine -----------------
+    def is_DataSourcePath_allowed(self):
+        if self.get_state() in [PyTango.DevState.RUNNING]:
+            return False
+        return True
+
+
+#------------------------------------------------------------------
 #    AvailableComponents command:
 #
 #    Description: Returns a list of available component names
@@ -517,6 +584,9 @@ class NXSRecSettingsClass(PyTango.DeviceClass):
 
     #    Command definitions
     cmd_list = {
+        'DataSourcePath':
+            [[PyTango.DevString, "datasource name"],
+            [PyTango.DevString, "NeXus Path"]],
         'LoadConfiguration':
             [[PyTango.DevVoid, ""],
             [PyTango.DevVoid, ""]],
@@ -582,6 +652,26 @@ class NXSRecSettingsClass(PyTango.DeviceClass):
             {
                 'label':"Client Data Record",
                 'description':"JSON dictionary with Client Data Record",
+                'Memorized':"true",
+                'Display level':PyTango.DispLevel.EXPERT,
+            } ],
+        'LabelPaths':
+            [[PyTango.DevString,
+            PyTango.SCALAR,
+            PyTango.READ_WRITE],
+            {
+                'label':"NeXus Paths for DataSource Labels",
+                'description':"JSON dictionary with NeXus Paths for Datasource Labels",
+                'Memorized':"true",
+                'Display level':PyTango.DispLevel.EXPERT,
+            } ],
+        'DataSourceLabels':
+            [[PyTango.DevString,
+            PyTango.SCALAR,
+            PyTango.READ_WRITE],
+            {
+                'label':"DataSource Labels",
+                'description':"JSON dictionary with Datasource Labels",
                 'Memorized':"true",
                 'Display level':PyTango.DispLevel.EXPERT,
             } ],
@@ -655,8 +745,8 @@ class NXSRecSettingsClass(PyTango.DeviceClass):
             PyTango.SCALAR,
             PyTango.READ_WRITE],
             {
-                'label':"Config File",
-                'description':"config file",
+                'label':"Config File with its Path",
+                'description':"config file with its full path",
                 'Memorized':"true",
             } ],
         'TimeZone':

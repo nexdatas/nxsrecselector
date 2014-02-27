@@ -50,10 +50,16 @@ class Settings(object):
         self.state["ComponentsFromMntGrp"] = False
         
         ## Configuration Server variables
-        self.state["ConfigVariables"] = ''
+        self.state["ConfigVariables"] = '{}'
 
         ## JSON with Client Data Record
-        self.state["DataRecord"] = ''
+        self.state["DataRecord"] = '{}'
+
+        ## JSON with DataSource Labels
+        self.state["DataSourceLabels"] = '{}'
+
+        ## JSON with NeXus paths for DataSource Labels
+        self.state["LabelPaths"] = '{}'
 
         ## create dynamic components
         self.state["DynamicComponents"] = True
@@ -201,6 +207,13 @@ class Settings(object):
     def availableDataSources(self):
         return self.__configCommand("AvailableDataSources")
 
+    ## save configuration
+    def dataSourcePath(self, name):
+        labels = json.loads(self.state["DataSourceLabels"])
+        label = labels.get(name, "")
+        paths = json.loads(self.state["LabelPaths"])
+        return paths.get(label, "")
+        
 
     ## save configuration
     def saveConfiguration(self):
