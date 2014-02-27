@@ -61,6 +61,15 @@ class Settings(object):
         ## JSON with NeXus paths for DataSource Labels
         self.state["LabelPaths"] = '{}'
 
+        ## JSON with NeXus paths for DataSource Labels
+        self.state["LabelLinks"] = '{}'
+
+        ## JSON with NeXus paths for DataSource Labels
+        self.state["LabelTypes"] = '{}'
+
+        ## JSON with NeXus paths for DataSource Labels
+        self.state["LabelShapes"] = '{}'
+
         ## create dynamic components
         self.state["DynamicComponents"] = True
 
@@ -116,7 +125,7 @@ class Settings(object):
 
     ## the json data string
     configDevice = property(__getConfigDevice, __setConfigDevice, __delConfigDevice, 
-                       doc = 'configuration server device name')
+                            doc = 'configuration server device name')
 
 
 
@@ -142,8 +151,8 @@ class Settings(object):
 
 
     ## the json data string
-    writerDevice = property(__getWriterDevice, __setWriterDevice, __delWriterDevice, 
-                       doc = 'Writer device name')
+    writerDevice = property(__getWriterDevice, __setWriterDevice, 
+                            __delWriterDevice, doc = 'Writer device name')
 
 
 

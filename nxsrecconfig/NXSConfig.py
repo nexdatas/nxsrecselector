@@ -209,6 +209,60 @@ class NXSRecSettings(PyTango.Device_4Impl):
 
 
 #------------------------------------------------------------------
+#    Read LabelTypes attribute
+#------------------------------------------------------------------
+    def read_LabelTypes(self, attr):
+        print >> self.log_info, "In ", self.get_name(), "::read_LabelTypes()"
+        attr.set_value(self.stg.state["LabelTypes"])
+
+
+#------------------------------------------------------------------
+#    Write LabelTypes attribute
+#------------------------------------------------------------------
+    def write_LabelTypes(self, attr):
+        print >> self.log_info, "In ", self.get_name(), "::write_LabelTypes()"
+        self.stg.state["LabelTypes"] = attr.get_write_value()
+        print >> self.log_info, "Attribute value = %s" % self.stg.state["LabelTypes"]
+
+
+
+#------------------------------------------------------------------
+#    Read LabelShapes attribute
+#------------------------------------------------------------------
+    def read_LabelShapes(self, attr):
+        print >> self.log_info, "In ", self.get_name(), "::read_LabelShapes()"
+        attr.set_value(self.stg.state["LabelShapes"])
+
+
+#------------------------------------------------------------------
+#    Write LabelShapes attribute
+#------------------------------------------------------------------
+    def write_LabelShapes(self, attr):
+        print >> self.log_info, "In ", self.get_name(), "::write_LabelShapes()"
+        self.stg.state["LabelShapes"] = attr.get_write_value()
+        print >> self.log_info, "Attribute value = %s" % self.stg.state["LabelShapes"]
+
+
+#------------------------------------------------------------------
+#    Read LabelLinks attribute
+#------------------------------------------------------------------
+    def read_LabelLinks(self, attr):
+        print >> self.log_info, "In ", self.get_name(), "::read_LabelLinks()"
+        attr.set_value(self.stg.state["LabelLinks"])
+
+
+#------------------------------------------------------------------
+#    Write LabelLinks attribute
+#------------------------------------------------------------------
+    def write_LabelLinks(self, attr):
+        print >> self.log_info, "In ", self.get_name(), "::write_LabelLinks()"
+        self.stg.state["LabelLinks"] = attr.get_write_value()
+        print >> self.log_info, "Attribute value = %s" % self.stg.state["LabelLinks"]
+
+
+
+
+#------------------------------------------------------------------
 #    Read DataSourceLabels attribute
 #------------------------------------------------------------------
     def read_DataSourceLabels(self, attr):
@@ -662,6 +716,36 @@ class NXSRecSettingsClass(PyTango.DeviceClass):
             {
                 'label':"NeXus Paths for DataSource Labels",
                 'description':"JSON dictionary with NeXus Paths for Datasource Labels",
+                'Memorized':"true",
+                'Display level':PyTango.DispLevel.EXPERT,
+            } ],
+        'LabelTypes':
+            [[PyTango.DevString,
+            PyTango.SCALAR,
+            PyTango.READ_WRITE],
+            {
+                'label':"NeXus Types for DataSource Labels",
+                'description':"JSON dictionary with NeXus Types for Datasource Labels",
+                'Memorized':"true",
+                'Display level':PyTango.DispLevel.EXPERT,
+            } ],
+        'LabelShapes':
+            [[PyTango.DevString,
+            PyTango.SCALAR,
+            PyTango.READ_WRITE],
+            {
+                'label':"NeXus Shapes for DataSource Labels",
+                'description':"JSON dictionary with NeXus Shapes for Datasource Labels",
+                'Memorized':"true",
+                'Display level':PyTango.DispLevel.EXPERT,
+            } ],
+        'LabelLinks':
+            [[PyTango.DevString,
+            PyTango.SCALAR,
+            PyTango.READ_WRITE],
+            {
+                'label':"NeXus Links for DataSource Labels",
+                'description':"JSON dictionary with NeXus Links for Datasource Labels",
                 'Memorized':"true",
                 'Display level':PyTango.DispLevel.EXPERT,
             } ],
