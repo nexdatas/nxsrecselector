@@ -22,6 +22,7 @@
 
 import json
 import PyTango
+from .Describer import Describer
 
 ## NeXus Sardana Recorder settings
 class Settings(object):
@@ -33,6 +34,12 @@ class Settings(object):
 
         ## server configuration dictionary
         self.state = {}
+
+        ## configuration version
+        self.state["ConfigVersion"] = ''
+
+        ## configuration version
+        self.state["ComponentInfo"] = ''
 
         ## group of electable components
         self.state["ComponentGroup"] = '{}'
@@ -238,6 +245,16 @@ class Settings(object):
         self.__configProxy.Open()
         res = getattr(self.__configProxy, command)()
         return res
+
+
+    ## read configuration server attribute
+    def __configAttr(self, attr):
+        if "configDevice" not in self.state or not self.state["ConfigDevice"]:
+            self.__getConfigDevice()
+        self.__configProxy = PyTango.DeviceProxy(self.state["ConfigDevice"])
+        self.__configProxy.Open()
+        res = getattr(self.__configProxy, attr)
+        return res
         
 
     ## mandatory components
@@ -269,13 +286,43 @@ class Settings(object):
     def loadConfiguration(self):
         fl = open(self.configFile, "r")
         self.state = json.load(fl)
+        self.state["ConfigVersion"] = ''
 
     ## checks existing controllers of pools for 
     #      AutomaticDataSources
     def updateControllers(self):
         pass
 
+    def __reloadDeps(self):
+        pass
+
+    def __getDS(self, strategy='', dstype=''):
+        if "configDevice" not in self.state or not self.state["ConfigDevice"]:
+            self.__getConfigDevice()
+        describer = Describer(self.state["ConfigDevice"])
+        res = describer.run(self.components(), strategy, dstype)
+        dds = set()
+        for dss in res[1].values():
+            if isinstance(dss, dict):
+                for ds in dss.keys():
+                    dds.add(ds)
+        return list(dds)
 
     ## update a list of Disable DataSources
     def updateDataSources(self):
-        pass
+        ver = self.state["ConfigVersion"]
+        csver = self.__configAttr("Version")
+        if not ver or csver != ver:
+            self.__reloadDeps()
+        
+        dss = self.__getDS('STEP','CLIENT')
+        print "DSS = ", dss
+        self.state["DisableDataSources"] = str(json.dumps(dss))
+        if self.__server:
+            dp = PyTango.DeviceProxy(str(self.__server.get_name()))
+            dp.write_attribute(str("DisableDataSources"), 
+                               self.state["DisableDataSources"])
+
+            
+
+        
