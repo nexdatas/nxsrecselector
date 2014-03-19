@@ -355,6 +355,25 @@ class NXSRecSettings(PyTango.Device_4Impl):
         print >> self.log_info, "Attribute value = %s" % self.stg.state["AutomaticDataSources"]
 
 
+
+#------------------------------------------------------------------
+#    Read DisableDataSources attribute
+#------------------------------------------------------------------
+    def read_DisableDataSources(self, attr):
+        print >> self.log_info, "In ", self.get_name(), "::read_DisableDataSources()"
+        attr.set_value(self.stg.state["DisableDataSources"])
+
+
+
+#------------------------------------------------------------------
+#    Write DisableDataSources attribute
+#------------------------------------------------------------------
+    def write_DisableDataSources(self, attr):
+        print >> self.log_info, "In ", self.get_name(), "::write_DisableDataSources()"
+        self.stg.state["DisableDataSources"] = attr.get_write_value()
+        print >> self.log_info, "Attribute value = %s" % self.stg.state["DisableDataSources"]
+
+
 #------------------------------------------------------------------
 #    Read AppendEntry attribute
 #------------------------------------------------------------------
@@ -561,6 +580,63 @@ class NXSRecSettings(PyTango.Device_4Impl):
 
 
 
+
+#------------------------------------------------------------------
+#    UpdateControllers:
+#
+#    Description: checks existing controllers of pools for 
+#        AutomaticDataSources
+#                
+#------------------------------------------------------------------
+    def UpdateControllers(self):
+        print >> self.log_info, "In ", self.get_name(), \
+            "::UpdateControllers()"
+        try:
+            self.set_state(PyTango.DevState.RUNNING)
+            self.stg.updateControllers()
+            self.set_state(PyTango.DevState.ON)
+        finally:
+            if self.get_state() == PyTango.DevState.RUNNING:
+                self.set_state(PyTango.DevState.ON)
+        
+
+
+#---- UpdateControllers command State Machine -----------------
+    def is_UpdateControllers_allowed(self):
+        if self.get_state() in [PyTango.DevState.RUNNING]:
+            return False
+        return True
+
+
+
+
+#------------------------------------------------------------------
+#    UpdateDataSources:
+#
+#    Description: update a list of Disable DataSources
+#                
+#------------------------------------------------------------------
+    def UpdateDataSources(self):
+        print >> self.log_info, "In ", self.get_name(), \
+            "::UpdateDataSources()"
+        try:
+            self.set_state(PyTango.DevState.RUNNING)
+            self.stg.updateDataSources()
+            self.set_state(PyTango.DevState.ON)
+        finally:
+            if self.get_state() == PyTango.DevState.RUNNING:
+                self.set_state(PyTango.DevState.ON)
+        
+
+
+#---- UpdateDataSources command State Machine -----------------
+    def is_UpdateDataSources_allowed(self):
+        if self.get_state() in [PyTango.DevState.RUNNING]:
+            return False
+        return True
+
+
+
 #------------------------------------------------------------------
 #    DataSourcePath command:
 #
@@ -704,6 +780,12 @@ class NXSRecSettingsClass(PyTango.DeviceClass):
             [[PyTango.DevVoid, ""],
             [PyTango.DevVoid, ""]],
         'SaveConfiguration':
+            [[PyTango.DevVoid, ""],
+            [PyTango.DevVoid, ""]],
+        'UpdateControllers':
+            [[PyTango.DevVoid, ""],
+            [PyTango.DevVoid, ""]],
+        'UpdateDataSources':
             [[PyTango.DevVoid, ""],
             [PyTango.DevVoid, ""]],
         'AvailableComponents':
@@ -869,6 +951,16 @@ class NXSRecSettingsClass(PyTango.DeviceClass):
             {
                 'label':"Automatic DataSources",
                 'description':"JSON list of Automatic DataSources",
+                'Memorized':"true",
+                'Display level':PyTango.DispLevel.EXPERT,
+            } ],
+        'DisableDataSources':
+            [[PyTango.DevString,
+            PyTango.SCALAR,
+            PyTango.READ_WRITE],
+            {
+                'label':"Disable DataSources",
+                'description':"JSON list of Disable DataSources",
                 'Memorized':"true",
                 'Display level':PyTango.DispLevel.EXPERT,
             } ],

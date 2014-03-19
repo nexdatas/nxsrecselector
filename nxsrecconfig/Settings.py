@@ -43,6 +43,9 @@ class Settings(object):
         ## automatic datasources
         self.state["AutomaticDataSources"] = '[]'
 
+        ## disable datasources
+        self.state["DisableDataSources"] = '[]'
+
 
         ## selected datasources
         self.state["DataSourceGroup"] = '{}'
@@ -125,9 +128,12 @@ class Settings(object):
         
 
     def dataSources(self):
+        dds = json.loads(self.state["DisableDataSources"])
+        if not isinstance(dds, list):
+            dds = []
         dss = json.loads(self.state["DataSourceGroup"])
         if isinstance(dss, dict):
-            return [ds for ds in dss.keys() if dss[ds]]
+            return [ds for ds in dss.keys() if dss[ds] and ds not in dds]
         else:
             return []
 
@@ -263,3 +269,13 @@ class Settings(object):
     def loadConfiguration(self):
         fl = open(self.configFile, "r")
         self.state = json.load(fl)
+
+    ## checks existing controllers of pools for 
+    #      AutomaticDataSources
+    def updateControllers(self):
+        pass
+
+
+    ## update a list of Disable DataSources
+    def updateDataSources(self):
+        pass
