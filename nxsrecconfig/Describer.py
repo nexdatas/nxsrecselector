@@ -73,7 +73,6 @@ class Describer(object):
                                 tr[ds] = []
                             tr[ds].append(vds)
                 self.__result[1][cp] = tr
-        print str(self.__result)        
         return self.__result
 
 

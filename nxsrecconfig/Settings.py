@@ -35,11 +35,6 @@ class Settings(object):
         ## server configuration dictionary
         self.state = {}
 
-        ## configuration version
-        self.state["ConfigVersion"] = ''
-
-        ## configuration version
-        self.state["ComponentInfo"] = ''
 
         ## group of electable components
         self.state["ComponentGroup"] = '{}'
@@ -49,10 +44,6 @@ class Settings(object):
 
         ## automatic datasources
         self.state["AutomaticDataSources"] = '[]'
-
-        ## disable datasources
-        self.state["DisableDataSources"] = '[]'
-
 
         ## selected datasources
         self.state["DataSourceGroup"] = '{}'
@@ -135,7 +126,8 @@ class Settings(object):
         
 
     def dataSources(self):
-        dds = json.loads(self.state["DisableDataSources"])
+        
+        dds = self.disableDataSources()
         if not isinstance(dds, list):
             dds = []
         dss = json.loads(self.state["DataSourceGroup"])
@@ -286,22 +278,19 @@ class Settings(object):
     def loadConfiguration(self):
         fl = open(self.configFile, "r")
         self.state = json.load(fl)
-        self.state["ConfigVersion"] = ''
 
     ## checks existing controllers of pools for 
     #      AutomaticDataSources
     def updateControllers(self):
         pass
 
-    def __reloadDeps(self):
-        pass
-
-    def __getDS(self, strategy='', dstype=''):
+    def __getStepClient(self):
         if "configDevice" not in self.state or not self.state["ConfigDevice"]:
             self.__getConfigDevice()
         describer = Describer(self.state["ConfigDevice"])
-        res = describer.run(self.components(), strategy, dstype)
+        res = describer.run(self.components(), 'STEP', 'CLIENT')
         dds = set()
+
         for dss in res[1].values():
             if isinstance(dss, dict):
                 for ds in dss.keys():
@@ -309,19 +298,10 @@ class Settings(object):
         return list(dds)
 
     ## update a list of Disable DataSources
-    def updateDataSources(self):
-        ver = self.state["ConfigVersion"]
-        csver = self.__configAttr("Version")
-        if not ver or csver != ver:
-            self.__reloadDeps()
+    def disableDataSources(self):
         
-        dss = self.__getDS('STEP','CLIENT')
-        print "DSS = ", dss
-        self.state["DisableDataSources"] = str(json.dumps(dss))
-        if self.__server:
-            dp = PyTango.DeviceProxy(str(self.__server.get_name()))
-            dp.write_attribute(str("DisableDataSources"), 
-                               self.state["DisableDataSources"])
+        dss = self.__getStepClient()
+        return dss
 
             
 

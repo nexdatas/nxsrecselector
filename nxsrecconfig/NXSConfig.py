@@ -361,17 +361,9 @@ class NXSRecSettings(PyTango.Device_4Impl):
 #------------------------------------------------------------------
     def read_DisableDataSources(self, attr):
         print >> self.log_info, "In ", self.get_name(), "::read_DisableDataSources()"
-        attr.set_value(self.stg.state["DisableDataSources"])
+        attr.set_value(self.stg.disableDataSources())
 
 
-
-#------------------------------------------------------------------
-#    Write DisableDataSources attribute
-#------------------------------------------------------------------
-    def write_DisableDataSources(self, attr):
-        print >> self.log_info, "In ", self.get_name(), "::write_DisableDataSources()"
-        self.stg.state["DisableDataSources"] = attr.get_write_value()
-        print >> self.log_info, "Attribute value = %s" % self.stg.state["DisableDataSources"]
 
 
 #------------------------------------------------------------------
@@ -610,32 +602,6 @@ class NXSRecSettings(PyTango.Device_4Impl):
 
 
 
-#------------------------------------------------------------------
-#    UpdateDataSources:
-#
-#    Description: update a list of Disable DataSources
-#                
-#------------------------------------------------------------------
-    def UpdateDataSources(self):
-        print >> self.log_info, "In ", self.get_name(), \
-            "::UpdateDataSources()"
-        try:
-            self.set_state(PyTango.DevState.RUNNING)
-            self.stg.updateDataSources()
-            self.set_state(PyTango.DevState.ON)
-        finally:
-            if self.get_state() == PyTango.DevState.RUNNING:
-                self.set_state(PyTango.DevState.ON)
-        
-
-
-#---- UpdateDataSources command State Machine -----------------
-    def is_UpdateDataSources_allowed(self):
-        if self.get_state() in [PyTango.DevState.RUNNING]:
-            return False
-        return True
-
-
 
 #------------------------------------------------------------------
 #    DataSourcePath command:
@@ -785,9 +751,6 @@ class NXSRecSettingsClass(PyTango.DeviceClass):
         'UpdateControllers':
             [[PyTango.DevVoid, ""],
             [PyTango.DevVoid, ""]],
-        'UpdateDataSources':
-            [[PyTango.DevVoid, ""],
-            [PyTango.DevVoid, ""]],
         'AvailableComponents':
             [[PyTango.DevVoid, ""],
             [PyTango.DevVarStringArray, "list of available component names"]],
@@ -808,7 +771,7 @@ class NXSRecSettingsClass(PyTango.DeviceClass):
             PyTango.READ, 10000],
             {
                 'label':"Selected Components",
-                'description':"JSON list of Selected Components",
+                'description':"list of Selected Components",
             } ],
         'ComponentGroup':
             [[PyTango.DevString,
@@ -932,7 +895,7 @@ class NXSRecSettingsClass(PyTango.DeviceClass):
             PyTango.READ, 10000],
             {
                 'label':"Selected Datasources",
-                'description':"JSON list of Selected Datasources",
+                'description':"list of Selected Datasources",
             } ],
         'DataSourceGroup':
             [[PyTango.DevString,
@@ -956,13 +919,11 @@ class NXSRecSettingsClass(PyTango.DeviceClass):
             } ],
         'DisableDataSources':
             [[PyTango.DevString,
-            PyTango.SCALAR,
-            PyTango.READ_WRITE],
+            PyTango.SPECTRUM,
+            PyTango.READ, 10000],
             {
                 'label':"Disable DataSources",
-                'description':"JSON list of Disable DataSources",
-                'Memorized':"true",
-                'Display level':PyTango.DispLevel.EXPERT,
+                'description':"list of Disable DataSources",
             } ],
         'AppendEntry':
             [[PyTango.DevBoolean,
