@@ -293,6 +293,29 @@ class Settings(object):
             if not Utils.findDeviceController(pools, dev):
                 nonexisting.append(dev)
         
+        describer = Describer(self.state["ConfigDevice"])
+        acps = json.loads(self.state["AutomaticComponentGroup"])
+        
+        rcp = set()
+        for acp in acps.keys():
+            res = describer.run([acp], '', '')
+            for cp, dss in res[1].items():
+                if isinstance(dss, dict):
+                    for ds in dss.keys():
+                        if ds in nonexisting:
+                            rcp.add(cp)
+                            break
+        for acp in acps.keys():
+            if acp in rcp:
+                acps[acp] = False
+            else:
+                acps[acp] = True
+                
+        self.state["AutomaticComponentGroup"] = json.dumps(acps)
+        if self.__server:
+            dp = PyTango.DeviceProxy(str(self.__server.get_name()))
+            dp.write_attribute(str("AutomaticComponentGroup"), 
+                               self.state["AutomaticComponentGroup"])
 
 
     def __getStepClient(self):

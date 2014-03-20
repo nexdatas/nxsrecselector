@@ -29,7 +29,7 @@ class Utils(object):
 
     @classmethod
     def getDeviceNamesByClass(cls, db, className):
-        srvs = cls.__getServerNameByClass(db, className)
+        srvs = cls.getServerNameByClass(db, className)
         argout = []
         for srv in srvs:
             lst = db.get_device_name(srv, className).value_string
@@ -53,7 +53,7 @@ class Utils(object):
 
     @classmethod
     def pools(cls, db):
-        poolNames = cls.__getDeviceNamesByClass(db, "Pool")
+        poolNames = cls.getDeviceNamesByClass(db, "Pool")
         pools = []
         for pool in poolNames:
             dp = PyTango.DeviceProxy(pool)
