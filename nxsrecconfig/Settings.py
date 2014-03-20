@@ -23,6 +23,7 @@
 import json
 import PyTango
 from .Describer import Describer
+from .Utils import Utils
 
 ## NeXus Sardana Recorder settings
 class Settings(object):
@@ -279,10 +280,20 @@ class Settings(object):
         fl = open(self.configFile, "r")
         self.state = json.load(fl)
 
+
+
+
     ## checks existing controllers of pools for 
     #      AutomaticDataSources
     def updateControllers(self):
-        pass
+        ads = set(json.loads(self.state["AutomaticDataSources"]))
+        pools = Utils.pools(self.__db)
+        nonexisting = []
+        for dev in ads:
+            if not Utils.findDeviceController(pools, dev):
+                nonexisting.append(dev)
+        
+
 
     def __getStepClient(self):
         if "configDevice" not in self.state or not self.state["ConfigDevice"]:
