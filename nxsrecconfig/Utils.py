@@ -28,6 +28,30 @@ class Utils(object):
     """  Tango Utilities """
 
     @classmethod
+    def openProxy(cls, device):
+        found = False
+        cnt = 0
+        cnfServer = PyTango.DeviceProxy(device)
+
+        while not found and cnt < 1000:
+            if cnt > 1:
+                time.sleep(0.01)
+            try:
+                if cnfServer.state() != PyTango.DevState.RUNNING:
+                    found = True
+            except (PyTango.DevFailed, PyTango.Except,  PyTango.DevError):
+                time.sleep(0.01)
+                found = False
+                if cnt == 999:
+                    raise
+            cnt += 1
+        
+        return cnfServer    
+
+
+
+
+    @classmethod
     def getDeviceNamesByClass(cls, db, className):
         srvs = cls.getServerNameByClass(db, className)
         argout = []
@@ -56,7 +80,7 @@ class Utils(object):
         poolNames = cls.getDeviceNamesByClass(db, "Pool")
         pools = []
         for pool in poolNames:
-            dp = PyTango.DeviceProxy(pool)
+            dp = cls.openProxy(pool)
             try:
                 dp.ping()
                 pools.append(dp)    
@@ -81,3 +105,14 @@ class Utils(object):
                 ctrl = chan['controller']
                 break
         return ctrl
+
+    
+    ## find device
+    # \param name device class name
+    @classmethod
+    def findDevice(cls, db, name):        
+        servers = db.get_device_exported_for_class(
+            name).value_string
+        if len(servers):
+            return servers[0]                
+

@@ -102,6 +102,9 @@ class Settings(object):
         ## Configuration Server device name
         self.state["ConfigDevice"] = ''
 
+        ## Door Server device name
+        self.state["DoorDevice"] = ''
+
         ## config server proxy
         self.__configProxy = None
 
@@ -127,7 +130,6 @@ class Settings(object):
         
 
     def dataSources(self):
-        
         dds = self.disableDataSources()
         if not isinstance(dds, list):
             dds = []
@@ -142,7 +144,7 @@ class Settings(object):
     # \returns name of configDevice           
     def __getConfigDevice(self):
         if "ConfigDevice" not in self.state or not self.state["ConfigDevice"]:
-            self.state["ConfigDevice"] = self.__findDevice("NXSConfigServer")
+            self.state["ConfigDevice"] = Utils.findDevice(self.__db,"NXSConfigServer")
         return self.state["ConfigDevice"]
 
     ## set method for configDevice attribute
@@ -151,13 +153,12 @@ class Settings(object):
         if name:
             self.state["ConfigDevice"] = name
         else:
-            self.state["ConfigDevice"] = self.__findDevice("NXSConfigServer")
+            self.state["ConfigDevice"] = Utils.findDevice(self.__db,"NXSConfigServer")
 
 
     ## del method for configDevice attribute
     def __delConfigDevice(self):
         self.state.pop("ConfigDevice")
-
 
     ## the json data string
     configDevice = property(__getConfigDevice, __setConfigDevice, __delConfigDevice, 
@@ -165,11 +166,41 @@ class Settings(object):
 
 
 
+
+
+
+    ## get method for doorDevice attribute
+    # \returns name of doorDevice           
+    def __getDoorDevice(self):
+        if "DoorDevice" not in self.state or not self.state["DoorDevice"]:
+            self.state["DoorDevice"] = Utils.findDevice(self.__db,"Door")
+        return self.state["DoorDevice"]
+
+    ## set method for doorDevice attribute
+    # \param name of doorDevice           
+    def __setDoorDevice(self, name):
+        if name:
+            self.state["DoorDevice"] = name
+        else:
+            self.state["DoorDevice"] = Utils.findDevice(self.__db,"Door")
+
+
+    ## del method for doorDevice attribute
+    def __delDoorDevice(self):
+        self.state.pop("DoorDevice")
+
+    ## the json data string
+    doorDevice = property(__getDoorDevice, __setDoorDevice, __delDoorDevice, 
+                            doc = 'door server device name')
+
+
+
     ## get method for writerDevice attribute
     # \returns name of writerDevice           
     def __getWriterDevice(self):
         if "writerDevice" not in self.state or not self.state["WriterDevice"]:
-            self.state["WriterDevice"] = self.__findDevice("NXSDataWriter")
+            self.state["WriterDevice"] = Utils.findDevice(
+                self.__db, "NXSDataWriter")
         return self.state["WriterDevice"]
 
     ## set method for writerDevice attribute
@@ -178,7 +209,8 @@ class Settings(object):
         if name:
             self.state["WriterDevice"] = name
         else:
-            self.state["WriterDevice"] = self.__findDevice("NXSDataWriter")
+            self.state["WriterDevice"] = Utils.findDevice(
+                self.__db,"NXSDataWriter")
 
 
     ## del method for writerDevice attribute
@@ -199,7 +231,8 @@ class Settings(object):
     # \returns name of writerDevice           
     def __getWriterDevice(self):
         if not self.__writerDevice:
-            self.__writerDevice = self.__findDevice("NXSDataWriter")
+            self.__writerDevice = Utils.findDevice(self.__db,
+                                                        "NXSDataWriter")
         return self.__writerDevice
 
     ## set method for writerDevice attribute
@@ -208,7 +241,8 @@ class Settings(object):
         if name:
             self.__writerDevice = name
         else:
-            self.__writerDevice = self.__findDevice("NXSDataWriter")
+            self.__writerDevice = Utils.findDevice(
+                self.__db, "NXSDataWriter")
 
 
     ## del method for writerDevice attribute
@@ -218,23 +252,15 @@ class Settings(object):
 
     ## the json data string
     writerDevice = property(__getWriterDevice, __setWriterDevice, __delWriterDevice, 
-                       doc = 'writeruration server device name')
+                       doc = 'writer server device name')
 
-
-    ## find device
-    # \param name device class name
-    def __findDevice(self, name):        
-        servers = self.__db.get_device_exported_for_class(
-            name).value_string
-        if len(servers):
-            return servers[0]                
 
 
     ## executes command on configuration server    
     def __configCommand(self, command):
         if "configDevice" not in self.state or not self.state["ConfigDevice"]:
             self.__getConfigDevice()
-        self.__configProxy = PyTango.DeviceProxy(self.state["ConfigDevice"])
+        self.__configProxy = Utils.openProxy(self.state["ConfigDevice"])
         self.__configProxy.Open()
         res = getattr(self.__configProxy, command)()
         return res
@@ -244,7 +270,7 @@ class Settings(object):
     def __configAttr(self, attr):
         if "configDevice" not in self.state or not self.state["ConfigDevice"]:
             self.__getConfigDevice()
-        self.__configProxy = PyTango.DeviceProxy(self.state["ConfigDevice"])
+        self.__configProxy = Utils.openProxy(self.state["ConfigDevice"])
         self.__configProxy.Open()
         res = getattr(self.__configProxy, attr)
         return res
@@ -313,7 +339,7 @@ class Settings(object):
                 
         self.state["AutomaticComponentGroup"] = json.dumps(acps)
         if self.__server:
-            dp = PyTango.DeviceProxy(str(self.__server.get_name()))
+            dp = Utils.openProxy(str(self.__server.get_name()))
             dp.write_attribute(str("AutomaticComponentGroup"), 
                                self.state["AutomaticComponentGroup"])
 

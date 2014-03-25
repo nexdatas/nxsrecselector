@@ -24,7 +24,7 @@ import PyTango
 import re
 import json
 import xml.dom.minidom
-
+from .Utils import Utils
 
 ## NeXus Sardana Recorder settings
 class Describer(object):
@@ -38,7 +38,7 @@ class Describer(object):
 
 
         if self.__server:
-            self.__nexusconfig_device = PyTango.DeviceProxy(self.__server)
+            self.__nexusconfig_device = Utils.openProxy(self.__server)
             self.__nexusconfig_device.Open()
             if components is not None:
                 cpp = self.__nexusconfig_device.AvailableComponents()  

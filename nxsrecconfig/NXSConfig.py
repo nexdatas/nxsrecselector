@@ -172,6 +172,23 @@ class NXSRecSettings(PyTango.Device_4Impl):
 
 
 #------------------------------------------------------------------
+#    Read DoorDevice attribute
+#------------------------------------------------------------------
+    def read_DoorDevice(self, attr):
+        print >> self.log_info, "In ", self.get_name(), "::read_DoorDevice()"
+        attr.set_value(self.stg.doorDevice)
+
+
+#------------------------------------------------------------------
+#    Write DoorDevice attribute
+#------------------------------------------------------------------
+    def write_DoorDevice(self, attr):
+        print >> self.log_info, "In ", self.get_name(), "::write_DoorDevice()"
+        self.stg.configDevice = attr.get_write_value()
+        print >> self.log_info, "Attribute value = %s" % self.stg.doorDevice
+
+
+
 #    Read ConfigDevice attribute
 #------------------------------------------------------------------
     def read_ConfigDevice(self, attr):
@@ -818,6 +835,15 @@ class NXSRecSettingsClass(PyTango.DeviceClass):
             {
                 'label':"Configuration Device",
                 'description':"Configuration device",
+                'Memorized':"true",
+            } ],
+        'DoorDevice':
+            [[PyTango.DevString,
+            PyTango.SCALAR,
+            PyTango.READ_WRITE],
+            {
+                'label':"Door Device",
+                'description':"Door device",
                 'Memorized':"true",
             } ],
         'WriterDevice':
