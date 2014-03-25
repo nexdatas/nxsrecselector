@@ -319,7 +319,9 @@ class Settings(object):
 
         describer = Describer(self.state["ConfigDevice"])
         res = describer.run(
-            list(set(self.components()) | set(self.mandatoryComponents())),
+            list(set(self.components()) | 
+                 set(self.automaticComponents()) | 
+                 set(self.mandatoryComponents())),
                             'STEP', 'CLIENT')
         for grp in res:
             for dss in grp.values():
