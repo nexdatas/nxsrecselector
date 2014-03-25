@@ -387,7 +387,9 @@ class Settings(object):
             self.__getConfigDevice()
         describer = Describer(self.state["ConfigDevice"])
         res = describer.run(
-            list(set(self.components()) | set(self.mandatoryComponents())),
+            list(set(self.components()) | 
+                 set(self.automaticComponents()) | 
+                 set(self.mandatoryComponents())),
                             'STEP', 'CLIENT')
         dds = set()
 
