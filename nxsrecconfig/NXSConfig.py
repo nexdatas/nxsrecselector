@@ -113,6 +113,25 @@ class NXSRecSettings(PyTango.Device_4Impl):
 
 
 #------------------------------------------------------------------
+#    Read Timer attribute
+#------------------------------------------------------------------
+    def read_Timer(self, attr):
+        print >> self.log_info, "In ", self.get_name(), "::read_Timer()"
+        attr.set_value(self.stg.state["Timer"])
+
+
+#------------------------------------------------------------------
+#    Write Timer attribute
+#------------------------------------------------------------------
+    def write_Timer(self, attr):
+        print >> self.log_info, "In ", self.get_name(), "::write_Timer()"
+        self.stg.state["Timer"] = attr.get_write_value()
+        print >> self.log_info, "Attribute value = %s" % self.stg.state["Timer"]
+
+
+
+
+#------------------------------------------------------------------
 #    Read ComponentGroup attribute
 #------------------------------------------------------------------
     def read_ComponentGroup(self, attr):
@@ -127,6 +146,8 @@ class NXSRecSettings(PyTango.Device_4Impl):
         print >> self.log_info, "In ", self.get_name(), "::write_ComponentGroup()"
         self.stg.state["ComponentGroup"] = attr.get_write_value()
         print >> self.log_info, "Attribute value = %s" % self.stg.state["ComponentGroup"]
+
+
 
 #------------------------------------------------------------------
 #    Read AutomaticComponentGroup attribute
@@ -184,7 +205,7 @@ class NXSRecSettings(PyTango.Device_4Impl):
 #------------------------------------------------------------------
     def write_DoorDevice(self, attr):
         print >> self.log_info, "In ", self.get_name(), "::write_DoorDevice()"
-        self.stg.configDevice = attr.get_write_value()
+        self.stg.doorDevice = attr.get_write_value()
         print >> self.log_info, "Attribute value = %s" % self.stg.doorDevice
 
 
@@ -203,6 +224,23 @@ class NXSRecSettings(PyTango.Device_4Impl):
         print >> self.log_info, "In ", self.get_name(), "::write_ConfigDevice()"
         self.stg.configDevice = attr.get_write_value()
         print >> self.log_info, "Attribute value = %s" % self.stg.configDevice
+
+
+
+#    Read ActiveMntGrp attribute
+#------------------------------------------------------------------
+    def read_ActiveMntGrp(self, attr):
+        print >> self.log_info, "In ", self.get_name(), "::read_ActiveMntGrp()"
+        attr.set_value(self.stg.activeMntGrp)
+
+
+#------------------------------------------------------------------
+#    Write ActiveMntGrp attribute
+#------------------------------------------------------------------
+    def write_ActiveMntGrp(self, attr):
+        print >> self.log_info, "In ", self.get_name(), "::write_ActiveMntGrp()"
+        self.stg.activeMntGrp = attr.get_write_value()
+        print >> self.log_info, "Attribute value = %s" % self.stg.activeMntGrp
 
 
 #------------------------------------------------------------------
@@ -616,6 +654,32 @@ class NXSRecSettings(PyTango.Device_4Impl):
             return False
         return True
 
+#------------------------------------------------------------------
+#    UpdateMntGrp:
+#
+#    Description: checks existing controllers of pools for 
+#        AutomaticDataSources
+#                
+#------------------------------------------------------------------
+    def UpdateMntGrp(self):
+        print >> self.log_info, "In ", self.get_name(), \
+            "::UpdateMntGrp()"
+        try:
+            self.set_state(PyTango.DevState.RUNNING)
+            self.stg.updateMntGrp()
+            self.set_state(PyTango.DevState.ON)
+        finally:
+            if self.get_state() == PyTango.DevState.RUNNING:
+                self.set_state(PyTango.DevState.ON)
+        
+
+
+#---- UpdateMntGrp command State Machine -----------------
+    def is_UpdateMntGrp_allowed(self):
+        if self.get_state() in [PyTango.DevState.RUNNING]:
+            return False
+        return True
+
 
 
 
@@ -765,6 +829,9 @@ class NXSRecSettingsClass(PyTango.DeviceClass):
         'SaveConfiguration':
             [[PyTango.DevVoid, ""],
             [PyTango.DevVoid, ""]],
+        'UpdateMntGrp':
+            [[PyTango.DevVoid, ""],
+            [PyTango.DevVoid, ""]],
         'UpdateControllers':
             [[PyTango.DevVoid, ""],
             [PyTango.DevVoid, ""]],
@@ -789,6 +856,15 @@ class NXSRecSettingsClass(PyTango.DeviceClass):
             {
                 'label':"Selected Components",
                 'description':"list of Selected Components",
+            } ],
+        'Timer':
+            [[PyTango.DevString,
+            PyTango.SCALAR,
+            PyTango.READ_WRITE],
+            {
+                'label':"Timer",
+                'description':"Timer",
+                'Memorized':"true",
             } ],
         'ComponentGroup':
             [[PyTango.DevString,
@@ -827,6 +903,15 @@ class NXSRecSettingsClass(PyTango.DeviceClass):
                 'description':"JSON list of optional components available for automatic selection",
                 'Memorized':"true",
                 'Display level':PyTango.DispLevel.EXPERT,
+            } ],
+        'ActiveMntGrp':
+            [[PyTango.DevString,
+            PyTango.SCALAR,
+            PyTango.READ_WRITE],
+            {
+                'label':"Active Measurement Group",
+                'description':"Active Measurement Group",
+                'Memorized':"true",
             } ],
         'ConfigDevice':
             [[PyTango.DevString,

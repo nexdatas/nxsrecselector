@@ -37,6 +37,9 @@ class Settings(object):
         self.state = {}
 
 
+        ## timer
+        self.state["Timer"] = ''
+
         ## group of electable components
         self.state["ComponentGroup"] = '{}'
 
@@ -140,6 +143,8 @@ class Settings(object):
             return []
 
 
+
+
     ## get method for configDevice attribute
     # \returns name of configDevice           
     def __getConfigDevice(self):
@@ -227,32 +232,22 @@ class Settings(object):
 
 
 
-    ## get method for writerDevice attribute
-    # \returns name of writerDevice           
-    def __getWriterDevice(self):
-        if not self.__writerDevice:
-            self.__writerDevice = Utils.findDevice(self.__db,
-                                                        "NXSDataWriter")
-        return self.__writerDevice
 
-    ## set method for writerDevice attribute
-    # \param name of writerDevice           
-    def __setWriterDevice(self, name):
-        if name:
-            self.__writerDevice = name
-        else:
-            self.__writerDevice = Utils.findDevice(
-                self.__db, "NXSDataWriter")
+    ## get method for ActiveMntGrp attribute
+    # \returns name of ActiveMntGrp
+    def __getActiveMntGrp(self):
+        door =  self.__getDoorDevice()
+        return Utils.getActiveMntGrp(door)
 
-
-    ## del method for writerDevice attribute
-    def __delWriterDevice(self):
-        del self.__writerDevice 
-
+    ## set method for ActiveMntGrp attribute
+    # \param name of ActiveMntGrp           
+    def __setActiveMntGrp(self, name):
+        door =  self.__getDoorDevice()
+        Utils.setActiveMntGrp(door, name)
 
     ## the json data string
-    writerDevice = property(__getWriterDevice, __setWriterDevice, __delWriterDevice, 
-                       doc = 'writer server device name')
+    activeMntGrp = property(__getActiveMntGrp, __setActiveMntGrp,
+                       doc = 'active measurement group')
 
 
 
@@ -306,6 +301,46 @@ class Settings(object):
         fl = open(self.configFile, "r")
         self.state = json.load(fl)
 
+    ## set active measurement group from components
+    def updateMntGrp(self):
+        pools = Utils.pools(self.__db)
+        hsh = {}
+        hsh['controllers'] = {} 
+        hsh['description'] = "Measurement Group" 
+        hsh['label'] = "" 
+        timer = self.state["Timer"]
+        datasources = self.dataSources()
+
+        aliases = []
+        if isinstance(datasources, list):
+            aliases = datasources
+        if timer:
+            aliases.append(timer)
+
+        describer = Describer(self.state["ConfigDevice"])
+        res = describer.run(
+            list(set(self.components()) | set(self.mandatoryComponents())),
+                            'STEP', 'CLIENT')
+        for grp in res:
+            for dss in grp.values():
+                for ds in dss.keys():
+                    aliases.append(str(ds))
+        aliases = list(set(aliases))
+
+        mntGrpName = self.__getActiveMntGrp()
+        fullname = str(Utils.findMntGrpName(mntGrpName, pools))
+        dpmg = Utils.openProxy(fullname)
+        hsh['label'] = mntGrpName
+        index = 0
+        fullname = Utils.findFullDeviceName(timer, pools)
+        if not fullname:
+            raise Exception("Timer or Monitor cannot be found amount the servers")
+        hsh['monitor'] = fullname
+        hsh['timer'] = fullname
+                        
+        for alias in aliases:
+            index = Utils.addDevice(alias, pools, hsh, timer, index)
+        dpmg.Configuration = json.dumps(hsh)
 
 
 
@@ -316,7 +351,7 @@ class Settings(object):
         pools = Utils.pools(self.__db)
         nonexisting = []
         for dev in ads:
-            if not Utils.findDeviceController(pools, dev):
+            if not Utils.findDeviceController(dev, pools):
                 nonexisting.append(dev)
         
         describer = Describer(self.state["ConfigDevice"])
@@ -344,11 +379,14 @@ class Settings(object):
                                self.state["AutomaticComponentGroup"])
 
 
-    def __getStepClient(self):
+    ## update a list of Disable DataSources
+    def disableDataSources(self):
         if "configDevice" not in self.state or not self.state["ConfigDevice"]:
             self.__getConfigDevice()
         describer = Describer(self.state["ConfigDevice"])
-        res = describer.run(self.components(), 'STEP', 'CLIENT')
+        res = describer.run(
+            list(set(self.components()) | set(self.mandatoryComponents())),
+                            'STEP', 'CLIENT')
         dds = set()
 
         for dss in res[1].values():
@@ -356,12 +394,6 @@ class Settings(object):
                 for ds in dss.keys():
                     dds.add(ds)
         return list(dds)
-
-    ## update a list of Disable DataSources
-    def disableDataSources(self):
-        
-        dss = self.__getStepClient()
-        return dss
 
             
 
