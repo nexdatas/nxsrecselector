@@ -237,17 +237,71 @@ class Settings(object):
     # \returns name of ActiveMntGrp
     def __getActiveMntGrp(self):
         ms =  self.__getMacroServer()
-        return Utils.getActiveMntGrp(ms)
+        return Utils.getEnv('ActiveMntGrp', ms)
 
     ## set method for ActiveMntGrp attribute
     # \param name of ActiveMntGrp           
     def __setActiveMntGrp(self, name):
         ms =  self.__getMacroServer()
-        Utils.setActiveMntGrp(ms, name)
+        Utils.setEnv('ActiveMntGrp', name, ms)
 
     ## the json data string
     activeMntGrp = property(__getActiveMntGrp, __setActiveMntGrp,
                        doc = 'active measurement group')
+
+
+
+
+    ## get method for ScanDir attribute
+    # \returns name of ScanDir
+    def __getScanDir(self):
+        ms =  self.__getMacroServer()
+        return Utils.getEnv('ScanDir', ms)
+
+    ## set method for ScanDir attribute
+    # \param name of ScanDir           
+    def __setScanDir(self, name):
+        ms =  self.__getMacroServer()
+        Utils.setEnv('ScanDir', name, ms)
+
+    ## the json data string
+    scanDir = property(__getScanDir, __setScanDir,
+                       doc = 'scan directory')
+
+
+
+    ## get method for ScanID attribute
+    # \returns name of ScanID
+    def __getScanID(self):
+        ms =  self.__getMacroServer()
+        return int(Utils.getEnv('ScanID', ms))
+
+    ## set method for ScanID attribute
+    # \param name of ScanID           
+    def __setScanID(self, name):
+        ms =  self.__getMacroServer()
+        Utils.setEnv('ScanID', name, ms)
+
+    ## the json data string
+    scanID = property(__getScanID, __setScanID,
+                       doc = 'scan id')
+
+
+    ## get method for ScanFile attribute
+    # \returns name of ScanFile
+    def __getScanFile(self):
+        ms =  self.__getMacroServer()
+        return Utils.getEnv('ScanFile', ms)
+
+    ## set method for ScanFile attribute
+    # \param name of ScanFile           
+    def __setScanFile(self, name):
+        ms =  self.__getMacroServer()
+        Utils.setEnv('ScanFile', name, ms)
+
+    ## the json data string
+    scanFile = property(__getScanFile, __setScanFile,
+                       doc = 'scan file(s)')
 
 
 

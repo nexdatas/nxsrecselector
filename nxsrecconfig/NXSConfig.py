@@ -210,6 +210,7 @@ class NXSRecSettings(PyTango.Device_4Impl):
 
 
 
+#------------------------------------------------------------------
 #    Read ConfigDevice attribute
 #------------------------------------------------------------------
     def read_ConfigDevice(self, attr):
@@ -227,6 +228,7 @@ class NXSRecSettings(PyTango.Device_4Impl):
 
 
 
+#------------------------------------------------------------------
 #    Read ActiveMntGrp attribute
 #------------------------------------------------------------------
     def read_ActiveMntGrp(self, attr):
@@ -241,6 +243,55 @@ class NXSRecSettings(PyTango.Device_4Impl):
         print >> self.log_info, "In ", self.get_name(), "::write_ActiveMntGrp()"
         self.stg.activeMntGrp = attr.get_write_value()
         print >> self.log_info, "Attribute value = %s" % self.stg.activeMntGrp
+
+#------------------------------------------------------------------
+#    Read ScanDir attribute
+#------------------------------------------------------------------
+    def read_ScanDir(self, attr):
+        print >> self.log_info, "In ", self.get_name(), "::read_ScanDir()"
+        attr.set_value(self.stg.scanDir)
+
+
+#------------------------------------------------------------------
+#    Write ScanDir attribute
+#------------------------------------------------------------------
+    def write_ScanDir(self, attr):
+        print >> self.log_info, "In ", self.get_name(), "::write_ScanDir()"
+        self.stg.scanDir = attr.get_write_value()
+        print >> self.log_info, "Attribute value = %s" % self.stg.scanDir
+
+#------------------------------------------------------------------
+#    Read ScanFile attribute
+#------------------------------------------------------------------
+    def read_ScanFile(self, attr):
+        print >> self.log_info, "In ", self.get_name(), "::read_ScanFile()"
+        attr.set_value(self.stg.scanFile)
+
+
+#------------------------------------------------------------------
+#    Write ScanFile attribute
+#------------------------------------------------------------------
+    def write_ScanFile(self, attr):
+        print >> self.log_info, "In ", self.get_name(), "::write_ScanFile()"
+        self.stg.scanFile = attr.get_write_value()
+        print >> self.log_info, "Attribute value = %s" % self.stg.scanFile
+
+#------------------------------------------------------------------
+#    Read ScanID attribute
+#------------------------------------------------------------------
+    def read_ScanID(self, attr):
+        print >> self.log_info, "In ", self.get_name(), "::read_ScanID()"
+        attr.set_value(self.stg.scanID)
+
+
+#------------------------------------------------------------------
+#    Write ScanID attribute
+#------------------------------------------------------------------
+    def write_ScanID(self, attr):
+        print >> self.log_info, "In ", self.get_name(), "::write_ScanID()"
+        self.stg.scanID = attr.get_write_value()
+        print >> self.log_info, "Attribute value = %s" % self.stg.scanID
+
 
 
 #------------------------------------------------------------------
@@ -911,7 +962,30 @@ class NXSRecSettingsClass(PyTango.DeviceClass):
             {
                 'label':"Active Measurement Group",
                 'description':"Active Measurement Group",
-                'Memorized':"true",
+            } ],
+        'ScanDir':
+            [[PyTango.DevString,
+            PyTango.SCALAR,
+            PyTango.READ_WRITE],
+            {
+                'label':"Scan Directory",
+                'description':"Scan Directory",
+            } ],
+        'ScanID':
+            [[PyTango.DevLong,
+            PyTango.SCALAR,
+            PyTango.READ_WRITE],
+            {
+#                'label':"Scan ID",
+                'description':"Scan ID",
+            } ],
+        'ScanFile':
+            [[PyTango.DevString,
+            PyTango.SPECTRUM,
+            PyTango.READ_WRITE, 50],
+            {
+                'label':"Scan File(s)",
+                'description':"Scan File(s)",
             } ],
         'ConfigDevice':
             [[PyTango.DevString,

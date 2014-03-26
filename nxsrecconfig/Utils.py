@@ -51,27 +51,27 @@ class Utils(object):
         return cnfServer    
 
     @classmethod
-    def getActiveMntGrp(cls, ms):
+    def getEnv(cls, var, ms):
         active = ""
         dp = cls.openProxy(ms)
         rec = dp.Environment
         if rec[0] == 'pickle':
             dc = pickle.loads(rec[1])
             if 'new' in dc.keys() and \
-                    'ActiveMntGrp' in dc['new'].keys():
-                active = dc['new']["ActiveMntGrp"]
+                    var in dc['new'].keys():
+                active = dc['new'][var]
         return active
 
 
     @classmethod
-    def setActiveMntGrp(cls, ms, name):
+    def setEnv(cls, var, name, ms):
         active = ""
         dp = cls.openProxy(ms)
         rec = dp.Environment
         if rec[0] == 'pickle':
             dc = pickle.loads(rec[1])
             if 'new' in dc.keys():
-                dc['new']["ActiveMntGrp"] = name
+                dc['new'][var] = name
                 pk = pickle.dumps(dc)    
                 dp.Environment = ['pickle', pk]
                     
