@@ -193,20 +193,20 @@ class NXSRecSettings(PyTango.Device_4Impl):
 
 
 #------------------------------------------------------------------
-#    Read DoorDevice attribute
+#    Read MacroServer attribute
 #------------------------------------------------------------------
-    def read_DoorDevice(self, attr):
-        print >> self.log_info, "In ", self.get_name(), "::read_DoorDevice()"
-        attr.set_value(self.stg.doorDevice)
+    def read_MacroServer(self, attr):
+        print >> self.log_info, "In ", self.get_name(), "::read_MacroServer()"
+        attr.set_value(self.stg.macroServer)
 
 
 #------------------------------------------------------------------
-#    Write DoorDevice attribute
+#    Write MacroServer attribute
 #------------------------------------------------------------------
-    def write_DoorDevice(self, attr):
-        print >> self.log_info, "In ", self.get_name(), "::write_DoorDevice()"
-        self.stg.doorDevice = attr.get_write_value()
-        print >> self.log_info, "Attribute value = %s" % self.stg.doorDevice
+    def write_MacroServer(self, attr):
+        print >> self.log_info, "In ", self.get_name(), "::write_MacroServer()"
+        self.stg.macroServer = attr.get_write_value()
+        print >> self.log_info, "Attribute value = %s" % self.stg.macroServer
 
 
 
@@ -922,13 +922,13 @@ class NXSRecSettingsClass(PyTango.DeviceClass):
                 'description':"Configuration device",
                 'Memorized':"true",
             } ],
-        'DoorDevice':
+        'MacroServer':
             [[PyTango.DevString,
             PyTango.SCALAR,
             PyTango.READ_WRITE],
             {
-                'label':"Door Device",
-                'description':"Door device",
+                'label':"MacroServer",
+                'description':"MacroServer",
                 'Memorized':"true",
             } ],
         'WriterDevice':

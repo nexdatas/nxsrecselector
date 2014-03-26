@@ -23,6 +23,7 @@
 import PyTango
 import time
 import json
+import pickle
 
 ## 
 class Utils(object):
@@ -50,43 +51,29 @@ class Utils(object):
         return cnfServer    
 
     @classmethod
-    def getActiveMntGrp(cls, door):
+    def getActiveMntGrp(cls, ms):
         active = ""
-        dp = cls.openProxy(door)
-        dp.RunMacro(["lsmeas"])
-        while dp.state() == PyTango.DevState.RUNNING:
-            time.sleep(0.01)
-        res = dp.Output
-        if res and len(res)>2:
-            for line in res[2:]:
-                sline = line.split()
-                if sline[0] == '*':
-                    active = sline[1]
-                    break
+        dp = cls.openProxy(ms)
+        rec = dp.Environment
+        if rec[0] == 'pickle':
+            dc = pickle.loads(rec[1])
+            if 'new' in dc.keys() and \
+                    'ActiveMntGrp' in dc['new'].keys():
+                active = dc['new']["ActiveMntGrp"]
         return active
 
 
     @classmethod
-    def setActiveMntGrp(cls, door, name):
-        groups = set()
-        dp = cls.openProxy(door)
-        dp.RunMacro(["lsmeas"])
-        while dp.state() == PyTango.DevState.RUNNING:
-            time.sleep(0.01)
-        res = dp.Output
-        if res and len(res)>2:
-            for line in res[2:]:
-                sline = line.split()
-                if sline[0] == '*':
-                    groups.add(sline[1])
-                else:
-                    groups.add(sline[0])
-        if name in groups:
-            dp.RunMacro(['senv', 'ActiveMntGrp', '"%s"' % name])
-            while dp.state() == PyTango.DevState.RUNNING:
-                time.sleep(0.01)
-        else:
-            raise Exception("Unknown Measurement Group: %s" % name)
+    def setActiveMntGrp(cls, ms, name):
+        active = ""
+        dp = cls.openProxy(ms)
+        rec = dp.Environment
+        if rec[0] == 'pickle':
+            dc = pickle.loads(rec[1])
+            if 'new' in dc.keys():
+                dc['new']["ActiveMntGrp"] = name
+                pk = pickle.dumps(dc)    
+                dp.Environment = ['pickle', pk]
                     
 
     @classmethod

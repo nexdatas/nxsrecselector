@@ -105,8 +105,8 @@ class Settings(object):
         ## Configuration Server device name
         self.state["ConfigDevice"] = ''
 
-        ## Door Server device name
-        self.state["DoorDevice"] = ''
+        ## MacroServer device name
+        self.state["MacroServer"] = ''
 
         ## config server proxy
         self.__configProxy = None
@@ -174,28 +174,28 @@ class Settings(object):
 
 
 
-    ## get method for doorDevice attribute
-    # \returns name of doorDevice           
-    def __getDoorDevice(self):
-        if "DoorDevice" not in self.state or not self.state["DoorDevice"]:
-            self.state["DoorDevice"] = Utils.findDevice(self.__db,"Door")
-        return self.state["DoorDevice"]
+    ## get method for macroServer attribute
+    # \returns name of macroServer           
+    def __getMacroServer(self):
+        if "MacroServer" not in self.state or not self.state["MacroServer"]:
+            self.state["MacroServer"] = Utils.findDevice(self.__db,"MacroServer")
+        return self.state["MacroServer"]
 
-    ## set method for doorDevice attribute
-    # \param name of doorDevice           
-    def __setDoorDevice(self, name):
+    ## set method for macroServer attribute
+    # \param name of macroServer           
+    def __setMacroServer(self, name):
         if name:
-            self.state["DoorDevice"] = name
+            self.state["MacroServer"] = name
         else:
-            self.state["DoorDevice"] = Utils.findDevice(self.__db,"Door")
+            self.state["MacroServer"] = Utils.findDevice(self.__db,"MacroServer")
 
 
-    ## del method for doorDevice attribute
-    def __delDoorDevice(self):
-        self.state.pop("DoorDevice")
+    ## del method for macroServer attribute
+    def __delMacroServer(self):
+        self.state.pop("MacroServer")
 
     ## the json data string
-    doorDevice = property(__getDoorDevice, __setDoorDevice, __delDoorDevice, 
+    macroServer = property(__getMacroServer, __setMacroServer, __delMacroServer, 
                             doc = 'door server device name')
 
 
@@ -236,14 +236,14 @@ class Settings(object):
     ## get method for ActiveMntGrp attribute
     # \returns name of ActiveMntGrp
     def __getActiveMntGrp(self):
-        door =  self.__getDoorDevice()
-        return Utils.getActiveMntGrp(door)
+        ms =  self.__getMacroServer()
+        return Utils.getActiveMntGrp(ms)
 
     ## set method for ActiveMntGrp attribute
     # \param name of ActiveMntGrp           
     def __setActiveMntGrp(self, name):
-        door =  self.__getDoorDevice()
-        Utils.setActiveMntGrp(door, name)
+        ms =  self.__getMacroServer()
+        Utils.setActiveMntGrp(ms, name)
 
     ## the json data string
     activeMntGrp = property(__getActiveMntGrp, __setActiveMntGrp,
