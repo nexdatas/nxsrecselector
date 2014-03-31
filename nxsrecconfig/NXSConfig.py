@@ -427,6 +427,14 @@ class NXSRecSettings(PyTango.Device_4Impl):
 
 
 #------------------------------------------------------------------
+#    Read Description attribute
+#------------------------------------------------------------------
+    def read_Description(self, attr):
+        print >> self.log_info, "In ", self.get_name(), "::read_Description()"
+        attr.set_value(self.stg.description())
+
+
+#------------------------------------------------------------------
 #    Read DataSourceGroup attribute
 #------------------------------------------------------------------
     def read_DataSourceGroup(self, attr):
@@ -1081,6 +1089,15 @@ class NXSRecSettingsClass(PyTango.DeviceClass):
             {
                 'label':"Selected Datasources",
                 'description':"list of Selected Datasources",
+            } ],
+        'Description':
+            [[PyTango.DevString,
+            PyTango.SCALAR,
+            PyTango.READ],
+            {
+                'label':"Dependences descrition",
+                'description':"Dependences descrition of Components and Datasources",
+                'Display level':PyTango.DispLevel.EXPERT,
             } ],
         'DataSourceGroup':
             [[PyTango.DevString,

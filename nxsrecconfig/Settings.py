@@ -149,7 +149,7 @@ class Settings(object):
     # \returns name of configDevice           
     def __getConfigDevice(self):
         if "ConfigDevice" not in self.state or not self.state["ConfigDevice"]:
-            self.state["ConfigDevice"] = Utils.findDevice(self.__db,"NXSConfigServer")
+            self.state["ConfigDevice"] = Utils.findDevice(self.__db, "NXSConfigServer")
         return self.state["ConfigDevice"]
 
     ## set method for configDevice attribute
@@ -158,7 +158,7 @@ class Settings(object):
         if name:
             self.state["ConfigDevice"] = name
         else:
-            self.state["ConfigDevice"] = Utils.findDevice(self.__db,"NXSConfigServer")
+            self.state["ConfigDevice"] = Utils.findDevice(self.__db, "NXSConfigServer")
 
 
     ## del method for configDevice attribute
@@ -355,6 +355,21 @@ class Settings(object):
         fl = open(self.configFile, "r")
         self.state = json.load(fl)
 
+        
+    def description(self):
+        dc = self.__description()
+        jdc = json.dumps(dc)
+        return jdc
+
+    def __description(self, dstype = ''):
+        describer = Describer(self.state["ConfigDevice"])
+        res = describer.run(
+            list(set(self.components()) | 
+                 set(self.automaticComponents()) | 
+                 set(self.mandatoryComponents())),
+                            'STEP')
+        return res
+
     ## set active measurement group from components
     def updateMntGrp(self):
         pools = Utils.pools(self.__db)
@@ -371,12 +386,7 @@ class Settings(object):
         if timer:
             aliases.append(timer)
 
-        describer = Describer(self.state["ConfigDevice"])
-        res = describer.run(
-            list(set(self.components()) | 
-                 set(self.automaticComponents()) | 
-                 set(self.mandatoryComponents())),
-                            'STEP', 'CLIENT')
+        res = self.__description('CLIENT')    
         for grp in res:
             for dss in grp.values():
                 for ds in dss.keys():
@@ -439,12 +449,7 @@ class Settings(object):
     def disableDataSources(self):
         if "configDevice" not in self.state or not self.state["ConfigDevice"]:
             self.__getConfigDevice()
-        describer = Describer(self.state["ConfigDevice"])
-        res = describer.run(
-            list(set(self.components()) | 
-                 set(self.automaticComponents()) | 
-                 set(self.mandatoryComponents())),
-                            'STEP', 'CLIENT')
+        res = self.__description()    
         dds = set()
 
         for dss in res[1].values():

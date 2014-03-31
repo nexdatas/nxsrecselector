@@ -36,7 +36,6 @@ class Describer(object):
 
     def run(self, components=None, strategy='', dstype=''):
 
-
         if self.__server:
             self.__nexusconfig_device = Utils.openProxy(self.__server)
             self.__nexusconfig_device.Open()
@@ -80,14 +79,16 @@ class Describer(object):
         label = 'datasources'
         dstype = None
         name = None
+#        print "TN0", node.nodeName, node.nodeType, node.TEXT_NODE
         if node.nodeName == 'datasource':
             if node.hasAttribute("type"):
                 dstype  = node.attributes["type"].value
             if node.hasAttribute("name"):
                 name = node.attributes["name"].value
-
+#            print "TN", dstype, name    
         elif node.nodeType == node.TEXT_NODE:
             dstxt = node.data
+#            print "TN1",dstxt 
             index = dstxt.find("$%s." % label)
             while index != -1 and not dstype:
                 try:
@@ -97,6 +98,7 @@ class Describer(object):
                 except Exception:
                     subc = ''
                 name = subc.strip() if subc else ""
+#                print "TN2", name    
                 try:
                     dsource = self.__nexusconfig_device.DataSources([str(name)])
                 except:
@@ -110,6 +112,7 @@ class Describer(object):
                                 dstype  = ds.attributes["type"].value
                             if ds.hasAttribute("name"):
                                 name = ds.attributes["name"].value
+#                            print "TN3", dstype, name    
                 index = dstxt.find("$%s." % label, index+1)
         return name, dstype
                 
@@ -117,6 +120,7 @@ class Describer(object):
     def __appendNode(self, node, dss, mode, counter): 
         prefix = '__unnamed__'
         name, dstype = self.__checkNode(node)
+#        print "APPEND", name, dstype
         if name:
             if name not in dss:
                 dss[name] = [] 
