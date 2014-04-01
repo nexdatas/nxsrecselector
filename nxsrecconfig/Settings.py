@@ -357,17 +357,18 @@ class Settings(object):
 
         
     def description(self):
-        dc = self.__description()
+        dc = self.__description(full = True)
         jdc = json.dumps(dc)
         return jdc
 
-    def __description(self, dstype = ''):
+    def __description(self, dstype = '', full = False):
         describer = Describer(self.state["ConfigDevice"])
-        res = describer.run(
-            list(set(self.components()) | 
-                 set(self.automaticComponents()) | 
-                 set(self.mandatoryComponents())),
-                            'STEP')
+        cp = None
+        if not full:
+            cp = list(set(self.components()) | 
+            set(self.automaticComponents()) | 
+            set(self.mandatoryComponents()))
+        res = describer.run(cp, 'STEP')
         return res
 
     ## set active measurement group from components
@@ -440,7 +441,7 @@ class Settings(object):
                 
         self.state["AutomaticComponentGroup"] = json.dumps(acps)
         if self.__server:
-            dp = Utils.openProxy(str(self.__server.get_name()))
+            dp = PyTango.DeviceProxy(str(self.__server.get_name()))
             dp.write_attribute(str("AutomaticComponentGroup"), 
                                self.state["AutomaticComponentGroup"])
 
