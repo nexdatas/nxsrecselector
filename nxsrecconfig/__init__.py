@@ -29,11 +29,11 @@ import sys
 # \param argv command-line arguments
 def run(argv):
     import PyTango
-    from .NXSConfig import NXSRecSettings as NXSRecConfig
-    from .NXSConfig import NXSRecSettingsClass as NXSRecConfigClass
+    from .NXSConfig import NXSRecSelector as NXSRecConfig
+    from .NXSConfig import NXSRecSelectorClass as NXSRecConfigClass
     try:
         py = PyTango.Util(argv)
-        py.add_class(NXSRecConfigClass, NXSRecConfig, 'NXSRecSettings')
+        py.add_class(NXSRecConfigClass, NXSRecConfig, 'NXSRecSelector')
 
         U = PyTango.Util.instance()
         U.server_init()

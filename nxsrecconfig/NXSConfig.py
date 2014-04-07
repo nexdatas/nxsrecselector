@@ -2,13 +2,13 @@
 #    "$Header:  $";
 #=============================================================================
 #
-# file :        NXSRecSettings.py
+# file :        NXSRecSelector.py
 #
-# description : Python source for the NXSRecSettings and its commands. 
+# description : Python source for the NXSRecSelector and its commands. 
 #                The class is derived from Device. It represents the
 #                CORBA servant object which will be accessed from the
 #                network. All commands which can be executed on the
-#                NXSRecSettings are implemented in this file.
+#                NXSRecSelector are implemented in this file.
 #
 # project :     TANGO Device Server
 #
@@ -36,7 +36,7 @@ import sys
 
 
 #==================================================================
-#   NXSRecSettings Class Description:
+#   NXSRecSelector Class Description:
 #
 #         Tango Server for Nexus Sardana Recorder Settings
 #
@@ -50,7 +50,7 @@ import sys
 
 from Settings import Settings as STG
 
-class NXSRecSettings(PyTango.Device_4Impl):
+class NXSRecSelector(PyTango.Device_4Impl):
 
 #--------- Add you global variables here --------------------------
 
@@ -61,7 +61,7 @@ class NXSRecSettings(PyTango.Device_4Impl):
         PyTango.Device_4Impl.__init__(self,cl,name)
         ## Recorder Settings
         self.stg = STG(self)
-        NXSRecSettings.init_device(self)
+        NXSRecSelector.init_device(self)
 
 #------------------------------------------------------------------
 #    Device destructor
@@ -93,7 +93,7 @@ class NXSRecSettings(PyTango.Device_4Impl):
 
 #==================================================================
 #
-#    NXSRecSettings read/write attribute methods
+#    NXSRecSelector read/write attribute methods
 #
 #==================================================================
 #------------------------------------------------------------------
@@ -618,7 +618,7 @@ class NXSRecSettings(PyTango.Device_4Impl):
 
 #==================================================================
 #
-#    NXSRecSettings command methods
+#    NXSRecSelector command methods
 #
 #==================================================================
 
@@ -862,10 +862,10 @@ class NXSRecSettings(PyTango.Device_4Impl):
 
 #==================================================================
 #
-#    NXSRecSettingsClass class definition
+#    NXSRecSelectorClass class definition
 #
 #==================================================================
-class NXSRecSettingsClass(PyTango.DeviceClass):
+class NXSRecSelectorClass(PyTango.DeviceClass):
 
     #    Class Properties
     class_property_list = {
@@ -1205,16 +1205,16 @@ class NXSRecSettingsClass(PyTango.DeviceClass):
 
 
 #------------------------------------------------------------------
-#    NXSRecSettingsClass Constructor
+#    NXSRecSelectorClass Constructor
 #------------------------------------------------------------------
     def __init__(self, name):
         PyTango.DeviceClass.__init__(self, name)
         self.set_type(name);
-        print "In NXSRecSettingsClass  constructor"
+        print "In NXSRecSelectorClass  constructor"
 
 #==================================================================
 #
-#    NXSRecSettings class main method
+#    NXSRecSelector class main method
 #
 #==================================================================
 if __name__ == '__main__':

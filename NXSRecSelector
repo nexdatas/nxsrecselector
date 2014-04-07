@@ -5,4 +5,4 @@ then
 fi
 SCRIPT=$(readlink -f $0)
 LOCALDIR=$(dirname "$SCRIPT")
-exec python $LOCALDIR/NXSRecSettings.py $*
+exec python $LOCALDIR/NXSRecSelector.py $*
