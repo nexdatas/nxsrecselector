@@ -418,7 +418,7 @@ class Settings(object):
         pools = Utils.pools(self.__db)
         nonexisting = []
         for dev in ads:
-            if not Utils.findDeviceController(dev, pools):
+            if not Utils.findFullDeviceName(dev, pools):
                 nonexisting.append(dev)
         
         describer = Describer(self.state["ConfigDevice"])

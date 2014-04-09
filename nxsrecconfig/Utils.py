@@ -176,8 +176,6 @@ class Utils(object):
         return ctrl
 
 
-
-
     @classmethod
     def addDevice(cls, device, pools, hsh, timer, index):
         ctrl = cls.findDeviceController(device, pools)
