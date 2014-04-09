@@ -158,6 +158,28 @@ class Utils(object):
             chan = json.loads(elm)
             if name == chan['name']:
                 argout = chan['full_name']
+                break
+        return argout
+
+
+    ## find mntgrp pool
+    # \param name alias name
+    # \param pools list of pool devices
+    # \returns full device name    
+    @classmethod
+    def findMntGrpPool(cls, name, pools):
+        lst = []
+        argout = None
+        for pool in pools:
+            lst = pool.MeasurementGroupList
+            for elm in lst:
+                chan = json.loads(elm)
+                if name == chan['name']:
+                    argout = pool
+                    break
+            else:
+                continue
+            break    
         return argout
 
 

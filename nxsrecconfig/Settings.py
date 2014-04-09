@@ -117,6 +117,7 @@ class Settings(object):
         ## config writer proxy
         self.__writerProxy = None
 
+
     def components(self):
         cps = json.loads(self.state["ComponentGroup"])
         if isinstance(cps, dict):
@@ -239,11 +240,26 @@ class Settings(object):
         ms =  self.__getMacroServer()
         return Utils.getEnv('ActiveMntGrp', ms)
 
+
+
     ## set method for ActiveMntGrp attribute
     # \param name of ActiveMntGrp           
     def __setActiveMntGrp(self, name):
         ms =  self.__getMacroServer()
-        Utils.setEnv('ActiveMntGrp', name, ms)
+        pools = Utils.pools(self.__db)
+        pool = None
+        full = Utils.findMntGrpName(name, pools)
+        if not full:
+            msp = Utils.openProxy(ms)
+            pn = msp.get_property("PoolNames")["PoolNames"]
+            if len(pn)>0:
+                pool = Utils.openProxy(pn[0])
+            if not pool and len(pools)> 0 :
+                pool = pools[0]
+            if pool:
+                pool.CreateMeasurementGroup([name, self.state["Timer"]])
+        if full or pool:        
+            Utils.setEnv('ActiveMntGrp', name, ms)
 
     ## the json data string
     activeMntGrp = property(__getActiveMntGrp, __setActiveMntGrp,
