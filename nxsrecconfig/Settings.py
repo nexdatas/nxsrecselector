@@ -290,7 +290,11 @@ class Settings(object):
     # \returns name of ScanID
     def __getScanID(self):
         ms =  self.__getMacroServer()
-        return int(Utils.getEnv('ScanID', ms))
+        sid = Utils.getEnv('ScanID', ms)
+        if sid:
+            return int(sid)
+        else:
+            return 0
 
     ## set method for ScanID attribute
     # \param name of ScanID           
