@@ -197,6 +197,24 @@ class Utils(object):
                 break
         return ctrl
 
+    @classmethod
+    def findTimers(cls, pools):
+        lst = []
+        res = []
+        for pool in pools:
+            if not pool.ExpChannelList is None:
+                lst += pool.ExpChannelList
+        ctrl = None
+        for elm in lst:
+            chan = json.loads(elm)
+            inter = chan['interfaces']
+            if isinstance(inter,(list,tuple)):
+                if 'CTExpChannel' in inter or \
+                        'OneDExpChannel' in inter or \
+                        'TwoDExpChannel' in inter:
+                    res.append(chan['name'])
+        return res
+
 
     @classmethod
     def addDevice(cls, device, pools, hsh, timer, index):

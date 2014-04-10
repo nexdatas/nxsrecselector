@@ -426,6 +426,13 @@ class NXSRecSelector(PyTango.Device_4Impl):
         attr.set_value(self.stg.dataSources())
 
 
+#    Read AvailableTimers attribute
+#------------------------------------------------------------------
+    def read_AvailableTimers(self, attr):
+        print >> self.log_info, "In ", self.get_name(), "::read_AvailableTimers()"
+        attr.set_value(self.stg.availableTimers())
+
+
 #------------------------------------------------------------------
 #    Read Description attribute
 #------------------------------------------------------------------
@@ -1089,6 +1096,14 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
             {
                 'label':"Selected Datasources",
                 'description':"list of Selected Datasources",
+            } ],
+        'AvailableTimers':
+            [[PyTango.DevString,
+            PyTango.SPECTRUM,
+            PyTango.READ, 10000],
+            {
+                'label':"Available Timers",
+                'description':"list of Available Timers",
             } ],
         'Description':
             [[PyTango.DevString,

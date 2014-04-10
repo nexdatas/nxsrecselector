@@ -461,6 +461,10 @@ class Settings(object):
             dp.write_attribute(str("AutomaticComponentGroup"), 
                                self.state["AutomaticComponentGroup"])
 
+    def availableTimers(self):
+        pools = Utils.pools(self.__db)
+        return Utils.findTimers(pools)
+        
 
     ## update a list of Disable DataSources
     def disableDataSources(self):
