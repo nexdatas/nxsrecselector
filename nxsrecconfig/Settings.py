@@ -206,11 +206,8 @@ class Settings(object):
     ## get method for writerDevice attribute
     # \returns name of writerDevice           
     def __getWriterDevice(self):
-        print "WD", "writerDevice" not in self.state 
-        print "WD2",  not self.state["WriterDevice"]
         if "writerDevice" not in self.state or not self.state["WriterDevice"]:
             self.state["WriterDevice"] = Utils.findDevice(self.__db, "NXSDataWriter")
-            print "WD4",self.state["WriterDevice"]
         return self.state["WriterDevice"]
 
     ## set method for writerDevice attribute
