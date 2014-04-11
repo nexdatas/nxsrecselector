@@ -276,7 +276,7 @@ class Settings(object):
     # \returns name of ScanDir
     def __getScanDir(self):
         ms =  self.__getMacroServer()
-        return Utils.getEnv('ScanDir', ms)
+        return str(Utils.getEnv('ScanDir', ms))
 
     ## set method for ScanDir attribute
     # \param name of ScanDir           
