@@ -123,7 +123,9 @@ class Utils(object):
         servers = db.get_device_exported_for_class(
             name).value_string
         if len(servers):
-            return servers[0]                
+            return servers[0] 
+        else:
+            return ''
 
 
     ## find device name from alias
