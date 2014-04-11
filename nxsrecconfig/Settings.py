@@ -117,6 +117,8 @@ class Settings(object):
         ## config writer proxy
         self.__writerProxy = None
 
+        ## default mntgrp
+        self.__defaultmntgrp = 'mntgrp'
 
     def components(self):
         cps = json.loads(self.state["ComponentGroup"])
@@ -245,6 +247,8 @@ class Settings(object):
     ## set method for ActiveMntGrp attribute
     # \param name of ActiveMntGrp           
     def __setActiveMntGrp(self, name):
+        if not name:
+            name =  self.__defaultmntgrp
         ms =  self.__getMacroServer()
         pools = Utils.pools(self.__db)
         pool = None
@@ -294,6 +298,7 @@ class Settings(object):
         if sid:
             return int(sid)
         else:
+            Utils.setEnv('ScanID', 0, ms)
             return 0
 
     ## set method for ScanID attribute
