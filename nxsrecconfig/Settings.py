@@ -445,8 +445,9 @@ class Settings(object):
         pools = Utils.pools(self.__db)
         s2 = time.clock()
         nonexisting = []
+        fnames = Utils.findFullDeviceNames(ads, pools)
         for dev in ads:
-            if not Utils.findFullDeviceName(dev, pools):
+            if dev not in fnames.keys():
                 nonexisting.append(dev)
         
         s3 = time.clock()
@@ -477,7 +478,7 @@ class Settings(object):
             dp.write_attribute(str("AutomaticComponentGroup"), 
                                self.state["AutomaticComponentGroup"])
         s7 = time.clock()
-        print "TIMING", s2-s1, s3-s2, s4-s3, s5-s4, s6-s5, s7-s6
+        print "TIMING", s2-s1, s3-s2, s4-s3, s5-s4, s6-s5, s7-s6 , s7-s1
 
     def availableTimers(self):
         pools = Utils.pools(self.__db)
