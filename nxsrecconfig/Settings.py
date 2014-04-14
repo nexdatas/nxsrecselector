@@ -24,6 +24,7 @@ import json
 import PyTango
 from .Describer import Describer
 from .Utils import Utils
+import time
 
 ## NeXus Sardana Recorder settings
 class Settings(object):
@@ -438,16 +439,21 @@ class Settings(object):
     ## checks existing controllers of pools for 
     #      AutomaticDataSources
     def updateControllers(self):
+        s1 = time.clock()
+
         ads = set(json.loads(self.state["AutomaticDataSources"]))
         pools = Utils.pools(self.__db)
+        s2 = time.clock()
         nonexisting = []
         for dev in ads:
             if not Utils.findFullDeviceName(dev, pools):
                 nonexisting.append(dev)
         
+        s3 = time.clock()
         describer = Describer(self.state["ConfigDevice"])
         acps = json.loads(self.state["AutomaticComponentGroup"])
         
+        s4 = time.clock()
         rcp = set()
         for acp in acps.keys():
             res = describer.run([acp], '', '')
@@ -457,17 +463,21 @@ class Settings(object):
                         if ds in nonexisting:
                             rcp.add(cp)
                             break
+        s5 = time.clock()
         for acp in acps.keys():
             if acp in rcp:
                 acps[acp] = False
             else:
                 acps[acp] = True
                 
+        s6 = time.clock()
         self.state["AutomaticComponentGroup"] = json.dumps(acps)
         if self.__server:
             dp = PyTango.DeviceProxy(str(self.__server.get_name()))
             dp.write_attribute(str("AutomaticComponentGroup"), 
                                self.state["AutomaticComponentGroup"])
+        s7 = time.clock()
+        print "TIMING", s2-s1, s3-s2, s4-s3, s5-s4, s6-s5, s7-s6
 
     def availableTimers(self):
         pools = Utils.pools(self.__db)
