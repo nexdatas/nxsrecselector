@@ -280,8 +280,12 @@ class Settings(object):
     ## set method for ScanDir attribute
     # \param name of ScanDir           
     def __setScanDir(self, name):
+        s1 = time.time()
         ms =  self.__getMacroServer()
+        s2 = time.time()
         Utils.setEnv('ScanDir', name, ms)
+        s3 = time.time()
+#        print "SCanDIR", s2-s1,s3-s2
 
     ## the json data string
     scanDir = property(__getScanDir, __setScanDir,
