@@ -442,12 +442,13 @@ class Settings(object):
         hsh['timer'] = fullname
                         
         s9 = time.clock()
-        for alias in aliases:
-            index = Utils.addDevice(alias, pools, hsh, timer, index)
+#        for alias in aliases:
+#            index = Utils.addDevice(alias, pools, hsh, timer, index)
+        index = Utils.addDevices(aliases, pools, hsh, fullname, index)
         s10 = time.clock()
         dpmg.Configuration = json.dumps(hsh)
         s11 = time.clock()
-        print s2-s1,s3-s2,s4-s3,s5-s4,s6-s5,s7-s6,s8-s7,s9-s8,s10-s9,s11-s10
+        print "update", s2-s1,s3-s2,s4-s3,s5-s4,s6-s5,s7-s6,s8-s7,s9-s8,s10-s9,s11-s10
 
 
     ## checks existing controllers of pools for 

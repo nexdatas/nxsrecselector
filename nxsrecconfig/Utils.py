@@ -217,6 +217,22 @@ class Utils(object):
                 break
         return ctrl
 
+
+
+    @classmethod
+    def findDeviceControllers(cls, devices, pools):
+        lst = []
+        for pool in pools:
+            if not pool.ExpChannelList is None:
+                lst += pool.ExpChannelList
+        ctrls = {}
+        for elm in lst:
+            chan = json.loads(elm)
+            if chan['name'] in devices:
+                ctrls[chan['name']] = chan['controller']
+        return ctrls
+
+
     @classmethod
     def findTimers(cls, pools):
         lst = []
@@ -289,4 +305,59 @@ class Utils(object):
                 dct['shape'] = [] 
             dct['source'] = dct['full_name'] + "/value"
             ctrlChannels[full_name] = dct
+        return index
+
+    @classmethod
+    def addDevices(cls, devices, pools, hsh, fulltimer, index):
+        ctrls = cls.findDeviceControllers(devices, pools)
+        fullnames = cls.findFullDeviceNames(devices, pools) 
+        for device, ctrl in ctrls.items():
+            if not ctrl in hsh['controllers'].keys():
+                hsh['controllers'][ctrl] = {}
+                hsh['controllers'][ctrl]['units'] = {}
+                hsh['controllers'][ctrl]['units']['0'] = {}
+                hsh['controllers'][ctrl]['units']['0'][
+                    u'channels'] = {}
+                hsh['controllers'][ctrl]['units']['0']['id'] = 0
+                hsh['controllers'][ctrl]['units']['0'][
+                    u'monitor'] = fulltimer
+                hsh['controllers'][ctrl]['units']['0'][
+                    u'timer'] = fulltimer
+                hsh['controllers'][ctrl]['units']['0'][
+                    u'trigger_type'] = 0
+
+            ctrlChannels = hsh['controllers'][ctrl]['units']['0'][
+                u'channels']
+        
+            fullname = fullnames[device]
+            if not fullname in ctrlChannels.keys():
+                dp  = PyTango.DeviceProxy(fullname.encode())
+                da =  dp.read_attribute('value')
+                dct = {}
+                dct['_controller_name'] = unicode(ctrl)
+                dct['_unit_id'] = u'0'
+                dct['conditioning'] = u''
+                dct['data_type'] = u'float64'
+                dct['data_units'] = u'No unit'
+                dct['enabled'] = True
+                dct['full_name'] = fullname
+                dct['index'] = index
+                index += 1
+                dct['instrument'] = None
+                dct['label'] = unicode(device)
+                dct['name'] = unicode(device)
+                dct['ndim'] = 0
+                dct['nexus_path'] = u''
+                dct['normalization'] = 0
+                dct['output'] = True
+                dct['plot_axes'] = []
+                dct['plot_type'] = 0
+                if da.dim_x and da.dim_x > 1 :
+                    dct['shape'] = [da.dim_y, da.dim_x] \
+                        if da.dim_y \
+                        else [da.dim_x]
+                else:
+                    dct['shape'] = [] 
+                dct['source'] = dct['full_name'] + "/value"
+                ctrlChannels[fullname] = dct
         return index
