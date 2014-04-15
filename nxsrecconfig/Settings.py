@@ -397,7 +397,7 @@ class Settings(object):
 
     ## set active measurement group from components
     def updateMntGrp(self):
-        s1 = time.clock()
+        s1 = time.time()
         pools = Utils.pools(self.__db)
         hsh = {}
         hsh['controllers'] = {} 
