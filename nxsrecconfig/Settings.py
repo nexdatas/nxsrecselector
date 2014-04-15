@@ -449,7 +449,7 @@ class Settings(object):
         s10 = time.time()
         dpmg.Configuration = json.dumps(hsh)
         s11 = time.time()
-        print "update", s1-s0, s2-s1,s3-s2,s4-s3,s5-s4,s6-s5,s7-s6,s8-s7,s9-s8,s10-s9,s11-s10
+#        print "update", s1-s0, s2-s1,s3-s2,s4-s3,s5-s4,s6-s5,s7-s6,s8-s7,s9-s8,s10-s9,s11-s10
 
 
     ## checks existing controllers of pools for 
