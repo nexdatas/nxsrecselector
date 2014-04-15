@@ -406,7 +406,7 @@ class Settings(object):
         timer = self.state["Timer"]
         datasources = self.dataSources()
 
-        s2 = time.clock()
+        s2 = time.time()
 
         aliases = []
         if isinstance(datasources, list):
@@ -414,7 +414,7 @@ class Settings(object):
         if timer:
             aliases.append(timer)
 
-        s3 = time.clock()
+        s3 = time.time()
 
         res = self.__description('CLIENT')    
         for grp in res:
@@ -423,31 +423,31 @@ class Settings(object):
                     aliases.append(str(ds))
         aliases = list(set(aliases))
 
-        s4 = time.clock()
+        s4 = time.time()
 
         mntGrpName = self.__getActiveMntGrp()
-        s5 = time.clock()
+        s5 = time.time()
 
         fullname = str(Utils.findMntGrpName(mntGrpName, pools))
-        s6 = time.clock()
+        s6 = time.time()
         dpmg = Utils.openProxy(fullname)
         hsh['label'] = mntGrpName
         index = 0
-        s7 = time.clock()
+        s7 = time.time()
         fullname = Utils.findFullDeviceName(timer, pools)
-        s8 = time.clock()
+        s8 = time.time()
         if not fullname:
             raise Exception("Timer or Monitor cannot be found amount the servers")
         hsh['monitor'] = fullname
         hsh['timer'] = fullname
                         
-        s9 = time.clock()
+        s9 = time.time()
 #        for alias in aliases:
 #            index = Utils.addDevice(alias, pools, hsh, timer, index)
         index = Utils.addDevices(aliases, pools, hsh, fullname, index)
-        s10 = time.clock()
+        s10 = time.time()
         dpmg.Configuration = json.dumps(hsh)
-        s11 = time.clock()
+        s11 = time.time()
         print "update", s2-s1,s3-s2,s4-s3,s5-s4,s6-s5,s7-s6,s8-s7,s9-s8,s10-s9,s11-s10
 
 
