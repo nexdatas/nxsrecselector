@@ -24,7 +24,7 @@ import json
 import PyTango
 from .Describer import Describer
 from .Utils import Utils
-
+import time
 ## NeXus Sardana Recorder settings
 class Settings(object):
     
@@ -397,6 +397,7 @@ class Settings(object):
 
     ## set active measurement group from components
     def updateMntGrp(self):
+        s1 = time.clock()
         pools = Utils.pools(self.__db)
         hsh = {}
         hsh['controllers'] = {} 
@@ -405,11 +406,15 @@ class Settings(object):
         timer = self.state["Timer"]
         datasources = self.dataSources()
 
+        s2 = time.clock()
+
         aliases = []
         if isinstance(datasources, list):
             aliases = datasources
         if timer:
             aliases.append(timer)
+
+        s3 = time.clock()
 
         res = self.__description('CLIENT')    
         for grp in res:
@@ -418,21 +423,31 @@ class Settings(object):
                     aliases.append(str(ds))
         aliases = list(set(aliases))
 
+        s4 = time.clock()
+
         mntGrpName = self.__getActiveMntGrp()
+        s5 = time.clock()
+
         fullname = str(Utils.findMntGrpName(mntGrpName, pools))
+        s6 = time.clock()
         dpmg = Utils.openProxy(fullname)
         hsh['label'] = mntGrpName
         index = 0
+        s7 = time.clock()
         fullname = Utils.findFullDeviceName(timer, pools)
+        s8 = time.clock()
         if not fullname:
             raise Exception("Timer or Monitor cannot be found amount the servers")
         hsh['monitor'] = fullname
         hsh['timer'] = fullname
                         
+        s9 = time.clock()
         for alias in aliases:
             index = Utils.addDevice(alias, pools, hsh, timer, index)
+        s10 = time.clock()
         dpmg.Configuration = json.dumps(hsh)
-
+        s11 = time.clock()
+        print s2-s1,s3-s2,s4-s3,s5-s4,s6-s5,s7-s6,s8-s7,s9-s8,s10-s9,s11-s10
 
 
     ## checks existing controllers of pools for 
