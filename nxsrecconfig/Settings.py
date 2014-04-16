@@ -24,7 +24,7 @@ import json
 import PyTango
 from .Describer import Describer
 from .Utils import Utils
-import time
+
 ## NeXus Sardana Recorder settings
 class Settings(object):
     
@@ -90,7 +90,8 @@ class Settings(object):
         self.state["DynamicLinks"] = True
 
         ## path for dynamic components
-        self.state["DynamicPath"] = '/entry$var.serialno:NXentry/NXinstrument/NXcollection'
+        self.state["DynamicPath"] = \
+            '/entry$var.serialno:NXentry/NXinstrument/NXcollection'
 
         ## timezone
         self.state["TimeZone"] = 'Europe/Berlin'
@@ -152,7 +153,8 @@ class Settings(object):
     # \returns name of configDevice           
     def __getConfigDevice(self):
         if "ConfigDevice" not in self.state or not self.state["ConfigDevice"]:
-            self.state["ConfigDevice"] = Utils.findDevice(self.__db, "NXSConfigServer")
+            self.state["ConfigDevice"] = Utils.findDevice(
+                self.__db, "NXSConfigServer")
         return self.state["ConfigDevice"]
 
     ## set method for configDevice attribute
@@ -161,7 +163,8 @@ class Settings(object):
         if name:
             self.state["ConfigDevice"] = name
         else:
-            self.state["ConfigDevice"] = Utils.findDevice(self.__db, "NXSConfigServer")
+            self.state["ConfigDevice"] = Utils.findDevice(
+                self.__db, "NXSConfigServer")
 
 
     ## del method for configDevice attribute
@@ -169,7 +172,8 @@ class Settings(object):
         self.state.pop("ConfigDevice")
 
     ## the json data string
-    configDevice = property(__getConfigDevice, __setConfigDevice, __delConfigDevice, 
+    configDevice = property(__getConfigDevice, __setConfigDevice, 
+                            __delConfigDevice, 
                             doc = 'configuration server device name')
 
 
@@ -181,7 +185,8 @@ class Settings(object):
     # \returns name of macroServer           
     def __getMacroServer(self):
         if "MacroServer" not in self.state or not self.state["MacroServer"]:
-            self.state["MacroServer"] = Utils.findDevice(self.__db,"MacroServer")
+            self.state["MacroServer"] = Utils.findDevice(
+                self.__db,"MacroServer")
         return self.state["MacroServer"]
 
     ## set method for macroServer attribute
@@ -190,7 +195,8 @@ class Settings(object):
         if name:
             self.state["MacroServer"] = name
         else:
-            self.state["MacroServer"] = Utils.findDevice(self.__db,"MacroServer")
+            self.state["MacroServer"] = Utils.findDevice(
+                self.__db,"MacroServer")
 
 
     ## del method for macroServer attribute
@@ -198,8 +204,9 @@ class Settings(object):
         self.state.pop("MacroServer")
 
     ## the json data string
-    macroServer = property(__getMacroServer, __setMacroServer, __delMacroServer, 
-                            doc = 'door server device name')
+    macroServer = property(__getMacroServer, __setMacroServer, 
+                           __delMacroServer, 
+                           doc = 'door server device name')
 
 
 
@@ -207,7 +214,8 @@ class Settings(object):
     # \returns name of writerDevice           
     def __getWriterDevice(self):
         if "writerDevice" not in self.state or not self.state["WriterDevice"]:
-            self.state["WriterDevice"] = Utils.findDevice(self.__db, "NXSDataWriter")
+            self.state["WriterDevice"] = Utils.findDevice(
+                self.__db, "NXSDataWriter")
         return self.state["WriterDevice"]
 
     ## set method for writerDevice attribute
@@ -280,12 +288,8 @@ class Settings(object):
     ## set method for ScanDir attribute
     # \param name of ScanDir           
     def __setScanDir(self, name):
-        s1 = time.time()
         ms =  self.__getMacroServer()
-        s2 = time.time()
         Utils.setEnv('ScanDir', name, ms)
-        s3 = time.time()
-#        print "SCanDIR", s2-s1,s3-s2
 
     ## the json data string
     scanDir = property(__getScanDir, __setScanDir,
@@ -396,14 +400,12 @@ class Settings(object):
             cp = list(set(self.components()) | 
             set(self.automaticComponents()) | 
             set(self.mandatoryComponents()))
-        res = describer.run(cp, 'STEP')
+        res = describer.run(cp, 'STEP', dstype)
         return res
 
     ## set active measurement group from components
     def updateMntGrp(self):
-        s0 = time.time()
         pools = Utils.pools(self.__db)
-        s1 = time.time()
         hsh = {}
         hsh['controllers'] = {} 
         hsh['description'] = "Measurement Group" 
@@ -411,15 +413,11 @@ class Settings(object):
         timer = self.state["Timer"]
         datasources = self.dataSources()
 
-        s2 = time.time()
-
         aliases = []
         if isinstance(datasources, list):
             aliases = datasources
         if timer:
             aliases.append(timer)
-
-        s3 = time.time()
 
         res = self.__description('CLIENT')    
         for grp in res:
@@ -428,32 +426,24 @@ class Settings(object):
                     aliases.append(str(ds))
         aliases = list(set(aliases))
 
-        s4 = time.time()
 
         mntGrpName = self.__getActiveMntGrp()
-        s5 = time.time()
 
         fullname = str(Utils.findMntGrpName(mntGrpName, pools))
-        s6 = time.time()
         dpmg = Utils.openProxy(fullname)
         hsh['label'] = mntGrpName
         index = 0
-        s7 = time.time()
         fullname = Utils.findFullDeviceName(timer, pools)
-        s8 = time.time()
         if not fullname:
-            raise Exception("Timer or Monitor cannot be found amount the servers")
+            raise Exception(
+                "Timer or Monitor cannot be found amount the servers")
         hsh['monitor'] = fullname
         hsh['timer'] = fullname
                         
-        s9 = time.time()
 #        for alias in aliases:
 #            index = Utils.addDevice(alias, pools, hsh, timer, index)
         index = Utils.addDevices(aliases, pools, hsh, fullname, index)
-        s10 = time.time()
         dpmg.Configuration = json.dumps(hsh)
-        s11 = time.time()
-#        print "update", s1-s0, s2-s1,s3-s2,s4-s3,s5-s4,s6-s5,s7-s6,s8-s7,s9-s8,s10-s9,s11-s10
 
 
     ## checks existing controllers of pools for 

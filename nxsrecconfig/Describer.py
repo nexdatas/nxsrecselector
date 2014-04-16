@@ -20,9 +20,7 @@
 
 """  Component Describer """
 
-import PyTango
 import re
-import json
 import xml.dom.minidom
 from .Utils import Utils
 
@@ -33,6 +31,7 @@ class Describer(object):
     def __init__(self, configserver):
         self.__result = [{}, {}]
         self.__server = configserver
+        self.__nexusconfig_device = None
 
     def run(self, components=None, strategy='', dstype=''):
 

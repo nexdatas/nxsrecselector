@@ -65,23 +65,14 @@ class Utils(object):
 
     @classmethod
     def setEnv(cls, var, name, ms):
-        s1 = time.time()
-        active = ""
         dp = cls.openProxy(ms)
-        s2 = time.time()
         rec = dp.Environment
-        s3 = time.time()
         if rec[0] == 'pickle':
             dc = pickle.loads(rec[1])
-            s4 = time.time()
             if 'new' in dc.keys():
                 dc['new'][var] = name
-                s5 = time.time()
                 pk = pickle.dumps(dc)    
-                s6 = time.time()
                 dp.Environment = ['pickle', pk]
-                s7 = time.time()
-#                print "SETENV", s2-s1,s3-s2,s4-s3,s5-s4,s6-s5,s7-s6
 
     @classmethod
     def getDeviceNamesByClass(cls, db, className):
@@ -248,11 +239,10 @@ class Utils(object):
         for pool in pools:
             if not pool.ExpChannelList is None:
                 lst += pool.ExpChannelList
-        ctrl = None
         for elm in lst:
             chan = json.loads(elm)
             inter = chan['interfaces']
-            if isinstance(inter,(list,tuple)):
+            if isinstance(inter, (list, tuple)):
                 if 'CTExpChannel' in inter or \
                         'OneDExpChannel' in inter or \
                         'TwoDExpChannel' in inter:
