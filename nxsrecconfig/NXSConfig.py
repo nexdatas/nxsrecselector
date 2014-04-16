@@ -779,6 +779,36 @@ class NXSRecSelector(PyTango.Device_4Impl):
         return True
 
 
+
+#------------------------------------------------------------------
+#    FindMntGrp command:
+#
+#    Description: Returns a NeXus path of a given datasource
+#                
+#    argout: DevString    mntgrp alias
+#    argout: DevString    mntgrp full name
+#------------------------------------------------------------------
+    def FindMntGrp(self, argin):
+        print >> self.log_info, "In ", self.get_name(), \
+            "::FindMntGrp()"
+        try:
+            self.set_state(PyTango.DevState.RUNNING)
+            argout = str(self.stg.findMntGrp(argin))
+            self.set_state(PyTango.DevState.ON)
+        finally:
+            if self.get_state() == PyTango.DevState.RUNNING:
+                self.set_state(PyTango.DevState.ON)
+        
+        return argout
+
+
+#---- AvailableComponents command State Machine -----------------
+    def is_FindMntGrp_allowed(self):
+        if self.get_state() in [PyTango.DevState.RUNNING]:
+            return False
+        return True
+
+
 #------------------------------------------------------------------
 #    AvailableComponents command:
 #
@@ -889,6 +919,9 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
         'DataSourcePath':
             [[PyTango.DevString, "datasource name"],
             [PyTango.DevString, "NeXus Path"]],
+        'FindMntGrp':
+            [[PyTango.DevString, "mntgrp alias"],
+            [PyTango.DevString, "mntgrp fullname"]],
         'LoadConfiguration':
             [[PyTango.DevVoid, ""],
             [PyTango.DevVoid, ""]],

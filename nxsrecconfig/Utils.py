@@ -180,7 +180,7 @@ class Utils(object):
         lst = []
         for pool in pools:
             lst += pool.MeasurementGroupList
-        argout = None
+        argout = ""
         for elm in lst:
             chan = json.loads(elm)
             if name == chan['name']:
@@ -208,6 +208,7 @@ class Utils(object):
                 continue
             break    
         return argout
+
 
 
     @classmethod

@@ -494,6 +494,10 @@ class Settings(object):
     def availableTimers(self):
         pools = Utils.pools(self.__db)
         return Utils.findTimers(pools)
+
+    def findMntGrp(self, name):
+        pools = Utils.pools(self.__db)
+        return Utils.findMntGrpName(name, pools)
         
 
     ## update a list of Disable DataSources
