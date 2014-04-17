@@ -121,6 +121,8 @@ class Settings(object):
         ## default mntgrp
         self.__defaultmntgrp = 'mntgrp'
 
+        self.poolBlacklist = []
+
     def components(self):
         cps = json.loads(self.state["ComponentGroup"])
         if isinstance(cps, dict):
@@ -257,7 +259,7 @@ class Settings(object):
         if not name:
             name =  self.__defaultmntgrp
         ms =  self.__getMacroServer()
-        pools = Utils.pools(self.__db)
+        pools = Utils.pools(self.__db, self.poolBlacklist)
         pool = None
         full = Utils.findMntGrpName(name, pools)
         if not full:
@@ -405,7 +407,7 @@ class Settings(object):
 
     ## set active measurement group from components
     def updateMntGrp(self):
-        pools = Utils.pools(self.__db)
+        pools = Utils.pools(self.__db, self.poolBlacklist)
         hsh = {}
         hsh['controllers'] = {} 
         hsh['description'] = "Measurement Group" 
@@ -450,7 +452,7 @@ class Settings(object):
     #      AutomaticDataSources
     def updateControllers(self):
         ads = set(json.loads(self.state["AutomaticDataSources"]))
-        pools = Utils.pools(self.__db)
+        pools = Utils.pools(self.__db, self.poolBlacklist)
         nonexisting = []
         fnames = Utils.findFullDeviceNames(ads, pools)
         for dev in ads:
@@ -482,11 +484,11 @@ class Settings(object):
                                self.state["AutomaticComponentGroup"])
 
     def availableTimers(self):
-        pools = Utils.pools(self.__db)
+        pools = Utils.pools(self.__db, self.poolBlacklist)
         return Utils.findTimers(pools)
 
     def findMntGrp(self, name):
-        pools = Utils.pools(self.__db)
+        pools = Utils.pools(self.__db, self.poolBlacklist)
         return Utils.findMntGrpName(name, pools)
         
 

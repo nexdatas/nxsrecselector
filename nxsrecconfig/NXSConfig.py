@@ -85,6 +85,9 @@ class NXSRecSelector(PyTango.Device_4Impl):
         self.stg = STG(self)
         self.set_state(PyTango.DevState.ON)
         self.get_device_properties(self.get_device_class())
+        
+        self.stg.poolBlacklist = self.PoolBlacklist \
+            if self.PoolBlacklist else []
 
 #------------------------------------------------------------------
 #    Always excuted hook method
@@ -952,6 +955,10 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
 
     #    Device Properties
     device_property_list = {
+       'PoolBlacklist':
+            [PyTango.DevVarStringArray,
+            "blacklist of pools",
+            [ ] ],
         }
 
 
