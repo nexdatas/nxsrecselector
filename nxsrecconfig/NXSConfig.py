@@ -142,7 +142,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
     def read_ComponentGroup(self, attr):
         print >> self.log_info, "In ", self.get_name(), \
             "::read_ComponentGroup()"
-        attr.set_value(self.stg.state["ComponentGroup"])
+        attr.set_value(self.stg.componentGroup)
 
 
 #------------------------------------------------------------------
@@ -151,7 +151,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
     def write_ComponentGroup(self, attr):
         print >> self.log_info, "In ", self.get_name(), \
             "::write_ComponentGroup()"
-        self.stg.state["ComponentGroup"] = attr.get_write_value()
+        self.stg.componentGroup = attr.get_write_value()
         print >> self.log_info, "Attribute value = %s" % \
             self.stg.state["ComponentGroup"]
 
@@ -163,7 +163,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
     def read_AutomaticComponentGroup(self, attr):
         print >> self.log_info, "In ", self.get_name(), \
             "::read_AutomaticComponentGroup()"
-        attr.set_value(self.stg.state["AutomaticComponentGroup"])
+        attr.set_value(self.stg.automaticComponentGroup)
 
 
 #------------------------------------------------------------------
@@ -172,7 +172,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
     def write_AutomaticComponentGroup(self, attr):
         print >> self.log_info, "In ", self.get_name(), \
             "::write_AutomaticComponentGroup()"
-        self.stg.state["AutomaticComponentGroup"] = attr.get_write_value()
+        self.stg.automaticComponentGroup = attr.get_write_value()
         print >> self.log_info, "Attribute value = %s" % \
             self.stg.state["AutomaticComponentGroup"]
 
@@ -192,7 +192,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
     def read_OptionalComponents(self, attr):
         print >> self.log_info, "In ", self.get_name(), \
             "::read_OptionalComponents()"
-        attr.set_value(self.stg.state["OptionalComponents"])
+        attr.set_value(self.stg.optionalComponents)
 
 
 #------------------------------------------------------------------
@@ -201,7 +201,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
     def write_OptionalComponents(self, attr):
         print >> self.log_info, "In ", self.get_name(), \
             "::write_OptionalComponents()"
-        self.stg.state["OptionalComponents"] = attr.get_write_value()
+        self.stg.optionalComponents = attr.get_write_value()
         print >> self.log_info, "Attribute value = %s" % \
             self.stg.state["OptionalComponents"]
 
@@ -350,7 +350,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
 #------------------------------------------------------------------
     def read_LabelPaths(self, attr):
         print >> self.log_info, "In ", self.get_name(), "::read_LabelPaths()"
-        attr.set_value(self.stg.state["LabelPaths"])
+        attr.set_value(self.stg.labelPaths)
 
 
 #------------------------------------------------------------------
@@ -358,7 +358,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
 #------------------------------------------------------------------
     def write_LabelPaths(self, attr):
         print >> self.log_info, "In ", self.get_name(), "::write_LabelPaths()"
-        self.stg.state["LabelPaths"] = attr.get_write_value()
+        self.stg.labelPaths = attr.get_write_value()
         print >> self.log_info, "Attribute value = %s" % \
             self.stg.state["LabelPaths"]
 
@@ -370,7 +370,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
 #------------------------------------------------------------------
     def read_LabelTypes(self, attr):
         print >> self.log_info, "In ", self.get_name(), "::read_LabelTypes()"
-        attr.set_value(self.stg.state["LabelTypes"])
+        attr.set_value(self.stg.labelTypes)
 
 
 #------------------------------------------------------------------
@@ -378,7 +378,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
 #------------------------------------------------------------------
     def write_LabelTypes(self, attr):
         print >> self.log_info, "In ", self.get_name(), "::write_LabelTypes()"
-        self.stg.state["LabelTypes"] = attr.get_write_value()
+        self.stg.labelTypes = attr.get_write_value()
         print >> self.log_info, "Attribute value = %s" % \
             self.stg.state["LabelTypes"]
 
@@ -389,7 +389,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
 #------------------------------------------------------------------
     def read_LabelShapes(self, attr):
         print >> self.log_info, "In ", self.get_name(), "::read_LabelShapes()"
-        attr.set_value(self.stg.state["LabelShapes"])
+        attr.set_value(self.stg.labelShapes)
 
 
 #------------------------------------------------------------------
@@ -397,7 +397,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
 #------------------------------------------------------------------
     def write_LabelShapes(self, attr):
         print >> self.log_info, "In ", self.get_name(), "::write_LabelShapes()"
-        self.stg.state["LabelShapes"] = attr.get_write_value()
+        self.stg.labelShapes = attr.get_write_value()
         print >> self.log_info, "Attribute value = %s" % \
             self.stg.state["LabelShapes"]
 
@@ -407,7 +407,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
 #------------------------------------------------------------------
     def read_LabelLinks(self, attr):
         print >> self.log_info, "In ", self.get_name(), "::read_LabelLinks()"
-        attr.set_value(self.stg.state["LabelLinks"])
+        attr.set_value(self.stg.labelLinks)
 
 
 #------------------------------------------------------------------
@@ -415,7 +415,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
 #------------------------------------------------------------------
     def write_LabelLinks(self, attr):
         print >> self.log_info, "In ", self.get_name(), "::write_LabelLinks()"
-        self.stg.state["LabelLinks"] = attr.get_write_value()
+        self.stg.labelLinks = attr.get_write_value()
         print >> self.log_info, "Attribute value = %s" % \
             self.stg.state["LabelLinks"]
 
@@ -428,7 +428,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
     def read_DataSourceLabels(self, attr):
         print >> self.log_info, "In ", self.get_name(), \
             "::read_DataSourceLabels()"
-        attr.set_value(self.stg.state["DataSourceLabels"])
+        attr.set_value(self.stg.dataSourceLabels)
 
 
 #------------------------------------------------------------------
@@ -437,7 +437,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
     def write_DataSourceLabels(self, attr):
         print >> self.log_info, "In ", self.get_name(), \
             "::write_DataSourceLabels()"
-        self.stg.state["DataSourceLabels"] = attr.get_write_value()
+        self.stg.dataSourceLabels = attr.get_write_value()
         print >> self.log_info, "Attribute value = %s" % \
             self.stg.state["DataSourceLabels"]
 
@@ -471,8 +471,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
 #------------------------------------------------------------------
     def read_DataSourceGroup(self, attr):
         print >> self.log_info, "In ", self.get_name(), "::read_DataSources()"
-        attr.set_value(self.stg.state["DataSourceGroup"])
-
+        attr.set_value(self.stg.dataSourceGroup)
 
 
 #------------------------------------------------------------------
@@ -481,7 +480,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
     def write_DataSourceGroup(self, attr):
         print >> self.log_info, "In ", self.get_name(), \
             "::write_DataSourceGroup()"
-        self.stg.state["DataSourceGroup"] = attr.get_write_value()
+        self.stg.dataSourceGroup = attr.get_write_value()
         print >> self.log_info, "Attribute value = %s" % \
             self.stg.state["DataSourceGroup"]
 
@@ -491,7 +490,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
     def read_AutomaticDataSources(self, attr):
         print >> self.log_info, "In ", self.get_name(), \
             "::read_AutomaticDataSources()"
-        attr.set_value(self.stg.state["AutomaticDataSources"])
+        attr.set_value(self.stg.automaticDataSources)
 
 
 
@@ -501,7 +500,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
     def write_AutomaticDataSources(self, attr):
         print >> self.log_info, "In ", self.get_name(), \
             "::write_AutomaticDataSources()"
-        self.stg.state["AutomaticDataSources"] = attr.get_write_value()
+        self.stg.automaticDataSources = attr.get_write_value()
         print >> self.log_info, "Attribute value = %s" % \
             self.stg.state["AutomaticDataSources"]
 

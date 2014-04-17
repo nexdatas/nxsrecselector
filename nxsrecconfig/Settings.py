@@ -21,6 +21,7 @@
 """  NeXus Sardana Recorder Settings implementation """
 
 import json
+import re
 import PyTango
 from .Describer import Describer
 from .Utils import Utils
@@ -131,6 +132,7 @@ class Settings(object):
             return []
 
     def automaticComponents(self):
+        self.updateControllers()
         cps = json.loads(self.state["AutomaticComponentGroup"])
         if isinstance(cps, dict):
             return [cp for cp in cps.keys() if cps[cp]]
@@ -177,6 +179,298 @@ class Settings(object):
     configDevice = property(__getConfigDevice, __setConfigDevice, 
                             __delConfigDevice, 
                             doc = 'configuration server device name')
+
+
+    ## get method for automaticDataSources attribute
+    # \returns name of automaticDataSources           
+    def __getAutomaticDataSources(self):
+        return self.state["AutomaticDataSources"]
+
+    ## set method for automaticDataSources attribute
+    # \param name of automaticDataSources           
+    def __setAutomaticDataSources(self, name):
+        jname = self.__stringToListJson(name)
+        if self.state["AutomaticDataSources"] != jname:
+            self.state["AutomaticDataSources"] = jname
+            self.updateControllers()
+
+    ## del method for automaticDataSources attribute
+    def __delAutomaticDataSources(self):
+        self.state.pop("AutomaticDataSources")
+
+    ## the json data string
+    automaticDataSources = property(
+        __getAutomaticDataSources, 
+        __setAutomaticDataSources, 
+        __delAutomaticDataSources, 
+        doc = 'automatic components group')
+
+
+
+
+
+    ## get method for optionalComponents attribute
+    # \returns name of optionalComponents           
+    def __getOptionalComponents(self):
+        return self.state["OptionalComponents"]
+
+    ## set method for optionalComponents attribute
+    # \param name of optionalComponents           
+    def __setOptionalComponents(self, name):
+        jname = self.__stringToListJson(name)
+        if self.state["OptionalComponents"] != jname:
+            self.state["OptionalComponents"] = jname
+
+    ## del method for optionalComponents attribute
+    def __delOptionalComponents(self):
+        self.state.pop("OptionalComponents")
+
+    ## the json data string
+    optionalComponents = property(
+        __getOptionalComponents, 
+        __setOptionalComponents, 
+        __delOptionalComponents, 
+        doc = 'automatic components group')
+
+
+
+
+    def __stringToDictJson(self, string, toBool = False):
+        try:
+            acps = json.loads(string)
+            assert isinstance(acp, dict) 
+            jstring = string
+        except:
+            lst = re.sub("[^\w]","  ",string).split()
+            if len(lst) % 2:
+                lst.append("")
+            dct = dict(zip(*[iter(lst)]*2))
+            if toBool:
+                for k in dct.keys():
+                    dct[k] = False \
+                        if dct[k].lower() == 'false' else True
+            jstring = json.dumps(dct)
+            return jstring
+
+
+    def __stringToListJson(self, string):
+        try:
+            acps = json.loads(string)
+            assert isinstance(acp, (list, tuple)) 
+            jstring = string
+        except:
+            lst = re.sub("[^\w]","  ",string).split()
+            jstring = json.dumps(lst)
+            return jstring
+
+
+    ## get method for automaticComponentGroup attribute
+    # \returns name of automaticComponentGroup           
+    def __getAutomaticComponentGroup(self):
+        return self.state["AutomaticComponentGroup"]
+
+
+    ## set method for automaticComponentGroup attribute
+    # \param name of automaticComponentGroup           
+    def __setAutomaticComponentGroup(self, name):
+        jname = self.__stringToDictJson(name, True)
+        if self.state["AutomaticComponentGroup"] != jname:
+            self.state["AutomaticComponentGroup"] = jname
+            self.updateControllers()
+
+    ## del method for automaticComponentGroup attribute
+    def __delAutomaticComponentGroup(self):
+        self.state.pop("AutomaticComponentGroup")
+
+    ## the json data string
+    automaticComponentGroup = property(
+        __getAutomaticComponentGroup, 
+        __setAutomaticComponentGroup, 
+        __delAutomaticComponentGroup, 
+        doc = 'automatic components group')
+
+
+    ## get method for componentGroup attribute
+    # \returns name of componentGroup           
+    def __getComponentGroup(self):
+        return self.state["ComponentGroup"]
+
+
+    ## set method for componentGroup attribute
+    # \param name of componentGroup           
+    def __setComponentGroup(self, name):
+        jname = self.__stringToDictJson(name, True)
+        if self.state["ComponentGroup"] != jname:
+            self.state["ComponentGroup"] = jname
+
+    ## del method for componentGroup attribute
+    def __delComponentGroup(self):
+        self.state.pop("ComponentGroup")
+
+    ## the json data string
+    componentGroup = property(
+        __getComponentGroup, 
+        __setComponentGroup, 
+        __delComponentGroup, 
+        doc = 'components group')
+
+
+    ## get method for dataSourceGroup attribute
+    # \returns name of dataSourceGroup           
+    def __getDataSourceGroup(self):
+        return self.state["DataSourceGroup"]
+
+
+    ## set method for dataSourceGroup attribute
+    # \param name of dataSourceGroup           
+    def __setDataSourceGroup(self, name):
+        jname = self.__stringToDictJson(name, True)
+        if self.state["DataSourceGroup"] != jname:
+            self.state["DataSourceGroup"] = jname
+
+    ## del method for dataSourceGroup attribute
+    def __delDataSourceGroup(self):
+        self.state.pop("DataSourceGroup")
+
+    ## the json data string
+    dataSourceGroup = property(
+        __getDataSourceGroup, 
+        __setDataSourceGroup, 
+        __delDataSourceGroup, 
+        doc = 'datasource  group')
+
+
+
+
+
+    ## get method for dataSourceLabels attribute
+    # \returns name of dataSourceLabels           
+    def __getDataSourceLabels(self):
+        return self.state["DataSourceLabels"]
+
+
+    ## set method for dataSourceLabels attribute
+    # \param name of dataSourceLabels           
+    def __setDataSourceLabels(self, name):
+        jname = self.__stringToDictJson(name)
+        if self.state["DataSourceLabels"] != jname:
+            self.state["DataSourceLabels"] = jname
+
+    ## del method for dataSourceLabels attribute
+    def __delDataSourceLabels(self):
+        self.state.pop("DataSourceLabels")
+
+    ## the json data string
+    dataSourceLabels = property(
+        __getDataSourceLabels, 
+        __setDataSourceLabels, 
+        __delDataSourceLabels, 
+        doc = 'datasource  labels')
+
+
+
+
+    ## get method for labelLinks attribute
+    # \returns name of labelLinks           
+    def __getLabelLinks(self):
+        return self.state["LabelLinks"]
+
+
+    ## set method for labelLinks attribute
+    # \param name of labelLinks           
+    def __setLabelLinks(self, name):
+        jname = self.__stringToDictJson(name)
+        if self.state["LabelLinks"] != jname:
+            self.state["LabelLinks"] = jname
+
+    ## del method for labelLinks attribute
+    def __delLabelLinks(self):
+        self.state.pop("LabelLinks")
+
+    ## the json data string
+    labelLinks = property(
+        __getLabelLinks, 
+        __setLabelLinks, 
+        __delLabelLinks, 
+        doc = 'label links')
+
+
+
+
+    ## get method for labelPaths attribute
+    # \returns name of labelPaths           
+    def __getLabelPaths(self):
+        return self.state["LabelPaths"]
+
+
+    ## set method for labelPaths attribute
+    # \param name of labelPaths           
+    def __setLabelPaths(self, name):
+        jname = self.__stringToDictJson(name)
+        if self.state["LabelPaths"] != jname:
+            self.state["LabelPaths"] = jname
+
+    ## del method for labelPaths attribute
+    def __delLabelPaths(self):
+        self.state.pop("LabelPaths")
+
+    ## the json data string
+    labelPaths = property(
+        __getLabelPaths, 
+        __setLabelPaths, 
+        __delLabelPaths, 
+        doc = 'label paths')
+
+
+    ## get method for labelShapes attribute
+    # \returns name of labelShapes           
+    def __getLabelShapes(self):
+        return self.state["LabelShapes"]
+
+
+    ## set method for labelShapes attribute
+    # \param name of labelShapes           
+    def __setLabelShapes(self, name):
+        jname = self.__stringToDictJson(name)
+        if self.state["LabelShapes"] != jname:
+            self.state["LabelShapes"] = jname
+
+    ## del method for labelShapes attribute
+    def __delLabelShapes(self):
+        self.state.pop("LabelShapes")
+
+    ## the json data string
+    labelShapes = property(
+        __getLabelShapes, 
+        __setLabelShapes, 
+        __delLabelShapes, 
+        doc = 'label shapes')
+
+
+
+    ## get method for labelTypes attribute
+    # \returns name of labelTypes           
+    def __getLabelTypes(self):
+        return self.state["LabelTypes"]
+
+
+    ## set method for labelTypes attribute
+    # \param name of labelTypes           
+    def __setLabelTypes(self, name):
+        jname = self.__stringToDictJson(name)
+        if self.state["LabelTypes"] != jname:
+            self.state["LabelTypes"] = jname
+
+    ## del method for labelTypes attribute
+    def __delLabelTypes(self):
+        self.state.pop("LabelTypes")
+
+    ## the json data string
+    labelTypes = property(
+        __getLabelTypes, 
+        __setLabelTypes, 
+        __delLabelTypes, 
+        doc = 'label types')
 
 
 
@@ -477,11 +771,13 @@ class Settings(object):
             else:
                 acps[acp] = True
                 
-        self.state["AutomaticComponentGroup"] = json.dumps(acps)
-        if self.__server:
-            dp = PyTango.DeviceProxy(str(self.__server.get_name()))
-            dp.write_attribute(str("AutomaticComponentGroup"), 
-                               self.state["AutomaticComponentGroup"])
+        jacps = json.dumps(acps)
+        if self.state["AutomaticComponentGroup"] != jacps:
+            self.state["AutomaticComponentGroup"] = jacps
+            if self.__server:
+                dp = PyTango.DeviceProxy(str(self.__server.get_name()))
+                dp.write_attribute(str("AutomaticComponentGroup"), 
+                                   self.state["AutomaticComponentGroup"])
 
     def availableTimers(self):
         pools = Utils.pools(self.__db, self.poolBlacklist)
