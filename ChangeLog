@@ -1,8 +1,8 @@
-2014-XX-XX Jan Kotanski <jankotan@gmail.com>
+2014-04-23 Jan Kotanski <jankotan@gmail.com>
 	* adding PoolBlacklist property
 	* cleaning code
 	* adding FindMntGrp
-	* tagged as v1.0.1
+	* tagged as v1.1.0
 
 2014-04-15 Jan Kotanski <jankotan@gmail.com>
 	* ChangeLog: first version
