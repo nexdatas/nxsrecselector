@@ -318,7 +318,12 @@ class Settings(object):
     ## get method for dataSourceGroup attribute
     # \returns name of dataSourceGroup           
     def __getDataSourceGroup(self):
-        return self.state["DataSourceGroup"]
+        dsg = json.loads(self.state["DataSourceGroup"])
+        pchs = self.poolChannels()
+        for pc in pchs:
+            if pc not in dsg.keys():
+                dsg[pc] = False
+        return json.dumps(dsg)
 
 
     ## set method for dataSourceGroup attribute
