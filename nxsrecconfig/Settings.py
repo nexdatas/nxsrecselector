@@ -665,6 +665,26 @@ class Settings(object):
     def availableDataSources(self):
         return self.__configCommand("AvailableDataSources")
 
+
+
+    # available pool channels
+    def poolChannels(self):
+        res = []
+        ms =  self.__getMacroServer()
+        msp = Utils.openProxy(ms)
+        pn = msp.get_property("PoolNames")["PoolNames"]
+        if len(pn)>0:
+            pool = Utils.openProxy(pn[0])
+            exps = pool.ExpChannelList
+            for jexp in exps:
+                if jexp:
+                    exp = json.loads(jexp)
+                    if exp and isinstance(exp,dict):
+                        res.append(exp['name'])
+        return res
+
+
+
     ## save configuration
     def dataSourcePath(self, name):
         labels = json.loads(self.state["DataSourceLabels"])
