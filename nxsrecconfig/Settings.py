@@ -184,7 +184,13 @@ class Settings(object):
     ## get method for automaticDataSources attribute
     # \returns name of automaticDataSources           
     def __getAutomaticDataSources(self):
-        return self.state["AutomaticDataSources"]
+#        return self.state["AutomaticDataSources"]
+        adsg = json.loads(self.state["AutomaticDataSources"])
+        pmots = self.poolMotors()
+
+        adsg = list(set(adsg) | set(pmots))
+        return json.dumps(adsg)
+
 
     ## set method for automaticDataSources attribute
     # \param name of automaticDataSources           
@@ -693,6 +699,23 @@ class Settings(object):
         return res
 
 
+    # available pool channels
+    def poolMotors(self):
+        res = []
+        ms =  self.__getMacroServer()
+        msp = Utils.openProxy(ms)
+        pn = msp.get_property("PoolNames")["PoolNames"]
+        if len(pn)>0:
+            pool = Utils.openProxy(pn[0])
+            exps = pool.MotorList
+            for jexp in exps:
+                if jexp:
+                    exp = json.loads(jexp)
+                    if exp and isinstance(exp,dict):
+                        res.append(exp['name'])
+        return res
+
+
 
     ## save configuration
     def dataSourcePath(self, name):
@@ -774,7 +797,7 @@ class Settings(object):
     ## checks existing controllers of pools for 
     #      AutomaticDataSources
     def updateControllers(self):
-        ads = set(json.loads(self.state["AutomaticDataSources"]))
+        ads = set(json.loads(self.automaticDataSources))
         pools = Utils.pools(self.__db, self.poolBlacklist)
         nonexisting = []
         fnames = Utils.findFullDeviceNames(ads, pools)
