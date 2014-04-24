@@ -25,6 +25,7 @@ import re
 import PyTango
 from .Describer import Describer
 from .Utils import Utils
+import pickle
 
 ## NeXus Sardana Recorder settings
 class Settings(object):
@@ -856,3 +857,58 @@ class Settings(object):
             
 
         
+    def fetchEnvData(self):
+        params = ["ScanDir",
+                  "ScanFile",
+                  "ScanID",
+                  "ActiveMntGrp"]
+        res = {}
+        dp = Utils.openProxy(self.macroServer)
+        rec = dp.Environment
+        if rec[0] == 'pickle':
+            dc = pickle.loads(rec[1])
+            if 'new' in dc.keys() :
+                for var in params:
+                    if var in dc['new'].keys():
+                        res[var] = dc['new'][var]
+        return json.dumps(res)                
+                        
+
+    def storeEnvData(self, jdata):
+        params = ["ScanDir",
+                  "ScanFile",
+#                  "ScanID",
+                  "ActiveMntGrp"]
+        jdata = self.__stringToDictJson(jdata)
+        data = json.loads(jdata)
+        scanID = -1
+        
+        ms =  self.__getMacroServer()
+        msp = Utils.openProxy(ms)
+        if "ActiveMntGrp" in data.keys():
+            if not data["ActiveMntGrp"]:
+                data["ActiveMntGrp"] =  self.__defaultmntgrp
+            mntgrp = data["ActiveMntGrp"]
+            pools = Utils.pools(self.__db, self.poolBlacklist)
+            full = Utils.findMntGrpName(mntgrp, pools)
+            if not full:
+                pn = msp.get_property("PoolNames")["PoolNames"]
+                if len(pn)>0:
+                    pool = Utils.openProxy(pn[0])
+                if not pool and len(pools)> 0 :
+                    pool = pools[0]
+                if pool:
+                    pool.CreateMeasurementGroup([mntgrp, self.state["Timer"]])
+
+        rec = msp.Environment
+        if rec[0] == 'pickle':
+            dc = pickle.loads(rec[1])
+            if 'new' in dc.keys():
+                for var in params:
+                    if var in data.keys():
+                        dc['new'][var] = data[var]
+                pk = pickle.dumps(dc) 
+                if 'ScanID' in dc['new'].keys():
+                    scanID = int(dc['new']["ScanID"])
+                msp.Environment = ['pickle', pk]
+        return scanID

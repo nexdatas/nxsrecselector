@@ -853,6 +853,65 @@ class NXSRecSelector(PyTango.Device_4Impl):
 
 
 #------------------------------------------------------------------
+#    StoreEnvData command:
+#
+#    Description: Stores ScanDir, ScanFile and ActiveMntGrp 
+#                 in environment variables
+#                
+#    argout: DevString    json dictionary with enviroutment data
+#    argout: DevLong    scan ID
+#------------------------------------------------------------------
+    def StoreEnvData(self, argin):
+        print >> self.log_info, "In ", self.get_name(), \
+            "::StoreEnvData()"
+        try:
+            self.set_state(PyTango.DevState.RUNNING)
+            argout = int(self.stg.storeEnvData(argin))
+            self.set_state(PyTango.DevState.ON)
+        finally:
+            if self.get_state() == PyTango.DevState.RUNNING:
+                self.set_state(PyTango.DevState.ON)
+        
+        return argout
+
+
+#---- StoreEnvData command State Machine -----------------
+    def is_StoreEnvData_allowed(self):
+        if self.get_state() in [PyTango.DevState.RUNNING]:
+            return False
+        return True
+
+
+#------------------------------------------------------------------
+#    FetchEnvData command:
+#
+#    Description: Fetches ScanDir, ScanFile and ActiveMntGrp and ScanID
+#                 in environment variables
+#                
+#    argout: DevString    json dictionary with enviroutment data
+#------------------------------------------------------------------
+    def FetchEnvData(self):
+        print >> self.log_info, "In ", self.get_name(), \
+            "::FetchEnvData()"
+        try:
+            self.set_state(PyTango.DevState.RUNNING)
+            argout = str(self.stg.fetchEnvData())
+            self.set_state(PyTango.DevState.ON)
+        finally:
+            if self.get_state() == PyTango.DevState.RUNNING:
+                self.set_state(PyTango.DevState.ON)
+        return argout
+        
+
+
+#---- FetchEnvData command State Machine -----------------
+    def is_FetchEnvData_allowed(self):
+        if self.get_state() in [PyTango.DevState.RUNNING]:
+            return False
+        return True
+
+
+#------------------------------------------------------------------
 #    AvailableComponents command:
 #
 #    Description: Returns a list of available component names
@@ -940,6 +999,36 @@ class NXSRecSelector(PyTango.Device_4Impl):
 
 
 
+#------------------------------------------------------------------
+#    PoolMotors command:
+#
+#    Description: Returns a list of available pool channels
+#                
+#    argout: DevVarStringArray    list of available pool channels
+#------------------------------------------------------------------
+    def PoolMotors(self):
+        print >> self.log_info, "In ", self.get_name(), \
+            "::PoolMotors()"
+        #    Add your own code here
+        try:
+            self.set_state(PyTango.DevState.RUNNING)
+            argout = self.stg.poolMotors()
+            self.set_state(PyTango.DevState.ON)
+        finally:
+            if self.get_state() == PyTango.DevState.RUNNING:
+                self.set_state(PyTango.DevState.ON)
+        
+        return argout
+
+
+#---- PoolMotors command State Machine -----------------
+    def is_PoolMotors_allowed(self):
+        if self.get_state() in [PyTango.DevState.RUNNING]:
+            return False
+        return True
+
+
+
 
 
 #------------------------------------------------------------------
@@ -997,34 +1086,43 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
     cmd_list = {
         'DataSourcePath':
             [[PyTango.DevString, "datasource name"],
-            [PyTango.DevString, "NeXus Path"]],
+             [PyTango.DevString, "NeXus Path"]],
         'FindMntGrp':
             [[PyTango.DevString, "mntgrp alias"],
-            [PyTango.DevString, "mntgrp fullname"]],
+             [PyTango.DevString, "mntgrp fullname"]],
+        'StoreEnvData':
+            [[PyTango.DevString, "enviroutment data"],
+             [PyTango.DevLong, "scanID"]],
+        'FetchEnvData':
+            [[PyTango.DevVoid, ""],
+             [PyTango.DevString, "enviroutment data"]],
         'LoadConfiguration':
             [[PyTango.DevVoid, ""],
-            [PyTango.DevVoid, ""]],
+             [PyTango.DevVoid, ""]],
         'SaveConfiguration':
             [[PyTango.DevVoid, ""],
-            [PyTango.DevVoid, ""]],
+             [PyTango.DevVoid, ""]],
         'UpdateMntGrp':
             [[PyTango.DevVoid, ""],
-            [PyTango.DevVoid, ""]],
+             [PyTango.DevVoid, ""]],
         'UpdateControllers':
             [[PyTango.DevVoid, ""],
-            [PyTango.DevVoid, ""]],
+             [PyTango.DevVoid, ""]],
         'AvailableComponents':
             [[PyTango.DevVoid, ""],
-            [PyTango.DevVarStringArray, "list of available component names"]],
+             [PyTango.DevVarStringArray, "list of available component names"]],
         'AvailableDataSources':
             [[PyTango.DevVoid, ""],
-            [PyTango.DevVarStringArray, "list of available DataSource names"]],
+             [PyTango.DevVarStringArray, "list of available DataSource names"]],
         'PoolChannels':
             [[PyTango.DevVoid, ""],
-            [PyTango.DevVarStringArray, "list of available pool channels"]],
+             [PyTango.DevVarStringArray, "list of available pool channels"]],
+        'PoolMotors':
+            [[PyTango.DevVoid, ""],
+             [PyTango.DevVarStringArray, "list of available pool channels"]],
         'MandatoryComponents':
             [[PyTango.DevVoid, ""],
-            [PyTango.DevVarStringArray, "component names"]],
+             [PyTango.DevVarStringArray, "component names"]],
         }
 
 

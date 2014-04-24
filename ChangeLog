@@ -1,5 +1,6 @@
 2014-04-XX Jan Kotanski <jankotan@gmail.com>
 	* adding pool channels to datasource group
+	* moving store/fetchEnvData into server
 	* tagged as v1.2.0
 
 2014-04-23 Jan Kotanski <jankotan@gmail.com>
