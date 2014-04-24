@@ -245,7 +245,7 @@ class Settings(object):
     def __stringToDictJson(self, string, toBool = False):
         try:
             acps = json.loads(string)
-            assert isinstance(acp, dict) 
+            assert isinstance(acps, dict) 
             jstring = string
         except:
             lst = re.sub("[^\w]","  ",string).split()
@@ -257,18 +257,18 @@ class Settings(object):
                     dct[k] = False \
                         if dct[k].lower() == 'false' else True
             jstring = json.dumps(dct)
-            return jstring
+        return jstring
 
 
     def __stringToListJson(self, string):
         try:
             acps = json.loads(string)
-            assert isinstance(acp, (list, tuple)) 
+            assert isinstance(acps, (list, tuple)) 
             jstring = string
         except:
             lst = re.sub("[^\w]","  ",string).split()
             jstring = json.dumps(lst)
-            return jstring
+        return jstring
 
 
     ## get method for automaticComponentGroup attribute
@@ -882,7 +882,6 @@ class Settings(object):
         jdata = self.__stringToDictJson(jdata)
         data = json.loads(jdata)
         scanID = -1
-        
         ms =  self.__getMacroServer()
         msp = Utils.openProxy(ms)
         if "ActiveMntGrp" in data.keys():
