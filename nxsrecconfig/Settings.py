@@ -319,7 +319,11 @@ class Settings(object):
     # \returns name of dataSourceGroup           
     def __getDataSourceGroup(self):
         dsg = json.loads(self.state["DataSourceGroup"])
+        ads = self.availableDataSources()
         pchs = self.poolChannels()
+        for ds in tuple(dsg.keys()):
+            if ds not in pchs or ds not in ads:
+                dsg.pop(ds)
         for pc in pchs:
             if pc not in dsg.keys():
                 dsg[pc] = False
