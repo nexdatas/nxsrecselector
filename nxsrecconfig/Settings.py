@@ -861,6 +861,7 @@ class Settings(object):
         params = ["ScanDir",
                   "ScanFile",
                   "ScanID",
+                  "NeXusSelectorDevice",
                   "ActiveMntGrp"]
         res = {}
         dp = Utils.openProxy(self.macroServer)
@@ -875,10 +876,6 @@ class Settings(object):
                         
 
     def storeEnvData(self, jdata):
-        params = ["ScanDir",
-                  "ScanFile",
-#                  "ScanID",
-                  "ActiveMntGrp"]
         jdata = self.__stringToDictJson(jdata)
         data = json.loads(jdata)
         scanID = -1
@@ -903,9 +900,8 @@ class Settings(object):
         if rec[0] == 'pickle':
             dc = pickle.loads(rec[1])
             if 'new' in dc.keys():
-                for var in params:
-                    if var in data.keys():
-                        dc['new'][var] = data[var]
+                for var in data.keys():
+                    dc['new'][var] = data[var]
                 pk = pickle.dumps(dc) 
                 if 'ScanID' in dc['new'].keys():
                     scanID = int(dc['new']["ScanID"])
