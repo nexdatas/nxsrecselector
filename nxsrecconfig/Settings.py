@@ -901,7 +901,7 @@ class Settings(object):
             dc = pickle.loads(rec[1])
             if 'new' in dc.keys():
                 for var in data.keys():
-                    dc['new'][var] = data[var]
+                    dc['new'][str(var)] = data[var]
                 pk = pickle.dumps(dc) 
                 if 'ScanID' in dc['new'].keys():
                     scanID = int(dc['new']["ScanID"])
