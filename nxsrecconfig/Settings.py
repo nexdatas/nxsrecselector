@@ -55,7 +55,7 @@ class Settings(object):
         self.state["DataSourceGroup"] = '{}'
 
         ## group of optional components available for automatic selection
-        self.state["OptionalComponents"] = ''
+        self.state["OptionalComponents"] = '{}'
 
         
         ## appending new entries to existing file
