@@ -145,7 +145,7 @@ class Settings(object):
         dds = self.disableDataSources()
         if not isinstance(dds, list):
             dds = []
-        dss = json.loads(self.state["DataSourceGroup"])
+        dss = json.loads(self.__getDataSourceGroup())
         if isinstance(dss, dict):
             return [ds for ds in dss.keys() if dss[ds] and ds not in dds]
         else:
