@@ -329,8 +329,7 @@ class Settings(object):
         ads = self.availableDataSources()
         pchs = self.poolChannels()
         for ds in tuple(dsg.keys()):
-            if ds not in pchs or ds not in ads:
-                print "REMOVING", ds, ds not in pchs , ds not in ads
+            if ds not in pchs and ds not in ads:
                 dsg.pop(ds)
         for pc in pchs:
             if pc not in dsg.keys():
