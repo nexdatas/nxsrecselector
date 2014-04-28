@@ -217,12 +217,21 @@ class NXSRecSelector(PyTango.Device_4Impl):
 
 
 #------------------------------------------------------------------
-#    Write MacroServer attribute
+#    Read Door attribute
 #------------------------------------------------------------------
-    def write_MacroServer(self, attr):
-        print >> self.log_info, "In ", self.get_name(), "::write_MacroServer()"
-        self.stg.macroServer = attr.get_write_value()
-        print >> self.log_info, "Attribute value = %s" % self.stg.macroServer
+    def read_Door(self, attr):
+        print >> self.log_info, "In ", self.get_name(), \
+            "::read_Door()"
+        attr.set_value(self.stg.door)
+
+
+#------------------------------------------------------------------
+#    Write Door attribute
+#------------------------------------------------------------------
+    def write_Door(self, attr):
+        print >> self.log_info, "In ", self.get_name(), "::write_Door()"
+        self.stg.door = attr.get_write_value()
+        print >> self.log_info, "Attribute value = %s" % self.stg.door
 
 
 
@@ -1229,10 +1238,18 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
         'MacroServer':
             [[PyTango.DevString,
             PyTango.SCALAR,
-            PyTango.READ_WRITE],
+            PyTango.READ],
             {
                 'label':"MacroServer",
                 'description':"MacroServer",
+            } ],
+        'Door':
+            [[PyTango.DevString,
+            PyTango.SCALAR,
+            PyTango.READ_WRITE],
+            {
+                'label':"Door",
+                'description':"Door",
                 'Memorized':"true",
             } ],
         'WriterDevice':

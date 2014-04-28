@@ -108,8 +108,8 @@ class Settings(object):
         ## Configuration Server device name
         self.state["ConfigDevice"] = ''
 
-        ## MacroServer device name
-        self.state["MacroServer"] = ''
+        ## Door device name
+        self.state["Door"] = ''
 
         ## config server proxy
         self.__configProxy = None
@@ -493,32 +493,45 @@ class Settings(object):
 
 
 
-    ## get method for macroServer attribute
-    # \returns name of macroServer           
-    def __getMacroServer(self):
-        if "MacroServer" not in self.state or not self.state["MacroServer"]:
-            self.state["MacroServer"] = Utils.findDevice(
-                self.__db,"MacroServer")
-        return self.state["MacroServer"]
+    ## get method for door attribute
+    # \returns name of door           
+    def __getDoor(self):
+        if "Door" not in self.state or not self.state["Door"]:
+            self.state["Door"] = Utils.findDevice(
+                self.__db,"Door")
+        return self.state["Door"]
 
-    ## set method for macroServer attribute
-    # \param name of macroServer           
-    def __setMacroServer(self, name):
+    ## set method for door attribute
+    # \param name of door           
+    def __setDoor(self, name):
         if name:
-            self.state["MacroServer"] = name
+            self.state["Door"] = name
         else:
-            self.state["MacroServer"] = Utils.findDevice(
-                self.__db,"MacroServer")
+            self.state["Door"] = Utils.findDevice(
+                self.__db,"Door")
 
 
-    ## del method for macroServer attribute
-    def __delMacroServer(self):
-        self.state.pop("MacroServer")
+    ## del method for door attribute
+    def __delDoor(self):
+        self.state.pop("Door")
 
     ## the json data string
-    macroServer = property(__getMacroServer, __setMacroServer, 
-                           __delMacroServer, 
+    door = property(__getDoor, __setDoor, 
+                           __delDoor, 
                            doc = 'door server device name')
+
+
+    def __getMacroServer(self):
+        door = self.__getDoor()
+        return Utils.getMacroServer(self.__db, door)
+        
+
+    ## the json data string
+    macroServer = property(__getMacroServer,
+                           doc = 'macroServer device name')
+
+    
+        
 
 
 

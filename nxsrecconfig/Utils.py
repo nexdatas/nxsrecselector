@@ -114,6 +114,21 @@ class Utils(object):
         return pools    
 
 
+    @classmethod
+    def getMacroServer(self, db, door):
+        servers = db.get_device_exported_for_class(
+            "MacroServer").value_string
+        
+        ms = ""
+        for server in servers:
+            dp = PyTango.DeviceProxy(server)
+            if hasattr(dp, "DoorList"):
+                lst = dp.DoorList
+                if door in lst:
+                    ms = server
+                    break
+        return ms
+
 
     
     ## find device
