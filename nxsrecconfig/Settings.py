@@ -125,6 +125,8 @@ class Settings(object):
 
         self.poolBlacklist = []
 
+        self.__macroserver = ""
+
     def components(self):
         cps = json.loads(self.state["ComponentGroup"])
         if isinstance(cps, dict):
@@ -499,6 +501,8 @@ class Settings(object):
         if "Door" not in self.state or not self.state["Door"]:
             self.state["Door"] = Utils.findDevice(
                 self.__db,"Door")
+            self.__macroserver = Utils.getMacroServer(
+                self.__db, self.state["Door"])
         return self.state["Door"]
 
     ## set method for door attribute
@@ -509,6 +513,8 @@ class Settings(object):
         else:
             self.state["Door"] = Utils.findDevice(
                 self.__db,"Door")
+        self.__macroserver = Utils.getMacroServer(
+            self.__db, self.state["Door"])
 
 
     ## del method for door attribute
@@ -522,8 +528,10 @@ class Settings(object):
 
 
     def __getMacroServer(self):
-        door = self.__getDoor()
-        return Utils.getMacroServer(self.__db, door)
+        if not self.__macroserver:
+            door = self.__getDoor()
+            self.__macroserver = Utils.getMacroServer(self.__db, door)
+        return self.__macroserver
         
 
     ## the json data string
