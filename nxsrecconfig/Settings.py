@@ -127,6 +127,9 @@ class Settings(object):
 
         self.__macroserver = ""
 
+
+        self.__pools = []
+
     def components(self):
         cps = json.loads(self.state["ComponentGroup"])
         if isinstance(cps, dict):
@@ -501,9 +504,9 @@ class Settings(object):
         if "Door" not in self.state or not self.state["Door"]:
             self.state["Door"] = Utils.findDevice(
                 self.__db,"Door")
-            self.__macroserver = Utils.getMacroServer(
-                self.__db, self.state["Door"])
+            self.__updateMacroServer(self.state["Door"])
         return self.state["Door"]
+
 
     ## set method for door attribute
     # \param name of door           
@@ -513,8 +516,8 @@ class Settings(object):
         else:
             self.state["Door"] = Utils.findDevice(
                 self.__db,"Door")
-        self.__macroserver = Utils.getMacroServer(
-            self.__db, self.state["Door"])
+        self.__updateMacroServer(self.state["Door"])
+
 
 
     ## del method for door attribute
@@ -530,9 +533,25 @@ class Settings(object):
     def __getMacroServer(self):
         if not self.__macroserver:
             door = self.__getDoor()
-            self.__macroserver = Utils.getMacroServer(self.__db, door)
+            self.__updateMacroServer(door)
         return self.__macroserver
+
+    def __getPools(self):
+        if not self.__pools:
+            door = self.__getDoor()
+            self.__updateMacroServer(door)
+        return self.__pools
+
+
+    def __updateMacroServer(self, door):
+        self.__macroserver = Utils.getMacroServer(self.__db, door)
+        msp = Utils.openProxy(self.__macroserver)
+        poolNames = list(
+            set(msp.get_property("PoolNames")["PoolNames"])
+            - set(self.poolBlacklist))
+        self.__pools = Utils.pools(poolNames)
         
+
 
     ## the json data string
     macroServer = property(__getMacroServer,
@@ -590,7 +609,7 @@ class Settings(object):
         if not name:
             name =  self.__defaultmntgrp
         ms =  self.__getMacroServer()
-        pools = Utils.pools(self.__db, self.poolBlacklist)
+        pools = self.__getPools()
         pool = None
         full = Utils.findMntGrpName(name, pools)
         if not full:
@@ -775,7 +794,7 @@ class Settings(object):
 
     ## set active measurement group from components
     def updateMntGrp(self):
-        pools = Utils.pools(self.__db, self.poolBlacklist)
+        pools = self.__getPools()
         hsh = {}
         hsh['controllers'] = {} 
         hsh['description'] = "Measurement Group" 
@@ -820,7 +839,7 @@ class Settings(object):
     #      AutomaticDataSources
     def updateControllers(self):
         ads = set(json.loads(self.automaticDataSources))
-        pools = Utils.pools(self.__db, self.poolBlacklist)
+        pools = self.__getPools()
         nonexisting = []
         fnames = Utils.findFullDeviceNames(ads, pools)
         for dev in ads:
@@ -854,11 +873,11 @@ class Settings(object):
                                    self.state["AutomaticComponentGroup"])
 
     def availableTimers(self):
-        pools = Utils.pools(self.__db, self.poolBlacklist)
+        pools = self.__getPools()
         return Utils.findTimers(pools)
 
     def findMntGrp(self, name):
-        pools = Utils.pools(self.__db, self.poolBlacklist)
+        pools = self.__getPools()
         return Utils.findMntGrpName(name, pools)
         
 
@@ -906,7 +925,7 @@ class Settings(object):
             if not data["ActiveMntGrp"]:
                 data["ActiveMntGrp"] =  self.__defaultmntgrp
             mntgrp = data["ActiveMntGrp"]
-            pools = Utils.pools(self.__db, self.poolBlacklist)
+            pools = self.__getPools()
             full = Utils.findMntGrpName(mntgrp, pools)
             if not full:
                 pn = msp.get_property("PoolNames")["PoolNames"]

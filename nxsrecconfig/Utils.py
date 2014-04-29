@@ -99,18 +99,15 @@ class Utils(object):
 
 
     @classmethod
-    def pools(cls, db, blacklist):
-        bl = [ p.lower() for p in blacklist ]
-        poolNames = cls.getDeviceNamesByClass(db, "Pool")
+    def pools(cls, poolNames):
         pools = []
         for pool in poolNames:
-            if pool.lower() not in bl:
-                dp = PyTango.DeviceProxy(pool)
-                try:
-                    dp.ping()
-                    pools.append(dp)    
-                except:
-                    pass
+            dp = PyTango.DeviceProxy(pool)
+            try:
+                dp.ping()
+                pools.append(dp)    
+            except:
+                pass
         return pools    
 
 
