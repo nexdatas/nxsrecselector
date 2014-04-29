@@ -793,8 +793,10 @@ class Settings(object):
         return res
 
     ## set active measurement group from components
+
     def updateMntGrp(self):
         pools = self.__getPools()
+        timerable = self.availableTimers()
         hsh = {}
         hsh['controllers'] = {} 
         hsh['description'] = "Measurement Group" 

@@ -257,9 +257,11 @@ class Utils(object):
             chan = json.loads(elm)
             inter = chan['interfaces']
             if isinstance(inter, (list, tuple)):
-                if 'CTExpChannel' in inter or \
-                        'OneDExpChannel' in inter or \
-                        'TwoDExpChannel' in inter:
+                if 'CTExpChannel' in inter:
+#                   or \
+#                       'PseudoCounter' in inter or \
+#                       'OneDExpChannel' in inter or \
+#                       'TwoDExpChannel' in inter:
                     res.append(chan['name'])
         return res
 
@@ -343,8 +345,8 @@ class Utils(object):
         
             fullname = fullnames[device]
             if not fullname in ctrlChannels.keys():
-                dp  = PyTango.DeviceProxy(fullname.encode())
-                da =  dp.read_attribute('value')
+                dp = PyTango.DeviceProxy(fullname.encode())
+                da = dp.read_attribute('value')
                 dct = {}
                 dct['_controller_name'] = unicode(ctrl)
                 dct['_unit_id'] = u'0'
