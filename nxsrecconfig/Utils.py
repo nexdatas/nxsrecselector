@@ -322,7 +322,7 @@ class Utils(object):
         return index
 
     @classmethod
-    def addDevices(cls, devices, pools, hsh, fulltimer, index):
+    def addDevices(cls, devices, dontdisplay, pools, hsh, fulltimer, index):
         ctrls = cls.findDeviceControllers(devices, pools)
         fullnames = cls.findFullDeviceNames(devices, pools) 
         for device, ctrl in ctrls.items():
@@ -364,14 +364,20 @@ class Utils(object):
                 dct['nexus_path'] = u''
                 dct['normalization'] = 0
                 dct['output'] = True
-                dct['plot_axes'] = []
-                dct['plot_type'] = 0
                 if da.dim_x and da.dim_x > 1 :
                     dct['shape'] = [da.dim_y, da.dim_x] \
                         if da.dim_y \
                         else [da.dim_x]
                 else:
                     dct['shape'] = [] 
+
+                if device in dontdisplay or dct['shape']:
+                    dct['plot_axes'] = []
+                    dct['plot_type'] = 0
+                else:        
+                    dct['plot_axes'] = ['<mov>']
+                    dct['plot_type'] = 1
+
                 dct['source'] = dct['full_name'] + "/value"
                 ctrlChannels[fullname] = dct
         return index

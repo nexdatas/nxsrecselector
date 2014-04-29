@@ -429,6 +429,24 @@ class NXSRecSelector(PyTango.Device_4Impl):
             self.stg.state["LabelLinks"]
 
 
+#------------------------------------------------------------------
+#    Read HiddenElements attribute
+#------------------------------------------------------------------
+    def read_HiddenElements(self, attr):
+        print >> self.log_info, "In ", self.get_name(), "::read_HiddenElements()"
+        attr.set_value(self.stg.hiddenElements)
+
+
+#------------------------------------------------------------------
+#    Write HiddenElements attribute
+#------------------------------------------------------------------
+    def write_HiddenElements(self, attr):
+        print >> self.log_info, "In ", self.get_name(), "::write_HiddenElements()"
+        self.stg.hiddenElements = attr.get_write_value()
+        print >> self.log_info, "Attribute value = %s" % \
+            self.stg.state["HiddenElements"]
+
+
 
 
 #------------------------------------------------------------------
@@ -450,6 +468,26 @@ class NXSRecSelector(PyTango.Device_4Impl):
         print >> self.log_info, "Attribute value = %s" % \
             self.stg.state["DataSourceLabels"]
 
+
+
+#------------------------------------------------------------------
+#    Read ComponentLabels attribute
+#------------------------------------------------------------------
+    def read_ComponentLabels(self, attr):
+        print >> self.log_info, "In ", self.get_name(), \
+            "::read_ComponentLabels()"
+        attr.set_value(self.stg.componentLabels)
+
+
+#------------------------------------------------------------------
+#    Write ComponentLabels attribute
+#------------------------------------------------------------------
+    def write_ComponentLabels(self, attr):
+        print >> self.log_info, "In ", self.get_name(), \
+            "::write_ComponentLabels()"
+        self.stg.componentLabels = attr.get_write_value()
+        print >> self.log_info, "Attribute value = %s" % \
+            self.stg.state["ComponentLabels"]
 
 #------------------------------------------------------------------
 #    Read DataSources attribute
@@ -1315,6 +1353,17 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
                 'Memorized':"true",
                 'Display level':PyTango.DispLevel.EXPERT,
             } ],
+        'HiddenElements':
+            [[PyTango.DevString,
+            PyTango.SCALAR,
+            PyTango.READ_WRITE],
+            {
+                'label':"Not displayed elements",
+                'description':"JSON list with not displayed Elements" \
+                    + "Labels",
+                'Memorized':"true",
+                'Display level':PyTango.DispLevel.EXPERT,
+            } ],
         'DataSourceLabels':
             [[PyTango.DevString,
             PyTango.SCALAR,
@@ -1322,6 +1371,16 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
             {
                 'label':"DataSource Labels",
                 'description':"JSON dictionary with Datasource Labels",
+                'Memorized':"true",
+                'Display level':PyTango.DispLevel.EXPERT,
+            } ],
+        'ComponentLabels':
+            [[PyTango.DevString,
+            PyTango.SCALAR,
+            PyTango.READ_WRITE],
+            {
+                'label':"Component Labels",
+                'description':"JSON dictionary with Component Labels",
                 'Memorized':"true",
                 'Display level':PyTango.DispLevel.EXPERT,
             } ],

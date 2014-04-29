@@ -73,16 +73,22 @@ class Settings(object):
         ## JSON with DataSource Labels
         self.state["DataSourceLabels"] = '{}'
 
-        ## JSON with NeXus paths for DataSource Labels
+        ## JSON with Component Labels
+        self.state["ComponentLabels"] = '{}'
+
+        ## JSON with NeXus paths for Label Paths
         self.state["LabelPaths"] = '{}'
 
-        ## JSON with NeXus paths for DataSource Labels
+        ## JSON with NeXus paths for Label Links
         self.state["LabelLinks"] = '{}'
 
-        ## JSON with NeXus paths for DataSource Labels
+        ## JSON with NeXus paths for Label Displays
+        self.state["HiddenElements"] = '[]'
+
+        ## JSON with NeXus paths for Label Types
         self.state["LabelTypes"] = '{}'
 
-        ## JSON with NeXus paths for DataSource Labels
+        ## JSON with NeXus paths for Label Shapes
         self.state["LabelShapes"] = '{}'
 
         ## create dynamic components
@@ -414,6 +420,32 @@ class Settings(object):
         __setLabelLinks, 
         __delLabelLinks, 
         doc = 'label links')
+
+
+
+    ## get method for hiddenElements attribute
+    # \returns name of hiddenElements           
+    def __getHiddenElements(self):
+        return self.state["HiddenElements"]
+
+
+    ## set method for hiddenElements attribute
+    # \param name of hiddenElements           
+    def __setHiddenElements(self, name):
+        jname = self.__stringToListJson(name)
+        if self.state["HiddenElements"] != jname:
+            self.state["HiddenElements"] = jname
+
+    ## del method for hiddenElements attribute
+    def __delHiddenElements(self):
+        self.state.pop("HiddenElements")
+
+    ## the json data string
+    hiddenElements = property(
+        __getHiddenElements, 
+        __setHiddenElements, 
+        __delHiddenElements, 
+        doc = 'label displays')
 
 
 
@@ -803,6 +835,7 @@ class Settings(object):
         hsh['label'] = "" 
         timer = self.state["Timer"]
         datasources = self.dataSources()
+        dontdisplay = json.loads(self.state["HiddenElements"])
 
         aliases = []
         if isinstance(datasources, list):
@@ -833,7 +866,7 @@ class Settings(object):
                         
 #        for alias in aliases:
 #            index = Utils.addDevice(alias, pools, hsh, timer, index)
-        index = Utils.addDevices(aliases, pools, hsh, fullname, index)
+        index = Utils.addDevices(aliases, dontdisplay, pools, hsh, fullname, index)
         dpmg.Configuration = json.dumps(hsh)
 
 
