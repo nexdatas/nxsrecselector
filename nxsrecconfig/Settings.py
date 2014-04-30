@@ -138,10 +138,15 @@ class Settings(object):
 
     def components(self):
         cps = json.loads(self.state["ComponentGroup"])
+        dss = self.dataSources()
+        acp = self.availableComponents()
+        res = [] 
         if isinstance(cps, dict):
-            return [cp for cp in cps.keys() if cps[cp]]
-        else:
-            return []
+            res = [cp for cp in cps.keys() if cps[cp]]
+            for ds in dss:
+                if ds in acp:
+                    res.append(ds)                
+        return res
 
     def automaticComponents(self):
         self.updateControllers()
@@ -311,7 +316,13 @@ class Settings(object):
     ## get method for componentGroup attribute
     # \returns name of componentGroup           
     def __getComponentGroup(self):
-        return self.state["ComponentGroup"]
+        cpg = json.loads(self.state["ComponentGroup"])
+        dss = json.loads(self.state["DataSourceGroup"]).keys()
+        for cp in set(cpg.keys()):
+            if cp in dss:
+                cpg.pop(cp)
+
+        return json.dumps(cpg)
 
 
     ## set method for componentGroup attribute
