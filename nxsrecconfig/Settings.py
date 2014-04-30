@@ -135,7 +135,8 @@ class Settings(object):
 
     def components(self):
         cps = json.loads(self.state["ComponentGroup"])
-        dss = json.loads(self.dataSourceGroup).keys()
+        ads = json.loads(self.dataSourceGroup)
+        dss = [ds for ds in ads if ads[ds]]
         acp = self.availableComponents()
         res = [] 
         if isinstance(cps, dict):
