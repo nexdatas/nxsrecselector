@@ -135,7 +135,7 @@ class Settings(object):
 
     def components(self):
         cps = json.loads(self.state["ComponentGroup"])
-        dss = self.dataSources()
+        dss = json.loads(self.dataSourceGroup).keys()
         acp = self.availableComponents()
         res = [] 
         if isinstance(cps, dict):
@@ -824,11 +824,9 @@ class Settings(object):
 
     def __description(self, dstype = '', full = False):
         describer = Describer(self.state["ConfigDevice"])
-        cps = json.loads(self.state["ComponentGroup"])
-        mcps = [cp for cp in cps.keys() if cps[cp]]
         cp = None
         if not full:
-            cp = list(set(mcps) | 
+            cp = list(set(self.components()) | 
             set(self.automaticComponents()) | 
             set(self.mandatoryComponents()))
         res = describer.run(cp, 'STEP', dstype)
