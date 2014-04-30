@@ -70,11 +70,8 @@ class Settings(object):
         ## JSON with Client Data Record
         self.state["DataRecord"] = '{}'
 
-        ## JSON with DataSource Labels
-        self.state["DataSourceLabels"] = '{}'
-
-        ## JSON with Component Labels
-        self.state["ComponentLabels"] = '{}'
+        ## JSON with Element Labels
+        self.state["Labels"] = '{}'
 
         ## JSON with NeXus paths for Label Paths
         self.state["LabelPaths"] = '{}'
@@ -138,7 +135,7 @@ class Settings(object):
 
     def components(self):
         cps = json.loads(self.state["ComponentGroup"])
-        dss = json.loads(self.dataSourceGroup)
+        dss = self.dataSources()
         acp = self.availableComponents()
         res = [] 
         if isinstance(cps, dict):
@@ -381,28 +378,28 @@ class Settings(object):
 
 
 
-    ## get method for dataSourceLabels attribute
-    # \returns name of dataSourceLabels           
-    def __getDataSourceLabels(self):
-        return self.state["DataSourceLabels"]
+    ## get method for labels attribute
+    # \returns name of labels           
+    def __getLabels(self):
+        return self.state["Labels"]
 
 
-    ## set method for dataSourceLabels attribute
-    # \param name of dataSourceLabels           
-    def __setDataSourceLabels(self, name):
+    ## set method for labels attribute
+    # \param name of labels           
+    def __setLabels(self, name):
         jname = self.__stringToDictJson(name)
-        if self.state["DataSourceLabels"] != jname:
-            self.state["DataSourceLabels"] = jname
+        if self.state["Labels"] != jname:
+            self.state["Labels"] = jname
 
-    ## del method for dataSourceLabels attribute
-    def __delDataSourceLabels(self):
-        self.state.pop("DataSourceLabels")
+    ## del method for labels attribute
+    def __delLabels(self):
+        self.state.pop("Labels")
 
     ## the json data string
-    dataSourceLabels = property(
-        __getDataSourceLabels, 
-        __setDataSourceLabels, 
-        __delDataSourceLabels, 
+    labels = property(
+        __getLabels, 
+        __setLabels, 
+        __delLabels, 
         doc = 'datasource  labels')
 
 
@@ -803,7 +800,7 @@ class Settings(object):
 
     ## save configuration
     def dataSourcePath(self, name):
-        labels = json.loads(self.state["DataSourceLabels"])
+        labels = json.loads(self.state["Labels"])
         label = labels.get(name, "")
         paths = json.loads(self.state["LabelPaths"])
         return paths.get(label, "")
@@ -827,9 +824,11 @@ class Settings(object):
 
     def __description(self, dstype = '', full = False):
         describer = Describer(self.state["ConfigDevice"])
+        cps = json.loads(self.state["ComponentGroup"])
+        mcps = [cp for cp in cps.keys() if cps[cp]]
         cp = None
         if not full:
-            cp = list(set(self.components()) | 
+            cp = list(set(mcps) | 
             set(self.automaticComponents()) | 
             set(self.mandatoryComponents()))
         res = describer.run(cp, 'STEP', dstype)

@@ -450,44 +450,24 @@ class NXSRecSelector(PyTango.Device_4Impl):
 
 
 #------------------------------------------------------------------
-#    Read DataSourceLabels attribute
+#    Read Labels attribute
 #------------------------------------------------------------------
-    def read_DataSourceLabels(self, attr):
+    def read_Labels(self, attr):
         print >> self.log_info, "In ", self.get_name(), \
-            "::read_DataSourceLabels()"
-        attr.set_value(self.stg.dataSourceLabels)
+            "::read_Labels()"
+        attr.set_value(self.stg.labels)
 
 
 #------------------------------------------------------------------
-#    Write DataSourceLabels attribute
+#    Write Labels attribute
 #------------------------------------------------------------------
-    def write_DataSourceLabels(self, attr):
+    def write_Labels(self, attr):
         print >> self.log_info, "In ", self.get_name(), \
-            "::write_DataSourceLabels()"
-        self.stg.dataSourceLabels = attr.get_write_value()
+            "::write_Labels()"
+        self.stg.labels = attr.get_write_value()
         print >> self.log_info, "Attribute value = %s" % \
-            self.stg.state["DataSourceLabels"]
+            self.stg.state["Labels"]
 
-
-
-#------------------------------------------------------------------
-#    Read ComponentLabels attribute
-#------------------------------------------------------------------
-    def read_ComponentLabels(self, attr):
-        print >> self.log_info, "In ", self.get_name(), \
-            "::read_ComponentLabels()"
-        attr.set_value(self.stg.componentLabels)
-
-
-#------------------------------------------------------------------
-#    Write ComponentLabels attribute
-#------------------------------------------------------------------
-    def write_ComponentLabels(self, attr):
-        print >> self.log_info, "In ", self.get_name(), \
-            "::write_ComponentLabels()"
-        self.stg.componentLabels = attr.get_write_value()
-        print >> self.log_info, "Attribute value = %s" % \
-            self.stg.state["ComponentLabels"]
 
 #------------------------------------------------------------------
 #    Read DataSources attribute
@@ -1364,23 +1344,13 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
                 'Memorized':"true",
                 'Display level':PyTango.DispLevel.EXPERT,
             } ],
-        'DataSourceLabels':
+        'Labels':
             [[PyTango.DevString,
             PyTango.SCALAR,
             PyTango.READ_WRITE],
             {
-                'label':"DataSource Labels",
-                'description':"JSON dictionary with Datasource Labels",
-                'Memorized':"true",
-                'Display level':PyTango.DispLevel.EXPERT,
-            } ],
-        'ComponentLabels':
-            [[PyTango.DevString,
-            PyTango.SCALAR,
-            PyTango.READ_WRITE],
-            {
-                'label':"Component Labels",
-                'description':"JSON dictionary with Component Labels",
+                'label':"Element Labels",
+                'description':"JSON dictionary with Element Labels",
                 'Memorized':"true",
                 'Display level':PyTango.DispLevel.EXPERT,
             } ],
