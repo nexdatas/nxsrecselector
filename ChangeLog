@@ -1,4 +1,6 @@
 2014-04-XX Jan Kotanski <jankotan@gmail.com>
+	* using only macroserver pools
+	* adding datasource components
 	* making use of Door instead of MacroServer
 	* tagged as v1.3.0
 
