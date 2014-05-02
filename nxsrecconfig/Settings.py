@@ -830,7 +830,9 @@ class Settings(object):
             cp = list(set(self.components()) | 
             set(self.automaticComponents()) | 
             set(self.mandatoryComponents()))
-        res = describer.run(cp, 'STEP', dstype)
+            res = describer.run(cp, 'STEP', dstype)
+        else:
+            res = describer.run(cp, '', dstype)
         return res
 
     ## set active measurement group from components
