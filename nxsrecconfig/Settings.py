@@ -877,9 +877,9 @@ class Settings(object):
             if pool:
                 pool.CreateMeasurementGroup(
                     [mntGrpName, self.state["Timer"]])
+                fullname = str(Utils.findMntGrpName(mntGrpName, pools))
 
         Utils.setEnv('ActiveMntGrp', mntGrpName, ms)
-
         dpmg = Utils.openProxy(fullname)
         hsh['label'] = mntGrpName
         index = 0
