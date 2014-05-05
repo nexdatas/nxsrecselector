@@ -114,6 +114,10 @@ class Settings(object):
         ## Door device name
         self.state["Door"] = ''
 
+        ## MntGrp
+        self.state["MntGrp"] = ''
+
+
         ## config server proxy
         self.__configProxy = None
 
@@ -124,7 +128,7 @@ class Settings(object):
         self.__writerProxy = None
 
         ## default mntgrp
-        self.__defaultmntgrp = 'mntgrp'
+        self.__defaultmntgrp = 'nxsmntgrp'
 
         self.poolBlacklist = []
 
@@ -536,6 +540,34 @@ class Settings(object):
 
 
 
+    ## get method for mntGrp attribute
+    # \returns name of mntGrp           
+    def __getMntGrp(self):
+        if "MntGrp" not in self.state or not self.state["MntGrp"]:
+            self.state["MntGrp"] = self.__defaultmntgrp
+        return self.state["MntGrp"]
+
+
+    ## set method for mntGrp attribute
+    # \param name of mntGrp           
+    def __setMntGrp(self, name):
+        if name:
+            self.state["MntGrp"] = name
+        else:
+            self.state["MntGrp"] = self.__defaultmntgrp
+
+
+
+    ## del method for mntGrp attribute
+    def __delMntGrp(self):
+        self.state.pop("MntGrp")
+
+    ## the json data string
+    mntGrp = property(__getMntGrp, __setMntGrp, 
+                           __delMntGrp, 
+                           doc = 'measurement group')
+
+
 
 
 
@@ -635,39 +667,6 @@ class Settings(object):
 
 
 
-
-    ## get method for ActiveMntGrp attribute
-    # \returns name of ActiveMntGrp
-    def __getActiveMntGrp(self):
-        ms =  self.__getMacroServer()
-        return Utils.getEnv('ActiveMntGrp', ms)
-
-
-
-    ## set method for ActiveMntGrp attribute
-    # \param name of ActiveMntGrp           
-    def __setActiveMntGrp(self, name):
-        if not name:
-            name =  self.__defaultmntgrp
-        ms =  self.__getMacroServer()
-        pools = self.__getPools()
-        pool = None
-        full = Utils.findMntGrpName(name, pools)
-        if not full:
-            msp = Utils.openProxy(ms)
-            pn = msp.get_property("PoolNames")["PoolNames"]
-            if len(pn)>0:
-                pool = Utils.openProxy(pn[0])
-            if not pool and len(pools)> 0 :
-                pool = pools[0]
-            if pool:
-                pool.CreateMeasurementGroup([name, self.state["Timer"]])
-        if full or pool:        
-            Utils.setEnv('ActiveMntGrp', name, ms)
-
-    ## the json data string
-    activeMntGrp = property(__getActiveMntGrp, __setActiveMntGrp,
-                       doc = 'active measurement group')
 
 
 
@@ -862,9 +861,25 @@ class Settings(object):
         aliases = list(set(aliases))
 
 
-        mntGrpName = self.__getActiveMntGrp()
-
+        if not self.state["MntGrp"]:
+            self.state["MntGrp"] = self.__defaultmntgrp
+        mntGrpName = self.state["MntGrp"]
         fullname = str(Utils.findMntGrpName(mntGrpName, pools))
+
+        ms =  self.__getMacroServer()
+        if not fullname:
+            msp = Utils.openProxy(ms)
+            pn = msp.get_property("PoolNames")["PoolNames"]
+            if len(pn)>0:
+                pool = Utils.openProxy(pn[0])
+            if not pool and len(pools)> 0 :
+                pool = pools[0]
+            if pool:
+                pool.CreateMeasurementGroup(
+                    [mntGrpName, self.state["Timer"]])
+
+        Utils.setEnv('ActiveMntGrp', mntGrpName, ms)
+
         dpmg = Utils.openProxy(fullname)
         hsh['label'] = mntGrpName
         index = 0
@@ -947,8 +962,8 @@ class Settings(object):
         params = ["ScanDir",
                   "ScanFile",
                   "ScanID",
-                  "NeXusSelectorDevice",
-                  "ActiveMntGrp"]
+#                  "ActiveMntGrp",
+                  "NeXusSelectorDevice"]
         res = {}
         dp = Utils.openProxy(self.macroServer)
         rec = dp.Environment
@@ -967,20 +982,6 @@ class Settings(object):
         scanID = -1
         ms =  self.__getMacroServer()
         msp = Utils.openProxy(ms)
-        if "ActiveMntGrp" in data.keys():
-            if not data["ActiveMntGrp"]:
-                data["ActiveMntGrp"] =  self.__defaultmntgrp
-            mntgrp = data["ActiveMntGrp"]
-            pools = self.__getPools()
-            full = Utils.findMntGrpName(mntgrp, pools)
-            if not full:
-                pn = msp.get_property("PoolNames")["PoolNames"]
-                if len(pn)>0:
-                    pool = Utils.openProxy(pn[0])
-                if not pool and len(pools)> 0 :
-                    pool = pools[0]
-                if pool:
-                    pool.CreateMeasurementGroup([mntgrp, self.state["Timer"]])
 
         rec = msp.Environment
         if rec[0] == 'pickle':

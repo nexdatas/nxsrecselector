@@ -254,20 +254,20 @@ class NXSRecSelector(PyTango.Device_4Impl):
 
 
 #------------------------------------------------------------------
-#    Read ActiveMntGrp attribute
+#    Read MntGrp attribute
 #------------------------------------------------------------------
-    def read_ActiveMntGrp(self, attr):
-        print >> self.log_info, "In ", self.get_name(), "::read_ActiveMntGrp()"
-        attr.set_value(self.stg.activeMntGrp)
+    def read_MntGrp(self, attr):
+        print >> self.log_info, "In ", self.get_name(), "::read_MntGrp()"
+        attr.set_value(self.stg.mntGrp)
 
 
 #------------------------------------------------------------------
-#    Write ActiveMntGrp attribute
+#    Write MntGrp attribute
 #------------------------------------------------------------------
-    def write_ActiveMntGrp(self, attr):
-        print >> self.log_info, "In ", self.get_name(), "::write_ActiveMntGrp()"
-        self.stg.activeMntGrp = attr.get_write_value()
-        print >> self.log_info, "Attribute value = %s" % self.stg.activeMntGrp
+    def write_MntGrp(self, attr):
+        print >> self.log_info, "In ", self.get_name(), "::write_MntGrp()"
+        self.stg.mntGrp = attr.get_write_value()
+        print >> self.log_info, "Attribute value = %s" % self.stg.mntGrp
 
 #------------------------------------------------------------------
 #    Read ScanDir attribute
@@ -853,7 +853,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
 #------------------------------------------------------------------
 #    FindMntGrp command:
 #
-#    Description: Returns a NeXus path of a given datasource
+#    Description: Returns a full name of the given measurement group
 #                
 #    argout: DevString    mntgrp alias
 #    argout: DevString    mntgrp full name
@@ -882,7 +882,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
 #------------------------------------------------------------------
 #    StoreEnvData command:
 #
-#    Description: Stores ScanDir, ScanFile and ActiveMntGrp 
+#    Description: Stores ScanDir, ScanFile and NeXusSelectorDevice
 #                 in environment variables
 #                
 #    argout: DevString    json dictionary with enviroutment data
@@ -912,7 +912,8 @@ class NXSRecSelector(PyTango.Device_4Impl):
 #------------------------------------------------------------------
 #    FetchEnvData command:
 #
-#    Description: Fetches ScanDir, ScanFile and ActiveMntGrp and ScanID
+#    Description: Fetches ScanDir, ScanFile, ScanID and 
+#                 NeXusSelectorDevice
 #                 in environment variables
 #                
 #    argout: DevString    json dictionary with enviroutment data
@@ -1212,13 +1213,14 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
                 'Memorized':"true",
                 'Display level':PyTango.DispLevel.EXPERT,
             } ],
-        'ActiveMntGrp':
+        'MntGrp':
             [[PyTango.DevString,
             PyTango.SCALAR,
             PyTango.READ_WRITE],
             {
-                'label':"Active Measurement Group",
-                'description':"Active Measurement Group",
+                'label':" Measurement Group",
+                'description':" Measurement Group",
+                'Memorized':"true",
             } ],
         'ScanDir':
             [[PyTango.DevString,
