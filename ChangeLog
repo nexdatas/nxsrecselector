@@ -1,4 +1,8 @@
-2014-05-27 Jan Kotanski <jankotan@gmail.com>
+2014-05-12 Jan Kotanski <jankotan@gmail.com>
+	* fixing name package
+	* tagged as v1.3.1
+
+2014-05-07 Jan Kotanski <jankotan@gmail.com>
 	* adding hidden elements
 	* using only macroserver pools
 	* adding datasource components

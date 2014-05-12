@@ -44,7 +44,7 @@ required = [
 
 ## metadata for distutils
 SETUPDATA = dict(
-    name = "nexdatas",
+    name = "nexrecselector",
     version = INDTS.__version__,
     author = "Jan Kotanski",
     author_email = "jankotan@gmail.com",
