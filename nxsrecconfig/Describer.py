@@ -73,16 +73,47 @@ class Describer(object):
                 self.__result[1][cp] = tr
         return self.__result
 
+    def __getRecord(self, node):
+        res = ''
+        host = None
+        port = None
+        dname = None
+        rname = None
+        device = node.getElementsByTagName("device")
+        if device and len(device)>0:
+            if device[0].hasAttribute("host"):
+                host = device[0].attributes["host"].value
+            if device[0].hasAttribute("port"):
+                port = device[0].attributes["port"].value
+            if device[0].hasAttribute("name"):
+                dname = device[0].attributes["name"].value
+
+        record = node.getElementsByTagName("record")
+        if record and len(record)>0:
+            if record[0].hasAttribute("name"):
+                rname = record[0].attributes["name"].value
+                if dname:
+                    if host:
+                        if not port:
+                            port = '10000'
+                        res = '%s:%s/%s/%s' % (host, port, dname, rname)
+                    else:
+                        res = '%s/%s' % (dname, rname)
+                else:
+                    res = rname
+        return res
 
     def __checkNode(self, node):
         label = 'datasources'
         dstype = None
         name = None
+        record = None
         if node.nodeName == 'datasource':
             if node.hasAttribute("type"):
                 dstype  = node.attributes["type"].value
             if node.hasAttribute("name"):
                 name = node.attributes["name"].value
+            record = self.__getRecord(node)     
         elif node.nodeType == node.TEXT_NODE:
             dstxt = node.data
             index = dstxt.find("$%s." % label)
@@ -107,24 +138,27 @@ class Describer(object):
                                 dstype  = ds.attributes["type"].value
                             if ds.hasAttribute("name"):
                                 name = ds.attributes["name"].value
+                            record = self.__getRecord(ds)    
                 index = dstxt.find("$%s." % label, index+1)
-        return name, dstype
+        return name, dstype, record
                 
 
     def __appendNode(self, node, dss, mode, counter): 
         prefix = '__unnamed__'
-        name, dstype = self.__checkNode(node)
+        name, dstype, record = self.__checkNode(node)
         if name:
             if name not in dss:
                 dss[name] = [] 
-            dss[name].append((str(mode), str(dstype) if dstype else None))
+            dss[name].append((str(mode), str(dstype) if dstype else None,
+                              str(record) if record else None))
         elif node.nodeName == 'datasource':
             name = prefix + str(counter) 
             while name in dss.keys():
                 name = prefix + str(counter) 
                 counter = counter + 1
             dss[name] = [] 
-            dss[name].append((str(mode), str(dstype) if dstype else None))
+            dss[name].append((str(mode), str(dstype) if dstype else None,
+                              str(record) if record else None))
         
         counter = counter +1
         return (name, counter)
