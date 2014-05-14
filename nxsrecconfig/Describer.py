@@ -73,7 +73,8 @@ class Describer(object):
                 self.__result[1][cp] = tr
         return self.__result
 
-    def __getRecord(self, node):
+    @classmethod
+    def __getRecord(cls, node):
         res = ''
         host = None
         port = None

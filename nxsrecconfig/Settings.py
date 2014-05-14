@@ -260,13 +260,14 @@ class Settings(object):
 
 
 
-    def __stringToDictJson(self, string, toBool = False):
+    @classmethod
+    def __stringToDictJson(cls, string, toBool = False):
         try:
             acps = json.loads(string)
             assert isinstance(acps, dict) 
             jstring = string
         except:
-            lst = re.sub("[^\w]","  ",string).split()
+            lst = re.sub("[^\w]", "  ", string).split()
             if len(lst) % 2:
                 lst.append("")
             dct = dict(zip(*[iter(lst)]*2))
@@ -278,13 +279,14 @@ class Settings(object):
         return jstring
 
 
-    def __stringToListJson(self, string):
+    @classmethod
+    def __stringToListJson(cls, string):
         try:
             acps = json.loads(string)
             assert isinstance(acps, (list, tuple)) 
             jstring = string
         except:
-            lst = re.sub("[^\w]","  ",string).split()
+            lst = re.sub("[^\w]", "  ", string).split()
             jstring = json.dumps(lst)
         return jstring
 
@@ -782,7 +784,7 @@ class Settings(object):
             for jexp in exps:
                 if jexp:
                     exp = json.loads(jexp)
-                    if exp and isinstance(exp,dict):
+                    if exp and isinstance(exp, dict):
                         res.append(exp['name'])
         return res
 
@@ -799,7 +801,7 @@ class Settings(object):
             for jexp in exps:
                 if jexp:
                     exp = json.loads(jexp)
-                    if exp and isinstance(exp,dict):
+                    if exp and isinstance(exp, dict):
                         res.append(exp['name'])
         return res
 
@@ -860,7 +862,7 @@ class Settings(object):
 
     def updateMntGrp(self):
         pools = self.__getPools()
-        timerable = self.availableTimers()
+#        timerable = self.availableTimers()
         hsh = {}
         hsh['controllers'] = {} 
         hsh['description'] = "Measurement Group" 
@@ -914,7 +916,8 @@ class Settings(object):
                         
 #        for alias in aliases:
 #            index = Utils.addDevice(alias, pools, hsh, timer, index)
-        index = Utils.addDevices(aliases, dontdisplay, pools, hsh, fullname, index)
+        index = Utils.addDevices(aliases, dontdisplay, pools, 
+                                 hsh, fullname, index)
         dpmg.Configuration = json.dumps(hsh)
 
 
@@ -966,7 +969,8 @@ class Settings(object):
 
     ## update a list of Disable DataSources
     def disableDataSources(self):
-        if "configDevice" not in self.state or not self.state["ConfigDevice"]:
+        if "configDevice" not in self.state \
+                or not self.state["ConfigDevice"]:
             self.__getConfigDevice()
         res = self.__description()    
         dds = set()

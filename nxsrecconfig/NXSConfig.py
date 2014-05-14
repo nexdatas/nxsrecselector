@@ -433,7 +433,8 @@ class NXSRecSelector(PyTango.Device_4Impl):
 #    Read HiddenElements attribute
 #------------------------------------------------------------------
     def read_HiddenElements(self, attr):
-        print >> self.log_info, "In ", self.get_name(), "::read_HiddenElements()"
+        print >> self.log_info, "In ", self.get_name(), \
+            "::read_HiddenElements()"
         attr.set_value(self.stg.hiddenElements)
 
 
@@ -441,7 +442,8 @@ class NXSRecSelector(PyTango.Device_4Impl):
 #    Write HiddenElements attribute
 #------------------------------------------------------------------
     def write_HiddenElements(self, attr):
-        print >> self.log_info, "In ", self.get_name(), "::write_HiddenElements()"
+        print >> self.log_info, "In ", self.get_name(), \
+            "::write_HiddenElements()"
         self.stg.hiddenElements = attr.get_write_value()
         print >> self.log_info, "Attribute value = %s" % \
             self.stg.state["HiddenElements"]

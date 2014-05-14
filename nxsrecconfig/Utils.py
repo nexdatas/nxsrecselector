@@ -112,7 +112,7 @@ class Utils(object):
 
 
     @classmethod
-    def getMacroServer(self, db, door):
+    def getMacroServer(cls, db, door):
         servers = db.get_device_exported_for_class(
             "MacroServer").value_string
         
