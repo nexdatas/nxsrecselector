@@ -730,12 +730,15 @@ class Settings(object):
 
 
     ## executes command on configuration server    
-    def __configCommand(self, command):
+    def __configCommand(self, command, var = None):
         if "configDevice" not in self.state or not self.state["ConfigDevice"]:
             self.__getConfigDevice()
         self.__configProxy = Utils.openProxy(self.state["ConfigDevice"])
         self.__configProxy.Open()
-        res = getattr(self.__configProxy, command)()
+        if var is None:
+            res = getattr(self.__configProxy, command)()
+        else:
+            res = self.__configProxy.command_inout(command, var)
         return res
 
 
@@ -756,6 +759,10 @@ class Settings(object):
     ## available components
     def availableComponents(self):
         return self.__configCommand("AvailableComponents")
+
+    ## available components
+    def componentVariables(self, name):
+        return self.__configCommand("ComponentVariables", name)
 
     ## available datasources
     def availableDataSources(self):
@@ -815,6 +822,21 @@ class Settings(object):
     def loadConfiguration(self):
         fl = open(self.configFile, "r")
         self.state = json.load(fl)
+
+    def variableComponents(self):
+        acp = self.availableComponents()
+        vrs = {}
+        for c in acp:
+            vr =  self.componentVariables(c)
+            if vr:
+                for v in vr:
+                    if v not in vrs:
+                        vrs[v] = []
+                    vrs[v].append(c)
+
+        
+        jdc = json.dumps(vrs)
+        return jdc
 
         
     def description(self):

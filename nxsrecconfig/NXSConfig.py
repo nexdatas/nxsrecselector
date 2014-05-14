@@ -492,6 +492,14 @@ class NXSRecSelector(PyTango.Device_4Impl):
         print >> self.log_info, "In ", self.get_name(), "::read_Description()"
         attr.set_value(self.stg.description())
 
+#------------------------------------------------------------------
+#    Read VariableComponents attribute
+#------------------------------------------------------------------
+    def read_VariableComponents(self, attr):
+        print >> self.log_info, "In ", self.get_name(), \
+            "::read_VariableComponents()"
+        attr.set_value(self.stg.variableComponents())
+
 
 #------------------------------------------------------------------
 #    Read DataSourceGroup attribute
@@ -1380,6 +1388,16 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
                 'label':"Dependences descrition",
                 'description':"Dependences descrition of Components and " \
                     + "Datasources",
+                'Display level':PyTango.DispLevel.EXPERT,
+            } ],
+        'VariableComponents':
+            [[PyTango.DevString,
+            PyTango.SCALAR,
+            PyTango.READ],
+            {
+                'label':" Variable Components",
+                'description':"JSON Dictionary with Variables for " \
+                    + " all  available Components ",
                 'Display level':PyTango.DispLevel.EXPERT,
             } ],
         'DataSourceGroup':
