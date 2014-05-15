@@ -886,12 +886,19 @@ class Settings(object):
                 for dsrs in dss.values():
                     for dsr in dsrs: 
                         records.append(str(dsr[2]))
+        if self.__server:                
+            print >> self.__server.log_debug, "Records:", records
+
         urecords = json.loads(self.state["DataRecord"]).keys()
         precords = Utils.fullDeviceNames(pools).values()
         missing = sorted(set(records)
                          - set(self.recorder_names) 
                          - set(urecords) 
                          - set(precords))
+        if self.__server:                
+            print >> self.__server.log_debug, "URecords:", urecords
+        if self.__server:                
+            print >> self.__server.log_debug, "PRecords:", precords
         if missing:
             raise Exception(
                 "User Data not defined %s" % str(missing))
