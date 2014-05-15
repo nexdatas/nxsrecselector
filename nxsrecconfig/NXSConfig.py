@@ -504,6 +504,15 @@ class NXSRecSelector(PyTango.Device_4Impl):
 
 
 #------------------------------------------------------------------
+#    Read FullDeviceNames attribute
+#------------------------------------------------------------------
+    def read_FullDeviceNames(self, attr):
+        print >> self.log_info, "In ", self.get_name(), \
+            "::read_FullDeviceNames()"
+        attr.set_value(self.stg.fullDeviceNames())
+
+
+#------------------------------------------------------------------
 #    Read DataSourceGroup attribute
 #------------------------------------------------------------------
     def read_DataSourceGroup(self, attr):
@@ -1400,6 +1409,16 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
                 'label':" Variable Components",
                 'description':"JSON Dictionary with Variables for " \
                     + " all  available Components ",
+                'Display level':PyTango.DispLevel.EXPERT,
+            } ],
+        'FullDeviceNames':
+            [[PyTango.DevString,
+            PyTango.SCALAR,
+            PyTango.READ],
+            {
+                'label':" Full device names",
+                'description':"JSON Dictionary with full device names for " \
+                    + " all aliases ",
                 'Display level':PyTango.DispLevel.EXPERT,
             } ],
         'DataSourceGroup':

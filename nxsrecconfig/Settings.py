@@ -858,8 +858,13 @@ class Settings(object):
             res = describer.run(cp, '', dstype)
         return res
 
-    ## set active measurement group from components
 
+    def fullDeviceNames(self):
+        pools = self.__getPools()
+        return  json.dumps(Utils.fullDeviceNames(pools))
+        
+
+    ## set active measurement group from components
     def updateMntGrp(self):
         pools = self.__getPools()
 #        timerable = self.availableTimers()

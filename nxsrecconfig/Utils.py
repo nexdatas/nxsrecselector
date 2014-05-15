@@ -140,8 +140,8 @@ class Utils(object):
             return ''
 
 
-    ## find device name from alias
-    # \param name alias name
+    ## find device names from aliases
+    # \param names alias names
     # \param pools list of pool devices
     # \returns full device name    
     @classmethod
@@ -158,10 +158,26 @@ class Utils(object):
         return argout
 
 
+    ## find device name for all aliases
+    # \param pools list of pool devices
+    # \returns dictionary with full device names for aliases
+    @classmethod
+    def fullDeviceNames(cls, pools):
+        lst = []
+        for pool in pools:
+            lst += pool.AcqChannelList
+        argout = {}
+        for elm in lst:
+            chan = json.loads(elm)
+            arr = chan['full_name'].split("/")
+            argout[chan['name']] = "/".join(arr[0:-1])
+        return argout
+
+
     ## find device name from alias
     # \param name alias name
     # \param pools list of pool devices
-    # \returns full device name    
+    # \returns full device name
     @classmethod
     def findFullDeviceName(cls, name, pools):
         lst = []
@@ -176,7 +192,7 @@ class Utils(object):
         return argout
 
 
-    ## find device name from alias
+    ## find device name from aliase
     # \param name alias name
     # \param pools list of pool devices
     # \returns full device name    
