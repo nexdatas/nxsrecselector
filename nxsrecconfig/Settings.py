@@ -873,8 +873,10 @@ class Settings(object):
 
         describer = Describer(self.state["ConfigDevice"])
 
+        frecords = Utils.fullDeviceNames(pools)
+
         dsres = describer.dataSources(
-            datasources, 'CLIENT')
+            set(datasources) - set(frecords.keys()), 'CLIENT')
         records = [str(dsr[2]) for dsr in dsres.values()]
         
         cp = list(set(self.components()) | 
@@ -890,7 +892,7 @@ class Settings(object):
             print >> self.__server.log_debug, "Records:", records
 
         urecords = json.loads(self.state["DataRecord"]).keys()
-        precords = Utils.fullDeviceNames(pools).values()
+        precords = frecords.values()
         missing = sorted(set(records)
                          - set(self.recorder_names) 
                          - set(urecords) 
