@@ -137,6 +137,11 @@ class Settings(object):
 
         self.__pools = []
 
+        ## Record names set by sardana
+        self.recorder_names = ['serialno', 'end_time', 'start_time', 
+                               'point_nb', 'timestamps']
+
+
     def components(self):
         cps = json.loads(self.state["ComponentGroup"])
         ads = json.loads(self.dataSourceGroup)
@@ -853,15 +858,44 @@ class Settings(object):
             cp = list(set(self.components()) | 
             set(self.automaticComponents()) | 
             set(self.mandatoryComponents()))
-            res = describer.run(cp, 'STEP', dstype)
+            res = describer.components(cp, 'STEP', dstype)
         else:
-            res = describer.run(cp, '', dstype)
+            res = describer.components(cp, '', dstype)
         return res
+
 
 
     def fullDeviceNames(self):
         pools = self.__getPools()
         return  json.dumps(Utils.fullDeviceNames(pools))
+        
+    def __checkClientRecords(self, datasources, pools):
+
+        describer = Describer(self.state["ConfigDevice"])
+
+        dsres = describer.dataSources(
+            datasources, 'CLIENT')
+        records = [str(dsr[2]) for dsr in dsres.values()]
+        
+        cp = list(set(self.components()) | 
+                  set(self.automaticComponents()) | 
+                  set(self.mandatoryComponents()))
+        cpres = describer.components(cp, '', 'CLIENT')
+        for grp in cpres:
+            for dss in grp.values():
+                for dsrs in dss.values():
+                    for dsr in dsrs: 
+                        records.append(str(dsr[2]))
+        urecords = json.loads(self.state["DataRecord"]).keys()
+        precords = Utils.fullDeviceNames(pools).values()
+        missing = sorted(set(records)
+                         - set(self.recorder_names) 
+                         - set(urecords) 
+                         - set(precords))
+        if missing:
+            raise Exception(
+                "User Data not defined %s" % str(missing))
+
         
 
     ## set active measurement group from components
@@ -876,13 +910,16 @@ class Settings(object):
         datasources = self.dataSources()
         dontdisplay = json.loads(self.state["HiddenElements"])
 
+        self.__checkClientRecords(datasources, pools)
+
         aliases = []
         if isinstance(datasources, list):
             aliases = datasources
         if timer:
             aliases.append(timer)
 
-        res = self.__description('CLIENT')    
+        res = self.__description('CLIENT')
+        
         for grp in res:
             for dss in grp.values():
                 for ds in dss.keys():
@@ -942,7 +979,7 @@ class Settings(object):
         
         rcp = set()
         for acp in acps.keys():
-            res = describer.run([acp], '', '')
+            res = describer.components([acp], '', '')
             for cp, dss in res[1].items():
                 if isinstance(dss, dict):
                     for ds in dss.keys():

@@ -29,11 +29,11 @@ class Describer(object):
     """ Lists datasources, strategy and dstype of given component """
 
     def __init__(self, configserver):
-        self.__result = [{}, {}]
         self.__server = configserver
         self.__nexusconfig_device = None
 
-    def run(self, components=None, strategy='', dstype=''):
+    def components(self, components=None, strategy='', dstype=''):
+        result = [{}, {}]
 
         if self.__server:
             self.__nexusconfig_device = Utils.openProxy(self.__server)
@@ -58,7 +58,7 @@ class Describer(object):
                                 if ds not in tr:
                                     tr[ds] = []
                                 tr[ds].append(vds)
-                    self.__result[0][cp] = tr
+                    result[0][cp] = tr
 
             for cp in cps:
                 dss = self.__getDataSourceAttributes(cp)  
@@ -70,8 +70,8 @@ class Describer(object):
                             if ds not in tr:
                                 tr[ds] = []
                             tr[ds].append(vds)
-                self.__result[1][cp] = tr
-        return self.__result
+                result[1][cp] = tr
+        return result
 
     @classmethod
     def __getRecord(cls, node):
@@ -126,23 +126,49 @@ class Describer(object):
                 except Exception:
                     subc = ''
                 name = subc.strip() if subc else ""
-                try:
-                    dsource = self.__nexusconfig_device.DataSources([str(name)])
-                except:
-                    dsource = []
-                if len(dsource)>0:
-                    indom = xml.dom.minidom.parseString(dsource[0])
-                    dss = indom.getElementsByTagName("datasource")
-                    for ds in dss:
-                        if ds.nodeName == 'datasource':
-                            if ds.hasAttribute("type"):
-                                dstype  = ds.attributes["type"].value
-                            if ds.hasAttribute("name"):
-                                name = ds.attributes["name"].value
-                            record = self.__getRecord(ds)    
+                name, dstype, record = self.__describeDataSource(name)
                 index = dstxt.find("$%s." % label, index+1)
         return name, dstype, record
-                
+
+
+    def dataSources(self, names=None, dstype=''):                
+        self.__nexusconfig_device = Utils.openProxy(self.__server)
+        self.__nexusconfig_device.Open()
+        ads = self.__nexusconfig_device.AvailableDataSources()  
+        if names is not None:
+            dss = [name for name in names if name in ads]
+        else:
+            dss= ads
+
+        result = {}
+        for name in dss:
+            if name:
+                rec = self.__describeDataSource(name)
+                if dstype and rec[1] != dstype:
+                    continue
+                result[name] = rec    
+        return result
+
+
+    def __describeDataSource(self, name):                
+        dstype = None
+        record = None
+        try:
+            dsource = self.__nexusconfig_device.DataSources([str(name)])
+        except:
+            dsource = []
+        if len(dsource)>0:
+            indom = xml.dom.minidom.parseString(dsource[0])
+            dss = indom.getElementsByTagName("datasource")
+            for ds in dss:
+                if ds.nodeName == 'datasource':
+                    if ds.hasAttribute("type"):
+                        dstype  = ds.attributes["type"].value
+                    if ds.hasAttribute("name"):
+                        name = ds.attributes["name"].value
+                    record = self.__getRecord(ds)    
+        return name, dstype, record
+                    
 
     def __appendNode(self, node, dss, mode, counter): 
         prefix = '__unnamed__'
