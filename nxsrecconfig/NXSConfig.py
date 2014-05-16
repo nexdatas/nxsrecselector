@@ -122,7 +122,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
 #------------------------------------------------------------------
     def read_Timer(self, attr):
         print >> self.log_info, "In ", self.get_name(), "::read_Timer()"
-        attr.set_value(self.stg.state["Timer"])
+        attr.set_value(self.stg.timer)
 
 
 #------------------------------------------------------------------
@@ -130,7 +130,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
 #------------------------------------------------------------------
     def write_Timer(self, attr):
         print >> self.log_info, "In ", self.get_name(), "::write_Timer()"
-        self.stg.state["Timer"] = attr.get_write_value()
+        self.stg.timer = attr.get_write_value()
         print >> self.log_info, "Attribute value = %s" % self.stg.state["Timer"]
 
 
@@ -1189,7 +1189,7 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
             PyTango.READ_WRITE],
             {
                 'label':"Timer",
-                'description':"Timer",
+                'description':"Timer and optionally extra timers",
                 'Memorized':"true",
             } ],
         'ComponentGroup':

@@ -283,10 +283,7 @@ class Utils(object):
 
 
     @classmethod
-    def addDevice(cls, device, pools, hsh, timer, index):
-        ctrl = cls.findDeviceController(device, pools)
-        if not ctrl:
-            return index
+    def __addController(cls, hsh, ctrl, fulltimer):
         if not ctrl in hsh['controllers'].keys():
             hsh['controllers'][ctrl] = {}
             hsh['controllers'][ctrl]['units'] = {}
@@ -295,19 +292,20 @@ class Utils(object):
                 u'channels'] = {}
             hsh['controllers'][ctrl]['units']['0']['id'] = 0
             hsh['controllers'][ctrl]['units']['0'][
-                u'monitor'] = cls.findFullDeviceName(timer, pools)
+                u'monitor'] =  fulltimer
             hsh['controllers'][ctrl]['units']['0'][
-                u'timer'] = cls.findFullDeviceName(timer, pools)
+                u'timer'] = fulltimer
             hsh['controllers'][ctrl]['units']['0'][
                 u'trigger_type'] = 0
 
+    @classmethod        
+    def __addChannel(cls, hsh, ctrl, device, fullname, dontdisplay, index):
+
         ctrlChannels = hsh['controllers'][ctrl]['units']['0'][
             u'channels']
-        
-        full_name = cls.findFullDeviceName(device, pools) 
-        if not full_name in ctrlChannels.keys():
-            dp  = PyTango.DeviceProxy(full_name.encode())
-            da =  dp.read_attribute('value')
+        if not fullname in ctrlChannels.keys():
+            dp = PyTango.DeviceProxy(fullname.encode())
+            da = dp.read_attribute('value')
             dct = {}
             dct['_controller_name'] = unicode(ctrl)
             dct['_unit_id'] = u'0'
@@ -315,7 +313,7 @@ class Utils(object):
             dct['data_type'] = u'float64'
             dct['data_units'] = u'No unit'
             dct['enabled'] = True
-            dct['full_name'] = full_name
+            dct['full_name'] = fullname
             dct['index'] = index
             index += 1
             dct['instrument'] = None
@@ -325,75 +323,48 @@ class Utils(object):
             dct['nexus_path'] = u''
             dct['normalization'] = 0
             dct['output'] = True
-            dct['plot_axes'] = []
-            dct['plot_type'] = 0
             if da.dim_x and da.dim_x > 1 :
                 dct['shape'] = [da.dim_y, da.dim_x] \
                     if da.dim_y \
                     else [da.dim_x]
             else:
                 dct['shape'] = [] 
+
+            if device in dontdisplay or dct['shape']:
+                dct['plot_axes'] = []
+                dct['plot_type'] = 0
+            else:        
+                dct['plot_axes'] = ['<mov>']
+                dct['plot_type'] = 1
+
             dct['source'] = dct['full_name'] + "/value"
-            ctrlChannels[full_name] = dct
+            ctrlChannels[fullname] = dct
+
+        return index
+
+    @classmethod
+    def addDevice(cls, device, dontdisplay, pools, hsh, timer, index):
+        ctrl = cls.findDeviceController(device, pools)
+        fulltimer = cls.findFullDeviceName(timer, pools)
+        if not ctrl:
+            return index
+
+        cls.__addController(hsh, ctrl, fulltimer)
+        fullname = cls.findFullDeviceName(device, pools) 
+        index = cls.__addChannel(hsh, ctrl, device, fullname, 
+                                 dontdisplay, index)
+
         return index
 
     @classmethod
     def addDevices(cls, devices, dontdisplay, pools, hsh, fulltimer, index):
         ctrls = cls.findDeviceControllers(devices, pools)
         fullnames = cls.findFullDeviceNames(devices, pools) 
+
         for device, ctrl in ctrls.items():
-            if not ctrl in hsh['controllers'].keys():
-                hsh['controllers'][ctrl] = {}
-                hsh['controllers'][ctrl]['units'] = {}
-                hsh['controllers'][ctrl]['units']['0'] = {}
-                hsh['controllers'][ctrl]['units']['0'][
-                    u'channels'] = {}
-                hsh['controllers'][ctrl]['units']['0']['id'] = 0
-                hsh['controllers'][ctrl]['units']['0'][
-                    u'monitor'] = fulltimer
-                hsh['controllers'][ctrl]['units']['0'][
-                    u'timer'] = fulltimer
-                hsh['controllers'][ctrl]['units']['0'][
-                    u'trigger_type'] = 0
-
-            ctrlChannels = hsh['controllers'][ctrl]['units']['0'][
-                u'channels']
-        
+            cls.__addController(hsh, ctrl, fulltimer)
             fullname = fullnames[device]
-            if not fullname in ctrlChannels.keys():
-                dp = PyTango.DeviceProxy(fullname.encode())
-                da = dp.read_attribute('value')
-                dct = {}
-                dct['_controller_name'] = unicode(ctrl)
-                dct['_unit_id'] = u'0'
-                dct['conditioning'] = u''
-                dct['data_type'] = u'float64'
-                dct['data_units'] = u'No unit'
-                dct['enabled'] = True
-                dct['full_name'] = fullname
-                dct['index'] = index
-                index += 1
-                dct['instrument'] = None
-                dct['label'] = unicode(device)
-                dct['name'] = unicode(device)
-                dct['ndim'] = 0
-                dct['nexus_path'] = u''
-                dct['normalization'] = 0
-                dct['output'] = True
-                if da.dim_x and da.dim_x > 1 :
-                    dct['shape'] = [da.dim_y, da.dim_x] \
-                        if da.dim_y \
-                        else [da.dim_x]
-                else:
-                    dct['shape'] = [] 
-
-                if device in dontdisplay or dct['shape']:
-                    dct['plot_axes'] = []
-                    dct['plot_type'] = 0
-                else:        
-                    dct['plot_axes'] = ['<mov>']
-                    dct['plot_type'] = 1
-
-                dct['source'] = dct['full_name'] + "/value"
-                ctrlChannels[fullname] = dct
+            index = cls.__addChannel(hsh, ctrl, device, fullname, 
+                                     dontdisplay, index)
+        
         return index

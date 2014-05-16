@@ -40,7 +40,7 @@ class Settings(object):
 
 
         ## timer
-        self.state["Timer"] = ''
+        self.state["Timer"] = '[]'
 
         ## group of electable components
         self.state["ComponentGroup"] = '{}'
@@ -233,6 +233,32 @@ class Settings(object):
         __getAutomaticDataSources, 
         __setAutomaticDataSources, 
         __delAutomaticDataSources, 
+        doc = 'automatic components group')
+
+
+
+    ## get method for timer attribute
+    # \returns name of timer           
+    def __getTimer(self):
+        return self.state["Timer"]
+
+
+    ## set method for timer attribute
+    # \param name of timer           
+    def __setTimer(self, name):
+        jname = self.__stringToListJson(name)
+        if self.state["Timer"] != jname:
+            self.state["Timer"] = jname
+
+    ## del method for timer attribute
+    def __delTimer(self):
+        self.state.pop("Timer")
+
+    ## the json data string
+    timer = property(
+        __getTimer, 
+        __setTimer, 
+        __delTimer, 
         doc = 'automatic components group')
 
 
@@ -915,7 +941,8 @@ class Settings(object):
         hsh['controllers'] = {} 
         hsh['description'] = "Measurement Group" 
         hsh['label'] = "" 
-        timer = self.state["Timer"]
+        timers = json.loads(self.state["Timer"])
+        timer =  timers[0] if timers else ''
         datasources = self.dataSources()
         dontdisplay = json.loads(self.state["HiddenElements"])
 
@@ -926,6 +953,10 @@ class Settings(object):
             aliases = datasources
         if timer:
             aliases.append(timer)
+        else:
+            raise Exception(
+                "Timer or Monitor not defined")
+            
 
         res = self.__description('CLIENT')
         
@@ -965,10 +996,15 @@ class Settings(object):
         hsh['monitor'] = fullname
         hsh['timer'] = fullname
                         
-#        for alias in aliases:
-#            index = Utils.addDevice(alias, pools, hsh, timer, index)
+        
+        if len(timers) > 1:
+            aliases = sorted(set(aliases)- set(timers[1:]))
         index = Utils.addDevices(aliases, dontdisplay, pools, 
                                  hsh, fullname, index)
+        if len(timers) > 1:
+            for timer in timers[1:]:
+                index = Utils.addDevice(timer, dontdisplay, pools, 
+                                        hsh, timer, index)
         dpmg.Configuration = json.dumps(hsh)
 
 
