@@ -996,15 +996,20 @@ class Settings(object):
         hsh['monitor'] = fullname
         hsh['timer'] = fullname
                         
-        
         if len(timers) > 1:
-            aliases = sorted(set(aliases)- set(timers[1:]))
+            ltimers = set(timers[1:])
+            if timer in ltimers:
+                ltimers.remove(timer)
+            aliases = sorted(set(aliases)- ltimers)
+        else:
+            ltimers = set()
+            aliases = sorted(set(aliases))
+            
         index = Utils.addDevices(aliases, dontdisplay, pools, 
                                  hsh, fullname, index)
-        if len(timers) > 1:
-            for timer in timers[1:]:
-                index = Utils.addDevice(timer, dontdisplay, pools, 
-                                        hsh, timer, index)
+        for ltimer in ltimers:
+            index = Utils.addDevice(ltimer, dontdisplay, pools, 
+                                    hsh, ltimer, index)
         dpmg.Configuration = json.dumps(hsh)
 
 
