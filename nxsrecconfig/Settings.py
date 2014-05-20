@@ -31,11 +31,13 @@ import pickle
 class Settings(object):
     
 
+    ## ccontructor
+    # \param server NXSRecSelector server
     def __init__(self, server = None):
         ## Tango server
         self.__server = server
 
-        ## server configuration dictionary
+        ##  dictionary with Settings 
         self.state = {}
 
 
@@ -130,6 +132,7 @@ class Settings(object):
         ## default mntgrp
         self.__defaultmntgrp = 'nxsmntgrp'
 
+        ## black list of pools
         self.poolBlacklist = []
 
         self.__macroserver = ""
@@ -142,6 +145,8 @@ class Settings(object):
                                'point_nb', 'timestamps']
 
 
+    ## provides selected components
+    # \returns list of available selected components
     def components(self):
         cps = json.loads(self.state["ComponentGroup"])
         ads = json.loads(self.dataSourceGroup)
@@ -155,6 +160,8 @@ class Settings(object):
                     res.append(ds)                
         return res
 
+    ## provides automatic components
+    # \returns list of available automatic components
     def automaticComponents(self):
         self.updateControllers()
         cps = json.loads(self.state["AutomaticComponentGroup"])
@@ -164,6 +171,8 @@ class Settings(object):
             return []
         
 
+    ## provides selected datasources
+    # \returns list of available selected datasources
     def dataSources(self):
         dds = self.disableDataSources()
         if not isinstance(dds, list):
@@ -763,6 +772,7 @@ class Settings(object):
 
 
     ## executes command on configuration server    
+    # \returns command result
     def __configCommand(self, command, var = None):
         if "configDevice" not in self.state or not self.state["ConfigDevice"]:
             self.__getConfigDevice()
@@ -776,6 +786,7 @@ class Settings(object):
 
 
     ## read configuration server attribute
+    # \returns attribute value
     def __configAttr(self, attr):
         if "configDevice" not in self.state or not self.state["ConfigDevice"]:
             self.__getConfigDevice()
@@ -786,24 +797,29 @@ class Settings(object):
         
 
     ## mandatory components
+    # \returns list of mandatory components
     def mandatoryComponents(self):
         return self.__configCommand("MandatoryComponents")
 
     ## available components
+    # \returns list of available components
     def availableComponents(self):
         return self.__configCommand("AvailableComponents")
 
     ## available components
+    # \returns list of component Variables
     def componentVariables(self, name):
         return self.__configCommand("ComponentVariables", name)
 
     ## available datasources
+    # \returns list of available datasources
     def availableDataSources(self):
         return self.__configCommand("AvailableDataSources")
 
 
 
-    # available pool channels
+    ## available pool channels
+    # \returns pool channels of the macroserver pools
     def poolChannels(self):
         res = []
         ms =  self.__getMacroServer()
@@ -820,7 +836,8 @@ class Settings(object):
         return res
 
 
-    # available pool channels
+    ## available pool motors
+    # \returns pool motors of the macroserver pools
     def poolMotors(self):
         res = []
         ms =  self.__getMacroServer()
@@ -838,7 +855,9 @@ class Settings(object):
 
 
 
-    ## save configuration
+    ## provides datasource path for the given label
+    # \param name given datasource
+    # \returns  datasource path for the given label
     def dataSourcePath(self, name):
         labels = json.loads(self.state["Labels"])
         label = labels.get(name, "")
@@ -846,16 +865,20 @@ class Settings(object):
         return paths.get(label, "")
         
 
-    ## save configuration
+    ## saves configuration
     def saveConfiguration(self):
         fl = open(self.configFile, "w+")
         json.dump(self.state, fl)
 
-    ## load configuration
+
+    ## loads configuration
     def loadConfiguration(self):
         fl = open(self.configFile, "r")
         self.state = json.load(fl)
 
+
+    ## provides components for all variables
+    # \returns dictionary with components for all variables 
     def variableComponents(self):
         acp = self.availableComponents()
         vrs = {}
@@ -871,12 +894,21 @@ class Settings(object):
         jdc = json.dumps(vrs)
         return jdc
 
-        
+
+    ## provides description of all components        
+    # \returns JSON string with description of all components
     def description(self):
         dc = self.__description(full = True)
         jdc = json.dumps(dc)
         return jdc
 
+
+    ## provides description of components        
+    # \param dstype list datasets only with given datasource type.
+    #        If '' all available ones are taken
+    # \param full if True describes all available ones are taken
+    #        otherwise selectect, automatic and mandatory
+    # \returns description of required components
     def __description(self, dstype = '', full = False):
         describer = Describer(self.state["ConfigDevice"])
         cp = None
@@ -891,10 +923,13 @@ class Settings(object):
 
 
 
+    ## provides full names of pool devices
+    # \returns JSON string with full names of pool devices
     def fullDeviceNames(self):
         pools = self.__getPools()
         return  json.dumps(Utils.fullDeviceNames(pools))
         
+    ## checks client records
     def __checkClientRecords(self, datasources, pools):
 
         describer = Describer(self.state["ConfigDevice"])
@@ -1050,16 +1085,22 @@ class Settings(object):
                 dp.write_attribute(str("AutomaticComponentGroup"), 
                                    self.state["AutomaticComponentGroup"])
 
+    ## provides available Timers from MacroServer pools            
+    # \returns  available Timers from MacroServer pools            
     def availableTimers(self):
         pools = self.__getPools()
         return Utils.findTimers(pools)
 
+    ## provides full name of Measurement group
+    # \param name alias
+    # \returns full name of Measurement group
     def findMntGrp(self, name):
         pools = self.__getPools()
         return Utils.findMntGrpName(name, pools)
         
 
     ## update a list of Disable DataSources
+    # \returns list of disable datasources
     def disableDataSources(self):
         if "configDevice" not in self.state \
                 or not self.state["ConfigDevice"]:
@@ -1075,7 +1116,8 @@ class Settings(object):
 
             
 
-        
+    ## fetches Enviroutment Data
+    # \returns JSON String with important variables
     def fetchEnvData(self):
         params = ["ScanDir",
                   "ScanFile",
@@ -1094,6 +1136,8 @@ class Settings(object):
         return json.dumps(res)                
                         
 
+    ## stores Enviroutment Data
+    # \param jdata JSON String with important variables
     def storeEnvData(self, jdata):
         jdata = self.__stringToDictJson(jdata)
         data = json.loads(jdata)

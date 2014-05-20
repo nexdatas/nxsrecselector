@@ -1109,19 +1109,19 @@ class NXSRecSelector(PyTango.Device_4Impl):
 
 
 
-##==================================================================
+#==================================================================
 #
-#    NXSRecSelectorClass class definition
+##    NXSRecSelectorClass class definition
 #
 #==================================================================
 class NXSRecSelectorClass(PyTango.DeviceClass):
 
-    #    Class Properties
+    ##    Class Properties
     class_property_list = {
         }
 
 
-    #    Device Properties
+    ##    Device Properties
     device_property_list = {
        'PoolBlacklist':
             [PyTango.DevVarStringArray,
@@ -1130,7 +1130,7 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
         }
 
 
-    #    Command definitions
+    ##    Command definitions
     cmd_list = {
         'DataSourcePath':
             [[PyTango.DevString, "datasource name"],
@@ -1174,7 +1174,7 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
         }
 
 
-    #    Attribute definitions
+    ##    Attribute definitions
     attr_list = {
         'Components':
             [[PyTango.DevString,
