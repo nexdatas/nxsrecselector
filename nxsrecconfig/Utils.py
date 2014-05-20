@@ -29,6 +29,10 @@ import pickle
 class Utils(object):
     """  Tango Utilities """
 
+    ## opens device proxy of the given device
+    # \param cls class instance
+    # \param device device name
+    # \returns DeviceProxy of device
     @classmethod
     def openProxy(cls, device):
         found = False
@@ -50,6 +54,10 @@ class Utils(object):
         
         return cnfServer    
 
+    ## provides environment variable value
+    # \param cls class instance
+    ## \param var variable name
+    ## \param ms macroserver
     @classmethod
     def getEnv(cls, var, ms):
         active = ""
@@ -63,41 +71,61 @@ class Utils(object):
         return active
 
 
+    ## sets environment variable value
+    # \param cls class instance
+    ## \param var variable name
+    ## \param value variable value
+    ## \param ms macroserver
     @classmethod
-    def setEnv(cls, var, name, ms):
+    def setEnv(cls, var, value, ms):
         dp = cls.openProxy(ms)
         rec = dp.Environment
         if rec[0] == 'pickle':
             dc = pickle.loads(rec[1])
             if 'new' in dc.keys():
-                dc['new'][var] = name
+                dc['new'][var] = value
                 pk = pickle.dumps(dc)    
                 dp.Environment = ['pickle', pk]
 
+                
+    ## provides device names with given class name
+    # \param cls class instance
+    # \param db tango database
+    # \param name class name
+    # \returns list of device names            
     @classmethod
-    def getDeviceNamesByClass(cls, db, className):
-        srvs = cls.getServerNameByClass(db, className)
+    def getDeviceNamesByClass(cls, db, name):
+        srvs = cls.getServerNameByClass(db, name)
         argout = []
         for srv in srvs:
-            lst = db.get_device_name(srv, className).value_string
+            lst = db.get_device_name(srv, name).value_string
             for i in range(0, len(lst)):
                 argout.append(lst[i])
         return argout
 
 
+    ## provides server names with given class name
+    # \param cls class instance
+    # \param db tango database
+    # \param name class name
+    # \returns list of server names            
     @classmethod
-    def getServerNameByClass(cls, db, argin): 
+    def getServerNameByClass(cls, db, name): 
         srvs = db.get_server_list("*").value_string
         argout = []
         for srv in srvs:
             classList = db.get_server_class_list(srv).value_string
             for clss in classList:
-                if clss == argin:
+                if clss == name:
                     argout.append(srv)
                     break
         return argout
 
 
+    ## provides pool proxies of given pool names
+    # \param cls class instance
+    # \param poolNames given pool names
+    # \returns list of DeviceProxy pools
     @classmethod
     def pools(cls, poolNames):
         pools = []
@@ -111,6 +139,11 @@ class Utils(object):
         return pools    
 
 
+    ## provides macro server of given door
+    # \param cls class instance
+    # \param db tango database
+    # \param door given door
+    # \returns first macro server of given door
     @classmethod
     def getMacroServer(cls, db, door):
         servers = db.get_device_exported_for_class(
@@ -128,8 +161,11 @@ class Utils(object):
 
 
     
-    ## find device
+    ## find device with given name
+    # \param cls class instance
+    # \param db tango database
     # \param name device class name
+    # \returns device name if exists
     @classmethod
     def findDevice(cls, db, name):        
         servers = db.get_device_exported_for_class(
@@ -141,6 +177,7 @@ class Utils(object):
 
 
     ## find device names from aliases
+    # \param cls class instance
     # \param names alias names
     # \param pools list of pool devices
     # \returns full device name    
@@ -159,6 +196,7 @@ class Utils(object):
 
 
     ## find device name for all aliases
+    # \param cls class instance
     # \param pools list of pool devices
     # \returns dictionary with full device names for aliases
     @classmethod
@@ -175,6 +213,7 @@ class Utils(object):
 
 
     ## find device name from alias
+    # \param cls class instance
     # \param name alias name
     # \param pools list of pool devices
     # \returns full device name
@@ -192,10 +231,11 @@ class Utils(object):
         return argout
 
 
-    ## find device name from aliase
+    ## find measurement group from alias
+    # \param cls class instance
     # \param name alias name
     # \param pools list of pool devices
-    # \returns full device name    
+    # \returns full name of   measurement group
     @classmethod
     def findMntGrpName(cls, name, pools):
         lst = []
@@ -210,10 +250,11 @@ class Utils(object):
         return argout
 
 
-    ## find mntgrp pool
+    ## provides measurement group pool
+    # \param cls class instance
     # \param name alias name
     # \param pools list of pool devices
-    # \returns full device name    
+    # \returns measurement group pool name
     @classmethod
     def findMntGrpPool(cls, name, pools):
         lst = []
@@ -232,6 +273,11 @@ class Utils(object):
 
 
 
+    ## provides device controller full name
+    # \param cls class instance
+    # \param device alias name
+    # \param pools list of pool devices
+    # \returns device controller full name
     @classmethod
     def findDeviceController(cls, device, pools):
         lst = []
@@ -248,6 +294,11 @@ class Utils(object):
 
 
 
+    ## provides device controller full names
+    # \param cls class instance
+    # \param devices alias names
+    # \param pools list of pool devices
+    # \returns device controller full names
     @classmethod
     def findDeviceControllers(cls, devices, pools):
         lst = []
@@ -262,6 +313,10 @@ class Utils(object):
         return ctrls
 
 
+    ## provides tiemrs of given pools
+    # \param cls class instance
+    # \param pools list of pool devices
+    # \returns list of timer names
     @classmethod
     def findTimers(cls, pools):
         lst = []
@@ -282,6 +337,7 @@ class Utils(object):
         return res
 
 
+    ## adds controller into configuration dictionary
     @classmethod
     def __addController(cls, hsh, ctrl, fulltimer):
         if not ctrl in hsh['controllers'].keys():
@@ -298,6 +354,8 @@ class Utils(object):
             hsh['controllers'][ctrl]['units']['0'][
                 u'trigger_type'] = 0
 
+
+    ## adds channel into configuration dictionary
     @classmethod        
     def __addChannel(cls, hsh, ctrl, device, fullname, dontdisplay, index):
 
@@ -342,6 +400,15 @@ class Utils(object):
 
         return index
 
+    ## adds device into configuration dictionary
+    # \param cls class instance
+    # \param device device alias
+    # \param dontdisplay list of devices disable for display
+    # \param pools list of give pools
+    # \param hsh configuration dictionary
+    # \param timer device timer
+    # \param index device index
+    # \returns next device index
     @classmethod
     def addDevice(cls, device, dontdisplay, pools, hsh, timer, index):
         ctrl = cls.findDeviceController(device, pools)
@@ -356,13 +423,22 @@ class Utils(object):
 
         return index
 
+    ## adds device into configuration dictionary
+    # \param cls class instance
+    # \param devices device aliass
+    # \param dontdisplay list of devices disable for display
+    # \param pools list of give pools
+    # \param hsh configuration dictionary
+    # \param timer device timer
+    # \param index device index
+    # \returns next device index
     @classmethod
-    def addDevices(cls, devices, dontdisplay, pools, hsh, fulltimer, index):
+    def addDevices(cls, devices, dontdisplay, pools, hsh, timer, index):
         ctrls = cls.findDeviceControllers(devices, pools)
         fullnames = cls.findFullDeviceNames(devices, pools) 
 
         for device, ctrl in ctrls.items():
-            cls.__addController(hsh, ctrl, fulltimer)
+            cls.__addController(hsh, ctrl, timer)
             fullname = fullnames[device]
             index = cls.__addChannel(hsh, ctrl, device, fullname, 
                                      dontdisplay, index)

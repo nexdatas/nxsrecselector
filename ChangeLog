@@ -1,3 +1,7 @@
+2014-XX-XX Jan Kotanski <jankotan@gmail.com>
+	* adding doxygen documentation
+	* tagged as v1.4.1
+
 2014-05-20 Jan Kotanski <jankotan@gmail.com>
 	* adding support for extra timers
 	* adding checks for user data
