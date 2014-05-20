@@ -1529,7 +1529,7 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
 
 
 #------------------------------------------------------------------
-#    NXSRecSelectorClass Constructor
+##    NXSRecSelectorClass Constructor
 #------------------------------------------------------------------
     def __init__(self, name):
         PyTango.DeviceClass.__init__(self, name)
