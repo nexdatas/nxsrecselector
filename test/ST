@@ -1,0 +1,8 @@
+#!/bin/bash
+if [ -f /home/etc/tango_env ]
+then
+    . /home/etc/tango_env
+fi
+SCRIPT=$(readlink -f $0)
+LOCALDIR=$(dirname "$SCRIPT")
+exec python $LOCALDIR/TestServer.py $*

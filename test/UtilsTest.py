@@ -27,6 +27,8 @@ import random
 import struct
 import PyTango
 
+import TestServerSetUp
+
 from nxsrecconfig.Utils import Utils
 
 
@@ -55,15 +57,20 @@ class UtilsTest(unittest.TestCase):
         self._buint = "uint64" if IS64BIT else "uint32"
         self._bfloat = "float64" if IS64BIT else "float32"
 
+        self._simps = TestServerSetUp.TestServerSetUp()
+        self._simps2 = TestServerSetUp.TestServerSetUp( "ttestp09/testts/t2r228", "S2")
+
     ## test starter
     # \brief Common set up
-    def setUp(self):
-        print "\nsetting up..."        
+    def setUp(self):       
+        self._simps.setUp()
+        self._simps2.setUp()
 
     ## test closer
     # \brief Common tear down
-    def tearDown(self):
-        print "tearing down ..."
+    def tearDown(self):       
+        self._simps2.tearDown()
+        self._simps.tearDown()
 
     ## Exception tester
     # \param exception expected exception
@@ -98,6 +105,12 @@ class UtilsTest(unittest.TestCase):
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         self.myAssertRaise(PyTango.DevFailed, Utils.openProxy, "sdf/testtestsf/d")
 
+        dp = Utils.openProxy(self._simps.new_device_info_writer.name)
+        self.assertTrue(isinstance(dp, PyTango.DeviceProxy))
+        self.assertEqual(dp.name(), self._simps.new_device_info_writer.name)
+        dp.setState("RUNNING")
+        dp = Utils.openProxy(self._simps.new_device_info_writer.name)
+        
 
 if __name__ == '__main__':
     unittest.main()
