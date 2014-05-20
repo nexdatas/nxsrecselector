@@ -15,7 +15,7 @@
 #
 #    You should have received a copy of the GNU General Public License
 #    along with nexdatas.  If not, see <http://www.gnu.org/licenses/>.
-## \file NXSDataWriter.py
+## \file NXSRecSelector.py
 # nxswriter runner
 
 """  NeXus Sardana Recorder Settings - Tango Server """

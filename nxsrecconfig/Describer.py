@@ -26,12 +26,21 @@ from .Utils import Utils
 
 ## NeXus Sardana Recorder settings
 class Describer(object):
-    """ Lists datasources, strategy and dstype of given component """
+    """ Lists datasources, strategy, dstype and record name of given component """
 
+    ## constructor
+    # \param configserver configuration server name
     def __init__(self, configserver):
         self.__server = configserver
         self.__nexusconfig_device = None
 
+    ## describes given components
+    # \param components given components. 
+    #        If None all available ones are taken
+    # \param strategy list datasets only with given strategy.
+    #        If '' all available ones are taken
+    # \param dstype list datasets only with given datasource type.
+    #        If '' all available ones are taken
     def components(self, components=None, strategy='', dstype=''):
         result = [{}, {}]
 
@@ -131,6 +140,11 @@ class Describer(object):
         return name, dstype, record
 
 
+    ## describes given components
+    # \param names given datasources. 
+    #        If None all available ones are taken
+    # \param dstype list datasourcesonly with given type.
+    #        If '' all available ones are taken
     def dataSources(self, names=None, dstype=''):                
         self.__nexusconfig_device = Utils.openProxy(self.__server)
         self.__nexusconfig_device.Open()

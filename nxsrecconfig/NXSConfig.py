@@ -50,6 +50,7 @@ import PyTango
 
 from .Settings import Settings as STG
 
+## NXSRecSelector server interface
 class NXSRecSelector(PyTango.Device_4Impl):
 
 #--------- Add you global variables here --------------------------
@@ -1108,7 +1109,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
 
 
 
-#==================================================================
+##==================================================================
 #
 #    NXSRecSelectorClass class definition
 #
