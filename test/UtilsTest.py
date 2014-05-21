@@ -110,7 +110,10 @@ class UtilsTest(unittest.TestCase):
         self.assertEqual(dp.name(), self._simps.new_device_info_writer.name)
         dp.setState("RUNNING")
         dp = Utils.openProxy(self._simps.new_device_info_writer.name)
+        self._simps.stop()
         
+        self.myAssertRaise(PyTango.DevFailed, Utils.openProxy, 
+                           self._simps.new_device_info_writer.name)
 
 if __name__ == '__main__':
     unittest.main()

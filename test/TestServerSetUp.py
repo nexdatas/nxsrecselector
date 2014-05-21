@@ -84,7 +84,11 @@ class TestServerSetUp(object):
         db.put_device_property(self.new_device_info_writer.name, self.device_prop)
         db.put_class_property(self.new_device_info_writer._class, self.class_prop)
 
+        self.start()
 
+
+    ## starts server    
+    def start(self):
         path = os.path.dirname(TestServer.__file__)
         
         if os.path.isfile("%s/ST" % path):
@@ -106,25 +110,30 @@ class TestServerSetUp(object):
                 found = False
             cnt +=1
         print ""
+        
 
     ## test closer
-    # \brief Common tear down oif Tango Server
+    # \brief Common tear down of Tango Server
     def tearDown(self): 
         print "tearing down ..."
         db = PyTango.Database()
         db.delete_server(self.new_device_info_writer.server)
         
+        self.stop()
+
+    ## stops server    
+    def stop(self):
         output = ""
         pipe = subprocess.Popen(
-            "ps -ef | grep 'TestServer.py %s'" % self.instance, stdout=subprocess.PIPE , shell= True).stdout
-
+            "ps -ef | grep 'TestServer.py %s'" % self.instance, 
+            stdout=subprocess.PIPE , shell= True).stdout
+        
         res = pipe.read().split("\n")
         for r in res:
             sr = r.split()
             if len(sr)>2:
-                 subprocess.call("kill -9 %s" % sr[1],stderr=subprocess.PIPE , shell= True)
-
-        
+                subprocess.call(
+                    "kill -9 %s" % sr[1],stderr=subprocess.PIPE , shell= True)
 
 if __name__ == "__main__":
     simps = TestServerSetUp()

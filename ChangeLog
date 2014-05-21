@@ -1,4 +1,5 @@
 2014-XX-XX Jan Kotanski <jankotan@gmail.com>
+	* changing state() into ping() in openProxy loop
 	* adding doxygen documentation
 	* tagged as v1.4.1
 
