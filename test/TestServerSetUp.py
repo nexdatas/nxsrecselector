@@ -92,7 +92,9 @@ class TestServerSetUp(object):
     ## starts server    
     def start(self):
         path = os.path.dirname(TestServer.__file__)
-        
+        if not path:
+            path = '.'
+
         if os.path.isfile("%s/ST" % path):
             self._psub = subprocess.call(
                 "cd %s; ./ST %s &" % (path, self.instance ) ,stdout =  None, 
