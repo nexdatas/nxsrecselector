@@ -78,13 +78,15 @@ class TestServerSetUp(object):
     # \brief Common set up of Tango Server
     def setUp(self):
         print "\nsetting up..."
+        self.add() 
+        self.start()
+
+    def add(self):    
         db = PyTango.Database()
         db.add_device(self.new_device_info_writer)
         db.add_server(self.new_device_info_writer.server, self.new_device_info_writer)
         db.put_device_property(self.new_device_info_writer.name, self.device_prop)
         db.put_class_property(self.new_device_info_writer._class, self.class_prop)
-
-        self.start()
 
 
     ## starts server    
@@ -116,10 +118,12 @@ class TestServerSetUp(object):
     # \brief Common tear down of Tango Server
     def tearDown(self): 
         print "tearing down ..."
+        self.delete()
+        self.stop()
+
+    def delete(self): 
         db = PyTango.Database()
         db.delete_server(self.new_device_info_writer.server)
-        
-        self.stop()
 
     ## stops server    
     def stop(self):
