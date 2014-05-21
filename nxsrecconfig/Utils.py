@@ -43,8 +43,8 @@ class Utils(object):
             if cnt > 1:
                 time.sleep(0.01)
             try:
-                if cnfServer.state() != PyTango.DevState.RUNNING:
-                    found = True
+                cnfServer.ping()
+                found = True
             except (PyTango.DevFailed, PyTango.Except, PyTango.DevError):
                 time.sleep(0.01)
                 found = False
