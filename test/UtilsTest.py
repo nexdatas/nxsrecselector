@@ -298,6 +298,63 @@ class UtilsTest(unittest.TestCase):
             self.assertEqual(dd, dv)
                 
             
+    ## getDeviceName test   
+    def test_getMacroServer(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        
+        arr = [
+            [self._simps.new_device_info_writer.name, 'test/door/1'],
+            [self._simps.new_device_info_writer.name, 'test/door/2'],
+            [self._simps2.new_device_info_writer.name, 'test/door/3'],
+            ["", 'test/door/4'],
+            ]
+
+        self._simps2.dp.DoorList = [
+            'test/door/2','test/door/3'
+            ]
+        db = DB()
+        db.classdevices['MacroServer'] = [ 
+            self._simps.new_device_info_writer.name,
+            self._simps2.new_device_info_writer.name]
+
+        for ar in arr:
+            ms = Utils.getMacroServer(db, ar[1])
+            self.assertEqual(ms, ar[0])
+
+
+    ## getDeviceName test   
+    def test_getMacroServer_db(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        
+        arr = [
+            [self._simps.new_device_info_writer.name, 'test/door/1'],
+            [self._simps.new_device_info_writer.name, 'test/door/2'],
+            [self._simps2.new_device_info_writer.name, 'test/door/3'],
+            ["", 'test/door/4'],
+            ]
+
+        self._simps2.dp.DoorList = [
+            'test/door/2','test/door/3'
+            ]
+        db = DB()
+        servers =  db.get_device_exported_for_class(
+            "MacroServer").value_string
+
+        alldoors = set()
+        for sr in servers:
+            try:
+                dp = PyTango.DeviceProxy(sr)
+            except:
+                dp = None
+            if dp:
+                doors = dp.DoorList
+                sdoors = set(doors) - alldoors
+                for dr in sdoors:
+                    ms = Utils.getMacroServer(db, dr)
+                    self.assertEqual(ms, sr)
+                alldoors.extends(sdoors)
 
 
 if __name__ == '__main__':

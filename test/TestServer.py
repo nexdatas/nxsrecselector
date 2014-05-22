@@ -83,6 +83,7 @@ class TestServer(PyTango.Device_4Impl):
                        '_ViewOptions': {'ShowDial': True}}}
 
         self.attr_Environment = ("pickle", pickle.dumps(env))
+        self.attr_DoorList = ['test/door/1', 'test/door/2']
 
 #------------------------------------------------------------------
 #    Always excuted hook method
@@ -97,6 +98,31 @@ class TestServer(PyTango.Device_4Impl):
 #    TestServer read/write attribute methods
 #
 #==================================================================
+
+#------------------------------------------------------------------
+#    Read DoorList attribute
+#------------------------------------------------------------------
+    def read_DoorList(self, attr):
+        print "In ", self.get_name(), "::read_DoorList()"
+        
+        #    Add your own code here
+        
+        attr.set_value(self.attr_DoorList)
+
+
+#------------------------------------------------------------------
+#    Write DoorList attribute
+#------------------------------------------------------------------
+    def write_DoorList(self, attr):
+        print "In ", self.get_name(), "::write_DoorList()"
+
+        #    Add your own code here
+
+        self.attr_DoorList = attr.get_write_value()
+        print "Attribute value = ", self.attr_DoorList
+
+
+
 #------------------------------------------------------------------
 #    Read Environment attribute
 #------------------------------------------------------------------
@@ -175,8 +201,16 @@ class TestServerClass(PyTango.DeviceClass):
     attr_list = {
         'Environment':
             [[PyTango.DevEncoded,
-            PyTango.SCALAR,
-            PyTango.READ_WRITE],
+              PyTango.SCALAR,
+              PyTango.READ_WRITE],
+            {
+                'description':"Environment attribute",
+            } ],
+        'DoorList':
+            [[PyTango.DevString,
+              PyTango.SPECTRUM,
+              PyTango.READ_WRITE,
+              256],
             {
                 'description':"Environment attribute",
             } ],
