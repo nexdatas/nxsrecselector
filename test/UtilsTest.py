@@ -225,19 +225,19 @@ class UtilsTest(unittest.TestCase):
 
 
     ## setEnv test   
-    def test_pools(self):
+    def test_proxies(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
-        self.assertEqual(Utils.pools([]), [])
-        self.myAssertRaise(PyTango.DevFailed, Utils.pools, ["bleble"])
-        dpl = Utils.pools([self._simps.new_device_info_writer.name])
+        self.assertEqual(Utils.proxies([]), [])
+        self.myAssertRaise(PyTango.DevFailed, Utils.proxies, ["bleble"])
+        dpl = Utils.proxies([self._simps.new_device_info_writer.name])
         self.assertEqual(len(dpl), 1)
         self.assertEqual(type(dpl[0]), PyTango.DeviceProxy)
         self.assertEqual(dpl[0].name(), 
                          self._simps.new_device_info_writer.name)
 
 
-        dpl = Utils.pools([
+        dpl = Utils.proxies([
                 self._simps.new_device_info_writer.name,
                 self._simps2.new_device_info_writer.name])
         self.assertEqual(len(dpl), 2)

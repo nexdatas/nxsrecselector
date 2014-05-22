@@ -664,7 +664,7 @@ class Settings(object):
         poolNames = list(
             set(msp.get_property("PoolNames")["PoolNames"])
             - set(self.poolBlacklist))
-        self.__pools = Utils.pools(poolNames)
+        self.__pools = Utils.proxies(poolNames)
         
 
 

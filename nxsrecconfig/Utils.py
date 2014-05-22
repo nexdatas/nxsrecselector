@@ -88,21 +88,21 @@ class Utils(object):
                 dp.Environment = ['pickle', pk]
 
 
-    ## provides pool proxies of given pool names
+    ## provides proxies of given device names
     # \param cls class instance
-    # \param poolNames given pool names
-    # \returns list of DeviceProxy pools
+    # \param names given device names
+    # \returns list of device DeviceProxies
     @classmethod
-    def pools(cls, poolNames):
-        pools = []
-        for pool in poolNames:
-            dp = PyTango.DeviceProxy(pool)
+    def proxies(cls, names):
+        dps = []
+        for name in names:
+            dp = PyTango.DeviceProxy(name)
             try:
                 dp.ping()
-                pools.append(dp)    
+                dps.append(dp)    
             except:
                 pass
-        return pools    
+        return dps    
                 
 
     ## provides server names with given class name
