@@ -34,11 +34,32 @@ from nxsrecconfig.Utils import Utils
 
 
 
+
 ## if 64-bit machione
 IS64BIT = (struct.calcsize("P") == 8)
 
 
+class DB(object):
+    def __init__(self):
+        pass
 
+    def get_device_name(self, serv_name, class_name):
+        
+        print "-> DbDatum"
+
+    def get_server_list(self, filter= '*'):
+        
+        print "-> DbDatum"
+
+    def get_server_class_list(self, server, filter= '*'):
+        
+        print "-> DbDatum"
+
+    def get_device_exported_for_class(self, class_name, filter= '*'):
+        
+        print "-> DbDatum"
+    
+      
 
 ## test fixture
 class UtilsTest(unittest.TestCase):
@@ -113,10 +134,10 @@ class UtilsTest(unittest.TestCase):
         dp = Utils.openProxy(self._simps.new_device_info_writer.name)
         self._simps.stop()
         
-        self.myAssertRaise(PyTango.DevFailed, Utils.openProxy, 
-                           self._simps.new_device_info_writer.name)
+#        self.myAssertRaise(PyTango.DevFailed, Utils.openProxy, 
+#                           self._simps.new_device_info_writer.name)
 
-    ## getEnv text   
+    ## getEnv test   
     def test_getsetEnv(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -141,7 +162,7 @@ class UtilsTest(unittest.TestCase):
                     k, self._simps.new_device_info_writer.name))
 
 
-    ## getEnv text   
+    ## getEnv test   
     def test_getEnv(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -175,7 +196,7 @@ class UtilsTest(unittest.TestCase):
 
  
 
-    ## setEnv text   
+    ## setEnv test   
     def test_setEnv(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -203,6 +224,28 @@ class UtilsTest(unittest.TestCase):
                     k, self._simps.new_device_info_writer.name))
 
 
+    ## setEnv test   
+    def test_pools(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        self.assertEqual(Utils.pools([]), [])
+        self.myAssertRaise(PyTango.DevFailed, Utils.pools, ["bleble"])
+        dpl = Utils.pools([self._simps.new_device_info_writer.name])
+        self.assertEqual(len(dpl), 1)
+        self.assertEqual(type(dpl[0]), PyTango.DeviceProxy)
+        self.assertEqual(dpl[0].name(), 
+                         self._simps.new_device_info_writer.name)
 
+
+        dpl = Utils.pools([
+                self._simps.new_device_info_writer.name,
+                self._simps2.new_device_info_writer.name])
+        self.assertEqual(len(dpl), 2)
+        self.assertEqual(type(dpl[0]), PyTango.DeviceProxy)
+        self.assertEqual(type(dpl[1]), PyTango.DeviceProxy)
+        self.assertEqual(dpl[0].name(), 
+                         self._simps.new_device_info_writer.name)
+        self.assertEqual(dpl[1].name(), 
+                         self._simps2.new_device_info_writer.name)
 if __name__ == '__main__':
     unittest.main()

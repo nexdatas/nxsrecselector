@@ -87,22 +87,23 @@ class Utils(object):
                 pk = pickle.dumps(dc)    
                 dp.Environment = ['pickle', pk]
 
-                
-    ## provides device names with given class name
-    # \param cls class instance
-    # \param db tango database
-    # \param name class name
-    # \returns list of device names            
-    @classmethod
-    def getDeviceNamesByClass(cls, db, name):
-        srvs = cls.getServerNameByClass(db, name)
-        argout = []
-        for srv in srvs:
-            lst = db.get_device_name(srv, name).value_string
-            for i in range(0, len(lst)):
-                argout.append(lst[i])
-        return argout
 
+    ## provides pool proxies of given pool names
+    # \param cls class instance
+    # \param poolNames given pool names
+    # \returns list of DeviceProxy pools
+    @classmethod
+    def pools(cls, poolNames):
+        pools = []
+        for pool in poolNames:
+            dp = PyTango.DeviceProxy(pool)
+            try:
+                dp.ping()
+                pools.append(dp)    
+            except:
+                pass
+        return pools    
+                
 
     ## provides server names with given class name
     # \param cls class instance
@@ -122,21 +123,24 @@ class Utils(object):
         return argout
 
 
-    ## provides pool proxies of given pool names
+    ## provides device names with given class name
     # \param cls class instance
-    # \param poolNames given pool names
-    # \returns list of DeviceProxy pools
+    # \param db tango database
+    # \param name class name
+    # \returns list of device names            
     @classmethod
-    def pools(cls, poolNames):
-        pools = []
-        for pool in poolNames:
-            dp = PyTango.DeviceProxy(pool)
-            try:
-                dp.ping()
-                pools.append(dp)    
-            except:
-                pass
-        return pools    
+    def getDeviceNamesByClass(cls, db, name):
+        srvs = cls.getServerNameByClass(db, name)
+        argout = []
+        for srv in srvs:
+            lst = db.get_device_name(srv, name).value_string
+            for i in range(0, len(lst)):
+                argout.append(lst[i])
+        return argout
+
+
+
+
 
 
     ## provides macro server of given door
@@ -158,7 +162,6 @@ class Utils(object):
                     ms = server
                     break
         return ms
-
 
     
     ## find device with given name
