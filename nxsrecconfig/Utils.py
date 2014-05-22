@@ -153,7 +153,7 @@ class Utils(object):
         argout = {}
         for elm in lst:
             chan = json.loads(elm)
-            if if names is None or chan['name'] in names:
+            if names is None or chan['name'] in names:
                 arr = chan['full_name'].split("/")
                 argout[chan['name']] = "/".join(arr[0:-1])
         return argout
