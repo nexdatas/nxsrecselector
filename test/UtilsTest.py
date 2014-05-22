@@ -38,9 +38,19 @@ from nxsrecconfig.Utils import Utils
 ## if 64-bit machione
 IS64BIT = (struct.calcsize("P") == 8)
 
+class Datum(object):
+    def __init__(self, device, value_string = None):
+        self.device = device
+        self.value_string = value_string if value_string else []
 
 class DB(object):
     def __init__(self):
+        self.classdevices = {
+            "NXSDataWriter":['test/nxsdatawriter/01','test/nxsdatawriter/02'],
+            "NXSConfigServer":['test/nxsconfigserver/01','test/nxsconfigserver/02'],
+            "Door":['test/door/01','test/door/02','test/door/03'],
+            "MacroServer":['test/ms/01'],
+            }
         pass
 
     def get_device_name(self, serv_name, class_name):
@@ -56,8 +66,12 @@ class DB(object):
         print "-> DbDatum"
 
     def get_device_exported_for_class(self, class_name, filter= '*'):
-        
-        print "-> DbDatum"
+        dd = Datum('device')
+        if class_name in self.classdevices:
+            dd.value_string = self.classdevices[class_name]
+        else:
+            dd.value_string = []
+        return dd
     
       
 
@@ -134,8 +148,8 @@ class UtilsTest(unittest.TestCase):
         dp = Utils.openProxy(self._simps.new_device_info_writer.name)
         self._simps.stop()
         
-#        self.myAssertRaise(PyTango.DevFailed, Utils.openProxy, 
-#                           self._simps.new_device_info_writer.name)
+        self.myAssertRaise(PyTango.DevFailed, Utils.openProxy, 
+                           self._simps.new_device_info_writer.name)
 
     ## getEnv test   
     def test_getsetEnv(self):
@@ -224,20 +238,20 @@ class UtilsTest(unittest.TestCase):
                     k, self._simps.new_device_info_writer.name))
 
 
-    ## setEnv test   
-    def test_proxies(self):
+    ## getProxies test   
+    def test_getProxies(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
-        self.assertEqual(Utils.proxies([]), [])
-        self.myAssertRaise(PyTango.DevFailed, Utils.proxies, ["bleble"])
-        dpl = Utils.proxies([self._simps.new_device_info_writer.name])
+        self.assertEqual(Utils.getProxies([]), [])
+        self.myAssertRaise(PyTango.DevFailed, Utils.getProxies, ["bleble"])
+        dpl = Utils.getProxies([self._simps.new_device_info_writer.name])
         self.assertEqual(len(dpl), 1)
         self.assertEqual(type(dpl[0]), PyTango.DeviceProxy)
         self.assertEqual(dpl[0].name(), 
                          self._simps.new_device_info_writer.name)
 
 
-        dpl = Utils.proxies([
+        dpl = Utils.getProxies([
                 self._simps.new_device_info_writer.name,
                 self._simps2.new_device_info_writer.name])
         self.assertEqual(len(dpl), 2)
@@ -247,5 +261,44 @@ class UtilsTest(unittest.TestCase):
                          self._simps.new_device_info_writer.name)
         self.assertEqual(dpl[1].name(), 
                          self._simps2.new_device_info_writer.name)
+
+
+
+    ## getDeviceName test   
+    def test_getDeviceName(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        
+        arr = [ "NXSDataWriter" , "" , "NXSConfigServer", "Door", 
+                "MacroServer" , "bleble"]
+
+        db = DB()
+    
+        for ar in arr:
+            dd = Utils.getDeviceName(db, ar)
+            src = db.get_device_exported_for_class(ar).value_string
+            dv = src[0] if len(src) else ''
+            self.assertEqual(dd, dv)
+
+
+    ## getDeviceName test   
+    def test_getDeviceName_db(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        
+        arr = [ "NXSDataWriter" , "" , "NXSConfigServer", "Door", 
+                "MacroServer" , "bleble"]
+
+        db = PyTango.Database()
+    
+        for ar in arr:
+            dd = Utils.getDeviceName(db, ar)
+            src = db.get_device_exported_for_class(ar).value_string
+            dv = src[0] if len(src) else ''
+            self.assertEqual(dd, dv)
+                
+            
+
+
 if __name__ == '__main__':
     unittest.main()

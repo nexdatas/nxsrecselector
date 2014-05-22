@@ -93,7 +93,7 @@ class Utils(object):
     # \param names given device names
     # \returns list of device DeviceProxies
     @classmethod
-    def proxies(cls, names):
+    def getProxies(cls, names):
         dps = []
         for name in names:
             dp = PyTango.DeviceProxy(name)
@@ -105,42 +105,19 @@ class Utils(object):
         return dps    
                 
 
-    ## provides server names with given class name
+    ## find device of give class
     # \param cls class instance
     # \param db tango database
-    # \param name class name
-    # \returns list of server names            
+    # \param cname device class name
+    # \returns device name if exists
     @classmethod
-    def getServerNameByClass(cls, db, name): 
-        srvs = db.get_server_list("*").value_string
-        argout = []
-        for srv in srvs:
-            classList = db.get_server_class_list(srv).value_string
-            for clss in classList:
-                if clss == name:
-                    argout.append(srv)
-                    break
-        return argout
-
-
-    ## provides device names with given class name
-    # \param cls class instance
-    # \param db tango database
-    # \param name class name
-    # \returns list of device names            
-    @classmethod
-    def getDeviceNamesByClass(cls, db, name):
-        srvs = cls.getServerNameByClass(db, name)
-        argout = []
-        for srv in srvs:
-            lst = db.get_device_name(srv, name).value_string
-            for i in range(0, len(lst)):
-                argout.append(lst[i])
-        return argout
-
-
-
-
+    def getDeviceName(cls, db, cname):        
+        servers = db.get_device_exported_for_class(
+            cname).value_string
+        if len(servers):
+            return servers[0] 
+        else:
+            return ''
 
 
     ## provides macro server of given door
@@ -152,7 +129,6 @@ class Utils(object):
     def getMacroServer(cls, db, door):
         servers = db.get_device_exported_for_class(
             "MacroServer").value_string
-        
         ms = ""
         for server in servers:
             dp = PyTango.DeviceProxy(server)
@@ -163,84 +139,33 @@ class Utils(object):
                     break
         return ms
 
-    
-    ## find device with given name
-    # \param cls class instance
-    # \param db tango database
-    # \param name device class name
-    # \returns device name if exists
-    @classmethod
-    def findDevice(cls, db, name):        
-        servers = db.get_device_exported_for_class(
-            name).value_string
-        if len(servers):
-            return servers[0] 
-        else:
-            return ''
-
 
     ## find device names from aliases
     # \param cls class instance
-    # \param names alias names
     # \param pools list of pool devices
+    # \param names alias names if None returns name for all aliases
     # \returns full device name    
     @classmethod
-    def findFullDeviceNames(cls, names, pools):
+    def getFullDeviceNames(cls, pools, names = None):
         lst = []
         for pool in pools:
             lst += pool.AcqChannelList
         argout = {}
         for elm in lst:
             chan = json.loads(elm)
-            if chan['name'] in names:
+            if if names is None or chan['name'] in names:
                 arr = chan['full_name'].split("/")
                 argout[chan['name']] = "/".join(arr[0:-1])
         return argout
 
 
-    ## find device name for all aliases
-    # \param cls class instance
-    # \param pools list of pool devices
-    # \returns dictionary with full device names for aliases
-    @classmethod
-    def fullDeviceNames(cls, pools):
-        lst = []
-        for pool in pools:
-            lst += pool.AcqChannelList
-        argout = {}
-        for elm in lst:
-            chan = json.loads(elm)
-            arr = chan['full_name'].split("/")
-            argout[chan['name']] = "/".join(arr[0:-1])
-        return argout
-
-
-    ## find device name from alias
-    # \param cls class instance
-    # \param name alias name
-    # \param pools list of pool devices
-    # \returns full device name
-    @classmethod
-    def findFullDeviceName(cls, name, pools):
-        lst = []
-        for pool in pools:
-            lst += pool.AcqChannelList
-        argout = None
-        for elm in lst:
-            chan = json.loads(elm)
-            if name == chan['name']:
-                arr = chan['full_name'].split("/")
-                argout = "/".join(arr[0:-1])
-        return argout
-
-
     ## find measurement group from alias
     # \param cls class instance
-    # \param name alias name
     # \param pools list of pool devices
+    # \param name alias name
     # \returns full name of   measurement group
     @classmethod
-    def findMntGrpName(cls, name, pools):
+    def getMntGrpName(cls, pools, name):
         lst = []
         for pool in pools:
             lst += pool.MeasurementGroupList
@@ -253,57 +178,13 @@ class Utils(object):
         return argout
 
 
-    ## provides measurement group pool
-    # \param cls class instance
-    # \param name alias name
-    # \param pools list of pool devices
-    # \returns measurement group pool name
-    @classmethod
-    def findMntGrpPool(cls, name, pools):
-        lst = []
-        argout = None
-        for pool in pools:
-            lst = pool.MeasurementGroupList
-            for elm in lst:
-                chan = json.loads(elm)
-                if name == chan['name']:
-                    argout = pool
-                    break
-            else:
-                continue
-            break    
-        return argout
-
-
-
-    ## provides device controller full name
-    # \param cls class instance
-    # \param device alias name
-    # \param pools list of pool devices
-    # \returns device controller full name
-    @classmethod
-    def findDeviceController(cls, device, pools):
-        lst = []
-        for pool in pools:
-            if not pool.ExpChannelList is None:
-                lst += pool.ExpChannelList
-        ctrl = None
-        for elm in lst:
-            chan = json.loads(elm)
-            if device == chan['name']:
-                ctrl = chan['controller']
-                break
-        return ctrl
-
-
-
     ## provides device controller full names
     # \param cls class instance
-    # \param devices alias names
     # \param pools list of pool devices
+    # \param devices alias names
     # \returns device controller full names
     @classmethod
-    def findDeviceControllers(cls, devices, pools):
+    def getDeviceControllers(cls, pools, devices):
         lst = []
         for pool in pools:
             if not pool.ExpChannelList is None:
@@ -321,7 +202,7 @@ class Utils(object):
     # \param pools list of pool devices
     # \returns list of timer names
     @classmethod
-    def findTimers(cls, pools):
+    def getTimers(cls, pools):
         lst = []
         res = []
         for pool in pools:
@@ -332,10 +213,6 @@ class Utils(object):
             inter = chan['interfaces']
             if isinstance(inter, (list, tuple)):
                 if 'CTExpChannel' in inter:
-#                   or \
-#                       'PseudoCounter' in inter or \
-#                       'OneDExpChannel' in inter or \
-#                       'TwoDExpChannel' in inter:
                     res.append(chan['name'])
         return res
 
@@ -403,6 +280,7 @@ class Utils(object):
 
         return index
 
+
     ## adds device into configuration dictionary
     # \param cls class instance
     # \param device device alias
@@ -414,17 +292,18 @@ class Utils(object):
     # \returns next device index
     @classmethod
     def addDevice(cls, device, dontdisplay, pools, hsh, timer, index):
-        ctrl = cls.findDeviceController(device, pools)
-        fulltimer = cls.findFullDeviceName(timer, pools)
+        ctrl = cls.getDeviceControllers(pools, [device])[device]
+        fulltimer = cls.getFullDeviceNames(pools, [timer])[timer]
         if not ctrl:
             return index
 
         cls.__addController(hsh, ctrl, fulltimer)
-        fullname = cls.findFullDeviceName(device, pools) 
+        fullname = cls.getFullDeviceNames(pools, [device])[device]
         index = cls.__addChannel(hsh, ctrl, device, fullname, 
                                  dontdisplay, index)
 
         return index
+
 
     ## adds device into configuration dictionary
     # \param cls class instance
@@ -437,8 +316,8 @@ class Utils(object):
     # \returns next device index
     @classmethod
     def addDevices(cls, devices, dontdisplay, pools, hsh, timer, index):
-        ctrls = cls.findDeviceControllers(devices, pools)
-        fullnames = cls.findFullDeviceNames(devices, pools) 
+        ctrls = cls.getDeviceControllers(pools, devices)
+        fullnames = cls.getFullDeviceNames(pools, devices) 
 
         for device, ctrl in ctrls.items():
             cls.__addController(hsh, ctrl, timer)

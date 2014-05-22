@@ -190,7 +190,7 @@ class Settings(object):
     # \returns name of configDevice           
     def __getConfigDevice(self):
         if "ConfigDevice" not in self.state or not self.state["ConfigDevice"]:
-            self.state["ConfigDevice"] = Utils.findDevice(
+            self.state["ConfigDevice"] = Utils.getDeviceName(
                 self.__db, "NXSConfigServer")
         return self.state["ConfigDevice"]
 
@@ -200,7 +200,7 @@ class Settings(object):
         if name:
             self.state["ConfigDevice"] = name
         else:
-            self.state["ConfigDevice"] = Utils.findDevice(
+            self.state["ConfigDevice"] = Utils.getDeviceName(
                 self.__db, "NXSConfigServer")
 
 
@@ -617,7 +617,7 @@ class Settings(object):
     # \returns name of door           
     def __getDoor(self):
         if "Door" not in self.state or not self.state["Door"]:
-            self.state["Door"] = Utils.findDevice(
+            self.state["Door"] = Utils.getDeviceName(
                 self.__db,"Door")
             self.__updateMacroServer(self.state["Door"])
         return self.state["Door"]
@@ -629,7 +629,7 @@ class Settings(object):
         if name:
             self.state["Door"] = name
         else:
-            self.state["Door"] = Utils.findDevice(
+            self.state["Door"] = Utils.getDeviceName(
                 self.__db,"Door")
         self.__updateMacroServer(self.state["Door"])
 
@@ -664,7 +664,7 @@ class Settings(object):
         poolNames = list(
             set(msp.get_property("PoolNames")["PoolNames"])
             - set(self.poolBlacklist))
-        self.__pools = Utils.proxies(poolNames)
+        self.__pools = Utils.getProxies(poolNames)
         
 
 
@@ -681,7 +681,7 @@ class Settings(object):
     # \returns name of writerDevice           
     def __getWriterDevice(self):
         if "writerDevice" not in self.state or not self.state["WriterDevice"]:
-            self.state["WriterDevice"] = Utils.findDevice(
+            self.state["WriterDevice"] = Utils.getDeviceName(
                 self.__db, "NXSDataWriter")
         return self.state["WriterDevice"]
 
@@ -691,7 +691,7 @@ class Settings(object):
         if name:
             self.state["WriterDevice"] = name
         else:
-            self.state["WriterDevice"] = Utils.findDevice(
+            self.state["WriterDevice"] = Utils.getDeviceName(
                 self.__db,"NXSDataWriter")
 
 
@@ -927,14 +927,14 @@ class Settings(object):
     # \returns JSON string with full names of pool devices
     def fullDeviceNames(self):
         pools = self.__getPools()
-        return  json.dumps(Utils.fullDeviceNames(pools))
+        return  json.dumps(Utils.getDeviceNames(pools))
         
     ## checks client records
     def __checkClientRecords(self, datasources, pools):
 
         describer = Describer(self.state["ConfigDevice"])
 
-        frecords = Utils.fullDeviceNames(pools)
+        frecords = Utils.getDeviceNames(pools)
 
         dsres = describer.dataSources(
             set(datasources) - set(frecords.keys()), 'CLIENT')
@@ -1005,7 +1005,7 @@ class Settings(object):
         if not self.state["MntGrp"]:
             self.state["MntGrp"] = self.__defaultmntgrp
         mntGrpName = self.state["MntGrp"]
-        fullname = str(Utils.findMntGrpName(mntGrpName, pools))
+        fullname = str(Utils.getMntGrpName(pools, mntGrpName))
 
         ms =  self.__getMacroServer()
         if not fullname:
@@ -1018,13 +1018,13 @@ class Settings(object):
             if pool:
                 pool.CreateMeasurementGroup(
                     [mntGrpName, self.state["Timer"]])
-                fullname = str(Utils.findMntGrpName(mntGrpName, pools))
+                fullname = str(Utils.getMntGrpName(pools, mntGrpName))
 
         Utils.setEnv('ActiveMntGrp', mntGrpName, ms)
         dpmg = Utils.openProxy(fullname)
         hsh['label'] = mntGrpName
         index = 0
-        fullname = Utils.findFullDeviceName(timer, pools)
+        fullname = Utils.getFullDeviceNames(pools, [timer])[timer]
         if not fullname:
             raise Exception(
                 "Timer or Monitor cannot be found amount the servers")
@@ -1054,7 +1054,7 @@ class Settings(object):
         ads = set(json.loads(self.automaticDataSources))
         pools = self.__getPools()
         nonexisting = []
-        fnames = Utils.findFullDeviceNames(ads, pools)
+        fnames = Utils.getFullDeviceNames(pools, ads)
         for dev in ads:
             if dev not in fnames.keys():
                 nonexisting.append(dev)
@@ -1089,14 +1089,14 @@ class Settings(object):
     # \returns  available Timers from MacroServer pools            
     def availableTimers(self):
         pools = self.__getPools()
-        return Utils.findTimers(pools)
+        return Utils.getTimers(pools)
 
     ## provides full name of Measurement group
     # \param name alias
     # \returns full name of Measurement group
     def findMntGrp(self, name):
         pools = self.__getPools()
-        return Utils.findMntGrpName(name, pools)
+        return Utils.getMntGrpName(pools, name)
         
 
     ## update a list of Disable DataSources
