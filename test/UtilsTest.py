@@ -26,6 +26,7 @@ import subprocess
 import random
 import struct
 import PyTango
+import pickle
 
 import TestServerSetUp
 
@@ -119,41 +120,89 @@ class UtilsTest(unittest.TestCase):
     def test_getsetEnv(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
-        self.assertEqual(u'/tmp/', 
-                         Utils.getEnv("ScanDir", 
-                                      self._simps.new_device_info_writer.name))
-        self.assertEqual([u'sar4r.nxs'], 
-                         Utils.getEnv("ScanFile", 
-                                      self._simps.new_device_info_writer.name))
-        self.assertEqual(192, 
-                         Utils.getEnv("ScanID", 
-                                      self._simps.new_device_info_writer.name))
-        self.assertEqual("", 
-                         Utils.getEnv("ScanNone", 
-                                      self._simps.new_device_info_writer.name))
+        
+        arr = {
+            "ScanDir": [u'/tmp/',  "/tmp/sardana/" ],
+            "ScanFile": [[u'sar4r.nxs'], [u'sar4r.nxs', u'sar5r.nxs']],
+            "ScanID": [192, 123],
+            "ScanNone": ["", "Something new"],
+            "_ViewOptions": [{'ShowDial': True}, {'ShowDial': False}],
+            }
+
+        for k, vl in arr.items():
+            self.assertEqual(
+                vl[0], Utils.getEnv(
+                    k, self._simps.new_device_info_writer.name))
+
+        for k, vl in arr.items():
+            Utils.setEnv(k, vl[1], 
+                         self._simps.new_device_info_writer.name)
+            self.assertEqual(vl[1], Utils.getEnv(
+                    k, self._simps.new_device_info_writer.name))
+
+
+    ## getEnv text   
+    def test_getEnv(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        
+        arr = {
+            "ScanDir": [u'/tmp/',  "/tmp/sardana/" ],
+            "ScanFile": [[u'sar4r.nxs'], [u'sar4r.nxs', u'sar5r.nxs']],
+            "ScanID": [192, 123],
+            "blebleble": ["", "Something new"],
+            "_ViewOptions": [{'ShowDial': True}, {'ShowDial': False}],
+            }
+
+        
+        for k, vl in arr.items():
+            self.assertEqual(
+                vl[0], Utils.getEnv(
+                    k, self._simps.new_device_info_writer.name))
+
+        self.assertEqual(self._simps.dp.Environment[0],'pickle')
+        en = pickle.loads(self._simps.dp.Environment[1])['new']
+        
+        for k, vl in arr.items():
+            en[k] = vl[1]
+            self._simps.dp.Environment =  (
+                'pickle',
+                pickle.dumps( {'new': en}))
+            self.assertEqual(vl[1], Utils.getEnv(
+                    k, self._simps.new_device_info_writer.name))
+
+            
+
  
-        Utils.setEnv("ScanDir", "/tmp/sardana/", 
-                     self._simps.new_device_info_writer.name)
-        self.assertEqual(u'/tmp/sardana/', 
-                         Utils.getEnv("ScanDir", 
-                                      self._simps.new_device_info_writer.name))
 
-        Utils.setEnv("ScanFile", [u'sar4r.nxs', u'sar5r.nxs'],  
-                     self._simps.new_device_info_writer.name)
-        self.assertEqual([u'sar4r.nxs', u'sar5r.nxs'], 
-                         Utils.getEnv("ScanFile", 
-                                      self._simps.new_device_info_writer.name))
+    ## setEnv text   
+    def test_setEnv(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        
+        arr = {
+            "ScanDir": [u'/tmp/',  "/tmp/sardana/" ],
+            "ScanFile": [[u'sar4r.nxs'], [u'sar4r.nxs', u'sar5r.nxs']],
+            "ScanID": [192, 123],
+            "ScanNone": ["", "Something new"],
+            "_ViewOptions": [{'ShowDial': True}, {'ShowDial': False}],
+            }
 
-        Utils.setEnv("ScanID", 123,  
-                     self._simps.new_device_info_writer.name)
-        self.assertEqual(123, 
-                         Utils.getEnv("ScanID", 
-                                      self._simps.new_device_info_writer.name))
-        Utils.setEnv("ScanNone", "Somethin new",  
-                     self._simps.new_device_info_writer.name)
-        self.assertEqual("Somethin new", 
-                         Utils.getEnv("ScanNone", 
-                                      self._simps.new_device_info_writer.name))
+        for k, vl in arr.items():
+            self.assertEqual(
+                vl[0], Utils.getEnv(
+                    k, self._simps.new_device_info_writer.name))
+
+        for k, vl in arr.items():
+            Utils.setEnv(k, vl[1], 
+                         self._simps.new_device_info_writer.name)
+
+            self.assertEqual(self._simps.dp.Environment[0],'pickle')
+            en = pickle.loads(self._simps.dp.Environment[1])['new']
+            self.assertEqual(en[k], Utils.getEnv(
+                    k, self._simps.new_device_info_writer.name))
+
+
 
 if __name__ == '__main__':
     unittest.main()
