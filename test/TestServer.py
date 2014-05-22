@@ -35,6 +35,7 @@ import PyTango
 import sys
 import numpy
 import struct
+import pickle
 
 #==================================================================
 #   TestServer Class Description:
@@ -73,8 +74,15 @@ class TestServer(PyTango.Device_4Impl):
         print "In ", self.get_name(), "::init_device()"
         self.set_state(PyTango.DevState.ON)
         self.get_device_properties(self.get_device_class())
+        env = {'new': {'ActiveMntGrp': 'nxsmntgrp',
+                       'DataCompressionRank': 0,
+                       'NeXusSelectorDevice': u'p09/nxsrecselector/1',
+                       'ScanDir': u'/tmp/',
+                       'ScanFile': [u'sar4r.nxs'],
+                       'ScanID': 192,
+                       '_ViewOptions': {'ShowDial': True}}}
 
-        self.attr_Environment = "UTF8","Hello UTF8! Pr\xc3\xb3ba \xe6\xb5\x8b"
+        self.attr_Environment = ("pickle", pickle.dumps(env))
 
 #------------------------------------------------------------------
 #    Always excuted hook method

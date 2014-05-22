@@ -98,7 +98,7 @@ class UtilsTest(unittest.TestCase):
 #        self.assertEqual(el.doc, "")
 #        self.assertEqual(el.last, None)
 
-    ## constructor test
+    ## openProxy test
     # \brief It tests default settings
     def test_openProxy(self):
         fun = sys._getframe().f_code.co_name
@@ -114,6 +114,46 @@ class UtilsTest(unittest.TestCase):
         
         self.myAssertRaise(PyTango.DevFailed, Utils.openProxy, 
                            self._simps.new_device_info_writer.name)
+
+    ## getEnv text   
+    def test_getsetEnv(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        self.assertEqual(u'/tmp/', 
+                         Utils.getEnv("ScanDir", 
+                                      self._simps.new_device_info_writer.name))
+        self.assertEqual([u'sar4r.nxs'], 
+                         Utils.getEnv("ScanFile", 
+                                      self._simps.new_device_info_writer.name))
+        self.assertEqual(192, 
+                         Utils.getEnv("ScanID", 
+                                      self._simps.new_device_info_writer.name))
+        self.assertEqual("", 
+                         Utils.getEnv("ScanNone", 
+                                      self._simps.new_device_info_writer.name))
+ 
+        Utils.setEnv("ScanDir", "/tmp/sardana/", 
+                     self._simps.new_device_info_writer.name)
+        self.assertEqual(u'/tmp/sardana/', 
+                         Utils.getEnv("ScanDir", 
+                                      self._simps.new_device_info_writer.name))
+
+        Utils.setEnv("ScanFile", [u'sar4r.nxs', u'sar5r.nxs'],  
+                     self._simps.new_device_info_writer.name)
+        self.assertEqual([u'sar4r.nxs', u'sar5r.nxs'], 
+                         Utils.getEnv("ScanFile", 
+                                      self._simps.new_device_info_writer.name))
+
+        Utils.setEnv("ScanID", 123,  
+                     self._simps.new_device_info_writer.name)
+        self.assertEqual(123, 
+                         Utils.getEnv("ScanID", 
+                                      self._simps.new_device_info_writer.name))
+        Utils.setEnv("ScanNone", "Somethin new",  
+                     self._simps.new_device_info_writer.name)
+        self.assertEqual("Somethin new", 
+                         Utils.getEnv("ScanNone", 
+                                      self._simps.new_device_info_writer.name))
 
 if __name__ == '__main__':
     unittest.main()
