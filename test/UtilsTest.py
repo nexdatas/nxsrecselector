@@ -698,6 +698,53 @@ class UtilsTest(unittest.TestCase):
         
 
 
+
+    def test_getTimers(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        
+
+        arr = [
+            ["test/ct/01", ["CTExpChannel"]],
+            ["test/ct/02", ["conem", "CTExpChannel"]],
+            ["test/ct/03", ["CTExpChannel", "ZeroDChannel"]],
+            ["test/ct/04", ["oneD","CTExpChannel"]],
+            ["null", ["counter_04"]],
+            ]
+
+
+        arr2 = [
+            ["test/mca/01", ["CTExpChannel"]],
+            ["test/mca/02", ["CTExpChannel2","CTExpChannel1"]],
+            ["test/sca/03", ["CTExpChannel3","CTExpChannel123"]],
+            ["test/sca/04", ["CTExpChannel","CTExpChannel2","CTExpChannel3"]],
+            ]
+
+        pool = Pool()
+        pool2 = Pool()
+        pool.ExpChannelList = [json.dumps(
+                {"name":a[0], "interfaces":a[1]}) for a in arr]
+        pool2.ExpChannelList = [json.dumps(
+                {"name":a[0], "interfaces":a[1]}) for a in arr2]
+
+        dd = Utils.getTimers([])
+        self.assertEqual(dd, [])
+
+        lst = [ar[0] for ar in arr if  "CTExpChannel" in ar[1]]
+
+        dd = Utils.getTimers([pool])
+        self.assertEqual(dd, lst)
+
+
+        lst.extend([ar[0] for ar in arr2 if  "CTExpChannel" in ar[1]])
+    
+        
+        dd = Utils.getTimers([pool, pool2])
+        self.assertEqual(dd, lst)
+            
+        
+
+
 if __name__ == '__main__':
     unittest.main()
 
