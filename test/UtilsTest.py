@@ -27,6 +27,7 @@ import random
 import struct
 import PyTango
 import pickle
+import json
 
 import TestServerSetUp
 
@@ -53,18 +54,6 @@ class DB(object):
             }
         pass
 
-    def get_device_name(self, serv_name, class_name):
-        
-        print "-> DbDatum"
-
-    def get_server_list(self, filter= '*'):
-        
-        print "-> DbDatum"
-
-    def get_server_class_list(self, server, filter= '*'):
-        
-        print "-> DbDatum"
-
     def get_device_exported_for_class(self, class_name, filter= '*'):
         dd = Datum('device')
         if class_name in self.classdevices:
@@ -73,6 +62,12 @@ class DB(object):
             dd.value_string = []
         return dd
     
+class Pool(object):
+
+    def __init__(self):
+        self.AcqChannelList = []
+        self.MeasurementGroupList = []
+        self.ExpChannelList = []
       
 
 ## test fixture
@@ -123,7 +118,7 @@ class UtilsTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
-    def test_constructor(self):
+    def ttest_constructor(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         el = Utils()
@@ -136,7 +131,7 @@ class UtilsTest(unittest.TestCase):
 
     ## openProxy test
     # \brief It tests default settings
-    def test_openProxy(self):
+    def ttest_openProxy(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         self.myAssertRaise(PyTango.DevFailed, Utils.openProxy, "sdf/testtestsf/d")
@@ -152,7 +147,7 @@ class UtilsTest(unittest.TestCase):
                            self._simps.new_device_info_writer.name)
 
     ## getEnv test   
-    def test_getsetEnv(self):
+    def ttest_getsetEnv(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         
@@ -177,7 +172,7 @@ class UtilsTest(unittest.TestCase):
 
 
     ## getEnv test   
-    def test_getEnv(self):
+    def ttest_getEnv(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         
@@ -211,7 +206,7 @@ class UtilsTest(unittest.TestCase):
  
 
     ## setEnv test   
-    def test_setEnv(self):
+    def ttest_setEnv(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         
@@ -239,7 +234,7 @@ class UtilsTest(unittest.TestCase):
 
 
     ## getProxies test   
-    def test_getProxies(self):
+    def ttest_getProxies(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         self.assertEqual(Utils.getProxies([]), [])
@@ -265,7 +260,7 @@ class UtilsTest(unittest.TestCase):
 
 
     ## getDeviceName test   
-    def test_getDeviceName(self):
+    def ttest_getDeviceName(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         
@@ -282,7 +277,7 @@ class UtilsTest(unittest.TestCase):
 
 
     ## getDeviceName test   
-    def test_getDeviceName_db(self):
+    def ttest_getDeviceName_db(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         
@@ -299,7 +294,7 @@ class UtilsTest(unittest.TestCase):
                 
             
     ## getDeviceName test   
-    def test_getMacroServer(self):
+    def ttest_getMacroServer(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         
@@ -324,7 +319,7 @@ class UtilsTest(unittest.TestCase):
 
 
     ## getDeviceName test   
-    def test_getMacroServer_db(self):
+    def ttest_getMacroServer_db(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         
@@ -356,6 +351,127 @@ class UtilsTest(unittest.TestCase):
                     self.assertEqual(ms, sr)
                 alldoors.extends(sdoors)
 
+
+    ## getDeviceName test   
+    def test_getFullDeviceNames_empty(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        
+
+        arr = [
+            {"name":"test/ct/01", "full_name":"counter_01/Value"} ,
+            {"name":"test/ct/02", "full_name":"counter_02/att"} ,
+            {"name":"test/ct/03", "full_name":"counter_03/value"} ,
+            {"name":"test/ct/04", "full_name":"counter_04/13"} ,
+            {"name":"null", "full_name":"counter_04"} ,
+            ]
+
+
+
+        pool = Pool()
+        pool.AcqChannelList = [json.dumps(a) for a in arr]
+    
+        import nxsrecconfig 
+        dd = Utils.getFullDeviceNames([])
+        self.assertEqual(dd, {})
+
+        dd = Utils.getFullDeviceNames([], [arr[0]["name"]])
+        self.assertEqual(dd, {})
+        dd = Utils.getFullDeviceNames([pool], [arr[4]["name"]])
+        self.assertEqual(dd, {"null":""})
+        
+
+
+    ## getDeviceName test   
+
+
+    ## getDeviceName test   
+    def test_getFullDeviceNames_pool1(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        
+
+        arr = [
+            ["test/ct/01", "counter_01", "Value"],
+            ["test/ct/02", "counter_02", "att"],
+            ["test/ct/03", "counter_03", "value"],
+            ["test/ct/04", "counter_04", "13"],
+            ["null", "counter_04",""],
+            ]
+
+        pool = Pool()
+        pool.AcqChannelList = [json.dumps(
+                {"name":a[0], "full_name":"%s/%s" % (a[1], a[2])}) for a in arr]
+    
+        
+        for ar in arr:
+            dd = Utils.getFullDeviceNames([pool], [ar[0]])
+            self.assertEqual(dd, {ar[0]:ar[1]})
+        
+
+        dd = Utils.getFullDeviceNames([pool], [ar[0] for ar in arr])
+        self.assertEqual(dd, dict((ar[0],ar[1]) for ar in arr))
+
+        dd = Utils.getFullDeviceNames([pool])
+        self.assertEqual(dd, dict((ar[0],ar[1]) for ar in arr))
+            
+
+
+    def test_getFullDeviceNames_pool2(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        
+
+        arr = [
+            ["test/ct/01", "counter_01", "Value"],
+            ["test/ct/02", "counter_02", "att"],
+            ["test/ct/03", "counter_03", "value"],
+            ["test/ct/04", "counter_04", "13"],
+            ["null", "counter_04",""],
+            ]
+
+
+        arr2 = [
+            ["test/mca/01", "mca_01", "1"],
+            ["test/mca/02", "mca_02", "a"],
+            ["test/sca/03", "my_sca_03", "1"],
+            ["test/sca/04", "mysca_04", "123"],
+            ]
+
+        pool = Pool()
+        pool2 = Pool()
+        pool.AcqChannelList = [json.dumps(
+                {"name":a[0], "full_name":"%s/%s" % (a[1], a[2])}) for a in arr]
+        pool2.AcqChannelList = [json.dumps(
+                {"name":a[0], "full_name":"%s/%s" % (a[1], a[2])}) for a in arr2]
+    
+        
+        for ar in arr:
+            dd = Utils.getFullDeviceNames([pool, pool2], [ar[0]])
+            self.assertEqual(dd, {ar[0]:ar[1]})
+
+        for ar in arr2:
+            dd = Utils.getFullDeviceNames([pool, pool2], [ar[0]])
+            self.assertEqual(dd, {ar[0]:ar[1]})
+        
+
+        res = dict((ar[0],ar[1]) for ar in arr)
+        res.update(dict((ar[0],ar[1]) for ar in arr2))
+
+        lst = [ar[0] for ar in arr]
+        lst.extend([ar[0] for ar in arr2])
+
+        dd = Utils.getFullDeviceNames([pool, pool2], lst)
+        self.assertEqual(dd, res)
+
+        dd = Utils.getFullDeviceNames([pool, pool2])
+        self.assertEqual(dd, res)
+
+        lst.extend(["sfdsdf","sdfsfd"])
+        dd = Utils.getFullDeviceNames([pool, pool2], lst)
+        self.assertEqual(dd, res)
+            
+        
 
 if __name__ == '__main__':
     unittest.main()
