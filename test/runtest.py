@@ -23,6 +23,9 @@
 import os 
 import unittest
 
+import logging
+from optparse import OptionParser
+
 #import TangoDataWriterTest
 #import DescriberTest
 
@@ -48,9 +51,27 @@ if PYTANGO_AVAILABLE:
 #import TestServerSetUp
 
 ## main function
-def main():
+def main():   
+    levels = {'debug': logging.DEBUG,
+              'info': logging.INFO,
+              'warning': logging.WARNING,
+              'error': logging.ERROR,
+              'critical': logging.CRITICAL}
+    
+    usage = "usage:runtest.py [-l debug_level] "
+    parser = OptionParser(usage=usage)
+
+    parser.add_option(
+        "-l","--log", dest="log", 
+        help="logging level, i.e. debug, info, warning, error, critical")
+
+    (options, _) = parser.parse_args()
 
 
+    if options.log:
+        level_name = options.log
+        level = levels.get(level_name, logging.NOTSET)
+        logging.basicConfig(level=level)     
 
 
     ## test server    

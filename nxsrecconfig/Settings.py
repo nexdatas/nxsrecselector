@@ -991,7 +991,6 @@ class Settings(object):
         else:
             raise Exception(
                 "Timer or Monitor not defined")
-            
 
         res = self.__description('CLIENT')
         

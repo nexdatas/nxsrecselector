@@ -220,6 +220,8 @@ class Utils(object):
     ## adds controller into configuration dictionary
     @classmethod
     def __addController(cls, hsh, ctrl, fulltimer):
+        if 'controllers' not in hsh.keys():
+            hsh['controllers'] = {}
         if not ctrl in hsh['controllers'].keys():
             hsh['controllers'][ctrl] = {}
             hsh['controllers'][ctrl]['units'] = {}
@@ -292,16 +294,20 @@ class Utils(object):
     # \returns next device index
     @classmethod
     def addDevice(cls, device, dontdisplay, pools, hsh, timer, index):
-        ctrl = cls.getDeviceControllers(pools, [device])[device]
-        fulltimer = cls.getFullDeviceNames(pools, [timer])[timer]
+        ctrls = cls.getDeviceControllers(pools, [device])
+        ctrl = ctrls[device] if ctrls and device in ctrls.keys() else ""
+        timers = cls.getFullDeviceNames(pools, [timer])
+        fulltimer = timers[timer] if timers and timer in timers.keys() else ""
         if not ctrl:
             return index
 
         cls.__addController(hsh, ctrl, fulltimer)
-        fullname = cls.getFullDeviceNames(pools, [device])[device]
+        fullnames = cls.getFullDeviceNames(pools, [device])  
+        fullname = fullnames[device] \
+            if fullnames and device in fullnames.keys() else ""
         index = cls.__addChannel(hsh, ctrl, device, fullname, 
-                                 dontdisplay, index)
-
+                                     dontdisplay, index)
+        
         return index
 
 

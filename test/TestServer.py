@@ -83,6 +83,7 @@ class TestServer(PyTango.Device_4Impl):
                        '_ViewOptions': {'ShowDial': True}}}
 
         self.attr_Environment = ("pickle", pickle.dumps(env))
+        self.attr_Value = 123.45
         self.attr_DoorList = ['test/door/1', 'test/door/2']
 
 #------------------------------------------------------------------
@@ -145,6 +146,28 @@ class TestServer(PyTango.Device_4Impl):
         self.attr_Environment = attr.get_write_value()
         print "Attribute value = ", self.attr_Environment
 
+#------------------------------------------------------------------
+#    Read Value attribute
+#------------------------------------------------------------------
+    def read_Value(self, attr):
+        print "In ", self.get_name(), "::read_Value()"
+        
+        #    Add your own code here
+        
+        attr.set_value(self.attr_Value)
+
+
+#------------------------------------------------------------------
+#    Write Value attribute
+#------------------------------------------------------------------
+    def write_Value(self, attr):
+        print "In ", self.get_name(), "::write_Value()"
+
+        #    Add your own code here
+
+        self.attr_Value = attr.get_write_value()
+        print "Attribute value = ", self.attr_Value
+
 
 
 #==================================================================
@@ -205,6 +228,13 @@ class TestServerClass(PyTango.DeviceClass):
               PyTango.READ_WRITE],
             {
                 'description':"Environment attribute",
+            } ],
+        'Value':
+            [[PyTango.DevDouble,
+              PyTango.SCALAR,
+              PyTango.READ_WRITE],
+            {
+                'description':"test value attribute",
             } ],
         'DoorList':
             [[PyTango.DevString,
