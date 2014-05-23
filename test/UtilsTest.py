@@ -916,7 +916,7 @@ class UtilsTest(unittest.TestCase):
 
 
 
-    def test_addDevice_controller_2(self):
+    def test_addDevice_controller_separate_ctrls(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         
@@ -928,7 +928,20 @@ class UtilsTest(unittest.TestCase):
 
         aarr = [
             ["test/ct/01", self._simps.new_device_info_writer.name, "Value"],
+            ["test/ct/02", self._simps.new_device_info_writer.name, "att"],
             ["test/ct/03", self._simps2.new_device_info_writer.name, "value"],
+            ["test/ct/04", self._simps2.new_device_info_writer.name, "13"],
+            ["null", self._simps2.new_device_info_writer.name,""],
+            ]
+
+
+
+        arr = [
+            ["test/ct/01", "cntl_01Value", ["CTExpChannel"]],
+            ["test/ct/02", "cntl_02att", ["conem", "CTExpChannel"]],
+            ["test/ct/03", "cntl_03alue", ["CTExpChannel", "ZeroDChannel"]],
+            ["test/ct/04", "cntl_01Value413", ["oneD","CTExpChannel"]],
+            ["null", "cntl_04", ["counter_04"]],
             ]
 
 
@@ -939,11 +952,6 @@ class UtilsTest(unittest.TestCase):
             ["test/sca/04", "mysca_04", "123"],
             ]
 
-        arr = [
-            ["test/ct/01", "cntl_01Value", ["CTExpChannel"]],
-            ["test/ct/03", "cntl_03alue", ["CTExpChannel", "ZeroDChannel"]],
-            ]
-
 
         arr2 = [
             ["test/mca/01", "mca_01", ["CTExpChannel"]],
@@ -952,6 +960,8 @@ class UtilsTest(unittest.TestCase):
             ["test/sca/04", "mysca_123", ["CTExpChannel","CTExpChannel2","CTExpChannel3"]],
             ]
 
+
+
         pool = Pool()
         pool2 = Pool()
         pool.ExpChannelList = [json.dumps(
@@ -959,9 +969,6 @@ class UtilsTest(unittest.TestCase):
         pool2.ExpChannelList = [json.dumps(
                 {"name":a[0], "controller":a[1], "interfaces":a[2]}) for a in arr2]
     
-
-
-
 
 
         pool.AcqChannelList = [json.dumps(
@@ -973,19 +980,19 @@ class UtilsTest(unittest.TestCase):
         hsh = {}
         iindex = 123
         index = iindex
-        for i, a in enumerate(aarr[:1]):
+        for i, a in enumerate(aarr):
             logger.debug("i = %s"% i)
-            index = Utils.addDevice(arr[0][0], [], [pool, pool2], hsh, a[0], index)
-            self.assertEqual(index, iindex+1)
+            index = Utils.addDevice(a[0], [], [pool, pool2], hsh, a[0], index)
+            self.assertEqual(index, iindex+1+i)
         fr = {}
         fr['controllers'] = {}
-        jres = json.loads(cnt % (aarr[0][1],aarr[0][1]))
-        fr['controllers'][arr[0][1]]= jres
 
-        for i, a in enumerate(aarr[:1]):
-            ch = json.loads(chnl % (iindex, a[0],"1",a[0],"",arr[i][1],a[1],'"<mov>"',
+        for i, a in enumerate(aarr):
+            jres = json.loads(cnt % (a[1],a[1]))
+            fr['controllers'][arr[i][1]]= jres
+            ch = json.loads(chnl % (iindex+i, a[0],"1",a[0],"",arr[i][1],a[1],'"<mov>"',
                                     "%s/%s" %(a[1], 'value')))
-            fr['controllers'][arr[0][1]]['units']['0']['channels'][a[1]] = ch
+            fr['controllers'][arr[i][1]]['units']['0']['channels'][a[1]] = ch
         self.myAssertDict(hsh, fr)
             
             
