@@ -118,7 +118,7 @@ class UtilsTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
-    def ttest_constructor(self):
+    def test_constructor(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         el = Utils()
@@ -131,7 +131,7 @@ class UtilsTest(unittest.TestCase):
 
     ## openProxy test
     # \brief It tests default settings
-    def ttest_openProxy(self):
+    def test_openProxy(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         self.myAssertRaise(PyTango.DevFailed, Utils.openProxy, "sdf/testtestsf/d")
@@ -147,7 +147,7 @@ class UtilsTest(unittest.TestCase):
                            self._simps.new_device_info_writer.name)
 
     ## getEnv test   
-    def ttest_getsetEnv(self):
+    def test_getsetEnv(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         
@@ -172,7 +172,7 @@ class UtilsTest(unittest.TestCase):
 
 
     ## getEnv test   
-    def ttest_getEnv(self):
+    def test_getEnv(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         
@@ -206,7 +206,7 @@ class UtilsTest(unittest.TestCase):
  
 
     ## setEnv test   
-    def ttest_setEnv(self):
+    def test_setEnv(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         
@@ -234,7 +234,7 @@ class UtilsTest(unittest.TestCase):
 
 
     ## getProxies test   
-    def ttest_getProxies(self):
+    def test_getProxies(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         self.assertEqual(Utils.getProxies([]), [])
@@ -260,7 +260,7 @@ class UtilsTest(unittest.TestCase):
 
 
     ## getDeviceName test   
-    def ttest_getDeviceName(self):
+    def test_getDeviceName(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         
@@ -277,7 +277,7 @@ class UtilsTest(unittest.TestCase):
 
 
     ## getDeviceName test   
-    def ttest_getDeviceName_db(self):
+    def test_getDeviceName_db(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         
@@ -294,7 +294,7 @@ class UtilsTest(unittest.TestCase):
                 
             
     ## getDeviceName test   
-    def ttest_getMacroServer(self):
+    def test_getMacroServer(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         
@@ -319,7 +319,7 @@ class UtilsTest(unittest.TestCase):
 
 
     ## getDeviceName test   
-    def ttest_getMacroServer_db(self):
+    def test_getMacroServer_db(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         
