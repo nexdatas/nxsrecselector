@@ -473,5 +473,231 @@ class UtilsTest(unittest.TestCase):
             
         
 
+
+    ## getDeviceName test   
+    def test_getMntGrpName_empty(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        
+
+        arr = [
+            {"name":"test/ct/01", "full_name":"mntgrp_01e"} ,
+            {"name":"test/ct/02", "full_name":"mntgrp_02att"} ,
+            {"name":"test/ct/03", "full_name":"mntgrp_03value"} ,
+            {"name":"test/ct/04", "full_name":"mntgrp_04/13"} ,
+            {"name":"null", "full_name":"mntgrp_04"} ,
+            ]
+
+
+
+        pool = Pool()
+        pool.MeasurementGroupList = [json.dumps(a) for a in arr]
+    
+        import nxsrecconfig 
+        dd = Utils.getFullDeviceNames([])
+        self.assertEqual(dd, {})
+
+        dd = Utils.getMntGrpName([], arr[0]["name"])
+        self.assertEqual(dd, '')
+        dd = Utils.getMntGrpName([pool], arr[4]["name"])
+        self.assertEqual(dd, arr[4]["full_name"])
+
+
+    def test_getMntGrpName_pool1(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        
+
+        arr = [
+            ["test/ct/01", "mntgrp_01Value"],
+            ["test/ct/02", "mntgrp_02att"],
+            ["test/ct/03", "mntgrp_03value"],
+            ["test/ct/04", "mntgrp_0413"],
+            ["null", "mntgrp_04"],
+            ]
+
+
+
+        pool = Pool()
+        pool.MeasurementGroupList = [json.dumps(
+                {"name":a[0], "full_name":a[1]}) for a in arr]
+    
+        
+        for ar in arr:
+            dd = Utils.getMntGrpName([pool], ar[0])
+            self.assertEqual(dd, ar[1])
+
+        
+
+        dd = Utils.getMntGrpName([pool], "adsasd")
+        self.assertEqual(dd, '')
+
+
+    def test_getMntGrpName_pool2(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        
+
+        arr = [
+            ["test/ct/01", "mntgrp_01Value"],
+            ["test/ct/02", "mntgrp_02att"],
+            ["test/ct/03", "mntgrp_03value"],
+            ["test/ct/04", "mntgrp_0413"],
+            ["null", "mntgrp_04"],
+            ]
+
+
+        arr2 = [
+            ["test/mca/01", "mgca_011"],
+            ["test/mca/02", "mgca_02a"],
+            ["test/sca/03", "mgy_sca_031"],
+            ["test/sca/04", "mntysca_04123"],
+            ]
+
+        pool = Pool()
+        pool2 = Pool()
+        pool.MeasurementGroupList = [json.dumps(
+                {"name":a[0], "full_name":a[1]}) for a in arr]
+        pool2.MeasurementGroupList = [json.dumps(
+                {"name":a[0], "full_name":a[1]}) for a in arr2]
+    
+        
+        for ar in arr:
+            dd = Utils.getMntGrpName([pool, pool2], ar[0])
+            self.assertEqual(dd, ar[1])
+
+        for ar in arr2:
+            dd = Utils.getMntGrpName([pool, pool2], ar[0])
+            self.assertEqual(dd, ar[1])
+        
+
+        dd = Utils.getMntGrpName([pool, pool2], "adsasd")
+        self.assertEqual(dd, '')
+            
+
+
+
+
+
+    ## getDeviceControllers test   
+    def test_getDeviceControllers_empty(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        
+
+        arr = [
+            {"name":"test/ct/01", "controller":"counter_01/Value"} ,
+            {"name":"test/ct/02", "controller":"counter_02/att"} ,
+            {"name":"test/ct/03", "controller":"counter_03/value"} ,
+            {"name":"test/ct/04", "controller":"counter_04/13"} ,
+            {"name":"null", "controller":"counter_04"} ,
+            ]
+
+
+
+        pool = Pool()
+        pool.ExpChannelList = [json.dumps(a) for a in arr]
+    
+        import nxsrecconfig 
+        dd = Utils.getDeviceControllers([], "test/ct/01")
+        self.assertEqual(dd, {})
+
+        dd = Utils.getDeviceControllers([], arr[0]["name"])
+        self.assertEqual(dd, {})
+        dd = Utils.getDeviceControllers([pool], arr[4]["name"])
+        self.assertEqual(dd, {arr[4]["name"]:arr[4]["controller"]})
+        
+        dd = Utils.getDeviceControllers([pool], "sdfds")
+        self.assertEqual(dd, {})
+
+
+
+
+    ## getDeviceControllers test   
+    def test_getDeviceControllers_pool1(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        
+
+        arr = [
+            ["test/ct/01", "counter_01"],
+            ["test/ct/02", "counter_02att"],
+            ["test/ct/03", "counter_03value"],
+            ["test/ct/04", "counter_0413"],
+            ["null", "counter_04"],
+            ]
+
+        pool = Pool()
+        pool.ExpChannelList = [json.dumps(
+                {"name":a[0], "controller":a[1]}) for a in arr]
+    
+        
+        for ar in arr:
+            dd = Utils.getDeviceControllers([pool], [ar[0]])
+            self.assertEqual(dd, {ar[0]:ar[1]})
+        
+
+        dd = Utils.getDeviceControllers([pool], [ar[0] for ar in arr])
+        self.assertEqual(dd, dict((ar[0],ar[1]) for ar in arr))
+
+            
+
+
+    def test_getDeviceControllers_pool2(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        
+
+        arr = [
+            ["test/ct/01", "counter_01Value"],
+            ["test/ct/02", "counter_02att"],
+            ["test/ct/03", "counter_03alue"],
+            ["test/ct/04", "counter_0413"],
+            ["null", "counter_04"],
+            ]
+
+
+        arr2 = [
+            ["test/mca/01", "mca_01"],
+            ["test/mca/02", "mca_02"],
+            ["test/sca/03", "my_sca1"],
+            ["test/sca/04", "mysca_123"],
+            ]
+
+        pool = Pool()
+        pool2 = Pool()
+        pool.ExpChannelList = [json.dumps(
+                {"name":a[0], "controller":a[1]}) for a in arr]
+        pool2.ExpChannelList = [json.dumps(
+                {"name":a[0], "controller":a[1]}) for a in arr2]
+    
+        
+        for ar in arr:
+            dd = Utils.getDeviceControllers([pool, pool2], [ar[0]])
+            self.assertEqual(dd, {ar[0]:ar[1]})
+
+        for ar in arr2:
+            dd = Utils.getDeviceControllers([pool, pool2], [ar[0]])
+            self.assertEqual(dd, {ar[0]:ar[1]})
+        
+
+        res = dict((ar[0],ar[1]) for ar in arr)
+        res.update(dict((ar[0],ar[1]) for ar in arr2))
+
+        lst = [ar[0] for ar in arr]
+        lst.extend([ar[0] for ar in arr2])
+
+        dd = Utils.getDeviceControllers([pool, pool2], lst)
+        self.assertEqual(dd, res)
+
+
+        lst.extend(["sfdsdf","sdfsfd"])
+        dd = Utils.getDeviceControllers([pool, pool2], lst)
+        self.assertEqual(dd, res)
+            
+        
+
+
 if __name__ == '__main__':
     unittest.main()
+
