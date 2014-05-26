@@ -24,10 +24,20 @@ import PyTango
 import time
 import json
 import pickle
+import numpy
 
 ## 
 class Utils(object):
     """  Tango Utilities """
+
+    ## map of Numpy:Tango types
+    tTnp = {PyTango.DevLong64:"int64", PyTango.DevLong:"int32",
+            PyTango.DevShort:"int16", PyTango.DevUChar:"uint8", 
+            PyTango.DevULong64:"uint64", PyTango.DevULong:"uint32", 
+            PyTango.DevUShort:"uint16", PyTango.DevDouble:"float64",
+            PyTango.DevFloat:"float32",PyTango.DevString:"string", 
+            PyTango.DevBoolean:"bool"}
+
 
     ## opens device proxy of the given device
     # \param cls class instance
@@ -235,7 +245,35 @@ class Utils(object):
                 u'timer'] = fulltimer
             hsh['controllers'][ctrl]['units']['0'][
                 u'trigger_type'] = 0
+    
+    ## retrives shape type value for attribure        
+    @classmethod        
+    def __getShapeTypeValue(cls, source):
+        vl = None
+        shp = [] 
+        dt = 'float64'
+        ap = PyTango.AttributeProxy(source)
+        try:
+            ac = ap.get_config()
+            if ac.data_format != PyTango.AttrDataFormat.SCALAR:
+                da = ap.read()
+                vl = da.value
+        except Exception:
+            pass
 
+        if vl is not None:
+            shp = list(numpy.shape(vl)) 
+            dt = getattr(vl, 'dtype', numpy.dtype(type(vl))).name
+        elif ac is not None:
+            if ac.data_format != PyTango.AttrDataFormat.SCALAR:
+                if da.dim_x and da.dim_x > 1 :
+                    shp = [da.dim_y, da.dim_x] \
+                        if da.dim_y \
+                        else [da.dim_x]
+            dt = cls.tTnp[ac.data_type]   
+        return (shp, dt, vl)
+
+            
 
     ## adds channel into configuration dictionary
     @classmethod        
@@ -244,13 +282,16 @@ class Utils(object):
         ctrlChannels = hsh['controllers'][ctrl]['units']['0'][
             u'channels']
         if not fullname in ctrlChannels.keys():
-            dp = PyTango.DeviceProxy(fullname.encode())
-            da = dp.read_attribute('value')
+            da = None
+            ac = None
+            source = '%s/%s' % (fullname.encode(), 'value')
+
+            shp, dt, vl = cls.__getShapeTypeValue(source)
             dct = {}
             dct['_controller_name'] = unicode(ctrl)
             dct['_unit_id'] = u'0'
             dct['conditioning'] = u''
-            dct['data_type'] = u'float64'
+            dct['data_type'] = dt
             dct['data_units'] = u'No unit'
             dct['enabled'] = True
             dct['full_name'] = fullname
@@ -263,12 +304,7 @@ class Utils(object):
             dct['nexus_path'] = u''
             dct['normalization'] = 0
             dct['output'] = True
-            if da.dim_x and da.dim_x > 1 :
-                dct['shape'] = [da.dim_y, da.dim_x] \
-                    if da.dim_y \
-                    else [da.dim_x]
-            else:
-                dct['shape'] = [] 
+            dct['shape'] = shp
 
             if device in dontdisplay or dct['shape']:
                 dct['plot_axes'] = []
@@ -277,7 +313,7 @@ class Utils(object):
                 dct['plot_axes'] = ['<mov>']
                 dct['plot_type'] = 1
 
-            dct['source'] = dct['full_name'] + "/value"
+            dct['source'] = source
             ctrlChannels[fullname] = dct
 
         return index
