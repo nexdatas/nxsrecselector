@@ -94,6 +94,8 @@ class UtilsTest(unittest.TestCase):
 
         self._simps = TestServerSetUp.TestServerSetUp()
         self._simps2 = TestServerSetUp.TestServerSetUp( "ttestp09/testts/t2r228", "S2")
+        self._simps3 = TestServerSetUp.TestServerSetUp( "ttestp09/testts/t3r228", "S3") 
+        self._simps4 = TestServerSetUp.TestServerSetUp( "ttestp09/testts/t4r228", "S4")
 
         self.cnt = '{"units": {"0":{"channels":{},' \
             + ' "trigger_type":0, "id":0, "timer":"%s", "monitor":"%s"}}}'
@@ -105,10 +107,14 @@ class UtilsTest(unittest.TestCase):
     def setUp(self):       
         self._simps.setUp()
         self._simps2.setUp()
+        self._simps3.setUp()
+        self._simps4.setUp()
 
     ## test closer
     # \brief Common tear down
     def tearDown(self):       
+        self._simps4.tearDown()
+        self._simps3.tearDown()
         self._simps2.tearDown()
         self._simps.tearDown()
 
@@ -937,19 +943,6 @@ class UtilsTest(unittest.TestCase):
             ["null", "cntl_04", ["counter_04"]],
             ]
 
-        aarr2 = [
-            ["test/mca/01", "mca_01", "1"],
-            ["test/mca/02", "mca_02", "a"],
-            ["test/sca/03", "my_sca_03", "1"],
-            ["test/sca/04", "mysca_04", "123"],
-            ]
-
-        arr2 = [
-            ["test/mca/01", "mca_01", ["CTExpChannel"]],
-            ["test/mca/02", "mca_02", ["conem", "CTExpChannel"]],
-            ["test/sca/03", "my_sca1", ["CTExpChannel2", "ZeroDChannel"]],
-            ["test/sca/04", "mysca_123", ["CTExpChannel","CTExpChannel2","CTExpChannel3"]],
-            ]
 
         pool = Pool()
         pool2 = Pool()
@@ -982,7 +975,7 @@ class UtilsTest(unittest.TestCase):
         self.myAssertDict(hsh, fr)
 
 
-    def test_addDevice_controller_separate_ctrls_2pools(self):
+    def ttest_addDevice_controller_separate_ctrls_2pools(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         
@@ -1058,6 +1051,72 @@ class UtilsTest(unittest.TestCase):
         self.myAssertDict(hsh, fr)
             
             
+
+
+    def test_addDevice_controller_separate_ctrls(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+
+        
+        aarr = [
+            ["test/ct/01", self._simps.new_device_info_writer.name, "Value"],
+            ["test/ct/02", self._simps2.new_device_info_writer.name, "att"],
+            ["test/ct/03", self._simps3.new_device_info_writer.name, "value"],
+            ["test/ct/04", self._simps4.new_device_info_writer.name, "13"],
+            ]
+
+        arr = [
+            ["test/ct/01", "cntl_01", ["CTExpChannel"]],
+            ["test/ct/02", "cntl_01", ["conem", "CTExpChannel"]],
+            ["test/ct/03", "cntl_01", ["CTExpChannel", "ZeroDChannel"]],
+            ["test/ct/04", "cntl_01", ["oneD","CTExpChannel"]],
+            ]
+
+
+        aarr2 = [
+            ["test/mca/01", self._simps.new_device_info_writer.name, "1"],
+            ["test/mca/02", self._simps.new_device_info_writer.name, "a"],
+            ["test/sca/03", self._simps2.new_device_info_writer.name, "1"],
+            ["test/sca/04", self._simps2.new_device_info_writer.name, "123"],
+            ]
+
+        arr2 = [
+            ["test/mca/01", "mca_01", ["CTExpChannel"]],
+            ["test/mca/02", "mca_02", ["conem", "CTExpChannel"]],
+            ["test/sca/03", "my_sca1", ["CTExpChannel2", "ZeroDChannel"]],
+            ["test/sca/04", "mysca_123", ["CTExpChannel","CTExpChannel2","CTExpChannel3"]],
+            ]
+
+        pool = Pool()
+        pool2 = Pool()
+        pool.ExpChannelList = [json.dumps(
+                {"name":a[0], "controller":a[1], "interfaces":a[2]}) for a in arr]
+        pool2.ExpChannelList = [json.dumps(
+                {"name":a[0], "controller":a[1], "interfaces":a[2]}) for a in arr2]
+    
+        pool.AcqChannelList = [json.dumps(
+                {"name":a[0], "full_name":"%s/%s" % (a[1], a[2])}) for a in aarr]
+        pool2.AcqChannelList = [json.dumps(
+                {"name":a[0], "full_name":"%s/%s" % (a[1], a[2])}) for a in aarr2]
+
+        hsh = {}
+        iindex = 123
+        index = iindex
+        for i, a in enumerate(aarr):
+            logger.debug("i = %s"% i)
+            index = Utils.addDevice(a[0], [], [pool, pool2], hsh, aarr[0][0], index)
+            print i , index , iindex+1+ i
+            self.assertEqual(index, iindex+1 + i)
+        fr = {}
+        fr['controllers'] = {}
+        jres = json.loads(self.cnt % (aarr[0][1],aarr[0][1]))
+        fr['controllers'][arr[0][1]]= jres
+
+        for i, a in enumerate(aarr):
+            ch = json.loads(self.chnl % (iindex+i, a[0],"1",a[0],"",arr[i][1],a[1],'"<mov>"',
+                                    "%s/%s" %(a[1], 'value')))
+            fr['controllers'][arr[i][1]]['units']['0']['channels'][a[1]] = ch
+        self.myAssertDict(hsh, fr)
 
             
 
