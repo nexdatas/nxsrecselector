@@ -1105,7 +1105,6 @@ class UtilsTest(unittest.TestCase):
         for i, a in enumerate(aarr):
             logger.debug("i = %s"% i)
             index = Utils.addDevice(a[0], [], [pool, pool2], hsh, aarr[0][0], index)
-            print i , index , iindex+1+ i
             self.assertEqual(index, iindex+1 + i)
         fr = {}
         fr['controllers'] = {}
@@ -1156,7 +1155,6 @@ class UtilsTest(unittest.TestCase):
         for i, a in enumerate(aarr):
             logger.debug("i = %s"% i)
             index = Utils.addDevice(a[0], [], [pool, pool2], hsh, aarr[0][0], index)
-            print i , index , iindex+1+ i
             self.assertEqual(index, iindex+1 + i)
         fr = {}
         fr['controllers'] = {}

@@ -58,6 +58,23 @@ class TestServer(PyTango.Device_4Impl):
 #------------------------------------------------------------------
     def __init__(self,cl, name):
         PyTango.Device_4Impl.__init__(self,cl,name)
+
+        self.defaults = {}
+	self.defaults["ScalarBoolean"] = [True, PyTango.SCALAR, PyTango.DevBoolean]
+	self.defaults["ScalarUChar"] = [12, PyTango.SCALAR, PyTango.DevUChar]
+	self.defaults["ScalarShort"] = [12, PyTango.SCALAR, PyTango.DevShort]
+	self.defaults["ScalarUShort"] = [12, PyTango.SCALAR, PyTango.DevUShort]
+	self.defaults["ScalarLong"] = [123, PyTango.SCALAR, PyTango.DevLong]
+	self.defaults["ScalarULong"] = [123, PyTango.SCALAR, PyTango.DevULong]
+	self.defaults["ScalarLong64"] = [123, PyTango.SCALAR, PyTango.DevLong64]
+	self.defaults["ScalarULong64"] = [123, PyTango.SCALAR, PyTango.DevULong64]
+	self.defaults["ScalarFloat"] = [-1.23, PyTango.SCALAR, PyTango.DevFloat]
+	self.defaults["ScalarDouble"] = [123.45, PyTango.SCALAR, PyTango.DevDouble]
+	self.defaults["ScalarString"] = ["Hello!", PyTango.SCALAR, PyTango.DevString]
+	self.defaults["ScalarEncoded"] = [("UTF8","Hello UTF8! Pr\xc3\xb3ba \xe6\xb5\x8b"), 
+                                          PyTango.SCALAR, PyTango.DevEncoded]
+
+        self.dtype = None
         TestServer.init_device(self)
 
 #------------------------------------------------------------------
@@ -83,7 +100,7 @@ class TestServer(PyTango.Device_4Impl):
                        '_ViewOptions': {'ShowDial': True}}}
 
         self.attr_Environment = ("pickle", pickle.dumps(env))
-        self.attr_Value = 123.45
+        self.ChangeValueType("ScalarDouble")
         self.attr_DoorList = ['test/door/1', 'test/door/2']
 
 #------------------------------------------------------------------
@@ -146,6 +163,7 @@ class TestServer(PyTango.Device_4Impl):
         self.attr_Environment = attr.get_write_value()
         print "Attribute value = ", self.attr_Environment
 
+
 #------------------------------------------------------------------
 #    Read Value attribute
 #------------------------------------------------------------------
@@ -154,7 +172,7 @@ class TestServer(PyTango.Device_4Impl):
         
         #    Add your own code here
         
-        attr.set_value(self.attr_Value)
+        attr.set_value(self.defaults[self.dtype][0])
 
 
 #------------------------------------------------------------------
@@ -165,9 +183,8 @@ class TestServer(PyTango.Device_4Impl):
 
         #    Add your own code here
 
-        self.attr_Value = attr.get_write_value()
-        print "Attribute value = ", self.attr_Value
-
+        self.defaults[self.dtype][0] = attr.get_write_value()
+        print "Attribute value = ", self.defaults[self.dtype][0]
 
 
 #==================================================================
@@ -192,8 +209,34 @@ class TestServer(PyTango.Device_4Impl):
             self.set_state(PyTango.DevState.FAULT)
         else:
             self.set_state(PyTango.DevState.ON)
-    
 
+
+#------------------------------------------------------------------
+#    ChangeValueType command:
+#
+#    Description: Set state of tango device
+#                
+#    argin: DevString     tango state
+#------------------------------------------------------------------
+    def ChangeValueType(self, dtype):
+        print "In ", self.get_name(), "::ChangeValueType()"
+        if dtype in self.defaults.keys():
+            if self.dtype is not None:
+                self.remove_attribute("Value")
+            self.dtype = dtype
+            dev_class = self.get_device_class()
+            attr_data = PyTango.AttrData("Value", dev_class.get_name(), 
+                                         [[self.defaults[self.dtype][2],
+                                           self.defaults[self.dtype][1],
+                                           PyTango.READ_WRITE],  
+                                          {'description':"dynamic attribute",
+                                           } ])
+                                         
+            self.add_attribute(attr_data, 
+                               r_meth=self.read_Value, 
+                               w_meth=self.write_Value)
+
+            
 
 #==================================================================
 #
@@ -217,6 +260,9 @@ class TestServerClass(PyTango.DeviceClass):
         'SetState':
             [[PyTango.DevString, "ScalarString"],
             [PyTango.DevVoid, ""]],
+        'ChangeValueType':
+            [[PyTango.DevString, "ScalarString"],
+            [PyTango.DevVoid, ""]],
         }
 
 
@@ -228,13 +274,6 @@ class TestServerClass(PyTango.DeviceClass):
               PyTango.READ_WRITE],
             {
                 'description':"Environment attribute",
-            } ],
-        'Value':
-            [[PyTango.DevDouble,
-              PyTango.SCALAR,
-              PyTango.READ_WRITE],
-            {
-                'description':"test value attribute",
             } ],
         'DoorList':
             [[PyTango.DevString,

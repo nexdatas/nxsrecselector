@@ -35,7 +35,7 @@ class Utils(object):
             PyTango.DevShort:"int16", PyTango.DevUChar:"uint8", 
             PyTango.DevULong64:"uint64", PyTango.DevULong:"uint32", 
             PyTango.DevUShort:"uint16", PyTango.DevDouble:"float64",
-            PyTango.DevFloat:"float32",PyTango.DevString:"string", 
+            PyTango.DevFloat:"float32", PyTango.DevString:"string", 
             PyTango.DevBoolean:"bool"}
 
 
