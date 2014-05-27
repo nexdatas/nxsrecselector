@@ -252,6 +252,7 @@ class Utils(object):
         vl = None
         shp = [] 
         dt = 'float64'
+        ut = 'No units'
         ap = PyTango.AttributeProxy(source)
         try:
             ac = ap.get_config()
@@ -271,7 +272,9 @@ class Utils(object):
                         if da.dim_y \
                         else [da.dim_x]
             dt = cls.tTnp[ac.data_type]   
-        return (shp, dt, vl)
+        if ac is not None:
+            ut= ac.unit
+        return (shp, dt, vl, ut)
 
             
 
@@ -286,13 +289,13 @@ class Utils(object):
             ac = None
             source = '%s/%s' % (fullname.encode(), 'value')
 
-            shp, dt, vl = cls.__getShapeTypeValue(source)
+            shp, dt, vl, ut = cls.__getShapeTypeValue(source)
             dct = {}
             dct['_controller_name'] = unicode(ctrl)
             dct['_unit_id'] = u'0'
             dct['conditioning'] = u''
             dct['data_type'] = dt
-            dct['data_units'] = u'No unit'
+            dct['data_units'] = ut
             dct['enabled'] = True
             dct['full_name'] = fullname
             dct['index'] = index
