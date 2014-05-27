@@ -30,7 +30,7 @@ import numpy
 class Utils(object):
     """  Tango Utilities """
 
-    ## map of Numpy:Tango types
+    ## map of Tango:Numpy types
     tTnp = {PyTango.DevLong64:"int64", PyTango.DevLong:"int32",
             PyTango.DevShort:"int16", PyTango.DevUChar:"uint8", 
             PyTango.DevULong64:"uint64", PyTango.DevULong:"uint32", 
@@ -309,9 +309,13 @@ class Utils(object):
             dct['output'] = True
             dct['shape'] = shp
 
-            if device in dontdisplay or dct['shape']:
+            if device in dontdisplay or \
+                    (dct['shape'] and len(dct['shape']) == 1):
                 dct['plot_axes'] = []
                 dct['plot_type'] = 0
+            elif dct['shape'] and len(dct['shape']) == 2:
+                dct['plot_axes'] = ['<idx>', '<idx>']
+                dct['plot_type'] = 2
             else:        
                 dct['plot_axes'] = ['<mov>']
                 dct['plot_type'] = 1
