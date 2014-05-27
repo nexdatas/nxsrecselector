@@ -99,7 +99,7 @@ class UtilsTest(unittest.TestCase):
 
         self.cnt = '{"units": {"0":{"channels":{},' \
             + ' "trigger_type":0, "id":0, "timer":"%s", "monitor":"%s"}}}'
-        self.chnl = '{"ndim":0, "index":%s, "name":"%s", "data_type":"float64", "plot_type":%s, "enabled": true, "label": "%s", "instrument":null, "shape": [%s], "_controller_name": "%s", "conditioning": "", "full_name": "%s", "_unit_id": "0", "normalization": 0, "output":true, "plot_axes":[%s], "nexus_path": "", "data_units": "No unit", "source": "%s"}'
+        self.chnl = '{"ndim":0, "index":%s, "name":"%s", "data_type":"%s", "plot_type":%s, "enabled": true, "label": "%s", "instrument":null, "shape": [%s], "_controller_name": "%s", "conditioning": "", "full_name": "%s", "_unit_id": "0", "normalization": 0, "output":true, "plot_axes":[%s], "nexus_path": "", "data_units": "No unit", "source": "%s"}'
 
 
     ## test starter
@@ -897,12 +897,14 @@ class UtilsTest(unittest.TestCase):
         fr = {}
         fr['controllers'] = {}
         fr['controllers'][arr[0][1]]= jres
-        ch = json.loads(self.chnl % (0,arr[0][0],"1",arr[0][0],"",arr[0][1],aarr[0][1],'"<mov>"',
+        ch = json.loads(self.chnl % (0,arr[0][0], "float64",
+                                     "1",arr[0][0],"",arr[0][1],aarr[0][1],'"<mov>"',
                                 "%s/%s" %(aarr[0][1], 'value')))
         fr['controllers'][arr[0][1]]['units']['0']['channels'][aarr[0][1]] = ch
         self.myAssertDict(hsh, fr)
 
-        ch = json.loads(self.chnl % (0,arr[0][0],"1",arr[0][0],"",arr[0][1],aarr[0][1],'"<mov>"',
+        ch = json.loads(self.chnl % (0,arr[0][0], "float64","1",
+                                     arr[0][0],"",arr[0][1],aarr[0][1],'"<mov>"',
                                 "%s/%s" %(aarr[0][1], 'value')))
         fr['controllers'][arr[0][1]]['units']['0']['channels'][aarr[0][1]] = ch
         self.myAssertDict(hsh, fr)
@@ -916,7 +918,8 @@ class UtilsTest(unittest.TestCase):
         fr = {}
         fr['controllers'] = {}
         fr['controllers'][arr[0][1]]= jres
-        ch = json.loads(self.chnl % (0, arr[0][0],"1",arr[0][0],"",arr[0][1],aarr[0][1],'"<mov>"',
+        ch = json.loads(self.chnl % (0, arr[0][0], "float64","1",
+                                     arr[0][0],"",arr[0][1],aarr[0][1],'"<mov>"',
                                 "%s/%s" %(aarr[0][1], 'value')))
         fr['controllers'][arr[0][1]]['units']['0']['channels'][aarr[0][1]] = ch
         self.myAssertDict(hsh, fr)
@@ -969,7 +972,8 @@ class UtilsTest(unittest.TestCase):
         for i, a in enumerate(aarr):
             jres = json.loads(self.cnt % (a[1],a[1]))
             fr['controllers'][arr[i][1]]= jres
-            ch = json.loads(self.chnl % (iindex+i, a[0],"1",a[0],"",arr[i][1],a[1],'"<mov>"',
+            ch = json.loads(self.chnl % (iindex+i, a[0], "float64","1",
+                                         a[0],"",arr[i][1],a[1],'"<mov>"',
                                     "%s/%s" %(a[1], 'value')))
             fr['controllers'][arr[i][1]]['units']['0']['channels'][a[1]] = ch
         self.myAssertDict(hsh, fr)
@@ -1039,14 +1043,16 @@ class UtilsTest(unittest.TestCase):
         for i, a in enumerate(aarr):
             jres = json.loads(self.cnt % (a[1],a[1]))
             fr['controllers'][arr[i][1]]= jres
-            ch = json.loads(self.chnl % (iindex+i, a[0],"1",a[0],"",arr[i][1],a[1],'"<mov>"',
-                                    "%s/%s" %(a[1], 'value')))
+            ch = json.loads(self.chnl % (iindex+i, a[0], "float64", 
+                                         "1",a[0],"",arr[i][1],a[1],'"<mov>"',
+                                         "%s/%s" %(a[1], 'value')))
             fr['controllers'][arr[i][1]]['units']['0']['channels'][a[1]] = ch
         for i, a in enumerate(aarr2):
             jres = json.loads(self.cnt % (a[1],a[1]))
             fr['controllers'][arr2[i][1]]= jres
-            ch = json.loads(self.chnl % (iindex+i+len(aarr), a[0],"1",a[0],"",arr2[i][1],a[1],'"<mov>"',
-                                    "%s/%s" %(a[1], 'value')))
+            ch = json.loads(self.chnl % (iindex+i+len(aarr), a[0], "float64",
+                                         "1",a[0],"",arr2[i][1],a[1],'"<mov>"',
+                                         "%s/%s" %(a[1], 'value')))
             fr['controllers'][arr2[i][1]]['units']['0']['channels'][a[1]] = ch
         self.myAssertDict(hsh, fr)
             
@@ -1112,8 +1118,9 @@ class UtilsTest(unittest.TestCase):
         fr['controllers'][arr[0][1]]= jres
 
         for i, a in enumerate(aarr):
-            ch = json.loads(self.chnl % (iindex+i, a[0],"1",a[0],"",arr[i][1],a[1],'"<mov>"',
-                                    "%s/%s" %(a[1], 'value')))
+            ch = json.loads(self.chnl % (iindex+i, a[0], "float64",
+                                         "1",a[0],"",arr[i][1],a[1],'"<mov>"',
+                                         "%s/%s" %(a[1], 'value')))
             fr['controllers'][arr[i][1]]['units']['0']['channels'][a[1]] = ch
         self.myAssertDict(hsh, fr)
 
@@ -1162,8 +1169,9 @@ class UtilsTest(unittest.TestCase):
         fr['controllers'][arr[0][1]]= jres
 
         for i, a in enumerate(aarr):
-            ch = json.loads(self.chnl % (iindex+i, a[0],"1",a[0],"",arr[i][1],a[1],'"<mov>"',
-                                    "%s/%s" %(a[1], 'value')))
+            ch = json.loads(self.chnl % (iindex+i, a[0], "float64","1",
+                                         a[0],"",arr[i][1],a[1],'"<mov>"',
+                                         "%s/%s" %(a[1], 'value')))
             fr['controllers'][arr[i][1]]['units']['0']['channels'][a[1]] = ch
         self.myAssertDict(hsh, fr)
 
