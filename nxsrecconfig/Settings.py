@@ -927,14 +927,14 @@ class Settings(object):
     # \returns JSON string with full names of pool devices
     def fullDeviceNames(self):
         pools = self.__getPools()
-        return  json.dumps(Utils.getDeviceNames(pools))
+        return  json.dumps(Utils.getFullDeviceNames(pools))
         
     ## checks client records
     def __checkClientRecords(self, datasources, pools):
 
         describer = Describer(self.state["ConfigDevice"])
 
-        frecords = Utils.getDeviceNames(pools)
+        frecords = Utils.getFullDeviceNames(pools)
 
         dsres = describer.dataSources(
             set(datasources) - set(frecords.keys()), 'CLIENT')
