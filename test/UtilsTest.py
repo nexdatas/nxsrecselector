@@ -971,6 +971,20 @@ class UtilsTest(unittest.TestCase):
             ]
 
 
+        aarr2 = [
+            ["test/mca/01", self._simps.new_device_info_writer.name, "1"],
+            ["test/mca/02", self._simps.new_device_info_writer.name, "a"],
+            ["test/sca/03", self._simps2.new_device_info_writer.name, "1"],
+            ["test/sca/04", self._simps2.new_device_info_writer.name, "123"],
+            ]
+
+        arr2 = [
+            ["test/mca/01", "mca_01", ["CTExpChannel"]],
+            ["test/mca/02", "mca_02", ["conem", "CTExpChannel"]],
+            ["test/sca/03", "my_sca1", ["CTExpChannel2", "ZeroDChannel"]],
+            ["test/sca/04", "mysca_123", ["CTExpChannel","CTExpChannel2","CTExpChannel3"]],
+            ]
+
         pool = Pool()
         pool2 = Pool()
         pool.ExpChannelList = [json.dumps(
@@ -1083,7 +1097,7 @@ class UtilsTest(unittest.TestCase):
             
 
 
-    def test_addDevice_controller_separate_ctrls(self):
+    def test_addDevice_controller_ctrls(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
 
@@ -1149,7 +1163,7 @@ class UtilsTest(unittest.TestCase):
         self.myAssertDict(hsh, fr)
 
 
-    def test_addDevice_controller_separate_ctrls_2pools(self):
+    def test_addDevice_controller_ctrls_2pools(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
 
