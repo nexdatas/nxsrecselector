@@ -124,10 +124,16 @@ class Utils(object):
     def getDeviceName(cls, db, cname):        
         servers = db.get_device_exported_for_class(
             cname).value_string
-        if len(servers):
-            return servers[0] 
-        else:
-            return ''
+        device = ''
+        for server in servers:
+            try:
+                dp = PyTango.DeviceProxy(server)
+                dp.ping()
+                device = server
+                break
+            except:
+                pass
+        return device
 
 
     ## provides macro server of given door

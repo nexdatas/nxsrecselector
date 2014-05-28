@@ -616,9 +616,14 @@ class Settings(object):
     ## get method for door attribute
     # \returns name of door           
     def __getDoor(self):
+        try:
+            dp = PyTango.DeviceProxy(self.state["Door"])
+            dp.ping()
+        except:
+            self.state["Door"] = ''
         if "Door" not in self.state or not self.state["Door"]:
             self.state["Door"] = Utils.getDeviceName(
-                self.__db,"Door")
+                self.__db, "Door")
             self.__updateMacroServer(self.state["Door"])
         return self.state["Door"]
 
