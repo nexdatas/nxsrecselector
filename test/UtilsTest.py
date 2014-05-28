@@ -55,6 +55,7 @@ class DB(object):
             "NXSConfigServer":['test/nxsconfigserver/01','test/nxsconfigserver/02'],
             "Door":['test/door/01','test/door/02','test/door/03'],
             "MacroServer":['test/ms/01'],
+            "TestServer":['ttestp09/testts/t1r228'],
             }
         pass
 
@@ -308,6 +309,21 @@ class UtilsTest(unittest.TestCase):
         for ar in arr:
             dd = Utils.getDeviceName(db, ar)
             src = db.get_device_exported_for_class(ar).value_string
+            self.assertEqual(dd, '')
+
+
+    ## getDeviceName test   
+    def test_getDeviceName_OK(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        
+        arr = ["TestServer"]
+
+        db = DB()
+    
+        for ar in arr:
+            dd = Utils.getDeviceName(db, ar)
+            src = db.get_device_exported_for_class(ar).value_string
             dv = src[0] if len(src) else ''
             self.assertEqual(dd, dv)
 
@@ -325,7 +341,15 @@ class UtilsTest(unittest.TestCase):
         for ar in arr:
             dd = Utils.getDeviceName(db, ar)
             src = db.get_device_exported_for_class(ar).value_string
-            dv = src[0] if len(src) else ''
+            dv = ''
+            for server in src:
+                try:
+                    dp = PyTango.DeviceProxy(server)
+                    dp.ping()
+                    dv = server
+                    break
+                except:
+                    pass
             self.assertEqual(dd, dv)
                 
             
