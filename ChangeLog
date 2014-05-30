@@ -1,4 +1,4 @@
-2014-XX-XX Jan Kotanski <jankotan@gmail.com>
+2014-05-30 Jan Kotanski <jankotan@gmail.com>
 	* adding getShapeTypeValue to Utils
 	* changing state() into ping() in openProxy loop
 	* adding doxygen documentation
