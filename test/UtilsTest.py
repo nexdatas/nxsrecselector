@@ -309,7 +309,16 @@ class UtilsTest(unittest.TestCase):
         for ar in arr:
             dd = Utils.getDeviceName(db, ar)
             src = db.get_device_exported_for_class(ar).value_string
-            self.assertEqual(dd, '')
+            dv = ''
+            for server in src:
+                try:
+                    dp = PyTango.DeviceProxy(server)
+                    dp.ping()
+                    dv = server
+                    break
+                except:
+                    pass
+            self.assertEqual(dd, dv)
 
 
     ## getDeviceName test   
