@@ -822,12 +822,13 @@ class NXSRecSelector(PyTango.Device_4Impl):
             "::UpdateMntGrp()"
         try:
             self.set_state(PyTango.DevState.RUNNING)
-            self.stg.updateMntGrp()
+            conf = str(self.stg.updateMntGrp())
             self.set_state(PyTango.DevState.ON)
         finally:
             if self.get_state() == PyTango.DevState.RUNNING:
                 self.set_state(PyTango.DevState.ON)
-        
+
+        return conf
 
 
 #---- UpdateMntGrp command State Machine -----------------
@@ -1152,7 +1153,7 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
              [PyTango.DevVoid, ""]],
         'UpdateMntGrp':
             [[PyTango.DevVoid, ""],
-             [PyTango.DevVoid, ""]],
+             [PyTango.DevString, "configuration"]],
         'UpdateControllers':
             [[PyTango.DevVoid, ""],
              [PyTango.DevVoid, ""]],

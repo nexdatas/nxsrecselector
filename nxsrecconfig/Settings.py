@@ -1049,8 +1049,9 @@ class Settings(object):
         for ltimer in ltimers:
             index = Utils.addDevice(ltimer, dontdisplay, pools, 
                                     hsh, ltimer, index)
-        dpmg.Configuration = json.dumps(hsh)
-
+        conf = json.dumps(hsh)
+        dpmg.Configuration = conf
+        return conf
 
     ## checks existing controllers of pools for 
     #      AutomaticDataSources

@@ -1,4 +1,8 @@
 2014-05-30 Jan Kotanski <jankotan@gmail.com>
+	* adding returning configuration by updateMntGrp
+	* tagged as v1.5.0
+
+2014-05-30 Jan Kotanski <jankotan@gmail.com>
 	* adding getShapeTypeValue to Utils
 	* changing state() into ping() in openProxy loop
 	* adding doxygen documentation
