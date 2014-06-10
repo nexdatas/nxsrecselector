@@ -1051,7 +1051,21 @@ class Settings(object):
                                     hsh, ltimer, index)
         conf = json.dumps(hsh)
         dpmg.Configuration = conf
-        return conf
+        return str(dpmg.Configuration)
+
+    def getConfiguration(self, proxy=None):
+        if not proxy:
+            pools = self.__getPools()
+            if not self.state["MntGrp"]:
+                self.state["MntGrp"] = self.__defaultmntgrp
+            mntGrpName = self.state["MntGrp"]
+            fullname = str(Utils.getMntGrpName(pools, mntGrpName))
+            dpmg = Utils.openProxy(fullname)
+        else:
+            dpmg = proxy
+        return str(dpmg.Configuration)
+        
+
 
     ## checks existing controllers of pools for 
     #      AutomaticDataSources

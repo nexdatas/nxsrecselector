@@ -811,10 +811,39 @@ class NXSRecSelector(PyTango.Device_4Impl):
         return True
 
 #------------------------------------------------------------------
+#    GetConfiguration:
+#
+#    Description:  returns mntgrp configuration
+#                
+#------------------------------------------------------------------
+    def GetConfiguration(self):
+        print >> self.log_info, "In ", self.get_name(), \
+            "::GetConfiguration()"
+        try:
+            self.set_state(PyTango.DevState.RUNNING)
+            conf = str(self.stg.getConfiguration())
+            self.set_state(PyTango.DevState.ON)
+        finally:
+            if self.get_state() == PyTango.DevState.RUNNING:
+                self.set_state(PyTango.DevState.ON)
+
+        return conf
+
+
+#---- GetConfiguration command State Machine -----------------
+    def is_GetConfiguration_allowed(self):
+        if self.get_state() in [PyTango.DevState.RUNNING]:
+            return False
+        return True
+
+
+
+
+#------------------------------------------------------------------
 #    UpdateMntGrp:
 #
-#    Description: checks existing controllers of pools for 
-#        AutomaticDataSources
+#    Description: updates mntgrp configuration
+#
 #                
 #------------------------------------------------------------------
     def UpdateMntGrp(self):
@@ -1152,6 +1181,9 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
             [[PyTango.DevVoid, ""],
              [PyTango.DevVoid, ""]],
         'UpdateMntGrp':
+            [[PyTango.DevVoid, ""],
+             [PyTango.DevString, "configuration"]],
+        'GetConfiguration':
             [[PyTango.DevVoid, ""],
              [PyTango.DevString, "configuration"]],
         'UpdateControllers':
