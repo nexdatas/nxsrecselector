@@ -1010,7 +1010,6 @@ class Settings(object):
             self.state["MntGrp"] = self.__defaultmntgrp
         mntGrpName = self.state["MntGrp"]
         fullname = str(Utils.getMntGrpName(pools, mntGrpName))
-
         ms =  self.__getMacroServer()
         if not fullname:
             msp = Utils.openProxy(ms)
@@ -1020,8 +1019,7 @@ class Settings(object):
             if not pool and len(pools)> 0 :
                 pool = pools[0]
             if pool:
-                pool.CreateMeasurementGroup(
-                    [mntGrpName, self.state["Timer"]])
+                pool.CreateMeasurementGroup([mntGrpName, timer])
                 fullname = str(Utils.getMntGrpName(pools, mntGrpName))
 
         Utils.setEnv('ActiveMntGrp', mntGrpName, ms)
