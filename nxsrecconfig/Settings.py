@@ -984,7 +984,8 @@ class Settings(object):
         timers = json.loads(self.state["Timer"])
         timer =  timers[0] if timers else ''
         datasources = self.dataSources()
-        dontdisplay = json.loads(self.state["HiddenElements"])
+        hidden = json.loads(self.state["HiddenElements"])
+        dontdisplay = set(hidden)
 
         self.__checkClientRecords(datasources, pools)
 
@@ -1000,11 +1001,13 @@ class Settings(object):
         res = self.__description('CLIENT')
         
         for grp in res:
-            for dss in grp.values():
+            for cp, dss in grp.items():
+                ndcp = cp in dontdisplay
                 for ds in dss.keys():
                     aliases.append(str(ds))
+                    if not ndcp and str(ds) in dontdisplay:
+                        dontdisplay.remove(str(ds))
         aliases = list(set(aliases))
-
 
         if not self.state["MntGrp"]:
             self.state["MntGrp"] = self.__defaultmntgrp
@@ -1041,7 +1044,6 @@ class Settings(object):
         else:
             ltimers = set()
             aliases = sorted(set(aliases))
-            
         index = Utils.addDevices(aliases, dontdisplay, pools, 
                                  hsh, fullname, index)
         for ltimer in ltimers:
