@@ -152,7 +152,7 @@ class Describer(object):
         if names is not None:
             dss = [name for name in names if name in ads]
         else:
-            dss= ads
+            dss = ads
 
         result = {}
         for name in dss:

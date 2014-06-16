@@ -279,7 +279,7 @@ class Utils(object):
                         else [da.dim_x]
             dt = cls.tTnp[ac.data_type]   
         if ac is not None:
-            ut= ac.unit
+            ut = ac.unit
         return (shp, dt, vl, ut)
 
             
@@ -291,11 +291,9 @@ class Utils(object):
         ctrlChannels = hsh['controllers'][ctrl]['units']['0'][
             u'channels']
         if not fullname in ctrlChannels.keys():
-            da = None
-            ac = None
             source = '%s/%s' % (fullname.encode(), 'value')
 
-            shp, dt, vl, ut = cls.__getShapeTypeValue(source)
+            shp, dt, _, ut = cls.__getShapeTypeValue(source)
             dct = {}
             dct['_controller_name'] = unicode(ctrl)
             dct['_unit_id'] = u'0'
