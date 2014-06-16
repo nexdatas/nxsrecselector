@@ -664,6 +664,8 @@ class Settings(object):
 
 
     def __updateMacroServer(self, door):
+        if not door:
+            raise Exception("Door '%s' cannot be found" % door)
         self.__macroserver = Utils.getMacroServer(self.__db, door)
         msp = Utils.openProxy(self.__macroserver)
         poolNames = list(
