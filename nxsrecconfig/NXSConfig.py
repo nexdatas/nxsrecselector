@@ -893,6 +893,32 @@ class NXSRecSelector(PyTango.Device_4Impl):
         return True
 
 
+#------------------------------------------------------------------
+#    ImportMntGrp:
+#
+#    Description: imports active mntgrp configuration
+#
+#                
+#------------------------------------------------------------------
+    def ImportMntGrp(self):
+        print >> self.log_info, "In ", self.get_name(), \
+            "::ImportMntGrp()"
+        try:
+            self.set_state(PyTango.DevState.RUNNING)
+            self.stg.importMntGrp()
+            self.set_state(PyTango.DevState.ON)
+        finally:
+            if self.get_state() == PyTango.DevState.RUNNING:
+                self.set_state(PyTango.DevState.ON)
+
+
+#---- ImportMntGrp command State Machine -----------------
+    def is_ImportMntGrp_allowed(self):
+        if self.get_state() in [PyTango.DevState.RUNNING]:
+            return False
+        return True
+
+
 
 
 
@@ -1204,6 +1230,9 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
             [[PyTango.DevVoid, ""],
              [PyTango.DevVoid, ""]],
         'SaveConfiguration':
+            [[PyTango.DevVoid, ""],
+             [PyTango.DevVoid, ""]],
+        'ImportMntGrp':
             [[PyTango.DevVoid, ""],
              [PyTango.DevVoid, ""]],
         'UpdateMntGrp':

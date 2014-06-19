@@ -174,6 +174,25 @@ class Utils(object):
                 argout[chan['name']] = "/".join(arr[0:-1])
         return argout
 
+    ## find aliases from fullnames
+    # \param cls class instance
+    # \param pools list of pool devices
+    # \param names fullnames if None returns all aliases
+    # \returns full device name    
+    @classmethod
+    def getAliases(cls, pools, names = None):
+        lst = []
+        for pool in pools:
+            lst += pool.AcqChannelList
+        argout = {}
+        for elm in lst:
+            chan = json.loads(elm)
+            arr = chan['full_name'].split("/")
+            fname = "/".join(arr[0:-1])
+            if names is None or fname in names:
+                argout[fname] = chan['name']
+        return argout
+
 
     ## find measurement group from alias
     # \param cls class instance
@@ -384,7 +403,7 @@ class Utils(object):
 
     ## adds device into configuration dictionary
     # \param cls class instance
-    # \param devices device aliass
+    # \param devices device aliases
     # \param dontdisplay list of devices disable for display
     # \param pools list of give pools
     # \param cnf configuration dictionary

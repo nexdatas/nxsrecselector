@@ -1056,12 +1056,69 @@ class Settings(object):
         return conf, mfullname
 
     ## set active measurement group from components
+    # \returns string with mntgrp configuration
     def updateMntGrp(self):
         conf, mntgrp  = self.createConfiguration()
         dpmg = Utils.openProxy(mntgrp)
         dpmg.Configuration = conf
         return str(dpmg.Configuration)
 
+
+    ## import setting from active measurement
+    def importMntGrp(self):
+        conf = json.loads(self.getConfiguration())
+        
+        pools = self.__getPools()
+        dsg = json.loads(self.dataSourceGroup)
+        hel = json.loads(self.hiddenElements)
+        channels = Utils.getFullDeviceNames(pools)
+        for ch in channels.keys():
+            if ch in dsg.keys():
+                dsg[ch] = False
+            if ch in hel:
+                hel.remove(ch)
+        timers = {}
+        timers[conf["timer"]] = ''
+        for ctrl in conf["controllers"].values():
+            
+            timers[ctrl['units']['0']['timer']] = ''
+            for ch in ctrl['units']['0']['channels'].values():
+                dsg[ch['name']] = True
+                if not bool(ch['plot_type']):
+                    hel.append(ch['name'])
+
+        dtimers = Utils.getAliases(pools, timers)
+        otimers = list(dtimers.values())
+        otimers.remove(dtimers[conf["timer"]])
+        otimers.insert(0,dtimers[conf["timer"]])
+
+        jdsg = json.dumps(dsg)
+        if self.state["DataSourceGroup"] != jdsg:
+            self.state["DataSourceGroup"] = jdsg
+            if self.__server:
+                dp = PyTango.DeviceProxy(str(self.__server.get_name()))
+                dp.write_attribute(str("DataSourceGroup"), 
+                                   self.state["DataSourceGroup"])
+        jhel = json.dumps(hel)
+        if self.state["HiddenElements"] != jhel:
+            self.state["HiddenElements"] =jhel
+            if self.__server:
+                dp = PyTango.DeviceProxy(str(self.__server.get_name()))
+                dp.write_attribute(str("HiddenElements"), 
+                                   self.state["HiddenElements"])
+
+        jtimers = json.dumps(otimers)
+        if self.state["Timer"] != jtimers:
+            self.state["Timer"] =jtimers
+            if self.__server:
+                dp = PyTango.DeviceProxy(str(self.__server.get_name()))
+                dp.write_attribute(str("Timer"), 
+                                   self.state["Timer"])
+
+
+    ## provides configuration of mntgrp
+    # \param proxy DeviceProxy of mntgrp 
+    # \returns string with mntgrp configuration
     def getConfiguration(self, proxy=None):
         if not proxy:
             pools = self.__getPools()
@@ -1075,6 +1132,8 @@ class Settings(object):
         return str(dpmg.Configuration)
 
 
+    ## check if active measurement group was changed
+    # \returns True if it is different to the current setting
     def isMntGrpChanged(self):
         mgconf = json.loads(self.getConfiguration())
         llconf, _ = self.createConfiguration()

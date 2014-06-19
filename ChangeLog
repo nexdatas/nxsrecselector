@@ -1,5 +1,6 @@
 2014-06-XX Jan Kotanski <jankotan@gmail.com>
 	* adding IsMntGrpChanged
+	* adding ImportMntGrp
 	* tagged as v1.5.1
 
 2014-06-17 Jan Kotanski <jankotan@gmail.com>
