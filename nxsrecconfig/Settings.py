@@ -976,15 +976,17 @@ class Settings(object):
         
 
     ## set active measurement group from components
-    def updateMntGrp(self):
+    def createConfiguration(self):
         pools = self.__getPools()
 #        timerable = self.availableTimers()
-        hsh = {}
-        hsh['controllers'] = {} 
-        hsh['description'] = "Measurement Group" 
-        hsh['label'] = "" 
+        cnf = {}
+        cnf['controllers'] = {} 
+        cnf['description'] = "Measurement Group" 
+        cnf['label'] = "" 
+
         timers = json.loads(self.state["Timer"])
         timer =  timers[0] if timers else ''
+
         datasources = self.dataSources()
         hidden = json.loads(self.state["HiddenElements"])
         dontdisplay = set(hidden)
@@ -1014,9 +1016,9 @@ class Settings(object):
         if not self.state["MntGrp"]:
             self.state["MntGrp"] = self.__defaultmntgrp
         mntGrpName = self.state["MntGrp"]
-        fullname = str(Utils.getMntGrpName(pools, mntGrpName))
+        mfullname = str(Utils.getMntGrpName(pools, mntGrpName))
         ms =  self.__getMacroServer()
-        if not fullname:
+        if not mfullname:
             msp = Utils.openProxy(ms)
             pn = msp.get_property("PoolNames")["PoolNames"]
             if len(pn)>0:
@@ -1025,18 +1027,17 @@ class Settings(object):
                 pool = pools[0]
             if pool:
                 pool.CreateMeasurementGroup([mntGrpName, timer])
-                fullname = str(Utils.getMntGrpName(pools, mntGrpName))
+                mfullname = str(Utils.getMntGrpName(pools, mntGrpName))
 
         Utils.setEnv('ActiveMntGrp', mntGrpName, ms)
-        dpmg = Utils.openProxy(fullname)
-        hsh['label'] = mntGrpName
+        cnf['label'] = mntGrpName
         index = 0
         fullname = Utils.getFullDeviceNames(pools, [timer])[timer]
         if not fullname:
             raise Exception(
                 "Timer or Monitor cannot be found amount the servers")
-        hsh['monitor'] = fullname
-        hsh['timer'] = fullname
+        cnf['monitor'] = fullname
+        cnf['timer'] = fullname
                         
         if len(timers) > 1:
             ltimers = set(timers[1:])
@@ -1047,11 +1048,17 @@ class Settings(object):
             ltimers = set()
             aliases = sorted(set(aliases))
         index = Utils.addDevices(aliases, dontdisplay, pools, 
-                                 hsh, fullname, index)
+                                 cnf, fullname, index)
         for ltimer in ltimers:
             index = Utils.addDevice(ltimer, dontdisplay, pools, 
-                                    hsh, ltimer, index)
-        conf = json.dumps(hsh)
+                                    cnf, ltimer, index)
+        conf = json.dumps(cnf)
+        return conf, mfullname
+
+    ## set active measurement group from components
+    def updateMntGrp(self):
+        conf, mntgrp  = self.createConfiguration()
+        dpmg = Utils.openProxy(mntgrp)
         dpmg.Configuration = conf
         return str(dpmg.Configuration)
 
@@ -1066,6 +1073,13 @@ class Settings(object):
         else:
             dpmg = proxy
         return str(dpmg.Configuration)
+
+
+    def isMntGrpChanged(self):
+        mgconf = json.loads(self.getConfiguration())
+        llconf, _ = self.createConfiguration()
+        lsconf = json.loads(llconf)
+        return not Utils.compareDict(mgconf, lsconf)
         
 
 

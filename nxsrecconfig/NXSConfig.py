@@ -811,6 +811,34 @@ class NXSRecSelector(PyTango.Device_4Impl):
         return True
 
 #------------------------------------------------------------------
+#    IsMntGrpChanged:
+#
+#    Description:  returns true if mntgrp was changed
+#                
+#------------------------------------------------------------------
+    def IsMntGrpChanged(self):
+        print >> self.log_info, "In ", self.get_name(), \
+            "::IsMntGrpChanged()"
+        try:
+            self.set_state(PyTango.DevState.RUNNING)
+            conf = bool(self.stg.isMntGrpChanged())
+            self.set_state(PyTango.DevState.ON)
+        finally:
+            if self.get_state() == PyTango.DevState.RUNNING:
+                self.set_state(PyTango.DevState.ON)
+
+        return conf
+
+
+#---- IsMntGrpChanged command State Machine -----------------
+    def is_IsMntGrpChanged_allowed(self):
+        if self.get_state() in [PyTango.DevState.RUNNING]:
+            return False
+        return True
+
+
+
+#------------------------------------------------------------------
 #    GetConfiguration:
 #
 #    Description:  returns mntgrp configuration
@@ -826,7 +854,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         finally:
             if self.get_state() == PyTango.DevState.RUNNING:
                 self.set_state(PyTango.DevState.ON)
-
+                
         return conf
 
 
@@ -835,8 +863,6 @@ class NXSRecSelector(PyTango.Device_4Impl):
         if self.get_state() in [PyTango.DevState.RUNNING]:
             return False
         return True
-
-
 
 
 #------------------------------------------------------------------
@@ -1186,6 +1212,9 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
         'GetConfiguration':
             [[PyTango.DevVoid, ""],
              [PyTango.DevString, "configuration"]],
+        'IsMntGrpChanged':
+            [[PyTango.DevVoid, ""],
+             [PyTango.DevBoolean, "true if mntgrp changed"]],
         'UpdateControllers':
             [[PyTango.DevVoid, ""],
              [PyTango.DevVoid, ""]],

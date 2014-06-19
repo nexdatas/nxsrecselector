@@ -235,21 +235,21 @@ class Utils(object):
 
     ## adds controller into configuration dictionary
     @classmethod
-    def __addController(cls, hsh, ctrl, fulltimer):
-        if 'controllers' not in hsh.keys():
-            hsh['controllers'] = {}
-        if not ctrl in hsh['controllers'].keys():
-            hsh['controllers'][ctrl] = {}
-            hsh['controllers'][ctrl]['units'] = {}
-            hsh['controllers'][ctrl]['units']['0'] = {}
-            hsh['controllers'][ctrl]['units']['0'][
+    def __addController(cls, cnf, ctrl, fulltimer):
+        if 'controllers' not in cnf.keys():
+            cnf['controllers'] = {}
+        if not ctrl in cnf['controllers'].keys():
+            cnf['controllers'][ctrl] = {}
+            cnf['controllers'][ctrl]['units'] = {}
+            cnf['controllers'][ctrl]['units']['0'] = {}
+            cnf['controllers'][ctrl]['units']['0'][
                 u'channels'] = {}
-            hsh['controllers'][ctrl]['units']['0']['id'] = 0
-            hsh['controllers'][ctrl]['units']['0'][
+            cnf['controllers'][ctrl]['units']['0']['id'] = 0
+            cnf['controllers'][ctrl]['units']['0'][
                 u'monitor'] =  fulltimer
-            hsh['controllers'][ctrl]['units']['0'][
+            cnf['controllers'][ctrl]['units']['0'][
                 u'timer'] = fulltimer
-            hsh['controllers'][ctrl]['units']['0'][
+            cnf['controllers'][ctrl]['units']['0'][
                 u'trigger_type'] = 0
     
     ## retrives shape type value for attribure        
@@ -286,9 +286,9 @@ class Utils(object):
 
     ## adds channel into configuration dictionary
     @classmethod        
-    def __addChannel(cls, hsh, ctrl, device, fullname, dontdisplay, index):
+    def __addChannel(cls, cnf, ctrl, device, fullname, dontdisplay, index):
 
-        ctrlChannels = hsh['controllers'][ctrl]['units']['0'][
+        ctrlChannels = cnf['controllers'][ctrl]['units']['0'][
             u'channels']
         if not fullname in ctrlChannels.keys():
             source = '%s/%s' % (fullname.encode(), 'value')
@@ -335,12 +335,12 @@ class Utils(object):
     # \param device device alias
     # \param dontdisplay list of devices disable for display
     # \param pools list of give pools
-    # \param hsh configuration dictionary
+    # \param cnf configuration dictionary
     # \param timer device timer
     # \param index device index
     # \returns next device index
     @classmethod
-    def addDevice(cls, device, dontdisplay, pools, hsh, timer, index):
+    def addDevice(cls, device, dontdisplay, pools, cnf, timer, index):
         ctrls = cls.getDeviceControllers(pools, [device])
         ctrl = ctrls[device] if ctrls and device in ctrls.keys() else ""
         timers = cls.getFullDeviceNames(pools, [timer])
@@ -348,14 +348,38 @@ class Utils(object):
         if not ctrl:
             return index
 
-        cls.__addController(hsh, ctrl, fulltimer)
+        cls.__addController(cnf, ctrl, fulltimer)
         fullnames = cls.getFullDeviceNames(pools, [device])  
         fullname = fullnames[device] \
             if fullnames and device in fullnames.keys() else ""
-        index = cls.__addChannel(hsh, ctrl, device, fullname, 
+        index = cls.__addChannel(cnf, ctrl, device, fullname, 
                                      dontdisplay, index)
         
         return index
+
+    @classmethod
+    def compareDict(self, dct, dct2):
+        if not isinstance(dct, dict):
+            return False
+        if not isinstance(dct2, dict):
+            return False
+        if len(dct.keys()) !=  len(dct2.keys()):
+            return False
+        status = True
+        for k,v in dct.items():
+            if k not in dct2.keys():
+                status = False
+                break
+            if isinstance(v, dict):
+                status = self.compareDict(v, dct2[k])
+                if not status:
+                    break
+            else:
+                if v != dct2[k]:
+                    status = False
+                    break
+        return status
+
 
 
     ## adds device into configuration dictionary
@@ -363,19 +387,18 @@ class Utils(object):
     # \param devices device aliass
     # \param dontdisplay list of devices disable for display
     # \param pools list of give pools
-    # \param hsh configuration dictionary
+    # \param cnf configuration dictionary
     # \param timer device timer
     # \param index device index
     # \returns next device index
     @classmethod
-    def addDevices(cls, devices, dontdisplay, pools, hsh, timer, index):
+    def addDevices(cls, devices, dontdisplay, pools, cnf, timer, index):
         ctrls = cls.getDeviceControllers(pools, devices)
         fullnames = cls.getFullDeviceNames(pools, devices) 
-
         for device, ctrl in ctrls.items():
-            cls.__addController(hsh, ctrl, timer)
+            cls.__addController(cnf, ctrl, timer)
             fullname = fullnames[device]
-            index = cls.__addChannel(hsh, ctrl, device, fullname, 
+            index = cls.__addChannel(cnf, ctrl, device, fullname, 
                                      dontdisplay, index)
         
         return index
