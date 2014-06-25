@@ -1,3 +1,7 @@
+2014-06-XX Jan Kotanski <jankotan@gmail.com>
+	* fixing checks in getWriterDevice
+	* tagged as v1.5.2
+
 2014-06-20 Jan Kotanski <jankotan@gmail.com>
 	* adding IsMntGrpChanged
 	* adding ImportMntGrp
