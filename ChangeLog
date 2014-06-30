@@ -1,4 +1,4 @@
-2014-06-XX Jan Kotanski <jankotan@gmail.com>
+2014-06-30 Jan Kotanski <jankotan@gmail.com>
 	* adding Configuration attribute
 	* fixing checks in getWriterDevice
 	* tagged as v1.6.0
