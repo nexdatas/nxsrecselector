@@ -246,6 +246,30 @@ class Settings(object):
 
 
 
+    ## set method for configuration attribute
+    # \param name of configuration           
+    def __setConfiguration(self, jconf):
+        self.state = json.loads(jconf)
+
+
+    ## get method for configuration attribute
+    # \param name of configuration           
+    def __getConfiguration(self):
+        return json.dumps(self.state)
+
+    ## del method for configuration attribute
+    def __delConfiguration(self):
+        self.state.pop("Configuration")
+
+    ## the json data string
+    configuration = property(
+        __getConfiguration, 
+        __setConfiguration, 
+        __delConfiguration, 
+        doc = 'automatic components group')
+
+
+
     ## get method for timer attribute
     # \returns name of timer           
     def __getTimer(self):
@@ -936,6 +960,7 @@ class Settings(object):
         pools = self.__getPools()
         return  json.dumps(Utils.getFullDeviceNames(pools))
         
+
     ## checks client records
     def __checkClientRecords(self, datasources, pools):
 
@@ -1066,7 +1091,7 @@ class Settings(object):
 
     ## import setting from active measurement
     def importMntGrp(self):
-        conf = json.loads(self.getConfiguration())
+        conf = json.loads(self.mntGrpConfiguration())
         
         pools = self.__getPools()
         dsg = json.loads(self.dataSourceGroup)
@@ -1119,7 +1144,7 @@ class Settings(object):
     ## provides configuration of mntgrp
     # \param proxy DeviceProxy of mntgrp 
     # \returns string with mntgrp configuration
-    def getConfiguration(self, proxy=None):
+    def mntGrpConfiguration(self, proxy=None):
         if not proxy:
             pools = self.__getPools()
             if not self.state["MntGrp"]:
@@ -1135,7 +1160,7 @@ class Settings(object):
     ## check if active measurement group was changed
     # \returns True if it is different to the current setting
     def isMntGrpChanged(self):
-        mgconf = json.loads(self.getConfiguration())
+        mgconf = json.loads(self.mntGrpConfiguration())
         llconf, _ = self.createConfiguration()
         lsconf = json.loads(llconf)
         return not Utils.compareDict(mgconf, lsconf)

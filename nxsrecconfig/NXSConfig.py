@@ -531,6 +531,38 @@ class NXSRecSelector(PyTango.Device_4Impl):
         print >> self.log_info, "Attribute value = %s" % \
             self.stg.state["DataSourceGroup"]
 
+
+#------------------------------------------------------------------
+#    Read Configuration attribute
+#------------------------------------------------------------------
+    def read_Configuration(self, attr):
+        print >> self.log_info, "In ", self.get_name(), "::read_DataSources()"
+        attr.set_value(self.stg.configuration)
+
+
+#------------------------------------------------------------------
+#    Write Configuration attribute
+#------------------------------------------------------------------
+    def write_Configuration(self, attr):
+        print >> self.log_info, "In ", self.get_name(), \
+            "::write_Configuration()"
+        self.stg.configuration = attr.get_write_value()
+        print >> self.log_info, "Attribute value = %s" % \
+            self.stg.configuration
+        try:
+            dp = PyTango.DeviceProxy(str(self.get_name()))
+            for var in self.stg.state.keys():
+                if hasattr(dp, var):
+                    if isinstance(self.stg.state[var], unicode):
+                        dp.write_attribute(str(var), str(self.stg.state[var]))
+                    else:
+                        dp.write_attribute(str(var), self.stg.state[var])
+
+            self.set_state(PyTango.DevState.ON)
+        finally:
+            if self.get_state() == PyTango.DevState.RUNNING:
+                self.set_state(PyTango.DevState.ON)
+        
 #------------------------------------------------------------------
 #    Read AutomaticDataSources attribute
 #------------------------------------------------------------------
@@ -839,17 +871,17 @@ class NXSRecSelector(PyTango.Device_4Impl):
 
 
 #------------------------------------------------------------------
-#    GetConfiguration:
+#    MntGrpConfiguration:
 #
 #    Description:  returns mntgrp configuration
 #                
 #------------------------------------------------------------------
-    def GetConfiguration(self):
+    def MntGrpConfiguration(self):
         print >> self.log_info, "In ", self.get_name(), \
-            "::GetConfiguration()"
+            "::MntGrpConfiguration()"
         try:
             self.set_state(PyTango.DevState.RUNNING)
-            conf = str(self.stg.getConfiguration())
+            conf = str(self.stg.mntGrpConfiguration())
             self.set_state(PyTango.DevState.ON)
         finally:
             if self.get_state() == PyTango.DevState.RUNNING:
@@ -858,8 +890,8 @@ class NXSRecSelector(PyTango.Device_4Impl):
         return conf
 
 
-#---- GetConfiguration command State Machine -----------------
-    def is_GetConfiguration_allowed(self):
+#---- MntGrpConfiguration command State Machine -----------------
+    def is_MntGrpConfiguration_allowed(self):
         if self.get_state() in [PyTango.DevState.RUNNING]:
             return False
         return True
@@ -1238,9 +1270,9 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
         'UpdateMntGrp':
             [[PyTango.DevVoid, ""],
              [PyTango.DevString, "configuration"]],
-        'GetConfiguration':
+        'MntGrpConfiguration':
             [[PyTango.DevVoid, ""],
-             [PyTango.DevString, "configuration"]],
+             [PyTango.DevString, " mntcrp configuration"]],
         'IsMntGrpChanged':
             [[PyTango.DevVoid, ""],
              [PyTango.DevBoolean, "true if mntgrp changed"]],
@@ -1511,6 +1543,15 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
                 'label':" Full device names",
                 'description':"JSON Dictionary with full device names for " \
                     + " all aliases ",
+                'Display level':PyTango.DispLevel.EXPERT,
+            } ],
+        'Configuration':
+            [[PyTango.DevString,
+            PyTango.SCALAR,
+            PyTango.READ_WRITE],
+            {
+                'label':"configuration",
+                'description':"JSON dict of server configuration",
                 'Display level':PyTango.DispLevel.EXPERT,
             } ],
         'DataSourceGroup':
