@@ -739,11 +739,6 @@ class Settings(object):
 
 
 
-
-
-
-
-
     ## get method for ScanDir attribute
     # \returns name of ScanDir
     def __getScanDir(self):
@@ -941,7 +936,10 @@ class Settings(object):
     #        otherwise selectect, automatic and mandatory
     # \returns description of required components
     def __description(self, dstype = '', full = False):
-        describer = Describer(self.state["ConfigDevice"])
+
+        nexusconfig_device = Utils.openProxy(self.state["ConfigDevice"])
+        nexusconfig_device.Open()
+        describer = Describer(nexusconfig_device)
         cp = None
         if not full:
             cp = list(set(self.components()) | 
@@ -964,7 +962,9 @@ class Settings(object):
     ## checks client records
     def __checkClientRecords(self, datasources, pools):
 
-        describer = Describer(self.state["ConfigDevice"])
+        nexusconfig_device = Utils.openProxy(self.state["ConfigDevice"])
+        nexusconfig_device.Open()
+        describer = Describer(nexusconfig_device)
 
         frecords = Utils.getFullDeviceNames(pools)
 
@@ -1178,7 +1178,9 @@ class Settings(object):
             if dev not in fnames.keys():
                 nonexisting.append(dev)
         
-        describer = Describer(self.state["ConfigDevice"])
+        nexusconfig_device = Utils.openProxy(self.state["ConfigDevice"])
+        nexusconfig_device.Open()
+        describer = Describer(nexusconfig_device)
         acps = json.loads(self.state["AutomaticComponentGroup"])
         
         rcp = set()

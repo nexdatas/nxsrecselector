@@ -22,7 +22,6 @@
 
 import re
 import xml.dom.minidom
-from .Utils import Utils
 
 ## NeXus Sardana Recorder settings
 class Describer(object):
@@ -30,9 +29,8 @@ class Describer(object):
 
     ## constructor
     # \param configserver configuration server name
-    def __init__(self, configserver):
-        self.__server = configserver
-        self.__nexusconfig_device = None
+    def __init__(self, nexusconfig_device):
+        self.__nexusconfig_device = nexusconfig_device
 
     ## describes given components
     # \param components given components. 
@@ -44,32 +42,17 @@ class Describer(object):
     def components(self, components=None, strategy='', dstype=''):
         result = [{}, {}]
 
-        if self.__server:
-            self.__nexusconfig_device = Utils.openProxy(self.__server)
-            self.__nexusconfig_device.Open()
-            if components is not None:
-                cpp = self.__nexusconfig_device.AvailableComponents()  
-                cps = [cp for cp in components if cp in cpp]
-            else:
-                cps = self.__nexusconfig_device.AvailableComponents()  
-            if components is None:
-                mand = self.__nexusconfig_device.MandatoryComponents()
-                cps = list(set(cps)- set(mand))
+        if components is not None:
+            cpp = self.__nexusconfig_device.availableComponents()  
+            cps = [cp for cp in components if cp in cpp]
+        else:
+            cps = self.__nexusconfig_device.availableComponents()  
+        if components is None:
+            mand = self.__nexusconfig_device.mandatoryComponents()
+            cps = list(set(cps)- set(mand))
 
-            if components is None:
-                for cp in mand:
-                    dss = self.__getDataSourceAttributes(cp)  
-                    tr = {}
-                    for ds in dss.keys():
-                        for vds in dss[ds]:
-                            if (not strategy or vds[0] == strategy) and \
-                                    (not dstype or vds[1] == dstype):
-                                if ds not in tr:
-                                    tr[ds] = []
-                                tr[ds].append(vds)
-                    result[0][cp] = tr
-
-            for cp in cps:
+        if components is None:
+            for cp in mand:
                 dss = self.__getDataSourceAttributes(cp)  
                 tr = {}
                 for ds in dss.keys():
@@ -79,7 +62,19 @@ class Describer(object):
                             if ds not in tr:
                                 tr[ds] = []
                             tr[ds].append(vds)
-                result[1][cp] = tr
+                result[0][cp] = tr
+
+        for cp in cps:
+            dss = self.__getDataSourceAttributes(cp)  
+            tr = {}
+            for ds in dss.keys():
+                for vds in dss[ds]:
+                    if (not strategy or vds[0] == strategy) and \
+                            (not dstype or vds[1] == dstype):
+                        if ds not in tr:
+                            tr[ds] = []
+                        tr[ds].append(vds)
+            result[1][cp] = tr
         return result
 
     @classmethod
@@ -146,9 +141,7 @@ class Describer(object):
     # \param dstype list datasourcesonly with given type.
     #        If '' all available ones are taken
     def dataSources(self, names=None, dstype=''):                
-        self.__nexusconfig_device = Utils.openProxy(self.__server)
-        self.__nexusconfig_device.Open()
-        ads = self.__nexusconfig_device.AvailableDataSources()  
+        ads = self.__nexusconfig_device.availableDataSources()  
         if names is not None:
             dss = [name for name in names if name in ads]
         else:
@@ -168,7 +161,7 @@ class Describer(object):
         dstype = None
         record = None
         try:
-            dsource = self.__nexusconfig_device.DataSources([str(name)])
+            dsource = self.__nexusconfig_device.dataSources([str(name)])
         except:
             dsource = []
         if len(dsource)>0:
@@ -206,7 +199,7 @@ class Describer(object):
 
     def __getDataSourceAttributes(self, cp):         
         dss = {}
-        xmlc = self.__nexusconfig_device.Components([cp])
+        xmlc = self.__nexusconfig_device.components([cp])
         names = []
         if not len(xmlc)>0:
             return names
