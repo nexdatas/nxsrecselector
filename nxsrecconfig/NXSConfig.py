@@ -946,6 +946,68 @@ class NXSRecSelector(PyTango.Device_4Impl):
 
 
 
+#------------------------------------------------------------------
+#    ImportAllEnv:
+#
+#    Description: imports all environment variables
+#
+#                
+#------------------------------------------------------------------
+    def ImportAllEnv(self):
+        print >> self.log_info, "In ", self.get_name(), \
+            "::ImportMntGrp()"
+        try:
+            self.set_state(PyTango.DevState.RUNNING)
+            self.__stg.importAllEnv()
+
+            ## updating memorized attributes
+            dp = PyTango.DeviceProxy(str(self.get_name()))
+            for var in self.__stg.names():
+                if hasattr(dp, var):
+                    dp.write_attribute(str(var), self.__stg.value(var))
+
+            self.set_state(PyTango.DevState.ON)
+        finally:
+            if self.get_state() == PyTango.DevState.RUNNING:
+                self.set_state(PyTango.DevState.ON)
+
+
+#---- ImportMntGrp command State Machine -----------------
+    def is_ImportEnv_allowed(self):
+        if self.get_state() in [PyTango.DevState.RUNNING]:
+            return False
+        return True
+
+
+
+
+#------------------------------------------------------------------
+#    ExportAllEnv:
+#
+#    Description: exports all environment variables
+#
+#                
+#------------------------------------------------------------------
+    def ExportAllEnv(self):
+        print >> self.log_info, "In ", self.get_name(), \
+            "::ExportMntGrp()"
+        try:
+            self.set_state(PyTango.DevState.RUNNING)
+            self.__stg.exportAllEnv()
+            self.set_state(PyTango.DevState.ON)
+        finally:
+            if self.get_state() == PyTango.DevState.RUNNING:
+                self.set_state(PyTango.DevState.ON)
+
+
+#---- ExportMntGrp command State Machine -----------------
+    def is_ExportEnv_allowed(self):
+        if self.get_state() in [PyTango.DevState.RUNNING]:
+            return False
+        return True
+
+
+
 
 
 #------------------------------------------------------------------
@@ -1257,6 +1319,12 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
             [[PyTango.DevVoid, ""],
              [PyTango.DevVoid, ""]],
         'ImportMntGrp':
+            [[PyTango.DevVoid, ""],
+             [PyTango.DevVoid, ""]],
+        'ImportAllEnv':
+            [[PyTango.DevVoid, ""],
+             [PyTango.DevVoid, ""]],
+        'ExportAllEnv':
             [[PyTango.DevVoid, ""],
              [PyTango.DevVoid, ""]],
         'UpdateMntGrp':

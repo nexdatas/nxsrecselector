@@ -1308,3 +1308,50 @@ class Settings(object):
                     scanID = int(dc['new']["ScanID"])
                 msp.Environment = ['pickle', pk]
         return scanID
+
+
+
+
+    ## imports all Enviroutment Data
+    def importAllEnv(self):
+        params = ["ScanDir",
+                  "ScanFile"]
+        
+        res = {}
+        dp = Utils.openProxy(self.macroServer)
+        rec = dp.Environment
+        if rec[0] == 'pickle':
+            dc = pickle.loads(rec[1])
+            if 'new' in dc.keys() :
+                for var in self.names():
+                    name = var if var in params else ("NeXus%s" % var)
+                    if var in dc['new'].keys():
+                        self.__state[var] = dc['new'][name]
+                        
+
+    ## exports all Enviroutment Data
+    def exportAllEnv(self):
+        params = ["ScanDir",
+                  "ScanFile"]
+
+        commands = ["Components", 
+                    "automaticComponents",
+                    "dataSources"]
+
+        ms =  self.__getMacroServer()
+        msp = Utils.openProxy(ms)
+
+        rec = msp.Environment
+        if rec[0] == 'pickle':
+            dc = pickle.loads(rec[1])
+            if 'new' in dc.keys():
+                for var in self.names():
+                    name = var if var in params else ("NeXus%s" % var)
+                    dc['new'][str(name)] = self.__state[var]
+                pk = pickle.dumps(dc) 
+                msp.Environment = ['pickle', pk]
+
+
+#                keys = names()
+#                for var in keys:
+#                    
