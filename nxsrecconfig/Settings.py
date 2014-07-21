@@ -820,7 +820,7 @@ class Settings(object):
                 or not self.__state["ConfigDevice"]:
             self.__getConfigDevice()
         if self.__state["ConfigDevice"] and \
-                self.__state["ConfigDevice"].lower() == self.__moduleLabel:
+                self.__state["ConfigDevice"].lower() != self.__moduleLabel:
             self.__configProxy = Utils.openProxy(self.__state["ConfigDevice"])
             self.__configProxy.open()
             self.__configModule = None
@@ -863,25 +863,25 @@ class Settings(object):
     ## mandatory components
     # \returns list of mandatory components
     def mandatoryComponents(self):
-        return self.__configCommand("MandatoryComponents")
+        return self.__configCommand("mandatoryComponents")
 
 
     ## available components
     # \returns list of available components
     def availableComponents(self):
-        return self.__configCommand("AvailableComponents")
+        return self.__configCommand("availableComponents")
 
 
     ## available components
     # \returns list of component Variables
     def componentVariables(self, name):
-        return self.__configCommand("ComponentVariables", name)
+        return self.__configCommand("componentVariables", name)
 
 
     ## available datasources
     # \returns list of available datasources
     def availableDataSources(self):
-        return self.__configCommand("AvailableDataSources")
+        return self.__configCommand("availableDataSources")
 
     ## available pool channels
     # \returns pool channels of the macroserver pools
