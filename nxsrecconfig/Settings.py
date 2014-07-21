@@ -126,6 +126,10 @@ class Settings(object):
         ## config server proxy
         self.__configProxy = None
 
+        ## config server module
+        self.__configModule = None
+
+
         ## NeXus Data Writer device
         self.__state["WriterDevice"] = ''
 
@@ -147,7 +151,7 @@ class Settings(object):
         self.recorder_names = ['serialno', 'end_time', 'start_time', 
                                'point_nb', 'timestamps']
 
-
+        
     ## provides names of variables    
     def names(self):
         return  self.__state.keys()
@@ -214,7 +218,10 @@ class Settings(object):
                 or not self.__state["ConfigDevice"]:
             self.__state["ConfigDevice"] = Utils.getDeviceName(
                 self.__db, "NXSConfigServer")
-        return self.__state["ConfigDevice"]
+        res = self.__state["ConfigDevice"]
+        if str(res).lower() == 'module':
+            res = ''
+        return res
 
     ## set method for configDevice attribute
     # \param name of configDevice           
@@ -824,7 +831,10 @@ class Settings(object):
                 or not self.__state["WriterDevice"]:
             self.__state["WriterDevice"] = Utils.getDeviceName(
                 self.__db, "NXSDataWriter")
-        return self.__state["WriterDevice"]
+        res = self.__state["WriterDevice"]
+        if str(res).lower() == 'module':
+            res = ''
+        return res
 
     ## set method for writerDevice attribute
     # \param name of writerDevice           
@@ -901,33 +911,52 @@ class Settings(object):
     ## the json data string
     scanFile = property(__getScanFile, __setScanFile,
                        doc = 'scan file(s)')
-
+    
+    
+    ## sets config instances
+    # \returns set config instance
+    def __setConfigInstance(self):
+        if "configDevice" not in self.__state \
+                or not self.__state["ConfigDevice"]:
+            self.__getConfigDevice()
+        if self.__state["ConfigDevice"] and \
+                self.__state["ConfigDevice"].lower() == 'module':
+            self.__configProxy = Utils.openProxy(self.__state["ConfigDevice"])
+            self.__configProxy.open()
+            self.__configModule = None
+        else:     
+            from nxsconfigserver import XMLConfigurator
+            self.__configModule = XMLConfigurator.XMLConfigurator()
+            ms =  self.__getMacroServer()
+            dbp = Utils.getEnv('NeXusDBParams', ms)
+            if not dbp:
+                dbp = {} 
+            self.__configModule.jsonsettings = json.dumps(dbp)
+            self.__configModule.open()
+            self.__configProxy = None
+        return self.__configProxy \
+            if self.__configProxy else self.__configModule
 
 
     ## executes command on configuration server    
     # \returns command result
     def __configCommand(self, command, var = None):
-        if "configDevice" not in self.__state \
-                or not self.__state["ConfigDevice"]:
-            self.__getConfigDevice()
-        self.__configProxy = Utils.openProxy(self.__state["ConfigDevice"])
-        self.__configProxy.Open()
+        inst = self.__setConfigInstance()    
         if var is None:
-            res = getattr(self.__configProxy, command)()
+            res = getattr(inst, command)()
         else:
-            res = self.__configProxy.command_inout(command, var)
+            if self.__configProxy:
+                res = inst.command_inout(command, var)
+            else:
+                res = getattr(inst, command)(var)
         return res
 
 
     ## read configuration server attribute
     # \returns attribute value
     def __configAttr(self, attr):
-        if "configDevice" not in self.__state \
-                or not self.__state["ConfigDevice"]:
-            self.__getConfigDevice()
-        self.__configProxy = Utils.openProxy(self.__state["ConfigDevice"])
-        self.__configProxy.Open()
-        res = getattr(self.__configProxy, attr)
+        inst = self.__setConfigInstance()    
+        res = getattr(inst, attr)
         return res
         
 
@@ -1046,8 +1075,7 @@ class Settings(object):
     # \returns description of required components
     def __description(self, dstype = '', full = False):
 
-        nexusconfig_device = Utils.openProxy(self.__state["ConfigDevice"])
-        nexusconfig_device.Open()
+        nexusconfig_device = self.__setConfigInstance()    
         describer = Describer(nexusconfig_device)
         cp = None
         if not full:
@@ -1071,8 +1099,7 @@ class Settings(object):
     ## checks client records
     def __checkClientRecords(self, datasources, pools):
 
-        nexusconfig_device = Utils.openProxy(self.__state["ConfigDevice"])
-        nexusconfig_device.Open()
+        nexusconfig_device = self.__setConfigInstance()    
         describer = Describer(nexusconfig_device)
 
         frecords = Utils.getFullDeviceNames(pools)
@@ -1287,8 +1314,7 @@ class Settings(object):
             if dev not in fnames.keys():
                 nonexisting.append(dev)
         
-        nexusconfig_device = Utils.openProxy(self.__state["ConfigDevice"])
-        nexusconfig_device.Open()
+        nexusconfig_device = self.__setConfigInstance()    
         describer = Describer(nexusconfig_device)
         acps = json.loads(self.__state["AutomaticComponentGroup"])
         
@@ -1332,9 +1358,6 @@ class Settings(object):
     ## update a list of Disable DataSources
     # \returns list of disable datasources
     def disableDataSources(self):
-        if "configDevice" not in self.__state \
-                or not self.__state["ConfigDevice"]:
-            self.__getConfigDevice()
         res = self.__description()    
         dds = set()
 
