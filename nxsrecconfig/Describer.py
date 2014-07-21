@@ -25,7 +25,8 @@ import xml.dom.minidom
 
 ## NeXus Sardana Recorder settings
 class Describer(object):
-    """ Lists datasources, strategy, dstype and record name of given component """
+    """ Lists datasources, strategy, dstype and record name 
+        of given component """
 
     ## constructor
     # \param configserver configuration server name

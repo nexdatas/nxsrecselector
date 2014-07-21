@@ -765,7 +765,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
             dp = PyTango.DeviceProxy(str(self.get_name()))
             for var in self.__stg.names():
                 if hasattr(dp, var):
-                    dp.write_attribute(str(var), self.__stg.value(var)
+                    dp.write_attribute(str(var), self.__stg.value(var))
 
             self.set_state(PyTango.DevState.ON)
         finally:

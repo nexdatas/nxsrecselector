@@ -377,7 +377,7 @@ class Utils(object):
         return index
 
     @classmethod
-    def compareDict(self, dct, dct2):
+    def compareDict(cls, dct, dct2):
         if not isinstance(dct, dict):
             return False
         if not isinstance(dct2, dict):
@@ -385,12 +385,12 @@ class Utils(object):
         if len(dct.keys()) !=  len(dct2.keys()):
             return False
         status = True
-        for k,v in dct.items():
+        for k, v in dct.items():
             if k not in dct2.keys():
                 status = False
                 break
             if isinstance(v, dict):
-                status = self.compareDict(v, dct2[k])
+                status = Utils.compareDict(v, dct2[k])
                 if not status:
                     break
             else:

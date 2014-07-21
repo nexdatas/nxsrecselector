@@ -159,10 +159,10 @@ class Settings(object):
     def value(self, name):
         vl = ''
         if name in self.__state.keys():
-            if isinstance(self.__state[var], unicode):
-                vl =  str(self.__state[var])
+            if isinstance(self.__state[name], unicode):
+                vl =  str(self.__state[name])
             else:
-                vl =  self.__state[var]
+                vl =  self.__state[name]
         return vl
 
 
@@ -210,7 +210,8 @@ class Settings(object):
     ## get method for configDevice attribute
     # \returns name of configDevice           
     def __getConfigDevice(self):
-        if "ConfigDevice" not in self.__state or not self.__state["ConfigDevice"]:
+        if "ConfigDevice" not in self.__state \
+                or not self.__state["ConfigDevice"]:
             self.__state["ConfigDevice"] = Utils.getDeviceName(
                 self.__db, "NXSConfigServer")
         return self.__state["ConfigDevice"]
@@ -311,7 +312,7 @@ class Settings(object):
     componentsFromMntGrp = property(
         __getComponentsFromMntGrp, 
         __setComponentsFromMntGrp, 
-        doc = 'flag for components from measurement' group)
+        doc = 'flag for components from measurement group')
 
 
     ## set method for dynamicComponents attribute
@@ -329,7 +330,7 @@ class Settings(object):
     dynamicComponents = property(
         __getDynamicComponents, 
         __setDynamicComponents, 
-        doc = 'flag for dynamic components' group)
+        doc = 'flag for dynamic components')
 
 
 
@@ -349,7 +350,7 @@ class Settings(object):
     dynamicLinks = property(
         __getDynamicLinks, 
         __setDynamicLinks, 
-        doc = 'flag for dynamic component links' group)
+        doc = 'flag for dynamic component links')
 
 
 
@@ -369,7 +370,7 @@ class Settings(object):
     dynamicPath = property(
         __getDynamicPath, 
         __setDynamicPath, 
-        doc = 'dynamic path' group)
+        doc = 'dynamic path')
 
 
 
@@ -819,7 +820,8 @@ class Settings(object):
     ## get method for writerDevice attribute
     # \returns name of writerDevice           
     def __getWriterDevice(self):
-        if "WriterDevice" not in self.__state or not self.__state["WriterDevice"]:
+        if "WriterDevice" not in self.__state \
+                or not self.__state["WriterDevice"]:
             self.__state["WriterDevice"] = Utils.getDeviceName(
                 self.__db, "NXSDataWriter")
         return self.__state["WriterDevice"]
@@ -905,7 +907,8 @@ class Settings(object):
     ## executes command on configuration server    
     # \returns command result
     def __configCommand(self, command, var = None):
-        if "configDevice" not in self.__state or not self.__state["ConfigDevice"]:
+        if "configDevice" not in self.__state \
+                or not self.__state["ConfigDevice"]:
             self.__getConfigDevice()
         self.__configProxy = Utils.openProxy(self.__state["ConfigDevice"])
         self.__configProxy.Open()
@@ -919,7 +922,8 @@ class Settings(object):
     ## read configuration server attribute
     # \returns attribute value
     def __configAttr(self, attr):
-        if "configDevice" not in self.__state or not self.__state["ConfigDevice"]:
+        if "configDevice" not in self.__state \
+                or not self.__state["ConfigDevice"]:
             self.__getConfigDevice()
         self.__configProxy = Utils.openProxy(self.__state["ConfigDevice"])
         self.__configProxy.Open()
@@ -1220,7 +1224,7 @@ class Settings(object):
         dtimers = Utils.getAliases(pools, timers)
         otimers = list(dtimers.values())
         otimers.remove(dtimers[conf["timer"]])
-        otimers.insert(0,dtimers[conf["timer"]])
+        otimers.insert(0, dtimers[conf["timer"]])
 
         jdsg = json.dumps(dsg)
         if self.__state["DataSourceGroup"] != jdsg:
@@ -1231,7 +1235,7 @@ class Settings(object):
                                    self.__state["DataSourceGroup"])
         jhel = json.dumps(hel)
         if self.__state["HiddenElements"] != jhel:
-            self.__state["HiddenElements"] =jhel
+            self.__state["HiddenElements"] = jhel
             if self.__server:
                 dp = PyTango.DeviceProxy(str(self.__server.get_name()))
                 dp.write_attribute(str("HiddenElements"), 
@@ -1239,7 +1243,7 @@ class Settings(object):
 
         jtimers = json.dumps(otimers)
         if self.__state["Timer"] != jtimers:
-            self.__state["Timer"] =jtimers
+            self.__state["Timer"] = jtimers
             if self.__server:
                 dp = PyTango.DeviceProxy(str(self.__server.get_name()))
                 dp.write_attribute(str("Timer"), 
