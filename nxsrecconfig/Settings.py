@@ -37,74 +37,63 @@ class Settings(object):
         ## Tango server
         self.__server = server
 
+        ## default zone
+        self.__defaultzone = 'Europe/Berlin'
+        ## default mntgrp
+        self.__defaultmntgrp = 'nxsmntgrp'
+
+
         ##  dictionary with Settings 
         self.__state = {}
-
-
         ## timer
         self.__state["Timer"] = '[]'
-
         ## group of electable components
         self.__state["ComponentGroup"] = '{}'
-
         ## group of automatic components describing instrument state
         self.__state["AutomaticComponentGroup"] = '{}'
-
         ## automatic datasources
         self.__state["AutomaticDataSources"] = '[]'
-
         ## selected datasources
         self.__state["DataSourceGroup"] = '{}'
-
         ## group of optional components available for automatic selection
         self.__state["OptionalComponents"] = '{}'
-
-        
         ## appending new entries to existing file
         self.__state["AppendEntry"] = True
-        
         ## select components from the active measurement group
         self.__state["ComponentsFromMntGrp"] = False
-        
         ## Configuration Server variables
         self.__state["ConfigVariables"] = '{}'
-
         ## JSON with Client Data Record
         self.__state["DataRecord"] = '{}'
-
         ## JSON with Element Labels
         self.__state["Labels"] = '{}'
-
         ## JSON with NeXus paths for Label Paths
         self.__state["LabelPaths"] = '{}'
-
         ## JSON with NeXus paths for Label Links
         self.__state["LabelLinks"] = '{}'
-
         ## JSON with NeXus paths for Label Displays
         self.__state["HiddenElements"] = '[]'
-
         ## JSON with NeXus paths for Label Types
         self.__state["LabelTypes"] = '{}'
-
         ## JSON with NeXus paths for Label Shapes
         self.__state["LabelShapes"] = '{}'
-
         ## create dynamic components
         self.__state["DynamicComponents"] = True
-
         ## create links for dynamic components
         self.__state["DynamicLinks"] = True
-
         ## path for dynamic components
         self.__state["DynamicPath"] = \
             '/entry$var.serialno:NXentry/NXinstrument/NXcollection'
-
-        ## default zone
-        self.__defaultzone = 'Europe/Berlin'
-
         ## timezone
         self.__state["TimeZone"] = self.__defaultzone
+        ## Configuration Server device name
+        self.__state["ConfigDevice"] = ''
+        ## NeXus Data Writer device
+        self.__state["WriterDevice"] = ''
+        ## Door device name
+        self.__state["Door"] = ''
+        ## MntGrp
+        self.__state["MntGrp"] = ''
 
         ## configuration file
         self.configFile = '/tmp/nxsrecconfig.cfg'
@@ -112,42 +101,21 @@ class Settings(object):
         ## tango database
         self.__db = PyTango.Database()
 
-
-        ## Configuration Server device name
-        self.__state["ConfigDevice"] = ''
-
-        ## Door device name
-        self.__state["Door"] = ''
-
-        ## MntGrp
-        self.__state["MntGrp"] = ''
-
-
         ## config server proxy
         self.__configProxy = None
-
         ## config server module
         self.__configModule = None
-
-        ## config label
-        self.__moduleLabel ='module'
-
-        ## NeXus Data Writer device
-        self.__state["WriterDevice"] = ''
-
         ## config writer proxy
         self.__writerProxy = None
+        ## module label
+        self.__moduleLabel = 'module'
 
-        ## default mntgrp
-        self.__defaultmntgrp = 'nxsmntgrp'
-
+        ## macro server instance
+        self.__macroserver = ""
+        ## pool instances
+        self.__pools = []
         ## black list of pools
         self.poolBlacklist = []
-
-        self.__macroserver = ""
-
-
-        self.__pools = []
 
         ## Record names set by sardana
         self.recorder_names = ['serialno', 'end_time', 'start_time', 
