@@ -1334,9 +1334,11 @@ class Settings(object):
         params = ["ScanDir",
                   "ScanFile"]
 
-        commands = ["Components", 
-                    "automaticComponents",
-                    "dataSources"]
+        commands = {
+            "components":"NeXusComponents",
+            "automaticComponents":"NeXusAutomaticComponents",
+            "dataSources":"NeXusDataSources"
+            }
 
         ms =  self.__getMacroServer()
         msp = Utils.openProxy(ms)
@@ -1348,10 +1350,10 @@ class Settings(object):
                 for var in self.names():
                     name = var if var in params else ("NeXus%s" % var)
                     dc['new'][str(name)] = self.__state[var]
+                for attr, name in commands.items():
+                    vl = getattr(self, attr)()
+                    dc['new'][str(name)] = json.dumps(vl)
                 pk = pickle.dumps(dc) 
                 msp.Environment = ['pickle', pk]
 
 
-#                keys = names()
-#                for var in keys:
-#                    
