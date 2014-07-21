@@ -129,6 +129,8 @@ class Settings(object):
         ## config server module
         self.__configModule = None
 
+        ## config label
+        self.__moduleLabel ='module'
 
         ## NeXus Data Writer device
         self.__state["WriterDevice"] = ''
@@ -219,7 +221,7 @@ class Settings(object):
             self.__state["ConfigDevice"] = Utils.getDeviceName(
                 self.__db, "NXSConfigServer")
         res = self.__state["ConfigDevice"]
-        if str(res).lower() == 'module':
+        if str(res).lower() == self.__moduleLabel:
             res = ''
         return res
 
@@ -832,7 +834,7 @@ class Settings(object):
             self.__state["WriterDevice"] = Utils.getDeviceName(
                 self.__db, "NXSDataWriter")
         res = self.__state["WriterDevice"]
-        if str(res).lower() == 'module':
+        if str(res).lower() == self.__moduleLabel:
             res = ''
         return res
 
@@ -920,7 +922,7 @@ class Settings(object):
                 or not self.__state["ConfigDevice"]:
             self.__getConfigDevice()
         if self.__state["ConfigDevice"] and \
-                self.__state["ConfigDevice"].lower() == 'module':
+                self.__state["ConfigDevice"].lower() == self.__moduleLabel:
             self.__configProxy = Utils.openProxy(self.__state["ConfigDevice"])
             self.__configProxy.open()
             self.__configModule = None
