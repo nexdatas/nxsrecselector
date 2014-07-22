@@ -842,10 +842,15 @@ class Settings(object):
             from nxsconfigserver import XMLConfigurator
             self.__configModule = XMLConfigurator.XMLConfigurator()
             ms =  self.__getMacroServer()
-            dbp = Utils.getEnv('NeXusDBParams', ms)
-            if not dbp:
-                dbp = {} 
-            self.__configModule.jsonsettings = json.dumps(dbp)
+
+            data = {}
+            self.__importEnv(['DBParams'], data)
+            if 'DBParams' in data.keys():
+                dbp = data['DBParams']
+            else:
+                dbp = '{}'
+                
+            self.__configModule.jsonsettings = dbp
             self.__configModule.open()
             self.__configProxy = None
         return self.__configProxy \
@@ -1328,6 +1333,12 @@ class Settings(object):
 
     ## imports all Enviroutment Data
     def importAllEnv(self):
+        self.__importEnv(self.names(), self.__state)
+        
+    ## imports Enviroutment Data
+    # \param names names of required variables
+    # \param data dictionary with resulting data     
+    def __importEnv(self, names, data):
         params = ["ScanDir",
                   "ScanFile"]
         
@@ -1338,24 +1349,28 @@ class Settings(object):
             dc = pickle.loads(rec[1])
             if 'new' in dc.keys() and self.__nxsenv in dc['new'].keys():
                 nenv = dc['new'][self.__nxsenv]
-                for var in self.names():
+                for var in names:
                     name = var if var in params else ("NeXus%s" % var)
                     if var in params:
                         if name in dc['new'].keys():
                             vl = dc['new'][name]
                             if type(vl) not in [str, bool, int]:
                                 vl = json.dumps(vl)
-                            self.__state[var] = vl
+                            data[var] = vl
                     else:    
-                        if name in nenv.keys():
-                            vl = nenv[name]
+                        if var in nenv.keys():
+                            vl = nenv[var]
                             if type(vl) not in [str, bool, int]:
                                 vl = json.dumps(vl)
-                            self.__state[var] = vl
+                            data[var] = vl
                   
 
     ## exports all Enviroutment Data
     def exportAllEnv(self):
+        self.__exportEnv(self.__state)
+
+    ## exports all Enviroutment Data
+    def __exportEnv(self, data):
         params = ["ScanDir",
                   "ScanFile"]
 
@@ -1376,14 +1391,14 @@ class Settings(object):
                          or not isinstance(dc['new'][self.__nxsenv], dict):
                      dc['new'][self.__nxsenv] = {}
                  nenv = dc['new'][self.__nxsenv] 
-                 for var in self.names():
+                 for var in data.keys():
                     if var in self.__pureVar:
-                        vl = self.__state[var]
+                        vl = data[var]
                     else:    
                         try:
-                            vl = json.loads(self.__state[var])
+                            vl = json.loads(data[var])
                         except ValueError:
-                            vl = self.__state[var]
+                            vl = data[var]
                     if var in params:
                         dc['new'][str(var)] = vl
                     else:
