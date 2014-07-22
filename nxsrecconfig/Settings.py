@@ -42,6 +42,19 @@ class Settings(object):
         ## default mntgrp
         self.__defaultmntgrp = 'nxsmntgrp'
 
+        self.__pureVar = [
+            "AppendEntry",
+            "ComponentsFromMntGrp",
+            "DynamicComponents",
+            "DynamicLinks",
+            "DynamicPath",
+            "TimeZone",
+            "ConfigDevice",
+            "WriterDevice",
+            "Door",
+            "MntGrp",
+            "ScanDir"
+            ]
 
         ##  dictionary with Settings 
         self.__state = {}
@@ -121,7 +134,8 @@ class Settings(object):
         self.recorder_names = ['serialno', 'end_time', 'start_time', 
                                'point_nb', 'timestamps']
 
-        
+        self.__nxsenv = "NeXusConfiguration"
+
     ## provides names of variables    
     def names(self):
         return  self.__state.keys()
@@ -1322,12 +1336,23 @@ class Settings(object):
         rec = dp.Environment
         if rec[0] == 'pickle':
             dc = pickle.loads(rec[1])
-            if 'new' in dc.keys() :
+            if 'new' in dc.keys() and self.__nxsenv in dc['new'].keys():
+                nenv = dc['new'][self.__nxsenv]
                 for var in self.names():
                     name = var if var in params else ("NeXus%s" % var)
-                    if var in dc['new'].keys():
-                        self.__state[var] = dc['new'][name]
-                        
+                    if var in params:
+                        if name in dc['new'].keys():
+                            vl = dc['new'][name]
+                            if type(vl) not in [str, bool, int]:
+                                vl = json.dumps(vl)
+                            self.__state[var] = vl
+                    else:    
+                        if name in nenv.keys():
+                            vl = nenv[name]
+                            if type(vl) not in [str, bool, int]:
+                                vl = json.dumps(vl)
+                            self.__state[var] = vl
+                  
 
     ## exports all Enviroutment Data
     def exportAllEnv(self):
@@ -1335,9 +1360,9 @@ class Settings(object):
                   "ScanFile"]
 
         commands = {
-            "components":"NeXusComponents",
-            "automaticComponents":"NeXusAutomaticComponents",
-            "dataSources":"NeXusDataSources"
+            "components":"Components",
+            "automaticComponents":"AutomaticComponents",
+            "dataSources":"DataSources"
             }
 
         ms =  self.__getMacroServer()
@@ -1345,15 +1370,28 @@ class Settings(object):
 
         rec = msp.Environment
         if rec[0] == 'pickle':
-            dc = pickle.loads(rec[1])
-            if 'new' in dc.keys():
-                for var in self.names():
-                    name = var if var in params else ("NeXus%s" % var)
-                    dc['new'][str(name)] = self.__state[var]
-                for attr, name in commands.items():
-                    vl = getattr(self, attr)()
-                    dc['new'][str(name)] = json.dumps(vl)
-                pk = pickle.dumps(dc) 
-                msp.Environment = ['pickle', pk]
+             dc = pickle.loads(rec[1])
+             if 'new' in dc.keys():
+                 if self.__nxsenv not in dc['new'].keys() \
+                         or not isinstance(dc['new'][self.__nxsenv], dict):
+                     dc['new'][self.__nxsenv] = {}
+                 nenv = dc['new'][self.__nxsenv] 
+                 for var in self.names():
+                    if var in self.__pureVar:
+                        vl = self.__state[var]
+                    else:    
+                        try:
+                            vl = json.loads(self.__state[var])
+                        except ValueError:
+                            vl = self.__state[var]
+                    if var in params:
+                        dc['new'][str(var)] = vl
+                    else:
+                        nenv[("%s" % var)] = vl
 
-
+                    
+                 for attr, name in commands.items():
+                     vl = getattr(self, attr)()
+                     nenv[str(name)] = vl
+                 pk = pickle.dumps(dc) 
+                 msp.Environment = ['pickle', pk]
