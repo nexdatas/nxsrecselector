@@ -115,7 +115,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
 #------------------------------------------------------------------
     def read_Components(self, attr):
         print >> self.log_info, "In ", self.get_name(), "::read_Components()"
-        attr.set_value(self.__stg.components())
+        attr.set_value(self.__stg.components)
 
 
 #------------------------------------------------------------------
@@ -184,7 +184,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
     def read_AutomaticComponents(self, attr):
         print >> self.log_info, "In ", self.get_name(), \
             "::read_AutomaticComponents()"
-        attr.set_value(self.__stg.automaticComponents())
+        attr.set_value(self.__stg.automaticComponents)
 
 
 #------------------------------------------------------------------
@@ -477,7 +477,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
 #------------------------------------------------------------------
     def read_DataSources(self, attr):
         print >> self.log_info, "In ", self.get_name(), "::read_DataSources()"
-        attr.set_value(self.__stg.dataSources())
+        attr.set_value(self.__stg.dataSources)
 
 #------------------------------------------------------------------
 #    Read AvailableTimers attribute
@@ -485,7 +485,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
     def read_AvailableTimers(self, attr):
         print >> self.log_info, "In ", self.get_name(), \
             "::read_AvailableTimers()"
-        attr.set_value(self.__stg.availableTimers())
+        attr.set_value(self.__stg.availableTimers)
 
 
 #------------------------------------------------------------------
@@ -493,7 +493,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
 #------------------------------------------------------------------
     def read_Description(self, attr):
         print >> self.log_info, "In ", self.get_name(), "::read_Description()"
-        attr.set_value(self.__stg.description())
+        attr.set_value(self.__stg.description)
 
 #------------------------------------------------------------------
 #    Read VariableComponents attribute
@@ -501,7 +501,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
     def read_VariableComponents(self, attr):
         print >> self.log_info, "In ", self.get_name(), \
             "::read_VariableComponents()"
-        attr.set_value(self.__stg.variableComponents())
+        attr.set_value(self.__stg.variableComponents)
 
 
 #------------------------------------------------------------------
@@ -510,7 +510,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
     def read_FullDeviceNames(self, attr):
         print >> self.log_info, "In ", self.get_name(), \
             "::read_FullDeviceNames()"
-        attr.set_value(self.__stg.fullDeviceNames())
+        attr.set_value(self.__stg.fullDeviceNames)
 
 
 #------------------------------------------------------------------
@@ -588,7 +588,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
     def read_DisableDataSources(self, attr):
         print >> self.log_info, "In ", self.get_name(), \
             "::read_DisableDataSources()"
-        attr.set_value(self.__stg.disableDataSources())
+        attr.set_value(self.__stg.disableDataSources)
 
 
 

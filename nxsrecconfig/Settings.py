@@ -156,7 +156,7 @@ class Settings(object):
 
     ## provides selected components
     # \returns list of available selected components
-    def components(self):
+    def __components(self):
         cps = json.loads(self.__state["ComponentGroup"])
         ads = json.loads(self.dataSourceGroup)
         dss = [ds for ds in ads if ads[ds]]
@@ -169,10 +169,15 @@ class Settings(object):
                     res.append(ds)                
         return res
 
+    ##  provides selected components
+    components = property(
+        __components,
+        doc = ' provides selected components')
+
 
     ## provides automatic components
     # \returns list of available automatic components
-    def automaticComponents(self):
+    def __automaticComponents(self):
         self.updateControllers()
         cps = json.loads(self.__state["AutomaticComponentGroup"])
         if isinstance(cps, dict):
@@ -180,11 +185,15 @@ class Settings(object):
         else:
             return []
         
+    ## provides automatic components
+    automaticComponents = property(__automaticComponents,
+                            doc = ' provides automatic components')
+
 
     ## provides selected datasources
     # \returns list of available selected datasources
-    def dataSources(self):
-        dds = self.disableDataSources()
+    def __dataSources(self):
+        dds = self.disableDataSources
         if not isinstance(dds, list):
             dds = []
         dss = json.loads(self.__state["DataSourceGroup"])
@@ -192,6 +201,11 @@ class Settings(object):
             return [ds for ds in dss.keys() if dss[ds] and ds not in dds]
         else:
             return []
+
+    ##  provides selected data sources
+    dataSources = property(
+        __dataSources,
+        doc = ' provides selected data sources')
 
 
     ## get method for configDevice attribute
@@ -841,7 +855,7 @@ class Settings(object):
         else:     
             from nxsconfigserver import XMLConfigurator
             self.__configModule = XMLConfigurator.XMLConfigurator()
-            ms =  self.__getMacroServer()
+            _ =  self.__getMacroServer()
 
             data = {}
             self.__importEnv(['DBParams'], data)
@@ -962,7 +976,7 @@ class Settings(object):
 
     ## provides components for all variables
     # \returns dictionary with components for all variables 
-    def variableComponents(self):
+    def __variableComponents(self):
         acp = self.availableComponents()
         vrs = {}
         for c in acp:
@@ -977,14 +991,25 @@ class Settings(object):
         jdc = json.dumps(vrs)
         return jdc
 
+    ##  provides components for all variables
+    variableComponents = property(
+        __variableComponents,
+        doc = 'provides components for all variables')
+
+
 
     ## provides description of all components        
     # \returns JSON string with description of all components
-    def description(self):
-        dc = self.__description(full = True)
+    def __description(self):
+        dc = self.__cpdescription(full = True)
         jdc = json.dumps(dc)
         return jdc
 
+    ##  provides description of all components
+    description = property(__description,
+                            doc = 'provides description of all components')
+
+    
 
     ## provides description of components        
     # \param dstype list datasets only with given datasource type.
@@ -992,14 +1017,14 @@ class Settings(object):
     # \param full if True describes all available ones are taken
     #        otherwise selectect, automatic and mandatory
     # \returns description of required components
-    def __description(self, dstype = '', full = False):
+    def __cpdescription(self, dstype = '', full = False):
 
         nexusconfig_device = self.__setConfigInstance()    
         describer = Describer(nexusconfig_device)
         cp = None
         if not full:
-            cp = list(set(self.components()) | 
-            set(self.automaticComponents()) | 
+            cp = list(set(self.components) | 
+            set(self.automaticComponents) | 
             set(self.mandatoryComponents()))
             res = describer.components(cp, 'STEP', dstype)
         else:
@@ -1009,9 +1034,15 @@ class Settings(object):
 
     ## provides full names of pool devices
     # \returns JSON string with full names of pool devices
-    def fullDeviceNames(self):
+    def __fullDeviceNames(self):
         pools = self.__getPools()
         return  json.dumps(Utils.getFullDeviceNames(pools))
+
+    ## provides full names of pool devices
+    fullDeviceNames = property(
+        __fullDeviceNames,
+        doc = ' provides full names of pool devices')
+
         
 
     ## checks client records
@@ -1026,8 +1057,8 @@ class Settings(object):
             set(datasources) - set(frecords.keys()), 'CLIENT')
         records = [str(dsr[2]) for dsr in dsres.values()]
         
-        cp = list(set(self.components()) | 
-                  set(self.automaticComponents()) | 
+        cp = list(set(self.components) | 
+                  set(self.automaticComponents) | 
                   set(self.mandatoryComponents()))
         cpres = describer.components(cp, '', 'CLIENT')
         for grp in cpres:
@@ -1056,7 +1087,6 @@ class Settings(object):
     ## set active measurement group from components
     def createConfiguration(self):
         pools = self.__getPools()
-#        timerable = self.availableTimers()
         cnf = {}
         cnf['controllers'] = {} 
         cnf['description'] = "Measurement Group" 
@@ -1065,7 +1095,7 @@ class Settings(object):
         timers = json.loads(self.__state["Timer"])
         timer =  timers[0] if timers else ''
 
-        datasources = self.dataSources()
+        datasources = self.dataSources
         hidden = json.loads(self.__state["HiddenElements"])
         dontdisplay = set(hidden)
 
@@ -1080,7 +1110,7 @@ class Settings(object):
             raise Exception(
                 "Timer or Monitor not defined")
 
-        res = self.__description('CLIENT')
+        res = self.__cpdescription('CLIENT')
         
         for grp in res:
             for cp, dss in grp.items():
@@ -1261,9 +1291,14 @@ class Settings(object):
 
     ## provides available Timers from MacroServer pools            
     # \returns  available Timers from MacroServer pools            
-    def availableTimers(self):
+    def __availableTimers(self):
         pools = self.__getPools()
         return Utils.getTimers(pools)
+
+    ##  provides description of all components
+    availableTimers = property(
+        __availableTimers,
+        doc = 'provides available Timers from MacroServer pools')
 
 
     ## provides full name of Measurement group
@@ -1274,10 +1309,10 @@ class Settings(object):
         return Utils.getMntGrpName(pools, name)
         
 
-    ## update a list of Disable DataSources
+    ## provides a list of Disable DataSources
     # \returns list of disable datasources
-    def disableDataSources(self):
-        res = self.__description()    
+    def __disableDataSources(self):
+        res = self.__cpdescription()    
         dds = set()
 
         for dss in res[1].values():
@@ -1286,6 +1321,12 @@ class Settings(object):
                     dds.add(ds)
         return list(dds)
             
+
+    ##  provides a list of Disable DataSources
+    disableDataSources = property(
+        __disableDataSources,
+        doc = 'provides a list of Disable DataSources')
+
 
     ## fetches Enviroutment Data
     # \returns JSON String with important variables
@@ -1342,7 +1383,6 @@ class Settings(object):
         params = ["ScanDir",
                   "ScanFile"]
         
-        res = {}
         dp = Utils.openProxy(self.macroServer)
         rec = dp.Environment
         if rec[0] == 'pickle':
@@ -1385,13 +1425,13 @@ class Settings(object):
 
         rec = msp.Environment
         if rec[0] == 'pickle':
-             dc = pickle.loads(rec[1])
-             if 'new' in dc.keys():
-                 if self.__nxsenv not in dc['new'].keys() \
-                         or not isinstance(dc['new'][self.__nxsenv], dict):
-                     dc['new'][self.__nxsenv] = {}
-                 nenv = dc['new'][self.__nxsenv] 
-                 for var in data.keys():
+            dc = pickle.loads(rec[1])
+            if 'new' in dc.keys():
+                if self.__nxsenv not in dc['new'].keys() \
+                        or not isinstance(dc['new'][self.__nxsenv], dict):
+                    dc['new'][self.__nxsenv] = {}
+                nenv = dc['new'][self.__nxsenv] 
+                for var in data.keys():
                     if var in self.__pureVar:
                         vl = data[var]
                     else:    
@@ -1405,8 +1445,8 @@ class Settings(object):
                         nenv[("%s" % var)] = vl
 
                     
-                 for attr, name in commands.items():
-                     vl = getattr(self, attr)()
-                     nenv[str(name)] = vl
-                 pk = pickle.dumps(dc) 
-                 msp.Environment = ['pickle', pk]
+                for attr, name in commands.items():
+                    vl = getattr(self, attr)
+                    nenv[str(name)] = vl
+                pk = pickle.dumps(dc) 
+                msp.Environment = ['pickle', pk]
