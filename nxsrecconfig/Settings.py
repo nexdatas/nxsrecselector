@@ -219,7 +219,7 @@ class Settings(object):
         if name:
             if name != self.__moduleLabel:
                 try:
-                    dp = Utils.getProxy()
+                    dp = Utils.getProxies([name])
                     if not dp:
                         self.__state["ConfigDevice"] = ''
                         name = ''
