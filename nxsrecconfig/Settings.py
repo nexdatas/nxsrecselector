@@ -215,15 +215,23 @@ class Settings(object):
                 or not self.__state["ConfigDevice"]:
             self.__state["ConfigDevice"] = Utils.getDeviceName(
                 self.__db, "NXSConfigServer")
-        res = self.__state["ConfigDevice"]
-        if str(res).lower() == self.__moduleLabel:
-            res = ''
-        return res
+        name = self.__state["ConfigDevice"]
+        if name:
+            if name != self.__moduleLabel:
+                try:
+                    dp = Utils.getProxy()
+                    if not dp:
+                        self.__state["ConfigDevice"] = ''
+                        name = ''
+                except:
+                    self.__state["ConfigDevice"] = ''
+                    name = ''
+        return name
 
     ## set method for configDevice attribute
     # \param name of configDevice           
     def __setConfigDevice(self, name):
-        if name:
+        if name:            
             self.__state["ConfigDevice"] = name
         else:
             self.__state["ConfigDevice"] = Utils.getDeviceName(
@@ -766,8 +774,6 @@ class Settings(object):
             self.__state["WriterDevice"] = Utils.getDeviceName(
                 self.__db, "NXSDataWriter")
         res = self.__state["WriterDevice"]
-        if str(res).lower() == self.__moduleLabel:
-            res = ''
         return res
 
     ## set method for writerDevice attribute
@@ -844,7 +850,7 @@ class Settings(object):
     ## sets config instances
     # \returns set config instance
     def __setConfigInstance(self):
-        if "configDevice" not in self.__state \
+        if "ConfigDevice" not in self.__state \
                 or not self.__state["ConfigDevice"]:
             self.__getConfigDevice()
         if self.__state["ConfigDevice"] and \
