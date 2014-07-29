@@ -1,3 +1,7 @@
+2014-07-29 Jan Kotanski <jankotan@gmail.com>
+	* passing proper message if 1/2D device is not running
+	* tagged as v1.7.1
+
 2014-07-24 Jan Kotanski <jankotan@gmail.com>
 	* making python API similar to Tango API
 	* tagged as v1.7.0

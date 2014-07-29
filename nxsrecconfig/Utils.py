@@ -279,13 +279,18 @@ class Utils(object):
         dt = 'float64'
         ut = 'No units'
         ap = PyTango.AttributeProxy(source)
+        da = None
+        ac = None
+
         try:
             ac = ap.get_config()
             if ac.data_format != PyTango.AttrDataFormat.SCALAR:
                 da = ap.read()
                 vl = da.value
-        except Exception:
-            pass
+        except Exception as e:
+            if ac and ac.data_format != PyTango.AttrDataFormat.SCALAR \
+                    and da is None:
+                raise
 
         if vl is not None:
             shp = list(numpy.shape(vl)) 
