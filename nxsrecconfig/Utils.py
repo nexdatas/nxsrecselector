@@ -165,7 +165,8 @@ class Utils(object):
     def getFullDeviceNames(cls, pools, names = None):
         lst = []
         for pool in pools:
-            lst += pool.AcqChannelList
+            if pool.AcqChannelList:
+                lst += pool.AcqChannelList
         argout = {}
         for elm in lst:
             chan = json.loads(elm)
@@ -183,7 +184,8 @@ class Utils(object):
     def getAliases(cls, pools, names = None):
         lst = []
         for pool in pools:
-            lst += pool.AcqChannelList
+            if pool.AcqChannelList:
+                lst += pool.AcqChannelList
         argout = {}
         for elm in lst:
             chan = json.loads(elm)
@@ -203,7 +205,8 @@ class Utils(object):
     def getMntGrpName(cls, pools, name):
         lst = []
         for pool in pools:
-            lst += pool.MeasurementGroupList
+            if pool.MeasurementGroupList:
+                lst += pool.MeasurementGroupList
         argout = ""
         for elm in lst:
             chan = json.loads(elm)
@@ -222,7 +225,7 @@ class Utils(object):
     def getDeviceControllers(cls, pools, devices):
         lst = []
         for pool in pools:
-            if not pool.ExpChannelList is None:
+            if pool.ExpChannelList:
                 lst += pool.ExpChannelList
         ctrls = {}
         for elm in lst:
@@ -241,7 +244,7 @@ class Utils(object):
         lst = []
         res = []
         for pool in pools:
-            if not pool.ExpChannelList is None:
+            if pool.ExpChannelList:
                 lst += pool.ExpChannelList
         for elm in lst:
             chan = json.loads(elm)
