@@ -96,7 +96,7 @@ class Settings(object):
         self.__state["DynamicLinks"] = True
         ## path for dynamic components
         self.__state["DynamicPath"] = \
-            '/entry$var.serialno:NXentry/NXinstrument/NXcollection'
+            '/entry$var.serialno:NXentry/NXinstrument/collection'
         ## timezone
         self.__state["TimeZone"] = self.__defaultzone
         ## Configuration Server device name
