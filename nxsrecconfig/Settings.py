@@ -929,14 +929,16 @@ class Settings(object):
         ms =  self.__getMacroServer()
         msp = Utils.openProxy(ms)
         pn = msp.get_property("PoolNames")["PoolNames"]
-        if len(pn)>0:
-            pool = Utils.openProxy(pn[0])
-            exps = pool.ExpChannelList
-            for jexp in exps:
-                if jexp:
-                    exp = json.loads(jexp)
-                    if exp and isinstance(exp, dict):
-                        res.append(exp['name'])
+        if pn:
+            for pl in pn:    
+                pool = Utils.openProxy(pl)
+                exps = pool.ExpChannelList
+                if exps:
+                    for jexp in exps:
+                        if jexp:
+                            exp = json.loads(jexp)
+                            if exp and isinstance(exp, dict):
+                                res.append(exp['name'])
         return res
 
 
@@ -947,14 +949,16 @@ class Settings(object):
         ms =  self.__getMacroServer()
         msp = Utils.openProxy(ms)
         pn = msp.get_property("PoolNames")["PoolNames"]
-        if len(pn)>0:
-            pool = Utils.openProxy(pn[0])
-            exps = pool.MotorList
-            for jexp in exps:
-                if jexp:
-                    exp = json.loads(jexp)
-                    if exp and isinstance(exp, dict):
-                        res.append(exp['name'])
+        if pn:
+            for pl in pn:    
+                pool = Utils.openProxy(pn[0])
+                exps = pool.MotorList
+                if exps:
+                    for jexp in exps:
+                        if jexp:
+                            exp = json.loads(jexp)
+                            if exp and isinstance(exp, dict):
+                                res.append(exp['name'])
         return res
 
 
@@ -1089,6 +1093,36 @@ class Settings(object):
             raise Exception(
                 "User Data not defined %s" % str(missing))
         
+    def __createMntGrp(self, ms, mntGrpName, timer, pools):
+        pool = None
+        amntgrp = Utils.getEnv('ActiveMntGrp', ms)
+        msp = Utils.openProxy(ms)
+        pn = msp.get_property("PoolNames")["PoolNames"]
+        apool = None
+        lpool = [None,0]
+        fpool = None
+        for pl in pn:
+            pool = Utils.openProxy(pl)
+            if not fpool:
+                fpool = pool
+            mntgrps = Utils.getMntGrps(pool)
+            if amntgrp in mntgrps:
+                apool = pool
+            if lpool[1] < len(mntgrps):
+                lpool = [pool, len(mntgrps)]        
+                
+        if not apool:
+            apool = lpool[0]
+        lpool = None    
+        if not apool and fpool:
+            apool = fpool
+        fpool = None    
+        if not apool and len(pools)> 0 :
+            apool = pools[0]
+        if apool:
+            apool.CreateMeasurementGroup([mntGrpName, timer])
+            mfullname = str(Utils.getMntGrpName(pools, mntGrpName))
+        return mfullname    
 
     ## set active measurement group from components
     def createConfiguration(self):
@@ -1125,6 +1159,7 @@ class Settings(object):
                     aliases.append(str(ds))
                     if not ndcp and str(ds) in dontdisplay:
                         dontdisplay.remove(str(ds))
+                        
         aliases = list(set(aliases))
 
         if not self.__state["MntGrp"]:
@@ -1132,16 +1167,9 @@ class Settings(object):
         mntGrpName = self.__state["MntGrp"]
         mfullname = str(Utils.getMntGrpName(pools, mntGrpName))
         ms =  self.__getMacroServer()
+
         if not mfullname:
-            msp = Utils.openProxy(ms)
-            pn = msp.get_property("PoolNames")["PoolNames"]
-            if len(pn)>0:
-                pool = Utils.openProxy(pn[0])
-            if not pool and len(pools)> 0 :
-                pool = pools[0]
-            if pool:
-                pool.CreateMeasurementGroup([mntGrpName, timer])
-                mfullname = str(Utils.getMntGrpName(pools, mntGrpName))
+            mfullname = self.__createMntGrp(ms, mntGrpName, timer, pools)
 
         Utils.setEnv('ActiveMntGrp', mntGrpName, ms)
         cnf['label'] = mntGrpName

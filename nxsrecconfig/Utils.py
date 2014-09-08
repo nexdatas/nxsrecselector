@@ -215,6 +215,21 @@ class Utils(object):
                 break
         return argout
 
+    ## find measurement group from alias
+    # \param cls class instance
+    # \param pool pool device
+    # \returns name of measurement group
+    @classmethod
+    def getMntGrps(cls, pool):
+        lst = []
+        if pool.MeasurementGroupList:
+            lst += pool.MeasurementGroupList
+        argout = []
+        for elm in lst:
+            chan = json.loads(elm)
+            argout.append(chan['name'])
+        return argout
+
 
     ## provides device controller full names
     # \param cls class instance

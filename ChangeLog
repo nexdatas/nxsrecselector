@@ -1,3 +1,8 @@
+2014-09-08 Jan Kotanski <jankotan@gmail.com>
+	* adding a guess for active pool if more then one
+	* adding fixes for empty pool
+	* tagged as v1.7.3
+
 2014-08-27 Jan Kotanski <jankotan@gmail.com>
 	* fixes for empty pool lists
 	* tagged as v1.7.2
