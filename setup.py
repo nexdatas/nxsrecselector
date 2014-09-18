@@ -39,7 +39,8 @@ def read(fname):
 ## required files
 required = [
     'numpy (>=1.5.0)',
-    'PyTango (>=7.2.2)'
+    'PyTango (>=7.2.2)',
+    'taurus (>=3.2.0)'
     ]
 
 ## metadata for distutils
