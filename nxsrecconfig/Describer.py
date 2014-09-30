@@ -86,7 +86,8 @@ class Describer(object):
     #        If '' all available ones are taken
     # \param dstype list datasets only with given datasource type.
     #        If '' all available ones are taken
-    def final(self, components=None, strategy='', dstype=''):
+    # \param cfvars configuration variables
+    def final(self, components=None, strategy='', dstype='', cfvars=None):
         result = [{}, {}]
 
         if components is not None:
@@ -95,7 +96,7 @@ class Describer(object):
         else:
             cps = self.__nexusconfig_device.availableComponents()
 
-        dss = self.__getDataSetAttributes(cps)
+        dss = self.__getDataSetAttributes(cps, cfvars)
         tr = []
         for ds in dss.keys():
             for vds in dss[ds]:
@@ -262,7 +263,9 @@ class Describer(object):
             return names
         return self.__getXMLAttributes(xmlc[0])
 
-    def __getDataSetAttributes(self, cps):
+    def __getDataSetAttributes(self, cps, cfvars=None):
+        if cfvars:
+            self.__nexusconfig_device.variables = cfvars
         self.__nexusconfig_device.createConfiguration(cps)
         cpxml = str(self.__nexusconfig_device.xmlstring)
         names = []
