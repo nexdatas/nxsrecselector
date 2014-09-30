@@ -1020,6 +1020,22 @@ class Settings(object):
                             doc = 'provides description of all components')
 
     
+    ## provides description of client datasoueces
+    # \returns JSON string with description of client datasources
+    def __clientSources(self):
+        nexusconfig_device = self.__setConfigInstance()    
+        describer = Describer(nexusconfig_device)
+        cp = None
+        cp = list(set(self.components) | 
+                  set(self.automaticComponents))
+        dc = describer.final(cp, '', 'CLIENT')
+        jdc = json.dumps(dc)
+        return jdc
+
+    ##  provides description of client datasources
+    clientSources = property(__clientSources,
+                          doc = 'provides description of step client datasources')
+
 
     ## provides description of components        
     # \param dstype list datasets only with given datasource type.

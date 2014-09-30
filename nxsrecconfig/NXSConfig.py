@@ -496,6 +496,13 @@ class NXSRecSelector(PyTango.Device_4Impl):
         attr.set_value(self.__stg.description)
 
 #------------------------------------------------------------------
+#    Read ClientSources attribute
+#------------------------------------------------------------------
+    def read_ClientSources(self, attr):
+        print >> self.log_info, "In ", self.get_name(), "::read_ClientSources()"
+        attr.set_value(self.__stg.clientSources)
+
+#------------------------------------------------------------------
 #    Read VariableComponents attribute
 #------------------------------------------------------------------
     def read_VariableComponents(self, attr):
@@ -1582,6 +1589,16 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
             {
                 'label':"Dependences descrition",
                 'description':"Dependences descrition of Components and " \
+                    + "Datasources",
+                'Display level':PyTango.DispLevel.EXPERT,
+            } ],
+        'ClientSources':
+            [[PyTango.DevString,
+            PyTango.SCALAR,
+            PyTango.READ],
+            {
+                'label':"Descrition of client datasources",
+                'description':"Dependences descrition of client " \
                     + "Datasources",
                 'Display level':PyTango.DispLevel.EXPERT,
             } ],
