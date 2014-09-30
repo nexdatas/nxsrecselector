@@ -16,7 +16,7 @@
 #    You should have received a copy of the GNU General Public License
 #    along with nexdatas.  If not, see <http://www.gnu.org/licenses/>.
 ## \file setup.py
-# nxswriter installer 
+# nxswriter installer
 
 """ setup.py for Nexus Recorder Selector Server """
 
@@ -44,28 +44,25 @@ required = [
 
 ## metadata for distutils
 SETUPDATA = dict(
-    name = "nxsrecselector",
-    version = INDTS.__version__,
-    author = "Jan Kotanski",
-    author_email = "jankotan@gmail.com",
-    description = ("Selector Server for NeXus Sardana recorder"),
-    license = "GNU GENERAL PUBLIC LICENSE v3",
-    keywords = "sardana writer configuration settings Tango server nexus data",
-    url = "www.desy.de",
+    name="nxsrecselector",
+    version=INDTS.__version__,
+    author="Jan Kotanski",
+    author_email="jankotan@gmail.com",
+    description=("Selector Server for NeXus Sardana recorder"),
+    license="GNU GENERAL PUBLIC LICENSE v3",
+    keywords="sardana writer configuration settings Tango server nexus data",
+    url="www.desy.de",
     packages=[NDTS],
     requires=required,
-    scripts = ['NXSRecSelector.py', 'NXSRecSelector'],
-    long_description= read('README')
+    scripts=['NXSRecSelector.py', 'NXSRecSelector'],
+    long_description=read('README')
 )
 
-
-        
 
 ## the main function
 def main():
     setup(**SETUPDATA)
-        
+
 
 if __name__ == '__main__':
     main()
-

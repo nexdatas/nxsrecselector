@@ -26,18 +26,18 @@ import json
 import pickle
 import numpy
 
-## 
+
+## Tango Utilities
 class Utils(object):
     """  Tango Utilities """
 
     ## map of Tango:Numpy types
-    tTnp = {PyTango.DevLong64:"int64", PyTango.DevLong:"int32",
-            PyTango.DevShort:"int16", PyTango.DevUChar:"uint8", 
-            PyTango.DevULong64:"uint64", PyTango.DevULong:"uint32", 
-            PyTango.DevUShort:"uint16", PyTango.DevDouble:"float64",
-            PyTango.DevFloat:"float32", PyTango.DevString:"string", 
-            PyTango.DevBoolean:"bool"}
-
+    tTnp = {PyTango.DevLong64: "int64", PyTango.DevLong: "int32",
+            PyTango.DevShort: "int16", PyTango.DevUChar: "uint8",
+            PyTango.DevULong64: "uint64", PyTango.DevULong: "uint32",
+            PyTango.DevUShort: "uint16", PyTango.DevDouble: "float64",
+            PyTango.DevFloat: "float32", PyTango.DevString: "string",
+            PyTango.DevBoolean: "bool"}
 
     ## opens device proxy of the given device
     # \param cls class instance
@@ -61,8 +61,8 @@ class Utils(object):
                 if cnt == 999:
                     raise
             cnt += 1
-        
-        return cnfServer    
+
+        return cnfServer
 
     ## provides environment variable value
     # \param cls class instance
@@ -80,7 +80,6 @@ class Utils(object):
                 active = dc['new'][var]
         return active
 
-
     ## sets environment variable value
     # \param cls class instance
     ## \param var variable name
@@ -94,9 +93,8 @@ class Utils(object):
             dc = pickle.loads(rec[1])
             if 'new' in dc.keys():
                 dc['new'][var] = value
-                pk = pickle.dumps(dc)    
+                pk = pickle.dumps(dc)
                 dp.Environment = ['pickle', pk]
-
 
     ## provides proxies of given device names
     # \param cls class instance
@@ -109,11 +107,10 @@ class Utils(object):
             dp = PyTango.DeviceProxy(name)
             try:
                 dp.ping()
-                dps.append(dp)    
+                dps.append(dp)
             except:
                 pass
-        return dps    
-                
+        return dps
 
     ## find device of give class
     # \param cls class instance
@@ -121,7 +118,7 @@ class Utils(object):
     # \param cname device class name
     # \returns device name if exists
     @classmethod
-    def getDeviceName(cls, db, cname):        
+    def getDeviceName(cls, db, cname):
         servers = db.get_device_exported_for_class(
             cname).value_string
         device = ''
@@ -134,7 +131,6 @@ class Utils(object):
             except:
                 pass
         return device
-
 
     ## provides macro server of given door
     # \param cls class instance
@@ -155,14 +151,13 @@ class Utils(object):
                     break
         return ms
 
-
     ## find device names from aliases
     # \param cls class instance
     # \param pools list of pool devices
     # \param names alias names if None returns name for all aliases
-    # \returns full device name    
+    # \returns full device name
     @classmethod
-    def getFullDeviceNames(cls, pools, names = None):
+    def getFullDeviceNames(cls, pools, names=None):
         lst = []
         for pool in pools:
             if pool.AcqChannelList:
@@ -179,9 +174,9 @@ class Utils(object):
     # \param cls class instance
     # \param pools list of pool devices
     # \param names fullnames if None returns all aliases
-    # \returns full device name    
+    # \returns full device name
     @classmethod
-    def getAliases(cls, pools, names = None):
+    def getAliases(cls, pools, names=None):
         lst = []
         for pool in pools:
             if pool.AcqChannelList:
@@ -194,7 +189,6 @@ class Utils(object):
             if names is None or fname in names:
                 argout[fname] = chan['name']
         return argout
-
 
     ## find measurement group from alias
     # \param cls class instance
@@ -230,7 +224,6 @@ class Utils(object):
             argout.append(chan['name'])
         return argout
 
-
     ## provides device controller full names
     # \param cls class instance
     # \param pools list of pool devices
@@ -248,7 +241,6 @@ class Utils(object):
             if chan['name'] in devices:
                 ctrls[chan['name']] = chan['controller']
         return ctrls
-
 
     ## provides tiemrs of given pools
     # \param cls class instance
@@ -269,7 +261,6 @@ class Utils(object):
                     res.append(chan['name'])
         return res
 
-
     ## adds controller into configuration dictionary
     @classmethod
     def __addController(cls, cnf, ctrl, fulltimer):
@@ -283,17 +274,17 @@ class Utils(object):
                 u'channels'] = {}
             cnf['controllers'][ctrl]['units']['0']['id'] = 0
             cnf['controllers'][ctrl]['units']['0'][
-                u'monitor'] =  fulltimer
+                u'monitor'] = fulltimer
             cnf['controllers'][ctrl]['units']['0'][
                 u'timer'] = fulltimer
             cnf['controllers'][ctrl]['units']['0'][
                 u'trigger_type'] = 0
-    
-    ## retrives shape type value for attribure        
-    @classmethod        
+
+    ## retrives shape type value for attribure
+    @classmethod
     def __getShapeTypeValue(cls, source):
         vl = None
-        shp = [] 
+        shp = []
         dt = 'float64'
         ut = 'No units'
         ap = PyTango.AttributeProxy(source)
@@ -311,23 +302,21 @@ class Utils(object):
                 raise
 
         if vl is not None:
-            shp = list(numpy.shape(vl)) 
+            shp = list(numpy.shape(vl))
             dt = getattr(vl, 'dtype', numpy.dtype(type(vl))).name
         elif ac is not None:
             if ac.data_format != PyTango.AttrDataFormat.SCALAR:
-                if da.dim_x and da.dim_x > 1 :
+                if da.dim_x and da.dim_x > 1:
                     shp = [da.dim_y, da.dim_x] \
                         if da.dim_y \
                         else [da.dim_x]
-            dt = cls.tTnp[ac.data_type]   
+            dt = cls.tTnp[ac.data_type]
         if ac is not None:
             ut = ac.unit
         return (shp, dt, vl, ut)
 
-            
-
     ## adds channel into configuration dictionary
-    @classmethod        
+    @classmethod
     def __addChannel(cls, cnf, ctrl, device, fullname, dontdisplay, index):
 
         ctrlChannels = cnf['controllers'][ctrl]['units']['0'][
@@ -362,7 +351,7 @@ class Utils(object):
             elif dct['shape'] and len(dct['shape']) == 2:
                 dct['plot_axes'] = ['<idx>', '<idx>']
                 dct['plot_type'] = 2
-            else:        
+            else:
                 dct['plot_axes'] = ['<mov>']
                 dct['plot_type'] = 1
 
@@ -370,7 +359,6 @@ class Utils(object):
             ctrlChannels[fullname] = dct
 
         return index
-
 
     ## adds device into configuration dictionary
     # \param cls class instance
@@ -391,21 +379,25 @@ class Utils(object):
             return index
 
         cls.__addController(cnf, ctrl, fulltimer)
-        fullnames = cls.getFullDeviceNames(pools, [device])  
+        fullnames = cls.getFullDeviceNames(pools, [device])
         fullname = fullnames[device] \
             if fullnames and device in fullnames.keys() else ""
-        index = cls.__addChannel(cnf, ctrl, device, fullname, 
+        index = cls.__addChannel(cnf, ctrl, device, fullname,
                                      dontdisplay, index)
-        
+
         return index
 
+    ## copares two dictionaries
+    # \param dct first dictinary
+    # \param dct2 second dictinary
+    # \returns if dictionaries are the same
     @classmethod
     def compareDict(cls, dct, dct2):
         if not isinstance(dct, dict):
             return False
         if not isinstance(dct2, dict):
             return False
-        if len(dct.keys()) !=  len(dct2.keys()):
+        if len(dct.keys()) != len(dct2.keys()):
             return False
         status = True
         for k, v in dct.items():
@@ -422,8 +414,6 @@ class Utils(object):
                     break
         return status
 
-
-
     ## adds device into configuration dictionary
     # \param cls class instance
     # \param devices device aliases
@@ -436,11 +426,11 @@ class Utils(object):
     @classmethod
     def addDevices(cls, devices, dontdisplay, pools, cnf, timer, index):
         ctrls = cls.getDeviceControllers(pools, devices)
-        fullnames = cls.getFullDeviceNames(pools, devices) 
+        fullnames = cls.getFullDeviceNames(pools, devices)
         for device, ctrl in ctrls.items():
             cls.__addController(cnf, ctrl, timer)
             fullname = fullnames[device]
-            index = cls.__addChannel(cnf, ctrl, device, fullname, 
+            index = cls.__addChannel(cnf, ctrl, device, fullname,
                                      dontdisplay, index)
-        
+
         return index

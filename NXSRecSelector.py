@@ -24,5 +24,5 @@
 import sys
 import nxsrecconfig
 
-nxsrecconfig.run(sys.argv)
 
+nxsrecconfig.run(sys.argv)

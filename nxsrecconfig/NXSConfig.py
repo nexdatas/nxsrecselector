@@ -4,7 +4,7 @@
 #
 # file :        NXSRecSelector.py
 #
-# description : Python source for the NXSRecSelector and its commands. 
+# description : Python source for the NXSRecSelector and its commands.
 #                The class is derived from Device. It represents the
 #                CORBA servant object which will be accessed from the
 #                network. All commands which can be executed on the
@@ -50,6 +50,7 @@ import PyTango
 
 from .Settings import Settings as STG
 
+
 ## NXSRecSelector server interface
 class NXSRecSelector(PyTango.Device_4Impl):
 
@@ -70,7 +71,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
     def delete_device(self):
         print >> self.log_info, "[Device delete_device method] for device", \
             self.get_name()
-        if hasattr(self, 'stg') and  self.__stg :
+        if hasattr(self, 'stg') and self.__stg:
             del self.__stg
             self.__stg = None
         self.set_state(PyTango.DevState.OFF)
@@ -80,13 +81,13 @@ class NXSRecSelector(PyTango.Device_4Impl):
 #------------------------------------------------------------------
     def init_device(self):
         print >> self.log_info, "In ", self.get_name(), "::init_device()"
-        if hasattr(self, 'stg') and  self.__stg :
+        if hasattr(self, 'stg') and self.__stg:
             del self.__stg
             self.__stg = None
         self.__stg = STG(self)
         self.set_state(PyTango.DevState.ON)
         self.get_device_properties(self.get_device_class())
-        
+
         self.__stg.poolBlacklist = self.PoolBlacklist \
             if self.PoolBlacklist else []
 
@@ -106,9 +107,8 @@ class NXSRecSelector(PyTango.Device_4Impl):
 #    Read Attribute Hardware
 #------------------------------------------------------------------
     def read_attr_hardware(self, _):
-        print >> self.log_info, "In ", self.get_name(), "::read_attr_hardware()"
-
-
+        print >> self.log_info, "In ", self.get_name(), \
+            "::read_attr_hardware()"
 
 #------------------------------------------------------------------
 #    Read Components attribute
@@ -117,14 +117,12 @@ class NXSRecSelector(PyTango.Device_4Impl):
         print >> self.log_info, "In ", self.get_name(), "::read_Components()"
         attr.set_value(self.__stg.components)
 
-
 #------------------------------------------------------------------
 #    Read Timer attribute
 #------------------------------------------------------------------
     def read_Timer(self, attr):
         print >> self.log_info, "In ", self.get_name(), "::read_Timer()"
         attr.set_value(self.__stg.timer)
-
 
 #------------------------------------------------------------------
 #    Write Timer attribute
@@ -134,9 +132,6 @@ class NXSRecSelector(PyTango.Device_4Impl):
         self.__stg.timer = attr.get_write_value()
         print >> self.log_info, "Attribute value = %s" % self.__stg.timer
 
-
-
-
 #------------------------------------------------------------------
 #    Read ComponentGroup attribute
 #------------------------------------------------------------------
@@ -144,7 +139,6 @@ class NXSRecSelector(PyTango.Device_4Impl):
         print >> self.log_info, "In ", self.get_name(), \
             "::read_ComponentGroup()"
         attr.set_value(self.__stg.componentGroup)
-
 
 #------------------------------------------------------------------
 #    Write ComponentGroup attribute
@@ -156,8 +150,6 @@ class NXSRecSelector(PyTango.Device_4Impl):
         print >> self.log_info, "Attribute value = %s" % \
             self.__stg.componentGroup
 
-
-
 #------------------------------------------------------------------
 #    Read AutomaticComponentGroup attribute
 #------------------------------------------------------------------
@@ -165,7 +157,6 @@ class NXSRecSelector(PyTango.Device_4Impl):
         print >> self.log_info, "In ", self.get_name(), \
             "::read_AutomaticComponentGroup()"
         attr.set_value(self.__stg.automaticComponentGroup)
-
 
 #------------------------------------------------------------------
 #    Write AutomaticComponentGroup attribute
@@ -177,7 +168,6 @@ class NXSRecSelector(PyTango.Device_4Impl):
         print >> self.log_info, "Attribute value = %s" % \
             self.__stg.automaticComponentGroup
 
-
 #------------------------------------------------------------------
 #    Read AutomaticComponents attribute
 #------------------------------------------------------------------
@@ -186,7 +176,6 @@ class NXSRecSelector(PyTango.Device_4Impl):
             "::read_AutomaticComponents()"
         attr.set_value(self.__stg.automaticComponents)
 
-
 #------------------------------------------------------------------
 #    Read OptionalComponents attribute
 #------------------------------------------------------------------
@@ -194,7 +183,6 @@ class NXSRecSelector(PyTango.Device_4Impl):
         print >> self.log_info, "In ", self.get_name(), \
             "::read_OptionalComponents()"
         attr.set_value(self.__stg.optionalComponents)
-
 
 #------------------------------------------------------------------
 #    Write OptionalComponents attribute
@@ -206,8 +194,6 @@ class NXSRecSelector(PyTango.Device_4Impl):
         print >> self.log_info, "Attribute value = %s" % \
             self.__stg.optionalComponents
 
-
-
 #------------------------------------------------------------------
 #    Read MacroServer attribute
 #------------------------------------------------------------------
@@ -215,7 +201,6 @@ class NXSRecSelector(PyTango.Device_4Impl):
         print >> self.log_info, "In ", self.get_name(), \
             "::read_MacroServer()"
         attr.set_value(self.__stg.macroServer)
-
 
 #------------------------------------------------------------------
 #    Read Door attribute
@@ -225,7 +210,6 @@ class NXSRecSelector(PyTango.Device_4Impl):
             "::read_Door()"
         attr.set_value(self.__stg.door)
 
-
 #------------------------------------------------------------------
 #    Write Door attribute
 #------------------------------------------------------------------
@@ -234,25 +218,23 @@ class NXSRecSelector(PyTango.Device_4Impl):
         self.__stg.door = attr.get_write_value()
         print >> self.log_info, "Attribute value = %s" % self.__stg.door
 
-
-
 #------------------------------------------------------------------
 #    Read ConfigDevice attribute
 #------------------------------------------------------------------
     def read_ConfigDevice(self, attr):
-        print >> self.log_info, "In ", self.get_name(), "::read_ConfigDevice()"
+        print >> self.log_info, "In ", self.get_name(), \
+            "::read_ConfigDevice()"
         attr.set_value(self.__stg.configDevice)
-
 
 #------------------------------------------------------------------
 #    Write ConfigDevice attribute
 #------------------------------------------------------------------
     def write_ConfigDevice(self, attr):
-        print >> self.log_info, "In ", self.get_name(), "::write_ConfigDevice()"
+        print >> self.log_info, "In ", self.get_name(), \
+            "::write_ConfigDevice()"
         self.__stg.configDevice = attr.get_write_value()
-        print >> self.log_info, "Attribute value = %s" % self.__stg.configDevice
-
-
+        print >> self.log_info, "Attribute value = %s" % \
+            self.__stg.configDevice
 
 #------------------------------------------------------------------
 #    Read MntGrp attribute
@@ -260,7 +242,6 @@ class NXSRecSelector(PyTango.Device_4Impl):
     def read_MntGrp(self, attr):
         print >> self.log_info, "In ", self.get_name(), "::read_MntGrp()"
         attr.set_value(self.__stg.mntGrp)
-
 
 #------------------------------------------------------------------
 #    Write MntGrp attribute
@@ -277,7 +258,6 @@ class NXSRecSelector(PyTango.Device_4Impl):
         print >> self.log_info, "In ", self.get_name(), "::read_ScanDir()"
         attr.set_value(self.__stg.scanDir)
 
-
 #------------------------------------------------------------------
 #    Write ScanDir attribute
 #------------------------------------------------------------------
@@ -292,7 +272,6 @@ class NXSRecSelector(PyTango.Device_4Impl):
     def read_ScanFile(self, attr):
         print >> self.log_info, "In ", self.get_name(), "::read_ScanFile()"
         attr.set_value(self.__stg.scanFile)
-
 
 #------------------------------------------------------------------
 #    Write ScanFile attribute
@@ -309,7 +288,6 @@ class NXSRecSelector(PyTango.Device_4Impl):
         print >> self.log_info, "In ", self.get_name(), "::read_ScanID()"
         attr.set_value(self.__stg.scanID)
 
-
 #------------------------------------------------------------------
 #    Write ScanID attribute
 #------------------------------------------------------------------
@@ -318,8 +296,6 @@ class NXSRecSelector(PyTango.Device_4Impl):
         self.__stg.scanID = attr.get_write_value()
         print >> self.log_info, "Attribute value = %s" % self.__stg.scanID
 
-
-
 #------------------------------------------------------------------
 #    Read WriterDevice attribute
 #------------------------------------------------------------------
@@ -327,14 +303,15 @@ class NXSRecSelector(PyTango.Device_4Impl):
         print >> self.log_info, "In ", self.get_name(), "::read_WriterDevice()"
         attr.set_value(self.__stg.writerDevice)
 
-
 #------------------------------------------------------------------
 #    Write WriterDevice attribute
 #------------------------------------------------------------------
     def write_WriterDevice(self, attr):
-        print >> self.log_info, "In ", self.get_name(), "::write_WriterDevice()"
+        print >> self.log_info, "In ", self.get_name(), \
+            "::write_WriterDevice()"
         self.__stg.writerDevice = attr.get_write_value()
-        print >> self.log_info, "Attribute value = %s" % self.__stg.writerDevice
+        print >> self.log_info, "Attribute value = %s" \
+            % self.__stg.writerDevice
 
 #------------------------------------------------------------------
 #    Read DataRecord attribute
@@ -342,7 +319,6 @@ class NXSRecSelector(PyTango.Device_4Impl):
     def read_DataRecord(self, attr):
         print >> self.log_info, "In ", self.get_name(), "::read_DataRecord()"
         attr.set_value(self.__stg.dataRecord)
-
 
 #------------------------------------------------------------------
 #    Write DataRecord attribute
@@ -353,15 +329,12 @@ class NXSRecSelector(PyTango.Device_4Impl):
         print >> self.log_info, "Attribute value = %s" % \
             self.__stg.dataRecord
 
-
-
 #------------------------------------------------------------------
 #    Read LabelPaths attribute
 #------------------------------------------------------------------
     def read_LabelPaths(self, attr):
         print >> self.log_info, "In ", self.get_name(), "::read_LabelPaths()"
         attr.set_value(self.__stg.labelPaths)
-
 
 #------------------------------------------------------------------
 #    Write LabelPaths attribute
@@ -372,16 +345,12 @@ class NXSRecSelector(PyTango.Device_4Impl):
         print >> self.log_info, "Attribute value = %s" % \
             self.__stg.labelPaths
 
-
-
-
 #------------------------------------------------------------------
 #    Read LabelTypes attribute
 #------------------------------------------------------------------
     def read_LabelTypes(self, attr):
         print >> self.log_info, "In ", self.get_name(), "::read_LabelTypes()"
         attr.set_value(self.__stg.labelTypes)
-
 
 #------------------------------------------------------------------
 #    Write LabelTypes attribute
@@ -392,8 +361,6 @@ class NXSRecSelector(PyTango.Device_4Impl):
         print >> self.log_info, "Attribute value = %s" % \
             self.__stg.labelTypes
 
-
-
 #------------------------------------------------------------------
 #    Read LabelShapes attribute
 #------------------------------------------------------------------
@@ -401,34 +368,33 @@ class NXSRecSelector(PyTango.Device_4Impl):
         print >> self.log_info, "In ", self.get_name(), "::read_LabelShapes()"
         attr.set_value(self.__stg.labelShapes)
 
-
 #------------------------------------------------------------------
 #    Write LabelShapes attribute
 #------------------------------------------------------------------
     def write_LabelShapes(self, attr):
-        print >> self.log_info, "In ", self.get_name(), "::write_LabelShapes()"
+        print >> self.log_info, "In ", self.get_name(), \
+            "::write_LabelShapes()"
         self.__stg.labelShapes = attr.get_write_value()
         print >> self.log_info, "Attribute value = %s" % \
             self.__stg.labelShapes
-
 
 #------------------------------------------------------------------
 #    Read LabelLinks attribute
 #------------------------------------------------------------------
     def read_LabelLinks(self, attr):
-        print >> self.log_info, "In ", self.get_name(), "::read_LabelLinks()"
+        print >> self.log_info, "In ", self.get_name(), \
+            "::read_LabelLinks()"
         attr.set_value(self.__stg.labelLinks)
-
 
 #------------------------------------------------------------------
 #    Write LabelLinks attribute
 #------------------------------------------------------------------
     def write_LabelLinks(self, attr):
-        print >> self.log_info, "In ", self.get_name(), "::write_LabelLinks()"
+        print >> self.log_info, "In ", self.get_name(), \
+            "::write_LabelLinks()"
         self.__stg.labelLinks = attr.get_write_value()
         print >> self.log_info, "Attribute value = %s" % \
             self.__stg.labelLinks
-
 
 #------------------------------------------------------------------
 #    Read HiddenElements attribute
@@ -437,7 +403,6 @@ class NXSRecSelector(PyTango.Device_4Impl):
         print >> self.log_info, "In ", self.get_name(), \
             "::read_HiddenElements()"
         attr.set_value(self.__stg.hiddenElements)
-
 
 #------------------------------------------------------------------
 #    Write HiddenElements attribute
@@ -449,9 +414,6 @@ class NXSRecSelector(PyTango.Device_4Impl):
         print >> self.log_info, "Attribute value = %s" % \
             self.__stg.hiddenElements
 
-
-
-
 #------------------------------------------------------------------
 #    Read Labels attribute
 #------------------------------------------------------------------
@@ -459,7 +421,6 @@ class NXSRecSelector(PyTango.Device_4Impl):
         print >> self.log_info, "In ", self.get_name(), \
             "::read_Labels()"
         attr.set_value(self.__stg.labels)
-
 
 #------------------------------------------------------------------
 #    Write Labels attribute
@@ -471,12 +432,12 @@ class NXSRecSelector(PyTango.Device_4Impl):
         print >> self.log_info, "Attribute value = %s" % \
             self.__stg.labels
 
-
 #------------------------------------------------------------------
 #    Read DataSources attribute
 #------------------------------------------------------------------
     def read_DataSources(self, attr):
-        print >> self.log_info, "In ", self.get_name(), "::read_DataSources()"
+        print >> self.log_info, "In ", self.get_name(), \
+            "::read_DataSources()"
         attr.set_value(self.__stg.dataSources)
 
 #------------------------------------------------------------------
@@ -486,7 +447,6 @@ class NXSRecSelector(PyTango.Device_4Impl):
         print >> self.log_info, "In ", self.get_name(), \
             "::read_AvailableTimers()"
         attr.set_value(self.__stg.availableTimers)
-
 
 #------------------------------------------------------------------
 #    Read Description attribute
@@ -499,7 +459,8 @@ class NXSRecSelector(PyTango.Device_4Impl):
 #    Read ClientSources attribute
 #------------------------------------------------------------------
     def read_ClientSources(self, attr):
-        print >> self.log_info, "In ", self.get_name(), "::read_ClientSources()"
+        print >> self.log_info, "In ", self.get_name(), \
+            "::read_ClientSources()"
         attr.set_value(self.__stg.clientSources)
 
 #------------------------------------------------------------------
@@ -510,7 +471,6 @@ class NXSRecSelector(PyTango.Device_4Impl):
             "::read_VariableComponents()"
         attr.set_value(self.__stg.variableComponents)
 
-
 #------------------------------------------------------------------
 #    Read FullDeviceNames attribute
 #------------------------------------------------------------------
@@ -519,14 +479,12 @@ class NXSRecSelector(PyTango.Device_4Impl):
             "::read_FullDeviceNames()"
         attr.set_value(self.__stg.fullDeviceNames)
 
-
 #------------------------------------------------------------------
 #    Read DataSourceGroup attribute
 #------------------------------------------------------------------
     def read_DataSourceGroup(self, attr):
         print >> self.log_info, "In ", self.get_name(), "::read_DataSources()"
         attr.set_value(self.__stg.dataSourceGroup)
-
 
 #------------------------------------------------------------------
 #    Write DataSourceGroup attribute
@@ -538,14 +496,12 @@ class NXSRecSelector(PyTango.Device_4Impl):
         print >> self.log_info, "Attribute value = %s" % \
             self.__stg.dataSourceGroup
 
-
 #------------------------------------------------------------------
 #    Read Configuration attribute
 #------------------------------------------------------------------
     def read_Configuration(self, attr):
         print >> self.log_info, "In ", self.get_name(), "::read_DataSources()"
         attr.set_value(self.__stg.configuration)
-
 
 #------------------------------------------------------------------
 #    Write Configuration attribute
@@ -561,12 +517,12 @@ class NXSRecSelector(PyTango.Device_4Impl):
             for var in self.stg.names():
                 if hasattr(dp, var):
                     dp.write_attribute(str(var), self.__stg.value(var))
-                        
+
             self.set_state(PyTango.DevState.ON)
         finally:
             if self.get_state() == PyTango.DevState.RUNNING:
                 self.set_state(PyTango.DevState.ON)
-        
+
 #------------------------------------------------------------------
 #    Read AutomaticDataSources attribute
 #------------------------------------------------------------------
@@ -575,8 +531,6 @@ class NXSRecSelector(PyTango.Device_4Impl):
             "::read_AutomaticDataSources()"
         attr.set_value(self.__stg.automaticDataSources)
 
-
-        
 #------------------------------------------------------------------
 #    Write AutomaticDataSources attribute
 #------------------------------------------------------------------
@@ -587,8 +541,6 @@ class NXSRecSelector(PyTango.Device_4Impl):
         print >> self.log_info, "Attribute value = %s" % \
             self.__stg.automaticDataSources
 
-
-
 #------------------------------------------------------------------
 #    Read DisableDataSources attribute
 #------------------------------------------------------------------
@@ -597,16 +549,12 @@ class NXSRecSelector(PyTango.Device_4Impl):
             "::read_DisableDataSources()"
         attr.set_value(self.__stg.disableDataSources)
 
-
-
-
 #------------------------------------------------------------------
 #    Read AppendEntry attribute
 #------------------------------------------------------------------
     def read_AppendEntry(self, attr):
         print >> self.log_info, "In ", self.get_name(), "::read_AppendEntry()"
         attr.set_value(self.__stg.appendEntry)
-
 
 #------------------------------------------------------------------
 #    Write AppendEntry attribute
@@ -616,7 +564,6 @@ class NXSRecSelector(PyTango.Device_4Impl):
         self.__stg.appendEntry = attr.get_write_value()
         print >> self.log_info, "Attribute value = %s" % \
             self.__stg.appendEntry
-        
 
 #------------------------------------------------------------------
 #    Read ComponentsFromMntGrp attribute
@@ -625,7 +572,6 @@ class NXSRecSelector(PyTango.Device_4Impl):
         print >> self.log_info, "In ", self.get_name(), \
             "::read_ComponentsFromMntGrp()"
         attr.set_value(self.__stg.componentsFromMntGrp)
-
 
 #------------------------------------------------------------------
 #    Write ComponentsFromMntGrp attribute
@@ -637,7 +583,6 @@ class NXSRecSelector(PyTango.Device_4Impl):
         print >> self.log_info, "Attribute value = %s" % \
             self.__stg.componentsFromMntGrp
 
-
 #------------------------------------------------------------------
 #    Read DynamicComponents attribute
 #------------------------------------------------------------------
@@ -645,7 +590,6 @@ class NXSRecSelector(PyTango.Device_4Impl):
         print >> self.log_info, "In ", self.get_name(), \
             "::read_DynamicComponents()"
         attr.set_value(self.__stg.dynamicComponents)
-
 
 #------------------------------------------------------------------
 #    Write DynamicComponents attribute
@@ -657,23 +601,23 @@ class NXSRecSelector(PyTango.Device_4Impl):
         print >> self.log_info, "Attribute value = %s" % \
             self.__stg.dynamicComponents
 
-
 #------------------------------------------------------------------
 #    Read DynamicLinks attribute
 #------------------------------------------------------------------
     def read_DynamicLinks(self, attr):
-        print >> self.log_info, "In ", self.get_name(), "::read_DynamicLinks()"
+        print >> self.log_info, "In ", self.get_name(), \
+            "::read_DynamicLinks()"
         attr.set_value(self.__stg.dynamicLinks)
 
 #------------------------------------------------------------------
 #    Write DynamicLinks attribute
 #------------------------------------------------------------------
     def write_DynamicLinks(self, attr):
-        print >> self.log_info, "In ", self.get_name(), "::write_DynamicLinks()"
+        print >> self.log_info, "In ", self.get_name(), \
+            "::write_DynamicLinks()"
         self.__stg.dynamicLinks = attr.get_write_value()
         print >> self.log_info, "Attribute value = %s" % \
             self.__stg.dynamicLinks
-
 
 #------------------------------------------------------------------
 #    Read DynamicPath attribute
@@ -681,7 +625,6 @@ class NXSRecSelector(PyTango.Device_4Impl):
     def read_DynamicPath(self, attr):
         print >> self.log_info, "In ", self.get_name(), "::read_DynamicPath()"
         attr.set_value(self.__stg.dynamicPath)
-
 
 #------------------------------------------------------------------
 #    Write DynamicPath attribute
@@ -692,7 +635,6 @@ class NXSRecSelector(PyTango.Device_4Impl):
         print >> self.log_info, "Attribute value = %s" % \
             self.__stg.dynamicPath
 
-
 #------------------------------------------------------------------
 #    Read ConfigVariables attribute
 #------------------------------------------------------------------
@@ -700,7 +642,6 @@ class NXSRecSelector(PyTango.Device_4Impl):
         print >> self.log_info, "In ", self.get_name(), \
             "::read_ConfigVariables()"
         attr.set_value(self.__stg.configVariables)
-
 
 #------------------------------------------------------------------
 #    Write ConfigVariables attribute
@@ -712,14 +653,12 @@ class NXSRecSelector(PyTango.Device_4Impl):
         print >> self.log_info, "Attribute value = %s" % \
             self.__stg.configVariables
 
-
 #------------------------------------------------------------------
 #    Read ConfigFile attribute
 #------------------------------------------------------------------
     def read_ConfigFile(self, attr):
         print >> self.log_info, "In ", self.get_name(), "::read_ConfigFile()"
         attr.set_value(self.__stg.configFile)
-
 
 #------------------------------------------------------------------
 #    Write ConfigFile attribute
@@ -729,13 +668,12 @@ class NXSRecSelector(PyTango.Device_4Impl):
         self.__stg.configFile = attr.get_write_value()
         print >> self.log_info, "Attribute value = %s" % self.__stg.configFile
 
-
+#------------------------------------------------------------------
 #    Read TimeZone attribute
 #------------------------------------------------------------------
     def read_TimeZone(self, attr):
         print >> self.log_info, "In ", self.get_name(), "::read_TimeZone()"
         attr.set_value(self.__stg.timeZone)
-
 
 #------------------------------------------------------------------
 #    Write TimeZone attribute
@@ -745,9 +683,6 @@ class NXSRecSelector(PyTango.Device_4Impl):
         self.__stg.timeZone = attr.get_write_value()
         print >> self.log_info, "Attribute value = %s" % \
             self.__stg.timeZone
-
-
-
 
 #==================================================================
 #
@@ -759,7 +694,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
 #    LoadConfiguration command:
 #
 #    Description: Load server configuration
-#                
+#
 #------------------------------------------------------------------
     def LoadConfiguration(self):
         print >> self.log_info, "In ", self.get_name(), \
@@ -767,7 +702,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         try:
             self.set_state(PyTango.DevState.RUNNING)
             self.__stg.loadConfiguration()
-            
+
             ## updating memorized attributes
             dp = PyTango.DeviceProxy(str(self.get_name()))
             for var in self.__stg.names():
@@ -778,8 +713,6 @@ class NXSRecSelector(PyTango.Device_4Impl):
         finally:
             if self.get_state() == PyTango.DevState.RUNNING:
                 self.set_state(PyTango.DevState.ON)
-        
-
 
 #---- LoadConfiguration command State Machine -----------------
     def is_LoadConfiguration_allowed(self):
@@ -787,13 +720,11 @@ class NXSRecSelector(PyTango.Device_4Impl):
             return False
         return True
 
-
-
 #------------------------------------------------------------------
 #    LoadConfiguration command:
 #
 #    Description: Save server configuration
-#                
+#
 #------------------------------------------------------------------
     def SaveConfiguration(self):
         print >> self.log_info, "In ", self.get_name(), \
@@ -805,8 +736,6 @@ class NXSRecSelector(PyTango.Device_4Impl):
         finally:
             if self.get_state() == PyTango.DevState.RUNNING:
                 self.set_state(PyTango.DevState.ON)
-        
-
 
 #---- SaveConfiguration command State Machine -----------------
     def is_SaveConfiguration_allowed(self):
@@ -814,15 +743,12 @@ class NXSRecSelector(PyTango.Device_4Impl):
             return False
         return True
 
-
-
-
 #------------------------------------------------------------------
 #    UpdateControllers:
 #
-#    Description: checks existing controllers of pools for 
+#    Description: checks existing controllers of pools for
 #        AutomaticDataSources
-#                
+#
 #------------------------------------------------------------------
     def UpdateControllers(self):
         print >> self.log_info, "In ", self.get_name(), \
@@ -834,8 +760,6 @@ class NXSRecSelector(PyTango.Device_4Impl):
         finally:
             if self.get_state() == PyTango.DevState.RUNNING:
                 self.set_state(PyTango.DevState.ON)
-        
-
 
 #---- UpdateControllers command State Machine -----------------
     def is_UpdateControllers_allowed(self):
@@ -847,7 +771,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
 #    IsMntGrpChanged:
 #
 #    Description:  returns true if mntgrp was changed
-#                
+#
 #------------------------------------------------------------------
     def IsMntGrpChanged(self):
         print >> self.log_info, "In ", self.get_name(), \
@@ -862,20 +786,17 @@ class NXSRecSelector(PyTango.Device_4Impl):
 
         return conf
 
-
 #---- IsMntGrpChanged command State Machine -----------------
     def is_IsMntGrpChanged_allowed(self):
         if self.get_state() in [PyTango.DevState.RUNNING]:
             return False
         return True
 
-
-
 #------------------------------------------------------------------
 #    MntGrpConfiguration:
 #
 #    Description:  returns mntgrp configuration
-#                
+#
 #------------------------------------------------------------------
     def MntGrpConfiguration(self):
         print >> self.log_info, "In ", self.get_name(), \
@@ -887,9 +808,8 @@ class NXSRecSelector(PyTango.Device_4Impl):
         finally:
             if self.get_state() == PyTango.DevState.RUNNING:
                 self.set_state(PyTango.DevState.ON)
-                
-        return conf
 
+        return conf
 
 #---- MntGrpConfiguration command State Machine -----------------
     def is_MntGrpConfiguration_allowed(self):
@@ -897,13 +817,12 @@ class NXSRecSelector(PyTango.Device_4Impl):
             return False
         return True
 
-
 #------------------------------------------------------------------
 #    UpdateMntGrp:
 #
 #    Description: updates mntgrp configuration
 #
-#                
+#
 #------------------------------------------------------------------
     def UpdateMntGrp(self):
         print >> self.log_info, "In ", self.get_name(), \
@@ -918,20 +837,18 @@ class NXSRecSelector(PyTango.Device_4Impl):
 
         return conf
 
-
 #---- UpdateMntGrp command State Machine -----------------
     def is_UpdateMntGrp_allowed(self):
         if self.get_state() in [PyTango.DevState.RUNNING]:
             return False
         return True
 
-
 #------------------------------------------------------------------
 #    ImportMntGrp:
 #
 #    Description: imports active mntgrp configuration
 #
-#                
+#
 #------------------------------------------------------------------
     def ImportMntGrp(self):
         print >> self.log_info, "In ", self.get_name(), \
@@ -944,21 +861,18 @@ class NXSRecSelector(PyTango.Device_4Impl):
             if self.get_state() == PyTango.DevState.RUNNING:
                 self.set_state(PyTango.DevState.ON)
 
-
 #---- ImportMntGrp command State Machine -----------------
     def is_ImportMntGrp_allowed(self):
         if self.get_state() in [PyTango.DevState.RUNNING]:
             return False
         return True
 
-
-
 #------------------------------------------------------------------
 #    ImportAllEnv:
 #
 #    Description: imports all environment variables
 #
-#                
+#
 #------------------------------------------------------------------
     def ImportAllEnv(self):
         print >> self.log_info, "In ", self.get_name(), \
@@ -978,22 +892,18 @@ class NXSRecSelector(PyTango.Device_4Impl):
             if self.get_state() == PyTango.DevState.RUNNING:
                 self.set_state(PyTango.DevState.ON)
 
-
 #---- ImportMntGrp command State Machine -----------------
     def is_ImportEnv_allowed(self):
         if self.get_state() in [PyTango.DevState.RUNNING]:
             return False
         return True
 
-
-
-
 #------------------------------------------------------------------
 #    ExportAllEnv:
 #
 #    Description: exports all environment variables
 #
-#                
+#
 #------------------------------------------------------------------
     def ExportAllEnv(self):
         print >> self.log_info, "In ", self.get_name(), \
@@ -1006,22 +916,17 @@ class NXSRecSelector(PyTango.Device_4Impl):
             if self.get_state() == PyTango.DevState.RUNNING:
                 self.set_state(PyTango.DevState.ON)
 
-
 #---- ExportMntGrp command State Machine -----------------
     def is_ExportEnv_allowed(self):
         if self.get_state() in [PyTango.DevState.RUNNING]:
             return False
         return True
 
-
-
-
-
 #------------------------------------------------------------------
 #    DataSourcePath command:
 #
 #    Description: Returns a NeXus path of a given datasource
-#                
+#
 #    argout: DevString    datasource name
 #    argout: DevString    NeXus path
 #------------------------------------------------------------------
@@ -1035,9 +940,8 @@ class NXSRecSelector(PyTango.Device_4Impl):
         finally:
             if self.get_state() == PyTango.DevState.RUNNING:
                 self.set_state(PyTango.DevState.ON)
-        
-        return argout
 
+        return argout
 
 #---- AvailableComponents command State Machine -----------------
     def is_DataSourcePath_allowed(self):
@@ -1045,13 +949,11 @@ class NXSRecSelector(PyTango.Device_4Impl):
             return False
         return True
 
-
-
 #------------------------------------------------------------------
 #    FindMntGrp command:
 #
 #    Description: Returns a full name of the given measurement group
-#                
+#
 #    argout: DevString    mntgrp alias
 #    argout: DevString    mntgrp full name
 #------------------------------------------------------------------
@@ -1065,9 +967,8 @@ class NXSRecSelector(PyTango.Device_4Impl):
         finally:
             if self.get_state() == PyTango.DevState.RUNNING:
                 self.set_state(PyTango.DevState.ON)
-        
-        return argout
 
+        return argout
 
 #---- AvailableComponents command State Machine -----------------
     def is_FindMntGrp_allowed(self):
@@ -1075,13 +976,12 @@ class NXSRecSelector(PyTango.Device_4Impl):
             return False
         return True
 
-
 #------------------------------------------------------------------
 #    StoreEnvData command:
 #
 #    Description: Stores ScanDir, ScanFile and NeXusSelectorDevice
 #                 in environment variables
-#                
+#
 #    argout: DevString    json dictionary with enviroutment data
 #    argout: DevLong    scan ID
 #------------------------------------------------------------------
@@ -1095,9 +995,8 @@ class NXSRecSelector(PyTango.Device_4Impl):
         finally:
             if self.get_state() == PyTango.DevState.RUNNING:
                 self.set_state(PyTango.DevState.ON)
-        
-        return argout
 
+        return argout
 
 #---- StoreEnvData command State Machine -----------------
     def is_StoreEnvData_allowed(self):
@@ -1105,14 +1004,13 @@ class NXSRecSelector(PyTango.Device_4Impl):
             return False
         return True
 
-
 #------------------------------------------------------------------
 #    FetchEnvData command:
 #
-#    Description: Fetches ScanDir, ScanFile, ScanID and 
+#    Description: Fetches ScanDir, ScanFile, ScanID and
 #                 NeXusSelectorDevice
 #                 in environment variables
-#                
+#
 #    argout: DevString    json dictionary with enviroutment data
 #------------------------------------------------------------------
     def FetchEnvData(self):
@@ -1126,8 +1024,6 @@ class NXSRecSelector(PyTango.Device_4Impl):
             if self.get_state() == PyTango.DevState.RUNNING:
                 self.set_state(PyTango.DevState.ON)
         return argout
-        
-
 
 #---- FetchEnvData command State Machine -----------------
     def is_FetchEnvData_allowed(self):
@@ -1135,12 +1031,11 @@ class NXSRecSelector(PyTango.Device_4Impl):
             return False
         return True
 
-
 #------------------------------------------------------------------
 #    AvailableComponents command:
 #
 #    Description: Returns a list of available component names
-#                
+#
 #    argout: DevVarStringArray    list of available component names
 #------------------------------------------------------------------
     def AvailableComponents(self):
@@ -1153,9 +1048,8 @@ class NXSRecSelector(PyTango.Device_4Impl):
         finally:
             if self.get_state() == PyTango.DevState.RUNNING:
                 self.set_state(PyTango.DevState.ON)
-        
-        return argout
 
+        return argout
 
 #---- AvailableComponents command State Machine -----------------
     def is_AvailableComponents_allowed(self):
@@ -1163,12 +1057,11 @@ class NXSRecSelector(PyTango.Device_4Impl):
             return False
         return True
 
-
 #------------------------------------------------------------------
 #    AvailableDataSources command:
 #
 #    Description: Returns a list of available DataSource names
-#                
+#
 #    argout: DevVarStringArray    list of available DataSource names
 #------------------------------------------------------------------
     def AvailableDataSources(self):
@@ -1181,9 +1074,8 @@ class NXSRecSelector(PyTango.Device_4Impl):
         finally:
             if self.get_state() == PyTango.DevState.RUNNING:
                 self.set_state(PyTango.DevState.ON)
-        
-        return argout
 
+        return argout
 
 #---- AvailableDataSources command State Machine -----------------
     def is_AvailableDataSources_allowed(self):
@@ -1191,13 +1083,11 @@ class NXSRecSelector(PyTango.Device_4Impl):
             return False
         return True
 
-
-
 #------------------------------------------------------------------
 #    PoolChannels command:
 #
 #    Description: Returns a list of available pool channels
-#                
+#
 #    argout: DevVarStringArray    list of available pool channels
 #------------------------------------------------------------------
     def PoolChannels(self):
@@ -1210,9 +1100,8 @@ class NXSRecSelector(PyTango.Device_4Impl):
         finally:
             if self.get_state() == PyTango.DevState.RUNNING:
                 self.set_state(PyTango.DevState.ON)
-        
-        return argout
 
+        return argout
 
 #---- PoolChannels command State Machine -----------------
     def is_PoolChannels_allowed(self):
@@ -1220,13 +1109,11 @@ class NXSRecSelector(PyTango.Device_4Impl):
             return False
         return True
 
-
-
 #------------------------------------------------------------------
 #    PoolMotors command:
 #
 #    Description: Returns a list of available pool channels
-#                
+#
 #    argout: DevVarStringArray    list of available pool channels
 #------------------------------------------------------------------
     def PoolMotors(self):
@@ -1240,9 +1127,8 @@ class NXSRecSelector(PyTango.Device_4Impl):
         finally:
             if self.get_state() == PyTango.DevState.RUNNING:
                 self.set_state(PyTango.DevState.ON)
-        
-        return argout
 
+        return argout
 
 #---- PoolMotors command State Machine -----------------
     def is_PoolMotors_allowed(self):
@@ -1250,22 +1136,18 @@ class NXSRecSelector(PyTango.Device_4Impl):
             return False
         return True
 
-
-
-
-
 #------------------------------------------------------------------
 #    MandatoryComponents command:
 #
 #    Description: Sets the mandatory components
-#                
+#
 #    argout: DevVarStringArray    component names
 #------------------------------------------------------------------
     def MandatoryComponents(self):
         print >> self.log_info, "In ", self.get_name(), \
             "::MandatoryComponents()"
         #    Add your own code here
-        
+
         try:
             self.set_state(PyTango.DevState.RUNNING)
             argout = self.__stg.mandatoryComponents()
@@ -1275,13 +1157,11 @@ class NXSRecSelector(PyTango.Device_4Impl):
                 self.set_state(PyTango.DevState.ON)
         return argout
 
-
 #---- MandatoryComponents command State Machine -----------------
     def is_MandatoryComponents_allowed(self):
         if self.get_state() in [PyTango.DevState.RUNNING]:
             return False
         return True
-
 
 
 #==================================================================
@@ -1295,15 +1175,13 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
     class_property_list = {
         }
 
-
     ##    Device Properties
     device_property_list = {
        'PoolBlacklist':
-            [PyTango.DevVarStringArray,
+           [PyTango.DevVarStringArray,
             "blacklist of pools",
-            [ ] ],
+            []],
         }
-
 
     ##    Command definitions
     cmd_list = {
@@ -1348,10 +1226,12 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
              [PyTango.DevVoid, ""]],
         'AvailableComponents':
             [[PyTango.DevVoid, ""],
-             [PyTango.DevVarStringArray, "list of available component names"]],
+             [PyTango.DevVarStringArray,
+              "list of available component names"]],
         'AvailableDataSources':
             [[PyTango.DevVoid, ""],
-             [PyTango.DevVarStringArray, "list of available DataSource names"]],
+             [PyTango.DevVarStringArray,
+              "list of available DataSource names"]],
         'PoolChannels':
             [[PyTango.DevVoid, ""],
              [PyTango.DevVarStringArray, "list of available pool channels"]],
@@ -1363,7 +1243,6 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
              [PyTango.DevVarStringArray, "component names"]],
         }
 
-
     ##    Attribute definitions
     attr_list = {
         'Components':
@@ -1373,7 +1252,7 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
             {
                 'label':"Selected Components",
                 'description':"list of Selected Components",
-            } ],
+            }],
         'Timer':
             [[PyTango.DevString,
             PyTango.SCALAR,
@@ -1382,7 +1261,7 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
                 'label':"Timer",
                 'description':"Timer and optionally extra timers",
                 'Memorized':"true",
-            } ],
+            }],
         'ComponentGroup':
             [[PyTango.DevString,
             PyTango.SCALAR,
@@ -1392,18 +1271,18 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
                 'description':"JSON dict of Components for Selection",
                 'Memorized':"true",
                 'Display level':PyTango.DispLevel.EXPERT,
-            } ],
+            }],
         'AutomaticComponentGroup':
             [[PyTango.DevString,
             PyTango.SCALAR,
             PyTango.READ_WRITE],
             {
                 'label':"Automatic Components Group",
-                'description':"JSON dict with selection of automatic "\
-                    + "components",
+                'description':"JSON dict with selection of automatic "
+                + "components",
                 'Memorized':"true",
                 'Display level':PyTango.DispLevel.EXPERT,
-            } ],
+            }],
         'AutomaticComponents':
             [[PyTango.DevString,
             PyTango.SPECTRUM,
@@ -1411,18 +1290,18 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
             {
                 'label':"Automatic Components",
                 'description':"JSON list of automatic components",
-            } ],
+            }],
         'OptionalComponents':
             [[PyTango.DevString,
             PyTango.SCALAR,
             PyTango.READ_WRITE],
             {
                 'label':"Optional Components Group",
-                'description':"JSON list of optional components " \
-                    + "available for automatic selection",
+                'description':"JSON list of optional components "
+                + "available for automatic selection",
                 'Memorized':"true",
                 'Display level':PyTango.DispLevel.EXPERT,
-            } ],
+            }],
         'MntGrp':
             [[PyTango.DevString,
             PyTango.SCALAR,
@@ -1431,7 +1310,7 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
                 'label':" Measurement Group",
                 'description':" Measurement Group",
                 'Memorized':"true",
-            } ],
+            }],
         'ScanDir':
             [[PyTango.DevString,
             PyTango.SCALAR,
@@ -1439,7 +1318,7 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
             {
                 'label':"Scan Directory",
                 'description':"Scan Directory",
-            } ],
+            }],
         'ScanID':
             [[PyTango.DevLong,
             PyTango.SCALAR,
@@ -1447,7 +1326,7 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
             {
 #                'label':"Scan ID",
                 'description':"Scan ID",
-            } ],
+            }],
         'ScanFile':
             [[PyTango.DevString,
             PyTango.SPECTRUM,
@@ -1455,7 +1334,7 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
             {
                 'label':"Scan File(s)",
                 'description':"Scan File(s)",
-            } ],
+            }],
         'ConfigDevice':
             [[PyTango.DevString,
             PyTango.SCALAR,
@@ -1464,7 +1343,7 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
                 'label':"Configuration Device",
                 'description':"Configuration device",
                 'Memorized':"true",
-            } ],
+            }],
         'MacroServer':
             [[PyTango.DevString,
             PyTango.SCALAR,
@@ -1472,7 +1351,7 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
             {
                 'label':"MacroServer",
                 'description':"MacroServer",
-            } ],
+            }],
         'Door':
             [[PyTango.DevString,
             PyTango.SCALAR,
@@ -1481,7 +1360,7 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
                 'label':"Door",
                 'description':"Door",
                 'Memorized':"true",
-            } ],
+            }],
         'WriterDevice':
             [[PyTango.DevString,
             PyTango.SCALAR,
@@ -1490,7 +1369,7 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
                 'label':"Writer Device",
                 'description':"Writer device",
                 'Memorized':"true",
-            } ],
+            }],
         'DataRecord':
             [[PyTango.DevString,
             PyTango.SCALAR,
@@ -1500,62 +1379,62 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
                 'description':"JSON dictionary with Client Data Record",
                 'Memorized':"true",
                 'Display level':PyTango.DispLevel.EXPERT,
-            } ],
+            }],
         'LabelPaths':
             [[PyTango.DevString,
             PyTango.SCALAR,
             PyTango.READ_WRITE],
             {
                 'label':"NeXus Paths for DataSource Labels",
-                'description':"JSON dictionary with NeXus Paths for " \
-                    + "Datasource Labels",
+                'description':"JSON dictionary with NeXus Paths for "
+                + "Datasource Labels",
                 'Memorized':"true",
                 'Display level':PyTango.DispLevel.EXPERT,
-            } ],
+            }],
         'LabelTypes':
             [[PyTango.DevString,
             PyTango.SCALAR,
             PyTango.READ_WRITE],
             {
                 'label':"NeXus Types for DataSource Labels",
-                'description':"JSON dictionary with NeXus Types for " \
-                    + "Datasource Labels",
+                'description':"JSON dictionary with NeXus Types for "
+                + "Datasource Labels",
                 'Memorized':"true",
                 'Display level':PyTango.DispLevel.EXPERT,
-            } ],
+            }],
         'LabelShapes':
             [[PyTango.DevString,
             PyTango.SCALAR,
             PyTango.READ_WRITE],
             {
                 'label':"NeXus Shapes for DataSource Labels",
-                'description':"JSON dictionary with NeXus Shapes for " \
-                    + "Datasource Labels",
+                'description':"JSON dictionary with NeXus Shapes for "
+                + "Datasource Labels",
                 'Memorized':"true",
                 'Display level':PyTango.DispLevel.EXPERT,
-            } ],
+            }],
         'LabelLinks':
             [[PyTango.DevString,
             PyTango.SCALAR,
             PyTango.READ_WRITE],
             {
                 'label':"NeXus Links for DataSource Labels",
-                'description':"JSON dictionary with NeXus Links for " \
-                    + "Datasource Labels",
+                'description':"JSON dictionary with NeXus Links for "
+                + "Datasource Labels",
                 'Memorized':"true",
                 'Display level':PyTango.DispLevel.EXPERT,
-            } ],
+            }],
         'HiddenElements':
             [[PyTango.DevString,
             PyTango.SCALAR,
             PyTango.READ_WRITE],
             {
                 'label':"Not displayed elements",
-                'description':"JSON list with not displayed Elements" \
-                    + "Labels",
+                'description':"JSON list with not displayed Elements"
+                + "Labels",
                 'Memorized':"true",
                 'Display level':PyTango.DispLevel.EXPERT,
-            } ],
+            }],
         'Labels':
             [[PyTango.DevString,
             PyTango.SCALAR,
@@ -1565,7 +1444,7 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
                 'description':"JSON dictionary with Element Labels",
                 'Memorized':"true",
                 'Display level':PyTango.DispLevel.EXPERT,
-            } ],
+            }],
         'DataSources':
             [[PyTango.DevString,
             PyTango.SPECTRUM,
@@ -1573,7 +1452,7 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
             {
                 'label':"Selected Datasources",
                 'description':"list of Selected Datasources",
-            } ],
+            }],
         'AvailableTimers':
             [[PyTango.DevString,
             PyTango.SPECTRUM,
@@ -1581,47 +1460,47 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
             {
                 'label':"Available Timers",
                 'description':"list of Available Timers",
-            } ],
+            }],
         'Description':
             [[PyTango.DevString,
             PyTango.SCALAR,
             PyTango.READ],
             {
                 'label':"Dependences descrition",
-                'description':"Dependences descrition of Components and " \
-                    + "Datasources",
+                'description':"Dependences descrition of Components and "
+                + "Datasources",
                 'Display level':PyTango.DispLevel.EXPERT,
-            } ],
+            }],
         'ClientSources':
             [[PyTango.DevString,
             PyTango.SCALAR,
             PyTango.READ],
             {
                 'label':"Descrition of client datasources",
-                'description':"Dependences descrition of client " \
-                    + "Datasources",
+                'description':"Dependences descrition of client "
+                + "Datasources",
                 'Display level':PyTango.DispLevel.EXPERT,
-            } ],
+            }],
         'VariableComponents':
             [[PyTango.DevString,
             PyTango.SCALAR,
             PyTango.READ],
             {
                 'label':" Variable Components",
-                'description':"JSON Dictionary with Variables for " \
-                    + " all  available Components ",
+                'description':"JSON Dictionary with Variables for "
+                + " all  available Components ",
                 'Display level':PyTango.DispLevel.EXPERT,
-            } ],
+            }],
         'FullDeviceNames':
             [[PyTango.DevString,
             PyTango.SCALAR,
             PyTango.READ],
             {
                 'label':" Full device names",
-                'description':"JSON Dictionary with full device names for " \
-                    + " all aliases ",
+                'description':"JSON Dictionary with full device names for "
+                + " all aliases ",
                 'Display level':PyTango.DispLevel.EXPERT,
-            } ],
+            }],
         'Configuration':
             [[PyTango.DevString,
             PyTango.SCALAR,
@@ -1630,7 +1509,7 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
                 'label':"configuration",
                 'description':"JSON dict of server configuration",
                 'Display level':PyTango.DispLevel.EXPERT,
-            } ],
+            }],
         'DataSourceGroup':
             [[PyTango.DevString,
             PyTango.SCALAR,
@@ -1640,7 +1519,7 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
                 'description':"JSON dict of DataSources for selection",
                 'Memorized':"true",
                 'Display level':PyTango.DispLevel.EXPERT,
-            } ],
+            }],
         'AutomaticDataSources':
             [[PyTango.DevString,
             PyTango.SCALAR,
@@ -1650,7 +1529,7 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
                 'description':"JSON list of Automatic DataSources",
                 'Memorized':"true",
                 'Display level':PyTango.DispLevel.EXPERT,
-            } ],
+            }],
         'DisableDataSources':
             [[PyTango.DevString,
             PyTango.SPECTRUM,
@@ -1658,7 +1537,7 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
             {
                 'label':"Disable DataSources",
                 'description':"list of Disable DataSources",
-            } ],
+            }],
         'AppendEntry':
             [[PyTango.DevBoolean,
             PyTango.SCALAR,
@@ -1667,7 +1546,7 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
                 'label':"Append Entry",
                 'description':"flag for entry  appending ",
                 'Memorized':"true",
-            } ],
+            }],
         'ComponentsFromMntGrp':
             [[PyTango.DevBoolean,
             PyTango.SCALAR,
@@ -1676,7 +1555,7 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
                 'label':"Select Components from MntGrp",
                 'description':"select components from mntgrp",
                 'Memorized':"true",
-            } ],
+            }],
         'DynamicComponents':
             [[PyTango.DevBoolean,
             PyTango.SCALAR,
@@ -1685,7 +1564,7 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
                 'label':"Dynamic Components",
                 'description':"create dynamic components",
                 'Memorized':"true",
-            } ],
+            }],
         'DynamicLinks':
             [[PyTango.DevBoolean,
             PyTango.SCALAR,
@@ -1694,7 +1573,7 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
                 'label':"Links for Dynamic Components",
                 'description':"create links for dynamic components",
                 'Memorized':"true",
-            } ],
+            }],
         'DynamicPath':
             [[PyTango.DevString,
             PyTango.SCALAR,
@@ -1704,18 +1583,18 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
                 'description':"path for dynamic components",
                 'Memorized':"true",
                 'Display level':PyTango.DispLevel.EXPERT,
-            } ],
+            }],
         'ConfigVariables':
             [[PyTango.DevString,
             PyTango.SCALAR,
             PyTango.READ_WRITE],
             {
                 'label':"Configuration Variables",
-                'description':"JSON dictionary with configuration variables" \
-                    + "for templated components",
+                'description':"JSON dictionary with configuration variables"
+                + "for templated components",
                 'Memorized':"true",
                 'Display level':PyTango.DispLevel.EXPERT,
-            } ],
+            }],
         'ConfigFile':
             [[PyTango.DevString,
             PyTango.SCALAR,
@@ -1724,7 +1603,7 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
                 'label':"Config File with its Path",
                 'description':"config file with its full path",
                 'Memorized':"true",
-            } ],
+            }],
         'TimeZone':
             [[PyTango.DevString,
             PyTango.SCALAR,
@@ -1733,12 +1612,11 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
                 'label':"Time Zone",
                 'description':"timezone",
                 'Memorized':"true",
-            } ],
+            }],
         }
 
-
 #------------------------------------------------------------------
-##    NXSRecSelectorClass Constructor
+##    Nxsrecselectorclass Constructor
 #------------------------------------------------------------------
     def __init__(self, name):
         PyTango.DeviceClass.__init__(self, name)
