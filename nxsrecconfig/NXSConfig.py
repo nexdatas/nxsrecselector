@@ -1083,6 +1083,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
             return False
         return True
 
+
 #------------------------------------------------------------------
 #    PoolChannels command:
 #
@@ -1159,6 +1160,59 @@ class NXSRecSelector(PyTango.Device_4Impl):
 
 #---- MandatoryComponents command State Machine -----------------
     def is_MandatoryComponents_allowed(self):
+        if self.get_state() in [PyTango.DevState.RUNNING]:
+            return False
+        return True
+
+#------------------------------------------------------------------
+#    CreateDynamicComponent command:
+#
+#    Description: create dynamic component
+#
+#    argin:  DevVarStringArray    list of datasource parameters
+#    argout: DevVarString         name of created dynamic component
+#------------------------------------------------------------------
+    def CreateDynamicComponent(self, argin):
+        print >> self.log_info, "In ", self.get_name(), \
+            "::CreateDynamicComponent()"
+        try:
+            self.set_state(PyTango.DevState.RUNNING)
+            argout = self.__stg.createDynamicComponent(argin)
+            self.set_state(PyTango.DevState.OPEN)
+        finally:
+            if self.get_state() == PyTango.DevState.RUNNING:
+                self.set_state(PyTango.DevState.OPEN)
+
+        return argout
+
+#---- CreateDynamicComponent command State Machine -----------------
+    def is_CreateDynamicComponent_allowed(self):
+        if self.get_state() in [PyTango.DevState.RUNNING]:
+            #    End of Generated Code
+            #    Re-Start of Generated Code
+            return False
+        return True
+
+#------------------------------------------------------------------
+#    RemoveDynamicComponent command:
+#
+#    Description: Deletes the given dynamic component
+#
+#    argin:  DevString  dynamic component name
+#------------------------------------------------------------------
+    def RemoveDynamicComponent(self, argin):
+        print >> self.log_info, "In ", self.get_name(), "::RemoveDynamicComponent()"
+        #    Add your own code here
+        try:
+            self.set_state(PyTango.DevState.RUNNING)
+            self.__stg.removeDynamicComponent(argin)
+            self.set_state(PyTango.DevState.OPEN)
+        finally:
+            if self.get_state() == PyTango.DevState.RUNNING:
+                self.set_state(PyTango.DevState.OPEN)
+
+#---- RemoveDynamicComponent command State Machine -----------------
+    def is_RemoveDynamicComponent_allowed(self):
         if self.get_state() in [PyTango.DevState.RUNNING]:
             return False
         return True
@@ -1241,6 +1295,12 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
         'MandatoryComponents':
             [[PyTango.DevVoid, ""],
              [PyTango.DevVarStringArray, "component names"]],
+        'CreateDynamicComponent':
+            [[PyTango.DevVarStringArray, "list of available pool channels"],
+             [PyTango.DevString, "name of dynamic Component"]],
+        'RemoveDynamicComponent':
+            [[PyTango.DevString, "name of dynamic Component"],
+             [PyTango.DevVoid, ""]],
         }
 
     ##    Attribute definitions
