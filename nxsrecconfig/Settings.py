@@ -901,7 +901,7 @@ class Settings(object):
         pn = msp.get_property("PoolNames")["PoolNames"]
         if pn:
             for pl in pn:
-                pool = Utils.openProxy(pn[0])
+                pool = Utils.openProxy(pl)
                 exps = pool.MotorList
                 if exps:
                     for jexp in exps:
@@ -970,7 +970,7 @@ class Settings(object):
         cp = None
         cp = list(set(self.components) |
                   set(self.automaticComponents))
-        dc = describer.final(cp, '', 'CLIENT',self.configVariables)
+        dc = describer.final(cp, '', 'CLIENT', self.configVariables)
         jdc = json.dumps(dc)
         return jdc
 

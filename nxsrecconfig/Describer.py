@@ -88,7 +88,6 @@ class Describer(object):
     #        If '' all available ones are taken
     # \param cfvars configuration variables
     def final(self, components=None, strategy='', dstype='', cfvars=None):
-        result = [{}, {}]
 
         if components is not None:
             cpp = self.__nexusconfig_device.availableComponents()
@@ -242,7 +241,8 @@ class Describer(object):
 
         return (fname, counter)
 
-    def __getShape(self, node):
+    @classmethod
+    def __getShape(cls, node):
         shape = None
         rank = int(node.attributes["rank"].value)
         shape = [None] * rank

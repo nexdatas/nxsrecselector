@@ -1201,7 +1201,8 @@ class NXSRecSelector(PyTango.Device_4Impl):
 #    argin:  DevString  dynamic component name
 #------------------------------------------------------------------
     def RemoveDynamicComponent(self, argin):
-        print >> self.log_info, "In ", self.get_name(), "::RemoveDynamicComponent()"
+        print >> self.log_info, "In ", self.get_name(), \
+            "::RemoveDynamicComponent()"
         #    Add your own code here
         try:
             self.set_state(PyTango.DevState.RUNNING)

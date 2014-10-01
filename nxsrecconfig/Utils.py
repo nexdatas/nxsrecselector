@@ -296,7 +296,7 @@ class Utils(object):
             if ac.data_format != PyTango.AttrDataFormat.SCALAR:
                 da = ap.read()
                 vl = da.value
-        except Exception as e:
+        except Exception:
             if ac and ac.data_format != PyTango.AttrDataFormat.SCALAR \
                     and da is None:
                 raise

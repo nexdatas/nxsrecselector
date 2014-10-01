@@ -20,11 +20,10 @@
 
 """  Dynamic Component """
 
-import re
 import xml.dom.minidom
 import json
-
 import PyTango
+
 
 ## NeXus Sardana Recorder settings
 class DynamicComponent(object):
@@ -36,8 +35,8 @@ class DynamicComponent(object):
     def __init__(self, nexusconfig_device):
         self.__nexusconfig_device = nexusconfig_device
 
-        self.__dictDSources = [] 
-        self.__listDSources = [] 
+        self.__dictDSources = []
+        self.__listDSources = []
         self.__dsources = []
         ## dynamic components
         self.__defaultCP = "__dynamic_component__"
@@ -79,16 +78,16 @@ class DynamicComponent(object):
             name = "/".join(lst[1:])
         return self.__db.get_alias(name)
 
-    ## sets user datasource parameters 
-    # \params dct list of parameter dictionaries    
+    ## sets user datasource parameters
+    # \params dct list of parameter dictionaries
     def setDictDSources(self, dct):
         self.__dictDSources = []
         dct = json.loads(dct)
         if not isinstance(dct, list):
             for dd in dct:
-                if "name" not in dd.keys() and  "label" in dd.keys():
+                if "name" not in dd.keys() and "label" in dd.keys():
                     dd["name"] = dd["label"]
-                elif "name" in dd.keys() and  "label" not in dd.keys():
+                elif "name" in dd.keys() and "label" not in dd.keys():
                     dd["label"] = dd["name"]
                 else:
                     continue
@@ -97,16 +96,14 @@ class DynamicComponent(object):
                     self.__dictDSources[-1]["dtype"] = "string"
                 if "shape" not in dd.keys():
                     self.__dictDSources[-1]["shape"] = []
-                    
-                    
 
-    ## sets user datasource parameters 
+    ## sets user datasource parameters
     # \params lst list of datasources
     def setListDSources(self, lst):
         self.__listDSources = json.loads(lst)
         if not isinstance(self.__listDSources, list):
             self.__listDSources = []
-        
+
     def setDataSources(self, dsources):
         self.__dsources = list(dsources)
         if not isinstance(self.__dsources, list):
@@ -128,22 +125,20 @@ class DynamicComponent(object):
         self.__nexusshapes = json.loads(shapes)
         if not isinstance(self.__nexusshapes, dict):
             self.__nexusshapes = {}
-    
+
     def setLinkParams(self, dynamicLinks, dynamicPath):
         self.__links = dynamicLinks
         self.__defaultpath = dynamicPath
         if not self.__defaultpath:
             self.__defaultpath = self.__ldefaultpath
 
-
-    ## creates dynamic component       
+    ## creates dynamic component
     def create(self):
         cps = self.__nexusconfig_device.availableComponents()
         name = self.__defaultCP
         while name in cps:
             name = name + "x"
         self.__dynamicCP = name
-
 
         root = xml.dom.minidom.Document()
         definition = root.createElement("definition")
@@ -156,18 +151,16 @@ class DynamicComponent(object):
                 path, field = self.__getFieldPath(
                     self.__nexuspaths, self.__nexuslabels,
                     alias, self.__defaultpath)
-                link = self.__getProp(self.__nexuslinks, self.__nexuslabels, 
+                link = self.__getProp(self.__nexuslinks, self.__nexuslabels,
                                       alias, self.__links)
                 (parent, nxdata) = self.__createGroupTree(
                     root, definition, path, link)
-#                self.debug("DC: %s, %s, %s, %s :  %s %s %s" % (
-#                        dd["name"], dd["dtype"], dd["label"], str(dd["shape"]),
-#                        alias, path, field))
                 created.append(alias)
                 nxtype = self.__npTn[dd["dtype"]] \
                     if dd["dtype"] in self.__npTn.keys() else 'NX_CHAR'
                 self.__createField(
-                    root, parent, field, nxtype, alias, dd["name"], dd["shape"])
+                    root, parent, field, nxtype, alias,
+                    dd["name"], dd["shape"])
                 if link:
                     self.__createLink(root, nxdata, path, field)
 
@@ -203,10 +196,12 @@ class DynamicComponent(object):
                     indom = xml.dom.minidom.parseString(dsource[0])
                     dss = indom.getElementsByTagName("datasource")
                     if len(dss):
-                        nxtype = self.__getProp(self.__nexustypes, self.__nexuslabels, ds,
-                                                'NX_CHAR')
-                        shape = self.__getProp(self.__nexusshapes, self.__nexuslabels, ds,
-                                               None)
+                        nxtype = self.__getProp(
+                            self.__nexustypes, self.__nexuslabels, ds,
+                            'NX_CHAR')
+                        shape = self.__getProp(
+                            self.__nexusshapes, self.__nexuslabels, ds,
+                            None)
 #                        self.debug("TYPE: %s" % nxtype)
                         self.__createField(root, parent, field, nxtype, ds,
                                        dsnode=dss[0], shape=shape)
@@ -221,13 +216,15 @@ class DynamicComponent(object):
 
         return self.__dynamicCP
 
-    def __getProp(self, nexusprop, nexuslabels, name, default):
-        prop = nexusprop.get(self.__nexuslabels.get(name, ""), None)
+    @classmethod
+    def __getProp(cls, nexusprop, nexuslabels, name, default):
+        prop = nexusprop.get(nexuslabels.get(name, ""), None)
         if prop is None:
             prop = nexusprop.get(name, default)
         return prop
 
-    def __getFieldPath(self, nexuspaths, nexuslabels, alias, defaultpath):
+    @classmethod
+    def __getFieldPath(cls, nexuspaths, nexuslabels, alias, defaultpath):
         path = nexuspaths.get(nexuslabels.get(alias, ""), "")
         if not path:
             path = nexuspaths.get(alias, "")
@@ -239,7 +236,6 @@ class DynamicComponent(object):
             path = defaultpath
             field = alias
         return (path, field)
-
 
     @classmethod
     def __createLink(cls, root, entry, path, name):
@@ -290,7 +286,8 @@ class DynamicComponent(object):
         if name in cps:
             self.__nexusconfig_device.deleteComponent(str(name))
 
-    def __createGroupTree(self, root, definition, path, links=False):
+    @classmethod
+    def __createGroupTree(cls, root, definition, path, links=False):
         # create group tree
 
         spath = path.split('/')
@@ -320,4 +317,3 @@ class DynamicComponent(object):
             nxdata.setAttribute("name", "data")
 
         return parent, nxdata
-
