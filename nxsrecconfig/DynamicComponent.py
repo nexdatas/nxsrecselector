@@ -82,21 +82,22 @@ class DynamicComponent(object):
     # \params dct list of parameter dictionaries
     def setDictDSources(self, dct):
         self.__dictDSources = []
-        dct = json.loads(dct)
-        if not isinstance(dct, list):
-            for dd in dct:
+        jdct = json.loads(dct)
+            
+        if isinstance(jdct, list):
+            for dd in jdct:
                 if "name" not in dd.keys() and "label" in dd.keys():
                     dd["name"] = dd["label"]
                 elif "name" in dd.keys() and "label" not in dd.keys():
                     dd["label"] = dd["name"]
-                else:
+                elif "name" not in dd.keys() and "label" not in dd.keys():
                     continue
                 self.__dictDSources.append(dd)
                 if "dtype" not in dd.keys():
                     self.__dictDSources[-1]["dtype"] = "string"
                 if "shape" not in dd.keys():
                     self.__dictDSources[-1]["shape"] = []
-
+        
     ## sets user datasource parameters
     # \params lst list of datasources
     def setListDSources(self, lst):
@@ -202,7 +203,6 @@ class DynamicComponent(object):
                         shape = self.__getProp(
                             self.__nexusshapes, self.__nexuslabels, ds,
                             None)
-#                        self.debug("TYPE: %s" % nxtype)
                         self.__createField(root, parent, field, nxtype, ds,
                                        dsnode=dss[0], shape=shape)
                         if link:
@@ -211,7 +211,6 @@ class DynamicComponent(object):
         self.__nexusconfig_device.xmlstring = str(root.toprettyxml(indent=""))
         self.__nexusconfig_device.storeComponent(str(self.__dynamicCP))
 
-#        self.debug("Dynamic Component:\n%s" % root.toprettyxml(indent="  "))
 #        print "Dynamic Component:\n%s" % root.toprettyxml(indent="  ")
 
         return self.__dynamicCP
