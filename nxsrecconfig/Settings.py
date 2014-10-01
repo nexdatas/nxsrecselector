@@ -1426,27 +1426,26 @@ class Settings(object):
 
     ## creates dynamic component
     # \param params datasource parameters
-    # \returns dynamic component name            
+    # \returns dynamic component name
     def createDynamicComponent(self, params):
         nexusconfig_device = self.__setConfigInstance()
         dcpcreator = DynamicComponent(nexusconfig_device)
         if params and isinstance(params, (list, tuple)):
-            if len(params)>0 and params[0]:
+            if len(params) > 0 and params[0]:
                 dcpcreator.setListDSources(params[0])
-            if len(params)>1 and params[1]:
+            if len(params) > 1 and params[1]:
                 dcpcreator.setDictDSources(params[1])
-        dcpcreator.setDataSources(self.dataSources)        
+        dcpcreator.setDataSources(self.dataSources)
         dcpcreator.setLabelParams(
             self.labels, self.labelPaths, self.labelLinks,
             self.labelTypes, self.labelShapes)
         dcpcreator.setLinkParams(self.dynamicLinks, self.dynamicPath)
 
-        return dcpcreator.create()        
+        return dcpcreator.create()
 
     ## removes dynamic component
-    # \param name dynamic component name            
+    # \param name dynamic component name
     def removeDynamicComponent(self, name):
         nexusconfig_device = self.__setConfigInstance()
         dcpcreator = DynamicComponent(nexusconfig_device)
         dcpcreator.removeDynamicComponent(name)
-        

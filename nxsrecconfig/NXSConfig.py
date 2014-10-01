@@ -1083,7 +1083,6 @@ class NXSRecSelector(PyTango.Device_4Impl):
             return False
         return True
 
-
 #------------------------------------------------------------------
 #    PoolChannels command:
 #
