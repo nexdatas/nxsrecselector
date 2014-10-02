@@ -94,21 +94,26 @@ class Describer(object):
             cps = [cp for cp in components if cp in cpp]
         else:
             cps = self.__nexusconfig_device.availableComponents()
+        if components is None:
+            mand = self.__nexusconfig_device.mandatoryComponents()
+            cps = list(set(cps) | set(mand))
 
-        dss = self.__getDataSetAttributes(cps, cfvars)
         tr = []
-        for ds in dss.keys():
-            for vds in dss[ds]:
-                if (not strategy or vds[0] == strategy) and \
+        for cp in cps:
+            dss = self.__getDataSetAttributes(cp, cfvars)
+            for ds in dss.keys():
+                for vds in dss[ds]:
+                    if (not strategy or vds[0] == strategy) and \
                         (not dstype or vds[1] == dstype):
-                    elem = {}
-                    elem["dsname"] = ds
-                    elem["strategy"] = vds[0]
-                    elem["dstype"] = vds[1]
-                    elem["record"] = vds[2]
-                    elem["nxtype"] = vds[3]
-                    elem["shape"] = vds[4]
-                    tr.append(elem)
+                        elem = {}
+                        elem["dsname"] = ds
+                        elem["strategy"] = vds[0]
+                        elem["dstype"] = vds[1]
+                        elem["record"] = vds[2]
+                        elem["nxtype"] = vds[3]
+                        elem["shape"] = vds[4]
+                        elem["cpname"] = cp
+                        tr.append(elem)
         return tr
 
     @classmethod
@@ -263,15 +268,14 @@ class Describer(object):
             return names
         return self.__getXMLAttributes(xmlc[0])
 
-    def __getDataSetAttributes(self, cps, cfvars=None):
+    def __getDataSetAttributes(self, cp, cfvars=None):
         if cfvars:
             self.__nexusconfig_device.variables = cfvars
-        self.__nexusconfig_device.createConfiguration(cps)
-        cpxml = str(self.__nexusconfig_device.xmlstring)
+        xmlc = self.__nexusconfig_device.instantiatedComponents([cp])
         names = []
-        if not len(cpxml) > 0:
+        if not len(xmlc) > 0:
             return names
-        return self.__getXMLAttributes(cpxml)
+        return self.__getXMLAttributes(xmlc[0])
 
     def __getXMLAttributes(self, cpxml):
         indom = xml.dom.minidom.parseString(cpxml)

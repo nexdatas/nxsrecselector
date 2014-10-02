@@ -456,14 +456,6 @@ class NXSRecSelector(PyTango.Device_4Impl):
         attr.set_value(self.__stg.description)
 
 #------------------------------------------------------------------
-#    Read ClientSources attribute
-#------------------------------------------------------------------
-    def read_ClientSources(self, attr):
-        print >> self.log_info, "In ", self.get_name(), \
-            "::read_ClientSources()"
-        attr.set_value(self.__stg.clientSources)
-
-#------------------------------------------------------------------
 #    Read VariableComponents attribute
 #------------------------------------------------------------------
     def read_VariableComponents(self, attr):
@@ -1217,6 +1209,35 @@ class NXSRecSelector(PyTango.Device_4Impl):
             return False
         return True
 
+#------------------------------------------------------------------
+#    ClientSources command:
+#
+#    Description: create dynamic component
+#
+#    argin:  DevVarStringArray    list of component names
+#    argout: DevVarString         description of component datasources
+#------------------------------------------------------------------
+    def ClientSources(self, argin):
+        print >> self.log_info, "In ", self.get_name(), \
+            "::ClientSources()"
+        try:
+            self.set_state(PyTango.DevState.RUNNING)
+            argout = self.__stg.clientSources(argin)
+            self.set_state(PyTango.DevState.OPEN)
+        finally:
+            if self.get_state() == PyTango.DevState.RUNNING:
+                self.set_state(PyTango.DevState.OPEN)
+
+        return argout
+
+#---- ClientSources command State Machine -----------------
+    def is_ClientSources_allowed(self):
+        if self.get_state() in [PyTango.DevState.RUNNING]:
+            #    End of Generated Code
+            #    Re-Start of Generated Code
+            return False
+        return True
+
 
 #==================================================================
 #
@@ -1298,6 +1319,10 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
         'CreateDynamicComponent':
             [[PyTango.DevVarStringArray, "list of available pool channels"],
              [PyTango.DevString, "name of dynamic Component"]],
+        'ClientSources':
+            [[PyTango.DevVarStringArray, "list of required components"],
+             [PyTango.DevString,
+              "JSON with description of CLIENT Datasources"]],
         'RemoveDynamicComponent':
             [[PyTango.DevString, "name of dynamic Component"],
              [PyTango.DevVoid, ""]],

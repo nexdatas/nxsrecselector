@@ -83,7 +83,7 @@ class DynamicComponent(object):
     def setDictDSources(self, dct):
         self.__dictDSources = []
         jdct = json.loads(dct)
-            
+
         if isinstance(jdct, list):
             for dd in jdct:
                 if "name" not in dd.keys() and "label" in dd.keys():
@@ -97,7 +97,7 @@ class DynamicComponent(object):
                     self.__dictDSources[-1]["dtype"] = "string"
                 if "shape" not in dd.keys():
                     self.__dictDSources[-1]["shape"] = []
-        
+
     ## sets user datasource parameters
     # \params lst list of datasources
     def setListDSources(self, lst):
