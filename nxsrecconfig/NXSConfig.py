@@ -1556,16 +1556,6 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
                 + "Datasources",
                 'Display level':PyTango.DispLevel.EXPERT,
             }],
-        'ClientSources':
-            [[PyTango.DevString,
-            PyTango.SCALAR,
-            PyTango.READ],
-            {
-                'label':"Descrition of client datasources",
-                'description':"Dependences descrition of client "
-                + "Datasources",
-                'Display level':PyTango.DispLevel.EXPERT,
-            }],
         'VariableComponents':
             [[PyTango.DevString,
             PyTango.SCALAR,
