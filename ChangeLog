@@ -1,4 +1,4 @@
-2014-10-XX Jan Kotanski <jankotan@gmail.com>
+2014-10-06 Jan Kotanski <jankotan@gmail.com>
 	* change parameters of CreateDynamicComponent
 	* removing label from datasource dictionary
 	* making update of config server variables inr final describer
