@@ -85,11 +85,7 @@ class DynamicComponent(object):
 
         if isinstance(jdct, list):
             for dd in jdct:
-                if "name" not in dd.keys() and "label" in dd.keys():
-                    dd["name"] = dd["label"]
-                elif "name" in dd.keys() and "label" not in dd.keys():
-                    dd["label"] = dd["name"]
-                elif "name" not in dd.keys() and "label" not in dd.keys():
+                if "name" not in dd.keys():
                     continue
                 self.__dictDSources.append(dd)
                 if "dtype" not in dd.keys():

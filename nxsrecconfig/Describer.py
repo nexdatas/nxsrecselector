@@ -21,6 +21,7 @@
 """  Component Describer """
 
 import re
+import json
 import xml.dom.minidom
 
 
@@ -270,7 +271,11 @@ class Describer(object):
 
     def __getDataSetAttributes(self, cp, cfvars=None):
         if cfvars:
-            self.__nexusconfig_device.variables = cfvars
+            cv = json.loads(self.__nexusconfig_device.variables)
+            sv = json.loads(cfvars)
+            if sv and isinstance(sv, dict):
+                cv.update(sv)
+            self.__nexusconfig_device.variables = json.dumps(cv)
         xmlc = self.__nexusconfig_device.instantiatedComponents([cp])
         names = []
         if not len(xmlc) > 0:
