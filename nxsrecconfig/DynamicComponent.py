@@ -140,7 +140,6 @@ class DynamicComponent(object):
 
         created = []
         for dd in self.__dictDSources:
-#            if self.__get_alias(str(dd["name"])) in self.__listDSources:
             alias = self.__get_alias(str(dd["name"]))
             path, field = self.__getFieldPath(
                 self.__nexuspaths, self.__nexuslabels,
@@ -179,14 +178,14 @@ class DynamicComponent(object):
                     self.__createField(root, parent, field, nxtype, ds,
                                        dsnode=dss[0], shape=shape)
                 else:
-                    self.__createField(root, parent, field, nxtype, ds, ds, shape)
+                    self.__createField(root, parent, field, nxtype, ds,
+                                       ds, shape)
                 if link:
                     self.__createLink(root, nxdata, path, field)
 
         self.__nexusconfig_device.xmlstring = str(root.toprettyxml(indent=""))
         self.__nexusconfig_device.storeComponent(str(self.__dynamicCP))
-
-#        print "Dynamic Component:\n%s" % root.toprettyxml(indent="  ")
+#        print("Dynamic Component:\n%s" % root.toprettyxml(indent="  "))
 
         return self.__dynamicCP
 
