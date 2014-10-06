@@ -1160,7 +1160,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
 #
 #    Description: create dynamic component
 #
-#    argin:  DevVarStringArray    list of datasource parameters
+#    argin:  DevVarString         list of datasource parameters
 #    argout: DevVarString         name of created dynamic component
 #------------------------------------------------------------------
     def CreateDynamicComponent(self, argin):
@@ -1317,7 +1317,7 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
             [[PyTango.DevVoid, ""],
              [PyTango.DevVarStringArray, "component names"]],
         'CreateDynamicComponent':
-            [[PyTango.DevVarStringArray, "list of available pool channels"],
+            [[PyTango.DevString, "JSON string with datasource parameters"],
              [PyTango.DevString, "name of dynamic Component"]],
         'ClientSources':
             [[PyTango.DevVarStringArray, "list of required components"],

@@ -1,3 +1,7 @@
+2014-10-XX Jan Kotanski <jankotan@gmail.com>
+	* change parameters of CreateDynamicComponent
+	* tagged as v1.8.2
+
 2014-10-02 Jan Kotanski <jankotan@gmail.com>
 	* removing ClientSources attribute
 	* tagged as v1.8.1

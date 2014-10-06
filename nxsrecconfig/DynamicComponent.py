@@ -36,7 +36,6 @@ class DynamicComponent(object):
         self.__nexusconfig_device = nexusconfig_device
 
         self.__dictDSources = []
-        self.__listDSources = []
         self.__dsources = []
         ## dynamic components
         self.__defaultCP = "__dynamic_component__"
@@ -98,13 +97,6 @@ class DynamicComponent(object):
                 if "shape" not in dd.keys():
                     self.__dictDSources[-1]["shape"] = []
 
-    ## sets user datasource parameters
-    # \params lst list of datasources
-    def setListDSources(self, lst):
-        self.__listDSources = json.loads(lst)
-        if not isinstance(self.__listDSources, list):
-            self.__listDSources = []
-
     def setDataSources(self, dsources):
         self.__dsources = list(dsources)
         if not isinstance(self.__dsources, list):
@@ -144,28 +136,29 @@ class DynamicComponent(object):
         root = xml.dom.minidom.Document()
         definition = root.createElement("definition")
         root.appendChild(definition)
+        avds = self.__nexusconfig_device.availableDataSources()
 
         created = []
         for dd in self.__dictDSources:
-            if self.__get_alias(str(dd["name"])) in self.__listDSources:
-                alias = self.__get_alias(str(dd["name"]))
-                path, field = self.__getFieldPath(
-                    self.__nexuspaths, self.__nexuslabels,
-                    alias, self.__defaultpath)
-                link = self.__getProp(self.__nexuslinks, self.__nexuslabels,
+#            if self.__get_alias(str(dd["name"])) in self.__listDSources:
+            alias = self.__get_alias(str(dd["name"]))
+            path, field = self.__getFieldPath(
+                self.__nexuspaths, self.__nexuslabels,
+                alias, self.__defaultpath)
+            link = self.__getProp(self.__nexuslinks, self.__nexuslabels,
                                       alias, self.__links)
-                (parent, nxdata) = self.__createGroupTree(
-                    root, definition, path, link)
-                created.append(alias)
-                nxtype = self.__npTn[dd["dtype"]] \
-                    if dd["dtype"] in self.__npTn.keys() else 'NX_CHAR'
-                self.__createField(
-                    root, parent, field, nxtype, alias,
-                    dd["name"], dd["shape"])
-                if link:
-                    self.__createLink(root, nxdata, path, field)
+            (parent, nxdata) = self.__createGroupTree(
+                root, definition, path, link)
+            created.append(alias)
+            nxtype = self.__npTn[dd["dtype"]] \
+                if dd["dtype"] in self.__npTn.keys() else 'NX_CHAR'
+            self.__createField(
+                root, parent, field, nxtype, alias,
+                dd["name"], dd["shape"])
+            if link:
+                self.__createLink(root, nxdata, path, field)
 
-        for ds in self.__listDSources:
+        for ds in self.__dsources:
             if ds not in created:
                 path, field = self.__getFieldPath(
                     self.__nexuspaths, self.__nexuslabels,
@@ -179,34 +172,16 @@ class DynamicComponent(object):
                     self.__nexustypes, self.__nexuslabels, ds, 'NX_CHAR')
                 shape = self.__getProp(
                     self.__nexusshapes, self.__nexuslabels, ds, None)
-                self.__createField(root, parent, field, nxtype, ds, ds, shape)
-                if link:
-                    self.__createLink(root, nxdata, path, field)
-
-        for ds in self.__dsources:
-            if ds not in created:
-                path, field = self.__getFieldPath(
-                    self.__nexuspaths, self.__nexuslabels,
-                    ds, self.__defaultpath)
-                link = self.__getProp(
-                    self.__nexuslinks, self.__nexuslabels, ds, self.__links)
-                (parent, nxdata) = self.__createGroupTree(
-                    root, definition, path, link)
-                dsource = self.__nexusconfig_device.dataSources([str(ds)])
-                if len(dsource) > 0:
+                if ds in avds:
+                    dsource = self.__nexusconfig_device.dataSources([str(ds)])
                     indom = xml.dom.minidom.parseString(dsource[0])
                     dss = indom.getElementsByTagName("datasource")
-                    if len(dss):
-                        nxtype = self.__getProp(
-                            self.__nexustypes, self.__nexuslabels, ds,
-                            'NX_CHAR')
-                        shape = self.__getProp(
-                            self.__nexusshapes, self.__nexuslabels, ds,
-                            None)
-                        self.__createField(root, parent, field, nxtype, ds,
+                    self.__createField(root, parent, field, nxtype, ds,
                                        dsnode=dss[0], shape=shape)
-                        if link:
-                            self.__createLink(root, nxdata, path, field)
+                else:
+                    self.__createField(root, parent, field, nxtype, ds, ds, shape)
+                if link:
+                    self.__createLink(root, nxdata, path, field)
 
         self.__nexusconfig_device.xmlstring = str(root.toprettyxml(indent=""))
         self.__nexusconfig_device.storeComponent(str(self.__dynamicCP))
