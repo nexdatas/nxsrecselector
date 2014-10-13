@@ -21,7 +21,7 @@
 """  NeXus Sardana Recorder Settings - Tango Server """
 
 ## package version
-__version__ = "1.8.2"
+__version__ = "1.8.3"
 
 import sys
 
@@ -34,7 +34,7 @@ def run(argv):
     from .NXSConfig import NXSRecSelectorClass as NXSRecConfigClass
     try:
         py = PyTango.Util(argv)
-        py.add_class(NXSRecConfigClass, NXSRecConfig, 'NXSRecSelector')
+        py.add_class(NXSRecConfigClass, NXSRecConfig)
 
         U = PyTango.Util.instance()
         U.server_init()
