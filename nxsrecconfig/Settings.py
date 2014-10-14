@@ -963,6 +963,7 @@ class Settings(object):
                             doc='provides description of all components')
 
     ## provides description of client datasources
+    # \params cps component names
     # \returns JSON string with description of client datasources
     def clientSources(self, cps):
         nexusconfig_device = self.__setConfigInstance()
@@ -977,6 +978,21 @@ class Settings(object):
         dc = describer.final(cp, '', 'CLIENT', self.configVariables)
         jdc = json.dumps(dc)
         return jdc
+
+    ## create configuration 
+    # \params cps component names
+    # \returns JSON string with description of client datasources
+    def createConfiguration(self, cps):
+        nexusconfig_device = self.__setConfigInstance()
+        if cps:
+            cp = cps
+        else:
+            cp = None
+            cp = list(set(self.components) |
+                      set(self.automaticComponents) |
+                      set(self.mandatoryComponents()))
+        nexusconfig_device.CreateConfiguration(cp)  
+        return str(nexusconfig_device.XMLString)
 
     ## provides description of components
     # \param dstype list datasets only with given datasource type.
@@ -1079,7 +1095,7 @@ class Settings(object):
         return mfullname
 
     ## set active measurement group from components
-    def createConfiguration(self):
+    def createMntGrpConfiguration(self):
         pools = self.__getPools()
         cnf = {}
         cnf['controllers'] = {}
@@ -1154,7 +1170,7 @@ class Settings(object):
     ## set active measurement group from components
     # \returns string with mntgrp configuration
     def updateMntGrp(self):
-        conf, mntgrp = self.createConfiguration()
+        conf, mntgrp = self.createMntGrpConfiguration()
         dpmg = Utils.openProxy(mntgrp)
         dpmg.Configuration = conf
         return str(dpmg.Configuration)
@@ -1229,9 +1245,34 @@ class Settings(object):
     # \returns True if it is different to the current setting
     def isMntGrpChanged(self):
         mgconf = json.loads(self.mntGrpConfiguration())
-        llconf, _ = self.createConfiguration()
+        llconf, _ = self.createMntGrpConfiguration()
         lsconf = json.loads(llconf)
         return not Utils.compareDict(mgconf, lsconf)
+
+    ##  sends ConfigVariables into ConfigServer
+    #        and updates serialno if appendEntry selected
+    def updateConfigVariables(self):
+
+        confvars = self.configVariables
+        nexusconfig_device = self.__setConfigInstance()
+        jvars = json.loads(confvars)
+        cvars = json.loads(nexusconfig_device.Variables)
+        ## appending scans to one file?
+        if self.appendEntry and not 'serialno' in jvars.keys():
+            ## an entry name should contain $var.serialno
+            if 'serialno' in cvars.keys():
+                try:
+                    sn = int(cvars["serialno"])
+                    sn += 1
+                    cvars["serialno"] = str(sn)
+                except Exception:
+                    pass
+            else:
+                cvars["serialno"] = str(1)
+            jvars["serialno"] = cvars["serialno"]
+            confvars = json.dumps(jvars)
+        nexusconfig_device.Variables = confvars
+
 
     ## checks existing controllers of pools for
     #      AutomaticDataSources

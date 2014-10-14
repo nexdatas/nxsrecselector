@@ -760,6 +760,30 @@ class NXSRecSelector(PyTango.Device_4Impl):
         return True
 
 #------------------------------------------------------------------
+#    UpdateConfigVariables:
+#
+#    Description: sends ConfigVariables into ConfigServer
+#        and updates serialno if appendEntry selected
+#
+#------------------------------------------------------------------
+    def UpdateConfigVariables(self):
+        print >> self.log_info, "In ", self.get_name(), \
+            "::UpdateConfigVariables()"
+        try:
+            self.set_state(PyTango.DevState.RUNNING)
+            self.__stg.updateConfigVariables()
+            self.set_state(PyTango.DevState.ON)
+        finally:
+            if self.get_state() == PyTango.DevState.RUNNING:
+                self.set_state(PyTango.DevState.ON)
+
+#---- UpdateConfigVariables command State Machine -----------------
+    def is_UpdateConfigVariables_allowed(self):
+        if self.get_state() in [PyTango.DevState.RUNNING]:
+            return False
+        return True
+
+#------------------------------------------------------------------
 #    IsMntGrpChanged:
 #
 #    Description:  returns true if mntgrp was changed
@@ -1238,6 +1262,35 @@ class NXSRecSelector(PyTango.Device_4Impl):
             return False
         return True
 
+#------------------------------------------------------------------
+#    CreateConfiguration command:
+#
+#    Description: create configuration from the given components
+#
+#    argin:  DevVarStringArray    list of component names
+#    argout: DevVarString         XML configuration string
+#------------------------------------------------------------------
+    def CreateConfiguration(self, argin):
+        print >> self.log_info, "In ", self.get_name(), \
+            "::CreateConfiguration()"
+        try:
+            self.set_state(PyTango.DevState.RUNNING)
+            argout = self.__stg.createConfiguration(argin)
+            self.set_state(PyTango.DevState.OPEN)
+        finally:
+            if self.get_state() == PyTango.DevState.RUNNING:
+                self.set_state(PyTango.DevState.OPEN)
+
+        return argout
+
+#---- CreateConfiguration command State Machine -----------------
+    def is_CreateConfiguration_allowed(self):
+        if self.get_state() in [PyTango.DevState.RUNNING]:
+            #    End of Generated Code
+            #    Re-Start of Generated Code
+            return False
+        return True
+
 
 #==================================================================
 #
@@ -1299,6 +1352,9 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
         'UpdateControllers':
             [[PyTango.DevVoid, ""],
              [PyTango.DevVoid, ""]],
+        'UpdateConfigVariables':
+            [[PyTango.DevVoid, ""],
+             [PyTango.DevVoid, ""]],
         'AvailableComponents':
             [[PyTango.DevVoid, ""],
              [PyTango.DevVarStringArray,
@@ -1323,6 +1379,10 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
             [[PyTango.DevVarStringArray, "list of required components"],
              [PyTango.DevString,
               "JSON with description of CLIENT Datasources"]],
+        'CreateConfiguration':
+            [[PyTango.DevVarStringArray, "list of required components"],
+             [PyTango.DevString,
+              "XML Settinges"]],
         'RemoveDynamicComponent':
             [[PyTango.DevString, "name of dynamic Component"],
              [PyTango.DevVoid, ""]],
