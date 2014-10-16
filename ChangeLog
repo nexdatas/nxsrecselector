@@ -1,3 +1,7 @@
+2014-10-16 Jan Kotanski <jankotan@gmail.com>
+	* adding ping and attributes checks for updateControllers
+	* tagged as v1.8.5
+
 2014-10-14 Jan Kotanski <jankotan@gmail.com>
 	* adding CreateConfiguration and UpdateConfigVariables commands
 	* tagged as v1.8.4

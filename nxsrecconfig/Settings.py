@@ -137,6 +137,9 @@ class Settings(object):
 
         self.__nxsenv = "NeXusConfiguration"
 
+        self.attrsToCheck = ["Value", "Position", "Counts", "Data",
+                             "Voltage", "Energy", "SampleTime"]
+
     ## provides names of variables
     def names(self):
         return self.__state.keys()
@@ -1284,7 +1287,15 @@ class Settings(object):
         for dev in ads:
             if dev not in fnames.keys():
                 nonexisting.append(dev)
-
+            try:
+                dp = PyTango.DeviceProxy(fnames[dev])
+                dp.ping()
+                for at in self.attrsToCheck:
+                    if hasattr(dp, at):
+                        _ = dp.read_attribute(at)
+            except:
+                nonexisting.append(dev)
+                
         nexusconfig_device = self.__setConfigInstance()
         describer = Describer(nexusconfig_device)
         acps = json.loads(self.__state["AutomaticComponentGroup"])
