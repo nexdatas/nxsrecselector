@@ -1,4 +1,8 @@
 2014-10-17 Jan Kotanski <jankotan@gmail.com>
+	* skip checks for pool devices in updateController
+	* tagged as v1.8.7
+
+2014-10-17 Jan Kotanski <jankotan@gmail.com>
 	* change back parameters of CreateDynamicComponent
 	* tagged as v1.8.6
 

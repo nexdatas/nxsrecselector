@@ -1285,8 +1285,8 @@ class Settings(object):
         nonexisting = []
         fnames = Utils.getFullDeviceNames(pools, ads)
         for dev in ads:
-            if dev not in fnames.keys():
-                nonexisting.append(dev)
+#            if dev not in fnames.keys():
+#                nonexisting.append(dev)
             try:
                 dp = PyTango.DeviceProxy(fnames[dev])
                 dp.ping()
