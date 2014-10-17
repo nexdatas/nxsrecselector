@@ -1,3 +1,7 @@
+2014-10-17 Jan Kotanski <jankotan@gmail.com>
+	* change back parameters of CreateDynamicComponent
+	* tagged as v1.8.6
+
 2014-10-16 Jan Kotanski <jankotan@gmail.com>
 	* adding ping and attributes checks for updateControllers
 	* tagged as v1.8.5
