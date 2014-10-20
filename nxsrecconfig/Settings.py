@@ -986,7 +986,7 @@ class Settings(object):
         jdc = json.dumps(dc)
         return jdc
 
-    ## create configuration 
+    ## create configuration
     # \params cps component names
     # \returns JSON string with description of client datasources
     def createConfiguration(self, cps):
@@ -998,7 +998,7 @@ class Settings(object):
             cp = list(set(self.components) |
                       set(self.automaticComponents) |
                       set(self.mandatoryComponents()))
-        nexusconfig_device.CreateConfiguration(cp)  
+        nexusconfig_device.CreateConfiguration(cp)
         return str(nexusconfig_device.XMLString)
 
     ## provides description of components
@@ -1280,7 +1280,6 @@ class Settings(object):
             confvars = json.dumps(jvars)
         nexusconfig_device.Variables = confvars
 
-
     ## checks existing controllers of pools for
     #      AutomaticDataSources
     def updateControllers(self):
@@ -1291,12 +1290,12 @@ class Settings(object):
         for dev in ads:
 #            if dev not in fnames.keys():
 #                nonexisting.append(dev)
-            try:                
+            try:
                 if dev in fnames:
                     dp = PyTango.DeviceProxy(str(fnames[dev]))
                 else:
                     dp = PyTango.DeviceProxy(str(dev))
-                    
+
                 if dp.state() == PyTango.DevState.FAULT:
                     raise Exception("FAULT STATE")
                 dp.ping()
@@ -1305,7 +1304,7 @@ class Settings(object):
                         _ = dp.read_attribute(at)
             except:
                 nonexisting.append(dev)
-                
+
         nexusconfig_device = self.__setConfigInstance()
         describer = Describer(nexusconfig_device)
         acps = json.loads(self.__state["AutomaticComponentGroup"])
@@ -1491,8 +1490,6 @@ class Settings(object):
     def createDynamicComponent(self, params):
         nexusconfig_device = self.__setConfigInstance()
         dcpcreator = DynamicComponent(nexusconfig_device)
-
-
 
         if params and isinstance(params, (list, tuple)):
             if len(params) > 0 and params[0]:

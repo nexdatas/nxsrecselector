@@ -1373,7 +1373,7 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
             [[PyTango.DevVoid, ""],
              [PyTango.DevVarStringArray, "component names"]],
         'CreateDynamicComponent':
-            [[PyTango.DevVarStringArray, 
+            [[PyTango.DevVarStringArray,
               "list of JSON strings with datasource parameters"],
              [PyTango.DevString, "name of dynamic Component"]],
         'ClientSources':
