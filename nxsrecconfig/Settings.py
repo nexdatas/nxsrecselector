@@ -1287,34 +1287,29 @@ class Settings(object):
         pools = self.__getPools()
         nonexisting = []
         fnames = Utils.getFullDeviceNames(pools, ads)
+        nexusconfig_device = self.__setConfigInstance()
         describer = Describer(nexusconfig_device)
 
         for dev in ads:
-#            if dev not in fnames.keys():
-#                nonexisting.append(dev)
-            try:
-                try:
-                    if dev in fnames:
-                        dp = PyTango.DeviceProxy(str(fnames[dev]))
-                    else:
-                        dp = PyTango.DeviceProxy(str(dev))
-                    for at in self.attrsToCheck:
-                        if hasattr(dp, at):
-                            _ = dp.read_attribute(at)
-                except:
-                    dsres = describer.dataSources([dev])
-                    mdev = dsres[dev][3]
-                    sdev = mdev.split('/')
-                    dp = PyTango.DeviceProxy('/'.join(sdev[0:-1]))
-                    at = sdev[-1]
-                    _ = dp.read_attribute(at)
-                if dp.state() == PyTango.DevState.FAULT:
-                    raise Exception("FAULT STATE")
-                dp.ping()
-            except:
+            if dev not in fnames.keys():
                 nonexisting.append(dev)
-
-        nexusconfig_device = self.__setConfigInstance()
+#            try:
+#                if dev in fnames:
+#                    dp = PyTango.DeviceProxy(str(fnames[dev]))
+#                else:
+#                    dp = PyTango.DeviceProxy(str(dev))
+#                if dp.state() == PyTango.DevState.FAULT:
+#                    raise Exception("FAULT STATE")
+#                dp.ping()
+#                for at in self.attrsToCheck:
+#                    if hasattr(dp, at):
+#                        _ = dp.read_attribute(at)
+#            except Exception as e:
+#                if self.__server:
+#                    print >> self.__server.log_debug, "No device ", dev
+#
+#                nonexisting.append(dev)
+                                
         acps = json.loads(self.__state["AutomaticComponentGroup"])
 
         rcp = set()
@@ -1326,6 +1321,15 @@ class Settings(object):
                         if ds in nonexisting:
                             rcp.add(cp)
                             break
+                        else:
+                            try:
+                                dp = PyTango.DeviceProxy(str(ds))
+                                if dp.state() == PyTango.DevState.FAULT:
+                                    raise Exception("FAULT STATE")
+                                dp.ping()
+                            except:
+                                rcp.add(cp)
+                                break                                
         for acp in acps.keys():
             if acp in rcp:
                 acps[acp] = False
