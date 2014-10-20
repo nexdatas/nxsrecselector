@@ -1287,26 +1287,34 @@ class Settings(object):
         pools = self.__getPools()
         nonexisting = []
         fnames = Utils.getFullDeviceNames(pools, ads)
+        describer = Describer(nexusconfig_device)
+
         for dev in ads:
 #            if dev not in fnames.keys():
 #                nonexisting.append(dev)
             try:
-                if dev in fnames:
-                    dp = PyTango.DeviceProxy(str(fnames[dev]))
-                else:
-                    dp = PyTango.DeviceProxy(str(dev))
-
+                try:
+                    if dev in fnames:
+                        dp = PyTango.DeviceProxy(str(fnames[dev]))
+                    else:
+                        dp = PyTango.DeviceProxy(str(dev))
+                    for at in self.attrsToCheck:
+                        if hasattr(dp, at):
+                            _ = dp.read_attribute(at)
+                except:
+                    dsres = describer.dataSources([dev])
+                    mdev = dsres[dev][3]
+                    sdev = mdev.split('/')
+                    dp = PyTango.DeviceProxy('/'.join(sdev[0:-1]))
+                    at = sdev[-1]
+                    _ = dp.read_attribute(at)
                 if dp.state() == PyTango.DevState.FAULT:
                     raise Exception("FAULT STATE")
                 dp.ping()
-                for at in self.attrsToCheck:
-                    if hasattr(dp, at):
-                        _ = dp.read_attribute(at)
             except:
                 nonexisting.append(dev)
 
         nexusconfig_device = self.__setConfigInstance()
-        describer = Describer(nexusconfig_device)
         acps = json.loads(self.__state["AutomaticComponentGroup"])
 
         rcp = set()
