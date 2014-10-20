@@ -1287,8 +1287,14 @@ class Settings(object):
         for dev in ads:
 #            if dev not in fnames.keys():
 #                nonexisting.append(dev)
-            try:
-                dp = PyTango.DeviceProxy(fnames[dev])
+            try:                
+                if dev in fnames:
+                    dp = PyTango.DeviceProxy(str(fnames[dev]))
+                else:
+                    dp = PyTango.DeviceProxy(str(dev))
+                    
+                if dp.state() == PyTango.DevState.FAULT:
+                    raise Exception("FAULT STATE")
                 dp.ping()
                 for at in self.attrsToCheck:
                     if hasattr(dp, at):

@@ -1,3 +1,7 @@
+2014-10-20 Jan Kotanski <jankotan@gmail.com>
+	* adding checks for state of automatic datasources
+	* tagged as v1.8.8
+
 2014-10-17 Jan Kotanski <jankotan@gmail.com>
 	* skip checks for pool devices in updateController
 	* tagged as v1.8.7
