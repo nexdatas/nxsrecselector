@@ -1,3 +1,7 @@
+2014-10-XX Jan Kotanski <jankotan@gmail.com>
+	* fixes for Not initialised
+	* tagged as v1.8.9
+
 2014-10-20 Jan Kotanski <jankotan@gmail.com>
 	* adding checks for state of automatic datasources
 	* tagged as v1.8.8

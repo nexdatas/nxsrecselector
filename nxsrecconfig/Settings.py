@@ -435,6 +435,8 @@ class Settings(object):
     @classmethod
     def __stringToDictJson(cls, string, toBool=False):
         try:
+            if not string or string == "Not initialised":
+                return {}
             acps = json.loads(string)
             assert isinstance(acps, dict)
             jstring = string
@@ -452,6 +454,8 @@ class Settings(object):
 
     @classmethod
     def __stringToListJson(cls, string):
+        if not string or string == "Not initialised":
+            return []
         try:
             acps = json.loads(string)
             assert isinstance(acps, (list, tuple))
