@@ -1309,7 +1309,7 @@ class Settings(object):
                     print >> self.__server.log_debug, "No device ", dev
 
                 nonexisting.append(dev)
-                                
+
         acps = json.loads(self.__state["AutomaticComponentGroup"])
 
         rcp = set()
@@ -1330,7 +1330,7 @@ class Settings(object):
 #                            except:
 #                                rcp.add(cp)
 #                                break
-                                
+
         for acp in acps.keys():
             if acp in rcp:
                 acps[acp] = False
