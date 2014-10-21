@@ -1291,24 +1291,24 @@ class Settings(object):
         describer = Describer(nexusconfig_device)
 
         for dev in ads:
-            if dev not in fnames.keys():
-                nonexisting.append(dev)
-#            try:
-#                if dev in fnames:
-#                    dp = PyTango.DeviceProxy(str(fnames[dev]))
-#                else:
-#                    dp = PyTango.DeviceProxy(str(dev))
-#                if dp.state() == PyTango.DevState.FAULT:
-#                    raise Exception("FAULT STATE")
-#                dp.ping()
-#                for at in self.attrsToCheck:
-#                    if hasattr(dp, at):
-#                        _ = dp.read_attribute(at)
-#            except Exception as e:
-#                if self.__server:
-#                    print >> self.__server.log_debug, "No device ", dev
-#
+#            if dev not in fnames.keys():
 #                nonexisting.append(dev)
+            try:
+                if dev in fnames:
+                    dp = PyTango.DeviceProxy(str(fnames[dev]))
+                else:
+                    dp = PyTango.DeviceProxy(str(dev))
+                if dp.state() == PyTango.DevState.FAULT:
+                    raise Exception("FAULT STATE")
+                dp.ping()
+                for at in self.attrsToCheck:
+                    if hasattr(dp, at):
+                        _ = dp.read_attribute(at)
+            except Exception as e:
+                if self.__server:
+                    print >> self.__server.log_debug, "No device ", dev
+
+                nonexisting.append(dev)
                                 
         acps = json.loads(self.__state["AutomaticComponentGroup"])
 
@@ -1321,15 +1321,16 @@ class Settings(object):
                         if ds in nonexisting:
                             rcp.add(cp)
                             break
-                        else:
-                            try:
-                                dp = PyTango.DeviceProxy(str(ds))
-                                if dp.state() == PyTango.DevState.FAULT:
-                                    raise Exception("FAULT STATE")
-                                dp.ping()
-                            except:
-                                rcp.add(cp)
-                                break                                
+#                        else:
+#                            try:
+#                                dp = PyTango.DeviceProxy(str(ds))
+#                                if dp.state() == PyTango.DevState.FAULT:
+#                                    raise Exception("FAULT STATE")
+#                                dp.ping()
+#                            except:
+#                                rcp.add(cp)
+#                                break
+                                
         for acp in acps.keys():
             if acp in rcp:
                 acps[acp] = False
