@@ -133,7 +133,7 @@ class Settings(object):
 
         ## Record names set by sardana
         self.recorder_names = ['serialno', 'end_time', 'start_time',
-                               'point_nb', 'timestamps']
+                               'point_nb', 'timestamps', 'scan_title']
 
         self.__nxsenv = "NeXusConfiguration"
 
@@ -1512,6 +1512,8 @@ class Settings(object):
                 dcpcreator.setDataSources(self.dataSources)
             if len(params) > 1 and params[1]:
                 dcpcreator.setDictDSources(params[1])
+            if len(params) > 2 and params[2]:
+                dcpcreator.setInitDSources(json.loads(params[2]))
         dcpcreator.setLabelParams(
             self.labels, self.labelPaths, self.labelLinks,
             self.labelTypes, self.labelShapes)

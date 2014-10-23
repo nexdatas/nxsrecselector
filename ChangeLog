@@ -1,3 +1,7 @@
+2014-10-22 Jan Kotanski <jankotan@gmail.com>
+	* adding support for missing user data
+	* tagged as v1.8.10
+
 2014-10-21 Jan Kotanski <jankotan@gmail.com>
 	* fixes for setting configuration
 	* fixes for Not initialised

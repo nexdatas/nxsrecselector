@@ -37,6 +37,7 @@ class DynamicComponent(object):
 
         self.__dictDSources = []
         self.__dsources = []
+        self.__initdsources = []
         ## dynamic components
         self.__defaultCP = "__dynamic_component__"
         self.__dynamicCP = ""
@@ -97,6 +98,11 @@ class DynamicComponent(object):
         self.__dsources = list(dsources)
         if not isinstance(self.__dsources, list):
             self.__dsources = []
+
+    def setInitDSources(self, dsources):
+        self.__initdsources = list(dsources)
+        if not isinstance(self.__initdsources, list):
+            self.__initdsources = []
 
     def setLabelParams(self, labels, paths, links, types, shapes):
         self.__nexuslabels = json.loads(labels)
@@ -179,6 +185,25 @@ class DynamicComponent(object):
                 if link:
                     self.__createLink(root, nxdata, path, field)
 
+        for ds in self.__initdsources:
+            if ds not in created:
+                path, field = self.__getFieldPath(
+                    self.__nexuspaths, self.__nexuslabels,
+                    ds, self.__defaultpath)
+                link = self.__getProp(
+                    self.__nexuslinks, self.__nexuslabels, ds, self.__links)
+                (parent, nxdata) = self.__createGroupTree(
+                    root, definition, path, link)
+
+                nxtype = self.__getProp(
+                    self.__nexustypes, self.__nexuslabels, ds, 'NX_CHAR')
+                shape = self.__getProp(
+                    self.__nexusshapes, self.__nexuslabels, ds, None)
+                self.__createField(root, parent, field, nxtype, ds,
+                                   ds, shape, strategy='INIT')
+                if link:
+                    self.__createLink(root, nxdata, path, field)
+
         self.__nexusconfig_device.xmlstring = str(root.toprettyxml(indent=""))
         self.__nexusconfig_device.storeComponent(str(self.__dynamicCP))
 #        print("Dynamic Component:\n%s" % root.toprettyxml(indent="  "))
@@ -216,15 +241,16 @@ class DynamicComponent(object):
 
     @classmethod
     def __createField(cls, root, parent, fname, nxtype, sname,
-                      record=None, shape=None, dsnode=None):
+                      record=None, shape=None, dsnode=None, 
+                      strategy='STEP'):
         field = root.createElement("field")
         parent.appendChild(field)
         field.setAttribute("type", nxtype)
         field.setAttribute("name", fname)
 
-        strategy = root.createElement("strategy")
-        field.appendChild(strategy)
-        strategy.setAttribute("mode", "STEP")
+        strategynode = root.createElement("strategy")
+        field.appendChild(strategynode)
+        strategynode.setAttribute("mode", strategy)
 
         if dsnode:
             dsource = root.importNode(dsnode, True)
