@@ -1503,8 +1503,7 @@ class Settings(object):
     def createDynamicComponent(self, params):
         nexusconfig_device = self.__setConfigInstance()
         dcpcreator = DynamicComponent(nexusconfig_device)
-
-        if params and isinstance(params, (list, tuple)):
+        if isinstance(params, (list, tuple)):
             if len(params) > 0 and params[0]:
                 dcpcreator.setDataSources(
                     json.loads(params[0]))
