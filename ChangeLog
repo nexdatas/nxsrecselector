@@ -1,4 +1,8 @@
 2014-10-24 Jan Kotanski <jankotan@gmail.com>
+	* improving updateControllers
+	* tagged as v1.8.12
+
+2014-10-24 Jan Kotanski <jankotan@gmail.com>
 	* fixes for createDynamicComponent parameters
 	* tagged as v1.8.11
 
