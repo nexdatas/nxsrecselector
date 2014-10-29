@@ -255,11 +255,12 @@ class Describer(object):
         dims = node.getElementsByTagName("dim")
         for dim in dims:
             index = int(dim.attributes["index"].value)
-            try:
-                value = int(dim.attributes["value"].value)
-            except:
-                value = dim.attributes["value"].value
-            shape[index - 1] = value
+            if dim.hasAttribute("value"):
+                try:
+                    value = int(dim.attributes["value"].value)
+                except:
+                    value = dim.attributes["value"].value
+                shape[index - 1] = value
         return shape
 
     def __getDataSourceAttributes(self, cp):

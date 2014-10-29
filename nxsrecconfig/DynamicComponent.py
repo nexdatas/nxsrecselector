@@ -241,7 +241,7 @@ class DynamicComponent(object):
 
     @classmethod
     def __createField(cls, root, parent, fname, nxtype, sname,
-                      record=None, shape=None, dsnode=None, 
+                      record=None, shape=None, dsnode=None,
                       strategy='STEP'):
         field = root.createElement("field")
         parent.appendChild(field)
