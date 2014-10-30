@@ -179,7 +179,6 @@ class Settings(object):
     ## provides automatic components
     # \returns list of available automatic components
     def __automaticComponents(self):
-        self.updateControllers()
         cps = json.loads(self.__state["AutomaticComponentGroup"])
         if isinstance(cps, dict):
             return [cp for cp in cps.keys() if cps[cp]]
@@ -1305,8 +1304,7 @@ class Settings(object):
                         if ds in nonexisting:
                             rcp.add(cp)
                             break
-#                        elif ds in ads:
-                        else:
+                        elif ds in ads:
                             try:
                                 dp = PyTango.DeviceProxy(str(ds))
                                 if dp.state() == PyTango.DevState.FAULT:

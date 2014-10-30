@@ -1,3 +1,8 @@
+2014-10-30 Jan Kotanski <jankotan@gmail.com>
+	* skipping updateControllers call for automaticComponents
+	* fixing updateControllers
+	* tagged as v1.8.14
+
 2014-10-29 Jan Kotanski <jankotan@gmail.com>
 	* relaxing checking of dimension value for datasources
 	* tagged as v1.8.13
