@@ -1329,13 +1329,6 @@ class Settings(object):
                 dp = PyTango.DeviceProxy(str(self.__server.get_name()))
                 dp.write_attribute(str("AutomaticComponentGroup"),
                                    self.__state["AutomaticComponentGroup"])
-        if not hasattr(self, 'myerror2'):
-            self.myerror2 = 0
-        else:
-            self.myerror2 += 1
-        if self.myerror2 > 2:
-            import time
-            time.sleep(8)
 
     ## provides available Timers from MacroServer pools
     # \returns  available Timers from MacroServer pools
