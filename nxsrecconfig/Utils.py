@@ -142,6 +142,9 @@ class Utils(object):
         servers = db.get_device_exported_for_class(
             "MacroServer").value_string
         ms = ""
+        sdoor = door.split("/")
+        if len(sdoor) > 1 and ":" in sdoor[0]:
+            door = "/".join(sdoor[1:])
         for server in servers:
             dp = PyTango.DeviceProxy(server)
             if hasattr(dp, "DoorList"):

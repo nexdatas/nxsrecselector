@@ -255,7 +255,7 @@ class Settings(object):
         jname = self.__stringToListJson(name)
         if self.__state["AutomaticDataSources"] != jname:
             self.__state["AutomaticDataSources"] = jname
-            self.updateControllers()
+
 
     ## the json data string
     automaticDataSources = property(
@@ -475,7 +475,6 @@ class Settings(object):
         jname = self.__stringToDictJson(name, True)
         if self.__state["AutomaticComponentGroup"] != jname:
             self.__state["AutomaticComponentGroup"] = jname
-            self.updateControllers()
 
     ## the json data string
     automaticComponentGroup = property(
@@ -1330,6 +1329,13 @@ class Settings(object):
                 dp = PyTango.DeviceProxy(str(self.__server.get_name()))
                 dp.write_attribute(str("AutomaticComponentGroup"),
                                    self.__state["AutomaticComponentGroup"])
+        if not hasattr(self, 'myerror2'):
+            self.myerror2 = 0
+        else:
+            self.myerror2 += 1
+        if self.myerror2 > 2:
+            import time
+            time.sleep(8)
 
     ## provides available Timers from MacroServer pools
     # \returns  available Timers from MacroServer pools
