@@ -1111,6 +1111,7 @@ class Settings(object):
         timer = timers[0] if timers else ''
 
         datasources = self.dataSources
+        disabledatasources = self.disableDataSources
         hidden = json.loads(self.__state["HiddenElements"])
         dontdisplay = set(hidden)
 
@@ -1119,6 +1120,9 @@ class Settings(object):
         aliases = []
         if isinstance(datasources, list):
             aliases = datasources
+        pchs = self.poolChannels()
+        pdd = list(set(pchs) & set(disabledatasources))
+        aliases.extend(pdd)
         if timer:
             aliases.append(timer)
         else:
