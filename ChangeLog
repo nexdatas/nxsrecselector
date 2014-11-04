@@ -1,4 +1,8 @@
 2014-11-03 Jan Kotanski <jankotan@gmail.com>
+	* fixes for updateMntGrp
+	* tagged as v1.8.16
+
+2014-11-03 Jan Kotanski <jankotan@gmail.com>
 	* skipping updateControllers call for automaticComponentGroup nad automaticDataSources
 	* allowing door name with hostname
 	* tagged as v1.8.15
