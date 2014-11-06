@@ -1,3 +1,7 @@
+2014-11-05 Jan Kotanski <jankotan@gmail.com>
+	* changing default plot for 1D data to ['<idx>']
+	* tagged as v1.8.17
+
 2014-11-04 Jan Kotanski <jankotan@gmail.com>
 	* fixes for updateMntGrp
 	* tagged as v1.8.16
