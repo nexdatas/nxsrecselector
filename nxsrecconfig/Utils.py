@@ -347,8 +347,7 @@ class Utils(object):
             dct['output'] = True
             dct['shape'] = shp
 
-            if device in dontdisplay: or \
-                    (dct['shape'] and len(dct['shape']) == 1):
+            if device in dontdisplay:
                 dct['plot_axes'] = []
                 dct['plot_type'] = 0
             elif dct['shape'] and len(dct['shape']) == 1:

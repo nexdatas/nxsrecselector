@@ -1,4 +1,8 @@
 2014-11-11 Jan Kotanski <jankotan@gmail.com>
+	* fixes for addding devices
+	* tagged as v1.8.18
+
+2014-11-11 Jan Kotanski <jankotan@gmail.com>
 	* changing default plot for 1D data to ['<idx>']
 	* tagged as v1.8.17
 
