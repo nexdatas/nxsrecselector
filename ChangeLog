@@ -1,3 +1,7 @@
+2014-11-12 Jan Kotanski <jankotan@gmail.com>
+	* moving checking devices to separate threads
+	* tagged as v1.8.19
+
 2014-11-11 Jan Kotanski <jankotan@gmail.com>
 	* fixes for addding devices
 	* tagged as v1.8.18

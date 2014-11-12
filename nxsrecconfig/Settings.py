@@ -27,6 +27,8 @@ from .Describer import Describer
 from .DynamicComponent import DynamicComponent
 from .Utils import Utils
 import pickle
+import Queue
+import threading
 
 
 ## NeXus Sardana Recorder settings
@@ -38,6 +40,8 @@ class Settings(object):
         ## Tango server
         self.__server = server
 
+        ## number of threads
+        self.numberOfThreads = 8
         ## default zone
         self.__defaultzone = 'Europe/Berlin'
         ## default mntgrp
@@ -255,7 +259,6 @@ class Settings(object):
         jname = self.__stringToListJson(name)
         if self.__state["AutomaticDataSources"] != jname:
             self.__state["AutomaticDataSources"] = jname
-
 
     ## the json data string
     automaticDataSources = property(
@@ -1299,6 +1302,7 @@ class Settings(object):
         acps = json.loads(self.__state["AutomaticComponentGroup"])
 
         rcp = set()
+        toCheck = {}
         for acp in acps.keys():
             res = describer.components([acp], '', '')
             for cp, dss in res[1].items():
@@ -1308,17 +1312,26 @@ class Settings(object):
                             rcp.add(cp)
                             break
                         elif ds in ads:
-                            try:
-                                dp = PyTango.DeviceProxy(str(ds))
-                                if dp.state() == PyTango.DevState.FAULT:
-                                    raise Exception("FAULT STATE")
-                                dp.ping()
-#                                for at in self.attrsToCheck:
-#                                    if hasattr(dp, at):
-#                                        _ = dp.read_attribute(at)
-                            except:
-                                rcp.add(cp)
-                                break
+                            if cp not in toCheck.keys():
+                                toCheck[cp] = [cp]
+                            toCheck[cp].append(str(ds))
+
+        cqueue = Queue.Queue()
+        for lds in toCheck.values():
+            if self.__server:
+                print >> self.__server.log_debug, "To Check:", lds
+            cqueue.put(lds)
+        for _ in range(self.numberOfThreads):
+            thd = threading.Thread(target=_checker, args=(cqueue,))
+            thd.daemon = True
+            thd.start()
+        cqueue.join()
+
+        for lds in toCheck.values():
+            if lds and len(lds) > 0:
+                if self.__server:
+                    print >> self.__server.log_debug, "Problem with:", lds
+                rcp.add(lds[0])
 
         for acp in acps.keys():
             if acp in rcp:
@@ -1515,3 +1528,22 @@ class Settings(object):
         nexusconfig_device = self.__setConfigInstance()
         dcpcreator = DynamicComponent(nexusconfig_device)
         dcpcreator.removeDynamicComponent(name)
+
+## checkers if Tango devices are alive
+# \params cqueue queue with task of the form ['comp','alias','alias', ...]
+def _checker(cqueue):
+    while True:
+        lds = cqueue.get()
+        ok = True
+        for ds in lds[1:]:
+            try:
+                dp = PyTango.DeviceProxy(ds)
+                if dp.state() == PyTango.DevState.FAULT:
+                    raise Exception("FAULT STATE")
+                dp.ping()
+            except:
+                ok = False
+                break
+        if ok:
+            lds[:] = []
+        cqueue.task_done()
