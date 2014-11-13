@@ -219,6 +219,35 @@ class NXSRecSelector(PyTango.Device_4Impl):
         print >> self.log_info, "Attribute value = %s" % self.__stg.door
 
 #------------------------------------------------------------------
+#    Read STEPDataSources attribute
+#------------------------------------------------------------------
+    def read_STEPDataSources(self, attr):
+        print >> self.log_info, "In ", self.get_name(), "::read_STEPDataSources()"
+        attr.set_value(self.__stg.stepdatasources)
+
+#------------------------------------------------------------------
+#    Write STEPDataSources attribute
+#------------------------------------------------------------------
+    def write_STEPDataSources(self, attr):
+        print >> self.log_info, "In ", self.get_name(), \
+            "::write_STEPDataSources()"
+        if self.is_STEPDataSources_write_allowed():
+            self.__stg.stepdatasources = attr.get_write_value()
+            print >> self.log_info, "Attribute value = ", \
+                self.__stg.stepdatasources
+        else:
+            print >> self.log_warn, \
+                "To change the settings please close the server."
+            raise Exception(
+                "To change the settings please close the server.")
+
+#---- STEPDataSources attribute Write State Machine -----------------
+    def is_STEPDataSources_write_allowed(self):
+        if self.get_state() in [PyTango.DevState.RUNNING]:
+            return False
+        return True
+
+#------------------------------------------------------------------
 #    Read ConfigDevice attribute
 #------------------------------------------------------------------
     def read_ConfigDevice(self, attr):
@@ -1398,6 +1427,14 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
             {
                 'label':"Selected Components",
                 'description':"list of Selected Components",
+            }],
+        'STEPDataSources':
+            [[PyTango.DevString,
+            PyTango.SPECTRUM,
+            PyTango.READ_WRITE, 10000],
+            {
+                'label':"list of datasources to be switch into step mode",
+                'description':"list of datasources to be switch into step mode",
             }],
         'Timer':
             [[PyTango.DevString,

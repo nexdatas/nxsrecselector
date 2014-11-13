@@ -536,6 +536,25 @@ class Settings(object):
         __setDataSourceGroup,
         doc='datasource  group')
 
+
+    ## get method for dataSourceGroup attribute
+    # \returns names of STEP dataSources
+    def __getSTEPDataSources(self):
+        inst = self.__setConfigInstance()
+        return list(inst.stepdatasources)
+
+    ## set method for dataSourceGroup attribute
+    # \param names of STEP dataSources
+    def __setSTEPDataSources(self, names):
+        inst = self.__setConfigInstance()
+        inst.stepdatasources = names
+
+    ## the json data string
+    stepdatasources = property(
+        __getSTEPDataSources,
+        __setSTEPDataSources,
+        doc='datasource  group')
+
     ## get method for labels attribute
     # \returns name of labels
     def __getLabels(self):
