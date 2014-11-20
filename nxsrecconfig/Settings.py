@@ -73,8 +73,8 @@ class Settings(object):
         self.__state["AutomaticDataSources"] = '[]'
         ## selected datasources
         self.__state["DataSourceGroup"] = '{}'
-        ## group of optional components available for automatic selection
-        self.__state["OptionalComponents"] = '{}'
+        ## group of optional components available for automatic selqection
+        self.__state["OptionalComponents"] = '[]'
         ## appending new entries to existing file
         self.__state["AppendEntry"] = True
         ## select components from the active measurement group

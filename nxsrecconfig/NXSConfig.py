@@ -1349,11 +1349,11 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
             [[PyTango.DevString, "mntgrp alias"],
              [PyTango.DevString, "mntgrp fullname"]],
         'StoreEnvData':
-            [[PyTango.DevString, "enviroutment data"],
+            [[PyTango.DevString, "environment data"],
              [PyTango.DevLong, "scanID"]],
         'FetchEnvData':
             [[PyTango.DevVoid, ""],
-             [PyTango.DevString, "enviroutment data"]],
+             [PyTango.DevString, "environment data"]],
         'LoadConfiguration':
             [[PyTango.DevVoid, ""],
              [PyTango.DevVoid, ""]],
