@@ -222,7 +222,8 @@ class NXSRecSelector(PyTango.Device_4Impl):
 #    Read STEPDataSources attribute
 #------------------------------------------------------------------
     def read_STEPDataSources(self, attr):
-        print >> self.log_info, "In ", self.get_name(), "::read_STEPDataSources()"
+        print >> self.log_info, "In ", self.get_name(), \
+            "::read_STEPDataSources()"
         attr.set_value(self.__stg.stepdatasources)
 
 #------------------------------------------------------------------
@@ -533,16 +534,16 @@ class NXSRecSelector(PyTango.Device_4Impl):
         self.__stg.configuration = attr.get_write_value()
         print >> self.log_info, "Attribute value = %s" % \
             self.__stg.configuration
-        try:
-            dp = PyTango.DeviceProxy(str(self.get_name()))
-            for var in self.__stg.names():
-                if hasattr(dp, var):
-                    dp.write_attribute(str(var), self.__stg.value(var))
-
-            self.set_state(PyTango.DevState.ON)
-        finally:
-            if self.get_state() == PyTango.DevState.RUNNING:
-                self.set_state(PyTango.DevState.ON)
+#        try:
+#            dp = PyTango.DeviceProxy(str(self.get_name()))
+#            for var in self.__stg.names():
+#                if hasattr(dp, var):
+#                    dp.write_attribute(str(var), self.__stg.value(var))
+#
+#            self.set_state(PyTango.DevState.ON)
+#        finally:
+#            if self.get_state() == PyTango.DevState.RUNNING:
+#                self.set_state(PyTango.DevState.ON)
 
 #------------------------------------------------------------------
 #    Read AutomaticDataSources attribute
@@ -1433,8 +1434,9 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
             PyTango.SPECTRUM,
             PyTango.READ_WRITE, 10000],
             {
-                'label':"list of datasources to be switch into step mode",
-                'description':"list of datasources to be switch into step mode",
+                'label':"list of datasources to be switched into step mode",
+                'description':"list of datasources to be switched"
+                + " into step mode",
             }],
         'Timer':
             [[PyTango.DevString,
@@ -1443,7 +1445,7 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
             {
                 'label':"Timer",
                 'description':"Timer and optionally extra timers",
-                'Memorized':"true",
+#                'Memorized':"true",
             }],
         'ComponentGroup':
             [[PyTango.DevString,
@@ -1452,7 +1454,7 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
             {
                 'label':"Components Group",
                 'description':"JSON dict of Components for Selection",
-                'Memorized':"true",
+#                'Memorized':"true",
                 'Display level':PyTango.DispLevel.EXPERT,
             }],
         'AutomaticComponentGroup':
@@ -1463,7 +1465,7 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
                 'label':"Automatic Components Group",
                 'description':"JSON dict with selection of automatic "
                 + "components",
-                'Memorized':"true",
+#                'Memorized':"true",
                 'Display level':PyTango.DispLevel.EXPERT,
             }],
         'AutomaticComponents':
@@ -1482,7 +1484,7 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
                 'label':"Optional Components Group",
                 'description':"JSON list of optional components "
                 + "available for automatic selection",
-                'Memorized':"true",
+#                'Memorized':"true",
                 'Display level':PyTango.DispLevel.EXPERT,
             }],
         'MntGrp':
@@ -1492,7 +1494,7 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
             {
                 'label':" Measurement Group",
                 'description':" Measurement Group",
-                'Memorized':"true",
+#                'Memorized':"true",
             }],
         'ScanDir':
             [[PyTango.DevString,
@@ -1507,7 +1509,7 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
             PyTango.SCALAR,
             PyTango.READ_WRITE],
             {
-#                'label':"Scan ID",
+                'label':"Scan ID",
                 'description':"Scan ID",
             }],
         'ScanFile':
@@ -1525,7 +1527,7 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
             {
                 'label':"Configuration Device",
                 'description':"Configuration device",
-                'Memorized':"true",
+#                'Memorized':"true",
             }],
         'MacroServer':
             [[PyTango.DevString,
@@ -1542,7 +1544,7 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
             {
                 'label':"Door",
                 'description':"Door",
-                'Memorized':"true",
+#                'Memorized':"true",
             }],
         'WriterDevice':
             [[PyTango.DevString,
@@ -1551,7 +1553,7 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
             {
                 'label':"Writer Device",
                 'description':"Writer device",
-                'Memorized':"true",
+#                'Memorized':"true",
             }],
         'DataRecord':
             [[PyTango.DevString,
@@ -1560,7 +1562,7 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
             {
                 'label':"Client Data Record",
                 'description':"JSON dictionary with Client Data Record",
-                'Memorized':"true",
+#                'Memorized':"true",
                 'Display level':PyTango.DispLevel.EXPERT,
             }],
         'LabelPaths':
@@ -1571,7 +1573,7 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
                 'label':"NeXus Paths for DataSource Labels",
                 'description':"JSON dictionary with NeXus Paths for "
                 + "Datasource Labels",
-                'Memorized':"true",
+#                'Memorized':"true",
                 'Display level':PyTango.DispLevel.EXPERT,
             }],
         'LabelTypes':
@@ -1582,7 +1584,7 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
                 'label':"NeXus Types for DataSource Labels",
                 'description':"JSON dictionary with NeXus Types for "
                 + "Datasource Labels",
-                'Memorized':"true",
+#                'Memorized':"true",
                 'Display level':PyTango.DispLevel.EXPERT,
             }],
         'LabelShapes':
@@ -1593,7 +1595,7 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
                 'label':"NeXus Shapes for DataSource Labels",
                 'description':"JSON dictionary with NeXus Shapes for "
                 + "Datasource Labels",
-                'Memorized':"true",
+#                'Memorized':"true",
                 'Display level':PyTango.DispLevel.EXPERT,
             }],
         'LabelLinks':
@@ -1604,7 +1606,7 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
                 'label':"NeXus Links for DataSource Labels",
                 'description':"JSON dictionary with NeXus Links for "
                 + "Datasource Labels",
-                'Memorized':"true",
+#                'Memorized':"true",
                 'Display level':PyTango.DispLevel.EXPERT,
             }],
         'HiddenElements':
@@ -1615,7 +1617,7 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
                 'label':"Not displayed elements",
                 'description':"JSON list with not displayed Elements"
                 + "Labels",
-                'Memorized':"true",
+#                'Memorized':"true",
                 'Display level':PyTango.DispLevel.EXPERT,
             }],
         'Labels':
@@ -1625,7 +1627,7 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
             {
                 'label':"Element Labels",
                 'description':"JSON dictionary with Element Labels",
-                'Memorized':"true",
+#                'Memorized':"true",
                 'Display level':PyTango.DispLevel.EXPERT,
             }],
         'DataSources':
@@ -1681,6 +1683,7 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
             {
                 'label':"configuration",
                 'description':"JSON dict of server configuration",
+                'Memorized':"true",
                 'Display level':PyTango.DispLevel.EXPERT,
             }],
         'DataSourceGroup':
@@ -1690,7 +1693,7 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
             {
                 'label':"Datasources Group",
                 'description':"JSON dict of DataSources for selection",
-                'Memorized':"true",
+#                'Memorized':"true",
                 'Display level':PyTango.DispLevel.EXPERT,
             }],
         'AutomaticDataSources':
@@ -1700,7 +1703,7 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
             {
                 'label':"Automatic DataSources",
                 'description':"JSON list of Automatic DataSources",
-                'Memorized':"true",
+#                'Memorized':"true",
                 'Display level':PyTango.DispLevel.EXPERT,
             }],
         'DisableDataSources':
@@ -1718,7 +1721,7 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
             {
                 'label':"Append Entry",
                 'description':"flag for entry  appending ",
-                'Memorized':"true",
+#                'Memorized':"true",
             }],
         'ComponentsFromMntGrp':
             [[PyTango.DevBoolean,
@@ -1727,7 +1730,7 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
             {
                 'label':"Select Components from MntGrp",
                 'description':"select components from mntgrp",
-                'Memorized':"true",
+#                'Memorized':"true",
             }],
         'DynamicComponents':
             [[PyTango.DevBoolean,
@@ -1736,7 +1739,7 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
             {
                 'label':"Dynamic Components",
                 'description':"create dynamic components",
-                'Memorized':"true",
+#                'Memorized':"true",
             }],
         'DynamicLinks':
             [[PyTango.DevBoolean,
@@ -1745,7 +1748,7 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
             {
                 'label':"Links for Dynamic Components",
                 'description':"create links for dynamic components",
-                'Memorized':"true",
+#                'Memorized':"true",
             }],
         'DynamicPath':
             [[PyTango.DevString,
@@ -1754,7 +1757,7 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
             {
                 'label':"Path for Dynamic Components",
                 'description':"path for dynamic components",
-                'Memorized':"true",
+#                'Memorized':"true",
                 'Display level':PyTango.DispLevel.EXPERT,
             }],
         'ConfigVariables':
@@ -1765,7 +1768,7 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
                 'label':"Configuration Variables",
                 'description':"JSON dictionary with configuration variables"
                 + "for templated components",
-                'Memorized':"true",
+#                'Memorized':"true",
                 'Display level':PyTango.DispLevel.EXPERT,
             }],
         'ConfigFile':
@@ -1784,7 +1787,7 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
             {
                 'label':"Time Zone",
                 'description':"timezone",
-                'Memorized':"true",
+#                'Memorized':"true",
             }],
         }
 

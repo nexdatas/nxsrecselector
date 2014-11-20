@@ -123,8 +123,6 @@ class Settings(object):
         self.__configProxy = None
         ## config server module
         self.__configModule = None
-        ## config writer proxy
-        self.__writerProxy = None
         ## module label
         self.__moduleLabel = 'module'
 
@@ -233,11 +231,9 @@ class Settings(object):
     ## set method for configDevice attribute
     # \param name of configDevice
     def __setConfigDevice(self, name):
-        if name:
-            self.__state["ConfigDevice"] = name
-        else:
-            self.__state["ConfigDevice"] = Utils.getDeviceName(
-                self.__db, "NXSConfigServer")
+        mname = name if name else Utils.getDeviceName(
+            self.__db, "NXSConfigServer")
+        self.__updateProfile("ConfigDevice", mname)
 
     ## the json data string
     configDevice = property(__getConfigDevice, __setConfigDevice,
@@ -257,8 +253,7 @@ class Settings(object):
     # \param name of automaticDataSources
     def __setAutomaticDataSources(self, name):
         jname = self.__stringToListJson(name)
-        if self.__state["AutomaticDataSources"] != jname:
-            self.__state["AutomaticDataSources"] = jname
+        self.__updateProfile("AutomaticDataSources", jname)
 
     ## the json data string
     automaticDataSources = property(
@@ -269,7 +264,9 @@ class Settings(object):
     ## set method for configuration attribute
     # \param name of configuration
     def __setConfiguration(self, jconf):
-        self.__state = json.loads(jconf)
+        state = json.loads(jconf)
+        for key, value in state.items():
+            self.__state[key] = value
 
     ## get method for configuration attribute
     # \returns configuration
@@ -283,9 +280,9 @@ class Settings(object):
         doc='automatic components group')
 
     ## set method for appendEntry attribute
-    # \param name of appendEntry
-    def __setAppendEntry(self, ae):
-        self.__state["AppendEntry"] = bool(ae)
+    # \param flag appendEntry flag
+    def __setAppendEntry(self, flag):
+        self.__updateProfile("AppendEntry", bool(flag))
 
     ## get method for appendEntry attribute
     # \returns flag of appendEntry
@@ -301,7 +298,7 @@ class Settings(object):
     ## set method for componentsFromMntGrp attribute
     # \param flag  componentsFromMntGrp
     def __setComponentsFromMntGrp(self, flag):
-        self.__state["ComponentsFromMntGrp"] = bool(flag)
+        self.__updateProfile("ComponentsFromMntGrp", bool(flag))
 
     ## get method for componentsFromMntGrp attribute
     # \returns flag of componentsFromMntGrp
@@ -317,7 +314,7 @@ class Settings(object):
     ## set method for dynamicComponents attribute
     # \param flag  dynamic Components
     def __setDynamicComponents(self, flag):
-        self.__state["DynamicComponents"] = bool(flag)
+        self.__updateProfile("DynamicComponents", bool(flag))
 
     ## get method for dynamicComponents attribute
     # \returns flag of dynamicComponents
@@ -333,7 +330,7 @@ class Settings(object):
     ## set method for dynamicLinks attribute
     # \param flag dynamic Links
     def __setDynamicLinks(self, flag):
-        self.__state["DynamicLinks"] = bool(flag)
+        self.__updateProfile("DynamicLinks", bool(flag))
 
     ## get method for dynamicLinks attribute
     # \returns flag of dynamicLinks
@@ -349,7 +346,7 @@ class Settings(object):
     ## set method for dynamicPath attribute
     # \param path dynamic path
     def __setDynamicPath(self, path):
-        self.__state["DynamicPath"] = str(path)
+        self.__updateProfile("DynamicPath", path)
 
     ## get method for dynamicPath attribute
     # \returns dynamicPath
@@ -371,8 +368,7 @@ class Settings(object):
     # \param name of timer
     def __setTimer(self, name):
         jname = self.__stringToListJson(name)
-        if self.__state["Timer"] != jname:
-            self.__state["Timer"] = jname
+        self.__updateProfile("Timer", jname)
 
     ## the json data string
     timer = property(
@@ -389,8 +385,7 @@ class Settings(object):
     # \param name of optionalComponents
     def __setOptionalComponents(self, name):
         jname = self.__stringToListJson(name)
-        if self.__state["OptionalComponents"] != jname:
-            self.__state["OptionalComponents"] = jname
+        self.__updateProfile("OptionalComponents", jname)
 
     ## the json data string
     optionalComponents = property(
@@ -407,8 +402,7 @@ class Settings(object):
     # \param name of dataRecord
     def __setDataRecord(self, name):
         jname = self.__stringToDictJson(name)
-        if self.__state["DataRecord"] != jname:
-            self.__state["DataRecord"] = jname
+        self.__updateProfile("DataRecord", jname)
 
     ## the json data string
     dataRecord = property(
@@ -425,8 +419,7 @@ class Settings(object):
     # \param name of configVariables
     def __setConfigVariables(self, name):
         jname = self.__stringToDictJson(name)
-        if self.__state["ConfigVariables"] != jname:
-            self.__state["ConfigVariables"] = jname
+        self.__updateProfile("ConfigVariables", jname)
 
     ## the json variables string
     configVariables = property(
@@ -476,8 +469,7 @@ class Settings(object):
     # \param name of automaticComponentGroup
     def __setAutomaticComponentGroup(self, name):
         jname = self.__stringToDictJson(name, True)
-        if self.__state["AutomaticComponentGroup"] != jname:
-            self.__state["AutomaticComponentGroup"] = jname
+        self.__updateProfile("AutomaticComponentGroup", jname)
 
     ## the json data string
     automaticComponentGroup = property(
@@ -500,8 +492,7 @@ class Settings(object):
     # \param name of componentGroup
     def __setComponentGroup(self, name):
         jname = self.__stringToDictJson(name, True)
-        if self.__state["ComponentGroup"] != jname:
-            self.__state["ComponentGroup"] = jname
+        self.__updateProfile("ComponentGroup", jname)
 
     ## the json data string
     componentGroup = property(
@@ -527,15 +518,13 @@ class Settings(object):
     # \param name of dataSourceGroup
     def __setDataSourceGroup(self, name):
         jname = self.__stringToDictJson(name, True)
-        if self.__state["DataSourceGroup"] != jname:
-            self.__state["DataSourceGroup"] = jname
+        self.__updateProfile("DataSourceGroup", jname)
 
     ## the json data string
     dataSourceGroup = property(
         __getDataSourceGroup,
         __setDataSourceGroup,
         doc='datasource  group')
-
 
     ## get method for dataSourceGroup attribute
     # \returns names of STEP dataSources
@@ -564,8 +553,7 @@ class Settings(object):
     # \param name of labels
     def __setLabels(self, name):
         jname = self.__stringToDictJson(name)
-        if self.__state["Labels"] != jname:
-            self.__state["Labels"] = jname
+        self.__updateProfile("Labels", jname)
 
     ## the json data string
     labels = property(
@@ -582,8 +570,7 @@ class Settings(object):
     # \param name of labelLinks
     def __setLabelLinks(self, name):
         jname = self.__stringToDictJson(name)
-        if self.__state["LabelLinks"] != jname:
-            self.__state["LabelLinks"] = jname
+        self.__updateProfile("LabelLinks", jname)
 
     ## the json data string
     labelLinks = property(
@@ -600,8 +587,7 @@ class Settings(object):
     # \param name of hiddenElements
     def __setHiddenElements(self, name):
         jname = self.__stringToListJson(name)
-        if self.__state["HiddenElements"] != jname:
-            self.__state["HiddenElements"] = jname
+        self.__updateProfile("HiddenElements", jname)
 
     ## the json data string
     hiddenElements = property(
@@ -618,8 +604,7 @@ class Settings(object):
     # \param name of labelPaths
     def __setLabelPaths(self, name):
         jname = self.__stringToDictJson(name)
-        if self.__state["LabelPaths"] != jname:
-            self.__state["LabelPaths"] = jname
+        self.__updateProfile("LabelPaths", jname)
 
     ## the json data string
     labelPaths = property(
@@ -636,8 +621,7 @@ class Settings(object):
     # \param name of labelShapes
     def __setLabelShapes(self, name):
         jname = self.__stringToDictJson(name)
-        if self.__state["LabelShapes"] != jname:
-            self.__state["LabelShapes"] = jname
+        self.__updateProfile("LabelShapes", jname)
 
     ## the json data string
     labelShapes = property(
@@ -654,8 +638,7 @@ class Settings(object):
     # \param name of labelTypes
     def __setLabelTypes(self, name):
         jname = self.__stringToDictJson(name)
-        if self.__state["LabelTypes"] != jname:
-            self.__state["LabelTypes"] = jname
+        self.__updateProfile("LabelTypes", jname)
 
     ## the json data string
     labelTypes = property(
@@ -673,10 +656,8 @@ class Settings(object):
     ## set method for mntGrp attribute
     # \param name of mntGrp
     def __setMntGrp(self, name):
-        if name:
-            self.__state["MntGrp"] = name
-        else:
-            self.__state["MntGrp"] = self.__defaultmntgrp
+        mname = name if name else self.__defaultmntgrp
+        self.__updateProfile("MntGrp", mname)
 
     ## the json data string
     mntGrp = property(__getMntGrp, __setMntGrp,
@@ -692,10 +673,8 @@ class Settings(object):
     ## set method for timeZone attribute
     # \param name of timeZone
     def __setTimeZone(self, name):
-        if name:
-            self.__state["TimeZone"] = name
-        else:
-            self.__state["TimeZone"] = self.__defaultzone
+        mname = name if name else self.__defaultzone
+        self.__updateProfile("TimeZone", mname)
 
     ## th time zone
     timeZone = property(__getTimeZone, __setTimeZone,
@@ -718,12 +697,10 @@ class Settings(object):
     ## set method for door attribute
     # \param name of door
     def __setDoor(self, name):
-        if name:
-            self.__state["Door"] = name
-        else:
-            self.__state["Door"] = Utils.getDeviceName(
-                self.__db, "Door")
-        self.__updateMacroServer(self.__state["Door"])
+        mname = name if name else Utils.getDeviceName(
+            self.__db, "Door")
+        self.__updateProfile("Door", mname)
+        self.__updateMacroServer(mname)
 
     ## the json data string
     door = property(__getDoor, __setDoor,
@@ -768,11 +745,9 @@ class Settings(object):
     ## set method for writerDevice attribute
     # \param name of writerDevice
     def __setWriterDevice(self, name):
-        if name:
-            self.__state["WriterDevice"] = name
-        else:
-            self.__state["WriterDevice"] = Utils.getDeviceName(
-                self.__db, "NXSDataWriter")
+        mname = name if name else Utils.getDeviceName(
+            self.__db, "NXSDataWriter")
+        self.__updateProfile("WriterDevice", mname)
 
     ## the json data string
     writerDevice = property(__getWriterDevice, __setWriterDevice,
@@ -1090,7 +1065,8 @@ class Settings(object):
             raise Exception(
                 "User Data not defined %s" % str(missing))
 
-    def __createMntGrp(self, ms, mntGrpName, timer, pools):
+    @classmethod    
+    def __createMntGrp(cls, ms, mntGrpName, timer, pools):
         pool = None
         amntgrp = Utils.getEnv('ActiveMntGrp', ms)
         msp = Utils.openProxy(ms)
@@ -1234,28 +1210,34 @@ class Settings(object):
         otimers.remove(dtimers[conf["timer"]])
         otimers.insert(0, dtimers[conf["timer"]])
 
+        changed = False
         jdsg = json.dumps(dsg)
         if self.__state["DataSourceGroup"] != jdsg:
             self.__state["DataSourceGroup"] = jdsg
-            if self.__server:
-                dp = PyTango.DeviceProxy(str(self.__server.get_name()))
-                dp.write_attribute(str("DataSourceGroup"),
-                                   self.__state["DataSourceGroup"])
+            changed = True
+#            if self.__server:
+#                dp = PyTango.DeviceProxy(str(self.__server.get_name()))
+#                dp.write_attribute(str("DataSourceGroup"),
+#                                   self.__state["DataSourceGroup"])
         jhel = json.dumps(hel)
         if self.__state["HiddenElements"] != jhel:
             self.__state["HiddenElements"] = jhel
-            if self.__server:
-                dp = PyTango.DeviceProxy(str(self.__server.get_name()))
-                dp.write_attribute(str("HiddenElements"),
-                                   self.__state["HiddenElements"])
+            changed = True
+#            if self.__server:
+#                dp = PyTango.DeviceProxy(str(self.__server.get_name()))
+#                dp.write_attribute(str("HiddenElements"),
+#                                   self.__state["HiddenElements"])
 
         jtimers = json.dumps(otimers)
         if self.__state["Timer"] != jtimers:
             self.__state["Timer"] = jtimers
-            if self.__server:
-                dp = PyTango.DeviceProxy(str(self.__server.get_name()))
-                dp.write_attribute(str("Timer"),
-                                   self.__state["Timer"])
+            changed = True
+#            if self.__server:
+#                dp = PyTango.DeviceProxy(str(self.__server.get_name()))
+#                dp.write_attribute(str("Timer"),
+#                                   self.__state["Timer"])
+        if self.__server and changed:
+            self.__updateProfile()
 
     ## provides configuration of mntgrp
     # \param proxy DeviceProxy of mntgrp
@@ -1359,12 +1341,17 @@ class Settings(object):
                 acps[acp] = True
 
         jacps = json.dumps(acps)
-        if self.__state["AutomaticComponentGroup"] != jacps:
-            self.__state["AutomaticComponentGroup"] = jacps
-            if self.__server:
-                dp = PyTango.DeviceProxy(str(self.__server.get_name()))
-                dp.write_attribute(str("AutomaticComponentGroup"),
-                                   self.__state["AutomaticComponentGroup"])
+        self.__updateProfile("AutomaticComponentGroup", jacps)
+
+    def __updateProfile(self, key=None, value=None):
+        if key and value:
+            if key not in self.__state.keys():
+                self.__state[key] = None
+            if self.__state[key] != value:
+                self.__state["Timer"] = value
+                if self.__server and hasattr(self.__server, "get_name"):
+                    dp = PyTango.DeviceProxy(str(self.__server.get_name()))
+                    dp.write_attribute(str("Configuration"), self.__state)
 
     ## provides available Timers from MacroServer pools
     # \returns  available Timers from MacroServer pools
@@ -1547,6 +1534,7 @@ class Settings(object):
         nexusconfig_device = self.__setConfigInstance()
         dcpcreator = DynamicComponent(nexusconfig_device)
         dcpcreator.removeDynamicComponent(name)
+
 
 ## checkers if Tango devices are alive
 # \params cqueue queue with task of the form ['comp','alias','alias', ...]
