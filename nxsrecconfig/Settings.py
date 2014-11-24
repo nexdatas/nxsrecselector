@@ -219,7 +219,7 @@ class Settings(object):
         if name:
             if name != self.__moduleLabel:
                 try:
-                    dp = Utils.getProxies([name])
+                    dp = Utils.getProxies([str(name)])
                     if not dp:
                         self.__state["ConfigDevice"] = ''
                         name = ''
@@ -264,13 +264,17 @@ class Settings(object):
     ## set method for configuration attribute
     # \param name of configuration
     def __setConfiguration(self, jconf):
+        print "JSON:", jconf
         state = json.loads(jconf)
         for key, value in state.items():
+            print " SETS %s:%s" % (key, value)
             self.__state[key] = value
 
     ## get method for configuration attribute
     # \returns configuration
     def __getConfiguration(self):
+        print "STATE:" , self.__state
+        print "JSTATE:" , json.dumps(self.__state)
         return json.dumps(self.__state)
 
     ## the json data string
@@ -518,6 +522,7 @@ class Settings(object):
     # \param name of dataSourceGroup
     def __setDataSourceGroup(self, name):
         jname = self.__stringToDictJson(name, True)
+        print "JNAME", jname
         self.__updateProfile("DataSourceGroup", jname)
 
     ## the json data string
@@ -931,6 +936,7 @@ class Settings(object):
     def loadConfiguration(self):
         fl = open(self.configFile, "r")
         self.__state = json.load(fl)
+        self.__updateProfile()
 
     ## provides components for all variables
     # \returns dictionary with components for all variables
@@ -1344,14 +1350,21 @@ class Settings(object):
         self.__updateProfile("AutomaticComponentGroup", jacps)
 
     def __updateProfile(self, key=None, value=None):
+        changed = True
+        print "KV", key, value
         if key and value:
+            changed = False
             if key not in self.__state.keys():
                 self.__state[key] = None
             if self.__state[key] != value:
-                self.__state["Timer"] = value
-                if self.__server and hasattr(self.__server, "get_name"):
-                    dp = PyTango.DeviceProxy(str(self.__server.get_name()))
-                    dp.write_attribute(str("Configuration"), self.__state)
+                self.__state[key] = value
+                changed = True
+        print "CHANGED", changed        
+        if changed and self.__server and hasattr(self.__server, "get_name"):
+            dp = PyTango.DeviceProxy(str(self.__server.get_name()))
+            print "DUMPS:", json.dumps(self.__state)
+            dp.write_attribute(str("Configuration"), 
+                               json.dumps(self.__state))
 
     ## provides available Timers from MacroServer pools
     # \returns  available Timers from MacroServer pools
@@ -1431,6 +1444,7 @@ class Settings(object):
     ## imports all Enviroutment Data
     def importAllEnv(self):
         self.__importEnv(self.names(), self.__state)
+        self.__updateProfile()
 
     ## imports Enviroutment Data
     # \param names names of required variables

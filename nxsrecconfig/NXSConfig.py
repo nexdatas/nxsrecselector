@@ -523,6 +523,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
 #------------------------------------------------------------------
     def read_Configuration(self, attr):
         print >> self.log_info, "In ", self.get_name(), "::read_DataSources()"
+        print  "READ CF: ", self.__stg.configuration
         attr.set_value(self.__stg.configuration)
 
 #------------------------------------------------------------------
@@ -531,6 +532,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
     def write_Configuration(self, attr):
         print >> self.log_info, "In ", self.get_name(), \
             "::write_Configuration()"
+        print "WRITE CF: ", attr.get_write_value()
         self.__stg.configuration = attr.get_write_value()
         print >> self.log_info, "Attribute value = %s" % \
             self.__stg.configuration
@@ -726,10 +728,10 @@ class NXSRecSelector(PyTango.Device_4Impl):
             self.__stg.loadConfiguration()
 
             ## updating memorized attributes
-            dp = PyTango.DeviceProxy(str(self.get_name()))
-            for var in self.__stg.names():
-                if hasattr(dp, var):
-                    dp.write_attribute(str(var), self.__stg.value(var))
+#            dp = PyTango.DeviceProxy(str(self.get_name()))
+#            for var in self.__stg.names():
+#                if hasattr(dp, var):
+#                    dp.write_attribute(str(var), self.__stg.value(var))
 
             self.set_state(PyTango.DevState.ON)
         finally:
@@ -926,12 +928,6 @@ class NXSRecSelector(PyTango.Device_4Impl):
         try:
             self.set_state(PyTango.DevState.RUNNING)
             self.__stg.importAllEnv()
-
-            ## updating memorized attributes
-            dp = PyTango.DeviceProxy(str(self.get_name()))
-            for var in self.__stg.names():
-                if hasattr(dp, var):
-                    dp.write_attribute(str(var), self.__stg.value(var))
 
             self.set_state(PyTango.DevState.ON)
         finally:

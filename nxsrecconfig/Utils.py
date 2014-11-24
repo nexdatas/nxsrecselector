@@ -47,7 +47,7 @@ class Utils(object):
     def openProxy(cls, device):
         found = False
         cnt = 0
-        cnfServer = PyTango.DeviceProxy(device)
+        cnfServer = PyTango.DeviceProxy(str(device))
 
         while not found and cnt < 1000:
             if cnt > 1:
