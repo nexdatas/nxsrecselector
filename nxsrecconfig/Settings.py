@@ -250,7 +250,7 @@ class Settings(object):
         adsg = json.loads(self.__state["AutomaticDataSources"])
         pmots = self.poolMotors()
 
-        adsg = list(set(adsg) | set(pmots))
+        adsg = list(set(adsg if adsg else []) | set(pmots if pmots else []))
         return json.dumps(adsg)
 
     ## set method for automaticDataSources attribute
@@ -541,7 +541,10 @@ class Settings(object):
     # \returns names of STEP dataSources
     def __getSTEPDataSources(self):
         inst = self.__setConfigInstance()
-        return list(inst.stepdatasources)
+        if inst.stepdatasources:
+            return list(inst.stepdatasources)
+        else:
+            return list()
 
     ## set method for dataSourceGroup attribute
     # \param names of STEP dataSources
@@ -740,9 +743,11 @@ class Settings(object):
             raise Exception("Door '%s' cannot be found" % door)
         self.__macroserver = Utils.getMacroServer(self.__db, door)
         msp = Utils.openProxy(self.__macroserver)
+        pnames = msp.get_property("PoolNames")["PoolNames"]
+        if not pnames:
+            pnames = []
         poolNames = list(
-            set(msp.get_property("PoolNames")["PoolNames"])
-            - set(self.poolBlacklist))
+            set(pnames) - set(self.poolBlacklist))
         self.__pools = Utils.getProxies(poolNames)
 
     def __getMacroServer(self):
@@ -883,22 +888,32 @@ class Settings(object):
     ## mandatory components
     # \returns list of mandatory components
     def mandatoryComponents(self):
-        return self.__configCommand("mandatoryComponents")
+        mc = self.__configCommand("mandatoryComponents")
+        mc = mc if mc else []
+        return mc    
 
     ## available components
     # \returns list of available components
     def availableComponents(self):
-        return self.__configCommand("availableComponents")
+        ac = self.__configCommand("availableComponents")
+        ac = ac if ac else []
+        return ac    
+        
 
     ## available components
     # \returns list of component Variables
     def componentVariables(self, name):
-        return self.__configCommand("componentVariables", name)
+        av = self.__configCommand("componentVariables", name)
+        av = av if av else []
+        return av    
+        
 
     ## available datasources
     # \returns list of available datasources
     def availableDataSources(self):
-        return self.__configCommand("availableDataSources")
+        ad = self.__configCommand("availableDataSources")
+        ad = ad if ad else []
+        return ad    
 
     ## available pool channels
     # \returns pool channels of the macroserver pools
