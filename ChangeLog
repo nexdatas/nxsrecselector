@@ -1,3 +1,7 @@
+2014-11-26 Jan Kotanski <jankotan@gmail.com>
+	* fix for STEPdatasources attribute
+	* tagged as v1.9.1
+
 2014-11-13 Jan Kotanski <jankotan@gmail.com>
 	* adding STEPdatasources
 	* works only with Tango NXSConfigServer (>= 1.9.0)
