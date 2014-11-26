@@ -1052,6 +1052,23 @@ class Settings(object):
         __fullDeviceNames,
         doc=' provides full names of pool devices')
 
+    ## describe datasources
+    # \param datasources list for datasource names
+    # \returns list of dictionary with description of datasources
+    def getSourceDescription(self, datasources):
+        nexusconfig_device = self.__setConfigInstance()
+        describer = Describer(nexusconfig_device)
+        dsres = describer.dataSources(set(datasources))
+        dslist = []
+        if isinstance(dsres, dict):
+            for ds in dsres.values():
+                elem = {}
+                elem["dsname"] = ds[0]
+                elem["dstype"] = ds[1]
+                elem["record"] = ds[2]
+                dslist.append(str(json.dumps(elem)))
+        return dslist    
+
     ## checks client records
     def __checkClientRecords(self, datasources, pools):
 

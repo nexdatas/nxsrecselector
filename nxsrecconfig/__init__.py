@@ -32,9 +32,12 @@ def run(argv):
     import PyTango
     from .NXSConfig import NXSRecSelector as NXSRecConfig
     from .NXSConfig import NXSRecSelectorClass as NXSRecConfigClass
+    from .NXSWriterControl import NXSWriterControlClass
+    from .NXSWriterControl import NXSWriterControl
     try:
         py = PyTango.Util(argv)
         py.add_class(NXSRecConfigClass, NXSRecConfig)
+        py.add_class(NXSWriterControlClass, NXSWriterControl)
 
         U = PyTango.Util.instance()
         U.server_init()
