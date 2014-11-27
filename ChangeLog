@@ -1,3 +1,7 @@
+2014-11-27 Jan Kotanski <jankotan@gmail.com>
+	* adding checks for existence of keys in mntgrp during importMntGrp
+	* tagged as v1.9.2
+
 2014-11-26 Jan Kotanski <jankotan@gmail.com>
 	* fix for STEPdatasources attribute
 	* tagged as v1.9.1
