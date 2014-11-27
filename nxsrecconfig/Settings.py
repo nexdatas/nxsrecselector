@@ -1251,20 +1251,26 @@ class Settings(object):
                 dsg[ch] = False
             if ch in hel:
                 hel.remove(ch)
+
+        otimers = None        
         timers = {}
-        timers[conf["timer"]] = ''
-        for ctrl in conf["controllers"].values():
+        if "timer" in conf.keys() and "controllers" in conf.keys():
+            timers[conf["timer"]] = ''
+            for ctrl in conf["controllers"].values():
+                if 'units' in ctrl.keys() and \
+                        '0' in ctrl['units'].keys() and \
+                        'timer' in ctrl['units']['0'].keys():
+                    timers[ctrl['units']['0']['timer']] = ''
+                    if 'channels' in ctrl['units']['0'].keys():
+                        for ch in ctrl['units']['0']['channels'].values():
+                            dsg[ch['name']] = True
+                            if not bool(ch['plot_type']):
+                                hel.append(ch['name'])
 
-            timers[ctrl['units']['0']['timer']] = ''
-            for ch in ctrl['units']['0']['channels'].values():
-                dsg[ch['name']] = True
-                if not bool(ch['plot_type']):
-                    hel.append(ch['name'])
-
-        dtimers = Utils.getAliases(pools, timers)
-        otimers = list(dtimers.values())
-        otimers.remove(dtimers[conf["timer"]])
-        otimers.insert(0, dtimers[conf["timer"]])
+            dtimers = Utils.getAliases(pools, timers)
+            otimers = list(dtimers.values())
+            otimers.remove(dtimers[conf["timer"]])
+            otimers.insert(0, dtimers[conf["timer"]])
 
         jdsg = json.dumps(dsg)
         if self.__state["DataSourceGroup"] != jdsg:
@@ -1281,13 +1287,14 @@ class Settings(object):
                 dp.write_attribute(str("HiddenElements"),
                                    self.__state["HiddenElements"])
 
-        jtimers = json.dumps(otimers)
-        if self.__state["Timer"] != jtimers:
-            self.__state["Timer"] = jtimers
-            if self.__server:
-                dp = PyTango.DeviceProxy(str(self.__server.get_name()))
-                dp.write_attribute(str("Timer"),
-                                   self.__state["Timer"])
+        if otimers is not None:        
+            jtimers = json.dumps(otimers)
+            if self.__state["Timer"] != jtimers:
+                self.__state["Timer"] = jtimers
+                if self.__server:
+                    dp = PyTango.DeviceProxy(str(self.__server.get_name()))
+                    dp.write_attribute(str("Timer"),
+                                       self.__state["Timer"])
 
     ## provides configuration of mntgrp
     # \param proxy DeviceProxy of mntgrp
