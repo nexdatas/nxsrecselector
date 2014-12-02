@@ -708,7 +708,7 @@ class Settings(object):
     # \returns name of door
     def __getDoor(self):
         try:
-            dp = PyTango.DeviceProxy(self.__state["Door"])
+            dp = PyTango.DeviceProxy(str(self.__state["Door"]))
             dp.ping()
         except:
             self.__state["Door"] = ''
@@ -1578,7 +1578,7 @@ def _checker(cqueue):
         ok = True
         for ds in lds[1:]:
             try:
-                dp = PyTango.DeviceProxy(ds)
+                dp = PyTango.DeviceProxy(str(ds))
                 if dp.state() == PyTango.DevState.FAULT:
                     raise Exception("FAULT STATE")
                 dp.ping()
