@@ -106,7 +106,7 @@ class NXSWriterControl(PyTango.Device_4Impl):
                 self.NXSRecSelector =  servers[0]
 #        print "SERVER", self.NXSRecSelector
         if self.NXSRecSelector:
-            self.__rsp = PyTango.DeviceProxy(self.NXSRecSelector)
+            self.__rsp = PyTango.DeviceProxy(str(self.NXSRecSelector))
 
         self.set_state(PyTango.DevState.ON)
 
