@@ -1,4 +1,8 @@
 2014-12-02 Jan Kotanski <jankotan@gmail.com>
+	* adding fix for unicode device names
+	* tagged as v1.9.4
+
+2014-12-02 Jan Kotanski <jankotan@gmail.com>
 	* adding TANGO dynamic datasources
 	* tagged as v1.9.3
 
