@@ -47,7 +47,7 @@ class Utils(object):
     def openProxy(cls, device):
         found = False
         cnt = 0
-        cnfServer = PyTango.DeviceProxy(device)
+        cnfServer = PyTango.DeviceProxy(str(device))
 
         while not found and cnt < 1000:
             if cnt > 1:
@@ -104,7 +104,7 @@ class Utils(object):
     def getProxies(cls, names):
         dps = []
         for name in names:
-            dp = PyTango.DeviceProxy(name)
+            dp = PyTango.DeviceProxy(str(name))
             try:
                 dp.ping()
                 dps.append(dp)
@@ -124,7 +124,7 @@ class Utils(object):
         device = ''
         for server in servers:
             try:
-                dp = PyTango.DeviceProxy(server)
+                dp = PyTango.DeviceProxy(str(server))
                 dp.ping()
                 device = server
                 break
@@ -146,7 +146,7 @@ class Utils(object):
         if len(sdoor) > 1 and ":" in sdoor[0]:
             door = "/".join(sdoor[1:])
         for server in servers:
-            dp = PyTango.DeviceProxy(server)
+            dp = PyTango.DeviceProxy(str(server))
             if hasattr(dp, "DoorList"):
                 lst = dp.DoorList
                 if door in lst:
@@ -326,7 +326,7 @@ class Utils(object):
     def __getSource(cls, name):
         source = None
         try:
-            dp = PyTango.DeviceProxy(name)
+            dp = PyTango.DeviceProxy(str(name))
             if hasattr(dp, 'DataSource'):
                 ds = dp.DataSource
                 sds = ds.split("://")

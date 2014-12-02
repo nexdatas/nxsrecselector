@@ -246,7 +246,7 @@ class DynamicComponent(object):
         host = None
         port = None
         try:
-            dp = PyTango.DeviceProxy(name)
+            dp = PyTango.DeviceProxy(str(name))
             if hasattr(dp, 'DataSource'):
                 ds = dp.DataSource
                 sds = ds.split("://")
