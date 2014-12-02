@@ -154,6 +154,7 @@ class Utils(object):
                     break
         return ms
 
+
     ## find device names from aliases
     # \param cls class instance
     # \param pools list of pool devices
@@ -301,7 +302,7 @@ class Utils(object):
                 vl = da.value
         except Exception:
             if ac and ac.data_format != PyTango.AttrDataFormat.SCALAR \
-                    and da is None:
+                    and (da is None or not hasattr(da, 'dim_x')):
                 raise
 
         if vl is not None:
@@ -318,6 +319,24 @@ class Utils(object):
             ut = ac.unit
         return (shp, dt, vl, ut)
 
+    ## provides datasource from pool device
+    # \param name device pool name
+    # \returns source of pool device
+    @classmethod
+    def __getSource(cls, name):
+        source = None
+        try:
+            dp = PyTango.DeviceProxy(name)
+            if hasattr(dp, 'DataSource'):
+                ds = dp.DataSource
+                sds = ds.split("://")
+                source = sds[-1]
+        except:
+            pass
+        if not source:    
+            source = '%s/%s' % (name.encode(), 'Value')
+        return source
+
     ## adds channel into configuration dictionary
     @classmethod
     def __addChannel(cls, cnf, ctrl, device, fullname, dontdisplay, index):
@@ -325,8 +344,7 @@ class Utils(object):
         ctrlChannels = cnf['controllers'][ctrl]['units']['0'][
             u'channels']
         if not fullname in ctrlChannels.keys():
-            source = '%s/%s' % (fullname.encode(), 'value')
-
+            source = cls.__getSource(fullname)
             shp, dt, _, ut = cls.__getShapeTypeValue(source)
             dct = {}
             dct['_controller_name'] = unicode(ctrl)

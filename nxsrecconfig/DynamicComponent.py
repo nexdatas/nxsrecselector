@@ -240,6 +240,31 @@ class DynamicComponent(object):
             link.setAttribute("name", name)
 
     @classmethod
+    def __findDataSource(cls, name):
+        attr = None
+        device = None
+        host = None
+        port = None
+        try:
+            dp = PyTango.DeviceProxy(name)
+            if hasattr(dp, 'DataSource'):
+                ds = dp.DataSource
+                sds = ds.split("://")
+                source = sds[-1]
+                arr = source.split("/")
+                if len(arr) > 4 and ":" in arr[0]:
+                    device = "/".join(arr[1:-1])
+                    attr = arr[-1]
+                    arr[0].split(":")
+                elif len(arr) > 3:
+                    device = "/".join(arr[:-1])
+                    attr = arr[-1]
+        except:
+            pass
+        return (attr, device, host, port)
+            
+
+    @classmethod
     def __createField(cls, root, parent, fname, nxtype, sname,
                       record=None, shape=None, dsnode=None,
                       strategy='STEP'):
@@ -255,12 +280,28 @@ class DynamicComponent(object):
         if dsnode:
             dsource = root.importNode(dsnode, True)
         else:
-            dsource = root.createElement("datasource")
-            dsource.setAttribute("name", sname)
-            dsource.setAttribute("type", "CLIENT")
-            rec = root.createElement("record")
-            dsource.appendChild(rec)
-            rec.setAttribute("name", record)
+            (attr, device, host, port) = cls.__findDataSource(sname)
+            if device and attr:
+                dsource = root.createElement("datasource")
+                dsource.setAttribute("name", sname)
+                dsource.setAttribute("type", "TANGO")
+                dev = root.createElement("device")
+                dsource.appendChild(dev)
+                dev.setAttribute("member", "attribute")
+                dev.setAttribute("name", device)
+                if host and port:
+                    dev.setAttribute("hostname", host)
+                    dev.setAttribute("port", port)
+                rec = root.createElement("record")
+                dsource.appendChild(rec)
+                rec.setAttribute("name", attr)
+            else:
+                dsource = root.createElement("datasource")
+                dsource.setAttribute("name", sname)
+                dsource.setAttribute("type", "CLIENT")
+                rec = root.createElement("record")
+                dsource.appendChild(rec)
+                rec.setAttribute("name", record)
 
         field.appendChild(dsource)
         if shape:
