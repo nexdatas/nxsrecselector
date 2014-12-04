@@ -95,7 +95,7 @@ class NXSWriterControl(PyTango.Device_4Impl):
 #        print "INIT DEV"
         print >> self.log_info, "In ", self.get_name(), "::init_device()"
         self.get_device_properties(self.get_device_class())
-        if self.ChannelTypes:
+        if self.ChannelTypes is not None:
             self.__groups = json.loads(self.ChannelTypes)
 
         if not self.NXSRecSelector:
@@ -160,7 +160,7 @@ class NXSWriterControl(PyTango.Device_4Impl):
         print >> self.log_info, "In ", self.get_name(), "::write_Timer()"
         tm = attr.get_write_value()
         try:
-            timers = json.dump(tm)
+            timers = json.dumps(tm)
         except:
             timers = tm
         self.__rsp.write_attribute("Timer", str(timers))
