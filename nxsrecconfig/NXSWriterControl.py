@@ -130,16 +130,23 @@ class NXSWriterControl(PyTango.Device_4Impl):
             "::read_attr_hardware()"
 
 #------------------------------------------------------------------
-#    Read Components attribute
+#    Read SelectedChannels attribute
 #------------------------------------------------------------------
     def read_SelectedChannels(self, attr):
-        print >> self.log_info, "In ", self.get_name(), "::read_Components()"
+        print >> self.log_info, "In ", self.get_name(), "::read_SelectedChannels()"
         components = set(self.__rsp.Components)
         components.update(self.__rsp.DataSources)
         components.update(json.loads(self.__rsp.timer))
         components.update(self.__rsp.automaticComponents)
         components.update(self.__rsp.mandatoryComponents())
         attr.set_value(list(sorted(components)))
+
+#------------------------------------------------------------------
+#    Read AvailableTypes attribute
+#------------------------------------------------------------------
+    def read_AvailableTypes(self, attr):
+        print >> self.log_info, "In ", self.get_name(), "::read_AvailableTypes()"
+        attr.set_value(list(self.__groups.keys() if self.__groups else []))
 
 #------------------------------------------------------------------
 #    Read Timers attribute
@@ -816,6 +823,14 @@ class NXSWriterControlClass(PyTango.DeviceClass):
     
     ##    Attribute definitions
     attr_list = {
+        'AvailableTypes':
+            [[PyTango.DevString,
+              PyTango.SPECTRUM,
+              PyTango.READ, 10000],
+             {
+                'label':"AvailableTypes",
+                'description':"list of AvailableTypes",
+                }],
         'SelectedChannels':
             [[PyTango.DevString,
               PyTango.SPECTRUM,
