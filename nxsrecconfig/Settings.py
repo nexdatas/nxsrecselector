@@ -1561,6 +1561,11 @@ class Settings(object):
             self.labelTypes, self.labelShapes)
         dcpcreator.setLinkParams(self.dynamicLinks, self.dynamicPath)
 
+        dcpcreator.setComponents(
+            list(set(self.components) |
+                 set(self.automaticComponents) |
+                 set(self.mandatoryComponents())))
+
         return dcpcreator.create()
 
     ## removes dynamic component
