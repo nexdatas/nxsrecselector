@@ -1,3 +1,11 @@
+2014-12-05 Jan Kotanski <jankotan@gmail.com>
+	* skipping linking for dynamic datasources with attached components
+	* tagged as v1.9.5
+
+2014-12-02 Jan Kotanski <jankotan@gmail.com>
+	* adding fix for unicode device names
+	* tagged as v1.9.4
+
 2014-12-02 Jan Kotanski <jankotan@gmail.com>
 	* adding fix for unicode device names
 	* tagged as v1.9.4

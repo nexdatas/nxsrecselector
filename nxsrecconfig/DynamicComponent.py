@@ -47,6 +47,7 @@ class DynamicComponent(object):
         self.__nexustypes = {}
         self.__nexusshapes = {}
 
+        self.__components = []
         self.__db = PyTango.Database()
 
         self.__ldefaultpath = \
@@ -104,6 +105,11 @@ class DynamicComponent(object):
         if not isinstance(self.__initdsources, list):
             self.__initdsources = []
 
+    def setComponents(self, components):
+        self.__components = list(components)
+        if not isinstance(self.__components, list):
+            self.__components = []
+
     def setLabelParams(self, labels, paths, links, types, shapes):
         self.__nexuslabels = json.loads(labels)
         if not isinstance(self.__nexuslabels, dict):
@@ -139,14 +145,17 @@ class DynamicComponent(object):
         definition = root.createElement("definition")
         root.appendChild(definition)
         avds = self.__nexusconfig_device.availableDataSources()
-
+        
         created = []
         for dd in self.__dictDSources:
             alias = self.__get_alias(str(dd["name"]))
             path, field = self.__getFieldPath(
                 self.__nexuspaths, self.__nexuslabels,
                 alias, self.__defaultpath)
-            link = self.__getProp(self.__nexuslinks, self.__nexuslabels,
+            if alias in self.__components:
+                link = False
+            else:
+                link = self.__getProp(self.__nexuslinks, self.__nexuslabels,
                                       alias, self.__links)
             (parent, nxdata) = self.__createGroupTree(
                 root, definition, path, link)
@@ -164,8 +173,13 @@ class DynamicComponent(object):
                 path, field = self.__getFieldPath(
                     self.__nexuspaths, self.__nexuslabels,
                     ds, self.__defaultpath)
-                link = self.__getProp(
-                    self.__nexuslinks, self.__nexuslabels, ds, self.__links)
+
+                if ds in self.__components:
+                    link = False
+                else:
+                    link = self.__getProp(
+                        self.__nexuslinks, self.__nexuslabels, ds,
+                        self.__links)
                 (parent, nxdata) = self.__createGroupTree(
                     root, definition, path, link)
 
@@ -190,8 +204,12 @@ class DynamicComponent(object):
                 path, field = self.__getFieldPath(
                     self.__nexuspaths, self.__nexuslabels,
                     ds, self.__defaultpath)
-                link = self.__getProp(
-                    self.__nexuslinks, self.__nexuslabels, ds, self.__links)
+                if ds in self.__components:
+                    link = False
+                else:
+                    link = self.__getProp(
+                        self.__nexuslinks, self.__nexuslabels, ds,
+                        self.__links)
                 (parent, nxdata) = self.__createGroupTree(
                     root, definition, path, link)
 
