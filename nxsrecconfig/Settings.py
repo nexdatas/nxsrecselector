@@ -1289,6 +1289,8 @@ class Settings(object):
                 self.__state["MntGrp"] = self.__defaultmntgrp
             mntGrpName = self.__state["MntGrp"]
             fullname = str(Utils.getMntGrpName(pools, mntGrpName))
+            if not fullname:
+                return "{}"
             dpmg = Utils.openProxy(fullname)
         else:
             dpmg = proxy
