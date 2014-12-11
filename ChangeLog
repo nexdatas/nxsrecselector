@@ -1,3 +1,11 @@
+2014-12-11 Jan Kotanski <jankotan@gmail.com>
+	* adding attributes to check
+	* tagged as v1.9.7
+
+2014-12-09 Jan Kotanski <jankotan@gmail.com>
+	* adding checks for non-exising mntgrp
+	* tagged as v1.9.6
+
 2014-12-05 Jan Kotanski <jankotan@gmail.com>
 	* skipping linking for dynamic datasources with attached components
 	* tagged as v1.9.5

@@ -31,6 +31,9 @@ import Queue
 import threading
 
 
+ATTRIBUTESTOCHECK = ["Value", "Position", "Counts", "Data",
+                     "Voltage", "Energy", "SampleTime"]
+
 ## NeXus Sardana Recorder settings
 class Settings(object):
 
@@ -141,8 +144,6 @@ class Settings(object):
 
         self.__nxsenv = "NeXusConfiguration"
 
-        self.attrsToCheck = ["Value", "Position", "Counts", "Data",
-                             "Voltage", "Energy", "SampleTime"]
 
     ## provides names of variables
     def names(self):
@@ -1606,6 +1607,9 @@ def _checker(cqueue):
                 if dp.state() == PyTango.DevState.FAULT:
                     raise Exception("FAULT STATE")
                 dp.ping()
+                for attr in ATTRIBUTESTOCHECK:
+                    if hasattr(dp, attr):
+                        _ = getattr(dp, attr)
             except:
                 ok = False
                 break
