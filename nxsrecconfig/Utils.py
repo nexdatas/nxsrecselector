@@ -25,7 +25,7 @@ import time
 import json
 import pickle
 import numpy
-
+import fnmatch
 
 ## Tango Utilities
 class Utils(object):
@@ -249,20 +249,31 @@ class Utils(object):
     ## provides tiemrs of given pools
     # \param cls class instance
     # \param pools list of pool devices
+    # \param filters device name filter list
     # \returns list of timer names
     @classmethod
-    def getTimers(cls, pools):
+    def getTimers(cls, pools, filters=None):
         lst = []
         res = []
         for pool in pools:
             if pool.ExpChannelList:
                 lst += pool.ExpChannelList
+                
+        if not filters or not hasattr(filters, '__iter__'):
+            filters = ["*dgg*"]
         for elm in lst:
             chan = json.loads(elm)
             inter = chan['interfaces']
+            source = chan['source']
             if isinstance(inter, (list, tuple)):
                 if 'CTExpChannel' in inter:
-                    res.append(chan['name'])
+                    found = False
+                    for df in filters:
+                        found = fnmatch.filter([source], df)
+                        if found:
+                            break
+                    if found:
+                        res.append(chan['name'])
         return res
 
     ## adds controller into configuration dictionary

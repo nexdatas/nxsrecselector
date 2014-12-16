@@ -137,6 +137,8 @@ class Settings(object):
         self.__pools = []
         ## black list of pools
         self.poolBlacklist = []
+        ## timer filter list
+        self.timerFilterList = ["*dgg*"]
 
         ## Record names set by sardana
         self.recorder_names = ['serialno', 'end_time', 'start_time',
@@ -1395,7 +1397,7 @@ class Settings(object):
     # \returns  available Timers from MacroServer pools
     def __availableTimers(self):
         pools = self.__getPools()
-        return Utils.getTimers(pools)
+        return Utils.getTimers(pools, self.timerFilterList)
 
     ##  provides description of all components
     availableTimers = property(
