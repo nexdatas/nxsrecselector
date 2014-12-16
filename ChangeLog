@@ -1,4 +1,8 @@
 2014-12-16 Jan Kotanski <jankotan@gmail.com>
+	* making timers hidden for display by default
+	* tagged as v1.9.9
+
+2014-12-16 Jan Kotanski <jankotan@gmail.com>
 	* adding TimerFilterList property
 	* changing default apply entry to False
 	* tagged as v1.9.8

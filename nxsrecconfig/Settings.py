@@ -1181,7 +1181,7 @@ class Settings(object):
         pdd = list(set(pchs) & set(disabledatasources))
         aliases.extend(pdd)
         if timer:
-            if timer not in aliasse:
+            if timer not in aliases:
                 aliases.append(timer)
                 dontdisplay.add(timer)
         else:
