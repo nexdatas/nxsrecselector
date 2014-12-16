@@ -1,3 +1,7 @@
+2014-12-XX Jan Kotanski <jankotan@gmail.com>
+	* changing default apply entry to False
+	* tagged as v1.9.8
+
 2014-12-11 Jan Kotanski <jankotan@gmail.com>
 	* adding attributes to check
 	* tagged as v1.9.7

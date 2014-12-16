@@ -79,7 +79,7 @@ class Settings(object):
         ## group of optional components available for automatic selqection
         self.__state["OptionalComponents"] = '[]'
         ## appending new entries to existing file
-        self.__state["AppendEntry"] = True
+        self.__state["AppendEntry"] = False
         ## select components from the active measurement group
         self.__state["ComponentsFromMntGrp"] = False
         ## Configuration Server variables
