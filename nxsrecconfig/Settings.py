@@ -1181,7 +1181,9 @@ class Settings(object):
         pdd = list(set(pchs) & set(disabledatasources))
         aliases.extend(pdd)
         if timer:
-            aliases.append(timer)
+            if timer not in aliasse:
+                aliases.append(timer)
+                dontdisplay.add(timer)
         else:
             raise Exception(
                 "Timer or Monitor not defined")
