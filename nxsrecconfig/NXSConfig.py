@@ -86,6 +86,8 @@ class NXSRecSelector(PyTango.Device_4Impl):
 
         self.__stg.poolBlacklist = self.PoolBlacklist \
             if self.PoolBlacklist else []
+        self.__stg.timerFilterList = self.TimerFilterList \
+            if self.TimerFilterList else ["*dgg*"]
 
 #------------------------------------------------------------------
 #    Always excuted hook method
@@ -1358,6 +1360,10 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
        'PoolBlacklist':
            [PyTango.DevVarStringArray,
             "blacklist of pools",
+            []],
+       'TimerFilterList':
+           [PyTango.DevVarStringArray,
+            "list of timer filters",
             []],
         }
 
