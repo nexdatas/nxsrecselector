@@ -1,3 +1,7 @@
+2014-12-17 Jan Kotanski <jankotan@gmail.com>
+	* fixing timer display status
+	* tagged as v1.9.10
+
 2014-12-16 Jan Kotanski <jankotan@gmail.com>
 	* making timers hidden for display by default
 	* tagged as v1.9.9

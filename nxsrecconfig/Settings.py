@@ -1181,6 +1181,7 @@ class Settings(object):
                     if not ndcp and str(ds) in dontdisplay:
                         dontdisplay.remove(str(ds))
 
+        self.__state["HiddenElements"] = json.dumps(list(dontdisplay))
         aliases = list(set(aliases))
 
         if not self.__state["MntGrp"]:
@@ -1259,6 +1260,17 @@ class Settings(object):
             otimers = list(dtimers.values())
             otimers.remove(dtimers[conf["timer"]])
             otimers.insert(0, dtimers[conf["timer"]])
+            
+            tms = json.loads(self.__state["Timer"])
+            tms.extend(otimers)
+
+            hel2 = json.loads(self.hiddenElements)
+            for tm in tms:
+                if tm in hel2:
+                    if tm in dsg.keys():
+                        dsg[tm] = False
+                    if tm in hel:
+                        hel.remove(tm)
 
         jdsg = json.dumps(dsg)
         if self.__state["DataSourceGroup"] != jdsg:
