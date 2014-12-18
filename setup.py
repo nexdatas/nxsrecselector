@@ -54,7 +54,7 @@ SETUPDATA = dict(
     url="www.desy.de",
     packages=[NDTS],
     requires=required,
-    scripts=['NXSRecSelector.py', 'NXSRecSelector'],
+    scripts=['NXSRecSelector'],
     long_description=read('README')
 )
 

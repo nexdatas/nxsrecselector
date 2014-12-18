@@ -1,3 +1,7 @@
+2014-12-18 Jan Kotanski <jankotan@gmail.com>
+	* removing startup shell script
+	* tagged as v1.9.11
+
 2014-12-17 Jan Kotanski <jankotan@gmail.com>
 	* fixing timer display status
 	* tagged as v1.9.10
