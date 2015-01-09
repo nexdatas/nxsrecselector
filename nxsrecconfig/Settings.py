@@ -1367,10 +1367,18 @@ class Settings(object):
             res = describer.components([acp], '', '')
             for cp, dss in res[1].items():
                 if isinstance(dss, dict):
+                    tgds = describer.dataSources(dss.keys(), 'TANGO')
                     for ds in dss.keys():
                         if ds in nonexisting:
                             rcp.add(cp)
                             break
+                        elif ds in tgds.keys():    
+                            if cp not in toCheck.keys():
+                                toCheck[cp] = [cp]
+                            srec = tgds[ds][2].split("/")
+                            rds = "/".join(srec[:-1])
+                            attr = srec[-1]
+                            toCheck[cp].append((str(ds), str(rds), str(attr)))
                         elif ds in ads:
                             if cp not in toCheck.keys():
                                 toCheck[cp] = [cp]
@@ -1601,14 +1609,24 @@ def _checker(cqueue):
         lds = cqueue.get()
         ok = True
         for ds in lds[1:]:
+            if isinstance(ds, tuple) and len(ds) > 2:
+                dname = str(ds[1])
+                attr = str(ds[2])
+            else:
+                dname = str(ds)
+                attr = None
+                
             try:
-                dp = PyTango.DeviceProxy(str(ds))
+                dp = PyTango.DeviceProxy(dname)
                 if dp.state() == PyTango.DevState.FAULT:
                     raise Exception("FAULT STATE")
                 dp.ping()
-                for attr in ATTRIBUTESTOCHECK:
-                    if hasattr(dp, attr):
-                        _ = getattr(dp, attr)
+                if not attr:
+                    for gattr in ATTRIBUTESTOCHECK:
+                        if hasattr(dp, gattr):
+                            _ = getattr(dp, gattr)
+                else:
+                    _ = getattr(dp, attr)
             except:
                 ok = False
                 break

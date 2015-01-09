@@ -1,4 +1,8 @@
 2015-01-09 Jan Kotanski <jankotan@gmail.com>
+	* adding checks for automatic tango datasources
+	* tagged as v1.9.13
+
+2015-01-09 Jan Kotanski <jankotan@gmail.com>
 	* adding getExperimentalChannels into Utils
 	* impove importMntGrp
 	* tagged as v1.9.12
