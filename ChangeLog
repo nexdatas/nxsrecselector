@@ -1,3 +1,8 @@
+2015-01-09 Jan Kotanski <jankotan@gmail.com>
+	* adding getExperimentalChannels into Utils
+	* impove importMntGrp
+	* tagged as v1.9.12
+
 2014-12-18 Jan Kotanski <jankotan@gmail.com>
 	* removing startup shell script
 	* tagged as v1.9.11

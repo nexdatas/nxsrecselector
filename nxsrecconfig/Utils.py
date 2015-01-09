@@ -246,6 +246,22 @@ class Utils(object):
                 ctrls[chan['name']] = chan['controller']
         return ctrls
 
+    ## provides experimental Channels
+    # \param cls class instance
+    # \param pools list of pool devices
+    # \returns experimental channel names
+    @classmethod
+    def getExperimentalChannels(cls, pools):
+        lst = []
+        channels = []
+        for pool in pools:
+            if pool.ExpChannelList:
+                lst += pool.ExpChannelList
+        for elm in lst:
+            chan = json.loads(elm)
+            channels.append(chan['name'])
+        return channels
+
     ## provides tiemrs of given pools
     # \param cls class instance
     # \param pools list of pool devices
