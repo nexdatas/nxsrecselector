@@ -1251,8 +1251,8 @@ class Settings(object):
         pools = self.__getPools()
         dsg = json.loads(self.dataSourceGroup)
         hel = json.loads(self.hiddenElements)
-        channels = Utils.getFullDeviceNames(pools)
-        for ch in channels.keys():
+        channels = Utils.getExperimentalChannels(pools)
+        for ch in channels:
             if ch in dsg.keys():
                 dsg[ch] = False
             if ch in hel:
