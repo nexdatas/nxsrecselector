@@ -1618,8 +1618,10 @@ def _checker(cqueue):
                 
             try:
                 dp = PyTango.DeviceProxy(dname)
-                if dp.state() == PyTango.DevState.FAULT:
-                    raise Exception("FAULT STATE")
+                if dp.state() in [
+                    PyTango.DevState.FAULT, 
+                    PyTango.DevState.ALARM]:
+                    raise Exception("FAULT or ALARM STATE")
                 dp.ping()
                 if not attr:
                     for gattr in ATTRIBUTESTOCHECK:

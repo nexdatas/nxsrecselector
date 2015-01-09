@@ -126,8 +126,8 @@ class Describer(object):
         rname = None
         device = node.getElementsByTagName("device")
         if device and len(device) > 0:
-            if device[0].hasAttribute("host"):
-                host = device[0].attributes["host"].value
+            if device[0].hasAttribute("hostname"):
+                host = device[0].attributes["hostname"].value
             if device[0].hasAttribute("port"):
                 port = device[0].attributes["port"].value
             if device[0].hasAttribute("name"):
