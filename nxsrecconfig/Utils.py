@@ -357,6 +357,7 @@ class Utils(object):
             if hasattr(dp, 'DataSource'):
                 ds = dp.DataSource
                 sds = ds.split("://")
+                _ = PyTango.AttributeProxy(sds[-1])
                 source = sds[-1]
         except:
             pass

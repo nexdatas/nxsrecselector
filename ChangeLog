@@ -1,3 +1,8 @@
+2015-01-12 Jan Kotanski <jankotan@gmail.com>
+	* adding ctctrl for timer filter
+	* skipping DataSource attribute if not set
+	* tagged as v1.9.15
+
 2015-01-09 Jan Kotanski <jankotan@gmail.com>
 	* fix for getting host record
 	* setting ALARM as device error state
