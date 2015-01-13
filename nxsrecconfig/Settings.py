@@ -138,7 +138,7 @@ class Settings(object):
         ## black list of pools
         self.poolBlacklist = []
         ## timer filter list
-        self.timerFilterList = ["*dgg*"]
+        self.timerFilterList = ["*dgg*", "*ctctrl*"]
 
         ## Record names set by sardana
         self.recorder_names = ['serialno', 'end_time', 'start_time',
@@ -1036,8 +1036,8 @@ class Settings(object):
             cp = list(set(self.components) |
                       set(self.automaticComponents) |
                       set(self.mandatoryComponents()))
-        nexusconfig_device.CreateConfiguration(cp)
-        return str(nexusconfig_device.XMLString)
+        nexusconfig_device.createConfiguration(cp)
+        return str(nexusconfig_device.xmlstring)
 
     ## provides description of components
     # \param dstype list datasets only with given datasource type.
@@ -1328,7 +1328,7 @@ class Settings(object):
         confvars = self.configVariables
         nexusconfig_device = self.__setConfigInstance()
         jvars = json.loads(confvars)
-        cvars = json.loads(nexusconfig_device.Variables)
+        cvars = json.loads(nexusconfig_device.variables)
         ## appending scans to one file?
         if self.appendEntry and not 'serialno' in jvars.keys():
             ## an entry name should contain $var.serialno
@@ -1343,7 +1343,7 @@ class Settings(object):
                 cvars["serialno"] = str(1)
             jvars["serialno"] = cvars["serialno"]
             confvars = json.dumps(jvars)
-        nexusconfig_device.Variables = confvars
+        nexusconfig_device.variables = confvars
 
     ## checks existing controllers of pools for
     #      AutomaticDataSources

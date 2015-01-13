@@ -1,4 +1,8 @@
 2015-01-13 Jan Kotanski <jankotan@gmail.com>
+	* fixes for module version
+	* tagged as v1.9.17
+
+2015-01-13 Jan Kotanski <jankotan@gmail.com>
 	* updateControllers: checking Tango ds first
 	* tagged as v1.9.16
 
