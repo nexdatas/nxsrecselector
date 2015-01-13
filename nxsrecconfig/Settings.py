@@ -28,6 +28,7 @@ from .DynamicComponent import DynamicComponent
 from .Utils import Utils
 import pickle
 import Queue
+import getpass
 import threading
 
 
@@ -862,8 +863,15 @@ class Settings(object):
             else:
                 dbp = '{}'
 
-            self.__configModule.jsonsettings = dbp
-            self.__configModule.open()
+            try:    
+                self.__configModule.jsonsettings = dbp
+                self.__configModule.open()
+            except:
+                user = getpass.getuser()
+                dbp = '{"host":"localhost","db":"nxsconfig","use_unicode":true,' \
+                    + '"read_default_file":"/home/%s/.my.cnf"}' % user
+                self.__configModule.jsonsettings = dbp
+                self.__configModule.open()
             self.__configProxy = None
         return self.__configProxy \
             if self.__configProxy else self.__configModule

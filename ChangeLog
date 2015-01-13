@@ -1,4 +1,8 @@
 2015-01-13 Jan Kotanski <jankotan@gmail.com>
+	* adding default DBParams
+	* tagged as v1.9.18
+
+2015-01-13 Jan Kotanski <jankotan@gmail.com>
 	* fixes for module version
 	* tagged as v1.9.17
 
