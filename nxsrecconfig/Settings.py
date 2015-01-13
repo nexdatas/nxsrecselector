@@ -868,7 +868,7 @@ class Settings(object):
                 self.__configModule.open()
             except:
                 user = getpass.getuser()
-                dbp = '{"host":"localhost","db":"nxsconfig","use_unicode":true' \
+                dbp = '{"host":"localhost","db":"nxsconfig","use_unicode":true,' \
                     + '"read_default_file":"/home/%s/.my.cnf"}' % user
                 self.__configModule.jsonsettings = dbp
                 self.__configModule.open()
