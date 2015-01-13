@@ -1,3 +1,7 @@
+2015-01-13 Jan Kotanski <jankotan@gmail.com>
+	* updateControllers: checking Tango ds first
+	* tagged as v1.9.16
+
 2015-01-12 Jan Kotanski <jankotan@gmail.com>
 	* adding ctctrl for timer filter
 	* skipping DataSource attribute if not set

@@ -1369,16 +1369,17 @@ class Settings(object):
                 if isinstance(dss, dict):
                     tgds = describer.dataSources(dss.keys(), 'TANGO')
                     for ds in dss.keys():
-                        if ds in nonexisting:
-                            rcp.add(cp)
-                            break
-                        elif ds in tgds.keys():    
+                        if ds in tgds.keys():    
                             if cp not in toCheck.keys():
                                 toCheck[cp] = [cp]
                             srec = tgds[ds][2].split("/")
                             rds = "/".join(srec[:-1])
                             attr = srec[-1]
                             toCheck[cp].append((str(ds), str(rds), str(attr)))
+                        elif ds in nonexisting:
+                            rcp.add(cp)
+                            toCheck.pop(cp)
+                            break
                         elif ds in ads:
                             if cp not in toCheck.keys():
                                 toCheck[cp] = [cp]
