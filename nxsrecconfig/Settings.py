@@ -138,7 +138,7 @@ class Settings(object):
         ## black list of pools
         self.poolBlacklist = []
         ## timer filter list
-        self.timerFilterList = ["*dgg*"]
+        self.timerFilterList = ["*dgg*", "*ctctrl*"]
 
         ## Record names set by sardana
         self.recorder_names = ['serialno', 'end_time', 'start_time',
@@ -1036,8 +1036,8 @@ class Settings(object):
             cp = list(set(self.components) |
                       set(self.automaticComponents) |
                       set(self.mandatoryComponents()))
-        nexusconfig_device.CreateConfiguration(cp)
-        return str(nexusconfig_device.XMLString)
+        nexusconfig_device.createConfiguration(cp)
+        return str(nexusconfig_device.xmlstring)
 
     ## provides description of components
     # \param dstype list datasets only with given datasource type.
@@ -1345,7 +1345,7 @@ class Settings(object):
         confvars = self.configVariables
         nexusconfig_device = self.__setConfigInstance()
         jvars = json.loads(confvars)
-        cvars = json.loads(nexusconfig_device.Variables)
+        cvars = json.loads(nexusconfig_device.variables)
         ## appending scans to one file?
         if self.appendEntry and not 'serialno' in jvars.keys():
             ## an entry name should contain $var.serialno
@@ -1360,7 +1360,7 @@ class Settings(object):
                 cvars["serialno"] = str(1)
             jvars["serialno"] = cvars["serialno"]
             confvars = json.dumps(jvars)
-        nexusconfig_device.Variables = confvars
+        nexusconfig_device.variables = confvars
 
     ## checks existing controllers of pools for
     #      AutomaticDataSources
@@ -1521,24 +1521,24 @@ class Settings(object):
 
         dp = Utils.openProxy(self.macroServer)
         rec = dp.Environment
+        nenv = {}
         if rec[0] == 'pickle':
             dc = pickle.loads(rec[1])
-            if 'new' in dc.keys() and self.__nxsenv in dc['new'].keys():
-                nenv = dc['new'][self.__nxsenv]
+            if 'new' in dc.keys():
+                if self.__nxsenv in dc['new'].keys():
+                    nenv = dc['new'][self.__nxsenv]
                 for var in names:
                     name = var if var in params else ("NeXus%s" % var)
-                    if var in params:
-                        if name in dc['new'].keys():
-                            vl = dc['new'][name]
-                            if type(vl) not in [str, bool, int]:
-                                vl = json.dumps(vl)
-                            data[var] = vl
-                    else:
-                        if var in nenv.keys():
-                            vl = nenv[var]
-                            if type(vl) not in [str, bool, int]:
-                                vl = json.dumps(vl)
-                            data[var] = vl
+                    if name in dc['new'].keys():
+                        vl = dc['new'][name]
+                        if type(vl) not in [str, bool, int]:
+                            vl = json.dumps(vl)
+                        data[var] = vl
+                    elif var in nenv.keys():
+                        vl = nenv[var]
+                        if type(vl) not in [str, bool, int]:
+                            vl = json.dumps(vl)
+                        data[var] = vl
 
     ## exports all Enviroutment Data
     def exportAllEnv(self):
