@@ -1504,24 +1504,24 @@ class Settings(object):
 
         dp = Utils.openProxy(self.macroServer)
         rec = dp.Environment
+        nenv = {}
         if rec[0] == 'pickle':
             dc = pickle.loads(rec[1])
-            if 'new' in dc.keys() and self.__nxsenv in dc['new'].keys():
-                nenv = dc['new'][self.__nxsenv]
+            if 'new' in dc.keys():
+                if self.__nxsenv in dc['new'].keys():
+                    nenv = dc['new'][self.__nxsenv]
                 for var in names:
                     name = var if var in params else ("NeXus%s" % var)
-                    if var in params:
-                        if name in dc['new'].keys():
-                            vl = dc['new'][name]
-                            if type(vl) not in [str, bool, int]:
-                                vl = json.dumps(vl)
-                            data[var] = vl
-                    else:
-                        if var in nenv.keys():
-                            vl = nenv[var]
-                            if type(vl) not in [str, bool, int]:
-                                vl = json.dumps(vl)
-                            data[var] = vl
+                    if name in dc['new'].keys():
+                        vl = dc['new'][name]
+                        if type(vl) not in [str, bool, int]:
+                            vl = json.dumps(vl)
+                        data[var] = vl
+                    elif var in nenv.keys():
+                        vl = nenv[var]
+                        if type(vl) not in [str, bool, int]:
+                            vl = json.dumps(vl)
+                        data[var] = vl
 
     ## exports all Enviroutment Data
     def exportAllEnv(self):
