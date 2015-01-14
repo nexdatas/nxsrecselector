@@ -554,7 +554,7 @@ class Settings(object):
     # \param names of STEP dataSources
     def __setSTEPDataSources(self, names):
         inst = self.__setConfigInstance()
-        inst.stepdatasources = names
+        inst.stepdatasources = [str(nm) for nm in names]
 
     ## the json data string
     stepdatasources = property(
