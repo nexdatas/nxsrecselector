@@ -1388,7 +1388,8 @@ class Settings(object):
                             toCheck[cp].append((str(ds), str(rds), str(attr)))
                         elif ds in nonexisting:
                             rcp.add(cp)
-                            toCheck.pop(cp)
+                            if cp in toCheck.keys():
+                                toCheck.pop(cp)
                             break
                         elif ds in ads:
                             if cp not in toCheck.keys():
