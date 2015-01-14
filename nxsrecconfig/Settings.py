@@ -866,12 +866,14 @@ class Settings(object):
             try:    
                 self.__configModule.jsonsettings = dbp
                 self.__configModule.open()
+                self.__configModule.availableComponents()
             except:
                 user = getpass.getuser()
                 dbp = '{"host":"localhost","db":"nxsconfig","use_unicode":true,' \
                     + '"read_default_file":"/home/%s/.my.cnf"}' % user
                 self.__configModule.jsonsettings = dbp
                 self.__configModule.open()
+                self.__configModule.availableComponents()
             self.__configProxy = None
         return self.__configProxy \
             if self.__configProxy else self.__configModule
