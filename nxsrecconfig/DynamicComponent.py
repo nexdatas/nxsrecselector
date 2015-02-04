@@ -247,7 +247,7 @@ class DynamicComponent(object):
         else:
             path = defaultpath
             field = alias
-        return (path, field)
+        return (path, field.replace("/", "_").replace(":", "_").replace(".", "_"))
 
     @classmethod
     def __createLink(cls, root, entry, path, name):
