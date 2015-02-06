@@ -1,4 +1,8 @@
 2015-02-06 Jan Kotanski <jankotan@gmail.com>
+	* adding OrderedChannels attribute
+	* tagged as v1.10.0
+
+2015-02-06 Jan Kotanski <jankotan@gmail.com>
 	* adding support __tango__ controller
 	* tagged as v1.9.22
 

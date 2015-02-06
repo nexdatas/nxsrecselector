@@ -69,6 +69,8 @@ class Settings(object):
         self.__state = {}
         ## timer
         self.__state["Timer"] = '[]'
+        ## ordered channels
+        self.__state["OrderedChannels"] = '[]'
         ## group of electable components
         self.__state["ComponentGroup"] = '{}'
         ## group of automatic components describing instrument state
@@ -382,7 +384,31 @@ class Settings(object):
     timer = property(
         __getTimer,
         __setTimer,
-        doc='automatic components group')
+        doc='timers')
+
+    ## get method for orderedChannels attribute
+    # \returns name of orderedChannels
+    def __getOrderedChannels(self):
+        pch = self.poolChannels()
+        och = json.loads(self.__state["OrderedChannels"])
+
+        ordchannels = [ch for ch in och if ch in pch]    
+        uordchannels = list(set(pch) - set(och))
+        ordchannels.extend(sorted(uordchannels))
+        return json.dumps(ordchannels)
+
+    ## set method for orderedChannels attribute
+    # \param name of orderedChannels
+    def __setOrderedChannels(self, name):
+        jname = self.__stringToListJson(name)
+        if self.__state["OrderedChannels"] != jname:
+            self.__state["OrderedChannels"] = jname
+
+    ## the json data string
+    orderedChannels = property(
+        __getOrderedChannels,
+        __setOrderedChannels,
+        doc='ordered channels')
 
     ## get method for optionalComponents attribute
     # \returns name of optionalComponents
@@ -947,6 +973,8 @@ class Settings(object):
                                 res.append(exp['name'])
         return res
 
+    
+
     ## available pool motors
     # \returns pool motors of the macroserver pools
     def poolMotors(self):
@@ -1159,6 +1187,9 @@ class Settings(object):
 
         timers = json.loads(self.__state["Timer"])
         timer = timers[0] if timers else ''
+        if not timer:
+            raise Exception(
+                "Timer or Monitor not defined")
 
         datasources = self.dataSources
         disabledatasources = self.disableDataSources
@@ -1170,16 +1201,14 @@ class Settings(object):
         aliases = []
         if isinstance(datasources, list):
             aliases = datasources
-        pchs = self.poolChannels()
+        pchs = json.loads(self.orderedChannels)
         pdd = list(set(pchs) & set(disabledatasources))
         aliases.extend(pdd)
-        if timer:
-            if timer not in aliases:
-                aliases.append(timer)
-                dontdisplay.add(timer)
-        else:
-            raise Exception(
-                "Timer or Monitor not defined")
+
+        for tm in timers:
+            if tm not in aliases:
+                aliases.append(tm)
+                dontdisplay.add(tm)
 
         res = self.__cpdescription('CLIENT')
 
@@ -1213,19 +1242,28 @@ class Settings(object):
         cnf['monitor'] = fullname
         cnf['timer'] = fullname
 
+        ltimers = set()
         if len(timers) > 1:
             ltimers = set(timers[1:])
             if timer in ltimers:
                 ltimers.remove(timer)
-            aliases = sorted(set(aliases) - ltimers)
-        else:
-            ltimers = set()
-            aliases = sorted(set(aliases))
-        index = Utils.addDevices(aliases, dontdisplay, pools,
-                                 cnf, fullname, index)
-        for ltimer in ltimers:
-            index = Utils.addDevice(ltimer, dontdisplay, pools,
-                                    cnf, ltimer, index)
+
+        ordchannels = [ch for ch in pchs if ch in aliases]    
+        print "OChannels: ", str(ordchannels)
+        uordchannels = list(set(aliases) - set(ordchannels))
+        print "UOChannels: ", str(uordchannels)
+    
+
+        fullnames = Utils.getFullDeviceNames(pools, aliases)
+        for al in ordchannels:
+            index = Utils.addDevice(
+                al, dontdisplay, pools, cnf,
+                ltimer if al in ltimers else timer, index, fullnames)
+        for al in uordchannels:
+            index = Utils.addDevice(
+                al, dontdisplay, pools, cnf,
+                ltimer if al in ltimers else timer, index, fullnames)
+
         conf = json.dumps(cnf)
         return conf, mfullname
 
