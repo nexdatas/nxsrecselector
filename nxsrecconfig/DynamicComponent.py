@@ -247,7 +247,9 @@ class DynamicComponent(object):
         else:
             path = defaultpath
             field = alias
-        return (path, field)
+        if len(field) > 12 and field[:8] == 'tango://':
+            field = field[8:]
+        return (path, field.replace("/", "_").replace(":", "_").replace(".", "_"))
 
     @classmethod
     def __createLink(cls, root, entry, path, name):
@@ -263,17 +265,29 @@ class DynamicComponent(object):
         device = None
         host = None
         port = None
+        source = None
         try:
-            dp = PyTango.DeviceProxy(str(name))
-            if hasattr(dp, 'DataSource'):
-                ds = dp.DataSource
-                sds = ds.split("://")
-                source = sds[-1]
+            sname = name.split("://")
+            if name and sname[0] == 'tango' and sname[-1].count('/') > 2:
+                
+                source = sname[-1]
+            else:
+                
+                dp = PyTango.DeviceProxy(str(name))
+                if hasattr(dp, 'DataSource'):
+                    ds = dp.DataSource
+                    sds = ds.split("://")
+                    source = sds[-1]
+
+            if source:        
                 arr = source.split("/")
                 if len(arr) > 4 and ":" in arr[0]:
                     device = "/".join(arr[1:-1])
                     attr = arr[-1]
-                    arr[0].split(":")
+                    hat= arr[0].split(":")
+                    if hat > 1:
+                        host = hat[0]
+                        port= hat[1]
                 elif len(arr) > 3:
                     device = "/".join(arr[:-1])
                     attr = arr[-1]
@@ -299,6 +313,7 @@ class DynamicComponent(object):
             dsource = root.importNode(dsnode, True)
         else:
             (attr, device, host, port) = cls.__findDataSource(sname)
+            print (sname, attr, device, host, port)
             if device and attr:
                 dsource = root.createElement("datasource")
                 dsource.setAttribute("name", sname)

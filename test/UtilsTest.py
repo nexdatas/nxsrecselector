@@ -772,27 +772,34 @@ class UtilsTest(unittest.TestCase):
         
 
         arr = [
-            ["test/ct/01", ["CTExpChannel"]],
-            ["test/ct/02", ["conem", "CTExpChannel"]],
-            ["test/ct/03", ["CTExpChannel", "ZeroDChannel"]],
-            ["test/ct/04", ["oneD","CTExpChannel"]],
-            ["null", ["counter_04"]],
+            ["test/ct/01", ["CTExpChannel"],
+             "haso228k:10000/expchan/dgg2_exp_00/1/Value"],
+            ["test/ct/02", ["conem", "CTExpChannel"],
+                            "haso228k:10000/expchan/dgg2_exp_01/1/Value"],
+            ["test/ct/03", ["CTExpChannel", "ZeroDChannel"],
+             "haso228k:10000/expchan/dgg2_exp_02/1/Value"],
+            ["test/ct/04", ["oneD","CTExpChannel"],
+             "haso228k:10000/expchan/dgg2_exp_03/1/Value"],
+            ["null", ["counter_04"],
+             "haso228k:10000/expchan/dg2_exp_01/1/Value"],
             ]
 
 
         arr2 = [
-            ["test/mca/01", ["CTExpChannel"]],
-            ["test/mca/02", ["CTExpChannel2","CTExpChannel1"]],
-            ["test/sca/03", ["CTExpChannel3","CTExpChannel123"]],
-            ["test/sca/04", ["CTExpChannel","CTExpChannel2","CTExpChannel3"]],
+            ["test/mca/01", ["CTExpChannel"],
+             "haso228k:10000/expchan/dgg2_exp_01/1/Value"],
+            ["test/mca/02", ["CTExpChannel2","CTExpChannel1"],"haso228k:10000/expchan/dg2_exp_01/1/Value"],
+            ["test/sca/03", ["CTExpChannel3","CTExpChannel123"],"haso228k:10000/expchan/dg2_exp_01/1/Value"],
+            ["test/sca/04", ["CTExpChannel","CTExpChannel2","CTExpChannel3"], 
+             "haso228k:10000/expchan/dgg2_exp_01/1/Value"],
             ]
 
         pool = Pool()
         pool2 = Pool()
         pool.ExpChannelList = [json.dumps(
-                {"name":a[0], "interfaces":a[1]}) for a in arr]
+                {"name":a[0], "interfaces":a[1],"source":a[2]}) for a in arr]
         pool2.ExpChannelList = [json.dumps(
-                {"name":a[0], "interfaces":a[1]}) for a in arr2]
+                {"name":a[0], "interfaces":a[1],"source":a[2]}) for a in arr2]
 
         dd = Utils.getTimers([])
         self.assertEqual(dd, [])
@@ -802,10 +809,8 @@ class UtilsTest(unittest.TestCase):
         dd = Utils.getTimers([pool])
         self.assertEqual(dd, lst)
 
-
         lst.extend([ar[0] for ar in arr2 if  "CTExpChannel" in ar[1]])
     
-        
         dd = Utils.getTimers([pool, pool2])
         self.assertEqual(dd, lst)
             
@@ -932,13 +937,13 @@ class UtilsTest(unittest.TestCase):
         fr['controllers'][arr[0][1]]= jres
         ch = json.loads(self.chnl % (0,arr[0][0], "float64",
                                      "1",arr[0][0],"",arr[0][1],aarr[0][1],'"<mov>"',
-                                "%s/%s" %(aarr[0][1], 'value')))
+                                "%s/%s" %(aarr[0][1], 'Value')))
         fr['controllers'][arr[0][1]]['units']['0']['channels'][aarr[0][1]] = ch
         self.myAssertDict(hsh, fr)
 
         ch = json.loads(self.chnl % (0,arr[0][0], "float64","1",
                                      arr[0][0],"",arr[0][1],aarr[0][1],'"<mov>"',
-                                "%s/%s" %(aarr[0][1], 'value')))
+                                "%s/%s" %(aarr[0][1], 'Value')))
         fr['controllers'][arr[0][1]]['units']['0']['channels'][aarr[0][1]] = ch
         self.myAssertDict(hsh, fr)
 
@@ -953,7 +958,7 @@ class UtilsTest(unittest.TestCase):
         fr['controllers'][arr[0][1]]= jres
         ch = json.loads(self.chnl % (0, arr[0][0], "float64","1",
                                      arr[0][0],"",arr[0][1],aarr[0][1],'"<mov>"',
-                                "%s/%s" %(aarr[0][1], 'value')))
+                                "%s/%s" %(aarr[0][1], 'Value')))
         fr['controllers'][arr[0][1]]['units']['0']['channels'][aarr[0][1]] = ch
         self.myAssertDict(hsh, fr)
 
@@ -1021,7 +1026,7 @@ class UtilsTest(unittest.TestCase):
             fr['controllers'][arr[i][1]]= jres
             ch = json.loads(self.chnl % (iindex+i, a[0], "float64","1",
                                          a[0],"",arr[i][1],a[1],'"<mov>"',
-                                    "%s/%s" %(a[1], 'value')))
+                                    "%s/%s" %(a[1], 'Value')))
             fr['controllers'][arr[i][1]]['units']['0']['channels'][a[1]] = ch
         self.myAssertDict(hsh, fr)
 
@@ -1092,14 +1097,14 @@ class UtilsTest(unittest.TestCase):
             fr['controllers'][arr[i][1]]= jres
             ch = json.loads(self.chnl % (iindex+i, a[0], "float64", 
                                          "1",a[0],"",arr[i][1],a[1],'"<mov>"',
-                                         "%s/%s" %(a[1], 'value')))
+                                         "%s/%s" %(a[1], 'Value')))
             fr['controllers'][arr[i][1]]['units']['0']['channels'][a[1]] = ch
         for i, a in enumerate(aarr2):
             jres = json.loads(self.cnt % (a[1],a[1]))
             fr['controllers'][arr2[i][1]]= jres
             ch = json.loads(self.chnl % (iindex+i+len(aarr), a[0], "float64",
                                          "1",a[0],"",arr2[i][1],a[1],'"<mov>"',
-                                         "%s/%s" %(a[1], 'value')))
+                                         "%s/%s" %(a[1], 'Value')))
             fr['controllers'][arr2[i][1]]['units']['0']['channels'][a[1]] = ch
         self.myAssertDict(hsh, fr)
             
@@ -1167,7 +1172,7 @@ class UtilsTest(unittest.TestCase):
         for i, a in enumerate(aarr):
             ch = json.loads(self.chnl % (iindex+i, a[0], "float64",
                                          "1",a[0],"",arr[i][1],a[1],'"<mov>"',
-                                         "%s/%s" %(a[1], 'value')))
+                                         "%s/%s" %(a[1], 'Value')))
             fr['controllers'][arr[i][1]]['units']['0']['channels'][a[1]] = ch
         self.myAssertDict(hsh, fr)
 
@@ -1218,7 +1223,7 @@ class UtilsTest(unittest.TestCase):
         for i, a in enumerate(aarr):
             ch = json.loads(self.chnl % (iindex+i, a[0], "float64","1",
                                          a[0],"",arr[i][1],a[1],'"<mov>"',
-                                         "%s/%s" %(a[1], 'value')))
+                                         "%s/%s" %(a[1], 'Value')))
             fr['controllers'][arr[i][1]]['units']['0']['channels'][a[1]] = ch
         self.myAssertDict(hsh, fr)
 
