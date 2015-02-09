@@ -1249,20 +1249,18 @@ class Settings(object):
                 ltimers.remove(timer)
 
         ordchannels = [ch for ch in pchs if ch in aliases]    
-        print "OChannels: ", str(ordchannels)
         uordchannels = list(set(aliases) - set(ordchannels))
-        print "UOChannels: ", str(uordchannels)
     
 
         fullnames = Utils.getFullDeviceNames(pools, aliases)
         for al in ordchannels:
             index = Utils.addDevice(
                 al, dontdisplay, pools, cnf,
-                ltimer if al in ltimers else timer, index, fullnames)
+                al if al in ltimers else timer, index, fullnames)
         for al in uordchannels:
             index = Utils.addDevice(
                 al, dontdisplay, pools, cnf,
-                ltimer if al in ltimers else timer, index, fullnames)
+                al if al in ltimers else timer, index, fullnames)
 
         conf = json.dumps(cnf)
         return conf, mfullname
