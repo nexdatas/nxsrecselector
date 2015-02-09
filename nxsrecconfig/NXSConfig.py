@@ -131,6 +131,21 @@ class NXSRecSelector(PyTango.Device_4Impl):
         print >> self.log_info, "Attribute value = %s" % self.__stg.timer
 
 #------------------------------------------------------------------
+#    Read OrderedChannels attribute
+#------------------------------------------------------------------
+    def read_OrderedChannels(self, attr):
+        print >> self.log_info, "In ", self.get_name(), "::read_OrderedChannels()"
+        attr.set_value(self.__stg.orderedChannels)
+
+#------------------------------------------------------------------
+#    Write OrderedChannels attribute
+#------------------------------------------------------------------
+    def write_OrderedChannels(self, attr):
+        print >> self.log_info, "In ", self.get_name(), "::write_OrderedChannels()"
+        self.__stg.orderedChannels = attr.get_write_value()
+        print >> self.log_info, "Attribute value = %s" % self.__stg.orderedChannels
+
+#------------------------------------------------------------------
 #    Read ComponentGroup attribute
 #------------------------------------------------------------------
     def read_ComponentGroup(self, attr):
@@ -1474,6 +1489,15 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
             {
                 'label':"Timer",
                 'description':"Timer and optionally extra timers",
+                'Memorized':"true",
+            }],
+        'OrderedChannels':
+            [[PyTango.DevString,
+            PyTango.SCALAR,
+            PyTango.READ_WRITE],
+            {
+                'label':"odered channels",
+                'description':"Ordered channels",
                 'Memorized':"true",
             }],
         'ComponentGroup':

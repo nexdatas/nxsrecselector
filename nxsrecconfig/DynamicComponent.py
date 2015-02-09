@@ -313,7 +313,6 @@ class DynamicComponent(object):
             dsource = root.importNode(dsnode, True)
         else:
             (attr, device, host, port) = cls.__findDataSource(sname)
-            print (sname, attr, device, host, port)
             if device and attr:
                 dsource = root.createElement("datasource")
                 dsource.setAttribute("name", sname)

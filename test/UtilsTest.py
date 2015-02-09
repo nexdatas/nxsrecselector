@@ -853,7 +853,7 @@ class UtilsTest(unittest.TestCase):
         self.assertEqual(hsh, {})
 
         hsh = {}
-        res =  Utils.addDevice("", [], [pool, pool2], hsh, "", 0)
+        res =  Utils.addDevice("", [], [pool, pool2], hsh, "", 0 )
         self.assertEqual(res, 0)
         self.assertEqual(hsh, {})
 

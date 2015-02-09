@@ -421,22 +421,24 @@ class Utils(object):
     # \param index device index
     # \returns next device index
     @classmethod
-    def addDevice(cls, device, dontdisplay, pools, cnf, timer, index):
+    def addDevice(cls, device, dontdisplay, pools, cnf, timer, index, fullnames=None):
+        if not fullnames:
+            fullnames = cls.getFullDeviceNames(pools, [device, timer])
+            
         ctrls = cls.getDeviceControllers(pools, [device])
         ctrl = ctrls[device] if ctrls and device in ctrls.keys() else ""
         timers = cls.getFullDeviceNames(pools, [timer])
-        fulltimer = timers[timer] if timers and timer in timers.keys() else ""
+        fulltimer = fullnames[timer] if timers and timer in fullnames.keys() else ""
         if not ctrl:
             return index
 
         cls.__addController(cnf, ctrl, fulltimer)
-        fullnames = cls.getFullDeviceNames(pools, [device])
         fullname = fullnames[device] \
             if fullnames and device in fullnames.keys() else ""
         index = cls.__addChannel(cnf, ctrl, device, fullname,
                                      dontdisplay, index)
-
         return index
+
 
     ## copares two dictionaries
     # \param dct first dictinary
@@ -465,23 +467,3 @@ class Utils(object):
                     break
         return status
 
-    ## adds device into configuration dictionary
-    # \param cls class instance
-    # \param devices device aliases
-    # \param dontdisplay list of devices disable for display
-    # \param pools list of give pools
-    # \param cnf configuration dictionary
-    # \param timer device timer
-    # \param index device index
-    # \returns next device index
-    @classmethod
-    def addDevices(cls, devices, dontdisplay, pools, cnf, timer, index):
-        ctrls = cls.getDeviceControllers(pools, devices)
-        fullnames = cls.getFullDeviceNames(pools, devices)
-        for device, ctrl in ctrls.items():
-            cls.__addController(cnf, ctrl, timer)
-            fullname = fullnames[device]
-            index = cls.__addChannel(cnf, ctrl, device, fullname,
-                                     dontdisplay, index)
-
-        return index
