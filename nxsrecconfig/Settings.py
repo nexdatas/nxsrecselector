@@ -32,6 +32,7 @@ import getpass
 import threading
 
 
+
 ATTRIBUTESTOCHECK = ["Value", "Position", "Counts", "Data",
                      "Voltage", "Energy", "SampleTime"]
 
@@ -1291,6 +1292,71 @@ class Settings(object):
         return str(dpmg.Configuration)
 
 
+    def __createDataSources(self, tangods):
+        from nxstools.nxsxml import (XMLFile, NDSource)
+        from nxstools.nxsdevicetools import (
+            storeDataSource, checkServer, generateDeviceNames)
+
+
+        ads = self.availableDataSources()
+        sds = self.getSourceDescription(ads)
+
+        extangods = []
+        exsource = {}
+        for name, label, initsource in tangods:
+            source = initsource if initsource[:8] != 'tango://' else initsource[8:]
+            msource = None
+            csource = None
+            spsource = source.split("/")
+            if len(spsource) > 3 and ":" in spsource[0]:
+                host, port = spsource[0].split(":")
+                mhost = host.split(".")[0]
+                csource = "/".join(spsource[1:])
+                if mhost != host:
+                    msource = "%s:%s/%s" % (mhost, port, csource)
+                device = "/".join(spsource[1:-1])
+                attribute = spsource[-1]
+                exsource[source] = [host, port, device, attribute]
+            extangods.append([name, label, initsource, source, msource, csource])
+
+        jds = {}
+        for ds in sds: 
+            js = json.loads(ds)
+            for name, label, initsource, source, msource, csource in extangods:
+                if source == js["record"]:
+                    jds[initsource] = js["dsname"]
+                    break
+                elif msource == js["record"]:
+                    jds[initsource] = js["dsname"]
+                    break
+
+                
+        for name, label, initsource, source, msource, csource in extangods:
+            if initsource not in jds:
+                jds[initsource] = None
+                i = 0
+                nname = name
+                while nname in ads:
+                    i += 1
+                    nname = "%s_%s" % (name, i)
+                name = nname    
+                
+                if source in exsource:
+                    host, port, device, attribute = exsource[source]
+                    df = XMLFile("ds.xml")
+                    sr = NDSource(df)
+                    sr.initTango(name, device, "attribute", attribute, host, port)
+                
+                    inst = self.__setConfigInstance()
+                    xml = df.prettyPrint()
+                    inst.xmlstring = str(xml)
+                    inst.storeDataSource(str(name))
+#                    print "Store:", name, xml
+                    jds[initsource] = name    
+#        print "jds" , str(jds)
+        return jds
+            
+
     ## import setting from active measurement
     def importMntGrp(self):
         conf = json.loads(self.mntGrpConfiguration())
@@ -1307,7 +1373,7 @@ class Settings(object):
 
         otimers = None        
         timers = {}
-        tangos = []
+        tangods = []
         if "timer" in conf.keys() and "controllers" in conf.keys():
             timers[conf["timer"]] = ''
             for ctrl in conf["controllers"].values():
@@ -1318,20 +1384,33 @@ class Settings(object):
                         if 'channels' in ctrl['units']['0'].keys():
                             for ch in ctrl['units']['0']['channels'].values():
                                 dsg[ch['name']] = True
+                
                                 if not bool(ch['plot_type']):
                                     hel.append(ch['name'])
                     if 'channels' in ctrl['units']['0'].keys():
                         for ch in ctrl['units']['0']['channels'].values():
                             if '_controller_name' in ch.keys() and \
                                     ch['_controller_name'] == '__tango__':
-                                tangos.append([ch['name'], ch['label'], ch["source"]])
-#                                dsg[ch['name']] = True
-#                                if not bool(ch['plot_type']):
-#                                    hel.append(ch['name'])
-#            for ch in tangos:
-#                print "DS name:", ch
-                
+                                tangods.append([ch['name'], ch['label'], ch["source"]])
 
+            # TODO: adding synchronization (remove tango channel datasources)
+            if tangods:    
+                jds = self.__createDataSources(tangods)    
+                for ctrl in conf["controllers"].values():
+                    if 'units' in ctrl.keys() and \
+                            '0' in ctrl['units'].keys():
+                        if 'channels' in ctrl['units']['0'].keys():
+                            for ch in ctrl['units']['0']['channels'].values():
+                                if '_controller_name' in ch.keys() and \
+                                        ch['_controller_name'] == '__tango__':
+                                    if ch["source"] in jds.keys():
+                                        name = jds[ch["source"]]
+                                        dsg[name] = True
+                                        if not bool(ch['plot_type']):
+                                            hel.append(ch['name'])
+
+                                    
+                
             dtimers = Utils.getAliases(pools, timers)
             otimers = list(dtimers.values())
             otimers.remove(dtimers[conf["timer"]])
