@@ -1282,7 +1282,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
 #------------------------------------------------------------------
 #    ClientSources command:
 #
-#    Description: create dynamic component
+#    Description: describes client datasources from components
 #
 #    argin:  DevVarStringArray    list of component names
 #    argout: DevVarString         description of component datasources
@@ -1303,11 +1303,37 @@ class NXSRecSelector(PyTango.Device_4Impl):
 #---- ClientSources command State Machine -----------------
     def is_ClientSources_allowed(self):
         if self.get_state() in [PyTango.DevState.RUNNING]:
+            return False
+        return True
+
+#------------------------------------------------------------------
+#    GetSourceDescription command:
+#
+#    Description: descrive datasources
+#
+#    argin:  DevVarStringArray    list of datasource names
+#    argout: DevVarStringArray    description of datasources
+#------------------------------------------------------------------
+    def GetSourceDescription(self, argin):
+        print >> self.log_info, "In ", self.get_name(), \
+            "::GetSourceDescription()"
+        try:
+            self.set_state(PyTango.DevState.RUNNING)
+            argout = self.__stg.getSourceDescription(argin)
+            self.set_state(PyTango.DevState.OPEN)
+        finally:
+            if self.get_state() == PyTango.DevState.RUNNING:
+                self.set_state(PyTango.DevState.OPEN)
+
+        return argout
+
+#---- GetSourceDescription command State Machine -----------------
+    def is_GetSourceDescription_allowed(self):
+        if self.get_state() in [PyTango.DevState.RUNNING]:
             #    End of Generated Code
             #    Re-Start of Generated Code
             return False
         return True
-
 #------------------------------------------------------------------
 #    CreateConfiguration command:
 #
@@ -1332,8 +1358,6 @@ class NXSRecSelector(PyTango.Device_4Impl):
 #---- CreateConfiguration command State Machine -----------------
     def is_CreateConfiguration_allowed(self):
         if self.get_state() in [PyTango.DevState.RUNNING]:
-            #    End of Generated Code
-            #    Re-Start of Generated Code
             return False
         return True
 
@@ -1426,6 +1450,10 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
             [[PyTango.DevVarStringArray,
               "list of JSON strings with datasource parameters"],
              [PyTango.DevString, "name of dynamic Component"]],
+        'GetSourceDescription':
+            [[PyTango.DevVarStringArray, "list of required datasources"],
+             [PyTango.DevVarStringArray,
+              "list of JSON with description of CLIENT Datasources"]],
         'ClientSources':
             [[PyTango.DevVarStringArray, "list of required components"],
              [PyTango.DevString,
