@@ -71,7 +71,8 @@ class NXSRecSelector(PyTango.Device_4Impl):
     def delete_device(self):
         print >> self.log_info, "[Device delete_device method] for device", \
             self.get_name()
-        if self.__stg:
+        if hasattr(self, 'stg') and self.__stg:
+            del self.__stg
             self.__stg = None
         self.set_state(PyTango.DevState.OFF)
 
@@ -80,6 +81,9 @@ class NXSRecSelector(PyTango.Device_4Impl):
 #------------------------------------------------------------------
     def init_device(self):
         print >> self.log_info, "In ", self.get_name(), "::init_device()"
+        if hasattr(self, 'stg') and self.__stg:
+            del self.__stg
+            self.__stg = None
         self.__stg = STG(self)
         self.set_state(PyTango.DevState.ON)
         self.get_device_properties(self.get_device_class())
