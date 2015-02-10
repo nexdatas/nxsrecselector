@@ -1290,6 +1290,7 @@ class Settings(object):
         dpmg.Configuration = conf
         return str(dpmg.Configuration)
 
+
     ## import setting from active measurement
     def importMntGrp(self):
         conf = json.loads(self.mntGrpConfiguration())
@@ -1306,18 +1307,30 @@ class Settings(object):
 
         otimers = None        
         timers = {}
+        tangos = []
         if "timer" in conf.keys() and "controllers" in conf.keys():
             timers[conf["timer"]] = ''
             for ctrl in conf["controllers"].values():
                 if 'units' in ctrl.keys() and \
-                        '0' in ctrl['units'].keys() and \
-                        'timer' in ctrl['units']['0'].keys():
-                    timers[ctrl['units']['0']['timer']] = ''
+                        '0' in ctrl['units'].keys():
+                    if 'timer' in ctrl['units']['0'].keys():
+                        timers[ctrl['units']['0']['timer']] = ''
+                        if 'channels' in ctrl['units']['0'].keys():
+                            for ch in ctrl['units']['0']['channels'].values():
+                                dsg[ch['name']] = True
+                                if not bool(ch['plot_type']):
+                                    hel.append(ch['name'])
                     if 'channels' in ctrl['units']['0'].keys():
                         for ch in ctrl['units']['0']['channels'].values():
-                            dsg[ch['name']] = True
-                            if not bool(ch['plot_type']):
-                                hel.append(ch['name'])
+                            if '_controller_name' in ch.keys() and \
+                                    ch['_controller_name'] == '__tango__':
+                                tangos.append([ch['name'], ch['label'], ch["source"]])
+#                                dsg[ch['name']] = True
+#                                if not bool(ch['plot_type']):
+#                                    hel.append(ch['name'])
+#            for ch in tangos:
+#                print "DS name:", ch
+                
 
             dtimers = Utils.getAliases(pools, timers)
             otimers = list(dtimers.values())

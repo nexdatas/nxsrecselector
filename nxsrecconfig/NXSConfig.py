@@ -1330,7 +1330,6 @@ class NXSRecSelector(PyTango.Device_4Impl):
             #    Re-Start of Generated Code
             return False
         return True
-
 #------------------------------------------------------------------
 #    CreateConfiguration command:
 #
