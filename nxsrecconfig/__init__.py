@@ -21,7 +21,7 @@
 """  NeXus Sardana Recorder Settings - Tango Server """
 
 ## package version
-__version__ = "1.10.0"
+__version__ = "1.10.1"
 
 import sys
 
