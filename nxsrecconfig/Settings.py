@@ -957,7 +957,7 @@ class Settings(object):
             pool = Utils.openProxy(pl)
             if not fpool:
                 fpool = pool
-        if fpool:        
+        if fpool:
             mntgrps = Utils.getMntGrps(fpool)
         mntgrps = mntgrps if mntgrps else []
         return mntgrps
