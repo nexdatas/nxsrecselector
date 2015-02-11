@@ -27,6 +27,7 @@ import pickle
 import numpy
 import fnmatch
 
+
 ## Tango Utilities
 class Utils(object):
     """  Tango Utilities """
@@ -154,7 +155,6 @@ class Utils(object):
                     break
         return ms
 
-
     ## find device names from aliases
     # \param cls class instance
     # \param pools list of pool devices
@@ -274,7 +274,7 @@ class Utils(object):
         for pool in pools:
             if pool.ExpChannelList:
                 lst += pool.ExpChannelList
-                
+
         if not filters or not hasattr(filters, '__iter__'):
             filters = ["*dgg*"]
         for elm in lst:
@@ -361,7 +361,7 @@ class Utils(object):
                 source = sds[-1]
         except:
             pass
-        if not source:    
+        if not source:
             source = '%s/%s' % (name.encode(), 'Value')
         return source
 
@@ -421,14 +421,16 @@ class Utils(object):
     # \param index device index
     # \returns next device index
     @classmethod
-    def addDevice(cls, device, dontdisplay, pools, cnf, timer, index, fullnames=None):
+    def addDevice(cls, device, dontdisplay, pools, cnf,
+                  timer, index, fullnames=None):
         if not fullnames:
             fullnames = cls.getFullDeviceNames(pools, [device, timer])
-            
+
         ctrls = cls.getDeviceControllers(pools, [device])
         ctrl = ctrls[device] if ctrls and device in ctrls.keys() else ""
         timers = cls.getFullDeviceNames(pools, [timer])
-        fulltimer = fullnames[timer] if timers and timer in fullnames.keys() else ""
+        fulltimer = fullnames[timer] \
+            if timers and timer in fullnames.keys() else ""
         if not ctrl:
             return index
 
@@ -438,7 +440,6 @@ class Utils(object):
         index = cls.__addChannel(cnf, ctrl, device, fullname,
                                      dontdisplay, index)
         return index
-
 
     ## copares two dictionaries
     # \param dct first dictinary
@@ -466,4 +467,3 @@ class Utils(object):
                     status = False
                     break
         return status
-
