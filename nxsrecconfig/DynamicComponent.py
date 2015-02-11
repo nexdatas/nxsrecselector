@@ -145,7 +145,7 @@ class DynamicComponent(object):
         definition = root.createElement("definition")
         root.appendChild(definition)
         avds = self.__nexusconfig_device.availableDataSources()
-        
+
         created = []
         for dd in self.__dictDSources:
             alias = self.__get_alias(str(dd["name"]))
@@ -249,7 +249,8 @@ class DynamicComponent(object):
             field = alias
         if len(field) > 12 and field[:8] == 'tango://':
             field = field[8:]
-        return (path, field.replace("/", "_").replace(":", "_").replace(".", "_"))
+        return (path,
+                field.replace("/", "_").replace(":", "_").replace(".", "_"))
 
     @classmethod
     def __createLink(cls, root, entry, path, name):
@@ -269,32 +270,31 @@ class DynamicComponent(object):
         try:
             sname = name.split("://")
             if name and sname[0] == 'tango' and sname[-1].count('/') > 2:
-                
+
                 source = sname[-1]
             else:
-                
+
                 dp = PyTango.DeviceProxy(str(name))
                 if hasattr(dp, 'DataSource'):
                     ds = dp.DataSource
                     sds = ds.split("://")
                     source = sds[-1]
 
-            if source:        
+            if source:
                 arr = source.split("/")
                 if len(arr) > 4 and ":" in arr[0]:
                     device = "/".join(arr[1:-1])
                     attr = arr[-1]
-                    hat= arr[0].split(":")
+                    hat = arr[0].split(":")
                     if hat > 1:
                         host = hat[0]
-                        port= hat[1]
+                        port = hat[1]
                 elif len(arr) > 3:
                     device = "/".join(arr[:-1])
                     attr = arr[-1]
         except:
             pass
         return (attr, device, host, port)
-            
 
     @classmethod
     def __createField(cls, root, parent, fname, nxtype, sname,

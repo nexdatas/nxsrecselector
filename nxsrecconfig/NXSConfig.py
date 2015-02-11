@@ -138,16 +138,19 @@ class NXSRecSelector(PyTango.Device_4Impl):
 #    Read OrderedChannels attribute
 #------------------------------------------------------------------
     def read_OrderedChannels(self, attr):
-        print >> self.log_info, "In ", self.get_name(), "::read_OrderedChannels()"
+        print >> self.log_info, "In ", self.get_name(), \
+            "::read_OrderedChannels()"
         attr.set_value(self.__stg.orderedChannels)
 
 #------------------------------------------------------------------
 #    Write OrderedChannels attribute
 #------------------------------------------------------------------
     def write_OrderedChannels(self, attr):
-        print >> self.log_info, "In ", self.get_name(), "::write_OrderedChannels()"
+        print >> self.log_info, "In ", self.get_name(), \
+            "::write_OrderedChannels()"
         self.__stg.orderedChannels = attr.get_write_value()
-        print >> self.log_info, "Attribute value = %s" % self.__stg.orderedChannels
+        print >> self.log_info, "Attribute value = %s" % \
+            self.__stg.orderedChannels
 
 #------------------------------------------------------------------
 #    Read ComponentGroup attribute
@@ -239,7 +242,8 @@ class NXSRecSelector(PyTango.Device_4Impl):
 #    Read STEPDataSources attribute
 #------------------------------------------------------------------
     def read_STEPDataSources(self, attr):
-        print >> self.log_info, "In ", self.get_name(), "::read_STEPDataSources()"
+        print >> self.log_info, "In ", self.get_name(), \
+            "::read_STEPDataSources()"
         attr.set_value(self.__stg.stepdatasources)
 
 #------------------------------------------------------------------
@@ -1360,6 +1364,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
             #    Re-Start of Generated Code
             return False
         return True
+
 #------------------------------------------------------------------
 #    CreateConfiguration command:
 #
@@ -1513,7 +1518,8 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
             PyTango.READ_WRITE, 10000],
             {
                 'label':"list of datasources to be switch into step mode",
-                'description':"list of datasources to be switch into step mode",
+                'description':"list of datasources to be switched" +
+                " into step mode",
             }],
         'Timer':
             [[PyTango.DevString,

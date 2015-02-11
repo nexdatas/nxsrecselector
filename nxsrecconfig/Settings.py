@@ -33,15 +33,13 @@ import threading
 
 try:
     from nxstools.nxsxml import (XMLFile, NDSource)
-    from nxstools.nxsdevicetools import (
-        storeDataSource, checkServer, generateDeviceNames)
     NXSTOOLS = True
 except:
     NXSTOOLS = False
 
-
 ATTRIBUTESTOCHECK = ["Value", "Position", "Counts", "Data",
                      "Voltage", "Energy", "SampleTime"]
+
 
 ## NeXus Sardana Recorder settings
 class Settings(object):
@@ -156,7 +154,6 @@ class Settings(object):
                                'point_nb', 'timestamps', 'scan_title']
 
         self.__nxsenv = "NeXusConfiguration"
-
 
     ## provides names of variables
     def names(self):
@@ -400,7 +397,7 @@ class Settings(object):
         pch = self.poolChannels()
         och = json.loads(self.__state["OrderedChannels"])
 
-        ordchannels = [ch for ch in och if ch in pch]    
+        ordchannels = [ch for ch in och if ch in pch]
         uordchannels = list(set(pch) - set(och))
         ordchannels.extend(sorted(uordchannels))
         return json.dumps(ordchannels)
@@ -573,7 +570,6 @@ class Settings(object):
         __getDataSourceGroup,
         __setDataSourceGroup,
         doc='datasource  group')
-
 
     ## get method for dataSourceGroup attribute
     # \returns names of STEP dataSources
@@ -897,13 +893,14 @@ class Settings(object):
             else:
                 dbp = '{}'
 
-            try:    
+            try:
                 self.__configModule.jsonsettings = dbp
                 self.__configModule.open()
                 self.__configModule.availableComponents()
             except:
                 user = getpass.getuser()
-                dbp = '{"host":"localhost","db":"nxsconfig","use_unicode":true,' \
+                dbp = '{"host":"localhost","db":"nxsconfig",' \
+                    + '"use_unicode":true,' \
                     + '"read_default_file":"/home/%s/.my.cnf"}' % user
                 self.__configModule.jsonsettings = dbp
                 self.__configModule.open()
@@ -937,14 +934,14 @@ class Settings(object):
     def mandatoryComponents(self):
         mc = self.__configCommand("mandatoryComponents")
         mc = mc if mc else []
-        return mc    
+        return mc
 
     ## available components
     # \returns list of available components
     def availableComponents(self):
         ac = self.__configCommand("availableComponents")
         ac = ac if ac else []
-        return ac    
+        return ac
 
     ## available mntgrps
     # \returns list of available measurement groups
@@ -953,34 +950,31 @@ class Settings(object):
         mntgrps = None
         pool = None
         ms = self.__getMacroServer()
-        amntgrp = Utils.getEnv('ActiveMntGrp', ms)
         msp = Utils.openProxy(ms)
         pn = msp.get_property("PoolNames")["PoolNames"]
-        apool = None
-        lpool = [None, 0]
         fpool = None
         for pl in pn:
             pool = Utils.openProxy(pl)
             if not fpool:
                 fpool = pool
-            mntgrps = Utils.getMntGrps(pool)
+        if fpool:        
+            mntgrps = Utils.getMntGrps(fpool)
         mntgrps = mntgrps if mntgrps else []
-        return mntgrps    
+        return mntgrps
 
     ## available components
     # \returns list of component Variables
     def componentVariables(self, name):
         av = self.__configCommand("componentVariables", name)
         av = av if av else []
-        return av    
-        
+        return av
 
     ## available datasources
     # \returns list of available datasources
     def availableDataSources(self):
         ad = self.__configCommand("availableDataSources")
         ad = ad if ad else []
-        return ad    
+        return ad
 
     ## available pool channels
     # \returns pool channels of the macroserver pools
@@ -1000,8 +994,6 @@ class Settings(object):
                             if exp and isinstance(exp, dict):
                                 res.append(exp['name'])
         return res
-
-    
 
     ## available pool motors
     # \returns pool motors of the macroserver pools
@@ -1151,7 +1143,7 @@ class Settings(object):
                 elem["dstype"] = ds[1]
                 elem["record"] = ds[2]
                 dslist.append(str(json.dumps(elem)))
-        return dslist    
+        return dslist
 
     ## checks client records
     def __checkClientRecords(self, datasources, pools):
@@ -1293,9 +1285,8 @@ class Settings(object):
             if timer in ltimers:
                 ltimers.remove(timer)
 
-        ordchannels = [ch for ch in pchs if ch in aliases]    
+        ordchannels = [ch for ch in pchs if ch in aliases]
         uordchannels = list(set(aliases) - set(ordchannels))
-    
 
         fullnames = Utils.getFullDeviceNames(pools, aliases)
         for al in ordchannels:
@@ -1318,7 +1309,6 @@ class Settings(object):
         dpmg.Configuration = conf
         return str(dpmg.Configuration)
 
-
     def __createDataSources(self, tangods):
 
         ads = self.availableDataSources()
@@ -1327,7 +1317,8 @@ class Settings(object):
         extangods = []
         exsource = {}
         for name, label, initsource in tangods:
-            source = initsource if initsource[:8] != 'tango://' else initsource[8:]
+            source = initsource if initsource[:8] != 'tango://' \
+                else initsource[8:]
             msource = None
             csource = None
             spsource = source.split("/")
@@ -1340,10 +1331,11 @@ class Settings(object):
                 device = "/".join(spsource[1:-1])
                 attribute = spsource[-1]
                 exsource[source] = [host, port, device, attribute]
-            extangods.append([name, label, initsource, source, msource, csource])
+            extangods.append(
+                [name, label, initsource, source, msource, csource])
 
         jds = {}
-        for ds in sds: 
+        for ds in sds:
             js = json.loads(ds)
             for name, label, initsource, source, msource, csource in extangods:
                 if source == js["record"]:
@@ -1353,7 +1345,6 @@ class Settings(object):
                     jds[initsource] = js["dsname"]
                     break
 
-                
         for name, label, initsource, source, msource, csource in extangods:
             if initsource not in jds:
                 jds[initsource] = None
@@ -1362,23 +1353,21 @@ class Settings(object):
                 while nname in ads:
                     i += 1
                     nname = "%s_%s" % (name, i)
-                name = nname    
-                
+                name = nname
+
                 if source in exsource:
                     host, port, device, attribute = exsource[source]
                     df = XMLFile("ds.xml")
                     sr = NDSource(df)
-                    sr.initTango(name, device, "attribute", attribute, host, port)
-                
+                    sr.initTango(
+                        name, device, "attribute", attribute, host, port)
+
                     inst = self.__setConfigInstance()
                     xml = df.prettyPrint()
                     inst.xmlstring = str(xml)
                     inst.storeDataSource(str(name))
-#                    print "Store:", name, xml
-                    jds[initsource] = name    
-#        print "jds" , str(jds)
+                    jds[initsource] = name
         return jds
-            
 
     ## import setting from active measurement
     def importMntGrp(self):
@@ -1394,7 +1383,7 @@ class Settings(object):
             if ch in hel:
                 hel.remove(ch)
 
-        otimers = None        
+        otimers = None
         timers = {}
         tangods = []
         if "timer" in conf.keys() and "controllers" in conf.keys():
@@ -1407,17 +1396,18 @@ class Settings(object):
                         if 'channels' in ctrl['units']['0'].keys():
                             for ch in ctrl['units']['0']['channels'].values():
                                 dsg[ch['name']] = True
-                
+
                                 if not bool(ch['plot_type']):
                                     hel.append(ch['name'])
                     if 'channels' in ctrl['units']['0'].keys():
                         for ch in ctrl['units']['0']['channels'].values():
                             if '_controller_name' in ch.keys() and \
                                     ch['_controller_name'] == '__tango__':
-                                tangods.append([ch['name'], ch['label'], ch["source"]])
+                                tangods.append(
+                                    [ch['name'], ch['label'], ch["source"]])
 
-            if tangods and NXSTOOLS:    
-                jds = self.__createDataSources(tangods)    
+            if tangods and NXSTOOLS:
+                jds = self.__createDataSources(tangods)
                 for ctrl in conf["controllers"].values():
                     if 'units' in ctrl.keys() and \
                             '0' in ctrl['units'].keys():
@@ -1430,12 +1420,12 @@ class Settings(object):
                                         dsg[name] = True
                                         if not bool(ch['plot_type']):
                                             hel.append(ch['name'])
-                
+
             dtimers = Utils.getAliases(pools, timers)
             otimers = list(dtimers.values())
             otimers.remove(dtimers[conf["timer"]])
             otimers.insert(0, dtimers[conf["timer"]])
-            
+
             tms = json.loads(self.__state["Timer"])
             tms.extend(otimers)
 
@@ -1462,7 +1452,7 @@ class Settings(object):
                 dp.write_attribute(str("HiddenElements"),
                                    self.__state["HiddenElements"])
 
-        if otimers is not None:        
+        if otimers is not None:
             jtimers = json.dumps(otimers)
             if self.__state["Timer"] != jtimers:
                 self.__state["Timer"] = jtimers
@@ -1544,7 +1534,7 @@ class Settings(object):
                 if isinstance(dss, dict):
                     tgds = describer.dataSources(dss.keys(), 'TANGO')
                     for ds in dss.keys():
-                        if ds in tgds.keys():    
+                        if ds in tgds.keys():
                             if cp not in toCheck.keys():
                                 toCheck[cp] = [cp]
                             srec = tgds[ds][2].split("/")
@@ -1779,6 +1769,7 @@ class Settings(object):
         dcpcreator = DynamicComponent(nexusconfig_device)
         dcpcreator.removeDynamicComponent(name)
 
+
 ## checkers if Tango devices are alive
 # \params cqueue queue with task of the form ['comp','alias','alias', ...]
 def _checker(cqueue):
@@ -1792,11 +1783,11 @@ def _checker(cqueue):
             else:
                 dname = str(ds)
                 attr = None
-                
+
             try:
                 dp = PyTango.DeviceProxy(dname)
                 if dp.state() in [
-                    PyTango.DevState.FAULT, 
+                    PyTango.DevState.FAULT,
                     PyTango.DevState.ALARM]:
                     raise Exception("FAULT or ALARM STATE")
                 dp.ping()
