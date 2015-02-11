@@ -31,6 +31,13 @@ import Queue
 import getpass
 import threading
 
+try:
+    from nxstools.nxsxml import (XMLFile, NDSource)
+    from nxstools.nxsdevicetools import (
+        storeDataSource, checkServer, generateDeviceNames)
+    NXSTOOLS = True
+except:
+    NXSTOOLS = False
 
 
 ATTRIBUTESTOCHECK = ["Value", "Position", "Counts", "Data",
@@ -1313,10 +1320,6 @@ class Settings(object):
 
 
     def __createDataSources(self, tangods):
-        from nxstools.nxsxml import (XMLFile, NDSource)
-        from nxstools.nxsdevicetools import (
-            storeDataSource, checkServer, generateDeviceNames)
-
 
         ads = self.availableDataSources()
         sds = self.getSourceDescription(ads)
@@ -1413,8 +1416,7 @@ class Settings(object):
                                     ch['_controller_name'] == '__tango__':
                                 tangods.append([ch['name'], ch['label'], ch["source"]])
 
-            # TODO: adding synchronization (remove tango channel datasources)
-            if tangods:    
+            if tangods and NXSTOOLS:    
                 jds = self.__createDataSources(tangods)    
                 for ctrl in conf["controllers"].values():
                     if 'units' in ctrl.keys() and \
@@ -1428,8 +1430,6 @@ class Settings(object):
                                         dsg[name] = True
                                         if not bool(ch['plot_type']):
                                             hel.append(ch['name'])
-
-                                    
                 
             dtimers = Utils.getAliases(pools, timers)
             otimers = list(dtimers.values())
