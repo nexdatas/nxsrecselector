@@ -1120,6 +1120,32 @@ class NXSRecSelector(PyTango.Device_4Impl):
         return True
 
 #------------------------------------------------------------------
+#    AvailableMeasurementGroups command:
+#
+#    Description: Returns a list of available mntgrp names
+#
+#    argout: DevVarStringArray    list of available mntgrp names
+#------------------------------------------------------------------
+    def AvailableMeasurementGroups(self):
+        print >> self.log_info, "In ", self.get_name(), \
+            "::AvailableMeasurementGroups()"
+        try:
+            self.set_state(PyTango.DevState.RUNNING)
+            argout = self.__stg.availableMeasurementGroups()
+            self.set_state(PyTango.DevState.ON)
+        finally:
+            if self.get_state() == PyTango.DevState.RUNNING:
+                self.set_state(PyTango.DevState.ON)
+
+        return argout
+
+#---- AvailableMeasurementGroups command State Machine -----------------
+    def is_AvailableMeasurementGroups_allowed(self):
+        if self.get_state() in [PyTango.DevState.RUNNING]:
+            return False
+        return True
+
+#------------------------------------------------------------------
 #    AvailableDataSources command:
 #
 #    Description: Returns a list of available DataSource names
@@ -1433,6 +1459,10 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
             [[PyTango.DevVoid, ""],
              [PyTango.DevVarStringArray,
               "list of available component names"]],
+        'AvailableMeasurementGroups':
+            [[PyTango.DevVoid, ""],
+             [PyTango.DevVarStringArray,
+              "list of available mntgrp names"]],
         'AvailableDataSources':
             [[PyTango.DevVoid, ""],
              [PyTango.DevVarStringArray,

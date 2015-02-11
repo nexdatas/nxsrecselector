@@ -938,7 +938,27 @@ class Settings(object):
         ac = self.__configCommand("availableComponents")
         ac = ac if ac else []
         return ac    
-        
+
+    ## available mntgrps
+    # \returns list of available measurement groups
+    def availableMeasurementGroups(self):
+#        pools = self.__getPools()
+        mntgrps = None
+        pool = None
+        ms = self.__getMacroServer()
+        amntgrp = Utils.getEnv('ActiveMntGrp', ms)
+        msp = Utils.openProxy(ms)
+        pn = msp.get_property("PoolNames")["PoolNames"]
+        apool = None
+        lpool = [None, 0]
+        fpool = None
+        for pl in pn:
+            pool = Utils.openProxy(pl)
+            if not fpool:
+                fpool = pool
+            mntgrps = Utils.getMntGrps(pool)
+        mntgrps = mntgrps if mntgrps else []
+        return mntgrps    
 
     ## available components
     # \returns list of component Variables
