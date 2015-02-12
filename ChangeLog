@@ -1,3 +1,7 @@
+2015-02-12 Jan Kotanski <jankotan@gmail.com>
+	* adding support for multi-dim automatic component datasources
+	* tagged as v1.11.1
+
 2015-02-11 Jan Kotanski <jankotan@gmail.com>
 	* adding GetSourceDescription
 	* adding AvailableMeasurementGroups

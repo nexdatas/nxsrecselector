@@ -23,6 +23,7 @@
 import re
 import json
 import xml.dom.minidom
+from .Utils import Utils
 
 
 ## NeXus Sardana Recorder settings
@@ -117,37 +118,6 @@ class Describer(object):
                         tr.append(elem)
         return tr
 
-    @classmethod
-    def __getRecord(cls, node):
-        res = ''
-        host = None
-        port = None
-        dname = None
-        rname = None
-        device = node.getElementsByTagName("device")
-        if device and len(device) > 0:
-            if device[0].hasAttribute("hostname"):
-                host = device[0].attributes["hostname"].value
-            if device[0].hasAttribute("port"):
-                port = device[0].attributes["port"].value
-            if device[0].hasAttribute("name"):
-                dname = device[0].attributes["name"].value
-
-        record = node.getElementsByTagName("record")
-        if record and len(record) > 0:
-            if record[0].hasAttribute("name"):
-                rname = record[0].attributes["name"].value
-                if dname:
-                    if host:
-                        if not port:
-                            port = '10000'
-                        res = '%s:%s/%s/%s' % (host, port, dname, rname)
-                    else:
-                        res = '%s/%s' % (dname, rname)
-                else:
-                    res = rname
-        return res
-
     def __checkNode(self, node, dsl=None):
         label = 'datasources'
         dstype = None
@@ -160,7 +130,7 @@ class Describer(object):
                 dstype = node.attributes["type"].value
             if node.hasAttribute("name"):
                 name = node.attributes["name"].value
-            record = self.__getRecord(node)
+            record = Utils.getRecord(node)
             dslist.append((name, dstype, record))
 
         elif node.nodeType == node.TEXT_NODE:
@@ -219,7 +189,7 @@ class Describer(object):
                         dstype = ds.attributes["type"].value
                     if ds.hasAttribute("name"):
                         name = ds.attributes["name"].value
-                    record = self.__getRecord(ds)
+                    record = Utils.getRecord(ds)
         return name, dstype, record
 
     def __appendNode(self, node, dss, mode, counter, nxtype=None, shape=None):
