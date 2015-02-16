@@ -106,7 +106,6 @@ class Settings(object):
 
         self.__nxsenv = "NeXusConfiguration"
 
-
     ## provides values of the required variable
     # \param name name of the required variable
     # \returns  values of the required variable
@@ -200,7 +199,8 @@ class Settings(object):
         else:
             self.__selection["ConfigDevice"] = Utils.getDeviceName(
                 self.__db, "NXSConfigServer")
-        self.storeConfiguration()
+        self.fetchConfiguration()
+        self.importMntGrp()
 
     ## the json data string
     configDevice = property(__getConfigDevice, __setConfigDevice,
@@ -233,13 +233,13 @@ class Settings(object):
     ## set method for configuration attribute
     # \param name of configuration
     def __setConfiguration(self, jconf):
-        self.__selection = json.loads(jconf)
+        self.__selection.set(json.loads(jconf))
         self.storeConfiguration()
 
     ## get method for configuration attribute
     # \returns configuration
     def __getConfiguration(self):
-        return json.dumps(self.__selection)
+        return json.dumps(self.__selection.get())
 
     ## the json data string
     configuration = property(
@@ -687,7 +687,7 @@ class Settings(object):
             self.__selection["MntGrp"] = name
         else:
             self.__selection["MntGrp"] = self.__defaultmntgrp
-        self.storeConfiguration()
+#        self.storeConfiguration()
 
     ## the json data string
     mntGrp = property(__getMntGrp, __setMntGrp,
@@ -726,6 +726,8 @@ class Settings(object):
             self.__selection["Door"] = Utils.getDeviceName(
                 self.__db, "Door")
             self.__updateMacroServer(self.__selection["Door"])
+            if self.__selection["ConfigDevice"]:
+                self.storeConfiguration()
     
         return self.__selection["Door"]
 
@@ -791,7 +793,6 @@ class Settings(object):
         else:
             self.__selection["WriterDevice"] = Utils.getDeviceName(
                 self.__db, "NXSDataWriter")
-
         self.storeConfiguration()
 
     ## the json data string

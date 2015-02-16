@@ -39,6 +39,13 @@ class Selection(object):
 
         ##  dictionary with Settings
         self.__state = {}
+        self.reset()
+
+        if state:
+            self.set(state)
+
+    def reset(self):
+        self.__state.clear()
         ## timer
         self.__state["Timer"] = '[]'
         ## ordered channels
@@ -91,11 +98,11 @@ class Selection(object):
         ## MntGrp
         self.__state["MntGrp"] = ''
         
-        if state:
-            self.set(state)
 
     def set(self, state):
-        self.__state = dict(state)
+        self.reset()
+        for key in state.keys():
+            self.__state[key] = state[key]
 
     ## provides names of variables
     def keys(self):

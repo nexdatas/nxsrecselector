@@ -1609,6 +1609,7 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
                 'label':"list of datasources to be switch into step mode",
                 'description':"list of datasources to be switched" +
                 " into step mode",
+                'Display level':PyTango.DispLevel.EXPERT,
             }],
         'Timer':
             [[PyTango.DevString,
@@ -1625,6 +1626,7 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
             {
                 'label':"odered channels",
                 'description':"Ordered channels",
+                'Display level':PyTango.DispLevel.EXPERT,
             }],
         'ComponentGroup':
             [[PyTango.DevString,
@@ -1719,7 +1721,7 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
             {
                 'label':"Door",
                 'description':"Door",
-                'Memorized':"true",
+#                'Memorized':"true",
             }],
         'WriterDevice':
             [[PyTango.DevString,
@@ -1812,6 +1814,7 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
             {
                 'label':"Available Timers",
                 'description':"list of Available Timers",
+                'Display level':PyTango.DispLevel.EXPERT,
             }],
         'Description':
             [[PyTango.DevString,
