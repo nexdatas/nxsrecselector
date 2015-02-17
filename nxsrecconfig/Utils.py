@@ -497,3 +497,72 @@ class Utils(object):
                 else:
                     res = rname
         return res
+
+
+    @classmethod
+    def stringToDictJson(cls, string, toBool=False):
+        try:
+            if not string or string == "Not initialised":
+                return {}
+            acps = json.loads(string)
+            assert isinstance(acps, dict)
+            jstring = string
+        except:
+            lst = re.sub("[^\w]", "  ", string).split()
+            if len(lst) % 2:
+                lst.append("")
+            dct = dict(zip(*[iter(lst)] * 2))
+            if toBool:
+                for k in dct.keys():
+                    dct[k] = False \
+                        if dct[k].lower() == 'false' else True
+            jstring = json.dumps(dct)
+        return jstring
+
+    @classmethod
+    def stringToListJson(cls, string):
+        if not string or string == "Not initialised":
+            return []
+        try:
+            acps = json.loads(string)
+            assert isinstance(acps, (list, tuple))
+            jstring = string
+        except:
+            lst = re.sub("[^\w]", "  ", string).split()
+            jstring = json.dumps(lst)
+        return jstring
+
+
+## checkers if Tango devices are alive
+# \params cqueue queue with task of the form ['comp','alias','alias', ...]
+def checker(cqueue):
+    while True:
+        lds = cqueue.get()
+        ok = True
+        for ds in lds[1:]:
+            if isinstance(ds, tuple) and len(ds) > 2:
+                dname = str(ds[1])
+                attr = str(ds[2])
+            else:
+                dname = str(ds)
+                attr = None
+
+            try:
+                dp = PyTango.DeviceProxy(dname)
+                if dp.state() in [
+                    PyTango.DevState.FAULT,
+                    PyTango.DevState.ALARM]:
+                    raise Exception("FAULT or ALARM STATE")
+                dp.ping()
+                if not attr:
+                    for gattr in ATTRIBUTESTOCHECK:
+                        if hasattr(dp, gattr):
+                            _ = getattr(dp, gattr)
+                else:
+                    _ = getattr(dp, attr)
+            except:
+                ok = False
+                break
+        if ok:
+            lds[:] = []
+        cqueue.task_done()

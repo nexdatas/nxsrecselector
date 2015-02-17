@@ -26,6 +26,7 @@ import PyTango
 from .Describer import Describer
 from .DynamicComponent import DynamicComponent
 from .Utils import Utils
+from .Utils import checker
 from .Selection import Selection
 import pickle
 import Queue
@@ -51,8 +52,7 @@ class Settings(object):
         ## Tango server
         self.__server = server
         ## configuration selection
-        self.__selection = Selection()
-
+        self.__selection = Selection(self)
 
         ## number of threads
         self.numberOfThreads = 8
@@ -75,12 +75,12 @@ class Settings(object):
             "ScanDir"
             ]
 
-
         ## configuration file
         self.configFile = '/tmp/nxsrecconfig.cfg'
 
         ## tango database
         self.__db = PyTango.Database()
+        self.__selection.db = self
 
         ## config server proxy
         self.__configProxy = None
@@ -90,6 +90,7 @@ class Settings(object):
         self.__writerProxy = None
         ## module label
         self.__moduleLabel = 'module'
+        self.__selection.moduleLabel = self.__moduleLabel
 
         ## macro server instance
         self.__macroserver = ""
@@ -174,34 +175,15 @@ class Settings(object):
     ## get method for configDevice attribute
     # \returns name of configDevice
     def __getConfigDevice(self):
-        if "ConfigDevice" not in self.__selection.keys() \
-                or not self.__selection["ConfigDevice"]:
-            self.__selection["ConfigDevice"] = Utils.getDeviceName(
-                self.__db, "NXSConfigServer")
-        name = self.__selection["ConfigDevice"]
-        if name:
-            if name != self.__moduleLabel:
-                try:
-                    dp = Utils.getProxies([name])
-                    if not dp:
-                        self.__selection["ConfigDevice"] = ''
-                        name = ''
-                except:
-                    self.__selection["ConfigDevice"] = ''
-                    name = ''
-        return name
+        return self.__selection["ConfigDevice"]
 
     ## set method for configDevice attribute
     # \param name of configDevice
     def __setConfigDevice(self, name):
-        if name:
+        if name != self.__selection["ConfigDevice"]:
             self.__selection["ConfigDevice"] = name
-        else:
-            self.__selection["ConfigDevice"] = Utils.getDeviceName(
-                self.__db, "NXSConfigServer")
-        self.fetchConfiguration()
-        self.importMntGrp()
-
+            self.switchMntGrp()
+        
     ## the json data string
     configDevice = property(__getConfigDevice, __setConfigDevice,
                             doc='configuration server device name')
@@ -209,17 +191,12 @@ class Settings(object):
     ## get method for automaticDataSources attribute
     # \returns name of automaticDataSources
     def __getAutomaticDataSources(self):
-#        return self.__selection["AutomaticDataSources"]
-        adsg = json.loads(self.__selection["AutomaticDataSources"])
-        pmots = self.poolMotors()
-
-        adsg = list(set(adsg if adsg else []) | set(pmots if pmots else []))
-        return json.dumps(adsg)
+        return self.__selection["AutomaticDataSources"]
 
     ## set method for automaticDataSources attribute
     # \param name of automaticDataSources
     def __setAutomaticDataSources(self, name):
-        jname = self.__stringToListJson(name)
+        jname = Utils.stringToListJson(name)
         if self.__selection["AutomaticDataSources"] != jname:
             self.__selection["AutomaticDataSources"] = jname
             self.storeConfiguration()
@@ -340,7 +317,7 @@ class Settings(object):
     ## set method for timer attribute
     # \param name of timer
     def __setTimer(self, name):
-        jname = self.__stringToListJson(name)
+        jname = Utils.stringToListJson(name)
         if self.__selection["Timer"] != jname:
             self.__selection["Timer"] = jname
             self.storeConfiguration()
@@ -349,23 +326,17 @@ class Settings(object):
     timer = property(
         __getTimer,
         __setTimer,
-        doc='timers')
+        doc='timeWrs')
 
     ## get method for orderedChannels attribute
     # \returns name of orderedChannels
     def __getOrderedChannels(self):
-        pch = self.poolChannels()
-        och = json.loads(self.__selection["OrderedChannels"])
-
-        ordchannels = [ch for ch in och if ch in pch]
-        uordchannels = list(set(pch) - set(och))
-        ordchannels.extend(sorted(uordchannels))
-        return json.dumps(ordchannels)
+        return self.__selection["OrderedChannels"]
 
     ## set method for orderedChannels attribute
     # \param name of orderedChannels
     def __setOrderedChannels(self, name):
-        jname = self.__stringToListJson(name)
+        jname = Utils.stringToListJson(name)
         if self.__selection["OrderedChannels"] != jname:
             self.__selection["OrderedChannels"] = jname
             self.storeConfiguration()
@@ -384,7 +355,7 @@ class Settings(object):
     ## set method for optionalComponents attribute
     # \param name of optionalComponents
     def __setOptionalComponents(self, name):
-        jname = self.__stringToListJson(name)
+        jname = Utils.stringToListJson(name)
         if self.__selection["OptionalComponents"] != jname:
             self.__selection["OptionalComponents"] = jname
             self.storeConfiguration()
@@ -403,7 +374,7 @@ class Settings(object):
     ## set method for dataRecord attribute
     # \param name of dataRecord
     def __setDataRecord(self, name):
-        jname = self.__stringToDictJson(name)
+        jname = Utils.stringToDictJson(name)
         if self.__selection["DataRecord"] != jname:
             self.__selection["DataRecord"] = jname
             self.storeConfiguration()
@@ -422,7 +393,7 @@ class Settings(object):
     ## set method for configVariables attribute
     # \param name of configVariables
     def __setConfigVariables(self, name):
-        jname = self.__stringToDictJson(name)
+        jname = Utils.stringToDictJson(name)
         if self.__selection["ConfigVariables"] != jname:
             self.__selection["ConfigVariables"] = jname
             self.storeConfiguration()
@@ -433,39 +404,6 @@ class Settings(object):
         __setConfigVariables,
         doc='configuration variables')
 
-    @classmethod
-    def __stringToDictJson(cls, string, toBool=False):
-        try:
-            if not string or string == "Not initialised":
-                return {}
-            acps = json.loads(string)
-            assert isinstance(acps, dict)
-            jstring = string
-        except:
-            lst = re.sub("[^\w]", "  ", string).split()
-            if len(lst) % 2:
-                lst.append("")
-            dct = dict(zip(*[iter(lst)] * 2))
-            if toBool:
-                for k in dct.keys():
-                    dct[k] = False \
-                        if dct[k].lower() == 'false' else True
-            jstring = json.dumps(dct)
-        return jstring
-
-    @classmethod
-    def __stringToListJson(cls, string):
-        if not string or string == "Not initialised":
-            return []
-        try:
-            acps = json.loads(string)
-            assert isinstance(acps, (list, tuple))
-            jstring = string
-        except:
-            lst = re.sub("[^\w]", "  ", string).split()
-            jstring = json.dumps(lst)
-        return jstring
-
     ## get method for automaticComponentGroup attribute
     # \returns name of automaticComponentGroup
     def __getAutomaticComponentGroup(self):
@@ -474,7 +412,7 @@ class Settings(object):
     ## set method for automaticComponentGroup attribute
     # \param name of automaticComponentGroup
     def __setAutomaticComponentGroup(self, name):
-        jname = self.__stringToDictJson(name, True)
+        jname = Utils.stringToDictJson(name, True)
         if self.__selection["AutomaticComponentGroup"] != jname:
             self.__selection["AutomaticComponentGroup"] = jname
             self.storeConfiguration()
@@ -485,21 +423,16 @@ class Settings(object):
         __setAutomaticComponentGroup,
         doc='automatic components group')
 
+
     ## get method for componentGroup attribute
     # \returns name of componentGroup
     def __getComponentGroup(self):
-        cpg = json.loads(self.__selection["ComponentGroup"])
-        dss = json.loads(self.__selection["DataSourceGroup"]).keys()
-        for cp in set(cpg.keys()):
-            if cp in dss:
-                cpg.pop(cp)
-
-        return json.dumps(cpg)
+        return self.__selection["ComponentGroup"]
 
     ## set method for componentGroup attribute
     # \param name of componentGroup
     def __setComponentGroup(self, name):
-        jname = self.__stringToDictJson(name, True)
+        jname = Utils.stringToDictJson(name, True)
         if self.__selection["ComponentGroup"] != jname:
             self.__selection["ComponentGroup"] = jname
             self.storeConfiguration()
@@ -510,24 +443,16 @@ class Settings(object):
         __setComponentGroup,
         doc='components group')
 
+
     ## get method for dataSourceGroup attribute
     # \returns name of dataSourceGroup
     def __getDataSourceGroup(self):
-        dsg = json.loads(self.__selection["DataSourceGroup"])
-        ads = self.availableDataSources()
-        pchs = self.poolChannels()
-        for ds in tuple(dsg.keys()):
-            if ds not in pchs and ds not in ads:
-                dsg.pop(ds)
-        for pc in pchs:
-            if pc not in dsg.keys():
-                dsg[pc] = False
-        return json.dumps(dsg)
+        return self.__selection["DataSourceGroup"]
 
     ## set method for dataSourceGroup attribute
     # \param name of dataSourceGroup
     def __setDataSourceGroup(self, name):
-        jname = self.__stringToDictJson(name, True)
+        jname = Utils.stringToDictJson(name, True)
         if self.__selection["DataSourceGroup"] != jname:
             self.__selection["DataSourceGroup"] = jname
             self.storeConfiguration()
@@ -567,7 +492,7 @@ class Settings(object):
     ## set method for labels attribute
     # \param name of labels
     def __setLabels(self, name):
-        jname = self.__stringToDictJson(name)
+        jname = Utils.stringToDictJson(name)
         if self.__selection["Labels"] != jname:
             self.__selection["Labels"] = jname
             self.storeConfiguration()
@@ -586,7 +511,7 @@ class Settings(object):
     ## set method for labelLinks attribute
     # \param name of labelLinks
     def __setLabelLinks(self, name):
-        jname = self.__stringToDictJson(name)
+        jname = Utils.stringToDictJson(name)
         if self.__selection["LabelLinks"] != jname:
             self.__selection["LabelLinks"] = jname
             self.storeConfiguration()
@@ -605,7 +530,7 @@ class Settings(object):
     ## set method for hiddenElements attribute
     # \param name of hiddenElements
     def __setHiddenElements(self, name):
-        jname = self.__stringToListJson(name)
+        jname = Utils.stringToListJson(name)
         if self.__selection["HiddenElements"] != jname:
             self.__selection["HiddenElements"] = jname
             self.storeConfiguration()
@@ -624,7 +549,7 @@ class Settings(object):
     ## set method for labelPaths attribute
     # \param name of labelPaths
     def __setLabelPaths(self, name):
-        jname = self.__stringToDictJson(name)
+        jname = Utils.stringToDictJson(name)
         if self.__selection["LabelPaths"] != jname:
             self.__selection["LabelPaths"] = jname
             self.storeConfiguration()
@@ -643,7 +568,7 @@ class Settings(object):
     ## set method for labelShapes attribute
     # \param name of labelShapes
     def __setLabelShapes(self, name):
-        jname = self.__stringToDictJson(name)
+        jname = Utils.stringToDictJson(name)
         if self.__selection["LabelShapes"] != jname:
             self.__selection["LabelShapes"] = jname
             self.storeConfiguration()
@@ -662,7 +587,7 @@ class Settings(object):
     ## set method for labelTypes attribute
     # \param name of labelTypes
     def __setLabelTypes(self, name):
-        jname = self.__stringToDictJson(name)
+        jname = Utils.stringToDictJson(name)
         if self.__selection["LabelTypes"] != jname:
             self.__selection["LabelTypes"] = jname
             self.storeConfiguration()
@@ -673,20 +598,19 @@ class Settings(object):
         __setLabelTypes,
         doc='label types')
 
+
     ## get method for mntGrp attribute
     # \returns name of mntGrp
     def __getMntGrp(self):
-        if "MntGrp" not in self.__selection.keys() or not self.__selection["MntGrp"]:
-            self.__selection["MntGrp"] = self.__defaultmntgrp
         return self.__selection["MntGrp"]
 
     ## set method for mntGrp attribute
     # \param name of mntGrp
     def __setMntGrp(self, name):
-        if name:
-            self.__selection["MntGrp"] = name
-        else:
-            self.__selection["MntGrp"] = self.__defaultmntgrp
+        self.__selection["MntGrp"] = name
+
+#        if "MntGrp" not in self.keys() or not self.__selection["MntGrp"]:
+#            self.__selection["MntGrp"] = self.__defaultmntgrp
 #        self.storeConfiguration()
 
     ## the json data string
@@ -696,50 +620,29 @@ class Settings(object):
     ## get method for timeZone attribute
     # \returns name of timeZone
     def __getTimeZone(self):
-        if "TimeZone" not in self.__selection.keys() or not self.__selection["TimeZone"]:
-            self.__selection["TimeZone"] = self.__defaultzone
         return self.__selection["TimeZone"]
 
     ## set method for timeZone attribute
     # \param name of timeZone
     def __setTimeZone(self, name):
-        if name:
-            self.__selection["TimeZone"] = name
-        else:
-            self.__selection["TimeZone"] = self.__defaultzone
+        self.__selection["TimeZone"] = name
         self.storeConfiguration()
 
     ## th time zone
     timeZone = property(__getTimeZone, __setTimeZone,
                            doc='time zone')
 
+    
     ## get method for door attribute
     # \returns name of door
     def __getDoor(self):
-        try:
-            if str(self.__selection["Door"]):
-                dp = PyTango.DeviceProxy(str(self.__selection["Door"]))
-                dp.ping()
-        except:
-            self.__selection["Door"] = ''
-        if "Door" not in self.__selection.keys() or not self.__selection["Door"]:
-            self.__selection["Door"] = Utils.getDeviceName(
-                self.__db, "Door")
-            self.__updateMacroServer(self.__selection["Door"])
-            if self.__selection["ConfigDevice"]:
-                self.storeConfiguration()
-    
         return self.__selection["Door"]
 
     ## set method for door attribute
     # \param name of door
     def __setDoor(self, name):
-        if name:
-            self.__selection["Door"] = name
-        else:
-            self.__selection["Door"] = Utils.getDeviceName(
-                self.__db, "Door")
-        self.__updateMacroServer(self.__selection["Door"])
+        self.__selection["Door"] = name
+        self.updateMacroServer(self.__selection["Door"])
         if self.__selection["ConfigDevice"]:
             self.storeConfiguration()
 
@@ -750,10 +653,10 @@ class Settings(object):
     def __getPools(self):
         if not self.__pools:
             door = self.__getDoor()
-            self.__updateMacroServer(door)
+            self.updateMacroServer(door)
         return self.__pools
 
-    def __updateMacroServer(self, door):
+    def updateMacroServer(self, door):
         if not door:
             raise Exception("Door '%s' cannot be found" % door)
         self.__macroserver = Utils.getMacroServer(self.__db, door)
@@ -764,11 +667,11 @@ class Settings(object):
         poolNames = list(
             set(pnames) - set(self.poolBlacklist))
         self.__pools = Utils.getProxies(poolNames)
-
+        
     def __getMacroServer(self):
         if not self.__macroserver:
             door = self.__getDoor()
-            self.__updateMacroServer(door)
+            self.updateMacroServer(door)
         return self.__macroserver
 
     ## the json data string
@@ -778,22 +681,14 @@ class Settings(object):
     ## get method for writerDevice attribute
     # \returns name of writerDevice
     def __getWriterDevice(self):
-        if "WriterDevice" not in self.__selection.keys() \
-                or not self.__selection["WriterDevice"]:
-            self.__selection["WriterDevice"] = Utils.getDeviceName(
-                self.__db, "NXSDataWriter")
-        res = self.__selection["WriterDevice"]
-        return res
+        return self.__selection["WriterDevice"]
 
     ## set method for writerDevice attribute
     # \param name of writerDevice
     def __setWriterDevice(self, name):
-        if name:
-            self.__selection["WriterDevice"] = name
-        else:
-            self.__selection["WriterDevice"] = Utils.getDeviceName(
-                self.__db, "NXSDataWriter")
+        self.__selection["WriterDevice"] = name
         self.storeConfiguration()
+
 
     ## the json data string
     writerDevice = property(__getWriterDevice, __setWriterDevice,
@@ -858,6 +753,7 @@ class Settings(object):
         if "ConfigDevice" not in self.__selection.keys() \
                 or not self.__selection["ConfigDevice"]:
             self.__getConfigDevice()
+
         if self.__selection["ConfigDevice"] and \
                 self.__selection["ConfigDevice"].lower() != self.__moduleLabel:
             self.__configProxy = Utils.openProxy(self.__selection["ConfigDevice"])
@@ -904,13 +800,6 @@ class Settings(object):
                 res = getattr(inst, command)(var)
         return res
 
-    ## read configuration server attribute
-    # \returns attribute value
-    def __configAttr(self, attr):
-        inst = self.__setConfigInstance()
-        res = getattr(inst, attr)
-        return res
-
     ## mandatory components
     # \returns list of mandatory components
     def mandatoryComponents(self):
@@ -949,6 +838,14 @@ class Settings(object):
         if fpool:
             mntgrps = Utils.getMntGrps(fpool)
         mntgrps = mntgrps if mntgrps else []
+        amntgrp = Utils.getEnv('ActiveMntGrp', ms)
+
+        try:
+            if mntgrps:
+                ind = mntgrps.index(amntgrp)
+                mntgrps[0], mntgrps[ind] = mntgrps[ind], mntgrps[0] 
+        except ValueError:
+            pass
         return mntgrps
 
     ## available components
@@ -1024,7 +921,7 @@ class Settings(object):
         inst.selection = conf
         inst.storeSelection(self.mntGrp)
 
-    ## saves configuration
+    ## fetch configuration
     def fetchConfiguration(self):
         inst = self.__setConfigInstance()
         avsl = inst.availableSelections()
@@ -1375,6 +1272,15 @@ class Settings(object):
                     jds[initsource] = name
         return jds
 
+
+    def switchMntGrp(self):
+        ms = self.__getMacroServer()
+        amntgrp = Utils.getEnv('ActiveMntGrp', ms)
+        self.__selection["MntGrp"] = amntgrp
+        self.fetchConfiguration()
+        self.importMntGrp()
+
+
     ## import setting from active measurement
     def importMntGrp(self):
         conf = json.loads(self.mntGrpConfiguration())
@@ -1559,7 +1465,7 @@ class Settings(object):
                 print >> self.__server.log_debug, "To Check:", lds
             cqueue.put(lds)
         for _ in range(self.numberOfThreads):
-            thd = threading.Thread(target=_checker, args=(cqueue,))
+            thd = threading.Thread(target=checker, args=(cqueue,))
             thd.daemon = True
             thd.start()
         cqueue.join()
@@ -1638,7 +1544,7 @@ class Settings(object):
     ## stores Enviroutment Data
     # \param jdata JSON String with important variables
     def storeEnvData(self, jdata):
-        jdata = self.__stringToDictJson(jdata)
+        jdata = Utils.stringToDictJson(jdata)
         data = json.loads(jdata)
         scanID = -1
         ms = self.__getMacroServer()
@@ -1769,36 +1675,3 @@ class Settings(object):
         dcpcreator.removeDynamicComponent(name)
 
 
-## checkers if Tango devices are alive
-# \params cqueue queue with task of the form ['comp','alias','alias', ...]
-def _checker(cqueue):
-    while True:
-        lds = cqueue.get()
-        ok = True
-        for ds in lds[1:]:
-            if isinstance(ds, tuple) and len(ds) > 2:
-                dname = str(ds[1])
-                attr = str(ds[2])
-            else:
-                dname = str(ds)
-                attr = None
-
-            try:
-                dp = PyTango.DeviceProxy(dname)
-                if dp.state() in [
-                    PyTango.DevState.FAULT,
-                    PyTango.DevState.ALARM]:
-                    raise Exception("FAULT or ALARM STATE")
-                dp.ping()
-                if not attr:
-                    for gattr in ATTRIBUTESTOCHECK:
-                        if hasattr(dp, gattr):
-                            _ = getattr(dp, gattr)
-                else:
-                    _ = getattr(dp, attr)
-            except:
-                ok = False
-                break
-        if ok:
-            lds[:] = []
-        cqueue.task_done()

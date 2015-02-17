@@ -1721,7 +1721,7 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
             {
                 'label':"Door",
                 'description':"Door",
-#                'Memorized':"true",
+                'Memorized':"true",
             }],
         'WriterDevice':
             [[PyTango.DevString,
