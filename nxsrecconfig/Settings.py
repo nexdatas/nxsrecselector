@@ -609,10 +609,6 @@ class Settings(object):
     def __setMntGrp(self, name):
         self.__selection["MntGrp"] = name
 
-#        if "MntGrp" not in self.keys() or not self.__selection["MntGrp"]:
-#            self.__selection["MntGrp"] = self.__defaultmntgrp
-#        self.storeConfiguration()
-
     ## the json data string
     mntGrp = property(__getMntGrp, __setMntGrp,
                            doc='measurement group')
