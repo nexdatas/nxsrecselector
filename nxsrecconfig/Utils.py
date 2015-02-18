@@ -20,12 +20,16 @@
 
 """  Tango Utilities """
 
+import re
 import PyTango
 import time
 import json
 import pickle
 import numpy
 import fnmatch
+
+ATTRIBUTESTOCHECK = ["Value", "Position", "Counts", "Data",
+                     "Voltage", "Energy", "SampleTime"]
 
 
 ## Tango Utilities
@@ -497,7 +501,6 @@ class Utils(object):
                 else:
                     res = rname
         return res
-
 
     @classmethod
     def stringToDictJson(cls, string, toBool=False):

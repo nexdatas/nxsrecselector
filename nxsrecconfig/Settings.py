@@ -21,7 +21,6 @@
 """  NeXus Sardana Recorder Settings implementation """
 
 import json
-import re
 import PyTango
 from .Describer import Describer
 from .DynamicComponent import DynamicComponent
@@ -39,8 +38,6 @@ try:
 except:
     NXSTOOLS = False
 
-ATTRIBUTESTOCHECK = ["Value", "Position", "Counts", "Data",
-                     "Voltage", "Energy", "SampleTime"]
 
 
 ## NeXus Sardana Recorder settings
@@ -117,11 +114,11 @@ class Settings(object):
             if isinstance(vl, unicode):
                 vl = str(vl)
         return vl
- 
+
     ## provides names of variables
     def names(self):
         return self.__selection.keys()
-           
+
     ## provides selected components
     # \returns list of available selected components
     def __components(self):
@@ -183,7 +180,7 @@ class Settings(object):
         if name != self.__selection["ConfigDevice"]:
             self.__selection["ConfigDevice"] = name
             self.switchMntGrp()
-        
+
     ## the json data string
     configDevice = property(__getConfigDevice, __setConfigDevice,
                             doc='configuration server device name')
@@ -423,7 +420,6 @@ class Settings(object):
         __setAutomaticComponentGroup,
         doc='automatic components group')
 
-
     ## get method for componentGroup attribute
     # \returns name of componentGroup
     def __getComponentGroup(self):
@@ -442,7 +438,6 @@ class Settings(object):
         __getComponentGroup,
         __setComponentGroup,
         doc='components group')
-
 
     ## get method for dataSourceGroup attribute
     # \returns name of dataSourceGroup
@@ -598,7 +593,6 @@ class Settings(object):
         __setLabelTypes,
         doc='label types')
 
-
     ## get method for mntGrp attribute
     # \returns name of mntGrp
     def __getMntGrp(self):
@@ -628,7 +622,6 @@ class Settings(object):
     timeZone = property(__getTimeZone, __setTimeZone,
                            doc='time zone')
 
-    
     ## get method for door attribute
     # \returns name of door
     def __getDoor(self):
@@ -663,7 +656,7 @@ class Settings(object):
         poolNames = list(
             set(pnames) - set(self.poolBlacklist))
         self.__pools = Utils.getProxies(poolNames)
-        
+
     def __getMacroServer(self):
         if not self.__macroserver:
             door = self.__getDoor()
@@ -684,7 +677,6 @@ class Settings(object):
     def __setWriterDevice(self, name):
         self.__selection["WriterDevice"] = name
         self.storeConfiguration()
-
 
     ## the json data string
     writerDevice = property(__getWriterDevice, __setWriterDevice,
@@ -752,7 +744,8 @@ class Settings(object):
 
         if self.__selection["ConfigDevice"] and \
                 self.__selection["ConfigDevice"].lower() != self.__moduleLabel:
-            self.__configProxy = Utils.openProxy(self.__selection["ConfigDevice"])
+            self.__configProxy = Utils.openProxy(
+                self.__selection["ConfigDevice"])
             self.__configProxy.open()
             self.__configModule = None
         else:
@@ -839,7 +832,7 @@ class Settings(object):
         try:
             if mntgrps:
                 ind = mntgrps.index(amntgrp)
-                mntgrps[0], mntgrps[ind] = mntgrps[ind], mntgrps[0] 
+                mntgrps[0], mntgrps[ind] = mntgrps[ind], mntgrps[0]
         except ValueError:
             pass
         return mntgrps
@@ -1268,14 +1261,13 @@ class Settings(object):
                     jds[initsource] = name
         return jds
 
-
+    ## swithc to active measurement
     def switchMntGrp(self):
         ms = self.__getMacroServer()
         amntgrp = Utils.getEnv('ActiveMntGrp', ms)
         self.__selection["MntGrp"] = amntgrp
         self.fetchConfiguration()
         self.importMntGrp()
-
 
     ## import setting from active measurement
     def importMntGrp(self):
@@ -1345,7 +1337,7 @@ class Settings(object):
                     if tm in hel:
                         hel.remove(tm)
 
-        changed = False                
+        changed = False
         jdsg = json.dumps(dsg)
         if self.__selection["DataSourceGroup"] != jdsg:
             self.__selection["DataSourceGroup"] = jdsg
@@ -1669,5 +1661,3 @@ class Settings(object):
         nexusconfig_device = self.__setConfigInstance()
         dcpcreator = DynamicComponent(nexusconfig_device)
         dcpcreator.removeDynamicComponent(name)
-
-

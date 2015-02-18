@@ -20,10 +20,8 @@
 
 """  Selection state """
 
-import re
 import json
 import PyTango
-import xml.dom.minidom
 from .Utils import Utils
 
 
@@ -42,7 +40,6 @@ class Selection(object):
         ## default mntgrp
         self.__defaultmntgrp = 'nxsmntgrp'
 
-
         ##  dictionary with Settings
         self.__selection = {}
 
@@ -53,7 +50,6 @@ class Selection(object):
         self.moduleLabel = 'module'
 
         self.reset()
-
 
     def reset(self):
         self.__selection.clear()
@@ -108,7 +104,6 @@ class Selection(object):
         self.__selection["Door"] = ''
         ## MntGrp
         self.__selection["MntGrp"] = ''
-        
 
     def set(self, state):
         self.reset()
@@ -127,7 +122,7 @@ class Selection(object):
                 getattr(self, "_Selection__update" + key)()
         return dict(self.__selection)
 
-    def __getitem__(self, key): 
+    def __getitem__(self, key):
         if key in self.keys():
             if hasattr(self, "_Selection__update" + key):
                 getattr(self, "_Selection__update" + key)()
@@ -139,7 +134,6 @@ class Selection(object):
         self.__selection[key] = value
         if hasattr(self, "_Selection__reset" + key):
             getattr(self, "_Selection__reset" + key)()
-
 
     ## updates method for configDevice attribute
     def __updateConfigDevice(self):
@@ -181,7 +175,6 @@ class Selection(object):
         if "MntGrp" not in self.keys() or not self.__selection["MntGrp"]:
             self.__selection["MntGrp"] = self.__defaultmntgrp
 
-
     ## update method for componentGroup attribute
     def __updateComponentGroup(self):
         cpg = json.loads(self.__selection["ComponentGroup"])
@@ -191,7 +184,6 @@ class Selection(object):
                 cpg.pop(cp)
 
         self.__selection["ComponentGroup"] = json.dumps(cpg)
-
 
     ## update method for dataSourceGroup attribute
     def __updateDataSourceGroup(self):
@@ -206,7 +198,6 @@ class Selection(object):
                 dsg[pc] = False
         self.__selection["DataSourceGroup"] = json.dumps(dsg)
 
-
     ## update method for door attribute
     def __updateDoor(self):
         try:
@@ -215,7 +206,8 @@ class Selection(object):
                 dp.ping()
         except:
             self.__selection["Door"] = ''
-        if "Door" not in self.__selection.keys() or not self.__selection["Door"]:
+        if "Door" not in self.__selection.keys() \
+                or not self.__selection["Door"]:
             self.__selection["Door"] = Utils.getDeviceName(
                 self.__db, "Door")
             self.__pfun.updateMacroServer(self.__selection["Door"])
@@ -224,7 +216,6 @@ class Selection(object):
     def __updateTimeZone(self):
         if "TimeZone" not in self.keys() or not self.__selection["TimeZone"]:
             self.__selection["TimeZone"] = self.__defaultzone
-
 
     ## update method for writerDevice attribute
     # \returns name of writerDevice
@@ -250,7 +241,6 @@ class Selection(object):
     def __resetTimeZone(self):
         if not self.__selection["TimeZone"]:
             self.__selection["TimeZone"] = self.__defaultzone
-
 
     ## set method for door attribute
     def __resetDoor(self):

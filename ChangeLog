@@ -1,4 +1,4 @@
-2015-02-XX Jan Kotanski <jankotan@gmail.com>
+2015-02-18 Jan Kotanski <jankotan@gmail.com>
 	* adding selections from configuration server
 	* works only with Tango NXSConfigServer (>= 1.10.0)
 	* tagged as v1.12.0
