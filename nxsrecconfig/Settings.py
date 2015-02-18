@@ -21,11 +21,12 @@
 """  NeXus Sardana Recorder Settings implementation """
 
 import json
-import re
 import PyTango
 from .Describer import Describer
 from .DynamicComponent import DynamicComponent
 from .Utils import Utils
+from .Utils import checker
+from .Selection import Selection
 import pickle
 import Queue
 import getpass
@@ -37,8 +38,6 @@ try:
 except:
     NXSTOOLS = False
 
-ATTRIBUTESTOCHECK = ["Value", "Position", "Counts", "Data",
-                     "Voltage", "Energy", "SampleTime"]
 
 
 ## NeXus Sardana Recorder settings
@@ -49,6 +48,8 @@ class Settings(object):
     def __init__(self, server=None):
         ## Tango server
         self.__server = server
+        ## configuration selection
+        self.__selection = Selection(self)
 
         ## number of threads
         self.numberOfThreads = 8
@@ -71,65 +72,12 @@ class Settings(object):
             "ScanDir"
             ]
 
-        ##  dictionary with Settings
-        self.__state = {}
-        ## timer
-        self.__state["Timer"] = '[]'
-        ## ordered channels
-        self.__state["OrderedChannels"] = '[]'
-        ## group of electable components
-        self.__state["ComponentGroup"] = '{}'
-        ## group of automatic components describing instrument state
-        self.__state["AutomaticComponentGroup"] = '{}'
-        ## automatic datasources
-        self.__state["AutomaticDataSources"] = '[]'
-        ## selected datasources
-        self.__state["DataSourceGroup"] = '{}'
-        ## group of optional components available for automatic selqection
-        self.__state["OptionalComponents"] = '[]'
-        ## appending new entries to existing file
-        self.__state["AppendEntry"] = False
-        ## select components from the active measurement group
-        self.__state["ComponentsFromMntGrp"] = False
-        ## Configuration Server variables
-        self.__state["ConfigVariables"] = '{}'
-        ## JSON with Client Data Record
-        self.__state["DataRecord"] = '{}'
-        ## JSON with Element Labels
-        self.__state["Labels"] = '{}'
-        ## JSON with NeXus paths for Label Paths
-        self.__state["LabelPaths"] = '{}'
-        ## JSON with NeXus paths for Label Links
-        self.__state["LabelLinks"] = '{}'
-        ## JSON with NeXus paths for Label Displays
-        self.__state["HiddenElements"] = '[]'
-        ## JSON with NeXus paths for Label Types
-        self.__state["LabelTypes"] = '{}'
-        ## JSON with NeXus paths for Label Shapes
-        self.__state["LabelShapes"] = '{}'
-        ## create dynamic components
-        self.__state["DynamicComponents"] = True
-        ## create links for dynamic components
-        self.__state["DynamicLinks"] = True
-        ## path for dynamic components
-        self.__state["DynamicPath"] = \
-            '/entry$var.serialno:NXentry/NXinstrument/collection'
-        ## timezone
-        self.__state["TimeZone"] = self.__defaultzone
-        ## Configuration Server device name
-        self.__state["ConfigDevice"] = ''
-        ## NeXus Data Writer device
-        self.__state["WriterDevice"] = ''
-        ## Door device name
-        self.__state["Door"] = ''
-        ## MntGrp
-        self.__state["MntGrp"] = ''
-
         ## configuration file
         self.configFile = '/tmp/nxsrecconfig.cfg'
 
         ## tango database
         self.__db = PyTango.Database()
+        self.__selection.db = self
 
         ## config server proxy
         self.__configProxy = None
@@ -139,6 +87,7 @@ class Settings(object):
         self.__writerProxy = None
         ## module label
         self.__moduleLabel = 'module'
+        self.__selection.moduleLabel = self.__moduleLabel
 
         ## macro server instance
         self.__macroserver = ""
@@ -155,26 +104,25 @@ class Settings(object):
 
         self.__nxsenv = "NeXusConfiguration"
 
-    ## provides names of variables
-    def names(self):
-        return self.__state.keys()
-
     ## provides values of the required variable
     # \param name name of the required variable
     # \returns  values of the required variable
     def value(self, name):
         vl = ''
-        if name in self.__state.keys():
-            if isinstance(self.__state[name], unicode):
-                vl = str(self.__state[name])
-            else:
-                vl = self.__state[name]
+        if name in self.__selection.keys():
+            vl = self.__selection[name]
+            if isinstance(vl, unicode):
+                vl = str(vl)
         return vl
+
+    ## provides names of variables
+    def names(self):
+        return self.__selection.keys()
 
     ## provides selected components
     # \returns list of available selected components
     def __components(self):
-        cps = json.loads(self.__state["ComponentGroup"])
+        cps = json.loads(self.__selection["ComponentGroup"])
         ads = json.loads(self.dataSourceGroup)
         dss = [ds for ds in ads if ads[ds]]
         acp = self.availableComponents()
@@ -194,7 +142,7 @@ class Settings(object):
     ## provides automatic components
     # \returns list of available automatic components
     def __automaticComponents(self):
-        cps = json.loads(self.__state["AutomaticComponentGroup"])
+        cps = json.loads(self.__selection["AutomaticComponentGroup"])
         if isinstance(cps, dict):
             return [cp for cp in cps.keys() if cps[cp]]
         else:
@@ -210,7 +158,7 @@ class Settings(object):
         dds = self.disableDataSources
         if not isinstance(dds, list):
             dds = []
-        dss = json.loads(self.__state["DataSourceGroup"])
+        dss = json.loads(self.__selection["DataSourceGroup"])
         if isinstance(dss, dict):
             return [ds for ds in dss.keys() if dss[ds] and ds not in dds]
         else:
@@ -224,31 +172,14 @@ class Settings(object):
     ## get method for configDevice attribute
     # \returns name of configDevice
     def __getConfigDevice(self):
-        if "ConfigDevice" not in self.__state \
-                or not self.__state["ConfigDevice"]:
-            self.__state["ConfigDevice"] = Utils.getDeviceName(
-                self.__db, "NXSConfigServer")
-        name = self.__state["ConfigDevice"]
-        if name:
-            if name != self.__moduleLabel:
-                try:
-                    dp = Utils.getProxies([name])
-                    if not dp:
-                        self.__state["ConfigDevice"] = ''
-                        name = ''
-                except:
-                    self.__state["ConfigDevice"] = ''
-                    name = ''
-        return name
+        return self.__selection["ConfigDevice"]
 
     ## set method for configDevice attribute
     # \param name of configDevice
     def __setConfigDevice(self, name):
-        if name:
-            self.__state["ConfigDevice"] = name
-        else:
-            self.__state["ConfigDevice"] = Utils.getDeviceName(
-                self.__db, "NXSConfigServer")
+        if name != self.__selection["ConfigDevice"]:
+            self.__selection["ConfigDevice"] = name
+            self.switchMntGrp()
 
     ## the json data string
     configDevice = property(__getConfigDevice, __setConfigDevice,
@@ -257,19 +188,15 @@ class Settings(object):
     ## get method for automaticDataSources attribute
     # \returns name of automaticDataSources
     def __getAutomaticDataSources(self):
-#        return self.__state["AutomaticDataSources"]
-        adsg = json.loads(self.__state["AutomaticDataSources"])
-        pmots = self.poolMotors()
-
-        adsg = list(set(adsg if adsg else []) | set(pmots if pmots else []))
-        return json.dumps(adsg)
+        return self.__selection["AutomaticDataSources"]
 
     ## set method for automaticDataSources attribute
     # \param name of automaticDataSources
     def __setAutomaticDataSources(self, name):
-        jname = self.__stringToListJson(name)
-        if self.__state["AutomaticDataSources"] != jname:
-            self.__state["AutomaticDataSources"] = jname
+        jname = Utils.stringToListJson(name)
+        if self.__selection["AutomaticDataSources"] != jname:
+            self.__selection["AutomaticDataSources"] = jname
+            self.storeConfiguration()
 
     ## the json data string
     automaticDataSources = property(
@@ -280,12 +207,13 @@ class Settings(object):
     ## set method for configuration attribute
     # \param name of configuration
     def __setConfiguration(self, jconf):
-        self.__state = json.loads(jconf)
+        self.__selection.set(json.loads(jconf))
+        self.storeConfiguration()
 
     ## get method for configuration attribute
     # \returns configuration
     def __getConfiguration(self):
-        return json.dumps(self.__state)
+        return json.dumps(self.__selection.get())
 
     ## the json data string
     configuration = property(
@@ -296,12 +224,13 @@ class Settings(object):
     ## set method for appendEntry attribute
     # \param name of appendEntry
     def __setAppendEntry(self, ae):
-        self.__state["AppendEntry"] = bool(ae)
+        self.__selection["AppendEntry"] = bool(ae)
+        self.storeConfiguration()
 
     ## get method for appendEntry attribute
     # \returns flag of appendEntry
     def __getAppendEntry(self):
-        return bool(self.__state["AppendEntry"])
+        return bool(self.__selection["AppendEntry"])
 
     ## the json data string
     appendEntry = property(
@@ -312,12 +241,13 @@ class Settings(object):
     ## set method for componentsFromMntGrp attribute
     # \param flag  componentsFromMntGrp
     def __setComponentsFromMntGrp(self, flag):
-        self.__state["ComponentsFromMntGrp"] = bool(flag)
+        self.__selection["ComponentsFromMntGrp"] = bool(flag)
+        self.storeConfiguration()
 
     ## get method for componentsFromMntGrp attribute
     # \returns flag of componentsFromMntGrp
     def __getComponentsFromMntGrp(self):
-        return bool(self.__state["ComponentsFromMntGrp"])
+        return bool(self.__selection["ComponentsFromMntGrp"])
 
     ## the json data string
     componentsFromMntGrp = property(
@@ -328,12 +258,13 @@ class Settings(object):
     ## set method for dynamicComponents attribute
     # \param flag  dynamic Components
     def __setDynamicComponents(self, flag):
-        self.__state["DynamicComponents"] = bool(flag)
+        self.__selection["DynamicComponents"] = bool(flag)
+        self.storeConfiguration()
 
     ## get method for dynamicComponents attribute
     # \returns flag of dynamicComponents
     def __getDynamicComponents(self):
-        return bool(self.__state["DynamicComponents"])
+        return bool(self.__selection["DynamicComponents"])
 
     ## the json data string
     dynamicComponents = property(
@@ -344,12 +275,13 @@ class Settings(object):
     ## set method for dynamicLinks attribute
     # \param flag dynamic Links
     def __setDynamicLinks(self, flag):
-        self.__state["DynamicLinks"] = bool(flag)
+        self.__selection["DynamicLinks"] = bool(flag)
+        self.storeConfiguration()
 
     ## get method for dynamicLinks attribute
     # \returns flag of dynamicLinks
     def __getDynamicLinks(self):
-        return bool(self.__state["DynamicLinks"])
+        return bool(self.__selection["DynamicLinks"])
 
     ## the json data string
     dynamicLinks = property(
@@ -360,12 +292,13 @@ class Settings(object):
     ## set method for dynamicPath attribute
     # \param path dynamic path
     def __setDynamicPath(self, path):
-        self.__state["DynamicPath"] = str(path)
+        self.__selection["DynamicPath"] = str(path)
+        self.storeConfiguration()
 
     ## get method for dynamicPath attribute
     # \returns dynamicPath
     def __getDynamicPath(self):
-        return str(self.__state["DynamicPath"])
+        return str(self.__selection["DynamicPath"])
 
     ## the json data string
     dynamicPath = property(
@@ -376,38 +309,34 @@ class Settings(object):
     ## get method for timer attribute
     # \returns name of timer
     def __getTimer(self):
-        return self.__state["Timer"]
+        return self.__selection["Timer"]
 
     ## set method for timer attribute
     # \param name of timer
     def __setTimer(self, name):
-        jname = self.__stringToListJson(name)
-        if self.__state["Timer"] != jname:
-            self.__state["Timer"] = jname
+        jname = Utils.stringToListJson(name)
+        if self.__selection["Timer"] != jname:
+            self.__selection["Timer"] = jname
+            self.storeConfiguration()
 
     ## the json data string
     timer = property(
         __getTimer,
         __setTimer,
-        doc='timers')
+        doc='timeWrs')
 
     ## get method for orderedChannels attribute
     # \returns name of orderedChannels
     def __getOrderedChannels(self):
-        pch = self.poolChannels()
-        och = json.loads(self.__state["OrderedChannels"])
-
-        ordchannels = [ch for ch in och if ch in pch]
-        uordchannels = list(set(pch) - set(och))
-        ordchannels.extend(sorted(uordchannels))
-        return json.dumps(ordchannels)
+        return self.__selection["OrderedChannels"]
 
     ## set method for orderedChannels attribute
     # \param name of orderedChannels
     def __setOrderedChannels(self, name):
-        jname = self.__stringToListJson(name)
-        if self.__state["OrderedChannels"] != jname:
-            self.__state["OrderedChannels"] = jname
+        jname = Utils.stringToListJson(name)
+        if self.__selection["OrderedChannels"] != jname:
+            self.__selection["OrderedChannels"] = jname
+            self.storeConfiguration()
 
     ## the json data string
     orderedChannels = property(
@@ -418,14 +347,15 @@ class Settings(object):
     ## get method for optionalComponents attribute
     # \returns name of optionalComponents
     def __getOptionalComponents(self):
-        return self.__state["OptionalComponents"]
+        return self.__selection["OptionalComponents"]
 
     ## set method for optionalComponents attribute
     # \param name of optionalComponents
     def __setOptionalComponents(self, name):
-        jname = self.__stringToListJson(name)
-        if self.__state["OptionalComponents"] != jname:
-            self.__state["OptionalComponents"] = jname
+        jname = Utils.stringToListJson(name)
+        if self.__selection["OptionalComponents"] != jname:
+            self.__selection["OptionalComponents"] = jname
+            self.storeConfiguration()
 
     ## the json data string
     optionalComponents = property(
@@ -436,14 +366,15 @@ class Settings(object):
     ## get method for dataRecord attribute
     # \returns name of dataRecord
     def __getDataRecord(self):
-        return self.__state["DataRecord"]
+        return self.__selection["DataRecord"]
 
     ## set method for dataRecord attribute
     # \param name of dataRecord
     def __setDataRecord(self, name):
-        jname = self.__stringToDictJson(name)
-        if self.__state["DataRecord"] != jname:
-            self.__state["DataRecord"] = jname
+        jname = Utils.stringToDictJson(name)
+        if self.__selection["DataRecord"] != jname:
+            self.__selection["DataRecord"] = jname
+            self.storeConfiguration()
 
     ## the json data string
     dataRecord = property(
@@ -454,14 +385,15 @@ class Settings(object):
     ## get method for configVariables attribute
     # \returns name of configVariables
     def __getConfigVariables(self):
-        return self.__state["ConfigVariables"]
+        return self.__selection["ConfigVariables"]
 
     ## set method for configVariables attribute
     # \param name of configVariables
     def __setConfigVariables(self, name):
-        jname = self.__stringToDictJson(name)
-        if self.__state["ConfigVariables"] != jname:
-            self.__state["ConfigVariables"] = jname
+        jname = Utils.stringToDictJson(name)
+        if self.__selection["ConfigVariables"] != jname:
+            self.__selection["ConfigVariables"] = jname
+            self.storeConfiguration()
 
     ## the json variables string
     configVariables = property(
@@ -469,50 +401,18 @@ class Settings(object):
         __setConfigVariables,
         doc='configuration variables')
 
-    @classmethod
-    def __stringToDictJson(cls, string, toBool=False):
-        try:
-            if not string or string == "Not initialised":
-                return {}
-            acps = json.loads(string)
-            assert isinstance(acps, dict)
-            jstring = string
-        except:
-            lst = re.sub("[^\w]", "  ", string).split()
-            if len(lst) % 2:
-                lst.append("")
-            dct = dict(zip(*[iter(lst)] * 2))
-            if toBool:
-                for k in dct.keys():
-                    dct[k] = False \
-                        if dct[k].lower() == 'false' else True
-            jstring = json.dumps(dct)
-        return jstring
-
-    @classmethod
-    def __stringToListJson(cls, string):
-        if not string or string == "Not initialised":
-            return []
-        try:
-            acps = json.loads(string)
-            assert isinstance(acps, (list, tuple))
-            jstring = string
-        except:
-            lst = re.sub("[^\w]", "  ", string).split()
-            jstring = json.dumps(lst)
-        return jstring
-
     ## get method for automaticComponentGroup attribute
     # \returns name of automaticComponentGroup
     def __getAutomaticComponentGroup(self):
-        return self.__state["AutomaticComponentGroup"]
+        return self.__selection["AutomaticComponentGroup"]
 
     ## set method for automaticComponentGroup attribute
     # \param name of automaticComponentGroup
     def __setAutomaticComponentGroup(self, name):
-        jname = self.__stringToDictJson(name, True)
-        if self.__state["AutomaticComponentGroup"] != jname:
-            self.__state["AutomaticComponentGroup"] = jname
+        jname = Utils.stringToDictJson(name, True)
+        if self.__selection["AutomaticComponentGroup"] != jname:
+            self.__selection["AutomaticComponentGroup"] = jname
+            self.storeConfiguration()
 
     ## the json data string
     automaticComponentGroup = property(
@@ -523,20 +423,15 @@ class Settings(object):
     ## get method for componentGroup attribute
     # \returns name of componentGroup
     def __getComponentGroup(self):
-        cpg = json.loads(self.__state["ComponentGroup"])
-        dss = json.loads(self.__state["DataSourceGroup"]).keys()
-        for cp in set(cpg.keys()):
-            if cp in dss:
-                cpg.pop(cp)
-
-        return json.dumps(cpg)
+        return self.__selection["ComponentGroup"]
 
     ## set method for componentGroup attribute
     # \param name of componentGroup
     def __setComponentGroup(self, name):
-        jname = self.__stringToDictJson(name, True)
-        if self.__state["ComponentGroup"] != jname:
-            self.__state["ComponentGroup"] = jname
+        jname = Utils.stringToDictJson(name, True)
+        if self.__selection["ComponentGroup"] != jname:
+            self.__selection["ComponentGroup"] = jname
+            self.storeConfiguration()
 
     ## the json data string
     componentGroup = property(
@@ -547,23 +442,15 @@ class Settings(object):
     ## get method for dataSourceGroup attribute
     # \returns name of dataSourceGroup
     def __getDataSourceGroup(self):
-        dsg = json.loads(self.__state["DataSourceGroup"])
-        ads = self.availableDataSources()
-        pchs = self.poolChannels()
-        for ds in tuple(dsg.keys()):
-            if ds not in pchs and ds not in ads:
-                dsg.pop(ds)
-        for pc in pchs:
-            if pc not in dsg.keys():
-                dsg[pc] = False
-        return json.dumps(dsg)
+        return self.__selection["DataSourceGroup"]
 
     ## set method for dataSourceGroup attribute
     # \param name of dataSourceGroup
     def __setDataSourceGroup(self, name):
-        jname = self.__stringToDictJson(name, True)
-        if self.__state["DataSourceGroup"] != jname:
-            self.__state["DataSourceGroup"] = jname
+        jname = Utils.stringToDictJson(name, True)
+        if self.__selection["DataSourceGroup"] != jname:
+            self.__selection["DataSourceGroup"] = jname
+            self.storeConfiguration()
 
     ## the json data string
     dataSourceGroup = property(
@@ -595,14 +482,15 @@ class Settings(object):
     ## get method for labels attribute
     # \returns name of labels
     def __getLabels(self):
-        return self.__state["Labels"]
+        return self.__selection["Labels"]
 
     ## set method for labels attribute
     # \param name of labels
     def __setLabels(self, name):
-        jname = self.__stringToDictJson(name)
-        if self.__state["Labels"] != jname:
-            self.__state["Labels"] = jname
+        jname = Utils.stringToDictJson(name)
+        if self.__selection["Labels"] != jname:
+            self.__selection["Labels"] = jname
+            self.storeConfiguration()
 
     ## the json data string
     labels = property(
@@ -613,14 +501,15 @@ class Settings(object):
     ## get method for labelLinks attribute
     # \returns name of labelLinks
     def __getLabelLinks(self):
-        return self.__state["LabelLinks"]
+        return self.__selection["LabelLinks"]
 
     ## set method for labelLinks attribute
     # \param name of labelLinks
     def __setLabelLinks(self, name):
-        jname = self.__stringToDictJson(name)
-        if self.__state["LabelLinks"] != jname:
-            self.__state["LabelLinks"] = jname
+        jname = Utils.stringToDictJson(name)
+        if self.__selection["LabelLinks"] != jname:
+            self.__selection["LabelLinks"] = jname
+            self.storeConfiguration()
 
     ## the json data string
     labelLinks = property(
@@ -631,14 +520,15 @@ class Settings(object):
     ## get method for hiddenElements attribute
     # \returns name of hiddenElements
     def __getHiddenElements(self):
-        return self.__state["HiddenElements"]
+        return self.__selection["HiddenElements"]
 
     ## set method for hiddenElements attribute
     # \param name of hiddenElements
     def __setHiddenElements(self, name):
-        jname = self.__stringToListJson(name)
-        if self.__state["HiddenElements"] != jname:
-            self.__state["HiddenElements"] = jname
+        jname = Utils.stringToListJson(name)
+        if self.__selection["HiddenElements"] != jname:
+            self.__selection["HiddenElements"] = jname
+            self.storeConfiguration()
 
     ## the json data string
     hiddenElements = property(
@@ -649,14 +539,15 @@ class Settings(object):
     ## get method for labelPaths attribute
     # \returns name of labelPaths
     def __getLabelPaths(self):
-        return self.__state["LabelPaths"]
+        return self.__selection["LabelPaths"]
 
     ## set method for labelPaths attribute
     # \param name of labelPaths
     def __setLabelPaths(self, name):
-        jname = self.__stringToDictJson(name)
-        if self.__state["LabelPaths"] != jname:
-            self.__state["LabelPaths"] = jname
+        jname = Utils.stringToDictJson(name)
+        if self.__selection["LabelPaths"] != jname:
+            self.__selection["LabelPaths"] = jname
+            self.storeConfiguration()
 
     ## the json data string
     labelPaths = property(
@@ -667,14 +558,15 @@ class Settings(object):
     ## get method for labelShapes attribute
     # \returns name of labelShapes
     def __getLabelShapes(self):
-        return self.__state["LabelShapes"]
+        return self.__selection["LabelShapes"]
 
     ## set method for labelShapes attribute
     # \param name of labelShapes
     def __setLabelShapes(self, name):
-        jname = self.__stringToDictJson(name)
-        if self.__state["LabelShapes"] != jname:
-            self.__state["LabelShapes"] = jname
+        jname = Utils.stringToDictJson(name)
+        if self.__selection["LabelShapes"] != jname:
+            self.__selection["LabelShapes"] = jname
+            self.storeConfiguration()
 
     ## the json data string
     labelShapes = property(
@@ -685,14 +577,15 @@ class Settings(object):
     ## get method for labelTypes attribute
     # \returns name of labelTypes
     def __getLabelTypes(self):
-        return self.__state["LabelTypes"]
+        return self.__selection["LabelTypes"]
 
     ## set method for labelTypes attribute
     # \param name of labelTypes
     def __setLabelTypes(self, name):
-        jname = self.__stringToDictJson(name)
-        if self.__state["LabelTypes"] != jname:
-            self.__state["LabelTypes"] = jname
+        jname = Utils.stringToDictJson(name)
+        if self.__selection["LabelTypes"] != jname:
+            self.__selection["LabelTypes"] = jname
+            self.storeConfiguration()
 
     ## the json data string
     labelTypes = property(
@@ -703,17 +596,12 @@ class Settings(object):
     ## get method for mntGrp attribute
     # \returns name of mntGrp
     def __getMntGrp(self):
-        if "MntGrp" not in self.__state or not self.__state["MntGrp"]:
-            self.__state["MntGrp"] = self.__defaultmntgrp
-        return self.__state["MntGrp"]
+        return self.__selection["MntGrp"]
 
     ## set method for mntGrp attribute
     # \param name of mntGrp
     def __setMntGrp(self, name):
-        if name:
-            self.__state["MntGrp"] = name
-        else:
-            self.__state["MntGrp"] = self.__defaultmntgrp
+        self.__selection["MntGrp"] = name
 
     ## the json data string
     mntGrp = property(__getMntGrp, __setMntGrp,
@@ -722,17 +610,13 @@ class Settings(object):
     ## get method for timeZone attribute
     # \returns name of timeZone
     def __getTimeZone(self):
-        if "TimeZone" not in self.__state or not self.__state["TimeZone"]:
-            self.__state["TimeZone"] = self.__defaultzone
-        return self.__state["TimeZone"]
+        return self.__selection["TimeZone"]
 
     ## set method for timeZone attribute
     # \param name of timeZone
     def __setTimeZone(self, name):
-        if name:
-            self.__state["TimeZone"] = name
-        else:
-            self.__state["TimeZone"] = self.__defaultzone
+        self.__selection["TimeZone"] = name
+        self.storeConfiguration()
 
     ## th time zone
     timeZone = property(__getTimeZone, __setTimeZone,
@@ -741,26 +625,15 @@ class Settings(object):
     ## get method for door attribute
     # \returns name of door
     def __getDoor(self):
-        try:
-            dp = PyTango.DeviceProxy(str(self.__state["Door"]))
-            dp.ping()
-        except:
-            self.__state["Door"] = ''
-        if "Door" not in self.__state or not self.__state["Door"]:
-            self.__state["Door"] = Utils.getDeviceName(
-                self.__db, "Door")
-            self.__updateMacroServer(self.__state["Door"])
-        return self.__state["Door"]
+        return self.__selection["Door"]
 
     ## set method for door attribute
     # \param name of door
     def __setDoor(self, name):
-        if name:
-            self.__state["Door"] = name
-        else:
-            self.__state["Door"] = Utils.getDeviceName(
-                self.__db, "Door")
-        self.__updateMacroServer(self.__state["Door"])
+        self.__selection["Door"] = name
+        self.updateMacroServer(self.__selection["Door"])
+        if self.__selection["ConfigDevice"]:
+            self.storeConfiguration()
 
     ## the json data string
     door = property(__getDoor, __setDoor,
@@ -769,10 +642,10 @@ class Settings(object):
     def __getPools(self):
         if not self.__pools:
             door = self.__getDoor()
-            self.__updateMacroServer(door)
+            self.updateMacroServer(door)
         return self.__pools
 
-    def __updateMacroServer(self, door):
+    def updateMacroServer(self, door):
         if not door:
             raise Exception("Door '%s' cannot be found" % door)
         self.__macroserver = Utils.getMacroServer(self.__db, door)
@@ -787,7 +660,7 @@ class Settings(object):
     def __getMacroServer(self):
         if not self.__macroserver:
             door = self.__getDoor()
-            self.__updateMacroServer(door)
+            self.updateMacroServer(door)
         return self.__macroserver
 
     ## the json data string
@@ -797,21 +670,13 @@ class Settings(object):
     ## get method for writerDevice attribute
     # \returns name of writerDevice
     def __getWriterDevice(self):
-        if "WriterDevice" not in self.__state \
-                or not self.__state["WriterDevice"]:
-            self.__state["WriterDevice"] = Utils.getDeviceName(
-                self.__db, "NXSDataWriter")
-        res = self.__state["WriterDevice"]
-        return res
+        return self.__selection["WriterDevice"]
 
     ## set method for writerDevice attribute
     # \param name of writerDevice
     def __setWriterDevice(self, name):
-        if name:
-            self.__state["WriterDevice"] = name
-        else:
-            self.__state["WriterDevice"] = Utils.getDeviceName(
-                self.__db, "NXSDataWriter")
+        self.__selection["WriterDevice"] = name
+        self.storeConfiguration()
 
     ## the json data string
     writerDevice = property(__getWriterDevice, __setWriterDevice,
@@ -873,12 +738,14 @@ class Settings(object):
     ## sets config instances
     # \returns set config instance
     def __setConfigInstance(self):
-        if "ConfigDevice" not in self.__state \
-                or not self.__state["ConfigDevice"]:
+        if "ConfigDevice" not in self.__selection.keys() \
+                or not self.__selection["ConfigDevice"]:
             self.__getConfigDevice()
-        if self.__state["ConfigDevice"] and \
-                self.__state["ConfigDevice"].lower() != self.__moduleLabel:
-            self.__configProxy = Utils.openProxy(self.__state["ConfigDevice"])
+
+        if self.__selection["ConfigDevice"] and \
+                self.__selection["ConfigDevice"].lower() != self.__moduleLabel:
+            self.__configProxy = Utils.openProxy(
+                self.__selection["ConfigDevice"])
             self.__configProxy.open()
             self.__configModule = None
         else:
@@ -922,13 +789,6 @@ class Settings(object):
                 res = getattr(inst, command)(var)
         return res
 
-    ## read configuration server attribute
-    # \returns attribute value
-    def __configAttr(self, attr):
-        inst = self.__setConfigInstance()
-        res = getattr(inst, attr)
-        return res
-
     ## mandatory components
     # \returns list of mandatory components
     def mandatoryComponents(self):
@@ -940,6 +800,13 @@ class Settings(object):
     # \returns list of available components
     def availableComponents(self):
         ac = self.__configCommand("availableComponents")
+        ac = ac if ac else []
+        return ac
+
+    ## available selections
+    # \returns list of available selections
+    def availableSelections(self):
+        ac = self.__configCommand("availableSelections")
         ac = ac if ac else []
         return ac
 
@@ -960,6 +827,14 @@ class Settings(object):
         if fpool:
             mntgrps = Utils.getMntGrps(fpool)
         mntgrps = mntgrps if mntgrps else []
+        amntgrp = Utils.getEnv('ActiveMntGrp', ms)
+
+        try:
+            if mntgrps:
+                ind = mntgrps.index(amntgrp)
+                mntgrps[0], mntgrps[ind] = mntgrps[ind], mntgrps[0]
+        except ValueError:
+            pass
         return mntgrps
 
     ## available components
@@ -1018,20 +893,36 @@ class Settings(object):
     # \param name given datasource
     # \returns  datasource path for the given label
     def dataSourcePath(self, name):
-        labels = json.loads(self.__state["Labels"])
+        labels = json.loads(self.__selection["Labels"])
         label = labels.get(name, "")
-        paths = json.loads(self.__state["LabelPaths"])
+        paths = json.loads(self.__selection["LabelPaths"])
         return paths.get(label, "")
 
     ## saves configuration
     def saveConfiguration(self):
         fl = open(self.configFile, "w+")
-        json.dump(self.__state, fl)
+        json.dump(self.__selection, fl)
+
+    ## saves configuration
+    def storeConfiguration(self):
+        inst = self.__setConfigInstance()
+        conf = str(json.dumps(self.__selection.get()))
+        inst.selection = conf
+        inst.storeSelection(self.mntGrp)
+
+    ## fetch configuration
+    def fetchConfiguration(self):
+        inst = self.__setConfigInstance()
+        avsl = inst.availableSelections()
+        if self.mntGrp in avsl:
+            confs = inst.selections([self.mntGrp])
+            if confs:
+                self.__selection.set(json.loads(str(confs[0])))
 
     ## loads configuration
     def loadConfiguration(self):
         fl = open(self.configFile, "r")
-        self.__state = json.load(fl)
+        self.__selection.set(json.load(fl))
 
     ## provides components for all variables
     # \returns dictionary with components for all variables
@@ -1169,7 +1060,7 @@ class Settings(object):
         if self.__server:
             print >> self.__server.log_debug, "Records:", records
 
-        urecords = json.loads(self.__state["DataRecord"]).keys()
+        urecords = json.loads(self.__selection["DataRecord"]).keys()
         precords = frecords.values()
         missing = sorted(set(records)
                          - set(self.recorder_names)
@@ -1222,7 +1113,7 @@ class Settings(object):
         cnf['description'] = "Measurement Group"
         cnf['label'] = ""
 
-        timers = json.loads(self.__state["Timer"])
+        timers = json.loads(self.__selection["Timer"])
         timer = timers[0] if timers else ''
         if not timer:
             raise Exception(
@@ -1230,7 +1121,7 @@ class Settings(object):
 
         datasources = self.dataSources
         disabledatasources = self.disableDataSources
-        hidden = json.loads(self.__state["HiddenElements"])
+        hidden = json.loads(self.__selection["HiddenElements"])
         dontdisplay = set(hidden)
 
         self.__checkClientRecords(datasources, pools)
@@ -1257,12 +1148,12 @@ class Settings(object):
                     if not ndcp and str(ds) in dontdisplay:
                         dontdisplay.remove(str(ds))
 
-        self.__state["HiddenElements"] = json.dumps(list(dontdisplay))
+        self.__selection["HiddenElements"] = json.dumps(list(dontdisplay))
         aliases = list(set(aliases))
 
-        if not self.__state["MntGrp"]:
-            self.__state["MntGrp"] = self.__defaultmntgrp
-        mntGrpName = self.__state["MntGrp"]
+        if not self.__selection["MntGrp"]:
+            self.__selection["MntGrp"] = self.__defaultmntgrp
+        mntGrpName = self.__selection["MntGrp"]
         mfullname = str(Utils.getMntGrpName(pools, mntGrpName))
         ms = self.__getMacroServer()
 
@@ -1299,6 +1190,7 @@ class Settings(object):
                 al if al in ltimers else timer, index, fullnames)
 
         conf = json.dumps(cnf)
+        self.storeConfiguration()
         return conf, mfullname
 
     ## set active measurement group from components
@@ -1369,6 +1261,14 @@ class Settings(object):
                     jds[initsource] = name
         return jds
 
+    ## swithc to active measurement
+    def switchMntGrp(self):
+        ms = self.__getMacroServer()
+        amntgrp = Utils.getEnv('ActiveMntGrp', ms)
+        self.__selection["MntGrp"] = amntgrp
+        self.fetchConfiguration()
+        self.importMntGrp()
+
     ## import setting from active measurement
     def importMntGrp(self):
         conf = json.loads(self.mntGrpConfiguration())
@@ -1426,7 +1326,7 @@ class Settings(object):
             otimers.remove(dtimers[conf["timer"]])
             otimers.insert(0, dtimers[conf["timer"]])
 
-            tms = json.loads(self.__state["Timer"])
+            tms = json.loads(self.__selection["Timer"])
             tms.extend(otimers)
 
             hel2 = json.loads(self.hiddenElements)
@@ -1437,29 +1337,24 @@ class Settings(object):
                     if tm in hel:
                         hel.remove(tm)
 
+        changed = False
         jdsg = json.dumps(dsg)
-        if self.__state["DataSourceGroup"] != jdsg:
-            self.__state["DataSourceGroup"] = jdsg
-            if self.__server:
-                dp = PyTango.DeviceProxy(str(self.__server.get_name()))
-                dp.write_attribute(str("DataSourceGroup"),
-                                   self.__state["DataSourceGroup"])
+        if self.__selection["DataSourceGroup"] != jdsg:
+            self.__selection["DataSourceGroup"] = jdsg
+            changed = True
+
         jhel = json.dumps(hel)
-        if self.__state["HiddenElements"] != jhel:
-            self.__state["HiddenElements"] = jhel
-            if self.__server:
-                dp = PyTango.DeviceProxy(str(self.__server.get_name()))
-                dp.write_attribute(str("HiddenElements"),
-                                   self.__state["HiddenElements"])
+        if self.__selection["HiddenElements"] != jhel:
+            self.__selection["HiddenElements"] = jhel
+            changed = True
 
         if otimers is not None:
             jtimers = json.dumps(otimers)
-            if self.__state["Timer"] != jtimers:
-                self.__state["Timer"] = jtimers
-                if self.__server:
-                    dp = PyTango.DeviceProxy(str(self.__server.get_name()))
-                    dp.write_attribute(str("Timer"),
-                                       self.__state["Timer"])
+            if self.__selection["Timer"] != jtimers:
+                self.__selection["Timer"] = jtimers
+                changed = True
+        if changed:
+            self.storeConfiguration()
 
     ## provides configuration of mntgrp
     # \param proxy DeviceProxy of mntgrp
@@ -1467,9 +1362,10 @@ class Settings(object):
     def mntGrpConfiguration(self, proxy=None):
         if not proxy:
             pools = self.__getPools()
-            if not self.__state["MntGrp"]:
-                self.__state["MntGrp"] = self.__defaultmntgrp
-            mntGrpName = self.__state["MntGrp"]
+            if not self.__selection["MntGrp"]:
+                self.__selection["MntGrp"] = self.__defaultmntgrp
+                self.storeConfiguration()
+            mntGrpName = self.__selection["MntGrp"]
             fullname = str(Utils.getMntGrpName(pools, mntGrpName))
             if not fullname:
                 return "{}"
@@ -1524,7 +1420,7 @@ class Settings(object):
             if dev not in fnames.keys():
                 nonexisting.append(dev)
 
-        acps = json.loads(self.__state["AutomaticComponentGroup"])
+        acps = json.loads(self.__selection["AutomaticComponentGroup"])
 
         rcp = set()
         toCheck = {}
@@ -1557,7 +1453,7 @@ class Settings(object):
                 print >> self.__server.log_debug, "To Check:", lds
             cqueue.put(lds)
         for _ in range(self.numberOfThreads):
-            thd = threading.Thread(target=_checker, args=(cqueue,))
+            thd = threading.Thread(target=checker, args=(cqueue,))
             thd.daemon = True
             thd.start()
         cqueue.join()
@@ -1575,12 +1471,9 @@ class Settings(object):
                 acps[acp] = True
 
         jacps = json.dumps(acps)
-        if self.__state["AutomaticComponentGroup"] != jacps:
-            self.__state["AutomaticComponentGroup"] = jacps
-            if self.__server:
-                dp = PyTango.DeviceProxy(str(self.__server.get_name()))
-                dp.write_attribute(str("AutomaticComponentGroup"),
-                                   self.__state["AutomaticComponentGroup"])
+        if self.__selection["AutomaticComponentGroup"] != jacps:
+            self.__selection["AutomaticComponentGroup"] = jacps
+            self.storeConfiguration()
 
     ## provides available Timers from MacroServer pools
     # \returns  available Timers from MacroServer pools
@@ -1639,7 +1532,7 @@ class Settings(object):
     ## stores Enviroutment Data
     # \param jdata JSON String with important variables
     def storeEnvData(self, jdata):
-        jdata = self.__stringToDictJson(jdata)
+        jdata = Utils.stringToDictJson(jdata)
         data = json.loads(jdata)
         scanID = -1
         ms = self.__getMacroServer()
@@ -1659,7 +1552,7 @@ class Settings(object):
 
     ## imports all Enviroutment Data
     def importAllEnv(self):
-        self.__importEnv(self.names(), self.__state)
+        self.__importEnv(self.__selection.keys(), self.__selection)
 
     ## imports Enviroutment Data
     # \param names names of required variables
@@ -1691,7 +1584,7 @@ class Settings(object):
 
     ## exports all Enviroutment Data
     def exportAllEnv(self):
-        self.__exportEnv(self.__state)
+        self.__exportEnv(self.__selection)
 
     ## exports all Enviroutment Data
     def __exportEnv(self, data):
@@ -1768,38 +1661,3 @@ class Settings(object):
         nexusconfig_device = self.__setConfigInstance()
         dcpcreator = DynamicComponent(nexusconfig_device)
         dcpcreator.removeDynamicComponent(name)
-
-
-## checkers if Tango devices are alive
-# \params cqueue queue with task of the form ['comp','alias','alias', ...]
-def _checker(cqueue):
-    while True:
-        lds = cqueue.get()
-        ok = True
-        for ds in lds[1:]:
-            if isinstance(ds, tuple) and len(ds) > 2:
-                dname = str(ds[1])
-                attr = str(ds[2])
-            else:
-                dname = str(ds)
-                attr = None
-
-            try:
-                dp = PyTango.DeviceProxy(dname)
-                if dp.state() in [
-                    PyTango.DevState.FAULT,
-                    PyTango.DevState.ALARM]:
-                    raise Exception("FAULT or ALARM STATE")
-                dp.ping()
-                if not attr:
-                    for gattr in ATTRIBUTESTOCHECK:
-                        if hasattr(dp, gattr):
-                            _ = getattr(dp, gattr)
-                else:
-                    _ = getattr(dp, attr)
-            except:
-                ok = False
-                break
-        if ok:
-            lds[:] = []
-        cqueue.task_done()

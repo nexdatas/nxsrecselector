@@ -1,3 +1,12 @@
+2015-02-18 Jan Kotanski <jankotan@gmail.com>
+	* adding selections from configuration server
+	* works only with Tango NXSConfigServer (>= 1.10.0)
+	* tagged as v1.12.0
+
+2015-02-12 Jan Kotanski <jankotan@gmail.com>
+	* adding support for multi-dim automatic component datasources
+	* tagged as v1.11.1
+
 2015-02-11 Jan Kotanski <jankotan@gmail.com>
 	* adding GetSourceDescription
 	* adding AvailableMeasurementGroups

@@ -20,12 +20,16 @@
 
 """  Tango Utilities """
 
+import re
 import PyTango
 import time
 import json
 import pickle
 import numpy
 import fnmatch
+
+ATTRIBUTESTOCHECK = ["Value", "Position", "Counts", "Data",
+                     "Voltage", "Energy", "SampleTime"]
 
 
 ## Tango Utilities
@@ -313,7 +317,7 @@ class Utils(object):
 
     ## retrives shape type value for attribure
     @classmethod
-    def __getShapeTypeValue(cls, source):
+    def getShapeTypeValue(cls, source):
         vl = None
         shp = []
         dt = 'float64'
@@ -334,15 +338,14 @@ class Utils(object):
 
         if vl is not None:
             shp = list(numpy.shape(vl))
-            dt = getattr(vl, 'dtype', numpy.dtype(type(vl))).name
         elif ac is not None:
             if ac.data_format != PyTango.AttrDataFormat.SCALAR:
                 if da.dim_x and da.dim_x > 1:
                     shp = [da.dim_y, da.dim_x] \
                         if da.dim_y \
                         else [da.dim_x]
-            dt = cls.tTnp[ac.data_type]
         if ac is not None:
+            dt = cls.tTnp[ac.data_type]
             ut = ac.unit
         return (shp, dt, vl, ut)
 
@@ -373,7 +376,7 @@ class Utils(object):
             u'channels']
         if not fullname in ctrlChannels.keys():
             source = cls.__getSource(fullname)
-            shp, dt, _, ut = cls.__getShapeTypeValue(source)
+            shp, dt, _, ut = cls.getShapeTypeValue(source)
             dct = {}
             dct['_controller_name'] = unicode(ctrl)
             dct['_unit_id'] = u'0'
@@ -467,3 +470,102 @@ class Utils(object):
                     status = False
                     break
         return status
+
+    @classmethod
+    def getRecord(cls, node):
+        res = ''
+        host = None
+        port = None
+        dname = None
+        rname = None
+        device = node.getElementsByTagName("device")
+        if device and len(device) > 0:
+            if device[0].hasAttribute("hostname"):
+                host = device[0].attributes["hostname"].value
+            if device[0].hasAttribute("port"):
+                port = device[0].attributes["port"].value
+            if device[0].hasAttribute("name"):
+                dname = device[0].attributes["name"].value
+
+        record = node.getElementsByTagName("record")
+        if record and len(record) > 0:
+            if record[0].hasAttribute("name"):
+                rname = record[0].attributes["name"].value
+                if dname:
+                    if host:
+                        if not port:
+                            port = '10000'
+                        res = '%s:%s/%s/%s' % (host, port, dname, rname)
+                    else:
+                        res = '%s/%s' % (dname, rname)
+                else:
+                    res = rname
+        return res
+
+    @classmethod
+    def stringToDictJson(cls, string, toBool=False):
+        try:
+            if not string or string == "Not initialised":
+                return {}
+            acps = json.loads(string)
+            assert isinstance(acps, dict)
+            jstring = string
+        except:
+            lst = re.sub("[^\w]", "  ", string).split()
+            if len(lst) % 2:
+                lst.append("")
+            dct = dict(zip(*[iter(lst)] * 2))
+            if toBool:
+                for k in dct.keys():
+                    dct[k] = False \
+                        if dct[k].lower() == 'false' else True
+            jstring = json.dumps(dct)
+        return jstring
+
+    @classmethod
+    def stringToListJson(cls, string):
+        if not string or string == "Not initialised":
+            return []
+        try:
+            acps = json.loads(string)
+            assert isinstance(acps, (list, tuple))
+            jstring = string
+        except:
+            lst = re.sub("[^\w]", "  ", string).split()
+            jstring = json.dumps(lst)
+        return jstring
+
+
+## checkers if Tango devices are alive
+# \params cqueue queue with task of the form ['comp','alias','alias', ...]
+def checker(cqueue):
+    while True:
+        lds = cqueue.get()
+        ok = True
+        for ds in lds[1:]:
+            if isinstance(ds, tuple) and len(ds) > 2:
+                dname = str(ds[1])
+                attr = str(ds[2])
+            else:
+                dname = str(ds)
+                attr = None
+
+            try:
+                dp = PyTango.DeviceProxy(dname)
+                if dp.state() in [
+                    PyTango.DevState.FAULT,
+                    PyTango.DevState.ALARM]:
+                    raise Exception("FAULT or ALARM STATE")
+                dp.ping()
+                if not attr:
+                    for gattr in ATTRIBUTESTOCHECK:
+                        if hasattr(dp, gattr):
+                            _ = getattr(dp, gattr)
+                else:
+                    _ = getattr(dp, attr)
+            except:
+                ok = False
+                break
+        if ok:
+            lds[:] = []
+        cqueue.task_done()

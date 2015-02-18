@@ -24,6 +24,8 @@ import xml.dom.minidom
 import json
 import PyTango
 
+from .Utils import Utils
+
 
 ## NeXus Sardana Recorder settings
 class DynamicComponent(object):
@@ -133,6 +135,19 @@ class DynamicComponent(object):
         if not self.__defaultpath:
             self.__defaultpath = self.__ldefaultpath
 
+    def __shapeFromTango(self, ds):
+        nxtype = None
+        dstype = None
+        shape = None
+        if ds.hasAttribute("type"):
+            dstype = ds.attributes["type"].value
+        if dstype == 'TANGO':
+            source = str(Utils.getRecord(ds))
+            shape, dt, _, _ = Utils.getShapeTypeValue(source)
+            nxtype = self.__npTn[dt] \
+                if dt in self.__npTn.keys() else nxtype
+        return shape, nxtype
+
     ## creates dynamic component
     def create(self):
         cps = self.__nexusconfig_device.availableComponents()
@@ -183,14 +198,22 @@ class DynamicComponent(object):
                 (parent, nxdata) = self.__createGroupTree(
                     root, definition, path, link)
 
-                nxtype = self.__getProp(
-                    self.__nexustypes, self.__nexuslabels, ds, 'NX_CHAR')
-                shape = self.__getProp(
-                    self.__nexusshapes, self.__nexuslabels, ds, None)
+                shape, nxtype = None, 'NX_CHAR'
                 if ds in avds:
                     dsource = self.__nexusconfig_device.dataSources([str(ds)])
                     indom = xml.dom.minidom.parseString(dsource[0])
                     dss = indom.getElementsByTagName("datasource")
+                    if dss and shape is None:
+                        shape, nxtype = self.__shapeFromTango(dss[0])
+                        if not nxtype:
+                            nxtype = 'NX_CHAR'
+
+                nxtype = self.__getProp(
+                    self.__nexustypes, self.__nexuslabels, ds, nxtype)
+                shape = self.__getProp(
+                    self.__nexusshapes, self.__nexuslabels, ds, shape)
+
+                if ds in avds:
                     self.__createField(root, parent, field, nxtype, ds,
                                        dsnode=dss[0], shape=shape)
                 else:
@@ -213,12 +236,28 @@ class DynamicComponent(object):
                 (parent, nxdata) = self.__createGroupTree(
                     root, definition, path, link)
 
+                shape, nxtype = None, 'NX_CHAR'
+                if ds in avds:
+                    dsource = self.__nexusconfig_device.dataSources([str(ds)])
+                    indom = xml.dom.minidom.parseString(dsource[0])
+                    dss = indom.getElementsByTagName("datasource")
+                    if dss and shape is None:
+                        shape, nxtype = self.__shapeFromTango(dss[0])
+                        if not nxtype:
+                            nxtype = 'NX_CHAR'
+
                 nxtype = self.__getProp(
-                    self.__nexustypes, self.__nexuslabels, ds, 'NX_CHAR')
+                    self.__nexustypes, self.__nexuslabels, ds, nxtype)
                 shape = self.__getProp(
-                    self.__nexusshapes, self.__nexuslabels, ds, None)
-                self.__createField(root, parent, field, nxtype, ds,
-                                   ds, shape, strategy='INIT')
+                    self.__nexusshapes, self.__nexuslabels, ds, shape)
+
+                if ds in avds:
+                    self.__createField(
+                        root, parent, field, nxtype, ds,
+                        ds, shape, strategy='INIT', dsnode=dss[0])
+                else:
+                    self.__createField(root, parent, field, nxtype, ds,
+                                       ds, shape, strategy='INIT')
                 if link:
                     self.__createLink(root, nxdata, path, field)
 
