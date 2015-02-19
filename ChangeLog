@@ -1,4 +1,8 @@
 2015-02-18 Jan Kotanski <jankotan@gmail.com>
+	* adding toupdate flag for memorize attributes
+	* tagged as v1.12.1
+
+2015-02-18 Jan Kotanski <jankotan@gmail.com>
 	* adding selections from configuration server
 	* works only with Tango NXSConfigServer (>= 1.10.0)
 	* tagged as v1.12.0
