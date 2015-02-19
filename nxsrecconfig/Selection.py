@@ -150,8 +150,6 @@ class Selection(object):
                         self.__selection["ConfigDevice"] = ''
                 except:
                     self.__selection["ConfigDevice"] = ''
-#            if self.__selection["ConfigDevice"]:
-#                self.__pfun.storeConfiguration()
 
     ## get method for automaticDataSources attribute
     def __updateAutomaticDataSources(self):
