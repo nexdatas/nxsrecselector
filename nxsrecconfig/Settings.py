@@ -39,6 +39,18 @@ except:
     NXSTOOLS = False
 
 
+import time
+
+class trk(object):
+    def __init__(self):
+        self.stt = time.time()
+        self.lst = self.stt
+
+    def check(self, label):
+        tt = time.time()
+        print label, tt - self.stt, tt - self.lst
+        self.lst = tt
+
 
 ## NeXus Sardana Recorder settings
 class Settings(object):
@@ -1107,25 +1119,32 @@ class Settings(object):
 
     ## set active measurement group from components
     def createMntGrpConfiguration(self):
+        tk = trk()
         pools = self.__getPools()
         cnf = {}
         cnf['controllers'] = {}
         cnf['description'] = "Measurement Group"
         cnf['label'] = ""
-
+        
+        tk.check("CMGC1")
         timers = json.loads(self.__selection["Timer"])
         timer = timers[0] if timers else ''
         if not timer:
             raise Exception(
                 "Timer or Monitor not defined")
 
+        tk.check("CMGC2")
         datasources = self.dataSources
+        tk.check("CMGC3")
         disabledatasources = self.disableDataSources
+        tk.check("CMGC4")
         hidden = json.loads(self.__selection["HiddenElements"])
         dontdisplay = set(hidden)
 
+        tk.check("CMGC5")
         self.__checkClientRecords(datasources, pools)
 
+        tk.check("CMGC6")
         aliases = []
         if isinstance(datasources, list):
             aliases = datasources
@@ -1138,7 +1157,9 @@ class Settings(object):
                 aliases.append(tm)
                 dontdisplay.add(tm)
 
+        tk.check("CMGC7")
         res = self.__cpdescription('CLIENT')
+        tk.check("CMGC8")
 
         for grp in res:
             for cp, dss in grp.items():
@@ -1151,18 +1172,23 @@ class Settings(object):
         self.__selection["HiddenElements"] = json.dumps(list(dontdisplay))
         aliases = list(set(aliases))
 
+        tk.check("CMGC9")
         if not self.__selection["MntGrp"]:
             self.__selection["MntGrp"] = self.__defaultmntgrp
         mntGrpName = self.__selection["MntGrp"]
         mfullname = str(Utils.getMntGrpName(pools, mntGrpName))
+        tk.check("CMGC10")
         ms = self.__getMacroServer()
+        tk.check("CMGC11")
 
         if not mfullname:
             mfullname = self.__createMntGrp(ms, mntGrpName, timer, pools)
 
+        tk.check("CMGC12")
         Utils.setEnv('ActiveMntGrp', mntGrpName, ms)
         cnf['label'] = mntGrpName
         index = 0
+        tk.check("CMGC12A")
         fullname = Utils.getFullDeviceNames(pools, [timer])[timer]
         if not fullname:
             raise Exception(
@@ -1170,6 +1196,7 @@ class Settings(object):
         cnf['monitor'] = fullname
         cnf['timer'] = fullname
 
+        tk.check("CMGC13")
         ltimers = set()
         if len(timers) > 1:
             ltimers = set(timers[1:])
@@ -1179,18 +1206,24 @@ class Settings(object):
         ordchannels = [ch for ch in pchs if ch in aliases]
         uordchannels = list(set(aliases) - set(ordchannels))
 
+        tk.check("CMGC14")
         fullnames = Utils.getFullDeviceNames(pools, aliases)
+        tk.check("CMGC15")
         for al in ordchannels:
             index = Utils.addDevice(
                 al, dontdisplay, pools, cnf,
                 al if al in ltimers else timer, index, fullnames)
+        tk.check("CMGC16")
         for al in uordchannels:
             index = Utils.addDevice(
                 al, dontdisplay, pools, cnf,
                 al if al in ltimers else timer, index, fullnames)
 
+        tk.check("CMGC17")
         conf = json.dumps(cnf)
+        tk.check("CMGC18")
         self.storeConfiguration()
+        tk.check("CMGC19")
         return conf, mfullname
 
     ## set active measurement group from components
