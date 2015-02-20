@@ -1661,3 +1661,21 @@ class Settings(object):
         nexusconfig_device = self.__setConfigInstance()
         dcpcreator = DynamicComponent(nexusconfig_device)
         dcpcreator.removeDynamicComponent(name)
+
+    ## deletes mntgrp
+    # \param name mntgrp name
+    def deleteMntGrp(self, name):
+        mntgrps = None
+        pool = None
+        ms = self.__getMacroServer()
+        msp = Utils.openProxy(ms)
+        pn = msp.get_property("PoolNames")["PoolNames"]
+        fpool = None
+        for pl in pn:
+            pool = Utils.openProxy(pl)
+            if not fpool:
+                fpool = pool
+        if fpool:
+            mntgrps = Utils.getMntGrps(fpool)
+            fpool.DeleteElement(str(name))
+                

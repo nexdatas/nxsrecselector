@@ -1,3 +1,7 @@
+2015-02-20 Jan Kotanski <jankotan@gmail.com>
+	* adding deleteMntGrp command
+	* tagged as v1.13.0
+
 2015-02-19 Jan Kotanski <jankotan@gmail.com>
 	* adding toupdate flag for memorize attributes
 	* tagged as v1.12.1

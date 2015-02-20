@@ -1396,6 +1396,31 @@ class NXSRecSelector(PyTango.Device_4Impl):
         return True
 
 #------------------------------------------------------------------
+#    DeleteMntGrp command:
+#
+#    Description: Deletes the given mntgrp
+#
+#    argin:  DevString  measurement group name
+#------------------------------------------------------------------
+    def DeleteMntGrp(self, argin):
+        print >> self.log_info, "In ", self.get_name(), \
+            "::DeleteMntGrp()"
+        #    Add your own code here
+        try:
+            self.set_state(PyTango.DevState.RUNNING)
+            self.__stg.deleteMntGrp(argin)
+            self.set_state(PyTango.DevState.OPEN)
+        finally:
+            if self.get_state() == PyTango.DevState.RUNNING:
+                self.set_state(PyTango.DevState.OPEN)
+
+#---- DeleteMntGrp command State Machine -----------------
+    def is_DeleteMntGrp_allowed(self):
+        if self.get_state() in [PyTango.DevState.RUNNING]:
+            return False
+        return True
+
+#------------------------------------------------------------------
 #    ClientSources command:
 #
 #    Description: describes client datasources from components
@@ -1527,6 +1552,9 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
              [PyTango.DevVoid, ""]],
         'StoreConfiguration':
             [[PyTango.DevVoid, ""],
+             [PyTango.DevVoid, ""]],
+        'DeleteMntGrp':
+            [[PyTango.DevString, "mntgrp name"],
              [PyTango.DevVoid, ""]],
         'ImportMntGrp':
             [[PyTango.DevVoid, ""],
