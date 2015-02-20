@@ -63,6 +63,8 @@ class NXSRecSelector(PyTango.Device_4Impl):
         PyTango.Device_4Impl.__init__(self, cl, name)
         ## Recorder Settings
         self.__stg = STG(self)
+        self.__toupdate = ['ConfigDevice', 'Door']
+
         NXSRecSelector.init_device(self)
 
 #------------------------------------------------------------------
@@ -556,9 +558,10 @@ class NXSRecSelector(PyTango.Device_4Impl):
             self.__stg.configuration
         try:
             dp = PyTango.DeviceProxy(str(self.get_name()))
-            for var in self.__stg.names():
-                if hasattr(dp, var):
-                    dp.write_attribute(str(var), self.__stg.value(var))
+            for var in self.__toupdate:
+                if var in self.__stg.names():
+                    if hasattr(dp, var):
+                        dp.write_attribute(str(var), self.__stg.value(var))
 
             self.set_state(PyTango.DevState.ON)
         finally:
@@ -747,9 +750,10 @@ class NXSRecSelector(PyTango.Device_4Impl):
 
             ## updating memorized attributes
             dp = PyTango.DeviceProxy(str(self.get_name()))
-            for var in self.__stg.names():
-                if hasattr(dp, var):
-                    dp.write_attribute(str(var), self.__stg.value(var))
+            for var in self.__toupdate:
+                if var in self.__stg.names():
+                    if hasattr(dp, var):
+                        dp.write_attribute(str(var), self.__stg.value(var))
 
             self.set_state(PyTango.DevState.ON)
         finally:
@@ -777,9 +781,10 @@ class NXSRecSelector(PyTango.Device_4Impl):
 
             ## updating memorized attributes
             dp = PyTango.DeviceProxy(str(self.get_name()))
-            for var in self.__stg.names():
-                if hasattr(dp, var):
-                    dp.write_attribute(str(var), self.__stg.value(var))
+            for var in self.__toupdate:
+                if var in self.__stg.names():
+                    if hasattr(dp, var):
+                        dp.write_attribute(str(var), self.__stg.value(var))
 
             self.set_state(PyTango.DevState.ON)
         finally:
@@ -1002,9 +1007,10 @@ class NXSRecSelector(PyTango.Device_4Impl):
 
             ## updating memorized attributes
             dp = PyTango.DeviceProxy(str(self.get_name()))
-            for var in self.__stg.names():
-                if hasattr(dp, var):
-                    dp.write_attribute(str(var), self.__stg.value(var))
+            for var in self.__toupdate:
+                if var in self.__stg.names():
+                    if hasattr(dp, var):
+                        dp.write_attribute(str(var), self.__stg.value(var))
 
             self.set_state(PyTango.DevState.ON)
         finally:
@@ -1389,6 +1395,31 @@ class NXSRecSelector(PyTango.Device_4Impl):
         return True
 
 #------------------------------------------------------------------
+#    DeleteMntGrp command:
+#
+#    Description: Deletes the given mntgrp
+#
+#    argin:  DevString  measurement group name
+#------------------------------------------------------------------
+    def DeleteMntGrp(self, argin):
+        print >> self.log_info, "In ", self.get_name(), \
+            "::DeleteMntGrp()"
+        #    Add your own code here
+        try:
+            self.set_state(PyTango.DevState.RUNNING)
+            self.__stg.deleteMntGrp(argin)
+            self.set_state(PyTango.DevState.OPEN)
+        finally:
+            if self.get_state() == PyTango.DevState.RUNNING:
+                self.set_state(PyTango.DevState.OPEN)
+
+#---- DeleteMntGrp command State Machine -----------------
+    def is_DeleteMntGrp_allowed(self):
+        if self.get_state() in [PyTango.DevState.RUNNING]:
+            return False
+        return True
+
+#------------------------------------------------------------------
 #    ClientSources command:
 #
 #    Description: describes client datasources from components
@@ -1520,6 +1551,9 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
              [PyTango.DevVoid, ""]],
         'StoreConfiguration':
             [[PyTango.DevVoid, ""],
+             [PyTango.DevVoid, ""]],
+        'DeleteMntGrp':
+            [[PyTango.DevString, "mntgrp name"],
              [PyTango.DevVoid, ""]],
         'ImportMntGrp':
             [[PyTango.DevVoid, ""],

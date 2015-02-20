@@ -39,7 +39,6 @@ except:
     NXSTOOLS = False
 
 
-
 ## NeXus Sardana Recorder settings
 class Settings(object):
 
@@ -945,6 +944,26 @@ class Settings(object):
         __variableComponents,
         doc='provides components for all variables')
 
+    ## provides description of components
+    # \param dstype list datasets only with given datasource type.
+    #        If '' all available ones are taken
+    # \param full if True describes all available ones are taken
+    #        otherwise selectect, automatic and mandatory
+    # \returns description of required components
+    def __cpdescription(self, dstype='', full=False):
+
+        nexusconfig_device = self.__setConfigInstance()
+        describer = Describer(nexusconfig_device)
+        cp = None
+        if not full:
+            cp = list(set(self.components) |
+            set(self.automaticComponents) |
+            set(self.mandatoryComponents()))
+            res = describer.components(cp, 'STEP', dstype)
+        else:
+            res = describer.components(cp, '', dstype)
+        return res
+
     ## provides description of all components
     # \returns JSON string with description of all components
     def __description(self):
@@ -987,26 +1006,6 @@ class Settings(object):
                       set(self.mandatoryComponents()))
         nexusconfig_device.createConfiguration(cp)
         return str(nexusconfig_device.xmlstring)
-
-    ## provides description of components
-    # \param dstype list datasets only with given datasource type.
-    #        If '' all available ones are taken
-    # \param full if True describes all available ones are taken
-    #        otherwise selectect, automatic and mandatory
-    # \returns description of required components
-    def __cpdescription(self, dstype='', full=False):
-
-        nexusconfig_device = self.__setConfigInstance()
-        describer = Describer(nexusconfig_device)
-        cp = None
-        if not full:
-            cp = list(set(self.components) |
-            set(self.automaticComponents) |
-            set(self.mandatoryComponents()))
-            res = describer.components(cp, 'STEP', dstype)
-        else:
-            res = describer.components(cp, '', dstype)
-        return res
 
     ## provides full names of pool devices
     # \returns JSON string with full names of pool devices
@@ -1661,3 +1660,18 @@ class Settings(object):
         nexusconfig_device = self.__setConfigInstance()
         dcpcreator = DynamicComponent(nexusconfig_device)
         dcpcreator.removeDynamicComponent(name)
+
+    ## deletes mntgrp
+    # \param name mntgrp name
+    def deleteMntGrp(self, name):
+        pool = None
+        ms = self.__getMacroServer()
+        msp = Utils.openProxy(ms)
+        pn = msp.get_property("PoolNames")["PoolNames"]
+        fpool = None
+        for pl in pn:
+            pool = Utils.openProxy(pl)
+            if not fpool:
+                fpool = pool
+        if fpool:
+            fpool.DeleteElement(str(name))
