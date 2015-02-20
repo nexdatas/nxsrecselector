@@ -66,7 +66,6 @@ class NXSRecSelector(PyTango.Device_4Impl):
         self.__toupdate = ['ConfigDevice', 'Door']
 
         NXSRecSelector.init_device(self)
-        
 
 #------------------------------------------------------------------
 #    Device destructor

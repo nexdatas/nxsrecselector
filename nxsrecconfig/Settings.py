@@ -39,7 +39,6 @@ except:
     NXSTOOLS = False
 
 
-
 ## NeXus Sardana Recorder settings
 class Settings(object):
 
@@ -1665,7 +1664,6 @@ class Settings(object):
     ## deletes mntgrp
     # \param name mntgrp name
     def deleteMntGrp(self, name):
-        mntgrps = None
         pool = None
         ms = self.__getMacroServer()
         msp = Utils.openProxy(ms)
@@ -1676,6 +1674,4 @@ class Settings(object):
             if not fpool:
                 fpool = pool
         if fpool:
-            mntgrps = Utils.getMntGrps(fpool)
             fpool.DeleteElement(str(name))
-                
