@@ -946,6 +946,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         if self.get_state() in [PyTango.DevState.RUNNING]:
             return False
         return True
+
 #------------------------------------------------------------------
 #    PoolChannels command:
 #
