@@ -769,6 +769,8 @@ class Settings(object):
     # \param name mntgrp name
     def deleteMntGrp(self, name):
         self.__mntgrptools.deleteMntGrp(name)
+        inst = self.setConfigInstance()
+        inst.deleteSelection(name)
 
     ## provides configuration of mntgrp
     # \param proxy DeviceProxy of mntgrp
