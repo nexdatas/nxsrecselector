@@ -22,7 +22,14 @@
 
 import json
 import PyTango
+import Queue
+import threading
 from .Utils import Utils
+from .Describer import Describer
+
+
+ATTRIBUTESTOCHECK = ["Value", "Position", "Counts", "Data",
+                     "Voltage", "Energy", "SampleTime"]
 
 
 ## NeXus Sardana Recorder settings
@@ -31,8 +38,9 @@ class Selection(object):
 
     ## constructor
     # \param configserver configuration server name
-    def __init__(self, pfun):
+    def __init__(self, pfun, numberOfThreads):
 
+        self.__numberOfThreads = numberOfThreads
         self.__pfun = pfun
         ## default zone
         self.__defaultzone = 'Europe/Berlin'
@@ -251,3 +259,100 @@ class Selection(object):
         if not self.__selection["WriterDevice"]:
             self.__selection["WriterDevice"] = Utils.getDeviceName(
                 self.__db, "NXSDataWriter")
+
+    def updateControllers(self, pools):
+        ads = set(json.loads(self["AutomaticDataSources"]))
+        nonexisting = []
+        fnames = Utils.getFullDeviceNames(pools, ads)
+        nexusconfig_device = self.__pfun.setConfigInstance()
+        describer = Describer(nexusconfig_device)
+
+        for dev in ads:
+            if dev not in fnames.keys():
+                nonexisting.append(dev)
+
+        acps = json.loads(self["AutomaticComponentGroup"])
+
+        rcp = set()
+        toCheck = {}
+        for acp in acps.keys():
+            res = describer.components([acp], '', '')
+            for cp, dss in res[1].items():
+                if isinstance(dss, dict):
+                    tgds = describer.dataSources(dss.keys(), 'TANGO')
+                    for ds in dss.keys():
+                        if ds in tgds.keys():
+                            if cp not in toCheck.keys():
+                                toCheck[cp] = [cp]
+                            srec = tgds[ds][2].split("/")
+                            rds = "/".join(srec[:-1])
+                            attr = srec[-1]
+                            toCheck[cp].append((str(ds), str(rds), str(attr)))
+                        elif ds in nonexisting:
+                            rcp.add(cp)
+                            if cp in toCheck.keys():
+                                toCheck.pop(cp)
+                            break
+                        elif ds in ads:
+                            if cp not in toCheck.keys():
+                                toCheck[cp] = [cp]
+                            toCheck[cp].append(str(ds))
+
+        cqueue = Queue.Queue()
+        for lds in toCheck.values():
+            cqueue.put(lds)
+        for _ in range(self.__numberOfThreads):
+            thd = threading.Thread(target=checker, args=(cqueue,))
+            thd.daemon = True
+            thd.start()
+        cqueue.join()
+
+        for lds in toCheck.values():
+            if lds and len(lds) > 0:
+                rcp.add(lds[0])
+
+        for acp in acps.keys():
+            if acp in rcp:
+                acps[acp] = False
+            else:
+                acps[acp] = True
+
+        jacps = json.dumps(acps)
+        if self["AutomaticComponentGroup"] != jacps:
+            self["AutomaticComponentGroup"] = jacps
+            self.__pfun.storeConfiguration()
+
+
+## checkers if Tango devices are alive
+# \params cqueue queue with task of the form ['comp','alias','alias', ...]
+def checker(cqueue):
+    while True:
+        lds = cqueue.get()
+        ok = True
+        for ds in lds[1:]:
+            if isinstance(ds, tuple) and len(ds) > 2:
+                dname = str(ds[1])
+                attr = str(ds[2])
+            else:
+                dname = str(ds)
+                attr = None
+
+            try:
+                dp = PyTango.DeviceProxy(dname)
+                if dp.state() in [
+                    PyTango.DevState.FAULT,
+                    PyTango.DevState.ALARM]:
+                    raise Exception("FAULT or ALARM STATE")
+                dp.ping()
+                if not attr:
+                    for gattr in ATTRIBUTESTOCHECK:
+                        if hasattr(dp, gattr):
+                            _ = getattr(dp, gattr)
+                else:
+                    _ = getattr(dp, attr)
+            except:
+                ok = False
+                break
+        if ok:
+            lds[:] = []
+        cqueue.task_done()
