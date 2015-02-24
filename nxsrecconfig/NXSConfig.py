@@ -946,6 +946,58 @@ class NXSRecSelector(PyTango.Device_4Impl):
         if self.get_state() in [PyTango.DevState.RUNNING]:
             return False
         return True
+#------------------------------------------------------------------
+#    PoolChannels command:
+#
+#    Description: Returns a list of available pool channels
+#
+#    argout: DevVarStringArray    list of available pool channels
+#------------------------------------------------------------------
+    def PoolChannels(self):
+        print >> self.log_info, "In ", self.get_name(), \
+            "::PoolChannels()"
+        try:
+            self.set_state(PyTango.DevState.RUNNING)
+            argout = self.__stg.poolChannels()
+            self.set_state(PyTango.DevState.ON)
+        finally:
+            if self.get_state() == PyTango.DevState.RUNNING:
+                self.set_state(PyTango.DevState.ON)
+
+        return argout
+
+#---- PoolChannels command State Machine -----------------
+    def is_PoolChannels_allowed(self):
+        if self.get_state() in [PyTango.DevState.RUNNING]:
+            return False
+        return True
+
+#------------------------------------------------------------------
+#    PoolMotors command:
+#
+#    Description: Returns a list of available pool channels
+#
+#    argout: DevVarStringArray    list of available pool channels
+#------------------------------------------------------------------
+    def PoolMotors(self):
+        print >> self.log_info, "In ", self.get_name(), \
+            "::PoolMotors()"
+        #    Add your own code here
+        try:
+            self.set_state(PyTango.DevState.RUNNING)
+            argout = self.__stg.poolMotors()
+            self.set_state(PyTango.DevState.ON)
+        finally:
+            if self.get_state() == PyTango.DevState.RUNNING:
+                self.set_state(PyTango.DevState.ON)
+
+        return argout
+
+#---- PoolMotors command State Machine -----------------
+    def is_PoolMotors_allowed(self):
+        if self.get_state() in [PyTango.DevState.RUNNING]:
+            return False
+        return True
 
 #------------------------------------------------------------------
 #    MandatoryComponents command:
@@ -1226,6 +1278,12 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
             [[PyTango.DevVoid, ""],
              [PyTango.DevVarStringArray,
               "list of available DataSource names"]],
+        'PoolChannels':
+            [[PyTango.DevVoid, ""],
+             [PyTango.DevVarStringArray, "list of available pool channels"]],
+        'PoolMotors':
+            [[PyTango.DevVoid, ""],
+             [PyTango.DevVarStringArray, "list of available pool motors"]],
         'MandatoryComponents':
             [[PyTango.DevVoid, ""],
              [PyTango.DevVarStringArray, "component names"]],
