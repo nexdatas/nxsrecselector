@@ -1038,19 +1038,18 @@ class Settings(object):
     ## checks client records
     def __checkClientRecords(self, datasources, pools):
 
-        nexusconfig_device = self.__setConfigInstance()
-        describer = Describer(nexusconfig_device)
+        describer = Describer(self.__setConfigInstance())
 
         frecords = Utils.getFullDeviceNames(pools)
-
         dsres = describer.dataSources(
             set(datasources) - set(frecords.keys()), 'CLIENT')
         records = [str(dsr[2]) for dsr in dsres.values()]
 
-        cp = list(set(self.components) |
-                  set(self.automaticComponents) |
-                  set(self.mandatoryComponents()))
-        cpres = describer.components(cp, '', 'CLIENT')
+        cpres = describer.components(
+            list(set(self.components) |
+                 set(self.automaticComponents) |
+                 set(self.mandatoryComponents())),
+            '', 'CLIENT')
         for grp in cpres:
             for dss in grp.values():
                 for dsrs in dss.values():
@@ -1073,7 +1072,8 @@ class Settings(object):
             raise Exception(
                 "User Data not defined %s" % str(missing))
 
-    def __createMntGrp(self, ms, mntGrpName, timer, pools):
+    @classmethod
+    def __createMntGrp(cls, ms, mntGrpName, timer, pools):
         pool = None
         amntgrp = Utils.getEnv('ActiveMntGrp', ms)
         msp = Utils.openProxy(ms)
@@ -1104,38 +1104,34 @@ class Settings(object):
             mfullname = str(Utils.getMntGrpName(pools, mntGrpName))
         return mfullname
 
-    ## set active measurement group from components
-    def createMntGrpConfiguration(self):
-        pools = self.__getPools()
-        cnf = {}
-        cnf['controllers'] = {}
-        cnf['description'] = "Measurement Group"
-        cnf['label'] = ""
-
-        timers = json.loads(self.__selection["Timer"])
-        timer = timers[0] if timers else ''
+    def __prepareTimers(self, cnf, ltimers, pools):
+        # prepare timers
+        mtimers = json.loads(self.__selection["Timer"])
+        timer = mtimers[0] if mtimers else ''
         if not timer:
             raise Exception(
                 "Timer or Monitor not defined")
+        fullname = Utils.getFullDeviceNames(pools, [timer])[timer]
+        if not fullname:
+            raise Exception(
+                "Timer or Monitor cannot be found amount the servers")
+        cnf['monitor'] = fullname
+        cnf['timer'] = fullname
+        if len(mtimers) > 1:
+            ltimers = set(mtimers[1:])
+            if timer in ltimers:
+                ltimers.remove(timer)
+        return timer
 
-        datasources = self.dataSources
-        disabledatasources = self.disableDataSources
-        hidden = json.loads(self.__selection["HiddenElements"])
-        dontdisplay = set(hidden)
-
-        self.__checkClientRecords(datasources, pools)
-
+    def __fetchChannels(self, dontdisplay, timers, pools):
         aliases = []
-        if isinstance(datasources, list):
-            aliases = datasources
-        pchs = json.loads(self.orderedChannels)
-        pdd = list(set(pchs) & set(disabledatasources))
-        aliases.extend(pdd)
 
-        for tm in timers:
-            if tm not in aliases:
-                aliases.append(tm)
-                dontdisplay.add(tm)
+        self.__checkClientRecords(list(self.dataSources), pools)
+
+        if isinstance(self.dataSources, list):
+            aliases = list(self.dataSources)
+        pchs = json.loads(self.orderedChannels)
+        aliases.extend(list(set(pchs) & set(self.disableDataSources)))
 
         res = self.__cpdescription('CLIENT')
 
@@ -1150,6 +1146,18 @@ class Settings(object):
         self.__selection["HiddenElements"] = json.dumps(list(dontdisplay))
         aliases = list(set(aliases))
 
+        for tm in timers:
+            if tm not in aliases:
+                aliases.append(tm)
+                dontdisplay.add(tm)
+
+        ordchannels = [ch for ch in pchs if ch in aliases]
+        aliases = list(set(aliases) - set(ordchannels))
+        ordchannels.extend(aliases)
+        return ordchannels
+
+    def __prepareMntGrp(self, cnf, timer, pools):
+        # set mntgrp
         if not self.__selection["MntGrp"]:
             self.__selection["MntGrp"] = self.__defaultmntgrp
         mntGrpName = self.__selection["MntGrp"]
@@ -1161,29 +1169,29 @@ class Settings(object):
 
         Utils.setEnv('ActiveMntGrp', mntGrpName, ms)
         cnf['label'] = mntGrpName
-        index = 0
-        fullname = Utils.getFullDeviceNames(pools, [timer])[timer]
-        if not fullname:
-            raise Exception(
-                "Timer or Monitor cannot be found amount the servers")
-        cnf['monitor'] = fullname
-        cnf['timer'] = fullname
+        return mfullname
+
+    ## set active measurement group from components
+    def createMntGrpConfiguration(self):
+        pools = self.__getPools()
+        cnf = {}
+        cnf['controllers'] = {}
+        cnf['description'] = "Measurement Group"
+        cnf['label'] = ""
+
+        dontdisplay = set(json.loads(self.__selection["HiddenElements"]))
 
         ltimers = set()
-        if len(timers) > 1:
-            ltimers = set(timers[1:])
-            if timer in ltimers:
-                ltimers.remove(timer)
+        timer = self.__prepareTimers(cnf, ltimers, pools)
 
-        ordchannels = [ch for ch in pchs if ch in aliases]
-        uordchannels = list(set(aliases) - set(ordchannels))
+        aliases = self.__fetchChannels(
+            dontdisplay, set(ltimers) | set([timer]), pools)
 
+        mfullname = self.__prepareMntGrp(cnf, timer, pools)
+
+        index = 0
         fullnames = Utils.getFullDeviceNames(pools, aliases)
-        for al in ordchannels:
-            index = Utils.addDevice(
-                al, dontdisplay, pools, cnf,
-                al if al in ltimers else timer, index, fullnames)
-        for al in uordchannels:
+        for al in aliases:
             index = Utils.addDevice(
                 al, dontdisplay, pools, cnf,
                 al if al in ltimers else timer, index, fullnames)
@@ -1201,7 +1209,6 @@ class Settings(object):
         return str(dpmg.Configuration)
 
     def __createDataSources(self, tangods):
-
         ads = self.availableDataSources()
         sds = self.getSourceDescription(ads)
 
