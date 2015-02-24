@@ -28,9 +28,6 @@ import pickle
 import numpy
 import fnmatch
 
-ATTRIBUTESTOCHECK = ["Value", "Position", "Counts", "Data",
-                     "Voltage", "Energy", "SampleTime"]
-
 
 ## Tango Utilities
 class Utils(object):
@@ -296,25 +293,6 @@ class Utils(object):
                         res.append(chan['name'])
         return res
 
-    ## adds controller into configuration dictionary
-    @classmethod
-    def __addController(cls, cnf, ctrl, fulltimer):
-        if 'controllers' not in cnf.keys():
-            cnf['controllers'] = {}
-        if not ctrl in cnf['controllers'].keys():
-            cnf['controllers'][ctrl] = {}
-            cnf['controllers'][ctrl]['units'] = {}
-            cnf['controllers'][ctrl]['units']['0'] = {}
-            cnf['controllers'][ctrl]['units']['0'][
-                u'channels'] = {}
-            cnf['controllers'][ctrl]['units']['0']['id'] = 0
-            cnf['controllers'][ctrl]['units']['0'][
-                u'monitor'] = fulltimer
-            cnf['controllers'][ctrl]['units']['0'][
-                u'timer'] = fulltimer
-            cnf['controllers'][ctrl]['units']['0'][
-                u'trigger_type'] = 0
-
     ## retrives shape type value for attribure
     @classmethod
     def getShapeTypeValue(cls, source):
@@ -353,7 +331,7 @@ class Utils(object):
     # \param name device pool name
     # \returns source of pool device
     @classmethod
-    def __getSource(cls, name):
+    def getSource(cls, name):
         source = None
         try:
             dp = PyTango.DeviceProxy(str(name))
@@ -367,82 +345,6 @@ class Utils(object):
         if not source:
             source = '%s/%s' % (name.encode(), 'Value')
         return source
-
-    ## adds channel into configuration dictionary
-    @classmethod
-    def __addChannel(cls, cnf, ctrl, device, fullname, dontdisplay, index):
-
-        ctrlChannels = cnf['controllers'][ctrl]['units']['0'][
-            u'channels']
-        if not fullname in ctrlChannels.keys():
-            source = cls.__getSource(fullname)
-            shp, dt, _, ut = cls.getShapeTypeValue(source)
-            dct = {}
-            dct['_controller_name'] = unicode(ctrl)
-            dct['_unit_id'] = u'0'
-            dct['conditioning'] = u''
-            dct['data_type'] = dt
-            dct['data_units'] = ut
-            dct['enabled'] = True
-            dct['full_name'] = fullname
-            dct['index'] = index
-            index += 1
-            dct['instrument'] = None
-            dct['label'] = unicode(device)
-            dct['name'] = unicode(device)
-            dct['ndim'] = 0
-            dct['nexus_path'] = u''
-            dct['normalization'] = 0
-            dct['output'] = True
-            dct['shape'] = shp
-
-            if device in dontdisplay:
-                dct['plot_axes'] = []
-                dct['plot_type'] = 0
-            elif dct['shape'] and len(dct['shape']) == 1:
-                dct['plot_axes'] = ['<idx>']
-                dct['plot_type'] = 1
-            elif dct['shape'] and len(dct['shape']) == 2:
-                dct['plot_axes'] = ['<idx>', '<idx>']
-                dct['plot_type'] = 2
-            else:
-                dct['plot_axes'] = ['<mov>']
-                dct['plot_type'] = 1
-
-            dct['source'] = source
-            ctrlChannels[fullname] = dct
-
-        return index
-
-    ## adds device into configuration dictionary
-    # \param cls class instance
-    # \param device device alias
-    # \param dontdisplay list of devices disable for display
-    # \param pools list of give pools
-    # \param cnf configuration dictionary
-    # \param timer device timer
-    # \param index device index
-    # \returns next device index
-    @classmethod
-    def addDevice(cls, device, dontdisplay, pools, cnf,
-                  timer, index, fullnames=None):
-        if not fullnames:
-            fullnames = cls.getFullDeviceNames(pools, [device, timer])
-
-        ctrls = cls.getDeviceControllers(pools, [device])
-        ctrl = ctrls[device] if ctrls and device in ctrls.keys() else ""
-        timers = cls.getFullDeviceNames(pools, [timer])
-        fulltimer = fullnames[timer] \
-            if timers and timer in fullnames.keys() else ""
-        if not ctrl:
-            return index
-
-        cls.__addController(cnf, ctrl, fulltimer)
-        fullname = fullnames[device] \
-            if fullnames and device in fullnames.keys() else ""
-        index = cls.__addChannel(cnf, ctrl, device, fullname,
-                                     dontdisplay, index)
-        return index
 
     ## copares two dictionaries
     # \param dct first dictinary
@@ -534,38 +436,3 @@ class Utils(object):
             lst = re.sub("[^\w]", "  ", string).split()
             jstring = json.dumps(lst)
         return jstring
-
-
-## checkers if Tango devices are alive
-# \params cqueue queue with task of the form ['comp','alias','alias', ...]
-def checker(cqueue):
-    while True:
-        lds = cqueue.get()
-        ok = True
-        for ds in lds[1:]:
-            if isinstance(ds, tuple) and len(ds) > 2:
-                dname = str(ds[1])
-                attr = str(ds[2])
-            else:
-                dname = str(ds)
-                attr = None
-
-            try:
-                dp = PyTango.DeviceProxy(dname)
-                if dp.state() in [
-                    PyTango.DevState.FAULT,
-                    PyTango.DevState.ALARM]:
-                    raise Exception("FAULT or ALARM STATE")
-                dp.ping()
-                if not attr:
-                    for gattr in ATTRIBUTESTOCHECK:
-                        if hasattr(dp, gattr):
-                            _ = getattr(dp, gattr)
-                else:
-                    _ = getattr(dp, attr)
-            except:
-                ok = False
-                break
-        if ok:
-            lds[:] = []
-        cqueue.task_done()
