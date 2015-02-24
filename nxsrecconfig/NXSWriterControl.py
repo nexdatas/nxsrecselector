@@ -153,7 +153,7 @@ class NXSWriterControl(PyTango.Device_4Impl):
 #------------------------------------------------------------------
     def read_Timers(self, attr):
         print >> self.log_info, "In ", self.get_name(), "::read_Timer()"
-        tm = self.__rsp.timer
+        tm = json.loads(self.__rsp.configuration)["Timer"]
         try:
             timers = json.loads(tm)
         except:
@@ -170,7 +170,9 @@ class NXSWriterControl(PyTango.Device_4Impl):
             timers = json.dumps(tm)
         except:
             timers = tm
-        self.__rsp.write_attribute("Timer", str(timers))
+        cnf = json.loads(self.__rsp.configuration)
+        cnf["Timer"] = timers
+        self.__rsp.configuration = str(json.dumps(cnf))
         print >> self.log_info, "Attribute value = %s" % self.__rsp.timer
 
 #------------------------------------------------------------------
@@ -296,7 +298,9 @@ class NXSWriterControl(PyTango.Device_4Impl):
             "::read_AutomaticComponents()"
         cps =[]
         try:
-            cps = json.loads(self.__rsp.automaticComponentGroup).keys()
+            cps = json.loads(
+                json.loads(self.__rsp.configuration)["AutomaticComponentGroup"]
+                ).keys())
         except:
             pass    
         attr.set_value(cps)
@@ -601,14 +605,16 @@ class NXSWriterControl(PyTango.Device_4Impl):
             "::UpdateConfigVariables()"
         try:
             self.set_state(PyTango.DevState.RUNNING)
+            cnf = json.loads(self.__rsp.configuration)
             if self.__name in self.__rsp.availableComponents():
-                dct = json.loads(self.__rsp.ComponentGroup)
+                dct = json.loads(cnf["ComponentGroup"])
                 dct[str(self.__name)] = True
-                self.__rsp.ComponentGroup = str(json.dumps(dct))
+                cnf["ComponentGroup"] = str(json.dumps(dct))
             else:
-                dct = json.loads(self.__rsp.DataSourceGroup)
+                dct = json.loads(cnf["DataSourceGroup"])
                 dct[str(self.__name)] = True
-                self.__rsp.DataSourceGroup = str(json.dumps(dct))
+                cnf["DataSourceGroup"] = str(json.dumps(dct))
+            self.__rsp.configuration = str(json.dumps(cnf))
             self.set_state(PyTango.DevState.ON)
         finally:
             if self.get_state() == PyTango.DevState.RUNNING:
@@ -630,15 +636,17 @@ class NXSWriterControl(PyTango.Device_4Impl):
         print >> self.log_info, "In ", self.get_name(), \
             "::UpdateChannels()"
         try:
-            dct = json.loads(self.__rsp.ComponentGroup)
+            cnf = json.loads(self.__rsp.configuration)
+            dct = json.loads(cnf["ComponentGroup"])
             if self.__name in dct:
                 dct[str(self.__name)] = False
-                self.__rsp.ComponentGroup = str(json.dumps(dct))
-            dct = json.loads(self.__rsp.DataSourceGroup)
+                cnf["ComponentGroup"] = str(json.dumps(dct))
+            dct = json.loads(cnf["DataSourceGroup"])
             if self.__name in dct:
                 dct[str(self.__name)] = False
-                self.__rsp.DataSourceGroup = str(json.dumps(dct))
+                cnf["DataSourceGroup"] = str(json.dumps(dct))
             self.set_state(PyTango.DevState.ON)
+            self.__rsp.configuration = str(json.dumps(cnf))
         finally:
             if self.get_state() == PyTango.DevState.RUNNING:
                 self.set_state(PyTango.DevState.ON)
