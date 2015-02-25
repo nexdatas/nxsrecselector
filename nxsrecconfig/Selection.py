@@ -184,7 +184,7 @@ class Selection(object):
                     dp = Utils.getProxies([name])
                     if not dp:
                         self.__selection["ConfigDevice"] = ''
-                except Exception:
+                except (PyTango.DevFailed, PyTango.Except, PyTango.DevError):
                     self.__selection["ConfigDevice"] = ''
 
     ## get method for automaticDataSources attribute
@@ -239,7 +239,7 @@ class Selection(object):
             if str(self.__selection["Door"]):
                 dp = PyTango.DeviceProxy(str(self.__selection["Door"]))
                 dp.ping()
-        except Exception:
+        except (PyTango.DevFailed, PyTango.Except, PyTango.DevError):
             self.__selection["Door"] = ''
         if "Door" not in self.__selection.keys() \
                 or not self.__selection["Door"]:
@@ -315,7 +315,6 @@ class Selection(object):
                                 toCheck[cp] = [cp]
                             toCheck[cp].append(str(ds))
         return toCheck
-                            
 
     def updateControllers(self, pools):
         ads = set(json.loads(self["AutomaticDataSources"]))
@@ -351,7 +350,6 @@ class Selection(object):
                 acps[acp] = True
 
         return json.dumps(acps)
-
 
     def getPools(self):
         if not self.__pools:
@@ -390,6 +388,7 @@ class Selection(object):
             self.__configModule = None
         else:
             from nxsconfigserver import XMLConfigurator
+            from MySQLdb.connections import DatabaseError
             self.__configModule = XMLConfigurator.XMLConfigurator()
             self.getMacroServer()
 
@@ -404,7 +403,7 @@ class Selection(object):
                 self.__configModule.jsonsettings = dbp
                 self.__configModule.open()
                 self.__configModule.availableComponents()
-            except Exception:
+            except DatabaseError:
                 user = getpass.getuser()
                 dbp = '{"host":"localhost","db":"nxsconfig",' \
                     + '"use_unicode":true,' \
@@ -467,7 +466,6 @@ class Selection(object):
                                 res.append(exp['name'])
         return res
 
-
     ## imports Enviroutment Data
     # \param names names of required variables
     # \param data dictionary with resulting data
@@ -479,7 +477,7 @@ class Selection(object):
             names = self.keys()
         if data is None:
             data = self
-        
+
         dp = Utils.openProxy(self.getMacroServer())
         rec = dp.Environment
         nenv = {}
@@ -533,12 +531,11 @@ class Selection(object):
                     else:
                         nenv[("%s" % var)] = vl
 
-                if cmddata:        
+                if cmddata:
                     for name, value in cmddata.items():
                         nenv[str(name)] = value
                 pk = pickle.dumps(dc)
                 msp.Environment = ['pickle', pk]
-
 
     ## fetches Enviroutment Data
     # \returns JSON String with important variables
@@ -580,6 +577,11 @@ class Selection(object):
                 msp.Environment = ['pickle', pk]
         return scanID
 
+
+class WrongStateError(Exception):
+    pass
+
+
 ## checkers if Tango devices are alive
 # \params cqueue queue with task of the form ['comp','alias','alias', ...]
 def checker(cqueue):
@@ -599,7 +601,7 @@ def checker(cqueue):
                 if dp.state() in [
                     PyTango.DevState.FAULT,
                     PyTango.DevState.ALARM]:
-                    raise Exception("FAULT or ALARM STATE")
+                    raise WrongStateError("FAULT or ALARM STATE")
                 dp.ping()
                 if not attr:
                     for gattr in ATTRIBUTESTOCHECK:
@@ -607,7 +609,8 @@ def checker(cqueue):
                             _ = getattr(dp, gattr)
                 else:
                     _ = getattr(dp, attr)
-            except Exception:
+            except (PyTango.DevFailed, PyTango.Except, PyTango.DevError,
+                    WrongStateError):
                 ok = False
                 break
         if ok:

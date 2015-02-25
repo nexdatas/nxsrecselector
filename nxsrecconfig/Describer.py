@@ -75,7 +75,6 @@ class Describer(object):
                         tr[ds].append(vds)
             result[cp] = tr
 
-
     ## describes given components after configuration creation
     # \param components given components.
     #        If None all available ones are taken

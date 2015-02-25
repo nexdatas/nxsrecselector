@@ -42,7 +42,7 @@ class Settings(object):
 
         ## configuration selection
         self.__selection = Selection(self.numberOfThreads)
-        
+
         self.__mntgrptools = MntGrpTools(self.__selection)
 
         ## configuration file
@@ -55,7 +55,6 @@ class Settings(object):
 
         ## timer filter list
         self.timerFilterList = ["*dgg*", "*ctctrl*"]
-
 
     ## provides values of the required variable
     # \param name name of the required variable
@@ -141,8 +140,6 @@ class Settings(object):
         __disableDataSources,
         doc='provides a list of Disable DataSources')
 
-
-
 ## read-write variables
 
     ## get method for configDevice attribute
@@ -160,7 +157,6 @@ class Settings(object):
     ## the json data string
     configDevice = property(__getConfigDevice, __setConfigDevice,
                             doc='configuration server device name')
-
 
     ## get method for poolBlacklist attribute
     # \returns name of poolBlacklist
@@ -573,7 +569,6 @@ class Settings(object):
         __fullDeviceNames,
         doc=' provides full names of pool devices')
 
-
     ##  sends ConfigVariables into ConfigServer
     #        and updates serialno if appendEntry selected
     def updateConfigVariables(self):
@@ -590,7 +585,7 @@ class Settings(object):
                     sn = int(cvars["serialno"])
                     sn += 1
                     cvars["serialno"] = str(sn)
-                except Exception:
+                except ValueError:
                     pass
             else:
                 cvars["serialno"] = str(1)
@@ -662,7 +657,7 @@ class Settings(object):
         self.__mntgrptools.macroServer = self.getMacroServer()
         if not self.__selection["MntGrp"]:
             self.switchMntGrp()
-        dpmg = self.__mntgrptools.getMntGrpProxy(pools)    
+        dpmg = self.__mntgrptools.getMntGrpProxy(pools)
         if not dpmg:
             return "{}"
         return str(dpmg.Configuration)
@@ -712,7 +707,6 @@ class Settings(object):
         self.__mntgrptools.configServer = self.setConfigInstance()
         if self.__mntgrptools.importMntGrp(jconf, pools):
             self.storeConfiguration()
-
 
     ## import setting from active measurement
     def importMntGrp(self):
@@ -799,4 +793,3 @@ class Settings(object):
             vl = getattr(self, attr)
             nenv[str(name)] = vl
         self.__selection.exportEnv(cmddata=nenv)
-

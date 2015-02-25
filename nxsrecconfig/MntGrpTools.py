@@ -129,7 +129,7 @@ class MntGrpTools(object):
                             tangods.append(
                                 [ch['name'], ch['label'], ch["source"]])
         return tangods
-                    
+
     def __readTangoChannels(self, conf, tangods, dsg, hel):
         if tangods and NXSTOOLS:
             jds = self.__createDataSources(tangods)
@@ -195,7 +195,7 @@ class MntGrpTools(object):
             if self.__selection["Timer"] != jtimers:
                 self.__selection["Timer"] = jtimers
                 changed = True
-        return changed        
+        return changed
 
     ## available mntgrps
     # \returns list of available measurement groups
@@ -318,7 +318,6 @@ class MntGrpTools(object):
             res = describer.components(cp, '', dstype)
         return res
 
-
     def __fetchChannels(self, dontdisplay, timers, pools):
         aliases = []
 
@@ -361,7 +360,7 @@ class MntGrpTools(object):
 
         if not mfullname:
             mfullname = self.__createMntGrp(
-                self.macroServer, 
+                self.macroServer,
                 mntGrpName, timer, pools)
 
         Utils.setEnv('ActiveMntGrp', mntGrpName, self.macroServer)
@@ -453,7 +452,6 @@ class MntGrpTools(object):
         self.__findSources(tangods, extangods, exsource)
         jds = self.__addKnownSources(extangods, sds)
         return self.__createUnknownSources(extangods, exsource, ads, jds)
-
 
     ## adds device into configuration dictionary
     # \param cls class instance

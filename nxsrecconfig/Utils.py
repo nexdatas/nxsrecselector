@@ -309,7 +309,7 @@ class Utils(object):
             if ac.data_format != PyTango.AttrDataFormat.SCALAR:
                 da = ap.read()
                 vl = da.value
-        except Exception:
+        except (PyTango.DevFailed, PyTango.Except, PyTango.DevError):
             if ac and ac.data_format != PyTango.AttrDataFormat.SCALAR \
                     and (da is None or not hasattr(da, 'dim_x')):
                 raise
@@ -340,7 +340,7 @@ class Utils(object):
                 sds = ds.split("://")
                 _ = PyTango.AttributeProxy(sds[-1])
                 source = sds[-1]
-        except Exception:
+        except (PyTango.DevFailed, PyTango.Except, PyTango.DevError):
             pass
         if not source:
             source = '%s/%s' % (name.encode(), 'Value')

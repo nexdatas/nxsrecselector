@@ -172,7 +172,7 @@ class DynamicComponent(object):
             if link:
                 self.__createLink(root, nxdata, path, field)
 
-    def __createNonSardanaNodes(self, created, avds, root, definition, 
+    def __createNonSardanaNodes(self, created, avds, root, definition,
                                 strategy="STEP"):
         dsources = self.__initdsources \
             if strategy == 'INIT' else self.__dsources
