@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #   This file is part of nxsrecconfig - NeXus Sardana Recorder Settings
 #
-#    Copyright (C) 2014 DESY, Jan Kotanski <jkotan@mail.desy.de>
+#    Copyright (C) 2014-2015 DESY, Jan Kotanski <jkotan@mail.desy.de>
 #
 #    nexdatas is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -110,7 +110,7 @@ class Utils(object):
             try:
                 dp.ping()
                 dps.append(dp)
-            except:
+            except (PyTango.DevFailed, PyTango.Except, PyTango.DevError):
                 pass
         return dps
 
@@ -130,7 +130,7 @@ class Utils(object):
                 dp.ping()
                 device = server
                 break
-            except:
+            except (PyTango.DevFailed, PyTango.Except, PyTango.DevError):
                 pass
         return device
 
@@ -340,7 +340,7 @@ class Utils(object):
                 sds = ds.split("://")
                 _ = PyTango.AttributeProxy(sds[-1])
                 source = sds[-1]
-        except:
+        except Exception:
             pass
         if not source:
             source = '%s/%s' % (name.encode(), 'Value')
@@ -412,7 +412,7 @@ class Utils(object):
             acps = json.loads(string)
             assert isinstance(acps, dict)
             jstring = string
-        except:
+        except (ValueError, AssertionError):
             lst = re.sub("[^\w]", "  ", string).split()
             if len(lst) % 2:
                 lst.append("")
@@ -432,7 +432,7 @@ class Utils(object):
             acps = json.loads(string)
             assert isinstance(acps, (list, tuple))
             jstring = string
-        except:
+        except (ValueError, AssertionError):
             lst = re.sub("[^\w]", "  ", string).split()
             jstring = json.dumps(lst)
         return jstring

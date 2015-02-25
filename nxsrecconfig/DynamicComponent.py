@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #   This file is part of nxsrecconfig - NeXus Sardana Recorder Settings
 #
-#    Copyright (C) 2014 DESY, Jan Kotanski <jkotan@mail.desy.de>
+#    Copyright (C) 2014-2015 DESY, Jan Kotanski <jkotan@mail.desy.de>
 #
 #    nexdatas is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -148,30 +148,19 @@ class DynamicComponent(object):
                 if dt in self.__npTn.keys() else nxtype
         return shape, nxtype
 
-    ## creates dynamic component
-    def create(self):
-        cps = self.__nexusconfig_device.availableComponents()
-        name = self.__defaultCP
-        while name in cps:
-            name = name + "x"
-        self.__dynamicCP = name
-
-        root = xml.dom.minidom.Document()
-        definition = root.createElement("definition")
-        root.appendChild(definition)
-        avds = self.__nexusconfig_device.availableDataSources()
-
-        created = []
+    def __createSardanaNodes(self, created, root, definition):
         for dd in self.__dictDSources:
             alias = self.__get_alias(str(dd["name"]))
             path, field = self.__getFieldPath(
                 self.__nexuspaths, self.__nexuslabels,
                 alias, self.__defaultpath)
+
             if alias in self.__components:
                 link = False
             else:
-                link = self.__getProp(self.__nexuslinks, self.__nexuslabels,
-                                      alias, self.__links)
+                link = self.__getProp(
+                    self.__nexuslinks, self.__nexuslabels,
+                    alias, self.__links)
             (parent, nxdata) = self.__createGroupTree(
                 root, definition, path, link)
             created.append(alias)
@@ -183,50 +172,16 @@ class DynamicComponent(object):
             if link:
                 self.__createLink(root, nxdata, path, field)
 
-        for ds in self.__dsources:
+    def __createNonSardanaNodes(self, created, avds, root, definition, 
+                                strategy="STEP"):
+        dsources = self.__initdsources \
+            if strategy == 'INIT' else self.__dsources
+        for ds in dsources:
             if ds not in created:
                 path, field = self.__getFieldPath(
                     self.__nexuspaths, self.__nexuslabels,
                     ds, self.__defaultpath)
 
-                if ds in self.__components:
-                    link = False
-                else:
-                    link = self.__getProp(
-                        self.__nexuslinks, self.__nexuslabels, ds,
-                        self.__links)
-                (parent, nxdata) = self.__createGroupTree(
-                    root, definition, path, link)
-
-                shape, nxtype = None, 'NX_CHAR'
-                if ds in avds:
-                    dsource = self.__nexusconfig_device.dataSources([str(ds)])
-                    indom = xml.dom.minidom.parseString(dsource[0])
-                    dss = indom.getElementsByTagName("datasource")
-                    if dss and shape is None:
-                        shape, nxtype = self.__shapeFromTango(dss[0])
-                        if not nxtype:
-                            nxtype = 'NX_CHAR'
-
-                nxtype = self.__getProp(
-                    self.__nexustypes, self.__nexuslabels, ds, nxtype)
-                shape = self.__getProp(
-                    self.__nexusshapes, self.__nexuslabels, ds, shape)
-
-                if ds in avds:
-                    self.__createField(root, parent, field, nxtype, ds,
-                                       dsnode=dss[0], shape=shape)
-                else:
-                    self.__createField(root, parent, field, nxtype, ds,
-                                       ds, shape)
-                if link:
-                    self.__createLink(root, nxdata, path, field)
-
-        for ds in self.__initdsources:
-            if ds not in created:
-                path, field = self.__getFieldPath(
-                    self.__nexuspaths, self.__nexuslabels,
-                    ds, self.__defaultpath)
                 if ds in self.__components:
                     link = False
                 else:
@@ -254,12 +209,30 @@ class DynamicComponent(object):
                 if ds in avds:
                     self.__createField(
                         root, parent, field, nxtype, ds,
-                        ds, shape, strategy='INIT', dsnode=dss[0])
+                        dsnode=dss[0], shape=shape, strategy=strategy)
                 else:
                     self.__createField(root, parent, field, nxtype, ds,
-                                       ds, shape, strategy='INIT')
+                                       ds, shape, strategy=strategy)
                 if link:
                     self.__createLink(root, nxdata, path, field)
+
+    ## creates dynamic component
+    def create(self):
+        cps = self.__nexusconfig_device.availableComponents()
+        name = self.__defaultCP
+        while name in cps:
+            name = name + "x"
+        self.__dynamicCP = name
+
+        root = xml.dom.minidom.Document()
+        definition = root.createElement("definition")
+        root.appendChild(definition)
+        avds = self.__nexusconfig_device.availableDataSources()
+
+        created = []
+        self.__createSardanaNodes(created, root, definition)
+        self.__createNonSardanaNodes(created, avds, root, definition, 'STEP')
+        self.__createNonSardanaNodes(created, avds, root, definition, 'INIT')
 
         self.__nexusconfig_device.xmlstring = str(root.toprettyxml(indent=""))
         self.__nexusconfig_device.storeComponent(str(self.__dynamicCP))
@@ -306,33 +279,32 @@ class DynamicComponent(object):
         host = None
         port = None
         source = None
+
         try:
             sname = name.split("://")
             if name and sname[0] == 'tango' and sname[-1].count('/') > 2:
-
                 source = sname[-1]
             else:
-
                 dp = PyTango.DeviceProxy(str(name))
                 if hasattr(dp, 'DataSource'):
                     ds = dp.DataSource
                     sds = ds.split("://")
                     source = sds[-1]
-
-            if source:
-                arr = source.split("/")
-                if len(arr) > 4 and ":" in arr[0]:
-                    device = "/".join(arr[1:-1])
-                    attr = arr[-1]
-                    hat = arr[0].split(":")
-                    if hat > 1:
-                        host = hat[0]
-                        port = hat[1]
-                elif len(arr) > 3:
-                    device = "/".join(arr[:-1])
-                    attr = arr[-1]
-        except:
+        except (PyTango.DevFailed, PyTango.Except, PyTango.DevError):
             pass
+
+        if source:
+            arr = source.split("/")
+            if len(arr) > 4 and ":" in arr[0]:
+                device = "/".join(arr[1:-1])
+                attr = arr[-1]
+                hat = arr[0].split(":")
+                if hat > 1:
+                    host = hat[0]
+                    port = hat[1]
+            elif len(arr) > 3:
+                device = "/".join(arr[:-1])
+                attr = arr[-1]
         return (attr, device, host, port)
 
     @classmethod
