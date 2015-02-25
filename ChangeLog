@@ -1,4 +1,4 @@
-2015-02-XX Jan Kotanski <jankotan@gmail.com>
+2015-02-25 Jan Kotanski <jankotan@gmail.com>
 	* simplifying the inteface, i.e
 	  removing many attributes duplaced in configuration
 	* moving commands from Settings into Selection
