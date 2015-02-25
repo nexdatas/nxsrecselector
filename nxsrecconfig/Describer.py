@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #   This file is part of nxsrecconfig - NeXus Sardana Recorder Settings
 #
-#    Copyright (C) 2014 DESY, Jan Kotanski <jkotan@mail.desy.de>
+#    Copyright (C) 2014-2015 DESY, Jan Kotanski <jkotan@mail.desy.de>
 #
 #    nexdatas is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -22,6 +22,7 @@
 
 import re
 import json
+import PyTango
 import xml.dom.minidom
 from .Utils import Utils
 
@@ -56,18 +57,12 @@ class Describer(object):
             cps = list(set(cps) - set(mand))
 
         if components is None:
-            for cp in mand:
-                dss = self.__getDataSourceAttributes(cp)
-                tr = {}
-                for ds in dss.keys():
-                    for vds in dss[ds]:
-                        if (not strategy or vds[0] == strategy) and \
-                                (not dstype or vds[1] == dstype):
-                            if ds not in tr:
-                                tr[ds] = []
-                            tr[ds].append(vds)
-                result[0][cp] = tr
+            self.__fillinresult(mand, strategy, dstype, result[0])
 
+        self.__fillinresult(cps, strategy, dstype, result[1])
+        return result
+
+    def __fillinresult(self, cps, strategy, dstype, result):
         for cp in cps:
             dss = self.__getDataSourceAttributes(cp)
             tr = {}
@@ -78,8 +73,7 @@ class Describer(object):
                         if ds not in tr:
                             tr[ds] = []
                         tr[ds].append(vds)
-            result[1][cp] = tr
-        return result
+            result[cp] = tr
 
     ## describes given components after configuration creation
     # \param components given components.
@@ -141,7 +135,7 @@ class Describer(object):
                     subc = re.finditer(
                         r"[\w]+",
                         dstxt[(index + len(label) + 2):]).next().group(0)
-                except Exception:
+                except (StopIteration, IndexError):
                     subc = ''
                 name = subc.strip() if subc else ""
                 name, dstype, record = self.__describeDataSource(name)
@@ -178,7 +172,7 @@ class Describer(object):
         record = None
         try:
             dsource = self.__nexusconfig_device.dataSources([str(name)])
-        except:
+        except (PyTango.DevFailed, PyTango.Except, PyTango.DevError):
             dsource = []
         if len(dsource) > 0:
             indom = xml.dom.minidom.parseString(dsource[0])
@@ -228,7 +222,7 @@ class Describer(object):
             if dim.hasAttribute("value"):
                 try:
                     value = int(dim.attributes["value"].value)
-                except:
+                except ValueError:
                     value = dim.attributes["value"].value
                 shape[index - 1] = value
         return shape

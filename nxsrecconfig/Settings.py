@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #   This file is part of nxsrecconfig - NeXus Sardana Recorder Settings
 #
-#    Copyright (C) 2014 DESY, Jan Kotanski <jkotan@mail.desy.de>
+#    Copyright (C) 2014-2015 DESY, Jan Kotanski <jkotan@mail.desy.de>
 #
 #    nexdatas is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -27,8 +27,6 @@ from .DynamicComponent import DynamicComponent
 from .Utils import Utils
 from .MntGrpTools import MntGrpTools
 from .Selection import Selection
-import pickle
-import getpass
 
 
 ## NeXus Sardana Recorder settings
@@ -43,54 +41,20 @@ class Settings(object):
         self.numberOfThreads = 20
 
         ## configuration selection
-        self.__selection = Selection(self, self.numberOfThreads)
+        self.__selection = Selection(self.numberOfThreads)
 
-        ## default zone
-        self.__defaultzone = 'Europe/Berlin'
-
-        self.__pureVar = [
-            "AppendEntry",
-            "ComponentsFromMntGrp",
-            "DynamicComponents",
-            "DynamicLinks",
-            "DynamicPath",
-            "TimeZone",
-            "ConfigDevice",
-            "WriterDevice",
-            "Door",
-            "MntGrp",
-            "ScanDir"
-            ]
-
-        self.__mntgrptools = MntGrpTools(self.__selection, self)
+        self.__mntgrptools = MntGrpTools(self.__selection)
 
         ## configuration file
         self.configFile = '/tmp/nxsrecconfig.cfg'
 
         ## tango database
         self.__db = PyTango.Database()
-        self.__selection.db = self
-
-        ## config server proxy
-        self.__configProxy = None
-        ## config server module
-        self.__configModule = None
         ## config writer proxy
         self.__writerProxy = None
-        ## module label
-        self.__moduleLabel = 'module'
-        self.__selection.moduleLabel = self.__moduleLabel
 
-        ## macro server instance
-        self.__macroserver = ""
-        ## pool instances
-        self.__pools = []
-        ## black list of pools
-        self.poolBlacklist = []
         ## timer filter list
         self.timerFilterList = ["*dgg*", "*ctctrl*"]
-
-        self.__nxsenv = "NeXusConfiguration"
 
     ## provides values of the required variable
     # \param name name of the required variable
@@ -159,6 +123,23 @@ class Settings(object):
         __dataSources,
         doc=' provides selected data sources')
 
+    ## provides a list of Disable DataSources
+    # \returns list of disable datasources
+    def __disableDataSources(self):
+        res = self.cpdescription()
+        dds = set()
+
+        for dss in res[1].values():
+            if isinstance(dss, dict):
+                for ds in dss.keys():
+                    dds.add(ds)
+        return list(dds)
+
+    ##  provides a list of Disable DataSources
+    disableDataSources = property(
+        __disableDataSources,
+        doc='provides a list of Disable DataSources')
+
 ## read-write variables
 
     ## get method for configDevice attribute
@@ -176,6 +157,20 @@ class Settings(object):
     ## the json data string
     configDevice = property(__getConfigDevice, __setConfigDevice,
                             doc='configuration server device name')
+
+    ## get method for poolBlacklist attribute
+    # \returns name of poolBlacklist
+    def __getPoolBlacklist(self):
+        return self.__selection.poolBlacklist
+
+    ## set method for poolBlacklist attribute
+    # \param name of poolBlacklist
+    def __setPoolBlacklist(self, name):
+        self.__selection.poolBlacklist = name
+
+    ## black list of pools
+    poolBlacklist = property(__getPoolBlacklist, __setPoolBlacklist,
+                             doc='pool black list')
 
     ## set method for configuration attribute
     # \param name of configuration
@@ -410,82 +405,23 @@ class Settings(object):
 ##  commands
 
     def __getPools(self):
-        if not self.__pools:
-            door = self.__getDoor()
-            self.updateMacroServer(door)
-        return self.__pools
+        return self.__selection.getPools()
 
     def updateMacroServer(self, door):
-        if not door:
-            raise Exception("Door '%s' cannot be found" % door)
-        self.__macroserver = Utils.getMacroServer(self.__db, door)
-        msp = Utils.openProxy(self.__macroserver)
-        pnames = msp.get_property("PoolNames")["PoolNames"]
-        if not pnames:
-            pnames = []
-        poolNames = list(
-            set(pnames) - set(self.poolBlacklist))
-        self.__pools = Utils.getProxies(poolNames)
+        return self.__selection.updateMacroServer(door)
 
     def getMacroServer(self):
-        if not self.__macroserver:
-            door = self.__getDoor()
-            self.updateMacroServer(door)
-        return self.__macroserver
+        return self.__selection.getMacroServer()
 
     ## sets config instances
     # \returns set config instance
     def setConfigInstance(self):
-        if "ConfigDevice" not in self.__selection.keys() \
-                or not self.__selection["ConfigDevice"]:
-            self.__getConfigDevice()
-
-        if self.__selection["ConfigDevice"] and \
-                self.__selection["ConfigDevice"].lower() != self.__moduleLabel:
-            self.__configProxy = Utils.openProxy(
-                self.__selection["ConfigDevice"])
-            self.__configProxy.open()
-            self.__configModule = None
-        else:
-            from nxsconfigserver import XMLConfigurator
-            self.__configModule = XMLConfigurator.XMLConfigurator()
-            self.getMacroServer()
-
-            data = {}
-            self.__importEnv(['DBParams'], data)
-            if 'DBParams' in data.keys():
-                dbp = data['DBParams']
-            else:
-                dbp = '{}'
-
-            try:
-                self.__configModule.jsonsettings = dbp
-                self.__configModule.open()
-                self.__configModule.availableComponents()
-            except:
-                user = getpass.getuser()
-                dbp = '{"host":"localhost","db":"nxsconfig",' \
-                    + '"use_unicode":true,' \
-                    + '"read_default_file":"/home/%s/.my.cnf"}' % user
-                self.__configModule.jsonsettings = dbp
-                self.__configModule.open()
-                self.__configModule.availableComponents()
-            self.__configProxy = None
-        return self.__configProxy \
-            if self.__configProxy else self.__configModule
+        return self.__selection.setConfigInstance()
 
     ## executes command on configuration server
     # \returns command result
     def __configCommand(self, command, var=None):
-        inst = self.setConfigInstance()
-        if var is None:
-            res = getattr(inst, command)()
-        else:
-            if self.__configProxy:
-                res = inst.command_inout(command, var)
-            else:
-                res = getattr(inst, command)(var)
-        return res
+        return self.__selection.configCommand(command, var)
 
     ## mandatory components
     # \returns list of mandatory components
@@ -525,40 +461,12 @@ class Settings(object):
     ## available pool channels
     # \returns pool channels of the macroserver pools
     def poolChannels(self):
-        res = []
-        ms = self.getMacroServer()
-        msp = Utils.openProxy(ms)
-        pn = msp.get_property("PoolNames")["PoolNames"]
-        if pn:
-            for pl in pn:
-                pool = Utils.openProxy(pl)
-                exps = pool.ExpChannelList
-                if exps:
-                    for jexp in exps:
-                        if jexp:
-                            exp = json.loads(jexp)
-                            if exp and isinstance(exp, dict):
-                                res.append(exp['name'])
-        return res
+        return self.__selection.poolChannels()
 
     ## available pool motors
     # \returns pool motors of the macroserver pools
     def poolMotors(self):
-        res = []
-        ms = self.getMacroServer()
-        msp = Utils.openProxy(ms)
-        pn = msp.get_property("PoolNames")["PoolNames"]
-        if pn:
-            for pl in pn:
-                pool = Utils.openProxy(pl)
-                exps = pool.MotorList
-                if exps:
-                    for jexp in exps:
-                        if jexp:
-                            exp = json.loads(jexp)
-                            if exp and isinstance(exp, dict):
-                                res.append(exp['name'])
-        return res
+        return self.__selection.poolMotors()
 
     ## saves configuration
     def saveConfiguration(self):
@@ -606,26 +514,6 @@ class Settings(object):
     variableComponents = property(
         __variableComponents,
         doc='provides components for all variables')
-
-    ## provides description of components
-    # \param dstype list datasets only with given datasource type.
-    #        If '' all available ones are taken
-    # \param full if True describes all available ones are taken
-    #        otherwise selectect, automatic and mandatory
-    # \returns description of required components
-    def cpdescription(self, dstype='', full=False):
-
-        nexusconfig_device = self.setConfigInstance()
-        describer = Describer(nexusconfig_device)
-        cp = None
-        if not full:
-            cp = list(set(self.components) |
-            set(self.automaticComponents) |
-            set(self.mandatoryComponents()))
-            res = describer.components(cp, 'STEP', dstype)
-        else:
-            res = describer.components(cp, '', dstype)
-        return res
 
     ## provides description of all components
     # \returns JSON string with description of all components
@@ -681,23 +569,6 @@ class Settings(object):
         __fullDeviceNames,
         doc=' provides full names of pool devices')
 
-    ## describe datasources
-    # \param datasources list for datasource names
-    # \returns list of dictionary with description of datasources
-    def getSourceDescription(self, datasources):
-        nexusconfig_device = self.setConfigInstance()
-        describer = Describer(nexusconfig_device)
-        dsres = describer.dataSources(set(datasources))
-        dslist = []
-        if isinstance(dsres, dict):
-            for ds in dsres.values():
-                elem = {}
-                elem["dsname"] = ds[0]
-                elem["dstype"] = ds[1]
-                elem["record"] = ds[2]
-                dslist.append(str(json.dumps(elem)))
-        return dslist
-
     ##  sends ConfigVariables into ConfigServer
     #        and updates serialno if appendEntry selected
     def updateConfigVariables(self):
@@ -714,7 +585,7 @@ class Settings(object):
                     sn = int(cvars["serialno"])
                     sn += 1
                     cvars["serialno"] = str(sn)
-                except Exception:
+                except ValueError:
                     pass
             else:
                 cvars["serialno"] = str(1)
@@ -725,8 +596,10 @@ class Settings(object):
     ## checks existing controllers of pools for
     #      AutomaticDataSources
     def updateControllers(self):
-        pools = self.__getPools()
-        self.__selection.updateControllers(pools)
+        jacps = self.__selection.updateControllers(self.__getPools())
+        if self.__selection["AutomaticComponentGroup"] != jacps:
+            self.__selection["AutomaticComponentGroup"] = jacps
+            self.storeConfiguration()
 
     ## provides available Timers from MacroServer pools
     # \returns  available Timers from MacroServer pools
@@ -738,23 +611,6 @@ class Settings(object):
     availableTimers = property(
         __availableTimers,
         doc='provides available Timers from MacroServer pools')
-
-    ## provides a list of Disable DataSources
-    # \returns list of disable datasources
-    def __disableDataSources(self):
-        res = self.cpdescription()
-        dds = set()
-
-        for dss in res[1].values():
-            if isinstance(dss, dict):
-                for ds in dss.keys():
-                    dds.add(ds)
-        return list(dds)
-
-    ##  provides a list of Disable DataSources
-    disableDataSources = property(
-        __disableDataSources,
-        doc='provides a list of Disable DataSources')
 
 # MntGrp methods
 
@@ -768,23 +624,58 @@ class Settings(object):
     ## deletes mntgrp
     # \param name mntgrp name
     def deleteMntGrp(self, name):
+        self.__mntgrptools.macroServer = self.getMacroServer()
         self.__mntgrptools.deleteMntGrp(name)
         inst = self.setConfigInstance()
         inst.deleteSelection(name)
 
+    ## describe datasources
+    # \param datasources list for datasource names
+    # \returns list of dictionary with description of datasources
+    def getSourceDescription(self, datasources):
+        self.__mntgrptools.configServer = self.setConfigInstance()
+        return self.__mntgrptools.getSourceDescription(datasources)
+
+    ## provides description of components
+    # \param dstype list datasets only with given datasource type.
+    #        If '' all available ones are taken
+    # \param full if True describes all available ones are taken
+    #        otherwise selectect, automatic and mandatory
+    # \returns description of required components
+    def cpdescription(self, dstype='', full=False):
+        self.__mntgrptools.configServer = self.setConfigInstance()
+        if not full:
+            self.__mntgrptools.components = list(
+                set(self.components) | set(self.automaticComponents) |
+                set(self.mandatoryComponents()))
+        return self.__mntgrptools.cpdescription(dstype, full)
+
     ## provides configuration of mntgrp
-    # \param proxy DeviceProxy of mntgrp
     # \returns string with mntgrp configuration
-    def mntGrpConfiguration(self, proxy=None):
+    def mntGrpConfiguration(self):
         pools = self.__getPools()
-        return self.__mntgrptools.mntGrpConfiguration(pools, proxy)
+        self.__mntgrptools.macroServer = self.getMacroServer()
+        if not self.__selection["MntGrp"]:
+            self.switchMntGrp()
+        dpmg = self.__mntgrptools.getMntGrpProxy(pools)
+        if not dpmg:
+            return "{}"
+        return str(dpmg.Configuration)
 
     ## check if active measurement group was changed
     # \returns True if it is different to the current setting
     def isMntGrpChanged(self):
         pools = self.__getPools()
-        mgconf = json.loads(self.__mntgrptools.mntGrpConfiguration(pools))
+        mgconf = json.loads(self.mntGrpConfiguration())
+        self.__mntgrptools.macroServer = self.getMacroServer()
+        self.__mntgrptools.configServer = self.setConfigInstance()
+        self.__mntgrptools.dataSources = self.dataSources
+        self.__mntgrptools.disableDataSources = self.disableDataSources
+        self.__mntgrptools.components = list(
+            set(self.components) | set(self.automaticComponents) |
+            set(self.mandatoryComponents()))
         llconf, _ = self.__mntgrptools.createMntGrpConfiguration(pools)
+        self.storeConfiguration()
         lsconf = json.loads(llconf)
         return not Utils.compareDict(mgconf, lsconf)
 
@@ -792,7 +683,15 @@ class Settings(object):
     # \returns string with mntgrp configuration
     def updateMntGrp(self):
         pools = self.__getPools()
+        self.__mntgrptools.macroServer = self.getMacroServer()
+        self.__mntgrptools.configServer = self.setConfigInstance()
+        self.__mntgrptools.dataSources = self.dataSources
+        self.__mntgrptools.disableDataSources = self.disableDataSources
+        self.__mntgrptools.components = list(
+            set(self.components) | set(self.automaticComponents) |
+            set(self.mandatoryComponents()))
         conf, mntgrp = self.__mntgrptools.createMntGrpConfiguration(pools)
+        self.storeConfiguration()
         dpmg = Utils.openProxy(mntgrp)
         dpmg.Configuration = conf
         return str(dpmg.Configuration)
@@ -800,16 +699,28 @@ class Settings(object):
     ## switch to active measurement
     def switchMntGrp(self):
         pools = self.__getPools()
-        return self.__mntgrptools.switchMntGrp(pools)
+        ms = self.getMacroServer()
+        amntgrp = Utils.getEnv('ActiveMntGrp', ms)
+        self.__selection["MntGrp"] = amntgrp
+        self.fetchConfiguration()
+        jconf = self.mntGrpConfiguration()
+        self.__mntgrptools.configServer = self.setConfigInstance()
+        if self.__mntgrptools.importMntGrp(jconf, pools):
+            self.storeConfiguration()
 
     ## import setting from active measurement
     def importMntGrp(self):
         pools = self.__getPools()
-        return self.__mntgrptools.importMntGrp(pools)
+        self.__mntgrptools.macroServer = self.getMacroServer()
+        self.__mntgrptools.configServer = self.setConfigInstance()
+        jconf = self.mntGrpConfiguration()
+        if self.__mntgrptools.importMntGrp(jconf, pools):
+            self.storeConfiguration()
 
     ## available mntgrps
     # \returns list of available measurement groups
     def availableMeasurementGroups(self):
+        self.__mntgrptools.macroServer = self.getMacroServer()
         return self.__mntgrptools.availableMeasurementGroups()
 
 # Dynamic component methods
@@ -859,116 +770,26 @@ class Settings(object):
     ## fetches Enviroutment Data
     # \returns JSON String with important variables
     def fetchEnvData(self):
-        params = ["ScanDir",
-                  "ScanFile",
-                  "ScanID",
-#                  "ActiveMntGrp",
-                  "NeXusSelectorDevice"]
-        res = {}
-        dp = Utils.openProxy(self.getMacroServer())
-        rec = dp.Environment
-        if rec[0] == 'pickle':
-            dc = pickle.loads(rec[1])
-            if 'new' in dc.keys():
-                for var in params:
-                    if var in dc['new'].keys():
-                        res[var] = dc['new'][var]
-        return json.dumps(res)
+        return self.__selection.fetchEnvData()
 
     ## stores Enviroutment Data
     # \param jdata JSON String with important variables
     def storeEnvData(self, jdata):
-        jdata = Utils.stringToDictJson(jdata)
-        data = json.loads(jdata)
-        scanID = -1
-        ms = self.getMacroServer()
-        msp = Utils.openProxy(ms)
-
-        rec = msp.Environment
-        if rec[0] == 'pickle':
-            dc = pickle.loads(rec[1])
-            if 'new' in dc.keys():
-                for var in data.keys():
-                    dc['new'][str(var)] = data[var]
-                pk = pickle.dumps(dc)
-                if 'ScanID' in dc['new'].keys():
-                    scanID = int(dc['new']["ScanID"])
-                msp.Environment = ['pickle', pk]
-        return scanID
+        return self.__selection.storeEnvData(jdata)
 
     ## imports all Enviroutment Data
     def importAllEnv(self):
-        self.__importEnv(self.__selection.keys(), self.__selection)
-
-    ## imports Enviroutment Data
-    # \param names names of required variables
-    # \param data dictionary with resulting data
-    def __importEnv(self, names, data):
-        params = ["ScanDir",
-                  "ScanFile"]
-
-        dp = Utils.openProxy(self.getMacroServer())
-        rec = dp.Environment
-        nenv = {}
-        if rec[0] == 'pickle':
-            dc = pickle.loads(rec[1])
-            if 'new' in dc.keys():
-                if self.__nxsenv in dc['new'].keys():
-                    nenv = dc['new'][self.__nxsenv]
-                for var in names:
-                    name = var if var in params else ("NeXus%s" % var)
-                    if name in dc['new'].keys():
-                        vl = dc['new'][name]
-                        if type(vl) not in [str, bool, int]:
-                            vl = json.dumps(vl)
-                        data[var] = vl
-                    elif var in nenv.keys():
-                        vl = nenv[var]
-                        if type(vl) not in [str, bool, int]:
-                            vl = json.dumps(vl)
-                        data[var] = vl
+        self.__selection.importEnv()
 
     ## exports all Enviroutment Data
     def exportAllEnv(self):
-        self.__exportEnv(self.__selection)
-
-    ## exports all Enviroutment Data
-    def __exportEnv(self, data):
-        params = ["ScanDir",
-                  "ScanFile"]
-
+        nenv = {}
         commands = {
             "components": "Components",
             "automaticComponents": "AutomaticComponents",
             "dataSources": "DataSources"
             }
-
-        ms = self.getMacroServer()
-        msp = Utils.openProxy(ms)
-
-        rec = msp.Environment
-        if rec[0] == 'pickle':
-            dc = pickle.loads(rec[1])
-            if 'new' in dc.keys():
-                if self.__nxsenv not in dc['new'].keys() \
-                        or not isinstance(dc['new'][self.__nxsenv], dict):
-                    dc['new'][self.__nxsenv] = {}
-                nenv = dc['new'][self.__nxsenv]
-                for var in data.keys():
-                    if var in self.__pureVar:
-                        vl = data[var]
-                    else:
-                        try:
-                            vl = json.loads(data[var])
-                        except ValueError:
-                            vl = data[var]
-                    if var in params:
-                        dc['new'][str(var)] = vl
-                    else:
-                        nenv[("%s" % var)] = vl
-
-                for attr, name in commands.items():
-                    vl = getattr(self, attr)
-                    nenv[str(name)] = vl
-                pk = pickle.dumps(dc)
-                msp.Environment = ['pickle', pk]
+        for attr, name in commands.items():
+            vl = getattr(self, attr)
+            nenv[str(name)] = vl
+        self.__selection.exportEnv(cmddata=nenv)
