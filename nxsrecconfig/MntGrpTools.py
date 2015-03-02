@@ -446,12 +446,12 @@ class MntGrpTools(object):
         if not ads:
             ads = []
         sds = self.getSourceDescription(ads)
-
         extangods = []
         exsource = {}
         self.__findSources(tangods, extangods, exsource)
         jds = self.__addKnownSources(extangods, sds)
-        return self.__createUnknownSources(extangods, exsource, ads, jds)
+        self.__createUnknownSources(extangods, exsource, ads, jds)
+        return jds
 
     ## adds device into configuration dictionary
     # \param cls class instance
