@@ -144,6 +144,8 @@ class Selection(object):
     def set(self, state):
         self.reset()
         for key in state.keys():
+            if key and key[0].upper() != key[0]:
+                key = key[0].upper() + key[1:]
             self.__selection[key] = state[key]
             if hasattr(self, "_Selection__reset" + key):
                 getattr(self, "_Selection__reset" + key)()
@@ -160,6 +162,8 @@ class Selection(object):
 
     def __getitem__(self, key):
         if key in self.keys():
+            if key and key[0].upper() != key[0]:
+                key = key[0].upper() + key[1:]
             if hasattr(self, "_Selection__update" + key):
                 getattr(self, "_Selection__update" + key)()
             return self.__selection[key]
