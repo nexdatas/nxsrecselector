@@ -363,7 +363,7 @@ class MntGrpTools(object):
                 self.macroServer,
                 mntGrpName, timer, pools)
 
-        Utils.setEnv('ActiveMntGrp', mntGrpName, self.macroServer)
+        Utils.setEnv('ActiveMntGrp', str(mntGrpName), self.macroServer)
         cnf['label'] = mntGrpName
         return mfullname
 

@@ -359,7 +359,7 @@ class Settings(object):
     # \param name of ScanDir
     def __setScanDir(self, name):
         ms = self.getMacroServer()
-        Utils.setEnv('ScanDir', name, ms)
+        Utils.setEnv('ScanDir', str(name), ms)
 
     ## the json data string
     scanDir = property(__getScanDir, __setScanDir,
