@@ -134,9 +134,14 @@ class NXSWriterControl(PyTango.Device_4Impl):
 #------------------------------------------------------------------
     def read_SelectedChannels(self, attr):
         print >> self.log_info, "In ", self.get_name(), "::read_SelectedChannels()"
+        tm = json.loads(self.__rsp.configuration)["Timer"]
+        try:
+            timers = json.loads(tm)
+        except:
+            timers = [tm]
         components = set(self.__rsp.Components)
         components.update(self.__rsp.DataSources)
-        components.update(json.loads(self.__rsp.timer))
+        components.update(json.loads(timers))
         components.update(self.__rsp.automaticComponents)
         components.update(self.__rsp.mandatoryComponents())
         attr.set_value(list(sorted(components)))
