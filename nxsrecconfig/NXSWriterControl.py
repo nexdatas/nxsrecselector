@@ -137,7 +137,7 @@ class NXSWriterControl(PyTango.Device_4Impl):
         tm = json.loads(self.__rsp.configuration)["Timer"]
         try:
             timers = json.loads(tm)
-        except:
+        except Exception:
             timers = [tm]
         components = set(self.__rsp.Components)
         components.update(self.__rsp.DataSources)
@@ -161,7 +161,7 @@ class NXSWriterControl(PyTango.Device_4Impl):
         tm = json.loads(self.__rsp.configuration)["Timer"]
         try:
             timers = json.loads(tm)
-        except:
+        except Exception:
             timers = [tm]
         attr.set_value(timers)
 
@@ -173,7 +173,7 @@ class NXSWriterControl(PyTango.Device_4Impl):
         tm = attr.get_write_value()
         try:
             timers = json.dumps(tm)
-        except:
+        except Exception:
             timers = tm
         cnf = json.loads(self.__rsp.configuration)
         cnf["Timer"] = timers
@@ -305,7 +305,7 @@ class NXSWriterControl(PyTango.Device_4Impl):
         try:
             cps = json.loads(
                 json.loads(self.__rsp.configuration)["AutomaticComponentGroup"]
-                ).keys())
+                ).keys()
         except:
             pass    
         attr.set_value(cps)
