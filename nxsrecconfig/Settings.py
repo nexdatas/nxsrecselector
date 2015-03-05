@@ -471,7 +471,7 @@ class Settings(object):
     ## saves configuration
     def saveConfiguration(self):
         fl = open(self.configFile, "w+")
-        json.dump(self.__selection, fl)
+        json.dump(self.__selection.get(), fl)
 
     ## saves configuration
     def storeConfiguration(self):
