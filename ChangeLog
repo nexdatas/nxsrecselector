@@ -1,4 +1,8 @@
 2015-03-04 Jan Kotanski <jankotan@gmail.com>
+	* fix for saveing configuration to file
+	* tagged as v1.14.4
+
+2015-03-04 Jan Kotanski <jankotan@gmail.com>
 	* making first letter of Configuration keys capital
 	* tagged as v1.14.3
 
