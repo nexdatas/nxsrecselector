@@ -296,7 +296,8 @@ class MntGrpTools(object):
         cnf['monitor'] = fullname
         cnf['timer'] = fullname
         if len(mtimers) > 1:
-            ltimers = set(mtimers[1:])
+            ltimers.clear()
+            ltimers.update(set(mtimers[1:]))
             if timer in ltimers:
                 ltimers.remove(timer)
         return timer
