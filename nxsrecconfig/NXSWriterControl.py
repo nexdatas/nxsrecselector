@@ -611,6 +611,7 @@ class NXSWriterControl(PyTango.Device_4Impl):
         try:
             self.set_state(PyTango.DevState.RUNNING)
             cnf = json.loads(self.__rsp.configuration)
+            pch = self.__rsp.PoolChannels()
             if self.__name in self.__rsp.availableComponents():
                 dct = json.loads(cnf["ComponentGroup"])
                 dct[str(self.__name)] = True
