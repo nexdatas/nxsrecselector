@@ -101,6 +101,8 @@ class Selection(object):
         self.__selection["AutomaticDataSources"] = '[]'
         ## selected datasources
         self.__selection["DataSourceGroup"] = '{}'
+        ## init datasources
+        self.__selection["InitDataSources"] = '[]'
         ## group of optional components available for automatic selqection
         self.__selection["OptionalComponents"] = '[]'
         ## appending new entries to existing file
