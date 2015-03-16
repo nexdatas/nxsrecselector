@@ -1,3 +1,7 @@
+2015-03-XX Jan Kotanski <jankotan@gmail.com>
+	* adding InitDataSources
+	* tagged as v1.15.0
+
 2015-03-05 Jan Kotanski <jankotan@gmail.com>
 	* fix selecting timers
 	* tagged as v1.14.5
