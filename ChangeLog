@@ -1,3 +1,12 @@
+2015-03-18 Jan Kotanski <jankotan@gmail.com>
+	* adding synchronziation of tango DS with sardana
+	* adding InitDataSources
+	* tagged as v1.15.0
+
+2015-03-05 Jan Kotanski <jankotan@gmail.com>
+	* fix selecting timers
+	* tagged as v1.14.5
+
 2015-03-05 Jan Kotanski <jankotan@gmail.com>
 	* fix for saveing configuration to file
 	* tagged as v1.14.4

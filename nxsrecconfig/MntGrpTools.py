@@ -66,7 +66,6 @@ class MntGrpTools(object):
 
     ## set active measurement group from components
     def createMntGrpConfiguration(self, pools):
-#        pools = self.__getPools()
         cnf = {}
         cnf['controllers'] = {}
         cnf['description'] = "Measurement Group"
@@ -296,7 +295,8 @@ class MntGrpTools(object):
         cnf['monitor'] = fullname
         cnf['timer'] = fullname
         if len(mtimers) > 1:
-            ltimers = set(mtimers[1:])
+            ltimers.clear()
+            ltimers.update(set(mtimers[1:]))
             if timer in ltimers:
                 ltimers.remove(timer)
         return timer
@@ -422,7 +422,8 @@ class MntGrpTools(object):
         df = XMLFile("ds.xml")
         sr = NDSource(df)
         sr.initTango(
-            name, device, "attribute", attribute, host, port)
+            name, device, "attribute", attribute, host, port,
+            group='__CLIENT__')
         return df.prettyPrint()
 
     def __createUnknownSources(self, extangods, exsource, ads, jds):
@@ -462,8 +463,7 @@ class MntGrpTools(object):
     # \param timer device timer
     # \param index device index
     # \returns next device index
-    @classmethod
-    def addDevice(cls, device, dontdisplay, pools, cnf,
+    def addDevice(self, device, dontdisplay, pools, cnf,
                   timer, index, fullnames=None):
         if not fullnames:
             fullnames = Utils.getFullDeviceNames(pools, [device, timer])
@@ -473,14 +473,23 @@ class MntGrpTools(object):
         timers = Utils.getFullDeviceNames(pools, [timer])
         fulltimer = fullnames[timer] \
             if timers and timer in fullnames.keys() else ""
-        if not ctrl:
-            return index
-
-        cls.__addController(cnf, ctrl, fulltimer)
-        fullname = fullnames[device] \
-            if fullnames and device in fullnames.keys() else ""
-        index = cls.__addChannel(cnf, ctrl, device, fullname,
+        if ctrl:
+            self.__addController(cnf, ctrl, fulltimer)
+            fullname = fullnames[device] \
+                if fullnames and device in fullnames.keys() else ""
+            index = self.__addChannel(cnf, ctrl, device, fullname,
                                      dontdisplay, index)
+        else:
+            sds = self.getSourceDescription([device])
+            if sds:
+                js = json.loads(sds[0])
+                if js["dstype"] == 'TANGO':
+                    ctrl = "__tango__"
+                    self.__addController(cnf, ctrl, fulltimer)
+                    index = self.__addTangoChannel(
+                        cnf, ctrl, device, str(js["record"]),
+                        dontdisplay, index)
+
         return index
 
     ## adds controller into configuration dictionary
@@ -523,6 +532,59 @@ class MntGrpTools(object):
             index += 1
             dct['instrument'] = None
             dct['label'] = unicode(device)
+            dct['name'] = unicode(device)
+            dct['ndim'] = 0
+            dct['nexus_path'] = u''
+            dct['normalization'] = 0
+            dct['output'] = True
+            dct['shape'] = shp
+
+            if device in dontdisplay:
+                dct['plot_axes'] = []
+                dct['plot_type'] = 0
+            elif dct['shape'] and len(dct['shape']) == 1:
+                dct['plot_axes'] = ['<idx>']
+                dct['plot_type'] = 1
+            elif dct['shape'] and len(dct['shape']) == 2:
+                dct['plot_axes'] = ['<idx>', '<idx>']
+                dct['plot_type'] = 2
+            else:
+                dct['plot_axes'] = ['<mov>']
+                dct['plot_type'] = 1
+
+            dct['source'] = source
+            ctrlChannels[fullname] = dct
+
+        return index
+
+
+    ## adds  tango channel into configuration dictionary
+    @classmethod
+    def __addTangoChannel(cls, cnf, ctrl, device, record, dontdisplay, index):
+
+        ctrlChannels = cnf['controllers'][ctrl]['units']['0'][
+            u'channels']
+        fullname = "tango://%s" % record
+        srecord = record.split("/")
+        if srecord and len(srecord) > 1 and ":" in srecord[0]:
+            label = "/".join(srecord[1:])
+        else:
+            label = record
+        if not fullname in ctrlChannels.keys():
+            source = record
+            shp, dt, _, ut = Utils.getShapeTypeValue(source)
+            dct = {}
+            dct['_controller_name'] = unicode(ctrl)
+            dct['_unit_id'] = u'0'
+            dct['conditioning'] = u''
+            dct['data_type'] = dt
+            dct['data_units'] = ut
+            dct['enabled'] = True
+            dct['full_name'] = fullname
+            dct['index'] = index
+            index += 1
+            dct['instrument'] = None
+            dct['label'] = unicode(label)
             dct['name'] = unicode(device)
             dct['ndim'] = 0
             dct['nexus_path'] = u''

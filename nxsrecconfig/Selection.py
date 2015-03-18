@@ -101,6 +101,8 @@ class Selection(object):
         self.__selection["AutomaticDataSources"] = '[]'
         ## selected datasources
         self.__selection["DataSourceGroup"] = '{}'
+        ## init datasources
+        self.__selection["InitDataSources"] = '[]'
         ## group of optional components available for automatic selqection
         self.__selection["OptionalComponents"] = '[]'
         ## appending new entries to existing file
@@ -494,12 +496,12 @@ class Selection(object):
                     name = var if var in params else ("NeXus%s" % var)
                     if name in dc['new'].keys():
                         vl = dc['new'][name]
-                        if type(vl) not in [str, bool, int]:
+                        if type(vl) not in [str, bool, int, unicode]:
                             vl = json.dumps(vl)
                         data[var] = vl
                     elif var in nenv.keys():
                         vl = nenv[var]
-                        if type(vl) not in [str, bool, int]:
+                        if type(vl) not in [str, bool, int, unicode]:
                             vl = json.dumps(vl)
                         data[var] = vl
 

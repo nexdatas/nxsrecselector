@@ -741,6 +741,10 @@ class Settings(object):
                 dcpcreator.setDictDSources(params[1])
             if len(params) > 2 and params[2]:
                 dcpcreator.setInitDSources(json.loads(params[2]))
+            else:
+                dcpcreator.setInitDSources(json.loads(
+                        self.__selection["InitDataSources"]))
+
         dcpcreator.setLabelParams(
             self.__selection["Labels"],
             self.__selection["LabelPaths"],
