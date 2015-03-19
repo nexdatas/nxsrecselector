@@ -621,8 +621,7 @@ def checker(cqueue):
                             _ = getattr(dp, gattr)
                 else:
                     _ = getattr(dp, attr)
-            except (PyTango.DevFailed, PyTango.Except, PyTango.DevError,
-                    WrongStateError):
+            except Exception:
                 ok = False
                 break
         if ok:
