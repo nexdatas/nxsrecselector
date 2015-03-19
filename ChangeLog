@@ -1,4 +1,8 @@
 2015-03-18 Jan Kotanski <jankotan@gmail.com>
+	* fix bugs for checker of AutomaticComponents
+	* tagged as v1.16.1
+
+2015-03-18 Jan Kotanski <jankotan@gmail.com>
 	* adding defaultAutomaticComponents
 	* tagged as v1.16.0
 
