@@ -1,4 +1,8 @@
 2015-03-18 Jan Kotanski <jankotan@gmail.com>
+	* adding defaultAutomaticComponents
+	* tagged as v1.16.0
+
+2015-03-18 Jan Kotanski <jankotan@gmail.com>
 	* adding synchronziation of tango DS with sardana
 	* adding InitDataSources
 	* tagged as v1.15.0

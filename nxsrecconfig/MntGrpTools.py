@@ -557,7 +557,6 @@ class MntGrpTools(object):
 
         return index
 
-
     ## adds  tango channel into configuration dictionary
     @classmethod
     def __addTangoChannel(cls, cnf, ctrl, device, record, dontdisplay, index):

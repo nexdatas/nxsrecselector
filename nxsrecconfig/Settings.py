@@ -55,6 +55,8 @@ class Settings(object):
 
         ## timer filter list
         self.timerFilterList = ["*dgg*", "*ctctrl*"]
+        ## default automaticComponents
+        self.defaultAutomaticComponents = []
 
     ## provides values of the required variable
     # \param name name of the required variable
@@ -600,6 +602,13 @@ class Settings(object):
         if self.__selection["AutomaticComponentGroup"] != jacps:
             self.__selection["AutomaticComponentGroup"] = jacps
             self.storeConfiguration()
+
+    ## reset automaticComponentGroup to defaultAutomaticComponents
+    def resetAutomaticComponents(self):
+        self.__selection.resetAutomaticComponents(
+            self.defaultAutomaticComponents)
+        self.updateControllers()
+        self.storeConfiguration()
 
     ## provides available Timers from MacroServer pools
     # \returns  available Timers from MacroServer pools
