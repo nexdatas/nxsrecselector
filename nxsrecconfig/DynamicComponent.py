@@ -262,7 +262,9 @@ class DynamicComponent(object):
         if len(field) > 12 and field[:8] == 'tango://':
             field = field[8:]
         return (path,
-                field.replace("/", "_").replace(":", "_").replace(".", "_"))
+                field.replace(" ", "_").replace("/", "_").replace(
+                ":", "_").replace(".", "_").replace("\\", "_").replace(
+                ";", "_").lower())
 
     @classmethod
     def __createLink(cls, root, entry, path, name):

@@ -1,8 +1,12 @@
-2015-03-18 Jan Kotanski <jankotan@gmail.com>
+2015-03-19 Jan Kotanski <jankotan@gmail.com>
+	* replace ' ' by '_' in dynamic component fields
+	* tagged as v1.16.2
+
+2015-03-19 Jan Kotanski <jankotan@gmail.com>
 	* fix bugs for checker of AutomaticComponents
 	* tagged as v1.16.1
 
-2015-03-18 Jan Kotanski <jankotan@gmail.com>
+2015-03-19 Jan Kotanski <jankotan@gmail.com>
 	* adding defaultAutomaticComponents
 	* tagged as v1.16.0
 
