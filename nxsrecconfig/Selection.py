@@ -322,6 +322,12 @@ class Selection(object):
                             toCheck[cp].append(str(ds))
         return toCheck
 
+    def resetAutomaticComponents(self, components):
+        acps = {}
+        for cp in components:
+            acps[cp] = False
+        self["AutomaticComponentGroup"] = json.dumps(acps)
+
     def updateControllers(self, pools):
         ads = set(json.loads(self["AutomaticDataSources"]))
         nonexisting = []

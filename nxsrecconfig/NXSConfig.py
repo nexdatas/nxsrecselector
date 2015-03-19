@@ -94,6 +94,9 @@ class NXSRecSelector(PyTango.Device_4Impl):
             if self.PoolBlacklist else []
         self.__stg.timerFilterList = self.TimerFilterList \
             if self.TimerFilterList else ["*dgg*", "*ctctrl*"]
+        self.__stg.defaultAutomaticComponents = \
+            self.DefaultAutomaticComponents \
+            if self.DefaultAutomaticComponents else []
 
 #------------------------------------------------------------------
 #    Always excuted hook method
@@ -577,6 +580,30 @@ class NXSRecSelector(PyTango.Device_4Impl):
 
 #---- UpdateControllers command State Machine -----------------
     def is_UpdateControllers_allowed(self):
+        if self.get_state() in [PyTango.DevState.RUNNING]:
+            return False
+        return True
+
+#------------------------------------------------------------------
+#    ResetAutomaticComponents:
+#
+#    Description: reset AutomaticComponentGroup
+#        to DefaultAutomaticComponents
+#
+#------------------------------------------------------------------
+    def ResetAutomaticComponents(self):
+        print >> self.log_info, "In ", self.get_name(), \
+            "::ResetAutomaticComponents()"
+        try:
+            self.set_state(PyTango.DevState.RUNNING)
+            self.__stg.resetAutomaticComponents()
+            self.set_state(PyTango.DevState.ON)
+        finally:
+            if self.get_state() == PyTango.DevState.RUNNING:
+                self.set_state(PyTango.DevState.ON)
+
+#---- ResetAutomaticComponents command State Machine -----------------
+    def is_ResetAutomaticComponents_allowed(self):
         if self.get_state() in [PyTango.DevState.RUNNING]:
             return False
         return True
@@ -1211,6 +1238,10 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
            [PyTango.DevVarStringArray,
             "list of timer filters",
             []],
+       'DefaultAutomaticComponents':
+           [PyTango.DevVarStringArray,
+            "list of default automatic components",
+            []],
         }
 
     ##    Command definitions
@@ -1258,6 +1289,9 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
             [[PyTango.DevVoid, ""],
              [PyTango.DevBoolean, "true if mntgrp changed"]],
         'UpdateControllers':
+            [[PyTango.DevVoid, ""],
+             [PyTango.DevVoid, ""]],
+        'ResetAutomaticComponents':
             [[PyTango.DevVoid, ""],
              [PyTango.DevVoid, ""]],
         'UpdateConfigVariables':
