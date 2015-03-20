@@ -152,9 +152,8 @@ class Settings(object):
     ## set method for configDevice attribute
     # \param name of configDevice
     def __setConfigDevice(self, name):
-        if name != self.__selection["ConfigDevice"]:
-            self.__selection["ConfigDevice"] = name
-            self.switchMntGrp()
+        self.__selection["ConfigDevice"] = name
+        self.switchMntGrp()
 
     ## the json data string
     configDevice = property(__getConfigDevice, __setConfigDevice,
@@ -329,8 +328,6 @@ class Settings(object):
     def __setDoor(self, name):
         self.__selection["Door"] = name
         self.updateMacroServer(self.__selection["Door"])
-        if self.__selection["ConfigDevice"]:
-            self.storeConfiguration()
 
     ## the json data string
     door = property(__getDoor, __setDoor,
@@ -708,9 +705,10 @@ class Settings(object):
     ## switch to active measurement
     def switchMntGrp(self):
         pools = self.__getPools()
-        ms = self.getMacroServer()
-        amntgrp = Utils.getEnv('ActiveMntGrp', ms)
-        self.__selection["MntGrp"] = amntgrp
+        if not self.__selection["MntGrp"]:
+            ms = self.getMacroServer()
+            amntgrp = Utils.getEnv('ActiveMntGrp', ms)
+            self.__selection["MntGrp"] = amntgrp
         self.fetchConfiguration()
         jconf = self.mntGrpConfiguration()
         self.__mntgrptools.configServer = self.setConfigInstance()
