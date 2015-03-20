@@ -296,7 +296,10 @@ class Selection(object):
                 self.__db, "NXSDataWriter")
 
     def __toCheck(self, rcp, acps, ads, nonexisting):
-        describer = Describer(self.setConfigInstance())
+        inst = self.setConfigInstance()
+        describer = Describer(inst)
+        avcp = inst.availableComponents()
+        rcp.update(set(acps) - set(avcp))
         toCheck = {}
         for acp in acps.keys():
             res = describer.components([acp], '', '')
@@ -338,7 +341,6 @@ class Selection(object):
                 nonexisting.append(dev)
 
         acps = json.loads(self["AutomaticComponentGroup"])
-
         rcp = set()
         toCheck = self.__toCheck(rcp, acps, ads, nonexisting)
 
