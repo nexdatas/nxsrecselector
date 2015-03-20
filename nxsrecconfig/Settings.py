@@ -57,6 +57,8 @@ class Settings(object):
         self.timerFilterList = ["*dgg*", "*ctctrl*"]
         ## default automaticComponents
         self.defaultAutomaticComponents = []
+        if not self.__server:
+            self.fetchConfiguration()
 
     ## provides values of the required variable
     # \param name name of the required variable
