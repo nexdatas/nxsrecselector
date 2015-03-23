@@ -1,3 +1,7 @@
+2015-03-23 Jan Kotanski <jankotan@gmail.com>
+	* setting ActiveMntGrp on init
+	* tagged as v1.16.5
+
 2015-03-20 Jan Kotanski <jankotan@gmail.com>
 	* fix for loading configuration on start without server
 	* tagged as v1.16.4
