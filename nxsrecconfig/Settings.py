@@ -59,6 +59,10 @@ class Settings(object):
         self.defaultAutomaticComponents = []
         if not self.__server:
             self.fetchConfiguration()
+        ms = self.getMacroServer()
+        amntgrp = Utils.getEnv('ActiveMntGrp', ms)
+        self.__selection["MntGrp"] = amntgrp
+
 
     ## provides values of the required variable
     # \param name name of the required variable
