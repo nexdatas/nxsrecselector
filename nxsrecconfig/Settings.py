@@ -57,12 +57,22 @@ class Settings(object):
         self.timerFilterList = ["*dgg*", "*ctctrl*"]
         ## default automaticComponents
         self.defaultAutomaticComponents = []
+
+        self.__setupSelection()
+
+    def __setupSelection(self):    
         if not self.__server:
             self.fetchConfiguration()
         ms = self.getMacroServer()
         amntgrp = Utils.getEnv('ActiveMntGrp', ms)
-        self.__selection["MntGrp"] = amntgrp
-
+        if amntgrp:
+            self.__selection["MntGrp"] = amntgrp
+        else:
+            avsel = self.availableSelections()
+            if avsel and avsel[0]:
+                print avsel
+                self.__selection["MntGrp"] = avsel[0]
+        self.fetchConfiguration()
 
     ## provides values of the required variable
     # \param name name of the required variable
