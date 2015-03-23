@@ -60,7 +60,7 @@ class Settings(object):
 
         self.__setupSelection()
 
-    def __setupSelection(self):    
+    def __setupSelection(self):
         if not self.__server:
             self.fetchConfiguration()
         ms = self.getMacroServer()
