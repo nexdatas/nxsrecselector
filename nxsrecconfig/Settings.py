@@ -70,7 +70,6 @@ class Settings(object):
         else:
             avsel = self.availableSelections()
             if avsel and avsel[0]:
-                print avsel
                 self.__selection["MntGrp"] = avsel[0]
         self.fetchConfiguration()
 
@@ -168,9 +167,10 @@ class Settings(object):
     ## set method for configDevice attribute
     # \param name of configDevice
     def __setConfigDevice(self, name):
-        self.__selection["ConfigDevice"] = name
-        self.switchMntGrp()
-
+        if name != self.__selection["ConfigDevice"]:
+            self.__selection["ConfigDevice"] = name
+            self.switchMntGrp()
+ 
     ## the json data string
     configDevice = property(__getConfigDevice, __setConfigDevice,
                             doc='configuration server device name')
