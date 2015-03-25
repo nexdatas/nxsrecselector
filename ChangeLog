@@ -1,4 +1,8 @@
 2015-03-25 Jan Kotanski <jankotan@gmail.com>
+	* second fix for duplicated in configserver tango datasources
+	* tagged as v1.16.8
+
+2015-03-25 Jan Kotanski <jankotan@gmail.com>
 	* fix for duplicated in configserver tango datasources
 	* tagged as v1.16.7
 

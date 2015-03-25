@@ -403,18 +403,36 @@ class MntGrpTools(object):
                 [name, initsource, source, msource])
 
     @classmethod
-    def __addKnownSources(cls, extangods, sds, jds=None):
-        if not jds:
-            jds = {}
+    def __addKnownSources(cls, extangods, sds, existing=None):
+        jds = {}
+        found = set()
+        if not existing:
+            existing = []
         for ds in sds:
             js = json.loads(ds)
-            for _, initsource, source, msource in extangods:
-                if source == js["record"]:
-                    jds[initsource] = js["dsname"]
-                    break
-                elif msource == js["record"]:
-                    jds[initsource] = js["dsname"]
-                    break
+            if js["dsname"] in existing:
+                for _, initsource, source, msource in extangods:
+                    if source == js["record"]:
+                        jds[initsource] = js["dsname"]
+                        found.add(str(js["record"]))
+                        break
+                    elif msource == js["record"]:
+                        jds[initsource] = js["dsname"]
+                        found.add(str(js["record"]))
+                        break
+        for ds in sds:
+            js = json.loads(ds)
+            if js["dsname"] not in existing and \
+                    js["record"] not in found:
+                for _, initsource, source, msource in extangods:
+                    if source == js["record"]:
+                        jds[initsource] = js["dsname"]
+                        found.add(str(js["dsname"]))
+                        break
+                    elif msource == js["record"]:
+                        jds[initsource] = js["dsname"]
+                        found.add(str(js["dsname"]))
+                        break
         return jds
 
     @classmethod
@@ -444,17 +462,15 @@ class MntGrpTools(object):
                     jds[initsource] = name
 
     def __createDataSources(self, tangods, dsg):
+        extangods = []
+        exsource = {}
+
         ads = self.configServer.availableDataSources()
         if not ads:
             ads = []
         sds = self.getSourceDescription(ads)
-        extangods = []
-        exsource = {}
         self.__findSources(tangods, extangods, exsource)
-        jds = self.__addKnownSources(extangods,
-                                     set(sds) & set(dsg.keys()))
-        jds = self.__addKnownSources(extangods,
-                                     set(sds) - set(dsg.keys()), jds)
+        jds = self.__addKnownSources(extangods, sds, dsg.keys())
         self.__createUnknownSources(extangods, exsource, ads, jds)
         return jds
 
