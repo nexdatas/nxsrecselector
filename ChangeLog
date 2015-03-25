@@ -1,3 +1,7 @@
+2015-03-25 Jan Kotanski <jankotan@gmail.com>
+	* fix for duplicated in configserver tango datasources
+	* tagged as v1.16.7
+
 2015-03-24 Jan Kotanski <jankotan@gmail.com>
 	* fix for deselecting elements
 	* tagged as v1.16.6

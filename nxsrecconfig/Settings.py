@@ -170,7 +170,7 @@ class Settings(object):
         if name != self.__selection["ConfigDevice"]:
             self.__selection["ConfigDevice"] = name
             self.switchMntGrp()
- 
+
     ## the json data string
     configDevice = property(__getConfigDevice, __setConfigDevice,
                             doc='configuration server device name')

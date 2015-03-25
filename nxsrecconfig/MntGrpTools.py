@@ -131,7 +131,7 @@ class MntGrpTools(object):
 
     def __readTangoChannels(self, conf, tangods, dsg, hel):
         if tangods and NXSTOOLS:
-            jds = self.__createDataSources(tangods)
+            jds = self.__createDataSources(tangods, dsg)
             for ctrl in conf["controllers"].values():
                 if 'units' in ctrl.keys() and \
                         '0' in ctrl['units'].keys():
@@ -403,8 +403,9 @@ class MntGrpTools(object):
                 [name, initsource, source, msource])
 
     @classmethod
-    def __addKnownSources(cls, extangods, sds):
-        jds = {}
+    def __addKnownSources(cls, extangods, sds, jds=None):
+        if not jds:
+            jds = {}
         for ds in sds:
             js = json.loads(ds)
             for _, initsource, source, msource in extangods:
@@ -442,7 +443,7 @@ class MntGrpTools(object):
                     self.configServer.storeDataSource(str(name))
                     jds[initsource] = name
 
-    def __createDataSources(self, tangods):
+    def __createDataSources(self, tangods, dsg):
         ads = self.configServer.availableDataSources()
         if not ads:
             ads = []
@@ -450,7 +451,10 @@ class MntGrpTools(object):
         extangods = []
         exsource = {}
         self.__findSources(tangods, extangods, exsource)
-        jds = self.__addKnownSources(extangods, sds)
+        jds = self.__addKnownSources(extangods,
+                                     set(sds) & set(dsg.keys()))
+        jds = self.__addKnownSources(extangods,
+                                     set(sds) - set(dsg.keys()), jds)
         self.__createUnknownSources(extangods, exsource, ads, jds)
         return jds
 
