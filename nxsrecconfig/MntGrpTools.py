@@ -451,8 +451,10 @@ class MntGrpTools(object):
         extangods = []
         exsource = {}
         self.__findSources(tangods, extangods, exsource)
-        jds = self.__addKnownSources(extangods, set(sds) & set(dsg.keys()))
-        jds = self.__addKnownSources(extangods, set(sds) - set(dsg.keys()), jds)
+        jds = self.__addKnownSources(extangods,
+                                     set(sds) & set(dsg.keys()))
+        jds = self.__addKnownSources(extangods,
+                                     set(sds) - set(dsg.keys()), jds)
         self.__createUnknownSources(extangods, exsource, ads, jds)
         return jds
 
