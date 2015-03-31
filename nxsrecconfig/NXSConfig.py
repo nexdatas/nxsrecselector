@@ -274,6 +274,40 @@ class NXSRecSelector(PyTango.Device_4Impl):
             % self.__stg.writerDevice
 
 #------------------------------------------------------------------
+#    Read DeviceGroups attribute
+#------------------------------------------------------------------
+    def read_DeviceGroups(self, attr):
+        print >> self.log_info, "In ", self.get_name(), \
+            "::read_DeviceGroups()"
+        attr.set_value(self.__stg.deviceGroups)
+
+#------------------------------------------------------------------
+#    Write DeviceGroups attribute
+#------------------------------------------------------------------
+    def write_DeviceGroups(self, attr):
+        print >> self.log_info, "In ", self.get_name(), \
+            "::write_DeviceGroups()"
+        self.__stg.deviceGroups = attr.get_write_value()
+        print >> self.log_info, "Attribute value = %s" % \
+            self.__stg.deviceGroups
+
+#------------------------------------------------------------------
+#    Read AdminData attribute
+#------------------------------------------------------------------
+    def read_AdminData(self, attr):
+        print >> self.log_info, "In ", self.get_name(), "::read_AdminData()"
+        attr.set_value(self.__stg.adminData)
+
+#------------------------------------------------------------------
+#    Write AdminData attribute
+#------------------------------------------------------------------
+    def write_AdminData(self, attr):
+        print >> self.log_info, "In ", self.get_name(), "::write_AdminData()"
+        self.__stg.adminData = attr.get_write_value()
+        print >> self.log_info, "Attribute value = %s" % \
+            self.__stg.adminData
+
+#------------------------------------------------------------------
 #    Read DataRecord attribute
 #------------------------------------------------------------------
     def read_DataRecord(self, attr):
@@ -1436,6 +1470,26 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
             {
                 'label':"Client Data Record",
                 'description':"JSON dictionary with Client Data Record",
+                'Display level':PyTango.DispLevel.EXPERT,
+            }],
+        'DeviceGroups':
+            [[PyTango.DevString,
+            PyTango.SCALAR,
+            PyTango.READ_WRITE],
+            {
+                'label':"Device groups",
+                'description':"JSON dictionary with device groups",
+                'Memorized':"true",
+                'Display level':PyTango.DispLevel.EXPERT,
+            }],
+        'AdminData':
+            [[PyTango.DevString,
+            PyTango.SCALAR,
+            PyTango.READ_WRITE],
+            {
+                'label':"Adminitrator Data",
+                'description':"JSON list with administrator data names",
+                'Memorized':"true",
                 'Display level':PyTango.DispLevel.EXPERT,
             }],
         'LabelTypes':

@@ -57,6 +57,15 @@ class Settings(object):
         self.timerFilterList = ["*dgg*", "*ctctrl*"]
         ## default automaticComponents
         self.defaultAutomaticComponents = []
+        ## default device groups
+        self.__defaultDeviceGroups = \
+            '{"timer": ["*exp_t*"], "dac": ["*exp_dac*"], ' \
+            + '"counter": ["*exp_c*"], "mca": ["*exp_mca*"], '\
+            + '"adc": ["*exp_adc*"], "motor": ["*exp_mot*"]}'
+        ## device groups
+        self.__deviceGroups = str(self.__defaultDeviceGroups)
+        ## administator data
+        self.__adminData = '[]'
 
         self.__setupSelection()
 
@@ -241,6 +250,51 @@ class Settings(object):
         __getDataRecord,
         __setDataRecord,
         doc='client data record')
+    ## get method for dataRecord attribute
+
+    # \returns name of deviceGroups
+    def __getDeviceGroups(self):
+        try:
+            ldct = json.loads(self.__deviceGroups)
+            assert isinstance(ldct, dict)
+            for vl in ldct.values():
+                assert isinstance(vl, list)
+            return self.__deviceGroups
+        except Exception:
+            return self.__defaultDeviceGroups
+
+    ## set method for deviceGroups attribute
+    # \param name of deviceGroups
+    def __setDeviceGroups(self, name):
+        jname = Utils.stringToDictJson(name)
+        self.__deviceGroups = jname
+
+    ## the json data string
+    deviceGroups = property(
+        __getDeviceGroups,
+        __setDeviceGroups,
+        doc='device groups')
+
+    # \returns name of adminData
+    def __getAdminData(self):
+        try:
+            lad = json.loads(self.__adminData)
+            assert isinstance(lad, list)
+            return self.__adminData
+        except Exception:
+            return '[]'
+
+    ## set method for adminData attribute
+    # \param name of adminData
+    def __setAdminData(self, name):
+        jname = Utils.stringToListJson(name)
+        self.__adminData = jname
+
+    ## the json data string
+    adminData = property(
+        __getAdminData,
+        __setAdminData,
+        doc='administrator data')
 
     ## get method for configVariables attribute
     # \returns name of configVariables
