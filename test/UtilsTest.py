@@ -817,7 +817,7 @@ class UtilsTest(unittest.TestCase):
 
 
 
-    def test_addDevice_empty(self):
+    def ttest_addDevice_empty(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         
@@ -866,7 +866,7 @@ class UtilsTest(unittest.TestCase):
 
 
 
-    def test_addDevice_controller(self):
+    def ttest_addDevice_controller(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         
@@ -964,7 +964,7 @@ class UtilsTest(unittest.TestCase):
 
 
 
-    def test_addDevice_controller_separate_ctrls(self):
+    def ttest_addDevice_controller_separate_ctrls(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         
@@ -1031,7 +1031,7 @@ class UtilsTest(unittest.TestCase):
         self.myAssertDict(hsh, fr)
 
 
-    def test_addDevice_controller_separate_ctrls_2pools(self):
+    def ttest_addDevice_controller_separate_ctrls_2pools(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         
@@ -1111,7 +1111,7 @@ class UtilsTest(unittest.TestCase):
             
 
 
-    def test_addDevice_controller_ctrls(self):
+    def ttest_addDevice_controller_ctrls(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
 
@@ -1177,7 +1177,7 @@ class UtilsTest(unittest.TestCase):
         self.myAssertDict(hsh, fr)
 
 
-    def test_addDevice_controller_ctrls_2pools(self):
+    def ttest_addDevice_controller_ctrls_2pools(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
 
