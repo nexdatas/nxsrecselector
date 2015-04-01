@@ -133,6 +133,14 @@ class NXSRecSelector(PyTango.Device_4Impl):
         attr.set_value(self.__stg.automaticComponents)
 
 #------------------------------------------------------------------
+#    Read DescriptionErrors attribute
+#------------------------------------------------------------------
+    def read_DescriptionErrors(self, attr):
+        print >> self.log_info, "In ", self.get_name(), \
+            "::read_DescriptionErrors()"
+        attr.set_value(self.__stg.descriptionErrors)
+
+#------------------------------------------------------------------
 #    Read Door attribute
 #------------------------------------------------------------------
     def read_Door(self, attr):
@@ -1403,7 +1411,15 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
             PyTango.READ, 10000],
             {
                 'label':"Automatic Components",
-                'description':"JSON list of automatic components",
+                'description':"list of automatic components",
+            }],
+        'DescriptionErrors':
+            [[PyTango.DevString,
+            PyTango.SPECTRUM,
+            PyTango.READ, 10000],
+            {
+                'label':"Description Component Errors",
+                'description':"list of Description Component Errors",
             }],
         'MntGrp':
             [[PyTango.DevString,

@@ -69,6 +69,8 @@ class Settings(object):
 
         self.__setupSelection()
 
+        self.__descErrors = []
+
     def __setupSelection(self):
         if not self.__server:
             self.fetchConfiguration()
@@ -131,6 +133,15 @@ class Settings(object):
     ## provides automatic components
     automaticComponents = property(__automaticComponents,
                             doc=' provides automatic components')
+
+    ## provides description component errors
+    # \returns list of available description component errors
+    def __getDescriptionErrors(self):
+        return self.__descErrors
+
+    ## provides automatic components
+    descriptionErrors = property(__getDescriptionErrors,
+                                 doc='provides description component errors')
 
     ## provides selected datasources
     # \returns list of available selected datasources
@@ -665,7 +676,8 @@ class Settings(object):
     ## checks existing controllers of pools for
     #      AutomaticDataSources
     def updateControllers(self):
-        jacps = self.__selection.updateControllers(self.__getPools())
+        jacps = self.__selection.updateControllers(
+            self.__getPools(), self.__descErrors)
         if self.__selection["AutomaticComponentGroup"] != jacps:
             self.__selection["AutomaticComponentGroup"] = jacps
             self.storeConfiguration()

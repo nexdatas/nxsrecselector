@@ -299,7 +299,10 @@ class Selection(object):
         inst = self.setConfigInstance()
         describer = Describer(inst)
         avcp = inst.availableComponents()
-        rcp.update(set(acps) - set(avcp))
+
+        rcp.update(dict(
+                [str(k), ("...", "%s not defined in Configuration Server" % k)]
+                for k in set(acps) - set(avcp)))
         toCheck = {}
         for acp in acps.keys():
             res = describer.components([acp], '', '')
@@ -315,7 +318,7 @@ class Selection(object):
                             toCheck[cp].append(
                                 (str(ds), str("/".join(srec[:-1])), str(attr)))
                         elif ds in nonexisting:
-                            rcp.add(cp)
+                            rcp[cp] = (ds, "%s not defined in Pool" % ds)
                             if cp in toCheck.keys():
                                 toCheck.pop(cp)
                             break
@@ -331,17 +334,16 @@ class Selection(object):
             acps[cp] = False
         self["AutomaticComponentGroup"] = json.dumps(acps)
 
-    def updateControllers(self, pools):
+    def updateControllers(self, pools, descErrors):
+        descErrors[:] = []
         ads = set(json.loads(self["AutomaticDataSources"]))
         nonexisting = []
         fnames = Utils.getFullDeviceNames(pools, ads)
 
-        for dev in ads:
-            if dev not in fnames.keys():
-                nonexisting.append(dev)
+        nonexisting = [dev for dev in ads if dev not in fnames.keys()]
 
         acps = json.loads(self["AutomaticComponentGroup"])
-        rcp = set()
+        rcp = {}
         toCheck = self.__toCheck(rcp, acps, ads, nonexisting)
 
         cqueue = Queue.Queue()
@@ -355,11 +357,16 @@ class Selection(object):
 
         for lds in toCheck.values():
             if lds and len(lds) > 0:
-                rcp.add(lds[0])
+                rcp[lds[0]] = (lds[1], lds[2])
 
         for acp in acps.keys():
-            if acp in rcp:
+            if acp in rcp.keys():
                 acps[acp] = False
+                value = rcp[acp]
+                descErrors.append(json.dumps(
+                        {"component": str(acp),
+                         "datasource": str(value[0]),
+                         "message": str(value[1])}))
             else:
                 acps[acp] = True
 
@@ -601,7 +608,8 @@ class WrongStateError(Exception):
 def checker(cqueue):
     while True:
         lds = cqueue.get()
-        ok = True
+        erds = None
+        message = None
         for ds in lds[1:]:
             if isinstance(ds, tuple) and len(ds) > 2:
                 dname = str(ds[1])
@@ -623,9 +631,12 @@ def checker(cqueue):
                             _ = getattr(dp, gattr)
                 else:
                     _ = getattr(dp, attr)
-            except Exception:
-                ok = False
+            except Exception as e:
+                message = str(e)
+                erds = ds
                 break
-        if ok:
+        if erds is None:
             lds[:] = []
+        else:
+            lds[:] = [lds[0], erds, message]
         cqueue.task_done()
