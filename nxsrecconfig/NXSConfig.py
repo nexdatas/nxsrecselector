@@ -651,6 +651,30 @@ class NXSRecSelector(PyTango.Device_4Impl):
         return True
 
 #------------------------------------------------------------------
+#    ClearAllSelections:
+#
+#    Description: reset AutomaticComponentGroup
+#        to DefaultAutomaticComponents
+#
+#------------------------------------------------------------------
+    def ClearAllSelections(self):
+        print >> self.log_info, "In ", self.get_name(), \
+            "::ClearAllSelections()"
+        try:
+            self.set_state(PyTango.DevState.RUNNING)
+            self.__stg.clearAllSelections()
+            self.set_state(PyTango.DevState.ON)
+        finally:
+            if self.get_state() == PyTango.DevState.RUNNING:
+                self.set_state(PyTango.DevState.ON)
+
+#---- ClearAllSelections command State Machine -----------------
+    def is_ClearAllSelections_allowed(self):
+        if self.get_state() in [PyTango.DevState.RUNNING]:
+            return False
+        return True
+
+#------------------------------------------------------------------
 #    UpdateConfigVariables:
 #
 #    Description: sends ConfigVariables into ConfigServer
@@ -746,6 +770,32 @@ class NXSRecSelector(PyTango.Device_4Impl):
 
 #---- UpdateMntGrp command State Machine -----------------
     def is_UpdateMntGrp_allowed(self):
+        if self.get_state() in [PyTango.DevState.RUNNING]:
+            return False
+        return True
+
+#------------------------------------------------------------------
+#    SwitchMntGrp:
+#
+#    Description: switchs mntgrp configuration
+#
+#
+#------------------------------------------------------------------
+    def SwitchMntGrp(self):
+        print >> self.log_info, "In ", self.get_name(), \
+            "::SwitchMntGrp()"
+        try:
+            self.set_state(PyTango.DevState.RUNNING)
+            conf = str(self.__stg.switchMntGrp())
+            self.set_state(PyTango.DevState.ON)
+        finally:
+            if self.get_state() == PyTango.DevState.RUNNING:
+                self.set_state(PyTango.DevState.ON)
+
+        return conf
+
+#---- SwitchMntGrp command State Machine -----------------
+    def is_SwitchMntGrp_allowed(self):
         if self.get_state() in [PyTango.DevState.RUNNING]:
             return False
         return True
@@ -1324,6 +1374,9 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
         'UpdateMntGrp':
             [[PyTango.DevVoid, ""],
              [PyTango.DevString, "configuration"]],
+        'SwitchMntGrp':
+            [[PyTango.DevVoid, ""],
+             [PyTango.DevString, "configuration"]],
         'MntGrpConfiguration':
             [[PyTango.DevVoid, ""],
              [PyTango.DevString, " mntcrp configuration"]],
@@ -1334,6 +1387,9 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
             [[PyTango.DevVoid, ""],
              [PyTango.DevVoid, ""]],
         'ResetAutomaticComponents':
+            [[PyTango.DevVoid, ""],
+             [PyTango.DevVoid, ""]],
+        'ClearAllSelections':
             [[PyTango.DevVoid, ""],
              [PyTango.DevVoid, ""]],
         'UpdateConfigVariables':

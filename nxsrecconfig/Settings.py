@@ -189,7 +189,7 @@ class Settings(object):
     def __setConfigDevice(self, name):
         if name != self.__selection["ConfigDevice"]:
             self.__selection["ConfigDevice"] = name
-            self.switchMntGrp()
+            self.switchMntGrp(toActive=False)
 
     ## the json data string
     configDevice = property(__getConfigDevice, __setConfigDevice,
@@ -689,6 +689,14 @@ class Settings(object):
         self.updateControllers()
         self.storeConfiguration()
 
+    ## clear all selections
+    def clearAllSelections(self):
+        avsel = self.availableSelections()
+        if avsel:
+            inst = self.setConfigInstance()
+            for name in avsel:
+                inst.deleteSelection(name)
+            
     ## provides available Timers from MacroServer pools
     # \returns  available Timers from MacroServer pools
     def __availableTimers(self):
@@ -744,7 +752,7 @@ class Settings(object):
         pools = self.__getPools()
         self.__mntgrptools.macroServer = self.getMacroServer()
         if not self.__selection["MntGrp"]:
-            self.switchMntGrp()
+            self.switchMntGrp(toActive=False)
         dpmg = self.__mntgrptools.getMntGrpProxy(pools)
         if not dpmg:
             return "{}"
@@ -785,12 +793,13 @@ class Settings(object):
         return str(dpmg.Configuration)
 
     ## switch to active measurement
-    def switchMntGrp(self):
+    def switchMntGrp(self, toActive=True):
         pools = self.__getPools()
-        if not self.__selection["MntGrp"]:
+        if not self.__selection["MntGrp"] or toActive:
             ms = self.getMacroServer()
             amntgrp = Utils.getEnv('ActiveMntGrp', ms)
-            self.__selection["MntGrp"] = amntgrp
+            if not toActive or amntgrp:
+                self.__selection["MntGrp"] = amntgrp
         self.fetchConfiguration()
         jconf = self.mntGrpConfiguration()
         self.__mntgrptools.configServer = self.setConfigInstance()
