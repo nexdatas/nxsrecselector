@@ -1,3 +1,8 @@
+2015-04-08 Jan Kotanski <jankotan@gmail.com>
+	* adding ClearAllSelections
+	* adding SwitchMntGrp
+	* tagged as v1.19.0
+
 2015-04-01 Jan Kotanski <jankotan@gmail.com>
 	* adding DescriptionErrors
 	* tagged as v1.18.0
