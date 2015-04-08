@@ -696,7 +696,7 @@ class Settings(object):
             inst = self.setConfigInstance()
             for name in avsel:
                 inst.deleteSelection(name)
-            
+
     ## provides available Timers from MacroServer pools
     # \returns  available Timers from MacroServer pools
     def __availableTimers(self):
