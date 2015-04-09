@@ -20,6 +20,7 @@
 
 """  NeXus Sardana Recorder Settings implementation """
 
+import gc
 import json
 import PyTango
 from .Describer import Describer
@@ -681,6 +682,7 @@ class Settings(object):
         if self.__selection["AutomaticComponentGroup"] != jacps:
             self.__selection["AutomaticComponentGroup"] = jacps
             self.storeConfiguration()
+        gc.collect()
 
     ## reset automaticComponentGroup to defaultAutomaticComponents
     def resetAutomaticComponents(self):

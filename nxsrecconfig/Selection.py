@@ -23,15 +23,11 @@
 import json
 import PyTango
 import Queue
-import threading
 import getpass
 import pickle
 from .Utils import Utils
 from .Describer import Describer
-
-
-ATTRIBUTESTOCHECK = ["Value", "Position", "Counts", "Data",
-                     "Voltage", "Energy", "SampleTime"]
+from .CheckerThread import CheckerThread
 
 
 ## NeXus Sardana Recorder settings
@@ -344,16 +340,22 @@ class Selection(object):
 
         acps = json.loads(self["AutomaticComponentGroup"])
         rcp = {}
+        threads = []
         toCheck = self.__toCheck(rcp, acps, ads, nonexisting)
 
         cqueue = Queue.Queue()
         for lds in toCheck.values():
             cqueue.put(lds)
-        for _ in range(self.__numberOfThreads):
-            thd = threading.Thread(target=checker, args=(cqueue,))
-            thd.daemon = True
+        if self.__numberOfThreads < 1:
+            self.__numberOfThreads = len(toCheck.values())
+
+        for i in range(min(self.__numberOfThreads, len(toCheck.values()))):
+            thd = CheckerThread(i, cqueue)
+            threads.append(thd)
             thd.start()
-        cqueue.join()
+
+        for th in threads:
+            th.join()
 
         for lds in toCheck.values():
             if lds and len(lds) > 0:
@@ -597,46 +599,3 @@ class Selection(object):
                     scanID = int(dc['new']["ScanID"])
                 msp.Environment = ['pickle', pk]
         return scanID
-
-
-class WrongStateError(Exception):
-    pass
-
-
-## checkers if Tango devices are alive
-# \params cqueue queue with task of the form ['comp','alias','alias', ...]
-def checker(cqueue):
-    while True:
-        lds = cqueue.get()
-        erds = None
-        message = None
-        for ds in lds[1:]:
-            if isinstance(ds, tuple) and len(ds) > 2:
-                dname = str(ds[1])
-                attr = str(ds[2])
-            else:
-                dname = str(ds)
-                attr = None
-
-            try:
-                dp = PyTango.DeviceProxy(dname)
-                if dp.state() in [
-                    PyTango.DevState.FAULT,
-                    PyTango.DevState.ALARM]:
-                    raise WrongStateError("FAULT or ALARM STATE")
-                dp.ping()
-                if not attr:
-                    for gattr in ATTRIBUTESTOCHECK:
-                        if hasattr(dp, gattr):
-                            _ = getattr(dp, gattr)
-                else:
-                    _ = getattr(dp, attr)
-            except Exception as e:
-                message = str(e)
-                erds = ds
-                break
-        if erds is None:
-            lds[:] = []
-        else:
-            lds[:] = [lds[0], erds, message]
-        cqueue.task_done()
