@@ -671,7 +671,7 @@ class Settings(object):
                 cvars["serialno"] = str(1)
             jvars["serialno"] = cvars["serialno"]
             confvars = json.dumps(jvars)
-        nexusconfig_device.variables = confvars
+        nexusconfig_device.variables = str(confvars)
 
     ## checks existing controllers of pools for
     #      AutomaticDataSources
