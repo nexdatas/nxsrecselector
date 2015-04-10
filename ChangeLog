@@ -1,4 +1,4 @@
-2015-04-09 Jan Kotanski <jankotan@gmail.com>
+2015-04-10 Jan Kotanski <jankotan@gmail.com>
 	* workaround for PyTango memory leak
 	* tagged as v1.19.3
 
