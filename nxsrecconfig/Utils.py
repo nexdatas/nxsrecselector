@@ -442,9 +442,8 @@ class Utils(object):
     @classmethod
     def command(cls, server, command, *var):
         if not hasattr(server, "command_inout"):
-            res = getattr(server, command)(*var)
-        if var is None:
-            res = server.command_inout(command)
+            return getattr(server, command)(*var)
+        elif var is None:
+            return server.command_inout(command)
         else:
-            res = server.command_inout(command, *var)
-        return res
+            return server.command_inout(command, *var)
