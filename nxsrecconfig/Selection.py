@@ -294,7 +294,7 @@ class Selection(object):
     def __toCheck(self, rcp, acps, ads, nonexisting):
         inst = self.setConfigInstance()
         describer = Describer(inst)
-        avcp = inst.availableComponents()
+        avcp = Utils.command(inst, "availableComponents")
 
         rcp.update(dict(
                 [str(k), ("...", "%s not defined in Configuration Server" % k)]
@@ -407,7 +407,7 @@ class Selection(object):
                 self.__selection["ConfigDevice"].lower() != self.moduleLabel:
             self.__configProxy = Utils.openProxy(
                 self.__selection["ConfigDevice"])
-            self.__configProxy.open()
+            self.__configProxy.command_inout("Open")
             self.__configModule = None
         else:
             from nxsconfigserver import XMLConfigurator
@@ -440,16 +440,9 @@ class Selection(object):
 
     ## executes command on configuration server
     # \returns command result
-    def configCommand(self, command, var=None):
+    def configCommand(self, command, *var):
         inst = self.setConfigInstance()
-        if var is None:
-            res = getattr(inst, command)()
-        else:
-            if self.__configProxy:
-                res = inst.command_inout(command, var)
-            else:
-                res = getattr(inst, command)(var)
-        return res
+        return Utils.command(inst, command, *var)
 
     ## available pool channels
     # \returns pool channels of the macroserver pools

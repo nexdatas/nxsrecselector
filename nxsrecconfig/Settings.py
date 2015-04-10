@@ -51,8 +51,6 @@ class Settings(object):
 
         ## tango database
         self.__db = PyTango.Database()
-        ## config writer proxy
-        self.__writerProxy = None
 
         ## timer filter list
         self.timerFilterList = ["*dgg*", "*ctctrl*"]
@@ -501,8 +499,8 @@ class Settings(object):
 
     ## executes command on configuration server
     # \returns command result
-    def __configCommand(self, command, var=None):
-        return self.__selection.configCommand(command, var)
+    def __configCommand(self, command, *var):
+        return self.__selection.configCommand(command, *var)
 
     ## mandatory components
     # \returns list of mandatory components

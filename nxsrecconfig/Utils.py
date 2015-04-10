@@ -436,3 +436,15 @@ class Utils(object):
             lst = re.sub("[^\w]", "  ", string).split()
             jstring = json.dumps(lst)
         return jstring
+
+    ## executes command on server
+    # \returns command result
+    @classmethod
+    def command(cls, server, command, *var):
+        if not hasattr(server, "command_inout"):
+            res = getattr(server, command)(*var)
+        if var is None:
+            res = server.command_inout(command)
+        else:
+            res = server.command_inout(command, *var)
+        return res

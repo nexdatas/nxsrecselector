@@ -48,12 +48,15 @@ class Describer(object):
         result = [{}, {}]
 
         if components is not None:
-            cpp = self.__nexusconfig_device.availableComponents()
+            cpp = Utils.command(self.__nexusconfig_device,
+                                "availableComponents")
             cps = [cp for cp in components if cp in cpp]
         else:
-            cps = self.__nexusconfig_device.availableComponents()
+            cps = Utils.command(self.__nexusconfig_device,
+                                "availableComponents")
         if components is None:
-            mand = self.__nexusconfig_device.mandatoryComponents()
+            mand = Utils.command(self.__nexusconfig_device,
+                                 "mandatoryComponents")
             cps = list(set(cps) - set(mand))
 
         if components is None:
@@ -86,12 +89,15 @@ class Describer(object):
     def final(self, components=None, strategy='', dstype='', cfvars=None):
 
         if components is not None:
-            cpp = self.__nexusconfig_device.availableComponents()
+            cpp = Utils.command(self.__nexusconfig_device,
+                                "availableComponents")
             cps = [cp for cp in components if cp in cpp]
         else:
-            cps = self.__nexusconfig_device.availableComponents()
+            cps = Utils.command(self.__nexusconfig_device,
+                                "availableComponents")
         if components is None:
-            mand = self.__nexusconfig_device.mandatoryComponents()
+            mand = Utils.command(self.__nexusconfig_device,
+                                 "mandatoryComponents")
             cps = list(set(cps) | set(mand))
 
         tr = []
@@ -152,7 +158,8 @@ class Describer(object):
     # \param dstype list datasources only with given type.
     #        If '' all available ones are taken
     def dataSources(self, names=None, dstype=''):
-        ads = self.__nexusconfig_device.availableDataSources()
+        ads = Utils.command(self.__nexusconfig_device,
+                            "availableDataSources")
         if names is not None:
             dss = [name for name in names if name in ads]
         else:
@@ -171,7 +178,8 @@ class Describer(object):
         dstype = None
         record = None
         try:
-            dsource = self.__nexusconfig_device.dataSources([str(name)])
+            dsource = Utils.command(self.__nexusconfig_device,
+                                    "dataSources", [str(name)])
         except (PyTango.DevFailed, PyTango.Except, PyTango.DevError):
             dsource = []
         if len(dsource) > 0:
@@ -228,7 +236,8 @@ class Describer(object):
         return shape
 
     def __getDataSourceAttributes(self, cp):
-        xmlc = self.__nexusconfig_device.components([cp])
+        xmlc = Utils.command(self.__nexusconfig_device,
+                             "components", [cp])
         names = []
         if not len(xmlc) > 0:
             return names
@@ -241,7 +250,8 @@ class Describer(object):
             if sv and isinstance(sv, dict):
                 cv.update(sv)
             self.__nexusconfig_device.variables = json.dumps(cv)
-        xmlc = self.__nexusconfig_device.instantiatedComponents([cp])
+        xmlc = Utils.command(self.__nexusconfig_device,
+                             "instantiatedComponents", [cp])
         names = []
         if not len(xmlc) > 0:
             return names

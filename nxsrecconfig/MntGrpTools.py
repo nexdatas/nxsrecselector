@@ -62,7 +62,8 @@ class MntGrpTools(object):
             if not fpool:
                 fpool = pool
         if fpool:
-            fpool.DeleteElement(str(name))
+            Utils.command(fpool, "DeleteElement",
+                          str(name))
 
     ## set active measurement group from components
     def createMntGrpConfiguration(self, pools):
@@ -277,7 +278,8 @@ class MntGrpTools(object):
         if not apool and len(pools) > 0:
             apool = pools[0]
         if apool:
-            apool.CreateMeasurementGroup([mntGrpName, timer])
+            Utils.command(apool, "CreateMeasurementGroup",
+                          [mntGrpName, timer])
             mfullname = str(Utils.getMntGrpName(pools, mntGrpName))
         return mfullname
 
@@ -458,14 +460,15 @@ class MntGrpTools(object):
                 if source in exsource:
                     xml = self.__createXMLSource(name, source, exsource)
                     self.configServer.xmlstring = str(xml)
-                    self.configServer.storeDataSource(str(name))
+                    Utils.command(self.configServer, "storeDataSource",
+                                  str(name))
                     jds[initsource] = name
 
     def __createDataSources(self, tangods, dsg):
         extangods = []
         exsource = {}
 
-        ads = self.configServer.availableDataSources()
+        ads = Utils.command(self.configServer, "availableDataSources")
         if not ads:
             ads = []
         sds = self.getSourceDescription(ads)

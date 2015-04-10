@@ -68,7 +68,7 @@ class CheckerThread(threading.Thread):
 
             try:
                 dp = PyTango.DeviceProxy(dname)
-                if dp.state() in [
+                if dp.command_inout("State") in [
                     PyTango.DevState.FAULT,
                     PyTango.DevState.ALARM]:
                     raise WrongStateError("FAULT or ALARM STATE")
