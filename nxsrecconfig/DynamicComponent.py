@@ -193,7 +193,9 @@ class DynamicComponent(object):
 
                 shape, nxtype = None, 'NX_CHAR'
                 if ds in avds:
-                    dsource = self.__nexusconfig_device.dataSources([str(ds)])
+                    dsource = Utils.command(
+                        self.__nexusconfig_device, "dataSources",
+                        [str(ds)])
                     indom = xml.dom.minidom.parseString(dsource[0])
                     dss = indom.getElementsByTagName("datasource")
                     if dss and shape is None:
@@ -218,7 +220,8 @@ class DynamicComponent(object):
 
     ## creates dynamic component
     def create(self):
-        cps = self.__nexusconfig_device.availableComponents()
+        cps = Utils.command(self.__nexusconfig_device,
+                            "availableComponents")
         name = self.__defaultCP
         while name in cps:
             name = name + "x"
@@ -227,7 +230,8 @@ class DynamicComponent(object):
         root = xml.dom.minidom.Document()
         definition = root.createElement("definition")
         root.appendChild(definition)
-        avds = self.__nexusconfig_device.availableDataSources()
+        avds = Utils.command(self.__nexusconfig_device,
+                             "availableDataSources")
 
         created = []
         self.__createSardanaNodes(created, root, definition)
@@ -235,7 +239,8 @@ class DynamicComponent(object):
         self.__createNonSardanaNodes(created, avds, root, definition, 'INIT')
 
         self.__nexusconfig_device.xmlstring = str(root.toprettyxml(indent=""))
-        self.__nexusconfig_device.storeComponent(str(self.__dynamicCP))
+        Utils.command(self.__nexusconfig_device, "storeComponent",
+                      str(self.__dynamicCP))
 #        print("Dynamic Component:\n%s" % root.toprettyxml(indent="  "))
 
         return self.__dynamicCP
@@ -363,9 +368,11 @@ class DynamicComponent(object):
         if self.__defaultCP not in name:
             raise Exception(
                 "Dynamic component name should contain: %s" % self.__defaultCP)
-        cps = self.__nexusconfig_device.availableComponents()
+        cps = Utils.command(self.__nexusconfig_device,
+                            "availableComponents")
         if name in cps:
-            self.__nexusconfig_device.deleteComponent(str(name))
+            Utils.command(self.__nexusconfig_device,
+                          "deleteComponent", str(name))
 
     @classmethod
     def __createGroupTree(cls, root, definition, path, links=False):

@@ -20,6 +20,7 @@
 
 """  NeXus Sardana Recorder Settings implementation """
 
+import gc
 import json
 import PyTango
 from .Describer import Describer
@@ -50,8 +51,6 @@ class Settings(object):
 
         ## tango database
         self.__db = PyTango.Database()
-        ## config writer proxy
-        self.__writerProxy = None
 
         ## timer filter list
         self.timerFilterList = ["*dgg*", "*ctctrl*"]
@@ -500,8 +499,8 @@ class Settings(object):
 
     ## executes command on configuration server
     # \returns command result
-    def __configCommand(self, command, var=None):
-        return self.__selection.configCommand(command, var)
+    def __configCommand(self, command, *var):
+        return self.__selection.configCommand(command, *var)
 
     ## mandatory components
     # \returns list of mandatory components
@@ -671,7 +670,7 @@ class Settings(object):
                 cvars["serialno"] = str(1)
             jvars["serialno"] = cvars["serialno"]
             confvars = json.dumps(jvars)
-        nexusconfig_device.variables = confvars
+        nexusconfig_device.variables = str(confvars)
 
     ## checks existing controllers of pools for
     #      AutomaticDataSources
@@ -681,6 +680,7 @@ class Settings(object):
         if self.__selection["AutomaticComponentGroup"] != jacps:
             self.__selection["AutomaticComponentGroup"] = jacps
             self.storeConfiguration()
+        gc.collect()
 
     ## reset automaticComponentGroup to defaultAutomaticComponents
     def resetAutomaticComponents(self):
