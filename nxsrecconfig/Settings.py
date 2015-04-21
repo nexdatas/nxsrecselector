@@ -634,7 +634,9 @@ class Settings(object):
             cp = list(set(self.components) |
                       set(self.automaticComponents) |
                       set(self.mandatoryComponents()))
-        nexusconfig_device.createConfiguration(cp)
+        Utils.command(nexusconfig_device,
+                      "createConfiguration",
+                      cp)
         return str(nexusconfig_device.xmlstring)
 
     ## provides full names of pool devices
