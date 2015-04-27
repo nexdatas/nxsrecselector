@@ -1,0 +1,7 @@
+# Text editor files 
+*~
+\#*\#
+# Compiled Python files
+*.pyc
+# Compiled C files
+*.o

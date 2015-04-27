@@ -1,0 +1,44 @@
+.TH NXSRecSelector 1 "2014-01-02" NXSRecSelector
+.SH NAME
+.B NXSRecSelector
+\- NeXus Selector Server for Sardana Recorder
+
+.SH SYNOPSIS
+.B  NXSRecSelector
+.I <instance_name>
+[-v[trace level]] [-file=<file_name> | -nodb [-dlist <device name list>] ]
+] 
+
+
+.SH DESCRIPTION
+.B NXSRecSelector
+is a Tango server which allows to select data channels for Sardana NeXus Recorder.
+The data channels are defined in terms of Extended NXDL strings and 
+they are stored as datasources and components in NXSConfigServer.
+
+
+.SH OPTIONS
+.\".IP "--version"
+.\"show program's version number and exit
+.IP "-v"
+trace level
+.IP "-file"
+file name
+.IP "-nodb"
+without DB
+.IP "-dlist"
+device name list        
+
+.SH SEE ALSO
+https://github.com/jkotan/nexdatas/
+
+.SH COPYRIGHT
+Copyrights (c) 2014, GNU GPL v2, DESY, Jan Kotanski
+
+.SH BUGS
+Please report bugs on the project's mailing list:
+mailto://jankotan@gmail.com
+
+.SH AUTHORS
+Jan Kotanski <jankotan@gmail.com>
+

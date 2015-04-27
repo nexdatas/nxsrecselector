@@ -1,0 +1,388 @@
+2015-04-10 Jan Kotanski <jankotan@gmail.com>
+	* removing memory leak from createConfiguration
+	* tagged as v1.19.5
+
+2015-04-10 Jan Kotanski <jankotan@gmail.com>
+	* fix for command function
+	* tagged as v1.19.4
+
+2015-04-10 Jan Kotanski <jankotan@gmail.com>
+	* workaround for PyTango memory leak
+	* tagged as v1.19.3
+
+2015-04-09 Jan Kotanski <jankotan@gmail.com>
+	* fix for updateControllers memory leak
+	* tagged as v1.19.2
+
+2015-04-09 Jan Kotanski <jankotan@gmail.com>
+	* fix for UpdateConfigVariables
+	* tagged as v1.19.1
+
+2015-04-08 Jan Kotanski <jankotan@gmail.com>
+	* adding ClearAllSelections
+	* adding SwitchMntGrp
+	* tagged as v1.19.0
+
+2015-04-01 Jan Kotanski <jankotan@gmail.com>
+	* adding DescriptionErrors
+	* tagged as v1.18.0
+
+2015-03-31 Jan Kotanski <jankotan@gmail.com>
+	* adding AdminData
+	* adding DeviceGroups
+	* tagged as v1.17.0
+
+2015-03-25 Jan Kotanski <jankotan@gmail.com>
+	* second fix for duplicated in configserver tango datasources
+	* tagged as v1.16.8
+
+2015-03-25 Jan Kotanski <jankotan@gmail.com>
+	* fix for duplicated in configserver tango datasources
+	* tagged as v1.16.7
+
+2015-03-24 Jan Kotanski <jankotan@gmail.com>
+	* fix for deselecting elements
+	* tagged as v1.16.6
+
+2015-03-23 Jan Kotanski <jankotan@gmail.com>
+	* setting ActiveMntGrp on init
+	* tagged as v1.16.5
+
+2015-03-20 Jan Kotanski <jankotan@gmail.com>
+	* fix for loading configuration on start without server
+	* tagged as v1.16.4
+
+2015-03-20 Jan Kotanski <jankotan@gmail.com>
+	* fix for restoring config after init the server
+	* disable automatic components if not exists
+	* tagged as v1.16.3
+
+2015-03-19 Jan Kotanski <jankotan@gmail.com>
+	* replace ' ' by '_' in dynamic component fields
+	* tagged as v1.16.2
+
+2015-03-19 Jan Kotanski <jankotan@gmail.com>
+	* fix bugs for checker of AutomaticComponents
+	* tagged as v1.16.1
+
+2015-03-19 Jan Kotanski <jankotan@gmail.com>
+	* adding defaultAutomaticComponents
+	* tagged as v1.16.0
+
+2015-03-18 Jan Kotanski <jankotan@gmail.com>
+	* adding synchronziation of tango DS with sardana
+	* adding InitDataSources
+	* tagged as v1.15.0
+
+2015-03-05 Jan Kotanski <jankotan@gmail.com>
+	* fix selecting timers
+	* tagged as v1.14.5
+
+2015-03-05 Jan Kotanski <jankotan@gmail.com>
+	* fix for saving configuration to file
+	* tagged as v1.14.4
+
+2015-03-04 Jan Kotanski <jankotan@gmail.com>
+	* making first letter of Configuration keys capital
+	* tagged as v1.14.3
+
+2015-03-04 Jan Kotanski <jankotan@gmail.com>
+	* workaround for ActiveMntGrp as unicode
+	* tagged as v1.14.2
+
+2015-03-02 Jan Kotanski <jankotan@gmail.com>
+	* fix for importing tango datasources
+	* tagged as v1.14.1
+
+2015-02-25 Jan Kotanski <jankotan@gmail.com>
+	* simplifying the inteface, i.e
+	  removing many attributes duplaced in configuration
+	* moving commands from Settings into Selection
+	* specify exception
+	* tagged as v1.14.0
+
+2015-02-20 Jan Kotanski <jankotan@gmail.com>
+	* adding deleteMntGrp command
+	* tagged as v1.13.0
+
+2015-02-19 Jan Kotanski <jankotan@gmail.com>
+	* adding toupdate flag for memorize attributes
+	* tagged as v1.12.1
+
+2015-02-18 Jan Kotanski <jankotan@gmail.com>
+	* adding selections from configuration server
+	* works only with Tango NXSConfigServer (>= 1.10.0)
+	* tagged as v1.12.0
+
+2015-02-12 Jan Kotanski <jankotan@gmail.com>
+	* adding support for multi-dim automatic component datasources
+	* tagged as v1.11.1
+
+2015-02-11 Jan Kotanski <jankotan@gmail.com>
+	* adding GetSourceDescription
+	* adding AvailableMeasurementGroups
+	* tagged as v1.11.0
+
+2015-02-09 Jan Kotanski <jankotan@gmail.com>
+	* adding OrderedChannels attribute
+	* tagged as v1.10.0
+
+2015-02-06 Jan Kotanski <jankotan@gmail.com>
+	* adding support __tango__ controller
+	* tagged as v1.9.22
+
+2015-01-14 Jan Kotanski <jankotan@gmail.com>
+	* fix for updateControllers
+	* tagged as v1.9.21
+
+2015-01-14 Jan Kotanski <jankotan@gmail.com>
+	* adding call for availableComponents to check BD connection
+	* tagged as v1.9.20
+
+2015-01-14 Jan Kotanski <jankotan@gmail.com>
+	* fix for setting STEPdatasources
+	* tagged as v1.9.19
+
+2015-01-13 Jan Kotanski <jankotan@gmail.com>
+	* adding default DBParams
+	* tagged as v1.9.18
+
+2015-01-13 Jan Kotanski <jankotan@gmail.com>
+	* fixes for module version
+	* tagged as v1.9.17
+
+2015-01-13 Jan Kotanski <jankotan@gmail.com>
+	* updateControllers: checking Tango ds first
+	* tagged as v1.9.16
+
+2015-01-12 Jan Kotanski <jankotan@gmail.com>
+	* adding ctctrl for timer filter
+	* skipping DataSource attribute if not set
+	* tagged as v1.9.15
+
+2015-01-09 Jan Kotanski <jankotan@gmail.com>
+	* fix for getting host record
+	* setting ALARM as device error state
+	* tagged as v1.9.14
+
+2015-01-09 Jan Kotanski <jankotan@gmail.com>
+	* adding checks for automatic tango datasources
+	* tagged as v1.9.13
+
+2015-01-09 Jan Kotanski <jankotan@gmail.com>
+	* adding getExperimentalChannels into Utils
+	* impove importMntGrp
+	* tagged as v1.9.12
+
+2014-12-18 Jan Kotanski <jankotan@gmail.com>
+	* removing startup shell script
+	* tagged as v1.9.11
+
+2014-12-17 Jan Kotanski <jankotan@gmail.com>
+	* fixing timer display status
+	* tagged as v1.9.10
+
+2014-12-16 Jan Kotanski <jankotan@gmail.com>
+	* making timers hidden for display by default
+	* tagged as v1.9.9
+
+2014-12-16 Jan Kotanski <jankotan@gmail.com>
+	* adding TimerFilterList property
+	* changing default apply entry to False
+	* tagged as v1.9.8
+
+2014-12-11 Jan Kotanski <jankotan@gmail.com>
+	* adding attributes to check
+	* tagged as v1.9.7
+
+2014-12-09 Jan Kotanski <jankotan@gmail.com>
+	* adding checks for non-exising mntgrp
+	* tagged as v1.9.6
+
+2014-12-05 Jan Kotanski <jankotan@gmail.com>
+	* skipping linking for dynamic datasources with attached components
+	* tagged as v1.9.5
+
+2014-12-02 Jan Kotanski <jankotan@gmail.com>
+	* adding fix for unicode device names
+	* tagged as v1.9.4
+
+2014-12-02 Jan Kotanski <jankotan@gmail.com>
+	* adding TANGO dynamic datasources
+	* tagged as v1.9.3
+
+2014-11-27 Jan Kotanski <jankotan@gmail.com>
+	* adding checks for existence of keys in mntgrp during importMntGrp
+	* tagged as v1.9.2
+
+2014-11-26 Jan Kotanski <jankotan@gmail.com>
+	* fix for STEPdatasources attribute
+	* tagged as v1.9.1
+
+2014-11-13 Jan Kotanski <jankotan@gmail.com>
+	* adding STEPdatasources
+	* works only with Tango NXSConfigServer (>= 1.9.0)
+	* tagged as v1.9.0
+
+2014-11-12 Jan Kotanski <jankotan@gmail.com>
+	* moving checking devices to separate threads
+	* tagged as v1.8.19
+
+2014-11-11 Jan Kotanski <jankotan@gmail.com>
+	* fixes for addding devices
+	* tagged as v1.8.18
+
+2014-11-11 Jan Kotanski <jankotan@gmail.com>
+	* changing default plot for 1D data to ['<idx>']
+	* tagged as v1.8.17
+
+2014-11-04 Jan Kotanski <jankotan@gmail.com>
+	* fixes for updateMntGrp
+	* tagged as v1.8.16
+
+2014-11-03 Jan Kotanski <jankotan@gmail.com>
+	* skipping updateControllers call for automaticComponentGroup nad automaticDataSources
+	* allowing door name with hostname
+	* tagged as v1.8.15
+
+2014-10-30 Jan Kotanski <jankotan@gmail.com>
+	* skipping updateControllers call for automaticComponents
+	* fixing updateControllers
+	* tagged as v1.8.14
+
+2014-10-29 Jan Kotanski <jankotan@gmail.com>
+	* relaxing checking of dimension value for datasources
+	* tagged as v1.8.13
+
+2014-10-28 Jan Kotanski <jankotan@gmail.com>
+	* improving updateControllers
+	* tagged as v1.8.12
+
+2014-10-24 Jan Kotanski <jankotan@gmail.com>
+	* fixes for createDynamicComponent parameters
+	* tagged as v1.8.11
+
+2014-10-22 Jan Kotanski <jankotan@gmail.com>
+	* adding support for missing user data
+	* tagged as v1.8.10
+
+2014-10-21 Jan Kotanski <jankotan@gmail.com>
+	* fixes for setting configuration
+	* fixes for Not initialised
+	* tagged as v1.8.9
+
+2014-10-20 Jan Kotanski <jankotan@gmail.com>
+	* adding checks for state of automatic datasources
+	* tagged as v1.8.8
+
+2014-10-17 Jan Kotanski <jankotan@gmail.com>
+	* skip checks for pool devices in updateController
+	* tagged as v1.8.7
+
+2014-10-17 Jan Kotanski <jankotan@gmail.com>
+	* change back parameters of CreateDynamicComponent
+	* tagged as v1.8.6
+
+2014-10-16 Jan Kotanski <jankotan@gmail.com>
+	* adding ping and attributes checks for updateControllers
+	* tagged as v1.8.5
+
+2014-10-14 Jan Kotanski <jankotan@gmail.com>
+	* adding CreateConfiguration and UpdateConfigVariables commands
+	* tagged as v1.8.4
+
+2014-10-13 Jan Kotanski <jankotan@gmail.com>
+	* workaround for Astor stream cut off
+	* tagged as v1.8.3
+
+2014-10-06 Jan Kotanski <jankotan@gmail.com>
+	* change parameters of CreateDynamicComponent
+	* removing label from datasource dictionary
+	* making update of config server variables inr final describer
+	* tagged as v1.8.2
+
+2014-10-02 Jan Kotanski <jankotan@gmail.com>
+	* removing ClientSources attribute
+	* tagged as v1.8.1
+
+2014-10-02 Jan Kotanski <jankotan@gmail.com>
+	* adding Create/Remove- DynamicComponent command
+	* adding ClientSources command
+	* work only with Tango NXSConfigServer (>= 1.7.0)
+	* tagged as v1.8.0
+
+2014-09-08 Jan Kotanski <jankotan@gmail.com>
+	* adding a guess for active pool if more then one
+	* adding fixes for empty pool
+	* tagged as v1.7.3
+
+2014-08-27 Jan Kotanski <jankotan@gmail.com>
+	* fixes for empty pool lists
+	* tagged as v1.7.2
+
+2014-07-29 Jan Kotanski <jankotan@gmail.com>
+	* passing proper message if 1/2D device is not running
+	* tagged as v1.7.1
+
+2014-07-24 Jan Kotanski <jankotan@gmail.com>
+	* making python API similar to Tango API
+	* tagged as v1.7.0
+
+2014-06-30 Jan Kotanski <jankotan@gmail.com>
+	* adding Configuration attribute
+	* fixing checks in getWriterDevice
+	* tagged as v1.6.0
+
+2014-06-20 Jan Kotanski <jankotan@gmail.com>
+	* adding IsMntGrpChanged
+	* adding ImportMntGrp
+	* tagged as v1.5.1
+
+2014-06-17 Jan Kotanski <jankotan@gmail.com>
+	* adding getConfiguration
+	* adding returning configuration by updateMntGrp
+	* tagged as v1.5.0
+
+2014-05-30 Jan Kotanski <jankotan@gmail.com>
+	* adding getShapeTypeValue to Utils
+	* changing state() into ping() in openProxy loop
+	* adding doxygen documentation
+	* tagged as v1.4.1
+
+2014-05-20 Jan Kotanski <jankotan@gmail.com>
+	* adding support for extra timers
+	* adding checks for user data
+	* adding VariableComponents attribute
+	* adding DS record into description
+	* tagged as v1.4.0
+
+2014-05-12 Jan Kotanski <jankotan@gmail.com>
+	* adding copyrights and man page
+	* tagged as v1.3.2
+
+2014-05-12 Jan Kotanski <jankotan@gmail.com>
+	* fixing name package
+	* tagged as v1.3.1
+
+2014-05-07 Jan Kotanski <jankotan@gmail.com>
+	* adding hidden elements
+	* using only macroserver pools
+	* adding datasource components
+	* making use of Door instead of MacroServer
+	* tagged as v1.3.0
+
+2014-04-28 Jan Kotanski <jankotan@gmail.com>
+	* adding pool channels to datasource group
+	* moving store/fetchEnvData into server
+	* tagged as v1.2.0
+
+2014-04-23 Jan Kotanski <jankotan@gmail.com>
+	* adding PoolBlacklist property
+	* cleaning code
+	* adding FindMntGrp
+	* tagged as v1.1.0
+
+2014-04-15 Jan Kotanski <jankotan@gmail.com>
+	* ChangeLog: first version
+	* tagged as v1.0.0
+
