@@ -139,6 +139,18 @@ class Selection(object):
         ## MntGrp
         self.__selection["MntGrp"] = ''
 
+    def deselect(self):
+        cps = json.loads(self.__selection["ComponentGroup"])
+        ads = json.loads(self.__selection["DataSourceGroup"])
+        for k in cps.keys():
+            cps[k] = False
+        for k in ads.keys():
+            ads[k] = False
+        self.__selection["InitDataSources"] = '[]'
+        self.__selection["DataSourceGroup"] = json.dumps(ads)
+        self.__selection["ComponentGroup"] = json.dumps(cps)
+
+
     def set(self, state):
         self.reset()
         for key in state.keys():

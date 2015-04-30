@@ -65,10 +65,10 @@ class Settings(object):
         self.__deviceGroups = str(self.__defaultDeviceGroups)
         ## administator data
         self.__adminData = '[]'
+        self.__descErrors = []
 
         self.__setupSelection()
 
-        self.__descErrors = []
 
     def __setupSelection(self):
         if not self.__server:
@@ -563,10 +563,19 @@ class Settings(object):
     def fetchConfiguration(self):
         inst = self.setConfigInstance()
         avsl = inst.availableSelections()
+        confs = None
         if self.mntGrp in avsl:
             confs = inst.selections([self.mntGrp])
-            if confs:
-                self.__selection.set(json.loads(str(confs[0])))
+        if confs:
+            self.__selection.set(json.loads(str(confs[0])))
+        else:
+            avmg = self.availableMeasurementGroups()
+            if self.mntGrp in avmg:
+                self.__selection.deselect()
+                self.__selection.resetAutomaticComponents(
+                    self.defaultAutomaticComponents)
+                self.updateControllers()
+            
 
     ## loads configuration
     def loadConfiguration(self):
