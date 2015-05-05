@@ -375,12 +375,15 @@ class Selection(object):
 
         for acp in acps.keys():
             if acp in rcp.keys():
-                acps[acp] = False
                 value = rcp[acp]
                 descErrors.append(json.dumps(
                         {"component": str(acp),
                          "datasource": str(value[0]),
                          "message": str(value[1])}))
+                if str(value[1]) != "ALARM_STATE":
+                    acps[acp] = False
+                else:
+                    acps[acp] = True
             else:
                 acps[acp] = True
 

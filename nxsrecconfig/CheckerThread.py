@@ -68,10 +68,10 @@ class CheckerThread(threading.Thread):
 
             try:
                 dp = PyTango.DeviceProxy(dname)
-                if dp.command_inout("State") in [
-                    PyTango.DevState.FAULT,
-                    PyTango.DevState.ALARM]:
-                    raise WrongStateError("FAULT or ALARM STATE")
+                state = dp.command_inout("State")
+                if  state in [
+                    PyTango.DevState.FAULT]:
+                    raise FaultStateError("FAULT STATE")
                 dp.ping()
                 if not attr:
                     for gattr in ATTRIBUTESTOCHECK:
@@ -79,6 +79,13 @@ class CheckerThread(threading.Thread):
                             _ = getattr(dp, gattr)
                 else:
                     _ = getattr(dp, attr)
+                if state in [
+                    PyTango.DevState.ALARM]:
+                    raise AlarmStateError("ALARM STATE")
+            except AlarmStateError as e:
+                message = "ALARM_STATE"
+                erds = ds
+                break
             except Exception as e:
                 message = str(e)
                 erds = ds
@@ -89,5 +96,8 @@ class CheckerThread(threading.Thread):
             lds[:] = [lds[0], erds, message]
 
 
-class WrongStateError(Exception):
+class AlarmStateError(Exception):
+    pass
+
+class FaultStateError(Exception):
     pass
