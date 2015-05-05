@@ -160,6 +160,14 @@ class UtilsTest(unittest.TestCase):
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         el = Utils()
 
+        tTnp = {PyTango.DevLong64: "int64", PyTango.DevLong: "int32",
+                PyTango.DevShort: "int16", PyTango.DevUChar: "uint8",
+                PyTango.DevULong64: "uint64", PyTango.DevULong: "uint32",
+                PyTango.DevUShort: "uint16", PyTango.DevDouble: "float64",
+                PyTango.DevFloat: "float32", PyTango.DevString: "string",
+                PyTango.DevBoolean: "bool"}
+        
+        self.myAssertDict(tTnp, Utils.tTnp)
 #        self.assertEqual(el.tagName, self._tfname)
 #        self.assertEqual(el._tagAttrs, self._fattrs)
 #        self.assertEqual(el.content, [])
@@ -540,6 +548,128 @@ class UtilsTest(unittest.TestCase):
         dd = Utils.getFullDeviceNames([pool, pool2], lst)
         self.assertEqual(dd, res)
             
+
+
+
+    ## getDeviceName test   
+    def test_getAliases_empty(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        
+
+        arr = [
+            {"name":"test/ct/01", "full_name":"counter_01/Value"} ,
+            {"name":"test/ct/02", "full_name":"counter_02/att"} ,
+            {"name":"test/ct/03", "full_name":"counter_03/value"} ,
+            {"name":"test/ct/04", "full_name":"counter_04/13"} ,
+            {"name":"conternull", "full_name":"null"} ,
+            ]
+
+
+
+        pool = Pool()
+        pool.AcqChannelList = [json.dumps(a) for a in arr]
+    
+        import nxsrecconfig 
+        dd = Utils.getAliases([])
+        self.assertEqual(dd, {})
+
+        dd = Utils.getAliases([], [arr[0]["full_name"]])
+        self.assertEqual(dd, {})
+        dd = Utils.getAliases([pool], [arr[4]["full_name"]])
+        self.assertEqual(dd, {})
+        
+
+
+    ## getDeviceName test   
+
+
+    ## getDeviceName test   
+    def test_getAliases_pool1(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        
+
+        arr = [
+            ["test/ct/01", "counter_01", "Value"],
+            ["test/ct/02", "counter_02", "att"],
+            ["test/ct/03", "counter_03", "value"],
+            ["test/ct/04", "counter_04", "13"],
+            ["counter_04","null",""],
+            ]
+
+        pool = Pool()
+        pool.AcqChannelList = [json.dumps(
+                {"name":a[0], "full_name":"%s/%s" % (a[1], a[2])}) for a in arr]
+    
+        
+        for ar in arr:
+            dd = Utils.getAliases([pool], [ar[1]])
+            self.assertEqual(dd, {ar[1]:ar[0]})
+        
+
+        dd = Utils.getAliases([pool], [ar[1] for ar in arr])
+        self.assertEqual(dd, dict((ar[1],ar[0]) for ar in arr))
+
+        dd = Utils.getAliases([pool])
+        self.assertEqual(dd, dict((ar[1],ar[0]) for ar in arr))
+            
+
+
+    def test_getAliases_pool2(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        
+
+        arr = [
+            ["test/ct/01", "counter_01", "Value"],
+            ["test/ct/02", "counter_02", "att"],
+            ["test/ct/03", "counter_03", "value"],
+            ["test/ct/04", "counter_04", "13"],
+            ["counter_04", "null",""],
+            ]
+
+
+        arr2 = [
+            ["test/mca/01", "mca_01", "1"],
+            ["test/mca/02", "mca_02", "a"],
+            ["test/sca/03", "my_sca_03", "1"],
+            ["test/sca/04", "mysca_04", "123"],
+            ]
+
+        pool = Pool()
+        pool2 = Pool()
+        pool.AcqChannelList = [json.dumps(
+                {"name":a[0], "full_name":"%s/%s" % (a[1], a[2])}) for a in arr]
+        pool2.AcqChannelList = [json.dumps(
+                {"name":a[0], "full_name":"%s/%s" % (a[1], a[2])}) for a in arr2]
+    
+        
+        for ar in arr:
+            dd = Utils.getAliases([pool, pool2], [ar[1]])
+            self.assertEqual(dd, {ar[1]:ar[0]})
+
+        for ar in arr2:
+            dd = Utils.getAliases([pool, pool2], [ar[1]])
+            self.assertEqual(dd, {ar[1]:ar[0]})
+        
+
+        res = dict((ar[1],ar[0]) for ar in arr)
+        res.update(dict((ar[1],ar[0]) for ar in arr2))
+
+        lst = [ar[1] for ar in arr]
+        lst.extend([ar[1] for ar in arr2])
+
+        dd = Utils.getAliases([pool, pool2], lst)
+        self.assertEqual(dd, res)
+
+        dd = Utils.getAliases([pool, pool2])
+        self.assertEqual(dd, res)
+
+        lst.extend(["sfdsdf","sdfsfd"])
+        dd = Utils.getAliases([pool, pool2], lst)
+        self.assertEqual(dd, res)
+            
         
 
 
@@ -643,6 +773,37 @@ class UtilsTest(unittest.TestCase):
         dd = Utils.getMntGrpName([pool, pool2], "adsasd")
         self.assertEqual(dd, '')
             
+
+
+
+
+    ## getDeviceName test   
+    def test_getMntGrps(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        
+
+        arr = [
+            {"name":"test/ct/01", "full_name":"mntgrp_01e"} ,
+            {"name":"test/ct/02", "full_name":"mntgrp_02att"} ,
+            {"name":"test/ct/03", "full_name":"mntgrp_03value"} ,
+            {"name":"test/ct/04", "full_name":"mntgrp_04/13"} ,
+            {"name":"null", "full_name":"mntgrp_04"} ,
+            ]
+
+
+
+        pool = Pool()
+        pool.MeasurementGroupList = [json.dumps(a) for a in arr]
+    
+        import nxsrecconfig 
+        dd = Utils.getFullDeviceNames([])
+        self.assertEqual(dd, {})
+
+        self.myAssertRaise(Exception, Utils.getMntGrps,None)
+        dd = Utils.getMntGrps(pool)
+        self.assertEqual(dd, [a["name"] for a in arr])
+
 
 
 
@@ -764,7 +925,53 @@ class UtilsTest(unittest.TestCase):
         dd = Utils.getDeviceControllers([pool, pool2], lst)
         self.assertEqual(dd, res)
             
+
+
+
+
+
+    ## getExperimentalChannels test   
+    def test_getExperimentalChannels_pool1(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
         
+
+        arr = [
+            {"name":"test/ct/01", "controller":"counter_01/Value"} ,
+            {"name":"test/ct/02", "controller":"counter_02/att"} ,
+            {"name":"test/ct/03", "controller":"counter_03/value"} ,
+            {"name":"test/ct/04", "controller":"counter_04/13"} ,
+            {"name":"null", "controller":"counter_04"} ,
+            ]
+
+        arr2 = [
+            ["test/mca/01", "mca_01"],
+            ["test/mca/02", "mca_02"],
+            ["test/sca/03", "my_sca1"],
+            ["test/sca/04", "mysca_123"],
+            ]
+
+
+        pool = Pool()
+        pool2 = Pool()
+        pool.ExpChannelList = [json.dumps(a) for a in arr]
+        pool2.ExpChannelList = [json.dumps(
+                {"name":a[0], "controller":a[1]}) for a in arr2]
+    
+        import nxsrecconfig 
+        dd = Utils.getExperimentalChannels([])
+        self.assertEqual(dd, [])
+
+        dd = Utils.getExperimentalChannels([])
+        self.assertEqual(dd, [])
+        dd = Utils.getExperimentalChannels([pool])
+        self.assertEqual(dd, [a["name"] for a in arr])
+
+        dd = Utils.getExperimentalChannels([pool, pool2])
+        res = [a["name"] for a in arr]
+        res.extend([a[0] for a in arr2])
+        self.assertEqual(dd, res)
+
 
     def test_getTimers(self):
         fun = sys._getframe().f_code.co_name
