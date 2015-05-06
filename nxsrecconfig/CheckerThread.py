@@ -85,7 +85,6 @@ class CheckerThread(threading.Thread):
             except AlarmStateError as e:
                 message = "ALARM_STATE"
                 erds = ds
-                break
             except Exception as e:
                 message = str(e)
                 erds = ds

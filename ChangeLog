@@ -1,4 +1,8 @@
 2015-05-06 Jan Kotanski <jankotan@gmail.com>
+	* fix for treatment of ALARM state for description component devices
+	* tagged as v1.19.8
+
+2015-05-06 Jan Kotanski <jankotan@gmail.com>
 	* adding treatment of ALARM state for description component devices
 	* tagged as v1.19.7
 
