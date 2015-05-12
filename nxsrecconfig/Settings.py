@@ -53,7 +53,7 @@ class Settings(object):
         self.__db = PyTango.Database()
 
         ## timer filter list
-        self.timerFilterList = ["*dgg*", "*ctctrl*"]
+        self.timerFilterList = ["*dgg*", "*/ctctrl0*"]
         ## default automaticComponents
         self.defaultAutomaticComponents = []
         ## default device groups

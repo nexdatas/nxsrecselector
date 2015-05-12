@@ -1,4 +1,8 @@
 2015-05-12 Jan Kotanski <jankotan@gmail.com>
+	* changing default timer mask
+	* tagged as v1.19.10
+
+2015-05-12 Jan Kotanski <jankotan@gmail.com>
 	* changing unicode to string for env var
 	* tagged as v1.19.9
 
