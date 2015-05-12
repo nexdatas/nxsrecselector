@@ -447,3 +447,15 @@ class Utils(object):
             return server.command_inout(command)
         else:
             return server.command_inout(command, *var)
+
+    @classmethod
+    def toString(cls, obj):
+        if isinstance(obj, unicode):
+            return str(obj)
+        elif isinstance(obj, list):
+            return [cls.toString(el) for el in obj]
+        elif isinstance(obj, dict):
+            return dict([(cls.toString(key), cls.toString(value)) \
+                             for key, value in obj.iteritems()])
+        else:
+            return obj
