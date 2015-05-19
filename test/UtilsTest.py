@@ -75,7 +75,49 @@ class Pool(object):
         self.AcqChannelList = []
         self.MeasurementGroupList = []
         self.ExpChannelList = []
-      
+
+
+class Server(object):
+
+    def __init__(self, value=None):
+        self.reset(value)
+
+    def reset(self, value=None):
+        self.value = value
+        self.command = None
+        self.exe = False
+        self.var = None
+        
+    def command_inout(self,command, var=None):
+        self.command = command
+        self.var = var
+        self.exe = True
+        return self.value
+
+class NoServer(object):
+
+    def __init__(self, value=None):
+        self.reset(value)
+
+    def reset(self, value=None):
+        self.value = value
+        self.command = None
+        self.exe = False
+        self.var = None
+        
+    def testcommand(self,  var):
+        self.command = 'testcommand'
+        self.var = var
+        self.exe = True
+        return self.value
+
+    def testcommand2(self):
+        self.command = 'testcommand2'
+        self.var = None
+        self.exe = True
+        return self.value
+
+        
 
 ## test fixture
 class UtilsTest(unittest.TestCase):
@@ -1684,6 +1726,71 @@ class UtilsTest(unittest.TestCase):
                     self.assertTrue(isinstance(Utils.toString(ke), str))
                     self.assertTrue(isinstance(Utils.toString(vl), str))
 
+    def test_command(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+
+        arg = [
+            ["mycommand", None, "return"],
+            ["mycommand1", ":asda",None ],
+            ["mycommanwrd", {"sdf":"sdfsd"}, 342],
+            ["mycommanwrd", None, None],
+            ["mycommansdfd", [], "rurn"],
+            ["mmmand", None, []],
+            ]
+        
+        for ar in arg:
+            server = Server(ar[2])
+            self.assertEqual(server.exe, False)
+            val = Utils.command(server, ar[0], ar[1])
+            self.assertEqual(server.exe, True)
+            self.assertEqual(server.command, ar[0])
+            self.assertEqual(server.var, ar[1])
+            self.assertEqual(val, ar[2])
+
+
+        for ar in arg:
+            server = Server(ar[2])
+            self.assertEqual(server.exe, False)
+            val = Utils.command(server, ar[0])
+            self.assertEqual(server.exe, True)
+            self.assertEqual(server.command, ar[0])
+            self.assertEqual(server.var, None)
+            self.assertEqual(val, ar[2])
+        
+    def test_command_noserver(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+
+        arg = [
+            [None, "return"],
+            [":asda",None ],
+            [{"sdf":"sdfsd"}, 342],
+            [ None, None],
+            [[], "rurn"],
+            [ None, []],
+            ]
+        
+        for ar in arg:
+            server = NoServer(ar[1])
+            self.assertEqual(server.exe, False)
+            val = Utils.command(server, "testcommand",  ar[0])
+            self.assertEqual(server.exe, True)
+            self.assertEqual(server.command, "testcommand")
+            self.assertEqual(server.var, ar[0])
+            self.assertEqual(val, ar[1])
+
+
+        for ar in arg:
+            server = Server(ar[1])
+            self.assertEqual(server.exe, False)
+            val = Utils.command(server, "testcommand2")
+            self.assertEqual(server.exe, True)
+            self.assertEqual(server.command, "testcommand2")
+            self.assertEqual(server.var, None)
+            self.assertEqual(val, ar[1])
+        
+            
 if __name__ == '__main__':
     unittest.main()
 
