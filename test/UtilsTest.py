@@ -28,6 +28,8 @@ import struct
 import PyTango
 import pickle
 import json
+from xml.dom import minidom
+import binascii
 
 import logging
 logger = logging.getLogger()
@@ -103,9 +105,17 @@ class UtilsTest(unittest.TestCase):
         self.chnl = '{"ndim":0, "index":%s, "name":"%s", "data_type":"%s", "plot_type":%s, "enabled": true, "label": "%s", "instrument":null, "shape": [%s], "_controller_name": "%s", "conditioning": "", "full_name": "%s", "_unit_id": "0", "normalization": 0, "output":true, "plot_axes":[%s], "nexus_path": "", "data_units": "No unit", "source": "%s"}'
 
 
+        try:
+            self.__seed  = long(binascii.hexlify(os.urandom(16)), 16)
+        except NotImplementedError:
+            self.__seed  = long(time.time() * 256) 
+         
+        self.__rnd = random.Random(self.__seed)
+
     ## test starter
     # \brief Common set up
     def setUp(self):       
+        print "SEED =", self.__seed 
         self._simps.setUp()
         self._simps2.setUp()
         self._simps3.setUp()
@@ -998,7 +1008,7 @@ class UtilsTest(unittest.TestCase):
             ["test/mca/02", ["CTExpChannel2","CTExpChannel1"],"haso228k:10000/expchan/dg2_exp_01/1/Value"],
             ["test/sca/03", ["CTExpChannel3","CTExpChannel123"],"haso228k:10000/expchan/dg2_exp_01/1/Value"],
             ["test/sca/04", ["CTExpChannel","CTExpChannel2","CTExpChannel3"], 
-             "haso228k:10000/expchan/dgg2_exp_01/1/Value"],
+            "haso228k:10000/expchan/dgg2_exp_01/1/Value"],
             ]
 
         pool = Pool()
@@ -1024,7 +1034,7 @@ class UtilsTest(unittest.TestCase):
 
 
 
-    def ttest_addDevice_empty(self):
+    def oldtest_addDevice_empty(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         
@@ -1073,7 +1083,7 @@ class UtilsTest(unittest.TestCase):
 
 
 
-    def ttest_addDevice_controller(self):
+    def oldtest_addDevice_controller(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         
@@ -1171,7 +1181,7 @@ class UtilsTest(unittest.TestCase):
 
 
 
-    def ttest_addDevice_controller_separate_ctrls(self):
+    def oldtest_addDevice_controller_separate_ctrls(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         
@@ -1238,7 +1248,7 @@ class UtilsTest(unittest.TestCase):
         self.myAssertDict(hsh, fr)
 
 
-    def ttest_addDevice_controller_separate_ctrls_2pools(self):
+    def oldtest_addDevice_controller_separate_ctrls_2pools(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         
@@ -1318,7 +1328,7 @@ class UtilsTest(unittest.TestCase):
             
 
 
-    def ttest_addDevice_controller_ctrls(self):
+    def oldtest_addDevice_controller_ctrls(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
 
@@ -1384,7 +1394,7 @@ class UtilsTest(unittest.TestCase):
         self.myAssertDict(hsh, fr)
 
 
-    def ttest_addDevice_controller_ctrls_2pools(self):
+    def oldtest_addDevice_controller_ctrls_2pools(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
 
@@ -1435,6 +1445,72 @@ class UtilsTest(unittest.TestCase):
         self.myAssertDict(hsh, fr)
 
             
+    def test_getRecord(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+
+        dom = minidom.parseString("<tag></tag>")
+        node = dom.getElementsByTagName("tag")
+        self.assertEqual(Utils.getRecord(node[0]), "")
+
+        dom = minidom.parseString("<tag><device/></tag>")
+        node = dom.getElementsByTagName("tag")
+        self.assertEqual(Utils.getRecord(node[0]), "")
+
+        host = 'haso2'*self.__rnd.randint(1, 3)
+        dom = minidom.parseString(
+            '<tag><device hostname="%s"></device></tag>' % (host))
+        node = dom.getElementsByTagName("tag")
+        self.assertEqual(Utils.getRecord(node[0]), '')
+
+        host = 'haso2'*self.__rnd.randint(1, 3)
+        dev = 'defv'*self.__rnd.randint(1, 3)
+        dom = minidom.parseString(
+            '<tag><device hostname="%s" /><record name="%s" /></tag>' % (host,dev))
+        node = dom.getElementsByTagName("tag")
+        self.assertEqual(Utils.getRecord(node[0]), dev)
+
+        host = 'haso2'*self.__rnd.randint(1, 3)
+        rec = 'recfv'*self.__rnd.randint(1, 3)
+        dev = 'devfv/'*self.__rnd.randint(1, 3)
+        dom = minidom.parseString(
+            '<tag><device name="%s" /><record name="%s" /></tag>' % (dev, rec))
+        node = dom.getElementsByTagName("tag")
+        self.assertEqual(Utils.getRecord(node[0]), "%s/%s" % (dev, rec))
+
+        host = 'haso2'*self.__rnd.randint(1, 3)
+        rec = 'recfv'*self.__rnd.randint(1, 3)
+        dev = 'devfv/'*self.__rnd.randint(1, 3)
+        port = 10000
+        dom = minidom.parseString(
+            '<tag><device name="%s" hostname="%s" /><record name="%s" /></tag>' % (dev, host, rec))
+        node = dom.getElementsByTagName("tag")
+        self.assertEqual(Utils.getRecord(node[0]), "%s:%s/%s/%s" % (host, port, dev, rec))
+
+
+        host = 'haso2'*self.__rnd.randint(1, 3)
+        rec = 'recfv'*self.__rnd.randint(1, 3)
+        dev = 'devfv/'*self.__rnd.randint(1, 3)
+        port = 10000*self.__rnd.randint(1, 3)
+        dom = minidom.parseString(
+            '<tag><device name="%s" port="%s" /><record name="%s" /></tag>' % (dev, port, rec))
+        node = dom.getElementsByTagName("tag")
+        self.assertEqual(Utils.getRecord(node[0]), "%s/%s" % (dev, rec))
+        
+
+        host = 'haso2'*self.__rnd.randint(1, 3)
+        rec = 'recfv'*self.__rnd.randint(1, 3)
+        dev = 'devfv/'*self.__rnd.randint(1, 3)
+        port = 10000*self.__rnd.randint(1, 3)
+        dom = minidom.parseString(
+            '<tag><device name="%s" hostname="%s" port="%s"/><record name="%s" /></tag>' % (
+                dev, host, port, rec))
+        node = dom.getElementsByTagName("tag")
+        self.assertEqual(Utils.getRecord(node[0]), "%s:%s/%s/%s" % (host, port, dev, rec))
+
+    def test_getRecord(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
 
 if __name__ == '__main__':
     unittest.main()
