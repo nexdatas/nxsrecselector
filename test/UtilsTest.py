@@ -1561,7 +1561,6 @@ class UtilsTest(unittest.TestCase):
             ]
 
         for ar in arg:
-            print  Utils.stringToDictJson(ar[0], True)
             self.myAssertDict(json.loads(Utils.stringToDictJson(ar[0], True)), ar[1])
 
 
@@ -1569,8 +1568,6 @@ class UtilsTest(unittest.TestCase):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         
-        fac = self.__rnd.randint(2, 10)
-        fac2 = self.__rnd.randint(2, 10)
         arg = [
             ["", []],
             ["Not initialised", []],
@@ -1588,6 +1585,104 @@ class UtilsTest(unittest.TestCase):
         for ar in arg:
             self.assertEqual(json.loads(Utils.stringToListJson(ar[0])), ar[1])
 
+
+    def test_compareDict(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        
+        arg = [
+            [{}, {}, True],
+            ["{}", {}, False],
+            [{}, [], False],
+            [{"some":False,"some2":True,"some4":True}, 
+             {"some":False,"some2":True,"some4":True}, True],
+            [{"some":12,"some2":True,"some4":True}, 
+             {"some":12,"some4":True,"some2":True}, True],
+            [{"some":False,"some2":True,"some4":True}, 
+             {"some":False,"some4":True,"some2":False}, False],
+            [{"some":12,"some2":True,"some4":True}, 
+             {"some":12,"some4":True,"som":True}, False],
+            [{"sdf":{"some":"sFalse","some2":True,"some4":True}}, 
+             {"sdf":{"some":"sFalse","some4":True,"some2":True}}, True],
+            [{"sdf":{"some":"sFalse","some2":True,"some4":True}}, 
+             {"sdf":{"some1":"sFalse","some4":True,"some2":True}}, False],
+            [{"sdf":["some","sFalse","some2",True,"some4",True]}, 
+             {"sdf":["some","sFalse","some2",True,"some4",True]}, True],
+            ]
+
+        for ar in arg:
+            self.assertEqual(Utils.compareDict(ar[0], ar[1]), ar[2])
+
+    def test_toString_string(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+
+        arg = [
+            ["", ""],
+            ["asd", "asd"],
+            ["asdf", u'asdf'],
+            ["dffd", u'dffd'],
+               ]
+        for ar in arg:
+            self.assertEqual(Utils.toString(ar[1]), ar[0])
+            self.assertTrue(isinstance(Utils.toString(ar[0]), str))
+
+    def test_toString_list(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+
+        arg = [
+            [["asd"], ["asd"]],
+            [["asdf"], [u'asdf']],
+            [["dffd"], [u'dffd']],
+            [["asd","asdfd"], ["asd","asdfd"]],
+            [["asdf","asdfasdf"], [u'asdf', u'asdfasdf']],
+            [["dffd", 'sdfasdf'], [u'dffd', u'sdfasdf']],
+               ]
+        for ar in arg:
+            self.assertEqual(Utils.toString(ar[1]), ar[0])
+            for aa in ar[0]:
+                self.assertTrue(isinstance(Utils.toString(aa), str))
+
+
+    def test_toString_dict(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+
+        arg = [
+            [{"asd":"asdfd"}, {"asd":"asdfd"}],
+            [{"asdf":"asdfasdf"}, {u'asdf': u'asdfasdf'}],
+            [{"dffd": 'sdfasdf'}, {u'dffd': u'sdfasdf'}],
+            [{"asdf":"asdfasdf","asdf123":"asdfasdf"}, 
+             {u'asdf': u'asdfasdf', u'asdf123': u'asdfasdf'}],
+               ]
+        for ar in arg:
+            print ar
+            self.assertEqual(Utils.toString(ar[1]), ar[0])
+            for ke, vl in ar[0].items():
+                self.assertTrue(isinstance(Utils.toString(ke), str))
+                self.assertTrue(isinstance(Utils.toString(vl), str))
+
+
+
+    def test_toString_listdict(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+
+        arg = [
+            [[{"asd":"asdfd"}], [{"asd":"asdfd"}]],
+            [[{"asdf":"asdfasdf"}], [{u'asdf': u'asdfasdf'}]],
+            [[{"dffd": 'sdfasdf'}], [{u'dffd': u'sdfasdf'}]],
+            [[{"asdf":"asdfasdf","asdf123":"asdfasdf"}], 
+             [{u'asdf': u'asdfasdf', u'asdf123': u'asdfasdf'}]],
+               ]
+        for ar in arg:
+            print ar
+            self.assertEqual(Utils.toString(ar[1]), ar[0])
+            for aa in ar[0]:
+                for ke, vl in aa.items():
+                    self.assertTrue(isinstance(Utils.toString(ke), str))
+                    self.assertTrue(isinstance(Utils.toString(vl), str))
 
 if __name__ == '__main__':
     unittest.main()
