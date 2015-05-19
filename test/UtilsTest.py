@@ -1508,9 +1508,59 @@ class UtilsTest(unittest.TestCase):
         node = dom.getElementsByTagName("tag")
         self.assertEqual(Utils.getRecord(node[0]), "%s:%s/%s/%s" % (host, port, dev, rec))
 
-    def test_getRecord(self):
+    def test_stringToDictJson(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        
+        fac = self.__rnd.randint(2, 10)
+        fac2 = self.__rnd.randint(2, 10)
+        arg = [
+            ["", {}],
+            ["some True", {"some":"True"}],
+            ["some trUe", {"some":"trUe"}],
+            ["some falSe", {"some":"falSe"}],
+            ["some False", {"some":"False"}],
+            ["some False some2 sfd some4 gdg", 
+             {"some":"False","some2":"sfd","some4":"gdg"}],
+            ['{"some":"False","some2":"sfd","some4":"gdg"}', 
+             {"some":"False","some2":"sfd","some4":"gdg"}],
+            ['{"some":false,"some2":true,"some4":"gdg"}', 
+             {"some":False,"some2":True,"some4":"gdg"}],
+            ['{"some":123,"some2":154.35,"some4":-34.4}', 
+             {"some":123,"some2":154.35,"some4":-34.4}],
+            ]
+
+        for ar in arg:
+            self.myAssertDict(json.loads(Utils.stringToDictJson(ar[0])), ar[1])
+            self.myAssertDict(json.loads(Utils.stringToDictJson(ar[0], False)), ar[1])
+
+
+
+    def test_stringToDictJson_tobool(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        
+        fac = self.__rnd.randint(2, 10)
+        fac2 = self.__rnd.randint(2, 10)
+        arg = [
+            ["", {}],
+            ["some True", {"some":True}],
+            ["some trUe", {"some":True}],
+            ["some falSe", {"some":False}],
+            ["some False", {"some":False}],
+            ["some False some2 sfd some4 gdg", 
+             {"some":False,"some2":True,"some4":True}],
+            ['{"some":"False","some2":"sfd","some4":"gdg"}', 
+             {"some":"False","some2":"sfd","some4":"gdg"}],
+            ['{"some":false,"some2":true,"some4":"gdg"}', 
+             {"some":False,"some2":True,"some4":"gdg"}],
+            ['{"some":123,"some2":154.35,"some4":-34.4}', 
+             {"some":123,"some2":154.35,"some4":-34.4}],
+            ]
+
+        for ar in arg:
+            print  Utils.stringToDictJson(ar[0], True)
+            self.myAssertDict(json.loads(Utils.stringToDictJson(ar[0], True)), ar[1])
 
 if __name__ == '__main__':
     unittest.main()
