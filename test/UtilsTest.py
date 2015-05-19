@@ -1516,6 +1516,7 @@ class UtilsTest(unittest.TestCase):
         fac2 = self.__rnd.randint(2, 10)
         arg = [
             ["", {}],
+            ["Not initialised", {}],
             ["some True", {"some":"True"}],
             ["some trUe", {"some":"trUe"}],
             ["some falSe", {"some":"falSe"}],
@@ -1544,6 +1545,7 @@ class UtilsTest(unittest.TestCase):
         fac2 = self.__rnd.randint(2, 10)
         arg = [
             ["", {}],
+            ["Not initialised", {}],
             ["some True", {"some":True}],
             ["some trUe", {"some":True}],
             ["some falSe", {"some":False}],
@@ -1561,6 +1563,31 @@ class UtilsTest(unittest.TestCase):
         for ar in arg:
             print  Utils.stringToDictJson(ar[0], True)
             self.myAssertDict(json.loads(Utils.stringToDictJson(ar[0], True)), ar[1])
+
+
+    def test_stringToDictJson(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        
+        fac = self.__rnd.randint(2, 10)
+        fac2 = self.__rnd.randint(2, 10)
+        arg = [
+            ["", []],
+            ["Not initialised", []],
+            ["some True", ["some","True"]],
+            ["some trUe", ["some","trUe"]],
+            ["some falSe", ["some","falSe"]],
+            ["some False", ["some","False"]],
+            ["some False some2 sfd some4 gdg", 
+             ["some","False","some2", "sfd","some4","gdg"]],
+             ['["some","False","some2", "sfd","some4","gdg"]',
+             ["some","False","some2", "sfd","some4","gdg"]
+             ],
+            ]
+
+        for ar in arg:
+            self.assertEqual(json.loads(Utils.stringToListJson(ar[0])), ar[1])
+
 
 if __name__ == '__main__':
     unittest.main()
