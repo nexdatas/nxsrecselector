@@ -210,7 +210,7 @@ class MntGrpTools(object):
             if not fpool:
                 fpool = pool
         if fpool:
-            mntgrps = Utils.getMntGrps(fpool)
+            mntgrps = Utils.getMntGrps([fpool])
         mntgrps = mntgrps if mntgrps else []
         amntgrp = Utils.getEnv('ActiveMntGrp', self.macroServer)
 
@@ -263,7 +263,7 @@ class MntGrpTools(object):
             pool = Utils.openProxy(pl)
             if not fpool:
                 fpool = pool
-            mntgrps = Utils.getMntGrps(pool)
+            mntgrps = Utils.getMntGrps([pool])
             if amntgrp in mntgrps:
                 apool = pool
             if lpool[1] < len(mntgrps):
@@ -542,7 +542,7 @@ class MntGrpTools(object):
             u'channels']
         if not fullname in ctrlChannels.keys():
             source = Utils.getSource(fullname)
-            shp, dt, _, ut = Utils.getShapeTypeValue(source)
+            shp, dt, ut = Utils.getShapeTypeUnit(source)
             dct = {}
             dct['_controller_name'] = unicode(ctrl)
             dct['_unit_id'] = u'0'
@@ -594,7 +594,7 @@ class MntGrpTools(object):
             label = record
         if not fullname in ctrlChannels.keys():
             source = record
-            shp, dt, _, ut = Utils.getShapeTypeValue(source)
+            shp, dt, ut = Utils.getShapeTypeUnit(source)
             dct = {}
             dct['_controller_name'] = unicode(ctrl)
             dct['_unit_id'] = u'0'

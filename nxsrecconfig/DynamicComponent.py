@@ -143,7 +143,7 @@ class DynamicComponent(object):
             dstype = ds.attributes["type"].value
         if dstype == 'TANGO':
             source = str(Utils.getRecord(ds))
-            shape, dt, _, _ = Utils.getShapeTypeValue(source)
+            shape, dt, _ = Utils.getShapeTypeUnit(source)
             nxtype = self.__npTn[dt] \
                 if dt in self.__npTn.keys() else nxtype
         return shape, nxtype

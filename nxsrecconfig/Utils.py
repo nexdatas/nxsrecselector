@@ -39,7 +39,7 @@ class Utils(object):
             PyTango.DevULong64: "uint64", PyTango.DevULong: "uint32",
             PyTango.DevUShort: "uint16", PyTango.DevDouble: "float64",
             PyTango.DevFloat: "float32", PyTango.DevString: "string",
-            PyTango.DevBoolean: "bool"}
+            PyTango.DevBoolean: "bool", PyTango.DevEncoded:"encoded"}
 
     ## opens device proxy of the given device
     # \param cls class instance
@@ -216,13 +216,14 @@ class Utils(object):
 
     ## find measurement group from alias
     # \param cls class instance
-    # \param pool pool device
+    # \param pools list of pool devices
     # \returns name of measurement group
     @classmethod
-    def getMntGrps(cls, pool):
+    def getMntGrps(cls, pools):
         lst = []
-        if pool.MeasurementGroupList:
-            lst += pool.MeasurementGroupList
+        for pool in pools:
+            if pool.MeasurementGroupList:
+                lst += pool.MeasurementGroupList
         argout = []
         for elm in lst:
             chan = json.loads(elm)
@@ -293,9 +294,10 @@ class Utils(object):
                         res.append(chan['name'])
         return res
 
+
     ## retrives shape type value for attribure
     @classmethod
-    def getShapeTypeValue(cls, source):
+    def getShapeTypeUnit(cls, source):
         vl = None
         shp = []
         dt = 'float64'
@@ -325,7 +327,7 @@ class Utils(object):
         if ac is not None:
             dt = cls.tTnp[ac.data_type]
             ut = ac.unit
-        return (shp, dt, vl, ut)
+        return (shp, dt, ut)
 
     ## provides datasource from pool device
     # \param name device pool name

@@ -154,6 +154,50 @@ class UtilsTest(unittest.TestCase):
          
         self.__rnd = random.Random(self.__seed)
 
+
+        self._counter =  [1,-2,6,-8,9,-11]
+        self._bools =  ["TruE","0","1","False","false", "True"]
+        self._fcounter =  [1.1,-2.4,6.54,-8.456,9.456,-0.46545]
+        self._dcounter =  [0.1,-2342.4,46.54,-854.456,9.243456,-0.423426545]
+        self._logical =  [[True,False,True,False], [True,False,False,True], [False,False,True,True]]
+
+        self._logical2 =  [[[True,False,True,False], [True,False,False,True]], 
+                           [[False,False,True,True], [False,False,True,False]],
+                           [[True,False,True,True], [False,False,True,False]]]
+
+        self._mca1 = [[self.__rnd.randint(-100, 100) for e in range(256)] for i in range(3)]
+        self._mca2 = [[self.__rnd.randint(0, 100) for e in range(256)] for i in range(3)]
+        self._fmca1 = [[self.__rnd.randint(0, 100)/10. for e in range(256)] for i in range(3)]
+#        self._fmca2 = [(float(e)/(100.+e)) for e in range(2048)]
+
+        self._dates = [["1996-07-31T21:15:22.123+0600","2012-11-14T14:05:23.2344-0200",
+                        "2014-02-04T04:16:12.43-0100","2012-11-14T14:05:23.2344-0200"],
+                       ["1956-05-23T12:12:32.123+0400","1212-12-12T12:25:43.1267-0700",
+                        "914-11-04T04:13:13.44-0000","1002-04-03T14:15:03.0012-0300"],                 
+                       ["1966-02-21T11:22:02.113+0200","1432-12-11T11:23:13.1223-0300",
+                        "1714-11-10T14:03:13.12-0400","1001-01-01T14:11:11.0011-0100"]]
+
+        self._dates2 = [[["1996-07-31T21:15:22.123+0600","2012-11-14T14:05:23.2344-0200",
+                          "2014-02-04T04:16:12.43-0100","2012-11-14T14:05:23.2344-0200"],
+                         ["1996-07-31T21:15:22.123+0600","2012-11-14T14:05:23.2344-0200",
+                          "2014-02-04T04:16:12.43-0100","2012-11-14T14:05:23.2344-0200"]],
+                        [["1996-07-31T21:15:22.123+0600","2012-11-14T14:05:23.2344-0200",
+                          "2014-02-04T04:16:12.43-0100","2012-11-14T14:05:23.2344-0200"],
+                         ["956-05-23T12:12:32.123+0400","1212-12-12T12:25:43.1267-0700",
+                          "914-11-04T04:13:13.44-0000","1002-04-03T14:15:03.0012-0300"]],
+                        [["956-05-23T12:12:32.123+0400","1212-12-12T12:25:43.1267-0700",
+                          "914-11-04T04:13:13.44-0000","1002-04-03T14:15:03.0012-0300"],                 
+                         ["956-05-23T12:12:32.123+0400","1212-12-12T12:25:43.1267-0700",
+                          "914-11-04T04:13:13.44-0000","1002-04-03T14:15:03.0012-0300"]]]
+
+        self._pco1 = [[[self.__rnd.randint(0, 100) for e1 in range(8)]  for e2 in range(10)] for i in range(3)]
+        self._fpco1 = [[[self.__rnd.randint(0, 100)/10. for e1 in range(8)]  for e2 in range(10)] for i in range(3)]
+
+        self._bint = "int64" if IS64BIT else "int32"
+        self._buint = "uint64" if IS64BIT else "uint32"
+        self._bfloat = "float64" if IS64BIT else "float32"
+
+
     ## test starter
     # \brief Common set up
     def setUp(self):       
@@ -217,14 +261,9 @@ class UtilsTest(unittest.TestCase):
                 PyTango.DevULong64: "uint64", PyTango.DevULong: "uint32",
                 PyTango.DevUShort: "uint16", PyTango.DevDouble: "float64",
                 PyTango.DevFloat: "float32", PyTango.DevString: "string",
-                PyTango.DevBoolean: "bool"}
+                PyTango.DevBoolean: "bool", PyTango.DevEncoded:"encoded"}
         
         self.myAssertDict(tTnp, Utils.tTnp)
-#        self.assertEqual(el.tagName, self._tfname)
-#        self.assertEqual(el._tagAttrs, self._fattrs)
-#        self.assertEqual(el.content, [])
-#        self.assertEqual(el.doc, "")
-#        self.assertEqual(el.last, None)
 
     ## openProxy test
     # \brief It tests default settings
@@ -843,18 +882,32 @@ class UtilsTest(unittest.TestCase):
             {"name":"null", "full_name":"mntgrp_04"} ,
             ]
 
+        arr2 = [
+            {"name":"test/ct/011", "full_name":"mntgrp_01e1"} ,
+            {"name":"test/ct/021", "full_name":"mntgrp_02att1"} ,
+            {"name":"test/ct/031", "full_name":"mntgrp_03value1"} ,
+            {"name":"test/ct/041", "full_name":"mntgrp_04/131"} ,
+            {"name":"null", "full_name":"mntgrp_041"} ,
+            ]
+
 
 
         pool = Pool()
         pool.MeasurementGroupList = [json.dumps(a) for a in arr]
-    
+        pool2 = Pool()
+        pool2.MeasurementGroupList = [json.dumps(a) for a in arr2]
         import nxsrecconfig 
         dd = Utils.getFullDeviceNames([])
         self.assertEqual(dd, {})
 
-        self.myAssertRaise(Exception, Utils.getMntGrps,None)
-        dd = Utils.getMntGrps(pool)
+        self.myAssertRaise(Exception, Utils.getMntGrps, None)
+        dd = Utils.getMntGrps([pool])
         self.assertEqual(dd, [a["name"] for a in arr])
+        self.myAssertRaise(Exception, Utils.getMntGrps, None)
+        dd = Utils.getMntGrps([pool, pool2])
+        res = [a["name"] for a in arr] 
+        res.extend([a["name"] for a in arr2])
+        self.assertEqual(dd, res)
 
 
 
@@ -1756,7 +1809,7 @@ class UtilsTest(unittest.TestCase):
             self.assertEqual(server.exe, True)
             self.assertEqual(server.command, ar[0])
             self.assertEqual(server.var, None)
-            self.assertEqual(val, ar[2])
+            self.assertEqual(val, ar[2] )
         
     def test_command_noserver(self):
         fun = sys._getframe().f_code.co_name
@@ -1790,7 +1843,164 @@ class UtilsTest(unittest.TestCase):
             self.assertEqual(server.var, None)
             self.assertEqual(val, ar[1])
         
-            
+
+    def checkstu(self, par, shape, dtype, unit):
+        self.assertEqual(shape, par[0])
+        self.assertEqual(dtype, par[1])
+        self.assertEqual(unit if unit else 'No unit', par[2])
+
+    def test_command_getShapeTypeUnit(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        self.myAssertRaise(Exception,
+                           Utils.getShapeTypeUnit, 
+                           "ttestp09/testts/t1r228/sdfffffffffffffffffffsdfs")
+        
+    def test_command_getShapeTypeUnit_scalar(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+
+        self._simps.dp.ScalarBoolean = bool(self._bools[0])
+        self._simps.dp.ScalarUChar = abs(self._counter[0])
+        self._simps.dp.ScalarShort = self._counter[0]
+        self._simps.dp.ScalarUShort = abs(self._counter[0])
+        self._simps.dp.ScalarLong = self._counter[0]
+        self._simps.dp.ScalarULong = abs(self._counter[0])
+        self._simps.dp.ScalarLong64 = self._counter[0]
+        self._simps.dp.ScalarFloat = self._fcounter[0]
+        self._simps.dp.ScalarDouble = self._dcounter[0]
+        self._simps.dp.ScalarString = self._bools[0]
+        self._simps.dp.ScalarULong64 =long(abs(self._counter[0]))
+        
+        
+        
+        arr = {
+            'ScalarBoolean':[[], 'bool','No unit'],
+            'ScalarUChar':[[], 'uint8','mm'],
+            'ScalarShort':[[], 'int16','deg'],
+            'ScalarUShort':[[], 'uint16','No unit'],
+            'ScalarLong':[[], 'int32','rad'],
+            'ScalarULong':[[], 'uint32','um'],
+            'ScalarLong64':[[], 'int64','cm'],
+            'ScalarFloat':[[], 'float32','eV'],
+            'ScalarDouble':[[], 'float64','GeV'],
+            'ScalarString':[[], 'string','mm N'],
+            'ScalarULong64':[[], 'uint64',''],
+            }
+
+        arr2 = {
+            'ScalarEncoded':[[], 'encoded','No unit'],
+            }
+
+        for k, ar in arr.items():
+            ap = PyTango.AttributeProxy("ttestp09/testts/t1r228/%s" % k)
+            ac = ap.get_config()
+            ac.unit = ar[2]
+            ap.set_config(ac)
+        
+        for k, ar in arr.items():
+#            print k, ar
+            self.checkstu(Utils.getShapeTypeUnit("ttestp09/testts/t1r228/%s" % k),
+                          ar[0], ar[1], ar[2])
+
+        for k, ar in arr2.items():
+#            print k, ar
+            self.checkstu(Utils.getShapeTypeUnit("ttestp09/testts/t1r228/%s" % k),
+                          ar[0], ar[1], ar[2])
+
+
+
+
+    def test_command_getShapeTypeUnit_spectrum(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        
+        self._simps.dp.SpectrumBoolean = self._logical[0]
+        self._simps.dp.SpectrumUChar = self._mca2[0]
+        self._simps.dp.SpectrumShort = self._mca1[0]
+        self._simps.dp.SpectrumUShort = self._mca2[0]
+        self._simps.dp.SpectrumLong = self._mca1[0]
+        self._simps.dp.SpectrumULong = self._mca2[0]
+        self._simps.dp.SpectrumLong64 = self._mca1[0]
+        self._simps.dp.SpectrumULong64 = self._mca2[0]
+        self._simps.dp.SpectrumFloat = self._fmca1[0]
+        self._simps.dp.SpectrumDouble = self._fmca1[0]
+        self._simps.dp.SpectrumString = self._dates[0]
+
+        
+        arr = {
+            'SpectrumBoolean':[[len(self._logical[0])], 'bool','No unit'],
+            'SpectrumUChar':[[len(self._mca2[0])], 'uint8','mm'],
+            'SpectrumShort':[[len(self._mca1[0])], 'int16','deg'],
+            'SpectrumUShort':[[len(self._mca2[0])], 'uint16','No unit'],
+            'SpectrumLong':[[len(self._mca1[0])], 'int32','rad'],
+            'SpectrumULong':[[len(self._mca2[0])], 'uint32','um'],
+            'SpectrumLong64':[[len(self._mca1[0])], 'int64','cm'],
+            'SpectrumULong64':[[len(self._mca2[0])], 'uint64',''],
+            'SpectrumFloat':[[len(self._fmca1[0])], 'float32','eV'],
+            'SpectrumDouble':[[len(self._fmca1[0])], 'float64','GeV'],
+            'SpectrumString':[[len(self._dates[0])], 'string','mm N'],
+            }
+
+
+        for k, ar in arr.items():
+            ap = PyTango.AttributeProxy("ttestp09/testts/t1r228/%s" % k)
+            ac = ap.get_config()
+            ac.unit = ar[2]
+            ap.set_config(ac)
+        
+        for k, ar in arr.items():
+#            print k, ar
+            self.checkstu(Utils.getShapeTypeUnit("ttestp09/testts/t1r228/%s" % k),
+                          ar[0], ar[1], ar[2])
+
+
+    def test_command_getShapeTypeUnit_image(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+
+        self._simps.dp.ImageBoolean = self._logical2[0]
+        self._simps.dp.ImageUChar = self._pco1[0]
+        self._simps.dp.ImageShort = self._pco1[0]
+        self._simps.dp.ImageUShort = self._pco1[0]
+        self._simps.dp.ImageLong = self._pco1[0]
+        self._simps.dp.ImageULong = self._pco1[0]
+        self._simps.dp.ImageLong64 = self._pco1[0]
+        self._simps.dp.ImageULong64 = self._pco1[0]
+        self._simps.dp.ImageFloat = self._fpco1[0]
+        self._simps.dp.ImageDouble = self._fpco1[0]
+        self._simps.dp.ImageString = self._dates2[0]
+
+        
+        
+        arr = {
+            'ImageBoolean':[[len(self._logical2[0]),len(self._logical2[0][0])], 'bool','No unit'],
+            'ImageUChar':[[len(self._pco1[0]),len(self._pco1[0][0])], 'uint8','mm'],
+            'ImageShort':[[len(self._pco1[0]),len(self._pco1[0][0])], 'int16','deg'],
+            'ImageUShort':[[len(self._pco1[0]),len(self._pco1[0][0])], 'uint16','No unit'],
+            'ImageLong':[[len(self._pco1[0]),len(self._pco1[0][0])], 'int32','rad'],
+            'ImageULong':[[len(self._pco1[0]),len(self._pco1[0][0])], 'uint32','um'],
+            'ImageLong64':[[len(self._pco1[0]),len(self._pco1[0][0])], 'int64','cm'],
+            'ImageULong64':[[len(self._pco1[0]),len(self._pco1[0][0])], 'uint64',''],
+            'ImageFloat':[[len(self._fpco1[0]),len(self._fpco1[0][0])], 'float32','eV'],
+            'ImageDouble':[[len(self._fpco1[0]),len(self._fpco1[0][0])], 'float64','GeV'],
+            'ImageString':[[len(self._dates2[0]),len(self._dates2[0][0])], 'string','mm N'],
+            }
+
+
+        for k, ar in arr.items():
+            ap = PyTango.AttributeProxy("ttestp09/testts/t1r228/%s" % k)
+            ac = ap.get_config()
+            ac.unit = ar[2]
+            ap.set_config(ac)
+        
+        for k, ar in arr.items():
+            print k, ar
+            self.checkstu(Utils.getShapeTypeUnit("ttestp09/testts/t1r228/%s" % k),
+                          ar[0], ar[1], ar[2])
+
+
+        
 if __name__ == '__main__':
     unittest.main()
 
