@@ -119,6 +119,7 @@ class TestServer(PyTango.Device_4Impl):
         self.attr_ImageString = [['True']]
         self.attr_ImageEncoded = self.encodeImage()
 
+        self.attr_value = ""
         TestServer.init_device(self)
 
     def encodeSpectrum(self):
@@ -1261,7 +1262,23 @@ class TestServer(PyTango.Device_4Impl):
         
         return self.attr_ScalarString
 
-            
+#------------------------------------------------------------------
+#    CreateDataSource command:
+#
+#------------------------------------------------------------------
+    def CreateAttribute(self, name):
+        print "In ", self.get_name(), "::CreateDataSource()"
+        #    Add your own code here
+        attr = PyTango.Attr(name, PyTango.DevString, PyTango.READ_WRITE)
+        self.add_attribute(attr, self.read_General, self.write_General)
+
+    def read_General(self, attr):
+        attr.set_value(self.attr_value)
+
+    def write_General(self, attr):
+        self.attr_value = attr.get_write_value()
+
+
 
 #==================================================================
 #
@@ -1285,6 +1302,9 @@ class TestServerClass(PyTango.DeviceClass):
         'SetState':
             [[PyTango.DevString, "ScalarString"],
             [PyTango.DevVoid, ""]],
+        'CreateAttribute':
+            [[PyTango.DevString, "ScalarString"],
+             [PyTango.DevVoid, ""]],
         'ChangeValueType':
             [[PyTango.DevString, "ScalarString"],
             [PyTango.DevVoid, ""]],
@@ -1609,7 +1629,7 @@ class TestServerClass(PyTango.DeviceClass):
 if __name__ == '__main__':
     try:
         py = PyTango.Util(sys.argv)
-        py.add_TgClass(TestServerClass,TestServer,'TestServer')
+        py.add_class(TestServerClass,TestServer,'TestServer')
 
         U = PyTango.Util.instance()
         U.server_init()

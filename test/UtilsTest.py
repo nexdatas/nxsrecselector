@@ -248,6 +248,11 @@ class UtilsTest(unittest.TestCase):
                 logger.debug("%s , %s" %(str(v), str(dct2[k])))
                 self.assertEqual(v, dct2[k])
 
+    def checkstu(self, par, shape, dtype, unit):
+        self.assertEqual(shape, par[0])
+        self.assertEqual(dtype, par[1])
+        self.assertEqual(unit if unit else 'No unit', par[2])
+
 
     ## constructor test
     # \brief It tests default settings
@@ -1844,11 +1849,6 @@ class UtilsTest(unittest.TestCase):
             self.assertEqual(val, ar[1])
         
 
-    def checkstu(self, par, shape, dtype, unit):
-        self.assertEqual(shape, par[0])
-        self.assertEqual(dtype, par[1])
-        self.assertEqual(unit if unit else 'No unit', par[2])
-
     def test_command_getShapeTypeUnit(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -2000,7 +2000,34 @@ class UtilsTest(unittest.TestCase):
                           ar[0], ar[1], ar[2])
 
 
+    def test_getSource(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
         
+
+        self.assertEqual(Utils.getSource("ttestp09/testts/t1r228"),
+                         "ttestp09/testts/t1r228/%s" %  'Value')
+
+        arr = ['ScalarBoolean', 'ScalarUChar', 'ScalarShort', 'ScalarUShort', 
+               'ScalarLong', 'ScalarULong', 'ScalarLong64', 'ScalarFloat', 
+               'ScalarDouble', 'ScalarString', 'ScalarULong64',
+               'SpectrumBoolean', 'SpectrumUChar', 'SpectrumShort', 'SpectrumUShort', 
+               'SpectrumLong', 'SpectrumULong', 'SpectrumLong64', 'SpectrumULong64', 
+               'SpectrumFloat', 'SpectrumDouble', 'SpectrumString',
+               'ImageBoolean', 'ImageUChar', 'ImageShort', 'ImageUShort', 'ImageLong', 
+               'ImageULong', 'ImageLong64', 'ImageULong64', 'ImageFloat', 'ImageDouble', 
+               'ImageString']
+        
+        self._simps.dp.CreateAttribute("DataSource")
+        for ar in arr:
+            self._simps.dp.DataSource = "ttestp09/testts/t1r228/%s" % ar
+            self.assertEqual(Utils.getSource("ttestp09/testts/t1r228"),
+                             "ttestp09/testts/t1r228/%s" %  ar)
+            
+        self._simps.dp.DataSource = "ttestp09/testts/t1r228/%s" % "sdfsdf"
+        self.assertEqual(Utils.getSource("ttestp09/testts/t1r228"),
+                         "ttestp09/testts/t1r228/Value")
+
 if __name__ == '__main__':
     unittest.main()
 
