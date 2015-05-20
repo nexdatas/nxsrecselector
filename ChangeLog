@@ -1,4 +1,4 @@
-2015-05-XX Jan Kotanski <jankotan@gmail.com>
+2015-05-20 Jan Kotanski <jankotan@gmail.com>
 	* fixes for Not initialised stringToDictJson stringToListJson
 	* changes Utils.getShapeTypeValue to Utils.getShapeTypeUnit
 	* tagged as v1.19.12
