@@ -150,7 +150,6 @@ class Selection(object):
         self.__selection["DataSourceGroup"] = json.dumps(ads)
         self.__selection["ComponentGroup"] = json.dumps(cps)
 
-
     def set(self, state):
         self.reset()
         for key in state.keys():

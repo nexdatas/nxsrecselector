@@ -162,7 +162,7 @@ class MntGrpTools(object):
                     dsg[tm] = False
                 if tm in hel:
                     hel.remove(tm)
-        return otimers            
+        return otimers
 
     ## import setting from active measurement
     def importMntGrp(self, jconf, pools):

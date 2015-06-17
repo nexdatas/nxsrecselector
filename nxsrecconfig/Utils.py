@@ -39,7 +39,7 @@ class Utils(object):
             PyTango.DevULong64: "uint64", PyTango.DevULong: "uint32",
             PyTango.DevUShort: "uint16", PyTango.DevDouble: "float64",
             PyTango.DevFloat: "float32", PyTango.DevString: "string",
-            PyTango.DevBoolean: "bool", PyTango.DevEncoded:"encoded"}
+            PyTango.DevBoolean: "bool", PyTango.DevEncoded: "encoded"}
 
     ## opens device proxy of the given device
     # \param cls class instance
@@ -294,7 +294,6 @@ class Utils(object):
                         res.append(chan['name'])
         return res
 
-
     ## retrives shape type value for attribure
     @classmethod
     def getShapeTypeUnit(cls, source):
@@ -457,7 +456,7 @@ class Utils(object):
         elif isinstance(obj, list):
             return [cls.toString(el) for el in obj]
         elif isinstance(obj, dict):
-            return dict([(cls.toString(key), cls.toString(value)) \
-                             for key, value in obj.iteritems()])
+            return dict([(cls.toString(key), cls.toString(value))
+                         for key, value in obj.iteritems()])
         else:
             return obj

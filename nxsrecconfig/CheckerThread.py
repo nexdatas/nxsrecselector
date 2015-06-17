@@ -69,7 +69,7 @@ class CheckerThread(threading.Thread):
             try:
                 dp = PyTango.DeviceProxy(dname)
                 state = dp.command_inout("State")
-                if  state in [
+                if state in [
                     PyTango.DevState.FAULT]:
                     raise FaultStateError("FAULT STATE")
                 dp.ping()
@@ -97,6 +97,7 @@ class CheckerThread(threading.Thread):
 
 class AlarmStateError(Exception):
     pass
+
 
 class FaultStateError(Exception):
     pass
