@@ -146,7 +146,7 @@ class MntGrpTools(object):
                                     if not bool(ch['plot_type']):
                                         hel.append(ch['name'])
 
-    def __reorderTimers(self, conf, timers, otimers, dsg, hel, pools):
+    def __reorderTimers(self, conf, timers, dsg, hel, pools):
         dtimers = Utils.getAliases(pools, timers)
         otimers = list(dtimers.values())
         otimers.remove(dtimers[conf["timer"]])
@@ -162,6 +162,7 @@ class MntGrpTools(object):
                     dsg[tm] = False
                 if tm in hel:
                     hel.remove(tm)
+        return otimers            
 
     ## import setting from active measurement
     def importMntGrp(self, jconf, pools):
@@ -177,7 +178,7 @@ class MntGrpTools(object):
         if "timer" in conf.keys() and "controllers" in conf.keys():
             tangods = self.__readChannels(conf, timers, dsg, hel)
             self.__readTangoChannels(conf, tangods, dsg, hel)
-            self.__reorderTimers(conf, otimers, timers, dsg, hel, pools)
+            otimers = self.__reorderTimers(conf, timers, dsg, hel, pools)
 
         changed = False
         jdsg = json.dumps(dsg)
@@ -189,7 +190,6 @@ class MntGrpTools(object):
         if self.__selection["HiddenElements"] != jhel:
             self.__selection["HiddenElements"] = jhel
             changed = True
-
         if otimers is not None:
             jtimers = json.dumps(otimers)
             if self.__selection["Timer"] != jtimers:

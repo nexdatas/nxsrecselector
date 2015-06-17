@@ -1,3 +1,7 @@
+2015-06-17 Jan Kotanski <jankotan@gmail.com>
+	* fixes for loading timers from mntgrp
+	* tagged as v1.19.13
+
 2015-05-20 Jan Kotanski <jankotan@gmail.com>
 	* fixes for Not initialised stringToDictJson stringToListJson
 	* changes Utils.getShapeTypeValue to Utils.getShapeTypeUnit
