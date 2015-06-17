@@ -575,7 +575,6 @@ class Settings(object):
                 self.__selection.resetAutomaticComponents(
                     self.defaultAutomaticComponents)
                 self.updateControllers()
-        print "Fetched: ", self.__selection["Timer"]        
 
     ## loads configuration
     def loadConfiguration(self):
