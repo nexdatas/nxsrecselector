@@ -230,7 +230,7 @@ class MntGrpTools(object):
         frecords = Utils.getFullDeviceNames(pools)
         dsres = describer.dataSources(
             set(datasources) - set(frecords.keys()), 'CLIENT')
-        records = [str(dsr[2]) for dsr in dsres.values()]
+        records = [str(dsr.record) for dsr in dsres.values()]
 
         cpres = describer.components(self.components,
             '', 'CLIENT')
@@ -379,9 +379,9 @@ class MntGrpTools(object):
         if isinstance(dsres, dict):
             for ds in dsres.values():
                 elem = {}
-                elem["dsname"] = ds[0]
-                elem["dstype"] = ds[1]
-                elem["record"] = ds[2]
+                elem["dsname"] = ds.name
+                elem["dstype"] = ds.dstype
+                elem["record"] = ds.record
                 dslist.append(str(json.dumps(elem)))
         return dslist
 

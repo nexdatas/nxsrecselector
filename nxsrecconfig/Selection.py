@@ -320,7 +320,7 @@ class Selection(object):
                         if ds in tgds.keys():
                             if cp not in toCheck.keys():
                                 toCheck[cp] = [cp]
-                            srec = tgds[ds][2].split("/")
+                            srec = tgds[ds].record.split("/")
                             attr = srec[-1]
                             toCheck[cp].append(
                                 (str(ds), str("/".join(srec[:-1])), str(attr)))

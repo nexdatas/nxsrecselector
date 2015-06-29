@@ -42,9 +42,9 @@ class DSItem(object):
             ## datasource record
             self.record = dsitem.record
         else:
-            self.name = name
-            self.dstype = dstype
-            self.record = record
+            self.name = str(name) if name else None
+            self.dstype = str(dstype) if dstype else None
+            self.record = str(record) if record else None
         
 
 ## Extended DataSource item
@@ -58,12 +58,11 @@ class ExDSItem(object):
     def __init__(self, dsitem, mode, nxtype, shape):
         ExDSItem.__init__(dsitem=dsitem)
         ## writing mode
-        self.mode = mode
+        self.mode = str(mode) if mode else None
         ## nexus type
-        self.nxtype = nxtype
+        self.nxtype = str(nxtype) if nxtype else None
         ## datasource shape
         self.shape = shape
-        
 
 
 ## NeXus Sardana Recorder settings
@@ -110,11 +109,12 @@ class Describer(object):
             tr = {}
             for ds in dss.keys():
                 for vds in dss[ds]:
-                    if (not strategy or vds[0] == strategy) and \
-                            (not dstype or vds[1] == dstype):
+                    if (not strategy or vds.mode == strategy) and \
+                            (not dstype or vds.dstype == dstype):
                         if ds not in tr:
                             tr[ds] = []
-                        tr[ds].append(vds)
+                        tr[ds].append((vds.mode, vds.dstype, vds.record,
+                                       vds.nxtype, vds.shape))
             result[cp] = tr
 
     ## describes given components after configuration creation
@@ -128,7 +128,7 @@ class Describer(object):
     def final(self, components=None, strategy='', dstype='', cfvars=None):
 
         if components is not None:
-            cpp = Utils.command(self.__nexusconfig_device,`
+            cpp = Utils.command(self.__nexusconfig_device,
                                 "availableComponents")
             cps = [cp for cp in components if cp in cpp]
         else:
@@ -148,32 +148,35 @@ class Describer(object):
                         (not dstype or vds[1] == dstype):
                         elem = {}
                         elem["dsname"] = ds
-                        elem["strategy"] = vds[0]
-                        elem["dstype"] = vds[1]
-                        elem["record"] = vds[2]
-                        elem["nxtype"] = vds[3]
-                        elem["shape"] = vds[4]
+                        elem["strategy"] = vds.mode
+                        elem["dstype"] = vds.dstype
+                        elem["record"] = vds.record
+                        elem["nxtype"] = vds.nxtype
+                        elem["shape"] = vds.shape
                         elem["cpname"] = cp
                         tr.append(elem)
         return tr
 
     def __checkNode(self, node, dsl=None):
         label = 'datasources'
-        dsitem = DSItem()
+        name = None
+        dstype = None
+        record = None
         dslist = dsl if dsl else []
 
         if node.nodeName == 'datasource':
             if node.hasAttribute("type"):
-                dsitem.dstype = node.attributes["type"].value
+                dstype = node.attributes["type"].value
             if node.hasAttribute("name"):
-                dsitem.name = node.attributes["name"].value
-            dsitem.record = Utils.getRecord(node)
-            dslist.append(dsitem)
+                name = node.attributes["name"].value
+            record = Utils.getRecord(node)
+            dslist.append(DSItem(name, dstype, record))
 
         elif node.nodeType == node.TEXT_NODE:
+            dsitem = DSItem()
             dstxt = node.data
             index = dstxt.find("$%s." % label)
-            while index != -1 and not dstype:
+            while index != -1:
                 try:
                     subc = re.finditer(
                         r"[\w]+",
@@ -182,10 +185,10 @@ class Describer(object):
                     subc = ''
                 name = subc.strip() if subc else ""
                 dsitem = self.__describeDataSource(name)
-                # name, dstype, record 
-                dstype = dsitem.
+                if dsitem.dstype:
+                    break
                 index = dstxt.find("$%s." % label, index + 1)
-            dslist.append(DSItem(name, dstype, record))
+            dslist.append(dsitem)
         if name and str(dstype) == 'PYEVAL':
             for child in node.childNodes:
                 self.__checkNode(child, dslist)
@@ -207,10 +210,10 @@ class Describer(object):
         result = {}
         for name in dss:
             if name:
-                rec = self.__describeDataSource(name)
-                if dstype and rec[1] != dstype:
+                dsitem = self.__describeDataSource(name)
+                if dstype and dsitem.dstype != dstype:
                     continue
-                result[name] = rec
+                result[name] = dsitem
         return result
 
     def __describeDataSource(self, name):
@@ -237,22 +240,18 @@ class Describer(object):
         prefix = '__unnamed__'
         dslist = self.__checkNode(node)
         fname = None
-        for (name, dstype, record) in dslist:
+        for dsitem in dslist:
             if name:
                 if name not in dss:
                     dss[name] = []
-                dss[name].append((str(mode), str(dstype) if dstype else None,
-                                  str(record) if record else None, nxtype,
-                                  shape))
+                dss[name].append(ExDSItem(dsitem, mode, nxtype, shape))
             elif node.nodeName == 'datasource':
                 name = prefix + str(counter)
                 while name in dss.keys():
                     name = prefix + str(counter)
                     counter = counter + 1
                 dss[name] = []
-                dss[name].append((str(mode), str(dstype) if dstype else None,
-                                  str(record) if record else None, nxtype,
-                                  shape))
+                dss[name].append(ExDSItem(dsitem, mode, nxtype, shape))
             if not fname:
                 fname = name
 
