@@ -26,6 +26,45 @@ import PyTango
 import xml.dom.minidom
 from .Utils import Utils
 
+## Basic DataSource item
+class DSItem(object):
+
+    ## constructor
+    # \param name datasource name
+    # \param dstype datasource type
+    # \param record datasource record
+    def __init__(self, name=None, dstype=None, record=None, dsitem=None):
+        if dsitem:
+            ## datasource name
+            self.name = dsitem.name
+            ## datasource type
+            self.dstype = dsitem.dstype
+            ## datasource record
+            self.record = dsitem.record
+        else:
+            self.name = name
+            self.dstype = dstype
+            self.record = record
+        
+
+## Extended DataSource item
+class ExDSItem(object):
+
+    ## constructor
+    # \param dsitem datasource item
+    # \param mode writing mode
+    # \param nxtype nexus type
+    # \param shape datasource shape
+    def __init__(self, dsitem, mode, nxtype, shape):
+        ExDSItem.__init__(dsitem=dsitem)
+        ## writing mode
+        self.mode = mode
+        ## nexus type
+        self.nxtype = nxtype
+        ## datasource shape
+        self.shape = shape
+        
+
 
 ## NeXus Sardana Recorder settings
 class Describer(object):
@@ -89,7 +128,7 @@ class Describer(object):
     def final(self, components=None, strategy='', dstype='', cfvars=None):
 
         if components is not None:
-            cpp = Utils.command(self.__nexusconfig_device,
+            cpp = Utils.command(self.__nexusconfig_device,`
                                 "availableComponents")
             cps = [cp for cp in components if cp in cpp]
         else:
@@ -120,18 +159,16 @@ class Describer(object):
 
     def __checkNode(self, node, dsl=None):
         label = 'datasources'
-        dstype = None
-        name = None
-        record = None
+        dsitem = DSItem()
         dslist = dsl if dsl else []
 
         if node.nodeName == 'datasource':
             if node.hasAttribute("type"):
-                dstype = node.attributes["type"].value
+                dsitem.dstype = node.attributes["type"].value
             if node.hasAttribute("name"):
-                name = node.attributes["name"].value
-            record = Utils.getRecord(node)
-            dslist.append((name, dstype, record))
+                dsitem.name = node.attributes["name"].value
+            dsitem.record = Utils.getRecord(node)
+            dslist.append(dsitem)
 
         elif node.nodeType == node.TEXT_NODE:
             dstxt = node.data
@@ -144,9 +181,11 @@ class Describer(object):
                 except (StopIteration, IndexError):
                     subc = ''
                 name = subc.strip() if subc else ""
-                name, dstype, record = self.__describeDataSource(name)
+                dsitem = self.__describeDataSource(name)
+                # name, dstype, record 
+                dstype = dsitem.
                 index = dstxt.find("$%s." % label, index + 1)
-            dslist.append((name, dstype, record))
+            dslist.append(DSItem(name, dstype, record))
         if name and str(dstype) == 'PYEVAL':
             for child in node.childNodes:
                 self.__checkNode(child, dslist)
@@ -192,7 +231,7 @@ class Describer(object):
                     if ds.hasAttribute("name"):
                         name = ds.attributes["name"].value
                     record = Utils.getRecord(ds)
-        return name, dstype, record
+        return DSItem(name, dstype, record)
 
     def __appendNode(self, node, dss, mode, counter, nxtype=None, shape=None):
         prefix = '__unnamed__'
