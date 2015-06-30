@@ -26,10 +26,11 @@ import PyTango
 import xml.dom.minidom
 from .Utils import Utils
 
+
 ## Basic DataSource item
 class DSItem(object):
     __slots__ = 'name', 'dstype', 'record'
-    
+
     ## constructor
     # \param name datasource name
     # \param dstype datasource type
@@ -46,7 +47,7 @@ class DSItem(object):
             self.name = str(name) if name else None
             self.dstype = str(dstype) if dstype else None
             self.record = str(record) if record else None
-        
+
 
 ## Extended DataSource item
 class ExDSItem(DSItem):
@@ -67,13 +68,24 @@ class ExDSItem(DSItem):
         self.shape = shape
 
 
+## Extended DataSource Dictionary
 class ExDSDict(dict):
 
+    ## constructor
+    # \param args dict args
+    # \param kw dict kw
     def __init__(self, *args, **kw):
         super(ExDSDict, self).__init__(*args, **kw)
         self.counter = 1
         self.prefix = '__unnamed__'
- 
+
+    ## appends a list of ExDSItem
+    # \param dslist DSItem list
+    # \param mode startegy mode
+    # \param nxtype NeXus type
+    # \param shape data shape
+    # \returns datasource name for first added datasource
+    #          or None if not appended
     def appendDSList(self, dslist, mode, nxtype=None, shape=None):
         fname = None
         for dsitem in dslist:
@@ -93,7 +105,6 @@ class ExDSDict(dict):
                 fname = name
 
         return fname
-
 
 
 ## NeXus Sardana Recorder settings
@@ -132,7 +143,7 @@ class Describer(object):
                 cps = list(set(cps) - set(mand))
             else:
                 cps = list(set(cps) | set(mand))
-                
+
         if self.treeOutput:
             result = [{}, {}]
             if components is None:
@@ -140,7 +151,7 @@ class Describer(object):
             result[1] = self.__fillintree(cps, strategy, dstype)
         else:
             result = self.__fillinlist(cps, strategy, dstype, cfvars)
-            
+
         return result
 
     def __fillinlist(self, cps, strategy, dstype, cfvars):
@@ -329,13 +340,13 @@ class Describer(object):
 
                 nxt = sg.nextSibling
                 while nxt and not name:
-                    name = dss.appendDSList(self.__getDSFromNode(nxt), 
+                    name = dss.appendDSList(self.__getDSFromNode(nxt),
                                             mode, nxtype, shape)
                     nxt = nxt.nextSibling
 
                 prev = sg.previousSibling
                 while prev and not name:
-                    name = dss.appendDSList(self.__getDSFromNode(prev), 
+                    name = dss.appendDSList(self.__getDSFromNode(prev),
                                             mode, nxtype, shape)
                     prev = prev.previousSibling
 
