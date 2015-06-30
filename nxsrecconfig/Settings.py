@@ -625,7 +625,7 @@ class Settings(object):
             cp = list(set(self.components) |
                       set(self.automaticComponents) |
                       set(self.mandatoryComponents()))
-        dc = describer.final(cp, '', 'CLIENT', self.configVariables)
+        dc = describer.components(cp, '', 'CLIENT', self.configVariables)
         jdc = json.dumps(dc)
         return jdc
 

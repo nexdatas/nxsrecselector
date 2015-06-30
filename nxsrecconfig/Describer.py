@@ -28,7 +28,8 @@ from .Utils import Utils
 
 ## Basic DataSource item
 class DSItem(object):
-
+    __slots__ = 'name', 'dstype', 'record'
+    
     ## constructor
     # \param name datasource name
     # \param dstype datasource type
@@ -48,7 +49,8 @@ class DSItem(object):
         
 
 ## Extended DataSource item
-class ExDSItem(object):
+class ExDSItem(DSItem):
+    __slots__ = 'mode', 'nxtype', 'shape'
 
     ## constructor
     # \param dsitem datasource item
@@ -56,13 +58,42 @@ class ExDSItem(object):
     # \param nxtype nexus type
     # \param shape datasource shape
     def __init__(self, dsitem, mode, nxtype, shape):
-        ExDSItem.__init__(dsitem=dsitem)
+        DSItem.__init__(self, dsitem=dsitem)
         ## writing mode
         self.mode = str(mode) if mode else None
         ## nexus type
         self.nxtype = str(nxtype) if nxtype else None
         ## datasource shape
         self.shape = shape
+
+
+class ExDSDict(dict):
+
+    def __init__(self, *args, **kw):
+        super(ExDSDict, self).__init__(*args, **kw)
+        self.counter = 1
+        self.prefix = '__unnamed__'
+ 
+    def appendDSList(self, dslist, mode, nxtype=None, shape=None):
+        fname = None
+        for dsitem in dslist:
+            name = dsitem.name
+            if name:
+                if name not in self.keys():
+                    self[name] = []
+                self[name].append(ExDSItem(dsitem, mode, nxtype, shape))
+            elif dsitem.dstype:
+                name = self.prefix + str(self.counter)
+                while name in self.keys():
+                    name = self.prefix + str(self.counter)
+                    self.counter = self.counter + 1
+                self[name] = []
+                self[name].append(ExDSItem(dsitem, mode, nxtype, shape))
+            if not fname:
+                fname = name
+
+        return fname
+
 
 
 ## NeXus Sardana Recorder settings
@@ -72,8 +103,9 @@ class Describer(object):
 
     ## constructor
     # \param configserver configuration server name
-    def __init__(self, nexusconfig_device):
+    def __init__(self, nexusconfig_device, tree=False):
         self.__nexusconfig_device = nexusconfig_device
+        self.treeOutput = tree
 
     ## describes given components
     # \param components given components.
@@ -82,8 +114,9 @@ class Describer(object):
     #        If '' all available ones are taken
     # \param dstype list datasets only with given datasource type.
     #        If '' all available ones are taken
-    def components(self, components=None, strategy='', dstype=''):
-        result = [{}, {}]
+    # \param cfvars configuration variables
+    def components(self, components=None, strategy='', dstype='', cfvars=None):
+        result = []
 
         if components is not None:
             cpp = Utils.command(self.__nexusconfig_device,
@@ -95,53 +128,25 @@ class Describer(object):
         if components is None:
             mand = Utils.command(self.__nexusconfig_device,
                                  "mandatoryComponents")
-            cps = list(set(cps) - set(mand))
-
-        if components is None:
-            self.__fillinresult(mand, strategy, dstype, result[0])
-
-        self.__fillinresult(cps, strategy, dstype, result[1])
+            if self.treeOutput:
+                cps = list(set(cps) - set(mand))
+            else:
+                cps = list(set(cps) | set(mand))
+                
+        if self.treeOutput:
+            result = [{}, {}]
+            if components is None:
+                result[0] = self.__fillintree(mand, strategy, dstype)
+            result[1] = self.__fillintree(cps, strategy, dstype)
+        else:
+            result = self.__fillinlist(cps, strategy, dstype, cfvars)
+            
         return result
 
-    def __fillinresult(self, cps, strategy, dstype, result):
+    def __fillinlist(self, cps, strategy, dstype, cfvars):
+        result = []
         for cp in cps:
-            dss = self.__getDataSourceAttributes(cp)
-            tr = {}
-            for ds in dss.keys():
-                for vds in dss[ds]:
-                    if (not strategy or vds.mode == strategy) and \
-                            (not dstype or vds.dstype == dstype):
-                        if ds not in tr:
-                            tr[ds] = []
-                        tr[ds].append((vds.mode, vds.dstype, vds.record,
-                                       vds.nxtype, vds.shape))
-            result[cp] = tr
-
-    ## describes given components after configuration creation
-    # \param components given components.
-    #        If None all available ones are taken
-    # \param strategy list datasets only with given strategy.
-    #        If '' all available ones are taken
-    # \param dstype list datasets only with given datasource type.
-    #        If '' all available ones are taken
-    # \param cfvars configuration variables
-    def final(self, components=None, strategy='', dstype='', cfvars=None):
-
-        if components is not None:
-            cpp = Utils.command(self.__nexusconfig_device,
-                                "availableComponents")
-            cps = [cp for cp in components if cp in cpp]
-        else:
-            cps = Utils.command(self.__nexusconfig_device,
-                                "availableComponents")
-        if components is None:
-            mand = Utils.command(self.__nexusconfig_device,
-                                 "mandatoryComponents")
-            cps = list(set(cps) | set(mand))
-
-        tr = []
-        for cp in cps:
-            dss = self.__getDataSetAttributes(cp, cfvars)
+            dss = self.__getInstDataSourceAttributes(cp, cfvars)
             for ds in dss.keys():
                 for vds in dss[ds]:
                     if (not strategy or vds[0] == strategy) and \
@@ -154,10 +159,26 @@ class Describer(object):
                         elem["nxtype"] = vds.nxtype
                         elem["shape"] = vds.shape
                         elem["cpname"] = cp
-                        tr.append(elem)
-        return tr
+                        result.append(elem)
+        return result
 
-    def __checkNode(self, node, dsl=None):
+    def __fillintree(self, cps, strategy, dstype):
+        result = {}
+        for cp in cps:
+            dss = self.__getDataSourceAttributes(cp)
+            tr = {}
+            for ds in dss.keys():
+                for vds in dss[ds]:
+                    if (not strategy or vds.mode == strategy) and \
+                            (not dstype or vds.dstype == dstype):
+                        if ds not in tr:
+                            tr[ds] = []
+                        tr[ds].append((vds.mode, vds.dstype, vds.record,
+                                       vds.nxtype, vds.shape))
+            result[cp] = tr
+        return result
+
+    def __getDSFromNode(self, node, dsl=None):
         label = 'datasources'
         name = None
         dstype = None
@@ -189,9 +210,11 @@ class Describer(object):
                     break
                 index = dstxt.find("$%s." % label, index + 1)
             dslist.append(dsitem)
+
         if name and str(dstype) == 'PYEVAL':
             for child in node.childNodes:
-                self.__checkNode(child, dslist)
+                self.__getDSFromNode(child, dslist)
+
         return dslist
 
     ## describes given datasources
@@ -236,27 +259,6 @@ class Describer(object):
                     record = Utils.getRecord(ds)
         return DSItem(name, dstype, record)
 
-    def __appendNode(self, node, dss, mode, counter, nxtype=None, shape=None):
-        prefix = '__unnamed__'
-        dslist = self.__checkNode(node)
-        fname = None
-        for dsitem in dslist:
-            if name:
-                if name not in dss:
-                    dss[name] = []
-                dss[name].append(ExDSItem(dsitem, mode, nxtype, shape))
-            elif node.nodeName == 'datasource':
-                name = prefix + str(counter)
-                while name in dss.keys():
-                    name = prefix + str(counter)
-                    counter = counter + 1
-                dss[name] = []
-                dss[name].append(ExDSItem(dsitem, mode, nxtype, shape))
-            if not fname:
-                fname = name
-
-        return (fname, counter)
-
     @classmethod
     def __getShape(cls, node):
         shape = None
@@ -279,9 +281,9 @@ class Describer(object):
         names = []
         if not len(xmlc) > 0:
             return names
-        return self.__getXMLAttributes(xmlc[0])
+        return self.__getDSFromXML(xmlc[0])
 
-    def __getDataSetAttributes(self, cp, cfvars=None):
+    def __getInstDataSourceAttributes(self, cp, cfvars=None):
         if cfvars:
             cv = json.loads(self.__nexusconfig_device.variables)
             sv = json.loads(cfvars)
@@ -293,14 +295,13 @@ class Describer(object):
         names = []
         if not len(xmlc) > 0:
             return names
-        return self.__getXMLAttributes(xmlc[0])
+        return self.__getDSFromXML(xmlc[0])
 
-    def __getXMLAttributes(self, cpxml):
+    def __getDSFromXML(self, cpxml):
         indom = xml.dom.minidom.parseString(cpxml)
         strategy = indom.getElementsByTagName("strategy")
-        counter = 1
-        dss = {}
 
+        dss = ExDSDict()
         for sg in strategy:
             if sg.hasAttribute("mode"):
                 mode = sg.attributes["mode"].value
@@ -328,14 +329,14 @@ class Describer(object):
 
                 nxt = sg.nextSibling
                 while nxt and not name:
-                    name, counter = self.__appendNode(
-                        nxt, dss, mode, counter, nxtype, shape)
+                    name = dss.appendDSList(self.__getDSFromNode(nxt), 
+                                            mode, nxtype, shape)
                     nxt = nxt.nextSibling
 
                 prev = sg.previousSibling
                 while prev and not name:
-                    name, counter = self.__appendNode(
-                        prev, dss, mode, counter, nxtype, shape)
+                    name = dss.appendDSList(self.__getDSFromNode(prev), 
+                                            mode, nxtype, shape)
                     prev = prev.previousSibling
 
         return dss

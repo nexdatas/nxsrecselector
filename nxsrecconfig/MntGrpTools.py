@@ -225,8 +225,7 @@ class MntGrpTools(object):
     ## checks client records
     def __checkClientRecords(self, datasources, pools):
 
-        describer = Describer(self.configServer)
-
+        describer = Describer(self.configServer, True)
         frecords = Utils.getFullDeviceNames(pools)
         dsres = describer.dataSources(
             set(datasources) - set(frecords.keys()), 'CLIENT')
@@ -311,7 +310,7 @@ class MntGrpTools(object):
     # \returns description of required components
     def cpdescription(self, dstype='', full=False):
 
-        describer = Describer(self.configServer)
+        describer = Describer(self.configServer, True)
         cp = None
         if not full:
             cp = self.components

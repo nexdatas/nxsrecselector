@@ -304,7 +304,7 @@ class Selection(object):
 
     def __toCheck(self, rcp, acps, ads, nonexisting):
         inst = self.setConfigInstance()
-        describer = Describer(inst)
+        describer = Describer(inst, True)
         avcp = Utils.command(inst, "availableComponents")
 
         rcp.update(dict(
