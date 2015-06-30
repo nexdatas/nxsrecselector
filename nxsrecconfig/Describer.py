@@ -116,7 +116,7 @@ class Describer(object):
     # \param configserver configuration server name
     def __init__(self, nexusconfig_device, tree=False):
         self.__nexusconfig_device = nexusconfig_device
-        self.treeOutput = tree
+        self.__treeOutput = tree
 
     ## describes given components
     # \param components given components.
@@ -139,12 +139,12 @@ class Describer(object):
         if components is None:
             mand = Utils.command(self.__nexusconfig_device,
                                  "mandatoryComponents")
-            if self.treeOutput:
+            if self.__treeOutput:
                 cps = list(set(cps) - set(mand))
             else:
                 cps = list(set(cps) | set(mand))
 
-        if self.treeOutput:
+        if self.__treeOutput:
             result = [{}, {}]
             if components is None:
                 result[0] = self.__fillintree(mand, strategy, dstype)
@@ -228,48 +228,6 @@ class Describer(object):
 
         return dslist
 
-    ## describes given datasources
-    # \param names given datasources.
-    #        If None all available ones are taken
-    # \param dstype list datasources only with given type.
-    #        If '' all available ones are taken
-    def dataSources(self, names=None, dstype=''):
-        ads = Utils.command(self.__nexusconfig_device,
-                            "availableDataSources")
-        if names is not None:
-            dss = [name for name in names if name in ads]
-        else:
-            dss = ads
-
-        result = {}
-        for name in dss:
-            if name:
-                dsitem = self.__describeDataSource(name)
-                if dstype and dsitem.dstype != dstype:
-                    continue
-                result[name] = dsitem
-        return result
-
-    def __describeDataSource(self, name):
-        dstype = None
-        record = None
-        try:
-            dsource = Utils.command(self.__nexusconfig_device,
-                                    "dataSources", [str(name)])
-        except (PyTango.DevFailed, PyTango.Except, PyTango.DevError):
-            dsource = []
-        if len(dsource) > 0:
-            indom = xml.dom.minidom.parseString(dsource[0])
-            dss = indom.getElementsByTagName("datasource")
-            for ds in dss:
-                if ds.nodeName == 'datasource':
-                    if ds.hasAttribute("type"):
-                        dstype = ds.attributes["type"].value
-                    if ds.hasAttribute("name"):
-                        name = ds.attributes["name"].value
-                    record = Utils.getRecord(ds)
-        return DSItem(name, dstype, record)
-
     @classmethod
     def __getShape(cls, node):
         shape = None
@@ -351,3 +309,45 @@ class Describer(object):
                     prev = prev.previousSibling
 
         return dss
+
+    ## describes given datasources
+    # \param names given datasources.
+    #        If None all available ones are taken
+    # \param dstype list datasources only with given type.
+    #        If '' all available ones are taken
+    def dataSources(self, names=None, dstype=''):
+        ads = Utils.command(self.__nexusconfig_device,
+                            "availableDataSources")
+        if names is not None:
+            dss = [name for name in names if name in ads]
+        else:
+            dss = ads
+
+        result = {}
+        for name in dss:
+            if name:
+                dsitem = self.__describeDataSource(name)
+                if dstype and dsitem.dstype != dstype:
+                    continue
+                result[name] = dsitem
+        return result
+
+    def __describeDataSource(self, name):
+        dstype = None
+        record = None
+        try:
+            dsource = Utils.command(self.__nexusconfig_device,
+                                    "dataSources", [str(name)])
+        except (PyTango.DevFailed, PyTango.Except, PyTango.DevError):
+            dsource = []
+        if len(dsource) > 0:
+            indom = xml.dom.minidom.parseString(dsource[0])
+            dss = indom.getElementsByTagName("datasource")
+            for ds in dss:
+                if ds.nodeName == 'datasource':
+                    if ds.hasAttribute("type"):
+                        dstype = ds.attributes["type"].value
+                    if ds.hasAttribute("name"):
+                        name = ds.attributes["name"].value
+                    record = Utils.getRecord(ds)
+        return DSItem(name, dstype, record)
