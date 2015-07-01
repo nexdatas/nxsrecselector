@@ -29,7 +29,6 @@ import struct
 from nxsrecconfig.Describer import Describer
 
 
-
 ## if 64-bit machione
 IS64BIT = (struct.calcsize("P") == 8)
 
@@ -46,7 +45,7 @@ class NoServer(object):
         self.dsdict = {}
         self.cpdict = {}
         self.mcplist = []
-        
+
     def dataSources(self, names):
         self.vars.append(names)
         self.commands.append("dataSources")
@@ -56,7 +55,6 @@ class NoServer(object):
         self.vars.append(None)
         self.commands.append("availableDataSources")
         return list(self.dsdict.keys())
-
 
     def components(self, names):
         self.vars.append(names)
@@ -86,11 +84,10 @@ class Server(NoServer):
             else:
                 self.value = cmd()
         else:
-    
+
             self.vars.append(var)
             self.commands.append(command)
         return self.value
-
 
 
 ## test fixture
@@ -101,30 +98,52 @@ class DescriberTest(unittest.TestCase):
     def __init__(self, methodName):
         unittest.TestCase.__init__(self, methodName)
 
-
-        self._tfname = "field"
-        self._tfname = "group"
-        self._fattrs = {"short_name":"test","units":"m" }
-
-
         self._bint = "int64" if IS64BIT else "int32"
         self._buint = "uint64" if IS64BIT else "uint32"
         self._bfloat = "float64" if IS64BIT else "float32"
 
         self.mydss = {
-            'ann':'<definition><datasource type="TANGO" name="ann"></datasource></definition>',
-            'ann2':'<definition><datasource type="TANGO" name="ann2"></datasource></definition>',
-            }
+            'ann': ('<definition><datasource type="TANGO" name="ann">'
+                    '</datasource></definition>'),
+            'ann2': ('<definition><datasource type="CLIENT" name="ann2">'
+                     '</datasource></definition>'),
+            'ann3': ('<definition><datasource type="DB" name="ann3">'
+                     '</datasource></definition>'),
+            'ann4': ('<definition><datasource type="PYEVAL" name="ann4">'
+                     '</datasource></definition>'),
+            'ann5': ('<definition><datasource type="NEW" name="ann5">'
+                     '</datasource></definition>'),
+            'tann0': ('<definition><datasource type="TANGO" name="tann0">'
+                     '<record name="myattr"/>'
+                     '<device port="12345" encoding="sfd" hostname="sf" '
+                     'member="attribute" name="dsff"/>'
+                     '</datasource></definition>'),
+            'tann1': ('<definition><datasource type="TANGO" name="tann1">'
+                     '<record name="myattr2"/>'
+                     '<device port="10000" encoding="sfd" hostname="sfa" '
+                     'member="attribute" name="dsf"/>'
+                     '</datasource></definition>'), 
+            'tann1b': ('<definition><datasource type="TANGO" name="tann1b">'
+                     '<record name="myattr2"/>'
+                     '<device member="attribute" name="dsf"/>'
+                     '</datasource></definition>'),
+           }
 
-        self.resdss = { 
-            'ann':("ann","TANGO",""),
-            'ann2':("ann2","TANGO",""),
-                        }
+        self.resdss = {
+            'ann': ("ann", "TANGO", ""),
+            'ann2': ("ann2", "CLIENT", ""),
+            'ann3': ("ann3", "DB", ""),
+            'ann4': ("ann4", "PYEVAL", ""),
+            'ann5': ("ann5", "NEW", ""),
+            'tann0': ("tann0", "TANGO", "sf:12345/dsff/myattr"),
+            'tann1': ("tann1", "TANGO", "sfa:10000/dsf/myattr2"),
+            'tann1b': ("tann1b", "TANGO", "dsf/myattr2"),
+            }
 
     ## test starter
     # \brief Common set up
     def setUp(self):
-        print "\nsetting up..."        
+        print "\nsetting up..."
 
     ## test closer
     # \brief Common tear down
@@ -137,8 +156,6 @@ class DescriberTest(unittest.TestCase):
             self.assertEqual(self.resdss[vl][0], rv[vl].name)
             self.assertEqual(self.resdss[vl][1], rv[vl].dstype)
             self.assertEqual(self.resdss[vl][2], rv[vl].record)
-        
-
 
     ## constructor test
     # \brief It tests default settings
@@ -160,7 +177,7 @@ class DescriberTest(unittest.TestCase):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         dsdict = {
-            "ann":self.mydss["ann"]
+            "ann": self.mydss["ann"]
             }
         server = NoServer()
         server.dsdict = dsdict
@@ -171,15 +188,13 @@ class DescriberTest(unittest.TestCase):
         res = des.dataSources(["ann"])
         self.checkDS(res, ["ann"])
 
-
         des = Describer(server)
-        res = des.dataSources(["ann"],"TANGO")
+        res = des.dataSources(["ann"], "TANGO")
         self.checkDS(res, ["ann"])
 
         des = Describer(server)
-        res = des.dataSources(["ann"],"CLIENT")
+        res = des.dataSources(["ann"], "CLIENT")
         self.checkDS(res, [])
-
 
     ## constructor test
     # \brief It tests default settings
@@ -194,7 +209,6 @@ class DescriberTest(unittest.TestCase):
         res = des.dataSources()
         self.checkDS(res, self.resdss.keys())
 
-
     ## constructor test
     # \brief It tests default settings
     def test_datasources_dstype(self):
@@ -206,7 +220,9 @@ class DescriberTest(unittest.TestCase):
 
         des = Describer(server)
         res = des.dataSources(dstype="TANGO")
-        self.checkDS(res, [k for k in self.resdss.keys() if self.resdss[k][1] == 'TANGO'])
+        self.checkDS(
+            res,
+            [k for k in self.resdss.keys() if self.resdss[k][1] == 'TANGO'])
 
 if __name__ == '__main__':
     unittest.main()
