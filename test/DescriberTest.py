@@ -34,6 +34,63 @@ from nxsrecconfig.Describer import Describer
 IS64BIT = (struct.calcsize("P") == 8)
 
 
+class NoServer(object):
+
+    def __init__(self, value=None):
+        self.reset(value)
+
+    def reset(self, value=None):
+        self.value = value
+        self.commands = []
+        self.vars = []
+        self.dsdict = {}
+        self.cpdict = {}
+        self.mcplist = []
+        
+    def dataSources(self, names):
+        self.vars.append(names)
+        self.commands.append("dataSources")
+        return [self.dsdict[nm] for nm in names if nm in self.dsdict.keys()]
+
+    def availableDataSources(self):
+        self.vars.append(None)
+        self.commands.append("availableDataSources")
+        return list(self.dsdict.keys())
+
+
+    def components(self, names):
+        self.vars.append(names)
+        self.commands.append("components")
+        return [self.cpdict[nm] for nm in names if nm in self.cpdict.keys()]
+
+    def availableComponents(self):
+        self.vars.append(None)
+        self.commands.append("availableComponents")
+        return list(self.cpdict.keys())
+
+    def mandatoryComponents(self):
+        self.vars.append(None)
+        self.commands.append("mandatoryComponents")
+        return list(self.mcplist)
+
+
+class Server(NoServer):
+    def __init__(self, value=None):
+        NoServer.__init__(self, value)
+
+    def command_inout(self, command, var=None):
+        if hasattr(self, command):
+            cmd = getattr(self, command)
+            if var is not None:
+                self.value = cmd(var)
+            else:
+                self.value = cmd()
+        else:
+    
+            self.vars.append(var)
+            self.commands.append(command)
+        return self.value
+
 
 
 ## test fixture
@@ -54,6 +111,14 @@ class DescriberTest(unittest.TestCase):
         self._buint = "uint64" if IS64BIT else "uint32"
         self._bfloat = "float64" if IS64BIT else "float32"
 
+        self.mydss = {
+            'ann':
+                '<definition><datasource type="TANGO" name="ann"></datasource></definition>'            
+            }
+
+        self.resdss = { "ann":("ann","TANGO","")
+                        }
+
     ## test starter
     # \brief Common set up
     def setUp(self):
@@ -63,6 +128,15 @@ class DescriberTest(unittest.TestCase):
     # \brief Common tear down
     def tearDown(self):
         print "tearing down ..."
+
+    def checkDS(self, rv, cv):
+        self.assertEqual(sorted(rv.keys()), sorted(cv))
+        for vl in cv:
+            self.assertEqual(self.resdss[vl][0], rv[vl].name)
+            self.assertEqual(self.resdss[vl][1], rv[vl].dstype)
+            self.assertEqual(self.resdss[vl][2], rv[vl].record)
+        
+
 
     ## constructor test
     # \brief It tests default settings
@@ -75,8 +149,41 @@ class DescriberTest(unittest.TestCase):
 #        self.assertEqual(el.content, [])
 #        self.assertEqual(el.doc, "")
 #        self.assertEqual(el.last, None)
+        el = Describer(None, False)
+        el = Describer(None, True)
 
+    ## constructor test
+    # \brief It tests default settings
+    def test_constructor_datasources(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        dsdict = {
+            "ann":self.mydss["ann"]
+            }
+        server = NoServer()
+        server.dsdict = dsdict
+        des = Describer(server)
+        self.assertEqual(des.dataSources(["myds2"]), {})
 
+        des = Describer(server)
+        res = des.dataSources(["ann"])
+        self.checkDS(res, ["ann"])
+
+        des = Describer(server)
+        res = des.dataSources()
+        self.checkDS(res, self.resdss.keys())
+
+        des = Describer(server)
+        res = des.dataSources(["ann"],"TANGO")
+        self.checkDS(res, ["ann"])
+
+        des = Describer(server)
+        res = des.dataSources(["ann"],"CLIENT")
+        self.checkDS(res, [])
+
+        des = Describer(server)
+        res = des.dataSources(dstype="TANGO")
+        self.checkDS(res, [k for k in self.resdss.keys() if self.resdss[k][1] == 'TANGO'])
 
 if __name__ == '__main__':
     unittest.main()

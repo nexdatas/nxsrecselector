@@ -45,12 +45,12 @@ DB_AVAILABLE = []
 import DSItemTest
 import ExDSItemTest
 import ExDSDictTest
+import DescriberTest
     
 
 if PYTANGO_AVAILABLE:
 #    import NXSDataWriterTest
     import UtilsTest
-    import DescriberTest
 
 #import TestServerSetUp
 
@@ -92,13 +92,13 @@ def main():
     suite.addTests(
         unittest.defaultTestLoader.loadTestsFromModule(ExDSDictTest) )
 
+    suite.addTests(
+        unittest.defaultTestLoader.loadTestsFromModule(DescriberTest) )
 
 
     if PYTANGO_AVAILABLE:
         suite.addTests(
             unittest.defaultTestLoader.loadTestsFromModule(UtilsTest) )
-        suite.addTests(
-            unittest.defaultTestLoader.loadTestsFromModule(DescriberTest) )
 
 
 
