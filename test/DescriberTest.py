@@ -127,6 +127,10 @@ class DescriberTest(unittest.TestCase):
                      '<record name="myattr2"/>'
                      '<device member="attribute" name="dsf"/>'
                      '</datasource></definition>'),
+            'tann1c': ('<definition><datasource type="TANGO" name="tann1c">'
+                     '<record name="myattr2"/>'
+                     '<device member="attribute" name="dsf/sd/we"/>'
+                     '</datasource></definition>'),
            }
 
         self.resdss = {
@@ -138,6 +142,7 @@ class DescriberTest(unittest.TestCase):
             'tann0': ("tann0", "TANGO", "sf:12345/dsff/myattr"),
             'tann1': ("tann1", "TANGO", "sfa:10000/dsf/myattr2"),
             'tann1b': ("tann1b", "TANGO", "dsf/myattr2"),
+            'tann1c': ("tann1c", "TANGO", "dsf/sd/we/myattr2"),
             }
 
     ## test starter
