@@ -91,15 +91,15 @@ def main():
         unittest.defaultTestLoader.loadTestsFromModule(ExDSItemTest) )
     suite.addTests(
         unittest.defaultTestLoader.loadTestsFromModule(ExDSDictTest) )
-    suite.addTests(
-        unittest.defaultTestLoader.loadTestsFromModule(DescriberTest) )
-
 
 
 
     if PYTANGO_AVAILABLE:
         suite.addTests(
             unittest.defaultTestLoader.loadTestsFromModule(UtilsTest) )
+        suite.addTests(
+            unittest.defaultTestLoader.loadTestsFromModule(DescriberTest) )
+
 
 
 
