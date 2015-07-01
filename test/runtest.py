@@ -50,6 +50,7 @@ import ExDSDictTest
 if PYTANGO_AVAILABLE:
 #    import NXSDataWriterTest
     import UtilsTest
+    import DescriberTest
 
 #import TestServerSetUp
 
@@ -90,6 +91,8 @@ def main():
         unittest.defaultTestLoader.loadTestsFromModule(ExDSItemTest) )
     suite.addTests(
         unittest.defaultTestLoader.loadTestsFromModule(ExDSDictTest) )
+    suite.addTests(
+        unittest.defaultTestLoader.loadTestsFromModule(DescriberTest) )
 
 
 
