@@ -112,11 +112,13 @@ class DescriberTest(unittest.TestCase):
         self._bfloat = "float64" if IS64BIT else "float32"
 
         self.mydss = {
-            'ann':
-                '<definition><datasource type="TANGO" name="ann"></datasource></definition>'            
+            'ann':'<definition><datasource type="TANGO" name="ann"></datasource></definition>',
+            'ann2':'<definition><datasource type="TANGO" name="ann2"></datasource></definition>',
             }
 
-        self.resdss = { "ann":("ann","TANGO","")
+        self.resdss = { 
+            'ann':("ann","TANGO",""),
+            'ann2':("ann2","TANGO",""),
                         }
 
     ## test starter
@@ -154,7 +156,7 @@ class DescriberTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
-    def test_constructor_datasources(self):
+    def test_datasources(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         dsdict = {
@@ -169,9 +171,6 @@ class DescriberTest(unittest.TestCase):
         res = des.dataSources(["ann"])
         self.checkDS(res, ["ann"])
 
-        des = Describer(server)
-        res = des.dataSources()
-        self.checkDS(res, self.resdss.keys())
 
         des = Describer(server)
         res = des.dataSources(["ann"],"TANGO")
@@ -180,6 +179,30 @@ class DescriberTest(unittest.TestCase):
         des = Describer(server)
         res = des.dataSources(["ann"],"CLIENT")
         self.checkDS(res, [])
+
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_datasources_noargs(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+
+        server = NoServer()
+        server.dsdict = self.mydss
+
+        des = Describer(server)
+        res = des.dataSources()
+        self.checkDS(res, self.resdss.keys())
+
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_datasources_dstype(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+
+        server = NoServer()
+        server.dsdict = self.mydss
 
         des = Describer(server)
         res = des.dataSources(dstype="TANGO")
