@@ -42,6 +42,9 @@ DB_AVAILABLE = []
     
 
 
+import DSItemTest
+import ExDSItemTest
+import ExDSDictTest
     
 
 if PYTANGO_AVAILABLE:
@@ -80,17 +83,18 @@ def main():
     ## test suit
     suite = unittest.TestSuite()
 
-#    suite.addTests(
-#        unittest.defaultTestLoader.loadTestsFromModule(DescriberTest) )
+    suite.addTests(
+        unittest.defaultTestLoader.loadTestsFromModule(DSItemTest) )
+
+    suite.addTests(
+        unittest.defaultTestLoader.loadTestsFromModule(ExDSItemTest) )
+    suite.addTests(
+        unittest.defaultTestLoader.loadTestsFromModule(ExDSDictTest) )
 
 
 
-#    suite.addTests(
-#        unittest.defaultTestLoader.loadTestsFromModule(TangoDataWriterTest) )
 
     if PYTANGO_AVAILABLE:
-#        suite.addTests(
-#            unittest.defaultTestLoader.loadTestsFromModule(NXSDataWriterTest) )
         suite.addTests(
             unittest.defaultTestLoader.loadTestsFromModule(UtilsTest) )
 

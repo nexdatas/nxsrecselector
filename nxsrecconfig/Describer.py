@@ -44,9 +44,9 @@ class DSItem(object):
             ## datasource record
             self.record = dsitem.record
         else:
-            self.name = str(name) if name else None
-            self.dstype = str(dstype) if dstype else None
-            self.record = str(record) if record else None
+            self.name = str(name) if name is not None else None
+            self.dstype = str(dstype) if dstype is not None else None
+            self.record = str(record) if record is not None else None
 
 
 ## Extended DataSource item
@@ -58,12 +58,12 @@ class ExDSItem(DSItem):
     # \param mode writing mode
     # \param nxtype nexus type
     # \param shape datasource shape
-    def __init__(self, dsitem, mode, nxtype, shape):
+    def __init__(self, dsitem=None, mode=None, nxtype=None, shape=None):
         DSItem.__init__(self, dsitem=dsitem)
         ## writing mode
-        self.mode = str(mode) if mode else None
+        self.mode = str(mode) if mode is not None else None
         ## nexus type
-        self.nxtype = str(nxtype) if nxtype else None
+        self.nxtype = str(nxtype) if nxtype is not None else None
         ## datasource shape
         self.shape = shape
 
@@ -76,8 +76,8 @@ class ExDSDict(dict):
     # \param kw dict kw
     def __init__(self, *args, **kw):
         super(ExDSDict, self).__init__(*args, **kw)
-        self.counter = 1
-        self.prefix = '__unnamed__'
+        self.__counter = 1
+        self.__prefix = '__unnamed__'
 
     ## appends a list of ExDSItem
     # \param dslist DSItem list
@@ -95,10 +95,10 @@ class ExDSDict(dict):
                     self[name] = []
                 self[name].append(ExDSItem(dsitem, mode, nxtype, shape))
             elif dsitem.dstype:
-                name = self.prefix + str(self.counter)
+                name = self.__prefix + str(self.__counter)
                 while name in self.keys():
-                    name = self.prefix + str(self.counter)
-                    self.counter = self.counter + 1
+                    name = self.__prefix + str(self.__counter)
+                    self.__counter = self.__counter + 1
                 self[name] = []
                 self[name].append(ExDSItem(dsitem, mode, nxtype, shape))
             if not fname:

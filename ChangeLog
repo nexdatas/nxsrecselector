@@ -1,4 +1,5 @@
 2015-06-XX Jan Kotanski <jankotan@gmail.com>
+	* adding tests for DSItem, ExDSItem and ExDSDict 
 	* adding DSItem, ExDSItem and ExDSDict for Describer
 	* tagged as v1.19.14
 
