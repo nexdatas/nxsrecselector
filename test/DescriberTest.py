@@ -44,10 +44,9 @@ class NoServer(object):
         self.vars = []
         self.dsdict = {}
         self.cpdict = {}
-        self.icpdict = {}
         self.mcplist = []
-        self.checkvariables = ""
-        self.variables = ""
+        self.checkvariables = None
+        self.variables = None
 
     def dataSources(self, names):
         self.vars.append(names)
@@ -69,7 +68,7 @@ class NoServer(object):
             raise Exception("Variables not set")
         self.vars.append(names)
         self.commands.append("components")
-        return [self.icpdict[nm] for nm in names if nm in self.icpdict.keys()]
+        return [self.cpdict[nm] for nm in names if nm in self.cpdict.keys()]
 
     def availableComponents(self):
         self.vars.append(None)
@@ -117,10 +116,117 @@ class DescriberTest(unittest.TestCase):
                       '<definition>'
                       '<group type="NXcollection" name="dddd"/>'
                       '</definition>'),
+            'mycp2' : ('<definition><group type="NXcollection" name="dddd">'
+                       '<field><datasource type="TANGO" name="ann" /></field>'
+                       '</group></definition>'),
+            'mycp3' : ('<definition><group type="NXcollection" name="dddd">'
+                       '<field>'
+                       '<datasource type="TANGO" name="ann" />'
+                       '<strategy mode="STEP" />'
+                       '</field>'
+                       '</group></definition>'),
+            'exp_t01': ('<?xml version=\'1.0\'?>'
+                        '<definition>'
+                        '<group type="NXentry" name="entry1">'
+                        '<group type="NXinstrument" name="instrument">'
+                        '<group type="NXdetector" name="detector">'
+                        '<field units="s" type="NX_FLOAT" name="exp_t01">'
+                        '<strategy mode="STEP"/>'
+                        '<datasource type="CLIENT" name="exp_t01">'
+                        '<record name="haso228k:10000/expchan/dgg2_exp_01/1"/>'
+                        '</datasource></field></group></group>'
+                        '</group></definition>'),
+            'dim1': (
+                '<definition><group type="NXentry">'
+                '<field type="NX_INT8" name="field1">'
+                '<datasource type="TANGO" name="tann1c">'
+                '<record name="myattr2"/>'
+                '<device member="attribute" name="dsf/sd/we"/>'
+                '</datasource>'
+                '<strategy mode="INIT"/>'
+                '<dimensions rank="1">'
+                '<dim index="1" value="34">'
+                '</dim></dimensions>'
+                '</field></group>'
+                '</definition>'),
+            'dim2': (
+                '<definition><group type="NXentry">'
+                '<field type="NX_INT8" name="field1">'
+                '<datasource type="TANGO" name="tann1c">'
+                '<record name="myattr2"/>'
+                '<device member="attribute" name="dsf/sd/we"/>'
+                '</datasource>'
+                '<strategy mode="INIT"/>'
+                '<dimensions rank="1">'
+                '<dim index="1" value="$datasource.ann">'
+                '</dim></dimensions>'
+                '</field></group>'
+                '</definition>'),
+            'dim3': (
+                '<definition><group type="NXentry">'
+                '<field type="NX_INT8" name="field1">'
+                '<datasource type="TANGO" name="tann1c">'
+                '<record name="myattr2"/>'
+                '<device member="attribute" name="dsf/sd/we"/>'
+                '</datasource>'
+                '<strategy mode="INIT"/>'
+                '<dimensions rank="1">'
+                '<dim index="1">1234'
+                '</dim></dimensions>'
+                '</field></group>'
+                '</definition>'),
+            'dim4': (
+                '<definition><group type="NXentry">'
+                '<field type="NX_INT8" name="field1">'
+                '<datasource type="TANGO" name="tann1c">'
+                '<record name="myattr2"/>'
+                '<device member="attribute" name="dsf/sd/we"/>'
+                '</datasource>'
+                '<strategy mode="INIT"/>'
+                '<dimensions rank="1">'
+                '<dim index="1">$datasource.ann2<strategy mode="CONFIG" />'
+                '</dim></dimensions>'
+                '</field></group>'
+                '</definition>'),
+            'dim5': (
+                '<definition><group type="NXentry">'
+                '<field type="NX_INT8" name="field1">'
+                '<datasource type="TANGO" name="tann1c">'
+                '<record name="myattr2"/>'
+                '<device member="attribute" name="dsf/sd/we"/>'
+                '</datasource>'
+                '<strategy mode="INIT"/>'
+                '<dimensions rank="1">'
+                '<dim index="1"><strategy mode="CONFIG" />'
+                '<datasource type="TANGO" name="ann" />'
+                '</dim></dimensions>'
+                '</field></group>'
+                '</definition>'),
             }
 
+        self.rescps = {
+            'mycp': {},
+            'mycp2': {},
+            'mycp3': {'ann': [('STEP', 'TANGO', '', None, None)]},
+            'exp_t01': {'exp_t01': [
+                    ('STEP', 'CLIENT', 'haso228k:10000/expchan/dgg2_exp_01/1',
+                     'NX_FLOAT', None)]},
+            'dim1': {'tann1c': [
+                    ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8', [34])]},
+            'dim2': {'tann1c': [
+                    ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8', ['$datasource.ann'])]},
+            'dim3': {'tann1c': [
+                    ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8', [1234])]},
+            'dim4': {'tann1c': [
+                    ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8', ['$datasource.ann2'])]},
+            'dim5': {'tann1c': [
+                    ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8', ['$datasource.ann'])],
+                     'ann': [('CONFIG', 'TANGO', '', None, None)],
+                     },
+            }
+            
         self.mydss = {
-            'nn': ('<definition><datasource type="TANGO">'
+            'nn': ('<?xml version=\'1.0\'?><definition><datasource type="TANGO">'
                     '</datasource></definition>'),
             'nn2': ('<definition><datasource type="TANGO" name="">'
                     '</datasource></definition>'),
@@ -222,6 +328,43 @@ class DescriberTest(unittest.TestCase):
             self.assertEqual(self.resdss[vl][0], rv[vl].name)
             self.assertEqual(self.resdss[vl][1], rv[vl].dstype)
             self.assertEqual(self.resdss[vl][2], rv[vl].record)
+     
+    def checkCP(self, rv, cv):
+        self.assertEqual(sorted(set(rv[0].keys()) 
+                                | set(rv[1].keys())), sorted(cv))
+        for i in range(2):
+            for cp, vl in rv[i].items():
+                cres = self.rescps[cp]
+                self.assertEqual(sorted(vl.keys()), sorted(cres.keys()))
+                for ds in cres.keys():
+                    self.assertEqual(sorted(cres[ds]), sorted(vl[ds]))
+
+    @classmethod                
+    def findElement(cls, cp, ds, vds, rv):
+        found = False
+        for el in rv:
+            if el["cpname"] == cp and el["dsname"] == ds \
+                    and el["strategy"] == vds[0] \
+                    and el["dstype"] == vds[1] \
+                    and el["record"] == vds[2] \
+                    and el["nxtype"] == vds[3] \
+                    and el["shape"] == vds[4]:
+                found = True
+                break
+        if not found:
+            print "NOT FOUND", cp, ds, vds, rv
+        return found   
+
+    def checkICP(self, rv, cv):
+        dscnt = 0
+        tcv = [k for k in cv if self.rescps[k]]
+        for cp in tcv:
+            for ds, dss in self.rescps[cp].items():
+                for vds in dss:
+                    self.assertTrue(self.findElement(cp, ds, vds, rv))
+                    dscnt += 1
+        self.assertEqual(dscnt, len(rv))
+        
 
     ## constructor test
     # \brief It tests default settings
@@ -229,11 +372,6 @@ class DescriberTest(unittest.TestCase):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         el = Describer(None, None)
-#        self.assertEqual(el.tagName, self._tfname)
-#        self.assertEqual(el._tagAttrs, self._fattrs)
-#        self.assertEqual(el.content, [])
-#        self.assertEqual(el.doc, "")
-#        self.assertEqual(el.last, None)
         el = Describer(None, False)
         el = Describer(None, True)
 
@@ -494,7 +632,19 @@ class DescriberTest(unittest.TestCase):
         server.dsdict = self.mydss
         server.cpdict = self.mycps
         des = Describer(server)
-        self.assertEqual(des.components(), [])
+        res = des.components()
+        self.checkICP(res, self.rescps.keys())
+#        self.assertEqual(des.components(), [])
 
+    ## constructor test
+    # \brief It tests default settings
+    def test_components_noarg_tree(self):
+        server = NoServer()
+        server.dsdict = self.mydss
+        server.cpdict = self.mycps
+        des = Describer(server, True)
+        res = des.components()
+        self.checkCP(res, self.rescps.keys())
+#        self.assertEqual(des.components(), [{}, {'mycp': {}}])
 if __name__ == '__main__':
     unittest.main()

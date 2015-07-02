@@ -230,7 +230,6 @@ class Describer(object):
 
     @classmethod
     def __getShape(cls, node):
-        shape = None
         rank = int(node.attributes["rank"].value)
         shape = [None] * rank
         dims = node.getElementsByTagName("dim")
@@ -240,8 +239,25 @@ class Describer(object):
                 try:
                     value = int(dim.attributes["value"].value)
                 except ValueError:
-                    value = dim.attributes["value"].value
+                    value = str(dim.attributes["value"].value)
                 shape[index - 1] = value
+            else:
+                dss = node.getElementsByTagName("datasource")
+                if dss:
+                    if dss[0].hasAttribute("name"):
+                        value = dss[0].attributes["name"].value
+                    else:
+                        value = '__unnamed__'
+                    shape[index - 1] = "$datasource.%s" % value
+                else:
+                    value = " ".join(t.nodeValue for t in dim.childNodes \
+                                         if t.nodeType == t.TEXT_NODE)
+                    try:
+                        value = int(value)
+                    except:
+                        value = value.strip()
+                    shape[index - 1] = value
+                
         return shape
 
     def __getDataSourceAttributes(self, cp):
