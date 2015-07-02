@@ -112,30 +112,32 @@ class DescriberTest(unittest.TestCase):
         self._bfloat = "float64" if IS64BIT else "float32"
 
         self.mycps = {
-            'mycp' : ('<?xml version=\'1.0\'?>'
-                      '<definition>'
-                      '<group type="NXcollection" name="dddd"/>'
-                      '</definition>'),
-            'mycp2' : ('<definition><group type="NXcollection" name="dddd">'
-                       '<field><datasource type="TANGO" name="ann" /></field>'
-                       '</group></definition>'),
-            'mycp3' : ('<definition><group type="NXcollection" name="dddd">'
-                       '<field>'
-                       '<datasource type="TANGO" name="ann" />'
-                       '<strategy mode="STEP" />'
-                       '</field>'
-                       '</group></definition>'),
-            'exp_t01': ('<?xml version=\'1.0\'?>'
-                        '<definition>'
-                        '<group type="NXentry" name="entry1">'
-                        '<group type="NXinstrument" name="instrument">'
-                        '<group type="NXdetector" name="detector">'
-                        '<field units="s" type="NX_FLOAT" name="exp_t01">'
-                        '<strategy mode="STEP"/>'
-                        '<datasource type="CLIENT" name="exp_t01">'
-                        '<record name="haso228k:10000/expchan/dgg2_exp_01/1"/>'
-                        '</datasource></field></group></group>'
-                        '</group></definition>'),
+            'mycp' : (
+                '<?xml version=\'1.0\'?>'
+                '<definition>'
+                '<group type="NXcollection" name="dddd"/>'
+                '</definition>'),
+            'mycp2' : (
+                '<definition><group type="NXcollection" name="dddd">'
+                '<field><datasource type="TANGO" name="ann" /></field>'
+                '</group></definition>'),
+            'mycp3' : (
+                '<definition><group type="NXcollection" name="dddd">'
+                '<field><datasource type="TANGO" name="ann" />'
+                '<strategy mode="STEP" />'
+                '</field></group></definition>'),
+            'exp_t01': (
+                '<?xml version=\'1.0\'?>'
+                '<definition>'
+                '<group type="NXentry" name="entry1">'
+                '<group type="NXinstrument" name="instrument">'
+                '<group type="NXdetector" name="detector">'
+                '<field units="s" type="NX_FLOAT" name="exp_t01">'
+                '<strategy mode="STEP"/>'
+                '<datasource type="CLIENT" name="exp_t01">'
+                '<record name="haso228k:10000/expchan/dgg2_exp_01/1"/>'
+                '</datasource></field></group></group>'
+                '</group></definition>'),
             'dim1': (
                 '<definition><group type="NXentry">'
                 '<field type="NX_INT8" name="field1">'
@@ -202,6 +204,101 @@ class DescriberTest(unittest.TestCase):
                 '</dim></dimensions>'
                 '</field></group>'
                 '</definition>'),
+            'dim6': (
+                '<definition><group type="NXentry">'
+                '<field type="NX_INT8" name="field1">'
+                '<datasource type="TANGO" name="tann1c">'
+                '<record name="myattr2"/>'
+                '<device member="attribute" name="dsf/sd/we"/>'
+                '</datasource>'
+                '<strategy mode="INIT"/>'
+                '<dimensions rank="2">'
+                '<dim index="1" value="$datasource.ann" />'
+                '<dim index="2" value="123" />'
+                '</dimensions>'
+                '</field></group>'
+                '</definition>'),
+            'dim7': (
+                '<definition><group type="NXentry">'
+                '<field type="NX_INT8" name="field1">'
+                '<datasource type="TANGO" name="tann1c">'
+                '<record name="myattr2"/>'
+                '<device member="attribute" name="dsf/sd/we"/>'
+                '</datasource>'
+                '<strategy mode="INIT"/>'
+                '<dimensions rank="2" />'
+                '</field></group>'
+                '</definition>'),
+            'dim8': (
+                '<definition><group type="NXentry">'
+                '<field type="NX_INT8" name="field1">'
+                '<datasource type="TANGO" name="tann1c">'
+                '<record name="myattr2"/>'
+                '<device member="attribute" name="dsf/sd/we"/>'
+                '</datasource>'
+                '<strategy mode="INIT"/>'
+                '<dimensions rank="2">'
+                '<dim index="2" value="123" />'
+                '</dimensions>'
+                '</field></group>'
+                '</definition>'),
+            'scan': (
+                '<definition><group type="NXentry" name="entry1">'
+                '<group type="NXinstrument" name="instrument">'
+                '<group type="NXdetector" name="detector">'
+                '<field units="m" type="NX_FLOAT" name="counter1">'
+                '<strategy mode="STEP"/>'
+                '<datasource type="CLIENT"><record name="exp_c01"/>'
+                '</datasource></field>'
+                '<field units="s" type="NX_FLOAT" name="counter2">'
+                '<strategy mode="STEP"/><datasource type="CLIENT">'
+                '<record name="exp_c02"/></datasource></field>'
+                '<field units="" type="NX_FLOAT" name="mca">'
+                '<dimensions rank="1"><dim value="2048" index="1"/>'
+                '</dimensions><strategy mode="STEP"/>'
+                '<datasource type="CLIENT"><record name="p09/mca/exp.02"/>'
+                '</datasource></field></group></group></group></definition>'
+                ),
+
+            'scan2': (
+                '<definition><group type="NXentry" name="entry1">'
+                '<group type="NXinstrument" name="instrument">'
+                '<group type="NXdetector" name="detector">'
+                '<field units="m" type="NX_FLOAT" name="counter1">'
+                '<strategy mode="STEP"/>'
+                '<datasource name="c01" type="CLIENT">'
+                '<record name="exp_c01"/></datasource></field>'
+                '<field units="s" type="NX_FLOAT" name="counter2">'
+                '<strategy mode="STEP"/>'
+                '<datasource type="CLIENT" name="c02">'
+                '<record name="exp_c02"/></datasource></field>'
+                '<field units="" type="NX_FLOAT" name="mca">'
+                '<dimensions rank="1"><dim value="2048" index="1"/>'
+                '</dimensions><strategy mode="STEP"/>'
+                '<datasource type="CLIENT"  name="mca">'
+                '<record name="p09/mca/exp.02"/>'
+                '</datasource></field></group></group></group></definition>'
+                ),
+            'scan3': (
+                '<definition><group type="NXentry" name="entry1">'
+                '<group type="NXinstrument" name="instrument">'
+                '<group type="NXdetector" name="detector">'
+                '<field units="m" type="NX_FLOAT" name="counter1">'
+                '<strategy mode="STEP"/>'
+                '<datasource name="c01" type="CLIENT">'
+                '<record name="exp_c01"/></datasource></field>'
+                '<field units="s" type="NX_FLOAT" name="counter2">'
+                '<strategy mode="INIT"/>'
+                '<datasource type="CLIENT" name="c01">'
+                '<record name="exp_c01"/></datasource></field>'
+                '<field units="" type="NX_FLOAT" name="mca">'
+                '<dimensions rank="1"><dim value="2048" index="1"/>'
+                '</dimensions><strategy mode="STEP"/>'
+                '<datasource type="CLIENT"  name="mca">'
+                '<record name="p09/mca/exp.02"/>'
+                '</datasource></field></group></group></group></definition>'
+                ),
+
             }
 
         self.rescps = {
@@ -222,6 +319,24 @@ class DescriberTest(unittest.TestCase):
             'dim5': {'tann1c': [
                     ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8', ['$datasource.ann'])],
                      'ann': [('CONFIG', 'TANGO', '', None, None)],
+                     },
+            'dim6': {'tann1c': [
+                    ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8', ['$datasource.ann', 123])]},
+            'dim7': {'tann1c': [
+                    ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8', [None, None])]},
+            'dim8': {'tann1c': [
+                    ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8', [None, 123])]},
+            'scan': {'__unnamed__1': [('STEP', 'CLIENT', 'exp_c01', 'NX_FLOAT', None)],
+                     '__unnamed__2': [('STEP', 'CLIENT', 'exp_c02', 'NX_FLOAT', None)],
+                     '__unnamed__3': [('STEP', 'CLIENT', 'p09/mca/exp.02', 'NX_FLOAT', [2048])], 
+                     },
+            'scan2': {'c01': [('STEP', 'CLIENT', 'exp_c01', 'NX_FLOAT', None)],
+                      'c02': [('STEP', 'CLIENT', 'exp_c02', 'NX_FLOAT', None)],
+                      'mca': [('STEP', 'CLIENT', 'p09/mca/exp.02', 'NX_FLOAT', [2048])], 
+                     },
+            'scan3': {'c01': [('STEP', 'CLIENT', 'exp_c01', 'NX_FLOAT', None),
+                              ('INIT', 'CLIENT', 'exp_c01', 'NX_FLOAT', None)],
+                      'mca': [('STEP', 'CLIENT', 'p09/mca/exp.02', 'NX_FLOAT', [2048])], 
                      },
             }
             
@@ -328,16 +443,54 @@ class DescriberTest(unittest.TestCase):
             self.assertEqual(self.resdss[vl][0], rv[vl].name)
             self.assertEqual(self.resdss[vl][1], rv[vl].dstype)
             self.assertEqual(self.resdss[vl][2], rv[vl].record)
-     
-    def checkCP(self, rv, cv):
-        self.assertEqual(sorted(set(rv[0].keys()) 
-                                | set(rv[1].keys())), sorted(cv))
+    
+            
+    def hasds(self, dslist, strategy, dstype):
+        for dss in dslist:
+            for ds in dss: 
+#                print "DD", ds[0], strategy, ds[0]==strategy, ds[1], dstype
+                dsfound = True if dstype is None else False
+                stfound = True if strategy is None else False
+                if dsfound and stfound:
+                    break
+                if not dsfound and ds[1] == dstype:
+                    dsfound = True
+                if not stfound and ds[0] == strategy:
+                    stfound = True
+#        print "FOUND", dslist, dsfound and stfound 
+        return dsfound and stfound
+            
+    @classmethod
+    def dsfilter(cls, dss, strategy, dstype):
+        res = []
+        for ds in dss: 
+            dsfound = True if dstype is None else False
+            stfound = True if strategy is None else False
+            if not dsfound and ds[1] == dstype:
+                dsfound = True
+            if not stfound and ds[0] == strategy:
+                stfound = True
+            if dsfound and stfound:
+                res.append(ds)
+        return res
+        
+
+    def checkCP(self, rv, cv, strategy=None, dstype=None):
+#        print "CV", cv ,strategy, dstype
+#        cv = [cc for cc in cv if self.hasds(self.rescps[cc].values(), strategy, dstype)]
+#        print "CV2", cv ,strategy, dstype
+        self.assertEqual(sorted(set(rv[0].keys()) | set(rv[1].keys())), sorted(cv))
         for i in range(2):
             for cp, vl in rv[i].items():
+#                print "CP", cp
                 cres = self.rescps[cp]
-                self.assertEqual(sorted(vl.keys()), sorted(cres.keys()))
-                for ds in cres.keys():
-                    self.assertEqual(sorted(cres[ds]), sorted(vl[ds]))
+                cresk = [ds for ds in cres.keys() if self.dsfilter(cres[ds], strategy, dstype)]
+                
+                self.assertEqual(sorted(vl.keys()), sorted(cresk))
+                for ds in cresk:
+#                    print "C1", sorted(cres[ds])
+#                    print "C2", sorted(vl[ds])
+                    self.assertEqual(sorted(self.dsfilter(cres[ds],strategy, dstype)), sorted(vl[ds]))
 
     @classmethod                
     def findElement(cls, cp, ds, vds, rv):
@@ -355,12 +508,18 @@ class DescriberTest(unittest.TestCase):
             print "NOT FOUND", cp, ds, vds, rv
         return found   
 
-    def checkICP(self, rv, cv):
+    def checkICP(self, rv, cv, strategy=None, dstype=None):
         dscnt = 0
         tcv = [k for k in cv if self.rescps[k]]
         for cp in tcv:
             for ds, dss in self.rescps[cp].items():
                 for vds in dss:
+                    if strategy is not None:
+                        if vds[0] != strategy:
+                            continue
+                    if dstype is not None:
+                        if vds[1] != dstype:
+                            continue
                     self.assertTrue(self.findElement(cp, ds, vds, rv))
                     dscnt += 1
         self.assertEqual(dscnt, len(rv))
@@ -624,7 +783,6 @@ class DescriberTest(unittest.TestCase):
         self.assertEqual(des.components(), [{}, {}])
         self.assertEqual(des.components(["unknown"]), [{}, {}])
 
-
     ## constructor test
     # \brief It tests default settings
     def test_components_noarg(self):
@@ -634,7 +792,6 @@ class DescriberTest(unittest.TestCase):
         des = Describer(server)
         res = des.components()
         self.checkICP(res, self.rescps.keys())
-#        self.assertEqual(des.components(), [])
 
     ## constructor test
     # \brief It tests default settings
@@ -645,6 +802,95 @@ class DescriberTest(unittest.TestCase):
         des = Describer(server, True)
         res = des.components()
         self.checkCP(res, self.rescps.keys())
-#        self.assertEqual(des.components(), [{}, {'mycp': {}}])
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_components_noarg_server(self):
+        server = Server()
+        server.dsdict = self.mydss
+        server.cpdict = self.mycps
+        des = Describer(server)
+        res = des.components()
+        self.checkICP(res, self.rescps.keys())
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_components_noarg_tree_server(self):
+        server = Server()
+        server.dsdict = self.mydss
+        server.cpdict = self.mycps
+        des = Describer(server, True)
+        res = des.components()
+        self.checkCP(res, self.rescps.keys())
+
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_components_strategy_dstype(self):
+        server = NoServer()
+        server.dsdict = self.mydss
+        server.cpdict = self.mycps
+
+        dstypes = [None, 'CLIENT', 'TANGO', 'PYEVAL', 'NEW', 'UNKNOWN']
+        strategies = [None, 'CONFIG','INIT','STEP', 'FINAL']
+        
+        for dst in dstypes:
+            for st in strategies:
+                des = Describer(server)
+                res = des.components(strategy=st, dstype=dst)
+                self.checkICP(res, self.rescps.keys(), 
+                              strategy=st, dstype=dst)
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_components_strategy_dstype_server(self):
+        server = Server()
+        server.dsdict = self.mydss
+        server.cpdict = self.mycps
+
+        dstypes = [None, 'CLIENT', 'TANGO', 'PYEVAL', 'NEW', 'UNKNOWN']
+        strategies = [None, 'CONFIG','INIT','STEP', 'FINAL']
+        
+        for dst in dstypes:
+            for st in strategies:
+                des = Describer(server)
+                res = des.components(strategy=st, dstype=dst)
+                self.checkICP(res, self.rescps.keys(), 
+                              strategy=st, dstype=dst)
+    ## constructor test
+    # \brief It tests default settings
+    def test_components_strategy_dstype_tree(self):
+        server = NoServer()
+        server.dsdict = self.mydss
+        server.cpdict = self.mycps
+
+        dstypes = [None, 'CLIENT', 'TANGO', 'PYEVAL', 'NEW', 'UNKNOWN']
+        strategies = [None, 'CONFIG','INIT','STEP', 'FINAL']
+        
+        for dst in dstypes:
+            for st in strategies:
+                des = Describer(server, True)
+                res = des.components(strategy=st, dstype=dst)
+                self.checkCP(res, self.rescps.keys(), 
+                              strategy=st, dstype=dst)
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_components_strategy_dstype_server_tree(self):
+        server = Server()
+        server.dsdict = self.mydss
+        server.cpdict = self.mycps
+
+        dstypes = [None, 'CLIENT', 'TANGO', 'PYEVAL', 'NEW', 'UNKNOWN']
+        strategies = [None, 'CONFIG','INIT','STEP', 'FINAL']
+        
+        for dst in dstypes:
+            for st in strategies:
+                des = Describer(server, True)
+                res = des.components(strategy=st, dstype=dst)
+                self.checkCP(res, self.rescps.keys(), 
+                              strategy=st, dstype=dst)
+
+
 if __name__ == '__main__':
     unittest.main()

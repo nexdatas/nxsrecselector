@@ -160,8 +160,8 @@ class Describer(object):
             dss = self.__getInstDataSourceAttributes(cp, cfvars)
             for ds in dss.keys():
                 for vds in dss[ds]:
-                    if (not strategy or vds[0] == strategy) and \
-                        (not dstype or vds[1] == dstype):
+                    if (not strategy or vds.mode == strategy) and \
+                        (not dstype or vds.dstype == dstype):
                         elem = {}
                         elem["dsname"] = ds
                         elem["strategy"] = vds.mode
@@ -256,6 +256,8 @@ class Describer(object):
                         value = int(value)
                     except:
                         value = value.strip()
+                        if not value:
+                            value = None
                     shape[index - 1] = value
                 
         return shape
