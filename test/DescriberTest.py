@@ -44,7 +44,10 @@ class NoServer(object):
         self.vars = []
         self.dsdict = {}
         self.cpdict = {}
+        self.icpdict = {}
         self.mcplist = []
+        self.checkvariables = ""
+        self.variables = ""
 
     def dataSources(self, names):
         self.vars.append(names)
@@ -60,6 +63,13 @@ class NoServer(object):
         self.vars.append(names)
         self.commands.append("components")
         return [self.cpdict[nm] for nm in names if nm in self.cpdict.keys()]
+
+    def instantiatedComponents(self, names):
+        if self.checkvariables != self.variables:
+            raise Exception("Variables not set")
+        self.vars.append(names)
+        self.commands.append("components")
+        return [self.icpdict[nm] for nm in names if nm in self.icpdict.keys()]
 
     def availableComponents(self):
         self.vars.append(None)
@@ -102,13 +112,20 @@ class DescriberTest(unittest.TestCase):
         self._buint = "uint64" if IS64BIT else "uint32"
         self._bfloat = "float64" if IS64BIT else "float32"
 
+        self.mycps = {
+            'mycp' : ('<?xml version=\'1.0\'?>'
+                      '<definition>'
+                      '<group type="NXcollection" name="dddd"/>'
+                      '</definition>'),
+            }
+
         self.mydss = {
             'nn': ('<definition><datasource type="TANGO">'
-                    '</datasource></definition>'), 
+                    '</datasource></definition>'),
             'nn2': ('<definition><datasource type="TANGO" name="">'
-                    '</datasource></definition>'), 
+                    '</datasource></definition>'),
             'ann': ('<definition><datasource type="TANGO" name="ann">'
-                    '</datasource></definition>'), 
+                    '</datasource></definition>'),
             'ann2': ('<definition><datasource type="CLIENT" name="ann2">'
                      '</datasource></definition>'),
             'ann3': ('<definition><datasource type="DB" name="ann3">'
@@ -126,7 +143,7 @@ class DescriberTest(unittest.TestCase):
                      '<record name="myattr2"/>'
                      '<device port="10000" encoding="sfd" hostname="sfa" '
                      'member="attribute" name="dsf"/>'
-                     '</datasource></definition>'), 
+                     '</datasource></definition>'),
             'tann1b': ('<definition><datasource type="TANGO" name="tann1b">'
                      '<record name="myattr2"/>'
                      '<device member="attribute" name="dsf"/>'
@@ -139,7 +156,9 @@ class DescriberTest(unittest.TestCase):
                 '<definition>'
                 '<datasource type="PYEVAL" name="P1M_postrun">'
                 '<result name="result">'
-                'ds.result = "" + ds.P1M_fileDir + "/" + ds.P1M_filePrefix + "%03i" + ds.P1M_filePostfix + ":1:" +  str(ds.P1M_fileStartNum)</result>'
+                'ds.result = "" + ds.P1M_fileDir + "/" + ds.P1M_filePrefix + '
+                '"%03i" + ds.P1M_filePostfix + ":1:" + '
+                ' str(ds.P1M_fileStartNum)</result>'
                 ' $datasources.P1M_fileStartNum'
                 ' $datasources.P1M_fileDir'
                 ' $datasources.P1M_filePostfix'
@@ -169,7 +188,7 @@ class DescriberTest(unittest.TestCase):
                 ),
            }
 
-        self.resdss = { 
+        self.resdss = {
             'nn': ("nn", "TANGO", ""),
             'nn2': ("", "TANGO", ""),
             'ann': ("ann", "TANGO", ""),
@@ -181,10 +200,10 @@ class DescriberTest(unittest.TestCase):
             'tann1': ("tann1", "TANGO", "sfa:10000/dsf/myattr2"),
             'tann1b': ("tann1b", "TANGO", "dsf/myattr2"),
             'tann1c': ("tann1c", "TANGO", "dsf/sd/we/myattr2"),
-            'P1M_postrun':('P1M_postrun', "PYEVAL", ""),
-            'dbtest':('dbtest', "DB", ""),
-            'dbds':('dbds', "DB", ""),
-            'slt1vgap':('slt1vgap', "CLIENT", "p02/slt/exp.07"),
+            'P1M_postrun': ('P1M_postrun', "PYEVAL", ""),
+            'dbtest': ('dbtest', "DB", ""),
+            'dbds': ('dbds', "DB", ""),
+            'slt1vgap': ('slt1vgap', "CLIENT", "p02/slt/exp.07"),
             }
 
     ## test starter
@@ -236,13 +255,16 @@ class DescriberTest(unittest.TestCase):
         self.checkDS(res, ["ann"])
 
         des = Describer(server)
+        res = des.dataSources(["ann", "myds2"])
+        self.checkDS(res, ["ann"])
+
+        des = Describer(server)
         res = des.dataSources(["ann"], "TANGO")
         self.checkDS(res, ["ann"])
 
         des = Describer(server)
         res = des.dataSources(["ann"], "CLIENT")
         self.checkDS(res, [])
-
 
     ## constructor test
     # \brief It tests default settings
@@ -259,6 +281,10 @@ class DescriberTest(unittest.TestCase):
 
         des = Describer(server)
         res = des.dataSources(["ann"])
+        self.checkDS(res, ["ann"])
+
+        des = Describer(server)
+        res = des.dataSources(["ann", "myds2"])
         self.checkDS(res, ["ann"])
 
         des = Describer(server)
@@ -310,7 +336,6 @@ class DescriberTest(unittest.TestCase):
             res,
             [k for k in self.resdss.keys() if self.resdss[k][1] == 'TANGO'])
 
-
         des = Describer(server)
         res = des.dataSources(dstype="CLIENT")
         self.checkDS(
@@ -356,7 +381,6 @@ class DescriberTest(unittest.TestCase):
             res,
             [k for k in self.resdss.keys() if self.resdss[k][1] == 'TANGO'])
 
-
         des = Describer(server)
         res = des.dataSources(dstype="CLIENT")
         self.checkDS(
@@ -387,7 +411,6 @@ class DescriberTest(unittest.TestCase):
             res,
             [k for k in self.resdss.keys() if self.resdss[k][1] == 'UNKNOWN'])
 
-
     ## constructor test
     # \brief It tests default settings
     def test_datasources_names(self):
@@ -401,15 +424,16 @@ class DescriberTest(unittest.TestCase):
             [],
             ["ann3"],
             ["ann", "nn2", "tann0", "dbtest", "slt1vgap"],
-            [ 'nn', 'nn2', 'ann', 'ann2', 'ann3', 'ann4', 'ann5', 'tann0', 'tann1',
-              'tann1b', 'tann1c', 'P1M_postrun', 'dbtest', 'dbds', 'slt1vgap']
+            ['nn', 'nn2', 'ann', 'ann2', 'ann3', 'ann4', 'ann5',
+             'tann0', 'tann1', 'tann1b', 'tann1c', 'P1M_postrun',
+             'dbtest', 'dbds', 'slt1vgap']
             ]
 
         for names in names_list:
             des = Describer(server)
             res = des.dataSources(names)
             self.checkDS(res, names)
-            
+
     ## constructor test
     # \brief It tests default settings
     def test_datasources_names_server(self):
@@ -423,17 +447,54 @@ class DescriberTest(unittest.TestCase):
             [],
             ["ann3"],
             ["ann", "nn2", "tann0", "dbtest", "slt1vgap"],
-            [ 'nn', 'nn2', 'ann', 'ann2', 'ann3', 'ann4', 'ann5', 'tann0', 'tann1',
-              'tann1b', 'tann1c', 'P1M_postrun', 'dbtest', 'dbds', 'slt1vgap']
+            ['nn', 'nn2', 'ann', 'ann2', 'ann3', 'ann4',
+             'ann5', 'tann0', 'tann1', 'tann1b', 'tann1c',
+             'P1M_postrun', 'dbtest', 'dbds', 'slt1vgap']
             ]
 
         for names in names_list:
             des = Describer(server)
             res = des.dataSources(names)
             self.checkDS(res, names)
-            
 
+    ## constructor test
+    # \brief It tests default settings
+    def test_components_unknown(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        dsdict = {
+            "ann": self.mydss["ann"]
+            }
+
+        server = NoServer()
+        server.dsdict = dsdict
+        des = Describer(server)
+        self.assertEqual(des.components(), [])
+        self.assertEqual(des.components(["unknown"]), [])
+
+        des = Describer(server, True)
+        self.assertEqual(des.components(), [{}, {}])
+        self.assertEqual(des.components(["unknown"]), [{}, {}])
+
+        server = Server()
+        server.dsdict = dsdict
+        des = Describer(server)
+        self.assertEqual(des.components(), [])
+        self.assertEqual(des.components(["unknown"]), [])
+
+        des = Describer(server, True)
+        self.assertEqual(des.components(), [{}, {}])
+        self.assertEqual(des.components(["unknown"]), [{}, {}])
+
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_components_noarg(self):
+        server = NoServer()
+        server.dsdict = self.mydss
+        server.cpdict = self.mycps
+        des = Describer(server)
+        self.assertEqual(des.components(), [])
 
 if __name__ == '__main__':
     unittest.main()
-

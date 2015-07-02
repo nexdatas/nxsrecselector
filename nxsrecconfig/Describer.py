@@ -261,9 +261,8 @@ class Describer(object):
             self.__nexusconfig_device.variables = json.dumps(cv)
         xmlc = Utils.command(self.__nexusconfig_device,
                              "instantiatedComponents", [cp])
-        names = []
         if not len(xmlc) > 0:
-            return names
+            return ExDSDict()
         return self.__getDSFromXML(xmlc[0])
 
     def __getDSFromXML(self, cpxml):
