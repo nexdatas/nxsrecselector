@@ -994,6 +994,143 @@ class DescriberTest(unittest.TestCase):
 
 
 
+    ## constructor test
+    # \brief It tests default settings
+    def test_components_noarg_comp(self):
+        dstypes = [None, 'CLIENT', 'TANGO', 'PYEVAL', 'NEW', 'UNKNOWN']
+        strategies = [None, 'CONFIG','INIT','STEP', 'FINAL']
+        
+        for dst in dstypes:
+            for st in strategies:
+        
+                ncps = self.__rnd.randint(1, len(self.mycps.keys())-1)
+                cps = self.__rnd.sample(set(self.mycps.keys()), ncps)
+                
+                server = NoServer()
+                server.dsdict = self.mydss
+                server.cpdict = self.mycps
+                des = Describer(server)
+                res = des.components(cps, strategy=st, dstype=dst)
+                self.checkICP(res, cps, 
+                              strategy=st, dstype=dst)
+
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_components_noarg_tree_comp(self):
+
+
+        dstypes = [None, 'CLIENT', 'TANGO', 'PYEVAL', 'NEW', 'UNKNOWN']
+        strategies = [None, 'CONFIG','INIT','STEP', 'FINAL']
+        
+        for dst in dstypes:
+            for st in strategies:
+                ncps = self.__rnd.randint(1, len(self.mycps.keys())-1)
+                cps = self.__rnd.sample(set(self.mycps.keys()), ncps)
+                
+                server = NoServer()
+                server.dsdict = self.mydss
+                server.cpdict = self.mycps
+                des = Describer(server, True)
+                res = des.components(cps,strategy=st, dstype=dst)
+                self.checkCP(res, cps,
+                              strategy=st, dstype=dst)
+
+
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_components_noarg_comp_server(self):
+        dstypes = [None, 'CLIENT', 'TANGO', 'PYEVAL', 'NEW', 'UNKNOWN']
+        strategies = [None, 'CONFIG','INIT','STEP', 'FINAL']
+        
+        for dst in dstypes:
+            for st in strategies:
+        
+                ncps = self.__rnd.randint(1, len(self.mycps.keys())-1)
+                cps = self.__rnd.sample(set(self.mycps.keys()), ncps)
+                
+                server = Server()
+                server.dsdict = self.mydss
+                server.cpdict = self.mycps
+                des = Describer(server)
+                res = des.components(cps, strategy=st, dstype=dst)
+                self.checkICP(res, cps, 
+                              strategy=st, dstype=dst)
+
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_components_noarg_tree_comp_server(self):
+
+
+        dstypes = [None, 'CLIENT', 'TANGO', 'PYEVAL', 'NEW', 'UNKNOWN']
+        strategies = [None, 'CONFIG','INIT','STEP', 'FINAL']
+        
+        for dst in dstypes:
+            for st in strategies:
+                ncps = self.__rnd.randint(1, len(self.mycps.keys())-1)
+                cps = self.__rnd.sample(set(self.mycps.keys()), ncps)
+                
+                server = Server()
+                server.dsdict = self.mydss
+                server.cpdict = self.mycps
+                des = Describer(server, True)
+                res = des.components(cps,strategy=st, dstype=dst)
+                self.checkCP(res, cps,
+                              strategy=st, dstype=dst)
+
+
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_components_noarg_mem_comp(self):
+        dstypes = [None, 'CLIENT', 'TANGO', 'PYEVAL', 'NEW', 'UNKNOWN']
+        strategies = [None, 'CONFIG','INIT','STEP', 'FINAL']
+        
+        for dst in dstypes:
+            for st in strategies:
+        
+                ncps = self.__rnd.randint(1, len(self.mycps.keys())-1)
+                cps = self.__rnd.sample(set(self.mycps.keys()), ncps)
+                
+                nmem = self.__rnd.randint(1, len(self.mycps.keys())-1)
+                mem = self.__rnd.sample(set(self.mycps.keys()), nmem)
+                server = NoServer()
+                server.dsdict = self.mydss
+                server.cpdict = self.mycps
+                server.mcplist = list(mem)
+                des = Describer(server)
+                res = des.components(cps, strategy=st, dstype=dst)
+                self.checkICP(res, cps, 
+                              strategy=st, dstype=dst)
+
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_components_noarg_mem_tree_comp(self):
+
+
+        dstypes = [None, 'CLIENT', 'TANGO', 'PYEVAL', 'NEW', 'UNKNOWN']
+        strategies = [None, 'CONFIG','INIT','STEP', 'FINAL']
+        
+        for dst in dstypes:
+            for st in strategies:
+                ncps = self.__rnd.randint(1, len(self.mycps.keys())-1)
+                cps = self.__rnd.sample(set(self.mycps.keys()), ncps)
+                
+                nmem = self.__rnd.randint(1, len(self.mycps.keys())-1)
+                mem = self.__rnd.sample(set(self.mycps.keys()), nmem)
+                server = NoServer()
+                server.dsdict = self.mydss
+                server.cpdict = self.mycps
+                server.mcplist = list(mem)
+                des = Describer(server, True)
+                res = des.components(cps,strategy=st, dstype=dst)
+                self.checkCP(res, cps,
+                              strategy=st, dstype=dst)
+
+
 
 if __name__ == '__main__':
     unittest.main()
