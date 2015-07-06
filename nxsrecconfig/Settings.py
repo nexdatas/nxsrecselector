@@ -164,7 +164,7 @@ class Settings(object):
         res = self.cpdescription()
         dds = set()
 
-        for dss in res[1].values():
+        for dss in res[0].values():
             if isinstance(dss, dict):
                 for ds in dss.keys():
                     dds.add(ds)

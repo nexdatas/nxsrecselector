@@ -489,8 +489,8 @@ class DescriberTest(unittest.TestCase):
 #        print "CV", cv ,strategy, dstype
 #        cv = [cc for cc in cv if self.hasds(self.rescps[cc].values(), strategy, dstype)]
 #        print "CV2", cv ,strategy, dstype
-        self.assertEqual(sorted(set(rv[0].keys()) | set(rv[1].keys())), sorted(cv))
-        for i in range(2):
+        self.assertEqual(sorted(set(rv[0].keys())), sorted(cv))
+        for i in range(1):
             for cp, vl in rv[i].items():
 #                print "CP", cp
                 cres = self.rescps[cp]
@@ -780,8 +780,8 @@ class DescriberTest(unittest.TestCase):
         self.assertEqual(des.components(["unknown"]), [])
 
         des = Describer(server, True)
-        self.assertEqual(des.components(), [{}, {}])
-        self.assertEqual(des.components(["unknown"]), [{}, {}])
+        self.assertEqual(des.components(), [{}])
+        self.assertEqual(des.components(["unknown"]), [{}])
 
         server = Server()
         server.dsdict = dsdict
@@ -790,8 +790,8 @@ class DescriberTest(unittest.TestCase):
         self.assertEqual(des.components(["unknown"]), [])
 
         des = Describer(server, True)
-        self.assertEqual(des.components(), [{}, {}])
-        self.assertEqual(des.components(["unknown"]), [{}, {}])
+        self.assertEqual(des.components(), [{}])
+        self.assertEqual(des.components(["unknown"]), [{}])
 
     ## constructor test
     # \brief It tests default settings

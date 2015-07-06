@@ -313,7 +313,7 @@ class Selection(object):
         toCheck = {}
         for acp in acps.keys():
             res = describer.components([acp], '', '')
-            for cp, dss in res[1].items():
+            for cp, dss in res[0].items():
                 if isinstance(dss, dict):
                     tgds = describer.dataSources(dss.keys(), 'TANGO')
                     for ds in dss.keys():

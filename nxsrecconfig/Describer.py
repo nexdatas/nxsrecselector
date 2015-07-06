@@ -136,19 +136,10 @@ class Describer(object):
         else:
             cps = Utils.command(self.__nexusconfig_device,
                                 "availableComponents")
-        if components is None:
-            mand = Utils.command(self.__nexusconfig_device,
-                                 "mandatoryComponents")
-            if self.__treeOutput:
-                cps = list(set(cps) - set(mand))
-            else:
-                cps = list(set(cps) | set(mand))
 
         if self.__treeOutput:
-            result = [{}, {}]
-            if components is None:
-                result[0] = self.__fillintree(mand, strategy, dstype)
-            result[1] = self.__fillintree(cps, strategy, dstype)
+            result = [{}]
+            result[0] = self.__fillintree(cps, strategy, dstype)
         else:
             result = self.__fillinlist(cps, strategy, dstype, cfvars)
 

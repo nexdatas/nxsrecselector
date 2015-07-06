@@ -1,9 +1,10 @@
 2015-06-XX Jan Kotanski <jankotan@gmail.com>
+	* changing description format
 	* imporving getShape in Describer
 	* adding tests for describer
 	* adding tests for DSItem, ExDSItem and ExDSDict
 	* adding DSItem, ExDSItem and ExDSDict for Describer
-	* tagged as v1.19.14
+	* tagged as v1.20.0
 
 2015-06-17 Jan Kotanski <jankotan@gmail.com>
 	* fixes for loading timers from mntgrp
