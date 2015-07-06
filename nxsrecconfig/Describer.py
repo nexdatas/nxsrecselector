@@ -265,9 +265,8 @@ class Describer(object):
     def __getDataSourceAttributes(self, cp):
         xmlc = Utils.command(self.__nexusconfig_device,
                              "components", [cp])
-        names = []
         if not len(xmlc) > 0:
-            return names
+            return ExDSDict()
         return self.__getDSFromXML(xmlc[0])
 
     def __getInstDataSourceAttributes(self, cp, cfvars=None):

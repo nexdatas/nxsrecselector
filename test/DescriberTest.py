@@ -25,6 +25,7 @@ import sys
 import subprocess
 import random
 import struct
+import binascii
 
 from nxsrecconfig.Describer import Describer
 
@@ -110,6 +111,14 @@ class DescriberTest(unittest.TestCase):
         self._bint = "int64" if IS64BIT else "int32"
         self._buint = "uint64" if IS64BIT else "uint32"
         self._bfloat = "float64" if IS64BIT else "float32"
+
+        try:
+            self.__seed  = long(binascii.hexlify(os.urandom(16)), 16)
+        except NotImplementedError:
+            self.__seed  = long(time.time() * 256) 
+         
+        self.__rnd = random.Random(self.__seed)
+
 
         self.mycps = {
             'mycp' : (
@@ -431,6 +440,7 @@ class DescriberTest(unittest.TestCase):
     # \brief Common set up
     def setUp(self):
         print "\nsetting up..."
+        print "SEED =", self.__seed 
 
     ## test closer
     # \brief Common tear down
@@ -890,6 +900,99 @@ class DescriberTest(unittest.TestCase):
                 res = des.components(strategy=st, dstype=dst)
                 self.checkCP(res, self.rescps.keys(), 
                               strategy=st, dstype=dst)
+
+
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_components_noarg_mem(self):
+        dstypes = [None, 'CLIENT', 'TANGO', 'PYEVAL', 'NEW', 'UNKNOWN']
+        strategies = [None, 'CONFIG','INIT','STEP', 'FINAL']
+        
+        for dst in dstypes:
+            for st in strategies:
+        
+                nmem = self.__rnd.randint(1, len(self.mydss.keys())-1)
+                mem = self.__rnd.sample(set(self.mydss.keys()), nmem)
+                
+                server = NoServer()
+                server.dsdict = self.mydss
+                server.cpdict = self.mycps
+                server.mcplist = list(mem)
+                des = Describer(server)
+                res = des.components(strategy=st, dstype=dst)
+                self.checkICP(res, self.rescps.keys(), 
+                              strategy=st, dstype=dst)
+
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_components_noarg_mem_tree(self):
+
+
+        dstypes = [None, 'CLIENT', 'TANGO', 'PYEVAL', 'NEW', 'UNKNOWN']
+        strategies = [None, 'CONFIG','INIT','STEP', 'FINAL']
+        
+        for dst in dstypes:
+            for st in strategies:
+                nmem = self.__rnd.randint(1, len(self.mycps.keys())-1)
+                mem = self.__rnd.sample(set(self.mycps.keys()), nmem)
+                
+                server = NoServer()
+                server.dsdict = self.mydss
+                server.cpdict = self.mycps
+                server.mcplist = list(mem)
+                des = Describer(server, True)
+                res = des.components(strategy=st, dstype=dst)
+                self.checkCP(res, self.rescps.keys(), 
+                              strategy=st, dstype=dst)
+
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_components_noarg_mem_server(self):
+        dstypes = [None, 'CLIENT', 'TANGO', 'PYEVAL', 'NEW', 'UNKNOWN']
+        strategies = [None, 'CONFIG','INIT','STEP', 'FINAL']
+        
+        for dst in dstypes:
+            for st in strategies:
+        
+                nmem = self.__rnd.randint(1, len(self.mydss.keys())-1)
+                mem = self.__rnd.sample(set(self.mydss.keys()), nmem)
+                
+                server = Server()
+                server.dsdict = self.mydss
+                server.cpdict = self.mycps
+                server.mcplist = list(mem)
+                des = Describer(server)
+                res = des.components(strategy=st, dstype=dst)
+                self.checkICP(res, self.rescps.keys(), 
+                              strategy=st, dstype=dst)
+
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_components_noarg_mem_tree_server(self):
+
+
+        dstypes = [None, 'CLIENT', 'TANGO', 'PYEVAL', 'NEW', 'UNKNOWN']
+        strategies = [None, 'CONFIG','INIT','STEP', 'FINAL']
+        
+        for dst in dstypes:
+            for st in strategies:
+                nmem = self.__rnd.randint(1, len(self.mycps.keys())-1)
+                mem = self.__rnd.sample(set(self.mycps.keys()), nmem)
+                
+                server = Server()
+                server.dsdict = self.mydss
+                server.cpdict = self.mycps
+                server.mcplist = list(mem)
+                des = Describer(server, True)
+                res = des.components(strategy=st, dstype=dst)
+                self.checkCP(res, self.rescps.keys(), 
+                              strategy=st, dstype=dst)
+
+
 
 
 if __name__ == '__main__':
