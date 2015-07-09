@@ -241,8 +241,8 @@ class Describer(object):
                         value = '__unnamed__'
                     shape[index - 1] = "$datasource.%s" % value
                 else:
-                    value = " ".join(t.nodeValue for t in dim.childNodes \
-                                         if t.nodeType == t.TEXT_NODE)
+                    value = " ".join(t.nodeValue for t in dim.childNodes
+                                     if t.nodeType == t.TEXT_NODE)
                     try:
                         value = int(value)
                     except:
@@ -250,7 +250,7 @@ class Describer(object):
                         if not value:
                             value = None
                     shape[index - 1] = value
-                
+
         return shape
 
     def __getDataSourceAttributes(self, cp):

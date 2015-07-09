@@ -1,5 +1,5 @@
-2015-06-XX Jan Kotanski <jankotan@gmail.com>
-	* changing description format
+2015-07-09 Jan Kotanski <jankotan@gmail.com>
+	* changing description attribute format
 	* imporving getShape in Describer
 	* adding tests for describer
 	* adding tests for DSItem, ExDSItem and ExDSDict
