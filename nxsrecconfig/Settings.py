@@ -28,6 +28,7 @@ from .DynamicComponent import DynamicComponent
 from .Utils import Utils
 from .MntGrpTools import MntGrpTools
 from .Selection import Selection
+from .MacroServerPools import MacroServerPools
 
 
 ## NeXus Sardana Recorder settings
@@ -41,8 +42,13 @@ class Settings(object):
         ## number of threads
         self.numberOfThreads = 20
 
+
         ## configuration selection
-        self.__selection = Selection(self.numberOfThreads)
+        self.__msp = MacroServerPools(self.numberOfThreads)
+
+        ## configuration selection
+        self.__selection = Selection(self.msp)
+
 
         self.__mntgrptools = MntGrpTools(self.__selection)
 
@@ -196,12 +202,12 @@ class Settings(object):
     ## get method for poolBlacklist attribute
     # \returns name of poolBlacklist
     def __getPoolBlacklist(self):
-        return self.__selection.poolBlacklist
+        return self.__msp.poolBlacklist
 
     ## set method for poolBlacklist attribute
     # \param name of poolBlacklist
     def __setPoolBlacklist(self, name):
-        self.__selection.poolBlacklist = name
+        self.__msp.poolBlacklist = name
 
     ## black list of pools
     poolBlacklist = property(__getPoolBlacklist, __setPoolBlacklist,

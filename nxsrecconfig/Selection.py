@@ -36,9 +36,11 @@ class Selection(object):
 
     ## constructor
     # \param configserver configuration server name
-    def __init__(self, numberOfThreads):
+    def __init__(self, macroserverpools):
 
-        self.__numberOfThreads = numberOfThreads
+        ## macro server and pools
+        self.__msp = macroserverpools
+#        self.__numberOfThreads = numberOfThreads
         ## default zone
         self.__defaultzone = 'Europe/Berlin'
 
@@ -54,16 +56,10 @@ class Selection(object):
         ## module label
         self.moduleLabel = 'module'
 
-        ## macro server instance
-        self.__macroserver = ""
-        ## pool instances
-        self.__pools = []
         ## config server proxy
         self.__configProxy = None
         ## config server module
         self.__configModule = None
-        ## black list of pools
-        self.poolBlacklist = []
 
         self.__nxsenv = "NeXusConfiguration"
 
@@ -393,19 +389,6 @@ class Selection(object):
             self.updateMacroServer(self["Door"])
         return self.__pools
 
-    ## updates MacroServer and sardana pools for given door
-    # \param door door device
-    def updateMacroServer(self, door):
-        if not door:
-            raise Exception("Door '%s' cannot be found" % door)
-        self.__macroserver = Utils.getMacroServer(self.__db, door)
-        msp = Utils.openProxy(self.__macroserver)
-        pnames = msp.get_property("PoolNames")["PoolNames"]
-        if not pnames:
-            pnames = []
-        poolNames = list(
-            set(pnames) - set(self.poolBlacklist))
-        self.__pools = Utils.getProxies(poolNames)
 
     def getMacroServer(self):
         if not self.__macroserver:
@@ -460,43 +443,6 @@ class Selection(object):
         inst = self.setConfigInstance()
         return Utils.command(inst, command, *var)
 
-    ## available pool channels
-    # \returns pool channels of the macroserver pools
-    def poolChannels(self):
-        res = []
-        ms = self.getMacroServer()
-        msp = Utils.openProxy(ms)
-        pn = msp.get_property("PoolNames")["PoolNames"]
-        if pn:
-            for pl in pn:
-                pool = Utils.openProxy(pl)
-                exps = pool.ExpChannelList
-                if exps:
-                    for jexp in exps:
-                        if jexp:
-                            exp = json.loads(jexp)
-                            if exp and isinstance(exp, dict):
-                                res.append(exp['name'])
-        return res
-
-    ## available pool motors
-    # \returns pool motors of the macroserver pools
-    def poolMotors(self):
-        res = []
-        ms = self.getMacroServer()
-        msp = Utils.openProxy(ms)
-        pn = msp.get_property("PoolNames")["PoolNames"]
-        if pn:
-            for pl in pn:
-                pool = Utils.openProxy(pl)
-                exps = pool.MotorList
-                if exps:
-                    for jexp in exps:
-                        if jexp:
-                            exp = json.loads(jexp)
-                            if exp and isinstance(exp, dict):
-                                res.append(exp['name'])
-        return res
 
     ## imports Enviroutment Data
     # \param names names of required variables
