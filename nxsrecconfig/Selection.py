@@ -385,15 +385,20 @@ class Selection(object):
         return json.dumps(acps)
 
     def getPools(self):
-        if not self.__pools:
-            self.updateMacroServer(self["Door"])
-        return self.__pools
+        return self.__msp.getPools(self["Door"])
 
+    ## available pool channels
+    # \returns pool channels of the macroserver pools
+    def poolChannels(self):
+        return self.__msp.poolChannels(self["Door"])
+
+    ## available pool motors
+    # \returns pool motors of the macroserver pools
+    def poolMotors(self):
+        return self.__msp.poolMotors(self["Door"])
 
     def getMacroServer(self):
-        if not self.__macroserver:
-            self.updateMacroServer(self["Door"])
-        return self.__macroserver
+        return self.__msp.getMacroServer(self["Door"])
 
     ## sets config instances
     # \returns set config instance

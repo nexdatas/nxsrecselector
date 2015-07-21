@@ -16,7 +16,7 @@
 #    You should have received a copy of the GNU General Public License
 #    along with nexdatas.  If not, see <http://www.gnu.org/licenses/>.
 ## \file MacroServerPools.py
-# component describer
+# sardana macro server and pools
 
 """  Selection state """
 
@@ -44,7 +44,6 @@ class MacroServerPools(object):
         self.__macroserver = ""
         ## pool instances
         self.__pools = []
-
         ## black list of pools
         self.poolBlacklist = []
 
@@ -63,10 +62,11 @@ class MacroServerPools(object):
         self.__pools = Utils.getProxies(poolNames)
 
     ## available pool channels
+    # \param door door device
     # \returns pool channels of the macroserver pools
-    def poolChannels(self):
+    def poolChannels(self, door):
         res = []
-        ms = self.getMacroServer()
+        ms = self.getMacroServer(door)
         msp = Utils.openProxy(ms)
         pn = msp.get_property("PoolNames")["PoolNames"]
         if pn:
@@ -83,9 +83,9 @@ class MacroServerPools(object):
 
     ## available pool motors
     # \returns pool motors of the macroserver pools
-    def poolMotors(self):
+    def poolMotors(self, door):
         res = []
-        ms = self.getMacroServer()
+        ms = self.getMacroServer(door)
         msp = Utils.openProxy(ms)
         pn = msp.get_property("PoolNames")["PoolNames"]
         if pn:
@@ -101,3 +101,12 @@ class MacroServerPools(object):
         return res
 
 
+    def getMacroServer(self, door):
+        if not self.__macroserver:
+            self.updateMacroServer(door)
+        return self.__macroserver
+
+    def getPools(self, door):
+        if not self.__pools:
+            self.updateMacroServer(door)
+        return self.__pools
