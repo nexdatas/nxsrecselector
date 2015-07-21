@@ -393,6 +393,8 @@ class Selection(object):
             self.updateMacroServer(self["Door"])
         return self.__pools
 
+    ## updates MacroServer and sardana pools for given door
+    # \param door door device
     def updateMacroServer(self, door):
         if not door:
             raise Exception("Door '%s' cannot be found" % door)
