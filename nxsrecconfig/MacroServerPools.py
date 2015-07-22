@@ -23,8 +23,8 @@
 import json
 import PyTango
 import Queue
-import getpass
-import pickle
+#import getpass
+#import pickle
 from .Utils import Utils
 from .Describer import Describer
 from .CheckerThread import CheckerThread
@@ -39,6 +39,9 @@ class MacroServerPools(object):
     def __init__(self, numberOfThreads):
 
         self.__numberOfThreads = numberOfThreads
+
+        ## tango database
+        self.__db = PyTango.Database()
 
         ## macro server instance
         self.__macroserver = ""
@@ -100,7 +103,6 @@ class MacroServerPools(object):
                                 res.append(exp['name'])
         return res
 
-
     def getMacroServer(self, door):
         if not self.__macroserver:
             self.updateMacroServer(door)
@@ -110,3 +112,79 @@ class MacroServerPools(object):
         if not self.__pools:
             self.updateMacroServer(door)
         return self.__pools
+
+    @classmethod
+    def __toCheck(cls, inst, rcp, acps, ads, nonexisting):
+        describer = Describer(inst, True)
+        avcp = Utils.command(inst, "availableComponents")
+
+        rcp.update(dict(
+                [str(k), ("...", "%s not defined in Configuration Server" % k)]
+                for k in set(acps) - set(avcp)))
+        toCheck = {}
+        for acp in acps.keys():
+            res = describer.components([acp], '', '')
+            for cp, dss in res[0].items():
+                if isinstance(dss, dict):
+                    tgds = describer.dataSources(dss.keys(), 'TANGO')
+                    for ds in dss.keys():
+                        if ds in tgds.keys():
+                            if cp not in toCheck.keys():
+                                toCheck[cp] = [cp]
+                            srec = tgds[ds].record.split("/")
+                            attr = srec[-1]
+                            toCheck[cp].append(
+                                (str(ds), str("/".join(srec[:-1])), str(attr)))
+                        elif ds in nonexisting:
+                            rcp[cp] = (ds, "%s not defined in Pool" % ds)
+                            if cp in toCheck.keys():
+                                toCheck.pop(cp)
+                            break
+                        elif ds in ads:
+                            if cp not in toCheck.keys():
+                                toCheck[cp] = [cp]
+                            toCheck[cp].append(str(ds))
+        return toCheck
+
+    def updateControllers(self, inst, ads, acps, door, descErrors):
+        descErrors[:] = []
+        rcp = {}
+        threads = []
+        pools = self.getPools(door)
+        fnames = Utils.getFullDeviceNames(pools, ads)
+        nonexisting = [dev for dev in ads if dev not in fnames.keys()]
+        toCheck = self.__toCheck(inst, rcp, acps, ads, nonexisting)
+
+        cqueue = Queue.Queue()
+        for lds in toCheck.values():
+            cqueue.put(lds)
+        if self.__numberOfThreads < 1:
+            self.__numberOfThreads = len(toCheck.values())
+
+        for i in range(min(self.__numberOfThreads, len(toCheck.values()))):
+            thd = CheckerThread(i, cqueue)
+            threads.append(thd)
+            thd.start()
+
+        for th in threads:
+            th.join()
+
+        for lds in toCheck.values():
+            if lds and len(lds) > 0:
+                rcp[lds[0]] = (lds[1], lds[2])
+
+        for acp in acps.keys():
+            if acp in rcp.keys():
+                value = rcp[acp]
+                descErrors.append(json.dumps(
+                        {"component": str(acp),
+                         "datasource": str(value[0]),
+                         "message": str(value[1])}))
+                if str(value[1]) != "ALARM_STATE":
+                    acps[acp] = False
+                else:
+                    acps[acp] = True
+            else:
+                acps[acp] = True
+
+        return json.dumps(acps)

@@ -21,315 +21,140 @@
 """  Selection state """
 
 import json
-import PyTango
-import Queue
-import getpass
-import pickle
-from .Utils import Utils
-from .Describer import Describer
-from .CheckerThread import CheckerThread
 
+class Selection(dict):
+    def __init__(self, *args, **kw):
+        super(Selection, self).__init__(*args, **kw)
 
-## NeXus Sardana Recorder settings
-class Selection(object):
-    """ selection state """
-
-    ## constructor
-    # \param configserver configuration server name
-    def __init__(self, macroserverpools):
-
-        ## macro server and pools
-        self.__msp = macroserverpools
-#        self.__numberOfThreads = numberOfThreads
         ## default zone
         self.__defaultzone = 'Europe/Berlin'
 
         ## default mntgrp
         self.__defaultmntgrp = 'nxsmntgrp'
 
-        ##  dictionary with Settings
-        self.__selection = {}
-
-        ## tango database
-        self.__db = PyTango.Database()
-
-        ## module label
-        self.moduleLabel = 'module'
-
-        ## config server proxy
-        self.__configProxy = None
-        ## config server module
-        self.__configModule = None
-
-        self.__nxsenv = "NeXusConfiguration"
-
-        self.__pureVar = [
-            "AppendEntry",
-            "ComponentsFromMntGrp",
-            "DynamicComponents",
-            "DynamicLinks",
-            "DynamicPath",
-            "TimeZone",
-            "ConfigDevice",
-            "WriterDevice",
-            "Door",
-            "MntGrp",
-            "ScanDir"
-            ]
-
-        self.reset()
-
     def reset(self):
-        self.__selection.clear()
+        self.clear()
         ## timer
-        self.__selection["Timer"] = '[]'
+        self["Timer"] = '[]'
         ## ordered channels
-        self.__selection["OrderedChannels"] = '[]'
+        self["OrderedChannels"] = '[]'
         ## group of electable components
-        self.__selection["ComponentGroup"] = '{}'
+        self["ComponentGroup"] = '{}'
         ## group of automatic components describing instrument state
-        self.__selection["AutomaticComponentGroup"] = '{}'
+        self["AutomaticComponentGroup"] = '{}'
         ## automatic datasources
-        self.__selection["AutomaticDataSources"] = '[]'
+        self["AutomaticDataSources"] = '[]'
         ## selected datasources
-        self.__selection["DataSourceGroup"] = '{}'
+        self["DataSourceGroup"] = '{}'
         ## init datasources
-        self.__selection["InitDataSources"] = '[]'
+        self["InitDataSources"] = '[]'
         ## group of optional components available for automatic selqection
-        self.__selection["OptionalComponents"] = '[]'
+        self["OptionalComponents"] = '[]'
         ## appending new entries to existing file
-        self.__selection["AppendEntry"] = False
+        self["AppendEntry"] = False
         ## select components from the active measurement group
-        self.__selection["ComponentsFromMntGrp"] = False
+        self["ComponentsFromMntGrp"] = False
         ## Configuration Server variables
-        self.__selection["ConfigVariables"] = '{}'
+        self["ConfigVariables"] = '{}'
         ## JSON with Client Data Record
-        self.__selection["DataRecord"] = '{}'
+        self["DataRecord"] = '{}'
         ## JSON with Element Labels
-        self.__selection["Labels"] = '{}'
+        self["Labels"] = '{}'
         ## JSON with NeXus paths for Label Paths
-        self.__selection["LabelPaths"] = '{}'
+        self["LabelPaths"] = '{}'
         ## JSON with NeXus paths for Label Links
-        self.__selection["LabelLinks"] = '{}'
+        self["LabelLinks"] = '{}'
         ## JSON with NeXus paths for Label Displays
-        self.__selection["HiddenElements"] = '[]'
+        self["HiddenElements"] = '[]'
         ## JSON with NeXus paths for Label Types
-        self.__selection["LabelTypes"] = '{}'
+        self["LabelTypes"] = '{}'
         ## JSON with NeXus paths for Label Shapes
-        self.__selection["LabelShapes"] = '{}'
+        self["LabelShapes"] = '{}'
         ## create dynamic components
-        self.__selection["DynamicComponents"] = True
+        self["DynamicComponents"] = True
         ## create links for dynamic components
-        self.__selection["DynamicLinks"] = True
+        self["DynamicLinks"] = True
         ## path for dynamic components
-        self.__selection["DynamicPath"] = \
+        self["DynamicPath"] = \
             '/entry$var.serialno:NXentry/NXinstrument/collection'
         ## timezone
-        self.__selection["TimeZone"] = self.__defaultzone
+        self["TimeZone"] = self.__defaultzone
         ## Configuration Server device name
-        self.__selection["ConfigDevice"] = ''
+        self["ConfigDevice"] = ''
         ## NeXus Data Writer device
-        self.__selection["WriterDevice"] = ''
+        self["WriterDevice"] = ''
         ## Door device name
-        self.__selection["Door"] = ''
+        self["Door"] = ''
         ## MntGrp
-        self.__selection["MntGrp"] = ''
+        self["MntGrp"] = ''
 
+    ## deselects components and datasources
     def deselect(self):
-        cps = json.loads(self.__selection["ComponentGroup"])
-        ads = json.loads(self.__selection["DataSourceGroup"])
+        cps = json.loads(self["ComponentGroup"])
+        ads = json.loads(self["DataSourceGroup"])
         for k in cps.keys():
             cps[k] = False
         for k in ads.keys():
             ads[k] = False
-        self.__selection["InitDataSources"] = '[]'
-        self.__selection["DataSourceGroup"] = json.dumps(ads)
-        self.__selection["ComponentGroup"] = json.dumps(cps)
-
-    def set(self, state):
-        self.reset()
-        for key in state.keys():
-            if key and key[0].upper() != key[0]:
-                key = key[0].upper() + key[1:]
-            self.__selection[key] = state[key]
-            if hasattr(self, "_Selection__reset" + key):
-                getattr(self, "_Selection__reset" + key)()
-
-    ## provides names of variables
-    def keys(self):
-        return self.__selection.keys()
-
-    def get(self):
-        for key in self.keys():
-            if hasattr(self, "_Selection__update" + key):
-                getattr(self, "_Selection__update" + key)()
-        return dict(self.__selection)
-
-    def __getitem__(self, key):
-        if key in self.keys():
-            if key and key[0].upper() != key[0]:
-                key = key[0].upper() + key[1:]
-            if hasattr(self, "_Selection__update" + key):
-                getattr(self, "_Selection__update" + key)()
-            return self.__selection[key]
-        else:
-            return None
-
-    def __setitem__(self, key, value):
-        self.__selection[key] = value
-        if hasattr(self, "_Selection__reset" + key):
-            getattr(self, "_Selection__reset" + key)()
-
-    ## updates method for configDevice attribute
-    def __updateConfigDevice(self):
-        if "ConfigDevice" not in self.__selection.keys() \
-                or not self.__selection["ConfigDevice"]:
-            self.__selection["ConfigDevice"] = Utils.getDeviceName(
-                self.__db, "NXSConfigServer")
-        name = self.__selection["ConfigDevice"]
-        if name:
-            if name != self.moduleLabel:
-                try:
-                    dp = Utils.getProxies([name])
-                    if not dp:
-                        self.__selection["ConfigDevice"] = ''
-                except (PyTango.DevFailed, PyTango.Except, PyTango.DevError):
-                    self.__selection["ConfigDevice"] = ''
+        self["InitDataSources"] = '[]'
+        self["DataSourceGroup"] = json.dumps(ads)
+        self["ComponentGroup"] = json.dumps(cps)
 
     ## get method for automaticDataSources attribute
-    def __updateAutomaticDataSources(self):
-        adsg = json.loads(self.__selection["AutomaticDataSources"])
-        pmots = self.poolMotors()
-        adsg = list(set(adsg if adsg else []) | set(pmots if pmots else []))
-        self.__selection["AutomaticDataSources"] = json.dumps(adsg)
+    def updateAutomaticDataSources(self, motors):
+        adsg = json.loads(self["AutomaticDataSources"])
+        adsg = list(set(adsg if adsg else []) | set(motors if motors else []))
+        self["AutomaticDataSources"] = json.dumps(adsg)
 
     ## update method for orderedChannels attribute
-    def __updateOrderedChannels(self):
-        pch = self.poolChannels()
-        och = json.loads(self.__selection["OrderedChannels"])
-
-        ordchannels = [ch for ch in och if ch in pch]
-        uordchannels = list(set(pch) - set(och))
+    def updateOrderedChannels(self, channels):
+        och = json.loads(self["OrderedChannels"])
+        ordchannels = [ch for ch in och if ch in channels]
+        uordchannels = list(set(channels) - set(och))
         ordchannels.extend(sorted(uordchannels))
-        self.__selection["OrderedChannels"] = json.dumps(ordchannels)
-
-    ## update method for mntGrp attribute
-    def __updateMntGrp(self):
-        if "MntGrp" not in self.keys() or not self.__selection["MntGrp"]:
-            self.__selection["MntGrp"] = self.__defaultmntgrp
+        self["OrderedChannels"] = json.dumps(ordchannels)
 
     ## update method for componentGroup attribute
-    def __updateComponentGroup(self):
-        cpg = json.loads(self.__selection["ComponentGroup"])
-        dss = json.loads(self.__selection["DataSourceGroup"]).keys()
+    def updateComponentGroup(self):
+        cpg = json.loads(self["ComponentGroup"])
+        dss = json.loads(self["DataSourceGroup"]).keys()
         for cp in set(cpg.keys()):
             if cp in dss:
                 cpg.pop(cp)
-
-        self.__selection["ComponentGroup"] = json.dumps(cpg)
+        self["ComponentGroup"] = json.dumps(cpg)
 
     ## update method for dataSourceGroup attribute
-    def __updateDataSourceGroup(self):
-        dsg = json.loads(self.__selection["DataSourceGroup"])
-        ads = self.configCommand("availableDataSources")
-        ads = ads if ads else []
-        pchs = self.poolChannels()
+    def updateDataSourceGroup(self, channels, datasources):
+        dsg = json.loads(self["DataSourceGroup"])
+        datasources = datasources if datasources else []
         for ds in tuple(dsg.keys()):
-            if ds not in pchs and ds not in ads:
+            if ds not in channels and ds not in datasources:
                 dsg.pop(ds)
-        for pc in pchs:
+        for pc in channels:
             if pc not in dsg.keys():
                 dsg[pc] = False
-        self.__selection["DataSourceGroup"] = json.dumps(dsg)
+        self["DataSourceGroup"] = json.dumps(dsg)
 
-    ## update method for door attribute
-    def __updateDoor(self):
-        try:
-            if str(self.__selection["Door"]):
-                dp = PyTango.DeviceProxy(str(self.__selection["Door"]))
-                dp.ping()
-        except (PyTango.DevFailed, PyTango.Except, PyTango.DevError):
-            self.__selection["Door"] = ''
-        if "Door" not in self.__selection.keys() \
-                or not self.__selection["Door"]:
-            self.__selection["Door"] = Utils.getDeviceName(
-                self.__db, "Door")
-            self.updateMacroServer(self.__selection["Door"])
+    ## update method for mntGrp attribute
+    def updateMntGrp(self):
+        if "MntGrp" not in self.keys() or not self["MntGrp"]:
+            self["MntGrp"] = self.__defaultmntgrp
 
     ## update method for timeZone attribute
-    def __updateTimeZone(self):
-        if "TimeZone" not in self.keys() or not self.__selection["TimeZone"]:
-            self.__selection["TimeZone"] = self.__defaultzone
-
-    ## update method for writerDevice attribute
-    # \returns name of writerDevice
-    def __updateWriterDevice(self):
-        if "WriterDevice" not in self.__selection.keys() \
-                or not self.__selection["WriterDevice"]:
-            self.__selection["WriterDevice"] = Utils.getDeviceName(
-                self.__db, "NXSDataWriter")
-
-    ## reset method for configDevice attribute
-    def __resetConfigDevice(self):
-        if not self.__selection["ConfigDevice"]:
-            self.__selection["ConfigDevice"] = Utils.getDeviceName(
-                self.__db, "NXSConfigServer")
+    def updateTimeZone(self):
+        if "TimeZone" not in self.keys() or not self["TimeZone"]:
+            self["TimeZone"] = self.__defaultzone
 
     ## set method for mntGrp attribute
-    def __resetMntGrp(self):
-        if not self.__selection["MntGrp"]:
-            self.__selection["MntGrp"] = self.__defaultmntgrp
+    def resetMntGrp(self):
+        if not self["MntGrp"]:
+            self["MntGrp"] = self.__defaultmntgrp
 
     ## set method for timeZone attribute
     # \param name of timeZone
-    def __resetTimeZone(self):
-        if not self.__selection["TimeZone"]:
-            self.__selection["TimeZone"] = self.__defaultzone
-
-    ## set method for door attribute
-    def __resetDoor(self):
-        if not self.__selection["Door"]:
-            self.__selection["Door"] = Utils.getDeviceName(
-                self.__db, "Door")
-
-    ## set method for writerDevice attribute
-    def __resetWriterDevice(self):
-        if not self.__selection["WriterDevice"]:
-            self.__selection["WriterDevice"] = Utils.getDeviceName(
-                self.__db, "NXSDataWriter")
-
-    def __toCheck(self, rcp, acps, ads, nonexisting):
-        inst = self.setConfigInstance()
-        describer = Describer(inst, True)
-        avcp = Utils.command(inst, "availableComponents")
-
-        rcp.update(dict(
-                [str(k), ("...", "%s not defined in Configuration Server" % k)]
-                for k in set(acps) - set(avcp)))
-        toCheck = {}
-        for acp in acps.keys():
-            res = describer.components([acp], '', '')
-            for cp, dss in res[0].items():
-                if isinstance(dss, dict):
-                    tgds = describer.dataSources(dss.keys(), 'TANGO')
-                    for ds in dss.keys():
-                        if ds in tgds.keys():
-                            if cp not in toCheck.keys():
-                                toCheck[cp] = [cp]
-                            srec = tgds[ds].record.split("/")
-                            attr = srec[-1]
-                            toCheck[cp].append(
-                                (str(ds), str("/".join(srec[:-1])), str(attr)))
-                        elif ds in nonexisting:
-                            rcp[cp] = (ds, "%s not defined in Pool" % ds)
-                            if cp in toCheck.keys():
-                                toCheck.pop(cp)
-                            break
-                        elif ds in ads:
-                            if cp not in toCheck.keys():
-                                toCheck[cp] = [cp]
-                            toCheck[cp].append(str(ds))
-        return toCheck
+    def resetTimeZone(self):
+        if not self["TimeZone"]:
+            self["TimeZone"] = self.__defaultzone
 
     def resetAutomaticComponents(self, components):
         acps = {}
@@ -337,225 +162,4 @@ class Selection(object):
             acps[cp] = False
         self["AutomaticComponentGroup"] = json.dumps(acps)
 
-    def updateControllers(self, pools, descErrors):
-        descErrors[:] = []
-        ads = set(json.loads(self["AutomaticDataSources"]))
-        nonexisting = []
-        fnames = Utils.getFullDeviceNames(pools, ads)
 
-        nonexisting = [dev for dev in ads if dev not in fnames.keys()]
-
-        acps = json.loads(self["AutomaticComponentGroup"])
-        rcp = {}
-        threads = []
-        toCheck = self.__toCheck(rcp, acps, ads, nonexisting)
-
-        cqueue = Queue.Queue()
-        for lds in toCheck.values():
-            cqueue.put(lds)
-        if self.__numberOfThreads < 1:
-            self.__numberOfThreads = len(toCheck.values())
-
-        for i in range(min(self.__numberOfThreads, len(toCheck.values()))):
-            thd = CheckerThread(i, cqueue)
-            threads.append(thd)
-            thd.start()
-
-        for th in threads:
-            th.join()
-
-        for lds in toCheck.values():
-            if lds and len(lds) > 0:
-                rcp[lds[0]] = (lds[1], lds[2])
-
-        for acp in acps.keys():
-            if acp in rcp.keys():
-                value = rcp[acp]
-                descErrors.append(json.dumps(
-                        {"component": str(acp),
-                         "datasource": str(value[0]),
-                         "message": str(value[1])}))
-                if str(value[1]) != "ALARM_STATE":
-                    acps[acp] = False
-                else:
-                    acps[acp] = True
-            else:
-                acps[acp] = True
-
-        return json.dumps(acps)
-
-    def getPools(self):
-        return self.__msp.getPools(self["Door"])
-
-    ## available pool channels
-    # \returns pool channels of the macroserver pools
-    def poolChannels(self):
-        return self.__msp.poolChannels(self["Door"])
-
-    ## available pool motors
-    # \returns pool motors of the macroserver pools
-    def poolMotors(self):
-        return self.__msp.poolMotors(self["Door"])
-
-    def getMacroServer(self):
-        return self.__msp.getMacroServer(self["Door"])
-
-    ## sets config instances
-    # \returns set config instance
-    def setConfigInstance(self):
-        if "ConfigDevice" not in self.__selection.keys() \
-                or not self.__selection["ConfigDevice"]:
-            self.__updateConfigDevice()
-
-        if self.__selection["ConfigDevice"] and \
-                self.__selection["ConfigDevice"].lower() != self.moduleLabel:
-            self.__configProxy = Utils.openProxy(
-                self.__selection["ConfigDevice"])
-            self.__configProxy.command_inout("Open")
-            self.__configModule = None
-        else:
-            from nxsconfigserver import XMLConfigurator
-            from MySQLdb.connections import DatabaseError
-            self.__configModule = XMLConfigurator.XMLConfigurator()
-            self.getMacroServer()
-
-            data = {}
-            self.importEnv(['DBParams'], data)
-            if 'DBParams' in data.keys():
-                dbp = data['DBParams']
-            else:
-                dbp = '{}'
-
-            try:
-                self.__configModule.jsonsettings = dbp
-                self.__configModule.open()
-                self.__configModule.availableComponents()
-            except DatabaseError:
-                user = getpass.getuser()
-                dbp = '{"host":"localhost","db":"nxsconfig",' \
-                    + '"use_unicode":true,' \
-                    + '"read_default_file":"/home/%s/.my.cnf"}' % user
-                self.__configModule.jsonsettings = dbp
-                self.__configModule.open()
-                self.__configModule.availableComponents()
-            self.__configProxy = None
-        return self.__configProxy \
-            if self.__configProxy else self.__configModule
-
-    ## executes command on configuration server
-    # \returns command result
-    def configCommand(self, command, *var):
-        inst = self.setConfigInstance()
-        return Utils.command(inst, command, *var)
-
-
-    ## imports Enviroutment Data
-    # \param names names of required variables
-    # \param data dictionary with resulting data
-    def importEnv(self, names=None, data=None):
-        params = ["ScanDir",
-                  "ScanFile"]
-
-        if names is None:
-            names = self.keys()
-        if data is None:
-            data = self
-
-        dp = Utils.openProxy(self.getMacroServer())
-        rec = dp.Environment
-        nenv = {}
-        if rec[0] == 'pickle':
-            dc = pickle.loads(rec[1])
-            if 'new' in dc.keys():
-                if self.__nxsenv in dc['new'].keys():
-                    nenv = dc['new'][self.__nxsenv]
-                for var in names:
-                    name = var if var in params else ("NeXus%s" % var)
-                    if name in dc['new'].keys():
-                        vl = dc['new'][name]
-                        if type(vl) not in [str, bool, int, unicode]:
-                            vl = json.dumps(vl)
-                        data[var] = vl
-                    elif var in nenv.keys():
-                        vl = nenv[var]
-                        if type(vl) not in [str, bool, int, unicode]:
-                            vl = json.dumps(vl)
-                        data[var] = vl
-
-    ## exports all Enviroutment Data
-    def exportEnv(self, data=None, cmddata=None):
-        params = ["ScanDir",
-                  "ScanFile"]
-
-        if data is None:
-            data = self
-
-        ms = self.getMacroServer()
-        msp = Utils.openProxy(ms)
-
-        rec = msp.Environment
-        if rec[0] == 'pickle':
-            dc = pickle.loads(rec[1])
-            if 'new' in dc.keys():
-                if self.__nxsenv not in dc['new'].keys() \
-                        or not isinstance(dc['new'][self.__nxsenv], dict):
-                    dc['new'][self.__nxsenv] = {}
-                nenv = dc['new'][self.__nxsenv]
-                for var in data.keys():
-                    if var in self.__pureVar:
-                        vl = data[var]
-                    else:
-                        try:
-                            vl = json.loads(data[var])
-                        except ValueError:
-                            vl = data[var]
-                    if var in params:
-                        dc['new'][str(var)] = vl
-                    else:
-                        nenv[("%s" % var)] = vl
-
-                if cmddata:
-                    for name, value in cmddata.items():
-                        nenv[str(name)] = value
-                pk = pickle.dumps(dc)
-                msp.Environment = ['pickle', pk]
-
-    ## fetches Enviroutment Data
-    # \returns JSON String with important variables
-    def fetchEnvData(self):
-        params = ["ScanDir",
-                  "ScanFile",
-                  "ScanID",
-#                  "ActiveMntGrp",
-                  "NeXusSelectorDevice"]
-        res = {}
-        dp = Utils.openProxy(self.getMacroServer())
-        rec = dp.Environment
-        if rec[0] == 'pickle':
-            dc = pickle.loads(rec[1])
-            if 'new' in dc.keys():
-                for var in params:
-                    if var in dc['new'].keys():
-                        res[var] = dc['new'][var]
-        return json.dumps(res)
-
-    ## stores Enviroutment Data
-    # \param jdata JSON String with important variables
-    def storeEnvData(self, jdata):
-        jdata = Utils.stringToDictJson(jdata)
-        data = json.loads(jdata)
-        scanID = -1
-        ms = self.getMacroServer()
-        msp = Utils.openProxy(ms)
-
-        rec = msp.Environment
-        if rec[0] == 'pickle':
-            dc = pickle.loads(rec[1])
-            if 'new' in dc.keys():
-                for var in data.keys():
-                    dc['new'][str(var)] = Utils.toString(data[var])
-                pk = pickle.dumps(dc)
-                if 'ScanID' in dc['new'].keys():
-                    scanID = int(dc['new']["ScanID"])
-                msp.Environment = ['pickle', pk]
-        return scanID

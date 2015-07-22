@@ -27,7 +27,7 @@ from .Describer import Describer
 from .DynamicComponent import DynamicComponent
 from .Utils import Utils
 from .MntGrpTools import MntGrpTools
-from .Selection import Selection
+from .Selector import Selector
 from .MacroServerPools import MacroServerPools
 
 
@@ -42,15 +42,13 @@ class Settings(object):
         ## number of threads
         self.numberOfThreads = 20
 
-
         ## configuration selection
         self.__msp = MacroServerPools(self.numberOfThreads)
 
         ## configuration selection
-        self.__selection = Selection(self.msp)
+        self.__selector = Selector(self.__msp)
 
-
-        self.__mntgrptools = MntGrpTools(self.__selection)
+        self.__mntgrptools = MntGrpTools(self.__selector)
 
         ## configuration file
         self.configFile = '/tmp/nxsrecconfig.cfg'
@@ -81,11 +79,11 @@ class Settings(object):
         ms = self.getMacroServer()
         amntgrp = Utils.getEnv('ActiveMntGrp', ms)
         if amntgrp:
-            self.__selection["MntGrp"] = amntgrp
+            self.__selector["MntGrp"] = amntgrp
         else:
             avsel = self.availableSelections()
             if avsel and avsel[0]:
-                self.__selection["MntGrp"] = avsel[0]
+                self.__selector["MntGrp"] = avsel[0]
         self.fetchConfiguration()
 
     ## provides values of the required variable
@@ -93,23 +91,23 @@ class Settings(object):
     # \returns  values of the required variable
     def value(self, name):
         vl = ''
-        if name in self.__selection.keys():
-            vl = self.__selection[name]
+        if name in self.__selector.keys():
+            vl = self.__selector[name]
             if isinstance(vl, unicode):
                 vl = str(vl)
         return vl
 
     ## provides names of variables
     def names(self):
-        return self.__selection.keys()
+        return self.__selector.keys()
 
 ## read-only variables
 
     ## provides selected components
     # \returns list of available selected components
     def __components(self):
-        cps = json.loads(self.__selection["ComponentGroup"])
-        ads = json.loads(self.__selection["DataSourceGroup"])
+        cps = json.loads(self.__selector["ComponentGroup"])
+        ads = json.loads(self.__selector["DataSourceGroup"])
         dss = [ds for ds in ads if ads[ds]]
         acp = self.availableComponents()
         res = []
@@ -128,7 +126,7 @@ class Settings(object):
     ## provides automatic components
     # \returns list of available automatic components
     def __automaticComponents(self):
-        cps = json.loads(self.__selection["AutomaticComponentGroup"])
+        cps = json.loads(self.__selector["AutomaticComponentGroup"])
         if isinstance(cps, dict):
             return [cp for cp in cps.keys() if cps[cp]]
         else:
@@ -153,7 +151,7 @@ class Settings(object):
         dds = self.disableDataSources
         if not isinstance(dds, list):
             dds = []
-        dss = json.loads(self.__selection["DataSourceGroup"])
+        dss = json.loads(self.__selector["DataSourceGroup"])
         if isinstance(dss, dict):
             return [ds for ds in dss.keys() if dss[ds] and ds not in dds]
         else:
@@ -186,13 +184,13 @@ class Settings(object):
     ## get method for configDevice attribute
     # \returns name of configDevice
     def __getConfigDevice(self):
-        return self.__selection["ConfigDevice"]
+        return self.__selector["ConfigDevice"]
 
     ## set method for configDevice attribute
     # \param name of configDevice
     def __setConfigDevice(self, name):
-        if name != self.__selection["ConfigDevice"]:
-            self.__selection["ConfigDevice"] = name
+        if name != self.__selector["ConfigDevice"]:
+            self.__selector["ConfigDevice"] = name
             self.switchMntGrp(toActive=False)
 
     ## the json data string
@@ -216,13 +214,13 @@ class Settings(object):
     ## set method for configuration attribute
     # \param name of configuration
     def __setConfiguration(self, jconf):
-        self.__selection.set(json.loads(jconf))
+        self.__selector.set(json.loads(jconf))
         self.storeConfiguration()
 
     ## get method for configuration attribute
     # \returns configuration
     def __getConfiguration(self):
-        return json.dumps(self.__selection.get())
+        return json.dumps(self.__selector.get())
 
     ## the json data string
     configuration = property(
@@ -233,13 +231,13 @@ class Settings(object):
     ## set method for appendEntry attribute
     # \param name of appendEntry
     def __setAppendEntry(self, ae):
-        self.__selection["AppendEntry"] = bool(ae)
+        self.__selector["AppendEntry"] = bool(ae)
         self.storeConfiguration()
 
     ## get method for appendEntry attribute
     # \returns flag of appendEntry
     def __getAppendEntry(self):
-        return bool(self.__selection["AppendEntry"])
+        return bool(self.__selector["AppendEntry"])
 
     ## the json data string
     appendEntry = property(
@@ -250,14 +248,14 @@ class Settings(object):
     ## get method for dataRecord attribute
     # \returns name of dataRecord
     def __getDataRecord(self):
-        return self.__selection["DataRecord"]
+        return self.__selector["DataRecord"]
 
     ## set method for dataRecord attribute
     # \param name of dataRecord
     def __setDataRecord(self, name):
         jname = Utils.stringToDictJson(name)
-        if self.__selection["DataRecord"] != jname:
-            self.__selection["DataRecord"] = jname
+        if self.__selector["DataRecord"] != jname:
+            self.__selector["DataRecord"] = jname
             self.storeConfiguration()
 
     ## the json data string
@@ -314,14 +312,14 @@ class Settings(object):
     ## get method for configVariables attribute
     # \returns name of configVariables
     def __getConfigVariables(self):
-        return self.__selection["ConfigVariables"]
+        return self.__selector["ConfigVariables"]
 
     ## set method for configVariables attribute
     # \param name of configVariables
     def __setConfigVariables(self, name):
         jname = Utils.stringToDictJson(name)
-        if self.__selection["ConfigVariables"] != jname:
-            self.__selection["ConfigVariables"] = jname
+        if self.__selector["ConfigVariables"] != jname:
+            self.__selector["ConfigVariables"] = jname
             self.storeConfiguration()
 
     ## the json variables string
@@ -354,14 +352,14 @@ class Settings(object):
     ## get method for labelShapes attribute
     # \returns name of labelShapes
     def __getLabelShapes(self):
-        return self.__selection["LabelShapes"]
+        return self.__selector["LabelShapes"]
 
     ## set method for labelShapes attribute
     # \param name of labelShapes
     def __setLabelShapes(self, name):
         jname = Utils.stringToDictJson(name)
-        if self.__selection["LabelShapes"] != jname:
-            self.__selection["LabelShapes"] = jname
+        if self.__selector["LabelShapes"] != jname:
+            self.__selector["LabelShapes"] = jname
             self.storeConfiguration()
 
     ## the json data string
@@ -373,14 +371,14 @@ class Settings(object):
     ## get method for labelTypes attribute
     # \returns name of labelTypes
     def __getLabelTypes(self):
-        return self.__selection["LabelTypes"]
+        return self.__selector["LabelTypes"]
 
     ## set method for labelTypes attribute
     # \param name of labelTypes
     def __setLabelTypes(self, name):
         jname = Utils.stringToDictJson(name)
-        if self.__selection["LabelTypes"] != jname:
-            self.__selection["LabelTypes"] = jname
+        if self.__selector["LabelTypes"] != jname:
+            self.__selector["LabelTypes"] = jname
             self.storeConfiguration()
 
     ## the json data string
@@ -392,12 +390,12 @@ class Settings(object):
     ## get method for mntGrp attribute
     # \returns name of mntGrp
     def __getMntGrp(self):
-        return self.__selection["MntGrp"]
+        return self.__selector["MntGrp"]
 
     ## set method for mntGrp attribute
     # \param name of mntGrp
     def __setMntGrp(self, name):
-        self.__selection["MntGrp"] = name
+        self.__selector["MntGrp"] = name
 
     ## the json data string
     mntGrp = property(__getMntGrp, __setMntGrp,
@@ -406,13 +404,13 @@ class Settings(object):
     ## get method for door attribute
     # \returns name of door
     def __getDoor(self):
-        return self.__selection["Door"]
+        return self.__selector["Door"]
 
     ## set method for door attribute
     # \param name of door
     def __setDoor(self, name):
-        self.__selection["Door"] = name
-        self.updateMacroServer(self.__selection["Door"])
+        self.__selector["Door"] = name
+        self.__msp.updateMacroServer(self.__selector["Door"])
 
     ## the json data string
     door = property(__getDoor, __setDoor,
@@ -421,12 +419,12 @@ class Settings(object):
     ## get method for writerDevice attribute
     # \returns name of writerDevice
     def __getWriterDevice(self):
-        return self.__selection["WriterDevice"]
+        return self.__selector["WriterDevice"]
 
     ## set method for writerDevice attribute
     # \param name of writerDevice
     def __setWriterDevice(self, name):
-        self.__selection["WriterDevice"] = name
+        self.__selector["WriterDevice"] = name
         self.storeConfiguration()
 
     ## the json data string
@@ -489,23 +487,23 @@ class Settings(object):
 ##  commands
 
     def __getPools(self):
-        return self.__selection.getPools()
+        return self.__selector.getPools()
 
     def updateMacroServer(self, door):
-        return self.__selection.updateMacroServer(door)
+        return self.__msp.updateMacroServer(door)
 
     def getMacroServer(self):
-        return self.__selection.getMacroServer()
+        return self.__selector.getMacroServer()
 
     ## sets config instances
     # \returns set config instance
     def setConfigInstance(self):
-        return self.__selection.setConfigInstance()
+        return self.__selector.setConfigInstance()
 
     ## executes command on configuration server
     # \returns command result
     def __configCommand(self, command, *var):
-        return self.__selection.configCommand(command, *var)
+        return self.__selector.configCommand(command, *var)
 
     ## mandatory components
     # \returns list of mandatory components
@@ -545,22 +543,22 @@ class Settings(object):
     ## available pool channels
     # \returns pool channels of the macroserver pools
     def poolChannels(self):
-        return self.__selection.poolChannels()
+        return self.__selector.poolChannels()
 
     ## available pool motors
     # \returns pool motors of the macroserver pools
     def poolMotors(self):
-        return self.__selection.poolMotors()
+        return self.__selector.poolMotors()
 
     ## saves configuration
     def saveConfiguration(self):
         fl = open(self.configFile, "w+")
-        json.dump(self.__selection.get(), fl)
+        json.dump(self.__selector.get(), fl)
 
     ## saves configuration
     def storeConfiguration(self):
         inst = self.setConfigInstance()
-        conf = str(json.dumps(self.__selection.get()))
+        conf = str(json.dumps(self.__selector.get()))
         inst.selection = conf
         inst.storeSelection(self.mntGrp)
 
@@ -572,19 +570,19 @@ class Settings(object):
         if self.mntGrp in avsl:
             confs = inst.selections([self.mntGrp])
         if confs:
-            self.__selection.set(json.loads(str(confs[0])))
+            self.__selector.set(json.loads(str(confs[0])))
         else:
             avmg = self.availableMeasurementGroups()
             if self.mntGrp in avmg:
-                self.__selection.deselect()
-                self.__selection.resetAutomaticComponents(
+                self.__selector.deselect()
+                self.__selector.resetAutomaticComponents(
                     self.defaultAutomaticComponents)
                 self.updateControllers()
 
     ## loads configuration
     def loadConfiguration(self):
         fl = open(self.configFile, "r")
-        self.__selection.set(json.load(fl))
+        self.__selector.set(json.load(fl))
 
     ## provides components for all variables
     # \returns dictionary with components for all variables
@@ -690,16 +688,15 @@ class Settings(object):
     ## checks existing controllers of pools for
     #      AutomaticDataSources
     def updateControllers(self):
-        jacps = self.__selection.updateControllers(
-            self.__getPools(), self.__descErrors)
-        if self.__selection["AutomaticComponentGroup"] != jacps:
-            self.__selection["AutomaticComponentGroup"] = jacps
+        jacps = self.__selector.updateControllers(self.__descErrors)
+        if self.__selector["AutomaticComponentGroup"] != jacps:
+            self.__selector["AutomaticComponentGroup"] = jacps
             self.storeConfiguration()
         gc.collect()
 
     ## reset automaticComponentGroup to defaultAutomaticComponents
     def resetAutomaticComponents(self):
-        self.__selection.resetAutomaticComponents(
+        self.__selector.resetAutomaticComponents(
             self.defaultAutomaticComponents)
         self.updateControllers()
         self.storeConfiguration()
@@ -766,7 +763,7 @@ class Settings(object):
     def mntGrpConfiguration(self):
         pools = self.__getPools()
         self.__mntgrptools.macroServer = self.getMacroServer()
-        if not self.__selection["MntGrp"]:
+        if not self.__selector["MntGrp"]:
             self.switchMntGrp(toActive=False)
         dpmg = self.__mntgrptools.getMntGrpProxy(pools)
         if not dpmg:
@@ -810,11 +807,11 @@ class Settings(object):
     ## switch to active measurement
     def switchMntGrp(self, toActive=True):
         pools = self.__getPools()
-        if not self.__selection["MntGrp"] or toActive:
+        if not self.__selector["MntGrp"] or toActive:
             ms = self.getMacroServer()
             amntgrp = Utils.getEnv('ActiveMntGrp', ms)
             if not toActive or amntgrp:
-                self.__selection["MntGrp"] = amntgrp
+                self.__selector["MntGrp"] = amntgrp
         self.fetchConfiguration()
         jconf = self.mntGrpConfiguration()
         self.__mntgrptools.configServer = self.setConfigInstance()
@@ -856,17 +853,17 @@ class Settings(object):
                 dcpcreator.setInitDSources(json.loads(params[2]))
             else:
                 dcpcreator.setInitDSources(json.loads(
-                        self.__selection["InitDataSources"]))
+                        self.__selector["InitDataSources"]))
 
         dcpcreator.setLabelParams(
-            self.__selection["Labels"],
-            self.__selection["LabelPaths"],
-            self.__selection["LabelLinks"],
-            self.__selection["LabelTypes"],
-            self.__selection["LabelShapes"])
+            self.__selector["Labels"],
+            self.__selector["LabelPaths"],
+            self.__selector["LabelLinks"],
+            self.__selector["LabelTypes"],
+            self.__selector["LabelShapes"])
         dcpcreator.setLinkParams(
-            bool(self.__selection["DynamicLinks"]),
-            str(self.__selection["DynamicPath"]))
+            bool(self.__selector["DynamicLinks"]),
+            str(self.__selector["DynamicPath"]))
 
         dcpcreator.setComponents(
             list(set(self.components) |
@@ -887,16 +884,16 @@ class Settings(object):
     ## fetches Enviroutment Data
     # \returns JSON String with important variables
     def fetchEnvData(self):
-        return self.__selection.fetchEnvData()
+        return self.__selector.fetchEnvData()
 
     ## stores Enviroutment Data
     # \param jdata JSON String with important variables
     def storeEnvData(self, jdata):
-        return self.__selection.storeEnvData(jdata)
+        return self.__selector.storeEnvData(jdata)
 
     ## imports all Enviroutment Data
     def importAllEnv(self):
-        self.__selection.importEnv()
+        self.__selector.importEnv()
 
     ## exports all Enviroutment Data
     def exportAllEnv(self):
@@ -909,4 +906,4 @@ class Settings(object):
         for attr, name in commands.items():
             vl = getattr(self, attr)
             nenv[str(name)] = vl
-        self.__selection.exportEnv(cmddata=nenv)
+        self.__selector.exportEnv(cmddata=nenv)
