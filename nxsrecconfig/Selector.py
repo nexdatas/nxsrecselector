@@ -27,6 +27,7 @@ import pickle
 from .Utils import Utils
 from .Selection import Selection
 
+
 ## NeXus Sardana Recorder settings
 class Selector(object):
     """ selection state """
@@ -261,7 +262,7 @@ class Selector(object):
                 configDevice.jsonsettings = dbp
                 configDevice.open()
                 configDevice.availableComponents()
-        return configDevice 
+        return configDevice
 
     ## executes command on configuration server
     # \returns command result

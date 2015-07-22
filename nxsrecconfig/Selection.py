@@ -22,6 +22,7 @@
 
 import json
 
+
 class Selection(dict):
     def __init__(self, *args, **kw):
         super(Selection, self).__init__(*args, **kw)
@@ -161,5 +162,3 @@ class Selection(dict):
         for cp in components:
             acps[cp] = False
         self["AutomaticComponentGroup"] = json.dumps(acps)
-
-

@@ -23,8 +23,6 @@
 import json
 import PyTango
 import Queue
-#import getpass
-#import pickle
 from .Utils import Utils
 from .Describer import Describer
 from .CheckerThread import CheckerThread
