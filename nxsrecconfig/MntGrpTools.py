@@ -35,9 +35,9 @@ except ImportError:
 ## MntGrp Tools
 class MntGrpTools(object):
     """  MntGrp Tools """
-    def __init__(self, selection):
-        ## configuration selection
-        self.__selection = selection
+    def __init__(self, selector):
+        ## configuration selector
+        self.__selector = selector
         ## default mntgrp
         self.__defaultmntgrp = 'nxsmntgrp'
 
@@ -72,7 +72,7 @@ class MntGrpTools(object):
         cnf['description'] = "Measurement Group"
         cnf['label'] = ""
 
-        dontdisplay = set(json.loads(self.__selection["HiddenElements"]))
+        dontdisplay = set(json.loads(self.__selector["HiddenElements"]))
 
         ltimers = set()
         timer = self.__prepareTimers(cnf, ltimers, pools)
@@ -92,7 +92,7 @@ class MntGrpTools(object):
         return conf, mfullname
 
     def getMntGrpProxy(self, pools):
-        mntGrpName = self.__selection["MntGrp"]
+        mntGrpName = self.__selector["MntGrp"]
         fullname = str(Utils.getMntGrpName(pools, mntGrpName))
         if not fullname:
             return None
@@ -152,10 +152,10 @@ class MntGrpTools(object):
         otimers.remove(dtimers[conf["timer"]])
         otimers.insert(0, dtimers[conf["timer"]])
 
-        tms = json.loads(self.__selection["Timer"])
+        tms = json.loads(self.__selector["Timer"])
         tms.extend(otimers)
 
-        hel2 = json.loads(self.__selection["HiddenElements"])
+        hel2 = json.loads(self.__selector["HiddenElements"])
         for tm in tms:
             if tm in hel2:
                 if tm in dsg.keys():
@@ -170,8 +170,8 @@ class MntGrpTools(object):
         otimers = None
         timers = {}
 
-        dsg = json.loads(self.__selection["DataSourceGroup"])
-        hel = json.loads(self.__selection["HiddenElements"])
+        dsg = json.loads(self.__selector["DataSourceGroup"])
+        hel = json.loads(self.__selector["HiddenElements"])
         self.__clearChannels(dsg, hel, pools)
 
         # fill in dsg, timers hel
@@ -182,18 +182,18 @@ class MntGrpTools(object):
 
         changed = False
         jdsg = json.dumps(dsg)
-        if self.__selection["DataSourceGroup"] != jdsg:
-            self.__selection["DataSourceGroup"] = jdsg
+        if self.__selector["DataSourceGroup"] != jdsg:
+            self.__selector["DataSourceGroup"] = jdsg
             changed = True
 
         jhel = json.dumps(hel)
-        if self.__selection["HiddenElements"] != jhel:
-            self.__selection["HiddenElements"] = jhel
+        if self.__selector["HiddenElements"] != jhel:
+            self.__selector["HiddenElements"] = jhel
             changed = True
         if otimers is not None:
             jtimers = json.dumps(otimers)
-            if self.__selection["Timer"] != jtimers:
-                self.__selection["Timer"] = jtimers
+            if self.__selector["Timer"] != jtimers:
+                self.__selector["Timer"] = jtimers
                 changed = True
         return changed
 
@@ -239,7 +239,7 @@ class MntGrpTools(object):
                     for dsr in dsrs:
                         records.append(str(dsr[2]))
 
-        urecords = json.loads(self.__selection["DataRecord"]).keys()
+        urecords = json.loads(self.__selector["DataRecord"]).keys()
         precords = frecords.values()
         missing = sorted(set(records)
                          - set(self.recorder_names)
@@ -284,7 +284,7 @@ class MntGrpTools(object):
 
     ## prepares timers
     def __prepareTimers(self, cnf, ltimers, pools):
-        mtimers = json.loads(self.__selection["Timer"])
+        mtimers = json.loads(self.__selector["Timer"])
         timer = mtimers[0] if mtimers else ''
         if not timer:
             raise Exception(
@@ -325,7 +325,7 @@ class MntGrpTools(object):
         self.__checkClientRecords(self.dataSources, pools)
         if isinstance(self.dataSources, list):
             aliases = list(self.dataSources)
-        pchannels = json.loads(self.__selection["OrderedChannels"])
+        pchannels = json.loads(self.__selector["OrderedChannels"])
         aliases.extend(
             list(set(pchannels) & set(self.disableDataSources)))
 
@@ -339,7 +339,7 @@ class MntGrpTools(object):
                     if not ndcp and str(ds) in dontdisplay:
                         dontdisplay.remove(str(ds))
 
-        self.__selection["HiddenElements"] = json.dumps(list(dontdisplay))
+        self.__selector["HiddenElements"] = json.dumps(list(dontdisplay))
         aliases = list(set(aliases))
 
         for tm in timers:
@@ -354,9 +354,9 @@ class MntGrpTools(object):
 
     ## sets mntgrp
     def __prepareMntGrp(self, cnf, timer, pools):
-        if not self.__selection["MntGrp"]:
-            self.__selection["MntGrp"] = self.__defaultmntgrp
-        mntGrpName = self.__selection["MntGrp"]
+        if not self.__selector["MntGrp"]:
+            self.__selector["MntGrp"] = self.__defaultmntgrp
+        mntGrpName = self.__selector["MntGrp"]
         mfullname = str(Utils.getMntGrpName(pools, mntGrpName))
 
         if not mfullname:
