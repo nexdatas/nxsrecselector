@@ -24,7 +24,7 @@ import xml.dom.minidom
 import json
 import PyTango
 
-from .Utils import Utils
+from .Utils import Utils, TangoUtils
 
 
 ## NeXus Sardana Recorder settings
@@ -143,7 +143,7 @@ class DynamicComponent(object):
             dstype = ds.attributes["type"].value
         if dstype == 'TANGO':
             source = str(Utils.getRecord(ds))
-            shape, dt, _ = Utils.getShapeTypeUnit(source)
+            shape, dt, _ = TangoUtils.getShapeTypeUnit(source)
             nxtype = self.__npTn[dt] \
                 if dt in self.__npTn.keys() else nxtype
         return shape, nxtype
@@ -193,7 +193,7 @@ class DynamicComponent(object):
 
                 shape, nxtype = None, 'NX_CHAR'
                 if ds in avds:
-                    dsource = Utils.command(
+                    dsource = TangoUtils.command(
                         self.__nexusconfig_device, "dataSources",
                         [str(ds)])
                     indom = xml.dom.minidom.parseString(dsource[0])
@@ -220,7 +220,7 @@ class DynamicComponent(object):
 
     ## creates dynamic component
     def create(self):
-        cps = Utils.command(self.__nexusconfig_device,
+        cps = TangoUtils.command(self.__nexusconfig_device,
                             "availableComponents")
         name = self.__defaultCP
         while name in cps:
@@ -230,7 +230,7 @@ class DynamicComponent(object):
         root = xml.dom.minidom.Document()
         definition = root.createElement("definition")
         root.appendChild(definition)
-        avds = Utils.command(self.__nexusconfig_device,
+        avds = TangoUtils.command(self.__nexusconfig_device,
                              "availableDataSources")
 
         created = []
@@ -239,7 +239,7 @@ class DynamicComponent(object):
         self.__createNonSardanaNodes(created, avds, root, definition, 'INIT')
 
         self.__nexusconfig_device.xmlstring = str(root.toprettyxml(indent=""))
-        Utils.command(self.__nexusconfig_device, "storeComponent",
+        TangoUtils.command(self.__nexusconfig_device, "storeComponent",
                       str(self.__dynamicCP))
 #        print("Dynamic Component:\n%s" % root.toprettyxml(indent="  "))
 
@@ -364,14 +364,14 @@ class DynamicComponent(object):
                 dim.setAttribute("index", str(i + 1))
                 dim.setAttribute("value", str(shape[i]))
 
-    def removeDynamicComponent(self, name):
+    def remove(self, name):
         if self.__defaultCP not in name:
             raise Exception(
                 "Dynamic component name should contain: %s" % self.__defaultCP)
-        cps = Utils.command(self.__nexusconfig_device,
+        cps = TangoUtils.command(self.__nexusconfig_device,
                             "availableComponents")
         if name in cps:
-            Utils.command(self.__nexusconfig_device,
+            TangoUtils.command(self.__nexusconfig_device,
                           "deleteComponent", str(name))
 
     @classmethod

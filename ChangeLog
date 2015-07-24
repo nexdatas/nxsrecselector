@@ -1,3 +1,8 @@
+2015-07-XX Jan Kotanski <jankotan@gmail.com>
+	* splitting MSUtils, TangoUtils, PoolUtils from Utils
+	* adding MacroServerPools
+	* tagged as v1.20.1
+
 2015-07-09 Jan Kotanski <jankotan@gmail.com>
 	* changing description attribute format
 	* imporving getShape in Describer

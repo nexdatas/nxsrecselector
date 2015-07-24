@@ -23,8 +23,7 @@
 import json
 import PyTango
 import getpass
-import pickle
-from .Utils import Utils
+from .Utils import TangoUtils, PoolUtils
 from .Selection import Selection
 
 
@@ -48,22 +47,6 @@ class Selector(object):
 
         ## module label
         self.moduleLabel = 'module'
-
-        self.__nxsenv = "NeXusConfiguration"
-
-        self.__pureVar = [
-            "AppendEntry",
-            "ComponentsFromMntGrp",
-            "DynamicComponents",
-            "DynamicLinks",
-            "DynamicPath",
-            "TimeZone",
-            "ConfigDevice",
-            "WriterDevice",
-            "Door",
-            "MntGrp",
-            "ScanDir"
-            ]
 
         self.__selection.reset()
 
@@ -111,13 +94,13 @@ class Selector(object):
     def __updateConfigDevice(self):
         if "ConfigDevice" not in self.__selection.keys() \
                 or not self.__selection["ConfigDevice"]:
-            self.__selection["ConfigDevice"] = Utils.getDeviceName(
+            self.__selection["ConfigDevice"] = TangoUtils.getDeviceName(
                 self.__db, "NXSConfigServer")
         name = self.__selection["ConfigDevice"]
         if name:
             if name != self.moduleLabel:
                 try:
-                    dp = Utils.getProxies([name])
+                    dp = TangoUtils.getProxies([name])
                     if not dp:
                         self.__selection["ConfigDevice"] = ''
                 except (PyTango.DevFailed, PyTango.Except, PyTango.DevError):
@@ -155,7 +138,7 @@ class Selector(object):
             self.__selection["Door"] = ''
         if "Door" not in self.__selection.keys() \
                 or not self.__selection["Door"]:
-            self.__selection["Door"] = Utils.getDeviceName(
+            self.__selection["Door"] = TangoUtils.getDeviceName(
                 self.__db, "Door")
             self.__msp.updateMacroServer(self.__selection["Door"])
 
@@ -168,13 +151,13 @@ class Selector(object):
     def __updateWriterDevice(self):
         if "WriterDevice" not in self.__selection.keys() \
                 or not self.__selection["WriterDevice"]:
-            self.__selection["WriterDevice"] = Utils.getDeviceName(
+            self.__selection["WriterDevice"] = TangoUtils.getDeviceName(
                 self.__db, "NXSDataWriter")
 
     ## reset method for configDevice attribute
     def __resetConfigDevice(self):
         if not self.__selection["ConfigDevice"]:
-            self.__selection["ConfigDevice"] = Utils.getDeviceName(
+            self.__selection["ConfigDevice"] = TangoUtils.getDeviceName(
                 self.__db, "NXSConfigServer")
 
     ## set method for mntGrp attribute
@@ -189,24 +172,24 @@ class Selector(object):
     ## set method for door attribute
     def __resetDoor(self):
         if not self.__selection["Door"]:
-            self.__selection["Door"] = Utils.getDeviceName(
+            self.__selection["Door"] = TangoUtils.getDeviceName(
                 self.__db, "Door")
 
     ## set method for writerDevice attribute
     def __resetWriterDevice(self):
         if not self.__selection["WriterDevice"]:
-            self.__selection["WriterDevice"] = Utils.getDeviceName(
+            self.__selection["WriterDevice"] = TangoUtils.getDeviceName(
                 self.__db, "NXSDataWriter")
 
     def resetAutomaticComponents(self, components):
         self.__selection.resetAutomaticComponents(components)
 
-    def updateControllers(self, descErrors):
-        ads = set(json.loads(self["AutomaticDataSources"]))
-        acps = json.loads(self["AutomaticComponentGroup"])
-        inst = self.setConfigInstance()
-        return self.__msp.updateControllers(
-            inst, ads, acps, self["Door"], descErrors)
+    def updateAutomaticComponents(self, channelerrors):
+        datasources = set(json.loads(self["AutomaticDataSources"]))
+        acpgroup = json.loads(self["AutomaticComponentGroup"])
+        configdevice = self.setConfigInstance()
+        return self.__msp.checkComponentChannels(
+            self["Door"], configdevice, datasources, acpgroup, channelerrors)
 
     def getPools(self):
         return self.__msp.getPools(self["Door"])
@@ -214,12 +197,12 @@ class Selector(object):
     ## available pool channels
     # \returns pool channels of the macroserver pools
     def poolChannels(self):
-        return self.__msp.poolChannels(self["Door"])
+        return PoolUtils.getExperimentalChannels(self.getPools())        
 
     ## available pool motors
     # \returns pool motors of the macroserver pools
     def poolMotors(self):
-        return self.__msp.poolMotors(self["Door"])
+        return PoolUtils.getMotorNames(self.getPools())        
 
     def getMacroServer(self):
         return self.__msp.getMacroServer(self["Door"])
@@ -234,7 +217,7 @@ class Selector(object):
 
         if self.__selection["ConfigDevice"] and \
                 self.__selection["ConfigDevice"].lower() != self.moduleLabel:
-            configDevice = Utils.openProxy(
+            configDevice = TangoUtils.openProxy(
                 self.__selection["ConfigDevice"])
             configDevice.command_inout("Open")
         else:
@@ -267,116 +250,31 @@ class Selector(object):
     ## executes command on configuration server
     # \returns command result
     def configCommand(self, command, *var):
-        inst = self.setConfigInstance()
-        return Utils.command(inst, command, *var)
+        configdevice = self.setConfigInstance()
+        return TangoUtils.command(configdevice, command, *var)
 
-    ## imports Enviroutment Data
+    ## imports Selector Environment Data
     # \param names names of required variables
     # \param data dictionary with resulting data
     def importEnv(self, names=None, data=None):
-        params = ["ScanDir",
-                  "ScanFile"]
-
         if names is None:
             names = self.keys()
         if data is None:
             data = self
+        self.__msp.getSelectorEnv(self["Door"], names, data)
 
-        dp = Utils.openProxy(self.getMacroServer())
-        rec = dp.Environment
-        nenv = {}
-        if rec[0] == 'pickle':
-            dc = pickle.loads(rec[1])
-            if 'new' in dc.keys():
-                if self.__nxsenv in dc['new'].keys():
-                    nenv = dc['new'][self.__nxsenv]
-                for var in names:
-                    name = var if var in params else ("NeXus%s" % var)
-                    if name in dc['new'].keys():
-                        vl = dc['new'][name]
-                        if type(vl) not in [str, bool, int, unicode]:
-                            vl = json.dumps(vl)
-                        data[var] = vl
-                    elif var in nenv.keys():
-                        vl = nenv[var]
-                        if type(vl) not in [str, bool, int, unicode]:
-                            vl = json.dumps(vl)
-                        data[var] = vl
-
-    ## exports all Enviroutment Data
+    ## exports Selector Environment Data
     def exportEnv(self, data=None, cmddata=None):
-        params = ["ScanDir",
-                  "ScanFile"]
-
         if data is None:
             data = self
+        self.__msp.setSelectorEnv(self["Door"], data, cmddata)
 
-        ms = self.getMacroServer()
-        msp = Utils.openProxy(ms)
-
-        rec = msp.Environment
-        if rec[0] == 'pickle':
-            dc = pickle.loads(rec[1])
-            if 'new' in dc.keys():
-                if self.__nxsenv not in dc['new'].keys() \
-                        or not isinstance(dc['new'][self.__nxsenv], dict):
-                    dc['new'][self.__nxsenv] = {}
-                nenv = dc['new'][self.__nxsenv]
-                for var in data.keys():
-                    if var in self.__pureVar:
-                        vl = data[var]
-                    else:
-                        try:
-                            vl = json.loads(data[var])
-                        except ValueError:
-                            vl = data[var]
-                    if var in params:
-                        dc['new'][str(var)] = vl
-                    else:
-                        nenv[("%s" % var)] = vl
-
-                if cmddata:
-                    for name, value in cmddata.items():
-                        nenv[str(name)] = value
-                pk = pickle.dumps(dc)
-                msp.Environment = ['pickle', pk]
-
-    ## fetches Enviroutment Data
+    ## fetches Environment Data
     # \returns JSON String with important variables
     def fetchEnvData(self):
-        params = ["ScanDir",
-                  "ScanFile",
-                  "ScanID",
-#                  "ActiveMntGrp",
-                  "NeXusSelectorDevice"]
-        res = {}
-        dp = Utils.openProxy(self.getMacroServer())
-        rec = dp.Environment
-        if rec[0] == 'pickle':
-            dc = pickle.loads(rec[1])
-            if 'new' in dc.keys():
-                for var in params:
-                    if var in dc['new'].keys():
-                        res[var] = dc['new'][var]
-        return json.dumps(res)
+        return self.__msp.getScanEnv(self["Door"])
 
-    ## stores Enviroutment Data
+    ## stores Environment Data
     # \param jdata JSON String with important variables
     def storeEnvData(self, jdata):
-        jdata = Utils.stringToDictJson(jdata)
-        data = json.loads(jdata)
-        scanID = -1
-        ms = self.getMacroServer()
-        msp = Utils.openProxy(ms)
-
-        rec = msp.Environment
-        if rec[0] == 'pickle':
-            dc = pickle.loads(rec[1])
-            if 'new' in dc.keys():
-                for var in data.keys():
-                    dc['new'][str(var)] = Utils.toString(data[var])
-                pk = pickle.dumps(dc)
-                if 'ScanID' in dc['new'].keys():
-                    scanID = int(dc['new']["ScanID"])
-                msp.Environment = ['pickle', pk]
-        return scanID
+        return self.__msp.setScanEnv(self["Door"], jdata)

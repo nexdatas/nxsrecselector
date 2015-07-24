@@ -37,7 +37,7 @@ logger = logging.getLogger()
 
 import TestServerSetUp
 
-from nxsrecconfig.Utils import Utils
+from nxsrecconfig.Utils import Utils, TangoUtils, MSUtils, PoolUtils
 
 
 
@@ -75,6 +75,7 @@ class Pool(object):
         self.AcqChannelList = []
         self.MeasurementGroupList = []
         self.ExpChannelList = []
+        self.MotorList = []
 
 
 class Server(object):
@@ -268,23 +269,23 @@ class UtilsTest(unittest.TestCase):
                 PyTango.DevFloat: "float32", PyTango.DevString: "string",
                 PyTango.DevBoolean: "bool", PyTango.DevEncoded:"encoded"}
         
-        self.myAssertDict(tTnp, Utils.tTnp)
+        self.myAssertDict(tTnp, TangoUtils.tTnp)
 
     ## openProxy test
     # \brief It tests default settings
     def test_openProxy(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
-        self.myAssertRaise(PyTango.DevFailed, Utils.openProxy, "sdf/testtestsf/d")
+        self.myAssertRaise(PyTango.DevFailed, TangoUtils.openProxy, "sdf/testtestsf/d")
 
-        dp = Utils.openProxy(self._simps.new_device_info_writer.name)
+        dp = TangoUtils.openProxy(self._simps.new_device_info_writer.name)
         self.assertTrue(isinstance(dp, PyTango.DeviceProxy))
         self.assertEqual(dp.name(), self._simps.new_device_info_writer.name)
         dp.setState("RUNNING")
-        dp = Utils.openProxy(self._simps.new_device_info_writer.name)
+        dp = TangoUtils.openProxy(self._simps.new_device_info_writer.name)
         self._simps.stop()
         
-        self.myAssertRaise(PyTango.DevFailed, Utils.openProxy, 
+        self.myAssertRaise(PyTango.DevFailed, TangoUtils.openProxy, 
                            self._simps.new_device_info_writer.name)
 
     ## getEnv test   
@@ -302,13 +303,13 @@ class UtilsTest(unittest.TestCase):
 
         for k, vl in arr.items():
             self.assertEqual(
-                vl[0], Utils.getEnv(
+                vl[0], MSUtils.getEnv(
                     k, self._simps.new_device_info_writer.name))
 
         for k, vl in arr.items():
-            Utils.setEnv(k, vl[1], 
+            MSUtils.setEnv(k, vl[1], 
                          self._simps.new_device_info_writer.name)
-            self.assertEqual(vl[1], Utils.getEnv(
+            self.assertEqual(vl[1], MSUtils.getEnv(
                     k, self._simps.new_device_info_writer.name))
 
 
@@ -328,7 +329,7 @@ class UtilsTest(unittest.TestCase):
         
         for k, vl in arr.items():
             self.assertEqual(
-                vl[0], Utils.getEnv(
+                vl[0], MSUtils.getEnv(
                     k, self._simps.new_device_info_writer.name))
 
         self.assertEqual(self._simps.dp.Environment[0],'pickle')
@@ -339,7 +340,7 @@ class UtilsTest(unittest.TestCase):
             self._simps.dp.Environment =  (
                 'pickle',
                 pickle.dumps( {'new': en}))
-            self.assertEqual(vl[1], Utils.getEnv(
+            self.assertEqual(vl[1], MSUtils.getEnv(
                     k, self._simps.new_device_info_writer.name))
 
             
@@ -361,16 +362,16 @@ class UtilsTest(unittest.TestCase):
 
         for k, vl in arr.items():
             self.assertEqual(
-                vl[0], Utils.getEnv(
+                vl[0], MSUtils.getEnv(
                     k, self._simps.new_device_info_writer.name))
 
         for k, vl in arr.items():
-            Utils.setEnv(k, vl[1], 
+            MSUtils.setEnv(k, vl[1], 
                          self._simps.new_device_info_writer.name)
 
             self.assertEqual(self._simps.dp.Environment[0],'pickle')
             en = pickle.loads(self._simps.dp.Environment[1])['new']
-            self.assertEqual(en[k], Utils.getEnv(
+            self.assertEqual(en[k], MSUtils.getEnv(
                     k, self._simps.new_device_info_writer.name))
 
 
@@ -378,16 +379,16 @@ class UtilsTest(unittest.TestCase):
     def test_getProxies(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
-        self.assertEqual(Utils.getProxies([]), [])
-        self.myAssertRaise(PyTango.DevFailed, Utils.getProxies, ["bleble"])
-        dpl = Utils.getProxies([self._simps.new_device_info_writer.name])
+        self.assertEqual(TangoUtils.getProxies([]), [])
+        self.myAssertRaise(PyTango.DevFailed, TangoUtils.getProxies, ["bleble"])
+        dpl = TangoUtils.getProxies([self._simps.new_device_info_writer.name])
         self.assertEqual(len(dpl), 1)
         self.assertEqual(type(dpl[0]), PyTango.DeviceProxy)
         self.assertEqual(dpl[0].name(), 
                          self._simps.new_device_info_writer.name)
 
 
-        dpl = Utils.getProxies([
+        dpl = TangoUtils.getProxies([
                 self._simps.new_device_info_writer.name,
                 self._simps2.new_device_info_writer.name])
         self.assertEqual(len(dpl), 2)
@@ -411,7 +412,7 @@ class UtilsTest(unittest.TestCase):
         db = DB()
     
         for ar in arr:
-            dd = Utils.getDeviceName(db, ar)
+            dd = TangoUtils.getDeviceName(db, ar)
             src = db.get_device_exported_for_class(ar).value_string
             dv = ''
             for server in src:
@@ -435,7 +436,7 @@ class UtilsTest(unittest.TestCase):
         db = DB()
     
         for ar in arr:
-            dd = Utils.getDeviceName(db, ar)
+            dd = TangoUtils.getDeviceName(db, ar)
             src = db.get_device_exported_for_class(ar).value_string
             dv = src[0] if len(src) else ''
             self.assertEqual(dd, dv)
@@ -452,7 +453,7 @@ class UtilsTest(unittest.TestCase):
         db = PyTango.Database()
     
         for ar in arr:
-            dd = Utils.getDeviceName(db, ar)
+            dd = TangoUtils.getDeviceName(db, ar)
             src = db.get_device_exported_for_class(ar).value_string
             dv = ''
             for server in src:
@@ -487,7 +488,7 @@ class UtilsTest(unittest.TestCase):
             self._simps2.new_device_info_writer.name]
 
         for ar in arr:
-            ms = Utils.getMacroServer(db, ar[1])
+            ms = MSUtils.getMacroServer(db, ar[1])
             self.assertEqual(ms, ar[0])
 
 
@@ -520,7 +521,7 @@ class UtilsTest(unittest.TestCase):
                 doors = dp.DoorList
                 sdoors = set(doors) - alldoors
                 for dr in sdoors:
-                    ms = Utils.getMacroServer(db, dr)
+                    ms = MSUtils.getMacroServer(db, dr)
                     self.assertEqual(ms, sr)
                 alldoors.extends(sdoors)
 
@@ -545,12 +546,12 @@ class UtilsTest(unittest.TestCase):
         pool.AcqChannelList = [json.dumps(a) for a in arr]
     
         import nxsrecconfig 
-        dd = Utils.getFullDeviceNames([])
+        dd = PoolUtils.getFullDeviceNames([])
         self.assertEqual(dd, {})
 
-        dd = Utils.getFullDeviceNames([], [arr[0]["name"]])
+        dd = PoolUtils.getFullDeviceNames([], [arr[0]["name"]])
         self.assertEqual(dd, {})
-        dd = Utils.getFullDeviceNames([pool], [arr[4]["name"]])
+        dd = PoolUtils.getFullDeviceNames([pool], [arr[4]["name"]])
         self.assertEqual(dd, {"null":""})
         
 
@@ -578,14 +579,14 @@ class UtilsTest(unittest.TestCase):
     
         
         for ar in arr:
-            dd = Utils.getFullDeviceNames([pool], [ar[0]])
+            dd = PoolUtils.getFullDeviceNames([pool], [ar[0]])
             self.assertEqual(dd, {ar[0]:ar[1]})
         
 
-        dd = Utils.getFullDeviceNames([pool], [ar[0] for ar in arr])
+        dd = PoolUtils.getFullDeviceNames([pool], [ar[0] for ar in arr])
         self.assertEqual(dd, dict((ar[0],ar[1]) for ar in arr))
 
-        dd = Utils.getFullDeviceNames([pool])
+        dd = PoolUtils.getFullDeviceNames([pool])
         self.assertEqual(dd, dict((ar[0],ar[1]) for ar in arr))
             
 
@@ -620,11 +621,11 @@ class UtilsTest(unittest.TestCase):
     
         
         for ar in arr:
-            dd = Utils.getFullDeviceNames([pool, pool2], [ar[0]])
+            dd = PoolUtils.getFullDeviceNames([pool, pool2], [ar[0]])
             self.assertEqual(dd, {ar[0]:ar[1]})
 
         for ar in arr2:
-            dd = Utils.getFullDeviceNames([pool, pool2], [ar[0]])
+            dd = PoolUtils.getFullDeviceNames([pool, pool2], [ar[0]])
             self.assertEqual(dd, {ar[0]:ar[1]})
         
 
@@ -634,14 +635,14 @@ class UtilsTest(unittest.TestCase):
         lst = [ar[0] for ar in arr]
         lst.extend([ar[0] for ar in arr2])
 
-        dd = Utils.getFullDeviceNames([pool, pool2], lst)
+        dd = PoolUtils.getFullDeviceNames([pool, pool2], lst)
         self.assertEqual(dd, res)
 
-        dd = Utils.getFullDeviceNames([pool, pool2])
+        dd = PoolUtils.getFullDeviceNames([pool, pool2])
         self.assertEqual(dd, res)
 
         lst.extend(["sfdsdf","sdfsfd"])
-        dd = Utils.getFullDeviceNames([pool, pool2], lst)
+        dd = PoolUtils.getFullDeviceNames([pool, pool2], lst)
         self.assertEqual(dd, res)
             
 
@@ -667,12 +668,12 @@ class UtilsTest(unittest.TestCase):
         pool.AcqChannelList = [json.dumps(a) for a in arr]
     
         import nxsrecconfig 
-        dd = Utils.getAliases([])
+        dd = PoolUtils.getAliases([])
         self.assertEqual(dd, {})
 
-        dd = Utils.getAliases([], [arr[0]["full_name"]])
+        dd = PoolUtils.getAliases([], [arr[0]["full_name"]])
         self.assertEqual(dd, {})
-        dd = Utils.getAliases([pool], [arr[4]["full_name"]])
+        dd = PoolUtils.getAliases([pool], [arr[4]["full_name"]])
         self.assertEqual(dd, {})
         
 
@@ -700,14 +701,14 @@ class UtilsTest(unittest.TestCase):
     
         
         for ar in arr:
-            dd = Utils.getAliases([pool], [ar[1]])
+            dd = PoolUtils.getAliases([pool], [ar[1]])
             self.assertEqual(dd, {ar[1]:ar[0]})
         
 
-        dd = Utils.getAliases([pool], [ar[1] for ar in arr])
+        dd = PoolUtils.getAliases([pool], [ar[1] for ar in arr])
         self.assertEqual(dd, dict((ar[1],ar[0]) for ar in arr))
 
-        dd = Utils.getAliases([pool])
+        dd = PoolUtils.getAliases([pool])
         self.assertEqual(dd, dict((ar[1],ar[0]) for ar in arr))
             
 
@@ -742,11 +743,11 @@ class UtilsTest(unittest.TestCase):
     
         
         for ar in arr:
-            dd = Utils.getAliases([pool, pool2], [ar[1]])
+            dd = PoolUtils.getAliases([pool, pool2], [ar[1]])
             self.assertEqual(dd, {ar[1]:ar[0]})
 
         for ar in arr2:
-            dd = Utils.getAliases([pool, pool2], [ar[1]])
+            dd = PoolUtils.getAliases([pool, pool2], [ar[1]])
             self.assertEqual(dd, {ar[1]:ar[0]})
         
 
@@ -756,14 +757,14 @@ class UtilsTest(unittest.TestCase):
         lst = [ar[1] for ar in arr]
         lst.extend([ar[1] for ar in arr2])
 
-        dd = Utils.getAliases([pool, pool2], lst)
+        dd = PoolUtils.getAliases([pool, pool2], lst)
         self.assertEqual(dd, res)
 
-        dd = Utils.getAliases([pool, pool2])
+        dd = PoolUtils.getAliases([pool, pool2])
         self.assertEqual(dd, res)
 
         lst.extend(["sfdsdf","sdfsfd"])
-        dd = Utils.getAliases([pool, pool2], lst)
+        dd = PoolUtils.getAliases([pool, pool2], lst)
         self.assertEqual(dd, res)
             
         
@@ -789,12 +790,12 @@ class UtilsTest(unittest.TestCase):
         pool.MeasurementGroupList = [json.dumps(a) for a in arr]
     
         import nxsrecconfig 
-        dd = Utils.getFullDeviceNames([])
+        dd = PoolUtils.getFullDeviceNames([])
         self.assertEqual(dd, {})
 
-        dd = Utils.getMntGrpName([], arr[0]["name"])
+        dd = PoolUtils.getMntGrpName([], arr[0]["name"])
         self.assertEqual(dd, '')
-        dd = Utils.getMntGrpName([pool], arr[4]["name"])
+        dd = PoolUtils.getMntGrpName([pool], arr[4]["name"])
         self.assertEqual(dd, arr[4]["full_name"])
 
 
@@ -819,12 +820,12 @@ class UtilsTest(unittest.TestCase):
     
         
         for ar in arr:
-            dd = Utils.getMntGrpName([pool], ar[0])
+            dd = PoolUtils.getMntGrpName([pool], ar[0])
             self.assertEqual(dd, ar[1])
 
         
 
-        dd = Utils.getMntGrpName([pool], "adsasd")
+        dd = PoolUtils.getMntGrpName([pool], "adsasd")
         self.assertEqual(dd, '')
 
 
@@ -858,15 +859,15 @@ class UtilsTest(unittest.TestCase):
     
         
         for ar in arr:
-            dd = Utils.getMntGrpName([pool, pool2], ar[0])
+            dd = PoolUtils.getMntGrpName([pool, pool2], ar[0])
             self.assertEqual(dd, ar[1])
 
         for ar in arr2:
-            dd = Utils.getMntGrpName([pool, pool2], ar[0])
+            dd = PoolUtils.getMntGrpName([pool, pool2], ar[0])
             self.assertEqual(dd, ar[1])
         
 
-        dd = Utils.getMntGrpName([pool, pool2], "adsasd")
+        dd = PoolUtils.getMntGrpName([pool, pool2], "adsasd")
         self.assertEqual(dd, '')
             
 
@@ -902,14 +903,14 @@ class UtilsTest(unittest.TestCase):
         pool2 = Pool()
         pool2.MeasurementGroupList = [json.dumps(a) for a in arr2]
         import nxsrecconfig 
-        dd = Utils.getFullDeviceNames([])
+        dd = PoolUtils.getFullDeviceNames([])
         self.assertEqual(dd, {})
 
-        self.myAssertRaise(Exception, Utils.getMntGrps, None)
-        dd = Utils.getMntGrps([pool])
+        self.myAssertRaise(Exception, PoolUtils.getMntGrps, None)
+        dd = PoolUtils.getMntGrps([pool])
         self.assertEqual(dd, [a["name"] for a in arr])
-        self.myAssertRaise(Exception, Utils.getMntGrps, None)
-        dd = Utils.getMntGrps([pool, pool2])
+        self.myAssertRaise(Exception, PoolUtils.getMntGrps, None)
+        dd = PoolUtils.getMntGrps([pool, pool2])
         res = [a["name"] for a in arr] 
         res.extend([a["name"] for a in arr2])
         self.assertEqual(dd, res)
@@ -939,15 +940,15 @@ class UtilsTest(unittest.TestCase):
         pool.ExpChannelList = [json.dumps(a) for a in arr]
     
         import nxsrecconfig 
-        dd = Utils.getDeviceControllers([], "test/ct/01")
+        dd = PoolUtils.getDeviceControllers([], "test/ct/01")
         self.assertEqual(dd, {})
 
-        dd = Utils.getDeviceControllers([], arr[0]["name"])
+        dd = PoolUtils.getDeviceControllers([], arr[0]["name"])
         self.assertEqual(dd, {})
-        dd = Utils.getDeviceControllers([pool], arr[4]["name"])
+        dd = PoolUtils.getDeviceControllers([pool], arr[4]["name"])
         self.assertEqual(dd, {arr[4]["name"]:arr[4]["controller"]})
         
-        dd = Utils.getDeviceControllers([pool], "sdfds")
+        dd = PoolUtils.getDeviceControllers([pool], "sdfds")
         self.assertEqual(dd, {})
 
 
@@ -973,11 +974,11 @@ class UtilsTest(unittest.TestCase):
     
         
         for ar in arr:
-            dd = Utils.getDeviceControllers([pool], [ar[0]])
+            dd = PoolUtils.getDeviceControllers([pool], [ar[0]])
             self.assertEqual(dd, {ar[0]:ar[1]})
         
 
-        dd = Utils.getDeviceControllers([pool], [ar[0] for ar in arr])
+        dd = PoolUtils.getDeviceControllers([pool], [ar[0] for ar in arr])
         self.assertEqual(dd, dict((ar[0],ar[1]) for ar in arr))
 
             
@@ -1013,11 +1014,11 @@ class UtilsTest(unittest.TestCase):
     
         
         for ar in arr:
-            dd = Utils.getDeviceControllers([pool, pool2], [ar[0]])
+            dd = PoolUtils.getDeviceControllers([pool, pool2], [ar[0]])
             self.assertEqual(dd, {ar[0]:ar[1]})
 
         for ar in arr2:
-            dd = Utils.getDeviceControllers([pool, pool2], [ar[0]])
+            dd = PoolUtils.getDeviceControllers([pool, pool2], [ar[0]])
             self.assertEqual(dd, {ar[0]:ar[1]})
         
 
@@ -1027,12 +1028,12 @@ class UtilsTest(unittest.TestCase):
         lst = [ar[0] for ar in arr]
         lst.extend([ar[0] for ar in arr2])
 
-        dd = Utils.getDeviceControllers([pool, pool2], lst)
+        dd = PoolUtils.getDeviceControllers([pool, pool2], lst)
         self.assertEqual(dd, res)
 
 
         lst.extend(["sfdsdf","sdfsfd"])
-        dd = Utils.getDeviceControllers([pool, pool2], lst)
+        dd = PoolUtils.getDeviceControllers([pool, pool2], lst)
         self.assertEqual(dd, res)
             
 
@@ -1069,15 +1070,58 @@ class UtilsTest(unittest.TestCase):
                 {"name":a[0], "controller":a[1]}) for a in arr2]
     
         import nxsrecconfig 
-        dd = Utils.getExperimentalChannels([])
+        dd = PoolUtils.getExperimentalChannels([])
         self.assertEqual(dd, [])
 
-        dd = Utils.getExperimentalChannels([])
+        dd = PoolUtils.getExperimentalChannels([])
         self.assertEqual(dd, [])
-        dd = Utils.getExperimentalChannels([pool])
+        dd = PoolUtils.getExperimentalChannels([pool])
         self.assertEqual(dd, [a["name"] for a in arr])
 
-        dd = Utils.getExperimentalChannels([pool, pool2])
+        dd = PoolUtils.getExperimentalChannels([pool, pool2])
+        res = [a["name"] for a in arr]
+        res.extend([a[0] for a in arr2])
+        self.assertEqual(dd, res)
+
+
+    ## getMotorNames test   
+    def test_getMotorNames_pool1(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        
+
+        arr = [
+            {"name":"test/ct/01", "controller":"counter_01/Value"} ,
+            {"name":"test/ct/02", "controller":"counter_02/att"} ,
+            {"name":"test/ct/03", "controller":"counter_03/value"} ,
+            {"name":"test/ct/04", "controller":"counter_04/13"} ,
+            {"name":"null", "controller":"counter_04"} ,
+            ]
+
+        arr2 = [
+            ["test/mca/01", "mca_01"],
+            ["test/mca/02", "mca_02"],
+            ["test/sca/03", "my_sca1"],
+            ["test/sca/04", "mysca_123"],
+            ]
+
+
+        pool = Pool()
+        pool2 = Pool()
+        pool.MotorList = [json.dumps(a) for a in arr]
+        pool2.MotorList = [json.dumps(
+                {"name":a[0], "controller":a[1]}) for a in arr2]
+    
+        import nxsrecconfig 
+        dd = PoolUtils.getMotorNames([])
+        self.assertEqual(dd, [])
+
+        dd = PoolUtils.getMotorNames([])
+        self.assertEqual(dd, [])
+        dd = PoolUtils.getMotorNames([pool])
+        self.assertEqual(dd, [a["name"] for a in arr])
+
+        dd = PoolUtils.getMotorNames([pool, pool2])
         res = [a["name"] for a in arr]
         res.extend([a[0] for a in arr2])
         self.assertEqual(dd, res)
@@ -1118,17 +1162,17 @@ class UtilsTest(unittest.TestCase):
         pool2.ExpChannelList = [json.dumps(
                 {"name":a[0], "interfaces":a[1],"source":a[2]}) for a in arr2]
 
-        dd = Utils.getTimers([])
+        dd = PoolUtils.getTimers([])
         self.assertEqual(dd, [])
 
         lst = [ar[0] for ar in arr if  "CTExpChannel" in ar[1]]
 
-        dd = Utils.getTimers([pool])
+        dd = PoolUtils.getTimers([pool])
         self.assertEqual(dd, lst)
 
         lst.extend([ar[0] for ar in arr2 if  "CTExpChannel" in ar[1]])
     
-        dd = Utils.getTimers([pool, pool2])
+        dd = PoolUtils.getTimers([pool, pool2])
         self.assertEqual(dd, lst)
             
 
@@ -1800,7 +1844,7 @@ class UtilsTest(unittest.TestCase):
         for ar in arg:
             server = Server(ar[2])
             self.assertEqual(server.exe, False)
-            val = Utils.command(server, ar[0], ar[1])
+            val = TangoUtils.command(server, ar[0], ar[1])
             self.assertEqual(server.exe, True)
             self.assertEqual(server.command, ar[0])
             self.assertEqual(server.var, ar[1])
@@ -1810,7 +1854,7 @@ class UtilsTest(unittest.TestCase):
         for ar in arg:
             server = Server(ar[2])
             self.assertEqual(server.exe, False)
-            val = Utils.command(server, ar[0])
+            val = TangoUtils.command(server, ar[0])
             self.assertEqual(server.exe, True)
             self.assertEqual(server.command, ar[0])
             self.assertEqual(server.var, None)
@@ -1832,7 +1876,7 @@ class UtilsTest(unittest.TestCase):
         for ar in arg:
             server = NoServer(ar[1])
             self.assertEqual(server.exe, False)
-            val = Utils.command(server, "testcommand",  ar[0])
+            val = TangoUtils.command(server, "testcommand",  ar[0])
             self.assertEqual(server.exe, True)
             self.assertEqual(server.command, "testcommand")
             self.assertEqual(server.var, ar[0])
@@ -1842,7 +1886,7 @@ class UtilsTest(unittest.TestCase):
         for ar in arg:
             server = Server(ar[1])
             self.assertEqual(server.exe, False)
-            val = Utils.command(server, "testcommand2")
+            val = TangoUtils.command(server, "testcommand2")
             self.assertEqual(server.exe, True)
             self.assertEqual(server.command, "testcommand2")
             self.assertEqual(server.var, None)
@@ -1853,7 +1897,7 @@ class UtilsTest(unittest.TestCase):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         self.myAssertRaise(Exception,
-                           Utils.getShapeTypeUnit, 
+                           TangoUtils.getShapeTypeUnit, 
                            "ttestp09/testts/t1r228/sdfffffffffffffffffffsdfs")
         
     def test_command_getShapeTypeUnit_scalar(self):
@@ -1900,12 +1944,12 @@ class UtilsTest(unittest.TestCase):
         
         for k, ar in arr.items():
 #            print k, ar
-            self.checkstu(Utils.getShapeTypeUnit("ttestp09/testts/t1r228/%s" % k),
+            self.checkstu(TangoUtils.getShapeTypeUnit("ttestp09/testts/t1r228/%s" % k),
                           ar[0], ar[1], ar[2])
 
         for k, ar in arr2.items():
 #            print k, ar
-            self.checkstu(Utils.getShapeTypeUnit("ttestp09/testts/t1r228/%s" % k),
+            self.checkstu(TangoUtils.getShapeTypeUnit("ttestp09/testts/t1r228/%s" % k),
                           ar[0], ar[1], ar[2])
 
 
@@ -1951,7 +1995,7 @@ class UtilsTest(unittest.TestCase):
         
         for k, ar in arr.items():
 #            print k, ar
-            self.checkstu(Utils.getShapeTypeUnit("ttestp09/testts/t1r228/%s" % k),
+            self.checkstu(TangoUtils.getShapeTypeUnit("ttestp09/testts/t1r228/%s" % k),
                           ar[0], ar[1], ar[2])
 
 
@@ -1996,7 +2040,7 @@ class UtilsTest(unittest.TestCase):
         
         for k, ar in arr.items():
             print k, ar
-            self.checkstu(Utils.getShapeTypeUnit("ttestp09/testts/t1r228/%s" % k),
+            self.checkstu(TangoUtils.getShapeTypeUnit("ttestp09/testts/t1r228/%s" % k),
                           ar[0], ar[1], ar[2])
 
 
@@ -2005,7 +2049,7 @@ class UtilsTest(unittest.TestCase):
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         
 
-        self.assertEqual(Utils.getSource("ttestp09/testts/t1r228"),
+        self.assertEqual(PoolUtils.getSource("ttestp09/testts/t1r228"),
                          "ttestp09/testts/t1r228/%s" %  'Value')
 
         arr = ['ScalarBoolean', 'ScalarUChar', 'ScalarShort', 'ScalarUShort', 
@@ -2021,11 +2065,11 @@ class UtilsTest(unittest.TestCase):
         self._simps.dp.CreateAttribute("DataSource")
         for ar in arr:
             self._simps.dp.DataSource = "ttestp09/testts/t1r228/%s" % ar
-            self.assertEqual(Utils.getSource("ttestp09/testts/t1r228"),
+            self.assertEqual(PoolUtils.getSource("ttestp09/testts/t1r228"),
                              "ttestp09/testts/t1r228/%s" %  ar)
             
         self._simps.dp.DataSource = "ttestp09/testts/t1r228/%s" % "sdfsdf"
-        self.assertEqual(Utils.getSource("ttestp09/testts/t1r228"),
+        self.assertEqual(PoolUtils.getSource("ttestp09/testts/t1r228"),
                          "ttestp09/testts/t1r228/Value")
 
 if __name__ == '__main__':

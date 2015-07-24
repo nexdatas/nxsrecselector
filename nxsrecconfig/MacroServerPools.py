@@ -23,7 +23,8 @@
 import json
 import PyTango
 import Queue
-from .Utils import Utils
+import pickle
+from .Utils import Utils, TangoUtils, MSUtils, PoolUtils
 from .Describer import Describer
 from .CheckerThread import CheckerThread
 
@@ -41,6 +42,8 @@ class MacroServerPools(object):
         ## tango database
         self.__db = PyTango.Database()
 
+        self.__nxsenv = "NeXusConfiguration"
+
         ## macro server instance
         self.__macroserver = ""
         ## pool instances
@@ -48,79 +51,62 @@ class MacroServerPools(object):
         ## black list of pools
         self.poolBlacklist = []
 
+        self.__pureVar = [
+            "AppendEntry",
+            "ComponentsFromMntGrp",
+            "DynamicComponents",
+            "DynamicLinks",
+            "DynamicPath",
+            "TimeZone",
+            "ConfigDevice",
+            "WriterDevice",
+            "Door",
+            "MntGrp",
+            "ScanDir"
+            ]
+
     ## updates MacroServer and sardana pools for given door
     # \param door door device
     def updateMacroServer(self, door):
         if not door:
             raise Exception("Door '%s' cannot be found" % door)
-        self.__macroserver = Utils.getMacroServer(self.__db, door)
-        msp = Utils.openProxy(self.__macroserver)
+        self.__macroserver = MSUtils.getMacroServer(self.__db, door)
+        msp = TangoUtils.openProxy(self.__macroserver)
         pnames = msp.get_property("PoolNames")["PoolNames"]
         if not pnames:
             pnames = []
         poolNames = list(
             set(pnames) - set(self.poolBlacklist))
-        self.__pools = Utils.getProxies(poolNames)
+        self.__pools = TangoUtils.getProxies(poolNames)
 
-    ## available pool channels
+    ## door macro server device name
     # \param door door device
-    # \returns pool channels of the macroserver pools
-    def poolChannels(self, door):
-        res = []
-        ms = self.getMacroServer(door)
-        msp = Utils.openProxy(ms)
-        pn = msp.get_property("PoolNames")["PoolNames"]
-        if pn:
-            for pl in pn:
-                pool = Utils.openProxy(pl)
-                exps = pool.ExpChannelList
-                if exps:
-                    for jexp in exps:
-                        if jexp:
-                            exp = json.loads(jexp)
-                            if exp and isinstance(exp, dict):
-                                res.append(exp['name'])
-        return res
-
-    ## available pool motors
-    # \returns pool motors of the macroserver pools
-    def poolMotors(self, door):
-        res = []
-        ms = self.getMacroServer(door)
-        msp = Utils.openProxy(ms)
-        pn = msp.get_property("PoolNames")["PoolNames"]
-        if pn:
-            for pl in pn:
-                pool = Utils.openProxy(pl)
-                exps = pool.MotorList
-                if exps:
-                    for jexp in exps:
-                        if jexp:
-                            exp = json.loads(jexp)
-                            if exp and isinstance(exp, dict):
-                                res.append(exp['name'])
-        return res
-
+    # \returns macroserver device name
     def getMacroServer(self, door):
         if not self.__macroserver:
             self.updateMacroServer(door)
         return self.__macroserver
 
+    ## door pool device proxies
+    # \param door door device
+    # \returns pool device proxies
     def getPools(self, door):
         if not self.__pools:
             self.updateMacroServer(door)
         return self.__pools
 
     @classmethod
-    def __toCheck(cls, inst, rcp, acps, ads, nonexisting):
-        describer = Describer(inst, True)
-        avcp = Utils.command(inst, "availableComponents")
+    def __toCheck(cls, configdevice, discomponentgroup, components, channels, 
+                  nonexisting):
+        describer = Describer(configdevice, True)
+        availablecomponents = TangoUtils.command(configdevice,
+                                                 "availableComponents")
 
-        rcp.update(dict(
+        discomponentgroup.update(dict(
                 [str(k), ("...", "%s not defined in Configuration Server" % k)]
-                for k in set(acps) - set(avcp)))
+                for k in set(components) - set(availablecomponents)))
         toCheck = {}
-        for acp in acps.keys():
+        for acp in components:
             res = describer.components([acp], '', '')
             for cp, dss in res[0].items():
                 if isinstance(dss, dict):
@@ -134,24 +120,28 @@ class MacroServerPools(object):
                             toCheck[cp].append(
                                 (str(ds), str("/".join(srec[:-1])), str(attr)))
                         elif ds in nonexisting:
-                            rcp[cp] = (ds, "%s not defined in Pool" % ds)
+                            discomponentgroup[cp] = \
+                                (ds, "%s not defined in Pool" % ds)
                             if cp in toCheck.keys():
                                 toCheck.pop(cp)
                             break
-                        elif ds in ads:
+                        elif ds in channels:
                             if cp not in toCheck.keys():
                                 toCheck[cp] = [cp]
                             toCheck[cp].append(str(ds))
         return toCheck
 
-    def updateControllers(self, inst, ads, acps, door, descErrors):
-        descErrors[:] = []
-        rcp = {}
+    def checkComponentChannels(self, door, configdevice, channels,
+                               componentgroup, channelerrors):
+        channelerrors[:] = []
+        discomponentgroup = {}
         threads = []
         pools = self.getPools(door)
-        fnames = Utils.getFullDeviceNames(pools, ads)
-        nonexisting = [dev for dev in ads if dev not in fnames.keys()]
-        toCheck = self.__toCheck(inst, rcp, acps, ads, nonexisting)
+        fnames = PoolUtils.getFullDeviceNames(pools, channels)
+        nonexisting = [dev for dev in channels if dev not in fnames.keys()]
+        toCheck = self.__toCheck(configdevice, discomponentgroup, 
+                                 componentgroup.keys(),
+                                 channels, nonexisting)
 
         cqueue = Queue.Queue()
         for lds in toCheck.values():
@@ -169,20 +159,123 @@ class MacroServerPools(object):
 
         for lds in toCheck.values():
             if lds and len(lds) > 0:
-                rcp[lds[0]] = (lds[1], lds[2])
+                discomponentgroup[lds[0]] = (lds[1], lds[2])
 
-        for acp in acps.keys():
-            if acp in rcp.keys():
-                value = rcp[acp]
-                descErrors.append(json.dumps(
+        for acp in componentgroup.keys():
+            if acp in discomponentgroup.keys():
+                value = discomponentgroup[acp]
+                channelerrors.append(json.dumps(
                         {"component": str(acp),
                          "datasource": str(value[0]),
                          "message": str(value[1])}))
                 if str(value[1]) != "ALARM_STATE":
-                    acps[acp] = False
+                    componentgroup[acp] = False
                 else:
-                    acps[acp] = True
+                    componentgroup[acp] = True
             else:
-                acps[acp] = True
+                componentgroup[acp] = True
 
-        return json.dumps(acps)
+        return json.dumps(componentgroup)
+
+    ## imports Environment Data
+    # \param door door device
+    # \param names names of required variables
+    # \param data dictionary with resulting data
+    def getSelectorEnv(self, door, names, data):
+        params = ["ScanDir",
+                  "ScanFile"]
+
+        msp = TangoUtils.openProxy(self.getMacroServer(door))
+        rec = msp.Environment
+        nenv = {}
+        vl = None
+        if rec[0] == 'pickle':
+            dc = pickle.loads(rec[1])
+            if 'new' in dc.keys():
+                if self.__nxsenv in dc['new'].keys():
+                    nenv = dc['new'][self.__nxsenv]
+                for var in names:
+                    name = var if var in params else ("NeXus%s" % var)
+                    if name in dc['new'].keys():
+                        vl = dc['new'][name]
+                    elif var in nenv.keys():
+                        vl = nenv[var]
+                    else:
+                        continue
+                    if type(vl) not in [str, bool, int, unicode]:
+                        vl = json.dumps(vl)
+                    data[var] = vl
+
+    ## exports all Environment Data
+    # \param door door device
+    def setSelectorEnv(self, door, data, cmddata=None):
+        params = ["ScanDir",
+                  "ScanFile"]
+
+        msp = TangoUtils.openProxy(self.getMacroServer(door))
+        rec = msp.Environment
+        if rec[0] == 'pickle':
+            dc = pickle.loads(rec[1])
+            if 'new' in dc.keys():
+                if self.__nxsenv not in dc['new'].keys() \
+                        or not isinstance(dc['new'][self.__nxsenv], dict):
+                    dc['new'][self.__nxsenv] = {}
+                nenv = dc['new'][self.__nxsenv]
+                for var in data.keys():
+                    if var in self.__pureVar:
+                        vl = data[var]
+                    else:
+                        try:
+                            vl = json.loads(data[var])
+                        except ValueError:
+                            vl = data[var]
+                    if var in params:
+                        dc['new'][str(var)] = vl
+                    else:
+                        nenv[("%s" % var)] = vl
+
+                if cmddata:
+                    for name, value in cmddata.items():
+                        nenv[str(name)] = value
+                pk = pickle.dumps(dc)
+                msp.Environment = ['pickle', pk]
+
+    ## fetches Scan Environment Data
+    # \param door door device
+    # \returns JSON String with important variables
+    def getScanEnv(self, door):
+        params = ["ScanDir",
+                  "ScanFile",
+                  "ScanID",
+#                  "ActiveMntGrp",
+                  "NeXusSelectorDevice"]
+        res = {}
+        msp = TangoUtils.openProxy(self.getMacroServer(door))
+        rec = msp.Environment
+        if rec[0] == 'pickle':
+            dc = pickle.loads(rec[1])
+            if 'new' in dc.keys():
+                for var in params:
+                    if var in dc['new'].keys():
+                        res[var] = dc['new'][var]
+        return json.dumps(res)
+
+    ## stores Scan Environment Data
+    # \param door door device
+    # \param jdata JSON String with important variables
+    def setScanEnv(self, door, jdata):
+        jdata = Utils.stringToDictJson(jdata)
+        data = json.loads(jdata)
+        scanID = -1
+        msp = TangoUtils.openProxy(self.getMacroServer(door))
+        rec = msp.Environment
+        if rec[0] == 'pickle':
+            dc = pickle.loads(rec[1])
+            if 'new' in dc.keys():
+                for var in data.keys():
+                    dc['new'][str(var)] = Utils.toString(data[var])
+                pk = pickle.dumps(dc)
+                if 'ScanID' in dc['new'].keys():
+                    scanID = int(dc['new']["ScanID"])
+                msp.Environment = ['pickle', pk]
+        return scanID

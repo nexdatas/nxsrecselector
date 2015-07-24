@@ -22,7 +22,7 @@
 
 import json
 
-from .Utils import Utils
+from .Utils import TangoUtils, PoolUtils, MSUtils
 from .Describer import Describer
 
 try:
@@ -54,15 +54,15 @@ class MntGrpTools(object):
     # \param name mntgrp name
     def deleteMntGrp(self, name):
         pool = None
-        msp = Utils.openProxy(self.macroServer)
+        msp = TangoUtils.openProxy(self.macroServer)
         pn = msp.get_property("PoolNames")["PoolNames"]
         fpool = None
         for pl in pn:
-            pool = Utils.openProxy(pl)
+            pool = TangoUtils.openProxy(pl)
             if not fpool:
                 fpool = pool
         if fpool:
-            Utils.command(fpool, "DeleteElement",
+            TangoUtils.command(fpool, "DeleteElement",
                           str(name))
 
     ## set active measurement group from components
@@ -83,7 +83,7 @@ class MntGrpTools(object):
         mfullname = self.__prepareMntGrp(cnf, timer, pools)
 
         index = 0
-        fullnames = Utils.getFullDeviceNames(pools, aliases)
+        fullnames = PoolUtils.getFullDeviceNames(pools, aliases)
         for al in aliases:
             index = self.addDevice(
                 al, dontdisplay, pools, cnf,
@@ -93,14 +93,14 @@ class MntGrpTools(object):
 
     def getMntGrpProxy(self, pools):
         mntGrpName = self.__selector["MntGrp"]
-        fullname = str(Utils.getMntGrpName(pools, mntGrpName))
+        fullname = str(PoolUtils.getMntGrpName(pools, mntGrpName))
         if not fullname:
             return None
-        return Utils.openProxy(fullname)
+        return TangoUtils.openProxy(fullname)
 
     @classmethod
     def __clearChannels(cls, dsg, hel, pools):
-        channels = Utils.getExperimentalChannels(pools)
+        channels = PoolUtils.getExperimentalChannels(pools)
         for ch in channels:
             if ch in dsg.keys():
                 dsg[ch] = False
@@ -147,7 +147,7 @@ class MntGrpTools(object):
                                         hel.append(ch['name'])
 
     def __reorderTimers(self, conf, timers, dsg, hel, pools):
-        dtimers = Utils.getAliases(pools, timers)
+        dtimers = PoolUtils.getAliases(pools, timers)
         otimers = list(dtimers.values())
         otimers.remove(dtimers[conf["timer"]])
         otimers.insert(0, dtimers[conf["timer"]])
@@ -202,17 +202,17 @@ class MntGrpTools(object):
     def availableMeasurementGroups(self):
         mntgrps = None
         pool = None
-        msp = Utils.openProxy(self.macroServer)
+        msp = TangoUtils.openProxy(self.macroServer)
         pn = msp.get_property("PoolNames")["PoolNames"]
         fpool = None
         for pl in pn:
-            pool = Utils.openProxy(pl)
+            pool = TangoUtils.openProxy(pl)
             if not fpool:
                 fpool = pool
         if fpool:
-            mntgrps = Utils.getMntGrps([fpool])
+            mntgrps = PoolUtils.getMntGrps([fpool])
         mntgrps = mntgrps if mntgrps else []
-        amntgrp = Utils.getEnv('ActiveMntGrp', self.macroServer)
+        amntgrp = MSUtils.getEnv('ActiveMntGrp', self.macroServer)
 
         try:
             if mntgrps:
@@ -226,7 +226,7 @@ class MntGrpTools(object):
     def __checkClientRecords(self, datasources, pools):
 
         describer = Describer(self.configServer, True)
-        frecords = Utils.getFullDeviceNames(pools)
+        frecords = PoolUtils.getFullDeviceNames(pools)
         dsres = describer.dataSources(
             set(datasources) - set(frecords.keys()), 'CLIENT')
         records = [str(dsr.record) for dsr in dsres.values()]
@@ -252,17 +252,17 @@ class MntGrpTools(object):
     @classmethod
     def __createMntGrp(cls, ms, mntGrpName, timer, pools):
         pool = None
-        amntgrp = Utils.getEnv('ActiveMntGrp', ms)
-        msp = Utils.openProxy(ms)
+        amntgrp = MSUtils.getEnv('ActiveMntGrp', ms)
+        msp = TangoUtils.openProxy(ms)
         pn = msp.get_property("PoolNames")["PoolNames"]
         apool = None
         lpool = [None, 0]
         fpool = None
         for pl in pn:
-            pool = Utils.openProxy(pl)
+            pool = TangoUtils.openProxy(pl)
             if not fpool:
                 fpool = pool
-            mntgrps = Utils.getMntGrps([pool])
+            mntgrps = PoolUtils.getMntGrps([pool])
             if amntgrp in mntgrps:
                 apool = pool
             if lpool[1] < len(mntgrps):
@@ -277,9 +277,9 @@ class MntGrpTools(object):
         if not apool and len(pools) > 0:
             apool = pools[0]
         if apool:
-            Utils.command(apool, "CreateMeasurementGroup",
+            TangoUtils.command(apool, "CreateMeasurementGroup",
                           [mntGrpName, timer])
-            mfullname = str(Utils.getMntGrpName(pools, mntGrpName))
+            mfullname = str(PoolUtils.getMntGrpName(pools, mntGrpName))
         return mfullname
 
     ## prepares timers
@@ -289,7 +289,7 @@ class MntGrpTools(object):
         if not timer:
             raise Exception(
                 "Timer or Monitor not defined")
-        fullname = Utils.getFullDeviceNames(pools, [timer])[timer]
+        fullname = PoolUtils.getFullDeviceNames(pools, [timer])[timer]
         if not fullname:
             raise Exception(
                 "Timer or Monitor cannot be found amount the servers")
@@ -357,14 +357,14 @@ class MntGrpTools(object):
         if not self.__selector["MntGrp"]:
             self.__selector["MntGrp"] = self.__defaultmntgrp
         mntGrpName = self.__selector["MntGrp"]
-        mfullname = str(Utils.getMntGrpName(pools, mntGrpName))
+        mfullname = str(PoolUtils.getMntGrpName(pools, mntGrpName))
 
         if not mfullname:
             mfullname = self.__createMntGrp(
                 self.macroServer,
                 mntGrpName, timer, pools)
 
-        Utils.setEnv('ActiveMntGrp', str(mntGrpName), self.macroServer)
+        MSUtils.setEnv('ActiveMntGrp', str(mntGrpName), self.macroServer)
         cnf['label'] = mntGrpName
         return mfullname
 
@@ -459,7 +459,7 @@ class MntGrpTools(object):
                 if source in exsource:
                     xml = self.__createXMLSource(name, source, exsource)
                     self.configServer.xmlstring = str(xml)
-                    Utils.command(self.configServer, "storeDataSource",
+                    TangoUtils.command(self.configServer, "storeDataSource",
                                   str(name))
                     jds[initsource] = name
 
@@ -467,7 +467,7 @@ class MntGrpTools(object):
         extangods = []
         exsource = {}
 
-        ads = Utils.command(self.configServer, "availableDataSources")
+        ads = TangoUtils.command(self.configServer, "availableDataSources")
         if not ads:
             ads = []
         sds = self.getSourceDescription(ads)
@@ -488,11 +488,11 @@ class MntGrpTools(object):
     def addDevice(self, device, dontdisplay, pools, cnf,
                   timer, index, fullnames=None):
         if not fullnames:
-            fullnames = Utils.getFullDeviceNames(pools, [device, timer])
+            fullnames = PoolUtils.getFullDeviceNames(pools, [device, timer])
 
-        ctrls = Utils.getDeviceControllers(pools, [device])
+        ctrls = PoolUtils.getDeviceControllers(pools, [device])
         ctrl = ctrls[device] if ctrls and device in ctrls.keys() else ""
-        timers = Utils.getFullDeviceNames(pools, [timer])
+        timers = PoolUtils.getFullDeviceNames(pools, [timer])
         fulltimer = fullnames[timer] \
             if timers and timer in fullnames.keys() else ""
         if ctrl:
@@ -540,8 +540,8 @@ class MntGrpTools(object):
         ctrlChannels = cnf['controllers'][ctrl]['units']['0'][
             u'channels']
         if not fullname in ctrlChannels.keys():
-            source = Utils.getSource(fullname)
-            shp, dt, ut = Utils.getShapeTypeUnit(source)
+            source = PoolUtils.getSource(fullname)
+            shp, dt, ut = TangoUtils.getShapeTypeUnit(source)
             dct = {}
             dct['_controller_name'] = unicode(ctrl)
             dct['_unit_id'] = u'0'
@@ -593,7 +593,7 @@ class MntGrpTools(object):
             label = record
         if not fullname in ctrlChannels.keys():
             source = record
-            shp, dt, ut = Utils.getShapeTypeUnit(source)
+            shp, dt, ut = TangoUtils.getShapeTypeUnit(source)
             dct = {}
             dct['_controller_name'] = unicode(ctrl)
             dct['_unit_id'] = u'0'

@@ -25,7 +25,7 @@ import json
 import PyTango
 from .Describer import Describer
 from .DynamicComponent import DynamicComponent
-from .Utils import Utils
+from .Utils import Utils, TangoUtils, MSUtils, PoolUtils
 from .MntGrpTools import MntGrpTools
 from .Selector import Selector
 from .MacroServerPools import MacroServerPools
@@ -77,7 +77,7 @@ class Settings(object):
         if not self.__server:
             self.fetchConfiguration()
         ms = self.getMacroServer()
-        amntgrp = Utils.getEnv('ActiveMntGrp', ms)
+        amntgrp = MSUtils.getEnv('ActiveMntGrp', ms)
         if amntgrp:
             self.__selector["MntGrp"] = amntgrp
         else:
@@ -435,13 +435,13 @@ class Settings(object):
     # \returns name of ScanDir
     def __getScanDir(self):
         ms = self.getMacroServer()
-        return str(Utils.getEnv('ScanDir', ms))
+        return str(MSUtils.getEnv('ScanDir', ms))
 
     ## set method for ScanDir attribute
     # \param name of ScanDir
     def __setScanDir(self, name):
         ms = self.getMacroServer()
-        Utils.setEnv('ScanDir', str(name), ms)
+        MSUtils.setEnv('ScanDir', str(name), ms)
 
     ## the json data string
     scanDir = property(__getScanDir, __setScanDir,
@@ -451,18 +451,18 @@ class Settings(object):
     # \returns name of ScanID
     def __getScanID(self):
         ms = self.getMacroServer()
-        sid = Utils.getEnv('ScanID', ms)
+        sid = MSUtils.getEnv('ScanID', ms)
         if sid:
             return int(sid)
         else:
-            Utils.setEnv('ScanID', 0, ms)
+            MSUtils.setEnv('ScanID', 0, ms)
             return 0
 
     ## set method for ScanID attribute
     # \param name of ScanID
     def __setScanID(self, name):
         ms = self.getMacroServer()
-        Utils.setEnv('ScanID', name, ms)
+        MSUtils.setEnv('ScanID', name, ms)
 
     ## the json data string
     scanID = property(__getScanID, __setScanID,
@@ -472,13 +472,13 @@ class Settings(object):
     # \returns name of ScanFile
     def __getScanFile(self):
         ms = self.getMacroServer()
-        return Utils.getEnv('ScanFile', ms)
+        return MSUtils.getEnv('ScanFile', ms)
 
     ## set method for ScanFile attribute
     # \param name of ScanFile
     def __setScanFile(self, name):
         ms = self.getMacroServer()
-        Utils.setEnv('ScanFile', name, ms)
+        MSUtils.setEnv('ScanFile', name, ms)
 
     ## the json data string
     scanFile = property(__getScanFile, __setScanFile,
@@ -645,16 +645,16 @@ class Settings(object):
             cp = list(set(self.components) |
                       set(self.automaticComponents) |
                       set(self.mandatoryComponents()))
-        Utils.command(nexusconfig_device,
-                      "createConfiguration",
-                      cp)
+        TangoUtils.command(nexusconfig_device,
+                           "createConfiguration",
+                           cp)
         return str(nexusconfig_device.xmlstring)
 
     ## provides full names of pool devices
     # \returns JSON string with full names of pool devices
     def __fullDeviceNames(self):
         pools = self.__getPools()
-        return json.dumps(Utils.getFullDeviceNames(pools))
+        return json.dumps(PoolUtils.getFullDeviceNames(pools))
 
     ## provides full names of pool devices
     fullDeviceNames = property(
@@ -688,7 +688,7 @@ class Settings(object):
     ## checks existing controllers of pools for
     #      AutomaticDataSources
     def updateControllers(self):
-        jacps = self.__selector.updateControllers(self.__descErrors)
+        jacps = self.__selector.updateAutomaticComponents(self.__descErrors)
         if self.__selector["AutomaticComponentGroup"] != jacps:
             self.__selector["AutomaticComponentGroup"] = jacps
             self.storeConfiguration()
@@ -713,7 +713,7 @@ class Settings(object):
     # \returns  available Timers from MacroServer pools
     def __availableTimers(self):
         pools = self.__getPools()
-        return Utils.getTimers(pools, self.timerFilterList)
+        return PoolUtils.getTimers(pools, self.timerFilterList)
 
     ##  provides description of all components
     availableTimers = property(
@@ -727,7 +727,7 @@ class Settings(object):
     # \returns full name of Measurement group
     def findMntGrp(self, name):
         pools = self.__getPools()
-        return Utils.getMntGrpName(pools, name)
+        return PoolUtils.getMntGrpName(pools, name)
 
     ## deletes mntgrp
     # \param name mntgrp name
@@ -759,7 +759,7 @@ class Settings(object):
         return self.__mntgrptools.cpdescription(dstype, full)
 
     ## provides configuration of mntgrp
-    # \returns string with mntgrp configuration
+     # \returns string with mntgrp configuration
     def mntGrpConfiguration(self):
         pools = self.__getPools()
         self.__mntgrptools.macroServer = self.getMacroServer()
@@ -800,7 +800,7 @@ class Settings(object):
             set(self.mandatoryComponents()))
         conf, mntgrp = self.__mntgrptools.createMntGrpConfiguration(pools)
         self.storeConfiguration()
-        dpmg = Utils.openProxy(mntgrp)
+        dpmg = TangoUtils.openProxy(mntgrp)
         dpmg.Configuration = conf
         return str(dpmg.Configuration)
 
@@ -809,7 +809,7 @@ class Settings(object):
         pools = self.__getPools()
         if not self.__selector["MntGrp"] or toActive:
             ms = self.getMacroServer()
-            amntgrp = Utils.getEnv('ActiveMntGrp', ms)
+            amntgrp = MSUtils.getEnv('ActiveMntGrp', ms)
             if not toActive or amntgrp:
                 self.__selector["MntGrp"] = amntgrp
         self.fetchConfiguration()
@@ -877,7 +877,7 @@ class Settings(object):
     def removeDynamicComponent(self, name):
         nexusconfig_device = self.setConfigInstance()
         dcpcreator = DynamicComponent(nexusconfig_device)
-        dcpcreator.removeDynamicComponent(name)
+        dcpcreator.remove(name)
 
 # Environment methods:
 

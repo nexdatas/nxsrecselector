@@ -24,7 +24,7 @@ import re
 import json
 import PyTango
 import xml.dom.minidom
-from .Utils import Utils
+from .Utils import Utils, TangoUtils
 
 
 ## Basic DataSource item
@@ -130,11 +130,11 @@ class Describer(object):
         result = []
 
         if components is not None:
-            cpp = Utils.command(self.__nexusconfig_device,
+            cpp = TangoUtils.command(self.__nexusconfig_device,
                                 "availableComponents")
             cps = [cp for cp in components if cp in cpp]
         else:
-            cps = Utils.command(self.__nexusconfig_device,
+            cps = TangoUtils.command(self.__nexusconfig_device,
                                 "availableComponents")
 
         if self.__treeOutput:
@@ -254,7 +254,7 @@ class Describer(object):
         return shape
 
     def __getDataSourceAttributes(self, cp):
-        xmlc = Utils.command(self.__nexusconfig_device,
+        xmlc = TangoUtils.command(self.__nexusconfig_device,
                              "components", [cp])
         if not len(xmlc) > 0:
             return ExDSDict()
@@ -267,7 +267,7 @@ class Describer(object):
             if sv and isinstance(sv, dict):
                 cv.update(sv)
             self.__nexusconfig_device.variables = json.dumps(cv)
-        xmlc = Utils.command(self.__nexusconfig_device,
+        xmlc = TangoUtils.command(self.__nexusconfig_device,
                              "instantiatedComponents", [cp])
         if not len(xmlc) > 0:
             return ExDSDict()
@@ -323,7 +323,7 @@ class Describer(object):
     # \param dstype list datasources only with given type.
     #        If '' all available ones are taken
     def dataSources(self, names=None, dstype=''):
-        ads = Utils.command(self.__nexusconfig_device,
+        ads = TangoUtils.command(self.__nexusconfig_device,
                             "availableDataSources")
         if names is not None:
             dss = [name for name in names if name in ads]
@@ -343,7 +343,7 @@ class Describer(object):
         dstype = None
         record = None
         try:
-            dsource = Utils.command(self.__nexusconfig_device,
+            dsource = TangoUtils.command(self.__nexusconfig_device,
                                     "dataSources", [str(name)])
         except (PyTango.DevFailed, PyTango.Except, PyTango.DevError):
             dsource = []
