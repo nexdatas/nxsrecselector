@@ -116,18 +116,17 @@ class MntGrpTools(object):
                     '0' in ctrl['units'].keys():
                 if 'timer' in ctrl['units']['0'].keys():
                     timers[ctrl['units']['0']['timer']] = ''
-                    if 'channels' in ctrl['units']['0'].keys():
-                        for ch in ctrl['units']['0']['channels'].values():
-                            dsg[ch['name']] = True
-
-                            if not bool(ch['plot_type']):
-                                hel.append(ch['name'])
                 if 'channels' in ctrl['units']['0'].keys():
                     for ch in ctrl['units']['0']['channels'].values():
                         if '_controller_name' in ch.keys() and \
                                 ch['_controller_name'] == '__tango__':
                             tangods.append(
                                 [ch['name'], ch['label'], ch["source"]])
+                        else:
+                            dsg[ch['name']] = True
+                            if not bool(ch['plot_type']):
+                                hel.append(ch['name'])
+
         return tangods
 
     def __readTangoChannels(self, conf, tangods, dsg, hel):

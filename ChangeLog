@@ -1,4 +1,5 @@
-2015-07-XX Jan Kotanski <jankotan@gmail.com>
+2015-07-30 Jan Kotanski <jankotan@gmail.com>
+	* fix for reading MntGrp with ODChannels
 	* splitting MSUtils, TangoUtils, PoolUtils from Utils
 	* adding MacroServerPools
 	* tagged as v1.20.1
