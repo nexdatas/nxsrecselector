@@ -32,6 +32,7 @@ class Selection(dict):
 
         ## default mntgrp
         self.__defaultmntgrp = 'nxsmntgrp'
+        self.reset()
 
     def reset(self):
         self.clear()
@@ -104,7 +105,7 @@ class Selection(dict):
     ## get method for automaticDataSources attribute
     def updateAutomaticDataSources(self, motors):
         adsg = json.loads(self["AutomaticDataSources"])
-        adsg = list(set(adsg if adsg else []) | set(motors if motors else []))
+        adsg = list(set(adsg or []) | set(motors or []))
         self["AutomaticDataSources"] = json.dumps(adsg)
 
     ## update method for orderedChannels attribute
@@ -127,7 +128,7 @@ class Selection(dict):
     ## update method for dataSourceGroup attribute
     def updateDataSourceGroup(self, channels, datasources):
         dsg = json.loads(self["DataSourceGroup"])
-        datasources = datasources if datasources else []
+        datasources = datasources or []
         for ds in tuple(dsg.keys()):
             if ds not in channels and ds not in datasources:
                 dsg.pop(ds)

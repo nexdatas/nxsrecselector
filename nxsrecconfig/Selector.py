@@ -48,8 +48,6 @@ class Selector(object):
         ## module label
         self.moduleLabel = 'module'
 
-        self.__selection.reset()
-
     def reset(self):
         self.__selection.reset()
 

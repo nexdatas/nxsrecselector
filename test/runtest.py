@@ -49,6 +49,7 @@ import DescriberTest
 import TangoDSItemTest
 import CheckerItemTest
 import CheckerThreadTest
+import SelectionTest
     
 
 if PYTANGO_AVAILABLE:
@@ -86,6 +87,9 @@ def main():
     
     ## test suit
     suite = unittest.TestSuite()
+
+    suite.addTests(
+        unittest.defaultTestLoader.loadTestsFromModule(SelectionTest) )
 
     suite.addTests(
         unittest.defaultTestLoader.loadTestsFromModule(TangoDSItemTest) )
