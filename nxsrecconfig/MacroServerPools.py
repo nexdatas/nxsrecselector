@@ -26,7 +26,7 @@ import Queue
 import pickle
 from .Utils import Utils, TangoUtils, MSUtils, PoolUtils
 from .Describer import Describer
-from .CheckerThread import CheckerThread
+from .CheckerThread import CheckerThread, TangoDSItem, CheckerItem
 
 
 ## NeXus Sardana Recorder settings
@@ -96,7 +96,7 @@ class MacroServerPools(object):
         return self.__pools
 
     @classmethod
-    def __toCheck(cls, configdevice, discomponentgroup, components, channels, 
+    def __toCheck(cls, configdevice, discomponentgroup, components, channels,
                   nonexisting):
         describer = Describer(configdevice, True)
         availablecomponents = TangoUtils.command(configdevice,
@@ -114,11 +114,13 @@ class MacroServerPools(object):
                     for ds in dss.keys():
                         if ds in tgds.keys():
                             if cp not in toCheck.keys():
-                                toCheck[cp] = [cp]
+                                toCheck[cp] = CheckerItem(cp)
                             srec = tgds[ds].record.split("/")
                             attr = srec[-1]
                             toCheck[cp].append(
-                                (str(ds), str("/".join(srec[:-1])), str(attr)))
+                                TangoDSItem(str(ds),
+                                            str("/".join(srec[:-1])),
+                                            str(attr)))
                         elif ds in nonexisting:
                             discomponentgroup[cp] = \
                                 (ds, "%s not defined in Pool" % ds)
@@ -127,9 +129,9 @@ class MacroServerPools(object):
                             break
                         elif ds in channels:
                             if cp not in toCheck.keys():
-                                toCheck[cp] = [cp]
-                            toCheck[cp].append(str(ds))
-        return toCheck
+                                toCheck[cp] = CheckerItem(cp)
+                            toCheck[cp].append(TangoDSItem(str(ds)))
+        return toCheck.values()
 
     def checkComponentChannels(self, door, configdevice, channels,
                                componentgroup, channelerrors):
@@ -139,17 +141,17 @@ class MacroServerPools(object):
         pools = self.getPools(door)
         fnames = PoolUtils.getFullDeviceNames(pools, channels)
         nonexisting = [dev for dev in channels if dev not in fnames.keys()]
-        toCheck = self.__toCheck(configdevice, discomponentgroup, 
+        toCheck = self.__toCheck(configdevice, discomponentgroup,
                                  componentgroup.keys(),
                                  channels, nonexisting)
 
         cqueue = Queue.Queue()
-        for lds in toCheck.values():
-            cqueue.put(lds)
+        for checkeritem in toCheck:
+            cqueue.put(checkeritem)
         if self.__numberOfThreads < 1:
-            self.__numberOfThreads = len(toCheck.values())
+            self.__numberOfThreads = len(toCheck)
 
-        for i in range(min(self.__numberOfThreads, len(toCheck.values()))):
+        for i in range(min(self.__numberOfThreads, len(toCheck))):
             thd = CheckerThread(i, cqueue)
             threads.append(thd)
             thd.start()
@@ -157,21 +159,18 @@ class MacroServerPools(object):
         for th in threads:
             th.join()
 
-        for lds in toCheck.values():
-            if lds and len(lds) > 0:
-                discomponentgroup[lds[0]] = (lds[1], lds[2])
+        for checkeritem in toCheck:
+            if checkeritem.errords is not None:
+                discomponentgroup[checkeritem.name] = checkeritem
 
         for acp in componentgroup.keys():
             if acp in discomponentgroup.keys():
-                value = discomponentgroup[acp]
+                checkeritem = discomponentgroup[acp]
                 channelerrors.append(json.dumps(
                         {"component": str(acp),
-                         "datasource": str(value[0]),
-                         "message": str(value[1])}))
-                if str(value[1]) != "ALARM_STATE":
-                    componentgroup[acp] = False
-                else:
-                    componentgroup[acp] = True
+                         "datasource": str(checkeritem.errords),
+                         "message": str(checkeritem.message)}))
+                componentgroup[acp] = checkeritem.enabled
             else:
                 componentgroup[acp] = True
 

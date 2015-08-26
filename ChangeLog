@@ -1,3 +1,7 @@
+2015-XX-XX Jan Kotanski <jankotan@gmail.com>
+	* adding TangoDsItem and CheckerItem
+	* tagged as v1.20.2
+
 2015-07-30 Jan Kotanski <jankotan@gmail.com>
 	* fix for reading MntGrp with ODChannels
 	* splitting MSUtils, TangoUtils, PoolUtils from Utils

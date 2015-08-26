@@ -29,6 +29,37 @@ ATTRIBUTESTOCHECK = ["Value", "Position", "Counts", "Data",
                      "Voltage", "Energy", "SampleTime"]
 
 
+## Tango DataSource item
+class TangoDSItem(object):
+    __slots__ = 'name', 'device', 'attr'
+
+    ## constructor
+    # \param name datasource name
+    # \param device datasource device
+    # \param attr device attribute
+    def __init__(self, name=None, device=None, attr=None):
+        self.name = str(name) if name is not None else None
+        self.device = str(device) if device is not None else None
+        self.attr = str(attr) if attr is not None else None
+
+
+## Checker list Item
+class CheckerItem(list):
+
+    ## constructor
+    # \param name checker item name
+    def __init__(self, name):
+        super(CheckerItem, self).__init__()
+        ## checker name
+        self.name = name
+        ## datasource with first error
+        self.errords = None
+        ## first error message
+        self.message = None
+        ## enabled flag
+        self.enabled = True
+
+
 ## Single CheckerThread
 class CheckerThread(threading.Thread):
     ## constructor
@@ -55,44 +86,32 @@ class CheckerThread(threading.Thread):
                 full = False
 
     @classmethod
-    def __check(cls, lds):
-        erds = None
-        message = None
-        for ds in lds[1:]:
-            if isinstance(ds, tuple) and len(ds) > 2:
-                dname = str(ds[1])
-                attr = str(ds[2])
-            else:
-                dname = str(ds)
-                attr = None
-
+    def __check(cls, checkeritem):
+        for ds in checkeritem:
             try:
-                dp = PyTango.DeviceProxy(dname)
+                dp = PyTango.DeviceProxy(ds.device)
                 state = dp.command_inout("State")
                 if state in [
                     PyTango.DevState.FAULT]:
                     raise FaultStateError("FAULT STATE")
                 dp.ping()
-                if not attr:
+                if not ds.attr:
                     for gattr in ATTRIBUTESTOCHECK:
                         if hasattr(dp, gattr):
                             _ = getattr(dp, gattr)
                 else:
-                    _ = getattr(dp, attr)
+                    _ = getattr(dp, ds.attr)
                 if state in [
                     PyTango.DevState.ALARM]:
                     raise AlarmStateError("ALARM STATE")
             except AlarmStateError as e:
-                message = "ALARM_STATE"
-                erds = ds
+                checkeritem.message = "ALARM_STATE"
+                checkeritem.errords = ds.name
             except Exception as e:
-                message = str(e)
-                erds = ds
+                checkeritem.message = str(e)
+                checkeritem.errords = ds.name
+                checkeritem.enabled = False
                 break
-        if erds is None:
-            lds[:] = []
-        else:
-            lds[:] = [lds[0], erds, message]
 
 
 class AlarmStateError(Exception):

@@ -197,12 +197,12 @@ class Selector(object):
     ## available pool channels
     # \returns pool channels of the macroserver pools
     def poolChannels(self):
-        return PoolUtils.getExperimentalChannels(self.getPools())        
+        return PoolUtils.getExperimentalChannels(self.getPools())
 
     ## available pool motors
     # \returns pool motors of the macroserver pools
     def poolMotors(self):
-        return PoolUtils.getMotorNames(self.getPools())        
+        return PoolUtils.getMotorNames(self.getPools())
 
     def getMacroServer(self):
         return self.__msp.getMacroServer(self["Door"])
