@@ -283,6 +283,8 @@ class TestServer(PyTango.Device_4Impl):
             self.set_state(PyTango.DevState.RUNNING)
         elif state == "FAULT":
             self.set_state(PyTango.DevState.FAULT)
+        elif state == "ALARM":
+            self.set_state(PyTango.DevState.ALARM)
         else:
             self.set_state(PyTango.DevState.ON)
 

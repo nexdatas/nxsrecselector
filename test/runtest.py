@@ -48,6 +48,7 @@ import ExDSDictTest
 import DescriberTest
 import TangoDSItemTest
 import CheckerItemTest
+import CheckerThreadTest
     
 
 if PYTANGO_AVAILABLE:
@@ -107,6 +108,8 @@ def main():
         suite.addTests(
             unittest.defaultTestLoader.loadTestsFromModule(UtilsTest) )
 
+        suite.addTests(
+            unittest.defaultTestLoader.loadTestsFromModule(CheckerThreadTest) )
 
 
 
