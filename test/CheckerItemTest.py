@@ -69,34 +69,34 @@ class CheckerItemTest(unittest.TestCase):
         self.assertEqual(el.name, None)
         self.assertEqual(el.errords, None)
         self.assertEqual(el.message, None)
-        self.assertEqual(el.enabled, True)
+        self.assertEqual(el.active, True)
 
         el = CheckerItem("myname")
         self.assertEqual(el.name, "myname")
         self.assertEqual(el.errords, None)
         self.assertEqual(el.message, None)
-        self.assertEqual(el.enabled, True)
+        self.assertEqual(el.active, True)
 
         el = CheckerItem(None)
         el.errords="mytype"
         self.assertEqual(el.name, None)
         self.assertEqual(el.errords, "mytype")
         self.assertEqual(el.message, None)
-        self.assertEqual(el.enabled, True)
+        self.assertEqual(el.active, True)
 
         el = CheckerItem(None)
         el.message="mymessage"
         self.assertEqual(el.name, None)
         self.assertEqual(el.errords, None)
         self.assertEqual(el.message, "mymessage")
-        self.assertEqual(el.enabled, True)
+        self.assertEqual(el.active, True)
 
         el = CheckerItem("myname2")
         el.errords = "mytype2"
         self.assertEqual(el.name, "myname2")
         self.assertEqual(el.errords, "mytype2")
         self.assertEqual(el.message, None)
-        self.assertEqual(el.enabled, True)
+        self.assertEqual(el.active, True)
 
 
         el = CheckerItem(None)
@@ -105,14 +105,14 @@ class CheckerItemTest(unittest.TestCase):
         self.assertEqual(el.name, None)
         self.assertEqual(el.errords, "mytype2")
         self.assertEqual(el.message, "mymessage2")
-        self.assertEqual(el.enabled, True)
+        self.assertEqual(el.active, True)
 
         el = CheckerItem("myname2")
         el.message = "mymessage2"
         self.assertEqual(el.name, "myname2")
         self.assertEqual(el.errords, None)
         self.assertEqual(el.message, "mymessage2")
-        self.assertEqual(el.enabled, True)
+        self.assertEqual(el.active, True)
 
         el = CheckerItem("myname3")
         el.errords = "mytype3"
@@ -120,9 +120,9 @@ class CheckerItemTest(unittest.TestCase):
         self.assertEqual(el.name, "myname3")
         self.assertEqual(el.errords, "mytype3")
         self.assertEqual(el.message, "mymessage3")
-        self.assertEqual(el.enabled, True)
-        el.enabled = False
-        self.assertEqual(el.enabled, False)
+        self.assertEqual(el.active, True)
+        el.active = False
+        self.assertEqual(el.active, False)
 
         
 if __name__ == '__main__':

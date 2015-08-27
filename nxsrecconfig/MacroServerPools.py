@@ -34,7 +34,7 @@ class MacroServerPools(object):
     """ sardanamacro server and pools """
 
     ## constructor
-    # \param configserver configuration server name
+    # \param numberOfThreads number of threads
     def __init__(self, numberOfThreads):
 
         self.__numberOfThreads = numberOfThreads
@@ -133,6 +133,13 @@ class MacroServerPools(object):
                             toCheck[cp].append(TangoDSItem(str(ds)))
         return toCheck.values()
 
+    ## checks component channels
+    # \param door
+    # \param configdevice
+    # \param channels
+    # \param componentgroup
+    # \param channelerrors
+    # \returns json dictionary with selected active components
     def checkComponentChannels(self, door, configdevice, channels,
                                componentgroup, channelerrors):
         channelerrors[:] = []
@@ -170,7 +177,7 @@ class MacroServerPools(object):
                         {"component": str(acp),
                          "datasource": str(checkeritem.errords),
                          "message": str(checkeritem.message)}))
-                componentgroup[acp] = checkeritem.enabled
+                componentgroup[acp] = checkeritem.active
             else:
                 componentgroup[acp] = True
 
@@ -207,6 +214,8 @@ class MacroServerPools(object):
 
     ## exports all Environment Data
     # \param door door device
+    # \param data data dictionary
+    # \param cmddata command data dictionary
     def setSelectorEnv(self, door, data, cmddata=None):
         params = ["ScanDir",
                   "ScanFile"]

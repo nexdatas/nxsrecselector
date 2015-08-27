@@ -40,14 +40,18 @@ def read(fname):
 ## test command class
 class TestCommand(Command):
 
+    ## user options
     user_options = []
 
+    ## initializes options
     def initialize_options(self):
         pass
 
+    ## finalizes options
     def finalize_options(self):
         pass
-
+    
+    ## runs command
     def run(self):
         import sys
         import subprocess

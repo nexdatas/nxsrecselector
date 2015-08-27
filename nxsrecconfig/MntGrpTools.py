@@ -27,6 +27,7 @@ from .Describer import Describer
 
 try:
     from nxstools.nxsxml import (XMLFile, NDSource)
+    ## flag for nxstools installed
     NXSTOOLS = True
 except ImportError:
     NXSTOOLS = False
@@ -47,10 +48,15 @@ class MntGrpTools(object):
         ## Record names set by sardana
         self.recorder_names = ['serialno', 'end_time', 'start_time',
                                'point_nb', 'timestamps', 'scan_title']
+        ## macro server name
         self.macroServer = None
+        ## configuration serve proxy
         self.configServer = None
+        ## component list
         self.components = []
+        ## datasource list
         self.dataSources = []
+        ## disable datasource list
         self.disableDataSources = []
 
     ## deletes mntgrp
@@ -94,6 +100,9 @@ class MntGrpTools(object):
         conf = json.dumps(cnf)
         return conf, mfullname
 
+    ## provides Measurement Group Proxy 
+    # \param pools give pools
+    # \returns Measurement Group Proxy 
     def getMntGrpProxy(self, pools):
         mntGrpName = self.__selector["MntGrp"]
         fullname = str(PoolUtils.getMntGrpName(pools, mntGrpName))
@@ -486,6 +495,7 @@ class MntGrpTools(object):
     # \param cnf configuration dictionary
     # \param timer device timer
     # \param index device index
+    # \param fullnames dictionary with full names
     # \returns next device index
     def addDevice(self, device, dontdisplay, pools, cnf,
                   timer, index, fullnames=None):

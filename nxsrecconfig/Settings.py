@@ -65,10 +65,12 @@ class Settings(object):
             '{"timer": ["*exp_t*"], "dac": ["*exp_dac*"], ' \
             + '"counter": ["*exp_c*"], "mca": ["*exp_mca*"], '\
             + '"adc": ["*exp_adc*"], "motor": ["*exp_mot*"]}'
+
         ## device groups
         self.__deviceGroups = str(self.__defaultDeviceGroups)
         ## administator data
         self.__adminData = '[]'
+        ## error descriptions
         self.__descErrors = []
 
         self.__setupSelection()
@@ -263,8 +265,8 @@ class Settings(object):
         __getDataRecord,
         __setDataRecord,
         doc='client data record')
-    ## get method for dataRecord attribute
 
+    ## get method for dataRecord attribute
     # \returns name of deviceGroups
     def __getDeviceGroups(self):
         try:
@@ -276,10 +278,11 @@ class Settings(object):
         except Exception:
             return self.__defaultDeviceGroups
 
-    ## set method for deviceGroups attribute
+    ## sets method for deviceGroups attribute
     # \param name of deviceGroups
     def __setDeviceGroups(self, name):
         jname = Utils.stringToDictJson(name)
+        ## device groups
         self.__deviceGroups = jname
 
     ## the json data string
@@ -301,6 +304,7 @@ class Settings(object):
     # \param name of adminData
     def __setAdminData(self, name):
         jname = Utils.stringToListJson(name)
+        ## administator data
         self.__adminData = jname
 
     ## the json data string
@@ -489,9 +493,13 @@ class Settings(object):
     def __getPools(self):
         return self.__selector.getPools()
 
+    ## updates MacroServer for the given door server
+    # \param door current door server
     def updateMacroServer(self, door):
         return self.__msp.updateMacroServer(door)
 
+    ## provides the current macroserver name
+    # \returns macroserver name
     def getMacroServer(self):
         return self.__selector.getMacroServer()
 
@@ -617,7 +625,7 @@ class Settings(object):
                             doc='provides description of all components')
 
     ## provides description of client datasources
-    # \params cps component names
+    # \param cps component names
     # \returns JSON string with description of client datasources
     def clientSources(self, cps):
         nexusconfig_device = self.setConfigInstance()
@@ -634,7 +642,7 @@ class Settings(object):
         return jdc
 
     ## create configuration
-    # \params cps component names
+    # \param cps component names
     # \returns JSON string with description of client datasources
     def createConfiguration(self, cps):
         nexusconfig_device = self.setConfigInstance()

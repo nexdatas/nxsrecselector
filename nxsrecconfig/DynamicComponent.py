@@ -33,7 +33,7 @@ class DynamicComponent(object):
         of given component """
 
     ## constructor
-    # \param configserver configuration server name
+    # \param nexusconfig_device configserver configuration server name
     def __init__(self, nexusconfig_device):
         self.__nexusconfig_device = nexusconfig_device
 
@@ -82,7 +82,7 @@ class DynamicComponent(object):
         return self.__db.get_alias(name)
 
     ## sets user datasource parameters
-    # \params dct list of parameter dictionaries
+    # \param dct list of parameter dictionaries
     def setDictDSources(self, dct):
         self.__dictDSources = []
         jdct = json.loads(dct)
@@ -97,21 +97,33 @@ class DynamicComponent(object):
                 if "shape" not in dd.keys():
                     self.__dictDSources[-1]["shape"] = []
 
+    ## sets step datasource parameters
+    # \param dsources list of step datasources
     def setDataSources(self, dsources):
         self.__dsources = list(dsources)
         if not isinstance(self.__dsources, list):
             self.__dsources = []
 
+    ## sets init datasource parameters
+    # \param dsources list of init datasources
     def setInitDSources(self, dsources):
         self.__initdsources = list(dsources)
         if not isinstance(self.__initdsources, list):
             self.__initdsources = []
 
+    ## sets components parameters
+    # \param components list of components
     def setComponents(self, components):
         self.__components = list(components)
         if not isinstance(self.__components, list):
             self.__components = []
 
+    ## sets label parameters for specific dynamic components
+    # \param labels label dictionaries
+    # \param paths nexus path dictionaries
+    # \param links link dictionaries
+    # \param types nexus type dictionaries
+    # \param shapes data shape dictionaries
     def setLabelParams(self, labels, paths, links, types, shapes):
         self.__nexuslabels = json.loads(labels)
         if not isinstance(self.__nexuslabels, dict):
@@ -129,6 +141,9 @@ class DynamicComponent(object):
         if not isinstance(self.__nexusshapes, dict):
             self.__nexusshapes = {}
 
+    ## sets default nexus path and link flag for dynamic components
+    # \param dynamicPath nexus default path
+    # \param dynamicLinks default link flag
     def setLinkParams(self, dynamicLinks, dynamicPath):
         self.__links = dynamicLinks
         self.__defaultpath = dynamicPath
@@ -364,6 +379,8 @@ class DynamicComponent(object):
                 dim.setAttribute("index", str(i + 1))
                 dim.setAttribute("value", str(shape[i]))
 
+    ## removes dynamic component
+    # \param name dynamic component name            
     def remove(self, name):
         if self.__defaultCP not in name:
             raise Exception(

@@ -25,6 +25,7 @@ import PyTango
 import threading
 
 
+## default attributes to check
 ATTRIBUTESTOCHECK = ["Value", "Position", "Counts", "Data",
                      "Voltage", "Energy", "SampleTime"]
 
@@ -38,8 +39,11 @@ class TangoDSItem(object):
     # \param device datasource device
     # \param attr device attribute
     def __init__(self, name=None, device=None, attr=None):
+        ## datasource name
         self.name = str(name) if name is not None else None
+        ## datasource device
         self.device = str(device) if device is not None else None
+        ## datasource device attribute
         self.attr = str(attr) if attr is not None else None
 
 
@@ -57,7 +61,7 @@ class CheckerItem(list):
         ## first error message
         self.message = None
         ## enabled flag
-        self.enabled = True
+        self.active = True
 
 
 ## Single CheckerThread
@@ -110,13 +114,15 @@ class CheckerThread(threading.Thread):
             except Exception as e:
                 checkeritem.message = str(e)
                 checkeritem.errords = ds.name
-                checkeritem.enabled = False
+                checkeritem.active = False
                 break
 
 
+## Alarm State Exception class
 class AlarmStateError(Exception):
     pass
 
 
+## Fault State Exception class
 class FaultStateError(Exception):
     pass

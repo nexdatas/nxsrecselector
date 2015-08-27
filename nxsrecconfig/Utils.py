@@ -94,6 +94,10 @@ class Utils(object):
                     res = rname
         return res
 
+    ## converts string to json dictionary
+    # \param string with list of item or json dictionary
+    # \param toBool if true convert dictionary values to bool
+    # \returns json dictionary
     @classmethod
     def stringToDictJson(cls, string, toBool=False):
         try:
@@ -114,6 +118,9 @@ class Utils(object):
             jstring = json.dumps(dct)
         return jstring
 
+    ## converts string to json list
+    # \param string with list of item or json list
+    # \returns json list
     @classmethod
     def stringToListJson(cls, string):
         if not string or string == "Not initialised":
@@ -127,6 +134,9 @@ class Utils(object):
             jstring = json.dumps(lst)
         return jstring
 
+    ## converts list/dict/object of unicode/string to string object
+    # \param obj given unicode/string object
+    # \returns string object
     @classmethod
     def toString(cls, obj):
         if isinstance(obj, unicode):

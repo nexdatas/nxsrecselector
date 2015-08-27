@@ -15,7 +15,7 @@
 #
 #    You should have received a copy of the GNU General Public License
 #    along with nexdatas.  If not, see <http://www.gnu.org/licenses/>.
-## \file state.py
+## \file Selection.py
 # component describer
 
 """  Selection state """
@@ -118,7 +118,7 @@ class Selection(dict):
         self["AutomaticDataSources"] = json.dumps(adsg)
 
     ## update method for orderedChannels attribute
-    # \param
+    # \param channels pool channels
     def updateOrderedChannels(self, channels):
         och = json.loads(self["OrderedChannels"])
         ordchannels = [ch for ch in och if ch in channels]
@@ -163,11 +163,12 @@ class Selection(dict):
             self["MntGrp"] = self.__defaultmntgrp
 
     ## set method for timeZone attribute
-    # \param name of timeZone
     def resetTimeZone(self):
         if not self["TimeZone"]:
             self["TimeZone"] = self.__defaultzone
 
+    ## resets Automatic Components with given components and set them to not active
+    # \param components list of components to be set
     def resetAutomaticComponents(self, components):
         acps = {}
         for cp in components:

@@ -35,6 +35,7 @@ class DSItem(object):
     # \param name datasource name
     # \param dstype datasource type
     # \param record datasource record
+    # \param dsitem datasource item
     def __init__(self, name=None, dstype=None, record=None, dsitem=None):
         if dsitem:
             ## datasource name
@@ -113,7 +114,8 @@ class Describer(object):
         of given component """
 
     ## constructor
-    # \param configserver configuration server name
+    # \param nexusconfig_device configserver configuration server name
+    # \param tree output flag for dictionary tree 
     def __init__(self, nexusconfig_device, tree=False):
         self.__nexusconfig_device = nexusconfig_device
         self.__treeOutput = tree

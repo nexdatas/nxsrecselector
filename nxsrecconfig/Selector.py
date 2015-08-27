@@ -15,7 +15,7 @@
 #
 #    You should have received a copy of the GNU General Public License
 #    along with nexdatas.  If not, see <http://www.gnu.org/licenses/>.
-## \file state.py
+## \file Selector.py
 # component describer
 
 """  Selection state """
@@ -32,7 +32,7 @@ class Selector(object):
     """ selection state """
 
     ## constructor
-    # \param configserver configuration server name
+    # \param macroserverpools MacroServerPools object
     def __init__(self, macroserverpools):
 
         ## macro server and pools
@@ -48,12 +48,16 @@ class Selector(object):
         ## module label
         self.moduleLabel = 'module'
 
+    ## resets seleciton    
     def reset(self):
         self.__selection.reset()
 
+    ## deselect seleciton elements
     def deselect(self):
         self.__selection.deselect()
 
+    ## sets selection from state data
+    # \param state state data    
     def set(self, state):
         self.reset()
         for key in state.keys():
@@ -67,12 +71,17 @@ class Selector(object):
     def keys(self):
         return self.__selection.keys()
 
+    ## provides selection data
+    # \returns selection data
     def get(self):
         for key in self.keys():
             if hasattr(self, "_Selector__update" + key):
                 getattr(self, "_Selector__update" + key)()
         return dict(self.__selection)
 
+    ## provides value of selection item
+    # \param key selection item name
+    # \return selection item value
     def __getitem__(self, key):
         if key in self.keys():
             if key and key[0].upper() != key[0]:
@@ -83,6 +92,9 @@ class Selector(object):
         else:
             return None
 
+    ## sets value of selection item
+    # \param key selection item name
+    # \param value selection item value
     def __setitem__(self, key, value):
         self.__selection[key] = value
         if hasattr(self, "_Selector__reset" + key):
@@ -179,9 +191,14 @@ class Selector(object):
             self.__selection["WriterDevice"] = TangoUtils.getDeviceName(
                 self.__db, "NXSDataWriter")
 
+    ## resets automatic components to set of given components
+    # \param components new selection automatic components        
     def resetAutomaticComponents(self, components):
         self.__selection.resetAutomaticComponents(components)
 
+    ## updates active state of automatic components 
+    # \param channelerrors error list for non-active components
+    # \returns new group of automatic components
     def updateAutomaticComponents(self, channelerrors):
         datasources = set(json.loads(self["AutomaticDataSources"]))
         acpgroup = json.loads(self["AutomaticComponentGroup"])
@@ -189,6 +206,8 @@ class Selector(object):
         return self.__msp.checkComponentChannels(
             self["Door"], configdevice, datasources, acpgroup, channelerrors)
 
+    ## provides pool proxies
+    # \returns list of pool proxies
     def getPools(self):
         return self.__msp.getPools(self["Door"])
 
@@ -202,6 +221,8 @@ class Selector(object):
     def poolMotors(self):
         return PoolUtils.getMotorNames(self.getPools())
 
+    ## provides MacroServer name
+    # \returns MacroServer name
     def getMacroServer(self):
         return self.__msp.getMacroServer(self["Door"])
 
