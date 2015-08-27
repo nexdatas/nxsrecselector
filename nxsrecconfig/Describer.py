@@ -115,7 +115,7 @@ class Describer(object):
 
     ## constructor
     # \param nexusconfig_device configserver configuration server name
-    # \param tree output flag for dictionary tree 
+    # \param tree output flag for dictionary tree
     def __init__(self, nexusconfig_device, tree=False):
         self.__nexusconfig_device = nexusconfig_device
         self.__treeOutput = tree

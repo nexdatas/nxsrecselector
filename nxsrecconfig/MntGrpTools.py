@@ -100,9 +100,9 @@ class MntGrpTools(object):
         conf = json.dumps(cnf)
         return conf, mfullname
 
-    ## provides Measurement Group Proxy 
+    ## provides Measurement Group Proxy
     # \param pools give pools
-    # \returns Measurement Group Proxy 
+    # \returns Measurement Group Proxy
     def getMntGrpProxy(self, pools):
         mntGrpName = self.__selector["MntGrp"]
         fullname = str(PoolUtils.getMntGrpName(pools, mntGrpName))

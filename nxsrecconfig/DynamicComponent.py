@@ -380,7 +380,7 @@ class DynamicComponent(object):
                 dim.setAttribute("value", str(shape[i]))
 
     ## removes dynamic component
-    # \param name dynamic component name            
+    # \param name dynamic component name
     def remove(self, name):
         if self.__defaultCP not in name:
             raise Exception(

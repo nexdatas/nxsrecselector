@@ -48,7 +48,7 @@ class Selector(object):
         ## module label
         self.moduleLabel = 'module'
 
-    ## resets seleciton    
+    ## resets seleciton
     def reset(self):
         self.__selection.reset()
 
@@ -57,7 +57,7 @@ class Selector(object):
         self.__selection.deselect()
 
     ## sets selection from state data
-    # \param state state data    
+    # \param state state data
     def set(self, state):
         self.reset()
         for key in state.keys():
@@ -192,11 +192,11 @@ class Selector(object):
                 self.__db, "NXSDataWriter")
 
     ## resets automatic components to set of given components
-    # \param components new selection automatic components        
+    # \param components new selection automatic components
     def resetAutomaticComponents(self, components):
         self.__selection.resetAutomaticComponents(components)
 
-    ## updates active state of automatic components 
+    ## updates active state of automatic components
     # \param channelerrors error list for non-active components
     # \returns new group of automatic components
     def updateAutomaticComponents(self, channelerrors):

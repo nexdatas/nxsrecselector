@@ -167,7 +167,8 @@ class Selection(dict):
         if not self["TimeZone"]:
             self["TimeZone"] = self.__defaultzone
 
-    ## resets Automatic Components with given components and set them to not active
+    ## resets Automatic Components with given components and set them
+    #  to not active
     # \param components list of components to be set
     def resetAutomaticComponents(self, components):
         acps = {}
