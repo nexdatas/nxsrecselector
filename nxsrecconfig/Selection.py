@@ -23,7 +23,13 @@
 import json
 
 
+## Selection dictionary
 class Selection(dict):
+    """ Selection Dictionary """
+
+    ## constructor
+    # \param args dictionary args
+    # \param kw dictionary kw
     def __init__(self, *args, **kw):
         super(Selection, self).__init__(*args, **kw)
 
@@ -34,6 +40,7 @@ class Selection(dict):
         self.__defaultmntgrp = 'nxsmntgrp'
         self.reset()
 
+    ## resets dictionary to default value
     def reset(self):
         self.clear()
         ## timer
@@ -102,13 +109,16 @@ class Selection(dict):
         self["DataSourceGroup"] = json.dumps(ads)
         self["ComponentGroup"] = json.dumps(cps)
 
-    ## get method for automaticDataSources attribute
-    def updateAutomaticDataSources(self, motors):
+    ## update method for Automatic DataSources
+    # \brief appends new datasources to Automatic DataSources
+    # \param datasources
+    def updateAutomaticDataSources(self, datasources):
         adsg = json.loads(self["AutomaticDataSources"])
-        adsg = list(set(adsg or []) | set(motors or []))
+        adsg = list(set(adsg or []) | set(datasources or []))
         self["AutomaticDataSources"] = json.dumps(adsg)
 
     ## update method for orderedChannels attribute
+    # \param
     def updateOrderedChannels(self, channels):
         och = json.loads(self["OrderedChannels"])
         ordchannels = [ch for ch in och if ch in channels]

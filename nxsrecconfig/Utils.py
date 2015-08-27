@@ -60,6 +60,9 @@ class Utils(object):
                     break
         return status
 
+    ## provides datasource record from xml dom node
+    # \param node xml DOM node
+    # \returns datasource record
     @classmethod
     def getRecord(cls, node):
         res = ''

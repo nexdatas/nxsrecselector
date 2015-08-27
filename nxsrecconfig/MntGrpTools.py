@@ -35,6 +35,9 @@ except ImportError:
 ## MntGrp Tools
 class MntGrpTools(object):
     """  MntGrp Tools """
+
+    ## constructor
+    # \param selector selector object
     def __init__(self, selector):
         ## configuration selector
         self.__selector = selector
