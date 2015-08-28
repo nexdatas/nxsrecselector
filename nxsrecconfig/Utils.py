@@ -322,7 +322,7 @@ class MSUtils(object):
             dp = PyTango.DeviceProxy(str(server))
             if hasattr(dp, "DoorList"):
                 lst = dp.DoorList
-                if door in lst:
+                if lst and door in lst:
                     ms = server
                     break
         return ms

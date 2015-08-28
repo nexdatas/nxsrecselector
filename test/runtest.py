@@ -50,6 +50,7 @@ import TangoDSItemTest
 import CheckerItemTest
 import CheckerThreadTest
 import SelectionTest
+import MacroServerPoolsTest
     
 
 if PYTANGO_AVAILABLE:
@@ -114,6 +115,9 @@ def main():
 
         suite.addTests(
             unittest.defaultTestLoader.loadTestsFromModule(CheckerThreadTest) )
+
+        suite.addTests(
+            unittest.defaultTestLoader.loadTestsFromModule(MacroServerPoolsTest) )
 
 
 

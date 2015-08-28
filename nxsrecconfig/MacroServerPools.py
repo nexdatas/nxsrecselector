@@ -66,21 +66,24 @@ class MacroServerPools(object):
             ]
 
     ## updates MacroServer and sardana pools for given door
-    # \param door door device
+    # \param door door device name
     def updateMacroServer(self, door):
+        self.__macroserver = ""
+        self.__pools = []
         if not door:
             raise Exception("Door '%s' cannot be found" % door)
-        self.__macroserver = MSUtils.getMacroServer(self.__db, door)
-        msp = TangoUtils.openProxy(self.__macroserver)
+        macroserver = MSUtils.getMacroServer(self.__db, door)
+        msp = TangoUtils.openProxy(macroserver)
         pnames = msp.get_property("PoolNames")["PoolNames"]
         if not pnames:
             pnames = []
         poolNames = list(
             set(pnames) - set(self.poolBlacklist))
         self.__pools = TangoUtils.getProxies(poolNames)
+        self.__macroserver = macroserver
 
     ## door macro server device name
-    # \param door door device
+    # \param door door device name
     # \returns macroserver device name
     def getMacroServer(self, door):
         if not self.__macroserver:
@@ -88,7 +91,7 @@ class MacroServerPools(object):
         return self.__macroserver
 
     ## door pool device proxies
-    # \param door door device
+    # \param door door device name
     # \returns pool device proxies
     def getPools(self, door):
         if not self.__pools:
@@ -134,11 +137,11 @@ class MacroServerPools(object):
         return toCheck.values()
 
     ## checks component channels
-    # \param door
-    # \param configdevice
-    # \param channels
-    # \param componentgroup
-    # \param channelerrors
+    # \param door door device name 
+    # \param configdevice configuration server
+    # \param channels pool channels
+    # \param componentgroup automatic component group
+    # \param channelerrors deactivated component errors
     # \returns json dictionary with selected active components
     def checkComponentChannels(self, door, configdevice, channels,
                                componentgroup, channelerrors):

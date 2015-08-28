@@ -1,5 +1,6 @@
 2015-XX-XX Jan Kotanski <jankotan@gmail.com>
 	* adding TangoDsItem and CheckerItem
+	* fix for getMacroServer when DoorList is empty
 	* tagged as v1.20.2
 
 2015-07-30 Jan Kotanski <jankotan@gmail.com>
