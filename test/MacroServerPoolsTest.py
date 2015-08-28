@@ -691,6 +691,68 @@ class MacroServerPoolTest(unittest.TestCase):
                                    componentgroup,
                                    nonexisting)
         self.myAssertDict(json.loads(res), {"mycp":True})
+        self.assertEqual(componentgroup, {"mycp":True})
+        self.assertEqual(nonexisting, [])
+
+        print self._cf.dp.GetCommandVariable("COMMANDS")
+        self.assertEqual(json.loads(self._cf.dp.GetCommandVariable("COMMANDS")), 
+                         ["AvailableComponents", "AvailableComponents", "Components", "AvailableDataSources"])
+        self.assertEqual(json.loads(self._cf.dp.GetCommandVariable("VARS")),[None, None, ['mycp'], None] )
+#        print self._cf.dp.availableComponents()
+
+
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_checkComponentChannels_withcf_nocps(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        msp = MacroServerPools(0)
+        msp = MacroServerPools(10)
+        nonexisting = []
+        poolchannels = ["mycp"]
+        componentgroup = {}
+
+        self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
+        self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
+
+        res = msp.checkComponentChannels(self._ms.door.keys()[0],
+                                   self._cf.dp, 
+                                   poolchannels,
+                                   componentgroup,
+                                   nonexisting)
+        self.myAssertDict(json.loads(res), {})
+        self.assertEqual(componentgroup, {})
+        self.assertEqual(nonexisting, [])
+
+        print self._cf.dp.GetCommandVariable("COMMANDS")
+        self.assertEqual(json.loads(self._cf.dp.GetCommandVariable("COMMANDS")), 
+                         ["AvailableComponents"])
+        self.assertEqual(json.loads(self._cf.dp.GetCommandVariable("VARS")),[None] )
+
+#        print self._cf.dp.availableComponents()
+    ## constructor test
+    # \brief It tests default settings
+    def test_checkComponentChannels_withcf_nocps(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        msp = MacroServerPools(0)
+        msp = MacroServerPools(10)
+        nonexisting = []
+        poolchannels = []
+        componentgroup = {"mycp":True}
+
+        self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
+        self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
+
+        res = msp.checkComponentChannels(self._ms.door.keys()[0],
+                                   self._cf.dp, 
+                                   poolchannels,
+                                   componentgroup,
+                                   nonexisting)
+        self.myAssertDict(json.loads(res), {"mycp":True})
+        self.assertEqual(componentgroup, {"mycp":True})
+        self.assertEqual(nonexisting, [])
 
         print self._cf.dp.GetCommandVariable("COMMANDS")
         self.assertEqual(json.loads(self._cf.dp.GetCommandVariable("COMMANDS")), 
