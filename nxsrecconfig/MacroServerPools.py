@@ -105,9 +105,11 @@ class MacroServerPools(object):
         availablecomponents = TangoUtils.command(configdevice,
                                                  "availableComponents")
 
-        discomponentgroup.update(dict(
-                [str(k), ("...", "%s not defined in Configuration Server" % k)]
-                for k in set(components) - set(availablecomponents)))
+        for k in set(components) - set(availablecomponents):
+            discomponentgroup[str(k)] = CheckerItem(str(k))
+            discomponentgroup[str(k)].errords = "..."
+            discomponentgroup[str(k)].message = \
+                "%s not defined in Configuration Server" % k
         toCheck = {}
         for acp in components:
             res = describer.components([acp], '', '')
@@ -125,8 +127,11 @@ class MacroServerPools(object):
                                             str("/".join(srec[:-1])),
                                             str(attr)))
                         elif ds in nonexisting:
-                            discomponentgroup[cp] = \
-                                (ds, "%s not defined in Pool" % ds)
+                            discomponentgroup[cp] = CheckerItem(cp)
+                            discomponentgroup[cp].errords = ds
+                            discomponentgroup[cp].message = \
+                                "%s not defined in Pool" % ds
+
                             if cp in toCheck.keys():
                                 toCheck.pop(cp)
                             break
