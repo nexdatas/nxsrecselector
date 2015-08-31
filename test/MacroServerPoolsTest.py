@@ -1359,6 +1359,52 @@ class MacroServerPoolTest(unittest.TestCase):
             simps2.tearDown()
             
 
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_checkComponentChannels_2wds_nodspool(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        simps2 = TestServerSetUp.TestServerSetUp( "ttestp09/testts/t2r228", "S2")
+        try:
+            simps2.setUp()
+            msp = MacroServerPools(1)
+            channelerrors = []
+            poolchannels = ["scalar2_long", "spectrum2_short"]
+            componentgroup = {"smycp":False,"smycp2":False,"smycp3":False,
+                              "s2mycp":False,"s2mycp2":False,"s2mycp3":False}
+
+            cps = dict(self.smycps)
+            cps.update(self.smycps2)
+            dss = dict(self.smydss)
+#            dss.update(self.smydss2)
+
+            self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
+            self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
+    #        print "MDSS", self._cf.dp.availableDataSources()
+    #        print "XDSS", self._cf.dp.dataSources(["scalar_long"])
+            res = msp.checkComponentChannels(self._ms.door.keys()[0],
+                                       self._cf.dp, 
+                                       poolchannels,
+                                       componentgroup,
+                                       channelerrors)
+    #        print res 
+    #        print channelerrors
+
+            self.myAssertDict(json.loads(res), {
+                    "smycp":True,"smycp2":True,"smycp3":True,
+                    "s2mycp":False,"s2mycp2":False,"s2mycp3":True})
+            self.myAssertDict(componentgroup, {
+                    "smycp":True,"smycp2":True,"smycp3":True,
+                    "s2mycp":False,"s2mycp2":False,"s2mycp3":True})
+            self.assertEqual(len(channelerrors), 2)
+
+    #        print self._cf.dp.GetCommandVariable("COMMANDS")
+            res = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+        finally:
+            simps2.tearDown()
+            
+
     ## constructor test
     # \brief It tests default settings
     def test_checkComponentChannels_2wds_nocomponents(self):
