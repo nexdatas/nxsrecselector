@@ -108,6 +108,7 @@ class MacroServerPools(object):
         for k in set(components) - set(availablecomponents):
             discomponentgroup[str(k)] = CheckerItem(str(k))
             discomponentgroup[str(k)].errords = "..."
+            discomponentgroup[str(k)].active = False
             discomponentgroup[str(k)].message = \
                 "%s not defined in Configuration Server" % k
         toCheck = {}
@@ -129,6 +130,7 @@ class MacroServerPools(object):
                         elif ds in nonexisting:
                             discomponentgroup[cp] = CheckerItem(cp)
                             discomponentgroup[cp].errords = ds
+                            discomponentgroup[cp].active = False
                             discomponentgroup[cp].message = \
                                 "%s not defined in Pool" % ds
 

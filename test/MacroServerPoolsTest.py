@@ -294,12 +294,12 @@ class MacroServerPoolTest(unittest.TestCase):
                 '<field name="long">$datasources.scalar2_long<strategy mode="STEP"/></field>'
                 '<field name="short">$datasources.scalar2_short<strategy mode="STEP"/></field>'
                 '</group></definition>'),
-            'smycp2' : (
+            's2mycp2' : (
                 '<definition><group type="NXcollection" name="dddd2">'
                 '<field name="long">$datasources.spectrum2_long<strategy mode="STEP"/></field>'
                 '<field name="short">$datasources.spectrum2_short<strategy mode="FINAL"/></field>'
                 '</group></definition>'),
-            'smycp3' : (
+            's2mycp3' : (
                 '<definition><group type="NXcollection" name="dddd2">'
                 '<field name="long">$datasources.image2_long<strategy mode="STEP"/></field>'
                 '<field name="short">$datasources.image2_short<strategy mode="INIT"/></field>'
@@ -736,7 +736,7 @@ class MacroServerPoolTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
-    def ttest_constructor(self):
+    def test_constructor(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         msp = MacroServerPools(0)
@@ -744,7 +744,7 @@ class MacroServerPoolTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
-    def ttest_getMacroServer(self):
+    def test_getMacroServer(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         msp = MacroServerPools(0)
@@ -775,7 +775,7 @@ class MacroServerPoolTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
-    def ttest_getPool(self):
+    def test_getPool(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         msp = MacroServerPools(10)
@@ -826,7 +826,7 @@ class MacroServerPoolTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
-    def ttest_getPool_1to3(self):
+    def test_getPool_1to3(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         doors = ["door2testp09/testts/t1r228","door2testp09/testts/t2r228","door2testp09/testts/t3r228"]
@@ -889,7 +889,7 @@ class MacroServerPoolTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
-    def ttest_getPool_3to3(self):
+    def test_getPool_3to3(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         doors = ["door3testp09/testts/t1r228","door3testp09/testts/t2r228","door3testp09/testts/t3r228"]
@@ -953,7 +953,7 @@ class MacroServerPoolTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
-    def ttest_checkComponentChannels_simple(self):
+    def test_checkComponentChannels_simple(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         msp = MacroServerPools(0)
@@ -975,7 +975,7 @@ class MacroServerPoolTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
-    def ttest_checkComponentChannels_withcf(self):
+    def test_checkComponentChannels_withcf(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         msp = MacroServerPools(0)
@@ -1004,7 +1004,7 @@ class MacroServerPoolTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
-    def ttest_checkComponentChannels_withcf_cps(self):
+    def test_checkComponentChannels_withcf_cps(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         msp = MacroServerPools(0)
@@ -1035,7 +1035,7 @@ class MacroServerPoolTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
-    def ttest_checkComponentChannels_withcf_nocps(self):
+    def test_checkComponentChannels_withcf_nocps(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         msp = MacroServerPools(0)
@@ -1064,7 +1064,7 @@ class MacroServerPoolTest(unittest.TestCase):
 #        print self._cf.dp.availableComponents()
     ## constructor test
     # \brief It tests default settings
-    def ttest_checkComponentChannels_withcf_nochnnel(self):
+    def test_checkComponentChannels_withcf_nochnnel(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         msp = MacroServerPools(0)
@@ -1094,7 +1094,7 @@ class MacroServerPoolTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
-    def ttest_checkComponentChannels_wds(self):
+    def test_checkComponentChannels_wds(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         msp = MacroServerPools(0)
@@ -1120,13 +1120,13 @@ class MacroServerPoolTest(unittest.TestCase):
         print self._cf.dp.GetCommandVariable("COMMANDS")
         self.assertEqual(json.loads(self._cf.dp.GetCommandVariable("COMMANDS")), 
                          ["AvailableComponents", "AvailableDataSources", "AvailableComponents", 
-                          "Components"])
-        self.assertEqual(json.loads(self._cf.dp.GetCommandVariable("VARS")),[None, None, None, ['smycp']] )
+                          "Components", "DataSources",  "DataSources", "DataSources",  "DataSources"])
+#        self.assertEqual(json.loads(self._cf.dp.GetCommandVariable("VARS")),[None, None, None, ['smycp']] )
 
 
     ## constructor test
     # \brief It tests default settings
-    def ttest_checkComponentChannels_wds2(self):
+    def test_checkComponentChannels_wds2(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         msp = MacroServerPools(0)
@@ -1151,9 +1151,11 @@ class MacroServerPoolTest(unittest.TestCase):
         print self._cf.dp.GetCommandVariable("COMMANDS")
         self.assertEqual(json.loads(self._cf.dp.GetCommandVariable("COMMANDS")), 
                          ["AvailableComponents", "AvailableDataSources", "AvailableComponents", 
-                          "Components", "Components", "Components"])
+                          "Components", "DataSources",  "DataSources",  "DataSources",  "DataSources", 
+                          "Components", "DataSources",  "DataSources", "DataSources",  "DataSources", 
+                          "Components", "DataSources",  "DataSources", "DataSources",  "DataSources" ])
         res = json.loads(self._cf.dp.GetCommandVariable("VARS"))
-        self.assertEqual(sorted(componentgroup.keys()),sorted([res[3][0], res[4][0], res[5][0]]) )
+#        self.assertEqual(sorted(componentgroup.keys()),sorted([res[3][0], res[4][0], res[5][0]]) )
 
 
     ## constructor test
@@ -1161,8 +1163,113 @@ class MacroServerPoolTest(unittest.TestCase):
     def test_checkComponentChannels_2wds(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
-        msp = MacroServerPools(0)
-        msp = MacroServerPools(10)
+        simps2 = TestServerSetUp.TestServerSetUp( "ttestp09/testts/t2r228", "S2")
+        try:
+            simps2.setUp()
+            msp = MacroServerPools(1)
+            channelerrors = []
+            poolchannels = []
+            componentgroup = {"smycp":False,"smycp2":False,"smycp3":False,
+                              "s2mycp":False,"s2mycp2":False,"s2mycp3":False}
+
+            cps = dict(self.smycps)
+            cps.update(self.smycps2)
+            dss = dict(self.smydss)
+            dss.update(self.smydss2)
+
+            self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
+            self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
+    #        print "MDSS", self._cf.dp.availableDataSources()
+    #        print "XDSS", self._cf.dp.dataSources(["scalar_long"])
+            res = msp.checkComponentChannels(self._ms.door.keys()[0],
+                                       self._cf.dp, 
+                                       poolchannels,
+                                       componentgroup,
+                                       channelerrors)
+    #        print res 
+    #        print channelerrors
+
+            self.myAssertDict(json.loads(res), {
+                    "smycp":True,"smycp2":True,"smycp3":True,
+                    "s2mycp":True,"s2mycp2":True,"s2mycp3":True})
+            self.myAssertDict(componentgroup, {
+                    "smycp":True,"smycp2":True,"smycp3":True,
+                    "s2mycp":True,"s2mycp2":True,"s2mycp3":True})
+            self.assertEqual(len(channelerrors), 0)
+
+    #        print self._cf.dp.GetCommandVariable("COMMANDS")
+            self.assertEqual(json.loads(self._cf.dp.GetCommandVariable("COMMANDS")), 
+                             ["AvailableComponents", "AvailableDataSources", "AvailableComponents", 
+                              "Components", "DataSources","DataSources", "DataSources", "DataSources",
+                              "Components", "DataSources","DataSources", "DataSources","DataSources",
+                              "Components", "DataSources","DataSources", "DataSources","DataSources",
+                              "Components", "DataSources","DataSources", "DataSources","DataSources",
+                              "Components", "DataSources","DataSources", "DataSources","DataSources",
+                              "Components", "DataSources","DataSources", "DataSources","DataSources"])
+            res = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+        finally:
+            simps2.tearDown()
+            
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_checkComponentChannels_2wds_dvnorunning(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        simps2 = TestServerSetUp.TestServerSetUp( "ttestp09/testts/t2r228", "S2")
+        try:
+            simps2.add()
+            msp = MacroServerPools(1)
+            channelerrors = []
+            poolchannels = []
+            componentgroup = {"smycp":False,"smycp2":False,"smycp3":False,
+                              "s2mycp":False,"s2mycp2":False,"s2mycp3":False}
+
+            cps = dict(self.smycps)
+            cps.update(self.smycps2)
+            dss = dict(self.smydss)
+            dss.update(self.smydss2)
+
+            self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
+            self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
+    #        print "MDSS", self._cf.dp.availableDataSources()
+    #        print "XDSS", self._cf.dp.dataSources(["scalar_long"])
+            res = msp.checkComponentChannels(self._ms.door.keys()[0],
+                                       self._cf.dp, 
+                                       poolchannels,
+                                       componentgroup,
+                                       channelerrors)
+    #        print res 
+    #        print channelerrors
+
+            self.myAssertDict(json.loads(res), {
+                    "smycp":True,"smycp2":True,"smycp3":True,
+                    "s2mycp":False,"s2mycp2":False,"s2mycp3":False})
+            self.myAssertDict(componentgroup, {
+                    "smycp":True,"smycp2":True,"smycp3":True,
+                    "s2mycp":False,"s2mycp2":False,"s2mycp3":False})
+            self.assertEqual(len(channelerrors), 3)
+
+    #        print self._cf.dp.GetCommandVariable("COMMANDS")
+            self.assertEqual(json.loads(self._cf.dp.GetCommandVariable("COMMANDS")), 
+                             ["AvailableComponents", "AvailableDataSources", "AvailableComponents", 
+                              "Components", "DataSources","DataSources", "DataSources", "DataSources",
+                              "Components", "DataSources","DataSources", "DataSources","DataSources",
+                              "Components", "DataSources","DataSources", "DataSources","DataSources",
+                              "Components", "DataSources","DataSources", "DataSources","DataSources",
+                              "Components", "DataSources","DataSources", "DataSources","DataSources",
+                              "Components", "DataSources","DataSources", "DataSources","DataSources"])
+            res = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+        finally:
+            simps2.delete()
+            
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_checkComponentChannels_2wds_dvnodef(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        msp = MacroServerPools(1)
         channelerrors = []
         poolchannels = []
         componentgroup = {"smycp":False,"smycp2":False,"smycp3":False,
@@ -1175,26 +1282,127 @@ class MacroServerPoolTest(unittest.TestCase):
 
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
-        print "MDSS", self._cf.dp.availableDataSources()
-        print "XDSS", self._cf.dp.dataSources(["scalar_long"])
+#        print "MDSS", self._cf.dp.availableDataSources()
+#        print "XDSS", self._cf.dp.dataSources(["scalar_long"])
         res = msp.checkComponentChannels(self._ms.door.keys()[0],
                                    self._cf.dp, 
                                    poolchannels,
                                    componentgroup,
                                    channelerrors)
-        print res 
+#        print res 
+#        print channelerrors
 
-        self.myAssertDict(json.loads(res), {"smycp":True,"smycp2":True,"smycp3":True})
-        self.assertEqual(componentgroup, {"smycp":True,"smycp2":True,"smycp3":True})
-        self.assertEqual(channelerrors, [])
+        self.myAssertDict(json.loads(res), {
+                "smycp":True,"smycp2":True,"smycp3":True,
+                "s2mycp":False,"s2mycp2":False,"s2mycp3":False})
+        self.myAssertDict(componentgroup, {
+                "smycp":True,"smycp2":True,"smycp3":True,
+                "s2mycp":False,"s2mycp2":False,"s2mycp3":False})
+        self.assertEqual(len(channelerrors), 3)
 
-        print self._cf.dp.GetCommandVariable("COMMANDS")
+#        print self._cf.dp.GetCommandVariable("COMMANDS")
         self.assertEqual(json.loads(self._cf.dp.GetCommandVariable("COMMANDS")), 
                          ["AvailableComponents", "AvailableDataSources", "AvailableComponents", 
-                          "Components", "Components", "Components"])
+                          "Components", "DataSources","DataSources", "DataSources", "DataSources",
+                          "Components", "DataSources","DataSources", "DataSources","DataSources",
+                          "Components", "DataSources","DataSources", "DataSources","DataSources",
+                          "Components", "DataSources","DataSources", "DataSources","DataSources",
+                          "Components", "DataSources","DataSources", "DataSources","DataSources",
+                          "Components", "DataSources","DataSources", "DataSources","DataSources"])
         res = json.loads(self._cf.dp.GetCommandVariable("VARS"))
-        self.assertEqual(sorted(componentgroup.keys()),sorted([res[3][0], res[4][0], res[5][0]]) )
+#        print res
+#        self.assertEqual(sorted(componentgroup.keys()),sorted([res[3][0], res[4][0], res[5][0]]) )
 
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_checkComponentChannels_2wds_nods(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        simps2 = TestServerSetUp.TestServerSetUp( "ttestp09/testts/t2r228", "S2")
+        try:
+            simps2.setUp()
+            msp = MacroServerPools(1)
+            channelerrors = []
+            poolchannels = []
+            componentgroup = {"smycp":False,"smycp2":False,"smycp3":False,
+                              "s2mycp":False,"s2mycp2":False,"s2mycp3":False}
+
+            cps = dict(self.smycps)
+            cps.update(self.smycps2)
+            dss = dict(self.smydss)
+#            dss.update(self.smydss2)
+
+            self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
+            self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
+    #        print "MDSS", self._cf.dp.availableDataSources()
+    #        print "XDSS", self._cf.dp.dataSources(["scalar_long"])
+            res = msp.checkComponentChannels(self._ms.door.keys()[0],
+                                       self._cf.dp, 
+                                       poolchannels,
+                                       componentgroup,
+                                       channelerrors)
+    #        print res 
+    #        print channelerrors
+
+            self.myAssertDict(json.loads(res), {
+                    "smycp":True,"smycp2":True,"smycp3":True,
+                    "s2mycp":True,"s2mycp2":True,"s2mycp3":True})
+            self.myAssertDict(componentgroup, {
+                    "smycp":True,"smycp2":True,"smycp3":True,
+                    "s2mycp":True,"s2mycp2":True,"s2mycp3":True})
+            self.assertEqual(len(channelerrors), 0)
+
+    #        print self._cf.dp.GetCommandVariable("COMMANDS")
+            res = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+        finally:
+            simps2.tearDown()
+            
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_checkComponentChannels_2wds_nocomponents(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        simps2 = TestServerSetUp.TestServerSetUp( "ttestp09/testts/t2r228", "S2")
+        try:
+            simps2.setUp()
+            msp = MacroServerPools(1)
+            channelerrors = []
+            poolchannels = []
+            componentgroup = {"smycp":False,"smycp2":False,"smycp3":False,
+                              "s2mycp":False,"s2mycp2":False,"s2mycp3":False}
+
+            cps = dict(self.smycps)
+#            cps.update(self.smycps2)
+            dss = dict(self.smydss)
+#            dss.update(self.smydss2)
+
+            self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
+            self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
+    #        print "MDSS", self._cf.dp.availableDataSources()
+    #        print "XDSS", self._cf.dp.dataSources(["scalar_long"])
+            res = msp.checkComponentChannels(self._ms.door.keys()[0],
+                                       self._cf.dp, 
+                                       poolchannels,
+                                       componentgroup,
+                                       channelerrors)
+    #        print res 
+    #        print channelerrors
+
+            self.myAssertDict(json.loads(res), {
+                    "smycp":True,"smycp2":True,"smycp3":True,
+                    "s2mycp":False,"s2mycp2":False,"s2mycp3":False})
+            self.myAssertDict(componentgroup, {
+                    "smycp":True,"smycp2":True,"smycp3":True,
+                    "s2mycp":False,"s2mycp2":False,"s2mycp3":False})
+            self.assertEqual(len(channelerrors), 3)
+
+    #        print self._cf.dp.GetCommandVariable("COMMANDS")
+            res = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+        finally:
+            simps2.tearDown()
+            
 
 
 if __name__ == '__main__':
