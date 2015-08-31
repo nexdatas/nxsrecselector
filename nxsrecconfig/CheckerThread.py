@@ -93,7 +93,7 @@ class CheckerThread(threading.Thread):
     def __check(cls, checkeritem):
         for ds in checkeritem:
             try:
-                dp = PyTango.DeviceProxy(ds.device)
+                dp = PyTango.DeviceProxy(ds.device or ds.name)
                 state = dp.command_inout("State")
                 if state in [
                     PyTango.DevState.FAULT]:
@@ -116,7 +116,6 @@ class CheckerThread(threading.Thread):
                 checkeritem.errords = ds.name
                 checkeritem.active = False
                 break
-
 
 ## Alarm State Exception class
 class AlarmStateError(Exception):

@@ -60,6 +60,10 @@ class Pool(PyTango.Device_4Impl):
         PyTango.Device_4Impl.__init__(self,cl,name)
 
         self.attr_value = ""
+        self.attr_AcqChannelList = []
+        self.attr_MeasurementGroupList = []
+        self.attr_ExpChannelList = []
+        self.attr_MotorList = []
         Pool.init_device(self)
 
 
@@ -92,6 +96,68 @@ class Pool(PyTango.Device_4Impl):
 #    TestPool read/write attribute methods
 #
 #==================================================================
+
+#------------------------------------------------------------------
+#    Read AcqChannelList attribute
+#------------------------------------------------------------------
+    def read_AcqChannelList(self, attr):
+        print >> self.log_info, "In ", self.get_name(), \
+            "::read_AcqChannelList()"
+        attr.set_value(self.attr_AcqChannelList)
+
+#------------------------------------------------------------------
+#    Write AcqChannelList attribute
+#------------------------------------------------------------------
+    def write_AcqChannelList(self, attr):
+        print >> self.log_info, "In ", self.get_name(), \
+            "::write_AcqChannelList()"
+        self.attr_AcqChannelList = attr.get_write_value()
+
+#------------------------------------------------------------------
+#    Read MeasurementGroupList attribute
+#------------------------------------------------------------------
+    def read_MeasurementGroupList(self, attr):
+        print >> self.log_info, "In ", self.get_name(), \
+            "::read_MeasurementGroupList()"
+        attr.set_value(self.attr_MeasurementGroupList)
+
+#------------------------------------------------------------------
+#    Write MeasurementGroupList attribute
+#------------------------------------------------------------------
+    def write_MeasurementGroupList(self, attr):
+        print >> self.log_info, "In ", self.get_name(), \
+            "::write_MeasurementGroupList()"
+        self.attr_MeasurementGroupList = attr.get_write_value()
+#------------------------------------------------------------------
+#    Read ExpChannelList attribute
+#------------------------------------------------------------------
+    def read_ExpChannelList(self, attr):
+        print >> self.log_info, "In ", self.get_name(), \
+            "::read_ExpChannelList()"
+        attr.set_value(self.attr_ExpChannelList)
+
+#------------------------------------------------------------------
+#    Write ExpChannelList attribute
+#------------------------------------------------------------------
+    def write_ExpChannelList(self, attr):
+        print >> self.log_info, "In ", self.get_name(), \
+            "::write_ExpChannelList()"
+        self.attr_ExpChannelList = attr.get_write_value()
+#------------------------------------------------------------------
+#    Read MotorList attribute
+#------------------------------------------------------------------
+    def read_MotorList(self, attr):
+        print >> self.log_info, "In ", self.get_name(), \
+            "::read_MotorList()"
+        attr.set_value(self.attr_MotorList)
+
+#------------------------------------------------------------------
+#    Write MotorList attribute
+#------------------------------------------------------------------
+    def write_MotorList(self, attr):
+        print >> self.log_info, "In ", self.get_name(), \
+            "::write_MotorList()"
+        self.attr_MotorList = attr.get_write_value()
 
 
 #==================================================================
@@ -148,6 +214,38 @@ class PoolClass(PyTango.DeviceClass):
 
     #    Attribute definitions
     attr_list = {
+        'AcqChannelList':
+            [[PyTango.DevString,
+            PyTango.SPECTRUM,
+            PyTango.READ_WRITE, 4096],
+            {
+                'label': "",
+                'description': " "
+            }],
+        'MeasurementGroupList':
+            [[PyTango.DevString,
+            PyTango.SPECTRUM,
+            PyTango.READ_WRITE, 4096],
+            {
+                'label': "",
+                'description': " "
+            }],
+        'ExpChannelList':
+            [[PyTango.DevString,
+            PyTango.SPECTRUM,
+            PyTango.READ_WRITE, 4096],
+            {
+                'label': "",
+                'description': " "
+            }],
+        'MotorList':
+            [[PyTango.DevString,
+            PyTango.SPECTRUM,
+            PyTango.READ_WRITE, 4096],
+            {
+                'label': "",
+                'description': " "
+            }],
         }
 
 
