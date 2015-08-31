@@ -436,6 +436,22 @@ class DescriberTest(unittest.TestCase):
             'slt1vgap': ('slt1vgap', "CLIENT", "p02/slt/exp.07"),
             }
 
+    ## Exception tester
+    # \param exception expected exception
+    # \param method called method      
+    # \param args list with method arguments
+    # \param kwargs dictionary with method arguments
+    def myAssertRaise(self, exception, method, *args, **kwargs):
+        err = None
+        try:
+            error =  False
+            method(*args, **kwargs)
+        except exception, e:
+            error = True
+            err = e
+        self.assertEqual(error, True)
+        return err
+
     ## test starter
     # \brief Common set up
     def setUp(self):
@@ -540,9 +556,9 @@ class DescriberTest(unittest.TestCase):
     def test_constructor(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
-        el = Describer(None, None)
-        el = Describer(None, False)
-        el = Describer(None, True)
+        self.myAssertRaise(Exception, Describer, None, None)
+        self.myAssertRaise(Exception, Describer, None, False)
+        self.myAssertRaise(Exception, Describer, None, True)
 
     ## constructor test
     # \brief It tests default settings

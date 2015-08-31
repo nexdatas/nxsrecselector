@@ -270,7 +270,336 @@ class MacroServerPoolTest(unittest.TestCase):
 
             }
 
+        self.smycps ={
+            'smycp' : (
+                '<definition><group type="NXcollection" name="dddd">'
+                '<field name="long">$datasources.scalar_long<strategy mode="STEP"/></field>'
+                '<field name="short">$datasources.scalar_short<strategy mode="STEP"/></field>'
+                '</group></definition>'),
+            'smycp2' : (
+                '<definition><group type="NXcollection" name="dddd">'
+                '<field name="long">$datasources.spectrum_long<strategy mode="INIT"/></field>'
+                '<field name="short">$datasources.spectrum_short<strategy mode="STEP"/></field>'
+                '</group></definition>'),
+            'smycp3' : (
+                '<definition><group type="NXcollection" name="dddd">'
+                '<field name="long">$datasources.image_long<strategy mode="FINAL"/></field>'
+                '<field name="short">$datasources.image_short<strategy mode="STEP"/></field>'
+                '</group></definition>'),
+            }
+
+        self.smycps2 ={
+            's2mycp' : (
+                '<definition><group type="NXcollection" name="dddd2">'
+                '<field name="long">$datasources.scalar2_long<strategy mode="STEP"/></field>'
+                '<field name="short">$datasources.scalar2_short<strategy mode="STEP"/></field>'
+                '</group></definition>'),
+            'smycp2' : (
+                '<definition><group type="NXcollection" name="dddd2">'
+                '<field name="long">$datasources.spectrum2_long<strategy mode="STEP"/></field>'
+                '<field name="short">$datasources.spectrum2_short<strategy mode="FINAL"/></field>'
+                '</group></definition>'),
+            'smycp3' : (
+                '<definition><group type="NXcollection" name="dddd2">'
+                '<field name="long">$datasources.image2_long<strategy mode="STEP"/></field>'
+                '<field name="short">$datasources.image2_short<strategy mode="INIT"/></field>'
+                '</group></definition>'),
+            }
             
+        self.smydss = {
+            'scalar_long': ('<definition><datasource type="TANGO" name="scalar_long">'
+                     '<record name="ScalarLong"/>'
+                     '<device member="attribute" name="ttestp09/testts/t1r228"/>'
+                     '</datasource></definition>'),
+            'scalar_bool': ('<definition><datasource type="TANGO" name="scalar_bool">'
+                     '<record name="ScalarBoolean"/>'
+                     '<device member="attribute" name="ttestp09/testts/t1r228"/>'
+                     '</datasource></definition>'),
+            'scalar_short': ('<definition><datasource type="TANGO" name="scalar_short">'
+                     '<record name="ScalarShort"/>'
+                     '<device member="attribute" name="ttestp09/testts/t1r228"/>'
+                     '</datasource></definition>'),
+            'scalar_ushort': ('<definition><datasource type="TANGO" name="scalar_ushort">'
+                     '<record name="ScalarUShort"/>'
+                     '<device member="attribute" name="ttestp09/testts/t1r228"/>'
+                     '</datasource></definition>'),
+            'scalar_ulong': ('<definition><datasource type="TANGO" name="scalar_ulong">'
+                     '<record name="ScalarULong"/>'
+                     '<device member="attribute" name="ttestp09/testts/t1r228"/>'
+                     '</datasource></definition>'),
+            'scalar_long64': ('<definition><datasource type="TANGO" name="scalar_long64">'
+                     '<record name="ScalarLong64"/>'
+                     '<device member="attribute" name="ttestp09/testts/t1r228"/>'
+                     '</datasource></definition>'),
+            'scalar_ulong64': ('<definition><datasource type="TANGO" name="scalar_ulong64">'
+                     '<record name="ScalarULong64"/>'
+                     '<device member="attribute" name="ttestp09/testts/t1r228"/>'
+                     '</datasource></definition>'),
+            'scalar_float': ('<definition><datasource type="TANGO" name="scalar_float">'
+                     '<record name="ScalarFloat"/>'
+                     '<device member="attribute" name="ttestp09/testts/t1r228"/>'
+                     '</datasource></definition>'),
+            'scalar_double': ('<definition><datasource type="TANGO" name="scalar_double">'
+                     '<record name="ScalarDouble"/>'
+                     '<device member="attribute" name="ttestp09/testts/t1r228"/>'
+                     '</datasource></definition>'),
+            'scalar_string': ('<definition><datasource type="TANGO" name="scalar_string">'
+                     '<record name="ScalarString"/>'
+                     '<device member="attribute" name="ttestp09/testts/t1r228"/>'
+                     '</datasource></definition>'),
+            'scalar_Encoded': ('<definition><datasource type="TANGO" name="scalar_encoded">'
+                     '<record name="ScalarEncoded"/>'
+                     '<device member="attribute" name="ttestp09/testts/t1r228"/>'
+                     '</datasource></definition>'),
+            'scalar_uchar': ('<definition><datasource type="TANGO" name="scalar_uchar">'
+                     '<record name="ScalarUChar"/>'
+                     '<device member="attribute" name="ttestp09/testts/t1r228"/>'
+                     '</datasource></definition>'),
+            'spectrum_long': ('<definition><datasource type="TANGO" name="spectrum_long">'
+                     '<record name="SpectrumLong"/>'
+                     '<device member="attribute" name="ttestp09/testts/t1r228"/>'
+                     '</datasource></definition>'),
+            'spectrum_bool': ('<definition><datasource type="TANGO" name="spectrum_bool">'
+                     '<record name="SpectrumBoolean"/>'
+                     '<device member="attribute" name="ttestp09/testts/t1r228"/>'
+                     '</datasource></definition>'),
+            'spectrum_short': ('<definition><datasource type="TANGO" name="spectrum_short">'
+                     '<record name="SpectrumShort"/>'
+                     '<device member="attribute" name="ttestp09/testts/t1r228"/>'
+                     '</datasource></definition>'),
+            'spectrum_ushort': ('<definition><datasource type="TANGO" name="spectrum_ushort">'
+                     '<record name="SpectrumUShort"/>'
+                     '<device member="attribute" name="ttestp09/testts/t1r228"/>'
+                     '</datasource></definition>'),
+            'spectrum_ulong': ('<definition><datasource type="TANGO" name="spectrum_ulong">'
+                     '<record name="SpectrumULong"/>'
+                     '<device member="attribute" name="ttestp09/testts/t1r228"/>'
+                     '</datasource></definition>'),
+            'spectrum_long64': ('<definition><datasource type="TANGO" name="spectrum_long64">'
+                     '<record name="SpectrumLong64"/>'
+                     '<device member="attribute" name="ttestp09/testts/t1r228"/>'
+                     '</datasource></definition>'),
+            'spectrum_ulong64': ('<definition><datasource type="TANGO" name="spectrum_ulong64">'
+                     '<record name="SpectrumULong64"/>'
+                     '<device member="attribute" name="ttestp09/testts/t1r228"/>'
+                     '</datasource></definition>'),
+            'spectrum_float': ('<definition><datasource type="TANGO" name="spectrum_float">'
+                     '<record name="SpectrumFloat"/>'
+                     '<device member="attribute" name="ttestp09/testts/t1r228"/>'
+                     '</datasource></definition>'),
+            'spectrum_double': ('<definition><datasource type="TANGO" name="spectrum_double">'
+                     '<record name="SpectrumDouble"/>'
+                     '<device member="attribute" name="ttestp09/testts/t1r228"/>'
+                     '</datasource></definition>'),
+            'spectrum_string': ('<definition><datasource type="TANGO" name="spectrum_string">'
+                     '<record name="SpectrumString"/>'
+                     '<device member="attribute" name="ttestp09/testts/t1r228"/>'
+                     '</datasource></definition>'),
+            'spectrum_Encoded': ('<definition><datasource type="TANGO" name="spectrum_encoded">'
+                     '<record name="SpectrumEncoded"/>'
+                     '<device member="attribute" name="ttestp09/testts/t1r228"/>'
+                     '</datasource></definition>'),
+            'spectrum_uchar': ('<definition><datasource type="TANGO" name="spectrum_uchar">'
+                     '<record name="SpectrumUChar"/>'
+                     '<device member="attribute" name="ttestp09/testts/t1r228"/>'
+                     '</datasource></definition>'),
+            'image_long': ('<definition><datasource type="TANGO" name="image_long">'
+                     '<record name="ImageLong"/>'
+                     '<device member="attribute" name="ttestp09/testts/t1r228"/>'
+                     '</datasource></definition>'),
+            'image_bool': ('<definition><datasource type="TANGO" name="image_bool">'
+                     '<record name="ImageBoolean"/>'
+                     '<device member="attribute" name="ttestp09/testts/t1r228"/>'
+                     '</datasource></definition>'),
+            'image_short': ('<definition><datasource type="TANGO" name="image_short">'
+                     '<record name="ImageShort"/>'
+                     '<device member="attribute" name="ttestp09/testts/t1r228"/>'
+                     '</datasource></definition>'),
+            'image_ushort': ('<definition><datasource type="TANGO" name="image_ushort">'
+                     '<record name="ImageUShort"/>'
+                     '<device member="attribute" name="ttestp09/testts/t1r228"/>'
+                     '</datasource></definition>'),
+            'image_ulong': ('<definition><datasource type="TANGO" name="image_ulong">'
+                     '<record name="ImageULong"/>'
+                     '<device member="attribute" name="ttestp09/testts/t1r228"/>'
+                     '</datasource></definition>'),
+            'image_long64': ('<definition><datasource type="TANGO" name="image_long64">'
+                     '<record name="ImageLong64"/>'
+                     '<device member="attribute" name="ttestp09/testts/t1r228"/>'
+                     '</datasource></definition>'),
+            'image_ulong64': ('<definition><datasource type="TANGO" name="image_ulong64">'
+                     '<record name="ImageULong64"/>'
+                     '<device member="attribute" name="ttestp09/testts/t1r228"/>'
+                     '</datasource></definition>'),
+            'image_float': ('<definition><datasource type="TANGO" name="image_float">'
+                     '<record name="ImageFloat"/>'
+                     '<device member="attribute" name="ttestp09/testts/t1r228"/>'
+                     '</datasource></definition>'),
+            'image_double': ('<definition><datasource type="TANGO" name="image_double">'
+                     '<record name="ImageDouble"/>'
+                     '<device member="attribute" name="ttestp09/testts/t1r228"/>'
+                     '</datasource></definition>'),
+            'image_string': ('<definition><datasource type="TANGO" name="image_string">'
+                     '<record name="ImageString"/>'
+                     '<device member="attribute" name="ttestp09/testts/t1r228"/>'
+                     '</datasource></definition>'),
+            'image_Encoded': ('<definition><datasource type="TANGO" name="image_encoded">'
+                     '<record name="ImageEncoded"/>'
+                     '<device member="attribute" name="ttestp09/testts/t1r228"/>'
+                     '</datasource></definition>'),
+            'image_uchar': ('<definition><datasource type="TANGO" name="image_uchar">'
+                     '<record name="ImageUChar"/>'
+                     '<device member="attribute" name="ttestp09/testts/t1r228"/>'
+                     '</datasource></definition>'),
+            }
+
+
+        self.smydss2 = {
+            'scalar2_long': ('<definition><datasource type="TANGO" name="scalar2_long">'
+                     '<record name="ScalarLong"/>'
+                     '<device member="attribute" name="ttestp09/testts/t2r228"/>'
+                     '</datasource></definition>'),
+            'scalar2_bool': ('<definition><datasource type="TANGO" name="scalar2_bool">'
+                     '<record name="ScalarBoolean"/>'
+                     '<device member="attribute" name="ttestp09/testts/t2r228"/>'
+                     '</datasource></definition>'),
+            'scalar2_short': ('<definition><datasource type="TANGO" name="scalar2_short">'
+                     '<record name="ScalarShort"/>'
+                     '<device member="attribute" name="ttestp09/testts/t2r228"/>'
+                     '</datasource></definition>'),
+            'scalar2_ushort': ('<definition><datasource type="TANGO" name="scalar2_ushort">'
+                     '<record name="ScalarUShort"/>'
+                     '<device member="attribute" name="ttestp09/testts/t2r228"/>'
+                     '</datasource></definition>'),
+            'scalar2_ulong': ('<definition><datasource type="TANGO" name="scalar2_ulong">'
+                     '<record name="ScalarULong"/>'
+                     '<device member="attribute" name="ttestp09/testts/t2r228"/>'
+                     '</datasource></definition>'),
+            'scalar2_long64': ('<definition><datasource type="TANGO" name="scalar2_long64">'
+                     '<record name="ScalarLong64"/>'
+                     '<device member="attribute" name="ttestp09/testts/t2r228"/>'
+                     '</datasource></definition>'),
+            'scalar2_ulong64': ('<definition><datasource type="TANGO" name="scalar2_ulong64">'
+                     '<record name="ScalarULong64"/>'
+                     '<device member="attribute" name="ttestp09/testts/t2r228"/>'
+                     '</datasource></definition>'),
+            'scalar2_float': ('<definition><datasource type="TANGO" name="scalar2_float">'
+                     '<record name="ScalarFloat"/>'
+                     '<device member="attribute" name="ttestp09/testts/t2r228"/>'
+                     '</datasource></definition>'),
+            'scalar2_double': ('<definition><datasource type="TANGO" name="scalar2_double">'
+                     '<record name="ScalarDouble"/>'
+                     '<device member="attribute" name="ttestp09/testts/t2r228"/>'
+                     '</datasource></definition>'),
+            'scalar2_string': ('<definition><datasource type="TANGO" name="scalar2_string">'
+                     '<record name="ScalarString"/>'
+                     '<device member="attribute" name="ttestp09/testts/t2r228"/>'
+                     '</datasource></definition>'),
+            'scalar2_Encoded': ('<definition><datasource type="TANGO" name="scalar2_encoded">'
+                     '<record name="ScalarEncoded"/>'
+                     '<device member="attribute" name="ttestp09/testts/t2r228"/>'
+                     '</datasource></definition>'),
+            'scalar2_uchar': ('<definition><datasource type="TANGO" name="scalar2_uchar">'
+                     '<record name="ScalarUChar"/>'
+                     '<device member="attribute" name="ttestp09/testts/t2r228"/>'
+                     '</datasource></definition>'),
+            'spectrum2_long': ('<definition><datasource type="TANGO" name="spectrum2_long">'
+                     '<record name="SpectrumLong"/>'
+                     '<device member="attribute" name="ttestp09/testts/t2r228"/>'
+                     '</datasource></definition>'),
+            'spectrum2_bool': ('<definition><datasource type="TANGO" name="spectrum2_bool">'
+                     '<record name="SpectrumBoolean"/>'
+                     '<device member="attribute" name="ttestp09/testts/t2r228"/>'
+                     '</datasource></definition>'),
+            'spectrum2_short': ('<definition><datasource type="TANGO" name="spectrum2_short">'
+                     '<record name="SpectrumShort"/>'
+                     '<device member="attribute" name="ttestp09/testts/t2r228"/>'
+                     '</datasource></definition>'),
+            'spectrum2_ushort': ('<definition><datasource type="TANGO" name="spectrum2_ushort">'
+                     '<record name="SpectrumUShort"/>'
+                     '<device member="attribute" name="ttestp09/testts/t2r228"/>'
+                     '</datasource></definition>'),
+            'spectrum2_ulong': ('<definition><datasource type="TANGO" name="spectrum2_ulong">'
+                     '<record name="SpectrumULong"/>'
+                     '<device member="attribute" name="ttestp09/testts/t2r228"/>'
+                     '</datasource></definition>'),
+            'spectrum2_long64': ('<definition><datasource type="TANGO" name="spectrum2_long64">'
+                     '<record name="SpectrumLong64"/>'
+                     '<device member="attribute" name="ttestp09/testts/t2r228"/>'
+                     '</datasource></definition>'),
+            'spectrum2_ulong64': ('<definition><datasource type="TANGO" name="spectrum2_ulong64">'
+                     '<record name="SpectrumULong64"/>'
+                     '<device member="attribute" name="ttestp09/testts/t2r228"/>'
+                     '</datasource></definition>'),
+            'spectrum2_float': ('<definition><datasource type="TANGO" name="spectrum2_float">'
+                     '<record name="SpectrumFloat"/>'
+                     '<device member="attribute" name="ttestp09/testts/t2r228"/>'
+                     '</datasource></definition>'),
+            'spectrum2_double': ('<definition><datasource type="TANGO" name="spectrum2_double">'
+                     '<record name="SpectrumDouble"/>'
+                     '<device member="attribute" name="ttestp09/testts/t2r228"/>'
+                     '</datasource></definition>'),
+            'spectrum2_string': ('<definition><datasource type="TANGO" name="spectrum2_string">'
+                     '<record name="SpectrumString"/>'
+                     '<device member="attribute" name="ttestp09/testts/t2r228"/>'
+                     '</datasource></definition>'),
+            'spectrum2_Encoded': ('<definition><datasource type="TANGO" name="spectrum2_encoded">'
+                     '<record name="SpectrumEncoded"/>'
+                     '<device member="attribute" name="ttestp09/testts/t2r228"/>'
+                     '</datasource></definition>'),
+            'spectrum2_uchar': ('<definition><datasource type="TANGO" name="spectrum2_uchar">'
+                     '<record name="SpectrumUChar"/>'
+                     '<device member="attribute" name="ttestp09/testts/t2r228"/>'
+                     '</datasource></definition>'),
+            'image2_long': ('<definition><datasource type="TANGO" name="image2_long">'
+                     '<record name="ImageLong"/>'
+                     '<device member="attribute" name="ttestp09/testts/t2r228"/>'
+                     '</datasource></definition>'),
+            'image2_bool': ('<definition><datasource type="TANGO" name="image2_bool">'
+                     '<record name="ImageBoolean"/>'
+                     '<device member="attribute" name="ttestp09/testts/t2r228"/>'
+                     '</datasource></definition>'),
+            'image2_short': ('<definition><datasource type="TANGO" name="image2_short">'
+                     '<record name="ImageShort"/>'
+                     '<device member="attribute" name="ttestp09/testts/t2r228"/>'
+                     '</datasource></definition>'),
+            'image2_ushort': ('<definition><datasource type="TANGO" name="image2_ushort">'
+                     '<record name="ImageUShort"/>'
+                     '<device member="attribute" name="ttestp09/testts/t2r228"/>'
+                     '</datasource></definition>'),
+            'image2_ulong': ('<definition><datasource type="TANGO" name="image2_ulong">'
+                     '<record name="ImageULong"/>'
+                     '<device member="attribute" name="ttestp09/testts/t2r228"/>'
+                     '</datasource></definition>'),
+            'image2_long64': ('<definition><datasource type="TANGO" name="image2_long64">'
+                     '<record name="ImageLong64"/>'
+                     '<device member="attribute" name="ttestp09/testts/t2r228"/>'
+                     '</datasource></definition>'),
+            'image2_ulong64': ('<definition><datasource type="TANGO" name="image2_ulong64">'
+                     '<record name="ImageULong64"/>'
+                     '<device member="attribute" name="ttestp09/testts/t2r228"/>'
+                     '</datasource></definition>'),
+            'image2_float': ('<definition><datasource type="TANGO" name="image2_float">'
+                     '<record name="ImageFloat"/>'
+                     '<device member="attribute" name="ttestp09/testts/t2r228"/>'
+                     '</datasource></definition>'),
+            'image2_double': ('<definition><datasource type="TANGO" name="image2_double">'
+                     '<record name="ImageDouble"/>'
+                     '<device member="attribute" name="ttestp09/testts/t2r228"/>'
+                     '</datasource></definition>'),
+            'image2_string': ('<definition><datasource type="TANGO" name="image2_string">'
+                     '<record name="ImageString"/>'
+                     '<device member="attribute" name="ttestp09/testts/t2r228"/>'
+                     '</datasource></definition>'),
+            'image2_Encoded': ('<definition><datasource type="TANGO" name="image2_encoded">'
+                     '<record name="ImageEncoded"/>'
+                     '<device member="attribute" name="ttestp09/testts/t2r228"/>'
+                     '</datasource></definition>'),
+            'image2_uchar': ('<definition><datasource type="TANGO" name="image2_uchar">'
+                     '<record name="ImageUChar"/>'
+                     '<device member="attribute" name="ttestp09/testts/t2r228"/>'
+                     '</datasource></definition>'),
+            }
         self.mydss = {
             'nn': ('<?xml version=\'1.0\'?><definition><datasource type="TANGO">'
                     '</datasource></definition>'),
@@ -407,7 +736,7 @@ class MacroServerPoolTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
-    def test_constructor(self):
+    def ttest_constructor(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         msp = MacroServerPools(0)
@@ -415,7 +744,7 @@ class MacroServerPoolTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
-    def test_getMacroServer(self):
+    def ttest_getMacroServer(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         msp = MacroServerPools(0)
@@ -446,7 +775,7 @@ class MacroServerPoolTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
-    def test_getPool(self):
+    def ttest_getPool(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         msp = MacroServerPools(10)
@@ -497,7 +826,7 @@ class MacroServerPoolTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
-    def test_getPool_1to3(self):
+    def ttest_getPool_1to3(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         doors = ["door2testp09/testts/t1r228","door2testp09/testts/t2r228","door2testp09/testts/t3r228"]
@@ -560,7 +889,7 @@ class MacroServerPoolTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
-    def test_getPool_3to3(self):
+    def ttest_getPool_3to3(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         doors = ["door3testp09/testts/t1r228","door3testp09/testts/t2r228","door3testp09/testts/t3r228"]
@@ -624,12 +953,12 @@ class MacroServerPoolTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
-    def test_checkComponentChannels_simple(self):
+    def ttest_checkComponentChannels_simple(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         msp = MacroServerPools(0)
         msp = MacroServerPools(10)
-        nonexisting = []
+        channelerrors = []
         poolchannels = []
         componentgroup = {}
         self.myAssertRaise(Exception, msp.checkComponentChannels, None, None, None, None, None)
@@ -637,20 +966,21 @@ class MacroServerPoolTest(unittest.TestCase):
                                    self._cf.dp, 
                                    poolchannels,
                                    componentgroup,
-                                   nonexisting)
+                                   channelerrors)
         self.assertEqual(res, '{}')
         print self._cf.dp.GetCommandVariable("COMMANDS")
-        self.assertEqual(json.loads(self._cf.dp.GetCommandVariable("COMMANDS")), ['AvailableComponents'])
-        self.assertEqual(json.loads(self._cf.dp.GetCommandVariable("VARS")), [None])
+        self.assertEqual(json.loads(self._cf.dp.GetCommandVariable("COMMANDS")), 
+                         ['AvailableComponents','AvailableDataSources','AvailableComponents'])
+        self.assertEqual(json.loads(self._cf.dp.GetCommandVariable("VARS")), [None, None, None])
 
     ## constructor test
     # \brief It tests default settings
-    def test_checkComponentChannels_withcf(self):
+    def ttest_checkComponentChannels_withcf(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         msp = MacroServerPools(0)
         msp = MacroServerPools(10)
-        nonexisting = []
+        channelerrors = []
         poolchannels = []
         componentgroup = {}
 
@@ -661,24 +991,25 @@ class MacroServerPoolTest(unittest.TestCase):
                                    self._cf.dp, 
                                    poolchannels,
                                    componentgroup,
-                                   nonexisting)
+                                   channelerrors)
         self.assertEqual(res, '{}')
         self.assertEqual(componentgroup, {})
-        self.assertEqual(nonexisting, [])
+        self.assertEqual(channelerrors, [])
         print self._cf.dp.GetCommandVariable("COMMANDS")
-        self.assertEqual(json.loads(self._cf.dp.GetCommandVariable("COMMANDS")), ['AvailableComponents'])
-        self.assertEqual(json.loads(self._cf.dp.GetCommandVariable("VARS")), [None])
+        self.assertEqual(json.loads(self._cf.dp.GetCommandVariable("COMMANDS")), 
+                         ["AvailableComponents", "AvailableDataSources", "AvailableComponents"])
+        self.assertEqual(json.loads(self._cf.dp.GetCommandVariable("VARS")), [None, None, None])
 #        print self._cf.dp.availableComponents()
 
 
     ## constructor test
     # \brief It tests default settings
-    def test_checkComponentChannels_withcf_cps(self):
+    def ttest_checkComponentChannels_withcf_cps(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         msp = MacroServerPools(0)
         msp = MacroServerPools(10)
-        nonexisting = []
+        channelerrors = []
         poolchannels = ["mycp"]
         componentgroup = {"mycp":False}
 
@@ -689,27 +1020,27 @@ class MacroServerPoolTest(unittest.TestCase):
                                    self._cf.dp, 
                                    poolchannels,
                                    componentgroup,
-                                   nonexisting)
+                                   channelerrors)
         self.myAssertDict(json.loads(res), {"mycp":True})
         self.assertEqual(componentgroup, {"mycp":True})
-        self.assertEqual(nonexisting, [])
+        self.assertEqual(channelerrors, [])
 
         print self._cf.dp.GetCommandVariable("COMMANDS")
         self.assertEqual(json.loads(self._cf.dp.GetCommandVariable("COMMANDS")), 
-                         ["AvailableComponents", "AvailableComponents", "Components", "AvailableDataSources"])
-        self.assertEqual(json.loads(self._cf.dp.GetCommandVariable("VARS")),[None, None, ['mycp'], None] )
+                         ["AvailableComponents", "AvailableDataSources", "AvailableComponents", "Components"])
+        self.assertEqual(json.loads(self._cf.dp.GetCommandVariable("VARS")),[None, None, None, ['mycp']] )
 #        print self._cf.dp.availableComponents()
 
 
 
     ## constructor test
     # \brief It tests default settings
-    def test_checkComponentChannels_withcf_nocps(self):
+    def ttest_checkComponentChannels_withcf_nocps(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         msp = MacroServerPools(0)
         msp = MacroServerPools(10)
-        nonexisting = []
+        channelerrors = []
         poolchannels = ["mycp"]
         componentgroup = {}
 
@@ -720,25 +1051,25 @@ class MacroServerPoolTest(unittest.TestCase):
                                    self._cf.dp, 
                                    poolchannels,
                                    componentgroup,
-                                   nonexisting)
+                                   channelerrors)
         self.myAssertDict(json.loads(res), {})
         self.assertEqual(componentgroup, {})
-        self.assertEqual(nonexisting, [])
+        self.assertEqual(channelerrors, [])
 
         print self._cf.dp.GetCommandVariable("COMMANDS")
         self.assertEqual(json.loads(self._cf.dp.GetCommandVariable("COMMANDS")), 
-                         ["AvailableComponents"])
-        self.assertEqual(json.loads(self._cf.dp.GetCommandVariable("VARS")),[None] )
+                         ["AvailableComponents", "AvailableDataSources", "AvailableComponents"])
+        self.assertEqual(json.loads(self._cf.dp.GetCommandVariable("VARS")),[None, None, None] )
 
 #        print self._cf.dp.availableComponents()
     ## constructor test
     # \brief It tests default settings
-    def test_checkComponentChannels_withcf_nocps(self):
+    def ttest_checkComponentChannels_withcf_nochnnel(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         msp = MacroServerPools(0)
         msp = MacroServerPools(10)
-        nonexisting = []
+        channelerrors = []
         poolchannels = []
         componentgroup = {"mycp":True}
 
@@ -749,16 +1080,120 @@ class MacroServerPoolTest(unittest.TestCase):
                                    self._cf.dp, 
                                    poolchannels,
                                    componentgroup,
-                                   nonexisting)
+                                   channelerrors)
         self.myAssertDict(json.loads(res), {"mycp":True})
         self.assertEqual(componentgroup, {"mycp":True})
-        self.assertEqual(nonexisting, [])
+        self.assertEqual(channelerrors, [])
 
         print self._cf.dp.GetCommandVariable("COMMANDS")
         self.assertEqual(json.loads(self._cf.dp.GetCommandVariable("COMMANDS")), 
-                         ["AvailableComponents", "AvailableComponents", "Components", "AvailableDataSources"])
-        self.assertEqual(json.loads(self._cf.dp.GetCommandVariable("VARS")),[None, None, ['mycp'], None] )
+                         ["AvailableComponents", "AvailableDataSources", "AvailableComponents", "Components"])
+        self.assertEqual(json.loads(self._cf.dp.GetCommandVariable("VARS")),[None, None, None, ['mycp']] )
 #        print self._cf.dp.availableComponents()
+
+
+    ## constructor test
+    # \brief It tests default settings
+    def ttest_checkComponentChannels_wds(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        msp = MacroServerPools(0)
+        msp = MacroServerPools(10)
+        channelerrors = []
+        poolchannels = []
+        componentgroup = {"smycp":True}
+
+        self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.smycps)])
+        self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
+
+        res = msp.checkComponentChannels(self._ms.door.keys()[0],
+                                   self._cf.dp, 
+                                   poolchannels,
+                                   componentgroup,
+                                   channelerrors)
+        
+        print res
+        self.myAssertDict(json.loads(res), {"smycp":True})
+        self.assertEqual(componentgroup, {"smycp":True})
+        self.assertEqual(channelerrors, [])
+
+        print self._cf.dp.GetCommandVariable("COMMANDS")
+        self.assertEqual(json.loads(self._cf.dp.GetCommandVariable("COMMANDS")), 
+                         ["AvailableComponents", "AvailableDataSources", "AvailableComponents", 
+                          "Components"])
+        self.assertEqual(json.loads(self._cf.dp.GetCommandVariable("VARS")),[None, None, None, ['smycp']] )
+
+
+    ## constructor test
+    # \brief It tests default settings
+    def ttest_checkComponentChannels_wds2(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        msp = MacroServerPools(0)
+        msp = MacroServerPools(10)
+        channelerrors = []
+        poolchannels = []
+        componentgroup = {"smycp":False,"smycp2":False,"smycp3":False}
+
+        self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.smycps)])
+        self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
+
+        res = msp.checkComponentChannels(self._ms.door.keys()[0],
+                                   self._cf.dp, 
+                                   poolchannels,
+                                   componentgroup,
+                                   channelerrors)
+        
+        self.myAssertDict(json.loads(res), {"smycp":True,"smycp2":True,"smycp3":True})
+        self.assertEqual(componentgroup, {"smycp":True,"smycp2":True,"smycp3":True})
+        self.assertEqual(channelerrors, [])
+
+        print self._cf.dp.GetCommandVariable("COMMANDS")
+        self.assertEqual(json.loads(self._cf.dp.GetCommandVariable("COMMANDS")), 
+                         ["AvailableComponents", "AvailableDataSources", "AvailableComponents", 
+                          "Components", "Components", "Components"])
+        res = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+        self.assertEqual(sorted(componentgroup.keys()),sorted([res[3][0], res[4][0], res[5][0]]) )
+
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_checkComponentChannels_2wds(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        msp = MacroServerPools(0)
+        msp = MacroServerPools(10)
+        channelerrors = []
+        poolchannels = []
+        componentgroup = {"smycp":False,"smycp2":False,"smycp3":False,
+                          "s2mycp":False,"s2mycp2":False,"s2mycp3":False}
+
+        cps = dict(self.smycps)
+        cps.update(self.smycps2)
+        dss = dict(self.smydss)
+        dss.update(self.smydss2)
+
+        self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
+        self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
+        print "MDSS", self._cf.dp.availableDataSources()
+        print "XDSS", self._cf.dp.dataSources(["scalar_long"])
+        res = msp.checkComponentChannels(self._ms.door.keys()[0],
+                                   self._cf.dp, 
+                                   poolchannels,
+                                   componentgroup,
+                                   channelerrors)
+        print res 
+
+        self.myAssertDict(json.loads(res), {"smycp":True,"smycp2":True,"smycp3":True})
+        self.assertEqual(componentgroup, {"smycp":True,"smycp2":True,"smycp3":True})
+        self.assertEqual(channelerrors, [])
+
+        print self._cf.dp.GetCommandVariable("COMMANDS")
+        self.assertEqual(json.loads(self._cf.dp.GetCommandVariable("COMMANDS")), 
+                         ["AvailableComponents", "AvailableDataSources", "AvailableComponents", 
+                          "Components", "Components", "Components"])
+        res = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+        self.assertEqual(sorted(componentgroup.keys()),sorted([res[3][0], res[4][0], res[5][0]]) )
 
 
 

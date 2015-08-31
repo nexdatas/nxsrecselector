@@ -119,6 +119,12 @@ class Describer(object):
     def __init__(self, nexusconfig_device, tree=False):
         self.__nexusconfig_device = nexusconfig_device
         self.__treeOutput = tree
+        self.__availableComponents = TangoUtils.command(
+            self.__nexusconfig_device,
+            "availableComponents")
+        self.__availableDataSources =TangoUtils.command(
+            self.__nexusconfig_device,
+            "availableDataSources")
 
     ## describes given components
     # \param components given components.
@@ -132,12 +138,9 @@ class Describer(object):
         result = []
 
         if components is not None:
-            cpp = TangoUtils.command(self.__nexusconfig_device,
-                                "availableComponents")
-            cps = [cp for cp in components if cp in cpp]
+            cps = [cp for cp in components if cp in self.__availableComponents]
         else:
-            cps = TangoUtils.command(self.__nexusconfig_device,
-                                "availableComponents")
+            cps = list(self.__availableComponents)
 
         if self.__treeOutput:
             result = [{}]
@@ -325,8 +328,7 @@ class Describer(object):
     # \param dstype list datasources only with given type.
     #        If '' all available ones are taken
     def dataSources(self, names=None, dstype=''):
-        ads = TangoUtils.command(self.__nexusconfig_device,
-                            "availableDataSources")
+        ads = list(self.__availableDataSources)
         if names is not None:
             dss = [name for name in names if name in ads]
         else:

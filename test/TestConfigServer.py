@@ -257,7 +257,7 @@ class NXSConfigServer(PyTango.Device_4Impl):
         print >> self.log_info, "In ", self.get_name(), "::DataSources()"
         self.cmd["VARS"].append(names)
         self.cmd["COMMANDS"].append("DataSources")
-        return [self.cmd["DSDICT"][nm] for nm in names if nm in self.cmd["CPDICT"].keys()]
+        return [self.cmd["DSDICT"][nm] for nm in names if nm in self.cmd["DSDICT"].keys()]
 
 #------------------------------------------------------------------
 #    AvailableComponents command:
