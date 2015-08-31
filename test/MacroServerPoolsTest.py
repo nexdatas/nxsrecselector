@@ -1803,7 +1803,7 @@ class MacroServerPoolTest(unittest.TestCase):
             db.delete_device_alias(arr[0]["name"])
             simps2.tearDown()
             
-  ## constructor test
+   ## constructor test
     # \brief It tests default settings
     def test_checkComponentChannels_2wds_notangodspool_alias_value(self):
         fun = sys._getframe().f_code.co_name
@@ -1855,6 +1855,63 @@ class MacroServerPoolTest(unittest.TestCase):
                     "smycp":True,"smycp2":True,"smycp3":True,
                     "s2mycp":True,"s2mycp2":True,"s2mycp3":True,"smycpnt1":True})
             self.assertEqual(len(channelerrors), 0)
+
+    #        print self._cf.dp.GetCommandVariable("COMMANDS")
+            res = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+        finally:
+            db.delete_device_alias(arr[0]["name"])
+            simps2.tearDown()
+            
+  ## constructor test
+    # \brief It tests default settings
+    def test_checkComponentChannels_2wds_notangodspool_alias_novalue(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        simps2 = TestServerSetUp.TestServerSetUp( "ttestp09/testts/t2r228", "S2")
+        db = PyTango.Database()
+
+        arr = [
+            {"name":"client2_short", "full_name":"ttestp09/testts/t2r228"} ,
+            ]
+        try:
+            simps2.add()
+            msp = MacroServerPools(10)
+            db.put_device_alias(arr[0]["full_name"],arr[0]["name"])
+            db.put_device_property(self._ms.ms.keys()[0], {'PoolNames':self._pool.dp.name()})
+            channelerrors = []
+            poolchannels = ["scalar2_long", "spectrum2_short", "client2_short"]
+            componentgroup = {
+                "smycp":False,"smycp2":False,"smycp3":False,
+                "s2mycpnt1":False,
+#                "s2mycp":False,"s2mycp2":False,"s2mycp3":False
+                }
+
+            cps = dict(self.smycps)
+            cps.update(self.smycps2)
+            dss = dict(self.smydss)
+            dss.update(self.smydss2)
+
+            self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
+            self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
+            msp.updateMacroServer(self._ms.door.keys()[0])
+            pools = msp.getPools(self._ms.door.keys()[0])
+            pools[0].AcqChannelList = [json.dumps(a) for a in arr]
+            print "POOLS", pools
+            res = msp.checkComponentChannels(self._ms.door.keys()[0],
+                                       self._cf.dp, 
+                                       poolchannels,
+                                       componentgroup,
+                                       channelerrors)
+#            print res 
+#            print channelerrors
+
+            self.myAssertDict(json.loads(res), {
+                    "smycp":True,"smycp2":True,"smycp3":True,
+                    "s2mycpnt1":False})
+            self.myAssertDict(componentgroup, {
+                    "smycp":True,"smycp2":True,"smycp3":True,
+                    "s2mycpnt1":False})
+            self.assertEqual(len(channelerrors), 1)
 
     #        print self._cf.dp.GetCommandVariable("COMMANDS")
             res = json.loads(self._cf.dp.GetCommandVariable("VARS"))
