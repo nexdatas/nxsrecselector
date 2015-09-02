@@ -122,7 +122,7 @@ class Describer(object):
         self.__availableComponents = TangoUtils.command(
             self.__nexusconfig_device,
             "availableComponents")
-        self.__availableDataSources =TangoUtils.command(
+        self.__availableDataSources = TangoUtils.command(
             self.__nexusconfig_device,
             "availableDataSources")
 

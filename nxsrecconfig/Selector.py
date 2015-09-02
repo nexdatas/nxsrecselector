@@ -37,7 +37,6 @@ class Selector(object):
 
         ## macro server and pools
         self.__msp = macroserverpools
-#        self.__numberOfThreads = numberOfThreads
 
         ##  dictionary with Settings
         self.__selection = Selection()

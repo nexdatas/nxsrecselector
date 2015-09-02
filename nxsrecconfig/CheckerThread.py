@@ -117,6 +117,7 @@ class CheckerThread(threading.Thread):
                 checkeritem.active = False
                 break
 
+
 ## Alarm State Exception class
 class AlarmStateError(Exception):
     pass

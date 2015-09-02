@@ -144,7 +144,7 @@ class MacroServerPools(object):
         return toCheck.values()
 
     ## checks component channels
-    # \param door door device name 
+    # \param door door device name
     # \param configdevice configuration server
     # \param channels pool channels
     # \param componentgroup automatic component group

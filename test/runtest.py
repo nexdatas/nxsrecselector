@@ -29,13 +29,7 @@ from optparse import OptionParser
 #import TangoDataWriterTest
 #import DescriberTest
 
-try:
-    import PyTango
-    ## if module PyTango avalable
-    PYTANGO_AVAILABLE = True
-except ImportError, e:
-    PYTANGO_AVAILABLE = False
-    print "PyTango is not available: %s" % e
+import PyTango
     
 ## list of available databases
 DB_AVAILABLE = []
@@ -50,12 +44,11 @@ import TangoDSItemTest
 import CheckerItemTest
 import CheckerThreadTest
 import SelectionTest
+import SelectorTest
 import MacroServerPoolsTest
     
 
-if PYTANGO_AVAILABLE:
-#    import NXSDataWriterTest
-    import UtilsTest
+import UtilsTest
 
 #import TestServerSetUp
 
@@ -91,6 +84,8 @@ def main():
 
     suite.addTests(
         unittest.defaultTestLoader.loadTestsFromModule(SelectionTest) )
+    suite.addTests(
+        unittest.defaultTestLoader.loadTestsFromModule(SelectorTest) )
 
     suite.addTests(
         unittest.defaultTestLoader.loadTestsFromModule(TangoDSItemTest) )
@@ -109,15 +104,14 @@ def main():
         unittest.defaultTestLoader.loadTestsFromModule(DescriberTest) )
 
 
-    if PYTANGO_AVAILABLE:
-        suite.addTests(
-            unittest.defaultTestLoader.loadTestsFromModule(UtilsTest) )
-
-        suite.addTests(
-            unittest.defaultTestLoader.loadTestsFromModule(CheckerThreadTest) )
-
-        suite.addTests(
-            unittest.defaultTestLoader.loadTestsFromModule(MacroServerPoolsTest) )
+    suite.addTests(
+        unittest.defaultTestLoader.loadTestsFromModule(UtilsTest) )
+    
+    suite.addTests(
+        unittest.defaultTestLoader.loadTestsFromModule(CheckerThreadTest) )
+    
+    suite.addTests(
+        unittest.defaultTestLoader.loadTestsFromModule(MacroServerPoolsTest) )
 
 
 
