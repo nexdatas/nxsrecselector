@@ -761,7 +761,7 @@ class MacroServerPoolTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
-    def ttest_constructor(self):
+    def test_constructor(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         msp = MacroServerPools(0)
@@ -769,7 +769,7 @@ class MacroServerPoolTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
-    def ttest_getMacroServer(self):
+    def test_getMacroServer(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         msp = MacroServerPools(0)
@@ -800,7 +800,7 @@ class MacroServerPoolTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
-    def ttest_getPool(self):
+    def test_getPool(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         msp = MacroServerPools(10)
@@ -851,7 +851,7 @@ class MacroServerPoolTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
-    def ttest_getPool_1to3(self):
+    def test_getPool_1to3(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         doors = ["door2testp09/testts/t1r228","door2testp09/testts/t2r228","door2testp09/testts/t3r228"]
@@ -914,7 +914,7 @@ class MacroServerPoolTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
-    def ttest_getPool_3to3(self):
+    def test_getPool_3to3(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         doors = ["door3testp09/testts/t1r228","door3testp09/testts/t2r228","door3testp09/testts/t3r228"]
@@ -978,7 +978,7 @@ class MacroServerPoolTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
-    def ttest_checkComponentChannels_simple(self):
+    def test_checkComponentChannels_simple(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         msp = MacroServerPools(0)
@@ -1000,7 +1000,7 @@ class MacroServerPoolTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
-    def ttest_checkComponentChannels_withcf(self):
+    def test_checkComponentChannels_withcf(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         msp = MacroServerPools(0)
@@ -1029,7 +1029,7 @@ class MacroServerPoolTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
-    def ttest_checkComponentChannels_withcf_cps(self):
+    def test_checkComponentChannels_withcf_cps(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         msp = MacroServerPools(0)
@@ -1060,7 +1060,7 @@ class MacroServerPoolTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
-    def ttest_checkComponentChannels_withcf_nocps(self):
+    def test_checkComponentChannels_withcf_nocps(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         msp = MacroServerPools(0)
@@ -1089,7 +1089,7 @@ class MacroServerPoolTest(unittest.TestCase):
 #        print self._cf.dp.availableComponents()
     ## constructor test
     # \brief It tests default settings
-    def ttest_checkComponentChannels_withcf_nochnnel(self):
+    def test_checkComponentChannels_withcf_nochnnel(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         msp = MacroServerPools(0)
@@ -1119,7 +1119,7 @@ class MacroServerPoolTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
-    def ttest_checkComponentChannels_wds(self):
+    def test_checkComponentChannels_wds(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         msp = MacroServerPools(0)
@@ -1151,7 +1151,7 @@ class MacroServerPoolTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
-    def ttest_checkComponentChannels_wds2(self):
+    def test_checkComponentChannels_wds2(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         msp = MacroServerPools(0)
@@ -1185,7 +1185,7 @@ class MacroServerPoolTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
-    def ttest_checkComponentChannels_2wds(self):
+    def test_checkComponentChannels_2wds(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         simps2 = TestServerSetUp.TestServerSetUp( "ttestp09/testts/t2r228", "S2")
@@ -1238,7 +1238,7 @@ class MacroServerPoolTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
-    def ttest_checkComponentChannels_2wds_dvnorunning(self):
+    def test_checkComponentChannels_2wds_dvnorunning(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         simps2 = TestServerSetUp.TestServerSetUp( "ttestp09/testts/t2r228", "S2")
@@ -1291,7 +1291,7 @@ class MacroServerPoolTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
-    def ttest_checkComponentChannels_2wds_dvnodef(self):
+    def test_checkComponentChannels_2wds_dvnodef(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         msp = MacroServerPools(1)
@@ -1341,7 +1341,7 @@ class MacroServerPoolTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
-    def ttest_checkComponentChannels_2wds_nods(self):
+    def test_checkComponentChannels_2wds_nods(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         simps2 = TestServerSetUp.TestServerSetUp( "ttestp09/testts/t2r228", "S2")
@@ -1387,7 +1387,7 @@ class MacroServerPoolTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
-    def ttest_checkComponentChannels_2wds_nodspool(self):
+    def test_checkComponentChannels_2wds_nodspool(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         simps2 = TestServerSetUp.TestServerSetUp( "ttestp09/testts/t2r228", "S2")
@@ -1431,7 +1431,7 @@ class MacroServerPoolTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
-    def ttest_checkComponentChannels_2wds_notangods(self):
+    def test_checkComponentChannels_2wds_notangods(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         simps2 = TestServerSetUp.TestServerSetUp( "ttestp09/testts/t2r228", "S2")
@@ -1475,7 +1475,7 @@ class MacroServerPoolTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
-    def ttest_checkComponentChannels_2wds_notangodsnopool(self):
+    def test_checkComponentChannels_2wds_notangodsnopool(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         simps2 = TestServerSetUp.TestServerSetUp( "ttestp09/testts/t2r228", "S2")
@@ -1520,7 +1520,7 @@ class MacroServerPoolTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
-    def ttest_checkComponentChannels_2wds_notangodsnopool2(self):
+    def test_checkComponentChannels_2wds_notangodsnopool2(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         simps2 = TestServerSetUp.TestServerSetUp( "ttestp09/testts/t2r228", "S2")
@@ -1570,7 +1570,7 @@ class MacroServerPoolTest(unittest.TestCase):
             
     ## constructor test
     # \brief It tests default settings
-    def ttest_checkComponentChannels_2wds_notangods2(self):
+    def test_checkComponentChannels_2wds_notangods2(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         simps2 = TestServerSetUp.TestServerSetUp( "ttestp09/testts/t2r228", "S2")
@@ -1628,7 +1628,7 @@ class MacroServerPoolTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
-    def ttest_checkComponentChannels_2wds_notangodspool_error(self):
+    def test_checkComponentChannels_2wds_notangodspool_error(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         simps2 = TestServerSetUp.TestServerSetUp( "ttestp09/testts/t2r228", "S2")
@@ -1687,7 +1687,7 @@ class MacroServerPoolTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
-    def ttest_checkComponentChannels_2wds_notangodspool(self):
+    def test_checkComponentChannels_2wds_notangodspool(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         simps2 = TestServerSetUp.TestServerSetUp( "ttestp09/testts/t2r228", "S2")
@@ -1748,7 +1748,7 @@ class MacroServerPoolTest(unittest.TestCase):
 
    ## constructor test
     # \brief It tests default settings
-    def ttest_checkComponentChannels_2wds_notangodspool_alias(self):
+    def test_checkComponentChannels_2wds_notangodspool_alias(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         simps2 = TestServerSetUp.TestServerSetUp( "ttestp09/testts/t2r228", "S2")
@@ -1807,7 +1807,7 @@ class MacroServerPoolTest(unittest.TestCase):
             
    ## constructor test
     # \brief It tests default settings
-    def ttest_checkComponentChannels_2wds_notangodspool_alias_value(self):
+    def test_checkComponentChannels_2wds_notangodspool_alias_value(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         simps2 = TestServerSetUp.TestServerSetUp( "ttestp09/testts/t2r228", "S2")
@@ -1866,7 +1866,7 @@ class MacroServerPoolTest(unittest.TestCase):
             
   ## constructor test
     # \brief It tests default settings
-    def ttest_checkComponentChannels_2wds_notangodspool_alias_novalue(self):
+    def test_checkComponentChannels_2wds_notangodspool_alias_novalue(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         simps2 = TestServerSetUp.TestServerSetUp( "ttestp09/testts/t2r228", "S2")
@@ -1923,7 +1923,7 @@ class MacroServerPoolTest(unittest.TestCase):
             
     ## constructor test
     # \brief It tests default settings
-    def ttest_checkComponentChannels_2wds_nocomponents(self):
+    def test_checkComponentChannels_2wds_nocomponents(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         simps2 = TestServerSetUp.TestServerSetUp( "ttestp09/testts/t2r228", "S2")
@@ -1969,7 +1969,7 @@ class MacroServerPoolTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
-    def ttest_getSelectorEnv_noenv(self):
+    def test_getSelectorEnv_noenv(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
             
@@ -2006,7 +2006,7 @@ class MacroServerPoolTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
-    def ttest_getSelectorEnv(self):
+    def test_getSelectorEnv(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
             
@@ -2209,6 +2209,50 @@ class MacroServerPoolTest(unittest.TestCase):
                     "ScanFile":["file.nxs"], 
                     }
              },
+            {"new":{"ScanDir":"/tmp", 
+                    'ScanID': 192, 
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1', 
+                    "NeXusConfiguration":{"ConfigServer":'ptr/ert/ert',
+                                          "Bool":True,
+                                          "Int":234,
+                                          "Float":123.124,
+                                          "Something":["dgfg"],
+                                          "Dict":{"dgfg":123,"sdf":"345"},
+                                          "CConfigServer":'ptr/ert/ert',
+                                          "CBool":True,
+                                          "CInt":234,
+                                          "CFloat":123.124,
+                                          "CSomething":["dgfg"],
+                                          "CDict":{"dgfg":123,"sdf":"345"}
+                                          },
+                    'ActiveMntGrp': 'nxsmntgrp', 
+                    '_ViewOptions': {'ShowDial': True}, 
+                    'DataCompressionRank': 0, 
+                    "ScanFile":["file.nxs"], 
+                    }
+             },
+            {"new":{"ScanDir":"/tmp", 
+                    'ScanID': 192, 
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1', 
+                    "NeXusConfiguration":{"ConfigServer":'ptr/ert/ert',
+                                          "Bool":True,
+                                          "Int":234,
+                                          "Float":123.124,
+                                          "Something":["dgfg"],
+                                          "Dict":{"dgfg":123,"sdf":"345"},
+                                          "CConfigServer":'ptr/ert/ert',
+                                          "CBool":True,
+                                          "CInt":234,
+                                          "CFloat":123.124,
+                                          "CSomething":json.dumps(["dgfg"]),
+                                          "CDict":json.dumps({"dgfg":123,"sdf":"345"})
+                                          },
+                    'ActiveMntGrp': 'nxsmntgrp', 
+                    '_ViewOptions': {'ShowDial': True}, 
+                    'DataCompressionRank': 0, 
+                    "ScanFile":["file.nxs"], 
+                    }
+             },
            ]
 
         edats = [
@@ -2226,7 +2270,30 @@ class MacroServerPoolTest(unittest.TestCase):
              "Bool":True, "Int":234,"Float":123.124, "Something":["dgfg"],
              "Dict":{"dgfg":123,"sdf":"345"},
              },
+            {"ScanDir":"/tmp", "ScanFile":["file.nxs"],"ConfigServer":"ptr/ert/ert",
+             "Bool":True, "Int":234,"Float":123.124, "Something":["dgfg"],
+             "Dict":{"dgfg":123,"sdf":"345"},
+             },
+            {"ScanDir":"/tmp", "ScanFile":["file.nxs"],"ConfigServer":"ptr/ert/ert",
+             "Bool":True, "Int":234,"Float":123.124, "Something":["dgfg"],
+             "Dict":{"dgfg":123,"sdf":"345"},
+             },
             ] 
+
+        cmds  = [None, None, {}, None, None, None, None, None, 
+                 {"CConfigServer":'ptr/ert/ert',
+                  "CBool":True,
+                  "CInt":234,
+                  "CFloat":123.124,
+                  "CSomething":["dgfg"],
+                  "CDict":{"dgfg":123,"sdf":"345"}},
+                 {"CConfigServer":'ptr/ert/ert',
+                  "CBool":True,
+                  "CInt":234,
+                  "CFloat":123.124,
+                  "CSomething":json.dumps(["dgfg"]),
+                  "CDict":json.dumps({"dgfg":123,"sdf":"345"})},
+                 ]
 
         msp = MacroServerPools(10)
         self.myAssertRaise(Exception, msp.setSelectorEnv, None, {})
@@ -2234,12 +2301,607 @@ class MacroServerPoolTest(unittest.TestCase):
         msp.setSelectorEnv(self._ms.door.keys()[0], {})
         msp.setSelectorEnv(self._ms.door.keys()[0], {}, {})
         for i, dt in enumerate(edats):
-            msp.setSelectorEnv(self._ms.door.keys()[0], dt)
+            msp.setSelectorEnv(self._ms.door.keys()[0], dt, cmds[i])
 #            print "I = ",i
             data = {}
             env = pickle.loads(self._ms.dps[self._ms.ms.keys()[0]].Environment[1])
 #            print "env", env
 #            print "ei", envs[i]
+            self.myAssertDict(envs[i], env)
+
+
+
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_getScanEnv(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+            
+        envs = [
+            pickle.dumps(
+                {"new":{"ScanDir":"/tmp"}
+                 }
+                ),
+            pickle.dumps(
+                {"new":{"ScanDir":"/tmp", "ScanID": 11}
+                 }
+                ),
+            pickle.dumps(
+                {"new":{"ScanDir":"/tmp", "ScanFile":["file.nxs"]}
+                 }
+                ),
+            pickle.dumps(
+                {"new":{"ScanDir":"/tmp",  "ScanID": 13,
+                        "ScanFile":["file.nxs"], 
+                        "NeXusConfigServer":"ptr/ert/ert",
+                        }
+                 }
+                ),
+            pickle.dumps(
+                {"new":{"ScanDir":"/tmp", 
+                        "ScanFile":["file.nxs","file2.nxs"], 
+                        "NeXusSelectorDevice": "p09/nxsrecselector/1",
+                        "NeXusConfiguration":{"ConfigServer":"ptr/ert/ert2"},
+                        }
+                 }
+                ),
+            pickle.dumps(
+                {"new":{"ScanDir":"/tmp",  "ScanID": 15,
+                        "ScanFile":"file.nxs", 
+                        "NeXusSelectorDevice": "p09/nxsrecselector/1",
+                        "NeXusConfigServer":"ptr/ert/ert",
+                        "NeXusConfiguration":{"ConfigServer":"ptr/ert/ert2"},
+                        }
+                 }
+                ),
+            pickle.dumps(
+                {"new":{"ScanDir":"/tmp", 
+                        "ScanFile":["file.nxs"], 
+                        "NeXusConfigServer":u'ptr/ert/ert',
+                        "NeXusBool":True,
+                        "NeXusInt":234,
+                        "NeXusSelectorDevice": "p09/nxsrecselector/1",
+                        "NeXusFloat":123.123,
+                        "NeXusSomething":("dgfg",),
+                        "NeXusDict":{"dgfg":123,"sdf":"345"},
+                        }
+                 }
+                ),
+            pickle.dumps(
+                {"new":{"ScanDir":"/tmp",  "ScanID": 17,
+                        "ScanFile":["file.nxs"], 
+                        "NeXusSelectorDevice": "p09/nxsrecselector/1",
+                        "NeXusConfiguration":{"ConfigServer":u'ptr/ert/ert',
+                        "Bool":True,
+                        "Int":234,
+                        "Float":123.123,
+                        "Something":("dgfg",),
+                        "Dict":{"dgfg":123,"sdf":"345"}}
+                        }
+                 }
+                ),
+            ]
+
+        edats = [
+            {"ScanDir":"/tmp"},
+            {"ScanDir":"/tmp", "ScanID": 11},
+            {"ScanDir":"/tmp", "ScanFile":["file.nxs"]},
+            {"ScanDir":"/tmp", "ScanFile":["file.nxs"], "ScanID": 13},
+            {"ScanDir":"/tmp", "ScanFile":["file.nxs","file2.nxs"],"NeXusSelectorDevice": "p09/nxsrecselector/1"},
+            {"ScanDir":"/tmp", "ScanFile":"file.nxs", "ScanID": 15,"NeXusSelectorDevice": "p09/nxsrecselector/1"},
+            {"ScanDir":"/tmp", "ScanFile":["file.nxs"],"NeXusSelectorDevice": "p09/nxsrecselector/1"},
+            {"ScanDir":"/tmp", "ScanFile":["file.nxs"], "ScanID": 17,"NeXusSelectorDevice": "p09/nxsrecselector/1"},             
+            ] 
+
+        msp = MacroServerPools(10)
+        self.myAssertRaise(Exception, msp.getScanEnv, None)
+        data = {"ScanID": 192, "NeXusSelectorDevice": "p09/nxsrecselector/1", "ScanFile": ["sar4r.nxs"], "ScanDir": "/tmp/"}
+        res = msp.getScanEnv(self._ms.door.keys()[0])
+        self.myAssertDict(json.loads(res),data)
+        for i, dt in enumerate(edats):
+#            print "I = ",i
+            data = {}
+            self._ms.dps[self._ms.ms.keys()[0]].Environment = ('pickle', envs[i])
+            dt = msp.getScanEnv(self._ms.door.keys()[0])
+#            print edats[i]
+#            print "data",dt
+            self.myAssertDict(edats[i], json.loads(dt))
+
+
+
+
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_setScanEnv(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+            
+        envs = [
+            {"new":{'ScanID': 192, 
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1', 
+                    'ScanFile': [u'sar4r.nxs'], 
+                    'ActiveMntGrp': 'nxsmntgrp', 
+                    '_ViewOptions': {'ShowDial': True}, 
+                    'DataCompressionRank': 0, 
+                    'ScanDir': '/tmp/'}
+             },
+            {"new":{
+                    'ScanID': 192, 
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1', 
+                    'ScanFile': [u'sar4r.nxs'], 
+                    'ActiveMntGrp': 'nxsmntgrp', 
+                    '_ViewOptions': {'ShowDial': True}, 
+                    'DataCompressionRank': 0, 
+                    'ScanDir': '/tmp'}
+             },
+            {"new":{
+                    'ScanID': 11, 
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1', 
+                    'ActiveMntGrp': 'nxsmntgrp', 
+                    '_ViewOptions': {'ShowDial': True}, 
+                    'DataCompressionRank': 0, 
+                    "ScanDir":"/tmp", 
+                    "ScanFile":["file.nxs"]
+                    }
+             },
+            {"new":{"ScanDir":"/tmp", 
+                    'ScanID': 11, 
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1', 
+                    "ConfigServer":"ptr/ert/ert", 
+                    'ActiveMntGrp': 'nxsmntgrp', 
+                    '_ViewOptions': {'ShowDial': True}, 
+                    'DataCompressionRank': 0, 
+                    "ScanFile":["file.nxs"], 
+                    }
+             },
+            {"new":{"ScanDir":"/tmp", 
+                    'ScanID': 13, 
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1', 
+                    "ConfigServer":"ptr/ert/ert2", 
+                    'ActiveMntGrp': 'nxsmntgrp', 
+                    '_ViewOptions': {'ShowDial': True}, 
+                    'DataCompressionRank': 0, 
+                    "ScanFile":["file.nxs","file2.nxs"], 
+                    }
+             },
+            {"new":{"ScanDir":"/tmp", 
+                    'ScanID': 13, 
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1', 
+                    "ConfigServer":"ptr/ert/ert", 
+                    'ActiveMntGrp': 'nxsmntgrp', 
+                    '_ViewOptions': {'ShowDial': True}, 
+                    'DataCompressionRank': 0, 
+                    "ScanFile":"file.nxs", 
+                    }
+             },
+            {"new":{"ScanDir":"/tmp", 
+                    'ScanID': 15, 
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1', 
+                    "ConfigServer":'ptr/ert/ert',
+                    "Bool":True,
+                    "Int":234,
+                    "Float":123.123,
+                    "Something":["dgfg"],
+                    "Dict":{"dgfg":123,"sdf":"345"},
+                    'ActiveMntGrp': 'nxsmntgrp', 
+                    '_ViewOptions': {'ShowDial': True}, 
+                    'DataCompressionRank': 0, 
+                    "ScanFile":["file.nxs"], 
+                    }
+             }, 
+            {"new":{"ScanDir":"/tmp", 
+                    'ScanID': 15, 
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1', 
+                    "ConfigServer":'ptr/ert/ert',
+                    "Bool":True,
+                    "Int":234,
+                    "Float":123.124,
+                    "Something":["dgfg"],
+                    "Dict":{"dgfg":123,"sdf":"345"},
+                    'ActiveMntGrp': 'nxsmntgrp', 
+                    '_ViewOptions': {'ShowDial': True}, 
+                    'DataCompressionRank': 0, 
+                    "ScanFile":["file.nxs"], 
+                    }
+             },
+            {"new":{"ScanDir":"/tmp", 
+                    'ScanID': 17, 
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1', 
+                    "ConfigServer":'ptr/ert/ert',
+                    "Bool":True,
+                    "Int":234,
+                    "Float":123.124,
+                    "Something":["dgfg"],
+                    "Dict":{"dgfg":123,"sdf":"345"},
+                    'ActiveMntGrp': 'nxsmntgrp', 
+                    '_ViewOptions': {'ShowDial': True}, 
+                    'DataCompressionRank': 0, 
+                    "ScanFile":["file.nxs"], 
+                    }
+             },
+            {"new":{"ScanDir":"/tmp", 
+                    'ScanID': 17, 
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1', 
+                    "ConfigServer":'ptr/ert/ert',
+                    "Bool":True,
+                    "Int":234,
+                    "Float":123.124,
+                    "Something":["dgfg"],
+                    "Dict":{"dgfg":123,"sdf":"345"},
+                    'ActiveMntGrp': 'nxsmntgrp', 
+                    '_ViewOptions': {'ShowDial': True}, 
+                    'DataCompressionRank': 0, 
+                    "ScanFile":["file.nxs"], 
+                    }
+             },
+           ]
+
+        edats = [
+            {},
+            {"ScanDir":"/tmp"},
+            {"ScanDir":"/tmp", "ScanFile":["file.nxs"], "ScanID":11},
+            {"ScanDir":"/tmp", "ScanFile":["file.nxs"],"ConfigServer":"ptr/ert/ert"},
+            {"ScanDir":"/tmp", "ScanFile":["file.nxs","file2.nxs"],"ConfigServer":"ptr/ert/ert2", "ScanID":13},
+            {"ScanDir":"/tmp", "ScanFile":"file.nxs", "ConfigServer":"ptr/ert/ert"},
+            {"ScanDir":"/tmp", "ScanFile":["file.nxs"],"ConfigServer":"ptr/ert/ert", "ScanID":15,
+             "Bool":True, "Int":234,"Float":123.123, "Something":["dgfg"],
+             "Dict":{"dgfg":123,"sdf":"345"},
+             },
+            {"ScanDir":"/tmp", "ScanFile":["file.nxs"],"ConfigServer":"ptr/ert/ert",
+             "Bool":True, "Int":234,"Float":123.124, "Something":["dgfg"],
+             "Dict":{"dgfg":123,"sdf":"345"},
+             },
+            {"ScanDir":"/tmp", "ScanFile":["file.nxs"],"ConfigServer":"ptr/ert/ert", "ScanID":17,
+             "Bool":True, "Int":234,"Float":123.124, "Something":["dgfg"],
+             "Dict":{"dgfg":123,"sdf":"345"},
+             },
+            {"ScanDir":"/tmp", "ScanFile":["file.nxs"],"ConfigServer":"ptr/ert/ert",
+             "Bool":True, "Int":234,"Float":123.124, "Something":["dgfg"],
+             "Dict":{"dgfg":123,"sdf":"345"},
+             },
+            ] 
+
+        sids = [192,192,11,11,13,13,15,15,17,17]
+
+        msp = MacroServerPools(10)
+        self.myAssertRaise(Exception, msp.setScanEnv, None, "{}")
+        msp.setScanEnv(self._ms.door.keys()[0], "{}")
+        for i, dt in enumerate(edats):
+            sid = msp.setScanEnv(self._ms.door.keys()[0], json.dumps(dt))
+            print "I = ",i,sid
+            self.assertEqual(sid, sids[i])
+            data = {}
+            env = pickle.loads(self._ms.dps[self._ms.ms.keys()[0]].Environment[1])
+#            print "env", env
+#            print "ei", envs[i]
+            self.myAssertDict(envs[i], env)
+
+            
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_setScanEnv_scanid(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+            
+
+        envs = [
+            pickle.dumps(
+                {"new":{}
+                     }
+                ),
+            pickle.dumps(
+                {"new":{"ScanID":12}
+                     }
+                )
+            ]
+
+        msp = MacroServerPools(10)
+        self.myAssertRaise(Exception, msp.setScanEnv, None, "{}")
+        self.assertEqual(msp.setScanEnv(self._ms.door.keys()[0], "{}"), 192)
+        self._ms.dps[self._ms.ms.keys()[0]].Environment = ('pickle', envs[0])
+        self.assertEqual(msp.setScanEnv(self._ms.door.keys()[0], "{}"), -1)
+        self._ms.dps[self._ms.ms.keys()[0]].Environment = ('pickle', envs[1])
+        self.assertEqual(msp.setScanEnv(self._ms.door.keys()[0], "{}"), 12)
+        
+
+
+
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_setScanEnv(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+            
+        envs = [
+            {"new":{'ScanID': 192, 
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1', 
+                    'ScanFile': [u'sar4r.nxs'], 
+                    'ActiveMntGrp': 'nxsmntgrp', 
+                    '_ViewOptions': {'ShowDial': True}, 
+                    'DataCompressionRank': 0, 
+                    'ScanDir': '/tmp/'}
+             },
+            {"new":{
+                    'ScanID': 192, 
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1', 
+                    'ScanFile': [u'sar4r.nxs'], 
+                    'ActiveMntGrp': 'nxsmntgrp', 
+                    '_ViewOptions': {'ShowDial': True}, 
+                    'DataCompressionRank': 0, 
+                    'ScanDir': '/tmp'}
+             },
+            {"new":{
+                    'ScanID': 11, 
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1', 
+                    'ActiveMntGrp': 'nxsmntgrp', 
+                    '_ViewOptions': {'ShowDial': True}, 
+                    'DataCompressionRank': 0, 
+                    "ScanDir":"/tmp", 
+                    "ScanFile":["file.nxs"]
+                    }
+             },
+            {"new":{"ScanDir":"/tmp", 
+                    'ScanID': 11, 
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1', 
+                    "ConfigServer":"ptr/ert/ert", 
+                    'ActiveMntGrp': 'nxsmntgrp', 
+                    '_ViewOptions': {'ShowDial': True}, 
+                    'DataCompressionRank': 0, 
+                    "ScanFile":["file.nxs"], 
+                    }
+             },
+            {"new":{"ScanDir":"/tmp", 
+                    'ScanID': 13, 
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1', 
+                    "ConfigServer":"ptr/ert/ert2", 
+                    'ActiveMntGrp': 'nxsmntgrp', 
+                    '_ViewOptions': {'ShowDial': True}, 
+                    'DataCompressionRank': 0, 
+                    "ScanFile":["file.nxs","file2.nxs"], 
+                    }
+             },
+            {"new":{"ScanDir":"/tmp", 
+                    'ScanID': 13, 
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1', 
+                    "ConfigServer":"ptr/ert/ert", 
+                    'ActiveMntGrp': 'nxsmntgrp', 
+                    '_ViewOptions': {'ShowDial': True}, 
+                    'DataCompressionRank': 0, 
+                    "ScanFile":"file.nxs", 
+                    }
+             },
+            {"new":{"ScanDir":"/tmp", 
+                    'ScanID': 15, 
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1', 
+                    "ConfigServer":'ptr/ert/ert',
+                    "Bool":True,
+                    "Int":234,
+                    "Float":123.123,
+                    "Something":["dgfg"],
+                    "Dict":{"dgfg":123,"sdf":"345"},
+                    'ActiveMntGrp': 'nxsmntgrp', 
+                    '_ViewOptions': {'ShowDial': True}, 
+                    'DataCompressionRank': 0, 
+                    "ScanFile":["file.nxs"], 
+                    }
+             }, 
+            {"new":{"ScanDir":"/tmp", 
+                    'ScanID': 15, 
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1', 
+                    "ConfigServer":'ptr/ert/ert',
+                    "Bool":True,
+                    "Int":234,
+                    "Float":123.124,
+                    "Something":["dgfg"],
+                    "Dict":{"dgfg":123,"sdf":"345"},
+                    'ActiveMntGrp': 'nxsmntgrp', 
+                    '_ViewOptions': {'ShowDial': True}, 
+                    'DataCompressionRank': 0, 
+                    "ScanFile":["file.nxs"], 
+                    }
+             },
+            {"new":{"ScanDir":"/tmp", 
+                    'ScanID': 17, 
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1', 
+                    "ConfigServer":'ptr/ert/ert',
+                    "Bool":True,
+                    "Int":234,
+                    "Float":123.124,
+                    "Something":["dgfg"],
+                    "Dict":{"dgfg":123,"sdf":"345"},
+                    'ActiveMntGrp': 'nxsmntgrp', 
+                    '_ViewOptions': {'ShowDial': True}, 
+                    'DataCompressionRank': 0, 
+                    "ScanFile":["file.nxs"], 
+                    }
+             },
+            {"new":{"ScanDir":"/tmp", 
+                    'ScanID': 17, 
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1', 
+                    "ConfigServer":'ptr/ert/ert',
+                    "Bool":True,
+                    "Int":234,
+                    "Float":123.124,
+                    "Something":["dgfg"],
+                    "Dict":{"dgfg":123,"sdf":"345"},
+                    'ActiveMntGrp': 'nxsmntgrp', 
+                    '_ViewOptions': {'ShowDial': True}, 
+                    'DataCompressionRank': 0, 
+                    "ScanFile":["file.nxs"], 
+                    }
+             },
+           ]
+
+        edats = [
+            {},
+            {"ScanDir":"/tmp"},
+            {"ScanDir":"/tmp", "ScanFile":["file.nxs"], "ScanID":11},
+            {"ScanDir":"/tmp", "ScanFile":["file.nxs"],"ConfigServer":"ptr/ert/ert"},
+            {"ScanDir":"/tmp", "ScanFile":["file.nxs","file2.nxs"],"ConfigServer":"ptr/ert/ert2", "ScanID":13},
+            {"ScanDir":"/tmp", "ScanFile":"file.nxs", "ConfigServer":"ptr/ert/ert"},
+            {"ScanDir":"/tmp", "ScanFile":["file.nxs"],"ConfigServer":"ptr/ert/ert", "ScanID":15,
+             "Bool":True, "Int":234,"Float":123.123, "Something":["dgfg"],
+             "Dict":{"dgfg":123,"sdf":"345"},
+             },
+            {"ScanDir":"/tmp", "ScanFile":["file.nxs"],"ConfigServer":"ptr/ert/ert",
+             "Bool":True, "Int":234,"Float":123.124, "Something":["dgfg"],
+             "Dict":{"dgfg":123,"sdf":"345"},
+             },
+            {"ScanDir":"/tmp", "ScanFile":["file.nxs"],"ConfigServer":"ptr/ert/ert", "ScanID":17,
+             "Bool":True, "Int":234,"Float":123.124, "Something":["dgfg"],
+             "Dict":{"dgfg":123,"sdf":"345"},
+             },
+            {"ScanDir":"/tmp", "ScanFile":["file.nxs"],"ConfigServer":"ptr/ert/ert",
+             "Bool":True, "Int":234,"Float":123.124, "Something":["dgfg"],
+             "Dict":{"dgfg":123,"sdf":"345"},
+             },
+            ] 
+
+        sids = [192,192,11,11,13,13,15,15,17,17]
+
+        msp = MacroServerPools(10)
+        self.myAssertRaise(Exception, msp.setScanEnv, None, "{}")
+        msp.setScanEnv(self._ms.door.keys()[0], "{}")
+        for i, dt in enumerate(edats):
+            sid = msp.setScanEnv(self._ms.door.keys()[0], json.dumps(dt))
+            print "I = ",i,sid
+            self.assertEqual(sid, sids[i])
+            data = {}
+            env = pickle.loads(self._ms.dps[self._ms.ms.keys()[0]].Environment[1])
+#            print "env", env
+#            print "ei", envs[i]
+            self.myAssertDict(envs[i], env)
+
+
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_setScanEnv_dtlist(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+            
+        envs = [
+            {"new":{'ScanID': 192, 
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1', 
+                    'ScanFile': [u'sar4r.nxs'], 
+                    'ActiveMntGrp': 'nxsmntgrp', 
+                    '_ViewOptions': {'ShowDial': True}, 
+                    'DataCompressionRank': 0, 
+                    'ScanDir': '/tmp/'}
+             },
+            {"new":{
+                    'ScanID': 192, 
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1', 
+                    'ScanFile': [u'sar4r.nxs'], 
+                    'ActiveMntGrp': 'nxsmntgrp', 
+                    '_ViewOptions': {'ShowDial': True}, 
+                    'DataCompressionRank': 0, 
+                    'ScanDir': '/tmp'}
+             },
+            {"new":{
+                    'ScanID': "11", 
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1', 
+                    'ActiveMntGrp': 'nxsmntgrp', 
+                    '_ViewOptions': {'ShowDial': True}, 
+                    'DataCompressionRank': 0, 
+                    "ScanDir":"/tmp", 
+                    "ScanFile":"file.nxs"
+                    }
+             },
+            {"new":{"ScanDir":"/tmp", 
+                    'ScanID': "11", 
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1', 
+                    "ConfigServer":"ptr/ert/ert", 
+                    'ActiveMntGrp': 'nxsmntgrp', 
+                    '_ViewOptions': {'ShowDial': True}, 
+                    'DataCompressionRank': 0, 
+                    "ScanFile":"file.nxs", 
+                    }
+             },
+            {"new":{"ScanDir":"/tmp", 
+                    'ScanID': '13', 
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1', 
+                    "ConfigServer":"ptr/ert/ert2", 
+                    'ActiveMntGrp': 'nxsmntgrp', 
+                    '_ViewOptions': {'ShowDial': True}, 
+                    'DataCompressionRank': 0, 
+                    "ScanFile":"file.nxs", 
+                    }
+             },
+            {"new":{"ScanDir":"/tmp", 
+                    'ScanID': 13, 
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1', 
+                    "ConfigServer":"ptr/ert/ert", 
+                    'ActiveMntGrp': 'nxsmntgrp', 
+                    '_ViewOptions': {'ShowDial': True}, 
+                    'DataCompressionRank': 0, 
+                    "ScanFile":"file.nxs", 
+                    }
+             },
+            {"new":{"ScanDir":"/tmp", 
+                    'ScanID': 15, 
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1', 
+                    "ConfigServer":'ptr/ert/ert',
+                    "Bool":True,
+                    "Int":234,
+                    "Float":123.123,
+                    "Something":["dgfg"],
+                    "Dict":{"dgfg":123,"sdf":"345"},
+                    'ActiveMntGrp': 'nxsmntgrp', 
+                    '_ViewOptions': {'ShowDial': True}, 
+                    'DataCompressionRank': 0, 
+                    "ScanFile":["file.nxs"], 
+                    }
+             }, 
+            {"new":{"ScanDir":"/tmp", 
+                    'ScanID': 15, 
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1', 
+                    "ConfigServer":'ptr/ert/ert',
+                    "Bool":True,
+                    "Int":234,
+                    "Float":123.124,
+                    "Something":["dgfg"],
+                    "Dict":{"dgfg":123,"sdf":"345"},
+                    'ActiveMntGrp': 'nxsmntgrp', 
+                    '_ViewOptions': {'ShowDial': True}, 
+                    'DataCompressionRank': 0, 
+                    "ScanFile":["file.nxs"], 
+                    }
+             },
+           ]
+
+        edats = [
+            "",
+            "ScanDir /tmp",
+            "ScanDir:/tmp, ScanFile:file.nxs, ScanID:11",
+            "ScanDir /tmp, ScanFile:file.nxs,ConfigServer ptr/ert/ert",
+            "ScanDir:/tmp, ScanFile:file.nxs  ConfigServer:ptr/ert/ert2, ScanID:13",
+            {"ScanDir":"/tmp", "ScanFile":"file.nxs", "ConfigServer":"ptr/ert/ert", "ScanID":13},
+            {"ScanDir":"/tmp", "ScanFile":["file.nxs"],"ConfigServer":"ptr/ert/ert", "ScanID":15,
+             "Bool":True, "Int":234,"Float":123.123, "Something":["dgfg"],
+             "Dict":{"dgfg":123,"sdf":"345"},
+             },
+            ] 
+
+        sids = [192,192,11,11,13,13,15,15,17,17]
+
+        msp = MacroServerPools(10)
+        self.myAssertRaise(Exception, msp.setScanEnv, None, "{}")
+        msp.setScanEnv(self._ms.door.keys()[0], "{}")
+        for i, dt in enumerate(edats):
+            env = pickle.loads(self._ms.dps[self._ms.ms.keys()[0]].Environment[1])
+            print "env0", env
+            sid = msp.setScanEnv(self._ms.door.keys()[0], dt if not isinstance(dt, dict) else json.dumps(dt))
+            print "I = ",i,sid
+            self.assertEqual(sid, sids[i])
+            data = {}
+            env = pickle.loads(self._ms.dps[self._ms.ms.keys()[0]].Environment[1])
+            print "env", env
+            print "ei", envs[i]
             self.myAssertDict(envs[i], env)
 
 

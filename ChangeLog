@@ -1,4 +1,5 @@
 2015-XX-XX Jan Kotanski <jankotan@gmail.com>
+	* spliting words by whitesplaces and :,; in  stringTo[List|Dict]Json
 	* adding TangoDsItem and CheckerItem
 	* reduce configserver calls
 	* fix for getMacroServer when DoorList is empty

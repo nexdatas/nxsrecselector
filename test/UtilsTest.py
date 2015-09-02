@@ -1665,6 +1665,10 @@ class UtilsTest(unittest.TestCase):
             ["some trUe", {"some":"trUe"}],
             ["some falSe", {"some":"falSe"}],
             ["some False", {"some":"False"}],
+            ["some,False;some2:sfd,som.e4 ;gdg", 
+             {"some":"False","some2":"sfd","som.e4":"gdg"}],
+            ["some,False;some2:sfd,som.e4 gdg:", 
+             {"some":"False","some2":"sfd","som.e4":"gdg"}],
             ["some False some2 sfd some4 gdg", 
              {"some":"False","some2":"sfd","some4":"gdg"}],
             ['{"some":"False","some2":"sfd","some4":"gdg"}', 
@@ -1708,7 +1712,7 @@ class UtilsTest(unittest.TestCase):
             self.myAssertDict(json.loads(Utils.stringToDictJson(ar[0], True)), ar[1])
 
 
-    def test_stringToDictJson(self):
+    def test_stringToListJson(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         
@@ -1724,6 +1728,8 @@ class UtilsTest(unittest.TestCase):
              ['["some","False","some2", "sfd","some4","gdg"]',
              ["some","False","some2", "sfd","some4","gdg"]
              ],
+            ["some:False,some2 ;sfd;som.e4 gdg", 
+             ["some","False","some2", "sfd","som.e4","gdg"]],
             ]
 
         for ar in arg:

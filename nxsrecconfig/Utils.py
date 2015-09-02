@@ -104,10 +104,11 @@ class Utils(object):
             if not string or string == "Not initialised":
                 return "{}"
             acps = json.loads(string)
-            assert isinstance(acps, dict)
+            if not isinstance(acps, dict):
+                raise AssertionError()
             jstring = string
         except (ValueError, AssertionError):
-            lst = re.sub("[^\w]", "  ", string).split()
+            lst = re.sub("[:,;]", " ", string).split()
             if len(lst) % 2:
                 lst.append("")
             dct = dict(zip(*[iter(lst)] * 2))
@@ -127,10 +128,11 @@ class Utils(object):
             return "[]"
         try:
             acps = json.loads(string)
-            assert isinstance(acps, (list, tuple))
+            if not isinstance(acps, (list, tuple)):
+                raise AssertionError()
             jstring = string
         except (ValueError, AssertionError):
-            lst = re.sub("[^\w]", "  ", string).split()
+            lst = re.sub("[:,;]", "  ", string).split()
             jstring = json.dumps(lst)
         return jstring
 
