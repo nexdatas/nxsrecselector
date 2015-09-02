@@ -218,7 +218,7 @@ class MacroServerPools(object):
                         vl = nenv[var]
                     else:
                         continue
-                    if type(vl) not in [str, bool, int, unicode]:
+                    if type(vl) not in [str, bool, int, unicode, float]:
                         vl = json.dumps(vl)
                     data[var] = vl
 
@@ -245,7 +245,7 @@ class MacroServerPools(object):
                     else:
                         try:
                             vl = json.loads(data[var])
-                        except ValueError:
+                        except (ValueError, TypeError):
                             vl = data[var]
                     if var in params:
                         dc['new'][str(var)] = vl
