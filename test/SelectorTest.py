@@ -49,8 +49,6 @@ from nxsrecconfig.Selector import Selector
 IS64BIT = (struct.calcsize("P") == 8)
 
 
-
-
 ## test fixture
 class SelectorTest(unittest.TestCase):
 
@@ -59,7 +57,6 @@ class SelectorTest(unittest.TestCase):
     def __init__(self, methodName):
         unittest.TestCase.__init__(self, methodName)
 
-
         self._bint = "int64" if IS64BIT else "int32"
         self._buint = "uint64" if IS64BIT else "uint32"
         self._bfloat = "float64" if IS64BIT else "float32"
@@ -67,33 +64,26 @@ class SelectorTest(unittest.TestCase):
         self._ms = TestMacroServerSetUp.TestMacroServerSetUp()
         self._cf = TestConfigServerSetUp.TestConfigServerSetUp()
         self._pool = TestPoolSetUp.TestPoolSetUp()
-#        self._ms2 = TestMacroServerSetUp.TestMacroServerSetUp("mstestp09/testts/t2r228", "MSTESTS2")
         self._simps = TestServerSetUp.TestServerSetUp()
-#        self._simps2 = TestServerSetUp.TestServerSetUp( "ttestp09/testts/t2r228", "S2")
- #       self._simps3 = TestServerSetUp.TestServerSetUp( "ttestp09/testts/t3r228", "S3")
- #       self._simps4 = TestServerSetUp.TestServerSetUp( "ttestp09/testts/t4r228", "S4")
- #       self._simpsoff = TestServerSetUp.TestServerSetUp( "ttestp09/testts/t5r228", "OFF")
-
 
         try:
-            self.__seed  = long(binascii.hexlify(os.urandom(16)), 16)
+            self.__seed = long(binascii.hexlify(os.urandom(16)), 16)
         except NotImplementedError:
-            self.__seed  = long(time.time() * 256)
+            self.__seed = long(time.time() * 256)
 
         self.__rnd = random.Random(self.__seed)
 
-
         self.mycps = {
-            'mycp' : (
+            'mycp': (
                 '<?xml version=\'1.0\'?>'
                 '<definition>'
                 '<group type="NXcollection" name="dddd"/>'
                 '</definition>'),
-            'mycp2' : (
+            'mycp2': (
                 '<definition><group type="NXcollection" name="dddd">'
                 '<field><datasource type="TANGO" name="ann" /></field>'
                 '</group></definition>'),
-            'mycp3' : (
+            'mycp3': (
                 '<definition><group type="NXcollection" name="dddd">'
                 '<field><datasource type="TANGO" name="ann" />'
                 '<strategy mode="STEP" />'
@@ -273,362 +263,462 @@ class SelectorTest(unittest.TestCase):
 
             }
 
-        self.smycps ={
-            'smycp' : (
+        self.smycps = {
+            'smycp': (
                 '<definition><group type="NXcollection" name="dddd">'
-                '<field name="long">$datasources.scalar_long<strategy mode="STEP"/></field>'
-                '<field name="short">$datasources.scalar_short<strategy mode="STEP"/></field>'
+                '<field name="long">'
+                '$datasources.scalar_long<strategy mode="STEP"/></field>'
+                '<field name="short">'
+                '$datasources.scalar_short<strategy mode="STEP"/></field>'
                 '</group></definition>'),
-            'smycp2' : (
+            'smycp2': (
                 '<definition><group type="NXcollection" name="dddd">'
-                '<field name="long">$datasources.spectrum_long<strategy mode="INIT"/></field>'
-                '<field name="short">$datasources.spectrum_short<strategy mode="STEP"/></field>'
+                '<field name="long">'
+                '$datasources.spectrum_long<strategy mode="INIT"/></field>'
+                '<field name="short">'
+                '$datasources.spectrum_short<strategy mode="STEP"/></field>'
                 '</group></definition>'),
-            'smycp3' : (
+            'smycp3': (
                 '<definition><group type="NXcollection" name="dddd">'
-                '<field name="long">$datasources.image_long<strategy mode="FINAL"/></field>'
-                '<field name="short">$datasources.image_short<strategy mode="STEP"/></field>'
+                '<field name="long">'
+                '$datasources.image_long<strategy mode="FINAL"/></field>'
+                '<field name="short">'
+                '$datasources.image_short<strategy mode="STEP"/></field>'
                 '</group></definition>'),
-            'smycpnt1' : (
+            'smycpnt1': (
                 '<definition><group type="NXcollection" name="ddddnt">'
-                '<field name="long">$datasources.client_long<strategy mode="FINAL"/></field>'
-                '<field name="short">$datasources.client_short<strategy mode="STEP"/></field>'
+                '<field name="long">'
+                '$datasources.client_long<strategy mode="FINAL"/></field>'
+                '<field name="short">'
+                '$datasources.client_short<strategy mode="STEP"/></field>'
                 '</group></definition>'),
             }
 
-        self.smycps2 ={
-            's2mycp' : (
+        self.smycps2 = {
+            's2mycp': (
                 '<definition><group type="NXcollection" name="dddd2">'
-                '<field name="long">$datasources.scalar2_long<strategy mode="STEP"/></field>'
-                '<field name="short">$datasources.scalar2_short<strategy mode="STEP"/></field>'
+                '<field name="long">'
+                '$datasources.scalar2_long<strategy mode="STEP"/></field>'
+                '<field name="short">'
+                '$datasources.scalar2_short<strategy mode="STEP"/></field>'
                 '</group></definition>'),
-            's2mycp2' : (
+            's2mycp2': (
                 '<definition><group type="NXcollection" name="dddd2">'
-                '<field name="long">$datasources.spectrum2_long<strategy mode="STEP"/></field>'
-                '<field name="short">$datasources.spectrum2_short<strategy mode="FINAL"/></field>'
+                '<field name="long">'
+                '$datasources.spectrum2_long<strategy mode="STEP"/></field>'
+                '<field name="short">'
+                '$datasources.spectrum2_short<strategy mode="FINAL"/></field>'
                 '</group></definition>'),
-            's2mycp3' : (
+            's2mycp3': (
                 '<definition><group type="NXcollection" name="dddd2">'
-                '<field name="long">$datasources.image2_long<strategy mode="STEP"/></field>'
-                '<field name="short">$datasources.image2_short<strategy mode="INIT"/></field>'
+                '<field name="long">'
+                '$datasources.image2_long<strategy mode="STEP"/></field>'
+                '<field name="short">'
+                '$datasources.image2_short<strategy mode="INIT"/></field>'
                 '</group></definition>'),
-            's2mycpnt1' : (
+            's2mycpnt1': (
                 '<definition><group type="NXcollection" name="dddd2nt">'
-                '<field name="long">$datasources.client2_long<strategy mode="FINAL"/></field>'
-                '<field name="short">$datasources.client2_short<strategy mode="STEP"/></field>'
+                '<field name="long">'
+                '$datasources.client2_long<strategy mode="FINAL"/></field>'
+                '<field name="short">'
+                '$datasources.client2_short<strategy mode="STEP"/></field>'
                 '</group></definition>'),
             }
 
         self.smydss = {
-            'scalar_long': ('<definition><datasource type="TANGO" name="scalar_long">'
-                     '<record name="ScalarLong"/>'
-                     '<device member="attribute" name="ttestp09/testts/t1r228"/>'
-                     '</datasource></definition>'),
-            'scalar_bool': ('<definition><datasource type="TANGO" name="scalar_bool">'
-                     '<record name="ScalarBoolean"/>'
-                     '<device member="attribute" name="ttestp09/testts/t1r228"/>'
-                     '</datasource></definition>'),
-            'scalar_short': ('<definition><datasource type="TANGO" name="scalar_short">'
-                     '<record name="ScalarShort"/>'
-                     '<device member="attribute" name="ttestp09/testts/t1r228"/>'
-                     '</datasource></definition>'),
-            'scalar_ushort': ('<definition><datasource type="TANGO" name="scalar_ushort">'
-                     '<record name="ScalarUShort"/>'
-                     '<device member="attribute" name="ttestp09/testts/t1r228"/>'
-                     '</datasource></definition>'),
-            'scalar_ulong': ('<definition><datasource type="TANGO" name="scalar_ulong">'
-                     '<record name="ScalarULong"/>'
-                     '<device member="attribute" name="ttestp09/testts/t1r228"/>'
-                     '</datasource></definition>'),
-            'scalar_long64': ('<definition><datasource type="TANGO" name="scalar_long64">'
-                     '<record name="ScalarLong64"/>'
-                     '<device member="attribute" name="ttestp09/testts/t1r228"/>'
-                     '</datasource></definition>'),
-            'scalar_ulong64': ('<definition><datasource type="TANGO" name="scalar_ulong64">'
-                     '<record name="ScalarULong64"/>'
-                     '<device member="attribute" name="ttestp09/testts/t1r228"/>'
-                     '</datasource></definition>'),
-            'scalar_float': ('<definition><datasource type="TANGO" name="scalar_float">'
-                     '<record name="ScalarFloat"/>'
-                     '<device member="attribute" name="ttestp09/testts/t1r228"/>'
-                     '</datasource></definition>'),
-            'scalar_double': ('<definition><datasource type="TANGO" name="scalar_double">'
-                     '<record name="ScalarDouble"/>'
-                     '<device member="attribute" name="ttestp09/testts/t1r228"/>'
-                     '</datasource></definition>'),
-            'scalar_string': ('<definition><datasource type="TANGO" name="scalar_string">'
-                     '<record name="ScalarString"/>'
-                     '<device member="attribute" name="ttestp09/testts/t1r228"/>'
-                     '</datasource></definition>'),
-            'scalar_Encoded': ('<definition><datasource type="TANGO" name="scalar_encoded">'
-                     '<record name="ScalarEncoded"/>'
-                     '<device member="attribute" name="ttestp09/testts/t1r228"/>'
-                     '</datasource></definition>'),
-            'scalar_uchar': ('<definition><datasource type="TANGO" name="scalar_uchar">'
-                     '<record name="ScalarUChar"/>'
-                     '<device member="attribute" name="ttestp09/testts/t1r228"/>'
-                     '</datasource></definition>'),
-            'spectrum_long': ('<definition><datasource type="TANGO" name="spectrum_long">'
-                     '<record name="SpectrumLong"/>'
-                     '<device member="attribute" name="ttestp09/testts/t1r228"/>'
-                     '</datasource></definition>'),
-            'spectrum_bool': ('<definition><datasource type="TANGO" name="spectrum_bool">'
-                     '<record name="SpectrumBoolean"/>'
-                     '<device member="attribute" name="ttestp09/testts/t1r228"/>'
-                     '</datasource></definition>'),
-            'spectrum_short': ('<definition><datasource type="TANGO" name="spectrum_short">'
-                     '<record name="SpectrumShort"/>'
-                     '<device member="attribute" name="ttestp09/testts/t1r228"/>'
-                     '</datasource></definition>'),
-            'spectrum_ushort': ('<definition><datasource type="TANGO" name="spectrum_ushort">'
-                     '<record name="SpectrumUShort"/>'
-                     '<device member="attribute" name="ttestp09/testts/t1r228"/>'
-                     '</datasource></definition>'),
-            'spectrum_ulong': ('<definition><datasource type="TANGO" name="spectrum_ulong">'
-                     '<record name="SpectrumULong"/>'
-                     '<device member="attribute" name="ttestp09/testts/t1r228"/>'
-                     '</datasource></definition>'),
-            'spectrum_long64': ('<definition><datasource type="TANGO" name="spectrum_long64">'
-                     '<record name="SpectrumLong64"/>'
-                     '<device member="attribute" name="ttestp09/testts/t1r228"/>'
-                     '</datasource></definition>'),
-            'spectrum_ulong64': ('<definition><datasource type="TANGO" name="spectrum_ulong64">'
-                     '<record name="SpectrumULong64"/>'
-                     '<device member="attribute" name="ttestp09/testts/t1r228"/>'
-                     '</datasource></definition>'),
-            'spectrum_float': ('<definition><datasource type="TANGO" name="spectrum_float">'
-                     '<record name="SpectrumFloat"/>'
-                     '<device member="attribute" name="ttestp09/testts/t1r228"/>'
-                     '</datasource></definition>'),
-            'spectrum_double': ('<definition><datasource type="TANGO" name="spectrum_double">'
-                     '<record name="SpectrumDouble"/>'
-                     '<device member="attribute" name="ttestp09/testts/t1r228"/>'
-                     '</datasource></definition>'),
-            'spectrum_string': ('<definition><datasource type="TANGO" name="spectrum_string">'
-                     '<record name="SpectrumString"/>'
-                     '<device member="attribute" name="ttestp09/testts/t1r228"/>'
-                     '</datasource></definition>'),
-            'spectrum_Encoded': ('<definition><datasource type="TANGO" name="spectrum_encoded">'
-                     '<record name="SpectrumEncoded"/>'
-                     '<device member="attribute" name="ttestp09/testts/t1r228"/>'
-                     '</datasource></definition>'),
-            'spectrum_uchar': ('<definition><datasource type="TANGO" name="spectrum_uchar">'
-                     '<record name="SpectrumUChar"/>'
-                     '<device member="attribute" name="ttestp09/testts/t1r228"/>'
-                     '</datasource></definition>'),
-            'image_long': ('<definition><datasource type="TANGO" name="image_long">'
-                     '<record name="ImageLong"/>'
-                     '<device member="attribute" name="ttestp09/testts/t1r228"/>'
-                     '</datasource></definition>'),
-            'image_bool': ('<definition><datasource type="TANGO" name="image_bool">'
-                     '<record name="ImageBoolean"/>'
-                     '<device member="attribute" name="ttestp09/testts/t1r228"/>'
-                     '</datasource></definition>'),
-            'image_short': ('<definition><datasource type="TANGO" name="image_short">'
-                     '<record name="ImageShort"/>'
-                     '<device member="attribute" name="ttestp09/testts/t1r228"/>'
-                     '</datasource></definition>'),
-            'image_ushort': ('<definition><datasource type="TANGO" name="image_ushort">'
-                     '<record name="ImageUShort"/>'
-                     '<device member="attribute" name="ttestp09/testts/t1r228"/>'
-                     '</datasource></definition>'),
-            'image_ulong': ('<definition><datasource type="TANGO" name="image_ulong">'
-                     '<record name="ImageULong"/>'
-                     '<device member="attribute" name="ttestp09/testts/t1r228"/>'
-                     '</datasource></definition>'),
-            'image_long64': ('<definition><datasource type="TANGO" name="image_long64">'
-                     '<record name="ImageLong64"/>'
-                     '<device member="attribute" name="ttestp09/testts/t1r228"/>'
-                     '</datasource></definition>'),
-            'image_ulong64': ('<definition><datasource type="TANGO" name="image_ulong64">'
-                     '<record name="ImageULong64"/>'
-                     '<device member="attribute" name="ttestp09/testts/t1r228"/>'
-                     '</datasource></definition>'),
-            'image_float': ('<definition><datasource type="TANGO" name="image_float">'
-                     '<record name="ImageFloat"/>'
-                     '<device member="attribute" name="ttestp09/testts/t1r228"/>'
-                     '</datasource></definition>'),
-            'image_double': ('<definition><datasource type="TANGO" name="image_double">'
-                     '<record name="ImageDouble"/>'
-                     '<device member="attribute" name="ttestp09/testts/t1r228"/>'
-                     '</datasource></definition>'),
-            'image_string': ('<definition><datasource type="TANGO" name="image_string">'
-                     '<record name="ImageString"/>'
-                     '<device member="attribute" name="ttestp09/testts/t1r228"/>'
-                     '</datasource></definition>'),
-            'image_Encoded': ('<definition><datasource type="TANGO" name="image_encoded">'
-                     '<record name="ImageEncoded"/>'
-                     '<device member="attribute" name="ttestp09/testts/t1r228"/>'
-                     '</datasource></definition>'),
-            'image_uchar': ('<definition><datasource type="TANGO" name="image_uchar">'
-                     '<record name="ImageUChar"/>'
-                     '<device member="attribute" name="ttestp09/testts/t1r228"/>'
-                     '</datasource></definition>'),
-            'client_long': ('<definition><datasource type="CLIENT" name="client_long">'
-                     '<record name="ClientLong"/>'
-                     '</datasource></definition>'),
-            'client_short': ('<definition><datasource type="CLIENT" name="client_short">'
-                     '<record name="ClientShort"/>'
-                     '</datasource></definition>'),
+            'scalar_long': (
+                '<definition><datasource type="TANGO" name="scalar_long">'
+                '<record name="ScalarLong"/>'
+                '<device member="attribute" name="ttestp09/testts/t1r228"/>'
+                '</datasource></definition>'),
+            'scalar_bool': (
+                '<definition><datasource type="TANGO" name="scalar_bool">'
+                '<record name="ScalarBoolean"/>'
+                '<device member="attribute" name="ttestp09/testts/t1r228"/>'
+                '</datasource></definition>'),
+            'scalar_short': (
+                '<definition><datasource type="TANGO" name="scalar_short">'
+                '<record name="ScalarShort"/>'
+                '<device member="attribute" name="ttestp09/testts/t1r228"/>'
+                '</datasource></definition>'),
+            'scalar_ushort': (
+                '<definition><datasource type="TANGO" name="scalar_ushort">'
+                '<record name="ScalarUShort"/>'
+                '<device member="attribute" name="ttestp09/testts/t1r228"/>'
+                '</datasource></definition>'),
+            'scalar_ulong': (
+                '<definition><datasource type="TANGO" name="scalar_ulong">'
+                '<record name="ScalarULong"/>'
+                '<device member="attribute" name="ttestp09/testts/t1r228"/>'
+                '</datasource></definition>'),
+            'scalar_long64': (
+                '<definition><datasource type="TANGO" name="scalar_long64">'
+                '<record name="ScalarLong64"/>'
+                '<device member="attribute" name="ttestp09/testts/t1r228"/>'
+                '</datasource></definition>'),
+            'scalar_ulong64': (
+                '<definition><datasource type="TANGO" name="scalar_ulong64">'
+                '<record name="ScalarULong64"/>'
+                '<device member="attribute" name="ttestp09/testts/t1r228"/>'
+                '</datasource></definition>'),
+            'scalar_float': (
+                '<definition><datasource type="TANGO" name="scalar_float">'
+                '<record name="ScalarFloat"/>'
+                '<device member="attribute" name="ttestp09/testts/t1r228"/>'
+                '</datasource></definition>'),
+            'scalar_double': (
+                '<definition><datasource type="TANGO" name="scalar_double">'
+                '<record name="ScalarDouble"/>'
+                '<device member="attribute" name="ttestp09/testts/t1r228"/>'
+                '</datasource></definition>'),
+            'scalar_string': (
+                '<definition><datasource type="TANGO" name="scalar_string">'
+                '<record name="ScalarString"/>'
+                '<device member="attribute" name="ttestp09/testts/t1r228"/>'
+                '</datasource></definition>'),
+            'scalar_Encoded': (
+                '<definition><datasource type="TANGO" name="scalar_encoded">'
+                '<record name="ScalarEncoded"/>'
+                '<device member="attribute" name="ttestp09/testts/t1r228"/>'
+                '</datasource></definition>'),
+            'scalar_uchar': (
+                '<definition><datasource type="TANGO" name="scalar_uchar">'
+                '<record name="ScalarUChar"/>'
+                '<device member="attribute" name="ttestp09/testts/t1r228"/>'
+                '</datasource></definition>'),
+            'spectrum_long': (
+                '<definition><datasource type="TANGO" name="spectrum_long">'
+                '<record name="SpectrumLong"/>'
+                '<device member="attribute" name="ttestp09/testts/t1r228"/>'
+                '</datasource></definition>'),
+            'spectrum_bool': (
+                '<definition><datasource type="TANGO" name="spectrum_bool">'
+                '<record name="SpectrumBoolean"/>'
+                '<device member="attribute" name="ttestp09/testts/t1r228"/>'
+                '</datasource></definition>'),
+            'spectrum_short': (
+                '<definition><datasource type="TANGO" name="spectrum_short">'
+                '<record name="SpectrumShort"/>'
+                '<device member="attribute" name="ttestp09/testts/t1r228"/>'
+                '</datasource></definition>'),
+            'spectrum_ushort': (
+                '<definition><datasource type="TANGO" name="spectrum_ushort">'
+                '<record name="SpectrumUShort"/>'
+                '<device member="attribute" name="ttestp09/testts/t1r228"/>'
+                '</datasource></definition>'),
+            'spectrum_ulong': (
+                '<definition><datasource type="TANGO" name="spectrum_ulong">'
+                '<record name="SpectrumULong"/>'
+                '<device member="attribute" name="ttestp09/testts/t1r228"/>'
+                '</datasource></definition>'),
+            'spectrum_long64': (
+                '<definition><datasource type="TANGO" name="spectrum_long64">'
+                '<record name="SpectrumLong64"/>'
+                '<device member="attribute" name="ttestp09/testts/t1r228"/>'
+                '</datasource></definition>'),
+            'spectrum_ulong64': (
+                '<definition><datasource type="TANGO" name="spectrum_ulong64">'
+                '<record name="SpectrumULong64"/>'
+                '<device member="attribute" name="ttestp09/testts/t1r228"/>'
+                '</datasource></definition>'),
+            'spectrum_float': (
+                '<definition><datasource type="TANGO" name="spectrum_float">'
+                '<record name="SpectrumFloat"/>'
+                '<device member="attribute" name="ttestp09/testts/t1r228"/>'
+                '</datasource></definition>'),
+            'spectrum_double': (
+                '<definition><datasource type="TANGO" name="spectrum_double">'
+                '<record name="SpectrumDouble"/>'
+                '<device member="attribute" name="ttestp09/testts/t1r228"/>'
+                '</datasource></definition>'),
+            'spectrum_string': (
+                '<definition><datasource type="TANGO" name="spectrum_string">'
+                '<record name="SpectrumString"/>'
+                '<device member="attribute" name="ttestp09/testts/t1r228"/>'
+                '</datasource></definition>'),
+            'spectrum_Encoded': (
+                '<definition><datasource type="TANGO" name="spectrum_encoded">'
+                '<record name="SpectrumEncoded"/>'
+                '<device member="attribute" name="ttestp09/testts/t1r228"/>'
+                '</datasource></definition>'),
+            'spectrum_uchar': (
+                '<definition><datasource type="TANGO" name="spectrum_uchar">'
+                '<record name="SpectrumUChar"/>'
+                '<device member="attribute" name="ttestp09/testts/t1r228"/>'
+                '</datasource></definition>'),
+            'image_long': (
+                '<definition><datasource type="TANGO" name="image_long">'
+                '<record name="ImageLong"/>'
+                '<device member="attribute" name="ttestp09/testts/t1r228"/>'
+                '</datasource></definition>'),
+            'image_bool': (
+                '<definition><datasource type="TANGO" name="image_bool">'
+                '<record name="ImageBoolean"/>'
+                '<device member="attribute" name="ttestp09/testts/t1r228"/>'
+                '</datasource></definition>'),
+            'image_short': (
+                '<definition><datasource type="TANGO" name="image_short">'
+                '<record name="ImageShort"/>'
+                '<device member="attribute" name="ttestp09/testts/t1r228"/>'
+                '</datasource></definition>'),
+            'image_ushort': (
+                '<definition><datasource type="TANGO" name="image_ushort">'
+                '<record name="ImageUShort"/>'
+                '<device member="attribute" name="ttestp09/testts/t1r228"/>'
+                '</datasource></definition>'),
+            'image_ulong': (
+                '<definition><datasource type="TANGO" name="image_ulong">'
+                '<record name="ImageULong"/>'
+                '<device member="attribute" name="ttestp09/testts/t1r228"/>'
+                '</datasource></definition>'),
+            'image_long64':
+                ('<definition><datasource type="TANGO" name="image_long64">'
+                 '<record name="ImageLong64"/>'
+                 '<device member="attribute" name="ttestp09/testts/t1r228"/>'
+                 '</datasource></definition>'),
+            'image_ulong64':
+                ('<definition><datasource type="TANGO" name="image_ulong64">'
+                 '<record name="ImageULong64"/>'
+                 '<device member="attribute" name="ttestp09/testts/t1r228"/>'
+                 '</datasource></definition>'),
+            'image_float':
+                ('<definition><datasource type="TANGO" name="image_float">'
+                 '<record name="ImageFloat"/>'
+                 '<device member="attribute" name="ttestp09/testts/t1r228"/>'
+                 '</datasource></definition>'),
+            'image_double':
+                ('<definition><datasource type="TANGO" name="image_double">'
+                 '<record name="ImageDouble"/>'
+                 '<device member="attribute" name="ttestp09/testts/t1r228"/>'
+                 '</datasource></definition>'),
+            'image_string':
+                ('<definition><datasource type="TANGO" name="image_string">'
+                 '<record name="ImageString"/>'
+                 '<device member="attribute" name="ttestp09/testts/t1r228"/>'
+                 '</datasource></definition>'),
+            'image_Encoded':
+                ('<definition><datasource type="TANGO" name="image_encoded">'
+                 '<record name="ImageEncoded"/>'
+                 '<device member="attribute" name="ttestp09/testts/t1r228"/>'
+                 '</datasource></definition>'),
+            'image_uchar':
+                ('<definition><datasource type="TANGO" name="image_uchar">'
+                 '<record name="ImageUChar"/>'
+                 '<device member="attribute" name="ttestp09/testts/t1r228"/>'
+                 '</datasource></definition>'),
+            'client_long':
+                ('<definition><datasource type="CLIENT" name="client_long">'
+                 '<record name="ClientLong"/>'
+                 '</datasource></definition>'),
+            'client_short':
+                ('<definition><datasource type="CLIENT" name="client_short">'
+                 '<record name="ClientShort"/>'
+                 '</datasource></definition>'),
             }
 
-
         self.smydss2 = {
-            'scalar2_long': ('<definition><datasource type="TANGO" name="scalar2_long">'
-                     '<record name="ScalarLong"/>'
-                     '<device member="attribute" name="ttestp09/testts/t2r228"/>'
-                     '</datasource></definition>'),
-            'scalar2_bool': ('<definition><datasource type="TANGO" name="scalar2_bool">'
-                     '<record name="ScalarBoolean"/>'
-                     '<device member="attribute" name="ttestp09/testts/t2r228"/>'
-                     '</datasource></definition>'),
-            'scalar2_short': ('<definition><datasource type="TANGO" name="scalar2_short">'
-                     '<record name="ScalarShort"/>'
-                     '<device member="attribute" name="ttestp09/testts/t2r228"/>'
-                     '</datasource></definition>'),
-            'scalar2_ushort': ('<definition><datasource type="TANGO" name="scalar2_ushort">'
-                     '<record name="ScalarUShort"/>'
-                     '<device member="attribute" name="ttestp09/testts/t2r228"/>'
-                     '</datasource></definition>'),
-            'scalar2_ulong': ('<definition><datasource type="TANGO" name="scalar2_ulong">'
-                     '<record name="ScalarULong"/>'
-                     '<device member="attribute" name="ttestp09/testts/t2r228"/>'
-                     '</datasource></definition>'),
-            'scalar2_long64': ('<definition><datasource type="TANGO" name="scalar2_long64">'
-                     '<record name="ScalarLong64"/>'
-                     '<device member="attribute" name="ttestp09/testts/t2r228"/>'
-                     '</datasource></definition>'),
-            'scalar2_ulong64': ('<definition><datasource type="TANGO" name="scalar2_ulong64">'
-                     '<record name="ScalarULong64"/>'
-                     '<device member="attribute" name="ttestp09/testts/t2r228"/>'
-                     '</datasource></definition>'),
-            'scalar2_float': ('<definition><datasource type="TANGO" name="scalar2_float">'
-                     '<record name="ScalarFloat"/>'
-                     '<device member="attribute" name="ttestp09/testts/t2r228"/>'
-                     '</datasource></definition>'),
-            'scalar2_double': ('<definition><datasource type="TANGO" name="scalar2_double">'
-                     '<record name="ScalarDouble"/>'
-                     '<device member="attribute" name="ttestp09/testts/t2r228"/>'
-                     '</datasource></definition>'),
-            'scalar2_string': ('<definition><datasource type="TANGO" name="scalar2_string">'
-                     '<record name="ScalarString"/>'
-                     '<device member="attribute" name="ttestp09/testts/t2r228"/>'
-                     '</datasource></definition>'),
-            'scalar2_Encoded': ('<definition><datasource type="TANGO" name="scalar2_encoded">'
-                     '<record name="ScalarEncoded"/>'
-                     '<device member="attribute" name="ttestp09/testts/t2r228"/>'
-                     '</datasource></definition>'),
-            'scalar2_uchar': ('<definition><datasource type="TANGO" name="scalar2_uchar">'
-                     '<record name="ScalarUChar"/>'
-                     '<device member="attribute" name="ttestp09/testts/t2r228"/>'
-                     '</datasource></definition>'),
-            'spectrum2_long': ('<definition><datasource type="TANGO" name="spectrum2_long">'
-                     '<record name="SpectrumLong"/>'
-                     '<device member="attribute" name="ttestp09/testts/t2r228"/>'
-                     '</datasource></definition>'),
-            'spectrum2_bool': ('<definition><datasource type="TANGO" name="spectrum2_bool">'
-                     '<record name="SpectrumBoolean"/>'
-                     '<device member="attribute" name="ttestp09/testts/t2r228"/>'
-                     '</datasource></definition>'),
-            'spectrum2_short': ('<definition><datasource type="TANGO" name="spectrum2_short">'
-                     '<record name="SpectrumShort"/>'
-                     '<device member="attribute" name="ttestp09/testts/t2r228"/>'
-                     '</datasource></definition>'),
-            'spectrum2_ushort': ('<definition><datasource type="TANGO" name="spectrum2_ushort">'
-                     '<record name="SpectrumUShort"/>'
-                     '<device member="attribute" name="ttestp09/testts/t2r228"/>'
-                     '</datasource></definition>'),
-            'spectrum2_ulong': ('<definition><datasource type="TANGO" name="spectrum2_ulong">'
-                     '<record name="SpectrumULong"/>'
-                     '<device member="attribute" name="ttestp09/testts/t2r228"/>'
-                     '</datasource></definition>'),
-            'spectrum2_long64': ('<definition><datasource type="TANGO" name="spectrum2_long64">'
-                     '<record name="SpectrumLong64"/>'
-                     '<device member="attribute" name="ttestp09/testts/t2r228"/>'
-                     '</datasource></definition>'),
-            'spectrum2_ulong64': ('<definition><datasource type="TANGO" name="spectrum2_ulong64">'
-                     '<record name="SpectrumULong64"/>'
-                     '<device member="attribute" name="ttestp09/testts/t2r228"/>'
-                     '</datasource></definition>'),
-            'spectrum2_float': ('<definition><datasource type="TANGO" name="spectrum2_float">'
-                     '<record name="SpectrumFloat"/>'
-                     '<device member="attribute" name="ttestp09/testts/t2r228"/>'
-                     '</datasource></definition>'),
-            'spectrum2_double': ('<definition><datasource type="TANGO" name="spectrum2_double">'
-                     '<record name="SpectrumDouble"/>'
-                     '<device member="attribute" name="ttestp09/testts/t2r228"/>'
-                     '</datasource></definition>'),
-            'spectrum2_string': ('<definition><datasource type="TANGO" name="spectrum2_string">'
-                     '<record name="SpectrumString"/>'
-                     '<device member="attribute" name="ttestp09/testts/t2r228"/>'
-                     '</datasource></definition>'),
-            'spectrum2_Encoded': ('<definition><datasource type="TANGO" name="spectrum2_encoded">'
-                     '<record name="SpectrumEncoded"/>'
-                     '<device member="attribute" name="ttestp09/testts/t2r228"/>'
-                     '</datasource></definition>'),
-            'spectrum2_uchar': ('<definition><datasource type="TANGO" name="spectrum2_uchar">'
-                     '<record name="SpectrumUChar"/>'
-                     '<device member="attribute" name="ttestp09/testts/t2r228"/>'
-                     '</datasource></definition>'),
-            'image2_long': ('<definition><datasource type="TANGO" name="image2_long">'
-                     '<record name="ImageLong"/>'
-                     '<device member="attribute" name="ttestp09/testts/t2r228"/>'
-                     '</datasource></definition>'),
-            'image2_bool': ('<definition><datasource type="TANGO" name="image2_bool">'
-                     '<record name="ImageBoolean"/>'
-                     '<device member="attribute" name="ttestp09/testts/t2r228"/>'
-                     '</datasource></definition>'),
-            'image2_short': ('<definition><datasource type="TANGO" name="image2_short">'
-                     '<record name="ImageShort"/>'
-                     '<device member="attribute" name="ttestp09/testts/t2r228"/>'
-                     '</datasource></definition>'),
-            'image2_ushort': ('<definition><datasource type="TANGO" name="image2_ushort">'
-                     '<record name="ImageUShort"/>'
-                     '<device member="attribute" name="ttestp09/testts/t2r228"/>'
-                     '</datasource></definition>'),
-            'image2_ulong': ('<definition><datasource type="TANGO" name="image2_ulong">'
-                     '<record name="ImageULong"/>'
-                     '<device member="attribute" name="ttestp09/testts/t2r228"/>'
-                     '</datasource></definition>'),
-            'image2_long64': ('<definition><datasource type="TANGO" name="image2_long64">'
-                     '<record name="ImageLong64"/>'
-                     '<device member="attribute" name="ttestp09/testts/t2r228"/>'
-                     '</datasource></definition>'),
-            'image2_ulong64': ('<definition><datasource type="TANGO" name="image2_ulong64">'
-                     '<record name="ImageULong64"/>'
-                     '<device member="attribute" name="ttestp09/testts/t2r228"/>'
-                     '</datasource></definition>'),
-            'image2_float': ('<definition><datasource type="TANGO" name="image2_float">'
-                     '<record name="ImageFloat"/>'
-                     '<device member="attribute" name="ttestp09/testts/t2r228"/>'
-                     '</datasource></definition>'),
-            'image2_double': ('<definition><datasource type="TANGO" name="image2_double">'
-                     '<record name="ImageDouble"/>'
-                     '<device member="attribute" name="ttestp09/testts/t2r228"/>'
-                     '</datasource></definition>'),
-            'image2_string': ('<definition><datasource type="TANGO" name="image2_string">'
-                     '<record name="ImageString"/>'
-                     '<device member="attribute" name="ttestp09/testts/t2r228"/>'
-                     '</datasource></definition>'),
-            'image2_Encoded': ('<definition><datasource type="TANGO" name="image2_encoded">'
-                     '<record name="ImageEncoded"/>'
-                     '<device member="attribute" name="ttestp09/testts/t2r228"/>'
-                     '</datasource></definition>'),
-            'image2_uchar': ('<definition><datasource type="TANGO" name="image2_uchar">'
-                     '<record name="ImageUChar"/>'
-                     '<device member="attribute" name="ttestp09/testts/t2r228"/>'
-                     '</datasource></definition>'),
-            'client2_long': ('<definition><datasource type="CLIENT" name="client2_long">'
-                     '<record name="Client2Long"/>'
-                     '</datasource></definition>'),
-            'client2_short': ('<definition><datasource type="CLIENT" name="client2_short">'
-                     '<record name="Client2Short"/>'
-                     '</datasource></definition>'),
+            'scalar2_long':
+                ('<definition><datasource type="TANGO" name="scalar2_long">'
+                 '<record name="ScalarLong"/>'
+                 '<device member="attribute" name="ttestp09/testts/t2r228"/>'
+                 '</datasource></definition>'),
+            'scalar2_bool':
+                ('<definition><datasource type="TANGO" name="scalar2_bool">'
+                 '<record name="ScalarBoolean"/>'
+                 '<device member="attribute" name="ttestp09/testts/t2r228"/>'
+                 '</datasource></definition>'),
+            'scalar2_short':
+                ('<definition><datasource type="TANGO" name="scalar2_short">'
+                 '<record name="ScalarShort"/>'
+                 '<device member="attribute" name="ttestp09/testts/t2r228"/>'
+                 '</datasource></definition>'),
+            'scalar2_ushort':
+                ('<definition><datasource type="TANGO" name="scalar2_ushort">'
+                 '<record name="ScalarUShort"/>'
+                 '<device member="attribute" name="ttestp09/testts/t2r228"/>'
+                 '</datasource></definition>'),
+            'scalar2_ulong':
+                ('<definition><datasource type="TANGO" name="scalar2_ulong">'
+                 '<record name="ScalarULong"/>'
+                 '<device member="attribute" name="ttestp09/testts/t2r228"/>'
+                 '</datasource></definition>'),
+            'scalar2_long64':
+                ('<definition><datasource type="TANGO" name="scalar2_long64">'
+                 '<record name="ScalarLong64"/>'
+                 '<device member="attribute" name="ttestp09/testts/t2r228"/>'
+                 '</datasource></definition>'),
+            'scalar2_ulong64':
+                ('<definition><datasource type="TANGO" name="scalar2_ulong64">'
+                 '<record name="ScalarULong64"/>'
+                 '<device member="attribute" name="ttestp09/testts/t2r228"/>'
+                 '</datasource></definition>'),
+            'scalar2_float':
+                ('<definition><datasource type="TANGO" name="scalar2_float">'
+                 '<record name="ScalarFloat"/>'
+                 '<device member="attribute" name="ttestp09/testts/t2r228"/>'
+                 '</datasource></definition>'),
+            'scalar2_double':
+                ('<definition><datasource type="TANGO" name="scalar2_double">'
+                 '<record name="ScalarDouble"/>'
+                 '<device member="attribute" name="ttestp09/testts/t2r228"/>'
+                 '</datasource></definition>'),
+            'scalar2_string':
+                ('<definition><datasource type="TANGO" name="scalar2_string">'
+                 '<record name="ScalarString"/>'
+                 '<device member="attribute" name="ttestp09/testts/t2r228"/>'
+                 '</datasource></definition>'),
+            'scalar2_Encoded':
+                ('<definition><datasource type="TANGO" name="scalar2_encoded">'
+                 '<record name="ScalarEncoded"/>'
+                 '<device member="attribute" name="ttestp09/testts/t2r228"/>'
+                 '</datasource></definition>'),
+            'scalar2_uchar':
+                ('<definition><datasource type="TANGO" name="scalar2_uchar">'
+                 '<record name="ScalarUChar"/>'
+                 '<device member="attribute" name="ttestp09/testts/t2r228"/>'
+                 '</datasource></definition>'),
+            'spectrum2_long':
+                ('<definition><datasource type="TANGO" name="spectrum2_long">'
+                 '<record name="SpectrumLong"/>'
+                 '<device member="attribute" name="ttestp09/testts/t2r228"/>'
+                 '</datasource></definition>'),
+            'spectrum2_bool':
+                ('<definition><datasource type="TANGO" name="spectrum2_bool">'
+                 '<record name="SpectrumBoolean"/>'
+                 '<device member="attribute" name="ttestp09/testts/t2r228"/>'
+                 '</datasource></definition>'),
+            'spectrum2_short':
+                ('<definition>'
+                 '<datasource type="TANGO" name="spectrum2_short">'
+                 '<record name="SpectrumShort"/>'
+                 '<device member="attribute" name="ttestp09/testts/t2r228"/>'
+                 '</datasource></definition>'),
+            'spectrum2_ushort':
+                ('<definition>'
+                 '<datasource type="TANGO" name="spectrum2_ushort">'
+                 '<record name="SpectrumUShort"/>'
+                 '<device member="attribute" name="ttestp09/testts/t2r228"/>'
+                 '</datasource></definition>'),
+            'spectrum2_ulong':
+                ('<definition>'
+                 '<datasource type="TANGO" name="spectrum2_ulong">'
+                 '<record name="SpectrumULong"/>'
+                 '<device member="attribute" name="ttestp09/testts/t2r228"/>'
+                 '</datasource></definition>'),
+            'spectrum2_long64':
+                ('<definition>'
+                 '<datasource type="TANGO" name="spectrum2_long64">'
+                 '<record name="SpectrumLong64"/>'
+                 '<device member="attribute" name="ttestp09/testts/t2r228"/>'
+                 '</datasource></definition>'),
+            'spectrum2_ulong64':
+                ('<definition>'
+                 '<datasource type="TANGO" name="spectrum2_ulong64">'
+                 '<record name="SpectrumULong64"/>'
+                 '<device member="attribute" name="ttestp09/testts/t2r228"/>'
+                 '</datasource></definition>'),
+            'spectrum2_float':
+                ('<definition><datasource type="TANGO" name="spectrum2_float">'
+                 '<record name="SpectrumFloat"/>'
+                 '<device member="attribute" name="ttestp09/testts/t2r228"/>'
+                 '</datasource></definition>'),
+            'spectrum2_double':
+                ('<definition>'
+                 '<datasource type="TANGO" name="spectrum2_double">'
+                 '<record name="SpectrumDouble"/>'
+                 '<device member="attribute" name="ttestp09/testts/t2r228"/>'
+                 '</datasource></definition>'),
+            'spectrum2_string':
+                ('<definition>'
+                 '<datasource type="TANGO" name="spectrum2_string">'
+                 '<record name="SpectrumString"/>'
+                 '<device member="attribute" name="ttestp09/testts/t2r228"/>'
+                 '</datasource></definition>'),
+            'spectrum2_Encoded':
+                ('<definition>'
+                 '<datasource type="TANGO" name="spectrum2_encoded">'
+                 '<record name="SpectrumEncoded"/>'
+                 '<device member="attribute" name="ttestp09/testts/t2r228"/>'
+                 '</datasource></definition>'),
+            'spectrum2_uchar':
+                ('<definition><datasource type="TANGO" name="spectrum2_uchar">'
+                 '<record name="SpectrumUChar"/>'
+                 '<device member="attribute" name="ttestp09/testts/t2r228"/>'
+                 '</datasource></definition>'),
+            'image2_long':
+                ('<definition><datasource type="TANGO" name="image2_long">'
+                 '<record name="ImageLong"/>'
+                 '<device member="attribute" name="ttestp09/testts/t2r228"/>'
+                 '</datasource></definition>'),
+            'image2_bool':
+                ('<definition><datasource type="TANGO" name="image2_bool">'
+                 '<record name="ImageBoolean"/>'
+                 '<device member="attribute" name="ttestp09/testts/t2r228"/>'
+                 '</datasource></definition>'),
+            'image2_short':
+                ('<definition><datasource type="TANGO" name="image2_short">'
+                 '<record name="ImageShort"/>'
+                 '<device member="attribute" name="ttestp09/testts/t2r228"/>'
+                 '</datasource></definition>'),
+            'image2_ushort':
+                ('<definition><datasource type="TANGO" name="image2_ushort">'
+                 '<record name="ImageUShort"/>'
+                 '<device member="attribute" name="ttestp09/testts/t2r228"/>'
+                 '</datasource></definition>'),
+            'image2_ulong':
+                ('<definition><datasource type="TANGO" name="image2_ulong">'
+                 '<record name="ImageULong"/>'
+                 '<device member="attribute" name="ttestp09/testts/t2r228"/>'
+                 '</datasource></definition>'),
+            'image2_long64':
+                ('<definition><datasource type="TANGO" name="image2_long64">'
+                 '<record name="ImageLong64"/>'
+                 '<device member="attribute" name="ttestp09/testts/t2r228"/>'
+                 '</datasource></definition>'),
+            'image2_ulong64':
+                ('<definition><datasource type="TANGO" name="image2_ulong64">'
+                 '<record name="ImageULong64"/>'
+                 '<device member="attribute" name="ttestp09/testts/t2r228"/>'
+                 '</datasource></definition>'),
+            'image2_float':
+                ('<definition><datasource type="TANGO" name="image2_float">'
+                 '<record name="ImageFloat"/>'
+                 '<device member="attribute" name="ttestp09/testts/t2r228"/>'
+                 '</datasource></definition>'),
+            'image2_double':
+                ('<definition><datasource type="TANGO" name="image2_double">'
+                 '<record name="ImageDouble"/>'
+                 '<device member="attribute" name="ttestp09/testts/t2r228"/>'
+                 '</datasource></definition>'),
+            'image2_string':
+                ('<definition><datasource type="TANGO" name="image2_string">'
+                 '<record name="ImageString"/>'
+                 '<device member="attribute" name="ttestp09/testts/t2r228"/>'
+                 '</datasource></definition>'),
+            'image2_Encoded':
+                ('<definition><datasource type="TANGO" name="image2_encoded">'
+                 '<record name="ImageEncoded"/>'
+                 '<device member="attribute" name="ttestp09/testts/t2r228"/>'
+                 '</datasource></definition>'),
+            'image2_uchar':
+                ('<definition><datasource type="TANGO" name="image2_uchar">'
+                 '<record name="ImageUChar"/>'
+                 '<device member="attribute" name="ttestp09/testts/t2r228"/>'
+                 '</datasource></definition>'),
+            'client2_long':
+                ('<definition><datasource type="CLIENT" name="client2_long">'
+                 '<record name="Client2Long"/>'
+                 '</datasource></definition>'),
+            'client2_short':
+                ('<definition><datasource type="CLIENT" name="client2_short">'
+                 '<record name="Client2Short"/>'
+                 '</datasource></definition>'),
             }
 
         self.mydss = {
-            'nn': ('<?xml version=\'1.0\'?><definition><datasource type="TANGO">'
-                    '</datasource></definition>'),
+            'nn':
+            ('<?xml version=\'1.0\'?><definition><datasource type="TANGO">'
+             '</datasource></definition>'),
             'nn2': ('<definition><datasource type="TANGO" name="">'
                     '</datasource></definition>'),
             'ann': ('<definition><datasource type="TANGO" name="ann">'
@@ -721,15 +811,14 @@ class SelectorTest(unittest.TestCase):
             ("LabelShapes", '{}'),
             ("DynamicComponents", True),
             ("DynamicLinks", True),
-            ("DynamicPath", \
-                 '/entry$var.serialno:NXentry/NXinstrument/collection'),
+            ("DynamicPath",
+             '/entry$var.serialno:NXentry/NXinstrument/collection'),
             ("TimeZone", self.__defaultzone),
             ("ConfigDevice", ''),
             ("WriterDevice", ''),
             ("Door", ''),
             ("MntGrp", '')
             ]
-
 
     ## test starter
     # \brief Common set up
@@ -768,7 +857,7 @@ class SelectorTest(unittest.TestCase):
     def myAssertRaise(self, exception, method, *args, **kwargs):
         err = None
         try:
-            error =  False
+            error = False
             method(*args, **kwargs)
         except exception, e:
             error = True
@@ -776,23 +865,21 @@ class SelectorTest(unittest.TestCase):
         self.assertEqual(error, True)
         return err
 
-
     def myAssertDict(self, dct, dct2):
         logger.debug('dict %s' % type(dct))
-        logger.debug("\n%s\n%s" % ( dct, dct2))
+        logger.debug("\n%s\n%s" % (dct, dct2))
         self.assertTrue(isinstance(dct, dict))
         self.assertTrue(isinstance(dct2, dict))
-        logger.debug("%s %s" %(len(dct.keys()), len(dct2.keys())))
+        logger.debug("%s %s" % (len(dct.keys()), len(dct2.keys())))
         self.assertEqual(len(dct.keys()), len(dct2.keys()))
-        for k,v in dct.items():
-            logger.debug("%s  in %s" %(str(k), str(dct2.keys())))
+        for k, v in dct.items():
+            logger.debug("%s  in %s" % (str(k), str(dct2.keys())))
             self.assertTrue(k in dct2.keys())
             if isinstance(v, dict):
                 self.myAssertDict(v, dct2[k])
             else:
-                logger.debug("%s , %s" %(str(v), str(dct2[k])))
+                logger.debug("%s , %s" % (str(v), str(dct2[k])))
                 self.assertEqual(v, dct2[k])
-
 
     ## constructor test
     # \brief It tests default settings
@@ -813,7 +900,8 @@ class SelectorTest(unittest.TestCase):
         self.assertEqual(se.getPools(), [])
         self.assertEqual(se.getMacroServer(), self._ms.ms.keys()[0])
         db = PyTango.Database()
-        db.put_device_property(self._ms.ms.keys()[0], {'PoolNames':self._pool.dp.name()})
+        db.put_device_property(self._ms.ms.keys()[0],
+                               {'PoolNames': self._pool.dp.name()})
         self._ms.dps[self._ms.ms.keys()[0]].Init()
         pools = se.getPools()
         self.assertEqual(len(pools), 1)
@@ -821,38 +909,38 @@ class SelectorTest(unittest.TestCase):
         self.assertEqual(pools[0].name(), self._pool.dp.name())
         self.assertEqual(se.getMacroServer(), self._ms.ms.keys()[0])
 
-
-
-
     ## constructor test
     # \brief It tests default settings
     def test_se_getPool_1to3(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
-        doors = ["door2testp09/testts/t1r228","door2testp09/testts/t2r228","door2testp09/testts/t3r228"]
+        doors = ["door2testp09/testts/t1r228",
+                 "door2testp09/testts/t2r228",
+                 "door2testp09/testts/t3r228"]
         msname = "ms2testp09/testts/t1r228"
         try:
 
-            ms2 = TestMacroServerSetUp.TestMacroServerSetUp("MSTESTS1TO3", [msname], doors)
+            ms2 = TestMacroServerSetUp.TestMacroServerSetUp(
+                "MSTESTS1TO3", [msname], doors)
             ms2.setUp()
 
             msp = MacroServerPools(10)
             db = PyTango.Database()
             se = Selector(msp)
-            db.put_device_property(ms2.ms.keys()[0], {'PoolNames':self._pool.dp.name()})
+            db.put_device_property(ms2.ms.keys()[0],
+                                   {'PoolNames': self._pool.dp.name()})
             ms2.dps[ms2.ms.keys()[0]].Init()
-
 
             for i in range(3):
                 ms2.dps[ms2.ms.keys()[0]].DoorList = doors
-                self.myAssertRaise(Exception, msp.updateMacroServer, "sfdsTESTdfdf/sdfsdf/sdffsf")
+                self.myAssertRaise(Exception, msp.updateMacroServer,
+                                   "sfdsTESTdfdf/sdfsdf/sdffsf")
                 self.myAssertRaise(Exception, msp.updateMacroServer, "")
                 self.myAssertRaise(Exception, msp.getMacroServer, "")
                 self.myAssertRaise(Exception, msp.getPools, "")
                 self.myAssertRaise(Exception, se.getMacroServer, "")
                 self.myAssertRaise(Exception, se.getPools, "")
                 print doors[i]
-
 
                 se["Door"] = doors[i]
 #                msp.updateMacroServer(doors[i])
@@ -861,10 +949,10 @@ class SelectorTest(unittest.TestCase):
                 self.assertEqual(len(pools), 1)
                 self.assertTrue(isinstance(pools[0], PyTango.DeviceProxy))
                 self.assertEqual(pools[0].name(), self._pool.dp.name())
-                self.assertEqual(msp.getMacroServer(doors[i]), ms2.ms.keys()[0])
+                self.assertEqual(msp.getMacroServer(doors[i]),
+                                 ms2.ms.keys()[0])
                 print "door",  se["Door"]
                 self.assertEqual(se.getMacroServer(), ms2.ms.keys()[0])
-
 
         finally:
             ms2.tearDown()
@@ -874,20 +962,25 @@ class SelectorTest(unittest.TestCase):
     def test_se_getPool_3to3(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
-        doors = ["door3testp09/testts/t1r228","door3testp09/testts/t2r228","door3testp09/testts/t3r228"]
-        mss =  ["ms3testp09/testts/t1r228", "ms3testp09/testts/t2r228", "ms3testp09/testts/t3r228"]
+        doors = ["door3testp09/testts/t1r228",
+                 "door3testp09/testts/t2r228",
+                 "door3testp09/testts/t3r228"]
+        mss = ["ms3testp09/testts/t1r228",
+               "ms3testp09/testts/t2r228",
+               "ms3testp09/testts/t3r228"]
         try:
 
-            ms3 = TestMacroServerSetUp.TestMacroServerSetUp("MSTESTS3TO3", mss, doors)
+            ms3 = TestMacroServerSetUp.TestMacroServerSetUp(
+                "MSTESTS3TO3", mss, doors)
             ms3.setUp()
 
             msp = MacroServerPools(10)
             db = PyTango.Database()
             se = Selector(msp)
             for j, ms in enumerate(mss):
-                db.put_device_property(ms, {'PoolNames':self._pool.dp.name()})
+                db.put_device_property(ms,
+                                       {'PoolNames': self._pool.dp.name()})
                 ms3.dps[ms].Init()
-
 
             for i, ms in enumerate(mss):
                 ms3.dps[ms].DoorList = [doors[i]]
@@ -908,8 +1001,6 @@ class SelectorTest(unittest.TestCase):
         finally:
             ms3.tearDown()
 
-
-
     ## constructor test
     # \brief It tests default settings
     def test_poolMotors(self):
@@ -921,20 +1012,20 @@ class SelectorTest(unittest.TestCase):
         se = Selector(msp)
 
         db = PyTango.Database()
-        db.put_device_property(self._ms.ms.keys()[0], {'PoolNames':self._pool.dp.name()})
+        db.put_device_property(self._ms.ms.keys()[0],
+                               {'PoolNames': self._pool.dp.name()})
         self._ms.dps[self._ms.ms.keys()[0]].Init()
 
         pools = se.getPools()
 
         self.assertEqual(se.poolMotors(), [])
 
-
         arr = [
-            {"name":"test/ct/01", "controller":"counter_01/Value"} ,
-            {"name":"test/ct/02", "controller":"counter_02/att"} ,
-            {"name":"test/ct/03", "controller":"counter_03/value"} ,
-            {"name":"test/ct/04", "controller":"counter_04/13"} ,
-            {"name":"null", "controller":"counter_04"} ,
+            {"name":"test/ct/01", "controller":"counter_01/Value"},
+            {"name":"test/ct/02", "controller":"counter_02/att"},
+            {"name":"test/ct/03", "controller":"counter_03/value"},
+            {"name":"test/ct/04", "controller":"counter_04/13"},
+            {"name":"null", "controller":"counter_04"},
             ]
 
         arr2 = [
@@ -944,10 +1035,8 @@ class SelectorTest(unittest.TestCase):
             ["test/sca/04", "mysca_123"],
             ]
 
-
         pool = self._pool.dp
         pool.MotorList = [json.dumps(a) for a in arr]
-
 
         dd = se.poolMotors()
         self.assertEqual(dd, [a["name"] for a in arr])
@@ -959,16 +1048,12 @@ class SelectorTest(unittest.TestCase):
         res = [a[0] for a in arr2]
         self.assertEqual(dd, res)
 
-
-
         print se.poolMotors()
 
         self.assertEqual(len(pools), 1)
         self.assertTrue(isinstance(pools[0], PyTango.DeviceProxy))
         self.assertEqual(pools[0].name(), self._pool.dp.name())
         self.assertEqual(se.getMacroServer(), self._ms.ms.keys()[0])
-
-
 
     ## constructor test
     # \brief It tests default settings
@@ -981,20 +1066,20 @@ class SelectorTest(unittest.TestCase):
         se = Selector(msp)
 
         db = PyTango.Database()
-        db.put_device_property(self._ms.ms.keys()[0], {'PoolNames':self._pool.dp.name()})
+        db.put_device_property(self._ms.ms.keys()[0],
+                               {'PoolNames': self._pool.dp.name()})
         self._ms.dps[self._ms.ms.keys()[0]].Init()
 
         pools = se.getPools()
 
         self.assertEqual(se.poolChannels(), [])
 
-
         arr = [
-            {"name":"test/ct/01", "controller":"counter_01/Value"} ,
-            {"name":"test/ct/02", "controller":"counter_02/att"} ,
-            {"name":"test/ct/03", "controller":"counter_03/value"} ,
-            {"name":"test/ct/04", "controller":"counter_04/13"} ,
-            {"name":"null", "controller":"counter_04"} ,
+            {"name":"test/ct/01", "controller":"counter_01/Value"},
+            {"name":"test/ct/02", "controller":"counter_02/att"},
+            {"name":"test/ct/03", "controller":"counter_03/value"},
+            {"name":"test/ct/04", "controller":"counter_04/13"},
+            {"name":"null", "controller":"counter_04"},
             ]
 
         arr2 = [
@@ -1004,10 +1089,8 @@ class SelectorTest(unittest.TestCase):
             ["test/sca/04", "mysca_123"],
             ]
 
-
         pool = self._pool.dp
         pool.ExpChannelList = [json.dumps(a) for a in arr]
-
 
         dd = se.poolChannels()
         self.assertEqual(dd, [a["name"] for a in arr])
@@ -1019,15 +1102,12 @@ class SelectorTest(unittest.TestCase):
         res = [a[0] for a in arr2]
         self.assertEqual(dd, res)
 
-
-
         print se.poolChannels()
 
         self.assertEqual(len(pools), 1)
         self.assertTrue(isinstance(pools[0], PyTango.DeviceProxy))
         self.assertEqual(pools[0].name(), self._pool.dp.name())
         self.assertEqual(se.getMacroServer(), self._ms.ms.keys()[0])
-
 
 
 if __name__ == '__main__':

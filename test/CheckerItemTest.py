@@ -28,12 +28,8 @@ import struct
 
 from nxsrecconfig.CheckerThread import CheckerItem
 
-
-
 ## if 64-bit machione
 IS64BIT = (struct.calcsize("P") == 8)
-
-
 
 
 ## test fixture
@@ -44,7 +40,6 @@ class CheckerItemTest(unittest.TestCase):
     def __init__(self, methodName):
         unittest.TestCase.__init__(self, methodName)
 
-
         self._bint = "int64" if IS64BIT else "int32"
         self._buint = "uint64" if IS64BIT else "uint32"
         self._bfloat = "float64" if IS64BIT else "float32"
@@ -52,7 +47,7 @@ class CheckerItemTest(unittest.TestCase):
     ## test starter
     # \brief Common set up
     def setUp(self):
-        print "\nsetting up..."        
+        print "\nsetting up..."
 
     ## test closer
     # \brief Common tear down
@@ -78,14 +73,14 @@ class CheckerItemTest(unittest.TestCase):
         self.assertEqual(el.active, True)
 
         el = CheckerItem(None)
-        el.errords="mytype"
+        el.errords = "mytype"
         self.assertEqual(el.name, None)
         self.assertEqual(el.errords, "mytype")
         self.assertEqual(el.message, None)
         self.assertEqual(el.active, True)
 
         el = CheckerItem(None)
-        el.message="mymessage"
+        el.message = "mymessage"
         self.assertEqual(el.name, None)
         self.assertEqual(el.errords, None)
         self.assertEqual(el.message, "mymessage")
@@ -97,7 +92,6 @@ class CheckerItemTest(unittest.TestCase):
         self.assertEqual(el.errords, "mytype2")
         self.assertEqual(el.message, None)
         self.assertEqual(el.active, True)
-
 
         el = CheckerItem(None)
         el.errords = "mytype2"
@@ -124,6 +118,6 @@ class CheckerItemTest(unittest.TestCase):
         el.active = False
         self.assertEqual(el.active, False)
 
-        
+
 if __name__ == '__main__':
     unittest.main()
