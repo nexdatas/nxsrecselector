@@ -20,7 +20,7 @@
 # the unittest runner
 #
 
-import os 
+import os
 import unittest
 
 import logging
@@ -30,10 +30,9 @@ from optparse import OptionParser
 #import DescriberTest
 
 import PyTango
-    
+
 ## list of available databases
 DB_AVAILABLE = []
-    
 
 
 import DSItemTest
@@ -46,76 +45,70 @@ import CheckerThreadTest
 import SelectionTest
 import SelectorTest
 import MacroServerPoolsTest
-    
 
 import UtilsTest
 
 #import TestServerSetUp
 
+
 ## main function
-def main():   
+def main():
     levels = {'debug': logging.DEBUG,
               'info': logging.INFO,
               'warning': logging.WARNING,
               'error': logging.ERROR,
               'critical': logging.CRITICAL}
-    
+
     usage = "usage:runtest.py [-l debug_level] "
     parser = OptionParser(usage=usage)
 
     parser.add_option(
-        "-l","--log", dest="log", 
+        "-l", "--log", dest="log",
         help="logging level, i.e. debug, info, warning, error, critical")
 
     (options, _) = parser.parse_args()
 
-
     if options.log:
         level_name = options.log
         level = levels.get(level_name, logging.NOTSET)
-        logging.basicConfig(level=level)     
+        logging.basicConfig(level=level)
 
+    ## test server
+    ts = None
 
-    ## test server    
-    ts = None    
-    
     ## test suit
     suite = unittest.TestSuite()
 
     suite.addTests(
-        unittest.defaultTestLoader.loadTestsFromModule(SelectionTest) )
+        unittest.defaultTestLoader.loadTestsFromModule(SelectionTest))
     suite.addTests(
-        unittest.defaultTestLoader.loadTestsFromModule(SelectorTest) )
+        unittest.defaultTestLoader.loadTestsFromModule(SelectorTest))
 
     suite.addTests(
-        unittest.defaultTestLoader.loadTestsFromModule(TangoDSItemTest) )
+        unittest.defaultTestLoader.loadTestsFromModule(TangoDSItemTest))
     suite.addTests(
-        unittest.defaultTestLoader.loadTestsFromModule(CheckerItemTest) )
+        unittest.defaultTestLoader.loadTestsFromModule(CheckerItemTest))
 
     suite.addTests(
-        unittest.defaultTestLoader.loadTestsFromModule(DSItemTest) )
+        unittest.defaultTestLoader.loadTestsFromModule(DSItemTest))
 
     suite.addTests(
-        unittest.defaultTestLoader.loadTestsFromModule(ExDSItemTest) )
+        unittest.defaultTestLoader.loadTestsFromModule(ExDSItemTest))
     suite.addTests(
-        unittest.defaultTestLoader.loadTestsFromModule(ExDSDictTest) )
-
-    suite.addTests(
-        unittest.defaultTestLoader.loadTestsFromModule(DescriberTest) )
-
+        unittest.defaultTestLoader.loadTestsFromModule(ExDSDictTest))
 
     suite.addTests(
-        unittest.defaultTestLoader.loadTestsFromModule(UtilsTest) )
-    
+        unittest.defaultTestLoader.loadTestsFromModule(DescriberTest))
+
     suite.addTests(
-        unittest.defaultTestLoader.loadTestsFromModule(CheckerThreadTest) )
-    
+        unittest.defaultTestLoader.loadTestsFromModule(UtilsTest))
+
     suite.addTests(
-        unittest.defaultTestLoader.loadTestsFromModule(MacroServerPoolsTest) )
+        unittest.defaultTestLoader.loadTestsFromModule(CheckerThreadTest))
 
+    suite.addTests(
+        unittest.defaultTestLoader.loadTestsFromModule(MacroServerPoolsTest))
 
-
-    
     ## test runner
     runner = unittest.TextTestRunner()
     ## test result

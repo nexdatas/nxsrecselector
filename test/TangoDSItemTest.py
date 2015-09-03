@@ -29,11 +29,8 @@ import struct
 from nxsrecconfig.CheckerThread import TangoDSItem
 
 
-
 ## if 64-bit machione
 IS64BIT = (struct.calcsize("P") == 8)
-
-
 
 
 ## test fixture
@@ -44,7 +41,6 @@ class TangoDSItemTest(unittest.TestCase):
     def __init__(self, methodName):
         unittest.TestCase.__init__(self, methodName)
 
-
         self._bint = "int64" if IS64BIT else "int32"
         self._buint = "uint64" if IS64BIT else "uint32"
         self._bfloat = "float64" if IS64BIT else "float32"
@@ -52,7 +48,7 @@ class TangoDSItemTest(unittest.TestCase):
     ## test starter
     # \brief Common set up
     def setUp(self):
-        print "\nsetting up..."        
+        print "\nsetting up..."
 
     ## test closer
     # \brief Common tear down
@@ -89,13 +85,12 @@ class TangoDSItemTest(unittest.TestCase):
         self.assertEqual(el.device, "mytype2")
         self.assertEqual(el.attr, None)
 
-
         el = TangoDSItem(None, "mytype2", "myattr2")
         self.assertEqual(el.name, None)
         self.assertEqual(el.device, "mytype2")
         self.assertEqual(el.attr, "myattr2")
 
-        el = TangoDSItem("myname2", None , "myattr2")
+        el = TangoDSItem("myname2", None, "myattr2")
         self.assertEqual(el.name, "myname2")
         self.assertEqual(el.device, None)
         self.assertEqual(el.attr, "myattr2")
@@ -110,6 +105,6 @@ class TangoDSItemTest(unittest.TestCase):
         self.assertEqual(el.device, "1")
         self.assertEqual(el.attr, "1.234")
 
-        
+
 if __name__ == '__main__':
     unittest.main()

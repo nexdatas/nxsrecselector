@@ -1154,7 +1154,6 @@ class SelectorTest(unittest.TestCase):
                     self.assertEqual(se[key], vl)
                 else:
                     self.assertEqual(se[key], val[key])
-                    
 
             lds1 = self.__rnd.randint(1, 40)
             dss1 = [self.getRandomName(10) for _ in range(lds1)]

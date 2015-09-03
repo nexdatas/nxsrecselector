@@ -48,8 +48,6 @@ from nxsrecconfig.MacroServerPools import MacroServerPools
 IS64BIT = (struct.calcsize("P") == 8)
 
 
-
-
 ## test fixture
 class MacroServerPoolTest(unittest.TestCase):
 
@@ -58,7 +56,6 @@ class MacroServerPoolTest(unittest.TestCase):
     def __init__(self, methodName):
         unittest.TestCase.__init__(self, methodName)
 
-
         self._bint = "int64" if IS64BIT else "int32"
         self._buint = "uint64" if IS64BIT else "uint32"
         self._bfloat = "float64" if IS64BIT else "float32"
@@ -66,33 +63,26 @@ class MacroServerPoolTest(unittest.TestCase):
         self._ms = TestMacroServerSetUp.TestMacroServerSetUp()
         self._cf = TestConfigServerSetUp.TestConfigServerSetUp()
         self._pool = TestPoolSetUp.TestPoolSetUp()
-#        self._ms2 = TestMacroServerSetUp.TestMacroServerSetUp("mstestp09/testts/t2r228", "MSTESTS2")
         self._simps = TestServerSetUp.TestServerSetUp()
-#        self._simps2 = TestServerSetUp.TestServerSetUp( "ttestp09/testts/t2r228", "S2")
- #       self._simps3 = TestServerSetUp.TestServerSetUp( "ttestp09/testts/t3r228", "S3") 
- #       self._simps4 = TestServerSetUp.TestServerSetUp( "ttestp09/testts/t4r228", "S4")
- #       self._simpsoff = TestServerSetUp.TestServerSetUp( "ttestp09/testts/t5r228", "OFF")
-
 
         try:
-            self.__seed  = long(binascii.hexlify(os.urandom(16)), 16)
+            self.__seed = long(binascii.hexlify(os.urandom(16)), 16)
         except NotImplementedError:
-            self.__seed  = long(time.time() * 256) 
-         
+            self.__seed = long(time.time() * 256)
+
         self.__rnd = random.Random(self.__seed)
 
-
         self.mycps = {
-            'mycp' : (
+            'mycp': (
                 '<?xml version=\'1.0\'?>'
                 '<definition>'
                 '<group type="NXcollection" name="dddd"/>'
                 '</definition>'),
-            'mycp2' : (
+            'mycp2': (
                 '<definition><group type="NXcollection" name="dddd">'
                 '<field><datasource type="TANGO" name="ann" /></field>'
                 '</group></definition>'),
-            'mycp3' : (
+            'mycp3': (
                 '<definition><group type="NXcollection" name="dddd">'
                 '<field><datasource type="TANGO" name="ann" />'
                 '<strategy mode="STEP" />'
@@ -272,361 +262,455 @@ class MacroServerPoolTest(unittest.TestCase):
 
             }
 
-        self.smycps ={
-            'smycp' : (
+        self.smycps = {
+            'smycp': (
                 '<definition><group type="NXcollection" name="dddd">'
-                '<field name="long">$datasources.scalar_long<strategy mode="STEP"/></field>'
-                '<field name="short">$datasources.scalar_short<strategy mode="STEP"/></field>'
+                '<field name="long">'
+                '$datasources.scalar_long<strategy mode="STEP"/></field>'
+                '<field name="short">'
+                '$datasources.scalar_short<strategy mode="STEP"/></field>'
                 '</group></definition>'),
-            'smycp2' : (
+            'smycp2': (
                 '<definition><group type="NXcollection" name="dddd">'
-                '<field name="long">$datasources.spectrum_long<strategy mode="INIT"/></field>'
-                '<field name="short">$datasources.spectrum_short<strategy mode="STEP"/></field>'
+                '<field name="long">'
+                '$datasources.spectrum_long<strategy mode="INIT"/></field>'
+                '<field name="short">'
+                '$datasources.spectrum_short<strategy mode="STEP"/></field>'
                 '</group></definition>'),
-            'smycp3' : (
+            'smycp3': (
                 '<definition><group type="NXcollection" name="dddd">'
-                '<field name="long">$datasources.image_long<strategy mode="FINAL"/></field>'
-                '<field name="short">$datasources.image_short<strategy mode="STEP"/></field>'
+                '<field name="long">'
+                '$datasources.image_long<strategy mode="FINAL"/></field>'
+                '<field name="short">'
+                '$datasources.image_short<strategy mode="STEP"/></field>'
                 '</group></definition>'),
-            'smycpnt1' : (
+            'smycpnt1': (
                 '<definition><group type="NXcollection" name="ddddnt">'
-                '<field name="long">$datasources.client_long<strategy mode="FINAL"/></field>'
-                '<field name="short">$datasources.client_short<strategy mode="STEP"/></field>'
+                '<field name="long">'
+                '$datasources.client_long<strategy mode="FINAL"/></field>'
+                '<field name="short">'
+                '$datasources.client_short<strategy mode="STEP"/></field>'
                 '</group></definition>'),
             }
 
-        self.smycps2 ={
-            's2mycp' : (
+        self.smycps2 = {
+            's2mycp': (
                 '<definition><group type="NXcollection" name="dddd2">'
-                '<field name="long">$datasources.scalar2_long<strategy mode="STEP"/></field>'
-                '<field name="short">$datasources.scalar2_short<strategy mode="STEP"/></field>'
+                '<field name="long">'
+                '$datasources.scalar2_long<strategy mode="STEP"/></field>'
+                '<field name="short">'
+                '$datasources.scalar2_short<strategy mode="STEP"/></field>'
                 '</group></definition>'),
-            's2mycp2' : (
+            's2mycp2': (
                 '<definition><group type="NXcollection" name="dddd2">'
-                '<field name="long">$datasources.spectrum2_long<strategy mode="STEP"/></field>'
-                '<field name="short">$datasources.spectrum2_short<strategy mode="FINAL"/></field>'
+                '<field name="long">'
+                '$datasources.spectrum2_long<strategy mode="STEP"/></field>'
+                '<field name="short">'
+                '$datasources.spectrum2_short<strategy mode="FINAL"/></field>'
                 '</group></definition>'),
-            's2mycp3' : (
+            's2mycp3': (
                 '<definition><group type="NXcollection" name="dddd2">'
-                '<field name="long">$datasources.image2_long<strategy mode="STEP"/></field>'
-                '<field name="short">$datasources.image2_short<strategy mode="INIT"/></field>'
+                '<field name="long">'
+                '$datasources.image2_long<strategy mode="STEP"/></field>'
+                '<field name="short">'
+                '$datasources.image2_short<strategy mode="INIT"/></field>'
                 '</group></definition>'),
-            's2mycpnt1' : (
+            's2mycpnt1': (
                 '<definition><group type="NXcollection" name="dddd2nt">'
-                '<field name="long">$datasources.client2_long<strategy mode="FINAL"/></field>'
-                '<field name="short">$datasources.client2_short<strategy mode="STEP"/></field>'
+                '<field name="long">'
+                '$datasources.client2_long<strategy mode="FINAL"/></field>'
+                '<field name="short">'
+                '$datasources.client2_short<strategy mode="STEP"/></field>'
                 '</group></definition>'),
             }
-            
-        self.smydss = {
-            'scalar_long': ('<definition><datasource type="TANGO" name="scalar_long">'
-                     '<record name="ScalarLong"/>'
-                     '<device member="attribute" name="ttestp09/testts/t1r228"/>'
-                     '</datasource></definition>'),
-            'scalar_bool': ('<definition><datasource type="TANGO" name="scalar_bool">'
-                     '<record name="ScalarBoolean"/>'
-                     '<device member="attribute" name="ttestp09/testts/t1r228"/>'
-                     '</datasource></definition>'),
-            'scalar_short': ('<definition><datasource type="TANGO" name="scalar_short">'
-                     '<record name="ScalarShort"/>'
-                     '<device member="attribute" name="ttestp09/testts/t1r228"/>'
-                     '</datasource></definition>'),
-            'scalar_ushort': ('<definition><datasource type="TANGO" name="scalar_ushort">'
-                     '<record name="ScalarUShort"/>'
-                     '<device member="attribute" name="ttestp09/testts/t1r228"/>'
-                     '</datasource></definition>'),
-            'scalar_ulong': ('<definition><datasource type="TANGO" name="scalar_ulong">'
-                     '<record name="ScalarULong"/>'
-                     '<device member="attribute" name="ttestp09/testts/t1r228"/>'
-                     '</datasource></definition>'),
-            'scalar_long64': ('<definition><datasource type="TANGO" name="scalar_long64">'
-                     '<record name="ScalarLong64"/>'
-                     '<device member="attribute" name="ttestp09/testts/t1r228"/>'
-                     '</datasource></definition>'),
-            'scalar_ulong64': ('<definition><datasource type="TANGO" name="scalar_ulong64">'
-                     '<record name="ScalarULong64"/>'
-                     '<device member="attribute" name="ttestp09/testts/t1r228"/>'
-                     '</datasource></definition>'),
-            'scalar_float': ('<definition><datasource type="TANGO" name="scalar_float">'
-                     '<record name="ScalarFloat"/>'
-                     '<device member="attribute" name="ttestp09/testts/t1r228"/>'
-                     '</datasource></definition>'),
-            'scalar_double': ('<definition><datasource type="TANGO" name="scalar_double">'
-                     '<record name="ScalarDouble"/>'
-                     '<device member="attribute" name="ttestp09/testts/t1r228"/>'
-                     '</datasource></definition>'),
-            'scalar_string': ('<definition><datasource type="TANGO" name="scalar_string">'
-                     '<record name="ScalarString"/>'
-                     '<device member="attribute" name="ttestp09/testts/t1r228"/>'
-                     '</datasource></definition>'),
-            'scalar_Encoded': ('<definition><datasource type="TANGO" name="scalar_encoded">'
-                     '<record name="ScalarEncoded"/>'
-                     '<device member="attribute" name="ttestp09/testts/t1r228"/>'
-                     '</datasource></definition>'),
-            'scalar_uchar': ('<definition><datasource type="TANGO" name="scalar_uchar">'
-                     '<record name="ScalarUChar"/>'
-                     '<device member="attribute" name="ttestp09/testts/t1r228"/>'
-                     '</datasource></definition>'),
-            'spectrum_long': ('<definition><datasource type="TANGO" name="spectrum_long">'
-                     '<record name="SpectrumLong"/>'
-                     '<device member="attribute" name="ttestp09/testts/t1r228"/>'
-                     '</datasource></definition>'),
-            'spectrum_bool': ('<definition><datasource type="TANGO" name="spectrum_bool">'
-                     '<record name="SpectrumBoolean"/>'
-                     '<device member="attribute" name="ttestp09/testts/t1r228"/>'
-                     '</datasource></definition>'),
-            'spectrum_short': ('<definition><datasource type="TANGO" name="spectrum_short">'
-                     '<record name="SpectrumShort"/>'
-                     '<device member="attribute" name="ttestp09/testts/t1r228"/>'
-                     '</datasource></definition>'),
-            'spectrum_ushort': ('<definition><datasource type="TANGO" name="spectrum_ushort">'
-                     '<record name="SpectrumUShort"/>'
-                     '<device member="attribute" name="ttestp09/testts/t1r228"/>'
-                     '</datasource></definition>'),
-            'spectrum_ulong': ('<definition><datasource type="TANGO" name="spectrum_ulong">'
-                     '<record name="SpectrumULong"/>'
-                     '<device member="attribute" name="ttestp09/testts/t1r228"/>'
-                     '</datasource></definition>'),
-            'spectrum_long64': ('<definition><datasource type="TANGO" name="spectrum_long64">'
-                     '<record name="SpectrumLong64"/>'
-                     '<device member="attribute" name="ttestp09/testts/t1r228"/>'
-                     '</datasource></definition>'),
-            'spectrum_ulong64': ('<definition><datasource type="TANGO" name="spectrum_ulong64">'
-                     '<record name="SpectrumULong64"/>'
-                     '<device member="attribute" name="ttestp09/testts/t1r228"/>'
-                     '</datasource></definition>'),
-            'spectrum_float': ('<definition><datasource type="TANGO" name="spectrum_float">'
-                     '<record name="SpectrumFloat"/>'
-                     '<device member="attribute" name="ttestp09/testts/t1r228"/>'
-                     '</datasource></definition>'),
-            'spectrum_double': ('<definition><datasource type="TANGO" name="spectrum_double">'
-                     '<record name="SpectrumDouble"/>'
-                     '<device member="attribute" name="ttestp09/testts/t1r228"/>'
-                     '</datasource></definition>'),
-            'spectrum_string': ('<definition><datasource type="TANGO" name="spectrum_string">'
-                     '<record name="SpectrumString"/>'
-                     '<device member="attribute" name="ttestp09/testts/t1r228"/>'
-                     '</datasource></definition>'),
-            'spectrum_Encoded': ('<definition><datasource type="TANGO" name="spectrum_encoded">'
-                     '<record name="SpectrumEncoded"/>'
-                     '<device member="attribute" name="ttestp09/testts/t1r228"/>'
-                     '</datasource></definition>'),
-            'spectrum_uchar': ('<definition><datasource type="TANGO" name="spectrum_uchar">'
-                     '<record name="SpectrumUChar"/>'
-                     '<device member="attribute" name="ttestp09/testts/t1r228"/>'
-                     '</datasource></definition>'),
-            'image_long': ('<definition><datasource type="TANGO" name="image_long">'
-                     '<record name="ImageLong"/>'
-                     '<device member="attribute" name="ttestp09/testts/t1r228"/>'
-                     '</datasource></definition>'),
-            'image_bool': ('<definition><datasource type="TANGO" name="image_bool">'
-                     '<record name="ImageBoolean"/>'
-                     '<device member="attribute" name="ttestp09/testts/t1r228"/>'
-                     '</datasource></definition>'),
-            'image_short': ('<definition><datasource type="TANGO" name="image_short">'
-                     '<record name="ImageShort"/>'
-                     '<device member="attribute" name="ttestp09/testts/t1r228"/>'
-                     '</datasource></definition>'),
-            'image_ushort': ('<definition><datasource type="TANGO" name="image_ushort">'
-                     '<record name="ImageUShort"/>'
-                     '<device member="attribute" name="ttestp09/testts/t1r228"/>'
-                     '</datasource></definition>'),
-            'image_ulong': ('<definition><datasource type="TANGO" name="image_ulong">'
-                     '<record name="ImageULong"/>'
-                     '<device member="attribute" name="ttestp09/testts/t1r228"/>'
-                     '</datasource></definition>'),
-            'image_long64': ('<definition><datasource type="TANGO" name="image_long64">'
-                     '<record name="ImageLong64"/>'
-                     '<device member="attribute" name="ttestp09/testts/t1r228"/>'
-                     '</datasource></definition>'),
-            'image_ulong64': ('<definition><datasource type="TANGO" name="image_ulong64">'
-                     '<record name="ImageULong64"/>'
-                     '<device member="attribute" name="ttestp09/testts/t1r228"/>'
-                     '</datasource></definition>'),
-            'image_float': ('<definition><datasource type="TANGO" name="image_float">'
-                     '<record name="ImageFloat"/>'
-                     '<device member="attribute" name="ttestp09/testts/t1r228"/>'
-                     '</datasource></definition>'),
-            'image_double': ('<definition><datasource type="TANGO" name="image_double">'
-                     '<record name="ImageDouble"/>'
-                     '<device member="attribute" name="ttestp09/testts/t1r228"/>'
-                     '</datasource></definition>'),
-            'image_string': ('<definition><datasource type="TANGO" name="image_string">'
-                     '<record name="ImageString"/>'
-                     '<device member="attribute" name="ttestp09/testts/t1r228"/>'
-                     '</datasource></definition>'),
-            'image_Encoded': ('<definition><datasource type="TANGO" name="image_encoded">'
-                     '<record name="ImageEncoded"/>'
-                     '<device member="attribute" name="ttestp09/testts/t1r228"/>'
-                     '</datasource></definition>'),
-            'image_uchar': ('<definition><datasource type="TANGO" name="image_uchar">'
-                     '<record name="ImageUChar"/>'
-                     '<device member="attribute" name="ttestp09/testts/t1r228"/>'
-                     '</datasource></definition>'),
-            'client_long': ('<definition><datasource type="CLIENT" name="client_long">'
-                     '<record name="ClientLong"/>'
-                     '</datasource></definition>'),
-            'client_short': ('<definition><datasource type="CLIENT" name="client_short">'
-                     '<record name="ClientShort"/>'
-                     '</datasource></definition>'),
-            }
 
+        self.smydss = {
+            'scalar_long': (
+                '<definition><datasource type="TANGO" name="scalar_long">'
+                '<record name="ScalarLong"/>'
+                '<device member="attribute" name="ttestp09/testts/t1r228"/>'
+                '</datasource></definition>'),
+            'scalar_bool': (
+                '<definition><datasource type="TANGO" name="scalar_bool">'
+                '<record name="ScalarBoolean"/>'
+                '<device member="attribute" name="ttestp09/testts/t1r228"/>'
+                '</datasource></definition>'),
+            'scalar_short': (
+                '<definition><datasource type="TANGO" name="scalar_short">'
+                '<record name="ScalarShort"/>'
+                '<device member="attribute" name="ttestp09/testts/t1r228"/>'
+                '</datasource></definition>'),
+            'scalar_ushort': (
+                '<definition><datasource type="TANGO" name="scalar_ushort">'
+                '<record name="ScalarUShort"/>'
+                '<device member="attribute" name="ttestp09/testts/t1r228"/>'
+                '</datasource></definition>'),
+            'scalar_ulong': (
+                '<definition><datasource type="TANGO" name="scalar_ulong">'
+                '<record name="ScalarULong"/>'
+                '<device member="attribute" name="ttestp09/testts/t1r228"/>'
+                '</datasource></definition>'),
+            'scalar_long64': (
+                '<definition><datasource type="TANGO" name="scalar_long64">'
+                '<record name="ScalarLong64"/>'
+                '<device member="attribute" name="ttestp09/testts/t1r228"/>'
+                '</datasource></definition>'),
+            'scalar_ulong64': (
+                '<definition><datasource type="TANGO" name="scalar_ulong64">'
+                '<record name="ScalarULong64"/>'
+                '<device member="attribute" name="ttestp09/testts/t1r228"/>'
+                '</datasource></definition>'),
+            'scalar_float': (
+                '<definition><datasource type="TANGO" name="scalar_float">'
+                '<record name="ScalarFloat"/>'
+                '<device member="attribute" name="ttestp09/testts/t1r228"/>'
+                '</datasource></definition>'),
+            'scalar_double': (
+                '<definition><datasource type="TANGO" name="scalar_double">'
+                '<record name="ScalarDouble"/>'
+                '<device member="attribute" name="ttestp09/testts/t1r228"/>'
+                '</datasource></definition>'),
+            'scalar_string': (
+                '<definition><datasource type="TANGO" name="scalar_string">'
+                '<record name="ScalarString"/>'
+                '<device member="attribute" name="ttestp09/testts/t1r228"/>'
+                '</datasource></definition>'),
+            'scalar_Encoded': (
+                '<definition><datasource type="TANGO" name="scalar_encoded">'
+                '<record name="ScalarEncoded"/>'
+                '<device member="attribute" name="ttestp09/testts/t1r228"/>'
+                '</datasource></definition>'),
+            'scalar_uchar': (
+                '<definition><datasource type="TANGO" name="scalar_uchar">'
+                '<record name="ScalarUChar"/>'
+                '<device member="attribute" name="ttestp09/testts/t1r228"/>'
+                '</datasource></definition>'),
+            'spectrum_long': (
+                '<definition><datasource type="TANGO" name="spectrum_long">'
+                '<record name="SpectrumLong"/>'
+                '<device member="attribute" name="ttestp09/testts/t1r228"/>'
+                '</datasource></definition>'),
+            'spectrum_bool': (
+                '<definition><datasource type="TANGO" name="spectrum_bool">'
+                '<record name="SpectrumBoolean"/>'
+                '<device member="attribute" name="ttestp09/testts/t1r228"/>'
+                '</datasource></definition>'),
+            'spectrum_short': (
+                '<definition><datasource type="TANGO" name="spectrum_short">'
+                '<record name="SpectrumShort"/>'
+                '<device member="attribute" name="ttestp09/testts/t1r228"/>'
+                '</datasource></definition>'),
+            'spectrum_ushort': (
+                '<definition><datasource type="TANGO" name="spectrum_ushort">'
+                '<record name="SpectrumUShort"/>'
+                '<device member="attribute" name="ttestp09/testts/t1r228"/>'
+                '</datasource></definition>'),
+            'spectrum_ulong': (
+                '<definition><datasource type="TANGO" name="spectrum_ulong">'
+                '<record name="SpectrumULong"/>'
+                '<device member="attribute" name="ttestp09/testts/t1r228"/>'
+                '</datasource></definition>'),
+            'spectrum_long64': (
+                '<definition><datasource type="TANGO" name="spectrum_long64">'
+                '<record name="SpectrumLong64"/>'
+                '<device member="attribute" name="ttestp09/testts/t1r228"/>'
+                '</datasource></definition>'),
+            'spectrum_ulong64': (
+                '<definition><datasource type="TANGO" name="spectrum_ulong64">'
+                '<record name="SpectrumULong64"/>'
+                '<device member="attribute" name="ttestp09/testts/t1r228"/>'
+                '</datasource></definition>'),
+            'spectrum_float': (
+                '<definition><datasource type="TANGO" name="spectrum_float">'
+                '<record name="SpectrumFloat"/>'
+                '<device member="attribute" name="ttestp09/testts/t1r228"/>'
+                '</datasource></definition>'),
+            'spectrum_double': (
+                '<definition><datasource type="TANGO" name="spectrum_double">'
+                '<record name="SpectrumDouble"/>'
+                '<device member="attribute" name="ttestp09/testts/t1r228"/>'
+                '</datasource></definition>'),
+            'spectrum_string': (
+                '<definition><datasource type="TANGO" name="spectrum_string">'
+                '<record name="SpectrumString"/>'
+                '<device member="attribute" name="ttestp09/testts/t1r228"/>'
+                '</datasource></definition>'),
+            'spectrum_Encoded': (
+                '<definition><datasource type="TANGO" name="spectrum_encoded">'
+                '<record name="SpectrumEncoded"/>'
+                '<device member="attribute" name="ttestp09/testts/t1r228"/>'
+                '</datasource></definition>'),
+            'spectrum_uchar': (
+                '<definition><datasource type="TANGO" name="spectrum_uchar">'
+                '<record name="SpectrumUChar"/>'
+                '<device member="attribute" name="ttestp09/testts/t1r228"/>'
+                '</datasource></definition>'),
+            'image_long': (
+                '<definition><datasource type="TANGO" name="image_long">'
+                '<record name="ImageLong"/>'
+                '<device member="attribute" name="ttestp09/testts/t1r228"/>'
+                '</datasource></definition>'),
+            'image_bool': (
+                '<definition><datasource type="TANGO" name="image_bool">'
+                '<record name="ImageBoolean"/>'
+                '<device member="attribute" name="ttestp09/testts/t1r228"/>'
+                '</datasource></definition>'),
+            'image_short': (
+                '<definition><datasource type="TANGO" name="image_short">'
+                '<record name="ImageShort"/>'
+                '<device member="attribute" name="ttestp09/testts/t1r228"/>'
+                '</datasource></definition>'),
+            'image_ushort': (
+                '<definition><datasource type="TANGO" name="image_ushort">'
+                '<record name="ImageUShort"/>'
+                '<device member="attribute" name="ttestp09/testts/t1r228"/>'
+                '</datasource></definition>'),
+            'image_ulong': (
+                '<definition><datasource type="TANGO" name="image_ulong">'
+                '<record name="ImageULong"/>'
+                '<device member="attribute" name="ttestp09/testts/t1r228"/>'
+                '</datasource></definition>'),
+            'image_long64': (
+                '<definition><datasource type="TANGO" name="image_long64">'
+                '<record name="ImageLong64"/>'
+                '<device member="attribute" name="ttestp09/testts/t1r228"/>'
+                '</datasource></definition>'),
+            'image_ulong64': (
+                '<definition><datasource type="TANGO" name="image_ulong64">'
+                '<record name="ImageULong64"/>'
+                '<device member="attribute" name="ttestp09/testts/t1r228"/>'
+                '</datasource></definition>'),
+            'image_float': (
+                '<definition><datasource type="TANGO" name="image_float">'
+                '<record name="ImageFloat"/>'
+                '<device member="attribute" name="ttestp09/testts/t1r228"/>'
+                '</datasource></definition>'),
+            'image_double': (
+                '<definition><datasource type="TANGO" name="image_double">'
+                '<record name="ImageDouble"/>'
+                '<device member="attribute" name="ttestp09/testts/t1r228"/>'
+                '</datasource></definition>'),
+            'image_string': (
+                '<definition><datasource type="TANGO" name="image_string">'
+                '<record name="ImageString"/>'
+                '<device member="attribute" name="ttestp09/testts/t1r228"/>'
+                '</datasource></definition>'),
+            'image_Encoded': (
+                '<definition><datasource type="TANGO" name="image_encoded">'
+                '<record name="ImageEncoded"/>'
+                '<device member="attribute" name="ttestp09/testts/t1r228"/>'
+                '</datasource></definition>'),
+            'image_uchar': (
+                '<definition><datasource type="TANGO" name="image_uchar">'
+                '<record name="ImageUChar"/>'
+                '<device member="attribute" name="ttestp09/testts/t1r228"/>'
+                '</datasource></definition>'),
+            'client_long': (
+                '<definition><datasource type="CLIENT" name="client_long">'
+                '<record name="ClientLong"/>'
+                '</datasource></definition>'),
+            'client_short': (
+                '<definition><datasource type="CLIENT" name="client_short">'
+                '<record name="ClientShort"/>'
+                '</datasource></definition>'),
+            }
 
         self.smydss2 = {
-            'scalar2_long': ('<definition><datasource type="TANGO" name="scalar2_long">'
-                     '<record name="ScalarLong"/>'
-                     '<device member="attribute" name="ttestp09/testts/t2r228"/>'
-                     '</datasource></definition>'),
-            'scalar2_bool': ('<definition><datasource type="TANGO" name="scalar2_bool">'
-                     '<record name="ScalarBoolean"/>'
-                     '<device member="attribute" name="ttestp09/testts/t2r228"/>'
-                     '</datasource></definition>'),
-            'scalar2_short': ('<definition><datasource type="TANGO" name="scalar2_short">'
-                     '<record name="ScalarShort"/>'
-                     '<device member="attribute" name="ttestp09/testts/t2r228"/>'
-                     '</datasource></definition>'),
-            'scalar2_ushort': ('<definition><datasource type="TANGO" name="scalar2_ushort">'
-                     '<record name="ScalarUShort"/>'
-                     '<device member="attribute" name="ttestp09/testts/t2r228"/>'
-                     '</datasource></definition>'),
-            'scalar2_ulong': ('<definition><datasource type="TANGO" name="scalar2_ulong">'
-                     '<record name="ScalarULong"/>'
-                     '<device member="attribute" name="ttestp09/testts/t2r228"/>'
-                     '</datasource></definition>'),
-            'scalar2_long64': ('<definition><datasource type="TANGO" name="scalar2_long64">'
-                     '<record name="ScalarLong64"/>'
-                     '<device member="attribute" name="ttestp09/testts/t2r228"/>'
-                     '</datasource></definition>'),
-            'scalar2_ulong64': ('<definition><datasource type="TANGO" name="scalar2_ulong64">'
-                     '<record name="ScalarULong64"/>'
-                     '<device member="attribute" name="ttestp09/testts/t2r228"/>'
-                     '</datasource></definition>'),
-            'scalar2_float': ('<definition><datasource type="TANGO" name="scalar2_float">'
-                     '<record name="ScalarFloat"/>'
-                     '<device member="attribute" name="ttestp09/testts/t2r228"/>'
-                     '</datasource></definition>'),
-            'scalar2_double': ('<definition><datasource type="TANGO" name="scalar2_double">'
-                     '<record name="ScalarDouble"/>'
-                     '<device member="attribute" name="ttestp09/testts/t2r228"/>'
-                     '</datasource></definition>'),
-            'scalar2_string': ('<definition><datasource type="TANGO" name="scalar2_string">'
-                     '<record name="ScalarString"/>'
-                     '<device member="attribute" name="ttestp09/testts/t2r228"/>'
-                     '</datasource></definition>'),
-            'scalar2_Encoded': ('<definition><datasource type="TANGO" name="scalar2_encoded">'
-                     '<record name="ScalarEncoded"/>'
-                     '<device member="attribute" name="ttestp09/testts/t2r228"/>'
-                     '</datasource></definition>'),
-            'scalar2_uchar': ('<definition><datasource type="TANGO" name="scalar2_uchar">'
-                     '<record name="ScalarUChar"/>'
-                     '<device member="attribute" name="ttestp09/testts/t2r228"/>'
-                     '</datasource></definition>'),
-            'spectrum2_long': ('<definition><datasource type="TANGO" name="spectrum2_long">'
-                     '<record name="SpectrumLong"/>'
-                     '<device member="attribute" name="ttestp09/testts/t2r228"/>'
-                     '</datasource></definition>'),
-            'spectrum2_bool': ('<definition><datasource type="TANGO" name="spectrum2_bool">'
-                     '<record name="SpectrumBoolean"/>'
-                     '<device member="attribute" name="ttestp09/testts/t2r228"/>'
-                     '</datasource></definition>'),
-            'spectrum2_short': ('<definition><datasource type="TANGO" name="spectrum2_short">'
-                     '<record name="SpectrumShort"/>'
-                     '<device member="attribute" name="ttestp09/testts/t2r228"/>'
-                     '</datasource></definition>'),
-            'spectrum2_ushort': ('<definition><datasource type="TANGO" name="spectrum2_ushort">'
-                     '<record name="SpectrumUShort"/>'
-                     '<device member="attribute" name="ttestp09/testts/t2r228"/>'
-                     '</datasource></definition>'),
-            'spectrum2_ulong': ('<definition><datasource type="TANGO" name="spectrum2_ulong">'
-                     '<record name="SpectrumULong"/>'
-                     '<device member="attribute" name="ttestp09/testts/t2r228"/>'
-                     '</datasource></definition>'),
-            'spectrum2_long64': ('<definition><datasource type="TANGO" name="spectrum2_long64">'
-                     '<record name="SpectrumLong64"/>'
-                     '<device member="attribute" name="ttestp09/testts/t2r228"/>'
-                     '</datasource></definition>'),
-            'spectrum2_ulong64': ('<definition><datasource type="TANGO" name="spectrum2_ulong64">'
-                     '<record name="SpectrumULong64"/>'
-                     '<device member="attribute" name="ttestp09/testts/t2r228"/>'
-                     '</datasource></definition>'),
-            'spectrum2_float': ('<definition><datasource type="TANGO" name="spectrum2_float">'
-                     '<record name="SpectrumFloat"/>'
-                     '<device member="attribute" name="ttestp09/testts/t2r228"/>'
-                     '</datasource></definition>'),
-            'spectrum2_double': ('<definition><datasource type="TANGO" name="spectrum2_double">'
-                     '<record name="SpectrumDouble"/>'
-                     '<device member="attribute" name="ttestp09/testts/t2r228"/>'
-                     '</datasource></definition>'),
-            'spectrum2_string': ('<definition><datasource type="TANGO" name="spectrum2_string">'
-                     '<record name="SpectrumString"/>'
-                     '<device member="attribute" name="ttestp09/testts/t2r228"/>'
-                     '</datasource></definition>'),
-            'spectrum2_Encoded': ('<definition><datasource type="TANGO" name="spectrum2_encoded">'
-                     '<record name="SpectrumEncoded"/>'
-                     '<device member="attribute" name="ttestp09/testts/t2r228"/>'
-                     '</datasource></definition>'),
-            'spectrum2_uchar': ('<definition><datasource type="TANGO" name="spectrum2_uchar">'
-                     '<record name="SpectrumUChar"/>'
-                     '<device member="attribute" name="ttestp09/testts/t2r228"/>'
-                     '</datasource></definition>'),
-            'image2_long': ('<definition><datasource type="TANGO" name="image2_long">'
-                     '<record name="ImageLong"/>'
-                     '<device member="attribute" name="ttestp09/testts/t2r228"/>'
-                     '</datasource></definition>'),
-            'image2_bool': ('<definition><datasource type="TANGO" name="image2_bool">'
-                     '<record name="ImageBoolean"/>'
-                     '<device member="attribute" name="ttestp09/testts/t2r228"/>'
-                     '</datasource></definition>'),
-            'image2_short': ('<definition><datasource type="TANGO" name="image2_short">'
-                     '<record name="ImageShort"/>'
-                     '<device member="attribute" name="ttestp09/testts/t2r228"/>'
-                     '</datasource></definition>'),
-            'image2_ushort': ('<definition><datasource type="TANGO" name="image2_ushort">'
-                     '<record name="ImageUShort"/>'
-                     '<device member="attribute" name="ttestp09/testts/t2r228"/>'
-                     '</datasource></definition>'),
-            'image2_ulong': ('<definition><datasource type="TANGO" name="image2_ulong">'
-                     '<record name="ImageULong"/>'
-                     '<device member="attribute" name="ttestp09/testts/t2r228"/>'
-                     '</datasource></definition>'),
-            'image2_long64': ('<definition><datasource type="TANGO" name="image2_long64">'
-                     '<record name="ImageLong64"/>'
-                     '<device member="attribute" name="ttestp09/testts/t2r228"/>'
-                     '</datasource></definition>'),
-            'image2_ulong64': ('<definition><datasource type="TANGO" name="image2_ulong64">'
-                     '<record name="ImageULong64"/>'
-                     '<device member="attribute" name="ttestp09/testts/t2r228"/>'
-                     '</datasource></definition>'),
-            'image2_float': ('<definition><datasource type="TANGO" name="image2_float">'
-                     '<record name="ImageFloat"/>'
-                     '<device member="attribute" name="ttestp09/testts/t2r228"/>'
-                     '</datasource></definition>'),
-            'image2_double': ('<definition><datasource type="TANGO" name="image2_double">'
-                     '<record name="ImageDouble"/>'
-                     '<device member="attribute" name="ttestp09/testts/t2r228"/>'
-                     '</datasource></definition>'),
-            'image2_string': ('<definition><datasource type="TANGO" name="image2_string">'
-                     '<record name="ImageString"/>'
-                     '<device member="attribute" name="ttestp09/testts/t2r228"/>'
-                     '</datasource></definition>'),
-            'image2_Encoded': ('<definition><datasource type="TANGO" name="image2_encoded">'
-                     '<record name="ImageEncoded"/>'
-                     '<device member="attribute" name="ttestp09/testts/t2r228"/>'
-                     '</datasource></definition>'),
-            'image2_uchar': ('<definition><datasource type="TANGO" name="image2_uchar">'
-                     '<record name="ImageUChar"/>'
-                     '<device member="attribute" name="ttestp09/testts/t2r228"/>'
-                     '</datasource></definition>'),
-            'client2_long': ('<definition><datasource type="CLIENT" name="client2_long">'
-                     '<record name="Client2Long"/>'
-                     '</datasource></definition>'),
-            'client2_short': ('<definition><datasource type="CLIENT" name="client2_short">'
-                     '<record name="Client2Short"/>'
-                     '</datasource></definition>'),
+            'scalar2_long': (
+                '<definition><datasource type="TANGO" name="scalar2_long">'
+                '<record name="ScalarLong"/>'
+                '<device member="attribute" name="ttestp09/testts/t2r228"/>'
+                '</datasource></definition>'),
+            'scalar2_bool': (
+                '<definition><datasource type="TANGO" name="scalar2_bool">'
+                '<record name="ScalarBoolean"/>'
+                '<device member="attribute" name="ttestp09/testts/t2r228"/>'
+                '</datasource></definition>'),
+            'scalar2_short': (
+                '<definition><datasource type="TANGO" name="scalar2_short">'
+                '<record name="ScalarShort"/>'
+                '<device member="attribute" name="ttestp09/testts/t2r228"/>'
+                '</datasource></definition>'),
+            'scalar2_ushort': (
+                '<definition><datasource type="TANGO" name="scalar2_ushort">'
+                '<record name="ScalarUShort"/>'
+                '<device member="attribute" name="ttestp09/testts/t2r228"/>'
+                '</datasource></definition>'),
+            'scalar2_ulong': (
+                '<definition><datasource type="TANGO" name="scalar2_ulong">'
+                '<record name="ScalarULong"/>'
+                '<device member="attribute" name="ttestp09/testts/t2r228"/>'
+                '</datasource></definition>'),
+            'scalar2_long64': (
+                '<definition><datasource type="TANGO" name="scalar2_long64">'
+                '<record name="ScalarLong64"/>'
+                '<device member="attribute" name="ttestp09/testts/t2r228"/>'
+                '</datasource></definition>'),
+            'scalar2_ulong64': (
+                '<definition><datasource type="TANGO" name="scalar2_ulong64">'
+                '<record name="ScalarULong64"/>'
+                '<device member="attribute" name="ttestp09/testts/t2r228"/>'
+                '</datasource></definition>'),
+            'scalar2_float': (
+                '<definition><datasource type="TANGO" name="scalar2_float">'
+                '<record name="ScalarFloat"/>'
+                '<device member="attribute" name="ttestp09/testts/t2r228"/>'
+                '</datasource></definition>'),
+            'scalar2_double': (
+                '<definition><datasource type="TANGO" name="scalar2_double">'
+                '<record name="ScalarDouble"/>'
+                '<device member="attribute" name="ttestp09/testts/t2r228"/>'
+                '</datasource></definition>'),
+            'scalar2_string': (
+                '<definition><datasource type="TANGO" name="scalar2_string">'
+                '<record name="ScalarString"/>'
+                '<device member="attribute" name="ttestp09/testts/t2r228"/>'
+                '</datasource></definition>'),
+            'scalar2_Encoded': (
+                '<definition><datasource type="TANGO" name="scalar2_encoded">'
+                '<record name="ScalarEncoded"/>'
+                '<device member="attribute" name="ttestp09/testts/t2r228"/>'
+                '</datasource></definition>'),
+            'scalar2_uchar': (
+                '<definition><datasource type="TANGO" name="scalar2_uchar">'
+                '<record name="ScalarUChar"/>'
+                '<device member="attribute" name="ttestp09/testts/t2r228"/>'
+                '</datasource></definition>'),
+            'spectrum2_long': (
+                '<definition><datasource type="TANGO" name="spectrum2_long">'
+                '<record name="SpectrumLong"/>'
+                '<device member="attribute" name="ttestp09/testts/t2r228"/>'
+                '</datasource></definition>'),
+            'spectrum2_bool': (
+                '<definition><datasource type="TANGO" name="spectrum2_bool">'
+                '<record name="SpectrumBoolean"/>'
+                '<device member="attribute" name="ttestp09/testts/t2r228"/>'
+                '</datasource></definition>'),
+            'spectrum2_short': (
+                '<definition><datasource type="TANGO" name="spectrum2_short">'
+                '<record name="SpectrumShort"/>'
+                '<device member="attribute" name="ttestp09/testts/t2r228"/>'
+                '</datasource></definition>'),
+            'spectrum2_ushort': (
+                '<definition><datasource type="TANGO" name="spectrum2_ushort">'
+                '<record name="SpectrumUShort"/>'
+                '<device member="attribute" name="ttestp09/testts/t2r228"/>'
+                '</datasource></definition>'),
+            'spectrum2_ulong': (
+                '<definition><datasource type="TANGO" name="spectrum2_ulong">'
+                '<record name="SpectrumULong"/>'
+                '<device member="attribute" name="ttestp09/testts/t2r228"/>'
+                '</datasource></definition>'),
+            'spectrum2_long64': (
+                '<definition><datasource type="TANGO" name="spectrum2_long64">'
+                '<record name="SpectrumLong64"/>'
+                '<device member="attribute" name="ttestp09/testts/t2r228"/>'
+                '</datasource></definition>'),
+            'spectrum2_ulong64': (
+                '<definition>'
+                '<datasource type="TANGO" name="spectrum2_ulong64">'
+                '<record name="SpectrumULong64"/>'
+                '<device member="attribute" name="ttestp09/testts/t2r228"/>'
+                '</datasource></definition>'),
+            'spectrum2_float': (
+                '<definition><datasource type="TANGO" name="spectrum2_float">'
+                '<record name="SpectrumFloat"/>'
+                '<device member="attribute" name="ttestp09/testts/t2r228"/>'
+                '</datasource></definition>'),
+            'spectrum2_double': (
+                '<definition><datasource type="TANGO" name="spectrum2_double">'
+                '<record name="SpectrumDouble"/>'
+                '<device member="attribute" name="ttestp09/testts/t2r228"/>'
+                '</datasource></definition>'),
+            'spectrum2_string': (
+                '<definition><datasource type="TANGO" name="spectrum2_string">'
+                '<record name="SpectrumString"/>'
+                '<device member="attribute" name="ttestp09/testts/t2r228"/>'
+                '</datasource></definition>'),
+            'spectrum2_Encoded': (
+                '<definition>'
+                '<datasource type="TANGO" name="spectrum2_encoded">'
+                '<record name="SpectrumEncoded"/>'
+                '<device member="attribute" name="ttestp09/testts/t2r228"/>'
+                '</datasource></definition>'),
+            'spectrum2_uchar': (
+                '<definition><datasource type="TANGO" name="spectrum2_uchar">'
+                '<record name="SpectrumUChar"/>'
+                '<device member="attribute" name="ttestp09/testts/t2r228"/>'
+                '</datasource></definition>'),
+            'image2_long': (
+                '<definition><datasource type="TANGO" name="image2_long">'
+                '<record name="ImageLong"/>'
+                '<device member="attribute" name="ttestp09/testts/t2r228"/>'
+                '</datasource></definition>'),
+            'image2_bool': (
+                '<definition><datasource type="TANGO" name="image2_bool">'
+                '<record name="ImageBoolean"/>'
+                '<device member="attribute" name="ttestp09/testts/t2r228"/>'
+                '</datasource></definition>'),
+            'image2_short': (
+                '<definition><datasource type="TANGO" name="image2_short">'
+                '<record name="ImageShort"/>'
+                '<device member="attribute" name="ttestp09/testts/t2r228"/>'
+                '</datasource></definition>'),
+            'image2_ushort': (
+                '<definition><datasource type="TANGO" name="image2_ushort">'
+                '<record name="ImageUShort"/>'
+                '<device member="attribute" name="ttestp09/testts/t2r228"/>'
+                '</datasource></definition>'),
+            'image2_ulong': (
+                '<definition><datasource type="TANGO" name="image2_ulong">'
+                '<record name="ImageULong"/>'
+                '<device member="attribute" name="ttestp09/testts/t2r228"/>'
+                '</datasource></definition>'),
+            'image2_long64': (
+                '<definition><datasource type="TANGO" name="image2_long64">'
+                '<record name="ImageLong64"/>'
+                '<device member="attribute" name="ttestp09/testts/t2r228"/>'
+                '</datasource></definition>'),
+            'image2_ulong64': (
+                '<definition><datasource type="TANGO" name="image2_ulong64">'
+                '<record name="ImageULong64"/>'
+                '<device member="attribute" name="ttestp09/testts/t2r228"/>'
+                '</datasource></definition>'),
+            'image2_float': (
+                '<definition><datasource type="TANGO" name="image2_float">'
+                '<record name="ImageFloat"/>'
+                '<device member="attribute" name="ttestp09/testts/t2r228"/>'
+                '</datasource></definition>'),
+            'image2_double': (
+                '<definition><datasource type="TANGO" name="image2_double">'
+                '<record name="ImageDouble"/>'
+                '<device member="attribute" name="ttestp09/testts/t2r228"/>'
+                '</datasource></definition>'),
+            'image2_string': (
+                '<definition><datasource type="TANGO" name="image2_string">'
+                '<record name="ImageString"/>'
+                '<device member="attribute" name="ttestp09/testts/t2r228"/>'
+                '</datasource></definition>'),
+            'image2_Encoded': (
+                '<definition><datasource type="TANGO" name="image2_encoded">'
+                '<record name="ImageEncoded"/>'
+                '<device member="attribute" name="ttestp09/testts/t2r228"/>'
+                '</datasource></definition>'),
+            'image2_uchar': (
+                '<definition><datasource type="TANGO" name="image2_uchar">'
+                '<record name="ImageUChar"/>'
+                '<device member="attribute" name="ttestp09/testts/t2r228"/>'
+                '</datasource></definition>'),
+            'client2_long': (
+                '<definition><datasource type="CLIENT" name="client2_long">'
+                '<record name="Client2Long"/>'
+                '</datasource></definition>'),
+            'client2_short': (
+                '<definition><datasource type="CLIENT" name="client2_short">'
+                '<record name="Client2Short"/>'
+                '</datasource></definition>'),
             }
 
         self.mydss = {
-            'nn': ('<?xml version=\'1.0\'?><definition><datasource type="TANGO">'
+            'nn': ('<?xml version=\'1.0\'?>'
+                   '<definition><datasource type="TANGO">'
                     '</datasource></definition>'),
             'nn2': ('<definition><datasource type="TANGO" name="">'
                     '</datasource></definition>'),
@@ -694,12 +778,10 @@ class MacroServerPoolTest(unittest.TestCase):
                 ),
            }
 
-
-
     ## test starter
     # \brief Common set up
     def setUp(self):
-        print "SEED =", self.__seed 
+        print "SEED =", self.__seed
         self._ms.setUp()
         self._cf.setUp()
         self._pool.setUp()
@@ -709,7 +791,7 @@ class MacroServerPoolTest(unittest.TestCase):
 #        self._simps3.setUp()
 #        self._simps4.setUp()
 #        self._simpsoff.add()
-        print "\nsetting up..."        
+        print "\nsetting up..."
 
     ## test closer
     # \brief Common tear down
@@ -724,16 +806,16 @@ class MacroServerPoolTest(unittest.TestCase):
         self._pool.tearDown()
         self._cf.tearDown()
         self._ms.tearDown()
- 
+
     ## Exception tester
     # \param exception expected exception
-    # \param method called method      
+    # \param method called method
     # \param args list with method arguments
     # \param kwargs dictionary with method arguments
     def myAssertRaise(self, exception, method, *args, **kwargs):
         err = None
         try:
-            error =  False
+            error = False
             method(*args, **kwargs)
         except exception, e:
             error = True
@@ -741,23 +823,21 @@ class MacroServerPoolTest(unittest.TestCase):
         self.assertEqual(error, True)
         return err
 
-
     def myAssertDict(self, dct, dct2):
         logger.debug('dict %s' % type(dct))
-        logger.debug("\n%s\n%s" % ( dct, dct2))
+        logger.debug("\n%s\n%s" % (dct, dct2))
         self.assertTrue(isinstance(dct, dict))
         self.assertTrue(isinstance(dct2, dict))
-        logger.debug("%s %s" %(len(dct.keys()), len(dct2.keys())))
+        logger.debug("%s %s" % (len(dct.keys()), len(dct2.keys())))
         self.assertEqual(len(dct.keys()), len(dct2.keys()))
-        for k,v in dct.items():
-            logger.debug("%s  in %s" %(str(k), str(dct2.keys())))
+        for k, v in dct.items():
+            logger.debug("%s  in %s" % (str(k), str(dct2.keys())))
             self.assertTrue(k in dct2.keys())
             if isinstance(v, dict):
                 self.myAssertDict(v, dct2[k])
             else:
-                logger.debug("%s , %s" %(str(v), str(dct2[k])))
+                logger.debug("%s , %s" % (str(v), str(dct2[k])))
                 self.assertEqual(v, dct2[k])
-
 
     ## constructor test
     # \brief It tests default settings
@@ -774,18 +854,21 @@ class MacroServerPoolTest(unittest.TestCase):
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         msp = MacroServerPools(0)
         msp = MacroServerPools(10)
-        self.myAssertRaise(Exception, msp.updateMacroServer, "sfdsTESTdfdf/sdfsdf/sdffsf")
+        self.myAssertRaise(Exception, msp.updateMacroServer,
+                           "sfdsTESTdfdf/sdfsdf/sdffsf")
         self.myAssertRaise(Exception, msp.updateMacroServer, "")
         self.myAssertRaise(Exception, msp.getMacroServer, "")
         self.myAssertRaise(Exception, msp.getPools, "")
 
         msp.updateMacroServer(self._ms.door.keys()[0])
-        self.assertEqual(msp.getMacroServer(""),self._ms.ms.keys()[0])
-        self.assertEqual(msp.getMacroServer(self._ms.door.keys()[0]),self._ms.ms.keys()[0])
+        self.assertEqual(msp.getMacroServer(""), self._ms.ms.keys()[0])
+        self.assertEqual(msp.getMacroServer(self._ms.door.keys()[0]),
+                         self._ms.ms.keys()[0])
         self.assertEqual(msp.getPools(self._ms.door.keys()[0]), [])
         self.myAssertRaise(Exception, msp.getPools, "")
 
-        self.myAssertRaise(Exception, msp.updateMacroServer, "sfdsTESTdfdf/sdfsdf/sdffsf")
+        self.myAssertRaise(Exception, msp.updateMacroServer,
+                           "sfdsTESTdfdf/sdfsdf/sdffsf")
         self.myAssertRaise(Exception, msp.updateMacroServer, "")
         self.myAssertRaise(Exception, msp.getMacroServer, "")
         self.myAssertRaise(Exception, msp.getPools, "")
@@ -793,10 +876,10 @@ class MacroServerPoolTest(unittest.TestCase):
         self.assertEqual(msp.getPools(self._ms.door.keys()[0]), [])
 
         self._ms.dps[self._ms.ms.keys()[0]].DoorList = []
-        self.myAssertRaise(Exception, msp.updateMacroServer, self._ms.door.keys()[0])
+        self.myAssertRaise(Exception, msp.updateMacroServer,
+                           self._ms.door.keys()[0])
         self.myAssertRaise(Exception, msp.getMacroServer, "")
         self.myAssertRaise(Exception, msp.getPools, self._ms.door.keys()[0])
-
 
     ## constructor test
     # \brief It tests default settings
@@ -805,28 +888,32 @@ class MacroServerPoolTest(unittest.TestCase):
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         msp = MacroServerPools(10)
         db = PyTango.Database()
-        db.put_device_property(self._ms.ms.keys()[0], {'PoolNames':self._pool.dp.name()})
+        db.put_device_property(self._ms.ms.keys()[0],
+                               {'PoolNames': self._pool.dp.name()})
         self._ms.dps[self._ms.ms.keys()[0]].Init()
 
-        self.myAssertRaise(Exception, msp.updateMacroServer, "sfdsTESTdfdf/sdfsdf/sdffsf")
+        self.myAssertRaise(Exception, msp.updateMacroServer,
+                           "sfdsTESTdfdf/sdfsdf/sdffsf")
         self.myAssertRaise(Exception, msp.updateMacroServer, "")
         self.myAssertRaise(Exception, msp.getMacroServer, "")
         self.myAssertRaise(Exception, msp.getPools, "")
 
         msp.updateMacroServer(self._ms.door.keys()[0])
         self.assertEqual(msp.getMacroServer(""), self._ms.ms.keys()[0])
-        self.assertEqual(msp.getMacroServer(self._ms.door.keys()[0]),self._ms.ms.keys()[0])
+        self.assertEqual(msp.getMacroServer(self._ms.door.keys()[0]),
+                         self._ms.ms.keys()[0])
         pools = msp.getPools(self._ms.door.keys()[0])
         self.assertEqual(len(pools), 1)
         self.assertTrue(isinstance(pools[0], PyTango.DeviceProxy))
         self.assertEqual(pools[0].name(), self._pool.dp.name())
-        
+
         pools = msp.getPools("sdfs")
         self.assertEqual(len(pools), 1)
         self.assertTrue(isinstance(pools[0], PyTango.DeviceProxy))
         self.assertEqual(pools[0].name(), self._pool.dp.name())
 
-        self.myAssertRaise(Exception, msp.updateMacroServer, "sfdsTESTdfdf/sdfsdf/sdffsf")
+        self.myAssertRaise(Exception, msp.updateMacroServer,
+                           "sfdsTESTdfdf/sdfsdf/sdffsf")
         self.myAssertRaise(Exception, msp.updateMacroServer, "")
         self.myAssertRaise(Exception, msp.getMacroServer, "")
 
@@ -841,43 +928,47 @@ class MacroServerPoolTest(unittest.TestCase):
         self.assertEqual(pools[0].name(), self._pool.dp.name())
 
         self._ms.dps[self._ms.ms.keys()[0]].DoorList = []
-        self.myAssertRaise(Exception, msp.updateMacroServer, self._ms.door.keys()[0])
+        self.myAssertRaise(Exception, msp.updateMacroServer,
+                           self._ms.door.keys()[0])
         self.myAssertRaise(Exception, msp.getMacroServer, "")
         self.myAssertRaise(Exception, msp.getPools, "")
-        
+
         self.myAssertRaise(Exception, msp.getPools, self._ms.door.keys()[0])
-
-
 
     ## constructor test
     # \brief It tests default settings
     def test_getPool_1to3(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
-        doors = ["door2testp09/testts/t1r228","door2testp09/testts/t2r228","door2testp09/testts/t3r228"]
+        doors = ["door2testp09/testts/t1r228",
+                 "door2testp09/testts/t2r228",
+                 "door2testp09/testts/t3r228"]
         msname = "ms2testp09/testts/t1r228"
         try:
-            
-            ms2 = TestMacroServerSetUp.TestMacroServerSetUp("MSTESTS1TO3", [msname], doors)
+
+            ms2 = TestMacroServerSetUp.TestMacroServerSetUp(
+                "MSTESTS1TO3", [msname], doors)
             ms2.setUp()
 
             msp = MacroServerPools(10)
             db = PyTango.Database()
-            db.put_device_property(ms2.ms.keys()[0], {'PoolNames':self._pool.dp.name()})
+            db.put_device_property(ms2.ms.keys()[0],
+                                   {'PoolNames': self._pool.dp.name()})
             ms2.dps[ms2.ms.keys()[0]].Init()
 
-            
             for i in range(3):
                 ms2.dps[ms2.ms.keys()[0]].DoorList = doors
                 print "doors", doors[i]
-                self.myAssertRaise(Exception, msp.updateMacroServer, "sfdsTESTdfdf/sdfsdf/sdffsf")
+                self.myAssertRaise(Exception, msp.updateMacroServer,
+                                   "sfdsTESTdfdf/sdfsdf/sdffsf")
                 self.myAssertRaise(Exception, msp.updateMacroServer, "")
                 self.myAssertRaise(Exception, msp.getMacroServer, "")
                 self.myAssertRaise(Exception, msp.getPools, "")
                 print doors[i]
                 msp.updateMacroServer(doors[i])
                 self.assertEqual(msp.getMacroServer(""), ms2.ms.keys()[0])
-                self.assertEqual(msp.getMacroServer(doors[i]),ms2.ms.keys()[0])
+                self.assertEqual(msp.getMacroServer(doors[i]),
+                                 ms2.ms.keys()[0])
                 pools = msp.getPools(doors[i])
                 self.assertEqual(len(pools), 1)
                 self.assertTrue(isinstance(pools[0], PyTango.DeviceProxy))
@@ -888,7 +979,8 @@ class MacroServerPoolTest(unittest.TestCase):
                 self.assertTrue(isinstance(pools[0], PyTango.DeviceProxy))
                 self.assertEqual(pools[0].name(), self._pool.dp.name())
 
-                self.myAssertRaise(Exception, msp.updateMacroServer, "sfdsTESTdfdf/sdfsdf/sdffsf")
+                self.myAssertRaise(Exception, msp.updateMacroServer,
+                                   "sfdsTESTdfdf/sdfsdf/sdffsf")
                 self.myAssertRaise(Exception, msp.updateMacroServer, "")
                 self.myAssertRaise(Exception, msp.getMacroServer, "")
 
@@ -911,37 +1003,41 @@ class MacroServerPoolTest(unittest.TestCase):
         finally:
             ms2.tearDown()
 
-
     ## constructor test
     # \brief It tests default settings
     def test_getPool_3to3(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
-        doors = ["door3testp09/testts/t1r228","door3testp09/testts/t2r228","door3testp09/testts/t3r228"]
-        mss =  ["ms3testp09/testts/t1r228", "ms3testp09/testts/t2r228", "ms3testp09/testts/t3r228"]
+        doors = ["door3testp09/testts/t1r228",
+                 "door3testp09/testts/t2r228",
+                 "door3testp09/testts/t3r228"]
+        mss = ["ms3testp09/testts/t1r228",
+               "ms3testp09/testts/t2r228",
+               "ms3testp09/testts/t3r228"]
         try:
-            
-            ms3 = TestMacroServerSetUp.TestMacroServerSetUp("MSTESTS3TO3", mss, doors)
+
+            ms3 = TestMacroServerSetUp.TestMacroServerSetUp(
+                "MSTESTS3TO3", mss, doors)
             ms3.setUp()
 
             msp = MacroServerPools(10)
             db = PyTango.Database()
             for j, ms in enumerate(mss):
-                db.put_device_property(ms, {'PoolNames':self._pool.dp.name()})
+                db.put_device_property(ms, {'PoolNames': self._pool.dp.name()})
                 ms3.dps[ms].Init()
-            
 
             for i, ms in enumerate(mss):
                 ms3.dps[ms].DoorList = [doors[i]]
                 print "ms", ms, "doors", doors[i]
-                self.myAssertRaise(Exception, msp.updateMacroServer, "sfdsTESTdfdf/sdfsdf/sdffsf")
+                self.myAssertRaise(Exception, msp.updateMacroServer,
+                                   "sfdsTESTdfdf/sdfsdf/sdffsf")
                 self.myAssertRaise(Exception, msp.updateMacroServer, "")
                 self.myAssertRaise(Exception, msp.getMacroServer, "")
                 self.myAssertRaise(Exception, msp.getPools, "")
                 print doors[i]
                 msp.updateMacroServer(doors[i])
                 self.assertEqual(msp.getMacroServer(""), ms)
-                self.assertEqual(msp.getMacroServer(doors[i]),ms)
+                self.assertEqual(msp.getMacroServer(doors[i]), ms)
                 pools = msp.getPools(doors[i])
                 self.assertEqual(len(pools), 1)
                 self.assertTrue(isinstance(pools[0], PyTango.DeviceProxy))
@@ -952,7 +1048,8 @@ class MacroServerPoolTest(unittest.TestCase):
                 self.assertTrue(isinstance(pools[0], PyTango.DeviceProxy))
                 self.assertEqual(pools[0].name(), self._pool.dp.name())
 
-                self.myAssertRaise(Exception, msp.updateMacroServer, "sfdsTESTdfdf/sdfsdf/sdffsf")
+                self.myAssertRaise(Exception, msp.updateMacroServer,
+                                   "sfdsTESTdfdf/sdfsdf/sdffsf")
                 self.myAssertRaise(Exception, msp.updateMacroServer, "")
                 self.myAssertRaise(Exception, msp.getMacroServer, "")
 
@@ -974,7 +1071,6 @@ class MacroServerPoolTest(unittest.TestCase):
                 self.myAssertRaise(Exception, msp.getPools, doors[i])
         finally:
             ms3.tearDown()
-                        
 
     ## constructor test
     # \brief It tests default settings
@@ -986,17 +1082,21 @@ class MacroServerPoolTest(unittest.TestCase):
         channelerrors = []
         poolchannels = []
         componentgroup = {}
-        self.myAssertRaise(Exception, msp.checkComponentChannels, None, None, None, None, None)
+        self.myAssertRaise(Exception, msp.checkComponentChannels,
+                           None, None, None, None, None)
         res = msp.checkComponentChannels(self._ms.door.keys()[0],
-                                   self._cf.dp, 
-                                   poolchannels,
-                                   componentgroup,
-                                   channelerrors)
+                                         self._cf.dp,
+                                         poolchannels,
+                                         componentgroup,
+                                         channelerrors)
         self.assertEqual(res, '{}')
         print self._cf.dp.GetCommandVariable("COMMANDS")
-        self.assertEqual(json.loads(self._cf.dp.GetCommandVariable("COMMANDS")), 
-                         ['AvailableComponents','AvailableDataSources','AvailableComponents'])
-        self.assertEqual(json.loads(self._cf.dp.GetCommandVariable("VARS")), [None, None, None])
+        self.assertEqual(
+            json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
+            ['AvailableComponents', 'AvailableDataSources',
+             'AvailableComponents'])
+        self.assertEqual(json.loads(
+                self._cf.dp.GetCommandVariable("VARS")), [None, None, None])
 
     ## constructor test
     # \brief It tests default settings
@@ -1013,19 +1113,22 @@ class MacroServerPoolTest(unittest.TestCase):
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
 
         res = msp.checkComponentChannels(self._ms.door.keys()[0],
-                                   self._cf.dp, 
-                                   poolchannels,
-                                   componentgroup,
-                                   channelerrors)
+                                         self._cf.dp,
+                                         poolchannels,
+                                         componentgroup,
+                                         channelerrors)
         self.assertEqual(res, '{}')
         self.assertEqual(componentgroup, {})
         self.assertEqual(channelerrors, [])
         print self._cf.dp.GetCommandVariable("COMMANDS")
-        self.assertEqual(json.loads(self._cf.dp.GetCommandVariable("COMMANDS")), 
-                         ["AvailableComponents", "AvailableDataSources", "AvailableComponents"])
-        self.assertEqual(json.loads(self._cf.dp.GetCommandVariable("VARS")), [None, None, None])
+        self.assertEqual(
+            json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
+            ["AvailableComponents", "AvailableDataSources",
+             "AvailableComponents"])
+        self.assertEqual(
+            json.loads(self._cf.dp.GetCommandVariable("VARS")),
+            [None, None, None])
 #        print self._cf.dp.availableComponents()
-
 
     ## constructor test
     # \brief It tests default settings
@@ -1036,27 +1139,29 @@ class MacroServerPoolTest(unittest.TestCase):
         msp = MacroServerPools(10)
         channelerrors = []
         poolchannels = ["mycp"]
-        componentgroup = {"mycp":False}
+        componentgroup = {"mycp": False}
 
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
 
         res = msp.checkComponentChannels(self._ms.door.keys()[0],
-                                   self._cf.dp, 
-                                   poolchannels,
-                                   componentgroup,
-                                   channelerrors)
-        self.myAssertDict(json.loads(res), {"mycp":True})
-        self.assertEqual(componentgroup, {"mycp":True})
+                                         self._cf.dp,
+                                         poolchannels,
+                                         componentgroup,
+                                         channelerrors)
+        self.myAssertDict(json.loads(res), {"mycp": True})
+        self.assertEqual(componentgroup, {"mycp": True})
         self.assertEqual(channelerrors, [])
 
         print self._cf.dp.GetCommandVariable("COMMANDS")
-        self.assertEqual(json.loads(self._cf.dp.GetCommandVariable("COMMANDS")), 
-                         ["AvailableComponents", "AvailableDataSources", "AvailableComponents", "Components"])
-        self.assertEqual(json.loads(self._cf.dp.GetCommandVariable("VARS")),[None, None, None, ['mycp']] )
+        self.assertEqual(
+            json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
+            ["AvailableComponents", "AvailableDataSources",
+             "AvailableComponents", "Components"])
+        self.assertEqual(
+            json.loads(self._cf.dp.GetCommandVariable("VARS")),
+            [None, None, None, ['mycp']])
 #        print self._cf.dp.availableComponents()
-
-
 
     ## constructor test
     # \brief It tests default settings
@@ -1073,18 +1178,22 @@ class MacroServerPoolTest(unittest.TestCase):
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
 
         res = msp.checkComponentChannels(self._ms.door.keys()[0],
-                                   self._cf.dp, 
-                                   poolchannels,
-                                   componentgroup,
-                                   channelerrors)
+                                         self._cf.dp,
+                                         poolchannels,
+                                         componentgroup,
+                                         channelerrors)
         self.myAssertDict(json.loads(res), {})
         self.assertEqual(componentgroup, {})
         self.assertEqual(channelerrors, [])
 
         print self._cf.dp.GetCommandVariable("COMMANDS")
-        self.assertEqual(json.loads(self._cf.dp.GetCommandVariable("COMMANDS")), 
-                         ["AvailableComponents", "AvailableDataSources", "AvailableComponents"])
-        self.assertEqual(json.loads(self._cf.dp.GetCommandVariable("VARS")),[None, None, None] )
+        self.assertEqual(
+            json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
+            ["AvailableComponents", "AvailableDataSources",
+             "AvailableComponents"])
+        self.assertEqual(
+            json.loads(self._cf.dp.GetCommandVariable("VARS")),
+            [None, None, None])
 
 #        print self._cf.dp.availableComponents()
     ## constructor test
@@ -1096,26 +1205,28 @@ class MacroServerPoolTest(unittest.TestCase):
         msp = MacroServerPools(10)
         channelerrors = []
         poolchannels = []
-        componentgroup = {"mycp":True}
+        componentgroup = {"mycp": True}
 
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
 
         res = msp.checkComponentChannels(self._ms.door.keys()[0],
-                                   self._cf.dp, 
-                                   poolchannels,
-                                   componentgroup,
-                                   channelerrors)
-        self.myAssertDict(json.loads(res), {"mycp":True})
-        self.assertEqual(componentgroup, {"mycp":True})
+                                         self._cf.dp,
+                                         poolchannels,
+                                         componentgroup,
+                                         channelerrors)
+        self.myAssertDict(json.loads(res), {"mycp": True})
+        self.assertEqual(componentgroup, {"mycp": True})
         self.assertEqual(channelerrors, [])
 
         print self._cf.dp.GetCommandVariable("COMMANDS")
-        self.assertEqual(json.loads(self._cf.dp.GetCommandVariable("COMMANDS")), 
-                         ["AvailableComponents", "AvailableDataSources", "AvailableComponents", "Components"])
-        self.assertEqual(json.loads(self._cf.dp.GetCommandVariable("VARS")),[None, None, None, ['mycp']] )
+        self.assertEqual(
+            json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
+            ["AvailableComponents", "AvailableDataSources",
+             "AvailableComponents", "Components"])
+        self.assertEqual(json.loads(self._cf.dp.GetCommandVariable("VARS")),
+                         [None, None, None, ['mycp']])
 #        print self._cf.dp.availableComponents()
-
 
     ## constructor test
     # \brief It tests default settings
@@ -1126,28 +1237,29 @@ class MacroServerPoolTest(unittest.TestCase):
         msp = MacroServerPools(10)
         channelerrors = []
         poolchannels = []
-        componentgroup = {"smycp":True}
+        componentgroup = {"smycp": True}
 
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.smycps)])
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
 
         res = msp.checkComponentChannels(self._ms.door.keys()[0],
-                                   self._cf.dp, 
-                                   poolchannels,
-                                   componentgroup,
-                                   channelerrors)
-        
+                                         self._cf.dp,
+                                         poolchannels,
+                                         componentgroup,
+                                         channelerrors)
+
         print res
-        self.myAssertDict(json.loads(res), {"smycp":True})
-        self.assertEqual(componentgroup, {"smycp":True})
+        self.myAssertDict(json.loads(res), {"smycp": True})
+        self.assertEqual(componentgroup, {"smycp": True})
         self.assertEqual(channelerrors, [])
 
         print self._cf.dp.GetCommandVariable("COMMANDS")
-        self.assertEqual(json.loads(self._cf.dp.GetCommandVariable("COMMANDS")), 
-                         ["AvailableComponents", "AvailableDataSources", "AvailableComponents", 
-                          "Components", "DataSources",  "DataSources", "DataSources",  "DataSources"])
-#        self.assertEqual(json.loads(self._cf.dp.GetCommandVariable("VARS")),[None, None, None, ['smycp']] )
-
+        self.assertEqual(
+            json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
+            ["AvailableComponents", "AvailableDataSources",
+             "AvailableComponents",
+             "Components", "DataSources",  "DataSources", "DataSources",
+             "DataSources"])
 
     ## constructor test
     # \brief It tests default settings
@@ -1158,44 +1270,51 @@ class MacroServerPoolTest(unittest.TestCase):
         msp = MacroServerPools(10)
         channelerrors = []
         poolchannels = []
-        componentgroup = {"smycp":False,"smycp2":False,"smycp3":False}
+        componentgroup = {"smycp": False, "smycp2": False, "smycp3": False}
 
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.smycps)])
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
 
         res = msp.checkComponentChannels(self._ms.door.keys()[0],
-                                   self._cf.dp, 
-                                   poolchannels,
-                                   componentgroup,
-                                   channelerrors)
-        
-        self.myAssertDict(json.loads(res), {"smycp":True,"smycp2":True,"smycp3":True})
-        self.assertEqual(componentgroup, {"smycp":True,"smycp2":True,"smycp3":True})
+                                         self._cf.dp,
+                                         poolchannels,
+                                         componentgroup,
+                                         channelerrors)
+
+        self.myAssertDict(json.loads(res), {
+                "smycp": True, "smycp2": True, "smycp3": True})
+        self.assertEqual(componentgroup, {
+                "smycp": True, "smycp2": True, "smycp3": True})
         self.assertEqual(channelerrors, [])
 
         print self._cf.dp.GetCommandVariable("COMMANDS")
-        self.assertEqual(json.loads(self._cf.dp.GetCommandVariable("COMMANDS")), 
-                         ["AvailableComponents", "AvailableDataSources", "AvailableComponents", 
-                          "Components", "DataSources",  "DataSources",  "DataSources",  "DataSources", 
-                          "Components", "DataSources",  "DataSources", "DataSources",  "DataSources", 
-                          "Components", "DataSources",  "DataSources", "DataSources",  "DataSources" ])
+        self.assertEqual(
+            json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
+            ["AvailableComponents", "AvailableDataSources",
+             "AvailableComponents",
+             "Components", "DataSources",  "DataSources",  "DataSources",
+             "DataSources",
+             "Components", "DataSources",  "DataSources", "DataSources",
+             "DataSources",
+             "Components", "DataSources",  "DataSources", "DataSources",
+             "DataSources"])
         res = json.loads(self._cf.dp.GetCommandVariable("VARS"))
-#        self.assertEqual(sorted(componentgroup.keys()),sorted([res[3][0], res[4][0], res[5][0]]) )
-
 
     ## constructor test
     # \brief It tests default settings
     def test_checkComponentChannels_2wds(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
-        simps2 = TestServerSetUp.TestServerSetUp( "ttestp09/testts/t2r228", "S2")
+        simps2 = TestServerSetUp.TestServerSetUp(
+            "ttestp09/testts/t2r228", "S2")
         try:
             simps2.setUp()
             msp = MacroServerPools(1)
             channelerrors = []
             poolchannels = []
-            componentgroup = {"smycp":False,"smycp2":False,"smycp3":False,
-                              "s2mycp":False,"s2mycp2":False,"s2mycp3":False}
+            componentgroup = {"smycp": False, "smycp2": False, "smycp3": False,
+                              "s2mycp": False, "s2mycp2": False,
+                              "s2mycp3": False}
 
             cps = dict(self.smycps)
             cps.update(self.smycps2)
@@ -1207,48 +1326,58 @@ class MacroServerPoolTest(unittest.TestCase):
     #        print "MDSS", self._cf.dp.availableDataSources()
     #        print "XDSS", self._cf.dp.dataSources(["scalar_long"])
             res = msp.checkComponentChannels(self._ms.door.keys()[0],
-                                       self._cf.dp, 
-                                       poolchannels,
-                                       componentgroup,
-                                       channelerrors)
-    #        print res 
+                                             self._cf.dp,
+                                             poolchannels,
+                                             componentgroup,
+                                             channelerrors)
+    #        print res
     #        print channelerrors
 
             self.myAssertDict(json.loads(res), {
-                    "smycp":True,"smycp2":True,"smycp3":True,
-                    "s2mycp":True,"s2mycp2":True,"s2mycp3":True})
+                    "smycp": True, "smycp2": True, "smycp3": True,
+                    "s2mycp": True, "s2mycp2": True, "s2mycp3": True})
             self.myAssertDict(componentgroup, {
-                    "smycp":True,"smycp2":True,"smycp3":True,
-                    "s2mycp":True,"s2mycp2":True,"s2mycp3":True})
+                    "smycp": True, "smycp2": True, "smycp3": True,
+                    "s2mycp": True, "s2mycp2": True, "s2mycp3": True})
             self.assertEqual(len(channelerrors), 0)
 
     #        print self._cf.dp.GetCommandVariable("COMMANDS")
-            self.assertEqual(json.loads(self._cf.dp.GetCommandVariable("COMMANDS")), 
-                             ["AvailableComponents", "AvailableDataSources", "AvailableComponents", 
-                              "Components", "DataSources","DataSources", "DataSources", "DataSources",
-                              "Components", "DataSources","DataSources", "DataSources","DataSources",
-                              "Components", "DataSources","DataSources", "DataSources","DataSources",
-                              "Components", "DataSources","DataSources", "DataSources","DataSources",
-                              "Components", "DataSources","DataSources", "DataSources","DataSources",
-                              "Components", "DataSources","DataSources", "DataSources","DataSources"])
+            self.assertEqual(
+                json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
+                             [
+                    "AvailableComponents", "AvailableDataSources",
+                    "AvailableComponents",
+                    "Components", "DataSources", "DataSources", "DataSources",
+                    "DataSources",
+                    "Components", "DataSources", "DataSources", "DataSources",
+                    "DataSources",
+                    "Components", "DataSources", "DataSources", "DataSources",
+                    "DataSources",
+                    "Components", "DataSources", "DataSources", "DataSources",
+                    "DataSources",
+                    "Components", "DataSources", "DataSources", "DataSources",
+                    "DataSources",
+                    "Components", "DataSources", "DataSources", "DataSources",
+                    "DataSources"])
             res = json.loads(self._cf.dp.GetCommandVariable("VARS"))
         finally:
             simps2.tearDown()
-            
 
     ## constructor test
     # \brief It tests default settings
     def test_checkComponentChannels_2wds_dvnorunning(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
-        simps2 = TestServerSetUp.TestServerSetUp( "ttestp09/testts/t2r228", "S2")
+        simps2 = TestServerSetUp.TestServerSetUp(
+            "ttestp09/testts/t2r228", "S2")
         try:
             simps2.add()
             msp = MacroServerPools(1)
             channelerrors = []
             poolchannels = []
-            componentgroup = {"smycp":False,"smycp2":False,"smycp3":False,
-                              "s2mycp":False,"s2mycp2":False,"s2mycp3":False}
+            componentgroup = {"smycp": False, "smycp2": False, "smycp3": False,
+                              "s2mycp": False, "s2mycp2": False,
+                              "s2mycp3": False}
 
             cps = dict(self.smycps)
             cps.update(self.smycps2)
@@ -1260,34 +1389,42 @@ class MacroServerPoolTest(unittest.TestCase):
     #        print "MDSS", self._cf.dp.availableDataSources()
     #        print "XDSS", self._cf.dp.dataSources(["scalar_long"])
             res = msp.checkComponentChannels(self._ms.door.keys()[0],
-                                       self._cf.dp, 
-                                       poolchannels,
-                                       componentgroup,
-                                       channelerrors)
-    #        print res 
+                                             self._cf.dp,
+                                             poolchannels,
+                                             componentgroup,
+                                             channelerrors)
+    #        print res
     #        print channelerrors
 
             self.myAssertDict(json.loads(res), {
-                    "smycp":True,"smycp2":True,"smycp3":True,
-                    "s2mycp":False,"s2mycp2":False,"s2mycp3":False})
+                    "smycp": True, "smycp2": True, "smycp3": True,
+                    "s2mycp": False, "s2mycp2": False, "s2mycp3": False})
             self.myAssertDict(componentgroup, {
-                    "smycp":True,"smycp2":True,"smycp3":True,
-                    "s2mycp":False,"s2mycp2":False,"s2mycp3":False})
+                    "smycp": True, "smycp2": True, "smycp3": True,
+                    "s2mycp": False, "s2mycp2": False, "s2mycp3": False})
             self.assertEqual(len(channelerrors), 3)
 
     #        print self._cf.dp.GetCommandVariable("COMMANDS")
-            self.assertEqual(json.loads(self._cf.dp.GetCommandVariable("COMMANDS")), 
-                             ["AvailableComponents", "AvailableDataSources", "AvailableComponents", 
-                              "Components", "DataSources","DataSources", "DataSources", "DataSources",
-                              "Components", "DataSources","DataSources", "DataSources","DataSources",
-                              "Components", "DataSources","DataSources", "DataSources","DataSources",
-                              "Components", "DataSources","DataSources", "DataSources","DataSources",
-                              "Components", "DataSources","DataSources", "DataSources","DataSources",
-                              "Components", "DataSources","DataSources", "DataSources","DataSources"])
+            self.assertEqual(
+                json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
+                             [
+                    "AvailableComponents", "AvailableDataSources",
+                    "AvailableComponents",
+                    "Components", "DataSources", "DataSources", "DataSources",
+                    "DataSources",
+                    "Components", "DataSources", "DataSources", "DataSources",
+                    "DataSources",
+                    "Components", "DataSources", "DataSources", "DataSources",
+                    "DataSources",
+                    "Components", "DataSources", "DataSources", "DataSources",
+                    "DataSources",
+                    "Components", "DataSources", "DataSources", "DataSources",
+                    "DataSources",
+                    "Components", "DataSources", "DataSources", "DataSources",
+                    "DataSources"])
             res = json.loads(self._cf.dp.GetCommandVariable("VARS"))
         finally:
             simps2.delete()
-            
 
     ## constructor test
     # \brief It tests default settings
@@ -1297,8 +1434,8 @@ class MacroServerPoolTest(unittest.TestCase):
         msp = MacroServerPools(1)
         channelerrors = []
         poolchannels = []
-        componentgroup = {"smycp":False,"smycp2":False,"smycp3":False,
-                          "s2mycp":False,"s2mycp2":False,"s2mycp3":False}
+        componentgroup = {"smycp": False, "smycp2": False, "smycp3": False,
+                          "s2mycp": False, "s2mycp2": False, "s2mycp3": False}
 
         cps = dict(self.smycps)
         cps.update(self.smycps2)
@@ -1310,48 +1447,56 @@ class MacroServerPoolTest(unittest.TestCase):
 #        print "MDSS", self._cf.dp.availableDataSources()
 #        print "XDSS", self._cf.dp.dataSources(["scalar_long"])
         res = msp.checkComponentChannels(self._ms.door.keys()[0],
-                                   self._cf.dp, 
+                                   self._cf.dp,
                                    poolchannels,
                                    componentgroup,
                                    channelerrors)
-#        print res 
+#        print res
 #        print channelerrors
 
         self.myAssertDict(json.loads(res), {
-                "smycp":True,"smycp2":True,"smycp3":True,
-                "s2mycp":False,"s2mycp2":False,"s2mycp3":False})
+                "smycp": True, "smycp2": True, "smycp3": True,
+                "s2mycp": False, "s2mycp2": False, "s2mycp3": False})
         self.myAssertDict(componentgroup, {
-                "smycp":True,"smycp2":True,"smycp3":True,
-                "s2mycp":False,"s2mycp2":False,"s2mycp3":False})
+                "smycp": True, "smycp2": True, "smycp3": True,
+                "s2mycp": False, "s2mycp2": False, "s2mycp3": False})
         self.assertEqual(len(channelerrors), 3)
 
 #        print self._cf.dp.GetCommandVariable("COMMANDS")
-        self.assertEqual(json.loads(self._cf.dp.GetCommandVariable("COMMANDS")), 
-                         ["AvailableComponents", "AvailableDataSources", "AvailableComponents", 
-                          "Components", "DataSources","DataSources", "DataSources", "DataSources",
-                          "Components", "DataSources","DataSources", "DataSources","DataSources",
-                          "Components", "DataSources","DataSources", "DataSources","DataSources",
-                          "Components", "DataSources","DataSources", "DataSources","DataSources",
-                          "Components", "DataSources","DataSources", "DataSources","DataSources",
-                          "Components", "DataSources","DataSources", "DataSources","DataSources"])
+        self.assertEqual(json.loads(
+                self._cf.dp.GetCommandVariable("COMMANDS")),
+                         [
+                "AvailableComponents", "AvailableDataSources",
+                "AvailableComponents",
+                "Components", "DataSources", "DataSources", "DataSources",
+                "DataSources",
+                "Components", "DataSources", "DataSources", "DataSources",
+                "DataSources",
+                "Components", "DataSources", "DataSources", "DataSources",
+                "DataSources",
+                "Components", "DataSources", "DataSources", "DataSources",
+                "DataSources",
+                "Components", "DataSources", "DataSources", "DataSources",
+                "DataSources",
+                "Components", "DataSources", "DataSources", "DataSources",
+                "DataSources"])
         res = json.loads(self._cf.dp.GetCommandVariable("VARS"))
-#        print res
-#        self.assertEqual(sorted(componentgroup.keys()),sorted([res[3][0], res[4][0], res[5][0]]) )
-
 
     ## constructor test
     # \brief It tests default settings
     def test_checkComponentChannels_2wds_nods(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
-        simps2 = TestServerSetUp.TestServerSetUp( "ttestp09/testts/t2r228", "S2")
+        simps2 = TestServerSetUp.TestServerSetUp(
+            "ttestp09/testts/t2r228", "S2")
         try:
             simps2.setUp()
             msp = MacroServerPools(1)
             channelerrors = []
             poolchannels = []
-            componentgroup = {"smycp":False,"smycp2":False,"smycp3":False,
-                              "s2mycp":False,"s2mycp2":False,"s2mycp3":False}
+            componentgroup = {"smycp": False, "smycp2": False, "smycp3": False,
+                              "s2mycp": False, "s2mycp2": False,
+                              "s2mycp3": False}
 
             cps = dict(self.smycps)
             cps.update(self.smycps2)
@@ -1363,41 +1508,41 @@ class MacroServerPoolTest(unittest.TestCase):
     #        print "MDSS", self._cf.dp.availableDataSources()
     #        print "XDSS", self._cf.dp.dataSources(["scalar_long"])
             res = msp.checkComponentChannels(self._ms.door.keys()[0],
-                                       self._cf.dp, 
+                                       self._cf.dp,
                                        poolchannels,
                                        componentgroup,
                                        channelerrors)
-    #        print res 
+    #        print res
     #        print channelerrors
 
             self.myAssertDict(json.loads(res), {
-                    "smycp":True,"smycp2":True,"smycp3":True,
-                    "s2mycp":True,"s2mycp2":True,"s2mycp3":True})
+                    "smycp": True, "smycp2": True, "smycp3": True,
+                    "s2mycp": True, "s2mycp2": True, "s2mycp3": True})
             self.myAssertDict(componentgroup, {
-                    "smycp":True,"smycp2":True,"smycp3":True,
-                    "s2mycp":True,"s2mycp2":True,"s2mycp3":True})
+                    "smycp": True, "smycp2": True, "smycp3": True,
+                    "s2mycp": True, "s2mycp2": True, "s2mycp3": True})
             self.assertEqual(len(channelerrors), 0)
 
     #        print self._cf.dp.GetCommandVariable("COMMANDS")
             res = json.loads(self._cf.dp.GetCommandVariable("VARS"))
         finally:
             simps2.tearDown()
-            
-
 
     ## constructor test
     # \brief It tests default settings
     def test_checkComponentChannels_2wds_nodspool(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
-        simps2 = TestServerSetUp.TestServerSetUp( "ttestp09/testts/t2r228", "S2")
+        simps2 = TestServerSetUp.TestServerSetUp(
+            "ttestp09/testts/t2r228", "S2")
         try:
             simps2.setUp()
             msp = MacroServerPools(1)
             channelerrors = []
             poolchannels = ["scalar2_long", "spectrum2_short"]
-            componentgroup = {"smycp":False,"smycp2":False,"smycp3":False,
-                              "s2mycp":False,"s2mycp2":False,"s2mycp3":False}
+            componentgroup = {"smycp": False, "smycp2": False, "smycp3": False,
+                              "s2mycp": False, "s2mycp2": False,
+                              "s2mycp3": False}
 
             cps = dict(self.smycps)
             cps.update(self.smycps2)
@@ -1409,19 +1554,19 @@ class MacroServerPoolTest(unittest.TestCase):
     #        print "MDSS", self._cf.dp.availableDataSources()
     #        print "XDSS", self._cf.dp.dataSources(["scalar_long"])
             res = msp.checkComponentChannels(self._ms.door.keys()[0],
-                                       self._cf.dp, 
+                                       self._cf.dp,
                                        poolchannels,
                                        componentgroup,
                                        channelerrors)
-    #        print res 
+    #        print res
     #        print channelerrors
 
             self.myAssertDict(json.loads(res), {
-                    "smycp":True,"smycp2":True,"smycp3":True,
-                    "s2mycp":False,"s2mycp2":False,"s2mycp3":True})
+                    "smycp": True, "smycp2": True, "smycp3": True,
+                    "s2mycp": False, "s2mycp2": False, "s2mycp3": True})
             self.myAssertDict(componentgroup, {
-                    "smycp":True,"smycp2":True,"smycp3":True,
-                    "s2mycp":False,"s2mycp2":False,"s2mycp3":True})
+                    "smycp": True, "smycp2": True, "smycp3": True,
+                    "s2mycp": False, "s2mycp2": False, "s2mycp3": True})
             self.assertEqual(len(channelerrors), 2)
 
     #        print self._cf.dp.GetCommandVariable("COMMANDS")
@@ -1434,14 +1579,17 @@ class MacroServerPoolTest(unittest.TestCase):
     def test_checkComponentChannels_2wds_notangods(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
-        simps2 = TestServerSetUp.TestServerSetUp( "ttestp09/testts/t2r228", "S2")
+        simps2 = TestServerSetUp.TestServerSetUp(
+            "ttestp09/testts/t2r228", "S2")
         try:
             simps2.setUp()
             msp = MacroServerPools(1)
             channelerrors = []
             poolchannels = ["scalar2_long", "spectrum2_short"]
-            componentgroup = {"smycp":False,"smycp2":False,"smycp3":False,"smycpnt1":False,
-                              "s2mycp":False,"s2mycp2":False,"s2mycp3":False}
+            componentgroup = {"smycp": False, "smycp2": False,
+                              "smycp3": False, "smycpnt1": False,
+                              "s2mycp": False, "s2mycp2": False,
+                              "s2mycp3": False}
 
             cps = dict(self.smycps)
             cps.update(self.smycps2)
@@ -1453,19 +1601,21 @@ class MacroServerPoolTest(unittest.TestCase):
     #        print "MDSS", self._cf.dp.availableDataSources()
     #        print "XDSS", self._cf.dp.dataSources(["scalar_long"])
             res = msp.checkComponentChannels(self._ms.door.keys()[0],
-                                       self._cf.dp, 
+                                       self._cf.dp,
                                        poolchannels,
                                        componentgroup,
                                        channelerrors)
-#            print res 
+#            print res
     #        print channelerrors
 
             self.myAssertDict(json.loads(res), {
-                    "smycp":True,"smycp2":True,"smycp3":True,
-                    "s2mycp":True,"s2mycp2":True,"s2mycp3":True,"smycpnt1":True})
+                    "smycp": True, "smycp2": True, "smycp3": True,
+                    "s2mycp": True, "s2mycp2": True, "s2mycp3": True,
+                    "smycpnt1": True})
             self.myAssertDict(componentgroup, {
-                    "smycp":True,"smycp2":True,"smycp3":True,
-                    "s2mycp":True,"s2mycp2":True,"s2mycp3":True,"smycpnt1":True})
+                    "smycp": True, "smycp2": True, "smycp3": True,
+                    "s2mycp": True, "s2mycp2": True, "s2mycp3": True,
+                    "smycpnt1": True})
             self.assertEqual(len(channelerrors), 0)
 
     #        print self._cf.dp.GetCommandVariable("COMMANDS")
@@ -1478,14 +1628,17 @@ class MacroServerPoolTest(unittest.TestCase):
     def test_checkComponentChannels_2wds_notangodsnopool(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
-        simps2 = TestServerSetUp.TestServerSetUp( "ttestp09/testts/t2r228", "S2")
+        simps2 = TestServerSetUp.TestServerSetUp(
+            "ttestp09/testts/t2r228", "S2")
         try:
             simps2.setUp()
             msp = MacroServerPools(1)
             channelerrors = []
             poolchannels = ["scalar2_long", "spectrum2_short", "client_long"]
-            componentgroup = {"smycp":False,"smycp2":False,"smycp3":False,"smycpnt1":False,
-                              "s2mycp":False,"s2mycp2":False,"s2mycp3":False}
+            componentgroup = {"smycp": False, "smycp2": False,
+                              "smycp3": False, "smycpnt1": False,
+                              "s2mycp": False, "s2mycp2": False,
+                              "s2mycp3": False}
 
             cps = dict(self.smycps)
             cps.update(self.smycps2)
@@ -1497,42 +1650,47 @@ class MacroServerPoolTest(unittest.TestCase):
     #        print "MDSS", self._cf.dp.availableDataSources()
     #        print "XDSS", self._cf.dp.dataSources(["scalar_long"])
             res = msp.checkComponentChannels(self._ms.door.keys()[0],
-                                       self._cf.dp, 
-                                       poolchannels,
-                                       componentgroup,
-                                       channelerrors)
-#            print res 
+                                             self._cf.dp,
+                                             poolchannels,
+                                             componentgroup,
+                                             channelerrors)
+#            print res
     #        print channelerrors
 
             self.myAssertDict(json.loads(res), {
-                    "smycp":True,"smycp2":True,"smycp3":True,
-                    "s2mycp":True,"s2mycp2":True,"s2mycp3":True,"smycpnt1":False})
+                    "smycp": True, "smycp2": True, "smycp3": True,
+                    "s2mycp": True, "s2mycp2": True, "s2mycp3": True,
+                    "smycpnt1": False})
             self.myAssertDict(componentgroup, {
-                    "smycp":True,"smycp2":True,"smycp3":True,
-                    "s2mycp":True,"s2mycp2":True,"s2mycp3":True,"smycpnt1":False})
+                    "smycp": True, "smycp2": True, "smycp3": True,
+                    "s2mycp": True, "s2mycp2": True, "s2mycp3": True,
+                    "smycpnt1": False})
             self.assertEqual(len(channelerrors), 1)
 
     #        print self._cf.dp.GetCommandVariable("COMMANDS")
             res = json.loads(self._cf.dp.GetCommandVariable("VARS"))
         finally:
             simps2.tearDown()
-            
 
     ## constructor test
     # \brief It tests default settings
     def test_checkComponentChannels_2wds_notangodsnopool2(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
-        simps2 = TestServerSetUp.TestServerSetUp( "ttestp09/testts/t2r228", "S2")
+        simps2 = TestServerSetUp.TestServerSetUp(
+            "ttestp09/testts/t2r228", "S2")
         try:
             simps2.setUp()
             msp = MacroServerPools(10)
             db = PyTango.Database()
-            db.put_device_property(self._ms.ms.keys()[0], {'PoolNames':self._pool.dp.name()})
+            db.put_device_property(self._ms.ms.keys()[0],
+                                   {'PoolNames': self._pool.dp.name()})
             channelerrors = []
             poolchannels = ["scalar2_long", "spectrum2_short", "client_long"]
-            componentgroup = {"smycp":False,"smycp2":False,"smycp3":False,"smycpnt1":False,
-                              "s2mycp":False,"s2mycp2":False,"s2mycp3":False}
+            componentgroup = {"smycp": False, "smycp2": False,
+                              "smycp3": False, "smycpnt1": False,
+                              "s2mycp": False, "s2mycp2": False,
+                              "s2mycp3": False}
 
             cps = dict(self.smycps)
             cps.update(self.smycps2)
@@ -1548,46 +1706,53 @@ class MacroServerPoolTest(unittest.TestCase):
             print "POOLS", pools
 
             res = msp.checkComponentChannels(self._ms.door.keys()[0],
-                                       self._cf.dp, 
-                                       poolchannels,
-                                       componentgroup,
-                                       channelerrors)
-#            print res 
+                                             self._cf.dp,
+                                             poolchannels,
+                                             componentgroup,
+                                             channelerrors)
+#            print res
     #        print channelerrors
 
             self.myAssertDict(json.loads(res), {
-                    "smycp":True,"smycp2":True,"smycp3":True,
-                    "s2mycp":True,"s2mycp2":True,"s2mycp3":True,"smycpnt1":False})
+                    "smycp": True, "smycp2": True, "smycp3": True,
+                    "s2mycp": True, "s2mycp2": True, "s2mycp3": True,
+                    "smycpnt1": False})
             self.myAssertDict(componentgroup, {
-                    "smycp":True,"smycp2":True,"smycp3":True,
-                    "s2mycp":True,"s2mycp2":True,"s2mycp3":True,"smycpnt1":False})
+                    "smycp": True, "smycp2": True, "smycp3": True,
+                    "s2mycp": True, "s2mycp2": True, "s2mycp3": True,
+                    "smycpnt1": False})
             self.assertEqual(len(channelerrors), 1)
 
     #        print self._cf.dp.GetCommandVariable("COMMANDS")
             res = json.loads(self._cf.dp.GetCommandVariable("VARS"))
         finally:
             simps2.tearDown()
-            
+
     ## constructor test
     # \brief It tests default settings
     def test_checkComponentChannels_2wds_notangods2(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
-        simps2 = TestServerSetUp.TestServerSetUp( "ttestp09/testts/t2r228", "S2")
+        simps2 = TestServerSetUp.TestServerSetUp(
+            "ttestp09/testts/t2r228", "S2")
 
         arr = [
-            {"name":"client_long", "full_name":"ttestp09/testts/t1r228/Value"} ,
-            {"name":"client_short", "full_name":"ttestp09/testts/t1r228/Value"} ,
+            {"name":"client_long", "full_name":"ttestp09/testts/t1r228/Value"},
+            {"name":"client_short",
+             "full_name":"ttestp09/testts/t1r228/Value"},
             ]
         try:
             simps2.setUp()
             msp = MacroServerPools(10)
             db = PyTango.Database()
-            db.put_device_property(self._ms.ms.keys()[0], {'PoolNames':self._pool.dp.name()})
+            db.put_device_property(self._ms.ms.keys()[0],
+                                   {'PoolNames': self._pool.dp.name()})
             channelerrors = []
             poolchannels = []
-            componentgroup = {"smycp":False,"smycp2":False,"smycp3":False,"smycpnt1":False,
-                              "s2mycp":False,"s2mycp2":False,"s2mycp3":False}
+            componentgroup = {"smycp": False, "smycp2": False,
+                              "smycp3": False, "smycpnt1": False,
+                              "s2mycp": False, "s2mycp2": False,
+                              "s2mycp3": False}
 
             cps = dict(self.smycps)
             cps.update(self.smycps2)
@@ -1604,50 +1769,54 @@ class MacroServerPoolTest(unittest.TestCase):
             print "POOLS", pools
 
             res = msp.checkComponentChannels(self._ms.door.keys()[0],
-                                       self._cf.dp, 
+                                       self._cf.dp,
                                        poolchannels,
                                        componentgroup,
                                        channelerrors)
-#            print res 
+#            print res
     #        print channelerrors
 
             self.myAssertDict(json.loads(res), {
-                    "smycp":True,"smycp2":True,"smycp3":True,
-                    "s2mycp":True,"s2mycp2":True,"s2mycp3":True,"smycpnt1":True})
+                    "smycp": True, "smycp2": True, "smycp3": True,
+                    "s2mycp": True, "s2mycp2": True, "s2mycp3": True,
+                    "smycpnt1": True})
             self.myAssertDict(componentgroup, {
-                    "smycp":True,"smycp2":True,"smycp3":True,
-                    "s2mycp":True,"s2mycp2":True,"s2mycp3":True,"smycpnt1":True})
+                    "smycp": True, "smycp2": True, "smycp3": True,
+                    "s2mycp": True, "s2mycp2": True, "s2mycp3": True,
+                    "smycpnt1": True})
             self.assertEqual(len(channelerrors), 0)
 
     #        print self._cf.dp.GetCommandVariable("COMMANDS")
             res = json.loads(self._cf.dp.GetCommandVariable("VARS"))
         finally:
             simps2.tearDown()
-            
-
 
     ## constructor test
     # \brief It tests default settings
     def test_checkComponentChannels_2wds_notangodspool_error(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
-        simps2 = TestServerSetUp.TestServerSetUp( "ttestp09/testts/t2r228", "S2")
+        simps2 = TestServerSetUp.TestServerSetUp(
+            "ttestp09/testts/t2r228", "S2")
 
         arr = [
-            {"name":"client_long", "full_name":"ttestp09/testts/t1r228/Value"} ,
-            {"name":"client_short", "full_name":"ttestp09/testts/t1r228/Value"} ,
+            {"name":"client_long", "full_name":"ttestp09/testts/t1r228/Value"},
+            {"name":"client_short",
+             "full_name":"ttestp09/testts/t1r228/Value"},
             ]
         try:
             simps2.setUp()
             msp = MacroServerPools(10)
             db = PyTango.Database()
-            db.put_device_property(self._ms.ms.keys()[0], {'PoolNames':self._pool.dp.name()})
+            db.put_device_property(self._ms.ms.keys()[0],
+                                   {'PoolNames': self._pool.dp.name()})
             channelerrors = []
-            poolchannels = ["scalar2_long", "spectrum2_short", "client_long", "client_short"]
+            poolchannels = ["scalar2_long", "spectrum2_short", "client_long",
+                            "client_short"]
             componentgroup = {
-                "smycp":False,"smycp2":False,"smycp3":False,
-                "smycpnt1":False,
-                "s2mycp":False,"s2mycp2":False,"s2mycp3":False
+                "smycp": False, "smycp2": False, "smycp3": False,
+                "smycpnt1": False,
+                "s2mycp": False, "s2mycp2": False, "s2mycp3": False
                 }
 
             cps = dict(self.smycps)
@@ -1665,19 +1834,21 @@ class MacroServerPoolTest(unittest.TestCase):
             print "POOLS", pools
 
             res = msp.checkComponentChannels(self._ms.door.keys()[0],
-                                       self._cf.dp, 
+                                       self._cf.dp,
                                        poolchannels,
                                        componentgroup,
                                        channelerrors)
-            print res 
+            print res
     #        print channelerrors
 
             self.myAssertDict(json.loads(res), {
-                    "smycp":True,"smycp2":True,"smycp3":True,
-                    "s2mycp":True,"s2mycp2":True,"s2mycp3":True,"smycpnt1":False})
+                    "smycp": True, "smycp2": True, "smycp3": True,
+                    "s2mycp": True, "s2mycp2": True, "s2mycp3": True,
+                    "smycpnt1": False})
             self.myAssertDict(componentgroup, {
-                    "smycp":True,"smycp2":True,"smycp3":True,
-                    "s2mycp":True,"s2mycp2":True,"s2mycp3":True,"smycpnt1":False})
+                    "smycp": True, "smycp2": True, "smycp3": True,
+                    "s2mycp": True, "s2mycp2": True, "s2mycp3": True,
+                    "smycpnt1": False})
             self.assertEqual(len(channelerrors), 1)
 
     #        print self._cf.dp.GetCommandVariable("COMMANDS")
@@ -1690,22 +1861,24 @@ class MacroServerPoolTest(unittest.TestCase):
     def test_checkComponentChannels_2wds_notangodspool(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
-        simps2 = TestServerSetUp.TestServerSetUp( "ttestp09/testts/t2r228", "S2")
+        simps2 = TestServerSetUp.TestServerSetUp(
+            "ttestp09/testts/t2r228", "S2")
 
         arr = [
-            {"name":"client_short", "full_name":"ttestp09/testts/t1r228"} ,
+            {"name":"client_short", "full_name":"ttestp09/testts/t1r228"},
             ]
         try:
             simps2.setUp()
             msp = MacroServerPools(10)
             db = PyTango.Database()
-            db.put_device_property(self._ms.ms.keys()[0], {'PoolNames':self._pool.dp.name()})
+            db.put_device_property(self._ms.ms.keys()[0],
+                                   {'PoolNames': self._pool.dp.name()})
             channelerrors = []
             poolchannels = ["scalar2_long", "spectrum2_short",  "client_short"]
             componentgroup = {
-                "smycp":False,"smycp2":False,"smycp3":False,
-                "smycpnt1":False,
-                "s2mycp":False,"s2mycp2":False,"s2mycp3":False
+                "smycp": False, "smycp2": False, "smycp3": False,
+                "smycpnt1": False,
+                "s2mycp": False, "s2mycp2": False, "s2mycp3": False
                 }
 
             cps = dict(self.smycps)
@@ -1724,50 +1897,52 @@ class MacroServerPoolTest(unittest.TestCase):
             self._simps.dp.ChangeValueType("ScalarShort")
             self._simps.dp.Value = 43
             res = msp.checkComponentChannels(self._ms.door.keys()[0],
-                                       self._cf.dp, 
+                                       self._cf.dp,
                                        poolchannels,
                                        componentgroup,
                                        channelerrors)
-#            print res 
+#            print res
     #        print channelerrors
 
             self.myAssertDict(json.loads(res), {
-                    "smycp":True,"smycp2":True,"smycp3":True,
-                    "s2mycp":True,"s2mycp2":True,"s2mycp3":True,"smycpnt1":False})
+                    "smycp": True, "smycp2": True, "smycp3": True,
+                    "s2mycp": True, "s2mycp2": True, "s2mycp3": True,
+                    "smycpnt1": False})
             self.myAssertDict(componentgroup, {
-                    "smycp":True,"smycp2":True,"smycp3":True,
-                    "s2mycp":True,"s2mycp2":True,"s2mycp3":True,"smycpnt1":False})
+                    "smycp": True, "smycp2": True, "smycp3": True,
+                    "s2mycp": True, "s2mycp2": True, "s2mycp3": True,
+                    "smycpnt1": False})
             self.assertEqual(len(channelerrors), 1)
 
     #        print self._cf.dp.GetCommandVariable("COMMANDS")
             res = json.loads(self._cf.dp.GetCommandVariable("VARS"))
         finally:
             simps2.tearDown()
-            
-
 
    ## constructor test
     # \brief It tests default settings
     def test_checkComponentChannels_2wds_notangodspool_alias(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
-        simps2 = TestServerSetUp.TestServerSetUp( "ttestp09/testts/t2r228", "S2")
+        simps2 = TestServerSetUp.TestServerSetUp(
+            "ttestp09/testts/t2r228", "S2")
         db = PyTango.Database()
 
         arr = [
-            {"name":"client_short", "full_name":"ttestp09/testts/t1r228"} ,
+            {"name":"client_short", "full_name":"ttestp09/testts/t1r228"},
             ]
         try:
             simps2.setUp()
             msp = MacroServerPools(10)
-            db.put_device_alias(arr[0]["full_name"],arr[0]["name"])
-            db.put_device_property(self._ms.ms.keys()[0], {'PoolNames':self._pool.dp.name()})
+            db.put_device_alias(arr[0]["full_name"], arr[0]["name"])
+            db.put_device_property(self._ms.ms.keys()[0],
+                                   {'PoolNames': self._pool.dp.name()})
             channelerrors = []
             poolchannels = ["scalar2_long", "spectrum2_short", "client_short"]
             componentgroup = {
-                "smycp":False,"smycp2":False,"smycp3":False,
-                "smycpnt1":False,
-                "s2mycp":False,"s2mycp2":False,"s2mycp3":False
+                "smycp": False, "smycp2": False, "smycp3": False,
+                "smycpnt1": False,
+                "s2mycp": False, "s2mycp2": False, "s2mycp3": False
                 }
 
             cps = dict(self.smycps)
@@ -1784,19 +1959,21 @@ class MacroServerPoolTest(unittest.TestCase):
             self._simps.dp.ChangeValueType("ScalarShort")
             self._simps.dp.Value = 43
             res = msp.checkComponentChannels(self._ms.door.keys()[0],
-                                       self._cf.dp, 
-                                       poolchannels,
-                                       componentgroup,
-                                       channelerrors)
-#            print res 
+                                             self._cf.dp,
+                                             poolchannels,
+                                             componentgroup,
+                                             channelerrors)
+#            print res
     #        print channelerrors
 
             self.myAssertDict(json.loads(res), {
-                    "smycp":True,"smycp2":True,"smycp3":True,
-                    "s2mycp":True,"s2mycp2":True,"s2mycp3":True,"smycpnt1":True})
+                    "smycp": True, "smycp2": True, "smycp3": True,
+                    "s2mycp": True, "s2mycp2": True, "s2mycp3": True,
+                    "smycpnt1": True})
             self.myAssertDict(componentgroup, {
-                    "smycp":True,"smycp2":True,"smycp3":True,
-                    "s2mycp":True,"s2mycp2":True,"s2mycp3":True,"smycpnt1":True})
+                    "smycp": True, "smycp2": True, "smycp3": True,
+                    "s2mycp": True, "s2mycp2": True, "s2mycp3": True,
+                    "smycpnt1": True})
             self.assertEqual(len(channelerrors), 0)
 
     #        print self._cf.dp.GetCommandVariable("COMMANDS")
@@ -1804,29 +1981,31 @@ class MacroServerPoolTest(unittest.TestCase):
         finally:
             db.delete_device_alias(arr[0]["name"])
             simps2.tearDown()
-            
+
    ## constructor test
     # \brief It tests default settings
     def test_checkComponentChannels_2wds_notangodspool_alias_value(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
-        simps2 = TestServerSetUp.TestServerSetUp( "ttestp09/testts/t2r228", "S2")
+        simps2 = TestServerSetUp.TestServerSetUp(
+            "ttestp09/testts/t2r228", "S2")
         db = PyTango.Database()
 
         arr = [
-            {"name":"client_short", "full_name":"ttestp09/testts/t1r228"} ,
+            {"name":"client_short", "full_name":"ttestp09/testts/t1r228"},
             ]
         try:
             simps2.setUp()
             msp = MacroServerPools(10)
-            db.put_device_alias(arr[0]["full_name"],arr[0]["name"])
-            db.put_device_property(self._ms.ms.keys()[0], {'PoolNames':self._pool.dp.name()})
+            db.put_device_alias(arr[0]["full_name"], arr[0]["name"])
+            db.put_device_property(self._ms.ms.keys()[0],
+                                   {'PoolNames': self._pool.dp.name()})
             channelerrors = []
             poolchannels = ["scalar2_long", "spectrum2_short", "client_short"]
             componentgroup = {
-                "smycp":False,"smycp2":False,"smycp3":False,
-                "smycpnt1":False,
-                "s2mycp":False,"s2mycp2":False,"s2mycp3":False
+                "smycp": False, "smycp2": False, "smycp3": False,
+                "smycpnt1": False,
+                "s2mycp": False, "s2mycp2": False, "s2mycp3": False
                 }
 
             cps = dict(self.smycps)
@@ -1843,19 +2022,21 @@ class MacroServerPoolTest(unittest.TestCase):
 #            self._simps.dp.ChangeValueType("ScalarShort")
 #            self._simps.dp.Value = 43
             res = msp.checkComponentChannels(self._ms.door.keys()[0],
-                                       self._cf.dp, 
+                                       self._cf.dp,
                                        poolchannels,
                                        componentgroup,
                                        channelerrors)
-#            print res 
+#            print res
     #        print channelerrors
 
             self.myAssertDict(json.loads(res), {
-                    "smycp":True,"smycp2":True,"smycp3":True,
-                    "s2mycp":True,"s2mycp2":True,"s2mycp3":True,"smycpnt1":True})
+                    "smycp": True, "smycp2": True, "smycp3": True,
+                    "s2mycp": True, "s2mycp2": True, "s2mycp3": True,
+                    "smycpnt1": True})
             self.myAssertDict(componentgroup, {
-                    "smycp":True,"smycp2":True,"smycp3":True,
-                    "s2mycp":True,"s2mycp2":True,"s2mycp3":True,"smycpnt1":True})
+                    "smycp": True, "smycp2": True, "smycp3": True,
+                    "s2mycp": True, "s2mycp2": True, "s2mycp3": True,
+                    "smycpnt1": True})
             self.assertEqual(len(channelerrors), 0)
 
     #        print self._cf.dp.GetCommandVariable("COMMANDS")
@@ -1863,29 +2044,31 @@ class MacroServerPoolTest(unittest.TestCase):
         finally:
             db.delete_device_alias(arr[0]["name"])
             simps2.tearDown()
-            
+
   ## constructor test
     # \brief It tests default settings
     def test_checkComponentChannels_2wds_notangodspool_alias_novalue(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
-        simps2 = TestServerSetUp.TestServerSetUp( "ttestp09/testts/t2r228", "S2")
+        simps2 = TestServerSetUp.TestServerSetUp(
+            "ttestp09/testts/t2r228", "S2")
         db = PyTango.Database()
 
         arr = [
-            {"name":"client2_short", "full_name":"ttestp09/testts/t2r228"} ,
+            {"name":"client2_short", "full_name":"ttestp09/testts/t2r228"},
             ]
         try:
             simps2.add()
             msp = MacroServerPools(10)
-            db.put_device_alias(arr[0]["full_name"],arr[0]["name"])
-            db.put_device_property(self._ms.ms.keys()[0], {'PoolNames':self._pool.dp.name()})
+            db.put_device_alias(arr[0]["full_name"], arr[0]["name"])
+            db.put_device_property(self._ms.ms.keys()[0],
+                                   {'PoolNames': self._pool.dp.name()})
             channelerrors = []
             poolchannels = ["scalar2_long", "spectrum2_short", "client2_short"]
             componentgroup = {
-                "smycp":False,"smycp2":False,"smycp3":False,
-                "s2mycpnt1":False,
-#                "s2mycp":False,"s2mycp2":False,"s2mycp3":False
+                "smycp": False, "smycp2": False, "smycp3": False,
+                "s2mycpnt1": False,
+#                "s2mycp": False, "s2mycp2": False, "s2mycp3": False
                 }
 
             cps = dict(self.smycps)
@@ -1900,19 +2083,19 @@ class MacroServerPoolTest(unittest.TestCase):
             pools[0].AcqChannelList = [json.dumps(a) for a in arr]
             print "POOLS", pools
             res = msp.checkComponentChannels(self._ms.door.keys()[0],
-                                       self._cf.dp, 
+                                       self._cf.dp,
                                        poolchannels,
                                        componentgroup,
                                        channelerrors)
-#            print res 
+#            print res
 #            print channelerrors
 
             self.myAssertDict(json.loads(res), {
-                    "smycp":True,"smycp2":True,"smycp3":True,
-                    "s2mycpnt1":False})
+                    "smycp": True, "smycp2": True, "smycp3": True,
+                    "s2mycpnt1": False})
             self.myAssertDict(componentgroup, {
-                    "smycp":True,"smycp2":True,"smycp3":True,
-                    "s2mycpnt1":False})
+                    "smycp": True, "smycp2": True, "smycp3": True,
+                    "s2mycpnt1": False})
             self.assertEqual(len(channelerrors), 1)
 
     #        print self._cf.dp.GetCommandVariable("COMMANDS")
@@ -1920,20 +2103,22 @@ class MacroServerPoolTest(unittest.TestCase):
         finally:
             db.delete_device_alias(arr[0]["name"])
             simps2.tearDown()
-            
+
     ## constructor test
     # \brief It tests default settings
     def test_checkComponentChannels_2wds_nocomponents(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
-        simps2 = TestServerSetUp.TestServerSetUp( "ttestp09/testts/t2r228", "S2")
+        simps2 = TestServerSetUp.TestServerSetUp(
+            "ttestp09/testts/t2r228", "S2")
         try:
             simps2.setUp()
             msp = MacroServerPools(1)
             channelerrors = []
             poolchannels = []
-            componentgroup = {"smycp":False,"smycp2":False,"smycp3":False,
-                              "s2mycp":False,"s2mycp2":False,"s2mycp3":False}
+            componentgroup = {
+                "smycp": False, "smycp2": False, "smycp3": False,
+                "s2mycp": False, "s2mycp2": False, "s2mycp3": False}
 
             cps = dict(self.smycps)
 #            cps.update(self.smycps2)
@@ -1945,34 +2130,32 @@ class MacroServerPoolTest(unittest.TestCase):
     #        print "MDSS", self._cf.dp.availableDataSources()
     #        print "XDSS", self._cf.dp.dataSources(["scalar_long"])
             res = msp.checkComponentChannels(self._ms.door.keys()[0],
-                                       self._cf.dp, 
+                                       self._cf.dp,
                                        poolchannels,
                                        componentgroup,
                                        channelerrors)
-    #        print res 
+    #        print res
     #        print channelerrors
 
             self.myAssertDict(json.loads(res), {
-                    "smycp":True,"smycp2":True,"smycp3":True,
-                    "s2mycp":False,"s2mycp2":False,"s2mycp3":False})
+                    "smycp": True, "smycp2": True, "smycp3": True,
+                    "s2mycp": False, "s2mycp2": False, "s2mycp3": False})
             self.myAssertDict(componentgroup, {
-                    "smycp":True,"smycp2":True,"smycp3":True,
-                    "s2mycp":False,"s2mycp2":False,"s2mycp3":False})
+                    "smycp": True, "smycp2": True, "smycp3": True,
+                    "s2mycp": False, "s2mycp2": False, "s2mycp3": False})
             self.assertEqual(len(channelerrors), 3)
 
     #        print self._cf.dp.GetCommandVariable("COMMANDS")
             res = json.loads(self._cf.dp.GetCommandVariable("VARS"))
         finally:
             simps2.tearDown()
-            
-
 
     ## constructor test
     # \brief It tests default settings
     def test_getSelectorEnv_noenv(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
-            
+
         envs = [
             pickle.dumps(
                 {"new":{}
@@ -1981,7 +2164,7 @@ class MacroServerPoolTest(unittest.TestCase):
             ]
         enms = [
             [],
-            ["ScanID"], 
+            ["ScanID"],
             ["ScanDir", "ScanFile"],
             ]
 
@@ -1989,27 +2172,26 @@ class MacroServerPoolTest(unittest.TestCase):
             {},
             {},
             {}
-            ] 
+            ]
 
         msp = MacroServerPools(10)
         self.myAssertRaise(Exception, msp.getSelectorEnv, None, [], {})
         msp.getSelectorEnv(self._ms.door.keys()[0], [], {})
         for i, dt in enumerate(edats):
-            
+
             data = {}
-            self._ms.dps[self._ms.ms.keys()[0]].Environment = ('pickle', envs[0])
-            msp.getSelectorEnv(self._ms.door.keys()[0],enms[i], data)
+            self._ms.dps[self._ms.ms.keys()[0]].Environment = (
+                'pickle', envs[0])
+            msp.getSelectorEnv(self._ms.door.keys()[0], enms[i], data)
 #            print "data",data
             self.myAssertDict(data, dt)
-
-
 
     ## constructor test
     # \brief It tests default settings
     def test_getSelectorEnv(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
-            
+
         envs = [
             pickle.dumps(
                 {"new":{"ScanDir":"/tmp"}
@@ -2024,79 +2206,90 @@ class MacroServerPoolTest(unittest.TestCase):
                  }
                 ),
             pickle.dumps(
-                {"new":{"ScanDir":"/tmp", 
-                        "ScanFile":["file.nxs"], 
+                {"new":{"ScanDir":"/tmp",
+                        "ScanFile":["file.nxs"],
                         "NeXusConfigServer":"ptr/ert/ert",
                         }
                  }
                 ),
             pickle.dumps(
-                {"new":{"ScanDir":"/tmp", 
-                        "ScanFile":["file.nxs","file2.nxs"], 
+                {"new":{"ScanDir":"/tmp",
+                        "ScanFile":["file.nxs", "file2.nxs"],
                         "NeXusConfiguration":{"ConfigServer":"ptr/ert/ert2"},
                         }
                  }
                 ),
             pickle.dumps(
-                {"new":{"ScanDir":"/tmp", 
-                        "ScanFile":"file.nxs", 
+                {"new":{"ScanDir":"/tmp",
+                        "ScanFile":"file.nxs",
                         "NeXusConfigServer":"ptr/ert/ert",
                         "NeXusConfiguration":{"ConfigServer":"ptr/ert/ert2"},
                         }
                  }
                 ),
             pickle.dumps(
-                {"new":{"ScanDir":"/tmp", 
-                        "ScanFile":["file.nxs"], 
+                {"new":{"ScanDir":"/tmp",
+                        "ScanFile":["file.nxs"],
                         "NeXusConfigServer":u'ptr/ert/ert',
-                        "NeXusBool":True,
+                        "NeXusBool": True,
                         "NeXusInt":234,
                         "NeXusFloat":123.123,
                         "NeXusSomething":("dgfg",),
-                        "NeXusDict":{"dgfg":123,"sdf":"345"},
+                        "NeXusDict":{"dgfg":123, "sdf":"345"},
                         }
                  }
                 ),
             pickle.dumps(
-                {"new":{"ScanDir":"/tmp", 
-                        "ScanFile":["file.nxs"], 
+                {"new":{"ScanDir":"/tmp",
+                        "ScanFile":["file.nxs"],
                         "NeXusConfiguration":{"ConfigServer":u'ptr/ert/ert',
-                        "Bool":True,
+                        "Bool": True,
                         "Int":234,
                         "Float":123.123,
                         "Something":("dgfg",),
-                        "Dict":{"dgfg":123,"sdf":"345"}}
+                        "Dict":{"dgfg":123, "sdf":"345"}}
                         }
                  }
                 ),
             ]
         enms = [
-            ["ScanID"], 
+            ["ScanID"],
             ["ScanDir"],
             ["ScanDir", "ScanFile", "ConfigServer"],
             ["ScanDir", "ScanFile", "ConfigServer"],
             ["ScanDir", "ScanFile", "ConfigServer"],
             ["ScanDir", "ScanFile", "ConfigServer"],
-            ["ScanDir", "ScanFile", "ConfigServer", "Bool", "Int","Float", "Something", "Dict"],
-            ["ScanDir", "ScanFile", "ConfigServer", "Bool", "Int","Float", "Something", "Dict"],
+            ["ScanDir", "ScanFile", "ConfigServer", "Bool", "Int", "Float",
+             "Something", "Dict"],
+            ["ScanDir", "ScanFile", "ConfigServer", "Bool", "Int", "Float",
+             "Something", "Dict"],
             ]
 
         edats = [
             {},
             {"ScanDir":"/tmp"},
             {"ScanDir":"/tmp", "ScanFile":json.dumps(["file.nxs"])},
-            {"ScanDir":"/tmp", "ScanFile":json.dumps(["file.nxs"]),"ConfigServer":"ptr/ert/ert"},
-            {"ScanDir":"/tmp", "ScanFile":json.dumps(["file.nxs","file2.nxs"]),"ConfigServer":"ptr/ert/ert2"},
-            {"ScanDir":"/tmp", "ScanFile":"file.nxs", "ConfigServer":"ptr/ert/ert"},
-            {"ScanDir":"/tmp", "ScanFile":json.dumps(["file.nxs"]),"ConfigServer":"ptr/ert/ert",
-             "Bool":True, "Int":234,"Float":123.123, "Something":json.dumps(["dgfg"]),
-             "Dict":json.dumps({"dgfg":123,"sdf":"345"}),
+            {"ScanDir":"/tmp",
+             "ScanFile":json.dumps(["file.nxs"]),
+             "ConfigServer":"ptr/ert/ert"},
+            {"ScanDir":"/tmp",
+             "ScanFile":json.dumps(["file.nxs", "file2.nxs"]),
+             "ConfigServer":"ptr/ert/ert2"},
+            {"ScanDir":"/tmp", "ScanFile":"file.nxs",
+             "ConfigServer":"ptr/ert/ert"},
+            {"ScanDir":"/tmp", "ScanFile":json.dumps(["file.nxs"]),
+             "ConfigServer":"ptr/ert/ert",
+             "Bool": True, "Int":234, "Float":123.123,
+             "Something":json.dumps(["dgfg"]),
+             "Dict":json.dumps({"dgfg":123, "sdf":"345"}),
              },
-            {"ScanDir":"/tmp", "ScanFile":json.dumps(["file.nxs"]),"ConfigServer":"ptr/ert/ert",
-             "Bool":True, "Int":234,"Float":123.123, "Something":json.dumps(["dgfg"]),
-             "Dict":json.dumps({"dgfg":123,"sdf":"345"}),             
+            {"ScanDir":"/tmp", "ScanFile":json.dumps(["file.nxs"]),
+             "ConfigServer":"ptr/ert/ert",
+             "Bool": True, "Int":234, "Float":123.123,
+             "Something":json.dumps(["dgfg"]),
+             "Dict":json.dumps({"dgfg":123, "sdf":"345"}),
              },
-            ] 
+            ]
 
         msp = MacroServerPools(10)
         self.myAssertRaise(Exception, msp.getSelectorEnv, None, [], {})
@@ -2104,153 +2297,154 @@ class MacroServerPoolTest(unittest.TestCase):
         for i, dt in enumerate(edats):
 #            print "I = ",i
             data = {}
-            self._ms.dps[self._ms.ms.keys()[0]].Environment = ('pickle', envs[i])
-            msp.getSelectorEnv(self._ms.door.keys()[0],enms[i], data)
-#            print pickle.loads(self._ms.dps[self._ms.ms.keys()[0]].Environment[1])
-#            print "data",data
+            self._ms.dps[self._ms.ms.keys()[0]].Environment = (
+                'pickle', envs[i])
+            msp.getSelectorEnv(self._ms.door.keys()[0], enms[i], data)
             self.myAssertDict(data, dt)
-
-
 
     ## constructor test
     # \brief It tests default settings
     def test_setSelectorEnv(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
-            
+
         envs = [
-            {"new":{'ScanID': 192, 
-                    'NeXusSelectorDevice': u'p09/nxsrecselector/1', 
-                    'ScanFile': [u'sar4r.nxs'], 
-                    'NeXusConfiguration': {}, 
-                    'ActiveMntGrp': 'nxsmntgrp', 
-                    '_ViewOptions': {'ShowDial': True}, 
-                    'DataCompressionRank': 0, 
+            {"new":{'ScanID': 192,
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1',
+                    'ScanFile': [u'sar4r.nxs'],
+                    'NeXusConfiguration': {},
+                    'ActiveMntGrp': 'nxsmntgrp',
+                    '_ViewOptions': {'ShowDial': True},
+                    'DataCompressionRank': 0,
                     'ScanDir': '/tmp/'}
              },
             {"new":{
-                    'ScanID': 192, 
-                    'NeXusSelectorDevice': u'p09/nxsrecselector/1', 
-                    'ScanFile': [u'sar4r.nxs'], 
-                    'NeXusConfiguration': {}, 
-                    'ActiveMntGrp': 'nxsmntgrp', 
-                    '_ViewOptions': {'ShowDial': True}, 
-                    'DataCompressionRank': 0, 
+                    'ScanID': 192,
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1',
+                    'ScanFile': [u'sar4r.nxs'],
+                    'NeXusConfiguration': {},
+                    'ActiveMntGrp': 'nxsmntgrp',
+                    '_ViewOptions': {'ShowDial': True},
+                    'DataCompressionRank': 0,
                     'ScanDir': '/tmp'}
              },
             {"new":{
-                    'ScanID': 192, 
-                    'NeXusSelectorDevice': u'p09/nxsrecselector/1', 
-                    'NeXusConfiguration': {}, 
-                    'ActiveMntGrp': 'nxsmntgrp', 
-                    '_ViewOptions': {'ShowDial': True}, 
-                    'DataCompressionRank': 0, 
-                    "ScanDir":"/tmp", 
+                    'ScanID': 192,
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1',
+                    'NeXusConfiguration': {},
+                    'ActiveMntGrp': 'nxsmntgrp',
+                    '_ViewOptions': {'ShowDial': True},
+                    'DataCompressionRank': 0,
+                    "ScanDir":"/tmp",
                     "ScanFile":["file.nxs"]
                     }
              },
-            {"new":{"ScanDir":"/tmp", 
-                    'ScanID': 192, 
-                    'NeXusSelectorDevice': u'p09/nxsrecselector/1', 
-                    'NeXusConfiguration': {"ConfigServer":"ptr/ert/ert"}, 
-                    'ActiveMntGrp': 'nxsmntgrp', 
-                    '_ViewOptions': {'ShowDial': True}, 
-                    'DataCompressionRank': 0, 
-                    "ScanFile":["file.nxs"], 
+            {"new":{"ScanDir":"/tmp",
+                    'ScanID': 192,
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1',
+                    'NeXusConfiguration': {"ConfigServer":"ptr/ert/ert"},
+                    'ActiveMntGrp': 'nxsmntgrp',
+                    '_ViewOptions': {'ShowDial': True},
+                    'DataCompressionRank': 0,
+                    "ScanFile":["file.nxs"],
                     }
              },
-            {"new":{"ScanDir":"/tmp", 
-                    'ScanID': 192, 
-                    'NeXusSelectorDevice': u'p09/nxsrecselector/1', 
-                    'NeXusConfiguration': {"ConfigServer":"ptr/ert/ert2"}, 
-                    'ActiveMntGrp': 'nxsmntgrp', 
-                    '_ViewOptions': {'ShowDial': True}, 
-                    'DataCompressionRank': 0, 
-                    "ScanFile":["file.nxs","file2.nxs"], 
+            {"new":{"ScanDir":"/tmp",
+                    'ScanID': 192,
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1',
+                    'NeXusConfiguration': {"ConfigServer":"ptr/ert/ert2"},
+                    'ActiveMntGrp': 'nxsmntgrp',
+                    '_ViewOptions': {'ShowDial': True},
+                    'DataCompressionRank': 0,
+                    "ScanFile":["file.nxs", "file2.nxs"],
                     }
              },
-            {"new":{"ScanDir":"/tmp", 
-                    'ScanID': 192, 
-                    'NeXusSelectorDevice': u'p09/nxsrecselector/1', 
-                    'NeXusConfiguration': {"ConfigServer":"ptr/ert/ert"}, 
-                    'ActiveMntGrp': 'nxsmntgrp', 
-                    '_ViewOptions': {'ShowDial': True}, 
-                    'DataCompressionRank': 0, 
-                    "ScanFile":"file.nxs", 
+            {"new":{"ScanDir":"/tmp",
+                    'ScanID': 192,
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1',
+                    'NeXusConfiguration': {"ConfigServer":"ptr/ert/ert"},
+                    'ActiveMntGrp': 'nxsmntgrp',
+                    '_ViewOptions': {'ShowDial': True},
+                    'DataCompressionRank': 0,
+                    "ScanFile":"file.nxs",
                     }
              },
-            {"new":{"ScanDir":"/tmp", 
-                    'ScanID': 192, 
-                    'NeXusSelectorDevice': u'p09/nxsrecselector/1', 
-                    "NeXusConfiguration":{"ConfigServer":'ptr/ert/ert',
-                                          "Bool":True,
-                                          "Int":234,
-                                          "Float":123.123,
-                                          "Something":["dgfg"],
-                                          "Dict":{"dgfg":123,"sdf":"345"}},
-                    'ActiveMntGrp': 'nxsmntgrp', 
-                    '_ViewOptions': {'ShowDial': True}, 
-                    'DataCompressionRank': 0, 
-                    "ScanFile":["file.nxs"], 
-                    }
-             }, 
-            {"new":{"ScanDir":"/tmp", 
-                    'ScanID': 192, 
-                    'NeXusSelectorDevice': u'p09/nxsrecselector/1', 
-                    "NeXusConfiguration":{"ConfigServer":'ptr/ert/ert',
-                                          "Bool":True,
-                                          "Int":234,
-                                          "Float":123.124,
-                                          "Something":["dgfg"],
-                                          "Dict":{"dgfg":123,"sdf":"345"}},
-                    'ActiveMntGrp': 'nxsmntgrp', 
-                    '_ViewOptions': {'ShowDial': True}, 
-                    'DataCompressionRank': 0, 
-                    "ScanFile":["file.nxs"], 
+            {"new":{"ScanDir":"/tmp",
+                    'ScanID': 192,
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1',
+                    "NeXusConfiguration":{
+                        "ConfigServer":'ptr/ert/ert',
+                        "Bool": True,
+                        "Int":234,
+                        "Float":123.123,
+                        "Something":["dgfg"],
+                        "Dict":{"dgfg":123, "sdf":"345"}},
+                    'ActiveMntGrp': 'nxsmntgrp',
+                    '_ViewOptions': {'ShowDial': True},
+                    'DataCompressionRank': 0,
+                    "ScanFile":["file.nxs"],
                     }
              },
-            {"new":{"ScanDir":"/tmp", 
-                    'ScanID': 192, 
-                    'NeXusSelectorDevice': u'p09/nxsrecselector/1', 
-                    "NeXusConfiguration":{"ConfigServer":'ptr/ert/ert',
-                                          "Bool":True,
-                                          "Int":234,
-                                          "Float":123.124,
-                                          "Something":["dgfg"],
-                                          "Dict":{"dgfg":123,"sdf":"345"},
-                                          "CConfigServer":'ptr/ert/ert',
-                                          "CBool":True,
-                                          "CInt":234,
-                                          "CFloat":123.124,
-                                          "CSomething":["dgfg"],
-                                          "CDict":{"dgfg":123,"sdf":"345"}
-                                          },
-                    'ActiveMntGrp': 'nxsmntgrp', 
-                    '_ViewOptions': {'ShowDial': True}, 
-                    'DataCompressionRank': 0, 
-                    "ScanFile":["file.nxs"], 
+            {"new":{"ScanDir":"/tmp",
+                    'ScanID': 192,
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1',
+                    "NeXusConfiguration":{
+                        "ConfigServer":'ptr/ert/ert',
+                        "Bool": True,
+                        "Int":234,
+                        "Float":123.124,
+                        "Something":["dgfg"],
+                        "Dict":{"dgfg":123, "sdf":"345"}},
+                    'ActiveMntGrp': 'nxsmntgrp',
+                    '_ViewOptions': {'ShowDial': True},
+                    'DataCompressionRank': 0,
+                    "ScanFile":["file.nxs"],
                     }
              },
-            {"new":{"ScanDir":"/tmp", 
-                    'ScanID': 192, 
-                    'NeXusSelectorDevice': u'p09/nxsrecselector/1', 
-                    "NeXusConfiguration":{"ConfigServer":'ptr/ert/ert',
-                                          "Bool":True,
-                                          "Int":234,
-                                          "Float":123.124,
-                                          "Something":["dgfg"],
-                                          "Dict":{"dgfg":123,"sdf":"345"},
-                                          "CConfigServer":'ptr/ert/ert',
-                                          "CBool":True,
-                                          "CInt":234,
-                                          "CFloat":123.124,
-                                          "CSomething":json.dumps(["dgfg"]),
-                                          "CDict":json.dumps({"dgfg":123,"sdf":"345"})
-                                          },
-                    'ActiveMntGrp': 'nxsmntgrp', 
-                    '_ViewOptions': {'ShowDial': True}, 
-                    'DataCompressionRank': 0, 
-                    "ScanFile":["file.nxs"], 
+            {"new":{"ScanDir":"/tmp",
+                    'ScanID': 192,
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1',
+                    "NeXusConfiguration":{
+                        "ConfigServer":'ptr/ert/ert',
+                        "Bool": True,
+                        "Int":234,
+                        "Float":123.124,
+                        "Something":["dgfg"],
+                        "Dict":{"dgfg":123, "sdf":"345"},
+                        "CConfigServer":'ptr/ert/ert',
+                        "CBool": True,
+                        "CInt":234,
+                        "CFloat":123.124,
+                        "CSomething":["dgfg"],
+                        "CDict":{"dgfg":123, "sdf":"345"}
+                        },
+                    'ActiveMntGrp': 'nxsmntgrp',
+                    '_ViewOptions': {'ShowDial': True},
+                    'DataCompressionRank': 0,
+                    "ScanFile":["file.nxs"],
+                    }
+             },
+            {"new":{"ScanDir":"/tmp",
+                    'ScanID': 192,
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1',
+                    "NeXusConfiguration":{
+                        "ConfigServer":'ptr/ert/ert',
+                        "Bool": True,
+                        "Int":234,
+                        "Float":123.124,
+                        "Something":["dgfg"],
+                        "Dict":{"dgfg":123, "sdf":"345"},
+                        "CConfigServer":'ptr/ert/ert',
+                        "CBool": True,
+                        "CInt":234,
+                        "CFloat":123.124,
+                        "CSomething":json.dumps(["dgfg"]),
+                        "CDict":json.dumps({"dgfg":123, "sdf":"345"})
+                        },
+                    'ActiveMntGrp': 'nxsmntgrp',
+                    '_ViewOptions': {'ShowDial': True},
+                    'DataCompressionRank': 0,
+                    "ScanFile":["file.nxs"],
                     }
              },
            ]
@@ -2259,41 +2453,50 @@ class MacroServerPoolTest(unittest.TestCase):
             {},
             {"ScanDir":"/tmp"},
             {"ScanDir":"/tmp", "ScanFile":json.dumps(["file.nxs"])},
-            {"ScanDir":"/tmp", "ScanFile":json.dumps(["file.nxs"]),"ConfigServer":"ptr/ert/ert"},
-            {"ScanDir":"/tmp", "ScanFile":json.dumps(["file.nxs","file2.nxs"]),"ConfigServer":"ptr/ert/ert2"},
-            {"ScanDir":"/tmp", "ScanFile":"file.nxs", "ConfigServer":"ptr/ert/ert"},
-            {"ScanDir":"/tmp", "ScanFile":json.dumps(["file.nxs"]),"ConfigServer":"ptr/ert/ert",
-             "Bool":True, "Int":234,"Float":123.123, "Something":json.dumps(["dgfg"]),
-             "Dict":json.dumps({"dgfg":123,"sdf":"345"}),
+            {"ScanDir":"/tmp", "ScanFile":json.dumps(["file.nxs"]),
+             "ConfigServer":"ptr/ert/ert"},
+            {"ScanDir":"/tmp",
+             "ScanFile":json.dumps(["file.nxs", "file2.nxs"]),
+             "ConfigServer":"ptr/ert/ert2"},
+            {"ScanDir":"/tmp", "ScanFile":"file.nxs",
+             "ConfigServer":"ptr/ert/ert"},
+            {"ScanDir":"/tmp", "ScanFile":json.dumps(["file.nxs"]),
+             "ConfigServer":"ptr/ert/ert",
+             "Bool": True, "Int":234, "Float":123.123,
+             "Something":json.dumps(["dgfg"]),
+             "Dict":json.dumps({"dgfg":123, "sdf":"345"}),
              },
-            {"ScanDir":"/tmp", "ScanFile":["file.nxs"],"ConfigServer":"ptr/ert/ert",
-             "Bool":True, "Int":234,"Float":123.124, "Something":["dgfg"],
-             "Dict":{"dgfg":123,"sdf":"345"},
+            {"ScanDir":"/tmp", "ScanFile":["file.nxs"],
+             "ConfigServer":"ptr/ert/ert",
+             "Bool": True, "Int":234, "Float":123.124, "Something":["dgfg"],
+             "Dict":{"dgfg":123, "sdf":"345"},
              },
-            {"ScanDir":"/tmp", "ScanFile":["file.nxs"],"ConfigServer":"ptr/ert/ert",
-             "Bool":True, "Int":234,"Float":123.124, "Something":["dgfg"],
-             "Dict":{"dgfg":123,"sdf":"345"},
+            {"ScanDir":"/tmp", "ScanFile":["file.nxs"],
+             "ConfigServer":"ptr/ert/ert",
+             "Bool": True, "Int":234, "Float":123.124, "Something":["dgfg"],
+             "Dict":{"dgfg":123, "sdf":"345"},
              },
-            {"ScanDir":"/tmp", "ScanFile":["file.nxs"],"ConfigServer":"ptr/ert/ert",
-             "Bool":True, "Int":234,"Float":123.124, "Something":["dgfg"],
-             "Dict":{"dgfg":123,"sdf":"345"},
+            {"ScanDir":"/tmp", "ScanFile":["file.nxs"],
+             "ConfigServer":"ptr/ert/ert",
+             "Bool": True, "Int":234, "Float":123.124, "Something":["dgfg"],
+             "Dict":{"dgfg":123, "sdf":"345"},
              },
-            ] 
+            ]
 
-        cmds  = [None, None, {}, None, None, None, None, None, 
+        cmds = [None, None, {}, None, None, None, None, None,
+                {"CConfigServer":'ptr/ert/ert',
+                 "CBool": True,
+                 "CInt":234,
+                 "CFloat":123.124,
+                 "CSomething":["dgfg"],
+                 "CDict":{"dgfg":123, "sdf":"345"}},
                  {"CConfigServer":'ptr/ert/ert',
-                  "CBool":True,
-                  "CInt":234,
-                  "CFloat":123.124,
-                  "CSomething":["dgfg"],
-                  "CDict":{"dgfg":123,"sdf":"345"}},
-                 {"CConfigServer":'ptr/ert/ert',
-                  "CBool":True,
+                  "CBool": True,
                   "CInt":234,
                   "CFloat":123.124,
                   "CSomething":json.dumps(["dgfg"]),
-                  "CDict":json.dumps({"dgfg":123,"sdf":"345"})},
-                 ]
+                  "CDict":json.dumps({"dgfg":123, "sdf":"345"})},
+                ]
 
         msp = MacroServerPools(10)
         self.myAssertRaise(Exception, msp.setSelectorEnv, None, {})
@@ -2304,20 +2507,18 @@ class MacroServerPoolTest(unittest.TestCase):
             msp.setSelectorEnv(self._ms.door.keys()[0], dt, cmds[i])
 #            print "I = ",i
             data = {}
-            env = pickle.loads(self._ms.dps[self._ms.ms.keys()[0]].Environment[1])
+            env = pickle.loads(
+                self._ms.dps[self._ms.ms.keys()[0]].Environment[1])
 #            print "env", env
 #            print "ei", envs[i]
             self.myAssertDict(envs[i], env)
-
-
-
 
     ## constructor test
     # \brief It tests default settings
     def test_getScanEnv(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
-            
+
         envs = [
             pickle.dumps(
                 {"new":{"ScanDir":"/tmp"}
@@ -2333,14 +2534,14 @@ class MacroServerPoolTest(unittest.TestCase):
                 ),
             pickle.dumps(
                 {"new":{"ScanDir":"/tmp",  "ScanID": 13,
-                        "ScanFile":["file.nxs"], 
+                        "ScanFile":["file.nxs"],
                         "NeXusConfigServer":"ptr/ert/ert",
                         }
                  }
                 ),
             pickle.dumps(
-                {"new":{"ScanDir":"/tmp", 
-                        "ScanFile":["file.nxs","file2.nxs"], 
+                {"new":{"ScanDir":"/tmp",
+                        "ScanFile":["file.nxs", "file2.nxs"],
                         "NeXusSelectorDevice": "p09/nxsrecselector/1",
                         "NeXusConfiguration":{"ConfigServer":"ptr/ert/ert2"},
                         }
@@ -2348,7 +2549,7 @@ class MacroServerPoolTest(unittest.TestCase):
                 ),
             pickle.dumps(
                 {"new":{"ScanDir":"/tmp",  "ScanID": 15,
-                        "ScanFile":"file.nxs", 
+                        "ScanFile":"file.nxs",
                         "NeXusSelectorDevice": "p09/nxsrecselector/1",
                         "NeXusConfigServer":"ptr/ert/ert",
                         "NeXusConfiguration":{"ConfigServer":"ptr/ert/ert2"},
@@ -2356,28 +2557,28 @@ class MacroServerPoolTest(unittest.TestCase):
                  }
                 ),
             pickle.dumps(
-                {"new":{"ScanDir":"/tmp", 
-                        "ScanFile":["file.nxs"], 
+                {"new":{"ScanDir":"/tmp",
+                        "ScanFile":["file.nxs"],
                         "NeXusConfigServer":u'ptr/ert/ert',
-                        "NeXusBool":True,
+                        "NeXusBool": True,
                         "NeXusInt":234,
                         "NeXusSelectorDevice": "p09/nxsrecselector/1",
                         "NeXusFloat":123.123,
                         "NeXusSomething":("dgfg",),
-                        "NeXusDict":{"dgfg":123,"sdf":"345"},
+                        "NeXusDict":{"dgfg":123, "sdf":"345"},
                         }
                  }
                 ),
             pickle.dumps(
                 {"new":{"ScanDir":"/tmp",  "ScanID": 17,
-                        "ScanFile":["file.nxs"], 
+                        "ScanFile":["file.nxs"],
                         "NeXusSelectorDevice": "p09/nxsrecselector/1",
                         "NeXusConfiguration":{"ConfigServer":u'ptr/ert/ert',
-                        "Bool":True,
+                        "Bool": True,
                         "Int":234,
                         "Float":123.123,
                         "Something":("dgfg",),
-                        "Dict":{"dgfg":123,"sdf":"345"}}
+                        "Dict":{"dgfg":123, "sdf":"345"}}
                         }
                  }
                 ),
@@ -2388,152 +2589,155 @@ class MacroServerPoolTest(unittest.TestCase):
             {"ScanDir":"/tmp", "ScanID": 11},
             {"ScanDir":"/tmp", "ScanFile":["file.nxs"]},
             {"ScanDir":"/tmp", "ScanFile":["file.nxs"], "ScanID": 13},
-            {"ScanDir":"/tmp", "ScanFile":["file.nxs","file2.nxs"],"NeXusSelectorDevice": "p09/nxsrecselector/1"},
-            {"ScanDir":"/tmp", "ScanFile":"file.nxs", "ScanID": 15,"NeXusSelectorDevice": "p09/nxsrecselector/1"},
-            {"ScanDir":"/tmp", "ScanFile":["file.nxs"],"NeXusSelectorDevice": "p09/nxsrecselector/1"},
-            {"ScanDir":"/tmp", "ScanFile":["file.nxs"], "ScanID": 17,"NeXusSelectorDevice": "p09/nxsrecselector/1"},             
-            ] 
+            {"ScanDir":"/tmp", "ScanFile":["file.nxs", "file2.nxs"],
+             "NeXusSelectorDevice": "p09/nxsrecselector/1"},
+            {"ScanDir":"/tmp", "ScanFile":"file.nxs", "ScanID": 15,
+             "NeXusSelectorDevice": "p09/nxsrecselector/1"},
+            {"ScanDir":"/tmp", "ScanFile":["file.nxs"],
+             "NeXusSelectorDevice": "p09/nxsrecselector/1"},
+            {"ScanDir":"/tmp", "ScanFile":["file.nxs"], "ScanID": 17,
+             "NeXusSelectorDevice": "p09/nxsrecselector/1"},
+            ]
 
         msp = MacroServerPools(10)
         self.myAssertRaise(Exception, msp.getScanEnv, None)
-        data = {"ScanID": 192, "NeXusSelectorDevice": "p09/nxsrecselector/1", "ScanFile": ["sar4r.nxs"], "ScanDir": "/tmp/"}
+        data = {"ScanID": 192,
+                "NeXusSelectorDevice": "p09/nxsrecselector/1",
+                "ScanFile": ["sar4r.nxs"], "ScanDir": "/tmp/"}
         res = msp.getScanEnv(self._ms.door.keys()[0])
-        self.myAssertDict(json.loads(res),data)
+        self.myAssertDict(json.loads(res), data)
         for i, dt in enumerate(edats):
 #            print "I = ",i
             data = {}
-            self._ms.dps[self._ms.ms.keys()[0]].Environment = ('pickle', envs[i])
+            self._ms.dps[self._ms.ms.keys()[0]].Environment = (
+                'pickle', envs[i])
             dt = msp.getScanEnv(self._ms.door.keys()[0])
 #            print edats[i]
 #            print "data",dt
             self.myAssertDict(edats[i], json.loads(dt))
-
-
-
-
 
     ## constructor test
     # \brief It tests default settings
     def test_setScanEnv(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
-            
+
         envs = [
-            {"new":{'ScanID': 192, 
-                    'NeXusSelectorDevice': u'p09/nxsrecselector/1', 
-                    'ScanFile': [u'sar4r.nxs'], 
-                    'ActiveMntGrp': 'nxsmntgrp', 
-                    '_ViewOptions': {'ShowDial': True}, 
-                    'DataCompressionRank': 0, 
+            {"new":{'ScanID': 192,
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1',
+                    'ScanFile': [u'sar4r.nxs'],
+                    'ActiveMntGrp': 'nxsmntgrp',
+                    '_ViewOptions': {'ShowDial': True},
+                    'DataCompressionRank': 0,
                     'ScanDir': '/tmp/'}
              },
             {"new":{
-                    'ScanID': 192, 
-                    'NeXusSelectorDevice': u'p09/nxsrecselector/1', 
-                    'ScanFile': [u'sar4r.nxs'], 
-                    'ActiveMntGrp': 'nxsmntgrp', 
-                    '_ViewOptions': {'ShowDial': True}, 
-                    'DataCompressionRank': 0, 
+                    'ScanID': 192,
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1',
+                    'ScanFile': [u'sar4r.nxs'],
+                    'ActiveMntGrp': 'nxsmntgrp',
+                    '_ViewOptions': {'ShowDial': True},
+                    'DataCompressionRank': 0,
                     'ScanDir': '/tmp'}
              },
             {"new":{
-                    'ScanID': 11, 
-                    'NeXusSelectorDevice': u'p09/nxsrecselector/1', 
-                    'ActiveMntGrp': 'nxsmntgrp', 
-                    '_ViewOptions': {'ShowDial': True}, 
-                    'DataCompressionRank': 0, 
-                    "ScanDir":"/tmp", 
+                    'ScanID': 11,
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1',
+                    'ActiveMntGrp': 'nxsmntgrp',
+                    '_ViewOptions': {'ShowDial': True},
+                    'DataCompressionRank': 0,
+                    "ScanDir":"/tmp",
                     "ScanFile":["file.nxs"]
                     }
              },
-            {"new":{"ScanDir":"/tmp", 
-                    'ScanID': 11, 
-                    'NeXusSelectorDevice': u'p09/nxsrecselector/1', 
-                    "ConfigServer":"ptr/ert/ert", 
-                    'ActiveMntGrp': 'nxsmntgrp', 
-                    '_ViewOptions': {'ShowDial': True}, 
-                    'DataCompressionRank': 0, 
-                    "ScanFile":["file.nxs"], 
+            {"new":{"ScanDir":"/tmp",
+                    'ScanID': 11,
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1',
+                    "ConfigServer":"ptr/ert/ert",
+                    'ActiveMntGrp': 'nxsmntgrp',
+                    '_ViewOptions': {'ShowDial': True},
+                    'DataCompressionRank': 0,
+                    "ScanFile":["file.nxs"],
                     }
              },
-            {"new":{"ScanDir":"/tmp", 
-                    'ScanID': 13, 
-                    'NeXusSelectorDevice': u'p09/nxsrecselector/1', 
-                    "ConfigServer":"ptr/ert/ert2", 
-                    'ActiveMntGrp': 'nxsmntgrp', 
-                    '_ViewOptions': {'ShowDial': True}, 
-                    'DataCompressionRank': 0, 
-                    "ScanFile":["file.nxs","file2.nxs"], 
+            {"new":{"ScanDir":"/tmp",
+                    'ScanID': 13,
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1',
+                    "ConfigServer":"ptr/ert/ert2",
+                    'ActiveMntGrp': 'nxsmntgrp',
+                    '_ViewOptions': {'ShowDial': True},
+                    'DataCompressionRank': 0,
+                    "ScanFile":["file.nxs", "file2.nxs"],
                     }
              },
-            {"new":{"ScanDir":"/tmp", 
-                    'ScanID': 13, 
-                    'NeXusSelectorDevice': u'p09/nxsrecselector/1', 
-                    "ConfigServer":"ptr/ert/ert", 
-                    'ActiveMntGrp': 'nxsmntgrp', 
-                    '_ViewOptions': {'ShowDial': True}, 
-                    'DataCompressionRank': 0, 
-                    "ScanFile":"file.nxs", 
+            {"new":{"ScanDir":"/tmp",
+                    'ScanID': 13,
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1',
+                    "ConfigServer":"ptr/ert/ert",
+                    'ActiveMntGrp': 'nxsmntgrp',
+                    '_ViewOptions': {'ShowDial': True},
+                    'DataCompressionRank': 0,
+                    "ScanFile":"file.nxs",
                     }
              },
-            {"new":{"ScanDir":"/tmp", 
-                    'ScanID': 15, 
-                    'NeXusSelectorDevice': u'p09/nxsrecselector/1', 
+            {"new":{"ScanDir":"/tmp",
+                    'ScanID': 15,
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1',
                     "ConfigServer":'ptr/ert/ert',
-                    "Bool":True,
+                    "Bool": True,
                     "Int":234,
                     "Float":123.123,
                     "Something":["dgfg"],
-                    "Dict":{"dgfg":123,"sdf":"345"},
-                    'ActiveMntGrp': 'nxsmntgrp', 
-                    '_ViewOptions': {'ShowDial': True}, 
-                    'DataCompressionRank': 0, 
-                    "ScanFile":["file.nxs"], 
-                    }
-             }, 
-            {"new":{"ScanDir":"/tmp", 
-                    'ScanID': 15, 
-                    'NeXusSelectorDevice': u'p09/nxsrecselector/1', 
-                    "ConfigServer":'ptr/ert/ert',
-                    "Bool":True,
-                    "Int":234,
-                    "Float":123.124,
-                    "Something":["dgfg"],
-                    "Dict":{"dgfg":123,"sdf":"345"},
-                    'ActiveMntGrp': 'nxsmntgrp', 
-                    '_ViewOptions': {'ShowDial': True}, 
-                    'DataCompressionRank': 0, 
-                    "ScanFile":["file.nxs"], 
+                    "Dict":{"dgfg":123, "sdf":"345"},
+                    'ActiveMntGrp': 'nxsmntgrp',
+                    '_ViewOptions': {'ShowDial': True},
+                    'DataCompressionRank': 0,
+                    "ScanFile":["file.nxs"],
                     }
              },
-            {"new":{"ScanDir":"/tmp", 
-                    'ScanID': 17, 
-                    'NeXusSelectorDevice': u'p09/nxsrecselector/1', 
+            {"new":{"ScanDir":"/tmp",
+                    'ScanID': 15,
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1',
                     "ConfigServer":'ptr/ert/ert',
-                    "Bool":True,
+                    "Bool": True,
                     "Int":234,
                     "Float":123.124,
                     "Something":["dgfg"],
-                    "Dict":{"dgfg":123,"sdf":"345"},
-                    'ActiveMntGrp': 'nxsmntgrp', 
-                    '_ViewOptions': {'ShowDial': True}, 
-                    'DataCompressionRank': 0, 
-                    "ScanFile":["file.nxs"], 
+                    "Dict":{"dgfg":123, "sdf":"345"},
+                    'ActiveMntGrp': 'nxsmntgrp',
+                    '_ViewOptions': {'ShowDial': True},
+                    'DataCompressionRank': 0,
+                    "ScanFile":["file.nxs"],
                     }
              },
-            {"new":{"ScanDir":"/tmp", 
-                    'ScanID': 17, 
-                    'NeXusSelectorDevice': u'p09/nxsrecselector/1', 
+            {"new":{"ScanDir":"/tmp",
+                    'ScanID': 17,
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1',
                     "ConfigServer":'ptr/ert/ert',
-                    "Bool":True,
+                    "Bool": True,
                     "Int":234,
                     "Float":123.124,
                     "Something":["dgfg"],
-                    "Dict":{"dgfg":123,"sdf":"345"},
-                    'ActiveMntGrp': 'nxsmntgrp', 
-                    '_ViewOptions': {'ShowDial': True}, 
-                    'DataCompressionRank': 0, 
-                    "ScanFile":["file.nxs"], 
+                    "Dict":{"dgfg":123, "sdf":"345"},
+                    'ActiveMntGrp': 'nxsmntgrp',
+                    '_ViewOptions': {'ShowDial': True},
+                    'DataCompressionRank': 0,
+                    "ScanFile":["file.nxs"],
+                    }
+             },
+            {"new":{"ScanDir":"/tmp",
+                    'ScanID': 17,
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1',
+                    "ConfigServer":'ptr/ert/ert',
+                    "Bool": True,
+                    "Int":234,
+                    "Float":123.124,
+                    "Something":["dgfg"],
+                    "Dict":{"dgfg":123, "sdf":"345"},
+                    'ActiveMntGrp': 'nxsmntgrp',
+                    '_ViewOptions': {'ShowDial': True},
+                    'DataCompressionRank': 0,
+                    "ScanFile":["file.nxs"],
                     }
              },
            ]
@@ -2542,50 +2746,55 @@ class MacroServerPoolTest(unittest.TestCase):
             {},
             {"ScanDir":"/tmp"},
             {"ScanDir":"/tmp", "ScanFile":["file.nxs"], "ScanID":11},
-            {"ScanDir":"/tmp", "ScanFile":["file.nxs"],"ConfigServer":"ptr/ert/ert"},
-            {"ScanDir":"/tmp", "ScanFile":["file.nxs","file2.nxs"],"ConfigServer":"ptr/ert/ert2", "ScanID":13},
-            {"ScanDir":"/tmp", "ScanFile":"file.nxs", "ConfigServer":"ptr/ert/ert"},
-            {"ScanDir":"/tmp", "ScanFile":["file.nxs"],"ConfigServer":"ptr/ert/ert", "ScanID":15,
-             "Bool":True, "Int":234,"Float":123.123, "Something":["dgfg"],
-             "Dict":{"dgfg":123,"sdf":"345"},
+            {"ScanDir":"/tmp", "ScanFile":["file.nxs"],
+             "ConfigServer":"ptr/ert/ert"},
+            {"ScanDir":"/tmp", "ScanFile":["file.nxs", "file2.nxs"],
+             "ConfigServer":"ptr/ert/ert2", "ScanID":13},
+            {"ScanDir":"/tmp", "ScanFile":"file.nxs",
+             "ConfigServer":"ptr/ert/ert"},
+            {"ScanDir":"/tmp", "ScanFile":["file.nxs"],
+             "ConfigServer":"ptr/ert/ert", "ScanID":15,
+             "Bool": True, "Int":234, "Float":123.123, "Something":["dgfg"],
+             "Dict":{"dgfg":123, "sdf":"345"},
              },
-            {"ScanDir":"/tmp", "ScanFile":["file.nxs"],"ConfigServer":"ptr/ert/ert",
-             "Bool":True, "Int":234,"Float":123.124, "Something":["dgfg"],
-             "Dict":{"dgfg":123,"sdf":"345"},
+            {"ScanDir":"/tmp", "ScanFile":["file.nxs"],
+             "ConfigServer":"ptr/ert/ert",
+             "Bool": True, "Int":234, "Float":123.124, "Something":["dgfg"],
+             "Dict":{"dgfg":123, "sdf":"345"},
              },
-            {"ScanDir":"/tmp", "ScanFile":["file.nxs"],"ConfigServer":"ptr/ert/ert", "ScanID":17,
-             "Bool":True, "Int":234,"Float":123.124, "Something":["dgfg"],
-             "Dict":{"dgfg":123,"sdf":"345"},
+            {"ScanDir":"/tmp", "ScanFile":["file.nxs"],
+             "ConfigServer":"ptr/ert/ert", "ScanID":17,
+             "Bool": True, "Int":234, "Float":123.124, "Something":["dgfg"],
+             "Dict":{"dgfg":123, "sdf":"345"},
              },
-            {"ScanDir":"/tmp", "ScanFile":["file.nxs"],"ConfigServer":"ptr/ert/ert",
-             "Bool":True, "Int":234,"Float":123.124, "Something":["dgfg"],
-             "Dict":{"dgfg":123,"sdf":"345"},
+            {"ScanDir":"/tmp", "ScanFile":["file.nxs"],
+             "ConfigServer":"ptr/ert/ert",
+             "Bool": True, "Int":234, "Float":123.124, "Something":["dgfg"],
+             "Dict":{"dgfg":123, "sdf":"345"},
              },
-            ] 
+            ]
 
-        sids = [192,192,11,11,13,13,15,15,17,17]
+        sids = [192, 192, 11, 11, 13, 13, 15, 15, 17, 17]
 
         msp = MacroServerPools(10)
         self.myAssertRaise(Exception, msp.setScanEnv, None, "{}")
         msp.setScanEnv(self._ms.door.keys()[0], "{}")
         for i, dt in enumerate(edats):
             sid = msp.setScanEnv(self._ms.door.keys()[0], json.dumps(dt))
-            print "I = ",i,sid
+            print "I = ", i, sid
             self.assertEqual(sid, sids[i])
             data = {}
-            env = pickle.loads(self._ms.dps[self._ms.ms.keys()[0]].Environment[1])
+            env = pickle.loads(
+                self._ms.dps[self._ms.ms.keys()[0]].Environment[1])
 #            print "env", env
 #            print "ei", envs[i]
             self.myAssertDict(envs[i], env)
-
-            
 
     ## constructor test
     # \brief It tests default settings
     def test_setScanEnv_scanid(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
-            
 
         envs = [
             pickle.dumps(
@@ -2605,133 +2814,129 @@ class MacroServerPoolTest(unittest.TestCase):
         self.assertEqual(msp.setScanEnv(self._ms.door.keys()[0], "{}"), -1)
         self._ms.dps[self._ms.ms.keys()[0]].Environment = ('pickle', envs[1])
         self.assertEqual(msp.setScanEnv(self._ms.door.keys()[0], "{}"), 12)
-        
-
-
-
 
     ## constructor test
     # \brief It tests default settings
     def test_setScanEnv(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
-            
+
         envs = [
-            {"new":{'ScanID': 192, 
-                    'NeXusSelectorDevice': u'p09/nxsrecselector/1', 
-                    'ScanFile': [u'sar4r.nxs'], 
-                    'ActiveMntGrp': 'nxsmntgrp', 
-                    '_ViewOptions': {'ShowDial': True}, 
-                    'DataCompressionRank': 0, 
+            {"new":{'ScanID': 192,
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1',
+                    'ScanFile': [u'sar4r.nxs'],
+                    'ActiveMntGrp': 'nxsmntgrp',
+                    '_ViewOptions': {'ShowDial': True},
+                    'DataCompressionRank': 0,
                     'ScanDir': '/tmp/'}
              },
             {"new":{
-                    'ScanID': 192, 
-                    'NeXusSelectorDevice': u'p09/nxsrecselector/1', 
-                    'ScanFile': [u'sar4r.nxs'], 
-                    'ActiveMntGrp': 'nxsmntgrp', 
-                    '_ViewOptions': {'ShowDial': True}, 
-                    'DataCompressionRank': 0, 
+                    'ScanID': 192,
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1',
+                    'ScanFile': [u'sar4r.nxs'],
+                    'ActiveMntGrp': 'nxsmntgrp',
+                    '_ViewOptions': {'ShowDial': True},
+                    'DataCompressionRank': 0,
                     'ScanDir': '/tmp'}
              },
             {"new":{
-                    'ScanID': 11, 
-                    'NeXusSelectorDevice': u'p09/nxsrecselector/1', 
-                    'ActiveMntGrp': 'nxsmntgrp', 
-                    '_ViewOptions': {'ShowDial': True}, 
-                    'DataCompressionRank': 0, 
-                    "ScanDir":"/tmp", 
+                    'ScanID': 11,
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1',
+                    'ActiveMntGrp': 'nxsmntgrp',
+                    '_ViewOptions': {'ShowDial': True},
+                    'DataCompressionRank': 0,
+                    "ScanDir":"/tmp",
                     "ScanFile":["file.nxs"]
                     }
              },
-            {"new":{"ScanDir":"/tmp", 
-                    'ScanID': 11, 
-                    'NeXusSelectorDevice': u'p09/nxsrecselector/1', 
-                    "ConfigServer":"ptr/ert/ert", 
-                    'ActiveMntGrp': 'nxsmntgrp', 
-                    '_ViewOptions': {'ShowDial': True}, 
-                    'DataCompressionRank': 0, 
-                    "ScanFile":["file.nxs"], 
+            {"new":{"ScanDir":"/tmp",
+                    'ScanID': 11,
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1',
+                    "ConfigServer":"ptr/ert/ert",
+                    'ActiveMntGrp': 'nxsmntgrp',
+                    '_ViewOptions': {'ShowDial': True},
+                    'DataCompressionRank': 0,
+                    "ScanFile":["file.nxs"],
                     }
              },
-            {"new":{"ScanDir":"/tmp", 
-                    'ScanID': 13, 
-                    'NeXusSelectorDevice': u'p09/nxsrecselector/1', 
-                    "ConfigServer":"ptr/ert/ert2", 
-                    'ActiveMntGrp': 'nxsmntgrp', 
-                    '_ViewOptions': {'ShowDial': True}, 
-                    'DataCompressionRank': 0, 
-                    "ScanFile":["file.nxs","file2.nxs"], 
+            {"new":{"ScanDir":"/tmp",
+                    'ScanID': 13,
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1',
+                    "ConfigServer":"ptr/ert/ert2",
+                    'ActiveMntGrp': 'nxsmntgrp',
+                    '_ViewOptions': {'ShowDial': True},
+                    'DataCompressionRank': 0,
+                    "ScanFile":["file.nxs", "file2.nxs"],
                     }
              },
-            {"new":{"ScanDir":"/tmp", 
-                    'ScanID': 13, 
-                    'NeXusSelectorDevice': u'p09/nxsrecselector/1', 
-                    "ConfigServer":"ptr/ert/ert", 
-                    'ActiveMntGrp': 'nxsmntgrp', 
-                    '_ViewOptions': {'ShowDial': True}, 
-                    'DataCompressionRank': 0, 
-                    "ScanFile":"file.nxs", 
+            {"new":{"ScanDir":"/tmp",
+                    'ScanID': 13,
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1',
+                    "ConfigServer":"ptr/ert/ert",
+                    'ActiveMntGrp': 'nxsmntgrp',
+                    '_ViewOptions': {'ShowDial': True},
+                    'DataCompressionRank': 0,
+                    "ScanFile":"file.nxs",
                     }
              },
-            {"new":{"ScanDir":"/tmp", 
-                    'ScanID': 15, 
-                    'NeXusSelectorDevice': u'p09/nxsrecselector/1', 
+            {"new":{"ScanDir":"/tmp",
+                    'ScanID': 15,
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1',
                     "ConfigServer":'ptr/ert/ert',
-                    "Bool":True,
+                    "Bool": True,
                     "Int":234,
                     "Float":123.123,
                     "Something":["dgfg"],
-                    "Dict":{"dgfg":123,"sdf":"345"},
-                    'ActiveMntGrp': 'nxsmntgrp', 
-                    '_ViewOptions': {'ShowDial': True}, 
-                    'DataCompressionRank': 0, 
-                    "ScanFile":["file.nxs"], 
-                    }
-             }, 
-            {"new":{"ScanDir":"/tmp", 
-                    'ScanID': 15, 
-                    'NeXusSelectorDevice': u'p09/nxsrecselector/1', 
-                    "ConfigServer":'ptr/ert/ert',
-                    "Bool":True,
-                    "Int":234,
-                    "Float":123.124,
-                    "Something":["dgfg"],
-                    "Dict":{"dgfg":123,"sdf":"345"},
-                    'ActiveMntGrp': 'nxsmntgrp', 
-                    '_ViewOptions': {'ShowDial': True}, 
-                    'DataCompressionRank': 0, 
-                    "ScanFile":["file.nxs"], 
+                    "Dict":{"dgfg":123, "sdf":"345"},
+                    'ActiveMntGrp': 'nxsmntgrp',
+                    '_ViewOptions': {'ShowDial': True},
+                    'DataCompressionRank': 0,
+                    "ScanFile":["file.nxs"],
                     }
              },
-            {"new":{"ScanDir":"/tmp", 
-                    'ScanID': 17, 
-                    'NeXusSelectorDevice': u'p09/nxsrecselector/1', 
+            {"new":{"ScanDir":"/tmp",
+                    'ScanID': 15,
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1',
                     "ConfigServer":'ptr/ert/ert',
-                    "Bool":True,
+                    "Bool": True,
                     "Int":234,
                     "Float":123.124,
                     "Something":["dgfg"],
-                    "Dict":{"dgfg":123,"sdf":"345"},
-                    'ActiveMntGrp': 'nxsmntgrp', 
-                    '_ViewOptions': {'ShowDial': True}, 
-                    'DataCompressionRank': 0, 
-                    "ScanFile":["file.nxs"], 
+                    "Dict":{"dgfg":123, "sdf":"345"},
+                    'ActiveMntGrp': 'nxsmntgrp',
+                    '_ViewOptions': {'ShowDial': True},
+                    'DataCompressionRank': 0,
+                    "ScanFile":["file.nxs"],
                     }
              },
-            {"new":{"ScanDir":"/tmp", 
-                    'ScanID': 17, 
-                    'NeXusSelectorDevice': u'p09/nxsrecselector/1', 
+            {"new":{"ScanDir":"/tmp",
+                    'ScanID': 17,
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1',
                     "ConfigServer":'ptr/ert/ert',
-                    "Bool":True,
+                    "Bool": True,
                     "Int":234,
                     "Float":123.124,
                     "Something":["dgfg"],
-                    "Dict":{"dgfg":123,"sdf":"345"},
-                    'ActiveMntGrp': 'nxsmntgrp', 
-                    '_ViewOptions': {'ShowDial': True}, 
-                    'DataCompressionRank': 0, 
-                    "ScanFile":["file.nxs"], 
+                    "Dict":{"dgfg":123, "sdf":"345"},
+                    'ActiveMntGrp': 'nxsmntgrp',
+                    '_ViewOptions': {'ShowDial': True},
+                    'DataCompressionRank': 0,
+                    "ScanFile":["file.nxs"],
+                    }
+             },
+            {"new":{"ScanDir":"/tmp",
+                    'ScanID': 17,
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1',
+                    "ConfigServer":'ptr/ert/ert',
+                    "Bool": True,
+                    "Int":234,
+                    "Float":123.124,
+                    "Something":["dgfg"],
+                    "Dict":{"dgfg": 123, "sdf": "345"},
+                    'ActiveMntGrp': 'nxsmntgrp',
+                    '_ViewOptions': {'ShowDial': True},
+                    'DataCompressionRank': 0,
+                    "ScanFile":["file.nxs"],
                     }
              },
            ]
@@ -2740,136 +2945,142 @@ class MacroServerPoolTest(unittest.TestCase):
             {},
             {"ScanDir":"/tmp"},
             {"ScanDir":"/tmp", "ScanFile":["file.nxs"], "ScanID":11},
-            {"ScanDir":"/tmp", "ScanFile":["file.nxs"],"ConfigServer":"ptr/ert/ert"},
-            {"ScanDir":"/tmp", "ScanFile":["file.nxs","file2.nxs"],"ConfigServer":"ptr/ert/ert2", "ScanID":13},
-            {"ScanDir":"/tmp", "ScanFile":"file.nxs", "ConfigServer":"ptr/ert/ert"},
-            {"ScanDir":"/tmp", "ScanFile":["file.nxs"],"ConfigServer":"ptr/ert/ert", "ScanID":15,
-             "Bool":True, "Int":234,"Float":123.123, "Something":["dgfg"],
-             "Dict":{"dgfg":123,"sdf":"345"},
+            {"ScanDir":"/tmp", "ScanFile":["file.nxs"],
+             "ConfigServer":"ptr/ert/ert"},
+            {"ScanDir":"/tmp", "ScanFile":["file.nxs", "file2.nxs"],
+             "ConfigServer":"ptr/ert/ert2", "ScanID":13},
+            {"ScanDir":"/tmp", "ScanFile":"file.nxs",
+             "ConfigServer":"ptr/ert/ert"},
+            {"ScanDir":"/tmp", "ScanFile":["file.nxs"],
+             "ConfigServer":"ptr/ert/ert", "ScanID":15,
+             "Bool": True, "Int":234, "Float":123.123, "Something":["dgfg"],
+             "Dict":{"dgfg":123, "sdf":"345"},
              },
-            {"ScanDir":"/tmp", "ScanFile":["file.nxs"],"ConfigServer":"ptr/ert/ert",
-             "Bool":True, "Int":234,"Float":123.124, "Something":["dgfg"],
-             "Dict":{"dgfg":123,"sdf":"345"},
+            {"ScanDir":"/tmp", "ScanFile":["file.nxs"],
+             "ConfigServer":"ptr/ert/ert",
+             "Bool": True, "Int":234, "Float":123.124, "Something":["dgfg"],
+             "Dict":{"dgfg":123, "sdf":"345"},
              },
-            {"ScanDir":"/tmp", "ScanFile":["file.nxs"],"ConfigServer":"ptr/ert/ert", "ScanID":17,
-             "Bool":True, "Int":234,"Float":123.124, "Something":["dgfg"],
-             "Dict":{"dgfg":123,"sdf":"345"},
+            {"ScanDir":"/tmp", "ScanFile":["file.nxs"],
+             "ConfigServer":"ptr/ert/ert", "ScanID":17,
+             "Bool": True, "Int":234, "Float":123.124, "Something":["dgfg"],
+             "Dict": {"dgfg":123, "sdf":"345"},
              },
-            {"ScanDir":"/tmp", "ScanFile":["file.nxs"],"ConfigServer":"ptr/ert/ert",
-             "Bool":True, "Int":234,"Float":123.124, "Something":["dgfg"],
-             "Dict":{"dgfg":123,"sdf":"345"},
+            {"ScanDir":"/tmp", "ScanFile":["file.nxs"],
+             "ConfigServer":"ptr/ert/ert",
+             "Bool": True, "Int": 234, "Float": 123.124, "Something":["dgfg"],
+             "Dict":{"dgfg": 123, "sdf": "345"},
              },
-            ] 
+            ]
 
-        sids = [192,192,11,11,13,13,15,15,17,17]
+        sids = [192, 192, 11, 11, 13, 13, 15, 15, 17, 17]
 
         msp = MacroServerPools(10)
         self.myAssertRaise(Exception, msp.setScanEnv, None, "{}")
         msp.setScanEnv(self._ms.door.keys()[0], "{}")
         for i, dt in enumerate(edats):
             sid = msp.setScanEnv(self._ms.door.keys()[0], json.dumps(dt))
-            print "I = ",i,sid
+            print "I = ", i, sid
             self.assertEqual(sid, sids[i])
             data = {}
-            env = pickle.loads(self._ms.dps[self._ms.ms.keys()[0]].Environment[1])
+            env = pickle.loads(
+                self._ms.dps[self._ms.ms.keys()[0]].Environment[1])
 #            print "env", env
 #            print "ei", envs[i]
             self.myAssertDict(envs[i], env)
-
-
 
     ## constructor test
     # \brief It tests default settings
     def test_setScanEnv_dtlist(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
-            
+
         envs = [
-            {"new":{'ScanID': 192, 
-                    'NeXusSelectorDevice': u'p09/nxsrecselector/1', 
-                    'ScanFile': [u'sar4r.nxs'], 
-                    'ActiveMntGrp': 'nxsmntgrp', 
-                    '_ViewOptions': {'ShowDial': True}, 
-                    'DataCompressionRank': 0, 
+            {"new":{'ScanID': 192,
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1',
+                    'ScanFile': [u'sar4r.nxs'],
+                    'ActiveMntGrp': 'nxsmntgrp',
+                    '_ViewOptions': {'ShowDial': True},
+                    'DataCompressionRank': 0,
                     'ScanDir': '/tmp/'}
              },
             {"new":{
-                    'ScanID': 192, 
-                    'NeXusSelectorDevice': u'p09/nxsrecselector/1', 
-                    'ScanFile': [u'sar4r.nxs'], 
-                    'ActiveMntGrp': 'nxsmntgrp', 
-                    '_ViewOptions': {'ShowDial': True}, 
-                    'DataCompressionRank': 0, 
+                    'ScanID': 192,
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1',
+                    'ScanFile': [u'sar4r.nxs'],
+                    'ActiveMntGrp': 'nxsmntgrp',
+                    '_ViewOptions': {'ShowDial': True},
+                    'DataCompressionRank': 0,
                     'ScanDir': '/tmp'}
              },
             {"new":{
-                    'ScanID': "11", 
-                    'NeXusSelectorDevice': u'p09/nxsrecselector/1', 
-                    'ActiveMntGrp': 'nxsmntgrp', 
-                    '_ViewOptions': {'ShowDial': True}, 
-                    'DataCompressionRank': 0, 
-                    "ScanDir":"/tmp", 
+                    'ScanID': "11",
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1',
+                    'ActiveMntGrp': 'nxsmntgrp',
+                    '_ViewOptions': {'ShowDial': True},
+                    'DataCompressionRank': 0,
+                    "ScanDir":"/tmp",
                     "ScanFile":"file.nxs"
                     }
              },
-            {"new":{"ScanDir":"/tmp", 
-                    'ScanID': "11", 
-                    'NeXusSelectorDevice': u'p09/nxsrecselector/1', 
-                    "ConfigServer":"ptr/ert/ert", 
-                    'ActiveMntGrp': 'nxsmntgrp', 
-                    '_ViewOptions': {'ShowDial': True}, 
-                    'DataCompressionRank': 0, 
-                    "ScanFile":"file.nxs", 
+            {"new":{"ScanDir":"/tmp",
+                    'ScanID': "11",
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1',
+                    "ConfigServer":"ptr/ert/ert",
+                    'ActiveMntGrp': 'nxsmntgrp',
+                    '_ViewOptions': {'ShowDial': True},
+                    'DataCompressionRank': 0,
+                    "ScanFile":"file.nxs",
                     }
              },
-            {"new":{"ScanDir":"/tmp", 
-                    'ScanID': '13', 
-                    'NeXusSelectorDevice': u'p09/nxsrecselector/1', 
-                    "ConfigServer":"ptr/ert/ert2", 
-                    'ActiveMntGrp': 'nxsmntgrp', 
-                    '_ViewOptions': {'ShowDial': True}, 
-                    'DataCompressionRank': 0, 
-                    "ScanFile":"file.nxs", 
+            {"new":{"ScanDir":"/tmp",
+                    'ScanID': '13',
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1',
+                    "ConfigServer":"ptr/ert/ert2",
+                    'ActiveMntGrp': 'nxsmntgrp',
+                    '_ViewOptions': {'ShowDial': True},
+                    'DataCompressionRank': 0,
+                    "ScanFile":"file.nxs",
                     }
              },
-            {"new":{"ScanDir":"/tmp", 
-                    'ScanID': 13, 
-                    'NeXusSelectorDevice': u'p09/nxsrecselector/1', 
-                    "ConfigServer":"ptr/ert/ert", 
-                    'ActiveMntGrp': 'nxsmntgrp', 
-                    '_ViewOptions': {'ShowDial': True}, 
-                    'DataCompressionRank': 0, 
-                    "ScanFile":"file.nxs", 
+            {"new":{"ScanDir":"/tmp",
+                    'ScanID': 13,
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1',
+                    "ConfigServer":"ptr/ert/ert",
+                    'ActiveMntGrp': 'nxsmntgrp',
+                    '_ViewOptions': {'ShowDial': True},
+                    'DataCompressionRank': 0,
+                    "ScanFile":"file.nxs",
                     }
              },
-            {"new":{"ScanDir":"/tmp", 
-                    'ScanID': 15, 
-                    'NeXusSelectorDevice': u'p09/nxsrecselector/1', 
+            {"new":{"ScanDir":"/tmp",
+                    'ScanID': 15,
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1',
                     "ConfigServer":'ptr/ert/ert',
-                    "Bool":True,
-                    "Int":234,
-                    "Float":123.123,
-                    "Something":["dgfg"],
-                    "Dict":{"dgfg":123,"sdf":"345"},
-                    'ActiveMntGrp': 'nxsmntgrp', 
-                    '_ViewOptions': {'ShowDial': True}, 
-                    'DataCompressionRank': 0, 
-                    "ScanFile":["file.nxs"], 
+                    "Bool": True,
+                    "Int": 234,
+                    "Float": 123.123,
+                    "Something": ["dgfg"],
+                    "Dict":{"dgfg":123, "sdf":"345"},
+                    'ActiveMntGrp': 'nxsmntgrp',
+                    '_ViewOptions': {'ShowDial': True},
+                    'DataCompressionRank': 0,
+                    "ScanFile":["file.nxs"],
                     }
-             }, 
-            {"new":{"ScanDir":"/tmp", 
-                    'ScanID': 15, 
-                    'NeXusSelectorDevice': u'p09/nxsrecselector/1', 
+             },
+            {"new":{"ScanDir":"/tmp",
+                    'ScanID': 15,
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1',
                     "ConfigServer":'ptr/ert/ert',
-                    "Bool":True,
-                    "Int":234,
-                    "Float":123.124,
+                    "Bool": True,
+                    "Int": 234,
+                    "Float": 123.124,
                     "Something":["dgfg"],
-                    "Dict":{"dgfg":123,"sdf":"345"},
-                    'ActiveMntGrp': 'nxsmntgrp', 
-                    '_ViewOptions': {'ShowDial': True}, 
-                    'DataCompressionRank': 0, 
-                    "ScanFile":["file.nxs"], 
+                    "Dict":{"dgfg":123, "sdf":"345"},
+                    'ActiveMntGrp': 'nxsmntgrp',
+                    '_ViewOptions': {'ShowDial': True},
+                    'DataCompressionRank': 0,
+                    "ScanFile":["file.nxs"],
                     }
              },
            ]
@@ -2879,27 +3090,34 @@ class MacroServerPoolTest(unittest.TestCase):
             "ScanDir /tmp",
             "ScanDir:/tmp, ScanFile:file.nxs, ScanID:11",
             "ScanDir /tmp, ScanFile:file.nxs,ConfigServer ptr/ert/ert",
-            "ScanDir:/tmp, ScanFile:file.nxs  ConfigServer:ptr/ert/ert2, ScanID:13",
-            {"ScanDir":"/tmp", "ScanFile":"file.nxs", "ConfigServer":"ptr/ert/ert", "ScanID":13},
-            {"ScanDir":"/tmp", "ScanFile":["file.nxs"],"ConfigServer":"ptr/ert/ert", "ScanID":15,
-             "Bool":True, "Int":234,"Float":123.123, "Something":["dgfg"],
-             "Dict":{"dgfg":123,"sdf":"345"},
+            "ScanDir:/tmp, ScanFile:file.nxs  ConfigServer:ptr/ert/ert2, "
+            "ScanID:13",
+            {"ScanDir":"/tmp", "ScanFile":"file.nxs",
+             "ConfigServer":"ptr/ert/ert", "ScanID":13},
+            {"ScanDir":"/tmp", "ScanFile":["file.nxs"],
+             "ConfigServer":"ptr/ert/ert", "ScanID":15,
+             "Bool": True, "Int":234, "Float":123.123, "Something":["dgfg"],
+             "Dict":{"dgfg":123, "sdf":"345"},
              },
-            ] 
+            ]
 
-        sids = [192,192,11,11,13,13,15,15,17,17]
+        sids = [192, 192, 11, 11, 13, 13, 15, 15, 17, 17]
 
         msp = MacroServerPools(10)
         self.myAssertRaise(Exception, msp.setScanEnv, None, "{}")
         msp.setScanEnv(self._ms.door.keys()[0], "{}")
         for i, dt in enumerate(edats):
-            env = pickle.loads(self._ms.dps[self._ms.ms.keys()[0]].Environment[1])
+            env = pickle.loads(
+                self._ms.dps[self._ms.ms.keys()[0]].Environment[1])
             print "env0", env
-            sid = msp.setScanEnv(self._ms.door.keys()[0], dt if not isinstance(dt, dict) else json.dumps(dt))
-            print "I = ",i,sid
+            sid = msp.setScanEnv(
+                self._ms.door.keys()[0],
+                dt if not isinstance(dt, dict) else json.dumps(dt))
+            print "I = ", i, sid
             self.assertEqual(sid, sids[i])
             data = {}
-            env = pickle.loads(self._ms.dps[self._ms.ms.keys()[0]].Environment[1])
+            env = pickle.loads(
+                self._ms.dps[self._ms.ms.keys()[0]].Environment[1])
             print "env", env
             print "ei", envs[i]
             self.myAssertDict(envs[i], env)
