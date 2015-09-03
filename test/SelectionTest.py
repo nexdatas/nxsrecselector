@@ -32,11 +32,8 @@ import json
 from nxsrecconfig.Selection import Selection
 
 
-
 ## if 64-bit machione
 IS64BIT = (struct.calcsize("P") == 8)
-
-
 
 
 ## test fixture
@@ -47,16 +44,14 @@ class SelectionTest(unittest.TestCase):
     def __init__(self, methodName):
         unittest.TestCase.__init__(self, methodName)
 
-
         self._tfname = "field"
         self._tfname = "group"
-        self._fattrs = {"short_name":"test","units":"m" }
+        self._fattrs = {"short_name": "test", "units": "m"}
 
         ## default zone
         self.__defaultzone = 'Europe/Berlin'
         ## default mntgrp
         self.__defaultmntgrp = 'nxsmntgrp'
-
 
         self._bint = "int64" if IS64BIT else "int32"
         self._buint = "uint64" if IS64BIT else "uint32"
@@ -83,29 +78,29 @@ class SelectionTest(unittest.TestCase):
             ("LabelShapes", '{}'),
             ("DynamicComponents", True),
             ("DynamicLinks", True),
-            ("DynamicPath", \
-                 '/entry$var.serialno:NXentry/NXinstrument/collection'),
+            ("DynamicPath",
+             '/entry$var.serialno:NXentry/NXinstrument/collection'),
             ("TimeZone", self.__defaultzone),
             ("ConfigDevice", ''),
             ("WriterDevice", ''),
             ("Door", ''),
             ("MntGrp", '')
         ]
-        
+
         self.__dump = {}
 
         try:
-            self.__seed  = long(binascii.hexlify(os.urandom(16)), 16)
+            self.__seed = long(binascii.hexlify(os.urandom(16)), 16)
         except NotImplementedError:
-            self.__seed  = long(time.time() * 256) 
-         
+            self.__seed = long(time.time() * 256)
+
         self.__rnd = random.Random(self.__seed)
 
     ## test starter
     # \brief Common set up
     def setUp(self):
-        print "SEED =", self.__seed 
-        print "\nsetting up..."        
+        print "SEED =", self.__seed
+        print "\nsetting up..."
 
     ## test closer
     # \brief Common tear down
@@ -118,15 +113,13 @@ class SelectionTest(unittest.TestCase):
             self.__dump[key] = vl
 
     def compareToDump(self, el, excluded=None):
-        exc = set(excluded or []) 
+        exc = set(excluded or [])
         dks = set(self.__dump.keys()) - exc
         eks = set(el.keys()) - exc
         self.assertEqual(dks, eks)
         for key in dks:
             self.assertEqual(self.__dump[key], el[key])
-            
-        
-        
+
     ## constructor test
     # \brief It tests default settings
     def test_constructor(self):
@@ -134,7 +127,7 @@ class SelectionTest(unittest.TestCase):
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         el = Selection()
         self.assertTrue(isinstance(el, dict))
-        self.assertEqual(len(el.keys()),len(self._keys))
+        self.assertEqual(len(el.keys()), len(self._keys))
         for key, vl in self._keys:
             self.assertTrue(key in el.keys())
             self.assertEqual(el[key], vl)
@@ -149,7 +142,7 @@ class SelectionTest(unittest.TestCase):
         self.assertEqual(len(el.keys()), 0)
         el.reset()
         self.assertTrue(isinstance(el, dict))
-        self.assertEqual(len(el.keys()),len(self._keys))
+        self.assertEqual(len(el.keys()), len(self._keys))
         for key, vl in self._keys:
             self.assertTrue(key in el.keys())
             self.assertEqual(el[key], vl)
@@ -159,8 +152,6 @@ class SelectionTest(unittest.TestCase):
         size = self.__rnd.randint(1, maxsize)
         return ''.join(self.__rnd.choice(letters) for _ in range(size))
 
-
-
     ## deselect test
     def test_deselect(self):
         fun = sys._getframe().f_code.co_name
@@ -168,7 +159,7 @@ class SelectionTest(unittest.TestCase):
         for i in range(20):
             el = Selection()
             el.deselect()
-            self.assertEqual(len(el.keys()),len(self._keys))
+            self.assertEqual(len(el.keys()), len(self._keys))
             for key, vl in self._keys:
                 self.assertTrue(key in el.keys())
                 self.assertEqual(el[key], vl)
@@ -181,9 +172,10 @@ class SelectionTest(unittest.TestCase):
                 cps[self.getRandomName(10)] = bool(self.__rnd.randint(0, 1))
             for i in range(lds):
                 dss[self.getRandomName(10)] = bool(self.__rnd.randint(0, 1))
-            el["ComponentGroup"] = json.dumps(cps)    
+            el["ComponentGroup"] = json.dumps(cps)
             el["DataSourceGroup"] = json.dumps(dss)
-            el["InitDataSources"] = json.dumps(self.__rnd.sample(dss, self.__rnd.randint(1, lds)))
+            el["InitDataSources"] = json.dumps(
+                self.__rnd.sample(dss, self.__rnd.randint(1, lds)))
             self.dump(el)
 
             el.deselect()
@@ -211,12 +203,10 @@ class SelectionTest(unittest.TestCase):
         for i in range(20):
             el = Selection()
             el.updateAutomaticDataSources(None)
-            self.assertEqual(len(el.keys()),len(self._keys))
+            self.assertEqual(len(el.keys()), len(self._keys))
             for key, vl in self._keys:
                 self.assertTrue(key in el.keys())
                 self.assertEqual(el[key], vl)
-
-
 
             lds1 = self.__rnd.randint(1, 40)
             lds2 = self.__rnd.randint(1, 40)
@@ -225,22 +215,21 @@ class SelectionTest(unittest.TestCase):
             dss2 = [self.getRandomName(10) for _ in range(lds2)]
             dss3 = [self.getRandomName(10) for _ in range(lds3)]
 
-            el["AutomaticDataSources"] = json.dumps(list(set(dss1) | set(dss2)))
+            el["AutomaticDataSources"] = json.dumps(
+                list(set(dss1) | set(dss2)))
             self.dump(el)
             el.updateAutomaticDataSources(None)
 
             self.compareToDump(el, ["AutomaticDataSources"])
-            self.assertEqual(set(list(set(dss2)| set(dss1))), 
+            self.assertEqual(set(list(set(dss2) | set(dss1))),
                              set(json.loads(el["AutomaticDataSources"])))
 
             el.updateAutomaticDataSources(list(set(dss3) | set(dss2)))
 
-            self.assertEqual(set(list(set(dss3) | set(dss2)| set(dss1))), 
+            self.assertEqual(set(list(set(dss3) | set(dss2) | set(dss1))),
                              set(json.loads(el["AutomaticDataSources"])))
 
             self.compareToDump(el, ["AutomaticDataSources"])
-
-
 
     ## updateOrderedChannels test
     def test_updateOrderedChannels(self):
@@ -249,12 +238,10 @@ class SelectionTest(unittest.TestCase):
         for i in range(20):
             el = Selection()
             el.updateOrderedChannels([])
-            self.assertEqual(len(el.keys()),len(self._keys))
+            self.assertEqual(len(el.keys()), len(self._keys))
             for key, vl in self._keys:
                 self.assertTrue(key in el.keys())
                 self.assertEqual(el[key], vl)
-
-
 
             lds1 = self.__rnd.randint(1, 40)
             lds2 = self.__rnd.randint(1, 40)
@@ -281,7 +268,6 @@ class SelectionTest(unittest.TestCase):
 
             self.compareToDump(el, ["OrderedChannels"])
 
-
             ndss = json.loads(el["OrderedChannels"])
             odss = []
             odss.extend(dss2)
@@ -299,7 +285,7 @@ class SelectionTest(unittest.TestCase):
         for i in range(20):
             el = Selection()
             el.deselect()
-            self.assertEqual(len(el.keys()),len(self._keys))
+            self.assertEqual(len(el.keys()), len(self._keys))
             for key, vl in self._keys:
                 self.assertTrue(key in el.keys())
                 self.assertEqual(el[key], vl)
@@ -315,7 +301,7 @@ class SelectionTest(unittest.TestCase):
             ccps = self.__rnd.sample(cps, self.__rnd.randint(1, lcp))
             for cp in ccps:
                 dss[cp] = bool(self.__rnd.randint(0, 1))
-            el["ComponentGroup"] = json.dumps(cps)    
+            el["ComponentGroup"] = json.dumps(cps)
             el["DataSourceGroup"] = json.dumps(dss)
             common = set(cps) & set(dss)
             self.dump(el)
@@ -332,7 +318,6 @@ class SelectionTest(unittest.TestCase):
                     self.assertEqual(ncps[key], cps[key])
             self.compareToDump(el, ["ComponentGroup"])
 
-
     ## deselect test
     def test_updateComponentGroup(self):
         fun = sys._getframe().f_code.co_name
@@ -340,15 +325,15 @@ class SelectionTest(unittest.TestCase):
         for i in range(20):
             el = Selection()
             el.deselect()
-            self.assertEqual(len(el.keys()),len(self._keys))
+            self.assertEqual(len(el.keys()), len(self._keys))
             for key, vl in self._keys:
                 self.assertTrue(key in el.keys())
                 self.assertEqual(el[key], vl)
 
             dss = {}
             lall = self.__rnd.randint(1, 40)
-            adss =  [self.getRandomName(10) for _ in range(lall)]
-            
+            adss = [self.getRandomName(10) for _ in range(lall)]
+
             dssn = self.__rnd.sample(adss, self.__rnd.randint(1, lall))
             chs = self.__rnd.sample(adss, self.__rnd.randint(1, lall))
             cdss = self.__rnd.sample(adss, self.__rnd.randint(1, lall))
@@ -364,7 +349,6 @@ class SelectionTest(unittest.TestCase):
             ndss = json.loads(el["DataSourceGroup"])
             existing = set(dssn) & (set(chs) | set(cdss))
 
-            
             for key, value in ndss.items():
                 if key in existing:
                     self.assertEqual(ndss[key], dss[key])
@@ -372,14 +356,14 @@ class SelectionTest(unittest.TestCase):
                     self.assertTrue(key in chs)
                     self.assertTrue(not value)
             self.compareToDump(el, ["DataSourceGroup"])
-            
+
     ## deselect test
     def test_updateMntGrp(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         el = Selection()
         el.deselect()
-        self.assertEqual(len(el.keys()),len(self._keys))
+        self.assertEqual(len(el.keys()), len(self._keys))
         for key, vl in self._keys:
             self.assertTrue(key in el.keys())
             self.assertEqual(el[key], vl)
@@ -390,13 +374,13 @@ class SelectionTest(unittest.TestCase):
         self.assertEqual(el["MntGrp"], self.__defaultmntgrp)
         self.compareToDump(el, ["MntGrp"])
 
-        mymg = "somthing123" 
+        mymg = "somthing123"
         el["MntGrp"] = mymg
         el.updateMntGrp()
         self.assertEqual(el["MntGrp"], mymg)
         self.compareToDump(el, ["MntGrp"])
 
-        mymg = "" 
+        mymg = ""
         el["MntGrp"] = mymg
         el.updateMntGrp()
         self.assertEqual(el["MntGrp"], self.__defaultmntgrp)
@@ -405,7 +389,6 @@ class SelectionTest(unittest.TestCase):
         el.clear()
         el.updateMntGrp()
         self.assertEqual(el["MntGrp"], self.__defaultmntgrp)
-
 
     ## deselect test
     def test_updateTimeZone(self):
@@ -413,7 +396,7 @@ class SelectionTest(unittest.TestCase):
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         el = Selection()
         el.deselect()
-        self.assertEqual(len(el.keys()),len(self._keys))
+        self.assertEqual(len(el.keys()), len(self._keys))
         for key, vl in self._keys:
             self.assertTrue(key in el.keys())
             self.assertEqual(el[key], vl)
@@ -424,13 +407,13 @@ class SelectionTest(unittest.TestCase):
         self.assertEqual(el["TimeZone"], self.__defaultzone)
         self.compareToDump(el, ["TimeZone"])
 
-        mymg = "somthing123" 
+        mymg = "somthing123"
         el["TimeZone"] = mymg
         el.updateTimeZone()
         self.assertEqual(el["TimeZone"], mymg)
         self.compareToDump(el, ["TimeZone"])
 
-        mymg = "" 
+        mymg = ""
         el["TimeZone"] = mymg
         el.updateTimeZone()
         self.assertEqual(el["TimeZone"], self.__defaultzone)
@@ -440,14 +423,13 @@ class SelectionTest(unittest.TestCase):
         el.updateTimeZone()
         self.assertEqual(el["TimeZone"], self.__defaultzone)
 
-
     ## deselect test
     def test_resetMntGrp(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         el = Selection()
         el.deselect()
-        self.assertEqual(len(el.keys()),len(self._keys))
+        self.assertEqual(len(el.keys()), len(self._keys))
         for key, vl in self._keys:
             self.assertTrue(key in el.keys())
             self.assertEqual(el[key], vl)
@@ -458,19 +440,17 @@ class SelectionTest(unittest.TestCase):
         self.assertEqual(el["MntGrp"], self.__defaultmntgrp)
         self.compareToDump(el, ["MntGrp"])
 
-        mymg = "somthing123" 
+        mymg = "somthing123"
         el["MntGrp"] = mymg
         el.resetMntGrp()
         self.assertEqual(el["MntGrp"], mymg)
         self.compareToDump(el, ["MntGrp"])
 
-        mymg = "" 
+        mymg = ""
         el["MntGrp"] = mymg
         el.resetMntGrp()
         self.assertEqual(el["MntGrp"], self.__defaultmntgrp)
         self.compareToDump(el, ["MntGrp"])
-
-
 
     ## deselect test
     def test_resetTimeZone(self):
@@ -478,7 +458,7 @@ class SelectionTest(unittest.TestCase):
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         el = Selection()
         el.deselect()
-        self.assertEqual(len(el.keys()),len(self._keys))
+        self.assertEqual(len(el.keys()), len(self._keys))
         for key, vl in self._keys:
             self.assertTrue(key in el.keys())
             self.assertEqual(el[key], vl)
@@ -489,19 +469,17 @@ class SelectionTest(unittest.TestCase):
         self.assertEqual(el["TimeZone"], self.__defaultzone)
         self.compareToDump(el, ["TimeZone"])
 
-        mymg = "somthing123" 
+        mymg = "somthing123"
         el["TimeZone"] = mymg
         el.resetTimeZone()
         self.assertEqual(el["TimeZone"], mymg)
         self.compareToDump(el, ["TimeZone"])
 
-        mymg = "" 
+        mymg = ""
         el["TimeZone"] = mymg
         el.resetTimeZone()
         self.assertEqual(el["TimeZone"], self.__defaultzone)
         self.compareToDump(el, ["TimeZone"])
-
-
 
     ## updateOrderedChannels test
     def test_resetAutomaticComponents(self):
@@ -509,21 +487,19 @@ class SelectionTest(unittest.TestCase):
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         for i in range(20):
             el = Selection()
-            self.assertEqual(len(el.keys()),len(self._keys))
+            self.assertEqual(len(el.keys()), len(self._keys))
             for key, vl in self._keys:
                 self.assertTrue(key in el.keys())
                 self.assertEqual(el[key], vl)
 
-
-
             lds1 = self.__rnd.randint(1, 40)
             dss1 = [self.getRandomName(10) for _ in range(lds1)]
-            
+
             cps = {}
             lcp = self.__rnd.randint(1, 40)
             for i in range(lcp):
                 cps[self.getRandomName(10)] = bool(self.__rnd.randint(0, 1))
-            el["AutomaticComponentGroup"] = json.dumps(cps)    
+            el["AutomaticComponentGroup"] = json.dumps(cps)
 
             self.dump(el)
 
@@ -531,12 +507,11 @@ class SelectionTest(unittest.TestCase):
 
             self.compareToDump(el, ["AutomaticComponentGroup"])
 
-
             ndss = json.loads(el["AutomaticComponentGroup"])
             for ds in dss1:
                 self.assertTrue(ds in ndss.keys())
                 self.assertEqual(ndss[ds], False)
-                
+
 
 if __name__ == '__main__':
     unittest.main()

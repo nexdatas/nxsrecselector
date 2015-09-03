@@ -31,6 +31,7 @@ import Queue
 import PyTango
 import json
 import pickle
+import string
 
 import logging
 logger = logging.getLogger()
@@ -39,6 +40,7 @@ import TestMacroServerSetUp
 import TestPoolSetUp
 import TestServerSetUp
 import TestConfigServerSetUp
+import TestWriterSetUp
 
 
 from nxsrecconfig.MacroServerPools import MacroServerPools
@@ -63,6 +65,7 @@ class SelectorTest(unittest.TestCase):
 
         self._ms = TestMacroServerSetUp.TestMacroServerSetUp()
         self._cf = TestConfigServerSetUp.TestConfigServerSetUp()
+        self._wr = TestWriterSetUp.TestWriterSetUp()
         self._pool = TestPoolSetUp.TestPoolSetUp()
         self._simps = TestServerSetUp.TestServerSetUp()
 
@@ -72,6 +75,8 @@ class SelectorTest(unittest.TestCase):
             self.__seed = long(time.time() * 256)
 
         self.__rnd = random.Random(self.__seed)
+
+        self.__dump = {}
 
         self.mycps = {
             'mycp': (
@@ -824,6 +829,7 @@ class SelectorTest(unittest.TestCase):
     # \brief Common set up
     def setUp(self):
         print "SEED =", self.__seed
+        self._wr.setUp()
         self._ms.setUp()
         self._cf.setUp()
         self._pool.setUp()
@@ -848,6 +854,25 @@ class SelectorTest(unittest.TestCase):
         self._pool.tearDown()
         self._cf.tearDown()
         self._ms.tearDown()
+        self._wr.tearDown()
+
+    def dump(self, el):
+        self.__dump = {}
+        for key in el.keys():
+            self.__dump[key] = el[key]
+
+    def compareToDump(self, el, excluded=None):
+        exc = set(excluded or [])
+        dks = set(self.__dump.keys()) - exc
+        eks = set(el.keys()) - exc
+        self.assertEqual(dks, eks)
+        for key in dks:
+            self.assertEqual(self.__dump[key], el[key])
+
+    def getRandomName(self, maxsize):
+        letters = string.lowercase + string.uppercase + string.digits
+        size = self.__rnd.randint(1, maxsize)
+        return ''.join(self.__rnd.choice(letters) for _ in range(size))
 
     ## Exception tester
     # \param exception expected exception
@@ -1109,6 +1134,47 @@ class SelectorTest(unittest.TestCase):
         self.assertEqual(pools[0].name(), self._pool.dp.name())
         self.assertEqual(se.getMacroServer(), self._ms.ms.keys()[0])
 
+    ## updateOrderedChannels test
+    def test_resetAutomaticComponents(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        for i in range(20):
+            msp = MacroServerPools(10)
+            se = Selector(msp)
+            se["ConfigDevice"] = val["ConfigDevice"]
+            se["WriterDevice"] = val["WriterDevice"]
+            self.assertEqual(len(se.keys()), len(self._keys))
+            for key, vl in self._keys:
+                self.assertTrue(key in se.keys())
+                if key not in val:
+                    self.assertEqual(se[key], vl)
+                else:
+                    self.assertEqual(se[key], val[key])
+                    
+
+            lds1 = self.__rnd.randint(1, 40)
+            dss1 = [self.getRandomName(10) for _ in range(lds1)]
+
+            cps = {}
+            lcp = self.__rnd.randint(1, 40)
+            for i in range(lcp):
+                cps[self.getRandomName(10)] = bool(self.__rnd.randint(0, 1))
+            se["AutomaticComponentGroup"] = json.dumps(cps)
+
+            self.dump(se)
+
+            se.resetAutomaticComponents(dss1)
+
+            self.compareToDump(se, ["AutomaticComponentGroup"])
+
+            ndss = json.loads(se["AutomaticComponentGroup"])
+            for ds in dss1:
+                self.assertTrue(ds in ndss.keys())
+                self.assertEqual(ndss[ds], False)
 
 if __name__ == '__main__':
     unittest.main()
