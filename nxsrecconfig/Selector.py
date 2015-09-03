@@ -62,9 +62,12 @@ class Selector(object):
         for key in state.keys():
             if key and key[0].upper() != key[0]:
                 key = key[0].upper() + key[1:]
-            self.__selection[key] = state[key]
-            if hasattr(self, "_Selector__reset" + key):
-                getattr(self, "_Selector__reset" + key)()
+            changed = False
+            if self.__selection[key] != state[key]:
+                self.__selection[key] = state[key]
+                changed = True
+            if hasattr(self, "_Selector__postSet" + key):
+                getattr(self, "_Selector__postSet" + key)(changed)
 
     ## provides names of variables
     def keys(self):
@@ -74,8 +77,8 @@ class Selector(object):
     # \returns selection data
     def get(self):
         for key in self.keys():
-            if hasattr(self, "_Selector__update" + key):
-                getattr(self, "_Selector__update" + key)()
+            if hasattr(self, "_Selector__preGet" + key):
+                getattr(self, "_Selector__preGet" + key)()
         return dict(self.__selection)
 
     ## provides value of selection item
@@ -85,8 +88,8 @@ class Selector(object):
         if key in self.keys():
             if key and key[0].upper() != key[0]:
                 key = key[0].upper() + key[1:]
-            if hasattr(self, "_Selector__update" + key):
-                getattr(self, "_Selector__update" + key)()
+            if hasattr(self, "_Selector__preGet" + key):
+                getattr(self, "_Selector__preGet" + key)()
             return self.__selection[key]
         else:
             return None
@@ -95,12 +98,19 @@ class Selector(object):
     # \param key selection item name
     # \param value selection item value
     def __setitem__(self, key, value):
-        self.__selection[key] = value
-        if hasattr(self, "_Selector__reset" + key):
-            getattr(self, "_Selector__reset" + key)()
+        changed = False
+        if self.__selection[key] != value:
+            self.__selection[key] = value
+            changed = True
+        if hasattr(self, "_Selector__postSet" + key):
+            getattr(self, "_Selector__postSet" + key)(changed)
 
     ## updates method for configDevice attribute
-    def __updateConfigDevice(self):
+    # \brief If configdevice is not defined in the selection:
+    #        * it finds first running NXSConfigServer
+    #        * it sets ConfigDevice as empty string if configdevice
+    #          is not running
+    def __preGetConfigDevice(self):
         if "ConfigDevice" not in self.__selection.keys() \
                 or not self.__selection["ConfigDevice"]:
             self.__selection["ConfigDevice"] = TangoUtils.getDeviceName(
@@ -116,29 +126,29 @@ class Selector(object):
                     self.__selection["ConfigDevice"] = ''
 
     ## get method for automaticDataSources attribute
-    def __updateAutomaticDataSources(self):
+    def __preGetAutomaticDataSources(self):
         self.__selection.updateAutomaticDataSources(self.poolMotors())
 
     ## update method for orderedChannels attribute
-    def __updateOrderedChannels(self):
+    def __preGetOrderedChannels(self):
         self.__selection.updateOrderedChannels(self.poolChannels())
 
     ## update method for mntGrp attribute
-    def __updateMntGrp(self):
+    def __preGetMntGrp(self):
         self.__selection.updateMntGrp()
 
     ## update method for componentGroup attribute
-    def __updateComponentGroup(self):
+    def __preGetComponentGroup(self):
         self.__selection.updateComponentGroup()
 
     ## update method for dataSourceGroup attribute
-    def __updateDataSourceGroup(self):
+    def __preGetDataSourceGroup(self):
         self.__selection.updateDataSourceGroup(
             self.poolChannels(),
             self.configCommand("availableDataSources"))
 
     ## update method for door attribute
-    def __updateDoor(self):
+    def __preGetDoor(self):
         try:
             if str(self.__selection["Door"]):
                 dp = PyTango.DeviceProxy(str(self.__selection["Door"]))
@@ -152,40 +162,43 @@ class Selector(object):
             self.__msp.updateMacroServer(self.__selection["Door"])
 
     ## update method for timeZone attribute
-    def __updateTimeZone(self):
+    def __preGetTimeZone(self):
         self.__selection.updateTimeZone()
 
     ## update method for writerDevice attribute
     # \returns name of writerDevice
-    def __updateWriterDevice(self):
+    def __preGetWriterDevice(self):
         if "WriterDevice" not in self.__selection.keys() \
                 or not self.__selection["WriterDevice"]:
             self.__selection["WriterDevice"] = TangoUtils.getDeviceName(
                 self.__db, "NXSDataWriter")
 
     ## reset method for configDevice attribute
-    def __resetConfigDevice(self):
+    def __postSetConfigDevice(self, changed=True):
         if not self.__selection["ConfigDevice"]:
             self.__selection["ConfigDevice"] = TangoUtils.getDeviceName(
                 self.__db, "NXSConfigServer")
 
     ## set method for mntGrp attribute
-    def __resetMntGrp(self):
+    def __postSetMntGrp(self, changed=True):
         self.__selection.resetMntGrp()
 
     ## set method for timeZone attribute
     # \param name of timeZone
-    def __resetTimeZone(self):
+    def __postSetTimeZone(self, changed=True):
         self.__selection.resetTimeZone()
 
     ## set method for door attribute
-    def __resetDoor(self):
+    def __postSetDoor(self, changed=True):
         if not self.__selection["Door"]:
             self.__selection["Door"] = TangoUtils.getDeviceName(
                 self.__db, "Door")
+            changed = True
+        if changed:
+            self.__msp.updateMacroServer(self.__selection["Door"])
 
     ## set method for writerDevice attribute
-    def __resetWriterDevice(self):
+    def __postSetWriterDevice(self, changed=True):
         if not self.__selection["WriterDevice"]:
             self.__selection["WriterDevice"] = TangoUtils.getDeviceName(
                 self.__db, "NXSDataWriter")
@@ -210,6 +223,11 @@ class Selector(object):
     def getPools(self):
         return self.__msp.getPools(self["Door"])
 
+    ## provides MacroServer name
+    # \returns MacroServer name
+    def getMacroServer(self):
+        return self.__msp.getMacroServer(self["Door"])
+
     ## available pool channels
     # \returns pool channels of the macroserver pools
     def poolChannels(self):
@@ -220,18 +238,13 @@ class Selector(object):
     def poolMotors(self):
         return PoolUtils.getMotorNames(self.getPools())
 
-    ## provides MacroServer name
-    # \returns MacroServer name
-    def getMacroServer(self):
-        return self.__msp.getMacroServer(self["Door"])
-
     ## sets config instances
     # \returns set config instance
     def setConfigInstance(self):
         configDevice = None
         if "ConfigDevice" not in self.__selection.keys() \
                 or not self.__selection["ConfigDevice"]:
-            self.__updateConfigDevice()
+            self.__preGetConfigDevice()
 
         if self.__selection["ConfigDevice"] and \
                 self.__selection["ConfigDevice"].lower() != self.moduleLabel:

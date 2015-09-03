@@ -70,7 +70,7 @@ class SelectorTest(unittest.TestCase):
 #        self._ms2 = TestMacroServerSetUp.TestMacroServerSetUp("mstestp09/testts/t2r228", "MSTESTS2")
         self._simps = TestServerSetUp.TestServerSetUp()
 #        self._simps2 = TestServerSetUp.TestServerSetUp( "ttestp09/testts/t2r228", "S2")
- #       self._simps3 = TestServerSetUp.TestServerSetUp( "ttestp09/testts/t3r228", "S3") 
+ #       self._simps3 = TestServerSetUp.TestServerSetUp( "ttestp09/testts/t3r228", "S3")
  #       self._simps4 = TestServerSetUp.TestServerSetUp( "ttestp09/testts/t4r228", "S4")
  #       self._simpsoff = TestServerSetUp.TestServerSetUp( "ttestp09/testts/t5r228", "OFF")
 
@@ -78,8 +78,8 @@ class SelectorTest(unittest.TestCase):
         try:
             self.__seed  = long(binascii.hexlify(os.urandom(16)), 16)
         except NotImplementedError:
-            self.__seed  = long(time.time() * 256) 
-         
+            self.__seed  = long(time.time() * 256)
+
         self.__rnd = random.Random(self.__seed)
 
 
@@ -318,7 +318,7 @@ class SelectorTest(unittest.TestCase):
                 '<field name="short">$datasources.client2_short<strategy mode="STEP"/></field>'
                 '</group></definition>'),
             }
-            
+
         self.smydss = {
             'scalar_long': ('<definition><datasource type="TANGO" name="scalar_long">'
                      '<record name="ScalarLong"/>'
@@ -693,14 +693,48 @@ class SelectorTest(unittest.TestCase):
                 '</datasource>'
                 '</definition>'
                 ),
-           }
+            }
 
+        ## default zone
+        self.__defaultzone = 'Europe/Berlin'
+        ## default mntgrp
+        self.__defaultmntgrp = 'nxsmntgrp'
+
+        self._keys = [
+            ("Timer", '[]'),
+            ("OrderedChannels", '[]'),
+            ("ComponentGroup", '{}'),
+            ("AutomaticComponentGroup", '{}'),
+            ("AutomaticDataSources", '[]'),
+            ("DataSourceGroup", '{}'),
+            ("InitDataSources", '[]'),
+            ("OptionalComponents", '[]'),
+            ("AppendEntry", False),
+            ("ComponentsFromMntGrp", False),
+            ("ConfigVariables", '{}'),
+            ("DataRecord", '{}'),
+            ("Labels", '{}'),
+            ("LabelPaths", '{}'),
+            ("LabelLinks", '{}'),
+            ("HiddenElements", '[]'),
+            ("LabelTypes", '{}'),
+            ("LabelShapes", '{}'),
+            ("DynamicComponents", True),
+            ("DynamicLinks", True),
+            ("DynamicPath", \
+                 '/entry$var.serialno:NXentry/NXinstrument/collection'),
+            ("TimeZone", self.__defaultzone),
+            ("ConfigDevice", ''),
+            ("WriterDevice", ''),
+            ("Door", ''),
+            ("MntGrp", '')
+            ]
 
 
     ## test starter
     # \brief Common set up
     def setUp(self):
-        print "SEED =", self.__seed 
+        print "SEED =", self.__seed
         self._ms.setUp()
         self._cf.setUp()
         self._pool.setUp()
@@ -710,7 +744,7 @@ class SelectorTest(unittest.TestCase):
 #        self._simps3.setUp()
 #        self._simps4.setUp()
 #        self._simpsoff.add()
-        print "\nsetting up..."        
+        print "\nsetting up..."
 
     ## test closer
     # \brief Common tear down
@@ -725,10 +759,10 @@ class SelectorTest(unittest.TestCase):
         self._pool.tearDown()
         self._cf.tearDown()
         self._ms.tearDown()
- 
+
     ## Exception tester
     # \param exception expected exception
-    # \param method called method      
+    # \param method called method
     # \param args list with method arguments
     # \param kwargs dictionary with method arguments
     def myAssertRaise(self, exception, method, *args, **kwargs):
@@ -770,34 +804,229 @@ class SelectorTest(unittest.TestCase):
         msp = MacroServerPools(10)
         se = Selector(msp)
         self.assertEqual(se.moduleLabel, 'module')
-        print se.keys()
-        self.assertEqual(sorted(se.keys()), 
-                         sorted(['DynamicLinks',
-                                 'ComponentGroup',
-                                 'TimeZone',
-                                 'LabelLinks',
-                                 'Door',
-                                 'DynamicComponents',
-                                 'AppendEntry',
-                                 'HiddenElements',
-                                 'LabelShapes',
-                                 'DataRecord',
-                                 'LabelTypes',
-                                 'AutomaticComponentGroup',
-                                 'OrderedChannels',
-                                 'Timer', 
-                                 'WriterDevice', 
-                                 'ConfigVariables', 
-                                 'ComponentsFromMntGrp', 
-                                 'InitDataSources', 
-                                 'DynamicPath', 
-                                 'Labels', 
-                                 'ConfigDevice', 
-                                 'MntGrp', 
-                                 'DataSourceGroup', 
-                                 'AutomaticDataSources', 
-                                 'OptionalComponents', 
-                                 'LabelPaths']))
+#        print se.keys()
+#        print [rc[0] for rc in self._keys]
+        self.assertEqual(sorted(se.keys()),
+                         sorted([rc[0] for rc in self._keys])
+                         )
+
+        self.assertEqual(se.getPools(), [])
+        self.assertEqual(se.getMacroServer(), self._ms.ms.keys()[0])
+        db = PyTango.Database()
+        db.put_device_property(self._ms.ms.keys()[0], {'PoolNames':self._pool.dp.name()})
+        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        pools = se.getPools()
+        self.assertEqual(len(pools), 1)
+        self.assertTrue(isinstance(pools[0], PyTango.DeviceProxy))
+        self.assertEqual(pools[0].name(), self._pool.dp.name())
+        self.assertEqual(se.getMacroServer(), self._ms.ms.keys()[0])
+
+
+
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_se_getPool_1to3(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        doors = ["door2testp09/testts/t1r228","door2testp09/testts/t2r228","door2testp09/testts/t3r228"]
+        msname = "ms2testp09/testts/t1r228"
+        try:
+
+            ms2 = TestMacroServerSetUp.TestMacroServerSetUp("MSTESTS1TO3", [msname], doors)
+            ms2.setUp()
+
+            msp = MacroServerPools(10)
+            db = PyTango.Database()
+            se = Selector(msp)
+            db.put_device_property(ms2.ms.keys()[0], {'PoolNames':self._pool.dp.name()})
+            ms2.dps[ms2.ms.keys()[0]].Init()
+
+
+            for i in range(3):
+                ms2.dps[ms2.ms.keys()[0]].DoorList = doors
+                self.myAssertRaise(Exception, msp.updateMacroServer, "sfdsTESTdfdf/sdfsdf/sdffsf")
+                self.myAssertRaise(Exception, msp.updateMacroServer, "")
+                self.myAssertRaise(Exception, msp.getMacroServer, "")
+                self.myAssertRaise(Exception, msp.getPools, "")
+                self.myAssertRaise(Exception, se.getMacroServer, "")
+                self.myAssertRaise(Exception, se.getPools, "")
+                print doors[i]
+
+
+                se["Door"] = doors[i]
+#                msp.updateMacroServer(doors[i])
+                print "door",  se["Door"]
+                pools = se.getPools()
+                self.assertEqual(len(pools), 1)
+                self.assertTrue(isinstance(pools[0], PyTango.DeviceProxy))
+                self.assertEqual(pools[0].name(), self._pool.dp.name())
+                self.assertEqual(msp.getMacroServer(doors[i]), ms2.ms.keys()[0])
+                print "door",  se["Door"]
+                self.assertEqual(se.getMacroServer(), ms2.ms.keys()[0])
+
+
+        finally:
+            ms2.tearDown()
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_se_getPool_3to3(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        doors = ["door3testp09/testts/t1r228","door3testp09/testts/t2r228","door3testp09/testts/t3r228"]
+        mss =  ["ms3testp09/testts/t1r228", "ms3testp09/testts/t2r228", "ms3testp09/testts/t3r228"]
+        try:
+
+            ms3 = TestMacroServerSetUp.TestMacroServerSetUp("MSTESTS3TO3", mss, doors)
+            ms3.setUp()
+
+            msp = MacroServerPools(10)
+            db = PyTango.Database()
+            se = Selector(msp)
+            for j, ms in enumerate(mss):
+                db.put_device_property(ms, {'PoolNames':self._pool.dp.name()})
+                ms3.dps[ms].Init()
+
+
+            for i, ms in enumerate(mss):
+                ms3.dps[ms].DoorList = [doors[i]]
+#                print "ms", ms, "doors", doors[i]
+                self.myAssertRaise(Exception, se.getMacroServer, "")
+                self.myAssertRaise(Exception, se.getPools, "")
+                se["Door"] = doors[i]
+#                msp.updateMacroServer(doors[i])
+                print "door",  se["Door"]
+                pools = se.getPools()
+                self.assertEqual(len(pools), 1)
+                self.assertTrue(isinstance(pools[0], PyTango.DeviceProxy))
+                self.assertEqual(pools[0].name(), self._pool.dp.name())
+                self.assertEqual(msp.getMacroServer(doors[i]), ms)
+                print "door",  se["Door"]
+                self.assertEqual(se.getMacroServer(), ms)
+
+        finally:
+            ms3.tearDown()
+
+
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_poolMotors(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        se = Selector(None)
+        self.myAssertRaise(Exception, se.poolMotors)
+        msp = MacroServerPools(10)
+        se = Selector(msp)
+
+        db = PyTango.Database()
+        db.put_device_property(self._ms.ms.keys()[0], {'PoolNames':self._pool.dp.name()})
+        self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+        pools = se.getPools()
+
+        self.assertEqual(se.poolMotors(), [])
+
+
+        arr = [
+            {"name":"test/ct/01", "controller":"counter_01/Value"} ,
+            {"name":"test/ct/02", "controller":"counter_02/att"} ,
+            {"name":"test/ct/03", "controller":"counter_03/value"} ,
+            {"name":"test/ct/04", "controller":"counter_04/13"} ,
+            {"name":"null", "controller":"counter_04"} ,
+            ]
+
+        arr2 = [
+            ["test/mca/01", "mca_01"],
+            ["test/mca/02", "mca_02"],
+            ["test/sca/03", "my_sca1"],
+            ["test/sca/04", "mysca_123"],
+            ]
+
+
+        pool = self._pool.dp
+        pool.MotorList = [json.dumps(a) for a in arr]
+
+
+        dd = se.poolMotors()
+        self.assertEqual(dd, [a["name"] for a in arr])
+
+        pool.MotorList = [json.dumps(
+                {"name":a[0], "controller":a[1]}) for a in arr2]
+
+        dd = se.poolMotors()
+        res = [a[0] for a in arr2]
+        self.assertEqual(dd, res)
+
+
+
+        print se.poolMotors()
+
+        self.assertEqual(len(pools), 1)
+        self.assertTrue(isinstance(pools[0], PyTango.DeviceProxy))
+        self.assertEqual(pools[0].name(), self._pool.dp.name())
+        self.assertEqual(se.getMacroServer(), self._ms.ms.keys()[0])
+
+
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_poolChannels(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        se = Selector(None)
+        self.myAssertRaise(Exception, se.poolChannels)
+        msp = MacroServerPools(10)
+        se = Selector(msp)
+
+        db = PyTango.Database()
+        db.put_device_property(self._ms.ms.keys()[0], {'PoolNames':self._pool.dp.name()})
+        self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+        pools = se.getPools()
+
+        self.assertEqual(se.poolChannels(), [])
+
+
+        arr = [
+            {"name":"test/ct/01", "controller":"counter_01/Value"} ,
+            {"name":"test/ct/02", "controller":"counter_02/att"} ,
+            {"name":"test/ct/03", "controller":"counter_03/value"} ,
+            {"name":"test/ct/04", "controller":"counter_04/13"} ,
+            {"name":"null", "controller":"counter_04"} ,
+            ]
+
+        arr2 = [
+            ["test/mca/01", "mca_01"],
+            ["test/mca/02", "mca_02"],
+            ["test/sca/03", "my_sca1"],
+            ["test/sca/04", "mysca_123"],
+            ]
+
+
+        pool = self._pool.dp
+        pool.ExpChannelList = [json.dumps(a) for a in arr]
+
+
+        dd = se.poolChannels()
+        self.assertEqual(dd, [a["name"] for a in arr])
+
+        pool.ExpChannelList = [json.dumps(
+                {"name":a[0], "controller":a[1]}) for a in arr2]
+
+        dd = se.poolChannels()
+        res = [a[0] for a in arr2]
+        self.assertEqual(dd, res)
+
+
+
+        print se.poolChannels()
+
+        self.assertEqual(len(pools), 1)
+        self.assertTrue(isinstance(pools[0], PyTango.DeviceProxy))
+        self.assertEqual(pools[0].name(), self._pool.dp.name())
+        self.assertEqual(se.getMacroServer(), self._ms.ms.keys()[0])
 
 
 
