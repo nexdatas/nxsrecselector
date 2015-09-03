@@ -4,7 +4,7 @@
 #
 # file :        TestPool.py
 #
-# description : Python source for the TestPool and its commands. 
+# description : Python source for the TestPool and its commands.
 #                The class is derived from Device. It represents the
 #                CORBA servant object which will be accessed from the
 #                network. All commands which can be executed on the
@@ -56,8 +56,8 @@ class Pool(PyTango.Device_4Impl):
 #------------------------------------------------------------------
 #    Device constructor
 #------------------------------------------------------------------
-    def __init__(self,cl, name):
-        PyTango.Device_4Impl.__init__(self,cl,name)
+    def __init__(self, cl, name):
+        PyTango.Device_4Impl.__init__(self, cl, name)
 
         self.attr_value = ""
         self.attr_AcqChannelList = []
@@ -66,14 +66,11 @@ class Pool(PyTango.Device_4Impl):
         self.attr_MotorList = []
         Pool.init_device(self)
 
-
-
 #------------------------------------------------------------------
 #    Device destructor
 #------------------------------------------------------------------
     def delete_device(self):
-        print "[Device delete_device method] for device",self.get_name()
-
+        print "[Device delete_device method] for device", self.get_name()
 
 #------------------------------------------------------------------
 #    Device initialization
@@ -89,14 +86,13 @@ class Pool(PyTango.Device_4Impl):
     def always_executed_hook(self):
         print "In ", self.get_name(), "::always_excuted_hook()"
 
-
-
+#
 #==================================================================
 #
 #    TestPool read/write attribute methods
 #
 #==================================================================
-
+#
 #------------------------------------------------------------------
 #    Read AcqChannelList attribute
 #------------------------------------------------------------------
@@ -128,6 +124,7 @@ class Pool(PyTango.Device_4Impl):
         print >> self.log_info, "In ", self.get_name(), \
             "::write_MeasurementGroupList()"
         self.attr_MeasurementGroupList = attr.get_write_value()
+
 #------------------------------------------------------------------
 #    Read ExpChannelList attribute
 #------------------------------------------------------------------
@@ -143,6 +140,7 @@ class Pool(PyTango.Device_4Impl):
         print >> self.log_info, "In ", self.get_name(), \
             "::write_ExpChannelList()"
         self.attr_ExpChannelList = attr.get_write_value()
+
 #------------------------------------------------------------------
 #    Read MotorList attribute
 #------------------------------------------------------------------
@@ -159,19 +157,17 @@ class Pool(PyTango.Device_4Impl):
             "::write_MotorList()"
         self.attr_MotorList = attr.get_write_value()
 
-
 #==================================================================
 #
 #    TestPool command methods
 #
 #==================================================================
-
-
+#
 #------------------------------------------------------------------
 #    SetState command:
 #
 #    Description: Set state of tango device
-#                
+#
 #    argin: DevString     tango state
 #------------------------------------------------------------------
     def SetState(self, state):
@@ -186,7 +182,6 @@ class Pool(PyTango.Device_4Impl):
             self.set_state(PyTango.DevState.ON)
 
 
-
 #==================================================================
 #
 #    PoolClass class definition
@@ -198,11 +193,9 @@ class PoolClass(PyTango.DeviceClass):
     class_property_list = {
          }
 
-
     #    Device Properties
     device_property_list = {
         }
-
 
     #    Command definitions
     cmd_list = {
@@ -210,7 +203,6 @@ class PoolClass(PyTango.DeviceClass):
             [[PyTango.DevString, "ScalarString"],
             [PyTango.DevVoid, ""]],
         }
-
 
     #    Attribute definitions
     attr_list = {
@@ -248,13 +240,12 @@ class PoolClass(PyTango.DeviceClass):
             }],
         }
 
-
 #------------------------------------------------------------------
 #    PoolClass Constructor
 #------------------------------------------------------------------
     def __init__(self, name):
         PyTango.DeviceClass.__init__(self, name)
-        self.set_type(name);
+        self.set_type(name)
         print "In TestPoolClass  constructor"
 
 #==================================================================
@@ -273,7 +264,7 @@ if __name__ == '__main__':
         U.server_init()
         U.server_run()
 
-    except PyTango.DevFailed,e:
-        print '-------> Received a DevFailed exception:',e
-    except Exception,e:
-        print '-------> An unforeseen exception occured....',e
+    except PyTango.DevFailed, e:
+        print '-------> Received a DevFailed exception:', e
+    except Exception, e:
+        print '-------> An unforeseen exception occured....', e

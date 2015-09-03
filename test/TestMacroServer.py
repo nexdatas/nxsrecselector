@@ -4,7 +4,7 @@
 #
 # file :        TestMacroServer.py
 #
-# description : Python source for the TestMacroServer and its commands. 
+# description : Python source for the TestMacroServer and its commands.
 #                The class is derived from Device. It represents the
 #                CORBA servant object which will be accessed from the
 #                network. All commands which can be executed on the
@@ -56,20 +56,17 @@ class MacroServer(PyTango.Device_4Impl):
 #------------------------------------------------------------------
 #    Device constructor
 #------------------------------------------------------------------
-    def __init__(self,cl, name):
-        PyTango.Device_4Impl.__init__(self,cl,name)
+    def __init__(self, cl, name):
+        PyTango.Device_4Impl.__init__(self, cl, name)
 
         self.attr_value = ""
         MacroServer.init_device(self)
-
-
 
 #------------------------------------------------------------------
 #    Device destructor
 #------------------------------------------------------------------
     def delete_device(self):
-        print "[Device delete_device method] for device",self.get_name()
-
+        print "[Device delete_device method] for device", self.get_name()
 
 #------------------------------------------------------------------
 #    Device initialization
@@ -96,23 +93,21 @@ class MacroServer(PyTango.Device_4Impl):
 #        print "In ", self.get_name(), "::always_excuted_hook()"
         pass
 
-
 #==================================================================
 #
 #    TestMacroServer read/write attribute methods
 #
 #==================================================================
-
+#
 #------------------------------------------------------------------
 #    Read DoorList attribute
 #------------------------------------------------------------------
     def read_DoorList(self, attr):
         print "In ", self.get_name(), "::read_DoorList()"
-        
-        #    Add your own code here
-        
-        attr.set_value(self.attr_DoorList)
 
+        #    Add your own code here
+
+        attr.set_value(self.attr_DoorList)
 
 #------------------------------------------------------------------
 #    Write DoorList attribute
@@ -125,18 +120,15 @@ class MacroServer(PyTango.Device_4Impl):
         self.attr_DoorList = attr.get_write_value()
         print "Attribute value = ", self.attr_DoorList
 
-
-
 #------------------------------------------------------------------
 #    Read Environment attribute
 #------------------------------------------------------------------
     def read_Environment(self, attr):
         print "In ", self.get_name(), "::read_Environment()"
-        
-        #    Add your own code here
-        
-        attr.set_value(self.attr_Environment[0], self.attr_Environment[1])
 
+        #    Add your own code here
+
+        attr.set_value(self.attr_Environment[0], self.attr_Environment[1])
 
 #------------------------------------------------------------------
 #    Write Environment attribute
@@ -149,20 +141,18 @@ class MacroServer(PyTango.Device_4Impl):
         self.attr_Environment = attr.get_write_value()
         print "Attribute value = ", self.attr_Environment
 
-
-
+#
 #==================================================================
 #
 #    TestMacroServer command methods
 #
 #==================================================================
-
-
+#
 #------------------------------------------------------------------
 #    SetState command:
 #
 #    Description: Set state of tango device
-#                
+#
 #    argin: DevString     tango state
 #------------------------------------------------------------------
     def SetState(self, state):
@@ -177,7 +167,6 @@ class MacroServer(PyTango.Device_4Impl):
             self.set_state(PyTango.DevState.ON)
 
 
-
 #==================================================================
 #
 #    MacroServerClass class definition
@@ -189,7 +178,6 @@ class MacroServerClass(PyTango.DeviceClass):
     class_property_list = {
          }
 
-
     #    Device Properties
     device_property_list = {
          'PoolNames':
@@ -198,14 +186,12 @@ class MacroServerClass(PyTango.DeviceClass):
             []],
         }
 
-
     #    Command definitions
     cmd_list = {
         'SetState':
             [[PyTango.DevString, "ScalarString"],
             [PyTango.DevVoid, ""]],
         }
-
 
     #    Attribute definitions
     attr_list = {
@@ -215,7 +201,7 @@ class MacroServerClass(PyTango.DeviceClass):
               PyTango.READ_WRITE],
             {
                 'description':"Environment attribute",
-            } ],
+            }],
         'DoorList':
             [[PyTango.DevString,
               PyTango.SPECTRUM,
@@ -223,18 +209,16 @@ class MacroServerClass(PyTango.DeviceClass):
               256],
             {
                 'description':"Environment attribute",
-            } ],
+            }],
         }
-
 
 #------------------------------------------------------------------
 #    MacroServerClass Constructor
 #------------------------------------------------------------------
     def __init__(self, name):
         PyTango.DeviceClass.__init__(self, name)
-        self.set_type(name);
+        self.set_type(name)
         print "In TestMacroServerClass  constructor"
-
 
 
 #==================================================================
@@ -248,7 +232,6 @@ class MacroServerClass(PyTango.DeviceClass):
 #   DevState.ON :  Server On
 #==================================================================
 
-
 class Door(PyTango.Device_4Impl):
 
 #--------- Add you global variables here --------------------------
@@ -256,20 +239,18 @@ class Door(PyTango.Device_4Impl):
 #------------------------------------------------------------------
 #    Device constructor
 #------------------------------------------------------------------
-    def __init__(self,cl, name):
-        PyTango.Device_4Impl.__init__(self,cl,name)
+    def __init__(self, cl, name):
+        PyTango.Device_4Impl.__init__(self, cl, name)
 
         self.attr_value = ""
         Door.init_device(self)
-
-
 
 #------------------------------------------------------------------
 #    Device destructor
 #------------------------------------------------------------------
     def delete_device(self):
-        print "[Device delete_device method] for device",self.get_name()
-
+        print "[Device delete_device method] for device", \
+            self.get_name()
 
 #------------------------------------------------------------------
 #    Device initialization
@@ -286,26 +267,23 @@ class Door(PyTango.Device_4Impl):
 #        print "In ", self.get_name(), "::always_excuted_hook()"
         pass
 
-
 #==================================================================
 #
 #    TestDoor read/write attribute methods
 #
 #==================================================================
-
-
+#
 #==================================================================
 #
 #    TestDoor command methods
 #
 #==================================================================
-
-
+#
 #------------------------------------------------------------------
 #    SetState command:
 #
 #    Description: Set state of tango device
-#                
+#
 #    argin: DevString     tango state
 #------------------------------------------------------------------
     def SetState(self, state):
@@ -320,7 +298,6 @@ class Door(PyTango.Device_4Impl):
             self.set_state(PyTango.DevState.ON)
 
 
-
 #==================================================================
 #
 #    DoorClass class definition
@@ -332,11 +309,9 @@ class DoorClass(PyTango.DeviceClass):
     class_property_list = {
          }
 
-
     #    Device Properties
     device_property_list = {
         }
-
 
     #    Command definitions
     cmd_list = {
@@ -345,18 +320,16 @@ class DoorClass(PyTango.DeviceClass):
             [PyTango.DevVoid, ""]],
         }
 
-
     #    Attribute definitions
     attr_list = {
         }
-
 
 #------------------------------------------------------------------
 #    DoorClass Constructor
 #------------------------------------------------------------------
     def __init__(self, name):
         PyTango.DeviceClass.__init__(self, name)
-        self.set_type(name);
+        self.set_type(name)
         print "In TestDoorClass  constructor"
 
 
@@ -377,7 +350,7 @@ if __name__ == '__main__':
         U.server_init()
         U.server_run()
 
-    except PyTango.DevFailed,e:
-        print '-------> Received a DevFailed exception:',e
-    except Exception,e:
-        print '-------> An unforeseen exception occured....',e
+    except PyTango.DevFailed, e:
+        print '-------> Received a DevFailed exception:', e
+    except Exception, e:
+        print '-------> An unforeseen exception occured....', e

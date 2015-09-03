@@ -34,14 +34,14 @@ class TestMacroServerSetUp(object):
 
     ## constructor
     # \brief defines server parameters
-    def __init__(self, instance = "MSTESTS1", msdevices = None, doordevices = None):
+    def __init__(self, instance="MSTESTS1", msdevices=None, doordevices=None):
         if not isinstance(msdevices, list):
-            msdevices  = ["mstestp09/testts/t1r228"]
+            msdevices = ["mstestp09/testts/t1r228"]
         if not isinstance(doordevices, list):
-            doordevices  = ["doortestp09/testts/t1r228"]
+            doordevices = ["doortestp09/testts/t1r228"]
         ## information about tango writer
         self.server = "MacroServer/%s" % instance
-        self.door = {}    
+        self.door = {}
         self.ms = {}
         ## device proxy
         self.dps = {}
@@ -60,20 +60,15 @@ class TestMacroServerSetUp(object):
         ## server instance
         self.instance = instance
         self._psub = None
-        ## device properties
-#        self.device_prop = {
-#            'PoolNames':[device.replace("mstest","pooltest")],
-#            }
-        
 
     ## test starter
     # \brief Common set up of Tango Server
     def setUp(self):
         print "\nsetting up..."
-        self.add() 
+        self.add()
         self.start()
 
-    def add(self):    
+    def add(self):
         db = PyTango.Database()
 #        db.add_device(self.new_device_info_writer)
         devices = self.ms.values()
@@ -84,21 +79,17 @@ class TestMacroServerSetUp(object):
         if devices:
             db.add_server(self.server, devices)
 
-            
-#        db.put_device_property(self.new_device_info_writer.name, self.device_prop)
-
-
-    ## starts server    
+    ## starts server
     def start(self):
         path = os.path.dirname(TestMacroServer.__file__)
         if not path:
             path = '.'
 
         self._psub = subprocess.call(
-            "cd %s;  python ./TestMacroServer.py %s &" % (path, self.instance ) ,stdout =  None, 
-            stderr =  None,  shell= True)
+            "cd %s;  python ./TestMacroServer.py %s &" % (path, self.instance),
+            stdout=None, stderr=None, shell=True)
         print "waiting for simple server",
-        
+
         found = False
         cnt = 0
         devices = self.ms.values()
@@ -117,34 +108,33 @@ class TestMacroServerSetUp(object):
             except Exception as e:
 #                print str(e)
                 found = False
-            cnt +=1
+            cnt += 1
         print ""
-        
 
     ## test closer
     # \brief Common tear down of Tango Server
-    def tearDown(self): 
+    def tearDown(self):
         print "tearing down ..."
         self.delete()
         self.stop()
 
-    def delete(self): 
+    def delete(self):
         db = PyTango.Database()
         db.delete_server(self.server)
 
-    ## stops server    
+    ## stops server
     def stop(self):
         output = ""
         pipe = subprocess.Popen(
-            "ps -ef | grep 'TestMacroServer.py %s'" % self.instance, 
-            stdout=subprocess.PIPE , shell= True).stdout
-        
+            "ps -ef | grep 'TestMacroServer.py %s'" % self.instance,
+            stdout=subprocess.PIPE, shell=True).stdout
+
         res = pipe.read().split("\n")
         for r in res:
             sr = r.split()
-            if len(sr)>2:
+            if len(sr) > 2:
                 subprocess.call(
-                    "kill -9 %s" % sr[1],stderr=subprocess.PIPE , shell= True)
+                    "kill -9 %s" % sr[1], stderr=subprocess.PIPE, shell=True)
 
 if __name__ == "__main__":
     simps = TestMacroServerSetUp()
