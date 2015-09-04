@@ -917,6 +917,23 @@ class SelectorTest(unittest.TestCase):
         for key in dks:
             self.assertEqual(self.__dump[key], el[key])
 
+    def compareToDumpJSON(self, el, excluded=None):
+        exc = set(excluded or [])
+        dks = set(self.__dump.keys()) - exc
+        eks = set(el.keys()) - exc
+        self.assertEqual(dks, eks)
+        for key in dks:
+            try:
+                w1 = json.loads(self.__dump[key])
+                w2 = json.loads(el[key])
+            except:
+                self.assertEqual(self.__dump[key], el[key])
+            else:
+                if isinstance(w1, dict):
+                    self.myAssertDict(w1, w2)
+                else:
+                    self.assertEqual(self.__dump[key], el[key])
+
     def getRandomName(self, maxsize):
         letters = string.lowercase + string.uppercase + string.digits
         size = self.__rnd.randint(1, maxsize)
@@ -1614,6 +1631,135 @@ class SelectorTest(unittest.TestCase):
                 se["ConfigDevice"] = 'module'
                 res = se.configCommand(ar[0], ar[1])
                 self.assertEqual(res, getattr(inst, ar[0])(ar[1]))
+
+    ## updateOrderedChannels test
+    def test_AutomaticDataSources(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        for i in range(20):
+            msp = MacroServerPools(10)
+            se = Selector(msp)
+            db = PyTango.Database()
+            db.put_device_property(self._ms.ms.keys()[0],
+                                   {'PoolNames': self._pool.dp.name()})
+            pool = self._pool.dp
+            pool.MotorList = []
+            se["AutomaticDataSources"] = json.dumps([])
+            self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+            se["ConfigDevice"] = val["ConfigDevice"]
+            se["WriterDevice"] = val["WriterDevice"]
+            self.assertEqual(len(se.keys()), len(self._keys))
+            for key, vl in self._keys:
+                self.assertTrue(key in se.keys())
+                if key not in val:
+                    self.assertEqual(se[key], vl)
+                else:
+                    self.assertEqual(se[key], val[key])
+
+            lds1 = self.__rnd.randint(1, 40)
+            lds2 = self.__rnd.randint(1, 40)
+            lds3 = self.__rnd.randint(1, 40)
+            dss1 = [self.getRandomName(10) for _ in range(lds1)]
+            dss2 = [self.getRandomName(10) for _ in range(lds2)]
+            dss3 = [self.getRandomName(10) for _ in range(lds3)]
+
+            se["AutomaticDataSources"] = json.dumps(
+                list(set(dss1) | set(dss2)))
+            self.dump(se)
+
+            ads = se["AutomaticDataSources"]
+
+            self.compareToDump(se, ["AutomaticDataSources"])
+
+            self.assertEqual(set(list(set(dss2) | set(dss1))),
+                             set(json.loads(ads)))
+
+            mnames = list(set(dss3) | set(dss2))
+            pool = self._pool.dp
+            pool.MotorList = [json.dumps(
+                    {"name":mn, "controller":("ctrl" + mn)}) for mn in mnames]
+
+            ads = se["AutomaticDataSources"]
+
+            self.assertEqual(set(list(set(dss3) | set(dss2) | set(dss1))),
+                             set(json.loads(ads)))
+
+            self.compareToDump(se, ["AutomaticDataSources"])
+
+    ## updateOrderedChannels test
+    def test_OrderedChannels(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        for i in range(20):
+            msp = MacroServerPools(10)
+            se = Selector(msp)
+            se["OrderedChannels"] = json.dumps([])
+            db = PyTango.Database()
+            db.put_device_property(self._ms.ms.keys()[0],
+                                   {'PoolNames': self._pool.dp.name()})
+            pool = self._pool.dp
+            pool.ExpChannelList = []
+            self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+            se["ConfigDevice"] = val["ConfigDevice"]
+            se["WriterDevice"] = val["WriterDevice"]
+            self.assertEqual(len(se.keys()), len(self._keys))
+            for key, vl in self._keys:
+                self.assertTrue(key in se.keys())
+                if key not in val:
+                    self.assertEqual(se[key], vl)
+                else:
+                    self.assertEqual(se[key], val[key])
+
+            lds1 = self.__rnd.randint(1, 40)
+            lds2 = self.__rnd.randint(1, 40)
+            lds3 = self.__rnd.randint(1, 40)
+            dss1 = [self.getRandomName(10) for _ in range(lds1)]
+            dss2 = [self.getRandomName(10) for _ in range(lds2)]
+            dss3 = [self.getRandomName(10) for _ in range(lds3)]
+
+            dss = []
+            dss.extend(dss2)
+            for ds in dss1:
+                if ds not in dss:
+                    dss.append(ds)
+            pchs = []
+            pchs.extend(dss2)
+            for ds in dss3:
+                if ds not in pchs:
+                    pchs.append(ds)
+            pchs = sorted(pchs)
+
+            pool = self._pool.dp
+            pool.ExpChannelList = [json.dumps(
+                    {"name":mn, "controller":("ctrl" + mn)}) for mn in pchs]
+
+            se["OrderedChannels"] = json.dumps(dss)
+            self.dump(se)
+
+            ads = se["OrderedChannels"]
+            print "OCS:", ads
+
+            self.compareToDumpJSON(se, ["OrderedChannels"])
+
+            ndss = json.loads(se["OrderedChannels"])
+            odss = []
+            odss.extend(dss2)
+            for ds in dss3:
+                if ds not in odss:
+                    odss.append(ds)
+
+            self.assertEqual(ndss[:len(dss2)], odss[:len(dss2)])
+            self.assertEqual(set(ndss), set(odss))
 
 
 if __name__ == '__main__':
