@@ -118,6 +118,7 @@ class Selection(dict):
         self["AutomaticDataSources"] = json.dumps(adsg)
 
     ## update method for orderedChannels attribute
+    # \brief sets pool channels in order defined by OrderedChannels
     # \param channels pool channels
     def updateOrderedChannels(self, channels):
         och = json.loads(self["OrderedChannels"])
@@ -127,6 +128,7 @@ class Selection(dict):
         self["OrderedChannels"] = json.dumps(ordchannels)
 
     ## update method for componentGroup attribute
+    # \brief It removes datasource components from component group
     def updateComponentGroup(self):
         cpg = json.loads(self["ComponentGroup"])
         dss = json.loads(self["DataSourceGroup"]).keys()
@@ -136,6 +138,11 @@ class Selection(dict):
         self["ComponentGroup"] = json.dumps(cpg)
 
     ## update method for dataSourceGroup attribute
+    # \brief It removes datasources from DataSourceGroup if they are
+    #        neither in poolchannels nor in avaiblable datasources
+    #        It removes new channels to DataSourceGroup
+    # \param channels pool channels
+    # \param datasources available datasources
     def updateDataSourceGroup(self, channels, datasources):
         dsg = json.loads(self["DataSourceGroup"])
         datasources = datasources or []
@@ -147,24 +154,16 @@ class Selection(dict):
                 dsg[pc] = False
         self["DataSourceGroup"] = json.dumps(dsg)
 
-    ## update method for mntGrp attribute
-    def updateMntGrp(self):
+    ## reset method for mntGrp attribute
+    # \brief If MntGrp not defined set it to default value
+    def resetMntGrp(self):
         if "MntGrp" not in self.keys() or not self["MntGrp"]:
             self["MntGrp"] = self.__defaultmntgrp
 
-    ## update method for timeZone attribute
-    def updateTimeZone(self):
-        if "TimeZone" not in self.keys() or not self["TimeZone"]:
-            self["TimeZone"] = self.__defaultzone
-
-    ## set method for mntGrp attribute
-    def resetMntGrp(self):
-        if not self["MntGrp"]:
-            self["MntGrp"] = self.__defaultmntgrp
-
-    ## set method for timeZone attribute
+    ## reset method for timeZone attribute
+    # \brief If TimeZone not defined set it to default value
     def resetTimeZone(self):
-        if not self["TimeZone"]:
+        if "TimeZone" not in self.keys() or not self["TimeZone"]:
             self["TimeZone"] = self.__defaultzone
 
     ## resets Automatic Components with given components and set them

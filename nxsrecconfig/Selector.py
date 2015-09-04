@@ -106,24 +106,50 @@ class Selector(object):
             getattr(self, "_Selector__postSet" + key)(changed)
 
     ## updates method for configDevice attribute
-    # \brief If configdevice is not defined in the selection:
-    #        * it finds first running NXSConfigServer
-    #        * it sets ConfigDevice as empty string if configdevice
-    #          is not running
+    # \brief if configdevice is not defined in the selection
+    #        it finds first running NXSConfigServer
     def __preGetConfigDevice(self):
         if "ConfigDevice" not in self.__selection.keys() \
                 or not self.__selection["ConfigDevice"]:
             self.__selection["ConfigDevice"] = TangoUtils.getDeviceName(
                 self.__db, "NXSConfigServer")
-        name = self.__selection["ConfigDevice"]
-        if name:
-            if name != self.moduleLabel:
-                try:
-                    dp = TangoUtils.getProxies([name])
-                    if not dp:
-                        self.__selection["ConfigDevice"] = ''
-                except (PyTango.DevFailed, PyTango.Except, PyTango.DevError):
-                    self.__selection["ConfigDevice"] = ''
+
+    ## reset method for configDevice attribute
+    def __postSetConfigDevice(self, changed=True):
+        if not self.__selection["ConfigDevice"]:
+            self.__selection["ConfigDevice"] = TangoUtils.getDeviceName(
+                self.__db, "NXSConfigServer")
+
+    ## update method for writerDevice attribute
+    # \returns name of writerDevice
+    def __preGetWriterDevice(self):
+        if "WriterDevice" not in self.__selection.keys() \
+                or not self.__selection["WriterDevice"]:
+            self.__selection["WriterDevice"] = TangoUtils.getDeviceName(
+                self.__db, "NXSDataWriter")
+
+    ## set method for writerDevice attribute
+    def __postSetWriterDevice(self, changed=True):
+        if not self.__selection["WriterDevice"]:
+            self.__selection["WriterDevice"] = TangoUtils.getDeviceName(
+                self.__db, "NXSDataWriter")
+
+    ## update method for door attribute
+    def __preGetDoor(self):
+        if "Door" not in self.__selection.keys() \
+                or not self.__selection["Door"]:
+            self.__selection["Door"] = TangoUtils.getDeviceName(
+                self.__db, "Door")
+            self.__msp.updateMacroServer(self.__selection["Door"])
+
+    ## set method for door attribute
+    def __postSetDoor(self, changed=True):
+        if not self.__selection["Door"]:
+            self.__selection["Door"] = TangoUtils.getDeviceName(
+                self.__db, "Door")
+            changed = True
+        if changed:
+            self.__msp.updateMacroServer(self.__selection["Door"])
 
     ## get method for automaticDataSources attribute
     def __preGetAutomaticDataSources(self):
@@ -135,7 +161,11 @@ class Selector(object):
 
     ## update method for mntGrp attribute
     def __preGetMntGrp(self):
-        self.__selection.updateMntGrp()
+        self.__selection.resetMntGrp()
+
+    ## set method for mntGrp attribute
+    def __postSetMntGrp(self, changed=True):
+        self.__selection.resetMntGrp()
 
     ## update method for componentGroup attribute
     def __preGetComponentGroup(self):
@@ -147,61 +177,14 @@ class Selector(object):
             self.poolChannels(),
             self.configCommand("availableDataSources"))
 
-    ## update method for door attribute
-    def __preGetDoor(self):
-        try:
-            if str(self.__selection["Door"]):
-                dp = PyTango.DeviceProxy(str(self.__selection["Door"]))
-                dp.ping()
-        except (PyTango.DevFailed, PyTango.Except, PyTango.DevError):
-            self.__selection["Door"] = ''
-        if "Door" not in self.__selection.keys() \
-                or not self.__selection["Door"]:
-            self.__selection["Door"] = TangoUtils.getDeviceName(
-                self.__db, "Door")
-            self.__msp.updateMacroServer(self.__selection["Door"])
-
     ## update method for timeZone attribute
     def __preGetTimeZone(self):
-        self.__selection.updateTimeZone()
-
-    ## update method for writerDevice attribute
-    # \returns name of writerDevice
-    def __preGetWriterDevice(self):
-        if "WriterDevice" not in self.__selection.keys() \
-                or not self.__selection["WriterDevice"]:
-            self.__selection["WriterDevice"] = TangoUtils.getDeviceName(
-                self.__db, "NXSDataWriter")
-
-    ## reset method for configDevice attribute
-    def __postSetConfigDevice(self, changed=True):
-        if not self.__selection["ConfigDevice"]:
-            self.__selection["ConfigDevice"] = TangoUtils.getDeviceName(
-                self.__db, "NXSConfigServer")
-
-    ## set method for mntGrp attribute
-    def __postSetMntGrp(self, changed=True):
-        self.__selection.resetMntGrp()
+        self.__selection.resetTimeZone()
 
     ## set method for timeZone attribute
     # \param name of timeZone
     def __postSetTimeZone(self, changed=True):
         self.__selection.resetTimeZone()
-
-    ## set method for door attribute
-    def __postSetDoor(self, changed=True):
-        if not self.__selection["Door"]:
-            self.__selection["Door"] = TangoUtils.getDeviceName(
-                self.__db, "Door")
-            changed = True
-        if changed:
-            self.__msp.updateMacroServer(self.__selection["Door"])
-
-    ## set method for writerDevice attribute
-    def __postSetWriterDevice(self, changed=True):
-        if not self.__selection["WriterDevice"]:
-            self.__selection["WriterDevice"] = TangoUtils.getDeviceName(
-                self.__db, "NXSDataWriter")
 
     ## resets automatic components to set of given components
     # \param components new selection automatic components
@@ -242,9 +225,7 @@ class Selector(object):
     # \returns set config instance
     def setConfigInstance(self):
         configDevice = None
-        if "ConfigDevice" not in self.__selection.keys() \
-                or not self.__selection["ConfigDevice"]:
-            self.__preGetConfigDevice()
+        self.__preGetConfigDevice()
 
         if self.__selection["ConfigDevice"] and \
                 self.__selection["ConfigDevice"].lower() != self.moduleLabel:

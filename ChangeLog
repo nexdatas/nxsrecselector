@@ -3,6 +3,7 @@
 	* adding TangoDsItem and CheckerItem
 	* reduce configserver calls
 	* fix for getMacroServer when DoorList is empty
+	* disabling automatic switching servers
 	* tagged as v1.20.2
 
 2015-07-30 Jan Kotanski <jankotan@gmail.com>

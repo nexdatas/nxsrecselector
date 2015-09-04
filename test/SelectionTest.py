@@ -358,72 +358,6 @@ class SelectionTest(unittest.TestCase):
             self.compareToDump(el, ["DataSourceGroup"])
 
     ## deselect test
-    def test_updateMntGrp(self):
-        fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
-        el = Selection()
-        el.deselect()
-        self.assertEqual(len(el.keys()), len(self._keys))
-        for key, vl in self._keys:
-            self.assertTrue(key in el.keys())
-            self.assertEqual(el[key], vl)
-
-        self.dump(el)
-
-        el.updateMntGrp()
-        self.assertEqual(el["MntGrp"], self.__defaultmntgrp)
-        self.compareToDump(el, ["MntGrp"])
-
-        mymg = "somthing123"
-        el["MntGrp"] = mymg
-        el.updateMntGrp()
-        self.assertEqual(el["MntGrp"], mymg)
-        self.compareToDump(el, ["MntGrp"])
-
-        mymg = ""
-        el["MntGrp"] = mymg
-        el.updateMntGrp()
-        self.assertEqual(el["MntGrp"], self.__defaultmntgrp)
-        self.compareToDump(el, ["MntGrp"])
-
-        el.clear()
-        el.updateMntGrp()
-        self.assertEqual(el["MntGrp"], self.__defaultmntgrp)
-
-    ## deselect test
-    def test_updateTimeZone(self):
-        fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
-        el = Selection()
-        el.deselect()
-        self.assertEqual(len(el.keys()), len(self._keys))
-        for key, vl in self._keys:
-            self.assertTrue(key in el.keys())
-            self.assertEqual(el[key], vl)
-
-        self.dump(el)
-
-        el.updateTimeZone()
-        self.assertEqual(el["TimeZone"], self.__defaultzone)
-        self.compareToDump(el, ["TimeZone"])
-
-        mymg = "somthing123"
-        el["TimeZone"] = mymg
-        el.updateTimeZone()
-        self.assertEqual(el["TimeZone"], mymg)
-        self.compareToDump(el, ["TimeZone"])
-
-        mymg = ""
-        el["TimeZone"] = mymg
-        el.updateTimeZone()
-        self.assertEqual(el["TimeZone"], self.__defaultzone)
-        self.compareToDump(el, ["TimeZone"])
-
-        el.clear()
-        el.updateTimeZone()
-        self.assertEqual(el["TimeZone"], self.__defaultzone)
-
-    ## deselect test
     def test_resetMntGrp(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -451,6 +385,10 @@ class SelectionTest(unittest.TestCase):
         el.resetMntGrp()
         self.assertEqual(el["MntGrp"], self.__defaultmntgrp)
         self.compareToDump(el, ["MntGrp"])
+
+        el.clear()
+        el.resetMntGrp()
+        self.assertEqual(el["MntGrp"], self.__defaultmntgrp)
 
     ## deselect test
     def test_resetTimeZone(self):
@@ -480,6 +418,10 @@ class SelectionTest(unittest.TestCase):
         el.resetTimeZone()
         self.assertEqual(el["TimeZone"], self.__defaultzone)
         self.compareToDump(el, ["TimeZone"])
+
+        el.clear()
+        el.resetTimeZone()
+        self.assertEqual(el["TimeZone"], self.__defaultzone)
 
     ## updateOrderedChannels test
     def test_resetAutomaticComponents(self):

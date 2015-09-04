@@ -45,6 +45,7 @@ import TestWriterSetUp
 
 from nxsrecconfig.MacroServerPools import MacroServerPools
 from nxsrecconfig.Selector import Selector
+from nxsrecconfig.Utils import TangoUtils, MSUtils
 
 
 ## if 64-bit machione
@@ -1174,6 +1175,146 @@ class SelectorTest(unittest.TestCase):
             for ds in dss1:
                 self.assertTrue(ds in ndss.keys())
                 self.assertEqual(ndss[ds], False)
+
+    ## updateOrderedChannels test
+    def test_ConfigServer(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        msp = MacroServerPools(10)
+        se = Selector(msp)
+        db = PyTango.Database()
+        se["ConfigDevice"] = val["ConfigDevice"]
+        self.assertTrue(se["ConfigDevice"], val["ConfigDevice"])
+#        print "se", se["ConfigDevice"]
+        se["ConfigDevice"] = "dfd"
+        self.assertTrue(se["ConfigDevice"], "dfd")
+        se["ConfigDevice"] = "module"
+        self.assertTrue(se["ConfigDevice"], "module")
+#        print "se", se["ConfigDevice"]
+        se["ConfigDevice"] = ""
+        self.assertTrue(se["ConfigDevice"],
+                        TangoUtils.getDeviceName(db, "NXSConfigServer"))
+#        print "se", se["ConfigDevice"]
+
+        se.reset()
+        self.assertTrue(se["ConfigDevice"],
+                        TangoUtils.getDeviceName(db, "NXSConfigServer"))
+
+    ## updateOrderedChannels test
+    def test_WriterDevice(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        msp = MacroServerPools(10)
+        se = Selector(msp)
+        db = PyTango.Database()
+        se["WriterDevice"] = val["WriterDevice"]
+        self.assertTrue(se["WriterDevice"], val["WriterDevice"])
+#        print "se", se["WriterDevice"]
+        se["WriterDevice"] = "dfd"
+        self.assertTrue(se["WriterDevice"], "dfd")
+        se["WriterDevice"] = "module"
+        self.assertTrue(se["WriterDevice"], "module")
+#        print "se", se["WriterDevice"]
+        se["WriterDevice"] = ""
+        self.assertTrue(se["WriterDevice"],
+                        TangoUtils.getDeviceName(db, "NXSDataWriter"))
+#        print "se", se["WriterDevice"]
+        se.reset()
+        self.assertTrue(se["WriterDevice"],
+                        TangoUtils.getDeviceName(db, "NXSDataWriter"))
+
+    def setDoor(self, se, door):
+        se["Door"] = door
+
+    ## updateOrderedChannels test
+    def test_Door(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        msname = self._ms.ms.keys()[0]
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "Door": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        msp = MacroServerPools(10)
+        se = Selector(msp)
+        db = PyTango.Database()
+        se["Door"] = val["Door"]
+        self.assertEqual(se.getMacroServer(), msname)
+        self.assertTrue(se["Door"], val["Door"])
+#        print "se", se["Door"]
+        self.assertEqual(se.getMacroServer(), msname)
+#        se["Door"] = "dfd"
+        self.myAssertRaise(Exception, self.setDoor, se, "dfd")
+        self.assertTrue(se["Door"], "dfd")
+        self.myAssertRaise(Exception, se.getMacroServer)
+#        se["Door"] = "module"
+        self.myAssertRaise(Exception, self.setDoor, se, "module")
+        self.myAssertRaise(Exception, se.getMacroServer)
+        self.assertTrue(se["Door"], "module")
+        self.myAssertRaise(Exception, se.getMacroServer)
+#        print "se", se["Door"]
+#        self.assertEqual(se.getMacroServer(), msname)
+        se["Door"] = ""
+        door = TangoUtils.getDeviceName(db, "Door")
+        ms = MSUtils.getMacroServer(db, door)
+        self.assertEqual(se.getMacroServer(), ms)
+        self.assertTrue(se["Door"],
+                        TangoUtils.getDeviceName(db, "Door"))
+#        print "se", se["Door"]
+        self.assertEqual(se.getMacroServer(), ms)
+        se.reset()
+        self.assertEqual(se.getMacroServer(), ms)
+        self.assertTrue(se["Door"],
+                        TangoUtils.getDeviceName(db, "Door"))
+#        print "se", se["Door"]
+        self.assertEqual(se.getMacroServer(), ms)
+
+    ## deselect test
+    def test_MntGrp(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        msp = MacroServerPools(10)
+        se = Selector(msp)
+        self.assertEqual(se["MntGrp"], self.__defaultmntgrp)
+        mg = self.getRandomName(10)
+        se["MntGrp"] = mg
+        self.assertEqual(se["MntGrp"], mg)
+        se["MntGrp"] = ""
+        self.assertEqual(se["MntGrp"], self.__defaultmntgrp)
+        mg = self.getRandomName(10)
+        se["MntGrp"] = mg
+        self.assertEqual(se["MntGrp"], mg)
+
+        se.reset()
+        self.assertEqual(se["MntGrp"], self.__defaultmntgrp)
+
+    ## deselect test
+    def test_TimeZone(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        msp = MacroServerPools(10)
+        se = Selector(msp)
+        self.assertEqual(se["TimeZone"], self.__defaultzone)
+        mg = self.getRandomName(10)
+        se["TimeZone"] = mg
+        self.assertEqual(se["TimeZone"], mg)
+        se["TimeZone"] = ""
+        self.assertEqual(se["TimeZone"], self.__defaultzone)
+        mg = self.getRandomName(10)
+        se["TimeZone"] = mg
+        self.assertEqual(se["TimeZone"], mg)
+
+        se.reset()
+        self.assertEqual(se["TimeZone"], self.__defaultzone)
+
 
 if __name__ == '__main__':
     unittest.main()
