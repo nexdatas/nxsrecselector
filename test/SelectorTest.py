@@ -1762,7 +1762,7 @@ class SelectorTest(unittest.TestCase):
             self.assertEqual(set(ndss), set(odss))
 
     ## deselect test
-    def test_updateComponentGroup(self):
+    def test_ComponentGroup(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -1815,6 +1815,82 @@ class SelectorTest(unittest.TestCase):
                     self.assertTrue(key in ncps.keys())
                     self.assertEqual(ncps[key], cps[key])
             self.compareToDumpJSON(se, ["ComponentGroup"])
+
+    ## updateOrderedChannels test
+    def test_DataSourceGroup(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        for i in range(20):
+            msp = MacroServerPools(10)
+            se = Selector(msp)
+            db = PyTango.Database()
+            db.put_device_property(self._ms.ms.keys()[0],
+                                   {'PoolNames': self._pool.dp.name()})
+            pool = self._pool.dp
+            pool.ExpChannelList = []
+            self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+            se["ConfigDevice"] = val["ConfigDevice"]
+            se["WriterDevice"] = val["WriterDevice"]
+            self.assertEqual(len(se.keys()), len(self._keys))
+            for key, vl in self._keys:
+                self.assertTrue(key in se.keys())
+                if key not in val:
+                    self.assertEqual(se[key], vl)
+                else:
+                    self.assertEqual(se[key], val[key])
+
+            print "WW1"
+
+            dss = {}
+            lall = self.__rnd.randint(1, 40)
+            adss = [self.getRandomName(10) for _ in range(lall)]
+
+            print "WW2"
+            dssn = self.__rnd.sample(adss, self.__rnd.randint(1, lall))
+            chs = self.__rnd.sample(adss, self.__rnd.randint(1, lall))
+            cdss = self.__rnd.sample(adss, self.__rnd.randint(1, lall))
+            print "DSSN", dssn
+            print "CHS", chs
+            print "CDSS", cdss
+
+            for ds in dssn:
+                dss[ds] = bool(self.__rnd.randint(0, 1))
+            se["DataSourceGroup"] = json.dumps(dss)
+            print "WW2"
+
+            pool = self._pool.dp
+            pool.ExpChannelList = [json.dumps(
+                    {"name":mn, "controller":("ctrl" + mn)}) for mn in chs]
+
+
+            self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(
+                        {key: self.smydss["scalar_long"] for key in cdss}
+                        )])
+            self.dump(se)
+
+            print "AVAIL", self._cf.dp.availableDataSources()
+            print "CHANNELS", se.poolChannels()
+            ndss = json.loads(se["DataSourceGroup"])
+            print "NDSS", ndss
+            print "DSS", dss
+            existing = set(dssn) & (set(chs) | set(cdss))
+            print "existing", existing
+            for key, value in ndss.items():
+                if key in existing:
+                    print "KEY", key
+                    self.assertEqual(ndss[key], dss[key])
+                else:
+                    self.assertTrue(key in chs)
+                    self.assertTrue(not value)
+            self.compareToDumpJSON(se, ["DataSourceGroup"])
+
+
+
 
 if __name__ == '__main__':
     unittest.main()
