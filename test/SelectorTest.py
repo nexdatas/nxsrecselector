@@ -46,11 +46,51 @@ import TestWriterSetUp
 from nxsrecconfig.MacroServerPools import MacroServerPools
 from nxsrecconfig.Selector import Selector
 from nxsrecconfig.Utils import TangoUtils, MSUtils
-
+from nxsconfigserver.XMLConfigurator import XMLConfigurator
 
 ## if 64-bit machione
 IS64BIT = (struct.calcsize("P") == 8)
 
+## list of available databases
+DB_AVAILABLE = []
+
+try:
+    import MySQLdb    
+    ## connection arguments to MYSQL DB
+    mydb = MySQLdb.connect({})
+    mydb.close()
+    DB_AVAILABLE.append("MYSQL")
+except:
+    try:
+        import MySQLdb    
+    ## connection arguments to MYSQL DB
+        args = {'host': u'localhost', 'db': u'nxsconfig',
+                'read_default_file': u'/etc/my.cnf', 'use_unicode': True}
+    ## inscance of MySQLdb
+        mydb = MySQLdb.connect(**args)
+        mydb.close()
+        DB_AVAILABLE.append("MYSQL")
+    except:
+        try:
+            import MySQLdb    
+            from os.path import expanduser
+            home = expanduser("~")
+        ## connection arguments to MYSQL DB
+            args2 = {'host': u'localhost', 'db': u'nxsconfig', 
+                     'read_default_file': u'%s/.my.cnf' % home,
+                     'use_unicode': True}
+        ## inscance of MySQLdb
+            mydb = MySQLdb.connect(**args2)
+            mydb.close()
+            DB_AVAILABLE.append("MYSQL")
+            
+        except ImportError, e:
+            print "MYSQL not available: %s" % e
+        except Exception, e:
+            print "MYSQL not available: %s" % e
+        except:
+            print "MYSQL not available"
+    
 
 ## test fixture
 class SelectorTest(unittest.TestCase):
@@ -69,6 +109,15 @@ class SelectorTest(unittest.TestCase):
         self._wr = TestWriterSetUp.TestWriterSetUp()
         self._pool = TestPoolSetUp.TestPoolSetUp()
         self._simps = TestServerSetUp.TestServerSetUp()
+
+        self.__args = {'host': u'localhost', 'db': u'nxsconfig',
+                       'read_default_file': u'/etc/my.cnf', 'use_unicode': True}
+        from os.path import expanduser
+        home = expanduser("~")
+        self.__args2 = {'host': u'localhost', 'db': u'nxsconfig',
+                        'read_default_file': u'%s/.my.cnf' % home, 'use_unicode': True}
+
+
 
         try:
             self.__seed = long(binascii.hexlify(os.urandom(16)), 16)
@@ -1187,6 +1236,8 @@ class SelectorTest(unittest.TestCase):
         msp = MacroServerPools(10)
         se = Selector(msp)
         db = PyTango.Database()
+        self.assertTrue(se["ConfigDevice"],
+                        TangoUtils.getDeviceName(db, "NXSConfigServer"))
         se["ConfigDevice"] = val["ConfigDevice"]
         self.assertTrue(se["ConfigDevice"], val["ConfigDevice"])
 #        print "se", se["ConfigDevice"]
@@ -1215,6 +1266,8 @@ class SelectorTest(unittest.TestCase):
         msp = MacroServerPools(10)
         se = Selector(msp)
         db = PyTango.Database()
+        self.assertTrue(se["WriterDevice"],
+                        TangoUtils.getDeviceName(db, "NXSDataWriter"))
         se["WriterDevice"] = val["WriterDevice"]
         self.assertTrue(se["WriterDevice"], val["WriterDevice"])
 #        print "se", se["WriterDevice"]
@@ -1240,12 +1293,14 @@ class SelectorTest(unittest.TestCase):
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         msname = self._ms.ms.keys()[0]
         val = {"ConfigDevice": self._cf.dp.name(),
-               "Door": self._wr.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
         msp = MacroServerPools(10)
         se = Selector(msp)
         db = PyTango.Database()
+        self.assertTrue(se["Door"],
+                        TangoUtils.getDeviceName(db, "Door"))
         se["Door"] = val["Door"]
         self.assertEqual(se.getMacroServer(), msname)
         self.assertTrue(se["Door"], val["Door"])
@@ -1314,6 +1369,66 @@ class SelectorTest(unittest.TestCase):
 
         se.reset()
         self.assertEqual(se["TimeZone"], self.__defaultzone)
+
+    ## deselect test
+    def test_setConfigInstance(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        msp = MacroServerPools(10)
+        se = Selector(msp)
+        db = PyTango.Database()
+
+        inst = se.setConfigInstance()
+        icf = TangoUtils.getDeviceName(db, "NXSConfigServer")
+        self.assertTrue(isinstance(inst, PyTango.DeviceProxy))
+        self.assertEqual(inst.name(), icf)
+        dev_info = inst.info()
+        self.assertEqual(dev_info.dev_class, "NXSConfigServer")
+
+        se["ConfigDevice"] = val["ConfigDevice"]
+        inst = se.setConfigInstance()
+        self.assertTrue(isinstance(inst, PyTango.DeviceProxy))
+        self.assertEqual(inst.name(), val["ConfigDevice"])
+        dev_info = inst.info()
+        self.assertEqual(dev_info.dev_class, "NXSConfigServer")
+
+        se["ConfigDevice"] = "sdfsfdsf,./wrwrwe/wer"
+        self.myAssertRaise(Exception, se.setConfigInstance)
+
+        se["ConfigDevice"] = val["WriterDevice"]
+        self.myAssertRaise(Exception, se.setConfigInstance)
+
+        se["ConfigDevice"] = val["Door"]
+        self.myAssertRaise(Exception, se.setConfigInstance)
+
+        se.reset()
+        self.assertTrue(isinstance(inst, PyTango.DeviceProxy))
+        self.assertEqual(inst.name(), icf)
+        dev_info = inst.info()
+        self.assertEqual(dev_info.dev_class, "NXSConfigServer")
+
+
+        se["ConfigDevice"] = 'module'
+
+        
+        if DB_AVAILABLE:
+            print "DB AVAILABLE:", DB_AVAILABLE
+            inst = se.setConfigInstance()
+            self.assertTrue(isinstance(inst, XMLConfigurator))
+
+        se.reset()
+        inst = se.setConfigInstance()
+        self.assertTrue(isinstance(inst, PyTango.DeviceProxy))
+        self.assertEqual(inst.name(), icf)
+        dev_info = inst.info()
+        self.assertEqual(dev_info.dev_class, "NXSConfigServer")
+
+
+            
 
 
 if __name__ == '__main__':
