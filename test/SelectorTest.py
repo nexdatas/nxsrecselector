@@ -55,14 +55,14 @@ IS64BIT = (struct.calcsize("P") == 8)
 DB_AVAILABLE = []
 
 try:
-    import MySQLdb    
+    import MySQLdb
     ## connection arguments to MYSQL DB
     mydb = MySQLdb.connect({})
     mydb.close()
     DB_AVAILABLE.append("MYSQL")
 except:
     try:
-        import MySQLdb    
+        import MySQLdb
     ## connection arguments to MYSQL DB
         args = {'host': u'localhost', 'db': u'nxsconfig',
                 'read_default_file': u'/etc/my.cnf', 'use_unicode': True}
@@ -72,25 +72,25 @@ except:
         DB_AVAILABLE.append("MYSQL")
     except:
         try:
-            import MySQLdb    
+            import MySQLdb
             from os.path import expanduser
             home = expanduser("~")
         ## connection arguments to MYSQL DB
-            args2 = {'host': u'localhost', 'db': u'nxsconfig', 
+            args2 = {'host': u'localhost', 'db': u'nxsconfig',
                      'read_default_file': u'%s/.my.cnf' % home,
                      'use_unicode': True}
         ## inscance of MySQLdb
             mydb = MySQLdb.connect(**args2)
             mydb.close()
             DB_AVAILABLE.append("MYSQL")
-            
+
         except ImportError, e:
             print "MYSQL not available: %s" % e
         except Exception, e:
             print "MYSQL not available: %s" % e
         except:
             print "MYSQL not available"
-    
+
 
 ## test fixture
 class SelectorTest(unittest.TestCase):
@@ -109,15 +109,6 @@ class SelectorTest(unittest.TestCase):
         self._wr = TestWriterSetUp.TestWriterSetUp()
         self._pool = TestPoolSetUp.TestPoolSetUp()
         self._simps = TestServerSetUp.TestServerSetUp()
-
-        self.__args = {'host': u'localhost', 'db': u'nxsconfig',
-                       'read_default_file': u'/etc/my.cnf', 'use_unicode': True}
-        from os.path import expanduser
-        home = expanduser("~")
-        self.__args2 = {'host': u'localhost', 'db': u'nxsconfig',
-                        'read_default_file': u'%s/.my.cnf' % home, 'use_unicode': True}
-
-
 
         try:
             self.__seed = long(binascii.hexlify(os.urandom(16)), 16)
@@ -1411,10 +1402,7 @@ class SelectorTest(unittest.TestCase):
         dev_info = inst.info()
         self.assertEqual(dev_info.dev_class, "NXSConfigServer")
 
-
         se["ConfigDevice"] = 'module'
-
-        
         if DB_AVAILABLE:
             print "DB AVAILABLE:", DB_AVAILABLE
             inst = se.setConfigInstance()
@@ -1426,9 +1414,6 @@ class SelectorTest(unittest.TestCase):
         self.assertEqual(inst.name(), icf)
         dev_info = inst.info()
         self.assertEqual(dev_info.dev_class, "NXSConfigServer")
-
-
-            
 
 
 if __name__ == '__main__':
