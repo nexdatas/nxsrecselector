@@ -119,6 +119,48 @@ class SelectorTest(unittest.TestCase):
 
         self.__dump = {}
 
+        ## default zone
+        self.__defaultzone = 'Europe/Berlin'
+        ## default mntgrp
+        self.__defaultmntgrp = 'nxsmntgrp'
+
+        self._keys = [
+            ("Timer", '[]'),
+            ("OrderedChannels", '[]'),
+            ("ComponentGroup", '{}'),
+            ("AutomaticComponentGroup", '{}'),
+            ("AutomaticDataSources", '[]'),
+            ("DataSourceGroup", '{}'),
+            ("InitDataSources", '[]'),
+            ("OptionalComponents", '[]'),
+            ("AppendEntry", False),
+            ("ComponentsFromMntGrp", False),
+            ("ConfigVariables", '{}'),
+            ("DataRecord", '{}'),
+            ("Labels", '{}'),
+            ("LabelPaths", '{}'),
+            ("LabelLinks", '{}'),
+            ("HiddenElements", '[]'),
+            ("LabelTypes", '{}'),
+            ("LabelShapes", '{}'),
+            ("DynamicComponents", True),
+            ("DynamicLinks", True),
+            ("DynamicPath",
+             '/entry$var.serialno:NXentry/NXinstrument/collection'),
+            ("TimeZone", self.__defaultzone),
+            ("ConfigDevice", ''),
+            ("WriterDevice", ''),
+            ("Door", ''),
+            ("MntGrp", '')
+            ]
+
+        self.mysel = {
+            'mysl': (
+                '{}'),
+            'mysl2': (
+                json.dumps({key: value for (key, value) in self._keys})),
+            }
+
         self.mycps = {
             'mycp': (
                 '<?xml version=\'1.0\'?>'
@@ -831,41 +873,6 @@ class SelectorTest(unittest.TestCase):
                 ),
             }
 
-        ## default zone
-        self.__defaultzone = 'Europe/Berlin'
-        ## default mntgrp
-        self.__defaultmntgrp = 'nxsmntgrp'
-
-        self._keys = [
-            ("Timer", '[]'),
-            ("OrderedChannels", '[]'),
-            ("ComponentGroup", '{}'),
-            ("AutomaticComponentGroup", '{}'),
-            ("AutomaticDataSources", '[]'),
-            ("DataSourceGroup", '{}'),
-            ("InitDataSources", '[]'),
-            ("OptionalComponents", '[]'),
-            ("AppendEntry", False),
-            ("ComponentsFromMntGrp", False),
-            ("ConfigVariables", '{}'),
-            ("DataRecord", '{}'),
-            ("Labels", '{}'),
-            ("LabelPaths", '{}'),
-            ("LabelLinks", '{}'),
-            ("HiddenElements", '[]'),
-            ("LabelTypes", '{}'),
-            ("LabelShapes", '{}'),
-            ("DynamicComponents", True),
-            ("DynamicLinks", True),
-            ("DynamicPath",
-             '/entry$var.serialno:NXentry/NXinstrument/collection'),
-            ("TimeZone", self.__defaultzone),
-            ("ConfigDevice", ''),
-            ("WriterDevice", ''),
-            ("Door", ''),
-            ("MntGrp", '')
-            ]
-
     ## test starter
     # \brief Common set up
     def setUp(self):
@@ -1414,6 +1421,199 @@ class SelectorTest(unittest.TestCase):
         self.assertEqual(inst.name(), icf)
         dev_info = inst.info()
         self.assertEqual(dev_info.dev_class, "NXSConfigServer")
+
+    def test_configCommand(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        msp = MacroServerPools(10)
+        se = Selector(msp)
+        db = PyTango.Database()
+
+        se["ConfigDevice"] = val["ConfigDevice"]
+
+        arg = [
+            ["AvailableComponents", None],
+            ["AvailableDataSources", None],
+            ["AvailableSelections", None],
+            ["MandatoryComponents", None],
+            ["availableComponents", None],
+            ["availableDataSources", None],
+            ["availableSelections", None],
+            ["mandatoryComponents", None],
+            ]
+
+        for ar in arg:
+            self._cf.dp.Init()
+            self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
+            self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
+            self._cf.dp.SetCommandVariable(["SELDICT", json.dumps(self.mysel)])
+            mcp = self.__rnd.sample(
+                self.mycps.keys(),
+                self.__rnd.randint(0, len(self.mycps.keys())))
+            self._cf.dp.SetCommandVariable(["MCPLIST", json.dumps(mcp)])
+            se = Selector(msp)
+            res = se.configCommand(ar[0])
+            print self._cf.dp.GetCommandVariable("COMMANDS")
+            self.assertEqual(
+                [c.lower() for c in
+                 json.loads(self._cf.dp.GetCommandVariable("COMMANDS"))],
+                [ar[0].lower()])
+            self.assertEqual(
+                json.loads(self._cf.dp.GetCommandVariable("VARS")),
+                [ar[1]])
+            inst = se.setConfigInstance()
+            self.assertEqual(res, inst.command_inout(ar[0]))
+
+    def test_configCommand_arg(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        msp = MacroServerPools(10)
+        se = Selector(msp)
+        db = PyTango.Database()
+
+        se["ConfigDevice"] = val["ConfigDevice"]
+        for i in range(5):
+            arg2 = [
+                ["Components", self.__rnd.sample(
+                            self.mycps.keys(),
+                            self.__rnd.randint(0, len(self.mycps.keys())))],
+                ["InstantiatedComponents", self.__rnd.sample(
+                            self.mycps.keys(),
+                            self.__rnd.randint(0, len(self.mycps.keys())))],
+                ["CreateConfiguration", self.__rnd.sample(
+                            self.mycps.keys(),
+                            self.__rnd.randint(0, len(self.mycps.keys())))],
+                ["DataSources", self.__rnd.sample(
+                            self.mydss.keys(),
+                            self.__rnd.randint(0, len(self.mydss.keys())))],
+                ["Selections", self.__rnd.sample(
+                            self.mysel.keys(),
+                            self.__rnd.randint(0, len(self.mysel.keys())))],
+                ["StoreSelection", self.__rnd.sample(self.mysel.keys(), 1)[0]],
+                ["StoreComponent", self.__rnd.sample(self.mycps.keys(), 1)[0]],
+                ["StoreDataSource",
+                 self.__rnd.sample(self.mydss.keys(), 1)[0]],
+                ["components", self.__rnd.sample(
+                            self.mycps.keys(),
+                            self.__rnd.randint(0, len(self.mycps.keys())))],
+                ["instantiatedComponents", self.__rnd.sample(
+                            self.mycps.keys(),
+                            self.__rnd.randint(0, len(self.mycps.keys())))],
+                ["createConfiguration", self.__rnd.sample(
+                            self.mycps.keys(),
+                            self.__rnd.randint(0, len(self.mycps.keys())))],
+                ["dataSources", self.__rnd.sample(
+                            self.mydss.keys(),
+                            self.__rnd.randint(0, len(self.mydss.keys())))],
+                ["selections", self.__rnd.sample(
+                            self.mysel.keys(),
+                            self.__rnd.randint(0, len(self.mysel.keys())))],
+                ["storeSelection", self.__rnd.sample(self.mysel.keys(), 1)[0]],
+                ["storeComponent", self.__rnd.sample(self.mycps.keys(), 1)[0]],
+                ["storeDataSource",
+                 self.__rnd.sample(self.mydss.keys(), 1)[0]],
+               ]
+            for ar in arg2:
+                self._cf.dp.Init()
+                self._cf.dp.SetCommandVariable(
+                    ["CPDICT", json.dumps(self.mycps)])
+                self._cf.dp.SetCommandVariable(
+                    ["DSDICT", json.dumps(self.mydss)])
+                self._cf.dp.SetCommandVariable(
+                    ["SELDICT", json.dumps(self.mysel)])
+                se = Selector(msp)
+#                print "COM", ar[0]
+#                print "VAR", ar[1]
+                res = se.configCommand(ar[0], ar[1])
+                print self._cf.dp.GetCommandVariable("COMMANDS")
+                self.assertEqual(
+                    [c.lower() for c in
+                     json.loads(self._cf.dp.GetCommandVariable("COMMANDS"))],
+                    [ar[0].lower()])
+                self.assertEqual(
+                    json.loads(self._cf.dp.GetCommandVariable("VARS")),
+                    [ar[1]])
+                inst = se.setConfigInstance()
+                self.assertEqual(res, inst.command_inout(ar[0], ar[1]))
+
+    def test_configCommand_module(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        msp = MacroServerPools(10)
+        se = Selector(msp)
+        db = PyTango.Database()
+
+        if DB_AVAILABLE:
+
+            arg = [
+                ["availableComponents", None],
+                ["availableDataSources", None],
+                ["availableSelections", None],
+                ["mandatoryComponents", None],
+                ]
+
+            for ar in arg:
+                se = Selector(msp)
+                se["ConfigDevice"] = 'module'
+                res = se.configCommand(ar[0])
+                inst = se.setConfigInstance()
+                self.assertEqual(res, getattr(inst, ar[0])())
+
+    def test_configCommand_arg_module(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        msp = MacroServerPools(10)
+        se = Selector(msp)
+        db = PyTango.Database()
+
+        se["ConfigDevice"] = 'module'
+        inst = se.setConfigInstance()
+        cps = inst.availableComponents() or []
+        dss = inst.availableDataSources() or []
+        sls = inst.availableSelections() or []
+        print "CPS !!!!", cps
+        print "DSS !!!!", dss
+
+        for i in range(5):
+            arg2 = [
+                ["components", self.__rnd.sample(
+                            cps,
+                            self.__rnd.randint(0, len(cps)))],
+                ["instantiatedComponents", self.__rnd.sample(
+                            cps,
+                            self.__rnd.randint(0, len(cps)))],
+                ["createConfiguration", self.__rnd.sample(
+                            cps,
+                            self.__rnd.randint(0, len(cps)))],
+                ["dataSources", self.__rnd.sample(
+                            dss,
+                            self.__rnd.randint(0, len(dss)))],
+                ["selections", self.__rnd.sample(
+                            sls,
+                            self.__rnd.randint(0, len(sls)))],
+               ]
+
+            for ar in arg2:
+                se = Selector(msp)
+                se["ConfigDevice"] = 'module'
+                res = se.configCommand(ar[0], ar[1])
+                self.assertEqual(res, getattr(inst, ar[0])(ar[1]))
 
 
 if __name__ == '__main__':

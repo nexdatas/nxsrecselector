@@ -91,7 +91,7 @@ class NXSConfigServer(PyTango.Device_4Impl):
         self.cmd["COMMANDS"] = []
         self.cmd["MCPLIST"] = []
         self.cmd["VALUE"] = None
-        self.cmd["CHECKVARIABLES"] = None
+        self.cmd["CHECKVARIABLES"] = ""
 
         self.get_device_properties(self.get_device_class())
 
@@ -238,10 +238,10 @@ class NXSConfigServer(PyTango.Device_4Impl):
     def InstantiatedComponents(self, names):
         print >> self.log_info, "In ", self.get_name(), \
             "::InstantiateComponents()"
-        if self.cmd["CHECKVARIABLES"] != self.attr_variables:
+        if self.cmd["CHECKVARIABLES"] != self.attr_Variables:
             raise Exception("Variables not set")
-        self.vars.append(names)
-        self.commands.append("InstantiatedComponents")
+        self.cmd["VARS"].append(names)
+        self.cmd["COMMANDS"].append("InstantiatedComponents")
         return [self.cmd["CPDICT"][nm] for nm in names
                 if nm in self.cmd["CPDICT"].keys()]
 
@@ -315,7 +315,7 @@ class NXSConfigServer(PyTango.Device_4Impl):
         #    Add your own code here
 
         self.cmd["VARS"].append(None)
-        self.cmd["COMMANDS"].append("AvailableDataSources")
+        self.cmd["COMMANDS"].append("MandatoryComponents")
         return list(self.cmd["MCPLIST"])
 
 #------------------------------------------------------------------
@@ -329,6 +329,30 @@ class NXSConfigServer(PyTango.Device_4Impl):
         print >> self.log_info, "In ", self.get_name(), "::StoreSelection()"
         self.cmd["VARS"].append(argin)
         self.cmd["COMMANDS"].append("StoreSelection")
+
+#------------------------------------------------------------------
+#    StoreDataSource command:
+#
+#    Description: Stores the selection from XMLString
+#
+#    argin:  DevString    selection name
+#------------------------------------------------------------------
+    def StoreDataSource(self, argin):
+        print >> self.log_info, "In ", self.get_name(), "::StoreDataSource()"
+        self.cmd["VARS"].append(argin)
+        self.cmd["COMMANDS"].append("StoreDataSource")
+
+#------------------------------------------------------------------
+#    StoreComponent command:
+#
+#    Description: Stores the component from XMLString
+#
+#    argin:  DevString    component name
+#------------------------------------------------------------------
+    def StoreComponent(self, argin):
+        print >> self.log_info, "In ", self.get_name(), "::StoreComponent()"
+        self.cmd["VARS"].append(argin)
+        self.cmd["COMMANDS"].append("StoreComponent")
 
 #------------------------------------------------------------------
 #    CreateConfiguration command:
@@ -439,8 +463,11 @@ class NXSConfigServerClass(PyTango.DeviceClass):
         'MandatoryComponents':
             [[PyTango.DevVoid, ""],
             [PyTango.DevVarStringArray, "component names"]],
-        'StoreSelection':
-            [[PyTango.DevString, "selection name"],
+        'StoreComponent':
+            [[PyTango.DevString, "component name"],
+            [PyTango.DevVoid, ""]],
+        'StoreDataSource':
+            [[PyTango.DevString, "datasource name"],
             [PyTango.DevVoid, ""]],
         'SetCommandVariable':
             [[PyTango.DevVarStringArray, "(name,jsonstring)"],
