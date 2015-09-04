@@ -319,7 +319,7 @@ class SelectionTest(unittest.TestCase):
             self.compareToDump(el, ["ComponentGroup"])
 
     ## deselect test
-    def test_updateComponentGroup(self):
+    def test_updateDataSourceGroup(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         for i in range(20):
