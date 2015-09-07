@@ -975,7 +975,7 @@ class SelectorTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
-    def test_constructor_keys(self):
+    def ttest_constructor_keys(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         se = Selector(None)
@@ -1003,7 +1003,7 @@ class SelectorTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
-    def test_se_getPool_1to3(self):
+    def ttest_se_getPool_1to3(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         doors = ["door2testp09/testts/t1r228",
@@ -1051,7 +1051,7 @@ class SelectorTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
-    def test_se_getPool_3to3(self):
+    def ttest_se_getPool_3to3(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         doors = ["door3testp09/testts/t1r228",
@@ -1095,7 +1095,7 @@ class SelectorTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
-    def test_poolMotors(self):
+    def ttest_poolMotors(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         se = Selector(None)
@@ -1149,7 +1149,7 @@ class SelectorTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
-    def test_poolChannels(self):
+    def ttest_poolChannels(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         se = Selector(None)
@@ -1202,7 +1202,7 @@ class SelectorTest(unittest.TestCase):
         self.assertEqual(se.getMacroServer(), self._ms.ms.keys()[0])
 
     ## updateOrderedChannels test
-    def test_resetAutomaticComponents(self):
+    def ttest_resetAutomaticComponents(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -1247,69 +1247,112 @@ class SelectorTest(unittest.TestCase):
                 self.assertEqual(se["AutomaticComponentGroup"], "{}")
 
     ## updateOrderedChannels test
-    def test_ConfigServer(self):
+    def ttest_ConfigServer(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
-        msp = MacroServerPools(10)
-        se = Selector(msp)
-        db = PyTango.Database()
-        self.assertTrue(se["ConfigDevice"],
-                        TangoUtils.getDeviceName(db, "NXSConfigServer"))
-        se["ConfigDevice"] = val["ConfigDevice"]
-        self.assertTrue(se["ConfigDevice"], val["ConfigDevice"])
-#        print "se", se["ConfigDevice"]
-        se["ConfigDevice"] = "dfd"
-        self.assertTrue(se["ConfigDevice"], "dfd")
-        se["ConfigDevice"] = "module"
-        self.assertTrue(se["ConfigDevice"], "module")
-#        print "se", se["ConfigDevice"]
-        se["ConfigDevice"] = ""
-        self.assertTrue(se["ConfigDevice"],
-                        TangoUtils.getDeviceName(db, "NXSConfigServer"))
-#        print "se", se["ConfigDevice"]
+        for i in range(20):
+            msp = MacroServerPools(10)
+            se = Selector(msp)
+            db = PyTango.Database()
+            self.assertTrue(se["ConfigDevice"],
+                            TangoUtils.getDeviceName(db, "NXSConfigServer"))
+            se["ConfigDevice"] = val["ConfigDevice"]
+            self.assertTrue(se["ConfigDevice"], val["ConfigDevice"])
 
-        se.reset()
-        self.assertTrue(se["ConfigDevice"],
-                        TangoUtils.getDeviceName(db, "NXSConfigServer"))
+            mydict = {}
+            if (i / 2) % 2:
+                mydict = se.get()
+                if (i / 2) % 4 - 2:
+                    se.exportEnv(mydict)
+            else:
+                se.exportEnv()
+
+    #        print "se", se["ConfigDevice"]
+            se["ConfigDevice"] = "dfd"
+            self.assertTrue(se["ConfigDevice"], "dfd")
+            se["ConfigDevice"] = "module"
+            self.assertTrue(se["ConfigDevice"], "module")
+    #        print "se", se["ConfigDevice"]
+            se["ConfigDevice"] = ""
+            self.assertTrue(se["ConfigDevice"],
+                            TangoUtils.getDeviceName(db, "NXSConfigServer"))
+    #        print "se", se["ConfigDevice"]
+
+            se.reset()
+            self.assertTrue(se["ConfigDevice"],
+                            TangoUtils.getDeviceName(db, "NXSConfigServer"))
+            mydata = {}
+            if (i / 2) % 2:
+                if (i / 2) % 4:
+                    se.set(mydict)
+                elif (i / 2) % 4 - 2:
+                    se.importEnv(data=mydata)
+                    se.set(mydata)
+            else:
+                se.importEnv()
+
+            self.assertTrue(se["ConfigDevice"], val["ConfigDevice"])
 
     ## updateOrderedChannels test
-    def test_WriterDevice(self):
+    def ttest_WriterDevice(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
-        msp = MacroServerPools(10)
-        se = Selector(msp)
-        db = PyTango.Database()
-        self.assertTrue(se["WriterDevice"],
-                        TangoUtils.getDeviceName(db, "NXSDataWriter"))
-        se["WriterDevice"] = val["WriterDevice"]
-        self.assertTrue(se["WriterDevice"], val["WriterDevice"])
-#        print "se", se["WriterDevice"]
-        se["WriterDevice"] = "dfd"
-        self.assertTrue(se["WriterDevice"], "dfd")
-        se["WriterDevice"] = "module"
-        self.assertTrue(se["WriterDevice"], "module")
-#        print "se", se["WriterDevice"]
-        se["WriterDevice"] = ""
-        self.assertTrue(se["WriterDevice"],
-                        TangoUtils.getDeviceName(db, "NXSDataWriter"))
-#        print "se", se["WriterDevice"]
-        se.reset()
-        self.assertTrue(se["WriterDevice"],
-                        TangoUtils.getDeviceName(db, "NXSDataWriter"))
+        for i in range(20):
+            msp = MacroServerPools(10)
+            se = Selector(msp)
+            db = PyTango.Database()
+            self.assertTrue(se["WriterDevice"],
+                            TangoUtils.getDeviceName(db, "NXSDataWriter"))
+            se["WriterDevice"] = val["WriterDevice"]
+            self.assertTrue(se["WriterDevice"], val["WriterDevice"])
+
+            mydict = {}
+            if (i / 2) % 2:
+                mydict = se.get()
+                if (i / 2) % 4 - 2:
+                    se.exportEnv(mydict)
+            else:
+                se.exportEnv()
+
+    #        print "se", se["WriterDevice"]
+            se["WriterDevice"] = "dfd"
+            self.assertTrue(se["WriterDevice"], "dfd")
+            se["WriterDevice"] = "module"
+            self.assertTrue(se["WriterDevice"], "module")
+    #        print "se", se["WriterDevice"]
+            se["WriterDevice"] = ""
+            self.assertTrue(se["WriterDevice"],
+                            TangoUtils.getDeviceName(db, "NXSDataWriter"))
+    #        print "se", se["WriterDevice"]
+            se.reset()
+            self.assertTrue(se["WriterDevice"],
+                            TangoUtils.getDeviceName(db, "NXSDataWriter"))
+
+            mydata = {}
+            if (i / 2) % 2:
+                if (i / 2) % 4:
+                    se.set(mydict)
+                elif (i / 2) % 4 - 2:
+                    se.importEnv(data=mydata)
+                    se.set(mydata)
+            else:
+                se.importEnv()
+
+            self.assertTrue(se["WriterDevice"], val["WriterDevice"])
 
     def setDoor(self, se, door):
         se["Door"] = door
 
     ## updateOrderedChannels test
-    def test_Door(self):
+    def ttest_Door(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         msname = self._ms.ms.keys()[0]
@@ -1317,82 +1360,148 @@ class SelectorTest(unittest.TestCase):
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
-        msp = MacroServerPools(10)
-        se = Selector(msp)
-        db = PyTango.Database()
-        self.assertTrue(se["Door"],
-                        TangoUtils.getDeviceName(db, "Door"))
-        se["Door"] = val["Door"]
-        self.assertEqual(se.getMacroServer(), msname)
-        self.assertTrue(se["Door"], val["Door"])
-#        print "se", se["Door"]
-        self.assertEqual(se.getMacroServer(), msname)
-#        se["Door"] = "dfd"
-        self.myAssertRaise(Exception, self.setDoor, se, "dfd")
-        self.assertTrue(se["Door"], "dfd")
-        self.myAssertRaise(Exception, se.getMacroServer)
-#        se["Door"] = "module"
-        self.myAssertRaise(Exception, self.setDoor, se, "module")
-        self.myAssertRaise(Exception, se.getMacroServer)
-        self.assertTrue(se["Door"], "module")
-        self.myAssertRaise(Exception, se.getMacroServer)
-#        print "se", se["Door"]
-#        self.assertEqual(se.getMacroServer(), msname)
-        se["Door"] = ""
-        door = TangoUtils.getDeviceName(db, "Door")
-        ms = MSUtils.getMacroServer(db, door)
-        self.assertEqual(se.getMacroServer(), ms)
-        self.assertTrue(se["Door"],
-                        TangoUtils.getDeviceName(db, "Door"))
-#        print "se", se["Door"]
-        self.assertEqual(se.getMacroServer(), ms)
-        se.reset()
-        self.assertEqual(se.getMacroServer(), ms)
-        self.assertTrue(se["Door"],
-                        TangoUtils.getDeviceName(db, "Door"))
-#        print "se", se["Door"]
-        self.assertEqual(se.getMacroServer(), ms)
+
+        for i in range(20):
+            msp = MacroServerPools(10)
+            se = Selector(msp)
+            db = PyTango.Database()
+            self.assertTrue(se["Door"],
+                            TangoUtils.getDeviceName(db, "Door"))
+            se["Door"] = val["Door"]
+            self.assertEqual(se.getMacroServer(), msname)
+            self.assertTrue(se["Door"], val["Door"])
+            self.assertEqual(se.getMacroServer(), msname)
+
+            mydict = {}
+            if (i / 2) % 2:
+                mydict = se.get()
+                if (i / 2) % 4 - 2:
+                    se.exportEnv(mydict)
+            else:
+                se.exportEnv()
+
+            self.myAssertRaise(Exception, self.setDoor, se, "dfd")
+            self.assertTrue(se["Door"], "dfd")
+            self.myAssertRaise(Exception, se.getMacroServer)
+    #        se["Door"] = "module"
+            self.myAssertRaise(Exception, self.setDoor, se, "module")
+            self.myAssertRaise(Exception, se.getMacroServer)
+            self.assertTrue(se["Door"], "module")
+            self.myAssertRaise(Exception, se.getMacroServer)
+    #        print "se", se["Door"]
+    #        self.assertEqual(se.getMacroServer(), msname)
+            se["Door"] = ""
+            door = TangoUtils.getDeviceName(db, "Door")
+            ms = MSUtils.getMacroServer(db, door)
+            self.assertEqual(se.getMacroServer(), ms)
+            self.assertTrue(se["Door"],
+                            TangoUtils.getDeviceName(db, "Door"))
+    #        print "se", se["Door"]
+            self.assertEqual(se.getMacroServer(), ms)
+            se.reset()
+            self.assertEqual(se.getMacroServer(), ms)
+            self.assertTrue(se["Door"],
+                            TangoUtils.getDeviceName(db, "Door"))
+    #        print "se", se["Door"]
+            self.assertEqual(se.getMacroServer(), ms)
+
+            mydata = {}
+            if (i / 2) % 2:
+                if (i / 2) % 4:
+                    se.set(mydict)
+                elif (i / 2) % 4 - 2:
+                    se.importEnv(data=mydata)
+                    se.set(mydata)
+            else:
+                se.importEnv()
+
+            self.assertEqual(se.getMacroServer(), msname)
+            self.assertTrue(se["Door"], val["Door"])
+            self.assertEqual(se.getMacroServer(), msname)
 
     ## deselect test
-    def test_MntGrp(self):
+    def ttest_MntGrp(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
-        msp = MacroServerPools(10)
-        se = Selector(msp)
-        self.assertEqual(se["MntGrp"], self.__defaultmntgrp)
-        mg = self.getRandomName(10)
-        se["MntGrp"] = mg
-        self.assertEqual(se["MntGrp"], mg)
-        se["MntGrp"] = ""
-        self.assertEqual(se["MntGrp"], self.__defaultmntgrp)
-        mg = self.getRandomName(10)
-        se["MntGrp"] = mg
-        self.assertEqual(se["MntGrp"], mg)
+        for i in range(20):
+            msp = MacroServerPools(10)
+            se = Selector(msp)
+            self.assertEqual(se["MntGrp"], self.__defaultmntgrp)
+            mg = self.getRandomName(10)
+            se["MntGrp"] = mg
+            self.assertEqual(se["MntGrp"], mg)
 
-        se.reset()
-        self.assertEqual(se["MntGrp"], self.__defaultmntgrp)
+            se["MntGrp"] = ""
+            self.assertEqual(se["MntGrp"], self.__defaultmntgrp)
+            mg = self.getRandomName(10)
+            se["MntGrp"] = mg
+            self.assertEqual(se["MntGrp"], mg)
+
+            mydict = {}
+            if (i / 2) % 2:
+                mydict = se.get()
+                if (i / 2) % 4 - 2:
+                    se.exportEnv(mydict)
+            else:
+                se.exportEnv()
+
+            se.reset()
+            self.assertEqual(se["MntGrp"], self.__defaultmntgrp)
+
+            mydata = {}
+            if (i / 2) % 2:
+                if (i / 2) % 4:
+                    se.set(mydict)
+                elif (i / 2) % 4 - 2:
+                    se.importEnv(data=mydata)
+                    se.set(mydata)
+            else:
+                se.importEnv()
+
+            self.assertEqual(se["MntGrp"], mg)
 
     ## deselect test
-    def test_TimeZone(self):
+    def ttest_TimeZone(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
-        msp = MacroServerPools(10)
-        se = Selector(msp)
-        self.assertEqual(se["TimeZone"], self.__defaultzone)
-        mg = self.getRandomName(10)
-        se["TimeZone"] = mg
-        self.assertEqual(se["TimeZone"], mg)
-        se["TimeZone"] = ""
-        self.assertEqual(se["TimeZone"], self.__defaultzone)
-        mg = self.getRandomName(10)
-        se["TimeZone"] = mg
-        self.assertEqual(se["TimeZone"], mg)
+        for i in range(20):
+            msp = MacroServerPools(10)
+            se = Selector(msp)
+            self.assertEqual(se["TimeZone"], self.__defaultzone)
+            mg = self.getRandomName(10)
+            se["TimeZone"] = mg
+            self.assertEqual(se["TimeZone"], mg)
+            se["TimeZone"] = ""
+            self.assertEqual(se["TimeZone"], self.__defaultzone)
+            mg = self.getRandomName(10)
+            se["TimeZone"] = mg
+            self.assertEqual(se["TimeZone"], mg)
 
-        se.reset()
-        self.assertEqual(se["TimeZone"], self.__defaultzone)
+            mydict = {}
+            if (i / 2) % 2:
+                mydict = se.get()
+                if (i / 2) % 4 - 2:
+                    se.exportEnv(mydict)
+            else:
+                se.exportEnv()
+
+            se.reset()
+            self.assertEqual(se["TimeZone"], self.__defaultzone)
+
+            mydata = {}
+            if (i / 2) % 2:
+                if (i / 2) % 4:
+                    se.set(mydict)
+                elif (i / 2) % 4 - 2:
+                    se.importEnv(data=mydata)
+                    se.set(mydata)
+            else:
+                se.importEnv()
+
+            self.assertEqual(se["TimeZone"], mg)
 
     ## deselect test
-    def test_setConfigInstance(self):
+    def ttest_setConfigInstance(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -1445,7 +1554,7 @@ class SelectorTest(unittest.TestCase):
         dev_info = inst.info()
         self.assertEqual(dev_info.dev_class, "NXSConfigServer")
 
-    def test_configCommand(self):
+    def ttest_configCommand(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -1491,7 +1600,7 @@ class SelectorTest(unittest.TestCase):
             inst = se.setConfigInstance()
             self.assertEqual(res, inst.command_inout(ar[0]))
 
-    def test_configCommand_arg(self):
+    def ttest_configCommand_arg(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -1567,7 +1676,7 @@ class SelectorTest(unittest.TestCase):
                 inst = se.setConfigInstance()
                 self.assertEqual(res, inst.command_inout(ar[0], ar[1]))
 
-    def test_configCommand_module(self):
+    def ttest_configCommand_module(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -1594,7 +1703,7 @@ class SelectorTest(unittest.TestCase):
                 inst = se.setConfigInstance()
                 self.assertEqual(res, getattr(inst, ar[0])())
 
-    def test_configCommand_arg_module(self):
+    def ttest_configCommand_arg_module(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -1639,7 +1748,7 @@ class SelectorTest(unittest.TestCase):
                 self.assertEqual(res, getattr(inst, ar[0])(ar[1]))
 
     ## updateOrderedChannels test
-    def test_AutomaticDataSources(self):
+    def ttest_AutomaticDataSources(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -1696,12 +1805,36 @@ class SelectorTest(unittest.TestCase):
                              set(ads))
 
             self.compareToDump(se, ["AutomaticDataSources"])
+
+            mydict = {}
+            if (i / 2) % 2:
+                mydict = se.get()
+                if (i / 2) % 4 - 2:
+                    se.exportEnv(mydict)
+            else:
+                se.exportEnv()
+
             se.reset()
             ads = json.loads(se["AutomaticDataSources"])
             self.assertEqual(set(mnames), set(ads))
 
+            mydata = {}
+            if (i / 2) % 2:
+                if (i / 2) % 4:
+                    se.set(mydict)
+                elif (i / 2) % 4 - 2:
+                    se.importEnv(data=mydata)
+                    se.set(mydata)
+            else:
+                se.importEnv()
+
+            ads = json.loads(se["AutomaticDataSources"])
+            self.assertEqual(set(list(set(dss3) | set(dss2) | set(dss1))),
+                             set(ads))
+            self.compareToDump(se, ["AutomaticDataSources"])
+
     ## updateOrderedChannels test
-    def test_OrderedChannels(self):
+    def ttest_OrderedChannels(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -1769,12 +1902,46 @@ class SelectorTest(unittest.TestCase):
 
             self.assertEqual(ndss[:len(dss2)], odss[:len(dss2)])
             self.assertEqual(set(ndss), set(odss))
+
+            mydict = {}
+            if (i / 2) % 2:
+                mydict = se.get()
+                if (i / 2) % 4 - 2:
+                    se.exportEnv(mydict)
+            else:
+                se.exportEnv()
+
             se.reset()
             ndss = json.loads(se["OrderedChannels"])
             self.assertEqual(ndss, sorted(pchs))
 
-    ## deselect test
-    def test_ComponentGroup(self):
+            mydata = {}
+            if (i / 2) % 2:
+                if (i / 2) % 4:
+                    se.set(mydict)
+                elif (i / 2) % 4 - 2:
+                    se.importEnv(data=mydata)
+                    se.set(mydata)
+            else:
+                se.importEnv()
+
+            ads = se["OrderedChannels"]
+            print "OCS:", ads
+
+            self.compareToDumpJSON(se, ["OrderedChannels"])
+
+            ndss = json.loads(se["OrderedChannels"])
+            odss = []
+            odss.extend(dss2)
+            for ds in dss3:
+                if ds not in odss:
+                    odss.append(ds)
+
+            self.assertEqual(ndss[:len(dss2)], odss[:len(dss2)])
+            self.assertEqual(set(ndss), set(odss))
+
+    ## ComponentGroup test
+    def ttest_ComponentGroup(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -1831,6 +1998,28 @@ class SelectorTest(unittest.TestCase):
                     self.assertTrue(key in ncps.keys())
                     self.assertEqual(ncps[key], cps[key])
             self.compareToDumpJSON(se, ["ComponentGroup"])
+
+            mydict = {}
+            nenv = {
+                "Components": self.__rnd.sample(
+                    cps, self.__rnd.randint(1, len(cps))),
+                "AutomaticComponents": self.__rnd.sample(
+                    cps, self.__rnd.randint(1, len(cps))),
+                "DataSources": self.__rnd.sample(
+                    cps, self.__rnd.randint(1, len(cps)))
+                }
+
+            if (i / 2) % 2:
+                mydict = se.get()
+                if (i / 2) % 8 - 2:
+                    se.exportEnv(cmddata=nenv)
+                elif (i / 2) % 8 - 4:
+                    se.exportEnv(mydict, cmddata=nenv)
+                elif (i / 2) % 8 - 6:
+                    se.exportEnv(mydict)
+            else:
+                se.exportEnv()
+
             if i % 2:
                 se.deselect()
                 self.compareToDumpJSON(se, ["ComponentGroup",
@@ -1861,8 +2050,40 @@ class SelectorTest(unittest.TestCase):
                     se["WriterDevice"],
                     TangoUtils.getDeviceName(db, "NXSDataWriter"))
 
+            mydata = {}
+            mycmd = {}
+            if (i / 2) % 2:
+                if (i / 2) % 8:
+                    se.set(mydict)
+                elif (i / 2) % 8 - 2:
+                    se.importEnv(data=mydata)
+                    se.set(mydata)
+                elif (i / 2) % 8 - 4:
+                    se.importEnv(data=mydata)
+                    se.set(mydata)
+                    se.importEnv(names=nenv.keys(), data=mycmd)
+                    self.assertEqual(mycmd, nenv)
+                elif (i / 2) % 8 - 6:
+                    se.importEnv(data=mydata)
+                    se.set(mydata)
+                    se.importEnv(names=nenv.keys(), data=mycmd)
+                    self.assertEqual(mycmd, nenv)
+
+            else:
+                se.importEnv()
+
+            ncps = json.loads(se["ComponentGroup"])
+            ndss = json.loads(se["DataSourceGroup"])
+
+            self.assertEqual(len(cps), len(ncps) + len(common))
+            for key in cps.keys():
+                if key not in common:
+                    self.assertTrue(key in ncps.keys())
+                    self.assertEqual(ncps[key], cps[key])
+            self.compareToDumpJSON(se, ["ComponentGroup"])
+
     ## DataSourceGroup test
-    def test_DataSourceGroup(self):
+    def ttest_DataSourceGroup(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -1922,6 +2143,28 @@ class SelectorTest(unittest.TestCase):
                     self.assertTrue(key in chs)
                     self.assertTrue(not value)
             self.compareToDumpJSON(se, ["DataSourceGroup"])
+
+            mydict = {}
+            nenv = {
+                "Components": self.__rnd.sample(
+                    adss, self.__rnd.randint(1, len(adss))),
+                "AutomaticComponents": self.__rnd.sample(
+                    adss, self.__rnd.randint(1, len(adss))),
+                "DataSources": self.__rnd.sample(
+                    adss, self.__rnd.randint(1, len(adss)))
+                }
+
+            if (i / 2) % 2:
+                mydict = se.get()
+                if (i / 2) % 8 - 2:
+                    se.exportEnv(cmddata=nenv)
+                elif (i / 2) % 8 - 4:
+                    se.exportEnv(mydict, cmddata=nenv)
+                elif (i / 2) % 8 - 6:
+                    se.exportEnv(mydict)
+            else:
+                se.exportEnv()
+
             if i % 2:
                 se.deselect()
                 ndss = json.loads(se["DataSourceGroup"])
@@ -1938,8 +2181,6 @@ class SelectorTest(unittest.TestCase):
                     if key not in val:
                         self.assertEqual(se[key], vl)
                 ndss = json.loads(se["DataSourceGroup"])
-                print "NDSS", sorted(ndss.keys())
-                print "CHS", sorted(chs)
                 self.assertEqual(sorted(ndss.keys()), sorted(chs))
                 for mn in chs:
                     self.assertEqual(ndss[mn], False)
@@ -1955,8 +2196,41 @@ class SelectorTest(unittest.TestCase):
                     se["WriterDevice"],
                     TangoUtils.getDeviceName(db, "NXSDataWriter"))
 
+            mydata = {}
+            mycmd = {}
+            if (i / 2) % 2:
+                if (i / 2) % 8:
+                    se.set(mydict)
+                elif (i / 2) % 8 - 2:
+                    se.importEnv(data=mydata)
+                    se.set(mydata)
+                elif (i / 2) % 8 - 4:
+                    se.importEnv(data=mydata)
+                    se.set(mydata)
+                    se.importEnv(names=nenv.keys(), data=mycmd)
+                    self.assertEqual(mycmd, nenv)
+                elif (i / 2) % 8 - 6:
+                    se.importEnv(data=mydata)
+                    se.set(mydata)
+                    se.importEnv(names=nenv.keys(), data=mycmd)
+                    self.assertEqual(mycmd, nenv)
+
+            else:
+                se.importEnv()
+
+            ndss = json.loads(se["DataSourceGroup"])
+            existing = set(dssn) & (set(chs) | set(cdss))
+            print "existing", existing
+            for key, value in ndss.items():
+                if key in existing:
+                    self.assertEqual(ndss[key], dss[key])
+                else:
+                    self.assertTrue(key in chs)
+                    self.assertTrue(not value)
+            self.compareToDumpJSON(se, ["DataSourceGroup"])
+
     ## updateOrderedChannels test
-    def test_AutomaticComponentGroup(self):
+    def ttest_AutomaticComponentGroup(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -1986,19 +2260,49 @@ class SelectorTest(unittest.TestCase):
 
             self.dump(se)
 
-            if i % 2:
-                self.compareToDump(se, ["AutomaticComponentGroup"])
-
-                ndss = json.loads(se["AutomaticComponentGroup"])
-                for ds in cps.keys():
-                    self.assertTrue(ds in ndss.keys())
-                    self.assertEqual(ndss[ds], cps[ds])
+            mydict = {}
+            if (i / 2) % 2:
+                mydict = se.get()
+                if (i / 2) % 4 - 2:
+                    se.exportEnv(mydict)
             else:
-                se.reset()
-                self.assertEqual(se["AutomaticComponentGroup"], "{}")
+                se.exportEnv()
+
+            self.compareToDump(se, ["AutomaticComponentGroup"])
+            ndss = json.loads(se["AutomaticComponentGroup"])
+            for ds in cps.keys():
+                self.assertTrue(ds in ndss.keys())
+                self.assertEqual(ndss[ds], cps[ds])
+
+            mydict = {}
+            if (i / 2) % 2:
+                mydict = se.get()
+                if (i / 2) % 4 - 2:
+                    se.exportEnv(mydict)
+            else:
+                se.exportEnv()
+
+            se.reset()
+            self.assertEqual(se["AutomaticComponentGroup"], "{}")
+
+            mydata = {}
+            if (i / 2) % 2:
+                if (i / 2) % 4:
+                    se.set(mydict)
+                elif (i / 2) % 4 - 2:
+                    se.importEnv(data=mydata)
+                    se.set(mydata)
+            else:
+                se.importEnv()
+
+            self.compareToDump(se, ["AutomaticComponentGroup"])
+            ndss = json.loads(se["AutomaticComponentGroup"])
+            for ds in cps.keys():
+                self.assertTrue(ds in ndss.keys())
+                self.assertEqual(ndss[ds], cps[ds])
 
     ## dataRecord test
-    def test_DataRecord(self):
+    def ttest_DataRecord(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2029,19 +2333,41 @@ class SelectorTest(unittest.TestCase):
 
             self.dump(se)
 
-            if i % 2:
-                self.compareToDump(se, ["DataRecord"])
-
-                ndss = json.loads(se["DataRecord"])
-                for ds in cps.keys():
-                    self.assertTrue(ds in ndss.keys())
-                    self.assertEqual(ndss[ds], cps[ds])
+            mydict = {}
+            if (i / 2) % 2:
+                mydict = se.get()
+                if (i / 2) % 4 - 2:
+                    se.exportEnv(mydict)
             else:
-                se.reset()
-                self.assertEqual(se["DataRecord"], "{}")
+                se.exportEnv()
+
+            self.compareToDump(se, ["DataRecord"])
+
+            ndss = json.loads(se["DataRecord"])
+            for ds in cps.keys():
+                self.assertTrue(ds in ndss.keys())
+                self.assertEqual(ndss[ds], cps[ds])
+            se.reset()
+            self.assertEqual(se["DataRecord"], "{}")
+
+            mydata = {}
+            if (i / 2) % 2:
+                if (i / 2) % 4:
+                    se.set(mydict)
+                elif (i / 2) % 4 - 2:
+                    se.importEnv(data=mydata)
+                    se.set(mydata)
+            else:
+                se.importEnv()
+            self.compareToDump(se, ["DataRecord"])
+
+            ndss = json.loads(se["DataRecord"])
+            for ds in cps.keys():
+                self.assertTrue(ds in ndss.keys())
+                self.assertEqual(ndss[ds], cps[ds])
 
     ## labels test
-    def test_Labels(self):
+    def ttest_Labels(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2071,20 +2397,41 @@ class SelectorTest(unittest.TestCase):
             se["Labels"] = json.dumps(cps)
 
             self.dump(se)
-
-            if i % 2:
-                self.compareToDump(se, ["Labels"])
-
-                ndss = json.loads(se["Labels"])
-                for ds in cps.keys():
-                    self.assertTrue(ds in ndss.keys())
-                    self.assertEqual(ndss[ds], cps[ds])
+            mydict = {}
+            if (i / 2) % 2:
+                mydict = se.get()
+                if (i / 2) % 4 - 2:
+                    se.exportEnv(mydict)
             else:
-                se.reset()
-                self.assertEqual(se["Labels"], "{}")
+                se.exportEnv()
+
+            self.compareToDump(se, ["Labels"])
+
+            ndss = json.loads(se["Labels"])
+            for ds in cps.keys():
+                self.assertTrue(ds in ndss.keys())
+                self.assertEqual(ndss[ds], cps[ds])
+            se.reset()
+            self.assertEqual(se["Labels"], "{}")
+
+            mydata = {}
+            if (i / 2) % 2:
+                if (i / 2) % 4:
+                    se.set(mydict)
+                elif (i / 2) % 4 - 2:
+                    se.importEnv(data=mydata)
+                    se.set(mydata)
+            else:
+                se.importEnv()
+            self.compareToDump(se, ["Labels"])
+
+            ndss = json.loads(se["Labels"])
+            for ds in cps.keys():
+                self.assertTrue(ds in ndss.keys())
+                self.assertEqual(ndss[ds], cps[ds])
 
     ## labelpaths test
-    def test_LabelPaths(self):
+    def ttest_LabelPaths(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2115,19 +2462,41 @@ class SelectorTest(unittest.TestCase):
 
             self.dump(se)
 
-            if i % 2:
-                self.compareToDump(se, ["LabelPaths"])
-
-                ndss = json.loads(se["LabelPaths"])
-                for ds in cps.keys():
-                    self.assertTrue(ds in ndss.keys())
-                    self.assertEqual(ndss[ds], cps[ds])
+            mydict = {}
+            if (i / 2) % 2:
+                mydict = se.get()
+                if (i / 2) % 4 - 2:
+                    se.exportEnv(mydict)
             else:
-                se.reset()
-                self.assertEqual(se["LabelPaths"], "{}")
+                se.exportEnv()
+
+            self.compareToDump(se, ["LabelPaths"])
+
+            ndss = json.loads(se["LabelPaths"])
+            for ds in cps.keys():
+                self.assertTrue(ds in ndss.keys())
+                self.assertEqual(ndss[ds], cps[ds])
+            se.reset()
+            self.assertEqual(se["LabelPaths"], "{}")
+
+            mydata = {}
+            if (i / 2) % 2:
+                if (i / 2) % 4:
+                    se.set(mydict)
+                elif (i / 2) % 4 - 2:
+                    se.importEnv(data=mydata)
+                    se.set(mydata)
+            else:
+                se.importEnv()
+            self.compareToDump(se, ["LabelPaths"])
+
+            ndss = json.loads(se["LabelPaths"])
+            for ds in cps.keys():
+                self.assertTrue(ds in ndss.keys())
+                self.assertEqual(ndss[ds], cps[ds])
 
     ## labellinks test
-    def test_LabelLinks(self):
+    def ttest_LabelLinks(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2156,20 +2525,42 @@ class SelectorTest(unittest.TestCase):
             se["LabelLinks"] = json.dumps(cps)
 
             self.dump(se)
-
-            if i % 2:
-                self.compareToDump(se, ["LabelLinks"])
-
-                ndss = json.loads(se["LabelLinks"])
-                for ds in cps.keys():
-                    self.assertTrue(ds in ndss.keys())
-                    self.assertEqual(ndss[ds], cps[ds])
+            mydict = {}
+            if (i / 2) % 2:
+                mydict = se.get()
+                if (i / 2) % 4 - 2:
+                    se.exportEnv(mydict)
             else:
-                se.reset()
-                self.assertEqual(se["LabelLinks"], "{}")
+                se.exportEnv()
+
+            self.compareToDump(se, ["LabelLinks"])
+
+            ndss = json.loads(se["LabelLinks"])
+            for ds in cps.keys():
+                self.assertTrue(ds in ndss.keys())
+                self.assertEqual(ndss[ds], cps[ds])
+            se.reset()
+            self.assertEqual(se["LabelLinks"], "{}")
+
+            mydata = {}
+            if (i / 2) % 2:
+                if (i / 2) % 4:
+                    se.set(mydict)
+                elif (i / 2) % 4 - 2:
+                    se.importEnv(data=mydata)
+                    se.set(mydata)
+            else:
+                se.importEnv()
+
+            self.compareToDump(se, ["LabelLinks"])
+
+            ndss = json.loads(se["LabelLinks"])
+            for ds in cps.keys():
+                self.assertTrue(ds in ndss.keys())
+                self.assertEqual(ndss[ds], cps[ds])
 
     ## labeltypes test
-    def test_LabelTypes(self):
+    def ttest_LabelTypes(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2199,20 +2590,41 @@ class SelectorTest(unittest.TestCase):
             se["LabelTypes"] = json.dumps(cps)
 
             self.dump(se)
-
-            if i % 2:
-                self.compareToDump(se, ["LabelTypes"])
-
-                ndss = json.loads(se["LabelTypes"])
-                for ds in cps.keys():
-                    self.assertTrue(ds in ndss.keys())
-                    self.assertEqual(ndss[ds], cps[ds])
+            mydict = {}
+            if (i / 2) % 2:
+                mydict = se.get()
+                if (i / 2) % 4 - 2:
+                    se.exportEnv(mydict)
             else:
-                se.reset()
-                self.assertEqual(se["LabelTypes"], "{}")
+                se.exportEnv()
+
+            self.compareToDump(se, ["LabelTypes"])
+
+            ndss = json.loads(se["LabelTypes"])
+            for ds in cps.keys():
+                self.assertTrue(ds in ndss.keys())
+                self.assertEqual(ndss[ds], cps[ds])
+            se.reset()
+
+            self.assertEqual(se["LabelTypes"], "{}")
+            mydata = {}
+            if (i / 2) % 2:
+                if (i / 2) % 4:
+                    se.set(mydict)
+                elif (i / 2) % 4 - 2:
+                    se.importEnv(data=mydata)
+                    se.set(mydata)
+            else:
+                se.importEnv()
+            self.compareToDump(se, ["LabelTypes"])
+
+            ndss = json.loads(se["LabelTypes"])
+            for ds in cps.keys():
+                self.assertTrue(ds in ndss.keys())
+                self.assertEqual(ndss[ds], cps[ds])
 
     ## labelshapes test
-    def test_LabelShapes(self):
+    def ttest_LabelShapes(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2244,19 +2656,41 @@ class SelectorTest(unittest.TestCase):
 
             self.dump(se)
 
-            if i % 2:
-                self.compareToDump(se, ["LabelShapes"])
-
-                ndss = json.loads(se["LabelShapes"])
-                for ds in cps.keys():
-                    self.assertTrue(ds in ndss.keys())
-                    self.assertEqual(ndss[ds], cps[ds])
+            mydict = {}
+            if (i / 2) % 2:
+                mydict = se.get()
+                if (i / 2) % 4 - 2:
+                    se.exportEnv(mydict)
             else:
-                se.reset()
-                self.assertEqual(se["LabelShapes"], "{}")
+                se.exportEnv()
+
+            self.compareToDump(se, ["LabelShapes"])
+
+            ndss = json.loads(se["LabelShapes"])
+            for ds in cps.keys():
+                self.assertTrue(ds in ndss.keys())
+                self.assertEqual(ndss[ds], cps[ds])
+
+            se.reset()
+            self.assertEqual(se["LabelShapes"], "{}")
+
+            mydata = {}
+            if (i / 2) % 2:
+                if (i / 2) % 4:
+                    se.set(mydict)
+                elif (i / 2) % 4 - 2:
+                    se.importEnv(data=mydata)
+                    se.set(mydata)
+            else:
+                se.importEnv()
+
+            ndss = json.loads(se["LabelShapes"])
+            for ds in cps.keys():
+                self.assertTrue(ds in ndss.keys())
+                self.assertEqual(ndss[ds], cps[ds])
 
     ## configvariables test
-    def test_ConfigVariables(self):
+    def ttest_ConfigVariables(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2286,20 +2720,39 @@ class SelectorTest(unittest.TestCase):
             se["ConfigVariables"] = json.dumps(cps)
 
             self.dump(se)
-
-            if i % 2:
-                self.compareToDump(se, ["ConfigVariables"])
-
-                ndss = json.loads(se["ConfigVariables"])
-                for ds in cps.keys():
-                    self.assertTrue(ds in ndss.keys())
-                    self.assertEqual(ndss[ds], cps[ds])
+            mydict = {}
+            if (i / 2) % 2:
+                mydict = se.get()
+                if (i / 2) % 4 - 2:
+                    se.exportEnv(mydict)
             else:
-                se.reset()
-                self.assertEqual(se["ConfigVariables"], "{}")
+                se.exportEnv()
+
+            self.compareToDump(se, ["ConfigVariables"])
+
+            ndss = json.loads(se["ConfigVariables"])
+            for ds in cps.keys():
+                self.assertTrue(ds in ndss.keys())
+                self.assertEqual(ndss[ds], cps[ds])
+            se.reset()
+            self.assertEqual(se["ConfigVariables"], "{}")
+
+            mydata = {}
+            if (i / 2) % 2:
+                if (i / 2) % 4:
+                    se.set(mydict)
+                elif (i / 2) % 4 - 2:
+                    se.importEnv(data=mydata)
+                    se.set(mydata)
+            else:
+                se.importEnv()
+            ndss = json.loads(se["ConfigVariables"])
+            for ds in cps.keys():
+                self.assertTrue(ds in ndss.keys())
+                self.assertEqual(ndss[ds], cps[ds])
 
     ## timers test
-    def test_Timer(self):
+    def ttest_Timer(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2326,18 +2779,35 @@ class SelectorTest(unittest.TestCase):
             se["Timer"] = json.dumps(cps)
 
             self.dump(se)
-
-            if i % 2:
-                self.compareToDump(se, ["Timer"])
-
-                ndss = json.loads(se["Timer"])
-                self.assertEqual(ndss, cps)
+            mydict = {}
+            if (i / 2) % 2:
+                mydict = se.get()
+                if (i / 2) % 4 - 2:
+                    se.exportEnv(mydict)
             else:
-                se.reset()
-                self.assertEqual(se["Timer"], "[]")
+                se.exportEnv()
+
+            self.compareToDump(se, ["Timer"])
+
+            ndss = json.loads(se["Timer"])
+            self.assertEqual(ndss, cps)
+            se.reset()
+            self.assertEqual(se["Timer"], "[]")
+            mydata = {}
+            if (i / 2) % 2:
+                if (i / 2) % 4:
+                    se.set(mydict)
+                elif (i / 2) % 4 - 2:
+                    se.importEnv(data=mydata)
+                    se.set(mydata)
+            else:
+                se.importEnv()
+            self.compareToDump(se, ["Timer"])
+            ndss = json.loads(se["Timer"])
+            self.assertEqual(ndss, cps)
 
     ## InitDataSources test
-    def test_InitDataSources(self):
+    def ttest_InitDataSources(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2365,18 +2835,36 @@ class SelectorTest(unittest.TestCase):
             se["InitDataSources"] = json.dumps(cps)
 
             self.dump(se)
-
-            if i % 2:
-                self.compareToDump(se, ["InitDataSources"])
-
-                ndss = json.loads(se["InitDataSources"])
-                self.assertEqual(ndss, cps)
+            mydict = {}
+            if (i / 2) % 2:
+                mydict = se.get()
+                if (i / 2) % 4 - 2:
+                    se.exportEnv(mydict)
             else:
-                se.reset()
-                self.assertEqual(se["InitDataSources"], "[]")
+                se.exportEnv()
+
+            self.compareToDump(se, ["InitDataSources"])
+            ndss = json.loads(se["InitDataSources"])
+            self.assertEqual(ndss, cps)
+
+            se.reset()
+            self.assertEqual(se["InitDataSources"], "[]")
+            mydata = {}
+            if (i / 2) % 2:
+                if (i / 2) % 4:
+                    se.set(mydict)
+                elif (i / 2) % 4 - 2:
+                    se.importEnv(data=mydata)
+                    se.set(mydata)
+            else:
+                se.importEnv()
+
+            self.compareToDump(se, ["InitDataSources"])
+            ndss = json.loads(se["InitDataSources"])
+            self.assertEqual(ndss, cps)
 
     ## OptionalComponents test
-    def test_OptionalComponents(self):
+    def ttest_OptionalComponents(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2403,18 +2891,36 @@ class SelectorTest(unittest.TestCase):
             se["OptionalComponents"] = json.dumps(cps)
 
             self.dump(se)
-
-            if i % 2:
-                self.compareToDump(se, ["OptionalComponents"])
-
-                ndss = json.loads(se["OptionalComponents"])
-                self.assertEqual(ndss, cps)
+            mydict = {}
+            if (i / 2) % 2:
+                mydict = se.get()
+                if (i / 2) % 4 - 2:
+                    se.exportEnv(mydict)
             else:
-                se.reset()
-                self.assertEqual(se["OptionalComponents"], "[]")
+                se.exportEnv()
+
+            self.compareToDump(se, ["OptionalComponents"])
+            ndss = json.loads(se["OptionalComponents"])
+            self.assertEqual(ndss, cps)
+
+            se.reset()
+            self.assertEqual(se["OptionalComponents"], "[]")
+            mydata = {}
+            if (i / 2) % 2:
+                if (i / 2) % 4:
+                    se.set(mydict)
+                elif (i / 2) % 4 - 2:
+                    se.importEnv(data=mydata)
+                    se.set(mydata)
+            else:
+                se.importEnv()
+
+            self.compareToDump(se, ["OptionalComponents"])
+            ndss = json.loads(se["OptionalComponents"])
+            self.assertEqual(ndss, cps)
 
     ## HiddenElements test
-    def test_HiddenElements(self):
+    def ttest_HiddenElements(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2441,18 +2947,37 @@ class SelectorTest(unittest.TestCase):
             se["HiddenElements"] = json.dumps(cps)
 
             self.dump(se)
-
-            if i % 2:
-                self.compareToDump(se, ["HiddenElements"])
-
-                ndss = json.loads(se["HiddenElements"])
-                self.assertEqual(ndss, cps)
+            mydict = {}
+            if (i / 2) % 2:
+                mydict = se.get()
+                if (i / 2) % 4 - 2:
+                    se.exportEnv(mydict)
             else:
-                se.reset()
-                self.assertEqual(se["HiddenElements"], "[]")
+                se.exportEnv()
+
+            self.compareToDump(se, ["HiddenElements"])
+            ndss = json.loads(se["HiddenElements"])
+            self.assertEqual(ndss, cps)
+
+            se.reset()
+            self.assertEqual(se["HiddenElements"], "[]")
+
+            mydata = {}
+            if (i / 2) % 2:
+                if (i / 2) % 4:
+                    se.set(mydict)
+                elif (i / 2) % 4 - 2:
+                    se.importEnv(data=mydata)
+                    se.set(mydata)
+            else:
+                se.importEnv()
+
+            self.compareToDump(se, ["HiddenElements"])
+            ndss = json.loads(se["HiddenElements"])
+            self.assertEqual(ndss, cps)
 
     ## DynamicPath test
-    def test_DynamicPath(self):
+    def ttest_DynamicPath(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2479,17 +3004,35 @@ class SelectorTest(unittest.TestCase):
             se["DynamicPath"] = cps
 
             self.dump(se)
-
-            if i % 2:
-                self.compareToDump(se, ["DynamicPath"])
-                self.assertEqual(se["DynamicPath"], cps)
+            mydict = {}
+            if (i / 2) % 2:
+                mydict = se.get()
+                if (i / 2) % 4 - 2:
+                    se.exportEnv(mydict)
             else:
-                se.reset()
-                self.assertEqual(se["DynamicPath"],
-                                 self.__defaultpath)
+                se.exportEnv()
+
+            self.compareToDump(se, ["DynamicPath"])
+            self.assertEqual(se["DynamicPath"], cps)
+
+            se.reset()
+            self.assertEqual(se["DynamicPath"],
+                             self.__defaultpath)
+
+            mydata = {}
+            if (i / 2) % 2:
+                if (i / 2) % 4:
+                    se.set(mydict)
+                elif (i / 2) % 4 - 2:
+                    se.importEnv(data=mydata)
+                    se.set(mydata)
+            else:
+                se.importEnv()
+            self.compareToDump(se, ["DynamicPath"])
+            self.assertEqual(se["DynamicPath"], cps)
 
     ## AppendEntry test
-    def test_AppendEntry(self):
+    def ttest_AppendEntry(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2515,16 +3058,35 @@ class SelectorTest(unittest.TestCase):
             se["AppendEntry"] = cps
 
             self.dump(se)
-
-            if i % 2:
-                self.compareToDump(se, ["AppendEntry"])
-                self.assertEqual(se["AppendEntry"], cps)
+            mydict = {}
+            if (i / 2) % 2:
+                mydict = se.get()
+                if (i / 2) % 4 - 2:
+                    se.exportEnv(mydict)
             else:
-                se.reset()
-                self.assertEqual(se["AppendEntry"], False)
+                se.exportEnv()
+
+            self.compareToDump(se, ["AppendEntry"])
+            self.assertEqual(se["AppendEntry"], cps)
+
+            se.reset()
+            self.assertEqual(se["AppendEntry"], False)
+
+            mydata = {}
+            if (i / 2) % 2:
+                if (i / 2) % 4:
+                    se.set(mydict)
+                elif (i / 2) % 4 - 2:
+                    se.importEnv(data=mydata)
+                    se.set(mydata)
+            else:
+                se.importEnv()
+
+            self.compareToDump(se, ["AppendEntry"])
+            self.assertEqual(se["AppendEntry"], cps)
 
     ## ComponentsFromMntGrp test
-    def test_ComponentsFromMntGrp(self):
+    def ttest_ComponentsFromMntGrp(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2550,13 +3112,32 @@ class SelectorTest(unittest.TestCase):
             se["ComponentsFromMntGrp"] = cps
 
             self.dump(se)
-
-            if i % 2:
-                self.compareToDump(se, ["ComponentsFromMntGrp"])
-                self.assertEqual(se["ComponentsFromMntGrp"], cps)
+            mydict = {}
+            if (i / 2) % 2:
+                mydict = se.get()
+                if (i / 2) % 4 - 2:
+                    se.exportEnv(mydict)
             else:
-                se.reset()
-                self.assertEqual(se["ComponentsFromMntGrp"], False)
+                se.exportEnv()
+
+            self.compareToDump(se, ["ComponentsFromMntGrp"])
+            self.assertEqual(se["ComponentsFromMntGrp"], cps)
+
+            se.reset()
+            self.assertEqual(se["ComponentsFromMntGrp"], False)
+
+            mydata = {}
+            if (i / 2) % 2:
+                if (i / 2) % 4:
+                    se.set(mydict)
+                elif (i / 2) % 4 - 2:
+                    se.importEnv(data=mydata)
+                    se.set(mydata)
+            else:
+                se.importEnv()
+
+            self.compareToDump(se, ["ComponentsFromMntGrp"])
+            self.assertEqual(se["ComponentsFromMntGrp"], cps)
 
     ## DynamicComponents test
     def test_DynamicComponents(self):
@@ -2585,13 +3166,31 @@ class SelectorTest(unittest.TestCase):
             se["DynamicComponents"] = cps
 
             self.dump(se)
-
-            if i % 2:
-                self.compareToDump(se, ["DynamicComponents"])
-                self.assertEqual(se["DynamicComponents"], cps)
+            mydict = {}
+            if (i / 2) % 2:
+                mydict = se.get()
+                if (i / 2) % 4 - 2:
+                    se.exportEnv(mydict)
             else:
-                se.reset()
-                self.assertEqual(se["DynamicComponents"], True)
+                se.exportEnv()
+
+            self.compareToDump(se, ["DynamicComponents"])
+            self.assertEqual(se["DynamicComponents"], cps)
+
+            se.reset()
+            self.assertEqual(se["DynamicComponents"], True)
+            mydata = {}
+            if (i / 2) % 2:
+                if (i / 2) % 4:
+                    se.set(mydict)
+                elif (i / 2) % 4 - 2:
+                    se.importEnv(data=mydata)
+                    se.set(mydata)
+            else:
+                se.importEnv()
+
+            self.compareToDump(se, ["DynamicComponents"])
+            self.assertEqual(se["DynamicComponents"], cps)
 
     ## DynamicLinks test
     def test_DynamicLinks(self):
@@ -2620,13 +3219,31 @@ class SelectorTest(unittest.TestCase):
             se["DynamicLinks"] = cps
 
             self.dump(se)
-
-            if i % 2:
-                self.compareToDump(se, ["DynamicLinks"])
-                self.assertEqual(se["DynamicLinks"], cps)
+            mydict = {}
+            if (i / 2) % 2:
+                mydict = se.get()
+                if (i / 2) % 4 - 2:
+                    se.exportEnv(mydict)
             else:
-                se.reset()
-                self.assertEqual(se["DynamicLinks"], True)
+                se.exportEnv()
+
+            self.compareToDump(se, ["DynamicLinks"])
+            self.assertEqual(se["DynamicLinks"], cps)
+
+            se.reset()
+            self.assertEqual(se["DynamicLinks"], True)
+            mydata = {}
+            if (i / 2) % 2:
+                if (i / 2) % 4:
+                    se.set(mydict)
+                elif (i / 2) % 4 - 2:
+                    se.importEnv(data=mydata)
+                    se.set(mydata)
+            else:
+                se.importEnv()
+
+            self.compareToDump(se, ["DynamicLinks"])
+            self.assertEqual(se["DynamicLinks"], cps)
 
 
 if __name__ == '__main__':
