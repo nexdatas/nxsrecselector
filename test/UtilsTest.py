@@ -21,6 +21,7 @@
 #
 import unittest
 import os
+import time
 import sys
 import subprocess
 import random
@@ -543,7 +544,7 @@ class UtilsTest(unittest.TestCase):
                 for dr in sdoors:
                     ms = MSUtils.getMacroServer(db, dr)
                     self.assertEqual(ms, sr)
-                alldoors.extends(sdoors)
+                alldoors.update(sdoors)
 
     ## getDeviceName test
     def test_getFullDeviceNames_empty(self):

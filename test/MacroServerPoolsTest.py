@@ -29,16 +29,17 @@ import threading
 import binascii
 import Queue
 import PyTango
+import time
 import json
 import pickle
 
 import logging
 logger = logging.getLogger()
 
-import TestMacroServerSetUp
-import TestPoolSetUp
-import TestServerSetUp
-import TestConfigServerSetUp
+from . import TestMacroServerSetUp
+from . import TestPoolSetUp
+from . import TestServerSetUp
+from . import TestConfigServerSetUp
 
 
 from nxsrecconfig.MacroServerPools import MacroServerPools
@@ -2817,7 +2818,7 @@ class MacroServerPoolTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
-    def test_setScanEnv(self):
+    def test_setScanEnv2(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
 

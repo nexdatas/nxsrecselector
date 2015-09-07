@@ -115,7 +115,7 @@ class Selector(object):
                 self.__db, "NXSConfigServer")
 
     ## reset method for configDevice attribute
-    def __postSetConfigDevice(self, changed=True):
+    def __postSetConfigDevice(self, _=True):
         if not self.__selection["ConfigDevice"]:
             self.__selection["ConfigDevice"] = TangoUtils.getDeviceName(
                 self.__db, "NXSConfigServer")
@@ -129,7 +129,7 @@ class Selector(object):
                 self.__db, "NXSDataWriter")
 
     ## set method for writerDevice attribute
-    def __postSetWriterDevice(self, changed=True):
+    def __postSetWriterDevice(self, _=True):
         if not self.__selection["WriterDevice"]:
             self.__selection["WriterDevice"] = TangoUtils.getDeviceName(
                 self.__db, "NXSDataWriter")
@@ -164,7 +164,7 @@ class Selector(object):
         self.__selection.resetMntGrp()
 
     ## set method for mntGrp attribute
-    def __postSetMntGrp(self, changed=True):
+    def __postSetMntGrp(self, _=True):
         self.__selection.resetMntGrp()
 
     ## update method for componentGroup attribute
@@ -183,7 +183,7 @@ class Selector(object):
 
     ## set method for timeZone attribute
     # \param name of timeZone
-    def __postSetTimeZone(self, changed=True):
+    def __postSetTimeZone(self, _=True):
         self.__selection.resetTimeZone()
 
     ## resets automatic components to set of given components

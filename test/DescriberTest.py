@@ -20,6 +20,7 @@
 # unittests for field Tags running Tango Server
 #
 import unittest
+import time
 import os
 import sys
 import subprocess

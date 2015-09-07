@@ -16,12 +16,13 @@
 #    You should have received a copy of the GNU General Public License
 #    along with nexdatas.  If not, see <http://www.gnu.org/licenses/>.
 ## \package test nexdatas
-## \file CheckerItemTest.py
+## \file CheckerThreadTest.py
 # unittests for TangoDsItemTest running Tango Server
 #
 import unittest
 import os
 import sys
+import time
 import subprocess
 import random
 import struct
@@ -30,7 +31,7 @@ import binascii
 import Queue
 import PyTango
 
-import TestServerSetUp
+from . import TestServerSetUp
 
 from nxsrecconfig.CheckerThread import CheckerThread, CheckerItem, TangoDSItem, ATTRIBUTESTOCHECK
 

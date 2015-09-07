@@ -32,15 +32,16 @@ import PyTango
 import json
 import pickle
 import string
+import time
 
 import logging
 logger = logging.getLogger()
 
-import TestMacroServerSetUp
-import TestPoolSetUp
-import TestServerSetUp
-import TestConfigServerSetUp
-import TestWriterSetUp
+from . import TestMacroServerSetUp
+from . import TestPoolSetUp
+from . import TestServerSetUp
+from . import TestConfigServerSetUp
+from . import TestWriterSetUp
 
 
 from nxsrecconfig.MacroServerPools import MacroServerPools
@@ -1270,6 +1271,17 @@ class SelectorTest(unittest.TestCase):
                     se.exportEnv(mydict)
             else:
                 se.exportEnv()
+                env = pickle.loads(
+                    self._ms.dps[self._ms.ms.keys()[0]].Environment[1])
+                for k in se.keys():
+                    try:
+                        self.assertEqual(
+                            json.loads(se[k]),
+                            env["new"]["NeXusConfiguration"][k])
+                    except:
+                        self.assertEqual(
+                            se[k],
+                            env["new"]["NeXusConfiguration"][k])
 
     #        print "se", se["ConfigDevice"]
             se["ConfigDevice"] = "dfd"
@@ -1321,6 +1333,17 @@ class SelectorTest(unittest.TestCase):
                     se.exportEnv(mydict)
             else:
                 se.exportEnv()
+                env = pickle.loads(
+                    self._ms.dps[self._ms.ms.keys()[0]].Environment[1])
+                for k in se.keys():
+                    try:
+                        self.assertEqual(
+                            json.loads(se[k]),
+                            env["new"]["NeXusConfiguration"][k])
+                    except:
+                        self.assertEqual(
+                            se[k],
+                            env["new"]["NeXusConfiguration"][k])
 
     #        print "se", se["WriterDevice"]
             se["WriterDevice"] = "dfd"
@@ -1444,6 +1467,17 @@ class SelectorTest(unittest.TestCase):
                     se.exportEnv(mydict)
             else:
                 se.exportEnv()
+                env = pickle.loads(
+                    self._ms.dps[self._ms.ms.keys()[0]].Environment[1])
+                for k in se.keys():
+                    try:
+                        self.assertEqual(
+                            json.loads(se[k]),
+                            env["new"]["NeXusConfiguration"][k])
+                    except:
+                        self.assertEqual(
+                            se[k],
+                            env["new"]["NeXusConfiguration"][k])
 
             se.reset()
             self.assertEqual(se["MntGrp"], self.__defaultmntgrp)
@@ -1484,6 +1518,17 @@ class SelectorTest(unittest.TestCase):
                     se.exportEnv(mydict)
             else:
                 se.exportEnv()
+                env = pickle.loads(
+                    self._ms.dps[self._ms.ms.keys()[0]].Environment[1])
+                for k in se.keys():
+                    try:
+                        self.assertEqual(
+                            json.loads(se[k]),
+                            env["new"]["NeXusConfiguration"][k])
+                    except:
+                        self.assertEqual(
+                            se[k],
+                            env["new"]["NeXusConfiguration"][k])
 
             se.reset()
             self.assertEqual(se["TimeZone"], self.__defaultzone)
@@ -1813,7 +1858,22 @@ class SelectorTest(unittest.TestCase):
                     se.exportEnv(mydict)
             else:
                 se.exportEnv()
-
+                env = pickle.loads(
+                    self._ms.dps[self._ms.ms.keys()[0]].Environment[1])
+                for k in se.keys():
+                    if k not in ["AutomaticDataSources"]:
+                        try:
+                            self.assertEqual(
+                                json.loads(se[k]),
+                                env["new"]["NeXusConfiguration"][k])
+                        except:
+                            self.assertEqual(
+                                se[k],
+                                env["new"]["NeXusConfiguration"][k])
+                    else:
+                        self.assertEqual(
+                            sorted(json.loads(se["AutomaticDataSources"])),
+                            sorted(env["new"]["NeXusConfiguration"][k]))
             se.reset()
             ads = json.loads(se["AutomaticDataSources"])
             self.assertEqual(set(mnames), set(ads))
@@ -1910,6 +1970,17 @@ class SelectorTest(unittest.TestCase):
                     se.exportEnv(mydict)
             else:
                 se.exportEnv()
+                env = pickle.loads(
+                    self._ms.dps[self._ms.ms.keys()[0]].Environment[1])
+                for k in se.keys():
+                    try:
+                        self.assertEqual(
+                            json.loads(se[k]),
+                            env["new"]["NeXusConfiguration"][k])
+                    except:
+                        self.assertEqual(
+                            se[k],
+                            env["new"]["NeXusConfiguration"][k])
 
             se.reset()
             ndss = json.loads(se["OrderedChannels"])
@@ -2019,6 +2090,17 @@ class SelectorTest(unittest.TestCase):
                     se.exportEnv(mydict)
             else:
                 se.exportEnv()
+                env = pickle.loads(
+                    self._ms.dps[self._ms.ms.keys()[0]].Environment[1])
+                for k in se.keys():
+                    try:
+                        self.assertEqual(
+                            json.loads(se[k]),
+                            env["new"]["NeXusConfiguration"][k])
+                    except:
+                        self.assertEqual(
+                            se[k],
+                            env["new"]["NeXusConfiguration"][k])
 
             if i % 2:
                 se.deselect()
@@ -2164,6 +2246,17 @@ class SelectorTest(unittest.TestCase):
                     se.exportEnv(mydict)
             else:
                 se.exportEnv()
+                env = pickle.loads(
+                    self._ms.dps[self._ms.ms.keys()[0]].Environment[1])
+                for k in se.keys():
+                    try:
+                        self.assertEqual(
+                            json.loads(se[k]),
+                            env["new"]["NeXusConfiguration"][k])
+                    except:
+                        self.assertEqual(
+                            se[k],
+                            env["new"]["NeXusConfiguration"][k])
 
             if i % 2:
                 se.deselect()
@@ -2281,6 +2374,17 @@ class SelectorTest(unittest.TestCase):
                     se.exportEnv(mydict)
             else:
                 se.exportEnv()
+                env = pickle.loads(
+                    self._ms.dps[self._ms.ms.keys()[0]].Environment[1])
+                for k in se.keys():
+                    try:
+                        self.assertEqual(
+                            json.loads(se[k]),
+                            env["new"]["NeXusConfiguration"][k])
+                    except:
+                        self.assertEqual(
+                            se[k],
+                            env["new"]["NeXusConfiguration"][k])
 
             se.reset()
             self.assertEqual(se["AutomaticComponentGroup"], "{}")
@@ -2340,6 +2444,17 @@ class SelectorTest(unittest.TestCase):
                     se.exportEnv(mydict)
             else:
                 se.exportEnv()
+                env = pickle.loads(
+                    self._ms.dps[self._ms.ms.keys()[0]].Environment[1])
+                for k in se.keys():
+                    try:
+                        self.assertEqual(
+                            json.loads(se[k]),
+                            env["new"]["NeXusConfiguration"][k])
+                    except:
+                        self.assertEqual(
+                            se[k],
+                            env["new"]["NeXusConfiguration"][k])
 
             self.compareToDump(se, ["DataRecord"])
 
@@ -2404,6 +2519,17 @@ class SelectorTest(unittest.TestCase):
                     se.exportEnv(mydict)
             else:
                 se.exportEnv()
+                env = pickle.loads(
+                    self._ms.dps[self._ms.ms.keys()[0]].Environment[1])
+                for k in se.keys():
+                    try:
+                        self.assertEqual(
+                            json.loads(se[k]),
+                            env["new"]["NeXusConfiguration"][k])
+                    except:
+                        self.assertEqual(
+                            se[k],
+                            env["new"]["NeXusConfiguration"][k])
 
             self.compareToDump(se, ["Labels"])
 
@@ -2469,6 +2595,17 @@ class SelectorTest(unittest.TestCase):
                     se.exportEnv(mydict)
             else:
                 se.exportEnv()
+                env = pickle.loads(
+                    self._ms.dps[self._ms.ms.keys()[0]].Environment[1])
+                for k in se.keys():
+                    try:
+                        self.assertEqual(
+                            json.loads(se[k]),
+                            env["new"]["NeXusConfiguration"][k])
+                    except:
+                        self.assertEqual(
+                            se[k],
+                            env["new"]["NeXusConfiguration"][k])
 
             self.compareToDump(se, ["LabelPaths"])
 
@@ -2532,6 +2669,17 @@ class SelectorTest(unittest.TestCase):
                     se.exportEnv(mydict)
             else:
                 se.exportEnv()
+                env = pickle.loads(
+                    self._ms.dps[self._ms.ms.keys()[0]].Environment[1])
+                for k in se.keys():
+                    try:
+                        self.assertEqual(
+                            json.loads(se[k]),
+                            env["new"]["NeXusConfiguration"][k])
+                    except:
+                        self.assertEqual(
+                            se[k],
+                            env["new"]["NeXusConfiguration"][k])
 
             self.compareToDump(se, ["LabelLinks"])
 
@@ -2597,6 +2745,17 @@ class SelectorTest(unittest.TestCase):
                     se.exportEnv(mydict)
             else:
                 se.exportEnv()
+                env = pickle.loads(
+                    self._ms.dps[self._ms.ms.keys()[0]].Environment[1])
+                for k in se.keys():
+                    try:
+                        self.assertEqual(
+                            json.loads(se[k]),
+                            env["new"]["NeXusConfiguration"][k])
+                    except:
+                        self.assertEqual(
+                            se[k],
+                            env["new"]["NeXusConfiguration"][k])
 
             self.compareToDump(se, ["LabelTypes"])
 
@@ -2663,6 +2822,17 @@ class SelectorTest(unittest.TestCase):
                     se.exportEnv(mydict)
             else:
                 se.exportEnv()
+                env = pickle.loads(
+                    self._ms.dps[self._ms.ms.keys()[0]].Environment[1])
+                for k in se.keys():
+                    try:
+                        self.assertEqual(
+                            json.loads(se[k]),
+                            env["new"]["NeXusConfiguration"][k])
+                    except:
+                        self.assertEqual(
+                            se[k],
+                            env["new"]["NeXusConfiguration"][k])
 
             self.compareToDump(se, ["LabelShapes"])
 
@@ -2727,6 +2897,17 @@ class SelectorTest(unittest.TestCase):
                     se.exportEnv(mydict)
             else:
                 se.exportEnv()
+                env = pickle.loads(
+                    self._ms.dps[self._ms.ms.keys()[0]].Environment[1])
+                for k in se.keys():
+                    try:
+                        self.assertEqual(
+                            json.loads(se[k]),
+                            env["new"]["NeXusConfiguration"][k])
+                    except:
+                        self.assertEqual(
+                            se[k],
+                            env["new"]["NeXusConfiguration"][k])
 
             self.compareToDump(se, ["ConfigVariables"])
 
@@ -2786,6 +2967,17 @@ class SelectorTest(unittest.TestCase):
                     se.exportEnv(mydict)
             else:
                 se.exportEnv()
+                env = pickle.loads(
+                    self._ms.dps[self._ms.ms.keys()[0]].Environment[1])
+                for k in se.keys():
+                    try:
+                        self.assertEqual(
+                            json.loads(se[k]),
+                            env["new"]["NeXusConfiguration"][k])
+                    except:
+                        self.assertEqual(
+                            se[k],
+                            env["new"]["NeXusConfiguration"][k])
 
             self.compareToDump(se, ["Timer"])
 
@@ -2842,6 +3034,17 @@ class SelectorTest(unittest.TestCase):
                     se.exportEnv(mydict)
             else:
                 se.exportEnv()
+                env = pickle.loads(
+                    self._ms.dps[self._ms.ms.keys()[0]].Environment[1])
+                for k in se.keys():
+                    try:
+                        self.assertEqual(
+                            json.loads(se[k]),
+                            env["new"]["NeXusConfiguration"][k])
+                    except:
+                        self.assertEqual(
+                            se[k],
+                            env["new"]["NeXusConfiguration"][k])
 
             self.compareToDump(se, ["InitDataSources"])
             ndss = json.loads(se["InitDataSources"])
@@ -2898,6 +3101,17 @@ class SelectorTest(unittest.TestCase):
                     se.exportEnv(mydict)
             else:
                 se.exportEnv()
+                env = pickle.loads(
+                    self._ms.dps[self._ms.ms.keys()[0]].Environment[1])
+                for k in se.keys():
+                    try:
+                        self.assertEqual(
+                            json.loads(se[k]),
+                            env["new"]["NeXusConfiguration"][k])
+                    except:
+                        self.assertEqual(
+                            se[k],
+                            env["new"]["NeXusConfiguration"][k])
 
             self.compareToDump(se, ["OptionalComponents"])
             ndss = json.loads(se["OptionalComponents"])
@@ -2954,6 +3168,17 @@ class SelectorTest(unittest.TestCase):
                     se.exportEnv(mydict)
             else:
                 se.exportEnv()
+                env = pickle.loads(
+                    self._ms.dps[self._ms.ms.keys()[0]].Environment[1])
+                for k in se.keys():
+                    try:
+                        self.assertEqual(
+                            json.loads(se[k]),
+                            env["new"]["NeXusConfiguration"][k])
+                    except:
+                        self.assertEqual(
+                            se[k],
+                            env["new"]["NeXusConfiguration"][k])
 
             self.compareToDump(se, ["HiddenElements"])
             ndss = json.loads(se["HiddenElements"])
@@ -3011,6 +3236,17 @@ class SelectorTest(unittest.TestCase):
                     se.exportEnv(mydict)
             else:
                 se.exportEnv()
+                env = pickle.loads(
+                    self._ms.dps[self._ms.ms.keys()[0]].Environment[1])
+                for k in se.keys():
+                    try:
+                        self.assertEqual(
+                            json.loads(se[k]),
+                            env["new"]["NeXusConfiguration"][k])
+                    except:
+                        self.assertEqual(
+                            se[k],
+                            env["new"]["NeXusConfiguration"][k])
 
             self.compareToDump(se, ["DynamicPath"])
             self.assertEqual(se["DynamicPath"], cps)
@@ -3065,6 +3301,17 @@ class SelectorTest(unittest.TestCase):
                     se.exportEnv(mydict)
             else:
                 se.exportEnv()
+                env = pickle.loads(
+                    self._ms.dps[self._ms.ms.keys()[0]].Environment[1])
+                for k in se.keys():
+                    try:
+                        self.assertEqual(
+                            json.loads(se[k]),
+                            env["new"]["NeXusConfiguration"][k])
+                    except:
+                        self.assertEqual(
+                            se[k],
+                            env["new"]["NeXusConfiguration"][k])
 
             self.compareToDump(se, ["AppendEntry"])
             self.assertEqual(se["AppendEntry"], cps)
@@ -3119,6 +3366,17 @@ class SelectorTest(unittest.TestCase):
                     se.exportEnv(mydict)
             else:
                 se.exportEnv()
+                env = pickle.loads(
+                    self._ms.dps[self._ms.ms.keys()[0]].Environment[1])
+                for k in se.keys():
+                    try:
+                        self.assertEqual(
+                            json.loads(se[k]),
+                            env["new"]["NeXusConfiguration"][k])
+                    except:
+                        self.assertEqual(
+                            se[k],
+                            env["new"]["NeXusConfiguration"][k])
 
             self.compareToDump(se, ["ComponentsFromMntGrp"])
             self.assertEqual(se["ComponentsFromMntGrp"], cps)
@@ -3173,6 +3431,17 @@ class SelectorTest(unittest.TestCase):
                     se.exportEnv(mydict)
             else:
                 se.exportEnv()
+                env = pickle.loads(
+                    self._ms.dps[self._ms.ms.keys()[0]].Environment[1])
+                for k in se.keys():
+                    try:
+                        self.assertEqual(
+                            json.loads(se[k]),
+                            env["new"]["NeXusConfiguration"][k])
+                    except:
+                        self.assertEqual(
+                            se[k],
+                            env["new"]["NeXusConfiguration"][k])
 
             self.compareToDump(se, ["DynamicComponents"])
             self.assertEqual(se["DynamicComponents"], cps)
@@ -3226,6 +3495,17 @@ class SelectorTest(unittest.TestCase):
                     se.exportEnv(mydict)
             else:
                 se.exportEnv()
+                env = pickle.loads(
+                    self._ms.dps[self._ms.ms.keys()[0]].Environment[1])
+                for k in se.keys():
+                    try:
+                        self.assertEqual(
+                            json.loads(se[k]),
+                            env["new"]["NeXusConfiguration"][k])
+                    except:
+                        self.assertEqual(
+                            se[k],
+                            env["new"]["NeXusConfiguration"][k])
 
             self.compareToDump(se, ["DynamicLinks"])
             self.assertEqual(se["DynamicLinks"], cps)

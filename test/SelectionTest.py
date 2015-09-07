@@ -28,6 +28,7 @@ import struct
 import binascii
 import string
 import json
+import time
 
 from nxsrecconfig.Selection import Selection
 

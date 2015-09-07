@@ -20,10 +20,10 @@
 # unittests for TangoDsItemTest running Tango Server
 #
 import unittest
-import os
+#import os
 import sys
-import subprocess
-import random
+#import subprocess
+#import random
 import struct
 
 from nxsrecconfig.CheckerThread import CheckerItem
