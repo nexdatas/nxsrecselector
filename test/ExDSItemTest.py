@@ -29,11 +29,8 @@ import struct
 from nxsrecconfig.Describer import DSItem, ExDSItem
 
 
-
 ## if 64-bit machione
 IS64BIT = (struct.calcsize("P") == 8)
-
-
 
 
 ## test fixture
@@ -44,11 +41,9 @@ class ExDSItemTest(unittest.TestCase):
     def __init__(self, methodName):
         unittest.TestCase.__init__(self, methodName)
 
-
         self._tfname = "field"
         self._tfname = "group"
-        self._fattrs = {"short_name":"test","units":"m" }
-
+        self._fattrs = {"short_name": "test", "units": "m"}
 
         self._bint = "int64" if IS64BIT else "int32"
         self._buint = "uint64" if IS64BIT else "uint32"
@@ -57,13 +52,12 @@ class ExDSItemTest(unittest.TestCase):
     ## test starter
     # \brief Common set up
     def setUp(self):
-        print "\nsetting up..."        
+        print "\nsetting up..."
 
     ## test closer
     # \brief Common tear down
     def tearDown(self):
         print "tearing down ..."
-
 
     ## constructor test
     # \brief It tests default settings
@@ -78,29 +72,27 @@ class ExDSItemTest(unittest.TestCase):
         self.assertEqual(el.nxtype, None)
         self.assertEqual(el.shape, None)
 
-
-        el = ExDSItem(None, "mymode", "mynxtype", [23,4,5])
+        el = ExDSItem(None, "mymode", "mynxtype", [23, 4, 5])
         self.assertEqual(el.name, None)
         self.assertEqual(el.dstype, None)
         self.assertEqual(el.record, None)
         self.assertEqual(el.mode, "mymode")
         self.assertEqual(el.nxtype, "mynxtype")
-        self.assertEqual(el.shape, [23,4,5])
-
+        self.assertEqual(el.shape, [23, 4, 5])
 
         el = DSItem("myname3", "mytype3", "myrecord3")
         self.assertEqual(el.name, "myname3")
         self.assertEqual(el.dstype, "mytype3")
         self.assertEqual(el.record, "myrecord3")
 
-
-        el2 = ExDSItem(el, "mymode2", "mynxtype2", [4,5])
+        el2 = ExDSItem(el, "mymode2", "mynxtype2", [4, 5])
         self.assertEqual(el2.name, "myname3")
         self.assertEqual(el2.dstype, "mytype3")
         self.assertEqual(el2.record, "myrecord3")
         self.assertEqual(el2.mode, "mymode2")
         self.assertEqual(el2.nxtype, "mynxtype2")
-        self.assertEqual(el2.shape, [4,5])
+        self.assertEqual(el2.shape, [4, 5])
+
 
 if __name__ == '__main__':
     unittest.main()

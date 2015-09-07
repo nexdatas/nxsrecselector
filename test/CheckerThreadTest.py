@@ -33,14 +33,12 @@ import PyTango
 
 import TestServerSetUp
 
-from nxsrecconfig.CheckerThread import CheckerThread, CheckerItem, TangoDSItem, ATTRIBUTESTOCHECK
-
+from nxsrecconfig.CheckerThread import (
+    CheckerThread, CheckerItem, TangoDSItem, ATTRIBUTESTOCHECK)
 
 
 ## if 64-bit machione
 IS64BIT = (struct.calcsize("P") == 8)
-
-
 
 
 ## test fixture
@@ -51,36 +49,37 @@ class CheckerItemTest(unittest.TestCase):
     def __init__(self, methodName):
         unittest.TestCase.__init__(self, methodName)
 
-
         self._bint = "int64" if IS64BIT else "int32"
         self._buint = "uint64" if IS64BIT else "uint32"
         self._bfloat = "float64" if IS64BIT else "float32"
 
         self._simps = TestServerSetUp.TestServerSetUp()
-        self._simps2 = TestServerSetUp.TestServerSetUp( "ttestp09/testts/t2r228", "S2")
-        self._simps3 = TestServerSetUp.TestServerSetUp( "ttestp09/testts/t3r228", "S3") 
-        self._simps4 = TestServerSetUp.TestServerSetUp( "ttestp09/testts/t4r228", "S4")
-        self._simpsoff = TestServerSetUp.TestServerSetUp( "ttestp09/testts/t5r228", "OFF")
-
+        self._simps2 = TestServerSetUp.TestServerSetUp(
+            "ttestp09/testts/t2r228", "S2")
+        self._simps3 = TestServerSetUp.TestServerSetUp(
+            "ttestp09/testts/t3r228", "S3")
+        self._simps4 = TestServerSetUp.TestServerSetUp(
+            "ttestp09/testts/t4r228", "S4")
+        self._simpsoff = TestServerSetUp.TestServerSetUp(
+            "ttestp09/testts/t5r228", "OFF")
 
         try:
-            self.__seed  = long(binascii.hexlify(os.urandom(16)), 16)
+            self.__seed = long(binascii.hexlify(os.urandom(16)), 16)
         except NotImplementedError:
-            self.__seed  = long(time.time() * 256) 
-         
-        self.__rnd = random.Random(self.__seed)
+            self.__seed = long(time.time() * 256)
 
+        self.__rnd = random.Random(self.__seed)
 
     ## test starter
     # \brief Common set up
     def setUp(self):
-        print "SEED =", self.__seed 
+        print "SEED =", self.__seed
         self._simps.setUp()
         self._simps2.setUp()
         self._simps3.setUp()
         self._simps4.setUp()
         self._simpsoff.add()
-        print "\nsetting up..."        
+        print "\nsetting up..."
 
     ## test closer
     # \brief Common tear down
@@ -122,7 +121,7 @@ class CheckerItemTest(unittest.TestCase):
         self.assertEqual(el.index, idn)
         el.run()
         self.assertTrue(cqueue.empty())
-        
+
         ci0 = CheckerItem("cp0")
         ci0.append(TangoDSItem("ds0", None, None))
         cqueue.put(ci0)
@@ -132,53 +131,71 @@ class CheckerItemTest(unittest.TestCase):
         cqueue.put(ci1)
 
         ci2 = CheckerItem("cp2")
-        ci2.append(TangoDSItem("ds2", self._simps3.new_device_info_writer.name, None))
+        ci2.append(TangoDSItem("ds2", self._simps3.new_device_info_writer.name,
+                               None))
         cqueue.put(ci2)
 
         ci3 = CheckerItem("cp3")
-        ci3.append(TangoDSItem("ds3", self._simps3.new_device_info_writer.name, 'ScalarDouble'))
-        ci3.append(TangoDSItem("ds4", self._simps3.new_device_info_writer.name, 'ScalarLong'))
-        ci3.append(TangoDSItem("ds5", self._simps3.new_device_info_writer.name, 'ScalarShort'))
-        ci3.append(TangoDSItem("ds6", self._simps3.new_device_info_writer.name, 'ScalarBoolean'))
+        ci3.append(TangoDSItem("ds3", self._simps3.new_device_info_writer.name,
+                               'ScalarDouble'))
+        ci3.append(TangoDSItem("ds4", self._simps3.new_device_info_writer.name,
+                               'ScalarLong'))
+        ci3.append(TangoDSItem("ds5", self._simps3.new_device_info_writer.name,
+                               'ScalarShort'))
+        ci3.append(TangoDSItem("ds6", self._simps3.new_device_info_writer.name,
+                               'ScalarBoolean'))
         cqueue.put(ci3)
 
         ci4 = CheckerItem("cp4")
-        ci4.append(TangoDSItem("ds3", self._simps3.new_device_info_writer.name, 'ScalarDouble'))
-        ci4.append(TangoDSItem("ds4", self._simps3.new_device_info_writer.name, 'ScalarDoubleddd'))
+        ci4.append(TangoDSItem("ds3", self._simps3.new_device_info_writer.name,
+                               'ScalarDouble'))
+        ci4.append(TangoDSItem("ds4", self._simps3.new_device_info_writer.name,
+                               'ScalarDoubleddd'))
         cqueue.put(ci4)
 
         ci5 = CheckerItem("cp5")
         dp = PyTango.DeviceProxy(self._simps4.new_device_info_writer.name)
         dp.SetState("ALARM")
-        ci5.append(TangoDSItem("ds3", self._simps4.new_device_info_writer.name, 'ScalarDouble'))
-        ci5.append(TangoDSItem("ds4", self._simps4.new_device_info_writer.name, 'ScalarShort'))
+        ci5.append(TangoDSItem("ds3", self._simps4.new_device_info_writer.name,
+                               'ScalarDouble'))
+        ci5.append(TangoDSItem("ds4", self._simps4.new_device_info_writer.name,
+                               'ScalarShort'))
         cqueue.put(ci5)
 
         ci6 = CheckerItem("cp6")
         dp = PyTango.DeviceProxy(self._simps4.new_device_info_writer.name)
         dp.CreateAttribute("Position")
-        ci6.append(TangoDSItem("ds3", self._simps4.new_device_info_writer.name, None))
-        ci6.append(TangoDSItem("ds4", self._simps4.new_device_info_writer.name, 'ScalarShort'))
+        ci6.append(TangoDSItem("ds3", self._simps4.new_device_info_writer.name,
+                               None))
+        ci6.append(TangoDSItem("ds4", self._simps4.new_device_info_writer.name,
+                               'ScalarShort'))
         cqueue.put(ci6)
-
 
         ci7 = CheckerItem("cp6")
         dp = PyTango.DeviceProxy(self._simps.new_device_info_writer.name)
         dp.CreateAttribute("Position")
-        ci7.append(TangoDSItem("ds3", self._simps.new_device_info_writer.name, None))
-        ci7.append(TangoDSItem("ds4", self._simps.new_device_info_writer.name, 'ScalarShort'))
+        ci7.append(TangoDSItem("ds3", self._simps.new_device_info_writer.name,
+                               None))
+        ci7.append(TangoDSItem("ds4", self._simps.new_device_info_writer.name,
+                               'ScalarShort'))
         cqueue.put(ci7)
 
         ci8 = CheckerItem("cp8")
         dp = PyTango.DeviceProxy(self._simps2.new_device_info_writer.name)
         dp.SetState("FAULT")
-        ci8.append(TangoDSItem("ds3", self._simps2.new_device_info_writer.name, 'ScalarDouble'))
-        ci8.append(TangoDSItem("ds4", self._simps2.new_device_info_writer.name, 'ScalarShort'))
+        ci8.append(TangoDSItem("ds3", self._simps2.new_device_info_writer.name,
+                               'ScalarDouble'))
+        ci8.append(TangoDSItem("ds4", self._simps2.new_device_info_writer.name,
+                               'ScalarShort'))
         cqueue.put(ci8)
 
         ci9 = CheckerItem("cp9")
-        ci9.append(TangoDSItem("ds3", self._simpsoff.new_device_info_writer.name, 'ScalarDouble'))
-        ci9.append(TangoDSItem("ds4", self._simpsoff.new_device_info_writer.name, 'ScalarShort'))
+        ci9.append(TangoDSItem(
+                "ds3", self._simpsoff.new_device_info_writer.name,
+                'ScalarDouble'))
+        ci9.append(TangoDSItem(
+                "ds4", self._simpsoff.new_device_info_writer.name,
+                'ScalarShort'))
         cqueue.put(ci9)
 
         el.run()
@@ -214,7 +231,6 @@ class CheckerItemTest(unittest.TestCase):
         self.assertTrue(ci9.message is not None)
         self.assertTrue(not ci9.active)
 
-
     ## constructor test
     # \brief It tests default settings
     def test_run_attr(self):
@@ -232,7 +248,7 @@ class CheckerItemTest(unittest.TestCase):
         ATTRIBUTESTOCHECK[:] = []
         el.run()
         self.assertTrue(cqueue.empty())
-        
+
         ci0 = CheckerItem("cp0")
         ci0.append(TangoDSItem("ds0", None, None))
         cqueue.put(ci0)
@@ -242,53 +258,82 @@ class CheckerItemTest(unittest.TestCase):
         cqueue.put(ci1)
 
         ci2 = CheckerItem("cp2")
-        ci2.append(TangoDSItem("ds2", self._simps3.new_device_info_writer.name, None))
+        ci2.append(TangoDSItem(
+                "ds2", self._simps3.new_device_info_writer.name, None))
         cqueue.put(ci2)
 
         ci3 = CheckerItem("cp3")
-        ci3.append(TangoDSItem("ds3", self._simps3.new_device_info_writer.name, 'ScalarDouble'))
-        ci3.append(TangoDSItem("ds4", self._simps3.new_device_info_writer.name, 'ScalarLong'))
-        ci3.append(TangoDSItem("ds5", self._simps3.new_device_info_writer.name, 'ScalarShort'))
-        ci3.append(TangoDSItem("ds6", self._simps3.new_device_info_writer.name, 'ScalarBoolean'))
+        ci3.append(TangoDSItem(
+                "ds3", self._simps3.new_device_info_writer.name,
+                'ScalarDouble'))
+        ci3.append(TangoDSItem(
+                "ds4", self._simps3.new_device_info_writer.name,
+                'ScalarLong'))
+        ci3.append(TangoDSItem(
+                "ds5", self._simps3.new_device_info_writer.name,
+                'ScalarShort'))
+        ci3.append(TangoDSItem(
+                "ds6", self._simps3.new_device_info_writer.name,
+                'ScalarBoolean'))
         cqueue.put(ci3)
 
         ci4 = CheckerItem("cp4")
-        ci4.append(TangoDSItem("ds3", self._simps3.new_device_info_writer.name, 'ScalarDouble'))
-        ci4.append(TangoDSItem("ds4", self._simps3.new_device_info_writer.name, 'ScalarDoubleddd'))
+        ci4.append(TangoDSItem(
+                "ds3", self._simps3.new_device_info_writer.name,
+                'ScalarDouble'))
+        ci4.append(TangoDSItem(
+                "ds4", self._simps3.new_device_info_writer.name,
+                'ScalarDoubleddd'))
         cqueue.put(ci4)
 
         ci5 = CheckerItem("cp5")
-        dp = PyTango.DeviceProxy(self._simps4.new_device_info_writer.name)
+        dp = PyTango.DeviceProxy(
+            self._simps4.new_device_info_writer.name)
         dp.SetState("ALARM")
-        ci5.append(TangoDSItem("ds3", self._simps4.new_device_info_writer.name, 'ScalarDouble'))
-        ci5.append(TangoDSItem("ds4", self._simps4.new_device_info_writer.name, 'ScalarShort'))
+        ci5.append(TangoDSItem(
+                "ds3", self._simps4.new_device_info_writer.name,
+                'ScalarDouble'))
+        ci5.append(TangoDSItem(
+                "ds4", self._simps4.new_device_info_writer.name,
+                'ScalarShort'))
         cqueue.put(ci5)
 
         ci6 = CheckerItem("cp6")
-        dp = PyTango.DeviceProxy(self._simps4.new_device_info_writer.name)
+        dp = PyTango.DeviceProxy(
+            self._simps4.new_device_info_writer.name)
         dp.CreateAttribute("Position")
-        ci6.append(TangoDSItem("ds3", self._simps4.new_device_info_writer.name, None))
-        ci6.append(TangoDSItem("ds4", self._simps4.new_device_info_writer.name, 'ScalarShort'))
+        ci6.append(TangoDSItem(
+                "ds3", self._simps4.new_device_info_writer.name, None))
+        ci6.append(TangoDSItem(
+                "ds4", self._simps4.new_device_info_writer.name,
+                'ScalarShort'))
         cqueue.put(ci6)
-
 
         ci7 = CheckerItem("cp6")
         dp = PyTango.DeviceProxy(self._simps.new_device_info_writer.name)
         dp.CreateAttribute("Position")
-        ci7.append(TangoDSItem("ds3", self._simps.new_device_info_writer.name, None))
-        ci7.append(TangoDSItem("ds4", self._simps.new_device_info_writer.name, 'ScalarShort'))
+        ci7.append(TangoDSItem(
+                "ds3", self._simps.new_device_info_writer.name, None))
+        ci7.append(TangoDSItem(
+                "ds4", self._simps.new_device_info_writer.name, 'ScalarShort'))
         cqueue.put(ci7)
 
         ci8 = CheckerItem("cp8")
         dp = PyTango.DeviceProxy(self._simps2.new_device_info_writer.name)
         dp.SetState("FAULT")
-        ci8.append(TangoDSItem("ds3", self._simps2.new_device_info_writer.name, 'ScalarDouble'))
-        ci8.append(TangoDSItem("ds4", self._simps2.new_device_info_writer.name, 'ScalarShort'))
+        ci8.append(TangoDSItem("ds3", self._simps2.new_device_info_writer.name,
+                               'ScalarDouble'))
+        ci8.append(TangoDSItem("ds4", self._simps2.new_device_info_writer.name,
+                               'ScalarShort'))
         cqueue.put(ci8)
 
         ci9 = CheckerItem("cp9")
-        ci9.append(TangoDSItem("ds3", self._simpsoff.new_device_info_writer.name, 'ScalarDouble'))
-        ci9.append(TangoDSItem("ds4", self._simpsoff.new_device_info_writer.name, 'ScalarShort'))
+        ci9.append(TangoDSItem(
+                "ds3", self._simpsoff.new_device_info_writer.name,
+                'ScalarDouble'))
+        ci9.append(TangoDSItem(
+                "ds4", self._simpsoff.new_device_info_writer.name,
+                'ScalarShort'))
         cqueue.put(ci9)
 
         el.run()
@@ -326,7 +371,6 @@ class CheckerItemTest(unittest.TestCase):
 
         ATTRIBUTESTOCHECK[:] = matt
 
-
     def test_start(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -336,7 +380,7 @@ class CheckerItemTest(unittest.TestCase):
         el = CheckerThread(idn, cqueue)
         self.assertEqual(el.index, idn)
         self.assertTrue(cqueue.empty())
-        
+
         ci0 = CheckerItem("cp0")
         ci0.append(TangoDSItem("ds0", None, None))
         cqueue.put(ci0)
@@ -346,58 +390,76 @@ class CheckerItemTest(unittest.TestCase):
         cqueue.put(ci1)
 
         ci2 = CheckerItem("cp2")
-        ci2.append(TangoDSItem("ds2", self._simps3.new_device_info_writer.name, None))
+        ci2.append(TangoDSItem("ds2", self._simps3.new_device_info_writer.name,
+                               None))
         cqueue.put(ci2)
 
         ci3 = CheckerItem("cp3")
-        ci3.append(TangoDSItem("ds3", self._simps3.new_device_info_writer.name, 'ScalarDouble'))
-        ci3.append(TangoDSItem("ds4", self._simps3.new_device_info_writer.name, 'ScalarLong'))
-        ci3.append(TangoDSItem("ds5", self._simps3.new_device_info_writer.name, 'ScalarShort'))
-        ci3.append(TangoDSItem("ds6", self._simps3.new_device_info_writer.name, 'ScalarBoolean'))
+        ci3.append(TangoDSItem("ds3", self._simps3.new_device_info_writer.name,
+                               'ScalarDouble'))
+        ci3.append(TangoDSItem("ds4", self._simps3.new_device_info_writer.name,
+                               'ScalarLong'))
+        ci3.append(TangoDSItem("ds5", self._simps3.new_device_info_writer.name,
+                               'ScalarShort'))
+        ci3.append(TangoDSItem("ds6", self._simps3.new_device_info_writer.name,
+                               'ScalarBoolean'))
         cqueue.put(ci3)
 
         ci4 = CheckerItem("cp4")
-        ci4.append(TangoDSItem("ds3", self._simps3.new_device_info_writer.name, 'ScalarDouble'))
-        ci4.append(TangoDSItem("ds4", self._simps3.new_device_info_writer.name, 'ScalarDoubleddd'))
+        ci4.append(TangoDSItem("ds3", self._simps3.new_device_info_writer.name,
+                               'ScalarDouble'))
+        ci4.append(TangoDSItem("ds4", self._simps3.new_device_info_writer.name,
+                               'ScalarDoubleddd'))
         cqueue.put(ci4)
 
         ci5 = CheckerItem("cp5")
         dp = PyTango.DeviceProxy(self._simps4.new_device_info_writer.name)
         dp.SetState("ALARM")
-        ci5.append(TangoDSItem("ds3", self._simps4.new_device_info_writer.name, 'ScalarDouble'))
-        ci5.append(TangoDSItem("ds4", self._simps4.new_device_info_writer.name, 'ScalarShort'))
+        ci5.append(TangoDSItem("ds3", self._simps4.new_device_info_writer.name,
+                               'ScalarDouble'))
+        ci5.append(TangoDSItem("ds4", self._simps4.new_device_info_writer.name,
+                               'ScalarShort'))
         cqueue.put(ci5)
 
         ci6 = CheckerItem("cp6")
         dp = PyTango.DeviceProxy(self._simps4.new_device_info_writer.name)
         dp.CreateAttribute("Position")
-        ci6.append(TangoDSItem("ds3", self._simps4.new_device_info_writer.name, None))
-        ci6.append(TangoDSItem("ds4", self._simps4.new_device_info_writer.name, 'ScalarShort'))
+        ci6.append(TangoDSItem("ds3", self._simps4.new_device_info_writer.name,
+                               None))
+        ci6.append(TangoDSItem("ds4", self._simps4.new_device_info_writer.name,
+                               'ScalarShort'))
         cqueue.put(ci6)
-
 
         ci7 = CheckerItem("cp6")
         dp = PyTango.DeviceProxy(self._simps.new_device_info_writer.name)
         dp.CreateAttribute("Position")
-        ci7.append(TangoDSItem("ds3", self._simps.new_device_info_writer.name, None))
-        ci7.append(TangoDSItem("ds4", self._simps.new_device_info_writer.name, 'ScalarShort'))
+        ci7.append(TangoDSItem("ds3", self._simps.new_device_info_writer.name,
+                               None))
+        ci7.append(TangoDSItem("ds4", self._simps.new_device_info_writer.name,
+                               'ScalarShort'))
         cqueue.put(ci7)
 
         ci8 = CheckerItem("cp8")
         dp = PyTango.DeviceProxy(self._simps2.new_device_info_writer.name)
         dp.SetState("FAULT")
-        ci8.append(TangoDSItem("ds3", self._simps2.new_device_info_writer.name, 'ScalarDouble'))
-        ci8.append(TangoDSItem("ds4", self._simps2.new_device_info_writer.name, 'ScalarShort'))
+        ci8.append(TangoDSItem("ds3", self._simps2.new_device_info_writer.name,
+                               'ScalarDouble'))
+        ci8.append(TangoDSItem("ds4", self._simps2.new_device_info_writer.name,
+                               'ScalarShort'))
         cqueue.put(ci8)
 
         ci9 = CheckerItem("cp9")
-        ci9.append(TangoDSItem("ds3", self._simpsoff.new_device_info_writer.name, 'ScalarDouble'))
-        ci9.append(TangoDSItem("ds4", self._simpsoff.new_device_info_writer.name, 'ScalarShort'))
+        ci9.append(TangoDSItem(
+                "ds3", self._simpsoff.new_device_info_writer.name,
+                'ScalarDouble'))
+        ci9.append(TangoDSItem(
+                "ds4", self._simpsoff.new_device_info_writer.name,
+                'ScalarShort'))
         cqueue.put(ci9)
 
         el.start()
         el.join()
-        
+
         self.assertTrue(ci0.message is not None)
         self.assertEqual(ci0.errords, 'ds0')
         self.assertTrue(not ci0.active)
@@ -429,8 +491,6 @@ class CheckerItemTest(unittest.TestCase):
         self.assertTrue(ci9.message is not None)
         self.assertTrue(not ci9.active)
 
-
-
     def test_start_five(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -440,7 +500,7 @@ class CheckerItemTest(unittest.TestCase):
         ths = []
         for i in range(5):
             ths.append(CheckerThread(i, cqueue))
-        
+
         ci0 = CheckerItem("cp0")
         ci0.append(TangoDSItem("ds0", None, None))
         cqueue.put(ci0)
@@ -450,61 +510,78 @@ class CheckerItemTest(unittest.TestCase):
         cqueue.put(ci1)
 
         ci2 = CheckerItem("cp2")
-        ci2.append(TangoDSItem("ds2", self._simps3.new_device_info_writer.name, None))
+        ci2.append(TangoDSItem("ds2", self._simps3.new_device_info_writer.name,
+                               None))
         cqueue.put(ci2)
 
         ci3 = CheckerItem("cp3")
-        ci3.append(TangoDSItem("ds3", self._simps3.new_device_info_writer.name, 'ScalarDouble'))
-        ci3.append(TangoDSItem("ds4", self._simps3.new_device_info_writer.name, 'ScalarLong'))
-        ci3.append(TangoDSItem("ds5", self._simps3.new_device_info_writer.name, 'ScalarShort'))
-        ci3.append(TangoDSItem("ds6", self._simps3.new_device_info_writer.name, 'ScalarBoolean'))
+        ci3.append(TangoDSItem("ds3", self._simps3.new_device_info_writer.name,
+                               'ScalarDouble'))
+        ci3.append(TangoDSItem("ds4", self._simps3.new_device_info_writer.name,
+                               'ScalarLong'))
+        ci3.append(TangoDSItem("ds5", self._simps3.new_device_info_writer.name,
+                               'ScalarShort'))
+        ci3.append(TangoDSItem("ds6", self._simps3.new_device_info_writer.name,
+                               'ScalarBoolean'))
         cqueue.put(ci3)
 
         ci4 = CheckerItem("cp4")
-        ci4.append(TangoDSItem("ds3", self._simps3.new_device_info_writer.name, 'ScalarDouble'))
-        ci4.append(TangoDSItem("ds4", self._simps3.new_device_info_writer.name, 'ScalarDoubleddd'))
+        ci4.append(TangoDSItem("ds3", self._simps3.new_device_info_writer.name,
+                               'ScalarDouble'))
+        ci4.append(TangoDSItem("ds4", self._simps3.new_device_info_writer.name,
+                               'ScalarDoubleddd'))
         cqueue.put(ci4)
 
         ci5 = CheckerItem("cp5")
         dp = PyTango.DeviceProxy(self._simps4.new_device_info_writer.name)
         dp.SetState("ALARM")
-        ci5.append(TangoDSItem("ds3", self._simps4.new_device_info_writer.name, 'ScalarDouble'))
-        ci5.append(TangoDSItem("ds4", self._simps4.new_device_info_writer.name, 'ScalarShort'))
+        ci5.append(TangoDSItem("ds3", self._simps4.new_device_info_writer.name,
+                               'ScalarDouble'))
+        ci5.append(TangoDSItem("ds4", self._simps4.new_device_info_writer.name,
+                               'ScalarShort'))
         cqueue.put(ci5)
 
         ci6 = CheckerItem("cp6")
         dp = PyTango.DeviceProxy(self._simps4.new_device_info_writer.name)
         dp.CreateAttribute("Position")
-        ci6.append(TangoDSItem("ds3", self._simps4.new_device_info_writer.name, None))
-        ci6.append(TangoDSItem("ds4", self._simps4.new_device_info_writer.name, 'ScalarShort'))
+        ci6.append(TangoDSItem("ds3", self._simps4.new_device_info_writer.name,
+                               None))
+        ci6.append(TangoDSItem("ds4", self._simps4.new_device_info_writer.name,
+                               'ScalarShort'))
         cqueue.put(ci6)
-
 
         ci7 = CheckerItem("cp6")
         dp = PyTango.DeviceProxy(self._simps.new_device_info_writer.name)
         dp.CreateAttribute("Position")
-        ci7.append(TangoDSItem("ds3", self._simps.new_device_info_writer.name, None))
-        ci7.append(TangoDSItem("ds4", self._simps.new_device_info_writer.name, 'ScalarShort'))
+        ci7.append(TangoDSItem("ds3", self._simps.new_device_info_writer.name,
+                               None))
+        ci7.append(TangoDSItem("ds4", self._simps.new_device_info_writer.name,
+                               'ScalarShort'))
         cqueue.put(ci7)
 
         ci8 = CheckerItem("cp8")
         dp = PyTango.DeviceProxy(self._simps2.new_device_info_writer.name)
         dp.SetState("FAULT")
-        ci8.append(TangoDSItem("ds3", self._simps2.new_device_info_writer.name, 'ScalarDouble'))
-        ci8.append(TangoDSItem("ds4", self._simps2.new_device_info_writer.name, 'ScalarShort'))
+        ci8.append(TangoDSItem("ds3", self._simps2.new_device_info_writer.name,
+                               'ScalarDouble'))
+        ci8.append(TangoDSItem("ds4", self._simps2.new_device_info_writer.name,
+                               'ScalarShort'))
         cqueue.put(ci8)
 
         ci9 = CheckerItem("cp9")
-        ci9.append(TangoDSItem("ds3", self._simpsoff.new_device_info_writer.name, 'ScalarDouble'))
-        ci9.append(TangoDSItem("ds4", self._simpsoff.new_device_info_writer.name, 'ScalarShort'))
+        ci9.append(TangoDSItem(
+                "ds3", self._simpsoff.new_device_info_writer.name,
+                'ScalarDouble'))
+        ci9.append(TangoDSItem(
+                "ds4", self._simpsoff.new_device_info_writer.name,
+                'ScalarShort'))
         cqueue.put(ci9)
-
 
         for el in ths:
             el.start()
-        for el in ths:    
+        for el in ths:
             el.join()
-        
+
         self.assertTrue(ci0.message is not None)
         self.assertEqual(ci0.errords, 'ds0')
         self.assertTrue(not ci0.active)

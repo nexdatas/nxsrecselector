@@ -114,24 +114,23 @@ class DescriberTest(unittest.TestCase):
         self._bfloat = "float64" if IS64BIT else "float32"
 
         try:
-            self.__seed  = long(binascii.hexlify(os.urandom(16)), 16)
+            self.__seed = long(binascii.hexlify(os.urandom(16)), 16)
         except NotImplementedError:
-            self.__seed  = long(time.time() * 256) 
-         
+            self.__seed = long(time.time() * 256)
+
         self.__rnd = random.Random(self.__seed)
 
-
         self.mycps = {
-            'mycp' : (
+            'mycp': (
                 '<?xml version=\'1.0\'?>'
                 '<definition>'
                 '<group type="NXcollection" name="dddd"/>'
                 '</definition>'),
-            'mycp2' : (
+            'mycp2': (
                 '<definition><group type="NXcollection" name="dddd">'
                 '<field><datasource type="TANGO" name="ann" /></field>'
                 '</group></definition>'),
-            'mycp3' : (
+            'mycp3': (
                 '<definition><group type="NXcollection" name="dddd">'
                 '<field><datasource type="TANGO" name="ann" />'
                 '<strategy mode="STEP" />'
@@ -321,38 +320,51 @@ class DescriberTest(unittest.TestCase):
             'dim1': {'tann1c': [
                     ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8', [34])]},
             'dim2': {'tann1c': [
-                    ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8', ['$datasource.ann'])]},
+                    ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8',
+                     ['$datasource.ann'])]},
             'dim3': {'tann1c': [
-                    ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8', [1234])]},
+                    ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8',
+                     [1234])]},
             'dim4': {'tann1c': [
-                    ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8', ['$datasource.ann2'])]},
+                    ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8',
+                     ['$datasource.ann2'])]},
             'dim5': {'tann1c': [
-                    ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8', ['$datasource.ann'])],
+                    ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8',
+                     ['$datasource.ann'])],
                      'ann': [('CONFIG', 'TANGO', '', None, None)],
                      },
             'dim6': {'tann1c': [
-                    ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8', ['$datasource.ann', 123])]},
+                    ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8',
+                     ['$datasource.ann', 123])]},
             'dim7': {'tann1c': [
-                    ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8', [None, None])]},
+                    ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8',
+                     [None, None])]},
             'dim8': {'tann1c': [
-                    ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8', [None, 123])]},
-            'scan': {'__unnamed__1': [('STEP', 'CLIENT', 'exp_c01', 'NX_FLOAT', None)],
-                     '__unnamed__2': [('STEP', 'CLIENT', 'exp_c02', 'NX_FLOAT', None)],
-                     '__unnamed__3': [('STEP', 'CLIENT', 'p09/mca/exp.02', 'NX_FLOAT', [2048])], 
+                    ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8',
+                     [None, 123])]},
+            'scan': {'__unnamed__1': [('STEP', 'CLIENT', 'exp_c01',
+                                       'NX_FLOAT', None)],
+                     '__unnamed__2': [('STEP', 'CLIENT', 'exp_c02',
+                                       'NX_FLOAT', None)],
+                     '__unnamed__3': [('STEP', 'CLIENT', 'p09/mca/exp.02',
+                                       'NX_FLOAT', [2048])],
                      },
             'scan2': {'c01': [('STEP', 'CLIENT', 'exp_c01', 'NX_FLOAT', None)],
                       'c02': [('STEP', 'CLIENT', 'exp_c02', 'NX_FLOAT', None)],
-                      'mca': [('STEP', 'CLIENT', 'p09/mca/exp.02', 'NX_FLOAT', [2048])], 
+                      'mca': [('STEP', 'CLIENT', 'p09/mca/exp.02', 'NX_FLOAT',
+                               [2048])],
                      },
             'scan3': {'c01': [('STEP', 'CLIENT', 'exp_c01', 'NX_FLOAT', None),
                               ('INIT', 'CLIENT', 'exp_c01', 'NX_FLOAT', None)],
-                      'mca': [('STEP', 'CLIENT', 'p09/mca/exp.02', 'NX_FLOAT', [2048])], 
+                      'mca': [('STEP', 'CLIENT', 'p09/mca/exp.02', 'NX_FLOAT',
+                               [2048])],
                      },
             }
-            
+
         self.mydss = {
-            'nn': ('<?xml version=\'1.0\'?><definition><datasource type="TANGO">'
-                    '</datasource></definition>'),
+            'nn': ('<?xml version=\'1.0\'?>'
+                   '<definition><datasource type="TANGO">'
+                   '</datasource></definition>'),
             'nn2': ('<definition><datasource type="TANGO" name="">'
                     '</datasource></definition>'),
             'ann': ('<definition><datasource type="TANGO" name="ann">'
@@ -439,13 +451,13 @@ class DescriberTest(unittest.TestCase):
 
     ## Exception tester
     # \param exception expected exception
-    # \param method called method      
+    # \param method called method
     # \param args list with method arguments
     # \param kwargs dictionary with method arguments
     def myAssertRaise(self, exception, method, *args, **kwargs):
         err = None
         try:
-            error =  False
+            error = False
             method(*args, **kwargs)
         except exception, e:
             error = True
@@ -457,7 +469,7 @@ class DescriberTest(unittest.TestCase):
     # \brief Common set up
     def setUp(self):
         print "\nsetting up..."
-        print "SEED =", self.__seed 
+        print "SEED =", self.__seed
 
     ## test closer
     # \brief Common tear down
@@ -470,11 +482,10 @@ class DescriberTest(unittest.TestCase):
             self.assertEqual(self.resdss[vl][0], rv[vl].name)
             self.assertEqual(self.resdss[vl][1], rv[vl].dstype)
             self.assertEqual(self.resdss[vl][2], rv[vl].record)
-    
-            
+
     def hasds(self, dslist, strategy, dstype):
         for dss in dslist:
-            for ds in dss: 
+            for ds in dss:
 #                print "DD", ds[0], strategy, ds[0]==strategy, ds[1], dstype
                 dsfound = True if dstype is None else False
                 stfound = True if strategy is None else False
@@ -484,13 +495,13 @@ class DescriberTest(unittest.TestCase):
                     dsfound = True
                 if not stfound and ds[0] == strategy:
                     stfound = True
-#        print "FOUND", dslist, dsfound and stfound 
+#        print "FOUND", dslist, dsfound and stfound
         return dsfound and stfound
-            
+
     @classmethod
     def dsfilter(cls, dss, strategy, dstype):
         res = []
-        for ds in dss: 
+        for ds in dss:
             dsfound = True if dstype is None else False
             stfound = True if strategy is None else False
             if not dsfound and ds[1] == dstype:
@@ -500,26 +511,25 @@ class DescriberTest(unittest.TestCase):
             if dsfound and stfound:
                 res.append(ds)
         return res
-        
 
     def checkCP(self, rv, cv, strategy=None, dstype=None):
-#        print "CV", cv ,strategy, dstype
-#        cv = [cc for cc in cv if self.hasds(self.rescps[cc].values(), strategy, dstype)]
-#        print "CV2", cv ,strategy, dstype
         self.assertEqual(sorted(set(rv[0].keys())), sorted(cv))
         for i in range(1):
             for cp, vl in rv[i].items():
 #                print "CP", cp
                 cres = self.rescps[cp]
-                cresk = [ds for ds in cres.keys() if self.dsfilter(cres[ds], strategy, dstype)]
-                
+                cresk = [ds for ds in cres.keys()
+                         if self.dsfilter(cres[ds], strategy, dstype)]
+
                 self.assertEqual(sorted(vl.keys()), sorted(cresk))
                 for ds in cresk:
 #                    print "C1", sorted(cres[ds])
 #                    print "C2", sorted(vl[ds])
-                    self.assertEqual(sorted(self.dsfilter(cres[ds],strategy, dstype)), sorted(vl[ds]))
+                    self.assertEqual(
+                        sorted(self.dsfilter(cres[ds], strategy, dstype)),
+                        sorted(vl[ds]))
 
-    @classmethod                
+    @classmethod
     def findElement(cls, cp, ds, vds, rv):
         found = False
         for el in rv:
@@ -533,7 +543,7 @@ class DescriberTest(unittest.TestCase):
                 break
         if not found:
             print "NOT FOUND", cp, ds, vds, rv
-        return found   
+        return found
 
     def checkICP(self, rv, cv, strategy=None, dstype=None):
         dscnt = 0
@@ -550,7 +560,6 @@ class DescriberTest(unittest.TestCase):
                     self.assertTrue(self.findElement(cp, ds, vds, rv))
                     dscnt += 1
         self.assertEqual(dscnt, len(rv))
-        
 
     ## constructor test
     # \brief It tests default settings
@@ -850,7 +859,6 @@ class DescriberTest(unittest.TestCase):
         res = des.components()
         self.checkCP(res, self.rescps.keys())
 
-
     ## constructor test
     # \brief It tests default settings
     def test_components_strategy_dstype(self):
@@ -859,13 +867,13 @@ class DescriberTest(unittest.TestCase):
         server.cpdict = self.mycps
 
         dstypes = [None, 'CLIENT', 'TANGO', 'PYEVAL', 'NEW', 'UNKNOWN']
-        strategies = [None, 'CONFIG','INIT','STEP', 'FINAL']
-        
+        strategies = [None, 'CONFIG', 'INIT', 'STEP', 'FINAL']
+
         for dst in dstypes:
             for st in strategies:
                 des = Describer(server)
                 res = des.components(strategy=st, dstype=dst)
-                self.checkICP(res, self.rescps.keys(), 
+                self.checkICP(res, self.rescps.keys(),
                               strategy=st, dstype=dst)
 
     ## constructor test
@@ -876,14 +884,15 @@ class DescriberTest(unittest.TestCase):
         server.cpdict = self.mycps
 
         dstypes = [None, 'CLIENT', 'TANGO', 'PYEVAL', 'NEW', 'UNKNOWN']
-        strategies = [None, 'CONFIG','INIT','STEP', 'FINAL']
-        
+        strategies = [None, 'CONFIG', 'INIT', 'STEP', 'FINAL']
+
         for dst in dstypes:
             for st in strategies:
                 des = Describer(server)
                 res = des.components(strategy=st, dstype=dst)
-                self.checkICP(res, self.rescps.keys(), 
+                self.checkICP(res, self.rescps.keys(),
                               strategy=st, dstype=dst)
+
     ## constructor test
     # \brief It tests default settings
     def test_components_strategy_dstype_tree(self):
@@ -892,13 +901,13 @@ class DescriberTest(unittest.TestCase):
         server.cpdict = self.mycps
 
         dstypes = [None, 'CLIENT', 'TANGO', 'PYEVAL', 'NEW', 'UNKNOWN']
-        strategies = [None, 'CONFIG','INIT','STEP', 'FINAL']
-        
+        strategies = [None, 'CONFIG', 'INIT', 'STEP', 'FINAL']
+
         for dst in dstypes:
             for st in strategies:
                 des = Describer(server, True)
                 res = des.components(strategy=st, dstype=dst)
-                self.checkCP(res, self.rescps.keys(), 
+                self.checkCP(res, self.rescps.keys(),
                               strategy=st, dstype=dst)
 
     ## constructor test
@@ -909,209 +918,192 @@ class DescriberTest(unittest.TestCase):
         server.cpdict = self.mycps
 
         dstypes = [None, 'CLIENT', 'TANGO', 'PYEVAL', 'NEW', 'UNKNOWN']
-        strategies = [None, 'CONFIG','INIT','STEP', 'FINAL']
-        
+        strategies = [None, 'CONFIG', 'INIT', 'STEP', 'FINAL']
+
         for dst in dstypes:
             for st in strategies:
                 des = Describer(server, True)
                 res = des.components(strategy=st, dstype=dst)
-                self.checkCP(res, self.rescps.keys(), 
+                self.checkCP(res, self.rescps.keys(),
                               strategy=st, dstype=dst)
-
-
 
     ## constructor test
     # \brief It tests default settings
     def test_components_noarg_mem(self):
         dstypes = [None, 'CLIENT', 'TANGO', 'PYEVAL', 'NEW', 'UNKNOWN']
-        strategies = [None, 'CONFIG','INIT','STEP', 'FINAL']
-        
+        strategies = [None, 'CONFIG', 'INIT', 'STEP', 'FINAL']
+
         for dst in dstypes:
             for st in strategies:
-        
-                nmem = self.__rnd.randint(1, len(self.mydss.keys())-1)
+
+                nmem = self.__rnd.randint(1, len(self.mydss.keys()) - 1)
                 mem = self.__rnd.sample(set(self.mydss.keys()), nmem)
-                
+
                 server = NoServer()
                 server.dsdict = self.mydss
                 server.cpdict = self.mycps
                 server.mcplist = list(mem)
                 des = Describer(server)
                 res = des.components(strategy=st, dstype=dst)
-                self.checkICP(res, self.rescps.keys(), 
+                self.checkICP(res, self.rescps.keys(),
                               strategy=st, dstype=dst)
-
 
     ## constructor test
     # \brief It tests default settings
     def test_components_noarg_mem_tree(self):
 
-
         dstypes = [None, 'CLIENT', 'TANGO', 'PYEVAL', 'NEW', 'UNKNOWN']
-        strategies = [None, 'CONFIG','INIT','STEP', 'FINAL']
-        
+        strategies = [None, 'CONFIG', 'INIT', 'STEP', 'FINAL']
+
         for dst in dstypes:
             for st in strategies:
-                nmem = self.__rnd.randint(1, len(self.mycps.keys())-1)
+                nmem = self.__rnd.randint(1, len(self.mycps.keys()) - 1)
                 mem = self.__rnd.sample(set(self.mycps.keys()), nmem)
-                
+
                 server = NoServer()
                 server.dsdict = self.mydss
                 server.cpdict = self.mycps
                 server.mcplist = list(mem)
                 des = Describer(server, True)
                 res = des.components(strategy=st, dstype=dst)
-                self.checkCP(res, self.rescps.keys(), 
+                self.checkCP(res, self.rescps.keys(),
                               strategy=st, dstype=dst)
-
 
     ## constructor test
     # \brief It tests default settings
     def test_components_noarg_mem_server(self):
         dstypes = [None, 'CLIENT', 'TANGO', 'PYEVAL', 'NEW', 'UNKNOWN']
-        strategies = [None, 'CONFIG','INIT','STEP', 'FINAL']
-        
+        strategies = [None, 'CONFIG', 'INIT', 'STEP', 'FINAL']
+
         for dst in dstypes:
             for st in strategies:
-        
-                nmem = self.__rnd.randint(1, len(self.mydss.keys())-1)
+
+                nmem = self.__rnd.randint(1, len(self.mydss.keys()) - 1)
                 mem = self.__rnd.sample(set(self.mydss.keys()), nmem)
-                
+
                 server = Server()
                 server.dsdict = self.mydss
                 server.cpdict = self.mycps
                 server.mcplist = list(mem)
                 des = Describer(server)
                 res = des.components(strategy=st, dstype=dst)
-                self.checkICP(res, self.rescps.keys(), 
+                self.checkICP(res, self.rescps.keys(),
                               strategy=st, dstype=dst)
-
 
     ## constructor test
     # \brief It tests default settings
     def test_components_noarg_mem_tree_server(self):
 
-
         dstypes = [None, 'CLIENT', 'TANGO', 'PYEVAL', 'NEW', 'UNKNOWN']
-        strategies = [None, 'CONFIG','INIT','STEP', 'FINAL']
-        
+        strategies = [None, 'CONFIG', 'INIT', 'STEP', 'FINAL']
+
         for dst in dstypes:
             for st in strategies:
-                nmem = self.__rnd.randint(1, len(self.mycps.keys())-1)
+                nmem = self.__rnd.randint(1, len(self.mycps.keys()) - 1)
                 mem = self.__rnd.sample(set(self.mycps.keys()), nmem)
-                
+
                 server = Server()
                 server.dsdict = self.mydss
                 server.cpdict = self.mycps
                 server.mcplist = list(mem)
                 des = Describer(server, True)
                 res = des.components(strategy=st, dstype=dst)
-                self.checkCP(res, self.rescps.keys(), 
+                self.checkCP(res, self.rescps.keys(),
                               strategy=st, dstype=dst)
-
-
 
     ## constructor test
     # \brief It tests default settings
     def test_components_noarg_comp(self):
         dstypes = [None, 'CLIENT', 'TANGO', 'PYEVAL', 'NEW', 'UNKNOWN']
-        strategies = [None, 'CONFIG','INIT','STEP', 'FINAL']
-        
+        strategies = [None, 'CONFIG', 'INIT', 'STEP', 'FINAL']
+
         for dst in dstypes:
             for st in strategies:
-        
-                ncps = self.__rnd.randint(1, len(self.mycps.keys())-1)
+
+                ncps = self.__rnd.randint(1, len(self.mycps.keys()) - 1)
                 cps = self.__rnd.sample(set(self.mycps.keys()), ncps)
-                
+
                 server = NoServer()
                 server.dsdict = self.mydss
                 server.cpdict = self.mycps
                 des = Describer(server)
                 res = des.components(cps, strategy=st, dstype=dst)
-                self.checkICP(res, cps, 
+                self.checkICP(res, cps,
                               strategy=st, dstype=dst)
-
 
     ## constructor test
     # \brief It tests default settings
     def test_components_noarg_tree_comp(self):
 
-
         dstypes = [None, 'CLIENT', 'TANGO', 'PYEVAL', 'NEW', 'UNKNOWN']
-        strategies = [None, 'CONFIG','INIT','STEP', 'FINAL']
-        
+        strategies = [None, 'CONFIG', 'INIT', 'STEP', 'FINAL']
+
         for dst in dstypes:
             for st in strategies:
-                ncps = self.__rnd.randint(1, len(self.mycps.keys())-1)
+                ncps = self.__rnd.randint(1, len(self.mycps.keys()) - 1)
                 cps = self.__rnd.sample(set(self.mycps.keys()), ncps)
-                
+
                 server = NoServer()
                 server.dsdict = self.mydss
                 server.cpdict = self.mycps
                 des = Describer(server, True)
-                res = des.components(cps,strategy=st, dstype=dst)
+                res = des.components(cps, strategy=st, dstype=dst)
                 self.checkCP(res, cps,
                               strategy=st, dstype=dst)
-
-
 
     ## constructor test
     # \brief It tests default settings
     def test_components_noarg_comp_server(self):
         dstypes = [None, 'CLIENT', 'TANGO', 'PYEVAL', 'NEW', 'UNKNOWN']
-        strategies = [None, 'CONFIG','INIT','STEP', 'FINAL']
-        
+        strategies = [None, 'CONFIG', 'INIT', 'STEP', 'FINAL']
+
         for dst in dstypes:
             for st in strategies:
-        
-                ncps = self.__rnd.randint(1, len(self.mycps.keys())-1)
+
+                ncps = self.__rnd.randint(1, len(self.mycps.keys()) - 1)
                 cps = self.__rnd.sample(set(self.mycps.keys()), ncps)
-                
+
                 server = Server()
                 server.dsdict = self.mydss
                 server.cpdict = self.mycps
                 des = Describer(server)
                 res = des.components(cps, strategy=st, dstype=dst)
-                self.checkICP(res, cps, 
+                self.checkICP(res, cps,
                               strategy=st, dstype=dst)
-
 
     ## constructor test
     # \brief It tests default settings
     def test_components_noarg_tree_comp_server(self):
 
-
         dstypes = [None, 'CLIENT', 'TANGO', 'PYEVAL', 'NEW', 'UNKNOWN']
-        strategies = [None, 'CONFIG','INIT','STEP', 'FINAL']
-        
+        strategies = [None, 'CONFIG', 'INIT', 'STEP', 'FINAL']
+
         for dst in dstypes:
             for st in strategies:
-                ncps = self.__rnd.randint(1, len(self.mycps.keys())-1)
+                ncps = self.__rnd.randint(1, len(self.mycps.keys()) - 1)
                 cps = self.__rnd.sample(set(self.mycps.keys()), ncps)
-                
+
                 server = Server()
                 server.dsdict = self.mydss
                 server.cpdict = self.mycps
                 des = Describer(server, True)
-                res = des.components(cps,strategy=st, dstype=dst)
+                res = des.components(cps, strategy=st, dstype=dst)
                 self.checkCP(res, cps,
                               strategy=st, dstype=dst)
-
-
 
     ## constructor test
     # \brief It tests default settings
     def test_components_noarg_mem_comp(self):
         dstypes = [None, 'CLIENT', 'TANGO', 'PYEVAL', 'NEW', 'UNKNOWN']
-        strategies = [None, 'CONFIG','INIT','STEP', 'FINAL']
-        
+        strategies = [None, 'CONFIG', 'INIT', 'STEP', 'FINAL']
+
         for dst in dstypes:
             for st in strategies:
-        
-                ncps = self.__rnd.randint(1, len(self.mycps.keys())-1)
+
+                ncps = self.__rnd.randint(1, len(self.mycps.keys()) - 1)
                 cps = self.__rnd.sample(set(self.mycps.keys()), ncps)
-                
-                nmem = self.__rnd.randint(1, len(self.mycps.keys())-1)
+
+                nmem = self.__rnd.randint(1, len(self.mycps.keys()) - 1)
                 mem = self.__rnd.sample(set(self.mycps.keys()), nmem)
                 server = NoServer()
                 server.dsdict = self.mydss
@@ -1119,34 +1111,31 @@ class DescriberTest(unittest.TestCase):
                 server.mcplist = list(mem)
                 des = Describer(server)
                 res = des.components(cps, strategy=st, dstype=dst)
-                self.checkICP(res, cps, 
+                self.checkICP(res, cps,
                               strategy=st, dstype=dst)
-
 
     ## constructor test
     # \brief It tests default settings
     def test_components_noarg_mem_tree_comp(self):
 
-
         dstypes = [None, 'CLIENT', 'TANGO', 'PYEVAL', 'NEW', 'UNKNOWN']
-        strategies = [None, 'CONFIG','INIT','STEP', 'FINAL']
-        
+        strategies = [None, 'CONFIG', 'INIT', 'STEP', 'FINAL']
+
         for dst in dstypes:
             for st in strategies:
-                ncps = self.__rnd.randint(1, len(self.mycps.keys())-1)
+                ncps = self.__rnd.randint(1, len(self.mycps.keys()) - 1)
                 cps = self.__rnd.sample(set(self.mycps.keys()), ncps)
-                
-                nmem = self.__rnd.randint(1, len(self.mycps.keys())-1)
+
+                nmem = self.__rnd.randint(1, len(self.mycps.keys()) - 1)
                 mem = self.__rnd.sample(set(self.mycps.keys()), nmem)
                 server = NoServer()
                 server.dsdict = self.mydss
                 server.cpdict = self.mycps
                 server.mcplist = list(mem)
                 des = Describer(server, True)
-                res = des.components(cps,strategy=st, dstype=dst)
+                res = des.components(cps, strategy=st, dstype=dst)
                 self.checkCP(res, cps,
                               strategy=st, dstype=dst)
-
 
 
 if __name__ == '__main__':

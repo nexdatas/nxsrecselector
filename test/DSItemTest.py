@@ -29,11 +29,8 @@ import struct
 from nxsrecconfig.Describer import DSItem
 
 
-
 ## if 64-bit machione
 IS64BIT = (struct.calcsize("P") == 8)
-
-
 
 
 ## test fixture
@@ -44,11 +41,9 @@ class DSItemTest(unittest.TestCase):
     def __init__(self, methodName):
         unittest.TestCase.__init__(self, methodName)
 
-
         self._tfname = "field"
         self._tfname = "group"
-        self._fattrs = {"short_name":"test","units":"m" }
-
+        self._fattrs = {"short_name": "test", "units": "m"}
 
         self._bint = "int64" if IS64BIT else "int32"
         self._buint = "uint64" if IS64BIT else "uint32"
@@ -57,7 +52,7 @@ class DSItemTest(unittest.TestCase):
     ## test starter
     # \brief Common set up
     def setUp(self):
-        print "\nsetting up..."        
+        print "\nsetting up..."
 
     ## test closer
     # \brief Common tear down
@@ -94,13 +89,12 @@ class DSItemTest(unittest.TestCase):
         self.assertEqual(el.dstype, "mytype2")
         self.assertEqual(el.record, None)
 
-
         el = DSItem(None, "mytype2", "myrecord2")
         self.assertEqual(el.name, None)
         self.assertEqual(el.dstype, "mytype2")
         self.assertEqual(el.record, "myrecord2")
 
-        el = DSItem("myname2", None , "myrecord2")
+        el = DSItem("myname2", None, "myrecord2")
         self.assertEqual(el.name, "myname2")
         self.assertEqual(el.dstype, None)
         self.assertEqual(el.record, "myrecord2")
@@ -114,8 +108,6 @@ class DSItemTest(unittest.TestCase):
         self.assertEqual(el.name, "True")
         self.assertEqual(el.dstype, "1")
         self.assertEqual(el.record, "1.234")
-
-        
 
     ## constructor test
     # \brief It tests default settings
@@ -132,16 +124,16 @@ class DSItemTest(unittest.TestCase):
         self.assertEqual(el2.dstype, "mytype3")
         self.assertEqual(el2.record, "myrecord3")
 
-        el2 = DSItem("name","type","record",dsitem=el)
+        el2 = DSItem("name", "type", "record", dsitem=el)
         self.assertEqual(el2.name, "myname3")
         self.assertEqual(el2.dstype, "mytype3")
         self.assertEqual(el2.record, "myrecord3")
-
 
         el = None
         self.assertEqual(el2.name, "myname3")
         self.assertEqual(el2.dstype, "mytype3")
         self.assertEqual(el2.record, "myrecord3")
+
 
 if __name__ == '__main__':
     unittest.main()
