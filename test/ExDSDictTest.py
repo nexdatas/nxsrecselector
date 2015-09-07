@@ -20,13 +20,16 @@
 # unittests for field Tags running Tango Server
 #
 import unittest
-import os
+#import os
 import sys
-import subprocess
-import random
+#import subprocess
+#import random
 import struct
 
-from nxsrecconfig.Describer import DSItem, ExDSItem, ExDSDict
+from nxsrecconfig.Describer import (
+    DSItem,
+#    ExDSItem, 
+    ExDSDict)
 
 
 ## if 64-bit machione
