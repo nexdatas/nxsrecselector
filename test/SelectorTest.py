@@ -2048,7 +2048,8 @@ class SelectorTest(unittest.TestCase):
                 cps[self.getRandomName(10)] = bool(self.__rnd.randint(0, 1))
             for i in range(lds):
                 dss[self.getRandomName(10)] = bool(self.__rnd.randint(0, 1))
-            ccps = self.__rnd.sample(cps, self.__rnd.randint(1, lcp))
+            ccps = self.__rnd.sample(cps, self.__rnd.randint(
+                    1, len(cps.keys())))
             for cp in ccps:
                 dss[cp] = bool(self.__rnd.randint(0, 1))
             self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
@@ -3524,6 +3525,2122 @@ class SelectorTest(unittest.TestCase):
 
             self.compareToDump(se, ["DynamicLinks"])
             self.assertEqual(se["DynamicLinks"], cps)
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_updateAutomaticComponents_simple(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        msp = MacroServerPools(10)
+        se = Selector(msp)
+        se["ConfigDevice"] = val["ConfigDevice"]
+        se["WriterDevice"] = val["WriterDevice"]
+        channelerrors = []
+        self.myAssertRaise(Exception, se.updateAutomaticComponents,
+                           None)
+        res = se.updateAutomaticComponents(channelerrors)
+        self.assertEqual(res, '{}')
+        print self._cf.dp.GetCommandVariable("COMMANDS")
+        self.assertEqual(
+            json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
+            ['AvailableComponents', 'AvailableDataSources',
+             'AvailableComponents'])
+        self.assertEqual(json.loads(
+                self._cf.dp.GetCommandVariable("VARS")), [None, None, None])
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_updateAutomaticComponents_withcf(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        msp = MacroServerPools(10)
+        se = Selector(msp)
+        se["ConfigDevice"] = val["ConfigDevice"]
+        se["WriterDevice"] = val["WriterDevice"]
+        channelerrors = []
+        poolchannels = []
+        componentgroup = {}
+
+        self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
+        self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
+
+        res = se.updateAutomaticComponents(channelerrors)
+
+        self.assertEqual(res, '{}')
+        self.assertEqual(componentgroup, {})
+        self.assertEqual(channelerrors, [])
+        print self._cf.dp.GetCommandVariable("COMMANDS")
+        self.assertEqual(
+            json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
+            ["AvailableComponents", "AvailableDataSources",
+             "AvailableComponents"])
+        self.assertEqual(
+            json.loads(self._cf.dp.GetCommandVariable("VARS")),
+            [None, None, None])
+#        print self._cf.dp.availableComponents()
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_updateAutomaticComponents_withcf_cps(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        msp = MacroServerPools(10)
+        se = Selector(msp)
+        se["ConfigDevice"] = val["ConfigDevice"]
+        se["WriterDevice"] = val["WriterDevice"]
+        channelerrors = []
+        poolchannels = ["mycp"]
+        componentgroup = {"mycp": False}
+
+        self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
+        self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
+
+        se["AutomaticDataSources"] = json.dumps(poolchannels)
+        se["AutomaticComponentGroup"] = json.dumps(componentgroup)
+        res = se.updateAutomaticComponents(channelerrors)
+        self.myAssertDict(json.loads(res), {"mycp": True})
+        self.assertEqual(channelerrors, [])
+
+        print self._cf.dp.GetCommandVariable("COMMANDS")
+        self.assertEqual(
+            json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
+            ["AvailableComponents", "AvailableDataSources",
+             "AvailableComponents", "Components"])
+        self.assertEqual(
+            json.loads(self._cf.dp.GetCommandVariable("VARS")),
+            [None, None, None, ['mycp']])
+#        print self._cf.dp.availableComponents()
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_updateAutomaticComponents_withcf_nocps(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        msp = MacroServerPools(10)
+        se = Selector(msp)
+        se["ConfigDevice"] = val["ConfigDevice"]
+        se["WriterDevice"] = val["WriterDevice"]
+        channelerrors = []
+        poolchannels = ["mycp"]
+        componentgroup = {}
+
+        self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
+        self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
+
+        se["AutomaticDataSources"] = json.dumps(poolchannels)
+        se["AutomaticComponentGroup"] = json.dumps(componentgroup)
+        res = se.updateAutomaticComponents(channelerrors)
+
+        self.myAssertDict(json.loads(res), {})
+        self.assertEqual(channelerrors, [])
+
+        print self._cf.dp.GetCommandVariable("COMMANDS")
+        self.assertEqual(
+            json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
+            ["AvailableComponents", "AvailableDataSources",
+             "AvailableComponents"])
+        self.assertEqual(
+            json.loads(self._cf.dp.GetCommandVariable("VARS")),
+            [None, None, None])
+
+#        print self._cf.dp.availableComponents()
+    ## constructor test
+    # \brief It tests default settings
+    def test_updateAutomaticComponents_withcf_nochnnel(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        msp = MacroServerPools(10)
+        se = Selector(msp)
+        se["ConfigDevice"] = val["ConfigDevice"]
+        se["WriterDevice"] = val["WriterDevice"]
+        channelerrors = []
+        poolchannels = []
+        componentgroup = {"mycp": True}
+
+        self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
+        self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
+
+        se["AutomaticDataSources"] = json.dumps(poolchannels)
+        se["AutomaticComponentGroup"] = json.dumps(componentgroup)
+        res = se.updateAutomaticComponents(channelerrors)
+
+        self.myAssertDict(json.loads(res), {"mycp": True})
+        self.assertEqual(channelerrors, [])
+
+        print self._cf.dp.GetCommandVariable("COMMANDS")
+        self.assertEqual(
+            json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
+            ["AvailableComponents", "AvailableDataSources",
+             "AvailableComponents", "Components"])
+        self.assertEqual(json.loads(self._cf.dp.GetCommandVariable("VARS")),
+                         [None, None, None, ['mycp']])
+#        print self._cf.dp.availableComponents()
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_updateAutomaticComponents_wds(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        msp = MacroServerPools(10)
+        se = Selector(msp)
+        se["ConfigDevice"] = val["ConfigDevice"]
+        se["WriterDevice"] = val["WriterDevice"]
+        channelerrors = []
+        poolchannels = []
+        componentgroup = {"smycp": True}
+
+        self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.smycps)])
+        self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
+
+        se["AutomaticDataSources"] = json.dumps(poolchannels)
+        se["AutomaticComponentGroup"] = json.dumps(componentgroup)
+        res = se.updateAutomaticComponents(channelerrors)
+
+        self.myAssertDict(json.loads(res), {"smycp": True})
+        self.assertEqual(channelerrors, [])
+
+        print self._cf.dp.GetCommandVariable("COMMANDS")
+        self.assertEqual(
+            json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
+            ["AvailableComponents", "AvailableDataSources",
+             "AvailableComponents",
+             "Components", "DataSources",  "DataSources", "DataSources",
+             "DataSources"])
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_updateAutomaticComponents_wds2(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        msp = MacroServerPools(10)
+        se = Selector(msp)
+        se["ConfigDevice"] = val["ConfigDevice"]
+        se["WriterDevice"] = val["WriterDevice"]
+        channelerrors = []
+        poolchannels = []
+        componentgroup = {"smycp": False, "smycp2": False, "smycp3": False}
+
+        self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.smycps)])
+        self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
+
+        se["AutomaticDataSources"] = json.dumps(poolchannels)
+        se["AutomaticComponentGroup"] = json.dumps(componentgroup)
+        res = se.updateAutomaticComponents(channelerrors)
+
+        self.myAssertDict(json.loads(res), {
+                "smycp": True, "smycp2": True, "smycp3": True})
+        self.assertEqual(channelerrors, [])
+
+        print self._cf.dp.GetCommandVariable("COMMANDS")
+        self.assertEqual(
+            json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
+            ["AvailableComponents", "AvailableDataSources",
+             "AvailableComponents",
+             "Components", "DataSources",  "DataSources",  "DataSources",
+             "DataSources",
+             "Components", "DataSources",  "DataSources", "DataSources",
+             "DataSources",
+             "Components", "DataSources",  "DataSources", "DataSources",
+             "DataSources"])
+        res = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_updateAutomaticComponents_2wds(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        simps2 = TestServerSetUp.TestServerSetUp(
+            "ttestp09/testts/t2r228", "S2")
+        try:
+            simps2.setUp()
+            msp = MacroServerPools(1)
+            msp = MacroServerPools(10)
+            se = Selector(msp)
+            se["ConfigDevice"] = val["ConfigDevice"]
+            se["WriterDevice"] = val["WriterDevice"]
+            channelerrors = []
+            poolchannels = []
+            componentgroup = {"smycp": False, "smycp2": False, "smycp3": False,
+                              "s2mycp": False, "s2mycp2": False,
+                              "s2mycp3": False}
+
+            cps = dict(self.smycps)
+            cps.update(self.smycps2)
+            dss = dict(self.smydss)
+            dss.update(self.smydss2)
+
+            self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
+            self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
+
+            se["AutomaticDataSources"] = json.dumps(poolchannels)
+            se["AutomaticComponentGroup"] = json.dumps(componentgroup)
+            res = se.updateAutomaticComponents(channelerrors)
+
+            self.myAssertDict(json.loads(res), {
+                    "smycp": True, "smycp2": True, "smycp3": True,
+                    "s2mycp": True, "s2mycp2": True, "s2mycp3": True})
+            self.assertEqual(len(channelerrors), 0)
+
+    #        print self._cf.dp.GetCommandVariable("COMMANDS")
+            self.assertEqual(
+                json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
+                             [
+                    "AvailableComponents", "AvailableDataSources",
+                    "AvailableComponents",
+                    "Components", "DataSources", "DataSources", "DataSources",
+                    "DataSources",
+                    "Components", "DataSources", "DataSources", "DataSources",
+                    "DataSources",
+                    "Components", "DataSources", "DataSources", "DataSources",
+                    "DataSources",
+                    "Components", "DataSources", "DataSources", "DataSources",
+                    "DataSources",
+                    "Components", "DataSources", "DataSources", "DataSources",
+                    "DataSources",
+                    "Components", "DataSources", "DataSources", "DataSources",
+                    "DataSources"])
+            res = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+        finally:
+            simps2.tearDown()
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_updateAutomaticComponents_2wds_dvnorunning(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        simps2 = TestServerSetUp.TestServerSetUp(
+            "ttestp09/testts/t2r228", "S2")
+        try:
+            simps2.add()
+            msp = MacroServerPools(1)
+            se = Selector(msp)
+            se["ConfigDevice"] = val["ConfigDevice"]
+            se["WriterDevice"] = val["WriterDevice"]
+            channelerrors = []
+            poolchannels = []
+            componentgroup = {"smycp": False, "smycp2": False, "smycp3": False,
+                              "s2mycp": False, "s2mycp2": False,
+                              "s2mycp3": False}
+
+            cps = dict(self.smycps)
+            cps.update(self.smycps2)
+            dss = dict(self.smydss)
+            dss.update(self.smydss2)
+
+            self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
+            self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
+
+            se["AutomaticDataSources"] = json.dumps(poolchannels)
+            se["AutomaticComponentGroup"] = json.dumps(componentgroup)
+            res = se.updateAutomaticComponents(channelerrors)
+
+            self.myAssertDict(json.loads(res), {
+                    "smycp": True, "smycp2": True, "smycp3": True,
+                    "s2mycp": False, "s2mycp2": False, "s2mycp3": False})
+            self.assertEqual(len(channelerrors), 3)
+
+    #        print self._cf.dp.GetCommandVariable("COMMANDS")
+            self.assertEqual(
+                json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
+                             [
+                    "AvailableComponents", "AvailableDataSources",
+                    "AvailableComponents",
+                    "Components", "DataSources", "DataSources", "DataSources",
+                    "DataSources",
+                    "Components", "DataSources", "DataSources", "DataSources",
+                    "DataSources",
+                    "Components", "DataSources", "DataSources", "DataSources",
+                    "DataSources",
+                    "Components", "DataSources", "DataSources", "DataSources",
+                    "DataSources",
+                    "Components", "DataSources", "DataSources", "DataSources",
+                    "DataSources",
+                    "Components", "DataSources", "DataSources", "DataSources",
+                    "DataSources"])
+            res = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+        finally:
+            simps2.delete()
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_updateAutomaticComponents_2wds_dvnodef(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        msp = MacroServerPools(1)
+        se = Selector(msp)
+        se["ConfigDevice"] = val["ConfigDevice"]
+        se["WriterDevice"] = val["WriterDevice"]
+        channelerrors = []
+        poolchannels = []
+        componentgroup = {"smycp": False, "smycp2": False, "smycp3": False,
+                          "s2mycp": False, "s2mycp2": False, "s2mycp3": False}
+
+        cps = dict(self.smycps)
+        cps.update(self.smycps2)
+        dss = dict(self.smydss)
+        dss.update(self.smydss2)
+
+        self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
+        self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
+
+        se["AutomaticDataSources"] = json.dumps(poolchannels)
+        se["AutomaticComponentGroup"] = json.dumps(componentgroup)
+        res = se.updateAutomaticComponents(channelerrors)
+
+        self.myAssertDict(json.loads(res), {
+                "smycp": True, "smycp2": True, "smycp3": True,
+                "s2mycp": False, "s2mycp2": False, "s2mycp3": False})
+        self.assertEqual(len(channelerrors), 3)
+
+        self.assertEqual(json.loads(
+                self._cf.dp.GetCommandVariable("COMMANDS")),
+                         [
+                "AvailableComponents", "AvailableDataSources",
+                "AvailableComponents",
+                "Components", "DataSources", "DataSources", "DataSources",
+                "DataSources",
+                "Components", "DataSources", "DataSources", "DataSources",
+                "DataSources",
+                "Components", "DataSources", "DataSources", "DataSources",
+                "DataSources",
+                "Components", "DataSources", "DataSources", "DataSources",
+                "DataSources",
+                "Components", "DataSources", "DataSources", "DataSources",
+                "DataSources",
+                "Components", "DataSources", "DataSources", "DataSources",
+                "DataSources"])
+        res = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_updateAutomaticComponents_2wds_nods(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        simps2 = TestServerSetUp.TestServerSetUp(
+            "ttestp09/testts/t2r228", "S2")
+        try:
+            simps2.setUp()
+            msp = MacroServerPools(1)
+            se = Selector(msp)
+            se["ConfigDevice"] = val["ConfigDevice"]
+            se["WriterDevice"] = val["WriterDevice"]
+            channelerrors = []
+            poolchannels = []
+            componentgroup = {"smycp": False, "smycp2": False, "smycp3": False,
+                              "s2mycp": False, "s2mycp2": False,
+                              "s2mycp3": False}
+
+            cps = dict(self.smycps)
+            cps.update(self.smycps2)
+            dss = dict(self.smydss)
+#            dss.update(self.smydss2)
+
+            self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
+            self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
+
+            se["AutomaticDataSources"] = json.dumps(poolchannels)
+            se["AutomaticComponentGroup"] = json.dumps(componentgroup)
+            res = se.updateAutomaticComponents(channelerrors)
+
+            self.myAssertDict(json.loads(res), {
+                    "smycp": True, "smycp2": True, "smycp3": True,
+                    "s2mycp": True, "s2mycp2": True, "s2mycp3": True})
+            self.assertEqual(len(channelerrors), 0)
+
+            res = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+        finally:
+            simps2.tearDown()
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_updateAutomaticComponents_2wds_nodspool(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        simps2 = TestServerSetUp.TestServerSetUp(
+            "ttestp09/testts/t2r228", "S2")
+        try:
+            simps2.setUp()
+            msp = MacroServerPools(1)
+            se = Selector(msp)
+            se["ConfigDevice"] = val["ConfigDevice"]
+            se["WriterDevice"] = val["WriterDevice"]
+            channelerrors = []
+            poolchannels = ["scalar2_long", "spectrum2_short"]
+            componentgroup = {"smycp": False, "smycp2": False, "smycp3": False,
+                              "s2mycp": False, "s2mycp2": False,
+                              "s2mycp3": False}
+
+            cps = dict(self.smycps)
+            cps.update(self.smycps2)
+            dss = dict(self.smydss)
+#            dss.update(self.smydss2)
+
+            self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
+            self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
+
+            se["AutomaticDataSources"] = json.dumps(poolchannels)
+            se["AutomaticComponentGroup"] = json.dumps(componentgroup)
+            res = se.updateAutomaticComponents(channelerrors)
+
+            self.myAssertDict(json.loads(res), {
+                    "smycp": True, "smycp2": True, "smycp3": True,
+                    "s2mycp": False, "s2mycp2": False, "s2mycp3": True})
+            self.assertEqual(len(channelerrors), 2)
+
+    #        print self._cf.dp.GetCommandVariable("COMMANDS")
+            res = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+        finally:
+            simps2.tearDown()
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_updateAutomaticComponents_2wds_notangods(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        simps2 = TestServerSetUp.TestServerSetUp(
+            "ttestp09/testts/t2r228", "S2")
+        try:
+            simps2.setUp()
+            msp = MacroServerPools(1)
+            se = Selector(msp)
+            se["ConfigDevice"] = val["ConfigDevice"]
+            se["WriterDevice"] = val["WriterDevice"]
+            channelerrors = []
+
+            poolchannels = ["scalar2_long", "spectrum2_short"]
+            componentgroup = {"smycp": False, "smycp2": False,
+                              "smycp3": False, "smycpnt1": False,
+                              "s2mycp": False, "s2mycp2": False,
+                              "s2mycp3": False}
+
+            cps = dict(self.smycps)
+            cps.update(self.smycps2)
+            dss = dict(self.smydss)
+            dss.update(self.smydss2)
+
+            self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
+            self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
+
+            se["AutomaticDataSources"] = json.dumps(poolchannels)
+            se["AutomaticComponentGroup"] = json.dumps(componentgroup)
+            res = se.updateAutomaticComponents(channelerrors)
+
+            self.myAssertDict(json.loads(res), {
+                    "smycp": True, "smycp2": True, "smycp3": True,
+                    "s2mycp": True, "s2mycp2": True, "s2mycp3": True,
+                    "smycpnt1": True})
+            self.assertEqual(len(channelerrors), 0)
+
+    #        print self._cf.dp.GetCommandVariable("COMMANDS")
+            res = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+        finally:
+            simps2.tearDown()
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_updateAutomaticComponents_2wds_notangodsnopool(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        simps2 = TestServerSetUp.TestServerSetUp(
+            "ttestp09/testts/t2r228", "S2")
+        try:
+            simps2.setUp()
+            msp = MacroServerPools(1)
+            se = Selector(msp)
+            se["ConfigDevice"] = val["ConfigDevice"]
+            se["WriterDevice"] = val["WriterDevice"]
+            channelerrors = []
+            poolchannels = ["scalar2_long", "spectrum2_short", "client_long"]
+            componentgroup = {"smycp": False, "smycp2": False,
+                              "smycp3": False, "smycpnt1": False,
+                              "s2mycp": False, "s2mycp2": False,
+                              "s2mycp3": False}
+
+            cps = dict(self.smycps)
+            cps.update(self.smycps2)
+            dss = dict(self.smydss)
+            dss.update(self.smydss2)
+
+            self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
+            self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
+
+            se["AutomaticDataSources"] = json.dumps(poolchannels)
+            se["AutomaticComponentGroup"] = json.dumps(componentgroup)
+            res = se.updateAutomaticComponents(channelerrors)
+
+            self.myAssertDict(json.loads(res), {
+                    "smycp": True, "smycp2": True, "smycp3": True,
+                    "s2mycp": True, "s2mycp2": True, "s2mycp3": True,
+                    "smycpnt1": False})
+            self.assertEqual(len(channelerrors), 1)
+
+    #        print self._cf.dp.GetCommandVariable("COMMANDS")
+            res = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+        finally:
+            simps2.tearDown()
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_updateAutomaticComponents_2wds_notangodsnopool2(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        simps2 = TestServerSetUp.TestServerSetUp(
+            "ttestp09/testts/t2r228", "S2")
+        try:
+            simps2.setUp()
+            msp = MacroServerPools(1)
+            se = Selector(msp)
+            se["ConfigDevice"] = val["ConfigDevice"]
+            se["WriterDevice"] = val["WriterDevice"]
+            channelerrors = []
+            poolchannels = ["scalar2_long", "spectrum2_short", "client_long"]
+            componentgroup = {"smycp": False, "smycp2": False,
+                              "smycp3": False, "smycpnt1": False,
+                              "s2mycp": False, "s2mycp2": False,
+                              "s2mycp3": False}
+
+            cps = dict(self.smycps)
+            cps.update(self.smycps2)
+            dss = dict(self.smydss)
+            dss.update(self.smydss2)
+
+            self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
+            self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
+
+            msp.updateMacroServer(self._ms.door.keys()[0])
+            pools = msp.getPools(self._ms.door.keys()[0])
+            print "POOLS", pools
+
+            se["AutomaticDataSources"] = json.dumps(poolchannels)
+            se["AutomaticComponentGroup"] = json.dumps(componentgroup)
+            res = se.updateAutomaticComponents(channelerrors)
+
+            self.myAssertDict(json.loads(res), {
+                    "smycp": True, "smycp2": True, "smycp3": True,
+                    "s2mycp": True, "s2mycp2": True, "s2mycp3": True,
+                    "smycpnt1": False})
+            self.assertEqual(len(channelerrors), 1)
+
+    #        print self._cf.dp.GetCommandVariable("COMMANDS")
+            res = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+        finally:
+            simps2.tearDown()
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_updateAutomaticComponents_2wds_notangods2(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        simps2 = TestServerSetUp.TestServerSetUp(
+            "ttestp09/testts/t2r228", "S2")
+
+        arr = [
+            {"name":"client_long", "full_name":"ttestp09/testts/t1r228/Value"},
+            {"name":"client_short",
+             "full_name":"ttestp09/testts/t1r228/Value"},
+            ]
+
+        try:
+            simps2.setUp()
+            msp = MacroServerPools(1)
+            se = Selector(msp)
+            se["ConfigDevice"] = val["ConfigDevice"]
+            se["WriterDevice"] = val["WriterDevice"]
+            db = PyTango.Database()
+            db.put_device_property(self._ms.ms.keys()[0],
+                                   {'PoolNames': self._pool.dp.name()})
+            channelerrors = []
+            poolchannels = []
+            componentgroup = {"smycp": False, "smycp2": False,
+                              "smycp3": False, "smycpnt1": False,
+                              "s2mycp": False, "s2mycp2": False,
+                              "s2mycp3": False}
+
+            cps = dict(self.smycps)
+            cps.update(self.smycps2)
+            dss = dict(self.smydss)
+            dss.update(self.smydss2)
+
+            self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
+            self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
+
+            msp.updateMacroServer(self._ms.door.keys()[0])
+            pools = msp.getPools(self._ms.door.keys()[0])
+            pools[0].AcqChannelList = [json.dumps(a) for a in arr]
+            print "POOLS", pools
+
+            se["AutomaticDataSources"] = json.dumps(poolchannels)
+            se["AutomaticComponentGroup"] = json.dumps(componentgroup)
+            res = se.updateAutomaticComponents(channelerrors)
+
+            self.myAssertDict(json.loads(res), {
+                    "smycp": True, "smycp2": True, "smycp3": True,
+                    "s2mycp": True, "s2mycp2": True, "s2mycp3": True,
+                    "smycpnt1": True})
+            self.assertEqual(len(channelerrors), 0)
+
+    #        print self._cf.dp.GetCommandVariable("COMMANDS")
+            res = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+        finally:
+            simps2.tearDown()
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_updateAutomaticComponents_2wds_notangodspool_error(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        simps2 = TestServerSetUp.TestServerSetUp(
+            "ttestp09/testts/t2r228", "S2")
+
+        arr = [
+            {"name":"client_long", "full_name":"ttestp09/testts/t1r228/Value"},
+            {"name":"client_short",
+             "full_name":"ttestp09/testts/t1r228/Value"},
+            ]
+
+        try:
+            simps2.setUp()
+            msp = MacroServerPools(1)
+            se = Selector(msp)
+            se["ConfigDevice"] = val["ConfigDevice"]
+            se["WriterDevice"] = val["WriterDevice"]
+            db = PyTango.Database()
+            db.put_device_property(self._ms.ms.keys()[0],
+                                   {'PoolNames': self._pool.dp.name()})
+            channelerrors = []
+            poolchannels = ["scalar2_long", "spectrum2_short", "client_long",
+                            "client_short"]
+            componentgroup = {
+                "smycp": False, "smycp2": False, "smycp3": False,
+                "smycpnt1": False,
+                "s2mycp": False, "s2mycp2": False, "s2mycp3": False
+                }
+
+            cps = dict(self.smycps)
+            cps.update(self.smycps2)
+            dss = dict(self.smydss)
+            dss.update(self.smydss2)
+
+            self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
+            self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
+    #        print "MDSS", self._cf.dp.availableDataSources()
+    #        print "XDSS", self._cf.dp.dataSources(["scalar_long"])
+            msp.updateMacroServer(self._ms.door.keys()[0])
+            pools = msp.getPools(self._ms.door.keys()[0])
+            pools[0].AcqChannelList = [json.dumps(a) for a in arr]
+            print "POOLS", pools
+
+            se["AutomaticDataSources"] = json.dumps(poolchannels)
+            se["AutomaticComponentGroup"] = json.dumps(componentgroup)
+            res = se.updateAutomaticComponents(channelerrors)
+
+            print res
+    #        print channelerrors
+
+            self.myAssertDict(json.loads(res), {
+                    "smycp": True, "smycp2": True, "smycp3": True,
+                    "s2mycp": True, "s2mycp2": True, "s2mycp3": True,
+                    "smycpnt1": False})
+            self.assertEqual(len(channelerrors), 1)
+
+    #        print self._cf.dp.GetCommandVariable("COMMANDS")
+            res = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+        finally:
+            simps2.tearDown()
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_updateAutomaticComponents_2wds_notangodspool(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        simps2 = TestServerSetUp.TestServerSetUp(
+            "ttestp09/testts/t2r228", "S2")
+
+        arr = [
+            {"name":"client_short", "full_name":"ttestp09/testts/t1r228"},
+            ]
+
+        try:
+            simps2.setUp()
+            msp = MacroServerPools(1)
+            se = Selector(msp)
+            se["ConfigDevice"] = val["ConfigDevice"]
+            se["WriterDevice"] = val["WriterDevice"]
+            db = PyTango.Database()
+            db.put_device_property(self._ms.ms.keys()[0],
+                                   {'PoolNames': self._pool.dp.name()})
+            channelerrors = []
+
+            poolchannels = ["scalar2_long", "spectrum2_short",  "client_short"]
+            componentgroup = {
+                "smycp": False, "smycp2": False, "smycp3": False,
+                "smycpnt1": False,
+                "s2mycp": False, "s2mycp2": False, "s2mycp3": False
+                }
+
+            cps = dict(self.smycps)
+            cps.update(self.smycps2)
+            dss = dict(self.smydss)
+            dss.update(self.smydss2)
+
+            self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
+            self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
+    #        print "MDSS", self._cf.dp.availableDataSources()
+    #        print "XDSS", self._cf.dp.dataSources(["scalar_long"])
+            msp.updateMacroServer(self._ms.door.keys()[0])
+            pools = msp.getPools(self._ms.door.keys()[0])
+            pools[0].AcqChannelList = [json.dumps(a) for a in arr]
+            print "POOLS", pools
+            self._simps.dp.ChangeValueType("ScalarShort")
+            self._simps.dp.Value = 43
+
+            se["AutomaticDataSources"] = json.dumps(poolchannels)
+            se["AutomaticComponentGroup"] = json.dumps(componentgroup)
+            res = se.updateAutomaticComponents(channelerrors)
+
+            self.myAssertDict(json.loads(res), {
+                    "smycp": True, "smycp2": True, "smycp3": True,
+                    "s2mycp": True, "s2mycp2": True, "s2mycp3": True,
+                    "smycpnt1": False})
+            self.assertEqual(len(channelerrors), 1)
+
+    #        print self._cf.dp.GetCommandVariable("COMMANDS")
+            res = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+        finally:
+            simps2.tearDown()
+
+   ## constructor test
+    # \brief It tests default settings
+    def test_updateAutomaticComponents_2wds_notangodspool_alias(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        simps2 = TestServerSetUp.TestServerSetUp(
+            "ttestp09/testts/t2r228", "S2")
+
+        arr = [
+            {"name":"client_short", "full_name":"ttestp09/testts/t1r228"},
+            ]
+
+        try:
+            db = PyTango.Database()
+            simps2.setUp()
+            msp = MacroServerPools(1)
+            se = Selector(msp)
+            se["ConfigDevice"] = val["ConfigDevice"]
+            se["WriterDevice"] = val["WriterDevice"]
+            db.put_device_alias(arr[0]["full_name"], arr[0]["name"])
+            db.put_device_property(self._ms.ms.keys()[0],
+                                   {'PoolNames': self._pool.dp.name()})
+
+            channelerrors = []
+            poolchannels = ["scalar2_long", "spectrum2_short", "client_short"]
+            componentgroup = {
+                "smycp": False, "smycp2": False, "smycp3": False,
+                "smycpnt1": False,
+                "s2mycp": False, "s2mycp2": False, "s2mycp3": False
+                }
+
+            cps = dict(self.smycps)
+            cps.update(self.smycps2)
+            dss = dict(self.smydss)
+            dss.update(self.smydss2)
+
+            self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
+            self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
+            msp.updateMacroServer(self._ms.door.keys()[0])
+            pools = msp.getPools(self._ms.door.keys()[0])
+            pools[0].AcqChannelList = [json.dumps(a) for a in arr]
+            print "POOLS", pools
+            self._simps.dp.ChangeValueType("ScalarShort")
+            self._simps.dp.Value = 43
+
+            se["AutomaticDataSources"] = json.dumps(poolchannels)
+            se["AutomaticComponentGroup"] = json.dumps(componentgroup)
+            res = se.updateAutomaticComponents(channelerrors)
+
+            self.myAssertDict(json.loads(res), {
+                    "smycp": True, "smycp2": True, "smycp3": True,
+                    "s2mycp": True, "s2mycp2": True, "s2mycp3": True,
+                    "smycpnt1": True})
+            self.assertEqual(len(channelerrors), 0)
+
+            res = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+        finally:
+            db.delete_device_alias(arr[0]["name"])
+            simps2.tearDown()
+
+   ## constructor test
+    # \brief It tests default settings
+    def test_updateAutomaticComponents_2wds_notangodspool_alias_value(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        simps2 = TestServerSetUp.TestServerSetUp(
+            "ttestp09/testts/t2r228", "S2")
+
+        arr = [
+            {"name":"client_short", "full_name":"ttestp09/testts/t1r228"},
+            ]
+
+        try:
+            db = PyTango.Database()
+            simps2.setUp()
+            msp = MacroServerPools(10)
+            se = Selector(msp)
+            se["ConfigDevice"] = val["ConfigDevice"]
+            se["WriterDevice"] = val["WriterDevice"]
+            db.put_device_alias(arr[0]["full_name"], arr[0]["name"])
+            db.put_device_property(self._ms.ms.keys()[0],
+                                   {'PoolNames': self._pool.dp.name()})
+
+            channelerrors = []
+            poolchannels = ["scalar2_long", "spectrum2_short", "client_short"]
+            componentgroup = {
+                "smycp": False, "smycp2": False, "smycp3": False,
+                "smycpnt1": False,
+                "s2mycp": False, "s2mycp2": False, "s2mycp3": False
+                }
+
+            cps = dict(self.smycps)
+            cps.update(self.smycps2)
+            dss = dict(self.smydss)
+            dss.update(self.smydss2)
+
+            self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
+            self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
+            msp.updateMacroServer(self._ms.door.keys()[0])
+            pools = msp.getPools(self._ms.door.keys()[0])
+            pools[0].AcqChannelList = [json.dumps(a) for a in arr]
+            print "POOLS", pools
+
+            se["AutomaticDataSources"] = json.dumps(poolchannels)
+            se["AutomaticComponentGroup"] = json.dumps(componentgroup)
+            res = se.updateAutomaticComponents(channelerrors)
+
+            self.myAssertDict(json.loads(res), {
+                    "smycp": True, "smycp2": True, "smycp3": True,
+                    "s2mycp": True, "s2mycp2": True, "s2mycp3": True,
+                    "smycpnt1": True})
+            self.assertEqual(len(channelerrors), 0)
+
+    #        print self._cf.dp.GetCommandVariable("COMMANDS")
+            res = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+        finally:
+            db.delete_device_alias(arr[0]["name"])
+            simps2.tearDown()
+
+  ## constructor test
+    # \brief It tests default settings
+    def test_updateAutomaticComponents_2wds_notangodspool_alias_novalue(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        simps2 = TestServerSetUp.TestServerSetUp(
+            "ttestp09/testts/t2r228", "S2")
+
+        arr = [
+            {"name":"client_short", "full_name":"ttestp09/testts/t1r228"},
+            ]
+
+        try:
+            db = PyTango.Database()
+            simps2.setUp()
+            msp = MacroServerPools(1)
+            se = Selector(msp)
+            se["ConfigDevice"] = val["ConfigDevice"]
+            se["WriterDevice"] = val["WriterDevice"]
+            db.put_device_alias(arr[0]["full_name"], arr[0]["name"])
+            db.put_device_property(self._ms.ms.keys()[0],
+                                   {'PoolNames': self._pool.dp.name()})
+
+            channelerrors = []
+            poolchannels = ["scalar2_long", "spectrum2_short", "client2_short"]
+            componentgroup = {
+                "smycp": False, "smycp2": False, "smycp3": False,
+                "s2mycpnt1": False,
+#                "s2mycp": False, "s2mycp2": False, "s2mycp3": False
+                }
+
+            cps = dict(self.smycps)
+            cps.update(self.smycps2)
+            dss = dict(self.smydss)
+            dss.update(self.smydss2)
+
+            self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
+            self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
+            msp.updateMacroServer(self._ms.door.keys()[0])
+            pools = msp.getPools(self._ms.door.keys()[0])
+            pools[0].AcqChannelList = [json.dumps(a) for a in arr]
+            print "POOLS", pools
+            se["AutomaticDataSources"] = json.dumps(poolchannels)
+            se["AutomaticComponentGroup"] = json.dumps(componentgroup)
+            res = se.updateAutomaticComponents(channelerrors)
+
+            self.myAssertDict(json.loads(res), {
+                    "smycp": True, "smycp2": True, "smycp3": True,
+                    "s2mycpnt1": False})
+            self.assertEqual(len(channelerrors), 1)
+
+    #        print self._cf.dp.GetCommandVariable("COMMANDS")
+            res = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+        finally:
+            db.delete_device_alias(arr[0]["name"])
+            simps2.tearDown()
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_updateAutomaticComponents_2wds_nocomponents(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        simps2 = TestServerSetUp.TestServerSetUp(
+            "ttestp09/testts/t2r228", "S2")
+
+        arr = [
+            {"name":"client_short", "full_name":"ttestp09/testts/t1r228"},
+            ]
+
+        try:
+            db = PyTango.Database()
+            simps2.setUp()
+            msp = MacroServerPools(1)
+            se = Selector(msp)
+            se["ConfigDevice"] = val["ConfigDevice"]
+            se["WriterDevice"] = val["WriterDevice"]
+
+            channelerrors = []
+            poolchannels = []
+            componentgroup = {
+                "smycp": False, "smycp2": False, "smycp3": False,
+                "s2mycp": False, "s2mycp2": False, "s2mycp3": False}
+
+            cps = dict(self.smycps)
+#            cps.update(self.smycps2)
+            dss = dict(self.smydss)
+#            dss.update(self.smydss2)
+
+            self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
+            self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
+    #        print "MDSS", self._cf.dp.availableDataSources()
+    #        print "XDSS", self._cf.dp.dataSources(["scalar_long"])
+            se["AutomaticDataSources"] = json.dumps(poolchannels)
+            se["AutomaticComponentGroup"] = json.dumps(componentgroup)
+            res = se.updateAutomaticComponents(channelerrors)
+
+            self.myAssertDict(json.loads(res), {
+                    "smycp": True, "smycp2": True, "smycp3": True,
+                    "s2mycp": False, "s2mycp2": False, "s2mycp3": False})
+            self.assertEqual(len(channelerrors), 3)
+
+    #        print self._cf.dp.GetCommandVariable("COMMANDS")
+            res = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+        finally:
+            simps2.tearDown()
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_importEnv_noenv(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+
+        envs = [
+            pickle.dumps(
+                {"new":{}
+                 }
+                )
+            ]
+        enms = [
+            [],
+            ["ScanID"],
+            ["ScanDir", "ScanFile"],
+            ]
+
+        edats = [
+            {},
+            {},
+            {}
+            ]
+
+        msp = MacroServerPools(10)
+        se = Selector(msp)
+        se["ConfigDevice"] = val["ConfigDevice"]
+        se["WriterDevice"] = val["WriterDevice"]
+        se.importEnv([], {})
+        for i, dt in enumerate(edats):
+
+            data = {}
+            self._ms.dps[self._ms.ms.keys()[0]].Environment = (
+                'pickle', envs[0])
+            se.importEnv(enms[i], data)
+#            print "data",data
+            self.myAssertDict(data, dt)
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_importEnv(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        envs = [
+            pickle.dumps(
+                {"new":{"ScanDir":"/tmp"}
+                 }
+                ),
+            pickle.dumps(
+                {"new":{"ScanDir":"/tmp"}
+                 }
+                ),
+            pickle.dumps(
+                {"new":{"ScanDir":"/tmp", "ScanFile":["file.nxs"]}
+                 }
+                ),
+            pickle.dumps(
+                {"new":{"ScanDir":"/tmp",
+                        "ScanFile":["file.nxs"],
+                        "NeXusConfigServer":"ptr/ert/ert",
+                        }
+                 }
+                ),
+            pickle.dumps(
+                {"new":{"ScanDir":"/tmp",
+                        "ScanFile":["file.nxs", "file2.nxs"],
+                        "NeXusConfiguration":{"ConfigServer":"ptr/ert/ert2"},
+                        }
+                 }
+                ),
+            pickle.dumps(
+                {"new":{"ScanDir":"/tmp",
+                        "ScanFile":"file.nxs",
+                        "NeXusConfigServer":"ptr/ert/ert",
+                        "NeXusConfiguration":{"ConfigServer":"ptr/ert/ert2"},
+                        }
+                 }
+                ),
+            pickle.dumps(
+                {"new":{"ScanDir":"/tmp",
+                        "ScanFile":["file.nxs"],
+                        "NeXusConfigServer":u'ptr/ert/ert',
+                        "NeXusBool": True,
+                        "NeXusInt":234,
+                        "NeXusFloat":123.123,
+                        "NeXusSomething":("dgfg",),
+                        "NeXusDict":{"dgfg":123, "sdf":"345"},
+                        }
+                 }
+                ),
+            pickle.dumps(
+                {"new":{"ScanDir":"/tmp",
+                        "ScanFile":["file.nxs"],
+                        "NeXusConfiguration":{"ConfigServer":u'ptr/ert/ert',
+                        "Bool": True,
+                        "Int":234,
+                        "Float":123.123,
+                        "Something":("dgfg",),
+                        "Dict":{"dgfg":123, "sdf":"345"}}
+                        }
+                 }
+                ),
+            ]
+        enms = [
+            ["ScanID"],
+            ["ScanDir"],
+            ["ScanDir", "ScanFile", "ConfigServer"],
+            ["ScanDir", "ScanFile", "ConfigServer"],
+            ["ScanDir", "ScanFile", "ConfigServer"],
+            ["ScanDir", "ScanFile", "ConfigServer"],
+            ["ScanDir", "ScanFile", "ConfigServer", "Bool", "Int", "Float",
+             "Something", "Dict"],
+            ["ScanDir", "ScanFile", "ConfigServer", "Bool", "Int", "Float",
+             "Something", "Dict"],
+            ]
+
+        edats = [
+            {},
+            {"ScanDir":"/tmp"},
+            {"ScanDir":"/tmp", "ScanFile":json.dumps(["file.nxs"])},
+            {"ScanDir":"/tmp",
+             "ScanFile":json.dumps(["file.nxs"]),
+             "ConfigServer":"ptr/ert/ert"},
+            {"ScanDir":"/tmp",
+             "ScanFile":json.dumps(["file.nxs", "file2.nxs"]),
+             "ConfigServer":"ptr/ert/ert2"},
+            {"ScanDir":"/tmp", "ScanFile":"file.nxs",
+             "ConfigServer":"ptr/ert/ert"},
+            {"ScanDir":"/tmp", "ScanFile":json.dumps(["file.nxs"]),
+             "ConfigServer":"ptr/ert/ert",
+             "Bool": True, "Int":234, "Float":123.123,
+             "Something":json.dumps(["dgfg"]),
+             "Dict":json.dumps({"dgfg":123, "sdf":"345"}),
+             },
+            {"ScanDir":"/tmp", "ScanFile":json.dumps(["file.nxs"]),
+             "ConfigServer":"ptr/ert/ert",
+             "Bool": True, "Int":234, "Float":123.123,
+             "Something":json.dumps(["dgfg"]),
+             "Dict":json.dumps({"dgfg":123, "sdf":"345"}),
+             },
+            ]
+
+        msp = MacroServerPools(10)
+        se = Selector(msp)
+        se["ConfigDevice"] = val["ConfigDevice"]
+        se["WriterDevice"] = val["WriterDevice"]
+        se.importEnv([], {})
+        for i, dt in enumerate(edats):
+#            print "I = ",i
+            data = {}
+            self._ms.dps[self._ms.ms.keys()[0]].Environment = (
+                'pickle', envs[i])
+            se.importEnv(enms[i], data)
+            self.myAssertDict(data, dt)
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_exportEnv(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+
+        envs = [
+            {"new":{'ScanID': 192,
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1',
+                    'ScanFile': [u'sar4r.nxs'],
+                    'NeXusConfiguration': {},
+                    'ActiveMntGrp': 'nxsmntgrp',
+                    '_ViewOptions': {'ShowDial': True},
+                    'DataCompressionRank': 0,
+                    'ScanDir': '/tmp/'}
+             },
+            {"new":{
+                    'ScanID': 192,
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1',
+                    'ScanFile': [u'sar4r.nxs'],
+                    'NeXusConfiguration': {},
+                    'ActiveMntGrp': 'nxsmntgrp',
+                    '_ViewOptions': {'ShowDial': True},
+                    'DataCompressionRank': 0,
+                    'ScanDir': '/tmp'}
+             },
+            {"new":{
+                    'ScanID': 192,
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1',
+                    'NeXusConfiguration': {},
+                    'ActiveMntGrp': 'nxsmntgrp',
+                    '_ViewOptions': {'ShowDial': True},
+                    'DataCompressionRank': 0,
+                    "ScanDir":"/tmp",
+                    "ScanFile":["file.nxs"]
+                    }
+             },
+            {"new":{"ScanDir":"/tmp",
+                    'ScanID': 192,
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1',
+                    'NeXusConfiguration': {"ConfigServer":"ptr/ert/ert"},
+                    'ActiveMntGrp': 'nxsmntgrp',
+                    '_ViewOptions': {'ShowDial': True},
+                    'DataCompressionRank': 0,
+                    "ScanFile":["file.nxs"],
+                    }
+             },
+            {"new":{"ScanDir":"/tmp",
+                    'ScanID': 192,
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1',
+                    'NeXusConfiguration': {"ConfigServer":"ptr/ert/ert2"},
+                    'ActiveMntGrp': 'nxsmntgrp',
+                    '_ViewOptions': {'ShowDial': True},
+                    'DataCompressionRank': 0,
+                    "ScanFile":["file.nxs", "file2.nxs"],
+                    }
+             },
+            {"new":{"ScanDir":"/tmp",
+                    'ScanID': 192,
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1',
+                    'NeXusConfiguration': {"ConfigServer":"ptr/ert/ert"},
+                    'ActiveMntGrp': 'nxsmntgrp',
+                    '_ViewOptions': {'ShowDial': True},
+                    'DataCompressionRank': 0,
+                    "ScanFile":"file.nxs",
+                    }
+             },
+            {"new":{"ScanDir":"/tmp",
+                    'ScanID': 192,
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1',
+                    "NeXusConfiguration":{
+                        "ConfigServer":'ptr/ert/ert',
+                        "Bool": True,
+                        "Int":234,
+                        "Float":123.123,
+                        "Something":["dgfg"],
+                        "Dict":{"dgfg":123, "sdf":"345"}},
+                    'ActiveMntGrp': 'nxsmntgrp',
+                    '_ViewOptions': {'ShowDial': True},
+                    'DataCompressionRank': 0,
+                    "ScanFile":["file.nxs"],
+                    }
+             },
+            {"new":{"ScanDir":"/tmp",
+                    'ScanID': 192,
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1',
+                    "NeXusConfiguration":{
+                        "ConfigServer":'ptr/ert/ert',
+                        "Bool": True,
+                        "Int":234,
+                        "Float":123.124,
+                        "Something":["dgfg"],
+                        "Dict":{"dgfg":123, "sdf":"345"}},
+                    'ActiveMntGrp': 'nxsmntgrp',
+                    '_ViewOptions': {'ShowDial': True},
+                    'DataCompressionRank': 0,
+                    "ScanFile":["file.nxs"],
+                    }
+             },
+            {"new":{"ScanDir":"/tmp",
+                    'ScanID': 192,
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1',
+                    "NeXusConfiguration":{
+                        "ConfigServer":'ptr/ert/ert',
+                        "Bool": True,
+                        "Int":234,
+                        "Float":123.124,
+                        "Something":["dgfg"],
+                        "Dict":{"dgfg":123, "sdf":"345"},
+                        "CConfigServer":'ptr/ert/ert',
+                        "CBool": True,
+                        "CInt":234,
+                        "CFloat":123.124,
+                        "CSomething":["dgfg"],
+                        "CDict":{"dgfg":123, "sdf":"345"}
+                        },
+                    'ActiveMntGrp': 'nxsmntgrp',
+                    '_ViewOptions': {'ShowDial': True},
+                    'DataCompressionRank': 0,
+                    "ScanFile":["file.nxs"],
+                    }
+             },
+            {"new":{"ScanDir":"/tmp",
+                    'ScanID': 192,
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1',
+                    "NeXusConfiguration":{
+                        "ConfigServer":'ptr/ert/ert',
+                        "Bool": True,
+                        "Int":234,
+                        "Float":123.124,
+                        "Something":["dgfg"],
+                        "Dict":{"dgfg":123, "sdf":"345"},
+                        "CConfigServer":'ptr/ert/ert',
+                        "CBool": True,
+                        "CInt":234,
+                        "CFloat":123.124,
+                        "CSomething":json.dumps(["dgfg"]),
+                        "CDict":json.dumps({"dgfg":123, "sdf":"345"})
+                        },
+                    'ActiveMntGrp': 'nxsmntgrp',
+                    '_ViewOptions': {'ShowDial': True},
+                    'DataCompressionRank': 0,
+                    "ScanFile":["file.nxs"],
+                    }
+             },
+           ]
+
+        edats = [
+            {},
+            {"ScanDir":"/tmp"},
+            {"ScanDir":"/tmp", "ScanFile":json.dumps(["file.nxs"])},
+            {"ScanDir":"/tmp", "ScanFile":json.dumps(["file.nxs"]),
+             "ConfigServer":"ptr/ert/ert"},
+            {"ScanDir":"/tmp",
+             "ScanFile":json.dumps(["file.nxs", "file2.nxs"]),
+             "ConfigServer":"ptr/ert/ert2"},
+            {"ScanDir":"/tmp", "ScanFile":"file.nxs",
+             "ConfigServer":"ptr/ert/ert"},
+            {"ScanDir":"/tmp", "ScanFile":json.dumps(["file.nxs"]),
+             "ConfigServer":"ptr/ert/ert",
+             "Bool": True, "Int":234, "Float":123.123,
+             "Something":json.dumps(["dgfg"]),
+             "Dict":json.dumps({"dgfg":123, "sdf":"345"}),
+             },
+            {"ScanDir":"/tmp", "ScanFile":["file.nxs"],
+             "ConfigServer":"ptr/ert/ert",
+             "Bool": True, "Int":234, "Float":123.124, "Something":["dgfg"],
+             "Dict":{"dgfg":123, "sdf":"345"},
+             },
+            {"ScanDir":"/tmp", "ScanFile":["file.nxs"],
+             "ConfigServer":"ptr/ert/ert",
+             "Bool": True, "Int":234, "Float":123.124, "Something":["dgfg"],
+             "Dict":{"dgfg":123, "sdf":"345"},
+             },
+            {"ScanDir":"/tmp", "ScanFile":["file.nxs"],
+             "ConfigServer":"ptr/ert/ert",
+             "Bool": True, "Int":234, "Float":123.124, "Something":["dgfg"],
+             "Dict":{"dgfg":123, "sdf":"345"},
+             },
+            ]
+
+        cmds = [None, None, {}, None, None, None, None, None,
+                {"CConfigServer":'ptr/ert/ert',
+                 "CBool": True,
+                 "CInt":234,
+                 "CFloat":123.124,
+                 "CSomething":["dgfg"],
+                 "CDict":{"dgfg":123, "sdf":"345"}},
+                 {"CConfigServer":'ptr/ert/ert',
+                  "CBool": True,
+                  "CInt":234,
+                  "CFloat":123.124,
+                  "CSomething":json.dumps(["dgfg"]),
+                  "CDict":json.dumps({"dgfg":123, "sdf":"345"})},
+                ]
+        msp = MacroServerPools(10)
+        se = Selector(msp)
+        se["ConfigDevice"] = val["ConfigDevice"]
+        se["WriterDevice"] = val["WriterDevice"]
+        se.exportEnv({})
+        se.exportEnv({}, {})
+        for i, dt in enumerate(edats):
+            se.exportEnv(dt, cmds[i])
+#            print "I = ",i
+            data = {}
+            env = pickle.loads(
+                self._ms.dps[self._ms.ms.keys()[0]].Environment[1])
+#            print "env", env
+#            print "ei", envs[i]
+            self.myAssertDict(envs[i], env)
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_fetchEnvData(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+
+        envs = [
+            pickle.dumps(
+                {"new":{"ScanDir":"/tmp"}
+                 }
+                ),
+            pickle.dumps(
+                {"new":{"ScanDir":"/tmp", "ScanID": 11}
+                 }
+                ),
+            pickle.dumps(
+                {"new":{"ScanDir":"/tmp", "ScanFile":["file.nxs"]}
+                 }
+                ),
+            pickle.dumps(
+                {"new":{"ScanDir":"/tmp",  "ScanID": 13,
+                        "ScanFile":["file.nxs"],
+                        "NeXusConfigServer":"ptr/ert/ert",
+                        }
+                 }
+                ),
+            pickle.dumps(
+                {"new":{"ScanDir":"/tmp",
+                        "ScanFile":["file.nxs", "file2.nxs"],
+                        "NeXusSelectorDevice": "p09/nxsrecselector/1",
+                        "NeXusConfiguration":{"ConfigServer":"ptr/ert/ert2"},
+                        }
+                 }
+                ),
+            pickle.dumps(
+                {"new":{"ScanDir":"/tmp",  "ScanID": 15,
+                        "ScanFile":"file.nxs",
+                        "NeXusSelectorDevice": "p09/nxsrecselector/1",
+                        "NeXusConfigServer":"ptr/ert/ert",
+                        "NeXusConfiguration":{"ConfigServer":"ptr/ert/ert2"},
+                        }
+                 }
+                ),
+            pickle.dumps(
+                {"new":{"ScanDir":"/tmp",
+                        "ScanFile":["file.nxs"],
+                        "NeXusConfigServer":u'ptr/ert/ert',
+                        "NeXusBool": True,
+                        "NeXusInt":234,
+                        "NeXusSelectorDevice": "p09/nxsrecselector/1",
+                        "NeXusFloat":123.123,
+                        "NeXusSomething":("dgfg",),
+                        "NeXusDict":{"dgfg":123, "sdf":"345"},
+                        }
+                 }
+                ),
+            pickle.dumps(
+                {"new":{"ScanDir":"/tmp",  "ScanID": 17,
+                        "ScanFile":["file.nxs"],
+                        "NeXusSelectorDevice": "p09/nxsrecselector/1",
+                        "NeXusConfiguration":{"ConfigServer":u'ptr/ert/ert',
+                        "Bool": True,
+                        "Int":234,
+                        "Float":123.123,
+                        "Something":("dgfg",),
+                        "Dict":{"dgfg":123, "sdf":"345"}}
+                        }
+                 }
+                ),
+            ]
+
+        edats = [
+            {"ScanDir":"/tmp"},
+            {"ScanDir":"/tmp", "ScanID": 11},
+            {"ScanDir":"/tmp", "ScanFile":["file.nxs"]},
+            {"ScanDir":"/tmp", "ScanFile":["file.nxs"], "ScanID": 13},
+            {"ScanDir":"/tmp", "ScanFile":["file.nxs", "file2.nxs"],
+             "NeXusSelectorDevice": "p09/nxsrecselector/1"},
+            {"ScanDir":"/tmp", "ScanFile":"file.nxs", "ScanID": 15,
+             "NeXusSelectorDevice": "p09/nxsrecselector/1"},
+            {"ScanDir":"/tmp", "ScanFile":["file.nxs"],
+             "NeXusSelectorDevice": "p09/nxsrecselector/1"},
+            {"ScanDir":"/tmp", "ScanFile":["file.nxs"], "ScanID": 17,
+             "NeXusSelectorDevice": "p09/nxsrecselector/1"},
+            ]
+
+        msp = MacroServerPools(10)
+        se = Selector(msp)
+        se["ConfigDevice"] = val["ConfigDevice"]
+        se["WriterDevice"] = val["WriterDevice"]
+        data = {"ScanID": 192,
+                "NeXusSelectorDevice": "p09/nxsrecselector/1",
+                "ScanFile": ["sar4r.nxs"], "ScanDir": "/tmp/"}
+        res = se.fetchEnvData()
+        self.myAssertDict(json.loads(res), data)
+        for i, dt in enumerate(edats):
+#            print "I = ",i
+            data = {}
+            self._ms.dps[self._ms.ms.keys()[0]].Environment = (
+                'pickle', envs[i])
+            dt = se.fetchEnvData()
+#            print edats[i]
+#            print "data",dt
+            self.myAssertDict(edats[i], json.loads(dt))
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_storeEnvData(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+
+        envs = [
+            {"new":{'ScanID': 192,
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1',
+                    'ScanFile': [u'sar4r.nxs'],
+                    'ActiveMntGrp': 'nxsmntgrp',
+                    '_ViewOptions': {'ShowDial': True},
+                    'DataCompressionRank': 0,
+                    'ScanDir': '/tmp/'}
+             },
+            {"new":{
+                    'ScanID': 192,
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1',
+                    'ScanFile': [u'sar4r.nxs'],
+                    'ActiveMntGrp': 'nxsmntgrp',
+                    '_ViewOptions': {'ShowDial': True},
+                    'DataCompressionRank': 0,
+                    'ScanDir': '/tmp'}
+             },
+            {"new":{
+                    'ScanID': 11,
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1',
+                    'ActiveMntGrp': 'nxsmntgrp',
+                    '_ViewOptions': {'ShowDial': True},
+                    'DataCompressionRank': 0,
+                    "ScanDir":"/tmp",
+                    "ScanFile":["file.nxs"]
+                    }
+             },
+            {"new":{"ScanDir":"/tmp",
+                    'ScanID': 11,
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1',
+                    "ConfigServer":"ptr/ert/ert",
+                    'ActiveMntGrp': 'nxsmntgrp',
+                    '_ViewOptions': {'ShowDial': True},
+                    'DataCompressionRank': 0,
+                    "ScanFile":["file.nxs"],
+                    }
+             },
+            {"new":{"ScanDir":"/tmp",
+                    'ScanID': 13,
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1',
+                    "ConfigServer":"ptr/ert/ert2",
+                    'ActiveMntGrp': 'nxsmntgrp',
+                    '_ViewOptions': {'ShowDial': True},
+                    'DataCompressionRank': 0,
+                    "ScanFile":["file.nxs", "file2.nxs"],
+                    }
+             },
+            {"new":{"ScanDir":"/tmp",
+                    'ScanID': 13,
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1',
+                    "ConfigServer":"ptr/ert/ert",
+                    'ActiveMntGrp': 'nxsmntgrp',
+                    '_ViewOptions': {'ShowDial': True},
+                    'DataCompressionRank': 0,
+                    "ScanFile":"file.nxs",
+                    }
+             },
+            {"new":{"ScanDir":"/tmp",
+                    'ScanID': 15,
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1',
+                    "ConfigServer":'ptr/ert/ert',
+                    "Bool": True,
+                    "Int":234,
+                    "Float":123.123,
+                    "Something":["dgfg"],
+                    "Dict":{"dgfg":123, "sdf":"345"},
+                    'ActiveMntGrp': 'nxsmntgrp',
+                    '_ViewOptions': {'ShowDial': True},
+                    'DataCompressionRank': 0,
+                    "ScanFile":["file.nxs"],
+                    }
+             },
+            {"new":{"ScanDir":"/tmp",
+                    'ScanID': 15,
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1',
+                    "ConfigServer":'ptr/ert/ert',
+                    "Bool": True,
+                    "Int":234,
+                    "Float":123.124,
+                    "Something":["dgfg"],
+                    "Dict":{"dgfg":123, "sdf":"345"},
+                    'ActiveMntGrp': 'nxsmntgrp',
+                    '_ViewOptions': {'ShowDial': True},
+                    'DataCompressionRank': 0,
+                    "ScanFile":["file.nxs"],
+                    }
+             },
+            {"new":{"ScanDir":"/tmp",
+                    'ScanID': 17,
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1',
+                    "ConfigServer":'ptr/ert/ert',
+                    "Bool": True,
+                    "Int":234,
+                    "Float":123.124,
+                    "Something":["dgfg"],
+                    "Dict":{"dgfg":123, "sdf":"345"},
+                    'ActiveMntGrp': 'nxsmntgrp',
+                    '_ViewOptions': {'ShowDial': True},
+                    'DataCompressionRank': 0,
+                    "ScanFile":["file.nxs"],
+                    }
+             },
+            {"new":{"ScanDir":"/tmp",
+                    'ScanID': 17,
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1',
+                    "ConfigServer":'ptr/ert/ert',
+                    "Bool": True,
+                    "Int":234,
+                    "Float":123.124,
+                    "Something":["dgfg"],
+                    "Dict":{"dgfg":123, "sdf":"345"},
+                    'ActiveMntGrp': 'nxsmntgrp',
+                    '_ViewOptions': {'ShowDial': True},
+                    'DataCompressionRank': 0,
+                    "ScanFile":["file.nxs"],
+                    }
+             },
+           ]
+
+        edats = [
+            {},
+            {"ScanDir":"/tmp"},
+            {"ScanDir":"/tmp", "ScanFile":["file.nxs"], "ScanID":11},
+            {"ScanDir":"/tmp", "ScanFile":["file.nxs"],
+             "ConfigServer":"ptr/ert/ert"},
+            {"ScanDir":"/tmp", "ScanFile":["file.nxs", "file2.nxs"],
+             "ConfigServer":"ptr/ert/ert2", "ScanID":13},
+            {"ScanDir":"/tmp", "ScanFile":"file.nxs",
+             "ConfigServer":"ptr/ert/ert"},
+            {"ScanDir":"/tmp", "ScanFile":["file.nxs"],
+             "ConfigServer":"ptr/ert/ert", "ScanID":15,
+             "Bool": True, "Int":234, "Float":123.123, "Something":["dgfg"],
+             "Dict":{"dgfg":123, "sdf":"345"},
+             },
+            {"ScanDir":"/tmp", "ScanFile":["file.nxs"],
+             "ConfigServer":"ptr/ert/ert",
+             "Bool": True, "Int":234, "Float":123.124, "Something":["dgfg"],
+             "Dict":{"dgfg":123, "sdf":"345"},
+             },
+            {"ScanDir":"/tmp", "ScanFile":["file.nxs"],
+             "ConfigServer":"ptr/ert/ert", "ScanID":17,
+             "Bool": True, "Int":234, "Float":123.124, "Something":["dgfg"],
+             "Dict":{"dgfg":123, "sdf":"345"},
+             },
+            {"ScanDir":"/tmp", "ScanFile":["file.nxs"],
+             "ConfigServer":"ptr/ert/ert",
+             "Bool": True, "Int":234, "Float":123.124, "Something":["dgfg"],
+             "Dict":{"dgfg":123, "sdf":"345"},
+             },
+            ]
+
+        sids = [192, 192, 11, 11, 13, 13, 15, 15, 17, 17]
+
+        msp = MacroServerPools(10)
+        se = Selector(msp)
+        se["ConfigDevice"] = val["ConfigDevice"]
+        se["WriterDevice"] = val["WriterDevice"]
+        se.storeEnvData("{}")
+        for i, dt in enumerate(edats):
+            sid = se.storeEnvData(json.dumps(dt))
+            print "I = ", i, sid
+            self.assertEqual(sid, sids[i])
+            data = {}
+            env = pickle.loads(
+                self._ms.dps[self._ms.ms.keys()[0]].Environment[1])
+#            print "env", env
+#            print "ei", envs[i]
+            self.myAssertDict(envs[i], env)
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_setScanEnv_scanid(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+
+        envs = [
+            pickle.dumps(
+                {"new":{}
+                     }
+                ),
+            pickle.dumps(
+                {"new":{"ScanID":12}
+                     }
+                )
+            ]
+
+        msp = MacroServerPools(10)
+        se = Selector(msp)
+        se["ConfigDevice"] = val["ConfigDevice"]
+        se["WriterDevice"] = val["WriterDevice"]
+
+        self.assertEqual(se.storeEnvData("{}"), 192)
+        self._ms.dps[self._ms.ms.keys()[0]].Environment = ('pickle', envs[0])
+        self.assertEqual(se.storeEnvData("{}"), -1)
+        self._ms.dps[self._ms.ms.keys()[0]].Environment = ('pickle', envs[1])
+        self.assertEqual(se.storeEnvData("{}"), 12)
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_setScanEnv2(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+
+        envs = [
+            {"new":{'ScanID': 192,
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1',
+                    'ScanFile': [u'sar4r.nxs'],
+                    'ActiveMntGrp': 'nxsmntgrp',
+                    '_ViewOptions': {'ShowDial': True},
+                    'DataCompressionRank': 0,
+                    'ScanDir': '/tmp/'}
+             },
+            {"new":{
+                    'ScanID': 192,
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1',
+                    'ScanFile': [u'sar4r.nxs'],
+                    'ActiveMntGrp': 'nxsmntgrp',
+                    '_ViewOptions': {'ShowDial': True},
+                    'DataCompressionRank': 0,
+                    'ScanDir': '/tmp'}
+             },
+            {"new":{
+                    'ScanID': 11,
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1',
+                    'ActiveMntGrp': 'nxsmntgrp',
+                    '_ViewOptions': {'ShowDial': True},
+                    'DataCompressionRank': 0,
+                    "ScanDir":"/tmp",
+                    "ScanFile":["file.nxs"]
+                    }
+             },
+            {"new":{"ScanDir":"/tmp",
+                    'ScanID': 11,
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1',
+                    "ConfigServer":"ptr/ert/ert",
+                    'ActiveMntGrp': 'nxsmntgrp',
+                    '_ViewOptions': {'ShowDial': True},
+                    'DataCompressionRank': 0,
+                    "ScanFile":["file.nxs"],
+                    }
+             },
+            {"new":{"ScanDir":"/tmp",
+                    'ScanID': 13,
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1',
+                    "ConfigServer":"ptr/ert/ert2",
+                    'ActiveMntGrp': 'nxsmntgrp',
+                    '_ViewOptions': {'ShowDial': True},
+                    'DataCompressionRank': 0,
+                    "ScanFile":["file.nxs", "file2.nxs"],
+                    }
+             },
+            {"new":{"ScanDir":"/tmp",
+                    'ScanID': 13,
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1',
+                    "ConfigServer":"ptr/ert/ert",
+                    'ActiveMntGrp': 'nxsmntgrp',
+                    '_ViewOptions': {'ShowDial': True},
+                    'DataCompressionRank': 0,
+                    "ScanFile":"file.nxs",
+                    }
+             },
+            {"new":{"ScanDir":"/tmp",
+                    'ScanID': 15,
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1',
+                    "ConfigServer":'ptr/ert/ert',
+                    "Bool": True,
+                    "Int":234,
+                    "Float":123.123,
+                    "Something":["dgfg"],
+                    "Dict":{"dgfg":123, "sdf":"345"},
+                    'ActiveMntGrp': 'nxsmntgrp',
+                    '_ViewOptions': {'ShowDial': True},
+                    'DataCompressionRank': 0,
+                    "ScanFile":["file.nxs"],
+                    }
+             },
+            {"new":{"ScanDir":"/tmp",
+                    'ScanID': 15,
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1',
+                    "ConfigServer":'ptr/ert/ert',
+                    "Bool": True,
+                    "Int":234,
+                    "Float":123.124,
+                    "Something":["dgfg"],
+                    "Dict":{"dgfg":123, "sdf":"345"},
+                    'ActiveMntGrp': 'nxsmntgrp',
+                    '_ViewOptions': {'ShowDial': True},
+                    'DataCompressionRank': 0,
+                    "ScanFile":["file.nxs"],
+                    }
+             },
+            {"new":{"ScanDir":"/tmp",
+                    'ScanID': 17,
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1',
+                    "ConfigServer":'ptr/ert/ert',
+                    "Bool": True,
+                    "Int":234,
+                    "Float":123.124,
+                    "Something":["dgfg"],
+                    "Dict":{"dgfg":123, "sdf":"345"},
+                    'ActiveMntGrp': 'nxsmntgrp',
+                    '_ViewOptions': {'ShowDial': True},
+                    'DataCompressionRank': 0,
+                    "ScanFile":["file.nxs"],
+                    }
+             },
+            {"new":{"ScanDir":"/tmp",
+                    'ScanID': 17,
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1',
+                    "ConfigServer":'ptr/ert/ert',
+                    "Bool": True,
+                    "Int":234,
+                    "Float":123.124,
+                    "Something":["dgfg"],
+                    "Dict":{"dgfg": 123, "sdf": "345"},
+                    'ActiveMntGrp': 'nxsmntgrp',
+                    '_ViewOptions': {'ShowDial': True},
+                    'DataCompressionRank': 0,
+                    "ScanFile":["file.nxs"],
+                    }
+             },
+           ]
+
+        edats = [
+            {},
+            {"ScanDir":"/tmp"},
+            {"ScanDir":"/tmp", "ScanFile":["file.nxs"], "ScanID":11},
+            {"ScanDir":"/tmp", "ScanFile":["file.nxs"],
+             "ConfigServer":"ptr/ert/ert"},
+            {"ScanDir":"/tmp", "ScanFile":["file.nxs", "file2.nxs"],
+             "ConfigServer":"ptr/ert/ert2", "ScanID":13},
+            {"ScanDir":"/tmp", "ScanFile":"file.nxs",
+             "ConfigServer":"ptr/ert/ert"},
+            {"ScanDir":"/tmp", "ScanFile":["file.nxs"],
+             "ConfigServer":"ptr/ert/ert", "ScanID":15,
+             "Bool": True, "Int":234, "Float":123.123, "Something":["dgfg"],
+             "Dict":{"dgfg":123, "sdf":"345"},
+             },
+            {"ScanDir":"/tmp", "ScanFile":["file.nxs"],
+             "ConfigServer":"ptr/ert/ert",
+             "Bool": True, "Int":234, "Float":123.124, "Something":["dgfg"],
+             "Dict":{"dgfg":123, "sdf":"345"},
+             },
+            {"ScanDir":"/tmp", "ScanFile":["file.nxs"],
+             "ConfigServer":"ptr/ert/ert", "ScanID":17,
+             "Bool": True, "Int":234, "Float":123.124, "Something":["dgfg"],
+             "Dict": {"dgfg":123, "sdf":"345"},
+             },
+            {"ScanDir":"/tmp", "ScanFile":["file.nxs"],
+             "ConfigServer":"ptr/ert/ert",
+             "Bool": True, "Int": 234, "Float": 123.124, "Something":["dgfg"],
+             "Dict":{"dgfg": 123, "sdf": "345"},
+             },
+            ]
+
+        sids = [192, 192, 11, 11, 13, 13, 15, 15, 17, 17]
+
+        msp = MacroServerPools(10)
+        se = Selector(msp)
+        se["ConfigDevice"] = val["ConfigDevice"]
+        se["WriterDevice"] = val["WriterDevice"]
+        se.storeEnvData("{}")
+        for i, dt in enumerate(edats):
+            sid = se.storeEnvData(json.dumps(dt))
+            print "I = ", i, sid
+            self.assertEqual(sid, sids[i])
+            data = {}
+            env = pickle.loads(
+                self._ms.dps[self._ms.ms.keys()[0]].Environment[1])
+#            print "env", env
+#            print "ei", envs[i]
+            self.myAssertDict(envs[i], env)
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_setScanEnv_dtlist(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+
+        envs = [
+            {"new":{'ScanID': 192,
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1',
+                    'ScanFile': [u'sar4r.nxs'],
+                    'ActiveMntGrp': 'nxsmntgrp',
+                    '_ViewOptions': {'ShowDial': True},
+                    'DataCompressionRank': 0,
+                    'ScanDir': '/tmp/'}
+             },
+            {"new":{
+                    'ScanID': 192,
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1',
+                    'ScanFile': [u'sar4r.nxs'],
+                    'ActiveMntGrp': 'nxsmntgrp',
+                    '_ViewOptions': {'ShowDial': True},
+                    'DataCompressionRank': 0,
+                    'ScanDir': '/tmp'}
+             },
+            {"new":{
+                    'ScanID': "11",
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1',
+                    'ActiveMntGrp': 'nxsmntgrp',
+                    '_ViewOptions': {'ShowDial': True},
+                    'DataCompressionRank': 0,
+                    "ScanDir":"/tmp",
+                    "ScanFile":"file.nxs"
+                    }
+             },
+            {"new":{"ScanDir":"/tmp",
+                    'ScanID': "11",
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1',
+                    "ConfigServer":"ptr/ert/ert",
+                    'ActiveMntGrp': 'nxsmntgrp',
+                    '_ViewOptions': {'ShowDial': True},
+                    'DataCompressionRank': 0,
+                    "ScanFile":"file.nxs",
+                    }
+             },
+            {"new":{"ScanDir":"/tmp",
+                    'ScanID': '13',
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1',
+                    "ConfigServer":"ptr/ert/ert2",
+                    'ActiveMntGrp': 'nxsmntgrp',
+                    '_ViewOptions': {'ShowDial': True},
+                    'DataCompressionRank': 0,
+                    "ScanFile":"file.nxs",
+                    }
+             },
+            {"new":{"ScanDir":"/tmp",
+                    'ScanID': 13,
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1',
+                    "ConfigServer":"ptr/ert/ert",
+                    'ActiveMntGrp': 'nxsmntgrp',
+                    '_ViewOptions': {'ShowDial': True},
+                    'DataCompressionRank': 0,
+                    "ScanFile":"file.nxs",
+                    }
+             },
+            {"new":{"ScanDir":"/tmp",
+                    'ScanID': 15,
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1',
+                    "ConfigServer":'ptr/ert/ert',
+                    "Bool": True,
+                    "Int": 234,
+                    "Float": 123.123,
+                    "Something": ["dgfg"],
+                    "Dict":{"dgfg":123, "sdf":"345"},
+                    'ActiveMntGrp': 'nxsmntgrp',
+                    '_ViewOptions': {'ShowDial': True},
+                    'DataCompressionRank': 0,
+                    "ScanFile":["file.nxs"],
+                    }
+             },
+            {"new":{"ScanDir":"/tmp",
+                    'ScanID': 15,
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1',
+                    "ConfigServer":'ptr/ert/ert',
+                    "Bool": True,
+                    "Int": 234,
+                    "Float": 123.124,
+                    "Something":["dgfg"],
+                    "Dict":{"dgfg":123, "sdf":"345"},
+                    'ActiveMntGrp': 'nxsmntgrp',
+                    '_ViewOptions': {'ShowDial': True},
+                    'DataCompressionRank': 0,
+                    "ScanFile":["file.nxs"],
+                    }
+             },
+           ]
+
+        edats = [
+            "",
+            "ScanDir /tmp",
+            "ScanDir:/tmp, ScanFile:file.nxs, ScanID:11",
+            "ScanDir /tmp, ScanFile:file.nxs,ConfigServer ptr/ert/ert",
+            "ScanDir:/tmp, ScanFile:file.nxs  ConfigServer:ptr/ert/ert2, "
+            "ScanID:13",
+            {"ScanDir":"/tmp", "ScanFile":"file.nxs",
+             "ConfigServer":"ptr/ert/ert", "ScanID":13},
+            {"ScanDir":"/tmp", "ScanFile":["file.nxs"],
+             "ConfigServer":"ptr/ert/ert", "ScanID":15,
+             "Bool": True, "Int":234, "Float":123.123, "Something":["dgfg"],
+             "Dict":{"dgfg":123, "sdf":"345"},
+             },
+            ]
+
+        sids = [192, 192, 11, 11, 13, 13, 15, 15, 17, 17]
+
+        msp = MacroServerPools(10)
+        se = Selector(msp)
+        se["ConfigDevice"] = val["ConfigDevice"]
+        se["WriterDevice"] = val["WriterDevice"]
+        se.storeEnvData("{}")
+
+        msp.setScanEnv(self._ms.door.keys()[0], "{}")
+        for i, dt in enumerate(edats):
+            env = pickle.loads(
+                self._ms.dps[self._ms.ms.keys()[0]].Environment[1])
+            print "env0", env
+            sid = se.storeEnvData(
+                dt if not isinstance(dt, dict) else json.dumps(dt))
+            print "I = ", i, sid
+            self.assertEqual(sid, sids[i])
+            data = {}
+            env = pickle.loads(
+                self._ms.dps[self._ms.ms.keys()[0]].Environment[1])
+            print "env", env
+            print "ei", envs[i]
+            self.myAssertDict(envs[i], env)
 
 
 if __name__ == '__main__':
