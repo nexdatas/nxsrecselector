@@ -37,11 +37,11 @@ import time
 import logging
 logger = logging.getLogger()
 
-from . import TestMacroServerSetUp
-from . import TestPoolSetUp
-from . import TestServerSetUp
-from . import TestConfigServerSetUp
-from . import TestWriterSetUp
+import TestMacroServerSetUp
+import TestPoolSetUp
+import TestServerSetUp
+import TestConfigServerSetUp
+import TestWriterSetUp
 
 
 from nxsrecconfig.MacroServerPools import MacroServerPools

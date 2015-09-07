@@ -31,7 +31,7 @@ import binascii
 import Queue
 import PyTango
 
-from . import TestServerSetUp
+import TestServerSetUp
 
 from nxsrecconfig.CheckerThread import CheckerThread, CheckerItem, TangoDSItem, ATTRIBUTESTOCHECK
 

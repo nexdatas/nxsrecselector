@@ -36,10 +36,10 @@ import pickle
 import logging
 logger = logging.getLogger()
 
-from . import TestMacroServerSetUp
-from . import TestPoolSetUp
-from . import TestServerSetUp
-from . import TestConfigServerSetUp
+import TestMacroServerSetUp
+import TestPoolSetUp
+import TestServerSetUp
+import TestConfigServerSetUp
 
 
 from nxsrecconfig.MacroServerPools import MacroServerPools
