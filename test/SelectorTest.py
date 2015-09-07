@@ -123,6 +123,9 @@ class SelectorTest(unittest.TestCase):
         self.__defaultzone = 'Europe/Berlin'
         ## default mntgrp
         self.__defaultmntgrp = 'nxsmntgrp'
+        ## default path
+        self.__defaultpath = \
+            '/entry$var.serialno:NXentry/NXinstrument/collection'
 
         self._keys = [
             ("Timer", '[]'),
@@ -145,8 +148,7 @@ class SelectorTest(unittest.TestCase):
             ("LabelShapes", '{}'),
             ("DynamicComponents", True),
             ("DynamicLinks", True),
-            ("DynamicPath",
-             '/entry$var.serialno:NXentry/NXinstrument/collection'),
+            ("DynamicPath", self.__defaultpath),
             ("TimeZone", self.__defaultzone),
             ("ConfigDevice", ''),
             ("WriterDevice", ''),
@@ -1231,14 +1233,18 @@ class SelectorTest(unittest.TestCase):
 
             self.dump(se)
 
-            se.resetAutomaticComponents(dss1)
+            if i % 2:
+                se.resetAutomaticComponents(dss1)
 
-            self.compareToDump(se, ["AutomaticComponentGroup"])
+                self.compareToDump(se, ["AutomaticComponentGroup"])
 
-            ndss = json.loads(se["AutomaticComponentGroup"])
-            for ds in dss1:
-                self.assertTrue(ds in ndss.keys())
-                self.assertEqual(ndss[ds], False)
+                ndss = json.loads(se["AutomaticComponentGroup"])
+                for ds in dss1:
+                    self.assertTrue(ds in ndss.keys())
+                    self.assertEqual(ndss[ds], False)
+            else:
+                se.reset()
+                self.assertEqual(se["AutomaticComponentGroup"], "{}")
 
     ## updateOrderedChannels test
     def test_ConfigServer(self):
@@ -1684,12 +1690,15 @@ class SelectorTest(unittest.TestCase):
             pool.MotorList = [json.dumps(
                     {"name":mn, "controller":("ctrl" + mn)}) for mn in mnames]
 
-            ads = se["AutomaticDataSources"]
+            ads = json.loads(se["AutomaticDataSources"])
 
             self.assertEqual(set(list(set(dss3) | set(dss2) | set(dss1))),
-                             set(json.loads(ads)))
+                             set(ads))
 
             self.compareToDump(se, ["AutomaticDataSources"])
+            se.reset()
+            ads = json.loads(se["AutomaticDataSources"])
+            self.assertEqual(set(mnames), set(ads))
 
     ## updateOrderedChannels test
     def test_OrderedChannels(self):
@@ -1737,7 +1746,7 @@ class SelectorTest(unittest.TestCase):
             for ds in dss3:
                 if ds not in pchs:
                     pchs.append(ds)
-            pchs = sorted(pchs)
+            pchs = sorted(set(pchs))
 
             pool = self._pool.dp
             pool.ExpChannelList = [json.dumps(
@@ -1760,6 +1769,9 @@ class SelectorTest(unittest.TestCase):
 
             self.assertEqual(ndss[:len(dss2)], odss[:len(dss2)])
             self.assertEqual(set(ndss), set(odss))
+            se.reset()
+            ndss = json.loads(se["OrderedChannels"])
+            self.assertEqual(ndss, sorted(pchs))
 
     ## deselect test
     def test_ComponentGroup(self):
@@ -1801,8 +1813,12 @@ class SelectorTest(unittest.TestCase):
             ccps = self.__rnd.sample(cps, self.__rnd.randint(1, lcp))
             for cp in ccps:
                 dss[cp] = bool(self.__rnd.randint(0, 1))
+            self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
+            self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
+
             se["ComponentGroup"] = json.dumps(cps)
             se["DataSourceGroup"] = json.dumps(dss)
+            ndss = json.loads(se["DataSourceGroup"])
             common = set(cps) & set(dss)
             self.dump(se)
 
@@ -1815,15 +1831,46 @@ class SelectorTest(unittest.TestCase):
                     self.assertTrue(key in ncps.keys())
                     self.assertEqual(ncps[key], cps[key])
             self.compareToDumpJSON(se, ["ComponentGroup"])
+            if i % 2:
+                se.deselect()
+                self.compareToDumpJSON(se, ["ComponentGroup",
+                                            "DataSourceGroup"])
+                ncps = json.loads(se["ComponentGroup"])
+                ndss = json.loads(se["DataSourceGroup"])
+                for key in cps.keys():
+                    if key not in common:
+                        self.assertTrue(key in ncps.keys())
+                        self.assertEqual(ncps[key], False)
+                for key in dss.keys():
+                    if key not in common:
+                        self.assertTrue(key in dss.keys())
+                        self.assertEqual(ndss[key], False)
+            else:
+                se.reset()
+                for key, vl in self._keys:
+                    self.assertTrue(key in se.keys())
+                    if key not in val:
+                        self.assertEqual(se[key], vl)
+                self.assertEqual(se["MntGrp"], val["MntGrp"])
+                self.assertTrue(se["Door"],
+                                TangoUtils.getDeviceName(db, "Door"))
+                self.assertTrue(
+                    se["ConfigDevice"],
+                    TangoUtils.getDeviceName(db, "NXSConfigServer"))
+                self.assertTrue(
+                    se["WriterDevice"],
+                    TangoUtils.getDeviceName(db, "NXSDataWriter"))
 
-    ## updateOrderedChannels test
+    ## DataSourceGroup test
     def test_DataSourceGroup(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
-               "MntGrp": 'nxsmntgrp'}
+               "MntGrp": 'nxsmntgrp',
+               "OrderedChannels": "[]",
+               "DataSourceGroup": "{}"}
         for i in range(20):
             msp = MacroServerPools(10)
             se = Selector(msp)
@@ -1844,52 +1891,742 @@ class SelectorTest(unittest.TestCase):
                 else:
                     self.assertEqual(se[key], val[key])
 
-            print "WW1"
-
             dss = {}
             lall = self.__rnd.randint(1, 40)
             adss = [self.getRandomName(10) for _ in range(lall)]
 
-            print "WW2"
-            dssn = self.__rnd.sample(adss, self.__rnd.randint(1, lall))
-            chs = self.__rnd.sample(adss, self.__rnd.randint(1, lall))
-            cdss = self.__rnd.sample(adss, self.__rnd.randint(1, lall))
-            print "DSSN", dssn
-            print "CHS", chs
-            print "CDSS", cdss
+            dssn = set(self.__rnd.sample(adss, self.__rnd.randint(1, lall)))
+            chs = set(self.__rnd.sample(adss, self.__rnd.randint(1, lall)))
+            cdss = set(self.__rnd.sample(adss, self.__rnd.randint(1, lall)))
 
             for ds in dssn:
                 dss[ds] = bool(self.__rnd.randint(0, 1))
             se["DataSourceGroup"] = json.dumps(dss)
-            print "WW2"
 
             pool = self._pool.dp
             pool.ExpChannelList = [json.dumps(
                     {"name":mn, "controller":("ctrl" + mn)}) for mn in chs]
-
 
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(
                         {key: self.smydss["scalar_long"] for key in cdss}
                         )])
             self.dump(se)
 
-            print "AVAIL", self._cf.dp.availableDataSources()
-            print "CHANNELS", se.poolChannels()
             ndss = json.loads(se["DataSourceGroup"])
-            print "NDSS", ndss
-            print "DSS", dss
             existing = set(dssn) & (set(chs) | set(cdss))
             print "existing", existing
             for key, value in ndss.items():
                 if key in existing:
-                    print "KEY", key
                     self.assertEqual(ndss[key], dss[key])
                 else:
                     self.assertTrue(key in chs)
                     self.assertTrue(not value)
             self.compareToDumpJSON(se, ["DataSourceGroup"])
+            if i % 2:
+                se.deselect()
+                ndss = json.loads(se["DataSourceGroup"])
+                self.compareToDumpJSON(se, ["DataSourceGroup"])
+                if key in existing:
+                    self.assertEqual(ndss[key], False)
+                else:
+                    self.assertTrue(key in chs)
+                    self.assertTrue(not value)
+            else:
+                se.reset()
+                for key, vl in self._keys:
+                    self.assertTrue(key in se.keys())
+                    if key not in val:
+                        self.assertEqual(se[key], vl)
+                ndss = json.loads(se["DataSourceGroup"])
+                print "NDSS", sorted(ndss.keys())
+                print "CHS", sorted(chs)
+                self.assertEqual(sorted(ndss.keys()), sorted(chs))
+                for mn in chs:
+                    self.assertEqual(ndss[mn], False)
+                och = json.loads(se["OrderedChannels"])
+                self.assertEqual(och, sorted(chs))
+                self.assertEqual(se["MntGrp"], val["MntGrp"])
+                self.assertTrue(se["Door"],
+                                TangoUtils.getDeviceName(db, "Door"))
+                self.assertTrue(
+                    se["ConfigDevice"],
+                    TangoUtils.getDeviceName(db, "NXSConfigServer"))
+                self.assertTrue(
+                    se["WriterDevice"],
+                    TangoUtils.getDeviceName(db, "NXSDataWriter"))
 
+    ## updateOrderedChannels test
+    def test_AutomaticComponentGroup(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        for i in range(20):
+            msp = MacroServerPools(10)
+            se = Selector(msp)
+            se["ConfigDevice"] = val["ConfigDevice"]
+            se["WriterDevice"] = val["WriterDevice"]
+            self.assertEqual(len(se.keys()), len(self._keys))
+            for key, vl in self._keys:
+                self.assertTrue(key in se.keys())
+                if key not in val:
+                    self.assertEqual(se[key], vl)
+                else:
+                    self.assertEqual(se[key], val[key])
 
+            lds1 = self.__rnd.randint(1, 40)
+
+            cps = {}
+            lcp = self.__rnd.randint(1, 40)
+            for i in range(lcp):
+                cps[self.getRandomName(10)] = bool(self.__rnd.randint(0, 1))
+            se["AutomaticComponentGroup"] = json.dumps(cps)
+
+            self.dump(se)
+
+            if i % 2:
+                self.compareToDump(se, ["AutomaticComponentGroup"])
+
+                ndss = json.loads(se["AutomaticComponentGroup"])
+                for ds in cps.keys():
+                    self.assertTrue(ds in ndss.keys())
+                    self.assertEqual(ndss[ds], cps[ds])
+            else:
+                se.reset()
+                self.assertEqual(se["AutomaticComponentGroup"], "{}")
+
+    ## dataRecord test
+    def test_DataRecord(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        for i in range(20):
+            msp = MacroServerPools(10)
+            se = Selector(msp)
+            se["ConfigDevice"] = val["ConfigDevice"]
+            se["WriterDevice"] = val["WriterDevice"]
+            self.assertEqual(len(se.keys()), len(self._keys))
+            for key, vl in self._keys:
+                self.assertTrue(key in se.keys())
+                if key not in val:
+                    self.assertEqual(se[key], vl)
+                else:
+                    self.assertEqual(se[key], val[key])
+
+            lds1 = self.__rnd.randint(1, 40)
+
+            cps = {}
+            lcp = self.__rnd.randint(1, 40)
+            for i in range(lcp):
+                cps[self.getRandomName(10)] = self.getRandomName(
+                    self.__rnd.randint(1, 40))
+            se["DataRecord"] = json.dumps(cps)
+
+            self.dump(se)
+
+            if i % 2:
+                self.compareToDump(se, ["DataRecord"])
+
+                ndss = json.loads(se["DataRecord"])
+                for ds in cps.keys():
+                    self.assertTrue(ds in ndss.keys())
+                    self.assertEqual(ndss[ds], cps[ds])
+            else:
+                se.reset()
+                self.assertEqual(se["DataRecord"], "{}")
+
+    ## labels test
+    def test_Labels(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        for i in range(20):
+            msp = MacroServerPools(10)
+            se = Selector(msp)
+            se["ConfigDevice"] = val["ConfigDevice"]
+            se["WriterDevice"] = val["WriterDevice"]
+            self.assertEqual(len(se.keys()), len(self._keys))
+            for key, vl in self._keys:
+                self.assertTrue(key in se.keys())
+                if key not in val:
+                    self.assertEqual(se[key], vl)
+                else:
+                    self.assertEqual(se[key], val[key])
+
+            lds1 = self.__rnd.randint(1, 40)
+
+            cps = {}
+            lcp = self.__rnd.randint(1, 40)
+            for i in range(lcp):
+                cps[self.getRandomName(10)] = self.getRandomName(
+                    self.__rnd.randint(1, 40))
+            se["Labels"] = json.dumps(cps)
+
+            self.dump(se)
+
+            if i % 2:
+                self.compareToDump(se, ["Labels"])
+
+                ndss = json.loads(se["Labels"])
+                for ds in cps.keys():
+                    self.assertTrue(ds in ndss.keys())
+                    self.assertEqual(ndss[ds], cps[ds])
+            else:
+                se.reset()
+                self.assertEqual(se["Labels"], "{}")
+
+    ## labelpaths test
+    def test_LabelPaths(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        for i in range(20):
+            msp = MacroServerPools(10)
+            se = Selector(msp)
+            se["ConfigDevice"] = val["ConfigDevice"]
+            se["WriterDevice"] = val["WriterDevice"]
+            self.assertEqual(len(se.keys()), len(self._keys))
+            for key, vl in self._keys:
+                self.assertTrue(key in se.keys())
+                if key not in val:
+                    self.assertEqual(se[key], vl)
+                else:
+                    self.assertEqual(se[key], val[key])
+
+            lds1 = self.__rnd.randint(1, 40)
+
+            cps = {}
+            lcp = self.__rnd.randint(1, 40)
+            for i in range(lcp):
+                cps[self.getRandomName(10)] = self.getRandomName(
+                    self.__rnd.randint(1, 40))
+            se["LabelPaths"] = json.dumps(cps)
+
+            self.dump(se)
+
+            if i % 2:
+                self.compareToDump(se, ["LabelPaths"])
+
+                ndss = json.loads(se["LabelPaths"])
+                for ds in cps.keys():
+                    self.assertTrue(ds in ndss.keys())
+                    self.assertEqual(ndss[ds], cps[ds])
+            else:
+                se.reset()
+                self.assertEqual(se["LabelPaths"], "{}")
+
+    ## labellinks test
+    def test_LabelLinks(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        for i in range(20):
+            msp = MacroServerPools(10)
+            se = Selector(msp)
+            se["ConfigDevice"] = val["ConfigDevice"]
+            se["WriterDevice"] = val["WriterDevice"]
+            self.assertEqual(len(se.keys()), len(self._keys))
+            for key, vl in self._keys:
+                self.assertTrue(key in se.keys())
+                if key not in val:
+                    self.assertEqual(se[key], vl)
+                else:
+                    self.assertEqual(se[key], val[key])
+
+            lds1 = self.__rnd.randint(1, 40)
+
+            cps = {}
+            lcp = self.__rnd.randint(1, 40)
+            for i in range(lcp):
+                cps[self.getRandomName(10)] = bool(self.__rnd.randint(0, 1))
+            se["LabelLinks"] = json.dumps(cps)
+
+            self.dump(se)
+
+            if i % 2:
+                self.compareToDump(se, ["LabelLinks"])
+
+                ndss = json.loads(se["LabelLinks"])
+                for ds in cps.keys():
+                    self.assertTrue(ds in ndss.keys())
+                    self.assertEqual(ndss[ds], cps[ds])
+            else:
+                se.reset()
+                self.assertEqual(se["LabelLinks"], "{}")
+
+    ## labeltypes test
+    def test_LabelTypes(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        for i in range(20):
+            msp = MacroServerPools(10)
+            se = Selector(msp)
+            se["ConfigDevice"] = val["ConfigDevice"]
+            se["WriterDevice"] = val["WriterDevice"]
+            self.assertEqual(len(se.keys()), len(self._keys))
+            for key, vl in self._keys:
+                self.assertTrue(key in se.keys())
+                if key not in val:
+                    self.assertEqual(se[key], vl)
+                else:
+                    self.assertEqual(se[key], val[key])
+
+            lds1 = self.__rnd.randint(1, 40)
+
+            cps = {}
+            lcp = self.__rnd.randint(1, 40)
+            for i in range(lcp):
+                cps[self.getRandomName(10)] = self.getRandomName(
+                    self.__rnd.randint(1, 40))
+            se["LabelTypes"] = json.dumps(cps)
+
+            self.dump(se)
+
+            if i % 2:
+                self.compareToDump(se, ["LabelTypes"])
+
+                ndss = json.loads(se["LabelTypes"])
+                for ds in cps.keys():
+                    self.assertTrue(ds in ndss.keys())
+                    self.assertEqual(ndss[ds], cps[ds])
+            else:
+                se.reset()
+                self.assertEqual(se["LabelTypes"], "{}")
+
+    ## labelshapes test
+    def test_LabelShapes(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        for i in range(20):
+            msp = MacroServerPools(10)
+            se = Selector(msp)
+            se["ConfigDevice"] = val["ConfigDevice"]
+            se["WriterDevice"] = val["WriterDevice"]
+            self.assertEqual(len(se.keys()), len(self._keys))
+            for key, vl in self._keys:
+                self.assertTrue(key in se.keys())
+                if key not in val:
+                    self.assertEqual(se[key], vl)
+                else:
+                    self.assertEqual(se[key], val[key])
+
+            lds1 = self.__rnd.randint(1, 40)
+
+            cps = {}
+            lcp = self.__rnd.randint(1, 40)
+            for i in range(lcp):
+                dim = self.__rnd.randint(0, 3)
+                cps[self.getRandomName(10)] = [
+                    self.__rnd.randint(1, 1000) for _ in range(dim)]
+            se["LabelShapes"] = json.dumps(cps)
+
+            self.dump(se)
+
+            if i % 2:
+                self.compareToDump(se, ["LabelShapes"])
+
+                ndss = json.loads(se["LabelShapes"])
+                for ds in cps.keys():
+                    self.assertTrue(ds in ndss.keys())
+                    self.assertEqual(ndss[ds], cps[ds])
+            else:
+                se.reset()
+                self.assertEqual(se["LabelShapes"], "{}")
+
+    ## configvariables test
+    def test_ConfigVariables(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        for i in range(20):
+            msp = MacroServerPools(10)
+            se = Selector(msp)
+            se["ConfigDevice"] = val["ConfigDevice"]
+            se["WriterDevice"] = val["WriterDevice"]
+            self.assertEqual(len(se.keys()), len(self._keys))
+            for key, vl in self._keys:
+                self.assertTrue(key in se.keys())
+                if key not in val:
+                    self.assertEqual(se[key], vl)
+                else:
+                    self.assertEqual(se[key], val[key])
+
+            lds1 = self.__rnd.randint(1, 40)
+
+            cps = {}
+            lcp = self.__rnd.randint(1, 40)
+            for i in range(lcp):
+                cps[self.getRandomName(10)] = self.getRandomName(
+                    self.__rnd.randint(1, 40))
+            se["ConfigVariables"] = json.dumps(cps)
+
+            self.dump(se)
+
+            if i % 2:
+                self.compareToDump(se, ["ConfigVariables"])
+
+                ndss = json.loads(se["ConfigVariables"])
+                for ds in cps.keys():
+                    self.assertTrue(ds in ndss.keys())
+                    self.assertEqual(ndss[ds], cps[ds])
+            else:
+                se.reset()
+                self.assertEqual(se["ConfigVariables"], "{}")
+
+    ## timers test
+    def test_Timer(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        for i in range(20):
+            msp = MacroServerPools(10)
+            se = Selector(msp)
+            se["ConfigDevice"] = val["ConfigDevice"]
+            se["WriterDevice"] = val["WriterDevice"]
+            self.assertEqual(len(se.keys()), len(self._keys))
+            for key, vl in self._keys:
+                self.assertTrue(key in se.keys())
+                if key not in val:
+                    self.assertEqual(se[key], vl)
+                else:
+                    self.assertEqual(se[key], val[key])
+
+            lds1 = self.__rnd.randint(1, 40)
+
+            lcp = self.__rnd.randint(1, 40)
+            cps = [self.getRandomName(10) for _ in range(lcp)]
+            se["Timer"] = json.dumps(cps)
+
+            self.dump(se)
+
+            if i % 2:
+                self.compareToDump(se, ["Timer"])
+
+                ndss = json.loads(se["Timer"])
+                self.assertEqual(ndss, cps)
+            else:
+                se.reset()
+                self.assertEqual(se["Timer"], "[]")
+
+    ## InitDataSources test
+    def test_InitDataSources(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        for i in range(20):
+            msp = MacroServerPools(10)
+            se = Selector(msp)
+            se["ConfigDevice"] = val["ConfigDevice"]
+            se["WriterDevice"] = val["WriterDevice"]
+            self.assertEqual(len(se.keys()), len(self._keys))
+            for key, vl in self._keys:
+                self.assertTrue(key in se.keys())
+                if key not in val:
+                    self.assertEqual(se[key], vl)
+                else:
+                    self.assertEqual(se[key], val[key])
+
+            lds1 = self.__rnd.randint(1, 40)
+
+            cps = {}
+            lcp = self.__rnd.randint(1, 40)
+            cps = [self.getRandomName(10) for _ in range(lcp)]
+            se["InitDataSources"] = json.dumps(cps)
+
+            self.dump(se)
+
+            if i % 2:
+                self.compareToDump(se, ["InitDataSources"])
+
+                ndss = json.loads(se["InitDataSources"])
+                self.assertEqual(ndss, cps)
+            else:
+                se.reset()
+                self.assertEqual(se["InitDataSources"], "[]")
+
+    ## OptionalComponents test
+    def test_OptionalComponents(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        for i in range(20):
+            msp = MacroServerPools(10)
+            se = Selector(msp)
+            se["ConfigDevice"] = val["ConfigDevice"]
+            se["WriterDevice"] = val["WriterDevice"]
+            self.assertEqual(len(se.keys()), len(self._keys))
+            for key, vl in self._keys:
+                self.assertTrue(key in se.keys())
+                if key not in val:
+                    self.assertEqual(se[key], vl)
+                else:
+                    self.assertEqual(se[key], val[key])
+
+            lds1 = self.__rnd.randint(1, 40)
+
+            lcp = self.__rnd.randint(1, 40)
+            cps = [self.getRandomName(10) for _ in range(lcp)]
+            se["OptionalComponents"] = json.dumps(cps)
+
+            self.dump(se)
+
+            if i % 2:
+                self.compareToDump(se, ["OptionalComponents"])
+
+                ndss = json.loads(se["OptionalComponents"])
+                self.assertEqual(ndss, cps)
+            else:
+                se.reset()
+                self.assertEqual(se["OptionalComponents"], "[]")
+
+    ## HiddenElements test
+    def test_HiddenElements(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        for i in range(20):
+            msp = MacroServerPools(10)
+            se = Selector(msp)
+            se["ConfigDevice"] = val["ConfigDevice"]
+            se["WriterDevice"] = val["WriterDevice"]
+            self.assertEqual(len(se.keys()), len(self._keys))
+            for key, vl in self._keys:
+                self.assertTrue(key in se.keys())
+                if key not in val:
+                    self.assertEqual(se[key], vl)
+                else:
+                    self.assertEqual(se[key], val[key])
+
+            lds1 = self.__rnd.randint(1, 40)
+
+            lcp = self.__rnd.randint(1, 40)
+            cps = [self.getRandomName(10) for _ in range(lcp)]
+            se["HiddenElements"] = json.dumps(cps)
+
+            self.dump(se)
+
+            if i % 2:
+                self.compareToDump(se, ["HiddenElements"])
+
+                ndss = json.loads(se["HiddenElements"])
+                self.assertEqual(ndss, cps)
+            else:
+                se.reset()
+                self.assertEqual(se["HiddenElements"], "[]")
+
+    ## DynamicPath test
+    def test_DynamicPath(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        for i in range(20):
+            msp = MacroServerPools(10)
+            se = Selector(msp)
+            se["ConfigDevice"] = val["ConfigDevice"]
+            se["WriterDevice"] = val["WriterDevice"]
+            self.assertEqual(len(se.keys()), len(self._keys))
+            for key, vl in self._keys:
+                self.assertTrue(key in se.keys())
+                if key not in val:
+                    self.assertEqual(se[key], vl)
+                else:
+                    self.assertEqual(se[key], val[key])
+
+            lds1 = self.__rnd.randint(1, 40)
+
+            lcp = self.__rnd.randint(1, 40)
+            cps = self.getRandomName(10)
+            se["DynamicPath"] = cps
+
+            self.dump(se)
+
+            if i % 2:
+                self.compareToDump(se, ["DynamicPath"])
+                self.assertEqual(se["DynamicPath"], cps)
+            else:
+                se.reset()
+                self.assertEqual(se["DynamicPath"],
+                                 self.__defaultpath)
+
+    ## AppendEntry test
+    def test_AppendEntry(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        for i in range(20):
+            msp = MacroServerPools(10)
+            se = Selector(msp)
+            se["ConfigDevice"] = val["ConfigDevice"]
+            se["WriterDevice"] = val["WriterDevice"]
+            self.assertEqual(len(se.keys()), len(self._keys))
+            for key, vl in self._keys:
+                self.assertTrue(key in se.keys())
+                if key not in val:
+                    self.assertEqual(se[key], vl)
+                else:
+                    self.assertEqual(se[key], val[key])
+
+            lds1 = self.__rnd.randint(1, 40)
+
+            cps = bool(self.__rnd.randint(0, 1))
+            se["AppendEntry"] = cps
+
+            self.dump(se)
+
+            if i % 2:
+                self.compareToDump(se, ["AppendEntry"])
+                self.assertEqual(se["AppendEntry"], cps)
+            else:
+                se.reset()
+                self.assertEqual(se["AppendEntry"], False)
+
+    ## ComponentsFromMntGrp test
+    def test_ComponentsFromMntGrp(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        for i in range(20):
+            msp = MacroServerPools(10)
+            se = Selector(msp)
+            se["ConfigDevice"] = val["ConfigDevice"]
+            se["WriterDevice"] = val["WriterDevice"]
+            self.assertEqual(len(se.keys()), len(self._keys))
+            for key, vl in self._keys:
+                self.assertTrue(key in se.keys())
+                if key not in val:
+                    self.assertEqual(se[key], vl)
+                else:
+                    self.assertEqual(se[key], val[key])
+
+            lds1 = self.__rnd.randint(1, 40)
+
+            cps = bool(self.__rnd.randint(0, 1))
+            se["ComponentsFromMntGrp"] = cps
+
+            self.dump(se)
+
+            if i % 2:
+                self.compareToDump(se, ["ComponentsFromMntGrp"])
+                self.assertEqual(se["ComponentsFromMntGrp"], cps)
+            else:
+                se.reset()
+                self.assertEqual(se["ComponentsFromMntGrp"], False)
+
+    ## DynamicComponents test
+    def test_DynamicComponents(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        for i in range(20):
+            msp = MacroServerPools(10)
+            se = Selector(msp)
+            se["ConfigDevice"] = val["ConfigDevice"]
+            se["WriterDevice"] = val["WriterDevice"]
+            self.assertEqual(len(se.keys()), len(self._keys))
+            for key, vl in self._keys:
+                self.assertTrue(key in se.keys())
+                if key not in val:
+                    self.assertEqual(se[key], vl)
+                else:
+                    self.assertEqual(se[key], val[key])
+
+            lds1 = self.__rnd.randint(1, 40)
+
+            cps = bool(self.__rnd.randint(0, 1))
+            se["DynamicComponents"] = cps
+
+            self.dump(se)
+
+            if i % 2:
+                self.compareToDump(se, ["DynamicComponents"])
+                self.assertEqual(se["DynamicComponents"], cps)
+            else:
+                se.reset()
+                self.assertEqual(se["DynamicComponents"], True)
+
+    ## DynamicLinks test
+    def test_DynamicLinks(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        for i in range(20):
+            msp = MacroServerPools(10)
+            se = Selector(msp)
+            se["ConfigDevice"] = val["ConfigDevice"]
+            se["WriterDevice"] = val["WriterDevice"]
+            self.assertEqual(len(se.keys()), len(self._keys))
+            for key, vl in self._keys:
+                self.assertTrue(key in se.keys())
+                if key not in val:
+                    self.assertEqual(se[key], vl)
+                else:
+                    self.assertEqual(se[key], val[key])
+
+            lds1 = self.__rnd.randint(1, 40)
+
+            cps = bool(self.__rnd.randint(0, 1))
+            se["DynamicLinks"] = cps
+
+            self.dump(se)
+
+            if i % 2:
+                self.compareToDump(se, ["DynamicLinks"])
+                self.assertEqual(se["DynamicLinks"], cps)
+            else:
+                se.reset()
+                self.assertEqual(se["DynamicLinks"], True)
 
 
 if __name__ == '__main__':

@@ -144,7 +144,6 @@ class Selection(dict):
     # \param channels pool channels
     # \param datasources available datasources
     def updateDataSourceGroup(self, channels, datasources):
-        print "UDSG"
         dsg = json.loads(self["DataSourceGroup"])
         datasources = datasources or []
         for ds in tuple(dsg.keys()):
