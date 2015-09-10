@@ -1,3 +1,7 @@
+2015-09-XX Jan Kotanski <jankotan@gmail.com>
+	* storing ScanFile as a string if only one
+	* tagged as v1.20.3
+
 2015-09-08 Jan Kotanski <jankotan@gmail.com>
 	* spliting words by whitesplaces and :,; in  stringTo[List|Dict]Json
 	* adding TangoDsItem and CheckerItem

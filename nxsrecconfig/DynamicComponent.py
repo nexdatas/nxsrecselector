@@ -37,8 +37,8 @@ class DynamicComponent(object):
     def __init__(self, nexusconfig_device):
         self.__nexusconfig_device = nexusconfig_device
 
-        self.__dictDSources = []
-        self.__dsources = []
+        self.__stepdsourcesDict = []
+        self.__stepdsources = []
         self.__initdsources = []
         ## dynamic components
         self.__defaultCP = "__dynamic_component__"
@@ -49,7 +49,7 @@ class DynamicComponent(object):
         self.__nexustypes = {}
         self.__nexusshapes = {}
 
-        self.__components = []
+        self.__dsWithoutLinks = []
         self.__db = PyTango.Database()
 
         self.__ldefaultpath = \
@@ -81,42 +81,43 @@ class DynamicComponent(object):
             name = "/".join(lst[1:])
         return self.__db.get_alias(name)
 
-    ## sets user datasource parameters
+    ## sets user datasources with type and shape
     # \param dct list of parameter dictionaries
-    def setDictDSources(self, dct):
-        self.__dictDSources = []
+    #        [{"name": <dsname>, "dtype": <num_type>, "shape":<list>}, ...]  
+    def setStepDictDSources(self, dct):
+        self.__stepdsourcesDict = []
         jdct = json.loads(dct)
 
         if isinstance(jdct, list):
             for dd in jdct:
                 if "name" not in dd.keys():
                     continue
-                self.__dictDSources.append(dd)
+                self.__stepdsourcesDict.append(dd)
                 if "dtype" not in dd.keys():
-                    self.__dictDSources[-1]["dtype"] = "string"
+                    self.__stepdsourcesDict[-1]["dtype"] = "string"
                 if "shape" not in dd.keys():
-                    self.__dictDSources[-1]["shape"] = []
+                    self.__stepdsourcesDict[-1]["shape"] = []
 
-    ## sets step datasource parameters
+    ## sets step datasources
     # \param dsources list of step datasources
-    def setDataSources(self, dsources):
-        self.__dsources = list(dsources)
-        if not isinstance(self.__dsources, list):
-            self.__dsources = []
+    def setStepDSources(self, dsources):
+        self.__stepdsources = list(dsources)
+        if not isinstance(self.__stepdsources, list):
+            self.__stepdsources = []
 
-    ## sets init datasource parameters
+    ## sets init datasources
     # \param dsources list of init datasources
     def setInitDSources(self, dsources):
         self.__initdsources = list(dsources)
         if not isinstance(self.__initdsources, list):
             self.__initdsources = []
 
-    ## sets components parameters
-    # \param components list of components
-    def setComponents(self, components):
-        self.__components = list(components)
-        if not isinstance(self.__components, list):
-            self.__components = []
+    ## makes datasources to be without links
+    # \param dsources list of datasources
+    def markDSourcesWithoutLinks(self, datasources):
+        self.__dsWithoutLinks = list(datasources)
+        if not isinstance(self.__dsWithoutLinks, list):
+            self.__dsWithoutLinks = []
 
     ## sets label parameters for specific dynamic components
     # \param labels label dictionaries
@@ -144,7 +145,7 @@ class DynamicComponent(object):
     ## sets default nexus path and link flag for dynamic components
     # \param dynamicPath nexus default path
     # \param dynamicLinks default link flag
-    def setLinkParams(self, dynamicLinks, dynamicPath):
+    def setDefaultLinkPath(self, dynamicLinks, dynamicPath):
         self.__links = dynamicLinks
         self.__defaultpath = dynamicPath
         if not self.__defaultpath:
@@ -164,13 +165,13 @@ class DynamicComponent(object):
         return shape, nxtype
 
     def __createSardanaNodes(self, created, root, definition):
-        for dd in self.__dictDSources:
+        for dd in self.__stepdsourcesDict:
             alias = self.__get_alias(str(dd["name"]))
             path, field = self.__getFieldPath(
                 self.__nexuspaths, self.__nexuslabels,
                 alias, self.__defaultpath)
 
-            if alias in self.__components:
+            if alias in self.__dsWithoutLinks:
                 link = False
             else:
                 link = self.__getProp(
@@ -190,14 +191,14 @@ class DynamicComponent(object):
     def __createNonSardanaNodes(self, created, avds, root, definition,
                                 strategy="STEP"):
         dsources = self.__initdsources \
-            if strategy == 'INIT' else self.__dsources
+            if strategy == 'INIT' else self.__stepdsources
         for ds in dsources:
             if ds not in created:
                 path, field = self.__getFieldPath(
                     self.__nexuspaths, self.__nexuslabels,
                     ds, self.__defaultpath)
 
-                if ds in self.__components:
+                if ds in self.__dsWithoutLinks:
                     link = False
                 else:
                     link = self.__getProp(

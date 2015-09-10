@@ -45,7 +45,7 @@ import CheckerThreadTest
 import SelectionTest
 import SelectorTest
 import MacroServerPoolsTest
-
+import DynamicComponentTest
 import UtilsTest
 
 #import TestServerSetUp
@@ -108,6 +108,9 @@ def main():
 
     suite.addTests(
         unittest.defaultTestLoader.loadTestsFromModule(MacroServerPoolsTest))
+
+    suite.addTests(
+        unittest.defaultTestLoader.loadTestsFromModule(DynamicComponentTest))
 
     ## test runner
     runner = unittest.TextTestRunner()

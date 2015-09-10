@@ -476,12 +476,15 @@ class Settings(object):
     # \returns name of ScanFile
     def __getScanFile(self):
         ms = self.getMacroServer()
-        return MSUtils.getEnv('ScanFile', ms)
+        val = MSUtils.getEnv('ScanFile', ms)
+        return [val] if isinstance(val, (str, unicode)) else val
 
     ## set method for ScanFile attribute
     # \param name of ScanFile
     def __setScanFile(self, name):
         ms = self.getMacroServer()
+        if isinstance(name, (list, tuple)) and len(name) == 1:
+            name = name[0]
         MSUtils.setEnv('ScanFile', name, ms)
 
     ## the json data string
@@ -851,12 +854,12 @@ class Settings(object):
         dcpcreator = DynamicComponent(nexusconfig_device)
         if isinstance(params, (list, tuple)):
             if len(params) > 0 and params[0]:
-                dcpcreator.setDataSources(
+                dcpcreator.setStepDSources(
                     json.loads(params[0]))
             else:
-                dcpcreator.setDataSources(self.dataSources)
+                dcpcreator.setStepDSources(self.dataSources)
             if len(params) > 1 and params[1]:
-                dcpcreator.setDictDSources(params[1])
+                dcpcreator.setStepDictDSources(params[1])
             if len(params) > 2 and params[2]:
                 dcpcreator.setInitDSources(json.loads(params[2]))
             else:
@@ -869,11 +872,11 @@ class Settings(object):
             self.__selector["LabelLinks"],
             self.__selector["LabelTypes"],
             self.__selector["LabelShapes"])
-        dcpcreator.setLinkParams(
+        dcpcreator.setDefaultLinkPath(
             bool(self.__selector["DynamicLinks"]),
             str(self.__selector["DynamicPath"]))
 
-        dcpcreator.setComponents(
+        dcpcreator.markDSourcesWithoutLinks(
             list(set(self.components) |
                  set(self.automaticComponents) |
                  set(self.mandatoryComponents())))

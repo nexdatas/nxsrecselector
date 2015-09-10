@@ -99,7 +99,8 @@ class NXSConfigServer(PyTango.Device_4Impl):
 #    Always excuted hook method
 #------------------------------------------------------------------
     def always_executed_hook(self):
-        print "In ", self.get_name(), "::always_excuted_hook()"
+        pass
+#        print "In ", self.get_name(), "::always_excuted_hook()"
 
 #------------------------------------------------------------------
 #    Read XMLString attribute
@@ -329,6 +330,7 @@ class NXSConfigServer(PyTango.Device_4Impl):
         print >> self.log_info, "In ", self.get_name(), "::StoreSelection()"
         self.cmd["VARS"].append(argin)
         self.cmd["COMMANDS"].append("StoreSelection")
+        self.cmd["SELDICT"][str(argin)] = self.attr_Selection
 
 #------------------------------------------------------------------
 #    StoreDataSource command:
@@ -341,6 +343,7 @@ class NXSConfigServer(PyTango.Device_4Impl):
         print >> self.log_info, "In ", self.get_name(), "::StoreDataSource()"
         self.cmd["VARS"].append(argin)
         self.cmd["COMMANDS"].append("StoreDataSource")
+        self.cmd["DSDICT"][str(argin)] = self.attr_XMLString
 
 #------------------------------------------------------------------
 #    StoreComponent command:
@@ -353,6 +356,46 @@ class NXSConfigServer(PyTango.Device_4Impl):
         print >> self.log_info, "In ", self.get_name(), "::StoreComponent()"
         self.cmd["VARS"].append(argin)
         self.cmd["COMMANDS"].append("StoreComponent")
+        self.cmd["CPDICT"][str(argin)] = self.attr_XMLString
+
+#------------------------------------------------------------------
+#    DeleteComponent command:
+#
+#    Description: Deletes the component from XMLString
+#
+#    argin:  DevString    component name
+#------------------------------------------------------------------
+    def DeleteComponent(self, argin):
+        print >> self.log_info, "In ", self.get_name(), "::DeleteComponent()"
+        self.cmd["VARS"].append(argin)
+        self.cmd["COMMANDS"].append("DeleteComponent")
+        self.cmd["CPDICT"].pop(str(argin))
+
+#------------------------------------------------------------------
+#    DeleteSelection command:
+#
+#    Description: Deletes the selection from XMLString
+#
+#    argin:  DevString    selection name
+#------------------------------------------------------------------
+    def DeleteSelection(self, argin):
+        print >> self.log_info, "In ", self.get_name(), "::DeleteSelection()"
+        self.cmd["VARS"].append(argin)
+        self.cmd["COMMANDS"].append("DeleteSelection")
+        self.cmd["SELDICT"].pop(str(argin))
+
+#------------------------------------------------------------------
+#    DeleteDataSource command:
+#
+#    Description: Deletes the datasource from XMLString
+#
+#    argin:  DevString    datasource name
+#------------------------------------------------------------------
+    def DeleteDataSource(self, argin):
+        print >> self.log_info, "In ", self.get_name(), "::DeleteDataSource()"
+        self.cmd["VARS"].append(argin)
+        self.cmd["COMMANDS"].append("DeleteDataSource")
+        self.cmd["DSDICT"].pop(str(argin))
 
 #------------------------------------------------------------------
 #    CreateConfiguration command:
@@ -467,6 +510,15 @@ class NXSConfigServerClass(PyTango.DeviceClass):
             [[PyTango.DevString, "component name"],
             [PyTango.DevVoid, ""]],
         'StoreDataSource':
+            [[PyTango.DevString, "datasource name"],
+            [PyTango.DevVoid, ""]],
+        'DeleteComponent':
+            [[PyTango.DevString, "component name"],
+            [PyTango.DevVoid, ""]],
+        'DeleteSelection':
+            [[PyTango.DevString, "selection name"],
+            [PyTango.DevVoid, ""]],
+        'DeleteDataSource':
             [[PyTango.DevString, "datasource name"],
             [PyTango.DevVoid, ""]],
         'SetCommandVariable':
