@@ -133,12 +133,12 @@ class DynamicComponent(object):
             self.__nexusshapes = {}
 
     ## sets default nexus path and link flag for dynamic components
+    # \brief if dynamicPath is None or "" it is reset to default one        
     # \param dynamicPath nexus default path
     # \param dynamicLinks default link flag
     def setDefaultLinkPath(self, dynamicLinks, dynamicPath):
         self.__links = dynamicLinks
         self.__defaultpath = dynamicPath
-        print "DEFAULT", self.__defaultpath
         if not self.__defaultpath:
             self.__defaultpath = self.__ldefaultpath
 
@@ -161,7 +161,6 @@ class DynamicComponent(object):
             path, field = self.__getPathField(
                 self.__nexuspaths, self.__nexuslabels,
                 alias, self.__defaultpath)
-            print "FIELD, PATH", field, path
             link = self.__getProp(
                 self.__nexuslinks, self.__nexuslabels,
                 alias, self.__links)
@@ -173,7 +172,6 @@ class DynamicComponent(object):
             self.__createField(
                 root, parent, field, nxtype, alias,
                 dd["name"], dd["shape"])
-            print "path", path    
             if link:
                 self.__createLink(root, nxdata, path, field)
 
@@ -382,14 +380,11 @@ class DynamicComponent(object):
     def __createGroupTree(cls, root, definition, path, links=False):
         # create group tree
 
-        print "SPATH", path
         spath = path.split('/')
         entry = None
         parent = definition
         nxdata = None
-        print "SPLIT", spath
         for dr in spath:
-            print "dr", dr
             if dr.strip():
                 node = root.createElement("group")
                 parent.appendChild(node)
@@ -404,7 +399,6 @@ class DynamicComponent(object):
                         w.append("NX" + w[0])
                 node.setAttribute("type", w[1])
                 node.setAttribute("name", w[0])
-                print "Append dr", w[1], w[0]
                 parent = node
         if links and entry:
             nxdata = root.createElement("group")

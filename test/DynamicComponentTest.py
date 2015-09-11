@@ -944,7 +944,7 @@ class DynamicComponentTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
-    def ttest_create_remove(self):
+    def test_create_remove(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         cps = {"empty":
@@ -1000,7 +1000,7 @@ class DynamicComponentTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
-    def ttest_create_dict(self):
+    def test_create_dict(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         cps = {
@@ -1130,7 +1130,7 @@ class DynamicComponentTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
-    def ttest_create_dict_type(self):
+    def test_create_dict_type(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         cps = {
@@ -1157,7 +1157,7 @@ class DynamicComponentTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
-    def ttest_create_dict_shape(self):
+    def test_create_dict_shape(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         cps = {
@@ -1198,7 +1198,7 @@ class DynamicComponentTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
-    def ttest_create_dict_shapetype(self):
+    def test_create_dict_shapetype(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         cps = {
@@ -1221,7 +1221,7 @@ class DynamicComponentTest(unittest.TestCase):
         dimbg = '<dimensions rank="%s">\n'
         dim = '<dim index="%s" value="%s"/>\n'
         dimend = '</dimensions>\n'
-        
+
         dname = "__dynamic_component__"
 
         arr = [
@@ -1310,7 +1310,7 @@ class DynamicComponentTest(unittest.TestCase):
                                           "{}", "{}")
                     elif i == 10:
                         dc.setDefaultLinkPath(False, self.__defaultpath)
-                        dc.setLabelParams(json.dumps({ar["name"]: lbl}), 
+                        dc.setLabelParams(json.dumps({ar["name"]: lbl}),
                                           "{}",
                                           json.dumps({ar["full_name"]: True}),
                                           "{}",
@@ -1347,7 +1347,6 @@ class DynamicComponentTest(unittest.TestCase):
             simps3.tearDown()
             simps2.tearDown()
 
-
     ## constructor test
     # \brief It tests default settings
     def test_create_dict_fieldpath(self):
@@ -1361,7 +1360,7 @@ class DynamicComponentTest(unittest.TestCase):
             '<group name="collection" type="NXcollection">\n%s'
             '</group>\n</group>\n%s</group>\n</definition>\n',
             }
-        
+
         defbg = '<?xml version="1.0" ?>\n<definition>\n'
         defend = '</definition>\n'
         groupbg = '<group name="%s" type="%s">\n'
@@ -1371,14 +1370,13 @@ class DynamicComponentTest(unittest.TestCase):
             '<datasource name="%s" type="CLIENT">\n' + \
             '<record name="%s"/>\n</datasource>\n%s</field>\n'
 
-
         link = '<group name="data" type="NXdata">\n' + \
             '<link name="%s" target="%s/%s"/>\n</group>\n'
 
         dimbg = '<dimensions rank="%s">\n'
         dim = '<dim index="%s" value="%s"/>\n'
         dimend = '</dimensions>\n'
-        
+
         dname = "__dynamic_component__"
 
         arr = [
@@ -1401,22 +1399,22 @@ class DynamicComponentTest(unittest.TestCase):
             for i, ar in enumerate(arr):
                 if '/' in ar["full_name"]:
                     db.put_device_alias(ar["full_name"], ar["name"])
-                print "I = ", i
+#                print "I = ", i
                 for tp, nxstp in self.__npTn.items():
                     dc = DynamicComponent(self._cf.dp)
-                    
+
                     lbl = self.getRandomName(20)
                     fieldname = self.getRandomName(20)
-                    print "FIELD", fieldname
+#                    print "FIELD", fieldname
                     path = [
                         (self.getRandomName(20)
                          if self.__rnd.randint(0, 1) else None,
                          ("NX" + self.getRandomName(20))
                          if self.__rnd.randint(0, 1) else None)
                         for _ in range(self.__rnd.randint(0, 10))]
-                    print "path0", path, len(path)
+#                    print "path0", path, len(path)
                     path = [nd for nd in path if nd != (None, None)]
-                    print "path1", path, len(path)
+#                    print "path1", path, len(path)
                     mypath = ""
                     for node in path:
                         mypath += "/"
@@ -1427,9 +1425,9 @@ class DynamicComponentTest(unittest.TestCase):
                         if node[1]:
                             mypath += node[1]
 #                    mypath += fieldname
-                    print "path2", path, len(path)
-                    print "PATH", path, mypath
-                    print "TP = ", tp
+#                    print "path2", path, len(path)
+#                    print "PATH", path, mypath
+#                    print "TP = ", tp
                     ms = [self.__rnd.randint(0, 3000)
                           for _ in range(self.__rnd.randint(0, 3))]
                     ms2 = [self.__rnd.randint(0, 3000)
@@ -1440,17 +1438,17 @@ class DynamicComponentTest(unittest.TestCase):
                     elif i == 1:
                         dc.setDefaultLinkPath(True, mypath)
                     elif i == 2:
-                        dc.setLabelParams("{}", 
-                                          json.dumps({ar["name"]: 
-                                                      mypath + "/" + fieldname}),
-                                          json.dumps({ar["name"]: False}),
-                                          "{}", "{}")
+                        dc.setLabelParams(
+                            "{}",
+                            json.dumps({ar["name"]: mypath + "/" + fieldname}),
+                            json.dumps({ar["name"]: False}),
+                            "{}", "{}")
                     elif i == 3:
-                        dc.setLabelParams("{}",
-                                          json.dumps({ar["name"]:
-                                                          mypath + "/" + fieldname}),
-                                          json.dumps({ar["name"]: True}),
-                                          "{}", "{}")
+                        dc.setLabelParams(
+                            "{}",
+                            json.dumps({ar["name"]: mypath + "/" + fieldname}),
+                            json.dumps({ar["name"]: True}),
+                            "{}", "{}")
                     dc.setStepDictDSources([{"name": ar["full_name"],
                                              "shape": ms,
                                              "dtype": tp}])
@@ -1465,24 +1463,26 @@ class DynamicComponentTest(unittest.TestCase):
                     comp = self._cf.dp.Components([cpname])[0]
                     ds = ar["name"]
                     lk = link % (ds, mypath, ds)
-                    if i < 2:
+                    if i % 4 < 2:
                         fd = field % (ds, nxstp, ds, ar["full_name"], mstr)
                     else:
                         fname = fieldname.lower()
-                        fd = field % (fieldname.lower(), nxstp, ds, ar["full_name"], mstr)
+                        fd = field % (fieldname.lower(), nxstp, ds,
+                                      ar["full_name"], mstr)
 
-                    print "path3", path, len(path), bool(path)
-                    if path:
+#                    print "path3", path, len(path), bool(path)
+                    if path or i > 1:
 
-                        print "path", bool(path)
-                        if i < 2:
+#                        print "path", bool(path)
+                        if i % 4 < 2:
                             lk = link % (ds, mypath, ds)
                         else:
-                            lk = link % (fieldname.lower(), mypath, fieldname.lower())
+                            lk = link % (fieldname.lower(), mypath,
+                                         fieldname.lower())
                         mycps = defbg
                         for nm, gtp in path:
                             if not nm:
-                                nm = gtp[2:] 
+                                nm = gtp[2:]
                             if not gtp:
                                 gtp = 'NX' + nm
                             mycps += groupbg % (nm, gtp)
@@ -1497,7 +1497,7 @@ class DynamicComponentTest(unittest.TestCase):
                         mycps2 = defbg
                         for k, (nm, gtp) in enumerate(path):
                             if not nm:
-                                nm = gtp[2:] 
+                                nm = gtp[2:]
                             if not gtp:
                                 gtp = 'NX' + nm
                             mycps2 += groupbg % (nm, gtp)
@@ -1508,20 +1508,21 @@ class DynamicComponentTest(unittest.TestCase):
                         for _ in path:
                             mycps2 += groupend
                         mycps2 += defend
-                        print "FIRST"
+#                        print "FIRST"
                     else:
-                        if i < 2:
+                        if i % 4 < 2:
                             lk = link % (ds,  self.__defaultpath, ds)
                         else:
-                            lk = link % (fieldname.lower(),  self.__defaultpath, fieldname.lower())
+                            lk = link % (fieldname.lower(), self.__defaultpath,
+                                         fieldname.lower())
                         mycps = cps["shapetype"] % (
                             fd,
                             lk if i % 2 else "")
-                        mycps = mycps2
-                        print "SECOND"
+                        mycps2 = mycps
+ #                       print "SECOND"
                     try:
                         self.assertEqual(comp, mycps)
-                    except:    
+                    except:
                         self.assertEqual(comp, mycps2)
         finally:
             for ar in arr:
