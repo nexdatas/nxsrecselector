@@ -1413,7 +1413,9 @@ class DynamicComponentTest(unittest.TestCase):
                          if self.__rnd.randint(0, 1) else None)
                         for _ in range(self.__rnd.randint(0, 10))]
 #                    print "path0", path, len(path)
-                    path = [nd for nd in path if nd != (None, None)]
+                    path = [nd for nd in path if (
+                            nd != (None, None) and
+                            nd[0] and not nd[0].startswith("NX"))]
 #                    print "path1", path, len(path)
                     mypath = ""
                     for node in path:
@@ -1448,6 +1450,28 @@ class DynamicComponentTest(unittest.TestCase):
                             "{}",
                             json.dumps({ar["name"]: mypath + "/" + fieldname}),
                             json.dumps({ar["name"]: True}),
+                            "{}", "{}")
+                    elif i == 4:
+                        dc.setDefaultLinkPath(False, mypath)
+                        dc.setLabelParams(
+                            json.dumps({ar["name"]: lbl}),
+                            "{}", "{}", "{}", "{}")
+                    elif i == 5:
+                        dc.setDefaultLinkPath(True, mypath)
+                        dc.setLabelParams(
+                            json.dumps({ar["name"]: lbl}),
+                            "{}", "{}", "{}", "{}")
+                    elif i == 6:
+                        dc.setLabelParams(
+                            json.dumps({ar["name"]: lbl}),
+                            json.dumps({lbl: mypath + "/" + fieldname}),
+                            json.dumps({lbl: False}),
+                            "{}", "{}")
+                    elif i == 7:
+                        dc.setLabelParams(
+                            json.dumps({ar["name"]: lbl}),
+                            json.dumps({lbl: mypath + "/" + fieldname}),
+                            json.dumps({lbl: True}),
                             "{}", "{}")
                     dc.setStepDictDSources([{"name": ar["full_name"],
                                              "shape": ms,
