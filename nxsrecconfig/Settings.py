@@ -859,17 +859,25 @@ class Settings(object):
             else:
                 dcpcreator.setStepDSources(self.dataSources)
             if len(params) > 1 and params[1]:
-                dcpcreator.setStepDictDSources(params[1])
+                dcpcreator.setStepDictDSources(json.loads(params[1]))
             if len(params) > 2 and params[2]:
                 dcpcreator.setInitDSources(json.loads(params[2]))
             else:
                 dcpcreator.setInitDSources(json.loads(
                         self.__selector["InitDataSources"]))
+            
+        withoutLinks = list(set(self.components) |
+                            set(self.automaticComponents) |
+                            set(self.mandatoryComponents()))    
+
+        links = json.loads(self.__selector["LabelLinks"])
+        for ds in withoutLinks:
+            links[ds] = False
 
         dcpcreator.setLabelParams(
             self.__selector["Labels"],
             self.__selector["LabelPaths"],
-            self.__selector["LabelLinks"],
+            json.dumps(links),
             self.__selector["LabelTypes"],
             self.__selector["LabelShapes"])
         dcpcreator.setDefaultLinkPath(
@@ -877,9 +885,7 @@ class Settings(object):
             str(self.__selector["DynamicPath"]))
 
         dcpcreator.markDSourcesWithoutLinks(
-            list(set(self.components) |
-                 set(self.automaticComponents) |
-                 set(self.mandatoryComponents())))
+            )
 
         return dcpcreator.create()
 

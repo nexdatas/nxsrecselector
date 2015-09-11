@@ -49,7 +49,6 @@ class DynamicComponent(object):
         self.__nexustypes = {}
         self.__nexusshapes = {}
 
-        self.__dsWithoutLinks = []
         self.__db = PyTango.Database()
 
         self.__ldefaultpath = \
@@ -82,20 +81,18 @@ class DynamicComponent(object):
         return self.__db.get_alias(name)
 
     ## sets user datasources with type and shape
-    # \param dct list of parameter dictionaries
-    #        [{"name": <dsname>, "dtype": <num_type>, "shape":<list>}, ...]  
-    def setStepDictDSources(self, dct):
+    # \param dctlist json list of parameter dictionaries
+    #        [{"name": <dsname>, "dtype": <num_type>, "shape":<list>}, ...]
+    def setStepDictDSources(self, dctlist):
         self.__stepdsourcesDict = []
-        jdct = json.loads(dct)
-
-        if isinstance(jdct, list):
-            for dd in jdct:
-                if "name" not in dd.keys():
+        if isinstance(dctlist, list):
+            for dct in dctlist:
+                if "name" not in dct.keys():
                     continue
-                self.__stepdsourcesDict.append(dd)
-                if "dtype" not in dd.keys():
+                self.__stepdsourcesDict.append(dct)
+                if "dtype" not in dct.keys():
                     self.__stepdsourcesDict[-1]["dtype"] = "string"
-                if "shape" not in dd.keys():
+                if "shape" not in dct.keys():
                     self.__stepdsourcesDict[-1]["shape"] = []
 
     ## sets step datasources
@@ -111,13 +108,6 @@ class DynamicComponent(object):
         self.__initdsources = list(dsources)
         if not isinstance(self.__initdsources, list):
             self.__initdsources = []
-
-    ## makes datasources to be without links
-    # \param dsources list of datasources
-    def markDSourcesWithoutLinks(self, datasources):
-        self.__dsWithoutLinks = list(datasources)
-        if not isinstance(self.__dsWithoutLinks, list):
-            self.__dsWithoutLinks = []
 
     ## sets label parameters for specific dynamic components
     # \param labels label dictionaries
@@ -148,6 +138,7 @@ class DynamicComponent(object):
     def setDefaultLinkPath(self, dynamicLinks, dynamicPath):
         self.__links = dynamicLinks
         self.__defaultpath = dynamicPath
+        print "DEFAULT", self.__defaultpath
         if not self.__defaultpath:
             self.__defaultpath = self.__ldefaultpath
 
@@ -167,16 +158,13 @@ class DynamicComponent(object):
     def __createSardanaNodes(self, created, root, definition):
         for dd in self.__stepdsourcesDict:
             alias = self.__get_alias(str(dd["name"]))
-            path, field = self.__getFieldPath(
+            path, field = self.__getPathField(
                 self.__nexuspaths, self.__nexuslabels,
                 alias, self.__defaultpath)
-
-            if alias in self.__dsWithoutLinks:
-                link = False
-            else:
-                link = self.__getProp(
-                    self.__nexuslinks, self.__nexuslabels,
-                    alias, self.__links)
+            print "FIELD, PATH", field, path
+            link = self.__getProp(
+                self.__nexuslinks, self.__nexuslabels,
+                alias, self.__links)
             (parent, nxdata) = self.__createGroupTree(
                 root, definition, path, link)
             created.append(alias)
@@ -185,6 +173,7 @@ class DynamicComponent(object):
             self.__createField(
                 root, parent, field, nxtype, alias,
                 dd["name"], dd["shape"])
+            print "path", path    
             if link:
                 self.__createLink(root, nxdata, path, field)
 
@@ -194,16 +183,13 @@ class DynamicComponent(object):
             if strategy == 'INIT' else self.__stepdsources
         for ds in dsources:
             if ds not in created:
-                path, field = self.__getFieldPath(
+                path, field = self.__getPathField(
                     self.__nexuspaths, self.__nexuslabels,
                     ds, self.__defaultpath)
 
-                if ds in self.__dsWithoutLinks:
-                    link = False
-                else:
-                    link = self.__getProp(
-                        self.__nexuslinks, self.__nexuslabels, ds,
-                        self.__links)
+                link = self.__getProp(
+                    self.__nexuslinks, self.__nexuslabels, ds,
+                    self.__links)
                 (parent, nxdata) = self.__createGroupTree(
                     root, definition, path, link)
 
@@ -237,7 +223,7 @@ class DynamicComponent(object):
     ## creates dynamic component
     def create(self):
         cps = TangoUtils.command(self.__nexusconfig_device,
-                            "availableComponents")
+                                 "availableComponents")
         name = self.__defaultCP
         while name in cps:
             name = name + "x"
@@ -247,7 +233,7 @@ class DynamicComponent(object):
         definition = root.createElement("definition")
         root.appendChild(definition)
         avds = TangoUtils.command(self.__nexusconfig_device,
-                             "availableDataSources")
+                                  "availableDataSources")
 
         created = []
         self.__createSardanaNodes(created, root, definition)
@@ -269,7 +255,7 @@ class DynamicComponent(object):
         return prop
 
     @classmethod
-    def __getFieldPath(cls, nexuspaths, nexuslabels, alias, defaultpath):
+    def __getPathField(cls, nexuspaths, nexuslabels, alias, defaultpath):
         path = nexuspaths.get(nexuslabels.get(alias, ""), "")
         if not path:
             path = nexuspaths.get(alias, "")
@@ -396,11 +382,14 @@ class DynamicComponent(object):
     def __createGroupTree(cls, root, definition, path, links=False):
         # create group tree
 
+        print "SPATH", path
         spath = path.split('/')
         entry = None
         parent = definition
         nxdata = None
+        print "SPLIT", spath
         for dr in spath:
+            print "dr", dr
             if dr.strip():
                 node = root.createElement("group")
                 parent.appendChild(node)
@@ -415,8 +404,9 @@ class DynamicComponent(object):
                         w.append("NX" + w[0])
                 node.setAttribute("type", w[1])
                 node.setAttribute("name", w[0])
+                print "Append dr", w[1], w[0]
                 parent = node
-        if links:
+        if links and entry:
             nxdata = root.createElement("group")
             entry.appendChild(nxdata)
             nxdata.setAttribute("type", "NXdata")

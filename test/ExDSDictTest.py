@@ -28,7 +28,7 @@ import struct
 
 from nxsrecconfig.Describer import (
     DSItem,
-#    ExDSItem, 
+#    ExDSItem,
     ExDSDict)
 
 

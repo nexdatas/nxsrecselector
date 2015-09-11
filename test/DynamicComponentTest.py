@@ -120,6 +120,14 @@ class DynamicComponentTest(unittest.TestCase):
 
         self.__dump = {}
 
+        self.__npTn = {"float32": "NX_FLOAT32", "float64": "NX_FLOAT64",
+                       "float": "NX_FLOAT32", "double": "NX_FLOAT64",
+                       "int": "NX_INT", "int64": "NX_INT64",
+                       "int32": "NX_INT32", "int16": "NX_INT16",
+                       "int8": "NX_INT8", "uint64": "NX_UINT64",
+                       "uint32": "NX_UINT32", "uint16": "NX_UINT16",
+                       "uint8": "NX_UINT8", "uint": "NX_UINT64",
+                       "string": "NX_CHAR", "bool": "NX_BOOLEAN"}
         ## default zone
         self.__defaultzone = 'Europe/Berlin'
         ## default mntgrp
@@ -936,7 +944,7 @@ class DynamicComponentTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
-    def test_create_remove(self):
+    def ttest_create_remove(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         cps = {"empty":
@@ -964,10 +972,10 @@ class DynamicComponentTest(unittest.TestCase):
         self.assertEqual(cpname, dname + "xxx")
         self._cf.dp.Components([cpname])
         self.assertEqual(cps["empty"], self._cf.dp.Components([cpname])[0])
-        
+
         dc.remove(dname + "xx")
         self.assertEqual(self._cf.dp.Components([dname + "xx"]), [])
-        
+
         cpname = dc.create()
         self.assertEqual(cpname, dname + "xx")
         self._cf.dp.Components([cpname])
@@ -975,22 +983,553 @@ class DynamicComponentTest(unittest.TestCase):
 
         dc.remove(dname + "x")
         self.assertEqual(self._cf.dp.Components([dname + "x"]), [])
-        
+
         dc.remove(dname + "xxx")
         self.assertEqual(self._cf.dp.Components([dname + "xxx"]), [])
-        
+
         dc.remove(dname + "xx")
         self.assertEqual(self._cf.dp.Components([dname + "xx"]), [])
 
         dc.remove(dname + "xx")
         self.assertEqual(self._cf.dp.Components([dname + "xx"]), [])
-        
+
         dc.remove(dname)
         self.assertEqual(self._cf.dp.Components([dname]), [])
 
         self.myAssertRaise(Exception, dc.remove, "sdfsdf")
+
+    ## constructor test
+    # \brief It tests default settings
+    def ttest_create_dict(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        cps = {
+            "empty":
+                '<?xml version="1.0" ?>\n<definition/>\n',
+            "one":
+                '<?xml version="1.0" ?>\n<definition>\n'
+            '<group name="entry$var.serialno" type="NXentry">\n'
+            '<group name="instrument" type="NXinstrument">\n'
+            '<group name="collection" type="NXcollection">\n'
+            '<field name="onename" type="NX_CHAR">\n<strategy mode="STEP"/>\n'
+            '<datasource name="onename" type="CLIENT">\n'
+            '<record name="onename"/>\n</datasource>\n</field>\n'
+            '</group>\n</group>\n<group name="data" type="NXdata">\n'
+            '<link name="onename" target="/entry$var.serialno:'
+            'NXentry/NXinstrument/collection/onename"/>\n'
+            '</group>\n</group>\n</definition>\n',
+            "two":
+                '<?xml version="1.0" ?>\n<definition>\n'
+            '<group name="entry$var.serialno" type="NXentry">\n'
+            '<group name="instrument" type="NXinstrument">\n'
+            '<group name="collection" type="NXcollection">\n'
+            '<field name="ds1" type="NX_CHAR">\n<strategy mode="STEP"/>\n'
+            '<datasource name="ds1" type="CLIENT">\n<record name="ds1"/>\n'
+            '</datasource>\n</field>\n</group>\n</group>\n'
+            '<group name="data" type="NXdata">\n'
+            '<link name="ds1" target="/entry$var.serialno:'
+            'NXentry/NXinstrument/collection/ds1"/>\n</group>\n</group>\n'
+            '<group name="entry$var.serialno" type="NXentry">'
+            '\n<group name="instrument" type="NXinstrument">\n'
+            '<group name="collection" type="NXcollection">\n'
+            '<field name="ds2" type="NX_CHAR">\n<strategy mode="STEP"/>\n'
+            '<datasource name="ds2" type="CLIENT">\n<record name="ds2"/>\n'
+            '</datasource>\n</field>\n</group>\n</group>\n'
+            '<group name="data" type="NXdata">\n'
+            '<link name="ds2" target="/entry$var.serialno:'
+            'NXentry/NXinstrument/collection/ds2"/>\n</group>\n'
+            '</group>\n</definition>\n',
+            "three":
+                '<?xml version="1.0" ?>\n<definition>\n'
+            '<group name="entry$var.serialno" type="NXentry">\n'
+            '<group name="instrument" type="NXinstrument">\n'
+            '<group name="collection" type="NXcollection">\n'
+            '<field name="ds1" type="NX_CHAR">\n<strategy mode="STEP"/>\n'
+            '<datasource name="ds1" type="CLIENT">\n<record name="ds1"/>\n'
+            '</datasource>\n</field>\n</group>\n</group>\n'
+            '<group name="data" type="NXdata">\n'
+            '<link name="ds1" target="/entry$var.serialno:'
+            'NXentry/NXinstrument/collection/ds1"/>\n</group>\n</group>\n'
+            '<group name="entry$var.serialno" type="NXentry">'
+            '\n<group name="instrument" type="NXinstrument">\n'
+            '<group name="collection" type="NXcollection">\n'
+            '<field name="ds2" type="NX_CHAR">\n<strategy mode="STEP"/>\n'
+            '<datasource name="ds2" type="CLIENT">\n<record name="ds2"/>\n'
+            '</datasource>\n</field>\n</group>\n</group>\n'
+            '<group name="data" type="NXdata">\n'
+            '<link name="ds2" target="/entry$var.serialno:'
+            'NXentry/NXinstrument/collection/ds2"/>\n</group>\n</group>\n'
+            '<group name="entry$var.serialno" type="NXentry">'
+            '\n<group name="instrument" type="NXinstrument">\n'
+            '<group name="collection" type="NXcollection">\n'
+            '<field name="ds3" type="NX_CHAR">\n<strategy mode="STEP"/>\n'
+            '<datasource name="ds3" type="CLIENT">\n<record name="ds3"/>\n'
+            '</datasource>\n</field>\n</group>\n</group>\n'
+            '<group name="data" type="NXdata">\n'
+            '<link name="ds3" target="/entry$var.serialno:'
+            'NXentry/NXinstrument/collection/ds3"/>\n</group>\n</group>\n'
+            '</definition>\n',
+            "type":
+                '<?xml version="1.0" ?>\n<definition>\n'
+            '<group name="entry$var.serialno" type="NXentry">\n'
+            '<group name="instrument" type="NXinstrument">\n'
+            '<group name="collection" type="NXcollection">\n'
+            '<field name="ds1" type="NX_INT">\n<strategy mode="STEP"/>\n'
+            '<datasource name="ds1" type="CLIENT">\n'
+            '<record name="ds1"/>\n</datasource>\n</field>\n'
+            '</group>\n</group>\n<group name="data" type="NXdata">\n'
+            '<link name="ds1" target="/entry$var.serialno:'
+            'NXentry/NXinstrument/collection/ds1"/>\n'
+            '</group>\n</group>\n</definition>\n',
+            "shape":
+                '<?xml version="1.0" ?>\n<definition>\n'
+            '<group name="entry$var.serialno" type="NXentry">\n'
+            '<group name="instrument" type="NXinstrument">\n'
+            '<group name="collection" type="NXcollection">\n'
+            '<field name="ds2" type="NX_CHAR">\n<strategy mode="STEP"/>\n'
+            '<datasource name="ds2" type="CLIENT">\n'
+            '<record name="ds2"/>\n</datasource>\n'
+            '<dimensions rank="1">\n<dim index="1" value="34"/>\n'
+            '</dimensions>\n</field>\n'
+            '</group>\n</group>\n<group name="data" type="NXdata">\n'
+            '<link name="ds2" target="/entry$var.serialno:'
+            'NXentry/NXinstrument/collection/ds2"/>\n'
+            '</group>\n</group>\n</definition>\n',
+            "shapetype":
+                '<?xml version="1.0" ?>\n<definition>\n'
+            '<group name="entry$var.serialno" type="NXentry">\n'
+            '<group name="instrument" type="NXinstrument">\n'
+            '<group name="collection" type="NXcollection">\n'
+            '<field name="ds3" type="NX_FLOAT64">\n<strategy mode="STEP"/>\n'
+            '<datasource name="ds3" type="CLIENT">\n'
+            '<record name="ds3"/>\n</datasource>\n'
+            '<dimensions rank="2">\n<dim index="1" value="3"/>\n'
+            '<dim index="2" value="56"/>\n</dimensions>\n</field>\n'
+            '</group>\n</group>\n<group name="data" type="NXdata">\n'
+            '<link name="ds3" target="/entry$var.serialno:'
+            'NXentry/NXinstrument/collection/ds3"/>\n'
+            '</group>\n</group>\n</definition>\n',
+            }
+        dsdict = {
+            "empty": [],
+            "one": [{"name": "onename"}],
+            "two": [{"name": "ds1"}, {"name": "ds2"}],
+            "three": [{"name": "ds1"}, {"name": "ds2"}, {"name": "ds3"}],
+            "type": [{"name": "ds1", "dtype": "int"}],
+            "shape": [{"name": "ds2", "shape": [34]}],
+            "shapetype": [{"name": "ds3", "dtype": "float64",
+                           "shape":[3, 56]}],
+            }
+        dname = "__dynamic_component__"
+        dc = DynamicComponent(self._cf.dp)
+        for lb, ds in dsdict.items():
+            dc.setStepDictDSources(ds)
+            cpname = dc.create()
+            comp = self._cf.dp.Components([cpname])[0]
+            self.assertEqual(cps[lb], comp)
+
+    ## constructor test
+    # \brief It tests default settings
+    def ttest_create_dict_type(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        cps = {
+            "type":
+                '<?xml version="1.0" ?>\n<definition>\n'
+            '<group name="entry$var.serialno" type="NXentry">\n'
+            '<group name="instrument" type="NXinstrument">\n'
+            '<group name="collection" type="NXcollection">\n'
+            '<field name="ds1" type="%s">\n<strategy mode="STEP"/>\n'
+            '<datasource name="ds1" type="CLIENT">\n'
+            '<record name="ds1"/>\n</datasource>\n</field>\n'
+            '</group>\n</group>\n<group name="data" type="NXdata">\n'
+            '<link name="ds1" target="/entry$var.serialno:'
+            'NXentry/NXinstrument/collection/ds1"/>\n'
+            '</group>\n</group>\n</definition>\n',
+            }
+        dname = "__dynamic_component__"
+        dc = DynamicComponent(self._cf.dp)
+        for tp, nxstp in self.__npTn.items():
+            dc.setStepDictDSources([{"name": "ds1", "dtype":tp}])
+            cpname = dc.create()
+            comp = self._cf.dp.Components([cpname])[0]
+            self.assertEqual(cps["type"] % nxstp, comp)
+
+    ## constructor test
+    # \brief It tests default settings
+    def ttest_create_dict_shape(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        cps = {
+            "shape":
+                '<?xml version="1.0" ?>\n<definition>\n'
+            '<group name="entry$var.serialno" type="NXentry">\n'
+            '<group name="instrument" type="NXinstrument">\n'
+            '<group name="collection" type="NXcollection">\n'
+            '<field name="ds2" type="NX_CHAR">\n<strategy mode="STEP"/>\n'
+            '<datasource name="ds2" type="CLIENT">\n'
+            '<record name="ds2"/>\n</datasource>\n%s</field>\n'
+            '</group>\n</group>\n<group name="data" type="NXdata">\n'
+            '<link name="ds2" target="/entry$var.serialno:'
+            'NXentry/NXinstrument/collection/ds2"/>\n'
+            '</group>\n</group>\n</definition>\n',
+            }
+
+        dimbg = '<dimensions rank="%s">\n'
+        dim = '<dim index="%s" value="%s"/>\n'
+        dimend = '</dimensions>\n'
+
+        dname = "__dynamic_component__"
+        dc = DynamicComponent(self._cf.dp)
+        for i in range(50):
+            ms = [self.__rnd.randint(0, 3000)
+                  for _ in range(self.__rnd.randint(0, 3))]
+            dc.setStepDictDSources([{"name": "ds2", "shape":ms}])
+            cpname = dc.create()
+            mstr = ""
+            if ms:
+                mstr += dimbg % len(ms)
+                for ind, val in enumerate(ms):
+                    mstr += dim % (ind + 1, val)
+                mstr += dimend
+
+            comp = self._cf.dp.Components([cpname])[0]
+            self.assertEqual(cps["shape"] % mstr, comp)
+
+    ## constructor test
+    # \brief It tests default settings
+    def ttest_create_dict_shapetype(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        cps = {
+            "shapetype":
+                '<?xml version="1.0" ?>\n<definition>\n'
+            '<group name="entry$var.serialno" type="NXentry">\n'
+            '<group name="instrument" type="NXinstrument">\n'
+            '<group name="collection" type="NXcollection">\n'
+            '<field name="%s" type="%s">\n<strategy mode="STEP"/>\n'
+            '<datasource name="%s" type="CLIENT">\n'
+            '<record name="%s"/>\n</datasource>\n'
+            '%s</field>\n'
+            '</group>\n</group>\n%s</group>\n</definition>\n',
+            }
+
+        link = '<group name="data" type="NXdata">\n' + \
+            '<link name="%s" target="/entry$var.serialno:' + \
+            'NXentry/NXinstrument/collection/%s"/>\n</group>\n'
+
+        dimbg = '<dimensions rank="%s">\n'
+        dim = '<dim index="%s" value="%s"/>\n'
+        dimend = '</dimensions>\n'
         
+        dname = "__dynamic_component__"
+
+        arr = [
+            {"name":"client", "full_name":"client"},
+            {"name":"client_short", "full_name":"ttestp09/testts/t1r228"},
+            {"name":"client_long", "full_name":"ttestp09/testts/t2r228"},
+            {"name":"myclient_long", "full_name":"ttestp09/testts/t3r228"},
+            {"name":"client", "full_name":"client"},
+            {"name":"client_short", "full_name":"ttestp09/testts/t1r228"},
+            {"name":"client_long", "full_name":"ttestp09/testts/t2r228"},
+            {"name":"myclient_long", "full_name":"ttestp09/testts/t3r228"},
+            {"name":"client", "full_name":"client"},
+            {"name":"client_short", "full_name":"ttestp09/testts/t1r228"},
+            {"name":"client_long", "full_name":"ttestp09/testts/t2r228"},
+            {"name":"myclient_long", "full_name":"ttestp09/testts/t3r228"},
+            ]
+
+        simps2 = TestServerSetUp.TestServerSetUp(
+            "ttestp09/testts/t2r228", "S2")
+        simps3 = TestServerSetUp.TestServerSetUp(
+            "ttestp09/testts/t3r228", "S3")
+
+        db = PyTango.Database()
+        try:
+            simps2.setUp()
+            simps3.setUp()
+
+            dc = DynamicComponent(self._cf.dp)
+            for i, ar in enumerate(arr):
+                if '/' in ar["full_name"]:
+                    db.put_device_alias(ar["full_name"], ar["name"])
+#                print "I = ", i
+                for tp, nxstp in self.__npTn.items():
+                    lbl = self.getRandomName(20)
+                    dc = DynamicComponent(self._cf.dp)
+#                    print "TP = ", tp
+                    ms = [self.__rnd.randint(0, 3000)
+                          for _ in range(self.__rnd.randint(0, 3))]
+                    ms2 = [self.__rnd.randint(0, 3000)
+                          for _ in range(self.__rnd.randint(0, 3))]
+                    tmptp = self.__rnd.choice(self.__npTn.keys())
+                    if i == 0:
+                        pass
+                        dc.setDefaultLinkPath(False, self.__defaultpath)
+                    elif i == 1:
+                        dc.setDefaultLinkPath(True, self.__defaultpath)
+                    elif i == 2:
+                        dc.setLabelParams("{}", "{}",
+                                          json.dumps({ar["name"]: False}),
+                                          "{}", "{}")
+                    elif i == 3:
+                        dc.setLabelParams("{}", "{}",
+                                          json.dumps({ar["name"]: True}),
+                                          "{}", "{}")
+                    elif i == 4:
+                        dc.setDefaultLinkPath(True, self.__defaultpath)
+                        dc.setLabelParams("{}", "{}",
+                                          json.dumps({ar["name"]: False}),
+                                          "{}", "{}")
+                    elif i == 5:
+                        dc.setDefaultLinkPath(False, self.__defaultpath)
+                        dc.setLabelParams("{}", "{}",
+                                          json.dumps({ar["name"]: True}),
+                                          "{}", "{}")
+                    elif i == 6:
+                        dc.setDefaultLinkPath(False, self.__defaultpath)
+                        dc.setLabelParams("{}", "{}",
+                                          json.dumps({ar["full_name"]: True}),
+                                          "{}",
+                                          json.dumps({ar["name"]: ms2}))
+                    elif i == 7:
+                        dc.setLabelParams("{}", "{}", "{}",
+                                          json.dumps({ar["name"]: tmptp}),
+                                          "{}")
+                    elif i == 8:
+                        dc.setDefaultLinkPath(True, self.__defaultpath)
+                        dc.setLabelParams(json.dumps({ar["name"]: lbl}),
+                                          "{}",
+                                          json.dumps({lbl: False}),
+                                          "{}", "{}")
+                    elif i == 9:
+                        dc.setDefaultLinkPath(False, self.__defaultpath)
+                        dc.setLabelParams(json.dumps({ar["name"]: lbl}),
+                                          "{}",
+                                          json.dumps({lbl: True}),
+                                          "{}", "{}")
+                    elif i == 10:
+                        dc.setDefaultLinkPath(False, self.__defaultpath)
+                        dc.setLabelParams(json.dumps({ar["name"]: lbl}), 
+                                          "{}",
+                                          json.dumps({ar["full_name"]: True}),
+                                          "{}",
+                                          json.dumps({lbl: ms2}))
+                    elif i == 11:
+                        dc.setLabelParams(json.dumps({ar["name"]: lbl}),
+                                          "{}", "{}",
+                                          json.dumps({lbl: tmptp}),
+                                          "{}")
+                    dc.setStepDictDSources([{"name": ar["full_name"],
+                                             "shape": ms,
+                                             "dtype": tp}])
+                    cpname = dc.create()
+                    mstr = ""
+                    if ms:
+                        mstr += dimbg % len(ms)
+                        for ind, val in enumerate(ms):
+                            mstr += dim % (ind + 1, val)
+                        mstr += dimend
+
+                    comp = self._cf.dp.Components([cpname])[0]
+                    ds = ar["name"]
+                    lk = link % (ds, ds)
+                    self.assertEqual(cps["shapetype"] % (
+                            ds,
+                            nxstp, ds, ar["full_name"], mstr,
+                            lk if i % 2 else ""),
+                                     comp)
+        finally:
+            for ar in arr:
+                if '/' in ar["full_name"]:
+                    db.delete_device_alias(ar["name"])
+
+            simps3.tearDown()
+            simps2.tearDown()
+
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_create_dict_fieldpath(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        cps = {
+            "shapetype":
+                '<?xml version="1.0" ?>\n<definition>\n'
+            '<group name="entry$var.serialno" type="NXentry">\n'
+            '<group name="instrument" type="NXinstrument">\n'
+            '<group name="collection" type="NXcollection">\n%s'
+            '</group>\n</group>\n%s</group>\n</definition>\n',
+            }
         
+        defbg = '<?xml version="1.0" ?>\n<definition>\n'
+        defend = '</definition>\n'
+        groupbg = '<group name="%s" type="%s">\n'
+        groupend = '</group>\n'
+
+        field = '<field name="%s" type="%s">\n<strategy mode="STEP"/>\n' + \
+            '<datasource name="%s" type="CLIENT">\n' + \
+            '<record name="%s"/>\n</datasource>\n%s</field>\n'
+
+
+        link = '<group name="data" type="NXdata">\n' + \
+            '<link name="%s" target="%s/%s"/>\n</group>\n'
+
+        dimbg = '<dimensions rank="%s">\n'
+        dim = '<dim index="%s" value="%s"/>\n'
+        dimend = '</dimensions>\n'
+        
+        dname = "__dynamic_component__"
+
+        arr = [
+            {"name":"client", "full_name":"client"},
+            {"name":"client_short", "full_name":"ttestp09/testts/t1r228"},
+            {"name":"client_long", "full_name":"ttestp09/testts/t2r228"},
+            {"name":"myclient_long", "full_name":"ttestp09/testts/t3r228"},
+            ]
+
+        simps2 = TestServerSetUp.TestServerSetUp(
+            "ttestp09/testts/t2r228", "S2")
+        simps3 = TestServerSetUp.TestServerSetUp(
+            "ttestp09/testts/t3r228", "S3")
+
+        db = PyTango.Database()
+        try:
+            simps2.setUp()
+            simps3.setUp()
+
+            for i, ar in enumerate(arr):
+                if '/' in ar["full_name"]:
+                    db.put_device_alias(ar["full_name"], ar["name"])
+                print "I = ", i
+                for tp, nxstp in self.__npTn.items():
+                    dc = DynamicComponent(self._cf.dp)
+                    
+                    lbl = self.getRandomName(20)
+                    fieldname = self.getRandomName(20)
+                    print "FIELD", fieldname
+                    path = [
+                        (self.getRandomName(20)
+                         if self.__rnd.randint(0, 1) else None,
+                         ("NX" + self.getRandomName(20))
+                         if self.__rnd.randint(0, 1) else None)
+                        for _ in range(self.__rnd.randint(0, 10))]
+                    print "path0", path, len(path)
+                    path = [nd for nd in path if nd != (None, None)]
+                    print "path1", path, len(path)
+                    mypath = ""
+                    for node in path:
+                        mypath += "/"
+                        if node[0]:
+                            mypath += node[0]
+                            if node[1]:
+                                mypath += ":"
+                        if node[1]:
+                            mypath += node[1]
+#                    mypath += fieldname
+                    print "path2", path, len(path)
+                    print "PATH", path, mypath
+                    print "TP = ", tp
+                    ms = [self.__rnd.randint(0, 3000)
+                          for _ in range(self.__rnd.randint(0, 3))]
+                    ms2 = [self.__rnd.randint(0, 3000)
+                          for _ in range(self.__rnd.randint(0, 3))]
+                    tmptp = self.__rnd.choice(self.__npTn.keys())
+                    if i == 0:
+                        dc.setDefaultLinkPath(False, mypath)
+                    elif i == 1:
+                        dc.setDefaultLinkPath(True, mypath)
+                    elif i == 2:
+                        dc.setLabelParams("{}", 
+                                          json.dumps({ar["name"]: 
+                                                      mypath + "/" + fieldname}),
+                                          json.dumps({ar["name"]: False}),
+                                          "{}", "{}")
+                    elif i == 3:
+                        dc.setLabelParams("{}",
+                                          json.dumps({ar["name"]:
+                                                          mypath + "/" + fieldname}),
+                                          json.dumps({ar["name"]: True}),
+                                          "{}", "{}")
+                    dc.setStepDictDSources([{"name": ar["full_name"],
+                                             "shape": ms,
+                                             "dtype": tp}])
+                    cpname = dc.create()
+                    mstr = ""
+                    if ms:
+                        mstr += dimbg % len(ms)
+                        for ind, val in enumerate(ms):
+                            mstr += dim % (ind + 1, val)
+                        mstr += dimend
+
+                    comp = self._cf.dp.Components([cpname])[0]
+                    ds = ar["name"]
+                    lk = link % (ds, mypath, ds)
+                    if i < 2:
+                        fd = field % (ds, nxstp, ds, ar["full_name"], mstr)
+                    else:
+                        fname = fieldname.lower()
+                        fd = field % (fieldname.lower(), nxstp, ds, ar["full_name"], mstr)
+
+                    print "path3", path, len(path), bool(path)
+                    if path:
+
+                        print "path", bool(path)
+                        if i < 2:
+                            lk = link % (ds, mypath, ds)
+                        else:
+                            lk = link % (fieldname.lower(), mypath, fieldname.lower())
+                        mycps = defbg
+                        for nm, gtp in path:
+                            if not nm:
+                                nm = gtp[2:] 
+                            if not gtp:
+                                gtp = 'NX' + nm
+                            mycps += groupbg % (nm, gtp)
+                        mycps += fd
+
+                        for j in range(len(path) - 1):
+                            mycps += groupend
+                        mycps += lk if i % 2 else ""
+                        mycps += groupend
+                        mycps += defend
+
+                        mycps2 = defbg
+                        for k, (nm, gtp) in enumerate(path):
+                            if not nm:
+                                nm = gtp[2:] 
+                            if not gtp:
+                                gtp = 'NX' + nm
+                            mycps2 += groupbg % (nm, gtp)
+                            if not k:
+                                mycps2 += lk if i % 2 else ""
+                        mycps2 += fd
+
+                        for _ in path:
+                            mycps2 += groupend
+                        mycps2 += defend
+                        print "FIRST"
+                    else:
+                        if i < 2:
+                            lk = link % (ds,  self.__defaultpath, ds)
+                        else:
+                            lk = link % (fieldname.lower(),  self.__defaultpath, fieldname.lower())
+                        mycps = cps["shapetype"] % (
+                            fd,
+                            lk if i % 2 else "")
+                        mycps = mycps2
+                        print "SECOND"
+                    try:
+                        self.assertEqual(comp, mycps)
+                    except:    
+                        self.assertEqual(comp, mycps2)
+        finally:
+            for ar in arr:
+                if '/' in ar["full_name"]:
+                    db.delete_device_alias(ar["name"])
+
+            simps3.tearDown()
+            simps2.tearDown()
 
 if __name__ == '__main__':
     unittest.main()
