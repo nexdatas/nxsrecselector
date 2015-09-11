@@ -194,7 +194,8 @@ class TestServer(PyTango.Device_4Impl):
 #    Always excuted hook method
 #------------------------------------------------------------------
     def always_executed_hook(self):
-        print "In ", self.get_name(), "::always_excuted_hook()"
+        pass
+#        print "In ", self.get_name(), "::always_excuted_hook()"
 
 #
 #==================================================================

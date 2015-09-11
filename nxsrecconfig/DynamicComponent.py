@@ -133,7 +133,7 @@ class DynamicComponent(object):
             self.__nexusshapes = {}
 
     ## sets default nexus path and link flag for dynamic components
-    # \brief if dynamicPath is None or "" it is reset to default one        
+    # \brief if dynamicPath is None or "" it is reset to default one
     # \param dynamicPath nexus default path
     # \param dynamicLinks default link flag
     def setDefaultLinkPath(self, dynamicLinks, dynamicPath):

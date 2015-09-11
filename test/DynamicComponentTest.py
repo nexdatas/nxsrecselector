@@ -1556,5 +1556,202 @@ class DynamicComponentTest(unittest.TestCase):
             simps3.tearDown()
             simps2.tearDown()
 
+    ## constructor test
+    # \brief It tests default settings
+    def test_create_dict_datasource_attr(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        cps = {
+            "shapetype":
+                '<?xml version="1.0" ?>\n<definition>\n%s'
+            '</group>\n</group>\n%s</group>\n</definition>\n',
+            }
+
+        defbg = '<?xml version="1.0" ?>\n<definition>\n'
+        defend = '</definition>\n'
+        groupbg = '<group name="entry$var.serialno" type="NXentry">\n' + \
+            '<group name="instrument" type="NXinstrument">\n' + \
+            '<group name="collection" type="NXcollection">\n'
+        groupend = '</group>\n'
+
+        fieldbg = '<field name="%s" type="%s">\n<strategy mode="STEP"/>\n'
+
+        dsclient = '<datasource name="%s" type="CLIENT">\n' + \
+            '<record name="%s"/>\n</datasource>\n'
+
+        dstango = '<datasource name="%s" type="TANGO">\n' + \
+            '<device member="attribute" name="%s"/>\n' + \
+            '<record name="%s"/>\n</datasource>\n'
+
+        fieldend = '</field>\n'
+
+        link = '<group name="data" type="NXdata">\n' + \
+            '<link name="%s" target="%s/%s"/>\n</group>\n'
+
+        dimbg = '<dimensions rank="%s">\n'
+        dim = '<dim index="%s" value="%s"/>\n'
+        dimend = '</dimensions>\n'
+
+        dname = "__dynamic_component__"
+
+        arr = [
+            {"name":"client_short", "full_name":"ttestp09/testts/t1r228",
+             "source":"ttestp09/testts/t1r228"},
+            {"name":"client_long", "full_name":"ttestp09/testts/t2r228",
+             "source":"ttestp09/testts/t1r228/Value"},
+            {"name":"myclient_long", "full_name":"ttestp09/testts/t3r228",
+             "source":"ttestp09/testts/t1r228/NonExisting"},
+            {"name":"myclient", "full_name":"ttestp09/testts/t4r228",
+             "source":"ttestp09/testts/t1r228/ImageDouble"},
+            ]
+
+        simps2 = TestServerSetUp.TestServerSetUp(
+            "ttestp09/testts/t2r228", "S2")
+        simps3 = TestServerSetUp.TestServerSetUp(
+            "ttestp09/testts/t3r228", "S3")
+        simps4 = TestServerSetUp.TestServerSetUp(
+            "ttestp09/testts/t4r228", "S4")
+
+        db = PyTango.Database()
+        try:
+            simps2.setUp()
+            simps3.setUp()
+            simps4.setUp()
+            self._simps.dp.CreateAttribute("DataSource")
+            simps2.dp.CreateAttribute("DataSource")
+            simps3.dp.CreateAttribute("DataSource")
+            simps4.dp.CreateAttribute("DataSource")
+            self._simps.dp.DataSource = arr[0]["source"]
+            simps2.dp.DataSource = arr[1]["source"]
+            simps3.dp.DataSource = arr[2]["source"]
+            simps4.dp.DataSource = arr[3]["source"]
+
+            for i, ar in enumerate(arr):
+#                print "I = ", i, ar["name"]
+                db.put_device_alias(ar["full_name"], ar["name"])
+
+                dc = DynamicComponent(self._cf.dp)
+                dc.setStepDictDSources([{"name": ar["full_name"]}])
+                cpname = dc.create()
+                comp = self._cf.dp.Components([cpname])[0]
+                mycps = defbg + groupbg + fieldbg % (ar["name"], "NX_CHAR")
+                if i:
+                    sso = ar["source"].split("/")
+                    mycps += dstango % (
+                        ar["name"], "/".join(sso[:-1]), sso[-1])
+                else:
+                    mycps += dsclient % (ar["name"], ar["full_name"])
+                mycps += fieldend + groupend + groupend
+                mycps += link % (ar["name"], self.__defaultpath,
+                                         ar["name"])
+                mycps += groupend + defend
+
+                self.assertEqual(comp, mycps)
+#                print comp
+        finally:
+            for ar in arr:
+                if '/' in ar["full_name"]:
+                    db.delete_device_alias(ar["name"])
+
+            simps4.tearDown()
+            simps3.tearDown()
+            simps2.tearDown()
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_create_step(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        cps = {
+            "empty":
+                '<?xml version="1.0" ?>\n<definition/>\n',
+            "one":
+                '<?xml version="1.0" ?>\n<definition>\n'
+            '<group name="entry$var.serialno" type="NXentry">\n'
+            '<group name="instrument" type="NXinstrument">\n'
+            '<group name="collection" type="NXcollection">\n'
+            '<field name="one" type="NX_CHAR">\n<strategy mode="STEP"/>\n'
+            '<datasource name="one" type="CLIENT">\n<record name="one"/>\n'
+            '</datasource>\n</field>\n'
+            '</group>\n</group>\n'
+            '<group name="data" type="NXdata">\n'
+            '<link name="one" target="/entry$var.serialno:'
+            'NXentry/NXinstrument/collection/one"/>\n'
+            '</group>\n</group>\n'
+            '</definition>\n',
+            "two":
+                '<?xml version="1.0" ?>\n<definition>\n'
+            '<group name="entry$var.serialno" type="NXentry">\n'
+            '<group name="instrument" type="NXinstrument">\n'
+            '<group name="collection" type="NXcollection">\n'
+            '<field name="d1" type="NX_CHAR">\n<strategy mode="STEP"/>\n'
+            '<datasource name="d1" type="CLIENT">\n<record name="d1"/>\n'
+            '</datasource>\n</field>\n'
+            '</group>\n</group>\n'
+            '<group name="data" type="NXdata">\n'
+            '<link name="d1" target="/entry$var.serialno:'
+            'NXentry/NXinstrument/collection/d1"/>\n'
+            '</group>\n</group>\n'
+            '<group name="entry$var.serialno" type="NXentry">\n'
+            '<group name="instrument" type="NXinstrument">\n'
+            '<group name="collection" type="NXcollection">\n'
+            '<field name="d2" type="NX_CHAR">\n<strategy mode="STEP"/>\n'
+            '<datasource name="d2" type="CLIENT">\n<record name="d2"/>\n'
+            '</datasource>\n</field>\n</group>\n</group>\n'
+            '<group name="data" type="NXdata">\n'
+            '<link name="d2" target="/entry$var.serialno:'
+            'NXentry/NXinstrument/collection/d2"/>\n'
+            '</group>\n</group>\n'
+            '</definition>\n',
+            "three":
+                '<?xml version="1.0" ?>\n<definition>\n'
+            '<group name="entry$var.serialno" type="NXentry">\n'
+            '<group name="instrument" type="NXinstrument">\n'
+            '<group name="collection" type="NXcollection">\n'
+            '<field name="ds1" type="NX_CHAR">\n<strategy mode="STEP"/>\n'
+            '<datasource name="ds1" type="CLIENT">\n<record name="ds1"/>\n'
+            '</datasource>\n</field>\n'
+            '</group>\n</group>\n'
+            '<group name="data" type="NXdata">\n'
+            '<link name="ds1" target="/entry$var.serialno:'
+            'NXentry/NXinstrument/collection/ds1"/>\n'
+            '</group>\n</group>\n'
+            '<group name="entry$var.serialno" type="NXentry">\n'
+            '<group name="instrument" type="NXinstrument">\n'
+            '<group name="collection" type="NXcollection">\n'
+            '<field name="ds2" type="NX_CHAR">\n<strategy mode="STEP"/>\n'
+            '<datasource name="ds2" type="CLIENT">\n<record name="ds2"/>\n'
+            '</datasource>\n</field>\n</group>\n</group>\n'
+            '<group name="data" type="NXdata">\n'
+            '<link name="ds2" target="/entry$var.serialno:'
+            'NXentry/NXinstrument/collection/ds2"/>\n'
+            '</group>\n</group>\n'
+            '<group name="entry$var.serialno" type="NXentry">\n'
+            '<group name="instrument" type="NXinstrument">\n'
+            '<group name="collection" type="NXcollection">\n'
+            '<field name="ds3" type="NX_CHAR">\n<strategy mode="STEP"/>\n'
+            '<datasource name="ds3" type="CLIENT">\n<record name="ds3"/>\n'
+            '</datasource>\n</field>\n</group>\n</group>\n'
+            '<group name="data" type="NXdata">\n'
+            '<link name="ds3" target="/entry$var.serialno:'
+            'NXentry/NXinstrument/collection/ds3"/>\n'
+            '</group>\n</group>\n'
+            '</definition>\n'
+            }
+        dsdict = {
+            "empty": [],
+            "one": ["one"],
+            "two": ["d1", "d2"],
+            "three": ["ds1", "ds2", "ds3"],
+            }
+        dname = "__dynamic_component__"
+        dc = DynamicComponent(self._cf.dp)
+        for lb, ds in dsdict.items():
+            dc.setStepDSources(ds)
+            cpname = dc.create()
+            comp = self._cf.dp.Components([cpname])[0]
+#            print "COMP", comp
+            self.assertEqual(cps[lb], comp)
+
 if __name__ == '__main__':
     unittest.main()

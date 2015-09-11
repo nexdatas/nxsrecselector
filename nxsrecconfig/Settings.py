@@ -865,10 +865,10 @@ class Settings(object):
             else:
                 dcpcreator.setInitDSources(json.loads(
                         self.__selector["InitDataSources"]))
-            
+
         withoutLinks = list(set(self.components) |
                             set(self.automaticComponents) |
-                            set(self.mandatoryComponents()))    
+                            set(self.mandatoryComponents()))
 
         links = json.loads(self.__selector["LabelLinks"])
         for ds in withoutLinks:
