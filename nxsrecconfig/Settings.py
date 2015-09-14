@@ -756,18 +756,21 @@ class Settings(object):
         return self.__mntgrptools.getSourceDescription(datasources)
 
     ## provides description of components
-    # \param dstype list datasets only with given datasource type.
-    #        If '' all available ones are taken
     # \param full if True describes all available ones are taken
     #        otherwise selectect, automatic and mandatory
     # \returns description of required components
-    def cpdescription(self, dstype='', full=False):
-        self.__mntgrptools.configServer = self.setConfigInstance()
+    def cpdescription(self, full=False):
+        nexusconfig_device = self.setConfigInstance()
+        describer = Describer(nexusconfig_device)
+        cp = None
         if not full:
-            self.__mntgrptools.components = list(
+            cp = list(
                 set(self.components) | set(self.automaticComponents) |
                 set(self.mandatoryComponents()))
-        return self.__mntgrptools.cpdescription(dstype, full)
+            res = describer.components(cp, 'STEP', '')
+        else:
+            res = describer.components(cp, '', '')
+        return res
 
     ## provides configuration of mntgrp
      # \returns string with mntgrp configuration
@@ -883,9 +886,6 @@ class Settings(object):
         dcpcreator.setDefaultLinkPath(
             bool(self.__selector["DynamicLinks"]),
             str(self.__selector["DynamicPath"]))
-
-        dcpcreator.markDSourcesWithoutLinks(
-            )
 
         return dcpcreator.create()
 

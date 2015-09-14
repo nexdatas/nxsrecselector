@@ -313,23 +313,6 @@ class MntGrpTools(object):
                 ltimers.remove(timer)
         return timer
 
-    ## provides description of components
-    # \param dstype list datasets only with given datasource type.
-    #        If '' all available ones are taken
-    # \param full if True describes all available ones are taken
-    #        otherwise selectect, automatic and mandatory
-    # \returns description of required components
-    def cpdescription(self, dstype='', full=False):
-
-        describer = Describer(self.configServer, True)
-        cp = None
-        if not full:
-            cp = self.components
-            res = describer.components(cp, 'STEP', dstype)
-        else:
-            res = describer.components(cp, '', dstype)
-        return res
-
     def __fetchChannels(self, dontdisplay, timers, pools):
         aliases = []
 
@@ -340,7 +323,8 @@ class MntGrpTools(object):
         aliases.extend(
             list(set(pchannels) & set(self.disableDataSources)))
 
-        res = self.cpdescription('CLIENT')
+        describer = Describer(self.configServer, True)
+        res = describer.components(self.components, 'STEP', 'CLIENT')
 
         for grp in res:
             for cp, dss in grp.items():
