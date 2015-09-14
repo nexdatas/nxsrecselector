@@ -292,7 +292,6 @@ class DynamicComponent(object):
             source = sname[-1]
         else:
             source = PoolUtils.getSource(name)
-
         if source:
             arr = source.split("/")
             if len(arr) > 4 and ":" in arr[0]:
