@@ -23,10 +23,11 @@ import unittest
 import time
 import os
 import sys
-#import subprocess
+import json
 import random
 import struct
 import binascii
+#import subprocess
 
 from nxsrecconfig.Describer import Describer
 
@@ -483,6 +484,22 @@ class DescriberTest(unittest.TestCase):
             self.assertEqual(self.resdss[vl][1], rv[vl].dstype)
             self.assertEqual(self.resdss[vl][2], rv[vl].record)
 
+
+    def checkDSList(self, rv, cv):
+        self.assertEqual(len(rv), len(cv))
+
+        mset = set()
+        for jr in rv:
+            rr = json.loads(jr)
+            vl = rr["dsname"] 
+            mset.add(vl)
+            if not vl:
+                vl = 'nn2'
+            self.assertEqual(self.resdss[vl][0], rr["dsname"])
+            self.assertEqual(self.resdss[vl][1], rr["dstype"])
+            self.assertEqual(self.resdss[vl][2], rr["record"])
+        self.assertEqual(len(rv), len(mset))
+
     def hasds(self, dslist, strategy, dstype):
         for dss in dslist:
             for ds in dss:
@@ -581,23 +598,23 @@ class DescriberTest(unittest.TestCase):
         server = NoServer()
         server.dsdict = dsdict
         des = Describer(server)
-        self.assertEqual(des.dataSources(["myds2"]), {})
+        self.assertEqual(des.dataSources(["myds2"]), [])
 
         des = Describer(server)
         res = des.dataSources(["ann"])
-        self.checkDS(res, ["ann"])
+        self.checkDSList(res, ["ann"])
 
         des = Describer(server)
         res = des.dataSources(["ann", "myds2"])
-        self.checkDS(res, ["ann"])
+        self.checkDSList(res, ["ann"])
 
         des = Describer(server)
         res = des.dataSources(["ann"], "TANGO")
-        self.checkDS(res, ["ann"])
+        self.checkDSList(res, ["ann"])
 
         des = Describer(server)
         res = des.dataSources(["ann"], "CLIENT")
-        self.checkDS(res, [])
+        self.checkDSList(res, [])
 
     ## constructor test
     # \brief It tests default settings
@@ -610,23 +627,23 @@ class DescriberTest(unittest.TestCase):
         server = Server()
         server.dsdict = dsdict
         des = Describer(server)
-        self.assertEqual(des.dataSources(["myds2"]), {})
+        self.assertEqual(des.dataSources(["myds2"]), [])
 
         des = Describer(server)
         res = des.dataSources(["ann"])
-        self.checkDS(res, ["ann"])
+        self.checkDSList(res, ["ann"])
 
         des = Describer(server)
         res = des.dataSources(["ann", "myds2"])
-        self.checkDS(res, ["ann"])
+        self.checkDSList(res, ["ann"])
 
         des = Describer(server)
         res = des.dataSources(["ann"], "TANGO")
-        self.checkDS(res, ["ann"])
+        self.checkDSList(res, ["ann"])
 
         des = Describer(server)
         res = des.dataSources(["ann"], "CLIENT")
-        self.checkDS(res, [])
+        self.checkDSList(res, [])
 
     ## constructor test
     # \brief It tests default settings
@@ -639,7 +656,7 @@ class DescriberTest(unittest.TestCase):
 
         des = Describer(server)
         res = des.dataSources()
-        self.checkDS(res, self.resdss.keys())
+        self.checkDSList(res, self.resdss.keys())
 
     ## constructor test
     # \brief It tests default settings
@@ -652,7 +669,7 @@ class DescriberTest(unittest.TestCase):
 
         des = Describer(server)
         res = des.dataSources()
-        self.checkDS(res, self.resdss.keys())
+        self.checkDSList(res, self.resdss.keys())
 
     ## constructor test
     # \brief It tests default settings
@@ -665,37 +682,37 @@ class DescriberTest(unittest.TestCase):
 
         des = Describer(server)
         res = des.dataSources(dstype="TANGO")
-        self.checkDS(
+        self.checkDSList(
             res,
             [k for k in self.resdss.keys() if self.resdss[k][1] == 'TANGO'])
 
         des = Describer(server)
         res = des.dataSources(dstype="CLIENT")
-        self.checkDS(
+        self.checkDSList(
             res,
             [k for k in self.resdss.keys() if self.resdss[k][1] == 'CLIENT'])
 
         des = Describer(server)
         res = des.dataSources(dstype="DB")
-        self.checkDS(
+        self.checkDSList(
             res,
             [k for k in self.resdss.keys() if self.resdss[k][1] == 'DB'])
 
         des = Describer(server)
         res = des.dataSources(dstype="PYEVAL")
-        self.checkDS(
+        self.checkDSList(
             res,
             [k for k in self.resdss.keys() if self.resdss[k][1] == 'PYEVAL'])
 
         des = Describer(server)
         res = des.dataSources(dstype="NEW")
-        self.checkDS(
+        self.checkDSList(
             res,
             [k for k in self.resdss.keys() if self.resdss[k][1] == 'NEW'])
 
         des = Describer(server)
         res = des.dataSources(dstype="UNKNOWN")
-        self.checkDS(
+        self.checkDSList(
             res,
             [k for k in self.resdss.keys() if self.resdss[k][1] == 'UNKNOWN'])
 
@@ -710,37 +727,37 @@ class DescriberTest(unittest.TestCase):
 
         des = Describer(server)
         res = des.dataSources(dstype="TANGO")
-        self.checkDS(
+        self.checkDSList(
             res,
             [k for k in self.resdss.keys() if self.resdss[k][1] == 'TANGO'])
 
         des = Describer(server)
         res = des.dataSources(dstype="CLIENT")
-        self.checkDS(
+        self.checkDSList(
             res,
             [k for k in self.resdss.keys() if self.resdss[k][1] == 'CLIENT'])
 
         des = Describer(server)
         res = des.dataSources(dstype="DB")
-        self.checkDS(
+        self.checkDSList(
             res,
             [k for k in self.resdss.keys() if self.resdss[k][1] == 'DB'])
 
         des = Describer(server)
         res = des.dataSources(dstype="PYEVAL")
-        self.checkDS(
+        self.checkDSList(
             res,
             [k for k in self.resdss.keys() if self.resdss[k][1] == 'PYEVAL'])
 
         des = Describer(server)
         res = des.dataSources(dstype="NEW")
-        self.checkDS(
+        self.checkDSList(
             res,
             [k for k in self.resdss.keys() if self.resdss[k][1] == 'NEW'])
 
         des = Describer(server)
         res = des.dataSources(dstype="UNKNOWN")
-        self.checkDS(
+        self.checkDSList(
             res,
             [k for k in self.resdss.keys() if self.resdss[k][1] == 'UNKNOWN'])
 
@@ -765,7 +782,7 @@ class DescriberTest(unittest.TestCase):
         for names in names_list:
             des = Describer(server)
             res = des.dataSources(names)
-            self.checkDS(res, names)
+            self.checkDSList(res, names)
 
     ## constructor test
     # \brief It tests default settings
@@ -788,6 +805,227 @@ class DescriberTest(unittest.TestCase):
         for names in names_list:
             des = Describer(server)
             res = des.dataSources(names)
+            print res
+            self.checkDSList(res, names)
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_datasources_tree(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        dsdict = {
+            "ann": self.mydss["ann"]
+            }
+        server = NoServer()
+        server.dsdict = dsdict
+        des = Describer(server, True)
+        self.assertEqual(des.dataSources(["myds2"])[0], {})
+
+        des = Describer(server, True)
+        res = des.dataSources(["ann"])[0]
+        self.checkDS(res, ["ann"])
+
+        des = Describer(server, True)
+        res = des.dataSources(["ann", "myds2"])[0]
+        self.checkDS(res, ["ann"])
+
+        des = Describer(server, True)
+        res = des.dataSources(["ann"], "TANGO")[0]
+        self.checkDS(res, ["ann"])
+
+        des = Describer(server, True)
+        res = des.dataSources(["ann"], "CLIENT")[0]
+        self.checkDS(res, [])
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_datasources_server_tree(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        dsdict = {
+            "ann": self.mydss["ann"]
+            }
+        server = Server()
+        server.dsdict = dsdict
+        des = Describer(server, True)
+        self.assertEqual(des.dataSources(["myds2"])[0], {})
+
+        des = Describer(server, True)
+        res = des.dataSources(["ann"])[0]
+        self.checkDS(res, ["ann"])
+
+        des = Describer(server, True)
+        res = des.dataSources(["ann", "myds2"])[0]
+        self.checkDS(res, ["ann"])
+
+        des = Describer(server, True)
+        res = des.dataSources(["ann"], "TANGO")[0]
+        self.checkDS(res, ["ann"])
+
+        des = Describer(server, True)
+        res = des.dataSources(["ann"], "CLIENT")[0]
+        self.checkDS(res, [])
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_datasources_noargs_tree(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+
+        server = NoServer()
+        server.dsdict = self.mydss
+
+        des = Describer(server, True)
+        res = des.dataSources()[0]
+        self.checkDS(res, self.resdss.keys())
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_datasources_noargs_server_tree(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+
+        server = Server()
+        server.dsdict = self.mydss
+
+        des = Describer(server, True)
+        res = des.dataSources()[0]
+        self.checkDS(res, self.resdss.keys())
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_datasources_dstype_tree(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+
+        server = NoServer()
+        server.dsdict = self.mydss
+
+        des = Describer(server, True)
+        res = des.dataSources(dstype="TANGO")[0]
+        self.checkDS(
+            res,
+            [k for k in self.resdss.keys() if self.resdss[k][1] == 'TANGO'])
+
+        des = Describer(server, True)
+        res = des.dataSources(dstype="CLIENT")[0]
+        self.checkDS(
+            res,
+            [k for k in self.resdss.keys() if self.resdss[k][1] == 'CLIENT'])
+
+        des = Describer(server, True)
+        res = des.dataSources(dstype="DB")[0]
+        self.checkDS(
+            res,
+            [k for k in self.resdss.keys() if self.resdss[k][1] == 'DB'])
+
+        des = Describer(server, True)
+        res = des.dataSources(dstype="PYEVAL")[0]
+        self.checkDS(
+            res,
+            [k for k in self.resdss.keys() if self.resdss[k][1] == 'PYEVAL'])
+
+        des = Describer(server, True)
+        res = des.dataSources(dstype="NEW")[0]
+        self.checkDS(
+            res,
+            [k for k in self.resdss.keys() if self.resdss[k][1] == 'NEW'])
+
+        des = Describer(server, True)
+        res = des.dataSources(dstype="UNKNOWN")[0]
+        self.checkDS(
+            res,
+            [k for k in self.resdss.keys() if self.resdss[k][1] == 'UNKNOWN'])
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_datasources_dstype_server_tree(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+
+        server = Server()
+        server.dsdict = self.mydss
+
+        des = Describer(server, True)
+        res = des.dataSources(dstype="TANGO")[0]
+        self.checkDS(
+            res,
+            [k for k in self.resdss.keys() if self.resdss[k][1] == 'TANGO'])
+
+        des = Describer(server, True)
+        res = des.dataSources(dstype="CLIENT")[0]
+        self.checkDS(
+            res,
+            [k for k in self.resdss.keys() if self.resdss[k][1] == 'CLIENT'])
+
+        des = Describer(server, True)
+        res = des.dataSources(dstype="DB")[0]
+        self.checkDS(
+            res,
+            [k for k in self.resdss.keys() if self.resdss[k][1] == 'DB'])
+
+        des = Describer(server, True)
+        res = des.dataSources(dstype="PYEVAL")[0]
+        self.checkDS(
+            res,
+            [k for k in self.resdss.keys() if self.resdss[k][1] == 'PYEVAL'])
+
+        des = Describer(server, True)
+        res = des.dataSources(dstype="NEW")[0]
+        self.checkDS(
+            res,
+            [k for k in self.resdss.keys() if self.resdss[k][1] == 'NEW'])
+
+        des = Describer(server, True)
+        res = des.dataSources(dstype="UNKNOWN")[0]
+        self.checkDS(
+            res,
+            [k for k in self.resdss.keys() if self.resdss[k][1] == 'UNKNOWN'])
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_datasources_names_tree(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+
+        server = NoServer()
+        server.dsdict = self.mydss
+
+        names_list = [
+            [],
+            ["ann3"],
+            ["ann", "nn2", "tann0", "dbtest", "slt1vgap"],
+            ['nn', 'nn2', 'ann', 'ann2', 'ann3', 'ann4', 'ann5',
+             'tann0', 'tann1', 'tann1b', 'tann1c', 'P1M_postrun',
+             'dbtest', 'dbds', 'slt1vgap']
+            ]
+
+        for names in names_list:
+            des = Describer(server, True)
+            res = des.dataSources(names)[0]
+            self.checkDS(res, names)
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_datasources_names_server_tree(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+
+        server = Server()
+        server.dsdict = self.mydss
+
+        names_list = [
+            [],
+            ["ann3"],
+            ["ann", "nn2", "tann0", "dbtest", "slt1vgap"],
+            ['nn', 'nn2', 'ann', 'ann2', 'ann3', 'ann4',
+             'ann5', 'tann0', 'tann1', 'tann1b', 'tann1c',
+             'P1M_postrun', 'dbtest', 'dbds', 'slt1vgap']
+            ]
+
+        for names in names_list:
+            des = Describer(server, True)
+            res = des.dataSources(names)[0]
             self.checkDS(res, names)
 
     ## constructor test

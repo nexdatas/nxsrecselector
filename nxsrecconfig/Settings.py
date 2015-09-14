@@ -752,8 +752,9 @@ class Settings(object):
     # \param datasources list for datasource names
     # \returns list of dictionary with description of datasources
     def getSourceDescription(self, datasources):
-        self.__mntgrptools.configServer = self.setConfigInstance()
-        return self.__mntgrptools.getSourceDescription(datasources)
+        nexusconfig_device = self.setConfigInstance()
+        describer = Describer(nexusconfig_device)
+        return describer.dataSources(datasources)
 
     ## provides description of components
     # \param full if True describes all available ones are taken

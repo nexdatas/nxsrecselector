@@ -116,7 +116,7 @@ class MacroServerPools(object):
             res = describer.components([acp], '', '')
             for cp, dss in res[0].items():
                 if isinstance(dss, dict):
-                    tgds = describer.dataSources(dss.keys(), 'TANGO')
+                    tgds = describer.dataSources(dss.keys(), 'TANGO')[0]
                     for ds in dss.keys():
                         if ds in tgds.keys():
                             if cp not in toCheck.keys():

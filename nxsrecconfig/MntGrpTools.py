@@ -94,7 +94,7 @@ class MntGrpTools(object):
         index = 0
         fullnames = PoolUtils.getFullDeviceNames(pools, aliases)
         for al in aliases:
-            index = self.addDevice(
+            index = self.__addDevice(
                 al, dontdisplay, pools, cnf,
                 al if al in ltimers else timer, index, fullnames)
         conf = json.dumps(cnf)
@@ -239,7 +239,7 @@ class MntGrpTools(object):
         describer = Describer(self.configServer, True)
         frecords = PoolUtils.getFullDeviceNames(pools)
         dsres = describer.dataSources(
-            set(datasources) - set(frecords.keys()), 'CLIENT')
+            set(datasources) - set(frecords.keys()), 'CLIENT')[0]
         records = [str(dsr.record) for dsr in dsres.values()]
 
         cpres = describer.components(self.components,
@@ -363,21 +363,6 @@ class MntGrpTools(object):
         cnf['label'] = mntGrpName
         return mfullname
 
-    ## describe datasources
-    # \param datasources list for datasource names
-    # \returns list of dictionary with description of datasources
-    def getSourceDescription(self, datasources):
-        describer = Describer(self.configServer)
-        dsres = describer.dataSources(set(datasources))
-        dslist = []
-        if isinstance(dsres, dict):
-            for ds in dsres.values():
-                elem = {}
-                elem["dsname"] = ds.name
-                elem["dstype"] = ds.dstype
-                elem["record"] = ds.record
-                dslist.append(str(json.dumps(elem)))
-        return dslist
 
     @classmethod
     def __findSources(cls, tangods, extangods, exsource):
@@ -465,7 +450,8 @@ class MntGrpTools(object):
         ads = TangoUtils.command(self.configServer, "availableDataSources")
         if not ads:
             ads = []
-        sds = self.getSourceDescription(ads)
+        describer = Describer(self.configServer)
+        sds = describer.dataSources(ads)
         self.__findSources(tangods, extangods, exsource)
         jds = self.__addKnownSources(extangods, sds, dsg.keys())
         self.__createUnknownSources(extangods, exsource, ads, jds)
@@ -481,7 +467,7 @@ class MntGrpTools(object):
     # \param index device index
     # \param fullnames dictionary with full names
     # \returns next device index
-    def addDevice(self, device, dontdisplay, pools, cnf,
+    def __addDevice(self, device, dontdisplay, pools, cnf,
                   timer, index, fullnames=None):
         if not fullnames:
             fullnames = PoolUtils.getFullDeviceNames(pools, [device, timer])
@@ -498,7 +484,8 @@ class MntGrpTools(object):
             index = self.__addChannel(cnf, ctrl, device, fullname,
                                      dontdisplay, index)
         else:
-            sds = self.getSourceDescription([device])
+            describer = Describer(self.configServer)
+            sds = describer.dataSources([device])
             if sds:
                 js = json.loads(sds[0])
                 if js["dstype"] == 'TANGO':

@@ -134,6 +134,7 @@ class Describer(object):
     # \param dstype list datasets only with given datasource type.
     #        If '' all available ones are taken
     # \param cfvars configuration variables
+    # \returns list of dictionary with description of components
     def components(self, components=None, strategy='', dstype='', cfvars=None):
         result = []
 
@@ -327,6 +328,7 @@ class Describer(object):
     #        If None all available ones are taken
     # \param dstype list datasources only with given type.
     #        If '' all available ones are taken
+    # \returns list of dictionary with description of datasources
     def dataSources(self, names=None, dstype=''):
         ads = list(self.__availableDataSources)
         if names is not None:
@@ -334,14 +336,28 @@ class Describer(object):
         else:
             dss = ads
 
-        result = {}
+        dslist = []
+        dsres = {}
         for name in dss:
             if name:
                 dsitem = self.__describeDataSource(name)
                 if dstype and dsitem.dstype != dstype:
                     continue
-                result[name] = dsitem
-        return result
+                dsres[name] = dsitem
+
+        if self.__treeOutput:
+            dslist = [{}]
+            dslist[0] = dsres
+        else:
+            dslist = []
+            if isinstance(dsres, dict):
+                for ds in dsres.values():
+                    elem = {}
+                    elem["dsname"] = ds.name
+                    elem["dstype"] = ds.dstype
+                    elem["record"] = ds.record
+                    dslist.append(str(json.dumps(elem)))
+        return dslist
 
     def __describeDataSource(self, name):
         dstype = None
