@@ -176,7 +176,7 @@ class SelectionTest(unittest.TestCase):
             el["ComponentGroup"] = json.dumps(cps)
             el["DataSourceGroup"] = json.dumps(dss)
             el["InitDataSources"] = json.dumps(
-                self.__rnd.sample(dss, self.__rnd.randint(1, lds)))
+                self.__rnd.sample(dss, self.__rnd.randint(1, len(dss))))
             self.dump(el)
 
             el.deselect()
@@ -299,7 +299,7 @@ class SelectionTest(unittest.TestCase):
                 cps[self.getRandomName(10)] = bool(self.__rnd.randint(0, 1))
             for i in range(lds):
                 dss[self.getRandomName(10)] = bool(self.__rnd.randint(0, 1))
-            ccps = self.__rnd.sample(cps, self.__rnd.randint(1, lcp))
+            ccps = self.__rnd.sample(cps, self.__rnd.randint(1, len(cps)))
             for cp in ccps:
                 dss[cp] = bool(self.__rnd.randint(0, 1))
             el["ComponentGroup"] = json.dumps(cps)
@@ -335,9 +335,9 @@ class SelectionTest(unittest.TestCase):
             lall = self.__rnd.randint(1, 40)
             adss = [self.getRandomName(10) for _ in range(lall)]
 
-            dssn = self.__rnd.sample(adss, self.__rnd.randint(1, lall))
-            chs = self.__rnd.sample(adss, self.__rnd.randint(1, lall))
-            cdss = self.__rnd.sample(adss, self.__rnd.randint(1, lall))
+            dssn = self.__rnd.sample(adss, self.__rnd.randint(1, len(adss)))
+            chs = self.__rnd.sample(adss, self.__rnd.randint(1, len(adss)))
+            cdss = self.__rnd.sample(adss, self.__rnd.randint(1, len(adss)))
 
             for ds in dssn:
                 dss[ds] = bool(self.__rnd.randint(0, 1))

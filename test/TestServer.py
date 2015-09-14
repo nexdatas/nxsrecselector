@@ -106,9 +106,9 @@ class TestServer(PyTango.Device_4Impl):
         self.attr_SpectrumUChar = [1, 2]
         self.attr_SpectrumShort = [1, -3, 4]
         self.attr_SpectrumUShort = [1, 4, 5, 6]
-        self.attr_SpectrumLong = [1123, -435, 35, -6345]
         self.attr_SpectrumULong = numpy.array(
             [1234, 5678, 45, 345], dtype='uint32')
+        self.attr_SpectrumLong = [1123, -435, 35, -6345]
         self.attr_SpectrumLong64 = [1123, -435, 35, -6345]
         self.attr_SpectrumULong64 = [1123, 23435, 35, 3345]
         self.attr_SpectrumFloat = [11.23, -4.35, 3.5, -634.5]
@@ -501,7 +501,6 @@ class TestServer(PyTango.Device_4Impl):
         print "In ", self.get_name(), "::read_ScalarString()"
 
         #    Add your own code here
-
         attr.set_value(self.attr_ScalarString)
 
 #------------------------------------------------------------------
@@ -686,6 +685,7 @@ class TestServer(PyTango.Device_4Impl):
         print "In ", self.get_name(), "::read_SpectrumLong()"
 
         #    Add your own code here
+
         attr.set_value(self.attr_SpectrumLong)
         print self.attr_SpectrumLong
 
@@ -1389,7 +1389,7 @@ class TestServerClass(PyTango.DeviceClass):
         'SpectrumLong':
             [[PyTango.DevLong,
             PyTango.SPECTRUM,
-            PyTango.WRITE, 4096],
+            PyTango.READ_WRITE, 4096],
             {
                 'description':"SpectrumLong attribute",
             }],

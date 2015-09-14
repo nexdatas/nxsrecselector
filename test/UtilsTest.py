@@ -1992,7 +1992,7 @@ class UtilsTest(unittest.TestCase):
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
 
         self.assertEqual(PoolUtils.getSource("ttestp09/testts/t1r228"),
-                         "ttestp09/testts/t1r228/%s" % 'Value')
+                         None)
 
         arr = ['ScalarBoolean', 'ScalarUChar', 'ScalarShort', 'ScalarUShort',
                'ScalarLong', 'ScalarULong', 'ScalarLong64', 'ScalarFloat',
@@ -2012,8 +2012,9 @@ class UtilsTest(unittest.TestCase):
                              "ttestp09/testts/t1r228/%s" % ar)
 
         self._simps.dp.DataSource = "ttestp09/testts/t1r228/%s" % "sdfsdf"
+
         self.assertEqual(PoolUtils.getSource("ttestp09/testts/t1r228"),
-                         "ttestp09/testts/t1r228/Value")
+                         None)
 
 if __name__ == '__main__':
     unittest.main()

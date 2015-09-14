@@ -553,6 +553,8 @@ class MntGrpTools(object):
             u'channels']
         if not fullname in ctrlChannels.keys():
             source = PoolUtils.getSource(fullname)
+            if not source:
+                source = '%s/%s' % (fullname.encode(), 'Value')
             shp, dt, ut = TangoUtils.getShapeTypeUnit(source)
             dct = {}
             dct['_controller_name'] = unicode(ctrl)

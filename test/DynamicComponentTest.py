@@ -33,6 +33,7 @@ import json
 import pickle
 import string
 import time
+import xml.dom.minidom
 
 import logging
 logger = logging.getLogger()
@@ -128,6 +129,29 @@ class DynamicComponentTest(unittest.TestCase):
                        "uint32": "NX_UINT32", "uint16": "NX_UINT16",
                        "uint8": "NX_UINT8", "uint": "NX_UINT64",
                        "string": "NX_CHAR", "bool": "NX_BOOLEAN"}
+        self.__npTn2 = {"float32": "NX_FLOAT32", "float64": "NX_FLOAT64",
+                       "float": "NX_FLOAT32", "double": "NX_FLOAT64",
+                        "long": "NX_INT32",
+                        "long64": "NX_INT64",
+                        "long32": "NX_INT32",
+                        "ulong64": "NX_UINT64",
+                        "ulong32": "NX_UINT32",
+                        "ulong": "NX_UINT32",
+                        "ushort": "NX_UINT16",
+                        "uchar": "NX_UINT8",
+                        "short": "NX_INT16",
+                        "int": "NX_INT",
+                        "int64": "NX_INT64",
+                        "int32": "NX_INT32",
+                        "int16": "NX_INT16",
+                        "int8": "NX_INT8",
+                        "uint64": "NX_UINT64",
+                        "uint32": "NX_UINT32",
+                        "uint16": "NX_UINT16",
+                        "uint8": "NX_UINT8",
+                        "uint": "NX_UINT64",
+                        "string": "NX_CHAR",
+                        "bool": "NX_BOOLEAN"}
         ## default zone
         self.__defaultzone = 'Europe/Berlin'
         ## default mntgrp
@@ -607,12 +631,62 @@ class DynamicComponentTest(unittest.TestCase):
                  '</datasource></definition>'),
             'client_long':
                 ('<definition><datasource type="CLIENT" name="client_long">'
-                 '<record name="ClientLong"/>'
+                 '<record name="ttestp09/testts/t1r228/ScalarLong"/>'
                  '</datasource></definition>'),
             'client_short':
                 ('<definition><datasource type="CLIENT" name="client_short">'
-                 '<record name="ClientShort"/>'
+                 '<record name="ttestp09/testts/t1r228/ScalarShort"/>'
                  '</datasource></definition>'),
+            }
+
+        self.smydsspar = {
+            'scalar_long': ([]),
+            'scalar_bool': ([]),
+            'scalar_short': ([]),
+            'scalar_ushort': ([]),
+            'scalar_ulong': ([]),
+            'scalar_long64': ([]),
+            'scalar_ulong64': ([]),
+            'scalar_float': ([]),
+            'scalar_double': ([]),
+            'scalar_string': ([]),
+            'scalar_Encoded': ([]),
+            'scalar_uchar': ([]),
+            'spectrum_long': ([4]),
+            'spectrum_bool': ([2]),
+            'spectrum_short': ([3]),
+            'spectrum_ushort': ([4]),
+            'spectrum_ulong': ([4]),
+            'spectrum_long64': ([4]),
+            'spectrum_ulong64': ([4]),
+            'spectrum_float': ([4]),
+            'spectrum_double': ([4]),
+            'spectrum_string': ([4]),
+            'spectrum_Encoded': ([]),
+            'spectrum_uchar': ([2]),
+            'image_long': ([2, 2]),
+            'image_bool': ([1, 1]),
+            'image_short': ([2, 2]),
+            'image_ushort': ([2, 2]),
+            'image_ulong': ([2, 2]),
+            'image_long64':
+                ([2, 2]),
+            'image_ulong64':
+                ([2, 2]),
+            'image_float':
+                ([2, 2]),
+            'image_double':
+                ([2, 2]),
+            'image_string':
+                ([1, 1]),
+            'image_Encoded':
+                ([]),
+            'image_uchar':
+                ([2, 2]),
+            'client_long':
+                ([]),
+            'client_short':
+                ([]),
             }
 
         self.smydss2 = {
@@ -1627,7 +1701,7 @@ class DynamicComponentTest(unittest.TestCase):
             simps4.dp.DataSource = arr[3]["source"]
 
             for i, ar in enumerate(arr):
-#                print "I = ", i, ar["name"]
+                print "I = ", i, ar["name"]
                 db.put_device_alias(ar["full_name"], ar["name"])
 
                 dc = DynamicComponent(self._cf.dp)
@@ -1635,7 +1709,7 @@ class DynamicComponentTest(unittest.TestCase):
                 cpname = dc.create()
                 comp = self._cf.dp.Components([cpname])[0]
                 mycps = defbg + groupbg + fieldbg % (ar["name"], "NX_CHAR")
-                if i:
+                if i % 2:
                     sso = ar["source"].split("/")
                     mycps += dstango % (
                         ar["name"], "/".join(sso[:-1]), sso[-1])
@@ -1752,6 +1826,1168 @@ class DynamicComponentTest(unittest.TestCase):
             comp = self._cf.dp.Components([cpname])[0]
 #            print "COMP", comp
             self.assertEqual(cps[lb], comp)
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_create_step_no_type(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        cps = {
+            "type":
+                '<?xml version="1.0" ?>\n<definition>\n'
+            '<group name="entry$var.serialno" type="NXentry">\n'
+            '<group name="instrument" type="NXinstrument">\n'
+            '<group name="collection" type="NXcollection">\n'
+            '<field name="ds1" type="%s">\n<strategy mode="STEP"/>\n'
+            '<datasource name="ds1" type="CLIENT">\n'
+            '<record name="ds1"/>\n</datasource>\n</field>\n'
+            '</group>\n</group>\n<group name="data" type="NXdata">\n'
+            '<link name="ds1" target="/entry$var.serialno:'
+            'NXentry/NXinstrument/collection/ds1"/>\n'
+            '</group>\n</group>\n</definition>\n',
+            }
+        dname = "__dynamic_component__"
+        dc = DynamicComponent(self._cf.dp)
+        for tp, nxstp in self.__npTn.items():
+            dc.setStepDSources(["ds1"])
+#            dc.setStepDSources([{"name": "ds1", "dtype":tp}])
+            cpname = dc.create()
+            comp = self._cf.dp.Components([cpname])[0]
+#            self.assertEqual(cps["type"] % nxstp, comp)
+            self.assertEqual(cps["type"] % "NX_CHAR", comp)
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_create_init_no_type(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        cps = {
+            "type":
+                '<?xml version="1.0" ?>\n<definition>\n'
+            '<group name="entry$var.serialno" type="NXentry">\n'
+            '<group name="instrument" type="NXinstrument">\n'
+            '<group name="collection" type="NXcollection">\n'
+            '<field name="ds1" type="%s">\n<strategy mode="INIT"/>\n'
+            '<datasource name="ds1" type="CLIENT">\n'
+            '<record name="ds1"/>\n</datasource>\n</field>\n'
+            '</group>\n</group>\n<group name="data" type="NXdata">\n'
+            '<link name="ds1" target="/entry$var.serialno:'
+            'NXentry/NXinstrument/collection/ds1"/>\n'
+            '</group>\n</group>\n</definition>\n',
+            }
+        dname = "__dynamic_component__"
+        dc = DynamicComponent(self._cf.dp)
+        for tp, nxstp in self.__npTn.items():
+            dc.setInitDSources(["ds1"])
+#            dc.setStepDSources([{"name": "ds1", "dtype":tp}])
+            cpname = dc.create()
+            comp = self._cf.dp.Components([cpname])[0]
+#            self.assertEqual(cps["type"] % nxstp, comp)
+            self.assertEqual(cps["type"] % "NX_CHAR", comp)
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_create_step_type_param(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        cps = {
+            "type":
+                '<?xml version="1.0" ?>\n<definition>\n'
+            '<group name="entry$var.serialno" type="NXentry">\n'
+            '<group name="instrument" type="NXinstrument">\n'
+            '<group name="collection" type="NXcollection">\n'
+            '<field name="ds1" type="%s">\n<strategy mode="STEP"/>\n'
+            '<datasource name="ds1" type="CLIENT">\n'
+            '<record name="ds1"/>\n</datasource>\n</field>\n'
+            '</group>\n</group>\n<group name="data" type="NXdata">\n'
+            '<link name="ds1" target="/entry$var.serialno:'
+            'NXentry/NXinstrument/collection/ds1"/>\n'
+            '</group>\n</group>\n</definition>\n',
+            }
+        dname = "__dynamic_component__"
+        dc = DynamicComponent(self._cf.dp)
+        for tp, nxstp in self.__npTn.items():
+            dc.setStepDSources(["ds1"])
+            dc.setLabelParams("{}", "{}", "{}",
+                              json.dumps({"ds1": nxstp}),
+                              "{}")
+            cpname = dc.create()
+            comp = self._cf.dp.Components([cpname])[0]
+            self.assertEqual(cps["type"] % nxstp, comp)
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_create_init_type_param(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        cps = {
+            "type":
+                '<?xml version="1.0" ?>\n<definition>\n'
+            '<group name="entry$var.serialno" type="NXentry">\n'
+            '<group name="instrument" type="NXinstrument">\n'
+            '<group name="collection" type="NXcollection">\n'
+            '<field name="ds1" type="%s">\n<strategy mode="INIT"/>\n'
+            '<datasource name="ds1" type="CLIENT">\n'
+            '<record name="ds1"/>\n</datasource>\n</field>\n'
+            '</group>\n</group>\n<group name="data" type="NXdata">\n'
+            '<link name="ds1" target="/entry$var.serialno:'
+            'NXentry/NXinstrument/collection/ds1"/>\n'
+            '</group>\n</group>\n</definition>\n',
+            }
+        dname = "__dynamic_component__"
+        dc = DynamicComponent(self._cf.dp)
+        for tp, nxstp in self.__npTn.items():
+            dc.setInitDSources(["ds1"])
+            dc.setLabelParams("{}", "{}", "{}",
+                              json.dumps({"ds1": nxstp}),
+                              "{}")
+            cpname = dc.create()
+            comp = self._cf.dp.Components([cpname])[0]
+            self.assertEqual(cps["type"] % nxstp, comp)
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_create_step_shape(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        cps = {
+            "shape":
+                '<?xml version="1.0" ?>\n<definition>\n'
+            '<group name="entry$var.serialno" type="NXentry">\n'
+            '<group name="instrument" type="NXinstrument">\n'
+            '<group name="collection" type="NXcollection">\n'
+            '<field name="ds2" type="NX_CHAR">\n<strategy mode="STEP"/>\n'
+            '<datasource name="ds2" type="CLIENT">\n'
+            '<record name="ds2"/>\n</datasource>\n%s</field>\n'
+            '</group>\n</group>\n<group name="data" type="NXdata">\n'
+            '<link name="ds2" target="/entry$var.serialno:'
+            'NXentry/NXinstrument/collection/ds2"/>\n'
+            '</group>\n</group>\n</definition>\n',
+            }
+
+        dimbg = '<dimensions rank="%s">\n'
+        dim = '<dim index="%s" value="%s"/>\n'
+        dimend = '</dimensions>\n'
+
+        dname = "__dynamic_component__"
+        dc = DynamicComponent(self._cf.dp)
+        for i in range(50):
+            ms = [self.__rnd.randint(0, 3000)
+                  for _ in range(self.__rnd.randint(0, 3))]
+            dc.setLabelParams("{}", "{}", "{}",
+                              "{}",
+                              json.dumps({"ds2": ms}))
+            dc.setStepDSources(["ds2"])
+            cpname = dc.create()
+            mstr = ""
+            if ms:
+                mstr += dimbg % len(ms)
+                for ind, val in enumerate(ms):
+                    mstr += dim % (ind + 1, val)
+                mstr += dimend
+
+            comp = self._cf.dp.Components([cpname])[0]
+            self.assertEqual(cps["shape"] % mstr, comp)
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_create_init_shape(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        cps = {
+            "shape":
+                '<?xml version="1.0" ?>\n<definition>\n'
+            '<group name="entry$var.serialno" type="NXentry">\n'
+            '<group name="instrument" type="NXinstrument">\n'
+            '<group name="collection" type="NXcollection">\n'
+            '<field name="ds2" type="NX_CHAR">\n<strategy mode="INIT"/>\n'
+            '<datasource name="ds2" type="CLIENT">\n'
+            '<record name="ds2"/>\n</datasource>\n%s</field>\n'
+            '</group>\n</group>\n<group name="data" type="NXdata">\n'
+            '<link name="ds2" target="/entry$var.serialno:'
+            'NXentry/NXinstrument/collection/ds2"/>\n'
+            '</group>\n</group>\n</definition>\n',
+            }
+
+        dimbg = '<dimensions rank="%s">\n'
+        dim = '<dim index="%s" value="%s"/>\n'
+        dimend = '</dimensions>\n'
+
+        dname = "__dynamic_component__"
+        dc = DynamicComponent(self._cf.dp)
+        for i in range(50):
+            ms = [self.__rnd.randint(0, 3000)
+                  for _ in range(self.__rnd.randint(0, 3))]
+            dc.setLabelParams("{}", "{}", "{}",
+                              "{}",
+                              json.dumps({"ds2": ms}))
+            dc.setInitDSources(["ds2"])
+            cpname = dc.create()
+            mstr = ""
+            if ms:
+                mstr += dimbg % len(ms)
+                for ind, val in enumerate(ms):
+                    mstr += dim % (ind + 1, val)
+                mstr += dimend
+
+            comp = self._cf.dp.Components([cpname])[0]
+            self.assertEqual(cps["shape"] % mstr, comp)
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_create_step_shapetype(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        cps = {
+            "shapetype":
+                '<?xml version="1.0" ?>\n<definition>\n'
+            '<group name="entry$var.serialno" type="NXentry">\n'
+            '<group name="instrument" type="NXinstrument">\n'
+            '<group name="collection" type="NXcollection">\n'
+            '<field name="%s" type="%s">\n<strategy mode="STEP"/>\n'
+            '<datasource name="%s" type="CLIENT">\n'
+            '<record name="%s"/>\n</datasource>\n'
+            '%s</field>\n'
+            '</group>\n</group>\n%s</group>\n</definition>\n',
+            }
+
+        link = '<group name="data" type="NXdata">\n' + \
+            '<link name="%s" target="/entry$var.serialno:' + \
+            'NXentry/NXinstrument/collection/%s"/>\n</group>\n'
+
+        dimbg = '<dimensions rank="%s">\n'
+        dim = '<dim index="%s" value="%s"/>\n'
+        dimend = '</dimensions>\n'
+
+        dname = "__dynamic_component__"
+
+        arr = [
+            {"name":"client"},
+            {"name":"client_short"},
+            {"name":"client_long"},
+            {"name":"myclient_long"},
+            {"name":"client"},
+            {"name":"client_short"},
+            {"name":"client_long"},
+            {"name":"myclient_long"},
+            {"name":"client"},
+            {"name":"client_short"},
+            {"name":"client_long"},
+            {"name":"myclient_long"},
+            {"name":"client"},
+            {"name":"client_short"},
+            {"name":"client_long"},
+            {"name":"myclient_long"},
+            ]
+
+        db = PyTango.Database()
+        try:
+            dc = DynamicComponent(self._cf.dp)
+            for i, ar in enumerate(arr):
+                for tp, nxstp in self.__npTn.items():
+                    lbl = self.getRandomName(20)
+                    dc = DynamicComponent(self._cf.dp)
+#                    print "TP = ", tp, i
+                    ms = [self.__rnd.randint(0, 3000)
+                          for _ in range(self.__rnd.randint(0, 3))]
+                    ms2 = [self.__rnd.randint(0, 3000)
+                          for _ in range(self.__rnd.randint(0, 3))]
+                    tmptp = self.__rnd.choice(self.__npTn.keys())
+                    if i == 0:
+                        dc.setDefaultLinkPath(False, self.__defaultpath)
+                        dc.setLabelParams("{}", "{}", "{}",
+                                          json.dumps({ar["name"]: nxstp}),
+                                          json.dumps({ar["name"]: ms}))
+                    elif i == 1:
+                        dc.setDefaultLinkPath(True, self.__defaultpath)
+                        dc.setLabelParams("{}", "{}", "{}",
+                                          json.dumps({ar["name"]: nxstp}),
+                                          json.dumps({ar["name"]: ms}))
+                    elif i == 2:
+                        dc.setLabelParams("{}", "{}",
+                                          json.dumps({ar["name"]: False}),
+                                          json.dumps({ar["name"]: nxstp}),
+                                          json.dumps({ar["name"]: ms}))
+                    elif i == 3:
+                        dc.setLabelParams("{}", "{}",
+                                          json.dumps({ar["name"]: True}),
+                                          json.dumps({ar["name"]: nxstp}),
+                                          json.dumps({ar["name"]: ms}))
+                    elif i == 4:
+                        dc.setDefaultLinkPath(True, self.__defaultpath)
+                        dc.setLabelParams("{}", "{}",
+                                          json.dumps({ar["name"]: False}),
+                                          json.dumps({ar["name"]: nxstp}),
+                                          json.dumps({ar["name"]: ms}))
+                    elif i == 5:
+                        dc.setDefaultLinkPath(False, self.__defaultpath)
+                        dc.setLabelParams("{}", "{}",
+                                          json.dumps({ar["name"]: True}),
+                                          json.dumps({ar["name"]: nxstp}),
+                                          json.dumps({ar["name"]: ms}))
+                    elif i == 6:
+                        dc.setDefaultLinkPath(False, self.__defaultpath)
+                        dc.setLabelParams("{}", "{}",
+                                          json.dumps({"dssd": True}),
+                                          json.dumps({ar["name"]: nxstp}),
+                                          json.dumps({ar["name"]: ms}))
+                    elif i == 7:
+                        dc.setLabelParams(json.dumps({ar["name"]: lbl}),
+                                          "{}", "{}",
+                                          json.dumps({ar["name"]: nxstp}),
+                                          json.dumps({ar["name"]: ms}))
+                    elif i == 8:
+                        pass
+                        dc.setDefaultLinkPath(False, self.__defaultpath)
+                        dc.setLabelParams(json.dumps({ar["name"]: lbl}),
+                                          "{}", "{}",
+                                          json.dumps({lbl: nxstp}),
+                                          json.dumps({lbl: ms}))
+                    elif i == 9:
+                        dc.setDefaultLinkPath(True, self.__defaultpath)
+                        dc.setLabelParams(json.dumps({ar["name"]: lbl}),
+                                          "{}", "{}",
+                                          json.dumps({lbl: nxstp}),
+                                          json.dumps({lbl: ms}))
+                    elif i == 10:
+                        dc.setLabelParams(json.dumps({ar["name"]: lbl}),
+                                          "{}",
+                                          json.dumps({lbl: False}),
+                                          json.dumps({lbl: nxstp}),
+                                          json.dumps({lbl: ms}))
+                    elif i == 11:
+                        dc.setLabelParams(json.dumps({ar["name"]: lbl}),
+                                          "{}",
+                                          json.dumps({lbl: True}),
+                                          json.dumps({lbl: nxstp}),
+                                          json.dumps({lbl: ms}))
+                    elif i == 12:
+                        dc.setDefaultLinkPath(True, self.__defaultpath)
+                        dc.setLabelParams(json.dumps({ar["name"]: lbl}),
+                                          "{}",
+                                          json.dumps({lbl: False}),
+                                          json.dumps({lbl: nxstp}),
+                                          json.dumps({lbl: ms}))
+                    elif i == 13:
+                        dc.setDefaultLinkPath(False, self.__defaultpath)
+                        dc.setLabelParams(json.dumps({ar["name"]: lbl}),
+                                          "{}",
+                                          json.dumps({lbl: True}),
+                                          json.dumps({lbl: nxstp}),
+                                          json.dumps({lbl: ms}))
+                    elif i == 14:
+                        dc.setDefaultLinkPath(False, self.__defaultpath)
+                        dc.setLabelParams(json.dumps({ar["name"]: lbl}),
+                                          "{}",
+                                          json.dumps({"dssd": True}),
+                                          json.dumps({lbl: nxstp}),
+                                          json.dumps({lbl: ms}))
+                    elif i == 15:
+                        dc.setLabelParams(json.dumps({ar["name"]: lbl}),
+                                          "{}", "{}",
+                                          json.dumps({lbl: nxstp}),
+                                          json.dumps({ar["name"]: ms}))
+
+                    dc.setStepDSources([ar["name"]])
+                    cpname = dc.create()
+                    mstr = ""
+                    if ms:
+                        mstr += dimbg % len(ms)
+                        for ind, val in enumerate(ms):
+                            mstr += dim % (ind + 1, val)
+                        mstr += dimend
+
+                    comp = self._cf.dp.Components([cpname])[0]
+                    ds = ar["name"]
+                    lk = link % (ds, ds)
+                    self.assertEqual(cps["shapetype"] % (
+                            ds,
+                            nxstp, ds, ar["name"], mstr,
+                            lk if i % 2 else ""),
+                                     comp)
+        finally:
+            pass
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_create_init_shapetype(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        cps = {
+            "shapetype":
+                '<?xml version="1.0" ?>\n<definition>\n'
+            '<group name="entry$var.serialno" type="NXentry">\n'
+            '<group name="instrument" type="NXinstrument">\n'
+            '<group name="collection" type="NXcollection">\n'
+            '<field name="%s" type="%s">\n<strategy mode="INIT"/>\n'
+            '<datasource name="%s" type="CLIENT">\n'
+            '<record name="%s"/>\n</datasource>\n'
+            '%s</field>\n'
+            '</group>\n</group>\n%s</group>\n</definition>\n',
+            }
+
+        link = '<group name="data" type="NXdata">\n' + \
+            '<link name="%s" target="/entry$var.serialno:' + \
+            'NXentry/NXinstrument/collection/%s"/>\n</group>\n'
+
+        dimbg = '<dimensions rank="%s">\n'
+        dim = '<dim index="%s" value="%s"/>\n'
+        dimend = '</dimensions>\n'
+
+        dname = "__dynamic_component__"
+
+        arr = [
+            {"name":"client"},
+            {"name":"client_short"},
+            {"name":"client_long"},
+            {"name":"myclient_long"},
+            {"name":"client"},
+            {"name":"client_short"},
+            {"name":"client_long"},
+            {"name":"myclient_long"},
+            {"name":"client"},
+            {"name":"client_short"},
+            {"name":"client_long"},
+            {"name":"myclient_long"},
+            {"name":"client"},
+            {"name":"client_short"},
+            {"name":"client_long"},
+            {"name":"myclient_long"},
+            ]
+
+        db = PyTango.Database()
+        try:
+            dc = DynamicComponent(self._cf.dp)
+            for i, ar in enumerate(arr):
+                for tp, nxstp in self.__npTn.items():
+                    lbl = self.getRandomName(20)
+                    dc = DynamicComponent(self._cf.dp)
+#                    print "TP = ", tp, i
+                    ms = [self.__rnd.randint(0, 3000)
+                          for _ in range(self.__rnd.randint(0, 3))]
+                    ms2 = [self.__rnd.randint(0, 3000)
+                          for _ in range(self.__rnd.randint(0, 3))]
+                    tmptp = self.__rnd.choice(self.__npTn.keys())
+                    if i == 0:
+                        dc.setDefaultLinkPath(False, self.__defaultpath)
+                        dc.setLabelParams("{}", "{}", "{}",
+                                          json.dumps({ar["name"]: nxstp}),
+                                          json.dumps({ar["name"]: ms}))
+                    elif i == 1:
+                        dc.setDefaultLinkPath(True, self.__defaultpath)
+                        dc.setLabelParams("{}", "{}", "{}",
+                                          json.dumps({ar["name"]: nxstp}),
+                                          json.dumps({ar["name"]: ms}))
+                    elif i == 2:
+                        dc.setLabelParams("{}", "{}",
+                                          json.dumps({ar["name"]: False}),
+                                          json.dumps({ar["name"]: nxstp}),
+                                          json.dumps({ar["name"]: ms}))
+                    elif i == 3:
+                        dc.setLabelParams("{}", "{}",
+                                          json.dumps({ar["name"]: True}),
+                                          json.dumps({ar["name"]: nxstp}),
+                                          json.dumps({ar["name"]: ms}))
+                    elif i == 4:
+                        dc.setDefaultLinkPath(True, self.__defaultpath)
+                        dc.setLabelParams("{}", "{}",
+                                          json.dumps({ar["name"]: False}),
+                                          json.dumps({ar["name"]: nxstp}),
+                                          json.dumps({ar["name"]: ms}))
+                    elif i == 5:
+                        dc.setDefaultLinkPath(False, self.__defaultpath)
+                        dc.setLabelParams("{}", "{}",
+                                          json.dumps({ar["name"]: True}),
+                                          json.dumps({ar["name"]: nxstp}),
+                                          json.dumps({ar["name"]: ms}))
+                    elif i == 6:
+                        dc.setDefaultLinkPath(False, self.__defaultpath)
+                        dc.setLabelParams("{}", "{}",
+                                          json.dumps({"dssd": True}),
+                                          json.dumps({ar["name"]: nxstp}),
+                                          json.dumps({ar["name"]: ms}))
+                    elif i == 7:
+                        dc.setLabelParams(json.dumps({ar["name"]: lbl}),
+                                          "{}", "{}",
+                                          json.dumps({ar["name"]: nxstp}),
+                                          json.dumps({ar["name"]: ms}))
+                    elif i == 8:
+                        pass
+                        dc.setDefaultLinkPath(False, self.__defaultpath)
+                        dc.setLabelParams(json.dumps({ar["name"]: lbl}),
+                                          "{}", "{}",
+                                          json.dumps({lbl: nxstp}),
+                                          json.dumps({lbl: ms}))
+                    elif i == 9:
+                        dc.setDefaultLinkPath(True, self.__defaultpath)
+                        dc.setLabelParams(json.dumps({ar["name"]: lbl}),
+                                          "{}", "{}",
+                                          json.dumps({lbl: nxstp}),
+                                          json.dumps({lbl: ms}))
+                    elif i == 10:
+                        dc.setLabelParams(json.dumps({ar["name"]: lbl}),
+                                          "{}",
+                                          json.dumps({lbl: False}),
+                                          json.dumps({lbl: nxstp}),
+                                          json.dumps({lbl: ms}))
+                    elif i == 11:
+                        dc.setLabelParams(json.dumps({ar["name"]: lbl}),
+                                          "{}",
+                                          json.dumps({lbl: True}),
+                                          json.dumps({lbl: nxstp}),
+                                          json.dumps({lbl: ms}))
+                    elif i == 12:
+                        dc.setDefaultLinkPath(True, self.__defaultpath)
+                        dc.setLabelParams(json.dumps({ar["name"]: lbl}),
+                                          "{}",
+                                          json.dumps({lbl: False}),
+                                          json.dumps({lbl: nxstp}),
+                                          json.dumps({lbl: ms}))
+                    elif i == 13:
+                        dc.setDefaultLinkPath(False, self.__defaultpath)
+                        dc.setLabelParams(json.dumps({ar["name"]: lbl}),
+                                          "{}",
+                                          json.dumps({lbl: True}),
+                                          json.dumps({lbl: nxstp}),
+                                          json.dumps({lbl: ms}))
+                    elif i == 14:
+                        dc.setDefaultLinkPath(False, self.__defaultpath)
+                        dc.setLabelParams(json.dumps({ar["name"]: lbl}),
+                                          "{}",
+                                          json.dumps({"dssd": True}),
+                                          json.dumps({lbl: nxstp}),
+                                          json.dumps({lbl: ms}))
+                    elif i == 15:
+                        dc.setLabelParams(json.dumps({ar["name"]: lbl}),
+                                          "{}", "{}",
+                                          json.dumps({lbl: nxstp}),
+                                          json.dumps({ar["name"]: ms}))
+
+                    dc.setInitDSources([ar["name"]])
+                    cpname = dc.create()
+                    mstr = ""
+                    if ms:
+                        mstr += dimbg % len(ms)
+                        for ind, val in enumerate(ms):
+                            mstr += dim % (ind + 1, val)
+                        mstr += dimend
+
+                    comp = self._cf.dp.Components([cpname])[0]
+                    ds = ar["name"]
+                    lk = link % (ds, ds)
+                    self.assertEqual(cps["shapetype"] % (
+                            ds,
+                            nxstp, ds, ar["name"], mstr,
+                            lk if i % 2 else ""),
+                                     comp)
+        finally:
+            pass
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_create_step_typeshape_tango_nods(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+
+        defbg = '<?xml version="1.0" ?>\n<definition>\n'
+        defend = '</definition>\n'
+        groupbg = '<group name="entry$var.serialno" type="NXentry">\n' + \
+            '<group name="instrument" type="NXinstrument">\n' + \
+            '<group name="collection" type="NXcollection">\n'
+        groupend = '</group>\n'
+
+        fieldbg = '<field name="%s" type="%s">\n<strategy mode="STEP"/>\n'
+        fieldend = '</field>\n'
+
+        dsclient = '<datasource name="%s" type="CLIENT">\n' + \
+            '<record name="%s"/>\n</datasource>\n'
+
+        link = '<group name="data" type="NXdata">\n' + \
+            '<link name="%s" target="%s/%s"/>\n</group>\n'
+
+        dimbg = '<dimensions rank="%s">\n'
+        dim = '<dim index="%s" value="%s"/>\n'
+        dimend = '</dimensions>\n'
+
+#        self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
+        dc = DynamicComponent(self._cf.dp)
+        for i in range(4):
+            for ds, dsxml in self.smydss.items():
+                ms = self.smydsspar[ds]
+                sds = ds.split("_")
+                tp = sds[1]
+                dc.setStepDSources([ds])
+
+
+                if i == 0:
+                    dc.setDefaultLinkPath(False, self.__defaultpath)
+                    dc.setLabelParams("{}", "{}", "{}", "{}", "{}")
+                elif i == 1:
+                    dc.setDefaultLinkPath(True, self.__defaultpath)
+                    dc.setLabelParams("{}", "{}", "{}", "{}", "{}")
+                elif i == 2:
+                    dc.setLabelParams("{}", "{}",
+                                      json.dumps({ds: False}), "{}", "{}")
+                elif i == 3:
+                    dc.setLabelParams("{}", "{}",
+                                      json.dumps({ds: True}), "{}", "{}")
+
+
+                cpname = dc.create()
+                comp = self._cf.dp.Components([cpname])[0]
+
+                nxstype = 'NX_CHAR'
+                mycps = defbg + groupbg + fieldbg % (
+                    ds.lower(), nxstype)
+
+                mycps += dsclient % (ds, ds)
+                mstr = ""
+
+                mycps += mstr
+                mycps += fieldend + groupend + groupend
+                lk = link % (ds.lower(), self.__defaultpath,
+                        ds.lower())
+                mycps += lk if i%2 else ""
+                mycps += groupend + defend
+
+                self.assertEqual(comp, mycps)
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_create_init_typeshape_tango_nods(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+
+        defbg = '<?xml version="1.0" ?>\n<definition>\n'
+        defend = '</definition>\n'
+        groupbg = '<group name="entry$var.serialno" type="NXentry">\n' + \
+            '<group name="instrument" type="NXinstrument">\n' + \
+            '<group name="collection" type="NXcollection">\n'
+        groupend = '</group>\n'
+
+        fieldbg = '<field name="%s" type="%s">\n<strategy mode="INIT"/>\n'
+        fieldend = '</field>\n'
+
+        dsclient = '<datasource name="%s" type="CLIENT">\n' + \
+            '<record name="%s"/>\n</datasource>\n'
+
+        link = '<group name="data" type="NXdata">\n' + \
+            '<link name="%s" target="%s/%s"/>\n</group>\n'
+
+        dimbg = '<dimensions rank="%s">\n'
+        dim = '<dim index="%s" value="%s"/>\n'
+        dimend = '</dimensions>\n'
+
+#        self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
+        dc = DynamicComponent(self._cf.dp)
+        for i in range(4):
+            for ds, dsxml in self.smydss.items():
+                ms = self.smydsspar[ds]
+                sds = ds.split("_")
+                tp = sds[1]
+                dc.setInitDSources([ds])
+
+
+                if i == 0:
+                    dc.setDefaultLinkPath(False, self.__defaultpath)
+                    dc.setLabelParams("{}", "{}", "{}", "{}", "{}")
+                elif i == 1:
+                    dc.setDefaultLinkPath(True, self.__defaultpath)
+                    dc.setLabelParams("{}", "{}", "{}", "{}", "{}")
+                elif i == 2:
+                    dc.setLabelParams("{}", "{}",
+                                      json.dumps({ds: False}), "{}", "{}")
+                elif i == 3:
+                    dc.setLabelParams("{}", "{}",
+                                      json.dumps({ds: True}), "{}", "{}")
+
+
+                cpname = dc.create()
+                comp = self._cf.dp.Components([cpname])[0]
+
+                nxstype = 'NX_CHAR'
+                mycps = defbg + groupbg + fieldbg % (
+                    ds.lower(), nxstype)
+
+                mycps += dsclient % (ds, ds)
+                mstr = ""
+
+                mycps += mstr
+                mycps += fieldend + groupend + groupend
+                lk = link % (ds.lower(), self.__defaultpath,
+                        ds.lower())
+                mycps += lk if i%2 else ""
+                mycps += groupend + defend
+
+                self.assertEqual(comp, mycps)
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_create_step_typeshape_tango(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+
+        defbg = '<?xml version="1.0" ?>\n<definition>\n'
+        defend = '</definition>\n'
+        groupbg = '<group name="entry$var.serialno" type="NXentry">\n' + \
+            '<group name="instrument" type="NXinstrument">\n' + \
+            '<group name="collection" type="NXcollection">\n'
+        groupend = '</group>\n'
+
+        fieldbg = '<field name="%s" type="%s">\n<strategy mode="STEP"/>\n'
+        fieldend = '</field>\n'
+
+        link = '<group name="data" type="NXdata">\n' + \
+            '<link name="%s" target="%s/%s"/>\n</group>\n'
+
+        dimbg = '<dimensions rank="%s">\n'
+        dim = '<dim index="%s" value="%s"/>\n'
+        dimend = '</dimensions>\n'
+
+        self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
+        dc = DynamicComponent(self._cf.dp)
+        for i in range(4):
+            for ds, dsxml in self.smydss.items():
+                ms = self.smydsspar[ds]
+                sds = ds.split("_")
+                tp = sds[1]
+                dc.setStepDSources([ds])
+
+
+                if i == 0:
+                    dc.setDefaultLinkPath(False, self.__defaultpath)
+                    dc.setLabelParams("{}", "{}", "{}", "{}", "{}")
+                elif i == 1:
+                    dc.setDefaultLinkPath(True, self.__defaultpath)
+                    dc.setLabelParams("{}", "{}", "{}", "{}", "{}")
+                elif i == 2:
+                    dc.setLabelParams("{}", "{}",
+                                      json.dumps({ds: False}), "{}", "{}")
+                elif i == 3:
+                    dc.setLabelParams("{}", "{}",
+                                      json.dumps({ds: True}), "{}", "{}")
+
+
+                cpname = dc.create()
+                comp = self._cf.dp.Components([cpname])[0]
+
+                indom = xml.dom.minidom.parseString(dsxml)
+                dss = indom.getElementsByTagName("datasource")
+                if not ds.startswith("client_") and sds[1] != 'Encoded':
+                    nxstype = self.__npTn2[tp]
+                else:
+                    nxstype = 'NX_CHAR'
+                mycps = defbg + groupbg + fieldbg % (
+                    ds.lower(), nxstype)
+
+                mycps += dss[0].toprettyxml(indent="")
+                mstr = ""
+                if ms:
+                    mstr += dimbg % len(ms)
+                    for ind, val in enumerate(ms):
+                        mstr += dim % (ind + 1, val)
+                    mstr += dimend
+
+                mycps += mstr
+                mycps += fieldend + groupend + groupend
+                lk = link % (ds.lower(), self.__defaultpath,
+                        ds.lower())
+                mycps += lk if i%2 else ""
+                mycps += groupend + defend
+
+                self.assertEqual(comp, mycps)
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_create_init_typeshape_tango(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+
+        defbg = '<?xml version="1.0" ?>\n<definition>\n'
+        defend = '</definition>\n'
+        groupbg = '<group name="entry$var.serialno" type="NXentry">\n' + \
+            '<group name="instrument" type="NXinstrument">\n' + \
+            '<group name="collection" type="NXcollection">\n'
+        groupend = '</group>\n'
+
+        fieldbg = '<field name="%s" type="%s">\n<strategy mode="INIT"/>\n'
+        fieldend = '</field>\n'
+
+        link = '<group name="data" type="NXdata">\n' + \
+            '<link name="%s" target="%s/%s"/>\n</group>\n'
+
+        dimbg = '<dimensions rank="%s">\n'
+        dim = '<dim index="%s" value="%s"/>\n'
+        dimend = '</dimensions>\n'
+
+        self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
+        dc = DynamicComponent(self._cf.dp)
+        for i in range(4):
+            for ds, dsxml in self.smydss.items():
+                ms = self.smydsspar[ds]
+                sds = ds.split("_")
+                tp = sds[1]
+                dc.setInitDSources([ds])
+
+
+                if i == 0:
+                    dc.setDefaultLinkPath(False, self.__defaultpath)
+                    dc.setLabelParams("{}", "{}", "{}", "{}", "{}")
+                elif i == 1:
+                    dc.setDefaultLinkPath(True, self.__defaultpath)
+                    dc.setLabelParams("{}", "{}", "{}", "{}", "{}")
+                elif i == 2:
+                    dc.setLabelParams("{}", "{}",
+                                      json.dumps({ds: False}), "{}", "{}")
+                elif i == 3:
+                    dc.setLabelParams("{}", "{}",
+                                      json.dumps({ds: True}), "{}", "{}")
+
+
+                cpname = dc.create()
+                comp = self._cf.dp.Components([cpname])[0]
+
+                indom = xml.dom.minidom.parseString(dsxml)
+                dss = indom.getElementsByTagName("datasource")
+                if not ds.startswith("client_") and sds[1] != 'Encoded':
+                    nxstype = self.__npTn2[tp]
+                else:
+                    nxstype = 'NX_CHAR'
+                mycps = defbg + groupbg + fieldbg % (
+                    ds.lower(), nxstype)
+
+                mycps += dss[0].toprettyxml(indent="")
+                mstr = ""
+                if ms:
+                    mstr += dimbg % len(ms)
+                    for ind, val in enumerate(ms):
+                        mstr += dim % (ind + 1, val)
+                    mstr += dimend
+
+                mycps += mstr
+                mycps += fieldend + groupend + groupend
+                lk = link % (ds.lower(), self.__defaultpath,
+                        ds.lower())
+                mycps += lk if i%2 else ""
+                mycps += groupend + defend
+
+                self.assertEqual(comp, mycps)
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_create_step_typeshape_tango(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+
+        defbg = '<?xml version="1.0" ?>\n<definition>\n'
+        defend = '</definition>\n'
+        groupbg = '<group name="entry$var.serialno" type="NXentry">\n' + \
+            '<group name="instrument" type="NXinstrument">\n' + \
+            '<group name="collection" type="NXcollection">\n'
+        groupend = '</group>\n'
+
+        fieldbg = '<field name="%s" type="%s">\n<strategy mode="STEP"/>\n'
+        fieldend = '</field>\n'
+
+        link = '<group name="data" type="NXdata">\n' + \
+            '<link name="%s" target="%s/%s"/>\n</group>\n'
+
+        dimbg = '<dimensions rank="%s">\n'
+        dim = '<dim index="%s" value="%s"/>\n'
+        dimend = '</dimensions>\n'
+
+        self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
+        for i, nxstp in enumerate(self.__npTn.values()):
+            for ds, dsxml in self.smydss.items():
+                dc = DynamicComponent(self._cf.dp)
+                ms = self.smydsspar[ds]
+                ms2 = [self.__rnd.randint(0, 3000)
+                       for _ in range(self.__rnd.randint(0, 3))]
+                lbl = self.getRandomName(20)
+                sds = ds.split("_")
+                tp = sds[1]
+                dc.setStepDSources([ds])
+
+                if i == 0:
+                    dc.setDefaultLinkPath(False, self.__defaultpath)
+                    dc.setLabelParams("{}", "{}", "{}",
+                                      json.dumps({ds: nxstp}),
+                                      json.dumps({ds: ms2}))
+                elif i == 1:
+                    dc.setDefaultLinkPath(True, self.__defaultpath)
+                    dc.setLabelParams("{}", "{}", "{}",
+                                      json.dumps({ds: nxstp}),
+                                      json.dumps({ds: ms2}))
+                elif i == 2:
+                    dc.setLabelParams("{}", "{}",
+                                      json.dumps({ds: False}),
+                                      json.dumps({ds: nxstp}),
+                                      json.dumps({ds: ms2}))
+                elif i == 3:
+                    dc.setLabelParams("{}", "{}",
+                                      json.dumps({ds: True}),
+                                      json.dumps({ds: nxstp}),
+                                      json.dumps({ds: ms2}))
+                elif i == 4:
+                    dc.setDefaultLinkPath(True, self.__defaultpath)
+                    dc.setLabelParams("{}", "{}",
+                                      json.dumps({ds: False}),
+                                      json.dumps({ds: nxstp}),
+                                      json.dumps({ds: ms2}))
+                elif i == 5:
+                    dc.setDefaultLinkPath(False, self.__defaultpath)
+                    dc.setLabelParams("{}", "{}",
+                                      json.dumps({ds: True}),
+                                      json.dumps({ds: nxstp}),
+                                      json.dumps({ds: ms2}))
+                elif i == 6:
+                    dc.setDefaultLinkPath(False, self.__defaultpath)
+                    dc.setLabelParams("{}", "{}",
+                                      json.dumps({"dssd": True}),
+                                      json.dumps({ds: nxstp}),
+                                      json.dumps({ds: ms2}))
+                elif i == 7:
+                    dc.setLabelParams(json.dumps({ds: lbl}),
+                                      "{}", "{}",
+                                      json.dumps({ds: nxstp}),
+                                      json.dumps({ds: ms2}))
+                elif i == 8:
+                    pass
+                    dc.setDefaultLinkPath(False, self.__defaultpath)
+                    dc.setLabelParams(json.dumps({ds: lbl}),
+                                      "{}", "{}",
+                                      json.dumps({lbl: nxstp}),
+                                      json.dumps({lbl: ms2}))
+                elif i == 9:
+                    dc.setDefaultLinkPath(True, self.__defaultpath)
+                    dc.setLabelParams(json.dumps({ds: lbl}),
+                                      "{}", "{}",
+                                      json.dumps({lbl: nxstp}),
+                                      json.dumps({lbl: ms2}))
+                elif i == 10:
+                    dc.setLabelParams(json.dumps({ds: lbl}),
+                                      "{}",
+                                      json.dumps({lbl: False}),
+                                      json.dumps({lbl: nxstp}),
+                                      json.dumps({lbl: ms2}))
+                elif i == 11:
+                    dc.setLabelParams(json.dumps({ds: lbl}),
+                                      "{}",
+                                      json.dumps({lbl: True}),
+                                      json.dumps({lbl: nxstp}),
+                                      json.dumps({lbl: ms2}))
+                elif i == 12:
+                    dc.setDefaultLinkPath(True, self.__defaultpath)
+                    dc.setLabelParams(json.dumps({ds: lbl}),
+                                      "{}",
+                                      json.dumps({lbl: False}),
+                                      json.dumps({lbl: nxstp}),
+                                      json.dumps({lbl: ms2}))
+                elif i == 13:
+                    dc.setDefaultLinkPath(False, self.__defaultpath)
+                    dc.setLabelParams(json.dumps({ds: lbl}),
+                                      "{}",
+                                      json.dumps({lbl: True}),
+                                      json.dumps({lbl: nxstp}),
+                                      json.dumps({lbl: ms2}))
+                elif i == 14:
+                    dc.setDefaultLinkPath(False, self.__defaultpath)
+                    dc.setLabelParams(json.dumps({ds: lbl}),
+                                      "{}",
+                                      json.dumps({"dssd": True}),
+                                      json.dumps({lbl: nxstp}),
+                                      json.dumps({lbl: ms2}))
+                elif i == 15:
+                    dc.setLabelParams(json.dumps({ds: lbl}),
+                                      "{}", "{}",
+                                      json.dumps({lbl: nxstp}),
+                                      json.dumps({ds: ms2}))
+
+
+                cpname = dc.create()
+                comp = self._cf.dp.Components([cpname])[0]
+
+                indom = xml.dom.minidom.parseString(dsxml)
+                dss = indom.getElementsByTagName("datasource")
+                nxstype = nxstp
+                mycps = defbg + groupbg + fieldbg % (
+                    ds.lower(), nxstype)
+
+                mycps += dss[0].toprettyxml(indent="")
+                mstr = ""
+                if ms2:
+                    mstr += dimbg % len(ms2)
+                    for ind, val in enumerate(ms2):
+                        mstr += dim % (ind + 1, val)
+                    mstr += dimend
+
+                mycps += mstr
+                mycps += fieldend + groupend + groupend
+                lk = link % (ds.lower(), self.__defaultpath,
+                        ds.lower())
+                mycps += lk if i%2 else ""
+                mycps += groupend + defend
+
+                self.assertEqual(comp, mycps)
+
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_create_init_typeshape_tango(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+
+        defbg = '<?xml version="1.0" ?>\n<definition>\n'
+        defend = '</definition>\n'
+        groupbg = '<group name="entry$var.serialno" type="NXentry">\n' + \
+            '<group name="instrument" type="NXinstrument">\n' + \
+            '<group name="collection" type="NXcollection">\n'
+        groupend = '</group>\n'
+
+        fieldbg = '<field name="%s" type="%s">\n<strategy mode="INIT"/>\n'
+        fieldend = '</field>\n'
+
+        link = '<group name="data" type="NXdata">\n' + \
+            '<link name="%s" target="%s/%s"/>\n</group>\n'
+
+        dimbg = '<dimensions rank="%s">\n'
+        dim = '<dim index="%s" value="%s"/>\n'
+        dimend = '</dimensions>\n'
+
+        self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
+        for i, nxstp in enumerate(self.__npTn.values()):
+            for ds, dsxml in self.smydss.items():
+                dc = DynamicComponent(self._cf.dp)
+                ms = self.smydsspar[ds]
+                ms2 = [self.__rnd.randint(0, 3000)
+                       for _ in range(self.__rnd.randint(0, 3))]
+                lbl = self.getRandomName(20)
+                sds = ds.split("_")
+                tp = sds[1]
+                dc.setInitDSources([ds])
+
+                if i == 0:
+                    dc.setDefaultLinkPath(False, self.__defaultpath)
+                    dc.setLabelParams("{}", "{}", "{}",
+                                      json.dumps({ds: nxstp}),
+                                      json.dumps({ds: ms2}))
+                elif i == 1:
+                    dc.setDefaultLinkPath(True, self.__defaultpath)
+                    dc.setLabelParams("{}", "{}", "{}",
+                                      json.dumps({ds: nxstp}),
+                                      json.dumps({ds: ms2}))
+                elif i == 2:
+                    dc.setLabelParams("{}", "{}",
+                                      json.dumps({ds: False}),
+                                      json.dumps({ds: nxstp}),
+                                      json.dumps({ds: ms2}))
+                elif i == 3:
+                    dc.setLabelParams("{}", "{}",
+                                      json.dumps({ds: True}),
+                                      json.dumps({ds: nxstp}),
+                                      json.dumps({ds: ms2}))
+                elif i == 4:
+                    dc.setDefaultLinkPath(True, self.__defaultpath)
+                    dc.setLabelParams("{}", "{}",
+                                      json.dumps({ds: False}),
+                                      json.dumps({ds: nxstp}),
+                                      json.dumps({ds: ms2}))
+                elif i == 5:
+                    dc.setDefaultLinkPath(False, self.__defaultpath)
+                    dc.setLabelParams("{}", "{}",
+                                      json.dumps({ds: True}),
+                                      json.dumps({ds: nxstp}),
+                                      json.dumps({ds: ms2}))
+                elif i == 6:
+                    dc.setDefaultLinkPath(False, self.__defaultpath)
+                    dc.setLabelParams("{}", "{}",
+                                      json.dumps({"dssd": True}),
+                                      json.dumps({ds: nxstp}),
+                                      json.dumps({ds: ms2}))
+                elif i == 7:
+                    dc.setLabelParams(json.dumps({ds: lbl}),
+                                      "{}", "{}",
+                                      json.dumps({ds: nxstp}),
+                                      json.dumps({ds: ms2}))
+                elif i == 8:
+                    pass
+                    dc.setDefaultLinkPath(False, self.__defaultpath)
+                    dc.setLabelParams(json.dumps({ds: lbl}),
+                                      "{}", "{}",
+                                      json.dumps({lbl: nxstp}),
+                                      json.dumps({lbl: ms2}))
+                elif i == 9:
+                    dc.setDefaultLinkPath(True, self.__defaultpath)
+                    dc.setLabelParams(json.dumps({ds: lbl}),
+                                      "{}", "{}",
+                                      json.dumps({lbl: nxstp}),
+                                      json.dumps({lbl: ms2}))
+                elif i == 10:
+                    dc.setLabelParams(json.dumps({ds: lbl}),
+                                      "{}",
+                                      json.dumps({lbl: False}),
+                                      json.dumps({lbl: nxstp}),
+                                      json.dumps({lbl: ms2}))
+                elif i == 11:
+                    dc.setLabelParams(json.dumps({ds: lbl}),
+                                      "{}",
+                                      json.dumps({lbl: True}),
+                                      json.dumps({lbl: nxstp}),
+                                      json.dumps({lbl: ms2}))
+                elif i == 12:
+                    dc.setDefaultLinkPath(True, self.__defaultpath)
+                    dc.setLabelParams(json.dumps({ds: lbl}),
+                                      "{}",
+                                      json.dumps({lbl: False}),
+                                      json.dumps({lbl: nxstp}),
+                                      json.dumps({lbl: ms2}))
+                elif i == 13:
+                    dc.setDefaultLinkPath(False, self.__defaultpath)
+                    dc.setLabelParams(json.dumps({ds: lbl}),
+                                      "{}",
+                                      json.dumps({lbl: True}),
+                                      json.dumps({lbl: nxstp}),
+                                      json.dumps({lbl: ms2}))
+                elif i == 14:
+                    dc.setDefaultLinkPath(False, self.__defaultpath)
+                    dc.setLabelParams(json.dumps({ds: lbl}),
+                                      "{}",
+                                      json.dumps({"dssd": True}),
+                                      json.dumps({lbl: nxstp}),
+                                      json.dumps({lbl: ms2}))
+                elif i == 15:
+                    dc.setLabelParams(json.dumps({ds: lbl}),
+                                      "{}", "{}",
+                                      json.dumps({lbl: nxstp}),
+                                      json.dumps({ds: ms2}))
+
+
+                cpname = dc.create()
+                comp = self._cf.dp.Components([cpname])[0]
+
+                indom = xml.dom.minidom.parseString(dsxml)
+                dss = indom.getElementsByTagName("datasource")
+                nxstype = nxstp
+                mycps = defbg + groupbg + fieldbg % (
+                    ds.lower(), nxstype)
+
+                mycps += dss[0].toprettyxml(indent="")
+                mstr = ""
+                if ms2:
+                    mstr += dimbg % len(ms2)
+                    for ind, val in enumerate(ms2):
+                        mstr += dim % (ind + 1, val)
+                    mstr += dimend
+
+                mycps += mstr
+                mycps += fieldend + groupend + groupend
+                lk = link % (ds.lower(), self.__defaultpath,
+                        ds.lower())
+                mycps += lk if i%2 else ""
+                mycps += groupend + defend
+
+                self.assertEqual(comp, mycps)
+
 
 if __name__ == '__main__':
     unittest.main()

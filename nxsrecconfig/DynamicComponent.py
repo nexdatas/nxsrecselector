@@ -24,7 +24,7 @@ import xml.dom.minidom
 import json
 import PyTango
 
-from .Utils import Utils, TangoUtils
+from .Utils import Utils, TangoUtils, PoolUtils
 
 
 ## NeXus Sardana Recorder settings
@@ -287,18 +287,11 @@ class DynamicComponent(object):
         port = None
         source = None
 
-        try:
-            sname = name.split("://")
-            if name and sname[0] == 'tango' and sname[-1].count('/') > 2:
-                source = sname[-1]
-            else:
-                dp = PyTango.DeviceProxy(str(name))
-                if hasattr(dp, 'DataSource'):
-                    ds = dp.DataSource
-                    sds = ds.split("://")
-                    source = sds[-1]
-        except (PyTango.DevFailed, PyTango.Except, PyTango.DevError):
-            pass
+        sname = name.split("://")
+        if name and sname[0] == 'tango' and sname[-1].count('/') > 2:
+            source = sname[-1]
+        else:
+            source = PoolUtils.getSource(name)
 
         if source:
             arr = source.split("/")

@@ -507,6 +507,4 @@ class PoolUtils(object):
                 source = sds[-1]
         except (PyTango.DevFailed, PyTango.Except, PyTango.DevError):
             pass
-        if not source:
-            source = '%s/%s' % (name.encode(), 'Value')
         return source
