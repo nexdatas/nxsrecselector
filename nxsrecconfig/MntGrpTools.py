@@ -75,7 +75,7 @@ class MntGrpTools(object):
                           str(name))
 
     ## set active measurement group from components
-    def createMntGrpConfiguration(self, pools):
+    def createMntGrp(self, pools):
         cnf = {}
         cnf['controllers'] = {}
         cnf['description'] = "Measurement Group"
@@ -99,16 +99,6 @@ class MntGrpTools(object):
                 al if al in ltimers else timer, index, fullnames)
         conf = json.dumps(cnf)
         return conf, mfullname
-
-    ## provides Measurement Group Proxy
-    # \param pools give pools
-    # \returns Measurement Group Proxy
-    def getMntGrpProxy(self, pools):
-        mntGrpName = self.__selector["MntGrp"]
-        fullname = str(PoolUtils.getMntGrpName(pools, mntGrpName))
-        if not fullname:
-            return None
-        return TangoUtils.openProxy(fullname)
 
     @classmethod
     def __clearChannels(cls, dsg, hel, pools):
@@ -210,7 +200,7 @@ class MntGrpTools(object):
 
     ## available mntgrps
     # \returns list of available measurement groups
-    def availableMeasurementGroups(self):
+    def availableMntGrps(self):
         mntgrps = None
         pool = None
         msp = TangoUtils.openProxy(self.macroServer)
@@ -261,7 +251,7 @@ class MntGrpTools(object):
                 "User Data not defined %s" % str(missing))
 
     @classmethod
-    def __createMntGrp(cls, ms, mntGrpName, timer, pools):
+    def __createMntGrpDevice(cls, ms, mntGrpName, timer, pools):
         pool = None
         amntgrp = MSUtils.getEnv('ActiveMntGrp', ms)
         msp = TangoUtils.openProxy(ms)
@@ -355,7 +345,7 @@ class MntGrpTools(object):
         mfullname = str(PoolUtils.getMntGrpName(pools, mntGrpName))
 
         if not mfullname:
-            mfullname = self.__createMntGrp(
+            mfullname = self.__createMntGrpDevice(
                 self.macroServer,
                 mntGrpName, timer, pools)
 

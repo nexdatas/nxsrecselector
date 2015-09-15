@@ -780,7 +780,9 @@ class Settings(object):
         self.__mntgrptools.macroServer = self.getMacroServer()
         if not self.__selector["MntGrp"]:
             self.switchMntGrp(toActive=False)
-        dpmg = self.__mntgrptools.getMntGrpProxy(pools)
+        mntGrpName = self.__selector["MntGrp"]
+        fullname = str(PoolUtils.getMntGrpName(pools, mntGrpName))
+        dpmg = TangoUtils.openProxy(fullname) if fullname else None
         if not dpmg:
             return "{}"
         return str(dpmg.Configuration)
@@ -797,7 +799,7 @@ class Settings(object):
         self.__mntgrptools.components = list(
             set(self.components) | set(self.automaticComponents) |
             set(self.mandatoryComponents()))
-        llconf, _ = self.__mntgrptools.createMntGrpConfiguration(pools)
+        llconf, _ = self.__mntgrptools.createMntGrp(pools)
         self.storeConfiguration()
         lsconf = json.loads(llconf)
         return not Utils.compareDict(mgconf, lsconf)
@@ -813,7 +815,7 @@ class Settings(object):
         self.__mntgrptools.components = list(
             set(self.components) | set(self.automaticComponents) |
             set(self.mandatoryComponents()))
-        conf, mntgrp = self.__mntgrptools.createMntGrpConfiguration(pools)
+        conf, mntgrp = self.__mntgrptools.createMntGrp(pools)
         self.storeConfiguration()
         dpmg = TangoUtils.openProxy(mntgrp)
         dpmg.Configuration = conf
@@ -846,7 +848,7 @@ class Settings(object):
     # \returns list of available measurement groups
     def availableMeasurementGroups(self):
         self.__mntgrptools.macroServer = self.getMacroServer()
-        return self.__mntgrptools.availableMeasurementGroups()
+        return self.__mntgrptools.availableMntGrps()
 
 # Dynamic component methods
 
