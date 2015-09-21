@@ -353,7 +353,6 @@ class MntGrpTools(object):
         cnf['label'] = mntGrpName
         return mfullname
 
-
     @classmethod
     def __findSources(cls, tangods, extangods, exsource):
         for name, _, initsource in tangods:

@@ -1,4 +1,8 @@
 2015-09-21 Jan Kotanski <jankotan@gmail.com>
+	* fixing Description attribute
+	* tagged as v1.20.4
+
+2015-09-21 Jan Kotanski <jankotan@gmail.com>
 	* storing ScanFile as a string if only one
 	* tagged as v1.20.3
 

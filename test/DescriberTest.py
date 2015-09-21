@@ -484,14 +484,13 @@ class DescriberTest(unittest.TestCase):
             self.assertEqual(self.resdss[vl][1], rv[vl].dstype)
             self.assertEqual(self.resdss[vl][2], rv[vl].record)
 
-
     def checkDSList(self, rv, cv):
         self.assertEqual(len(rv), len(cv))
 
         mset = set()
         for jr in rv:
             rr = json.loads(jr)
-            vl = rr["dsname"] 
+            vl = rr["dsname"]
             mset.add(vl)
             if not vl:
                 vl = 'nn2'

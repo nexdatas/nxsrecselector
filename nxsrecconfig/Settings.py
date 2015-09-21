@@ -762,7 +762,7 @@ class Settings(object):
     # \returns description of required components
     def cpdescription(self, full=False):
         nexusconfig_device = self.setConfigInstance()
-        describer = Describer(nexusconfig_device)
+        describer = Describer(nexusconfig_device, True)
         cp = None
         if not full:
             cp = list(
