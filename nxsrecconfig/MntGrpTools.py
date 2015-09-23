@@ -49,9 +49,9 @@ class MntGrpTools(object):
         self.recorder_names = ['serialno', 'end_time', 'start_time',
                                'point_nb', 'timestamps', 'scan_title']
         ## macro server name
-        self.macroServer = None
+        self.__macroServer = None
         ## configuration serve proxy
-        self.configServer = None
+        self.__configServer = None
         ## component list
         self.components = []
         ## datasource list
@@ -59,11 +59,17 @@ class MntGrpTools(object):
         ## disable datasource list
         self.disableDataSources = []
 
+    def updateMacroServer(self):
+        self.__macroServer = self.__selector.getMacroServer()
+
+    def updateConfigServer(self):
+        self.__configServer = self.__selector.setConfigInstance()
+
     ## deletes mntgrp
     # \param name mntgrp name
     def deleteMntGrp(self, name):
         pool = None
-        msp = TangoUtils.openProxy(self.macroServer)
+        msp = TangoUtils.openProxy(self.__macroServer)
         pn = msp.get_property("PoolNames")["PoolNames"]
         fpool = None
         for pl in pn:
@@ -203,7 +209,7 @@ class MntGrpTools(object):
     def availableMntGrps(self):
         mntgrps = None
         pool = None
-        msp = TangoUtils.openProxy(self.macroServer)
+        msp = TangoUtils.openProxy(self.__macroServer)
         pn = msp.get_property("PoolNames")["PoolNames"]
         fpool = None
         for pl in pn:
@@ -213,7 +219,7 @@ class MntGrpTools(object):
         if fpool:
             mntgrps = PoolUtils.getMntGrps([fpool])
         mntgrps = mntgrps if mntgrps else []
-        amntgrp = MSUtils.getEnv('ActiveMntGrp', self.macroServer)
+        amntgrp = MSUtils.getEnv('ActiveMntGrp', self.__macroServer)
 
         try:
             if mntgrps:
@@ -226,7 +232,7 @@ class MntGrpTools(object):
     ## checks client records
     def __checkClientRecords(self, datasources, pools):
 
-        describer = Describer(self.configServer, True)
+        describer = Describer(self.__configServer, True)
         frecords = PoolUtils.getFullDeviceNames(pools)
         dsres = describer.dataSources(
             set(datasources) - set(frecords.keys()), 'CLIENT')[0]
@@ -313,7 +319,7 @@ class MntGrpTools(object):
         aliases.extend(
             list(set(pchannels) & set(self.disableDataSources)))
 
-        describer = Describer(self.configServer, True)
+        describer = Describer(self.__configServer, True)
         res = describer.components(self.components, 'STEP', 'CLIENT')
 
         for grp in res:
@@ -346,10 +352,10 @@ class MntGrpTools(object):
 
         if not mfullname:
             mfullname = self.__createMntGrpDevice(
-                self.macroServer,
+                self.__macroServer,
                 mntGrpName, timer, pools)
 
-        MSUtils.setEnv('ActiveMntGrp', str(mntGrpName), self.macroServer)
+        MSUtils.setEnv('ActiveMntGrp', str(mntGrpName), self.__macroServer)
         cnf['label'] = mntGrpName
         return mfullname
 
@@ -427,8 +433,8 @@ class MntGrpTools(object):
                 name = nname
                 if source in exsource:
                     xml = self.__createXMLSource(name, source, exsource)
-                    self.configServer.xmlstring = str(xml)
-                    TangoUtils.command(self.configServer, "storeDataSource",
+                    self.__configServer.xmlstring = str(xml)
+                    TangoUtils.command(self.__configServer, "storeDataSource",
                                   str(name))
                     jds[initsource] = name
 
@@ -436,10 +442,10 @@ class MntGrpTools(object):
         extangods = []
         exsource = {}
 
-        ads = TangoUtils.command(self.configServer, "availableDataSources")
+        ads = TangoUtils.command(self.__configServer, "availableDataSources")
         if not ads:
             ads = []
-        describer = Describer(self.configServer)
+        describer = Describer(self.__configServer)
         sds = describer.dataSources(ads)
         self.__findSources(tangods, extangods, exsource)
         jds = self.__addKnownSources(extangods, sds, dsg.keys())
@@ -473,7 +479,7 @@ class MntGrpTools(object):
             index = self.__addChannel(cnf, ctrl, device, fullname,
                                      dontdisplay, index)
         else:
-            describer = Describer(self.configServer)
+            describer = Describer(self.__configServer)
             sds = describer.dataSources([device])
             if sds:
                 js = json.loads(sds[0])

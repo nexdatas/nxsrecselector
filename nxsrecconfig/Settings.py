@@ -743,7 +743,7 @@ class Settings(object):
     ## deletes mntgrp
     # \param name mntgrp name
     def deleteMntGrp(self, name):
-        self.__mntgrptools.macroServer = self.getMacroServer()
+        self.__mntgrptools.updateMacroServer()
         self.__mntgrptools.deleteMntGrp(name)
         inst = self.setConfigInstance()
         inst.deleteSelection(name)
@@ -777,7 +777,7 @@ class Settings(object):
      # \returns string with mntgrp configuration
     def mntGrpConfiguration(self):
         pools = self.__getPools()
-        self.__mntgrptools.macroServer = self.getMacroServer()
+        self.__mntgrptools.updateMacroServer()
         if not self.__selector["MntGrp"]:
             self.switchMntGrp(toActive=False)
         mntGrpName = self.__selector["MntGrp"]
@@ -792,8 +792,8 @@ class Settings(object):
     def isMntGrpChanged(self):
         pools = self.__getPools()
         mgconf = json.loads(self.mntGrpConfiguration())
-        self.__mntgrptools.macroServer = self.getMacroServer()
-        self.__mntgrptools.configServer = self.setConfigInstance()
+        self.__mntgrptools.updateMacroServer()
+        self.__mntgrptools.updateConfigServer()
         self.__mntgrptools.dataSources = self.dataSources
         self.__mntgrptools.disableDataSources = self.disableDataSources
         self.__mntgrptools.components = list(
@@ -808,8 +808,8 @@ class Settings(object):
     # \returns string with mntgrp configuration
     def updateMntGrp(self):
         pools = self.__getPools()
-        self.__mntgrptools.macroServer = self.getMacroServer()
-        self.__mntgrptools.configServer = self.setConfigInstance()
+        self.__mntgrptools.updateMacroServer()
+        self.__mntgrptools.updateConfigServer()
         self.__mntgrptools.dataSources = self.dataSources
         self.__mntgrptools.disableDataSources = self.disableDataSources
         self.__mntgrptools.components = list(
@@ -831,15 +831,15 @@ class Settings(object):
                 self.__selector["MntGrp"] = amntgrp
         self.fetchConfiguration()
         jconf = self.mntGrpConfiguration()
-        self.__mntgrptools.configServer = self.setConfigInstance()
+        self.__mntgrptools.updateConfigServer()
         if self.__mntgrptools.importMntGrp(jconf, pools):
             self.storeConfiguration()
 
     ## import setting from active measurement
     def importMntGrp(self):
         pools = self.__getPools()
-        self.__mntgrptools.macroServer = self.getMacroServer()
-        self.__mntgrptools.configServer = self.setConfigInstance()
+        self.__mntgrptools.updateMacroServer()
+        self.__mntgrptools.updateConfigServer()
         jconf = self.mntGrpConfiguration()
         if self.__mntgrptools.importMntGrp(jconf, pools):
             self.storeConfiguration()
@@ -847,7 +847,7 @@ class Settings(object):
     ## available mntgrps
     # \returns list of available measurement groups
     def availableMeasurementGroups(self):
-        self.__mntgrptools.macroServer = self.getMacroServer()
+        self.__mntgrptools.updateMacroServer()
         return self.__mntgrptools.availableMntGrps()
 
 # Dynamic component methods
