@@ -586,6 +586,7 @@ class Settings(object):
             avmg = self.availableMeasurementGroups()
             if self.mntGrp in avmg:
                 self.__selector.deselect()
+                self.importMntGrp()
                 self.__selector.resetAutomaticComponents(
                     self.defaultAutomaticComponents)
                 self.updateControllers()

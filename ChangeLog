@@ -1,5 +1,6 @@
 2015-09-XX Jan Kotanski <jankotan@gmail.com>
 	* making macroserver and configserver in mgt private
+	* adding importMntGrp in fetchConfiguration if non available selection
 	* tagged as v1.20.5
 
 2015-09-21 Jan Kotanski <jankotan@gmail.com>
