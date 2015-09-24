@@ -107,7 +107,7 @@ class Pool(PyTango.Device_4Impl):
     def write_AcqChannelList(self, attr):
         print >> self.log_info, "In ", self.get_name(), \
             "::write_AcqChannelList()"
-        self.attr_AcqChannelList = attr.get_write_value()
+        self.attr_AcqChannelList = attr.get_write_value() or []
 
 #------------------------------------------------------------------
 #    Read MeasurementGroupList attribute
@@ -123,7 +123,7 @@ class Pool(PyTango.Device_4Impl):
     def write_MeasurementGroupList(self, attr):
         print >> self.log_info, "In ", self.get_name(), \
             "::write_MeasurementGroupList()"
-        self.attr_MeasurementGroupList = attr.get_write_value()
+        self.attr_MeasurementGroupList = attr.get_write_value() or []
 
 #------------------------------------------------------------------
 #    Read ExpChannelList attribute
@@ -139,7 +139,7 @@ class Pool(PyTango.Device_4Impl):
     def write_ExpChannelList(self, attr):
         print >> self.log_info, "In ", self.get_name(), \
             "::write_ExpChannelList()"
-        self.attr_ExpChannelList = attr.get_write_value()
+        self.attr_ExpChannelList = attr.get_write_value() or []
 
 #------------------------------------------------------------------
 #    Read MotorList attribute
@@ -155,7 +155,7 @@ class Pool(PyTango.Device_4Impl):
     def write_MotorList(self, attr):
         print >> self.log_info, "In ", self.get_name(), \
             "::write_MotorList()"
-        self.attr_MotorList = attr.get_write_value()
+        self.attr_MotorList = attr.get_write_value() or []
 
 #==================================================================
 #

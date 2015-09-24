@@ -47,9 +47,13 @@ class Selector(object):
         ## module label
         self.moduleLabel = 'module'
 
-    ## resets seleciton
+    ## resets seleciton except Door and ConfigDevice
     def reset(self):
+        door = self["Door"]
+        cf = self["ConfigDevice"]
         self.__selection.reset()
+        self["Door"] = door
+        self["ConfigDevice"] = cf
 
     ## deselect seleciton elements
     def deselect(self):
