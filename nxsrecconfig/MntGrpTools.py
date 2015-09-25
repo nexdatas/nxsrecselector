@@ -58,6 +58,8 @@ class MntGrpTools(object):
         self.dataSources = []
         ## disable datasource list
         self.disableDataSources = []
+        ## default automaticComponents
+        self.defaultAutomaticComponents = []
 
     def updateMacroServer(self):
         self.__macroServer = self.__selector.getMacroServer()
@@ -68,6 +70,7 @@ class MntGrpTools(object):
     ## deletes mntgrp
     # \param name mntgrp name
     def deleteMntGrp(self, name):
+        self.updateMacroServer()
         pool = None
         msp = TangoUtils.openProxy(self.__macroServer)
         pn = msp.get_property("PoolNames")["PoolNames"]
@@ -79,9 +82,12 @@ class MntGrpTools(object):
         if fpool:
             TangoUtils.command(fpool, "DeleteElement",
                           str(name))
+        inst = self.__selector.setConfigInstance()
+        inst.deleteSelection(name)
 
     ## set active measurement group from components
-    def createMntGrp(self, pools):
+    def createMntGrp(self):
+        pools = self.__selector.getPools()
         cnf = {}
         cnf['controllers'] = {}
         cnf['description'] = "Measurement Group"
@@ -105,6 +111,159 @@ class MntGrpTools(object):
                 al if al in ltimers else timer, index, fullnames)
         conf = json.dumps(cnf)
         return conf, mfullname
+
+    ## import setting from active measurement
+    def importMntGrp(self, jconf):
+        pools = self.__selector.getPools()
+        conf = json.loads(jconf)
+        otimers = None
+        timers = {}
+
+        dsg = json.loads(self.__selector["DataSourceGroup"])
+        hel = json.loads(self.__selector["HiddenElements"])
+        self.__clearChannels(dsg, hel, pools)
+
+        # fill in dsg, timers hel
+        if "timer" in conf.keys() and "controllers" in conf.keys():
+            tangods = self.__readChannels(conf, timers, dsg, hel)
+            self.__readTangoChannels(conf, tangods, dsg, hel)
+            otimers = self.__reorderTimers(conf, timers, dsg, hel, pools)
+
+        changed = False
+        jdsg = json.dumps(dsg)
+        if self.__selector["DataSourceGroup"] != jdsg:
+            self.__selector["DataSourceGroup"] = jdsg
+            changed = True
+
+        jhel = json.dumps(hel)
+        if self.__selector["HiddenElements"] != jhel:
+            self.__selector["HiddenElements"] = jhel
+            changed = True
+        if otimers is not None:
+            jtimers = json.dumps(otimers)
+            if self.__selector["Timer"] != jtimers:
+                self.__selector["Timer"] = jtimers
+                changed = True
+        return changed
+
+    ## available mntgrps
+    # \returns list of available measurement groups
+    def availableMntGrps(self):
+        self.updateMacroServer()
+        mntgrps = None
+        pool = None
+        msp = TangoUtils.openProxy(self.__macroServer)
+        pn = msp.get_property("PoolNames")["PoolNames"]
+        fpool = None
+        for pl in pn:
+            pool = TangoUtils.openProxy(pl)
+            if not fpool:
+                fpool = pool
+        if fpool:
+            mntgrps = PoolUtils.getMntGrps([fpool])
+        mntgrps = mntgrps if mntgrps else []
+        amntgrp = MSUtils.getEnv('ActiveMntGrp', self.__macroServer)
+
+        try:
+            if mntgrps:
+                ind = mntgrps.index(amntgrp)
+                mntgrps[0], mntgrps[ind] = mntgrps[ind], mntgrps[0]
+        except ValueError:
+            pass
+        return mntgrps
+
+
+
+    ## provides configuration of mntgrp
+     # \returns string with mntgrp configuration
+    def mntGrpConfiguration(self):
+        pools = self.__selector.getPools()
+        self.updateMacroServer()
+        if not self.__selector["MntGrp"]:
+            self.switchMntGrp(toActive=False)
+        mntGrpName = self.__selector["MntGrp"]
+        fullname = str(PoolUtils.getMntGrpName(pools, mntGrpName))
+        dpmg = TangoUtils.openProxy(fullname) if fullname else None
+        if not dpmg:
+            return "{}"
+        return str(dpmg.Configuration)
+
+    ## check if active measurement group was changed
+    # \returns True if it is different to the current setting
+    def isMntGrpChanged(self):
+        mgconf = json.loads(self.mntGrpConfiguration())
+        self.updateMacroServer()
+        self.updateConfigServer()
+        llconf, _ = self.createMntGrp()
+        self.storeConfiguration()
+        lsconf = json.loads(llconf)
+        return not Utils.compareDict(mgconf, lsconf)
+
+    ## set active measurement group from components
+    # \returns string with mntgrp configuration
+    def updateMntGrp(self):
+        self.updateMacroServer()
+        self.updateConfigServer()
+        conf, mntgrp = self.createMntGrp()
+        self.storeConfiguration()
+        dpmg = TangoUtils.openProxy(mntgrp)
+        dpmg.Configuration = conf
+        return str(dpmg.Configuration)
+
+    ## switch to active measurement
+    def switchMntGrp(self, toActive=True):
+        if not self.__selector["MntGrp"] or toActive:
+            ms = self.__selector.getMacroServer()
+            amntgrp = MSUtils.getEnv('ActiveMntGrp', ms)
+            if not toActive or amntgrp:
+                self.__selector["MntGrp"] = amntgrp
+        self.fetchConfiguration()
+        jconf = self.mntGrpConfiguration()
+        self.updateConfigServer()
+        if self.importMntGrp(jconf):
+            self.storeConfiguration()
+
+    ## import setting from active measurement
+    def importMntGrp(self):
+        self.__mntgrptools.updateMacroServer()
+        self.__mntgrptools.updateConfigServer()
+        jconf = self.mntGrpConfiguration()
+        if self.__mntgrptools.importMntGrp(jconf):
+            self.storeConfiguration()
+
+    ## saves configuration
+    def storeConfiguration(self):
+        inst = self.__selector.setConfigInstance()
+        conf = str(json.dumps(self.__selector.get()))
+        inst.selection = conf
+        inst.storeSelection(self.mntGrp)
+
+    ## fetch configuration
+    def fetchConfiguration(self):
+        inst = self.__selector.setConfigInstance()
+        avsl = inst.availableSelections()
+        confs = None
+        if self.mntGrp in avsl:
+            confs = inst.selections([self.mntGrp])
+        if confs:
+            self.__selector.set(json.loads(str(confs[0])))
+        else:
+            avmg = self.availableMntGrps()
+            if self.mntGrp in avmg:
+                self.__selector.deselect()
+                self.importMntGrp()
+                self.__selector.resetAutomaticComponents(
+                    self.defaultAutomaticComponents)
+                self.updateControllers()
+
+    ## checks existing controllers of pools for
+    #      AutomaticDataSources
+    def updateControllers(self):
+        jacps = self.__selector.updateAutomaticComponents(self.__descErrors)
+        if self.__selector["AutomaticComponentGroup"] != jacps:
+            self.__selector["AutomaticComponentGroup"] = jacps
+            self.storeConfiguration()
+        gc.collect()
 
     @classmethod
     def __clearChannels(cls, dsg, hel, pools):
@@ -170,64 +329,6 @@ class MntGrpTools(object):
                 if tm in hel:
                     hel.remove(tm)
         return otimers
-
-    ## import setting from active measurement
-    def importMntGrp(self, jconf, pools):
-        conf = json.loads(jconf)
-        otimers = None
-        timers = {}
-
-        dsg = json.loads(self.__selector["DataSourceGroup"])
-        hel = json.loads(self.__selector["HiddenElements"])
-        self.__clearChannels(dsg, hel, pools)
-
-        # fill in dsg, timers hel
-        if "timer" in conf.keys() and "controllers" in conf.keys():
-            tangods = self.__readChannels(conf, timers, dsg, hel)
-            self.__readTangoChannels(conf, tangods, dsg, hel)
-            otimers = self.__reorderTimers(conf, timers, dsg, hel, pools)
-
-        changed = False
-        jdsg = json.dumps(dsg)
-        if self.__selector["DataSourceGroup"] != jdsg:
-            self.__selector["DataSourceGroup"] = jdsg
-            changed = True
-
-        jhel = json.dumps(hel)
-        if self.__selector["HiddenElements"] != jhel:
-            self.__selector["HiddenElements"] = jhel
-            changed = True
-        if otimers is not None:
-            jtimers = json.dumps(otimers)
-            if self.__selector["Timer"] != jtimers:
-                self.__selector["Timer"] = jtimers
-                changed = True
-        return changed
-
-    ## available mntgrps
-    # \returns list of available measurement groups
-    def availableMntGrps(self):
-        mntgrps = None
-        pool = None
-        msp = TangoUtils.openProxy(self.__macroServer)
-        pn = msp.get_property("PoolNames")["PoolNames"]
-        fpool = None
-        for pl in pn:
-            pool = TangoUtils.openProxy(pl)
-            if not fpool:
-                fpool = pool
-        if fpool:
-            mntgrps = PoolUtils.getMntGrps([fpool])
-        mntgrps = mntgrps if mntgrps else []
-        amntgrp = MSUtils.getEnv('ActiveMntGrp', self.__macroServer)
-
-        try:
-            if mntgrps:
-                ind = mntgrps.index(amntgrp)
-                mntgrps[0], mntgrps[ind] = mntgrps[ind], mntgrps[0]
-        except ValueError:
-            pass
-        return mntgrps
 
     ## checks client records
     def __checkClientRecords(self, datasources, pools):
