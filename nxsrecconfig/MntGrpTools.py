@@ -21,6 +21,7 @@
 """  MntGrp Tools """
 
 import json
+import gc
 
 from .Utils import TangoUtils, PoolUtils, MSUtils
 from .Describer import Describer
@@ -113,7 +114,7 @@ class MntGrpTools(object):
         return conf, mfullname
 
     ## import setting from active measurement
-    def importMntGrp(self, jconf):
+    def __importMntGrp(self, jconf):
         pools = self.__selector.getPools()
         conf = json.loads(jconf)
         otimers = None
@@ -220,15 +221,15 @@ class MntGrpTools(object):
         self.fetchConfiguration()
         jconf = self.mntGrpConfiguration()
         self.updateConfigServer()
-        if self.importMntGrp(jconf):
+        if self.__importMntGrp(jconf):
             self.storeConfiguration()
 
     ## import setting from active measurement
     def importMntGrp(self):
-        self.__mntgrptools.updateMacroServer()
-        self.__mntgrptools.updateConfigServer()
+        self.updateMacroServer()
+        self.updateConfigServer()
         jconf = self.mntGrpConfiguration()
-        if self.__mntgrptools.importMntGrp(jconf):
+        if self.__importMntGrp(jconf):
             self.storeConfiguration()
 
     ## saves configuration
@@ -244,12 +245,12 @@ class MntGrpTools(object):
         avsl = inst.availableSelections()
         confs = None
         if self.mntGrp in avsl:
-            confs = inst.selections([self.mntGrp])
+            confs = inst.selections([self.__selector["MntGrp"]])
         if confs:
             self.__selector.set(json.loads(str(confs[0])))
         else:
             avmg = self.availableMntGrps()
-            if self.mntGrp in avmg:
+            if self.__selector["MntGrp"] in avmg:
                 self.__selector.deselect()
                 self.importMntGrp()
                 self.__selector.resetAutomaticComponents(

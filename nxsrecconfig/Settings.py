@@ -20,7 +20,6 @@
 
 """  NeXus Sardana Recorder Settings implementation """
 
-import gc
 import json
 import PyTango
 from .Describer import Describer
@@ -569,6 +568,8 @@ class Settings(object):
 
     ## fetch configuration
     def fetchConfiguration(self):
+        self.mntgrptools.defaultAutomaticComponents = \
+            self.defaultAutomaticComponents
         self.mntgrptools.fetchConfiguration()
 
     ## loads configuration
@@ -750,11 +751,15 @@ class Settings(object):
     ## provides configuration of mntgrp
      # \returns string with mntgrp configuration
     def mntGrpConfiguration(self):
+        self.mntgrptools.defaultAutomaticComponents = \
+            self.defaultAutomaticComponents
         return self.__mntgrptools.mntGrpConfiguration()
 
     ## check if active measurement group was changed
     # \returns True if it is different to the current setting
     def isMntGrpChanged(self):
+        self.mntgrptools.defaultAutomaticComponents = \
+            self.defaultAutomaticComponents
         self.__mntgrptools.dataSources = self.dataSources
         self.__mntgrptools.disableDataSources = self.disableDataSources
         self.__mntgrptools.components = list(
@@ -765,6 +770,8 @@ class Settings(object):
     ## set active measurement group from components
     # \returns string with mntgrp configuration
     def updateMntGrp(self):
+        self.mntgrptools.defaultAutomaticComponents = \
+            self.defaultAutomaticComponents
         self.__mntgrptools.dataSources = self.dataSources
         self.__mntgrptools.disableDataSources = self.disableDataSources
         self.__mntgrptools.components = list(
@@ -774,24 +781,20 @@ class Settings(object):
 
     ## switch to active measurement
     def switchMntGrp(self, toActive=True):
-        if not self.__selector["MntGrp"] or toActive:
-            ms = self.getMacroServer()
-            amntgrp = MSUtils.getEnv('ActiveMntGrp', ms)
-            if not toActive or amntgrp:
-                self.__selector["MntGrp"] = amntgrp
-        self.fetchConfiguration()
-        jconf = self.mntGrpConfiguration()
-        self.__mntgrptools.updateConfigServer()
-        if self.__mntgrptools.importMntGrp(jconf):
-            self.storeConfiguration()
+        self.mntgrptools.defaultAutomaticComponents = \
+            self.defaultAutomaticComponents
+        self.__mntgrptools.switchMntGrp(toActive)
 
     ## import setting from active measurement
     def importMntGrp(self):
-        self.__mntgrptools.updateMacroServer()
-        self.__mntgrptools.updateConfigServer()
-        jconf = self.mntGrpConfiguration()
-        if self.__mntgrptools.importMntGrp(jconf):
-            self.storeConfiguration()
+        self.mntgrptools.defaultAutomaticComponents = \
+            self.defaultAutomaticComponents
+        self.__mntgrptools.importMntGrp()
+#        self.__mntgrptools.updateMacroServer()
+#        self.__mntgrptools.updateConfigServer()
+#        jconf = self.mntGrpConfiguration()
+#        if self.__mntgrptools.importMntGrp(jconf):
+#            self.storeConfiguration()
 
     ## available mntgrps
     # \returns list of available measurement groups
