@@ -20,7 +20,6 @@
 
 """  NeXus Sardana Recorder Settings implementation """
 
-import gc
 import json
 import PyTango
 from .Describer import Describer
@@ -58,8 +57,6 @@ class Settings(object):
 
         ## timer filter list
         self.timerFilterList = ["*dgg*", "*/ctctrl0*"]
-        ## default automaticComponents
-        self.defaultAutomaticComponents = []
         ## default device groups
         self.__defaultDeviceGroups = \
             '{"timer": ["*exp_t*"], "dac": ["*exp_dac*"], ' \
@@ -70,8 +67,6 @@ class Settings(object):
         self.__deviceGroups = str(self.__defaultDeviceGroups)
         ## administator data
         self.__adminData = '[]'
-        ## error descriptions
-        self.__descErrors = []
 
         self.__setupSelection()
 
@@ -141,7 +136,7 @@ class Settings(object):
     ## provides description component errors
     # \returns list of available description component errors
     def __getDescriptionErrors(self):
-        return self.__descErrors
+        return self.__mntgrptools.descErrors
 
     ## provides automatic components
     descriptionErrors = property(__getDescriptionErrors,
@@ -182,6 +177,22 @@ class Settings(object):
         doc='provides a list of Disable DataSources')
 
 ## read-write variables
+
+    ## get method for defaultAutomaticComponents attribute
+    # \returns list of components
+    def __getDefaultAutomaticComponents(self):
+        return self.__mntgrptools.defaultAutomaticComponents
+
+    ## set method for defaultAutomaticComponents attribute
+    # \param components list of components
+    def __setDefaultAutomaticComponents(self, components):
+        self.__mntgrptools.defaultAutomaticComponents = components
+
+    ## default AutomaticComponents
+    defaultAutomaticComponents = property(
+        __getDefaultAutomaticComponents,
+        __setDefaultAutomaticComponents,
+        doc='default Automatic components')
 
     ## get method for configDevice attribute
     # \returns name of configDevice
@@ -493,9 +504,6 @@ class Settings(object):
 
 ##  commands
 
-    def __getPools(self):
-        return self.__selector.getPools()
-
     ## updates MacroServer for the given door server
     # \param door current door server
     def updateMacroServer(self, door):
@@ -568,28 +576,11 @@ class Settings(object):
 
     ## saves configuration
     def storeConfiguration(self):
-        inst = self.setConfigInstance()
-        conf = str(json.dumps(self.__selector.get()))
-        inst.selection = conf
-        inst.storeSelection(self.mntGrp)
+        self.__mntgrptools.storeProfile()
 
     ## fetch configuration
     def fetchConfiguration(self):
-        inst = self.setConfigInstance()
-        avsl = inst.availableSelections()
-        confs = None
-        if self.mntGrp in avsl:
-            confs = inst.selections([self.mntGrp])
-        if confs:
-            self.__selector.set(json.loads(str(confs[0])))
-        else:
-            avmg = self.availableMeasurementGroups()
-            if self.mntGrp in avmg:
-                self.__selector.deselect()
-                self.importMntGrp()
-                self.__selector.resetAutomaticComponents(
-                    self.defaultAutomaticComponents)
-                self.updateControllers()
+        self.__mntgrptools.fetchProfile()
 
     ## loads configuration
     def loadConfiguration(self):
@@ -665,7 +656,7 @@ class Settings(object):
     ## provides full names of pool devices
     # \returns JSON string with full names of pool devices
     def __fullDeviceNames(self):
-        pools = self.__getPools()
+        pools = self.__selector.getPools()
         return json.dumps(PoolUtils.getFullDeviceNames(pools))
 
     ## provides full names of pool devices
@@ -700,11 +691,7 @@ class Settings(object):
     ## checks existing controllers of pools for
     #      AutomaticDataSources
     def updateControllers(self):
-        jacps = self.__selector.updateAutomaticComponents(self.__descErrors)
-        if self.__selector["AutomaticComponentGroup"] != jacps:
-            self.__selector["AutomaticComponentGroup"] = jacps
-            self.storeConfiguration()
-        gc.collect()
+        self.__mntgrptools.updateAutomaticDataSources()
 
     ## reset automaticComponentGroup to defaultAutomaticComponents
     def resetAutomaticComponents(self):
@@ -724,30 +711,13 @@ class Settings(object):
     ## provides available Timers from MacroServer pools
     # \returns  available Timers from MacroServer pools
     def __availableTimers(self):
-        pools = self.__getPools()
+        pools = self.__selector.getPools()
         return PoolUtils.getTimers(pools, self.timerFilterList)
 
     ##  provides description of all components
     availableTimers = property(
         __availableTimers,
         doc='provides available Timers from MacroServer pools')
-
-# MntGrp methods
-
-    ## provides full name of Measurement group
-    # \param name alias
-    # \returns full name of Measurement group
-    def findMntGrp(self, name):
-        pools = self.__getPools()
-        return PoolUtils.getMntGrpName(pools, name)
-
-    ## deletes mntgrp
-    # \param name mntgrp name
-    def deleteMntGrp(self, name):
-        self.__mntgrptools.updateMacroServer()
-        self.__mntgrptools.deleteMntGrp(name)
-        inst = self.setConfigInstance()
-        inst.deleteSelection(name)
 
     ## describe datasources
     # \param datasources list for datasource names
@@ -774,81 +744,60 @@ class Settings(object):
             res = describer.components(cp, '', '')
         return res
 
+# MntGrp methods
+
+    ## provides full name of Measurement group
+    # \param name alias
+    # \returns full name of Measurement group
+    def findMntGrp(self, name):
+        pools = self.__selector.getPools()
+        return PoolUtils.getMntGrpName(pools, name)
+
+    ## deletes mntgrp
+    # \param name mntgrp name
+    def deleteMntGrp(self, name):
+        self.__mntgrptools.deleteMntGrp(name)
+
     ## provides configuration of mntgrp
      # \returns string with mntgrp configuration
     def mntGrpConfiguration(self):
-        pools = self.__getPools()
-        self.__mntgrptools.updateMacroServer()
-        if not self.__selector["MntGrp"]:
-            self.switchMntGrp(toActive=False)
-        mntGrpName = self.__selector["MntGrp"]
-        fullname = str(PoolUtils.getMntGrpName(pools, mntGrpName))
-        dpmg = TangoUtils.openProxy(fullname) if fullname else None
-        if not dpmg:
-            return "{}"
-        return str(dpmg.Configuration)
+        return self.__mntgrptools.mntGrpConfiguration()
 
     ## check if active measurement group was changed
     # \returns True if it is different to the current setting
     def isMntGrpChanged(self):
-        pools = self.__getPools()
-        mgconf = json.loads(self.mntGrpConfiguration())
-        self.__mntgrptools.updateMacroServer()
-        self.__mntgrptools.updateConfigServer()
-        self.__mntgrptools.dataSources = self.dataSources
-        self.__mntgrptools.disableDataSources = self.disableDataSources
-        self.__mntgrptools.components = list(
+        dataSources = self.dataSources
+        disableDataSources = self.disableDataSources
+        components = list(
             set(self.components) | set(self.automaticComponents) |
             set(self.mandatoryComponents()))
-        llconf, _ = self.__mntgrptools.createMntGrp(pools)
-        self.storeConfiguration()
-        lsconf = json.loads(llconf)
-        return not Utils.compareDict(mgconf, lsconf)
+        return self.__mntgrptools.isMntGrpChanged(
+            components, dataSources,
+            disableDataSources)
 
     ## set active measurement group from components
     # \returns string with mntgrp configuration
     def updateMntGrp(self):
-        pools = self.__getPools()
-        self.__mntgrptools.updateMacroServer()
-        self.__mntgrptools.updateConfigServer()
-        self.__mntgrptools.dataSources = self.dataSources
-        self.__mntgrptools.disableDataSources = self.disableDataSources
-        self.__mntgrptools.components = list(
+        dataSources = self.dataSources
+        disableDataSources = self.disableDataSources
+        components = list(
             set(self.components) | set(self.automaticComponents) |
             set(self.mandatoryComponents()))
-        conf, mntgrp = self.__mntgrptools.createMntGrp(pools)
-        self.storeConfiguration()
-        dpmg = TangoUtils.openProxy(mntgrp)
-        dpmg.Configuration = conf
-        return str(dpmg.Configuration)
+        return self.__mntgrptools.updateMntGrp(
+            components, dataSources,
+            disableDataSources)
 
     ## switch to active measurement
     def switchMntGrp(self, toActive=True):
-        pools = self.__getPools()
-        if not self.__selector["MntGrp"] or toActive:
-            ms = self.getMacroServer()
-            amntgrp = MSUtils.getEnv('ActiveMntGrp', ms)
-            if not toActive or amntgrp:
-                self.__selector["MntGrp"] = amntgrp
-        self.fetchConfiguration()
-        jconf = self.mntGrpConfiguration()
-        self.__mntgrptools.updateConfigServer()
-        if self.__mntgrptools.importMntGrp(jconf, pools):
-            self.storeConfiguration()
+        self.__mntgrptools.switchMntGrp(toActive)
 
     ## import setting from active measurement
     def importMntGrp(self):
-        pools = self.__getPools()
-        self.__mntgrptools.updateMacroServer()
-        self.__mntgrptools.updateConfigServer()
-        jconf = self.mntGrpConfiguration()
-        if self.__mntgrptools.importMntGrp(jconf, pools):
-            self.storeConfiguration()
+        self.__mntgrptools.importMntGrp()
 
     ## available mntgrps
     # \returns list of available measurement groups
     def availableMeasurementGroups(self):
-        self.__mntgrptools.updateMacroServer()
         return self.__mntgrptools.availableMntGrps()
 
 # Dynamic component methods
