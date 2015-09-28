@@ -3,7 +3,7 @@
 	* moving MntGrp methods from Settings to MntGrpTools
 	* making macroserver and configserver in mgt private
 	* adding importMntGrp in fetchConfiguration if non available selection
-	* tagged as v1.20.5
+	* tagged as v1.21.0
 
 2015-09-21 Jan Kotanski <jankotan@gmail.com>
 	* fixing Description attribute
