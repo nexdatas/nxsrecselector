@@ -1,4 +1,5 @@
 2015-09-XX Jan Kotanski <jankotan@gmail.com>
+	* moving MntGrpTools to Profile
 	* moving MntGrp methods from Settings to MntGrpTools
 	* making macroserver and configserver in mgt private
 	* adding importMntGrp in fetchConfiguration if non available selection

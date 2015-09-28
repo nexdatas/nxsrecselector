@@ -21,11 +21,12 @@
 """  NeXus Sardana Recorder Settings implementation """
 
 import json
+import gc
 import PyTango
 from .Describer import Describer
 from .DynamicComponent import DynamicComponent
 from .Utils import Utils, TangoUtils, MSUtils, PoolUtils
-from .MntGrpTools import MntGrpTools
+from .Profile import Profile
 from .Selector import Selector
 from .MacroServerPools import MacroServerPools
 
@@ -47,7 +48,8 @@ class Settings(object):
         ## configuration selection
         self.__selector = Selector(self.__msp)
 
-        self.__mntgrptools = MntGrpTools(self.__selector)
+        ## profile
+        self.__profile = Profile(self.__selector)
 
         ## configuration file
         self.configFile = '/tmp/nxsrecconfig.cfg'
@@ -136,7 +138,7 @@ class Settings(object):
     ## provides description component errors
     # \returns list of available description component errors
     def __getDescriptionErrors(self):
-        return self.__mntgrptools.descErrors
+        return self.__profile.descErrors
 
     ## provides automatic components
     descriptionErrors = property(__getDescriptionErrors,
@@ -181,12 +183,12 @@ class Settings(object):
     ## get method for defaultAutomaticComponents attribute
     # \returns list of components
     def __getDefaultAutomaticComponents(self):
-        return self.__mntgrptools.defaultAutomaticComponents
+        return self.__profile.defaultAutomaticComponents
 
     ## set method for defaultAutomaticComponents attribute
     # \param components list of components
     def __setDefaultAutomaticComponents(self, components):
-        self.__mntgrptools.defaultAutomaticComponents = components
+        self.__profile.defaultAutomaticComponents = components
 
     ## default AutomaticComponents
     defaultAutomaticComponents = property(
@@ -576,11 +578,11 @@ class Settings(object):
 
     ## saves configuration
     def storeConfiguration(self):
-        self.__mntgrptools.storeProfile()
+        self.__profile.store()
 
     ## fetch configuration
     def fetchConfiguration(self):
-        self.__mntgrptools.fetchProfile()
+        self.__profile.fetch()
 
     ## loads configuration
     def loadConfiguration(self):
@@ -691,7 +693,8 @@ class Settings(object):
     ## checks existing controllers of pools for
     #      AutomaticDataSources
     def updateControllers(self):
-        self.__mntgrptools.updateAutomaticDataSources()
+        self.__profile.updateAutomaticComponents()
+        gc.collect()
 
     ## reset automaticComponentGroup to defaultAutomaticComponents
     def resetAutomaticComponents(self):
@@ -756,12 +759,12 @@ class Settings(object):
     ## deletes mntgrp
     # \param name mntgrp name
     def deleteMntGrp(self, name):
-        self.__mntgrptools.deleteMntGrp(name)
+        self.__profile.delete(name)
 
     ## provides configuration of mntgrp
      # \returns string with mntgrp configuration
     def mntGrpConfiguration(self):
-        return self.__mntgrptools.mntGrpConfiguration()
+        return self.__profile.mntGrpConfiguration()
 
     ## check if active measurement group was changed
     # \returns True if it is different to the current setting
@@ -771,7 +774,7 @@ class Settings(object):
         components = list(
             set(self.components) | set(self.automaticComponents) |
             set(self.mandatoryComponents()))
-        return self.__mntgrptools.isMntGrpChanged(
+        return self.__profile.isMntGrpChanged(
             components, dataSources,
             disableDataSources)
 
@@ -783,22 +786,22 @@ class Settings(object):
         components = list(
             set(self.components) | set(self.automaticComponents) |
             set(self.mandatoryComponents()))
-        return self.__mntgrptools.updateMntGrp(
+        return self.__profile.update(
             components, dataSources,
             disableDataSources)
 
     ## switch to active measurement
     def switchMntGrp(self, toActive=True):
-        self.__mntgrptools.switchMntGrp(toActive)
+        self.__profile.switch(toActive)
 
     ## import setting from active measurement
     def importMntGrp(self):
-        self.__mntgrptools.importMntGrp()
+        self.__profile.importMntGrp()
 
     ## available mntgrps
     # \returns list of available measurement groups
     def availableMeasurementGroups(self):
-        return self.__mntgrptools.availableMntGrps()
+        return self.__profile.availableMntGrps()
 
 # Dynamic component methods
 
