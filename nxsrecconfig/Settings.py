@@ -57,8 +57,6 @@ class Settings(object):
 
         ## timer filter list
         self.timerFilterList = ["*dgg*", "*/ctctrl0*"]
-        ## default automaticComponents
-        self.defaultAutomaticComponents = []
         ## default device groups
         self.__defaultDeviceGroups = \
             '{"timer": ["*exp_t*"], "dac": ["*exp_dac*"], ' \
@@ -69,8 +67,6 @@ class Settings(object):
         self.__deviceGroups = str(self.__defaultDeviceGroups)
         ## administator data
         self.__adminData = '[]'
-        ## error descriptions
-        self.__descErrors = []
 
         self.__setupSelection()
 
@@ -140,7 +136,7 @@ class Settings(object):
     ## provides description component errors
     # \returns list of available description component errors
     def __getDescriptionErrors(self):
-        return self.__descErrors
+        return self.__mntgrptools.descErrors
 
     ## provides automatic components
     descriptionErrors = property(__getDescriptionErrors,
@@ -181,6 +177,22 @@ class Settings(object):
         doc='provides a list of Disable DataSources')
 
 ## read-write variables
+
+    ## get method for defaultAutomaticComponents attribute
+    # \returns list of components
+    def __getDefaultAutomaticComponents(self):
+        return self.__mntgrptools.defaultAutomaticComponents
+
+    ## set method for defaultAutomaticComponents attribute
+    # \param components list of components
+    def __setDefaultAutomaticComponents(self, components):
+        self.__mntgrptools.defaultAutomaticComponents = components
+
+    ## default AutomaticComponents
+    defaultAutomaticComponents = property(
+        __getDefaultAutomaticComponents,
+        __setDefaultAutomaticComponents,
+        doc='default Automatic components')
 
     ## get method for configDevice attribute
     # \returns name of configDevice
@@ -564,13 +576,11 @@ class Settings(object):
 
     ## saves configuration
     def storeConfiguration(self):
-        self.mntgrptools.storeConfiguration()
+        self.__mntgrptools.storeProfile()
 
     ## fetch configuration
     def fetchConfiguration(self):
-        self.mntgrptools.defaultAutomaticComponents = \
-            self.defaultAutomaticComponents
-        self.mntgrptools.fetchConfiguration()
+        self.__mntgrptools.fetchProfile()
 
     ## loads configuration
     def loadConfiguration(self):
@@ -681,7 +691,7 @@ class Settings(object):
     ## checks existing controllers of pools for
     #      AutomaticDataSources
     def updateControllers(self):
-        self.mntgrptools.updateControllers()
+        self.__mntgrptools.updateAutomaticDataSources()
 
     ## reset automaticComponentGroup to defaultAutomaticComponents
     def resetAutomaticComponents(self):
@@ -751,50 +761,39 @@ class Settings(object):
     ## provides configuration of mntgrp
      # \returns string with mntgrp configuration
     def mntGrpConfiguration(self):
-        self.mntgrptools.defaultAutomaticComponents = \
-            self.defaultAutomaticComponents
         return self.__mntgrptools.mntGrpConfiguration()
 
     ## check if active measurement group was changed
     # \returns True if it is different to the current setting
     def isMntGrpChanged(self):
-        self.mntgrptools.defaultAutomaticComponents = \
-            self.defaultAutomaticComponents
-        self.__mntgrptools.dataSources = self.dataSources
-        self.__mntgrptools.disableDataSources = self.disableDataSources
-        self.__mntgrptools.components = list(
+        dataSources = self.dataSources
+        disableDataSources = self.disableDataSources
+        components = list(
             set(self.components) | set(self.automaticComponents) |
             set(self.mandatoryComponents()))
-        return self.__mntgrptools.isMntGrpChanged()
+        return self.__mntgrptools.isMntGrpChanged(
+            components, dataSources,
+            disableDataSources)
 
     ## set active measurement group from components
     # \returns string with mntgrp configuration
     def updateMntGrp(self):
-        self.mntgrptools.defaultAutomaticComponents = \
-            self.defaultAutomaticComponents
-        self.__mntgrptools.dataSources = self.dataSources
-        self.__mntgrptools.disableDataSources = self.disableDataSources
-        self.__mntgrptools.components = list(
+        dataSources = self.dataSources
+        disableDataSources = self.disableDataSources
+        components = list(
             set(self.components) | set(self.automaticComponents) |
             set(self.mandatoryComponents()))
-        return self.__mntgrptools.updateMntGrp()
+        return self.__mntgrptools.updateMntGrp(
+            components, dataSources,
+            disableDataSources)
 
     ## switch to active measurement
     def switchMntGrp(self, toActive=True):
-        self.mntgrptools.defaultAutomaticComponents = \
-            self.defaultAutomaticComponents
         self.__mntgrptools.switchMntGrp(toActive)
 
     ## import setting from active measurement
     def importMntGrp(self):
-        self.mntgrptools.defaultAutomaticComponents = \
-            self.defaultAutomaticComponents
         self.__mntgrptools.importMntGrp()
-#        self.__mntgrptools.updateMacroServer()
-#        self.__mntgrptools.updateConfigServer()
-#        jconf = self.mntGrpConfiguration()
-#        if self.__mntgrptools.importMntGrp(jconf):
-#            self.storeConfiguration()
 
     ## available mntgrps
     # \returns list of available measurement groups

@@ -23,7 +23,7 @@
 import json
 import gc
 
-from .Utils import TangoUtils, PoolUtils, MSUtils
+from .Utils import TangoUtils, PoolUtils, MSUtils, Utils
 from .Describer import Describer
 
 try:
@@ -32,6 +32,9 @@ try:
     NXSTOOLS = True
 except ImportError:
     NXSTOOLS = False
+
+RECORDER_NAMES = ['serialno', 'end_time', 'start_time',
+                  'point_nb', 'timestamps', 'scan_title']
 
 
 ## MntGrp Tools
@@ -46,49 +49,49 @@ class MntGrpTools(object):
         ## default mntgrp
         self.__defaultmntgrp = 'nxsmntgrp'
 
-        ## Record names set by sardana
-        self.recorder_names = ['serialno', 'end_time', 'start_time',
-                               'point_nb', 'timestamps', 'scan_title']
         ## macro server name
-        self.__macroServer = None
-        ## configuration serve proxy
+        self.__macroServerName = None
+        ## configuration server proxy
         self.__configServer = None
-        ## component list
-        self.components = []
-        ## datasource list
-        self.dataSources = []
-        ## disable datasource list
-        self.disableDataSources = []
+        ## pool server proxies
+        self.__pools = None
+
         ## default automaticComponents
         self.defaultAutomaticComponents = []
+        ## error descriptions
+        self.descErrors = []
 
-    def updateMacroServer(self):
-        self.__macroServer = self.__selector.getMacroServer()
+    def __updateMacroServer(self):
+        self.__macroServerName = self.__selector.getMacroServer()
 
-    def updateConfigServer(self):
+    def __updateConfigServer(self):
         self.__configServer = self.__selector.setConfigInstance()
+
+    def __updatePools(self):
+        self.__pools = self.__selector.getPools()
 
     ## deletes mntgrp
     # \param name mntgrp name
     def deleteMntGrp(self, name):
-        self.updateMacroServer()
-        pool = None
-        msp = TangoUtils.openProxy(self.__macroServer)
-        pn = msp.get_property("PoolNames")["PoolNames"]
+        self.__updatePools()
         fpool = None
-        for pl in pn:
-            pool = TangoUtils.openProxy(pl)
+        for pool in self.__pools:
             if not fpool:
                 fpool = pool
+                break
         if fpool:
-            TangoUtils.command(fpool, "DeleteElement",
-                          str(name))
+            TangoUtils.command(
+                fpool, "DeleteElement", str(name))
         inst = self.__selector.setConfigInstance()
         inst.deleteSelection(name)
 
     ## set active measurement group from components
-    def createMntGrp(self):
-        pools = self.__selector.getPools()
+    # \param components  component list
+    # \param datasources datasource list
+    # \param disabledatasources disable datasource list
+    def createMntGrp(self, components, datasources, disabledatasources):
+        self.__updatePools()
+        self.__updateMacroServer()
         cnf = {}
         cnf['controllers'] = {}
         cnf['description'] = "Measurement Group"
@@ -97,38 +100,39 @@ class MntGrpTools(object):
         dontdisplay = set(json.loads(self.__selector["HiddenElements"]))
 
         ltimers = set()
-        timer = self.__prepareTimers(cnf, ltimers, pools)
+        timer = self.__prepareTimers(cnf, ltimers)
 
         aliases = self.__fetchChannels(
-            dontdisplay, set(ltimers) | set([timer]), pools)
+            components, datasources, disabledatasources,
+            dontdisplay, set(ltimers) | set([timer]))
 
-        mfullname = self.__prepareMntGrp(cnf, timer, pools)
+        mfullname = self.__prepareMntGrp(cnf, timer)
 
         index = 0
-        fullnames = PoolUtils.getFullDeviceNames(pools, aliases)
+        fullnames = PoolUtils.getFullDeviceNames(self.__pools, aliases)
         for al in aliases:
             index = self.__addDevice(
-                al, dontdisplay, pools, cnf,
+                al, dontdisplay, cnf,
                 al if al in ltimers else timer, index, fullnames)
         conf = json.dumps(cnf)
         return conf, mfullname
 
     ## import setting from active measurement
     def __importMntGrp(self, jconf):
-        pools = self.__selector.getPools()
+        self.__updatePools()
         conf = json.loads(jconf)
         otimers = None
         timers = {}
 
         dsg = json.loads(self.__selector["DataSourceGroup"])
         hel = json.loads(self.__selector["HiddenElements"])
-        self.__clearChannels(dsg, hel, pools)
+        self.__clearChannels(dsg, hel)
 
         # fill in dsg, timers hel
         if "timer" in conf.keys() and "controllers" in conf.keys():
             tangods = self.__readChannels(conf, timers, dsg, hel)
             self.__readTangoChannels(conf, tangods, dsg, hel)
-            otimers = self.__reorderTimers(conf, timers, dsg, hel, pools)
+            otimers = self.__reorderTimers(conf, timers, dsg, hel)
 
         changed = False
         jdsg = json.dumps(dsg)
@@ -150,20 +154,20 @@ class MntGrpTools(object):
     ## available mntgrps
     # \returns list of available measurement groups
     def availableMntGrps(self):
-        self.updateMacroServer()
+        self.__updateMacroServer()
+        self.__updatePools()
         mntgrps = None
         pool = None
-        msp = TangoUtils.openProxy(self.__macroServer)
-        pn = msp.get_property("PoolNames")["PoolNames"]
+        self.__updatePools()
         fpool = None
-        for pl in pn:
-            pool = TangoUtils.openProxy(pl)
+        for pool in self.__pools:
             if not fpool:
                 fpool = pool
+                break
         if fpool:
             mntgrps = PoolUtils.getMntGrps([fpool])
         mntgrps = mntgrps if mntgrps else []
-        amntgrp = MSUtils.getEnv('ActiveMntGrp', self.__macroServer)
+        amntgrp = MSUtils.getEnv('ActiveMntGrp', self.__macroServerName)
 
         try:
             if mntgrps:
@@ -173,40 +177,44 @@ class MntGrpTools(object):
             pass
         return mntgrps
 
-
-
     ## provides configuration of mntgrp
      # \returns string with mntgrp configuration
     def mntGrpConfiguration(self):
-        pools = self.__selector.getPools()
-        self.updateMacroServer()
+        self.__updatePools()
+        self.__updateMacroServer()
         if not self.__selector["MntGrp"]:
             self.switchMntGrp(toActive=False)
         mntGrpName = self.__selector["MntGrp"]
-        fullname = str(PoolUtils.getMntGrpName(pools, mntGrpName))
+        fullname = str(PoolUtils.getMntGrpName(self.__pools, mntGrpName))
         dpmg = TangoUtils.openProxy(fullname) if fullname else None
         if not dpmg:
             return "{}"
         return str(dpmg.Configuration)
 
     ## check if active measurement group was changed
+    # \param components  component list
+    # \param datasources datasource list
+    # \param disabledatasources disable datasource list
     # \returns True if it is different to the current setting
-    def isMntGrpChanged(self):
+    def isMntGrpChanged(self, components, datasources, disabledatasources):
         mgconf = json.loads(self.mntGrpConfiguration())
-        self.updateMacroServer()
-        self.updateConfigServer()
-        llconf, _ = self.createMntGrp()
-        self.storeConfiguration()
+        self.__updateConfigServer()
+        llconf, _ = self.createMntGrp(
+            components, datasources, disabledatasources)
+        self.storeProfile()
         lsconf = json.loads(llconf)
         return not Utils.compareDict(mgconf, lsconf)
 
     ## set active measurement group from components
+    # \param components  component list
+    # \param datasources datasource list
+    # \param disabledatasources disable datasource list
     # \returns string with mntgrp configuration
-    def updateMntGrp(self):
-        self.updateMacroServer()
-        self.updateConfigServer()
-        conf, mntgrp = self.createMntGrp()
-        self.storeConfiguration()
+    def updateMntGrp(self, components, datasources, disabledatasources):
+        self.__updateConfigServer()
+        conf, mntgrp = self.createMntGrp(
+            components, datasources, disabledatasources)
+        self.storeProfile()
         dpmg = TangoUtils.openProxy(mntgrp)
         dpmg.Configuration = conf
         return str(dpmg.Configuration)
@@ -218,33 +226,33 @@ class MntGrpTools(object):
             amntgrp = MSUtils.getEnv('ActiveMntGrp', ms)
             if not toActive or amntgrp:
                 self.__selector["MntGrp"] = amntgrp
-        self.fetchConfiguration()
+        self.fetchProfile()
         jconf = self.mntGrpConfiguration()
-        self.updateConfigServer()
+        self.__updateConfigServer()
         if self.__importMntGrp(jconf):
-            self.storeConfiguration()
+            self.storeProfile()
 
     ## import setting from active measurement
     def importMntGrp(self):
-        self.updateMacroServer()
-        self.updateConfigServer()
+        self.__updateMacroServer()
+        self.__updateConfigServer()
         jconf = self.mntGrpConfiguration()
         if self.__importMntGrp(jconf):
-            self.storeConfiguration()
+            self.storeProfile()
 
     ## saves configuration
-    def storeConfiguration(self):
+    def storeProfile(self):
         inst = self.__selector.setConfigInstance()
         conf = str(json.dumps(self.__selector.get()))
         inst.selection = conf
-        inst.storeSelection(self.mntGrp)
+        inst.storeSelection(self.__selector["MntGrp"])
 
     ## fetch configuration
-    def fetchConfiguration(self):
+    def fetchProfile(self):
         inst = self.__selector.setConfigInstance()
         avsl = inst.availableSelections()
         confs = None
-        if self.mntGrp in avsl:
+        if self.__selector["MntGrp"] in avsl:
             confs = inst.selections([self.__selector["MntGrp"]])
         if confs:
             self.__selector.set(json.loads(str(confs[0])))
@@ -255,20 +263,19 @@ class MntGrpTools(object):
                 self.importMntGrp()
                 self.__selector.resetAutomaticComponents(
                     self.defaultAutomaticComponents)
-                self.updateControllers()
+                self.updateAutomaticDataSources()
 
     ## checks existing controllers of pools for
     #      AutomaticDataSources
-    def updateControllers(self):
-        jacps = self.__selector.updateAutomaticComponents(self.__descErrors)
+    def updateAutomaticDataSources(self):
+        jacps = self.__selector.updateAutomaticComponents(self.descErrors)
         if self.__selector["AutomaticComponentGroup"] != jacps:
             self.__selector["AutomaticComponentGroup"] = jacps
-            self.storeConfiguration()
+            self.storeProfile()
         gc.collect()
 
-    @classmethod
-    def __clearChannels(cls, dsg, hel, pools):
-        channels = PoolUtils.getExperimentalChannels(pools)
+    def __clearChannels(self, dsg, hel):
+        channels = PoolUtils.getExperimentalChannels(self.__pools)
         for ch in channels:
             if ch in dsg.keys():
                 dsg[ch] = False
@@ -313,8 +320,8 @@ class MntGrpTools(object):
                                     if not bool(ch['plot_type']):
                                         hel.append(ch['name'])
 
-    def __reorderTimers(self, conf, timers, dsg, hel, pools):
-        dtimers = PoolUtils.getAliases(pools, timers)
+    def __reorderTimers(self, conf, timers, dsg, hel):
+        dtimers = PoolUtils.getAliases(self.__pools, timers)
         otimers = list(dtimers.values())
         otimers.remove(dtimers[conf["timer"]])
         otimers.insert(0, dtimers[conf["timer"]])
@@ -332,15 +339,15 @@ class MntGrpTools(object):
         return otimers
 
     ## checks client records
-    def __checkClientRecords(self, datasources, pools):
+    def __checkClientRecords(self, components, datasources):
 
         describer = Describer(self.__configServer, True)
-        frecords = PoolUtils.getFullDeviceNames(pools)
+        frecords = PoolUtils.getFullDeviceNames(self.__pools)
         dsres = describer.dataSources(
             set(datasources) - set(frecords.keys()), 'CLIENT')[0]
         records = [str(dsr.record) for dsr in dsres.values()]
 
-        cpres = describer.components(self.components,
+        cpres = describer.components(components,
             '', 'CLIENT')
         for grp in cpres:
             for dss in grp.values():
@@ -351,24 +358,19 @@ class MntGrpTools(object):
         urecords = json.loads(self.__selector["DataRecord"]).keys()
         precords = frecords.values()
         missing = sorted(set(records)
-                         - set(self.recorder_names)
+                         - set(RECORDER_NAMES)
                          - set(urecords)
                          - set(precords))
         if missing:
             raise Exception(
                 "User Data not defined %s" % str(missing))
 
-    @classmethod
-    def __createMntGrpDevice(cls, ms, mntGrpName, timer, pools):
-        pool = None
-        amntgrp = MSUtils.getEnv('ActiveMntGrp', ms)
-        msp = TangoUtils.openProxy(ms)
-        pn = msp.get_property("PoolNames")["PoolNames"]
+    def __createMntGrpDevice(self, mntGrpName, timer):
+        amntgrp = MSUtils.getEnv('ActiveMntGrp', self.__macroServerName)
         apool = None
         lpool = [None, 0]
         fpool = None
-        for pl in pn:
-            pool = TangoUtils.openProxy(pl)
+        for pool in self.__pools:
             if not fpool:
                 fpool = pool
             mntgrps = PoolUtils.getMntGrps([pool])
@@ -383,22 +385,23 @@ class MntGrpTools(object):
         if not apool and fpool:
             apool = fpool
         fpool = None
-        if not apool and len(pools) > 0:
-            apool = pools[0]
+        if not apool and len(self.__pools) > 0:
+            apool = self.__pools[0]
         if apool:
             TangoUtils.command(apool, "CreateMeasurementGroup",
                           [mntGrpName, timer])
-            mfullname = str(PoolUtils.getMntGrpName(pools, mntGrpName))
+            mfullname = str(PoolUtils.getMntGrpName(self.__pools, mntGrpName))
         return mfullname
 
     ## prepares timers
-    def __prepareTimers(self, cnf, ltimers, pools):
+    def __prepareTimers(self, cnf, ltimers):
         mtimers = json.loads(self.__selector["Timer"])
         timer = mtimers[0] if mtimers else ''
         if not timer:
             raise Exception(
                 "Timer or Monitor not defined")
-        fullname = PoolUtils.getFullDeviceNames(pools, [timer])[timer]
+        fullname = PoolUtils.getFullDeviceNames(
+            self.__pools, [timer])[timer]
         if not fullname:
             raise Exception(
                 "Timer or Monitor cannot be found amount the servers")
@@ -411,18 +414,19 @@ class MntGrpTools(object):
                 ltimers.remove(timer)
         return timer
 
-    def __fetchChannels(self, dontdisplay, timers, pools):
+    def __fetchChannels(self, components, datasources, disabledatasources,
+                        dontdisplay, timers):
         aliases = []
 
-        self.__checkClientRecords(self.dataSources, pools)
-        if isinstance(self.dataSources, list):
-            aliases = list(self.dataSources)
+        self.__checkClientRecords(components, datasources)
+        if isinstance(datasources, list):
+            aliases = list(datasources)
         pchannels = json.loads(self.__selector["OrderedChannels"])
         aliases.extend(
-            list(set(pchannels) & set(self.disableDataSources)))
+            list(set(pchannels) & set(disabledatasources)))
 
         describer = Describer(self.__configServer, True)
-        res = describer.components(self.components, 'STEP', 'CLIENT')
+        res = describer.components(components, 'STEP', 'CLIENT')
 
         for grp in res:
             for cp, dss in grp.items():
@@ -446,18 +450,16 @@ class MntGrpTools(object):
         return pchannels
 
     ## sets mntgrp
-    def __prepareMntGrp(self, cnf, timer, pools):
+    def __prepareMntGrp(self, cnf, timer):
         if not self.__selector["MntGrp"]:
             self.__selector["MntGrp"] = self.__defaultmntgrp
         mntGrpName = self.__selector["MntGrp"]
-        mfullname = str(PoolUtils.getMntGrpName(pools, mntGrpName))
+        mfullname = str(PoolUtils.getMntGrpName(self.__pools, mntGrpName))
 
         if not mfullname:
-            mfullname = self.__createMntGrpDevice(
-                self.__macroServer,
-                mntGrpName, timer, pools)
+            mfullname = self.__createMntGrpDevice(mntGrpName, timer)
 
-        MSUtils.setEnv('ActiveMntGrp', str(mntGrpName), self.__macroServer)
+        MSUtils.setEnv('ActiveMntGrp', str(mntGrpName), self.__macroServerName)
         cnf['label'] = mntGrpName
         return mfullname
 
@@ -558,20 +560,20 @@ class MntGrpTools(object):
     # \param cls class instance
     # \param device device alias
     # \param dontdisplay list of devices disable for display
-    # \param pools list of give pools
     # \param cnf configuration dictionary
     # \param timer device timer
     # \param index device index
     # \param fullnames dictionary with full names
     # \returns next device index
-    def __addDevice(self, device, dontdisplay, pools, cnf,
+    def __addDevice(self, device, dontdisplay, cnf,
                   timer, index, fullnames=None):
         if not fullnames:
-            fullnames = PoolUtils.getFullDeviceNames(pools, [device, timer])
+            fullnames = PoolUtils.getFullDeviceNames(
+                self.__pools, [device, timer])
 
-        ctrls = PoolUtils.getDeviceControllers(pools, [device])
+        ctrls = PoolUtils.getDeviceControllers(self.__pools, [device])
         ctrl = ctrls[device] if ctrls and device in ctrls.keys() else ""
-        timers = PoolUtils.getFullDeviceNames(pools, [timer])
+        timers = PoolUtils.getFullDeviceNames(self.__pools, [timer])
         fulltimer = fullnames[timer] \
             if timers and timer in fullnames.keys() else ""
         if ctrl:
