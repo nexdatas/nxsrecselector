@@ -26,7 +26,7 @@ import PyTango
 from .Describer import Describer
 from .DynamicComponent import DynamicComponent
 from .Utils import Utils, TangoUtils, MSUtils, PoolUtils
-from .Profile import Profile
+from .ProfileManager import ProfileManager
 from .Selector import Selector
 from .MacroServerPools import MacroServerPools
 
@@ -49,7 +49,7 @@ class Settings(object):
         self.__selector = Selector(self.__msp)
 
         ## profile
-        self.__profile = Profile(self.__selector)
+        self.__profileManager = ProfileManager(self.__selector)
 
         ## configuration file
         self.configFile = '/tmp/nxsrecconfig.cfg'
@@ -138,7 +138,7 @@ class Settings(object):
     ## provides description component errors
     # \returns list of available description component errors
     def __getDescriptionErrors(self):
-        return self.__profile.descErrors
+        return self.__profileManager.descErrors
 
     ## provides automatic components
     descriptionErrors = property(__getDescriptionErrors,
@@ -183,12 +183,12 @@ class Settings(object):
     ## get method for defaultAutomaticComponents attribute
     # \returns list of components
     def __getDefaultAutomaticComponents(self):
-        return self.__profile.defaultAutomaticComponents
+        return self.__profileManager.defaultAutomaticComponents
 
     ## set method for defaultAutomaticComponents attribute
     # \param components list of components
     def __setDefaultAutomaticComponents(self, components):
-        self.__profile.defaultAutomaticComponents = components
+        self.__profileManager.defaultAutomaticComponents = components
 
     ## default AutomaticComponents
     defaultAutomaticComponents = property(
@@ -578,11 +578,11 @@ class Settings(object):
 
     ## saves configuration
     def storeConfiguration(self):
-        self.__profile.store()
+        self.__profileManager.storeProfile()
 
     ## fetch configuration
     def fetchConfiguration(self):
-        self.__profile.fetch()
+        self.__profileManager.fetchProfile()
 
     ## loads configuration
     def loadConfiguration(self):
@@ -693,7 +693,7 @@ class Settings(object):
     ## checks existing controllers of pools for
     #      AutomaticDataSources
     def updateControllers(self):
-        self.__profile.updateAutomaticComponents()
+        self.__profileManager.updateAutomaticComponents()
         gc.collect()
 
     ## reset automaticComponentGroup to defaultAutomaticComponents
@@ -759,12 +759,12 @@ class Settings(object):
     ## deletes mntgrp
     # \param name mntgrp name
     def deleteMntGrp(self, name):
-        self.__profile.delete(name)
+        self.__profileManager.deleteProfile(name)
 
     ## provides configuration of mntgrp
      # \returns string with mntgrp configuration
     def mntGrpConfiguration(self):
-        return self.__profile.mntGrpConfiguration()
+        return self.__profileManager.mntGrpConfiguration()
 
     ## check if active measurement group was changed
     # \returns True if it is different to the current setting
@@ -774,7 +774,7 @@ class Settings(object):
         components = list(
             set(self.components) | set(self.automaticComponents) |
             set(self.mandatoryComponents()))
-        return self.__profile.isMntGrpChanged(
+        return self.__profileManager.isMntGrpChanged(
             components, dataSources,
             disableDataSources)
 
@@ -786,22 +786,22 @@ class Settings(object):
         components = list(
             set(self.components) | set(self.automaticComponents) |
             set(self.mandatoryComponents()))
-        return self.__profile.update(
+        return self.__profileManager.updateProfile(
             components, dataSources,
             disableDataSources)
 
     ## switch to active measurement
     def switchMntGrp(self, toActive=True):
-        self.__profile.switch(toActive)
+        self.__profileManager.switchProfile(toActive)
 
     ## import setting from active measurement
     def importMntGrp(self):
-        self.__profile.importMntGrp()
+        self.__profileManager.importMntGrp()
 
     ## available mntgrps
     # \returns list of available measurement groups
     def availableMeasurementGroups(self):
-        return self.__profile.availableMntGrps()
+        return self.__profileManager.availableMntGrps()
 
 # Dynamic component methods
 

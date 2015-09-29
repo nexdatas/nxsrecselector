@@ -15,10 +15,10 @@
 #
 #    You should have received a copy of the GNU General Public License
 #    along with nexdatas.  If not, see <http://www.gnu.org/licenses/>.
-## \file Profile.py
+## \file ProfileManager.py
 # tango utilities
 
-"""  Profile """
+"""  ProfileManager """
 
 import json
 
@@ -36,8 +36,8 @@ DEFAULT_RECORD_KEYS = ['serialno', 'end_time', 'start_time',
                        'point_nb', 'timestamps', 'scan_title']
 
 
-## Profile class
-class Profile(object):
+## ProfileManager class
+class ProfileManager(object):
     """  MntGrp Tools """
 
     ## constructor
@@ -101,7 +101,7 @@ class Profile(object):
         self.__updatePools()
         self.__updateMacroServer()
         if not self.__selector["MntGrp"]:
-            self.switch(toActive=False)
+            self.switchProfile(toActive=False)
         mntGrpName = self.__selector["MntGrp"]
         fullname = str(PoolUtils.getMntGrpName(self.__pools, mntGrpName))
         dpmg = TangoUtils.openProxy(fullname) if fullname else None
@@ -119,7 +119,7 @@ class Profile(object):
         self.__updateConfigServer()
         llconf, _ = self.__createMntGrpConf(
             components, datasources, disabledatasources)
-        self.store()
+        self.storeProfile()
         lsconf = json.loads(llconf)
         return not Utils.compareDict(mgconf, lsconf)
 
@@ -129,44 +129,44 @@ class Profile(object):
         self.__updateConfigServer()
         jconf = self.mntGrpConfiguration()
         if self.__setFromMntGrpConf(jconf):
-            self.store()
+            self.storeProfile()
 
     ## set active measurement group from components
     # \param components  component list
     # \param datasources datasource list
     # \param disabledatasources disable datasource list
     # \returns string with mntgrp configuration
-    def update(self, components, datasources, disabledatasources):
+    def updateProfile(self, components, datasources, disabledatasources):
         self.__updateConfigServer()
         conf, mntgrp = self.__createMntGrpConf(
             components, datasources, disabledatasources)
-        self.store()
+        self.storeProfile()
         dpmg = TangoUtils.openProxy(mntgrp)
         dpmg.Configuration = conf
         return str(dpmg.Configuration)
 
-    ## switch to active measurement
-    def switch(self, toActive=True):
+    ## switchProfile to active measurement
+    def switchProfile(self, toActive=True):
         if not self.__selector["MntGrp"] or toActive:
             ms = self.__selector.getMacroServer()
             amntgrp = MSUtils.getEnv('ActiveMntGrp', ms)
             if not toActive or amntgrp:
                 self.__selector["MntGrp"] = amntgrp
-        self.fetch()
+        self.fetchProfile()
         jconf = self.mntGrpConfiguration()
         self.__updateConfigServer()
         if self.__setFromMntGrpConf(jconf):
-            self.store()
+            self.storeProfile()
 
     ## saves configuration
-    def store(self):
+    def storeProfile(self):
         inst = self.__selector.setConfigInstance()
         conf = str(json.dumps(self.__selector.get()))
         inst.selection = conf
         inst.storeSelection(self.__selector["MntGrp"])
 
     ## fetch configuration
-    def fetch(self):
+    def fetchProfile(self):
         inst = self.__selector.setConfigInstance()
         avsl = inst.availableSelections()
         confs = None
@@ -185,7 +185,7 @@ class Profile(object):
 
     ## deletes mntgrp
     # \param name mntgrp name
-    def delete(self, name):
+    def deleteProfile(self, name):
         self.__updatePools()
         fpool = None
         for pool in self.__pools:
@@ -271,7 +271,7 @@ class Profile(object):
         jacps = self.__selector.updateAutomaticComponents(self.descErrors)
         if self.__selector["AutomaticComponentGroup"] != jacps:
             self.__selector["AutomaticComponentGroup"] = jacps
-            self.store()
+            self.storeProfile()
 
     def __clearChannels(self, dsg, hel):
         channels = PoolUtils.getExperimentalChannels(self.__pools)
