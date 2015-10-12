@@ -158,7 +158,7 @@ class Describer(object):
             for ds in dss.keys():
                 for vds in dss[ds]:
                     if (not strategy or vds.mode == strategy) and \
-                        (not dstype or vds.dstype == dstype):
+                       (not dstype or vds.dstype == dstype):
                         elem = {}
                         elem["dsname"] = ds
                         elem["strategy"] = vds.mode
@@ -261,7 +261,7 @@ class Describer(object):
 
     def __getDataSourceAttributes(self, cp):
         xmlc = TangoUtils.command(self.__nexusconfig_device,
-                             "components", [cp])
+                                  "components", [cp])
         if not len(xmlc) > 0:
             return ExDSDict()
         return self.__getDSFromXML(xmlc[0])
@@ -274,7 +274,7 @@ class Describer(object):
                 cv.update(sv)
             self.__nexusconfig_device.variables = json.dumps(cv)
         xmlc = TangoUtils.command(self.__nexusconfig_device,
-                             "instantiatedComponents", [cp])
+                                  "instantiatedComponents", [cp])
         if not len(xmlc) > 0:
             return ExDSDict()
         return self.__getDSFromXML(xmlc[0])
@@ -364,7 +364,7 @@ class Describer(object):
         record = None
         try:
             dsource = TangoUtils.command(self.__nexusconfig_device,
-                                    "dataSources", [str(name)])
+                                         "dataSources", [str(name)])
         except (PyTango.DevFailed, PyTango.Except, PyTango.DevError):
             dsource = []
         if len(dsource) > 0:

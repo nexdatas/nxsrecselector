@@ -95,8 +95,7 @@ class CheckerThread(threading.Thread):
             try:
                 dp = PyTango.DeviceProxy(ds.device or ds.name)
                 state = dp.command_inout("State")
-                if state in [
-                    PyTango.DevState.FAULT]:
+                if state in [PyTango.DevState.FAULT]:
                     raise FaultStateError("FAULT STATE")
                 dp.ping()
                 if not ds.attr:
@@ -105,8 +104,7 @@ class CheckerThread(threading.Thread):
                             _ = getattr(dp, gattr)
                 else:
                     _ = getattr(dp, ds.attr)
-                if state in [
-                    PyTango.DevState.ALARM]:
+                if state in [PyTango.DevState.ALARM]:
                     raise AlarmStateError("ALARM STATE")
             except AlarmStateError as e:
                 checkeritem.message = "ALARM_STATE"

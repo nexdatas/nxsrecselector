@@ -96,7 +96,7 @@ class ProfileManager(object):
         return mntgrps
 
     ## provides configuration of mntgrp
-     # \returns string with mntgrp configuration
+    # \returns string with mntgrp configuration
     def mntGrpConfiguration(self):
         self.__updatePools()
         self.__updateMacroServer()
@@ -346,8 +346,7 @@ class ProfileManager(object):
             set(datasources) - set(frecords.keys()), 'CLIENT')[0]
         records = [str(dsr.record) for dsr in dsres.values()]
 
-        cpres = describer.components(components,
-            '', 'CLIENT')
+        cpres = describer.components(components, '', 'CLIENT')
         for grp in cpres:
             for dss in grp.values():
                 for dsrs in dss.values():
@@ -388,7 +387,7 @@ class ProfileManager(object):
             apool = self.__pools[0]
         if apool:
             TangoUtils.command(apool, "CreateMeasurementGroup",
-                          [mntGrpName, timer])
+                               [mntGrpName, timer])
             mfullname = str(PoolUtils.getMntGrpName(self.__pools, mntGrpName))
         return mfullname
 
@@ -538,7 +537,7 @@ class ProfileManager(object):
                     xml = self.__createXMLSource(name, source, exsource)
                     self.__configServer.xmlstring = str(xml)
                     TangoUtils.command(self.__configServer, "storeDataSource",
-                                  str(name))
+                                       str(name))
                     jds[initsource] = name
 
     def __createDataSources(self, tangods, dsg):
@@ -565,7 +564,7 @@ class ProfileManager(object):
     # \param fullnames dictionary with full names
     # \returns next device index
     def __addDevice(self, device, dontdisplay, cnf,
-                  timer, index, fullnames=None):
+                    timer, index, fullnames=None):
         if not fullnames:
             fullnames = PoolUtils.getFullDeviceNames(
                 self.__pools, [device, timer])
@@ -580,7 +579,7 @@ class ProfileManager(object):
             fullname = fullnames[device] \
                 if fullnames and device in fullnames.keys() else ""
             index = self.__addChannel(cnf, ctrl, device, fullname,
-                                     dontdisplay, index)
+                                      dontdisplay, index)
         else:
             describer = Describer(self.__configServer)
             sds = describer.dataSources([device])
@@ -600,7 +599,7 @@ class ProfileManager(object):
     def __addController(cls, cnf, ctrl, fulltimer):
         if 'controllers' not in cnf.keys():
             cnf['controllers'] = {}
-        if not ctrl in cnf['controllers'].keys():
+        if ctrl not in cnf['controllers'].keys():
             cnf['controllers'][ctrl] = {}
             cnf['controllers'][ctrl]['units'] = {}
             cnf['controllers'][ctrl]['units']['0'] = {}
@@ -620,7 +619,7 @@ class ProfileManager(object):
 
         ctrlChannels = cnf['controllers'][ctrl]['units']['0'][
             u'channels']
-        if not fullname in ctrlChannels.keys():
+        if fullname not in ctrlChannels.keys():
             source = PoolUtils.getSource(fullname)
             if not source:
                 source = '%s/%s' % (fullname.encode(), 'Value')
@@ -674,7 +673,7 @@ class ProfileManager(object):
             label = "/".join(srecord[1:])
         else:
             label = record
-        if not fullname in ctrlChannels.keys():
+        if fullname not in ctrlChannels.keys():
             source = record
             shp, dt, ut = TangoUtils.getShapeTypeUnit(source)
             dct = {}

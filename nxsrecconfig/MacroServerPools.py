@@ -63,7 +63,7 @@ class MacroServerPools(object):
             "Door",
             "MntGrp",
             "ScanDir"
-            ]
+        ]
 
     ## updates MacroServer and sardana pools for given door
     # \param door door device name
@@ -184,9 +184,10 @@ class MacroServerPools(object):
             if acp in discomponentgroup.keys():
                 checkeritem = discomponentgroup[acp]
                 channelerrors.append(json.dumps(
-                        {"component": str(acp),
-                         "datasource": str(checkeritem.errords),
-                         "message": str(checkeritem.message)}))
+                    {"component": str(acp),
+                     "datasource": str(checkeritem.errords),
+                     "message": str(checkeritem.message)}
+                ))
                 componentgroup[acp] = checkeritem.active
             else:
                 componentgroup[acp] = True
@@ -265,7 +266,7 @@ class MacroServerPools(object):
         params = ["ScanDir",
                   "ScanFile",
                   "ScanID",
-#                  "ActiveMntGrp",
+                  # "ActiveMntGrp",
                   "NeXusSelectorDevice"]
         res = {}
         msp = TangoUtils.openProxy(self.getMacroServer(door))

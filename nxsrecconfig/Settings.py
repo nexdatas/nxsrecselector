@@ -82,7 +82,7 @@ class Settings(object):
                 Streams.log_info = server.log_info
             if hasattr(self.__server, "log_debug"):
                 Streams.log_debug = server.log_debug
-        
+
         self.__setupSelection()
 
     def __setupSelection(self):
@@ -146,7 +146,7 @@ class Settings(object):
 
     ## provides automatic components
     automaticComponents = property(__automaticComponents,
-                            doc=' provides automatic components')
+                                   doc=' provides automatic components')
 
     ## provides description component errors
     # \returns list of available description component errors
@@ -429,7 +429,7 @@ class Settings(object):
 
     ## the json data string
     mntGrp = property(__getMntGrp, __setMntGrp,
-                           doc='measurement group')
+                      doc='measurement group')
 
     ## get method for door attribute
     # \returns name of door
@@ -444,7 +444,7 @@ class Settings(object):
 
     ## the json data string
     door = property(__getDoor, __setDoor,
-                           doc='door server device name')
+                    doc='door server device name')
 
     ## get method for writerDevice attribute
     # \returns name of writerDevice
@@ -496,7 +496,7 @@ class Settings(object):
 
     ## the json data string
     scanID = property(__getScanID, __setScanID,
-                       doc='scan id')
+                      doc='scan id')
 
     ## get method for ScanFile attribute
     # \returns name of ScanFile
@@ -515,7 +515,7 @@ class Settings(object):
 
     ## the json data string
     scanFile = property(__getScanFile, __setScanFile,
-                       doc='scan file(s)')
+                        doc='scan file(s)')
 
 ##  commands
 
@@ -632,7 +632,7 @@ class Settings(object):
 
     ##  provides description of all components
     description = property(__description,
-                            doc='provides description of all components')
+                           doc='provides description of all components')
 
     ## provides description of client datasources
     # \param cps component names
@@ -688,7 +688,7 @@ class Settings(object):
         jvars = json.loads(confvars)
         cvars = json.loads(nexusconfig_device.variables)
         ## appending scans to one file?
-        if self.appendEntry and not 'serialno' in jvars.keys():
+        if self.appendEntry and 'serialno' not in jvars.keys():
             ## an entry name should contain $var.serialno
             if 'serialno' in cvars.keys():
                 try:
@@ -775,7 +775,7 @@ class Settings(object):
         self.__profileManager.deleteProfile(name)
 
     ## provides configuration of mntgrp
-     # \returns string with mntgrp configuration
+    # \returns string with mntgrp configuration
     def mntGrpConfiguration(self):
         return self.__profileManager.mntGrpConfiguration()
 
@@ -836,7 +836,7 @@ class Settings(object):
                 dcpcreator.setInitDSources(json.loads(params[2]))
             else:
                 dcpcreator.setInitDSources(json.loads(
-                        self.__selector["InitDataSources"]))
+                    self.__selector["InitDataSources"]))
 
         withoutLinks = list(set(self.components) |
                             set(self.automaticComponents) |
@@ -888,7 +888,7 @@ class Settings(object):
             "components": "Components",
             "automaticComponents": "AutomaticComponents",
             "dataSources": "DataSources"
-            }
+        }
         for attr, name in commands.items():
             vl = getattr(self, attr)
             nenv[str(name)] = vl

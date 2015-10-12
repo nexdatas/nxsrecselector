@@ -1,3 +1,4 @@
+
 #    "$Name:  $";
 #    "$Header:  $";
 #=============================================================================
@@ -136,6 +137,10 @@ class TestServer(PyTango.Device_4Impl):
         self.attr_value = ""
         TestServer.init_device(self)
 
+#        print >> sys.stderr, "%s"
+#        print >> self.log_debug, "%s"
+#        self.debug_stream("%s")
+        
     def encodeSpectrum(self):
         format = 'INT32'
         # uint8 B

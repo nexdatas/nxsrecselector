@@ -240,7 +240,7 @@ class DynamicComponent(object):
 
         self.__nexusconfig_device.xmlstring = str(root.toprettyxml(indent=""))
         TangoUtils.command(self.__nexusconfig_device, "storeComponent",
-                      str(self.__dynamicCP))
+                           str(self.__dynamicCP))
 #        print("Dynamic Component:\n%s" % root.toprettyxml(indent="  "))
 
         return self.__dynamicCP
@@ -268,8 +268,8 @@ class DynamicComponent(object):
             field = field[8:]
         return (path,
                 field.replace(" ", "_").replace("/", "_").replace(
-                ":", "_").replace(".", "_").replace("\\", "_").replace(
-                ";", "_").lower())
+                    ":", "_").replace(".", "_").replace("\\", "_").replace(
+                        ";", "_").lower())
 
     @classmethod
     def __createLink(cls, root, entry, path, name):
@@ -363,10 +363,10 @@ class DynamicComponent(object):
             raise Exception(
                 "Dynamic component name should contain: %s" % self.__defaultCP)
         cps = TangoUtils.command(self.__nexusconfig_device,
-                            "availableComponents")
+                                 "availableComponents")
         if name in cps:
             TangoUtils.command(self.__nexusconfig_device,
-                          "deleteComponent", str(name))
+                               "deleteComponent", str(name))
 
     @classmethod
     def __createGroupTree(cls, root, definition, path, links=False):
