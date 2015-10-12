@@ -57,8 +57,6 @@ class ProfileManager(object):
 
         ## default automaticComponents
         self.defaultAutomaticComponents = []
-        ## error descriptions
-        self.descErrors = []
 
     def __updateMacroServer(self):
         self.__macroServerName = self.__selector.getMacroServer()
@@ -160,28 +158,18 @@ class ProfileManager(object):
 
     ## saves configuration
     def storeProfile(self):
-        inst = self.__selector.setConfigInstance()
-        conf = str(json.dumps(self.__selector.get()))
-        inst.selection = conf
-        inst.storeSelection(self.__selector["MntGrp"])
+        self.__selector.storeSelection()
 
     ## fetch configuration
     def fetchProfile(self):
-        inst = self.__selector.setConfigInstance()
-        avsl = inst.availableSelections()
-        confs = None
-        if self.__selector["MntGrp"] in avsl:
-            confs = inst.selections([self.__selector["MntGrp"]])
-        if confs:
-            self.__selector.set(json.loads(str(confs[0])))
-        else:
+        if self.__selector.fetchSelection() is False:
             avmg = self.availableMntGrps()
             if self.__selector["MntGrp"] in avmg:
                 self.__selector.deselect()
                 self.importMntGrp()
                 self.__selector.resetAutomaticComponents(
                     self.defaultAutomaticComponents)
-                self.updateAutomaticComponents()
+                self.__selector.updateAutomaticComponents()
 
     ## deletes mntgrp
     # \param name mntgrp name
@@ -264,14 +252,6 @@ class ProfileManager(object):
                 self.__selector["Timer"] = jtimers
                 changed = True
         return changed
-
-    ## checks existing controllers of pools for
-    #      AutomaticDataSources
-    def updateAutomaticComponents(self):
-        jacps = self.__selector.updateAutomaticComponents(self.descErrors)
-        if self.__selector["AutomaticComponentGroup"] != jacps:
-            self.__selector["AutomaticComponentGroup"] = jacps
-            self.storeProfile()
 
     def __clearChannels(self, dsg, hel):
         channels = PoolUtils.getExperimentalChannels(self.__pools)

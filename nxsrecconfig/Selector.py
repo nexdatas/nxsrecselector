@@ -46,6 +46,8 @@ class Selector(object):
 
         ## module label
         self.moduleLabel = 'module'
+        ## error descriptions
+        self.descErrors = []
 
     ## resets seleciton except Door and ConfigDevice
     def reset(self):
@@ -196,14 +198,16 @@ class Selector(object):
         self.__selection.resetAutomaticComponents(components)
 
     ## updates active state of automatic components
-    # \param channelerrors error list for non-active components
     # \returns new group of automatic components
-    def updateAutomaticComponents(self, channelerrors):
+    def updateAutomaticComponents(self):
         datasources = set(json.loads(self["AutomaticDataSources"]))
         acpgroup = json.loads(self["AutomaticComponentGroup"])
         configdevice = self.setConfigInstance()
-        return self.__msp.checkComponentChannels(
-            self["Door"], configdevice, datasources, acpgroup, channelerrors)
+        jacps =  self.__msp.checkComponentChannels(
+            self["Door"], configdevice, datasources, acpgroup, self.descErrors)
+        if self["AutomaticComponentGroup"] != jacps:
+            self["AutomaticComponentGroup"] = jacps
+            self.storeSelection()
 
     ## provides pool proxies
     # \returns list of pool proxies
@@ -294,3 +298,24 @@ class Selector(object):
     # \param jdata JSON String with important variables
     def storeEnvData(self, jdata):
         return self.__msp.setScanEnv(self["Door"], jdata)
+
+    ## saves configuration
+    def storeSelection(self):
+        inst = self.setConfigInstance()
+        conf = str(json.dumps(self.get()))
+        inst.selection = conf
+        inst.storeSelection(self["MntGrp"])
+
+    ## fetch configuration
+    # \returns if configuration was fetched    
+    def fetchSelection(self):
+        inst = self.setConfigInstance()
+        avsl = inst.availableSelections()
+        confs = None
+        if self["MntGrp"] in avsl:
+            confs = inst.selections([self["MntGrp"]])
+        if confs:
+            self.set(json.loads(str(confs[0])))
+            return True
+        return False
+

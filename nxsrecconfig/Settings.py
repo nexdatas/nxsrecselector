@@ -151,7 +151,7 @@ class Settings(object):
     ## provides description component errors
     # \returns list of available description component errors
     def __getDescriptionErrors(self):
-        return self.__profileManager.descErrors
+        return self.__selector.descErrors
 
     ## provides automatic components
     descriptionErrors = property(__getDescriptionErrors,
@@ -706,7 +706,7 @@ class Settings(object):
     ## checks existing controllers of pools for
     #      AutomaticDataSources
     def updateControllers(self):
-        self.__profileManager.updateAutomaticComponents()
+        self.__selector.updateAutomaticComponents()
         gc.collect()
 
     ## reset automaticComponentGroup to defaultAutomaticComponents
