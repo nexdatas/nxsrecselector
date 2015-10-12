@@ -29,6 +29,7 @@ from .Utils import Utils, TangoUtils, MSUtils, PoolUtils
 from .ProfileManager import ProfileManager
 from .Selector import Selector
 from .MacroServerPools import MacroServerPools
+from . import Streams
 
 
 ## NeXus Sardana Recorder settings
@@ -70,6 +71,18 @@ class Settings(object):
         ## administator data
         self.__adminData = '[]'
 
+        if server:
+            if hasattr(self.__server, "log_fatal"):
+                Streams.log_fatal = server.log_fatal
+            if hasattr(self.__server, "log_error"):
+                Streams.log_error = server.log_error
+            if hasattr(self.__server, "log_warn"):
+                Streams.log_warn = server.log_warn
+            if hasattr(self.__server, "log_info"):
+                Streams.log_info = server.log_info
+            if hasattr(self.__server, "log_debug"):
+                Streams.log_debug = server.log_debug
+        
         self.__setupSelection()
 
     def __setupSelection(self):

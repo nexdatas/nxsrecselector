@@ -61,6 +61,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
 #------------------------------------------------------------------
     def __init__(self, cl, name):
         PyTango.Device_4Impl.__init__(self, cl, name)
+        self.debug_stream("In __init__()")
         ## Recorder Settings
         self.__stg = STG(self)
         self.__toupdate = ['ConfigDevice', 'Door']
@@ -71,8 +72,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
 #    Device destructor
 #------------------------------------------------------------------
     def delete_device(self):
-        print >> self.log_info, "[Device delete_device method] for device", \
-            self.get_name()
+        self.debug_stream("In delete_device()")
         if hasattr(self, 'stg') and self.__stg:
             del self.__stg
             self.__stg = None
@@ -82,7 +82,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
 #    Device initialization
 #------------------------------------------------------------------
     def init_device(self):
-        print >> self.log_info, "In ", self.get_name(), "::init_device()"
+        self.debug_stream("In init_device()")
         if hasattr(self, 'stg') and self.__stg:
             del self.__stg
             self.__stg = None
@@ -102,8 +102,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
 #    Always excuted hook method
 #------------------------------------------------------------------
     def always_executed_hook(self):
-        print >> self.log_info, "In ", self.get_name(), \
-            "::always_excuted_hook()"
+        self.debug_stream("In always_excuted_hook()")
 
 #==================================================================
 #
@@ -114,69 +113,59 @@ class NXSRecSelector(PyTango.Device_4Impl):
 #    Read Attribute Hardware
 #------------------------------------------------------------------
     def read_attr_hardware(self, _):
-        print >> self.log_info, "In ", self.get_name(), \
-            "::read_attr_hardware()"
+        self.debug_stream("In read_attr_hardware()")
 
 #------------------------------------------------------------------
 #    Read Components attribute
 #------------------------------------------------------------------
     def read_Components(self, attr):
-        print >> self.log_info, "In ", self.get_name(), "::read_Components()"
+        self.debug_stream("In read_Components()")
         attr.set_value(self.__stg.components)
 
 #------------------------------------------------------------------
 #    Read AutomaticComponents attribute
 #------------------------------------------------------------------
     def read_AutomaticComponents(self, attr):
-        print >> self.log_info, "In ", self.get_name(), \
-            "::read_AutomaticComponents()"
+        self.debug_stream("In read_AutomaticComponents()")
         attr.set_value(self.__stg.automaticComponents)
 
 #------------------------------------------------------------------
 #    Read DescriptionErrors attribute
 #------------------------------------------------------------------
     def read_DescriptionErrors(self, attr):
-        print >> self.log_info, "In ", self.get_name(), \
-            "::read_DescriptionErrors()"
+        self.debug_stream("In read_DescriptionErrors()")
         attr.set_value(self.__stg.descriptionErrors)
 
 #------------------------------------------------------------------
 #    Read Door attribute
 #------------------------------------------------------------------
     def read_Door(self, attr):
-        print >> self.log_info, "In ", self.get_name(), \
-            "::read_Door()"
+        self.debug_stream("In read_Door()")
         attr.set_value(self.__stg.door)
 
 #------------------------------------------------------------------
 #    Write Door attribute
 #------------------------------------------------------------------
     def write_Door(self, attr):
-        print >> self.log_info, "In ", self.get_name(), "::write_Door()"
+        self.debug_stream("In write_Door()")
         self.__stg.door = attr.get_write_value()
-        print >> self.log_info, "Attribute value = %s" % self.__stg.door
 
 #------------------------------------------------------------------
 #    Read STEPDataSources attribute
 #------------------------------------------------------------------
     def read_STEPDataSources(self, attr):
-        print >> self.log_info, "In ", self.get_name(), \
-            "::read_STEPDataSources()"
+        self.debug_stream("In read_STEPDataSources()")
         attr.set_value(self.__stg.stepdatasources)
 
 #------------------------------------------------------------------
 #    Write STEPDataSources attribute
 #------------------------------------------------------------------
     def write_STEPDataSources(self, attr):
-        print >> self.log_info, "In ", self.get_name(), \
-            "::write_STEPDataSources()"
+        self.debug_stream("In write_STEPDataSources()")
         if self.is_STEPDataSources_write_allowed():
             self.__stg.stepdatasources = attr.get_write_value()
-            print >> self.log_info, "Attribute value = ", \
-                self.__stg.stepdatasources
         else:
-            print >> self.log_warn, \
-                "To change the settings please close the server."
+            self.warn_stream("To change the settings please close the server.")
             raise Exception(
                 "To change the settings please close the server.")
 
@@ -190,235 +179,204 @@ class NXSRecSelector(PyTango.Device_4Impl):
 #    Read ConfigDevice attribute
 #------------------------------------------------------------------
     def read_ConfigDevice(self, attr):
-        print >> self.log_info, "In ", self.get_name(), \
-            "::read_ConfigDevice()"
+        self.debug_stream("In read_ConfigDevice()")
         attr.set_value(self.__stg.configDevice)
 
 #------------------------------------------------------------------
 #    Write ConfigDevice attribute
 #------------------------------------------------------------------
     def write_ConfigDevice(self, attr):
-        print >> self.log_info, "In ", self.get_name(), \
-            "::write_ConfigDevice()"
+        self.debug_stream("In write_ConfigDevice()")
         self.__stg.configDevice = attr.get_write_value()
-        print >> self.log_info, "Attribute value = %s" % \
-            self.__stg.configDevice
 
 #------------------------------------------------------------------
 #    Read MntGrp attribute
 #------------------------------------------------------------------
     def read_MntGrp(self, attr):
-        print >> self.log_info, "In ", self.get_name(), "::read_MntGrp()"
+        self.debug_stream("In read_MntGrp()")
         attr.set_value(self.__stg.mntGrp)
 
 #------------------------------------------------------------------
 #    Write MntGrp attribute
 #------------------------------------------------------------------
     def write_MntGrp(self, attr):
-        print >> self.log_info, "In ", self.get_name(), "::write_MntGrp()"
+        self.debug_stream("In write_MntGrp()")
         self.__stg.mntGrp = attr.get_write_value()
-        print >> self.log_info, "Attribute value = %s" % self.__stg.mntGrp
 
 #------------------------------------------------------------------
 #    Read ScanDir attribute
 #------------------------------------------------------------------
     def read_ScanDir(self, attr):
-        print >> self.log_info, "In ", self.get_name(), "::read_ScanDir()"
+        self.debug_stream("In read_ScanDir()")
         attr.set_value(self.__stg.scanDir)
 
 #------------------------------------------------------------------
 #    Write ScanDir attribute
 #------------------------------------------------------------------
     def write_ScanDir(self, attr):
-        print >> self.log_info, "In ", self.get_name(), "::write_ScanDir()"
+        self.debug_stream("In write_ScanDir()")
         self.__stg.scanDir = attr.get_write_value()
-        print >> self.log_info, "Attribute value = %s" % self.__stg.scanDir
 
 #------------------------------------------------------------------
 #    Read ScanFile attribute
 #------------------------------------------------------------------
     def read_ScanFile(self, attr):
-        print >> self.log_info, "In ", self.get_name(), "::read_ScanFile()"
+        self.debug_stream("In read_ScanFile()")
         attr.set_value(self.__stg.scanFile)
 
 #------------------------------------------------------------------
 #    Write ScanFile attribute
 #------------------------------------------------------------------
     def write_ScanFile(self, attr):
-        print >> self.log_info, "In ", self.get_name(), "::write_ScanFile()"
+        self.debug_stream("In write_ScanFile()")
         self.__stg.scanFile = attr.get_write_value()
-        print >> self.log_info, "Attribute value = %s" % self.__stg.scanFile
 
 #------------------------------------------------------------------
 #    Read ScanID attribute
 #------------------------------------------------------------------
     def read_ScanID(self, attr):
-        print >> self.log_info, "In ", self.get_name(), "::read_ScanID()"
+        self.debug_stream("In read_ScanID()")
         attr.set_value(self.__stg.scanID)
 
 #------------------------------------------------------------------
 #    Write ScanID attribute
 #------------------------------------------------------------------
     def write_ScanID(self, attr):
-        print >> self.log_info, "In ", self.get_name(), "::write_ScanID()"
+        self.debug_stream("In write_ScanID()")
         self.__stg.scanID = attr.get_write_value()
-        print >> self.log_info, "Attribute value = %s" % self.__stg.scanID
 
 #------------------------------------------------------------------
 #    Read WriterDevice attribute
 #------------------------------------------------------------------
     def read_WriterDevice(self, attr):
-        print >> self.log_info, "In ", self.get_name(), "::read_WriterDevice()"
+        self.debug_stream("In read_WriterDevice()")
         attr.set_value(self.__stg.writerDevice)
 
 #------------------------------------------------------------------
 #    Write WriterDevice attribute
 #------------------------------------------------------------------
     def write_WriterDevice(self, attr):
-        print >> self.log_info, "In ", self.get_name(), \
-            "::write_WriterDevice()"
+        self.debug_stream("In write_WriterDevice()")
         self.__stg.writerDevice = attr.get_write_value()
-        print >> self.log_info, "Attribute value = %s" \
-            % self.__stg.writerDevice
 
 #------------------------------------------------------------------
 #    Read DeviceGroups attribute
 #------------------------------------------------------------------
     def read_DeviceGroups(self, attr):
-        print >> self.log_info, "In ", self.get_name(), \
-            "::read_DeviceGroups()"
+        self.debug_stream("In read_DeviceGroups()")
         attr.set_value(self.__stg.deviceGroups)
 
 #------------------------------------------------------------------
 #    Write DeviceGroups attribute
 #------------------------------------------------------------------
     def write_DeviceGroups(self, attr):
-        print >> self.log_info, "In ", self.get_name(), \
-            "::write_DeviceGroups()"
+        self.debug_stream("In write_DeviceGroups()")
         self.__stg.deviceGroups = attr.get_write_value()
-        print >> self.log_info, "Attribute value = %s" % \
-            self.__stg.deviceGroups
 
 #------------------------------------------------------------------
 #    Read AdminData attribute
 #------------------------------------------------------------------
     def read_AdminData(self, attr):
-        print >> self.log_info, "In ", self.get_name(), "::read_AdminData()"
+        self.debug_stream("In read_AdminData()")
         attr.set_value(self.__stg.adminData)
 
 #------------------------------------------------------------------
 #    Write AdminData attribute
 #------------------------------------------------------------------
     def write_AdminData(self, attr):
-        print >> self.log_info, "In ", self.get_name(), "::write_AdminData()"
+        self.debug_stream("In write_AdminData()")
         self.__stg.adminData = attr.get_write_value()
-        print >> self.log_info, "Attribute value = %s" % \
-            self.__stg.adminData
 
 #------------------------------------------------------------------
 #    Read DataRecord attribute
 #------------------------------------------------------------------
     def read_DataRecord(self, attr):
-        print >> self.log_info, "In ", self.get_name(), "::read_DataRecord()"
+        self.debug_stream("In read_DataRecord()")
         attr.set_value(self.__stg.dataRecord)
 
 #------------------------------------------------------------------
 #    Write DataRecord attribute
 #------------------------------------------------------------------
     def write_DataRecord(self, attr):
-        print >> self.log_info, "In ", self.get_name(), "::write_DataRecord()"
+        self.debug_stream("In write_DataRecord()")
         self.__stg.dataRecord = attr.get_write_value()
-        print >> self.log_info, "Attribute value = %s" % \
-            self.__stg.dataRecord
 
 #------------------------------------------------------------------
 #    Read LabelTypes attribute
 #------------------------------------------------------------------
     def read_LabelTypes(self, attr):
-        print >> self.log_info, "In ", self.get_name(), "::read_LabelTypes()"
+        self.debug_stream("In read_LabelTypes()")
         attr.set_value(self.__stg.labelTypes)
 
 #------------------------------------------------------------------
 #    Write LabelTypes attribute
 #------------------------------------------------------------------
     def write_LabelTypes(self, attr):
-        print >> self.log_info, "In ", self.get_name(), "::write_LabelTypes()"
+        self.debug_stream("In write_LabelTypes()")
         self.__stg.labelTypes = attr.get_write_value()
-        print >> self.log_info, "Attribute value = %s" % \
-            self.__stg.labelTypes
 
 #------------------------------------------------------------------
 #    Read LabelShapes attribute
 #------------------------------------------------------------------
     def read_LabelShapes(self, attr):
-        print >> self.log_info, "In ", self.get_name(), "::read_LabelShapes()"
+        self.debug_stream("In read_LabelShapes()")
         attr.set_value(self.__stg.labelShapes)
 
 #------------------------------------------------------------------
 #    Write LabelShapes attribute
 #------------------------------------------------------------------
     def write_LabelShapes(self, attr):
-        print >> self.log_info, "In ", self.get_name(), \
-            "::write_LabelShapes()"
+        self.debug_stream("In write_LabelShapes()")
         self.__stg.labelShapes = attr.get_write_value()
-        print >> self.log_info, "Attribute value = %s" % \
-            self.__stg.labelShapes
 
 #------------------------------------------------------------------
 #    Read DataSources attribute
 #------------------------------------------------------------------
     def read_DataSources(self, attr):
-        print >> self.log_info, "In ", self.get_name(), \
-            "::read_DataSources()"
+        self.debug_stream("In read_DataSources()")
         attr.set_value(self.__stg.dataSources)
 
 #------------------------------------------------------------------
 #    Read AvailableTimers attribute
 #------------------------------------------------------------------
     def read_AvailableTimers(self, attr):
-        print >> self.log_info, "In ", self.get_name(), \
-            "::read_AvailableTimers()"
+        self.debug_stream("In read_AvailableTimers()")
         attr.set_value(self.__stg.availableTimers)
 
 #------------------------------------------------------------------
 #    Read Description attribute
 #------------------------------------------------------------------
     def read_Description(self, attr):
-        print >> self.log_info, "In ", self.get_name(), "::read_Description()"
+        self.debug_stream("In read_Description()")
         attr.set_value(self.__stg.description)
 
 #------------------------------------------------------------------
 #    Read VariableComponents attribute
 #------------------------------------------------------------------
     def read_VariableComponents(self, attr):
-        print >> self.log_info, "In ", self.get_name(), \
-            "::read_VariableComponents()"
+        self.debug_stream("In read_VariableComponents()")
         attr.set_value(self.__stg.variableComponents)
 
 #------------------------------------------------------------------
 #    Read FullDeviceNames attribute
 #------------------------------------------------------------------
     def read_FullDeviceNames(self, attr):
-        print >> self.log_info, "In ", self.get_name(), \
-            "::read_FullDeviceNames()"
+        self.debug_stream("In read_FullDeviceNames()")
         attr.set_value(self.__stg.fullDeviceNames)
 
 #------------------------------------------------------------------
 #    Read Configuration attribute
 #------------------------------------------------------------------
     def read_Configuration(self, attr):
-        print >> self.log_info, "In ", self.get_name(), "::read_DataSources()"
+        self.debug_stream("In read_DataSources()")
         attr.set_value(self.__stg.configuration)
 
 #------------------------------------------------------------------
 #    Write Configuration attribute
 #------------------------------------------------------------------
     def write_Configuration(self, attr):
-        print >> self.log_info, "In ", self.get_name(), \
-            "::write_Configuration()"
+        self.debug_stream("In write_Configuration()")
         self.__stg.configuration = attr.get_write_value()
-        print >> self.log_info, "Attribute value = %s" % \
-            self.__stg.configuration
         try:
             dp = PyTango.DeviceProxy(str(self.get_name()))
             for var in self.__toupdate:
@@ -435,58 +393,50 @@ class NXSRecSelector(PyTango.Device_4Impl):
 #    Read DisableDataSources attribute
 #------------------------------------------------------------------
     def read_DisableDataSources(self, attr):
-        print >> self.log_info, "In ", self.get_name(), \
-            "::read_DisableDataSources()"
+        self.debug_stream("In read_DisableDataSources()")
         attr.set_value(self.__stg.disableDataSources)
 
 #------------------------------------------------------------------
 #    Read AppendEntry attribute
 #------------------------------------------------------------------
     def read_AppendEntry(self, attr):
-        print >> self.log_info, "In ", self.get_name(), "::read_AppendEntry()"
+        self.debug_stream("In read_AppendEntry()")
         attr.set_value(self.__stg.appendEntry)
 
 #------------------------------------------------------------------
 #    Write AppendEntry attribute
 #------------------------------------------------------------------
     def write_AppendEntry(self, attr):
-        print >> self.log_info, "In ", self.get_name(), "::write_AppendEntry()"
+        self.debug_stream("In write_AppendEntry()")
         self.__stg.appendEntry = attr.get_write_value()
-        print >> self.log_info, "Attribute value = %s" % \
-            self.__stg.appendEntry
 
 #------------------------------------------------------------------
 #    Read ConfigVariables attribute
 #------------------------------------------------------------------
     def read_ConfigVariables(self, attr):
-        print >> self.log_info, "In ", self.get_name(), \
-            "::read_ConfigVariables()"
+        self.debug_stream("In read_ConfigVariables()")
         attr.set_value(self.__stg.configVariables)
 
 #------------------------------------------------------------------
 #    Write ConfigVariables attribute
 #------------------------------------------------------------------
     def write_ConfigVariables(self, attr):
-        print >> self.log_info, "In ", self.get_name(), \
-            "::write_ConfigVariables()"
+        self.debug_stream("In write_ConfigVariables()")
         self.__stg.configVariables = attr.get_write_value()
-        print >> self.log_info, "Attribute value = %s" % \
-            self.__stg.configVariables
 
 #------------------------------------------------------------------
 #    Read ConfigFile attribute
 #------------------------------------------------------------------
     def read_ConfigFile(self, attr):
-        print >> self.log_info, "In ", self.get_name(), "::read_ConfigFile()"
+        self.debug_stream("In read_ConfigFile()")
         attr.set_value(self.__stg.configFile)
 
 #------------------------------------------------------------------
 #    Write ConfigFile attribute
 #------------------------------------------------------------------
     def write_ConfigFile(self, attr):
-        print >> self.log_info, "In ", self.get_name(), "::write_ConfigFile()"
+        self.debug_stream("In write_ConfigFile()")
         self.__stg.configFile = attr.get_write_value()
-        print >> self.log_info, "Attribute value = %s" % self.__stg.configFile
 
 #==================================================================
 #
@@ -501,8 +451,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
 #
 #------------------------------------------------------------------
     def LoadConfiguration(self):
-        print >> self.log_info, "In ", self.get_name(), \
-            "::LoadConfiguration()"
+        self.debug_stream("In LoadConfiguration()")
         try:
             self.set_state(PyTango.DevState.RUNNING)
             self.__stg.loadConfiguration()
@@ -532,8 +481,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
 #
 #------------------------------------------------------------------
     def FetchConfiguration(self):
-        print >> self.log_info, "In ", self.get_name(), \
-            "::FetchConfiguration()"
+        self.debug_stream("In FetchConfiguration()")
         try:
             self.set_state(PyTango.DevState.RUNNING)
             self.__stg.fetchConfiguration()
@@ -563,8 +511,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
 #
 #------------------------------------------------------------------
     def SaveConfiguration(self):
-        print >> self.log_info, "In ", self.get_name(), \
-            "::SaveConfiguration()"
+        self.debug_stream("In SaveConfiguration()")
         try:
             self.set_state(PyTango.DevState.RUNNING)
             self.__stg.saveConfiguration()
@@ -586,8 +533,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
 #
 #------------------------------------------------------------------
     def StoreConfiguration(self):
-        print >> self.log_info, "In ", self.get_name(), \
-            "::StoreConfiguration()"
+        self.debug_stream("In StoreConfiguration()")
         try:
             self.set_state(PyTango.DevState.RUNNING)
             self.__stg.storeConfiguration()
@@ -610,8 +556,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
 #
 #------------------------------------------------------------------
     def UpdateControllers(self):
-        print >> self.log_info, "In ", self.get_name(), \
-            "::UpdateControllers()"
+        self.debug_stream("In UpdateControllers()")
         try:
             self.set_state(PyTango.DevState.RUNNING)
             self.__stg.updateControllers()
@@ -634,8 +579,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
 #
 #------------------------------------------------------------------
     def ResetAutomaticComponents(self):
-        print >> self.log_info, "In ", self.get_name(), \
-            "::ResetAutomaticComponents()"
+        self.debug_stream("In ResetAutomaticComponents()")
         try:
             self.set_state(PyTango.DevState.RUNNING)
             self.__stg.resetAutomaticComponents()
@@ -658,8 +602,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
 #
 #------------------------------------------------------------------
     def ClearAllSelections(self):
-        print >> self.log_info, "In ", self.get_name(), \
-            "::ClearAllSelections()"
+        self.debug_stream("In ClearAllSelections()")
         try:
             self.set_state(PyTango.DevState.RUNNING)
             self.__stg.clearAllSelections()
@@ -682,8 +625,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
 #
 #------------------------------------------------------------------
     def UpdateConfigVariables(self):
-        print >> self.log_info, "In ", self.get_name(), \
-            "::UpdateConfigVariables()"
+        self.debug_stream("In UpdateConfigVariables()")
         try:
             self.set_state(PyTango.DevState.RUNNING)
             self.__stg.updateConfigVariables()
@@ -705,8 +647,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
 #
 #------------------------------------------------------------------
     def IsMntGrpChanged(self):
-        print >> self.log_info, "In ", self.get_name(), \
-            "::IsMntGrpChanged()"
+        self.debug_stream("In IsMntGrpChanged()")
         try:
             self.set_state(PyTango.DevState.RUNNING)
             conf = bool(self.__stg.isMntGrpChanged())
@@ -730,8 +671,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
 #
 #------------------------------------------------------------------
     def MntGrpConfiguration(self):
-        print >> self.log_info, "In ", self.get_name(), \
-            "::MntGrpConfiguration()"
+        self.debug_stream("In MntGrpConfiguration()")
         try:
             self.set_state(PyTango.DevState.RUNNING)
             conf = str(self.__stg.mntGrpConfiguration())
@@ -756,8 +696,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
 #
 #------------------------------------------------------------------
     def UpdateMntGrp(self):
-        print >> self.log_info, "In ", self.get_name(), \
-            "::UpdateMntGrp()"
+        self.debug_stream("In UpdateMntGrp()")
         try:
             self.set_state(PyTango.DevState.RUNNING)
             conf = str(self.__stg.updateMntGrp())
@@ -782,8 +721,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
 #
 #------------------------------------------------------------------
     def SwitchMntGrp(self):
-        print >> self.log_info, "In ", self.get_name(), \
-            "::SwitchMntGrp()"
+        self.debug_stream("In SwitchMntGrp()")
         try:
             self.set_state(PyTango.DevState.RUNNING)
             conf = str(self.__stg.switchMntGrp())
@@ -808,8 +746,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
 #
 #------------------------------------------------------------------
     def ImportMntGrp(self):
-        print >> self.log_info, "In ", self.get_name(), \
-            "::ImportMntGrp()"
+        self.debug_stream("In ImportMntGrp()")
         try:
             self.set_state(PyTango.DevState.RUNNING)
             self.__stg.importMntGrp()
@@ -832,8 +769,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
 #
 #------------------------------------------------------------------
     def ImportAllEnv(self):
-        print >> self.log_info, "In ", self.get_name(), \
-            "::ImportMntGrp()"
+        self.debug_stream("In ImportAllEnv()")
         try:
             self.set_state(PyTango.DevState.RUNNING)
             self.__stg.importAllEnv()
@@ -864,8 +800,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
 #
 #------------------------------------------------------------------
     def ExportAllEnv(self):
-        print >> self.log_info, "In ", self.get_name(), \
-            "::ExportMntGrp()"
+        self.debug_stream("In ExportAllEnv()")
         try:
             self.set_state(PyTango.DevState.RUNNING)
             self.__stg.exportAllEnv()
@@ -889,8 +824,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
 #    argout: DevString    mntgrp full name
 #------------------------------------------------------------------
     def FindMntGrp(self, argin):
-        print >> self.log_info, "In ", self.get_name(), \
-            "::FindMntGrp()"
+        self.debug_stream("In FindMntGrp()")
         try:
             self.set_state(PyTango.DevState.RUNNING)
             argout = str(self.__stg.findMntGrp(argin))
@@ -917,8 +851,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
 #    argout: DevLong    scan ID
 #------------------------------------------------------------------
     def StoreEnvData(self, argin):
-        print >> self.log_info, "In ", self.get_name(), \
-            "::StoreEnvData()"
+        self.debug_stream("In StoreEnvData()")
         try:
             self.set_state(PyTango.DevState.RUNNING)
             argout = int(self.__stg.storeEnvData(argin))
@@ -945,8 +878,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
 #    argout: DevString    json dictionary with enviroutment data
 #------------------------------------------------------------------
     def FetchEnvData(self):
-        print >> self.log_info, "In ", self.get_name(), \
-            "::FetchEnvData()"
+        self.debug_stream("In FetchEnvData()")
         try:
             self.set_state(PyTango.DevState.RUNNING)
             argout = str(self.__stg.fetchEnvData())
@@ -970,8 +902,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
 #    argout: DevVarStringArray    list of available component names
 #------------------------------------------------------------------
     def AvailableComponents(self):
-        print >> self.log_info, "In ", self.get_name(), \
-            "::AvailableComponents()"
+        self.debug_stream("In AvailableComponents()")
         try:
             self.set_state(PyTango.DevState.RUNNING)
             argout = self.__stg.availableComponents()
@@ -996,8 +927,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
 #    argout: DevVarStringArray    list of available selection names
 #------------------------------------------------------------------
     def AvailableSelections(self):
-        print >> self.log_info, "In ", self.get_name(), \
-            "::AvailableSelections()"
+        self.debug_stream("In AvailableSelections()")
         try:
             self.set_state(PyTango.DevState.RUNNING)
             argout = self.__stg.availableSelections()
@@ -1022,8 +952,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
 #    argout: DevVarStringArray    list of available mntgrp names
 #------------------------------------------------------------------
     def AvailableMeasurementGroups(self):
-        print >> self.log_info, "In ", self.get_name(), \
-            "::AvailableMeasurementGroups()"
+        self.debug_stream("In AvailableMeasurementGroups()")
         try:
             self.set_state(PyTango.DevState.RUNNING)
             argout = self.__stg.availableMeasurementGroups()
@@ -1048,8 +977,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
 #    argout: DevVarStringArray    list of available DataSource names
 #------------------------------------------------------------------
     def AvailableDataSources(self):
-        print >> self.log_info, "In ", self.get_name(), \
-            "::AvailableDataSources()"
+        self.debug_stream("In AvailableDataSources()")
         try:
             self.set_state(PyTango.DevState.RUNNING)
             argout = self.__stg.availableDataSources()
@@ -1074,8 +1002,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
 #    argout: DevVarStringArray    list of available pool channels
 #------------------------------------------------------------------
     def PoolChannels(self):
-        print >> self.log_info, "In ", self.get_name(), \
-            "::PoolChannels()"
+        self.debug_stream("In PoolChannels()")
         try:
             self.set_state(PyTango.DevState.RUNNING)
             argout = self.__stg.poolChannels()
@@ -1100,8 +1027,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
 #    argout: DevVarStringArray    list of available pool channels
 #------------------------------------------------------------------
     def PoolMotors(self):
-        print >> self.log_info, "In ", self.get_name(), \
-            "::PoolMotors()"
+        self.debug_stream("In PoolMotors()")
         #    Add your own code here
         try:
             self.set_state(PyTango.DevState.RUNNING)
@@ -1127,8 +1053,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
 #    argout: DevVarStringArray    component names
 #------------------------------------------------------------------
     def MandatoryComponents(self):
-        print >> self.log_info, "In ", self.get_name(), \
-            "::MandatoryComponents()"
+        self.debug_stream("In MandatoryComponents()")
         #    Add your own code here
 
         try:
@@ -1155,8 +1080,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
 #    argout: DevVarString         name of created dynamic component
 #------------------------------------------------------------------
     def CreateDynamicComponent(self, argin):
-        print >> self.log_info, "In ", self.get_name(), \
-            "::CreateDynamicComponent()"
+        self.debug_stream("In CreateDynamicComponent()")
         try:
             self.set_state(PyTango.DevState.RUNNING)
             argout = self.__stg.createDynamicComponent(argin)
@@ -1183,8 +1107,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
 #    argin:  DevString  dynamic component name
 #------------------------------------------------------------------
     def RemoveDynamicComponent(self, argin):
-        print >> self.log_info, "In ", self.get_name(), \
-            "::RemoveDynamicComponent()"
+        self.debug_stream("In RemoveDynamicComponent()")
         #    Add your own code here
         try:
             self.set_state(PyTango.DevState.RUNNING)
@@ -1208,8 +1131,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
 #    argin:  DevString  measurement group name
 #------------------------------------------------------------------
     def DeleteMntGrp(self, argin):
-        print >> self.log_info, "In ", self.get_name(), \
-            "::DeleteMntGrp()"
+        self.debug_stream("In DeleteMntGrp()")
         #    Add your own code here
         try:
             self.set_state(PyTango.DevState.RUNNING)
@@ -1234,8 +1156,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
 #    argout: DevVarString         description of component datasources
 #------------------------------------------------------------------
     def ClientSources(self, argin):
-        print >> self.log_info, "In ", self.get_name(), \
-            "::ClientSources()"
+        self.debug_stream("In ClientSources()")
         try:
             self.set_state(PyTango.DevState.RUNNING)
             argout = self.__stg.clientSources(argin)
@@ -1261,8 +1182,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
 #    argout: DevVarStringArray    description of datasources
 #------------------------------------------------------------------
     def GetSourceDescription(self, argin):
-        print >> self.log_info, "In ", self.get_name(), \
-            "::GetSourceDescription()"
+        self.debug_stream("In GetSourceDescription()")
         try:
             self.set_state(PyTango.DevState.RUNNING)
             argout = self.__stg.getSourceDescription(argin)
@@ -1290,8 +1210,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
 #    argout: DevVarString         XML configuration string
 #------------------------------------------------------------------
     def CreateConfiguration(self, argin):
-        print >> self.log_info, "In ", self.get_name(), \
-            "::CreateConfiguration()"
+        self.debug_stream("In CreateConfiguration()")
         try:
             self.set_state(PyTango.DevState.RUNNING)
             argout = self.__stg.createConfiguration(argin)
@@ -1683,7 +1602,7 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
     def __init__(self, name):
         PyTango.DeviceClass.__init__(self, name)
         self.set_type(name)
-        print "In NXSRecSelectorClass  constructor"
+        print("In NXSRecSelectorClass constructor")
 
 #==================================================================
 #

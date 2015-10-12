@@ -41,6 +41,6 @@ def run(argv):
         U.server_run()
 
     except PyTango.DevFailed, e:
-        print '-------> Received a DevFailed exception:', e
+        print('-------> Received a DevFailed exception: %s' % e)
     except Exception, e:
-        print '-------> An unforeseen exception occured....', e
+        print('-------> An unforeseen exception occured.... %s' % e)
