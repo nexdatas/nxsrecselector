@@ -3610,10 +3610,12 @@ class SelectorTest(unittest.TestCase):
         se = Selector(msp)
         se["ConfigDevice"] = val["ConfigDevice"]
         se["WriterDevice"] = val["WriterDevice"]
-        channelerrors = []
-        self.myAssertRaise(Exception, se.updateAutomaticComponents,
-                           None)
-        res = se.updateAutomaticComponents(channelerrors)
+        channelerrors = []  
+        se.descErrors = None
+        self.myAssertRaise(Exception, se.updateAutomaticComponents)
+        se.descErrors = []
+        se.updateAutomaticComponents()
+        res = se["AutomaticComponentGroup"]
         self.assertEqual(res, '{}')
         print self._cf.dp.GetCommandVariable("COMMANDS")
         self.assertEqual(
@@ -3643,7 +3645,9 @@ class SelectorTest(unittest.TestCase):
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
 
-        res = se.updateAutomaticComponents(channelerrors)
+        se.descErrors = []
+        se.updateAutomaticComponents()
+        res = se["AutomaticComponentGroup"]
 
         self.assertEqual(res, '{}')
         self.assertEqual(componentgroup, {})
@@ -3680,7 +3684,62 @@ class SelectorTest(unittest.TestCase):
 
         se["AutomaticDataSources"] = json.dumps(poolchannels)
         se["AutomaticComponentGroup"] = json.dumps(componentgroup)
-        res = se.updateAutomaticComponents(channelerrors)
+        se.descErrors = []
+        se.updateAutomaticComponents()
+        res = se["AutomaticComponentGroup"]
+        self.myAssertDict(json.loads(res), {"mycp": True})
+        self.assertEqual(channelerrors, [])
+
+        print self._cf.dp.GetCommandVariable("COMMANDS")
+        self.assertEqual(
+            json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
+            ["AvailableComponents", "AvailableDataSources",
+             "AvailableComponents", "Components", "AvailableDataSources",
+             "StoreSelection"])
+        self.assertEqual(
+            json.loads(self._cf.dp.GetCommandVariable("VARS")),
+            [None, None, None, ['mycp'], None, val["MntGrp"]])
+
+        self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
+        sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
+        self.assertEqual(len(sed.keys()), len(self._keys))
+        for key, vl in self._keys:
+            self.assertTrue(key in sed.keys())
+            if key in val:
+                self.assertEqual(sed[key], val[key])
+            elif key == 'AutomaticComponentGroup':
+                self.assertEqual(sed[key], res)
+            elif key == 'AutomaticDataSources':
+                self.assertEqual(sed[key], json.dumps(poolchannels))
+            else:
+                self.assertEqual(sed[key], vl)
+
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_updateAutomaticComponents_withcf_cps_t(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        msp = MacroServerPools(10)
+        se = Selector(msp)
+        se["ConfigDevice"] = val["ConfigDevice"]
+        se["WriterDevice"] = val["WriterDevice"]
+        channelerrors = []
+        poolchannels = ["mycp"]
+        componentgroup = {"mycp": True}
+
+        self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
+        self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
+
+        se["AutomaticDataSources"] = json.dumps(poolchannels)
+        se["AutomaticComponentGroup"] = json.dumps(componentgroup)
+        se.descErrors = []
+        se.updateAutomaticComponents()
+        res = se["AutomaticComponentGroup"]
         self.myAssertDict(json.loads(res), {"mycp": True})
         self.assertEqual(channelerrors, [])
 
@@ -3692,7 +3751,8 @@ class SelectorTest(unittest.TestCase):
         self.assertEqual(
             json.loads(self._cf.dp.GetCommandVariable("VARS")),
             [None, None, None, ['mycp']])
-#        print self._cf.dp.availableComponents()
+
+        self.assertTrue(val["MntGrp"] not in self._cf.dp.availableSelections())
 
     ## constructor test
     # \brief It tests default settings
@@ -3716,7 +3776,9 @@ class SelectorTest(unittest.TestCase):
 
         se["AutomaticDataSources"] = json.dumps(poolchannels)
         se["AutomaticComponentGroup"] = json.dumps(componentgroup)
-        res = se.updateAutomaticComponents(channelerrors)
+        se.descErrors = []
+        se.updateAutomaticComponents()
+        res = se["AutomaticComponentGroup"]
 
         self.myAssertDict(json.loads(res), {})
         self.assertEqual(channelerrors, [])
@@ -3730,10 +3792,63 @@ class SelectorTest(unittest.TestCase):
             json.loads(self._cf.dp.GetCommandVariable("VARS")),
             [None, None, None])
 
-#        print self._cf.dp.availableComponents()
+        self.assertTrue(val["MntGrp"] not in self._cf.dp.availableSelections())
+
     ## constructor test
     # \brief It tests default settings
     def test_updateAutomaticComponents_withcf_nochnnel(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        msp = MacroServerPools(10)
+        se = Selector(msp)
+        se["ConfigDevice"] = val["ConfigDevice"]
+        se["WriterDevice"] = val["WriterDevice"]
+        channelerrors = []
+        poolchannels = []
+        componentgroup = {"mycp": False}
+
+        self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
+        self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
+
+        se["AutomaticDataSources"] = json.dumps(poolchannels)
+        se["AutomaticComponentGroup"] = json.dumps(componentgroup)
+        se.descErrors = []
+        se.updateAutomaticComponents()
+        res = se["AutomaticComponentGroup"]
+
+        self.myAssertDict(json.loads(res), {"mycp": True})
+        self.assertEqual(channelerrors, [])
+
+        print self._cf.dp.GetCommandVariable("COMMANDS")
+        self.assertEqual(
+            json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
+            ["AvailableComponents", "AvailableDataSources",
+             "AvailableComponents", "Components", "AvailableDataSources",
+             "StoreSelection"])
+        self.assertEqual(json.loads(self._cf.dp.GetCommandVariable("VARS")),
+                         [None, None, None, ['mycp'], None, val["MntGrp"]])
+        self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
+        sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
+        self.assertEqual(len(sed.keys()), len(self._keys))
+        for key, vl in self._keys:
+            self.assertTrue(key in sed.keys())
+            if key in val:
+                self.assertEqual(sed[key], val[key])
+            elif key == 'AutomaticComponentGroup':
+                self.assertEqual(sed[key], res)
+            elif key == 'AutomaticDataSources':
+                self.assertEqual(sed[key], json.dumps(poolchannels))
+            else:
+                self.assertEqual(sed[key], vl)
+
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_updateAutomaticComponents_withcf_nochnnel_t(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -3753,7 +3868,9 @@ class SelectorTest(unittest.TestCase):
 
         se["AutomaticDataSources"] = json.dumps(poolchannels)
         se["AutomaticComponentGroup"] = json.dumps(componentgroup)
-        res = se.updateAutomaticComponents(channelerrors)
+        se.descErrors = []
+        se.updateAutomaticComponents()
+        res = se["AutomaticComponentGroup"]
 
         self.myAssertDict(json.loads(res), {"mycp": True})
         self.assertEqual(channelerrors, [])
@@ -3765,11 +3882,11 @@ class SelectorTest(unittest.TestCase):
              "AvailableComponents", "Components"])
         self.assertEqual(json.loads(self._cf.dp.GetCommandVariable("VARS")),
                          [None, None, None, ['mycp']])
-#        print self._cf.dp.availableComponents()
+        self.assertTrue(val["MntGrp"] not in self._cf.dp.availableSelections())
 
     ## constructor test
     # \brief It tests default settings
-    def test_updateAutomaticComponents_wds(self):
+    def test_updateAutomaticComponents_wds_t(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -3789,7 +3906,9 @@ class SelectorTest(unittest.TestCase):
 
         se["AutomaticDataSources"] = json.dumps(poolchannels)
         se["AutomaticComponentGroup"] = json.dumps(componentgroup)
-        res = se.updateAutomaticComponents(channelerrors)
+        se.descErrors = []
+        se.updateAutomaticComponents()
+        res = se["AutomaticComponentGroup"]
 
         self.myAssertDict(json.loads(res), {"smycp": True})
         self.assertEqual(channelerrors, [])
@@ -3801,6 +3920,67 @@ class SelectorTest(unittest.TestCase):
              "AvailableComponents",
              "Components", "DataSources",  "DataSources", "DataSources",
              "DataSources"])
+        self.assertTrue(val["MntGrp"] not in self._cf.dp.availableSelections())
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_updateAutomaticComponents_wds(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        msp = MacroServerPools(10)
+        se = Selector(msp)
+        se["ConfigDevice"] = val["ConfigDevice"]
+        se["WriterDevice"] = val["WriterDevice"]
+        channelerrors = []
+        poolchannels = []
+        componentgroup = {"smycp": False}
+
+        self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.smycps)])
+        self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
+
+        se["AutomaticDataSources"] = json.dumps(poolchannels)
+        se["AutomaticComponentGroup"] = json.dumps(componentgroup)
+        se.descErrors = []
+        se.updateAutomaticComponents()
+        res = se["AutomaticComponentGroup"]
+
+        self.myAssertDict(json.loads(res), {"smycp": True})
+        self.assertEqual(channelerrors, [])
+
+        print self._cf.dp.GetCommandVariable("COMMANDS")
+        self.assertEqual(
+            json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
+            ["AvailableComponents", "AvailableDataSources",
+             "AvailableComponents",
+             "Components", "DataSources",  "DataSources", "DataSources",
+             "DataSources", "AvailableDataSources",
+             "StoreSelection"])
+        self.assertEqual(json.loads(self._cf.dp.GetCommandVariable("VARS")),
+                         [None, None, None,
+                          [u'smycp'],
+                          [u'scalar_long'],
+                          [u'scalar_short'],
+                          [u'scalar_long'],
+                          [u'scalar_short'],
+                          None, val["MntGrp"]])
+        self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
+        sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
+        self.assertEqual(len(sed.keys()), len(self._keys))
+        for key, vl in self._keys:
+            self.assertTrue(key in sed.keys())
+            if key in val:
+                self.assertEqual(sed[key], val[key])
+            elif key == 'AutomaticComponentGroup':
+                self.assertEqual(sed[key], res)
+            elif key == 'AutomaticDataSources':
+                self.assertEqual(sed[key], json.dumps(poolchannels))
+            else:
+                self.assertEqual(sed[key], vl)
+
 
     ## constructor test
     # \brief It tests default settings
@@ -3824,7 +4004,9 @@ class SelectorTest(unittest.TestCase):
 
         se["AutomaticDataSources"] = json.dumps(poolchannels)
         se["AutomaticComponentGroup"] = json.dumps(componentgroup)
-        res = se.updateAutomaticComponents(channelerrors)
+        se.descErrors = []
+        se.updateAutomaticComponents()
+        res = se["AutomaticComponentGroup"]
 
         self.myAssertDict(json.loads(res), {
                 "smycp": True, "smycp2": True, "smycp3": True})
@@ -3840,8 +4022,23 @@ class SelectorTest(unittest.TestCase):
              "Components", "DataSources",  "DataSources", "DataSources",
              "DataSources",
              "Components", "DataSources",  "DataSources", "DataSources",
-             "DataSources"])
-        res = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+             "DataSources",
+             "AvailableDataSources", "StoreSelection"
+             ])
+        res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+        self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
+        sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
+        self.assertEqual(len(sed.keys()), len(self._keys))
+        for key, vl in self._keys:
+            self.assertTrue(key in sed.keys())
+            if key in val:
+                self.assertEqual(sed[key], val[key])
+            elif key == 'AutomaticComponentGroup':
+                self.assertEqual(sed[key], res)
+            elif key == 'AutomaticDataSources':
+                self.assertEqual(sed[key], json.dumps(poolchannels))
+            else:
+                self.assertEqual(sed[key], vl)
 
     ## constructor test
     # \brief It tests default settings
@@ -3878,7 +4075,9 @@ class SelectorTest(unittest.TestCase):
 
             se["AutomaticDataSources"] = json.dumps(poolchannels)
             se["AutomaticComponentGroup"] = json.dumps(componentgroup)
-            res = se.updateAutomaticComponents(channelerrors)
+            se.descErrors = []
+            se.updateAutomaticComponents()
+            res = se["AutomaticComponentGroup"]
 
             self.myAssertDict(json.loads(res), {
                     "smycp": True, "smycp2": True, "smycp3": True,
@@ -3902,8 +4101,23 @@ class SelectorTest(unittest.TestCase):
                     "Components", "DataSources", "DataSources", "DataSources",
                     "DataSources",
                     "Components", "DataSources", "DataSources", "DataSources",
-                    "DataSources"])
-            res = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+                    "DataSources",
+                    "AvailableDataSources", "StoreSelection"
+                    ])
+            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
+            sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
+            self.assertEqual(len(sed.keys()), len(self._keys))
+            for key, vl in self._keys:
+                self.assertTrue(key in sed.keys())
+                if key in val:
+                    self.assertEqual(sed[key], val[key])
+                elif key == 'AutomaticComponentGroup':
+                    self.assertEqual(sed[key], res)
+                elif key == 'AutomaticDataSources':
+                    self.assertEqual(sed[key], json.dumps(poolchannels))
+                else:
+                    self.assertEqual(sed[key], vl)
         finally:
             simps2.tearDown()
 
@@ -3941,12 +4155,14 @@ class SelectorTest(unittest.TestCase):
 
             se["AutomaticDataSources"] = json.dumps(poolchannels)
             se["AutomaticComponentGroup"] = json.dumps(componentgroup)
-            res = se.updateAutomaticComponents(channelerrors)
+            se.descErrors = []
+            se.updateAutomaticComponents()
+            res = se["AutomaticComponentGroup"]
 
             self.myAssertDict(json.loads(res), {
                     "smycp": True, "smycp2": True, "smycp3": True,
                     "s2mycp": False, "s2mycp2": False, "s2mycp3": False})
-            self.assertEqual(len(channelerrors), 3)
+            self.assertEqual(len(se.descErrors), 3)
 
     #        print self._cf.dp.GetCommandVariable("COMMANDS")
             self.assertEqual(
@@ -3965,8 +4181,22 @@ class SelectorTest(unittest.TestCase):
                     "Components", "DataSources", "DataSources", "DataSources",
                     "DataSources",
                     "Components", "DataSources", "DataSources", "DataSources",
-                    "DataSources"])
-            res = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+                    "DataSources",
+                    "AvailableDataSources", "StoreSelection"])
+            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
+            sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
+            self.assertEqual(len(sed.keys()), len(self._keys))
+            for key, vl in self._keys:
+                self.assertTrue(key in sed.keys())
+                if key in val:
+                    self.assertEqual(sed[key], val[key])
+                elif key == 'AutomaticComponentGroup':
+                    self.assertEqual(sed[key], res)
+                elif key == 'AutomaticDataSources':
+                    self.assertEqual(sed[key], json.dumps(poolchannels))
+                else:
+                    self.assertEqual(sed[key], vl)
         finally:
             simps2.delete()
 
@@ -3998,12 +4228,14 @@ class SelectorTest(unittest.TestCase):
 
         se["AutomaticDataSources"] = json.dumps(poolchannels)
         se["AutomaticComponentGroup"] = json.dumps(componentgroup)
-        res = se.updateAutomaticComponents(channelerrors)
+        se.descErrors = []
+        se.updateAutomaticComponents()
+        res = se["AutomaticComponentGroup"]
 
         self.myAssertDict(json.loads(res), {
                 "smycp": True, "smycp2": True, "smycp3": True,
                 "s2mycp": False, "s2mycp2": False, "s2mycp3": False})
-        self.assertEqual(len(channelerrors), 3)
+        self.assertEqual(len(se.descErrors), 3)
 
         self.assertEqual(json.loads(
                 self._cf.dp.GetCommandVariable("COMMANDS")),
@@ -4021,8 +4253,22 @@ class SelectorTest(unittest.TestCase):
                 "Components", "DataSources", "DataSources", "DataSources",
                 "DataSources",
                 "Components", "DataSources", "DataSources", "DataSources",
-                "DataSources"])
-        res = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+                "DataSources",
+                "AvailableDataSources", "StoreSelection"])
+        res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+        self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
+        sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
+        self.assertEqual(len(sed.keys()), len(self._keys))
+        for key, vl in self._keys:
+            self.assertTrue(key in sed.keys())
+            if key in val:
+                self.assertEqual(sed[key], val[key])
+            elif key == 'AutomaticComponentGroup':
+                self.assertEqual(sed[key], res)
+            elif key == 'AutomaticDataSources':
+                self.assertEqual(sed[key], json.dumps(poolchannels))
+            else:
+                self.assertEqual(sed[key], vl)
 
     ## constructor test
     # \brief It tests default settings
@@ -4058,14 +4304,29 @@ class SelectorTest(unittest.TestCase):
 
             se["AutomaticDataSources"] = json.dumps(poolchannels)
             se["AutomaticComponentGroup"] = json.dumps(componentgroup)
-            res = se.updateAutomaticComponents(channelerrors)
+            se.descErrors = []
+            se.updateAutomaticComponents()
+            res = se["AutomaticComponentGroup"]
 
             self.myAssertDict(json.loads(res), {
                     "smycp": True, "smycp2": True, "smycp3": True,
                     "s2mycp": True, "s2mycp2": True, "s2mycp3": True})
-            self.assertEqual(len(channelerrors), 0)
+            self.assertEqual(len(se.descErrors), 0)
 
-            res = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
+            sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
+            self.assertEqual(len(sed.keys()), len(self._keys))
+            for key, vl in self._keys:
+                self.assertTrue(key in sed.keys())
+                if key in val:
+                    self.assertEqual(sed[key], val[key])
+                elif key == 'AutomaticComponentGroup':
+                    self.assertEqual(sed[key], res)
+                elif key == 'AutomaticDataSources':
+                    self.assertEqual(sed[key], json.dumps(poolchannels))
+                else:
+                    self.assertEqual(sed[key], vl)
         finally:
             simps2.tearDown()
 
@@ -4103,15 +4364,30 @@ class SelectorTest(unittest.TestCase):
 
             se["AutomaticDataSources"] = json.dumps(poolchannels)
             se["AutomaticComponentGroup"] = json.dumps(componentgroup)
-            res = se.updateAutomaticComponents(channelerrors)
+            se.descErrors = []
+            se.updateAutomaticComponents()
+            res = se["AutomaticComponentGroup"]
 
             self.myAssertDict(json.loads(res), {
                     "smycp": True, "smycp2": True, "smycp3": True,
                     "s2mycp": False, "s2mycp2": False, "s2mycp3": True})
-            self.assertEqual(len(channelerrors), 2)
+            self.assertEqual(len(se.descErrors), 2)
 
     #        print self._cf.dp.GetCommandVariable("COMMANDS")
-            res = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
+            sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
+            self.assertEqual(len(sed.keys()), len(self._keys))
+            for key, vl in self._keys:
+                self.assertTrue(key in sed.keys())
+                if key in val:
+                    self.assertEqual(sed[key], val[key])
+                elif key == 'AutomaticComponentGroup':
+                    self.assertEqual(sed[key], res)
+                elif key == 'AutomaticDataSources':
+                    self.assertEqual(set(json.loads(sed[key])), set(poolchannels))
+                else:
+                    self.assertEqual(sed[key], vl)
         finally:
             simps2.tearDown()
 
@@ -4151,7 +4427,9 @@ class SelectorTest(unittest.TestCase):
 
             se["AutomaticDataSources"] = json.dumps(poolchannels)
             se["AutomaticComponentGroup"] = json.dumps(componentgroup)
-            res = se.updateAutomaticComponents(channelerrors)
+            se.descErrors = []
+            se.updateAutomaticComponents()
+            res = se["AutomaticComponentGroup"]
 
             self.myAssertDict(json.loads(res), {
                     "smycp": True, "smycp2": True, "smycp3": True,
@@ -4160,7 +4438,20 @@ class SelectorTest(unittest.TestCase):
             self.assertEqual(len(channelerrors), 0)
 
     #        print self._cf.dp.GetCommandVariable("COMMANDS")
-            res = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
+            sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
+            self.assertEqual(len(sed.keys()), len(self._keys))
+            for key, vl in self._keys:
+                self.assertTrue(key in sed.keys())
+                if key in val:
+                    self.assertEqual(sed[key], val[key])
+                elif key == 'AutomaticComponentGroup':
+                    self.assertEqual(sed[key], res)
+                elif key == 'AutomaticDataSources':
+                    self.assertEqual(set(json.loads(sed[key])), set(poolchannels))
+                else:
+                    self.assertEqual(sed[key], vl)
         finally:
             simps2.tearDown()
 
@@ -4199,16 +4490,31 @@ class SelectorTest(unittest.TestCase):
 
             se["AutomaticDataSources"] = json.dumps(poolchannels)
             se["AutomaticComponentGroup"] = json.dumps(componentgroup)
-            res = se.updateAutomaticComponents(channelerrors)
+            se.descErrors = []
+            se.updateAutomaticComponents()
+            res = se["AutomaticComponentGroup"]
 
             self.myAssertDict(json.loads(res), {
                     "smycp": True, "smycp2": True, "smycp3": True,
                     "s2mycp": True, "s2mycp2": True, "s2mycp3": True,
                     "smycpnt1": False})
-            self.assertEqual(len(channelerrors), 1)
+            self.assertEqual(len(se.descErrors), 1)
 
     #        print self._cf.dp.GetCommandVariable("COMMANDS")
-            res = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
+            sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
+            self.assertEqual(len(sed.keys()), len(self._keys))
+            for key, vl in self._keys:
+                self.assertTrue(key in sed.keys())
+                if key in val:
+                    self.assertEqual(sed[key], val[key])
+                elif key == 'AutomaticComponentGroup':
+                    self.assertEqual(sed[key], res)
+                elif key == 'AutomaticDataSources':
+                    self.assertEqual(set(json.loads(sed[key])), set(poolchannels))
+                else:
+                    self.assertEqual(sed[key], vl)
         finally:
             simps2.tearDown()
 
@@ -4251,16 +4557,31 @@ class SelectorTest(unittest.TestCase):
 
             se["AutomaticDataSources"] = json.dumps(poolchannels)
             se["AutomaticComponentGroup"] = json.dumps(componentgroup)
-            res = se.updateAutomaticComponents(channelerrors)
+            se.descErrors = []
+            se.updateAutomaticComponents()
+            res = se["AutomaticComponentGroup"]
 
             self.myAssertDict(json.loads(res), {
                     "smycp": True, "smycp2": True, "smycp3": True,
                     "s2mycp": True, "s2mycp2": True, "s2mycp3": True,
                     "smycpnt1": False})
-            self.assertEqual(len(channelerrors), 1)
+            self.assertEqual(len(se.descErrors), 1)
 
     #        print self._cf.dp.GetCommandVariable("COMMANDS")
-            res = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
+            sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
+            self.assertEqual(len(sed.keys()), len(self._keys))
+            for key, vl in self._keys:
+                self.assertTrue(key in sed.keys())
+                if key in val:
+                    self.assertEqual(sed[key], val[key])
+                elif key == 'AutomaticComponentGroup':
+                    self.assertEqual(sed[key], res)
+                elif key == 'AutomaticDataSources':
+                    self.assertEqual(set(json.loads(sed[key])), set(poolchannels))
+                else:
+                    self.assertEqual(sed[key], vl)
         finally:
             simps2.tearDown()
 
@@ -4314,16 +4635,31 @@ class SelectorTest(unittest.TestCase):
 
             se["AutomaticDataSources"] = json.dumps(poolchannels)
             se["AutomaticComponentGroup"] = json.dumps(componentgroup)
-            res = se.updateAutomaticComponents(channelerrors)
+            se.descErrors = []
+            se.updateAutomaticComponents()
+            res = se["AutomaticComponentGroup"]
 
             self.myAssertDict(json.loads(res), {
                     "smycp": True, "smycp2": True, "smycp3": True,
                     "s2mycp": True, "s2mycp2": True, "s2mycp3": True,
                     "smycpnt1": True})
-            self.assertEqual(len(channelerrors), 0)
+            self.assertEqual(len(se.descErrors), 0)
 
     #        print self._cf.dp.GetCommandVariable("COMMANDS")
-            res = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
+            sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
+            self.assertEqual(len(sed.keys()), len(self._keys))
+            for key, vl in self._keys:
+                self.assertTrue(key in sed.keys())
+                if key in val:
+                    self.assertEqual(sed[key], val[key])
+                elif key == 'AutomaticComponentGroup':
+                    self.assertEqual(sed[key], res)
+                elif key == 'AutomaticDataSources':
+                    self.assertEqual(set(json.loads(sed[key])), set(poolchannels))
+                else:
+                    self.assertEqual(sed[key], vl)
         finally:
             simps2.tearDown()
 
@@ -4380,7 +4716,9 @@ class SelectorTest(unittest.TestCase):
 
             se["AutomaticDataSources"] = json.dumps(poolchannels)
             se["AutomaticComponentGroup"] = json.dumps(componentgroup)
-            res = se.updateAutomaticComponents(channelerrors)
+            se.descErrors = []
+            se.updateAutomaticComponents()
+            res = se["AutomaticComponentGroup"]
 
             print res
     #        print channelerrors
@@ -4389,10 +4727,23 @@ class SelectorTest(unittest.TestCase):
                     "smycp": True, "smycp2": True, "smycp3": True,
                     "s2mycp": True, "s2mycp2": True, "s2mycp3": True,
                     "smycpnt1": False})
-            self.assertEqual(len(channelerrors), 1)
+            self.assertEqual(len(se.descErrors), 1)
 
     #        print self._cf.dp.GetCommandVariable("COMMANDS")
-            res = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
+            sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
+            self.assertEqual(len(sed.keys()), len(self._keys))
+            for key, vl in self._keys:
+                self.assertTrue(key in sed.keys())
+                if key in val:
+                    self.assertEqual(sed[key], val[key])
+                elif key == 'AutomaticComponentGroup':
+                    self.assertEqual(sed[key], res)
+                elif key == 'AutomaticDataSources':
+                    self.assertEqual(set(json.loads(sed[key])), set(poolchannels))
+                else:
+                    self.assertEqual(sed[key], vl)
         finally:
             simps2.tearDown()
 
@@ -4449,16 +4800,31 @@ class SelectorTest(unittest.TestCase):
 
             se["AutomaticDataSources"] = json.dumps(poolchannels)
             se["AutomaticComponentGroup"] = json.dumps(componentgroup)
-            res = se.updateAutomaticComponents(channelerrors)
+            se.descErrors = []
+            se.updateAutomaticComponents()
+            res = se["AutomaticComponentGroup"]
 
             self.myAssertDict(json.loads(res), {
                     "smycp": True, "smycp2": True, "smycp3": True,
                     "s2mycp": True, "s2mycp2": True, "s2mycp3": True,
                     "smycpnt1": False})
-            self.assertEqual(len(channelerrors), 1)
+            self.assertEqual(len(se.descErrors), 1)
 
     #        print self._cf.dp.GetCommandVariable("COMMANDS")
-            res = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
+            sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
+            self.assertEqual(len(sed.keys()), len(self._keys))
+            for key, vl in self._keys:
+                self.assertTrue(key in sed.keys())
+                if key in val:
+                    self.assertEqual(sed[key], val[key])
+                elif key == 'AutomaticComponentGroup':
+                    self.assertEqual(sed[key], res)
+                elif key == 'AutomaticDataSources':
+                    self.assertEqual(set(json.loads(sed[key])), set(poolchannels))
+                else:
+                    self.assertEqual(sed[key], vl)
         finally:
             simps2.tearDown()
 
@@ -4514,15 +4880,30 @@ class SelectorTest(unittest.TestCase):
 
             se["AutomaticDataSources"] = json.dumps(poolchannels)
             se["AutomaticComponentGroup"] = json.dumps(componentgroup)
-            res = se.updateAutomaticComponents(channelerrors)
+            se.descErrors = []
+            se.updateAutomaticComponents()
+            res = se["AutomaticComponentGroup"]
 
             self.myAssertDict(json.loads(res), {
                     "smycp": True, "smycp2": True, "smycp3": True,
                     "s2mycp": True, "s2mycp2": True, "s2mycp3": True,
                     "smycpnt1": True})
-            self.assertEqual(len(channelerrors), 0)
+            self.assertEqual(len(se.descErrors), 0)
 
-            res = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
+            sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
+            self.assertEqual(len(sed.keys()), len(self._keys))
+            for key, vl in self._keys:
+                self.assertTrue(key in sed.keys())
+                if key in val:
+                    self.assertEqual(sed[key], val[key])
+                elif key == 'AutomaticComponentGroup':
+                    self.assertEqual(sed[key], res)
+                elif key == 'AutomaticDataSources':
+                    self.assertEqual(set(json.loads(sed[key])), set(poolchannels))
+                else:
+                    self.assertEqual(sed[key], vl)
         finally:
             db.delete_device_alias(arr[0]["name"])
             simps2.tearDown()
@@ -4577,16 +4958,31 @@ class SelectorTest(unittest.TestCase):
 
             se["AutomaticDataSources"] = json.dumps(poolchannels)
             se["AutomaticComponentGroup"] = json.dumps(componentgroup)
-            res = se.updateAutomaticComponents(channelerrors)
+            se.descErrors = []
+            se.updateAutomaticComponents()
+            res = se["AutomaticComponentGroup"]
 
             self.myAssertDict(json.loads(res), {
                     "smycp": True, "smycp2": True, "smycp3": True,
                     "s2mycp": True, "s2mycp2": True, "s2mycp3": True,
                     "smycpnt1": True})
-            self.assertEqual(len(channelerrors), 0)
+            self.assertEqual(len(se.descErrors), 0)
 
     #        print self._cf.dp.GetCommandVariable("COMMANDS")
-            res = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
+            sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
+            self.assertEqual(len(sed.keys()), len(self._keys))
+            for key, vl in self._keys:
+                self.assertTrue(key in sed.keys())
+                if key in val:
+                    self.assertEqual(sed[key], val[key])
+                elif key == 'AutomaticComponentGroup':
+                    self.assertEqual(sed[key], res)
+                elif key == 'AutomaticDataSources':
+                    self.assertEqual(set(json.loads(sed[key])), set(poolchannels))
+                else:
+                    self.assertEqual(sed[key], vl)
         finally:
             db.delete_device_alias(arr[0]["name"])
             simps2.tearDown()
@@ -4640,15 +5036,30 @@ class SelectorTest(unittest.TestCase):
             print "POOLS", pools
             se["AutomaticDataSources"] = json.dumps(poolchannels)
             se["AutomaticComponentGroup"] = json.dumps(componentgroup)
-            res = se.updateAutomaticComponents(channelerrors)
+            se.descErrors = []
+            se.updateAutomaticComponents()
+            res = se["AutomaticComponentGroup"]
 
             self.myAssertDict(json.loads(res), {
                     "smycp": True, "smycp2": True, "smycp3": True,
                     "s2mycpnt1": False})
-            self.assertEqual(len(channelerrors), 1)
+            self.assertEqual(len(se.descErrors), 1)
 
     #        print self._cf.dp.GetCommandVariable("COMMANDS")
-            res = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
+            sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
+            self.assertEqual(len(sed.keys()), len(self._keys))
+            for key, vl in self._keys:
+                self.assertTrue(key in sed.keys())
+                if key in val:
+                    self.assertEqual(sed[key], val[key])
+                elif key == 'AutomaticComponentGroup':
+                    self.assertEqual(sed[key], res)
+                elif key == 'AutomaticDataSources':
+                    self.assertEqual(set(json.loads(sed[key])), set(poolchannels))
+                else:
+                    self.assertEqual(sed[key], vl)
         finally:
             db.delete_device_alias(arr[0]["name"])
             simps2.tearDown()
@@ -4695,15 +5106,30 @@ class SelectorTest(unittest.TestCase):
     #        print "XDSS", self._cf.dp.dataSources(["scalar_long"])
             se["AutomaticDataSources"] = json.dumps(poolchannels)
             se["AutomaticComponentGroup"] = json.dumps(componentgroup)
-            res = se.updateAutomaticComponents(channelerrors)
+            se.descErrors = []
+            se.updateAutomaticComponents()
+            res = se["AutomaticComponentGroup"]
 
             self.myAssertDict(json.loads(res), {
                     "smycp": True, "smycp2": True, "smycp3": True,
                     "s2mycp": False, "s2mycp2": False, "s2mycp3": False})
-            self.assertEqual(len(channelerrors), 3)
+            self.assertEqual(len(se.descErrors), 3)
 
     #        print self._cf.dp.GetCommandVariable("COMMANDS")
-            res = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
+            sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
+            self.assertEqual(len(sed.keys()), len(self._keys))
+            for key, vl in self._keys:
+                self.assertTrue(key in sed.keys())
+                if key in val:
+                    self.assertEqual(sed[key], val[key])
+                elif key == 'AutomaticComponentGroup':
+                    self.assertEqual(sed[key], res)
+                elif key == 'AutomaticDataSources':
+                    self.assertEqual(set(json.loads(sed[key])), set(poolchannels))
+                else:
+                    self.assertEqual(sed[key], vl)
         finally:
             simps2.tearDown()
 
