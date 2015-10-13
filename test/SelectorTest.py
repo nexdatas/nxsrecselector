@@ -1289,7 +1289,7 @@ class SelectorTest(unittest.TestCase):
                 mydict = se.get()
                 if (i / 2) % 4 - 2:
                     se.exportEnv(mydict)
-            else:
+            elif (i / 2) % 4 == 0:
                 se.exportEnv()
                 env = pickle.loads(
                     self._ms.dps[self._ms.ms.keys()[0]].Environment[1])
@@ -1302,6 +1302,10 @@ class SelectorTest(unittest.TestCase):
                         self.assertEqual(
                             se[k],
                             env["new"]["NeXusConfiguration"][k])
+            else:
+                se["MntGrp"] = val["MntGrp"]
+                se.storeSelection()
+
 
     #        print "se", se["ConfigDevice"]
             se["ConfigDevice"] = "dfd"
@@ -1324,8 +1328,11 @@ class SelectorTest(unittest.TestCase):
                 elif (i / 2) % 4 - 2:
                     se.importEnv(data=mydata)
                     se.set(mydata)
-            else:
+            elif (i / 2) % 4 == 0:
                 se.importEnv()
+            else:
+                se["MntGrp"] = val["MntGrp"]
+                se.fetchSelection()
 
             self.assertTrue(se["ConfigDevice"], val["ConfigDevice"])
 
@@ -1352,7 +1359,7 @@ class SelectorTest(unittest.TestCase):
                 mydict = se.get()
                 if (i / 2) % 4 - 2:
                     se.exportEnv(mydict)
-            else:
+            elif (i / 2) % 4 == 0:
                 se.exportEnv()
                 env = pickle.loads(
                     self._ms.dps[self._ms.ms.keys()[0]].Environment[1])
@@ -1365,6 +1372,9 @@ class SelectorTest(unittest.TestCase):
                         self.assertEqual(
                             se[k],
                             env["new"]["NeXusConfiguration"][k])
+            else:
+                se["MntGrp"] = val["MntGrp"]
+                se.storeSelection()
 
     #        print "se", se["WriterDevice"]
             se["WriterDevice"] = "dfd"
@@ -1387,8 +1397,11 @@ class SelectorTest(unittest.TestCase):
                 elif (i / 2) % 4 - 2:
                     se.importEnv(data=mydata)
                     se.set(mydata)
-            else:
+            elif (i / 2) % 4 == 0:
                 se.importEnv()
+            else:
+                se["MntGrp"] = val["MntGrp"]
+                se.fetchSelection()
 
             self.assertTrue(se["WriterDevice"], val["WriterDevice"])
 
@@ -1421,8 +1434,11 @@ class SelectorTest(unittest.TestCase):
                 mydict = se.get()
                 if (i / 2) % 4 - 2:
                     se.exportEnv(mydict)
-            else:
+            elif (i / 2) % 4 == 0:
                 se.exportEnv()
+            else:
+                se["MntGrp"] = val["MntGrp"]
+                se.storeSelection()
 
             self.myAssertRaise(Exception, self.setDoor, se, "dfd")
             self.assertTrue(se["Door"], "dfd")
@@ -1457,9 +1473,12 @@ class SelectorTest(unittest.TestCase):
                     se["Door"] = val["Door"]
                     se.importEnv(data=mydata)
                     se.set(mydata)
-            else:
+            elif (i / 2) % 4 == 0:
                 se["Door"] = val["Door"]
                 se.importEnv()
+            else:
+                se["MntGrp"] = val["MntGrp"]
+                se.fetchSelection()
 
             self.assertEqual(se.getMacroServer(), msname)
             self.assertEqual(se["Door"], val["Door"])
@@ -1494,7 +1513,7 @@ class SelectorTest(unittest.TestCase):
                 mydict = se.get()
                 if (i / 2) % 4 - 2:
                     se.exportEnv(mydict)
-            else:
+            elif (i / 2) % 4 == 0:
                 se.exportEnv()
                 env = pickle.loads(
                     self._ms.dps[self._ms.ms.keys()[0]].Environment[1])
@@ -1507,6 +1526,8 @@ class SelectorTest(unittest.TestCase):
                         self.assertEqual(
                             se[k],
                             env["new"]["NeXusConfiguration"][k])
+            else:
+                se.storeSelection()
 
             se.reset()
             self.assertEqual(se["MntGrp"], self.__defaultmntgrp)
@@ -1518,8 +1539,11 @@ class SelectorTest(unittest.TestCase):
                 elif (i / 2) % 4 - 2:
                     se.importEnv(data=mydata)
                     se.set(mydata)
-            else:
+            elif (i / 2) % 4 == 0:
                 se.importEnv()
+            else:
+                se["MntGrp"] = mg
+                se.fetchSelection()
 
             self.assertEqual(se["MntGrp"], mg)
 
@@ -1550,7 +1574,7 @@ class SelectorTest(unittest.TestCase):
                 mydict = se.get()
                 if (i / 2) % 4 - 2:
                     se.exportEnv(mydict)
-            else:
+            elif (i / 2) % 4 == 0:
                 se.exportEnv()
                 env = pickle.loads(
                     self._ms.dps[self._ms.ms.keys()[0]].Environment[1])
@@ -1563,6 +1587,10 @@ class SelectorTest(unittest.TestCase):
                         self.assertEqual(
                             se[k],
                             env["new"]["NeXusConfiguration"][k])
+            else:
+                se["MntGrp"] = val["MntGrp"]
+                se.storeSelection()
+
 
             se.reset()
             self.assertEqual(se["TimeZone"], self.__defaultzone)
@@ -1574,8 +1602,11 @@ class SelectorTest(unittest.TestCase):
                 elif (i / 2) % 4 - 2:
                     se.importEnv(data=mydata)
                     se.set(mydata)
-            else:
+            elif (i / 2) % 4 == 0:
                 se.importEnv()
+            else:
+                se["MntGrp"] = val["MntGrp"]
+                se.fetchSelection()
 
             self.assertEqual(se["TimeZone"], mg)
 
@@ -1896,7 +1927,7 @@ class SelectorTest(unittest.TestCase):
                 mydict = se.get()
                 if (i / 2) % 4 - 2:
                     se.exportEnv(mydict)
-            else:
+            elif (i / 2) % 4 == 0:
                 se.exportEnv()
                 env = pickle.loads(
                     self._ms.dps[self._ms.ms.keys()[0]].Environment[1])
@@ -1914,6 +1945,10 @@ class SelectorTest(unittest.TestCase):
                         self.assertEqual(
                             sorted(json.loads(se["AutomaticDataSources"])),
                             sorted(env["new"]["NeXusConfiguration"][k]))
+            else:
+                se["MntGrp"] = val["MntGrp"]
+                se.storeSelection()
+
             se.reset()
             ads = json.loads(se["AutomaticDataSources"])
             self.assertEqual(set(mnames), set(ads))
@@ -1925,8 +1960,11 @@ class SelectorTest(unittest.TestCase):
                 elif (i / 2) % 4 - 2:
                     se.importEnv(data=mydata)
                     se.set(mydata)
-            else:
+            elif (i / 2) % 4 == 0:
                 se.importEnv()
+            else:
+                se["MntGrp"] = val["MntGrp"]
+                se.fetchSelection()
 
             ads = json.loads(se["AutomaticDataSources"])
             self.assertEqual(set(list(set(dss3) | set(dss2) | set(dss1))),
@@ -2009,7 +2047,7 @@ class SelectorTest(unittest.TestCase):
                 mydict = se.get()
                 if (i / 2) % 4 - 2:
                     se.exportEnv(mydict)
-            else:
+            elif (i / 2) % 4 == 0:
                 se.exportEnv()
                 env = pickle.loads(
                     self._ms.dps[self._ms.ms.keys()[0]].Environment[1])
@@ -2022,6 +2060,9 @@ class SelectorTest(unittest.TestCase):
                         self.assertEqual(
                             se[k],
                             env["new"]["NeXusConfiguration"][k])
+            else:
+                se["MntGrp"] = val["MntGrp"]
+                se.storeSelection()
 
             se.reset()
             ndss = json.loads(se["OrderedChannels"])
@@ -2034,8 +2075,11 @@ class SelectorTest(unittest.TestCase):
                 elif (i / 2) % 4 - 2:
                     se.importEnv(data=mydata)
                     se.set(mydata)
-            else:
+            elif (i / 2) % 4 == 0:
                 se.importEnv()
+            else:
+                se["MntGrp"] = val["MntGrp"]
+                se.fetchSelection()
 
             ads = se["OrderedChannels"]
             print "OCS:", ads
@@ -2132,7 +2176,7 @@ class SelectorTest(unittest.TestCase):
                     se.exportEnv(mydict, cmddata=nenv)
                 elif (i / 2) % 8 - 6:
                     se.exportEnv(mydict)
-            else:
+            elif (i / 2) % 4 == 0:
                 se.exportEnv()
                 env = pickle.loads(
                     self._ms.dps[self._ms.ms.keys()[0]].Environment[1])
@@ -2145,6 +2189,9 @@ class SelectorTest(unittest.TestCase):
                         self.assertEqual(
                             se[k],
                             env["new"]["NeXusConfiguration"][k])
+            else:
+                se["MntGrp"] = val["MntGrp"]
+                se.storeSelection()
 
             if i % 2:
                 se.deselect()
@@ -2194,9 +2241,11 @@ class SelectorTest(unittest.TestCase):
                     se.set(mydata)
                     se.importEnv(names=nenv.keys(), data=mycmd)
                     self.assertEqual(mycmd, nenv)
-
-            else:
+            elif (i / 2) % 4 == 0:
                 se.importEnv()
+            else:
+                se["MntGrp"] = val["MntGrp"]
+                se.fetchSelection()
 
             ncps = json.loads(se["ComponentGroup"])
             ndss = json.loads(se["DataSourceGroup"])
@@ -2289,7 +2338,7 @@ class SelectorTest(unittest.TestCase):
                     se.exportEnv(mydict, cmddata=nenv)
                 elif (i / 2) % 8 - 6:
                     se.exportEnv(mydict)
-            else:
+            elif (i / 2) % 4 == 0:
                 se.exportEnv()
                 env = pickle.loads(
                     self._ms.dps[self._ms.ms.keys()[0]].Environment[1])
@@ -2302,6 +2351,9 @@ class SelectorTest(unittest.TestCase):
                         self.assertEqual(
                             se[k],
                             env["new"]["NeXusConfiguration"][k])
+            else:
+                se["MntGrp"] = val["MntGrp"]
+                se.storeSelection()
 
             if i % 2:
                 se.deselect()
@@ -2352,9 +2404,11 @@ class SelectorTest(unittest.TestCase):
                     se.set(mydata)
                     se.importEnv(names=nenv.keys(), data=mycmd)
                     self.assertEqual(mycmd, nenv)
-
-            else:
+            elif (i / 2) % 4 == 0:
                 se.importEnv()
+            else:
+                se["MntGrp"] = val["MntGrp"]
+                se.fetchSelection()
 
             ndss = json.loads(se["DataSourceGroup"])
             existing = set(dssn) & (set(chs) | set(cdss))
@@ -2404,8 +2458,11 @@ class SelectorTest(unittest.TestCase):
                 mydict = se.get()
                 if (i / 2) % 4 - 2:
                     se.exportEnv(mydict)
-            else:
+            elif (i / 2) % 4 == 0:
                 se.exportEnv()
+            else:
+                se["MntGrp"] = val["MntGrp"]
+                se.storeSelection()
 
             self.compareToDump(se, ["AutomaticComponentGroup"])
             ndss = json.loads(se["AutomaticComponentGroup"])
@@ -2442,8 +2499,11 @@ class SelectorTest(unittest.TestCase):
                 elif (i / 2) % 4 - 2:
                     se.importEnv(data=mydata)
                     se.set(mydata)
-            else:
+            elif (i / 2) % 4 == 0:
                 se.importEnv()
+            else:
+                se["MntGrp"] = val["MntGrp"]
+                se.fetchSelection()
 
             self.compareToDump(se, ["AutomaticComponentGroup"])
             ndss = json.loads(se["AutomaticComponentGroup"])
@@ -2489,7 +2549,7 @@ class SelectorTest(unittest.TestCase):
                 mydict = se.get()
                 if (i / 2) % 4 - 2:
                     se.exportEnv(mydict)
-            else:
+            elif (i / 2) % 4 == 0:
                 se.exportEnv()
                 env = pickle.loads(
                     self._ms.dps[self._ms.ms.keys()[0]].Environment[1])
@@ -2502,6 +2562,9 @@ class SelectorTest(unittest.TestCase):
                         self.assertEqual(
                             se[k],
                             env["new"]["NeXusConfiguration"][k])
+            else:
+                se["MntGrp"] = val["MntGrp"]
+                se.storeSelection()
 
             self.compareToDump(se, ["DataRecord"])
 
@@ -2519,8 +2582,12 @@ class SelectorTest(unittest.TestCase):
                 elif (i / 2) % 4 - 2:
                     se.importEnv(data=mydata)
                     se.set(mydata)
-            else:
+            elif (i / 2) % 4 == 0:
                 se.importEnv()
+            else:
+                se["MntGrp"] = val["MntGrp"]
+                se.fetchSelection()
+
             self.compareToDump(se, ["DataRecord"])
 
             ndss = json.loads(se["DataRecord"])
@@ -2565,7 +2632,7 @@ class SelectorTest(unittest.TestCase):
                 mydict = se.get()
                 if (i / 2) % 4 - 2:
                     se.exportEnv(mydict)
-            else:
+            elif (i / 2) % 4 == 0:
                 se.exportEnv()
                 env = pickle.loads(
                     self._ms.dps[self._ms.ms.keys()[0]].Environment[1])
@@ -2578,6 +2645,9 @@ class SelectorTest(unittest.TestCase):
                         self.assertEqual(
                             se[k],
                             env["new"]["NeXusConfiguration"][k])
+            else:
+                se["MntGrp"] = val["MntGrp"]
+                se.storeSelection()
 
             self.compareToDump(se, ["Labels"])
 
@@ -2595,8 +2665,11 @@ class SelectorTest(unittest.TestCase):
                 elif (i / 2) % 4 - 2:
                     se.importEnv(data=mydata)
                     se.set(mydata)
-            else:
+            elif (i / 2) % 4 == 0:
                 se.importEnv()
+            else:
+                se["MntGrp"] = val["MntGrp"]
+                se.fetchSelection()
             self.compareToDump(se, ["Labels"])
 
             ndss = json.loads(se["Labels"])
@@ -2642,7 +2715,7 @@ class SelectorTest(unittest.TestCase):
                 mydict = se.get()
                 if (i / 2) % 4 - 2:
                     se.exportEnv(mydict)
-            else:
+            elif (i / 2) % 4 == 0:
                 se.exportEnv()
                 env = pickle.loads(
                     self._ms.dps[self._ms.ms.keys()[0]].Environment[1])
@@ -2655,6 +2728,9 @@ class SelectorTest(unittest.TestCase):
                         self.assertEqual(
                             se[k],
                             env["new"]["NeXusConfiguration"][k])
+            else:
+                se["MntGrp"] = val["MntGrp"]
+                se.storeSelection()
 
             self.compareToDump(se, ["LabelPaths"])
 
@@ -2672,8 +2748,11 @@ class SelectorTest(unittest.TestCase):
                 elif (i / 2) % 4 - 2:
                     se.importEnv(data=mydata)
                     se.set(mydata)
-            else:
+            elif (i / 2) % 4 == 0:
                 se.importEnv()
+            else:
+                se["MntGrp"] = val["MntGrp"]
+                se.fetchSelection()
             self.compareToDump(se, ["LabelPaths"])
 
             ndss = json.loads(se["LabelPaths"])
@@ -2717,7 +2796,7 @@ class SelectorTest(unittest.TestCase):
                 mydict = se.get()
                 if (i / 2) % 4 - 2:
                     se.exportEnv(mydict)
-            else:
+            elif (i / 2) % 4 == 0:
                 se.exportEnv()
                 env = pickle.loads(
                     self._ms.dps[self._ms.ms.keys()[0]].Environment[1])
@@ -2730,6 +2809,9 @@ class SelectorTest(unittest.TestCase):
                         self.assertEqual(
                             se[k],
                             env["new"]["NeXusConfiguration"][k])
+            else:
+                se["MntGrp"] = val["MntGrp"]
+                se.storeSelection()
 
             self.compareToDump(se, ["LabelLinks"])
 
@@ -2747,8 +2829,11 @@ class SelectorTest(unittest.TestCase):
                 elif (i / 2) % 4 - 2:
                     se.importEnv(data=mydata)
                     se.set(mydata)
-            else:
+            elif (i / 2) % 4 == 0:
                 se.importEnv()
+            else:
+                se["MntGrp"] = val["MntGrp"]
+                se.fetchSelection()
 
             self.compareToDump(se, ["LabelLinks"])
 
@@ -2794,7 +2879,7 @@ class SelectorTest(unittest.TestCase):
                 mydict = se.get()
                 if (i / 2) % 4 - 2:
                     se.exportEnv(mydict)
-            else:
+            elif (i / 2) % 4 == 0:
                 se.exportEnv()
                 env = pickle.loads(
                     self._ms.dps[self._ms.ms.keys()[0]].Environment[1])
@@ -2807,6 +2892,9 @@ class SelectorTest(unittest.TestCase):
                         self.assertEqual(
                             se[k],
                             env["new"]["NeXusConfiguration"][k])
+            else:
+                se["MntGrp"] = val["MntGrp"]
+                se.storeSelection()
 
             self.compareToDump(se, ["LabelTypes"])
 
@@ -2824,9 +2912,11 @@ class SelectorTest(unittest.TestCase):
                 elif (i / 2) % 4 - 2:
                     se.importEnv(data=mydata)
                     se.set(mydata)
-            else:
+            elif (i / 2) % 4 == 0:
                 se.importEnv()
-            self.compareToDump(se, ["LabelTypes"])
+            else:
+                se["MntGrp"] = val["MntGrp"]
+                se.fetchSelection()
 
             ndss = json.loads(se["LabelTypes"])
             for ds in cps.keys():
@@ -2872,7 +2962,7 @@ class SelectorTest(unittest.TestCase):
                 mydict = se.get()
                 if (i / 2) % 4 - 2:
                     se.exportEnv(mydict)
-            else:
+            elif (i / 2) % 4 == 0:
                 se.exportEnv()
                 env = pickle.loads(
                     self._ms.dps[self._ms.ms.keys()[0]].Environment[1])
@@ -2885,6 +2975,9 @@ class SelectorTest(unittest.TestCase):
                         self.assertEqual(
                             se[k],
                             env["new"]["NeXusConfiguration"][k])
+            else:
+                se["MntGrp"] = val["MntGrp"]
+                se.storeSelection()
 
             self.compareToDump(se, ["LabelShapes"])
 
@@ -2903,8 +2996,11 @@ class SelectorTest(unittest.TestCase):
                 elif (i / 2) % 4 - 2:
                     se.importEnv(data=mydata)
                     se.set(mydata)
-            else:
+            elif (i / 2) % 4 == 0:
                 se.importEnv()
+            else:
+                se["MntGrp"] = val["MntGrp"]
+                se.fetchSelection()
 
             ndss = json.loads(se["LabelShapes"])
             for ds in cps.keys():
@@ -2948,7 +3044,7 @@ class SelectorTest(unittest.TestCase):
                 mydict = se.get()
                 if (i / 2) % 4 - 2:
                     se.exportEnv(mydict)
-            else:
+            elif (i / 2) % 4 == 0:
                 se.exportEnv()
                 env = pickle.loads(
                     self._ms.dps[self._ms.ms.keys()[0]].Environment[1])
@@ -2961,6 +3057,9 @@ class SelectorTest(unittest.TestCase):
                         self.assertEqual(
                             se[k],
                             env["new"]["NeXusConfiguration"][k])
+            else:
+                se["MntGrp"] = val["MntGrp"]
+                se.storeSelection()
 
             self.compareToDump(se, ["ConfigVariables"])
 
@@ -2978,8 +3077,12 @@ class SelectorTest(unittest.TestCase):
                 elif (i / 2) % 4 - 2:
                     se.importEnv(data=mydata)
                     se.set(mydata)
-            else:
+            elif (i / 2) % 4 == 0:
                 se.importEnv()
+            else:
+                se["MntGrp"] = val["MntGrp"]
+                se.fetchSelection()
+
             ndss = json.loads(se["ConfigVariables"])
             for ds in cps.keys():
                 self.assertTrue(ds in ndss.keys())
@@ -3019,7 +3122,7 @@ class SelectorTest(unittest.TestCase):
                 mydict = se.get()
                 if (i / 2) % 4 - 2:
                     se.exportEnv(mydict)
-            else:
+            elif (i / 2) % 4 == 0:
                 se.exportEnv()
                 env = pickle.loads(
                     self._ms.dps[self._ms.ms.keys()[0]].Environment[1])
@@ -3032,6 +3135,9 @@ class SelectorTest(unittest.TestCase):
                         self.assertEqual(
                             se[k],
                             env["new"]["NeXusConfiguration"][k])
+            else:
+                se["MntGrp"] = val["MntGrp"]
+                se.storeSelection()
 
             self.compareToDump(se, ["Timer"])
 
@@ -3046,8 +3152,11 @@ class SelectorTest(unittest.TestCase):
                 elif (i / 2) % 4 - 2:
                     se.importEnv(data=mydata)
                     se.set(mydata)
-            else:
+            elif (i / 2) % 4 == 0:
                 se.importEnv()
+            else:
+                se["MntGrp"] = val["MntGrp"]
+                se.fetchSelection()
             self.compareToDump(se, ["Timer"])
             ndss = json.loads(se["Timer"])
             self.assertEqual(ndss, cps)
@@ -3087,7 +3196,7 @@ class SelectorTest(unittest.TestCase):
                 mydict = se.get()
                 if (i / 2) % 4 - 2:
                     se.exportEnv(mydict)
-            else:
+            elif (i / 2) % 4 == 0:
                 se.exportEnv()
                 env = pickle.loads(
                     self._ms.dps[self._ms.ms.keys()[0]].Environment[1])
@@ -3100,6 +3209,9 @@ class SelectorTest(unittest.TestCase):
                         self.assertEqual(
                             se[k],
                             env["new"]["NeXusConfiguration"][k])
+            else:
+                se["MntGrp"] = val["MntGrp"]
+                se.storeSelection()
 
             self.compareToDump(se, ["InitDataSources"])
             ndss = json.loads(se["InitDataSources"])
@@ -3114,8 +3226,11 @@ class SelectorTest(unittest.TestCase):
                 elif (i / 2) % 4 - 2:
                     se.importEnv(data=mydata)
                     se.set(mydata)
-            else:
+            elif (i / 2) % 4 == 0:
                 se.importEnv()
+            else:
+                se["MntGrp"] = val["MntGrp"]
+                se.fetchSelection()
 
             self.compareToDump(se, ["InitDataSources"])
             ndss = json.loads(se["InitDataSources"])
@@ -3155,7 +3270,7 @@ class SelectorTest(unittest.TestCase):
                 mydict = se.get()
                 if (i / 2) % 4 - 2:
                     se.exportEnv(mydict)
-            else:
+            elif (i / 2) % 4 == 0:
                 se.exportEnv()
                 env = pickle.loads(
                     self._ms.dps[self._ms.ms.keys()[0]].Environment[1])
@@ -3168,6 +3283,9 @@ class SelectorTest(unittest.TestCase):
                         self.assertEqual(
                             se[k],
                             env["new"]["NeXusConfiguration"][k])
+            else:
+                se["MntGrp"] = val["MntGrp"]
+                se.storeSelection()
 
             self.compareToDump(se, ["OptionalComponents"])
             ndss = json.loads(se["OptionalComponents"])
@@ -3182,8 +3300,11 @@ class SelectorTest(unittest.TestCase):
                 elif (i / 2) % 4 - 2:
                     se.importEnv(data=mydata)
                     se.set(mydata)
-            else:
+            elif (i / 2) % 4 == 0:
                 se.importEnv()
+            else:
+                se["MntGrp"] = val["MntGrp"]
+                se.fetchSelection()
 
             self.compareToDump(se, ["OptionalComponents"])
             ndss = json.loads(se["OptionalComponents"])
@@ -3223,7 +3344,7 @@ class SelectorTest(unittest.TestCase):
                 mydict = se.get()
                 if (i / 2) % 4 - 2:
                     se.exportEnv(mydict)
-            else:
+            elif (i / 2) % 4 == 0:
                 se.exportEnv()
                 env = pickle.loads(
                     self._ms.dps[self._ms.ms.keys()[0]].Environment[1])
@@ -3236,6 +3357,9 @@ class SelectorTest(unittest.TestCase):
                         self.assertEqual(
                             se[k],
                             env["new"]["NeXusConfiguration"][k])
+            else:
+                se["MntGrp"] = val["MntGrp"]
+                se.storeSelection()
 
             self.compareToDump(se, ["HiddenElements"])
             ndss = json.loads(se["HiddenElements"])
@@ -3251,8 +3375,11 @@ class SelectorTest(unittest.TestCase):
                 elif (i / 2) % 4 - 2:
                     se.importEnv(data=mydata)
                     se.set(mydata)
-            else:
+            elif (i / 2) % 4 == 0:
                 se.importEnv()
+            else:
+                se["MntGrp"] = val["MntGrp"]
+                se.fetchSelection()
 
             self.compareToDump(se, ["HiddenElements"])
             ndss = json.loads(se["HiddenElements"])
@@ -3292,7 +3419,7 @@ class SelectorTest(unittest.TestCase):
                 mydict = se.get()
                 if (i / 2) % 4 - 2:
                     se.exportEnv(mydict)
-            else:
+            elif (i / 2) % 4 == 0:
                 se.exportEnv()
                 env = pickle.loads(
                     self._ms.dps[self._ms.ms.keys()[0]].Environment[1])
@@ -3305,6 +3432,9 @@ class SelectorTest(unittest.TestCase):
                         self.assertEqual(
                             se[k],
                             env["new"]["NeXusConfiguration"][k])
+            else:
+                se["MntGrp"] = val["MntGrp"]
+                se.storeSelection()
 
             self.compareToDump(se, ["DynamicPath"])
             self.assertEqual(se["DynamicPath"], cps)
@@ -3320,8 +3450,12 @@ class SelectorTest(unittest.TestCase):
                 elif (i / 2) % 4 - 2:
                     se.importEnv(data=mydata)
                     se.set(mydata)
-            else:
+            elif (i / 2) % 4 == 0:
                 se.importEnv()
+            else:
+                se["MntGrp"] = val["MntGrp"]
+                se.fetchSelection()
+
             self.compareToDump(se, ["DynamicPath"])
             self.assertEqual(se["DynamicPath"], cps)
 
@@ -3360,7 +3494,7 @@ class SelectorTest(unittest.TestCase):
                 mydict = se.get()
                 if (i / 2) % 4 - 2:
                     se.exportEnv(mydict)
-            else:
+            elif (i / 2) % 4 == 0:
                 se.exportEnv()
                 env = pickle.loads(
                     self._ms.dps[self._ms.ms.keys()[0]].Environment[1])
@@ -3373,6 +3507,9 @@ class SelectorTest(unittest.TestCase):
                         self.assertEqual(
                             se[k],
                             env["new"]["NeXusConfiguration"][k])
+            else:
+                se["MntGrp"] = val["MntGrp"]
+                se.storeSelection()
 
             print "SE2", se["TimeZone"]
             print "SE3", se["TimeZone"]
@@ -3391,8 +3528,11 @@ class SelectorTest(unittest.TestCase):
                 elif (i / 2) % 4 - 2:
                     se.importEnv(data=mydata)
                     se.set(mydata)
-            else:
+            elif (i / 2) % 4 == 0:
                 se.importEnv()
+            else:
+                se["MntGrp"] = val["MntGrp"]
+                se.fetchSelection()
 
             print "WSE2", se["TimeZone"]
             print "WSE3", se["TimeZone"]
@@ -3432,7 +3572,7 @@ class SelectorTest(unittest.TestCase):
                 mydict = se.get()
                 if (i / 2) % 4 - 2:
                     se.exportEnv(mydict)
-            else:
+            elif (i / 2) % 4 == 0:
                 se.exportEnv()
                 env = pickle.loads(
                     self._ms.dps[self._ms.ms.keys()[0]].Environment[1])
@@ -3445,6 +3585,9 @@ class SelectorTest(unittest.TestCase):
                         self.assertEqual(
                             se[k],
                             env["new"]["NeXusConfiguration"][k])
+            else:
+                se["MntGrp"] = val["MntGrp"]
+                se.storeSelection()
 
             self.compareToDump(se, ["ComponentsFromMntGrp"])
             self.assertEqual(se["ComponentsFromMntGrp"], cps)
@@ -3459,8 +3602,11 @@ class SelectorTest(unittest.TestCase):
                 elif (i / 2) % 4 - 2:
                     se.importEnv(data=mydata)
                     se.set(mydata)
-            else:
+            elif (i / 2) % 4 == 0:
                 se.importEnv()
+            else:
+                se["MntGrp"] = val["MntGrp"]
+                se.fetchSelection()
 
             self.compareToDump(se, ["ComponentsFromMntGrp"])
             self.assertEqual(se["ComponentsFromMntGrp"], cps)
@@ -3498,7 +3644,7 @@ class SelectorTest(unittest.TestCase):
                 mydict = se.get()
                 if (i / 2) % 4 - 2:
                     se.exportEnv(mydict)
-            else:
+            elif (i / 2) % 4 == 0:
                 se.exportEnv()
                 env = pickle.loads(
                     self._ms.dps[self._ms.ms.keys()[0]].Environment[1])
@@ -3511,6 +3657,9 @@ class SelectorTest(unittest.TestCase):
                         self.assertEqual(
                             se[k],
                             env["new"]["NeXusConfiguration"][k])
+            else:
+                se["MntGrp"] = val["MntGrp"]
+                se.storeSelection()
 
             self.compareToDump(se, ["DynamicComponents"])
             self.assertEqual(se["DynamicComponents"], cps)
@@ -3525,8 +3674,11 @@ class SelectorTest(unittest.TestCase):
                 elif (i / 2) % 4 - 2:
                     se.importEnv(data=mydata)
                     se.set(mydata)
-            else:
+            elif (i / 2) % 4 == 0:
                 se.importEnv()
+            else:
+                se["MntGrp"] = val["MntGrp"]
+                se.fetchSelection()
 
             self.compareToDump(se, ["DynamicComponents"])
             self.assertEqual(se["DynamicComponents"], cps)
@@ -3564,7 +3716,7 @@ class SelectorTest(unittest.TestCase):
                 mydict = se.get()
                 if (i / 2) % 4 - 2:
                     se.exportEnv(mydict)
-            else:
+            elif (i / 2) % 4 == 0:
                 se.exportEnv()
                 env = pickle.loads(
                     self._ms.dps[self._ms.ms.keys()[0]].Environment[1])
@@ -3577,6 +3729,9 @@ class SelectorTest(unittest.TestCase):
                         self.assertEqual(
                             se[k],
                             env["new"]["NeXusConfiguration"][k])
+            else:
+                se["MntGrp"] = val["MntGrp"]
+                se.storeSelection()
 
             self.compareToDump(se, ["DynamicLinks"])
             self.assertEqual(se["DynamicLinks"], cps)
@@ -3591,8 +3746,11 @@ class SelectorTest(unittest.TestCase):
                 elif (i / 2) % 4 - 2:
                     se.importEnv(data=mydata)
                     se.set(mydata)
-            else:
+            elif (i / 2) % 4 == 0:
                 se.importEnv()
+            else:
+                se["MntGrp"] = val["MntGrp"]
+                se.fetchSelection()
 
             self.compareToDump(se, ["DynamicLinks"])
             self.assertEqual(se["DynamicLinks"], cps)
@@ -3611,7 +3769,7 @@ class SelectorTest(unittest.TestCase):
         se["Door"] = val["Door"]
         se["ConfigDevice"] = val["ConfigDevice"]
         se["WriterDevice"] = val["WriterDevice"]
-        channelerrors = []  
+        channelerrors = []
         se.descErrors = None
         self.myAssertRaise(Exception, se.updateAutomaticComponents)
         se.descErrors = []
