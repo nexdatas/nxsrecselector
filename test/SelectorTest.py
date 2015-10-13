@@ -3608,6 +3608,7 @@ class SelectorTest(unittest.TestCase):
                "MntGrp": 'nxsmntgrp'}
         msp = MacroServerPools(10)
         se = Selector(msp)
+        se["Door"] = val["Door"]
         se["ConfigDevice"] = val["ConfigDevice"]
         se["WriterDevice"] = val["WriterDevice"]
         channelerrors = []  
@@ -3636,6 +3637,7 @@ class SelectorTest(unittest.TestCase):
                "MntGrp": 'nxsmntgrp'}
         msp = MacroServerPools(10)
         se = Selector(msp)
+        se["Door"] = val["Door"]
         se["ConfigDevice"] = val["ConfigDevice"]
         se["WriterDevice"] = val["WriterDevice"]
         channelerrors = []
@@ -3673,6 +3675,7 @@ class SelectorTest(unittest.TestCase):
                "MntGrp": 'nxsmntgrp'}
         msp = MacroServerPools(10)
         se = Selector(msp)
+        se["Door"] = val["Door"]
         se["ConfigDevice"] = val["ConfigDevice"]
         se["WriterDevice"] = val["WriterDevice"]
         channelerrors = []
@@ -3708,9 +3711,10 @@ class SelectorTest(unittest.TestCase):
             if key in val:
                 self.assertEqual(sed[key], val[key])
             elif key == 'AutomaticComponentGroup':
-                self.assertEqual(sed[key], res)
+                self.assertEqual(set(json.loads(sed[key])),
+                    set(json.loads(res)))
             elif key == 'AutomaticDataSources':
-                self.assertEqual(sed[key], json.dumps(poolchannels))
+                self.assertEqual(set(json.loads(sed[key])), set(poolchannels))
             else:
                 self.assertEqual(sed[key], vl)
 
@@ -3726,6 +3730,7 @@ class SelectorTest(unittest.TestCase):
                "MntGrp": 'nxsmntgrp'}
         msp = MacroServerPools(10)
         se = Selector(msp)
+        se["Door"] = val["Door"]
         se["ConfigDevice"] = val["ConfigDevice"]
         se["WriterDevice"] = val["WriterDevice"]
         channelerrors = []
@@ -3765,6 +3770,7 @@ class SelectorTest(unittest.TestCase):
                "MntGrp": 'nxsmntgrp'}
         msp = MacroServerPools(10)
         se = Selector(msp)
+        se["Door"] = val["Door"]
         se["ConfigDevice"] = val["ConfigDevice"]
         se["WriterDevice"] = val["WriterDevice"]
         channelerrors = []
@@ -3805,6 +3811,7 @@ class SelectorTest(unittest.TestCase):
                "MntGrp": 'nxsmntgrp'}
         msp = MacroServerPools(10)
         se = Selector(msp)
+        se["Door"] = val["Door"]
         se["ConfigDevice"] = val["ConfigDevice"]
         se["WriterDevice"] = val["WriterDevice"]
         channelerrors = []
@@ -3833,15 +3840,17 @@ class SelectorTest(unittest.TestCase):
                          [None, None, None, ['mycp'], None, val["MntGrp"]])
         self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
         sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
+        print sed
         self.assertEqual(len(sed.keys()), len(self._keys))
         for key, vl in self._keys:
             self.assertTrue(key in sed.keys())
             if key in val:
                 self.assertEqual(sed[key], val[key])
             elif key == 'AutomaticComponentGroup':
-                self.assertEqual(sed[key], res)
+                self.assertEqual(set(json.loads(sed[key])),
+                    set(json.loads(res)))
             elif key == 'AutomaticDataSources':
-                self.assertEqual(sed[key], json.dumps(poolchannels))
+                self.assertEqual(set(json.loads(sed[key])), set(poolchannels))
             else:
                 self.assertEqual(sed[key], vl)
 
@@ -3857,6 +3866,7 @@ class SelectorTest(unittest.TestCase):
                "MntGrp": 'nxsmntgrp'}
         msp = MacroServerPools(10)
         se = Selector(msp)
+        se["Door"] = val["Door"]
         se["ConfigDevice"] = val["ConfigDevice"]
         se["WriterDevice"] = val["WriterDevice"]
         channelerrors = []
@@ -3895,6 +3905,7 @@ class SelectorTest(unittest.TestCase):
                "MntGrp": 'nxsmntgrp'}
         msp = MacroServerPools(10)
         se = Selector(msp)
+        se["Door"] = val["Door"]
         se["ConfigDevice"] = val["ConfigDevice"]
         se["WriterDevice"] = val["WriterDevice"]
         channelerrors = []
@@ -3933,6 +3944,7 @@ class SelectorTest(unittest.TestCase):
                "MntGrp": 'nxsmntgrp'}
         msp = MacroServerPools(10)
         se = Selector(msp)
+        se["Door"] = val["Door"]
         se["ConfigDevice"] = val["ConfigDevice"]
         se["WriterDevice"] = val["WriterDevice"]
         channelerrors = []
@@ -3975,9 +3987,10 @@ class SelectorTest(unittest.TestCase):
             if key in val:
                 self.assertEqual(sed[key], val[key])
             elif key == 'AutomaticComponentGroup':
-                self.assertEqual(sed[key], res)
+                self.assertEqual(set(json.loads(sed[key])),
+                    set(json.loads(res)))
             elif key == 'AutomaticDataSources':
-                self.assertEqual(sed[key], json.dumps(poolchannels))
+                self.assertEqual(set(json.loads(sed[key])), set(poolchannels))
             else:
                 self.assertEqual(sed[key], vl)
 
@@ -3993,6 +4006,7 @@ class SelectorTest(unittest.TestCase):
                "MntGrp": 'nxsmntgrp'}
         msp = MacroServerPools(10)
         se = Selector(msp)
+        se["Door"] = val["Door"]
         se["ConfigDevice"] = val["ConfigDevice"]
         se["WriterDevice"] = val["WriterDevice"]
         channelerrors = []
@@ -4034,9 +4048,10 @@ class SelectorTest(unittest.TestCase):
             if key in val:
                 self.assertEqual(sed[key], val[key])
             elif key == 'AutomaticComponentGroup':
-                self.assertEqual(sed[key], res)
+                self.assertEqual(set(json.loads(sed[key])),
+                    set(json.loads(res)))
             elif key == 'AutomaticDataSources':
-                self.assertEqual(sed[key], json.dumps(poolchannels))
+                self.assertEqual(set(json.loads(sed[key])), set(poolchannels))
             else:
                 self.assertEqual(sed[key], vl)
 
@@ -4113,9 +4128,11 @@ class SelectorTest(unittest.TestCase):
                 if key in val:
                     self.assertEqual(sed[key], val[key])
                 elif key == 'AutomaticComponentGroup':
-                    self.assertEqual(sed[key], res)
+                    self.assertEqual(set(json.loads(sed[key])),
+                        set(json.loads(res)))
                 elif key == 'AutomaticDataSources':
-                    self.assertEqual(sed[key], json.dumps(poolchannels))
+                    self.assertEqual(set(json.loads(sed[key])),
+                                     set(poolchannels))
                 else:
                     self.assertEqual(sed[key], vl)
         finally:
@@ -4192,9 +4209,11 @@ class SelectorTest(unittest.TestCase):
                 if key in val:
                     self.assertEqual(sed[key], val[key])
                 elif key == 'AutomaticComponentGroup':
-                    self.assertEqual(sed[key], res)
+                    self.assertEqual(set(json.loads(sed[key])),
+                        set(json.loads(res)))
                 elif key == 'AutomaticDataSources':
-                    self.assertEqual(sed[key], json.dumps(poolchannels))
+                    self.assertEqual(set(json.loads(sed[key])),
+                                     set(poolchannels))
                 else:
                     self.assertEqual(sed[key], vl)
         finally:
@@ -4211,6 +4230,7 @@ class SelectorTest(unittest.TestCase):
                "MntGrp": 'nxsmntgrp'}
         msp = MacroServerPools(1)
         se = Selector(msp)
+        se["Door"] = val["Door"]
         se["ConfigDevice"] = val["ConfigDevice"]
         se["WriterDevice"] = val["WriterDevice"]
         channelerrors = []
@@ -4264,9 +4284,11 @@ class SelectorTest(unittest.TestCase):
             if key in val:
                 self.assertEqual(sed[key], val[key])
             elif key == 'AutomaticComponentGroup':
-                self.assertEqual(sed[key], res)
+                self.assertEqual(set(json.loads(sed[key])),
+                    set(json.loads(res)))
             elif key == 'AutomaticDataSources':
-                self.assertEqual(sed[key], json.dumps(poolchannels))
+                self.assertEqual(set(json.loads(sed[key])),
+                                 set(poolchannels))
             else:
                 self.assertEqual(sed[key], vl)
 
@@ -4322,9 +4344,11 @@ class SelectorTest(unittest.TestCase):
                 if key in val:
                     self.assertEqual(sed[key], val[key])
                 elif key == 'AutomaticComponentGroup':
-                    self.assertEqual(sed[key], res)
+                    self.assertEqual(set(json.loads(sed[key])),
+                                     set(json.loads(res)))
                 elif key == 'AutomaticDataSources':
-                    self.assertEqual(sed[key], json.dumps(poolchannels))
+                    self.assertEqual(set(json.loads(sed[key])),
+                                     set(poolchannels))
                 else:
                     self.assertEqual(sed[key], vl)
         finally:
@@ -4383,7 +4407,8 @@ class SelectorTest(unittest.TestCase):
                 if key in val:
                     self.assertEqual(sed[key], val[key])
                 elif key == 'AutomaticComponentGroup':
-                    self.assertEqual(sed[key], res)
+                    self.assertEqual(set(json.loads(sed[key])),
+                                     set(json.loads(res)))
                 elif key == 'AutomaticDataSources':
                     self.assertEqual(set(json.loads(sed[key])), set(poolchannels))
                 else:
@@ -4447,7 +4472,8 @@ class SelectorTest(unittest.TestCase):
                 if key in val:
                     self.assertEqual(sed[key], val[key])
                 elif key == 'AutomaticComponentGroup':
-                    self.assertEqual(sed[key], res)
+                    self.assertEqual(set(json.loads(sed[key])),
+                                     set(json.loads(res)))
                 elif key == 'AutomaticDataSources':
                     self.assertEqual(set(json.loads(sed[key])), set(poolchannels))
                 else:
@@ -4510,7 +4536,8 @@ class SelectorTest(unittest.TestCase):
                 if key in val:
                     self.assertEqual(sed[key], val[key])
                 elif key == 'AutomaticComponentGroup':
-                    self.assertEqual(sed[key], res)
+                    self.assertEqual(set(json.loads(sed[key])),
+                                     set(json.loads(res)))
                 elif key == 'AutomaticDataSources':
                     self.assertEqual(set(json.loads(sed[key])), set(poolchannels))
                 else:
@@ -4577,7 +4604,8 @@ class SelectorTest(unittest.TestCase):
                 if key in val:
                     self.assertEqual(sed[key], val[key])
                 elif key == 'AutomaticComponentGroup':
-                    self.assertEqual(sed[key], res)
+                    self.assertEqual(set(json.loads(sed[key])),
+                                     set(json.loads(res)))
                 elif key == 'AutomaticDataSources':
                     self.assertEqual(set(json.loads(sed[key])), set(poolchannels))
                 else:
@@ -4655,7 +4683,8 @@ class SelectorTest(unittest.TestCase):
                 if key in val:
                     self.assertEqual(sed[key], val[key])
                 elif key == 'AutomaticComponentGroup':
-                    self.assertEqual(sed[key], res)
+                    self.assertEqual(set(json.loads(sed[key])),
+                                     set(json.loads(res)))
                 elif key == 'AutomaticDataSources':
                     self.assertEqual(set(json.loads(sed[key])), set(poolchannels))
                 else:
@@ -4739,7 +4768,8 @@ class SelectorTest(unittest.TestCase):
                 if key in val:
                     self.assertEqual(sed[key], val[key])
                 elif key == 'AutomaticComponentGroup':
-                    self.assertEqual(sed[key], res)
+                    self.assertEqual(set(json.loads(sed[key])),
+                                     set(json.loads(res)))
                 elif key == 'AutomaticDataSources':
                     self.assertEqual(set(json.loads(sed[key])), set(poolchannels))
                 else:
@@ -4820,7 +4850,8 @@ class SelectorTest(unittest.TestCase):
                 if key in val:
                     self.assertEqual(sed[key], val[key])
                 elif key == 'AutomaticComponentGroup':
-                    self.assertEqual(sed[key], res)
+                    self.assertEqual(set(json.loads(sed[key])),
+                                     set(json.loads(res)))
                 elif key == 'AutomaticDataSources':
                     self.assertEqual(set(json.loads(sed[key])), set(poolchannels))
                 else:
@@ -4899,7 +4930,8 @@ class SelectorTest(unittest.TestCase):
                 if key in val:
                     self.assertEqual(sed[key], val[key])
                 elif key == 'AutomaticComponentGroup':
-                    self.assertEqual(sed[key], res)
+                    self.assertEqual(set(json.loads(sed[key])),
+                                     set(json.loads(res)))
                 elif key == 'AutomaticDataSources':
                     self.assertEqual(set(json.loads(sed[key])), set(poolchannels))
                 else:
@@ -4978,7 +5010,8 @@ class SelectorTest(unittest.TestCase):
                 if key in val:
                     self.assertEqual(sed[key], val[key])
                 elif key == 'AutomaticComponentGroup':
-                    self.assertEqual(sed[key], res)
+                    self.assertEqual(set(json.loads(sed[key])),
+                                     set(json.loads(res)))
                 elif key == 'AutomaticDataSources':
                     self.assertEqual(set(json.loads(sed[key])), set(poolchannels))
                 else:
@@ -5055,7 +5088,8 @@ class SelectorTest(unittest.TestCase):
                 if key in val:
                     self.assertEqual(sed[key], val[key])
                 elif key == 'AutomaticComponentGroup':
-                    self.assertEqual(sed[key], res)
+                    self.assertEqual(set(json.loads(sed[key])),
+                                     set(json.loads(res)))
                 elif key == 'AutomaticDataSources':
                     self.assertEqual(set(json.loads(sed[key])), set(poolchannels))
                 else:
@@ -5125,7 +5159,8 @@ class SelectorTest(unittest.TestCase):
                 if key in val:
                     self.assertEqual(sed[key], val[key])
                 elif key == 'AutomaticComponentGroup':
-                    self.assertEqual(sed[key], res)
+                    self.assertEqual(set(json.loads(sed[key])),
+                                     set(json.loads(res)))
                 elif key == 'AutomaticDataSources':
                     self.assertEqual(set(json.loads(sed[key])), set(poolchannels))
                 else:
