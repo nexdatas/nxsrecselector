@@ -16,7 +16,7 @@
 #    You should have received a copy of the GNU General Public License
 #    along with nexdatas.  If not, see <http://www.gnu.org/licenses/>.
 ## \package test nexdatas
-## \file MntGrpToolsTest.py
+## \file ProfileManagerTest.py
 # unittests for TangoDsItemTest running Tango Server
 #
 import unittest
@@ -46,7 +46,7 @@ import TestWriterSetUp
 
 from nxsrecconfig.MacroServerPools import MacroServerPools
 from nxsrecconfig.Selector import Selector
-from nxsrecconfig.MntGrpTools import MntGrpTools
+from nxsrecconfig.ProfileManager import ProfileManager
 from nxsrecconfig.Utils import TangoUtils, MSUtils
 from nxsconfigserver.XMLConfigurator import XMLConfigurator
 
@@ -95,7 +95,7 @@ except:
 
 
 ## test fixture
-class MntGrpToolsTest(unittest.TestCase):
+class ProfileManagerTest(unittest.TestCase):
 
     ## constructor
     # \param methodName name of the test method
@@ -986,14 +986,14 @@ class MntGrpToolsTest(unittest.TestCase):
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
 
-        mgt = MntGrpTools(None)
+        mgt = ProfileManager(None)
 
         se = Selector(None)
-        mgt = MntGrpTools(se)
+        mgt = ProfileManager(se)
 
         msp = MacroServerPools(10)
         se = Selector(msp)
-        mgt = MntGrpTools(se)
+        mgt = ProfileManager(se)
 
 if __name__ == '__main__':
     unittest.main()

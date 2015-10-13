@@ -47,7 +47,7 @@ import SelectorTest
 import MacroServerPoolsTest
 import DynamicComponentTest
 import UtilsTest
-import MntGrpToolsTest
+import ProfileManagerTest
 
 #import TestServerSetUp
 
@@ -85,7 +85,7 @@ def main():
     suite.addTests(
         unittest.defaultTestLoader.loadTestsFromModule(SelectorTest))
     suite.addTests(
-        unittest.defaultTestLoader.loadTestsFromModule(MntGrpToolsTest))
+        unittest.defaultTestLoader.loadTestsFromModule(ProfileManagerTest))
 
     suite.addTests(
         unittest.defaultTestLoader.loadTestsFromModule(TangoDSItemTest))
