@@ -140,7 +140,8 @@ class TestServer(PyTango.Device_4Impl):
 #        print >> sys.stderr, "%s"
 #        print >> self.log_debug, "%s"
 #        self.debug_stream("%s")
-        
+#        self.log_error.write("%s \n")
+
     def encodeSpectrum(self):
         format = 'INT32'
         # uint8 B

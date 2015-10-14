@@ -40,7 +40,11 @@ log_debug = None
 #        when log stream does not exist
 def fatal(message, std=True):
     if log_fatal:
-        log_fatal.write(message + '\n')
+        try:
+            log_fatal.write(message + '\n')
+        except:
+            ## workaround for PyTango bug: #740
+            sys.stderr.write(message + '\n')
     elif std:
         sys.stderr.write(message + '\n')
 
@@ -51,7 +55,11 @@ def fatal(message, std=True):
 #        when log stream does not exist
 def error(message, std=True):
     if log_error:
-        log_error.write(message + '\n')
+        try:
+            log_error.write(message + '\n')
+        except:
+            ## workaround for PyTango bug: #740
+            sys.stderr.write(message + '\n')
     elif std:
         sys.stderr.write(message + '\n')
 
@@ -62,7 +70,11 @@ def error(message, std=True):
 #        when log stream does not exist
 def warn(message, std=True):
     if log_warn:
-        log_warn.write(message + '\n')
+        try:
+            log_warn.write(message + '\n')
+        except:
+            ## workaround for PyTango bug: #740
+            sys.stderr.write(message + '\n')
     elif std:
         sys.stderr.write(message + '\n')
 
@@ -73,7 +85,11 @@ def warn(message, std=True):
 #        when log stream does not exist
 def info(message, std=True):
     if log_info:
-        log_info.write(message + '\n')
+        try:
+            log_info.write(message + '\n')
+        except:
+            ## workaround for PyTango bug: #740
+            sys.stdout.write(message + '\n')
     elif std:
         sys.stdout.write(message + '\n')
 
@@ -84,6 +100,10 @@ def info(message, std=True):
 #        when log stream does not exist
 def debug(message, std=True):
     if log_debug:
-        log_debug.write(message + '\n')
+        try:
+            log_debug.write(message + '\n')
+        except:
+            ## workaround for PyTango bug: #740
+            sys.stdout.write(message + '\n')
     elif std:
         sys.stdout.write(message + '\n')
