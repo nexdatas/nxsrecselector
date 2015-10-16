@@ -1,4 +1,4 @@
-2015-09-XX Jan Kotanski <jankotan@gmail.com>
+2015-10-16 Jan Kotanski <jankotan@gmail.com>
 	* moving MntGrpTools to ProfileManager
 	* moving MntGrp methods from Settings to MntGrpTools
 	* making macroserver and configserver in mgt private
