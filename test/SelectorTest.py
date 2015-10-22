@@ -977,7 +977,7 @@ class SelectorTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
-    def test_constructor_keys(self):
+    def ttest_constructor_keys(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -1012,7 +1012,7 @@ class SelectorTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
-    def test_se_getPool_1to3(self):
+    def ttest_se_getPool_1to3(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         doors = ["door2testp09/testts/t1r228",
@@ -1060,7 +1060,7 @@ class SelectorTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
-    def test_se_getPool_3to3(self):
+    def ttest_se_getPool_3to3(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         doors = ["door3testp09/testts/t1r228",
@@ -1104,7 +1104,7 @@ class SelectorTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
-    def test_poolMotors(self):
+    def ttest_poolMotors(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -1163,7 +1163,7 @@ class SelectorTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
-    def test_poolChannels(self):
+    def ttest_poolChannels(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -1221,7 +1221,7 @@ class SelectorTest(unittest.TestCase):
         self.assertEqual(se.getMacroServer(), self._ms.ms.keys()[0])
 
     ## updateOrderedChannels test
-    def test_resetAutomaticComponents(self):
+    def ttest_resetAutomaticComponents(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -1267,7 +1267,7 @@ class SelectorTest(unittest.TestCase):
                 self.assertEqual(se["AutomaticComponentGroup"], "{}")
 
     ## updateOrderedChannels test
-    def test_ConfigServer(self):
+    def ttest_ConfigServer(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -1337,7 +1337,7 @@ class SelectorTest(unittest.TestCase):
             self.assertTrue(se["ConfigDevice"], val["ConfigDevice"])
 
     ## updateOrderedChannels test
-    def test_WriterDevice(self):
+    def ttest_WriterDevice(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -1409,7 +1409,7 @@ class SelectorTest(unittest.TestCase):
         se["Door"] = door
 
     ## updateOrderedChannels test
-    def test_Door(self):
+    def ttest_Door(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         msname = self._ms.ms.keys()[0]
@@ -1485,7 +1485,7 @@ class SelectorTest(unittest.TestCase):
             self.assertEqual(se.getMacroServer(), msname)
 
     ## deselect test
-    def test_MntGrp(self):
+    def ttest_MntGrp(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -1548,7 +1548,7 @@ class SelectorTest(unittest.TestCase):
             self.assertEqual(se["MntGrp"], mg)
 
     ## deselect test
-    def test_TimeZone(self):
+    def ttest_TimeZone(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -1611,7 +1611,7 @@ class SelectorTest(unittest.TestCase):
             self.assertEqual(se["TimeZone"], mg)
 
     ## deselect test
-    def test_setConfigInstance(self):
+    def ttest_setConfigInstance(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -1667,7 +1667,7 @@ class SelectorTest(unittest.TestCase):
         dev_info = inst.info()
         self.assertEqual(dev_info.dev_class, "NXSConfigServer")
 
-    def test_configCommand(self):
+    def ttest_configCommand(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -1714,7 +1714,7 @@ class SelectorTest(unittest.TestCase):
             inst = se.setConfigInstance()
             self.assertEqual(res, inst.command_inout(ar[0]))
 
-    def test_configCommand_arg(self):
+    def ttest_configCommand_arg(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -1790,7 +1790,7 @@ class SelectorTest(unittest.TestCase):
                 inst = se.setConfigInstance()
                 self.assertEqual(res, inst.command_inout(ar[0], ar[1]))
 
-    def test_configCommand_module(self):
+    def ttest_configCommand_module(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -1856,13 +1856,19 @@ class SelectorTest(unittest.TestCase):
                ]
 
             for ar in arg2:
+                print "ARR", ar
                 se = Selector(msp)
                 se["ConfigDevice"] = 'module'
-                res = se.configCommand(ar[0], ar[1])
-                self.assertEqual(res, getattr(inst, ar[0])(ar[1]))
+                try:
+                    mres = getattr(inst, ar[0])(ar[1])
+                except:
+                    pass
+                else:
+                    res = se.configCommand(ar[0], ar[1])
+                    self.assertEqual(res, mres)
 
     ## updateOrderedChannels test
-    def test_AutomaticDataSources(self):
+    def ttest_AutomaticDataSources(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -1972,7 +1978,7 @@ class SelectorTest(unittest.TestCase):
             self.compareToDump(se, ["AutomaticDataSources"])
 
     ## updateOrderedChannels test
-    def test_OrderedChannels(self):
+    def ttest_OrderedChannels(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2097,7 +2103,7 @@ class SelectorTest(unittest.TestCase):
             self.assertEqual(set(ndss), set(odss))
 
     ## ComponentGroup test
-    def test_ComponentGroup(self):
+    def ttest_ComponentGroup(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2258,7 +2264,7 @@ class SelectorTest(unittest.TestCase):
             self.compareToDumpJSON(se, ["ComponentGroup"])
 
     ## DataSourceGroup test
-    def test_DataSourceGroup(self):
+    def ttest_DataSourceGroup(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2422,7 +2428,7 @@ class SelectorTest(unittest.TestCase):
             self.compareToDumpJSON(se, ["DataSourceGroup"])
 
     ## updateOrderedChannels test
-    def test_AutomaticComponentGroup(self):
+    def ttest_AutomaticComponentGroup(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2512,7 +2518,7 @@ class SelectorTest(unittest.TestCase):
                 self.assertEqual(ndss[ds], cps[ds])
 
     ## dataRecord test
-    def test_DataRecord(self):
+    def ttest_DataRecord(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2596,7 +2602,7 @@ class SelectorTest(unittest.TestCase):
                 self.assertEqual(ndss[ds], cps[ds])
 
     ## labels test
-    def test_Labels(self):
+    def ttest_Labels(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2678,7 +2684,7 @@ class SelectorTest(unittest.TestCase):
                 self.assertEqual(ndss[ds], cps[ds])
 
     ## labelpaths test
-    def test_LabelPaths(self):
+    def ttest_LabelPaths(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2761,7 +2767,7 @@ class SelectorTest(unittest.TestCase):
                 self.assertEqual(ndss[ds], cps[ds])
 
     ## labellinks test
-    def test_LabelLinks(self):
+    def ttest_LabelLinks(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2843,7 +2849,7 @@ class SelectorTest(unittest.TestCase):
                 self.assertEqual(ndss[ds], cps[ds])
 
     ## labeltypes test
-    def test_LabelTypes(self):
+    def ttest_LabelTypes(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2924,7 +2930,7 @@ class SelectorTest(unittest.TestCase):
                 self.assertEqual(ndss[ds], cps[ds])
 
     ## labelshapes test
-    def test_LabelShapes(self):
+    def ttest_LabelShapes(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -3008,7 +3014,7 @@ class SelectorTest(unittest.TestCase):
                 self.assertEqual(ndss[ds], cps[ds])
 
     ## configvariables test
-    def test_ConfigVariables(self):
+    def ttest_ConfigVariables(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -3089,7 +3095,7 @@ class SelectorTest(unittest.TestCase):
                 self.assertEqual(ndss[ds], cps[ds])
 
     ## timers test
-    def test_Timer(self):
+    def ttest_Timer(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -3162,7 +3168,7 @@ class SelectorTest(unittest.TestCase):
             self.assertEqual(ndss, cps)
 
     ## InitDataSources test
-    def test_InitDataSources(self):
+    def ttest_InitDataSources(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -3237,7 +3243,7 @@ class SelectorTest(unittest.TestCase):
             self.assertEqual(ndss, cps)
 
     ## OptionalComponents test
-    def test_OptionalComponents(self):
+    def ttest_OptionalComponents(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -3311,7 +3317,7 @@ class SelectorTest(unittest.TestCase):
             self.assertEqual(ndss, cps)
 
     ## HiddenElements test
-    def test_HiddenElements(self):
+    def ttest_HiddenElements(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -3386,7 +3392,7 @@ class SelectorTest(unittest.TestCase):
             self.assertEqual(ndss, cps)
 
     ## DynamicPath test
-    def test_DynamicPath(self):
+    def ttest_DynamicPath(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -3460,7 +3466,7 @@ class SelectorTest(unittest.TestCase):
             self.assertEqual(se["DynamicPath"], cps)
 
     ## AppendEntry test
-    def test_AppendEntry(self):
+    def ttest_AppendEntry(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -3540,7 +3546,7 @@ class SelectorTest(unittest.TestCase):
             self.assertEqual(se["AppendEntry"], cps)
 
     ## ComponentsFromMntGrp test
-    def test_ComponentsFromMntGrp(self):
+    def ttest_ComponentsFromMntGrp(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -3612,7 +3618,7 @@ class SelectorTest(unittest.TestCase):
             self.assertEqual(se["ComponentsFromMntGrp"], cps)
 
     ## DynamicComponents test
-    def test_DynamicComponents(self):
+    def ttest_DynamicComponents(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -3684,7 +3690,7 @@ class SelectorTest(unittest.TestCase):
             self.assertEqual(se["DynamicComponents"], cps)
 
     ## DynamicLinks test
-    def test_DynamicLinks(self):
+    def ttest_DynamicLinks(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -3757,7 +3763,7 @@ class SelectorTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
-    def test_updateAutomaticComponents_simple(self):
+    def ttest_updateAutomaticComponents_simple(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -3786,7 +3792,7 @@ class SelectorTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
-    def test_updateAutomaticComponents_withcf(self):
+    def ttest_updateAutomaticComponents_withcf(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -3824,7 +3830,7 @@ class SelectorTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
-    def test_updateAutomaticComponents_withcf_cps(self):
+    def ttest_updateAutomaticComponents_withcf_cps(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -3879,7 +3885,7 @@ class SelectorTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
-    def test_updateAutomaticComponents_withcf_cps_t(self):
+    def ttest_updateAutomaticComponents_withcf_cps_t(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -3919,7 +3925,7 @@ class SelectorTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
-    def test_updateAutomaticComponents_withcf_nocps(self):
+    def ttest_updateAutomaticComponents_withcf_nocps(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -3960,7 +3966,7 @@ class SelectorTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
-    def test_updateAutomaticComponents_withcf_nochnnel(self):
+    def ttest_updateAutomaticComponents_withcf_nochnnel(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -4015,7 +4021,7 @@ class SelectorTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
-    def test_updateAutomaticComponents_withcf_nochnnel_t(self):
+    def ttest_updateAutomaticComponents_withcf_nochnnel_t(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -4054,7 +4060,7 @@ class SelectorTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
-    def test_updateAutomaticComponents_wds_t(self):
+    def ttest_updateAutomaticComponents_wds_t(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -4093,7 +4099,7 @@ class SelectorTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
-    def test_updateAutomaticComponents_wds(self):
+    def ttest_updateAutomaticComponents_wds(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -4155,7 +4161,7 @@ class SelectorTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
-    def test_updateAutomaticComponents_wds2(self):
+    def ttest_updateAutomaticComponents_wds2(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -4215,7 +4221,7 @@ class SelectorTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
-    def test_updateAutomaticComponents_2wds(self):
+    def ttest_updateAutomaticComponents_2wds(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -4298,7 +4304,7 @@ class SelectorTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
-    def test_updateAutomaticComponents_2wds_dvnorunning(self):
+    def ttest_updateAutomaticComponents_2wds_dvnorunning(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -4379,7 +4385,7 @@ class SelectorTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
-    def test_updateAutomaticComponents_2wds_dvnodef(self):
+    def ttest_updateAutomaticComponents_2wds_dvnodef(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -4452,7 +4458,7 @@ class SelectorTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
-    def test_updateAutomaticComponents_2wds_nods(self):
+    def ttest_updateAutomaticComponents_2wds_nods(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -4514,7 +4520,7 @@ class SelectorTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
-    def test_updateAutomaticComponents_2wds_nodspool(self):
+    def ttest_updateAutomaticComponents_2wds_nodspool(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -4576,7 +4582,7 @@ class SelectorTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
-    def test_updateAutomaticComponents_2wds_notangods(self):
+    def ttest_updateAutomaticComponents_2wds_notangods(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -4641,7 +4647,7 @@ class SelectorTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
-    def test_updateAutomaticComponents_2wds_notangodsnopool(self):
+    def ttest_updateAutomaticComponents_2wds_notangodsnopool(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -4705,7 +4711,7 @@ class SelectorTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
-    def test_updateAutomaticComponents_2wds_notangodsnopool2(self):
+    def ttest_updateAutomaticComponents_2wds_notangodsnopool2(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -4773,7 +4779,7 @@ class SelectorTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
-    def test_updateAutomaticComponents_2wds_notangods2(self):
+    def ttest_updateAutomaticComponents_2wds_notangods2(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -4852,7 +4858,7 @@ class SelectorTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
-    def test_updateAutomaticComponents_2wds_notangodspool_error(self):
+    def ttest_updateAutomaticComponents_2wds_notangodspool_error(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -4937,7 +4943,7 @@ class SelectorTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
-    def test_updateAutomaticComponents_2wds_notangodspool(self):
+    def ttest_updateAutomaticComponents_2wds_notangodspool(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -5019,7 +5025,7 @@ class SelectorTest(unittest.TestCase):
 
    ## constructor test
     # \brief It tests default settings
-    def test_updateAutomaticComponents_2wds_notangodspool_alias(self):
+    def ttest_updateAutomaticComponents_2wds_notangodspool_alias(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -5100,7 +5106,7 @@ class SelectorTest(unittest.TestCase):
 
    ## constructor test
     # \brief It tests default settings
-    def test_updateAutomaticComponents_2wds_notangodspool_alias_value(self):
+    def ttest_updateAutomaticComponents_2wds_notangodspool_alias_value(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -5180,7 +5186,7 @@ class SelectorTest(unittest.TestCase):
 
   ## constructor test
     # \brief It tests default settings
-    def test_updateAutomaticComponents_2wds_notangodspool_alias_novalue(self):
+    def ttest_updateAutomaticComponents_2wds_notangodspool_alias_novalue(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -5258,7 +5264,7 @@ class SelectorTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
-    def test_updateAutomaticComponents_2wds_nocomponents(self):
+    def ttest_updateAutomaticComponents_2wds_nocomponents(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -5328,7 +5334,7 @@ class SelectorTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
-    def test_importEnv_noenv(self):
+    def ttest_importEnv_noenv(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -5371,7 +5377,7 @@ class SelectorTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
-    def test_importEnv(self):
+    def ttest_importEnv(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -5493,7 +5499,7 @@ class SelectorTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
-    def test_exportEnv(self):
+    def ttest_exportEnv(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
 
@@ -5710,7 +5716,7 @@ class SelectorTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
-    def test_fetchEnvData(self):
+    def ttest_fetchEnvData(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -5820,7 +5826,7 @@ class SelectorTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
-    def test_storeEnvData(self):
+    def ttest_storeEnvData(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -6001,7 +6007,7 @@ class SelectorTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
-    def test_setScanEnv_scanid(self):
+    def ttest_setScanEnv_scanid(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -6034,7 +6040,7 @@ class SelectorTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
-    def test_setScanEnv2(self):
+    def ttest_setScanEnv2(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -6215,7 +6221,7 @@ class SelectorTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
-    def test_setScanEnv_dtlist(self):
+    def ttest_setScanEnv_dtlist(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),

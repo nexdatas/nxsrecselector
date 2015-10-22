@@ -153,7 +153,8 @@ class NXSRecSelector(PyTango.Device_4Impl):
     #------------------------------------------------------------------
     def read_STEPDataSources(self, attr):
         self.debug_stream("In read_STEPDataSources()")
-        attr.set_value(self.__stg.stepdatasources)
+        # workaround for PyTango #709
+        attr.set_value(self.__stg.stepdatasources or [])
 
     #------------------------------------------------------------------
     #    Write STEPDataSources attribute
@@ -161,7 +162,8 @@ class NXSRecSelector(PyTango.Device_4Impl):
     def write_STEPDataSources(self, attr):
         self.debug_stream("In write_STEPDataSources()")
         if self.is_STEPDataSources_write_allowed():
-            self.__stg.stepdatasources = attr.get_write_value()
+            # workaround for PyTango #709
+            self.__stg.stepdatasources = attr.get_write_value() or []
         else:
             self.warn_stream("To change the settings please close the server.")
             raise Exception(
@@ -220,14 +222,16 @@ class NXSRecSelector(PyTango.Device_4Impl):
     #------------------------------------------------------------------
     def read_ScanFile(self, attr):
         self.debug_stream("In read_ScanFile()")
-        attr.set_value(self.__stg.scanFile)
+        # workaround for PyTango #709
+        attr.set_value(self.__stg.scanFile or [])
 
     #------------------------------------------------------------------
     #    Write ScanFile attribute
     #------------------------------------------------------------------
     def write_ScanFile(self, attr):
         self.debug_stream("In write_ScanFile()")
-        self.__stg.scanFile = attr.get_write_value()
+        # workaround for PyTango #709
+        self.__stg.scanFile = attr.get_write_value() or []
 
     #------------------------------------------------------------------
     #    Read ScanID attribute
