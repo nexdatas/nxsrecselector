@@ -203,8 +203,9 @@ class Selector(object):
         datasources = set(json.loads(self["AutomaticDataSources"]))
         acpgroup = json.loads(self["AutomaticComponentGroup"])
         configdevice = self.setConfigInstance()
-        jacps =  self.__msp.checkComponentChannels(
-            self["Door"], configdevice, datasources, acpgroup, self.descErrors)
+        jacps = self.__msp.checkComponentChannels(
+            self["Door"], configdevice, datasources, acpgroup,
+            self.descErrors)
         if self["AutomaticComponentGroup"] != jacps:
             self["AutomaticComponentGroup"] = jacps
             self.storeSelection()
@@ -307,7 +308,7 @@ class Selector(object):
         inst.storeSelection(self["MntGrp"])
 
     ## fetch configuration
-    # \returns if configuration was fetched    
+    # \returns if configuration was fetched
     def fetchSelection(self):
         inst = self.setConfigInstance()
         avsl = inst.availableSelections()
@@ -318,4 +319,3 @@ class Selector(object):
             self.set(json.loads(str(confs[0])))
             return True
         return False
-
