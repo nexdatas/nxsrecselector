@@ -1123,7 +1123,9 @@ class ProfileManagerTest(unittest.TestCase):
                 self.assertEqual(dd[0], ar["name"])
                 if arr1 == arr or ar["name"] != 'null':
                     self.assertEqual(set(dd), set([a["name"] for a in arr1]))
-
+                else:
+                    self.assertEqual(set(dd), set([a["name"] for a in arr]))
+    
             for ar in arr2:
                 MSUtils.setEnv('ActiveMntGrp', ar["name"],
                                self._ms.ms.keys()[0])
@@ -1131,6 +1133,8 @@ class ProfileManagerTest(unittest.TestCase):
                 self.assertEqual(dd[0], ar["name"])
                 if arr2 == arr or ar["name"] != 'null':
                     self.assertEqual(set(dd), set([a["name"] for a in arr2]))
+                else:
+                    self.assertEqual(set(dd), set([a["name"] for a in arr]))
         finally:
             tpool2.tearDown()
 

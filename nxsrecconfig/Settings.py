@@ -592,7 +592,7 @@ class Settings(object):
 
     ## saves configuration
     def storeConfiguration(self):
-        self.__profileManager.storeProfile()
+        self.__selector.storeSelection()
 
     ## fetch configuration
     def fetchConfiguration(self):

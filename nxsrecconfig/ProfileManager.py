@@ -73,7 +73,6 @@ class ProfileManager(object):
         self.__updateMacroServer()
         self.__updatePools()
         mntgrps = None
-        pool = None
         amntgrp = MSUtils.getEnv('ActiveMntGrp', self.__macroServerName)
         fpool = self.__getActivePool(amntgrp)
         if fpool:
@@ -112,7 +111,7 @@ class ProfileManager(object):
         self.__updateConfigServer()
         llconf, _ = self.__createMntGrpConf(
             components, datasources, disabledatasources)
-        self.storeProfile()
+        self.__selector.storeSelection()
         lsconf = json.loads(llconf)
         return not Utils.compareDict(mgconf, lsconf)
 
@@ -122,7 +121,7 @@ class ProfileManager(object):
         self.__updateConfigServer()
         jconf = self.mntGrpConfiguration()
         if self.__setFromMntGrpConf(jconf):
-            self.storeProfile()
+            self.__selector.storeSelection()
 
     ## set active measurement group from components
     # \param components  component list
@@ -133,7 +132,7 @@ class ProfileManager(object):
         self.__updateConfigServer()
         conf, mntgrp = self.__createMntGrpConf(
             components, datasources, disabledatasources)
-        self.storeProfile()
+        self.__selector.storeSelection()
         dpmg = TangoUtils.openProxy(mntgrp)
         dpmg.Configuration = conf
         return str(dpmg.Configuration)
@@ -149,11 +148,7 @@ class ProfileManager(object):
         jconf = self.mntGrpConfiguration()
         self.__updateConfigServer()
         if self.__setFromMntGrpConf(jconf):
-            self.storeProfile()
-
-    ## saves configuration
-    def storeProfile(self):
-        self.__selector.storeSelection()
+            self.__selector.storeSelection()
 
     ## fetch configuration
     def fetchProfile(self):
@@ -170,14 +165,11 @@ class ProfileManager(object):
     # \param name mntgrp name
     def deleteProfile(self, name):
         self.__updatePools()
-        fpool = None
         for pool in self.__pools:
-            if not fpool:
-                fpool = pool
-                break
-        if fpool:
-            TangoUtils.command(
-                fpool, "DeleteElement", str(name))
+            mntgrps = PoolUtils.getMntGrps([pool])
+            if name in mntgrps:
+                TangoUtils.command(
+                    pool, "DeleteElement", str(name))
         inst = self.__selector.setConfigInstance()
         inst.deleteSelection(name)
 
