@@ -995,5 +995,145 @@ class ProfileManagerTest(unittest.TestCase):
         se = Selector(msp)
         mgt = ProfileManager(se)
 
+    ## availableMntGrps test
+    # \brief It tests default settings
+    def test_availableMntGrps(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+
+
+        mgt = ProfileManager(None)
+        self.myAssertRaise(Exception, mgt.availableMntGrps)
+
+        se = Selector(None)
+        mgt = ProfileManager(se)
+        self.myAssertRaise(Exception, mgt.availableMntGrps)
+
+        msp = MacroServerPools(10)
+        se = Selector(msp)
+        se["Door"] = val["Door"]
+        mgt = ProfileManager(se)
+        self.assertEqual(mgt.availableMntGrps(), [])
+
+        db = PyTango.Database()
+        db.put_device_property(self._ms.ms.keys()[0],
+                               {'PoolNames': self._pool.dp.name()})
+        pool = self._pool.dp
+        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        print  se.getPools()
+
+        self.assertEqual(mgt.availableMntGrps(), [])
+
+
+        arr = [
+            {"name":"test/ct/01", "full_name":"mntgrp_01e"},
+            {"name":"test/ct/02", "full_name":"mntgrp_02att"},
+            {"name":"test/ct/03", "full_name":"mntgrp_03value"},
+            {"name":"test/ct/04", "full_name":"mntgrp_04/13"},
+            {"name":"null", "full_name":"mntgrp_04"},
+            ]
+
+        pool.MeasurementGroupList = [json.dumps(a) for a in arr]
+        
+        dd = mgt.availableMntGrps()
+        self.assertEqual(set(dd), set([a["name"] for a in arr]))
+
+        for ar in arr:
+            
+            MSUtils.setEnv('ActiveMntGrp', ar["name"],
+                           self._ms.ms.keys()[0])
+            print MSUtils.getEnv('ActiveMntGrp', self._ms.ms.keys()[0])
+            dd = mgt.availableMntGrps()
+            self.assertEqual(dd[0], ar["name"])
+            self.assertEqual(set(dd), set([a["name"] for a in arr]))
+
+    ## availableMntGrps test
+    # \brief It tests default settings
+    def test_availableMntGrps_twopools(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+
+
+        mgt = ProfileManager(None)
+        self.myAssertRaise(Exception, mgt.availableMntGrps)
+
+        se = Selector(None)
+        mgt = ProfileManager(se)
+        self.myAssertRaise(Exception, mgt.availableMntGrps)
+
+        msp = MacroServerPools(10)
+        se = Selector(msp)
+        se["Door"] = val["Door"]
+        mgt = ProfileManager(se)
+        self.assertEqual(mgt.availableMntGrps(), [])
+
+        try:
+            tpool2 = TestPoolSetUp.TestPoolSetUp(
+                "pooltestp09/testts/t2r228","POOLTESTS2")
+            tpool2.setUp()
+
+            db = PyTango.Database()
+            db.put_device_property(self._ms.ms.keys()[0],
+                                   {'PoolNames': [tpool2.dp.name(), self._pool.dp.name()]})
+            pool = self._pool.dp
+            pool2 = tpool2.dp
+            self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+            self.assertEqual(mgt.availableMntGrps(), [])
+            arr1 = [
+                {"name":"test/ct/01", "full_name":"mntgrp_01e"},
+                {"name":"test/ct/02", "full_name":"mntgrp_02att"},
+                {"name":"test/ct/03", "full_name":"mntgrp_03value"},
+                {"name":"test/ct/04", "full_name":"mntgrp_04/13"},
+                {"name":"null", "full_name":"mntgrp_04"},
+                ]
+
+            arr2 = [
+                {"name":"test/ct/011", "full_name":"mntgrp_01e1"},
+                {"name":"test/ct/021", "full_name":"mntgrp_02att1"},
+                {"name":"test/ct/031", "full_name":"mntgrp_03value1"},
+                {"name":"test/ct/041", "full_name":"mntgrp_04/131"},
+                {"name":"null", "full_name":"mntgrp_041"},
+                ]
+
+            pool.MeasurementGroupList = [json.dumps(a) for a in arr1]
+            pool2.MeasurementGroupList = [json.dumps(a) for a in arr2]
+            
+            if se.getPools()[0].name() == "pooltestp09/testts/t2r228":
+                arr = arr2 
+            else:
+                arr = arr1
+
+            dd = mgt.availableMntGrps()
+            self.assertEqual(set(dd), set([a["name"] for a in arr]))
+
+            for ar in arr1:
+
+                MSUtils.setEnv('ActiveMntGrp', ar["name"],
+                               self._ms.ms.keys()[0])
+                dd = mgt.availableMntGrps()
+                self.assertEqual(dd[0], ar["name"])
+                if arr1 == arr or ar["name"] != 'null':
+                    self.assertEqual(set(dd), set([a["name"] for a in arr1]))
+
+            for ar in arr2:
+                MSUtils.setEnv('ActiveMntGrp', ar["name"],
+                               self._ms.ms.keys()[0])
+                dd = mgt.availableMntGrps()
+                self.assertEqual(dd[0], ar["name"])
+                if arr2 == arr or ar["name"] != 'null':
+                    self.assertEqual(set(dd), set([a["name"] for a in arr2]))
+        finally:
+            tpool2.tearDown()
+
+
 if __name__ == '__main__':
     unittest.main()

@@ -74,16 +74,11 @@ class ProfileManager(object):
         self.__updatePools()
         mntgrps = None
         pool = None
-        self.__updatePools()
-        fpool = None
-        for pool in self.__pools:
-            if not fpool:
-                fpool = pool
-                break
+        amntgrp = MSUtils.getEnv('ActiveMntGrp', self.__macroServerName)
+        fpool = self.__getActivePool(amntgrp)
         if fpool:
             mntgrps = PoolUtils.getMntGrps([fpool])
         mntgrps = mntgrps if mntgrps else []
-        amntgrp = MSUtils.getEnv('ActiveMntGrp', self.__macroServerName)
 
         try:
             if mntgrps:
@@ -343,28 +338,28 @@ class ProfileManager(object):
             raise Exception(
                 "User Data not defined %s" % str(missing))
 
-    def __createMntGrpDevice(self, mntGrpName, timer):
-        amntgrp = MSUtils.getEnv('ActiveMntGrp', self.__macroServerName)
-        apool = None
+    def __getActivePool(self, mntgrp=None):
+        apool = []
         lpool = [None, 0]
         fpool = None
         for pool in self.__pools:
             if not fpool:
                 fpool = pool
             mntgrps = PoolUtils.getMntGrps([pool])
-            if amntgrp in mntgrps:
-                apool = pool
+            if mntgrp in mntgrps:
+                if not apool:
+                    fpool = pool
+                apool.append(pool)
             if lpool[1] < len(mntgrps):
                 lpool = [pool, len(mntgrps)]
 
-        if not apool:
-            apool = lpool[0]
-        lpool = None
-        if not apool and fpool:
-            apool = fpool
-        fpool = None
-        if not apool and len(self.__pools) > 0:
-            apool = self.__pools[0]
+        if fpool is None:
+            fpool = lpool[0]
+        return fpool
+
+    def __createMntGrpDevice(self, mntGrpName, timer):
+        amntgrp = MSUtils.getEnv('ActiveMntGrp', self.__macroServerName)
+        apool = self.__getActivePool(amntgrp)
         if apool:
             TangoUtils.command(apool, "CreateMeasurementGroup",
                                [mntGrpName, timer])
