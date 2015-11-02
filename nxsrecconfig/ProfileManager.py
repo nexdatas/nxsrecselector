@@ -87,6 +87,45 @@ class ProfileManager(object):
             pass
         return mntgrps
 
+    ## deletes mntgrp
+    # \param name mntgrp name
+    def deleteProfile(self, name):
+        self.__updatePools()
+        for pool in self.__pools:
+            mntgrps = PoolUtils.getMntGrps([pool])
+            if name in mntgrps:
+                TangoUtils.command(
+                    pool, "DeleteElement", str(name))
+        inst = self.__selector.setConfigInstance()
+        inst.deleteSelection(name)
+
+    ## set active measurement group from components
+    # \param components  component list
+    # \param datasources datasource list
+    # \param disabledatasources disable datasource list
+    # \returns string with mntgrp configuration
+    def updateProfile(self, components, datasources, disabledatasources):
+        self.__updateConfigServer()
+        conf, mntgrp = self.__createMntGrpConf(
+            components, datasources, disabledatasources)
+        self.__selector.storeSelection()
+        dpmg = TangoUtils.openProxy(mntgrp)
+        dpmg.Configuration = conf
+        return str(dpmg.Configuration)
+
+    ## switchProfile to active measurement
+    def switchProfile(self, toActive=True):
+        if not self.__selector["MntGrp"] or toActive:
+            ms = self.__selector.getMacroServer()
+            amntgrp = MSUtils.getEnv('ActiveMntGrp', ms)
+            if not toActive or amntgrp:
+                self.__selector["MntGrp"] = amntgrp
+        self.fetchProfile()
+        jconf = self.mntGrpConfiguration()
+        self.__updateConfigServer()
+        if self.__setFromMntGrpConf(jconf):
+            self.__selector.storeSelection()
+
     ## provides configuration of mntgrp
     # \returns string with mntgrp configuration
     def mntGrpConfiguration(self):
@@ -122,34 +161,6 @@ class ProfileManager(object):
         jconf = self.mntGrpConfiguration()
         if self.__setFromMntGrpConf(jconf):
             self.__selector.storeSelection()
-
-    ## set active measurement group from components
-    # \param components  component list
-    # \param datasources datasource list
-    # \param disabledatasources disable datasource list
-    # \returns string with mntgrp configuration
-    def updateProfile(self, components, datasources, disabledatasources):
-        self.__updateConfigServer()
-        conf, mntgrp = self.__createMntGrpConf(
-            components, datasources, disabledatasources)
-        self.__selector.storeSelection()
-        dpmg = TangoUtils.openProxy(mntgrp)
-        dpmg.Configuration = conf
-        return str(dpmg.Configuration)
-
-    ## switchProfile to active measurement
-    def switchProfile(self, toActive=True):
-        if not self.__selector["MntGrp"] or toActive:
-            ms = self.__selector.getMacroServer()
-            amntgrp = MSUtils.getEnv('ActiveMntGrp', ms)
-            if not toActive or amntgrp:
-                self.__selector["MntGrp"] = amntgrp
-        self.fetchProfile()
-        jconf = self.mntGrpConfiguration()
-        self.__updateConfigServer()
-        if self.__setFromMntGrpConf(jconf):
-            self.__selector.storeSelection()
-
     ## fetch configuration
     def fetchProfile(self):
         if self.__selector.fetchSelection() is False:
@@ -161,17 +172,6 @@ class ProfileManager(object):
                     self.defaultAutomaticComponents)
                 self.__selector.updateAutomaticComponents()
 
-    ## deletes mntgrp
-    # \param name mntgrp name
-    def deleteProfile(self, name):
-        self.__updatePools()
-        for pool in self.__pools:
-            mntgrps = PoolUtils.getMntGrps([pool])
-            if name in mntgrps:
-                TangoUtils.command(
-                    pool, "DeleteElement", str(name))
-        inst = self.__selector.setConfigInstance()
-        inst.deleteSelection(name)
 
     ## set active measurement group from components
     # \param components  component list

@@ -182,6 +182,31 @@ class Pool(PyTango.Device_4Impl):
             self.set_state(PyTango.DevState.ON)
 
 
+#------------------------------------------------------------------
+#    DeleteElement command:
+#
+#    Description: Set state of tango device
+#
+#    argin: DevString     element
+#------------------------------------------------------------------
+    def DeleteElement(self, name):
+        print "In ", self.get_name(), "::DeleteElement()"
+        attrs = [
+            "attr_MeasurementGroupList",
+            "attr_AcqChannelList",
+            "attr_ExpChannelList",
+            "attr_MotorList"
+            ]
+        for attr in attrs:
+            inlist = list(getattr(self, attr))
+            outlist = []
+            for elem in mylist:
+                el = json.loads(elem)
+                if 'name' not in el or name != el['name']:
+                    outlist.append(elem)
+            getattr(self, attr)[:] = outlist
+
+
 #==================================================================
 #
 #    PoolClass class definition
@@ -202,6 +227,9 @@ class PoolClass(PyTango.DeviceClass):
         'SetState':
             [[PyTango.DevString, "ScalarString"],
             [PyTango.DevVoid, ""]],
+        'DeleteElement':
+            [[PyTango.DevString, "element name"],
+             [PyTango.DevVoid, ""]],
         }
 
     #    Attribute definitions
