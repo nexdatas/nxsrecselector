@@ -402,6 +402,32 @@ class UtilsTest(unittest.TestCase):
             self.assertEqual(en[k], MSUtils.getEnv(
                     k, self._simps.new_device_info_writer.name))
 
+    ## setEnv test
+    def test_usetEnv(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+
+        arr = {
+            "ScanDir": [u'/tmp/',  "/tmp/sardana/"],
+            "ScanFile": [[u'sar4r.nxs'], [u'sar4r.nxs', u'sar5r.nxs']],
+            "ScanID": [192, 123],
+            "ScanNone": ["", "Something new"],
+            "_ViewOptions": [{'ShowDial': True}, {'ShowDial': False}],
+            }
+
+        for k, vl in arr.items():
+            self.assertEqual(
+                vl[0], MSUtils.getEnv(
+                    k, self._simps.new_device_info_writer.name))
+
+        for k, vl in arr.items():
+            MSUtils.usetEnv(k, self._simps.new_device_info_writer.name)
+
+            self.assertEqual(self._simps.dp.Environment[0], 'pickle')
+            en = pickle.loads(self._simps.dp.Environment[1])['new']
+            self.assertEqual('', MSUtils.getEnv(
+                    k, self._simps.new_device_info_writer.name))
+
     ## getProxies test
     def test_getProxies(self):
         fun = sys._getframe().f_code.co_name

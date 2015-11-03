@@ -96,8 +96,11 @@ class ProfileManager(object):
             if name in mntgrps:
                 TangoUtils.command(
                     pool, "DeleteElement", str(name))
+        if MSUtils.getEnv('ActiveMntGrp', self.__macroServerName) == name:
+            MSUtils.usetEnv("ActiveMntGrp", self.__macroServerName)        
         inst = self.__selector.setConfigInstance()
-        inst.deleteSelection(name)
+        if name in inst.AvailableSelections():
+            inst.deleteSelection(name)
 
     ## set active measurement group from components
     # \param components  component list

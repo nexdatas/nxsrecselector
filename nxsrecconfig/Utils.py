@@ -307,6 +307,22 @@ class MSUtils(object):
                 pk = pickle.dumps(dc)
                 dp.Environment = ['pickle', pk]
 
+    ## unsets environment variable
+    # \param cls class instance
+    ## \param var variable name
+    ## \param ms macroserver
+    @classmethod
+    def usetEnv(cls, var,  ms):
+        dp = TangoUtils.openProxy(ms)
+        rec = dp.Environment
+        if rec[0] == 'pickle':
+            dc = pickle.loads(rec[1])
+            if 'new' in dc.keys():
+                if var in dc['new']:
+                    dc['new'].pop(var)
+                pk = pickle.dumps(dc)
+                dp.Environment = ['pickle', pk]
+
     ## provides macro server of given door
     # \param cls class instance
     # \param db tango database

@@ -36,6 +36,7 @@ import sys
 import numpy
 import struct
 import pickle
+import json
 
 #==================================================================
 #   TestPool Class Description:
@@ -200,7 +201,7 @@ class Pool(PyTango.Device_4Impl):
         for attr in attrs:
             inlist = list(getattr(self, attr))
             outlist = []
-            for elem in mylist:
+            for elem in inlist:
                 el = json.loads(elem)
                 if 'name' not in el or name != el['name']:
                     outlist.append(elem)
