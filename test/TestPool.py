@@ -37,6 +37,7 @@ import numpy
 import struct
 import pickle
 import json
+import TestMGSetUp
 
 #==================================================================
 #   TestPool Class Description:
@@ -65,6 +66,7 @@ class Pool(PyTango.Device_4Impl):
         self.attr_MeasurementGroupList = []
         self.attr_ExpChannelList = []
         self.attr_MotorList = []
+        self._tmgs = []
         Pool.init_device(self)
 
 #------------------------------------------------------------------
@@ -72,6 +74,8 @@ class Pool(PyTango.Device_4Impl):
 #------------------------------------------------------------------
     def delete_device(self):
         print "[Device delete_device method] for device", self.get_name()
+        for tmg in self._tmgs:
+            tmg.tearDown()
 
 #------------------------------------------------------------------
 #    Device initialization
@@ -182,7 +186,6 @@ class Pool(PyTango.Device_4Impl):
         else:
             self.set_state(PyTango.DevState.ON)
 
-
 #------------------------------------------------------------------
 #    DeleteElement command:
 #
@@ -208,6 +211,24 @@ class Pool(PyTango.Device_4Impl):
             getattr(self, attr)[:] = outlist
 
 
+#------------------------------------------------------------------
+#    CreateMeasurementGroup command:
+#
+#    Description: Set state of tango device
+#
+#    argin: DevVarStringArray     element
+#------------------------------------------------------------------
+    def CreateMeasurementGroup(self, names):
+        print "In ", self.get_name(), "::CreateMeasurementGroup()"
+        mg = names[0]
+        tm = names[1]
+        self.attr_MeasurementGroupList.append(json.dumps(
+                {"name": mg, 
+                 "full_name": "mntgrp/pool/%s" % (mg)}))
+        tmg = TestMGSetUp.TestMeasurementGroupSetUp(name=mg)
+        tmg.setUp()
+        self._tmgs.append(tmg)
+
 #==================================================================
 #
 #    PoolClass class definition
@@ -230,6 +251,9 @@ class PoolClass(PyTango.DeviceClass):
             [PyTango.DevVoid, ""]],
         'DeleteElement':
             [[PyTango.DevString, "element name"],
+             [PyTango.DevVoid, ""]],
+        'CreateMeasurementGroup':
+            [[PyTango.DevVarStringArray, "channel names"],
              [PyTango.DevVoid, ""]],
         }
 
