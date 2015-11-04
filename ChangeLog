@@ -1,5 +1,6 @@
 2015-10-XX Jan Kotanski <jankotan@gmail.com>
 	* fixes behaviour of ProfileManager with many pools
+	* moves components, disableDataSources, cpdescrition, datasources into ProfileManager
 	* tagged as v1.21.2
 
 2015-10-21 Jan Kotanski <jankotan@gmail.com>

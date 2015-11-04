@@ -118,17 +118,7 @@ class Settings(object):
     ## provides selected components
     # \returns list of available selected components
     def __components(self):
-        cps = json.loads(self.__selector["ComponentGroup"])
-        ads = json.loads(self.__selector["DataSourceGroup"])
-        dss = [ds for ds in ads if ads[ds]]
-        acp = self.availableComponents()
-        res = []
-        if isinstance(cps, dict):
-            res = [cp for cp in cps.keys() if cps[cp]]
-            for ds in dss:
-                if ds in acp:
-                    res.append(ds)
-        return res
+        return self.__profileManager.components()
 
     ##  provides selected components
     components = property(
@@ -138,11 +128,7 @@ class Settings(object):
     ## provides automatic components
     # \returns list of available automatic components
     def __automaticComponents(self):
-        cps = json.loads(self.__selector["AutomaticComponentGroup"])
-        if isinstance(cps, dict):
-            return [cp for cp in cps.keys() if cps[cp]]
-        else:
-            return []
+        return self.__profileManager.automaticComponents()
 
     ## provides automatic components
     automaticComponents = property(__automaticComponents,
@@ -160,14 +146,7 @@ class Settings(object):
     ## provides selected datasources
     # \returns list of available selected datasources
     def __dataSources(self):
-        dds = self.disableDataSources
-        if not isinstance(dds, list):
-            dds = []
-        dss = json.loads(self.__selector["DataSourceGroup"])
-        if isinstance(dss, dict):
-            return [ds for ds in dss.keys() if dss[ds] and ds not in dds]
-        else:
-            return []
+        return self.__profileManager.dataSources()
 
     ##  provides selected data sources
     dataSources = property(
@@ -177,14 +156,7 @@ class Settings(object):
     ## provides a list of Disable DataSources
     # \returns list of disable datasources
     def __disableDataSources(self):
-        res = self.cpdescription()
-        dds = set()
-
-        for dss in res[0].values():
-            if isinstance(dss, dict):
-                for ds in dss.keys():
-                    dds.add(ds)
-        return list(dds)
+        return self.__profileManager.disableDataSources()
 
     ##  provides a list of Disable DataSources
     disableDataSources = property(
@@ -683,7 +655,6 @@ class Settings(object):
     ##  sends ConfigVariables into ConfigServer
     #        and updates serialno if appendEntry selected
     def updateConfigVariables(self):
-
         confvars = self.configVariables
         nexusconfig_device = self.setConfigInstance()
         jvars = json.loads(confvars)
@@ -749,17 +720,7 @@ class Settings(object):
     #        otherwise selectect, automatic and mandatory
     # \returns description of required components
     def cpdescription(self, full=False):
-        nexusconfig_device = self.setConfigInstance()
-        describer = Describer(nexusconfig_device, True)
-        cp = None
-        if not full:
-            cp = list(
-                set(self.components) | set(self.automaticComponents) |
-                set(self.mandatoryComponents()))
-            res = describer.components(cp, 'STEP', '')
-        else:
-            res = describer.components(cp, '', '')
-        return res
+        return self.__profileManager.cpdescription(full)
 
 # MntGrp methods
 
@@ -783,26 +744,12 @@ class Settings(object):
     ## check if active measurement group was changed
     # \returns True if it is different to the current setting
     def isMntGrpChanged(self):
-        dataSources = self.dataSources
-        disableDataSources = self.disableDataSources
-        components = list(
-            set(self.components) | set(self.automaticComponents) |
-            set(self.mandatoryComponents()))
-        return self.__profileManager.isMntGrpChanged(
-            components, dataSources,
-            disableDataSources)
+        return self.__profileManager.isMntGrpChanged()
 
     ## set active measurement group from components
     # \returns string with mntgrp configuration
     def updateMntGrp(self):
-        dataSources = self.dataSources
-        disableDataSources = self.disableDataSources
-        components = list(
-            set(self.components) | set(self.automaticComponents) |
-            set(self.mandatoryComponents()))
-        return self.__profileManager.updateProfile(
-            components, dataSources,
-            disableDataSources)
+        return self.__profileManager.updateProfile()
 
     ## switch to active measurement
     def switchMntGrp(self, toActive=True):

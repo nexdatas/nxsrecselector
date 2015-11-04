@@ -1320,7 +1320,6 @@ class ProfileManagerTest(unittest.TestCase):
         finally:
             tpool2.tearDown()
 
-
     ## updateProfile test
     def test_updateProfile_empty(self):
         fun = sys._getframe().f_code.co_name
@@ -1331,11 +1330,11 @@ class ProfileManagerTest(unittest.TestCase):
                "MntGrp": 'nxsmntgrp'}
 
         mgt = ProfileManager(None)
-        self.myAssertRaise(Exception, mgt.updateProfile, [], [], [])
+        self.myAssertRaise(Exception, mgt.updateProfile)
 
         se = Selector(None)
         mgt = ProfileManager(se)
-        self.myAssertRaise(Exception, mgt.updateProfile, [], [], [])
+        self.myAssertRaise(Exception, mgt.updateProfile)
 
         msp = MacroServerPools(10)
         se = Selector(msp)
@@ -1343,7 +1342,7 @@ class ProfileManagerTest(unittest.TestCase):
         se["ConfigDevice"] = val["ConfigDevice"]
         mgt = ProfileManager(se)
         self.assertEqual(mgt.availableMntGrps(), [])
-        self.myAssertRaise(Exception, mgt.updateProfile, [], [], [])
+        self.myAssertRaise(Exception, mgt.updateProfile)
 
         db = PyTango.Database()
         db.put_device_property(self._ms.ms.keys()[0],
@@ -1362,56 +1361,49 @@ class ProfileManagerTest(unittest.TestCase):
             ]
         pool.AcqChannelList = [json.dumps(a) for a in arr]
 
-        self.myAssertRaise(Exception, mgt.updateProfile, [], [], [])
+        self.myAssertRaise(Exception, mgt.updateProfile)
         for ar in arr:
-
 
             se["Timer"] = '["%s"]' % ar["name"]
 
-            print "START", ar
-            
             tmg = TestMGSetUp.TestMeasurementGroupSetUp(name='nxsmntgrp')
             dv = "/".join(ar["full_name"].split("/")[0:-1])
-            smg = {"controllers": {}, 
-                   "monitor": "%s" % dv, 
-                   "description": "Measurement Group", 
-                   "timer": "%s" % dv, 
+            smg = {"controllers": {},
+                   "monitor": "%s" % dv,
+                   "description": "Measurement Group",
+                   "timer": "%s" % dv,
                    "label": "nxsmntgrp"}
             try:
-                mgt.updateProfile([], [], [])
+                self.assertEqual(json.loads(se["HiddenElements"]), [])
+                self.assertEqual(json.loads(se["OrderedChannels"]), [])
+                self.assertEqual(json.loads(se["DataRecord"]), {})
+                self.assertEqual(json.loads(se["Timer"]), [ar["name"]])
+                self.assertEqual(se["MntGrp"], "nxsmntgrp")
+                jpcnf = mgt.updateProfile()
+                pcnf = json.loads(jpcnf)
                 mgdp = PyTango.DeviceProxy(tmg.new_device_info_writer.name)
                 jcnf = mgdp.Configuration
                 cnf = json.loads(jcnf)
-                print cnf
+                self.assertEqual(json.loads(se["HiddenElements"]), [])
+                self.assertEqual(json.loads(se["OrderedChannels"]), [])
+                self.assertEqual(json.loads(se["DataRecord"]), {})
+                self.assertEqual(json.loads(se["Timer"]), [ar["name"]])
+                self.assertEqual(se["MntGrp"], "nxsmntgrp")
                 self.myAssertDict(smg, cnf)
+                self.myAssertDict(smg, pcnf)
+                se.reset()
+                se["Door"] = val["Door"]
+                se["ConfigDevice"] = val["ConfigDevice"]
+                se["MntGrp"] = "nxsmntgrp"
+                se.fetchSelection()
+                self.assertEqual(json.loads(se["HiddenElements"]), [])
+                self.assertEqual(json.loads(se["OrderedChannels"]), [])
+                self.assertEqual(json.loads(se["DataRecord"]), {})
+                self.assertEqual(json.loads(se["Timer"]), [ar["name"]])
+                self.assertEqual(se["MntGrp"], "nxsmntgrp")
             finally:
                 mgt.deleteProfile("nxsmntgrp")
                 tmg.tearDown()
-                
-
-
-#        pool.MeasurementGroupList = [json.dumps(a) for a in arr]
-
-#        dd2 = mgt.availableMntGrps()
-#        self.assertEqual(set(dd2), set([a["name"] for a in arr]))
-
-#        self._cf.dp.Init()
-#        self._cf.dp.SetCommandVariable(["SELDICT", json.dumps(self.mysel2)])
-#        sl2 = self._cf.dp.availableSelections()
-
-#        dl = []
-#        mgs = [ar["name"] for ar in arr] + self.mysel2.keys()
-#        print mgs
-#        for ar in mgs:
-#            MSUtils.setEnv('ActiveMntGrp', ar, self._ms.ms.keys()[0])
-#            mgt.deleteProfile(ar)
-#            dl.append(ar)
-#            self.assertEqual(MSUtils.getEnv(
-#                    'ActiveMntGrp', self._ms.ms.keys()[0]), "")
-#            dd = mgt.availableMntGrps()
-#            self.assertEqual(set(dd), set(dd2) - set(dl))
-#            sl = self._cf.dp.availableSelections()
-#            self.assertEqual(set(sl), set(sl2) - set(dl))
 
 
 if __name__ == '__main__':

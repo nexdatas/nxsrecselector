@@ -87,6 +87,72 @@ class ProfileManager(object):
             pass
         return mntgrps
 
+    ## provides selected components
+    # \returns list of available selected components
+    def components(self):
+        cps = json.loads(self.__selector["ComponentGroup"])
+        ads = json.loads(self.__selector["DataSourceGroup"])
+        dss = [ds for ds in ads if ads[ds]]
+        acp = self.__selector.configCommand("availableComponents") or []
+        res = []
+        if isinstance(cps, dict):
+            res = [cp for cp in cps.keys() if cps[cp]]
+            for ds in dss:
+                if ds in acp:
+                    res.append(ds)
+        return res
+
+    ## provides automatic components
+    # \returns list of available automatic components
+    def automaticComponents(self):
+        cps = json.loads(self.__selector["AutomaticComponentGroup"])
+        if isinstance(cps, dict):
+            return [cp for cp in cps.keys() if cps[cp]]
+        else:
+            return []
+
+    ## provides description of components
+    # \param full if True describes all available ones are taken
+    #        otherwise selectect, automatic and mandatory
+    # \returns description of required components
+    def cpdescription(self, full=False):
+        self.__updateConfigServer()
+        describer = Describer(self.__configServer, True)
+        cp = None
+        if not full:
+            mcp = self.__selector.configCommand("mandatoryComponents") or []
+            cp = list(
+                set(self.components()) | set(self.automaticComponents()) |
+                set(mcp))
+            res = describer.components(cp, 'STEP', '')
+        else:
+            res = describer.components(cp, '', '')
+        return res
+
+    ## provides a list of Disable DataSources
+    # \returns list of disable datasources
+    def disableDataSources(self):
+        res = self.cpdescription()
+        dds = set()
+
+        for dss in res[0].values():
+            if isinstance(dss, dict):
+                for ds in dss.keys():
+                    dds.add(ds)
+        return list(dds)
+
+    ## provides selected datasources
+    # \returns list of available selected datasources
+    def dataSources(self):
+        dds = self.disableDataSources()
+        if not isinstance(dds, list):
+            dds = []
+        dss = json.loads(self.__selector["DataSourceGroup"])
+        if isinstance(dss, dict):
+            return [ds for ds in dss.keys() if dss[ds] and ds not in dds]
+        else:
+            return []
+
     ## deletes mntgrp
     # \param name mntgrp name
     def deleteProfile(self, name):
@@ -97,7 +163,7 @@ class ProfileManager(object):
                 TangoUtils.command(
                     pool, "DeleteElement", str(name))
         if MSUtils.getEnv('ActiveMntGrp', self.__macroServerName) == name:
-            MSUtils.usetEnv("ActiveMntGrp", self.__macroServerName)        
+            MSUtils.usetEnv("ActiveMntGrp", self.__macroServerName)
         inst = self.__selector.setConfigInstance()
         if name in inst.AvailableSelections():
             inst.deleteSelection(name)
@@ -107,8 +173,13 @@ class ProfileManager(object):
     # \param datasources datasource list
     # \param disabledatasources disable datasource list
     # \returns string with mntgrp configuration
-    def updateProfile(self, components, datasources, disabledatasources):
-        self.__updateConfigServer()
+    def updateProfile(self):
+        mcp = self.__selector.configCommand("mandatoryComponents") or []
+        datasources = self.dataSources()
+        disabledatasources = self.disableDataSources()
+        components = list(
+            set(self.components()) | set(self.automaticComponents()) |
+            set(mcp))
         conf, mntgrp = self.__createMntGrpConf(
             components, datasources, disabledatasources)
         self.__selector.storeSelection()
@@ -144,11 +215,14 @@ class ProfileManager(object):
         return str(dpmg.Configuration)
 
     ## check if active measurement group was changed
-    # \param components  component list
-    # \param datasources datasource list
-    # \param disabledatasources disable datasource list
     # \returns True if it is different to the current setting
-    def isMntGrpChanged(self, components, datasources, disabledatasources):
+    def isMntGrpChanged(self):
+        mcp = self.__selector.configCommand("mandatoryComponents") or []
+        datasources = self.dataSources()
+        disabledatasources = self.disableDataSources()
+        components = list(
+            set(self.components()) | set(self.automaticComponents()) |
+            set(mcp))
         mgconf = json.loads(self.mntGrpConfiguration())
         self.__updateConfigServer()
         llconf, _ = self.__createMntGrpConf(
@@ -164,6 +238,7 @@ class ProfileManager(object):
         jconf = self.mntGrpConfiguration()
         if self.__setFromMntGrpConf(jconf):
             self.__selector.storeSelection()
+
     ## fetch configuration
     def fetchProfile(self):
         if self.__selector.fetchSelection() is False:
@@ -174,7 +249,6 @@ class ProfileManager(object):
                 self.__selector.resetAutomaticComponents(
                     self.defaultAutomaticComponents)
                 self.__selector.updateAutomaticComponents()
-
 
     ## set active measurement group from components
     # \param components  component list
