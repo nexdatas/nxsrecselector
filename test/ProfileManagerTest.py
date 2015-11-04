@@ -1406,5 +1406,112 @@ class ProfileManagerTest(unittest.TestCase):
                 tmg.tearDown()
 
 
+    ## updateProfile test
+    def test_automaticComponents(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+
+        for i in range(20):
+            msp = MacroServerPools(10)
+            se = Selector(msp)
+            se["Door"] = val["Door"]
+            se["ConfigDevice"] = val["ConfigDevice"]
+            se["WriterDevice"] = val["WriterDevice"]
+            pm = ProfileManager(se)
+
+            cps = {}
+            lcp = self.__rnd.randint(1, 40)
+            for i in range(lcp):
+                cps[self.getRandomName(10)] = bool(self.__rnd.randint(0, 1))
+            se["AutomaticComponentGroup"] = json.dumps(cps)
+
+            self.dump(se)
+            
+            ac = pm.automaticComponents()
+            self.compareToDump(se, ["AutomaticComponentGroup"])
+            ndss = json.loads(se["AutomaticComponentGroup"])
+                        
+            acp= []
+            for ds in cps.keys():
+                self.assertTrue(ds in ndss.keys())
+                self.assertEqual(ndss[ds], cps[ds])
+                if ndss[ds]:
+                    acp.append(ds)
+
+            self.assertEqual(set(ac), set(acp))
+
+
+    ## updateProfile test
+    def test_components(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+
+        for i in range(20):
+            msp = MacroServerPools(10)
+            se = Selector(msp)
+            se["Door"] = val["Door"]
+            se["OrderedChannels"] = json.dumps([])
+            db = PyTango.Database()
+            db.put_device_property(self._ms.ms.keys()[0],
+                                   {'PoolNames': self._pool.dp.name()})
+            pool = self._pool.dp
+            pool.ExpChannelList = []
+            self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+            se["Door"] = val["Door"]
+            se["ConfigDevice"] = val["ConfigDevice"]
+            se["WriterDevice"] = val["WriterDevice"]
+            pm = ProfileManager(se)
+
+
+            cps = {}
+            dss = {}
+            lcp = self.__rnd.randint(1, 40)
+            lds = self.__rnd.randint(1, 40)
+            for i in range(lcp):
+                cps[self.getRandomName(10)] = bool(self.__rnd.randint(0, 1))
+            for i in range(lds):
+                dss[self.getRandomName(10)] = bool(self.__rnd.randint(0, 1))
+            ddss = self.__rnd.sample(dss, self.__rnd.randint(
+                    1, len(dss.keys())))
+            dcps = dict(cps)    
+            for ds in ddss:
+                dcps[ds] = bool(self.__rnd.randint(0, 1))
+            
+            self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(dcps)])
+            self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
+
+            se["ComponentGroup"] = json.dumps(cps)
+            se["DataSourceGroup"] = json.dumps(dss)
+            ndss = json.loads(se["DataSourceGroup"])
+            common = set(cps) & set(dss)
+            self.dump(se)
+
+            ncps = json.loads(se["ComponentGroup"])
+            ndss = json.loads(se["DataSourceGroup"])
+            tdss = [ds for ds in ndss if ndss[ds]]
+            tcps = [cp for cp in ncps if ncps[cp]]
+
+            pmcp = pm.components()
+            self.assertEqual(len(cps), len(ncps) + len(common))
+            for key in cps.keys():
+                if key not in common:
+                    self.assertTrue(key in ncps.keys())
+                    self.assertEqual(ncps[key], cps[key])
+            self.compareToDumpJSON(se, ["ComponentGroup"])
+            ac = self._cf.dp.availableComponents()
+            for cp in pmcp:
+                self.assertTrue(cp in ac)
+            mfcp = set(tcps) | (set(tdss) & set(ac))
+            self.assertEqual(set(pmcp), set(mfcp))
+
 if __name__ == '__main__':
     unittest.main()
