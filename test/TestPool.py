@@ -210,7 +210,6 @@ class Pool(PyTango.Device_4Impl):
                     outlist.append(elem)
             getattr(self, attr)[:] = outlist
 
-
 #------------------------------------------------------------------
 #    CreateMeasurementGroup command:
 #
@@ -223,11 +222,12 @@ class Pool(PyTango.Device_4Impl):
         mg = names[0]
         tm = names[1]
         self.attr_MeasurementGroupList.append(json.dumps(
-                {"name": mg, 
+                {"name": mg,
                  "full_name": "mntgrp/pool/%s" % (mg)}))
         tmg = TestMGSetUp.TestMeasurementGroupSetUp(name=mg)
         tmg.setUp()
         self._tmgs.append(tmg)
+
 
 #==================================================================
 #

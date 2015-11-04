@@ -106,6 +106,7 @@ class MeasurementGroup(PyTango.Device_4Impl):
         print >> self.log_info, "In ", self.get_name(), \
             "::write_Configuration()"
         self.attr_Configuration = attr.get_write_value() or ""
+
 #==================================================================
 #
 #    TestMeasurementGroup command methods

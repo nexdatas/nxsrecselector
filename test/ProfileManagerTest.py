@@ -369,6 +369,57 @@ class ProfileManagerTest(unittest.TestCase):
 
             }
 
+        self.rescps = {
+            'mycp': {},
+            'mycp2': {},
+            'mycp3': {'ann': [('STEP', 'TANGO', '', None, None)]},
+            'exp_t01': {'exp_t01': [
+                    ('STEP', 'CLIENT', 'haso228k:10000/expchan/dgg2_exp_01/1',
+                     'NX_FLOAT', None)]},
+            'dim1': {'tann1c': [
+                    ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8', [34])]},
+            'dim2': {'tann1c': [
+                    ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8',
+                     ['$datasource.ann'])]},
+            'dim3': {'tann1c': [
+                    ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8',
+                     [1234])]},
+            'dim4': {'tann1c': [
+                    ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8',
+                     ['$datasource.ann2'])]},
+            'dim5': {'tann1c': [
+                    ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8',
+                     ['$datasource.ann'])],
+                     'ann': [('CONFIG', 'TANGO', '', None, None)],
+                     },
+            'dim6': {'tann1c': [
+                    ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8',
+                     ['$datasource.ann', 123])]},
+            'dim7': {'tann1c': [
+                    ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8',
+                     [None, None])]},
+            'dim8': {'tann1c': [
+                    ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8',
+                     [None, 123])]},
+            'scan': {'__unnamed__1': [('STEP', 'CLIENT', 'exp_c01',
+                                       'NX_FLOAT', None)],
+                     '__unnamed__2': [('STEP', 'CLIENT', 'exp_c02',
+                                       'NX_FLOAT', None)],
+                     '__unnamed__3': [('STEP', 'CLIENT', 'p09/mca/exp.02',
+                                       'NX_FLOAT', [2048])],
+                     },
+            'scan2': {'c01': [('STEP', 'CLIENT', 'exp_c01', 'NX_FLOAT', None)],
+                      'c02': [('STEP', 'CLIENT', 'exp_c02', 'NX_FLOAT', None)],
+                      'mca': [('STEP', 'CLIENT', 'p09/mca/exp.02', 'NX_FLOAT',
+                               [2048])],
+                     },
+            'scan3': {'c01': [('STEP', 'CLIENT', 'exp_c01', 'NX_FLOAT', None),
+                              ('INIT', 'CLIENT', 'exp_c01', 'NX_FLOAT', None)],
+                      'mca': [('STEP', 'CLIENT', 'p09/mca/exp.02', 'NX_FLOAT',
+                               [2048])],
+                     },
+            }
+
         self.smycps = {
             'smycp': (
                 '<definition><group type="NXcollection" name="dddd">'
@@ -891,6 +942,24 @@ class ProfileManagerTest(unittest.TestCase):
                 ),
             }
 
+        self.resdss = {
+            'nn': ("nn", "TANGO", ""),
+            'nn2': ("", "TANGO", ""),
+            'ann': ("ann", "TANGO", ""),
+            'ann2': ("ann2", "CLIENT", ""),
+            'ann3': ("ann3", "DB", ""),
+            'ann4': ("ann4", "PYEVAL", ""),
+            'ann5': ("ann5", "NEW", ""),
+            'tann0': ("tann0", "TANGO", "sf:12345/dsff/myattr"),
+            'tann1': ("tann1", "TANGO", "sfa:10000/dsf/myattr2"),
+            'tann1b': ("tann1b", "TANGO", "dsf/myattr2"),
+            'tann1c': ("tann1c", "TANGO", "dsf/sd/we/myattr2"),
+            'P1M_postrun': ('P1M_postrun', "PYEVAL", ""),
+            'dbtest': ('dbtest', "DB", ""),
+            'dbds': ('dbds', "DB", ""),
+            'slt1vgap': ('slt1vgap', "CLIENT", "p02/slt/exp.07"),
+            }
+
     ## test starter
     # \brief Common set up
     def setUp(self):
@@ -921,6 +990,37 @@ class ProfileManagerTest(unittest.TestCase):
         self._cf.tearDown()
         self._ms.tearDown()
         self._wr.tearDown()
+
+    @classmethod
+    def dsfilter(cls, dss, strategy, dstype):
+        res = []
+        for ds in dss:
+            dsfound = True if dstype is None else False
+            stfound = True if strategy is None else False
+            if not dsfound and ds[1] == dstype:
+                dsfound = True
+            if not stfound and ds[0] == strategy:
+                stfound = True
+            if dsfound and stfound:
+                res.append(ds)
+        return res
+
+    def checkCP(self, rv, cv, strategy=None, dstype=None):
+        self.assertEqual(sorted(set(rv[0].keys())), sorted(cv))
+        for i in range(1):
+            for cp, vl in rv[i].items():
+#                print "CP", cp
+                cres = self.rescps[cp]
+                cresk = [ds for ds in cres.keys()
+                         if self.dsfilter(cres[ds], strategy, dstype)]
+
+                self.assertEqual(sorted(vl.keys()), sorted(cresk))
+                for ds in cresk:
+#                    print "C1", sorted(cres[ds])
+#                    print "C2", sorted(vl[ds])
+                    self.assertEqual(
+                        sorted(self.dsfilter(cres[ds], strategy, dstype)),
+                        sorted(vl[ds]))
 
     def dump(self, el):
         self.__dump = {}
@@ -1405,7 +1505,6 @@ class ProfileManagerTest(unittest.TestCase):
                 mgt.deleteProfile("nxsmntgrp")
                 tmg.tearDown()
 
-
     ## updateProfile test
     def test_automaticComponents(self):
         fun = sys._getframe().f_code.co_name
@@ -1430,12 +1529,12 @@ class ProfileManagerTest(unittest.TestCase):
             se["AutomaticComponentGroup"] = json.dumps(cps)
 
             self.dump(se)
-            
+
             ac = pm.automaticComponents()
             self.compareToDump(se, ["AutomaticComponentGroup"])
             ndss = json.loads(se["AutomaticComponentGroup"])
-                        
-            acp= []
+
+            acp = []
             for ds in cps.keys():
                 self.assertTrue(ds in ndss.keys())
                 self.assertEqual(ndss[ds], cps[ds])
@@ -1443,7 +1542,6 @@ class ProfileManagerTest(unittest.TestCase):
                     acp.append(ds)
 
             self.assertEqual(set(ac), set(acp))
-
 
     ## updateProfile test
     def test_components(self):
@@ -1471,7 +1569,6 @@ class ProfileManagerTest(unittest.TestCase):
             se["WriterDevice"] = val["WriterDevice"]
             pm = ProfileManager(se)
 
-
             cps = {}
             dss = {}
             lcp = self.__rnd.randint(1, 40)
@@ -1482,10 +1579,10 @@ class ProfileManagerTest(unittest.TestCase):
                 dss[self.getRandomName(10)] = bool(self.__rnd.randint(0, 1))
             ddss = self.__rnd.sample(dss, self.__rnd.randint(
                     1, len(dss.keys())))
-            dcps = dict(cps)    
+            dcps = dict(cps)
             for ds in ddss:
                 dcps[ds] = bool(self.__rnd.randint(0, 1))
-            
+
             self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(dcps)])
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
 
@@ -1512,6 +1609,227 @@ class ProfileManagerTest(unittest.TestCase):
                 self.assertTrue(cp in ac)
             mfcp = set(tcps) | (set(tdss) & set(ac))
             self.assertEqual(set(pmcp), set(mfcp))
+
+    ## updateProfile test
+    def test_cpdescritpion_unknown(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+
+        msp = MacroServerPools(10)
+        se = Selector(msp)
+        se["Door"] = val["Door"]
+        se["OrderedChannels"] = json.dumps([])
+        db = PyTango.Database()
+        db.put_device_property(self._ms.ms.keys()[0],
+                               {'PoolNames': self._pool.dp.name()})
+        pool = self._pool.dp
+        pool.ExpChannelList = []
+        self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+        se["Door"] = val["Door"]
+        se["ConfigDevice"] = val["ConfigDevice"]
+        se["WriterDevice"] = val["WriterDevice"]
+        pm = ProfileManager(se)
+
+        cps = {}
+        dss = {}
+        lcp = self.__rnd.randint(1, 40)
+        lds = self.__rnd.randint(1, 40)
+
+        dsdict = {
+            "ann": self.mydss["ann"]
+            }
+
+        self._cf.dp.SetCommandVariable(["CPDICT", json.dumps({})])
+        self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dsdict)])
+
+        se["ComponentGroup"] = json.dumps(cps)
+        se["DataSourceGroup"] = json.dumps(dss)
+        ndss = json.loads(se["DataSourceGroup"])
+        common = set(cps) & set(dss)
+        self.dump(se)
+
+        ncps = json.loads(se["ComponentGroup"])
+        ndss = json.loads(se["DataSourceGroup"])
+        tdss = [ds for ds in ndss if ndss[ds]]
+        tcps = [cp for cp in ncps if ncps[cp]]
+
+        self.assertEqual(pm.cpdescription(), [{}])
+        se["ComponentGroup"] = json.dumps({"unknown": True})
+        self.assertEqual(pm.cpdescription(), [{}])
+        se["DataSourceGroup"] = json.dumps({"unknown": True})
+        self.assertEqual(pm.cpdescription(), [{}])
+        self._cf.dp.SetCommandVariable(["MCPLIST", json.dumps(["unknown"])])
+        self.assertEqual(pm.cpdescription(), [{}])
+
+    ## updateProfile test
+    def test_cpdescritpion_full(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+
+        msp = MacroServerPools(10)
+        se = Selector(msp)
+        se["Door"] = val["Door"]
+        se["OrderedChannels"] = json.dumps([])
+        db = PyTango.Database()
+        db.put_device_property(self._ms.ms.keys()[0],
+                               {'PoolNames': self._pool.dp.name()})
+        pool = self._pool.dp
+        pool.ExpChannelList = []
+        self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+        se["Door"] = val["Door"]
+        se["ConfigDevice"] = val["ConfigDevice"]
+        se["WriterDevice"] = val["WriterDevice"]
+        pm = ProfileManager(se)
+
+        cps = {}
+        dss = {}
+        lcp = self.__rnd.randint(1, 40)
+        lds = self.__rnd.randint(1, 40)
+
+        dsdict = {
+            "ann": self.mydss["ann"]
+            }
+
+        self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
+        self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
+
+        se["ComponentGroup"] = json.dumps({})
+        se["DataSourceGroup"] = json.dumps({})
+        ndss = json.loads(se["DataSourceGroup"])
+        common = set(cps) & set(dss)
+        self.dump(se)
+
+        res = pm.cpdescription(True)
+        self.checkCP(res, self.rescps.keys())
+
+    ## updateProfile test
+    def test_cpdescritpion_comp_nods(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+
+        for i in range(20):
+            msp = MacroServerPools(10)
+            se = Selector(msp)
+            se["Door"] = val["Door"]
+            se["OrderedChannels"] = json.dumps([])
+            db = PyTango.Database()
+            db.put_device_property(self._ms.ms.keys()[0],
+                                   {'PoolNames': self._pool.dp.name()})
+            pool = self._pool.dp
+            pool.ExpChannelList = []
+            self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+            se["Door"] = val["Door"]
+            se["ConfigDevice"] = val["ConfigDevice"]
+            se["WriterDevice"] = val["WriterDevice"]
+            pm = ProfileManager(se)
+
+            cps = {}
+            dss = {}
+            lcp = self.__rnd.randint(1, 40)
+            lds = self.__rnd.randint(1, 40)
+
+            self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
+            self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
+
+            ncps = self.__rnd.randint(1, len(self.mycps.keys()) - 1)
+            lcps = self.__rnd.sample(set(self.mycps.keys()), ncps)
+            for cp in lcps:
+                cps[cp] = bool(self.__rnd.randint(0, 1))
+
+            mncps = self.__rnd.randint(1, len(self.mycps.keys()) - 1)
+            mcps = self.__rnd.sample(set(self.mycps.keys()), mncps)
+
+            tdss = [ds for ds in dss if dss[ds]]
+            tcps = [cp for cp in cps if cps[cp]]
+
+            se["ComponentGroup"] = json.dumps(cps)
+            se["DataSourceGroup"] = json.dumps(dss)
+            self._cf.dp.SetCommandVariable(["MCPLIST", json.dumps(mcps)])
+            ndss = json.loads(se["DataSourceGroup"])
+            common = set(cps) & set(dss)
+            self.dump(se)
+
+            res = pm.cpdescription()
+            self.checkCP(res, list(set(tcps) | set(tdss) | set(mcps)),
+                         strategy='STEP')
+
+    ## updateProfile test
+    def test_cpdescritpion_comp_ds(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+
+        for i in range(20):
+            msp = MacroServerPools(10)
+            se = Selector(msp)
+            se["Door"] = val["Door"]
+            se["OrderedChannels"] = json.dumps([])
+            db = PyTango.Database()
+            db.put_device_property(self._ms.ms.keys()[0],
+                                   {'PoolNames': self._pool.dp.name()})
+            pool = self._pool.dp
+            pool.ExpChannelList = []
+            self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+            se["Door"] = val["Door"]
+            se["ConfigDevice"] = val["ConfigDevice"]
+            se["WriterDevice"] = val["WriterDevice"]
+            pm = ProfileManager(se)
+
+            cps = {}
+            dss = {}
+            lcp = self.__rnd.randint(1, 40)
+            lds = self.__rnd.randint(1, 40)
+
+            self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
+            self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
+
+            ncps = self.__rnd.randint(1, len(self.mycps.keys()) - 1)
+            lcps = self.__rnd.sample(set(self.mycps.keys()), ncps)
+            for cp in lcps:
+                cps[cp] = bool(self.__rnd.randint(0, 1))
+
+            ndss = self.__rnd.randint(1, len(self.mycps.keys()) - 1)
+            ldss = self.__rnd.sample(set(self.mycps.keys()), ndss)
+            for ds in ldss:
+                if ds in self.mydss.keys():
+                    dss[ds] = bool(self.__rnd.randint(0, 1))
+
+            mncps = self.__rnd.randint(1, len(self.mycps.keys()) - 1)
+            mcps = self.__rnd.sample(set(self.mycps.keys()), mncps)
+
+            tdss = [ds for ds in dss if dss[ds]]
+            tcps = [cp for cp in cps if cps[cp]]
+
+            se["ComponentGroup"] = json.dumps(cps)
+            se["DataSourceGroup"] = json.dumps(dss)
+            self._cf.dp.SetCommandVariable(["MCPLIST", json.dumps(mcps)])
+            ndss = json.loads(se["DataSourceGroup"])
+            common = set(cps) & set(dss)
+            self.dump(se)
+
+            res = pm.cpdescription()
+            self.checkCP(res, list(set(tcps) | set(tdss) | set(mcps)),
+                         strategy='STEP')
+
 
 if __name__ == '__main__':
     unittest.main()
