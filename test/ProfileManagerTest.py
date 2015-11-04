@@ -1899,6 +1899,74 @@ class ProfileManagerTest(unittest.TestCase):
             self.assertEqual(mdds, set(dds))
             self.assertEqual(len(mdds), len(dds))
 
+    ## updateProfile test
+    def test_datasources(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+
+        for i in range(20):
+            msp = MacroServerPools(10)
+            se = Selector(msp)
+            se["Door"] = val["Door"]
+            se["OrderedChannels"] = json.dumps([])
+            db = PyTango.Database()
+            db.put_device_property(self._ms.ms.keys()[0],
+                                   {'PoolNames': self._pool.dp.name()})
+            pool = self._pool.dp
+            pool.ExpChannelList = []
+            self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+            se["Door"] = val["Door"]
+            se["ConfigDevice"] = val["ConfigDevice"]
+            se["WriterDevice"] = val["WriterDevice"]
+            pm = ProfileManager(se)
+
+            cps = {}
+            dss = {}
+            lcp = self.__rnd.randint(1, 40)
+            lds = self.__rnd.randint(1, 40)
+
+            self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
+            self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
+
+            ncps = self.__rnd.randint(1, len(self.mycps.keys()) - 1)
+            lcps = self.__rnd.sample(set(self.mycps.keys()), ncps)
+            for cp in lcps:
+                cps[cp] = bool(self.__rnd.randint(0, 1))
+
+            ndss = self.__rnd.randint(1, len(self.mycps.keys()) - 1)
+            ldss = self.__rnd.sample(set(self.mycps.keys()), ndss)
+            for ds in ldss:
+                if ds in self.mydss.keys():
+                    dss[ds] = bool(self.__rnd.randint(0, 1))
+
+            ndss = self.__rnd.randint(1, len(self.mydss.keys()) - 1)
+            ldss = self.__rnd.sample(set(self.mydss.keys()), ndss)
+            for ds in ldss:
+                if ds in self.mydss.keys():
+                    dss[ds] = bool(self.__rnd.randint(0, 1))
+
+            mncps = self.__rnd.randint(1, len(self.mycps.keys()) - 1)
+            mcps = self.__rnd.sample(set(self.mycps.keys()), mncps)
+
+            se["ComponentGroup"] = json.dumps(cps)
+            se["DataSourceGroup"] = json.dumps(dss)
+            self._cf.dp.SetCommandVariable(["MCPLIST", json.dumps(mcps)])
+            ndss = json.loads(se["DataSourceGroup"])
+            common = set(cps) & set(dss)
+            self.dump(se)
+
+            dds = pm.disableDataSources()
+            rdss = pm.dataSources()
+            tdss = [ds for ds in dss if dss[ds] and ds not in dds]
+
+            self.assertEqual(set(tdss), set(rdss))
+            self.assertEqual(len(tdss), len(rdss))
+
 
 if __name__ == '__main__':
     unittest.main()
