@@ -141,8 +141,145 @@ class TestServerSetUp(object):
                 subprocess.call(
                     "kill -9 %s" % sr[1], stderr=subprocess.PIPE, shell=True)
 
+
+## test fixture
+class MultiTestServerSetUp(object):
+
+    ## constructor
+    # \brief defines server parameters
+    def __init__(self, instance="MTS01", devices=None):
+        if not isinstance(devices, list):
+            devices = ["ttestp09/testts/mt1r228"]
+
+        ## information about tango writer
+        self.server = "TestServer/%s" % instance
+        self.ts = {}
+        ## device proxy
+        self.dps = {}
+        for dv in devices:
+            self.ts[dv] = PyTango.DbDevInfo()
+            self.ts[dv]._class = "TestServer"
+            self.ts[dv].server = self.server
+            self.ts[dv].name = dv
+
+        ## server instance
+        self.instance = instance
+        self._psub = None
+
+        ## device properties
+        self.device_prop = {
+            'DeviceBoolean': False,
+            'DeviceShort': 12,
+            'DeviceLong': 1234566,
+            'DeviceFloat': 12.4345,
+            'DeviceDouble': 3.453456,
+            'DeviceUShort': 1,
+            'DeviceULong': 23234,
+            'DeviceString': "My Sting"
+            }
+
+        ##  class properties
+        self.class_prop = {
+            'ClassBoolean': True,
+            'ClassShort': 1,
+            'ClassLong': -123555,
+            'ClassFloat': 12.345,
+            'ClassDouble': 1.23445,
+            'ClassUShort': 1,
+            'ClassULong': 12343,
+            'ClassString': "My ClassString",
+            }
+
+    ## test starter
+    # \brief Common set up of Tango Server
+    def setUp(self):
+        print "\nsetting up..."
+        self.add()
+        self.start()
+
+    def add(self):
+        db = PyTango.Database()
+
+        devices = self.ts.values()
+        for dv in devices:
+            db.add_device(dv)
+            print dv.name
+            db.put_device_property(dv.name, self.device_prop)
+            db.put_class_property(dv._class, self.class_prop)
+
+        if devices:
+            db.add_server(self.server, devices)
+
+    ## starts server
+    def start(self):
+        path = os.path.dirname(TestServer.__file__)
+        if not path:
+            path = '.'
+
+        self._psub = subprocess.call(
+            "cd %s;  python ./TestServer.py %s &" % (path, self.instance),
+            stdout=None, stderr=None, shell=True)
+        print "waiting for simple server",
+
+        found = False
+        cnt = 0
+        devices = self.ts.values()
+        while not found and cnt < 1000:
+            try:
+                print "\b.",
+                dpcnt = 0
+                for dv in devices:
+                    self.dps[dv.name] = PyTango.DeviceProxy(dv.name)
+                    time.sleep(0.01)
+                    if self.dps[dv.name].state() == PyTango.DevState.ON:
+                        dpcnt += 1
+                if dpcnt == len(devices):
+                    found = True
+            except Exception as e:
+#                print str(e)
+                found = False
+            cnt += 1
+        print ""
+
+    ## test closer
+    # \brief Common tear down of Tango Server
+    def tearDown(self):
+        print "tearing down ..."
+        self.delete()
+        self.stop()
+
+    def delete(self):
+        db = PyTango.Database()
+        db.delete_server(self.server)
+
+    ## stops server
+    def stop(self):
+        output = ""
+        pipe = subprocess.Popen(
+            "ps -ef | grep 'TestServer.py %s'" % self.instance,
+            stdout=subprocess.PIPE, shell=True).stdout
+
+        res = pipe.read().split("\n")
+        for r in res:
+            sr = r.split()
+            if len(sr) > 2:
+                subprocess.call(
+                    "kill -9 %s" % sr[1], stderr=subprocess.PIPE, shell=True)
+
+
 if __name__ == "__main__":
     simps = TestServerSetUp()
     simps.setUp()
     print simps.dp.status()
+    simps.tearDown()
+    simps = MultiTestServerSetUp()
+    simps.setUp()
+    for dp in simps.dps.values():
+        print dp.status()
+    simps.tearDown()
+    simps = MultiTestServerSetUp(devices=[
+            "tm2/dd/sr", "dsf/44/fgg", "sdffd/sdfsd/sfd"])
+    simps.setUp()
+    for dp in simps.dps.values():
+        print dp.status()
     simps.tearDown()

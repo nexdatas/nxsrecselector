@@ -312,7 +312,7 @@ class MSUtils(object):
     ## \param var variable name
     ## \param ms macroserver
     @classmethod
-    def usetEnv(cls, var,  ms):
+    def usetEnv(cls, var, ms):
         dp = TangoUtils.openProxy(ms)
         rec = dp.Environment
         if rec[0] == 'pickle':
