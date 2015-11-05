@@ -469,7 +469,14 @@ class ProfileManager(object):
 
         describer = Describer(self.__configServer, True)
         res = describer.components(components, 'STEP', 'CLIENT')
-
+        for grp in res:
+            for cp, dss in grp.items():
+                ndcp = cp in dontdisplay
+                for ds in dss.keys():
+                    aliases.append(str(ds))
+                    if not ndcp and str(ds) in dontdisplay:
+                        dontdisplay.remove(str(ds))
+        res = describer.components(components, 'STEP', 'TANGO')
         for grp in res:
             for cp, dss in grp.items():
                 ndcp = cp in dontdisplay
@@ -487,7 +494,7 @@ class ProfileManager(object):
                 dontdisplay.add(tm)
 
         pchannels = [ch for ch in pchannels if ch in aliases]
-        aliases = list(set(aliases) - set(pchannels))
+        aliases = sorted(list(set(aliases) - set(pchannels)))
         pchannels.extend(aliases)
         return pchannels
 
