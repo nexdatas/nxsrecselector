@@ -368,6 +368,24 @@ class PoolUtils(object):
                 ctrls[chan['name']] = chan['controller']
         return ctrls
 
+    ## provides channel sources
+    # \param cls class instance
+    # \param pools list of pool devices
+    # \param devices alias names
+    # \returns device sources
+    @classmethod
+    def getChannelSources(cls, pools, devices):
+        lst = []
+        for pool in pools:
+            if pool.ExpChannelList:
+                lst += pool.ExpChannelList
+        srs = {}
+        for elm in lst:
+            chan = json.loads(elm)
+            if chan['name'] in devices:
+                srs[chan['name']] = chan['source']
+        return srs
+
     ## provides experimental Channels
     # \param cls class instance
     # \param pools list of pool devices

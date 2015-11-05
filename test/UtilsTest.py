@@ -1004,6 +1004,105 @@ class UtilsTest(unittest.TestCase):
         dd = PoolUtils.getDeviceControllers([pool, pool2], lst)
         self.assertEqual(dd, res)
 
+    ## getChannelSources test
+    def test_getChannelSources_empty(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+
+        arr = [
+            {"name":"test/ct/01", "source":"counter_01/Value"},
+            {"name":"test/ct/02", "source":"counter_02/att"},
+            {"name":"test/ct/03", "source":"counter_03/value"},
+            {"name":"test/ct/04", "source":"counter_04/13"},
+            {"name":"null", "source":"counter_04"},
+            ]
+
+        pool = Pool()
+        pool.ExpChannelList = [json.dumps(a) for a in arr]
+
+        import nxsrecconfig
+        dd = PoolUtils.getChannelSources([], "test/ct/01")
+        self.assertEqual(dd, {})
+
+        dd = PoolUtils.getChannelSources([], arr[0]["name"])
+        self.assertEqual(dd, {})
+        dd = PoolUtils.getChannelSources([pool], arr[4]["name"])
+        self.assertEqual(dd, {arr[4]["name"]: arr[4]["source"]})
+
+        dd = PoolUtils.getChannelSources([pool], "sdfds")
+        self.assertEqual(dd, {})
+
+    ## getChannelSources test
+    def test_getChannelSources_pool1(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+
+        arr = [
+            ["test/ct/01", "counter_01"],
+            ["test/ct/02", "counter_02att"],
+            ["test/ct/03", "counter_03value"],
+            ["test/ct/04", "counter_0413"],
+            ["null", "counter_04"],
+            ]
+
+        pool = Pool()
+        pool.ExpChannelList = [json.dumps(
+                {"name":a[0], "source":a[1]}) for a in arr]
+
+        for ar in arr:
+            dd = PoolUtils.getChannelSources([pool], [ar[0]])
+            self.assertEqual(dd, {ar[0]: ar[1]})
+
+        dd = PoolUtils.getChannelSources([pool], [ar[0] for ar in arr])
+        self.assertEqual(dd, dict((ar[0], ar[1]) for ar in arr))
+
+    def test_getChannelSources_pool2(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+
+        arr = [
+            ["test/ct/01", "counter_01Value"],
+            ["test/ct/02", "counter_02att"],
+            ["test/ct/03", "counter_03alue"],
+            ["test/ct/04", "counter_0413"],
+            ["null", "counter_04"],
+            ]
+
+        arr2 = [
+            ["test/mca/01", "mca_01"],
+            ["test/mca/02", "mca_02"],
+            ["test/sca/03", "my_sca1"],
+            ["test/sca/04", "mysca_123"],
+            ]
+
+        pool = Pool()
+        pool2 = Pool()
+        pool.ExpChannelList = [json.dumps(
+                {"name":a[0], "source":a[1]}) for a in arr]
+        pool2.ExpChannelList = [json.dumps(
+                {"name":a[0], "source":a[1]}) for a in arr2]
+
+        for ar in arr:
+            dd = PoolUtils.getChannelSources([pool, pool2], [ar[0]])
+            self.assertEqual(dd, {ar[0]: ar[1]})
+
+        for ar in arr2:
+            dd = PoolUtils.getChannelSources([pool, pool2], [ar[0]])
+            self.assertEqual(dd, {ar[0]: ar[1]})
+
+        res = dict((ar[0], ar[1]) for ar in arr)
+        res.update(dict((ar[0], ar[1]) for ar in arr2))
+
+        lst = [ar[0] for ar in arr]
+        lst.extend([ar[0] for ar in arr2])
+
+        dd = PoolUtils.getChannelSources([pool, pool2], lst)
+        self.assertEqual(dd, res)
+
+        lst.extend(["sfdsdf", "sdfsfd"])
+        dd = PoolUtils.getChannelSources([pool, pool2], lst)
+        self.assertEqual(dd, res)
+
     ## getExperimentalChannels test
     def test_getExperimentalChannels_pool1(self):
         fun = sys._getframe().f_code.co_name

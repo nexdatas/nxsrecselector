@@ -276,10 +276,11 @@ class ProfileManager(object):
 
         index = 0
         fullnames = PoolUtils.getFullDeviceNames(self.__pools, aliases)
+        sources = PoolUtils.getChannelSources(self.__pools, aliases)
         for al in aliases:
             index = self.__addDevice(
                 al, dontdisplay, cnf,
-                al if al in ltimers else timer, index, fullnames)
+                al if al in ltimers else timer, index, fullnames, sources)
         conf = json.dumps(cnf)
         return conf, mfullname
 
@@ -615,7 +616,7 @@ class ProfileManager(object):
     # \param fullnames dictionary with full names
     # \returns next device index
     def __addDevice(self, device, dontdisplay, cnf,
-                    timer, index, fullnames=None):
+                    timer, index, fullnames=None, sources=None):
         if not fullnames:
             fullnames = PoolUtils.getFullDeviceNames(
                 self.__pools, [device, timer])
@@ -629,8 +630,10 @@ class ProfileManager(object):
             self.__addController(cnf, ctrl, fulltimer)
             fullname = fullnames[device] \
                 if fullnames and device in fullnames.keys() else ""
+            source = sources[device] \
+                if sources and device in sources.keys() else ""
             index = self.__addChannel(cnf, ctrl, device, fullname,
-                                      dontdisplay, index)
+                                      dontdisplay, index, source)
         else:
             describer = Describer(self.__configServer)
             sds = describer.dataSources([device])
@@ -666,15 +669,16 @@ class ProfileManager(object):
 
     ## adds channel into configuration dictionary
     @classmethod
-    def __addChannel(cls, cnf, ctrl, device, fullname, dontdisplay, index):
+    def __addChannel(cls, cnf, ctrl, device, fullname, dontdisplay, index,
+                     source):
 
         ctrlChannels = cnf['controllers'][ctrl]['units']['0'][
             u'channels']
         if fullname not in ctrlChannels.keys():
-            source = PoolUtils.getSource(fullname)
-            if not source:
-                source = '%s/%s' % (fullname.encode(), 'Value')
-            shp, dt, ut = TangoUtils.getShapeTypeUnit(source)
+            dsource = PoolUtils.getSource(fullname) or source.encode()
+            if not dsource:
+                dsource = '%s/%s' % (fullname.encode(), 'Value')
+            shp, dt, ut = TangoUtils.getShapeTypeUnit(dsource)
             dct = {}
             dct['_controller_name'] = unicode(ctrl)
             dct['_unit_id'] = u'0'
@@ -707,7 +711,7 @@ class ProfileManager(object):
                 dct['plot_axes'] = ['<mov>']
                 dct['plot_type'] = 1
 
-            dct['source'] = source
+            dct['source'] = dsource
             ctrlChannels[fullname] = dct
 
         return index
