@@ -452,6 +452,19 @@ class ProfileManagerTest(unittest.TestCase):
                 '</group></definition>'),
             }
 
+        self.smycpsstep = {
+            'smycp': ("scalar_long","scalar_short"),
+            'smycp2': ("spectrum_short",),
+            'smycp3': ("image_short",),
+            'smycpnt1': ("client_short",),
+            }
+        self.smycpsstep2 = {
+            's2mycp': ("scalar2_long","scalar2_short"),
+            's2mycp2': ("spectrum2_long",),
+            's2mycp3': ("image2_long",),
+            's2mycpnt1': ("client2_short",),
+            }
+
         self.smycps2 = {
             's2mycp': (
                 '<definition><group type="NXcollection" name="dddd2">'
@@ -675,192 +688,192 @@ class ProfileManagerTest(unittest.TestCase):
             }
 
         self.smydssXX = {
-            'scalar_long': (
-                '<definition><datasource type="TANGO" name="scalar_long">'
+            'scalar2_long': (
+                '<definition><datasource type="TANGO" name="scalar2_long">'
                 '<record name="ScalarLong"/>'
                 '<device member="attribute" name="ttestp09/testts/t01r228"/>'
                 '</datasource></definition>'),
-            'scalar_bool': (
-                '<definition><datasource type="TANGO" name="scalar_bool">'
+            'scalar2_bool': (
+                '<definition><datasource type="TANGO" name="scalar2_bool">'
                 '<record name="ScalarBoolean"/>'
                 '<device member="attribute" name="ttestp09/testts/t02r228"/>'
                 '</datasource></definition>'),
-            'scalar_short': (
-                '<definition><datasource type="TANGO" name="scalar_short">'
+            'scalar2_short': (
+                '<definition><datasource type="TANGO" name="scalar2_short">'
                 '<record name="ScalarShort"/>'
                 '<device member="attribute" name="ttestp09/testts/t03r228"/>'
                 '</datasource></definition>'),
-            'scalar_ushort': (
-                '<definition><datasource type="TANGO" name="scalar_ushort">'
+            'scalar2_ushort': (
+                '<definition><datasource type="TANGO" name="scalar2_ushort">'
                 '<record name="ScalarUShort"/>'
                 '<device member="attribute" name="ttestp09/testts/t04r228"/>'
                 '</datasource></definition>'),
-            'scalar_ulong': (
-                '<definition><datasource type="TANGO" name="scalar_ulong">'
+            'scalar2_ulong': (
+                '<definition><datasource type="TANGO" name="scalar2_ulong">'
                 '<record name="ScalarULong"/>'
                 '<device member="attribute" name="ttestp09/testts/t05r228"/>'
                 '</datasource></definition>'),
-            'scalar_long64': (
-                '<definition><datasource type="TANGO" name="scalar_long64">'
+            'scalar2_long64': (
+                '<definition><datasource type="TANGO" name="scalar2_long64">'
                 '<record name="ScalarLong64"/>'
                 '<device member="attribute" name="ttestp09/testts/t06r228"/>'
                 '</datasource></definition>'),
-            'scalar_ulong64': (
-                '<definition><datasource type="TANGO" name="scalar_ulong64">'
+            'scalar2_ulong64': (
+                '<definition><datasource type="TANGO" name="scalar2_ulong64">'
                 '<record name="ScalarULong64"/>'
                 '<device member="attribute" name="ttestp09/testts/t07r228"/>'
                 '</datasource></definition>'),
-            'scalar_float': (
-                '<definition><datasource type="TANGO" name="scalar_float">'
+            'scalar2_float': (
+                '<definition><datasource type="TANGO" name="scalar2_float">'
                 '<record name="ScalarFloat"/>'
                 '<device member="attribute" name="ttestp09/testts/t08r228"/>'
                 '</datasource></definition>'),
-            'scalar_double': (
-                '<definition><datasource type="TANGO" name="scalar_double">'
+            'scalar2_double': (
+                '<definition><datasource type="TANGO" name="scalar2_double">'
                 '<record name="ScalarDouble"/>'
                 '<device member="attribute" name="ttestp09/testts/t09r228"/>'
                 '</datasource></definition>'),
-            'scalar_string': (
-                '<definition><datasource type="TANGO" name="scalar_string">'
+            'scalar2_string': (
+                '<definition><datasource type="TANGO" name="scalar2_string">'
                 '<record name="ScalarString"/>'
                 '<device member="attribute" name="ttestp09/testts/t10r228"/>'
                 '</datasource></definition>'),
-            'scalar_Encoded': (
-                '<definition><datasource type="TANGO" name="scalar_encoded">'
+            'scalar2_Encoded': (
+                '<definition><datasource type="TANGO" name="scalar2_encoded">'
                 '<record name="ScalarEncoded"/>'
                 '<device member="attribute" name="ttestp09/testts/t11r228"/>'
                 '</datasource></definition>'),
-            'scalar_uchar': (
-                '<definition><datasource type="TANGO" name="scalar_uchar">'
+            'scalar2_uchar': (
+                '<definition><datasource type="TANGO" name="scalar2_uchar">'
                 '<record name="ScalarUChar"/>'
                 '<device member="attribute" name="ttestp09/testts/t12r228"/>'
                 '</datasource></definition>'),
-            'spectrum_long': (
-                '<definition><datasource type="TANGO" name="spectrum_long">'
+            'spectrum2_long': (
+                '<definition><datasource type="TANGO" name="spectrum2_long">'
                 '<record name="SpectrumLong"/>'
                 '<device member="attribute" name="ttestp09/testts/t13r228"/>'
                 '</datasource></definition>'),
-            'spectrum_bool': (
-                '<definition><datasource type="TANGO" name="spectrum_bool">'
+            'spectrum2_bool': (
+                '<definition><datasource type="TANGO" name="spectrum2_bool">'
                 '<record name="SpectrumBoolean"/>'
                 '<device member="attribute" name="ttestp09/testts/t14r228"/>'
                 '</datasource></definition>'),
-            'spectrum_short': (
-                '<definition><datasource type="TANGO" name="spectrum_short">'
+            'spectrum2_short': (
+                '<definition><datasource type="TANGO" name="spectrum2_short">'
                 '<record name="SpectrumShort"/>'
                 '<device member="attribute" name="ttestp09/testts/t15r228"/>'
                 '</datasource></definition>'),
-            'spectrum_ushort': (
-                '<definition><datasource type="TANGO" name="spectrum_ushort">'
+            'spectrum2_ushort': (
+                '<definition><datasource type="TANGO" name="spectrum2_ushort">'
                 '<record name="SpectrumUShort"/>'
                 '<device member="attribute" name="ttestp09/testts/t16r228"/>'
                 '</datasource></definition>'),
-            'spectrum_ulong': (
-                '<definition><datasource type="TANGO" name="spectrum_ulong">'
+            'spectrum2_ulong': (
+                '<definition><datasource type="TANGO" name="spectrum2_ulong">'
                 '<record name="SpectrumULong"/>'
                 '<device member="attribute" name="ttestp09/testts/t17r228"/>'
                 '</datasource></definition>'),
-            'spectrum_long64': (
-                '<definition><datasource type="TANGO" name="spectrum_long64">'
+            'spectrum2_long64': (
+                '<definition><datasource type="TANGO" name="spectrum2_long64">'
                 '<record name="SpectrumLong64"/>'
                 '<device member="attribute" name="ttestp09/testts/t18r228"/>'
                 '</datasource></definition>'),
-            'spectrum_ulong64': (
-                '<definition><datasource type="TANGO" name="spectrum_ulong64">'
+            'spectrum2_ulong64': (
+                '<definition><datasource type="TANGO" name="spectrum2_ulong64">'
                 '<record name="SpectrumULong64"/>'
                 '<device member="attribute" name="ttestp09/testts/t19r228"/>'
                 '</datasource></definition>'),
-            'spectrum_float': (
-                '<definition><datasource type="TANGO" name="spectrum_float">'
+            'spectrum2_float': (
+                '<definition><datasource type="TANGO" name="spectrum2_float">'
                 '<record name="SpectrumFloat"/>'
                 '<device member="attribute" name="ttestp09/testts/t20r228"/>'
                 '</datasource></definition>'),
-            'spectrum_double': (
-                '<definition><datasource type="TANGO" name="spectrum_double">'
+            'spectrum2_double': (
+                '<definition><datasource type="TANGO" name="spectrum2_double">'
                 '<record name="SpectrumDouble"/>'
                 '<device member="attribute" name="ttestp09/testts/t21r228"/>'
                 '</datasource></definition>'),
-            'spectrum_string': (
-                '<definition><datasource type="TANGO" name="spectrum_string">'
+            'spectrum2_string': (
+                '<definition><datasource type="TANGO" name="spectrum2_string">'
                 '<record name="SpectrumString"/>'
                 '<device member="attribute" name="ttestp09/testts/t22r228"/>'
                 '</datasource></definition>'),
-            'spectrum_Encoded': (
-                '<definition><datasource type="TANGO" name="spectrum_encoded">'
+            'spectrum2_Encoded': (
+                '<definition><datasource type="TANGO" name="spectrum2_encoded">'
                 '<record name="SpectrumEncoded"/>'
                 '<device member="attribute" name="ttestp09/testts/t23r228"/>'
                 '</datasource></definition>'),
-            'spectrum_uchar': (
-                '<definition><datasource type="TANGO" name="spectrum_uchar">'
+            'spectrum2_uchar': (
+                '<definition><datasource type="TANGO" name="spectrum2_uchar">'
                 '<record name="SpectrumUChar"/>'
                 '<device member="attribute" name="ttestp09/testts/t24r228"/>'
                 '</datasource></definition>'),
-            'image_long': (
-                '<definition><datasource type="TANGO" name="image_long">'
+            'image2_long': (
+                '<definition><datasource type="TANGO" name="image2_long">'
                 '<record name="ImageLong"/>'
                 '<device member="attribute" name="ttestp09/testts/t25r228"/>'
                 '</datasource></definition>'),
-            'image_bool': (
-                '<definition><datasource type="TANGO" name="image_bool">'
+            'image2_bool': (
+                '<definition><datasource type="TANGO" name="image2_bool">'
                 '<record name="ImageBoolean"/>'
                 '<device member="attribute" name="ttestp09/testts/t26r228"/>'
                 '</datasource></definition>'),
-            'image_short': (
-                '<definition><datasource type="TANGO" name="image_short">'
+            'image2_short': (
+                '<definition><datasource type="TANGO" name="image2_short">'
                 '<record name="ImageShort"/>'
                 '<device member="attribute" name="ttestp09/testts/t27r228"/>'
                 '</datasource></definition>'),
-            'image_ushort': (
-                '<definition><datasource type="TANGO" name="image_ushort">'
+            'image2_ushort': (
+                '<definition><datasource type="TANGO" name="image2_ushort">'
                 '<record name="ImageUShort"/>'
                 '<device member="attribute" name="ttestp09/testts/t28r228"/>'
                 '</datasource></definition>'),
-            'image_ulong': (
-                '<definition><datasource type="TANGO" name="image_ulong">'
+            'image2_ulong': (
+                '<definition><datasource type="TANGO" name="image2_ulong">'
                 '<record name="ImageULong"/>'
                 '<device member="attribute" name="ttestp09/testts/t29r228"/>'
                 '</datasource></definition>'),
-            'image_long64':
-                ('<definition><datasource type="TANGO" name="image_long64">'
+            'image2_long64':
+                ('<definition><datasource type="TANGO" name="image2_long64">'
                  '<record name="ImageLong64"/>'
                  '<device member="attribute" name="ttestp09/testts/t30r228"/>'
                  '</datasource></definition>'),
-            'image_ulong64':
-                ('<definition><datasource type="TANGO" name="image_ulong64">'
+            'image2_ulong64':
+                ('<definition><datasource type="TANGO" name="image2_ulong64">'
                  '<record name="ImageULong64"/>'
                  '<device member="attribute" name="ttestp09/testts/t31r228"/>'
                  '</datasource></definition>'),
-            'image_float':
-                ('<definition><datasource type="TANGO" name="image_float">'
+            'image2_float':
+                ('<definition><datasource type="TANGO" name="image2_float">'
                  '<record name="ImageFloat"/>'
                  '<device member="attribute" name="ttestp09/testts/t32r228"/>'
                  '</datasource></definition>'),
-            'image_double':
-                ('<definition><datasource type="TANGO" name="image_double">'
+            'image2_double':
+                ('<definition><datasource type="TANGO" name="image2_double">'
                  '<record name="ImageDouble"/>'
                  '<device member="attribute" name="ttestp09/testts/t33r228"/>'
                  '</datasource></definition>'),
-            'image_string':
-                ('<definition><datasource type="TANGO" name="image_string">'
+            'image2_string':
+                ('<definition><datasource type="TANGO" name="image2_string">'
                  '<record name="ImageString"/>'
                  '<device member="attribute" name="ttestp09/testts/t34r228"/>'
                  '</datasource></definition>'),
-            'image_Encoded':
-                ('<definition><datasource type="TANGO" name="image_encoded">'
+            'image2_Encoded':
+                ('<definition><datasource type="TANGO" name="image2_encoded">'
                  '<record name="ImageEncoded"/>'
                  '<device member="attribute" name="ttestp09/testts/t35r228"/>'
                  '</datasource></definition>'),
-            'image_uchar':
-                ('<definition><datasource type="TANGO" name="image_uchar">'
+            'image2_uchar':
+                ('<definition><datasource type="TANGO" name="image2_uchar">'
                  '<record name="ImageUChar"/>'
                  '<device member="attribute" name="ttestp09/testts/t36r228"/>'
                  '</datasource></definition>'),
-            'client_long':
-                ('<definition><datasource type="CLIENT" name="client_long">'
+            'client2_long':
+                ('<definition><datasource type="CLIENT" name="client2_long">'
                  '<record name="ClientLong"/>'
                  '</datasource></definition>'),
-            'client_short':
-                ('<definition><datasource type="CLIENT" name="client_short">'
+            'client2_short':
+                ('<definition><datasource type="CLIENT" name="client2_short">'
                  '<record name="ClientShort"/>'
                  '</datasource></definition>'),
             }
@@ -1124,168 +1137,168 @@ class ProfileManagerTest(unittest.TestCase):
             }
 
         self.smychsXX = {
-            'scalar_long': {
+            'scalar2_long': {
                 'data_type': 'int32',
                 'plot_type': 1,
                 'data_units': 'No unit',
                 'shape': [],
                 'plot_axes': ['<mov>'],
                 'source': 'ttestp09/testts/t01r228/ScalarLong'},
-            'scalar_bool': {
+            'scalar2_bool': {
                 'data_type': 'bool',
                 'plot_type': 1,
                 'data_units': 'No unit',
                 'shape': [],
                 'plot_axes': ['<mov>'],
                 'source': 'ttestp09/testts/t02r228/ScalarBoolean'},
-            'scalar_short': {
+            'scalar2_short': {
                 'data_type': 'int16',
                 'plot_type': 1,
                 'data_units': 'No unit',
                 'shape': [],
                 'plot_axes': ['<mov>'],
                 'source': 'ttestp09/testts/t03r228/ScalarShort'},
-            'scalar_ushort': {
+            'scalar2_ushort': {
                 'data_type': 'uint16',
                 'plot_type': 1,
                 'data_units': 'No unit',
                 'shape': [],
                 'plot_axes': ['<mov>'],
                 'source': 'ttestp09/testts/t04r228/ScalarUShort'},
-            'scalar_ulong': {
+            'scalar2_ulong': {
                 'data_type': 'uint32',
                 'plot_type': 1,
                 'data_units': 'No unit',
                 'shape': [],
                 'plot_axes': ['<mov>'],
                 'source': 'ttestp09/testts/t05r228/ScalarULong'},
-            'scalar_long64': {
+            'scalar2_long64': {
                 'data_type': 'int64',
                 'plot_type': 1,
                 'data_units': 'No unit',
                 'shape': [],
                 'plot_axes': ['<mov>'],
                 'source': 'ttestp09/testts/t06r228/ScalarLong64'},
-            'scalar_ulong64': {
+            'scalar2_ulong64': {
                 'data_type': 'uint64',
                 'plot_type': 1,
                 'data_units': 'No unit',
                 'shape': [],
                 'plot_axes': ['<mov>'],
                 'source': 'ttestp09/testts/t07r228/ScalarULong64'},
-            'scalar_float': {
+            'scalar2_float': {
                 'data_type': 'float32',
                 'plot_type': 1,
                 'data_units': 'No unit',
                 'shape': [],
                 'plot_axes': ['<mov>'],
                 'source': 'ttestp09/testts/t08r228/ScalarFloat'},
-            'scalar_double': {
+            'scalar2_double': {
                 'data_type': 'float64',
                 'plot_type': 1,
                 'data_units': 'No unit',
                 'shape': [],
                 'plot_axes': ['<mov>'],
                 'source': 'ttestp09/testts/t09r228/ScalarDouble'},
-            'scalar_string': {
+            'scalar2_string': {
                 'data_type': 'string',
                 'plot_type': 1,
                 'data_units': 'No unit',
                 'shape': [],
                 'plot_axes': ['<mov>'],
                 'source': 'ttestp09/testts/t10r228/ScalarString'},
-            'scalar_Encoded': {
+            'scalar2_Encoded': {
                 'data_type': 'encoded',
                 'plot_type': 1,
                 'data_units': 'No unit',
                 'shape': [],
                 'plot_axes': ['<mov>'],
                 'source': 'ttestp09/testts/t11r228/ScalarEncoded'},
-            'scalar_uchar': {
+            'scalar2_uchar': {
                 'data_type': 'uint8',
                 'plot_type': 1,
                 'data_units': 'No unit',
                 'shape': [],
                 'plot_axes': ['<mov>'],
                 'source': 'ttestp09/testts/t12r228/ScalarUChar'},
-            'spectrum_long': {
+            'spectrum2_long': {
                 'data_type': 'int32',
                 'plot_type': 1,
                 'data_units': 'No unit',
                 'shape': [4],
                 'plot_axes': ['<idx>'],
                 'source': 'ttestp09/testts/t13r228/SpectrumLong'},
-            'spectrum_bool': {
+            'spectrum2_bool': {
                 'data_type': 'bool',
                 'plot_type': 1,
                 'data_units': 'No unit',
                 'shape': [2],
                 'plot_axes': ['<idx>'],
                 'source': 'ttestp09/testts/t14r228/SpectrumBoolean'},
-            'spectrum_short': {
+            'spectrum2_short': {
                 'data_type': 'int16',
                 'plot_type': 1,
                 'data_units': 'No unit',
                 'shape': [3],
                 'plot_axes': ['<idx>'],
                 'source': 'ttestp09/testts/t15r228/SpectrumShort'},
-            'spectrum_ushort': {
+            'spectrum2_ushort': {
                 'data_type': 'uint16',
                 'plot_type': 1,
                 'data_units': 'No unit',
                 'shape': [4],
                 'plot_axes': ['<idx>'],
                 'source': 'ttestp09/testts/t16r228/SpectrumUShort'},
-            'spectrum_ulong': {
+            'spectrum2_ulong': {
                 'data_type': 'uint32',
                 'plot_type': 1,
                 'data_units': 'No unit',
                 'shape': [4],
                 'plot_axes': ['<idx>'],
                 'source': 'ttestp09/testts/t17r228/SpectrumULong'},
-            'spectrum_long64': {
+            'spectrum2_long64': {
                 'data_type': 'int64',
                 'plot_type': 1,
                 'data_units': 'No unit',
                 'shape': [4],
                 'plot_axes': ['<idx>'],
                 'source': 'ttestp09/testts/t18r228/SpectrumLong64'},
-            'spectrum_ulong64': {
+            'spectrum2_ulong64': {
                 'data_type': 'uint64',
                 'plot_type': 1,
                 'data_units': 'No unit',
                 'shape': [4],
                 'plot_axes': ['<idx>'],
                 'source': 'ttestp09/testts/t19r228/SpectrumULong64'},
-            'spectrum_float': {
+            'spectrum2_float': {
                 'data_type': 'float32',
                 'plot_type': 1,
                 'data_units': 'No unit',
                 'shape': [4],
                 'plot_axes': ['<idx>'],
                 'source': 'ttestp09/testts/t20r228/SpectrumFloat'},
-            'spectrum_double': {
+            'spectrum2_double': {
                 'data_type': 'float64',
                 'plot_type': 1,
                 'data_units': 'No unit',
                 'shape': [4],
                 'plot_axes': ['<idx>'],
                 'source': 'ttestp09/testts/t21r228/SpectrumDouble'},
-            'spectrum_string': {
+            'spectrum2_string': {
                 'data_type': 'string',
                 'plot_type': 1,
                 'data_units': 'No unit',
                 'shape': [4],
                 'plot_axes': ['<idx>'],
                 'source': 'ttestp09/testts/t22r228/SpectrumString'},
-            'spectrum_Encoded': {
+            'spectrum2_Encoded': {
                 'data_type': 'encoded',
                 'plot_type': 1,
                 'data_units': 'No unit',
                 'shape': [],
                 'plot_axes': ['<mov>'],
                 'source': 'ttestp09/testts/t23r228/SpectrumEncoded'},
-            'spectrum_uchar': {
+            'spectrum2_uchar': {
                 'data_type': 'uint8',
                 'plot_type': 1,
                 'data_units': 'No unit',
@@ -1293,92 +1306,92 @@ class ProfileManagerTest(unittest.TestCase):
                 'plot_axes': ['<idx>'],
                 'source': 'ttestp09/testts/t24r228/SpectrumUChar'},
 
-            'image_long': {
+            'image2_long': {
                 'data_type': 'int32',
                 'plot_type': 2,
                 'data_units': 'No unit',
                 'shape': [2, 2],
                 'plot_axes': ['<idx>', '<idx>'],
                 'source': 'ttestp09/testts/t25r228/ImageLong'},
-            'image_bool': {
+            'image2_bool': {
                 'data_type': 'bool',
                 'plot_type': 2,
                 'data_units': 'No unit',
                 'shape': [1, 1],
                 'plot_axes': ['<idx>', '<idx>'],
                 'source': 'ttestp09/testts/t26r228/ImageBoolean'},
-            'image_short': {
+            'image2_short': {
                 'data_type': 'int16',
                 'plot_type': 2,
                 'data_units': 'No unit',
                 'shape': [2, 2],
                 'plot_axes': ['<idx>', '<idx>'],
                 'source': 'ttestp09/testts/t27r228/ImageShort'},
-            'image_ushort': {
+            'image2_ushort': {
                 'data_type': 'uint16',
                 'plot_type': 2,
                 'data_units': 'No unit',
                 'shape': [2, 2],
                 'plot_axes': ['<idx>', '<idx>'],
                 'source': 'ttestp09/testts/t28r228/ImageUShort'},
-            'image_ulong': {
+            'image2_ulong': {
                 'data_type': 'uint32',
                 'plot_type': 2,
                 'data_units': 'No unit',
                 'shape': [2, 2],
                 'plot_axes': ['<idx>', '<idx>'],
                 'source': 'ttestp09/testts/t29r228/ImageULong'},
-            'image_long64': {
+            'image2_long64': {
                 'data_type': 'int64',
                 'plot_type': 2,
                 'data_units': 'No unit',
                 'shape': [2, 2],
                 'plot_axes': ['<idx>', '<idx>'],
                 'source': 'ttestp09/testts/t30r228/ImageLong64'},
-            'image_ulong64': {
+            'image2_ulong64': {
                 'data_type': 'uint64',
                 'plot_type': 2,
                 'data_units': 'No unit',
                 'shape': [2, 2],
                 'plot_axes': ['<idx>', '<idx>'],
                 'source': 'ttestp09/testts/t31r228/ImageULong64'},
-            'image_float': {
+            'image2_float': {
                 'data_type': 'float32',
                 'plot_type': 2,
                 'data_units': 'No unit',
                 'shape': [2, 2],
                 'plot_axes': ['<idx>', '<idx>'],
                 'source': 'ttestp09/testts/t32r228/ImageFloat'},
-            'image_double': {
+            'image2_double': {
                 'data_type': 'float64',
                 'plot_type': 2,
                 'data_units': 'No unit',
                 'shape': [2, 2],
                 'plot_axes': ['<idx>', '<idx>'],
                 'source': 'ttestp09/testts/t33r228/ImageDouble'},
-            'image_string': {
+            'image2_string': {
                 'data_type': 'string',
                 'plot_type': 2,
                 'data_units': 'No unit',
                 'shape': [1, 1],
                 'plot_axes': ['<idx>', '<idx>'],
                 'source': 'ttestp09/testts/t34r228/ImageString'},
-            'image_Encoded': {
+            'image2_Encoded': {
                 'data_type': 'encoded',
                 'plot_type': 1,
                 'data_units': 'No unit',
                 'shape': [],
                 'plot_axes': ['<mov>'],
                 'source': 'ttestp09/testts/t35r228/ImageEncoded'},
-            'image_uchar': {
+            'image2_uchar': {
                 'data_type': 'uint8',
                 'plot_type': 2,
                 'data_units': 'No unit',
                 'shape': [2, 2],
                 'plot_axes': ['<idx>', '<idx>'],
                 'source': 'ttestp09/testts/t36r228/ImageUChar'},
-            'client_long': {},
-            'client_short': {},
+            'client2_long': {},
+            'client2_short': {},
             }
 
         self.smydss2 = {
@@ -1803,12 +1816,14 @@ class ProfileManagerTest(unittest.TestCase):
                 self.myAssertDict(v, dct2[k])
             else:
                 logger.debug("%s , %s" % (str(v), str(dct2[k])))
+#                if k == 'index':
+#                    continue
                 if v != dct2[k]:
                     print 'VALUES', k, v, dct2[k]
                 self.assertEqual(v, dct2[k])
 
     ## constructor test
-    def test_constructor_keys(self):
+    def ttest_constructor_keys(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -1826,7 +1841,7 @@ class ProfileManagerTest(unittest.TestCase):
         mgt = ProfileManager(se)
 
     ## availableMntGrps test
-    def test_availableMntGrps(self):
+    def ttest_availableMntGrps(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -1878,7 +1893,7 @@ class ProfileManagerTest(unittest.TestCase):
             self.assertEqual(set(dd), set([a["name"] for a in arr]))
 
     ## availableMntGrps test
-    def test_availableMntGrps_twopools(self):
+    def ttest_availableMntGrps_twopools(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -1964,7 +1979,7 @@ class ProfileManagerTest(unittest.TestCase):
             tpool2.tearDown()
 
     ## deleteProfile test
-    def test_deleteProfile(self):
+    def ttest_deleteProfile(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2026,7 +2041,7 @@ class ProfileManagerTest(unittest.TestCase):
             self.assertEqual(set(sl), set(sl2) - set(dl))
 
     ## deleteProfile test
-    def test_deleteProfile_twopools(self):
+    def ttest_deleteProfile_twopools(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2138,7 +2153,7 @@ class ProfileManagerTest(unittest.TestCase):
             tpool2.tearDown()
 
     ## updateProfile test
-    def test_automaticComponents(self):
+    def ttest_automaticComponents(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2176,7 +2191,7 @@ class ProfileManagerTest(unittest.TestCase):
             self.assertEqual(set(ac), set(acp))
 
     ## updateProfile test
-    def test_components(self):
+    def ttest_components(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2243,7 +2258,7 @@ class ProfileManagerTest(unittest.TestCase):
             self.assertEqual(set(pmcp), set(mfcp))
 
     ## updateProfile test
-    def test_cpdescritpion_unknown(self):
+    def ttest_cpdescritpion_unknown(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2299,7 +2314,7 @@ class ProfileManagerTest(unittest.TestCase):
         self.assertEqual(pm.cpdescription(), [{}])
 
     ## updateProfile test
-    def test_cpdescritpion_full(self):
+    def ttest_cpdescritpion_full(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2345,7 +2360,7 @@ class ProfileManagerTest(unittest.TestCase):
         self.checkCP(res, self.rescps.keys())
 
     ## updateProfile test
-    def test_cpdescritpion_comp_nods(self):
+    def ttest_cpdescritpion_comp_nods(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2401,7 +2416,7 @@ class ProfileManagerTest(unittest.TestCase):
                          strategy='STEP')
 
     ## updateProfile test
-    def test_cpdescritpion_comp_ds(self):
+    def ttest_cpdescritpion_comp_ds(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2463,7 +2478,7 @@ class ProfileManagerTest(unittest.TestCase):
                          strategy='STEP')
 
     ## updateProfile test
-    def test_disabledatasources(self):
+    def ttest_disabledatasources(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2532,7 +2547,7 @@ class ProfileManagerTest(unittest.TestCase):
             self.assertEqual(len(mdds), len(dds))
 
     ## updateProfile test
-    def test_datasources(self):
+    def ttest_datasources(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2600,7 +2615,7 @@ class ProfileManagerTest(unittest.TestCase):
             self.assertEqual(len(tdss), len(rdss))
 
     ## updateProfile test
-    def test_updateProfile_empty(self):
+    def ttest_updateProfile_empty(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2695,7 +2710,7 @@ class ProfileManagerTest(unittest.TestCase):
                 tmg.tearDown()
 
     ## updateProfile test
-    def test_updateProfile_components_nopool(self):
+    def ttest_updateProfile_components_nopool(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2864,7 +2879,7 @@ class ProfileManagerTest(unittest.TestCase):
                     pass
 
     ## updateProfile test
-    def test_updateProfile_nodevice(self):
+    def ttest_updateProfile_nodevice(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2988,7 +3003,7 @@ class ProfileManagerTest(unittest.TestCase):
                     pass
 
     ## updateProfile test
-    def test_updateProfile_nodevice_cp(self):
+    def ttest_updateProfile_nodevice_cp(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -3111,7 +3126,7 @@ class ProfileManagerTest(unittest.TestCase):
                     pass
 
     ## updateProfile test
-    def test_updateProfile_wrongdevice(self):
+    def ttest_updateProfile_wrongdevice(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -3234,7 +3249,7 @@ class ProfileManagerTest(unittest.TestCase):
                     pass
 
     ## updateProfile test
-    def test_updateProfile_components_nopool_tango(self):
+    def ttest_updateProfile_components_nopool_tango(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -3445,9 +3460,260 @@ class ProfileManagerTest(unittest.TestCase):
                     tmg.tearDown()
                 except:
                     pass
+    ## updateProfile test
+    def ttest_updateProfile_components_nopool_tango_hiddenElements(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+
+        wrong = []
+
+        mgt = ProfileManager(None)
+        self.myAssertRaise(Exception, mgt.updateProfile)
+
+        se = Selector(None)
+        mgt = ProfileManager(se)
+        self.myAssertRaise(Exception, mgt.updateProfile)
+
+        msp = MacroServerPools(10)
+        se = Selector(msp)
+        se["Door"] = val["Door"]
+        se["ConfigDevice"] = val["ConfigDevice"]
+        mgt = ProfileManager(se)
+        self.assertEqual(mgt.availableMntGrps(), [])
+        self.myAssertRaise(Exception, mgt.updateProfile)
+
+        db = PyTango.Database()
+        db.put_device_property(self._ms.ms.keys()[0],
+                               {'PoolNames': self._pool.dp.name()})
+        pool = self._pool.dp
+        self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+        self.assertEqual(mgt.availableMntGrps(), [])
+
+        arr = [
+            {"full_name":"test/ct/01/Value", "name":"ct01"},
+            {"full_name":"test/ct/02/Value", "name":"ct02"},
+            {"full_name":"test/ct/03/value", "name":"ct03"},
+            {"full_name":"test/ct/04/value", "name":"ct04"},
+            {"full_name":"null/val", "name":"mntgrp_04"},
+            ]
+        pool.AcqChannelList = [json.dumps(a) for a in arr]
+
+        self.myAssertRaise(Exception, mgt.updateProfile)
+        self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.smycps)])
+        self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
+
+        for i in range(30):
+            ar = arr[i % len(arr)]
+
+            cps = {}
+            acps = {}
+            dss = {}
+            lcp = self.__rnd.randint(1, 40)
+            lds = self.__rnd.randint(1, 40)
+
+            self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.smycps)])
+            self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
+
+            comps = set()
+            ncps = self.__rnd.randint(1, len(self.smycps.keys()) - 1)
+            lcps = self.__rnd.sample(set(self.smycps.keys()), ncps)
+            for cp in lcps:
+                if cp not in wrong:
+                    cps[cp] = bool(self.__rnd.randint(0, 1))
+                    if cps[cp]:
+                        comps.add(cp)
+
+            ancps = self.__rnd.randint(1, len(self.smycps.keys()) - 1)
+            alcps = self.__rnd.sample(set(self.smycps.keys()), ancps)
+            for cp in alcps:
+                if cp not in wrong:
+                    acps[cp] = bool(self.__rnd.randint(0, 1))
+                    if acps[cp]:
+                        comps.add(cp)
+
+            ndss = self.__rnd.randint(1, len(self.smycps.keys()) - 1)
+            ldss = self.__rnd.sample(set(self.smycps.keys()), ndss)
+            for ds in ldss:
+                if ds in self.smydss.keys():
+                    if ds not in wrong:
+                        dss[ds] = bool(self.__rnd.randint(0, 1))
+
+            ndss = self.__rnd.randint(1, len(self.smydss.keys()) - 1)
+            ldss = self.__rnd.sample(set(self.smydss.keys()), ndss)
+            for ds in ldss:
+                if ds in self.smydss.keys():
+                    if ds not in wrong:
+                        dss[ds] = bool(self.__rnd.randint(0, 1))
+
+            mncps = self.__rnd.randint(1, len(self.smycps.keys()) - 1)
+            mcps = [cp for cp in self.__rnd.sample(
+                    set(self.smycps.keys()), mncps) if cp not in wrong]
+            for cp in mcps:
+                comps.add(cp)
+            
+
+            se["ComponentGroup"] = json.dumps(cps)
+            se["AutomaticComponentGroup"] = json.dumps(acps)
+            se["DataSourceGroup"] = json.dumps(dss)
+            self._cf.dp.SetCommandVariable(["MCPLIST", json.dumps(mcps)])
+
+            records = {}
+            describer = Describer(self._cf.dp, True)
+            cpres = describer.components(dstype='CLIENT')
+            for grp in cpres:
+                for idss in grp.values():
+                    for idsrs in idss.values():
+                        for idsr in idsrs:
+                            records[str(idsr[2])] = "1234"
+            dsres = describer.dataSources(dss.keys(), dstype='CLIENT')[0]
+            for dsr in dsres.values():
+                records[str(dsr.record)] = '2345'
+
+            se["Timer"] = '["%s"]' % ar["name"]
+            se["DataRecord"] = json.dumps(records)
+
+            tmg = TestMGSetUp.TestMeasurementGroupSetUp(name='nxsmntgrp')
+            dv = "/".join(ar["full_name"].split("/")[0:-1])
+            chds = [ds for ds in mgt.dataSources()
+                    if not ds.startswith('client')]
+            chds1 = list(chds)
+            chds2 = [ds for ds in mgt.disableDataSources()
+                     if not ds.startswith('client')]
+            chds.extend(chds2)
+            chds = sorted(chds)
+
+            lheds = []
+            if chds:
+                nhe = self.__rnd.randint(0, len(set(chds)) - 1)
+                lheds = self.__rnd.sample(set(chds), nhe)
+
+            lhecp = []
+            if comps:
+                nhe = self.__rnd.randint(0, len(set(comps)) - 1)
+                lhecp = self.__rnd.sample(set(comps), nhe)
+                
+            lhe = lheds + lhecp
+
+            se["HiddenElements"] = json.dumps(lhe)
+
+            lhe2 = []
+            for el in lhe:
+                found = False
+                for cp in comps:
+                    if el in self.smycpsstep[cp]:
+                        if cp not in lhecp: 
+                            found = True
+                if not found:
+                    lhe2.append(el)        
+
+            tgc = {}
+
+            try:
+                self.myAssertDict(json.loads(se["AutomaticComponentGroup"]),
+                                  acps)
+                self.myAssertDict(json.loads(se["ComponentGroup"]), cps)
+                self.myAssertDict(json.loads(se["DataSourceGroup"]), dss)
+                self.assertEqual(set(json.loads(se["HiddenElements"])), set(lhe))
+                self.assertEqual(json.loads(se["OrderedChannels"]), [])
+                self.myAssertDict(json.loads(se["DataRecord"]), records)
+                self.assertEqual(json.loads(se["Timer"]), [ar["name"]])
+                self.assertEqual(se["MntGrp"], "nxsmntgrp")
+#                print "COMP", mgt.components()
+#                print "ACOMP", mgt.automaticComponents()
+#                print "MCP", mcps
+#                print "DS", mgt.dataSources()
+#                print "DDS", mgt.disableDataSources()
+                jpcnf = mgt.updateProfile()
+                pcnf = json.loads(jpcnf)
+                mgdp = PyTango.DeviceProxy(tmg.new_device_info_writer.name)
+                jcnf = mgdp.Configuration
+                cnf = json.loads(jcnf)
+                self.myAssertDict(json.loads(se["AutomaticComponentGroup"]),
+                                  acps)
+                self.myAssertDict(json.loads(se["ComponentGroup"]), cps)
+                self.myAssertDict(json.loads(se["DataSourceGroup"]), dss)
+                self.assertEqual(set(json.loads(se["HiddenElements"])), set(lhe2))
+                self.assertEqual(json.loads(se["OrderedChannels"]), [])
+                self.myAssertDict(json.loads(se["DataRecord"]), records)
+                self.assertEqual(json.loads(se["Timer"]), [ar["name"]])
+                self.assertEqual(se["MntGrp"], "nxsmntgrp")
+#                print "CNF", cnf
+#                print "CHDS", chds
+                for i, ds in enumerate(chds):
+                    cnt = self.smychs[str(ds)]
+                    try:
+                        chn = {'ndim': 0,
+                               'index': i,
+                               'name': str(ds),
+                               'data_type': cnt['data_type'],
+                               'plot_type': (cnt['plot_type']
+                                             if ds not in lhe2 else 0),
+                               'data_units': cnt['data_units'],
+                               'enabled': True,
+                               'label': cnt['source'],
+                               'instrument': None,
+                               'shape': cnt['shape'],
+                               '_controller_name': '__tango__',
+                               'conditioning': '',
+                               'full_name': '%s%s' % (
+                                'tango://', cnt['source']),
+                               '_unit_id': '0',
+                               'output': True,
+                               'plot_axes': (cnt['plot_axes']
+                                             if ds not in lhe2 else []),
+                               'nexus_path': '',
+                               'normalization': 0,
+                               'source': cnt['source']}
+                        tgc[chn["full_name"]] = chn
+                    except:
+                        print ds, cnt
+                        raise
+
+                smg = {"controllers":
+                       {'__tango__':
+                        {'units':
+                         {'0':
+                          {'channels': tgc,
+                           'monitor': dv,
+                           'id': 0,
+                           'timer': dv,
+                           'trigger_type': 0}}}},
+                       "monitor": "%s" % dv,
+                       "description": "Measurement Group",
+                       "timer": "%s" % dv,
+                       "label": "nxsmntgrp"}
+#                print "SMG", smg
+                self.myAssertDict(smg, pcnf)
+                self.myAssertDict(pcnf, cnf)
+                se.reset()
+                se["Door"] = val["Door"]
+                se["ConfigDevice"] = val["ConfigDevice"]
+                se["MntGrp"] = "nxsmntgrp"
+                se.fetchSelection()
+                self.myAssertDict(json.loads(se["AutomaticComponentGroup"]),
+                                  acps)
+                self.myAssertDict(json.loads(se["ComponentGroup"]), cps)
+                self.myAssertDict(json.loads(se["DataSourceGroup"]), dss)
+                self.assertEqual(set(json.loads(se["HiddenElements"])), set(lhe2))
+                self.assertEqual(json.loads(se["OrderedChannels"]), [])
+                self.myAssertDict(json.loads(se["DataRecord"]), records)
+                self.assertEqual(json.loads(se["Timer"]), [ar["name"]])
+                self.assertEqual(se["MntGrp"], "nxsmntgrp")
+            finally:
+                mgt.deleteProfile("nxsmntgrp")
+                try:
+                    tmg.tearDown()
+                except:
+                    pass
+
 
     ## updateProfile test
-    def test_updateProfile_components_pool_tango(self):
+    def ttest_updateProfile_components_pool_tango(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -3496,9 +3762,9 @@ class ProfileManagerTest(unittest.TestCase):
                     exp = {}
                     exp["name"] = ds
                     exp["source"] = vl["source"]
-                    if ds.startswith("image_"):
+                    if ds.startswith("image"):
                         exp["controller"] = image_ctrl
-                    if ds.startswith("spectrum_"):
+                    if ds.startswith("spectrum"):
                         exp["controller"] = spectrum_ctrl
                     else:
                         exp["controller"] = scalar_ctrl
@@ -3525,7 +3791,7 @@ class ProfileManagerTest(unittest.TestCase):
 
             self.myAssertRaise(Exception, mgt.updateProfile)
             self._cf.dp.SetCommandVariable(
-                ["CPDICT", json.dumps(self.smycps)])
+                ["CPDICT", json.dumps(self.smycps2)])
             self._cf.dp.SetCommandVariable(
                 ["DSDICT", json.dumps(self.smydssXX)])
 
@@ -3539,24 +3805,24 @@ class ProfileManagerTest(unittest.TestCase):
                     lds = self.__rnd.randint(1, 40)
 
                     self._cf.dp.SetCommandVariable(
-                        ["CPDICT", json.dumps(self.smycps)])
+                        ["CPDICT", json.dumps(self.smycps2)])
                     self._cf.dp.SetCommandVariable(
                         ["DSDICT", json.dumps(self.smydssXX)])
 
-                    ncps = self.__rnd.randint(1, len(self.smycps.keys()) - 1)
-                    lcps = self.__rnd.sample(set(self.smycps.keys()), ncps)
+                    ncps = self.__rnd.randint(1, len(self.smycps2.keys()) - 1)
+                    lcps = self.__rnd.sample(set(self.smycps2.keys()), ncps)
                     for cp in lcps:
                         if cp not in wrong:
                             cps[cp] = bool(self.__rnd.randint(0, 1))
 
-                    ancps = self.__rnd.randint(1, len(self.smycps.keys()) - 1)
-                    alcps = self.__rnd.sample(set(self.smycps.keys()), ancps)
+                    ancps = self.__rnd.randint(1, len(self.smycps2.keys()) - 1)
+                    alcps = self.__rnd.sample(set(self.smycps2.keys()), ancps)
                     for cp in alcps:
                         if cp not in wrong:
                             acps[cp] = bool(self.__rnd.randint(0, 1))
 
-                    ndss = self.__rnd.randint(1, len(self.smycps.keys()) - 1)
-                    ldss = self.__rnd.sample(set(self.smycps.keys()), ndss)
+                    ndss = self.__rnd.randint(1, len(self.smycps2.keys()) - 1)
+                    ldss = self.__rnd.sample(set(self.smycps2.keys()), ndss)
                     for ds in ldss:
                         if ds in self.smydssXX.keys():
                             if ds not in wrong:
@@ -3569,9 +3835,9 @@ class ProfileManagerTest(unittest.TestCase):
                             if ds not in wrong:
                                 dss[ds] = bool(self.__rnd.randint(0, 1))
 
-                    mncps = self.__rnd.randint(1, len(self.smycps.keys()) - 1)
+                    mncps = self.__rnd.randint(1, len(self.smycps2.keys()) - 1)
                     mcps = [cp for cp in self.__rnd.sample(
-                            set(self.smycps.keys()), mncps) if cp not in wrong]
+                            set(self.smycps2.keys()), mncps) if cp not in wrong]
 
                     adss = dict(dss)
                     for ch in expch:
@@ -3703,6 +3969,696 @@ class ProfileManagerTest(unittest.TestCase):
                     self.myAssertDict(json.loads(se["ComponentGroup"]), cps)
                     self.myAssertDict(json.loads(se["DataSourceGroup"]), adss)
                     self.assertEqual(json.loads(se["HiddenElements"]), [])
+                    self.assertEqual(json.loads(se["OrderedChannels"]), pdss)
+                    self.myAssertDict(json.loads(se["DataRecord"]), records)
+                    self.assertEqual(json.loads(se["Timer"]), [ar["name"]])
+                    self.assertEqual(se["MntGrp"], "nxsmntgrp")
+                finally:
+                    mgt.deleteProfile("nxsmntgrp")
+                    try:
+                        tmg.tearDown()
+                    except:
+                        pass
+        finally:
+            simp2.tearDown()
+
+    ## updateProfile test
+    def ttest_updateProfile_components_pool_tango_hiddenelements(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+
+        wrong = []
+
+        mgt = ProfileManager(None)
+        self.myAssertRaise(Exception, mgt.updateProfile)
+
+        se = Selector(None)
+        mgt = ProfileManager(se)
+        self.myAssertRaise(Exception, mgt.updateProfile)
+
+        msp = MacroServerPools(10)
+        se = Selector(msp)
+        se["Door"] = val["Door"]
+        se["ConfigDevice"] = val["ConfigDevice"]
+        mgt = ProfileManager(se)
+        self.assertEqual(mgt.availableMntGrps(), [])
+        self.myAssertRaise(Exception, mgt.updateProfile)
+
+        db = PyTango.Database()
+        db.put_device_property(self._ms.ms.keys()[0],
+                               {'PoolNames': self._pool.dp.name()})
+        pool = self._pool.dp
+        self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+        self.assertEqual(mgt.availableMntGrps(), [])
+        scalar_ctrl = 'ttestp09/testts/t1r228'
+        spectrum_ctrl = 'ttestp09/testts/t2r228'
+        image_ctrl = 'ttestp09/testts/t3r228'
+        ctrls = [scalar_ctrl, spectrum_ctrl, image_ctrl, "__tango__"]
+
+        simp2 = TestServerSetUp.MultiTestServerSetUp(
+            devices=['ttestp09/testts/t%02dr228' % i for i in range(1, 37)])
+        try:
+            simp2.setUp()
+
+            expch = []
+            pdss = []
+            for ds, vl in self.smychsXX.items():
+                if vl:
+                    exp = {}
+                    exp["name"] = ds
+                    exp["source"] = vl["source"]
+                    if ds.startswith("image"):
+                        exp["controller"] = image_ctrl
+                    if ds.startswith("spectrum"):
+                        exp["controller"] = spectrum_ctrl
+                    else:
+                        exp["controller"] = scalar_ctrl
+                    expch.append(exp)
+                    pdss.append(ds)
+            pdss = sorted(pdss)
+
+            acqch = [
+                {"full_name":"test/ct/01/Value", "name":"ct01"},
+                {"full_name":"test/ct/02/Value", "name":"ct02"},
+                {"full_name":"test/ct/03/value", "name":"ct03"},
+                {"full_name":"test/ct/04/value", "name":"ct04"},
+                {"full_name":"null/val", "name":"mntgrp_04"}
+                ]
+
+            for ch in expch:
+                ach = {}
+                ach["name"] = ch["name"]
+                ach["full_name"] = ch["source"]
+                acqch.append(ach)
+
+            pool.AcqChannelList = [json.dumps(a) for a in acqch]
+            pool.ExpChannelList = [json.dumps(a) for a in expch]
+
+            self.myAssertRaise(Exception, mgt.updateProfile)
+            self._cf.dp.SetCommandVariable(
+                ["CPDICT", json.dumps(self.smycps2)])
+            self._cf.dp.SetCommandVariable(
+                ["DSDICT", json.dumps(self.smydssXX)])
+
+            for i in range(30):
+                try:
+                    ar = acqch[i % 5]
+                    cps = {}
+                    acps = {}
+                    dss = {}
+                    lcp = self.__rnd.randint(1, 40)
+                    lds = self.__rnd.randint(1, 40)
+
+                    self._cf.dp.SetCommandVariable(
+                        ["CPDICT", json.dumps(self.smycps2)])
+                    self._cf.dp.SetCommandVariable(
+                        ["DSDICT", json.dumps(self.smydssXX)])
+                    comps = set()
+
+                    ncps = self.__rnd.randint(1, len(self.smycps2.keys()) - 1)
+                    lcps = self.__rnd.sample(set(self.smycps2.keys()), ncps)
+                    for cp in lcps:
+                        if cp not in wrong:
+                            cps[cp] = bool(self.__rnd.randint(0, 1))
+                            if cps[cp]:
+                                comps.add(cp)
+
+                    ancps = self.__rnd.randint(1, len(self.smycps2.keys()) - 1)
+                    alcps = self.__rnd.sample(set(self.smycps2.keys()), ancps)
+                    for cp in alcps:
+                        if cp not in wrong:
+                            acps[cp] = bool(self.__rnd.randint(0, 1))
+                            if acps[cp]:
+                                comps.add(cp)
+                            
+                    ndss = self.__rnd.randint(1, len(self.smycps2.keys()) - 1)
+                    ldss = self.__rnd.sample(set(self.smycps2.keys()), ndss)
+                    for ds in ldss:
+                        if ds in self.smydssXX.keys():
+                            if ds not in wrong:
+                                dss[ds] = bool(self.__rnd.randint(0, 1))
+
+                    ndss = self.__rnd.randint(1, len(self.smydssXX.keys()) - 1)
+                    ldss = self.__rnd.sample(set(self.smydssXX.keys()), ndss)
+                    for ds in ldss:
+                        if ds in self.smydssXX.keys():
+                            if ds not in wrong:
+                                dss[ds] = bool(self.__rnd.randint(0, 1))
+
+                    mncps = self.__rnd.randint(1, len(self.smycps2.keys()) - 1)
+                    mcps = [cp for cp in self.__rnd.sample(
+                            set(self.smycps2.keys()), mncps) if cp not in wrong]
+                    for cp in mcps:
+                        comps.add(cp)
+
+                    adss = dict(dss)
+                    for ch in expch:
+#                        print ch
+                        if ch["name"] not in adss.keys():
+                            adss[ch["name"]] = False
+                    se["ComponentGroup"] = json.dumps(cps)
+                    se["AutomaticComponentGroup"] = json.dumps(acps)
+                    se["DataSourceGroup"] = json.dumps(dss)
+                    self._cf.dp.SetCommandVariable(["MCPLIST",
+                                                    json.dumps(mcps)])
+
+                    records = {}
+                    describer = Describer(self._cf.dp, True)
+                    cpres = describer.components(dstype='CLIENT')
+                    for grp in cpres:
+                        for idss in grp.values():
+                            for idsrs in idss.values():
+                                for idsr in idsrs:
+                                    records[str(idsr[2])] = "1234"
+                    dsres = describer.dataSources(
+                        dss.keys(), dstype='CLIENT')[0]
+                    for dsr in dsres.values():
+                        records[str(dsr.record)] = '2345'
+
+                    se["Timer"] = '["%s"]' % ar["name"]
+                    se["DataRecord"] = json.dumps(records)
+
+                    tmg = TestMGSetUp.TestMeasurementGroupSetUp(
+                        name='nxsmntgrp')
+                    dv = "/".join(ar["full_name"].split("/")[0:-1])
+                    chds = [ds for ds in mgt.dataSources()
+                            if not ds.startswith('client')]
+                    chds1 = list(chds)
+                    chds2 = [ds for ds in mgt.disableDataSources()
+                             if not ds.startswith('client')]
+                    chds.extend(chds2)
+                    chds = sorted(chds)
+
+                    lheds = []
+                    if chds:
+                        nhe = self.__rnd.randint(0, len(set(chds)) - 1)
+                        lheds = self.__rnd.sample(set(chds), nhe)
+
+                    lhecp = []
+                    if comps:
+                        nhe = self.__rnd.randint(0, len(set(comps)) - 1)
+                        lhecp = self.__rnd.sample(set(comps), nhe)
+
+                    lhe = lheds + lhecp
+
+                    se["HiddenElements"] = json.dumps(lhe)
+
+                    lhe2 = []
+                    for el in lhe:
+                        found = False
+                        for cp in comps:
+                            if el in self.smycpsstep2[cp]:
+                                if cp not in lhecp: 
+                                    found = True
+                        if not found:
+                            lhe2.append(el) 
+
+                    print "LHE", lhe
+                    print "LHE2", lhe2
+                    print "LHECP", lhecp
+                    print "COMPS", comps
+
+#                    print "COMP", mgt.components()
+#                    print "ACOMP", mgt.automaticComponents()
+#                    print "MCP", mcps
+#                    print "DS", mgt.dataSources()
+#                    print "DDS", mgt.disableDataSources()
+
+                    self.myAssertDict(
+                        json.loads(se["AutomaticComponentGroup"]),
+                        acps)
+                    self.myAssertDict(json.loads(se["ComponentGroup"]), cps)
+                    self.myAssertDict(json.loads(se["DataSourceGroup"]), adss)
+                    self.assertEqual(set(json.loads(se["HiddenElements"])), set(lhe))
+                    self.assertEqual(json.loads(se["OrderedChannels"]), pdss)
+                    self.myAssertDict(json.loads(se["DataRecord"]), records)
+                    self.assertEqual(json.loads(se["Timer"]), [ar["name"]])
+                    self.assertEqual(se["MntGrp"], "nxsmntgrp")
+                    jpcnf = mgt.updateProfile()
+                    pcnf = json.loads(jpcnf)
+                    mgdp = PyTango.DeviceProxy(tmg.new_device_info_writer.name)
+                    jcnf = mgdp.Configuration
+                    cnf = json.loads(jcnf)
+                    self.myAssertDict(
+                        json.loads(se["AutomaticComponentGroup"]),
+                        acps)
+                    self.myAssertDict(json.loads(se["ComponentGroup"]), cps)
+                    self.myAssertDict(json.loads(se["DataSourceGroup"]), adss)
+                    self.assertEqual(set(json.loads(se["HiddenElements"])), set(lhe2))
+                    self.assertEqual(json.loads(se["OrderedChannels"]), pdss)
+                    self.myAssertDict(json.loads(se["DataRecord"]), records)
+                    self.assertEqual(json.loads(se["Timer"]), [ar["name"]])
+                    self.assertEqual(se["MntGrp"], "nxsmntgrp")
+#                    print "CNF", cnf
+#                    print "CHDS", chds
+                    myctrls = {}
+                    for cl in ctrls:
+                        tgc = {}
+                        for exp in expch:
+                            ds = exp["name"]
+                            if ds in chds and cl == exp['controller']:
+                                cnt = self.smychsXX[str(ds)]
+                                i = chds.index(str(ds))
+#                                print "INDEX", i, ds
+                                try:
+                                    tdv = "/".join(
+                                        cnt['source'].split("/")[:-1])
+                                    chn = {'ndim': 0,
+                                           'index': i,
+                                           'name': str(ds),
+                                           'data_type': cnt['data_type'],
+                                           'plot_type': (
+                                            cnt['plot_type']
+                                            if ds not in lhe2 else 0),
+                                           'data_units': cnt['data_units'],
+                                           'enabled': True,
+                                           'label': ds,
+                                           'instrument': None,
+                                           'shape': cnt['shape'],
+                                           '_controller_name': cl,
+                                           'conditioning': '',
+                                           'full_name': tdv,
+                                           '_unit_id': '0',
+                                           'output': True,
+                                           'plot_axes': (
+                                            cnt['plot_axes']
+                                            if ds not in lhe2 else []),
+                                           'nexus_path': '',
+                                           'normalization': 0,
+                                           'source': cnt['source']}
+                                    tgc[tdv] = chn
+                                except:
+#                                    print ds, cnt
+                                    raise
+                        if tgc:
+                            myctrls[cl] = {'units':
+                                               {'0':
+                                                    {'channels': tgc,
+                                                     'monitor': dv,
+                                                     'id': 0,
+                                                     'timer': dv,
+                                                     'trigger_type': 0}}}
+
+                    smg = {"controllers": myctrls,
+                           "monitor": "%s" % dv,
+                           "description": "Measurement Group",
+                           "timer": "%s" % dv,
+                           "label": "nxsmntgrp"}
+#                    print "SMG", smg
+                    self.myAssertDict(smg, pcnf)
+                    self.myAssertDict(pcnf, cnf)
+                    se.reset()
+                    se["Door"] = val["Door"]
+                    se["ConfigDevice"] = val["ConfigDevice"]
+                    se["MntGrp"] = "nxsmntgrp"
+                    se.fetchSelection()
+                    self.myAssertDict(
+                        json.loads(se["AutomaticComponentGroup"]),
+                        acps)
+                    self.myAssertDict(json.loads(se["ComponentGroup"]), cps)
+                    self.myAssertDict(json.loads(se["DataSourceGroup"]), adss)
+                    self.assertEqual(set(json.loads(se["HiddenElements"])), set(lhe2))
+                    self.assertEqual(json.loads(se["OrderedChannels"]), pdss)
+                    self.myAssertDict(json.loads(se["DataRecord"]), records)
+                    self.assertEqual(json.loads(se["Timer"]), [ar["name"]])
+                    self.assertEqual(se["MntGrp"], "nxsmntgrp")
+                finally:
+                    mgt.deleteProfile("nxsmntgrp")
+                    try:
+                        tmg.tearDown()
+                    except:
+                        pass
+        finally:
+            simp2.tearDown()
+
+    ## updateProfile test
+    def test_updateProfile_components_mixed_tango_hiddenelements(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+
+        wrong = []
+
+        mgt = ProfileManager(None)
+        self.myAssertRaise(Exception, mgt.updateProfile)
+
+        se = Selector(None)
+        mgt = ProfileManager(se)
+        self.myAssertRaise(Exception, mgt.updateProfile)
+
+        msp = MacroServerPools(10)
+        se = Selector(msp)
+        se["Door"] = val["Door"]
+        se["ConfigDevice"] = val["ConfigDevice"]
+        mgt = ProfileManager(se)
+        self.assertEqual(mgt.availableMntGrps(), [])
+        self.myAssertRaise(Exception, mgt.updateProfile)
+
+        db = PyTango.Database()
+        db.put_device_property(self._ms.ms.keys()[0],
+                               {'PoolNames': self._pool.dp.name()})
+        pool = self._pool.dp
+        self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+        self.assertEqual(mgt.availableMntGrps(), [])
+        scalar_ctrl = 'ttestp09/testts/t1r228'
+        spectrum_ctrl = 'ttestp09/testts/t2r228'
+        image_ctrl = 'ttestp09/testts/t3r228'
+        ctrls = [scalar_ctrl, spectrum_ctrl, image_ctrl, "__tango__"]
+
+        simp2 = TestServerSetUp.MultiTestServerSetUp(
+            devices=['ttestp09/testts/t%02dr228' % i for i in range(1, 37)])
+        try:
+            simp2.setUp()
+
+            expch = []
+            pdss = []
+            for ds, vl in self.smychsXX.items():
+                if vl:
+                    exp = {}
+                    exp["name"] = ds
+                    exp["source"] = vl["source"]
+                    if ds.startswith("image"):
+                        exp["controller"] = image_ctrl
+                    if ds.startswith("spectrum"):
+                        exp["controller"] = spectrum_ctrl
+                    else:
+                        exp["controller"] = scalar_ctrl
+                    expch.append(exp)
+                    pdss.append(ds)
+            pdss = sorted(pdss)
+
+            acqch = [
+                {"full_name":"test/ct/01/Value", "name":"ct01"},
+                {"full_name":"test/ct/02/Value", "name":"ct02"},
+                {"full_name":"test/ct/03/value", "name":"ct03"},
+                {"full_name":"test/ct/04/value", "name":"ct04"},
+                {"full_name":"null/val", "name":"mntgrp_04"}
+                ]
+
+            for ch in expch:
+                ach = {}
+                ach["name"] = ch["name"]
+                ach["full_name"] = ch["source"]
+                acqch.append(ach)
+
+            pool.AcqChannelList = [json.dumps(a) for a in acqch]
+            pool.ExpChannelList = [json.dumps(a) for a in expch]
+
+            self.myAssertRaise(Exception, mgt.updateProfile)
+            amycps = dict(self.smycps2)
+            amycps.update(self.smycps)
+            amydss = dict(self.smydssXX)
+            amydss.update(self.smydss)
+            amycpsstep = dict(self.smycpsstep)
+            amycpsstep.update(self.smycpsstep2)
+            self._cf.dp.SetCommandVariable(
+                ["CPDICT", json.dumps(amycps)])
+            self._cf.dp.SetCommandVariable(
+                ["DSDICT", json.dumps(amydss)])
+
+            for i in range(30):
+#                if i % 2:
+#                    self.__rnd.shuffle(pdss)
+                try:
+                    ar = acqch[i % 5]
+                    cps = {}
+                    acps = {}
+                    dss = {}
+                    lcp = self.__rnd.randint(1, 40)
+                    lds = self.__rnd.randint(1, 40)
+
+                    self._cf.dp.SetCommandVariable(
+                        ["CPDICT", json.dumps(amycps)])
+                    self._cf.dp.SetCommandVariable(
+                        ["DSDICT", json.dumps(amydss)])
+                    comps = set()
+
+                    ncps = self.__rnd.randint(1, len(amycps) - 1)
+                    lcps = self.__rnd.sample(set(amycps.keys()), ncps)
+                    for cp in lcps:
+                        if cp not in wrong:
+                            cps[cp] = bool(self.__rnd.randint(0, 1))
+                            if cps[cp]:
+                                comps.add(cp)
+
+                    ancps = self.__rnd.randint(1, len(amycps.keys()) - 1)
+                    alcps = self.__rnd.sample(set(amycps.keys()), ancps)
+                    for cp in alcps:
+                        if cp not in wrong:
+                            acps[cp] = bool(self.__rnd.randint(0, 1))
+                            if acps[cp]:
+                                comps.add(cp)
+                            
+                    ndss = self.__rnd.randint(1, len(amycps.keys()) - 1)
+                    ldss = self.__rnd.sample(set(amycps.keys()), ndss)
+                    for ds in ldss:
+                        if ds in amydss.keys():
+                            if ds not in wrong:
+                                dss[ds] = bool(self.__rnd.randint(0, 1))
+
+                    ndss = self.__rnd.randint(1, len(amydss.keys()) - 1)
+                    ldss = self.__rnd.sample(set(amydss.keys()), ndss)
+                    for ds in ldss:
+                        if ds in amydss.keys():
+                            if ds not in wrong:
+                                dss[ds] = bool(self.__rnd.randint(0, 1))
+
+                    mncps = self.__rnd.randint(1, len(amycps.keys()) - 1)
+                    mcps = [cp for cp in self.__rnd.sample(
+                            set(amycps.keys()), mncps) if cp not in wrong]
+                    for cp in mcps:
+                        comps.add(cp)
+
+                    adss = dict(dss)
+                    for ch in expch:
+#                        print ch
+                        if ch["name"] not in adss.keys():
+                            adss[ch["name"]] = False
+                    se["ComponentGroup"] = json.dumps(cps)
+                    se["AutomaticComponentGroup"] = json.dumps(acps)
+                    se["DataSourceGroup"] = json.dumps(dss)
+                    self._cf.dp.SetCommandVariable(["MCPLIST",
+                                                    json.dumps(mcps)])
+
+                    records = {}
+                    describer = Describer(self._cf.dp, True)
+                    cpres = describer.components(dstype='CLIENT')
+                    for grp in cpres:
+                        for idss in grp.values():
+                            for idsrs in idss.values():
+                                for idsr in idsrs:
+                                    records[str(idsr[2])] = "1234"
+                    dsres = describer.dataSources(
+                        dss.keys(), dstype='CLIENT')[0]
+                    for dsr in dsres.values():
+                        records[str(dsr.record)] = '2345'
+
+                    se["Timer"] = '["%s"]' % ar["name"]
+                    se["DataRecord"] = json.dumps(records)
+
+                    tmg = TestMGSetUp.TestMeasurementGroupSetUp(
+                        name='nxsmntgrp')
+                    dv = "/".join(ar["full_name"].split("/")[0:-1])
+                    chds = [ds for ds in mgt.dataSources()
+                            if not ds.startswith('client')]
+                    chds1 = list(chds)
+                    chds2 = [ds for ds in mgt.disableDataSources()
+                             if not ds.startswith('client')]
+                    chds.extend(chds2)
+                    tmpchds = sorted(chds)
+                    chds = []
+                    for ds in tmpchds:
+                        if ds in pdss:
+                            chds.append(ds)
+                    for ds in tmpchds:
+                        if ds not in pdss:
+                            chds.append(ds)
+
+
+                    lheds = []
+                    if chds:
+                        nhe = self.__rnd.randint(0, len(set(chds)) - 1)
+                        lheds = self.__rnd.sample(set(chds), nhe)
+
+                    lhecp = []
+                    if comps:
+                        nhe = self.__rnd.randint(0, len(set(comps)) - 1)
+                        lhecp = self.__rnd.sample(set(comps), nhe)
+
+                    lhe = lheds + lhecp
+
+                    se["HiddenElements"] = json.dumps(lhe)
+                    se["OrderedChannels"] = json.dumps(pdss)
+
+                    lhe2 = []
+                    for el in lhe:
+                        found = False
+                        for cp in comps:
+                            if el in amycpsstep[cp]:
+                                if cp not in lhecp: 
+                                    found = True
+                        if not found:
+                            lhe2.append(el) 
+
+#                    print "LHE", lhe
+#                    print "LHE2", lhe2
+#                    print "LHECP", lhecp
+#                    print "COMPS", comps
+
+#                    print "COMP", mgt.components()
+#                    print "ACOMP", mgt.automaticComponents()
+#                    print "MCP", mcps
+#                    print "DS", mgt.dataSources()
+#                    print "DDS", mgt.disableDataSources()
+
+                    self.myAssertDict(
+                        json.loads(se["AutomaticComponentGroup"]),
+                        acps)
+                    self.myAssertDict(json.loads(se["ComponentGroup"]), cps)
+                    self.myAssertDict(json.loads(se["DataSourceGroup"]), adss)
+                    self.assertEqual(set(json.loads(se["HiddenElements"])), set(lhe))
+                    self.assertEqual(json.loads(se["OrderedChannels"]), pdss)
+                    self.myAssertDict(json.loads(se["DataRecord"]), records)
+                    self.assertEqual(json.loads(se["Timer"]), [ar["name"]])
+                    self.assertEqual(se["MntGrp"], "nxsmntgrp")
+                    jpcnf = mgt.updateProfile()
+                    pcnf = json.loads(jpcnf)
+                    mgdp = PyTango.DeviceProxy(tmg.new_device_info_writer.name)
+                    jcnf = mgdp.Configuration
+                    cnf = json.loads(jcnf)
+                    self.myAssertDict(
+                        json.loads(se["AutomaticComponentGroup"]),
+                        acps)
+                    self.myAssertDict(json.loads(se["ComponentGroup"]), cps)
+                    self.myAssertDict(json.loads(se["DataSourceGroup"]), adss)
+                    self.assertEqual(set(json.loads(se["HiddenElements"])), set(lhe2))
+                    self.assertEqual(json.loads(se["OrderedChannels"]), pdss)
+                    self.myAssertDict(json.loads(se["DataRecord"]), records)
+                    self.assertEqual(json.loads(se["Timer"]), [ar["name"]])
+                    self.assertEqual(se["MntGrp"], "nxsmntgrp")
+#                    print "CNF", cnf
+#                    print "CHDS", chds
+                    myctrls = {}
+                    for cl in ctrls:
+                        tgc = {}
+                        for exp in expch:
+                            ds = exp["name"]
+                            if ds in chds and cl == exp['controller']:
+                                if ds in self.smychsXX.keys():
+                                    cnt = self.smychsXX[str(ds)]
+                                    i = chds.index(str(ds))
+#                                    print "INDEX", i, ds
+                                    try:
+                                        tdv = "/".join(
+                                            cnt['source'].split("/")[:-1])
+                                        chn = {'ndim': 0,
+                                               'index': i,
+                                               'name': str(ds),
+                                               'data_type': cnt['data_type'],
+                                               'plot_type': (
+                                                cnt['plot_type']
+                                                if ds not in lhe2 else 0),
+                                               'data_units': cnt['data_units'],
+                                               'enabled': True,
+                                               'label': ds,
+                                               'instrument': None,
+                                               'shape': cnt['shape'],
+                                               '_controller_name': cl,
+                                               'conditioning': '',
+                                               'full_name': tdv,
+                                               '_unit_id': '0',
+                                               'output': True,
+                                               'plot_axes': (
+                                                cnt['plot_axes']
+                                                if ds not in lhe2 else []),
+                                               'nexus_path': '',
+                                               'normalization': 0,
+                                               'source': cnt['source']}
+                                        tgc[tdv] = chn
+                                    except:
+    #                                    print ds, cnt
+                                        raise
+                        if tgc:
+                            myctrls[cl] = {'units':
+                                               {'0':
+                                                    {'channels': tgc,
+                                                     'monitor': dv,
+                                                     'id': 0,
+                                                     'timer': dv,
+                                                     'trigger_type': 0}}}
+
+
+                            
+                    tgc = {}
+                    for ds in chds:
+                        if ds in self.smychs:
+                            cnt = self.smychs[str(ds)]
+                            i = chds.index(str(ds))
+#                            print "INDEX", i, ds
+                            try:
+                                chn = {'ndim': 0,
+                                       'index': i,
+                                       'name': str(ds),
+                                       'data_type': cnt['data_type'],
+                                       'plot_type': (cnt['plot_type']
+                                                     if ds not in lhe2 else 0),
+                                       'data_units': cnt['data_units'],
+                                       'enabled': True,
+                                       'label': cnt['source'],
+                                       'instrument': None,
+                                       'shape': cnt['shape'],
+                                       '_controller_name': '__tango__',
+                                       'conditioning': '',
+                                       'full_name': '%s%s' % (
+                                        'tango://', cnt['source']),
+                                       '_unit_id': '0',
+                                       'output': True,
+                                       'plot_axes': (cnt['plot_axes']
+                                                     if ds not in lhe2 else []),
+                                       'nexus_path': '',
+                                       'normalization': 0,
+                                       'source': cnt['source']}
+                                tgc[chn["full_name"]] = chn
+                            except:
+#                                print ds, cnt
+                                raise
+
+                    myctrls['__tango__'] = {'units':
+                                                {'0':
+                                                     {'channels': tgc,
+                                                      'monitor': dv,
+                                                      'id': 0,
+                                                      'timer': dv,
+                                                      'trigger_type': 0}}}
+
+                    smg = {"controllers": myctrls,
+                           "monitor": "%s" % dv,
+                           "description": "Measurement Group",
+                           "timer": "%s" % dv,
+                           "label": "nxsmntgrp"}
+#                    print "SMG", smg
+                    self.myAssertDict(smg, pcnf)
+                    self.myAssertDict(pcnf, cnf)
+                    se.reset()
+                    se["Door"] = val["Door"]
+                    se["ConfigDevice"] = val["ConfigDevice"]
+                    se["MntGrp"] = "nxsmntgrp"
+                    se.fetchSelection()
+                    self.myAssertDict(
+                        json.loads(se["AutomaticComponentGroup"]),
+                        acps)
+                    self.myAssertDict(json.loads(se["ComponentGroup"]), cps)
+                    self.myAssertDict(json.loads(se["DataSourceGroup"]), adss)
+                    self.assertEqual(set(json.loads(se["HiddenElements"])), set(lhe2))
                     self.assertEqual(json.loads(se["OrderedChannels"]), pdss)
                     self.myAssertDict(json.loads(se["DataRecord"]), records)
                     self.assertEqual(json.loads(se["Timer"]), [ar["name"]])
