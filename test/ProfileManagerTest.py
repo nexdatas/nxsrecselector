@@ -453,13 +453,13 @@ class ProfileManagerTest(unittest.TestCase):
             }
 
         self.smycpsstep = {
-            'smycp': ("scalar_long","scalar_short"),
+            'smycp': ("scalar_long", "scalar_short"),
             'smycp2': ("spectrum_short",),
             'smycp3': ("image_short",),
             'smycpnt1': ("client_short",),
             }
         self.smycpsstep2 = {
-            's2mycp': ("scalar2_long","scalar2_short"),
+            's2mycp': ("scalar2_long", "scalar2_short"),
             's2mycp2': ("spectrum2_long",),
             's2mycp3': ("image2_long",),
             's2mycpnt1': ("client2_short",),
@@ -779,7 +779,8 @@ class ProfileManagerTest(unittest.TestCase):
                 '<device member="attribute" name="ttestp09/testts/t18r228"/>'
                 '</datasource></definition>'),
             'spectrum2_ulong64': (
-                '<definition><datasource type="TANGO" name="spectrum2_ulong64">'
+                '<definition>'
+                '<datasource type="TANGO" name="spectrum2_ulong64">'
                 '<record name="SpectrumULong64"/>'
                 '<device member="attribute" name="ttestp09/testts/t19r228"/>'
                 '</datasource></definition>'),
@@ -799,7 +800,8 @@ class ProfileManagerTest(unittest.TestCase):
                 '<device member="attribute" name="ttestp09/testts/t22r228"/>'
                 '</datasource></definition>'),
             'spectrum2_Encoded': (
-                '<definition><datasource type="TANGO" name="spectrum2_encoded">'
+                '<definition>'
+                '<datasource type="TANGO" name="spectrum2_encoded">'
                 '<record name="SpectrumEncoded"/>'
                 '<device member="attribute" name="ttestp09/testts/t23r228"/>'
                 '</datasource></definition>'),
@@ -1823,7 +1825,7 @@ class ProfileManagerTest(unittest.TestCase):
                 self.assertEqual(v, dct2[k])
 
     ## constructor test
-    def ttest_constructor_keys(self):
+    def test_constructor_keys(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -1841,7 +1843,7 @@ class ProfileManagerTest(unittest.TestCase):
         mgt = ProfileManager(se)
 
     ## availableMntGrps test
-    def ttest_availableMntGrps(self):
+    def test_availableMntGrps(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -1893,7 +1895,7 @@ class ProfileManagerTest(unittest.TestCase):
             self.assertEqual(set(dd), set([a["name"] for a in arr]))
 
     ## availableMntGrps test
-    def ttest_availableMntGrps_twopools(self):
+    def test_availableMntGrps_twopools(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -1979,7 +1981,7 @@ class ProfileManagerTest(unittest.TestCase):
             tpool2.tearDown()
 
     ## deleteProfile test
-    def ttest_deleteProfile(self):
+    def test_deleteProfile(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2041,7 +2043,7 @@ class ProfileManagerTest(unittest.TestCase):
             self.assertEqual(set(sl), set(sl2) - set(dl))
 
     ## deleteProfile test
-    def ttest_deleteProfile_twopools(self):
+    def test_deleteProfile_twopools(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2153,7 +2155,7 @@ class ProfileManagerTest(unittest.TestCase):
             tpool2.tearDown()
 
     ## updateProfile test
-    def ttest_automaticComponents(self):
+    def test_automaticComponents(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2191,7 +2193,7 @@ class ProfileManagerTest(unittest.TestCase):
             self.assertEqual(set(ac), set(acp))
 
     ## updateProfile test
-    def ttest_components(self):
+    def test_components(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2258,7 +2260,7 @@ class ProfileManagerTest(unittest.TestCase):
             self.assertEqual(set(pmcp), set(mfcp))
 
     ## updateProfile test
-    def ttest_cpdescritpion_unknown(self):
+    def test_cpdescritpion_unknown(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2314,7 +2316,7 @@ class ProfileManagerTest(unittest.TestCase):
         self.assertEqual(pm.cpdescription(), [{}])
 
     ## updateProfile test
-    def ttest_cpdescritpion_full(self):
+    def test_cpdescritpion_full(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2360,7 +2362,7 @@ class ProfileManagerTest(unittest.TestCase):
         self.checkCP(res, self.rescps.keys())
 
     ## updateProfile test
-    def ttest_cpdescritpion_comp_nods(self):
+    def test_cpdescritpion_comp_nods(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2416,7 +2418,7 @@ class ProfileManagerTest(unittest.TestCase):
                          strategy='STEP')
 
     ## updateProfile test
-    def ttest_cpdescritpion_comp_ds(self):
+    def test_cpdescritpion_comp_ds(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2478,7 +2480,7 @@ class ProfileManagerTest(unittest.TestCase):
                          strategy='STEP')
 
     ## updateProfile test
-    def ttest_disabledatasources(self):
+    def test_disabledatasources(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2547,7 +2549,7 @@ class ProfileManagerTest(unittest.TestCase):
             self.assertEqual(len(mdds), len(dds))
 
     ## updateProfile test
-    def ttest_datasources(self):
+    def test_datasources(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2615,7 +2617,7 @@ class ProfileManagerTest(unittest.TestCase):
             self.assertEqual(len(tdss), len(rdss))
 
     ## updateProfile test
-    def ttest_updateProfile_empty(self):
+    def test_updateProfile_empty(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2710,7 +2712,7 @@ class ProfileManagerTest(unittest.TestCase):
                 tmg.tearDown()
 
     ## updateProfile test
-    def ttest_updateProfile_components_nopool(self):
+    def test_updateProfile_components_nopool(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2879,7 +2881,7 @@ class ProfileManagerTest(unittest.TestCase):
                     pass
 
     ## updateProfile test
-    def ttest_updateProfile_nodevice(self):
+    def test_updateProfile_nodevice(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -3003,7 +3005,7 @@ class ProfileManagerTest(unittest.TestCase):
                     pass
 
     ## updateProfile test
-    def ttest_updateProfile_nodevice_cp(self):
+    def test_updateProfile_nodevice_cp(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -3126,7 +3128,7 @@ class ProfileManagerTest(unittest.TestCase):
                     pass
 
     ## updateProfile test
-    def ttest_updateProfile_wrongdevice(self):
+    def test_updateProfile_wrongdevice(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -3249,7 +3251,7 @@ class ProfileManagerTest(unittest.TestCase):
                     pass
 
     ## updateProfile test
-    def ttest_updateProfile_components_nopool_tango(self):
+    def test_updateProfile_components_nopool_tango(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -3460,8 +3462,9 @@ class ProfileManagerTest(unittest.TestCase):
                     tmg.tearDown()
                 except:
                     pass
+
     ## updateProfile test
-    def ttest_updateProfile_components_nopool_tango_hiddenElements(self):
+    def test_updateProfile_components_nopool_tango_hiddenElements(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -3555,7 +3558,6 @@ class ProfileManagerTest(unittest.TestCase):
                     set(self.smycps.keys()), mncps) if cp not in wrong]
             for cp in mcps:
                 comps.add(cp)
-            
 
             se["ComponentGroup"] = json.dumps(cps)
             se["AutomaticComponentGroup"] = json.dumps(acps)
@@ -3596,7 +3598,7 @@ class ProfileManagerTest(unittest.TestCase):
             if comps:
                 nhe = self.__rnd.randint(0, len(set(comps)) - 1)
                 lhecp = self.__rnd.sample(set(comps), nhe)
-                
+
             lhe = lheds + lhecp
 
             se["HiddenElements"] = json.dumps(lhe)
@@ -3606,10 +3608,10 @@ class ProfileManagerTest(unittest.TestCase):
                 found = False
                 for cp in comps:
                     if el in self.smycpsstep[cp]:
-                        if cp not in lhecp: 
+                        if cp not in lhecp:
                             found = True
                 if not found:
-                    lhe2.append(el)        
+                    lhe2.append(el)
 
             tgc = {}
 
@@ -3618,7 +3620,8 @@ class ProfileManagerTest(unittest.TestCase):
                                   acps)
                 self.myAssertDict(json.loads(se["ComponentGroup"]), cps)
                 self.myAssertDict(json.loads(se["DataSourceGroup"]), dss)
-                self.assertEqual(set(json.loads(se["HiddenElements"])), set(lhe))
+                self.assertEqual(set(json.loads(se["HiddenElements"])),
+                                 set(lhe))
                 self.assertEqual(json.loads(se["OrderedChannels"]), [])
                 self.myAssertDict(json.loads(se["DataRecord"]), records)
                 self.assertEqual(json.loads(se["Timer"]), [ar["name"]])
@@ -3637,7 +3640,8 @@ class ProfileManagerTest(unittest.TestCase):
                                   acps)
                 self.myAssertDict(json.loads(se["ComponentGroup"]), cps)
                 self.myAssertDict(json.loads(se["DataSourceGroup"]), dss)
-                self.assertEqual(set(json.loads(se["HiddenElements"])), set(lhe2))
+                self.assertEqual(set(json.loads(se["HiddenElements"])),
+                                 set(lhe2))
                 self.assertEqual(json.loads(se["OrderedChannels"]), [])
                 self.myAssertDict(json.loads(se["DataRecord"]), records)
                 self.assertEqual(json.loads(se["Timer"]), [ar["name"]])
@@ -3699,7 +3703,8 @@ class ProfileManagerTest(unittest.TestCase):
                                   acps)
                 self.myAssertDict(json.loads(se["ComponentGroup"]), cps)
                 self.myAssertDict(json.loads(se["DataSourceGroup"]), dss)
-                self.assertEqual(set(json.loads(se["HiddenElements"])), set(lhe2))
+                self.assertEqual(set(json.loads(se["HiddenElements"])),
+                                 set(lhe2))
                 self.assertEqual(json.loads(se["OrderedChannels"]), [])
                 self.myAssertDict(json.loads(se["DataRecord"]), records)
                 self.assertEqual(json.loads(se["Timer"]), [ar["name"]])
@@ -3711,9 +3716,8 @@ class ProfileManagerTest(unittest.TestCase):
                 except:
                     pass
 
-
     ## updateProfile test
-    def ttest_updateProfile_components_pool_tango(self):
+    def test_updateProfile_components_pool_tango(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -3837,7 +3841,8 @@ class ProfileManagerTest(unittest.TestCase):
 
                     mncps = self.__rnd.randint(1, len(self.smycps2.keys()) - 1)
                     mcps = [cp for cp in self.__rnd.sample(
-                            set(self.smycps2.keys()), mncps) if cp not in wrong]
+                            set(self.smycps2.keys()), mncps)
+                            if cp not in wrong]
 
                     adss = dict(dss)
                     for ch in expch:
@@ -3983,7 +3988,7 @@ class ProfileManagerTest(unittest.TestCase):
             simp2.tearDown()
 
     ## updateProfile test
-    def ttest_updateProfile_components_pool_tango_hiddenelements(self):
+    def test_updateProfile_components_pool_tango_hiddenelements(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -4095,7 +4100,7 @@ class ProfileManagerTest(unittest.TestCase):
                             acps[cp] = bool(self.__rnd.randint(0, 1))
                             if acps[cp]:
                                 comps.add(cp)
-                            
+
                     ndss = self.__rnd.randint(1, len(self.smycps2.keys()) - 1)
                     ldss = self.__rnd.sample(set(self.smycps2.keys()), ndss)
                     for ds in ldss:
@@ -4112,7 +4117,8 @@ class ProfileManagerTest(unittest.TestCase):
 
                     mncps = self.__rnd.randint(1, len(self.smycps2.keys()) - 1)
                     mcps = [cp for cp in self.__rnd.sample(
-                            set(self.smycps2.keys()), mncps) if cp not in wrong]
+                            set(self.smycps2.keys()), mncps)
+                            if cp not in wrong]
                     for cp in mcps:
                         comps.add(cp)
 
@@ -4173,10 +4179,10 @@ class ProfileManagerTest(unittest.TestCase):
                         found = False
                         for cp in comps:
                             if el in self.smycpsstep2[cp]:
-                                if cp not in lhecp: 
+                                if cp not in lhecp:
                                     found = True
                         if not found:
-                            lhe2.append(el) 
+                            lhe2.append(el)
 
                     print "LHE", lhe
                     print "LHE2", lhe2
@@ -4194,7 +4200,8 @@ class ProfileManagerTest(unittest.TestCase):
                         acps)
                     self.myAssertDict(json.loads(se["ComponentGroup"]), cps)
                     self.myAssertDict(json.loads(se["DataSourceGroup"]), adss)
-                    self.assertEqual(set(json.loads(se["HiddenElements"])), set(lhe))
+                    self.assertEqual(set(json.loads(se["HiddenElements"])),
+                                     set(lhe))
                     self.assertEqual(json.loads(se["OrderedChannels"]), pdss)
                     self.myAssertDict(json.loads(se["DataRecord"]), records)
                     self.assertEqual(json.loads(se["Timer"]), [ar["name"]])
@@ -4209,7 +4216,8 @@ class ProfileManagerTest(unittest.TestCase):
                         acps)
                     self.myAssertDict(json.loads(se["ComponentGroup"]), cps)
                     self.myAssertDict(json.loads(se["DataSourceGroup"]), adss)
-                    self.assertEqual(set(json.loads(se["HiddenElements"])), set(lhe2))
+                    self.assertEqual(set(json.loads(se["HiddenElements"])),
+                                     set(lhe2))
                     self.assertEqual(json.loads(se["OrderedChannels"]), pdss)
                     self.myAssertDict(json.loads(se["DataRecord"]), records)
                     self.assertEqual(json.loads(se["Timer"]), [ar["name"]])
@@ -4256,13 +4264,14 @@ class ProfileManagerTest(unittest.TestCase):
 #                                    print ds, cnt
                                     raise
                         if tgc:
-                            myctrls[cl] = {'units':
-                                               {'0':
-                                                    {'channels': tgc,
-                                                     'monitor': dv,
-                                                     'id': 0,
-                                                     'timer': dv,
-                                                     'trigger_type': 0}}}
+                            myctrls[cl] = {
+                                'units':
+                                    {'0':
+                                         {'channels': tgc,
+                                          'monitor': dv,
+                                          'id': 0,
+                                          'timer': dv,
+                                          'trigger_type': 0}}}
 
                     smg = {"controllers": myctrls,
                            "monitor": "%s" % dv,
@@ -4282,7 +4291,8 @@ class ProfileManagerTest(unittest.TestCase):
                         acps)
                     self.myAssertDict(json.loads(se["ComponentGroup"]), cps)
                     self.myAssertDict(json.loads(se["DataSourceGroup"]), adss)
-                    self.assertEqual(set(json.loads(se["HiddenElements"])), set(lhe2))
+                    self.assertEqual(set(json.loads(se["HiddenElements"])),
+                                     set(lhe2))
                     self.assertEqual(json.loads(se["OrderedChannels"]), pdss)
                     self.myAssertDict(json.loads(se["DataRecord"]), records)
                     self.assertEqual(json.loads(se["Timer"]), [ar["name"]])
@@ -4303,7 +4313,7 @@ class ProfileManagerTest(unittest.TestCase):
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
-               "MntGrp": 'nxsmntgrp'}
+               "MntGrp": 'nxsmntgrp2'}
 
         wrong = []
 
@@ -4318,6 +4328,7 @@ class ProfileManagerTest(unittest.TestCase):
         se = Selector(msp)
         se["Door"] = val["Door"]
         se["ConfigDevice"] = val["ConfigDevice"]
+        se["MntGrp"] = val["MntGrp"]
         mgt = ProfileManager(se)
         self.assertEqual(mgt.availableMntGrps(), [])
         self.myAssertRaise(Exception, mgt.updateProfile)
@@ -4386,8 +4397,6 @@ class ProfileManagerTest(unittest.TestCase):
                 ["DSDICT", json.dumps(amydss)])
 
             for i in range(30):
-#                if i % 2:
-#                    self.__rnd.shuffle(pdss)
                 try:
                     ar = acqch[i % 5]
                     cps = {}
@@ -4417,7 +4426,7 @@ class ProfileManagerTest(unittest.TestCase):
                             acps[cp] = bool(self.__rnd.randint(0, 1))
                             if acps[cp]:
                                 comps.add(cp)
-                            
+
                     ndss = self.__rnd.randint(1, len(amycps.keys()) - 1)
                     ldss = self.__rnd.sample(set(amycps.keys()), ndss)
                     for ds in ldss:
@@ -4466,7 +4475,7 @@ class ProfileManagerTest(unittest.TestCase):
                     se["DataRecord"] = json.dumps(records)
 
                     tmg = TestMGSetUp.TestMeasurementGroupSetUp(
-                        name='nxsmntgrp')
+                        name='nxsmntgrp2')
                     dv = "/".join(ar["full_name"].split("/")[0:-1])
                     chds = [ds for ds in mgt.dataSources()
                             if not ds.startswith('client')]
@@ -4482,7 +4491,6 @@ class ProfileManagerTest(unittest.TestCase):
                     for ds in tmpchds:
                         if ds not in pdss:
                             chds.append(ds)
-
 
                     lheds = []
                     if chds:
@@ -4504,10 +4512,10 @@ class ProfileManagerTest(unittest.TestCase):
                         found = False
                         for cp in comps:
                             if el in amycpsstep[cp]:
-                                if cp not in lhecp: 
+                                if cp not in lhecp:
                                     found = True
                         if not found:
-                            lhe2.append(el) 
+                            lhe2.append(el)
 
 #                    print "LHE", lhe
 #                    print "LHE2", lhe2
@@ -4525,11 +4533,12 @@ class ProfileManagerTest(unittest.TestCase):
                         acps)
                     self.myAssertDict(json.loads(se["ComponentGroup"]), cps)
                     self.myAssertDict(json.loads(se["DataSourceGroup"]), adss)
-                    self.assertEqual(set(json.loads(se["HiddenElements"])), set(lhe))
+                    self.assertEqual(set(json.loads(se["HiddenElements"])),
+                                     set(lhe))
                     self.assertEqual(json.loads(se["OrderedChannels"]), pdss)
                     self.myAssertDict(json.loads(se["DataRecord"]), records)
                     self.assertEqual(json.loads(se["Timer"]), [ar["name"]])
-                    self.assertEqual(se["MntGrp"], "nxsmntgrp")
+                    self.assertEqual(se["MntGrp"], "nxsmntgrp2")
                     jpcnf = mgt.updateProfile()
                     pcnf = json.loads(jpcnf)
                     mgdp = PyTango.DeviceProxy(tmg.new_device_info_writer.name)
@@ -4540,11 +4549,12 @@ class ProfileManagerTest(unittest.TestCase):
                         acps)
                     self.myAssertDict(json.loads(se["ComponentGroup"]), cps)
                     self.myAssertDict(json.loads(se["DataSourceGroup"]), adss)
-                    self.assertEqual(set(json.loads(se["HiddenElements"])), set(lhe2))
+                    self.assertEqual(set(json.loads(se["HiddenElements"])),
+                                     set(lhe2))
                     self.assertEqual(json.loads(se["OrderedChannels"]), pdss)
                     self.myAssertDict(json.loads(se["DataRecord"]), records)
                     self.assertEqual(json.loads(se["Timer"]), [ar["name"]])
-                    self.assertEqual(se["MntGrp"], "nxsmntgrp")
+                    self.assertEqual(se["MntGrp"], "nxsmntgrp2")
 #                    print "CNF", cnf
 #                    print "CHDS", chds
                     myctrls = {}
@@ -4596,8 +4606,6 @@ class ProfileManagerTest(unittest.TestCase):
                                                      'timer': dv,
                                                      'trigger_type': 0}}}
 
-
-                            
                     tgc = {}
                     for ds in chds:
                         if ds in self.smychs:
@@ -4622,8 +4630,386 @@ class ProfileManagerTest(unittest.TestCase):
                                         'tango://', cnt['source']),
                                        '_unit_id': '0',
                                        'output': True,
-                                       'plot_axes': (cnt['plot_axes']
-                                                     if ds not in lhe2 else []),
+                                       'plot_axes': (
+                                        cnt['plot_axes']
+                                        if ds not in lhe2 else []),
+                                       'nexus_path': '',
+                                       'normalization': 0,
+                                       'source': cnt['source']}
+                                tgc[chn["full_name"]] = chn
+                            except:
+#                                print ds, cnt
+                                raise
+                    if tgc:
+                        myctrls['__tango__'] = {'units':
+                                                    {'0':
+                                                         {'channels': tgc,
+                                                          'monitor': dv,
+                                                          'id': 0,
+                                                          'timer': dv,
+                                                          'trigger_type': 0}}}
+
+                    smg = {"controllers": myctrls,
+                           "monitor": "%s" % dv,
+                           "description": "Measurement Group",
+                           "timer": "%s" % dv,
+                           "label": "nxsmntgrp2"}
+#                    print "SMG", smg
+                    self.myAssertDict(smg, pcnf)
+                    self.myAssertDict(pcnf, cnf)
+                    se.reset()
+                    se["Door"] = val["Door"]
+                    se["ConfigDevice"] = val["ConfigDevice"]
+                    se["MntGrp"] = "nxsmntgrp2"
+                    se.fetchSelection()
+                    self.myAssertDict(
+                        json.loads(se["AutomaticComponentGroup"]),
+                        acps)
+                    self.myAssertDict(json.loads(se["ComponentGroup"]), cps)
+                    self.myAssertDict(json.loads(se["DataSourceGroup"]), adss)
+                    self.assertEqual(set(json.loads(se["HiddenElements"])),
+                                     set(lhe2))
+                    self.assertEqual(json.loads(se["OrderedChannels"]), pdss)
+                    self.myAssertDict(json.loads(se["DataRecord"]), records)
+                    self.assertEqual(json.loads(se["Timer"]), [ar["name"]])
+                    self.assertEqual(se["MntGrp"], "nxsmntgrp2")
+                finally:
+                    mgt.deleteProfile("nxsmntgrp2")
+                    try:
+                        tmg.tearDown()
+                    except:
+                        pass
+        finally:
+            simp2.tearDown()
+
+    ## updateProfile test
+    def test_updateProfile_components_mixed_tango_orderedchannels(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'mg2'}
+
+        wrong = []
+
+        mgt = ProfileManager(None)
+        self.myAssertRaise(Exception, mgt.updateProfile)
+
+        se = Selector(None)
+        mgt = ProfileManager(se)
+        self.myAssertRaise(Exception, mgt.updateProfile)
+
+        msp = MacroServerPools(10)
+        se = Selector(msp)
+        se["Door"] = val["Door"]
+        se["ConfigDevice"] = val["ConfigDevice"]
+        se["MntGrp"] = val["MntGrp"]
+        mgt = ProfileManager(se)
+        self.assertEqual(mgt.availableMntGrps(), [])
+        self.myAssertRaise(Exception, mgt.updateProfile)
+
+        db = PyTango.Database()
+        db.put_device_property(self._ms.ms.keys()[0],
+                               {'PoolNames': self._pool.dp.name()})
+        pool = self._pool.dp
+        self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+        self.assertEqual(mgt.availableMntGrps(), [])
+        scalar_ctrl = 'ttestp09/testts/t1r228'
+        spectrum_ctrl = 'ttestp09/testts/t2r228'
+        image_ctrl = 'ttestp09/testts/t3r228'
+        ctrls = [scalar_ctrl, spectrum_ctrl, image_ctrl, "__tango__"]
+
+        simp2 = TestServerSetUp.MultiTestServerSetUp(
+            devices=['ttestp09/testts/t%02dr228' % i for i in range(1, 37)])
+        try:
+            simp2.setUp()
+
+            expch = []
+            pdss = []
+            for ds, vl in self.smychsXX.items():
+                if vl:
+                    exp = {}
+                    exp["name"] = ds
+                    exp["source"] = vl["source"]
+                    if ds.startswith("image"):
+                        exp["controller"] = image_ctrl
+                    if ds.startswith("spectrum"):
+                        exp["controller"] = spectrum_ctrl
+                    else:
+                        exp["controller"] = scalar_ctrl
+                    expch.append(exp)
+                    pdss.append(ds)
+            pdss = sorted(pdss)
+            self.__rnd.shuffle(pdss)
+
+            acqch = [
+                {"full_name":"test/ct/01/Value", "name":"ct01"},
+                {"full_name":"test/ct/02/Value", "name":"ct02"},
+                {"full_name":"test/ct/03/value", "name":"ct03"},
+                {"full_name":"test/ct/04/value", "name":"ct04"},
+                {"full_name":"null/val", "name":"mntgrp_04"}
+                ]
+
+            for ch in expch:
+                ach = {}
+                ach["name"] = ch["name"]
+                ach["full_name"] = ch["source"]
+                acqch.append(ach)
+
+            pool.AcqChannelList = [json.dumps(a) for a in acqch]
+            pool.ExpChannelList = [json.dumps(a) for a in expch]
+
+            self.myAssertRaise(Exception, mgt.updateProfile)
+            amycps = dict(self.smycps2)
+            amycps.update(self.smycps)
+            amydss = dict(self.smydssXX)
+            amydss.update(self.smydss)
+            amycpsstep = dict(self.smycpsstep)
+            amycpsstep.update(self.smycpsstep2)
+            self._cf.dp.SetCommandVariable(
+                ["CPDICT", json.dumps(amycps)])
+            self._cf.dp.SetCommandVariable(
+                ["DSDICT", json.dumps(amydss)])
+
+            for i in range(30):
+                try:
+                    ar = acqch[i % 5]
+                    cps = {}
+                    acps = {}
+                    dss = {}
+                    lcp = self.__rnd.randint(1, 40)
+                    lds = self.__rnd.randint(1, 40)
+
+                    self._cf.dp.SetCommandVariable(
+                        ["CPDICT", json.dumps(amycps)])
+                    self._cf.dp.SetCommandVariable(
+                        ["DSDICT", json.dumps(amydss)])
+                    comps = set()
+
+                    ncps = self.__rnd.randint(1, len(amycps) - 1)
+                    lcps = self.__rnd.sample(set(amycps.keys()), ncps)
+                    for cp in lcps:
+                        if cp not in wrong:
+                            cps[cp] = bool(self.__rnd.randint(0, 1))
+                            if cps[cp]:
+                                comps.add(cp)
+
+                    ancps = self.__rnd.randint(1, len(amycps.keys()) - 1)
+                    alcps = self.__rnd.sample(set(amycps.keys()), ancps)
+                    for cp in alcps:
+                        if cp not in wrong:
+                            acps[cp] = bool(self.__rnd.randint(0, 1))
+                            if acps[cp]:
+                                comps.add(cp)
+
+                    ndss = self.__rnd.randint(1, len(amycps.keys()) - 1)
+                    ldss = self.__rnd.sample(set(amycps.keys()), ndss)
+                    for ds in ldss:
+                        if ds in amydss.keys():
+                            if ds not in wrong:
+                                dss[ds] = bool(self.__rnd.randint(0, 1))
+
+                    ndss = self.__rnd.randint(1, len(amydss.keys()) - 1)
+                    ldss = self.__rnd.sample(set(amydss.keys()), ndss)
+                    for ds in ldss:
+                        if ds in amydss.keys():
+                            if ds not in wrong:
+                                dss[ds] = bool(self.__rnd.randint(0, 1))
+
+                    mncps = self.__rnd.randint(1, len(amycps.keys()) - 1)
+                    mcps = [cp for cp in self.__rnd.sample(
+                            set(amycps.keys()), mncps) if cp not in wrong]
+                    for cp in mcps:
+                        comps.add(cp)
+
+                    adss = dict(dss)
+                    for ch in expch:
+#                        print ch
+                        if ch["name"] not in adss.keys():
+                            adss[ch["name"]] = False
+                    se["ComponentGroup"] = json.dumps(cps)
+                    se["AutomaticComponentGroup"] = json.dumps(acps)
+                    se["DataSourceGroup"] = json.dumps(dss)
+                    self._cf.dp.SetCommandVariable(["MCPLIST",
+                                                    json.dumps(mcps)])
+
+                    records = {}
+                    describer = Describer(self._cf.dp, True)
+                    cpres = describer.components(dstype='CLIENT')
+                    for grp in cpres:
+                        for idss in grp.values():
+                            for idsrs in idss.values():
+                                for idsr in idsrs:
+                                    records[str(idsr[2])] = "1234"
+                    dsres = describer.dataSources(
+                        dss.keys(), dstype='CLIENT')[0]
+                    for dsr in dsres.values():
+                        records[str(dsr.record)] = '2345'
+
+                    se["Timer"] = '["%s"]' % ar["name"]
+                    se["DataRecord"] = json.dumps(records)
+
+                    tmg = TestMGSetUp.TestMeasurementGroupSetUp(
+                        name='mg2')
+                    dv = "/".join(ar["full_name"].split("/")[0:-1])
+                    chds = [ds for ds in mgt.dataSources()
+                            if not ds.startswith('client')]
+                    chds1 = list(chds)
+                    chds2 = [ds for ds in mgt.disableDataSources()
+                             if not ds.startswith('client')]
+                    chds.extend(chds2)
+                    tmpchds = sorted(chds)
+                    chds = []
+                    for ds in pdss:
+                        if ds in tmpchds:
+                            chds.append(ds)
+                    for ds in tmpchds:
+                        if ds not in pdss:
+                            chds.append(ds)
+
+                    lheds = []
+                    if chds:
+                        nhe = self.__rnd.randint(0, len(set(chds)) - 1)
+                        lheds = self.__rnd.sample(set(chds), nhe)
+
+                    lhecp = []
+                    if comps:
+                        nhe = self.__rnd.randint(0, len(set(comps)) - 1)
+                        lhecp = self.__rnd.sample(set(comps), nhe)
+
+                    lhe = lheds + lhecp
+
+                    se["HiddenElements"] = json.dumps(lhe)
+                    se["OrderedChannels"] = json.dumps(pdss)
+
+                    lhe2 = []
+                    for el in lhe:
+                        found = False
+                        for cp in comps:
+                            if el in amycpsstep[cp]:
+                                if cp not in lhecp:
+                                    found = True
+                        if not found:
+                            lhe2.append(el)
+
+#                    print "LHE", lhe
+#                    print "LHE2", lhe2
+#                    print "LHECP", lhecp
+#                    print "COMPS", comps
+
+#                    print "COMP", mgt.components()
+#                    print "ACOMP", mgt.automaticComponents()
+#                    print "MCP", mcps
+#                    print "DS", mgt.dataSources()
+#                    print "DDS", mgt.disableDataSources()
+
+                    self.myAssertDict(
+                        json.loads(se["AutomaticComponentGroup"]),
+                        acps)
+                    self.myAssertDict(json.loads(se["ComponentGroup"]), cps)
+                    self.myAssertDict(json.loads(se["DataSourceGroup"]), adss)
+                    self.assertEqual(set(json.loads(se["HiddenElements"])),
+                                     set(lhe))
+                    self.assertEqual(json.loads(se["OrderedChannels"]), pdss)
+                    self.myAssertDict(json.loads(se["DataRecord"]), records)
+                    self.assertEqual(json.loads(se["Timer"]), [ar["name"]])
+                    self.assertEqual(se["MntGrp"], "mg2")
+                    jpcnf = mgt.updateProfile()
+                    pcnf = json.loads(jpcnf)
+                    mgdp = PyTango.DeviceProxy(tmg.new_device_info_writer.name)
+                    jcnf = mgdp.Configuration
+                    cnf = json.loads(jcnf)
+                    self.myAssertDict(
+                        json.loads(se["AutomaticComponentGroup"]),
+                        acps)
+                    self.myAssertDict(json.loads(se["ComponentGroup"]), cps)
+                    self.myAssertDict(json.loads(se["DataSourceGroup"]), adss)
+                    self.assertEqual(set(json.loads(se["HiddenElements"])),
+                                     set(lhe2))
+                    self.assertEqual(json.loads(se["OrderedChannels"]), pdss)
+                    self.myAssertDict(json.loads(se["DataRecord"]), records)
+                    self.assertEqual(json.loads(se["Timer"]), [ar["name"]])
+                    self.assertEqual(se["MntGrp"], "mg2")
+#                    print "CNF", cnf
+#                    print "CHDS", chds
+                    myctrls = {}
+                    for cl in ctrls:
+                        tgc = {}
+                        for exp in expch:
+                            ds = exp["name"]
+                            if ds in chds and cl == exp['controller']:
+                                if ds in self.smychsXX.keys():
+                                    cnt = self.smychsXX[str(ds)]
+                                    i = chds.index(str(ds))
+#                                    print "INDEX", i, ds
+                                    try:
+                                        tdv = "/".join(
+                                            cnt['source'].split("/")[:-1])
+                                        chn = {'ndim': 0,
+                                               'index': i,
+                                               'name': str(ds),
+                                               'data_type': cnt['data_type'],
+                                               'plot_type': (
+                                                cnt['plot_type']
+                                                if ds not in lhe2 else 0),
+                                               'data_units': cnt['data_units'],
+                                               'enabled': True,
+                                               'label': ds,
+                                               'instrument': None,
+                                               'shape': cnt['shape'],
+                                               '_controller_name': cl,
+                                               'conditioning': '',
+                                               'full_name': tdv,
+                                               '_unit_id': '0',
+                                               'output': True,
+                                               'plot_axes': (
+                                                cnt['plot_axes']
+                                                if ds not in lhe2 else []),
+                                               'nexus_path': '',
+                                               'normalization': 0,
+                                               'source': cnt['source']}
+                                        tgc[tdv] = chn
+                                    except:
+    #                                    print ds, cnt
+                                        raise
+                        if tgc:
+                            myctrls[cl] = {'units':
+                                               {'0':
+                                                    {'channels': tgc,
+                                                     'monitor': dv,
+                                                     'id': 0,
+                                                     'timer': dv,
+                                                     'trigger_type': 0}}}
+
+                    tgc = {}
+                    for ds in chds:
+                        if ds in self.smychs:
+                            cnt = self.smychs[str(ds)]
+                            i = chds.index(str(ds))
+#                            print "INDEX", i, ds
+                            try:
+                                chn = {'ndim': 0,
+                                       'index': i,
+                                       'name': str(ds),
+                                       'data_type': cnt['data_type'],
+                                       'plot_type': (cnt['plot_type']
+                                                     if ds not in lhe2 else 0),
+                                       'data_units': cnt['data_units'],
+                                       'enabled': True,
+                                       'label': cnt['source'],
+                                       'instrument': None,
+                                       'shape': cnt['shape'],
+                                       '_controller_name': '__tango__',
+                                       'conditioning': '',
+                                       'full_name': '%s%s' % (
+                                        'tango://', cnt['source']),
+                                       '_unit_id': '0',
+                                       'output': True,
+                                       'plot_axes': (
+                                        cnt['plot_axes']
+                                        if ds not in lhe2 else []),
                                        'nexus_path': '',
                                        'normalization': 0,
                                        'source': cnt['source']}
@@ -4632,45 +5018,48 @@ class ProfileManagerTest(unittest.TestCase):
 #                                print ds, cnt
                                 raise
 
-                    myctrls['__tango__'] = {'units':
-                                                {'0':
-                                                     {'channels': tgc,
-                                                      'monitor': dv,
-                                                      'id': 0,
-                                                      'timer': dv,
-                                                      'trigger_type': 0}}}
+                    if tgc:
+                        myctrls['__tango__'] = {'units':
+                                                    {'0':
+                                                         {'channels': tgc,
+                                                          'monitor': dv,
+                                                          'id': 0,
+                                                          'timer': dv,
+                                                          'trigger_type': 0}}}
 
                     smg = {"controllers": myctrls,
                            "monitor": "%s" % dv,
                            "description": "Measurement Group",
                            "timer": "%s" % dv,
-                           "label": "nxsmntgrp"}
+                           "label": "mg2"}
 #                    print "SMG", smg
                     self.myAssertDict(smg, pcnf)
                     self.myAssertDict(pcnf, cnf)
                     se.reset()
                     se["Door"] = val["Door"]
                     se["ConfigDevice"] = val["ConfigDevice"]
-                    se["MntGrp"] = "nxsmntgrp"
+                    se["MntGrp"] = "mg2"
                     se.fetchSelection()
                     self.myAssertDict(
                         json.loads(se["AutomaticComponentGroup"]),
                         acps)
                     self.myAssertDict(json.loads(se["ComponentGroup"]), cps)
                     self.myAssertDict(json.loads(se["DataSourceGroup"]), adss)
-                    self.assertEqual(set(json.loads(se["HiddenElements"])), set(lhe2))
+                    self.assertEqual(set(json.loads(se["HiddenElements"])),
+                                     set(lhe2))
                     self.assertEqual(json.loads(se["OrderedChannels"]), pdss)
                     self.myAssertDict(json.loads(se["DataRecord"]), records)
                     self.assertEqual(json.loads(se["Timer"]), [ar["name"]])
-                    self.assertEqual(se["MntGrp"], "nxsmntgrp")
+                    self.assertEqual(se["MntGrp"], "mg2")
                 finally:
-                    mgt.deleteProfile("nxsmntgrp")
+                    mgt.deleteProfile("mg2")
                     try:
                         tmg.tearDown()
                     except:
                         pass
         finally:
             simp2.tearDown()
+
 
 if __name__ == '__main__':
     unittest.main()
