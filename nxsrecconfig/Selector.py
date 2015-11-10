@@ -27,7 +27,7 @@ from .Utils import TangoUtils, PoolUtils
 from .Selection import Selection
 
 
-## NeXus Sardana Recorder settings
+## Access class to Selection dictionary and Config Device
 class Selector(object):
     """ selection state """
 
@@ -38,7 +38,7 @@ class Selector(object):
         ## macro server and pools
         self.__msp = macroserverpools
 
-        ##  dictionary with Settings
+        ##  selection dictionary with Settings
         self.__selection = Selection()
 
         ## tango database

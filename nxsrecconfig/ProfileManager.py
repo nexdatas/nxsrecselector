@@ -36,7 +36,7 @@ DEFAULT_RECORD_KEYS = ['serialno', 'end_time', 'start_time',
                        'point_nb', 'timestamps', 'scan_title']
 
 
-## ProfileManager class
+## Manages Measurement Group and Profile from Selector
 class ProfileManager(object):
     """  MntGrp Tools """
 
@@ -375,11 +375,9 @@ class ProfileManager(object):
 
         hel2 = json.loads(self.__selector["HiddenElements"])
         for tm in tms:
-            if tm in hel2:
+            if tm in hel:
                 if tm in dsg.keys():
                     dsg[tm] = False
-                if tm in hel:
-                    hel.remove(tm)
         return otimers
 
     ## checks client records
@@ -465,6 +463,7 @@ class ProfileManager(object):
         if isinstance(datasources, list):
             aliases = list(datasources)
         pchannels = json.loads(self.__selector["OrderedChannels"])
+        dsg = json.loads(self.__selector["DataSourceGroup"])
         aliases.extend(
             list(set(pchannels) & set(disabledatasources)))
 
@@ -475,6 +474,7 @@ class ProfileManager(object):
                 ndcp = cp in dontdisplay
                 for ds in dss.keys():
                     aliases.append(str(ds))
+                    dsg[str(ds)] = True
                     if not ndcp and str(ds) in dontdisplay:
                         dontdisplay.remove(str(ds))
         res = describer.components(components, 'STEP', 'TANGO')
@@ -483,9 +483,16 @@ class ProfileManager(object):
                 ndcp = cp in dontdisplay
                 for ds in dss.keys():
                     aliases.append(str(ds))
+                    dsg[str(ds)] = True
                     if not ndcp and str(ds) in dontdisplay:
                         dontdisplay.remove(str(ds))
 
+        for tm in timers:
+            if tm in dontdisplay:
+                if tm in dsg.keys():
+                    dsg[str(tm)] = False
+
+        self.__selector["DataSourceGroup"] = json.dumps(dsg)
         self.__selector["HiddenElements"] = json.dumps(list(dontdisplay))
         aliases = list(set(aliases))
 
