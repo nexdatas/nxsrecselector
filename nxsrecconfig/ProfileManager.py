@@ -292,14 +292,22 @@ class ProfileManager(object):
         timers = {}
 
         dsg = json.loads(self.__selector["DataSourceGroup"])
-        hel = json.loads(self.__selector["HiddenElements"])
+        hel = set(json.loads(self.__selector["HiddenElements"]))
         self.__clearChannels(dsg, hel)
 
         # fill in dsg, timers hel
         if "timer" in conf.keys() and "controllers" in conf.keys():
+            print "DSG1", dsg
+            print "H1", hel
             tangods = self.__readChannels(conf, timers, dsg, hel)
+            print "DSG1", dsg
+            print "H2", hel
             self.__readTangoChannels(conf, tangods, dsg, hel)
+            print "DSG3", dsg
+            print "H3", hel
             otimers = self.__reorderTimers(conf, timers, dsg, hel)
+            print "DSG4", dsg
+            print "H4", hel
 
         changed = False
         jdsg = json.dumps(dsg)
@@ -307,9 +315,8 @@ class ProfileManager(object):
             self.__selector["DataSourceGroup"] = jdsg
             changed = True
 
-        jhel = json.dumps(hel)
-        if self.__selector["HiddenElements"] != jhel:
-            self.__selector["HiddenElements"] = jhel
+        if set(json.loads(self.__selector["HiddenElements"])) != hel:
+            self.__selector["HiddenElements"] = json.dumps(list(hel))
             changed = True
         if otimers is not None:
             jtimers = json.dumps(otimers)
@@ -344,7 +351,9 @@ class ProfileManager(object):
                         else:
                             dsg[ch['name']] = True
                             if not bool(ch['plot_type']):
-                                hel.append(ch['name'])
+                                hel.add(ch['name'])
+                            elif ch['name'] in hel:
+                                hel.remove(ch['name'])
 
         return tangods
 
@@ -362,7 +371,9 @@ class ProfileManager(object):
                                     name = jds[ch["source"]]
                                     dsg[name] = True
                                     if not bool(ch['plot_type']):
-                                        hel.append(ch['name'])
+                                        hel.add(ch['name'])
+                                    elif ch['name'] in hel:
+                                        hel.remove(ch['name'])
 
     def __reorderTimers(self, conf, timers, dsg, hel):
         dtimers = PoolUtils.getAliases(self.__pools, timers)
@@ -374,10 +385,14 @@ class ProfileManager(object):
         tms.extend(otimers)
 
         hel2 = json.loads(self.__selector["HiddenElements"])
+        print "OTIMERS", otimers
         for tm in tms:
             if tm in hel:
                 if tm in dsg.keys():
+                    print "TIMER FALSE", tm
                     dsg[tm] = False
+#                    if tm not in otimers:
+                    hel.remove(tm)
         return otimers
 
     ## checks client records
