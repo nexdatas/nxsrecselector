@@ -1,10 +1,10 @@
-2015-10-XX Jan Kotanski <jankotan@gmail.com>
+2015-11-11 Jan Kotanski <jankotan@gmail.com>
 	* adding getChannelSources into PoolUtils
 	* adding support for __tango__ channels from components
 	* changing timer datasource selection
 	* fixes behaviour of ProfileManager with many pools
 	* moves components, disableDataSources, cpdescrition, datasources into ProfileManager
-	* tagged as v1.21.2
+	* tagged as v1.22.0
 
 2015-10-21 Jan Kotanski <jankotan@gmail.com>
 	* workaround for PyTango #709
