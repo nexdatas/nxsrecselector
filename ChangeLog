@@ -1,3 +1,7 @@
+2015-11-XX Jan Kotanski <jankotan@gmail.com>
+	* fixes duplicated HiddenElements
+	* tagged as v1.22.1
+
 2015-11-11 Jan Kotanski <jankotan@gmail.com>
 	* adding getChannelSources into PoolUtils
 	* adding support for __tango__ channels from components
