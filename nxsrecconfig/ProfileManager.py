@@ -225,10 +225,19 @@ class ProfileManager(object):
             set(mcp))
         mgconf = json.loads(self.mntGrpConfiguration())
         self.__updateConfigServer()
+        state = self.__selector.get()
+        amg = MSUtils.getEnv('ActiveMntGrp', self.__macroServerName)
         llconf, _ = self.__createMntGrpConf(
             components, datasources, disabledatasources)
-        self.__selector.storeSelection()
+
+        amg2 = MSUtils.getEnv('ActiveMntGrp', self.__macroServerName)
+        if amg != amg2:
+            MSUtils.setEnv('ActiveMntGrp', str(amg), self.__macroServerName)
+        state2 = self.__selector.get()
+        if json.dumps(state) != json.dumps(state2):
+            self.__selector.set(state)
         lsconf = json.loads(llconf)
+
         return not Utils.compareDict(mgconf, lsconf)
 
     ## import setting from active measurement
