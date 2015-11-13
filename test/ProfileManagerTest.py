@@ -6077,7 +6077,7 @@ class ProfileManagerTest(unittest.TestCase):
         self.maxDiff = None
         self.tearDown()
         try:
-            for _ in range(10):
+            for j in range(10):
                 self.setUp()
                 db = PyTango.Database()
                 db.put_device_property(self._ms.ms.keys()[0],
@@ -7123,6 +7123,10 @@ class ProfileManagerTest(unittest.TestCase):
                     self.assertTrue(
                         not mg4 in self._cf.dp.availableSelections())
                     self.assertTrue(mg4 in lmgt.availableMntGrps())
+                    if j % 2:
+                        lmgt.defaultAutomaticComponents = list(json.loads(lse["AutomaticComponentGroup"]).keys())
+
+                    
                     lmgt.fetchProfile()
 #                    lmgt.importMntGrp()
                     tmpcf1 = json.loads(mgt[mg1].mntGrpConfiguration())
@@ -7154,9 +7158,15 @@ class ProfileManagerTest(unittest.TestCase):
                     self.assertEqual(
                         set(json.loads(lse["InitDataSources"])),
                         set())
-                    self.myAssertDict(
-                        json.loads(lse["AutomaticComponentGroup"]),
-                        {})
+
+                    if j % 2:
+                        self.myAssertDict(
+                            json.loads(lse["AutomaticComponentGroup"]),
+                            acps[mg3])
+                    else:
+                        self.myAssertDict(
+                            json.loads(lse["AutomaticComponentGroup"]),
+                            {})
 
                     mycps = dict(cps[mg3])
                     for cp in mycps:
