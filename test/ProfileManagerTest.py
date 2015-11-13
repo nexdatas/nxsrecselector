@@ -1832,7 +1832,7 @@ class ProfileManagerTest(unittest.TestCase):
                 self.assertEqual(v, dct2[k])
 
     ## constructor test
-    def ttest_constructor_keys(self):
+    def test_constructor_keys(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -1850,7 +1850,7 @@ class ProfileManagerTest(unittest.TestCase):
         mgt = ProfileManager(se)
 
     ## availableMntGrps test
-    def ttest_availableMntGrps(self):
+    def test_availableMntGrps(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -1902,7 +1902,7 @@ class ProfileManagerTest(unittest.TestCase):
             self.assertEqual(set(dd), set([a["name"] for a in arr]))
 
     ## availableMntGrps test
-    def ttest_availableMntGrps_twopools(self):
+    def test_availableMntGrps_twopools(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -1988,7 +1988,7 @@ class ProfileManagerTest(unittest.TestCase):
             tpool2.tearDown()
 
     ## deleteProfile test
-    def ttest_deleteProfile(self):
+    def test_deleteProfile(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2050,7 +2050,7 @@ class ProfileManagerTest(unittest.TestCase):
             self.assertEqual(set(sl), set(sl2) - set(dl))
 
     ## deleteProfile test
-    def ttest_deleteProfile_twopools(self):
+    def test_deleteProfile_twopools(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2162,7 +2162,7 @@ class ProfileManagerTest(unittest.TestCase):
             tpool2.tearDown()
 
     ## updateProfile test
-    def ttest_automaticComponents(self):
+    def test_automaticComponents(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2200,7 +2200,7 @@ class ProfileManagerTest(unittest.TestCase):
             self.assertEqual(set(ac), set(acp))
 
     ## updateProfile test
-    def ttest_components(self):
+    def test_components(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2267,7 +2267,7 @@ class ProfileManagerTest(unittest.TestCase):
             self.assertEqual(set(pmcp), set(mfcp))
 
     ## updateProfile test
-    def ttest_cpdescritpion_unknown(self):
+    def test_cpdescritpion_unknown(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2323,7 +2323,7 @@ class ProfileManagerTest(unittest.TestCase):
         self.assertEqual(pm.cpdescription(), [{}])
 
     ## updateProfile test
-    def ttest_cpdescritpion_full(self):
+    def test_cpdescritpion_full(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2369,7 +2369,7 @@ class ProfileManagerTest(unittest.TestCase):
         self.checkCP(res, self.rescps.keys())
 
     ## updateProfile test
-    def ttest_cpdescritpion_comp_nods(self):
+    def test_cpdescritpion_comp_nods(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2425,7 +2425,7 @@ class ProfileManagerTest(unittest.TestCase):
                          strategy='STEP')
 
     ## updateProfile test
-    def ttest_cpdescritpion_comp_ds(self):
+    def test_cpdescritpion_comp_ds(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2487,7 +2487,7 @@ class ProfileManagerTest(unittest.TestCase):
                          strategy='STEP')
 
     ## updateProfile test
-    def ttest_disabledatasources(self):
+    def test_disabledatasources(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2556,7 +2556,7 @@ class ProfileManagerTest(unittest.TestCase):
             self.assertEqual(len(mdds), len(dds))
 
     ## updateProfile test
-    def ttest_datasources(self):
+    def test_datasources(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2624,7 +2624,7 @@ class ProfileManagerTest(unittest.TestCase):
             self.assertEqual(len(tdss), len(rdss))
 
     ## updateProfile test
-    def ttest_updateProfile_empty(self):
+    def test_updateProfile_empty(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2719,7 +2719,7 @@ class ProfileManagerTest(unittest.TestCase):
                 tmg.tearDown()
 
     ## updateProfile test
-    def ttest_updateProfile_components_nopool(self):
+    def test_updateProfile_components_nopool(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2893,7 +2893,7 @@ class ProfileManagerTest(unittest.TestCase):
                     pass
 
     ## updateProfile test
-    def ttest_updateProfile_nodevice(self):
+    def test_updateProfile_nodevice(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -3017,7 +3017,7 @@ class ProfileManagerTest(unittest.TestCase):
                     pass
 
     ## updateProfile test
-    def ttest_updateProfile_nodevice_cp(self):
+    def test_updateProfile_nodevice_cp(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -3140,7 +3140,7 @@ class ProfileManagerTest(unittest.TestCase):
                     pass
 
     ## updateProfile test
-    def ttest_updateProfile_wrongdevice(self):
+    def test_updateProfile_wrongdevice(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -3263,7 +3263,7 @@ class ProfileManagerTest(unittest.TestCase):
                     pass
 
     ## updateProfile test
-    def ttest_updateProfile_components_nopool_tango(self):
+    def test_updateProfile_components_nopool_tango(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -3484,7 +3484,7 @@ class ProfileManagerTest(unittest.TestCase):
                     pass
 
     ## updateProfile test
-    def ttest_updateProfile_components_nopool_tango_hiddenElements(self):
+    def test_updateProfile_components_nopool_tango_hiddenElements(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -3745,7 +3745,7 @@ class ProfileManagerTest(unittest.TestCase):
                     pass
 
     ## updateProfile test
-    def ttest_updateProfile_components_pool_tango(self):
+    def test_updateProfile_components_pool_tango(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -4024,7 +4024,7 @@ class ProfileManagerTest(unittest.TestCase):
             simp2.tearDown()
 
     ## updateProfile test
-    def ttest_updateProfile_components_pool_tango_hiddenelements(self):
+    def test_updateProfile_components_pool_tango_hiddenelements(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -4351,7 +4351,7 @@ class ProfileManagerTest(unittest.TestCase):
             simp2.tearDown()
 
     ## updateProfile test
-    def ttest_updateProfile_components_mixed_tango_hiddenelements(self):
+    def test_updateProfile_components_mixed_tango_hiddenelements(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -4735,7 +4735,7 @@ class ProfileManagerTest(unittest.TestCase):
             simp2.tearDown()
 
     ## updateProfile test
-    def ttest_updateProfile_components_mixed_tango_orderedchannels(self):
+    def test_updateProfile_components_mixed_tango_orderedchannels(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -5121,7 +5121,7 @@ class ProfileManagerTest(unittest.TestCase):
             simp2.tearDown()
 
     ## updateProfile test
-    def ttest_updateProfile_components_mixed_tango_timers(self):
+    def test_updateProfile_components_mixed_tango_timers(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -5560,7 +5560,7 @@ class ProfileManagerTest(unittest.TestCase):
             simp2.tearDown()
 
     ## updateProfile test
-    def ttest_updateProfile_mntGrpConfiguration_isMntGrpChanged(self):
+    def test_updateProfile_mntGrpConfiguration_isMntGrpChanged(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -7124,11 +7124,11 @@ class ProfileManagerTest(unittest.TestCase):
                         not mg4 in self._cf.dp.availableSelections())
                     self.assertTrue(mg4 in lmgt.availableMntGrps())
                     if j % 2:
-                        lmgt.defaultAutomaticComponents = list(json.loads(lse["AutomaticComponentGroup"]).keys())
+                        lmgt.defaultAutomaticComponents = \
+                            list(json.loads(lse["AutomaticComponentGroup"]
+                                            ).keys())
 
-                    
                     lmgt.fetchProfile()
-#                    lmgt.importMntGrp()
                     tmpcf1 = json.loads(mgt[mg1].mntGrpConfiguration())
                     tmpcf2 = json.loads(mgt[mg2].mntGrpConfiguration())
                     tmpcf3 = json.loads(mgt[mg3].mntGrpConfiguration())
@@ -7160,9 +7160,21 @@ class ProfileManagerTest(unittest.TestCase):
                         set())
 
                     if j % 2:
+
+                        cpgood = self.smycps.keys() + self.smycps2.keys()
+                        if "client_long" in aadss[mg3] \
+                                or "client_short" in aadss[mg3]:
+                            cpgood.remove("smycpnt1")
+                        if "client2_long" in aadss[mg3] \
+                                or "client2_short" in aadss[mg3]:
+                            cpgood.remove("s2mycpnt1")
+
+                        myacps = dict(acps[mg3])
+                        for cp in myacps.keys():
+                            myacps[cp] = cp in cpgood
                         self.myAssertDict(
                             json.loads(lse["AutomaticComponentGroup"]),
-                            acps[mg3])
+                            myacps)
                     else:
                         self.myAssertDict(
                             json.loads(lse["AutomaticComponentGroup"]),
