@@ -45,8 +45,6 @@ class ProfileManager(object):
     def __init__(self, selector):
         ## configuration selector
         self.__selector = selector
-        ## default mntgrp
-        self.__defaultmntgrp = 'nxsmntgrp'
 
         ## macro server name
         self.__macroServerName = None
@@ -189,7 +187,7 @@ class ProfileManager(object):
 
     ## switchProfile to active measurement
     def switchProfile(self, toActive=True):
-        if not self.__selector["MntGrp"] or toActive:
+        if toActive:
             ms = self.__selector.getMacroServer()
             amntgrp = MSUtils.getEnv('ActiveMntGrp', ms)
             if not toActive or amntgrp:
@@ -205,8 +203,6 @@ class ProfileManager(object):
     def mntGrpConfiguration(self):
         self.__updatePools()
         self.__updateMacroServer()
-        if not self.__selector["MntGrp"]:
-            self.switchProfile(toActive=False)
         mntGrpName = self.__selector["MntGrp"]
         fullname = str(PoolUtils.getMntGrpName(self.__pools, mntGrpName))
         dpmg = TangoUtils.openProxy(fullname) if fullname else None
@@ -223,10 +219,12 @@ class ProfileManager(object):
         components = list(
             set(self.components()) | set(self.automaticComponents()) |
             set(mcp))
+
         mgconf = json.loads(self.mntGrpConfiguration())
-        self.__updateConfigServer()
+
         state = self.__selector.get()
         amg = MSUtils.getEnv('ActiveMntGrp', self.__macroServerName)
+
         llconf, _ = self.__createMntGrpConf(
             components, datasources, disabledatasources)
 
@@ -236,8 +234,8 @@ class ProfileManager(object):
         state2 = self.__selector.get()
         if json.dumps(state) != json.dumps(state2):
             self.__selector.set(state)
-        lsconf = json.loads(llconf)
 
+        lsconf = json.loads(llconf)
         return not Utils.compareDict(mgconf, lsconf)
 
     ## import setting from active measurement
@@ -521,8 +519,6 @@ class ProfileManager(object):
 
     ## sets mntgrp
     def __prepareMntGrp(self, cnf, timer):
-        if not self.__selector["MntGrp"]:
-            self.__selector["MntGrp"] = self.__defaultmntgrp
         mntGrpName = self.__selector["MntGrp"]
         mfullname = str(PoolUtils.getMntGrpName(self.__pools, mntGrpName))
 
