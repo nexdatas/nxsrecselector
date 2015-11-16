@@ -160,7 +160,6 @@ class SettingsTest(unittest.TestCase):
             ("MntGrp", '')
             ]
 
-
     ## test starter
     # \brief Common set up
     def setUp(self):

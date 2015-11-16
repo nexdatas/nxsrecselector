@@ -31,6 +31,8 @@ import ServerSetUp
 import SettingsTest
 from nxsrecconfig import Settings
 import nxsrecconfig
+
+
 ## test fixture
 class NXSRecSelectorTest(SettingsTest.SettingsTest):
 
@@ -41,8 +43,6 @@ class NXSRecSelectorTest(SettingsTest.SettingsTest):
 
         self._sv = ServerSetUp.ServerSetUp()
 
-
-
     ## test starter
     # \brief Common set up of Tango Server
     def setUp(self):
@@ -51,44 +51,43 @@ class NXSRecSelectorTest(SettingsTest.SettingsTest):
 
     ## test closer
     # \brief Common tear down oif Tango Server
-    def tearDown(self): 
+    def tearDown(self):
         self._sv.tearDown()
         SettingsTest.SettingsTest.tearDown(self)
-        
+
     ## opens config server
     # \param args connection arguments
-    # \returns NXSConfigServer instance   
+    # \returns NXSConfigServer instance
     def openRecSelector(self):
-        
+
         found = False
         cnt = 0
         while not found and cnt < 1000:
             try:
                 print "\b.",
-                xmlc = PyTango.DeviceProxy(self._sv.new_device_info_writer.name)
+                xmlc = PyTango.DeviceProxy(
+                    self._sv.new_device_info_writer.name)
                 time.sleep(0.01)
                 if xmlc.state() == PyTango.DevState.ON:
                     found = True
                 found = True
-            except Exception,e:    
-                print self._sv.new_device_info_writer.name,e
+            except Exception as e:
+                print("%s%s" % (self._sv.new_device_info_writer.name, e))
                 found = False
             except:
                 found = False
-                
-            cnt +=1
+
+            cnt += 1
 
         if not found:
-            raise Exception, "Cannot connect to %s" % self._sv.new_device_info_writer.name
-
+            raise Exception(
+                "Cannot connect to %s" %
+                self._sv.new_device_info_writer.name)
 
         self.assertEqual(xmlc.state(), PyTango.DevState.ON)
-        
-        return xmlc
-        
 
+        return xmlc
 
 
 if __name__ == '__main__':
     unittest.main()
-

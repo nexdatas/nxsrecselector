@@ -42,26 +42,25 @@ class ServerSetUp(object):
 
         self._psub = None
 
-
-
     ## test starter
     # \brief Common set up of Tango Server
     def setUp(self):
         print "tearing down ..."
         db = PyTango.Database()
         db.add_device(self.new_device_info_writer)
-        db.add_server(self.new_device_info_writer.server, self.new_device_info_writer)
-        
+        db.add_server(self.new_device_info_writer.server,
+                      self.new_device_info_writer)
+
         if os.path.isfile("../NXSRecSelector"):
             self._psub = subprocess.call(
-                "cd ..; ./NXSRecSelector NRSTEST &",stdout =  None, 
-                stderr =  None,  shell= True)
+                "cd ..; ./NXSRecSelector NRSTEST &", stdout=None,
+                stderr=None,  shell=True)
         else:
             self._psub = subprocess.call(
-                "NXSRecSelector NRSTEST &",stdout =  None, 
-                stderr = None , shell= True)
+                "NXSRecSelector NRSTEST &", stdout=None,
+                stderr=None, shell=True)
         print "waiting for server",
-        
+
         found = False
         cnt = 0
         while not found and cnt < 1000:
@@ -71,28 +70,28 @@ class ServerSetUp(object):
                 time.sleep(0.01)
                 if dp.state() == PyTango.DevState.ON:
                     found = True
-                found = True    
-            except:    
+                found = True
+            except:
                 found = False
-            cnt +=1
+            cnt += 1
         print ""
 
     ## test closer
     # \brief Common tear down oif Tango Server
-    def tearDown(self): 
+    def tearDown(self):
         print "tearing down ..."
         db = PyTango.Database()
         db.delete_server(self.new_device_info_writer.server)
-        
+
         output = ""
         pipe = subprocess.Popen(
-            "ps -ef | grep 'NXSRecSelector NRSTEST'", stdout=subprocess.PIPE , shell= True).stdout
+            "ps -ef | grep 'NXSRecSelector NRSTEST'",
+            stdout=subprocess.PIPE, shell=True).stdout
 
         res = pipe.read().split("\n")
         for r in res:
             sr = r.split()
-            if len(sr)>2:
-                 subprocess.call("kill -9 %s" % sr[1],stderr=subprocess.PIPE , shell= True)
-
-        
-
+            if len(sr) > 2:
+                subprocess.call(
+                    "kill -9 %s" % sr[1],
+                    stderr=subprocess.PIPE, shell=True)
