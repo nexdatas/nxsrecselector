@@ -48,6 +48,8 @@ import MacroServerPoolsTest
 import DynamicComponentTest
 import UtilsTest
 import ProfileManagerTest
+import SettingsTest
+import NXSRecSelectorTest
 
 #import TestServerSetUp
 
@@ -114,6 +116,12 @@ def main():
 
     suite.addTests(
         unittest.defaultTestLoader.loadTestsFromModule(DynamicComponentTest))
+
+    suite.addTests(
+        unittest.defaultTestLoader.loadTestsFromModule(SettingsTest))
+
+    suite.addTests(
+        unittest.defaultTestLoader.loadTestsFromModule(NXSRecSelectorTest))
 
     ## test runner
     runner = unittest.TextTestRunner()
