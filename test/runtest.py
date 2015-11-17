@@ -128,8 +128,8 @@ def main():
     ## test result
     result = runner.run(suite)
 
- #   if ts:
- #       ts.tearDown()
+    #   if ts:
+    #       ts.tearDown()
 
 if __name__ == "__main__":
     main()
