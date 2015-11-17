@@ -357,7 +357,10 @@ class SettingsTest(unittest.TestCase):
                          set([k[0] for k in self._keys]))
 
         for nm in rs.names():
+            if rs.value(nm) != se[nm]:
+                print ("DICT NAME %s" nm)
             self.assertEqual(rs.value(nm), se[nm])
+            
         self.assertEqual(rs.value("UNKNOWN_VARIABLE_34535"), '')
 
         print "MntGrp", rs.mntGrp

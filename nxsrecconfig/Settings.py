@@ -490,6 +490,60 @@ class Settings(object):
     scanFile = property(__getScanFile, __setScanFile,
                         doc='scan file(s)')
 
+    ## provides components for all variables
+    # \returns dictionary with components for all variables
+    def __variableComponents(self):
+        acps = self.availableComponents()
+        vrs = {}
+        for cp in acps:
+            vr = self.__configCommand("componentVariables", cp) or []
+            if vr:
+                for v in vr:
+                    if v not in vrs:
+                        vrs[v] = []
+                    vrs[v].append(cp)
+
+        jdc = json.dumps(vrs)
+        return jdc
+
+    ##  provides components for all variables
+    variableComponents = property(
+        __variableComponents,
+        doc='provides components for all variables')
+
+    ## provides description of all components
+    # \returns JSON string with description of all components
+    def __description(self):
+        dc = self.__profileManager.cpdescription(full=True)
+        jdc = json.dumps(dc)
+        return jdc
+
+    ##  provides description of all components
+    description = property(__description,
+                           doc='provides description of all components')
+
+    ## provides full names of pool devices
+    # \returns JSON string with full names of pool devices
+    def __fullDeviceNames(self):
+        pools = self.__selector.getPools()
+        return json.dumps(PoolUtils.getFullDeviceNames(pools))
+
+    ## provides full names of pool devices
+    fullDeviceNames = property(
+        __fullDeviceNames,
+        doc=' provides full names of pool devices')
+
+    ## provides available Timers from MacroServer pools
+    # \returns  available Timers from MacroServer pools
+    def __availableTimers(self):
+        pools = self.__selector.getPools()
+        return PoolUtils.getTimers(pools, self.timerFilterList)
+
+    ##  provides description of all components
+    availableTimers = property(
+        __availableTimers,
+        doc='provides available Timers from MacroServer pools')
+
 ##  commands
 
     ## executes command on configuration server
@@ -549,38 +603,6 @@ class Settings(object):
         fl = open(self.configFile, "r")
         self.__selector.set(json.load(fl))
 
-    ## provides components for all variables
-    # \returns dictionary with components for all variables
-    def __variableComponents(self):
-        acps = self.availableComponents()
-        vrs = {}
-        for cp in acps:
-            vr = self.__configCommand("componentVariables", cp) or []
-            if vr:
-                for v in vr:
-                    if v not in vrs:
-                        vrs[v] = []
-                    vrs[v].append(cp)
-
-        jdc = json.dumps(vrs)
-        return jdc
-
-    ##  provides components for all variables
-    variableComponents = property(
-        __variableComponents,
-        doc='provides components for all variables')
-
-    ## provides description of all components
-    # \returns JSON string with description of all components
-    def __description(self):
-        dc = self.__profileManager.cpdescription(full=True)
-        jdc = json.dumps(dc)
-        return jdc
-
-    ##  provides description of all components
-    description = property(__description,
-                           doc='provides description of all components')
-
     ## provides description of client datasources
     # \param cps component names
     # \returns JSON string with description of client datasources
@@ -614,17 +636,6 @@ class Settings(object):
                            "createConfiguration",
                            cp)
         return str(nexusconfig_device.xmlstring)
-
-    ## provides full names of pool devices
-    # \returns JSON string with full names of pool devices
-    def __fullDeviceNames(self):
-        pools = self.__selector.getPools()
-        return json.dumps(PoolUtils.getFullDeviceNames(pools))
-
-    ## provides full names of pool devices
-    fullDeviceNames = property(
-        __fullDeviceNames,
-        doc=' provides full names of pool devices')
 
     ##  sends ConfigVariables into ConfigServer
     #        and updates serialno if appendEntry selected
@@ -669,17 +680,6 @@ class Settings(object):
             inst = self.__selector.setConfigInstance()
             for name in avsel:
                 inst.deleteSelection(name)
-
-    ## provides available Timers from MacroServer pools
-    # \returns  available Timers from MacroServer pools
-    def __availableTimers(self):
-        pools = self.__selector.getPools()
-        return PoolUtils.getTimers(pools, self.timerFilterList)
-
-    ##  provides description of all components
-    availableTimers = property(
-        __availableTimers,
-        doc='provides available Timers from MacroServer pools')
 
     ## describe datasources
     # \param datasources list for datasource names
