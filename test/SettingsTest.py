@@ -363,7 +363,6 @@ class SettingsTest(unittest.TestCase):
                 if rs.value(nm) != se[nm]:
                     print ("DICT NAME %s" % nm)
                 self.assertEqual(rs.value(nm), se[nm])
-            
         self.assertEqual(rs.value("UNKNOWN_VARIABLE_34535"), '')
 
         print "MntGrp", rs.mntGrp
