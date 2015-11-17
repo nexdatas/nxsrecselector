@@ -49,7 +49,7 @@ from nxsrecconfig.MacroServerPools import MacroServerPools
 from nxsrecconfig.Selector import Selector
 from nxsrecconfig.Describer import Describer
 from nxsrecconfig.ProfileManager import ProfileManager
-from nxsrecconfig.Utils import TangoUtils, MSUtils
+from nxsrecconfig.Utils import TangoUtils, MSUtils, Utils
 from nxsconfigserver.XMLConfigurator import XMLConfigurator
 
 ## if 64-bit machione
@@ -6144,10 +6144,10 @@ class ProfileManagerTest(unittest.TestCase):
                             myct = ("ctrl_%s" % tm).replace("_", "/")
                             timers[myct] = tm
                             ctrls.append(myct)
-        #                print "TIMERSL", tms
-        #                print "TIMERSD", timers
+                        print "TIMERSL", tms
+                        print "TIMERSD", timers
                         ltimers[mg] = timers.values()
-        #                print "LTIMER", ltimers[mg]
+                        print "LTIMER", ltimers[mg]
 
                         for ds, vl in self.smychsXX.items():
                             if vl:
@@ -6434,21 +6434,21 @@ class ProfileManagerTest(unittest.TestCase):
                         self.assertEqual(
                             json.loads(se[mg]["Timer"]), ltimers[mg])
                         self.assertEqual(se[mg]["MntGrp"], mg)
-        #                    print "CNF", cnf
-        #                    print "CHDS", chds
+#                            print "CNF", cnf
+#                            print "CHDS", chds
                         myctrls = {}
                         fgtm = "/".join(
                             self.smychsXX[str(ltimers[mg][0])]['source'].split(
                                 "/")[:-1])
-        #                    print "EXPCH", [exp["name"] for exp in expch]
-        #                    print "CHDS", chds
+#                            print "EXPCH", [exp["name"] for exp in expch]
+#                            print "CHDS", chds
                         for cl in ctrls:
-        #                        print "CTRL", cl
+#                                print "CTRL", cl
                             tgc = {}
                             for exp in expch:
                                 ds = exp["name"]
-        #                            if cl == exp['controller']:
-        #                                print "DS", ds , ds in chds
+#                                if cl == exp['controller']:
+ #                                       print "DS", ds , ds in chds
                                 if ds in chds and cl == exp['controller']:
                                     if ds in self.smychsXX.keys():
                                         cnt = self.smychsXX[str(ds)]
@@ -6755,8 +6755,10 @@ class ProfileManagerTest(unittest.TestCase):
                     print "T1", json.loads(se[mg1]["Timer"])
                     print "T2", json.loads(se[mg2]["Timer"])
                     print "LT", json.loads(lse["Timer"])
+                    # ???
                     self.myAssertDict(
                         json.loads(lse["DataSourceGroup"]), ladss)
+                    # ???
                     self.assertEqual(set(json.loads(lse["HiddenElements"])),
                                      set(llhe))
 
@@ -6783,8 +6785,12 @@ class ProfileManagerTest(unittest.TestCase):
                     self.myAssertDict(tmpcf2, ltmpcf)
 
                     lmgt.importMntGrp()
-                    self.assertTrue(lmgt.isMntGrpChanged())
-                    self.assertTrue(lmgt.isMntGrpChanged())
+                    # ???
+
+                    ltmpcf2 = json.loads(lmgt.mntGrpConfiguration())
+                    if not Utils.compareDict(ltmpcf2, ltmpcf):
+                        self.assertTrue(lmgt.isMntGrpChanged())
+                        self.assertTrue(lmgt.isMntGrpChanged())
 
                     tmpcf1 = json.loads(mgt[mg1].mntGrpConfiguration())
                     tmpcf2 = json.loads(mgt[mg2].mntGrpConfiguration())
@@ -6835,8 +6841,6 @@ class ProfileManagerTest(unittest.TestCase):
 
                     # switch to active profile mg3
                     lse["MntGrp"] = mg2
-                    self.assertTrue(lmgt.isMntGrpChanged())
-                    self.assertTrue(lmgt.isMntGrpChanged())
                     MSUtils.setEnv('ActiveMntGrp', mg3, self._ms.ms.keys()[0])
 
                     tmpcf1 = json.loads(mgt[mg1].mntGrpConfiguration())

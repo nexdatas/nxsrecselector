@@ -320,7 +320,22 @@ class SettingsTest(unittest.TestCase):
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
 
-        se = self.openRecSelector()
+        rs = self.openRecSelector()
+        if isinstance(rs, Settings):
+            self.assertEqual(rs.numberOfThreads, 20)
+            self.assertEqual(rs.timerFilterList, ["*dgg*", "*/ctctrl0*"])
+            self.assertEqual(
+                rs.deviceGroups,
+                '{"timer": ["*exp_t*"], "dac": ["*exp_dac*"], '
+                '"counter": ["*exp_c*"], "mca": ["*exp_mca*"], '
+                '"adc": ["*exp_adc*"], "motor": ["*exp_mot*"]}')
+            self.assertEqual(rs.adminData, '[]')
+        self.assertEqual(rs.configFile, '/tmp/nxsrecconfig.cfg')
+
+        print "CONFIG", rs.configDevice
+        print "CONFIG", rs.door
+        print "DeviceGroups", rs.deviceGroups
+        print "AdminData", rs.adminData
 
 
 if __name__ == '__main__':

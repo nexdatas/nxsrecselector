@@ -383,7 +383,6 @@ class ProfileManager(object):
         tms = json.loads(self.__selector["Timer"])
         tms.extend(otimers)
 
-        hel2 = json.loads(self.__selector["HiddenElements"])
         for tm in tms:
             if tm in hel:
                 if tm in dsg.keys():
