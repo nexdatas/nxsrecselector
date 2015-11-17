@@ -1,6 +1,7 @@
 2015-11-XX Jan Kotanski <jankotan@gmail.com>
+	* removing unused methods from Settings
 	* fixes duplicated HiddenElements
-	* tagged as v1.22.1
+	* tagged as v1.23.0
 
 2015-11-11 Jan Kotanski <jankotan@gmail.com>
 	* adding getChannelSources into PoolUtils

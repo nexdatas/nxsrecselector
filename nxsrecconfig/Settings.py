@@ -88,7 +88,7 @@ class Settings(object):
     def __setupSelection(self):
         if not self.__server:
             self.fetchConfiguration()
-        ms = self.getMacroServer()
+        ms = self.__selector.getMacroServer()
         amntgrp = MSUtils.getEnv('ActiveMntGrp', ms)
         if amntgrp:
             self.__selector["MntGrp"] = amntgrp
@@ -333,7 +333,7 @@ class Settings(object):
     ## get method for dataSourceGroup attribute
     # \returns names of STEP dataSources
     def __getSTEPDataSources(self):
-        inst = self.setConfigInstance()
+        inst = self.__selector.setConfigInstance()
         if inst.stepdatasources:
             return list(inst.stepdatasources)
         else:
@@ -342,7 +342,7 @@ class Settings(object):
     ## set method for dataSourceGroup attribute
     # \param names of STEP dataSources
     def __setSTEPDataSources(self, names):
-        inst = self.setConfigInstance()
+        inst = self.__selector.setConfigInstance()
         names = names or []
         inst.stepdatasources = [str(nm) for nm in names]
 
@@ -437,13 +437,13 @@ class Settings(object):
     ## get method for ScanDir attribute
     # \returns name of ScanDir
     def __getScanDir(self):
-        ms = self.getMacroServer()
+        ms = self.__selector.getMacroServer()
         return str(MSUtils.getEnv('ScanDir', ms))
 
     ## set method for ScanDir attribute
     # \param name of ScanDir
     def __setScanDir(self, name):
-        ms = self.getMacroServer()
+        ms = self.__selector.getMacroServer()
         MSUtils.setEnv('ScanDir', str(name), ms)
 
     ## the json data string
@@ -453,7 +453,7 @@ class Settings(object):
     ## get method for ScanID attribute
     # \returns name of ScanID
     def __getScanID(self):
-        ms = self.getMacroServer()
+        ms = self.__selector.getMacroServer()
         sid = MSUtils.getEnv('ScanID', ms)
         if sid:
             return int(sid)
@@ -464,7 +464,7 @@ class Settings(object):
     ## set method for ScanID attribute
     # \param name of ScanID
     def __setScanID(self, name):
-        ms = self.getMacroServer()
+        ms = self.__selector.getMacroServer()
         MSUtils.setEnv('ScanID', name, ms)
 
     ## the json data string
@@ -474,14 +474,14 @@ class Settings(object):
     ## get method for ScanFile attribute
     # \returns name of ScanFile
     def __getScanFile(self):
-        ms = self.getMacroServer()
+        ms = self.__selector.getMacroServer()
         val = MSUtils.getEnv('ScanFile', ms)
         return [val] if isinstance(val, (str, unicode)) else val
 
     ## set method for ScanFile attribute
     # \param name of ScanFile
     def __setScanFile(self, name):
-        ms = self.getMacroServer()
+        ms = self.__selector.getMacroServer()
         if isinstance(name, (list, tuple)) and len(name) == 1:
             name = name[0]
         MSUtils.setEnv('ScanFile', name, ms)
@@ -492,21 +492,6 @@ class Settings(object):
 
 ##  commands
 
-    ## updates MacroServer for the given door server
-    # \param door current door server
-    def updateMacroServer(self, door):
-        return self.__msp.updateMacroServer(door)
-
-    ## provides the current macroserver name
-    # \returns macroserver name
-    def getMacroServer(self):
-        return self.__selector.getMacroServer()
-
-    ## sets config instances
-    # \returns set config instance
-    def setConfigInstance(self):
-        return self.__selector.setConfigInstance()
-
     ## executes command on configuration server
     # \returns command result
     def __configCommand(self, command, *var):
@@ -515,36 +500,25 @@ class Settings(object):
     ## mandatory components
     # \returns list of mandatory components
     def mandatoryComponents(self):
-        mc = self.__configCommand("mandatoryComponents")
-        mc = mc if mc else []
+        mc = self.__configCommand("mandatoryComponents") or []
         return mc
 
     ## available components
     # \returns list of available components
     def availableComponents(self):
-        ac = self.__configCommand("availableComponents")
-        ac = ac if ac else []
+        ac = self.__configCommand("availableComponents") or []
         return ac
 
     ## available selections
     # \returns list of available selections
     def availableSelections(self):
-        ac = self.__configCommand("availableSelections")
-        ac = ac if ac else []
+        ac = self.__configCommand("availableSelections") or []
         return ac
-
-    ## available components
-    # \returns list of component Variables
-    def componentVariables(self, name):
-        av = self.__configCommand("componentVariables", name)
-        av = av if av else []
-        return av
 
     ## available datasources
     # \returns list of available datasources
     def availableDataSources(self):
-        ad = self.__configCommand("availableDataSources")
-        ad = ad if ad else []
+        ad = self.__configCommand("availableDataSources") or []
         return ad
 
     ## available pool channels
@@ -578,15 +552,15 @@ class Settings(object):
     ## provides components for all variables
     # \returns dictionary with components for all variables
     def __variableComponents(self):
-        acp = self.availableComponents()
+        acps = self.availableComponents()
         vrs = {}
-        for c in acp:
-            vr = self.componentVariables(c)
+        for cp in acps:
+            vr = self.__configCommand("componentVariables", cp) or []
             if vr:
                 for v in vr:
                     if v not in vrs:
                         vrs[v] = []
-                    vrs[v].append(c)
+                    vrs[v].append(cp)
 
         jdc = json.dumps(vrs)
         return jdc
@@ -599,7 +573,7 @@ class Settings(object):
     ## provides description of all components
     # \returns JSON string with description of all components
     def __description(self):
-        dc = self.cpdescription(full=True)
+        dc = self.__profileManager.cpdescription(full=True)
         jdc = json.dumps(dc)
         return jdc
 
@@ -611,7 +585,7 @@ class Settings(object):
     # \param cps component names
     # \returns JSON string with description of client datasources
     def clientSources(self, cps):
-        nexusconfig_device = self.setConfigInstance()
+        nexusconfig_device = self.__selector.setConfigInstance()
         describer = Describer(nexusconfig_device)
         if cps:
             cp = cps
@@ -628,7 +602,7 @@ class Settings(object):
     # \param cps component names
     # \returns JSON string with description of client datasources
     def createConfiguration(self, cps):
-        nexusconfig_device = self.setConfigInstance()
+        nexusconfig_device = self.__selector.setConfigInstance()
         if cps:
             cp = cps
         else:
@@ -656,7 +630,7 @@ class Settings(object):
     #        and updates serialno if appendEntry selected
     def updateConfigVariables(self):
         confvars = self.configVariables
-        nexusconfig_device = self.setConfigInstance()
+        nexusconfig_device = self.__selector.setConfigInstance()
         jvars = json.loads(confvars)
         cvars = json.loads(nexusconfig_device.variables)
         ## appending scans to one file?
@@ -692,7 +666,7 @@ class Settings(object):
     def clearAllSelections(self):
         avsel = self.availableSelections()
         if avsel:
-            inst = self.setConfigInstance()
+            inst = self.__selector.setConfigInstance()
             for name in avsel:
                 inst.deleteSelection(name)
 
@@ -711,16 +685,9 @@ class Settings(object):
     # \param datasources list for datasource names
     # \returns list of dictionary with description of datasources
     def getSourceDescription(self, datasources):
-        nexusconfig_device = self.setConfigInstance()
+        nexusconfig_device = self.__selector.setConfigInstance()
         describer = Describer(nexusconfig_device)
         return describer.dataSources(datasources)
-
-    ## provides description of components
-    # \param full if True describes all available ones are taken
-    #        otherwise selectect, automatic and mandatory
-    # \returns description of required components
-    def cpdescription(self, full=False):
-        return self.__profileManager.cpdescription(full)
 
 # MntGrp methods
 
@@ -770,7 +737,7 @@ class Settings(object):
     # \param params datasource parameters
     # \returns dynamic component name
     def createDynamicComponent(self, params):
-        nexusconfig_device = self.setConfigInstance()
+        nexusconfig_device = self.__selector.setConfigInstance()
         dcpcreator = DynamicComponent(nexusconfig_device)
         if isinstance(params, (list, tuple)):
             if len(params) > 0 and params[0]:
@@ -809,7 +776,7 @@ class Settings(object):
     ## removes dynamic component
     # \param name dynamic component name
     def removeDynamicComponent(self, name):
-        nexusconfig_device = self.setConfigInstance()
+        nexusconfig_device = self.__selector.setConfigInstance()
         dcpcreator = DynamicComponent(nexusconfig_device)
         dcpcreator.remove(name)
 

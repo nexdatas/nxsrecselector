@@ -47,6 +47,7 @@ import TestMGSetUp
 
 from nxsrecconfig.MacroServerPools import MacroServerPools
 from nxsrecconfig.Selector import Selector
+from nxsrecconfig.ProfileManager import ProfileManager
 from nxsrecconfig.Describer import Describer
 from nxsrecconfig.Settings import Settings
 from nxsrecconfig.Utils import TangoUtils, MSUtils
@@ -311,8 +312,74 @@ class SettingsTest(unittest.TestCase):
     def openRecSelector(self):
         return Settings()
 
+    def subtest_constructor(self):
+        # properties
+
+        db = PyTango.Database()
+        msp = MacroServerPools(10)
+
+        icf = TangoUtils.getDeviceName(db, "NXSConfigServer")
+        idoor = TangoUtils.getDeviceName(db, "Door")
+        msp.getPools(idoor)
+
+        rs = self.openRecSelector()
+
+        se = Selector(msp)
+        pm = ProfileManager(se)
+        print "AMGs", pm.availableMntGrps()
+        amntgrp = MSUtils.getEnv('ActiveMntGrp', msp.getMacroServer(idoor))
+        print "ActiveMntGrp", amntgrp
+        self.assertEqual(rs.numberOfThreads, 20)
+        self.assertEqual(rs.timerFilterList, ["*dgg*", "*/ctctrl0*"])
+        # memorize attirbutes
+        self.assertEqual(
+            rs.deviceGroups,
+            '{"timer": ["*exp_t*"], "dac": ["*exp_dac*"], '
+            '"counter": ["*exp_c*"], "mca": ["*exp_mca*"], '
+            '"adc": ["*exp_adc*"], "motor": ["*exp_mot*"]}')
+        self.assertEqual(rs.adminData, '[]')
+        self.assertEqual(rs.configFile, '/tmp/nxsrecconfig.cfg')
+        self.assertEqual(rs.configDevice, icf)
+        self.assertEqual(rs.door, idoor)
+        cf = PyTango.DeviceProxy(rs.configDevice)
+        self.assertEqual(
+            cf.availableSelections(),
+            rs.availableSelections())
+        print "AMGs", pm.availableMntGrps()
+        print "AvSels", cf.availableSelections()
+        if amntgrp in pm.availableMntGrps():
+            self.assertEqual(rs.mntGrp, amntgrp)
+        elif cf.availableSelections():
+            self.assertEqual(rs.mntGrp, cf.availableSelections()[0])
+        else:
+            self.assertEqual('nxsmntgrp', amntgrp)
+        self.assertEqual(set(rs.names()),
+                         set([k[0] for k in self._keys]))
+
+        for nm in rs.names():
+            self.assertEqual(rs.value(nm), se[nm])
+        self.assertEqual(rs.value("UNKNOWN_VARIABLE_34535"), '')
+
+        print "MntGrp", rs.mntGrp
+        # memorize attirbutes
+        print "ConfigDevice", rs.configDevice
+        print "Door", rs.door
+        print "DeviceGroups", rs.deviceGroups
+        print "AdminData", rs.adminData
+
     ## constructor test
-    def test_constructor_keys(self):
+    def test_constructor(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+
+        self.subtest_constructor()
+
+    ## constructor test
+    def test_constructor_configDevice_door(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -321,21 +388,16 @@ class SettingsTest(unittest.TestCase):
                "MntGrp": 'nxsmntgrp'}
 
         rs = self.openRecSelector()
-        if isinstance(rs, Settings):
-            self.assertEqual(rs.numberOfThreads, 20)
-            self.assertEqual(rs.timerFilterList, ["*dgg*", "*/ctctrl0*"])
-            self.assertEqual(
-                rs.deviceGroups,
-                '{"timer": ["*exp_t*"], "dac": ["*exp_dac*"], '
-                '"counter": ["*exp_c*"], "mca": ["*exp_mca*"], '
-                '"adc": ["*exp_adc*"], "motor": ["*exp_mot*"]}')
-            self.assertEqual(rs.adminData, '[]')
-        self.assertEqual(rs.configFile, '/tmp/nxsrecconfig.cfg')
+        rs.configDevice = val["ConfigDevice"]
+        rs.door = val["Door"]
+        rs.mntGrp = val["MntGrp"]
+        self.assertEqual(rs.configDevice, val["ConfigDevice"])
+        self.assertEqual(rs.door, val["Door"])
+        self.assertEqual(rs.mntGrp, val["MntGrp"])
 
-        print "CONFIG", rs.configDevice
-        print "CONFIG", rs.door
-        print "DeviceGroups", rs.deviceGroups
-        print "AdminData", rs.adminData
+#        msp = MacroServerPools(10)
+
+#        self.assertEqual(msp.getMacroServer(), self._ms.ms.keys()[0])
 
 
 if __name__ == '__main__':

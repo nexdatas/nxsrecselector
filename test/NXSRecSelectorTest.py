@@ -32,6 +32,11 @@ import SettingsTest
 from nxsrecconfig import Settings
 import nxsrecconfig
 
+from nxsrecconfig.MacroServerPools import MacroServerPools
+from nxsrecconfig.Selector import Selector
+from nxsrecconfig.ProfileManager import ProfileManager
+from nxsrecconfig.Utils import TangoUtils, MSUtils
+
 
 ## test fixture
 class NXSRecSelectorTest(SettingsTest.SettingsTest):
@@ -87,6 +92,31 @@ class NXSRecSelectorTest(SettingsTest.SettingsTest):
         self.assertEqual(xmlc.state(), PyTango.DevState.ON)
 
         return xmlc
+
+    def subtest_constructor(self):
+        rs = self.openRecSelector()
+        msp = MacroServerPools(10)
+        se = Selector(msp)
+        se["Door"] = rs.door
+        se["ConfigDevice"] = rs.configDevice
+        pm = ProfileManager(se)
+        cf = PyTango.DeviceProxy(rs.configDevice)
+        print "AvSels", cf.availableSelections()
+        print "AMGs", pm.availableMntGrps()
+        amntgrp = MSUtils.getEnv('ActiveMntGrp', msp.getMacroServer(rs.door))
+        if amntgrp in pm.availableMntGrps():
+            self.assertEqual(rs.mntGrp, amntgrp)
+        elif cf.availableSelections():
+            self.assertEqual(rs.mntGrp, cf.availableSelections()[0])
+        else:
+            self.assertEqual('nxsmntgrp', amntgrp)
+
+        print "MntGrp", rs.mntGrp
+        # memorize attirbutes
+        print "ConfigDevice", rs.configDevice
+        print "Door", rs.door
+        print "DeviceGroups", rs.deviceGroups
+        print "AdminData", rs.adminData
 
 
 if __name__ == '__main__':
