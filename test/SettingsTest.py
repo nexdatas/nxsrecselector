@@ -384,7 +384,7 @@ class SettingsTest(unittest.TestCase):
         self.subtest_constructor()
 
     ## constructor test
-    def ttest_constructor_configDevice_door(self):
+    def test_constructor_configDevice_door(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
