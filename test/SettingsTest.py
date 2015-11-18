@@ -2037,6 +2037,9 @@ class SettingsTest(unittest.TestCase):
         rs = self.openRecSelector()
         rs.configDevice = val["ConfigDevice"]
         rs.door = val["Door"]
+        db = PyTango.Database()
+        db.put_device_property(self._ms.ms.keys()[0],
+                               {'PoolNames': self._pool.dp.name()})
         rs.mntGrp = val["MntGrp"]
         self.assertEqual(rs.configDevice, val["ConfigDevice"])
         self.assertEqual(rs.door, val["Door"])

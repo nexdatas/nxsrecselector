@@ -243,16 +243,13 @@ class ProfileManager(object):
         self.__updateMacroServer()
         self.__updateConfigServer()
         jconf = self.mntGrpConfiguration()
-        print("IMPORT MNTGRP")
         if self.__setFromMntGrpConf(jconf):
-            print("STORE MNTGRP %s" % jconf)
             self.__selector.storeSelection()
 
     ## fetch configuration
     def fetchProfile(self):
         if self.__selector.fetchSelection() is False:
             avmg = self.availableMntGrps()
-            print ("fetchProfile %s %s" % (self.__selector["MntGrp"] , avmg))
             if self.__selector["MntGrp"] in avmg:
                 self.__selector.deselect()
                 self.importMntGrp()
