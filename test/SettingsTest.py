@@ -1895,7 +1895,7 @@ class SettingsTest(unittest.TestCase):
         print "AdminData", rs.adminData
 
     ## constructor test
-    def ttest_constructor(self):
+    def test_constructor(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -1906,7 +1906,7 @@ class SettingsTest(unittest.TestCase):
         self.subtest_constructor()
 
     ## constructor test
-    def ttest_constructor_configDevice_door(self):
+    def test_constructor_configDevice_door(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -1924,7 +1924,7 @@ class SettingsTest(unittest.TestCase):
 
 
     ## constructor test
-    def ttest_mandatory_components(self):
+    def test_mandatory_components(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -1958,7 +1958,7 @@ class SettingsTest(unittest.TestCase):
         
 
     ## constructor test
-    def ttest_mandatory_components(self):
+    def test_mandatory_components(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -1992,7 +1992,7 @@ class SettingsTest(unittest.TestCase):
         
 
    ## constructor test
-    def ttest_available_components_datasources(self):
+    def test_available_components_datasources(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2034,20 +2034,23 @@ class SettingsTest(unittest.TestCase):
 
         wrong = []
 
-        rs = self.openRecSelector()
-        rs.configDevice = val["ConfigDevice"]
-        rs.door = val["Door"]
         db = PyTango.Database()
         db.put_device_property(self._ms.ms.keys()[0],
                                {'PoolNames': self._pool.dp.name()})
+        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        rs = self.openRecSelector()
+        rs.configDevice = val["ConfigDevice"]
+        rs.door = val["Door"]
         rs.mntGrp = val["MntGrp"]
+        
+        print "AMGs", rs.availableMeasurementGroups()
         self.assertEqual(rs.configDevice, val["ConfigDevice"])
         self.assertEqual(rs.door, val["Door"])
         self.assertEqual(rs.mntGrp, val["MntGrp"])
         self.assertEqual(set(rs.availableComponents()), set())
         self.assertEqual(set(rs.availableDataSources()), set())
         print("SEL %s" %  set(rs.availableSelections()))
-        self.assertEqual(set(rs.availableSelections()), set())
+        self.assertEqual(set(rs.availableSelections()), set([val["MntGrp"]]))
 
         self._cf.dp.SetCommandVariable(["SELDICT", json.dumps(self.mysel2)])
 

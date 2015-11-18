@@ -248,6 +248,7 @@ class ProfileManager(object):
 
     ## fetch configuration
     def fetchProfile(self):
+        self.__updateConfigServer()
         if self.__selector.fetchSelection() is False:
             avmg = self.availableMntGrps()
             if self.__selector["MntGrp"] in avmg:
@@ -322,6 +323,9 @@ class ProfileManager(object):
             if self.__selector["Timer"] != jtimers:
                 self.__selector["Timer"] = jtimers
                 changed = True
+        if self.__selector["MntGrp"] not in \
+           self.__configServer.availableSelections():
+            changed = True
         return changed
 
     def __clearChannels(self, dsg, hel):
