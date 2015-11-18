@@ -244,6 +244,7 @@ class ProfileManager(object):
         self.__updateConfigServer()
         jconf = self.mntGrpConfiguration()
         if self.__setFromMntGrpConf(jconf):
+            print("STORE MNTGRP %s" % jconf)
             self.__selector.storeSelection()
 
     ## fetch configuration
