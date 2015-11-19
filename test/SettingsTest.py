@@ -2043,15 +2043,12 @@ class SettingsTest(unittest.TestCase):
         rs.door = val["Door"]
         rs.mntGrp = val["MntGrp"]
         
-        print "AMGs", rs.availableMeasurementGroups()
         self.assertEqual(rs.configDevice, val["ConfigDevice"])
         self.assertEqual(rs.door, val["Door"])
         self.assertEqual(rs.mntGrp, val["MntGrp"])
         self.assertEqual(set(rs.availableComponents()), set())
         self.assertEqual(set(rs.availableDataSources()), set())
-        print("SEL %s" %  set(rs.availableSelections()))
-        self.assertEqual(set(rs.availableSelections()), set([val["MntGrp"]]))
-
+ 
         self._cf.dp.SetCommandVariable(["SELDICT", json.dumps(self.mysel2)])
 
         self.assertEqual(set(rs.availableSelections()), set(self.mysel2.keys()))
@@ -2061,3 +2058,4 @@ class SettingsTest(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+
