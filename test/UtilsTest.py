@@ -60,8 +60,7 @@ class DB(object):
             "Door": ['test/door/01', 'test/door/02', 'test/door/03'],
             "MacroServer": ['test/ms/01'],
             "TestServer": ['ttestp09/testts/t1r228'],
-            }
-        pass
+        }
 
     def get_device_exported_for_class(self, class_name, filter='*'):
         dd = Datum('device')
@@ -110,7 +109,7 @@ class NoServer(object):
         self.exe = False
         self.var = None
 
-    def testcommand(self,  var):
+    def testcommand(self, var):
         self.command = 'testcommand'
         self.var = var
         self.exe = True
@@ -328,12 +327,12 @@ class UtilsTest(unittest.TestCase):
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
 
         arr = {
-            "ScanDir": [u'/tmp/',  "/tmp/sardana/"],
+            "ScanDir": [u'/tmp/', "/tmp/sardana/"],
             "ScanFile": [[u'sar4r.nxs'], [u'sar4r.nxs', u'sar5r.nxs']],
             "ScanID": [192, 123],
             "ScanNone": ["", "Something new"],
             "_ViewOptions": [{'ShowDial': True}, {'ShowDial': False}],
-            }
+        }
 
         for k, vl in arr.items():
             self.assertEqual(
@@ -342,9 +341,9 @@ class UtilsTest(unittest.TestCase):
 
         for k, vl in arr.items():
             MSUtils.setEnv(k, vl[1],
-                         self._simps.new_device_info_writer.name)
+                           self._simps.new_device_info_writer.name)
             self.assertEqual(vl[1], MSUtils.getEnv(
-                    k, self._simps.new_device_info_writer.name))
+                k, self._simps.new_device_info_writer.name))
 
     ## getEnv test
     def test_getEnv(self):
@@ -352,12 +351,12 @@ class UtilsTest(unittest.TestCase):
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
 
         arr = {
-            "ScanDir": [u'/tmp/',  "/tmp/sardana/"],
+            "ScanDir": [u'/tmp/', "/tmp/sardana/"],
             "ScanFile": [[u'sar4r.nxs'], [u'sar4r.nxs', u'sar5r.nxs']],
             "ScanID": [192, 123],
             "blebleble": ["", "Something new"],
             "_ViewOptions": [{'ShowDial': True}, {'ShowDial': False}],
-            }
+        }
 
         for k, vl in arr.items():
             self.assertEqual(
@@ -373,7 +372,7 @@ class UtilsTest(unittest.TestCase):
                 'pickle',
                 pickle.dumps({'new': en}))
             self.assertEqual(vl[1], MSUtils.getEnv(
-                    k, self._simps.new_device_info_writer.name))
+                k, self._simps.new_device_info_writer.name))
 
     ## setEnv test
     def test_setEnv(self):
@@ -381,12 +380,12 @@ class UtilsTest(unittest.TestCase):
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
 
         arr = {
-            "ScanDir": [u'/tmp/',  "/tmp/sardana/"],
+            "ScanDir": [u'/tmp/', "/tmp/sardana/"],
             "ScanFile": [[u'sar4r.nxs'], [u'sar4r.nxs', u'sar5r.nxs']],
             "ScanID": [192, 123],
             "ScanNone": ["", "Something new"],
             "_ViewOptions": [{'ShowDial': True}, {'ShowDial': False}],
-            }
+        }
 
         for k, vl in arr.items():
             self.assertEqual(
@@ -395,12 +394,12 @@ class UtilsTest(unittest.TestCase):
 
         for k, vl in arr.items():
             MSUtils.setEnv(k, vl[1],
-                         self._simps.new_device_info_writer.name)
+                           self._simps.new_device_info_writer.name)
 
             self.assertEqual(self._simps.dp.Environment[0], 'pickle')
             en = pickle.loads(self._simps.dp.Environment[1])['new']
             self.assertEqual(en[k], MSUtils.getEnv(
-                    k, self._simps.new_device_info_writer.name))
+                k, self._simps.new_device_info_writer.name))
 
     ## setEnv test
     def test_usetEnv(self):
@@ -408,12 +407,12 @@ class UtilsTest(unittest.TestCase):
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
 
         arr = {
-            "ScanDir": [u'/tmp/',  "/tmp/sardana/"],
+            "ScanDir": [u'/tmp/', "/tmp/sardana/"],
             "ScanFile": [[u'sar4r.nxs'], [u'sar4r.nxs', u'sar5r.nxs']],
             "ScanID": [192, 123],
             "ScanNone": ["", "Something new"],
             "_ViewOptions": [{'ShowDial': True}, {'ShowDial': False}],
-            }
+        }
 
         for k, vl in arr.items():
             self.assertEqual(
@@ -426,7 +425,7 @@ class UtilsTest(unittest.TestCase):
             self.assertEqual(self._simps.dp.Environment[0], 'pickle')
             en = pickle.loads(self._simps.dp.Environment[1])['new']
             self.assertEqual('', MSUtils.getEnv(
-                    k, self._simps.new_device_info_writer.name))
+                k, self._simps.new_device_info_writer.name))
 
     ## getProxies test
     def test_getProxies(self):
@@ -442,8 +441,8 @@ class UtilsTest(unittest.TestCase):
                          self._simps.new_device_info_writer.name)
 
         dpl = TangoUtils.getProxies([
-                self._simps.new_device_info_writer.name,
-                self._simps2.new_device_info_writer.name])
+            self._simps.new_device_info_writer.name,
+            self._simps2.new_device_info_writer.name])
         self.assertEqual(len(dpl), 2)
         self.assertEqual(type(dpl[0]), PyTango.DeviceProxy)
         self.assertEqual(type(dpl[1]), PyTango.DeviceProxy)
@@ -525,11 +524,11 @@ class UtilsTest(unittest.TestCase):
             [self._simps.new_device_info_writer.name, 'test/door/2'],
             [self._simps2.new_device_info_writer.name, 'test/door/3'],
             ["", 'test/door/4'],
-            ]
+        ]
 
         self._simps2.dp.DoorList = [
             'test/door/2', 'test/door/3'
-            ]
+        ]
         db = DB()
         db.classdevices['MacroServer'] = [
             self._simps.new_device_info_writer.name,
@@ -549,11 +548,11 @@ class UtilsTest(unittest.TestCase):
             [self._simps.new_device_info_writer.name, 'test/door/2'],
             [self._simps2.new_device_info_writer.name, 'test/door/3'],
             ["", 'test/door/4'],
-            ]
+        ]
 
         self._simps2.dp.DoorList = [
             'test/door/2', 'test/door/3'
-            ]
+        ]
         db = DB()
         servers = db.get_device_exported_for_class(
             "MacroServer").value_string
@@ -578,12 +577,12 @@ class UtilsTest(unittest.TestCase):
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
 
         arr = [
-            {"name":"test/ct/01", "full_name":"counter_01/Value"},
-            {"name":"test/ct/02", "full_name":"counter_02/att"},
-            {"name":"test/ct/03", "full_name":"counter_03/value"},
-            {"name":"test/ct/04", "full_name":"counter_04/13"},
-            {"name":"null", "full_name":"counter_04"},
-            ]
+            {"name": "test/ct/01", "full_name": "counter_01/Value"},
+            {"name": "test/ct/02", "full_name": "counter_02/att"},
+            {"name": "test/ct/03", "full_name": "counter_03/value"},
+            {"name": "test/ct/04", "full_name": "counter_04/13"},
+            {"name": "null", "full_name": "counter_04"},
+        ]
 
         pool = Pool()
         pool.AcqChannelList = [json.dumps(a) for a in arr]
@@ -608,12 +607,13 @@ class UtilsTest(unittest.TestCase):
             ["test/ct/03", "counter_03", "value"],
             ["test/ct/04", "counter_04", "13"],
             ["null", "counter_04", ""],
-            ]
+        ]
 
         pool = Pool()
-        pool.AcqChannelList = [json.dumps(
-                {"name":a[0], "full_name":"%s/%s" % (a[1], a[2])})
-                               for a in arr]
+        pool.AcqChannelList = [
+            json.dumps(
+                {"name": a[0], "full_name": "%s/%s" % (a[1], a[2])})
+            for a in arr]
 
         for ar in arr:
             dd = PoolUtils.getFullDeviceNames([pool], [ar[0]])
@@ -635,23 +635,25 @@ class UtilsTest(unittest.TestCase):
             ["test/ct/03", "counter_03", "value"],
             ["test/ct/04", "counter_04", "13"],
             ["null", "counter_04", ""],
-            ]
+        ]
 
         arr2 = [
             ["test/mca/01", "mca_01", "1"],
             ["test/mca/02", "mca_02", "a"],
             ["test/sca/03", "my_sca_03", "1"],
             ["test/sca/04", "mysca_04", "123"],
-            ]
+        ]
 
         pool = Pool()
         pool2 = Pool()
-        pool.AcqChannelList = [json.dumps(
-                {"name":a[0], "full_name":"%s/%s" % (a[1], a[2])})
-                               for a in arr]
-        pool2.AcqChannelList = [json.dumps(
-                {"name":a[0], "full_name":"%s/%s" % (a[1], a[2])})
-                                for a in arr2]
+        pool.AcqChannelList = [
+            json.dumps(
+                {"name": a[0], "full_name": "%s/%s" % (a[1], a[2])})
+            for a in arr]
+        pool2.AcqChannelList = [
+            json.dumps(
+                {"name": a[0], "full_name": "%s/%s" % (a[1], a[2])})
+            for a in arr2]
 
         for ar in arr:
             dd = PoolUtils.getFullDeviceNames([pool, pool2], [ar[0]])
@@ -683,12 +685,12 @@ class UtilsTest(unittest.TestCase):
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
 
         arr = [
-            {"name":"test/ct/01", "full_name":"counter_01/Value"},
-            {"name":"test/ct/02", "full_name":"counter_02/att"},
-            {"name":"test/ct/03", "full_name":"counter_03/value"},
-            {"name":"test/ct/04", "full_name":"counter_04/13"},
-            {"name":"conternull", "full_name":"null"},
-            ]
+            {"name": "test/ct/01", "full_name": "counter_01/Value"},
+            {"name": "test/ct/02", "full_name": "counter_02/att"},
+            {"name": "test/ct/03", "full_name": "counter_03/value"},
+            {"name": "test/ct/04", "full_name": "counter_04/13"},
+            {"name": "conternull", "full_name": "null"},
+        ]
 
         pool = Pool()
         pool.AcqChannelList = [json.dumps(a) for a in arr]
@@ -713,12 +715,13 @@ class UtilsTest(unittest.TestCase):
             ["test/ct/03", "counter_03", "value"],
             ["test/ct/04", "counter_04", "13"],
             ["counter_04", "null", ""],
-            ]
+        ]
 
         pool = Pool()
-        pool.AcqChannelList = [json.dumps(
-                {"name":a[0], "full_name":"%s/%s" % (a[1], a[2])})
-                               for a in arr]
+        pool.AcqChannelList = [
+            json.dumps(
+                {"name": a[0], "full_name": "%s/%s" % (a[1], a[2])})
+            for a in arr]
 
         for ar in arr:
             dd = PoolUtils.getAliases([pool], [ar[1]])
@@ -740,23 +743,25 @@ class UtilsTest(unittest.TestCase):
             ["test/ct/03", "counter_03", "value"],
             ["test/ct/04", "counter_04", "13"],
             ["counter_04", "null", ""],
-            ]
+        ]
 
         arr2 = [
             ["test/mca/01", "mca_01", "1"],
             ["test/mca/02", "mca_02", "a"],
             ["test/sca/03", "my_sca_03", "1"],
             ["test/sca/04", "mysca_04", "123"],
-            ]
+        ]
 
         pool = Pool()
         pool2 = Pool()
-        pool.AcqChannelList = [json.dumps(
-                {"name":a[0], "full_name": "%s/%s" % (a[1], a[2])})
-                               for a in arr]
-        pool2.AcqChannelList = [json.dumps(
-                {"name":a[0], "full_name": "%s/%s" % (a[1], a[2])})
-                                for a in arr2]
+        pool.AcqChannelList = [
+            json.dumps(
+                {"name": a[0], "full_name": "%s/%s" % (a[1], a[2])})
+            for a in arr]
+        pool2.AcqChannelList = [
+            json.dumps(
+                {"name": a[0], "full_name": "%s/%s" % (a[1], a[2])})
+            for a in arr2]
 
         for ar in arr:
             dd = PoolUtils.getAliases([pool, pool2], [ar[1]])
@@ -788,12 +793,12 @@ class UtilsTest(unittest.TestCase):
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
 
         arr = [
-            {"name":"test/ct/01", "full_name":"mntgrp_01e"},
-            {"name":"test/ct/02", "full_name":"mntgrp_02att"},
-            {"name":"test/ct/03", "full_name":"mntgrp_03value"},
-            {"name":"test/ct/04", "full_name":"mntgrp_04/13"},
-            {"name":"null", "full_name":"mntgrp_04"},
-            ]
+            {"name": "test/ct/01", "full_name": "mntgrp_01e"},
+            {"name": "test/ct/02", "full_name": "mntgrp_02att"},
+            {"name": "test/ct/03", "full_name": "mntgrp_03value"},
+            {"name": "test/ct/04", "full_name": "mntgrp_04/13"},
+            {"name": "null", "full_name": "mntgrp_04"},
+        ]
 
         pool = Pool()
         pool.MeasurementGroupList = [json.dumps(a) for a in arr]
@@ -817,11 +822,11 @@ class UtilsTest(unittest.TestCase):
             ["test/ct/03", "mntgrp_03value"],
             ["test/ct/04", "mntgrp_0413"],
             ["null", "mntgrp_04"],
-            ]
+        ]
 
         pool = Pool()
         pool.MeasurementGroupList = [json.dumps(
-                {"name":a[0], "full_name":a[1]}) for a in arr]
+            {"name": a[0], "full_name": a[1]}) for a in arr]
 
         for ar in arr:
             dd = PoolUtils.getMntGrpName([pool], ar[0])
@@ -840,21 +845,21 @@ class UtilsTest(unittest.TestCase):
             ["test/ct/03", "mntgrp_03value"],
             ["test/ct/04", "mntgrp_0413"],
             ["null", "mntgrp_04"],
-            ]
+        ]
 
         arr2 = [
             ["test/mca/01", "mgca_011"],
             ["test/mca/02", "mgca_02a"],
             ["test/sca/03", "mgy_sca_031"],
             ["test/sca/04", "mntysca_04123"],
-            ]
+        ]
 
         pool = Pool()
         pool2 = Pool()
         pool.MeasurementGroupList = [json.dumps(
-                {"name":a[0], "full_name":a[1]}) for a in arr]
+            {"name": a[0], "full_name": a[1]}) for a in arr]
         pool2.MeasurementGroupList = [json.dumps(
-                {"name":a[0], "full_name":a[1]}) for a in arr2]
+            {"name": a[0], "full_name": a[1]}) for a in arr2]
 
         for ar in arr:
             dd = PoolUtils.getMntGrpName([pool, pool2], ar[0])
@@ -873,20 +878,20 @@ class UtilsTest(unittest.TestCase):
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
 
         arr = [
-            {"name":"test/ct/01", "full_name":"mntgrp_01e"},
-            {"name":"test/ct/02", "full_name":"mntgrp_02att"},
-            {"name":"test/ct/03", "full_name":"mntgrp_03value"},
-            {"name":"test/ct/04", "full_name":"mntgrp_04/13"},
-            {"name":"null", "full_name":"mntgrp_04"},
-            ]
+            {"name": "test/ct/01", "full_name": "mntgrp_01e"},
+            {"name": "test/ct/02", "full_name": "mntgrp_02att"},
+            {"name": "test/ct/03", "full_name": "mntgrp_03value"},
+            {"name": "test/ct/04", "full_name": "mntgrp_04/13"},
+            {"name": "null", "full_name": "mntgrp_04"},
+        ]
 
         arr2 = [
-            {"name":"test/ct/011", "full_name":"mntgrp_01e1"},
-            {"name":"test/ct/021", "full_name":"mntgrp_02att1"},
-            {"name":"test/ct/031", "full_name":"mntgrp_03value1"},
-            {"name":"test/ct/041", "full_name":"mntgrp_04/131"},
-            {"name":"null", "full_name":"mntgrp_041"},
-            ]
+            {"name": "test/ct/011", "full_name": "mntgrp_01e1"},
+            {"name": "test/ct/021", "full_name": "mntgrp_02att1"},
+            {"name": "test/ct/031", "full_name": "mntgrp_03value1"},
+            {"name": "test/ct/041", "full_name": "mntgrp_04/131"},
+            {"name": "null", "full_name": "mntgrp_041"},
+        ]
 
         pool = Pool()
         pool.MeasurementGroupList = [json.dumps(a) for a in arr]
@@ -911,12 +916,12 @@ class UtilsTest(unittest.TestCase):
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
 
         arr = [
-            {"name":"test/ct/01", "controller":"counter_01/Value"},
-            {"name":"test/ct/02", "controller":"counter_02/att"},
-            {"name":"test/ct/03", "controller":"counter_03/value"},
-            {"name":"test/ct/04", "controller":"counter_04/13"},
-            {"name":"null", "controller":"counter_04"},
-            ]
+            {"name": "test/ct/01", "controller": "counter_01/Value"},
+            {"name": "test/ct/02", "controller": "counter_02/att"},
+            {"name": "test/ct/03", "controller": "counter_03/value"},
+            {"name": "test/ct/04", "controller": "counter_04/13"},
+            {"name": "null", "controller": "counter_04"},
+        ]
 
         pool = Pool()
         pool.ExpChannelList = [json.dumps(a) for a in arr]
@@ -944,11 +949,11 @@ class UtilsTest(unittest.TestCase):
             ["test/ct/03", "counter_03value"],
             ["test/ct/04", "counter_0413"],
             ["null", "counter_04"],
-            ]
+        ]
 
         pool = Pool()
         pool.ExpChannelList = [json.dumps(
-                {"name":a[0], "controller":a[1]}) for a in arr]
+            {"name": a[0], "controller": a[1]}) for a in arr]
 
         for ar in arr:
             dd = PoolUtils.getDeviceControllers([pool], [ar[0]])
@@ -967,21 +972,21 @@ class UtilsTest(unittest.TestCase):
             ["test/ct/03", "counter_03alue"],
             ["test/ct/04", "counter_0413"],
             ["null", "counter_04"],
-            ]
+        ]
 
         arr2 = [
             ["test/mca/01", "mca_01"],
             ["test/mca/02", "mca_02"],
             ["test/sca/03", "my_sca1"],
             ["test/sca/04", "mysca_123"],
-            ]
+        ]
 
         pool = Pool()
         pool2 = Pool()
         pool.ExpChannelList = [json.dumps(
-                {"name":a[0], "controller":a[1]}) for a in arr]
+            {"name": a[0], "controller": a[1]}) for a in arr]
         pool2.ExpChannelList = [json.dumps(
-                {"name":a[0], "controller":a[1]}) for a in arr2]
+            {"name": a[0], "controller": a[1]}) for a in arr2]
 
         for ar in arr:
             dd = PoolUtils.getDeviceControllers([pool, pool2], [ar[0]])
@@ -1010,12 +1015,12 @@ class UtilsTest(unittest.TestCase):
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
 
         arr = [
-            {"name":"test/ct/01", "source":"counter_01/Value"},
-            {"name":"test/ct/02", "source":"counter_02/att"},
-            {"name":"test/ct/03", "source":"counter_03/value"},
-            {"name":"test/ct/04", "source":"counter_04/13"},
-            {"name":"null", "source":"counter_04"},
-            ]
+            {"name": "test/ct/01", "source": "counter_01/Value"},
+            {"name": "test/ct/02", "source": "counter_02/att"},
+            {"name": "test/ct/03", "source": "counter_03/value"},
+            {"name": "test/ct/04", "source": "counter_04/13"},
+            {"name": "null", "source": "counter_04"},
+        ]
 
         pool = Pool()
         pool.ExpChannelList = [json.dumps(a) for a in arr]
@@ -1043,11 +1048,11 @@ class UtilsTest(unittest.TestCase):
             ["test/ct/03", "counter_03value"],
             ["test/ct/04", "counter_0413"],
             ["null", "counter_04"],
-            ]
+        ]
 
         pool = Pool()
         pool.ExpChannelList = [json.dumps(
-                {"name":a[0], "source":a[1]}) for a in arr]
+            {"name": a[0], "source": a[1]}) for a in arr]
 
         for ar in arr:
             dd = PoolUtils.getChannelSources([pool], [ar[0]])
@@ -1066,21 +1071,21 @@ class UtilsTest(unittest.TestCase):
             ["test/ct/03", "counter_03alue"],
             ["test/ct/04", "counter_0413"],
             ["null", "counter_04"],
-            ]
+        ]
 
         arr2 = [
             ["test/mca/01", "mca_01"],
             ["test/mca/02", "mca_02"],
             ["test/sca/03", "my_sca1"],
             ["test/sca/04", "mysca_123"],
-            ]
+        ]
 
         pool = Pool()
         pool2 = Pool()
         pool.ExpChannelList = [json.dumps(
-                {"name":a[0], "source":a[1]}) for a in arr]
+            {"name": a[0], "source": a[1]}) for a in arr]
         pool2.ExpChannelList = [json.dumps(
-                {"name":a[0], "source":a[1]}) for a in arr2]
+            {"name": a[0], "source": a[1]}) for a in arr2]
 
         for ar in arr:
             dd = PoolUtils.getChannelSources([pool, pool2], [ar[0]])
@@ -1109,25 +1114,25 @@ class UtilsTest(unittest.TestCase):
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
 
         arr = [
-            {"name":"test/ct/01", "controller":"counter_01/Value"},
-            {"name":"test/ct/02", "controller":"counter_02/att"},
-            {"name":"test/ct/03", "controller":"counter_03/value"},
-            {"name":"test/ct/04", "controller":"counter_04/13"},
-            {"name":"null", "controller":"counter_04"},
-            ]
+            {"name": "test/ct/01", "controller": "counter_01/Value"},
+            {"name": "test/ct/02", "controller": "counter_02/att"},
+            {"name": "test/ct/03", "controller": "counter_03/value"},
+            {"name": "test/ct/04", "controller": "counter_04/13"},
+            {"name": "null", "controller": "counter_04"},
+        ]
 
         arr2 = [
             ["test/mca/01", "mca_01"],
             ["test/mca/02", "mca_02"],
             ["test/sca/03", "my_sca1"],
             ["test/sca/04", "mysca_123"],
-            ]
+        ]
 
         pool = Pool()
         pool2 = Pool()
         pool.ExpChannelList = [json.dumps(a) for a in arr]
         pool2.ExpChannelList = [json.dumps(
-                {"name":a[0], "controller":a[1]}) for a in arr2]
+            {"name": a[0], "controller": a[1]}) for a in arr2]
 
         import nxsrecconfig
         dd = PoolUtils.getExperimentalChannels([])
@@ -1149,25 +1154,25 @@ class UtilsTest(unittest.TestCase):
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
 
         arr = [
-            {"name":"test/ct/01", "controller":"counter_01/Value"},
-            {"name":"test/ct/02", "controller":"counter_02/att"},
-            {"name":"test/ct/03", "controller":"counter_03/value"},
-            {"name":"test/ct/04", "controller":"counter_04/13"},
-            {"name":"null", "controller":"counter_04"},
-            ]
+            {"name": "test/ct/01", "controller": "counter_01/Value"},
+            {"name": "test/ct/02", "controller": "counter_02/att"},
+            {"name": "test/ct/03", "controller": "counter_03/value"},
+            {"name": "test/ct/04", "controller": "counter_04/13"},
+            {"name": "null", "controller": "counter_04"},
+        ]
 
         arr2 = [
             ["test/mca/01", "mca_01"],
             ["test/mca/02", "mca_02"],
             ["test/sca/03", "my_sca1"],
             ["test/sca/04", "mysca_123"],
-            ]
+        ]
 
         pool = Pool()
         pool2 = Pool()
         pool.MotorList = [json.dumps(a) for a in arr]
         pool2.MotorList = [json.dumps(
-                {"name":a[0], "controller":a[1]}) for a in arr2]
+            {"name": a[0], "controller": a[1]}) for a in arr2]
 
         import nxsrecconfig
         dd = PoolUtils.getMotorNames([])
@@ -1191,14 +1196,14 @@ class UtilsTest(unittest.TestCase):
             ["test/ct/01", ["CTExpChannel"],
              "haso228k:10000/expchan/dgg2_exp_00/1/Value"],
             ["test/ct/02", ["conem", "CTExpChannel"],
-                            "haso228k:10000/expchan/dgg2_exp_01/1/Value"],
+             "haso228k:10000/expchan/dgg2_exp_01/1/Value"],
             ["test/ct/03", ["CTExpChannel", "ZeroDChannel"],
              "haso228k:10000/expchan/dgg2_exp_02/1/Value"],
             ["test/ct/04", ["oneD", "CTExpChannel"],
              "haso228k:10000/expchan/dgg2_exp_03/1/Value"],
             ["null", ["counter_04"],
              "haso228k:10000/expchan/dg2_exp_01/1/Value"],
-            ]
+        ]
 
         arr2 = [
             ["test/mca/01", ["CTExpChannel"],
@@ -1209,15 +1214,15 @@ class UtilsTest(unittest.TestCase):
              "haso228k:10000/expchan/dg2_exp_01/1/Value"],
             ["test/sca/04", ["CTExpChannel", "CTExpChannel2",
                              "CTExpChannel3"],
-            "haso228k:10000/expchan/dgg2_exp_01/1/Value"],
-            ]
+             "haso228k:10000/expchan/dgg2_exp_01/1/Value"],
+        ]
 
         pool = Pool()
         pool2 = Pool()
         pool.ExpChannelList = [json.dumps(
-                {"name":a[0], "interfaces":a[1], "source":a[2]}) for a in arr]
+            {"name": a[0], "interfaces": a[1], "source": a[2]}) for a in arr]
         pool2.ExpChannelList = [json.dumps(
-                {"name":a[0], "interfaces":a[1], "source":a[2]}) for a in arr2]
+            {"name": a[0], "interfaces": a[1], "source": a[2]}) for a in arr2]
 
         dd = PoolUtils.getTimers([])
         self.assertEqual(dd, [])
@@ -1242,21 +1247,21 @@ class UtilsTest(unittest.TestCase):
             ["test/ct/03", "counter_03alue"],
             ["test/ct/04", "counter_0413"],
             ["null", "counter_04"],
-            ]
+        ]
 
         arr2 = [
             ["test/mca/01", "mca_01"],
             ["test/mca/02", "mca_02"],
             ["test/sca/03", "my_sca1"],
             ["test/sca/04", "mysca_123"],
-            ]
+        ]
 
         pool = Pool()
         pool2 = Pool()
         pool.ExpChannelList = [json.dumps(
-                {"name":a[0], "controller":a[1]}) for a in arr]
+            {"name": a[0], "controller": a[1]}) for a in arr]
         pool2.ExpChannelList = [json.dumps(
-                {"name":a[0], "controller":a[1]}) for a in arr2]
+            {"name": a[0], "controller": a[1]}) for a in arr2]
 
         hsh = {}
         res = Utils.addDevice("", [], [], hsh, "", 0)
@@ -1283,14 +1288,14 @@ class UtilsTest(unittest.TestCase):
             ["test/ct/03", self._simps2.new_device_info_writer.name, "value"],
             ["test/ct/04", self._simps2.new_device_info_writer.name, "13"],
             ["null", self._simps2.new_device_info_writer.name, ""],
-            ]
+        ]
 
         aarr2 = [
             ["test/mca/01", "mca_01", "1"],
             ["test/mca/02", "mca_02", "a"],
             ["test/sca/03", "my_sca_03", "1"],
             ["test/sca/04", "mysca_04", "123"],
-            ]
+        ]
 
         arr = [
             ["test/ct/01", "cntl_01Value", ["CTExpChannel"]],
@@ -1298,7 +1303,7 @@ class UtilsTest(unittest.TestCase):
             ["test/ct/03", "cntl_03alue", ["CTExpChannel", "ZeroDChannel"]],
             ["test/ct/04", "cntl_0413", ["oneD", "CTExpChannel"]],
             ["null", "cntl_04", ["counter_04"]],
-            ]
+        ]
 
         arr2 = [
             ["test/mca/01", "mca_01", ["CTExpChannel"]],
@@ -1306,16 +1311,18 @@ class UtilsTest(unittest.TestCase):
             ["test/sca/03", "my_sca1", ["CTExpChannel2", "ZeroDChannel"]],
             ["test/sca/04", "mysca_123", ["CTExpChannel", "CTExpChannel2",
                                           "CTExpChannel3"]],
-            ]
+        ]
 
         pool = Pool()
         pool2 = Pool()
-        pool.ExpChannelList = [json.dumps(
-                {"name":a[0], "controller":a[1], "interfaces":a[2]})
-                               for a in arr]
-        pool2.ExpChannelList = [json.dumps(
-                {"name":a[0], "controller":a[1], "interfaces":a[2]})
-                                for a in arr2]
+        pool.ExpChannelList = [
+            json.dumps(
+                {"name": a[0], "controller": a[1], "interfaces": a[2]})
+            for a in arr]
+        pool2.ExpChannelList = [
+            json.dumps(
+                {"name": a[0], "controller": a[1], "interfaces": a[2]})
+            for a in arr2]
 
         hsh = {}
         self.myAssertRaise(PyTango.DevFailed, Utils.addDevice,
@@ -1326,12 +1333,14 @@ class UtilsTest(unittest.TestCase):
         fr['controllers'][arr[0][1]] = res
         self.assertEqual(hsh, fr)
 
-        pool.AcqChannelList = [json.dumps(
-                {"name":a[0], "full_name": "%s/%s" % (a[1], a[2])})
-                               for a in aarr]
-        pool2.AcqChannelList = [json.dumps(
-                {"name":a[0], "full_name": "%s/%s" % (a[1], a[2])})
-                                for a in aarr2]
+        pool.AcqChannelList = [
+            json.dumps(
+                {"name": a[0], "full_name": "%s/%s" % (a[1], a[2])})
+            for a in aarr]
+        pool2.AcqChannelList = [
+            json.dumps(
+                {"name": a[0], "full_name": "%s/%s" % (a[1], a[2])})
+            for a in aarr2]
 
         hsh = {}
         res = Utils.addDevice(arr[0][0], [], [pool, pool2], hsh, "", 0)
@@ -1340,17 +1349,19 @@ class UtilsTest(unittest.TestCase):
         fr = {}
         fr['controllers'] = {}
         fr['controllers'][arr[0][1]] = jres
-        ch = json.loads(self.chnl % (0, arr[0][0], "float64",
-                                     "1", arr[0][0], "", arr[0][1], aarr[0][1],
-                                     '"<mov>"',
-                                     "%s/%s" % (aarr[0][1], 'Value')))
+        ch = json.loads(
+            self.chnl % (0, arr[0][0], "float64",
+                         "1", arr[0][0], "", arr[0][1], aarr[0][1],
+                         '"<mov>"',
+                         "%s/%s" % (aarr[0][1], 'Value')))
         fr['controllers'][arr[0][1]]['units']['0']['channels'][aarr[0][1]] = ch
         self.myAssertDict(hsh, fr)
 
-        ch = json.loads(self.chnl % (0, arr[0][0], "float64", "1",
-                                     arr[0][0], "", arr[0][1], aarr[0][1],
-                                     '"<mov>"',
-                                     "%s/%s" % (aarr[0][1], 'Value')))
+        ch = json.loads(
+            self.chnl % (0, arr[0][0], "float64", "1",
+                         arr[0][0], "", arr[0][1], aarr[0][1],
+                         '"<mov>"',
+                         "%s/%s" % (aarr[0][1], 'Value')))
         fr['controllers'][arr[0][1]]['units']['0']['channels'][aarr[0][1]] = ch
         self.myAssertDict(hsh, fr)
 
@@ -1362,10 +1373,11 @@ class UtilsTest(unittest.TestCase):
         fr = {}
         fr['controllers'] = {}
         fr['controllers'][arr[0][1]] = jres
-        ch = json.loads(self.chnl % (0, arr[0][0], "float64", "1",
-                                     arr[0][0], "", arr[0][1], aarr[0][1],
-                                     '"<mov>"',
-                                "%s/%s" % (aarr[0][1], 'Value')))
+        ch = json.loads(
+            self.chnl % (0, arr[0][0], "float64", "1",
+                         arr[0][0], "", arr[0][1], aarr[0][1],
+                         '"<mov>"',
+                         "%s/%s" % (aarr[0][1], 'Value')))
         fr['controllers'][arr[0][1]]['units']['0']['channels'][aarr[0][1]] = ch
         self.myAssertDict(hsh, fr)
 
@@ -1379,7 +1391,7 @@ class UtilsTest(unittest.TestCase):
             ["test/ct/03", self._simps2.new_device_info_writer.name, "value"],
             ["test/ct/04", self._simps2.new_device_info_writer.name, "13"],
             ["null", self._simps2.new_device_info_writer.name, ""],
-            ]
+        ]
 
         arr = [
             ["test/ct/01", "cntl_01Value", ["CTExpChannel"]],
@@ -1387,14 +1399,14 @@ class UtilsTest(unittest.TestCase):
             ["test/ct/03", "cntl_03alue", ["CTExpChannel", "ZeroDChannel"]],
             ["test/ct/04", "cntl_01Value413", ["oneD", "CTExpChannel"]],
             ["null", "cntl_04", ["counter_04"]],
-            ]
+        ]
 
         aarr2 = [
             ["test/mca/01", self._simps.new_device_info_writer.name, "1"],
             ["test/mca/02", self._simps.new_device_info_writer.name, "a"],
             ["test/sca/03", self._simps2.new_device_info_writer.name, "1"],
             ["test/sca/04", self._simps2.new_device_info_writer.name, "123"],
-            ]
+        ]
 
         arr2 = [
             ["test/mca/01", "mca_01", ["CTExpChannel"]],
@@ -1402,23 +1414,27 @@ class UtilsTest(unittest.TestCase):
             ["test/sca/03", "my_sca1", ["CTExpChannel2", "ZeroDChannel"]],
             ["test/sca/04", "mysca_123", ["CTExpChannel", "CTExpChannel2",
                                           "CTExpChannel3"]],
-            ]
+        ]
 
         pool = Pool()
         pool2 = Pool()
-        pool.ExpChannelList = [json.dumps(
-                {"name":a[0], "controller":a[1], "interfaces":a[2]})
-                               for a in arr]
-        pool2.ExpChannelList = [json.dumps(
-                {"name":a[0], "controller":a[1], "interfaces":a[2]})
-                                for a in arr2]
+        pool.ExpChannelList = [
+            json.dumps(
+                {"name": a[0], "controller": a[1], "interfaces": a[2]})
+            for a in arr]
+        pool2.ExpChannelList = [
+            json.dumps(
+                {"name": a[0], "controller": a[1], "interfaces": a[2]})
+            for a in arr2]
 
-        pool.AcqChannelList = [json.dumps(
-                {"name":a[0], "full_name":"%s/%s" % (a[1], a[2])})
-                               for a in aarr]
-        pool2.AcqChannelList = [json.dumps(
-                {"name":a[0], "full_name":"%s/%s" % (a[1], a[2])})
-                                for a in aarr2]
+        pool.AcqChannelList = [
+            json.dumps(
+                {"name": a[0], "full_name": "%s/%s" % (a[1], a[2])})
+            for a in aarr]
+        pool2.AcqChannelList = [
+            json.dumps(
+                {"name": a[0], "full_name": "%s/%s" % (a[1], a[2])})
+            for a in aarr2]
 
         hsh = {}
         iindex = 123
@@ -1433,10 +1449,11 @@ class UtilsTest(unittest.TestCase):
         for i, a in enumerate(aarr):
             jres = json.loads(self.cnt % (a[1], a[1]))
             fr['controllers'][arr[i][1]] = jres
-            ch = json.loads(self.chnl % (iindex + i, a[0], "float64", "1",
-                                         a[0], "", arr[i][1], a[1],
-                                         '"<mov>"',
-                                    "%s/%s" % (a[1], 'Value')))
+            ch = json.loads(
+                self.chnl % (iindex + i, a[0], "float64", "1",
+                             a[0], "", arr[i][1], a[1],
+                             '"<mov>"',
+                             "%s/%s" % (a[1], 'Value')))
             fr['controllers'][arr[i][1]]['units']['0']['channels'][a[1]] = ch
         self.myAssertDict(hsh, fr)
 
@@ -1450,7 +1467,7 @@ class UtilsTest(unittest.TestCase):
             ["test/ct/03", self._simps2.new_device_info_writer.name, "value"],
             ["test/ct/04", self._simps2.new_device_info_writer.name, "13"],
             ["null", self._simps2.new_device_info_writer.name, ""],
-            ]
+        ]
 
         arr = [
             ["test/ct/01", "cntl_01Value", ["CTExpChannel"]],
@@ -1458,14 +1475,14 @@ class UtilsTest(unittest.TestCase):
             ["test/ct/03", "cntl_03alue", ["CTExpChannel", "ZeroDChannel"]],
             ["test/ct/04", "cntl_01Value413", ["oneD", "CTExpChannel"]],
             ["null", "cntl_04", ["counter_04"]],
-            ]
+        ]
 
         aarr2 = [
             ["test/mca/01", self._simps.new_device_info_writer.name, "1"],
             ["test/mca/02", self._simps.new_device_info_writer.name, "a"],
             ["test/sca/03", self._simps2.new_device_info_writer.name, "1"],
             ["test/sca/04", self._simps2.new_device_info_writer.name, "123"],
-            ]
+        ]
 
         arr2 = [
             ["test/mca/01", "mca_01", ["CTExpChannel"]],
@@ -1473,23 +1490,27 @@ class UtilsTest(unittest.TestCase):
             ["test/sca/03", "my_sca1", ["CTExpChannel2", "ZeroDChannel"]],
             ["test/sca/04", "mysca_123", ["CTExpChannel", "CTExpChannel2",
                                           "CTExpChannel3"]],
-            ]
+        ]
 
         pool = Pool()
         pool2 = Pool()
-        pool.ExpChannelList = [json.dumps(
-                {"name":a[0], "controller":a[1], "interfaces":a[2]})
-                               for a in arr]
-        pool2.ExpChannelList = [json.dumps(
-                {"name":a[0], "controller":a[1], "interfaces":a[2]})
-                                for a in arr2]
+        pool.ExpChannelList = [
+            json.dumps(
+                {"name": a[0], "controller": a[1], "interfaces": a[2]})
+            for a in arr]
+        pool2.ExpChannelList = [
+            json.dumps(
+                {"name": a[0], "controller": a[1], "interfaces": a[2]})
+            for a in arr2]
 
-        pool.AcqChannelList = [json.dumps(
-                {"name":a[0], "full_name":"%s/%s" % (a[1], a[2])})
-                               for a in aarr]
-        pool2.AcqChannelList = [json.dumps(
-                {"name":a[0], "full_name":"%s/%s" % (a[1], a[2])})
-                                for a in aarr2]
+        pool.AcqChannelList = [
+            json.dumps(
+                {"name": a[0], "full_name": "%s/%s" % (a[1], a[2])})
+            for a in aarr]
+        pool2.AcqChannelList = [
+            json.dumps(
+                {"name": a[0], "full_name": "%s/%s" % (a[1], a[2])})
+            for a in aarr2]
 
         hsh = {}
         iindex = 123
@@ -1534,21 +1555,21 @@ class UtilsTest(unittest.TestCase):
             ["test/ct/02", self._simps2.new_device_info_writer.name, "att"],
             ["test/ct/03", self._simps3.new_device_info_writer.name, "value"],
             ["test/ct/04", self._simps4.new_device_info_writer.name, "13"],
-            ]
+        ]
 
         arr = [
             ["test/ct/01", "cntl_01", ["CTExpChannel"]],
             ["test/ct/02", "cntl_01", ["conem", "CTExpChannel"]],
             ["test/ct/03", "cntl_01", ["CTExpChannel", "ZeroDChannel"]],
             ["test/ct/04", "cntl_01", ["oneD", "CTExpChannel"]],
-            ]
+        ]
 
         aarr2 = [
             ["test/mca/01", self._simps.new_device_info_writer.name, "1"],
             ["test/mca/02", self._simps.new_device_info_writer.name, "a"],
             ["test/sca/03", self._simps2.new_device_info_writer.name, "1"],
             ["test/sca/04", self._simps2.new_device_info_writer.name, "123"],
-            ]
+        ]
 
         arr2 = [
             ["test/mca/01", "mca_01", ["CTExpChannel"]],
@@ -1557,23 +1578,27 @@ class UtilsTest(unittest.TestCase):
             ["test/sca/04", "mysca_123", ["CTExpChannel",
                                           "CTExpChannel2",
                                           "CTExpChannel3"]],
-            ]
+        ]
 
         pool = Pool()
         pool2 = Pool()
-        pool.ExpChannelList = [json.dumps(
-                {"name":a[0], "controller":a[1], "interfaces":a[2]})
-                               for a in arr]
-        pool2.ExpChannelList = [json.dumps(
-                {"name":a[0], "controller":a[1], "interfaces":a[2]})
-                                for a in arr2]
+        pool.ExpChannelList = [
+            json.dumps(
+                {"name": a[0], "controller": a[1], "interfaces": a[2]})
+            for a in arr]
+        pool2.ExpChannelList = [
+            json.dumps(
+                {"name": a[0], "controller": a[1], "interfaces": a[2]})
+            for a in arr2]
 
-        pool.AcqChannelList = [json.dumps(
-                {"name":a[0], "full_name":"%s/%s" % (a[1], a[2])})
-                               for a in aarr]
-        pool2.AcqChannelList = [json.dumps(
-                {"name":a[0], "full_name":"%s/%s" % (a[1], a[2])})
-                               for a in aarr2]
+        pool.AcqChannelList = [
+            json.dumps(
+                {"name": a[0], "full_name": "%s/%s" % (a[1], a[2])})
+            for a in aarr]
+        pool2.AcqChannelList = [
+            json.dumps(
+                {"name": a[0], "full_name": "%s/%s" % (a[1], a[2])})
+            for a in aarr2]
 
         hsh = {}
         iindex = 123
@@ -1605,30 +1630,34 @@ class UtilsTest(unittest.TestCase):
             ["test/ct/02", self._simps2.new_device_info_writer.name, "att"],
             ["test/ct/03", self._simps3.new_device_info_writer.name, "value"],
             ["test/ct/04", self._simps4.new_device_info_writer.name, "13"],
-            ]
+        ]
 
         arr = [
             ["test/ct/01", "cntl_01", ["CTExpChannel"]],
             ["test/ct/02", "cntl_01", ["conem", "CTExpChannel"]],
             ["test/ct/03", "cntl_01", ["CTExpChannel", "ZeroDChannel"]],
             ["test/ct/04", "cntl_01", ["oneD", "CTExpChannel"]],
-            ]
+        ]
 
         pool = Pool()
         pool2 = Pool()
-        pool.ExpChannelList = [json.dumps(
-                {"name":a[0], "controller":a[1], "interfaces":a[2]})
-                               for a in arr[:2]]
-        pool2.ExpChannelList = [json.dumps(
-                {"name":a[0], "controller":a[1], "interfaces":a[2]})
-                                for a in arr[2:]]
+        pool.ExpChannelList = [
+            json.dumps(
+                {"name": a[0], "controller": a[1], "interfaces": a[2]})
+            for a in arr[:2]]
+        pool2.ExpChannelList = [
+            json.dumps(
+                {"name": a[0], "controller": a[1], "interfaces": a[2]})
+            for a in arr[2:]]
 
-        pool.AcqChannelList = [json.dumps(
-                {"name":a[0], "full_name":"%s/%s" % (a[1], a[2])})
-                               for a in aarr[:2]]
-        pool2.AcqChannelList = [json.dumps(
-                {"name":a[0], "full_name":"%s/%s" % (a[1], a[2])})
-                                for a in aarr[2:]]
+        pool.AcqChannelList = [
+            json.dumps(
+                {"name": a[0], "full_name": "%s/%s" % (a[1], a[2])})
+            for a in aarr[:2]]
+        pool2.AcqChannelList = [
+            json.dumps(
+                {"name": a[0], "full_name": "%s/%s" % (a[1], a[2])})
+            for a in aarr[2:]]
 
         hsh = {}
         iindex = 123
@@ -1726,29 +1755,29 @@ class UtilsTest(unittest.TestCase):
         arg = [
             ["", {}],
             ["Not initialised", {}],
-            ["some True", {"some":"True"}],
-            ["some trUe", {"some":"trUe"}],
-            ["some falSe", {"some":"falSe"}],
-            ["some False", {"some":"False"}],
+            ["some True", {"some": "True"}],
+            ["some trUe", {"some": "trUe"}],
+            ["some falSe", {"some": "falSe"}],
+            ["some False", {"some": "False"}],
             ["some,False;some2:sfd,som.e4 ;gdg",
-             {"some":"False", "some2":"sfd", "som.e4":"gdg"}],
-            ["some,False;some2:sfd,som.e4 gdg:",
-             {"some":"False", "some2":"sfd", "som.e4":"gdg"}],
+             {"some": "False", "some2": "sfd", "som.e4": "gdg"}],
+            ["some,False;some2:sfd,som.e4 gdg: ",
+             {"some": "False", "some2": "sfd", "som.e4": "gdg"}],
             ["some False some2 sfd some4 gdg",
-             {"some":"False", "some2":"sfd", "some4":"gdg"}],
-            ['{"some":"False","some2":"sfd","some4":"gdg"}',
-             {"some":"False", "some2":"sfd", "some4":"gdg"}],
-            ['{"some":false,"some2":true,"some4":"gdg"}',
-             {"some":False, "some2":True, "some4":"gdg"}],
+             {"some": "False", "some2": "sfd", "some4": "gdg"}],
+            ['{"some": "False","some2": "sfd","some4": "gdg"}',
+             {"some": "False", "some2": "sfd", "some4": "gdg"}],
+            ['{"some":false,"some2":true,"some4": "gdg"}',
+             {"some": False, "some2": True, "some4": "gdg"}],
             ['{"some":123,"some2":154.35,"some4":-34.4}',
-             {"some":123, "some2":154.35, "some4":-34.4}],
-            ]
+             {"some": 123, "some2": 154.35, "some4": -34.4}],
+        ]
 
         for ar in arg:
             self.myAssertDict(json.loads(
-                    Utils.stringToDictJson(ar[0])), ar[1])
+                Utils.stringToDictJson(ar[0])), ar[1])
             self.myAssertDict(json.loads(
-                    Utils.stringToDictJson(ar[0], False)), ar[1])
+                Utils.stringToDictJson(ar[0], False)), ar[1])
 
     def test_stringToDictJson_tobool(self):
         fun = sys._getframe().f_code.co_name
@@ -1759,23 +1788,23 @@ class UtilsTest(unittest.TestCase):
         arg = [
             ["", {}],
             ["Not initialised", {}],
-            ["some True", {"some":True}],
-            ["some trUe", {"some":True}],
-            ["some falSe", {"some":False}],
-            ["some False", {"some":False}],
+            ["some True", {"some": True}],
+            ["some trUe", {"some": True}],
+            ["some falSe", {"some": False}],
+            ["some False", {"some": False}],
             ["some False some2 sfd some4 gdg",
-             {"some":False, "some2":True, "some4":True}],
-            ['{"some":"False","some2":"sfd","some4":"gdg"}',
-             {"some":"False", "some2":"sfd", "some4":"gdg"}],
-            ['{"some":false,"some2":true,"some4":"gdg"}',
-             {"some":False, "some2":True, "some4":"gdg"}],
+             {"some": False, "some2": True, "some4": True}],
+            ['{"some": "False","some2": "sfd","some4": "gdg"}',
+             {"some": "False", "some2": "sfd", "some4": "gdg"}],
+            ['{"some":false,"some2":true,"some4": "gdg"}',
+             {"some": False, "some2": True, "some4": "gdg"}],
             ['{"some":123,"some2":154.35,"some4":-34.4}',
-             {"some":123, "some2":154.35, "some4":-34.4}],
-            ]
+             {"some": 123, "some2": 154.35, "some4": -34.4}],
+        ]
 
         for ar in arg:
             self.myAssertDict(json.loads(
-                    Utils.stringToDictJson(ar[0], True)), ar[1])
+                Utils.stringToDictJson(ar[0], True)), ar[1])
 
     def test_stringToListJson(self):
         fun = sys._getframe().f_code.co_name
@@ -1790,12 +1819,13 @@ class UtilsTest(unittest.TestCase):
             ["some False", ["some", "False"]],
             ["some False some2 sfd some4 gdg",
              ["some", "False", "some2", "sfd", "some4", "gdg"]],
-             ['["some","False","some2", "sfd","some4","gdg"]',
-             ["some", "False", "some2", "sfd", "some4", "gdg"]
-             ],
+            [
+                '["some","False","some2", "sfd","some4","gdg"]',
+                ["some", "False", "some2", "sfd", "some4", "gdg"]
+            ],
             ["some:False,some2 ;sfd;som.e4 gdg",
              ["some", "False", "some2", "sfd", "som.e4", "gdg"]],
-            ]
+        ]
 
         for ar in arg:
             self.assertEqual(json.loads(Utils.stringToListJson(ar[0])), ar[1])
@@ -1808,21 +1838,22 @@ class UtilsTest(unittest.TestCase):
             [{}, {}, True],
             ["{}", {}, False],
             [{}, [], False],
-            [{"some":False, "some2":True, "some4":True},
-             {"some":False, "some2":True, "some4":True}, True],
-            [{"some":12, "some2":True, "some4":True},
-             {"some":12, "some4":True, "some2":True}, True],
-            [{"some":False, "some2":True, "some4":True},
-             {"some":False, "some4":True, "some2":False}, False],
-            [{"some":12, "some2":True, "some4":True},
-             {"some":12, "some4":True, "som":True}, False],
-            [{"sdf":{"some":"sFalse", "some2":True, "some4":True}},
-             {"sdf":{"some":"sFalse", "some4":True, "some2":True}}, True],
-            [{"sdf":{"some":"sFalse", "some2":True, "some4":True}},
-             {"sdf":{"some1":"sFalse", "some4":True, "some2":True}}, False],
+            [{"some": False, "some2": True, "some4": True},
+             {"some": False, "some2": True, "some4": True}, True],
+            [{"some": 12, "some2": True, "some4": True},
+             {"some": 12, "some4": True, "some2": True}, True],
+            [{"some": False, "some2": True, "some4": True},
+             {"some": False, "some4": True, "some2": False}, False],
+            [{"some": 12, "some2": True, "some4": True},
+             {"some": 12, "some4": True, "som": True}, False],
+            [{"sdf": {"some": "sFalse", "some2": True, "some4": True}},
+             {"sdf": {"some": "sFalse", "some4": True, "some2": True}}, True],
+            [{"sdf": {"some": "sFalse", "some2": True, "some4": True}},
+             {"sdf": {"some1": "sFalse", "some4": True, "some2": True}},
+             False],
             [{"sdf": ["some", "sFalse", "some2", True, "some4", True]},
              {"sdf": ["some", "sFalse", "some2", True, "some4", True]}, True],
-            ]
+        ]
 
         for ar in arg:
             self.assertEqual(Utils.compareDict(ar[0], ar[1]), ar[2])
@@ -1836,7 +1867,7 @@ class UtilsTest(unittest.TestCase):
             ["asd", "asd"],
             ["asdf", u'asdf'],
             ["dffd", u'dffd'],
-               ]
+        ]
         for ar in arg:
             self.assertEqual(Utils.toString(ar[1]), ar[0])
             self.assertTrue(isinstance(Utils.toString(ar[0]), str))
@@ -1852,7 +1883,7 @@ class UtilsTest(unittest.TestCase):
             [["asd", "asdfd"], ["asd", "asdfd"]],
             [["asdf", "asdfasdf"], [u'asdf', u'asdfasdf']],
             [["dffd", 'sdfasdf'], [u'dffd', u'sdfasdf']],
-               ]
+        ]
         for ar in arg:
             self.assertEqual(Utils.toString(ar[1]), ar[0])
             for aa in ar[0]:
@@ -1863,12 +1894,12 @@ class UtilsTest(unittest.TestCase):
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
 
         arg = [
-            [{"asd":"asdfd"}, {"asd":"asdfd"}],
-            [{"asdf":"asdfasdf"}, {u'asdf': u'asdfasdf'}],
+            [{"asd": "asdfd"}, {"asd": "asdfd"}],
+            [{"asdf": "asdfasdf"}, {u'asdf': u'asdfasdf'}],
             [{"dffd": 'sdfasdf'}, {u'dffd': u'sdfasdf'}],
-            [{"asdf":"asdfasdf", "asdf123":"asdfasdf"},
+            [{"asdf": "asdfasdf", "asdf123": "asdfasdf"},
              {u'asdf': u'asdfasdf', u'asdf123': u'asdfasdf'}],
-               ]
+        ]
         for ar in arg:
             print ar
             self.assertEqual(Utils.toString(ar[1]), ar[0])
@@ -1881,12 +1912,12 @@ class UtilsTest(unittest.TestCase):
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
 
         arg = [
-            [[{"asd": "asdfd"}], [{"asd":"asdfd"}]],
+            [[{"asd": "asdfd"}], [{"asd": "asdfd"}]],
             [[{"asdf": "asdfasdf"}], [{u'asdf': u'asdfasdf'}]],
             [[{"dffd": 'sdfasdf'}], [{u'dffd': u'sdfasdf'}]],
-            [[{"asdf": "asdfasdf", "asdf123":"asdfasdf"}],
+            [[{"asdf": "asdfasdf", "asdf123": "asdfasdf"}],
              [{u'asdf': u'asdfasdf', u'asdf123': u'asdfasdf'}]],
-               ]
+        ]
         for ar in arg:
             print ar
             self.assertEqual(Utils.toString(ar[1]), ar[0])
@@ -1902,11 +1933,11 @@ class UtilsTest(unittest.TestCase):
         arg = [
             ["mycommand", None, "return"],
             ["mycommand1", ":asda", None],
-            ["mycommanwrd", {"sdf":"sdfsd"}, 342],
+            ["mycommanwrd", {"sdf": "sdfsd"}, 342],
             ["mycommanwrd", None, None],
             ["mycommansdfd", [], "rurn"],
             ["mmmand", None, []],
-            ]
+        ]
 
         for ar in arg:
             server = Server(ar[2])
@@ -1933,16 +1964,16 @@ class UtilsTest(unittest.TestCase):
         arg = [
             [None, "return"],
             [":asda", None],
-            [{"sdf":"sdfsd"}, 342],
+            [{"sdf": "sdfsd"}, 342],
             [None, None],
             [[], "rurn"],
             [None, []],
-            ]
+        ]
 
         for ar in arg:
             server = NoServer(ar[1])
             self.assertEqual(server.exe, False)
-            val = TangoUtils.command(server, "testcommand",  ar[0])
+            val = TangoUtils.command(server, "testcommand", ar[0])
             self.assertEqual(server.exe, True)
             self.assertEqual(server.command, "testcommand")
             self.assertEqual(server.var, ar[0])
@@ -1992,11 +2023,11 @@ class UtilsTest(unittest.TestCase):
             'ScalarDouble': [[], 'float64', 'GeV'],
             'ScalarString': [[], 'string', 'mm N'],
             'ScalarULong64': [[], 'uint64', ''],
-            }
+        }
 
         arr2 = {
             'ScalarEncoded': [[], 'encoded', 'No unit'],
-            }
+        }
 
         for k, ar in arr.items():
             ap = PyTango.AttributeProxy("ttestp09/testts/t1r228/%s" % k)
@@ -2005,16 +2036,16 @@ class UtilsTest(unittest.TestCase):
             ap.set_config(ac)
 
         for k, ar in arr.items():
-#            print k, ar
-            self.checkstu(TangoUtils.getShapeTypeUnit(
+            self.checkstu(
+                TangoUtils.getShapeTypeUnit(
                     "ttestp09/testts/t1r228/%s" % k),
-                          ar[0], ar[1], ar[2])
+                ar[0], ar[1], ar[2])
 
         for k, ar in arr2.items():
-#            print k, ar
-            self.checkstu(TangoUtils.getShapeTypeUnit(
+            self.checkstu(
+                TangoUtils.getShapeTypeUnit(
                     "ttestp09/testts/t1r228/%s" % k),
-                          ar[0], ar[1], ar[2])
+                ar[0], ar[1], ar[2])
 
     def test_command_getShapeTypeUnit_spectrum(self):
         fun = sys._getframe().f_code.co_name
@@ -2044,7 +2075,7 @@ class UtilsTest(unittest.TestCase):
             'SpectrumFloat': [[len(self._fmca1[0])], 'float32', 'eV'],
             'SpectrumDouble': [[len(self._fmca1[0])], 'float64', 'GeV'],
             'SpectrumString': [[len(self._dates[0])], 'string', 'mm N'],
-            }
+        }
 
         for k, ar in arr.items():
             ap = PyTango.AttributeProxy("ttestp09/testts/t1r228/%s" % k)
@@ -2053,10 +2084,9 @@ class UtilsTest(unittest.TestCase):
             ap.set_config(ac)
 
         for k, ar in arr.items():
-#            print k, ar
-            self.checkstu(TangoUtils.getShapeTypeUnit(
-                    "ttestp09/testts/t1r228/%s" % k),
-                          ar[0], ar[1], ar[2])
+            self.checkstu(
+                TangoUtils.getShapeTypeUnit("ttestp09/testts/t1r228/%s" % k),
+                ar[0], ar[1], ar[2])
 
     def test_command_getShapeTypeUnit_image(self):
         fun = sys._getframe().f_code.co_name
@@ -2098,7 +2128,7 @@ class UtilsTest(unittest.TestCase):
                             'float64', 'GeV'],
             'ImageString': [[len(self._dates2[0]), len(self._dates2[0][0])],
                             'string', 'mm N'],
-            }
+        }
 
         for k, ar in arr.items():
             ap = PyTango.AttributeProxy("ttestp09/testts/t1r228/%s" % k)
@@ -2109,8 +2139,8 @@ class UtilsTest(unittest.TestCase):
         for k, ar in arr.items():
             print k, ar
             self.checkstu(TangoUtils.getShapeTypeUnit(
-                    "ttestp09/testts/t1r228/%s" % k),
-                          ar[0], ar[1], ar[2])
+                "ttestp09/testts/t1r228/%s" % k
+            ), ar[0], ar[1], ar[2])
 
     def test_getSource(self):
         fun = sys._getframe().f_code.co_name
@@ -2123,7 +2153,7 @@ class UtilsTest(unittest.TestCase):
                'ScalarLong', 'ScalarULong', 'ScalarLong64', 'ScalarFloat',
                'ScalarDouble', 'ScalarString', 'ScalarULong64',
                'SpectrumBoolean', 'SpectrumUChar', 'SpectrumShort',
-               'SpectrumUShort',  'SpectrumLong', 'SpectrumULong',
+               'SpectrumUShort', 'SpectrumLong', 'SpectrumULong',
                'SpectrumLong64', 'SpectrumULong64', 'SpectrumFloat',
                'SpectrumDouble', 'SpectrumString', 'ImageBoolean',
                'ImageUChar', 'ImageShort', 'ImageUShort', 'ImageLong',

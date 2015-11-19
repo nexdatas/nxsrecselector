@@ -50,7 +50,7 @@ class TestCommand(Command):
     ## finalizes options
     def finalize_options(self):
         pass
-    
+
     ## runs command
     def run(self):
         import sys
@@ -63,7 +63,7 @@ class TestCommand(Command):
 required = [
     'numpy (>=1.5.0)',
     'PyTango (>=7.2.2)'
-    ]
+]
 
 ## metadata for distutils
 SETUPDATA = dict(
