@@ -106,7 +106,6 @@ class TestMacroServerSetUp(object):
                 if dpcnt == len(devices):
                     found = True
             except Exception as e:
-#                print str(e)
                 found = False
             cnt += 1
         print ""
@@ -135,6 +134,7 @@ class TestMacroServerSetUp(object):
             if len(sr) > 2:
                 subprocess.call(
                     "kill -9 %s" % sr[1], stderr=subprocess.PIPE, shell=True)
+
 
 if __name__ == "__main__":
     simps = TestMacroServerSetUp()

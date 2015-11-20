@@ -158,14 +158,14 @@ class ProfileManagerTest(unittest.TestCase):
             ("WriterDevice", ''),
             ("Door", ''),
             ("MntGrp", '')
-            ]
+        ]
 
         self.mysel = {
             'mysl': (
                 '{}'),
             'mysl2': (
                 json.dumps({key: value for (key, value) in self._keys})),
-            }
+        }
 
         self.mysel2 = {
             'mntgrp_01e': (
@@ -178,7 +178,7 @@ class ProfileManagerTest(unittest.TestCase):
                 json.dumps({key: value for (key, value) in self._keys})),
             'mntgrp_012313': (
                 json.dumps({key: value for (key, value) in self._keys})),
-            }
+        }
 
         self.mycps = {
             'mycp': (
@@ -327,7 +327,7 @@ class ProfileManagerTest(unittest.TestCase):
                 '</dimensions><strategy mode="STEP"/>'
                 '<datasource type="CLIENT"><record name="p09/mca/exp.02"/>'
                 '</datasource></field></group></group></group></definition>'
-                ),
+            ),
 
             'scan2': (
                 '<definition><group type="NXentry" name="entry1">'
@@ -347,7 +347,7 @@ class ProfileManagerTest(unittest.TestCase):
                 '<datasource type="CLIENT"  name="mca">'
                 '<record name="p09/mca/exp.02"/>'
                 '</datasource></field></group></group></group></definition>'
-                ),
+            ),
             'scan3': (
                 '<definition><group type="NXentry" name="entry1">'
                 '<group type="NXinstrument" name="instrument">'
@@ -366,60 +366,64 @@ class ProfileManagerTest(unittest.TestCase):
                 '<datasource type="CLIENT"  name="mca">'
                 '<record name="p09/mca/exp.02"/>'
                 '</datasource></field></group></group></group></definition>'
-                ),
+            ),
 
-            }
+        }
 
         self.rescps = {
             'mycp': {},
             'mycp2': {},
             'mycp3': {'ann': [('STEP', 'TANGO', '', None, None)]},
             'exp_t01': {'exp_t01': [
-                    ('STEP', 'CLIENT', 'haso228k:10000/expchan/dgg2_exp_01/1',
-                     'NX_FLOAT', None)]},
+                ('STEP', 'CLIENT', 'haso228k:10000/expchan/dgg2_exp_01/1',
+                 'NX_FLOAT', None)]},
             'dim1': {'tann1c': [
-                    ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8', [34])]},
+                ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8', [34])]},
             'dim2': {'tann1c': [
-                    ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8',
-                     ['$datasource.ann'])]},
+                ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8',
+                 ['$datasource.ann'])]},
             'dim3': {'tann1c': [
-                    ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8',
-                     [1234])]},
+                ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8',
+                 [1234])]},
             'dim4': {'tann1c': [
-                    ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8',
-                     ['$datasource.ann2'])]},
-            'dim5': {'tann1c': [
+                ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8',
+                 ['$datasource.ann2'])]},
+            'dim5': {
+                'tann1c': [
                     ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8',
                      ['$datasource.ann'])],
-                     'ann': [('CONFIG', 'TANGO', '', None, None)],
-                     },
+                'ann': [('CONFIG', 'TANGO', '', None, None)],
+            },
             'dim6': {'tann1c': [
-                    ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8',
-                     ['$datasource.ann', 123])]},
+                ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8',
+                 ['$datasource.ann', 123])]},
             'dim7': {'tann1c': [
-                    ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8',
-                     [None, None])]},
+                ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8',
+                 [None, None])]},
             'dim8': {'tann1c': [
-                    ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8',
-                     [None, 123])]},
-            'scan': {'__unnamed__1': [('STEP', 'CLIENT', 'exp_c01',
-                                       'NX_FLOAT', None)],
-                     '__unnamed__2': [('STEP', 'CLIENT', 'exp_c02',
-                                       'NX_FLOAT', None)],
-                     '__unnamed__3': [('STEP', 'CLIENT', 'p09/mca/exp.02',
-                                       'NX_FLOAT', [2048])],
-                     },
-            'scan2': {'c01': [('STEP', 'CLIENT', 'exp_c01', 'NX_FLOAT', None)],
-                      'c02': [('STEP', 'CLIENT', 'exp_c02', 'NX_FLOAT', None)],
-                      'mca': [('STEP', 'CLIENT', 'p09/mca/exp.02', 'NX_FLOAT',
-                               [2048])],
-                     },
-            'scan3': {'c01': [('STEP', 'CLIENT', 'exp_c01', 'NX_FLOAT', None),
-                              ('INIT', 'CLIENT', 'exp_c01', 'NX_FLOAT', None)],
-                      'mca': [('STEP', 'CLIENT', 'p09/mca/exp.02', 'NX_FLOAT',
-                               [2048])],
-                     },
-            }
+                ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8',
+                 [None, 123])]},
+            'scan': {
+                '__unnamed__1': [('STEP', 'CLIENT', 'exp_c01',
+                                  'NX_FLOAT', None)],
+                '__unnamed__2': [('STEP', 'CLIENT', 'exp_c02',
+                                  'NX_FLOAT', None)],
+                '__unnamed__3': [('STEP', 'CLIENT', 'p09/mca/exp.02',
+                                  'NX_FLOAT', [2048])],
+            },
+            'scan2': {
+                'c01': [('STEP', 'CLIENT', 'exp_c01', 'NX_FLOAT', None)],
+                'c02': [('STEP', 'CLIENT', 'exp_c02', 'NX_FLOAT', None)],
+                'mca': [('STEP', 'CLIENT', 'p09/mca/exp.02', 'NX_FLOAT',
+                         [2048])],
+            },
+            'scan3': {
+                'c01': [('STEP', 'CLIENT', 'exp_c01', 'NX_FLOAT', None),
+                        ('INIT', 'CLIENT', 'exp_c01', 'NX_FLOAT', None)],
+                'mca': [('STEP', 'CLIENT', 'p09/mca/exp.02', 'NX_FLOAT',
+                         [2048])],
+            },
+        }
 
         self.smycps = {
             'smycp': (
@@ -450,20 +454,20 @@ class ProfileManagerTest(unittest.TestCase):
                 '<field name="short">'
                 '$datasources.client_short<strategy mode="STEP"/></field>'
                 '</group></definition>'),
-            }
+        }
 
         self.smycpsstep = {
             'smycp': ("scalar_long", "scalar_short"),
             'smycp2': ("spectrum_short",),
             'smycp3': ("image_short",),
             'smycpnt1': ("client_short",),
-            }
+        }
         self.smycpsstep2 = {
             's2mycp': ("scalar2_long", "scalar2_short"),
             's2mycp2': ("spectrum2_long",),
             's2mycp3': ("image2_long",),
             's2mycpnt1': ("client2_short",),
-            }
+        }
 
         self.smycps2 = {
             's2mycp': (
@@ -494,7 +498,7 @@ class ProfileManagerTest(unittest.TestCase):
                 '<field name="short">'
                 '$datasources.client2_short<strategy mode="STEP"/></field>'
                 '</group></definition>'),
-            }
+        }
 
         self.smydss = {
             'scalar_long': (
@@ -685,7 +689,7 @@ class ProfileManagerTest(unittest.TestCase):
                 ('<definition><datasource type="CLIENT" name="client_short">'
                  '<record name="ClientShort"/>'
                  '</datasource></definition>'),
-            }
+        }
 
         self.smydssXX = {
             'scalar2_long': (
@@ -878,7 +882,7 @@ class ProfileManagerTest(unittest.TestCase):
                 ('<definition><datasource type="CLIENT" name="client2_short">'
                  '<record name="ClientShort"/>'
                  '</datasource></definition>'),
-            }
+        }
 
         self.smychs = {
             'scalar_long': {
@@ -1136,7 +1140,7 @@ class ProfileManagerTest(unittest.TestCase):
                 'source': 'ttestp09/testts/t1r228/ImageUChar'},
             'client_long': {},
             'client_short': {},
-            }
+        }
 
         self.smychsXX = {
             'scalar2_long': {
@@ -1394,7 +1398,7 @@ class ProfileManagerTest(unittest.TestCase):
                 'source': 'ttestp09/testts/t36r228/ImageUChar'},
             'client2_long': {},
             'client2_short': {},
-            }
+        }
 
         self.smydss2 = {
             'scalar2_long':
@@ -1593,7 +1597,7 @@ class ProfileManagerTest(unittest.TestCase):
                 ('<definition><datasource type="CLIENT" name="client2_short">'
                  '<record name="Client2Short"/>'
                  '</datasource></definition>'),
-            }
+        }
 
         self.mydss = {
             'nn':
@@ -1612,23 +1616,23 @@ class ProfileManagerTest(unittest.TestCase):
             'ann5': ('<definition><datasource type="NEW" name="ann5">'
                      '</datasource></definition>'),
             'tann0': ('<definition><datasource type="TANGO" name="tann0">'
-                     '<record name="myattr"/>'
-                     '<device port="12345" encoding="sfd" hostname="sf" '
-                     'member="attribute" name="dsff"/>'
-                     '</datasource></definition>'),
+                      '<record name="myattr"/>'
+                      '<device port="12345" encoding="sfd" hostname="sf" '
+                      'member="attribute" name="dsff"/>'
+                      '</datasource></definition>'),
             'tann1': ('<definition><datasource type="TANGO" name="tann1">'
-                     '<record name="myattr2"/>'
-                     '<device port="10000" encoding="sfd" hostname="sfa" '
-                     'member="attribute" name="dsf"/>'
-                     '</datasource></definition>'),
+                      '<record name="myattr2"/>'
+                      '<device port="10000" encoding="sfd" hostname="sfa" '
+                      'member="attribute" name="dsf"/>'
+                      '</datasource></definition>'),
             'tann1b': ('<definition><datasource type="TANGO" name="tann1b">'
-                     '<record name="myattr2"/>'
-                     '<device member="attribute" name="dsf"/>'
-                     '</datasource></definition>'),
+                       '<record name="myattr2"/>'
+                       '<device member="attribute" name="dsf"/>'
+                       '</datasource></definition>'),
             'tann1c': ('<definition><datasource type="TANGO" name="tann1c">'
-                     '<record name="myattr2"/>'
-                     '<device member="attribute" name="dsf/sd/we"/>'
-                     '</datasource></definition>'),
+                       '<record name="myattr2"/>'
+                       '<device member="attribute" name="dsf/sd/we"/>'
+                       '</datasource></definition>'),
             'P1M_postrun': (
                 '<definition>'
                 '<datasource type="PYEVAL" name="P1M_postrun">'
@@ -1662,8 +1666,8 @@ class ProfileManagerTest(unittest.TestCase):
                 '<record name="p02/slt/exp.07"/>'
                 '</datasource>'
                 '</definition>'
-                ),
-            }
+            ),
+        }
 
         self.resdss = {
             'nn': ("nn", "TANGO", ""),
@@ -1681,7 +1685,7 @@ class ProfileManagerTest(unittest.TestCase):
             'dbtest': ('dbtest', "DB", ""),
             'dbds': ('dbds', "DB", ""),
             'slt1vgap': ('slt1vgap', "CLIENT", "p02/slt/exp.07"),
-            }
+        }
 
     ## test starter
     # \brief Common set up
@@ -1732,15 +1736,12 @@ class ProfileManagerTest(unittest.TestCase):
         self.assertEqual(sorted(set(rv[0].keys())), sorted(cv))
         for i in range(1):
             for cp, vl in rv[i].items():
-#                print "CP", cp
                 cres = self.rescps[cp]
                 cresk = [ds for ds in cres.keys()
                          if self.dsfilter(cres[ds], strategy, dstype)]
 
                 self.assertEqual(sorted(vl.keys()), sorted(cresk))
                 for ds in cresk:
-#                    print "C1", sorted(cres[ds])
-#                    print "C2", sorted(vl[ds])
                     self.assertEqual(
                         sorted(self.dsfilter(cres[ds], strategy, dstype)),
                         sorted(vl[ds]))
@@ -1823,7 +1824,6 @@ class ProfileManagerTest(unittest.TestCase):
             logger.debug("%s  in %s" % (str(k), str(dct2.keys())))
             self.assertTrue(k in dct2.keys())
             if isinstance(v, dict):
-#                print "KEY", k
                 self.myAssertDict(v, dct2[k])
             else:
                 logger.debug("%s , %s" % (str(v), str(dct2[k])))
@@ -1880,12 +1880,12 @@ class ProfileManagerTest(unittest.TestCase):
         self.assertEqual(mgt.availableMntGrps(), [])
 
         arr = [
-            {"name":"test/ct/01", "full_name":"mntgrp_01e"},
-            {"name":"test/ct/02", "full_name":"mntgrp_02att"},
-            {"name":"test/ct/03", "full_name":"mntgrp_03value"},
-            {"name":"test/ct/04", "full_name":"mntgrp_04/13"},
-            {"name":"null", "full_name":"mntgrp_04"},
-            ]
+            {"name": "test/ct/01", "full_name": "mntgrp_01e"},
+            {"name": "test/ct/02", "full_name": "mntgrp_02att"},
+            {"name": "test/ct/03", "full_name": "mntgrp_03value"},
+            {"name": "test/ct/04", "full_name": "mntgrp_04/13"},
+            {"name": "null", "full_name": "mntgrp_04"},
+        ]
 
         pool.MeasurementGroupList = [json.dumps(a) for a in arr]
 
@@ -1929,29 +1929,30 @@ class ProfileManagerTest(unittest.TestCase):
             tpool2.setUp()
 
             db = PyTango.Database()
-            db.put_device_property(self._ms.ms.keys()[0],
-                                   {'PoolNames': [
-                        tpool2.dp.name(), self._pool.dp.name()]})
+            db.put_device_property(
+                self._ms.ms.keys()[0],
+                {'PoolNames': [
+                    tpool2.dp.name(), self._pool.dp.name()]})
             pool = self._pool.dp
             pool2 = tpool2.dp
             self._ms.dps[self._ms.ms.keys()[0]].Init()
 
             self.assertEqual(mgt.availableMntGrps(), [])
             arr1 = [
-                {"name":"test/ct/01", "full_name":"mntgrp_01e"},
-                {"name":"test/ct/02", "full_name":"mntgrp_02att"},
-                {"name":"test/ct/03", "full_name":"mntgrp_03value"},
-                {"name":"test/ct/04", "full_name":"mntgrp_04/13"},
-                {"name":"null", "full_name":"mntgrp_04"},
-                ]
+                {"name": "test/ct/01", "full_name": "mntgrp_01e"},
+                {"name": "test/ct/02", "full_name": "mntgrp_02att"},
+                {"name": "test/ct/03", "full_name": "mntgrp_03value"},
+                {"name": "test/ct/04", "full_name": "mntgrp_04/13"},
+                {"name": "null", "full_name": "mntgrp_04"},
+            ]
 
             arr2 = [
-                {"name":"test/ct/011", "full_name":"mntgrp_01e1"},
-                {"name":"test/ct/021", "full_name":"mntgrp_02att1"},
-                {"name":"test/ct/031", "full_name":"mntgrp_03value1"},
-                {"name":"test/ct/041", "full_name":"mntgrp_04/131"},
-                {"name":"null", "full_name":"mntgrp_041"},
-                ]
+                {"name": "test/ct/011", "full_name": "mntgrp_01e1"},
+                {"name": "test/ct/021", "full_name": "mntgrp_02att1"},
+                {"name": "test/ct/031", "full_name": "mntgrp_03value1"},
+                {"name": "test/ct/041", "full_name": "mntgrp_04/131"},
+                {"name": "null", "full_name": "mntgrp_041"},
+            ]
 
             pool.MeasurementGroupList = [json.dumps(a) for a in arr1]
             pool2.MeasurementGroupList = [json.dumps(a) for a in arr2]
@@ -2019,12 +2020,12 @@ class ProfileManagerTest(unittest.TestCase):
         self.assertEqual(mgt.availableMntGrps(), [])
 
         arr = [
-            {"full_name":"test/ct/01", "name":"mntgrp_01e"},
-            {"full_name":"test/ct/02", "name":"mntgrp_02att"},
-            {"full_name":"test/ct/03", "name":"mntgrp_03value"},
-            {"full_name":"test/ct/04", "name":"mntgrp_04_13"},
-            {"full_name":"null", "name":"mntgrp_04"},
-            ]
+            {"full_name": "test/ct/01", "name": "mntgrp_01e"},
+            {"full_name": "test/ct/02", "name": "mntgrp_02att"},
+            {"full_name": "test/ct/03", "name": "mntgrp_03value"},
+            {"full_name": "test/ct/04", "name": "mntgrp_04_13"},
+            {"full_name": "null", "name": "mntgrp_04"},
+        ]
 
         pool.MeasurementGroupList = [json.dumps(a) for a in arr]
 
@@ -2043,7 +2044,7 @@ class ProfileManagerTest(unittest.TestCase):
             mgt.deleteProfile(ar)
             dl.append(ar)
             self.assertEqual(MSUtils.getEnv(
-                    'ActiveMntGrp', self._ms.ms.keys()[0]), "")
+                'ActiveMntGrp', self._ms.ms.keys()[0]), "")
             dd = mgt.availableMntGrps()
             self.assertEqual(set(dd), set(dd2) - set(dl))
             sl = self._cf.dp.availableSelections()
@@ -2078,8 +2079,10 @@ class ProfileManagerTest(unittest.TestCase):
             tpool2.setUp()
 
             db = PyTango.Database()
-            db.put_device_property(self._ms.ms.keys()[0],
-                                   {'PoolNames': [
+            db.put_device_property(
+                self._ms.ms.keys()[0],
+                {
+                    'PoolNames': [
                         tpool2.dp.name(), self._pool.dp.name()]})
             pool = self._pool.dp
             pool2 = tpool2.dp
@@ -2088,20 +2091,20 @@ class ProfileManagerTest(unittest.TestCase):
             self.assertEqual(mgt.availableMntGrps(), [])
 
             arr = [
-                {"full_name":"test/ct/01", "name":"mntgrp_01e"},
-                {"full_name":"test/ct/02", "name":"mntgrp_02att"},
-                {"full_name":"test/ct/03", "name":"mntgrp_03value"},
-                {"full_name":"test/ct/04", "name":"mntgrp_04_13"},
-                {"full_name":"null", "name":"mntgrp_04"},
-                ]
+                {"full_name": "test/ct/01", "name": "mntgrp_01e"},
+                {"full_name": "test/ct/02", "name": "mntgrp_02att"},
+                {"full_name": "test/ct/03", "name": "mntgrp_03value"},
+                {"full_name": "test/ct/04", "name": "mntgrp_04_13"},
+                {"full_name": "null", "name": "mntgrp_04"},
+            ]
 
             arr2 = [
-                {"full_name":"test/ct/011", "name":"mntgrp_01e1"},
-                {"full_name":"test/ct/021", "name":"mntgrp_02att"},
-                {"full_name":"test/ct/031", "name":"mntgrp_03value1"},
-                {"full_name":"test/ct/041", "name":"mntgrp_04/131"},
-                {"full_name":"null", "name":"mntgrp_04"},
-                ]
+                {"full_name": "test/ct/011", "name": "mntgrp_01e1"},
+                {"full_name": "test/ct/021", "name": "mntgrp_02att"},
+                {"full_name": "test/ct/031", "name": "mntgrp_03value1"},
+                {"full_name": "test/ct/041", "name": "mntgrp_04/131"},
+                {"full_name": "null", "name": "mntgrp_04"},
+            ]
 
             pool.MeasurementGroupList = [json.dumps(a) for a in arr]
             pool2.MeasurementGroupList = [json.dumps(a) for a in arr2]
@@ -2128,7 +2131,7 @@ class ProfileManagerTest(unittest.TestCase):
                 mgt.deleteProfile(ar)
                 dl.append(ar)
                 self.assertEqual(MSUtils.getEnv(
-                        'ActiveMntGrp', self._ms.ms.keys()[0]), "")
+                    'ActiveMntGrp', self._ms.ms.keys()[0]), "")
                 dd = [json.loads(mg)["name"]
                       for mg in pool.MeasurementGroupList]
                 dd_2 = [json.loads(mg)["name"]
@@ -2148,7 +2151,7 @@ class ProfileManagerTest(unittest.TestCase):
                 mgt.deleteProfile(ar)
                 dl.append(ar)
                 self.assertEqual(MSUtils.getEnv(
-                        'ActiveMntGrp', self._ms.ms.keys()[0]), "")
+                    'ActiveMntGrp', self._ms.ms.keys()[0]), "")
                 dd = [json.loads(mg)["name"]
                       for mg in pool.MeasurementGroupList]
                 dd_2 = [json.loads(mg)["name"]
@@ -2234,7 +2237,7 @@ class ProfileManagerTest(unittest.TestCase):
             for i in range(lds):
                 dss[self.getRandomName(10)] = bool(self.__rnd.randint(0, 1))
             ddss = self.__rnd.sample(dss, self.__rnd.randint(
-                    1, len(dss.keys())))
+                1, len(dss.keys())))
             dcps = dict(cps)
             for ds in ddss:
                 dcps[ds] = bool(self.__rnd.randint(0, 1))
@@ -2298,7 +2301,7 @@ class ProfileManagerTest(unittest.TestCase):
 
         dsdict = {
             "ann": self.mydss["ann"]
-            }
+        }
 
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps({})])
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dsdict)])
@@ -2354,7 +2357,7 @@ class ProfileManagerTest(unittest.TestCase):
 
         dsdict = {
             "ann": self.mydss["ann"]
-            }
+        }
 
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
@@ -2657,12 +2660,12 @@ class ProfileManagerTest(unittest.TestCase):
         self.assertEqual(mgt.availableMntGrps(), [])
 
         arr = [
-            {"full_name":"test/ct/01/Value", "name":"ct01"},
-            {"full_name":"test/ct/02/Value", "name":"ct02"},
-            {"full_name":"test/ct/03/value", "name":"ct03"},
-            {"full_name":"test/ct/04/value", "name":"ct04"},
-            {"full_name":"null/val", "name":"mntgrp_04"},
-            ]
+            {"full_name": "test/ct/01/Value", "name": "ct01"},
+            {"full_name": "test/ct/02/Value", "name": "ct02"},
+            {"full_name": "test/ct/03/value", "name": "ct03"},
+            {"full_name": "test/ct/04/value", "name": "ct04"},
+            {"full_name": "null/val", "name": "mntgrp_04"},
+        ]
         pool.AcqChannelList = [json.dumps(a) for a in arr]
 
         self.myAssertRaise(Exception, mgt.updateProfile)
@@ -2727,7 +2730,7 @@ class ProfileManagerTest(unittest.TestCase):
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
 
-        wrong = ['nn', 'ann', 'nn2',  'tann1', 'tann0', 'tann1b', 'tann1c',
+        wrong = ['nn', 'ann', 'nn2', 'tann1', 'tann0', 'tann1b', 'tann1c',
                  'dim1', 'dim2', 'dim3', 'dim4', 'dim5', 'dim5', 'dim6',
                  'dim7', 'dim8', 'tann1c', 'mycp3', 'exp_t01']
 
@@ -2755,12 +2758,12 @@ class ProfileManagerTest(unittest.TestCase):
         self.assertEqual(mgt.availableMntGrps(), [])
 
         arr = [
-            {"full_name":"test/ct/01/Value", "name":"ct01"},
-            {"full_name":"test/ct/02/Value", "name":"ct02"},
-            {"full_name":"test/ct/03/value", "name":"ct03"},
-            {"full_name":"test/ct/04/value", "name":"ct04"},
-            {"full_name":"null/val", "name":"mntgrp_04"},
-            ]
+            {"full_name": "test/ct/01/Value", "name": "ct01"},
+            {"full_name": "test/ct/02/Value", "name": "ct02"},
+            {"full_name": "test/ct/03/value", "name": "ct03"},
+            {"full_name": "test/ct/04/value", "name": "ct04"},
+            {"full_name": "null/val", "name": "mntgrp_04"},
+        ]
         pool.AcqChannelList = [json.dumps(a) for a in arr]
 
         self.myAssertRaise(Exception, mgt.updateProfile)
@@ -2928,12 +2931,12 @@ class ProfileManagerTest(unittest.TestCase):
         self.assertEqual(mgt.availableMntGrps(), [])
 
         arr = [
-            {"full_name":"test/ct/01/Value", "name":"ct01"},
-            {"full_name":"test/ct/02/Value", "name":"ct02"},
-            {"full_name":"test/ct/03/value", "name":"ct03"},
-            {"full_name":"test/ct/04/value", "name":"ct04"},
-            {"full_name":"null/val", "name":"mntgrp_04"},
-            ]
+            {"full_name": "test/ct/01/Value", "name": "ct01"},
+            {"full_name": "test/ct/02/Value", "name": "ct02"},
+            {"full_name": "test/ct/03/value", "name": "ct03"},
+            {"full_name": "test/ct/04/value", "name": "ct04"},
+            {"full_name": "null/val", "name": "mntgrp_04"},
+        ]
         pool.AcqChannelList = [json.dumps(a) for a in arr]
 
         self.myAssertRaise(Exception, mgt.updateProfile)
@@ -3050,12 +3053,12 @@ class ProfileManagerTest(unittest.TestCase):
         self.assertEqual(mgt.availableMntGrps(), [])
 
         arr = [
-            {"full_name":"test/ct/01/Value", "name":"ct01"},
-            {"full_name":"test/ct/02/Value", "name":"ct02"},
-            {"full_name":"test/ct/03/value", "name":"ct03"},
-            {"full_name":"test/ct/04/value", "name":"ct04"},
-            {"full_name":"null/val", "name":"mntgrp_04"},
-            ]
+            {"full_name": "test/ct/01/Value", "name": "ct01"},
+            {"full_name": "test/ct/02/Value", "name": "ct02"},
+            {"full_name": "test/ct/03/value", "name": "ct03"},
+            {"full_name": "test/ct/04/value", "name": "ct04"},
+            {"full_name": "null/val", "name": "mntgrp_04"},
+        ]
         pool.AcqChannelList = [json.dumps(a) for a in arr]
 
         self.myAssertRaise(Exception, mgt.updateProfile)
@@ -3173,12 +3176,12 @@ class ProfileManagerTest(unittest.TestCase):
         self.assertEqual(mgt.availableMntGrps(), [])
 
         arr = [
-            {"full_name":"test/ct/01/Value", "name":"ct01"},
-            {"full_name":"test/ct/02/Value", "name":"ct02"},
-            {"full_name":"test/ct/03/value", "name":"ct03"},
-            {"full_name":"test/ct/04/value", "name":"ct04"},
-            {"full_name":"null/val", "name":"mntgrp_04"},
-            ]
+            {"full_name": "test/ct/01/Value", "name": "ct01"},
+            {"full_name": "test/ct/02/Value", "name": "ct02"},
+            {"full_name": "test/ct/03/value", "name": "ct03"},
+            {"full_name": "test/ct/04/value", "name": "ct04"},
+            {"full_name": "null/val", "name": "mntgrp_04"},
+        ]
         pool.AcqChannelList = [json.dumps(a) for a in arr]
 
         self.myAssertRaise(Exception, mgt.updateProfile)
@@ -3297,12 +3300,12 @@ class ProfileManagerTest(unittest.TestCase):
         self.assertEqual(mgt.availableMntGrps(), [])
 
         arr = [
-            {"full_name":"test/ct/01/Value", "name":"ct01"},
-            {"full_name":"test/ct/02/Value", "name":"ct02"},
-            {"full_name":"test/ct/03/value", "name":"ct03"},
-            {"full_name":"test/ct/04/value", "name":"ct04"},
-            {"full_name":"null/val", "name":"mntgrp_04"},
-            ]
+            {"full_name": "test/ct/01/Value", "name": "ct01"},
+            {"full_name": "test/ct/02/Value", "name": "ct02"},
+            {"full_name": "test/ct/03/value", "name": "ct03"},
+            {"full_name": "test/ct/04/value", "name": "ct04"},
+            {"full_name": "null/val", "name": "mntgrp_04"},
+        ]
         pool.AcqChannelList = [json.dumps(a) for a in arr]
 
         self.myAssertRaise(Exception, mgt.updateProfile)
@@ -3434,7 +3437,7 @@ class ProfileManagerTest(unittest.TestCase):
                                '_controller_name': '__tango__',
                                'conditioning': '',
                                'full_name': '%s%s' % (
-                                'tango://', cnt['source']),
+                                   'tango://', cnt['source']),
                                '_unit_id': '0',
                                'output': True,
                                'plot_axes': cnt['plot_axes'],
@@ -3518,12 +3521,12 @@ class ProfileManagerTest(unittest.TestCase):
         self.assertEqual(mgt.availableMntGrps(), [])
 
         arr = [
-            {"full_name":"test/ct/01/Value", "name":"ct01"},
-            {"full_name":"test/ct/02/Value", "name":"ct02"},
-            {"full_name":"test/ct/03/value", "name":"ct03"},
-            {"full_name":"test/ct/04/value", "name":"ct04"},
-            {"full_name":"null/val", "name":"mntgrp_04"},
-            ]
+            {"full_name": "test/ct/01/Value", "name": "ct01"},
+            {"full_name": "test/ct/02/Value", "name": "ct02"},
+            {"full_name": "test/ct/03/value", "name": "ct03"},
+            {"full_name": "test/ct/04/value", "name": "ct04"},
+            {"full_name": "null/val", "name": "mntgrp_04"},
+        ]
         pool.AcqChannelList = [json.dumps(a) for a in arr]
 
         self.myAssertRaise(Exception, mgt.updateProfile)
@@ -3683,8 +3686,9 @@ class ProfileManagerTest(unittest.TestCase):
                                'index': i,
                                'name': str(ds),
                                'data_type': cnt['data_type'],
-                               'plot_type': (cnt['plot_type']
-                                             if ds not in lhe2 else 0),
+                               'plot_type': (
+                                   cnt['plot_type']
+                                   if ds not in lhe2 else 0),
                                'data_units': cnt['data_units'],
                                'enabled': True,
                                'label': cnt['source'],
@@ -3693,11 +3697,12 @@ class ProfileManagerTest(unittest.TestCase):
                                '_controller_name': '__tango__',
                                'conditioning': '',
                                'full_name': '%s%s' % (
-                                'tango://', cnt['source']),
+                                   'tango://', cnt['source']),
                                '_unit_id': '0',
                                'output': True,
-                               'plot_axes': (cnt['plot_axes']
-                                             if ds not in lhe2 else []),
+                               'plot_axes': (
+                                   cnt['plot_axes']
+                                   if ds not in lhe2 else []),
                                'nexus_path': '',
                                'normalization': 0,
                                'source': cnt['source']}
@@ -3805,12 +3810,12 @@ class ProfileManagerTest(unittest.TestCase):
             pdss = sorted(pdss)
 
             acqch = [
-                {"full_name":"test/ct/01/Value", "name":"ct01"},
-                {"full_name":"test/ct/02/Value", "name":"ct02"},
-                {"full_name":"test/ct/03/value", "name":"ct03"},
-                {"full_name":"test/ct/04/value", "name":"ct04"},
-                {"full_name":"null/val", "name":"mntgrp_04"}
-                ]
+                {"full_name": "test/ct/01/Value", "name": "ct01"},
+                {"full_name": "test/ct/02/Value", "name": "ct02"},
+                {"full_name": "test/ct/03/value", "name": "ct03"},
+                {"full_name": "test/ct/04/value", "name": "ct04"},
+                {"full_name": "null/val", "name": "mntgrp_04"}
+            ]
 
             for ch in expch:
                 ach = {}
@@ -3868,13 +3873,13 @@ class ProfileManagerTest(unittest.TestCase):
                                 dss[ds] = bool(self.__rnd.randint(0, 1))
 
                     mncps = self.__rnd.randint(1, len(self.smycps2.keys()) - 1)
-                    mcps = [cp for cp in self.__rnd.sample(
+                    mcps = [
+                        cp for cp in self.__rnd.sample(
                             set(self.smycps2.keys()), mncps)
-                            if cp not in wrong]
+                        if cp not in wrong]
 
                     adss = dict(dss)
                     for ch in expch:
-#                        print ch
                         if ch["name"] not in adss.keys():
                             adss[ch["name"]] = False
                     se["ComponentGroup"] = json.dumps(cps)
@@ -3905,13 +3910,8 @@ class ProfileManagerTest(unittest.TestCase):
                     chds = mgt.dataSources()
                     chds.extend(mgt.disableDataSources())
                     chds = sorted([
-                            ds for ds in chds if not ds.startswith('client')])
+                        ds for ds in chds if not ds.startswith('client')])
 
-#                    print "COMP", mgt.components()
-#                    print "ACOMP", mgt.automaticComponents()
-#                    print "MCP", mcps
-#                    print "DS", mgt.dataSources()
-#                    print "DDS", mgt.disableDataSources()
                     self.myAssertDict(
                         json.loads(se["AutomaticComponentGroup"]),
                         acps)
@@ -3945,8 +3945,6 @@ class ProfileManagerTest(unittest.TestCase):
                     self.myAssertDict(json.loads(se["DataRecord"]), records)
                     self.assertEqual(json.loads(se["Timer"]), [ar["name"]])
                     self.assertEqual(se["MntGrp"], "nxsmntgrp")
-#                    print "CNF", cnf
-#                    print "CHDS", chds
                     myctrls = {}
                     for cl in ctrls:
                         tgc = {}
@@ -3955,7 +3953,6 @@ class ProfileManagerTest(unittest.TestCase):
                             if ds in chds and cl == exp['controller']:
                                 cnt = self.smychsXX[str(ds)]
                                 i = chds.index(str(ds))
-#                                print "INDEX", i, ds
                                 try:
                                     tdv = "/".join(
                                         cnt['source'].split("/")[:-1])
@@ -3980,23 +3977,21 @@ class ProfileManagerTest(unittest.TestCase):
                                            'source': cnt['source']}
                                     tgc[tdv] = chn
                                 except:
-#                                    print ds, cnt
                                     raise
                         if tgc:
                             myctrls[cl] = {'units':
-                                               {'0':
-                                                    {'channels': tgc,
-                                                     'monitor': dv,
-                                                     'id': 0,
-                                                     'timer': dv,
-                                                     'trigger_type': 0}}}
+                                           {'0':
+                                            {'channels': tgc,
+                                             'monitor': dv,
+                                             'id': 0,
+                                             'timer': dv,
+                                             'trigger_type': 0}}}
 
                     smg = {"controllers": myctrls,
                            "monitor": "%s" % dv,
                            "description": "Measurement Group",
                            "timer": "%s" % dv,
                            "label": "nxsmntgrp"}
-#                    print "SMG", smg
                     self.myAssertDict(smg, pcnf)
                     self.myAssertDict(pcnf, cnf)
                     se.reset()
@@ -4084,12 +4079,12 @@ class ProfileManagerTest(unittest.TestCase):
             pdss = sorted(pdss)
 
             acqch = [
-                {"full_name":"test/ct/01/Value", "name":"ct01"},
-                {"full_name":"test/ct/02/Value", "name":"ct02"},
-                {"full_name":"test/ct/03/value", "name":"ct03"},
-                {"full_name":"test/ct/04/value", "name":"ct04"},
-                {"full_name":"null/val", "name":"mntgrp_04"}
-                ]
+                {"full_name": "test/ct/01/Value", "name": "ct01"},
+                {"full_name": "test/ct/02/Value", "name": "ct02"},
+                {"full_name": "test/ct/03/value", "name": "ct03"},
+                {"full_name": "test/ct/04/value", "name": "ct04"},
+                {"full_name": "null/val", "name": "mntgrp_04"}
+            ]
 
             for ch in expch:
                 ach = {}
@@ -4160,7 +4155,6 @@ class ProfileManagerTest(unittest.TestCase):
 
                     adss = dict(dss)
                     for ch in expch:
-#                        print ch
                         if ch["name"] not in adss.keys():
                             adss[ch["name"]] = False
                     se["ComponentGroup"] = json.dumps(cps)
@@ -4285,8 +4279,8 @@ class ProfileManagerTest(unittest.TestCase):
                                            'name': str(ds),
                                            'data_type': cnt['data_type'],
                                            'plot_type': (
-                                            cnt['plot_type']
-                                            if ds not in lhe2 else 0),
+                                               cnt['plot_type']
+                                               if ds not in lhe2 else 0),
                                            'data_units': cnt['data_units'],
                                            'enabled': True,
                                            'label': ds,
@@ -4298,24 +4292,23 @@ class ProfileManagerTest(unittest.TestCase):
                                            '_unit_id': '0',
                                            'output': True,
                                            'plot_axes': (
-                                            cnt['plot_axes']
-                                            if ds not in lhe2 else []),
+                                               cnt['plot_axes']
+                                               if ds not in lhe2 else []),
                                            'nexus_path': '',
                                            'normalization': 0,
                                            'source': cnt['source']}
                                     tgc[tdv] = chn
                                 except:
-#                                    print ds, cnt
                                     raise
                         if tgc:
                             myctrls[cl] = {
                                 'units':
                                     {'0':
-                                         {'channels': tgc,
-                                          'monitor': dv,
-                                          'id': 0,
-                                          'timer': dv,
-                                          'trigger_type': 0}}}
+                                     {'channels': tgc,
+                                      'monitor': dv,
+                                      'id': 0,
+                                      'timer': dv,
+                                      'trigger_type': 0}}}
 
                     smg = {"controllers": myctrls,
                            "monitor": "%s" % dv,
@@ -4412,12 +4405,12 @@ class ProfileManagerTest(unittest.TestCase):
             pdss = sorted(pdss)
 
             acqch = [
-                {"full_name":"test/ct/01/Value", "name":"ct01"},
-                {"full_name":"test/ct/02/Value", "name":"ct02"},
-                {"full_name":"test/ct/03/value", "name":"ct03"},
-                {"full_name":"test/ct/04/value", "name":"ct04"},
-                {"full_name":"null/val", "name":"mntgrp_04"}
-                ]
+                {"full_name": "test/ct/01/Value", "name": "ct01"},
+                {"full_name": "test/ct/02/Value", "name": "ct02"},
+                {"full_name": "test/ct/03/value", "name": "ct03"},
+                {"full_name": "test/ct/04/value", "name": "ct04"},
+                {"full_name": "null/val", "name": "mntgrp_04"}
+            ]
 
             for ch in expch:
                 ach = {}
@@ -4493,7 +4486,6 @@ class ProfileManagerTest(unittest.TestCase):
 
                     adss = dict(dss)
                     for ch in expch:
-#                        print ch
                         if ch["name"] not in adss.keys():
                             adss[ch["name"]] = False
                     se["ComponentGroup"] = json.dumps(cps)
@@ -4627,8 +4619,8 @@ class ProfileManagerTest(unittest.TestCase):
                                                'name': str(ds),
                                                'data_type': cnt['data_type'],
                                                'plot_type': (
-                                                cnt['plot_type']
-                                                if ds not in lhe2 else 0),
+                                                   cnt['plot_type']
+                                                   if ds not in lhe2 else 0),
                                                'data_units': cnt['data_units'],
                                                'enabled': True,
                                                'label': ds,
@@ -4640,23 +4632,22 @@ class ProfileManagerTest(unittest.TestCase):
                                                '_unit_id': '0',
                                                'output': True,
                                                'plot_axes': (
-                                                cnt['plot_axes']
-                                                if ds not in lhe2 else []),
+                                                   cnt['plot_axes']
+                                                   if ds not in lhe2 else []),
                                                'nexus_path': '',
                                                'normalization': 0,
                                                'source': cnt['source']}
                                         tgc[tdv] = chn
                                     except:
-    #                                    print ds, cnt
                                         raise
                         if tgc:
                             myctrls[cl] = {'units':
-                                               {'0':
-                                                    {'channels': tgc,
-                                                     'monitor': dv,
-                                                     'id': 0,
-                                                     'timer': dv,
-                                                     'trigger_type': 0}}}
+                                           {'0':
+                                            {'channels': tgc,
+                                             'monitor': dv,
+                                             'id': 0,
+                                             'timer': dv,
+                                             'trigger_type': 0}}}
 
                     tgc = {}
                     for ds in chds:
@@ -4669,8 +4660,9 @@ class ProfileManagerTest(unittest.TestCase):
                                        'index': i,
                                        'name': str(ds),
                                        'data_type': cnt['data_type'],
-                                       'plot_type': (cnt['plot_type']
-                                                     if ds not in lhe2 else 0),
+                                       'plot_type': (
+                                           cnt['plot_type']
+                                           if ds not in lhe2 else 0),
                                        'data_units': cnt['data_units'],
                                        'enabled': True,
                                        'label': cnt['source'],
@@ -4679,27 +4671,26 @@ class ProfileManagerTest(unittest.TestCase):
                                        '_controller_name': '__tango__',
                                        'conditioning': '',
                                        'full_name': '%s%s' % (
-                                        'tango://', cnt['source']),
+                                           'tango://', cnt['source']),
                                        '_unit_id': '0',
                                        'output': True,
                                        'plot_axes': (
-                                        cnt['plot_axes']
-                                        if ds not in lhe2 else []),
+                                           cnt['plot_axes']
+                                           if ds not in lhe2 else []),
                                        'nexus_path': '',
                                        'normalization': 0,
                                        'source': cnt['source']}
                                 tgc[chn["full_name"]] = chn
                             except:
-#                                print ds, cnt
                                 raise
                     if tgc:
                         myctrls['__tango__'] = {'units':
-                                                    {'0':
-                                                         {'channels': tgc,
-                                                          'monitor': dv,
-                                                          'id': 0,
-                                                          'timer': dv,
-                                                          'trigger_type': 0}}}
+                                                {'0':
+                                                 {'channels': tgc,
+                                                  'monitor': dv,
+                                                  'id': 0,
+                                                  'timer': dv,
+                                                  'trigger_type': 0}}}
 
                     smg = {"controllers": myctrls,
                            "monitor": "%s" % dv,
@@ -4797,12 +4788,12 @@ class ProfileManagerTest(unittest.TestCase):
             self.__rnd.shuffle(pdss)
 
             acqch = [
-                {"full_name":"test/ct/01/Value", "name":"ct01"},
-                {"full_name":"test/ct/02/Value", "name":"ct02"},
-                {"full_name":"test/ct/03/value", "name":"ct03"},
-                {"full_name":"test/ct/04/value", "name":"ct04"},
-                {"full_name":"null/val", "name":"mntgrp_04"}
-                ]
+                {"full_name": "test/ct/01/Value", "name": "ct01"},
+                {"full_name": "test/ct/02/Value", "name": "ct02"},
+                {"full_name": "test/ct/03/value", "name": "ct03"},
+                {"full_name": "test/ct/04/value", "name": "ct04"},
+                {"full_name": "null/val", "name": "mntgrp_04"}
+            ]
 
             for ch in expch:
                 ach = {}
@@ -4872,13 +4863,12 @@ class ProfileManagerTest(unittest.TestCase):
 
                     mncps = self.__rnd.randint(1, len(amycps.keys()) - 1)
                     mcps = [cp for cp in self.__rnd.sample(
-                            set(amycps.keys()), mncps) if cp not in wrong]
+                        set(amycps.keys()), mncps) if cp not in wrong]
                     for cp in mcps:
                         comps.add(cp)
 
                     adss = dict(dss)
                     for ch in expch:
-#                        print ch
                         if ch["name"] not in adss.keys():
                             adss[ch["name"]] = False
                     se["ComponentGroup"] = json.dumps(cps)
@@ -5012,8 +5002,8 @@ class ProfileManagerTest(unittest.TestCase):
                                                'name': str(ds),
                                                'data_type': cnt['data_type'],
                                                'plot_type': (
-                                                cnt['plot_type']
-                                                if ds not in lhe2 else 0),
+                                                   cnt['plot_type']
+                                                   if ds not in lhe2 else 0),
                                                'data_units': cnt['data_units'],
                                                'enabled': True,
                                                'label': ds,
@@ -5025,23 +5015,22 @@ class ProfileManagerTest(unittest.TestCase):
                                                '_unit_id': '0',
                                                'output': True,
                                                'plot_axes': (
-                                                cnt['plot_axes']
-                                                if ds not in lhe2 else []),
+                                                   cnt['plot_axes']
+                                                   if ds not in lhe2 else []),
                                                'nexus_path': '',
                                                'normalization': 0,
                                                'source': cnt['source']}
                                         tgc[tdv] = chn
                                     except:
-    #                                    print ds, cnt
                                         raise
                         if tgc:
                             myctrls[cl] = {'units':
-                                               {'0':
-                                                    {'channels': tgc,
-                                                     'monitor': dv,
-                                                     'id': 0,
-                                                     'timer': dv,
-                                                     'trigger_type': 0}}}
+                                           {'0':
+                                            {'channels': tgc,
+                                             'monitor': dv,
+                                             'id': 0,
+                                             'timer': dv,
+                                             'trigger_type': 0}}}
 
                     tgc = {}
                     for ds in chds:
@@ -5054,8 +5043,9 @@ class ProfileManagerTest(unittest.TestCase):
                                        'index': i,
                                        'name': str(ds),
                                        'data_type': cnt['data_type'],
-                                       'plot_type': (cnt['plot_type']
-                                                     if ds not in lhe2 else 0),
+                                       'plot_type': (
+                                           cnt['plot_type']
+                                           if ds not in lhe2 else 0),
                                        'data_units': cnt['data_units'],
                                        'enabled': True,
                                        'label': cnt['source'],
@@ -5064,28 +5054,27 @@ class ProfileManagerTest(unittest.TestCase):
                                        '_controller_name': '__tango__',
                                        'conditioning': '',
                                        'full_name': '%s%s' % (
-                                        'tango://', cnt['source']),
+                                           'tango://', cnt['source']),
                                        '_unit_id': '0',
                                        'output': True,
                                        'plot_axes': (
-                                        cnt['plot_axes']
-                                        if ds not in lhe2 else []),
+                                           cnt['plot_axes']
+                                           if ds not in lhe2 else []),
                                        'nexus_path': '',
                                        'normalization': 0,
                                        'source': cnt['source']}
                                 tgc[chn["full_name"]] = chn
                             except:
-#                                print ds, cnt
                                 raise
 
                     if tgc:
                         myctrls['__tango__'] = {'units':
-                                                    {'0':
-                                                         {'channels': tgc,
-                                                          'monitor': dv,
-                                                          'id': 0,
-                                                          'timer': dv,
-                                                          'trigger_type': 0}}}
+                                                {'0':
+                                                 {'channels': tgc,
+                                                  'monitor': dv,
+                                                  'id': 0,
+                                                  'timer': dv,
+                                                  'trigger_type': 0}}}
 
                     smg = {"controllers": myctrls,
                            "monitor": "%s" % dv,
@@ -5171,16 +5160,13 @@ class ProfileManagerTest(unittest.TestCase):
                 timers = {}
                 ntms = self.__rnd.randint(1, 5)
                 tms = self.__rnd.sample(set(
-                        [ch for ch in self.smychsXX.keys()
-                         if not ch.startswith("client")]), ntms)
+                    [ch for ch in self.smychsXX.keys()
+                     if not ch.startswith("client")]), ntms)
                 for tm in tms:
                     myct = ("ctrl_%s" % tm).replace("_", "/")
                     timers[myct] = tm
                     ctrls.append(myct)
-#                print "TIMERSL", tms
-#                print "TIMERSD", timers
                 ltimers = timers.values()
-#                print "LTIMER", ltimers
 
                 for ds, vl in self.smychsXX.items():
                     if vl:
@@ -5207,12 +5193,12 @@ class ProfileManagerTest(unittest.TestCase):
                 self.__rnd.shuffle(pdss)
 
                 acqch = [
-                    {"full_name":"test/ct/01/Value", "name":"ct01"},
-                    {"full_name":"test/ct/02/Value", "name":"ct02"},
-                    {"full_name":"test/ct/03/value", "name":"ct03"},
-                    {"full_name":"test/ct/04/value", "name":"ct04"},
-                    {"full_name":"null/val", "name":"mntgrp_04"}
-                    ]
+                    {"full_name": "test/ct/01/Value", "name": "ct01"},
+                    {"full_name": "test/ct/02/Value", "name": "ct02"},
+                    {"full_name": "test/ct/03/value", "name": "ct03"},
+                    {"full_name": "test/ct/04/value", "name": "ct04"},
+                    {"full_name": "null/val", "name": "mntgrp_04"}
+                ]
 
                 for ch in expch:
                     ach = {}
@@ -5223,7 +5209,6 @@ class ProfileManagerTest(unittest.TestCase):
                 pool.AcqChannelList = [json.dumps(a) for a in acqch]
                 pool.ExpChannelList = [json.dumps(a) for a in expch]
 
-#                self.myAssertRaise(Exception, mgt.updateProfile)
                 amycps = dict(self.smycps2)
                 amycps.update(self.smycps)
                 amydss = dict(self.smydssXX)
@@ -5236,7 +5221,6 @@ class ProfileManagerTest(unittest.TestCase):
                     ["DSDICT", json.dumps(amydss)])
 
                 try:
-#                    ar = acqch[i % 5]
                     cps = {}
                     acps = {}
                     dss = {}
@@ -5290,7 +5274,6 @@ class ProfileManagerTest(unittest.TestCase):
 
                     adss = dict(dss)
                     for ch in expch:
-#                        print ch
                         if ch["name"] not in adss.keys():
                             adss[ch["name"]] = False
                     se["ComponentGroup"] = json.dumps(cps)
@@ -5410,26 +5393,18 @@ class ProfileManagerTest(unittest.TestCase):
                     self.myAssertDict(json.loads(se["DataRecord"]), records)
                     self.assertEqual(json.loads(se["Timer"]), ltimers)
                     self.assertEqual(se["MntGrp"], "mg2")
-#                    print "CNF", cnf
-#                    print "CHDS", chds
                     myctrls = {}
                     fgtm = "/".join(
                         self.smychsXX[str(ltimers[0])]['source'].split(
                             "/")[:-1])
-#                    print "EXPCH", [exp["name"] for exp in expch]
-#                    print "CHDS", chds
                     for cl in ctrls:
-#                        print "CTRL", cl
                         tgc = {}
                         for exp in expch:
                             ds = exp["name"]
-#                            if cl == exp['controller']:
-#                                print "DS", ds , ds in chds
                             if ds in chds and cl == exp['controller']:
                                 if ds in self.smychsXX.keys():
                                     cnt = self.smychsXX[str(ds)]
                                     i = chds.index(str(ds))
-#                                    print "INDEX", i, ds
                                     try:
                                         tdv = "/".join(
                                             cnt['source'].split("/")[:-1])
@@ -5438,9 +5413,10 @@ class ProfileManagerTest(unittest.TestCase):
                                                'name': str(ds),
                                                'data_type': cnt['data_type'],
                                                'plot_type': (
-                                                cnt['plot_type']
-                                                if (ds not in lhe2
-                                                    and ds in bchds) else 0),
+                                                   cnt['plot_type']
+                                                   if (ds not in lhe2
+                                                       and ds in bchds)
+                                                   else 0),
                                                'data_units': cnt['data_units'],
                                                'enabled': True,
                                                'label': ds,
@@ -5452,18 +5428,17 @@ class ProfileManagerTest(unittest.TestCase):
                                                '_unit_id': '0',
                                                'output': True,
                                                'plot_axes': (
-                                                cnt['plot_axes']
-                                                if (ds not in lhe2
-                                                    and ds in bchds) else []),
+                                                   cnt['plot_axes']
+                                                   if (ds not in lhe2
+                                                       and ds in bchds)
+                                                   else []),
                                                'nexus_path': '',
                                                'normalization': 0,
                                                'source': cnt['source']}
                                         tgc[tdv] = chn
                                     except:
-    #                                    print ds, cnt
                                         raise
                         if tgc:
-#                            print "TIMERIN", cl ,  timers.keys()
                             ltm = timers[cl] if cl in timers.keys() \
                                 else ltimers[0]
                             fltm = "/".join(
@@ -5472,12 +5447,12 @@ class ProfileManagerTest(unittest.TestCase):
                             myctrls[cl] = {
                                 'units':
                                     {'0':
-                                         {
-                                        'channels': tgc,
-                                        'monitor': fltm,
-                                        'id': 0,
-                                        'timer': fltm,
-                                        'trigger_type': 0}}}
+                                     {
+                                         'channels': tgc,
+                                         'monitor': fltm,
+                                         'id': 0,
+                                         'timer': fltm,
+                                         'trigger_type': 0}}}
 
                     tgc = {}
                     for ds in chds:
@@ -5500,28 +5475,27 @@ class ProfileManagerTest(unittest.TestCase):
                                        '_controller_name': '__tango__',
                                        'conditioning': '',
                                        'full_name': '%s%s' % (
-                                        'tango://', cnt['source']),
+                                           'tango://', cnt['source']),
                                        '_unit_id': '0',
                                        'output': True,
                                        'plot_axes': (
-                                        cnt['plot_axes']
-                                        if ds not in lhe2 else []),
+                                           cnt['plot_axes']
+                                           if ds not in lhe2 else []),
                                        'nexus_path': '',
                                        'normalization': 0,
                                        'source': cnt['source']}
                                 tgc[chn["full_name"]] = chn
                             except:
-#                                print ds, cnt
                                 raise
 
                     if tgc:
                         myctrls['__tango__'] = {'units':
-                                                    {'0':
-                                                         {'channels': tgc,
-                                                          'monitor': fgtm,
-                                                          'id': 0,
-                                                          'timer': fgtm,
-                                                          'trigger_type': 0}}}
+                                                {'0':
+                                                 {'channels': tgc,
+                                                  'monitor': fgtm,
+                                                  'id': 0,
+                                                  'timer': fgtm,
+                                                  'trigger_type': 0}}}
 
                     smg = {"controllers": myctrls,
                            "monitor": "%s" % fgtm,
@@ -5610,16 +5584,13 @@ class ProfileManagerTest(unittest.TestCase):
                 timers = {}
                 ntms = self.__rnd.randint(1, 5)
                 tms = self.__rnd.sample(set(
-                        [ch for ch in self.smychsXX.keys()
-                         if not ch.startswith("client")]), ntms)
+                    [ch for ch in self.smychsXX.keys()
+                     if not ch.startswith("client")]), ntms)
                 for tm in tms:
                     myct = ("ctrl_%s" % tm).replace("_", "/")
                     timers[myct] = tm
                     ctrls.append(myct)
-#                print "TIMERSL", tms
-#                print "TIMERSD", timers
                 ltimers = timers.values()
-#                print "LTIMER", ltimers
 
                 for ds, vl in self.smychsXX.items():
                     if vl:
@@ -5646,12 +5617,12 @@ class ProfileManagerTest(unittest.TestCase):
                 self.__rnd.shuffle(pdss)
 
                 acqch = [
-                    {"full_name":"test/ct/01/Value", "name":"ct01"},
-                    {"full_name":"test/ct/02/Value", "name":"ct02"},
-                    {"full_name":"test/ct/03/value", "name":"ct03"},
-                    {"full_name":"test/ct/04/value", "name":"ct04"},
-                    {"full_name":"null/val", "name":"mntgrp_04"}
-                    ]
+                    {"full_name": "test/ct/01/Value", "name": "ct01"},
+                    {"full_name": "test/ct/02/Value", "name": "ct02"},
+                    {"full_name": "test/ct/03/value", "name": "ct03"},
+                    {"full_name": "test/ct/04/value", "name": "ct04"},
+                    {"full_name": "null/val", "name": "mntgrp_04"}
+                ]
 
                 for ch in expch:
                     ach = {}
@@ -5662,7 +5633,6 @@ class ProfileManagerTest(unittest.TestCase):
                 pool.AcqChannelList = [json.dumps(a) for a in acqch]
                 pool.ExpChannelList = [json.dumps(a) for a in expch]
 
-#                self.myAssertRaise(Exception, mgt.updateProfile)
                 amycps = dict(self.smycps2)
                 amycps.update(self.smycps)
                 amydss = dict(self.smydssXX)
@@ -5675,7 +5645,6 @@ class ProfileManagerTest(unittest.TestCase):
                     ["DSDICT", json.dumps(amydss)])
 
                 try:
-#                    ar = acqch[i % 5]
                     cps = {}
                     acps = {}
                     dss = {}
@@ -5720,26 +5689,25 @@ class ProfileManagerTest(unittest.TestCase):
 
                     nadss = self.__rnd.randint(1, len(amydss.keys()) - 1)
                     aadss = [ds for ds in self.__rnd.sample(
-                            set(amydss.keys()), nadss)]
+                        set(amydss.keys()), nadss)]
                     nadss = self.__rnd.randint(1, len(amydss.keys()) - 1)
                     indss = [ds for ds in self.__rnd.sample(
-                            set(amydss.keys()), nadss)]
+                        set(amydss.keys()), nadss)]
 
                     for tm in ltimers:
                         dss[tm] = bool(self.__rnd.randint(0, 1))
 
                     mncps = self.__rnd.randint(1, len(amycps.keys()) - 1)
                     mcps = [cp for cp in self.__rnd.sample(
-                            set(amycps.keys()), mncps) if cp not in wrong]
+                        set(amycps.keys()), mncps) if cp not in wrong]
                     oncps = self.__rnd.randint(1, len(amycps.keys()) - 1)
                     ocps = [cp for cp in self.__rnd.sample(
-                            set(amycps.keys()), oncps) if cp not in wrong]
+                        set(amycps.keys()), oncps) if cp not in wrong]
                     for cp in mcps:
                         comps.add(cp)
 
                     adss = dict(dss)
                     for ch in expch:
-#                        print ch
                         if ch["name"] not in adss.keys():
                             adss[ch["name"]] = False
                     se["ComponentGroup"] = json.dumps(cps)
@@ -5756,32 +5724,32 @@ class ProfileManagerTest(unittest.TestCase):
                     se["TimeZone"] = self.getRandomName(20)
 
                     se["ConfigVariables"] = json.dumps(dict(
-                            (self.getRandomName(10),
-                             self.getRandomName(15)) for _ in
-                            range(self.__rnd.randint(1, 40))))
+                        (self.getRandomName(10),
+                         self.getRandomName(15)) for _ in
+                        range(self.__rnd.randint(1, 40))))
                     se["Labels"] = json.dumps({})
                     se["LabelPaths"] = json.dumps(dict(
-                            (self.getRandomName(10),
-                             self.getRandomName(15)) for _ in
-                            range(self.__rnd.randint(1, 40))))
+                        (self.getRandomName(10),
+                         self.getRandomName(15)) for _ in
+                        range(self.__rnd.randint(1, 40))))
                     se["Labels"] = json.dumps(dict(
-                            (self.getRandomName(10),
-                             self.getRandomName(15)) for _ in
-                            range(self.__rnd.randint(1, 40))))
+                        (self.getRandomName(10),
+                         self.getRandomName(15)) for _ in
+                        range(self.__rnd.randint(1, 40))))
                     se["LabelLinks"] = json.dumps(dict(
-                            (self.getRandomName(10),
-                             bool(self.__rnd.randint(0, 1))) for _ in
-                            range(self.__rnd.randint(1, 40))))
+                        (self.getRandomName(10),
+                         bool(self.__rnd.randint(0, 1))) for _ in
+                        range(self.__rnd.randint(1, 40))))
                     se["LabelTypes"] = json.dumps(dict(
-                            (self.getRandomName(10),
-                             self.getRandomName(15)) for _ in
-                            range(self.__rnd.randint(1, 40))))
+                        (self.getRandomName(10),
+                         self.getRandomName(15)) for _ in
+                        range(self.__rnd.randint(1, 40))))
                     se["LabelShapes"] = json.dumps(dict(
-                            (self.getRandomName(10), [
-                                    self.__rnd.randint(1, 40)
-                                    for _ in range(
-                                        self.__rnd.randint(0, 3))]) for _ in
-                            range(self.__rnd.randint(1, 40))))
+                        (self.getRandomName(10),
+                         [self.__rnd.randint(1, 40)
+                          for _ in range(self.__rnd.randint(0, 3))])
+                        for _ in range(self.__rnd.randint(1, 40))))
+
                     self._cf.dp.SetCommandVariable(["MCPLIST",
 
                                                     json.dumps(mcps)])
@@ -5903,16 +5871,11 @@ class ProfileManagerTest(unittest.TestCase):
                     self.myAssertDict(json.loads(se["DataRecord"]), records)
                     self.assertEqual(json.loads(se["Timer"]), ltimers)
                     self.assertEqual(se["MntGrp"], "mg2")
-#                    print "CNF", cnf
-#                    print "CHDS", chds
                     myctrls = {}
                     fgtm = "/".join(
                         self.smychsXX[str(ltimers[0])]['source'].split(
                             "/")[:-1])
-#                    print "EXPCH", [exp["name"] for exp in expch]
-#                    print "CHDS", chds
                     for cl in ctrls:
-#                        print "CTRL", cl
                         tgc = {}
                         for exp in expch:
                             ds = exp["name"]
@@ -5931,9 +5894,10 @@ class ProfileManagerTest(unittest.TestCase):
                                                'name': str(ds),
                                                'data_type': cnt['data_type'],
                                                'plot_type': (
-                                                cnt['plot_type']
-                                                if (ds not in lhe2
-                                                    and ds in bchds) else 0),
+                                                   cnt['plot_type']
+                                                   if (ds not in lhe2
+                                                       and ds in bchds)
+                                                   else 0),
                                                'data_units': cnt['data_units'],
                                                'enabled': True,
                                                'label': ds,
@@ -5945,18 +5909,17 @@ class ProfileManagerTest(unittest.TestCase):
                                                '_unit_id': '0',
                                                'output': True,
                                                'plot_axes': (
-                                                cnt['plot_axes']
-                                                if (ds not in lhe2
-                                                    and ds in bchds) else []),
+                                                   cnt['plot_axes']
+                                                   if (ds not in lhe2
+                                                       and ds in bchds)
+                                                   else []),
                                                'nexus_path': '',
                                                'normalization': 0,
                                                'source': cnt['source']}
                                         tgc[tdv] = chn
                                     except:
-    #                                    print ds, cnt
                                         raise
                         if tgc:
-#                            print "TIMERIN", cl ,  timers.keys()
                             ltm = timers[cl] if cl in timers.keys() \
                                 else ltimers[0]
                             fltm = "/".join(
@@ -5965,12 +5928,12 @@ class ProfileManagerTest(unittest.TestCase):
                             myctrls[cl] = {
                                 'units':
                                     {'0':
-                                         {
-                                        'channels': tgc,
-                                        'monitor': fltm,
-                                        'id': 0,
-                                        'timer': fltm,
-                                        'trigger_type': 0}}}
+                                     {
+                                         'channels': tgc,
+                                         'monitor': fltm,
+                                         'id': 0,
+                                         'timer': fltm,
+                                         'trigger_type': 0}}}
 
                     tgc = {}
                     for ds in chds:
@@ -5993,28 +5956,27 @@ class ProfileManagerTest(unittest.TestCase):
                                        '_controller_name': '__tango__',
                                        'conditioning': '',
                                        'full_name': '%s%s' % (
-                                        'tango://', cnt['source']),
+                                           'tango://', cnt['source']),
                                        '_unit_id': '0',
                                        'output': True,
                                        'plot_axes': (
-                                        cnt['plot_axes']
-                                        if ds not in lhe2 else []),
+                                           cnt['plot_axes']
+                                           if ds not in lhe2 else []),
                                        'nexus_path': '',
                                        'normalization': 0,
                                        'source': cnt['source']}
                                 tgc[chn["full_name"]] = chn
                             except:
-#                                print ds, cnt
                                 raise
 
                     if tgc:
                         myctrls['__tango__'] = {'units':
-                                                    {'0':
-                                                         {'channels': tgc,
-                                                          'monitor': fgtm,
-                                                          'id': 0,
-                                                          'timer': fgtm,
-                                                          'trigger_type': 0}}}
+                                                {'0':
+                                                 {'channels': tgc,
+                                                  'monitor': fgtm,
+                                                  'id': 0,
+                                                  'timer': fgtm,
+                                                  'trigger_type': 0}}}
 
                     smg = {"controllers": myctrls,
                            "monitor": "%s" % fgtm,
@@ -6034,11 +5996,12 @@ class ProfileManagerTest(unittest.TestCase):
                     self.assertTrue(not mgt.isMntGrpChanged())
                     self.assertTrue(not mgt.isMntGrpChanged())
 
-                    self.compareToDumpJSON(se, ["AutomaticComponentGroup",
-                                            "ComponentGroup",
-                                            "DataSourceGroup",
-                                            "HiddenElements",
-                                            "AutomaticDataSources"])
+                    self.compareToDumpJSON(
+                        se, ["AutomaticComponentGroup",
+                             "ComponentGroup",
+                             "DataSourceGroup",
+                             "HiddenElements",
+                             "AutomaticDataSources"])
 
                     self.myAssertDict(
                         json.loads(se["AutomaticComponentGroup"]), acps)
@@ -6138,8 +6101,8 @@ class ProfileManagerTest(unittest.TestCase):
                         timers = {}
                         ntms = self.__rnd.randint(1, 5)
                         tms = self.__rnd.sample(set(
-                                [ch for ch in self.smychsXX.keys()
-                                 if not ch.startswith("client")]), ntms)
+                            [ch for ch in self.smychsXX.keys()
+                             if not ch.startswith("client")]), ntms)
                         for tm in tms:
                             myct = ("ctrl_%s" % tm).replace("_", "/")
                             timers[myct] = tm
@@ -6174,12 +6137,12 @@ class ProfileManagerTest(unittest.TestCase):
                         self.__rnd.shuffle(pdss[mg])
 
                         acqch = [
-                            {"full_name":"test/ct/01/Value", "name":"ct01"},
-                            {"full_name":"test/ct/02/Value", "name":"ct02"},
-                            {"full_name":"test/ct/03/value", "name":"ct03"},
-                            {"full_name":"test/ct/04/value", "name":"ct04"},
-                            {"full_name":"null/val", "name":"mntgrp_04"}
-                            ]
+                            {"full_name": "test/ct/01/Value", "name": "ct01"},
+                            {"full_name": "test/ct/02/Value", "name": "ct02"},
+                            {"full_name": "test/ct/03/value", "name": "ct03"},
+                            {"full_name": "test/ct/04/value", "name": "ct04"},
+                            {"full_name": "null/val", "name": "mntgrp_04"}
+                        ]
 
                         for ch in expch:
                             ach = {}
@@ -6245,10 +6208,10 @@ class ProfileManagerTest(unittest.TestCase):
 
                         nadss = self.__rnd.randint(1, len(amydss.keys()) - 1)
                         aadss[mg] = [ds for ds in self.__rnd.sample(
-                                set(amydss.keys()), nadss)]
+                            set(amydss.keys()), nadss)]
                         nadss = self.__rnd.randint(1, len(amydss.keys()) - 1)
                         indss = [ds for ds in self.__rnd.sample(
-                                set(amydss.keys()), nadss)]
+                            set(amydss.keys()), nadss)]
 
                         for tm in ltimers[mg]:
                             dss[tm] = bool(self.__rnd.randint(0, 1))
@@ -6264,7 +6227,6 @@ class ProfileManagerTest(unittest.TestCase):
 
                         adss[mg] = dict(dss)
                         for ch in expch:
-        #                        print ch
                             if ch["name"] not in adss[mg].keys():
                                 adss[mg][ch["name"]] = False
                         se[mg]["ComponentGroup"] = json.dumps(cps[mg])
@@ -6284,33 +6246,32 @@ class ProfileManagerTest(unittest.TestCase):
                         se[mg]["TimeZone"] = self.getRandomName(20)
 
                         se[mg]["ConfigVariables"] = json.dumps(dict(
-                                (self.getRandomName(10),
-                                 self.getRandomName(15)) for _ in
-                                range(self.__rnd.randint(1, 40))))
+                            (self.getRandomName(10),
+                             self.getRandomName(15)) for _ in
+                            range(self.__rnd.randint(1, 40))))
                         se[mg]["Labels"] = json.dumps({})
                         se[mg]["LabelPaths"] = json.dumps(dict(
-                                (self.getRandomName(10),
-                                 self.getRandomName(15)) for _ in
-                                range(self.__rnd.randint(1, 40))))
+                            (self.getRandomName(10),
+                             self.getRandomName(15)) for _ in
+                            range(self.__rnd.randint(1, 40))))
                         se[mg]["Labels"] = json.dumps(dict(
-                                (self.getRandomName(10),
-                                 self.getRandomName(15)) for _ in
-                                range(self.__rnd.randint(1, 40))))
+                            (self.getRandomName(10),
+                             self.getRandomName(15)) for _ in
+                            range(self.__rnd.randint(1, 40))))
                         se[mg]["LabelLinks"] = json.dumps(dict(
-                                (self.getRandomName(10),
-                                 bool(self.__rnd.randint(0, 1))) for _ in
-                                range(self.__rnd.randint(1, 40))))
+                            (self.getRandomName(10),
+                             bool(self.__rnd.randint(0, 1))) for _ in
+                            range(self.__rnd.randint(1, 40))))
                         se[mg]["LabelTypes"] = json.dumps(dict(
-                                (self.getRandomName(10),
-                                 self.getRandomName(15)) for _ in
-                                range(self.__rnd.randint(1, 40))))
+                            (self.getRandomName(10),
+                             self.getRandomName(15)) for _ in
+                            range(self.__rnd.randint(1, 40))))
                         se[mg]["LabelShapes"] = json.dumps(dict(
-                                (self.getRandomName(10), [
-                                        self.__rnd.randint(1, 40)
-                                        for _ in range(
-                                            self.__rnd.randint(0, 3))])
-                                for _ in
-                                range(self.__rnd.randint(1, 40))))
+                            (self.getRandomName(10),
+                             [self.__rnd.randint(1, 40)
+                              for _ in range(self.__rnd.randint(0, 3))])
+                            for _ in
+                            range(self.__rnd.randint(1, 40))))
 
                         self._cf.dp.SetCommandVariable(["MCPLIST",
                                                         json.dumps(mcps)])
@@ -6434,26 +6395,18 @@ class ProfileManagerTest(unittest.TestCase):
                         self.assertEqual(
                             json.loads(se[mg]["Timer"]), ltimers[mg])
                         self.assertEqual(se[mg]["MntGrp"], mg)
-#                            print "CNF", cnf
-#                            print "CHDS", chds
                         myctrls = {}
                         fgtm = "/".join(
                             self.smychsXX[str(ltimers[mg][0])]['source'].split(
                                 "/")[:-1])
-#                            print "EXPCH", [exp["name"] for exp in expch]
-#                            print "CHDS", chds
                         for cl in ctrls:
-#                                print "CTRL", cl
                             tgc = {}
                             for exp in expch:
                                 ds = exp["name"]
-#                                if cl == exp['controller']:
- #                                       print "DS", ds , ds in chds
                                 if ds in chds and cl == exp['controller']:
                                     if ds in self.smychsXX.keys():
                                         cnt = self.smychsXX[str(ds)]
                                         i = chds.index(str(ds))
-        #                                    print "INDEX", i, ds
                                         try:
                                             tdv = "/".join(
                                                 cnt['source'].split("/")[:-1])
@@ -6463,10 +6416,10 @@ class ProfileManagerTest(unittest.TestCase):
                                                    'data_type':
                                                        cnt['data_type'],
                                                    'plot_type': (
-                                                    cnt['plot_type']
-                                                    if (ds not in lhe2[mg]
-                                                        and ds in bchds)
-                                                    else 0),
+                                                       cnt['plot_type']
+                                                       if (ds not in lhe2[mg]
+                                                           and ds in bchds)
+                                                       else 0),
                                                    'data_units':
                                                        cnt['data_units'],
                                                    'enabled': True,
@@ -6479,19 +6432,17 @@ class ProfileManagerTest(unittest.TestCase):
                                                    '_unit_id': '0',
                                                    'output': True,
                                                    'plot_axes': (
-                                                    cnt['plot_axes']
-                                                    if (ds not in lhe2[mg]
-                                                        and ds in bchds)
-                                                    else []),
+                                                       cnt['plot_axes']
+                                                       if (ds not in lhe2[mg]
+                                                           and ds in bchds)
+                                                       else []),
                                                    'nexus_path': '',
                                                    'normalization': 0,
                                                    'source': cnt['source']}
                                             tgc[tdv] = chn
                                         except:
-        #                                    print ds, cnt
                                             raise
                             if tgc:
-        #                            print "TIMERIN", cl ,  timers.keys()
                                 ltm = timers[cl] if cl in timers.keys() \
                                     else ltimers[mg][0]
                                 fltm = "/".join(
@@ -6500,12 +6451,12 @@ class ProfileManagerTest(unittest.TestCase):
                                 myctrls[cl] = {
                                     'units':
                                         {'0':
-                                             {
-                                            'channels': tgc,
-                                            'monitor': fltm,
-                                            'id': 0,
-                                            'timer': fltm,
-                                            'trigger_type': 0}}}
+                                         {
+                                             'channels': tgc,
+                                             'monitor': fltm,
+                                             'id': 0,
+                                             'timer': fltm,
+                                             'trigger_type': 0}}}
 
                         tgc = {}
                         for ds in chds:
@@ -6519,8 +6470,8 @@ class ProfileManagerTest(unittest.TestCase):
                                            'name': str(ds),
                                            'data_type': cnt['data_type'],
                                            'plot_type': (
-                                            cnt['plot_type']
-                                            if ds not in lhe2[mg] else 0),
+                                               cnt['plot_type']
+                                               if ds not in lhe2[mg] else 0),
                                            'data_units': cnt['data_units'],
                                            'enabled': True,
                                            'label': cnt['source'],
@@ -6529,29 +6480,28 @@ class ProfileManagerTest(unittest.TestCase):
                                            '_controller_name': '__tango__',
                                            'conditioning': '',
                                            'full_name': '%s%s' % (
-                                            'tango://', cnt['source']),
+                                               'tango://', cnt['source']),
                                            '_unit_id': '0',
                                            'output': True,
                                            'plot_axes': (
-                                            cnt['plot_axes']
-                                            if ds not in lhe2[mg] else []),
+                                               cnt['plot_axes']
+                                               if ds not in lhe2[mg] else []),
                                            'nexus_path': '',
                                            'normalization': 0,
                                            'source': cnt['source']}
                                     tgc[chn["full_name"]] = chn
                                 except:
-        #                                print ds, cnt
                                     raise
 
                         if tgc:
                             myctrls['__tango__'] = {
                                 'units':
                                     {'0':
-                                         {'channels': tgc,
-                                          'monitor': fgtm,
-                                          'id': 0,
-                                          'timer': fgtm,
-                                          'trigger_type': 0}}}
+                                     {'channels': tgc,
+                                      'monitor': fgtm,
+                                      'id': 0,
+                                      'timer': fgtm,
+                                      'trigger_type': 0}}}
 
                         smg = {"controllers": myctrls,
                                "monitor": "%s" % fgtm,
@@ -6571,13 +6521,13 @@ class ProfileManagerTest(unittest.TestCase):
                         self.assertTrue(not mgt[mg].isMntGrpChanged())
                         self.assertTrue(not mgt[mg].isMntGrpChanged())
 
-                        self.compareToDumpJSON(se[mg],
-                                           [
-                                            "DataSourceGroup",
-                                            "HiddenElements",
-                                            "AutomaticDataSources",
-                                            "HiddenElements"],
-                                           name=mg)
+                        self.compareToDumpJSON(
+                            se[mg],
+                            ["DataSourceGroup",
+                             "HiddenElements",
+                             "AutomaticDataSources",
+                             "HiddenElements"],
+                            name=mg)
 
                         self.myAssertDict(
                             json.loads(se[mg]["DataSourceGroup"]), adss[mg])
@@ -6609,13 +6559,14 @@ class ProfileManagerTest(unittest.TestCase):
 
                     lmgt.switchProfile(False)
 
-                    self.compareToDumpJSON(lse, [
+                    self.compareToDumpJSON(
+                        lse, [
                             "DataSourceGroup",
                             "HiddenElements",
                             "AutomaticDataSources",
                             "Timer"
-                            ],
-                                           name=mg1)
+                        ],
+                        name=mg1)
 
                     tmpcf = json.loads(mgt[mg1].mntGrpConfiguration())
                     ltmpcf = json.loads(lmgt.mntGrpConfiguration())
@@ -6652,20 +6603,21 @@ class ProfileManagerTest(unittest.TestCase):
                     ltmpcf = json.loads(lmgt.mntGrpConfiguration())
 #                    self.myAssertDict(tmpcf1, ltmpcf)
                     self.myAssertDict(tmpcf2, ltmpcf)
-                    self.compareToDumpJSON(se[mg2],
-                                       [
-                                        "DataSourceGroup",
-                                        "HiddenElements",
-                                        "AutomaticDataSources"],
-                                       name=mg2)
+                    self.compareToDumpJSON(
+                        se[mg2],
+                        ["DataSourceGroup",
+                         "HiddenElements",
+                         "AutomaticDataSources"],
+                        name=mg2)
 
-                    self.compareToDumpJSON(lse,
-                                       ["DataSourceGroup",
-                                        "HiddenElements",
-                                        "AutomaticDataSources",
-                                        "Timer",
-                                        "MntGrp"],
-                                       name=mg1)
+                    self.compareToDumpJSON(
+                        lse,
+                        ["DataSourceGroup",
+                         "HiddenElements",
+                         "AutomaticDataSources",
+                         "Timer",
+                         "MntGrp"],
+                        name=mg1)
 
                     tmpcf = json.loads(mgt[mg2].mntGrpConfiguration())
                     ltmpcf = json.loads(lmgt.mntGrpConfiguration())
@@ -6798,24 +6750,26 @@ class ProfileManagerTest(unittest.TestCase):
 #                    self.myAssertDict(tmpcf1, ltmpcf)
                     self.myAssertDict(tmpcf2, ltmpcf)
 
-                    self.compareToDumpJSON(lse,
-                                       ["AutomaticComponentGroup",
-                                        "ComponentGroup",
-                                        "DataSourceGroup",
-                                        "HiddenElements",
-                                        "AutomaticDataSources",
-                                        "Timer",
-                                        "MntGrp"],
-                                       name=mg1)
+                    self.compareToDumpJSON(
+                        lse,
+                        ["AutomaticComponentGroup",
+                         "ComponentGroup",
+                         "DataSourceGroup",
+                         "HiddenElements",
+                         "AutomaticDataSources",
+                         "Timer",
+                         "MntGrp"],
+                        name=mg1)
 
-                    self.compareToDump(se[mg2],
-                                       ["AutomaticComponentGroup",
-                                        "ComponentGroup",
-                                        "DataSourceGroup",
-                                        "HiddenElements",
-                                        "AutomaticDataSources",
-                                        "Timer"],
-                                       name=mg2)
+                    self.compareToDump(
+                        se[mg2],
+                        ["AutomaticComponentGroup",
+                         "ComponentGroup",
+                         "DataSourceGroup",
+                         "HiddenElements",
+                         "AutomaticDataSources",
+                         "Timer"],
+                        name=mg2)
 
                     self.myAssertDict(
                         json.loads(se[mg2]["AutomaticComponentGroup"]),
@@ -6861,13 +6815,14 @@ class ProfileManagerTest(unittest.TestCase):
 #                    self.myAssertDict(tmpcf1, ltmpcf)
 #                    self.myAssertDict(tmpcf2, ltmpcf)
 
-                    self.compareToDumpJSON(lse,
-                                       [
-                                        "DataSourceGroup",
-                                        "HiddenElements",
-                                        "AutomaticDataSources",
-                                        "Timer"],
-                                       name=mg3)
+                    self.compareToDumpJSON(
+                        lse,
+                        [
+                            "DataSourceGroup",
+                            "HiddenElements",
+                            "AutomaticDataSources",
+                            "Timer"],
+                        name=mg3)
                     self.myAssertDict(json.loads(lse["DataSourceGroup"]),
                                       adss[mg3])
                     self.assertEqual(
@@ -6906,14 +6861,15 @@ class ProfileManagerTest(unittest.TestCase):
                         wmg,
                         MSUtils.getEnv('ActiveMntGrp', self._ms.ms.keys()[0]))
 
-                    self.compareToDumpJSON(lse,
-                                       [
-                                        "DataSourceGroup",
-                                        "HiddenElements",
-                                        "AutomaticDataSources",
-                                        "Timer",
-                                        "MntGrp"],
-                                       name=mg3)
+                    self.compareToDumpJSON(
+                        lse,
+                        [
+                            "DataSourceGroup",
+                            "HiddenElements",
+                            "AutomaticDataSources",
+                            "Timer",
+                            "MntGrp"],
+                        name=mg3)
                     mydsg = dict(json.loads(lse["DataSourceGroup"]))
                     for ds in self.smychsXX.keys():
                         if ds in expch:
@@ -6965,13 +6921,14 @@ class ProfileManagerTest(unittest.TestCase):
 #                    self.myAssertDict(tmpcf1, ltmpcf)
 #                    self.myAssertDict(tmpcf2, ltmpcf)
 
-                    self.compareToDumpJSON(lse,
-                                       [
-                                        "DataSourceGroup",
-                                        "HiddenElements",
-                                        "AutomaticDataSources",
-                                        "Timer"],
-                                       name=mg3)
+                    self.compareToDumpJSON(
+                        lse,
+                        [
+                            "DataSourceGroup",
+                            "HiddenElements",
+                            "AutomaticDataSources",
+                            "Timer"],
+                        name=mg3)
                     self.myAssertDict(json.loads(lse["DataSourceGroup"]),
                                       adss[mg3])
                     self.assertEqual(
@@ -7012,13 +6969,14 @@ class ProfileManagerTest(unittest.TestCase):
 #                    self.myAssertDict(tmpcf1, ltmpcf)
 #                    self.myAssertDict(tmpcf2, ltmpcf)
 
-                    self.compareToDumpJSON(lse,
-                                       [
-                                        "DataSourceGroup",
-                                        "HiddenElements",
-                                        "AutomaticDataSources",
-                                        "Timer"],
-                                       name=mg3)
+                    self.compareToDumpJSON(
+                        lse,
+                        [
+                            "DataSourceGroup",
+                            "HiddenElements",
+                            "AutomaticDataSources",
+                            "Timer"],
+                        name=mg3)
                     self.myAssertDict(json.loads(lse["DataSourceGroup"]),
                                       adss[mg3])
                     self.assertEqual(
@@ -7056,13 +7014,14 @@ class ProfileManagerTest(unittest.TestCase):
 #                    self.myAssertDict(tmpcf1, ltmpcf)
 #                    self.myAssertDict(tmpcf2, ltmpcf)
 
-                    self.compareToDumpJSON(lse,
-                                       [
-                                        "DataSourceGroup",
-                                        "HiddenElements",
-                                        "AutomaticDataSources",
-                                        "Timer"],
-                                       name=mg3)
+                    self.compareToDumpJSON(
+                        lse,
+                        [
+                            "DataSourceGroup",
+                            "HiddenElements",
+                            "AutomaticDataSources",
+                            "Timer"],
+                        name=mg3)
                     self.myAssertDict(json.loads(lse["DataSourceGroup"]),
                                       adss[mg3])
                     self.assertEqual(
@@ -7095,13 +7054,14 @@ class ProfileManagerTest(unittest.TestCase):
 #                    self.myAssertDict(tmpcf1, ltmpcf)
 #                    self.myAssertDict(tmpcf2, ltmpcf)
 
-                    self.compareToDumpJSON(lse,
-                                       [
-                                        "DataSourceGroup",
-                                        "HiddenElements",
-                                        "AutomaticDataSources",
-                                        "Timer", "MntGrp"],
-                                       name=mg3)
+                    self.compareToDumpJSON(
+                        lse,
+                        [
+                            "DataSourceGroup",
+                            "HiddenElements",
+                            "AutomaticDataSources",
+                            "Timer", "MntGrp"],
+                        name=mg3)
                     self.myAssertDict(json.loads(lse["DataSourceGroup"]),
                                       adss[mg3])
                     self.assertEqual(
@@ -7125,7 +7085,7 @@ class ProfileManagerTest(unittest.TestCase):
                     self._cf.dp.deleteSelection(mg4)
                     lse["MntGrp"] = mg4
                     self.assertTrue(
-                        not mg4 in self._cf.dp.availableSelections())
+                        mg4 not in self._cf.dp.availableSelections())
                     self.assertTrue(mg4 in lmgt.availableMntGrps())
                     if j % 2:
                         lmgt.defaultAutomaticComponents = \
@@ -7143,8 +7103,9 @@ class ProfileManagerTest(unittest.TestCase):
 #                    self.myAssertDict(tmpcf1, ltmpcf)
 #                    self.myAssertDict(tmpcf2, ltmpcf)
 
-                    self.compareToDumpJSON(lse,
-                                           [
+                    self.compareToDumpJSON(
+                        lse,
+                        [
                             "InitDataSources",
                             "AutomaticDataSources",
                             "AutomaticComponentGroup",
@@ -7154,8 +7115,8 @@ class ProfileManagerTest(unittest.TestCase):
                             "ComponentGroup",
                             "DataSourceGroup",
                             "HiddenElements",
-                            ],
-                                           name=mg3)
+                        ],
+                        name=mg3)
                     self.assertEqual(
                         set(json.loads(lse["AutomaticDataSources"])),
                         set(aadss[mg3]))

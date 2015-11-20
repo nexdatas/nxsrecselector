@@ -53,11 +53,11 @@ import TestMGSetUp
 
 class Pool(PyTango.Device_4Impl):
 
-#--------- Add you global variables here --------------------------
+    #--------- Add you global variables here --------------------------
 
-#------------------------------------------------------------------
-#    Device constructor
-#------------------------------------------------------------------
+    #------------------------------------------------------------------
+    #    Device constructor
+    #------------------------------------------------------------------
     def __init__(self, cl, name):
         PyTango.Device_4Impl.__init__(self, cl, name)
 
@@ -69,113 +69,113 @@ class Pool(PyTango.Device_4Impl):
         self._tmgs = []
         Pool.init_device(self)
 
-#------------------------------------------------------------------
-#    Device destructor
-#------------------------------------------------------------------
+    #------------------------------------------------------------------
+    #    Device destructor
+    #------------------------------------------------------------------
     def delete_device(self):
         print "[Device delete_device method] for device", self.get_name()
         for tmg in self._tmgs:
             tmg.tearDown()
 
-#------------------------------------------------------------------
-#    Device initialization
-#------------------------------------------------------------------
+    #------------------------------------------------------------------
+    #    Device initialization
+    #------------------------------------------------------------------
     def init_device(self):
         print "In ", self.get_name(), "::init_device()"
         self.set_state(PyTango.DevState.ON)
         self.get_device_properties(self.get_device_class())
 
-#------------------------------------------------------------------
-#    Always excuted hook method
-#------------------------------------------------------------------
+    #------------------------------------------------------------------
+    #    Always excuted hook method
+    #------------------------------------------------------------------
     def always_executed_hook(self):
         pass
     #    print "In ", self.get_name(), "::always_excuted_hook()"
 
-#
-#==================================================================
-#
-#    TestPool read/write attribute methods
-#
-#==================================================================
-#
-#------------------------------------------------------------------
-#    Read AcqChannelList attribute
-#------------------------------------------------------------------
+    #
+    #==================================================================
+    #
+    #    TestPool read/write attribute methods
+    #
+    #==================================================================
+    #
+    #------------------------------------------------------------------
+    #    Read AcqChannelList attribute
+    #------------------------------------------------------------------
     def read_AcqChannelList(self, attr):
         print >> self.log_info, "In ", self.get_name(), \
             "::read_AcqChannelList()"
         attr.set_value(self.attr_AcqChannelList)
 
-#------------------------------------------------------------------
-#    Write AcqChannelList attribute
-#------------------------------------------------------------------
+    #------------------------------------------------------------------
+    #    Write AcqChannelList attribute
+    #------------------------------------------------------------------
     def write_AcqChannelList(self, attr):
         print >> self.log_info, "In ", self.get_name(), \
             "::write_AcqChannelList()"
         self.attr_AcqChannelList = attr.get_write_value() or []
 
-#------------------------------------------------------------------
-#    Read MeasurementGroupList attribute
-#------------------------------------------------------------------
+    #------------------------------------------------------------------
+    #    Read MeasurementGroupList attribute
+    #------------------------------------------------------------------
     def read_MeasurementGroupList(self, attr):
         print >> self.log_info, "In ", self.get_name(), \
             "::read_MeasurementGroupList()"
         attr.set_value(self.attr_MeasurementGroupList)
 
-#------------------------------------------------------------------
-#    Write MeasurementGroupList attribute
-#------------------------------------------------------------------
+    #------------------------------------------------------------------
+    #    Write MeasurementGroupList attribute
+    #------------------------------------------------------------------
     def write_MeasurementGroupList(self, attr):
         print >> self.log_info, "In ", self.get_name(), \
             "::write_MeasurementGroupList()"
         self.attr_MeasurementGroupList = attr.get_write_value() or []
 
-#------------------------------------------------------------------
-#    Read ExpChannelList attribute
-#------------------------------------------------------------------
+    #------------------------------------------------------------------
+    #    Read ExpChannelList attribute
+    #------------------------------------------------------------------
     def read_ExpChannelList(self, attr):
         print >> self.log_info, "In ", self.get_name(), \
             "::read_ExpChannelList()"
         attr.set_value(self.attr_ExpChannelList)
 
-#------------------------------------------------------------------
-#    Write ExpChannelList attribute
-#------------------------------------------------------------------
+    #------------------------------------------------------------------
+    #    Write ExpChannelList attribute
+    #------------------------------------------------------------------
     def write_ExpChannelList(self, attr):
         print >> self.log_info, "In ", self.get_name(), \
             "::write_ExpChannelList()"
         self.attr_ExpChannelList = attr.get_write_value() or []
 
-#------------------------------------------------------------------
-#    Read MotorList attribute
-#------------------------------------------------------------------
+    #------------------------------------------------------------------
+    #    Read MotorList attribute
+    #------------------------------------------------------------------
     def read_MotorList(self, attr):
         print >> self.log_info, "In ", self.get_name(), \
             "::read_MotorList()"
         attr.set_value(self.attr_MotorList)
 
-#------------------------------------------------------------------
-#    Write MotorList attribute
-#------------------------------------------------------------------
+    #------------------------------------------------------------------
+    #    Write MotorList attribute
+    #------------------------------------------------------------------
     def write_MotorList(self, attr):
         print >> self.log_info, "In ", self.get_name(), \
             "::write_MotorList()"
         self.attr_MotorList = attr.get_write_value() or []
 
-#==================================================================
-#
-#    TestPool command methods
-#
-#==================================================================
-#
-#------------------------------------------------------------------
-#    SetState command:
-#
-#    Description: Set state of tango device
-#
-#    argin: DevString     tango state
-#------------------------------------------------------------------
+    #==================================================================
+    #
+    #    TestPool command methods
+    #
+    #==================================================================
+    #
+    #------------------------------------------------------------------
+    #    SetState command:
+    #
+    #    Description: Set state of tango device
+    #
+    #    argin: DevString     tango state
+    #------------------------------------------------------------------
     def SetState(self, state):
         print "In ", self.get_name(), "::SetState()"
         if state == "RUNNING":
@@ -187,13 +187,13 @@ class Pool(PyTango.Device_4Impl):
         else:
             self.set_state(PyTango.DevState.ON)
 
-#------------------------------------------------------------------
-#    DeleteElement command:
-#
-#    Description: Set state of tango device
-#
-#    argin: DevString     element
-#------------------------------------------------------------------
+    #------------------------------------------------------------------
+    #    DeleteElement command:
+    #
+    #    Description: Set state of tango device
+    #
+    #    argin: DevString     element
+    #------------------------------------------------------------------
     def DeleteElement(self, name):
         print "In ", self.get_name(), "::DeleteElement()"
         attrs = [
@@ -201,7 +201,7 @@ class Pool(PyTango.Device_4Impl):
             "attr_AcqChannelList",
             "attr_ExpChannelList",
             "attr_MotorList"
-            ]
+        ]
         for attr in attrs:
             inlist = list(getattr(self, attr))
             outlist = []
@@ -211,20 +211,20 @@ class Pool(PyTango.Device_4Impl):
                     outlist.append(elem)
             getattr(self, attr)[:] = outlist
 
-#------------------------------------------------------------------
-#    CreateMeasurementGroup command:
-#
-#    Description: Set state of tango device
-#
-#    argin: DevVarStringArray     element
-#------------------------------------------------------------------
+    #------------------------------------------------------------------
+    #    CreateMeasurementGroup command:
+    #
+    #    Description: Set state of tango device
+    #
+    #    argin: DevVarStringArray     element
+    #------------------------------------------------------------------
     def CreateMeasurementGroup(self, names):
         print "In ", self.get_name(), "::CreateMeasurementGroup()"
         mg = names[0]
         tm = names[1]
         self.attr_MeasurementGroupList.append(json.dumps(
-                {"name": mg,
-                 "full_name": "mntgrp/pool/%s" % (mg)}))
+            {"name": mg,
+             "full_name": "mntgrp/pool/%s" % (mg)}))
         tmg = TestMGSetUp.TestMeasurementGroupSetUp(name=mg)
         tmg.setUp()
         self._tmgs.append(tmg)
@@ -239,64 +239,64 @@ class PoolClass(PyTango.DeviceClass):
 
     #    Class Properties
     class_property_list = {
-         }
+    }
 
     #    Device Properties
     device_property_list = {
-        }
+    }
 
     #    Command definitions
     cmd_list = {
         'SetState':
             [[PyTango.DevString, "ScalarString"],
-            [PyTango.DevVoid, ""]],
+             [PyTango.DevVoid, ""]],
         'DeleteElement':
             [[PyTango.DevString, "element name"],
              [PyTango.DevVoid, ""]],
         'CreateMeasurementGroup':
             [[PyTango.DevVarStringArray, "channel names"],
              [PyTango.DevVoid, ""]],
-        }
+    }
 
     #    Attribute definitions
     attr_list = {
         'AcqChannelList':
             [[PyTango.DevString,
-            PyTango.SPECTRUM,
-            PyTango.READ_WRITE, 4096],
-            {
-                'label': "",
-                'description': " "
+              PyTango.SPECTRUM,
+              PyTango.READ_WRITE, 4096],
+             {
+                 'label': "",
+                 'description': " "
             }],
         'MeasurementGroupList':
             [[PyTango.DevString,
-            PyTango.SPECTRUM,
-            PyTango.READ_WRITE, 4096],
-            {
-                'label': "",
-                'description': " "
+              PyTango.SPECTRUM,
+              PyTango.READ_WRITE, 4096],
+             {
+                 'label': "",
+                 'description': " "
             }],
         'ExpChannelList':
             [[PyTango.DevString,
-            PyTango.SPECTRUM,
-            PyTango.READ_WRITE, 4096],
-            {
-                'label': "",
-                'description': " "
+              PyTango.SPECTRUM,
+              PyTango.READ_WRITE, 4096],
+             {
+                 'label': "",
+                 'description': " "
             }],
         'MotorList':
             [[PyTango.DevString,
-            PyTango.SPECTRUM,
-            PyTango.READ_WRITE, 4096],
-            {
-                'label': "",
-                'description': " "
+              PyTango.SPECTRUM,
+              PyTango.READ_WRITE, 4096],
+             {
+                 'label': "",
+                 'description': " "
             }],
-        }
+    }
 
-#------------------------------------------------------------------
-#    PoolClass Constructor
-#------------------------------------------------------------------
+    #------------------------------------------------------------------
+    #    PoolClass Constructor
+    #------------------------------------------------------------------
     def __init__(self, name):
         PyTango.DeviceClass.__init__(self, name)
         self.set_type(name)

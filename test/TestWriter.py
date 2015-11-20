@@ -51,11 +51,11 @@ import pickle
 
 class NXSDataWriter(PyTango.Device_4Impl):
 
-#--------- Add you global variables here --------------------------
+    #--------- Add you global variables here --------------------------
 
-#------------------------------------------------------------------
-#    Device constructor
-#------------------------------------------------------------------
+    #------------------------------------------------------------------
+    #    Device constructor
+    #------------------------------------------------------------------
     def __init__(self, cl, name):
         PyTango.Device_4Impl.__init__(self, cl, name)
 
@@ -66,23 +66,23 @@ class NXSDataWriter(PyTango.Device_4Impl):
         self.attr_MotorList = []
         NXSDataWriter.init_device(self)
 
-#------------------------------------------------------------------
-#    Device destructor
-#------------------------------------------------------------------
+    #------------------------------------------------------------------
+    #    Device destructor
+    #------------------------------------------------------------------
     def delete_device(self):
         print "[Device delete_device method] for device", self.get_name()
 
-#------------------------------------------------------------------
-#    Device initialization
-#------------------------------------------------------------------
+    #------------------------------------------------------------------
+    #    Device initialization
+    #------------------------------------------------------------------
     def init_device(self):
         print "In ", self.get_name(), "::init_device()"
         self.set_state(PyTango.DevState.ON)
         self.get_device_properties(self.get_device_class())
 
-#------------------------------------------------------------------
-#    Always excuted hook method
-#------------------------------------------------------------------
+    #------------------------------------------------------------------
+    #    Always excuted hook method
+    #------------------------------------------------------------------
     def always_executed_hook(self):
         print "In ", self.get_name(), "::always_excuted_hook()"
 
@@ -98,14 +98,14 @@ class NXSDataWriter(PyTango.Device_4Impl):
 #    TestWriter command methods
 #
 #==================================================================
-#
-#------------------------------------------------------------------
-#    SetState command:
-#
-#    Description: Set state of tango device
-#
-#    argin: DevString     tango state
-#------------------------------------------------------------------
+    #
+    #------------------------------------------------------------------
+    #    SetState command:
+    #
+    #    Description: Set state of tango device
+    #
+    #    argin: DevString     tango state
+    #------------------------------------------------------------------
     def SetState(self, state):
         print "In ", self.get_name(), "::SetState()"
         if state == "RUNNING":
@@ -127,22 +127,22 @@ class NXSDataWriterClass(PyTango.DeviceClass):
 
     #    Class Properties
     class_property_list = {
-         }
+    }
 
     #    Device Properties
     device_property_list = {
-        }
+    }
 
     #    Command definitions
     cmd_list = {
         'SetState':
-            [[PyTango.DevString, "ScalarString"],
-            [PyTango.DevVoid, ""]],
-        }
+        [[PyTango.DevString, "ScalarString"],
+         [PyTango.DevVoid, ""]],
+    }
 
     #    Attribute definitions
     attr_list = {
-        }
+    }
 
 #------------------------------------------------------------------
 #    WriterClass Constructor

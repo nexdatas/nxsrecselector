@@ -52,11 +52,11 @@ import json
 
 class MeasurementGroup(PyTango.Device_4Impl):
 
-#--------- Add you global variables here --------------------------
+    #--------- Add you global variables here --------------------------
 
-#------------------------------------------------------------------
-#    Device constructor
-#------------------------------------------------------------------
+    #------------------------------------------------------------------
+    #    Device constructor
+    #------------------------------------------------------------------
     def __init__(self, cl, name):
         PyTango.Device_4Impl.__init__(self, cl, name)
 
@@ -64,63 +64,63 @@ class MeasurementGroup(PyTango.Device_4Impl):
         self.attr_Configuration = "{}"
         MeasurementGroup.init_device(self)
 
-#------------------------------------------------------------------
-#    Device destructor
-#------------------------------------------------------------------
+    #------------------------------------------------------------------
+    #    Device destructor
+    #------------------------------------------------------------------
     def delete_device(self):
         print "[Device delete_device method] for device", self.get_name()
 
-#------------------------------------------------------------------
-#    Device initialization
-#------------------------------------------------------------------
+    #------------------------------------------------------------------
+    #    Device initialization
+    #------------------------------------------------------------------
     def init_device(self):
         print "In ", self.get_name(), "::init_device()"
         self.set_state(PyTango.DevState.ON)
         self.get_device_properties(self.get_device_class())
 
-#------------------------------------------------------------------
-#    Always excuted hook method
-#------------------------------------------------------------------
+    #------------------------------------------------------------------
+    #    Always excuted hook method
+    #------------------------------------------------------------------
     def always_executed_hook(self):
         pass
         #        print "In ", self.get_name(), "::always_excuted_hook()"
 
-#
-#==================================================================
-#
-#    TestMeasurementGroup read/write attribute methods
-#
-#==================================================================
-#
-#------------------------------------------------------------------
-#    Read Configuration attribute
-#------------------------------------------------------------------
+    #
+    #==================================================================
+    #
+    #    TestMeasurementGroup read/write attribute methods
+    #
+    #==================================================================
+    #
+    #------------------------------------------------------------------
+    #    Read Configuration attribute
+    #------------------------------------------------------------------
     def read_Configuration(self, attr):
         print >> self.log_info, "In ", self.get_name(), \
             "::read_Configuration()"
         attr.set_value(self.attr_Configuration)
 
-#------------------------------------------------------------------
-#    Write Configuration attribute
-#------------------------------------------------------------------
+    #------------------------------------------------------------------
+    #    Write Configuration attribute
+    #------------------------------------------------------------------
     def write_Configuration(self, attr):
         print >> self.log_info, "In ", self.get_name(), \
             "::write_Configuration()"
         self.attr_Configuration = attr.get_write_value() or ""
 
-#==================================================================
-#
-#    TestMeasurementGroup command methods
-#
-#==================================================================
-#
-#------------------------------------------------------------------
-#    SetState command:
-#
-#    Description: Set state of tango device
-#
-#    argin: DevString     tango state
-#------------------------------------------------------------------
+    #==================================================================
+    #
+    #    TestMeasurementGroup command methods
+    #
+    #==================================================================
+    #
+    #------------------------------------------------------------------
+    #    SetState command:
+    #
+    #    Description: Set state of tango device
+    #
+    #    argin: DevString     tango state
+    #------------------------------------------------------------------
     def SetState(self, state):
         print "In ", self.get_name(), "::SetState()"
         if state == "RUNNING":
@@ -142,30 +142,30 @@ class MeasurementGroupClass(PyTango.DeviceClass):
 
     #    Class Properties
     class_property_list = {
-         }
+    }
 
     #    Device Properties
     device_property_list = {
-        }
+    }
 
     #    Command definitions
     cmd_list = {
         'SetState':
             [[PyTango.DevString, "ScalarString"],
-            [PyTango.DevVoid, ""]],
-        }
+             [PyTango.DevVoid, ""]],
+    }
 
     #    Attribute definitions
     attr_list = {
         'Configuration':
             [[PyTango.DevString,
-            PyTango.SCALAR,
-            PyTango.READ_WRITE],
-            {
-                'label': "",
-                'description': " "
+              PyTango.SCALAR,
+              PyTango.READ_WRITE],
+             {
+                 'label': "",
+                 'description': " "
             }],
-        }
+    }
 
 #------------------------------------------------------------------
 #    MeasurementGroupClass Constructor

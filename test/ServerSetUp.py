@@ -54,7 +54,7 @@ class ServerSetUp(object):
         if os.path.isfile("../NXSRecSelector"):
             self._psub = subprocess.call(
                 "cd ..; ./NXSRecSelector NRSTEST &", stdout=None,
-                stderr=None,  shell=True)
+                stderr=None, shell=True)
         else:
             self._psub = subprocess.call(
                 "NXSRecSelector NRSTEST &", stdout=None,

@@ -59,7 +59,7 @@ class TestServerSetUp(object):
             'DeviceUShort': 1,
             'DeviceULong': 23234,
             'DeviceString': "My Sting"
-            }
+        }
 
         ##  class properties
         self.class_prop = {
@@ -71,7 +71,7 @@ class TestServerSetUp(object):
             'ClassUShort': 1,
             'ClassULong': 12343,
             'ClassString': "My ClassString",
-            }
+        }
 
     ## test starter
     # \brief Common set up of Tango Server
@@ -99,7 +99,7 @@ class TestServerSetUp(object):
         if os.path.isfile("%s/ST" % path):
             self._psub = subprocess.call(
                 "cd %s; ./ST %s &" % (path, self.instance), stdout=None,
-                stderr=None,  shell=True)
+                stderr=None, shell=True)
         print "waiting for simple server",
 
         found = False
@@ -176,7 +176,7 @@ class MultiTestServerSetUp(object):
             'DeviceUShort': 1,
             'DeviceULong': 23234,
             'DeviceString': "My Sting"
-            }
+        }
 
         ##  class properties
         self.class_prop = {
@@ -188,7 +188,7 @@ class MultiTestServerSetUp(object):
             'ClassUShort': 1,
             'ClassULong': 12343,
             'ClassString': "My ClassString",
-            }
+        }
 
     ## test starter
     # \brief Common set up of Tango Server
@@ -236,7 +236,6 @@ class MultiTestServerSetUp(object):
                 if dpcnt == len(devices):
                     found = True
             except Exception as e:
-#                print str(e)
                 found = False
             cnt += 1
         print ""
@@ -278,7 +277,7 @@ if __name__ == "__main__":
         print dp.status()
     simps.tearDown()
     simps = MultiTestServerSetUp(devices=[
-            "tm2/dd/sr", "dsf/44/fgg", "sdffd/sdfsd/sfd"])
+        "tm2/dd/sr", "dsf/44/fgg", "sdffd/sdfsd/sfd"])
     simps.setUp()
     for dp in simps.dps.values():
         print dp.status()
