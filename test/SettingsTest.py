@@ -159,13 +159,13 @@ class SettingsTest(unittest.TestCase):
             ("WriterDevice", ''),
             ("Door", ''),
             ("MntGrp", '')
-            ]
+        ]
         self.mysel = {
             'mysl': (
                 '{}'),
             'mysl2': (
                 json.dumps({key: value for (key, value) in self._keys})),
-            }
+        }
 
         self.mysel2 = {
             'mntgrp_01e': (
@@ -178,7 +178,7 @@ class SettingsTest(unittest.TestCase):
                 json.dumps({key: value for (key, value) in self._keys})),
             'mntgrp_012313': (
                 json.dumps({key: value for (key, value) in self._keys})),
-            }
+        }
 
         self.mycps = {
             'mycp': (
@@ -327,7 +327,7 @@ class SettingsTest(unittest.TestCase):
                 '</dimensions><strategy mode="STEP"/>'
                 '<datasource type="CLIENT"><record name="p09/mca/exp.02"/>'
                 '</datasource></field></group></group></group></definition>'
-                ),
+            ),
 
             'scan2': (
                 '<definition><group type="NXentry" name="entry1">'
@@ -347,7 +347,7 @@ class SettingsTest(unittest.TestCase):
                 '<datasource type="CLIENT"  name="mca">'
                 '<record name="p09/mca/exp.02"/>'
                 '</datasource></field></group></group></group></definition>'
-                ),
+            ),
             'scan3': (
                 '<definition><group type="NXentry" name="entry1">'
                 '<group type="NXinstrument" name="instrument">'
@@ -366,42 +366,48 @@ class SettingsTest(unittest.TestCase):
                 '<datasource type="CLIENT"  name="mca">'
                 '<record name="p09/mca/exp.02"/>'
                 '</datasource></field></group></group></group></definition>'
-                ),
+            ),
 
-            }
+        }
 
         self.rescps = {
             'mycp': {},
             'mycp2': {},
             'mycp3': {'ann': [('STEP', 'TANGO', '', None, None)]},
-            'exp_t01': {'exp_t01': [
+            'exp_t01': {
+                'exp_t01': [
                     ('STEP', 'CLIENT', 'haso228k:10000/expchan/dgg2_exp_01/1',
                      'NX_FLOAT', None)]},
-            'dim1': {'tann1c': [
+            'dim1': {
+                'tann1c': [
                     ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8', [34])]},
-            'dim2': {'tann1c': [
+            'dim2': {
+                'tann1c': [
                     ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8',
                      ['$datasource.ann'])]},
-            'dim3': {'tann1c': [
+            'dim3': {
+                'tann1c': [
                     ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8',
                      [1234])]},
-            'dim4': {'tann1c': [
+            'dim4': {
+                'tann1c': [
                     ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8',
                      ['$datasource.ann2'])]},
-            'dim5': {'tann1c': [
+            'dim5': {
+                'tann1c': [
                     ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8',
                      ['$datasource.ann'])],
-                     'ann': [('CONFIG', 'TANGO', '', None, None)],
-                     },
+                'ann': [('CONFIG', 'TANGO', '', None, None)],
+            },
             'dim6': {'tann1c': [
-                    ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8',
-                     ['$datasource.ann', 123])]},
+                ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8',
+                 ['$datasource.ann', 123])]},
             'dim7': {'tann1c': [
-                    ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8',
-                     [None, None])]},
+                ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8',
+                 [None, None])]},
             'dim8': {'tann1c': [
-                    ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8',
-                     [None, 123])]},
+                ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8',
+                 [None, 123])]},
             'scan': {'__unnamed__1': [('STEP', 'CLIENT', 'exp_c01',
                                        'NX_FLOAT', None)],
                      '__unnamed__2': [('STEP', 'CLIENT', 'exp_c02',
@@ -409,17 +415,19 @@ class SettingsTest(unittest.TestCase):
                      '__unnamed__3': [('STEP', 'CLIENT', 'p09/mca/exp.02',
                                        'NX_FLOAT', [2048])],
                      },
-            'scan2': {'c01': [('STEP', 'CLIENT', 'exp_c01', 'NX_FLOAT', None)],
-                      'c02': [('STEP', 'CLIENT', 'exp_c02', 'NX_FLOAT', None)],
-                      'mca': [('STEP', 'CLIENT', 'p09/mca/exp.02', 'NX_FLOAT',
-                               [2048])],
-                     },
-            'scan3': {'c01': [('STEP', 'CLIENT', 'exp_c01', 'NX_FLOAT', None),
-                              ('INIT', 'CLIENT', 'exp_c01', 'NX_FLOAT', None)],
-                      'mca': [('STEP', 'CLIENT', 'p09/mca/exp.02', 'NX_FLOAT',
-                               [2048])],
-                     },
-            }
+            'scan2': {
+                'c01': [('STEP', 'CLIENT', 'exp_c01', 'NX_FLOAT', None)],
+                'c02': [('STEP', 'CLIENT', 'exp_c02', 'NX_FLOAT', None)],
+                'mca': [('STEP', 'CLIENT', 'p09/mca/exp.02', 'NX_FLOAT',
+                         [2048])],
+            },
+            'scan3': {
+                'c01': [('STEP', 'CLIENT', 'exp_c01', 'NX_FLOAT', None),
+                        ('INIT', 'CLIENT', 'exp_c01', 'NX_FLOAT', None)],
+                'mca': [('STEP', 'CLIENT', 'p09/mca/exp.02', 'NX_FLOAT',
+                         [2048])],
+            },
+        }
 
         self.smycps = {
             'smycp': (
@@ -450,20 +458,20 @@ class SettingsTest(unittest.TestCase):
                 '<field name="short">'
                 '$datasources.client_short<strategy mode="STEP"/></field>'
                 '</group></definition>'),
-            }
+        }
 
         self.smycpsstep = {
             'smycp': ("scalar_long", "scalar_short"),
             'smycp2': ("spectrum_short",),
             'smycp3': ("image_short",),
             'smycpnt1': ("client_short",),
-            }
+        }
         self.smycpsstep2 = {
             's2mycp': ("scalar2_long", "scalar2_short"),
             's2mycp2': ("spectrum2_long",),
             's2mycp3': ("image2_long",),
             's2mycpnt1': ("client2_short",),
-            }
+        }
 
         self.smycps2 = {
             's2mycp': (
@@ -494,7 +502,7 @@ class SettingsTest(unittest.TestCase):
                 '<field name="short">'
                 '$datasources.client2_short<strategy mode="STEP"/></field>'
                 '</group></definition>'),
-            }
+        }
 
         self.smydss = {
             'scalar_long': (
@@ -685,7 +693,7 @@ class SettingsTest(unittest.TestCase):
                 ('<definition><datasource type="CLIENT" name="client_short">'
                  '<record name="ClientShort"/>'
                  '</datasource></definition>'),
-            }
+        }
 
         self.smydssXX = {
             'scalar2_long': (
@@ -878,7 +886,7 @@ class SettingsTest(unittest.TestCase):
                 ('<definition><datasource type="CLIENT" name="client2_short">'
                  '<record name="ClientShort"/>'
                  '</datasource></definition>'),
-            }
+        }
 
         self.smychs = {
             'scalar_long': {
@@ -1136,7 +1144,7 @@ class SettingsTest(unittest.TestCase):
                 'source': 'ttestp09/testts/t1r228/ImageUChar'},
             'client_long': {},
             'client_short': {},
-            }
+        }
 
         self.smychsXX = {
             'scalar2_long': {
@@ -1394,7 +1402,7 @@ class SettingsTest(unittest.TestCase):
                 'source': 'ttestp09/testts/t36r228/ImageUChar'},
             'client2_long': {},
             'client2_short': {},
-            }
+        }
 
         self.smydss2 = {
             'scalar2_long':
@@ -1593,7 +1601,7 @@ class SettingsTest(unittest.TestCase):
                 ('<definition><datasource type="CLIENT" name="client2_short">'
                  '<record name="Client2Short"/>'
                  '</datasource></definition>'),
-            }
+        }
 
         self.mydss = {
             'nn':
@@ -1612,23 +1620,23 @@ class SettingsTest(unittest.TestCase):
             'ann5': ('<definition><datasource type="NEW" name="ann5">'
                      '</datasource></definition>'),
             'tann0': ('<definition><datasource type="TANGO" name="tann0">'
-                     '<record name="myattr"/>'
-                     '<device port="12345" encoding="sfd" hostname="sf" '
-                     'member="attribute" name="dsff"/>'
-                     '</datasource></definition>'),
+                      '<record name="myattr"/>'
+                      '<device port="12345" encoding="sfd" hostname="sf" '
+                      'member="attribute" name="dsff"/>'
+                      '</datasource></definition>'),
             'tann1': ('<definition><datasource type="TANGO" name="tann1">'
-                     '<record name="myattr2"/>'
-                     '<device port="10000" encoding="sfd" hostname="sfa" '
-                     'member="attribute" name="dsf"/>'
-                     '</datasource></definition>'),
+                      '<record name="myattr2"/>'
+                      '<device port="10000" encoding="sfd" hostname="sfa" '
+                      'member="attribute" name="dsf"/>'
+                      '</datasource></definition>'),
             'tann1b': ('<definition><datasource type="TANGO" name="tann1b">'
-                     '<record name="myattr2"/>'
-                     '<device member="attribute" name="dsf"/>'
-                     '</datasource></definition>'),
+                       '<record name="myattr2"/>'
+                       '<device member="attribute" name="dsf"/>'
+                       '</datasource></definition>'),
             'tann1c': ('<definition><datasource type="TANGO" name="tann1c">'
-                     '<record name="myattr2"/>'
-                     '<device member="attribute" name="dsf/sd/we"/>'
-                     '</datasource></definition>'),
+                       '<record name="myattr2"/>'
+                       '<device member="attribute" name="dsf/sd/we"/>'
+                       '</datasource></definition>'),
             'P1M_postrun': (
                 '<definition>'
                 '<datasource type="PYEVAL" name="P1M_postrun">'
@@ -1662,8 +1670,8 @@ class SettingsTest(unittest.TestCase):
                 '<record name="p02/slt/exp.07"/>'
                 '</datasource>'
                 '</definition>'
-                ),
-            }
+            ),
+        }
 
         self.resdss = {
             'nn': ("nn", "TANGO", ""),
@@ -1681,7 +1689,7 @@ class SettingsTest(unittest.TestCase):
             'dbtest': ('dbtest', "DB", ""),
             'dbds': ('dbds', "DB", ""),
             'slt1vgap': ('slt1vgap', "CLIENT", "p02/slt/exp.07"),
-            }
+        }
 
     ## test starter
     # \brief Common set up
@@ -1732,15 +1740,12 @@ class SettingsTest(unittest.TestCase):
         self.assertEqual(sorted(set(rv[0].keys())), sorted(cv))
         for i in range(1):
             for cp, vl in rv[i].items():
-#                print "CP", cp
                 cres = self.rescps[cp]
                 cresk = [ds for ds in cres.keys()
                          if self.dsfilter(cres[ds], strategy, dstype)]
 
                 self.assertEqual(sorted(vl.keys()), sorted(cresk))
                 for ds in cresk:
-#                    print "C1", sorted(cres[ds])
-#                    print "C2", sorted(vl[ds])
                     self.assertEqual(
                         sorted(self.dsfilter(cres[ds], strategy, dstype)),
                         sorted(vl[ds]))
@@ -1823,7 +1828,6 @@ class SettingsTest(unittest.TestCase):
             logger.debug("%s  in %s" % (str(k), str(dct2.keys())))
             self.assertTrue(k in dct2.keys())
             if isinstance(v, dict):
-#                print "KEY", k
                 self.myAssertDict(v, dct2[k])
             else:
                 logger.debug("%s , %s" % (str(v), str(dct2[k])))
@@ -1922,6 +1926,38 @@ class SettingsTest(unittest.TestCase):
         self.assertEqual(rs.door, val["Door"])
         self.assertEqual(rs.mntGrp, val["MntGrp"])
 
+    ## constructor test
+    def test_mandatory_components(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+
+        wrong = []
+
+        rs = self.openRecSelector()
+        rs.configDevice = val["ConfigDevice"]
+        rs.door = val["Door"]
+        rs.mntGrp = val["MntGrp"]
+        self.assertEqual(rs.configDevice, val["ConfigDevice"])
+        self.assertEqual(rs.door, val["Door"])
+        self.assertEqual(rs.mntGrp, val["MntGrp"])
+
+        self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
+        self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
+#        msp = MacroServerPools(10)
+
+#        self.assertEqual(msp.getMacroServer(), self._ms.ms.keys()[0])
+
+        self.assertEqual(set(rs.mandatoryComponents()), set())
+        mncps = self.__rnd.randint(1, len(self.mycps.keys()) - 1)
+        mcps = [cp for cp in self.__rnd.sample(
+                set(self.mycps.keys()), mncps) if cp not in wrong]
+
+        self._cf.dp.SetCommandVariable(["MCPLIST", json.dumps(mcps)])
+        self.assertEqual(set(rs.mandatoryComponents()), set(mcps))
 
     ## constructor test
     def test_mandatory_components(self):
@@ -1952,46 +1988,11 @@ class SettingsTest(unittest.TestCase):
         mncps = self.__rnd.randint(1, len(self.mycps.keys()) - 1)
         mcps = [cp for cp in self.__rnd.sample(
                 set(self.mycps.keys()), mncps) if cp not in wrong]
-        
+
         self._cf.dp.SetCommandVariable(["MCPLIST", json.dumps(mcps)])
         self.assertEqual(set(rs.mandatoryComponents()), set(mcps))
-        
 
-    ## constructor test
-    def test_mandatory_components(self):
-        fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
-        val = {"ConfigDevice": self._cf.dp.name(),
-               "WriterDevice": self._wr.dp.name(),
-               "Door": 'doortestp09/testts/t1r228',
-               "MntGrp": 'nxsmntgrp'}
-
-        wrong = []
-
-        rs = self.openRecSelector()
-        rs.configDevice = val["ConfigDevice"]
-        rs.door = val["Door"]
-        rs.mntGrp = val["MntGrp"]
-        self.assertEqual(rs.configDevice, val["ConfigDevice"])
-        self.assertEqual(rs.door, val["Door"])
-        self.assertEqual(rs.mntGrp, val["MntGrp"])
-
-        self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
-        self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
-#        msp = MacroServerPools(10)
-
-#        self.assertEqual(msp.getMacroServer(), self._ms.ms.keys()[0])
-
-        self.assertEqual(set(rs.mandatoryComponents()), set())
-        mncps = self.__rnd.randint(1, len(self.mycps.keys()) - 1)
-        mcps = [cp for cp in self.__rnd.sample(
-                set(self.mycps.keys()), mncps) if cp not in wrong]
-        
-        self._cf.dp.SetCommandVariable(["MCPLIST", json.dumps(mcps)])
-        self.assertEqual(set(rs.mandatoryComponents()), set(mcps))
-        
-
-   ## constructor test
+    ## available components and datasources
     def test_available_components_datasources(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -2012,7 +2013,6 @@ class SettingsTest(unittest.TestCase):
         self.assertEqual(set(rs.availableComponents()), set())
         self.assertEqual(set(rs.availableDataSources()), set())
 
-
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
 #        msp = MacroServerPools(10)
@@ -2020,9 +2020,8 @@ class SettingsTest(unittest.TestCase):
 #        self.assertEqual(msp.getMacroServer(), self._ms.ms.keys()[0])
 
         self.assertEqual(set(rs.availableComponents()), set(self.mycps.keys()))
-        self.assertEqual(set(rs.availableDataSources()), set(self.mydss.keys()))
-        
-
+        self.assertEqual(set(rs.availableDataSources()),
+                         set(self.mydss.keys()))
 
     def test_available_selections(self):
         fun = sys._getframe().f_code.co_name
@@ -2042,7 +2041,7 @@ class SettingsTest(unittest.TestCase):
         rs.configDevice = val["ConfigDevice"]
         rs.door = val["Door"]
         rs.mntGrp = val["MntGrp"]
-        
+
         self.assertEqual(rs.configDevice, val["ConfigDevice"])
         self.assertEqual(rs.door, val["Door"])
         self.assertEqual(rs.mntGrp, val["MntGrp"])
@@ -2051,14 +2050,17 @@ class SettingsTest(unittest.TestCase):
         try:
             self.assertEqual(set(rs.availableSelections()), set())
         except:
-            self.assertEqual(set(rs.availableSelections()), set(val["MntGrp"]))
- 
-        self._cf.dp.SetCommandVariable(["SELDICT", json.dumps(self.mysel2)])
+            self.assertEqual(set(rs.availableSelections()),
+                             set([val["MntGrp"]]))
 
-        self.assertEqual(set(rs.availableSelections()), set(self.mysel2.keys()))
+        self._cf.dp.SetCommandVariable(["SELDICT",
+                                        json.dumps(self.mysel2)])
+
+        self.assertEqual(set(rs.availableSelections()),
+                         set(self.mysel2.keys()))
         self.assertEqual(set(rs.availableComponents()), set())
         self.assertEqual(set(rs.availableDataSources()), set())
-        
+
     ## constructor test
     # \brief It tests default settings
     def test_poolChannels(self):
@@ -2078,7 +2080,6 @@ class SettingsTest(unittest.TestCase):
         rs.door = val["Door"]
         rs.mntGrp = val["MntGrp"]
 
-
         db = PyTango.Database()
         db.put_device_property(self._ms.ms.keys()[0],
                                {'PoolNames': self._pool.dp.name()})
@@ -2093,14 +2094,14 @@ class SettingsTest(unittest.TestCase):
             {"name": "test/ct/03", "controller": "counter_03/value"},
             {"name": "test/ct/04", "controller": "counter_04/13"},
             {"name": "null", "controller": "counter_04"},
-            ]
+        ]
 
         arr2 = [
             ["test/mca/01", "mca_01"],
             ["test/mca/02", "mca_02"],
             ["test/sca/03", "my_sca1"],
             ["test/sca/04", "mysca_123"],
-            ]
+        ]
 
         pool = self._pool.dp
         pool.ExpChannelList = [json.dumps(a) for a in arr]
@@ -2108,15 +2109,15 @@ class SettingsTest(unittest.TestCase):
         dd = rs.poolChannels()
         self.assertEqual(dd, [a["name"] for a in arr])
 
-        pool.ExpChannelList = [json.dumps(
-                {"name":a[0], "controller":a[1]}) for a in arr2]
+        pool.ExpChannelList = [
+            json.dumps(
+                {"name": a[0], "controller": a[1]}) for a in arr2]
 
         dd = rs.poolChannels()
         res = [a[0] for a in arr2]
         self.assertEqual(dd, res)
 
         print rs.poolChannels()
-
 
     ## constructor test
     # \brief It tests default settings
@@ -2137,7 +2138,6 @@ class SettingsTest(unittest.TestCase):
         rs.door = val["Door"]
         rs.mntGrp = val["MntGrp"]
 
-
         db = PyTango.Database()
         db.put_device_property(self._ms.ms.keys()[0],
                                {'PoolNames': self._pool.dp.name()})
@@ -2152,14 +2152,14 @@ class SettingsTest(unittest.TestCase):
             {"name": "test/ct/03", "controller": "counter_03/value"},
             {"name": "test/ct/04", "controller": "counter_04/13"},
             {"name": "null", "controller": "counter_04"},
-            ]
+        ]
 
         arr2 = [
             ["test/mca/01", "mca_01"],
             ["test/mca/02", "mca_02"],
             ["test/sca/03", "my_sca1"],
             ["test/sca/04", "mysca_123"],
-            ]
+        ]
 
         pool = self._pool.dp
         pool.MotorList = [json.dumps(a) for a in arr]
@@ -2167,8 +2167,9 @@ class SettingsTest(unittest.TestCase):
         dd = rs.poolMotors()
         self.assertEqual(dd, [a["name"] for a in arr])
 
-        pool.MotorList = [json.dumps(
-                {"name":a[0], "controller":a[1]}) for a in arr2]
+        pool.MotorList = [
+            json.dumps(
+                {"name": a[0], "controller": a[1]}) for a in arr2]
 
         dd = rs.poolMotors()
         res = [a[0] for a in arr2]
@@ -2179,4 +2180,3 @@ class SettingsTest(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
-
