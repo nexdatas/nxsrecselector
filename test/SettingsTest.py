@@ -2048,6 +2048,10 @@ class SettingsTest(unittest.TestCase):
         self.assertEqual(rs.mntGrp, val["MntGrp"])
         self.assertEqual(set(rs.availableComponents()), set())
         self.assertEqual(set(rs.availableDataSources()), set())
+        try:
+            self.assertEqual(set(rs.availableSelections()), set())
+        except:
+            self.assertEqual(set(rs.availableSelections()), set(val["MntGrp"]))
  
         self._cf.dp.SetCommandVariable(["SELDICT", json.dumps(self.mysel2)])
 
@@ -2055,6 +2059,123 @@ class SettingsTest(unittest.TestCase):
         self.assertEqual(set(rs.availableComponents()), set())
         self.assertEqual(set(rs.availableDataSources()), set())
         
+    ## constructor test
+    # \brief It tests default settings
+    def test_poolChannels(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+
+        db = PyTango.Database()
+        db.put_device_property(self._ms.ms.keys()[0],
+                               {'PoolNames': self._pool.dp.name()})
+        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        rs = self.openRecSelector()
+        rs.configDevice = val["ConfigDevice"]
+        rs.door = val["Door"]
+        rs.mntGrp = val["MntGrp"]
+
+
+        db = PyTango.Database()
+        db.put_device_property(self._ms.ms.keys()[0],
+                               {'PoolNames': self._pool.dp.name()})
+
+        self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+        self.assertEqual(rs.poolChannels(), [])
+
+        arr = [
+            {"name": "test/ct/01", "controller": "counter_01/Value"},
+            {"name": "test/ct/02", "controller": "counter_02/att"},
+            {"name": "test/ct/03", "controller": "counter_03/value"},
+            {"name": "test/ct/04", "controller": "counter_04/13"},
+            {"name": "null", "controller": "counter_04"},
+            ]
+
+        arr2 = [
+            ["test/mca/01", "mca_01"],
+            ["test/mca/02", "mca_02"],
+            ["test/sca/03", "my_sca1"],
+            ["test/sca/04", "mysca_123"],
+            ]
+
+        pool = self._pool.dp
+        pool.ExpChannelList = [json.dumps(a) for a in arr]
+
+        dd = rs.poolChannels()
+        self.assertEqual(dd, [a["name"] for a in arr])
+
+        pool.ExpChannelList = [json.dumps(
+                {"name":a[0], "controller":a[1]}) for a in arr2]
+
+        dd = rs.poolChannels()
+        res = [a[0] for a in arr2]
+        self.assertEqual(dd, res)
+
+        print rs.poolChannels()
+
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_poolMotors(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+
+        db = PyTango.Database()
+        db.put_device_property(self._ms.ms.keys()[0],
+                               {'PoolNames': self._pool.dp.name()})
+        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        rs = self.openRecSelector()
+        rs.configDevice = val["ConfigDevice"]
+        rs.door = val["Door"]
+        rs.mntGrp = val["MntGrp"]
+
+
+        db = PyTango.Database()
+        db.put_device_property(self._ms.ms.keys()[0],
+                               {'PoolNames': self._pool.dp.name()})
+
+        self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+        self.assertEqual(rs.poolMotors(), [])
+
+        arr = [
+            {"name": "test/ct/01", "controller": "counter_01/Value"},
+            {"name": "test/ct/02", "controller": "counter_02/att"},
+            {"name": "test/ct/03", "controller": "counter_03/value"},
+            {"name": "test/ct/04", "controller": "counter_04/13"},
+            {"name": "null", "controller": "counter_04"},
+            ]
+
+        arr2 = [
+            ["test/mca/01", "mca_01"],
+            ["test/mca/02", "mca_02"],
+            ["test/sca/03", "my_sca1"],
+            ["test/sca/04", "mysca_123"],
+            ]
+
+        pool = self._pool.dp
+        pool.MotorList = [json.dumps(a) for a in arr]
+
+        dd = rs.poolMotors()
+        self.assertEqual(dd, [a["name"] for a in arr])
+
+        pool.MotorList = [json.dumps(
+                {"name":a[0], "controller":a[1]}) for a in arr2]
+
+        dd = rs.poolMotors()
+        res = [a[0] for a in arr2]
+        self.assertEqual(dd, res)
+
+        print rs.poolMotors()
+
 
 if __name__ == '__main__':
     unittest.main()
