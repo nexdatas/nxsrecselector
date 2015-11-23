@@ -1,4 +1,5 @@
 2015-11-XX Jan Kotanski <jankotan@gmail.com>
+	* avoiding overwriting ConfigDevice by fetchSelection
 	* removing unused methods from Settings
 	* fixes duplicated HiddenElements
 	* tagged as v1.23.0
