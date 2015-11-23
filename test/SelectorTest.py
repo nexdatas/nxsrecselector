@@ -1305,16 +1305,13 @@ class SelectorTest(unittest.TestCase):
                 se["MntGrp"] = val["MntGrp"]
                 se.storeSelection()
 
-    #        print "se", se["ConfigDevice"]
             se["ConfigDevice"] = "dfd"
             self.assertTrue(se["ConfigDevice"], "dfd")
             se["ConfigDevice"] = "module"
             self.assertTrue(se["ConfigDevice"], "module")
-    #        print "se", se["ConfigDevice"]
             se["ConfigDevice"] = ""
             self.assertTrue(se["ConfigDevice"],
                             TangoUtils.getDeviceName(db, "NXSConfigServer"))
-    #        print "se", se["ConfigDevice"]
 
             se.reset()
             self.assertTrue(se["ConfigDevice"],
@@ -1329,7 +1326,14 @@ class SelectorTest(unittest.TestCase):
             elif (i / 2) % 4 == 0:
                 se.importEnv()
             else:
+                se["ConfigDevice"] = val["ConfigDevice"]
                 se["MntGrp"] = val["MntGrp"]
+                if (i % 2):
+                    jcf = json.loads(
+                        self._cf.dp.Selections([se["MntGrp"]])[0])
+                    jcf["ConfigDevice"] = "somethi/ng/else"
+                    self._cf.dp.Selection = str(json.dumps(jcf))
+                    self._cf.dp.StoreSelection(se["MntGrp"])
                 se.fetchSelection()
 
             self.assertTrue(se["ConfigDevice"], val["ConfigDevice"])

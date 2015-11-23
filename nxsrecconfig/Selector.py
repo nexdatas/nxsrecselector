@@ -311,11 +311,13 @@ class Selector(object):
     # \returns if configuration was fetched
     def fetchSelection(self):
         inst = self.setConfigInstance()
+        cnfdv = self["ConfigDevice"]
         avsl = inst.availableSelections()
         confs = None
         if self["MntGrp"] in avsl:
             confs = inst.selections([self["MntGrp"]])
-        if confs:
+        if confs is not None:
             self.set(json.loads(str(confs[0])))
+            self["ConfigDevice"] = cnfdv
             return True
         return False

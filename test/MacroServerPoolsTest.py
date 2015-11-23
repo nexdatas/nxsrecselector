@@ -1738,7 +1738,8 @@ class MacroServerPoolTest(unittest.TestCase):
             "ttestp09/testts/t2r228", "S2")
 
         arr = [
-            {"name": "client_long", "full_name": "ttestp09/testts/t1r228/Value"},
+            {"name": "client_long",
+             "full_name": "ttestp09/testts/t1r228/Value"},
             {"name": "client_short",
              "full_name": "ttestp09/testts/t1r228/Value"},
             ]
@@ -1801,7 +1802,8 @@ class MacroServerPoolTest(unittest.TestCase):
             "ttestp09/testts/t2r228", "S2")
 
         arr = [
-            {"name": "client_long", "full_name": "ttestp09/testts/t1r228/Value"},
+            {"name": "client_long",
+             "full_name": "ttestp09/testts/t1r228/Value"},
             {"name": "client_short",
              "full_name": "ttestp09/testts/t1r228/Value"},
             ]
