@@ -268,7 +268,7 @@ class DescriberTest(unittest.TestCase):
                 '</dimensions><strategy mode="STEP"/>'
                 '<datasource type="CLIENT"><record name="p09/mca/exp.02"/>'
                 '</datasource></field></group></group></group></definition>'
-                ),
+            ),
 
             'scan2': (
                 '<definition><group type="NXentry" name="entry1">'
@@ -288,7 +288,7 @@ class DescriberTest(unittest.TestCase):
                 '<datasource type="CLIENT"  name="mca">'
                 '<record name="p09/mca/exp.02"/>'
                 '</datasource></field></group></group></group></definition>'
-                ),
+            ),
             'scan3': (
                 '<definition><group type="NXentry" name="entry1">'
                 '<group type="NXinstrument" name="instrument">'
@@ -307,60 +307,64 @@ class DescriberTest(unittest.TestCase):
                 '<datasource type="CLIENT"  name="mca">'
                 '<record name="p09/mca/exp.02"/>'
                 '</datasource></field></group></group></group></definition>'
-                ),
+            ),
 
-            }
+        }
 
         self.rescps = {
             'mycp': {},
             'mycp2': {},
             'mycp3': {'ann': [('STEP', 'TANGO', '', None, None)]},
             'exp_t01': {'exp_t01': [
-                    ('STEP', 'CLIENT', 'haso228k:10000/expchan/dgg2_exp_01/1',
-                     'NX_FLOAT', None)]},
+                ('STEP', 'CLIENT', 'haso228k:10000/expchan/dgg2_exp_01/1',
+                 'NX_FLOAT', None)]},
             'dim1': {'tann1c': [
-                    ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8', [34])]},
+                ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8', [34])]},
             'dim2': {'tann1c': [
-                    ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8',
-                     ['$datasource.ann'])]},
+                ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8',
+                 ['$datasource.ann'])]},
             'dim3': {'tann1c': [
-                    ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8',
-                     [1234])]},
+                ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8',
+                 [1234])]},
             'dim4': {'tann1c': [
-                    ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8',
-                     ['$datasource.ann2'])]},
-            'dim5': {'tann1c': [
+                ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8',
+                 ['$datasource.ann2'])]},
+            'dim5': {
+                'tann1c': [
                     ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8',
                      ['$datasource.ann'])],
-                     'ann': [('CONFIG', 'TANGO', '', None, None)],
-                     },
+                'ann': [('CONFIG', 'TANGO', '', None, None)],
+            },
             'dim6': {'tann1c': [
-                    ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8',
-                     ['$datasource.ann', 123])]},
+                ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8',
+                 ['$datasource.ann', 123])]},
             'dim7': {'tann1c': [
-                    ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8',
-                     [None, None])]},
+                ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8',
+                 [None, None])]},
             'dim8': {'tann1c': [
-                    ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8',
-                     [None, 123])]},
-            'scan': {'__unnamed__1': [('STEP', 'CLIENT', 'exp_c01',
-                                       'NX_FLOAT', None)],
-                     '__unnamed__2': [('STEP', 'CLIENT', 'exp_c02',
-                                       'NX_FLOAT', None)],
-                     '__unnamed__3': [('STEP', 'CLIENT', 'p09/mca/exp.02',
-                                       'NX_FLOAT', [2048])],
-                     },
-            'scan2': {'c01': [('STEP', 'CLIENT', 'exp_c01', 'NX_FLOAT', None)],
-                      'c02': [('STEP', 'CLIENT', 'exp_c02', 'NX_FLOAT', None)],
-                      'mca': [('STEP', 'CLIENT', 'p09/mca/exp.02', 'NX_FLOAT',
-                               [2048])],
-                     },
-            'scan3': {'c01': [('STEP', 'CLIENT', 'exp_c01', 'NX_FLOAT', None),
-                              ('INIT', 'CLIENT', 'exp_c01', 'NX_FLOAT', None)],
-                      'mca': [('STEP', 'CLIENT', 'p09/mca/exp.02', 'NX_FLOAT',
-                               [2048])],
-                     },
-            }
+                ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8',
+                 [None, 123])]},
+            'scan': {
+                '__unnamed__1': [('STEP', 'CLIENT', 'exp_c01',
+                                  'NX_FLOAT', None)],
+                '__unnamed__2': [('STEP', 'CLIENT', 'exp_c02',
+                                  'NX_FLOAT', None)],
+                '__unnamed__3': [('STEP', 'CLIENT', 'p09/mca/exp.02',
+                                  'NX_FLOAT', [2048])],
+            },
+            'scan2': {
+                'c01': [('STEP', 'CLIENT', 'exp_c01', 'NX_FLOAT', None)],
+                'c02': [('STEP', 'CLIENT', 'exp_c02', 'NX_FLOAT', None)],
+                'mca': [('STEP', 'CLIENT', 'p09/mca/exp.02', 'NX_FLOAT',
+                         [2048])],
+            },
+            'scan3': {
+                'c01': [('STEP', 'CLIENT', 'exp_c01', 'NX_FLOAT', None),
+                        ('INIT', 'CLIENT', 'exp_c01', 'NX_FLOAT', None)],
+                'mca': [('STEP', 'CLIENT', 'p09/mca/exp.02', 'NX_FLOAT',
+                         [2048])],
+            },
+        }
 
         self.mydss = {
             'nn': ('<?xml version=\'1.0\'?>'
@@ -379,23 +383,23 @@ class DescriberTest(unittest.TestCase):
             'ann5': ('<definition><datasource type="NEW" name="ann5">'
                      '</datasource></definition>'),
             'tann0': ('<definition><datasource type="TANGO" name="tann0">'
-                     '<record name="myattr"/>'
-                     '<device port="12345" encoding="sfd" hostname="sf" '
-                     'member="attribute" name="dsff"/>'
-                     '</datasource></definition>'),
+                      '<record name="myattr"/>'
+                      '<device port="12345" encoding="sfd" hostname="sf" '
+                      'member="attribute" name="dsff"/>'
+                      '</datasource></definition>'),
             'tann1': ('<definition><datasource type="TANGO" name="tann1">'
-                     '<record name="myattr2"/>'
-                     '<device port="10000" encoding="sfd" hostname="sfa" '
-                     'member="attribute" name="dsf"/>'
-                     '</datasource></definition>'),
+                      '<record name="myattr2"/>'
+                      '<device port="10000" encoding="sfd" hostname="sfa" '
+                      'member="attribute" name="dsf"/>'
+                      '</datasource></definition>'),
             'tann1b': ('<definition><datasource type="TANGO" name="tann1b">'
-                     '<record name="myattr2"/>'
-                     '<device member="attribute" name="dsf"/>'
-                     '</datasource></definition>'),
+                       '<record name="myattr2"/>'
+                       '<device member="attribute" name="dsf"/>'
+                       '</datasource></definition>'),
             'tann1c': ('<definition><datasource type="TANGO" name="tann1c">'
-                     '<record name="myattr2"/>'
-                     '<device member="attribute" name="dsf/sd/we"/>'
-                     '</datasource></definition>'),
+                       '<record name="myattr2"/>'
+                       '<device member="attribute" name="dsf/sd/we"/>'
+                       '</datasource></definition>'),
             'P1M_postrun': (
                 '<definition>'
                 '<datasource type="PYEVAL" name="P1M_postrun">'
@@ -429,8 +433,8 @@ class DescriberTest(unittest.TestCase):
                 '<record name="p02/slt/exp.07"/>'
                 '</datasource>'
                 '</definition>'
-                ),
-           }
+            ),
+        }
 
         self.resdss = {
             'nn': ("nn", "TANGO", ""),
@@ -448,7 +452,7 @@ class DescriberTest(unittest.TestCase):
             'dbtest': ('dbtest', "DB", ""),
             'dbds': ('dbds', "DB", ""),
             'slt1vgap': ('slt1vgap', "CLIENT", "p02/slt/exp.07"),
-            }
+        }
 
     ## Exception tester
     # \param exception expected exception
@@ -502,7 +506,6 @@ class DescriberTest(unittest.TestCase):
     def hasds(self, dslist, strategy, dstype):
         for dss in dslist:
             for ds in dss:
-#                print "DD", ds[0], strategy, ds[0]==strategy, ds[1], dstype
                 dsfound = True if dstype is None else False
                 stfound = True if strategy is None else False
                 if dsfound and stfound:
@@ -532,15 +535,12 @@ class DescriberTest(unittest.TestCase):
         self.assertEqual(sorted(set(rv[0].keys())), sorted(cv))
         for i in range(1):
             for cp, vl in rv[i].items():
-#                print "CP", cp
                 cres = self.rescps[cp]
                 cresk = [ds for ds in cres.keys()
                          if self.dsfilter(cres[ds], strategy, dstype)]
 
                 self.assertEqual(sorted(vl.keys()), sorted(cresk))
                 for ds in cresk:
-#                    print "C1", sorted(cres[ds])
-#                    print "C2", sorted(vl[ds])
                     self.assertEqual(
                         sorted(self.dsfilter(cres[ds], strategy, dstype)),
                         sorted(vl[ds]))
@@ -593,7 +593,7 @@ class DescriberTest(unittest.TestCase):
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         dsdict = {
             "ann": self.mydss["ann"]
-            }
+        }
         server = NoServer()
         server.dsdict = dsdict
         des = Describer(server)
@@ -622,7 +622,7 @@ class DescriberTest(unittest.TestCase):
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         dsdict = {
             "ann": self.mydss["ann"]
-            }
+        }
         server = Server()
         server.dsdict = dsdict
         des = Describer(server)
@@ -776,7 +776,7 @@ class DescriberTest(unittest.TestCase):
             ['nn', 'nn2', 'ann', 'ann2', 'ann3', 'ann4', 'ann5',
              'tann0', 'tann1', 'tann1b', 'tann1c', 'P1M_postrun',
              'dbtest', 'dbds', 'slt1vgap']
-            ]
+        ]
 
         for names in names_list:
             des = Describer(server)
@@ -799,7 +799,7 @@ class DescriberTest(unittest.TestCase):
             ['nn', 'nn2', 'ann', 'ann2', 'ann3', 'ann4',
              'ann5', 'tann0', 'tann1', 'tann1b', 'tann1c',
              'P1M_postrun', 'dbtest', 'dbds', 'slt1vgap']
-            ]
+        ]
 
         for names in names_list:
             des = Describer(server)
@@ -814,7 +814,7 @@ class DescriberTest(unittest.TestCase):
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         dsdict = {
             "ann": self.mydss["ann"]
-            }
+        }
         server = NoServer()
         server.dsdict = dsdict
         des = Describer(server, True)
@@ -843,7 +843,7 @@ class DescriberTest(unittest.TestCase):
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         dsdict = {
             "ann": self.mydss["ann"]
-            }
+        }
         server = Server()
         server.dsdict = dsdict
         des = Describer(server, True)
@@ -997,7 +997,7 @@ class DescriberTest(unittest.TestCase):
             ['nn', 'nn2', 'ann', 'ann2', 'ann3', 'ann4', 'ann5',
              'tann0', 'tann1', 'tann1b', 'tann1c', 'P1M_postrun',
              'dbtest', 'dbds', 'slt1vgap']
-            ]
+        ]
 
         for names in names_list:
             des = Describer(server, True)
@@ -1020,7 +1020,7 @@ class DescriberTest(unittest.TestCase):
             ['nn', 'nn2', 'ann', 'ann2', 'ann3', 'ann4',
              'ann5', 'tann0', 'tann1', 'tann1b', 'tann1c',
              'P1M_postrun', 'dbtest', 'dbds', 'slt1vgap']
-            ]
+        ]
 
         for names in names_list:
             des = Describer(server, True)
@@ -1034,7 +1034,7 @@ class DescriberTest(unittest.TestCase):
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         dsdict = {
             "ann": self.mydss["ann"]
-            }
+        }
 
         server = NoServer()
         server.dsdict = dsdict
@@ -1145,7 +1145,7 @@ class DescriberTest(unittest.TestCase):
                 des = Describer(server, True)
                 res = des.components(strategy=st, dstype=dst)
                 self.checkCP(res, self.rescps.keys(),
-                              strategy=st, dstype=dst)
+                             strategy=st, dstype=dst)
 
     ## constructor test
     # \brief It tests default settings
@@ -1162,7 +1162,7 @@ class DescriberTest(unittest.TestCase):
                 des = Describer(server, True)
                 res = des.components(strategy=st, dstype=dst)
                 self.checkCP(res, self.rescps.keys(),
-                              strategy=st, dstype=dst)
+                             strategy=st, dstype=dst)
 
     ## constructor test
     # \brief It tests default settings
@@ -1204,7 +1204,7 @@ class DescriberTest(unittest.TestCase):
                 des = Describer(server, True)
                 res = des.components(strategy=st, dstype=dst)
                 self.checkCP(res, self.rescps.keys(),
-                              strategy=st, dstype=dst)
+                             strategy=st, dstype=dst)
 
     ## constructor test
     # \brief It tests default settings
@@ -1246,7 +1246,7 @@ class DescriberTest(unittest.TestCase):
                 des = Describer(server, True)
                 res = des.components(strategy=st, dstype=dst)
                 self.checkCP(res, self.rescps.keys(),
-                              strategy=st, dstype=dst)
+                             strategy=st, dstype=dst)
 
     ## constructor test
     # \brief It tests default settings
@@ -1286,7 +1286,7 @@ class DescriberTest(unittest.TestCase):
                 des = Describer(server, True)
                 res = des.components(cps, strategy=st, dstype=dst)
                 self.checkCP(res, cps,
-                              strategy=st, dstype=dst)
+                             strategy=st, dstype=dst)
 
     ## constructor test
     # \brief It tests default settings
@@ -1326,7 +1326,7 @@ class DescriberTest(unittest.TestCase):
                 des = Describer(server, True)
                 res = des.components(cps, strategy=st, dstype=dst)
                 self.checkCP(res, cps,
-                              strategy=st, dstype=dst)
+                             strategy=st, dstype=dst)
 
     ## constructor test
     # \brief It tests default settings
@@ -1372,7 +1372,7 @@ class DescriberTest(unittest.TestCase):
                 des = Describer(server, True)
                 res = des.components(cps, strategy=st, dstype=dst)
                 self.checkCP(res, cps,
-                              strategy=st, dstype=dst)
+                             strategy=st, dstype=dst)
 
 
 if __name__ == '__main__':

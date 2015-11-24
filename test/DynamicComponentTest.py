@@ -130,7 +130,7 @@ class DynamicComponentTest(unittest.TestCase):
                        "uint8": "NX_UINT8", "uint": "NX_UINT64",
                        "string": "NX_CHAR", "bool": "NX_BOOLEAN"}
         self.__npTn2 = {"float32": "NX_FLOAT32", "float64": "NX_FLOAT64",
-                       "float": "NX_FLOAT32", "double": "NX_FLOAT64",
+                        "float": "NX_FLOAT32", "double": "NX_FLOAT64",
                         "long": "NX_INT32",
                         "long64": "NX_INT64",
                         "long32": "NX_INT32",
@@ -187,14 +187,14 @@ class DynamicComponentTest(unittest.TestCase):
             ("WriterDevice", ''),
             ("Door", ''),
             ("MntGrp", '')
-            ]
+        ]
 
         self.mysel = {
             'mysl': (
                 '{}'),
             'mysl2': (
                 json.dumps({key: value for (key, value) in self._keys})),
-            }
+        }
 
         self.mycps = {
             'mycp': (
@@ -343,7 +343,7 @@ class DynamicComponentTest(unittest.TestCase):
                 '</dimensions><strategy mode="STEP"/>'
                 '<datasource type="CLIENT"><record name="p09/mca/exp.02"/>'
                 '</datasource></field></group></group></group></definition>'
-                ),
+            ),
 
             'scan2': (
                 '<definition><group type="NXentry" name="entry1">'
@@ -363,7 +363,7 @@ class DynamicComponentTest(unittest.TestCase):
                 '<datasource type="CLIENT"  name="mca">'
                 '<record name="p09/mca/exp.02"/>'
                 '</datasource></field></group></group></group></definition>'
-                ),
+            ),
             'scan3': (
                 '<definition><group type="NXentry" name="entry1">'
                 '<group type="NXinstrument" name="instrument">'
@@ -382,9 +382,9 @@ class DynamicComponentTest(unittest.TestCase):
                 '<datasource type="CLIENT"  name="mca">'
                 '<record name="p09/mca/exp.02"/>'
                 '</datasource></field></group></group></group></definition>'
-                ),
+            ),
 
-            }
+        }
 
         self.smycps = {
             'smycp': (
@@ -415,7 +415,7 @@ class DynamicComponentTest(unittest.TestCase):
                 '<field name="short">'
                 '$datasources.client_short<strategy mode="STEP"/></field>'
                 '</group></definition>'),
-            }
+        }
 
         self.smycps2 = {
             's2mycp': (
@@ -446,7 +446,7 @@ class DynamicComponentTest(unittest.TestCase):
                 '<field name="short">'
                 '$datasources.client2_short<strategy mode="STEP"/></field>'
                 '</group></definition>'),
-            }
+        }
 
         self.smydss = {
             'scalar_long': (
@@ -637,7 +637,7 @@ class DynamicComponentTest(unittest.TestCase):
                 ('<definition><datasource type="CLIENT" name="client_short">'
                  '<record name="ttestp09/testts/t1r228/ScalarShort"/>'
                  '</datasource></definition>'),
-            }
+        }
 
         self.smydsspar = {
             'scalar_long': ([]),
@@ -687,7 +687,7 @@ class DynamicComponentTest(unittest.TestCase):
                 ([]),
             'client_short':
                 ([]),
-            }
+        }
 
         self.smydss2 = {
             'scalar2_long':
@@ -886,7 +886,7 @@ class DynamicComponentTest(unittest.TestCase):
                 ('<definition><datasource type="CLIENT" name="client2_short">'
                  '<record name="Client2Short"/>'
                  '</datasource></definition>'),
-            }
+        }
 
         self.mydss = {
             'nn':
@@ -905,23 +905,23 @@ class DynamicComponentTest(unittest.TestCase):
             'ann5': ('<definition><datasource type="NEW" name="ann5">'
                      '</datasource></definition>'),
             'tann0': ('<definition><datasource type="TANGO" name="tann0">'
-                     '<record name="myattr"/>'
-                     '<device port="12345" encoding="sfd" hostname="sf" '
-                     'member="attribute" name="dsff"/>'
-                     '</datasource></definition>'),
+                      '<record name="myattr"/>'
+                      '<device port="12345" encoding="sfd" hostname="sf" '
+                      'member="attribute" name="dsff"/>'
+                      '</datasource></definition>'),
             'tann1': ('<definition><datasource type="TANGO" name="tann1">'
-                     '<record name="myattr2"/>'
-                     '<device port="10000" encoding="sfd" hostname="sfa" '
-                     'member="attribute" name="dsf"/>'
-                     '</datasource></definition>'),
+                      '<record name="myattr2"/>'
+                      '<device port="10000" encoding="sfd" hostname="sfa" '
+                      'member="attribute" name="dsf"/>'
+                      '</datasource></definition>'),
             'tann1b': ('<definition><datasource type="TANGO" name="tann1b">'
-                     '<record name="myattr2"/>'
-                     '<device member="attribute" name="dsf"/>'
-                     '</datasource></definition>'),
+                       '<record name="myattr2"/>'
+                       '<device member="attribute" name="dsf"/>'
+                       '</datasource></definition>'),
             'tann1c': ('<definition><datasource type="TANGO" name="tann1c">'
-                     '<record name="myattr2"/>'
-                     '<device member="attribute" name="dsf/sd/we"/>'
-                     '</datasource></definition>'),
+                       '<record name="myattr2"/>'
+                       '<device member="attribute" name="dsf/sd/we"/>'
+                       '</datasource></definition>'),
             'P1M_postrun': (
                 '<definition>'
                 '<datasource type="PYEVAL" name="P1M_postrun">'
@@ -955,8 +955,8 @@ class DynamicComponentTest(unittest.TestCase):
                 '<record name="p02/slt/exp.07"/>'
                 '</datasource>'
                 '</definition>'
-                ),
-            }
+            ),
+        }
 
     ## test starter
     # \brief Common set up
@@ -1022,7 +1022,7 @@ class DynamicComponentTest(unittest.TestCase):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         cps = {"empty":
-                   '<?xml version="1.0" ?>\n<definition/>\n'}
+               '<?xml version="1.0" ?>\n<definition/>\n'}
         dname = "__dynamic_component__"
         dc = DynamicComponent(None)
         dc = DynamicComponent(self._cf.dp)
@@ -1183,7 +1183,7 @@ class DynamicComponentTest(unittest.TestCase):
             '<link name="ds3" target="/entry$var.serialno:'
             'NXentry/NXinstrument/collection/ds3"/>\n'
             '</group>\n</group>\n</definition>\n',
-            }
+        }
         dsdict = {
             "empty": [],
             "one": [{"name": "onename"}],
@@ -1192,8 +1192,8 @@ class DynamicComponentTest(unittest.TestCase):
             "type": [{"name": "ds1", "dtype": "int"}],
             "shape": [{"name": "ds2", "shape": [34]}],
             "shapetype": [{"name": "ds3", "dtype": "float64",
-                           "shape":[3, 56]}],
-            }
+                           "shape": [3, 56]}],
+        }
         dname = "__dynamic_component__"
         dc = DynamicComponent(self._cf.dp)
         for lb, ds in dsdict.items():
@@ -1220,11 +1220,11 @@ class DynamicComponentTest(unittest.TestCase):
             '<link name="ds1" target="/entry$var.serialno:'
             'NXentry/NXinstrument/collection/ds1"/>\n'
             '</group>\n</group>\n</definition>\n',
-            }
+        }
         dname = "__dynamic_component__"
         dc = DynamicComponent(self._cf.dp)
         for tp, nxstp in self.__npTn.items():
-            dc.setStepDictDSources([{"name": "ds1", "dtype":tp}])
+            dc.setStepDictDSources([{"name": "ds1", "dtype": tp}])
             cpname = dc.create()
             comp = self._cf.dp.Components([cpname])[0]
             self.assertEqual(cps["type"] % nxstp, comp)
@@ -1247,7 +1247,7 @@ class DynamicComponentTest(unittest.TestCase):
             '<link name="ds2" target="/entry$var.serialno:'
             'NXentry/NXinstrument/collection/ds2"/>\n'
             '</group>\n</group>\n</definition>\n',
-            }
+        }
 
         dimbg = '<dimensions rank="%s">\n'
         dim = '<dim index="%s" value="%s"/>\n'
@@ -1258,7 +1258,7 @@ class DynamicComponentTest(unittest.TestCase):
         for i in range(50):
             ms = [self.__rnd.randint(0, 3000)
                   for _ in range(self.__rnd.randint(0, 3))]
-            dc.setStepDictDSources([{"name": "ds2", "shape":ms}])
+            dc.setStepDictDSources([{"name": "ds2", "shape": ms}])
             cpname = dc.create()
             mstr = ""
             if ms:
@@ -1286,7 +1286,7 @@ class DynamicComponentTest(unittest.TestCase):
             '<record name="%s"/>\n</datasource>\n'
             '%s</field>\n'
             '</group>\n</group>\n%s</group>\n</definition>\n',
-            }
+        }
 
         link = '<group name="data" type="NXdata">\n' + \
             '<link name="%s" target="/entry$var.serialno:' + \
@@ -1299,19 +1299,19 @@ class DynamicComponentTest(unittest.TestCase):
         dname = "__dynamic_component__"
 
         arr = [
-            {"name":"client", "full_name":"client"},
-            {"name":"client_short", "full_name":"ttestp09/testts/t1r228"},
-            {"name":"client_long", "full_name":"ttestp09/testts/t2r228"},
-            {"name":"myclient_long", "full_name":"ttestp09/testts/t3r228"},
-            {"name":"client", "full_name":"client"},
-            {"name":"client_short", "full_name":"ttestp09/testts/t1r228"},
-            {"name":"client_long", "full_name":"ttestp09/testts/t2r228"},
-            {"name":"myclient_long", "full_name":"ttestp09/testts/t3r228"},
-            {"name":"client", "full_name":"client"},
-            {"name":"client_short", "full_name":"ttestp09/testts/t1r228"},
-            {"name":"client_long", "full_name":"ttestp09/testts/t2r228"},
-            {"name":"myclient_long", "full_name":"ttestp09/testts/t3r228"},
-            ]
+            {"name": "client", "full_name": "client"},
+            {"name": "client_short", "full_name": "ttestp09/testts/t1r228"},
+            {"name": "client_long", "full_name": "ttestp09/testts/t2r228"},
+            {"name": "myclient_long", "full_name": "ttestp09/testts/t3r228"},
+            {"name": "client", "full_name": "client"},
+            {"name": "client_short", "full_name": "ttestp09/testts/t1r228"},
+            {"name": "client_long", "full_name": "ttestp09/testts/t2r228"},
+            {"name": "myclient_long", "full_name": "ttestp09/testts/t3r228"},
+            {"name": "client", "full_name": "client"},
+            {"name": "client_short", "full_name": "ttestp09/testts/t1r228"},
+            {"name": "client_long", "full_name": "ttestp09/testts/t2r228"},
+            {"name": "myclient_long", "full_name": "ttestp09/testts/t3r228"},
+        ]
 
         simps2 = TestServerSetUp.TestServerSetUp(
             "ttestp09/testts/t2r228", "S2")
@@ -1335,7 +1335,7 @@ class DynamicComponentTest(unittest.TestCase):
                     ms = [self.__rnd.randint(0, 3000)
                           for _ in range(self.__rnd.randint(0, 3))]
                     ms2 = [self.__rnd.randint(0, 3000)
-                          for _ in range(self.__rnd.randint(0, 3))]
+                           for _ in range(self.__rnd.randint(0, 3))]
                     tmptp = self.__rnd.choice(self.__npTn.keys())
                     if i == 0:
                         pass
@@ -1408,11 +1408,12 @@ class DynamicComponentTest(unittest.TestCase):
                     comp = self._cf.dp.Components([cpname])[0]
                     ds = ar["name"]
                     lk = link % (ds, ds)
-                    self.assertEqual(cps["shapetype"] % (
+                    self.assertEqual(
+                        cps["shapetype"] % (
                             ds,
                             nxstp, ds, ar["full_name"], mstr,
                             lk if i % 2 else ""),
-                                     comp)
+                        comp)
         finally:
             for ar in arr:
                 if '/' in ar["full_name"]:
@@ -1433,7 +1434,7 @@ class DynamicComponentTest(unittest.TestCase):
             '<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n%s'
             '</group>\n</group>\n%s</group>\n</definition>\n',
-            }
+        }
 
         defbg = '<?xml version="1.0" ?>\n<definition>\n'
         defend = '</definition>\n'
@@ -1454,15 +1455,15 @@ class DynamicComponentTest(unittest.TestCase):
         dname = "__dynamic_component__"
 
         arr = [
-            {"name":"client", "full_name":"client"},
-            {"name":"client_short", "full_name":"ttestp09/testts/t1r228"},
-            {"name":"client_long", "full_name":"ttestp09/testts/t2r228"},
-            {"name":"myclient_long", "full_name":"ttestp09/testts/t3r228"},
-            {"name":"client", "full_name":"client"},
-            {"name":"client_short", "full_name":"ttestp09/testts/t1r228"},
-            {"name":"client_long", "full_name":"ttestp09/testts/t2r228"},
-            {"name":"myclient_long", "full_name":"ttestp09/testts/t3r228"},
-            ]
+            {"name": "client", "full_name": "client"},
+            {"name": "client_short", "full_name": "ttestp09/testts/t1r228"},
+            {"name": "client_long", "full_name": "ttestp09/testts/t2r228"},
+            {"name": "myclient_long", "full_name": "ttestp09/testts/t3r228"},
+            {"name": "client", "full_name": "client"},
+            {"name": "client_short", "full_name": "ttestp09/testts/t1r228"},
+            {"name": "client_long", "full_name": "ttestp09/testts/t2r228"},
+            {"name": "myclient_long", "full_name": "ttestp09/testts/t3r228"},
+        ]
 
         simps2 = TestServerSetUp.TestServerSetUp(
             "ttestp09/testts/t2r228", "S2")
@@ -1511,7 +1512,7 @@ class DynamicComponentTest(unittest.TestCase):
                     ms = [self.__rnd.randint(0, 3000)
                           for _ in range(self.__rnd.randint(0, 3))]
                     ms2 = [self.__rnd.randint(0, 3000)
-                          for _ in range(self.__rnd.randint(0, 3))]
+                           for _ in range(self.__rnd.randint(0, 3))]
                     tmptp = self.__rnd.choice(self.__npTn.keys())
                     if i == 0:
                         dc.setDefaultLinkPath(False, mypath)
@@ -1575,7 +1576,6 @@ class DynamicComponentTest(unittest.TestCase):
 #                    print "path3", path, len(path), bool(path)
                     if path or i % 4 > 1:
 
-#                        print "path", bool(path)
                         if i % 4 < 2:
                             lk = link % (ds, mypath, ds)
                         else:
@@ -1613,7 +1613,7 @@ class DynamicComponentTest(unittest.TestCase):
 #                        print "FIRST"
                     else:
                         if i % 4 < 2:
-                            lk = link % (ds,  self.__defaultpath, ds)
+                            lk = link % (ds, self.__defaultpath, ds)
                         else:
                             lk = link % (fieldname.lower(), self.__defaultpath,
                                          fieldname.lower())
@@ -1621,7 +1621,6 @@ class DynamicComponentTest(unittest.TestCase):
                             fd,
                             lk if i % 2 else "")
                         mycps2 = mycps
- #                       print "SECOND"
                     try:
                         self.assertEqual(comp, mycps)
                     except:
@@ -1643,7 +1642,7 @@ class DynamicComponentTest(unittest.TestCase):
             "shapetype":
                 '<?xml version="1.0" ?>\n<definition>\n%s'
             '</group>\n</group>\n%s</group>\n</definition>\n',
-            }
+        }
 
         defbg = '<?xml version="1.0" ?>\n<definition>\n'
         defend = '</definition>\n'
@@ -1673,15 +1672,15 @@ class DynamicComponentTest(unittest.TestCase):
         dname = "__dynamic_component__"
 
         arr = [
-            {"name":"client_short", "full_name":"ttestp09/testts/t1r228",
-             "source":"ttestp09/testts/t1r228"},
-            {"name":"client_long", "full_name":"ttestp09/testts/t2r228",
-             "source":"ttestp09/testts/t1r228/Value"},
-            {"name":"myclient_long", "full_name":"ttestp09/testts/t3r228",
-             "source":"ttestp09/testts/t1r228/NonExisting"},
-            {"name":"myclient", "full_name":"ttestp09/testts/t4r228",
-             "source":"ttestp09/testts/t1r228/ImageDouble"},
-            ]
+            {"name": "client_short", "full_name": "ttestp09/testts/t1r228",
+             "source": "ttestp09/testts/t1r228"},
+            {"name": "client_long", "full_name": "ttestp09/testts/t2r228",
+             "source": "ttestp09/testts/t1r228/Value"},
+            {"name": "myclient_long", "full_name": "ttestp09/testts/t3r228",
+             "source": "ttestp09/testts/t1r228/NonExisting"},
+            {"name": "myclient", "full_name": "ttestp09/testts/t4r228",
+             "source": "ttestp09/testts/t1r228/ImageDouble"},
+        ]
 
         simps2 = TestServerSetUp.TestServerSetUp(
             "ttestp09/testts/t2r228", "S2")
@@ -1721,7 +1720,7 @@ class DynamicComponentTest(unittest.TestCase):
                     mycps += dsclient % (ar["name"], ar["full_name"])
                 mycps += fieldend + groupend + groupend
                 mycps += link % (ar["name"], self.__defaultpath,
-                                         ar["name"])
+                                 ar["name"])
                 mycps += groupend + defend
 
                 self.assertEqual(comp, mycps)
@@ -1815,13 +1814,13 @@ class DynamicComponentTest(unittest.TestCase):
             'NXentry/NXinstrument/collection/ds3"/>\n'
             '</group>\n</group>\n'
             '</definition>\n'
-            }
+        }
         dsdict = {
             "empty": [],
             "one": ["one"],
             "two": ["d1", "d2"],
             "three": ["ds1", "ds2", "ds3"],
-            }
+        }
         dname = "__dynamic_component__"
         dc = DynamicComponent(self._cf.dp)
         for lb, ds in dsdict.items():
@@ -1849,12 +1848,12 @@ class DynamicComponentTest(unittest.TestCase):
             '<link name="ds1" target="/entry$var.serialno:'
             'NXentry/NXinstrument/collection/ds1"/>\n'
             '</group>\n</group>\n</definition>\n',
-            }
+        }
         dname = "__dynamic_component__"
         dc = DynamicComponent(self._cf.dp)
         for tp, nxstp in self.__npTn.items():
             dc.setStepDSources(["ds1"])
-#            dc.setStepDSources([{"name": "ds1", "dtype":tp}])
+#            dc.setStepDSources([{"name": "ds1", "dtype": tp}])
             cpname = dc.create()
             comp = self._cf.dp.Components([cpname])[0]
 #            self.assertEqual(cps["type"] % nxstp, comp)
@@ -1878,12 +1877,12 @@ class DynamicComponentTest(unittest.TestCase):
             '<link name="ds1" target="/entry$var.serialno:'
             'NXentry/NXinstrument/collection/ds1"/>\n'
             '</group>\n</group>\n</definition>\n',
-            }
+        }
         dname = "__dynamic_component__"
         dc = DynamicComponent(self._cf.dp)
         for tp, nxstp in self.__npTn.items():
             dc.setInitDSources(["ds1"])
-#            dc.setStepDSources([{"name": "ds1", "dtype":tp}])
+#            dc.setStepDSources([{"name": "ds1", "dtype": tp}])
             cpname = dc.create()
             comp = self._cf.dp.Components([cpname])[0]
 #            self.assertEqual(cps["type"] % nxstp, comp)
@@ -1907,7 +1906,7 @@ class DynamicComponentTest(unittest.TestCase):
             '<link name="ds1" target="/entry$var.serialno:'
             'NXentry/NXinstrument/collection/ds1"/>\n'
             '</group>\n</group>\n</definition>\n',
-            }
+        }
         dname = "__dynamic_component__"
         dc = DynamicComponent(self._cf.dp)
         for tp, nxstp in self.__npTn.items():
@@ -1937,7 +1936,7 @@ class DynamicComponentTest(unittest.TestCase):
             '<link name="ds1" target="/entry$var.serialno:'
             'NXentry/NXinstrument/collection/ds1"/>\n'
             '</group>\n</group>\n</definition>\n',
-            }
+        }
         dname = "__dynamic_component__"
         dc = DynamicComponent(self._cf.dp)
         for tp, nxstp in self.__npTn.items():
@@ -1967,7 +1966,7 @@ class DynamicComponentTest(unittest.TestCase):
             '<link name="ds2" target="/entry$var.serialno:'
             'NXentry/NXinstrument/collection/ds2"/>\n'
             '</group>\n</group>\n</definition>\n',
-            }
+        }
 
         dimbg = '<dimensions rank="%s">\n'
         dim = '<dim index="%s" value="%s"/>\n'
@@ -2011,7 +2010,7 @@ class DynamicComponentTest(unittest.TestCase):
             '<link name="ds2" target="/entry$var.serialno:'
             'NXentry/NXinstrument/collection/ds2"/>\n'
             '</group>\n</group>\n</definition>\n',
-            }
+        }
 
         dimbg = '<dimensions rank="%s">\n'
         dim = '<dim index="%s" value="%s"/>\n'
@@ -2053,7 +2052,7 @@ class DynamicComponentTest(unittest.TestCase):
             '<record name="%s"/>\n</datasource>\n'
             '%s</field>\n'
             '</group>\n</group>\n%s</group>\n</definition>\n',
-            }
+        }
 
         link = '<group name="data" type="NXdata">\n' + \
             '<link name="%s" target="/entry$var.serialno:' + \
@@ -2066,23 +2065,23 @@ class DynamicComponentTest(unittest.TestCase):
         dname = "__dynamic_component__"
 
         arr = [
-            {"name":"client"},
-            {"name":"client_short"},
-            {"name":"client_long"},
-            {"name":"myclient_long"},
-            {"name":"client"},
-            {"name":"client_short"},
-            {"name":"client_long"},
-            {"name":"myclient_long"},
-            {"name":"client"},
-            {"name":"client_short"},
-            {"name":"client_long"},
-            {"name":"myclient_long"},
-            {"name":"client"},
-            {"name":"client_short"},
-            {"name":"client_long"},
-            {"name":"myclient_long"},
-            ]
+            {"name": "client"},
+            {"name": "client_short"},
+            {"name": "client_long"},
+            {"name": "myclient_long"},
+            {"name": "client"},
+            {"name": "client_short"},
+            {"name": "client_long"},
+            {"name": "myclient_long"},
+            {"name": "client"},
+            {"name": "client_short"},
+            {"name": "client_long"},
+            {"name": "myclient_long"},
+            {"name": "client"},
+            {"name": "client_short"},
+            {"name": "client_long"},
+            {"name": "myclient_long"},
+        ]
 
         db = PyTango.Database()
         try:
@@ -2091,11 +2090,10 @@ class DynamicComponentTest(unittest.TestCase):
                 for tp, nxstp in self.__npTn.items():
                     lbl = self.getRandomName(20)
                     dc = DynamicComponent(self._cf.dp)
-#                    print "TP = ", tp, i
                     ms = [self.__rnd.randint(0, 3000)
                           for _ in range(self.__rnd.randint(0, 3))]
                     ms2 = [self.__rnd.randint(0, 3000)
-                          for _ in range(self.__rnd.randint(0, 3))]
+                           for _ in range(self.__rnd.randint(0, 3))]
                     tmptp = self.__rnd.choice(self.__npTn.keys())
                     if i == 0:
                         dc.setDefaultLinkPath(False, self.__defaultpath)
@@ -2204,11 +2202,12 @@ class DynamicComponentTest(unittest.TestCase):
                     comp = self._cf.dp.Components([cpname])[0]
                     ds = ar["name"]
                     lk = link % (ds, ds)
-                    self.assertEqual(cps["shapetype"] % (
+                    self.assertEqual(
+                        cps["shapetype"] % (
                             ds,
                             nxstp, ds, ar["name"], mstr,
                             lk if i % 2 else ""),
-                                     comp)
+                        comp)
         finally:
             pass
 
@@ -2228,7 +2227,7 @@ class DynamicComponentTest(unittest.TestCase):
             '<record name="%s"/>\n</datasource>\n'
             '%s</field>\n'
             '</group>\n</group>\n%s</group>\n</definition>\n',
-            }
+        }
 
         link = '<group name="data" type="NXdata">\n' + \
             '<link name="%s" target="/entry$var.serialno:' + \
@@ -2241,23 +2240,23 @@ class DynamicComponentTest(unittest.TestCase):
         dname = "__dynamic_component__"
 
         arr = [
-            {"name":"client"},
-            {"name":"client_short"},
-            {"name":"client_long"},
-            {"name":"myclient_long"},
-            {"name":"client"},
-            {"name":"client_short"},
-            {"name":"client_long"},
-            {"name":"myclient_long"},
-            {"name":"client"},
-            {"name":"client_short"},
-            {"name":"client_long"},
-            {"name":"myclient_long"},
-            {"name":"client"},
-            {"name":"client_short"},
-            {"name":"client_long"},
-            {"name":"myclient_long"},
-            ]
+            {"name": "client"},
+            {"name": "client_short"},
+            {"name": "client_long"},
+            {"name": "myclient_long"},
+            {"name": "client"},
+            {"name": "client_short"},
+            {"name": "client_long"},
+            {"name": "myclient_long"},
+            {"name": "client"},
+            {"name": "client_short"},
+            {"name": "client_long"},
+            {"name": "myclient_long"},
+            {"name": "client"},
+            {"name": "client_short"},
+            {"name": "client_long"},
+            {"name": "myclient_long"},
+        ]
 
         db = PyTango.Database()
         try:
@@ -2270,7 +2269,7 @@ class DynamicComponentTest(unittest.TestCase):
                     ms = [self.__rnd.randint(0, 3000)
                           for _ in range(self.__rnd.randint(0, 3))]
                     ms2 = [self.__rnd.randint(0, 3000)
-                          for _ in range(self.__rnd.randint(0, 3))]
+                           for _ in range(self.__rnd.randint(0, 3))]
                     tmptp = self.__rnd.choice(self.__npTn.keys())
                     if i == 0:
                         dc.setDefaultLinkPath(False, self.__defaultpath)
@@ -2379,11 +2378,12 @@ class DynamicComponentTest(unittest.TestCase):
                     comp = self._cf.dp.Components([cpname])[0]
                     ds = ar["name"]
                     lk = link % (ds, ds)
-                    self.assertEqual(cps["shapetype"] % (
+                    self.assertEqual(
+                        cps["shapetype"] % (
                             ds,
                             nxstp, ds, ar["name"], mstr,
                             lk if i % 2 else ""),
-                                     comp)
+                        comp)
         finally:
             pass
 
@@ -2448,7 +2448,7 @@ class DynamicComponentTest(unittest.TestCase):
                 mycps += mstr
                 mycps += fieldend + groupend + groupend
                 lk = link % (ds.lower(), self.__defaultpath,
-                        ds.lower())
+                             ds.lower())
                 mycps += lk if i % 2 else ""
                 mycps += groupend + defend
 
@@ -2484,15 +2484,15 @@ class DynamicComponentTest(unittest.TestCase):
         dimend = '</dimensions>\n'
 
         arr = [
-            {"name":"client_short", "full_name":"ttestp09/testts/t1r228",
-             "source":"ttestp09/testts/t1r228"},
-            {"name":"client_long", "full_name":"ttestp09/testts/t2r228",
-             "source":"ttestp09/testts/t1r228/Value"},
-            {"name":"myclient_long", "full_name":"ttestp09/testts/t3r228",
-             "source":"ttestp09/testts/t1r228/NonExisting"},
-            {"name":"myclient", "full_name":"ttestp09/testts/t4r228",
-             "source":"ttestp09/testts/t1r228/ImageDouble"},
-            ]
+            {"name": "client_short", "full_name": "ttestp09/testts/t1r228",
+             "source": "ttestp09/testts/t1r228"},
+            {"name": "client_long", "full_name": "ttestp09/testts/t2r228",
+             "source": "ttestp09/testts/t1r228/Value"},
+            {"name": "myclient_long", "full_name": "ttestp09/testts/t3r228",
+             "source": "ttestp09/testts/t1r228/NonExisting"},
+            {"name": "myclient", "full_name": "ttestp09/testts/t4r228",
+             "source": "ttestp09/testts/t1r228/ImageDouble"},
+        ]
         simps2 = TestServerSetUp.TestServerSetUp(
             "ttestp09/testts/t2r228", "S2")
         simps3 = TestServerSetUp.TestServerSetUp(
@@ -2515,7 +2515,6 @@ class DynamicComponentTest(unittest.TestCase):
             simps3.dp.DataSource = arr[2]["source"]
             simps4.dp.DataSource = arr[3]["source"]
             for i, ar in enumerate(arr):
-#                print "I = ", i, ar["name"]
                 db.put_device_alias(ar["full_name"], ar["name"])
 
                 dc = DynamicComponent(self._cf.dp)
@@ -2532,11 +2531,10 @@ class DynamicComponentTest(unittest.TestCase):
                     mycps += dsclient % (ar["name"], ar["name"])
                 mycps += fieldend + groupend + groupend
                 mycps += link % (ar["name"], self.__defaultpath,
-                                         ar["name"])
+                                 ar["name"])
                 mycps += groupend + defend
 
                 self.assertEqual(comp, mycps)
-#                print comp
         finally:
             for ar in arr:
                 if '/' in ar["full_name"]:
@@ -2576,15 +2574,15 @@ class DynamicComponentTest(unittest.TestCase):
         dimend = '</dimensions>\n'
 
         arr = [
-            {"name":"client_short", "full_name":"ttestp09/testts/t1r228",
-             "source":"ttestp09/testts/t1r228"},
-            {"name":"client_long", "full_name":"ttestp09/testts/t2r228",
-             "source":"ttestp09/testts/t1r228/Value"},
-            {"name":"myclient_long", "full_name":"ttestp09/testts/t3r228",
-             "source":"ttestp09/testts/t1r228/NonExisting"},
-            {"name":"myclient", "full_name":"ttestp09/testts/t4r228",
-             "source":"ttestp09/testts/t1r228/ImageDouble"},
-            ]
+            {"name": "client_short", "full_name": "ttestp09/testts/t1r228",
+             "source": "ttestp09/testts/t1r228"},
+            {"name": "client_long", "full_name": "ttestp09/testts/t2r228",
+             "source": "ttestp09/testts/t1r228/Value"},
+            {"name": "myclient_long", "full_name": "ttestp09/testts/t3r228",
+             "source": "ttestp09/testts/t1r228/NonExisting"},
+            {"name": "myclient", "full_name": "ttestp09/testts/t4r228",
+             "source": "ttestp09/testts/t1r228/ImageDouble"},
+        ]
         simps2 = TestServerSetUp.TestServerSetUp(
             "ttestp09/testts/t2r228", "S2")
         simps3 = TestServerSetUp.TestServerSetUp(
@@ -2607,7 +2605,6 @@ class DynamicComponentTest(unittest.TestCase):
             simps3.dp.DataSource = arr[2]["source"]
             simps4.dp.DataSource = arr[3]["source"]
             for i, ar in enumerate(arr):
-#                print "I = ", i, ar["name"]
                 db.put_device_alias(ar["full_name"], ar["name"])
 
                 dc = DynamicComponent(self._cf.dp)
@@ -2624,7 +2621,7 @@ class DynamicComponentTest(unittest.TestCase):
                     mycps += dsclient % (ar["name"], ar["name"])
                 mycps += fieldend + groupend + groupend
                 mycps += link % (ar["name"], self.__defaultpath,
-                                         ar["name"])
+                                 ar["name"])
                 mycps += groupend + defend
 
                 self.assertEqual(comp, mycps)
@@ -2699,7 +2696,7 @@ class DynamicComponentTest(unittest.TestCase):
                 mycps += mstr
                 mycps += fieldend + groupend + groupend
                 lk = link % (ds.lower(), self.__defaultpath,
-                        ds.lower())
+                             ds.lower())
                 mycps += lk if i % 2 else ""
                 mycps += groupend + defend
 
@@ -2773,7 +2770,7 @@ class DynamicComponentTest(unittest.TestCase):
                 mycps += mstr
                 mycps += fieldend + groupend + groupend
                 lk = link % (ds.lower(), self.__defaultpath,
-                        ds.lower())
+                             ds.lower())
                 mycps += lk if i % 2 else ""
                 mycps += groupend + defend
 
@@ -2847,7 +2844,7 @@ class DynamicComponentTest(unittest.TestCase):
                 mycps += mstr
                 mycps += fieldend + groupend + groupend
                 lk = link % (ds.lower(), self.__defaultpath,
-                        ds.lower())
+                             ds.lower())
                 mycps += lk if i % 2 else ""
                 mycps += groupend + defend
 
@@ -3003,7 +3000,7 @@ class DynamicComponentTest(unittest.TestCase):
                 mycps += mstr
                 mycps += fieldend + groupend + groupend
                 lk = link % (ds.lower(), self.__defaultpath,
-                        ds.lower())
+                             ds.lower())
                 mycps += lk if i % 2 else ""
                 mycps += groupend + defend
 
@@ -3159,7 +3156,7 @@ class DynamicComponentTest(unittest.TestCase):
                 mycps += mstr
                 mycps += fieldend + groupend + groupend
                 lk = link % (ds.lower(), self.__defaultpath,
-                        ds.lower())
+                             ds.lower())
                 mycps += lk if i % 2 else ""
                 mycps += groupend + defend
 
@@ -3177,7 +3174,7 @@ class DynamicComponentTest(unittest.TestCase):
             '<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n%s'
             '</group>\n</group>\n%s</group>\n</definition>\n',
-            }
+        }
 
         defbg = '<?xml version="1.0" ?>\n<definition>\n'
         defend = '</definition>\n'
@@ -3304,10 +3301,8 @@ class DynamicComponentTest(unittest.TestCase):
                         fd = fieldbg % (fieldname.lower(), nxstp)
                     fd += dss[0].toprettyxml(indent="") + mstr + fieldend
 
-#                    print "path3", path, len(path), bool(path)
                     if path or i % 4 > 1:
 
-#                        print "path", bool(path)
                         if i % 4 < 2:
                             lk = link % (ds.lower(), mypath, ds.lower())
                         else:
@@ -3354,7 +3349,6 @@ class DynamicComponentTest(unittest.TestCase):
                             fd,
                             lk if i % 2 else "")
                         mycps2 = mycps
- #                       print "SECOND"
                     try:
                         self.assertEqual(comp, mycps2)
                     except:
@@ -3374,7 +3368,7 @@ class DynamicComponentTest(unittest.TestCase):
             '<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n%s'
             '</group>\n</group>\n%s</group>\n</definition>\n',
-            }
+        }
 
         defbg = '<?xml version="1.0" ?>\n<definition>\n'
         defend = '</definition>\n'
@@ -3501,10 +3495,8 @@ class DynamicComponentTest(unittest.TestCase):
                         fd = fieldbg % (fieldname.lower(), nxstp)
                     fd += dss[0].toprettyxml(indent="") + mstr + fieldend
 
-#                    print "path3", path, len(path), bool(path)
                     if path or i % 4 > 1:
 
-#                        print "path", bool(path)
                         if i % 4 < 2:
                             lk = link % (ds.lower(), mypath, ds.lower())
                         else:
@@ -3539,7 +3531,6 @@ class DynamicComponentTest(unittest.TestCase):
                         for _ in path:
                             mycps2 += groupend
                         mycps2 += defend
-#                        print "FIRST"
                     else:
                         if i % 4 < 2:
                             lk = link % (ds.lower(),
@@ -3551,7 +3542,6 @@ class DynamicComponentTest(unittest.TestCase):
                             fd,
                             lk if i % 2 else "")
                         mycps2 = mycps
- #                       print "SECOND"
                     try:
                         self.assertEqual(comp, mycps2)
                     except:
