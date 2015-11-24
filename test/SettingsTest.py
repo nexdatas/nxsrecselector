@@ -2177,6 +2177,135 @@ class SettingsTest(unittest.TestCase):
 
         print rs.poolMotors()
 
+    ## constructor test
+    # \brief It tests default settings
+    def test_findMntGrp_empty(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+
+        rs = self.openRecSelector()
+        rs.configDevice = val["ConfigDevice"]
+        rs.door = val["Door"]
+        rs.mntGrp = val["MntGrp"]
+
+        self.assertEqual(rs.findMntGrp("blemble"), '')
+        self.assertEqual(rs.findMntGrp("blembl2e"), '')
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_findMntGrp_pool1(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+
+        db = PyTango.Database()
+        db.put_device_property(self._ms.ms.keys()[0],
+                               {'PoolNames': self._pool.dp.name()})
+        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        rs = self.openRecSelector()
+        rs.configDevice = val["ConfigDevice"]
+        rs.door = val["Door"]
+        rs.mntGrp = val["MntGrp"]
+
+        db = PyTango.Database()
+        db.put_device_property(self._ms.ms.keys()[0],
+                               {'PoolNames': self._pool.dp.name()})
+
+        self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+        self.assertEqual(rs.findMntGrp("somethin"), '')
+
+        arr = [
+            ["test/ct/01", "mntgrp_01Value"],
+            ["test/ct/02", "mntgrp_02att"],
+            ["test/ct/03", "mntgrp_03value"],
+            ["test/ct/04", "mntgrp_0413"],
+            ["null", "mntgrp_04"],
+        ]
+
+        pool = self._pool.dp
+
+        pool.MeasurementGroupList = [json.dumps(
+            {"name": a[0], "full_name": a[1]}) for a in arr]
+
+        for ar in arr:
+            dd = rs.findMntGrp(ar[0])
+            self.assertEqual(dd, ar[1])
+
+        dd = rs.findMntGrp("adsasd")
+        self.assertEqual(dd, '')
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_findMntGrp_pool2(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+
+        try:
+            tpool2 = TestPoolSetUp.TestPoolSetUp(
+                "pooltestp09/testts/t2r228", "POOLTESTS2")
+            tpool2.setUp()
+
+            db = PyTango.Database()
+            db.put_device_property(
+                self._ms.ms.keys()[0],
+                {'PoolNames': [
+                    tpool2.dp.name(), self._pool.dp.name()]})
+            pool = self._pool.dp
+            pool2 = tpool2.dp
+            self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+            rs = self.openRecSelector()
+            rs.configDevice = val["ConfigDevice"]
+            rs.door = val["Door"]
+            rs.mntGrp = val["MntGrp"]
+
+            self.assertEqual(rs.findMntGrp("somethin"), '')
+
+            arr = [
+                ["test/ct/01", "mntgrp_01Value"],
+                ["test/ct/02", "mntgrp_02att"],
+                ["test/ct/03", "mntgrp_03value"],
+                ["test/ct/04", "mntgrp_0413"],
+                ["null", "mntgrp_04"],
+            ]
+
+            arr2 = [
+                ["test/mca/01", "mgca_011"],
+                ["test/mca/02", "mgca_02a"],
+                ["test/sca/03", "mgy_sca_031"],
+                ["test/sca/04", "mntysca_04123"],
+            ]
+
+            pool.MeasurementGroupList = [json.dumps(
+                {"name": a[0], "full_name": a[1]}) for a in arr]
+            pool2.MeasurementGroupList = [json.dumps(
+                {"name": a[0], "full_name": a[1]}) for a in arr2]
+
+            for ar in arr:
+                dd = rs.findMntGrp(ar[0])
+                self.assertEqual(dd, ar[1])
+
+            for ar in arr2:
+                dd = rs.findMntGrp(ar[0])
+                self.assertEqual(dd, ar[1])
+
+            dd = rs.findMntGrp("adsasd")
+            self.assertEqual(dd, '')
+        finally:
+            tpool2.tearDown()
+
 
 if __name__ == '__main__':
     unittest.main()
