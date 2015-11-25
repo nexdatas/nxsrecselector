@@ -1,4 +1,4 @@
-2015-11-XX Jan Kotanski <jankotan@gmail.com>
+2015-11-25 Jan Kotanski <jankotan@gmail.com>
 	* avoiding overwriting ConfigDevice by fetchSelection
 	* removing unused methods from Settings
 	* fixes duplicated HiddenElements
