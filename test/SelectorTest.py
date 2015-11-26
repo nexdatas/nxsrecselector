@@ -974,7 +974,7 @@ class SelectorTest(unittest.TestCase):
                 logger.debug("%s , %s" % (str(v), str(dct2[k])))
                 self.assertEqual(v, dct2[k])
 
-    ## constructor test
+    ## test
     # \brief It tests default settings
     def test_constructor_keys(self):
         fun = sys._getframe().f_code.co_name
@@ -1009,7 +1009,7 @@ class SelectorTest(unittest.TestCase):
         self.assertEqual(pools[0].name(), self._pool.dp.name())
         self.assertEqual(se.getMacroServer(), self._ms.ms.keys()[0])
 
-    ## constructor test
+    ## test
     # \brief It tests default settings
     def test_se_getPool_1to3(self):
         fun = sys._getframe().f_code.co_name
@@ -1057,7 +1057,7 @@ class SelectorTest(unittest.TestCase):
         finally:
             ms2.tearDown()
 
-    ## constructor test
+    ## test
     # \brief It tests default settings
     def test_se_getPool_3to3(self):
         fun = sys._getframe().f_code.co_name
@@ -1101,7 +1101,7 @@ class SelectorTest(unittest.TestCase):
         finally:
             ms3.tearDown()
 
-    ## constructor test
+    ## test
     # \brief It tests default settings
     def test_poolMotors(self):
         fun = sys._getframe().f_code.co_name
@@ -1160,7 +1160,7 @@ class SelectorTest(unittest.TestCase):
         self.assertEqual(pools[0].name(), self._pool.dp.name())
         self.assertEqual(se.getMacroServer(), self._ms.ms.keys()[0])
 
-    ## constructor test
+    ## test
     # \brief It tests default settings
     def test_poolChannels(self):
         fun = sys._getframe().f_code.co_name
@@ -3762,7 +3762,7 @@ class SelectorTest(unittest.TestCase):
             self.compareToDump(se, ["DynamicLinks"])
             self.assertEqual(se["DynamicLinks"], cps)
 
-    ## constructor test
+    ## test
     # \brief It tests default settings
     def test_updateAutomaticComponents_simple(self):
         fun = sys._getframe().f_code.co_name
@@ -3791,7 +3791,7 @@ class SelectorTest(unittest.TestCase):
         self.assertEqual(json.loads(
             self._cf.dp.GetCommandVariable("VARS")), [None, None, None])
 
-    ## constructor test
+    ## test
     # \brief It tests default settings
     def test_updateAutomaticComponents_withcf(self):
         fun = sys._getframe().f_code.co_name
@@ -3829,7 +3829,7 @@ class SelectorTest(unittest.TestCase):
             [None, None, None])
 #        print self._cf.dp.availableComponents()
 
-    ## constructor test
+    ## test
     # \brief It tests default settings
     def test_updateAutomaticComponents_withcf_cps(self):
         fun = sys._getframe().f_code.co_name
@@ -3883,7 +3883,7 @@ class SelectorTest(unittest.TestCase):
             else:
                 self.assertEqual(sed[key], vl)
 
-    ## constructor test
+    ## test
     # \brief It tests default settings
     def test_updateAutomaticComponents_withcf_cps_t(self):
         fun = sys._getframe().f_code.co_name
@@ -3923,7 +3923,7 @@ class SelectorTest(unittest.TestCase):
 
         self.assertTrue(val["MntGrp"] not in self._cf.dp.availableSelections())
 
-    ## constructor test
+    ## test
     # \brief It tests default settings
     def test_updateAutomaticComponents_withcf_nocps(self):
         fun = sys._getframe().f_code.co_name
@@ -3964,7 +3964,7 @@ class SelectorTest(unittest.TestCase):
 
         self.assertTrue(val["MntGrp"] not in self._cf.dp.availableSelections())
 
-    ## constructor test
+    ## test
     # \brief It tests default settings
     def test_updateAutomaticComponents_withcf_nochnnel(self):
         fun = sys._getframe().f_code.co_name
@@ -4018,7 +4018,7 @@ class SelectorTest(unittest.TestCase):
             else:
                 self.assertEqual(sed[key], vl)
 
-    ## constructor test
+    ## test
     # \brief It tests default settings
     def test_updateAutomaticComponents_withcf_nochnnel_t(self):
         fun = sys._getframe().f_code.co_name
@@ -4057,7 +4057,7 @@ class SelectorTest(unittest.TestCase):
                          [None, None, None, ['mycp']])
         self.assertTrue(val["MntGrp"] not in self._cf.dp.availableSelections())
 
-    ## constructor test
+    ## test
     # \brief It tests default settings
     def test_updateAutomaticComponents_wds_t(self):
         fun = sys._getframe().f_code.co_name
@@ -4096,7 +4096,7 @@ class SelectorTest(unittest.TestCase):
              "DataSources"])
         self.assertTrue(val["MntGrp"] not in self._cf.dp.availableSelections())
 
-    ## constructor test
+    ## test
     # \brief It tests default settings
     def test_updateAutomaticComponents_wds(self):
         fun = sys._getframe().f_code.co_name
@@ -4158,7 +4158,7 @@ class SelectorTest(unittest.TestCase):
             else:
                 self.assertEqual(sed[key], vl)
 
-    ## constructor test
+    ## test
     # \brief It tests default settings
     def test_updateAutomaticComponents_wds2(self):
         fun = sys._getframe().f_code.co_name
@@ -4219,7 +4219,7 @@ class SelectorTest(unittest.TestCase):
             else:
                 self.assertEqual(sed[key], vl)
 
-    ## constructor test
+    ## test
     # \brief It tests default settings
     def test_updateAutomaticComponents_2wds(self):
         fun = sys._getframe().f_code.co_name
@@ -4302,7 +4302,7 @@ class SelectorTest(unittest.TestCase):
         finally:
             simps2.tearDown()
 
-    ## constructor test
+    ## test
     # \brief It tests default settings
     def test_updateAutomaticComponents_2wds_dvnorunning(self):
         fun = sys._getframe().f_code.co_name
@@ -4383,7 +4383,7 @@ class SelectorTest(unittest.TestCase):
         finally:
             simps2.delete()
 
-    ## constructor test
+    ## test
     # \brief It tests default settings
     def test_updateAutomaticComponents_2wds_dvnodef(self):
         fun = sys._getframe().f_code.co_name
@@ -4459,7 +4459,7 @@ class SelectorTest(unittest.TestCase):
             else:
                 self.assertEqual(sed[key], vl)
 
-    ## constructor test
+    ## test
     # \brief It tests default settings
     def test_updateAutomaticComponents_2wds_nods(self):
         fun = sys._getframe().f_code.co_name
@@ -4521,7 +4521,7 @@ class SelectorTest(unittest.TestCase):
         finally:
             simps2.tearDown()
 
-    ## constructor test
+    ## test
     # \brief It tests default settings
     def test_updateAutomaticComponents_2wds_nodspool(self):
         fun = sys._getframe().f_code.co_name
@@ -4584,7 +4584,7 @@ class SelectorTest(unittest.TestCase):
         finally:
             simps2.tearDown()
 
-    ## constructor test
+    ## test
     # \brief It tests default settings
     def test_updateAutomaticComponents_2wds_notangods(self):
         fun = sys._getframe().f_code.co_name
@@ -4650,7 +4650,7 @@ class SelectorTest(unittest.TestCase):
         finally:
             simps2.tearDown()
 
-    ## constructor test
+    ## test
     # \brief It tests default settings
     def test_updateAutomaticComponents_2wds_notangodsnopool(self):
         fun = sys._getframe().f_code.co_name
@@ -4715,7 +4715,7 @@ class SelectorTest(unittest.TestCase):
         finally:
             simps2.tearDown()
 
-    ## constructor test
+    ## test
     # \brief It tests default settings
     def test_updateAutomaticComponents_2wds_notangodsnopool2(self):
         fun = sys._getframe().f_code.co_name
@@ -4784,7 +4784,7 @@ class SelectorTest(unittest.TestCase):
         finally:
             simps2.tearDown()
 
-    ## constructor test
+    ## test
     # \brief It tests default settings
     def test_updateAutomaticComponents_2wds_notangods2(self):
         fun = sys._getframe().f_code.co_name
@@ -4865,7 +4865,7 @@ class SelectorTest(unittest.TestCase):
         finally:
             simps2.tearDown()
 
-    ## constructor test
+    ## test
     # \brief It tests default settings
     def test_updateAutomaticComponents_2wds_notangodspool_error(self):
         fun = sys._getframe().f_code.co_name
@@ -4952,7 +4952,7 @@ class SelectorTest(unittest.TestCase):
         finally:
             simps2.tearDown()
 
-    ## constructor test
+    ## test
     # \brief It tests default settings
     def test_updateAutomaticComponents_2wds_notangodspool(self):
         fun = sys._getframe().f_code.co_name
@@ -5035,7 +5035,7 @@ class SelectorTest(unittest.TestCase):
         finally:
             simps2.tearDown()
 
-    ## constructor test
+    ## test
     # \brief It tests default settings
     def test_updateAutomaticComponents_2wds_notangodspool_alias(self):
         fun = sys._getframe().f_code.co_name
@@ -5117,7 +5117,7 @@ class SelectorTest(unittest.TestCase):
             db.delete_device_alias(arr[0]["name"])
             simps2.tearDown()
 
-    ## constructor test
+    ## test
     # \brief It tests default settings
     def test_updateAutomaticComponents_2wds_notangodspool_alias_value(self):
         fun = sys._getframe().f_code.co_name
@@ -5198,7 +5198,7 @@ class SelectorTest(unittest.TestCase):
             db.delete_device_alias(arr[0]["name"])
             simps2.tearDown()
 
-    ## constructor test
+    ## test
     # \brief It tests default settings
     def test_updateAutomaticComponents_2wds_notangodspool_alias_novalue(self):
         fun = sys._getframe().f_code.co_name
@@ -5277,7 +5277,7 @@ class SelectorTest(unittest.TestCase):
             db.delete_device_alias(arr[0]["name"])
             simps2.tearDown()
 
-    ## constructor test
+    ## test
     # \brief It tests default settings
     def test_updateAutomaticComponents_2wds_nocomponents(self):
         fun = sys._getframe().f_code.co_name
@@ -5348,7 +5348,7 @@ class SelectorTest(unittest.TestCase):
         finally:
             simps2.tearDown()
 
-    ## constructor test
+    ## test
     # \brief It tests default settings
     def test_importEnv_noenv(self):
         fun = sys._getframe().f_code.co_name
@@ -5390,7 +5390,7 @@ class SelectorTest(unittest.TestCase):
 #            print "data",data
             self.myAssertDict(data, dt)
 
-    ## constructor test
+    ## test
     # \brief It tests default settings
     def test_importEnv(self):
         fun = sys._getframe().f_code.co_name
@@ -5523,7 +5523,7 @@ class SelectorTest(unittest.TestCase):
             se.importEnv(enms[i], data)
             self.myAssertDict(data, dt)
 
-    ## constructor test
+    ## test
     # \brief It tests default settings
     def test_exportEnv(self):
         fun = sys._getframe().f_code.co_name
@@ -5758,7 +5758,7 @@ class SelectorTest(unittest.TestCase):
 #            print "ei", envs[i]
             self.myAssertDict(envs[i], env)
 
-    ## constructor test
+    ## test
     # \brief It tests default settings
     def test_fetchEnvData(self):
         fun = sys._getframe().f_code.co_name
@@ -5879,7 +5879,7 @@ class SelectorTest(unittest.TestCase):
             dt = se.fetchEnvData()
             self.myAssertDict(edats[i], json.loads(dt))
 
-    ## constructor test
+    ## test
     # \brief It tests default settings
     def test_storeEnvData(self):
         fun = sys._getframe().f_code.co_name
@@ -6078,7 +6078,7 @@ class SelectorTest(unittest.TestCase):
 #            print "ei", envs[i]
             self.myAssertDict(envs[i], env)
 
-    ## constructor test
+    ## test
     # \brief It tests default settings
     def test_setScanEnv_scanid(self):
         fun = sys._getframe().f_code.co_name
@@ -6109,7 +6109,7 @@ class SelectorTest(unittest.TestCase):
         self._ms.dps[self._ms.ms.keys()[0]].Environment = ('pickle', envs[1])
         self.assertEqual(se.storeEnvData("{}"), 12)
 
-    ## constructor test
+    ## test
     # \brief It tests default settings
     def test_setScanEnv2(self):
         fun = sys._getframe().f_code.co_name
@@ -6308,7 +6308,7 @@ class SelectorTest(unittest.TestCase):
 #            print "ei", envs[i]
             self.myAssertDict(envs[i], env)
 
-    ## constructor test
+    ## test
     # \brief It tests default settings
     def test_setScanEnv_dtlist(self):
         fun = sys._getframe().f_code.co_name
