@@ -1753,41 +1753,52 @@ class SettingsTest(unittest.TestCase):
     def dump(self, el, name="default"):
         self.__dump[name] = {}
 
-        for key in el.keys():
-            self.__dump[name][key] = el[key]
+        for key in self.names(el):
+            self.__dump[name][key] = self.value(el, key)
 
     def compareToDump(self, el, excluded=None, name="default"):
         exc = set(excluded or [])
         dks = set(self.__dump[name].keys()) - exc
-        eks = set(el.keys()) - exc
+        eks = set(self.names(el)) - exc
 #        print "SE4", el["TimeZone"]
         self.assertEqual(dks, eks)
         for key in dks:
-            if self.__dump[name][key] != el[key]:
+            if self.__dump[name][key] != self.value(el, key):
                 print "COMP", key
-            self.assertEqual(self.__dump[name][key], el[key])
+            self.assertEqual(self.__dump[name][key], self.value(el, key))
 
     def getDump(self, key, name="default"):
         return self.__dump[name][key]
 
+    def value(self, rs, name):
+        return rs.value(name)
+
+    def names(self, rs):
+        return rs.names()
+
+    def setProp(self, rc, name, value):
+        setattr(rc, name, value)
+
     def compareToDumpJSON(self, el, excluded=None, name="default"):
         exc = set(excluded or [])
         dks = set(self.__dump[name].keys()) - exc
-        eks = set(el.keys()) - exc
+        eks = set(self.names(el)) - exc
         self.assertEqual(dks, eks)
         for key in dks:
             try:
                 w1 = json.loads(self.__dump[name][key])
-                w2 = json.loads(el[key])
+                w2 = json.loads(self.value(el, key))
             except:
-                self.assertEqual(self.__dump[name][key], el[key])
+                self.assertEqual(self.__dump[name][key], self.value(el, key))
             else:
                 if isinstance(w1, dict):
                     self.myAssertDict(w1, w2)
                 else:
-                    if self.__dump[name][key] != el[key]:
+                    if self.__dump[name][key] != self.value(el, key):
                         print "COMP", key
-                    self.assertEqual(self.__dump[name][key], el[key])
+                    self.assertEqual(
+                        self.__dump[name][key],
+                        self.value(el, key))
 
     def getRandomName(self, maxsize):
         letters = string.lowercase + string.uppercase + string.digits
@@ -1879,17 +1890,17 @@ class SettingsTest(unittest.TestCase):
             self.assertEqual(rs.mntGrp, cf.availableSelections()[0])
         else:
             self.assertEqual('nxsmntgrp', amntgrp)
-        self.assertEqual(set(rs.names()),
+        self.assertEqual(set(self.names(rs)),
                          set([k[0] for k in self._keys]))
 
-        for nm in rs.names():
+        for nm in self.names(rs):
             if nm not in ["Timer",
                           "DataSourceGroup",
                           "AutomaticDataSources"]:
-                if rs.value(nm) != se[nm]:
+                if self.value(rs, nm) != se[nm]:
                     print ("DICT NAME %s" % nm)
-                self.assertEqual(rs.value(nm), se[nm])
-        self.assertEqual(rs.value("UNKNOWN_VARIABLE_34535"), '')
+                self.assertEqual(self.value(rs, nm), se[nm])
+        self.assertEqual(self.value(rs, "UNKNOWN_VARIABLE_34535"), '')
 
         print "MntGrp", rs.mntGrp
         # memorize attirbutes
@@ -2327,18 +2338,9 @@ class SettingsTest(unittest.TestCase):
 
         channelerrors = []
         rs.updateControllers()
-        res = rs.value("AutomaticComponentGroup")
+        res = self.value(rs, "AutomaticComponentGroup")
         self.assertEqual(res, '{}')
         print self._cf.dp.GetCommandVariable("COMMANDS")
-        self.assertEqual(
-            json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
-            ['AvailableSelections', 'AvailableSelections',
-             'AvailableComponents', 'AvailableDataSources',
-             'AvailableComponents'])
-        self.assertEqual(
-            json.loads(
-                self._cf.dp.GetCommandVariable("VARS")),
-            [None, None, None, None, None])
 
     ## updateControllers test
     # \brief It tests default settings
@@ -2367,20 +2369,12 @@ class SettingsTest(unittest.TestCase):
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
 
         rs.updateControllers()
-        res = rs.value("AutomaticComponentGroup")
+        res = self.value(rs, "AutomaticComponentGroup")
 
         self.assertEqual(res, '{}')
         self.assertEqual(componentgroup, {})
         self.assertEqual(channelerrors, [])
         print self._cf.dp.GetCommandVariable("COMMANDS")
-        self.assertEqual(
-            json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
-            ["AvailableSelections", "AvailableSelections",
-             "AvailableComponents", "AvailableDataSources",
-             "AvailableComponents"])
-        self.assertEqual(
-            json.loads(self._cf.dp.GetCommandVariable("VARS")),
-            [None, None, None, None, None])
 
     ## test
     # \brief It tests default settings
@@ -2414,7 +2408,7 @@ class SettingsTest(unittest.TestCase):
         cnf["AutomaticComponentGroup"] = json.dumps(componentgroup)
         rs.configuration = json.dumps(cnf)
         rs.updateControllers()
-        res = rs.value("AutomaticComponentGroup")
+        res = self.value(rs, "AutomaticComponentGroup")
         self.myAssertDict(json.loads(res), {"mycp": True})
         self.assertEqual(channelerrors, [])
 
@@ -2465,7 +2459,7 @@ class SettingsTest(unittest.TestCase):
         cnf["AutomaticComponentGroup"] = json.dumps(componentgroup)
         rs.configuration = json.dumps(cnf)
         rs.updateControllers()
-        res = rs.value("AutomaticComponentGroup")
+        res = self.value(rs, "AutomaticComponentGroup")
         self.myAssertDict(json.loads(res), {"mycp": True})
         self.assertEqual(channelerrors, [])
 
@@ -2503,7 +2497,7 @@ class SettingsTest(unittest.TestCase):
         cnf["AutomaticComponentGroup"] = json.dumps(componentgroup)
         rs.configuration = json.dumps(cnf)
         rs.updateControllers()
-        res = rs.value("AutomaticComponentGroup")
+        res = self.value(rs, "AutomaticComponentGroup")
 
         self.myAssertDict(json.loads(res), {})
         self.assertEqual(channelerrors, [])
@@ -2544,7 +2538,7 @@ class SettingsTest(unittest.TestCase):
         cnf["AutomaticComponentGroup"] = json.dumps(componentgroup)
         rs.configuration = json.dumps(cnf)
         rs.updateControllers()
-        res = rs.value("AutomaticComponentGroup")
+        res = self.value(rs, "AutomaticComponentGroup")
 
         self.myAssertDict(json.loads(res), {"mycp": True})
         self.assertEqual(channelerrors, [])
@@ -2598,7 +2592,7 @@ class SettingsTest(unittest.TestCase):
         cnf["AutomaticComponentGroup"] = json.dumps(componentgroup)
         rs.configuration = json.dumps(cnf)
         rs.updateControllers()
-        res = rs.value("AutomaticComponentGroup")
+        res = self.value(rs, "AutomaticComponentGroup")
 
         self.myAssertDict(json.loads(res), {"mycp": True})
         self.assertEqual(channelerrors, [])
@@ -2637,7 +2631,7 @@ class SettingsTest(unittest.TestCase):
         cnf["AutomaticComponentGroup"] = json.dumps(componentgroup)
         rs.configuration = json.dumps(cnf)
         rs.updateControllers()
-        res = rs.value("AutomaticComponentGroup")
+        res = self.value(rs, "AutomaticComponentGroup")
 
         self.myAssertDict(json.loads(res), {"smycp": True})
         self.assertEqual(channelerrors, [])
@@ -2676,7 +2670,7 @@ class SettingsTest(unittest.TestCase):
         cnf["AutomaticComponentGroup"] = json.dumps(componentgroup)
         rs.configuration = json.dumps(cnf)
         rs.updateControllers()
-        res = rs.value("AutomaticComponentGroup")
+        res = self.value(rs, "AutomaticComponentGroup")
 
         self.myAssertDict(json.loads(res), {"smycp": True})
         self.assertEqual(channelerrors, [])
@@ -2729,7 +2723,7 @@ class SettingsTest(unittest.TestCase):
         cnf["AutomaticComponentGroup"] = json.dumps(componentgroup)
         rs.configuration = json.dumps(cnf)
         rs.updateControllers()
-        res = rs.value("AutomaticComponentGroup")
+        res = self.value(rs, "AutomaticComponentGroup")
 
         self.myAssertDict(json.loads(res), {
             "smycp": True, "smycp2": True, "smycp3": True})
@@ -2795,7 +2789,7 @@ class SettingsTest(unittest.TestCase):
             cnf["AutomaticComponentGroup"] = json.dumps(componentgroup)
             rs.configuration = json.dumps(cnf)
             rs.updateControllers()
-            res = rs.value("AutomaticComponentGroup")
+            res = self.value(rs, "AutomaticComponentGroup")
 
             self.myAssertDict(json.loads(res), {
                 "smycp": True, "smycp2": True, "smycp3": True,
@@ -2864,7 +2858,7 @@ class SettingsTest(unittest.TestCase):
             cnf["AutomaticComponentGroup"] = json.dumps(componentgroup)
             rs.configuration = json.dumps(cnf)
             rs.updateControllers()
-            res = rs.value("AutomaticComponentGroup")
+            res = self.value(rs, "AutomaticComponentGroup")
 
             self.myAssertDict(json.loads(res), {
                 "smycp": True, "smycp2": True, "smycp3": True,
@@ -2928,7 +2922,7 @@ class SettingsTest(unittest.TestCase):
         cnf["AutomaticComponentGroup"] = json.dumps(componentgroup)
         rs.configuration = json.dumps(cnf)
         rs.updateControllers()
-        res = rs.value("AutomaticComponentGroup")
+        res = self.value(rs, "AutomaticComponentGroup")
 
         self.myAssertDict(json.loads(res), {
             "smycp": True, "smycp2": True, "smycp3": True,
@@ -2995,12 +2989,12 @@ class SettingsTest(unittest.TestCase):
             cnf["AutomaticComponentGroup"] = json.dumps(componentgroup)
             rs.configuration = json.dumps(cnf)
             rs.updateControllers()
-            res = rs.value("AutomaticComponentGroup")
+            res = self.value(rs, "AutomaticComponentGroup")
 
             self.myAssertDict(json.loads(res), {
                 "smycp": True, "smycp2": True, "smycp3": True,
                 "s2mycp": True, "s2mycp2": True, "s2mycp3": True})
-            self.assertEqual(len(rs.descriptionErrors), 0)
+            self.assertTrue(not rs.descriptionErrors)
 
             res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
@@ -3062,7 +3056,7 @@ class SettingsTest(unittest.TestCase):
             cnf["AutomaticComponentGroup"] = json.dumps(componentgroup)
             rs.configuration = json.dumps(cnf)
             rs.updateControllers()
-            res = rs.value("AutomaticComponentGroup")
+            res = self.value(rs, "AutomaticComponentGroup")
 
             self.myAssertDict(json.loads(res), {
                 "smycp": True, "smycp2": True, "smycp3": True,
@@ -3131,13 +3125,13 @@ class SettingsTest(unittest.TestCase):
             cnf["AutomaticComponentGroup"] = json.dumps(componentgroup)
             rs.configuration = json.dumps(cnf)
             rs.updateControllers()
-            res = rs.value("AutomaticComponentGroup")
+            res = self.value(rs, "AutomaticComponentGroup")
 
             self.myAssertDict(json.loads(res), {
                 "smycp": True, "smycp2": True, "smycp3": True,
                 "s2mycp": True, "s2mycp2": True, "s2mycp3": True,
                 "smycpnt1": True})
-            self.assertEqual(len(rs.descriptionErrors), 0)
+            self.assertTrue(not rs.descriptionErrors)
 
     #        print self._cf.dp.GetCommandVariable("COMMANDS")
             res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
@@ -3202,7 +3196,7 @@ class SettingsTest(unittest.TestCase):
             cnf["AutomaticComponentGroup"] = json.dumps(componentgroup)
             rs.configuration = json.dumps(cnf)
             rs.updateControllers()
-            res = rs.value("AutomaticComponentGroup")
+            res = self.value(rs, "AutomaticComponentGroup")
 
             self.myAssertDict(json.loads(res), {
                 "smycp": True, "smycp2": True, "smycp3": True,
@@ -3273,7 +3267,7 @@ class SettingsTest(unittest.TestCase):
             cnf["AutomaticComponentGroup"] = json.dumps(componentgroup)
             rs.configuration = json.dumps(cnf)
             rs.updateControllers()
-            res = rs.value("AutomaticComponentGroup")
+            res = self.value(rs, "AutomaticComponentGroup")
 
             self.myAssertDict(json.loads(res), {
                 "smycp": True, "smycp2": True, "smycp3": True,
@@ -3358,13 +3352,13 @@ class SettingsTest(unittest.TestCase):
             cnf["AutomaticComponentGroup"] = json.dumps(componentgroup)
             rs.configuration = json.dumps(cnf)
             rs.updateControllers()
-            res = rs.value("AutomaticComponentGroup")
+            res = self.value(rs, "AutomaticComponentGroup")
 
             self.myAssertDict(json.loads(res), {
                 "smycp": True, "smycp2": True, "smycp3": True,
                 "s2mycp": True, "s2mycp2": True, "s2mycp3": True,
                 "smycpnt1": True})
-            self.assertEqual(len(rs.descriptionErrors), 0)
+            self.assertTrue(not rs.descriptionErrors)
 
             res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
@@ -3444,7 +3438,7 @@ class SettingsTest(unittest.TestCase):
             cnf["AutomaticComponentGroup"] = json.dumps(componentgroup)
             rs.configuration = json.dumps(cnf)
             rs.updateControllers()
-            res = rs.value("AutomaticComponentGroup")
+            res = self.value(rs, "AutomaticComponentGroup")
 
             self.myAssertDict(json.loads(res), {
                 "smycp": True, "smycp2": True, "smycp3": True,
@@ -3531,7 +3525,7 @@ class SettingsTest(unittest.TestCase):
             cnf["AutomaticComponentGroup"] = json.dumps(componentgroup)
             rs.configuration = json.dumps(cnf)
             rs.updateControllers()
-            res = rs.value("AutomaticComponentGroup")
+            res = self.value(rs, "AutomaticComponentGroup")
 
             self.myAssertDict(json.loads(res), {
                 "smycp": True, "smycp2": True, "smycp3": True,
@@ -3617,13 +3611,13 @@ class SettingsTest(unittest.TestCase):
             cnf["AutomaticComponentGroup"] = json.dumps(componentgroup)
             rs.configuration = json.dumps(cnf)
             rs.updateControllers()
-            res = rs.value("AutomaticComponentGroup")
+            res = self.value(rs, "AutomaticComponentGroup")
 
             self.myAssertDict(json.loads(res), {
                 "smycp": True, "smycp2": True, "smycp3": True,
                 "s2mycp": True, "s2mycp2": True, "s2mycp3": True,
                 "smycpnt1": True})
-            self.assertEqual(len(rs.descriptionErrors), 0)
+            self.assertTrue(not rs.descriptionErrors)
 
             res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
@@ -3702,13 +3696,13 @@ class SettingsTest(unittest.TestCase):
             cnf["AutomaticComponentGroup"] = json.dumps(componentgroup)
             rs.configuration = json.dumps(cnf)
             rs.updateControllers()
-            res = rs.value("AutomaticComponentGroup")
+            res = self.value(rs, "AutomaticComponentGroup")
 
             self.myAssertDict(json.loads(res), {
                 "smycp": True, "smycp2": True, "smycp3": True,
                 "s2mycp": True, "s2mycp2": True, "s2mycp3": True,
                 "smycpnt1": True})
-            self.assertEqual(len(rs.descriptionErrors), 0)
+            self.assertTrue(not rs.descriptionErrors)
 
     #        print self._cf.dp.GetCommandVariable("COMMANDS")
             res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
@@ -3788,7 +3782,7 @@ class SettingsTest(unittest.TestCase):
             cnf["AutomaticComponentGroup"] = json.dumps(componentgroup)
             rs.configuration = json.dumps(cnf)
             rs.updateControllers()
-            res = rs.value("AutomaticComponentGroup")
+            res = self.value(rs, "AutomaticComponentGroup")
 
             self.myAssertDict(json.loads(res), {
                 "smycp": True, "smycp2": True, "smycp3": True,
@@ -3864,7 +3858,7 @@ class SettingsTest(unittest.TestCase):
             cnf["AutomaticComponentGroup"] = json.dumps(componentgroup)
             rs.configuration = json.dumps(cnf)
             rs.updateControllers()
-            res = rs.value("AutomaticComponentGroup")
+            res = self.value(rs, "AutomaticComponentGroup")
 
             self.myAssertDict(json.loads(res), {
                 "smycp": True, "smycp2": True, "smycp3": True,
@@ -3888,6 +3882,1775 @@ class SettingsTest(unittest.TestCase):
                                      set(poolchannels))
                 else:
                     self.assertEqual(sed[key], vl)
+        finally:
+            simps2.tearDown()
+
+    ## resetAutomaticComponents test
+    # \brief It tests default settings
+    def test_resetAutomaticComponents_simple(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+
+        db = PyTango.Database()
+        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        rs = self.openRecSelector()
+        rs.configDevice = val["ConfigDevice"]
+        rs.door = val["Door"]
+        rs.mntGrp = val["MntGrp"]
+
+        self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+        channelerrors = []
+        self.dump(rs)
+        rs.resetAutomaticComponents()
+        sed2 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
+        res = self.value(rs, "AutomaticComponentGroup")
+        self.assertEqual(res, '{}')
+        rs.configuration = '{}'
+        rs.configDevice = val["ConfigDevice"]
+        rs.door = val["Door"]
+        rs.mntGrp = val["MntGrp"]
+        rs.fetchConfiguration()
+        res = self.value(rs, "AutomaticComponentGroup")
+        self.assertEqual(res, '{}')
+
+        self.compareToDump(rs, ["AutomaticComponentGroup"])
+
+    ## resetAutomaticComponents test
+    # \brief It tests default settings
+    def test_resetAutomaticComponents_withcf(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+
+        db = PyTango.Database()
+        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        rs = self.openRecSelector()
+        rs.configDevice = val["ConfigDevice"]
+        rs.door = val["Door"]
+        rs.mntGrp = val["MntGrp"]
+
+        self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+        channelerrors = []
+        poolchannels = []
+        componentgroup = {}
+
+        self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
+        self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
+
+        self.dump(rs)
+        rs.resetAutomaticComponents()
+        sed2 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
+        res = self.value(rs, "AutomaticComponentGroup")
+        self.compareToDump(rs, ["AutomaticComponentGroup"])
+
+        self.assertEqual(res, '{}')
+        self.assertEqual(componentgroup, {})
+        self.assertEqual(channelerrors, [])
+        print self._cf.dp.GetCommandVariable("COMMANDS")
+
+        rs.configuration = '{}'
+        rs.configDevice = val["ConfigDevice"]
+        rs.door = val["Door"]
+        rs.mntGrp = val["MntGrp"]
+        rs.fetchConfiguration()
+        res = self.value(rs, "AutomaticComponentGroup")
+        self.assertEqual(res, '{}')
+
+    ## test
+    # \brief It tests default settings
+    def test_resetAutomaticComponents_withcf_cps(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+
+        channelerrors = []
+        poolchannels = ["mycp"]
+        componentgroup = {"mycp": False}
+
+        self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
+        self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
+
+        db = PyTango.Database()
+        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        rs = self.openRecSelector()
+        self.setProp(rs, "defaultAutomaticComponents",
+                     list(componentgroup.keys()))
+        rs.configDevice = val["ConfigDevice"]
+        rs.door = val["Door"]
+        rs.mntGrp = val["MntGrp"]
+        rs.writerDevice = val["WriterDevice"]
+
+        self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+        cnf = json.loads(rs.configuration)
+        cnf["AutomaticDataSources"] = json.dumps(poolchannels)
+        rs.configuration = json.dumps(cnf)
+        # rs.defaultAutomaticComponents = list(componentgroup.keys())
+        self.dump(rs)
+        sed1 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
+        rs.resetAutomaticComponents()
+        res = self.value(rs, "AutomaticComponentGroup")
+        self.compareToDump(rs, ["AutomaticComponentGroup"])
+        print "RES", res
+        self.myAssertDict(json.loads(res), {"mycp": True})
+        self.assertEqual(channelerrors, [])
+
+        self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
+        sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
+        self.assertEqual(len(sed.keys()), len(self._keys))
+        for key, vl in self._keys:
+            self.assertTrue(key in sed.keys())
+            self.assertTrue(key in sed1.keys())
+            if key in val:
+                self.assertEqual(sed[key], val[key])
+                self.assertEqual(sed1[key], val[key])
+            elif key == 'AutomaticComponentGroup':
+                self.myAssertDict(json.loads(sed[key]), json.loads(res))
+                self.assertNotEqual(sed1[key], res)
+            elif key == 'AutomaticDataSources':
+                self.assertEqual(set(json.loads(sed[key])), set(poolchannels))
+                self.assertEqual(set(json.loads(sed1[key])), set(poolchannels))
+            else:
+                self.assertEqual(sed[key], vl)
+                self.assertEqual(sed1[key], vl)
+
+    ## test
+    # \brief It tests default settings
+    def test_resetAutomaticComponents_withcf_cps_t(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+
+        db = PyTango.Database()
+        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+        channelerrors = []
+        poolchannels = ["mycp"]
+        componentgroup = {"mycp": True}
+
+        self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
+        self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
+
+        rs = self.openRecSelector()
+        self.setProp(rs, "defaultAutomaticComponents",
+                     list(componentgroup.keys()))
+        rs.configDevice = val["ConfigDevice"]
+        rs.door = val["Door"]
+        rs.mntGrp = val["MntGrp"]
+        rs.writerDevice = val["WriterDevice"]
+
+        cnf = json.loads(rs.configuration)
+        cnf["AutomaticDataSources"] = json.dumps(poolchannels)
+        rs.configuration = json.dumps(cnf)
+        self.dump(rs)
+        sed1 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
+        rs.resetAutomaticComponents()
+        sed2 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
+        self.compareToDump(rs, ["AutomaticComponentGroup"])
+        res = self.value(rs, "AutomaticComponentGroup")
+        self.myAssertDict(json.loads(res), {"mycp": True})
+        self.assertEqual(channelerrors, [])
+
+        self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
+
+    ## test
+    # \brief It tests default settings
+    def test_resetAutomaticComponents_withcf_nocps(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+
+        db = PyTango.Database()
+        self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+        self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+        channelerrors = []
+        poolchannels = ["mycp"]
+        componentgroup = {}
+
+        self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
+        self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
+
+        rs = self.openRecSelector()
+        self.setProp(rs, "defaultAutomaticComponents",
+                     list(componentgroup.keys()))
+        rs.configDevice = val["ConfigDevice"]
+        rs.door = val["Door"]
+        rs.mntGrp = val["MntGrp"]
+        rs.writerDevice = val["WriterDevice"]
+
+        cnf = json.loads(rs.configuration)
+        cnf["AutomaticDataSources"] = json.dumps(poolchannels)
+        rs.configuration = json.dumps(cnf)
+        self.dump(rs)
+        sed1 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
+        rs.resetAutomaticComponents()
+        sed2 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
+        self.compareToDump(rs, ["AutomaticComponentGroup"])
+        res = self.value(rs, "AutomaticComponentGroup")
+
+        self.myAssertDict(json.loads(res), {})
+        self.assertEqual(channelerrors, [])
+
+        print self._cf.dp.GetCommandVariable("COMMANDS")
+
+        self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
+
+    ## test
+    # \brief It tests default settings
+    def test_resetAutomaticComponents_withcf_nochnnel(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+
+        db = PyTango.Database()
+        self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+        channelerrors = []
+        poolchannels = []
+        componentgroup = {"mycp": False}
+
+        self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
+        self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
+        rs = self.openRecSelector()
+        self.setProp(rs, "defaultAutomaticComponents",
+                     list(componentgroup.keys()))
+        rs.configDevice = val["ConfigDevice"]
+        rs.door = val["Door"]
+        rs.mntGrp = val["MntGrp"]
+        rs.writerDevice = val["WriterDevice"]
+
+        self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+        cnf = json.loads(rs.configuration)
+        cnf["AutomaticDataSources"] = json.dumps(poolchannels)
+        rs.configuration = json.dumps(cnf)
+        self.dump(rs)
+        sed1 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
+        rs.resetAutomaticComponents()
+        res = self.value(rs, "AutomaticComponentGroup")
+        self.compareToDump(rs, ["AutomaticComponentGroup"])
+
+        self.myAssertDict(json.loads(res), {"mycp": True})
+        self.assertEqual(channelerrors, [])
+
+        print self._cf.dp.GetCommandVariable("COMMANDS")
+        self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
+        sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
+        print sed
+        self.assertEqual(len(sed.keys()), len(self._keys))
+        for key, vl in self._keys:
+            self.assertTrue(key in sed.keys())
+            if key in val:
+                self.assertEqual(sed[key], val[key])
+                self.assertEqual(sed1[key], val[key])
+            elif key == 'AutomaticComponentGroup':
+                self.myAssertDict(json.loads(sed[key]),
+                                  json.loads(res))
+                self.assertNotEqual(sed1[key], res)
+            elif key == 'AutomaticDataSources':
+                self.assertEqual(set(json.loads(sed[key])), set(poolchannels))
+                self.assertEqual(set(json.loads(sed1[key])), set(poolchannels))
+            else:
+                self.assertEqual(sed[key], vl)
+                self.assertEqual(sed1[key], vl)
+
+    ## test
+    # \brief It tests default settings
+    def test_resetAutomaticComponents_withcf_nochnnel_t(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+
+        db = PyTango.Database()
+        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        channelerrors = []
+        poolchannels = []
+        componentgroup = {"mycp": True}
+
+        self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
+        self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
+        rs = self.openRecSelector()
+        self.setProp(rs, "defaultAutomaticComponents",
+                     list(componentgroup.keys()))
+        rs.configDevice = val["ConfigDevice"]
+        rs.door = val["Door"]
+        rs.mntGrp = val["MntGrp"]
+        rs.writerDevice = val["WriterDevice"]
+
+        self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+        cnf = json.loads(rs.configuration)
+        cnf["AutomaticDataSources"] = json.dumps(poolchannels)
+        rs.configuration = json.dumps(cnf)
+        self.dump(rs)
+        sed1 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
+        rs.resetAutomaticComponents()
+        sed2 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
+        res = self.value(rs, "AutomaticComponentGroup")
+        self.compareToDump(rs, ["AutomaticComponentGroup"])
+
+        self.myAssertDict(json.loads(res), {"mycp": True})
+        self.assertEqual(channelerrors, [])
+
+        self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
+
+    ## test
+    # \brief It tests default settings
+    def test_resetAutomaticComponents_wds_t(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+
+        db = PyTango.Database()
+        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        channelerrors = []
+        poolchannels = []
+        componentgroup = {"smycp": True}
+
+        self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.smycps)])
+        self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
+        rs = self.openRecSelector()
+        self.setProp(rs, "defaultAutomaticComponents",
+                     list(componentgroup.keys()))
+        rs.configDevice = val["ConfigDevice"]
+        rs.door = val["Door"]
+        rs.mntGrp = val["MntGrp"]
+        rs.writerDevice = val["WriterDevice"]
+
+        self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+        cnf = json.loads(rs.configuration)
+        cnf["AutomaticDataSources"] = json.dumps(poolchannels)
+        rs.configuration = json.dumps(cnf)
+        self.dump(rs)
+        sed1 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
+        rs.resetAutomaticComponents()
+        sed2 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
+        res = self.value(rs, "AutomaticComponentGroup")
+        self.compareToDump(rs, ["AutomaticComponentGroup"])
+
+        self.myAssertDict(json.loads(res), {"smycp": True})
+        self.assertEqual(channelerrors, [])
+
+        self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
+
+    ## test
+    # \brief It tests default settings
+    def test_resetAutomaticComponents_wds(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+
+        db = PyTango.Database()
+        self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+        channelerrors = []
+        poolchannels = []
+        componentgroup = {"smycp": False}
+
+        self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.smycps)])
+        self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
+
+        rs = self.openRecSelector()
+        self.setProp(rs, "defaultAutomaticComponents",
+                     list(componentgroup.keys()))
+        rs.configDevice = val["ConfigDevice"]
+        rs.door = val["Door"]
+        rs.mntGrp = val["MntGrp"]
+        rs.writerDevice = val["WriterDevice"]
+
+        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        cnf = json.loads(rs.configuration)
+        cnf["AutomaticDataSources"] = json.dumps(poolchannels)
+        rs.configuration = json.dumps(cnf)
+        self.dump(rs)
+        sed1 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
+        rs.resetAutomaticComponents()
+        res = self.value(rs, "AutomaticComponentGroup")
+        self.compareToDump(rs, ["AutomaticComponentGroup"])
+
+        self.myAssertDict(json.loads(res), {"smycp": True})
+        self.assertEqual(channelerrors, [])
+
+        self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
+        sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
+        self.assertEqual(len(sed.keys()), len(self._keys))
+        for key, vl in self._keys:
+            self.assertTrue(key in sed.keys())
+            if key in val:
+                self.assertEqual(sed[key], val[key])
+                self.assertEqual(sed1[key], val[key])
+            elif key == 'AutomaticComponentGroup':
+                self.myAssertDict(json.loads(sed[key]),
+                                  json.loads(res))
+                self.assertNotEqual(sed1[key], res)
+            elif key == 'AutomaticDataSources':
+                self.assertEqual(set(json.loads(sed[key])),
+                                 set(poolchannels))
+                self.assertEqual(set(json.loads(sed1[key])),
+                                 set(poolchannels))
+            else:
+                self.assertEqual(sed[key], vl)
+                self.assertEqual(sed1[key], vl)
+
+    ## test
+    # \brief It tests default settings
+    def test_resetAutomaticComponents_wds2(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+
+        db = PyTango.Database()
+        self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+        channelerrors = []
+        poolchannels = []
+        componentgroup = {"smycp": False, "smycp2": False, "smycp3": False}
+
+        self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.smycps)])
+        self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
+        rs = self.openRecSelector()
+        self.setProp(rs, "defaultAutomaticComponents",
+                     list(componentgroup.keys()))
+        rs.configDevice = val["ConfigDevice"]
+        rs.door = val["Door"]
+        rs.mntGrp = val["MntGrp"]
+        rs.writerDevice = val["WriterDevice"]
+
+        self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+        cnf = json.loads(rs.configuration)
+        cnf["AutomaticDataSources"] = json.dumps(poolchannels)
+        rs.configuration = json.dumps(cnf)
+        self.dump(rs)
+        sed1 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
+        rs.resetAutomaticComponents()
+        res = self.value(rs, "AutomaticComponentGroup")
+        self.compareToDump(rs, ["AutomaticComponentGroup"])
+
+        self.myAssertDict(json.loads(res), {
+            "smycp": True, "smycp2": True, "smycp3": True})
+        self.assertEqual(channelerrors, [])
+
+        res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+        self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
+        sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
+        self.assertEqual(len(sed.keys()), len(self._keys))
+        for key, vl in self._keys:
+            self.assertTrue(key in sed.keys())
+            if key in val:
+                self.assertEqual(sed[key], val[key])
+                self.assertEqual(sed1[key], val[key])
+            elif key == 'AutomaticComponentGroup':
+                self.myAssertDict(json.loads(sed[key]),
+                                  json.loads(res))
+                self.assertNotEqual(sed1[key], res)
+            elif key == 'AutomaticDataSources':
+                self.assertEqual(set(json.loads(sed[key])),
+                                 set(poolchannels))
+                self.assertEqual(set(json.loads(sed1[key])),
+                                 set(poolchannels))
+            else:
+                self.assertEqual(sed[key], vl)
+                self.assertEqual(sed1[key], vl)
+
+    ## test
+    # \brief It tests default settings
+    def test_resetAutomaticComponents_2wds(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        simps2 = TestServerSetUp.TestServerSetUp(
+            "ttestp09/testts/t2r228", "S2")
+        try:
+            simps2.setUp()
+
+            db = PyTango.Database()
+            self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+            channelerrors = []
+            poolchannels = []
+            componentgroup = {"smycp": False, "smycp2": False, "smycp3": False,
+                              "s2mycp": False, "s2mycp2": False,
+                              "s2mycp3": False}
+
+            cps = dict(self.smycps)
+            cps.update(self.smycps2)
+            dss = dict(self.smydss)
+            dss.update(self.smydss2)
+
+            self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
+            self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
+            rs = self.openRecSelector()
+            self.setProp(rs, "defaultAutomaticComponents",
+                         list(componentgroup.keys()))
+            rs.configDevice = val["ConfigDevice"]
+            rs.door = val["Door"]
+            rs.mntGrp = val["MntGrp"]
+            rs.writerDevice = val["WriterDevice"]
+
+            self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+            cnf = json.loads(rs.configuration)
+            cnf["AutomaticDataSources"] = json.dumps(poolchannels)
+            rs.configuration = json.dumps(cnf)
+            self.dump(rs)
+            sed1 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
+            rs.resetAutomaticComponents()
+            res = self.value(rs, "AutomaticComponentGroup")
+            self.compareToDump(rs, ["AutomaticComponentGroup"])
+
+            self.myAssertDict(json.loads(res), {
+                "smycp": True, "smycp2": True, "smycp3": True,
+                "s2mycp": True, "s2mycp2": True, "s2mycp3": True})
+            self.assertEqual(len(channelerrors), 0)
+
+            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
+            sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
+            self.assertEqual(len(sed.keys()), len(self._keys))
+            for key, vl in self._keys:
+                self.assertTrue(key in sed.keys())
+                if key in val:
+                    self.assertEqual(sed[key], val[key])
+                    self.assertEqual(sed1[key], val[key])
+                elif key == 'AutomaticComponentGroup':
+                    self.myAssertDict(json.loads(sed[key]),
+                                      json.loads(res))
+                    self.assertNotEqual(sed1[key], res)
+                elif key == 'AutomaticDataSources':
+                    self.assertEqual(set(json.loads(sed[key])),
+                                     set(poolchannels))
+                    self.assertEqual(set(json.loads(sed1[key])),
+                                     set(poolchannels))
+                else:
+                    self.assertEqual(sed[key], vl)
+                    self.assertEqual(sed1[key], vl)
+        finally:
+            simps2.tearDown()
+
+    ## test
+    # \brief It tests default settings
+    def test_resetAutomaticComponents_2wds_dvnorunning(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        simps2 = TestServerSetUp.TestServerSetUp(
+            "ttestp09/testts/t2r228", "S2")
+        try:
+            simps2.add()
+
+            db = PyTango.Database()
+            self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+            channelerrors = []
+            poolchannels = []
+            componentgroup = {"smycp": False, "smycp2": False, "smycp3": False,
+                              "s2mycp": False, "s2mycp2": False,
+                              "s2mycp3": False}
+
+            cps = dict(self.smycps)
+            cps.update(self.smycps2)
+            dss = dict(self.smydss)
+            dss.update(self.smydss2)
+
+            self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
+            self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
+
+            rs = self.openRecSelector()
+            self.setProp(rs, "defaultAutomaticComponents",
+                         list(componentgroup.keys()))
+            rs.configDevice = val["ConfigDevice"]
+            rs.door = val["Door"]
+            rs.mntGrp = val["MntGrp"]
+            rs.writerDevice = val["WriterDevice"]
+
+            self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+            cnf = json.loads(rs.configuration)
+            cnf["AutomaticDataSources"] = json.dumps(poolchannels)
+            rs.configuration = json.dumps(cnf)
+            self.dump(rs)
+            sed1 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
+            rs.resetAutomaticComponents()
+            res = self.value(rs, "AutomaticComponentGroup")
+            self.compareToDump(rs, ["AutomaticComponentGroup"])
+
+            self.myAssertDict(json.loads(res), {
+                "smycp": True, "smycp2": True, "smycp3": True,
+                "s2mycp": False, "s2mycp2": False, "s2mycp3": False})
+            self.assertEqual(len(rs.descriptionErrors), 3)
+
+            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
+            sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
+            self.assertEqual(len(sed.keys()), len(self._keys))
+            for key, vl in self._keys:
+                self.assertTrue(key in sed.keys())
+                if key in val:
+                    self.assertEqual(sed[key], val[key])
+                    self.assertEqual(sed1[key], val[key])
+                elif key == 'AutomaticComponentGroup':
+                    self.myAssertDict(json.loads(sed[key]), json.loads(res))
+                    self.assertNotEqual(sed1[key], res)
+                elif key == 'AutomaticDataSources':
+                    self.assertEqual(set(json.loads(sed[key])),
+                                     set(poolchannels))
+                    self.assertEqual(set(json.loads(sed1[key])),
+                                     set(poolchannels))
+                else:
+                    self.assertEqual(sed[key], vl)
+                    self.assertEqual(sed1[key], vl)
+        finally:
+            simps2.delete()
+
+    ## test
+    # \brief It tests default settings
+    def test_resetAutomaticComponents_2wds_dvnodef(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+
+        db = PyTango.Database()
+        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        channelerrors = []
+        poolchannels = []
+        componentgroup = {"smycp": False, "smycp2": False, "smycp3": False,
+                          "s2mycp": False, "s2mycp2": False, "s2mycp3": False}
+
+        cps = dict(self.smycps)
+        cps.update(self.smycps2)
+        dss = dict(self.smydss)
+        dss.update(self.smydss2)
+
+        self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
+        self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
+        rs = self.openRecSelector()
+        self.setProp(rs, "defaultAutomaticComponents",
+                     list(componentgroup.keys()))
+        rs.configDevice = val["ConfigDevice"]
+        rs.door = val["Door"]
+        rs.mntGrp = val["MntGrp"]
+        rs.writerDevice = val["WriterDevice"]
+
+        self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+        cnf = json.loads(rs.configuration)
+        cnf["AutomaticDataSources"] = json.dumps(poolchannels)
+        rs.configuration = json.dumps(cnf)
+        self.dump(rs)
+        sed1 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
+        rs.resetAutomaticComponents()
+        res = self.value(rs, "AutomaticComponentGroup")
+        self.compareToDump(rs, ["AutomaticComponentGroup"])
+
+        self.myAssertDict(json.loads(res), {
+            "smycp": True, "smycp2": True, "smycp3": True,
+            "s2mycp": False, "s2mycp2": False, "s2mycp3": False})
+        self.assertEqual(len(rs.descriptionErrors), 3)
+
+        res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+        self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
+        sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
+        self.assertEqual(len(sed.keys()), len(self._keys))
+        for key, vl in self._keys:
+            self.assertTrue(key in sed.keys())
+            if key in val:
+                self.assertEqual(sed[key], val[key])
+                self.assertEqual(sed1[key], val[key])
+            elif key == 'AutomaticComponentGroup':
+                self.myAssertDict(json.loads(sed[key]), json.loads(res))
+                self.assertNotEqual(sed1[key], res)
+            elif key == 'AutomaticDataSources':
+                self.assertEqual(set(json.loads(sed[key])),
+                                 set(poolchannels))
+                self.assertEqual(set(json.loads(sed1[key])),
+                                 set(poolchannels))
+            else:
+                self.assertEqual(sed[key], vl)
+                self.assertEqual(sed1[key], vl)
+
+    ## test
+    # \brief It tests default settings
+    def test_resetAutomaticComponents_2wds_nods(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        simps2 = TestServerSetUp.TestServerSetUp(
+            "ttestp09/testts/t2r228", "S2")
+        try:
+            simps2.setUp()
+
+            db = PyTango.Database()
+            self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+            channelerrors = []
+            poolchannels = []
+            componentgroup = {"smycp": False, "smycp2": False, "smycp3": False,
+                              "s2mycp": False, "s2mycp2": False,
+                              "s2mycp3": False}
+
+            cps = dict(self.smycps)
+            cps.update(self.smycps2)
+            dss = dict(self.smydss)
+            #            dss.update(self.smydss2)
+
+            rs = self.openRecSelector()
+            self.setProp(rs, "defaultAutomaticComponents",
+                         list(componentgroup.keys()))
+            rs.configDevice = val["ConfigDevice"]
+            rs.door = val["Door"]
+            rs.mntGrp = val["MntGrp"]
+            rs.writerDevice = val["WriterDevice"]
+
+            self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+            self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
+            self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
+
+            cnf = json.loads(rs.configuration)
+            cnf["AutomaticDataSources"] = json.dumps(poolchannels)
+            rs.configuration = json.dumps(cnf)
+            self.dump(rs)
+            sed1 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
+            rs.resetAutomaticComponents()
+            res = self.value(rs, "AutomaticComponentGroup")
+            self.compareToDump(rs, ["AutomaticComponentGroup"])
+
+            self.myAssertDict(json.loads(res), {
+                "smycp": True, "smycp2": True, "smycp3": True,
+                "s2mycp": True, "s2mycp2": True, "s2mycp3": True})
+            self.assertTrue(not rs.descriptionErrors)
+
+            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
+            sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
+            self.assertEqual(len(sed.keys()), len(self._keys))
+            for key, vl in self._keys:
+                self.assertTrue(key in sed.keys())
+                if key in val:
+                    self.assertEqual(sed[key], val[key])
+                    self.assertEqual(sed1[key], val[key])
+                elif key == 'AutomaticComponentGroup':
+                    self.myAssertDict(json.loads(sed[key]), json.loads(res))
+                    self.assertNotEqual(sed1[key], res)
+                elif key == 'AutomaticDataSources':
+                    self.assertEqual(set(json.loads(sed[key])),
+                                     set(poolchannels))
+                    self.assertEqual(set(json.loads(sed1[key])),
+                                     set(poolchannels))
+                else:
+                    self.assertEqual(sed[key], vl)
+                    self.assertEqual(sed1[key], vl)
+        finally:
+            simps2.tearDown()
+
+    ## test
+    # \brief It tests default settings
+    def test_resetAutomaticComponents_2wds_nodspool(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        simps2 = TestServerSetUp.TestServerSetUp(
+            "ttestp09/testts/t2r228", "S2")
+        try:
+            simps2.setUp()
+            db = PyTango.Database()
+            self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+            poolchannels = ["scalar2_long", "spectrum2_short"]
+            componentgroup = {"smycp": False, "smycp2": False, "smycp3": False,
+                              "s2mycp": False, "s2mycp2": False,
+                              "s2mycp3": False}
+
+            cps = dict(self.smycps)
+            cps.update(self.smycps2)
+            dss = dict(self.smydss)
+#            dss.update(self.smydss2)
+
+            self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
+            self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
+
+            rs = self.openRecSelector()
+            self.setProp(rs, "defaultAutomaticComponents",
+                         list(componentgroup.keys()))
+            rs.configDevice = val["ConfigDevice"]
+            rs.door = val["Door"]
+            rs.mntGrp = val["MntGrp"]
+            rs.writerDevice = val["WriterDevice"]
+
+            self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+            cnf = json.loads(rs.configuration)
+            cnf["AutomaticDataSources"] = json.dumps(poolchannels)
+            rs.configuration = json.dumps(cnf)
+            self.dump(rs)
+            sed1 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
+            rs.resetAutomaticComponents()
+            res = self.value(rs, "AutomaticComponentGroup")
+            self.compareToDump(rs, ["AutomaticComponentGroup"])
+
+            self.myAssertDict(json.loads(res), {
+                "smycp": True, "smycp2": True, "smycp3": True,
+                "s2mycp": False, "s2mycp2": False, "s2mycp3": True})
+            self.assertEqual(len(rs.descriptionErrors), 2)
+
+            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
+            sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
+            self.assertEqual(len(sed.keys()), len(self._keys))
+            for key, vl in self._keys:
+                self.assertTrue(key in sed.keys())
+                self.assertTrue(key in sed1.keys())
+                if key in val:
+                    self.assertEqual(sed[key], val[key])
+                elif key == 'AutomaticComponentGroup':
+                    self.myAssertDict(json.loads(sed[key]), json.loads(res))
+                    self.assertNotEqual(sed1[key], res)
+                elif key == 'AutomaticDataSources':
+                    self.assertEqual(set(json.loads(sed[key])),
+                                     set(poolchannels))
+                    self.assertEqual(set(json.loads(sed1[key])),
+                                     set(poolchannels))
+                else:
+                    self.assertEqual(sed[key], vl)
+                    self.assertEqual(sed1[key], vl)
+        finally:
+            simps2.tearDown()
+
+    ## test
+    # \brief It tests default settings
+    def test_resetAutomaticComponents_2wds_notangods(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        simps2 = TestServerSetUp.TestServerSetUp(
+            "ttestp09/testts/t2r228", "S2")
+        try:
+            simps2.setUp()
+
+            db = PyTango.Database()
+            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            poolchannels = ["scalar2_long", "spectrum2_short"]
+            componentgroup = {"smycp": False, "smycp2": False,
+                              "smycp3": False, "smycpnt1": False,
+                              "s2mycp": False, "s2mycp2": False,
+                              "s2mycp3": False}
+
+            cps = dict(self.smycps)
+            cps.update(self.smycps2)
+            dss = dict(self.smydss)
+            dss.update(self.smydss2)
+
+            self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
+            self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
+
+            rs = self.openRecSelector()
+            self.setProp(rs, "defaultAutomaticComponents",
+                         list(componentgroup.keys()))
+            rs.configDevice = val["ConfigDevice"]
+            rs.door = val["Door"]
+            rs.mntGrp = val["MntGrp"]
+            rs.writerDevice = val["WriterDevice"]
+
+            self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+            cnf = json.loads(rs.configuration)
+            cnf["AutomaticDataSources"] = json.dumps(poolchannels)
+            rs.configuration = json.dumps(cnf)
+            self.dump(rs)
+            sed1 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
+            rs.resetAutomaticComponents()
+            res = self.value(rs, "AutomaticComponentGroup")
+            self.compareToDump(rs, ["AutomaticComponentGroup"])
+
+            self.myAssertDict(json.loads(res), {
+                "smycp": True, "smycp2": True, "smycp3": True,
+                "s2mycp": True, "s2mycp2": True, "s2mycp3": True,
+                "smycpnt1": True})
+            self.assertTrue(not rs.descriptionErrors)
+
+    #        print self._cf.dp.GetCommandVariable("COMMANDS")
+            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
+            sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
+            self.assertEqual(len(sed.keys()), len(self._keys))
+            for key, vl in self._keys:
+                self.assertTrue(key in sed.keys())
+                if key in val:
+                    self.assertEqual(sed[key], val[key])
+                    self.assertEqual(sed1[key], val[key])
+                elif key == 'AutomaticComponentGroup':
+                    self.myAssertDict(json.loads(sed[key]), json.loads(res))
+                    self.assertNotEqual(sed1[key], res)
+                elif key == 'AutomaticDataSources':
+                    self.assertEqual(set(json.loads(sed[key])),
+                                     set(poolchannels))
+                    self.assertEqual(set(json.loads(sed1[key])),
+                                     set(poolchannels))
+                else:
+                    self.assertEqual(sed[key], vl)
+                    self.assertEqual(sed1[key], vl)
+        finally:
+            simps2.tearDown()
+
+    ## test
+    # \brief It tests default settings
+    def test_resetAutomaticComponents_2wds_notangodsnopool(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        simps2 = TestServerSetUp.TestServerSetUp(
+            "ttestp09/testts/t2r228", "S2")
+        try:
+            simps2.setUp()
+
+            db = PyTango.Database()
+            self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+            poolchannels = ["scalar2_long", "spectrum2_short", "client_long"]
+            componentgroup = {"smycp": False, "smycp2": False,
+                              "smycp3": False, "smycpnt1": False,
+                              "s2mycp": False, "s2mycp2": False,
+                              "s2mycp3": False}
+
+            cps = dict(self.smycps)
+            cps.update(self.smycps2)
+            dss = dict(self.smydss)
+            dss.update(self.smydss2)
+            rs = self.openRecSelector()
+
+            self.setProp(rs, "defaultAutomaticComponents",
+                         list(componentgroup.keys()))
+            rs.configDevice = val["ConfigDevice"]
+            rs.door = val["Door"]
+            rs.mntGrp = val["MntGrp"]
+            rs.writerDevice = val["WriterDevice"]
+
+            self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+            self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
+            self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
+
+            cnf = json.loads(rs.configuration)
+            cnf["AutomaticDataSources"] = json.dumps(poolchannels)
+            rs.configuration = json.dumps(cnf)
+            self.dump(rs)
+            sed1 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
+            rs.resetAutomaticComponents()
+            res = self.value(rs, "AutomaticComponentGroup")
+            self.compareToDump(rs, ["AutomaticComponentGroup"])
+
+            self.myAssertDict(json.loads(res), {
+                "smycp": True, "smycp2": True, "smycp3": True,
+                "s2mycp": True, "s2mycp2": True, "s2mycp3": True,
+                "smycpnt1": False})
+            self.assertEqual(len(rs.descriptionErrors), 1)
+
+    #        print self._cf.dp.GetCommandVariable("COMMANDS")
+            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
+            sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
+            self.assertEqual(len(sed.keys()), len(self._keys))
+            for key, vl in self._keys:
+                self.assertTrue(key in sed.keys())
+                if key in val:
+                    self.assertEqual(sed[key], val[key])
+                    self.assertEqual(sed1[key], val[key])
+                elif key == 'AutomaticComponentGroup':
+                    self.myAssertDict(json.loads(sed[key]), json.loads(res))
+                    self.assertNotEqual(sed1[key], res)
+                elif key == 'AutomaticDataSources':
+                    self.assertEqual(set(json.loads(sed[key])),
+                                     set(poolchannels))
+                    self.assertEqual(set(json.loads(sed1[key])),
+                                     set(poolchannels))
+                else:
+                    self.assertEqual(sed[key], vl)
+                    self.assertEqual(sed1[key], vl)
+        finally:
+            simps2.tearDown()
+
+    ## test
+    # \brief It tests default settings
+    def test_resetAutomaticComponents_2wds_notangodsnopool2(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        simps2 = TestServerSetUp.TestServerSetUp(
+            "ttestp09/testts/t2r228", "S2")
+        try:
+            simps2.setUp()
+
+            db = PyTango.Database()
+            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            poolchannels = ["scalar2_long", "spectrum2_short", "client_long"]
+            componentgroup = {"smycp": False, "smycp2": False,
+                              "smycp3": False, "smycpnt1": False,
+                              "s2mycp": False, "s2mycp2": False,
+                              "s2mycp3": False}
+
+            cps = dict(self.smycps)
+            cps.update(self.smycps2)
+            dss = dict(self.smydss)
+            dss.update(self.smydss2)
+
+            self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
+            self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
+            rs = self.openRecSelector()
+            self.setProp(rs, "defaultAutomaticComponents",
+                         list(componentgroup.keys()))
+            rs.configDevice = val["ConfigDevice"]
+            rs.door = val["Door"]
+            rs.mntGrp = val["MntGrp"]
+            rs.writerDevice = val["WriterDevice"]
+
+            self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+            cnf = json.loads(rs.configuration)
+            cnf["AutomaticDataSources"] = json.dumps(poolchannels)
+            rs.configuration = json.dumps(cnf)
+            self.dump(rs)
+            sed1 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
+            rs.resetAutomaticComponents()
+            res = self.value(rs, "AutomaticComponentGroup")
+            self.compareToDump(rs, ["AutomaticComponentGroup"])
+
+            self.myAssertDict(json.loads(res), {
+                "smycp": True, "smycp2": True, "smycp3": True,
+                "s2mycp": True, "s2mycp2": True, "s2mycp3": True,
+                "smycpnt1": False})
+            self.assertEqual(len(rs.descriptionErrors), 1)
+
+    #        print self._cf.dp.GetCommandVariable("COMMANDS")
+            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
+            sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
+            self.assertEqual(len(sed.keys()), len(self._keys))
+            for key, vl in self._keys:
+                self.assertTrue(key in sed.keys())
+                if key in val:
+                    self.assertEqual(sed[key], val[key])
+                    self.assertEqual(sed1[key], val[key])
+                elif key == 'AutomaticComponentGroup':
+                    self.myAssertDict(json.loads(sed[key]), json.loads(res))
+                    self.assertNotEqual(sed1[key], res)
+                elif key == 'AutomaticDataSources':
+                    self.assertEqual(set(json.loads(sed[key])),
+                                     set(poolchannels))
+                    self.assertEqual(set(json.loads(sed1[key])),
+                                     set(poolchannels))
+                else:
+                    self.assertEqual(sed[key], vl)
+                    self.assertEqual(sed1[key], vl)
+        finally:
+            simps2.tearDown()
+
+    ## test
+    # \brief It tests default settings
+    def test_resetAutomaticComponents_2wds_notangods2(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        simps2 = TestServerSetUp.TestServerSetUp(
+            "ttestp09/testts/t2r228", "S2")
+
+        arr = [
+            {"name": "client_long",
+             "full_name": "ttestp09/testts/t1r228/Value"},
+            {"name": "client_short",
+             "full_name": "ttestp09/testts/t1r228/Value"},
+        ]
+
+        try:
+            simps2.setUp()
+
+            db = PyTango.Database()
+            db.put_device_property(self._ms.ms.keys()[0],
+                                   {'PoolNames': self._pool.dp.name()})
+            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            channelerrors = []
+            poolchannels = []
+            componentgroup = {"smycp": False, "smycp2": False,
+                              "smycp3": False, "smycpnt1": False,
+                              "s2mycp": False, "s2mycp2": False,
+                              "s2mycp3": False}
+
+            cps = dict(self.smycps)
+            cps.update(self.smycps2)
+            dss = dict(self.smydss)
+            dss.update(self.smydss2)
+
+            self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
+            self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
+
+            rs = self.openRecSelector()
+            self.setProp(rs, "defaultAutomaticComponents",
+                         list(componentgroup.keys()))
+            rs.configDevice = val["ConfigDevice"]
+            rs.door = val["Door"]
+            rs.mntGrp = val["MntGrp"]
+            rs.writerDevice = val["WriterDevice"]
+
+            self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+            pool = self._pool.dp
+            pool.AcqChannelList = [json.dumps(a) for a in arr]
+
+            cnf = json.loads(rs.configuration)
+            cnf["AutomaticDataSources"] = json.dumps(poolchannels)
+            rs.configuration = json.dumps(cnf)
+            self.dump(rs)
+            sed1 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
+            rs.resetAutomaticComponents()
+            res = self.value(rs, "AutomaticComponentGroup")
+            self.compareToDump(rs, ["AutomaticComponentGroup"])
+
+            self.myAssertDict(json.loads(res), {
+                "smycp": True, "smycp2": True, "smycp3": True,
+                "s2mycp": True, "s2mycp2": True, "s2mycp3": True,
+                "smycpnt1": True})
+            self.assertTrue(not rs.descriptionErrors)
+
+            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
+            sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
+            self.assertEqual(len(sed.keys()), len(self._keys))
+            for key, vl in self._keys:
+                self.assertTrue(key in sed.keys())
+                if key in val:
+                    self.assertEqual(sed[key], val[key])
+                    self.assertEqual(sed1[key], val[key])
+                elif key == 'AutomaticComponentGroup':
+                    self.myAssertDict(json.loads(sed[key]), json.loads(res))
+                    self.assertNotEqual(sed1[key], res)
+                elif key == 'AutomaticDataSources':
+                    self.assertEqual(set(json.loads(sed[key])),
+                                     set(poolchannels))
+                    self.assertEqual(set(json.loads(sed1[key])),
+                                     set(poolchannels))
+                else:
+                    self.assertEqual(sed[key], vl)
+                    self.assertEqual(sed1[key], vl)
+        finally:
+            simps2.tearDown()
+
+    ## test
+    # \brief It tests default settings
+    def test_resetAutomaticComponents_2wds_notangodspool_error(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        simps2 = TestServerSetUp.TestServerSetUp(
+            "ttestp09/testts/t2r228", "S2")
+
+        arr = [
+            {"name": "client_long",
+             "full_name": "ttestp09/testts/t1r228/Value"},
+            {"name": "client_short",
+             "full_name": "ttestp09/testts/t1r228/Value"},
+        ]
+
+        try:
+            simps2.setUp()
+
+            db = PyTango.Database()
+            db.put_device_property(self._ms.ms.keys()[0],
+                                   {'PoolNames': self._pool.dp.name()})
+            self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+            channelerrors = []
+            poolchannels = ["scalar2_long", "spectrum2_short", "client_long",
+                            "client_short"]
+            componentgroup = {
+                "smycp": False, "smycp2": False, "smycp3": False,
+                "smycpnt1": False,
+                "s2mycp": False, "s2mycp2": False, "s2mycp3": False
+            }
+
+            cps = dict(self.smycps)
+            cps.update(self.smycps2)
+            dss = dict(self.smydss)
+            dss.update(self.smydss2)
+
+            self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
+            self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
+            rs = self.openRecSelector()
+            self.setProp(rs, "defaultAutomaticComponents",
+                         list(componentgroup.keys()))
+            rs.configDevice = val["ConfigDevice"]
+            rs.door = val["Door"]
+            rs.mntGrp = val["MntGrp"]
+            rs.writerDevice = val["WriterDevice"]
+
+            self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+            pool = self._pool.dp
+            pool.AcqChannelList = [json.dumps(a) for a in arr]
+
+            cnf = json.loads(rs.configuration)
+            cnf["AutomaticDataSources"] = json.dumps(poolchannels)
+            rs.configuration = json.dumps(cnf)
+            self.dump(rs)
+            sed1 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
+            rs.resetAutomaticComponents()
+            res = self.value(rs, "AutomaticComponentGroup")
+            self.compareToDump(rs, ["AutomaticComponentGroup"])
+
+            self.myAssertDict(json.loads(res), {
+                "smycp": True, "smycp2": True, "smycp3": True,
+                "s2mycp": True, "s2mycp2": True, "s2mycp3": True,
+                "smycpnt1": False})
+            self.assertEqual(len(rs.descriptionErrors), 1)
+
+    #        print self._cf.dp.GetCommandVariable("COMMANDS")
+            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
+            sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
+            self.assertEqual(len(sed.keys()), len(self._keys))
+            for key, vl in self._keys:
+                self.assertTrue(key in sed.keys())
+                if key in val:
+                    self.assertEqual(sed[key], val[key])
+                    self.assertEqual(sed1[key], val[key])
+                elif key == 'AutomaticComponentGroup':
+                    self.myAssertDict(json.loads(sed[key]), json.loads(res))
+                    self.assertNotEqual(sed1[key], res)
+                elif key == 'AutomaticDataSources':
+                    self.assertEqual(set(json.loads(sed[key])),
+                                     set(poolchannels))
+                    self.assertEqual(set(json.loads(sed1[key])),
+                                     set(poolchannels))
+                else:
+                    self.assertEqual(sed[key], vl)
+                    self.assertEqual(sed1[key], vl)
+        finally:
+            simps2.tearDown()
+
+    ## test
+    # \brief It tests default settings
+    def test_resetAutomaticComponents_2wds_notangodspool(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        simps2 = TestServerSetUp.TestServerSetUp(
+            "ttestp09/testts/t2r228", "S2")
+
+        arr = [
+            {"name": "client_short", "full_name": "ttestp09/testts/t1r228"},
+        ]
+
+        try:
+            simps2.setUp()
+
+            db = PyTango.Database()
+            db.put_device_property(self._ms.ms.keys()[0],
+                                   {'PoolNames': self._pool.dp.name()})
+            self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+            channelerrors = []
+
+            poolchannels = ["scalar2_long", "spectrum2_short", "client_short"]
+            componentgroup = {
+                "smycp": False, "smycp2": False, "smycp3": False,
+                "smycpnt1": False,
+                "s2mycp": False, "s2mycp2": False, "s2mycp3": False
+            }
+
+            cps = dict(self.smycps)
+            cps.update(self.smycps2)
+            dss = dict(self.smydss)
+            dss.update(self.smydss2)
+
+            self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
+            self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
+            rs = self.openRecSelector()
+            self.setProp(rs, "defaultAutomaticComponents",
+                         list(componentgroup.keys()))
+            rs.configDevice = val["ConfigDevice"]
+            rs.door = val["Door"]
+            rs.mntGrp = val["MntGrp"]
+            rs.writerDevice = val["WriterDevice"]
+
+            self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+            pool = self._pool.dp
+            pool.AcqChannelList = [json.dumps(a) for a in arr]
+
+            self._simps.dp.ChangeValueType("ScalarShort")
+            self._simps.dp.Value = 43
+
+            cnf = json.loads(rs.configuration)
+            cnf["AutomaticDataSources"] = json.dumps(poolchannels)
+            rs.configuration = json.dumps(cnf)
+            self.dump(rs)
+            sed1 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
+            rs.resetAutomaticComponents()
+            res = self.value(rs, "AutomaticComponentGroup")
+            self.compareToDump(rs, ["AutomaticComponentGroup"])
+
+            self.myAssertDict(json.loads(res), {
+                "smycp": True, "smycp2": True, "smycp3": True,
+                "s2mycp": True, "s2mycp2": True, "s2mycp3": True,
+                "smycpnt1": False})
+            self.assertEqual(len(rs.descriptionErrors), 1)
+
+            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
+            sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
+            self.assertEqual(len(sed.keys()), len(self._keys))
+            for key, vl in self._keys:
+                self.assertTrue(key in sed.keys())
+                if key in val:
+                    self.assertEqual(sed[key], val[key])
+                    self.assertEqual(sed1[key], val[key])
+                elif key == 'AutomaticComponentGroup':
+                    self.myAssertDict(json.loads(sed[key]), json.loads(res))
+                    self.assertNotEqual(sed1[key], res)
+                elif key == 'AutomaticDataSources':
+                    self.assertEqual(set(json.loads(sed[key])),
+                                     set(poolchannels))
+                    self.assertEqual(set(json.loads(sed1[key])),
+                                     set(poolchannels))
+                else:
+                    self.assertEqual(sed[key], vl)
+                    self.assertEqual(sed1[key], vl)
+        finally:
+            simps2.tearDown()
+
+    ## test
+    # \brief It tests default settings
+    def test_resetAutomaticComponents_2wds_notangodspool_alias(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        simps2 = TestServerSetUp.TestServerSetUp(
+            "ttestp09/testts/t2r228", "S2")
+
+        arr = [
+            {"name": "client_short", "full_name": "ttestp09/testts/t1r228"},
+        ]
+
+        try:
+            db = PyTango.Database()
+            simps2.setUp()
+            db.put_device_alias(arr[0]["full_name"], arr[0]["name"])
+            db.put_device_property(self._ms.ms.keys()[0],
+                                   {'PoolNames': self._pool.dp.name()})
+
+            self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+            channelerrors = []
+            poolchannels = ["scalar2_long", "spectrum2_short", "client_short"]
+            componentgroup = {
+                "smycp": False, "smycp2": False, "smycp3": False,
+                "smycpnt1": False,
+                "s2mycp": False, "s2mycp2": False, "s2mycp3": False
+            }
+
+            cps = dict(self.smycps)
+            cps.update(self.smycps2)
+            dss = dict(self.smydss)
+            dss.update(self.smydss2)
+
+            self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
+            self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
+
+            rs = self.openRecSelector()
+            self.setProp(rs, "defaultAutomaticComponents",
+                         list(componentgroup.keys()))
+            rs.configDevice = val["ConfigDevice"]
+            rs.door = val["Door"]
+            rs.mntGrp = val["MntGrp"]
+            rs.writerDevice = val["WriterDevice"]
+
+            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            pool = self._pool.dp
+            pool.AcqChannelList = [json.dumps(a) for a in arr]
+
+            self._simps.dp.ChangeValueType("ScalarShort")
+            self._simps.dp.Value = 43
+
+            cnf = json.loads(rs.configuration)
+            cnf["AutomaticDataSources"] = json.dumps(poolchannels)
+            rs.configuration = json.dumps(cnf)
+            self.dump(rs)
+            sed1 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
+            rs.resetAutomaticComponents()
+            res = self.value(rs, "AutomaticComponentGroup")
+            self.compareToDump(rs, ["AutomaticComponentGroup"])
+
+            self.myAssertDict(json.loads(res), {
+                "smycp": True, "smycp2": True, "smycp3": True,
+                "s2mycp": True, "s2mycp2": True, "s2mycp3": True,
+                "smycpnt1": True})
+            self.assertTrue(not rs.descriptionErrors)
+
+            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
+            sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
+            self.assertEqual(len(sed.keys()), len(self._keys))
+            for key, vl in self._keys:
+                self.assertTrue(key in sed.keys())
+                self.assertTrue(key in sed1.keys())
+                if key in val:
+                    self.assertEqual(sed[key], val[key])
+                    self.assertEqual(sed1[key], val[key])
+                elif key == 'AutomaticComponentGroup':
+                    self.myAssertDict(json.loads(sed[key]), json.loads(res))
+                    self.assertNotEqual(sed1[key], res)
+                elif key == 'AutomaticDataSources':
+                    self.assertEqual(set(json.loads(sed[key])),
+                                     set(poolchannels))
+                    self.assertEqual(set(json.loads(sed1[key])),
+                                     set(poolchannels))
+                else:
+                    self.assertEqual(sed[key], vl)
+                    self.assertEqual(sed1[key], vl)
+        finally:
+            db.delete_device_alias(arr[0]["name"])
+            simps2.tearDown()
+
+    ## test
+    # \brief It tests default settings
+    def test_resetAutomaticComponents_2wds_notangodspool_alias_value(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        simps2 = TestServerSetUp.TestServerSetUp(
+            "ttestp09/testts/t2r228", "S2")
+
+        arr = [
+            {"name": "client_short", "full_name": "ttestp09/testts/t1r228"},
+        ]
+
+        try:
+            db = PyTango.Database()
+            simps2.setUp()
+
+            db.put_device_alias(arr[0]["full_name"], arr[0]["name"])
+            db.put_device_property(self._ms.ms.keys()[0],
+                                   {'PoolNames': self._pool.dp.name()})
+
+            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            channelerrors = []
+            poolchannels = ["scalar2_long", "spectrum2_short", "client_short"]
+            componentgroup = {
+                "smycp": False, "smycp2": False, "smycp3": False,
+                "smycpnt1": False,
+                "s2mycp": False, "s2mycp2": False, "s2mycp3": False
+            }
+
+            cps = dict(self.smycps)
+            cps.update(self.smycps2)
+            dss = dict(self.smydss)
+            dss.update(self.smydss2)
+
+            self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
+            self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
+            rs = self.openRecSelector()
+            self.setProp(rs, "defaultAutomaticComponents",
+                         list(componentgroup.keys()))
+            rs.configDevice = val["ConfigDevice"]
+            rs.door = val["Door"]
+            rs.mntGrp = val["MntGrp"]
+            rs.writerDevice = val["WriterDevice"]
+
+            self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+            pool = self._pool.dp
+            pool.AcqChannelList = [json.dumps(a) for a in arr]
+
+            cnf = json.loads(rs.configuration)
+            cnf["AutomaticDataSources"] = json.dumps(poolchannels)
+            rs.configuration = json.dumps(cnf)
+            self.dump(rs)
+            sed1 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
+            rs.resetAutomaticComponents()
+            res = self.value(rs, "AutomaticComponentGroup")
+            self.compareToDump(rs, ["AutomaticComponentGroup"])
+
+            self.myAssertDict(json.loads(res), {
+                "smycp": True, "smycp2": True, "smycp3": True,
+                "s2mycp": True, "s2mycp2": True, "s2mycp3": True,
+                "smycpnt1": True})
+            self.assertTrue(not rs.descriptionErrors)
+
+    #        print self._cf.dp.GetCommandVariable("COMMANDS")
+            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
+            sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
+            self.assertEqual(len(sed.keys()), len(self._keys))
+            for key, vl in self._keys:
+                self.assertTrue(key in sed.keys())
+                self.assertTrue(key in sed1.keys())
+                if key in val:
+                    self.assertEqual(sed[key], val[key])
+                    self.assertEqual(sed1[key], val[key])
+                elif key == 'AutomaticComponentGroup':
+                    self.myAssertDict(json.loads(sed[key]), json.loads(res))
+                    self.assertNotEqual(sed1[key], res)
+                elif key == 'AutomaticDataSources':
+                    self.assertEqual(set(json.loads(sed[key])),
+                                     set(poolchannels))
+                    self.assertEqual(set(json.loads(sed1[key])),
+                                     set(poolchannels))
+                else:
+                    self.assertEqual(sed[key], vl)
+                    self.assertEqual(sed1[key], vl)
+        finally:
+            db.delete_device_alias(arr[0]["name"])
+            simps2.tearDown()
+
+    ## test
+    # \brief It tests default settings
+    def test_resetAutomaticComponents_2wds_notangodspool_alias_novalue(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        simps2 = TestServerSetUp.TestServerSetUp(
+            "ttestp09/testts/t2r228", "S2")
+
+        arr = [
+            {"name": "client_short", "full_name": "ttestp09/testts/t1r228"},
+        ]
+
+        try:
+            db = PyTango.Database()
+            simps2.setUp()
+
+            db.put_device_alias(arr[0]["full_name"], arr[0]["name"])
+            db.put_device_property(self._ms.ms.keys()[0],
+                                   {'PoolNames': self._pool.dp.name()})
+
+            self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+            channelerrors = []
+            poolchannels = ["scalar2_long", "spectrum2_short", "client2_short"]
+            componentgroup = {
+                "smycp": False, "smycp2": False, "smycp3": False,
+                "s2mycpnt1": False,
+                #   "s2mycp": False, "s2mycp2": False, "s2mycp3": False
+            }
+
+            cps = dict(self.smycps)
+            cps.update(self.smycps2)
+            dss = dict(self.smydss)
+            dss.update(self.smydss2)
+
+            self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
+            self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
+            rs = self.openRecSelector()
+            self.setProp(rs, "defaultAutomaticComponents",
+                         list(componentgroup.keys()))
+            rs.configDevice = val["ConfigDevice"]
+            rs.door = val["Door"]
+            rs.mntGrp = val["MntGrp"]
+            rs.writerDevice = val["WriterDevice"]
+
+            self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+            pool = self._pool.dp
+            pool.AcqChannelList = [json.dumps(a) for a in arr]
+
+            cnf = json.loads(rs.configuration)
+            cnf["AutomaticDataSources"] = json.dumps(poolchannels)
+            rs.configuration = json.dumps(cnf)
+            self.dump(rs)
+            sed1 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
+            rs.resetAutomaticComponents()
+            res = self.value(rs, "AutomaticComponentGroup")
+            self.compareToDump(rs, ["AutomaticComponentGroup"])
+
+            self.myAssertDict(json.loads(res), {
+                "smycp": True, "smycp2": True, "smycp3": True,
+                "s2mycpnt1": False})
+            self.assertEqual(len(rs.descriptionErrors), 1)
+
+    #        print self._cf.dp.GetCommandVariable("COMMANDS")
+            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
+            sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
+            self.assertEqual(len(sed.keys()), len(self._keys))
+            for key, vl in self._keys:
+                self.assertTrue(key in sed.keys())
+                self.assertTrue(key in sed1.keys())
+                if key in val:
+                    self.assertEqual(sed[key], val[key])
+                    self.assertEqual(sed1[key], val[key])
+                elif key == 'AutomaticComponentGroup':
+                    self.myAssertDict(json.loads(sed[key]), json.loads(res))
+                    self.assertNotEqual(sed1[key], res)
+                elif key == 'AutomaticDataSources':
+                    self.assertEqual(set(json.loads(sed[key])),
+                                     set(poolchannels))
+                    self.assertEqual(set(json.loads(sed1[key])),
+                                     set(poolchannels))
+                else:
+                    self.assertEqual(sed[key], vl)
+                    self.assertEqual(sed1[key], vl)
+        finally:
+            db.delete_device_alias(arr[0]["name"])
+            simps2.tearDown()
+
+    ## test
+    # \brief It tests default settings
+    def test_resetAutomaticComponents_2wds_nocomponents(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        simps2 = TestServerSetUp.TestServerSetUp(
+            "ttestp09/testts/t2r228", "S2")
+
+        arr = [
+            {"name": "client_short", "full_name": "ttestp09/testts/t1r228"},
+        ]
+
+        try:
+            db = PyTango.Database()
+            simps2.setUp()
+
+            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            channelerrors = []
+            poolchannels = []
+            componentgroup = {
+                "smycp": False, "smycp2": False, "smycp3": False,
+                "s2mycp": False, "s2mycp2": False, "s2mycp3": False}
+
+            cps = dict(self.smycps)
+#            cps.update(self.smycps2)
+            dss = dict(self.smydss)
+#            dss.update(self.smydss2)
+
+            self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
+            self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
+
+            rs = self.openRecSelector()
+            self.setProp(rs, "defaultAutomaticComponents",
+                         list(componentgroup.keys()))
+            rs.configDevice = val["ConfigDevice"]
+            rs.door = val["Door"]
+            rs.mntGrp = val["MntGrp"]
+            rs.writerDevice = val["WriterDevice"]
+
+            self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+            cnf = json.loads(rs.configuration)
+            cnf["AutomaticDataSources"] = json.dumps(poolchannels)
+            rs.configuration = json.dumps(cnf)
+            self.dump(rs)
+            sed1 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
+            rs.resetAutomaticComponents()
+            res = self.value(rs, "AutomaticComponentGroup")
+
+            self.myAssertDict(json.loads(res), {
+                "smycp": True, "smycp2": True, "smycp3": True,
+                "s2mycp": False, "s2mycp2": False, "s2mycp3": False})
+            self.assertEqual(len(rs.descriptionErrors), 3)
+
+    #        print self._cf.dp.GetCommandVariable("COMMANDS")
+            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
+            sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
+            self.assertEqual(len(sed.keys()), len(self._keys))
+            for key, vl in self._keys:
+                self.assertTrue(key in sed.keys())
+                self.assertTrue(key in sed1.keys())
+                if key in val:
+                    self.assertEqual(sed[key], val[key])
+                    self.assertEqual(sed1[key], val[key])
+                elif key == 'AutomaticComponentGroup':
+                    self.myAssertDict(json.loads(sed[key]), json.loads(res))
+                    self.assertNotEqual(sed1[key], res)
+                elif key == 'AutomaticDataSources':
+                    self.assertEqual(set(json.loads(sed[key])),
+                                     set(poolchannels))
+                    self.assertEqual(set(json.loads(sed1[key])),
+                                     set(poolchannels))
+                else:
+                    self.assertEqual(sed[key], vl)
+                    self.assertEqual(sed1[key], vl)
         finally:
             simps2.tearDown()
 

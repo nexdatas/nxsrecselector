@@ -26,6 +26,7 @@ import subprocess
 import random
 import time
 import PyTango
+import json
 
 import ServerSetUp
 import SettingsTest
@@ -60,6 +61,20 @@ class NXSRecSelectorTest(SettingsTest.SettingsTest):
         self._sv.tearDown()
         SettingsTest.SettingsTest.tearDown(self)
 
+    def value(self, rs, name):
+        return json.loads(rs.configuration)[name]
+
+    def names(self, rs):
+        return json.loads(rs.configuration).keys()
+
+    def setProp(self, rc, name, value):
+        db = PyTango.Database()
+        name = "" + name[0].upper() + name[1:]
+        db.put_device_property(
+            self._sv.new_device_info_writer.name,
+            {name: value})
+        rc.Init()
+
     ## opens config server
     # \param args connection arguments
     # \returns NXSConfigServer instance
@@ -90,7 +105,6 @@ class NXSRecSelectorTest(SettingsTest.SettingsTest):
                 self._sv.new_device_info_writer.name)
 
         self.assertEqual(xmlc.state(), PyTango.DevState.ON)
-
         return xmlc
 
     def subtest_constructor(self):
