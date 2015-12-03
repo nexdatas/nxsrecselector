@@ -382,6 +382,7 @@ class UtilsTest(unittest.TestCase):
         arr = {
             "ScanDir": [u'/tmp/', "/tmp/sardana/"],
             "ScanFile": [[u'sar4r.nxs'], [u'sar4r.nxs', u'sar5r.nxs']],
+            "ScanFile": [[u'sar4r.nxs'], [u'sar5r.nxs']],
             "ScanID": [192, 123],
             "ScanNone": ["", "Something new"],
             "_ViewOptions": [{'ShowDial': True}, {'ShowDial': False}],

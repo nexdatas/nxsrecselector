@@ -7458,6 +7458,143 @@ class SettingsTest(unittest.TestCase):
         finally:
             tpool2.tearDown()
 
+    ## setEnv test
+    def test_scanDir(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+
+        db = PyTango.Database()
+        db.put_device_property(self._ms.ms.keys()[0],
+                               {'PoolNames': self._pool.dp.name()})
+        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        rs = self.openRecSelector()
+        rs.configDevice = val["ConfigDevice"]
+        rs.door = val["Door"]
+        rs.mntGrp = val["MntGrp"]
+
+        db = PyTango.Database()
+        db.put_device_property(self._ms.ms.keys()[0],
+                               {'PoolNames': self._pool.dp.name()})
+
+        self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+        arr = [
+            [u'/tmp/', "/tmp/sardana/"],
+            [u'/tmp/', "/tmp/sard234ana/"],
+            [u'/tmp/', "/tmp/sardan23a/"],
+            [u'/tmp/', "/tmp/sarda234na/"],
+        ]
+        for vl in arr:
+            self.assertEqual(vl[0], rs.scanDir)
+
+        for vl in arr:
+            rs.scanDir = vl[1]
+
+            self.assertEqual(
+                self._ms.dps[self._ms.ms.keys()[0]].Environment[0],
+                'pickle')
+            en = pickle.loads(
+                self._ms.dps[self._ms.ms.keys()[0]].Environment[1]
+            )['new']
+            self.assertEqual(en['ScanDir'], rs.scanDir)
+            self.assertEqual(vl[1], rs.scanDir)
+
+    ## setEnv test
+    def test_scanID(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+
+        db = PyTango.Database()
+        db.put_device_property(self._ms.ms.keys()[0],
+                               {'PoolNames': self._pool.dp.name()})
+        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        rs = self.openRecSelector()
+        rs.configDevice = val["ConfigDevice"]
+        rs.door = val["Door"]
+        rs.mntGrp = val["MntGrp"]
+
+        db = PyTango.Database()
+        db.put_device_property(self._ms.ms.keys()[0],
+                               {'PoolNames': self._pool.dp.name()})
+
+        self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+        arr = [
+            [192, 123],
+            [192, 1223],
+            [192, 12313],
+        ]
+        for vl in arr:
+            self.assertEqual(vl[0], rs.scanID)
+
+        for vl in arr:
+            rs.scanID = vl[1]
+
+            self.assertEqual(
+                self._ms.dps[self._ms.ms.keys()[0]].Environment[0],
+                'pickle')
+            en = pickle.loads(
+                self._ms.dps[self._ms.ms.keys()[0]].Environment[1]
+            )['new']
+            self.assertEqual(en['ScanID'], rs.scanID)
+            self.assertEqual(int(vl[1]), rs.scanID)
+
+    ## setEnv test
+    def test_scanFile(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+
+        db = PyTango.Database()
+        db.put_device_property(self._ms.ms.keys()[0],
+                               {'PoolNames': self._pool.dp.name()})
+        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        rs = self.openRecSelector()
+        rs.configDevice = val["ConfigDevice"]
+        rs.door = val["Door"]
+        rs.mntGrp = val["MntGrp"]
+
+        db = PyTango.Database()
+        db.put_device_property(self._ms.ms.keys()[0],
+                               {'PoolNames': self._pool.dp.name()})
+
+        self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+        arr = [
+            [[u'sar4r.nxs'], ['sar4r.nxs', 'sar5r.nxs']],
+            [[u'sar4r.nxs'], ['sssar3r.nxs']],
+        ]
+        for vl in arr:
+            self.assertEqual(list(vl[0]), list(rs.scanFile))
+
+        for vl in arr:
+            rs.scanFile = vl[1]
+
+            self.assertEqual(
+                self._ms.dps[self._ms.ms.keys()[0]].Environment[0],
+                'pickle')
+            en = pickle.loads(
+                self._ms.dps[self._ms.ms.keys()[0]].Environment[1]
+            )['new']
+            if isinstance(en['ScanFile'], (str, unicode)):
+                self.assertEqual(en['ScanFile'], rs.scanFile[0])
+            else:
+                self.assertEqual(list(en['ScanFile']), list(rs.scanFile))
+            self.assertEqual(list(vl[1]), list(rs.scanFile))
 
 if __name__ == '__main__':
     unittest.main()
