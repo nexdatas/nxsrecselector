@@ -2132,6 +2132,68 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
+    def test_poolChannels_bl(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+
+        db = PyTango.Database()
+        db.put_device_property(self._ms.ms.keys()[0],
+                               {'PoolNames': self._pool.dp.name()})
+        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        rs = self.openRecSelector()
+        self.setProp(rs, "poolBlacklist",
+                     [self._pool.dp.name()])
+        rs.configDevice = val["ConfigDevice"]
+        rs.door = val["Door"]
+        rs.mntGrp = val["MntGrp"]
+
+        db = PyTango.Database()
+        db.put_device_property(self._ms.ms.keys()[0],
+                               {'PoolNames': self._pool.dp.name()})
+
+        self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+        self.assertEqual(rs.poolChannels(), [])
+
+        arr = [
+            {"name": "test/ct/01", "controller": "counter_01/Value"},
+            {"name": "test/ct/02", "controller": "counter_02/att"},
+            {"name": "test/ct/03", "controller": "counter_03/value"},
+            {"name": "test/ct/04", "controller": "counter_04/13"},
+            {"name": "null", "controller": "counter_04"},
+        ]
+
+        arr2 = [
+            ["test/mca/01", "mca_01"],
+            ["test/mca/02", "mca_02"],
+            ["test/sca/03", "my_sca1"],
+            ["test/sca/04", "mysca_123"],
+        ]
+
+        pool = self._pool.dp
+        pool.ExpChannelList = [json.dumps(a) for a in arr]
+
+        dd = rs.poolChannels()
+#        self.assertEqual(dd, [a["name"] for a in arr])
+        self.assertEqual(dd, [])
+
+        pool.ExpChannelList = [
+            json.dumps(
+                {"name": a[0], "controller": a[1]}) for a in arr2]
+
+        dd = rs.poolChannels()
+#        res = [a[0] for a in arr2]
+        res = []
+        self.assertEqual(dd, res)
+
+        print rs.poolChannels()
+
+    ## test
+    # \brief It tests default settings
     def test_poolMotors(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -2184,6 +2246,68 @@ class SettingsTest(unittest.TestCase):
 
         dd = rs.poolMotors()
         res = [a[0] for a in arr2]
+        self.assertEqual(dd, res)
+
+        print rs.poolMotors()
+
+    ## test
+    # \brief It tests default settings
+    def test_poolMotors_bl(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+
+        db = PyTango.Database()
+        db.put_device_property(self._ms.ms.keys()[0],
+                               {'PoolNames': self._pool.dp.name()})
+        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        rs = self.openRecSelector()
+        self.setProp(rs, "poolBlacklist",
+                     [self._pool.dp.name()])
+        rs.configDevice = val["ConfigDevice"]
+        rs.door = val["Door"]
+        rs.mntGrp = val["MntGrp"]
+
+        db = PyTango.Database()
+        db.put_device_property(self._ms.ms.keys()[0],
+                               {'PoolNames': self._pool.dp.name()})
+
+        self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+        self.assertEqual(rs.poolMotors(), [])
+
+        arr = [
+            {"name": "test/ct/01", "controller": "counter_01/Value"},
+            {"name": "test/ct/02", "controller": "counter_02/att"},
+            {"name": "test/ct/03", "controller": "counter_03/value"},
+            {"name": "test/ct/04", "controller": "counter_04/13"},
+            {"name": "null", "controller": "counter_04"},
+        ]
+
+        arr2 = [
+            ["test/mca/01", "mca_01"],
+            ["test/mca/02", "mca_02"],
+            ["test/sca/03", "my_sca1"],
+            ["test/sca/04", "mysca_123"],
+        ]
+
+        pool = self._pool.dp
+        pool.MotorList = [json.dumps(a) for a in arr]
+
+        dd = rs.poolMotors()
+#        self.assertEqual(dd, [a["name"] for a in arr])
+        self.assertEqual(dd, [])
+
+        pool.MotorList = [
+            json.dumps(
+                {"name": a[0], "controller": a[1]}) for a in arr2]
+
+        dd = rs.poolMotors()
+#        res = [a[0] for a in arr2]
+        res = []
         self.assertEqual(dd, res)
 
         print rs.poolMotors()
@@ -2255,6 +2379,55 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
+    def test_findMntGrp_pool1_bl(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+
+        db = PyTango.Database()
+        db.put_device_property(self._ms.ms.keys()[0],
+                               {'PoolNames': self._pool.dp.name()})
+        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        rs = self.openRecSelector()
+        self.setProp(rs, "poolBlacklist",
+                     [self._pool.dp.name()])
+        rs.configDevice = val["ConfigDevice"]
+        rs.door = val["Door"]
+        rs.mntGrp = val["MntGrp"]
+
+        db = PyTango.Database()
+        db.put_device_property(self._ms.ms.keys()[0],
+                               {'PoolNames': self._pool.dp.name()})
+
+        self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+        self.assertEqual(rs.findMntGrp("somethin"), '')
+
+        arr = [
+            ["test/ct/01", "mntgrp_01Value"],
+            ["test/ct/02", "mntgrp_02att"],
+            ["test/ct/03", "mntgrp_03value"],
+            ["test/ct/04", "mntgrp_0413"],
+            ["null", "mntgrp_04"],
+        ]
+
+        pool = self._pool.dp
+
+        pool.MeasurementGroupList = [json.dumps(
+            {"name": a[0], "full_name": a[1]}) for a in arr]
+
+        for ar in arr:
+            dd = rs.findMntGrp(ar[0])
+            self.assertEqual(dd, '')
+
+        dd = rs.findMntGrp("adsasd")
+        self.assertEqual(dd, '')
+
+    ## test
+    # \brief It tests default settings
     def test_findMntGrp_pool2(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -2311,6 +2484,209 @@ class SettingsTest(unittest.TestCase):
             for ar in arr2:
                 dd = rs.findMntGrp(ar[0])
                 self.assertEqual(dd, ar[1])
+
+            dd = rs.findMntGrp("adsasd")
+            self.assertEqual(dd, '')
+        finally:
+            tpool2.tearDown()
+
+    ## test
+    # \brief It tests default settings
+    def test_findMntGrp_pool2_bl(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+
+        try:
+            tpool2 = TestPoolSetUp.TestPoolSetUp(
+                "pooltestp09/testts/t2r228", "POOLTESTS2")
+            tpool2.setUp()
+
+            db = PyTango.Database()
+            db.put_device_property(
+                self._ms.ms.keys()[0],
+                {'PoolNames': [
+                    tpool2.dp.name(), self._pool.dp.name()]})
+            pool = self._pool.dp
+            pool2 = tpool2.dp
+            self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+            rs = self.openRecSelector()
+            self.setProp(rs, "poolBlacklist",
+                         [tpool2.dp.name()])
+            rs.configDevice = val["ConfigDevice"]
+            rs.door = val["Door"]
+            rs.mntGrp = val["MntGrp"]
+
+            self.assertEqual(rs.findMntGrp("somethin"), '')
+
+            arr = [
+                ["test/ct/01", "mntgrp_01Value"],
+                ["test/ct/02", "mntgrp_02att"],
+                ["test/ct/03", "mntgrp_03value"],
+                ["test/ct/04", "mntgrp_0413"],
+                ["null", "mntgrp_04"],
+            ]
+
+            arr2 = [
+                ["test/mca/01", "mgca_011"],
+                ["test/mca/02", "mgca_02a"],
+                ["test/sca/03", "mgy_sca_031"],
+                ["test/sca/04", "mntysca_04123"],
+            ]
+
+            pool.MeasurementGroupList = [json.dumps(
+                {"name": a[0], "full_name": a[1]}) for a in arr]
+            pool2.MeasurementGroupList = [json.dumps(
+                {"name": a[0], "full_name": a[1]}) for a in arr2]
+
+            for ar in arr:
+                dd = rs.findMntGrp(ar[0])
+                self.assertEqual(dd, ar[1])
+
+            for ar in arr2:
+                dd = rs.findMntGrp(ar[0])
+#                self.assertEqual(dd, ar[1])
+                self.assertEqual(dd, '')
+
+            dd = rs.findMntGrp("adsasd")
+            self.assertEqual(dd, '')
+        finally:
+            tpool2.tearDown()
+
+    ## test
+    # \brief It tests default settings
+    def test_findMntGrp_pool2_bl2(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+
+        try:
+            tpool2 = TestPoolSetUp.TestPoolSetUp(
+                "pooltestp09/testts/t2r228", "POOLTESTS2")
+            tpool2.setUp()
+
+            db = PyTango.Database()
+            db.put_device_property(
+                self._ms.ms.keys()[0],
+                {'PoolNames': [
+                    tpool2.dp.name(), self._pool.dp.name()]})
+            pool = self._pool.dp
+            pool2 = tpool2.dp
+            self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+            rs = self.openRecSelector()
+            self.setProp(rs, "poolBlacklist",
+                         [self._pool.dp.name()])
+            rs.configDevice = val["ConfigDevice"]
+            rs.door = val["Door"]
+            rs.mntGrp = val["MntGrp"]
+
+            self.assertEqual(rs.findMntGrp("somethin"), '')
+
+            arr = [
+                ["test/ct/01", "mntgrp_01Value"],
+                ["test/ct/02", "mntgrp_02att"],
+                ["test/ct/03", "mntgrp_03value"],
+                ["test/ct/04", "mntgrp_0413"],
+                ["null", "mntgrp_04"],
+            ]
+
+            arr2 = [
+                ["test/mca/01", "mgca_011"],
+                ["test/mca/02", "mgca_02a"],
+                ["test/sca/03", "mgy_sca_031"],
+                ["test/sca/04", "mntysca_04123"],
+            ]
+
+            pool.MeasurementGroupList = [json.dumps(
+                {"name": a[0], "full_name": a[1]}) for a in arr]
+            pool2.MeasurementGroupList = [json.dumps(
+                {"name": a[0], "full_name": a[1]}) for a in arr2]
+
+            for ar in arr:
+                dd = rs.findMntGrp(ar[0])
+#                self.assertEqual(dd, ar[1])
+                self.assertEqual(dd, '')
+
+            for ar in arr2:
+                dd = rs.findMntGrp(ar[0])
+                self.assertEqual(dd, ar[1])
+#                self.assertEqual(dd, '')
+
+            dd = rs.findMntGrp("adsasd")
+            self.assertEqual(dd, '')
+        finally:
+            tpool2.tearDown()
+
+    ## test
+    # \brief It tests default settings
+    def test_findMntGrp_pool2_bl3(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+
+        try:
+            tpool2 = TestPoolSetUp.TestPoolSetUp(
+                "pooltestp09/testts/t2r228", "POOLTESTS2")
+            tpool2.setUp()
+
+            db = PyTango.Database()
+            db.put_device_property(
+                self._ms.ms.keys()[0],
+                {'PoolNames': [
+                    tpool2.dp.name(), self._pool.dp.name()]})
+            pool = self._pool.dp
+            pool2 = tpool2.dp
+            self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+            rs = self.openRecSelector()
+            self.setProp(rs, "poolBlacklist",
+                         [tpool2.dp.name(), self._pool.dp.name()])
+            rs.configDevice = val["ConfigDevice"]
+            rs.door = val["Door"]
+            rs.mntGrp = val["MntGrp"]
+
+            self.assertEqual(rs.findMntGrp("somethin"), '')
+
+            arr = [
+                ["test/ct/01", "mntgrp_01Value"],
+                ["test/ct/02", "mntgrp_02att"],
+                ["test/ct/03", "mntgrp_03value"],
+                ["test/ct/04", "mntgrp_0413"],
+                ["null", "mntgrp_04"],
+            ]
+
+            arr2 = [
+                ["test/mca/01", "mgca_011"],
+                ["test/mca/02", "mgca_02a"],
+                ["test/sca/03", "mgy_sca_031"],
+                ["test/sca/04", "mntysca_04123"],
+            ]
+
+            pool.MeasurementGroupList = [json.dumps(
+                {"name": a[0], "full_name": a[1]}) for a in arr]
+            pool2.MeasurementGroupList = [json.dumps(
+                {"name": a[0], "full_name": a[1]}) for a in arr2]
+
+            for ar in arr:
+                dd = rs.findMntGrp(ar[0])
+#                self.assertEqual(dd, ar[1])
+                self.assertEqual(dd, '')
+
+            for ar in arr2:
+                dd = rs.findMntGrp(ar[0])
+#                self.assertEqual(dd, ar[1])
+                self.assertEqual(dd, '')
 
             dd = rs.findMntGrp("adsasd")
             self.assertEqual(dd, '')
@@ -3381,6 +3757,92 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
+    def test_updateControllers_2wds_notangods2_bl(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        simps2 = TestServerSetUp.TestServerSetUp(
+            "ttestp09/testts/t2r228", "S2")
+
+        arr = [
+            {"name": "client_long",
+             "full_name": "ttestp09/testts/t1r228/Value"},
+            {"name": "client_short",
+             "full_name": "ttestp09/testts/t1r228/Value"},
+        ]
+
+        try:
+            simps2.setUp()
+
+            db = PyTango.Database()
+            db.put_device_property(self._ms.ms.keys()[0],
+                                   {'PoolNames': self._pool.dp.name()})
+            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            rs = self.openRecSelector()
+            self.setProp(rs, "poolBlacklist",
+                         [self._pool.dp.name()])
+            rs.configDevice = val["ConfigDevice"]
+            rs.door = val["Door"]
+            rs.mntGrp = val["MntGrp"]
+            rs.writerDevice = val["WriterDevice"]
+
+            self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+            channelerrors = []
+            poolchannels = []
+            componentgroup = {"smycp": False, "smycp2": False,
+                              "smycp3": False, "smycpnt1": False,
+                              "s2mycp": False, "s2mycp2": False,
+                              "s2mycp3": False}
+
+            cps = dict(self.smycps)
+            cps.update(self.smycps2)
+            dss = dict(self.smydss)
+            dss.update(self.smydss2)
+
+            self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
+            self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
+
+            pool = self._pool.dp
+            pool.AcqChannelList = [json.dumps(a) for a in arr]
+
+            cnf = json.loads(rs.configuration)
+            cnf["AutomaticDataSources"] = json.dumps(poolchannels)
+            cnf["AutomaticComponentGroup"] = json.dumps(componentgroup)
+            rs.configuration = json.dumps(cnf)
+            rs.updateControllers()
+            res = self.value(rs, "AutomaticComponentGroup")
+
+            self.myAssertDict(json.loads(res), {
+                "smycp": True, "smycp2": True, "smycp3": True,
+                "s2mycp": True, "s2mycp2": True, "s2mycp3": True,
+                "smycpnt1": True})
+            self.assertTrue(not rs.descriptionErrors)
+
+            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
+            sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
+            self.assertEqual(len(sed.keys()), len(self._keys))
+            for key, vl in self._keys:
+                self.assertTrue(key in sed.keys())
+                if key in val:
+                    self.assertEqual(sed[key], val[key])
+                elif key == 'AutomaticComponentGroup':
+                    self.assertEqual(set(json.loads(sed[key])),
+                                     set(json.loads(res)))
+                elif key == 'AutomaticDataSources':
+                    self.assertEqual(set(json.loads(sed[key])),
+                                     set(poolchannels))
+                else:
+                    self.assertEqual(sed[key], vl)
+        finally:
+            simps2.tearDown()
+
+    ## test
+    # \brief It tests default settings
     def test_updateControllers_2wds_notangodspool_error(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -3406,6 +3868,95 @@ class SettingsTest(unittest.TestCase):
                                    {'PoolNames': self._pool.dp.name()})
             self._ms.dps[self._ms.ms.keys()[0]].Init()
             rs = self.openRecSelector()
+            rs.configDevice = val["ConfigDevice"]
+            rs.door = val["Door"]
+            rs.mntGrp = val["MntGrp"]
+            rs.writerDevice = val["WriterDevice"]
+
+            self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+            channelerrors = []
+            poolchannels = ["scalar2_long", "spectrum2_short", "client_long",
+                            "client_short"]
+            componentgroup = {
+                "smycp": False, "smycp2": False, "smycp3": False,
+                "smycpnt1": False,
+                "s2mycp": False, "s2mycp2": False, "s2mycp3": False
+            }
+
+            cps = dict(self.smycps)
+            cps.update(self.smycps2)
+            dss = dict(self.smydss)
+            dss.update(self.smydss2)
+
+            self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
+            self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
+
+            pool = self._pool.dp
+            pool.AcqChannelList = [json.dumps(a) for a in arr]
+
+            cnf = json.loads(rs.configuration)
+            cnf["AutomaticDataSources"] = json.dumps(poolchannels)
+            cnf["AutomaticComponentGroup"] = json.dumps(componentgroup)
+            rs.configuration = json.dumps(cnf)
+            rs.updateControllers()
+            res = self.value(rs, "AutomaticComponentGroup")
+
+            self.myAssertDict(json.loads(res), {
+                "smycp": True, "smycp2": True, "smycp3": True,
+                "s2mycp": True, "s2mycp2": True, "s2mycp3": True,
+                "smycpnt1": False})
+            self.assertEqual(len(rs.descriptionErrors), 1)
+
+    #        print self._cf.dp.GetCommandVariable("COMMANDS")
+            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
+            sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
+            self.assertEqual(len(sed.keys()), len(self._keys))
+            for key, vl in self._keys:
+                self.assertTrue(key in sed.keys())
+                if key in val:
+                    self.assertEqual(sed[key], val[key])
+                elif key == 'AutomaticComponentGroup':
+                    self.assertEqual(set(json.loads(sed[key])),
+                                     set(json.loads(res)))
+                elif key == 'AutomaticDataSources':
+                    self.assertEqual(set(json.loads(sed[key])),
+                                     set(poolchannels))
+                else:
+                    self.assertEqual(sed[key], vl)
+        finally:
+            simps2.tearDown()
+
+    ## test
+    # \brief It tests default settings
+    def test_updateControllers_2wds_notangodspool_error_bl(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        simps2 = TestServerSetUp.TestServerSetUp(
+            "ttestp09/testts/t2r228", "S2")
+
+        arr = [
+            {"name": "client_long",
+             "full_name": "ttestp09/testts/t1r228/Value"},
+            {"name": "client_short",
+             "full_name": "ttestp09/testts/t1r228/Value"},
+        ]
+
+        try:
+            simps2.setUp()
+
+            db = PyTango.Database()
+            db.put_device_property(self._ms.ms.keys()[0],
+                                   {'PoolNames': self._pool.dp.name()})
+            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            rs = self.openRecSelector()
+            self.setProp(rs, "poolBlacklist",
+                         [self._pool.dp.name()])
             rs.configDevice = val["ConfigDevice"]
             rs.door = val["Door"]
             rs.mntGrp = val["MntGrp"]
@@ -3641,6 +4192,95 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
+    def test_updateControllers_2wds_notangodspool_alias_bl(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        simps2 = TestServerSetUp.TestServerSetUp(
+            "ttestp09/testts/t2r228", "S2")
+
+        arr = [
+            {"name": "client_short", "full_name": "ttestp09/testts/t1r228"},
+        ]
+
+        try:
+            db = PyTango.Database()
+            simps2.setUp()
+            db.put_device_alias(arr[0]["full_name"], arr[0]["name"])
+            db.put_device_property(self._ms.ms.keys()[0],
+                                   {'PoolNames': self._pool.dp.name()})
+
+            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            rs = self.openRecSelector()
+            self.setProp(rs, "poolBlacklist",
+                         [self._pool.dp.name()])
+            rs.configDevice = val["ConfigDevice"]
+            rs.door = val["Door"]
+            rs.mntGrp = val["MntGrp"]
+            rs.writerDevice = val["WriterDevice"]
+
+            self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+            channelerrors = []
+            poolchannels = ["scalar2_long", "spectrum2_short", "client_short"]
+            componentgroup = {
+                "smycp": False, "smycp2": False, "smycp3": False,
+                "smycpnt1": False,
+                "s2mycp": False, "s2mycp2": False, "s2mycp3": False
+            }
+
+            cps = dict(self.smycps)
+            cps.update(self.smycps2)
+            dss = dict(self.smydss)
+            dss.update(self.smydss2)
+
+            self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
+            self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
+
+            pool = self._pool.dp
+            pool.AcqChannelList = [json.dumps(a) for a in arr]
+
+            self._simps.dp.ChangeValueType("ScalarShort")
+            self._simps.dp.Value = 43
+
+            cnf = json.loads(rs.configuration)
+            cnf["AutomaticDataSources"] = json.dumps(poolchannels)
+            cnf["AutomaticComponentGroup"] = json.dumps(componentgroup)
+            rs.configuration = json.dumps(cnf)
+            rs.updateControllers()
+            res = self.value(rs, "AutomaticComponentGroup")
+
+            self.myAssertDict(json.loads(res), {
+                "smycp": True, "smycp2": True, "smycp3": True,
+                "s2mycp": True, "s2mycp2": True, "s2mycp3": True,
+                "smycpnt1": False})
+            self.assertTrue(rs.descriptionErrors)
+
+            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
+            sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
+            self.assertEqual(len(sed.keys()), len(self._keys))
+            for key, vl in self._keys:
+                self.assertTrue(key in sed.keys())
+                if key in val:
+                    self.assertEqual(sed[key], val[key])
+                elif key == 'AutomaticComponentGroup':
+                    self.assertEqual(set(json.loads(sed[key])),
+                                     set(json.loads(res)))
+                elif key == 'AutomaticDataSources':
+                    self.assertEqual(set(json.loads(sed[key])),
+                                     set(poolchannels))
+                else:
+                    self.assertEqual(sed[key], vl)
+        finally:
+            db.delete_device_alias(arr[0]["name"])
+            simps2.tearDown()
+
+    ## test
+    # \brief It tests default settings
     def test_updateControllers_2wds_notangodspool_alias_value(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -3727,6 +4367,94 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
+    def test_updateControllers_2wds_notangodspool_alias_value_bl(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        simps2 = TestServerSetUp.TestServerSetUp(
+            "ttestp09/testts/t2r228", "S2")
+
+        arr = [
+            {"name": "client_short", "full_name": "ttestp09/testts/t1r228"},
+        ]
+
+        try:
+            db = PyTango.Database()
+            simps2.setUp()
+
+            db.put_device_alias(arr[0]["full_name"], arr[0]["name"])
+            db.put_device_property(self._ms.ms.keys()[0],
+                                   {'PoolNames': self._pool.dp.name()})
+
+            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            rs = self.openRecSelector()
+            self.setProp(rs, "poolBlacklist",
+                         [self._pool.dp.name()])
+            rs.configDevice = val["ConfigDevice"]
+            rs.door = val["Door"]
+            rs.mntGrp = val["MntGrp"]
+            rs.writerDevice = val["WriterDevice"]
+
+            self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+            channelerrors = []
+            poolchannels = ["scalar2_long", "spectrum2_short", "client_short"]
+            componentgroup = {
+                "smycp": False, "smycp2": False, "smycp3": False,
+                "smycpnt1": False,
+                "s2mycp": False, "s2mycp2": False, "s2mycp3": False
+            }
+
+            cps = dict(self.smycps)
+            cps.update(self.smycps2)
+            dss = dict(self.smydss)
+            dss.update(self.smydss2)
+
+            self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
+            self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
+
+            pool = self._pool.dp
+            pool.AcqChannelList = [json.dumps(a) for a in arr]
+
+            cnf = json.loads(rs.configuration)
+            cnf["AutomaticDataSources"] = json.dumps(poolchannels)
+            cnf["AutomaticComponentGroup"] = json.dumps(componentgroup)
+            rs.configuration = json.dumps(cnf)
+            rs.updateControllers()
+            res = self.value(rs, "AutomaticComponentGroup")
+
+            self.myAssertDict(json.loads(res), {
+                "smycp": True, "smycp2": True, "smycp3": True,
+                "s2mycp": True, "s2mycp2": True, "s2mycp3": True,
+                "smycpnt1": False})
+            self.assertTrue(rs.descriptionErrors)
+
+    #        print self._cf.dp.GetCommandVariable("COMMANDS")
+            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
+            sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
+            self.assertEqual(len(sed.keys()), len(self._keys))
+            for key, vl in self._keys:
+                self.assertTrue(key in sed.keys())
+                if key in val:
+                    self.assertEqual(sed[key], val[key])
+                elif key == 'AutomaticComponentGroup':
+                    self.assertEqual(set(json.loads(sed[key])),
+                                     set(json.loads(res)))
+                elif key == 'AutomaticDataSources':
+                    self.assertEqual(set(json.loads(sed[key])),
+                                     set(poolchannels))
+                else:
+                    self.assertEqual(sed[key], vl)
+        finally:
+            db.delete_device_alias(arr[0]["name"])
+            simps2.tearDown()
+
+    ## test
+    # \brief It tests default settings
     def test_updateControllers_2wds_notangodspool_alias_novalue(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -3751,6 +4479,93 @@ class SettingsTest(unittest.TestCase):
 
             self._ms.dps[self._ms.ms.keys()[0]].Init()
             rs = self.openRecSelector()
+            rs.configDevice = val["ConfigDevice"]
+            rs.door = val["Door"]
+            rs.mntGrp = val["MntGrp"]
+            rs.writerDevice = val["WriterDevice"]
+
+            self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+            channelerrors = []
+            poolchannels = ["scalar2_long", "spectrum2_short", "client2_short"]
+            componentgroup = {
+                "smycp": False, "smycp2": False, "smycp3": False,
+                "s2mycpnt1": False,
+                #   "s2mycp": False, "s2mycp2": False, "s2mycp3": False
+            }
+
+            cps = dict(self.smycps)
+            cps.update(self.smycps2)
+            dss = dict(self.smydss)
+            dss.update(self.smydss2)
+
+            self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
+            self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
+
+            pool = self._pool.dp
+            pool.AcqChannelList = [json.dumps(a) for a in arr]
+
+            cnf = json.loads(rs.configuration)
+            cnf["AutomaticDataSources"] = json.dumps(poolchannels)
+            cnf["AutomaticComponentGroup"] = json.dumps(componentgroup)
+            rs.configuration = json.dumps(cnf)
+            rs.updateControllers()
+            res = self.value(rs, "AutomaticComponentGroup")
+
+            self.myAssertDict(json.loads(res), {
+                "smycp": True, "smycp2": True, "smycp3": True,
+                "s2mycpnt1": False})
+            self.assertEqual(len(rs.descriptionErrors), 1)
+
+    #        print self._cf.dp.GetCommandVariable("COMMANDS")
+            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
+            sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
+            self.assertEqual(len(sed.keys()), len(self._keys))
+            for key, vl in self._keys:
+                self.assertTrue(key in sed.keys())
+                if key in val:
+                    self.assertEqual(sed[key], val[key])
+                elif key == 'AutomaticComponentGroup':
+                    self.assertEqual(set(json.loads(sed[key])),
+                                     set(json.loads(res)))
+                elif key == 'AutomaticDataSources':
+                    self.assertEqual(set(json.loads(sed[key])),
+                                     set(poolchannels))
+                else:
+                    self.assertEqual(sed[key], vl)
+        finally:
+            db.delete_device_alias(arr[0]["name"])
+            simps2.tearDown()
+
+    ## test
+    # \brief It tests default settings
+    def test_updateControllers_2wds_notangodspool_alias_novalue_bl(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        simps2 = TestServerSetUp.TestServerSetUp(
+            "ttestp09/testts/t2r228", "S2")
+
+        arr = [
+            {"name": "client_short", "full_name": "ttestp09/testts/t1r228"},
+        ]
+
+        try:
+            db = PyTango.Database()
+            simps2.setUp()
+
+            db.put_device_alias(arr[0]["full_name"], arr[0]["name"])
+            db.put_device_property(self._ms.ms.keys()[0],
+                                   {'PoolNames': self._pool.dp.name()})
+
+            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            rs = self.openRecSelector()
+            self.setProp(rs, "poolBlacklist",
+                         [self._pool.dp.name()])
             rs.configDevice = val["ConfigDevice"]
             rs.door = val["Door"]
             rs.mntGrp = val["MntGrp"]
@@ -5100,6 +5915,100 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
+    def test_resetAutomaticComponents_2wds_notangods2_bl(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        simps2 = TestServerSetUp.TestServerSetUp(
+            "ttestp09/testts/t2r228", "S2")
+
+        arr = [
+            {"name": "client_long",
+             "full_name": "ttestp09/testts/t1r228/Value"},
+            {"name": "client_short",
+             "full_name": "ttestp09/testts/t1r228/Value"},
+        ]
+
+        try:
+            simps2.setUp()
+
+            db = PyTango.Database()
+            db.put_device_property(self._ms.ms.keys()[0],
+                                   {'PoolNames': self._pool.dp.name()})
+            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            channelerrors = []
+            poolchannels = []
+            componentgroup = {"smycp": False, "smycp2": False,
+                              "smycp3": False, "smycpnt1": False,
+                              "s2mycp": False, "s2mycp2": False,
+                              "s2mycp3": False}
+
+            cps = dict(self.smycps)
+            cps.update(self.smycps2)
+            dss = dict(self.smydss)
+            dss.update(self.smydss2)
+
+            self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
+            self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
+
+            rs = self.openRecSelector()
+            self.setProp(rs, "poolBlacklist",
+                         [self._pool.dp.name()])
+            self.setProp(rs, "defaultAutomaticComponents",
+                         list(componentgroup.keys()))
+            rs.configDevice = val["ConfigDevice"]
+            rs.door = val["Door"]
+            rs.mntGrp = val["MntGrp"]
+            rs.writerDevice = val["WriterDevice"]
+
+            self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+            pool = self._pool.dp
+            pool.AcqChannelList = [json.dumps(a) for a in arr]
+
+            cnf = json.loads(rs.configuration)
+            cnf["AutomaticDataSources"] = json.dumps(poolchannels)
+            rs.configuration = json.dumps(cnf)
+            self.dump(rs)
+            sed1 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
+            rs.resetAutomaticComponents()
+            res = self.value(rs, "AutomaticComponentGroup")
+            self.compareToDump(rs, ["AutomaticComponentGroup"])
+
+            self.myAssertDict(json.loads(res), {
+                "smycp": True, "smycp2": True, "smycp3": True,
+                "s2mycp": True, "s2mycp2": True, "s2mycp3": True,
+                "smycpnt1": True})
+            self.assertTrue(not rs.descriptionErrors)
+
+            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
+            sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
+            self.assertEqual(len(sed.keys()), len(self._keys))
+            for key, vl in self._keys:
+                self.assertTrue(key in sed.keys())
+                if key in val:
+                    self.assertEqual(sed[key], val[key])
+                    self.assertEqual(sed1[key], val[key])
+                elif key == 'AutomaticComponentGroup':
+                    self.myAssertDict(json.loads(sed[key]), json.loads(res))
+                    self.assertNotEqual(sed1[key], res)
+                elif key == 'AutomaticDataSources':
+                    self.assertEqual(set(json.loads(sed[key])),
+                                     set(poolchannels))
+                    self.assertEqual(set(json.loads(sed1[key])),
+                                     set(poolchannels))
+                else:
+                    self.assertEqual(sed[key], vl)
+                    self.assertEqual(sed1[key], vl)
+        finally:
+            simps2.tearDown()
+
+    ## test
+    # \brief It tests default settings
     def test_resetAutomaticComponents_2wds_notangodspool_error(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -5385,6 +6294,104 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
+    def test_resetAutomaticComponents_2wds_notangodspool_alias_bl(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        simps2 = TestServerSetUp.TestServerSetUp(
+            "ttestp09/testts/t2r228", "S2")
+
+        arr = [
+            {"name": "client_short", "full_name": "ttestp09/testts/t1r228"},
+        ]
+
+        try:
+            db = PyTango.Database()
+            simps2.setUp()
+            db.put_device_alias(arr[0]["full_name"], arr[0]["name"])
+            db.put_device_property(self._ms.ms.keys()[0],
+                                   {'PoolNames': self._pool.dp.name()})
+
+            self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+            channelerrors = []
+            poolchannels = ["scalar2_long", "spectrum2_short", "client_short"]
+            componentgroup = {
+                "smycp": False, "smycp2": False, "smycp3": False,
+                "smycpnt1": False,
+                "s2mycp": False, "s2mycp2": False, "s2mycp3": False
+            }
+
+            cps = dict(self.smycps)
+            cps.update(self.smycps2)
+            dss = dict(self.smydss)
+            dss.update(self.smydss2)
+
+            self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
+            self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
+
+            rs = self.openRecSelector()
+            self.setProp(rs, "defaultAutomaticComponents",
+                         list(componentgroup.keys()))
+            self.setProp(rs, "poolBlacklist",
+                         [self._pool.dp.name()])
+            rs.configDevice = val["ConfigDevice"]
+            rs.door = val["Door"]
+            rs.mntGrp = val["MntGrp"]
+            rs.writerDevice = val["WriterDevice"]
+
+            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            pool = self._pool.dp
+            pool.AcqChannelList = [json.dumps(a) for a in arr]
+
+            self._simps.dp.ChangeValueType("ScalarShort")
+            self._simps.dp.Value = 43
+
+            cnf = json.loads(rs.configuration)
+            cnf["AutomaticDataSources"] = json.dumps(poolchannels)
+            rs.configuration = json.dumps(cnf)
+            self.dump(rs)
+            sed1 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
+            rs.resetAutomaticComponents()
+            res = self.value(rs, "AutomaticComponentGroup")
+            self.compareToDump(rs, ["AutomaticComponentGroup"])
+
+            self.myAssertDict(json.loads(res), {
+                "smycp": True, "smycp2": True, "smycp3": True,
+                "s2mycp": True, "s2mycp2": True, "s2mycp3": True,
+                "smycpnt1": False})
+            self.assertTrue(rs.descriptionErrors)
+
+            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
+            sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
+            self.assertEqual(len(sed.keys()), len(self._keys))
+            for key, vl in self._keys:
+                self.assertTrue(key in sed.keys())
+                self.assertTrue(key in sed1.keys())
+                if key in val:
+                    self.assertEqual(sed[key], val[key])
+                    self.assertEqual(sed1[key], val[key])
+                elif key == 'AutomaticComponentGroup':
+                    self.myAssertDict(json.loads(sed[key]), json.loads(res))
+                    self.assertNotEqual(sed1[key], res)
+                elif key == 'AutomaticDataSources':
+                    self.assertEqual(set(json.loads(sed[key])),
+                                     set(poolchannels))
+                    self.assertEqual(set(json.loads(sed1[key])),
+                                     set(poolchannels))
+                else:
+                    self.assertEqual(sed[key], vl)
+                    self.assertEqual(sed1[key], vl)
+        finally:
+            db.delete_device_alias(arr[0]["name"])
+            simps2.tearDown()
+
+    ## test
+    # \brief It tests default settings
     def test_resetAutomaticComponents_2wds_notangodspool_alias_value(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -5450,6 +6457,102 @@ class SettingsTest(unittest.TestCase):
                 "s2mycp": True, "s2mycp2": True, "s2mycp3": True,
                 "smycpnt1": True})
             self.assertTrue(not rs.descriptionErrors)
+
+    #        print self._cf.dp.GetCommandVariable("COMMANDS")
+            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
+            sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
+            self.assertEqual(len(sed.keys()), len(self._keys))
+            for key, vl in self._keys:
+                self.assertTrue(key in sed.keys())
+                self.assertTrue(key in sed1.keys())
+                if key in val:
+                    self.assertEqual(sed[key], val[key])
+                    self.assertEqual(sed1[key], val[key])
+                elif key == 'AutomaticComponentGroup':
+                    self.myAssertDict(json.loads(sed[key]), json.loads(res))
+                    self.assertNotEqual(sed1[key], res)
+                elif key == 'AutomaticDataSources':
+                    self.assertEqual(set(json.loads(sed[key])),
+                                     set(poolchannels))
+                    self.assertEqual(set(json.loads(sed1[key])),
+                                     set(poolchannels))
+                else:
+                    self.assertEqual(sed[key], vl)
+                    self.assertEqual(sed1[key], vl)
+        finally:
+            db.delete_device_alias(arr[0]["name"])
+            simps2.tearDown()
+
+    ## test
+    # \brief It tests default settings
+    def test_resetAutomaticComponents_2wds_notangodspool_alias_value_bl(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        simps2 = TestServerSetUp.TestServerSetUp(
+            "ttestp09/testts/t2r228", "S2")
+
+        arr = [
+            {"name": "client_short", "full_name": "ttestp09/testts/t1r228"},
+        ]
+
+        try:
+            db = PyTango.Database()
+            simps2.setUp()
+
+            db.put_device_alias(arr[0]["full_name"], arr[0]["name"])
+            db.put_device_property(self._ms.ms.keys()[0],
+                                   {'PoolNames': self._pool.dp.name()})
+
+            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            channelerrors = []
+            poolchannels = ["scalar2_long", "spectrum2_short", "client_short"]
+            componentgroup = {
+                "smycp": False, "smycp2": False, "smycp3": False,
+                "smycpnt1": False,
+                "s2mycp": False, "s2mycp2": False, "s2mycp3": False
+            }
+
+            cps = dict(self.smycps)
+            cps.update(self.smycps2)
+            dss = dict(self.smydss)
+            dss.update(self.smydss2)
+
+            self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
+            self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
+            rs = self.openRecSelector()
+            self.setProp(rs, "defaultAutomaticComponents",
+                         list(componentgroup.keys()))
+            self.setProp(rs, "poolBlacklist",
+                         [self._pool.dp.name()])
+            rs.configDevice = val["ConfigDevice"]
+            rs.door = val["Door"]
+            rs.mntGrp = val["MntGrp"]
+            rs.writerDevice = val["WriterDevice"]
+
+            self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+            pool = self._pool.dp
+            pool.AcqChannelList = [json.dumps(a) for a in arr]
+
+            cnf = json.loads(rs.configuration)
+            cnf["AutomaticDataSources"] = json.dumps(poolchannels)
+            rs.configuration = json.dumps(cnf)
+            self.dump(rs)
+            sed1 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
+            rs.resetAutomaticComponents()
+            res = self.value(rs, "AutomaticComponentGroup")
+            self.compareToDump(rs, ["AutomaticComponentGroup"])
+
+            self.myAssertDict(json.loads(res), {
+                "smycp": True, "smycp2": True, "smycp3": True,
+                "s2mycp": True, "s2mycp2": True, "s2mycp3": True,
+                "smycpnt1": False})
+            self.assertTrue(rs.descriptionErrors)
 
     #        print self._cf.dp.GetCommandVariable("COMMANDS")
             res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
@@ -5723,6 +6826,56 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
+    def test_availableTimers_pool1_bl(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+
+        db = PyTango.Database()
+        db.put_device_property(self._ms.ms.keys()[0],
+                               {'PoolNames': self._pool.dp.name()})
+        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        rs = self.openRecSelector()
+        self.setProp(rs, "poolBlacklist",
+                     [self._pool.dp.name()])
+        rs.configDevice = val["ConfigDevice"]
+        rs.door = val["Door"]
+        rs.mntGrp = val["MntGrp"]
+
+        db = PyTango.Database()
+        db.put_device_property(self._ms.ms.keys()[0],
+                               {'PoolNames': self._pool.dp.name()})
+
+        self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+        arr = [
+            ["test/ct/01", ["CTExpChannel"],
+             "haso228k:10000/expchan/dgg2_exp_00/1/Value"],
+            ["test/ct/02", ["conem", "CTExpChannel"],
+             "haso228k:10000/expchan/dgg2_exp_01/1/Value"],
+            ["test/ct/03", ["CTExpChannel", "ZeroDChannel"],
+             "haso228k:10000/expchan/dgg2_exp_02/1/Value"],
+            ["test/ct/04", ["oneD", "CTExpChannel"],
+             "haso228k:10000/expchan/dgg2_exp_03/1/Value"],
+            ["null", ["counter_04"],
+             "haso228k:10000/expchan/dg2_exp_01/1/Value"],
+        ]
+
+        pool = self._pool.dp
+
+        pool.ExpChannelList = [json.dumps(
+            {"name": a[0], "interfaces": a[1], "source": a[2]}) for a in arr]
+
+        lst = [ar[0] for ar in arr if "CTExpChannel" in ar[1]]
+
+        dd = rs.availableTimers
+        self.assertTrue(not dd)
+
+    ## test
+    # \brief It tests default settings
     def test_availableTimers_pool1_filter(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -5845,6 +6998,179 @@ class SettingsTest(unittest.TestCase):
                 )
                 for a in arr2]
             lst.extend([ar[0] for ar in arr2 if "CTExpChannel" in ar[1]])
+
+            dd = rs.availableTimers
+            self.assertEqual(set(dd), set(lst))
+
+        finally:
+            tpool2.tearDown()
+
+    ## test
+    # \brief It tests default settings
+    def test_availableTimers_2pools_bl(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+
+        try:
+            tpool2 = TestPoolSetUp.TestPoolSetUp(
+                "pooltestp09/testts/t2r228", "POOLTESTS2")
+            tpool2.setUp()
+
+            db = PyTango.Database()
+            db.put_device_property(
+                self._ms.ms.keys()[0],
+                {'PoolNames': [
+                    tpool2.dp.name(), self._pool.dp.name()]})
+            pool = self._pool.dp
+            pool2 = tpool2.dp
+            self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+            rs = self.openRecSelector()
+            self.setProp(rs, "poolBlacklist",
+                         [tpool2.dp.name()])
+            rs.configDevice = val["ConfigDevice"]
+            rs.door = val["Door"]
+            rs.mntGrp = val["MntGrp"]
+
+            arr = [
+                ["test/ct/01", ["CTExpChannel"],
+                 "haso228k:10000/expchan/dgg2_exp_00/1/Value"],
+                ["test/ct/02", ["conem", "CTExpChannel"],
+                 "haso228k:10000/expchan/dgg2_exp_01/1/Value"],
+                ["test/ct/03", ["CTExpChannel", "ZeroDChannel"],
+                 "haso228k:10000/expchan/dgg2_exp_02/1/Value"],
+                ["test/ct/04", ["oneD", "CTExpChannel"],
+                 "haso228k:10000/expchan/dgg2_exp_03/1/Value"],
+                ["null", ["counter_04"],
+                 "haso228k:10000/expchan/dg2_exp_01/1/Value"],
+            ]
+
+            arr2 = [
+                ["test/mca/01", ["CTExpChannel"],
+                 "haso228k:10000/expchan/dgg2_exp_01/1/Value"],
+                ["test/mca/02", ["CTExpChannel2", "CTExpChannel1"],
+                 "haso228k:10000/expchan/dg2_exp_01/1/Value"],
+                ["test/sca/03", ["CTExpChannel3", "CTExpChannel123"],
+                 "haso228k:10000/expchan/dg2_exp_01/1/Value"],
+                ["test/sca/04", ["CTExpChannel", "CTExpChannel2",
+                                 "CTExpChannel3"],
+                 "haso228k:10000/expchan/dgg2_exp_01/1/Value"],
+            ]
+
+            dd = rs.availableTimers
+            self.assertTrue(not dd)
+
+            pool.ExpChannelList = [
+                json.dumps(
+                    {"name": a[0], "interfaces": a[1], "source": a[2]}
+                ) for a in arr
+            ]
+
+            lst = [ar[0] for ar in arr if "CTExpChannel" in ar[1]]
+
+            dd = rs.availableTimers
+            self.assertEqual(set(dd), set(lst))
+
+            pool2.ExpChannelList = [
+                json.dumps(
+                    {"name": a[0], "interfaces": a[1], "source": a[2]}
+                )
+                for a in arr2]
+#            lst.extend([ar[0] for ar in arr2 if "CTExpChannel" in ar[1]])
+
+            dd = rs.availableTimers
+            self.assertEqual(set(dd), set(lst))
+
+        finally:
+            tpool2.tearDown()
+
+    ## test
+    # \brief It tests default settings
+    def test_availableTimers_2pools_filter_bl(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+
+        try:
+            tpool2 = TestPoolSetUp.TestPoolSetUp(
+                "pooltestp09/testts/t2r228", "POOLTESTS2")
+            tpool2.setUp()
+
+            db = PyTango.Database()
+            db.put_device_property(
+                self._ms.ms.keys()[0],
+                {'PoolNames': [
+                    tpool2.dp.name(), self._pool.dp.name()]})
+            pool = self._pool.dp
+            pool2 = tpool2.dp
+            self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+            rs = self.openRecSelector()
+            self.setProp(rs, "timerFilterList",
+                         ["*exp_00*", "*exp_01*"])
+            self.setProp(rs, "poolBlacklist",
+                         [tpool2.dp.name()])
+            rs.configDevice = val["ConfigDevice"]
+            rs.door = val["Door"]
+            rs.mntGrp = val["MntGrp"]
+
+            arr = [
+                ["test/ct/01", ["CTExpChannel"],
+                 "haso228k:10000/expchan/dgg2_exp_00/1/Value"],
+                ["test/ct/02", ["conem", "CTExpChannel"],
+                 "haso228k:10000/expchan/dgg2_exp_01/1/Value"],
+                ["test/ct/03", ["CTExpChannel", "ZeroDChannel"],
+                 "haso228k:10000/expchan/dgg2_exp_02/1/Value"],
+                ["test/ct/04", ["oneD", "CTExpChannel"],
+                 "haso228k:10000/expchan/dgg2_exp_03/1/Value"],
+                ["null", ["counter_04"],
+                 "haso228k:10000/expchan/dg2_exp_01/1/Value"],
+            ]
+
+            arr2 = [
+                ["test/mca/01", ["CTExpChannel"],
+                 "haso228k:10000/expchan/dgg2_exp_01/1/Value"],
+                ["test/mca/02", ["CTExpChannel2", "CTExpChannel1"],
+                 "haso228k:10000/expchan/dg2_exp_01/1/Value"],
+                ["test/sca/03", ["CTExpChannel3", "CTExpChannel123"],
+                 "haso228k:10000/expchan/dg2_exp_01/1/Value"],
+                ["test/sca/04", ["CTExpChannel", "CTExpChannel2",
+                                 "CTExpChannel3"],
+                 "haso228k:10000/expchan/dgg2_exp_01/1/Value"],
+            ]
+
+            dd = rs.availableTimers
+            self.assertTrue(not dd)
+
+            pool.ExpChannelList = [
+                json.dumps(
+                    {"name": a[0], "interfaces": a[1], "source": a[2]}
+                )
+                for a in arr]
+
+            lst = [ar[0] for ar in arr if (
+                "CTExpChannel" in ar[1] and (
+                    'exp_00' in ar[2] or 'exp_01' in ar[2]))]
+
+            dd = rs.availableTimers
+            self.assertEqual(set(dd), set(lst))
+
+            pool2.ExpChannelList = [
+                json.dumps(
+                    {"name": a[0], "interfaces": a[1], "source": a[2]}
+                )
+                for a in arr2]
+#            lst.extend(
+#                [ar[0] for ar in arr2 if (
+#                    "CTExpChannel" in ar[1] and (
+#                        'exp_00' in ar[2] or 'exp_01' in ar[2]))])
 
             dd = rs.availableTimers
             self.assertEqual(set(dd), set(lst))
@@ -6061,6 +7387,72 @@ class SettingsTest(unittest.TestCase):
             dct2 = dict((ar[0], ar[1]) for ar in arr2)
             dd = json.loads(rs.fullDeviceNames)
             dct.update(dct2)
+            self.myAssertDict(dd, dct)
+
+        finally:
+            tpool2.tearDown()
+
+    def test_fullDeviceNames_pool2_bl(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+
+        try:
+            tpool2 = TestPoolSetUp.TestPoolSetUp(
+                "pooltestp09/testts/t2r228", "POOLTESTS2")
+            tpool2.setUp()
+
+            db = PyTango.Database()
+            db.put_device_property(
+                self._ms.ms.keys()[0],
+                {'PoolNames': [
+                    tpool2.dp.name(), self._pool.dp.name()]})
+            pool = self._pool.dp
+            pool2 = tpool2.dp
+            self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+            rs = self.openRecSelector()
+            self.setProp(rs, "poolBlacklist",
+                         [tpool2.dp.name()])
+            rs.configDevice = val["ConfigDevice"]
+            rs.door = val["Door"]
+            rs.mntGrp = val["MntGrp"]
+
+            arr = [
+                ["test/ct/01", "counter_01", "Value"],
+                ["test/ct/02", "counter_02", "att"],
+                ["test/ct/03", "counter_03", "value"],
+                ["test/ct/04", "counter_04", "13"],
+                ["null", "counter_04", ""],
+            ]
+
+            arr2 = [
+                ["test/mca/01", "mca_01", "1"],
+                ["test/mca/02", "mca_02", "a"],
+                ["test/sca/03", "my_sca_03", "1"],
+                ["test/sca/04", "mysca_04", "123"],
+            ]
+
+            pool.AcqChannelList = [
+                json.dumps(
+                    {"name": a[0], "full_name": "%s/%s" % (a[1], a[2])})
+                for a in arr]
+
+            dd = json.loads(rs.fullDeviceNames)
+            dct = dict((ar[0], ar[1]) for ar in arr)
+            self.myAssertDict(dd, dct)
+
+            pool2.AcqChannelList = [
+                json.dumps(
+                    {"name": a[0], "full_name": "%s/%s" % (a[1], a[2])})
+                for a in arr2]
+
+            dct2 = dict((ar[0], ar[1]) for ar in arr2)
+            dd = json.loads(rs.fullDeviceNames)
+#            dct.update(dct2)
             self.myAssertDict(dd, dct)
 
         finally:
