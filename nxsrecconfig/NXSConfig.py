@@ -294,6 +294,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
     def write_ScanEnvVariables(self, attr):
         self.debug_stream("In write_ScanEnvVariables()")
         self.__stg.scanEnvVariables = attr.get_write_value()
+
     #------------------------------------------------------------------
     #    Read UserData attribute
     #------------------------------------------------------------------

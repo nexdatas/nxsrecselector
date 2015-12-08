@@ -22,6 +22,7 @@
 
 import json
 
+
 ## Selection dictionary
 class Selection(dict):
     """ Selection Dictionary """
@@ -97,7 +98,7 @@ class Selection(dict):
         ## MntGrp
         self["MntGrp"] = ''
         ## version
-        self["Version"] = self.__version 
+        self["Version"] = self.__version
 
     ## deselects components and datasources
     def deselect(self):

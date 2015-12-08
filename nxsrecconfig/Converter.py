@@ -44,14 +44,14 @@ class Converter1to2(ConverterXtoY):
 
         ## names to convert
         self.names = {
-         "AutomaticComponentGroup": "ComponentPreselection",
-         "AutomaticDataSources": "PreselectedDataSources",
-         "ComponentGroup": "ComponentSelection",
-         "DataSourceGroup": "DataSourceSelection",
-         "DataRecord": "UserData",
-         "HiddenElements": "UnplottedComponents",
-         "DynamicLinks": "DefaultDynamicLinks",
-         "DynamicPath": "DefaultDynamicPath"
+            "AutomaticComponentGroup": "ComponentPreselection",
+            "AutomaticDataSources": "PreselectedDataSources",
+            "ComponentGroup": "ComponentSelection",
+            "DataSourceGroup": "DataSourceSelection",
+            "DataRecord": "UserData",
+            "HiddenElements": "UnplottedComponents",
+            "DynamicLinks": "DefaultDynamicLinks",
+            "DynamicPath": "DefaultDynamicPath"
 
         }
 
@@ -62,6 +62,7 @@ class Converter1to2(ConverterXtoY):
 #         LabelLinks		      ?	LabelLinks |
 #         LabelTypes		      ?	LabelTypes |
 #         LabelShapes		      ?	LabelShapes|
+
 
 ## Selection converter from 2 to 1
 class Converter2to1(ConverterXtoY):
@@ -83,6 +84,7 @@ class Converter2to1(ConverterXtoY):
 
     def convert(self, selection):
         super(Converter2to1, self).convert(selection)
+
 
 ## Selection converter
 class Converter(object):

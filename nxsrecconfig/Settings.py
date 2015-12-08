@@ -32,6 +32,7 @@ from .Selector import Selector
 from .MacroServerPools import MacroServerPools
 from . import Streams
 
+
 ## NeXus Sardana Recorder settings
 class Settings(object):
 
@@ -139,7 +140,7 @@ class Settings(object):
 
     ## provides preselected components
     preselectedComponents = property(preselectedComponents,
-                                   doc=' provides preselected components')
+                                     doc=' provides preselected components')
 
     ## provides description component errors
     # \returns list of available description component errors
@@ -169,7 +170,7 @@ class Settings(object):
     ## provides a list of profile component DataSources
     # \returns list of profile component datasources
     def componentDataSources(self):
-        return self.__profileManager.disableDataSources()
+        return self.__profileManager.componentDataSources()
 
 ## read-write variables
 

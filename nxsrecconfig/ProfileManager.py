@@ -127,9 +127,9 @@ class ProfileManager(object):
             res = describer.components(cp, '', '')
         return res
 
-    ## provides a list of Disable DataSources
-    # \returns list of disable datasources
-    def disableDataSources(self):
+    ## provides a list of Component DataSources
+    # \returns list of component datasources
+    def componentDataSources(self):
         res = self.cpdescription()
         dds = set()
 
@@ -142,7 +142,7 @@ class ProfileManager(object):
     ## provides selected datasources
     # \returns list of available selected datasources
     def dataSources(self):
-        dds = self.disableDataSources()
+        dds = self.componentDataSources()
         if not isinstance(dds, list):
             dds = []
         dss = json.loads(self.__selector["DataSourceSelection"])
@@ -169,17 +169,17 @@ class ProfileManager(object):
     ## set active measurement group from components
     # \param components  component list
     # \param datasources datasource list
-    # \param disabledatasources disable datasource list
+    # \param componentdatasources component datasource list
     # \returns string with mntgrp configuration
     def updateProfile(self):
         mcp = self.__selector.configCommand("mandatoryComponents") or []
         datasources = self.dataSources()
-        disabledatasources = self.disableDataSources()
+        componentdatasources = self.componentDataSources()
         components = list(
             set(self.components()) | set(self.preselectedComponents()) |
             set(mcp))
         conf, mntgrp = self.__createMntGrpConf(
-            components, datasources, disabledatasources)
+            components, datasources, componentdatasources)
         self.__selector.storeSelection()
         dpmg = TangoUtils.openProxy(mntgrp)
         dpmg.Configuration = conf
@@ -215,7 +215,7 @@ class ProfileManager(object):
     def isMntGrpUpdated(self):
         mcp = self.__selector.configCommand("mandatoryComponents") or []
         datasources = self.dataSources()
-        disabledatasources = self.disableDataSources()
+        componentdatasources = self.componentDataSources()
         components = list(
             set(self.components()) | set(self.preselectedComponents()) |
             set(mcp))
@@ -226,7 +226,7 @@ class ProfileManager(object):
         amg = MSUtils.getEnv('ActiveMntGrp', self.__macroServerName)
 
         llconf, _ = self.__createMntGrpConf(
-            components, datasources, disabledatasources)
+            components, datasources, componentdatasources)
 
         amg2 = MSUtils.getEnv('ActiveMntGrp', self.__macroServerName)
         if amg != amg2:
@@ -261,9 +261,10 @@ class ProfileManager(object):
     ## set active measurement group from components
     # \param components  component list
     # \param datasources datasource list
-    # \param disabledatasources disable datasource list
+    # \param componentdatasources component datasource list
     # \returns tuple of MntGrp configuration and MntGrp Device name
-    def __createMntGrpConf(self, components, datasources, disabledatasources):
+    def __createMntGrpConf(self, components, datasources,
+                           componentdatasources):
         self.__updatePools()
         self.__updateMacroServer()
         cnf = {}
@@ -277,7 +278,7 @@ class ProfileManager(object):
         timer = self.__prepareTimers(cnf, ltimers)
 
         aliases = self.__fetchChannels(
-            components, datasources, disabledatasources,
+            components, datasources, componentdatasources,
             dontdisplay, set(ltimers) | set([timer]))
 
         mfullname = self.__prepareMntGrp(cnf, timer)
@@ -469,7 +470,7 @@ class ProfileManager(object):
                 ltimers.remove(timer)
         return timer
 
-    def __fetchChannels(self, components, datasources, disabledatasources,
+    def __fetchChannels(self, components, datasources, componentdatasources,
                         dontdisplay, timers):
         aliases = []
 
@@ -479,7 +480,7 @@ class ProfileManager(object):
         pchannels = json.loads(self.__selector["OrderedChannels"])
         dsg = json.loads(self.__selector["DataSourceSelection"])
         aliases.extend(
-            list(set(pchannels) & set(disabledatasources)))
+            list(set(pchannels) & set(componentdatasources)))
 
         describer = Describer(self.__configServer, True)
         res = describer.components(components, 'STEP', 'CLIENT')
@@ -628,7 +629,7 @@ class ProfileManager(object):
     ## adds device into configuration dictionary
     # \param cls class instance
     # \param device device alias
-    # \param dontdisplay list of devices disable for display
+    # \param dontdisplay list of devices component for display
     # \param cnf configuration dictionary
     # \param timer device timer
     # \param index device index

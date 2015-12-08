@@ -2496,7 +2496,7 @@ class ProfileManagerTest(unittest.TestCase):
                          strategy='STEP')
 
     ## updateProfile test
-    def test_disabledatasources(self):
+    def test_componentdatasources(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2553,7 +2553,7 @@ class ProfileManagerTest(unittest.TestCase):
             common = set(cps) & set(dss)
             self.dump(se)
 
-            dds = pm.disableDataSources()
+            dds = pm.componentDataSources()
             res = pm.cpdescription()
 
             mdds = set()
@@ -2625,7 +2625,7 @@ class ProfileManagerTest(unittest.TestCase):
             common = set(cps) & set(dss)
             self.dump(se)
 
-            dds = pm.disableDataSources()
+            dds = pm.componentDataSources()
             rdss = pm.dataSources()
             tdss = [ds for ds in dss if dss[ds] and ds not in dds]
 
@@ -2858,7 +2858,7 @@ class ProfileManagerTest(unittest.TestCase):
                 print "ACOMP", mgt.preselectedComponents()
                 print "MCP", mcps
                 print "DS", mgt.dataSources()
-                print "DDS", mgt.disableDataSources()
+                print "DDS", mgt.componentDataSources()
                 print "TIMER", ar["name"]
                 res = mgt.cpdescription()
                 acp = self._cf.dp.AvailableComponents()
@@ -3383,7 +3383,7 @@ class ProfileManagerTest(unittest.TestCase):
             tmg = TestMGSetUp.TestMeasurementGroupSetUp(name='nxsmntgrp')
             dv = "/".join(ar["full_name"].split("/")[0:-1])
             chds = mgt.dataSources()
-            chds.extend(mgt.disableDataSources())
+            chds.extend(mgt.componentDataSources())
             chds = sorted([ds for ds in chds if not ds.startswith('client')])
 
             tgc = {}
@@ -3402,7 +3402,7 @@ class ProfileManagerTest(unittest.TestCase):
 #                print "ACOMP", mgt.preselectedComponents()
 #                print "MCP", mcps
 #                print "DS", mgt.dataSources()
-#                print "DDS", mgt.disableDataSources()
+#                print "DDS", mgt.componentDataSources()
 
                 res = mgt.cpdescription()
                 mdds = set()
@@ -3493,7 +3493,7 @@ class ProfileManagerTest(unittest.TestCase):
                     pass
 
     ## updateProfile test
-    def test_updateProfile_components_nopool_tango_hiddenElements(self):
+    def test_updateProfile_components_nopool_tango_unplottedcomponents(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -3613,7 +3613,7 @@ class ProfileManagerTest(unittest.TestCase):
             chds = [ds for ds in mgt.dataSources()
                     if not ds.startswith('client')]
             chds1 = list(chds)
-            chds2 = [ds for ds in mgt.disableDataSources()
+            chds2 = [ds for ds in mgt.componentDataSources()
                      if not ds.startswith('client')]
             chds.extend(chds2)
             chds = sorted(chds)
@@ -3659,7 +3659,7 @@ class ProfileManagerTest(unittest.TestCase):
 #                print "ACOMP", mgt.preselectedComponents()
 #                print "MCP", mcps
 #                print "DS", mgt.dataSources()
-#                print "DDS", mgt.disableDataSources()
+#                print "DDS", mgt.componentDataSources()
 
                 res = mgt.cpdescription()
                 mdds = set()
@@ -3914,7 +3914,7 @@ class ProfileManagerTest(unittest.TestCase):
                         name='nxsmntgrp')
                     dv = "/".join(ar["full_name"].split("/")[0:-1])
                     chds = mgt.dataSources()
-                    chds.extend(mgt.disableDataSources())
+                    chds.extend(mgt.componentDataSources())
                     chds = sorted([
                         ds for ds in chds if not ds.startswith('client')])
 
@@ -4025,7 +4025,7 @@ class ProfileManagerTest(unittest.TestCase):
             simp2.tearDown()
 
     ## updateProfile test
-    def test_updateProfile_components_pool_tango_hiddenelements(self):
+    def test_updateProfile_components_pool_tango_unplottedcomponents(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -4191,7 +4191,7 @@ class ProfileManagerTest(unittest.TestCase):
                     chds = [ds for ds in mgt.dataSources()
                             if not ds.startswith('client')]
                     chds1 = list(chds)
-                    chds2 = [ds for ds in mgt.disableDataSources()
+                    chds2 = [ds for ds in mgt.componentDataSources()
                              if not ds.startswith('client')]
                     chds.extend(chds2)
                     chds = sorted(chds)
@@ -4229,7 +4229,7 @@ class ProfileManagerTest(unittest.TestCase):
 #                    print "ACOMP", mgt.preselectedComponents()
 #                    print "MCP", mcps
 #                    print "DS", mgt.dataSources()
-#                    print "DDS", mgt.disableDataSources()
+#                    print "DDS", mgt.componentDataSources()
 
                     self.myAssertDict(
                         json.loads(se["ComponentPreselection"]),
@@ -4350,7 +4350,7 @@ class ProfileManagerTest(unittest.TestCase):
             simp2.tearDown()
 
     ## updateProfile test
-    def test_updateProfile_components_mixed_tango_hiddenelements(self):
+    def test_updateProfile_components_mixed_tango_unplottedcomponents(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -4522,7 +4522,7 @@ class ProfileManagerTest(unittest.TestCase):
                     chds = [ds for ds in mgt.dataSources()
                             if not ds.startswith('client')]
                     chds1 = list(chds)
-                    chds2 = [ds for ds in mgt.disableDataSources()
+                    chds2 = [ds for ds in mgt.componentDataSources()
                              if not ds.startswith('client')]
                     chds.extend(chds2)
                     tmpchds = sorted(chds)
@@ -4568,7 +4568,7 @@ class ProfileManagerTest(unittest.TestCase):
 #                    print "ACOMP", mgt.preselectedComponents()
 #                    print "MCP", mcps
 #                    print "DS", mgt.dataSources()
-#                    print "DDS", mgt.disableDataSources()
+#                    print "DDS", mgt.componentDataSources()
 
                     self.myAssertDict(
                         json.loads(se["ComponentPreselection"]),
@@ -4905,7 +4905,7 @@ class ProfileManagerTest(unittest.TestCase):
                     chds = [ds for ds in mgt.dataSources()
                             if not ds.startswith('client')]
                     chds1 = list(chds)
-                    chds2 = [ds for ds in mgt.disableDataSources()
+                    chds2 = [ds for ds in mgt.componentDataSources()
                              if not ds.startswith('client')]
                     chds.extend(chds2)
                     tmpchds = sorted(chds)
@@ -4951,7 +4951,7 @@ class ProfileManagerTest(unittest.TestCase):
 #                    print "ACOMP", mgt.preselectedComponents()
 #                    print "MCP", mcps
 #                    print "DS", mgt.dataSources()
-#                    print "DDS", mgt.disableDataSources()
+#                    print "DDS", mgt.componentDataSources()
 
                     self.myAssertDict(
                         json.loads(se["ComponentPreselection"]),
@@ -5310,7 +5310,7 @@ class ProfileManagerTest(unittest.TestCase):
                     chds = [ds for ds in mgt.dataSources()
                             if not ds.startswith('client')]
                     chds1 = list(chds)
-                    chds2 = [ds for ds in mgt.disableDataSources()
+                    chds2 = [ds for ds in mgt.componentDataSources()
                              if not ds.startswith('client')]
                     chds.extend(chds2)
                     bchds = list(chds)
@@ -5358,7 +5358,7 @@ class ProfileManagerTest(unittest.TestCase):
 #                    print "ACOMP", mgt.preselectedComponents()
 #                    print "MCP", mcps
 #                    print "DS", mgt.dataSources()
-#                    print "DDS", mgt.disableDataSources()
+#                    print "DDS", mgt.componentDataSources()
 
                     self.myAssertDict(
                         json.loads(se["ComponentPreselection"]),
@@ -5782,7 +5782,7 @@ class ProfileManagerTest(unittest.TestCase):
                     chds = [ds for ds in mgt.dataSources()
                             if not ds.startswith('client')]
                     chds1 = list(chds)
-                    chds2 = [ds for ds in mgt.disableDataSources()
+                    chds2 = [ds for ds in mgt.componentDataSources()
                              if not ds.startswith('client')]
                     chds.extend(chds2)
                     bchds = list(chds)
@@ -5830,7 +5830,7 @@ class ProfileManagerTest(unittest.TestCase):
 #                    print "ACOMP", mgt.preselectedComponents()
 #                    print "MCP", mcps
 #                    print "DS", mgt.dataSources()
-#                    print "DDS", mgt.disableDataSources()
+#                    print "DDS", mgt.componentDataSources()
 
                     self.myAssertDict(
                         json.loads(se["ComponentPreselection"]),
@@ -6304,7 +6304,7 @@ class ProfileManagerTest(unittest.TestCase):
                         chds = [ds for ds in mgt[mg].dataSources()
                                 if not ds.startswith('client')]
                         chds1 = list(chds)
-                        chds2 = [ds for ds in mgt[mg].disableDataSources()
+                        chds2 = [ds for ds in mgt[mg].componentDataSources()
                                  if not ds.startswith('client')]
                         chds.extend(chds2)
                         bchds = list(chds)
