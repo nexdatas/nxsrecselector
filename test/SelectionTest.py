@@ -29,6 +29,7 @@ import binascii
 import string
 import json
 import time
+import nxsrecconfig
 
 from nxsrecconfig.Selection import Selection
 
@@ -53,6 +54,8 @@ class SelectionTest(unittest.TestCase):
         self.__defaultzone = 'Europe/Berlin'
         ## default mntgrp
         self.__defaultmntgrp = 'nxsmntgrp'
+        ## selection version
+        self.__version = nxsrecconfig.__version__
 
         self._bint = "int64" if IS64BIT else "int32"
         self._buint = "uint64" if IS64BIT else "uint32"
@@ -61,33 +64,33 @@ class SelectionTest(unittest.TestCase):
         self._keys = [
             ("Timer", '[]'),
             ("OrderedChannels", '[]'),
-            ("ComponentGroup", '{}'),
-            ("AutomaticComponentGroup", '{}'),
-            ("AutomaticDataSources", '[]'),
-            ("DataSourceGroup", '{}'),
+            ("ComponentSelection", '{}'),
+            ("ComponentPreselection", '{}'),
+            ("PreselectedDataSources", '[]'),
+            ("DataSourceSelection", '{}'),
             ("InitDataSources", '[]'),
             ("OptionalComponents", '[]'),
             ("AppendEntry", False),
             ("ComponentsFromMntGrp", False),
             ("ConfigVariables", '{}'),
-            ("DataRecord", '{}'),
+            ("UserData", '{}'),
             ("Labels", '{}'),
             ("LabelPaths", '{}'),
             ("LabelLinks", '{}'),
-            ("HiddenElements", '[]'),
+            ("UnplottedComponents", '[]'),
             ("LabelTypes", '{}'),
             ("LabelShapes", '{}'),
             ("DynamicComponents", True),
-            ("DynamicLinks", True),
-            ("DynamicPath",
+            ("DefaultDynamicLinks", True),
+            ("DefaultDynamicPath",
              '/entry$var.serialno:NXentry/NXinstrument/collection'),
             ("TimeZone", self.__defaultzone),
             ("ConfigDevice", ''),
             ("WriterDevice", ''),
             ("Door", ''),
-            ("MntGrp", '')
+            ("MntGrp", ''),
+            ("Version", self.__version)
         ]
-
         self.__dump = {}
 
         try:
@@ -126,7 +129,7 @@ class SelectionTest(unittest.TestCase):
     def test_constructor(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
-        el = Selection()
+        el = Selection(Version=self.__version)
         self.assertTrue(isinstance(el, dict))
         self.assertEqual(len(el.keys()), len(self._keys))
         for key, vl in self._keys:
@@ -138,7 +141,7 @@ class SelectionTest(unittest.TestCase):
     def test_reset(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
-        el = Selection()
+        el = Selection(Version=self.__version)
         el.clear()
         self.assertEqual(len(el.keys()), 0)
         el.reset()
@@ -158,7 +161,7 @@ class SelectionTest(unittest.TestCase):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         for i in range(20):
-            el = Selection()
+            el = Selection(Version=self.__version)
             el.deselect()
             self.assertEqual(len(el.keys()), len(self._keys))
             for key, vl in self._keys:
@@ -173,16 +176,16 @@ class SelectionTest(unittest.TestCase):
                 cps[self.getRandomName(10)] = bool(self.__rnd.randint(0, 1))
             for i in range(lds):
                 dss[self.getRandomName(10)] = bool(self.__rnd.randint(0, 1))
-            el["ComponentGroup"] = json.dumps(cps)
-            el["DataSourceGroup"] = json.dumps(dss)
+            el["ComponentSelection"] = json.dumps(cps)
+            el["DataSourceSelection"] = json.dumps(dss)
             el["InitDataSources"] = json.dumps(
                 self.__rnd.sample(dss, self.__rnd.randint(1, len(dss))))
             self.dump(el)
 
             el.deselect()
 
-            ncps = json.loads(el["ComponentGroup"])
-            ndss = json.loads(el["DataSourceGroup"])
+            ncps = json.loads(el["ComponentSelection"])
+            ndss = json.loads(el["DataSourceSelection"])
 
             self.assertEqual(el["InitDataSources"], '[]')
             self.assertEqual(len(cps), len(ncps))
@@ -194,16 +197,16 @@ class SelectionTest(unittest.TestCase):
                 self.assertTrue(key in ndss.keys())
                 self.assertEqual(ndss[key], False)
 
-            self.compareToDump(el, ["ComponentGroup", "DataSourceGroup",
+            self.compareToDump(el, ["ComponentSelection", "DataSourceSelection",
                                     "InitDataSources"])
 
-    ## updateAutomaticDataSources test
-    def test_updateAutomaticDataSources(self):
+    ## updatePreselectedDataSources test
+    def test_updatePreselectedDataSources(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         for i in range(20):
-            el = Selection()
-            el.updateAutomaticDataSources(None)
+            el = Selection(Version=self.__version)
+            el.updatePreselectedDataSources(None)
             self.assertEqual(len(el.keys()), len(self._keys))
             for key, vl in self._keys:
                 self.assertTrue(key in el.keys())
@@ -216,28 +219,28 @@ class SelectionTest(unittest.TestCase):
             dss2 = [self.getRandomName(10) for _ in range(lds2)]
             dss3 = [self.getRandomName(10) for _ in range(lds3)]
 
-            el["AutomaticDataSources"] = json.dumps(
+            el["PreselectedDataSources"] = json.dumps(
                 list(set(dss1) | set(dss2)))
             self.dump(el)
-            el.updateAutomaticDataSources(None)
+            el.updatePreselectedDataSources(None)
 
-            self.compareToDump(el, ["AutomaticDataSources"])
+            self.compareToDump(el, ["PreselectedDataSources"])
             self.assertEqual(set(list(set(dss2) | set(dss1))),
-                             set(json.loads(el["AutomaticDataSources"])))
+                             set(json.loads(el["PreselectedDataSources"])))
 
-            el.updateAutomaticDataSources(list(set(dss3) | set(dss2)))
+            el.updatePreselectedDataSources(list(set(dss3) | set(dss2)))
 
             self.assertEqual(set(list(set(dss3) | set(dss2) | set(dss1))),
-                             set(json.loads(el["AutomaticDataSources"])))
+                             set(json.loads(el["PreselectedDataSources"])))
 
-            self.compareToDump(el, ["AutomaticDataSources"])
+            self.compareToDump(el, ["PreselectedDataSources"])
 
     ## updateOrderedChannels test
     def test_updateOrderedChannels(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         for i in range(20):
-            el = Selection()
+            el = Selection(Version=self.__version)
             el.updateOrderedChannels([])
             self.assertEqual(len(el.keys()), len(self._keys))
             for key, vl in self._keys:
@@ -280,11 +283,11 @@ class SelectionTest(unittest.TestCase):
             self.assertEqual(set(ndss), set(odss))
 
     ## deselect test
-    def test_updateComponentGroup(self):
+    def test_updateComponentSelection(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         for i in range(20):
-            el = Selection()
+            el = Selection(Version=self.__version)
             el.deselect()
             self.assertEqual(len(el.keys()), len(self._keys))
             for key, vl in self._keys:
@@ -302,29 +305,29 @@ class SelectionTest(unittest.TestCase):
             ccps = self.__rnd.sample(cps, self.__rnd.randint(1, len(cps)))
             for cp in ccps:
                 dss[cp] = bool(self.__rnd.randint(0, 1))
-            el["ComponentGroup"] = json.dumps(cps)
-            el["DataSourceGroup"] = json.dumps(dss)
+            el["ComponentSelection"] = json.dumps(cps)
+            el["DataSourceSelection"] = json.dumps(dss)
             common = set(cps) & set(dss)
             self.dump(el)
 
-            el.updateComponentGroup()
+            el.updateComponentSelection()
 
-            ncps = json.loads(el["ComponentGroup"])
-            ndss = json.loads(el["DataSourceGroup"])
+            ncps = json.loads(el["ComponentSelection"])
+            ndss = json.loads(el["DataSourceSelection"])
 
             self.assertEqual(len(cps), len(ncps) + len(common))
             for key in cps.keys():
                 if key not in common:
                     self.assertTrue(key in ncps.keys())
                     self.assertEqual(ncps[key], cps[key])
-            self.compareToDump(el, ["ComponentGroup"])
+            self.compareToDump(el, ["ComponentSelection"])
 
     ## deselect test
-    def test_updateDataSourceGroup(self):
+    def test_updateDataSourceSelection(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         for i in range(20):
-            el = Selection()
+            el = Selection(Version=self.__version)
             el.deselect()
             self.assertEqual(len(el.keys()), len(self._keys))
             for key, vl in self._keys:
@@ -341,13 +344,13 @@ class SelectionTest(unittest.TestCase):
 
             for ds in dssn:
                 dss[ds] = bool(self.__rnd.randint(0, 1))
-            el["DataSourceGroup"] = json.dumps(dss)
+            el["DataSourceSelection"] = json.dumps(dss)
 
             self.dump(el)
 
-            el.updateDataSourceGroup(chs, cdss)
+            el.updateDataSourceSelection(chs, cdss)
 
-            ndss = json.loads(el["DataSourceGroup"])
+            ndss = json.loads(el["DataSourceSelection"])
             existing = set(dssn) & (set(chs) | set(cdss))
 
             for key, value in ndss.items():
@@ -356,13 +359,13 @@ class SelectionTest(unittest.TestCase):
                 else:
                     self.assertTrue(key in chs)
                     self.assertTrue(not value)
-            self.compareToDump(el, ["DataSourceGroup"])
+            self.compareToDump(el, ["DataSourceSelection"])
 
     ## deselect test
     def test_resetMntGrp(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
-        el = Selection()
+        el = Selection(Version=self.__version)
         el.deselect()
         self.assertEqual(len(el.keys()), len(self._keys))
         for key, vl in self._keys:
@@ -395,7 +398,7 @@ class SelectionTest(unittest.TestCase):
     def test_resetTimeZone(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
-        el = Selection()
+        el = Selection(Version=self.__version)
         el.deselect()
         self.assertEqual(len(el.keys()), len(self._keys))
         for key, vl in self._keys:
@@ -425,11 +428,11 @@ class SelectionTest(unittest.TestCase):
         self.assertEqual(el["TimeZone"], self.__defaultzone)
 
     ## updateOrderedChannels test
-    def test_resetAutomaticComponents(self):
+    def test_resetPreselectedComponents(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         for i in range(20):
-            el = Selection()
+            el = Selection(Version=self.__version)
             self.assertEqual(len(el.keys()), len(self._keys))
             for key, vl in self._keys:
                 self.assertTrue(key in el.keys())
@@ -442,15 +445,15 @@ class SelectionTest(unittest.TestCase):
             lcp = self.__rnd.randint(1, 40)
             for i in range(lcp):
                 cps[self.getRandomName(10)] = bool(self.__rnd.randint(0, 1))
-            el["AutomaticComponentGroup"] = json.dumps(cps)
+            el["ComponentPreselection"] = json.dumps(cps)
 
             self.dump(el)
 
-            el.resetAutomaticComponents(dss1)
+            el.resetPreselectedComponents(dss1)
 
-            self.compareToDump(el, ["AutomaticComponentGroup"])
+            self.compareToDump(el, ["ComponentPreselection"])
 
-            ndss = json.loads(el["AutomaticComponentGroup"])
+            ndss = json.loads(el["ComponentPreselection"])
             for ds in dss1:
                 self.assertTrue(ds in ndss.keys())
                 self.assertEqual(ndss[ds], False)

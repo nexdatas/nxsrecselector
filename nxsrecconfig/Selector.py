@@ -25,6 +25,7 @@ import PyTango
 import getpass
 from .Utils import TangoUtils, PoolUtils
 from .Selection import Selection
+from .Converter import Converter
 
 
 ## Access class to Selection dictionary and Config Device
@@ -33,13 +34,18 @@ class Selector(object):
 
     ## constructor
     # \param macroserverpools MacroServerPools object
-    def __init__(self, macroserverpools):
+    def __init__(self, macroserverpools, version):
 
         ## macro server and pools
         self.__msp = macroserverpools
 
         ##  selection dictionary with Settings
-        self.__selection = Selection()
+        self.__selection = Selection(Version=version)
+        ##  selection dictionary with Settings
+        self.__converter = Converter(version)
+
+        ##  selection dictionary with Settings
+        self.__version = version
 
         ## tango database
         self.__db = PyTango.Database()
@@ -64,6 +70,8 @@ class Selector(object):
     ## sets selection from state data
     # \param state state data
     def set(self, state):
+        state = dict(state)
+        self.__converter.convert(state)
         self.reset()
         for key in state.keys():
             if key and key[0].upper() != key[0]:
@@ -157,9 +165,9 @@ class Selector(object):
         if changed:
             self.__msp.updateMacroServer(self.__selection["Door"])
 
-    ## get method for automaticDataSources attribute
-    def __preGetAutomaticDataSources(self):
-        self.__selection.updateAutomaticDataSources(self.poolMotors())
+    ## get method for preselectedDataSources attribute
+    def __preGetPreselectedDataSources(self):
+        self.__selection.updatePreselectedDataSources(self.poolMotors())
 
     ## update method for orderedChannels attribute
     def __preGetOrderedChannels(self):
@@ -174,12 +182,12 @@ class Selector(object):
         self.__selection.resetMntGrp()
 
     ## update method for componentGroup attribute
-    def __preGetComponentGroup(self):
-        self.__selection.updateComponentGroup()
+    def __preGetComponentSelection(self):
+        self.__selection.updateComponentSelection()
 
     ## update method for dataSourceGroup attribute
-    def __preGetDataSourceGroup(self):
-        self.__selection.updateDataSourceGroup(
+    def __preGetDataSourceSelection(self):
+        self.__selection.updateDataSourceSelection(
             self.poolChannels(),
             self.configCommand("availableDataSources"))
 
@@ -192,22 +200,22 @@ class Selector(object):
     def __postSetTimeZone(self, _=True):
         self.__selection.resetTimeZone()
 
-    ## resets automatic components to set of given components
-    # \param components new selection automatic components
-    def resetAutomaticComponents(self, components):
-        self.__selection.resetAutomaticComponents(components)
+    ## resets preselected components to set of given components
+    # \param components new selection preselected components
+    def resetPreselectedComponents(self, components):
+        self.__selection.resetPreselectedComponents(components)
 
-    ## updates active state of automatic components
-    # \returns new group of automatic components
-    def updateAutomaticComponents(self):
-        datasources = set(json.loads(self["AutomaticDataSources"]))
-        acpgroup = json.loads(self["AutomaticComponentGroup"])
+    ## updates active state of preselected components
+    # \returns new group of preselected components
+    def updatePreselectedComponents(self):
+        datasources = set(json.loads(self["PreselectedDataSources"]))
+        acpgroup = json.loads(self["ComponentPreselection"])
         configdevice = self.setConfigInstance()
         jacps = self.__msp.checkComponentChannels(
             self["Door"], configdevice, datasources, acpgroup,
             self.descErrors)
-        if self["AutomaticComponentGroup"] != jacps:
-            self["AutomaticComponentGroup"] = jacps
+        if self["ComponentPreselection"] != jacps:
+            self["ComponentPreselection"] = jacps
             self.storeSelection()
 
     ## provides pool proxies
@@ -278,11 +286,15 @@ class Selector(object):
     # \param names names of required variables
     # \param data dictionary with resulting data
     def importEnv(self, names=None, data=None):
+        update = False
         if names is None:
-            names = self.keys()
+            names = self.__converter.allkeys(self)
         if data is None:
-            data = self
+            data = {}
+            update = True
         self.__msp.getSelectorEnv(self["Door"], names, data)
+        if update:
+            self.set(data)
 
     ## exports Selector Environment Data
     def exportEnv(self, data=None, cmddata=None):
@@ -290,14 +302,14 @@ class Selector(object):
             data = self
         self.__msp.setSelectorEnv(self["Door"], data, cmddata)
 
-    ## fetches Environment Data
+    ## gets Scan Environment Data
     # \returns JSON String with important variables
-    def fetchEnvData(self):
+    def getScanEnvVariables(self):
         return self.__msp.getScanEnv(self["Door"])
 
-    ## stores Environment Data
+    ## sets Scan Environment Data
     # \param jdata JSON String with important variables
-    def storeEnvData(self, jdata):
+    def setScanEnvVariables(self, jdata):
         return self.__msp.setScanEnv(self["Door"], jdata)
 
     ## saves configuration

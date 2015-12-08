@@ -53,8 +53,8 @@ class ProfileManager(object):
         ## pool server proxies
         self.__pools = None
 
-        ## default automaticComponents
-        self.defaultAutomaticComponents = []
+        ## default preselectedComponents
+        self.defaultPreselectedComponents = []
 
     def __updateMacroServer(self):
         self.__macroServerName = self.__selector.getMacroServer()
@@ -88,8 +88,8 @@ class ProfileManager(object):
     ## provides selected components
     # \returns list of available selected components
     def components(self):
-        cps = json.loads(self.__selector["ComponentGroup"])
-        ads = json.loads(self.__selector["DataSourceGroup"])
+        cps = json.loads(self.__selector["ComponentSelection"])
+        ads = json.loads(self.__selector["DataSourceSelection"])
         dss = [ds for ds in ads if ads[ds]]
         acp = self.__selector.configCommand("availableComponents") or []
         res = []
@@ -100,10 +100,10 @@ class ProfileManager(object):
                     res.append(ds)
         return res
 
-    ## provides automatic components
-    # \returns list of available automatic components
-    def automaticComponents(self):
-        cps = json.loads(self.__selector["AutomaticComponentGroup"])
+    ## provides preselected components
+    # \returns list of available preselected components
+    def preselectedComponents(self):
+        cps = json.loads(self.__selector["ComponentPreselection"])
         if isinstance(cps, dict):
             return [cp for cp in cps.keys() if cps[cp]]
         else:
@@ -111,7 +111,7 @@ class ProfileManager(object):
 
     ## provides description of components
     # \param full if True describes all available ones are taken
-    #        otherwise selectect, automatic and mandatory
+    #        otherwise selectect, preselected and mandatory
     # \returns description of required components
     def cpdescription(self, full=False):
         self.__updateConfigServer()
@@ -120,7 +120,7 @@ class ProfileManager(object):
         if not full:
             mcp = self.__selector.configCommand("mandatoryComponents") or []
             cp = list(
-                set(self.components()) | set(self.automaticComponents()) |
+                set(self.components()) | set(self.preselectedComponents()) |
                 set(mcp))
             res = describer.components(cp, 'STEP', '')
         else:
@@ -145,7 +145,7 @@ class ProfileManager(object):
         dds = self.disableDataSources()
         if not isinstance(dds, list):
             dds = []
-        dss = json.loads(self.__selector["DataSourceGroup"])
+        dss = json.loads(self.__selector["DataSourceSelection"])
         if isinstance(dss, dict):
             return [ds for ds in dss.keys() if dss[ds] and ds not in dds]
         else:
@@ -176,7 +176,7 @@ class ProfileManager(object):
         datasources = self.dataSources()
         disabledatasources = self.disableDataSources()
         components = list(
-            set(self.components()) | set(self.automaticComponents()) |
+            set(self.components()) | set(self.preselectedComponents()) |
             set(mcp))
         conf, mntgrp = self.__createMntGrpConf(
             components, datasources, disabledatasources)
@@ -212,12 +212,12 @@ class ProfileManager(object):
 
     ## check if active measurement group was changed
     # \returns True if it is different to the current setting
-    def isMntGrpChanged(self):
+    def isMntGrpUpdated(self):
         mcp = self.__selector.configCommand("mandatoryComponents") or []
         datasources = self.dataSources()
         disabledatasources = self.disableDataSources()
         components = list(
-            set(self.components()) | set(self.automaticComponents()) |
+            set(self.components()) | set(self.preselectedComponents()) |
             set(mcp))
 
         mgconf = json.loads(self.mntGrpConfiguration())
@@ -254,9 +254,9 @@ class ProfileManager(object):
             if self.__selector["MntGrp"] in avmg:
                 self.__selector.deselect()
                 self.importMntGrp()
-                self.__selector.resetAutomaticComponents(
-                    self.defaultAutomaticComponents)
-                self.__selector.updateAutomaticComponents()
+                self.__selector.resetPreselectedComponents(
+                    self.defaultPreselectedComponents)
+                self.__selector.updatePreselectedComponents()
 
     ## set active measurement group from components
     # \param components  component list
@@ -271,7 +271,7 @@ class ProfileManager(object):
         cnf['description'] = "Measurement Group"
         cnf['label'] = ""
 
-        dontdisplay = set(json.loads(self.__selector["HiddenElements"]))
+        dontdisplay = set(json.loads(self.__selector["UnplottedComponents"]))
 
         ltimers = set()
         timer = self.__prepareTimers(cnf, ltimers)
@@ -299,8 +299,8 @@ class ProfileManager(object):
         otimers = None
         timers = {}
 
-        dsg = json.loads(self.__selector["DataSourceGroup"])
-        hel = set(json.loads(self.__selector["HiddenElements"]))
+        dsg = json.loads(self.__selector["DataSourceSelection"])
+        hel = set(json.loads(self.__selector["UnplottedComponents"]))
         self.__clearChannels(dsg, hel)
 
         # fill in dsg, timers hel
@@ -311,12 +311,12 @@ class ProfileManager(object):
 
         changed = False
         jdsg = json.dumps(dsg)
-        if self.__selector["DataSourceGroup"] != jdsg:
-            self.__selector["DataSourceGroup"] = jdsg
+        if self.__selector["DataSourceSelection"] != jdsg:
+            self.__selector["DataSourceSelection"] = jdsg
             changed = True
 
-        if set(json.loads(self.__selector["HiddenElements"])) != hel:
-            self.__selector["HiddenElements"] = json.dumps(list(hel))
+        if set(json.loads(self.__selector["UnplottedComponents"])) != hel:
+            self.__selector["UnplottedComponents"] = json.dumps(list(hel))
             changed = True
         if otimers is not None:
             jtimers = json.dumps(otimers)
@@ -410,7 +410,7 @@ class ProfileManager(object):
                     for dsr in dsrs:
                         records.append(str(dsr[2]))
 
-        urecords = json.loads(self.__selector["DataRecord"]).keys()
+        urecords = json.loads(self.__selector["UserData"]).keys()
         precords = frecords.values()
         missing = sorted(set(records)
                          - set(DEFAULT_RECORD_KEYS)
@@ -477,7 +477,7 @@ class ProfileManager(object):
         if isinstance(datasources, list):
             aliases = list(datasources)
         pchannels = json.loads(self.__selector["OrderedChannels"])
-        dsg = json.loads(self.__selector["DataSourceGroup"])
+        dsg = json.loads(self.__selector["DataSourceSelection"])
         aliases.extend(
             list(set(pchannels) & set(disabledatasources)))
 
@@ -506,8 +506,8 @@ class ProfileManager(object):
                 if tm in dsg.keys():
                     dsg[str(tm)] = False
 
-        self.__selector["DataSourceGroup"] = json.dumps(dsg)
-        self.__selector["HiddenElements"] = json.dumps(list(dontdisplay))
+        self.__selector["DataSourceSelection"] = json.dumps(dsg)
+        self.__selector["UnplottedComponents"] = json.dumps(list(dontdisplay))
         aliases = list(set(aliases))
 
         for tm in timers:

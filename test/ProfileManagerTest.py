@@ -33,6 +33,7 @@ import json
 import pickle
 import string
 import time
+import nxsrecconfig
 
 import logging
 logger = logging.getLogger()
@@ -131,33 +132,38 @@ class ProfileManagerTest(unittest.TestCase):
         self.__defaultpath = \
             '/entry$var.serialno:NXentry/NXinstrument/collection'
 
+        ## selection version
+        self.__version = nxsrecconfig.__version__
+
         self._keys = [
             ("Timer", '[]'),
             ("OrderedChannels", '[]'),
-            ("ComponentGroup", '{}'),
-            ("AutomaticComponentGroup", '{}'),
-            ("AutomaticDataSources", '[]'),
-            ("DataSourceGroup", '{}'),
+            ("ComponentSelection", '{}'),
+            ("ComponentPreselection", '{}'),
+            ("PreselectedDataSources", '[]'),
+            ("DataSourceSelection", '{}'),
             ("InitDataSources", '[]'),
             ("OptionalComponents", '[]'),
             ("AppendEntry", False),
             ("ComponentsFromMntGrp", False),
             ("ConfigVariables", '{}'),
-            ("DataRecord", '{}'),
+            ("UserData", '{}'),
             ("Labels", '{}'),
             ("LabelPaths", '{}'),
             ("LabelLinks", '{}'),
-            ("HiddenElements", '[]'),
+            ("UnplottedComponents", '[]'),
             ("LabelTypes", '{}'),
             ("LabelShapes", '{}'),
             ("DynamicComponents", True),
-            ("DynamicLinks", True),
-            ("DynamicPath", self.__defaultpath),
+            ("DefaultDynamicLinks", True),
+            ("DefaultDynamicPath", self.__defaultpath),
             ("TimeZone", self.__defaultzone),
             ("ConfigDevice", ''),
             ("WriterDevice", ''),
             ("Door", ''),
-            ("MntGrp", '')
+            ("MntGrp", ''),
+            ("Version", self.__version)
+
         ]
 
         self.mysel = {
@@ -1842,11 +1848,11 @@ class ProfileManagerTest(unittest.TestCase):
 
         mgt = ProfileManager(None)
 
-        se = Selector(None)
+        se = Selector(None, self.__version)
         mgt = ProfileManager(se)
 
         msp = MacroServerPools(10)
-        se = Selector(msp)
+        se = Selector(msp, self.__version)
         mgt = ProfileManager(se)
 
     ## availableMntGrps test
@@ -1861,12 +1867,12 @@ class ProfileManagerTest(unittest.TestCase):
         mgt = ProfileManager(None)
         self.myAssertRaise(Exception, mgt.availableMntGrps)
 
-        se = Selector(None)
+        se = Selector(None, self.__version)
         mgt = ProfileManager(se)
         self.myAssertRaise(Exception, mgt.availableMntGrps)
 
         msp = MacroServerPools(10)
-        se = Selector(msp)
+        se = Selector(msp, self.__version)
         se["Door"] = val["Door"]
         mgt = ProfileManager(se)
         self.assertEqual(mgt.availableMntGrps(), [])
@@ -1913,12 +1919,12 @@ class ProfileManagerTest(unittest.TestCase):
         mgt = ProfileManager(None)
         self.myAssertRaise(Exception, mgt.availableMntGrps)
 
-        se = Selector(None)
+        se = Selector(None, self.__version)
         mgt = ProfileManager(se)
         self.myAssertRaise(Exception, mgt.availableMntGrps)
 
         msp = MacroServerPools(10)
-        se = Selector(msp)
+        se = Selector(msp, self.__version)
         se["Door"] = val["Door"]
         mgt = ProfileManager(se)
         self.assertEqual(mgt.availableMntGrps(), [])
@@ -2000,12 +2006,12 @@ class ProfileManagerTest(unittest.TestCase):
         mgt = ProfileManager(None)
         self.myAssertRaise(Exception, mgt.deleteProfile)
 
-        se = Selector(None)
+        se = Selector(None, self.__version)
         mgt = ProfileManager(se)
         self.myAssertRaise(Exception, mgt.deleteProfile, None)
 
         msp = MacroServerPools(10)
-        se = Selector(msp)
+        se = Selector(msp, self.__version)
         se["Door"] = val["Door"]
         se["ConfigDevice"] = val["ConfigDevice"]
         mgt = ProfileManager(se)
@@ -2062,12 +2068,12 @@ class ProfileManagerTest(unittest.TestCase):
         mgt = ProfileManager(None)
         self.myAssertRaise(Exception, mgt.availableMntGrps)
 
-        se = Selector(None)
+        se = Selector(None, self.__version)
         mgt = ProfileManager(se)
         self.myAssertRaise(Exception, mgt.availableMntGrps)
 
         msp = MacroServerPools(10)
-        se = Selector(msp)
+        se = Selector(msp, self.__version)
         se["Door"] = val["Door"]
         se["ConfigDevice"] = val["ConfigDevice"]
         mgt = ProfileManager(se)
@@ -2165,7 +2171,7 @@ class ProfileManagerTest(unittest.TestCase):
             tpool2.tearDown()
 
     ## updateProfile test
-    def test_automaticComponents(self):
+    def test_preselectedComponents(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2175,7 +2181,7 @@ class ProfileManagerTest(unittest.TestCase):
 
         for i in range(20):
             msp = MacroServerPools(10)
-            se = Selector(msp)
+            se = Selector(msp, self.__version)
             se["Door"] = val["Door"]
             se["ConfigDevice"] = val["ConfigDevice"]
             se["WriterDevice"] = val["WriterDevice"]
@@ -2185,13 +2191,13 @@ class ProfileManagerTest(unittest.TestCase):
             lcp = self.__rnd.randint(1, 40)
             for i in range(lcp):
                 cps[self.getRandomName(10)] = bool(self.__rnd.randint(0, 1))
-            se["AutomaticComponentGroup"] = json.dumps(cps)
+            se["ComponentPreselection"] = json.dumps(cps)
 
             self.dump(se)
 
-            ac = pm.automaticComponents()
-            self.compareToDump(se, ["AutomaticComponentGroup"])
-            ndss = json.loads(se["AutomaticComponentGroup"])
+            ac = pm.preselectedComponents()
+            self.compareToDump(se, ["ComponentPreselection"])
+            ndss = json.loads(se["ComponentPreselection"])
 
             acp = []
             for ds in cps.keys():
@@ -2213,7 +2219,7 @@ class ProfileManagerTest(unittest.TestCase):
 
         for i in range(20):
             msp = MacroServerPools(10)
-            se = Selector(msp)
+            se = Selector(msp, self.__version)
             se["Door"] = val["Door"]
             se["OrderedChannels"] = json.dumps([])
             db = PyTango.Database()
@@ -2245,14 +2251,14 @@ class ProfileManagerTest(unittest.TestCase):
             self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(dcps)])
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
 
-            se["ComponentGroup"] = json.dumps(cps)
-            se["DataSourceGroup"] = json.dumps(dss)
-            ndss = json.loads(se["DataSourceGroup"])
+            se["ComponentSelection"] = json.dumps(cps)
+            se["DataSourceSelection"] = json.dumps(dss)
+            ndss = json.loads(se["DataSourceSelection"])
             common = set(cps) & set(dss)
             self.dump(se)
 
-            ncps = json.loads(se["ComponentGroup"])
-            ndss = json.loads(se["DataSourceGroup"])
+            ncps = json.loads(se["ComponentSelection"])
+            ndss = json.loads(se["DataSourceSelection"])
             tdss = [ds for ds in ndss if ndss[ds]]
             tcps = [cp for cp in ncps if ncps[cp]]
 
@@ -2262,7 +2268,7 @@ class ProfileManagerTest(unittest.TestCase):
                 if key not in common:
                     self.assertTrue(key in ncps.keys())
                     self.assertEqual(ncps[key], cps[key])
-            self.compareToDumpJSON(se, ["ComponentGroup"])
+            self.compareToDumpJSON(se, ["ComponentSelection"])
             ac = self._cf.dp.availableComponents()
             for cp in pmcp:
                 self.assertTrue(cp in ac)
@@ -2279,7 +2285,7 @@ class ProfileManagerTest(unittest.TestCase):
                "MntGrp": 'nxsmntgrp'}
 
         msp = MacroServerPools(10)
-        se = Selector(msp)
+        se = Selector(msp, self.__version)
         se["Door"] = val["Door"]
         se["OrderedChannels"] = json.dumps([])
         db = PyTango.Database()
@@ -2306,21 +2312,21 @@ class ProfileManagerTest(unittest.TestCase):
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps({})])
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dsdict)])
 
-        se["ComponentGroup"] = json.dumps(cps)
-        se["DataSourceGroup"] = json.dumps(dss)
-        ndss = json.loads(se["DataSourceGroup"])
+        se["ComponentSelection"] = json.dumps(cps)
+        se["DataSourceSelection"] = json.dumps(dss)
+        ndss = json.loads(se["DataSourceSelection"])
         common = set(cps) & set(dss)
         self.dump(se)
 
-        ncps = json.loads(se["ComponentGroup"])
-        ndss = json.loads(se["DataSourceGroup"])
+        ncps = json.loads(se["ComponentSelection"])
+        ndss = json.loads(se["DataSourceSelection"])
         tdss = [ds for ds in ndss if ndss[ds]]
         tcps = [cp for cp in ncps if ncps[cp]]
 
         self.assertEqual(pm.cpdescription(), [{}])
-        se["ComponentGroup"] = json.dumps({"unknown": True})
+        se["ComponentSelection"] = json.dumps({"unknown": True})
         self.assertEqual(pm.cpdescription(), [{}])
-        se["DataSourceGroup"] = json.dumps({"unknown": True})
+        se["DataSourceSelection"] = json.dumps({"unknown": True})
         self.assertEqual(pm.cpdescription(), [{}])
         self._cf.dp.SetCommandVariable(["MCPLIST", json.dumps(["unknown"])])
         self.assertEqual(pm.cpdescription(), [{}])
@@ -2335,7 +2341,7 @@ class ProfileManagerTest(unittest.TestCase):
                "MntGrp": 'nxsmntgrp'}
 
         msp = MacroServerPools(10)
-        se = Selector(msp)
+        se = Selector(msp, self.__version)
         se["Door"] = val["Door"]
         se["OrderedChannels"] = json.dumps([])
         db = PyTango.Database()
@@ -2362,9 +2368,9 @@ class ProfileManagerTest(unittest.TestCase):
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
 
-        se["ComponentGroup"] = json.dumps({})
-        se["DataSourceGroup"] = json.dumps({})
-        ndss = json.loads(se["DataSourceGroup"])
+        se["ComponentSelection"] = json.dumps({})
+        se["DataSourceSelection"] = json.dumps({})
+        ndss = json.loads(se["DataSourceSelection"])
         common = set(cps) & set(dss)
         self.dump(se)
 
@@ -2382,7 +2388,7 @@ class ProfileManagerTest(unittest.TestCase):
 
         for i in range(20):
             msp = MacroServerPools(10)
-            se = Selector(msp)
+            se = Selector(msp, self.__version)
             se["Door"] = val["Door"]
             se["OrderedChannels"] = json.dumps([])
             db = PyTango.Database()
@@ -2416,10 +2422,10 @@ class ProfileManagerTest(unittest.TestCase):
             tdss = [ds for ds in dss if dss[ds]]
             tcps = [cp for cp in cps if cps[cp]]
 
-            se["ComponentGroup"] = json.dumps(cps)
-            se["DataSourceGroup"] = json.dumps(dss)
+            se["ComponentSelection"] = json.dumps(cps)
+            se["DataSourceSelection"] = json.dumps(dss)
             self._cf.dp.SetCommandVariable(["MCPLIST", json.dumps(mcps)])
-            ndss = json.loads(se["DataSourceGroup"])
+            ndss = json.loads(se["DataSourceSelection"])
             common = set(cps) & set(dss)
             self.dump(se)
 
@@ -2438,7 +2444,7 @@ class ProfileManagerTest(unittest.TestCase):
 
         for i in range(20):
             msp = MacroServerPools(10)
-            se = Selector(msp)
+            se = Selector(msp, self.__version)
             se["Door"] = val["Door"]
             se["OrderedChannels"] = json.dumps([])
             db = PyTango.Database()
@@ -2478,10 +2484,10 @@ class ProfileManagerTest(unittest.TestCase):
             tdss = [ds for ds in dss if dss[ds]]
             tcps = [cp for cp in cps if cps[cp]]
 
-            se["ComponentGroup"] = json.dumps(cps)
-            se["DataSourceGroup"] = json.dumps(dss)
+            se["ComponentSelection"] = json.dumps(cps)
+            se["DataSourceSelection"] = json.dumps(dss)
             self._cf.dp.SetCommandVariable(["MCPLIST", json.dumps(mcps)])
-            ndss = json.loads(se["DataSourceGroup"])
+            ndss = json.loads(se["DataSourceSelection"])
             common = set(cps) & set(dss)
             self.dump(se)
 
@@ -2500,7 +2506,7 @@ class ProfileManagerTest(unittest.TestCase):
 
         for i in range(20):
             msp = MacroServerPools(10)
-            se = Selector(msp)
+            se = Selector(msp, self.__version)
             se["Door"] = val["Door"]
             se["OrderedChannels"] = json.dumps([])
             db = PyTango.Database()
@@ -2540,10 +2546,10 @@ class ProfileManagerTest(unittest.TestCase):
             tdss = [ds for ds in dss if dss[ds]]
             tcps = [cp for cp in cps if cps[cp]]
 
-            se["ComponentGroup"] = json.dumps(cps)
-            se["DataSourceGroup"] = json.dumps(dss)
+            se["ComponentSelection"] = json.dumps(cps)
+            se["DataSourceSelection"] = json.dumps(dss)
             self._cf.dp.SetCommandVariable(["MCPLIST", json.dumps(mcps)])
-            ndss = json.loads(se["DataSourceGroup"])
+            ndss = json.loads(se["DataSourceSelection"])
             common = set(cps) & set(dss)
             self.dump(se)
 
@@ -2569,7 +2575,7 @@ class ProfileManagerTest(unittest.TestCase):
 
         for i in range(20):
             msp = MacroServerPools(10)
-            se = Selector(msp)
+            se = Selector(msp, self.__version)
             se["Door"] = val["Door"]
             se["OrderedChannels"] = json.dumps([])
             db = PyTango.Database()
@@ -2612,10 +2618,10 @@ class ProfileManagerTest(unittest.TestCase):
             mncps = self.__rnd.randint(1, len(self.mycps.keys()) - 1)
             mcps = self.__rnd.sample(set(self.mycps.keys()), mncps)
 
-            se["ComponentGroup"] = json.dumps(cps)
-            se["DataSourceGroup"] = json.dumps(dss)
+            se["ComponentSelection"] = json.dumps(cps)
+            se["DataSourceSelection"] = json.dumps(dss)
             self._cf.dp.SetCommandVariable(["MCPLIST", json.dumps(mcps)])
-            ndss = json.loads(se["DataSourceGroup"])
+            ndss = json.loads(se["DataSourceSelection"])
             common = set(cps) & set(dss)
             self.dump(se)
 
@@ -2638,12 +2644,12 @@ class ProfileManagerTest(unittest.TestCase):
         mgt = ProfileManager(None)
         self.myAssertRaise(Exception, mgt.updateProfile)
 
-        se = Selector(None)
+        se = Selector(None, self.__version)
         mgt = ProfileManager(se)
         self.myAssertRaise(Exception, mgt.updateProfile)
 
         msp = MacroServerPools(10)
-        se = Selector(msp)
+        se = Selector(msp, self.__version)
         se["Door"] = val["Door"]
         se["ConfigDevice"] = val["ConfigDevice"]
         se["WriterDevice"] = val["WriterDevice"]
@@ -2681,12 +2687,12 @@ class ProfileManagerTest(unittest.TestCase):
                    "timer": "%s" % dv,
                    "label": "nxsmntgrp"}
             try:
-                self.assertEqual(json.loads(se["AutomaticComponentGroup"]), {})
-                self.assertEqual(json.loads(se["ComponentGroup"]), {})
-                self.assertEqual(json.loads(se["DataSourceGroup"]), {})
-                self.assertEqual(json.loads(se["HiddenElements"]), [])
+                self.assertEqual(json.loads(se["ComponentPreselection"]), {})
+                self.assertEqual(json.loads(se["ComponentSelection"]), {})
+                self.assertEqual(json.loads(se["DataSourceSelection"]), {})
+                self.assertEqual(json.loads(se["UnplottedComponents"]), [])
                 self.assertEqual(json.loads(se["OrderedChannels"]), [])
-                self.assertEqual(json.loads(se["DataRecord"]), {})
+                self.assertEqual(json.loads(se["UserData"]), {})
                 self.assertEqual(json.loads(se["Timer"]), [ar["name"]])
                 self.assertEqual(se["MntGrp"], "nxsmntgrp")
                 jpcnf = mgt.updateProfile()
@@ -2694,12 +2700,12 @@ class ProfileManagerTest(unittest.TestCase):
                 mgdp = PyTango.DeviceProxy(tmg.new_device_info_writer.name)
                 jcnf = mgdp.Configuration
                 cnf = json.loads(jcnf)
-                self.assertEqual(json.loads(se["AutomaticComponentGroup"]), {})
-                self.assertEqual(json.loads(se["ComponentGroup"]), {})
-                self.assertEqual(json.loads(se["DataSourceGroup"]), {})
-                self.assertEqual(json.loads(se["HiddenElements"]), [])
+                self.assertEqual(json.loads(se["ComponentPreselection"]), {})
+                self.assertEqual(json.loads(se["ComponentSelection"]), {})
+                self.assertEqual(json.loads(se["DataSourceSelection"]), {})
+                self.assertEqual(json.loads(se["UnplottedComponents"]), [])
                 self.assertEqual(json.loads(se["OrderedChannels"]), [])
-                self.assertEqual(json.loads(se["DataRecord"]), {})
+                self.assertEqual(json.loads(se["UserData"]), {})
                 self.assertEqual(json.loads(se["Timer"]), [ar["name"]])
                 self.assertEqual(se["MntGrp"], "nxsmntgrp")
                 self.myAssertDict(smg, cnf)
@@ -2709,12 +2715,12 @@ class ProfileManagerTest(unittest.TestCase):
                 se["ConfigDevice"] = val["ConfigDevice"]
                 se["MntGrp"] = "nxsmntgrp"
                 se.fetchSelection()
-                self.assertEqual(json.loads(se["AutomaticComponentGroup"]), {})
-                self.assertEqual(json.loads(se["ComponentGroup"]), {})
-                self.assertEqual(json.loads(se["DataSourceGroup"]), {})
-                self.assertEqual(json.loads(se["HiddenElements"]), [])
+                self.assertEqual(json.loads(se["ComponentPreselection"]), {})
+                self.assertEqual(json.loads(se["ComponentSelection"]), {})
+                self.assertEqual(json.loads(se["DataSourceSelection"]), {})
+                self.assertEqual(json.loads(se["UnplottedComponents"]), [])
                 self.assertEqual(json.loads(se["OrderedChannels"]), [])
-                self.assertEqual(json.loads(se["DataRecord"]), {})
+                self.assertEqual(json.loads(se["UserData"]), {})
                 self.assertEqual(json.loads(se["Timer"]), [ar["name"]])
                 self.assertEqual(se["MntGrp"], "nxsmntgrp")
             finally:
@@ -2737,12 +2743,12 @@ class ProfileManagerTest(unittest.TestCase):
         mgt = ProfileManager(None)
         self.myAssertRaise(Exception, mgt.updateProfile)
 
-        se = Selector(None)
+        se = Selector(None, self.__version)
         mgt = ProfileManager(se)
         self.myAssertRaise(Exception, mgt.updateProfile)
 
         msp = MacroServerPools(10)
-        se = Selector(msp)
+        se = Selector(msp, self.__version)
         se["Door"] = val["Door"]
         se["ConfigDevice"] = val["ConfigDevice"]
         mgt = ProfileManager(se)
@@ -2811,9 +2817,9 @@ class ProfileManagerTest(unittest.TestCase):
             mcps = [cp for cp in self.__rnd.sample(
                     set(self.mycps.keys()), mncps) if cp not in wrong]
 
-            se["ComponentGroup"] = json.dumps(cps)
-            se["AutomaticComponentGroup"] = json.dumps(acps)
-            se["DataSourceGroup"] = json.dumps(dss)
+            se["ComponentSelection"] = json.dumps(cps)
+            se["ComponentPreselection"] = json.dumps(acps)
+            se["DataSourceSelection"] = json.dumps(dss)
             self._cf.dp.SetCommandVariable(["MCPLIST", json.dumps(mcps)])
 
             records = {}
@@ -2829,7 +2835,7 @@ class ProfileManagerTest(unittest.TestCase):
                 records[str(dsr.record)] = '2345'
 
             se["Timer"] = '["%s"]' % ar["name"]
-            se["DataRecord"] = json.dumps(records)
+            se["UserData"] = json.dumps(records)
 
             tmg = TestMGSetUp.TestMeasurementGroupSetUp(name='nxsmntgrp')
             dv = "/".join(ar["full_name"].split("/")[0:-1])
@@ -2839,17 +2845,17 @@ class ProfileManagerTest(unittest.TestCase):
                    "timer": "%s" % dv,
                    "label": "nxsmntgrp"}
             try:
-                self.myAssertDict(json.loads(se["AutomaticComponentGroup"]),
+                self.myAssertDict(json.loads(se["ComponentPreselection"]),
                                   acps)
-                self.myAssertDict(json.loads(se["ComponentGroup"]), cps)
-                self.myAssertDict(json.loads(se["DataSourceGroup"]), dss)
-                self.assertEqual(json.loads(se["HiddenElements"]), [])
+                self.myAssertDict(json.loads(se["ComponentSelection"]), cps)
+                self.myAssertDict(json.loads(se["DataSourceSelection"]), dss)
+                self.assertEqual(json.loads(se["UnplottedComponents"]), [])
                 self.assertEqual(json.loads(se["OrderedChannels"]), [])
-                self.myAssertDict(json.loads(se["DataRecord"]), records)
+                self.myAssertDict(json.loads(se["UserData"]), records)
                 self.assertEqual(json.loads(se["Timer"]), [ar["name"]])
                 self.assertEqual(se["MntGrp"], "nxsmntgrp")
                 print "COMP", mgt.components()
-                print "ACOMP", mgt.automaticComponents()
+                print "ACOMP", mgt.preselectedComponents()
                 print "MCP", mcps
                 print "DS", mgt.dataSources()
                 print "DDS", mgt.disableDataSources()
@@ -2863,13 +2869,13 @@ class ProfileManagerTest(unittest.TestCase):
                 mgdp = PyTango.DeviceProxy(tmg.new_device_info_writer.name)
                 jcnf = mgdp.Configuration
                 cnf = json.loads(jcnf)
-                self.myAssertDict(json.loads(se["AutomaticComponentGroup"]),
+                self.myAssertDict(json.loads(se["ComponentPreselection"]),
                                   acps)
-                self.myAssertDict(json.loads(se["ComponentGroup"]), cps)
-                self.myAssertDict(json.loads(se["DataSourceGroup"]), dss)
-                self.assertEqual(json.loads(se["HiddenElements"]), [])
+                self.myAssertDict(json.loads(se["ComponentSelection"]), cps)
+                self.myAssertDict(json.loads(se["DataSourceSelection"]), dss)
+                self.assertEqual(json.loads(se["UnplottedComponents"]), [])
                 self.assertEqual(json.loads(se["OrderedChannels"]), [])
-                self.myAssertDict(json.loads(se["DataRecord"]), records)
+                self.myAssertDict(json.loads(se["UserData"]), records)
                 self.assertEqual(json.loads(se["Timer"]), [ar["name"]])
                 self.assertEqual(se["MntGrp"], "nxsmntgrp")
                 self.myAssertDict(smg, cnf)
@@ -2879,13 +2885,13 @@ class ProfileManagerTest(unittest.TestCase):
                 se["ConfigDevice"] = val["ConfigDevice"]
                 se["MntGrp"] = "nxsmntgrp"
                 se.fetchSelection()
-                self.myAssertDict(json.loads(se["AutomaticComponentGroup"]),
+                self.myAssertDict(json.loads(se["ComponentPreselection"]),
                                   acps)
-                self.myAssertDict(json.loads(se["ComponentGroup"]), cps)
-                self.myAssertDict(json.loads(se["DataSourceGroup"]), dss)
-                self.assertEqual(json.loads(se["HiddenElements"]), [])
+                self.myAssertDict(json.loads(se["ComponentSelection"]), cps)
+                self.myAssertDict(json.loads(se["DataSourceSelection"]), dss)
+                self.assertEqual(json.loads(se["UnplottedComponents"]), [])
                 self.assertEqual(json.loads(se["OrderedChannels"]), [])
-                self.myAssertDict(json.loads(se["DataRecord"]), records)
+                self.myAssertDict(json.loads(se["UserData"]), records)
                 self.assertEqual(json.loads(se["Timer"]), [ar["name"]])
                 self.assertEqual(se["MntGrp"], "nxsmntgrp")
             finally:
@@ -2910,12 +2916,12 @@ class ProfileManagerTest(unittest.TestCase):
         mgt = ProfileManager(None)
         self.myAssertRaise(Exception, mgt.updateProfile)
 
-        se = Selector(None)
+        se = Selector(None, self.__version)
         mgt = ProfileManager(se)
         self.myAssertRaise(Exception, mgt.updateProfile)
 
         msp = MacroServerPools(10)
-        se = Selector(msp)
+        se = Selector(msp, self.__version)
         se["Door"] = val["Door"]
         se["ConfigDevice"] = val["ConfigDevice"]
         mgt = ProfileManager(se)
@@ -2970,9 +2976,9 @@ class ProfileManagerTest(unittest.TestCase):
 
             mcps = []
 
-            se["ComponentGroup"] = json.dumps(cps)
-            se["AutomaticComponentGroup"] = json.dumps(acps)
-            se["DataSourceGroup"] = json.dumps(dss)
+            se["ComponentSelection"] = json.dumps(cps)
+            se["ComponentPreselection"] = json.dumps(acps)
+            se["DataSourceSelection"] = json.dumps(dss)
             self._cf.dp.SetCommandVariable(["MCPLIST", json.dumps(mcps)])
 
             records = {}
@@ -2988,7 +2994,7 @@ class ProfileManagerTest(unittest.TestCase):
                 records[str(dsr.record)] = '2345'
 
             se["Timer"] = '["%s"]' % ar["name"]
-            se["DataRecord"] = json.dumps(records)
+            se["UserData"] = json.dumps(records)
 
             tmg = TestMGSetUp.TestMeasurementGroupSetUp(name='nxsmntgrp')
             dv = "/".join(ar["full_name"].split("/")[0:-1])
@@ -2998,17 +3004,17 @@ class ProfileManagerTest(unittest.TestCase):
                    "timer": "%s" % dv,
                    "label": "nxsmntgrp"}
             try:
-                self.myAssertDict(json.loads(se["AutomaticComponentGroup"]),
+                self.myAssertDict(json.loads(se["ComponentPreselection"]),
                                   acps)
-                self.myAssertDict(json.loads(se["ComponentGroup"]), cps)
-                self.myAssertDict(json.loads(se["DataSourceGroup"]), dss)
-                self.assertEqual(json.loads(se["HiddenElements"]), [])
+                self.myAssertDict(json.loads(se["ComponentSelection"]), cps)
+                self.myAssertDict(json.loads(se["DataSourceSelection"]), dss)
+                self.assertEqual(json.loads(se["UnplottedComponents"]), [])
                 self.assertEqual(json.loads(se["OrderedChannels"]), [])
-                self.myAssertDict(json.loads(se["DataRecord"]), records)
+                self.myAssertDict(json.loads(se["UserData"]), records)
                 self.assertEqual(json.loads(se["Timer"]), [ar["name"]])
                 self.assertEqual(se["MntGrp"], "nxsmntgrp")
                 print "COMP", mgt.components()
-                print "ACOMP", mgt.automaticComponents()
+                print "ACOMP", mgt.preselectedComponents()
                 print "MCP", mcps
                 print "DS", mgt.dataSources()
                 self.myAssertRaise(Exception, mgt.updateProfile)
@@ -3032,12 +3038,12 @@ class ProfileManagerTest(unittest.TestCase):
         mgt = ProfileManager(None)
         self.myAssertRaise(Exception, mgt.updateProfile)
 
-        se = Selector(None)
+        se = Selector(None, self.__version)
         mgt = ProfileManager(se)
         self.myAssertRaise(Exception, mgt.updateProfile)
 
         msp = MacroServerPools(10)
-        se = Selector(msp)
+        se = Selector(msp, self.__version)
         se["Door"] = val["Door"]
         se["ConfigDevice"] = val["ConfigDevice"]
         mgt = ProfileManager(se)
@@ -3092,9 +3098,9 @@ class ProfileManagerTest(unittest.TestCase):
 
             mcps = []
 
-            se["ComponentGroup"] = json.dumps(cps)
-            se["AutomaticComponentGroup"] = json.dumps(acps)
-            se["DataSourceGroup"] = json.dumps(dss)
+            se["ComponentSelection"] = json.dumps(cps)
+            se["ComponentPreselection"] = json.dumps(acps)
+            se["DataSourceSelection"] = json.dumps(dss)
             self._cf.dp.SetCommandVariable(["MCPLIST", json.dumps(mcps)])
 
             records = {}
@@ -3110,7 +3116,7 @@ class ProfileManagerTest(unittest.TestCase):
                 records[str(dsr.record)] = '2345'
 
             se["Timer"] = '["%s"]' % ar["name"]
-            se["DataRecord"] = json.dumps(records)
+            se["UserData"] = json.dumps(records)
 
             tmg = TestMGSetUp.TestMeasurementGroupSetUp(name='nxsmntgrp')
             dv = "/".join(ar["full_name"].split("/")[0:-1])
@@ -3120,17 +3126,17 @@ class ProfileManagerTest(unittest.TestCase):
                    "timer": "%s" % dv,
                    "label": "nxsmntgrp"}
             try:
-                self.myAssertDict(json.loads(se["AutomaticComponentGroup"]),
+                self.myAssertDict(json.loads(se["ComponentPreselection"]),
                                   acps)
-                self.myAssertDict(json.loads(se["ComponentGroup"]), cps)
-                self.myAssertDict(json.loads(se["DataSourceGroup"]), dss)
-                self.assertEqual(json.loads(se["HiddenElements"]), [])
+                self.myAssertDict(json.loads(se["ComponentSelection"]), cps)
+                self.myAssertDict(json.loads(se["DataSourceSelection"]), dss)
+                self.assertEqual(json.loads(se["UnplottedComponents"]), [])
                 self.assertEqual(json.loads(se["OrderedChannels"]), [])
-                self.myAssertDict(json.loads(se["DataRecord"]), records)
+                self.myAssertDict(json.loads(se["UserData"]), records)
                 self.assertEqual(json.loads(se["Timer"]), [ar["name"]])
                 self.assertEqual(se["MntGrp"], "nxsmntgrp")
                 print "COMP", mgt.components()
-                print "ACOMP", mgt.automaticComponents()
+                print "ACOMP", mgt.preselectedComponents()
                 print "MCP", mcps
                 print "DS", mgt.dataSources()
                 self.myAssertRaise(Exception, mgt.updateProfile)
@@ -3155,12 +3161,12 @@ class ProfileManagerTest(unittest.TestCase):
         mgt = ProfileManager(None)
         self.myAssertRaise(Exception, mgt.updateProfile)
 
-        se = Selector(None)
+        se = Selector(None, self.__version)
         mgt = ProfileManager(se)
         self.myAssertRaise(Exception, mgt.updateProfile)
 
         msp = MacroServerPools(10)
-        se = Selector(msp)
+        se = Selector(msp, self.__version)
         se["Door"] = val["Door"]
         se["ConfigDevice"] = val["ConfigDevice"]
         mgt = ProfileManager(se)
@@ -3215,9 +3221,9 @@ class ProfileManagerTest(unittest.TestCase):
 
             mcps = []
 
-            se["ComponentGroup"] = json.dumps(cps)
-            se["AutomaticComponentGroup"] = json.dumps(acps)
-            se["DataSourceGroup"] = json.dumps(dss)
+            se["ComponentSelection"] = json.dumps(cps)
+            se["ComponentPreselection"] = json.dumps(acps)
+            se["DataSourceSelection"] = json.dumps(dss)
             self._cf.dp.SetCommandVariable(["MCPLIST", json.dumps(mcps)])
 
             records = {}
@@ -3233,7 +3239,7 @@ class ProfileManagerTest(unittest.TestCase):
                 records[str(dsr.record)] = '2345'
 
             se["Timer"] = '["%s"]' % ar["name"]
-            se["DataRecord"] = json.dumps(records)
+            se["UserData"] = json.dumps(records)
 
             tmg = TestMGSetUp.TestMeasurementGroupSetUp(name='nxsmntgrp')
             dv = "/".join(ar["full_name"].split("/")[0:-1])
@@ -3243,17 +3249,17 @@ class ProfileManagerTest(unittest.TestCase):
                    "timer": "%s" % dv,
                    "label": "nxsmntgrp"}
             try:
-                self.myAssertDict(json.loads(se["AutomaticComponentGroup"]),
+                self.myAssertDict(json.loads(se["ComponentPreselection"]),
                                   acps)
-                self.myAssertDict(json.loads(se["ComponentGroup"]), cps)
-                self.myAssertDict(json.loads(se["DataSourceGroup"]), dss)
-                self.assertEqual(json.loads(se["HiddenElements"]), [])
+                self.myAssertDict(json.loads(se["ComponentSelection"]), cps)
+                self.myAssertDict(json.loads(se["DataSourceSelection"]), dss)
+                self.assertEqual(json.loads(se["UnplottedComponents"]), [])
                 self.assertEqual(json.loads(se["OrderedChannels"]), [])
-                self.myAssertDict(json.loads(se["DataRecord"]), records)
+                self.myAssertDict(json.loads(se["UserData"]), records)
                 self.assertEqual(json.loads(se["Timer"]), [ar["name"]])
                 self.assertEqual(se["MntGrp"], "nxsmntgrp")
                 print "COMP", mgt.components()
-                print "ACOMP", mgt.automaticComponents()
+                print "ACOMP", mgt.preselectedComponents()
                 print "MCP", mcps
                 print "DS", mgt.dataSources()
 #                mgt.updateProfile()
@@ -3279,12 +3285,12 @@ class ProfileManagerTest(unittest.TestCase):
         mgt = ProfileManager(None)
         self.myAssertRaise(Exception, mgt.updateProfile)
 
-        se = Selector(None)
+        se = Selector(None, self.__version)
         mgt = ProfileManager(se)
         self.myAssertRaise(Exception, mgt.updateProfile)
 
         msp = MacroServerPools(10)
-        se = Selector(msp)
+        se = Selector(msp, self.__version)
         se["Door"] = val["Door"]
         se["ConfigDevice"] = val["ConfigDevice"]
         mgt = ProfileManager(se)
@@ -3354,9 +3360,9 @@ class ProfileManagerTest(unittest.TestCase):
             mcps = [cp for cp in self.__rnd.sample(
                     set(self.smycps.keys()), mncps) if cp not in wrong]
 
-            se["ComponentGroup"] = json.dumps(cps)
-            se["AutomaticComponentGroup"] = json.dumps(acps)
-            se["DataSourceGroup"] = json.dumps(dss)
+            se["ComponentSelection"] = json.dumps(cps)
+            se["ComponentPreselection"] = json.dumps(acps)
+            se["DataSourceSelection"] = json.dumps(dss)
             self._cf.dp.SetCommandVariable(["MCPLIST", json.dumps(mcps)])
 
             records = {}
@@ -3372,7 +3378,7 @@ class ProfileManagerTest(unittest.TestCase):
                 records[str(dsr.record)] = '2345'
 
             se["Timer"] = '["%s"]' % ar["name"]
-            se["DataRecord"] = json.dumps(records)
+            se["UserData"] = json.dumps(records)
 
             tmg = TestMGSetUp.TestMeasurementGroupSetUp(name='nxsmntgrp')
             dv = "/".join(ar["full_name"].split("/")[0:-1])
@@ -3383,17 +3389,17 @@ class ProfileManagerTest(unittest.TestCase):
             tgc = {}
 
             try:
-                self.myAssertDict(json.loads(se["AutomaticComponentGroup"]),
+                self.myAssertDict(json.loads(se["ComponentPreselection"]),
                                   acps)
-                self.myAssertDict(json.loads(se["ComponentGroup"]), cps)
-                self.myAssertDict(json.loads(se["DataSourceGroup"]), dss)
-                self.assertEqual(json.loads(se["HiddenElements"]), [])
+                self.myAssertDict(json.loads(se["ComponentSelection"]), cps)
+                self.myAssertDict(json.loads(se["DataSourceSelection"]), dss)
+                self.assertEqual(json.loads(se["UnplottedComponents"]), [])
                 self.assertEqual(json.loads(se["OrderedChannels"]), [])
-                self.myAssertDict(json.loads(se["DataRecord"]), records)
+                self.myAssertDict(json.loads(se["UserData"]), records)
                 self.assertEqual(json.loads(se["Timer"]), [ar["name"]])
                 self.assertEqual(se["MntGrp"], "nxsmntgrp")
 #                print "COMP", mgt.components()
-#                print "ACOMP", mgt.automaticComponents()
+#                print "ACOMP", mgt.preselectedComponents()
 #                print "MCP", mcps
 #                print "DS", mgt.dataSources()
 #                print "DDS", mgt.disableDataSources()
@@ -3410,13 +3416,13 @@ class ProfileManagerTest(unittest.TestCase):
                 mgdp = PyTango.DeviceProxy(tmg.new_device_info_writer.name)
                 jcnf = mgdp.Configuration
                 cnf = json.loads(jcnf)
-                self.myAssertDict(json.loads(se["AutomaticComponentGroup"]),
+                self.myAssertDict(json.loads(se["ComponentPreselection"]),
                                   acps)
-                self.myAssertDict(json.loads(se["ComponentGroup"]), cps)
-                self.myAssertDict(json.loads(se["DataSourceGroup"]), dss)
-                self.assertEqual(json.loads(se["HiddenElements"]), [])
+                self.myAssertDict(json.loads(se["ComponentSelection"]), cps)
+                self.myAssertDict(json.loads(se["DataSourceSelection"]), dss)
+                self.assertEqual(json.loads(se["UnplottedComponents"]), [])
                 self.assertEqual(json.loads(se["OrderedChannels"]), [])
-                self.myAssertDict(json.loads(se["DataRecord"]), records)
+                self.myAssertDict(json.loads(se["UserData"]), records)
                 self.assertEqual(json.loads(se["Timer"]), [ar["name"]])
                 self.assertEqual(se["MntGrp"], "nxsmntgrp")
 #                print "CNF", cnf
@@ -3470,13 +3476,13 @@ class ProfileManagerTest(unittest.TestCase):
                 se["ConfigDevice"] = val["ConfigDevice"]
                 se["MntGrp"] = "nxsmntgrp"
                 se.fetchSelection()
-                self.myAssertDict(json.loads(se["AutomaticComponentGroup"]),
+                self.myAssertDict(json.loads(se["ComponentPreselection"]),
                                   acps)
-                self.myAssertDict(json.loads(se["ComponentGroup"]), cps)
-                self.myAssertDict(json.loads(se["DataSourceGroup"]), dss)
-                self.assertEqual(json.loads(se["HiddenElements"]), [])
+                self.myAssertDict(json.loads(se["ComponentSelection"]), cps)
+                self.myAssertDict(json.loads(se["DataSourceSelection"]), dss)
+                self.assertEqual(json.loads(se["UnplottedComponents"]), [])
                 self.assertEqual(json.loads(se["OrderedChannels"]), [])
-                self.myAssertDict(json.loads(se["DataRecord"]), records)
+                self.myAssertDict(json.loads(se["UserData"]), records)
                 self.assertEqual(json.loads(se["Timer"]), [ar["name"]])
                 self.assertEqual(se["MntGrp"], "nxsmntgrp")
             finally:
@@ -3500,12 +3506,12 @@ class ProfileManagerTest(unittest.TestCase):
         mgt = ProfileManager(None)
         self.myAssertRaise(Exception, mgt.updateProfile)
 
-        se = Selector(None)
+        se = Selector(None, self.__version)
         mgt = ProfileManager(se)
         self.myAssertRaise(Exception, mgt.updateProfile)
 
         msp = MacroServerPools(10)
-        se = Selector(msp)
+        se = Selector(msp, self.__version)
         se["Door"] = val["Door"]
         se["ConfigDevice"] = val["ConfigDevice"]
         mgt = ProfileManager(se)
@@ -3582,9 +3588,9 @@ class ProfileManagerTest(unittest.TestCase):
             for cp in mcps:
                 comps.add(cp)
 
-            se["ComponentGroup"] = json.dumps(cps)
-            se["AutomaticComponentGroup"] = json.dumps(acps)
-            se["DataSourceGroup"] = json.dumps(dss)
+            se["ComponentSelection"] = json.dumps(cps)
+            se["ComponentPreselection"] = json.dumps(acps)
+            se["DataSourceSelection"] = json.dumps(dss)
             self._cf.dp.SetCommandVariable(["MCPLIST", json.dumps(mcps)])
 
             records = {}
@@ -3600,7 +3606,7 @@ class ProfileManagerTest(unittest.TestCase):
                 records[str(dsr.record)] = '2345'
 
             se["Timer"] = '["%s"]' % ar["name"]
-            se["DataRecord"] = json.dumps(records)
+            se["UserData"] = json.dumps(records)
 
             tmg = TestMGSetUp.TestMeasurementGroupSetUp(name='nxsmntgrp')
             dv = "/".join(ar["full_name"].split("/")[0:-1])
@@ -3624,7 +3630,7 @@ class ProfileManagerTest(unittest.TestCase):
 
             lhe = lheds + lhecp
 
-            se["HiddenElements"] = json.dumps(lhe)
+            se["UnplottedComponents"] = json.dumps(lhe)
 
             lhe2 = []
             for el in lhe:
@@ -3639,18 +3645,18 @@ class ProfileManagerTest(unittest.TestCase):
             tgc = {}
 
             try:
-                self.myAssertDict(json.loads(se["AutomaticComponentGroup"]),
+                self.myAssertDict(json.loads(se["ComponentPreselection"]),
                                   acps)
-                self.myAssertDict(json.loads(se["ComponentGroup"]), cps)
-                self.myAssertDict(json.loads(se["DataSourceGroup"]), dss)
-                self.assertEqual(set(json.loads(se["HiddenElements"])),
+                self.myAssertDict(json.loads(se["ComponentSelection"]), cps)
+                self.myAssertDict(json.loads(se["DataSourceSelection"]), dss)
+                self.assertEqual(set(json.loads(se["UnplottedComponents"])),
                                  set(lhe))
                 self.assertEqual(json.loads(se["OrderedChannels"]), [])
-                self.myAssertDict(json.loads(se["DataRecord"]), records)
+                self.myAssertDict(json.loads(se["UserData"]), records)
                 self.assertEqual(json.loads(se["Timer"]), [ar["name"]])
                 self.assertEqual(se["MntGrp"], "nxsmntgrp")
 #                print "COMP", mgt.components()
-#                print "ACOMP", mgt.automaticComponents()
+#                print "ACOMP", mgt.preselectedComponents()
 #                print "MCP", mcps
 #                print "DS", mgt.dataSources()
 #                print "DDS", mgt.disableDataSources()
@@ -3667,14 +3673,14 @@ class ProfileManagerTest(unittest.TestCase):
                 mgdp = PyTango.DeviceProxy(tmg.new_device_info_writer.name)
                 jcnf = mgdp.Configuration
                 cnf = json.loads(jcnf)
-                self.myAssertDict(json.loads(se["AutomaticComponentGroup"]),
+                self.myAssertDict(json.loads(se["ComponentPreselection"]),
                                   acps)
-                self.myAssertDict(json.loads(se["ComponentGroup"]), cps)
-                self.myAssertDict(json.loads(se["DataSourceGroup"]), dss)
-                self.assertEqual(set(json.loads(se["HiddenElements"])),
+                self.myAssertDict(json.loads(se["ComponentSelection"]), cps)
+                self.myAssertDict(json.loads(se["DataSourceSelection"]), dss)
+                self.assertEqual(set(json.loads(se["UnplottedComponents"])),
                                  set(lhe2))
                 self.assertEqual(json.loads(se["OrderedChannels"]), [])
-                self.myAssertDict(json.loads(se["DataRecord"]), records)
+                self.myAssertDict(json.loads(se["UserData"]), records)
                 self.assertEqual(json.loads(se["Timer"]), [ar["name"]])
                 self.assertEqual(se["MntGrp"], "nxsmntgrp")
 #                print "CNF", cnf
@@ -3732,14 +3738,14 @@ class ProfileManagerTest(unittest.TestCase):
                 se["ConfigDevice"] = val["ConfigDevice"]
                 se["MntGrp"] = "nxsmntgrp"
                 se.fetchSelection()
-                self.myAssertDict(json.loads(se["AutomaticComponentGroup"]),
+                self.myAssertDict(json.loads(se["ComponentPreselection"]),
                                   acps)
-                self.myAssertDict(json.loads(se["ComponentGroup"]), cps)
-                self.myAssertDict(json.loads(se["DataSourceGroup"]), dss)
-                self.assertEqual(set(json.loads(se["HiddenElements"])),
+                self.myAssertDict(json.loads(se["ComponentSelection"]), cps)
+                self.myAssertDict(json.loads(se["DataSourceSelection"]), dss)
+                self.assertEqual(set(json.loads(se["UnplottedComponents"])),
                                  set(lhe2))
                 self.assertEqual(json.loads(se["OrderedChannels"]), [])
-                self.myAssertDict(json.loads(se["DataRecord"]), records)
+                self.myAssertDict(json.loads(se["UserData"]), records)
                 self.assertEqual(json.loads(se["Timer"]), [ar["name"]])
                 self.assertEqual(se["MntGrp"], "nxsmntgrp")
             finally:
@@ -3763,12 +3769,12 @@ class ProfileManagerTest(unittest.TestCase):
         mgt = ProfileManager(None)
         self.myAssertRaise(Exception, mgt.updateProfile)
 
-        se = Selector(None)
+        se = Selector(None, self.__version)
         mgt = ProfileManager(se)
         self.myAssertRaise(Exception, mgt.updateProfile)
 
         msp = MacroServerPools(10)
-        se = Selector(msp)
+        se = Selector(msp, self.__version)
         se["Door"] = val["Door"]
         se["ConfigDevice"] = val["ConfigDevice"]
         mgt = ProfileManager(se)
@@ -3882,9 +3888,9 @@ class ProfileManagerTest(unittest.TestCase):
                     for ch in expch:
                         if ch["name"] not in adss.keys():
                             adss[ch["name"]] = False
-                    se["ComponentGroup"] = json.dumps(cps)
-                    se["AutomaticComponentGroup"] = json.dumps(acps)
-                    se["DataSourceGroup"] = json.dumps(dss)
+                    se["ComponentSelection"] = json.dumps(cps)
+                    se["ComponentPreselection"] = json.dumps(acps)
+                    se["DataSourceSelection"] = json.dumps(dss)
                     self._cf.dp.SetCommandVariable(["MCPLIST",
                                                     json.dumps(mcps)])
 
@@ -3902,7 +3908,7 @@ class ProfileManagerTest(unittest.TestCase):
                         records[str(dsr.record)] = '2345'
 
                     se["Timer"] = '["%s"]' % ar["name"]
-                    se["DataRecord"] = json.dumps(records)
+                    se["UserData"] = json.dumps(records)
 
                     tmg = TestMGSetUp.TestMeasurementGroupSetUp(
                         name='nxsmntgrp')
@@ -3913,13 +3919,13 @@ class ProfileManagerTest(unittest.TestCase):
                         ds for ds in chds if not ds.startswith('client')])
 
                     self.myAssertDict(
-                        json.loads(se["AutomaticComponentGroup"]),
+                        json.loads(se["ComponentPreselection"]),
                         acps)
-                    self.myAssertDict(json.loads(se["ComponentGroup"]), cps)
-                    self.myAssertDict(json.loads(se["DataSourceGroup"]), adss)
-                    self.assertEqual(json.loads(se["HiddenElements"]), [])
+                    self.myAssertDict(json.loads(se["ComponentSelection"]), cps)
+                    self.myAssertDict(json.loads(se["DataSourceSelection"]), adss)
+                    self.assertEqual(json.loads(se["UnplottedComponents"]), [])
                     self.assertEqual(json.loads(se["OrderedChannels"]), pdss)
-                    self.myAssertDict(json.loads(se["DataRecord"]), records)
+                    self.myAssertDict(json.loads(se["UserData"]), records)
                     self.assertEqual(json.loads(se["Timer"]), [ar["name"]])
                     self.assertEqual(se["MntGrp"], "nxsmntgrp")
 
@@ -3936,13 +3942,13 @@ class ProfileManagerTest(unittest.TestCase):
                     jcnf = mgdp.Configuration
                     cnf = json.loads(jcnf)
                     self.myAssertDict(
-                        json.loads(se["AutomaticComponentGroup"]),
+                        json.loads(se["ComponentPreselection"]),
                         acps)
-                    self.myAssertDict(json.loads(se["ComponentGroup"]), cps)
-                    self.myAssertDict(json.loads(se["DataSourceGroup"]), adss)
-                    self.assertEqual(json.loads(se["HiddenElements"]), [])
+                    self.myAssertDict(json.loads(se["ComponentSelection"]), cps)
+                    self.myAssertDict(json.loads(se["DataSourceSelection"]), adss)
+                    self.assertEqual(json.loads(se["UnplottedComponents"]), [])
                     self.assertEqual(json.loads(se["OrderedChannels"]), pdss)
-                    self.myAssertDict(json.loads(se["DataRecord"]), records)
+                    self.myAssertDict(json.loads(se["UserData"]), records)
                     self.assertEqual(json.loads(se["Timer"]), [ar["name"]])
                     self.assertEqual(se["MntGrp"], "nxsmntgrp")
                     myctrls = {}
@@ -4000,13 +4006,13 @@ class ProfileManagerTest(unittest.TestCase):
                     se["MntGrp"] = "nxsmntgrp"
                     se.fetchSelection()
                     self.myAssertDict(
-                        json.loads(se["AutomaticComponentGroup"]),
+                        json.loads(se["ComponentPreselection"]),
                         acps)
-                    self.myAssertDict(json.loads(se["ComponentGroup"]), cps)
-                    self.myAssertDict(json.loads(se["DataSourceGroup"]), adss)
-                    self.assertEqual(json.loads(se["HiddenElements"]), [])
+                    self.myAssertDict(json.loads(se["ComponentSelection"]), cps)
+                    self.myAssertDict(json.loads(se["DataSourceSelection"]), adss)
+                    self.assertEqual(json.loads(se["UnplottedComponents"]), [])
                     self.assertEqual(json.loads(se["OrderedChannels"]), pdss)
-                    self.myAssertDict(json.loads(se["DataRecord"]), records)
+                    self.myAssertDict(json.loads(se["UserData"]), records)
                     self.assertEqual(json.loads(se["Timer"]), [ar["name"]])
                     self.assertEqual(se["MntGrp"], "nxsmntgrp")
                 finally:
@@ -4032,12 +4038,12 @@ class ProfileManagerTest(unittest.TestCase):
         mgt = ProfileManager(None)
         self.myAssertRaise(Exception, mgt.updateProfile)
 
-        se = Selector(None)
+        se = Selector(None, self.__version)
         mgt = ProfileManager(se)
         self.myAssertRaise(Exception, mgt.updateProfile)
 
         msp = MacroServerPools(10)
-        se = Selector(msp)
+        se = Selector(msp, self.__version)
         se["Door"] = val["Door"]
         se["ConfigDevice"] = val["ConfigDevice"]
         mgt = ProfileManager(se)
@@ -4157,9 +4163,9 @@ class ProfileManagerTest(unittest.TestCase):
                     for ch in expch:
                         if ch["name"] not in adss.keys():
                             adss[ch["name"]] = False
-                    se["ComponentGroup"] = json.dumps(cps)
-                    se["AutomaticComponentGroup"] = json.dumps(acps)
-                    se["DataSourceGroup"] = json.dumps(dss)
+                    se["ComponentSelection"] = json.dumps(cps)
+                    se["ComponentPreselection"] = json.dumps(acps)
+                    se["DataSourceSelection"] = json.dumps(dss)
                     self._cf.dp.SetCommandVariable(["MCPLIST",
                                                     json.dumps(mcps)])
 
@@ -4177,7 +4183,7 @@ class ProfileManagerTest(unittest.TestCase):
                         records[str(dsr.record)] = '2345'
 
                     se["Timer"] = '["%s"]' % ar["name"]
-                    se["DataRecord"] = json.dumps(records)
+                    se["UserData"] = json.dumps(records)
 
                     tmg = TestMGSetUp.TestMeasurementGroupSetUp(
                         name='nxsmntgrp')
@@ -4202,7 +4208,7 @@ class ProfileManagerTest(unittest.TestCase):
 
                     lhe = lheds + lhecp
 
-                    se["HiddenElements"] = json.dumps(lhe)
+                    se["UnplottedComponents"] = json.dumps(lhe)
 
                     lhe2 = []
                     for el in lhe:
@@ -4220,20 +4226,20 @@ class ProfileManagerTest(unittest.TestCase):
                     print "COMPS", comps
 
 #                    print "COMP", mgt.components()
-#                    print "ACOMP", mgt.automaticComponents()
+#                    print "ACOMP", mgt.preselectedComponents()
 #                    print "MCP", mcps
 #                    print "DS", mgt.dataSources()
 #                    print "DDS", mgt.disableDataSources()
 
                     self.myAssertDict(
-                        json.loads(se["AutomaticComponentGroup"]),
+                        json.loads(se["ComponentPreselection"]),
                         acps)
-                    self.myAssertDict(json.loads(se["ComponentGroup"]), cps)
-                    self.myAssertDict(json.loads(se["DataSourceGroup"]), adss)
-                    self.assertEqual(set(json.loads(se["HiddenElements"])),
+                    self.myAssertDict(json.loads(se["ComponentSelection"]), cps)
+                    self.myAssertDict(json.loads(se["DataSourceSelection"]), adss)
+                    self.assertEqual(set(json.loads(se["UnplottedComponents"])),
                                      set(lhe))
                     self.assertEqual(json.loads(se["OrderedChannels"]), pdss)
-                    self.myAssertDict(json.loads(se["DataRecord"]), records)
+                    self.myAssertDict(json.loads(se["UserData"]), records)
                     self.assertEqual(json.loads(se["Timer"]), [ar["name"]])
                     self.assertEqual(se["MntGrp"], "nxsmntgrp")
 
@@ -4250,14 +4256,14 @@ class ProfileManagerTest(unittest.TestCase):
                     jcnf = mgdp.Configuration
                     cnf = json.loads(jcnf)
                     self.myAssertDict(
-                        json.loads(se["AutomaticComponentGroup"]),
+                        json.loads(se["ComponentPreselection"]),
                         acps)
-                    self.myAssertDict(json.loads(se["ComponentGroup"]), cps)
-                    self.myAssertDict(json.loads(se["DataSourceGroup"]), adss)
-                    self.assertEqual(set(json.loads(se["HiddenElements"])),
+                    self.myAssertDict(json.loads(se["ComponentSelection"]), cps)
+                    self.myAssertDict(json.loads(se["DataSourceSelection"]), adss)
+                    self.assertEqual(set(json.loads(se["UnplottedComponents"])),
                                      set(lhe2))
                     self.assertEqual(json.loads(se["OrderedChannels"]), pdss)
-                    self.myAssertDict(json.loads(se["DataRecord"]), records)
+                    self.myAssertDict(json.loads(se["UserData"]), records)
                     self.assertEqual(json.loads(se["Timer"]), [ar["name"]])
                     self.assertEqual(se["MntGrp"], "nxsmntgrp")
 #                    print "CNF", cnf
@@ -4324,14 +4330,14 @@ class ProfileManagerTest(unittest.TestCase):
                     se["MntGrp"] = "nxsmntgrp"
                     se.fetchSelection()
                     self.myAssertDict(
-                        json.loads(se["AutomaticComponentGroup"]),
+                        json.loads(se["ComponentPreselection"]),
                         acps)
-                    self.myAssertDict(json.loads(se["ComponentGroup"]), cps)
-                    self.myAssertDict(json.loads(se["DataSourceGroup"]), adss)
-                    self.assertEqual(set(json.loads(se["HiddenElements"])),
+                    self.myAssertDict(json.loads(se["ComponentSelection"]), cps)
+                    self.myAssertDict(json.loads(se["DataSourceSelection"]), adss)
+                    self.assertEqual(set(json.loads(se["UnplottedComponents"])),
                                      set(lhe2))
                     self.assertEqual(json.loads(se["OrderedChannels"]), pdss)
-                    self.myAssertDict(json.loads(se["DataRecord"]), records)
+                    self.myAssertDict(json.loads(se["UserData"]), records)
                     self.assertEqual(json.loads(se["Timer"]), [ar["name"]])
                     self.assertEqual(se["MntGrp"], "nxsmntgrp")
                 finally:
@@ -4357,12 +4363,12 @@ class ProfileManagerTest(unittest.TestCase):
         mgt = ProfileManager(None)
         self.myAssertRaise(Exception, mgt.updateProfile)
 
-        se = Selector(None)
+        se = Selector(None, self.__version)
         mgt = ProfileManager(se)
         self.myAssertRaise(Exception, mgt.updateProfile)
 
         msp = MacroServerPools(10)
-        se = Selector(msp)
+        se = Selector(msp, self.__version)
         se["Door"] = val["Door"]
         se["ConfigDevice"] = val["ConfigDevice"]
         se["MntGrp"] = val["MntGrp"]
@@ -4488,9 +4494,9 @@ class ProfileManagerTest(unittest.TestCase):
                     for ch in expch:
                         if ch["name"] not in adss.keys():
                             adss[ch["name"]] = False
-                    se["ComponentGroup"] = json.dumps(cps)
-                    se["AutomaticComponentGroup"] = json.dumps(acps)
-                    se["DataSourceGroup"] = json.dumps(dss)
+                    se["ComponentSelection"] = json.dumps(cps)
+                    se["ComponentPreselection"] = json.dumps(acps)
+                    se["DataSourceSelection"] = json.dumps(dss)
                     self._cf.dp.SetCommandVariable(["MCPLIST",
                                                     json.dumps(mcps)])
 
@@ -4508,7 +4514,7 @@ class ProfileManagerTest(unittest.TestCase):
                         records[str(dsr.record)] = '2345'
 
                     se["Timer"] = '["%s"]' % ar["name"]
-                    se["DataRecord"] = json.dumps(records)
+                    se["UserData"] = json.dumps(records)
 
                     tmg = TestMGSetUp.TestMeasurementGroupSetUp(
                         name='nxsmntgrp2')
@@ -4540,7 +4546,7 @@ class ProfileManagerTest(unittest.TestCase):
 
                     lhe = lheds + lhecp
 
-                    se["HiddenElements"] = json.dumps(lhe)
+                    se["UnplottedComponents"] = json.dumps(lhe)
                     se["OrderedChannels"] = json.dumps(pdss)
 
                     lhe2 = []
@@ -4559,20 +4565,20 @@ class ProfileManagerTest(unittest.TestCase):
 #                    print "COMPS", comps
 
 #                    print "COMP", mgt.components()
-#                    print "ACOMP", mgt.automaticComponents()
+#                    print "ACOMP", mgt.preselectedComponents()
 #                    print "MCP", mcps
 #                    print "DS", mgt.dataSources()
 #                    print "DDS", mgt.disableDataSources()
 
                     self.myAssertDict(
-                        json.loads(se["AutomaticComponentGroup"]),
+                        json.loads(se["ComponentPreselection"]),
                         acps)
-                    self.myAssertDict(json.loads(se["ComponentGroup"]), cps)
-                    self.myAssertDict(json.loads(se["DataSourceGroup"]), adss)
-                    self.assertEqual(set(json.loads(se["HiddenElements"])),
+                    self.myAssertDict(json.loads(se["ComponentSelection"]), cps)
+                    self.myAssertDict(json.loads(se["DataSourceSelection"]), adss)
+                    self.assertEqual(set(json.loads(se["UnplottedComponents"])),
                                      set(lhe))
                     self.assertEqual(json.loads(se["OrderedChannels"]), pdss)
-                    self.myAssertDict(json.loads(se["DataRecord"]), records)
+                    self.myAssertDict(json.loads(se["UserData"]), records)
                     self.assertEqual(json.loads(se["Timer"]), [ar["name"]])
                     self.assertEqual(se["MntGrp"], "nxsmntgrp2")
 
@@ -4589,14 +4595,14 @@ class ProfileManagerTest(unittest.TestCase):
                     jcnf = mgdp.Configuration
                     cnf = json.loads(jcnf)
                     self.myAssertDict(
-                        json.loads(se["AutomaticComponentGroup"]),
+                        json.loads(se["ComponentPreselection"]),
                         acps)
-                    self.myAssertDict(json.loads(se["ComponentGroup"]), cps)
-                    self.myAssertDict(json.loads(se["DataSourceGroup"]), adss)
-                    self.assertEqual(set(json.loads(se["HiddenElements"])),
+                    self.myAssertDict(json.loads(se["ComponentSelection"]), cps)
+                    self.myAssertDict(json.loads(se["DataSourceSelection"]), adss)
+                    self.assertEqual(set(json.loads(se["UnplottedComponents"])),
                                      set(lhe2))
                     self.assertEqual(json.loads(se["OrderedChannels"]), pdss)
-                    self.myAssertDict(json.loads(se["DataRecord"]), records)
+                    self.myAssertDict(json.loads(se["UserData"]), records)
                     self.assertEqual(json.loads(se["Timer"]), [ar["name"]])
                     self.assertEqual(se["MntGrp"], "nxsmntgrp2")
 #                    print "CNF", cnf
@@ -4706,14 +4712,14 @@ class ProfileManagerTest(unittest.TestCase):
                     se["MntGrp"] = "nxsmntgrp2"
                     se.fetchSelection()
                     self.myAssertDict(
-                        json.loads(se["AutomaticComponentGroup"]),
+                        json.loads(se["ComponentPreselection"]),
                         acps)
-                    self.myAssertDict(json.loads(se["ComponentGroup"]), cps)
-                    self.myAssertDict(json.loads(se["DataSourceGroup"]), adss)
-                    self.assertEqual(set(json.loads(se["HiddenElements"])),
+                    self.myAssertDict(json.loads(se["ComponentSelection"]), cps)
+                    self.myAssertDict(json.loads(se["DataSourceSelection"]), adss)
+                    self.assertEqual(set(json.loads(se["UnplottedComponents"])),
                                      set(lhe2))
                     self.assertEqual(json.loads(se["OrderedChannels"]), pdss)
-                    self.myAssertDict(json.loads(se["DataRecord"]), records)
+                    self.myAssertDict(json.loads(se["UserData"]), records)
                     self.assertEqual(json.loads(se["Timer"]), [ar["name"]])
                     self.assertEqual(se["MntGrp"], "nxsmntgrp2")
                 finally:
@@ -4739,12 +4745,12 @@ class ProfileManagerTest(unittest.TestCase):
         mgt = ProfileManager(None)
         self.myAssertRaise(Exception, mgt.updateProfile)
 
-        se = Selector(None)
+        se = Selector(None, self.__version)
         mgt = ProfileManager(se)
         self.myAssertRaise(Exception, mgt.updateProfile)
 
         msp = MacroServerPools(10)
-        se = Selector(msp)
+        se = Selector(msp, self.__version)
         se["Door"] = val["Door"]
         se["ConfigDevice"] = val["ConfigDevice"]
         se["MntGrp"] = val["MntGrp"]
@@ -4871,9 +4877,9 @@ class ProfileManagerTest(unittest.TestCase):
                     for ch in expch:
                         if ch["name"] not in adss.keys():
                             adss[ch["name"]] = False
-                    se["ComponentGroup"] = json.dumps(cps)
-                    se["AutomaticComponentGroup"] = json.dumps(acps)
-                    se["DataSourceGroup"] = json.dumps(dss)
+                    se["ComponentSelection"] = json.dumps(cps)
+                    se["ComponentPreselection"] = json.dumps(acps)
+                    se["DataSourceSelection"] = json.dumps(dss)
                     self._cf.dp.SetCommandVariable(["MCPLIST",
                                                     json.dumps(mcps)])
 
@@ -4891,7 +4897,7 @@ class ProfileManagerTest(unittest.TestCase):
                         records[str(dsr.record)] = '2345'
 
                     se["Timer"] = '["%s"]' % ar["name"]
-                    se["DataRecord"] = json.dumps(records)
+                    se["UserData"] = json.dumps(records)
 
                     tmg = TestMGSetUp.TestMeasurementGroupSetUp(
                         name='mg2')
@@ -4923,7 +4929,7 @@ class ProfileManagerTest(unittest.TestCase):
 
                     lhe = lheds + lhecp
 
-                    se["HiddenElements"] = json.dumps(lhe)
+                    se["UnplottedComponents"] = json.dumps(lhe)
                     se["OrderedChannels"] = json.dumps(pdss)
 
                     lhe2 = []
@@ -4942,20 +4948,20 @@ class ProfileManagerTest(unittest.TestCase):
 #                    print "COMPS", comps
 
 #                    print "COMP", mgt.components()
-#                    print "ACOMP", mgt.automaticComponents()
+#                    print "ACOMP", mgt.preselectedComponents()
 #                    print "MCP", mcps
 #                    print "DS", mgt.dataSources()
 #                    print "DDS", mgt.disableDataSources()
 
                     self.myAssertDict(
-                        json.loads(se["AutomaticComponentGroup"]),
+                        json.loads(se["ComponentPreselection"]),
                         acps)
-                    self.myAssertDict(json.loads(se["ComponentGroup"]), cps)
-                    self.myAssertDict(json.loads(se["DataSourceGroup"]), adss)
-                    self.assertEqual(set(json.loads(se["HiddenElements"])),
+                    self.myAssertDict(json.loads(se["ComponentSelection"]), cps)
+                    self.myAssertDict(json.loads(se["DataSourceSelection"]), adss)
+                    self.assertEqual(set(json.loads(se["UnplottedComponents"])),
                                      set(lhe))
                     self.assertEqual(json.loads(se["OrderedChannels"]), pdss)
-                    self.myAssertDict(json.loads(se["DataRecord"]), records)
+                    self.myAssertDict(json.loads(se["UserData"]), records)
                     self.assertEqual(json.loads(se["Timer"]), [ar["name"]])
                     self.assertEqual(se["MntGrp"], "mg2")
 
@@ -4972,14 +4978,14 @@ class ProfileManagerTest(unittest.TestCase):
                     jcnf = mgdp.Configuration
                     cnf = json.loads(jcnf)
                     self.myAssertDict(
-                        json.loads(se["AutomaticComponentGroup"]),
+                        json.loads(se["ComponentPreselection"]),
                         acps)
-                    self.myAssertDict(json.loads(se["ComponentGroup"]), cps)
-                    self.myAssertDict(json.loads(se["DataSourceGroup"]), adss)
-                    self.assertEqual(set(json.loads(se["HiddenElements"])),
+                    self.myAssertDict(json.loads(se["ComponentSelection"]), cps)
+                    self.myAssertDict(json.loads(se["DataSourceSelection"]), adss)
+                    self.assertEqual(set(json.loads(se["UnplottedComponents"])),
                                      set(lhe2))
                     self.assertEqual(json.loads(se["OrderedChannels"]), pdss)
-                    self.myAssertDict(json.loads(se["DataRecord"]), records)
+                    self.myAssertDict(json.loads(se["UserData"]), records)
                     self.assertEqual(json.loads(se["Timer"]), [ar["name"]])
                     self.assertEqual(se["MntGrp"], "mg2")
 #                    print "CNF", cnf
@@ -5090,14 +5096,14 @@ class ProfileManagerTest(unittest.TestCase):
                     se["MntGrp"] = "mg2"
                     se.fetchSelection()
                     self.myAssertDict(
-                        json.loads(se["AutomaticComponentGroup"]),
+                        json.loads(se["ComponentPreselection"]),
                         acps)
-                    self.myAssertDict(json.loads(se["ComponentGroup"]), cps)
-                    self.myAssertDict(json.loads(se["DataSourceGroup"]), adss)
-                    self.assertEqual(set(json.loads(se["HiddenElements"])),
+                    self.myAssertDict(json.loads(se["ComponentSelection"]), cps)
+                    self.myAssertDict(json.loads(se["DataSourceSelection"]), adss)
+                    self.assertEqual(set(json.loads(se["UnplottedComponents"])),
                                      set(lhe2))
                     self.assertEqual(json.loads(se["OrderedChannels"]), pdss)
-                    self.myAssertDict(json.loads(se["DataRecord"]), records)
+                    self.myAssertDict(json.loads(se["UserData"]), records)
                     self.assertEqual(json.loads(se["Timer"]), [ar["name"]])
                     self.assertEqual(se["MntGrp"], "mg2")
                 finally:
@@ -5123,12 +5129,12 @@ class ProfileManagerTest(unittest.TestCase):
         mgt = ProfileManager(None)
         self.myAssertRaise(Exception, mgt.updateProfile)
 
-        se = Selector(None)
+        se = Selector(None, self.__version)
         mgt = ProfileManager(se)
         self.myAssertRaise(Exception, mgt.updateProfile)
 
         msp = MacroServerPools(10)
-        se = Selector(msp)
+        se = Selector(msp, self.__version)
         se["Door"] = val["Door"]
         se["ConfigDevice"] = val["ConfigDevice"]
         se["MntGrp"] = val["MntGrp"]
@@ -5276,9 +5282,9 @@ class ProfileManagerTest(unittest.TestCase):
                     for ch in expch:
                         if ch["name"] not in adss.keys():
                             adss[ch["name"]] = False
-                    se["ComponentGroup"] = json.dumps(cps)
-                    se["AutomaticComponentGroup"] = json.dumps(acps)
-                    se["DataSourceGroup"] = json.dumps(dss)
+                    se["ComponentSelection"] = json.dumps(cps)
+                    se["ComponentPreselection"] = json.dumps(acps)
+                    se["DataSourceSelection"] = json.dumps(dss)
                     self._cf.dp.SetCommandVariable(["MCPLIST",
                                                     json.dumps(mcps)])
 
@@ -5296,7 +5302,7 @@ class ProfileManagerTest(unittest.TestCase):
                         records[str(dsr.record)] = '2345'
 
                     se["Timer"] = json.dumps(ltimers)
-                    se["DataRecord"] = json.dumps(records)
+                    se["UserData"] = json.dumps(records)
 
                     tmg = TestMGSetUp.TestMeasurementGroupSetUp(
                         name='mg2')
@@ -5330,7 +5336,7 @@ class ProfileManagerTest(unittest.TestCase):
 
                     lhe = lheds + lhecp
 
-                    se["HiddenElements"] = json.dumps(lhe)
+                    se["UnplottedComponents"] = json.dumps(lhe)
                     se["OrderedChannels"] = json.dumps(pdss)
 
                     lhe2 = []
@@ -5349,20 +5355,20 @@ class ProfileManagerTest(unittest.TestCase):
 #                    print "COMPS", comps
 
 #                    print "COMP", mgt.components()
-#                    print "ACOMP", mgt.automaticComponents()
+#                    print "ACOMP", mgt.preselectedComponents()
 #                    print "MCP", mcps
 #                    print "DS", mgt.dataSources()
 #                    print "DDS", mgt.disableDataSources()
 
                     self.myAssertDict(
-                        json.loads(se["AutomaticComponentGroup"]),
+                        json.loads(se["ComponentPreselection"]),
                         acps)
-                    self.myAssertDict(json.loads(se["ComponentGroup"]), cps)
-                    self.myAssertDict(json.loads(se["DataSourceGroup"]), adss)
-                    self.assertEqual(set(json.loads(se["HiddenElements"])),
+                    self.myAssertDict(json.loads(se["ComponentSelection"]), cps)
+                    self.myAssertDict(json.loads(se["DataSourceSelection"]), adss)
+                    self.assertEqual(set(json.loads(se["UnplottedComponents"])),
                                      set(lhe))
                     self.assertEqual(json.loads(se["OrderedChannels"]), pdss)
-                    self.myAssertDict(json.loads(se["DataRecord"]), records)
+                    self.myAssertDict(json.loads(se["UserData"]), records)
                     self.assertEqual(json.loads(se["Timer"]), ltimers)
                     self.assertEqual(se["MntGrp"], "mg2")
 
@@ -5383,14 +5389,14 @@ class ProfileManagerTest(unittest.TestCase):
                     jcnf = mgdp.Configuration
                     cnf = json.loads(jcnf)
                     self.myAssertDict(
-                        json.loads(se["AutomaticComponentGroup"]),
+                        json.loads(se["ComponentPreselection"]),
                         acps)
-                    self.myAssertDict(json.loads(se["ComponentGroup"]), cps)
-                    self.myAssertDict(json.loads(se["DataSourceGroup"]), adss)
-                    self.assertEqual(set(json.loads(se["HiddenElements"])),
+                    self.myAssertDict(json.loads(se["ComponentSelection"]), cps)
+                    self.myAssertDict(json.loads(se["DataSourceSelection"]), adss)
+                    self.assertEqual(set(json.loads(se["UnplottedComponents"])),
                                      set(lhe2))
                     self.assertEqual(json.loads(se["OrderedChannels"]), pdss)
-                    self.myAssertDict(json.loads(se["DataRecord"]), records)
+                    self.myAssertDict(json.loads(se["UserData"]), records)
                     self.assertEqual(json.loads(se["Timer"]), ltimers)
                     self.assertEqual(se["MntGrp"], "mg2")
                     myctrls = {}
@@ -5511,14 +5517,14 @@ class ProfileManagerTest(unittest.TestCase):
                     se["MntGrp"] = "mg2"
                     se.fetchSelection()
                     self.myAssertDict(
-                        json.loads(se["AutomaticComponentGroup"]),
+                        json.loads(se["ComponentPreselection"]),
                         acps)
-                    self.myAssertDict(json.loads(se["ComponentGroup"]), cps)
-                    self.myAssertDict(json.loads(se["DataSourceGroup"]), adss)
-                    self.assertEqual(set(json.loads(se["HiddenElements"])),
+                    self.myAssertDict(json.loads(se["ComponentSelection"]), cps)
+                    self.myAssertDict(json.loads(se["DataSourceSelection"]), adss)
+                    self.assertEqual(set(json.loads(se["UnplottedComponents"])),
                                      set(lhe2))
                     self.assertEqual(json.loads(se["OrderedChannels"]), pdss)
-                    self.myAssertDict(json.loads(se["DataRecord"]), records)
+                    self.myAssertDict(json.loads(se["UserData"]), records)
                     self.assertEqual(json.loads(se["Timer"]), ltimers)
                     self.assertEqual(se["MntGrp"], "mg2")
                 finally:
@@ -5534,7 +5540,7 @@ class ProfileManagerTest(unittest.TestCase):
             simp2.tearDown()
 
     ## updateProfile test
-    def test_updateProfile_mntGrpConfiguration_isMntGrpChanged(self):
+    def test_updateProfile_mntGrpConfiguration_isMntGrpUpdated(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -5547,12 +5553,12 @@ class ProfileManagerTest(unittest.TestCase):
         mgt = ProfileManager(None)
         self.myAssertRaise(Exception, mgt.updateProfile)
 
-        se = Selector(None)
+        se = Selector(None, self.__version)
         mgt = ProfileManager(se)
         self.myAssertRaise(Exception, mgt.updateProfile)
 
         msp = MacroServerPools(10)
-        se = Selector(msp)
+        se = Selector(msp, self.__version)
         se["Door"] = val["Door"]
         se["ConfigDevice"] = val["ConfigDevice"]
         se["MntGrp"] = val["MntGrp"]
@@ -5710,17 +5716,17 @@ class ProfileManagerTest(unittest.TestCase):
                     for ch in expch:
                         if ch["name"] not in adss.keys():
                             adss[ch["name"]] = False
-                    se["ComponentGroup"] = json.dumps(cps)
-                    se["AutomaticComponentGroup"] = json.dumps(acps)
-                    se["DataSourceGroup"] = json.dumps(dss)
-                    se["AutomaticDataSources"] = json.dumps(aadss)
+                    se["ComponentSelection"] = json.dumps(cps)
+                    se["ComponentPreselection"] = json.dumps(acps)
+                    se["DataSourceSelection"] = json.dumps(dss)
+                    se["PreselectedDataSources"] = json.dumps(aadss)
                     se["OptionalComponents"] = json.dumps(ocps)
                     se["InitDataSources"] = json.dumps(indss)
                     se["AppendEntry"] = bool(self.__rnd.randint(0, 1))
                     se["ComponentsFromMntGrp"] = bool(self.__rnd.randint(0, 1))
                     se["DynamicComponents"] = bool(self.__rnd.randint(0, 1))
-                    se["DynamicLinks"] = bool(self.__rnd.randint(0, 1))
-                    se["DynamicPath"] = self.getRandomName(20)
+                    se["DefaultDynamicLinks"] = bool(self.__rnd.randint(0, 1))
+                    se["DefaultDynamicPath"] = self.getRandomName(20)
                     se["TimeZone"] = self.getRandomName(20)
 
                     se["ConfigVariables"] = json.dumps(dict(
@@ -5768,7 +5774,7 @@ class ProfileManagerTest(unittest.TestCase):
                         records[str(dsr.record)] = '2345'
 
                     se["Timer"] = json.dumps(ltimers)
-                    se["DataRecord"] = json.dumps(records)
+                    se["UserData"] = json.dumps(records)
 
                     tmg = TestMGSetUp.TestMeasurementGroupSetUp(
                         name='mg2')
@@ -5802,7 +5808,7 @@ class ProfileManagerTest(unittest.TestCase):
 
                     lhe = lheds + lhecp
 
-                    se["HiddenElements"] = json.dumps(lhe)
+                    se["UnplottedComponents"] = json.dumps(lhe)
                     se["OrderedChannels"] = json.dumps(pdss)
 
                     lhe2 = []
@@ -5821,25 +5827,25 @@ class ProfileManagerTest(unittest.TestCase):
 #                    print "COMPS", comps
 
 #                    print "COMP", mgt.components()
-#                    print "ACOMP", mgt.automaticComponents()
+#                    print "ACOMP", mgt.preselectedComponents()
 #                    print "MCP", mcps
 #                    print "DS", mgt.dataSources()
 #                    print "DDS", mgt.disableDataSources()
 
                     self.myAssertDict(
-                        json.loads(se["AutomaticComponentGroup"]),
+                        json.loads(se["ComponentPreselection"]),
                         acps)
-                    self.myAssertDict(json.loads(se["ComponentGroup"]), cps)
-                    self.myAssertDict(json.loads(se["DataSourceGroup"]), adss)
-                    self.assertEqual(set(json.loads(se["HiddenElements"])),
+                    self.myAssertDict(json.loads(se["ComponentSelection"]), cps)
+                    self.myAssertDict(json.loads(se["DataSourceSelection"]), adss)
+                    self.assertEqual(set(json.loads(se["UnplottedComponents"])),
                                      set(lhe))
                     self.assertEqual(json.loads(se["OrderedChannels"]), pdss)
-                    self.myAssertDict(json.loads(se["DataRecord"]), records)
+                    self.myAssertDict(json.loads(se["UserData"]), records)
                     self.assertEqual(json.loads(se["Timer"]), ltimers)
                     self.assertEqual(se["MntGrp"], "mg2")
                     self.dump(se)
-                    self.assertTrue(mgt.isMntGrpChanged())
-                    self.assertTrue(mgt.isMntGrpChanged())
+                    self.assertTrue(mgt.isMntGrpUpdated())
+                    self.assertTrue(mgt.isMntGrpUpdated())
 
                     res = mgt.cpdescription()
                     mdds = set()
@@ -5854,21 +5860,21 @@ class ProfileManagerTest(unittest.TestCase):
                                 adss[tm] = False
 
                     jpcnf = mgt.updateProfile()
-                    self.assertTrue(not mgt.isMntGrpChanged())
-                    self.assertTrue(not mgt.isMntGrpChanged())
+                    self.assertTrue(not mgt.isMntGrpUpdated())
+                    self.assertTrue(not mgt.isMntGrpUpdated())
                     pcnf = json.loads(jpcnf)
                     mgdp = PyTango.DeviceProxy(tmg.new_device_info_writer.name)
                     jcnf = mgt.mntGrpConfiguration()
                     cnf = json.loads(jcnf)
                     self.myAssertDict(
-                        json.loads(se["AutomaticComponentGroup"]),
+                        json.loads(se["ComponentPreselection"]),
                         acps)
-                    self.myAssertDict(json.loads(se["ComponentGroup"]), cps)
-                    self.myAssertDict(json.loads(se["DataSourceGroup"]), adss)
-                    self.assertEqual(set(json.loads(se["HiddenElements"])),
+                    self.myAssertDict(json.loads(se["ComponentSelection"]), cps)
+                    self.myAssertDict(json.loads(se["DataSourceSelection"]), adss)
+                    self.assertEqual(set(json.loads(se["UnplottedComponents"])),
                                      set(lhe2))
                     self.assertEqual(json.loads(se["OrderedChannels"]), pdss)
-                    self.myAssertDict(json.loads(se["DataRecord"]), records)
+                    self.myAssertDict(json.loads(se["UserData"]), records)
                     self.assertEqual(json.loads(se["Timer"]), ltimers)
                     self.assertEqual(se["MntGrp"], "mg2")
                     myctrls = {}
@@ -5990,30 +5996,30 @@ class ProfileManagerTest(unittest.TestCase):
                     se["Door"] = val["Door"]
                     se["ConfigDevice"] = val["ConfigDevice"]
                     se["MntGrp"] = "mg2"
-                    self.myAssertRaise(Exception, mgt.isMntGrpChanged)
+                    self.myAssertRaise(Exception, mgt.isMntGrpUpdated)
                     mgt.fetchProfile()
 
-                    self.assertTrue(not mgt.isMntGrpChanged())
-                    self.assertTrue(not mgt.isMntGrpChanged())
+                    self.assertTrue(not mgt.isMntGrpUpdated())
+                    self.assertTrue(not mgt.isMntGrpUpdated())
 
                     self.compareToDumpJSON(
-                        se, ["AutomaticComponentGroup",
-                             "ComponentGroup",
-                             "DataSourceGroup",
-                             "HiddenElements",
-                             "AutomaticDataSources"])
+                        se, ["ComponentPreselection",
+                             "ComponentSelection",
+                             "DataSourceSelection",
+                             "UnplottedComponents",
+                             "PreselectedDataSources"])
 
                     self.myAssertDict(
-                        json.loads(se["AutomaticComponentGroup"]), acps)
-                    self.myAssertDict(json.loads(se["ComponentGroup"]), cps)
-                    self.myAssertDict(json.loads(se["DataSourceGroup"]), adss)
+                        json.loads(se["ComponentPreselection"]), acps)
+                    self.myAssertDict(json.loads(se["ComponentSelection"]), cps)
+                    self.myAssertDict(json.loads(se["DataSourceSelection"]), adss)
                     self.assertEqual(
-                        set(json.loads(se["AutomaticDataSources"])),
+                        set(json.loads(se["PreselectedDataSources"])),
                         set(aadss))
-                    self.assertEqual(set(json.loads(se["HiddenElements"])),
+                    self.assertEqual(set(json.loads(se["UnplottedComponents"])),
                                      set(lhe2))
                     self.assertEqual(json.loads(se["OrderedChannels"]), pdss)
-                    self.myAssertDict(json.loads(se["DataRecord"]), records)
+                    self.myAssertDict(json.loads(se["UserData"]), records)
                     self.assertEqual(json.loads(se["Timer"]), ltimers)
                     self.assertEqual(se["MntGrp"], "mg2")
                 finally:
@@ -6081,7 +6087,7 @@ class ProfileManagerTest(unittest.TestCase):
                     for i, mg in enumerate(mgs):
 
                         msp[mg] = MacroServerPools(10)
-                        se[mg] = Selector(msp[mg])
+                        se[mg] = Selector(msp[mg], self.__version)
                         se[mg]["Door"] = val["Door"]
                         se[mg]["ConfigDevice"] = val["ConfigDevice"]
                         se[mg]["MntGrp"] = mg
@@ -6229,11 +6235,11 @@ class ProfileManagerTest(unittest.TestCase):
                         for ch in expch:
                             if ch["name"] not in adss[mg].keys():
                                 adss[mg][ch["name"]] = False
-                        se[mg]["ComponentGroup"] = json.dumps(cps[mg])
-                        se[mg]["AutomaticComponentGroup"] = json.dumps(
+                        se[mg]["ComponentSelection"] = json.dumps(cps[mg])
+                        se[mg]["ComponentPreselection"] = json.dumps(
                             acps[mg])
-                        se[mg]["DataSourceGroup"] = json.dumps(dss)
-                        se[mg]["AutomaticDataSources"] = json.dumps(aadss[mg])
+                        se[mg]["DataSourceSelection"] = json.dumps(dss)
+                        se[mg]["PreselectedDataSources"] = json.dumps(aadss[mg])
                         se[mg]["OptionalComponents"] = json.dumps(ocps)
                         se[mg]["InitDataSources"] = json.dumps(indss)
                         se[mg]["AppendEntry"] = bool(self.__rnd.randint(0, 1))
@@ -6241,8 +6247,8 @@ class ProfileManagerTest(unittest.TestCase):
                             self.__rnd.randint(0, 1))
                         se[mg]["DynamicComponents"] = bool(
                             self.__rnd.randint(0, 1))
-                        se[mg]["DynamicLinks"] = bool(self.__rnd.randint(0, 1))
-                        se[mg]["DynamicPath"] = self.getRandomName(20)
+                        se[mg]["DefaultDynamicLinks"] = bool(self.__rnd.randint(0, 1))
+                        se[mg]["DefaultDynamicPath"] = self.getRandomName(20)
                         se[mg]["TimeZone"] = self.getRandomName(20)
 
                         se[mg]["ConfigVariables"] = json.dumps(dict(
@@ -6290,7 +6296,7 @@ class ProfileManagerTest(unittest.TestCase):
                             records[mg][str(dsr.record)] = '2345'
 
                         se[mg]["Timer"] = json.dumps(ltimers[mg])
-                        se[mg]["DataRecord"] = json.dumps(records[mg])
+                        se[mg]["UserData"] = json.dumps(records[mg])
 
                         tmg[mg] = TestMGSetUp.TestMeasurementGroupSetUp(
                             name=mg)
@@ -6324,7 +6330,7 @@ class ProfileManagerTest(unittest.TestCase):
 
                         lhe = lheds + lhecp
 
-                        se[mg]["HiddenElements"] = json.dumps(lhe)
+                        se[mg]["UnplottedComponents"] = json.dumps(lhe)
                         se[mg]["OrderedChannels"] = json.dumps(pdss[mg])
 
                         lhe2[mg] = []
@@ -6338,25 +6344,25 @@ class ProfileManagerTest(unittest.TestCase):
                                 lhe2[mg].append(el)
 
                         self.myAssertDict(
-                            json.loads(se[mg]["AutomaticComponentGroup"]),
+                            json.loads(se[mg]["ComponentPreselection"]),
                             acps[mg])
                         self.myAssertDict(
-                            json.loads(se[mg]["ComponentGroup"]), cps[mg])
+                            json.loads(se[mg]["ComponentSelection"]), cps[mg])
                         self.myAssertDict(
-                            json.loads(se[mg]["DataSourceGroup"]), adss[mg])
+                            json.loads(se[mg]["DataSourceSelection"]), adss[mg])
                         self.assertEqual(
-                            set(json.loads(se[mg]["HiddenElements"])),
+                            set(json.loads(se[mg]["UnplottedComponents"])),
                             set(lhe))
                         self.assertEqual(
                             json.loads(se[mg]["OrderedChannels"]), pdss[mg])
                         self.myAssertDict(
-                            json.loads(se[mg]["DataRecord"]), records[mg])
+                            json.loads(se[mg]["UserData"]), records[mg])
                         self.assertEqual(
                             json.loads(se[mg]["Timer"]), ltimers[mg])
                         self.assertEqual(se[mg]["MntGrp"], mg)
                         self.dump(se[mg], name=mg)
-                        self.assertTrue(mgt[mg].isMntGrpChanged())
-                        self.assertTrue(mgt[mg].isMntGrpChanged())
+                        self.assertTrue(mgt[mg].isMntGrpUpdated())
+                        self.assertTrue(mgt[mg].isMntGrpUpdated())
 
                         res = mgt[mg].cpdescription()
                         mdds = set()
@@ -6371,27 +6377,27 @@ class ProfileManagerTest(unittest.TestCase):
                                     adss[mg][tm] = False
 
                         jpcnf = mgt[mg].updateProfile()
-                        self.assertTrue(not mgt[mg].isMntGrpChanged())
-                        self.assertTrue(not mgt[mg].isMntGrpChanged())
+                        self.assertTrue(not mgt[mg].isMntGrpUpdated())
+                        self.assertTrue(not mgt[mg].isMntGrpUpdated())
                         pcnf = json.loads(jpcnf)
                         mgdp = PyTango.DeviceProxy(
                             tmg[mg].new_device_info_writer.name)
                         jcnf = mgt[mg].mntGrpConfiguration()
                         cnf = json.loads(jcnf)
                         self.myAssertDict(
-                            json.loads(se[mg]["AutomaticComponentGroup"]),
+                            json.loads(se[mg]["ComponentPreselection"]),
                             acps[mg])
                         self.myAssertDict(
-                            json.loads(se[mg]["ComponentGroup"]), cps[mg])
+                            json.loads(se[mg]["ComponentSelection"]), cps[mg])
                         self.myAssertDict(
-                            json.loads(se[mg]["DataSourceGroup"]), adss[mg])
+                            json.loads(se[mg]["DataSourceSelection"]), adss[mg])
                         self.assertEqual(
-                            set(json.loads(se[mg]["HiddenElements"])),
+                            set(json.loads(se[mg]["UnplottedComponents"])),
                             set(lhe2[mg]))
                         self.assertEqual(
                             json.loads(se[mg]["OrderedChannels"]), pdss[mg])
                         self.myAssertDict(
-                            json.loads(se[mg]["DataRecord"]), records[mg])
+                            json.loads(se[mg]["UserData"]), records[mg])
                         self.assertEqual(
                             json.loads(se[mg]["Timer"]), ltimers[mg])
                         self.assertEqual(se[mg]["MntGrp"], mg)
@@ -6515,32 +6521,32 @@ class ProfileManagerTest(unittest.TestCase):
                         se[mg]["Door"] = val["Door"]
                         se[mg]["ConfigDevice"] = val["ConfigDevice"]
                         se[mg]["MntGrp"] = mg
-                        self.myAssertRaise(Exception, mgt[mg].isMntGrpChanged)
+                        self.myAssertRaise(Exception, mgt[mg].isMntGrpUpdated)
                         mgt[mg].fetchProfile()
 
-                        self.assertTrue(not mgt[mg].isMntGrpChanged())
-                        self.assertTrue(not mgt[mg].isMntGrpChanged())
+                        self.assertTrue(not mgt[mg].isMntGrpUpdated())
+                        self.assertTrue(not mgt[mg].isMntGrpUpdated())
 
                         self.compareToDumpJSON(
                             se[mg],
-                            ["DataSourceGroup",
-                             "HiddenElements",
-                             "AutomaticDataSources",
-                             "HiddenElements"],
+                            ["DataSourceSelection",
+                             "UnplottedComponents",
+                             "PreselectedDataSources",
+                             "UnplottedComponents"],
                             name=mg)
 
                         self.myAssertDict(
-                            json.loads(se[mg]["DataSourceGroup"]), adss[mg])
+                            json.loads(se[mg]["DataSourceSelection"]), adss[mg])
                         self.assertEqual(
-                            set(json.loads(se[mg]["AutomaticDataSources"])),
+                            set(json.loads(se[mg]["PreselectedDataSources"])),
                             set(aadss[mg]))
                         self.assertEqual(
-                            set(json.loads(se[mg]["HiddenElements"])),
+                            set(json.loads(se[mg]["UnplottedComponents"])),
                             set(lhe2[mg]))
                         self.assertEqual(
                             json.loads(se[mg]["OrderedChannels"]), pdss[mg])
                         self.myAssertDict(
-                            json.loads(se[mg]["DataRecord"]), records[mg])
+                            json.loads(se[mg]["UserData"]), records[mg])
                         self.assertEqual(
                             json.loads(se[mg]["Timer"]), ltimers[mg])
                         self.assertEqual(se[mg]["MntGrp"], mg)
@@ -6549,21 +6555,21 @@ class ProfileManagerTest(unittest.TestCase):
                     mg1, mg2, mg3, mg4 = tuple(self.__rnd.sample(mgs, 4))
 
                     lmsp = MacroServerPools(10)
-                    lse = Selector(lmsp)
+                    lse = Selector(lmsp, self.__version)
                     lse["Door"] = val["Door"]
                     lse["ConfigDevice"] = val["ConfigDevice"]
                     # switch from empty profile to mg1
                     lse["MntGrp"] = mg1
                     lmgt = ProfileManager(lse)
-                    self.myAssertRaise(Exception, lmgt.isMntGrpChanged)
+                    self.myAssertRaise(Exception, lmgt.isMntGrpUpdated)
 
                     lmgt.switchProfile(False)
 
                     self.compareToDumpJSON(
                         lse, [
-                            "DataSourceGroup",
-                            "HiddenElements",
-                            "AutomaticDataSources",
+                            "DataSourceSelection",
+                            "UnplottedComponents",
+                            "PreselectedDataSources",
                             "Timer"
                         ],
                         name=mg1)
@@ -6573,14 +6579,14 @@ class ProfileManagerTest(unittest.TestCase):
                     self.myAssertDict(tmpcf, ltmpcf)
 
                     self.assertEqual(
-                        set(json.loads(lse["AutomaticDataSources"])),
+                        set(json.loads(lse["PreselectedDataSources"])),
                         set(aadss[mg1]))
                     self.myAssertDict(
-                        json.loads(lse["DataSourceGroup"]), adss[mg1])
+                        json.loads(lse["DataSourceSelection"]), adss[mg1])
                     self.assertEqual(
                         json.loads(lse["OrderedChannels"]), pdss[mg1])
                     self.myAssertDict(
-                        json.loads(lse["DataRecord"]), records[mg1])
+                        json.loads(lse["UserData"]), records[mg1])
                     self.assertEqual(
                         json.loads(lse["Timer"])[0], ltimers[mg1][0])
                     self.assertEqual(
@@ -6591,12 +6597,12 @@ class ProfileManagerTest(unittest.TestCase):
 
                     # import mntgrp another defined by selector MntGrp
                     lse["MntGrp"] = mg2
-                    self.assertTrue(lmgt.isMntGrpChanged())
-                    self.assertTrue(lmgt.isMntGrpChanged())
+                    self.assertTrue(lmgt.isMntGrpUpdated())
+                    self.assertTrue(lmgt.isMntGrpUpdated())
 
                     lmgt.importMntGrp()
-                    self.assertTrue(lmgt.isMntGrpChanged())
-                    self.assertTrue(lmgt.isMntGrpChanged())
+                    self.assertTrue(lmgt.isMntGrpUpdated())
+                    self.assertTrue(lmgt.isMntGrpUpdated())
 
                     tmpcf1 = json.loads(mgt[mg1].mntGrpConfiguration())
                     tmpcf2 = json.loads(mgt[mg2].mntGrpConfiguration())
@@ -6605,16 +6611,16 @@ class ProfileManagerTest(unittest.TestCase):
                     self.myAssertDict(tmpcf2, ltmpcf)
                     self.compareToDumpJSON(
                         se[mg2],
-                        ["DataSourceGroup",
-                         "HiddenElements",
-                         "AutomaticDataSources"],
+                        ["DataSourceSelection",
+                         "UnplottedComponents",
+                         "PreselectedDataSources"],
                         name=mg2)
 
                     self.compareToDumpJSON(
                         lse,
-                        ["DataSourceGroup",
-                         "HiddenElements",
-                         "AutomaticDataSources",
+                        ["DataSourceSelection",
+                         "UnplottedComponents",
+                         "PreselectedDataSources",
                          "Timer",
                          "MntGrp"],
                         name=mg1)
@@ -6624,12 +6630,12 @@ class ProfileManagerTest(unittest.TestCase):
                     self.myAssertDict(tmpcf, ltmpcf)
 
                     self.assertEqual(
-                        set(json.loads(lse["AutomaticDataSources"])),
+                        set(json.loads(lse["PreselectedDataSources"])),
                         set(aadss[mg1]))
                     self.assertEqual(
                         json.loads(lse["OrderedChannels"]), pdss[mg1])
                     self.myAssertDict(
-                        json.loads(lse["DataRecord"]), records[mg1])
+                        json.loads(lse["UserData"]), records[mg1])
 
                     self.assertEqual(
                         json.loads(lse["Timer"])[0], ltimers[mg2][0])
@@ -6637,16 +6643,16 @@ class ProfileManagerTest(unittest.TestCase):
                         set(json.loads(lse["Timer"])), set(ltimers[mg2]))
                     self.assertEqual(lse["MntGrp"], mg2)
 
-                    self.myAssertDict(json.loads(se[mg1]["DataSourceGroup"]),
+                    self.myAssertDict(json.loads(se[mg1]["DataSourceSelection"]),
                                       adss[mg1])
-                    self.myAssertDict(json.loads(se[mg2]["DataSourceGroup"]),
+                    self.myAssertDict(json.loads(se[mg2]["DataSourceSelection"]),
                                       adss[mg2])
 
                     self.assertEqual(
-                        set(json.loads(se[mg1]["HiddenElements"])),
+                        set(json.loads(se[mg1]["UnplottedComponents"])),
                         set(lhe2[mg1]))
                     self.assertEqual(
-                        set(json.loads(se[mg2]["HiddenElements"])),
+                        set(json.loads(se[mg2]["UnplottedComponents"])),
                         set(lhe2[mg2]))
 
                     ladss = {}
@@ -6698,7 +6704,7 @@ class ProfileManagerTest(unittest.TestCase):
                                 llhe.remove(tm)
                     for tm in json.loads(se[mg1]["Timer"]):
                         if tm in ladss:
-                            if tm in json.loads(se[mg2]["HiddenElements"]):
+                            if tm in json.loads(se[mg2]["UnplottedComponents"]):
                                 ladss[tm] = False
                                 if tm not in json.loads(se[mg2]["Timer"]):
                                     if tm in llhe:
@@ -6709,9 +6715,9 @@ class ProfileManagerTest(unittest.TestCase):
                     print "LT", json.loads(lse["Timer"])
                     # ???
                     self.myAssertDict(
-                        json.loads(lse["DataSourceGroup"]), ladss)
+                        json.loads(lse["DataSourceSelection"]), ladss)
                     # ???
-                    self.assertEqual(set(json.loads(lse["HiddenElements"])),
+                    self.assertEqual(set(json.loads(lse["UnplottedComponents"])),
                                      set(llhe))
 
                     # import mntgrp mg2 (with content mg1)
@@ -6727,8 +6733,8 @@ class ProfileManagerTest(unittest.TestCase):
                         tmg[mg2].new_device_info_writer.name)
                     print "name", tmg[mg2].new_device_info_writer.name
                     mgdp.Configuration = json.dumps(tmpcf)
-                    self.assertTrue(lmgt.isMntGrpChanged())
-                    self.assertTrue(lmgt.isMntGrpChanged())
+                    self.assertTrue(lmgt.isMntGrpUpdated())
+                    self.assertTrue(lmgt.isMntGrpUpdated())
 
                     tmpcf1 = json.loads(mgt[mg1].mntGrpConfiguration())
                     tmpcf2 = json.loads(mgt[mg2].mntGrpConfiguration())
@@ -6741,8 +6747,8 @@ class ProfileManagerTest(unittest.TestCase):
 
                     ltmpcf2 = json.loads(lmgt.mntGrpConfiguration())
                     if not Utils.compareDict(ltmpcf2, ltmpcf):
-                        self.assertTrue(lmgt.isMntGrpChanged())
-                        self.assertTrue(lmgt.isMntGrpChanged())
+                        self.assertTrue(lmgt.isMntGrpUpdated())
+                        self.assertTrue(lmgt.isMntGrpUpdated())
 
                     tmpcf1 = json.loads(mgt[mg1].mntGrpConfiguration())
                     tmpcf2 = json.loads(mgt[mg2].mntGrpConfiguration())
@@ -6752,42 +6758,42 @@ class ProfileManagerTest(unittest.TestCase):
 
                     self.compareToDumpJSON(
                         lse,
-                        ["AutomaticComponentGroup",
-                         "ComponentGroup",
-                         "DataSourceGroup",
-                         "HiddenElements",
-                         "AutomaticDataSources",
+                        ["ComponentPreselection",
+                         "ComponentSelection",
+                         "DataSourceSelection",
+                         "UnplottedComponents",
+                         "PreselectedDataSources",
                          "Timer",
                          "MntGrp"],
                         name=mg1)
 
                     self.compareToDump(
                         se[mg2],
-                        ["AutomaticComponentGroup",
-                         "ComponentGroup",
-                         "DataSourceGroup",
-                         "HiddenElements",
-                         "AutomaticDataSources",
+                        ["ComponentPreselection",
+                         "ComponentSelection",
+                         "DataSourceSelection",
+                         "UnplottedComponents",
+                         "PreselectedDataSources",
                          "Timer"],
                         name=mg2)
 
                     self.myAssertDict(
-                        json.loads(se[mg2]["AutomaticComponentGroup"]),
+                        json.loads(se[mg2]["ComponentPreselection"]),
                         acps[mg2])
                     self.myAssertDict(
-                        json.loads(se[mg2]["ComponentGroup"]),
+                        json.loads(se[mg2]["ComponentSelection"]),
                         cps[mg2])
                     self.myAssertDict(
-                        json.loads(se[mg2]["DataSourceGroup"]), adss[mg2])
+                        json.loads(se[mg2]["DataSourceSelection"]), adss[mg2])
                     self.assertEqual(
-                        set(json.loads(se[mg2]["AutomaticDataSources"])),
+                        set(json.loads(se[mg2]["PreselectedDataSources"])),
                         set(aadss[mg2]))
                     self.assertEqual(
-                        set(json.loads(se[mg2]["HiddenElements"])),
+                        set(json.loads(se[mg2]["UnplottedComponents"])),
                         set(lhe2[mg2]))
                     self.assertEqual(
                         json.loads(se[mg2]["OrderedChannels"]), pdss[mg2])
-                    self.myAssertDict(json.loads(se[mg2]["DataRecord"]),
+                    self.myAssertDict(json.loads(se[mg2]["UserData"]),
                                       records[mg2])
                     self.assertEqual(
                         json.loads(se[mg2]["Timer"]), ltimers[mg2])
@@ -6818,15 +6824,15 @@ class ProfileManagerTest(unittest.TestCase):
                     self.compareToDumpJSON(
                         lse,
                         [
-                            "DataSourceGroup",
-                            "HiddenElements",
-                            "AutomaticDataSources",
+                            "DataSourceSelection",
+                            "UnplottedComponents",
+                            "PreselectedDataSources",
                             "Timer"],
                         name=mg3)
-                    self.myAssertDict(json.loads(lse["DataSourceGroup"]),
+                    self.myAssertDict(json.loads(lse["DataSourceSelection"]),
                                       adss[mg3])
                     self.assertEqual(
-                        set(json.loads(lse["AutomaticDataSources"])),
+                        set(json.loads(lse["PreselectedDataSources"])),
                         set(aadss[mg3]))
 
                     mylhe = set(lhe2[mg3])
@@ -6837,11 +6843,11 @@ class ProfileManagerTest(unittest.TestCase):
                                     mylhe.remove(tm)
 
                     self.assertEqual(
-                        set(json.loads(lse["HiddenElements"])),
+                        set(json.loads(lse["UnplottedComponents"])),
                         mylhe)
                     self.assertEqual(json.loads(lse["OrderedChannels"]),
                                      pdss[mg3])
-                    self.myAssertDict(json.loads(lse["DataRecord"]),
+                    self.myAssertDict(json.loads(lse["UserData"]),
                                       records[mg3])
                     self.assertEqual(json.loads(lse["Timer"])[0],
                                      ltimers[mg3][0])
@@ -6851,8 +6857,8 @@ class ProfileManagerTest(unittest.TestCase):
 
                     # switch to nonexisting active profile
 
-#                    self.assertTrue(lmgt.isMntGrpChanged())
-#                    self.assertTrue(lmgt.isMntGrpChanged())
+#                    self.assertTrue(lmgt.isMntGrpUpdated())
+#                    self.assertTrue(lmgt.isMntGrpUpdated())
                     wmg = "wrong_mg"
                     lse["MntGrp"] = mg3
                     MSUtils.setEnv('ActiveMntGrp', wmg, self._ms.ms.keys()[0])
@@ -6864,13 +6870,13 @@ class ProfileManagerTest(unittest.TestCase):
                     self.compareToDumpJSON(
                         lse,
                         [
-                            "DataSourceGroup",
-                            "HiddenElements",
-                            "AutomaticDataSources",
+                            "DataSourceSelection",
+                            "UnplottedComponents",
+                            "PreselectedDataSources",
                             "Timer",
                             "MntGrp"],
                         name=mg3)
-                    mydsg = dict(json.loads(lse["DataSourceGroup"]))
+                    mydsg = dict(json.loads(lse["DataSourceSelection"]))
                     for ds in self.smychsXX.keys():
                         if ds in expch:
                             mydsg[ds] = False
@@ -6879,17 +6885,17 @@ class ProfileManagerTest(unittest.TestCase):
                         if ds in mylhe2:
                             mylhe2.remove(ds)
 
-                    self.myAssertDict(json.loads(lse["DataSourceGroup"]),
+                    self.myAssertDict(json.loads(lse["DataSourceSelection"]),
                                       mydsg)
                     self.assertEqual(
-                        set(json.loads(lse["AutomaticDataSources"])),
+                        set(json.loads(lse["PreselectedDataSources"])),
                         set(aadss[mg3]))
                     self.assertEqual(
-                        set(json.loads(lse["HiddenElements"])),
+                        set(json.loads(lse["UnplottedComponents"])),
                         mylhe2)
                     self.assertEqual(json.loads(lse["OrderedChannels"]),
                                      pdss[mg3])
-                    self.myAssertDict(json.loads(lse["DataRecord"]),
+                    self.myAssertDict(json.loads(lse["UserData"]),
                                       records[mg3])
                     self.assertEqual(json.loads(lse["Timer"])[0],
                                      ltimers[mg3][0])
@@ -6899,8 +6905,8 @@ class ProfileManagerTest(unittest.TestCase):
 
                     # switch to active profile mg3
                     lse["MntGrp"] = mg2
-                    self.assertTrue(lmgt.isMntGrpChanged())
-                    self.assertTrue(lmgt.isMntGrpChanged())
+                    self.assertTrue(lmgt.isMntGrpUpdated())
+                    self.assertTrue(lmgt.isMntGrpUpdated())
                     MSUtils.setEnv('ActiveMntGrp', mg3, self._ms.ms.keys()[0])
 
                     tmpcf1 = json.loads(mgt[mg1].mntGrpConfiguration())
@@ -6924,23 +6930,23 @@ class ProfileManagerTest(unittest.TestCase):
                     self.compareToDumpJSON(
                         lse,
                         [
-                            "DataSourceGroup",
-                            "HiddenElements",
-                            "AutomaticDataSources",
+                            "DataSourceSelection",
+                            "UnplottedComponents",
+                            "PreselectedDataSources",
                             "Timer"],
                         name=mg3)
-                    self.myAssertDict(json.loads(lse["DataSourceGroup"]),
+                    self.myAssertDict(json.loads(lse["DataSourceSelection"]),
                                       adss[mg3])
                     self.assertEqual(
-                        set(json.loads(lse["AutomaticDataSources"])),
+                        set(json.loads(lse["PreselectedDataSources"])),
                         set(aadss[mg3]))
 
                     self.assertEqual(
-                        set(json.loads(lse["HiddenElements"])),
+                        set(json.loads(lse["UnplottedComponents"])),
                         mylhe)
                     self.assertEqual(json.loads(lse["OrderedChannels"]),
                                      pdss[mg3])
-                    self.myAssertDict(json.loads(lse["DataRecord"]),
+                    self.myAssertDict(json.loads(lse["UserData"]),
                                       records[mg3])
                     self.assertEqual(json.loads(lse["Timer"])[0],
                                      ltimers[mg3][0])
@@ -6951,8 +6957,8 @@ class ProfileManagerTest(unittest.TestCase):
                     # try switch to unnamed active profile
                     # and then to selector mg3
 
-#                    self.assertTrue(lmgt.isMntGrpChanged())
-#                    self.assertTrue(lmgt.isMntGrpChanged())
+#                    self.assertTrue(lmgt.isMntGrpUpdated())
+#                    self.assertTrue(lmgt.isMntGrpUpdated())
                     wmg = ""
                     lse["MntGrp"] = mg3
                     MSUtils.setEnv('ActiveMntGrp', wmg, self._ms.ms.keys()[0])
@@ -6972,23 +6978,23 @@ class ProfileManagerTest(unittest.TestCase):
                     self.compareToDumpJSON(
                         lse,
                         [
-                            "DataSourceGroup",
-                            "HiddenElements",
-                            "AutomaticDataSources",
+                            "DataSourceSelection",
+                            "UnplottedComponents",
+                            "PreselectedDataSources",
                             "Timer"],
                         name=mg3)
-                    self.myAssertDict(json.loads(lse["DataSourceGroup"]),
+                    self.myAssertDict(json.loads(lse["DataSourceSelection"]),
                                       adss[mg3])
                     self.assertEqual(
-                        set(json.loads(lse["AutomaticDataSources"])),
+                        set(json.loads(lse["PreselectedDataSources"])),
                         set(aadss[mg3]))
 
                     self.assertEqual(
-                        set(json.loads(lse["HiddenElements"])),
+                        set(json.loads(lse["UnplottedComponents"])),
                         mylhe)
                     self.assertEqual(json.loads(lse["OrderedChannels"]),
                                      pdss[mg3])
-                    self.myAssertDict(json.loads(lse["DataRecord"]),
+                    self.myAssertDict(json.loads(lse["UserData"]),
                                       records[mg3])
                     self.assertEqual(json.loads(lse["Timer"])[0],
                                      ltimers[mg3][0])
@@ -6999,8 +7005,8 @@ class ProfileManagerTest(unittest.TestCase):
                     # try switch to unnamed active profile
                     # and then to selector mg3
 
-#                    self.assertTrue(lmgt.isMntGrpChanged())
-#                    self.assertTrue(lmgt.isMntGrpChanged())
+#                    self.assertTrue(lmgt.isMntGrpUpdated())
+#                    self.assertTrue(lmgt.isMntGrpUpdated())
                     wmg = ""
                     lse["MntGrp"] = mg3
                     MSUtils.usetEnv('ActiveMntGrp', self._ms.ms.keys()[0])
@@ -7017,23 +7023,23 @@ class ProfileManagerTest(unittest.TestCase):
                     self.compareToDumpJSON(
                         lse,
                         [
-                            "DataSourceGroup",
-                            "HiddenElements",
-                            "AutomaticDataSources",
+                            "DataSourceSelection",
+                            "UnplottedComponents",
+                            "PreselectedDataSources",
                             "Timer"],
                         name=mg3)
-                    self.myAssertDict(json.loads(lse["DataSourceGroup"]),
+                    self.myAssertDict(json.loads(lse["DataSourceSelection"]),
                                       adss[mg3])
                     self.assertEqual(
-                        set(json.loads(lse["AutomaticDataSources"])),
+                        set(json.loads(lse["PreselectedDataSources"])),
                         set(aadss[mg3]))
 
                     self.assertEqual(
-                        set(json.loads(lse["HiddenElements"])),
+                        set(json.loads(lse["UnplottedComponents"])),
                         mylhe)
                     self.assertEqual(json.loads(lse["OrderedChannels"]),
                                      pdss[mg3])
-                    self.myAssertDict(json.loads(lse["DataRecord"]),
+                    self.myAssertDict(json.loads(lse["UserData"]),
                                       records[mg3])
                     self.assertEqual(json.loads(lse["Timer"])[0],
                                      ltimers[mg3][0])
@@ -7057,23 +7063,23 @@ class ProfileManagerTest(unittest.TestCase):
                     self.compareToDumpJSON(
                         lse,
                         [
-                            "DataSourceGroup",
-                            "HiddenElements",
-                            "AutomaticDataSources",
+                            "DataSourceSelection",
+                            "UnplottedComponents",
+                            "PreselectedDataSources",
                             "Timer", "MntGrp"],
                         name=mg3)
-                    self.myAssertDict(json.loads(lse["DataSourceGroup"]),
+                    self.myAssertDict(json.loads(lse["DataSourceSelection"]),
                                       adss[mg3])
                     self.assertEqual(
-                        set(json.loads(lse["AutomaticDataSources"])),
+                        set(json.loads(lse["PreselectedDataSources"])),
                         set(aadss[mg3]))
 
                     self.assertEqual(
-                        set(json.loads(lse["HiddenElements"])),
+                        set(json.loads(lse["UnplottedComponents"])),
                         mylhe)
                     self.assertEqual(json.loads(lse["OrderedChannels"]),
                                      pdss[mg3])
-                    self.myAssertDict(json.loads(lse["DataRecord"]),
+                    self.myAssertDict(json.loads(lse["UserData"]),
                                       records[mg3])
                     self.assertEqual(json.loads(lse["Timer"])[0],
                                      ltimers[mg3][0])
@@ -7088,8 +7094,8 @@ class ProfileManagerTest(unittest.TestCase):
                         mg4 not in self._cf.dp.availableSelections())
                     self.assertTrue(mg4 in lmgt.availableMntGrps())
                     if j % 2:
-                        lmgt.defaultAutomaticComponents = \
-                            list(json.loads(lse["AutomaticComponentGroup"]
+                        lmgt.defaultPreselectedComponents = \
+                            list(json.loads(lse["ComponentPreselection"]
                                             ).keys())
 
                     lmgt.fetchProfile()
@@ -7107,18 +7113,18 @@ class ProfileManagerTest(unittest.TestCase):
                         lse,
                         [
                             "InitDataSources",
-                            "AutomaticDataSources",
-                            "AutomaticComponentGroup",
+                            "PreselectedDataSources",
+                            "ComponentPreselection",
                             "Timer",
                             "MntGrp",
 
-                            "ComponentGroup",
-                            "DataSourceGroup",
-                            "HiddenElements",
+                            "ComponentSelection",
+                            "DataSourceSelection",
+                            "UnplottedComponents",
                         ],
                         name=mg3)
                     self.assertEqual(
-                        set(json.loads(lse["AutomaticDataSources"])),
+                        set(json.loads(lse["PreselectedDataSources"])),
                         set(aadss[mg3]))
                     self.assertEqual(
                         set(json.loads(lse["InitDataSources"])),
@@ -7138,22 +7144,22 @@ class ProfileManagerTest(unittest.TestCase):
                         for cp in myacps.keys():
                             myacps[cp] = cp in cpgood
                         self.myAssertDict(
-                            json.loads(lse["AutomaticComponentGroup"]),
+                            json.loads(lse["ComponentPreselection"]),
                             myacps)
                     else:
                         self.myAssertDict(
-                            json.loads(lse["AutomaticComponentGroup"]),
+                            json.loads(lse["ComponentPreselection"]),
                             {})
 
                     mycps = dict(cps[mg3])
                     for cp in mycps:
                         mycps[cp] = False
                     self.myAssertDict(
-                        json.loads(lse["ComponentGroup"]), mycps)
+                        json.loads(lse["ComponentSelection"]), mycps)
 
                     self.assertEqual(json.loads(lse["OrderedChannels"]),
                                      pdss[mg3])
-                    self.myAssertDict(json.loads(lse["DataRecord"]),
+                    self.myAssertDict(json.loads(lse["UserData"]),
                                       records[mg3])
                     self.assertEqual(json.loads(lse["Timer"])[0],
                                      ltimers[mg4][0])
@@ -7185,7 +7191,7 @@ class ProfileManagerTest(unittest.TestCase):
 
                     llhe = set()
 
-                    for ds in json.loads(se[mg3]["HiddenElements"]):
+                    for ds in json.loads(se[mg3]["UnplottedComponents"]):
                         if ds not in self.smychsXX.keys():
                             llhe.add(ds)
 
@@ -7200,7 +7206,7 @@ class ProfileManagerTest(unittest.TestCase):
                                 llhe.remove(tm)
                     for tm in json.loads(se[mg3]["Timer"]):
                         if tm in ladss:
-                            if tm in json.loads(se[mg4]["HiddenElements"]):
+                            if tm in json.loads(se[mg4]["UnplottedComponents"]):
                                 ladss[tm] = False
                                 if tm not in json.loads(se[mg4]["Timer"]):
                                     if tm in llhe:
@@ -7212,11 +7218,11 @@ class ProfileManagerTest(unittest.TestCase):
                                 if ds in ladss and ladss[ds]:
                                     llhe.remove(ds)
 
-                    self.myAssertDict(json.loads(lse["DataSourceGroup"]),
+                    self.myAssertDict(json.loads(lse["DataSourceSelection"]),
                                       ladss)
 
                     self.assertEqual(
-                        set(json.loads(lse["HiddenElements"])),
+                        set(json.loads(lse["UnplottedComponents"])),
                         llhe)
 
                 finally:

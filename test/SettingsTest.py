@@ -33,6 +33,7 @@ import json
 import pickle
 import string
 import time
+import nxsrecconfig
 
 import logging
 logger = logging.getLogger()
@@ -132,33 +133,38 @@ class SettingsTest(unittest.TestCase):
         self.__defaultpath = \
             '/entry$var.serialno:NXentry/NXinstrument/collection'
 
+        ## selection version
+        self.version = nxsrecconfig.__version__
+
         self._keys = [
             ("Timer", '[]'),
             ("OrderedChannels", '[]'),
-            ("ComponentGroup", '{}'),
-            ("AutomaticComponentGroup", '{}'),
-            ("AutomaticDataSources", '[]'),
-            ("DataSourceGroup", '{}'),
+            ("ComponentSelection", '{}'),
+            ("ComponentPreselection", '{}'),
+            ("PreselectedDataSources", '[]'),
+            ("DataSourceSelection", '{}'),
             ("InitDataSources", '[]'),
             ("OptionalComponents", '[]'),
             ("AppendEntry", False),
             ("ComponentsFromMntGrp", False),
             ("ConfigVariables", '{}'),
-            ("DataRecord", '{}'),
+            ("UserData", '{}'),
             ("Labels", '{}'),
             ("LabelPaths", '{}'),
             ("LabelLinks", '{}'),
-            ("HiddenElements", '[]'),
+            ("UnplottedComponents", '[]'),
             ("LabelTypes", '{}'),
             ("LabelShapes", '{}'),
             ("DynamicComponents", True),
-            ("DynamicLinks", True),
-            ("DynamicPath", self.__defaultpath),
+            ("DefaultDynamicLinks", True),
+            ("DefaultDynamicPath", self.__defaultpath),
             ("TimeZone", self.__defaultzone),
             ("ConfigDevice", ''),
             ("WriterDevice", ''),
             ("Door", ''),
-            ("MntGrp", '')
+            ("MntGrp", ''),
+            ("Version", self.version)
+
         ]
         self.mysel = {
             'mysl': (
@@ -1771,6 +1777,7 @@ class SettingsTest(unittest.TestCase):
         return self.__dump[name][key]
 
     def value(self, rs, name):
+        
         return rs.value(name)
 
     def names(self, rs):
@@ -1861,7 +1868,7 @@ class SettingsTest(unittest.TestCase):
 
         rs = self.openRecSelector()
 
-        se = Selector(msp)
+        se = Selector(msp, self.version)
         pm = ProfileManager(se)
         print "AMGs", pm.availableMntGrps()
         amntgrp = MSUtils.getEnv('ActiveMntGrp', msp.getMacroServer(idoor))
@@ -1875,13 +1882,13 @@ class SettingsTest(unittest.TestCase):
             '"counter": ["*exp_c*"], "mca": ["*exp_mca*"], '
             '"adc": ["*exp_adc*"], "motor": ["*exp_mot*"]}')
         self.assertEqual(rs.adminData, '[]')
-        self.assertEqual(rs.configFile, '/tmp/nxsrecconfig.cfg')
+        self.assertEqual(rs.profileFile, '/tmp/nxsrecconfig.cfg')
         self.assertEqual(rs.configDevice, icf)
         self.assertEqual(rs.door, idoor)
         cf = PyTango.DeviceProxy(rs.configDevice)
         self.assertEqual(
             cf.availableSelections(),
-            rs.availableSelections())
+            rs.availableProfiles())
         print "AMGs", pm.availableMntGrps()
         print "AvSels", cf.availableSelections()
         if amntgrp in pm.availableMntGrps():
@@ -1895,8 +1902,8 @@ class SettingsTest(unittest.TestCase):
 
         for nm in self.names(rs):
             if nm not in ["Timer",
-                          "DataSourceGroup",
-                          "AutomaticDataSources"]:
+                          "DataSourceSelection",
+                          "PreselectedDataSources"]:
                 if self.value(rs, nm) != se[nm]:
                     print ("DICT NAME %s" % nm)
                 self.assertEqual(self.value(rs, nm), se[nm])
@@ -2059,15 +2066,15 @@ class SettingsTest(unittest.TestCase):
         self.assertEqual(set(rs.availableComponents()), set())
         self.assertEqual(set(rs.availableDataSources()), set())
         try:
-            self.assertEqual(set(rs.availableSelections()), set())
+            self.assertEqual(set(rs.availableProfiles()), set())
         except:
-            self.assertEqual(set(rs.availableSelections()),
+            self.assertEqual(set(rs.availableProfiles()),
                              set([val["MntGrp"]]))
 
         self._cf.dp.SetCommandVariable(["SELDICT",
                                         json.dumps(self.mysel2)])
 
-        self.assertEqual(set(rs.availableSelections()),
+        self.assertEqual(set(rs.availableProfiles()),
                          set(self.mysel2.keys()))
         self.assertEqual(set(rs.availableComponents()), set())
         self.assertEqual(set(rs.availableDataSources()), set())
@@ -2312,390 +2319,9 @@ class SettingsTest(unittest.TestCase):
 
         print rs.poolMotors()
 
-    ## test
+    ## preselectComponents test
     # \brief It tests default settings
-    def test_findMntGrp_empty(self):
-        fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
-        val = {"ConfigDevice": self._cf.dp.name(),
-               "WriterDevice": self._wr.dp.name(),
-               "Door": 'doortestp09/testts/t1r228',
-               "MntGrp": 'nxsmntgrp'}
-
-        rs = self.openRecSelector()
-        rs.configDevice = val["ConfigDevice"]
-        rs.door = val["Door"]
-        rs.mntGrp = val["MntGrp"]
-
-        self.assertEqual(rs.findMntGrp("blemble"), '')
-        self.assertEqual(rs.findMntGrp("blembl2e"), '')
-
-    ## test
-    # \brief It tests default settings
-    def test_findMntGrp_pool1(self):
-        fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
-        val = {"ConfigDevice": self._cf.dp.name(),
-               "WriterDevice": self._wr.dp.name(),
-               "Door": 'doortestp09/testts/t1r228',
-               "MntGrp": 'nxsmntgrp'}
-
-        db = PyTango.Database()
-        db.put_device_property(self._ms.ms.keys()[0],
-                               {'PoolNames': self._pool.dp.name()})
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
-        rs = self.openRecSelector()
-        rs.configDevice = val["ConfigDevice"]
-        rs.door = val["Door"]
-        rs.mntGrp = val["MntGrp"]
-
-        db = PyTango.Database()
-        db.put_device_property(self._ms.ms.keys()[0],
-                               {'PoolNames': self._pool.dp.name()})
-
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
-
-        self.assertEqual(rs.findMntGrp("somethin"), '')
-
-        arr = [
-            ["test/ct/01", "mntgrp_01Value"],
-            ["test/ct/02", "mntgrp_02att"],
-            ["test/ct/03", "mntgrp_03value"],
-            ["test/ct/04", "mntgrp_0413"],
-            ["null", "mntgrp_04"],
-        ]
-
-        pool = self._pool.dp
-
-        pool.MeasurementGroupList = [json.dumps(
-            {"name": a[0], "full_name": a[1]}) for a in arr]
-
-        for ar in arr:
-            dd = rs.findMntGrp(ar[0])
-            self.assertEqual(dd, ar[1])
-
-        dd = rs.findMntGrp("adsasd")
-        self.assertEqual(dd, '')
-
-    ## test
-    # \brief It tests default settings
-    def test_findMntGrp_pool1_bl(self):
-        fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
-        val = {"ConfigDevice": self._cf.dp.name(),
-               "WriterDevice": self._wr.dp.name(),
-               "Door": 'doortestp09/testts/t1r228',
-               "MntGrp": 'nxsmntgrp'}
-
-        db = PyTango.Database()
-        db.put_device_property(self._ms.ms.keys()[0],
-                               {'PoolNames': self._pool.dp.name()})
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
-        rs = self.openRecSelector()
-        self.setProp(rs, "poolBlacklist",
-                     [self._pool.dp.name()])
-        rs.configDevice = val["ConfigDevice"]
-        rs.door = val["Door"]
-        rs.mntGrp = val["MntGrp"]
-
-        db = PyTango.Database()
-        db.put_device_property(self._ms.ms.keys()[0],
-                               {'PoolNames': self._pool.dp.name()})
-
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
-
-        self.assertEqual(rs.findMntGrp("somethin"), '')
-
-        arr = [
-            ["test/ct/01", "mntgrp_01Value"],
-            ["test/ct/02", "mntgrp_02att"],
-            ["test/ct/03", "mntgrp_03value"],
-            ["test/ct/04", "mntgrp_0413"],
-            ["null", "mntgrp_04"],
-        ]
-
-        pool = self._pool.dp
-
-        pool.MeasurementGroupList = [json.dumps(
-            {"name": a[0], "full_name": a[1]}) for a in arr]
-
-        for ar in arr:
-            dd = rs.findMntGrp(ar[0])
-            self.assertEqual(dd, '')
-
-        dd = rs.findMntGrp("adsasd")
-        self.assertEqual(dd, '')
-
-    ## test
-    # \brief It tests default settings
-    def test_findMntGrp_pool2(self):
-        fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
-        val = {"ConfigDevice": self._cf.dp.name(),
-               "WriterDevice": self._wr.dp.name(),
-               "Door": 'doortestp09/testts/t1r228',
-               "MntGrp": 'nxsmntgrp'}
-
-        try:
-            tpool2 = TestPoolSetUp.TestPoolSetUp(
-                "pooltestp09/testts/t2r228", "POOLTESTS2")
-            tpool2.setUp()
-
-            db = PyTango.Database()
-            db.put_device_property(
-                self._ms.ms.keys()[0],
-                {'PoolNames': [
-                    tpool2.dp.name(), self._pool.dp.name()]})
-            pool = self._pool.dp
-            pool2 = tpool2.dp
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
-
-            rs = self.openRecSelector()
-            rs.configDevice = val["ConfigDevice"]
-            rs.door = val["Door"]
-            rs.mntGrp = val["MntGrp"]
-
-            self.assertEqual(rs.findMntGrp("somethin"), '')
-
-            arr = [
-                ["test/ct/01", "mntgrp_01Value"],
-                ["test/ct/02", "mntgrp_02att"],
-                ["test/ct/03", "mntgrp_03value"],
-                ["test/ct/04", "mntgrp_0413"],
-                ["null", "mntgrp_04"],
-            ]
-
-            arr2 = [
-                ["test/mca/01", "mgca_011"],
-                ["test/mca/02", "mgca_02a"],
-                ["test/sca/03", "mgy_sca_031"],
-                ["test/sca/04", "mntysca_04123"],
-            ]
-
-            pool.MeasurementGroupList = [json.dumps(
-                {"name": a[0], "full_name": a[1]}) for a in arr]
-            pool2.MeasurementGroupList = [json.dumps(
-                {"name": a[0], "full_name": a[1]}) for a in arr2]
-
-            for ar in arr:
-                dd = rs.findMntGrp(ar[0])
-                self.assertEqual(dd, ar[1])
-
-            for ar in arr2:
-                dd = rs.findMntGrp(ar[0])
-                self.assertEqual(dd, ar[1])
-
-            dd = rs.findMntGrp("adsasd")
-            self.assertEqual(dd, '')
-        finally:
-            tpool2.tearDown()
-
-    ## test
-    # \brief It tests default settings
-    def test_findMntGrp_pool2_bl(self):
-        fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
-        val = {"ConfigDevice": self._cf.dp.name(),
-               "WriterDevice": self._wr.dp.name(),
-               "Door": 'doortestp09/testts/t1r228',
-               "MntGrp": 'nxsmntgrp'}
-
-        try:
-            tpool2 = TestPoolSetUp.TestPoolSetUp(
-                "pooltestp09/testts/t2r228", "POOLTESTS2")
-            tpool2.setUp()
-
-            db = PyTango.Database()
-            db.put_device_property(
-                self._ms.ms.keys()[0],
-                {'PoolNames': [
-                    tpool2.dp.name(), self._pool.dp.name()]})
-            pool = self._pool.dp
-            pool2 = tpool2.dp
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
-
-            rs = self.openRecSelector()
-            self.setProp(rs, "poolBlacklist",
-                         [tpool2.dp.name()])
-            rs.configDevice = val["ConfigDevice"]
-            rs.door = val["Door"]
-            rs.mntGrp = val["MntGrp"]
-
-            self.assertEqual(rs.findMntGrp("somethin"), '')
-
-            arr = [
-                ["test/ct/01", "mntgrp_01Value"],
-                ["test/ct/02", "mntgrp_02att"],
-                ["test/ct/03", "mntgrp_03value"],
-                ["test/ct/04", "mntgrp_0413"],
-                ["null", "mntgrp_04"],
-            ]
-
-            arr2 = [
-                ["test/mca/01", "mgca_011"],
-                ["test/mca/02", "mgca_02a"],
-                ["test/sca/03", "mgy_sca_031"],
-                ["test/sca/04", "mntysca_04123"],
-            ]
-
-            pool.MeasurementGroupList = [json.dumps(
-                {"name": a[0], "full_name": a[1]}) for a in arr]
-            pool2.MeasurementGroupList = [json.dumps(
-                {"name": a[0], "full_name": a[1]}) for a in arr2]
-
-            for ar in arr:
-                dd = rs.findMntGrp(ar[0])
-                self.assertEqual(dd, ar[1])
-
-            for ar in arr2:
-                dd = rs.findMntGrp(ar[0])
-#                self.assertEqual(dd, ar[1])
-                self.assertEqual(dd, '')
-
-            dd = rs.findMntGrp("adsasd")
-            self.assertEqual(dd, '')
-        finally:
-            tpool2.tearDown()
-
-    ## test
-    # \brief It tests default settings
-    def test_findMntGrp_pool2_bl2(self):
-        fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
-        val = {"ConfigDevice": self._cf.dp.name(),
-               "WriterDevice": self._wr.dp.name(),
-               "Door": 'doortestp09/testts/t1r228',
-               "MntGrp": 'nxsmntgrp'}
-
-        try:
-            tpool2 = TestPoolSetUp.TestPoolSetUp(
-                "pooltestp09/testts/t2r228", "POOLTESTS2")
-            tpool2.setUp()
-
-            db = PyTango.Database()
-            db.put_device_property(
-                self._ms.ms.keys()[0],
-                {'PoolNames': [
-                    tpool2.dp.name(), self._pool.dp.name()]})
-            pool = self._pool.dp
-            pool2 = tpool2.dp
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
-
-            rs = self.openRecSelector()
-            self.setProp(rs, "poolBlacklist",
-                         [self._pool.dp.name()])
-            rs.configDevice = val["ConfigDevice"]
-            rs.door = val["Door"]
-            rs.mntGrp = val["MntGrp"]
-
-            self.assertEqual(rs.findMntGrp("somethin"), '')
-
-            arr = [
-                ["test/ct/01", "mntgrp_01Value"],
-                ["test/ct/02", "mntgrp_02att"],
-                ["test/ct/03", "mntgrp_03value"],
-                ["test/ct/04", "mntgrp_0413"],
-                ["null", "mntgrp_04"],
-            ]
-
-            arr2 = [
-                ["test/mca/01", "mgca_011"],
-                ["test/mca/02", "mgca_02a"],
-                ["test/sca/03", "mgy_sca_031"],
-                ["test/sca/04", "mntysca_04123"],
-            ]
-
-            pool.MeasurementGroupList = [json.dumps(
-                {"name": a[0], "full_name": a[1]}) for a in arr]
-            pool2.MeasurementGroupList = [json.dumps(
-                {"name": a[0], "full_name": a[1]}) for a in arr2]
-
-            for ar in arr:
-                dd = rs.findMntGrp(ar[0])
-#                self.assertEqual(dd, ar[1])
-                self.assertEqual(dd, '')
-
-            for ar in arr2:
-                dd = rs.findMntGrp(ar[0])
-                self.assertEqual(dd, ar[1])
-#                self.assertEqual(dd, '')
-
-            dd = rs.findMntGrp("adsasd")
-            self.assertEqual(dd, '')
-        finally:
-            tpool2.tearDown()
-
-    ## test
-    # \brief It tests default settings
-    def test_findMntGrp_pool2_bl3(self):
-        fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
-        val = {"ConfigDevice": self._cf.dp.name(),
-               "WriterDevice": self._wr.dp.name(),
-               "Door": 'doortestp09/testts/t1r228',
-               "MntGrp": 'nxsmntgrp'}
-
-        try:
-            tpool2 = TestPoolSetUp.TestPoolSetUp(
-                "pooltestp09/testts/t2r228", "POOLTESTS2")
-            tpool2.setUp()
-
-            db = PyTango.Database()
-            db.put_device_property(
-                self._ms.ms.keys()[0],
-                {'PoolNames': [
-                    tpool2.dp.name(), self._pool.dp.name()]})
-            pool = self._pool.dp
-            pool2 = tpool2.dp
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
-
-            rs = self.openRecSelector()
-            self.setProp(rs, "poolBlacklist",
-                         [tpool2.dp.name(), self._pool.dp.name()])
-            rs.configDevice = val["ConfigDevice"]
-            rs.door = val["Door"]
-            rs.mntGrp = val["MntGrp"]
-
-            self.assertEqual(rs.findMntGrp("somethin"), '')
-
-            arr = [
-                ["test/ct/01", "mntgrp_01Value"],
-                ["test/ct/02", "mntgrp_02att"],
-                ["test/ct/03", "mntgrp_03value"],
-                ["test/ct/04", "mntgrp_0413"],
-                ["null", "mntgrp_04"],
-            ]
-
-            arr2 = [
-                ["test/mca/01", "mgca_011"],
-                ["test/mca/02", "mgca_02a"],
-                ["test/sca/03", "mgy_sca_031"],
-                ["test/sca/04", "mntysca_04123"],
-            ]
-
-            pool.MeasurementGroupList = [json.dumps(
-                {"name": a[0], "full_name": a[1]}) for a in arr]
-            pool2.MeasurementGroupList = [json.dumps(
-                {"name": a[0], "full_name": a[1]}) for a in arr2]
-
-            for ar in arr:
-                dd = rs.findMntGrp(ar[0])
-#                self.assertEqual(dd, ar[1])
-                self.assertEqual(dd, '')
-
-            for ar in arr2:
-                dd = rs.findMntGrp(ar[0])
-#                self.assertEqual(dd, ar[1])
-                self.assertEqual(dd, '')
-
-            dd = rs.findMntGrp("adsasd")
-            self.assertEqual(dd, '')
-        finally:
-            tpool2.tearDown()
-
-    ## updateControllers test
-    # \brief It tests default settings
-    def test_updateControllers_simple(self):
+    def test_preselectComponents_simple(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2713,14 +2339,14 @@ class SettingsTest(unittest.TestCase):
         self._ms.dps[self._ms.ms.keys()[0]].Init()
 
         channelerrors = []
-        rs.updateControllers()
-        res = self.value(rs, "AutomaticComponentGroup")
+        rs.preselectComponents()
+        res = self.value(rs, "ComponentPreselection")
         self.assertEqual(res, '{}')
         print self._cf.dp.GetCommandVariable("COMMANDS")
 
-    ## updateControllers test
+    ## preselectComponents test
     # \brief It tests default settings
-    def test_updateControllers_withcf(self):
+    def test_preselectComponents_withcf(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2744,8 +2370,8 @@ class SettingsTest(unittest.TestCase):
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
 
-        rs.updateControllers()
-        res = self.value(rs, "AutomaticComponentGroup")
+        rs.preselectComponents()
+        res = self.value(rs, "ComponentPreselection")
 
         self.assertEqual(res, '{}')
         self.assertEqual(componentgroup, {})
@@ -2754,7 +2380,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_updateControllers_withcf_cps(self):
+    def test_preselectComponents_withcf_cps(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2779,12 +2405,12 @@ class SettingsTest(unittest.TestCase):
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
 
-        cnf = json.loads(rs.configuration)
-        cnf["AutomaticDataSources"] = json.dumps(poolchannels)
-        cnf["AutomaticComponentGroup"] = json.dumps(componentgroup)
-        rs.configuration = json.dumps(cnf)
-        rs.updateControllers()
-        res = self.value(rs, "AutomaticComponentGroup")
+        cnf = json.loads(rs.profileConfiguration)
+        cnf["PreselectedDataSources"] = json.dumps(poolchannels)
+        cnf["ComponentPreselection"] = json.dumps(componentgroup)
+        rs.profileConfiguration = json.dumps(cnf)
+        rs.preselectComponents()
+        res = self.value(rs, "ComponentPreselection")
         self.myAssertDict(json.loads(res), {"mycp": True})
         self.assertEqual(channelerrors, [])
 
@@ -2795,17 +2421,17 @@ class SettingsTest(unittest.TestCase):
             self.assertTrue(key in sed.keys())
             if key in val:
                 self.assertEqual(sed[key], val[key])
-            elif key == 'AutomaticComponentGroup':
+            elif key == 'ComponentPreselection':
                 self.assertEqual(set(json.loads(sed[key])),
                                  set(json.loads(res)))
-            elif key == 'AutomaticDataSources':
+            elif key == 'PreselectedDataSources':
                 self.assertEqual(set(json.loads(sed[key])), set(poolchannels))
             else:
                 self.assertEqual(sed[key], vl)
 
     ## test
     # \brief It tests default settings
-    def test_updateControllers_withcf_cps_t(self):
+    def test_preselectComponents_withcf_cps_t(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2830,12 +2456,12 @@ class SettingsTest(unittest.TestCase):
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
 
-        cnf = json.loads(rs.configuration)
-        cnf["AutomaticDataSources"] = json.dumps(poolchannels)
-        cnf["AutomaticComponentGroup"] = json.dumps(componentgroup)
-        rs.configuration = json.dumps(cnf)
-        rs.updateControllers()
-        res = self.value(rs, "AutomaticComponentGroup")
+        cnf = json.loads(rs.profileConfiguration)
+        cnf["PreselectedDataSources"] = json.dumps(poolchannels)
+        cnf["ComponentPreselection"] = json.dumps(componentgroup)
+        rs.profileConfiguration = json.dumps(cnf)
+        rs.preselectComponents()
+        res = self.value(rs, "ComponentPreselection")
         self.myAssertDict(json.loads(res), {"mycp": True})
         self.assertEqual(channelerrors, [])
 
@@ -2843,7 +2469,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_updateControllers_withcf_nocps(self):
+    def test_preselectComponents_withcf_nocps(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2868,12 +2494,12 @@ class SettingsTest(unittest.TestCase):
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
 
-        cnf = json.loads(rs.configuration)
-        cnf["AutomaticDataSources"] = json.dumps(poolchannels)
-        cnf["AutomaticComponentGroup"] = json.dumps(componentgroup)
-        rs.configuration = json.dumps(cnf)
-        rs.updateControllers()
-        res = self.value(rs, "AutomaticComponentGroup")
+        cnf = json.loads(rs.profileConfiguration)
+        cnf["PreselectedDataSources"] = json.dumps(poolchannels)
+        cnf["ComponentPreselection"] = json.dumps(componentgroup)
+        rs.profileConfiguration = json.dumps(cnf)
+        rs.preselectComponents()
+        res = self.value(rs, "ComponentPreselection")
 
         self.myAssertDict(json.loads(res), {})
         self.assertEqual(channelerrors, [])
@@ -2884,7 +2510,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_updateControllers_withcf_nochnnel(self):
+    def test_preselectComponents_withcf_nochnnel(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2909,12 +2535,12 @@ class SettingsTest(unittest.TestCase):
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
 
-        cnf = json.loads(rs.configuration)
-        cnf["AutomaticDataSources"] = json.dumps(poolchannels)
-        cnf["AutomaticComponentGroup"] = json.dumps(componentgroup)
-        rs.configuration = json.dumps(cnf)
-        rs.updateControllers()
-        res = self.value(rs, "AutomaticComponentGroup")
+        cnf = json.loads(rs.profileConfiguration)
+        cnf["PreselectedDataSources"] = json.dumps(poolchannels)
+        cnf["ComponentPreselection"] = json.dumps(componentgroup)
+        rs.profileConfiguration = json.dumps(cnf)
+        rs.preselectComponents()
+        res = self.value(rs, "ComponentPreselection")
 
         self.myAssertDict(json.loads(res), {"mycp": True})
         self.assertEqual(channelerrors, [])
@@ -2928,17 +2554,17 @@ class SettingsTest(unittest.TestCase):
             self.assertTrue(key in sed.keys())
             if key in val:
                 self.assertEqual(sed[key], val[key])
-            elif key == 'AutomaticComponentGroup':
+            elif key == 'ComponentPreselection':
                 self.assertEqual(set(json.loads(sed[key])),
                                  set(json.loads(res)))
-            elif key == 'AutomaticDataSources':
+            elif key == 'PreselectedDataSources':
                 self.assertEqual(set(json.loads(sed[key])), set(poolchannels))
             else:
                 self.assertEqual(sed[key], vl)
 
     ## test
     # \brief It tests default settings
-    def test_updateControllers_withcf_nochnnel_t(self):
+    def test_preselectComponents_withcf_nochnnel_t(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2963,12 +2589,12 @@ class SettingsTest(unittest.TestCase):
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
 
-        cnf = json.loads(rs.configuration)
-        cnf["AutomaticDataSources"] = json.dumps(poolchannels)
-        cnf["AutomaticComponentGroup"] = json.dumps(componentgroup)
-        rs.configuration = json.dumps(cnf)
-        rs.updateControllers()
-        res = self.value(rs, "AutomaticComponentGroup")
+        cnf = json.loads(rs.profileConfiguration)
+        cnf["PreselectedDataSources"] = json.dumps(poolchannels)
+        cnf["ComponentPreselection"] = json.dumps(componentgroup)
+        rs.profileConfiguration = json.dumps(cnf)
+        rs.preselectComponents()
+        res = self.value(rs, "ComponentPreselection")
 
         self.myAssertDict(json.loads(res), {"mycp": True})
         self.assertEqual(channelerrors, [])
@@ -2977,7 +2603,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_updateControllers_wds_t(self):
+    def test_preselectComponents_wds_t(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -3002,12 +2628,12 @@ class SettingsTest(unittest.TestCase):
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.smycps)])
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
 
-        cnf = json.loads(rs.configuration)
-        cnf["AutomaticDataSources"] = json.dumps(poolchannels)
-        cnf["AutomaticComponentGroup"] = json.dumps(componentgroup)
-        rs.configuration = json.dumps(cnf)
-        rs.updateControllers()
-        res = self.value(rs, "AutomaticComponentGroup")
+        cnf = json.loads(rs.profileConfiguration)
+        cnf["PreselectedDataSources"] = json.dumps(poolchannels)
+        cnf["ComponentPreselection"] = json.dumps(componentgroup)
+        rs.profileConfiguration = json.dumps(cnf)
+        rs.preselectComponents()
+        res = self.value(rs, "ComponentPreselection")
 
         self.myAssertDict(json.loads(res), {"smycp": True})
         self.assertEqual(channelerrors, [])
@@ -3016,7 +2642,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_updateControllers_wds(self):
+    def test_preselectComponents_wds(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -3041,12 +2667,12 @@ class SettingsTest(unittest.TestCase):
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.smycps)])
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
 
-        cnf = json.loads(rs.configuration)
-        cnf["AutomaticDataSources"] = json.dumps(poolchannels)
-        cnf["AutomaticComponentGroup"] = json.dumps(componentgroup)
-        rs.configuration = json.dumps(cnf)
-        rs.updateControllers()
-        res = self.value(rs, "AutomaticComponentGroup")
+        cnf = json.loads(rs.profileConfiguration)
+        cnf["PreselectedDataSources"] = json.dumps(poolchannels)
+        cnf["ComponentPreselection"] = json.dumps(componentgroup)
+        rs.profileConfiguration = json.dumps(cnf)
+        rs.preselectComponents()
+        res = self.value(rs, "ComponentPreselection")
 
         self.myAssertDict(json.loads(res), {"smycp": True})
         self.assertEqual(channelerrors, [])
@@ -3058,10 +2684,10 @@ class SettingsTest(unittest.TestCase):
             self.assertTrue(key in sed.keys())
             if key in val:
                 self.assertEqual(sed[key], val[key])
-            elif key == 'AutomaticComponentGroup':
+            elif key == 'ComponentPreselection':
                 self.assertEqual(set(json.loads(sed[key])),
                                  set(json.loads(res)))
-            elif key == 'AutomaticDataSources':
+            elif key == 'PreselectedDataSources':
                 self.assertEqual(set(json.loads(sed[key])),
                                  set(poolchannels))
             else:
@@ -3069,7 +2695,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_updateControllers_wds2(self):
+    def test_preselectComponents_wds2(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -3094,12 +2720,12 @@ class SettingsTest(unittest.TestCase):
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.smycps)])
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
 
-        cnf = json.loads(rs.configuration)
-        cnf["AutomaticDataSources"] = json.dumps(poolchannels)
-        cnf["AutomaticComponentGroup"] = json.dumps(componentgroup)
-        rs.configuration = json.dumps(cnf)
-        rs.updateControllers()
-        res = self.value(rs, "AutomaticComponentGroup")
+        cnf = json.loads(rs.profileConfiguration)
+        cnf["PreselectedDataSources"] = json.dumps(poolchannels)
+        cnf["ComponentPreselection"] = json.dumps(componentgroup)
+        rs.profileConfiguration = json.dumps(cnf)
+        rs.preselectComponents()
+        res = self.value(rs, "ComponentPreselection")
 
         self.myAssertDict(json.loads(res), {
             "smycp": True, "smycp2": True, "smycp3": True})
@@ -3113,10 +2739,10 @@ class SettingsTest(unittest.TestCase):
             self.assertTrue(key in sed.keys())
             if key in val:
                 self.assertEqual(sed[key], val[key])
-            elif key == 'AutomaticComponentGroup':
+            elif key == 'ComponentPreselection':
                 self.assertEqual(set(json.loads(sed[key])),
                                  set(json.loads(res)))
-            elif key == 'AutomaticDataSources':
+            elif key == 'PreselectedDataSources':
                 self.assertEqual(set(json.loads(sed[key])),
                                  set(poolchannels))
             else:
@@ -3124,7 +2750,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_updateControllers_2wds(self):
+    def test_preselectComponents_2wds(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -3160,12 +2786,12 @@ class SettingsTest(unittest.TestCase):
             self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
 
-            cnf = json.loads(rs.configuration)
-            cnf["AutomaticDataSources"] = json.dumps(poolchannels)
-            cnf["AutomaticComponentGroup"] = json.dumps(componentgroup)
-            rs.configuration = json.dumps(cnf)
-            rs.updateControllers()
-            res = self.value(rs, "AutomaticComponentGroup")
+            cnf = json.loads(rs.profileConfiguration)
+            cnf["PreselectedDataSources"] = json.dumps(poolchannels)
+            cnf["ComponentPreselection"] = json.dumps(componentgroup)
+            rs.profileConfiguration = json.dumps(cnf)
+            rs.preselectComponents()
+            res = self.value(rs, "ComponentPreselection")
 
             self.myAssertDict(json.loads(res), {
                 "smycp": True, "smycp2": True, "smycp3": True,
@@ -3180,10 +2806,10 @@ class SettingsTest(unittest.TestCase):
                 self.assertTrue(key in sed.keys())
                 if key in val:
                     self.assertEqual(sed[key], val[key])
-                elif key == 'AutomaticComponentGroup':
+                elif key == 'ComponentPreselection':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(json.loads(res)))
-                elif key == 'AutomaticDataSources':
+                elif key == 'PreselectedDataSources':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(poolchannels))
                 else:
@@ -3193,7 +2819,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_updateControllers_2wds_dvnorunning(self):
+    def test_preselectComponents_2wds_dvnorunning(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -3229,12 +2855,12 @@ class SettingsTest(unittest.TestCase):
             self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
 
-            cnf = json.loads(rs.configuration)
-            cnf["AutomaticDataSources"] = json.dumps(poolchannels)
-            cnf["AutomaticComponentGroup"] = json.dumps(componentgroup)
-            rs.configuration = json.dumps(cnf)
-            rs.updateControllers()
-            res = self.value(rs, "AutomaticComponentGroup")
+            cnf = json.loads(rs.profileConfiguration)
+            cnf["PreselectedDataSources"] = json.dumps(poolchannels)
+            cnf["ComponentPreselection"] = json.dumps(componentgroup)
+            rs.profileConfiguration = json.dumps(cnf)
+            rs.preselectComponents()
+            res = self.value(rs, "ComponentPreselection")
 
             self.myAssertDict(json.loads(res), {
                 "smycp": True, "smycp2": True, "smycp3": True,
@@ -3249,10 +2875,10 @@ class SettingsTest(unittest.TestCase):
                 self.assertTrue(key in sed.keys())
                 if key in val:
                     self.assertEqual(sed[key], val[key])
-                elif key == 'AutomaticComponentGroup':
+                elif key == 'ComponentPreselection':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(json.loads(res)))
-                elif key == 'AutomaticDataSources':
+                elif key == 'PreselectedDataSources':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(poolchannels))
                 else:
@@ -3262,7 +2888,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_updateControllers_2wds_dvnodef(self):
+    def test_preselectComponents_2wds_dvnodef(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -3293,12 +2919,12 @@ class SettingsTest(unittest.TestCase):
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
 
-        cnf = json.loads(rs.configuration)
-        cnf["AutomaticDataSources"] = json.dumps(poolchannels)
-        cnf["AutomaticComponentGroup"] = json.dumps(componentgroup)
-        rs.configuration = json.dumps(cnf)
-        rs.updateControllers()
-        res = self.value(rs, "AutomaticComponentGroup")
+        cnf = json.loads(rs.profileConfiguration)
+        cnf["PreselectedDataSources"] = json.dumps(poolchannels)
+        cnf["ComponentPreselection"] = json.dumps(componentgroup)
+        rs.profileConfiguration = json.dumps(cnf)
+        rs.preselectComponents()
+        res = self.value(rs, "ComponentPreselection")
 
         self.myAssertDict(json.loads(res), {
             "smycp": True, "smycp2": True, "smycp3": True,
@@ -3313,10 +2939,10 @@ class SettingsTest(unittest.TestCase):
             self.assertTrue(key in sed.keys())
             if key in val:
                 self.assertEqual(sed[key], val[key])
-            elif key == 'AutomaticComponentGroup':
+            elif key == 'ComponentPreselection':
                 self.assertEqual(set(json.loads(sed[key])),
                                  set(json.loads(res)))
-            elif key == 'AutomaticDataSources':
+            elif key == 'PreselectedDataSources':
                 self.assertEqual(set(json.loads(sed[key])),
                                  set(poolchannels))
             else:
@@ -3324,7 +2950,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_updateControllers_2wds_nods(self):
+    def test_preselectComponents_2wds_nods(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -3360,12 +2986,12 @@ class SettingsTest(unittest.TestCase):
             self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
 
-            cnf = json.loads(rs.configuration)
-            cnf["AutomaticDataSources"] = json.dumps(poolchannels)
-            cnf["AutomaticComponentGroup"] = json.dumps(componentgroup)
-            rs.configuration = json.dumps(cnf)
-            rs.updateControllers()
-            res = self.value(rs, "AutomaticComponentGroup")
+            cnf = json.loads(rs.profileConfiguration)
+            cnf["PreselectedDataSources"] = json.dumps(poolchannels)
+            cnf["ComponentPreselection"] = json.dumps(componentgroup)
+            rs.profileConfiguration = json.dumps(cnf)
+            rs.preselectComponents()
+            res = self.value(rs, "ComponentPreselection")
 
             self.myAssertDict(json.loads(res), {
                 "smycp": True, "smycp2": True, "smycp3": True,
@@ -3380,10 +3006,10 @@ class SettingsTest(unittest.TestCase):
                 self.assertTrue(key in sed.keys())
                 if key in val:
                     self.assertEqual(sed[key], val[key])
-                elif key == 'AutomaticComponentGroup':
+                elif key == 'ComponentPreselection':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(json.loads(res)))
-                elif key == 'AutomaticDataSources':
+                elif key == 'PreselectedDataSources':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(poolchannels))
                 else:
@@ -3393,7 +3019,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_updateControllers_2wds_nodspool(self):
+    def test_preselectComponents_2wds_nodspool(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -3427,12 +3053,12 @@ class SettingsTest(unittest.TestCase):
             self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
 
-            cnf = json.loads(rs.configuration)
-            cnf["AutomaticDataSources"] = json.dumps(poolchannels)
-            cnf["AutomaticComponentGroup"] = json.dumps(componentgroup)
-            rs.configuration = json.dumps(cnf)
-            rs.updateControllers()
-            res = self.value(rs, "AutomaticComponentGroup")
+            cnf = json.loads(rs.profileConfiguration)
+            cnf["PreselectedDataSources"] = json.dumps(poolchannels)
+            cnf["ComponentPreselection"] = json.dumps(componentgroup)
+            rs.profileConfiguration = json.dumps(cnf)
+            rs.preselectComponents()
+            res = self.value(rs, "ComponentPreselection")
 
             self.myAssertDict(json.loads(res), {
                 "smycp": True, "smycp2": True, "smycp3": True,
@@ -3447,10 +3073,10 @@ class SettingsTest(unittest.TestCase):
                 self.assertTrue(key in sed.keys())
                 if key in val:
                     self.assertEqual(sed[key], val[key])
-                elif key == 'AutomaticComponentGroup':
+                elif key == 'ComponentPreselection':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(json.loads(res)))
-                elif key == 'AutomaticDataSources':
+                elif key == 'PreselectedDataSources':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(poolchannels))
                 else:
@@ -3460,7 +3086,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_updateControllers_2wds_notangods(self):
+    def test_preselectComponents_2wds_notangods(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -3496,12 +3122,12 @@ class SettingsTest(unittest.TestCase):
             self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
 
-            cnf = json.loads(rs.configuration)
-            cnf["AutomaticDataSources"] = json.dumps(poolchannels)
-            cnf["AutomaticComponentGroup"] = json.dumps(componentgroup)
-            rs.configuration = json.dumps(cnf)
-            rs.updateControllers()
-            res = self.value(rs, "AutomaticComponentGroup")
+            cnf = json.loads(rs.profileConfiguration)
+            cnf["PreselectedDataSources"] = json.dumps(poolchannels)
+            cnf["ComponentPreselection"] = json.dumps(componentgroup)
+            rs.profileConfiguration = json.dumps(cnf)
+            rs.preselectComponents()
+            res = self.value(rs, "ComponentPreselection")
 
             self.myAssertDict(json.loads(res), {
                 "smycp": True, "smycp2": True, "smycp3": True,
@@ -3518,10 +3144,10 @@ class SettingsTest(unittest.TestCase):
                 self.assertTrue(key in sed.keys())
                 if key in val:
                     self.assertEqual(sed[key], val[key])
-                elif key == 'AutomaticComponentGroup':
+                elif key == 'ComponentPreselection':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(json.loads(res)))
-                elif key == 'AutomaticDataSources':
+                elif key == 'PreselectedDataSources':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(poolchannels))
                 else:
@@ -3531,7 +3157,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_updateControllers_2wds_notangodsnopool(self):
+    def test_preselectComponents_2wds_notangodsnopool(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -3567,12 +3193,12 @@ class SettingsTest(unittest.TestCase):
             self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
 
-            cnf = json.loads(rs.configuration)
-            cnf["AutomaticDataSources"] = json.dumps(poolchannels)
-            cnf["AutomaticComponentGroup"] = json.dumps(componentgroup)
-            rs.configuration = json.dumps(cnf)
-            rs.updateControllers()
-            res = self.value(rs, "AutomaticComponentGroup")
+            cnf = json.loads(rs.profileConfiguration)
+            cnf["PreselectedDataSources"] = json.dumps(poolchannels)
+            cnf["ComponentPreselection"] = json.dumps(componentgroup)
+            rs.profileConfiguration = json.dumps(cnf)
+            rs.preselectComponents()
+            res = self.value(rs, "ComponentPreselection")
 
             self.myAssertDict(json.loads(res), {
                 "smycp": True, "smycp2": True, "smycp3": True,
@@ -3589,10 +3215,10 @@ class SettingsTest(unittest.TestCase):
                 self.assertTrue(key in sed.keys())
                 if key in val:
                     self.assertEqual(sed[key], val[key])
-                elif key == 'AutomaticComponentGroup':
+                elif key == 'ComponentPreselection':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(json.loads(res)))
-                elif key == 'AutomaticDataSources':
+                elif key == 'PreselectedDataSources':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(poolchannels))
                 else:
@@ -3602,7 +3228,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_updateControllers_2wds_notangodsnopool2(self):
+    def test_preselectComponents_2wds_notangodsnopool2(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -3638,12 +3264,12 @@ class SettingsTest(unittest.TestCase):
             self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
 
-            cnf = json.loads(rs.configuration)
-            cnf["AutomaticDataSources"] = json.dumps(poolchannels)
-            cnf["AutomaticComponentGroup"] = json.dumps(componentgroup)
-            rs.configuration = json.dumps(cnf)
-            rs.updateControllers()
-            res = self.value(rs, "AutomaticComponentGroup")
+            cnf = json.loads(rs.profileConfiguration)
+            cnf["PreselectedDataSources"] = json.dumps(poolchannels)
+            cnf["ComponentPreselection"] = json.dumps(componentgroup)
+            rs.profileConfiguration = json.dumps(cnf)
+            rs.preselectComponents()
+            res = self.value(rs, "ComponentPreselection")
 
             self.myAssertDict(json.loads(res), {
                 "smycp": True, "smycp2": True, "smycp3": True,
@@ -3660,10 +3286,10 @@ class SettingsTest(unittest.TestCase):
                 self.assertTrue(key in sed.keys())
                 if key in val:
                     self.assertEqual(sed[key], val[key])
-                elif key == 'AutomaticComponentGroup':
+                elif key == 'ComponentPreselection':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(json.loads(res)))
-                elif key == 'AutomaticDataSources':
+                elif key == 'PreselectedDataSources':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(poolchannels))
                 else:
@@ -3673,7 +3299,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_updateControllers_2wds_notangods2(self):
+    def test_preselectComponents_2wds_notangods2(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -3723,12 +3349,12 @@ class SettingsTest(unittest.TestCase):
             pool = self._pool.dp
             pool.AcqChannelList = [json.dumps(a) for a in arr]
 
-            cnf = json.loads(rs.configuration)
-            cnf["AutomaticDataSources"] = json.dumps(poolchannels)
-            cnf["AutomaticComponentGroup"] = json.dumps(componentgroup)
-            rs.configuration = json.dumps(cnf)
-            rs.updateControllers()
-            res = self.value(rs, "AutomaticComponentGroup")
+            cnf = json.loads(rs.profileConfiguration)
+            cnf["PreselectedDataSources"] = json.dumps(poolchannels)
+            cnf["ComponentPreselection"] = json.dumps(componentgroup)
+            rs.profileConfiguration = json.dumps(cnf)
+            rs.preselectComponents()
+            res = self.value(rs, "ComponentPreselection")
 
             self.myAssertDict(json.loads(res), {
                 "smycp": True, "smycp2": True, "smycp3": True,
@@ -3744,10 +3370,10 @@ class SettingsTest(unittest.TestCase):
                 self.assertTrue(key in sed.keys())
                 if key in val:
                     self.assertEqual(sed[key], val[key])
-                elif key == 'AutomaticComponentGroup':
+                elif key == 'ComponentPreselection':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(json.loads(res)))
-                elif key == 'AutomaticDataSources':
+                elif key == 'PreselectedDataSources':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(poolchannels))
                 else:
@@ -3757,7 +3383,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_updateControllers_2wds_notangods2_bl(self):
+    def test_preselectComponents_2wds_notangods2_bl(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -3809,12 +3435,12 @@ class SettingsTest(unittest.TestCase):
             pool = self._pool.dp
             pool.AcqChannelList = [json.dumps(a) for a in arr]
 
-            cnf = json.loads(rs.configuration)
-            cnf["AutomaticDataSources"] = json.dumps(poolchannels)
-            cnf["AutomaticComponentGroup"] = json.dumps(componentgroup)
-            rs.configuration = json.dumps(cnf)
-            rs.updateControllers()
-            res = self.value(rs, "AutomaticComponentGroup")
+            cnf = json.loads(rs.profileConfiguration)
+            cnf["PreselectedDataSources"] = json.dumps(poolchannels)
+            cnf["ComponentPreselection"] = json.dumps(componentgroup)
+            rs.profileConfiguration = json.dumps(cnf)
+            rs.preselectComponents()
+            res = self.value(rs, "ComponentPreselection")
 
             self.myAssertDict(json.loads(res), {
                 "smycp": True, "smycp2": True, "smycp3": True,
@@ -3830,10 +3456,10 @@ class SettingsTest(unittest.TestCase):
                 self.assertTrue(key in sed.keys())
                 if key in val:
                     self.assertEqual(sed[key], val[key])
-                elif key == 'AutomaticComponentGroup':
+                elif key == 'ComponentPreselection':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(json.loads(res)))
-                elif key == 'AutomaticDataSources':
+                elif key == 'PreselectedDataSources':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(poolchannels))
                 else:
@@ -3843,7 +3469,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_updateControllers_2wds_notangodspool_error(self):
+    def test_preselectComponents_2wds_notangodspool_error(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -3895,12 +3521,12 @@ class SettingsTest(unittest.TestCase):
             pool = self._pool.dp
             pool.AcqChannelList = [json.dumps(a) for a in arr]
 
-            cnf = json.loads(rs.configuration)
-            cnf["AutomaticDataSources"] = json.dumps(poolchannels)
-            cnf["AutomaticComponentGroup"] = json.dumps(componentgroup)
-            rs.configuration = json.dumps(cnf)
-            rs.updateControllers()
-            res = self.value(rs, "AutomaticComponentGroup")
+            cnf = json.loads(rs.profileConfiguration)
+            cnf["PreselectedDataSources"] = json.dumps(poolchannels)
+            cnf["ComponentPreselection"] = json.dumps(componentgroup)
+            rs.profileConfiguration = json.dumps(cnf)
+            rs.preselectComponents()
+            res = self.value(rs, "ComponentPreselection")
 
             self.myAssertDict(json.loads(res), {
                 "smycp": True, "smycp2": True, "smycp3": True,
@@ -3917,10 +3543,10 @@ class SettingsTest(unittest.TestCase):
                 self.assertTrue(key in sed.keys())
                 if key in val:
                     self.assertEqual(sed[key], val[key])
-                elif key == 'AutomaticComponentGroup':
+                elif key == 'ComponentPreselection':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(json.loads(res)))
-                elif key == 'AutomaticDataSources':
+                elif key == 'PreselectedDataSources':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(poolchannels))
                 else:
@@ -3930,7 +3556,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_updateControllers_2wds_notangodspool_error_bl(self):
+    def test_preselectComponents_2wds_notangodspool_error_bl(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -3984,12 +3610,12 @@ class SettingsTest(unittest.TestCase):
             pool = self._pool.dp
             pool.AcqChannelList = [json.dumps(a) for a in arr]
 
-            cnf = json.loads(rs.configuration)
-            cnf["AutomaticDataSources"] = json.dumps(poolchannels)
-            cnf["AutomaticComponentGroup"] = json.dumps(componentgroup)
-            rs.configuration = json.dumps(cnf)
-            rs.updateControllers()
-            res = self.value(rs, "AutomaticComponentGroup")
+            cnf = json.loads(rs.profileConfiguration)
+            cnf["PreselectedDataSources"] = json.dumps(poolchannels)
+            cnf["ComponentPreselection"] = json.dumps(componentgroup)
+            rs.profileConfiguration = json.dumps(cnf)
+            rs.preselectComponents()
+            res = self.value(rs, "ComponentPreselection")
 
             self.myAssertDict(json.loads(res), {
                 "smycp": True, "smycp2": True, "smycp3": True,
@@ -4006,10 +3632,10 @@ class SettingsTest(unittest.TestCase):
                 self.assertTrue(key in sed.keys())
                 if key in val:
                     self.assertEqual(sed[key], val[key])
-                elif key == 'AutomaticComponentGroup':
+                elif key == 'ComponentPreselection':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(json.loads(res)))
-                elif key == 'AutomaticDataSources':
+                elif key == 'PreselectedDataSources':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(poolchannels))
                 else:
@@ -4019,7 +3645,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_updateControllers_2wds_notangodspool(self):
+    def test_preselectComponents_2wds_notangodspool(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -4071,12 +3697,12 @@ class SettingsTest(unittest.TestCase):
             self._simps.dp.ChangeValueType("ScalarShort")
             self._simps.dp.Value = 43
 
-            cnf = json.loads(rs.configuration)
-            cnf["AutomaticDataSources"] = json.dumps(poolchannels)
-            cnf["AutomaticComponentGroup"] = json.dumps(componentgroup)
-            rs.configuration = json.dumps(cnf)
-            rs.updateControllers()
-            res = self.value(rs, "AutomaticComponentGroup")
+            cnf = json.loads(rs.profileConfiguration)
+            cnf["PreselectedDataSources"] = json.dumps(poolchannels)
+            cnf["ComponentPreselection"] = json.dumps(componentgroup)
+            rs.profileConfiguration = json.dumps(cnf)
+            rs.preselectComponents()
+            res = self.value(rs, "ComponentPreselection")
 
             self.myAssertDict(json.loads(res), {
                 "smycp": True, "smycp2": True, "smycp3": True,
@@ -4092,10 +3718,10 @@ class SettingsTest(unittest.TestCase):
                 self.assertTrue(key in sed.keys())
                 if key in val:
                     self.assertEqual(sed[key], val[key])
-                elif key == 'AutomaticComponentGroup':
+                elif key == 'ComponentPreselection':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(json.loads(res)))
-                elif key == 'AutomaticDataSources':
+                elif key == 'PreselectedDataSources':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(poolchannels))
                 else:
@@ -4105,7 +3731,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_updateControllers_2wds_notangodspool_alias(self):
+    def test_preselectComponents_2wds_notangodspool_alias(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -4157,12 +3783,12 @@ class SettingsTest(unittest.TestCase):
             self._simps.dp.ChangeValueType("ScalarShort")
             self._simps.dp.Value = 43
 
-            cnf = json.loads(rs.configuration)
-            cnf["AutomaticDataSources"] = json.dumps(poolchannels)
-            cnf["AutomaticComponentGroup"] = json.dumps(componentgroup)
-            rs.configuration = json.dumps(cnf)
-            rs.updateControllers()
-            res = self.value(rs, "AutomaticComponentGroup")
+            cnf = json.loads(rs.profileConfiguration)
+            cnf["PreselectedDataSources"] = json.dumps(poolchannels)
+            cnf["ComponentPreselection"] = json.dumps(componentgroup)
+            rs.profileConfiguration = json.dumps(cnf)
+            rs.preselectComponents()
+            res = self.value(rs, "ComponentPreselection")
 
             self.myAssertDict(json.loads(res), {
                 "smycp": True, "smycp2": True, "smycp3": True,
@@ -4178,10 +3804,10 @@ class SettingsTest(unittest.TestCase):
                 self.assertTrue(key in sed.keys())
                 if key in val:
                     self.assertEqual(sed[key], val[key])
-                elif key == 'AutomaticComponentGroup':
+                elif key == 'ComponentPreselection':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(json.loads(res)))
-                elif key == 'AutomaticDataSources':
+                elif key == 'PreselectedDataSources':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(poolchannels))
                 else:
@@ -4192,7 +3818,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_updateControllers_2wds_notangodspool_alias_bl(self):
+    def test_preselectComponents_2wds_notangodspool_alias_bl(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -4246,12 +3872,12 @@ class SettingsTest(unittest.TestCase):
             self._simps.dp.ChangeValueType("ScalarShort")
             self._simps.dp.Value = 43
 
-            cnf = json.loads(rs.configuration)
-            cnf["AutomaticDataSources"] = json.dumps(poolchannels)
-            cnf["AutomaticComponentGroup"] = json.dumps(componentgroup)
-            rs.configuration = json.dumps(cnf)
-            rs.updateControllers()
-            res = self.value(rs, "AutomaticComponentGroup")
+            cnf = json.loads(rs.profileConfiguration)
+            cnf["PreselectedDataSources"] = json.dumps(poolchannels)
+            cnf["ComponentPreselection"] = json.dumps(componentgroup)
+            rs.profileConfiguration = json.dumps(cnf)
+            rs.preselectComponents()
+            res = self.value(rs, "ComponentPreselection")
 
             self.myAssertDict(json.loads(res), {
                 "smycp": True, "smycp2": True, "smycp3": True,
@@ -4267,10 +3893,10 @@ class SettingsTest(unittest.TestCase):
                 self.assertTrue(key in sed.keys())
                 if key in val:
                     self.assertEqual(sed[key], val[key])
-                elif key == 'AutomaticComponentGroup':
+                elif key == 'ComponentPreselection':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(json.loads(res)))
-                elif key == 'AutomaticDataSources':
+                elif key == 'PreselectedDataSources':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(poolchannels))
                 else:
@@ -4281,7 +3907,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_updateControllers_2wds_notangodspool_alias_value(self):
+    def test_preselectComponents_2wds_notangodspool_alias_value(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -4331,12 +3957,12 @@ class SettingsTest(unittest.TestCase):
             pool = self._pool.dp
             pool.AcqChannelList = [json.dumps(a) for a in arr]
 
-            cnf = json.loads(rs.configuration)
-            cnf["AutomaticDataSources"] = json.dumps(poolchannels)
-            cnf["AutomaticComponentGroup"] = json.dumps(componentgroup)
-            rs.configuration = json.dumps(cnf)
-            rs.updateControllers()
-            res = self.value(rs, "AutomaticComponentGroup")
+            cnf = json.loads(rs.profileConfiguration)
+            cnf["PreselectedDataSources"] = json.dumps(poolchannels)
+            cnf["ComponentPreselection"] = json.dumps(componentgroup)
+            rs.profileConfiguration = json.dumps(cnf)
+            rs.preselectComponents()
+            res = self.value(rs, "ComponentPreselection")
 
             self.myAssertDict(json.loads(res), {
                 "smycp": True, "smycp2": True, "smycp3": True,
@@ -4353,10 +3979,10 @@ class SettingsTest(unittest.TestCase):
                 self.assertTrue(key in sed.keys())
                 if key in val:
                     self.assertEqual(sed[key], val[key])
-                elif key == 'AutomaticComponentGroup':
+                elif key == 'ComponentPreselection':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(json.loads(res)))
-                elif key == 'AutomaticDataSources':
+                elif key == 'PreselectedDataSources':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(poolchannels))
                 else:
@@ -4367,7 +3993,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_updateControllers_2wds_notangodspool_alias_value_bl(self):
+    def test_preselectComponents_2wds_notangodspool_alias_value_bl(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -4419,12 +4045,12 @@ class SettingsTest(unittest.TestCase):
             pool = self._pool.dp
             pool.AcqChannelList = [json.dumps(a) for a in arr]
 
-            cnf = json.loads(rs.configuration)
-            cnf["AutomaticDataSources"] = json.dumps(poolchannels)
-            cnf["AutomaticComponentGroup"] = json.dumps(componentgroup)
-            rs.configuration = json.dumps(cnf)
-            rs.updateControllers()
-            res = self.value(rs, "AutomaticComponentGroup")
+            cnf = json.loads(rs.profileConfiguration)
+            cnf["PreselectedDataSources"] = json.dumps(poolchannels)
+            cnf["ComponentPreselection"] = json.dumps(componentgroup)
+            rs.profileConfiguration = json.dumps(cnf)
+            rs.preselectComponents()
+            res = self.value(rs, "ComponentPreselection")
 
             self.myAssertDict(json.loads(res), {
                 "smycp": True, "smycp2": True, "smycp3": True,
@@ -4441,10 +4067,10 @@ class SettingsTest(unittest.TestCase):
                 self.assertTrue(key in sed.keys())
                 if key in val:
                     self.assertEqual(sed[key], val[key])
-                elif key == 'AutomaticComponentGroup':
+                elif key == 'ComponentPreselection':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(json.loads(res)))
-                elif key == 'AutomaticDataSources':
+                elif key == 'PreselectedDataSources':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(poolchannels))
                 else:
@@ -4455,7 +4081,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_updateControllers_2wds_notangodspool_alias_novalue(self):
+    def test_preselectComponents_2wds_notangodspool_alias_novalue(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -4505,12 +4131,12 @@ class SettingsTest(unittest.TestCase):
             pool = self._pool.dp
             pool.AcqChannelList = [json.dumps(a) for a in arr]
 
-            cnf = json.loads(rs.configuration)
-            cnf["AutomaticDataSources"] = json.dumps(poolchannels)
-            cnf["AutomaticComponentGroup"] = json.dumps(componentgroup)
-            rs.configuration = json.dumps(cnf)
-            rs.updateControllers()
-            res = self.value(rs, "AutomaticComponentGroup")
+            cnf = json.loads(rs.profileConfiguration)
+            cnf["PreselectedDataSources"] = json.dumps(poolchannels)
+            cnf["ComponentPreselection"] = json.dumps(componentgroup)
+            rs.profileConfiguration = json.dumps(cnf)
+            rs.preselectComponents()
+            res = self.value(rs, "ComponentPreselection")
 
             self.myAssertDict(json.loads(res), {
                 "smycp": True, "smycp2": True, "smycp3": True,
@@ -4526,10 +4152,10 @@ class SettingsTest(unittest.TestCase):
                 self.assertTrue(key in sed.keys())
                 if key in val:
                     self.assertEqual(sed[key], val[key])
-                elif key == 'AutomaticComponentGroup':
+                elif key == 'ComponentPreselection':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(json.loads(res)))
-                elif key == 'AutomaticDataSources':
+                elif key == 'PreselectedDataSources':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(poolchannels))
                 else:
@@ -4540,7 +4166,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_updateControllers_2wds_notangodspool_alias_novalue_bl(self):
+    def test_preselectComponents_2wds_notangodspool_alias_novalue_bl(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -4592,12 +4218,12 @@ class SettingsTest(unittest.TestCase):
             pool = self._pool.dp
             pool.AcqChannelList = [json.dumps(a) for a in arr]
 
-            cnf = json.loads(rs.configuration)
-            cnf["AutomaticDataSources"] = json.dumps(poolchannels)
-            cnf["AutomaticComponentGroup"] = json.dumps(componentgroup)
-            rs.configuration = json.dumps(cnf)
-            rs.updateControllers()
-            res = self.value(rs, "AutomaticComponentGroup")
+            cnf = json.loads(rs.profileConfiguration)
+            cnf["PreselectedDataSources"] = json.dumps(poolchannels)
+            cnf["ComponentPreselection"] = json.dumps(componentgroup)
+            rs.profileConfiguration = json.dumps(cnf)
+            rs.preselectComponents()
+            res = self.value(rs, "ComponentPreselection")
 
             self.myAssertDict(json.loads(res), {
                 "smycp": True, "smycp2": True, "smycp3": True,
@@ -4613,10 +4239,10 @@ class SettingsTest(unittest.TestCase):
                 self.assertTrue(key in sed.keys())
                 if key in val:
                     self.assertEqual(sed[key], val[key])
-                elif key == 'AutomaticComponentGroup':
+                elif key == 'ComponentPreselection':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(json.loads(res)))
-                elif key == 'AutomaticDataSources':
+                elif key == 'PreselectedDataSources':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(poolchannels))
                 else:
@@ -4627,7 +4253,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_updateControllers_2wds_nocomponents(self):
+    def test_preselectComponents_2wds_nocomponents(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -4668,12 +4294,12 @@ class SettingsTest(unittest.TestCase):
             self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
 
-            cnf = json.loads(rs.configuration)
-            cnf["AutomaticDataSources"] = json.dumps(poolchannels)
-            cnf["AutomaticComponentGroup"] = json.dumps(componentgroup)
-            rs.configuration = json.dumps(cnf)
-            rs.updateControllers()
-            res = self.value(rs, "AutomaticComponentGroup")
+            cnf = json.loads(rs.profileConfiguration)
+            cnf["PreselectedDataSources"] = json.dumps(poolchannels)
+            cnf["ComponentPreselection"] = json.dumps(componentgroup)
+            rs.profileConfiguration = json.dumps(cnf)
+            rs.preselectComponents()
+            res = self.value(rs, "ComponentPreselection")
 
             self.myAssertDict(json.loads(res), {
                 "smycp": True, "smycp2": True, "smycp3": True,
@@ -4689,10 +4315,10 @@ class SettingsTest(unittest.TestCase):
                 self.assertTrue(key in sed.keys())
                 if key in val:
                     self.assertEqual(sed[key], val[key])
-                elif key == 'AutomaticComponentGroup':
+                elif key == 'ComponentPreselection':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(json.loads(res)))
-                elif key == 'AutomaticDataSources':
+                elif key == 'PreselectedDataSources':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(poolchannels))
                 else:
@@ -4700,9 +4326,9 @@ class SettingsTest(unittest.TestCase):
         finally:
             simps2.tearDown()
 
-    ## resetAutomaticComponents test
+    ## resetPreselectedComponents test
     # \brief It tests default settings
-    def test_resetAutomaticComponents_simple(self):
+    def test_resetPreselectedComponents_simple(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -4721,23 +4347,23 @@ class SettingsTest(unittest.TestCase):
 
         channelerrors = []
         self.dump(rs)
-        rs.resetAutomaticComponents()
+        rs.resetPreselectedComponents()
         sed2 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-        res = self.value(rs, "AutomaticComponentGroup")
+        res = self.value(rs, "ComponentPreselection")
         self.assertEqual(res, '{}')
-        rs.configuration = '{}'
+        rs.profileConfiguration = '{}'
         rs.configDevice = val["ConfigDevice"]
         rs.door = val["Door"]
         rs.mntGrp = val["MntGrp"]
-        rs.fetchConfiguration()
-        res = self.value(rs, "AutomaticComponentGroup")
+        rs.fetchProfile()
+        res = self.value(rs, "ComponentPreselection")
         self.assertEqual(res, '{}')
 
-        self.compareToDump(rs, ["AutomaticComponentGroup"])
+        self.compareToDump(rs, ["ComponentPreselection"])
 
-    ## resetAutomaticComponents test
+    ## resetPreselectedComponents test
     # \brief It tests default settings
-    def test_resetAutomaticComponents_withcf(self):
+    def test_resetPreselectedComponents_withcf(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -4762,27 +4388,27 @@ class SettingsTest(unittest.TestCase):
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
 
         self.dump(rs)
-        rs.resetAutomaticComponents()
+        rs.resetPreselectedComponents()
         sed2 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-        res = self.value(rs, "AutomaticComponentGroup")
-        self.compareToDump(rs, ["AutomaticComponentGroup"])
+        res = self.value(rs, "ComponentPreselection")
+        self.compareToDump(rs, ["ComponentPreselection"])
 
         self.assertEqual(res, '{}')
         self.assertEqual(componentgroup, {})
         self.assertEqual(channelerrors, [])
         print self._cf.dp.GetCommandVariable("COMMANDS")
 
-        rs.configuration = '{}'
+        rs.profileConfiguration = '{}'
         rs.configDevice = val["ConfigDevice"]
         rs.door = val["Door"]
         rs.mntGrp = val["MntGrp"]
-        rs.fetchConfiguration()
-        res = self.value(rs, "AutomaticComponentGroup")
+        rs.fetchProfile()
+        res = self.value(rs, "ComponentPreselection")
         self.assertEqual(res, '{}')
 
     ## test
     # \brief It tests default settings
-    def test_resetAutomaticComponents_withcf_cps(self):
+    def test_resetPreselectedComponents_withcf_cps(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -4800,7 +4426,7 @@ class SettingsTest(unittest.TestCase):
         db = PyTango.Database()
         self._ms.dps[self._ms.ms.keys()[0]].Init()
         rs = self.openRecSelector()
-        self.setProp(rs, "defaultAutomaticComponents",
+        self.setProp(rs, "defaultPreselectedComponents",
                      list(componentgroup.keys()))
         rs.configDevice = val["ConfigDevice"]
         rs.door = val["Door"]
@@ -4809,15 +4435,17 @@ class SettingsTest(unittest.TestCase):
 
         self._ms.dps[self._ms.ms.keys()[0]].Init()
 
-        cnf = json.loads(rs.configuration)
-        cnf["AutomaticDataSources"] = json.dumps(poolchannels)
-        rs.configuration = json.dumps(cnf)
-        # rs.defaultAutomaticComponents = list(componentgroup.keys())
+        cnf = json.loads(rs.profileConfiguration)
+        cnf["PreselectedDataSources"] = json.dumps(poolchannels)
+        rs.profileConfiguration = json.dumps(cnf)
+        # rs.defaultPreselectedComponents = list(componentgroup.keys())
         self.dump(rs)
         sed1 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-        rs.resetAutomaticComponents()
-        res = self.value(rs, "AutomaticComponentGroup")
-        self.compareToDump(rs, ["AutomaticComponentGroup"])
+        rs.resetPreselectedComponents()
+        print "VALUE"
+        res = self.value(rs, "ComponentPreselection")
+        print "VALUE 2"
+        self.compareToDump(rs, ["ComponentPreselection"])
         print "RES", res
         self.myAssertDict(json.loads(res), {"mycp": True})
         self.assertEqual(channelerrors, [])
@@ -4831,10 +4459,10 @@ class SettingsTest(unittest.TestCase):
             if key in val:
                 self.assertEqual(sed[key], val[key])
                 self.assertEqual(sed1[key], val[key])
-            elif key == 'AutomaticComponentGroup':
+            elif key == 'ComponentPreselection':
                 self.myAssertDict(json.loads(sed[key]), json.loads(res))
                 self.assertNotEqual(sed1[key], res)
-            elif key == 'AutomaticDataSources':
+            elif key == 'PreselectedDataSources':
                 self.assertEqual(set(json.loads(sed[key])), set(poolchannels))
                 self.assertEqual(set(json.loads(sed1[key])), set(poolchannels))
             else:
@@ -4843,7 +4471,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_resetAutomaticComponents_withcf_cps_t(self):
+    def test_resetPreselectedComponents_withcf_cps_t(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -4863,22 +4491,22 @@ class SettingsTest(unittest.TestCase):
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
 
         rs = self.openRecSelector()
-        self.setProp(rs, "defaultAutomaticComponents",
+        self.setProp(rs, "defaultPreselectedComponents",
                      list(componentgroup.keys()))
         rs.configDevice = val["ConfigDevice"]
         rs.door = val["Door"]
         rs.mntGrp = val["MntGrp"]
         rs.writerDevice = val["WriterDevice"]
 
-        cnf = json.loads(rs.configuration)
-        cnf["AutomaticDataSources"] = json.dumps(poolchannels)
-        rs.configuration = json.dumps(cnf)
+        cnf = json.loads(rs.profileConfiguration)
+        cnf["PreselectedDataSources"] = json.dumps(poolchannels)
+        rs.profileConfiguration = json.dumps(cnf)
         self.dump(rs)
         sed1 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-        rs.resetAutomaticComponents()
+        rs.resetPreselectedComponents()
         sed2 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-        self.compareToDump(rs, ["AutomaticComponentGroup"])
-        res = self.value(rs, "AutomaticComponentGroup")
+        self.compareToDump(rs, ["ComponentPreselection"])
+        res = self.value(rs, "ComponentPreselection")
         self.myAssertDict(json.loads(res), {"mycp": True})
         self.assertEqual(channelerrors, [])
 
@@ -4886,7 +4514,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_resetAutomaticComponents_withcf_nocps(self):
+    def test_resetPreselectedComponents_withcf_nocps(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -4907,22 +4535,22 @@ class SettingsTest(unittest.TestCase):
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
 
         rs = self.openRecSelector()
-        self.setProp(rs, "defaultAutomaticComponents",
+        self.setProp(rs, "defaultPreselectedComponents",
                      list(componentgroup.keys()))
         rs.configDevice = val["ConfigDevice"]
         rs.door = val["Door"]
         rs.mntGrp = val["MntGrp"]
         rs.writerDevice = val["WriterDevice"]
 
-        cnf = json.loads(rs.configuration)
-        cnf["AutomaticDataSources"] = json.dumps(poolchannels)
-        rs.configuration = json.dumps(cnf)
+        cnf = json.loads(rs.profileConfiguration)
+        cnf["PreselectedDataSources"] = json.dumps(poolchannels)
+        rs.profileConfiguration = json.dumps(cnf)
         self.dump(rs)
         sed1 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-        rs.resetAutomaticComponents()
+        rs.resetPreselectedComponents()
         sed2 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-        self.compareToDump(rs, ["AutomaticComponentGroup"])
-        res = self.value(rs, "AutomaticComponentGroup")
+        self.compareToDump(rs, ["ComponentPreselection"])
+        res = self.value(rs, "ComponentPreselection")
 
         self.myAssertDict(json.loads(res), {})
         self.assertEqual(channelerrors, [])
@@ -4933,7 +4561,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_resetAutomaticComponents_withcf_nochnnel(self):
+    def test_resetPreselectedComponents_withcf_nochnnel(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -4951,7 +4579,7 @@ class SettingsTest(unittest.TestCase):
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
         rs = self.openRecSelector()
-        self.setProp(rs, "defaultAutomaticComponents",
+        self.setProp(rs, "defaultPreselectedComponents",
                      list(componentgroup.keys()))
         rs.configDevice = val["ConfigDevice"]
         rs.door = val["Door"]
@@ -4960,14 +4588,14 @@ class SettingsTest(unittest.TestCase):
 
         self._ms.dps[self._ms.ms.keys()[0]].Init()
 
-        cnf = json.loads(rs.configuration)
-        cnf["AutomaticDataSources"] = json.dumps(poolchannels)
-        rs.configuration = json.dumps(cnf)
+        cnf = json.loads(rs.profileConfiguration)
+        cnf["PreselectedDataSources"] = json.dumps(poolchannels)
+        rs.profileConfiguration = json.dumps(cnf)
         self.dump(rs)
         sed1 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-        rs.resetAutomaticComponents()
-        res = self.value(rs, "AutomaticComponentGroup")
-        self.compareToDump(rs, ["AutomaticComponentGroup"])
+        rs.resetPreselectedComponents()
+        res = self.value(rs, "ComponentPreselection")
+        self.compareToDump(rs, ["ComponentPreselection"])
 
         self.myAssertDict(json.loads(res), {"mycp": True})
         self.assertEqual(channelerrors, [])
@@ -4982,11 +4610,11 @@ class SettingsTest(unittest.TestCase):
             if key in val:
                 self.assertEqual(sed[key], val[key])
                 self.assertEqual(sed1[key], val[key])
-            elif key == 'AutomaticComponentGroup':
+            elif key == 'ComponentPreselection':
                 self.myAssertDict(json.loads(sed[key]),
                                   json.loads(res))
                 self.assertNotEqual(sed1[key], res)
-            elif key == 'AutomaticDataSources':
+            elif key == 'PreselectedDataSources':
                 self.assertEqual(set(json.loads(sed[key])), set(poolchannels))
                 self.assertEqual(set(json.loads(sed1[key])), set(poolchannels))
             else:
@@ -4995,7 +4623,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_resetAutomaticComponents_withcf_nochnnel_t(self):
+    def test_resetPreselectedComponents_withcf_nochnnel_t(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -5012,7 +4640,7 @@ class SettingsTest(unittest.TestCase):
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
         rs = self.openRecSelector()
-        self.setProp(rs, "defaultAutomaticComponents",
+        self.setProp(rs, "defaultPreselectedComponents",
                      list(componentgroup.keys()))
         rs.configDevice = val["ConfigDevice"]
         rs.door = val["Door"]
@@ -5021,15 +4649,15 @@ class SettingsTest(unittest.TestCase):
 
         self._ms.dps[self._ms.ms.keys()[0]].Init()
 
-        cnf = json.loads(rs.configuration)
-        cnf["AutomaticDataSources"] = json.dumps(poolchannels)
-        rs.configuration = json.dumps(cnf)
+        cnf = json.loads(rs.profileConfiguration)
+        cnf["PreselectedDataSources"] = json.dumps(poolchannels)
+        rs.profileConfiguration = json.dumps(cnf)
         self.dump(rs)
         sed1 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-        rs.resetAutomaticComponents()
+        rs.resetPreselectedComponents()
         sed2 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-        res = self.value(rs, "AutomaticComponentGroup")
-        self.compareToDump(rs, ["AutomaticComponentGroup"])
+        res = self.value(rs, "ComponentPreselection")
+        self.compareToDump(rs, ["ComponentPreselection"])
 
         self.myAssertDict(json.loads(res), {"mycp": True})
         self.assertEqual(channelerrors, [])
@@ -5038,7 +4666,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_resetAutomaticComponents_wds_t(self):
+    def test_resetPreselectedComponents_wds_t(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -5055,7 +4683,7 @@ class SettingsTest(unittest.TestCase):
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.smycps)])
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
         rs = self.openRecSelector()
-        self.setProp(rs, "defaultAutomaticComponents",
+        self.setProp(rs, "defaultPreselectedComponents",
                      list(componentgroup.keys()))
         rs.configDevice = val["ConfigDevice"]
         rs.door = val["Door"]
@@ -5064,15 +4692,15 @@ class SettingsTest(unittest.TestCase):
 
         self._ms.dps[self._ms.ms.keys()[0]].Init()
 
-        cnf = json.loads(rs.configuration)
-        cnf["AutomaticDataSources"] = json.dumps(poolchannels)
-        rs.configuration = json.dumps(cnf)
+        cnf = json.loads(rs.profileConfiguration)
+        cnf["PreselectedDataSources"] = json.dumps(poolchannels)
+        rs.profileConfiguration = json.dumps(cnf)
         self.dump(rs)
         sed1 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-        rs.resetAutomaticComponents()
+        rs.resetPreselectedComponents()
         sed2 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-        res = self.value(rs, "AutomaticComponentGroup")
-        self.compareToDump(rs, ["AutomaticComponentGroup"])
+        res = self.value(rs, "ComponentPreselection")
+        self.compareToDump(rs, ["ComponentPreselection"])
 
         self.myAssertDict(json.loads(res), {"smycp": True})
         self.assertEqual(channelerrors, [])
@@ -5081,7 +4709,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_resetAutomaticComponents_wds(self):
+    def test_resetPreselectedComponents_wds(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -5100,7 +4728,7 @@ class SettingsTest(unittest.TestCase):
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
 
         rs = self.openRecSelector()
-        self.setProp(rs, "defaultAutomaticComponents",
+        self.setProp(rs, "defaultPreselectedComponents",
                      list(componentgroup.keys()))
         rs.configDevice = val["ConfigDevice"]
         rs.door = val["Door"]
@@ -5108,14 +4736,14 @@ class SettingsTest(unittest.TestCase):
         rs.writerDevice = val["WriterDevice"]
 
         self._ms.dps[self._ms.ms.keys()[0]].Init()
-        cnf = json.loads(rs.configuration)
-        cnf["AutomaticDataSources"] = json.dumps(poolchannels)
-        rs.configuration = json.dumps(cnf)
+        cnf = json.loads(rs.profileConfiguration)
+        cnf["PreselectedDataSources"] = json.dumps(poolchannels)
+        rs.profileConfiguration = json.dumps(cnf)
         self.dump(rs)
         sed1 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-        rs.resetAutomaticComponents()
-        res = self.value(rs, "AutomaticComponentGroup")
-        self.compareToDump(rs, ["AutomaticComponentGroup"])
+        rs.resetPreselectedComponents()
+        res = self.value(rs, "ComponentPreselection")
+        self.compareToDump(rs, ["ComponentPreselection"])
 
         self.myAssertDict(json.loads(res), {"smycp": True})
         self.assertEqual(channelerrors, [])
@@ -5128,11 +4756,11 @@ class SettingsTest(unittest.TestCase):
             if key in val:
                 self.assertEqual(sed[key], val[key])
                 self.assertEqual(sed1[key], val[key])
-            elif key == 'AutomaticComponentGroup':
+            elif key == 'ComponentPreselection':
                 self.myAssertDict(json.loads(sed[key]),
                                   json.loads(res))
                 self.assertNotEqual(sed1[key], res)
-            elif key == 'AutomaticDataSources':
+            elif key == 'PreselectedDataSources':
                 self.assertEqual(set(json.loads(sed[key])),
                                  set(poolchannels))
                 self.assertEqual(set(json.loads(sed1[key])),
@@ -5143,7 +4771,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_resetAutomaticComponents_wds2(self):
+    def test_resetPreselectedComponents_wds2(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -5161,7 +4789,7 @@ class SettingsTest(unittest.TestCase):
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.smycps)])
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
         rs = self.openRecSelector()
-        self.setProp(rs, "defaultAutomaticComponents",
+        self.setProp(rs, "defaultPreselectedComponents",
                      list(componentgroup.keys()))
         rs.configDevice = val["ConfigDevice"]
         rs.door = val["Door"]
@@ -5170,14 +4798,14 @@ class SettingsTest(unittest.TestCase):
 
         self._ms.dps[self._ms.ms.keys()[0]].Init()
 
-        cnf = json.loads(rs.configuration)
-        cnf["AutomaticDataSources"] = json.dumps(poolchannels)
-        rs.configuration = json.dumps(cnf)
+        cnf = json.loads(rs.profileConfiguration)
+        cnf["PreselectedDataSources"] = json.dumps(poolchannels)
+        rs.profileConfiguration = json.dumps(cnf)
         self.dump(rs)
         sed1 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-        rs.resetAutomaticComponents()
-        res = self.value(rs, "AutomaticComponentGroup")
-        self.compareToDump(rs, ["AutomaticComponentGroup"])
+        rs.resetPreselectedComponents()
+        res = self.value(rs, "ComponentPreselection")
+        self.compareToDump(rs, ["ComponentPreselection"])
 
         self.myAssertDict(json.loads(res), {
             "smycp": True, "smycp2": True, "smycp3": True})
@@ -5192,11 +4820,11 @@ class SettingsTest(unittest.TestCase):
             if key in val:
                 self.assertEqual(sed[key], val[key])
                 self.assertEqual(sed1[key], val[key])
-            elif key == 'AutomaticComponentGroup':
+            elif key == 'ComponentPreselection':
                 self.myAssertDict(json.loads(sed[key]),
                                   json.loads(res))
                 self.assertNotEqual(sed1[key], res)
-            elif key == 'AutomaticDataSources':
+            elif key == 'PreselectedDataSources':
                 self.assertEqual(set(json.loads(sed[key])),
                                  set(poolchannels))
                 self.assertEqual(set(json.loads(sed1[key])),
@@ -5207,7 +4835,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_resetAutomaticComponents_2wds(self):
+    def test_resetPreselectedComponents_2wds(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -5236,7 +4864,7 @@ class SettingsTest(unittest.TestCase):
             self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
             rs = self.openRecSelector()
-            self.setProp(rs, "defaultAutomaticComponents",
+            self.setProp(rs, "defaultPreselectedComponents",
                          list(componentgroup.keys()))
             rs.configDevice = val["ConfigDevice"]
             rs.door = val["Door"]
@@ -5245,14 +4873,14 @@ class SettingsTest(unittest.TestCase):
 
             self._ms.dps[self._ms.ms.keys()[0]].Init()
 
-            cnf = json.loads(rs.configuration)
-            cnf["AutomaticDataSources"] = json.dumps(poolchannels)
-            rs.configuration = json.dumps(cnf)
+            cnf = json.loads(rs.profileConfiguration)
+            cnf["PreselectedDataSources"] = json.dumps(poolchannels)
+            rs.profileConfiguration = json.dumps(cnf)
             self.dump(rs)
             sed1 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-            rs.resetAutomaticComponents()
-            res = self.value(rs, "AutomaticComponentGroup")
-            self.compareToDump(rs, ["AutomaticComponentGroup"])
+            rs.resetPreselectedComponents()
+            res = self.value(rs, "ComponentPreselection")
+            self.compareToDump(rs, ["ComponentPreselection"])
 
             self.myAssertDict(json.loads(res), {
                 "smycp": True, "smycp2": True, "smycp3": True,
@@ -5268,11 +4896,11 @@ class SettingsTest(unittest.TestCase):
                 if key in val:
                     self.assertEqual(sed[key], val[key])
                     self.assertEqual(sed1[key], val[key])
-                elif key == 'AutomaticComponentGroup':
+                elif key == 'ComponentPreselection':
                     self.myAssertDict(json.loads(sed[key]),
                                       json.loads(res))
                     self.assertNotEqual(sed1[key], res)
-                elif key == 'AutomaticDataSources':
+                elif key == 'PreselectedDataSources':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(poolchannels))
                     self.assertEqual(set(json.loads(sed1[key])),
@@ -5285,7 +4913,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_resetAutomaticComponents_2wds_dvnorunning(self):
+    def test_resetPreselectedComponents_2wds_dvnorunning(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -5315,7 +4943,7 @@ class SettingsTest(unittest.TestCase):
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
 
             rs = self.openRecSelector()
-            self.setProp(rs, "defaultAutomaticComponents",
+            self.setProp(rs, "defaultPreselectedComponents",
                          list(componentgroup.keys()))
             rs.configDevice = val["ConfigDevice"]
             rs.door = val["Door"]
@@ -5324,14 +4952,14 @@ class SettingsTest(unittest.TestCase):
 
             self._ms.dps[self._ms.ms.keys()[0]].Init()
 
-            cnf = json.loads(rs.configuration)
-            cnf["AutomaticDataSources"] = json.dumps(poolchannels)
-            rs.configuration = json.dumps(cnf)
+            cnf = json.loads(rs.profileConfiguration)
+            cnf["PreselectedDataSources"] = json.dumps(poolchannels)
+            rs.profileConfiguration = json.dumps(cnf)
             self.dump(rs)
             sed1 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-            rs.resetAutomaticComponents()
-            res = self.value(rs, "AutomaticComponentGroup")
-            self.compareToDump(rs, ["AutomaticComponentGroup"])
+            rs.resetPreselectedComponents()
+            res = self.value(rs, "ComponentPreselection")
+            self.compareToDump(rs, ["ComponentPreselection"])
 
             self.myAssertDict(json.loads(res), {
                 "smycp": True, "smycp2": True, "smycp3": True,
@@ -5347,10 +4975,10 @@ class SettingsTest(unittest.TestCase):
                 if key in val:
                     self.assertEqual(sed[key], val[key])
                     self.assertEqual(sed1[key], val[key])
-                elif key == 'AutomaticComponentGroup':
+                elif key == 'ComponentPreselection':
                     self.myAssertDict(json.loads(sed[key]), json.loads(res))
                     self.assertNotEqual(sed1[key], res)
-                elif key == 'AutomaticDataSources':
+                elif key == 'PreselectedDataSources':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(poolchannels))
                     self.assertEqual(set(json.loads(sed1[key])),
@@ -5363,7 +4991,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_resetAutomaticComponents_2wds_dvnodef(self):
+    def test_resetPreselectedComponents_2wds_dvnodef(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -5386,7 +5014,7 @@ class SettingsTest(unittest.TestCase):
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
         rs = self.openRecSelector()
-        self.setProp(rs, "defaultAutomaticComponents",
+        self.setProp(rs, "defaultPreselectedComponents",
                      list(componentgroup.keys()))
         rs.configDevice = val["ConfigDevice"]
         rs.door = val["Door"]
@@ -5395,14 +5023,14 @@ class SettingsTest(unittest.TestCase):
 
         self._ms.dps[self._ms.ms.keys()[0]].Init()
 
-        cnf = json.loads(rs.configuration)
-        cnf["AutomaticDataSources"] = json.dumps(poolchannels)
-        rs.configuration = json.dumps(cnf)
+        cnf = json.loads(rs.profileConfiguration)
+        cnf["PreselectedDataSources"] = json.dumps(poolchannels)
+        rs.profileConfiguration = json.dumps(cnf)
         self.dump(rs)
         sed1 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-        rs.resetAutomaticComponents()
-        res = self.value(rs, "AutomaticComponentGroup")
-        self.compareToDump(rs, ["AutomaticComponentGroup"])
+        rs.resetPreselectedComponents()
+        res = self.value(rs, "ComponentPreselection")
+        self.compareToDump(rs, ["ComponentPreselection"])
 
         self.myAssertDict(json.loads(res), {
             "smycp": True, "smycp2": True, "smycp3": True,
@@ -5418,10 +5046,10 @@ class SettingsTest(unittest.TestCase):
             if key in val:
                 self.assertEqual(sed[key], val[key])
                 self.assertEqual(sed1[key], val[key])
-            elif key == 'AutomaticComponentGroup':
+            elif key == 'ComponentPreselection':
                 self.myAssertDict(json.loads(sed[key]), json.loads(res))
                 self.assertNotEqual(sed1[key], res)
-            elif key == 'AutomaticDataSources':
+            elif key == 'PreselectedDataSources':
                 self.assertEqual(set(json.loads(sed[key])),
                                  set(poolchannels))
                 self.assertEqual(set(json.loads(sed1[key])),
@@ -5432,7 +5060,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_resetAutomaticComponents_2wds_nods(self):
+    def test_resetPreselectedComponents_2wds_nods(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -5459,7 +5087,7 @@ class SettingsTest(unittest.TestCase):
             #            dss.update(self.smydss2)
 
             rs = self.openRecSelector()
-            self.setProp(rs, "defaultAutomaticComponents",
+            self.setProp(rs, "defaultPreselectedComponents",
                          list(componentgroup.keys()))
             rs.configDevice = val["ConfigDevice"]
             rs.door = val["Door"]
@@ -5471,14 +5099,14 @@ class SettingsTest(unittest.TestCase):
             self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
 
-            cnf = json.loads(rs.configuration)
-            cnf["AutomaticDataSources"] = json.dumps(poolchannels)
-            rs.configuration = json.dumps(cnf)
+            cnf = json.loads(rs.profileConfiguration)
+            cnf["PreselectedDataSources"] = json.dumps(poolchannels)
+            rs.profileConfiguration = json.dumps(cnf)
             self.dump(rs)
             sed1 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-            rs.resetAutomaticComponents()
-            res = self.value(rs, "AutomaticComponentGroup")
-            self.compareToDump(rs, ["AutomaticComponentGroup"])
+            rs.resetPreselectedComponents()
+            res = self.value(rs, "ComponentPreselection")
+            self.compareToDump(rs, ["ComponentPreselection"])
 
             self.myAssertDict(json.loads(res), {
                 "smycp": True, "smycp2": True, "smycp3": True,
@@ -5494,10 +5122,10 @@ class SettingsTest(unittest.TestCase):
                 if key in val:
                     self.assertEqual(sed[key], val[key])
                     self.assertEqual(sed1[key], val[key])
-                elif key == 'AutomaticComponentGroup':
+                elif key == 'ComponentPreselection':
                     self.myAssertDict(json.loads(sed[key]), json.loads(res))
                     self.assertNotEqual(sed1[key], res)
-                elif key == 'AutomaticDataSources':
+                elif key == 'PreselectedDataSources':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(poolchannels))
                     self.assertEqual(set(json.loads(sed1[key])),
@@ -5510,7 +5138,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_resetAutomaticComponents_2wds_nodspool(self):
+    def test_resetPreselectedComponents_2wds_nodspool(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -5538,7 +5166,7 @@ class SettingsTest(unittest.TestCase):
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
 
             rs = self.openRecSelector()
-            self.setProp(rs, "defaultAutomaticComponents",
+            self.setProp(rs, "defaultPreselectedComponents",
                          list(componentgroup.keys()))
             rs.configDevice = val["ConfigDevice"]
             rs.door = val["Door"]
@@ -5547,14 +5175,14 @@ class SettingsTest(unittest.TestCase):
 
             self._ms.dps[self._ms.ms.keys()[0]].Init()
 
-            cnf = json.loads(rs.configuration)
-            cnf["AutomaticDataSources"] = json.dumps(poolchannels)
-            rs.configuration = json.dumps(cnf)
+            cnf = json.loads(rs.profileConfiguration)
+            cnf["PreselectedDataSources"] = json.dumps(poolchannels)
+            rs.profileConfiguration = json.dumps(cnf)
             self.dump(rs)
             sed1 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-            rs.resetAutomaticComponents()
-            res = self.value(rs, "AutomaticComponentGroup")
-            self.compareToDump(rs, ["AutomaticComponentGroup"])
+            rs.resetPreselectedComponents()
+            res = self.value(rs, "ComponentPreselection")
+            self.compareToDump(rs, ["ComponentPreselection"])
 
             self.myAssertDict(json.loads(res), {
                 "smycp": True, "smycp2": True, "smycp3": True,
@@ -5570,10 +5198,10 @@ class SettingsTest(unittest.TestCase):
                 self.assertTrue(key in sed1.keys())
                 if key in val:
                     self.assertEqual(sed[key], val[key])
-                elif key == 'AutomaticComponentGroup':
+                elif key == 'ComponentPreselection':
                     self.myAssertDict(json.loads(sed[key]), json.loads(res))
                     self.assertNotEqual(sed1[key], res)
-                elif key == 'AutomaticDataSources':
+                elif key == 'PreselectedDataSources':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(poolchannels))
                     self.assertEqual(set(json.loads(sed1[key])),
@@ -5586,7 +5214,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_resetAutomaticComponents_2wds_notangods(self):
+    def test_resetPreselectedComponents_2wds_notangods(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -5615,7 +5243,7 @@ class SettingsTest(unittest.TestCase):
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
 
             rs = self.openRecSelector()
-            self.setProp(rs, "defaultAutomaticComponents",
+            self.setProp(rs, "defaultPreselectedComponents",
                          list(componentgroup.keys()))
             rs.configDevice = val["ConfigDevice"]
             rs.door = val["Door"]
@@ -5624,14 +5252,14 @@ class SettingsTest(unittest.TestCase):
 
             self._ms.dps[self._ms.ms.keys()[0]].Init()
 
-            cnf = json.loads(rs.configuration)
-            cnf["AutomaticDataSources"] = json.dumps(poolchannels)
-            rs.configuration = json.dumps(cnf)
+            cnf = json.loads(rs.profileConfiguration)
+            cnf["PreselectedDataSources"] = json.dumps(poolchannels)
+            rs.profileConfiguration = json.dumps(cnf)
             self.dump(rs)
             sed1 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-            rs.resetAutomaticComponents()
-            res = self.value(rs, "AutomaticComponentGroup")
-            self.compareToDump(rs, ["AutomaticComponentGroup"])
+            rs.resetPreselectedComponents()
+            res = self.value(rs, "ComponentPreselection")
+            self.compareToDump(rs, ["ComponentPreselection"])
 
             self.myAssertDict(json.loads(res), {
                 "smycp": True, "smycp2": True, "smycp3": True,
@@ -5649,10 +5277,10 @@ class SettingsTest(unittest.TestCase):
                 if key in val:
                     self.assertEqual(sed[key], val[key])
                     self.assertEqual(sed1[key], val[key])
-                elif key == 'AutomaticComponentGroup':
+                elif key == 'ComponentPreselection':
                     self.myAssertDict(json.loads(sed[key]), json.loads(res))
                     self.assertNotEqual(sed1[key], res)
-                elif key == 'AutomaticDataSources':
+                elif key == 'PreselectedDataSources':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(poolchannels))
                     self.assertEqual(set(json.loads(sed1[key])),
@@ -5665,7 +5293,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_resetAutomaticComponents_2wds_notangodsnopool(self):
+    def test_resetPreselectedComponents_2wds_notangodsnopool(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -5692,7 +5320,7 @@ class SettingsTest(unittest.TestCase):
             dss.update(self.smydss2)
             rs = self.openRecSelector()
 
-            self.setProp(rs, "defaultAutomaticComponents",
+            self.setProp(rs, "defaultPreselectedComponents",
                          list(componentgroup.keys()))
             rs.configDevice = val["ConfigDevice"]
             rs.door = val["Door"]
@@ -5704,14 +5332,14 @@ class SettingsTest(unittest.TestCase):
             self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
 
-            cnf = json.loads(rs.configuration)
-            cnf["AutomaticDataSources"] = json.dumps(poolchannels)
-            rs.configuration = json.dumps(cnf)
+            cnf = json.loads(rs.profileConfiguration)
+            cnf["PreselectedDataSources"] = json.dumps(poolchannels)
+            rs.profileConfiguration = json.dumps(cnf)
             self.dump(rs)
             sed1 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-            rs.resetAutomaticComponents()
-            res = self.value(rs, "AutomaticComponentGroup")
-            self.compareToDump(rs, ["AutomaticComponentGroup"])
+            rs.resetPreselectedComponents()
+            res = self.value(rs, "ComponentPreselection")
+            self.compareToDump(rs, ["ComponentPreselection"])
 
             self.myAssertDict(json.loads(res), {
                 "smycp": True, "smycp2": True, "smycp3": True,
@@ -5729,10 +5357,10 @@ class SettingsTest(unittest.TestCase):
                 if key in val:
                     self.assertEqual(sed[key], val[key])
                     self.assertEqual(sed1[key], val[key])
-                elif key == 'AutomaticComponentGroup':
+                elif key == 'ComponentPreselection':
                     self.myAssertDict(json.loads(sed[key]), json.loads(res))
                     self.assertNotEqual(sed1[key], res)
-                elif key == 'AutomaticDataSources':
+                elif key == 'PreselectedDataSources':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(poolchannels))
                     self.assertEqual(set(json.loads(sed1[key])),
@@ -5745,7 +5373,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_resetAutomaticComponents_2wds_notangodsnopool2(self):
+    def test_resetPreselectedComponents_2wds_notangodsnopool2(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -5773,7 +5401,7 @@ class SettingsTest(unittest.TestCase):
             self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
             rs = self.openRecSelector()
-            self.setProp(rs, "defaultAutomaticComponents",
+            self.setProp(rs, "defaultPreselectedComponents",
                          list(componentgroup.keys()))
             rs.configDevice = val["ConfigDevice"]
             rs.door = val["Door"]
@@ -5782,14 +5410,14 @@ class SettingsTest(unittest.TestCase):
 
             self._ms.dps[self._ms.ms.keys()[0]].Init()
 
-            cnf = json.loads(rs.configuration)
-            cnf["AutomaticDataSources"] = json.dumps(poolchannels)
-            rs.configuration = json.dumps(cnf)
+            cnf = json.loads(rs.profileConfiguration)
+            cnf["PreselectedDataSources"] = json.dumps(poolchannels)
+            rs.profileConfiguration = json.dumps(cnf)
             self.dump(rs)
             sed1 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-            rs.resetAutomaticComponents()
-            res = self.value(rs, "AutomaticComponentGroup")
-            self.compareToDump(rs, ["AutomaticComponentGroup"])
+            rs.resetPreselectedComponents()
+            res = self.value(rs, "ComponentPreselection")
+            self.compareToDump(rs, ["ComponentPreselection"])
 
             self.myAssertDict(json.loads(res), {
                 "smycp": True, "smycp2": True, "smycp3": True,
@@ -5807,10 +5435,10 @@ class SettingsTest(unittest.TestCase):
                 if key in val:
                     self.assertEqual(sed[key], val[key])
                     self.assertEqual(sed1[key], val[key])
-                elif key == 'AutomaticComponentGroup':
+                elif key == 'ComponentPreselection':
                     self.myAssertDict(json.loads(sed[key]), json.loads(res))
                     self.assertNotEqual(sed1[key], res)
-                elif key == 'AutomaticDataSources':
+                elif key == 'PreselectedDataSources':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(poolchannels))
                     self.assertEqual(set(json.loads(sed1[key])),
@@ -5823,7 +5451,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_resetAutomaticComponents_2wds_notangods2(self):
+    def test_resetPreselectedComponents_2wds_notangods2(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -5863,7 +5491,7 @@ class SettingsTest(unittest.TestCase):
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
 
             rs = self.openRecSelector()
-            self.setProp(rs, "defaultAutomaticComponents",
+            self.setProp(rs, "defaultPreselectedComponents",
                          list(componentgroup.keys()))
             rs.configDevice = val["ConfigDevice"]
             rs.door = val["Door"]
@@ -5875,14 +5503,14 @@ class SettingsTest(unittest.TestCase):
             pool = self._pool.dp
             pool.AcqChannelList = [json.dumps(a) for a in arr]
 
-            cnf = json.loads(rs.configuration)
-            cnf["AutomaticDataSources"] = json.dumps(poolchannels)
-            rs.configuration = json.dumps(cnf)
+            cnf = json.loads(rs.profileConfiguration)
+            cnf["PreselectedDataSources"] = json.dumps(poolchannels)
+            rs.profileConfiguration = json.dumps(cnf)
             self.dump(rs)
             sed1 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-            rs.resetAutomaticComponents()
-            res = self.value(rs, "AutomaticComponentGroup")
-            self.compareToDump(rs, ["AutomaticComponentGroup"])
+            rs.resetPreselectedComponents()
+            res = self.value(rs, "ComponentPreselection")
+            self.compareToDump(rs, ["ComponentPreselection"])
 
             self.myAssertDict(json.loads(res), {
                 "smycp": True, "smycp2": True, "smycp3": True,
@@ -5899,10 +5527,10 @@ class SettingsTest(unittest.TestCase):
                 if key in val:
                     self.assertEqual(sed[key], val[key])
                     self.assertEqual(sed1[key], val[key])
-                elif key == 'AutomaticComponentGroup':
+                elif key == 'ComponentPreselection':
                     self.myAssertDict(json.loads(sed[key]), json.loads(res))
                     self.assertNotEqual(sed1[key], res)
-                elif key == 'AutomaticDataSources':
+                elif key == 'PreselectedDataSources':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(poolchannels))
                     self.assertEqual(set(json.loads(sed1[key])),
@@ -5915,7 +5543,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_resetAutomaticComponents_2wds_notangods2_bl(self):
+    def test_resetPreselectedComponents_2wds_notangods2_bl(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -5957,7 +5585,7 @@ class SettingsTest(unittest.TestCase):
             rs = self.openRecSelector()
             self.setProp(rs, "poolBlacklist",
                          [self._pool.dp.name()])
-            self.setProp(rs, "defaultAutomaticComponents",
+            self.setProp(rs, "defaultPreselectedComponents",
                          list(componentgroup.keys()))
             rs.configDevice = val["ConfigDevice"]
             rs.door = val["Door"]
@@ -5969,14 +5597,14 @@ class SettingsTest(unittest.TestCase):
             pool = self._pool.dp
             pool.AcqChannelList = [json.dumps(a) for a in arr]
 
-            cnf = json.loads(rs.configuration)
-            cnf["AutomaticDataSources"] = json.dumps(poolchannels)
-            rs.configuration = json.dumps(cnf)
+            cnf = json.loads(rs.profileConfiguration)
+            cnf["PreselectedDataSources"] = json.dumps(poolchannels)
+            rs.profileConfiguration = json.dumps(cnf)
             self.dump(rs)
             sed1 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-            rs.resetAutomaticComponents()
-            res = self.value(rs, "AutomaticComponentGroup")
-            self.compareToDump(rs, ["AutomaticComponentGroup"])
+            rs.resetPreselectedComponents()
+            res = self.value(rs, "ComponentPreselection")
+            self.compareToDump(rs, ["ComponentPreselection"])
 
             self.myAssertDict(json.loads(res), {
                 "smycp": True, "smycp2": True, "smycp3": True,
@@ -5993,10 +5621,10 @@ class SettingsTest(unittest.TestCase):
                 if key in val:
                     self.assertEqual(sed[key], val[key])
                     self.assertEqual(sed1[key], val[key])
-                elif key == 'AutomaticComponentGroup':
+                elif key == 'ComponentPreselection':
                     self.myAssertDict(json.loads(sed[key]), json.loads(res))
                     self.assertNotEqual(sed1[key], res)
-                elif key == 'AutomaticDataSources':
+                elif key == 'PreselectedDataSources':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(poolchannels))
                     self.assertEqual(set(json.loads(sed1[key])),
@@ -6009,7 +5637,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_resetAutomaticComponents_2wds_notangodspool_error(self):
+    def test_resetPreselectedComponents_2wds_notangodspool_error(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -6051,7 +5679,7 @@ class SettingsTest(unittest.TestCase):
             self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
             rs = self.openRecSelector()
-            self.setProp(rs, "defaultAutomaticComponents",
+            self.setProp(rs, "defaultPreselectedComponents",
                          list(componentgroup.keys()))
             rs.configDevice = val["ConfigDevice"]
             rs.door = val["Door"]
@@ -6063,14 +5691,14 @@ class SettingsTest(unittest.TestCase):
             pool = self._pool.dp
             pool.AcqChannelList = [json.dumps(a) for a in arr]
 
-            cnf = json.loads(rs.configuration)
-            cnf["AutomaticDataSources"] = json.dumps(poolchannels)
-            rs.configuration = json.dumps(cnf)
+            cnf = json.loads(rs.profileConfiguration)
+            cnf["PreselectedDataSources"] = json.dumps(poolchannels)
+            rs.profileConfiguration = json.dumps(cnf)
             self.dump(rs)
             sed1 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-            rs.resetAutomaticComponents()
-            res = self.value(rs, "AutomaticComponentGroup")
-            self.compareToDump(rs, ["AutomaticComponentGroup"])
+            rs.resetPreselectedComponents()
+            res = self.value(rs, "ComponentPreselection")
+            self.compareToDump(rs, ["ComponentPreselection"])
 
             self.myAssertDict(json.loads(res), {
                 "smycp": True, "smycp2": True, "smycp3": True,
@@ -6088,10 +5716,10 @@ class SettingsTest(unittest.TestCase):
                 if key in val:
                     self.assertEqual(sed[key], val[key])
                     self.assertEqual(sed1[key], val[key])
-                elif key == 'AutomaticComponentGroup':
+                elif key == 'ComponentPreselection':
                     self.myAssertDict(json.loads(sed[key]), json.loads(res))
                     self.assertNotEqual(sed1[key], res)
-                elif key == 'AutomaticDataSources':
+                elif key == 'PreselectedDataSources':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(poolchannels))
                     self.assertEqual(set(json.loads(sed1[key])),
@@ -6104,7 +5732,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_resetAutomaticComponents_2wds_notangodspool(self):
+    def test_resetPreselectedComponents_2wds_notangodspool(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -6143,7 +5771,7 @@ class SettingsTest(unittest.TestCase):
             self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
             rs = self.openRecSelector()
-            self.setProp(rs, "defaultAutomaticComponents",
+            self.setProp(rs, "defaultPreselectedComponents",
                          list(componentgroup.keys()))
             rs.configDevice = val["ConfigDevice"]
             rs.door = val["Door"]
@@ -6158,14 +5786,14 @@ class SettingsTest(unittest.TestCase):
             self._simps.dp.ChangeValueType("ScalarShort")
             self._simps.dp.Value = 43
 
-            cnf = json.loads(rs.configuration)
-            cnf["AutomaticDataSources"] = json.dumps(poolchannels)
-            rs.configuration = json.dumps(cnf)
+            cnf = json.loads(rs.profileConfiguration)
+            cnf["PreselectedDataSources"] = json.dumps(poolchannels)
+            rs.profileConfiguration = json.dumps(cnf)
             self.dump(rs)
             sed1 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-            rs.resetAutomaticComponents()
-            res = self.value(rs, "AutomaticComponentGroup")
-            self.compareToDump(rs, ["AutomaticComponentGroup"])
+            rs.resetPreselectedComponents()
+            res = self.value(rs, "ComponentPreselection")
+            self.compareToDump(rs, ["ComponentPreselection"])
 
             self.myAssertDict(json.loads(res), {
                 "smycp": True, "smycp2": True, "smycp3": True,
@@ -6182,10 +5810,10 @@ class SettingsTest(unittest.TestCase):
                 if key in val:
                     self.assertEqual(sed[key], val[key])
                     self.assertEqual(sed1[key], val[key])
-                elif key == 'AutomaticComponentGroup':
+                elif key == 'ComponentPreselection':
                     self.myAssertDict(json.loads(sed[key]), json.loads(res))
                     self.assertNotEqual(sed1[key], res)
-                elif key == 'AutomaticDataSources':
+                elif key == 'PreselectedDataSources':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(poolchannels))
                     self.assertEqual(set(json.loads(sed1[key])),
@@ -6198,7 +5826,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_resetAutomaticComponents_2wds_notangodspool_alias(self):
+    def test_resetPreselectedComponents_2wds_notangodspool_alias(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -6238,7 +5866,7 @@ class SettingsTest(unittest.TestCase):
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
 
             rs = self.openRecSelector()
-            self.setProp(rs, "defaultAutomaticComponents",
+            self.setProp(rs, "defaultPreselectedComponents",
                          list(componentgroup.keys()))
             rs.configDevice = val["ConfigDevice"]
             rs.door = val["Door"]
@@ -6252,14 +5880,14 @@ class SettingsTest(unittest.TestCase):
             self._simps.dp.ChangeValueType("ScalarShort")
             self._simps.dp.Value = 43
 
-            cnf = json.loads(rs.configuration)
-            cnf["AutomaticDataSources"] = json.dumps(poolchannels)
-            rs.configuration = json.dumps(cnf)
+            cnf = json.loads(rs.profileConfiguration)
+            cnf["PreselectedDataSources"] = json.dumps(poolchannels)
+            rs.profileConfiguration = json.dumps(cnf)
             self.dump(rs)
             sed1 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-            rs.resetAutomaticComponents()
-            res = self.value(rs, "AutomaticComponentGroup")
-            self.compareToDump(rs, ["AutomaticComponentGroup"])
+            rs.resetPreselectedComponents()
+            res = self.value(rs, "ComponentPreselection")
+            self.compareToDump(rs, ["ComponentPreselection"])
 
             self.myAssertDict(json.loads(res), {
                 "smycp": True, "smycp2": True, "smycp3": True,
@@ -6277,10 +5905,10 @@ class SettingsTest(unittest.TestCase):
                 if key in val:
                     self.assertEqual(sed[key], val[key])
                     self.assertEqual(sed1[key], val[key])
-                elif key == 'AutomaticComponentGroup':
+                elif key == 'ComponentPreselection':
                     self.myAssertDict(json.loads(sed[key]), json.loads(res))
                     self.assertNotEqual(sed1[key], res)
-                elif key == 'AutomaticDataSources':
+                elif key == 'PreselectedDataSources':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(poolchannels))
                     self.assertEqual(set(json.loads(sed1[key])),
@@ -6294,7 +5922,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_resetAutomaticComponents_2wds_notangodspool_alias_bl(self):
+    def test_resetPreselectedComponents_2wds_notangodspool_alias_bl(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -6334,7 +5962,7 @@ class SettingsTest(unittest.TestCase):
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
 
             rs = self.openRecSelector()
-            self.setProp(rs, "defaultAutomaticComponents",
+            self.setProp(rs, "defaultPreselectedComponents",
                          list(componentgroup.keys()))
             self.setProp(rs, "poolBlacklist",
                          [self._pool.dp.name()])
@@ -6350,14 +5978,14 @@ class SettingsTest(unittest.TestCase):
             self._simps.dp.ChangeValueType("ScalarShort")
             self._simps.dp.Value = 43
 
-            cnf = json.loads(rs.configuration)
-            cnf["AutomaticDataSources"] = json.dumps(poolchannels)
-            rs.configuration = json.dumps(cnf)
+            cnf = json.loads(rs.profileConfiguration)
+            cnf["PreselectedDataSources"] = json.dumps(poolchannels)
+            rs.profileConfiguration = json.dumps(cnf)
             self.dump(rs)
             sed1 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-            rs.resetAutomaticComponents()
-            res = self.value(rs, "AutomaticComponentGroup")
-            self.compareToDump(rs, ["AutomaticComponentGroup"])
+            rs.resetPreselectedComponents()
+            res = self.value(rs, "ComponentPreselection")
+            self.compareToDump(rs, ["ComponentPreselection"])
 
             self.myAssertDict(json.loads(res), {
                 "smycp": True, "smycp2": True, "smycp3": True,
@@ -6375,10 +6003,10 @@ class SettingsTest(unittest.TestCase):
                 if key in val:
                     self.assertEqual(sed[key], val[key])
                     self.assertEqual(sed1[key], val[key])
-                elif key == 'AutomaticComponentGroup':
+                elif key == 'ComponentPreselection':
                     self.myAssertDict(json.loads(sed[key]), json.loads(res))
                     self.assertNotEqual(sed1[key], res)
-                elif key == 'AutomaticDataSources':
+                elif key == 'PreselectedDataSources':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(poolchannels))
                     self.assertEqual(set(json.loads(sed1[key])),
@@ -6392,7 +6020,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_resetAutomaticComponents_2wds_notangodspool_alias_value(self):
+    def test_resetPreselectedComponents_2wds_notangodspool_alias_value(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -6431,7 +6059,7 @@ class SettingsTest(unittest.TestCase):
             self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
             rs = self.openRecSelector()
-            self.setProp(rs, "defaultAutomaticComponents",
+            self.setProp(rs, "defaultPreselectedComponents",
                          list(componentgroup.keys()))
             rs.configDevice = val["ConfigDevice"]
             rs.door = val["Door"]
@@ -6443,14 +6071,14 @@ class SettingsTest(unittest.TestCase):
             pool = self._pool.dp
             pool.AcqChannelList = [json.dumps(a) for a in arr]
 
-            cnf = json.loads(rs.configuration)
-            cnf["AutomaticDataSources"] = json.dumps(poolchannels)
-            rs.configuration = json.dumps(cnf)
+            cnf = json.loads(rs.profileConfiguration)
+            cnf["PreselectedDataSources"] = json.dumps(poolchannels)
+            rs.profileConfiguration = json.dumps(cnf)
             self.dump(rs)
             sed1 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-            rs.resetAutomaticComponents()
-            res = self.value(rs, "AutomaticComponentGroup")
-            self.compareToDump(rs, ["AutomaticComponentGroup"])
+            rs.resetPreselectedComponents()
+            res = self.value(rs, "ComponentPreselection")
+            self.compareToDump(rs, ["ComponentPreselection"])
 
             self.myAssertDict(json.loads(res), {
                 "smycp": True, "smycp2": True, "smycp3": True,
@@ -6469,10 +6097,10 @@ class SettingsTest(unittest.TestCase):
                 if key in val:
                     self.assertEqual(sed[key], val[key])
                     self.assertEqual(sed1[key], val[key])
-                elif key == 'AutomaticComponentGroup':
+                elif key == 'ComponentPreselection':
                     self.myAssertDict(json.loads(sed[key]), json.loads(res))
                     self.assertNotEqual(sed1[key], res)
-                elif key == 'AutomaticDataSources':
+                elif key == 'PreselectedDataSources':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(poolchannels))
                     self.assertEqual(set(json.loads(sed1[key])),
@@ -6486,7 +6114,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_resetAutomaticComponents_2wds_notangodspool_alias_value_bl(self):
+    def test_resetPreselectedComponents_2wds_notangodspool_alias_value_bl(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -6525,7 +6153,7 @@ class SettingsTest(unittest.TestCase):
             self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
             rs = self.openRecSelector()
-            self.setProp(rs, "defaultAutomaticComponents",
+            self.setProp(rs, "defaultPreselectedComponents",
                          list(componentgroup.keys()))
             self.setProp(rs, "poolBlacklist",
                          [self._pool.dp.name()])
@@ -6539,14 +6167,14 @@ class SettingsTest(unittest.TestCase):
             pool = self._pool.dp
             pool.AcqChannelList = [json.dumps(a) for a in arr]
 
-            cnf = json.loads(rs.configuration)
-            cnf["AutomaticDataSources"] = json.dumps(poolchannels)
-            rs.configuration = json.dumps(cnf)
+            cnf = json.loads(rs.profileConfiguration)
+            cnf["PreselectedDataSources"] = json.dumps(poolchannels)
+            rs.profileConfiguration = json.dumps(cnf)
             self.dump(rs)
             sed1 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-            rs.resetAutomaticComponents()
-            res = self.value(rs, "AutomaticComponentGroup")
-            self.compareToDump(rs, ["AutomaticComponentGroup"])
+            rs.resetPreselectedComponents()
+            res = self.value(rs, "ComponentPreselection")
+            self.compareToDump(rs, ["ComponentPreselection"])
 
             self.myAssertDict(json.loads(res), {
                 "smycp": True, "smycp2": True, "smycp3": True,
@@ -6565,10 +6193,10 @@ class SettingsTest(unittest.TestCase):
                 if key in val:
                     self.assertEqual(sed[key], val[key])
                     self.assertEqual(sed1[key], val[key])
-                elif key == 'AutomaticComponentGroup':
+                elif key == 'ComponentPreselection':
                     self.myAssertDict(json.loads(sed[key]), json.loads(res))
                     self.assertNotEqual(sed1[key], res)
-                elif key == 'AutomaticDataSources':
+                elif key == 'PreselectedDataSources':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(poolchannels))
                     self.assertEqual(set(json.loads(sed1[key])),
@@ -6582,7 +6210,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_resetAutomaticComponents_2wds_notangodspool_alias_novalue(self):
+    def test_resetPreselectedComponents_2wds_notangodspool_alias_novalue(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -6622,7 +6250,7 @@ class SettingsTest(unittest.TestCase):
             self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
             rs = self.openRecSelector()
-            self.setProp(rs, "defaultAutomaticComponents",
+            self.setProp(rs, "defaultPreselectedComponents",
                          list(componentgroup.keys()))
             rs.configDevice = val["ConfigDevice"]
             rs.door = val["Door"]
@@ -6634,14 +6262,14 @@ class SettingsTest(unittest.TestCase):
             pool = self._pool.dp
             pool.AcqChannelList = [json.dumps(a) for a in arr]
 
-            cnf = json.loads(rs.configuration)
-            cnf["AutomaticDataSources"] = json.dumps(poolchannels)
-            rs.configuration = json.dumps(cnf)
+            cnf = json.loads(rs.profileConfiguration)
+            cnf["PreselectedDataSources"] = json.dumps(poolchannels)
+            rs.profileConfiguration = json.dumps(cnf)
             self.dump(rs)
             sed1 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-            rs.resetAutomaticComponents()
-            res = self.value(rs, "AutomaticComponentGroup")
-            self.compareToDump(rs, ["AutomaticComponentGroup"])
+            rs.resetPreselectedComponents()
+            res = self.value(rs, "ComponentPreselection")
+            self.compareToDump(rs, ["ComponentPreselection"])
 
             self.myAssertDict(json.loads(res), {
                 "smycp": True, "smycp2": True, "smycp3": True,
@@ -6659,10 +6287,10 @@ class SettingsTest(unittest.TestCase):
                 if key in val:
                     self.assertEqual(sed[key], val[key])
                     self.assertEqual(sed1[key], val[key])
-                elif key == 'AutomaticComponentGroup':
+                elif key == 'ComponentPreselection':
                     self.myAssertDict(json.loads(sed[key]), json.loads(res))
                     self.assertNotEqual(sed1[key], res)
-                elif key == 'AutomaticDataSources':
+                elif key == 'PreselectedDataSources':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(poolchannels))
                     self.assertEqual(set(json.loads(sed1[key])),
@@ -6676,7 +6304,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_resetAutomaticComponents_2wds_nocomponents(self):
+    def test_resetPreselectedComponents_2wds_nocomponents(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -6710,7 +6338,7 @@ class SettingsTest(unittest.TestCase):
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
 
             rs = self.openRecSelector()
-            self.setProp(rs, "defaultAutomaticComponents",
+            self.setProp(rs, "defaultPreselectedComponents",
                          list(componentgroup.keys()))
             rs.configDevice = val["ConfigDevice"]
             rs.door = val["Door"]
@@ -6719,13 +6347,13 @@ class SettingsTest(unittest.TestCase):
 
             self._ms.dps[self._ms.ms.keys()[0]].Init()
 
-            cnf = json.loads(rs.configuration)
-            cnf["AutomaticDataSources"] = json.dumps(poolchannels)
-            rs.configuration = json.dumps(cnf)
+            cnf = json.loads(rs.profileConfiguration)
+            cnf["PreselectedDataSources"] = json.dumps(poolchannels)
+            rs.profileConfiguration = json.dumps(cnf)
             self.dump(rs)
             sed1 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-            rs.resetAutomaticComponents()
-            res = self.value(rs, "AutomaticComponentGroup")
+            rs.resetPreselectedComponents()
+            res = self.value(rs, "ComponentPreselection")
 
             self.myAssertDict(json.loads(res), {
                 "smycp": True, "smycp2": True, "smycp3": True,
@@ -6743,10 +6371,10 @@ class SettingsTest(unittest.TestCase):
                 if key in val:
                     self.assertEqual(sed[key], val[key])
                     self.assertEqual(sed1[key], val[key])
-                elif key == 'AutomaticComponentGroup':
+                elif key == 'ComponentPreselection':
                     self.myAssertDict(json.loads(sed[key]), json.loads(res))
                     self.assertNotEqual(sed1[key], res)
-                elif key == 'AutomaticDataSources':
+                elif key == 'PreselectedDataSources':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(poolchannels))
                     self.assertEqual(set(json.loads(sed1[key])),
@@ -6772,7 +6400,7 @@ class SettingsTest(unittest.TestCase):
         rs.door = val["Door"]
         rs.mntGrp = val["MntGrp"]
 
-        self.assertTrue(not rs.availableTimers)
+        self.assertTrue(not rs.availableTimers())
 
 #            rs = self.openRecSelector()
 
@@ -6821,7 +6449,7 @@ class SettingsTest(unittest.TestCase):
 
         lst = [ar[0] for ar in arr if "CTExpChannel" in ar[1]]
 
-        dd = rs.availableTimers
+        dd = rs.availableTimers()
         self.assertEqual(set(dd), set(lst))
 
     ## test
@@ -6871,7 +6499,7 @@ class SettingsTest(unittest.TestCase):
 
         lst = [ar[0] for ar in arr if "CTExpChannel" in ar[1]]
 
-        dd = rs.availableTimers
+        dd = rs.availableTimers()
         self.assertTrue(not dd)
 
     ## test
@@ -6921,7 +6549,7 @@ class SettingsTest(unittest.TestCase):
 
         lst = [ar[0] for ar in arr[:2] if "CTExpChannel" in ar[1]]
 
-        dd = rs.availableTimers
+        dd = rs.availableTimers()
         self.assertEqual(set(dd), set(lst))
 
     ## test
@@ -6978,7 +6606,7 @@ class SettingsTest(unittest.TestCase):
                  "haso228k:10000/expchan/dgg2_exp_01/1/Value"],
             ]
 
-            dd = rs.availableTimers
+            dd = rs.availableTimers()
             self.assertTrue(not dd)
 
             pool.ExpChannelList = [
@@ -6989,7 +6617,7 @@ class SettingsTest(unittest.TestCase):
 
             lst = [ar[0] for ar in arr if "CTExpChannel" in ar[1]]
 
-            dd = rs.availableTimers
+            dd = rs.availableTimers()
             self.assertEqual(set(dd), set(lst))
 
             pool2.ExpChannelList = [
@@ -6999,7 +6627,7 @@ class SettingsTest(unittest.TestCase):
                 for a in arr2]
             lst.extend([ar[0] for ar in arr2 if "CTExpChannel" in ar[1]])
 
-            dd = rs.availableTimers
+            dd = rs.availableTimers()
             self.assertEqual(set(dd), set(lst))
 
         finally:
@@ -7061,7 +6689,7 @@ class SettingsTest(unittest.TestCase):
                  "haso228k:10000/expchan/dgg2_exp_01/1/Value"],
             ]
 
-            dd = rs.availableTimers
+            dd = rs.availableTimers()
             self.assertTrue(not dd)
 
             pool.ExpChannelList = [
@@ -7072,7 +6700,7 @@ class SettingsTest(unittest.TestCase):
 
             lst = [ar[0] for ar in arr if "CTExpChannel" in ar[1]]
 
-            dd = rs.availableTimers
+            dd = rs.availableTimers()
             self.assertEqual(set(dd), set(lst))
 
             pool2.ExpChannelList = [
@@ -7082,7 +6710,7 @@ class SettingsTest(unittest.TestCase):
                 for a in arr2]
 #            lst.extend([ar[0] for ar in arr2 if "CTExpChannel" in ar[1]])
 
-            dd = rs.availableTimers
+            dd = rs.availableTimers()
             self.assertEqual(set(dd), set(lst))
 
         finally:
@@ -7146,7 +6774,7 @@ class SettingsTest(unittest.TestCase):
                  "haso228k:10000/expchan/dgg2_exp_01/1/Value"],
             ]
 
-            dd = rs.availableTimers
+            dd = rs.availableTimers()
             self.assertTrue(not dd)
 
             pool.ExpChannelList = [
@@ -7159,7 +6787,7 @@ class SettingsTest(unittest.TestCase):
                 "CTExpChannel" in ar[1] and (
                     'exp_00' in ar[2] or 'exp_01' in ar[2]))]
 
-            dd = rs.availableTimers
+            dd = rs.availableTimers()
             self.assertEqual(set(dd), set(lst))
 
             pool2.ExpChannelList = [
@@ -7172,7 +6800,7 @@ class SettingsTest(unittest.TestCase):
 #                    "CTExpChannel" in ar[1] and (
 #                        'exp_00' in ar[2] or 'exp_01' in ar[2]))])
 
-            dd = rs.availableTimers
+            dd = rs.availableTimers()
             self.assertEqual(set(dd), set(lst))
 
         finally:
@@ -7234,7 +6862,7 @@ class SettingsTest(unittest.TestCase):
                  "haso228k:10000/expchan/dgg2_exp_01/1/Value"],
             ]
 
-            dd = rs.availableTimers
+            dd = rs.availableTimers()
             self.assertTrue(not dd)
 
             pool.ExpChannelList = [
@@ -7247,7 +6875,7 @@ class SettingsTest(unittest.TestCase):
                 "CTExpChannel" in ar[1] and (
                     'exp_00' in ar[2] or 'exp_01' in ar[2]))]
 
-            dd = rs.availableTimers
+            dd = rs.availableTimers()
             self.assertEqual(set(dd), set(lst))
 
             pool2.ExpChannelList = [
@@ -7260,7 +6888,7 @@ class SettingsTest(unittest.TestCase):
                     "CTExpChannel" in ar[1] and (
                         'exp_00' in ar[2] or 'exp_01' in ar[2]))])
 
-            dd = rs.availableTimers
+            dd = rs.availableTimers()
             self.assertEqual(set(dd), set(lst))
 
         finally:
@@ -7284,7 +6912,7 @@ class SettingsTest(unittest.TestCase):
         rs.door = val["Door"]
         rs.mntGrp = val["MntGrp"]
 
-        self.assertEqual({}, json.loads(rs.fullDeviceNames))
+        self.assertEqual({}, json.loads(rs.fullDeviceNames()))
 
     ## getDeviceName test
     def test_fullDeviceNames_pool1(self):
@@ -7325,7 +6953,7 @@ class SettingsTest(unittest.TestCase):
                 {"name": a[0], "full_name": "%s/%s" % (a[1], a[2])})
             for a in arr]
 
-        dd = json.loads(rs.fullDeviceNames)
+        dd = json.loads(rs.fullDeviceNames())
         self.myAssertDict(dd, dict((ar[0], ar[1]) for ar in arr))
 
     def test_fullDeviceNames_pool2(self):
@@ -7375,7 +7003,7 @@ class SettingsTest(unittest.TestCase):
                     {"name": a[0], "full_name": "%s/%s" % (a[1], a[2])})
                 for a in arr]
 
-            dd = json.loads(rs.fullDeviceNames)
+            dd = json.loads(rs.fullDeviceNames())
             dct = dict((ar[0], ar[1]) for ar in arr)
             self.myAssertDict(dd, dct)
 
@@ -7385,7 +7013,7 @@ class SettingsTest(unittest.TestCase):
                 for a in arr2]
 
             dct2 = dict((ar[0], ar[1]) for ar in arr2)
-            dd = json.loads(rs.fullDeviceNames)
+            dd = json.loads(rs.fullDeviceNames())
             dct.update(dct2)
             self.myAssertDict(dd, dct)
 
@@ -7441,7 +7069,7 @@ class SettingsTest(unittest.TestCase):
                     {"name": a[0], "full_name": "%s/%s" % (a[1], a[2])})
                 for a in arr]
 
-            dd = json.loads(rs.fullDeviceNames)
+            dd = json.loads(rs.fullDeviceNames())
             dct = dict((ar[0], ar[1]) for ar in arr)
             self.myAssertDict(dd, dct)
 
@@ -7451,7 +7079,7 @@ class SettingsTest(unittest.TestCase):
                 for a in arr2]
 
             dct2 = dict((ar[0], ar[1]) for ar in arr2)
-            dd = json.loads(rs.fullDeviceNames)
+            dd = json.loads(rs.fullDeviceNames())
 #            dct.update(dct2)
             self.myAssertDict(dd, dct)
 

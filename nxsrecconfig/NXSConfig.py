@@ -47,7 +47,6 @@ import PyTango
 #   DevState.RUNNING : Performing a query
 #==================================================================
 
-
 from .Settings import Settings as STG
 
 
@@ -92,9 +91,9 @@ class NXSRecSelector(PyTango.Device_4Impl):
             if self.PoolBlacklist else []
         self.__stg.timerFilterList = self.TimerFilterList \
             if self.TimerFilterList else ["*dgg*", "*/ctctrl0*"]
-        self.__stg.defaultAutomaticComponents = \
-            self.DefaultAutomaticComponents \
-            if self.DefaultAutomaticComponents else []
+        self.__stg.defaultPreselectedComponents = \
+            self.DefaultPreselectedComponents \
+            if self.DefaultPreselectedComponents else []
 
     #------------------------------------------------------------------
     #    Always excuted hook method
@@ -121,13 +120,6 @@ class NXSRecSelector(PyTango.Device_4Impl):
         attr.set_value(self.__stg.components)
 
     #------------------------------------------------------------------
-    #    Read AutomaticComponents attribute
-    #------------------------------------------------------------------
-    def read_AutomaticComponents(self, attr):
-        self.debug_stream("In read_AutomaticComponents()")
-        attr.set_value(self.__stg.automaticComponents)
-
-    #------------------------------------------------------------------
     #    Read DescriptionErrors attribute
     #------------------------------------------------------------------
     def read_DescriptionErrors(self, attr):
@@ -149,19 +141,19 @@ class NXSRecSelector(PyTango.Device_4Impl):
         self.__stg.door = attr.get_write_value()
 
     #------------------------------------------------------------------
-    #    Read STEPDataSources attribute
+    #    Read StepDataSources attribute
     #------------------------------------------------------------------
-    def read_STEPDataSources(self, attr):
-        self.debug_stream("In read_STEPDataSources()")
+    def read_StepDataSources(self, attr):
+        self.debug_stream("In read_StepDataSources()")
         # workaround for PyTango #709
         attr.set_value(self.__stg.stepdatasources or [])
 
     #------------------------------------------------------------------
-    #    Write STEPDataSources attribute
+    #    Write StepDataSources attribute
     #------------------------------------------------------------------
-    def write_STEPDataSources(self, attr):
-        self.debug_stream("In write_STEPDataSources()")
-        if self.is_STEPDataSources_write_allowed():
+    def write_StepDataSources(self, attr):
+        self.debug_stream("In write_StepDataSources()")
+        if self.is_StepDataSources_write_allowed():
             # workaround for PyTango #709
             self.__stg.stepdatasources = attr.get_write_value() or []
         else:
@@ -169,8 +161,8 @@ class NXSRecSelector(PyTango.Device_4Impl):
             raise Exception(
                 "To change the settings please close the server.")
 
-    #---- STEPDataSources attribute Write State Machine -----------------
-    def is_STEPDataSources_write_allowed(self):
+    #---- StepDataSources attribute Write State Machine -----------------
+    def is_StepDataSources_write_allowed(self):
         if self.get_state() in [PyTango.DevState.RUNNING]:
             return False
         return True
@@ -290,18 +282,31 @@ class NXSRecSelector(PyTango.Device_4Impl):
         self.__stg.adminData = attr.get_write_value()
 
     #------------------------------------------------------------------
-    #    Read DataRecord attribute
+    #    Read ScanEnvVariables attribute
     #------------------------------------------------------------------
-    def read_DataRecord(self, attr):
-        self.debug_stream("In read_DataRecord()")
-        attr.set_value(self.__stg.dataRecord)
+    def read_ScanEnvVariables(self, attr):
+        self.debug_stream("In read_ScanEnvVariables()")
+        attr.set_value(self.__stg.scanEnvVariables)
 
     #------------------------------------------------------------------
-    #    Write DataRecord attribute
+    #    Write ScanEnvVariables attribute
     #------------------------------------------------------------------
-    def write_DataRecord(self, attr):
-        self.debug_stream("In write_DataRecord()")
-        self.__stg.dataRecord = attr.get_write_value()
+    def write_ScanEnvVariables(self, attr):
+        self.debug_stream("In write_ScanEnvVariables()")
+        self.__stg.scanEnvVariables = attr.get_write_value()
+    #------------------------------------------------------------------
+    #    Read UserData attribute
+    #------------------------------------------------------------------
+    def read_UserData(self, attr):
+        self.debug_stream("In read_UserData()")
+        attr.set_value(self.__stg.userData)
+
+    #------------------------------------------------------------------
+    #    Write UserData attribute
+    #------------------------------------------------------------------
+    def write_UserData(self, attr):
+        self.debug_stream("In write_UserData()")
+        self.__stg.userData = attr.get_write_value()
 
     #------------------------------------------------------------------
     #    Read LabelTypes attribute
@@ -339,46 +344,18 @@ class NXSRecSelector(PyTango.Device_4Impl):
         attr.set_value(self.__stg.dataSources)
 
     #------------------------------------------------------------------
-    #    Read AvailableTimers attribute
+    #    Read ProfileConfiguration attribute
     #------------------------------------------------------------------
-    def read_AvailableTimers(self, attr):
-        self.debug_stream("In read_AvailableTimers()")
-        attr.set_value(self.__stg.availableTimers)
-
-    #------------------------------------------------------------------
-    #    Read Description attribute
-    #------------------------------------------------------------------
-    def read_Description(self, attr):
-        self.debug_stream("In read_Description()")
-        attr.set_value(self.__stg.description)
-
-    #------------------------------------------------------------------
-    #    Read VariableComponents attribute
-    #------------------------------------------------------------------
-    def read_VariableComponents(self, attr):
-        self.debug_stream("In read_VariableComponents()")
-        attr.set_value(self.__stg.variableComponents)
-
-    #------------------------------------------------------------------
-    #    Read FullDeviceNames attribute
-    #------------------------------------------------------------------
-    def read_FullDeviceNames(self, attr):
-        self.debug_stream("In read_FullDeviceNames()")
-        attr.set_value(self.__stg.fullDeviceNames)
-
-    #------------------------------------------------------------------
-    #    Read Configuration attribute
-    #------------------------------------------------------------------
-    def read_Configuration(self, attr):
+    def read_ProfileConfiguration(self, attr):
         self.debug_stream("In read_DataSources()")
-        attr.set_value(self.__stg.configuration)
+        attr.set_value(self.__stg.profileConfiguration)
 
     #------------------------------------------------------------------
-    #    Write Configuration attribute
+    #    Write ProfileConfiguration attribute
     #------------------------------------------------------------------
-    def write_Configuration(self, attr):
-        self.debug_stream("In write_Configuration()")
-        self.__stg.configuration = attr.get_write_value()
+    def write_ProfileConfiguration(self, attr):
+        self.debug_stream("In write_ProfileConfiguration()")
+        self.__stg.profileConfiguration = attr.get_write_value()
         try:
             dp = PyTango.DeviceProxy(str(self.get_name()))
             for var in self.__toupdate:
@@ -390,13 +367,6 @@ class NXSRecSelector(PyTango.Device_4Impl):
         finally:
             if self.get_state() == PyTango.DevState.RUNNING:
                 self.set_state(PyTango.DevState.ON)
-
-    #------------------------------------------------------------------
-    #    Read DisableDataSources attribute
-    #------------------------------------------------------------------
-    def read_DisableDataSources(self, attr):
-        self.debug_stream("In read_DisableDataSources()")
-        attr.set_value(self.__stg.disableDataSources)
 
     #------------------------------------------------------------------
     #    Read AppendEntry attribute
@@ -427,18 +397,18 @@ class NXSRecSelector(PyTango.Device_4Impl):
         self.__stg.configVariables = attr.get_write_value()
 
     #------------------------------------------------------------------
-    #    Read ConfigFile attribute
+    #    Read ProfileFile attribute
     #------------------------------------------------------------------
-    def read_ConfigFile(self, attr):
-        self.debug_stream("In read_ConfigFile()")
-        attr.set_value(self.__stg.configFile)
+    def read_ProfileFile(self, attr):
+        self.debug_stream("In read_ProfileFile()")
+        attr.set_value(self.__stg.profileFile)
 
     #------------------------------------------------------------------
-    #    Write ConfigFile attribute
+    #    Write ProfileFile attribute
     #------------------------------------------------------------------
-    def write_ConfigFile(self, attr):
-        self.debug_stream("In write_ConfigFile()")
-        self.__stg.configFile = attr.get_write_value()
+    def write_ProfileFile(self, attr):
+        self.debug_stream("In write_ProfileFile()")
+        self.__stg.profileFile = attr.get_write_value()
 
     #==================================================================
     #
@@ -447,16 +417,16 @@ class NXSRecSelector(PyTango.Device_4Impl):
     #==================================================================
 
     #------------------------------------------------------------------
-    #    LoadConfiguration command:
+    #    LoadProfile command:
     #
     #    Description: Load server configuration
     #
     #------------------------------------------------------------------
-    def LoadConfiguration(self):
-        self.debug_stream("In LoadConfiguration()")
+    def LoadProfile(self):
+        self.debug_stream("In LoadProfile()")
         try:
             self.set_state(PyTango.DevState.RUNNING)
-            self.__stg.loadConfiguration()
+            self.__stg.loadProfile()
 
             ## updating memorized attributes
             dp = PyTango.DeviceProxy(str(self.get_name()))
@@ -470,23 +440,23 @@ class NXSRecSelector(PyTango.Device_4Impl):
             if self.get_state() == PyTango.DevState.RUNNING:
                 self.set_state(PyTango.DevState.ON)
 
-    #---- LoadConfiguration command State Machine -----------------
-    def is_LoadConfiguration_allowed(self):
+    #---- LoadProfile command State Machine -----------------
+    def is_LoadProfile_allowed(self):
         if self.get_state() in [PyTango.DevState.RUNNING]:
             return False
         return True
 
     #------------------------------------------------------------------
-    #    FetchConfiguration command:
+    #    FetchProfile command:
     #
     #    Description: Fetch server configuration
     #
     #------------------------------------------------------------------
-    def FetchConfiguration(self):
-        self.debug_stream("In FetchConfiguration()")
+    def FetchProfile(self):
+        self.debug_stream("In FetchProfile()")
         try:
             self.set_state(PyTango.DevState.RUNNING)
-            self.__stg.fetchConfiguration()
+            self.__stg.fetchProfile()
 
             ## updating memorized attributes
             dp = PyTango.DeviceProxy(str(self.get_name()))
@@ -500,121 +470,120 @@ class NXSRecSelector(PyTango.Device_4Impl):
             if self.get_state() == PyTango.DevState.RUNNING:
                 self.set_state(PyTango.DevState.ON)
 
-    #---- FetchConfiguration command State Machine -----------------
-    def is_FetchConfiguration_allowed(self):
+    #---- FetchProfile command State Machine -----------------
+    def is_FetchProfile_allowed(self):
         if self.get_state() in [PyTango.DevState.RUNNING]:
             return False
         return True
 
     #------------------------------------------------------------------
-    #    SaveConfiguration command:
+    #    SaveProfile command:
     #
     #    Description: Save server configuration
     #
     #------------------------------------------------------------------
-    def SaveConfiguration(self):
-        self.debug_stream("In SaveConfiguration()")
+    def SaveProfile(self):
+        self.debug_stream("In SaveProfile()")
         try:
             self.set_state(PyTango.DevState.RUNNING)
-            self.__stg.saveConfiguration()
+            self.__stg.saveProfile()
             self.set_state(PyTango.DevState.ON)
         finally:
             if self.get_state() == PyTango.DevState.RUNNING:
                 self.set_state(PyTango.DevState.ON)
 
-    #---- SaveConfiguration command State Machine -----------------
-    def is_SaveConfiguration_allowed(self):
+    #---- SaveProfile command State Machine -----------------
+    def is_SaveProfile_allowed(self):
         if self.get_state() in [PyTango.DevState.RUNNING]:
             return False
         return True
 
     #------------------------------------------------------------------
-    #    StoreConfiguration command:
+    #    StoreProfile command:
     #
     #    Description: Store server configuration
     #
     #------------------------------------------------------------------
-    def StoreConfiguration(self):
-        self.debug_stream("In StoreConfiguration()")
+    def StoreProfile(self):
+        self.debug_stream("In StoreProfile()")
         try:
             self.set_state(PyTango.DevState.RUNNING)
-            self.__stg.storeConfiguration()
+            self.__stg.storeProfile()
             self.set_state(PyTango.DevState.ON)
         finally:
             if self.get_state() == PyTango.DevState.RUNNING:
                 self.set_state(PyTango.DevState.ON)
 
-    #---- StoreConfiguration command State Machine -----------------
-    def is_StoreConfiguration_allowed(self):
+    #---- StoreProfile command State Machine -----------------
+    def is_StoreProfile_allowed(self):
         if self.get_state() in [PyTango.DevState.RUNNING]:
             return False
         return True
 
     #------------------------------------------------------------------
-    #    UpdateControllers:
+    #    PreselectComponents:
     #
     #    Description: checks existing controllers of pools for
-    #        AutomaticDataSources
+    #        PreselectedDataSources
     #
     #------------------------------------------------------------------
-    def UpdateControllers(self):
-        self.debug_stream("In UpdateControllers()")
+    def PreselectComponents(self):
+        self.debug_stream("In PreselectComponents()")
         try:
             self.set_state(PyTango.DevState.RUNNING)
-            self.__stg.updateControllers()
+            self.__stg.preselectComponents()
             self.set_state(PyTango.DevState.ON)
         finally:
             if self.get_state() == PyTango.DevState.RUNNING:
                 self.set_state(PyTango.DevState.ON)
 
-    #---- UpdateControllers command State Machine -----------------
-    def is_UpdateControllers_allowed(self):
+    #---- PreselectComponents command State Machine -----------------
+    def is_PreselectComponents_allowed(self):
         if self.get_state() in [PyTango.DevState.RUNNING]:
             return False
         return True
 
     #------------------------------------------------------------------
-    #    ResetAutomaticComponents:
+    #    ResetPreselectedComponents:
     #
-    #    Description: reset AutomaticComponentGroup
-    #        to DefaultAutomaticComponents
+    #    Description: reset PreselectedComponents
+    #        to DefaultPreselectedComponents
     #
     #------------------------------------------------------------------
-    def ResetAutomaticComponents(self):
-        self.debug_stream("In ResetAutomaticComponents()")
+    def ResetPreselectedComponents(self):
+        self.debug_stream("In ResetPreselectedComponents()")
         try:
             self.set_state(PyTango.DevState.RUNNING)
-            self.__stg.resetAutomaticComponents()
+            self.__stg.resetPreselectedComponents()
             self.set_state(PyTango.DevState.ON)
         finally:
             if self.get_state() == PyTango.DevState.RUNNING:
                 self.set_state(PyTango.DevState.ON)
 
-    #---- ResetAutomaticComponents command State Machine -----------------
-    def is_ResetAutomaticComponents_allowed(self):
+    #---- ResetPreselectedComponents command State Machine -----------------
+    def is_ResetPreselectedComponents_allowed(self):
         if self.get_state() in [PyTango.DevState.RUNNING]:
             return False
         return True
 
     #------------------------------------------------------------------
-    #    ClearAllSelections:
+    #    DeleteAllProfiles:
     #
-    #    Description: reset AutomaticComponentGroup
-    #        to DefaultAutomaticComponents
+    #    Description: deletes all profiles from Configuration Server
     #
     #------------------------------------------------------------------
-    def ClearAllSelections(self):
-        self.debug_stream("In ClearAllSelections()")
+    def DeleteAllProfiles(self):
+        self.debug_stream("In DeleteAllProfiles()")
         try:
             self.set_state(PyTango.DevState.RUNNING)
-            self.__stg.clearAllSelections()
+            self.__stg.deleteAllProfiles()
             self.set_state(PyTango.DevState.ON)
         finally:
             if self.get_state() == PyTango.DevState.RUNNING:
                 self.set_state(PyTango.DevState.ON)
 
-    #---- ClearAllSelections command State Machine -----------------
-    def is_ClearAllSelections_allowed(self):
+    #---- DeleteAllProfiles command State Machine -----------------
+    def is_DeleteAllProfiles_allowed(self):
         if self.get_state() in [PyTango.DevState.RUNNING]:
             return False
         return True
@@ -643,16 +612,16 @@ class NXSRecSelector(PyTango.Device_4Impl):
         return True
 
     #------------------------------------------------------------------
-    #    IsMntGrpChanged:
+    #    IsMntGrpUpdated:
     #
     #    Description:  returns true if mntgrp was changed
     #
     #------------------------------------------------------------------
-    def IsMntGrpChanged(self):
-        self.debug_stream("In IsMntGrpChanged()")
+    def IsMntGrpUpdated(self):
+        self.debug_stream("In IsMntGrpUpdated()")
         try:
             self.set_state(PyTango.DevState.RUNNING)
-            conf = bool(self.__stg.isMntGrpChanged())
+            conf = bool(self.__stg.isMntGrpUpdated())
             self.set_state(PyTango.DevState.ON)
         finally:
             if self.get_state() == PyTango.DevState.RUNNING:
@@ -660,8 +629,8 @@ class NXSRecSelector(PyTango.Device_4Impl):
 
         return conf
 
-    #---- IsMntGrpChanged command State Machine -----------------
-    def is_IsMntGrpChanged_allowed(self):
+    #---- IsMntGrpUpdated command State Machine -----------------
+    def is_IsMntGrpUpdated_allowed(self):
         if self.get_state() in [PyTango.DevState.RUNNING]:
             return False
         return True
@@ -716,17 +685,17 @@ class NXSRecSelector(PyTango.Device_4Impl):
         return True
 
     #------------------------------------------------------------------
-    #    SwitchMntGrp:
+    #    SwitchProfile:
     #
     #    Description: switchs mntgrp configuration
     #
     #
     #------------------------------------------------------------------
-    def SwitchMntGrp(self):
-        self.debug_stream("In SwitchMntGrp()")
+    def SwitchProfile(self):
+        self.debug_stream("In SwitchProfile()")
         try:
             self.set_state(PyTango.DevState.RUNNING)
-            conf = str(self.__stg.switchMntGrp())
+            conf = str(self.__stg.switchProfile())
             self.set_state(PyTango.DevState.ON)
         finally:
             if self.get_state() == PyTango.DevState.RUNNING:
@@ -734,8 +703,8 @@ class NXSRecSelector(PyTango.Device_4Impl):
 
         return conf
 
-    #---- SwitchMntGrp command State Machine -----------------
-    def is_SwitchMntGrp_allowed(self):
+    #---- SwitchProfile command State Machine -----------------
+    def is_SwitchProfile_allowed(self):
         if self.get_state() in [PyTango.DevState.RUNNING]:
             return False
         return True
@@ -764,17 +733,17 @@ class NXSRecSelector(PyTango.Device_4Impl):
         return True
 
     #------------------------------------------------------------------
-    #    ImportAllEnv:
+    #    ImportEnvProfile:
     #
     #    Description: imports all environment variables
     #
     #
     #------------------------------------------------------------------
-    def ImportAllEnv(self):
-        self.debug_stream("In ImportAllEnv()")
+    def ImportEnvProfile(self):
+        self.debug_stream("In ImportEnvProfile()")
         try:
             self.set_state(PyTango.DevState.RUNNING)
-            self.__stg.importAllEnv()
+            self.__stg.importEnvProfile()
 
             ## updating memorized attributes
             dp = PyTango.DeviceProxy(str(self.get_name()))
@@ -795,17 +764,17 @@ class NXSRecSelector(PyTango.Device_4Impl):
         return True
 
     #------------------------------------------------------------------
-    #    ExportAllEnv:
+    #    ExportEnvProfile:
     #
     #    Description: exports all environment variables
     #
     #
     #------------------------------------------------------------------
-    def ExportAllEnv(self):
-        self.debug_stream("In ExportAllEnv()")
+    def ExportEnvProfile(self):
+        self.debug_stream("In ExportEnvProfile()")
         try:
             self.set_state(PyTango.DevState.RUNNING)
-            self.__stg.exportAllEnv()
+            self.__stg.exportEnvProfile()
             self.set_state(PyTango.DevState.ON)
         finally:
             if self.get_state() == PyTango.DevState.RUNNING:
@@ -818,18 +787,17 @@ class NXSRecSelector(PyTango.Device_4Impl):
         return True
 
     #------------------------------------------------------------------
-    #    FindMntGrp command:
+    #    AvailableTimers command:
     #
-    #    Description: Returns a full name of the given measurement group
+    #    Description: Returns a list of available component names
     #
-    #    argout: DevString    mntgrp alias
-    #    argout: DevString    mntgrp full name
+    #    argout: DevVarStringArray    list of available component names
     #------------------------------------------------------------------
-    def FindMntGrp(self, argin):
-        self.debug_stream("In FindMntGrp()")
+    def AvailableTimers(self):
+        self.debug_stream("In AvailableTimers()")
         try:
             self.set_state(PyTango.DevState.RUNNING)
-            argout = str(self.__stg.findMntGrp(argin))
+            argout = self.__stg.availableTimers()
             self.set_state(PyTango.DevState.ON)
         finally:
             if self.get_state() == PyTango.DevState.RUNNING:
@@ -837,61 +805,8 @@ class NXSRecSelector(PyTango.Device_4Impl):
 
         return argout
 
-    #---- AvailableComponents command State Machine -----------------
-    def is_FindMntGrp_allowed(self):
-        if self.get_state() in [PyTango.DevState.RUNNING]:
-            return False
-        return True
-
-    #------------------------------------------------------------------
-    #    StoreEnvData command:
-    #
-    #    Description: Stores ScanDir, ScanFile and NeXusSelectorDevice
-    #                 in environment variables
-    #
-    #    argout: DevString    json dictionary with enviroutment data
-    #    argout: DevLong    scan ID
-    #------------------------------------------------------------------
-    def StoreEnvData(self, argin):
-        self.debug_stream("In StoreEnvData()")
-        try:
-            self.set_state(PyTango.DevState.RUNNING)
-            argout = int(self.__stg.storeEnvData(argin))
-            self.set_state(PyTango.DevState.ON)
-        finally:
-            if self.get_state() == PyTango.DevState.RUNNING:
-                self.set_state(PyTango.DevState.ON)
-
-        return argout
-
-    #---- StoreEnvData command State Machine -----------------
-    def is_StoreEnvData_allowed(self):
-        if self.get_state() in [PyTango.DevState.RUNNING]:
-            return False
-        return True
-
-    #------------------------------------------------------------------
-    #    FetchEnvData command:
-    #
-    #    Description: Fetches ScanDir, ScanFile, ScanID and
-    #                 NeXusSelectorDevice
-    #                 in environment variables
-    #
-    #    argout: DevString    json dictionary with enviroutment data
-    #------------------------------------------------------------------
-    def FetchEnvData(self):
-        self.debug_stream("In FetchEnvData()")
-        try:
-            self.set_state(PyTango.DevState.RUNNING)
-            argout = str(self.__stg.fetchEnvData())
-            self.set_state(PyTango.DevState.ON)
-        finally:
-            if self.get_state() == PyTango.DevState.RUNNING:
-                self.set_state(PyTango.DevState.ON)
-        return argout
-
-    #---- FetchEnvData command State Machine -----------------
-    def is_FetchEnvData_allowed(self):
+    #---- AvailableTimers command State Machine -----------------
+    def is_AvailableTimers_allowed(self):
         if self.get_state() in [PyTango.DevState.RUNNING]:
             return False
         return True
@@ -922,17 +837,17 @@ class NXSRecSelector(PyTango.Device_4Impl):
         return True
 
     #------------------------------------------------------------------
-    #    AvailableSelections command:
+    #    ComponentDescription command:
     #
-    #    Description: Returns a list of available selection names
+    #    Description: Returns a list of available component names
     #
-    #    argout: DevVarStringArray    list of available selection names
+    #    argout: DevString   list of available component names
     #------------------------------------------------------------------
-    def AvailableSelections(self):
-        self.debug_stream("In AvailableSelections()")
+    def ComponentDescription(self):
+        self.debug_stream("In ComponentDescription()")
         try:
             self.set_state(PyTango.DevState.RUNNING)
-            argout = self.__stg.availableSelections()
+            argout = self.__stg.componentDescription()
             self.set_state(PyTango.DevState.ON)
         finally:
             if self.get_state() == PyTango.DevState.RUNNING:
@@ -940,24 +855,24 @@ class NXSRecSelector(PyTango.Device_4Impl):
 
         return argout
 
-    #---- AvailableSelections command State Machine -----------------
-    def is_AvailableSelections_allowed(self):
+    #---- ComponentDescription command State Machine -----------------
+    def is_ComponentDescription_allowed(self):
         if self.get_state() in [PyTango.DevState.RUNNING]:
             return False
         return True
 
     #------------------------------------------------------------------
-    #    AvailableMeasurementGroups command:
+    #    FullDeviceNames command:
     #
-    #    Description: Returns a list of available mntgrp names
+    #    Description: Returns a JSON with full device names for all aliases
     #
-    #    argout: DevVarStringArray    list of available mntgrp names
+    #    argout: DevString JSON dictionary with full device names
     #------------------------------------------------------------------
-    def AvailableMeasurementGroups(self):
-        self.debug_stream("In AvailableMeasurementGroups()")
+    def FullDeviceNames(self):
+        self.debug_stream("In FullDeviceNames()")
         try:
             self.set_state(PyTango.DevState.RUNNING)
-            argout = self.__stg.availableMeasurementGroups()
+            argout = self.__stg.fullDeviceNames()
             self.set_state(PyTango.DevState.ON)
         finally:
             if self.get_state() == PyTango.DevState.RUNNING:
@@ -965,8 +880,83 @@ class NXSRecSelector(PyTango.Device_4Impl):
 
         return argout
 
-    #---- AvailableMeasurementGroups command State Machine -----------------
-    def is_AvailableMeasurementGroups_allowed(self):
+    #---- FullDeviceNames command State Machine -----------------
+    def is_FullDeviceNames_allowed(self):
+        if self.get_state() in [PyTango.DevState.RUNNING]:
+            return False
+        return True
+
+    #------------------------------------------------------------------
+    #    VariableComponents command:
+    #
+    #    Description: Returns a list of available component names
+    #
+    #    argout: DevString    list of available component names
+    #------------------------------------------------------------------
+    def VariableComponents(self):
+        self.debug_stream("In VariableComponents()")
+        try:
+            self.set_state(PyTango.DevState.RUNNING)
+            argout = self.__stg.variableComponents()
+            self.set_state(PyTango.DevState.ON)
+        finally:
+            if self.get_state() == PyTango.DevState.RUNNING:
+                self.set_state(PyTango.DevState.ON)
+
+        return argout
+
+    #---- VariableComponents command State Machine -----------------
+    def is_VariableComponents_allowed(self):
+        if self.get_state() in [PyTango.DevState.RUNNING]:
+            return False
+        return True
+
+    #------------------------------------------------------------------
+    #    AvailableProfiles command:
+    #
+    #    Description: Returns a list of available selection names
+    #
+    #    argout: DevVarStringArray    list of available selection names
+    #------------------------------------------------------------------
+    def AvailableProfiles(self):
+        self.debug_stream("In AvailableProfiles()")
+        try:
+            self.set_state(PyTango.DevState.RUNNING)
+            argout = self.__stg.availableProfiles()
+            self.set_state(PyTango.DevState.ON)
+        finally:
+            if self.get_state() == PyTango.DevState.RUNNING:
+                self.set_state(PyTango.DevState.ON)
+
+        return argout
+
+    #---- AvailableProfiles command State Machine -----------------
+    def is_AvailableProfiles_allowed(self):
+        if self.get_state() in [PyTango.DevState.RUNNING]:
+            return False
+        return True
+
+    #------------------------------------------------------------------
+    #    AvailableMntGrps command:
+    #
+    #    Description: Returns a list of available mntgrp names
+    #
+    #    argout: DevVarStringArray    list of available mntgrp names
+    #------------------------------------------------------------------
+    def AvailableMntGrps(self):
+        self.debug_stream("In AvailableMntGrps()")
+        try:
+            self.set_state(PyTango.DevState.RUNNING)
+            argout = self.__stg.availableMntGrps()
+            self.set_state(PyTango.DevState.ON)
+        finally:
+            if self.get_state() == PyTango.DevState.RUNNING:
+                self.set_state(PyTango.DevState.ON)
+
+        return argout
+
+    #---- AvailableMntGrps command State Machine -----------------
+    def is_AvailableMntGrps_allowed(self):
         if self.get_state() in [PyTango.DevState.RUNNING]:
             return False
         return True
@@ -1047,6 +1037,31 @@ class NXSRecSelector(PyTango.Device_4Impl):
         return True
 
     #------------------------------------------------------------------
+    #    ComponentDataSources command:
+    #
+    #    Description: Sets the component datasources
+    #
+    #    argout: DevVarStringArray    component names
+    #------------------------------------------------------------------
+    def ComponentDataSources(self):
+        self.debug_stream("In ComponentDataSources()")
+
+        try:
+            self.set_state(PyTango.DevState.RUNNING)
+            argout = self.__stg.componentDataSources()
+            self.set_state(PyTango.DevState.ON)
+        finally:
+            if self.get_state() == PyTango.DevState.RUNNING:
+                self.set_state(PyTango.DevState.ON)
+        return argout
+
+    #---- ComponentDataSources command State Machine -----------------
+    def is_ComponentDataSources_allowed(self):
+        if self.get_state() in [PyTango.DevState.RUNNING]:
+            return False
+        return True
+
+    #------------------------------------------------------------------
     #    MandatoryComponents command:
     #
     #    Description: Sets the mandatory components
@@ -1067,6 +1082,56 @@ class NXSRecSelector(PyTango.Device_4Impl):
 
     #---- MandatoryComponents command State Machine -----------------
     def is_MandatoryComponents_allowed(self):
+        if self.get_state() in [PyTango.DevState.RUNNING]:
+            return False
+        return True
+
+    #------------------------------------------------------------------
+    #    SelectedComponents command:
+    #
+    #    Description: Sets the selected components
+    #
+    #    argout: DevVarStringArray    component names
+    #------------------------------------------------------------------
+    def SelectedComponents(self):
+        self.debug_stream("In SelectedComponents()")
+
+        try:
+            self.set_state(PyTango.DevState.RUNNING)
+            argout = self.__stg.selectedComponents()
+            self.set_state(PyTango.DevState.ON)
+        finally:
+            if self.get_state() == PyTango.DevState.RUNNING:
+                self.set_state(PyTango.DevState.ON)
+        return argout
+
+    #---- SelectedComponents command State Machine -----------------
+    def is_SelectedComponents_allowed(self):
+        if self.get_state() in [PyTango.DevState.RUNNING]:
+            return False
+        return True
+
+    #------------------------------------------------------------------
+    #    PreselectedComponents command:
+    #
+    #    Description: Sets the preselected components
+    #
+    #    argout: DevVarStringArray    component names
+    #------------------------------------------------------------------
+    def PreselectedComponents(self):
+        self.debug_stream("In PreselectedComponents()")
+
+        try:
+            self.set_state(PyTango.DevState.RUNNING)
+            argout = self.__stg.selectedComponents()
+            self.set_state(PyTango.DevState.ON)
+        finally:
+            if self.get_state() == PyTango.DevState.RUNNING:
+                self.set_state(PyTango.DevState.ON)
+        return argout
+
+    #---- PreselectedComponents command State Machine -----------------
+    def is_PreselectedComponents_allowed(self):
         if self.get_state() in [PyTango.DevState.RUNNING]:
             return False
         return True
@@ -1123,41 +1188,41 @@ class NXSRecSelector(PyTango.Device_4Impl):
         return True
 
     #------------------------------------------------------------------
-    #    DeleteMntGrp command:
+    #    DeleteProfile command:
     #
     #    Description: Deletes the given mntgrp
     #
     #    argin:  DevString  measurement group name
     #------------------------------------------------------------------
-    def DeleteMntGrp(self, argin):
-        self.debug_stream("In DeleteMntGrp()")
+    def DeleteProfile(self, argin):
+        self.debug_stream("In DeleteProfile()")
         try:
             self.set_state(PyTango.DevState.RUNNING)
-            self.__stg.deleteMntGrp(argin)
+            self.__stg.deleteProfile(argin)
             self.set_state(PyTango.DevState.OPEN)
         finally:
             if self.get_state() == PyTango.DevState.RUNNING:
                 self.set_state(PyTango.DevState.OPEN)
 
-    #---- DeleteMntGrp command State Machine -----------------
-    def is_DeleteMntGrp_allowed(self):
+    #---- DeleteProfile command State Machine -----------------
+    def is_DeleteProfile_allowed(self):
         if self.get_state() in [PyTango.DevState.RUNNING]:
             return False
         return True
 
     #------------------------------------------------------------------
-    #    ClientSources command:
+    #    ComponentClientSources command:
     #
     #    Description: describes client datasources from components
     #
     #    argin:  DevVarStringArray    list of component names
     #    argout: DevVarString         description of component datasources
     #------------------------------------------------------------------
-    def ClientSources(self, argin):
-        self.debug_stream("In ClientSources()")
+    def ComponentClientSources(self, argin):
+        self.debug_stream("In ComponentClientSources()")
         try:
             self.set_state(PyTango.DevState.RUNNING)
-            argout = self.__stg.clientSources(argin)
+            argout = self.__stg.componentClientSources(argin)
             self.set_state(PyTango.DevState.OPEN)
         finally:
             if self.get_state() == PyTango.DevState.RUNNING:
@@ -1165,25 +1230,25 @@ class NXSRecSelector(PyTango.Device_4Impl):
 
         return argout
 
-    #---- ClientSources command State Machine -----------------
-    def is_ClientSources_allowed(self):
+    #---- ComponentClientSources command State Machine -----------------
+    def is_ComponentClientSources_allowed(self):
         if self.get_state() in [PyTango.DevState.RUNNING]:
             return False
         return True
 
     #------------------------------------------------------------------
-    #    GetSourceDescription command:
+    #    DataSourceDescription command:
     #
     #    Description: descrive datasources
     #
     #    argin:  DevVarStringArray    list of datasource names
     #    argout: DevVarStringArray    description of datasources
     #------------------------------------------------------------------
-    def GetSourceDescription(self, argin):
-        self.debug_stream("In GetSourceDescription()")
+    def DataSourceDescription(self, argin):
+        self.debug_stream("In DataSourceDescription()")
         try:
             self.set_state(PyTango.DevState.RUNNING)
-            argout = self.__stg.getSourceDescription(argin)
+            argout = self.__stg.dataSourceDescription(argin)
             self.set_state(PyTango.DevState.OPEN)
         finally:
             if self.get_state() == PyTango.DevState.RUNNING:
@@ -1191,8 +1256,8 @@ class NXSRecSelector(PyTango.Device_4Impl):
 
         return argout
 
-    #---- GetSourceDescription command State Machine -----------------
-    def is_GetSourceDescription_allowed(self):
+    #---- DataSourceDescription command State Machine -----------------
+    def is_DataSourceDescription_allowed(self):
         if self.get_state() in [PyTango.DevState.RUNNING]:
             #    End of Generated Code
             #    Re-Start of Generated Code
@@ -1200,18 +1265,18 @@ class NXSRecSelector(PyTango.Device_4Impl):
         return True
 
     #------------------------------------------------------------------
-    #    CreateConfiguration command:
+    #    CreateWriterConfiguration command:
     #
     #    Description: create configuration from the given components
     #
     #    argin:  DevVarStringArray    list of component names
     #    argout: DevVarString         XML configuration string
     #------------------------------------------------------------------
-    def CreateConfiguration(self, argin):
-        self.debug_stream("In CreateConfiguration()")
+    def CreateWriterConfiguration(self, argin):
+        self.debug_stream("In CreateWriterConfiguration()")
         try:
             self.set_state(PyTango.DevState.RUNNING)
-            argout = self.__stg.createConfiguration(argin)
+            argout = self.__stg.createWriterConfiguration(argin)
             self.set_state(PyTango.DevState.OPEN)
         finally:
             if self.get_state() == PyTango.DevState.RUNNING:
@@ -1219,8 +1284,8 @@ class NXSRecSelector(PyTango.Device_4Impl):
 
         return argout
 
-    #---- CreateConfiguration command State Machine -----------------
-    def is_CreateConfiguration_allowed(self):
+    #---- CreateWriterConfiguration command State Machine -----------------
+    def is_CreateWriterConfiguration_allowed(self):
         if self.get_state() in [PyTango.DevState.RUNNING]:
             return False
         return True
@@ -1247,66 +1312,57 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
         [PyTango.DevVarStringArray,
          "list of timer filters",
          []],
-        'DefaultAutomaticComponents':
+        'DefaultPreselectedComponents':
         [PyTango.DevVarStringArray,
-         "list of default automatic components",
+         "list of default preselected components",
          []],
     }
 
     ##    Command definitions
     cmd_list = {
-        'FindMntGrp':
-            [[PyTango.DevString, "mntgrp alias"],
-             [PyTango.DevString, "mntgrp fullname"]],
-        'StoreEnvData':
-            [[PyTango.DevString, "environment data"],
-             [PyTango.DevLong, "scanID"]],
-        'FetchEnvData':
-            [[PyTango.DevVoid, ""],
-             [PyTango.DevString, "environment data"]],
-        'LoadConfiguration':
+        'LoadProfile':
             [[PyTango.DevVoid, ""],
              [PyTango.DevVoid, ""]],
-        'SaveConfiguration':
+        'SaveProfile':
             [[PyTango.DevVoid, ""],
              [PyTango.DevVoid, ""]],
-        'FetchConfiguration':
+        'FetchProfile':
             [[PyTango.DevVoid, ""],
              [PyTango.DevVoid, ""]],
-        'StoreConfiguration':
+        'StoreProfile':
             [[PyTango.DevVoid, ""],
              [PyTango.DevVoid, ""]],
-        'DeleteMntGrp':
+        'DeleteProfile':
             [[PyTango.DevString, "mntgrp name"],
              [PyTango.DevVoid, ""]],
         'ImportMntGrp':
             [[PyTango.DevVoid, ""],
              [PyTango.DevVoid, ""]],
-        'ImportAllEnv':
+        'ImportEnvProfile':
             [[PyTango.DevVoid, ""],
              [PyTango.DevVoid, ""]],
-        'ExportAllEnv':
+        'ExportEnvProfile':
             [[PyTango.DevVoid, ""],
              [PyTango.DevVoid, ""]],
         'UpdateMntGrp':
             [[PyTango.DevVoid, ""],
              [PyTango.DevString, "configuration"]],
-        'SwitchMntGrp':
+        'SwitchProfile':
             [[PyTango.DevVoid, ""],
              [PyTango.DevString, "configuration"]],
         'MntGrpConfiguration':
             [[PyTango.DevVoid, ""],
              [PyTango.DevString, " mntcrp configuration"]],
-        'IsMntGrpChanged':
+        'IsMntGrpUpdated':
             [[PyTango.DevVoid, ""],
              [PyTango.DevBoolean, "true if mntgrp changed"]],
-        'UpdateControllers':
+        'PreselectComponents':
             [[PyTango.DevVoid, ""],
              [PyTango.DevVoid, ""]],
-        'ResetAutomaticComponents':
+        'ResetPreselectedComponents':
             [[PyTango.DevVoid, ""],
              [PyTango.DevVoid, ""]],
-        'ClearAllSelections':
+        'DeleteAllProfiles':
             [[PyTango.DevVoid, ""],
              [PyTango.DevVoid, ""]],
         'UpdateConfigVariables':
@@ -1316,11 +1372,11 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
             [[PyTango.DevVoid, ""],
              [PyTango.DevVarStringArray,
               "list of available component names"]],
-        'AvailableSelections':
+        'AvailableProfiles':
             [[PyTango.DevVoid, ""],
              [PyTango.DevVarStringArray,
               "list of available selection names"]],
-        'AvailableMeasurementGroups':
+        'AvailableMntGrps':
             [[PyTango.DevVoid, ""],
              [PyTango.DevVarStringArray,
               "list of available mntgrp names"]],
@@ -1328,6 +1384,27 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
             [[PyTango.DevVoid, ""],
              [PyTango.DevVarStringArray,
               "list of available DataSource names"]],
+        'AvailableTimers':
+            [[PyTango.DevVoid, ""],
+             [PyTango.DevVarStringArray,
+              "list of available timers"]],
+        'ComponentDescription':
+            [[PyTango.DevVoid, ""],
+             [PyTango.DevString,
+              "JSON component description"]],
+        'VariableComponents':
+            [[PyTango.DevVoid, ""],
+             [PyTango.DevString,
+              "JSON Dictionary with all Components for "
+                 + "  configuration variable"]],
+        'FullDeviceNames':
+            [[PyTango.DevVoid, ""],
+             [PyTango.DevString,
+              "JSON Dictionary with full device names for "
+                 + " all aliases "]],
+        'ComponentDataSources':
+            [[PyTango.DevVoid, ""],
+             [PyTango.DevVarStringArray, "profile component datasources"]],
         'PoolChannels':
             [[PyTango.DevVoid, ""],
              [PyTango.DevVarStringArray, "list of available pool channels"]],
@@ -1337,19 +1414,25 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
         'MandatoryComponents':
             [[PyTango.DevVoid, ""],
              [PyTango.DevVarStringArray, "component names"]],
+        'SelectedComponents':
+            [[PyTango.DevVoid, ""],
+             [PyTango.DevVarStringArray, "component names"]],
+        'PreselectedComponents':
+            [[PyTango.DevVoid, ""],
+             [PyTango.DevVarStringArray, "component names"]],
         'CreateDynamicComponent':
             [[PyTango.DevVarStringArray,
               "list of JSON strings with datasource parameters"],
              [PyTango.DevString, "name of dynamic Component"]],
-        'GetSourceDescription':
+        'DataSourceDescription':
             [[PyTango.DevVarStringArray, "list of required datasources"],
              [PyTango.DevVarStringArray,
               "list of JSON with description of CLIENT Datasources"]],
-        'ClientSources':
+        'ComponentClientSources':
             [[PyTango.DevVarStringArray, "list of required components"],
              [PyTango.DevString,
               "JSON with description of CLIENT Datasources"]],
-        'CreateConfiguration':
+        'CreateWriterConfiguration':
             [[PyTango.DevVarStringArray, "list of required components"],
              [PyTango.DevString,
               "XML Settinges"]],
@@ -1368,7 +1451,7 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
                  'label': "Selected Components",
                  'description': "list of Selected Components",
             }],
-        'STEPDataSources':
+        'StepDataSources':
             [[PyTango.DevString,
               PyTango.SPECTRUM,
               PyTango.READ_WRITE, 10000],
@@ -1377,14 +1460,6 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
                  'description': "list of datasources to be switched" +
                  " into step mode",
                  'Display level': PyTango.DispLevel.EXPERT,
-            }],
-        'AutomaticComponents':
-            [[PyTango.DevString,
-              PyTango.SPECTRUM,
-              PyTango.READ, 10000],
-             {
-                 'label': "Automatic Components",
-                 'description': "list of automatic components",
             }],
         'DescriptionErrors':
             [[PyTango.DevString,
@@ -1452,7 +1527,7 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
                  'label': "Writer Device",
                  'description': "Writer device",
             }],
-        'DataRecord':
+        'UserData':
             [[PyTango.DevString,
               PyTango.SCALAR,
               PyTango.READ_WRITE],
@@ -1479,6 +1554,15 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
                  'label': "Adminitrator Data",
                  'description': "JSON list with administrator data names",
                  'Memorized': "true",
+                 'Display level': PyTango.DispLevel.EXPERT,
+            }],
+        'ScanEnvVariables':
+            [[PyTango.DevString,
+              PyTango.SCALAR,
+              PyTango.READ_WRITE],
+             {
+                 'label': "Scan Environment Variables",
+                 'description': "JSON dict with Scan Environment Variablels",
                  'Display level': PyTango.DispLevel.EXPERT,
             }],
         'LabelTypes':
@@ -1509,46 +1593,7 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
                  'label': "Selected Datasources",
                  'description': "list of Selected Datasources",
             }],
-        'AvailableTimers':
-            [[PyTango.DevString,
-              PyTango.SPECTRUM,
-              PyTango.READ, 10000],
-             {
-                 'label': "Available Timers",
-                 'description': "list of Available Timers",
-                 'Display level': PyTango.DispLevel.EXPERT,
-            }],
-        'Description':
-            [[PyTango.DevString,
-              PyTango.SCALAR,
-              PyTango.READ],
-             {
-                 'label': "Dependences descrition",
-                 'description': "Dependences descrition of Components and "
-                 + "Datasources",
-                 'Display level': PyTango.DispLevel.EXPERT,
-            }],
-        'VariableComponents':
-            [[PyTango.DevString,
-              PyTango.SCALAR,
-              PyTango.READ],
-             {
-                 'label': " Variable Components",
-                 'description': "JSON Dictionary with Variables for "
-                 + " all  available Components ",
-                 'Display level': PyTango.DispLevel.EXPERT,
-            }],
-        'FullDeviceNames':
-            [[PyTango.DevString,
-              PyTango.SCALAR,
-              PyTango.READ],
-             {
-                 'label': " Full device names",
-                 'description': "JSON Dictionary with full device names for "
-                 + " all aliases ",
-                 'Display level': PyTango.DispLevel.EXPERT,
-            }],
-        'Configuration':
+        'ProfileConfiguration':
             [[PyTango.DevString,
               PyTango.SCALAR,
               PyTango.READ_WRITE],
@@ -1556,14 +1601,6 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
                  'label': "configuration",
                  'description': "JSON dict of server configuration",
                  'Display level': PyTango.DispLevel.EXPERT,
-            }],
-        'DisableDataSources':
-            [[PyTango.DevString,
-              PyTango.SPECTRUM,
-              PyTango.READ, 10000],
-             {
-                 'label': "Disable DataSources",
-                 'description': "list of Disable DataSources",
             }],
         'AppendEntry':
             [[PyTango.DevBoolean,
@@ -1583,7 +1620,7 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
                  + "for templated components",
                  'Display level': PyTango.DispLevel.EXPERT,
             }],
-        'ConfigFile':
+        'ProfileFile':
             [[PyTango.DevString,
               PyTango.SCALAR,
               PyTango.READ_WRITE],

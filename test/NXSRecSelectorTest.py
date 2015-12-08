@@ -62,10 +62,11 @@ class NXSRecSelectorTest(SettingsTest.SettingsTest):
         SettingsTest.SettingsTest.tearDown(self)
 
     def value(self, rs, name):
-        return json.loads(rs.configuration)[name]
+        print "VAL", json.loads(rs.profileConfiguration)
+        return json.loads(rs.profileConfiguration)[name]
 
     def names(self, rs):
-        return json.loads(rs.configuration).keys()
+        return json.loads(rs.profileConfiguration).keys()
 
     def setProp(self, rc, name, value):
         db = PyTango.Database()
@@ -110,7 +111,7 @@ class NXSRecSelectorTest(SettingsTest.SettingsTest):
     def subtest_constructor(self):
         rs = self.openRecSelector()
         msp = MacroServerPools(10)
-        se = Selector(msp)
+        se = Selector(msp, self.version)
         se["Door"] = rs.door
         se["ConfigDevice"] = rs.configDevice
         pm = ProfileManager(se)

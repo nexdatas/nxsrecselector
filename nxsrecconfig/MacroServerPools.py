@@ -55,8 +55,8 @@ class MacroServerPools(object):
             "AppendEntry",
             "ComponentsFromMntGrp",
             "DynamicComponents",
-            "DynamicLinks",
-            "DynamicPath",
+            "DefaultDynamicLinks",
+            "DefaultDynamicPath",
             "TimeZone",
             "ConfigDevice",
             "WriterDevice",
@@ -147,7 +147,7 @@ class MacroServerPools(object):
     # \param door door device name
     # \param configdevice configuration server
     # \param channels pool channels
-    # \param componentgroup automatic component group
+    # \param componentgroup preselected component group
     # \param channelerrors deactivated component errors
     # \returns json dictionary with selected active components
     def checkComponentChannels(self, door, configdevice, channels,

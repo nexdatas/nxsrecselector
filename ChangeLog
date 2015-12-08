@@ -1,3 +1,46 @@
+2015-12-XX Jan Kotanski <jankotan@gmail.com>
+	* changing API:
+	ImportAllEnv               -> ImportEnvProfile
+	ExportAllEnv               -> ExportEnvProfile
+	IsMntGrpChanged            -> IsMntGrpUpdated
+	UpdateControllers          -> PreselectComponents
+	ClientSources 	           -> ComponentClientSources
+	CreateConfiguration        -> CreateWriterConfiguration
+	LoadConfiguration          -> LoadProfile
+	SaveConfiguration          -> SaveProfile
+	FetchConfiguration         -> FetchProfile
+	StoreConfiguration         -> StoreProfile
+        DeleteMntGrp               -> DeleteProfile
+        SwitchMntGrp               -> SwitchProfile
+        ClearAllSelections         -> DeleteAllProfiles
+	AvailableSelections        -> AvailableProfiles
+	AvailableMeasurementGroups -> AvailableMntGrps
+	FindMntGrp		   (REMOVED)
+	GetEnvData                 -> GetScanEnvVariables
+	ResetAutomaticComponents   -> ResetPreselectedComponents
+	StoreEnvData               -> SetScanEnvVariables
+	GetSourceDescription	   -> DataSourceDescription
+
+	DataRecord		   -> UserData
+	ConfigFile                 -> ProfileFile
+	Configuration	           -> ProfileConfiguration
+
+	DisableDataSources   	   -> ComponentDataSources (command)
+	DataSources		   -> SelectedDataSources (command)
+
+	Components		   -> SelectedComponents (command)
+	AutomaticComponents	   -> PreselectedComponents (conmmand)
+	AvailableTimers		   -> AvailableTimers (command)
+	Description		   -> ComponentDescription (command)
+	VariableComponents	   -> VariableComponents (command)
+	FullDeviceNames 	   -> FullDeviceNames (command)
+	...			   -> DataSources (ComponentDS + SelecteDS)
+	...			   -> Components  (SelectedCP + PreselecteCP + MandatoryCP)
+	Configuration		   -> ProfileConfiguration
+	FetchEnvData/StoreEnvData  -> ScanEnvVariables (attribute)
+	* adding version profile converter
+	* tagged as v2.00.0
+
 2015-11-25 Jan Kotanski <jankotan@gmail.com>
 	* avoiding overwriting ConfigDevice by fetchSelection
 	* removing unused methods from Settings
@@ -473,4 +516,3 @@
 2014-04-15 Jan Kotanski <jankotan@gmail.com>
 	* ChangeLog: first version
 	* tagged as v1.0.0
-

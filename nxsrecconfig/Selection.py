@@ -22,7 +22,6 @@
 
 import json
 
-
 ## Selection dictionary
 class Selection(dict):
     """ Selection Dictionary """
@@ -38,6 +37,7 @@ class Selection(dict):
 
         ## default mntgrp
         self.__defaultmntgrp = 'nxsmntgrp'
+        self.__version = self["Version"] if "Version" in self else "1.0.0"
         self.reset()
 
     ## resets dictionary to default value
@@ -48,16 +48,16 @@ class Selection(dict):
         ## ordered channels
         self["OrderedChannels"] = '[]'
         ## group of electable components
-        self["ComponentGroup"] = '{}'
-        ## group of automatic components describing instrument state
-        self["AutomaticComponentGroup"] = '{}'
-        ## automatic datasources
-        self["AutomaticDataSources"] = '[]'
+        self["ComponentSelection"] = '{}'
+        ## group of preselected components describing instrument state
+        self["ComponentPreselection"] = '{}'
+        ## preselected datasources
+        self["PreselectedDataSources"] = '[]'
         ## selected datasources
-        self["DataSourceGroup"] = '{}'
+        self["DataSourceSelection"] = '{}'
         ## init datasources
         self["InitDataSources"] = '[]'
-        ## group of optional components available for automatic selqection
+        ## group of optional components available for preselected selqection
         self["OptionalComponents"] = '[]'
         ## appending new entries to existing file
         self["AppendEntry"] = False
@@ -66,7 +66,7 @@ class Selection(dict):
         ## Configuration Server variables
         self["ConfigVariables"] = '{}'
         ## JSON with Client Data Record
-        self["DataRecord"] = '{}'
+        self["UserData"] = '{}'
         ## JSON with Element Labels
         self["Labels"] = '{}'
         ## JSON with NeXus paths for Label Paths
@@ -74,7 +74,7 @@ class Selection(dict):
         ## JSON with NeXus paths for Label Links
         self["LabelLinks"] = '{}'
         ## JSON with NeXus paths for Label Displays
-        self["HiddenElements"] = '[]'
+        self["UnplottedComponents"] = '[]'
         ## JSON with NeXus paths for Label Types
         self["LabelTypes"] = '{}'
         ## JSON with NeXus paths for Label Shapes
@@ -82,9 +82,9 @@ class Selection(dict):
         ## create dynamic components
         self["DynamicComponents"] = True
         ## create links for dynamic components
-        self["DynamicLinks"] = True
+        self["DefaultDynamicLinks"] = True
         ## path for dynamic components
-        self["DynamicPath"] = \
+        self["DefaultDynamicPath"] = \
             '/entry$var.serialno:NXentry/NXinstrument/collection'
         ## timezone
         self["TimeZone"] = self.__defaultzone
@@ -96,26 +96,28 @@ class Selection(dict):
         self["Door"] = ''
         ## MntGrp
         self["MntGrp"] = ''
+        ## version
+        self["Version"] = self.__version 
 
     ## deselects components and datasources
     def deselect(self):
-        cps = json.loads(self["ComponentGroup"])
-        ads = json.loads(self["DataSourceGroup"])
+        cps = json.loads(self["ComponentSelection"])
+        ads = json.loads(self["DataSourceSelection"])
         for k in cps.keys():
             cps[k] = False
         for k in ads.keys():
             ads[k] = False
         self["InitDataSources"] = '[]'
-        self["DataSourceGroup"] = json.dumps(ads)
-        self["ComponentGroup"] = json.dumps(cps)
+        self["DataSourceSelection"] = json.dumps(ads)
+        self["ComponentSelection"] = json.dumps(cps)
 
-    ## update method for Automatic DataSources
-    # \brief appends new datasources to Automatic DataSources
+    ## update method for Preselected DataSources
+    # \brief appends new datasources to Preselected DataSources
     # \param datasources
-    def updateAutomaticDataSources(self, datasources):
-        adsg = json.loads(self["AutomaticDataSources"])
+    def updatePreselectedDataSources(self, datasources):
+        adsg = json.loads(self["PreselectedDataSources"])
         adsg = list(set(adsg or []) | set(datasources or []))
-        self["AutomaticDataSources"] = json.dumps(adsg)
+        self["PreselectedDataSources"] = json.dumps(adsg)
 
     ## update method for orderedChannels attribute
     # \brief sets pool channels in order defined by OrderedChannels
@@ -129,22 +131,22 @@ class Selection(dict):
 
     ## update method for componentGroup attribute
     # \brief It removes datasource components from component group
-    def updateComponentGroup(self):
-        cpg = json.loads(self["ComponentGroup"])
-        dss = json.loads(self["DataSourceGroup"]).keys()
+    def updateComponentSelection(self):
+        cpg = json.loads(self["ComponentSelection"])
+        dss = json.loads(self["DataSourceSelection"]).keys()
         for cp in set(cpg.keys()):
             if cp in dss:
                 cpg.pop(cp)
-        self["ComponentGroup"] = json.dumps(cpg)
+        self["ComponentSelection"] = json.dumps(cpg)
 
     ## update method for dataSourceGroup attribute
-    # \brief It removes datasources from DataSourceGroup if they are
+    # \brief It removes datasources from DataSourceSelection if they are
     #        neither in poolchannels nor in avaiblable datasources
-    #        It adds new channels to DataSourceGroup
+    #        It adds new channels to DataSourceSelection
     # \param channels pool channels
     # \param datasources available datasources
-    def updateDataSourceGroup(self, channels, datasources):
-        dsg = json.loads(self["DataSourceGroup"])
+    def updateDataSourceSelection(self, channels, datasources):
+        dsg = json.loads(self["DataSourceSelection"])
         datasources = datasources or []
         for ds in tuple(dsg.keys()):
             if ds not in channels and ds not in datasources:
@@ -152,7 +154,7 @@ class Selection(dict):
         for pc in channels:
             if pc not in dsg.keys():
                 dsg[pc] = False
-        self["DataSourceGroup"] = json.dumps(dsg)
+        self["DataSourceSelection"] = json.dumps(dsg)
 
     ## reset method for mntGrp attribute
     # \brief If MntGrp not defined set it to default value
@@ -166,11 +168,11 @@ class Selection(dict):
         if "TimeZone" not in self.keys() or not self["TimeZone"]:
             self["TimeZone"] = self.__defaultzone
 
-    ## resets Automatic Components with given components and set them
+    ## resets Preselected Components with given components and set them
     #  to not active
     # \param components list of components to be set
-    def resetAutomaticComponents(self, components):
+    def resetPreselectedComponents(self, components):
         acps = {}
         for cp in components:
             acps[cp] = False
-        self["AutomaticComponentGroup"] = json.dumps(acps)
+        self["ComponentPreselection"] = json.dumps(acps)

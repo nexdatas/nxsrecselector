@@ -23,6 +23,7 @@
 import json
 import gc
 import PyTango
+import nxsrecconfig
 from .Describer import Describer
 from .DynamicComponent import DynamicComponent
 from .Utils import Utils, TangoUtils, MSUtils, PoolUtils
@@ -30,7 +31,6 @@ from .ProfileManager import ProfileManager
 from .Selector import Selector
 from .MacroServerPools import MacroServerPools
 from . import Streams
-
 
 ## NeXus Sardana Recorder settings
 class Settings(object):
@@ -47,13 +47,13 @@ class Settings(object):
         self.__msp = MacroServerPools(self.numberOfThreads)
 
         ## configuration selection
-        self.__selector = Selector(self.__msp)
+        self.__selector = Selector(self.__msp, nxsrecconfig.__version__)
 
         ## profile
         self.__profileManager = ProfileManager(self.__selector)
 
         ## configuration file
-        self.configFile = '/tmp/nxsrecconfig.cfg'
+        self.profileFile = '/tmp/nxsrecconfig.cfg'
 
         ## tango database
         self.__db = PyTango.Database()
@@ -87,16 +87,16 @@ class Settings(object):
 
     def __setupSelection(self):
         if not self.__server:
-            self.fetchConfiguration()
+            self.fetchProfile()
         ms = self.__selector.getMacroServer()
         amntgrp = MSUtils.getEnv('ActiveMntGrp', ms)
         if amntgrp:
             self.__selector["MntGrp"] = amntgrp
         else:
-            avsel = self.availableSelections()
+            avsel = self.availableProfiles()
             if avsel and avsel[0]:
                 self.__selector["MntGrp"] = avsel[0]
-        self.fetchConfiguration()
+        self.fetchProfile()
 
     ## provides values of the required variable
     # \param name name of the required variable
@@ -115,71 +115,79 @@ class Settings(object):
 
 ## read-only variables
 
-    ## provides selected components
+    ## provides user selected components
+    # \returns list of available selected components
+    def selectedComponents(self):
+        return self.__profileManager.components()
+
+    ## provides all configuration components
     # \returns list of available selected components
     def __components(self):
-        return self.__profileManager.components()
+        return list(set(self.selectedComponents()) |
+                    set(self.preselectedComponents()) |
+                    set(self.mandatoryComponents()))
 
     ##  provides selected components
     components = property(
         __components,
         doc='provides selected components')
 
-    ## provides automatic components
-    # \returns list of available automatic components
-    def __automaticComponents(self):
-        return self.__profileManager.automaticComponents()
+    ## provides preselected components
+    # \returns list of available preselected components
+    def preselectedComponents(self):
+        return self.__profileManager.preselectedComponents()
 
-    ## provides automatic components
-    automaticComponents = property(__automaticComponents,
-                                   doc=' provides automatic components')
+    ## provides preselected components
+    preselectedComponents = property(preselectedComponents,
+                                   doc=' provides preselected components')
 
     ## provides description component errors
     # \returns list of available description component errors
     def __getDescriptionErrors(self):
         return self.__selector.descErrors
 
-    ## provides automatic components
+    ## provides preselected components
     descriptionErrors = property(__getDescriptionErrors,
                                  doc='provides description component errors')
 
     ## provides selected datasources
     # \returns list of available selected datasources
-    def __dataSources(self):
+    def selectedDataSources(self):
         return self.__profileManager.dataSources()
+
+    def __dataSources(self):
+        return list(
+            set(self.selectedDataSources()) |
+            set(self.componentDataSources())
+        )
 
     ##  provides selected data sources
     dataSources = property(
         __dataSources,
         doc=' provides selected data sources')
 
-    ## provides a list of Disable DataSources
-    # \returns list of disable datasources
-    def __disableDataSources(self):
+    ## provides a list of profile component DataSources
+    # \returns list of profile component datasources
+    def componentDataSources(self):
         return self.__profileManager.disableDataSources()
-
-    ##  provides a list of Disable DataSources
-    disableDataSources = property(
-        __disableDataSources,
-        doc='provides a list of Disable DataSources')
 
 ## read-write variables
 
-    ## get method for defaultAutomaticComponents attribute
+    ## get method for defaultPreselectedComponents attribute
     # \returns list of components
-    def __getDefaultAutomaticComponents(self):
-        return self.__profileManager.defaultAutomaticComponents
+    def __getDefaultPreselectedComponents(self):
+        return self.__profileManager.defaultPreselectedComponents
 
-    ## set method for defaultAutomaticComponents attribute
+    ## set method for defaultPreselectedComponents attribute
     # \param components list of components
-    def __setDefaultAutomaticComponents(self, components):
-        self.__profileManager.defaultAutomaticComponents = components
+    def __setDefaultPreselectedComponents(self, components):
+        self.__profileManager.defaultPreselectedComponents = components
 
-    ## default AutomaticComponents
-    defaultAutomaticComponents = property(
-        __getDefaultAutomaticComponents,
-        __setDefaultAutomaticComponents,
-        doc='default Automatic components')
+    ## default PreselectedComponents
+    defaultPreselectedComponents = property(
+        __getDefaultPreselectedComponents,
+        __setDefaultPreselectedComponents,
+        doc='default Preselected components')
 
     ## get method for configDevice attribute
     # \returns name of configDevice
@@ -191,7 +199,7 @@ class Settings(object):
     def __setConfigDevice(self, name):
         if name != self.__selector["ConfigDevice"]:
             self.__selector["ConfigDevice"] = name
-            self.switchMntGrp(toActive=False)
+            self.switchProfile(toActive=False)
 
     ## the json data string
     configDevice = property(__getConfigDevice, __setConfigDevice,
@@ -213,26 +221,26 @@ class Settings(object):
 
     ## set method for configuration attribute
     # \param name of configuration
-    def __setConfiguration(self, jconf):
+    def __setProfileConfiguration(self, jconf):
         self.__selector.set(json.loads(jconf))
-        self.storeConfiguration()
+        self.storeProfile()
 
     ## get method for configuration attribute
     # \returns configuration
-    def __getConfiguration(self):
+    def __getProfileConfiguration(self):
         return json.dumps(self.__selector.get())
 
     ## the json data string
-    configuration = property(
-        __getConfiguration,
-        __setConfiguration,
-        doc='automatic components group')
+    profileConfiguration = property(
+        __getProfileConfiguration,
+        __setProfileConfiguration,
+        doc='preselected components group')
 
     ## set method for appendEntry attribute
     # \param name of appendEntry
     def __setAppendEntry(self, ae):
         self.__selector["AppendEntry"] = bool(ae)
-        self.storeConfiguration()
+        self.storeProfile()
 
     ## get method for appendEntry attribute
     # \returns flag of appendEntry
@@ -245,26 +253,26 @@ class Settings(object):
         __setAppendEntry,
         doc='flag for append entry')
 
-    ## get method for dataRecord attribute
-    # \returns name of dataRecord
-    def __getDataRecord(self):
-        return self.__selector["DataRecord"]
+    ## get method for userData attribute
+    # \returns name of userData
+    def __getUserData(self):
+        return self.__selector["UserData"]
 
-    ## set method for dataRecord attribute
-    # \param name of dataRecord
-    def __setDataRecord(self, name):
+    ## set method for userData attribute
+    # \param name of userData
+    def __setUserData(self, name):
         jname = Utils.stringToDictJson(name)
-        if self.__selector["DataRecord"] != jname:
-            self.__selector["DataRecord"] = jname
-            self.storeConfiguration()
+        if self.__selector["UserData"] != jname:
+            self.__selector["UserData"] = jname
+            self.storeProfile()
 
     ## the json data string
-    dataRecord = property(
-        __getDataRecord,
-        __setDataRecord,
+    userData = property(
+        __getUserData,
+        __setUserData,
         doc='client data record')
 
-    ## get method for dataRecord attribute
+    ## get method for deviceGroups attribute
     # \returns name of deviceGroups
     def __getDeviceGroups(self):
         try:
@@ -322,7 +330,7 @@ class Settings(object):
         jname = Utils.stringToDictJson(name)
         if self.__selector["ConfigVariables"] != jname:
             self.__selector["ConfigVariables"] = jname
-            self.storeConfiguration()
+            self.storeProfile()
 
     ## the json variables string
     configVariables = property(
@@ -332,7 +340,7 @@ class Settings(object):
 
     ## get method for dataSourceGroup attribute
     # \returns names of STEP dataSources
-    def __getSTEPDataSources(self):
+    def __getStepDatSources(self):
         inst = self.__selector.setConfigInstance()
         if inst.stepdatasources:
             return list(inst.stepdatasources)
@@ -341,15 +349,15 @@ class Settings(object):
 
     ## set method for dataSourceGroup attribute
     # \param names of STEP dataSources
-    def __setSTEPDataSources(self, names):
+    def __setStepDatSources(self, names):
         inst = self.__selector.setConfigInstance()
         names = names or []
         inst.stepdatasources = [str(nm) for nm in names]
 
     ## the json data string
     stepdatasources = property(
-        __getSTEPDataSources,
-        __setSTEPDataSources,
+        __getStepDatSources,
+        __setStepDatSources,
         doc='datasource  group')
 
     ## get method for labelShapes attribute
@@ -363,7 +371,7 @@ class Settings(object):
         jname = Utils.stringToDictJson(name)
         if self.__selector["LabelShapes"] != jname:
             self.__selector["LabelShapes"] = jname
-            self.storeConfiguration()
+            self.storeProfile()
 
     ## the json data string
     labelShapes = property(
@@ -382,7 +390,7 @@ class Settings(object):
         jname = Utils.stringToDictJson(name)
         if self.__selector["LabelTypes"] != jname:
             self.__selector["LabelTypes"] = jname
-            self.storeConfiguration()
+            self.storeProfile()
 
     ## the json data string
     labelTypes = property(
@@ -428,7 +436,7 @@ class Settings(object):
     # \param name of writerDevice
     def __setWriterDevice(self, name):
         self.__selector["WriterDevice"] = name
-        self.storeConfiguration()
+        self.storeProfile()
 
     ## the json data string
     writerDevice = property(__getWriterDevice, __setWriterDevice,
@@ -492,7 +500,7 @@ class Settings(object):
 
     ## provides components for all variables
     # \returns dictionary with components for all variables
-    def __variableComponents(self):
+    def variableComponents(self):
         acps = self.availableComponents()
         vrs = {}
         for cp in acps:
@@ -506,43 +514,24 @@ class Settings(object):
         jdc = json.dumps(vrs)
         return jdc
 
-    ##  provides components for all variables
-    variableComponents = property(
-        __variableComponents,
-        doc='provides components for all variables')
-
     ## provides description of all components
     # \returns JSON string with description of all components
-    def __description(self):
+    def componentDescription(self):
         dc = self.__profileManager.cpdescription(full=True)
         jdc = json.dumps(dc)
         return jdc
 
-    ##  provides description of all components
-    description = property(__description,
-                           doc='provides description of all components')
-
     ## provides full names of pool devices
     # \returns JSON string with full names of pool devices
-    def __fullDeviceNames(self):
+    def fullDeviceNames(self):
         pools = self.__selector.getPools()
         return json.dumps(PoolUtils.getFullDeviceNames(pools))
 
-    ## provides full names of pool devices
-    fullDeviceNames = property(
-        __fullDeviceNames,
-        doc=' provides full names of pool devices')
-
     ## provides available Timers from MacroServer pools
     # \returns  available Timers from MacroServer pools
-    def __availableTimers(self):
+    def availableTimers(self):
         pools = self.__selector.getPools()
         return PoolUtils.getTimers(pools, self.timerFilterList)
-
-    ##  provides description of all components
-    availableTimers = property(
-        __availableTimers,
-        doc='provides available Timers from MacroServer pools')
 
 ##  commands
 
@@ -565,7 +554,7 @@ class Settings(object):
 
     ## available selections
     # \returns list of available selections
-    def availableSelections(self):
+    def availableProfiles(self):
         ac = self.__configCommand("availableSelections") or []
         return ac
 
@@ -586,36 +575,33 @@ class Settings(object):
         return self.__selector.poolMotors()
 
     ## saves configuration
-    def saveConfiguration(self):
-        fl = open(self.configFile, "w+")
+    def saveProfile(self):
+        fl = open(self.profileFile, "w+")
         json.dump(self.__selector.get(), fl)
 
     ## saves configuration
-    def storeConfiguration(self):
+    def storeProfile(self):
         self.__selector.storeSelection()
 
     ## fetch configuration
-    def fetchConfiguration(self):
+    def fetchProfile(self):
         self.__profileManager.fetchProfile()
 
     ## loads configuration
-    def loadConfiguration(self):
-        fl = open(self.configFile, "r")
+    def loadProfile(self):
+        fl = open(self.profileFile, "r")
         self.__selector.set(json.load(fl))
 
     ## provides description of client datasources
     # \param cps component names
     # \returns JSON string with description of client datasources
-    def clientSources(self, cps):
+    def componentClientSources(self, cps):
         nexusconfig_device = self.__selector.setConfigInstance()
         describer = Describer(nexusconfig_device)
         if cps:
             cp = cps
         else:
-            cp = None
-            cp = list(set(self.components) |
-                      set(self.automaticComponents) |
-                      set(self.mandatoryComponents()))
+            cp = self.components
         dc = describer.components(cp, '', 'CLIENT', self.configVariables)
         jdc = json.dumps(dc)
         return jdc
@@ -623,15 +609,12 @@ class Settings(object):
     ## create configuration
     # \param cps component names
     # \returns JSON string with description of client datasources
-    def createConfiguration(self, cps):
+    def createWriterConfiguration(self, cps):
         nexusconfig_device = self.__selector.setConfigInstance()
         if cps:
             cp = cps
         else:
-            cp = None
-            cp = list(set(self.components) |
-                      set(self.automaticComponents) |
-                      set(self.mandatoryComponents()))
+            cp = self.components
         TangoUtils.command(nexusconfig_device,
                            "createConfiguration",
                            cp)
@@ -661,21 +644,21 @@ class Settings(object):
         nexusconfig_device.variables = str(confvars)
 
     ## checks existing controllers of pools for
-    #      AutomaticDataSources
-    def updateControllers(self):
-        self.__selector.updateAutomaticComponents()
+    #      PreselectedDataSources
+    def preselectComponents(self):
+        self.__selector.updatePreselectedComponents()
         gc.collect()
 
-    ## reset automaticComponentGroup to defaultAutomaticComponents
-    def resetAutomaticComponents(self):
-        self.__selector.resetAutomaticComponents(
-            self.defaultAutomaticComponents)
-        self.updateControllers()
-        self.storeConfiguration()
+    ## reset preselected Components to defaultPreselectedComponents
+    def resetPreselectedComponents(self):
+        self.__selector.resetPreselectedComponents(
+            self.defaultPreselectedComponents)
+        self.preselectComponents()
+        self.storeProfile()
 
     ## clear all selections
-    def clearAllSelections(self):
-        avsel = self.availableSelections()
+    def deleteAllProfiles(self):
+        avsel = self.availableProfiles()
         if avsel:
             inst = self.__selector.setConfigInstance()
             for name in avsel:
@@ -691,16 +674,9 @@ class Settings(object):
 
 # MntGrp methods
 
-    ## provides full name of Measurement group
-    # \param name alias
-    # \returns full name of Measurement group
-    def findMntGrp(self, name):
-        pools = self.__selector.getPools()
-        return PoolUtils.getMntGrpName(pools, name)
-
     ## deletes mntgrp
     # \param name mntgrp name
-    def deleteMntGrp(self, name):
+    def deleteProfile(self, name):
         self.__profileManager.deleteProfile(name)
 
     ## provides configuration of mntgrp
@@ -710,8 +686,8 @@ class Settings(object):
 
     ## check if active measurement group was changed
     # \returns True if it is different to the current setting
-    def isMntGrpChanged(self):
-        return self.__profileManager.isMntGrpChanged()
+    def isMntGrpUpdated(self):
+        return self.__profileManager.isMntGrpUpdated()
 
     ## set active measurement group from components
     # \returns string with mntgrp configuration
@@ -719,7 +695,7 @@ class Settings(object):
         return self.__profileManager.updateProfile()
 
     ## switch to active measurement
-    def switchMntGrp(self, toActive=True):
+    def switchProfile(self, toActive=True):
         self.__profileManager.switchProfile(toActive)
 
     ## import setting from active measurement
@@ -728,7 +704,7 @@ class Settings(object):
 
     ## available mntgrps
     # \returns list of available measurement groups
-    def availableMeasurementGroups(self):
+    def availableMntGrps(self):
         return self.__profileManager.availableMntGrps()
 
 # Dynamic component methods
@@ -744,7 +720,7 @@ class Settings(object):
                 dcpcreator.setStepDSources(
                     json.loads(params[0]))
             else:
-                dcpcreator.setStepDSources(self.dataSources)
+                dcpcreator.setStepDSources(self.selectedDataSources())
             if len(params) > 1 and params[1]:
                 dcpcreator.setStepDictDSources(json.loads(params[1]))
             if len(params) > 2 and params[2]:
@@ -753,10 +729,7 @@ class Settings(object):
                 dcpcreator.setInitDSources(json.loads(
                     self.__selector["InitDataSources"]))
 
-        withoutLinks = list(set(self.components) |
-                            set(self.automaticComponents) |
-                            set(self.mandatoryComponents()))
-
+        withoutLinks = self.components
         links = json.loads(self.__selector["LabelLinks"])
         for ds in withoutLinks:
             links[ds] = False
@@ -768,8 +741,8 @@ class Settings(object):
             self.__selector["LabelTypes"],
             self.__selector["LabelShapes"])
         dcpcreator.setDefaultLinkPath(
-            bool(self.__selector["DynamicLinks"]),
-            str(self.__selector["DynamicPath"]))
+            bool(self.__selector["DefaultDynamicLinks"]),
+            str(self.__selector["DefaultDynamicPath"]))
 
         return dcpcreator.create()
 
@@ -782,26 +755,33 @@ class Settings(object):
 
 # Environment methods:
 
-    ## fetches Enviroutment Data
+    ## gets Scan Environment Data
     # \returns JSON String with important variables
-    def fetchEnvData(self):
-        return self.__selector.fetchEnvData()
+    def __getScanEnvVariables(self):
+        return self.__selector.getScanEnvVariables()
 
-    ## stores Enviroutment Data
+    ## sets Scan Environment Data
     # \param jdata JSON String with important variables
-    def storeEnvData(self, jdata):
-        return self.__selector.storeEnvData(jdata)
+    def __setScanEnvVariables(self, jdata):
+        return self.__selector.setScanEnvVariables(jdata)
+
+    ## the json data string
+    scanEnvVariables = property(
+        __getScanEnvVariables,
+        __setScanEnvVariables,
+        doc='scan environment data'
+    )
 
     ## imports all Enviroutment Data
-    def importAllEnv(self):
+    def importEnvProfile(self):
         self.__selector.importEnv()
 
     ## exports all Enviroutment Data
-    def exportAllEnv(self):
+    def exportEnvProfile(self):
         nenv = {}
         commands = {
             "components": "Components",
-            "automaticComponents": "AutomaticComponents",
+            "preselectedComponents": "PreselectedComponents",
             "dataSources": "DataSources"
         }
         for attr, name in commands.items():
