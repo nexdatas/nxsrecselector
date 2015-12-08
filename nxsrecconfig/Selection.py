@@ -68,18 +68,12 @@ class Selection(dict):
         self["ConfigVariables"] = '{}'
         ## JSON with Client Data Record
         self["UserData"] = '{}'
-        ## JSON with Element Labels
-        self["Labels"] = '{}'
+        ## JSON with channel properties
+        self["ChannelProperties"] = '{}'
         ## JSON with NeXus paths for Label Paths
-        self["LabelPaths"] = '{}'
-        ## JSON with NeXus paths for Label Links
-        self["LabelLinks"] = '{}'
+        self["Labels"] = '{}'
         ## JSON with NeXus paths for Label Displays
         self["UnplottedComponents"] = '[]'
-        ## JSON with NeXus paths for Label Types
-        self["LabelTypes"] = '{}'
-        ## JSON with NeXus paths for Label Shapes
-        self["LabelShapes"] = '{}'
         ## create dynamic components
         self["DynamicComponents"] = True
         ## create links for dynamic components

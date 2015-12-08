@@ -55,13 +55,22 @@ class Converter1to2(ConverterXtoY):
 
         }
 
+        ## names of properties
+        self.pnames = {
+            "LabelPaths": "nexus_path",
+            "LabelLinks": "link",
+            "LabelTypes": "data_type",
+            "LabelShapes": "shape",
+        }
+
+
     def convert(self, selection):
         super(Converter1to2, self).convert(selection)
-
-#         LabelPaths		      ?	LabelPaths | Properties
-#         LabelLinks		      ?	LabelLinks |
-#         LabelTypes		      ?	LabelTypes |
-#         LabelShapes		      ?	LabelShapes|
+        props = {}
+        for var, pn in pnames.items():
+            if var in selection:
+                self.addProperties(json.loads(selection.pop(var)), pn, props)
+        selection["ChannelProperties"] = json.dumps(props)
 
 
 ## Selection converter from 2 to 1
@@ -69,6 +78,14 @@ class Converter2to1(ConverterXtoY):
 
     def __init__(self):
         super(Converter2to1, self).__init__()
+
+        ## names of properties
+        self.pnames = {
+            "LabelPaths": "nexus_path",
+            "LabelLinks": "link",
+            "LabelTypes": "data_type",
+            "LabelShapes": "shape",
+        }
 
         ## names to convert
         self.names = {
@@ -84,6 +101,10 @@ class Converter2to1(ConverterXtoY):
 
     def convert(self, selection):
         super(Converter2to1, self).convert(selection)
+        if "ChannelProperties" in selection:
+            props = json.loads(selection["ChannelProperties"])
+            self.addVariables(self.pnames, props, selection)
+            selection["ChannelProperties"] = json.dumps(props)
 
 
 ## Selection converter
@@ -135,3 +156,30 @@ class Converter(object):
             minor = int(sver[1])
             patch = int(sver[2])
         return major, minor, patch
+
+    @classmethod    
+    def addVariables(self, pnames, props, selection):
+        for var, pn in pnames.items():
+            svars = json.loads(selection[var]) if var in selection else {}
+            for ch, prs in props.keys():
+                if pn in prs:
+                    svars[ch] = prs.pop(pn)
+            selection[var] = json.dumps(svars)
+
+    @classmethod    
+    def removeProperties(cls, name, props):
+        for ch, prs in props.items():
+            if name in prs.keys():
+                prs[ch].pop(name)
+        
+    @classmethod    
+    def addProperties(cls, variables, name, props):
+        for ch, value in variables.items():
+            if ch not in props:
+                props[ch] = {}
+            props[ch][name] = value
+
+    @classmethod    
+    def updateProperties(cls, variables, name, props):
+        cls.removeProperties(cls, name props)
+        cls.addProperties(cls, variables, name props)

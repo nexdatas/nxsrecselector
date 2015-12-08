@@ -30,6 +30,7 @@ from .Utils import Utils, TangoUtils, MSUtils, PoolUtils
 from .ProfileManager import ProfileManager
 from .Selector import Selector
 from .MacroServerPools import MacroServerPools
+from .Converter import Converter
 from . import Streams
 
 
@@ -361,18 +362,31 @@ class Settings(object):
         __setStepDatSources,
         doc='datasource  group')
 
+    def __getProperty(self, name):
+        props = json.loads(self.__selector["ChannelProperties"])
+        sel = {}
+        Converter.addVariables({"var": name}, props, sel)
+        return sel["var"]
+
+    def __setProperty(self, name, variables):
+        jvar = Utils.stringToDictJson(variables)
+        lvar = json.dumps(self.__getProperty(name))
+        if lvar != jvar:
+            props = json.loads(self.__selector["ChannelProperties"])
+            Convertver.updateProperties(json.loads(jvar), name, props)
+            self.__selector["ChannelProperties"] = json.dumps(props)
+            self.storeProfile()
+
+    
     ## get method for labelShapes attribute
     # \returns name of labelShapes
     def __getLabelShapes(self):
-        return self.__selector["LabelShapes"]
-
+        return json.dumps(self.__getProperty("shape"))
+        
     ## set method for labelShapes attribute
     # \param name of labelShapes
-    def __setLabelShapes(self, name):
-        jname = Utils.stringToDictJson(name)
-        if self.__selector["LabelShapes"] != jname:
-            self.__selector["LabelShapes"] = jname
-            self.storeProfile()
+    def __setLabelShapes(self, shapes):
+        self.__setProperty("shape", shapes)
 
     ## the json data string
     labelShapes = property(
@@ -383,15 +397,12 @@ class Settings(object):
     ## get method for labelTypes attribute
     # \returns name of labelTypes
     def __getLabelTypes(self):
-        return self.__selector["LabelTypes"]
+        return json.dumps(self.__getProperty("data_type"))
 
     ## set method for labelTypes attribute
-    # \param name of labelTypes
-    def __setLabelTypes(self, name):
-        jname = Utils.stringToDictJson(name)
-        if self.__selector["LabelTypes"] != jname:
-            self.__selector["LabelTypes"] = jname
-            self.storeProfile()
+    # \param types of labelTypes
+    def __setLabelTypes(self, types):
+        self.__getProperty("data_type", types)
 
     ## the json data string
     labelTypes = property(
@@ -716,8 +727,8 @@ class Settings(object):
     def createDynamicComponent(self, params):
         nexusconfig_device = self.__selector.setConfigInstance()
         dcpcreator = DynamicComponent(nexusconfig_device)
-        if isinstance(params, (list, tuple)):
-            if len(params) > 0 and params[0]:
+        if isinstance(params, (list, tuple)): 
+           if len(params) > 0 and params[0]:
                 dcpcreator.setStepDSources(
                     json.loads(params[0]))
             else:
@@ -731,16 +742,16 @@ class Settings(object):
                     self.__selector["InitDataSources"]))
 
         withoutLinks = self.components
-        links = json.loads(self.__selector["LabelLinks"])
+        links = self.__getProperty("link")
         for ds in withoutLinks:
             links[ds] = False
 
         dcpcreator.setLabelParams(
             self.__selector["Labels"],
-            self.__selector["LabelPaths"],
+            json.dumps(self.__getProperty("nexus_path")),
             json.dumps(links),
-            self.__selector["LabelTypes"],
-            self.__selector["LabelShapes"])
+            json.dumps(self.__getProperty("data_type")),
+            json.dumps(self.__getProperty("shape")))
         dcpcreator.setDefaultLinkPath(
             bool(self.__selector["DefaultDynamicLinks"]),
             str(self.__selector["DefaultDynamicPath"]))
