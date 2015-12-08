@@ -668,7 +668,7 @@ class Settings(object):
     ## describe datasources
     # \param datasources list for datasource names
     # \returns list of dictionary with description of datasources
-    def getSourceDescription(self, datasources):
+    def dataSourceDescription(self, datasources):
         nexusconfig_device = self.__selector.setConfigInstance()
         describer = Describer(nexusconfig_device)
         return describer.dataSources(datasources)
