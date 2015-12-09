@@ -132,7 +132,6 @@ class SelectorTest(unittest.TestCase):
         ## selection version
         self.__version = nxsrecconfig.__version__
 
-        
         self._keys = [
             ("Timer", '[]'),
             ("OrderedChannels", '[]'),
@@ -146,12 +145,8 @@ class SelectorTest(unittest.TestCase):
             ("ComponentsFromMntGrp", False),
             ("ConfigVariables", '{}'),
             ("UserData", '{}'),
-            ("Labels", '{}'),
-            ("LabelPaths", '{}'),
-            ("LabelLinks", '{}'),
             ("UnplottedComponents", '[]'),
-            ("LabelTypes", '{}'),
-            ("LabelShapes", '{}'),
+            ("ChannelProperties", '{}'),
             ("DynamicComponents", True),
             ("DefaultDynamicLinks", True),
             ("DefaultDynamicPath", self.__defaultpath),
@@ -1583,7 +1578,6 @@ class SelectorTest(unittest.TestCase):
                 if (i / 2) % 4 - 2:
                     se.exportEnv(mydict)
             elif (i / 2) % 4 == 0:
-                print "STORE" , se["TimeZone"]
                 se.exportEnv()
                 env = pickle.loads(
                     self._ms.dps[self._ms.ms.keys()[0]].Environment[1])
@@ -1596,7 +1590,6 @@ class SelectorTest(unittest.TestCase):
                         self.assertEqual(
                             se[k],
                             env["new"]["NeXusConfiguration"][k])
-                print "ENV", env["new"]["NeXusConfiguration"]    , se["TimeZone"]
             else:
                 se["MntGrp"] = val["MntGrp"]
                 se.storeSelection()
@@ -2638,7 +2631,9 @@ class SelectorTest(unittest.TestCase):
             for i in range(lcp):
                 cps[self.getRandomName(10)] = self.getRandomName(
                     self.__rnd.randint(1, 40))
-            se["Labels"] = json.dumps(cps)
+            prop = json.loads(se["ChannelProperties"])
+            prop["label"] = cps
+            se["ChannelProperties"] = json.dumps(prop)
 
             self.dump(se)
             mydict = {}
@@ -2663,14 +2658,16 @@ class SelectorTest(unittest.TestCase):
                 se["MntGrp"] = val["MntGrp"]
                 se.storeSelection()
 
-            self.compareToDump(se, ["Labels"])
+            self.compareToDump(se, ["ChannelProperties"])
 
-            ndss = json.loads(se["Labels"])
+            prop = json.loads(se["ChannelProperties"])
+            ndss = prop["label"]
             for ds in cps.keys():
                 self.assertTrue(ds in ndss.keys())
                 self.assertEqual(ndss[ds], cps[ds])
             se.reset()
-            self.assertEqual(se["Labels"], "{}")
+            prop = json.loads(se["ChannelProperties"])
+            self.assertEqual(prop, {})
 
             mydata = {}
             if (i / 2) % 2:
@@ -2684,9 +2681,10 @@ class SelectorTest(unittest.TestCase):
             else:
                 se["MntGrp"] = val["MntGrp"]
                 se.fetchSelection()
-            self.compareToDump(se, ["Labels"])
+            self.compareToDump(se, ["ChannelProperties"])
 
-            ndss = json.loads(se["Labels"])
+            prop = json.loads(se["ChannelProperties"])
+            ndss = prop["label"]
             for ds in cps.keys():
                 self.assertTrue(ds in ndss.keys())
                 self.assertEqual(ndss[ds], cps[ds])
@@ -2720,7 +2718,9 @@ class SelectorTest(unittest.TestCase):
             for i in range(lcp):
                 cps[self.getRandomName(10)] = self.getRandomName(
                     self.__rnd.randint(1, 40))
-            se["LabelPaths"] = json.dumps(cps)
+            prop = json.loads(se["ChannelProperties"])
+            prop["nexus_path"] = cps
+            se["ChannelProperties"] = json.dumps(prop)
 
             self.dump(se)
 
@@ -2746,14 +2746,16 @@ class SelectorTest(unittest.TestCase):
                 se["MntGrp"] = val["MntGrp"]
                 se.storeSelection()
 
-            self.compareToDump(se, ["LabelPaths"])
+            self.compareToDump(se, ["ChannelProperties"])
 
-            ndss = json.loads(se["LabelPaths"])
+            prop = json.loads(se["ChannelProperties"])
+            ndss = prop["nexus_path"]
             for ds in cps.keys():
                 self.assertTrue(ds in ndss.keys())
                 self.assertEqual(ndss[ds], cps[ds])
             se.reset()
-            self.assertEqual(se["LabelPaths"], "{}")
+            prop = json.loads(se["ChannelProperties"])
+            self.assertEqual(prop, {})
 
             mydata = {}
             if (i / 2) % 2:
@@ -2767,9 +2769,10 @@ class SelectorTest(unittest.TestCase):
             else:
                 se["MntGrp"] = val["MntGrp"]
                 se.fetchSelection()
-            self.compareToDump(se, ["LabelPaths"])
+            self.compareToDump(se, ["ChannelProperties"])
 
-            ndss = json.loads(se["LabelPaths"])
+            prop = json.loads(se["ChannelProperties"])
+            ndss = prop["nexus_path"]
             for ds in cps.keys():
                 self.assertTrue(ds in ndss.keys())
                 self.assertEqual(ndss[ds], cps[ds])
@@ -2802,7 +2805,9 @@ class SelectorTest(unittest.TestCase):
             lcp = self.__rnd.randint(1, 40)
             for i in range(lcp):
                 cps[self.getRandomName(10)] = bool(self.__rnd.randint(0, 1))
-            se["LabelLinks"] = json.dumps(cps)
+            prop = json.loads(se["ChannelProperties"])
+            prop["link"] = cps
+            se["ChannelProperties"] = json.dumps(prop)
 
             self.dump(se)
             mydict = {}
@@ -2827,14 +2832,16 @@ class SelectorTest(unittest.TestCase):
                 se["MntGrp"] = val["MntGrp"]
                 se.storeSelection()
 
-            self.compareToDump(se, ["LabelLinks"])
+            self.compareToDump(se, ["ChannelProperties"])
 
-            ndss = json.loads(se["LabelLinks"])
+            prop = json.loads(se["ChannelProperties"])
+            ndss = prop["link"]
             for ds in cps.keys():
                 self.assertTrue(ds in ndss.keys())
                 self.assertEqual(ndss[ds], cps[ds])
             se.reset()
-            self.assertEqual(se["LabelLinks"], "{}")
+            prop = json.loads(se["ChannelProperties"])
+            self.assertEqual(prop, {})
 
             mydata = {}
             if (i / 2) % 2:
@@ -2849,9 +2856,10 @@ class SelectorTest(unittest.TestCase):
                 se["MntGrp"] = val["MntGrp"]
                 se.fetchSelection()
 
-            self.compareToDump(se, ["LabelLinks"])
+            self.compareToDump(se, ["ChannelProperties"])
 
-            ndss = json.loads(se["LabelLinks"])
+            prop = json.loads(se["ChannelProperties"])
+            ndss = prop["link"]
             for ds in cps.keys():
                 self.assertTrue(ds in ndss.keys())
                 self.assertEqual(ndss[ds], cps[ds])
@@ -2885,7 +2893,9 @@ class SelectorTest(unittest.TestCase):
             for i in range(lcp):
                 cps[self.getRandomName(10)] = self.getRandomName(
                     self.__rnd.randint(1, 40))
-            se["LabelTypes"] = json.dumps(cps)
+            prop = json.loads(se["ChannelProperties"])
+            prop["data_type"] = cps
+            se["ChannelProperties"] = json.dumps(prop)
 
             self.dump(se)
             mydict = {}
@@ -2910,16 +2920,17 @@ class SelectorTest(unittest.TestCase):
                 se["MntGrp"] = val["MntGrp"]
                 se.storeSelection()
 
-            self.compareToDump(se, ["LabelTypes"])
+            self.compareToDump(se, ["ChannelProperties"])
 
-            ndss = json.loads(se["LabelTypes"])
+            prop = json.loads(se["ChannelProperties"])
+            ndss = prop["data_type"]
             for ds in cps.keys():
                 self.assertTrue(ds in ndss.keys())
                 self.assertEqual(ndss[ds], cps[ds])
             se.reset()
+            prop = json.loads(se["ChannelProperties"])
+            self.assertEqual(prop, {})
 
-            self.assertEqual(se["LabelTypes"], "{}")
-            mydata = {}
             if (i / 2) % 2:
                 if (i / 2) % 4:
                     se.set(mydict)
@@ -2932,7 +2943,10 @@ class SelectorTest(unittest.TestCase):
                 se["MntGrp"] = val["MntGrp"]
                 se.fetchSelection()
 
-            ndss = json.loads(se["LabelTypes"])
+            self.compareToDump(se, ["ChannelProperties"])
+
+            prop = json.loads(se["ChannelProperties"])
+            ndss = prop["data_type"]
             for ds in cps.keys():
                 self.assertTrue(ds in ndss.keys())
                 self.assertEqual(ndss[ds], cps[ds])
@@ -2967,7 +2981,9 @@ class SelectorTest(unittest.TestCase):
                 dim = self.__rnd.randint(0, 3)
                 cps[self.getRandomName(10)] = [
                     self.__rnd.randint(1, 1000) for _ in range(dim)]
-            se["LabelShapes"] = json.dumps(cps)
+            prop = json.loads(se["ChannelProperties"])
+            prop["shape"] = cps
+            se["ChannelProperties"] = json.dumps(prop)
 
             self.dump(se)
 
@@ -2993,15 +3009,17 @@ class SelectorTest(unittest.TestCase):
                 se["MntGrp"] = val["MntGrp"]
                 se.storeSelection()
 
-            self.compareToDump(se, ["LabelShapes"])
+            self.compareToDump(se, ["ChannelProperties"])
 
-            ndss = json.loads(se["LabelShapes"])
+            prop = json.loads(se["ChannelProperties"])
+            ndss = prop["shape"]
             for ds in cps.keys():
                 self.assertTrue(ds in ndss.keys())
                 self.assertEqual(ndss[ds], cps[ds])
 
             se.reset()
-            self.assertEqual(se["LabelShapes"], "{}")
+            prop = json.loads(se["ChannelProperties"])
+            self.assertEqual(prop, {})
 
             mydata = {}
             if (i / 2) % 2:
@@ -3016,7 +3034,10 @@ class SelectorTest(unittest.TestCase):
                 se["MntGrp"] = val["MntGrp"]
                 se.fetchSelection()
 
-            ndss = json.loads(se["LabelShapes"])
+            self.compareToDump(se, ["ChannelProperties"])
+
+            prop = json.loads(se["ChannelProperties"])
+            ndss = prop["shape"]
             for ds in cps.keys():
                 self.assertTrue(ds in ndss.keys())
                 self.assertEqual(ndss[ds], cps[ds])
@@ -5207,7 +5228,7 @@ class SelectorTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_updatePreselectedComponents_2wds_notangodspool_alias_novalue(self):
+    def test_updatePreselectedComponents_2wds_ntdsp_alias_novalue(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),

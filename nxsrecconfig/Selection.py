@@ -71,8 +71,6 @@ class Selection(dict):
         ## JSON with channel properties
         self["ChannelProperties"] = '{}'
         ## JSON with NeXus paths for Label Paths
-        self["Labels"] = '{}'
-        ## JSON with NeXus paths for Label Displays
         self["UnplottedComponents"] = '[]'
         ## create dynamic components
         self["DynamicComponents"] = True

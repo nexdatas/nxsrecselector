@@ -310,34 +310,6 @@ class NXSRecSelector(PyTango.Device_4Impl):
         self.__stg.userData = attr.get_write_value()
 
     #------------------------------------------------------------------
-    #    Read LabelTypes attribute
-    #------------------------------------------------------------------
-    def read_LabelTypes(self, attr):
-        self.debug_stream("In read_LabelTypes()")
-        attr.set_value(self.__stg.labelTypes)
-
-    #------------------------------------------------------------------
-    #    Write LabelTypes attribute
-    #------------------------------------------------------------------
-    def write_LabelTypes(self, attr):
-        self.debug_stream("In write_LabelTypes()")
-        self.__stg.labelTypes = attr.get_write_value()
-
-    #------------------------------------------------------------------
-    #    Read LabelShapes attribute
-    #------------------------------------------------------------------
-    def read_LabelShapes(self, attr):
-        self.debug_stream("In read_LabelShapes()")
-        attr.set_value(self.__stg.labelShapes)
-
-    #------------------------------------------------------------------
-    #    Write LabelShapes attribute
-    #------------------------------------------------------------------
-    def write_LabelShapes(self, attr):
-        self.debug_stream("In write_LabelShapes()")
-        self.__stg.labelShapes = attr.get_write_value()
-
-    #------------------------------------------------------------------
     #    Read DataSources attribute
     #------------------------------------------------------------------
     def read_DataSources(self, attr):
@@ -1150,10 +1122,10 @@ class NXSRecSelector(PyTango.Device_4Impl):
         try:
             self.set_state(PyTango.DevState.RUNNING)
             argout = self.__stg.createDynamicComponent(argin)
-            self.set_state(PyTango.DevState.OPEN)
+            self.set_state(PyTango.DevState.ON)
         finally:
             if self.get_state() == PyTango.DevState.RUNNING:
-                self.set_state(PyTango.DevState.OPEN)
+                self.set_state(PyTango.DevState.ON)
 
         return argout
 
@@ -1177,10 +1149,10 @@ class NXSRecSelector(PyTango.Device_4Impl):
         try:
             self.set_state(PyTango.DevState.RUNNING)
             self.__stg.removeDynamicComponent(argin)
-            self.set_state(PyTango.DevState.OPEN)
+            self.set_state(PyTango.DevState.ON)
         finally:
             if self.get_state() == PyTango.DevState.RUNNING:
-                self.set_state(PyTango.DevState.OPEN)
+                self.set_state(PyTango.DevState.ON)
 
     #---- RemoveDynamicComponent command State Machine -----------------
     def is_RemoveDynamicComponent_allowed(self):
@@ -1200,13 +1172,66 @@ class NXSRecSelector(PyTango.Device_4Impl):
         try:
             self.set_state(PyTango.DevState.RUNNING)
             self.__stg.deleteProfile(argin)
-            self.set_state(PyTango.DevState.OPEN)
+            self.set_state(PyTango.DevState.ON)
         finally:
             if self.get_state() == PyTango.DevState.RUNNING:
-                self.set_state(PyTango.DevState.OPEN)
+                self.set_state(PyTango.DevState.ON)
 
     #---- DeleteProfile command State Machine -----------------
     def is_DeleteProfile_allowed(self):
+        if self.get_state() in [PyTango.DevState.RUNNING]:
+            return False
+        return True
+
+    #------------------------------------------------------------------
+    #    ChannelProperties command:
+    #
+    #    Description: JSON dictionary with channel properties
+    #                 {channel:property}
+    #
+    #    argin:  DevString    property type
+    #    argout: DevString    JSON dictionary with channel properties
+    #------------------------------------------------------------------
+    def ChannelProperties(self, argin):
+        self.debug_stream("In ChannelProperties()")
+        try:
+            self.set_state(PyTango.DevState.RUNNING)
+            argout = self.__stg.channelProperties(argin)
+            self.set_state(PyTango.DevState.ON)
+        finally:
+            if self.get_state() == PyTango.DevState.RUNNING:
+                self.set_state(PyTango.DevState.ON)
+
+        return argout
+
+    #---- ChannelProperties command State Machine -----------------
+    def is_ChannelProperties_allowed(self):
+        if self.get_state() in [PyTango.DevState.RUNNING]:
+            return False
+        return True
+
+    #------------------------------------------------------------------
+    #    SetChannelProperties command: SetChannelProperties
+    #
+    #    Description: set Channel Properties of given type
+    #
+    #    argin:  DevVarStringArray   two element list with a property type and
+    #                                 JSON value dictionary {channel:property}
+    #------------------------------------------------------------------
+    def SetChannelProperties(self, argin):
+        self.debug_stream("In SetChannelProperties()")
+        try:
+            self.set_state(PyTango.DevState.RUNNING)
+            argout = self.__stg.setChannelProperties(argin)
+            self.set_state(PyTango.DevState.ON)
+        finally:
+            if self.get_state() == PyTango.DevState.RUNNING:
+                self.set_state(PyTango.DevState.ON)
+
+        return argout
+
+    #---- SetChannelProperties command State Machine -----------------
+    def is_SetChannelProperties_allowed(self):
         if self.get_state() in [PyTango.DevState.RUNNING]:
             return False
         return True
@@ -1224,10 +1249,10 @@ class NXSRecSelector(PyTango.Device_4Impl):
         try:
             self.set_state(PyTango.DevState.RUNNING)
             argout = self.__stg.componentClientSources(argin)
-            self.set_state(PyTango.DevState.OPEN)
+            self.set_state(PyTango.DevState.ON)
         finally:
             if self.get_state() == PyTango.DevState.RUNNING:
-                self.set_state(PyTango.DevState.OPEN)
+                self.set_state(PyTango.DevState.ON)
 
         return argout
 
@@ -1250,10 +1275,10 @@ class NXSRecSelector(PyTango.Device_4Impl):
         try:
             self.set_state(PyTango.DevState.RUNNING)
             argout = self.__stg.dataSourceDescription(argin)
-            self.set_state(PyTango.DevState.OPEN)
+            self.set_state(PyTango.DevState.ON)
         finally:
             if self.get_state() == PyTango.DevState.RUNNING:
-                self.set_state(PyTango.DevState.OPEN)
+                self.set_state(PyTango.DevState.ON)
 
         return argout
 
@@ -1278,10 +1303,10 @@ class NXSRecSelector(PyTango.Device_4Impl):
         try:
             self.set_state(PyTango.DevState.RUNNING)
             argout = self.__stg.createWriterConfiguration(argin)
-            self.set_state(PyTango.DevState.OPEN)
+            self.set_state(PyTango.DevState.ON)
         finally:
             if self.get_state() == PyTango.DevState.RUNNING:
-                self.set_state(PyTango.DevState.OPEN)
+                self.set_state(PyTango.DevState.ON)
 
         return argout
 
@@ -1433,6 +1458,15 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
             [[PyTango.DevVarStringArray, "list of required components"],
              [PyTango.DevString,
               "JSON with description of CLIENT Datasources"]],
+        'ChannelProperties':
+            [[PyTango.DevString, "property type"],
+             [PyTango.DevString,
+              "JSON dictionary with channel properties {channel:property}"]],
+        'SetChannelProperties':
+            [[PyTango.DevVarStringArray,
+              "a two element list with a property type and "
+              "JSON value dictionary {channel:property}"],
+             [PyTango.DevVoid, ""]],
         'CreateWriterConfiguration':
             [[PyTango.DevVarStringArray, "list of required components"],
              [PyTango.DevString,
@@ -1564,26 +1598,6 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
              {
                  'label': "Scan Environment Variables",
                  'description': "JSON dict with Scan Environment Variablels",
-                 'Display level': PyTango.DispLevel.EXPERT,
-            }],
-        'LabelTypes':
-            [[PyTango.DevString,
-              PyTango.SCALAR,
-              PyTango.READ_WRITE],
-             {
-                 'label': "NeXus Types for DataSource Labels",
-                'description': "JSON dictionary with NeXus Types for "
-                 + "Datasource Labels",
-                 'Display level': PyTango.DispLevel.EXPERT,
-            }],
-        'LabelShapes':
-            [[PyTango.DevString,
-              PyTango.SCALAR,
-              PyTango.READ_WRITE],
-             {
-                 'label': "NeXus Shapes for DataSource Labels",
-                 'description': "JSON dictionary with NeXus Shapes for "
-                 + "Datasource Labels",
                  'Display level': PyTango.DispLevel.EXPERT,
             }],
         'DataSources':

@@ -148,12 +148,8 @@ class ProfileManagerTest(unittest.TestCase):
             ("ComponentsFromMntGrp", False),
             ("ConfigVariables", '{}'),
             ("UserData", '{}'),
-            ("Labels", '{}'),
-            ("LabelPaths", '{}'),
-            ("LabelLinks", '{}'),
+            ("ChannelProperties", '{}'),
             ("UnplottedComponents", '[]'),
-            ("LabelTypes", '{}'),
-            ("LabelShapes", '{}'),
             ("DynamicComponents", True),
             ("DefaultDynamicLinks", True),
             ("DefaultDynamicPath", self.__defaultpath),
@@ -3921,8 +3917,10 @@ class ProfileManagerTest(unittest.TestCase):
                     self.myAssertDict(
                         json.loads(se["ComponentPreselection"]),
                         acps)
-                    self.myAssertDict(json.loads(se["ComponentSelection"]), cps)
-                    self.myAssertDict(json.loads(se["DataSourceSelection"]), adss)
+                    self.myAssertDict(
+                        json.loads(se["ComponentSelection"]), cps)
+                    self.myAssertDict(
+                        json.loads(se["DataSourceSelection"]), adss)
                     self.assertEqual(json.loads(se["UnplottedComponents"]), [])
                     self.assertEqual(json.loads(se["OrderedChannels"]), pdss)
                     self.myAssertDict(json.loads(se["UserData"]), records)
@@ -3944,8 +3942,10 @@ class ProfileManagerTest(unittest.TestCase):
                     self.myAssertDict(
                         json.loads(se["ComponentPreselection"]),
                         acps)
-                    self.myAssertDict(json.loads(se["ComponentSelection"]), cps)
-                    self.myAssertDict(json.loads(se["DataSourceSelection"]), adss)
+                    self.myAssertDict(
+                        json.loads(se["ComponentSelection"]), cps)
+                    self.myAssertDict(
+                        json.loads(se["DataSourceSelection"]), adss)
                     self.assertEqual(json.loads(se["UnplottedComponents"]), [])
                     self.assertEqual(json.loads(se["OrderedChannels"]), pdss)
                     self.myAssertDict(json.loads(se["UserData"]), records)
@@ -4008,8 +4008,10 @@ class ProfileManagerTest(unittest.TestCase):
                     self.myAssertDict(
                         json.loads(se["ComponentPreselection"]),
                         acps)
-                    self.myAssertDict(json.loads(se["ComponentSelection"]), cps)
-                    self.myAssertDict(json.loads(se["DataSourceSelection"]), adss)
+                    self.myAssertDict(
+                        json.loads(se["ComponentSelection"]), cps)
+                    self.myAssertDict(
+                        json.loads(se["DataSourceSelection"]), adss)
                     self.assertEqual(json.loads(se["UnplottedComponents"]), [])
                     self.assertEqual(json.loads(se["OrderedChannels"]), pdss)
                     self.myAssertDict(json.loads(se["UserData"]), records)
@@ -4234,10 +4236,13 @@ class ProfileManagerTest(unittest.TestCase):
                     self.myAssertDict(
                         json.loads(se["ComponentPreselection"]),
                         acps)
-                    self.myAssertDict(json.loads(se["ComponentSelection"]), cps)
-                    self.myAssertDict(json.loads(se["DataSourceSelection"]), adss)
-                    self.assertEqual(set(json.loads(se["UnplottedComponents"])),
-                                     set(lhe))
+                    self.myAssertDict(
+                        json.loads(se["ComponentSelection"]), cps)
+                    self.myAssertDict(
+                        json.loads(se["DataSourceSelection"]), adss)
+                    self.assertEqual(
+                        set(json.loads(se["UnplottedComponents"])),
+                        set(lhe))
                     self.assertEqual(json.loads(se["OrderedChannels"]), pdss)
                     self.myAssertDict(json.loads(se["UserData"]), records)
                     self.assertEqual(json.loads(se["Timer"]), [ar["name"]])
@@ -4258,10 +4263,13 @@ class ProfileManagerTest(unittest.TestCase):
                     self.myAssertDict(
                         json.loads(se["ComponentPreselection"]),
                         acps)
-                    self.myAssertDict(json.loads(se["ComponentSelection"]), cps)
-                    self.myAssertDict(json.loads(se["DataSourceSelection"]), adss)
-                    self.assertEqual(set(json.loads(se["UnplottedComponents"])),
-                                     set(lhe2))
+                    self.myAssertDict(
+                        json.loads(se["ComponentSelection"]), cps)
+                    self.myAssertDict(
+                        json.loads(se["DataSourceSelection"]), adss)
+                    self.assertEqual(
+                        set(json.loads(se["UnplottedComponents"])),
+                        set(lhe2))
                     self.assertEqual(json.loads(se["OrderedChannels"]), pdss)
                     self.myAssertDict(json.loads(se["UserData"]), records)
                     self.assertEqual(json.loads(se["Timer"]), [ar["name"]])
@@ -4332,10 +4340,13 @@ class ProfileManagerTest(unittest.TestCase):
                     self.myAssertDict(
                         json.loads(se["ComponentPreselection"]),
                         acps)
-                    self.myAssertDict(json.loads(se["ComponentSelection"]), cps)
-                    self.myAssertDict(json.loads(se["DataSourceSelection"]), adss)
-                    self.assertEqual(set(json.loads(se["UnplottedComponents"])),
-                                     set(lhe2))
+                    self.myAssertDict(
+                        json.loads(se["ComponentSelection"]), cps)
+                    self.myAssertDict(
+                        json.loads(se["DataSourceSelection"]), adss)
+                    self.assertEqual(
+                        set(json.loads(se["UnplottedComponents"])),
+                        set(lhe2))
                     self.assertEqual(json.loads(se["OrderedChannels"]), pdss)
                     self.myAssertDict(json.loads(se["UserData"]), records)
                     self.assertEqual(json.loads(se["Timer"]), [ar["name"]])
@@ -4573,10 +4584,13 @@ class ProfileManagerTest(unittest.TestCase):
                     self.myAssertDict(
                         json.loads(se["ComponentPreselection"]),
                         acps)
-                    self.myAssertDict(json.loads(se["ComponentSelection"]), cps)
-                    self.myAssertDict(json.loads(se["DataSourceSelection"]), adss)
-                    self.assertEqual(set(json.loads(se["UnplottedComponents"])),
-                                     set(lhe))
+                    self.myAssertDict(
+                        json.loads(se["ComponentSelection"]), cps)
+                    self.myAssertDict(
+                        json.loads(se["DataSourceSelection"]), adss)
+                    self.assertEqual(
+                        set(json.loads(se["UnplottedComponents"])),
+                        set(lhe))
                     self.assertEqual(json.loads(se["OrderedChannels"]), pdss)
                     self.myAssertDict(json.loads(se["UserData"]), records)
                     self.assertEqual(json.loads(se["Timer"]), [ar["name"]])
@@ -4597,10 +4611,13 @@ class ProfileManagerTest(unittest.TestCase):
                     self.myAssertDict(
                         json.loads(se["ComponentPreselection"]),
                         acps)
-                    self.myAssertDict(json.loads(se["ComponentSelection"]), cps)
-                    self.myAssertDict(json.loads(se["DataSourceSelection"]), adss)
-                    self.assertEqual(set(json.loads(se["UnplottedComponents"])),
-                                     set(lhe2))
+                    self.myAssertDict(
+                        json.loads(se["ComponentSelection"]), cps)
+                    self.myAssertDict(
+                        json.loads(se["DataSourceSelection"]), adss)
+                    self.assertEqual(
+                        set(json.loads(se["UnplottedComponents"])),
+                        set(lhe2))
                     self.assertEqual(json.loads(se["OrderedChannels"]), pdss)
                     self.myAssertDict(json.loads(se["UserData"]), records)
                     self.assertEqual(json.loads(se["Timer"]), [ar["name"]])
@@ -4714,10 +4731,13 @@ class ProfileManagerTest(unittest.TestCase):
                     self.myAssertDict(
                         json.loads(se["ComponentPreselection"]),
                         acps)
-                    self.myAssertDict(json.loads(se["ComponentSelection"]), cps)
-                    self.myAssertDict(json.loads(se["DataSourceSelection"]), adss)
-                    self.assertEqual(set(json.loads(se["UnplottedComponents"])),
-                                     set(lhe2))
+                    self.myAssertDict(
+                        json.loads(se["ComponentSelection"]), cps)
+                    self.myAssertDict(
+                        json.loads(se["DataSourceSelection"]), adss)
+                    self.assertEqual(
+                        set(json.loads(se["UnplottedComponents"])),
+                        set(lhe2))
                     self.assertEqual(json.loads(se["OrderedChannels"]), pdss)
                     self.myAssertDict(json.loads(se["UserData"]), records)
                     self.assertEqual(json.loads(se["Timer"]), [ar["name"]])
@@ -4956,10 +4976,13 @@ class ProfileManagerTest(unittest.TestCase):
                     self.myAssertDict(
                         json.loads(se["ComponentPreselection"]),
                         acps)
-                    self.myAssertDict(json.loads(se["ComponentSelection"]), cps)
-                    self.myAssertDict(json.loads(se["DataSourceSelection"]), adss)
-                    self.assertEqual(set(json.loads(se["UnplottedComponents"])),
-                                     set(lhe))
+                    self.myAssertDict(
+                        json.loads(se["ComponentSelection"]), cps)
+                    self.myAssertDict(
+                        json.loads(se["DataSourceSelection"]), adss)
+                    self.assertEqual(
+                        set(json.loads(se["UnplottedComponents"])),
+                        set(lhe))
                     self.assertEqual(json.loads(se["OrderedChannels"]), pdss)
                     self.myAssertDict(json.loads(se["UserData"]), records)
                     self.assertEqual(json.loads(se["Timer"]), [ar["name"]])
@@ -4980,10 +5003,13 @@ class ProfileManagerTest(unittest.TestCase):
                     self.myAssertDict(
                         json.loads(se["ComponentPreselection"]),
                         acps)
-                    self.myAssertDict(json.loads(se["ComponentSelection"]), cps)
-                    self.myAssertDict(json.loads(se["DataSourceSelection"]), adss)
-                    self.assertEqual(set(json.loads(se["UnplottedComponents"])),
-                                     set(lhe2))
+                    self.myAssertDict(
+                        json.loads(se["ComponentSelection"]), cps)
+                    self.myAssertDict(
+                        json.loads(se["DataSourceSelection"]), adss)
+                    self.assertEqual(
+                        set(json.loads(se["UnplottedComponents"])),
+                        set(lhe2))
                     self.assertEqual(json.loads(se["OrderedChannels"]), pdss)
                     self.myAssertDict(json.loads(se["UserData"]), records)
                     self.assertEqual(json.loads(se["Timer"]), [ar["name"]])
@@ -5098,10 +5124,13 @@ class ProfileManagerTest(unittest.TestCase):
                     self.myAssertDict(
                         json.loads(se["ComponentPreselection"]),
                         acps)
-                    self.myAssertDict(json.loads(se["ComponentSelection"]), cps)
-                    self.myAssertDict(json.loads(se["DataSourceSelection"]), adss)
-                    self.assertEqual(set(json.loads(se["UnplottedComponents"])),
-                                     set(lhe2))
+                    self.myAssertDict(
+                        json.loads(se["ComponentSelection"]), cps)
+                    self.myAssertDict(
+                        json.loads(se["DataSourceSelection"]), adss)
+                    self.assertEqual(
+                        set(json.loads(se["UnplottedComponents"])),
+                        set(lhe2))
                     self.assertEqual(json.loads(se["OrderedChannels"]), pdss)
                     self.myAssertDict(json.loads(se["UserData"]), records)
                     self.assertEqual(json.loads(se["Timer"]), [ar["name"]])
@@ -5363,10 +5392,13 @@ class ProfileManagerTest(unittest.TestCase):
                     self.myAssertDict(
                         json.loads(se["ComponentPreselection"]),
                         acps)
-                    self.myAssertDict(json.loads(se["ComponentSelection"]), cps)
-                    self.myAssertDict(json.loads(se["DataSourceSelection"]), adss)
-                    self.assertEqual(set(json.loads(se["UnplottedComponents"])),
-                                     set(lhe))
+                    self.myAssertDict(
+                        json.loads(se["ComponentSelection"]), cps)
+                    self.myAssertDict(
+                        json.loads(se["DataSourceSelection"]), adss)
+                    self.assertEqual(
+                        set(json.loads(se["UnplottedComponents"])),
+                        set(lhe))
                     self.assertEqual(json.loads(se["OrderedChannels"]), pdss)
                     self.myAssertDict(json.loads(se["UserData"]), records)
                     self.assertEqual(json.loads(se["Timer"]), ltimers)
@@ -5391,10 +5423,13 @@ class ProfileManagerTest(unittest.TestCase):
                     self.myAssertDict(
                         json.loads(se["ComponentPreselection"]),
                         acps)
-                    self.myAssertDict(json.loads(se["ComponentSelection"]), cps)
-                    self.myAssertDict(json.loads(se["DataSourceSelection"]), adss)
-                    self.assertEqual(set(json.loads(se["UnplottedComponents"])),
-                                     set(lhe2))
+                    self.myAssertDict(
+                        json.loads(se["ComponentSelection"]), cps)
+                    self.myAssertDict(
+                        json.loads(se["DataSourceSelection"]), adss)
+                    self.assertEqual(
+                        set(json.loads(se["UnplottedComponents"])),
+                        set(lhe2))
                     self.assertEqual(json.loads(se["OrderedChannels"]), pdss)
                     self.myAssertDict(json.loads(se["UserData"]), records)
                     self.assertEqual(json.loads(se["Timer"]), ltimers)
@@ -5519,10 +5554,13 @@ class ProfileManagerTest(unittest.TestCase):
                     self.myAssertDict(
                         json.loads(se["ComponentPreselection"]),
                         acps)
-                    self.myAssertDict(json.loads(se["ComponentSelection"]), cps)
-                    self.myAssertDict(json.loads(se["DataSourceSelection"]), adss)
-                    self.assertEqual(set(json.loads(se["UnplottedComponents"])),
-                                     set(lhe2))
+                    self.myAssertDict(
+                        json.loads(se["ComponentSelection"]), cps)
+                    self.myAssertDict(
+                        json.loads(se["DataSourceSelection"]), adss)
+                    self.assertEqual(
+                        set(json.loads(se["UnplottedComponents"])),
+                        set(lhe2))
                     self.assertEqual(json.loads(se["OrderedChannels"]), pdss)
                     self.myAssertDict(json.loads(se["UserData"]), records)
                     self.assertEqual(json.loads(se["Timer"]), ltimers)
@@ -5733,28 +5771,37 @@ class ProfileManagerTest(unittest.TestCase):
                         (self.getRandomName(10),
                          self.getRandomName(15)) for _ in
                         range(self.__rnd.randint(1, 40))))
-                    se["Labels"] = json.dumps({})
-                    se["LabelPaths"] = json.dumps(dict(
+
+                    paths = dict(
                         (self.getRandomName(10),
                          self.getRandomName(15)) for _ in
-                        range(self.__rnd.randint(1, 40))))
-                    se["Labels"] = json.dumps(dict(
+                        range(self.__rnd.randint(1, 40)))
+                    labels = dict(
                         (self.getRandomName(10),
                          self.getRandomName(15)) for _ in
-                        range(self.__rnd.randint(1, 40))))
-                    se["LabelLinks"] = json.dumps(dict(
+                        range(self.__rnd.randint(1, 40)))
+                    links = dict(
                         (self.getRandomName(10),
                          bool(self.__rnd.randint(0, 1))) for _ in
-                        range(self.__rnd.randint(1, 40))))
-                    se["LabelTypes"] = json.dumps(dict(
+                        range(self.__rnd.randint(1, 40)))
+                    types = dict(
                         (self.getRandomName(10),
                          self.getRandomName(15)) for _ in
-                        range(self.__rnd.randint(1, 40))))
-                    se["LabelShapes"] = json.dumps(dict(
+                        range(self.__rnd.randint(1, 40)))
+                    shapes = dict(
                         (self.getRandomName(10),
                          [self.__rnd.randint(1, 40)
                           for _ in range(self.__rnd.randint(0, 3))])
-                        for _ in range(self.__rnd.randint(1, 40))))
+                        for _ in range(self.__rnd.randint(1, 40)))
+                    se["ChannelProperties"] = json.dumps(
+                        {
+                            "label": labels,
+                            "nexus_path": paths,
+                            "link": links,
+                            "data_type": types,
+                            "shape": shapes
+                        }
+                    )
 
                     self._cf.dp.SetCommandVariable(["MCPLIST",
 
@@ -5835,10 +5882,13 @@ class ProfileManagerTest(unittest.TestCase):
                     self.myAssertDict(
                         json.loads(se["ComponentPreselection"]),
                         acps)
-                    self.myAssertDict(json.loads(se["ComponentSelection"]), cps)
-                    self.myAssertDict(json.loads(se["DataSourceSelection"]), adss)
-                    self.assertEqual(set(json.loads(se["UnplottedComponents"])),
-                                     set(lhe))
+                    self.myAssertDict(
+                        json.loads(se["ComponentSelection"]), cps)
+                    self.myAssertDict(
+                        json.loads(se["DataSourceSelection"]), adss)
+                    self.assertEqual(
+                        set(json.loads(se["UnplottedComponents"])),
+                        set(lhe))
                     self.assertEqual(json.loads(se["OrderedChannels"]), pdss)
                     self.myAssertDict(json.loads(se["UserData"]), records)
                     self.assertEqual(json.loads(se["Timer"]), ltimers)
@@ -5869,10 +5919,13 @@ class ProfileManagerTest(unittest.TestCase):
                     self.myAssertDict(
                         json.loads(se["ComponentPreselection"]),
                         acps)
-                    self.myAssertDict(json.loads(se["ComponentSelection"]), cps)
-                    self.myAssertDict(json.loads(se["DataSourceSelection"]), adss)
-                    self.assertEqual(set(json.loads(se["UnplottedComponents"])),
-                                     set(lhe2))
+                    self.myAssertDict(
+                        json.loads(se["ComponentSelection"]), cps)
+                    self.myAssertDict(
+                        json.loads(se["DataSourceSelection"]), adss)
+                    self.assertEqual(
+                        set(json.loads(se["UnplottedComponents"])),
+                        set(lhe2))
                     self.assertEqual(json.loads(se["OrderedChannels"]), pdss)
                     self.myAssertDict(json.loads(se["UserData"]), records)
                     self.assertEqual(json.loads(se["Timer"]), ltimers)
@@ -6011,13 +6064,16 @@ class ProfileManagerTest(unittest.TestCase):
 
                     self.myAssertDict(
                         json.loads(se["ComponentPreselection"]), acps)
-                    self.myAssertDict(json.loads(se["ComponentSelection"]), cps)
-                    self.myAssertDict(json.loads(se["DataSourceSelection"]), adss)
+                    self.myAssertDict(
+                        json.loads(se["ComponentSelection"]), cps)
+                    self.myAssertDict(
+                        json.loads(se["DataSourceSelection"]), adss)
                     self.assertEqual(
                         set(json.loads(se["PreselectedDataSources"])),
                         set(aadss))
-                    self.assertEqual(set(json.loads(se["UnplottedComponents"])),
-                                     set(lhe2))
+                    self.assertEqual(
+                        set(json.loads(se["UnplottedComponents"])),
+                        set(lhe2))
                     self.assertEqual(json.loads(se["OrderedChannels"]), pdss)
                     self.myAssertDict(json.loads(se["UserData"]), records)
                     self.assertEqual(json.loads(se["Timer"]), ltimers)
@@ -6239,7 +6295,8 @@ class ProfileManagerTest(unittest.TestCase):
                         se[mg]["ComponentPreselection"] = json.dumps(
                             acps[mg])
                         se[mg]["DataSourceSelection"] = json.dumps(dss)
-                        se[mg]["PreselectedDataSources"] = json.dumps(aadss[mg])
+                        se[mg]["PreselectedDataSources"] = \
+                            json.dumps(aadss[mg])
                         se[mg]["OptionalComponents"] = json.dumps(ocps)
                         se[mg]["InitDataSources"] = json.dumps(indss)
                         se[mg]["AppendEntry"] = bool(self.__rnd.randint(0, 1))
@@ -6247,7 +6304,8 @@ class ProfileManagerTest(unittest.TestCase):
                             self.__rnd.randint(0, 1))
                         se[mg]["DynamicComponents"] = bool(
                             self.__rnd.randint(0, 1))
-                        se[mg]["DefaultDynamicLinks"] = bool(self.__rnd.randint(0, 1))
+                        se[mg]["DefaultDynamicLinks"] = \
+                            bool(self.__rnd.randint(0, 1))
                         se[mg]["DefaultDynamicPath"] = self.getRandomName(20)
                         se[mg]["TimeZone"] = self.getRandomName(20)
 
@@ -6255,29 +6313,37 @@ class ProfileManagerTest(unittest.TestCase):
                             (self.getRandomName(10),
                              self.getRandomName(15)) for _ in
                             range(self.__rnd.randint(1, 40))))
-                        se[mg]["Labels"] = json.dumps({})
-                        se[mg]["LabelPaths"] = json.dumps(dict(
+                        paths = dict(
                             (self.getRandomName(10),
                              self.getRandomName(15)) for _ in
-                            range(self.__rnd.randint(1, 40))))
-                        se[mg]["Labels"] = json.dumps(dict(
+                            range(self.__rnd.randint(1, 40)))
+                        labels = dict(
                             (self.getRandomName(10),
                              self.getRandomName(15)) for _ in
-                            range(self.__rnd.randint(1, 40))))
-                        se[mg]["LabelLinks"] = json.dumps(dict(
+                            range(self.__rnd.randint(1, 40)))
+                        links = dict(
                             (self.getRandomName(10),
                              bool(self.__rnd.randint(0, 1))) for _ in
-                            range(self.__rnd.randint(1, 40))))
-                        se[mg]["LabelTypes"] = json.dumps(dict(
+                            range(self.__rnd.randint(1, 40)))
+                        types = dict(
                             (self.getRandomName(10),
                              self.getRandomName(15)) for _ in
-                            range(self.__rnd.randint(1, 40))))
-                        se[mg]["LabelShapes"] = json.dumps(dict(
+                            range(self.__rnd.randint(1, 40)))
+                        shapes = dict(
                             (self.getRandomName(10),
                              [self.__rnd.randint(1, 40)
                               for _ in range(self.__rnd.randint(0, 3))])
-                            for _ in
-                            range(self.__rnd.randint(1, 40))))
+                            for _ in range(self.__rnd.randint(1, 40)))
+
+                        se[mg]["ChannelProperties"] = json.dumps(
+                            {
+                                "label": labels,
+                                "nexus_path": paths,
+                                "link": links,
+                                "data_type": types,
+                                "shape": shapes
+                            }
+                        )
 
                         self._cf.dp.SetCommandVariable(["MCPLIST",
                                                         json.dumps(mcps)])
@@ -6349,7 +6415,8 @@ class ProfileManagerTest(unittest.TestCase):
                         self.myAssertDict(
                             json.loads(se[mg]["ComponentSelection"]), cps[mg])
                         self.myAssertDict(
-                            json.loads(se[mg]["DataSourceSelection"]), adss[mg])
+                            json.loads(se[mg]["DataSourceSelection"]),
+                            adss[mg])
                         self.assertEqual(
                             set(json.loads(se[mg]["UnplottedComponents"])),
                             set(lhe))
@@ -6390,7 +6457,8 @@ class ProfileManagerTest(unittest.TestCase):
                         self.myAssertDict(
                             json.loads(se[mg]["ComponentSelection"]), cps[mg])
                         self.myAssertDict(
-                            json.loads(se[mg]["DataSourceSelection"]), adss[mg])
+                            json.loads(
+                                se[mg]["DataSourceSelection"]), adss[mg])
                         self.assertEqual(
                             set(json.loads(se[mg]["UnplottedComponents"])),
                             set(lhe2[mg]))
@@ -6536,7 +6604,8 @@ class ProfileManagerTest(unittest.TestCase):
                             name=mg)
 
                         self.myAssertDict(
-                            json.loads(se[mg]["DataSourceSelection"]), adss[mg])
+                            json.loads(
+                                se[mg]["DataSourceSelection"]), adss[mg])
                         self.assertEqual(
                             set(json.loads(se[mg]["PreselectedDataSources"])),
                             set(aadss[mg]))
@@ -6643,10 +6712,12 @@ class ProfileManagerTest(unittest.TestCase):
                         set(json.loads(lse["Timer"])), set(ltimers[mg2]))
                     self.assertEqual(lse["MntGrp"], mg2)
 
-                    self.myAssertDict(json.loads(se[mg1]["DataSourceSelection"]),
-                                      adss[mg1])
-                    self.myAssertDict(json.loads(se[mg2]["DataSourceSelection"]),
-                                      adss[mg2])
+                    self.myAssertDict(
+                        json.loads(se[mg1]["DataSourceSelection"]),
+                        adss[mg1])
+                    self.myAssertDict(
+                        json.loads(se[mg2]["DataSourceSelection"]),
+                        adss[mg2])
 
                     self.assertEqual(
                         set(json.loads(se[mg1]["UnplottedComponents"])),
@@ -6704,7 +6775,8 @@ class ProfileManagerTest(unittest.TestCase):
                                 llhe.remove(tm)
                     for tm in json.loads(se[mg1]["Timer"]):
                         if tm in ladss:
-                            if tm in json.loads(se[mg2]["UnplottedComponents"]):
+                            if tm in json.loads(
+                                    se[mg2]["UnplottedComponents"]):
                                 ladss[tm] = False
                                 if tm not in json.loads(se[mg2]["Timer"]):
                                     if tm in llhe:
@@ -6717,8 +6789,9 @@ class ProfileManagerTest(unittest.TestCase):
                     self.myAssertDict(
                         json.loads(lse["DataSourceSelection"]), ladss)
                     # ???
-                    self.assertEqual(set(json.loads(lse["UnplottedComponents"])),
-                                     set(llhe))
+                    self.assertEqual(
+                        set(json.loads(lse["UnplottedComponents"])),
+                        set(llhe))
 
                     # import mntgrp mg2 (with content mg1)
                     # after change in mntgrp device
@@ -7206,7 +7279,8 @@ class ProfileManagerTest(unittest.TestCase):
                                 llhe.remove(tm)
                     for tm in json.loads(se[mg3]["Timer"]):
                         if tm in ladss:
-                            if tm in json.loads(se[mg4]["UnplottedComponents"]):
+                            if tm in json.loads(
+                                    se[mg4]["UnplottedComponents"]):
                                 ladss[tm] = False
                                 if tm not in json.loads(se[mg4]["Timer"]):
                                     if tm in llhe:

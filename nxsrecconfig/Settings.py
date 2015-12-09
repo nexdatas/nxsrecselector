@@ -362,53 +362,19 @@ class Settings(object):
         __setStepDatSources,
         doc='datasource  group')
 
-    def __getProperty(self, name):
+    def channelProperties(self, ptype):
         props = json.loads(self.__selector["ChannelProperties"])
-        sel = {}
-        Converter.addVariables({"var": name}, props, sel)
-        return sel["var"]
+        return json.dumps(props[ptype])
 
-    def __setProperty(self, name, variables):
+    def setChannelProperties(self, typeandvariables):
+        ptype, variables = typeandvariables
         jvar = Utils.stringToDictJson(variables)
-        lvar = json.dumps(self.__getProperty(name))
+        props = json.loads(self.__selector["ChannelProperties"])
+        lvar = json.dumps(props[ptype])
         if lvar != jvar:
-            props = json.loads(self.__selector["ChannelProperties"])
-            Convertver.updateProperties(json.loads(jvar), name, props)
+            props[ptype] = json.loads(jvar)
             self.__selector["ChannelProperties"] = json.dumps(props)
             self.storeProfile()
-
-    
-    ## get method for labelShapes attribute
-    # \returns name of labelShapes
-    def __getLabelShapes(self):
-        return json.dumps(self.__getProperty("shape"))
-        
-    ## set method for labelShapes attribute
-    # \param name of labelShapes
-    def __setLabelShapes(self, shapes):
-        self.__setProperty("shape", shapes)
-
-    ## the json data string
-    labelShapes = property(
-        __getLabelShapes,
-        __setLabelShapes,
-        doc='label shapes')
-
-    ## get method for labelTypes attribute
-    # \returns name of labelTypes
-    def __getLabelTypes(self):
-        return json.dumps(self.__getProperty("data_type"))
-
-    ## set method for labelTypes attribute
-    # \param types of labelTypes
-    def __setLabelTypes(self, types):
-        self.__getProperty("data_type", types)
-
-    ## the json data string
-    labelTypes = property(
-        __getLabelTypes,
-        __setLabelTypes,
-        doc='label types')
 
     ## get method for mntGrp attribute
     # \returns name of mntGrp
@@ -727,8 +693,8 @@ class Settings(object):
     def createDynamicComponent(self, params):
         nexusconfig_device = self.__selector.setConfigInstance()
         dcpcreator = DynamicComponent(nexusconfig_device)
-        if isinstance(params, (list, tuple)): 
-           if len(params) > 0 and params[0]:
+        if isinstance(params, (list, tuple)):
+            if len(params) > 0 and params[0]:
                 dcpcreator.setStepDSources(
                     json.loads(params[0]))
             else:
@@ -742,16 +708,16 @@ class Settings(object):
                     self.__selector["InitDataSources"]))
 
         withoutLinks = self.components
-        links = self.__getProperty("link")
+        links = json.loads(self.channelProperties("link"))
         for ds in withoutLinks:
             links[ds] = False
 
         dcpcreator.setLabelParams(
-            self.__selector["Labels"],
-            json.dumps(self.__getProperty("nexus_path")),
+            self.channelProperties("label"),
+            self.channelProperties("nexus_path"),
             json.dumps(links),
-            json.dumps(self.__getProperty("data_type")),
-            json.dumps(self.__getProperty("shape")))
+            elf.channelProperties("data_type"),
+            self.channelProperties("shape"))
         dcpcreator.setDefaultLinkPath(
             bool(self.__selector["DefaultDynamicLinks"]),
             str(self.__selector["DefaultDynamicPath"]))

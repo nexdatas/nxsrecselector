@@ -149,12 +149,8 @@ class SettingsTest(unittest.TestCase):
             ("ComponentsFromMntGrp", False),
             ("ConfigVariables", '{}'),
             ("UserData", '{}'),
-            ("Labels", '{}'),
-            ("LabelPaths", '{}'),
-            ("LabelLinks", '{}'),
             ("UnplottedComponents", '[]'),
-            ("LabelTypes", '{}'),
-            ("LabelShapes", '{}'),
+            ("ChannelProperties", '{}'),
             ("DynamicComponents", True),
             ("DefaultDynamicLinks", True),
             ("DefaultDynamicPath", self.__defaultpath),
@@ -1777,7 +1773,7 @@ class SettingsTest(unittest.TestCase):
         return self.__dump[name][key]
 
     def value(self, rs, name):
-        
+
         return rs.value(name)
 
     def names(self, rs):
@@ -6114,7 +6110,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_resetPreselectedComponents_2wds_notangodspool_alias_value_bl(self):
+    def test_resetPreselectedComponents_2wds_ntp_alias_value_bl(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),

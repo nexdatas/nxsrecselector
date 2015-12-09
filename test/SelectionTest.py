@@ -74,12 +74,8 @@ class SelectionTest(unittest.TestCase):
             ("ComponentsFromMntGrp", False),
             ("ConfigVariables", '{}'),
             ("UserData", '{}'),
-            ("Labels", '{}'),
-            ("LabelPaths", '{}'),
-            ("LabelLinks", '{}'),
+            ("ChannelProperties", '{}'),
             ("UnplottedComponents", '[]'),
-            ("LabelTypes", '{}'),
-            ("LabelShapes", '{}'),
             ("DynamicComponents", True),
             ("DefaultDynamicLinks", True),
             ("DefaultDynamicPath",
@@ -197,7 +193,8 @@ class SelectionTest(unittest.TestCase):
                 self.assertTrue(key in ndss.keys())
                 self.assertEqual(ndss[key], False)
 
-            self.compareToDump(el, ["ComponentSelection", "DataSourceSelection",
+            self.compareToDump(el, ["ComponentSelection",
+                                    "DataSourceSelection",
                                     "InitDataSources"])
 
     ## updatePreselectedDataSources test
