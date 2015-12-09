@@ -30,7 +30,6 @@ from .Utils import Utils, TangoUtils, MSUtils, PoolUtils
 from .ProfileManager import ProfileManager
 from .Selector import Selector
 from .MacroServerPools import MacroServerPools
-from .Converter import Converter
 from . import Streams
 
 
@@ -716,7 +715,7 @@ class Settings(object):
             self.channelProperties("label"),
             self.channelProperties("nexus_path"),
             json.dumps(links),
-            elf.channelProperties("data_type"),
+            self.channelProperties("data_type"),
             self.channelProperties("shape"))
         dcpcreator.setDefaultLinkPath(
             bool(self.__selector["DefaultDynamicLinks"]),

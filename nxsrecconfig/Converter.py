@@ -20,6 +20,7 @@
 
 """  Selection converter """
 
+import json
 
 ## virtual selection converter
 class ConverterXtoY(object):
@@ -67,9 +68,9 @@ class Converter1to2(ConverterXtoY):
     def convert(self, selection):
         super(Converter1to2, self).convert(selection)
         props = {}
-        for var, pn in pnames.items():
+        for var, pn in self.pnames.items():
             if var in selection:
-                props[name] = json.loads(selection.pop(var))
+                props[pn] = json.loads(selection.pop(var))
         selection["ChannelProperties"] = json.dumps(props)
 
 
@@ -104,9 +105,9 @@ class Converter2to1(ConverterXtoY):
         super(Converter2to1, self).convert(selection)
         if "ChannelProperties" in selection:
             props = json.loads(selection["ChannelProperties"])
-            for var, pn in pnames.items():
+            for var, pn in self.pnames.items():
                 if pn in props:
-                    selection[var] = props[pn]
+                    selection[var] = json.dumps(props[pn])
             selection["ChannelProperties"] = json.dumps(props)
 
 
