@@ -1866,7 +1866,8 @@ class SettingsTest(unittest.TestCase):
 
         se = Selector(msp, self.version)
         pm = ProfileManager(se)
-        print "AMGs", pm.availableMntGrps()
+        amgs = pm.availableMntGrps()
+        print "AMGs", amgs
         amntgrp = MSUtils.getEnv('ActiveMntGrp', msp.getMacroServer(idoor))
         print "ActiveMntGrp", amntgrp
         self.assertEqual(rs.numberOfThreads, 20)
@@ -1891,6 +1892,8 @@ class SettingsTest(unittest.TestCase):
             self.assertEqual(rs.mntGrp, amntgrp)
         elif cf.availableSelections():
             self.assertEqual(rs.mntGrp, cf.availableSelections()[0])
+        elif amgs:
+            self.assertEqual('', amntgrp)
         else:
             self.assertEqual('nxsmntgrp', amntgrp)
         self.assertEqual(set(self.names(rs)),
