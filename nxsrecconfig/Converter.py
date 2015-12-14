@@ -22,6 +22,7 @@
 
 import json
 
+
 ## virtual selection converter
 class ConverterXtoY(object):
 
@@ -107,8 +108,9 @@ class Converter2to1(ConverterXtoY):
             props = json.loads(selection["ChannelProperties"])
             for var, pn in self.pnames.items():
                 if pn in props:
-                    selection[var] = json.dumps(props[pn])
-            selection["ChannelProperties"] = json.dumps(props)
+                    selection[var] = json.dumps(props.pop(pn))
+            if props:
+                selection["ChannelProperties"] = json.dumps(props)
 
 
 ## Selection converter
@@ -116,46 +118,48 @@ class Converter(object):
     """ selection converer """
 
     ## constructor
-    # \param version the required selection version
-    def __init__(self, version):
+    # \param ver the required selection version
+    def __init__(self, ver):
 
         ##  selection dictionary with Settings
-        sver = version.split(".")
+        sver = ver.split(".")
         self.majorversion = int(sver[0])
         self.minorversion = int(sver[1])
         self.patchversion = int(sver[2])
 
-        self.__up = [Converter1to2()]
-        self.__down = [Converter2to1()]
-        self.__allkeys = set()
-        for cv in self.__up:
-            self.__allkeys.update(cv.names.keys())
+        self.up = [Converter1to2()]
+        self.down = [Converter2to1()]
 
     def allkeys(self, selection):
+        lkeys = set()
+        for cv in self.up:
+            lkeys.update(cv.names.keys())
         ak = set(selection.keys())
-        ak.update(self.__allkeys)
+        ak.update(lkeys)
         return ak
 
     def convert(self, selection):
-        major, _, _ = self.getVersion(selection)
+        major, _, _ = self.version(selection)
         if major == self.majorversion:
             return
 
         if major < self.majorversion:
             for i in range(major - 1, self.majorversion - 1):
-                self.__up[i].convert(selection)
+                self.up[i].convert(selection)
         elif major > self.majorversion:
             for i in range(major - 2, self.majorversion - 2, -1):
-                self.__down[i].convert(selection)
+                self.down[i].convert(selection)
+        selection["Version"] = "%s.%s.%s" % (
+            self.majorversion, self.minorversion, self.patchversion)
 
     @classmethod
-    def getVersion(cls, selection):
+    def version(cls, selection):
         major = 1
         minor = 0
         patch = 0
         if 'Version' in selection:
-            version = selection['Version']
-            sver = version.split(".")
+            ver = selection['Version']
+            sver = ver.split(".")
             major = int(sver[0])
             minor = int(sver[1])
             patch = int(sver[2])
