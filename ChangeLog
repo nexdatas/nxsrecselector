@@ -1,3 +1,7 @@
+2015-12-XX Jan Kotanski <jankotan@gmail.com>
+	* avoiding configuration version converter
+	* tagged as v1.24.0
+
 2015-11-25 Jan Kotanski <jankotan@gmail.com>
 	* avoiding overwriting ConfigDevice by fetchSelection
 	* removing unused methods from Settings

@@ -50,6 +50,11 @@ import UtilsTest
 import ProfileManagerTest
 import SettingsTest
 import NXSRecSelectorTest
+import ConverterTest
+import ConverterXtoYTest
+import Converter1to2Test
+import Converter2to1Test
+import StreamsTest
 
 #import TestServerSetUp
 
@@ -107,6 +112,21 @@ def main():
 
     suite.addTests(
         unittest.defaultTestLoader.loadTestsFromModule(UtilsTest))
+
+    suite.addTests(
+        unittest.defaultTestLoader.loadTestsFromModule(StreamsTest))
+
+    suite.addTests(
+        unittest.defaultTestLoader.loadTestsFromModule(ConverterTest))
+
+    suite.addTests(
+        unittest.defaultTestLoader.loadTestsFromModule(ConverterXtoYTest))
+
+    suite.addTests(
+        unittest.defaultTestLoader.loadTestsFromModule(Converter1to2Test))
+
+    suite.addTests(
+        unittest.defaultTestLoader.loadTestsFromModule(Converter2to1Test))
 
     suite.addTests(
         unittest.defaultTestLoader.loadTestsFromModule(CheckerThreadTest))

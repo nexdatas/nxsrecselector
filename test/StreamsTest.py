@@ -29,7 +29,7 @@ import binascii
 import string
 from cStringIO import StringIO
 
-from nxswriter import Streams
+from nxsrecconfig import Streams
 
 ## if 64-bit machione
 IS64BIT = (struct.calcsize("P") == 8)

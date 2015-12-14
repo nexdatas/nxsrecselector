@@ -25,6 +25,7 @@ import PyTango
 import getpass
 from .Utils import TangoUtils, PoolUtils
 from .Selection import Selection
+from .Converter import Converter
 
 
 ## Access class to Selection dictionary and Config Device
@@ -40,6 +41,8 @@ class Selector(object):
 
         ##  selection dictionary with Settings
         self.__selection = Selection()
+        ##  selection dictionary with Settings
+        self.__converter = Converter("1.0.0")
 
         ## tango database
         self.__db = PyTango.Database()
@@ -64,6 +67,9 @@ class Selector(object):
     ## sets selection from state data
     # \param state state data
     def set(self, state):
+        state = dict(state)
+        self.__converter.convert(state)
+
         self.reset()
         for key in state.keys():
             if key and key[0].upper() != key[0]:
@@ -278,11 +284,15 @@ class Selector(object):
     # \param names names of required variables
     # \param data dictionary with resulting data
     def importEnv(self, names=None, data=None):
+        update = False
         if names is None:
-            names = self.keys()
+            names = self.__converter.allkeys(self)
         if data is None:
-            data = self
+            data = {}
+            update = True
         self.__msp.getSelectorEnv(self["Door"], names, data)
+        if update:
+            self.set(data)
 
     ## exports Selector Environment Data
     def exportEnv(self, data=None, cmddata=None):
