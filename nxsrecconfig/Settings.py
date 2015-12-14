@@ -138,10 +138,6 @@ class Settings(object):
     def preselectedComponents(self):
         return self.__profileManager.preselectedComponents()
 
-    ## provides preselected components
-    preselectedComponents = property(preselectedComponents,
-                                     doc=' provides preselected components')
-
     ## provides description component errors
     # \returns list of available description component errors
     def __getDescriptionErrors(self):

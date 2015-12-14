@@ -1096,7 +1096,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
 
         try:
             self.set_state(PyTango.DevState.RUNNING)
-            argout = self.__stg.selectedComponents()
+            argout = self.__stg.preselectedComponents()
             self.set_state(PyTango.DevState.ON)
         finally:
             if self.get_state() == PyTango.DevState.RUNNING:
