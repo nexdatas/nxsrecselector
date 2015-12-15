@@ -1878,7 +1878,7 @@ class SettingsTest(unittest.TestCase):
             '{"timer": ["*exp_t*"], "dac": ["*exp_dac*"], '
             '"counter": ["*exp_c*"], "mca": ["*exp_mca*"], '
             '"adc": ["*exp_adc*"], "motor": ["*exp_mot*"]}')
-        self.assertEqual(rs.adminData, '[]')
+        self.assertEqual(rs.adminDataNames, '[]')
         self.assertEqual(rs.profileFile, '/tmp/nxsrecconfig.cfg')
         self.assertEqual(rs.configDevice, icf)
         self.assertEqual(rs.door, idoor)
@@ -1913,7 +1913,7 @@ class SettingsTest(unittest.TestCase):
         print "ConfigDevice", rs.configDevice
         print "Door", rs.door
         print "DeviceGroups", rs.deviceGroups
-        print "AdminData", rs.adminData
+        print "AdminDataNames", rs.adminDataNames
 
     ## test
     def test_constructor(self):
