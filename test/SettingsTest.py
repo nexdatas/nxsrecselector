@@ -7206,11 +7206,11 @@ class SettingsTest(unittest.TestCase):
             [[u'sar4r.nxs'], ['sssar3r.nxs']],
         ]
         for vl in arr:
-            self.assertEqual(list(vl[0]), list(rs.scanFile))
+            self.assertEqual(list(vl[0]), json.loads(rs.scanFile))
 
         for vl in arr:
-            rs.scanFile = vl[1]
-
+            rs.scanFile= json.dumps(vl[1])
+            print "SF", rs.scanFile
             self.assertEqual(
                 self._ms.dps[self._ms.ms.keys()[0]].Environment[0],
                 'pickle')
@@ -7218,10 +7218,21 @@ class SettingsTest(unittest.TestCase):
                 self._ms.dps[self._ms.ms.keys()[0]].Environment[1]
             )['new']
             if isinstance(en['ScanFile'], (str, unicode)):
-                self.assertEqual(en['ScanFile'], rs.scanFile[0])
+                try:
+                    sc = json.loads(rs.scanFile)[0]
+                except:
+                    sc = rs.scanFile
+                if len(sc) == 1:
+                    sc = sc[0]
+                self.assertEqual(en['ScanFile'], sc)
             else:
-                self.assertEqual(list(en['ScanFile']), list(rs.scanFile))
-            self.assertEqual(list(vl[1]), list(rs.scanFile))
+                sc = json.loads(rs.scanFile)
+#                if len(sc) == 1:
+#                    sc = sc[0]
+                self.assertEqual(list(en['ScanFile']), sc)
+            if not isinstance(sc, list):
+                sc = [sc]
+            self.assertEqual(list(vl[1]), sc)
 
 if __name__ == '__main__':
     unittest.main()
