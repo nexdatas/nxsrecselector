@@ -60,7 +60,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         PyTango.Device_4Impl.__init__(self, cl, name)
         self.debug_stream("In __init__()")
         ## Recorder Settings
-        self.__stg = STG(self)
+        self.__stg = None
         self.__toupdate = ['ConfigDevice', 'Door']
 
         NXSRecSelector.init_device(self)
@@ -83,10 +83,10 @@ class NXSRecSelector(PyTango.Device_4Impl):
         if hasattr(self, 'stg') and self.__stg:
             del self.__stg
             self.__stg = None
-        self.__stg = STG(self)
-        self.set_state(PyTango.DevState.ON)
         self.get_device_properties(self.get_device_class())
-
+        numberofthreads = self.NumberOfThreads or None
+        self.__stg = STG(self, numberofthreads)
+        self.set_state(PyTango.DevState.ON)
         self.__stg.poolBlacklist = self.PoolBlacklist \
             if self.PoolBlacklist else []
         self.__stg.timerFilterList = self.TimerFilterList \
@@ -268,18 +268,18 @@ class NXSRecSelector(PyTango.Device_4Impl):
         self.__stg.deviceGroups = attr.get_write_value()
 
     #------------------------------------------------------------------
-    #    Read AdminData attribute
+    #    Read AdminDataNames attribute
     #------------------------------------------------------------------
-    def read_AdminData(self, attr):
-        self.debug_stream("In read_AdminData()")
-        attr.set_value(self.__stg.adminData)
+    def read_AdminDataNames(self, attr):
+        self.debug_stream("In read_AdminDataNames()")
+        attr.set_value(self.__stg.adminDataNames)
 
     #------------------------------------------------------------------
-    #    Write AdminData attribute
+    #    Write AdminDataNames attribute
     #------------------------------------------------------------------
-    def write_AdminData(self, attr):
-        self.debug_stream("In write_AdminData()")
-        self.__stg.adminData = attr.get_write_value()
+    def write_AdminDataNames(self, attr):
+        self.debug_stream("In write_AdminDataNames()")
+        self.__stg.adminDataNames = attr.get_write_value()
 
     #------------------------------------------------------------------
     #    Read ScanEnvVariables attribute
@@ -1330,6 +1330,10 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
 
     ##    Device Properties
     device_property_list = {
+        'NumberOfThreads':
+        [PyTango.DevLong,
+         "maximal number of threads",
+         [20]],
         'PoolBlacklist':
         [PyTango.DevVarStringArray,
          "blacklist of pools",
@@ -1567,8 +1571,8 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
               PyTango.SCALAR,
               PyTango.READ_WRITE],
              {
-                 'label': "Client Data Record",
-                 'description': "JSON dictionary with Client Data Record",
+                 'label': "Client Data",
+                 'description': "JSON dictionary with User Data",
                  'Display level': PyTango.DispLevel.EXPERT,
             }],
         'DeviceGroups':
@@ -1581,12 +1585,12 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
                  'Memorized': "true",
                  'Display level': PyTango.DispLevel.EXPERT,
             }],
-        'AdminData':
+        'AdminDataNames':
             [[PyTango.DevString,
               PyTango.SCALAR,
               PyTango.READ_WRITE],
              {
-                 'label': "Adminitrator Data",
+                 'label': "Adminitrator Data Names",
                  'description': "JSON list with administrator data names",
                  'Memorized': "true",
                  'Display level': PyTango.DispLevel.EXPERT,
@@ -1613,7 +1617,7 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
               PyTango.SCALAR,
               PyTango.READ_WRITE],
              {
-                 'label': "configuration",
+                 'label': "Profile Configuration",
                  'description': "JSON dict of server configuration",
                  'Display level': PyTango.DispLevel.EXPERT,
             }],
@@ -1640,7 +1644,7 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
               PyTango.SCALAR,
               PyTango.READ_WRITE],
              {
-                 'label': "Config File with its Path",
+                 'label': "Profile File with its Path",
                  'description': "config file with its full path",
                  'Memorized': "true",
             }],

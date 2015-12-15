@@ -37,6 +37,7 @@
 	...			   -> DataSources (ComponentDS + SelecteDS)
 	...			   -> Components  (SelectedCP + PreselecteCP + MandatoryCP)
 	Configuration		   -> ProfileConfiguration
+	AdminData		   -> AdminDataNames
 	FetchEnvData/StoreEnvData  -> ScanEnvVariables (attribute)
 	* adding version profile converter
 	* tagged as v2.00.0

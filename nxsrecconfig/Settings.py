@@ -38,11 +38,11 @@ class Settings(object):
 
     ## ccontructor
     # \param server NXSRecSelector server
-    def __init__(self, server=None):
+    def __init__(self, server=None, numberofthreads=None):
         ## Tango server
         self.__server = server
         ## number of threads
-        self.numberOfThreads = 20
+        self.numberOfThreads = numberofthreads or 20
 
         ## configuration selection
         self.__msp = MacroServerPools(self.numberOfThreads)
@@ -70,7 +70,7 @@ class Settings(object):
         ## device groups
         self.__deviceGroups = str(self.__defaultDeviceGroups)
         ## administator data
-        self.__adminData = '[]'
+        self.__adminDataNames = '[]'
 
         if server:
             if hasattr(self.__server, "log_fatal"):
@@ -294,26 +294,26 @@ class Settings(object):
         __setDeviceGroups,
         doc='device groups')
 
-    # \returns name of adminData
-    def __getAdminData(self):
+    # \returns name of adminDataNames
+    def __getAdminDataNames(self):
         try:
-            lad = json.loads(self.__adminData)
+            lad = json.loads(self.__adminDataNames)
             assert isinstance(lad, list)
-            return self.__adminData
+            return self.__adminDataNames
         except Exception:
             return '[]'
 
-    ## set method for adminData attribute
-    # \param name of adminData
-    def __setAdminData(self, name):
+    ## set method for adminDataNames attribute
+    # \param name of adminDataNames
+    def __setAdminDataNames(self, name):
         jname = Utils.stringToListJson(name)
         ## administator data
-        self.__adminData = jname
+        self.__adminDataNames = jname
 
     ## the json data string
-    adminData = property(
-        __getAdminData,
-        __setAdminData,
+    adminDataNames = property(
+        __getAdminDataNames,
+        __setAdminDataNames,
         doc='administrator data')
 
     ## get method for configVariables attribute
