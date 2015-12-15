@@ -340,22 +340,21 @@ class Settings(object):
     def __getStepDatSources(self):
         inst = self.__selector.setConfigInstance()
         if inst.stepdatasources:
-            return list(inst.stepdatasources)
+            return inst.stepdatasources
         else:
-            return list()
+            return "[]"
 
     ## set method for dataSourceGroup attribute
     # \param names of STEP dataSources
     def __setStepDatSources(self, names):
         inst = self.__selector.setConfigInstance()
-        names = names or []
-        inst.stepdatasources = [str(nm) for nm in names]
+        inst.stepdatasources = names
 
     ## the json data string
     stepdatasources = property(
         __getStepDatSources,
         __setStepDatSources,
-        doc='datasource  group')
+        doc='step datasource list')
 
     def channelProperties(self, ptype):
         props = json.loads(self.__selector["ChannelProperties"])
@@ -457,15 +456,18 @@ class Settings(object):
     def __getScanFile(self):
         ms = self.__selector.getMacroServer()
         val = MSUtils.getEnv('ScanFile', ms)
-        return [val] if isinstance(val, (str, unicode)) else val
+        ret = [val] if isinstance(val, (str, unicode)) else val
+        return json.dumps(ret)
 
     ## set method for ScanFile attribute
     # \param name of ScanFile
     def __setScanFile(self, name):
+        jname = json.loads(Utils.stringToListJson(name))
+
         ms = self.__selector.getMacroServer()
-        if isinstance(name, (list, tuple)) and len(name) == 1:
-            name = name[0]
-        MSUtils.setEnv('ScanFile', name, ms)
+        if isinstance(jname, (list, tuple)) and len(jname) == 1:
+            jname = jname[0]
+        MSUtils.setEnv('ScanFile', jname, ms)
 
     ## the json data string
     scanFile = property(__getScanFile, __setScanFile,

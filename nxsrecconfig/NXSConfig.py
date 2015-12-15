@@ -145,8 +145,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
     #------------------------------------------------------------------
     def read_StepDataSources(self, attr):
         self.debug_stream("In read_StepDataSources()")
-        # workaround for PyTango #709
-        attr.set_value(self.__stg.stepdatasources or [])
+        attr.set_value(self.__stg.stepdatasources or "")
 
     #------------------------------------------------------------------
     #    Write StepDataSources attribute
@@ -154,8 +153,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
     def write_StepDataSources(self, attr):
         self.debug_stream("In write_StepDataSources()")
         if self.is_StepDataSources_write_allowed():
-            # workaround for PyTango #709
-            self.__stg.stepdatasources = attr.get_write_value() or []
+            self.__stg.stepdatasources = attr.get_write_value() or ""
         else:
             self.warn_stream("To change the settings please close the server.")
             raise Exception(
@@ -214,16 +212,14 @@ class NXSRecSelector(PyTango.Device_4Impl):
     #------------------------------------------------------------------
     def read_ScanFile(self, attr):
         self.debug_stream("In read_ScanFile()")
-        # workaround for PyTango #709
-        attr.set_value(self.__stg.scanFile or [])
+        attr.set_value(self.__stg.scanFile or "")
 
     #------------------------------------------------------------------
     #    Write ScanFile attribute
     #------------------------------------------------------------------
     def write_ScanFile(self, attr):
         self.debug_stream("In write_ScanFile()")
-        # workaround for PyTango #709
-        self.__stg.scanFile = attr.get_write_value() or []
+        self.__stg.scanFile = attr.get_write_value() or ""
 
     #------------------------------------------------------------------
     #    Read ScanID attribute
@@ -1492,8 +1488,8 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
             }],
         'StepDataSources':
             [[PyTango.DevString,
-              PyTango.SPECTRUM,
-              PyTango.READ_WRITE, 10000],
+              PyTango.SCALAR,
+              PyTango.READ_WRITE],
              {
                  'label': "list of datasources to be switch into step mode",
                  'description': "list of datasources to be switched" +
@@ -1534,8 +1530,8 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
             }],
         'ScanFile':
             [[PyTango.DevString,
-              PyTango.SPECTRUM,
-              PyTango.READ_WRITE, 50],
+              PyTango.SCALAR,
+              PyTango.READ_WRITE],
              {
                  'label': "Scan File(s)",
                  'description': "Scan File(s)",
