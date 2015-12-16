@@ -59,8 +59,8 @@ class Settings(object):
         ## tango database
         self.__db = PyTango.Database()
 
-        ## timer filter list
-        self.timerFilterList = ["*dgg*", "*/ctctrl0*"]
+        ## timer filters
+        self.timerFilters = ["*dgg*", "*/ctctrl0*"]
         ## default device groups
         self.__defaultDeviceGroups = \
             '{"timer": ["*exp_t*"], "dac": ["*exp_dac*"], ' \
@@ -70,7 +70,7 @@ class Settings(object):
         ## device groups
         self.__deviceGroups = str(self.__defaultDeviceGroups)
         ## administator data
-        self.__adminDataNames = '[]'
+        self.adminDataNames = []
 
         if server:
             if hasattr(self.__server, "log_fatal"):
@@ -115,6 +115,12 @@ class Settings(object):
         return self.__selector.keys()
 
 ## read-only variables
+
+
+    ## provides administrator data names
+    # \returns list of provides administrator data names
+    def administratorDataNames(self):
+        return list(self.adminDataNames)
 
     ## provides user selected components
     # \returns list of available selected components
@@ -293,28 +299,6 @@ class Settings(object):
         __getDeviceGroups,
         __setDeviceGroups,
         doc='device groups')
-
-    # \returns name of adminDataNames
-    def __getAdminDataNames(self):
-        try:
-            lad = json.loads(self.__adminDataNames)
-            assert isinstance(lad, list)
-            return self.__adminDataNames
-        except Exception:
-            return '[]'
-
-    ## set method for adminDataNames attribute
-    # \param name of adminDataNames
-    def __setAdminDataNames(self, name):
-        jname = Utils.stringToListJson(name)
-        ## administator data
-        self.__adminDataNames = jname
-
-    ## the json data string
-    adminDataNames = property(
-        __getAdminDataNames,
-        __setAdminDataNames,
-        doc='administrator data')
 
     ## get method for configVariables attribute
     # \returns name of configVariables
@@ -506,7 +490,7 @@ class Settings(object):
     # \returns  available Timers from MacroServer pools
     def availableTimers(self):
         pools = self.__selector.getPools()
-        return PoolUtils.getTimers(pools, self.timerFilterList)
+        return PoolUtils.getTimers(pools, self.timerFilters)
 
 ##  commands
 
@@ -732,20 +716,13 @@ class Settings(object):
 
     ## gets Scan Environment Data
     # \returns JSON String with important variables
-    def __getScanEnvVariables(self):
+    def scanEnvVariables(self):
         return self.__selector.getScanEnvVariables()
 
     ## sets Scan Environment Data
     # \param jdata JSON String with important variables
-    def __setScanEnvVariables(self, jdata):
+    def setScanEnvVariables(self, jdata):
         return self.__selector.setScanEnvVariables(jdata)
-
-    ## the json data string
-    scanEnvVariables = property(
-        __getScanEnvVariables,
-        __setScanEnvVariables,
-        doc='scan environment data'
-    )
 
     ## imports all Enviroutment Data
     def importEnvProfile(self):

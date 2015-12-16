@@ -135,7 +135,6 @@ class NXSRecSelectorTest(SettingsTest.SettingsTest):
         print "ConfigDevice", rs.configDevice
         print "Door", rs.door
         print "DeviceGroups", rs.deviceGroups
-        print "AdminDataNames", rs.adminDataNames
 
 
 if __name__ == '__main__':

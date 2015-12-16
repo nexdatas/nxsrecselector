@@ -89,8 +89,10 @@ class NXSRecSelector(PyTango.Device_4Impl):
         self.set_state(PyTango.DevState.ON)
         self.__stg.poolBlacklist = self.PoolBlacklist \
             if self.PoolBlacklist else []
-        self.__stg.timerFilterList = self.TimerFilterList \
-            if self.TimerFilterList else ["*dgg*", "*/ctctrl0*"]
+        self.__stg.timerFilters = self.TimerFilters \
+            if self.TimerFilters else ["*dgg*", "*/ctctrl0*"]
+        self.__stg.adminDataNames = self.AdminDataNames \
+            if self.AdminDataNames else []
         self.__stg.defaultPreselectedComponents = \
             self.DefaultPreselectedComponents \
             if self.DefaultPreselectedComponents else []
@@ -262,34 +264,6 @@ class NXSRecSelector(PyTango.Device_4Impl):
     def write_DeviceGroups(self, attr):
         self.debug_stream("In write_DeviceGroups()")
         self.__stg.deviceGroups = attr.get_write_value()
-
-    #------------------------------------------------------------------
-    #    Read AdminDataNames attribute
-    #------------------------------------------------------------------
-    def read_AdminDataNames(self, attr):
-        self.debug_stream("In read_AdminDataNames()")
-        attr.set_value(self.__stg.adminDataNames)
-
-    #------------------------------------------------------------------
-    #    Write AdminDataNames attribute
-    #------------------------------------------------------------------
-    def write_AdminDataNames(self, attr):
-        self.debug_stream("In write_AdminDataNames()")
-        self.__stg.adminDataNames = attr.get_write_value()
-
-    #------------------------------------------------------------------
-    #    Read ScanEnvVariables attribute
-    #------------------------------------------------------------------
-    def read_ScanEnvVariables(self, attr):
-        self.debug_stream("In read_ScanEnvVariables()")
-        attr.set_value(self.__stg.scanEnvVariables)
-
-    #------------------------------------------------------------------
-    #    Write ScanEnvVariables attribute
-    #------------------------------------------------------------------
-    def write_ScanEnvVariables(self, attr):
-        self.debug_stream("In write_ScanEnvVariables()")
-        self.__stg.scanEnvVariables = attr.get_write_value()
 
     #------------------------------------------------------------------
     #    Read UserData attribute
@@ -831,6 +805,33 @@ class NXSRecSelector(PyTango.Device_4Impl):
         return True
 
     #------------------------------------------------------------------
+    #    SetScanEnvVariables command:
+    #
+    #    Description: Stores ScanDir, ScanFile and NeXusSelectorDevice
+    #                 in environment variables
+    #
+    #    argout: DevString    json dictionary with environment data
+    #    argout: DevLong    scan ID
+    #------------------------------------------------------------------
+    def SetScanEnvVariables(self, argin):
+        self.debug_stream("In SetScanEnvVariables()")
+        try:
+            self.set_state(PyTango.DevState.RUNNING)
+            argout = int(self.__stg.setScanEnvVariables(argin))
+            self.set_state(PyTango.DevState.ON)
+        finally:
+            if self.get_state() == PyTango.DevState.RUNNING:
+                self.set_state(PyTango.DevState.ON)
+
+        return argout
+
+    #---- SetScanEnvVariables command State Machine -----------------
+    def is_SetScanEnvVariables_allowed(self):
+        if self.get_state() in [PyTango.DevState.RUNNING]:
+            return False
+        return True
+
+    #------------------------------------------------------------------
     #    FullDeviceNames command:
     #
     #    Description: Returns a JSON with full device names for all aliases
@@ -851,6 +852,33 @@ class NXSRecSelector(PyTango.Device_4Impl):
 
     #---- FullDeviceNames command State Machine -----------------
     def is_FullDeviceNames_allowed(self):
+        if self.get_state() in [PyTango.DevState.RUNNING]:
+            return False
+        return True
+
+    #------------------------------------------------------------------
+    #    ScanEnvVariables command:
+    #
+    #    Description: Fetches ScanDir, ScanFile, ScanID and
+    #                 NeXusSelectorDevice
+    #                 in environment variables
+    #
+    #    argout: DevString    json dictionary with environment data
+    #------------------------------------------------------------------
+    def ScanEnvVariables(self):
+        self.debug_stream("In ScanEnvVariables()")
+        try:
+            self.set_state(PyTango.DevState.RUNNING)
+            argout = str(self.__stg.scanEnvVariables())
+            self.set_state(PyTango.DevState.ON)
+        finally:
+            if self.get_state() == PyTango.DevState.RUNNING:
+                self.set_state(PyTango.DevState.ON)
+
+        return argout
+
+    #---- ScanEnvVariables command State Machine -----------------
+    def is_ScanEnvVariables_allowed(self):
         if self.get_state() in [PyTango.DevState.RUNNING]:
             return False
         return True
@@ -1008,7 +1036,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
     #------------------------------------------------------------------
     #    ComponentDataSources command:
     #
-    #    Description: Sets the component datasources
+    #    Description: Provides the component datasources
     #
     #    argout: DevVarStringArray    component names
     #------------------------------------------------------------------
@@ -1026,6 +1054,31 @@ class NXSRecSelector(PyTango.Device_4Impl):
 
     #---- ComponentDataSources command State Machine -----------------
     def is_ComponentDataSources_allowed(self):
+        if self.get_state() in [PyTango.DevState.RUNNING]:
+            return False
+        return True
+
+    #------------------------------------------------------------------
+    #    AdministratorDataNames command:
+    #
+    #    Description: Provides Administrator Data Names
+    #
+    #    argout: DevVarStringArray    data record names
+    #------------------------------------------------------------------
+    def AdministratorDataNames(self):
+        self.debug_stream("In AdministratorDataNames()")
+
+        try:
+            self.set_state(PyTango.DevState.RUNNING)
+            argout = self.__stg.administratorDataNames()
+            self.set_state(PyTango.DevState.ON)
+        finally:
+            if self.get_state() == PyTango.DevState.RUNNING:
+                self.set_state(PyTango.DevState.ON)
+        return argout
+
+    #---- AdministratorDataNames command State Machine -----------------
+    def is_AdministratorDataNames_allowed(self):
         if self.get_state() in [PyTango.DevState.RUNNING]:
             return False
         return True
@@ -1334,9 +1387,13 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
         [PyTango.DevVarStringArray,
          "blacklist of pools",
          []],
-        'TimerFilterList':
+        'TimerFilters':
         [PyTango.DevVarStringArray,
          "list of timer filters",
+         []],
+        'AdminDataNames':
+        [PyTango.DevVarStringArray,
+         "list of administrator data names",
          []],
         'DefaultPreselectedComponents':
         [PyTango.DevVarStringArray,
@@ -1346,6 +1403,12 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
 
     ##    Command definitions
     cmd_list = {
+        'SetScanEnvVariables':
+            [[PyTango.DevString, "environment data"],
+             [PyTango.DevLong, "scanID"]],
+        'ScanEnvVariables':
+            [[PyTango.DevVoid, ""],
+             [PyTango.DevString, "environment data"]],
         'LoadProfile':
             [[PyTango.DevVoid, ""],
              [PyTango.DevVoid, ""]],
@@ -1431,6 +1494,9 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
         'ComponentDataSources':
             [[PyTango.DevVoid, ""],
              [PyTango.DevVarStringArray, "profile component datasources"]],
+        'AdministratorDataNames':
+            [[PyTango.DevVoid, ""],
+             [PyTango.DevVarStringArray, "administrator data names"]],
         'PoolChannels':
             [[PyTango.DevVoid, ""],
              [PyTango.DevVarStringArray, "list of available pool channels"]],
@@ -1579,25 +1645,6 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
                  'label': "Device groups",
                  'description': "JSON dictionary with device groups",
                  'Memorized': "true",
-                 'Display level': PyTango.DispLevel.EXPERT,
-            }],
-        'AdminDataNames':
-            [[PyTango.DevString,
-              PyTango.SCALAR,
-              PyTango.READ_WRITE],
-             {
-                 'label': "Adminitrator Data Names",
-                 'description': "JSON list with administrator data names",
-                 'Memorized': "true",
-                 'Display level': PyTango.DispLevel.EXPERT,
-            }],
-        'ScanEnvVariables':
-            [[PyTango.DevString,
-              PyTango.SCALAR,
-              PyTango.READ_WRITE],
-             {
-                 'label': "Scan Environment Variables",
-                 'description': "JSON dict with Scan Environment Variablels",
                  'Display level': PyTango.DispLevel.EXPERT,
             }],
         'DataSources':

@@ -1871,14 +1871,14 @@ class SettingsTest(unittest.TestCase):
         amntgrp = MSUtils.getEnv('ActiveMntGrp', msp.getMacroServer(idoor))
         print "ActiveMntGrp", amntgrp
         self.assertEqual(rs.numberOfThreads, 20)
-        self.assertEqual(rs.timerFilterList, ["*dgg*", "*/ctctrl0*"])
+        self.assertEqual(rs.timerFilters, ["*dgg*", "*/ctctrl0*"])
         # memorize attirbutes
         self.assertEqual(
             rs.deviceGroups,
             '{"timer": ["*exp_t*"], "dac": ["*exp_dac*"], '
             '"counter": ["*exp_c*"], "mca": ["*exp_mca*"], '
             '"adc": ["*exp_adc*"], "motor": ["*exp_mot*"]}')
-        self.assertEqual(rs.adminDataNames, '[]')
+        self.assertEqual(rs.adminDataNames, [])
         self.assertEqual(rs.profileFile, '/tmp/nxsrecconfig.cfg')
         self.assertEqual(rs.configDevice, icf)
         self.assertEqual(rs.door, idoor)
@@ -6516,7 +6516,7 @@ class SettingsTest(unittest.TestCase):
                                {'PoolNames': self._pool.dp.name()})
         self._ms.dps[self._ms.ms.keys()[0]].Init()
         rs = self.openRecSelector()
-        self.setProp(rs, "timerFilterList",
+        self.setProp(rs, "timerFilters",
                      ["*dgg2_exp_00*", "*dgg2_exp_01*"])
         rs.configDevice = val["ConfigDevice"]
         rs.door = val["Door"]
@@ -6740,7 +6740,7 @@ class SettingsTest(unittest.TestCase):
             self._ms.dps[self._ms.ms.keys()[0]].Init()
 
             rs = self.openRecSelector()
-            self.setProp(rs, "timerFilterList",
+            self.setProp(rs, "timerFilters",
                          ["*exp_00*", "*exp_01*"])
             self.setProp(rs, "poolBlacklist",
                          [tpool2.dp.name()])
@@ -6830,7 +6830,7 @@ class SettingsTest(unittest.TestCase):
             self._ms.dps[self._ms.ms.keys()[0]].Init()
 
             rs = self.openRecSelector()
-            self.setProp(rs, "timerFilterList",
+            self.setProp(rs, "timerFilters",
                          ["*exp_00*", "*exp_01*"])
             rs.configDevice = val["ConfigDevice"]
             rs.door = val["Door"]
