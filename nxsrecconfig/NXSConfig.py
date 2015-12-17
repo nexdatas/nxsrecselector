@@ -1059,6 +1059,31 @@ class NXSRecSelector(PyTango.Device_4Impl):
         return True
 
     #------------------------------------------------------------------
+    #    SelectedDataSources command:
+    #
+    #    Description: Provides the selected datasources
+    #
+    #    argout: DevVarStringArray    component names
+    #------------------------------------------------------------------
+    def SelectedDataSources(self):
+        self.debug_stream("In SelectedDataSources()")
+
+        try:
+            self.set_state(PyTango.DevState.RUNNING)
+            argout = self.__stg.selectedDataSources()
+            self.set_state(PyTango.DevState.ON)
+        finally:
+            if self.get_state() == PyTango.DevState.RUNNING:
+                self.set_state(PyTango.DevState.ON)
+        return argout
+
+    #---- SelectedDataSources command State Machine -----------------
+    def is_SelectedDataSources_allowed(self):
+        if self.get_state() in [PyTango.DevState.RUNNING]:
+            return False
+        return True
+
+    #------------------------------------------------------------------
     #    AdministratorDataNames command:
     #
     #    Description: Provides Administrator Data Names
@@ -1492,6 +1517,9 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
               "JSON Dictionary with full device names for "
                  + " all aliases "]],
         'ComponentDataSources':
+            [[PyTango.DevVoid, ""],
+             [PyTango.DevVarStringArray, "profile component datasources"]],
+        'SelectedDataSources':
             [[PyTango.DevVoid, ""],
              [PyTango.DevVarStringArray, "profile component datasources"]],
         'AdministratorDataNames':

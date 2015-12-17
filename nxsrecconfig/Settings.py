@@ -116,7 +116,6 @@ class Settings(object):
 
 ## read-only variables
 
-
     ## provides administrator data names
     # \returns list of provides administrator data names
     def administratorDataNames(self):
