@@ -1,4 +1,4 @@
-2015-12-XX Jan Kotanski <jankotan@gmail.com>
+2016-01-04 Jan Kotanski <jankotan@gmail.com>
 	* changing API:
 	ImportAllEnv               -> ImportEnvProfile
 	ExportAllEnv               -> ExportEnvProfile
@@ -41,7 +41,7 @@
 	FetchEnvData	           -> scanEnvVariables
 	StoreEnvData  		   -> SetScanEnvVariables
 	* adding version profile converter
-	* tagged as v2.00.0
+	* tagged as v2.0.0
 
 2015-11-25 Jan Kotanski <jankotan@gmail.com>
 	* avoiding overwriting ConfigDevice by fetchSelection
