@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #   This file is part of nxsrecconfig - NeXus Sardana Recorder Settings
 #
-#    Copyright (C) 2014-2015 DESY, Jan Kotanski <jkotan@mail.desy.de>
+#    Copyright (C) 2014-2016 DESY, Jan Kotanski <jkotan@mail.desy.de>
 #
 #    nexdatas is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -21,7 +21,7 @@
 """  NeXus Sardana Recorder Settings - Tango Server """
 
 ## package version
-__version__ = "1.23.0"
+__version__ = "1.24.0"
 
 import sys
 
