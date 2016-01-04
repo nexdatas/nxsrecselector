@@ -48,7 +48,7 @@ class Settings(object):
         self.__msp = MacroServerPools(self.numberOfThreads)
 
         ## configuration selection
-        self.__selector = Selector(self.__msp, nxsrecconfig.__version__)
+        self.__selector = Selector(self.__msp, self.version)
 
         ## profile
         self.__profileManager = ProfileManager(self.__selector)
@@ -113,6 +113,15 @@ class Settings(object):
     ## provides names of variables
     def names(self):
         return self.__selector.keys()
+
+    ## server version
+    def __version(self):
+        return nxsrecconfig.__version__
+
+    ##  server version
+    version = property(
+        __version,
+        doc='server version')
 
 ## read-only variables
 

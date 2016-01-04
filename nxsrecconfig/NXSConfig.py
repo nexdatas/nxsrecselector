@@ -129,6 +129,13 @@ class NXSRecSelector(PyTango.Device_4Impl):
         attr.set_value(self.__stg.descriptionErrors)
 
     #------------------------------------------------------------------
+    #    Read Version attribute
+    #------------------------------------------------------------------
+    def read_Version(self, attr):
+        self.debug_stream("In read_Version()")
+        attr.set_value(self.__stg.version)
+
+    #------------------------------------------------------------------
     #    Read Door attribute
     #------------------------------------------------------------------
     def read_Door(self, attr):
@@ -1597,6 +1604,14 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
              {
                  'label': "Description Component Errors",
                  'description': "list of Description Component Errors",
+            }],
+        'Version':
+            [[PyTango.DevString,
+              PyTango.SCALAR,
+              PyTango.READ],
+             {
+                 'label': "Version",
+                 'description': "server version",
             }],
         'MntGrp':
             [[PyTango.DevString,
