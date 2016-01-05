@@ -26,6 +26,7 @@ import getpass
 from .Utils import TangoUtils, PoolUtils
 from .Selection import Selection
 from .Converter import Converter
+from . import Streams
 
 
 ## Access class to Selection dictionary and Config Device
@@ -75,6 +76,10 @@ class Selector(object):
             if key and key[0].upper() != key[0]:
                 key = key[0].upper() + key[1:]
             changed = False
+            if key not in self.__selection.keys():
+                print key
+                Streams.warn("Dropping %s variable" % key)
+                continue
             if self.__selection[key] != state[key]:
                 self.__selection[key] = state[key]
                 changed = True
