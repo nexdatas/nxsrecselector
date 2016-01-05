@@ -110,7 +110,8 @@ class Converter2to1(ConverterXtoY):
                 if pn in props:
                     selection[var] = json.dumps(props.pop(pn))
             selection.pop("ChannelProperties")
-        selection.pop("Version")
+        if "Version" in selection:
+            selection.pop("Version")
 
 ## Selection converter
 class Converter(object):

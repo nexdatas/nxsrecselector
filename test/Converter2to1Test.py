@@ -293,6 +293,8 @@ class Converter2to1Test(unittest.TestCase):
                     res[mk] = json.dumps(pv)
 
             self.maxDiff = None
+            if "ChannelProperties" in res:
+                res.pop("ChannelProperties")
             self.myAssertJSONDict(mysel, res)
 
 
