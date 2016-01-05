@@ -1,4 +1,5 @@
 2016-01-05 Jan Kotanski <jankotan@gmail.com>
+	* add check for configuration server version
 	* fix for version converter 2to1
 	* tagged as v2.0.1
 
