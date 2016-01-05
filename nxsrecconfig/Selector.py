@@ -277,6 +277,10 @@ class Selector(object):
                 configDevice.jsonsettings = dbp
                 configDevice.open()
                 configDevice.availableComponents()
+        cnfmajor = int(str(configDevice.version).split(".")[0])
+        if cnfmajor > 1:
+            raise Exception("NXSConfigServer (%s) version 2.0.0 or newer" %
+                            self.__selection["ConfigDevice"])
         return configDevice
 
     ## executes command on configuration server
