@@ -601,7 +601,7 @@ class NXSConfigServerClass(PyTango.DeviceClass):
                  'label': "Configuration Version",
                  'description': "Configuration version",
             }],
-   }
+    }
 
 #------------------------------------------------------------------
 #    NXSConfigServerClass Constructor
