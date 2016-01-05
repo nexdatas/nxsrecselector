@@ -78,6 +78,7 @@ class NXSConfigServer(PyTango.Device_4Impl):
         self.set_state(PyTango.DevState.ON)
 
         self.attr_XMLString = ""
+        self.attr_Version = "2.0.0"
         self.attr_Selection = ""
         self.attr_JSONSettings = ""
         self.attr_STEPDataSources = ""
@@ -101,6 +102,13 @@ class NXSConfigServer(PyTango.Device_4Impl):
     def always_executed_hook(self):
         pass
     #        print "In ", self.get_name(), "::always_excuted_hook()"
+
+    #------------------------------------------------------------------
+    #    Read Version attribute
+    #------------------------------------------------------------------
+    def read_Version(self, attr):
+        print >> self.log_info, "In ", self.get_name(), "::read_Version"
+        attr.set_value(self.attr_Version)
 
     #------------------------------------------------------------------
     #    Read XMLString attribute
@@ -585,7 +593,15 @@ class NXSConfigServerClass(PyTango.DeviceClass):
                  'description': "datasources to be switched "
                  "into STEP mode during creating configuration process",
             }],
-    }
+        'Version':
+            [[PyTango.DevString,
+              PyTango.SCALAR,
+              PyTango.READ],
+             {
+                 'label': "Configuration Version",
+                 'description': "Configuration version",
+            }],
+   }
 
 #------------------------------------------------------------------
 #    NXSConfigServerClass Constructor
