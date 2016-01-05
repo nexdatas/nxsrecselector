@@ -1,3 +1,7 @@
+2016-01-05 Jan Kotanski <jankotan@gmail.com>
+	* fix for version converter 2to1
+	* tagged as v2.0.1
+
 2016-01-04 Jan Kotanski <jankotan@gmail.com>
 	* changing API:
 	ImportAllEnv               -> ImportEnvProfile
