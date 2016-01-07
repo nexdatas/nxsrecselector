@@ -1347,7 +1347,9 @@ class SelectorTest(unittest.TestCase):
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
+
         for i in range(20):
+            
             msp = MacroServerPools(10)
             se = Selector(msp, self.__version)
             se["Door"] = val["Door"]

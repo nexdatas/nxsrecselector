@@ -741,7 +741,6 @@ class Settings(object):
         nenv = {}
         commands = {
             "components": "Components",
-            "preselectedComponents": "PreselectedComponents",
             "dataSources": "DataSources"
         }
         for attr, name in commands.items():

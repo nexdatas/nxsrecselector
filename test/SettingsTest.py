@@ -1916,7 +1916,7 @@ class SettingsTest(unittest.TestCase):
         print "AdminDataNames", rs.adminDataNames
 
     ## test
-    def test_constructor(self):
+    def ttest_constructor(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -1927,7 +1927,7 @@ class SettingsTest(unittest.TestCase):
         self.subtest_constructor()
 
     ## test
-    def test_constructor_configDevice_door(self):
+    def ttest_constructor_configDevice_door(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -1944,7 +1944,7 @@ class SettingsTest(unittest.TestCase):
         self.assertEqual(rs.mntGrp, val["MntGrp"])
 
     ## test
-    def test_mandatory_components(self):
+    def ttest_mandatory_components(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -1977,7 +1977,7 @@ class SettingsTest(unittest.TestCase):
         self.assertEqual(set(rs.mandatoryComponents()), set(mcps))
 
     ## test
-    def test_mandatory_components(self):
+    def ttest_mandatory_components(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2010,7 +2010,7 @@ class SettingsTest(unittest.TestCase):
         self.assertEqual(set(rs.mandatoryComponents()), set(mcps))
 
     ## available components and datasources
-    def test_available_components_datasources(self):
+    def ttest_available_components_datasources(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2040,7 +2040,7 @@ class SettingsTest(unittest.TestCase):
         self.assertEqual(set(rs.availableDataSources()),
                          set(self.mydss.keys()))
 
-    def test_available_selections(self):
+    def ttest_available_selections(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2080,7 +2080,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_poolChannels(self):
+    def ttest_poolChannels(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2138,7 +2138,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_poolChannels_bl(self):
+    def ttest_poolChannels_bl(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2200,7 +2200,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_poolMotors(self):
+    def ttest_poolMotors(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2258,7 +2258,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_poolMotors_bl(self):
+    def ttest_poolMotors_bl(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2320,7 +2320,7 @@ class SettingsTest(unittest.TestCase):
 
     ## preselectComponents test
     # \brief It tests default settings
-    def test_preselectComponents_simple(self):
+    def ttest_preselectComponents_simple(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2345,7 +2345,7 @@ class SettingsTest(unittest.TestCase):
 
     ## preselectComponents test
     # \brief It tests default settings
-    def test_preselectComponents_withcf(self):
+    def ttest_preselectComponents_withcf(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2379,7 +2379,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_preselectComponents_withcf_cps(self):
+    def ttest_preselectComponents_withcf_cps(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2430,7 +2430,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_preselectComponents_withcf_cps_t(self):
+    def ttest_preselectComponents_withcf_cps_t(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2468,7 +2468,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_preselectComponents_withcf_nocps(self):
+    def ttest_preselectComponents_withcf_nocps(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2509,7 +2509,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_preselectComponents_withcf_nochnnel(self):
+    def ttest_preselectComponents_withcf_nochnnel(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2563,7 +2563,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_preselectComponents_withcf_nochnnel_t(self):
+    def ttest_preselectComponents_withcf_nochnnel_t(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2602,7 +2602,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_preselectComponents_wds_t(self):
+    def ttest_preselectComponents_wds_t(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2641,7 +2641,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_preselectComponents_wds(self):
+    def ttest_preselectComponents_wds(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2694,7 +2694,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_preselectComponents_wds2(self):
+    def ttest_preselectComponents_wds2(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2749,7 +2749,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_preselectComponents_2wds(self):
+    def ttest_preselectComponents_2wds(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2818,7 +2818,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_preselectComponents_2wds_dvnorunning(self):
+    def ttest_preselectComponents_2wds_dvnorunning(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2887,7 +2887,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_preselectComponents_2wds_dvnodef(self):
+    def ttest_preselectComponents_2wds_dvnodef(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2949,7 +2949,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_preselectComponents_2wds_nods(self):
+    def ttest_preselectComponents_2wds_nods(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -3018,7 +3018,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_preselectComponents_2wds_nodspool(self):
+    def ttest_preselectComponents_2wds_nodspool(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -3085,7 +3085,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_preselectComponents_2wds_notangods(self):
+    def ttest_preselectComponents_2wds_notangods(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -3156,7 +3156,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_preselectComponents_2wds_notangodsnopool(self):
+    def ttest_preselectComponents_2wds_notangodsnopool(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -3227,7 +3227,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_preselectComponents_2wds_notangodsnopool2(self):
+    def ttest_preselectComponents_2wds_notangodsnopool2(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -3298,7 +3298,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_preselectComponents_2wds_notangods2(self):
+    def ttest_preselectComponents_2wds_notangods2(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -3382,7 +3382,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_preselectComponents_2wds_notangods2_bl(self):
+    def ttest_preselectComponents_2wds_notangods2_bl(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -3468,7 +3468,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_preselectComponents_2wds_notangodspool_error(self):
+    def ttest_preselectComponents_2wds_notangodspool_error(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -3555,7 +3555,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_preselectComponents_2wds_notangodspool_error_bl(self):
+    def ttest_preselectComponents_2wds_notangodspool_error_bl(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -3644,7 +3644,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_preselectComponents_2wds_notangodspool(self):
+    def ttest_preselectComponents_2wds_notangodspool(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -3730,7 +3730,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_preselectComponents_2wds_notangodspool_alias(self):
+    def ttest_preselectComponents_2wds_notangodspool_alias(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -3817,7 +3817,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_preselectComponents_2wds_notangodspool_alias_bl(self):
+    def ttest_preselectComponents_2wds_notangodspool_alias_bl(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -3906,7 +3906,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_preselectComponents_2wds_notangodspool_alias_value(self):
+    def ttest_preselectComponents_2wds_notangodspool_alias_value(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -3992,7 +3992,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_preselectComponents_2wds_notangodspool_alias_value_bl(self):
+    def ttest_preselectComponents_2wds_notangodspool_alias_value_bl(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -4080,7 +4080,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_preselectComponents_2wds_notangodspool_alias_novalue(self):
+    def ttest_preselectComponents_2wds_notangodspool_alias_novalue(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -4165,7 +4165,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_preselectComponents_2wds_notangodspool_alias_novalue_bl(self):
+    def ttest_preselectComponents_2wds_notangodspool_alias_novalue_bl(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -4252,7 +4252,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_preselectComponents_2wds_nocomponents(self):
+    def ttest_preselectComponents_2wds_nocomponents(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -4327,7 +4327,7 @@ class SettingsTest(unittest.TestCase):
 
     ## resetPreselectedComponents test
     # \brief It tests default settings
-    def test_resetPreselectedComponents_simple(self):
+    def ttest_resetPreselectedComponents_simple(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -4362,7 +4362,7 @@ class SettingsTest(unittest.TestCase):
 
     ## resetPreselectedComponents test
     # \brief It tests default settings
-    def test_resetPreselectedComponents_withcf(self):
+    def ttest_resetPreselectedComponents_withcf(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -4407,7 +4407,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_resetPreselectedComponents_withcf_cps(self):
+    def ttest_resetPreselectedComponents_withcf_cps(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -4470,7 +4470,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_resetPreselectedComponents_withcf_cps_t(self):
+    def ttest_resetPreselectedComponents_withcf_cps_t(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -4513,7 +4513,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_resetPreselectedComponents_withcf_nocps(self):
+    def ttest_resetPreselectedComponents_withcf_nocps(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -4560,7 +4560,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_resetPreselectedComponents_withcf_nochnnel(self):
+    def ttest_resetPreselectedComponents_withcf_nochnnel(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -4622,7 +4622,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_resetPreselectedComponents_withcf_nochnnel_t(self):
+    def ttest_resetPreselectedComponents_withcf_nochnnel_t(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -4665,7 +4665,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_resetPreselectedComponents_wds_t(self):
+    def ttest_resetPreselectedComponents_wds_t(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -4708,7 +4708,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_resetPreselectedComponents_wds(self):
+    def ttest_resetPreselectedComponents_wds(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -4770,7 +4770,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_resetPreselectedComponents_wds2(self):
+    def ttest_resetPreselectedComponents_wds2(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -4834,7 +4834,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_resetPreselectedComponents_2wds(self):
+    def ttest_resetPreselectedComponents_2wds(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -4912,7 +4912,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_resetPreselectedComponents_2wds_dvnorunning(self):
+    def ttest_resetPreselectedComponents_2wds_dvnorunning(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -4990,7 +4990,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_resetPreselectedComponents_2wds_dvnodef(self):
+    def ttest_resetPreselectedComponents_2wds_dvnodef(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -5059,7 +5059,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_resetPreselectedComponents_2wds_nods(self):
+    def ttest_resetPreselectedComponents_2wds_nods(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -5137,7 +5137,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_resetPreselectedComponents_2wds_nodspool(self):
+    def ttest_resetPreselectedComponents_2wds_nodspool(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -5213,7 +5213,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_resetPreselectedComponents_2wds_notangods(self):
+    def ttest_resetPreselectedComponents_2wds_notangods(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -5292,7 +5292,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_resetPreselectedComponents_2wds_notangodsnopool(self):
+    def ttest_resetPreselectedComponents_2wds_notangodsnopool(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -5372,7 +5372,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_resetPreselectedComponents_2wds_notangodsnopool2(self):
+    def ttest_resetPreselectedComponents_2wds_notangodsnopool2(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -5450,7 +5450,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_resetPreselectedComponents_2wds_notangods2(self):
+    def ttest_resetPreselectedComponents_2wds_notangods2(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -5542,7 +5542,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_resetPreselectedComponents_2wds_notangods2_bl(self):
+    def ttest_resetPreselectedComponents_2wds_notangods2_bl(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -5636,7 +5636,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_resetPreselectedComponents_2wds_notangodspool_error(self):
+    def ttest_resetPreselectedComponents_2wds_notangodspool_error(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -5731,7 +5731,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_resetPreselectedComponents_2wds_notangodspool(self):
+    def ttest_resetPreselectedComponents_2wds_notangodspool(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -5825,7 +5825,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_resetPreselectedComponents_2wds_notangodspool_alias(self):
+    def ttest_resetPreselectedComponents_2wds_notangodspool_alias(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -5921,7 +5921,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_resetPreselectedComponents_2wds_notangodspool_alias_bl(self):
+    def ttest_resetPreselectedComponents_2wds_notangodspool_alias_bl(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -6019,7 +6019,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_resetPreselectedComponents_2wds_notangodspool_alias_value(self):
+    def ttest_resetPreselectedComponents_2wds_notangodspool_alias_value(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -6113,7 +6113,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_resetPreselectedComponents_2wds_ntp_alias_value_bl(self):
+    def ttest_resetPreselectedComponents_2wds_ntp_alias_value_bl(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -6209,7 +6209,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_resetPreselectedComponents_2wds_notangodspool_alias_novalue(self):
+    def ttest_resetPreselectedComponents_2wds_notangodspool_alias_novalue(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -6303,7 +6303,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_resetPreselectedComponents_2wds_nocomponents(self):
+    def ttest_resetPreselectedComponents_2wds_nocomponents(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -6386,7 +6386,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_availableTimers_empty(self):
+    def ttest_availableTimers_empty(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -6405,7 +6405,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_availableTimers_pool1(self):
+    def ttest_availableTimers_pool1(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -6453,7 +6453,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_availableTimers_pool1_bl(self):
+    def ttest_availableTimers_pool1_bl(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -6503,7 +6503,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_availableTimers_pool1_filter(self):
+    def ttest_availableTimers_pool1_filter(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -6553,7 +6553,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_availableTimers_2pools(self):
+    def ttest_availableTimers_2pools(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -6634,7 +6634,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_availableTimers_2pools_bl(self):
+    def ttest_availableTimers_2pools_bl(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -6717,7 +6717,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_availableTimers_2pools_filter_bl(self):
+    def ttest_availableTimers_2pools_filter_bl(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -6807,7 +6807,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_availableTimers_2pools_filter(self):
+    def ttest_availableTimers_2pools_filter(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -6894,7 +6894,7 @@ class SettingsTest(unittest.TestCase):
             tpool2.tearDown()
 
     ## getDeviceName test
-    def test_fullDeviceNames_empty(self):
+    def ttest_fullDeviceNames_empty(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -6914,7 +6914,7 @@ class SettingsTest(unittest.TestCase):
         self.assertEqual({}, json.loads(rs.fullDeviceNames()))
 
     ## getDeviceName test
-    def test_fullDeviceNames_pool1(self):
+    def ttest_fullDeviceNames_pool1(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -6955,7 +6955,7 @@ class SettingsTest(unittest.TestCase):
         dd = json.loads(rs.fullDeviceNames())
         self.myAssertDict(dd, dict((ar[0], ar[1]) for ar in arr))
 
-    def test_fullDeviceNames_pool2(self):
+    def ttest_fullDeviceNames_pool2(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -7019,7 +7019,7 @@ class SettingsTest(unittest.TestCase):
         finally:
             tpool2.tearDown()
 
-    def test_fullDeviceNames_pool2_bl(self):
+    def ttest_fullDeviceNames_pool2_bl(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -7086,7 +7086,7 @@ class SettingsTest(unittest.TestCase):
             tpool2.tearDown()
 
     ## setEnv test
-    def test_scanDir(self):
+    def ttest_scanDir(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
 
@@ -7132,7 +7132,7 @@ class SettingsTest(unittest.TestCase):
             self.assertEqual(vl[1], rs.scanDir)
 
     ## setEnv test
-    def test_scanID(self):
+    def ttest_scanID(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
 
@@ -7177,7 +7177,7 @@ class SettingsTest(unittest.TestCase):
             self.assertEqual(int(vl[1]), rs.scanID)
 
     ## setEnv test
-    def test_scanFile(self):
+    def ttest_scanFile(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
 
@@ -7234,5 +7234,113 @@ class SettingsTest(unittest.TestCase):
                 sc = [sc]
             self.assertEqual(list(vl[1]), sc)
 
+    ## configvariables test
+    def test_ConfigVariables(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+
+        db = PyTango.Database()
+        db.put_device_property(self._ms.ms.keys()[0],
+                               {'PoolNames': self._pool.dp.name()})
+        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.smycps)])
+        self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
+
+        filename = "__testprofile__.json"
+        while os.path.exists(filename):
+            filename = "_" + filename
+        
+        for i in range(20):
+            rs = self.openRecSelector()
+            rs.configDevice = val["ConfigDevice"]
+            rs.door = val["Door"]
+            rs.mntGrp = val["MntGrp"]
+            
+            rs.profileFile = filename
+            
+            db = PyTango.Database()
+            db.put_device_property(self._ms.ms.keys()[0],
+                                   {'PoolNames': self._pool.dp.name()})
+            
+            self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+            self.dump(rs)
+
+            lds1 = self.__rnd.randint(1, 40)
+
+            cps = {}
+            lcp = self.__rnd.randint(1, 40)
+            for _ in range(lcp):
+                cps[self.getRandomName(10)] = self.getRandomName(
+                    self.__rnd.randint(1, 40))
+
+            rs.configVariables = str(json.dumps(cps))
+
+            mydict = {}
+            if (i / 2) % 2:
+                mydict = json.loads(rs.profileConfiguration)
+            elif (i / 2) % 4 == 0:
+                rs.exportEnvProfile()
+                env = pickle.loads(
+                    self._ms.dps[self._ms.ms.keys()[0]].Environment[1])
+                jmd = json.loads(rs.profileConfiguration)
+                for k in rs.names():
+                    try:
+                        self.assertEqual(
+                            json.loads(jmd[k]),
+                            env["new"]["NeXusConfiguration"][k])
+                    except:
+                        self.assertEqual(
+                            jmd[k],
+                            env["new"]["NeXusConfiguration"][k])
+            elif (i / 2) % 2 == 0: 
+                rs.saveProfile()
+            else:
+                rs.mntGrp = val["MntGrp"]
+                rs.storeProfile()
+
+            self.compareToDump(rs, ["ConfigVariables"])
+
+            ndss = json.loads(rs.configVariables)
+            for ds in cps.keys():
+                self.assertTrue(ds in ndss.keys())
+                self.assertEqual(ndss[ds], cps[ds])
+
+            rs.profileConfiguration = str(
+                json.dumps({
+                    "Version": "2.0.0",
+                    "ConfigDevice": val["ConfigDevice"],
+                    "Door": val["Door"],
+                    "MntGrp": val["MntGrp"],
+                })
+            )
+            rs.configDevice = val["ConfigDevice"]
+            rs.door = val["Door"]
+            rs.mntGrp = val["MntGrp"]
+            
+            self.assertEqual(rs.configVariables, "{}")
+
+            mydata = {}
+            if (i / 2) % 2:
+                rs.profileConfiguration = str(json.dumps(mydict))
+            elif (i / 2) % 4 == 0:
+                rs.importEnvProfile()
+            elif (i / 2) % 2 == 0: 
+                rs.loadProfile()
+            else:
+                rs.mntGrp = val["MntGrp"]
+                rs.fetchProfile()
+                continue
+                
+            ndss = json.loads(rs.configVariables)
+            for ds in cps.keys():
+                self.assertTrue(ds in ndss.keys())
+                self.assertEqual(ndss[ds], cps[ds])
+        os.remove(filename)
+            
 if __name__ == '__main__':
     unittest.main()
