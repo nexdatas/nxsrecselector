@@ -8917,6 +8917,43 @@ class SettingsTest(unittest.TestCase):
                     else:
                         self.assertEqual(rs.deviceGroups, ddg)
 
+    ## test
+    def test_stepdatasources(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+
+        rs = self.openRecSelector()
+        rs.configDevice = val["ConfigDevice"]
+        rs.door = val["Door"]
+        rs.mntGrp = val["MntGrp"]
+        self.assertEqual(rs.configDevice, val["ConfigDevice"])
+        self.assertEqual(rs.door, val["Door"])
+        self.assertEqual(rs.stepdatasources, '[]')
+
+        for _ in range(20):
+            lcp = self.__rnd.randint(1, 10)
+            anames = list(set([self.getRandomName(
+                self.__rnd.randint(1, 10)) for _ in range(lcp)]))
+            rs.stepdatasources = str(json.dumps(anames))
+            mds2 = json.loads(self._cf.dp.stepdatasources)
+            mds = json.loads(rs.stepdatasources)
+            self.assertEqual(set(mds), set(anames))
+            self.assertEqual(set(mds2), set(anames))
+
+        for _ in range(20):
+            lcp = self.__rnd.randint(1, 10)
+            anames = list(set([self.getRandomName(
+                self.__rnd.randint(1, 10)) for _ in range(lcp)]))
+            self._cf.dp.stepdatasources = str(json.dumps(anames))
+            mds2 = json.loads(self._cf.dp.stepdatasources)
+            mds = json.loads(rs.stepdatasources)
+            self.assertEqual(set(mds), set(anames))
+            self.assertEqual(set(mds2), set(anames))
+
 
 if __name__ == '__main__':
     unittest.main()

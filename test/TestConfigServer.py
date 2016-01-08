@@ -586,8 +586,8 @@ class NXSConfigServerClass(PyTango.DeviceClass):
             }],
         'STEPDataSources':
             [[PyTango.DevString,
-              PyTango.SPECTRUM,
-              PyTango.READ_WRITE, 4096],
+              PyTango.SCALAR,
+              PyTango.READ_WRITE],
              {
                  'label': "datasources to be switched into STEP mode",
                  'description': "datasources to be switched "
