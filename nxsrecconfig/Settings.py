@@ -64,7 +64,7 @@ class Settings(object):
         ## default device groups
         self.__defaultDeviceGroups = \
             '{"timer": ["*exp_t*"], "dac": ["*exp_dac*"], ' \
-            + '"counter": ["*exp_c*"], "mca": ["*exp_mca*"], '\
+            + '"counter": ["*exp_c*"], "mca": ["*exp_mca*"], ' \
             + '"adc": ["*exp_adc*"], "motor": ["*exp_mot*"]}'
 
         ## device groups
@@ -288,9 +288,12 @@ class Settings(object):
     def __getDeviceGroups(self):
         try:
             ldct = json.loads(self.__deviceGroups)
-            assert isinstance(ldct, dict)
+            if not isinstance(ldct, dict):
+                raise Exception("DeviceGroups is not a JSON dictionary")
             for vl in ldct.values():
-                assert isinstance(vl, list)
+                if not isinstance(vl, list):
+                    raise Exception(
+                        "DeviceGroups is not a JSON dictionary of lists")
             return self.__deviceGroups
         except Exception:
             return self.__defaultDeviceGroups

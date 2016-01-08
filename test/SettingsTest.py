@@ -8836,6 +8836,87 @@ class SettingsTest(unittest.TestCase):
                 self._ms.dps[self._ms.ms.keys()[0]].Environment[1])
             self.myAssertDict(envs[i], env)
 
+    ## test
+    def test_administratorDataNames(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+
+        rs = self.openRecSelector()
+        rs.configDevice = val["ConfigDevice"]
+        rs.door = val["Door"]
+        rs.mntGrp = val["MntGrp"]
+        self.assertEqual(rs.configDevice, val["ConfigDevice"])
+        self.assertEqual(rs.door, val["Door"])
+        self.assertEqual(rs.administratorDataNames(), [])
+
+        for _ in range(20):
+            lcp = self.__rnd.randint(1, 10)
+            anames = list(set([self.getRandomName(
+                self.__rnd.randint(1, 10)) for _ in range(lcp)]))
+            self.setProp(rs, "adminDataNames",
+                         anames)
+            self.assertEqual(rs.administratorDataNames(), anames)
+
+    ## test
+    def test_getDeviceGroups(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+
+        rs = self.openRecSelector()
+        rs.configDevice = val["ConfigDevice"]
+        rs.door = val["Door"]
+        rs.mntGrp = val["MntGrp"]
+        self.assertEqual(rs.configDevice, val["ConfigDevice"])
+        self.assertEqual(rs.door, val["Door"])
+        ddg = '{"timer": ["*exp_t*"], "dac": ["*exp_dac*"], ' \
+              + '"counter": ["*exp_c*"], "mca": ["*exp_mca*"], ' \
+              + '"adc": ["*exp_adc*"], "motor": ["*exp_mot*"]}'
+
+        self.assertEqual(rs.deviceGroups, ddg)
+
+        for _ in range(20):
+            lcp = self.__rnd.randint(1, 10)
+            anames = list(set([self.getRandomName(
+                self.__rnd.randint(1, 10)) for _ in range(lcp)]))
+            dg = {}
+            for an in anames:
+                lp = self.__rnd.randint(1, 10)
+                gr = list(set([self.getRandomName(
+                    self.__rnd.randint(1, 10)) for _ in range(lp)]))
+                dg[an] = gr
+            jdg = json.dumps(dg)
+            rs.deviceGroups = jdg
+            self.assertEqual(rs.deviceGroups, jdg)
+
+        for _ in range(20):
+            rnm = self.getRandomName(self.__rnd.randint(1, 10))
+            rs.deviceGroups = rnm
+            try:
+                ld = json.loads(rnm)
+            except:
+                self.assertEqual(rs.deviceGroups, ddg)
+            else:
+                good = True
+                if not isinstance(ld, dict):
+                    good = False
+                else:
+                    for vl in ld.values():
+                        if not isinstance(vl, list):
+                            good = False
+                            break
+                    if good:
+                        self.assertEqual(rs.deviceGroups, rnm)
+                    else:
+                        self.assertEqual(rs.deviceGroups, ddg)
+
 
 if __name__ == '__main__':
     unittest.main()
