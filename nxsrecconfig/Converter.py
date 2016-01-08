@@ -113,6 +113,7 @@ class Converter2to1(ConverterXtoY):
         if "Version" in selection:
             selection.pop("Version")
 
+
 ## Selection converter
 class Converter(object):
     """ selection converer """

@@ -1803,6 +1803,24 @@ class SettingsTest(unittest.TestCase):
                         self.__dump[name][key],
                         self.value(el, key))
 
+    def compareToDumpJSONSets(self, el, sets, name="default"):
+        exc = set(sets or [])
+        for key in exc:
+            try:
+                w1 = json.loads(self.__dump[name][key])
+                w2 = json.loads(self.value(el, key))
+            except:
+                self.assertEqual(self.__dump[name][key], self.value(el, key))
+            else:
+                if isinstance(w1, dict):
+                    self.myAssertDict(w1, w2)
+                else:
+                    if set(self.__dump[name][key]) != set(self.value(el, key)):
+                        print "COMP", key
+                    self.assertEqual(
+                        set(self.__dump[name][key]),
+                        set(self.value(el, key)))
+
     def getRandomName(self, maxsize):
         letters = string.lowercase + string.uppercase + string.digits
         size = self.__rnd.randint(1, maxsize)
@@ -1916,7 +1934,7 @@ class SettingsTest(unittest.TestCase):
         print "AdminDataNames", rs.adminDataNames
 
     ## test
-    def ttest_constructor(self):
+    def test_constructor(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -1927,7 +1945,7 @@ class SettingsTest(unittest.TestCase):
         self.subtest_constructor()
 
     ## test
-    def ttest_constructor_configDevice_door(self):
+    def test_constructor_configDevice_door(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -1944,7 +1962,7 @@ class SettingsTest(unittest.TestCase):
         self.assertEqual(rs.mntGrp, val["MntGrp"])
 
     ## test
-    def ttest_mandatory_components(self):
+    def test_mandatory_components(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -1977,7 +1995,7 @@ class SettingsTest(unittest.TestCase):
         self.assertEqual(set(rs.mandatoryComponents()), set(mcps))
 
     ## test
-    def ttest_mandatory_components(self):
+    def test_mandatory_components(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2010,7 +2028,7 @@ class SettingsTest(unittest.TestCase):
         self.assertEqual(set(rs.mandatoryComponents()), set(mcps))
 
     ## available components and datasources
-    def ttest_available_components_datasources(self):
+    def test_available_components_datasources(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2040,7 +2058,7 @@ class SettingsTest(unittest.TestCase):
         self.assertEqual(set(rs.availableDataSources()),
                          set(self.mydss.keys()))
 
-    def ttest_available_selections(self):
+    def test_available_selections(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2080,7 +2098,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def ttest_poolChannels(self):
+    def test_poolChannels(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2138,7 +2156,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def ttest_poolChannels_bl(self):
+    def test_poolChannels_bl(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2200,7 +2218,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def ttest_poolMotors(self):
+    def test_poolMotors(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2258,7 +2276,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def ttest_poolMotors_bl(self):
+    def test_poolMotors_bl(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2320,7 +2338,7 @@ class SettingsTest(unittest.TestCase):
 
     ## preselectComponents test
     # \brief It tests default settings
-    def ttest_preselectComponents_simple(self):
+    def test_preselectComponents_simple(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2345,7 +2363,7 @@ class SettingsTest(unittest.TestCase):
 
     ## preselectComponents test
     # \brief It tests default settings
-    def ttest_preselectComponents_withcf(self):
+    def test_preselectComponents_withcf(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2379,7 +2397,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def ttest_preselectComponents_withcf_cps(self):
+    def test_preselectComponents_withcf_cps(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2430,7 +2448,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def ttest_preselectComponents_withcf_cps_t(self):
+    def test_preselectComponents_withcf_cps_t(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2468,7 +2486,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def ttest_preselectComponents_withcf_nocps(self):
+    def test_preselectComponents_withcf_nocps(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2509,7 +2527,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def ttest_preselectComponents_withcf_nochnnel(self):
+    def test_preselectComponents_withcf_nochnnel(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2563,7 +2581,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def ttest_preselectComponents_withcf_nochnnel_t(self):
+    def test_preselectComponents_withcf_nochnnel_t(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2602,7 +2620,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def ttest_preselectComponents_wds_t(self):
+    def test_preselectComponents_wds_t(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2641,7 +2659,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def ttest_preselectComponents_wds(self):
+    def test_preselectComponents_wds(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2694,7 +2712,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def ttest_preselectComponents_wds2(self):
+    def test_preselectComponents_wds2(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2749,7 +2767,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def ttest_preselectComponents_2wds(self):
+    def test_preselectComponents_2wds(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2818,7 +2836,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def ttest_preselectComponents_2wds_dvnorunning(self):
+    def test_preselectComponents_2wds_dvnorunning(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2887,7 +2905,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def ttest_preselectComponents_2wds_dvnodef(self):
+    def test_preselectComponents_2wds_dvnodef(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2949,7 +2967,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def ttest_preselectComponents_2wds_nods(self):
+    def test_preselectComponents_2wds_nods(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -3018,7 +3036,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def ttest_preselectComponents_2wds_nodspool(self):
+    def test_preselectComponents_2wds_nodspool(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -3085,7 +3103,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def ttest_preselectComponents_2wds_notangods(self):
+    def test_preselectComponents_2wds_notangods(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -3156,7 +3174,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def ttest_preselectComponents_2wds_notangodsnopool(self):
+    def test_preselectComponents_2wds_notangodsnopool(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -3227,7 +3245,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def ttest_preselectComponents_2wds_notangodsnopool2(self):
+    def test_preselectComponents_2wds_notangodsnopool2(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -3298,7 +3316,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def ttest_preselectComponents_2wds_notangods2(self):
+    def test_preselectComponents_2wds_notangods2(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -3382,7 +3400,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def ttest_preselectComponents_2wds_notangods2_bl(self):
+    def test_preselectComponents_2wds_notangods2_bl(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -3468,7 +3486,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def ttest_preselectComponents_2wds_notangodspool_error(self):
+    def test_preselectComponents_2wds_notangodspool_error(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -3555,7 +3573,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def ttest_preselectComponents_2wds_notangodspool_error_bl(self):
+    def test_preselectComponents_2wds_notangodspool_error_bl(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -3644,7 +3662,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def ttest_preselectComponents_2wds_notangodspool(self):
+    def test_preselectComponents_2wds_notangodspool(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -3730,7 +3748,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def ttest_preselectComponents_2wds_notangodspool_alias(self):
+    def test_preselectComponents_2wds_notangodspool_alias(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -3817,7 +3835,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def ttest_preselectComponents_2wds_notangodspool_alias_bl(self):
+    def test_preselectComponents_2wds_notangodspool_alias_bl(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -3906,7 +3924,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def ttest_preselectComponents_2wds_notangodspool_alias_value(self):
+    def test_preselectComponents_2wds_notangodspool_alias_value(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -3992,7 +4010,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def ttest_preselectComponents_2wds_notangodspool_alias_value_bl(self):
+    def test_preselectComponents_2wds_notangodspool_alias_value_bl(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -4080,7 +4098,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def ttest_preselectComponents_2wds_notangodspool_alias_novalue(self):
+    def test_preselectComponents_2wds_notangodspool_alias_novalue(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -4165,7 +4183,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def ttest_preselectComponents_2wds_notangodspool_alias_novalue_bl(self):
+    def test_preselectComponents_2wds_notangodspool_alias_novalue_bl(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -4252,7 +4270,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def ttest_preselectComponents_2wds_nocomponents(self):
+    def test_preselectComponents_2wds_nocomponents(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -4327,7 +4345,7 @@ class SettingsTest(unittest.TestCase):
 
     ## resetPreselectedComponents test
     # \brief It tests default settings
-    def ttest_resetPreselectedComponents_simple(self):
+    def test_resetPreselectedComponents_simple(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -4362,7 +4380,7 @@ class SettingsTest(unittest.TestCase):
 
     ## resetPreselectedComponents test
     # \brief It tests default settings
-    def ttest_resetPreselectedComponents_withcf(self):
+    def test_resetPreselectedComponents_withcf(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -4407,7 +4425,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def ttest_resetPreselectedComponents_withcf_cps(self):
+    def test_resetPreselectedComponents_withcf_cps(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -4470,7 +4488,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def ttest_resetPreselectedComponents_withcf_cps_t(self):
+    def test_resetPreselectedComponents_withcf_cps_t(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -4513,7 +4531,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def ttest_resetPreselectedComponents_withcf_nocps(self):
+    def test_resetPreselectedComponents_withcf_nocps(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -4560,7 +4578,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def ttest_resetPreselectedComponents_withcf_nochnnel(self):
+    def test_resetPreselectedComponents_withcf_nochnnel(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -4622,7 +4640,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def ttest_resetPreselectedComponents_withcf_nochnnel_t(self):
+    def test_resetPreselectedComponents_withcf_nochnnel_t(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -4665,7 +4683,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def ttest_resetPreselectedComponents_wds_t(self):
+    def test_resetPreselectedComponents_wds_t(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -4708,7 +4726,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def ttest_resetPreselectedComponents_wds(self):
+    def test_resetPreselectedComponents_wds(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -4770,7 +4788,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def ttest_resetPreselectedComponents_wds2(self):
+    def test_resetPreselectedComponents_wds2(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -4834,7 +4852,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def ttest_resetPreselectedComponents_2wds(self):
+    def test_resetPreselectedComponents_2wds(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -4912,7 +4930,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def ttest_resetPreselectedComponents_2wds_dvnorunning(self):
+    def test_resetPreselectedComponents_2wds_dvnorunning(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -4990,7 +5008,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def ttest_resetPreselectedComponents_2wds_dvnodef(self):
+    def test_resetPreselectedComponents_2wds_dvnodef(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -5059,7 +5077,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def ttest_resetPreselectedComponents_2wds_nods(self):
+    def test_resetPreselectedComponents_2wds_nods(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -5137,7 +5155,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def ttest_resetPreselectedComponents_2wds_nodspool(self):
+    def test_resetPreselectedComponents_2wds_nodspool(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -5213,7 +5231,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def ttest_resetPreselectedComponents_2wds_notangods(self):
+    def test_resetPreselectedComponents_2wds_notangods(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -5292,7 +5310,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def ttest_resetPreselectedComponents_2wds_notangodsnopool(self):
+    def test_resetPreselectedComponents_2wds_notangodsnopool(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -5372,7 +5390,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def ttest_resetPreselectedComponents_2wds_notangodsnopool2(self):
+    def test_resetPreselectedComponents_2wds_notangodsnopool2(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -5450,7 +5468,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def ttest_resetPreselectedComponents_2wds_notangods2(self):
+    def test_resetPreselectedComponents_2wds_notangods2(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -5542,7 +5560,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def ttest_resetPreselectedComponents_2wds_notangods2_bl(self):
+    def test_resetPreselectedComponents_2wds_notangods2_bl(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -5636,7 +5654,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def ttest_resetPreselectedComponents_2wds_notangodspool_error(self):
+    def test_resetPreselectedComponents_2wds_notangodspool_error(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -5731,7 +5749,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def ttest_resetPreselectedComponents_2wds_notangodspool(self):
+    def test_resetPreselectedComponents_2wds_notangodspool(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -5825,7 +5843,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def ttest_resetPreselectedComponents_2wds_notangodspool_alias(self):
+    def test_resetPreselectedComponents_2wds_notangodspool_alias(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -5921,7 +5939,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def ttest_resetPreselectedComponents_2wds_notangodspool_alias_bl(self):
+    def test_resetPreselectedComponents_2wds_notangodspool_alias_bl(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -6019,7 +6037,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def ttest_resetPreselectedComponents_2wds_notangodspool_alias_value(self):
+    def test_resetPreselectedComponents_2wds_notangodspool_alias_value(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -6113,7 +6131,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def ttest_resetPreselectedComponents_2wds_ntp_alias_value_bl(self):
+    def test_resetPreselectedComponents_2wds_ntp_alias_value_bl(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -6209,7 +6227,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def ttest_resetPreselectedComponents_2wds_notangodspool_alias_novalue(self):
+    def test_resetPreselectedComponents_2wds_notangodspool_alias_novalue(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -6303,7 +6321,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def ttest_resetPreselectedComponents_2wds_nocomponents(self):
+    def test_resetPreselectedComponents_2wds_nocomponents(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -6386,7 +6404,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def ttest_availableTimers_empty(self):
+    def test_availableTimers_empty(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -6405,7 +6423,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def ttest_availableTimers_pool1(self):
+    def test_availableTimers_pool1(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -6453,7 +6471,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def ttest_availableTimers_pool1_bl(self):
+    def test_availableTimers_pool1_bl(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -6503,7 +6521,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def ttest_availableTimers_pool1_filter(self):
+    def test_availableTimers_pool1_filter(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -6553,7 +6571,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def ttest_availableTimers_2pools(self):
+    def test_availableTimers_2pools(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -6634,7 +6652,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def ttest_availableTimers_2pools_bl(self):
+    def test_availableTimers_2pools_bl(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -6717,7 +6735,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def ttest_availableTimers_2pools_filter_bl(self):
+    def test_availableTimers_2pools_filter_bl(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -6807,7 +6825,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def ttest_availableTimers_2pools_filter(self):
+    def test_availableTimers_2pools_filter(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -6894,7 +6912,7 @@ class SettingsTest(unittest.TestCase):
             tpool2.tearDown()
 
     ## getDeviceName test
-    def ttest_fullDeviceNames_empty(self):
+    def test_fullDeviceNames_empty(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -6914,7 +6932,7 @@ class SettingsTest(unittest.TestCase):
         self.assertEqual({}, json.loads(rs.fullDeviceNames()))
 
     ## getDeviceName test
-    def ttest_fullDeviceNames_pool1(self):
+    def test_fullDeviceNames_pool1(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -6955,7 +6973,7 @@ class SettingsTest(unittest.TestCase):
         dd = json.loads(rs.fullDeviceNames())
         self.myAssertDict(dd, dict((ar[0], ar[1]) for ar in arr))
 
-    def ttest_fullDeviceNames_pool2(self):
+    def test_fullDeviceNames_pool2(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -7019,7 +7037,7 @@ class SettingsTest(unittest.TestCase):
         finally:
             tpool2.tearDown()
 
-    def ttest_fullDeviceNames_pool2_bl(self):
+    def test_fullDeviceNames_pool2_bl(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -7086,7 +7104,7 @@ class SettingsTest(unittest.TestCase):
             tpool2.tearDown()
 
     ## setEnv test
-    def ttest_scanDir(self):
+    def test_scanDir(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
 
@@ -7132,7 +7150,7 @@ class SettingsTest(unittest.TestCase):
             self.assertEqual(vl[1], rs.scanDir)
 
     ## setEnv test
-    def ttest_scanID(self):
+    def test_scanID(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
 
@@ -7176,8 +7194,8 @@ class SettingsTest(unittest.TestCase):
             self.assertEqual(en['ScanID'], rs.scanID)
             self.assertEqual(int(vl[1]), rs.scanID)
 
-    ## setEnv test
-    def ttest_scanFile(self):
+    ## scanfile test
+    def test_scanFile(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
 
@@ -7209,7 +7227,7 @@ class SettingsTest(unittest.TestCase):
             self.assertEqual(list(vl[0]), json.loads(rs.scanFile))
 
         for vl in arr:
-            rs.scanFile= json.dumps(vl[1])
+            rs.scanFile = json.dumps(vl[1])
             print "SF", rs.scanFile
             self.assertEqual(
                 self._ms.dps[self._ms.ms.keys()[0]].Environment[0],
@@ -7235,7 +7253,7 @@ class SettingsTest(unittest.TestCase):
             self.assertEqual(list(vl[1]), sc)
 
     ## configvariables test
-    def test_ConfigVariables(self):
+    def test_configVariables(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -7253,24 +7271,26 @@ class SettingsTest(unittest.TestCase):
         filename = "__testprofile__.json"
         while os.path.exists(filename):
             filename = "_" + filename
-        
+
+        mg = self.getRandomName(10)
+        while mg == val["MntGrp"]:
+            mg = self.getRandomName(10)
+
         for i in range(20):
             rs = self.openRecSelector()
             rs.configDevice = val["ConfigDevice"]
             rs.door = val["Door"]
-            rs.mntGrp = val["MntGrp"]
-            
+            rs.mntGrp = mg
+
             rs.profileFile = filename
-            
+
             db = PyTango.Database()
             db.put_device_property(self._ms.ms.keys()[0],
                                    {'PoolNames': self._pool.dp.name()})
-            
+
             self._ms.dps[self._ms.ms.keys()[0]].Init()
 
             self.dump(rs)
-
-            lds1 = self.__rnd.randint(1, 40)
 
             cps = {}
             lcp = self.__rnd.randint(1, 40)
@@ -7288,7 +7308,7 @@ class SettingsTest(unittest.TestCase):
                 env = pickle.loads(
                     self._ms.dps[self._ms.ms.keys()[0]].Environment[1])
                 jmd = json.loads(rs.profileConfiguration)
-                for k in rs.names():
+                for k in self.names(rs):
                     try:
                         self.assertEqual(
                             json.loads(jmd[k]),
@@ -7297,10 +7317,10 @@ class SettingsTest(unittest.TestCase):
                         self.assertEqual(
                             jmd[k],
                             env["new"]["NeXusConfiguration"][k])
-            elif (i / 2) % 2 == 0: 
+            elif (i / 2) % 2 == 0:
                 rs.saveProfile()
             else:
-                rs.mntGrp = val["MntGrp"]
+                rs.mntGrp = mg
                 rs.storeProfile()
 
             self.compareToDump(rs, ["ConfigVariables"])
@@ -7321,7 +7341,7 @@ class SettingsTest(unittest.TestCase):
             rs.configDevice = val["ConfigDevice"]
             rs.door = val["Door"]
             rs.mntGrp = val["MntGrp"]
-            
+
             self.assertEqual(rs.configVariables, "{}")
 
             mydata = {}
@@ -7329,18 +7349,1493 @@ class SettingsTest(unittest.TestCase):
                 rs.profileConfiguration = str(json.dumps(mydict))
             elif (i / 2) % 4 == 0:
                 rs.importEnvProfile()
-            elif (i / 2) % 2 == 0: 
+            elif (i / 2) % 2 == 0:
                 rs.loadProfile()
             else:
-                rs.mntGrp = val["MntGrp"]
+                rs.mntGrp = mg
                 rs.fetchProfile()
-                continue
-                
+
             ndss = json.loads(rs.configVariables)
             for ds in cps.keys():
                 self.assertTrue(ds in ndss.keys())
                 self.assertEqual(ndss[ds], cps[ds])
         os.remove(filename)
-            
+
+    ## userdata test
+    def test_userData(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+
+        db = PyTango.Database()
+        db.put_device_property(self._ms.ms.keys()[0],
+                               {'PoolNames': self._pool.dp.name()})
+        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.smycps)])
+        self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
+
+        filename = "__testprofile__.json"
+        while os.path.exists(filename):
+            filename = "_" + filename
+
+        mg = self.getRandomName(10)
+        while mg == val["MntGrp"]:
+            mg = self.getRandomName(10)
+
+        for i in range(20):
+            rs = self.openRecSelector()
+            rs.configDevice = val["ConfigDevice"]
+            rs.door = val["Door"]
+            rs.mntGrp = mg
+
+            rs.profileFile = filename
+
+            db = PyTango.Database()
+            db.put_device_property(self._ms.ms.keys()[0],
+                                   {'PoolNames': self._pool.dp.name()})
+
+            self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+            self.dump(rs)
+
+            cps = {}
+            lcp = self.__rnd.randint(1, 40)
+            for _ in range(lcp):
+                cps[self.getRandomName(10)] = self.getRandomName(
+                    self.__rnd.randint(1, 40))
+
+            rs.userData = str(json.dumps(cps))
+
+            mydict = {}
+            if (i / 2) % 2:
+                mydict = json.loads(rs.profileConfiguration)
+            elif (i / 2) % 4 == 0:
+                rs.exportEnvProfile()
+                env = pickle.loads(
+                    self._ms.dps[self._ms.ms.keys()[0]].Environment[1])
+                jmd = json.loads(rs.profileConfiguration)
+                for k in self.names(rs):
+                    try:
+                        self.assertEqual(
+                            json.loads(jmd[k]),
+                            env["new"]["NeXusConfiguration"][k])
+                    except:
+                        self.assertEqual(
+                            jmd[k],
+                            env["new"]["NeXusConfiguration"][k])
+            elif (i / 2) % 2 == 0:
+                rs.saveProfile()
+            else:
+                rs.mntGrp = mg
+                rs.storeProfile()
+
+            self.compareToDump(rs, ["UserData"])
+
+            ndss = json.loads(rs.userData)
+            for ds in cps.keys():
+                self.assertTrue(ds in ndss.keys())
+                self.assertEqual(ndss[ds], cps[ds])
+
+            rs.profileConfiguration = str(
+                json.dumps({
+                    "Version": "2.0.0",
+                    "ConfigDevice": val["ConfigDevice"],
+                    "Door": val["Door"],
+                    "MntGrp": val["MntGrp"],
+                })
+            )
+            rs.configDevice = val["ConfigDevice"]
+            rs.door = val["Door"]
+            rs.mntGrp = val["MntGrp"]
+
+            self.assertEqual(rs.userData, "{}")
+
+            mydata = {}
+            if (i / 2) % 2:
+                rs.profileConfiguration = str(json.dumps(mydict))
+            elif (i / 2) % 4 == 0:
+                rs.importEnvProfile()
+            elif (i / 2) % 2 == 0:
+                rs.loadProfile()
+            else:
+                rs.mntGrp = mg
+                rs.fetchProfile()
+
+            ndss = json.loads(rs.userData)
+            for ds in cps.keys():
+                self.assertTrue(ds in ndss.keys())
+                self.assertEqual(ndss[ds], cps[ds])
+        os.remove(filename)
+
+    ## mntgrp test
+    def test_mntGrp(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+
+        db = PyTango.Database()
+        db.put_device_property(self._ms.ms.keys()[0],
+                               {'PoolNames': self._pool.dp.name()})
+        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.smycps)])
+        self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
+
+        filename = "__testprofile__.json"
+        while os.path.exists(filename):
+            filename = "_" + filename
+
+        for i in range(20):
+            rs = self.openRecSelector()
+            rs.configDevice = val["ConfigDevice"]
+            rs.door = val["Door"]
+            rs.mntGrp = val["MntGrp"]
+            self.assertEqual(rs.mntGrp, val["MntGrp"])
+            mg = self.getRandomName(10)
+            while mg == val["MntGrp"]:
+                mg = self.getRandomName(10)
+
+            rs.mntGrp = mg
+            self.assertEqual(rs.mntGrp, mg)
+
+            rs.profileFile = filename
+
+            db = PyTango.Database()
+            db.put_device_property(self._ms.ms.keys()[0],
+                                   {'PoolNames': self._pool.dp.name()})
+
+            self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+            self.dump(rs)
+
+            mydict = {}
+            if (i / 2) % 2:
+                mydict = json.loads(rs.profileConfiguration)
+            elif (i / 2) % 4 == 0:
+                rs.exportEnvProfile()
+                env = pickle.loads(
+                    self._ms.dps[self._ms.ms.keys()[0]].Environment[1])
+                jmd = json.loads(rs.profileConfiguration)
+                for k in self.names(rs):
+                    try:
+                        self.assertEqual(
+                            json.loads(jmd[k]),
+                            env["new"]["NeXusConfiguration"][k])
+                    except:
+                        self.assertEqual(
+                            jmd[k],
+                            env["new"]["NeXusConfiguration"][k])
+            elif (i / 2) % 2 == 0:
+                rs.saveProfile()
+            else:
+                rs.storeProfile()
+
+            self.compareToDump(rs, ["MntGrp"])
+            self.assertEqual(rs.mntGrp, mg)
+
+            rs.profileConfiguration = str(
+                json.dumps({
+                    "Version": "2.0.0",
+                    "ConfigDevice": val["ConfigDevice"],
+                    "Door": val["Door"],
+                    "MntGrp": val["MntGrp"],
+                })
+            )
+            rs.configDevice = val["ConfigDevice"]
+            rs.door = val["Door"]
+            rs.mntGrp = val["MntGrp"]
+
+            self.assertEqual(rs.mntGrp, val["MntGrp"])
+
+            mydata = {}
+            if (i / 2) % 2:
+                rs.profileConfiguration = str(json.dumps(mydict))
+            elif (i / 2) % 4 == 0:
+                rs.importEnvProfile()
+            elif (i / 2) % 2 == 0:
+                rs.loadProfile()
+            else:
+                rs.mntGrp = mg
+                rs.fetchProfile()
+
+            self.compareToDump(rs, ["MntGrp"])
+            self.assertEqual(rs.mntGrp, mg)
+
+        os.remove(filename)
+
+    ## appendentry test
+    def test_appendEntry(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+
+        db = PyTango.Database()
+        db.put_device_property(self._ms.ms.keys()[0],
+                               {'PoolNames': self._pool.dp.name()})
+        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.smycps)])
+        self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
+
+        filename = "__testprofile__.json"
+        while os.path.exists(filename):
+            filename = "_" + filename
+
+        mg = self.getRandomName(10)
+        while mg == val["MntGrp"]:
+            mg = self.getRandomName(10)
+
+        for i in range(20):
+            rs = self.openRecSelector()
+            rs.configDevice = val["ConfigDevice"]
+            rs.door = val["Door"]
+            rs.mntGrp = mg
+            self.assertEqual(rs.mntGrp, mg)
+
+            ap = bool(self.__rnd.randint(0, 1))
+            rs.appendEntry = ap
+            self.assertEqual(rs.appendEntry, ap)
+
+            rs.profileFile = filename
+
+            db = PyTango.Database()
+            db.put_device_property(self._ms.ms.keys()[0],
+                                   {'PoolNames': self._pool.dp.name()})
+
+            self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+            self.dump(rs)
+
+            mydict = {}
+            if (i / 2) % 2:
+                mydict = json.loads(rs.profileConfiguration)
+            elif (i / 2) % 4 == 0:
+                rs.exportEnvProfile()
+                env = pickle.loads(
+                    self._ms.dps[self._ms.ms.keys()[0]].Environment[1])
+                jmd = json.loads(rs.profileConfiguration)
+                for k in self.names(rs):
+                    try:
+                        self.assertEqual(
+                            json.loads(jmd[k]),
+                            env["new"]["NeXusConfiguration"][k])
+                    except:
+                        self.assertEqual(
+                            jmd[k],
+                            env["new"]["NeXusConfiguration"][k])
+            elif (i / 2) % 2 == 0:
+                rs.saveProfile()
+            else:
+                rs.mntGrp = mg
+                rs.storeProfile()
+
+            self.compareToDump(rs, ["AppendEntry"])
+            self.assertEqual(rs.appendEntry, ap)
+
+            rs.profileConfiguration = str(
+                json.dumps({
+                    "Version": "2.0.0",
+                    "ConfigDevice": val["ConfigDevice"],
+                    "Door": val["Door"],
+                    "MntGrp": val["MntGrp"],
+                })
+            )
+            rs.configDevice = val["ConfigDevice"]
+            rs.door = val["Door"]
+            rs.mntGrp = val["MntGrp"]
+
+            self.assertEqual(rs.appendEntry, False)
+
+            mydata = {}
+            if (i / 2) % 2:
+                rs.profileConfiguration = str(json.dumps(mydict))
+            elif (i / 2) % 4 == 0:
+                rs.importEnvProfile()
+            elif (i / 2) % 2 == 0:
+                rs.loadProfile()
+            else:
+                rs.mntGrp = mg
+                rs.fetchProfile()
+
+            self.compareToDump(rs, ["AppendEntry"])
+            self.assertEqual(rs.appendEntry, ap)
+
+        os.remove(filename)
+
+    ## test
+    def test_writerDevice(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+
+        db = PyTango.Database()
+        db.put_device_property(self._ms.ms.keys()[0],
+                               {'PoolNames': self._pool.dp.name()})
+        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.smycps)])
+        self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
+
+        filename = "__testprofile__.json"
+        while os.path.exists(filename):
+            filename = "_" + filename
+
+        mg = self.getRandomName(10)
+        while mg == val["MntGrp"]:
+            mg = self.getRandomName(10)
+
+        for i in range(20):
+            rs = self.openRecSelector()
+            rs.configDevice = val["ConfigDevice"]
+            rs.door = val["Door"]
+            rs.mntGrp = mg
+            self.assertEqual(rs.mntGrp, mg)
+
+            wd = self.getRandomName(10)
+            rs.writerDevice = wd
+            self.assertEqual(rs.writerDevice, wd)
+
+            rs.profileFile = filename
+
+            db = PyTango.Database()
+            db.put_device_property(self._ms.ms.keys()[0],
+                                   {'PoolNames': self._pool.dp.name()})
+
+            self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+            self.dump(rs)
+
+            mydict = {}
+            if (i / 2) % 2:
+                mydict = json.loads(rs.profileConfiguration)
+            elif (i / 2) % 4 == 0:
+                rs.exportEnvProfile()
+                env = pickle.loads(
+                    self._ms.dps[self._ms.ms.keys()[0]].Environment[1])
+                jmd = json.loads(rs.profileConfiguration)
+                for k in self.names(rs):
+                    try:
+                        self.assertEqual(
+                            json.loads(jmd[k]),
+                            env["new"]["NeXusConfiguration"][k])
+                    except:
+                        self.assertEqual(
+                            jmd[k],
+                            env["new"]["NeXusConfiguration"][k])
+            elif (i / 2) % 2 == 0:
+                rs.saveProfile()
+            else:
+                rs.mntGrp = mg
+                rs.storeProfile()
+
+            self.compareToDump(rs, ["WriterDevice"])
+            self.assertEqual(rs.writerDevice, wd)
+
+            rs.profileConfiguration = str(
+                json.dumps({
+                    "Version": "2.0.0",
+                    "ConfigDevice": val["ConfigDevice"],
+                    "Door": val["Door"],
+                    "MntGrp": val["MntGrp"],
+                })
+            )
+            rs.configDevice = val["ConfigDevice"]
+            rs.door = val["Door"]
+            rs.mntGrp = val["MntGrp"]
+
+            self.assertEqual(rs.mntGrp, val["MntGrp"])
+
+            mydata = {}
+            if (i / 2) % 2:
+                rs.profileConfiguration = str(json.dumps(mydict))
+            elif (i / 2) % 4 == 0:
+                rs.importEnvProfile()
+            elif (i / 2) % 2 == 0:
+                rs.loadProfile()
+            else:
+                rs.mntGrp = mg
+                rs.fetchProfile()
+
+            self.compareToDump(rs, ["WriterDevice"])
+            self.assertEqual(rs.writerDevice, wd)
+
+        os.remove(filename)
+
+    ## test
+    def test_door(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        doors = ["door2testp09/testts/t1r228",
+                 "door2testp09/testts/t2r228",
+                 "door2testp09/testts/t3r228"]
+        msname = "ms2testp09/testts/t1r228"
+        try:
+
+            ms2 = TestMacroServerSetUp.TestMacroServerSetUp(
+                "MSTESTS1TO3", [msname], doors)
+            ms2.setUp()
+
+            db = PyTango.Database()
+            db.put_device_property(ms2.ms.keys()[0],
+                                   {'PoolNames': self._pool.dp.name()})
+            print "KKKK", ms2.dps.keys()
+            ms2.dps[ms2.ms.keys()[0]].Init()
+            self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.smycps)])
+            self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
+            ms2.dps[ms2.ms.keys()[0]].DoorList = doors
+
+            filename = "__testprofile__.json"
+            while os.path.exists(filename):
+                filename = "_" + filename
+
+            mg = self.getRandomName(10)
+            while mg == val["MntGrp"]:
+                mg = self.getRandomName(10)
+
+            for i in range(20):
+                rs = self.openRecSelector()
+                rs.configDevice = val["ConfigDevice"]
+                rs.door = doors[i % 3]
+                rs.mntGrp = mg
+                self.assertEqual(rs.mntGrp, mg)
+                self.assertEqual(rs.door, doors[i % 3])
+
+                rs.profileFile = filename
+
+                self.dump(rs)
+
+                print "I", i
+                mydict = {}
+                if (i / 2) % 2:
+                    mydict = json.loads(rs.profileConfiguration)
+                elif (i / 2) % 4 == 0:
+                    rs.exportEnvProfile()
+                    env = pickle.loads(
+                        ms2.dps[ms2.ms.keys()[0]].Environment[1])
+                    jmd = json.loads(rs.profileConfiguration)
+                    for k in self.names(rs):
+                        try:
+                            self.assertEqual(
+                                json.loads(jmd[k]),
+                                env["new"]["NeXusConfiguration"][k])
+                        except:
+                            self.assertEqual(
+                                jmd[k],
+                                env["new"]["NeXusConfiguration"][k])
+                elif (i / 2) % 2 == 0:
+                    rs.saveProfile()
+                else:
+                    rs.mntGrp = mg
+                    rs.storeProfile()
+
+                self.compareToDump(rs, [])
+
+                rs.profileConfiguration = str(
+                    json.dumps({
+                        "Version": "2.0.0",
+                        "ConfigDevice": val["ConfigDevice"],
+                        "Door": val["Door"],
+                        "MntGrp": val["MntGrp"],
+                    })
+                )
+                rs.configDevice = val["ConfigDevice"]
+                rs.door = val["Door"]
+                rs.mntGrp = val["MntGrp"]
+
+                self.assertEqual(rs.mntGrp, val["MntGrp"])
+
+                mydata = {}
+                if (i / 2) % 2:
+                    rs.profileConfiguration = str(json.dumps(mydict))
+                elif (i / 2) % 4 == 0:
+                    rs.door = doors[i % 3]
+                    rs.importEnvProfile()
+                elif (i / 2) % 2 == 0:
+                    rs.loadProfile()
+                else:
+                    rs.mntGrp = mg
+                    rs.fetchProfile()
+
+                self.compareToDump(rs, [])
+                self.assertEqual(rs.door, doors[i % 3])
+            os.remove(filename)
+        finally:
+            ms2.tearDown()
+
+    ## test
+    def test_configDevice(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+
+        db = PyTango.Database()
+        db.put_device_property(self._ms.ms.keys()[0],
+                               {'PoolNames': self._pool.dp.name()})
+        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.smycps)])
+        self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
+
+        filename = "__testprofile__.json"
+        while os.path.exists(filename):
+            filename = "_" + filename
+
+        mg = self.getRandomName(10)
+        while mg == val["MntGrp"]:
+            mg = self.getRandomName(10)
+
+        for i in range(20):
+            rs = self.openRecSelector()
+            rs.configDevice = val["ConfigDevice"]
+            rs.door = val["Door"]
+            rs.mntGrp = mg
+            self.assertEqual(rs.mntGrp, mg)
+
+            rs.profileFile = filename
+
+            db = PyTango.Database()
+            db.put_device_property(self._ms.ms.keys()[0],
+                                   {'PoolNames': self._pool.dp.name()})
+
+            self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+            self.dump(rs)
+
+            mydict = {}
+            if (i / 2) % 2:
+                mydict = json.loads(rs.profileConfiguration)
+            elif (i / 2) % 4 == 0:
+                rs.exportEnvProfile()
+                env = pickle.loads(
+                    self._ms.dps[self._ms.ms.keys()[0]].Environment[1])
+                jmd = json.loads(rs.profileConfiguration)
+                for k in self.names(rs):
+                    try:
+                        self.assertEqual(
+                            json.loads(jmd[k]),
+                            env["new"]["NeXusConfiguration"][k])
+                    except:
+                        self.assertEqual(
+                            jmd[k],
+                            env["new"]["NeXusConfiguration"][k])
+            elif (i / 2) % 2 == 0:
+                rs.saveProfile()
+            else:
+                rs.mntGrp = mg
+                rs.storeProfile()
+
+            self.compareToDump(rs, [])
+            rs.configDevice = "module"
+            self.assertEqual(rs.configDevice, "module")
+            rs.configDevice = ""
+            self.assertTrue(
+                rs.configDevice,
+                TangoUtils.getDeviceName(db, "NXSConfigServer"))
+
+            rs.profileConfiguration = str(
+                json.dumps({
+                    "Version": "2.0.0",
+                    "ConfigDevice": val["ConfigDevice"],
+                    "Door": val["Door"],
+                    "MntGrp": val["MntGrp"],
+                })
+            )
+            rs.configDevice = val["ConfigDevice"]
+            rs.door = val["Door"]
+            rs.mntGrp = val["MntGrp"]
+
+            self.assertEqual(rs.mntGrp, val["MntGrp"])
+
+            mydata = {}
+            if (i / 2) % 2:
+                rs.profileConfiguration = str(json.dumps(mydict))
+            elif (i / 2) % 4 == 0:
+                rs.importEnvProfile()
+            elif (i / 2) % 2 == 0:
+                rs.loadProfile()
+            else:
+                rs.configDevice = val["ConfigDevice"]
+                rs.mntGrp = mg
+                rs.fetchProfile()
+
+            self.compareToDump(rs, [])
+
+        os.remove(filename)
+
+    def generateChannelProperties(self):
+        paths = dict(
+            (self.getRandomName(10),
+             self.getRandomName(15)) for _ in
+            range(self.__rnd.randint(1, 40)))
+        labels = dict(
+            (self.getRandomName(10),
+             self.getRandomName(15)) for _ in
+            range(self.__rnd.randint(1, 40)))
+        links = dict(
+            (self.getRandomName(10),
+             bool(self.__rnd.randint(0, 1))) for _ in
+            range(self.__rnd.randint(1, 40)))
+        types = dict(
+            (self.getRandomName(10),
+             self.getRandomName(15)) for _ in
+            range(self.__rnd.randint(1, 40)))
+        shapes = dict(
+            (self.getRandomName(10),
+             [self.__rnd.randint(1, 40)
+              for _ in range(self.__rnd.randint(0, 3))])
+            for _ in range(self.__rnd.randint(1, 40)))
+
+        return json.dumps(
+            {
+                "label": labels,
+                "nexus_path": paths,
+                "link": links,
+                "data_type": types,
+                "shape": shapes
+            }
+        )
+
+    def generateProfile(self, door, mg, cfdv, wrdv):
+        msp = MacroServerPools(10)
+        se = Selector(msp, "2.0.0")
+        se["Door"] = door
+        se["ConfigDevice"] = cfdv
+        se["WriterDevice"] = wrdv
+        se["MntGrp"] = mg
+        msp.updateMacroServer(self._ms.door.keys()[0])
+        wrong = []
+
+        cps = {}
+        lcp = self.__rnd.randint(1, 10)
+        for _ in range(lcp):
+            cps[self.getRandomName(10)] = self.getRandomName(
+                self.__rnd.randint(1, 10))
+        se["UserData"] = str(json.dumps(cps))
+
+        cps = {}
+        lcp = self.__rnd.randint(1, 10)
+        for _ in range(lcp):
+            cps[self.getRandomName(10)] = self.getRandomName(
+                self.__rnd.randint(1, 10))
+        se["ConfigVariables"] = str(json.dumps(cps))
+        se["DefaultDynamicPath"] = self.getRandomName(10)
+        se["TimeZone"] = self.getRandomName(10)
+        se["AppendEntry"] = bool(self.__rnd.randint(0, 1))
+        se["DynamicComponents"] = bool(self.__rnd.randint(0, 1))
+        se["DefaultDynamicLinks"] = bool(self.__rnd.randint(0, 1))
+        se["ComponentsFromMntGrp"] = bool(self.__rnd.randint(0, 1))
+        scalar_ctrl = 'ttestp09/testts/t1r228'
+        spectrum_ctrl = 'ttestp09/testts/t2r228'
+        image_ctrl = 'ttestp09/testts/t3r228'
+        ctrls = [scalar_ctrl, spectrum_ctrl, image_ctrl,
+                 "__tango__"]
+        expch = []
+        pdss = []
+        mgt = ProfileManager(se)
+
+        pool = self._pool.dp
+        timers = {}
+        ntms = self.__rnd.randint(1, 5)
+        tms = self.__rnd.sample(set(
+            [ch for ch in self.smychsXX.keys()
+             if not ch.startswith("client")]), ntms)
+        for tm in tms:
+            myct = ("ctrl_%s" % tm).replace("_", "/")
+            timers[myct] = tm
+            ctrls.append(myct)
+        ltimers = timers.values()
+        se["Timer"] = json.dumps(ltimers)
+
+        for ds, vl in self.smychsXX.items():
+            if vl:
+                exp = {}
+                exp["name"] = ds
+                exp["source"] = vl["source"]
+                myct = None
+                for ct, ch in timers.items():
+                    if ds == ch:
+                        myct = ct
+                        break
+
+                if myct:
+                    exp["controller"] = myct
+                elif ds.startswith("image"):
+                    exp["controller"] = image_ctrl
+                elif ds.startswith("spectrum"):
+                    exp["controller"] = spectrum_ctrl
+                else:
+                    exp["controller"] = scalar_ctrl
+                expch.append(exp)
+                pdss.append(ds)
+        pdss = sorted(pdss)
+        self.__rnd.shuffle(pdss)
+
+        acqch = [
+            {"full_name": "test/ct/01/Value", "name": "ct01"},
+            {"full_name": "test/ct/02/Value", "name": "ct02"},
+            {"full_name": "test/ct/03/value", "name": "ct03"},
+            {"full_name": "test/ct/04/value", "name": "ct04"},
+            {"full_name": "null/val", "name": "mntgrp_04"}
+        ]
+
+        for ch in expch:
+            ach = {}
+            ach["name"] = ch["name"]
+            ach["full_name"] = ch["source"]
+            acqch.append(ach)
+
+        pool.AcqChannelList = [json.dumps(a) for a in acqch]
+        pool.ExpChannelList = [json.dumps(a) for a in expch]
+        amycps = dict(self.smycps2)
+        amycps.update(self.smycps)
+        amydss = dict(self.smydssXX)
+        amydss.update(self.smydss)
+        amycpsstep = dict(self.smycpsstep)
+        amycpsstep.update(self.smycpsstep2)
+        self._cf.dp.SetCommandVariable(
+            ["CPDICT", json.dumps(amycps)])
+        self._cf.dp.SetCommandVariable(
+            ["DSDICT", json.dumps(amydss)])
+
+        cps = {}
+        acps = {}
+        dss = {}
+        lcp = self.__rnd.randint(1, 40)
+        lds = self.__rnd.randint(1, 40)
+
+        self._cf.dp.SetCommandVariable(
+            ["CPDICT", json.dumps(amycps)])
+        self._cf.dp.SetCommandVariable(
+            ["DSDICT", json.dumps(amydss)])
+        comps = set()
+
+        ncps = self.__rnd.randint(1, len(amycps) - 1)
+        lcps = self.__rnd.sample(set(amycps.keys()), ncps)
+        for cp in lcps:
+            if cp not in wrong:
+                cps[cp] = bool(self.__rnd.randint(0, 1))
+                if cps[cp]:
+                    comps.add(cp)
+
+        ancps = self.__rnd.randint(1, len(amycps.keys()) - 1)
+        alcps = self.__rnd.sample(set(amycps.keys()), ancps)
+        for cp in alcps:
+            if cp not in wrong:
+                acps[cp] = bool(self.__rnd.randint(0, 1))
+                if acps[cp]:
+                    comps.add(cp)
+
+        ndss = self.__rnd.randint(1, len(amycps.keys()) - 1)
+        ldss = self.__rnd.sample(set(amycps.keys()), ndss)
+        for ds in ldss:
+            if ds in amydss.keys():
+                if ds not in wrong:
+                    dss[ds] = bool(self.__rnd.randint(0, 1))
+
+        ndss = self.__rnd.randint(1, len(amydss.keys()) - 1)
+        ldss = self.__rnd.sample(set(amydss.keys()), ndss)
+        for ds in ldss:
+            if ds in amydss.keys():
+                if ds not in wrong:
+                    dss[ds] = bool(self.__rnd.randint(0, 1))
+
+        nadss = self.__rnd.randint(1, len(amydss.keys()) - 1)
+        aadss = [ds for ds in self.__rnd.sample(
+            set(amydss.keys()), nadss)]
+        nadss = self.__rnd.randint(1, len(amydss.keys()) - 1)
+        indss = [ds for ds in self.__rnd.sample(
+            set(amydss.keys()), nadss)]
+
+        for tm in ltimers:
+            dss[tm] = bool(self.__rnd.randint(0, 1))
+
+        mncps = self.__rnd.randint(1, len(amycps.keys()) - 1)
+        mcps = [cp for cp in self.__rnd.sample(
+                set(amycps.keys()), mncps) if cp not in wrong]
+        oncps = self.__rnd.randint(1, len(amycps.keys()) - 1)
+        ocps = [cp for cp in self.__rnd.sample(
+                set(amycps.keys()), oncps) if cp not in wrong]
+        for cp in mcps:
+            comps.add(cp)
+
+        adss = dict(dss)
+        for ch in expch:
+            if ch["name"] not in adss.keys():
+                adss[ch["name"]] = False
+        se["ComponentSelection"] = json.dumps(cps)
+        se["ComponentPreselection"] = json.dumps(
+            acps)
+        se["DataSourceSelection"] = json.dumps(dss)
+        se["PreselectedDataSources"] = \
+            json.dumps(aadss)
+        se["OptionalComponents"] = json.dumps(ocps)
+        se["InitDataSources"] = json.dumps(indss)
+        se["AppendEntry"] = bool(self.__rnd.randint(0, 1))
+        se["ComponentsFromMntGrp"] = bool(
+            self.__rnd.randint(0, 1))
+        se["DynamicComponents"] = bool(
+            self.__rnd.randint(0, 1))
+        se["DefaultDynamicLinks"] = \
+            bool(self.__rnd.randint(0, 1))
+        se["DefaultDynamicPath"] = self.getRandomName(20)
+        se["TimeZone"] = self.getRandomName(20)
+
+        se["ConfigVariables"] = json.dumps(dict(
+            (self.getRandomName(10),
+             self.getRandomName(15)) for _ in
+            range(self.__rnd.randint(1, 40))))
+        se["ChannelProperties"] = self.generateChannelProperties()
+        self._cf.dp.SetCommandVariable(["MCPLIST",
+                                        json.dumps(mcps)])
+
+        records = {}
+        describer = Describer(self._cf.dp, True)
+        cpres = describer.components(dstype='CLIENT')
+        for grp in cpres:
+            for idss in grp.values():
+                for idsrs in idss.values():
+                    for idsr in idsrs:
+                        records[str(idsr[2])] = "1234"
+        dsres = describer.dataSources(
+            dss.keys(), dstype='CLIENT')[0]
+        for dsr in dsres.values():
+            records[str(dsr.record)] = '2345'
+
+        se["Timer"] = json.dumps(ltimers)
+        se["UserData"] = json.dumps(records)
+
+        tmg = TestMGSetUp.TestMeasurementGroupSetUp(
+            name=mg)
+#                    dv = "/".join(ar["full_name"].split("/")[0:-1])
+        chds = [ds for ds in mgt.dataSources()
+                if not ds.startswith('client')]
+        chds1 = list(chds)
+        chds2 = [ds for ds in mgt.componentDataSources()
+                 if not ds.startswith('client')]
+        chds.extend(chds2)
+        bchds = list(chds)
+        chds.extend(ltimers)
+        tmpchds = sorted(list(set(chds)))
+        chds = []
+        for ds in pdss:
+            if ds in tmpchds:
+                chds.append(ds)
+        for ds in tmpchds:
+            if ds not in pdss:
+                chds.append(ds)
+
+        lheds = []
+        if chds:
+            nhe = self.__rnd.randint(0, len(set(chds)) - 1)
+            lheds = self.__rnd.sample(set(chds), nhe)
+
+        lhecp = []
+        if comps:
+            nhe = self.__rnd.randint(0, len(set(comps)) - 1)
+            lhecp = self.__rnd.sample(set(comps), nhe)
+
+        lhe = lheds + lhecp
+
+        se["UnplottedComponents"] = json.dumps(lhe)
+        se["OrderedChannels"] = json.dumps(pdss)
+
+        se.updatePreselectedComponents()
+        return str(json.dumps(se.get()))
+
+    ## userdata test
+    def test_channelProperties(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        self.maxDiff = None
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+
+        db = PyTango.Database()
+        db.put_device_property(self._ms.ms.keys()[0],
+                               {'PoolNames': self._pool.dp.name()})
+        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.smycps)])
+        self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
+
+        filename = "__testprofile__.json"
+        while os.path.exists(filename):
+            filename = "_" + filename
+
+        mg = self.getRandomName(10)
+        while mg == val["MntGrp"]:
+            mg = self.getRandomName(10)
+        simp2 = TestServerSetUp.MultiTestServerSetUp(
+            devices=['ttestp09/testts/t%02dr228' %
+                     i for i in range(1, 37)])
+        sets = ["PreselectedDataSources"]
+        try:
+            simp2.setUp()
+
+            for i in range(8):
+
+                rs = self.openRecSelector()
+                rs.configDevice = val["ConfigDevice"]
+                rs.door = val["Door"]
+                rs.mntGrp = mg
+                profconf = self.generateProfile(
+                    val["Door"], mg,
+                    val["ConfigDevice"],
+                    val["WriterDevice"])
+                rs.profileConfiguration = profconf
+
+                rs.profileFile = filename
+                db = PyTango.Database()
+                db.put_device_property(self._ms.ms.keys()[0],
+                                       {'PoolNames': self._pool.dp.name()})
+
+                self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+                self.dump(rs)
+
+                mydict = {}
+                if (i / 2) % 2:
+                    mydict = json.loads(rs.profileConfiguration)
+                elif (i / 2) % 4 == 0:
+                    rs.exportEnvProfile()
+                    env = pickle.loads(
+                        self._ms.dps[self._ms.ms.keys()[0]].Environment[1])
+                    jmd = json.loads(rs.profileConfiguration)
+                    for k in self.names(rs):
+                        try:
+                            self.assertEqual(
+                                jmd[k],
+                                env["new"]["NeXusConfiguration"][k])
+                        except:
+                            if k in sets:
+                                self.assertEqual(
+                                    set(json.loads(jmd[k])),
+                                    set(env["new"]["NeXusConfiguration"][k]))
+                            else:
+                                self.assertEqual(
+                                    json.loads(jmd[k]),
+                                    env["new"]["NeXusConfiguration"][k])
+                elif (i / 2) % 2 == 0:
+                    rs.saveProfile()
+                else:
+                    rs.mntGrp = mg
+                    rs.storeProfile()
+
+                self.compareToDumpJSON(rs, sets)
+                self.compareToDumpJSONSets(rs, sets)
+
+                rs.profileConfiguration = str(
+                    json.dumps({
+                        "Version": "2.0.0",
+                        "ConfigDevice": val["ConfigDevice"],
+                        "Door": val["Door"],
+                        "MntGrp": val["MntGrp"],
+                    })
+                )
+                rs.configDevice = val["ConfigDevice"]
+                rs.door = val["Door"]
+                rs.mntGrp = val["MntGrp"]
+
+                self.assertEqual(rs.userData, "{}")
+
+                mydata = {}
+                if (i / 2) % 2:
+                    rs.profileConfiguration = str(json.dumps(mydict))
+                elif (i / 2) % 4 == 0:
+                    rs.importEnvProfile()
+                elif (i / 2) % 2 == 0:
+                    rs.loadProfile()
+                else:
+                    rs.mntGrp = mg
+                    rs.fetchProfile()
+
+                self.compareToDumpJSON(rs, sets)
+                self.compareToDumpJSONSets(rs, sets)
+                prt = rs.profileConfiguration
+                rs.profileConfiguration = prt
+                self.compareToDumpJSON(rs, sets)
+                self.compareToDumpJSONSets(rs, sets)
+            os.remove(filename)
+        finally:
+            simp2.tearDown()
+
+    ## userdata test
+    def test_profileConfiguration(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        self.maxDiff = None
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+
+        db = PyTango.Database()
+        db.put_device_property(self._ms.ms.keys()[0],
+                               {'PoolNames': self._pool.dp.name()})
+        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.smycps)])
+        self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
+
+        filename = "__testprofile__.json"
+        while os.path.exists(filename):
+            filename = "_" + filename
+
+        mg = self.getRandomName(10)
+        while mg == val["MntGrp"]:
+            mg = self.getRandomName(10)
+        simp2 = TestServerSetUp.MultiTestServerSetUp(
+            devices=['ttestp09/testts/t%02dr228' %
+                     i for i in range(1, 37)])
+        sets = ["PreselectedDataSources"]
+        try:
+            simp2.setUp()
+
+            for i in range(8):
+
+                rs = self.openRecSelector()
+                rs.configDevice = val["ConfigDevice"]
+                rs.door = val["Door"]
+                rs.mntGrp = mg
+                profconf = self.generateProfile(
+                    val["Door"], mg,
+                    val["ConfigDevice"],
+                    val["WriterDevice"])
+                rs.profileConfiguration = profconf
+
+                rs.profileFile = filename
+                db = PyTango.Database()
+                db.put_device_property(self._ms.ms.keys()[0],
+                                       {'PoolNames': self._pool.dp.name()})
+
+                self._ms.dps[self._ms.ms.keys()[0]].Init()
+                chprop = json.loads(self.generateChannelProperties())
+                for nm, vl in chprop.items():
+                    rs.setChannelProperties([nm, json.dumps(vl)])
+
+                self.dump(rs)
+
+                mydict = {}
+                if (i / 2) % 2:
+                    mydict = json.loads(rs.profileConfiguration)
+                elif (i / 2) % 4 == 0:
+                    rs.exportEnvProfile()
+                    env = pickle.loads(
+                        self._ms.dps[self._ms.ms.keys()[0]].Environment[1])
+                    jmd = json.loads(rs.profileConfiguration)
+                    for k in self.names(rs):
+                        try:
+                            self.assertEqual(
+                                jmd[k],
+                                env["new"]["NeXusConfiguration"][k])
+                        except:
+                            if k in sets:
+                                self.assertEqual(
+                                    set(json.loads(jmd[k])),
+                                    set(env["new"]["NeXusConfiguration"][k]))
+                            else:
+                                self.assertEqual(
+                                    json.loads(jmd[k]),
+                                    env["new"]["NeXusConfiguration"][k])
+                elif (i / 2) % 2 == 0:
+                    rs.saveProfile()
+                else:
+                    rs.mntGrp = mg
+                    rs.storeProfile()
+
+                self.compareToDumpJSON(rs, sets)
+                self.compareToDumpJSONSets(rs, sets)
+
+                rs.profileConfiguration = str(
+                    json.dumps({
+                        "Version": "2.0.0",
+                        "ConfigDevice": val["ConfigDevice"],
+                        "Door": val["Door"],
+                        "MntGrp": val["MntGrp"],
+                    })
+                )
+                rs.configDevice = val["ConfigDevice"]
+                rs.door = val["Door"]
+                rs.mntGrp = val["MntGrp"]
+
+                self.assertEqual(rs.userData, "{}")
+
+                mydata = {}
+                if (i / 2) % 2:
+                    rs.profileConfiguration = str(json.dumps(mydict))
+                elif (i / 2) % 4 == 0:
+                    rs.importEnvProfile()
+                elif (i / 2) % 2 == 0:
+                    rs.loadProfile()
+                else:
+                    rs.mntGrp = mg
+                    rs.fetchProfile()
+
+                self.compareToDumpJSON(rs, sets)
+                self.compareToDumpJSONSets(rs, sets)
+                prt = rs.profileConfiguration
+                rs.profileConfiguration = prt
+                self.compareToDumpJSON(rs, sets)
+                self.compareToDumpJSONSets(rs, sets)
+                for nm, vl in chprop.items():
+                    vl2 = json.loads(rs.channelProperties(nm))
+                    self.myAssertDict(vl, vl2)
+            os.remove(filename)
+        finally:
+            simp2.tearDown()
+
+    ## test
+    # \brief It tests default settings
+    def test_scanEnvVariables(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        db = PyTango.Database()
+        db.put_device_property(self._ms.ms.keys()[0],
+                               {'PoolNames': self._pool.dp.name()})
+        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        rs = self.openRecSelector()
+        rs.configDevice = val["ConfigDevice"]
+        rs.door = val["Door"]
+        rs.mntGrp = val["MntGrp"]
+
+        db = PyTango.Database()
+        db.put_device_property(self._ms.ms.keys()[0],
+                               {'PoolNames': self._pool.dp.name()})
+
+        self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+        envs = [
+            pickle.dumps(
+                {
+                    "new": {"ScanDir": "/tmp"}
+                }
+            ),
+            pickle.dumps(
+                {
+                    "new": {"ScanDir": "/tmp", "ScanID": 11}
+                }
+            ),
+            pickle.dumps(
+                {
+                    "new": {"ScanDir": "/tmp", "ScanFile": ["file.nxs"]}
+                }
+            ),
+            pickle.dumps(
+                {
+                    "new": {
+                        "ScanDir": "/tmp", "ScanID": 13,
+                        "ScanFile": ["file.nxs"],
+                        "NeXusConfigServer": "ptr/ert/ert",
+                    }
+                }
+            ),
+            pickle.dumps(
+                {
+                    "new": {
+                        "ScanDir": "/tmp",
+                        "ScanFile": ["file.nxs", "file2.nxs"],
+                        "NeXusSelectorDevice": "p09/nxsrecselector/1",
+                        "NeXusConfiguration": {"ConfigServer": "ptr/ert/ert2"},
+                    }
+                }
+            ),
+            pickle.dumps(
+                {
+                    "new": {
+                        "ScanDir": "/tmp", "ScanID": 15,
+                        "ScanFile": "file.nxs",
+                        "NeXusSelectorDevice": "p09/nxsrecselector/1",
+                        "NeXusConfigServer": "ptr/ert/ert",
+                        "NeXusConfiguration": {"ConfigServer": "ptr/ert/ert2"},
+                    }
+                }
+            ),
+            pickle.dumps(
+                {
+                    "new": {
+                        "ScanDir": "/tmp",
+                        "ScanFile": ["file.nxs"],
+                        "NeXusConfigServer": u'ptr/ert/ert',
+                        "NeXusBool": True,
+                        "NeXusInt": 234,
+                        "NeXusSelectorDevice": "p09/nxsrecselector/1",
+                        "NeXusFloat": 123.123,
+                        "NeXusSomething": ("dgfg",),
+                        "NeXusDict": {"dgfg": 123, "sdf": "345"},
+                    }
+                }
+            ),
+            pickle.dumps(
+                {
+                    "new": {
+                        "ScanDir": "/tmp", "ScanID": 17,
+                        "ScanFile": ["file.nxs"],
+                        "NeXusSelectorDevice": "p09/nxsrecselector/1",
+                        "NeXusConfiguration": {
+                            "ConfigServer": u'ptr/ert/ert',
+                            "Bool": True,
+                            "Int": 234,
+                            "Float": 123.123,
+                            "Something": ("dgfg",),
+                            "Dict": {"dgfg": 123, "sdf": "345"}}
+                    }
+                }
+            ),
+        ]
+
+        edats = [
+            {"ScanDir": "/tmp"},
+            {"ScanDir": "/tmp", "ScanID": 11},
+            {"ScanDir": "/tmp", "ScanFile": ["file.nxs"]},
+            {"ScanDir": "/tmp", "ScanFile": ["file.nxs"], "ScanID": 13},
+            {"ScanDir": "/tmp", "ScanFile": ["file.nxs", "file2.nxs"],
+             "NeXusSelectorDevice": "p09/nxsrecselector/1"},
+            {"ScanDir": "/tmp", "ScanFile": "file.nxs", "ScanID": 15,
+             "NeXusSelectorDevice": "p09/nxsrecselector/1"},
+            {"ScanDir": "/tmp", "ScanFile": ["file.nxs"],
+             "NeXusSelectorDevice": "p09/nxsrecselector/1"},
+            {"ScanDir": "/tmp", "ScanFile": ["file.nxs"], "ScanID": 17,
+             "NeXusSelectorDevice": "p09/nxsrecselector/1"},
+        ]
+
+        data = {"ScanID": 192,
+                "NeXusSelectorDevice": "p09/nxsrecselector/1",
+                "ScanFile": ["sar4r.nxs"], "ScanDir": "/tmp/"}
+        res = rs.scanEnvVariables()
+        self.myAssertDict(json.loads(res), data)
+        for i, dt in enumerate(edats):
+            data = {}
+            self._ms.dps[self._ms.ms.keys()[0]].Environment = (
+                'pickle', envs[i])
+            dt = rs.scanEnvVariables()
+            self.myAssertDict(edats[i], json.loads(dt))
+
+    ## test
+    # \brief It tests default settings
+    def test_setScanEnvVariables(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        db = PyTango.Database()
+        db.put_device_property(self._ms.ms.keys()[0],
+                               {'PoolNames': self._pool.dp.name()})
+
+        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        rs = self.openRecSelector()
+        rs.configDevice = val["ConfigDevice"]
+        rs.door = val["Door"]
+        rs.mntGrp = val["MntGrp"]
+
+        db = PyTango.Database()
+        db.put_device_property(self._ms.ms.keys()[0],
+                               {'PoolNames': self._pool.dp.name()})
+
+        self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+        envs = [
+            {
+                "new": {
+                    'ScanID': 192,
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1',
+                    'ScanFile': [u'sar4r.nxs'],
+                    'ActiveMntGrp': 'nxsmntgrp',
+                    '_ViewOptions': {'ShowDial': True},
+                    'DataCompressionRank': 0,
+                    'ScanDir': '/tmp/'}
+            },
+            {
+                "new": {
+                    'ScanID': 192,
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1',
+                    'ScanFile': [u'sar4r.nxs'],
+                    'ActiveMntGrp': 'nxsmntgrp',
+                    '_ViewOptions': {'ShowDial': True},
+                    'DataCompressionRank': 0,
+                    'ScanDir': '/tmp'}
+            },
+            {
+                "new": {
+                    'ScanID': 11,
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1',
+                    'ActiveMntGrp': 'nxsmntgrp',
+                    '_ViewOptions': {'ShowDial': True},
+                    'DataCompressionRank': 0,
+                    "ScanDir": "/tmp",
+                    "ScanFile": ["file.nxs"]
+                }
+            },
+            {
+                "new": {
+                    "ScanDir": "/tmp",
+                    'ScanID': 11,
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1',
+                    "ConfigServer": "ptr/ert/ert",
+                    'ActiveMntGrp': 'nxsmntgrp',
+                    '_ViewOptions': {'ShowDial': True},
+                    'DataCompressionRank': 0,
+                    "ScanFile": ["file.nxs"],
+                }
+            },
+            {
+                "new": {
+                    "ScanDir": "/tmp",
+                    'ScanID': 13,
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1',
+                    "ConfigServer": "ptr/ert/ert2",
+                    'ActiveMntGrp': 'nxsmntgrp',
+                    '_ViewOptions': {'ShowDial': True},
+                    'DataCompressionRank': 0,
+                    "ScanFile": ["file.nxs", "file2.nxs"],
+                }
+            },
+            {
+                "new": {
+                    "ScanDir": "/tmp",
+                    'ScanID': 13,
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1',
+                    "ConfigServer": "ptr/ert/ert",
+                    'ActiveMntGrp': 'nxsmntgrp',
+                    '_ViewOptions': {'ShowDial': True},
+                    'DataCompressionRank': 0,
+                    "ScanFile": "file.nxs",
+                }
+            },
+            {
+                "new": {
+                    "ScanDir": "/tmp",
+                    'ScanID': 15,
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1',
+                    "ConfigServer": 'ptr/ert/ert',
+                    "Bool": True,
+                    "Int": 234,
+                    "Float": 123.123,
+                    "Something": ["dgfg"],
+                    "Dict": {"dgfg": 123, "sdf": "345"},
+                    'ActiveMntGrp': 'nxsmntgrp',
+                    '_ViewOptions': {'ShowDial': True},
+                    'DataCompressionRank': 0,
+                    "ScanFile": ["file.nxs"],
+                }
+            },
+            {
+                "new": {
+                    "ScanDir": "/tmp",
+                    'ScanID': 15,
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1',
+                    "ConfigServer": 'ptr/ert/ert',
+                    "Bool": True,
+                    "Int": 234,
+                    "Float": 123.124,
+                    "Something": ["dgfg"],
+                    "Dict": {"dgfg": 123, "sdf": "345"},
+                    'ActiveMntGrp': 'nxsmntgrp',
+                    '_ViewOptions': {'ShowDial': True},
+                    'DataCompressionRank': 0,
+                    "ScanFile": ["file.nxs"],
+                }
+            },
+            {
+                "new": {
+                    "ScanDir": "/tmp",
+                    'ScanID': 17,
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1',
+                    "ConfigServer": 'ptr/ert/ert',
+                    "Bool": True,
+                    "Int": 234,
+                    "Float": 123.124,
+                    "Something": ["dgfg"],
+                    "Dict": {"dgfg": 123, "sdf": "345"},
+                    'ActiveMntGrp': 'nxsmntgrp',
+                    '_ViewOptions': {'ShowDial': True},
+                    'DataCompressionRank': 0,
+                    "ScanFile": ["file.nxs"],
+                }
+            },
+            {
+                "new": {
+                    "ScanDir": "/tmp",
+                    'ScanID': 17,
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1',
+                    "ConfigServer": 'ptr/ert/ert',
+                    "Bool": True,
+                    "Int": 234,
+                    "Float": 123.124,
+                    "Something": ["dgfg"],
+                    "Dict": {"dgfg": 123, "sdf": "345"},
+                    'ActiveMntGrp': 'nxsmntgrp',
+                    '_ViewOptions': {'ShowDial': True},
+                    'DataCompressionRank': 0,
+                    "ScanFile": ["file.nxs"],
+                }
+            },
+        ]
+
+        edats = [
+            {},
+            {"ScanDir": "/tmp"},
+            {"ScanDir": "/tmp", "ScanFile": ["file.nxs"], "ScanID": 11},
+            {"ScanDir": "/tmp", "ScanFile": ["file.nxs"],
+             "ConfigServer": "ptr/ert/ert"},
+            {"ScanDir": "/tmp", "ScanFile": ["file.nxs", "file2.nxs"],
+             "ConfigServer": "ptr/ert/ert2", "ScanID": 13},
+            {"ScanDir": "/tmp", "ScanFile": "file.nxs",
+             "ConfigServer": "ptr/ert/ert"},
+            {"ScanDir": "/tmp", "ScanFile": ["file.nxs"],
+             "ConfigServer": "ptr/ert/ert", "ScanID": 15,
+             "Bool": True, "Int": 234, "Float": 123.123, "Something": ["dgfg"],
+             "Dict": {"dgfg": 123, "sdf": "345"},
+             },
+            {"ScanDir": "/tmp", "ScanFile": ["file.nxs"],
+             "ConfigServer": "ptr/ert/ert",
+             "Bool": True, "Int": 234, "Float": 123.124, "Something": ["dgfg"],
+             "Dict": {"dgfg": 123, "sdf": "345"},
+             },
+            {"ScanDir": "/tmp", "ScanFile": ["file.nxs"],
+             "ConfigServer": "ptr/ert/ert", "ScanID": 17,
+             "Bool": True, "Int": 234, "Float": 123.124, "Something": ["dgfg"],
+             "Dict": {"dgfg": 123, "sdf": "345"},
+             },
+            {"ScanDir": "/tmp", "ScanFile": ["file.nxs"],
+             "ConfigServer": "ptr/ert/ert",
+             "Bool": True, "Int": 234, "Float": 123.124, "Something": ["dgfg"],
+             "Dict": {"dgfg": 123, "sdf": "345"},
+             },
+        ]
+
+        sids = [192, 192, 11, 11, 13, 13, 15, 15, 17, 17]
+
+        rs.setScanEnvVariables("{}")
+        for i, dt in enumerate(edats):
+            sid = rs.setScanEnvVariables(json.dumps(dt))
+            print "I = ", i, sid
+            self.assertEqual(sid, sids[i])
+            data = {}
+            env = pickle.loads(
+                self._ms.dps[self._ms.ms.keys()[0]].Environment[1])
+            self.myAssertDict(envs[i], env)
+
+
 if __name__ == '__main__':
     unittest.main()
