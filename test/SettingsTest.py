@@ -8954,6 +8954,37 @@ class SettingsTest(unittest.TestCase):
             self.assertEqual(set(mds), set(anames))
             self.assertEqual(set(mds2), set(anames))
 
+    ## test
+    def test_deleteAllProfiles(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+
+        rs = self.openRecSelector()
+        rs.configDevice = val["ConfigDevice"]
+        rs.door = val["Door"]
+        rs.mntGrp = val["MntGrp"]
+        self.assertEqual(rs.configDevice, val["ConfigDevice"])
+        self.assertEqual(rs.door, val["Door"])
+
+        self._cf.dp.Init()
+        self._cf.dp.SetCommandVariable(["SELDICT", json.dumps(self.mysel2)])
+        sl1 = self._cf.dp.availableSelections()
+        self.assertEqual(set(sl1), set(self.mysel2.keys()))
+        rs.deleteAllProfiles()
+        sl2 = self._cf.dp.availableSelections()
+        self.assertEqual(set(sl2), set())
+
+        self._cf.dp.Init()
+        self._cf.dp.SetCommandVariable(["SELDICT", json.dumps(self.mysel)])
+        sl1 = self._cf.dp.availableSelections()
+        self.assertEqual(set(sl1), set(self.mysel.keys()))
+        rs.deleteAllProfiles()
+        sl2 = self._cf.dp.availableSelections()
+        self.assertEqual(set(sl2), set())
 
 if __name__ == '__main__':
     unittest.main()
