@@ -1735,7 +1735,7 @@ class SettingsTest(unittest.TestCase):
             if not stfound and ds[0] == strategy:
                 stfound = True
             if dsfound and stfound:
-                res.append(ds)
+                res.append(list(ds))
         return res
 
     def checkCP(self, rv, cv, strategy=None, dstype=None):
@@ -8985,6 +8985,857 @@ class SettingsTest(unittest.TestCase):
         rs.deleteAllProfiles()
         sl2 = self._cf.dp.availableSelections()
         self.assertEqual(set(sl2), set())
+
+    ## availableMntGrps test
+    def test_availableMntGrps(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+
+        rs = self.openRecSelector()
+        rs.configDevice = val["ConfigDevice"]
+        rs.door = val["Door"]
+        rs.mntGrp = val["MntGrp"]
+        self.assertEqual(rs.configDevice, val["ConfigDevice"])
+        self.assertEqual(rs.door, val["Door"])
+
+        self.assertEqual(rs.availableMntGrps(), [])
+
+        db = PyTango.Database()
+        db.put_device_property(self._ms.ms.keys()[0],
+                               {'PoolNames': self._pool.dp.name()})
+        pool = self._pool.dp
+        self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+        self.assertEqual(rs.availableMntGrps(), [])
+
+        arr = [
+            {"name": "test/ct/01", "full_name": "mntgrp_01e"},
+            {"name": "test/ct/02", "full_name": "mntgrp_02att"},
+            {"name": "test/ct/03", "full_name": "mntgrp_03value"},
+            {"name": "test/ct/04", "full_name": "mntgrp_04/13"},
+            {"name": "null", "full_name": "mntgrp_04"},
+        ]
+
+        pool.MeasurementGroupList = [json.dumps(a) for a in arr]
+
+        dd = rs.availableMntGrps()
+        self.assertEqual(set(dd), set([a["name"] for a in arr]))
+
+        for ar in arr:
+
+            MSUtils.setEnv('ActiveMntGrp', ar["name"],
+                           self._ms.ms.keys()[0])
+            print MSUtils.getEnv('ActiveMntGrp', self._ms.ms.keys()[0])
+            dd = rs.availableMntGrps()
+            self.assertEqual(dd[0], ar["name"])
+            self.assertEqual(set(dd), set([a["name"] for a in arr]))
+
+    ## availableMntGrps test
+    def test_availableMntGrps_twopools(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+
+        rs = self.openRecSelector()
+        rs.configDevice = val["ConfigDevice"]
+        rs.door = val["Door"]
+        rs.mntGrp = val["MntGrp"]
+        self.assertEqual(rs.configDevice, val["ConfigDevice"])
+        self.assertEqual(rs.door, val["Door"])
+
+        self.assertEqual(rs.availableMntGrps(), [])
+
+        try:
+            tpool2 = TestPoolSetUp.TestPoolSetUp(
+                "pooltestp09/testts/t2r228", "POOLTESTS2")
+            tpool2.setUp()
+
+            db = PyTango.Database()
+            db.put_device_property(
+                self._ms.ms.keys()[0],
+                {'PoolNames': [
+                    tpool2.dp.name(), self._pool.dp.name()]})
+            pool = self._pool.dp
+            pool2 = tpool2.dp
+            self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+            self.assertEqual(rs.availableMntGrps(), [])
+            arr1 = [
+                {"name": "test/ct/01", "full_name": "mntgrp_01e"},
+                {"name": "test/ct/02", "full_name": "mntgrp_02att"},
+                {"name": "test/ct/03", "full_name": "mntgrp_03value"},
+                {"name": "test/ct/04", "full_name": "mntgrp_04/13"},
+                {"name": "null", "full_name": "mntgrp_04"},
+            ]
+
+            arr2 = [
+                {"name": "test/ct/011", "full_name": "mntgrp_01e1"},
+                {"name": "test/ct/021", "full_name": "mntgrp_02att1"},
+                {"name": "test/ct/031", "full_name": "mntgrp_03value1"},
+                {"name": "test/ct/041", "full_name": "mntgrp_04/131"},
+                {"name": "null", "full_name": "mntgrp_041"},
+            ]
+
+            pool.MeasurementGroupList = [json.dumps(a) for a in arr1]
+            pool2.MeasurementGroupList = [json.dumps(a) for a in arr2]
+
+            pnames = self._ms.dps[
+                self._ms.ms.keys()[0]
+            ].get_property("PoolNames")["PoolNames"]
+
+            if pnames[0] == "pooltestp09/testts/t2r228":
+                arr = arr2
+            else:
+                arr = arr1
+
+            dd = rs.availableMntGrps()
+            self.assertEqual(set(dd), set([a["name"] for a in arr]))
+
+            for ar in arr1:
+
+                MSUtils.setEnv('ActiveMntGrp', ar["name"],
+                               self._ms.ms.keys()[0])
+                dd = rs.availableMntGrps()
+                self.assertEqual(dd[0], ar["name"])
+                if arr1 == arr or ar["name"] != 'null':
+                    self.assertEqual(set(dd), set([a["name"] for a in arr1]))
+                else:
+                    self.assertEqual(set(dd), set([a["name"] for a in arr]))
+
+            for ar in arr2:
+                MSUtils.setEnv('ActiveMntGrp', ar["name"],
+                               self._ms.ms.keys()[0])
+                dd = rs.availableMntGrps()
+                self.assertEqual(dd[0], ar["name"])
+                if arr2 == arr or ar["name"] != 'null':
+                    self.assertEqual(set(dd), set([a["name"] for a in arr2]))
+                else:
+                    self.assertEqual(set(dd), set([a["name"] for a in arr]))
+        finally:
+            tpool2.tearDown()
+
+    ## deleteProfile test
+    def test_deleteProfile(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+
+        rs = self.openRecSelector()
+        rs.configDevice = val["ConfigDevice"]
+        rs.door = val["Door"]
+        rs.mntGrp = val["MntGrp"]
+        self.assertEqual(rs.configDevice, val["ConfigDevice"])
+        self.assertEqual(rs.door, val["Door"])
+
+        db = PyTango.Database()
+        db.put_device_property(self._ms.ms.keys()[0],
+                               {'PoolNames': self._pool.dp.name()})
+        pool = self._pool.dp
+        self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+        self.assertEqual(rs.availableMntGrps(), [])
+
+        arr = [
+            {"full_name": "test/ct/01", "name": "mntgrp_01e"},
+            {"full_name": "test/ct/02", "name": "mntgrp_02att"},
+            {"full_name": "test/ct/03", "name": "mntgrp_03value"},
+            {"full_name": "test/ct/04", "name": "mntgrp_04_13"},
+            {"full_name": "null", "name": "mntgrp_04"},
+        ]
+
+        pool.MeasurementGroupList = [json.dumps(a) for a in arr]
+
+        dd2 = rs.availableMntGrps()
+        self.assertEqual(set(dd2), set([a["name"] for a in arr]))
+
+        self._cf.dp.Init()
+        self._cf.dp.SetCommandVariable(["SELDICT", json.dumps(self.mysel2)])
+        sl2 = self._cf.dp.availableSelections()
+
+        dl = []
+        mgs = [ar["name"] for ar in arr] + self.mysel2.keys()
+        print mgs
+        for ar in mgs:
+            MSUtils.setEnv('ActiveMntGrp', ar, self._ms.ms.keys()[0])
+            rs.deleteProfile(ar)
+            dl.append(ar)
+            self.assertEqual(MSUtils.getEnv(
+                'ActiveMntGrp', self._ms.ms.keys()[0]), "")
+            dd = rs.availableMntGrps()
+            self.assertEqual(set(dd), set(dd2) - set(dl))
+            sl = self._cf.dp.availableSelections()
+            self.assertEqual(set(sl), set(sl2) - set(dl))
+
+    ## deleteProfile test
+    def test_deleteProfile_twopools(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+
+        rs = self.openRecSelector()
+        rs.configDevice = val["ConfigDevice"]
+        rs.door = val["Door"]
+        rs.mntGrp = val["MntGrp"]
+        self.assertEqual(rs.configDevice, val["ConfigDevice"])
+        self.assertEqual(rs.door, val["Door"])
+
+        self.assertEqual(rs.availableMntGrps(), [])
+
+        try:
+            tpool2 = TestPoolSetUp.TestPoolSetUp(
+                "pooltestp09/testts/t2r228", "POOLTESTS2")
+            tpool2.setUp()
+
+            db = PyTango.Database()
+            db.put_device_property(
+                self._ms.ms.keys()[0],
+                {
+                    'PoolNames': [
+                        tpool2.dp.name(), self._pool.dp.name()]})
+            pool = self._pool.dp
+            pool2 = tpool2.dp
+            self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+            self.assertEqual(rs.availableMntGrps(), [])
+
+            arr = [
+                {"full_name": "test/ct/01", "name": "mntgrp_01e"},
+                {"full_name": "test/ct/02", "name": "mntgrp_02att"},
+                {"full_name": "test/ct/03", "name": "mntgrp_03value"},
+                {"full_name": "test/ct/04", "name": "mntgrp_04_13"},
+                {"full_name": "null", "name": "mntgrp_04"},
+            ]
+
+            arr2 = [
+                {"full_name": "test/ct/011", "name": "mntgrp_01e1"},
+                {"full_name": "test/ct/021", "name": "mntgrp_02att"},
+                {"full_name": "test/ct/031", "name": "mntgrp_03value1"},
+                {"full_name": "test/ct/041", "name": "mntgrp_04/131"},
+                {"full_name": "null", "name": "mntgrp_04"},
+            ]
+
+            pool.MeasurementGroupList = [json.dumps(a) for a in arr]
+            pool2.MeasurementGroupList = [json.dumps(a) for a in arr2]
+
+            MSUtils.setEnv(
+                'ActiveMntGrp', arr[0]["name"], self._ms.ms.keys()[0])
+
+            dd1 = [json.loads(mg)["name"]
+                   for mg in pool.MeasurementGroupList]
+            dd2 = [json.loads(mg)["name"]
+                   for mg in pool2.MeasurementGroupList]
+            self.assertEqual(set(dd1), set([a["name"] for a in arr]))
+            self.assertEqual(set(dd2), set([a["name"] for a in arr2]))
+
+            self._cf.dp.Init()
+            self._cf.dp.SetCommandVariable(
+                ["SELDICT", json.dumps(self.mysel2)])
+            sl2 = self._cf.dp.availableSelections()
+
+            dl = []
+            mgs = [ar["name"] for ar in arr] + self.mysel2.keys()
+            for ar in mgs:
+                MSUtils.setEnv('ActiveMntGrp', ar, self._ms.ms.keys()[0])
+                rs.deleteProfile(ar)
+                dl.append(ar)
+                self.assertEqual(MSUtils.getEnv(
+                    'ActiveMntGrp', self._ms.ms.keys()[0]), "")
+                dd = [json.loads(mg)["name"]
+                      for mg in pool.MeasurementGroupList]
+                dd_2 = [json.loads(mg)["name"]
+                        for mg in pool2.MeasurementGroupList]
+                self.assertEqual(set(dd), set(dd1) - set(dl))
+                self.assertEqual(set(dd_2), set(dd2) - set(dl))
+                sl = self._cf.dp.availableSelections()
+                self.assertEqual(set(sl), set(sl2) - set(dl))
+
+            dl = []
+            mgs = [ar["name"] for ar in arr2] + self.mysel2.keys()
+            dd1 = [json.loads(mg)["name"] for mg in pool.MeasurementGroupList]
+            dd2 = [json.loads(mg)["name"] for mg in pool2.MeasurementGroupList]
+            sl2 = self._cf.dp.availableSelections()
+            for ar in mgs:
+                MSUtils.setEnv('ActiveMntGrp', ar, self._ms.ms.keys()[0])
+                rs.deleteProfile(ar)
+                dl.append(ar)
+                self.assertEqual(MSUtils.getEnv(
+                    'ActiveMntGrp', self._ms.ms.keys()[0]), "")
+                dd = [json.loads(mg)["name"]
+                      for mg in pool.MeasurementGroupList]
+                dd_2 = [json.loads(mg)["name"]
+                        for mg in pool2.MeasurementGroupList]
+                self.assertEqual(set(dd), set(dd1) - set(dl))
+                self.assertEqual(set(dd_2), set(dd2) - set(dl))
+                sl = self._cf.dp.availableSelections()
+                self.assertEqual(set(sl), set(sl2) - set(dl))
+
+        finally:
+            tpool2.tearDown()
+
+    ## test
+    def test_preselectedComponents(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+
+        for i in range(20):
+            rs = self.openRecSelector()
+            rs.configDevice = val["ConfigDevice"]
+            rs.door = val["Door"]
+            rs.mntGrp = val["MntGrp"]
+            self.assertEqual(rs.configDevice, val["ConfigDevice"])
+            self.assertEqual(rs.door, val["Door"])
+
+            cps = {}
+            lcp = self.__rnd.randint(1, 40)
+            for i in range(lcp):
+                cps[self.getRandomName(10)] = bool(self.__rnd.randint(0, 1))
+            mp = json.loads(rs.profileConfiguration)
+            mp["ComponentPreselection"] = json.dumps(cps)
+            rs.profileConfiguration = str(json.dumps(mp))
+            self.dump(rs)
+
+            ac = rs.preselectedComponents()
+            mp = json.loads(rs.profileConfiguration)
+            self.compareToDump(rs, ["ComponentPreselection"])
+            ndss = json.loads(mp["ComponentPreselection"])
+
+            acp = []
+            for ds in cps.keys():
+                self.assertTrue(ds in ndss.keys())
+                self.assertEqual(ndss[ds], cps[ds])
+                if ndss[ds]:
+                    acp.append(ds)
+
+            self.assertEqual(set(ac), set(acp))
+
+    ## test
+    def test_selectedcomponents(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+
+        for i in range(20):
+            rs = self.openRecSelector()
+            rs.configDevice = val["ConfigDevice"]
+            rs.door = val["Door"]
+            rs.mntGrp = val["MntGrp"]
+            rs.writerDevice = val["WriterDevice"]
+            self.assertEqual(rs.configDevice, val["ConfigDevice"])
+            self.assertEqual(rs.door, val["Door"])
+
+            db = PyTango.Database()
+            db.put_device_property(self._ms.ms.keys()[0],
+                                   {'PoolNames': self._pool.dp.name()})
+            pool = self._pool.dp
+            pool.ExpChannelList = []
+            self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+            mp = json.loads(rs.profileConfiguration)
+            mp["OrderedChannels"] = json.dumps([])
+            rs.profileConfiguration = str(json.dumps(mp))
+
+            cps = {}
+            dss = {}
+            lcp = self.__rnd.randint(1, 40)
+            lds = self.__rnd.randint(1, 40)
+            for i in range(lcp):
+                cps[self.getRandomName(10)] = bool(self.__rnd.randint(0, 1))
+            for i in range(lds):
+                dss[self.getRandomName(10)] = bool(self.__rnd.randint(0, 1))
+            ddss = self.__rnd.sample(dss, self.__rnd.randint(
+                1, len(dss.keys())))
+            dcps = dict(cps)
+            for ds in ddss:
+                dcps[ds] = bool(self.__rnd.randint(0, 1))
+
+            self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(dcps)])
+            self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
+
+            mp = json.loads(rs.profileConfiguration)
+            mp["ComponentSelection"] = json.dumps(cps)
+            mp["DataSourceSelection"] = json.dumps(dss)
+            rs.profileConfiguration = str(json.dumps(mp))
+            mp = json.loads(rs.profileConfiguration)
+
+            ndss = json.loads(mp["DataSourceSelection"])
+            common = set(cps.keys()) & set(dss.keys())
+            self.dump(rs)
+
+            ncps = json.loads(mp["ComponentSelection"])
+            ndss = json.loads(mp["DataSourceSelection"])
+            tdss = [ds for ds in ndss if ndss[ds]]
+            tcps = [cp for cp in ncps if ncps[cp]]
+
+            pmcp = rs.selectedComponents()
+            self.assertEqual(len(set(cps.keys())),
+                             len(set(ncps.keys()) | set(common)))
+            for key in cps.keys():
+                if key not in common:
+                    self.assertTrue(key in ncps.keys())
+                    self.assertEqual(ncps[key], cps[key])
+            self.compareToDumpJSON(rs, ["ComponentSelection"])
+            ac = self._cf.dp.availableComponents()
+            for cp in pmcp:
+                self.assertTrue(cp in ac)
+            mfcp = set(tcps) | (set(tdss) & set(ac))
+            self.assertEqual(set(pmcp), set(mfcp))
+
+    ## test
+    def test_componentDescription_unknown(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+
+        rs = self.openRecSelector()
+        rs.configDevice = val["ConfigDevice"]
+        rs.door = val["Door"]
+        rs.mntGrp = val["MntGrp"]
+        rs.writerDevice = val["WriterDevice"]
+        self.assertEqual(rs.configDevice, val["ConfigDevice"])
+        self.assertEqual(rs.door, val["Door"])
+        db = PyTango.Database()
+        db.put_device_property(self._ms.ms.keys()[0],
+                               {'PoolNames': self._pool.dp.name()})
+        pool = self._pool.dp
+        pool.ExpChannelList = []
+        self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+        mp = json.loads(rs.profileConfiguration)
+        mp["OrderedChannels"] = json.dumps([])
+        rs.profileConfiguration = str(json.dumps(mp))
+
+        cps = {}
+        dss = {}
+        lcp = self.__rnd.randint(1, 40)
+        lds = self.__rnd.randint(1, 40)
+
+        dsdict = {
+            "ann": self.mydss["ann"]
+        }
+
+        self._cf.dp.SetCommandVariable(["CPDICT", json.dumps({})])
+        self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dsdict)])
+
+        mp = json.loads(rs.profileConfiguration)
+        mp["ComponentSelection"] = json.dumps(cps)
+        mp["DataSourceSelection"] = json.dumps(dss)
+        rs.profileConfiguration = str(json.dumps(mp))
+        mp = json.loads(rs.profileConfiguration)
+
+        ndss = json.loads(mp["DataSourceSelection"])
+        common = set(cps) & set(dss)
+        self.dump(rs)
+
+        ncps = json.loads(mp["ComponentSelection"])
+        ndss = json.loads(mp["DataSourceSelection"])
+        tdss = [ds for ds in ndss if ndss[ds]]
+        tcps = [cp for cp in ncps if ncps[cp]]
+
+        self.assertEqual(rs.componentDescription(), '[{}]')
+        mp = json.loads(rs.profileConfiguration)
+        mp["ComponentSelection"] = json.dumps({"unknown": True})
+        rs.profileConfiguration = str(json.dumps(mp))
+        self.assertEqual(rs.componentDescription(), '[{}]')
+        mp = json.loads(rs.profileConfiguration)
+        mp["DataSourceSelection"] = json.dumps({"unknown": True})
+        rs.profileConfiguration = str(json.dumps(mp))
+        self.assertEqual(rs.componentDescription(), '[{}]')
+        self._cf.dp.SetCommandVariable(["MCPLIST", json.dumps(["unknown"])])
+        self.assertEqual(rs.componentDescription(), '[{}]')
+
+    ## test
+    def test_componentDescription_full(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+
+        for i in range(20):
+            rs = self.openRecSelector()
+            rs.configDevice = val["ConfigDevice"]
+            rs.door = val["Door"]
+            rs.mntGrp = val["MntGrp"]
+            rs.writerDevice = val["WriterDevice"]
+            self.assertEqual(rs.configDevice, val["ConfigDevice"])
+            self.assertEqual(rs.door, val["Door"])
+            db = PyTango.Database()
+            db.put_device_property(self._ms.ms.keys()[0],
+                                   {'PoolNames': self._pool.dp.name()})
+            pool = self._pool.dp
+            pool.ExpChannelList = []
+            self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+            mp = json.loads(rs.profileConfiguration)
+            mp["OrderedChannels"] = json.dumps([])
+            rs.profileConfiguration = str(json.dumps(mp))
+
+            dsdict = {
+                "ann": self.mydss["ann"]
+            }
+
+            cps = {}
+            dss = {}
+            lcp = self.__rnd.randint(1, 40)
+            lds = self.__rnd.randint(1, 40)
+
+            self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
+            self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
+
+            ncps = self.__rnd.randint(1, len(self.mycps.keys()) - 1)
+            lcps = self.__rnd.sample(set(self.mycps.keys()), ncps)
+            for cp in lcps:
+                cps[cp] = bool(self.__rnd.randint(0, 1))
+
+            mncps = self.__rnd.randint(1, len(self.mycps.keys()) - 1)
+            mcps = self.__rnd.sample(set(self.mycps.keys()), mncps)
+
+            tdss = [ds for ds in dss if dss[ds]]
+            tcps = [cp for cp in cps if cps[cp]]
+
+            self._cf.dp.SetCommandVariable(["MCPLIST", json.dumps(mcps)])
+            self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
+            self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
+
+            mp = json.loads(rs.profileConfiguration)
+            mp["ComponentSelection"] = json.dumps(cps)
+            mp["DataSourceSelection"] = json.dumps(dss)
+            rs.profileConfiguration = str(json.dumps(mp))
+            mp = json.loads(rs.profileConfiguration)
+            ndss = json.loads(mp["DataSourceSelection"])
+            common = set(cps) & set(dss)
+            self.dump(rs)
+
+            res = json.loads(rs.componentDescription())
+            self.checkCP(res, self.rescps.keys())
+
+    ## updateProfile test
+    def test_componentdatasources(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+
+        for i in range(20):
+            rs = self.openRecSelector()
+            rs.configDevice = val["ConfigDevice"]
+            rs.door = val["Door"]
+            rs.mntGrp = val["MntGrp"]
+            rs.writerDevice = val["WriterDevice"]
+            self.assertEqual(rs.configDevice, val["ConfigDevice"])
+            self.assertEqual(rs.door, val["Door"])
+            db = PyTango.Database()
+            db.put_device_property(self._ms.ms.keys()[0],
+                                   {'PoolNames': self._pool.dp.name()})
+            pool = self._pool.dp
+            pool.ExpChannelList = []
+            self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+            mp = json.loads(rs.profileConfiguration)
+            mp["OrderedChannels"] = json.dumps([])
+            rs.profileConfiguration = str(json.dumps(mp))
+
+            cps = {}
+            dss = {}
+            lcp = self.__rnd.randint(1, 40)
+            lds = self.__rnd.randint(1, 40)
+
+            self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
+            self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
+
+            ncps = self.__rnd.randint(1, len(self.mycps.keys()) - 1)
+            lcps = self.__rnd.sample(set(self.mycps.keys()), ncps)
+            for cp in lcps:
+                cps[cp] = bool(self.__rnd.randint(0, 1))
+
+            ndss = self.__rnd.randint(1, len(self.mycps.keys()) - 1)
+            ldss = self.__rnd.sample(set(self.mycps.keys()), ndss)
+            for ds in ldss:
+                if ds in self.mydss.keys():
+                    dss[ds] = bool(self.__rnd.randint(0, 1))
+
+            mncps = self.__rnd.randint(1, len(self.mycps.keys()) - 1)
+            mcps = self.__rnd.sample(set(self.mycps.keys()), mncps)
+
+            tdss = [ds for ds in dss if dss[ds]]
+            tcps = [cp for cp in cps if cps[cp]]
+            mp = json.loads(rs.profileConfiguration)
+            mp["ComponentSelection"] = json.dumps(cps)
+            mp["DataSourceSelection"] = json.dumps(dss)
+            rs.profileConfiguration = str(json.dumps(mp))
+            mp = json.loads(rs.profileConfiguration)
+
+            self._cf.dp.SetCommandVariable(["MCPLIST", json.dumps(mcps)])
+            ndss = json.loads(mp["DataSourceSelection"])
+            common = set(cps) & set(dss)
+            self.dump(rs)
+
+            dds = rs.componentDataSources()
+            res = json.loads(rs.componentDescription())
+            wcps = rs.components
+            mdds = set()
+            for cp, mdss in res[0].items():
+                if cp in wcps:
+                    if isinstance(mdss, dict):
+                        for ds, lds in mdss.items():
+                            for ld in lds:
+                                if ld[0] == 'STEP':
+                                    mdds.add(ds)
+                                    break
+            self.assertEqual(len(mdds), len(dds))
+            self.assertEqual(mdds, set(dds))
+
+    ## updateProfile test
+    def test_selectedDatasources(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+
+        for i in range(20):
+            rs = self.openRecSelector()
+            rs.configDevice = val["ConfigDevice"]
+            rs.door = val["Door"]
+            rs.mntGrp = val["MntGrp"]
+            rs.writerDevice = val["WriterDevice"]
+            self.assertEqual(rs.configDevice, val["ConfigDevice"])
+            self.assertEqual(rs.door, val["Door"])
+            db = PyTango.Database()
+            db.put_device_property(self._ms.ms.keys()[0],
+                                   {'PoolNames': self._pool.dp.name()})
+            pool = self._pool.dp
+            pool.ExpChannelList = []
+            self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+            mp = json.loads(rs.profileConfiguration)
+            mp["OrderedChannels"] = json.dumps([])
+            rs.profileConfiguration = str(json.dumps(mp))
+
+            cps = {}
+            dss = {}
+            lcp = self.__rnd.randint(1, 40)
+            lds = self.__rnd.randint(1, 40)
+
+            self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
+            self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
+
+            ncps = self.__rnd.randint(1, len(self.mycps.keys()) - 1)
+            lcps = self.__rnd.sample(set(self.mycps.keys()), ncps)
+            for cp in lcps:
+                cps[cp] = bool(self.__rnd.randint(0, 1))
+
+            ndss = self.__rnd.randint(1, len(self.mycps.keys()) - 1)
+            ldss = self.__rnd.sample(set(self.mycps.keys()), ndss)
+            for ds in ldss:
+                if ds in self.mydss.keys():
+                    dss[ds] = bool(self.__rnd.randint(0, 1))
+
+            ndss = self.__rnd.randint(1, len(self.mydss.keys()) - 1)
+            ldss = self.__rnd.sample(set(self.mydss.keys()), ndss)
+            for ds in ldss:
+                if ds in self.mydss.keys():
+                    dss[ds] = bool(self.__rnd.randint(0, 1))
+
+            mncps = self.__rnd.randint(1, len(self.mycps.keys()) - 1)
+            mcps = self.__rnd.sample(set(self.mycps.keys()), mncps)
+
+            mp = json.loads(rs.profileConfiguration)
+            mp["ComponentSelection"] = json.dumps(cps)
+            mp["DataSourceSelection"] = json.dumps(dss)
+            rs.profileConfiguration = str(json.dumps(mp))
+            mp = json.loads(rs.profileConfiguration)
+            self._cf.dp.SetCommandVariable(["MCPLIST", json.dumps(mcps)])
+            ndss = json.loads(mp["DataSourceSelection"])
+            common = set(cps) & set(dss)
+            self.dump(rs)
+
+            dds = rs.componentDataSources()
+            rdss = rs.selectedDataSources()
+            tdss = [ds for ds in dss if dss[ds] and ds not in dds]
+
+            self.assertEqual(set(tdss), set(rdss))
+            self.assertEqual(len(tdss), len(rdss))
+
+    ## updateProfile test
+    def test_datasources(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+
+        for i in range(20):
+            rs = self.openRecSelector()
+            rs.configDevice = val["ConfigDevice"]
+            rs.door = val["Door"]
+            rs.mntGrp = val["MntGrp"]
+            rs.writerDevice = val["WriterDevice"]
+            self.assertEqual(rs.configDevice, val["ConfigDevice"])
+            self.assertEqual(rs.door, val["Door"])
+            db = PyTango.Database()
+            db.put_device_property(self._ms.ms.keys()[0],
+                                   {'PoolNames': self._pool.dp.name()})
+            pool = self._pool.dp
+            pool.ExpChannelList = []
+            self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+            mp = json.loads(rs.profileConfiguration)
+            mp["OrderedChannels"] = json.dumps([])
+            rs.profileConfiguration = str(json.dumps(mp))
+
+            cps = {}
+            dss = {}
+            lcp = self.__rnd.randint(1, 40)
+            lds = self.__rnd.randint(1, 40)
+
+            self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
+            self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
+
+            ncps = self.__rnd.randint(1, len(self.mycps.keys()) - 1)
+            lcps = self.__rnd.sample(set(self.mycps.keys()), ncps)
+            for cp in lcps:
+                cps[cp] = bool(self.__rnd.randint(0, 1))
+
+            ndss = self.__rnd.randint(1, len(self.mycps.keys()) - 1)
+            ldss = self.__rnd.sample(set(self.mycps.keys()), ndss)
+            for ds in ldss:
+                if ds in self.mydss.keys():
+                    dss[ds] = bool(self.__rnd.randint(0, 1))
+
+            ndss = self.__rnd.randint(1, len(self.mydss.keys()) - 1)
+            ldss = self.__rnd.sample(set(self.mydss.keys()), ndss)
+            for ds in ldss:
+                if ds in self.mydss.keys():
+                    dss[ds] = bool(self.__rnd.randint(0, 1))
+
+            mncps = self.__rnd.randint(1, len(self.mycps.keys()) - 1)
+            mcps = self.__rnd.sample(set(self.mycps.keys()), mncps)
+
+            mp = json.loads(rs.profileConfiguration)
+            mp["ComponentSelection"] = json.dumps(cps)
+            mp["DataSourceSelection"] = json.dumps(dss)
+            rs.profileConfiguration = str(json.dumps(mp))
+            mp = json.loads(rs.profileConfiguration)
+            self._cf.dp.SetCommandVariable(["MCPLIST", json.dumps(mcps)])
+            ndss = json.loads(mp["DataSourceSelection"])
+            common = set(cps) & set(dss)
+            self.dump(rs)
+
+            mds = rs.dataSources
+            dds = rs.componentDataSources()
+            rdss = rs.selectedDataSources()
+
+            self.assertEqual(set(mds), set(dds) | set(rdss))
+
+    ## test
+    def test_selectedcomponents(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+
+        for i in range(20):
+            rs = self.openRecSelector()
+            rs.configDevice = val["ConfigDevice"]
+            rs.door = val["Door"]
+            rs.mntGrp = val["MntGrp"]
+            rs.writerDevice = val["WriterDevice"]
+            self.assertEqual(rs.configDevice, val["ConfigDevice"])
+            self.assertEqual(rs.door, val["Door"])
+
+            db = PyTango.Database()
+            db.put_device_property(self._ms.ms.keys()[0],
+                                   {'PoolNames': self._pool.dp.name()})
+            pool = self._pool.dp
+            pool.ExpChannelList = []
+            self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+            mp = json.loads(rs.profileConfiguration)
+            mp["OrderedChannels"] = json.dumps([])
+            rs.profileConfiguration = str(json.dumps(mp))
+
+            mncps = self.__rnd.randint(1, len(self.mycps.keys()) - 1)
+            mcps = [cp for cp in self.__rnd.sample(
+                set(self.mycps.keys()), mncps)]
+
+            cps = {}
+            dss = {}
+            lcp = self.__rnd.randint(1, 40)
+            lds = self.__rnd.randint(1, 40)
+            for i in range(lcp):
+                cps[self.getRandomName(10)] = bool(self.__rnd.randint(0, 1))
+            for i in range(lds):
+                dss[self.getRandomName(10)] = bool(self.__rnd.randint(0, 1))
+            ddss = self.__rnd.sample(dss, self.__rnd.randint(
+                1, len(dss.keys())))
+            dcps = dict(cps)
+            for ds in ddss:
+                dcps[ds] = bool(self.__rnd.randint(0, 1))
+
+            pcps = {}
+            plcp = self.__rnd.randint(1, 40)
+            for i in range(plcp):
+                pcps[self.getRandomName(10)] = bool(self.__rnd.randint(0, 1))
+
+            self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(dcps)])
+            self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
+            self._cf.dp.SetCommandVariable(["MCPLIST", json.dumps(mcps)])
+
+            mp = json.loads(rs.profileConfiguration)
+            mp["ComponentSelection"] = json.dumps(cps)
+            mp["DataSourceSelection"] = json.dumps(dss)
+            mp["ComponentPreselection"] = json.dumps(cps)
+            rs.profileConfiguration = str(json.dumps(mp))
+            ac = rs.preselectedComponents()
+            mp = json.loads(rs.profileConfiguration)
+
+            ndss = json.loads(mp["DataSourceSelection"])
+            common = set(cps.keys()) & set(dss.keys())
+            self.dump(rs)
+
+            ncps = json.loads(mp["ComponentSelection"])
+            ndss = json.loads(mp["DataSourceSelection"])
+            tdss = [ds for ds in ndss if ndss[ds]]
+            tcps = [cp for cp in ncps if ncps[cp]]
+
+            rcp = rs.components
+            mcp = rs.mandatoryComponents()
+            scp = rs.selectedComponents()
+            pcp = rs.preselectedComponents()
+
+            self.assertEqual(set(rcp), set(mcp) | set(scp) | set(pcp))
+
 
 if __name__ == '__main__':
     unittest.main()
