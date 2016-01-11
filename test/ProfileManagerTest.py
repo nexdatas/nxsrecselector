@@ -2166,7 +2166,7 @@ class ProfileManagerTest(unittest.TestCase):
         finally:
             tpool2.tearDown()
 
-    ## updateProfile test
+    ## test
     def test_preselectedComponents(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -2204,7 +2204,7 @@ class ProfileManagerTest(unittest.TestCase):
 
             self.assertEqual(set(ac), set(acp))
 
-    ## updateProfile test
+    ## test
     def test_components(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -2271,7 +2271,7 @@ class ProfileManagerTest(unittest.TestCase):
             mfcp = set(tcps) | (set(tdss) & set(ac))
             self.assertEqual(set(pmcp), set(mfcp))
 
-    ## updateProfile test
+    ## test
     def test_cpdescritpion_unknown(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -2327,7 +2327,7 @@ class ProfileManagerTest(unittest.TestCase):
         self._cf.dp.SetCommandVariable(["MCPLIST", json.dumps(["unknown"])])
         self.assertEqual(pm.cpdescription(), [{}])
 
-    ## updateProfile test
+    ## test
     def test_cpdescritpion_full(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -2373,7 +2373,7 @@ class ProfileManagerTest(unittest.TestCase):
         res = pm.cpdescription(True)
         self.checkCP(res, self.rescps.keys())
 
-    ## updateProfile test
+    ## test
     def test_cpdescritpion_comp_nods(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -2429,7 +2429,7 @@ class ProfileManagerTest(unittest.TestCase):
             self.checkCP(res, list(set(tcps) | set(tdss) | set(mcps)),
                          strategy='STEP')
 
-    ## updateProfile test
+    ## test
     def test_cpdescritpion_comp_ds(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -2491,7 +2491,7 @@ class ProfileManagerTest(unittest.TestCase):
             self.checkCP(res, list(set(tcps) | set(tdss) | set(mcps)),
                          strategy='STEP')
 
-    ## updateProfile test
+    ## test
     def test_componentdatasources(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -2560,7 +2560,7 @@ class ProfileManagerTest(unittest.TestCase):
             self.assertEqual(mdds, set(dds))
             self.assertEqual(len(mdds), len(dds))
 
-    ## updateProfile test
+    ## test
     def test_datasources(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)

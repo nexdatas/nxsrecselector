@@ -6227,7 +6227,7 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_resetPreselectedComponents_2wds_notangodspool_alias_novalue(self):
+    def test_resetPreselectedComponents_2wds_notngdspool_alias_novalue(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -9835,6 +9835,4723 @@ class SettingsTest(unittest.TestCase):
             pcp = rs.preselectedComponents()
 
             self.assertEqual(set(rcp), set(mcp) | set(scp) | set(pcp))
+
+    ## updateMntGrp test
+    def test_updateMntGrp_empty(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp2'}
+
+        rs = self.openRecSelector()
+        rs.configDevice = val["ConfigDevice"]
+        rs.door = val["Door"]
+        rs.mntGrp = val["MntGrp"]
+        rs.writerDevice = val["WriterDevice"]
+        self.assertEqual(rs.configDevice, val["ConfigDevice"])
+        self.assertEqual(rs.door, val["Door"])
+
+        db = PyTango.Database()
+        db.put_device_property(self._ms.ms.keys()[0],
+                               {'PoolNames': self._pool.dp.name()})
+        pool = self._pool.dp
+        pool.ExpChannelList = []
+        self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+        self.assertEqual(rs.availableMntGrps(), [])
+
+        arr = [
+            {"full_name": "test/ct/01/Value", "name": "ct01"},
+            {"full_name": "test/ct/02/Value", "name": "ct02"},
+            {"full_name": "test/ct/03/value", "name": "ct03"},
+            {"full_name": "test/ct/04/value", "name": "ct04"},
+            {"full_name": "null/val", "name": "mntgrp_04"},
+        ]
+        pool.AcqChannelList = [json.dumps(a) for a in arr]
+
+        self.myAssertRaise(Exception, rs.updateMntGrp)
+        for ar in arr:
+            tmg = TestMGSetUp.TestMeasurementGroupSetUp(name=val["MntGrp"])
+            dv = "/".join(ar["full_name"].split("/")[0:-1])
+            smg = {"controllers": {},
+                   "monitor": "%s" % dv,
+                   "description": "Measurement Group",
+                   "timer": "%s" % dv,
+                   "label": "nxsmntgrp2"}
+            mp = json.loads(rs.profileConfiguration)
+            mp["Timer"] = '["%s"]' % ar["name"]
+            rs.profileConfiguration = str(json.dumps(mp))
+            mp = json.loads(rs.profileConfiguration)
+
+            try:
+                self.assertEqual(json.loads(mp["ComponentPreselection"]), {})
+                self.assertEqual(json.loads(mp["ComponentSelection"]), {})
+                self.assertEqual(json.loads(mp["DataSourceSelection"]), {})
+                self.assertEqual(json.loads(mp["UnplottedComponents"]), [])
+                self.assertEqual(json.loads(mp["OrderedChannels"]), [])
+                self.assertEqual(json.loads(mp["UserData"]), {})
+                self.assertEqual(json.loads(mp["Timer"]), [ar["name"]])
+                self.assertEqual(mp["MntGrp"], val["MntGrp"])
+                jpcnf = rs.updateMntGrp()
+                pcnf = json.loads(jpcnf)
+                mgdp = PyTango.DeviceProxy(tmg.new_device_info_writer.name)
+                jcnf = mgdp.Configuration
+                cnf = json.loads(jcnf)
+                mp = json.loads(rs.profileConfiguration)
+                self.assertEqual(json.loads(mp["ComponentPreselection"]), {})
+                self.assertEqual(json.loads(mp["ComponentSelection"]), {})
+                self.assertEqual(json.loads(mp["DataSourceSelection"]), {})
+                self.assertEqual(json.loads(mp["UnplottedComponents"]), [])
+                self.assertEqual(json.loads(mp["OrderedChannels"]), [])
+                self.assertEqual(json.loads(mp["UserData"]), {})
+                self.assertEqual(json.loads(mp["Timer"]), [ar["name"]])
+                self.assertEqual(mp["MntGrp"], val["MntGrp"])
+                self.myAssertDict(smg, cnf)
+                self.myAssertDict(smg, pcnf)
+                rs.fetchProfile()
+                mp = json.loads(rs.profileConfiguration)
+                rs.storeProfile()
+
+                rs.mntGrp = "nxsmntgrp"
+
+                rs.profileConfiguration = str(json.dumps({}))
+                rs.configDevice = val["ConfigDevice"]
+                rs.door = val["Door"]
+                rs.mntGrp = val["MntGrp"]
+                rs.fetchProfile()
+                mp = json.loads(rs.profileConfiguration)
+                self.assertEqual(json.loads(mp["ComponentPreselection"]), {})
+                self.assertEqual(json.loads(mp["ComponentSelection"]), {})
+                self.assertEqual(json.loads(mp["DataSourceSelection"]), {})
+                self.assertEqual(json.loads(mp["UnplottedComponents"]), [])
+                self.assertEqual(json.loads(mp["OrderedChannels"]), [])
+                self.assertEqual(json.loads(mp["UserData"]), {})
+                self.assertEqual(json.loads(mp["Timer"]), [ar["name"]])
+                self.assertEqual(mp["MntGrp"], "nxsmntgrp2")
+            finally:
+                rs.deleteProfile(val["MntGrp"])
+                tmg.tearDown()
+
+    ## updateMntGrp test
+    def test_updateMntGrp_components_nopool(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp2'}
+
+        wrong = ['nn', 'ann', 'nn2', 'tann1', 'tann0', 'tann1b', 'tann1c',
+                 'dim1', 'dim2', 'dim3', 'dim4', 'dim5', 'dim5', 'dim6',
+                 'dim7', 'dim8', 'tann1c', 'mycp3', 'exp_t01']
+
+        rs = self.openRecSelector()
+        rs.configDevice = val["ConfigDevice"]
+        rs.door = val["Door"]
+        rs.mntGrp = val["MntGrp"]
+        rs.writerDevice = val["WriterDevice"]
+        self.assertEqual(rs.configDevice, val["ConfigDevice"])
+        self.assertEqual(rs.door, val["Door"])
+
+        db = PyTango.Database()
+        db.put_device_property(self._ms.ms.keys()[0],
+                               {'PoolNames': self._pool.dp.name()})
+        pool = self._pool.dp
+        pool.ExpChannelList = []
+        self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+        self.assertEqual(rs.availableMntGrps(), [])
+
+        arr = [
+            {"full_name": "test/ct/01/Value", "name": "ct01"},
+            {"full_name": "test/ct/02/Value", "name": "ct02"},
+            {"full_name": "test/ct/03/value", "name": "ct03"},
+            {"full_name": "test/ct/04/value", "name": "ct04"},
+            {"full_name": "null/val", "name": "mntgrp_04"},
+        ]
+        pool.AcqChannelList = [json.dumps(a) for a in arr]
+
+        self.myAssertRaise(Exception, rs.updateMntGrp)
+        self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
+        self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
+
+        for i in range(30):
+            ar = arr[i % len(arr)]
+            cps = {}
+            acps = {}
+            dss = {}
+            lcp = self.__rnd.randint(1, 40)
+            lds = self.__rnd.randint(1, 40)
+
+            self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
+            self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
+
+            ncps = self.__rnd.randint(1, len(self.mycps.keys()) - 1)
+            lcps = self.__rnd.sample(set(self.mycps.keys()), ncps)
+            for cp in lcps:
+                if cp not in wrong:
+                    cps[cp] = bool(self.__rnd.randint(0, 1))
+
+            ancps = self.__rnd.randint(1, len(self.mycps.keys()) - 1)
+            alcps = self.__rnd.sample(set(self.mycps.keys()), ancps)
+            for cp in alcps:
+                if cp not in wrong:
+                    acps[cp] = bool(self.__rnd.randint(0, 1))
+
+            ndss = self.__rnd.randint(1, len(self.mycps.keys()) - 1)
+            ldss = self.__rnd.sample(set(self.mycps.keys()), ndss)
+            for ds in ldss:
+                if ds in self.mydss.keys():
+                    if ds not in wrong:
+                        dss[ds] = bool(self.__rnd.randint(0, 1))
+
+            ndss = self.__rnd.randint(1, len(self.mydss.keys()) - 1)
+            ldss = self.__rnd.sample(set(self.mydss.keys()), ndss)
+            for ds in ldss:
+                if ds in self.mydss.keys():
+                    if ds not in wrong:
+                        dss[ds] = bool(self.__rnd.randint(0, 1))
+
+            mncps = self.__rnd.randint(1, len(self.mycps.keys()) - 1)
+            mcps = [cp for cp in self.__rnd.sample(
+                    set(self.mycps.keys()), mncps) if cp not in wrong]
+
+            mp = json.loads(rs.profileConfiguration)
+            mp["ComponentSelection"] = json.dumps(cps)
+            mp["ComponentPreselection"] = json.dumps(acps)
+            mp["DataSourceSelection"] = json.dumps(dss)
+            self._cf.dp.SetCommandVariable(["MCPLIST", json.dumps(mcps)])
+            rs.profileConfiguration = str(json.dumps(mp))
+            mp = json.loads(rs.profileConfiguration)
+
+            records = {}
+            describer = Describer(self._cf.dp, True)
+            cpres = describer.components(dstype='CLIENT')
+            for grp in cpres:
+                for idss in grp.values():
+                    for idsrs in idss.values():
+                        for idsr in idsrs:
+                            records[str(idsr[2])] = "1234"
+            dsres = describer.dataSources(dss.keys(), dstype='CLIENT')[0]
+            for dsr in dsres.values():
+                records[str(dsr.record)] = '2345'
+
+            mp = json.loads(rs.profileConfiguration)
+            mp["Timer"] = '["%s"]' % ar["name"]
+            mp["UserData"] = json.dumps(records)
+            rs.profileConfiguration = str(json.dumps(mp))
+            mp = json.loads(rs.profileConfiguration)
+
+            tmg = TestMGSetUp.TestMeasurementGroupSetUp(name='nxsmntgrp2')
+            dv = "/".join(ar["full_name"].split("/")[0:-1])
+            smg = {"controllers": {},
+                   "monitor": "%s" % dv,
+                   "description": "Measurement Group",
+                   "timer": "%s" % dv,
+                   "label": "nxsmntgrp2"}
+            try:
+                self.myAssertDict(json.loads(mp["ComponentPreselection"]),
+                                  acps)
+                self.myAssertDict(json.loads(mp["ComponentSelection"]), cps)
+                self.myAssertDict(json.loads(mp["DataSourceSelection"]), dss)
+                self.assertEqual(json.loads(mp["UnplottedComponents"]), [])
+                self.assertEqual(json.loads(mp["OrderedChannels"]), [])
+                self.myAssertDict(json.loads(mp["UserData"]), records)
+                self.assertEqual(json.loads(mp["Timer"]), [ar["name"]])
+                self.assertEqual(mp["MntGrp"], "nxsmntgrp2")
+                mdds = set()
+
+                jpcnf = rs.updateMntGrp()
+                pcnf = json.loads(jpcnf)
+                mgdp = PyTango.DeviceProxy(tmg.new_device_info_writer.name)
+                jcnf = mgdp.Configuration
+                cnf = json.loads(jcnf)
+                mp = json.loads(rs.profileConfiguration)
+                self.myAssertDict(json.loads(mp["ComponentPreselection"]),
+                                  acps)
+                self.myAssertDict(json.loads(mp["ComponentSelection"]), cps)
+                self.myAssertDict(json.loads(mp["DataSourceSelection"]), dss)
+                self.assertEqual(json.loads(mp["UnplottedComponents"]), [])
+                self.assertEqual(json.loads(mp["OrderedChannels"]), [])
+                self.myAssertDict(json.loads(mp["UserData"]), records)
+                self.assertEqual(json.loads(mp["Timer"]), [ar["name"]])
+                self.assertEqual(mp["MntGrp"], "nxsmntgrp2")
+                self.myAssertDict(smg, cnf)
+                self.myAssertDict(smg, pcnf)
+                rs.mntGrp = "nxsmntgrp"
+                rs.profileConfiguration = str(json.dumps({}))
+                rs.configDevice = val["ConfigDevice"]
+                rs.door = val["Door"]
+                rs.mntGrp = val["MntGrp"]
+                rs.fetchProfile()
+                mp = json.loads(rs.profileConfiguration)
+                self.myAssertDict(json.loads(mp["ComponentPreselection"]),
+                                  acps)
+                self.myAssertDict(json.loads(mp["ComponentSelection"]), cps)
+                self.myAssertDict(json.loads(mp["DataSourceSelection"]), dss)
+                self.assertEqual(json.loads(mp["UnplottedComponents"]), [])
+                self.assertEqual(json.loads(mp["OrderedChannels"]), [])
+                self.myAssertDict(json.loads(mp["UserData"]), records)
+                self.assertEqual(json.loads(mp["Timer"]), [ar["name"]])
+                self.assertEqual(mp["MntGrp"], "nxsmntgrp2")
+            finally:
+                rs.deleteProfile("nxsmntgrp2")
+                try:
+                    tmg.tearDown()
+                except:
+                    pass
+
+    ## updateMntGrp test
+    def test_updateMntGrp_nodevice(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp2'}
+
+        wrong = ['nn', 'ann', 'nn2', 'tann1b', 'tann1c',
+                 'dim1', 'dim2', 'dim3', 'dim4', 'dim5', 'dim5', 'dim6',
+                 'dim7', 'dim8', 'tann1c']
+        rs = self.openRecSelector()
+        rs.configDevice = val["ConfigDevice"]
+        rs.door = val["Door"]
+        rs.mntGrp = val["MntGrp"]
+        rs.writerDevice = val["WriterDevice"]
+        self.assertEqual(rs.configDevice, val["ConfigDevice"])
+        self.assertEqual(rs.door, val["Door"])
+
+        db = PyTango.Database()
+        db.put_device_property(self._ms.ms.keys()[0],
+                               {'PoolNames': self._pool.dp.name()})
+        pool = self._pool.dp
+        pool.ExpChannelList = []
+        self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+        self.assertEqual(rs.availableMntGrps(), [])
+
+        arr = [
+            {"full_name": "test/ct/01/Value", "name": "ct01"},
+            {"full_name": "test/ct/02/Value", "name": "ct02"},
+            {"full_name": "test/ct/03/value", "name": "ct03"},
+            {"full_name": "test/ct/04/value", "name": "ct04"},
+            {"full_name": "null/val", "name": "mntgrp_04"},
+        ]
+        pool.AcqChannelList = [json.dumps(a) for a in arr]
+
+        self.myAssertRaise(Exception, rs.updateMntGrp)
+        self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
+        self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
+
+        ar = arr[0]
+
+        cps = {}
+        acps = {}
+        dss = {}
+        lcp = self.__rnd.randint(1, 40)
+        lds = self.__rnd.randint(1, 40)
+
+        self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
+        self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
+
+        for wds in wrong:
+            lcps = []
+            for cp in lcps:
+                cps[cp] = True
+
+            alcps = []
+            for cp in alcps:
+                acps[cp] = True
+
+            ldss = [wds]
+            for ds in ldss:
+                if ds in self.mydss.keys():
+                    dss[ds] = True
+
+            mcps = []
+
+            mp = json.loads(rs.profileConfiguration)
+            mp["ComponentSelection"] = json.dumps(cps)
+            mp["ComponentPreselection"] = json.dumps(acps)
+            mp["DataSourceSelection"] = json.dumps(dss)
+            self._cf.dp.SetCommandVariable(["MCPLIST", json.dumps(mcps)])
+            rs.profileConfiguration = str(json.dumps(mp))
+            mp = json.loads(rs.profileConfiguration)
+
+            records = {}
+            describer = Describer(self._cf.dp, True)
+            cpres = describer.components(dstype='CLIENT')
+            for grp in cpres:
+                for idss in grp.values():
+                    for idsrs in idss.values():
+                        for idsr in idsrs:
+                            records[str(idsr[2])] = "1234"
+            dsres = describer.dataSources(dss.keys(), dstype='CLIENT')[0]
+            for dsr in dsres.values():
+                records[str(dsr.record)] = '2345'
+
+            mp = json.loads(rs.profileConfiguration)
+            mp["Timer"] = '["%s"]' % ar["name"]
+            mp["UserData"] = json.dumps(records)
+            rs.profileConfiguration = str(json.dumps(mp))
+            mp = json.loads(rs.profileConfiguration)
+
+            tmg = TestMGSetUp.TestMeasurementGroupSetUp(name='nxsmntgrp2')
+            dv = "/".join(ar["full_name"].split("/")[0:-1])
+            smg = {"controllers": {},
+                   "monitor": "%s" % dv,
+                   "description": "Measurement Group",
+                   "timer": "%s" % dv,
+                   "label": "nxsmntgrp2"}
+            try:
+                self.myAssertDict(json.loads(mp["ComponentPreselection"]),
+                                  acps)
+                self.myAssertDict(json.loads(mp["ComponentSelection"]), cps)
+                self.myAssertDict(json.loads(mp["DataSourceSelection"]), dss)
+                self.assertEqual(json.loads(mp["UnplottedComponents"]), [])
+                self.assertEqual(json.loads(mp["OrderedChannels"]), [])
+                self.myAssertDict(json.loads(mp["UserData"]), records)
+                self.assertEqual(json.loads(mp["Timer"]), [ar["name"]])
+                self.assertEqual(mp["MntGrp"], "nxsmntgrp2")
+                self.myAssertRaise(Exception, rs.updateMntGrp)
+            finally:
+                rs.deleteProfile("nxsmntgrp2")
+                try:
+                    tmg.tearDown()
+                except:
+                    pass
+
+    ## updateMntGrp test
+    def test_updateMntGrp_nodevice_cp(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp2'}
+
+        wrong = ['mycp3']
+        rs = self.openRecSelector()
+        rs.configDevice = val["ConfigDevice"]
+        rs.door = val["Door"]
+        rs.mntGrp = val["MntGrp"]
+        rs.writerDevice = val["WriterDevice"]
+        self.assertEqual(rs.configDevice, val["ConfigDevice"])
+        self.assertEqual(rs.door, val["Door"])
+
+        db = PyTango.Database()
+        db.put_device_property(self._ms.ms.keys()[0],
+                               {'PoolNames': self._pool.dp.name()})
+        pool = self._pool.dp
+        pool.ExpChannelList = []
+        self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+        self.assertEqual(rs.availableMntGrps(), [])
+
+        arr = [
+            {"full_name": "test/ct/01/Value", "name": "ct01"},
+            {"full_name": "test/ct/02/Value", "name": "ct02"},
+            {"full_name": "test/ct/03/value", "name": "ct03"},
+            {"full_name": "test/ct/04/value", "name": "ct04"},
+            {"full_name": "null/val", "name": "mntgrp_04"},
+        ]
+        pool.AcqChannelList = [json.dumps(a) for a in arr]
+
+        self.myAssertRaise(Exception, rs.updateMntGrp)
+        self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
+        self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
+
+        ar = arr[0]
+
+        cps = {}
+        acps = {}
+        dss = {}
+        lcp = self.__rnd.randint(1, 40)
+        lds = self.__rnd.randint(1, 40)
+
+        self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
+        self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
+
+        for wds in wrong:
+            lcps = [wds]
+            for cp in lcps:
+                cps[cp] = True
+
+            alcps = []
+            for cp in alcps:
+                acps[cp] = True
+
+            ldss = []
+            for ds in ldss:
+                if ds in self.mydss.keys():
+                    dss[ds] = True
+
+            mcps = []
+
+            mp = json.loads(rs.profileConfiguration)
+            mp["ComponentSelection"] = json.dumps(cps)
+            mp["ComponentPreselection"] = json.dumps(acps)
+            mp["DataSourceSelection"] = json.dumps(dss)
+            self._cf.dp.SetCommandVariable(["MCPLIST", json.dumps(mcps)])
+            rs.profileConfiguration = str(json.dumps(mp))
+            mp = json.loads(rs.profileConfiguration)
+
+            records = {}
+            describer = Describer(self._cf.dp, True)
+            cpres = describer.components(dstype='CLIENT')
+            for grp in cpres:
+                for idss in grp.values():
+                    for idsrs in idss.values():
+                        for idsr in idsrs:
+                            records[str(idsr[2])] = "1234"
+            dsres = describer.dataSources(dss.keys(), dstype='CLIENT')[0]
+            for dsr in dsres.values():
+                records[str(dsr.record)] = '2345'
+
+            mp = json.loads(rs.profileConfiguration)
+            mp["Timer"] = '["%s"]' % ar["name"]
+            mp["UserData"] = json.dumps(records)
+            rs.profileConfiguration = str(json.dumps(mp))
+            mp = json.loads(rs.profileConfiguration)
+
+            tmg = TestMGSetUp.TestMeasurementGroupSetUp(name='nxsmntgrp2')
+            dv = "/".join(ar["full_name"].split("/")[0:-1])
+            smg = {"controllers": {},
+                   "monitor": "%s" % dv,
+                   "description": "Measurement Group",
+                   "timer": "%s" % dv,
+                   "label": "nxsmntgrp2"}
+            try:
+                self.myAssertDict(json.loads(mp["ComponentPreselection"]),
+                                  acps)
+                self.myAssertDict(json.loads(mp["ComponentSelection"]), cps)
+                self.myAssertDict(json.loads(mp["DataSourceSelection"]), dss)
+                self.assertEqual(json.loads(mp["UnplottedComponents"]), [])
+                self.assertEqual(json.loads(mp["OrderedChannels"]), [])
+                self.myAssertDict(json.loads(mp["UserData"]), records)
+                self.assertEqual(json.loads(mp["Timer"]), [ar["name"]])
+                self.assertEqual(mp["MntGrp"], "nxsmntgrp2")
+                self.myAssertRaise(Exception, rs.updateMntGrp)
+            finally:
+                try:
+                    tmg.tearDown()
+                except:
+                    pass
+
+    ## updateMntGrp test
+    def test_updateMntGrp_wrongdevice(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp2'}
+
+        wrong = ['tann1', 'tann0']
+        rs = self.openRecSelector()
+        rs.configDevice = val["ConfigDevice"]
+        rs.door = val["Door"]
+        rs.mntGrp = val["MntGrp"]
+        rs.writerDevice = val["WriterDevice"]
+        self.assertEqual(rs.configDevice, val["ConfigDevice"])
+        self.assertEqual(rs.door, val["Door"])
+
+        db = PyTango.Database()
+        db.put_device_property(self._ms.ms.keys()[0],
+                               {'PoolNames': self._pool.dp.name()})
+        pool = self._pool.dp
+        pool.ExpChannelList = []
+        self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+        self.assertEqual(rs.availableMntGrps(), [])
+
+        arr = [
+            {"full_name": "test/ct/01/Value", "name": "ct01"},
+            {"full_name": "test/ct/02/Value", "name": "ct02"},
+            {"full_name": "test/ct/03/value", "name": "ct03"},
+            {"full_name": "test/ct/04/value", "name": "ct04"},
+            {"full_name": "null/val", "name": "mntgrp_04"},
+        ]
+        pool.AcqChannelList = [json.dumps(a) for a in arr]
+
+        self.myAssertRaise(Exception, rs.updateMntGrp)
+        self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
+        self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
+
+        ar = arr[0]
+
+        cps = {}
+        acps = {}
+        dss = {}
+        lcp = self.__rnd.randint(1, 40)
+        lds = self.__rnd.randint(1, 40)
+
+        self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
+        self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
+
+        for wds in wrong:
+            lcps = []
+            for cp in lcps:
+                cps[cp] = True
+
+            alcps = []
+            for cp in alcps:
+                acps[cp] = True
+
+            ldss = [wds]
+            for ds in ldss:
+                if ds in self.mydss.keys():
+                    dss[ds] = True
+
+            mcps = []
+
+            mp = json.loads(rs.profileConfiguration)
+            mp["ComponentSelection"] = json.dumps(cps)
+            mp["ComponentPreselection"] = json.dumps(acps)
+            mp["DataSourceSelection"] = json.dumps(dss)
+            self._cf.dp.SetCommandVariable(["MCPLIST", json.dumps(mcps)])
+            rs.profileConfiguration = str(json.dumps(mp))
+            mp = json.loads(rs.profileConfiguration)
+
+            records = {}
+            describer = Describer(self._cf.dp, True)
+            cpres = describer.components(dstype='CLIENT')
+            for grp in cpres:
+                for idss in grp.values():
+                    for idsrs in idss.values():
+                        for idsr in idsrs:
+                            records[str(idsr[2])] = "1234"
+            dsres = describer.dataSources(dss.keys(), dstype='CLIENT')[0]
+            for dsr in dsres.values():
+                records[str(dsr.record)] = '2345'
+
+            mp = json.loads(rs.profileConfiguration)
+            mp["Timer"] = '["%s"]' % ar["name"]
+            mp["UserData"] = json.dumps(records)
+            rs.profileConfiguration = str(json.dumps(mp))
+            mp = json.loads(rs.profileConfiguration)
+
+            tmg = TestMGSetUp.TestMeasurementGroupSetUp(name='nxsmntgrp2')
+            dv = "/".join(ar["full_name"].split("/")[0:-1])
+            smg = {"controllers": {},
+                   "monitor": "%s" % dv,
+                   "description": "Measurement Group",
+                   "timer": "%s" % dv,
+                   "label": "nxsmntgrp2"}
+            try:
+                self.myAssertDict(json.loads(mp["ComponentPreselection"]),
+                                  acps)
+                self.myAssertDict(json.loads(mp["ComponentSelection"]), cps)
+                self.myAssertDict(json.loads(mp["DataSourceSelection"]), dss)
+                self.assertEqual(json.loads(mp["UnplottedComponents"]), [])
+                self.assertEqual(json.loads(mp["OrderedChannels"]), [])
+                self.myAssertDict(json.loads(mp["UserData"]), records)
+                self.assertEqual(json.loads(mp["Timer"]), [ar["name"]])
+                self.assertEqual(mp["MntGrp"], "nxsmntgrp2")
+                self.myAssertRaise(Exception, rs.updateMntGrp)
+            finally:
+                try:
+                    tmg.tearDown()
+                except:
+                    pass
+
+    ## updateMntGrp test
+    def test_updateMntGrp_components_nopool_tango(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp2'}
+
+        wrong = []
+        rs = self.openRecSelector()
+        rs.configDevice = val["ConfigDevice"]
+        rs.door = val["Door"]
+        rs.mntGrp = val["MntGrp"]
+        rs.writerDevice = val["WriterDevice"]
+        self.assertEqual(rs.configDevice, val["ConfigDevice"])
+        self.assertEqual(rs.door, val["Door"])
+
+        db = PyTango.Database()
+        db.put_device_property(self._ms.ms.keys()[0],
+                               {'PoolNames': self._pool.dp.name()})
+        pool = self._pool.dp
+        pool.ExpChannelList = []
+        self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+        self.assertEqual(rs.availableMntGrps(), [])
+
+        arr = [
+            {"full_name": "test/ct/01/Value", "name": "ct01"},
+            {"full_name": "test/ct/02/Value", "name": "ct02"},
+            {"full_name": "test/ct/03/value", "name": "ct03"},
+            {"full_name": "test/ct/04/value", "name": "ct04"},
+            {"full_name": "null/val", "name": "mntgrp_04"},
+        ]
+        pool.AcqChannelList = [json.dumps(a) for a in arr]
+
+        self.myAssertRaise(Exception, rs.updateMntGrp)
+        self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.smycps)])
+        self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
+
+        for i in range(30):
+            ar = arr[i % len(arr)]
+
+            cps = {}
+            acps = {}
+            dss = {}
+            lcp = self.__rnd.randint(1, 40)
+            lds = self.__rnd.randint(1, 40)
+
+            self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.smycps)])
+            self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
+
+            ncps = self.__rnd.randint(1, len(self.smycps.keys()) - 1)
+            lcps = self.__rnd.sample(set(self.smycps.keys()), ncps)
+            for cp in lcps:
+                if cp not in wrong:
+                    cps[cp] = bool(self.__rnd.randint(0, 1))
+
+            ancps = self.__rnd.randint(1, len(self.smycps.keys()) - 1)
+            alcps = self.__rnd.sample(set(self.smycps.keys()), ancps)
+            for cp in alcps:
+                if cp not in wrong:
+                    acps[cp] = bool(self.__rnd.randint(0, 1))
+
+            ndss = self.__rnd.randint(1, len(self.smycps.keys()) - 1)
+            ldss = self.__rnd.sample(set(self.smycps.keys()), ndss)
+            for ds in ldss:
+                if ds in self.smydss.keys():
+                    if ds not in wrong:
+                        dss[ds] = bool(self.__rnd.randint(0, 1))
+
+            ndss = self.__rnd.randint(1, len(self.smydss.keys()) - 1)
+            ldss = self.__rnd.sample(set(self.smydss.keys()), ndss)
+            for ds in ldss:
+                if ds in self.smydss.keys():
+                    if ds not in wrong:
+                        dss[ds] = bool(self.__rnd.randint(0, 1))
+
+            mncps = self.__rnd.randint(1, len(self.smycps.keys()) - 1)
+            mcps = [cp for cp in self.__rnd.sample(
+                    set(self.smycps.keys()), mncps) if cp not in wrong]
+
+            mp = json.loads(rs.profileConfiguration)
+            mp["ComponentSelection"] = json.dumps(cps)
+            mp["ComponentPreselection"] = json.dumps(acps)
+            mp["DataSourceSelection"] = json.dumps(dss)
+            self._cf.dp.SetCommandVariable(["MCPLIST", json.dumps(mcps)])
+            rs.profileConfiguration = str(json.dumps(mp))
+            mp = json.loads(rs.profileConfiguration)
+
+            records = {}
+            describer = Describer(self._cf.dp, True)
+            cpres = describer.components(dstype='CLIENT')
+            for grp in cpres:
+                for idss in grp.values():
+                    for idsrs in idss.values():
+                        for idsr in idsrs:
+                            records[str(idsr[2])] = "1234"
+            dsres = describer.dataSources(dss.keys(), dstype='CLIENT')[0]
+            for dsr in dsres.values():
+                records[str(dsr.record)] = '2345'
+
+            mp = json.loads(rs.profileConfiguration)
+            mp["Timer"] = '["%s"]' % ar["name"]
+            mp["UserData"] = json.dumps(records)
+            rs.profileConfiguration = str(json.dumps(mp))
+            mp = json.loads(rs.profileConfiguration)
+            tmg = TestMGSetUp.TestMeasurementGroupSetUp(name='nxsmntgrp2')
+            dv = "/".join(ar["full_name"].split("/")[0:-1])
+            chds = rs.selectedDataSources()
+            chds.extend(rs.componentDataSources())
+            chds = sorted([ds for ds in chds if not ds.startswith('client')])
+
+            tgc = {}
+
+            mp = json.loads(rs.profileConfiguration)
+            try:
+                self.myAssertDict(json.loads(mp["ComponentPreselection"]),
+                                  acps)
+                self.myAssertDict(json.loads(mp["ComponentSelection"]), cps)
+                self.myAssertDict(json.loads(mp["DataSourceSelection"]), dss)
+                self.assertEqual(json.loads(mp["UnplottedComponents"]), [])
+                self.assertEqual(json.loads(mp["OrderedChannels"]), [])
+                self.myAssertDict(json.loads(mp["UserData"]), records)
+                self.assertEqual(json.loads(mp["Timer"]), [ar["name"]])
+                self.assertEqual(mp["MntGrp"], "nxsmntgrp2")
+
+                wwcp = rs.components
+                describer = Describer(self._cf.dp, True)
+                res = describer.components(wwcp, "STEP", "")
+
+                mdds = set()
+                for mdss in res[0].values():
+                    if isinstance(mdss, dict):
+                        for ds in mdss.keys():
+                            dss[ds] = True
+
+                jpcnf = rs.updateMntGrp()
+                pcnf = json.loads(jpcnf)
+                mgdp = PyTango.DeviceProxy(tmg.new_device_info_writer.name)
+                jcnf = mgdp.Configuration
+                cnf = json.loads(jcnf)
+                mp = json.loads(rs.profileConfiguration)
+                self.myAssertDict(json.loads(mp["ComponentPreselection"]),
+                                  acps)
+                self.myAssertDict(json.loads(mp["ComponentSelection"]), cps)
+                self.myAssertDict(json.loads(mp["DataSourceSelection"]), dss)
+                self.assertEqual(json.loads(mp["UnplottedComponents"]), [])
+                self.assertEqual(json.loads(mp["OrderedChannels"]), [])
+                self.myAssertDict(json.loads(mp["UserData"]), records)
+                self.assertEqual(json.loads(mp["Timer"]), [ar["name"]])
+                self.assertEqual(mp["MntGrp"], "nxsmntgrp2")
+#                print "CNF", cnf
+#                print "CHDS", chds
+                for i, ds in enumerate(chds):
+                    cnt = self.smychs[str(ds)]
+                    try:
+                        chn = {'ndim': 0,
+                               'index': i,
+                               'name': str(ds),
+                               'data_type': cnt['data_type'],
+                               'plot_type': cnt['plot_type'],
+                               'data_units': cnt['data_units'],
+                               'enabled': True,
+                               'label': cnt['source'],
+                               'instrument': None,
+                               'shape': cnt['shape'],
+                               '_controller_name': '__tango__',
+                               'conditioning': '',
+                               'full_name': '%s%s' % (
+                                   'tango://', cnt['source']),
+                               '_unit_id': '0',
+                               'output': True,
+                               'plot_axes': cnt['plot_axes'],
+                               'nexus_path': '',
+                               'normalization': 0,
+                               'source': cnt['source']}
+                        tgc[chn["full_name"]] = chn
+                    except:
+                        print ds, cnt
+                        raise
+
+                smg = {"controllers":
+                       {'__tango__':
+                        {'units':
+                         {'0':
+                          {'channels': tgc,
+                           'monitor': dv,
+                           'id': 0,
+                           'timer': dv,
+                           'trigger_type': 0}}}},
+                       "monitor": "%s" % dv,
+                       "description": "Measurement Group",
+                       "timer": "%s" % dv,
+                       "label": "nxsmntgrp2"}
+#                print "SMG", smg
+                self.myAssertDict(smg, pcnf)
+                self.myAssertDict(pcnf, cnf)
+                rs.mntGrp = "nxsmntgrp"
+                rs.profileConfiguration = str(json.dumps({}))
+                rs.configDevice = val["ConfigDevice"]
+                rs.door = val["Door"]
+                rs.mntGrp = val["MntGrp"]
+                rs.fetchProfile()
+                mp = json.loads(rs.profileConfiguration)
+                self.myAssertDict(json.loads(mp["ComponentPreselection"]),
+                                  acps)
+                self.myAssertDict(json.loads(mp["ComponentSelection"]), cps)
+                self.myAssertDict(json.loads(mp["DataSourceSelection"]), dss)
+                self.assertEqual(json.loads(mp["UnplottedComponents"]), [])
+                self.assertEqual(json.loads(mp["OrderedChannels"]), [])
+                self.myAssertDict(json.loads(mp["UserData"]), records)
+                self.assertEqual(json.loads(mp["Timer"]), [ar["name"]])
+                self.assertEqual(mp["MntGrp"], "nxsmntgrp2")
+            finally:
+                rs.deleteProfile("nxsmntgrp2")
+                try:
+                    tmg.tearDown()
+                except:
+                    pass
+
+    ## updateProfile test
+    def test_updateMntGrp_components_nopool_tango_unplottedcomponents(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp2'}
+
+        wrong = []
+        rs = self.openRecSelector()
+        rs.configDevice = val["ConfigDevice"]
+        rs.door = val["Door"]
+        rs.mntGrp = val["MntGrp"]
+        rs.writerDevice = val["WriterDevice"]
+        self.assertEqual(rs.configDevice, val["ConfigDevice"])
+        self.assertEqual(rs.door, val["Door"])
+
+        db = PyTango.Database()
+        db.put_device_property(self._ms.ms.keys()[0],
+                               {'PoolNames': self._pool.dp.name()})
+        pool = self._pool.dp
+        pool.ExpChannelList = []
+        self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+        self.assertEqual(rs.availableMntGrps(), [])
+
+        arr = [
+            {"full_name": "test/ct/01/Value", "name": "ct01"},
+            {"full_name": "test/ct/02/Value", "name": "ct02"},
+            {"full_name": "test/ct/03/value", "name": "ct03"},
+            {"full_name": "test/ct/04/value", "name": "ct04"},
+            {"full_name": "null/val", "name": "mntgrp_04"},
+        ]
+        pool.AcqChannelList = [json.dumps(a) for a in arr]
+
+        self.myAssertRaise(Exception, rs.updateMntGrp)
+        self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.smycps)])
+        self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
+
+        for i in range(30):
+            ar = arr[i % len(arr)]
+
+            cps = {}
+            acps = {}
+            dss = {}
+            lcp = self.__rnd.randint(1, 40)
+            lds = self.__rnd.randint(1, 40)
+
+            self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.smycps)])
+            self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
+
+            comps = set()
+            ncps = self.__rnd.randint(1, len(self.smycps.keys()) - 1)
+            lcps = self.__rnd.sample(set(self.smycps.keys()), ncps)
+            for cp in lcps:
+                if cp not in wrong:
+                    cps[cp] = bool(self.__rnd.randint(0, 1))
+                    if cps[cp]:
+                        comps.add(cp)
+
+            ancps = self.__rnd.randint(1, len(self.smycps.keys()) - 1)
+            alcps = self.__rnd.sample(set(self.smycps.keys()), ancps)
+            for cp in alcps:
+                if cp not in wrong:
+                    acps[cp] = bool(self.__rnd.randint(0, 1))
+                    if acps[cp]:
+                        comps.add(cp)
+
+            ndss = self.__rnd.randint(1, len(self.smycps.keys()) - 1)
+            ldss = self.__rnd.sample(set(self.smycps.keys()), ndss)
+            for ds in ldss:
+                if ds in self.smydss.keys():
+                    if ds not in wrong:
+                        dss[ds] = bool(self.__rnd.randint(0, 1))
+
+            ndss = self.__rnd.randint(1, len(self.smydss.keys()) - 1)
+            ldss = self.__rnd.sample(set(self.smydss.keys()), ndss)
+            for ds in ldss:
+                if ds in self.smydss.keys():
+                    if ds not in wrong:
+                        dss[ds] = bool(self.__rnd.randint(0, 1))
+
+            mncps = self.__rnd.randint(1, len(self.smycps.keys()) - 1)
+            mcps = [cp for cp in self.__rnd.sample(
+                    set(self.smycps.keys()), mncps) if cp not in wrong]
+            for cp in mcps:
+                comps.add(cp)
+
+            mp = json.loads(rs.profileConfiguration)
+            mp["ComponentSelection"] = json.dumps(cps)
+            mp["ComponentPreselection"] = json.dumps(acps)
+            mp["DataSourceSelection"] = json.dumps(dss)
+            self._cf.dp.SetCommandVariable(["MCPLIST", json.dumps(mcps)])
+            self._cf.dp.SetCommandVariable(["MCPLIST", json.dumps(mcps)])
+            rs.profileConfiguration = str(json.dumps(mp))
+            mp = json.loads(rs.profileConfiguration)
+
+            records = {}
+            describer = Describer(self._cf.dp, True)
+            cpres = describer.components(dstype='CLIENT')
+            for grp in cpres:
+                for idss in grp.values():
+                    for idsrs in idss.values():
+                        for idsr in idsrs:
+                            records[str(idsr[2])] = "1234"
+            dsres = describer.dataSources(dss.keys(), dstype='CLIENT')[0]
+            for dsr in dsres.values():
+                records[str(dsr.record)] = '2345'
+
+            mp = json.loads(rs.profileConfiguration)
+            mp["Timer"] = '["%s"]' % ar["name"]
+            mp["UserData"] = json.dumps(records)
+            rs.profileConfiguration = str(json.dumps(mp))
+            mp = json.loads(rs.profileConfiguration)
+
+            tmg = TestMGSetUp.TestMeasurementGroupSetUp(name='nxsmntgrp2')
+            dv = "/".join(ar["full_name"].split("/")[0:-1])
+            chds = [ds for ds in rs.selectedDataSources()
+                    if not ds.startswith('client')]
+            chds1 = list(chds)
+            chds2 = [ds for ds in rs.componentDataSources()
+                     if not ds.startswith('client')]
+            chds.extend(chds2)
+            chds = sorted(chds)
+
+            lheds = []
+            if chds:
+                nhe = self.__rnd.randint(0, len(set(chds)) - 1)
+                lheds = self.__rnd.sample(set(chds), nhe)
+
+            lhecp = []
+            if comps:
+                nhe = self.__rnd.randint(0, len(set(comps)) - 1)
+                lhecp = self.__rnd.sample(set(comps), nhe)
+
+            lhe = lheds + lhecp
+
+            mp = json.loads(rs.profileConfiguration)
+            mp["UnplottedComponents"] = json.dumps(lhe)
+            rs.profileConfiguration = str(json.dumps(mp))
+            mp = json.loads(rs.profileConfiguration)
+
+            lhe2 = []
+            for el in lhe:
+                found = False
+                for cp in comps:
+                    if el in self.smycpsstep[cp]:
+                        if cp not in lhecp:
+                            found = True
+                if not found:
+                    lhe2.append(el)
+
+            tgc = {}
+            mp = json.loads(rs.profileConfiguration)
+
+            try:
+                self.myAssertDict(json.loads(mp["ComponentPreselection"]),
+                                  acps)
+                self.myAssertDict(json.loads(mp["ComponentSelection"]), cps)
+                self.myAssertDict(json.loads(mp["DataSourceSelection"]), dss)
+                self.assertEqual(set(json.loads(mp["UnplottedComponents"])),
+                                 set(lhe))
+                self.assertEqual(json.loads(mp["OrderedChannels"]), [])
+                self.myAssertDict(json.loads(mp["UserData"]), records)
+                self.assertEqual(json.loads(mp["Timer"]), [ar["name"]])
+                self.assertEqual(mp["MntGrp"], "nxsmntgrp2")
+                wwcp = rs.components
+                describer = Describer(self._cf.dp, True)
+                res = describer.components(wwcp, "STEP", "")
+
+                mdds = set()
+                for mdss in res[0].values():
+                    if isinstance(mdss, dict):
+                        for ds in mdss.keys():
+                            dss[ds] = True
+
+                jpcnf = rs.updateMntGrp()
+                pcnf = json.loads(jpcnf)
+                mgdp = PyTango.DeviceProxy(tmg.new_device_info_writer.name)
+                jcnf = mgdp.Configuration
+                cnf = json.loads(jcnf)
+                mp = json.loads(rs.profileConfiguration)
+                self.myAssertDict(json.loads(mp["ComponentPreselection"]),
+                                  acps)
+                self.myAssertDict(json.loads(mp["ComponentSelection"]), cps)
+                self.myAssertDict(json.loads(mp["DataSourceSelection"]), dss)
+                self.assertEqual(set(json.loads(mp["UnplottedComponents"])),
+                                 set(lhe2))
+                self.assertEqual(json.loads(mp["OrderedChannels"]), [])
+                self.myAssertDict(json.loads(mp["UserData"]), records)
+                self.assertEqual(json.loads(mp["Timer"]), [ar["name"]])
+                self.assertEqual(mp["MntGrp"], "nxsmntgrp2")
+#                print "CNF", cnf
+#                print "CHDS", chds
+                for i, ds in enumerate(chds):
+                    cnt = self.smychs[str(ds)]
+                    try:
+                        chn = {'ndim': 0,
+                               'index': i,
+                               'name': str(ds),
+                               'data_type': cnt['data_type'],
+                               'plot_type': (
+                                   cnt['plot_type']
+                                   if ds not in lhe2 else 0),
+                               'data_units': cnt['data_units'],
+                               'enabled': True,
+                               'label': cnt['source'],
+                               'instrument': None,
+                               'shape': cnt['shape'],
+                               '_controller_name': '__tango__',
+                               'conditioning': '',
+                               'full_name': '%s%s' % (
+                                   'tango://', cnt['source']),
+                               '_unit_id': '0',
+                               'output': True,
+                               'plot_axes': (
+                                   cnt['plot_axes']
+                                   if ds not in lhe2 else []),
+                               'nexus_path': '',
+                               'normalization': 0,
+                               'source': cnt['source']}
+                        tgc[chn["full_name"]] = chn
+                    except:
+                        print ds, cnt
+                        raise
+
+                smg = {"controllers":
+                       {'__tango__':
+                        {'units':
+                         {'0':
+                          {'channels': tgc,
+                           'monitor': dv,
+                           'id': 0,
+                           'timer': dv,
+                           'trigger_type': 0}}}},
+                       "monitor": "%s" % dv,
+                       "description": "Measurement Group",
+                       "timer": "%s" % dv,
+                       "label": "nxsmntgrp2"}
+#                print "SMG", smg
+                self.myAssertDict(smg, pcnf)
+                self.myAssertDict(pcnf, cnf)
+                rs.mntGrp = "nxsmntgrp"
+                rs.profileConfiguration = str(json.dumps({}))
+                rs.configDevice = val["ConfigDevice"]
+                rs.door = val["Door"]
+                rs.mntGrp = val["MntGrp"]
+                rs.fetchProfile()
+                mp = json.loads(rs.profileConfiguration)
+                self.myAssertDict(json.loads(mp["ComponentPreselection"]),
+                                  acps)
+                self.myAssertDict(json.loads(mp["ComponentSelection"]), cps)
+                self.myAssertDict(json.loads(mp["DataSourceSelection"]), dss)
+                self.assertEqual(set(json.loads(mp["UnplottedComponents"])),
+                                 set(lhe2))
+                self.assertEqual(json.loads(mp["OrderedChannels"]), [])
+                self.myAssertDict(json.loads(mp["UserData"]), records)
+                self.assertEqual(json.loads(mp["Timer"]), [ar["name"]])
+                self.assertEqual(mp["MntGrp"], "nxsmntgrp2")
+            finally:
+                rs.deleteProfile("nxsmntgrp2")
+                try:
+                    tmg.tearDown()
+                except:
+                    pass
+
+    ## updateMntGrp test
+    def test_updateMntGrp_components_pool_tango(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp2'}
+
+        wrong = []
+        rs = self.openRecSelector()
+        rs.configDevice = val["ConfigDevice"]
+        rs.door = val["Door"]
+        rs.mntGrp = val["MntGrp"]
+        rs.writerDevice = val["WriterDevice"]
+        self.assertEqual(rs.configDevice, val["ConfigDevice"])
+        self.assertEqual(rs.door, val["Door"])
+
+        db = PyTango.Database()
+        db.put_device_property(self._ms.ms.keys()[0],
+                               {'PoolNames': self._pool.dp.name()})
+        pool = self._pool.dp
+        pool.ExpChannelList = []
+        self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+        self.assertEqual(rs.availableMntGrps(), [])
+        scalar_ctrl = 'ttestp09/testts/t1r228'
+        spectrum_ctrl = 'ttestp09/testts/t2r228'
+        image_ctrl = 'ttestp09/testts/t3r228'
+        ctrls = [scalar_ctrl, spectrum_ctrl, image_ctrl, "__tango__"]
+
+        simp2 = TestServerSetUp.MultiTestServerSetUp(
+            devices=['ttestp09/testts/t%02dr228' % i for i in range(1, 37)])
+        try:
+            simp2.setUp()
+
+            expch = []
+            pdss = []
+            for ds, vl in self.smychsXX.items():
+                if vl:
+                    exp = {}
+                    exp["name"] = ds
+                    exp["source"] = vl["source"]
+                    if ds.startswith("image"):
+                        exp["controller"] = image_ctrl
+                    if ds.startswith("spectrum"):
+                        exp["controller"] = spectrum_ctrl
+                    else:
+                        exp["controller"] = scalar_ctrl
+                    expch.append(exp)
+                    pdss.append(ds)
+            pdss = sorted(pdss)
+
+            acqch = [
+                {"full_name": "test/ct/01/Value", "name": "ct01"},
+                {"full_name": "test/ct/02/Value", "name": "ct02"},
+                {"full_name": "test/ct/03/value", "name": "ct03"},
+                {"full_name": "test/ct/04/value", "name": "ct04"},
+                {"full_name": "null/val", "name": "mntgrp_04"}
+            ]
+
+            for ch in expch:
+                ach = {}
+                ach["name"] = ch["name"]
+                ach["full_name"] = ch["source"]
+                acqch.append(ach)
+
+            pool.AcqChannelList = [json.dumps(a) for a in acqch]
+            pool.ExpChannelList = [json.dumps(a) for a in expch]
+
+            self.myAssertRaise(Exception, rs.updateMntGrp)
+            self._cf.dp.SetCommandVariable(
+                ["CPDICT", json.dumps(self.smycps2)])
+            self._cf.dp.SetCommandVariable(
+                ["DSDICT", json.dumps(self.smydssXX)])
+
+            for i in range(30):
+                try:
+                    ar = acqch[i % 5]
+                    cps = {}
+                    acps = {}
+                    dss = {}
+                    lcp = self.__rnd.randint(1, 40)
+                    lds = self.__rnd.randint(1, 40)
+
+                    self._cf.dp.SetCommandVariable(
+                        ["CPDICT", json.dumps(self.smycps2)])
+                    self._cf.dp.SetCommandVariable(
+                        ["DSDICT", json.dumps(self.smydssXX)])
+
+                    ncps = self.__rnd.randint(1, len(self.smycps2.keys()) - 1)
+                    lcps = self.__rnd.sample(set(self.smycps2.keys()), ncps)
+                    for cp in lcps:
+                        if cp not in wrong:
+                            cps[cp] = bool(self.__rnd.randint(0, 1))
+
+                    ancps = self.__rnd.randint(1, len(self.smycps2.keys()) - 1)
+                    alcps = self.__rnd.sample(set(self.smycps2.keys()), ancps)
+                    for cp in alcps:
+                        if cp not in wrong:
+                            acps[cp] = bool(self.__rnd.randint(0, 1))
+
+                    ndss = self.__rnd.randint(1, len(self.smycps2.keys()) - 1)
+                    ldss = self.__rnd.sample(set(self.smycps2.keys()), ndss)
+                    for ds in ldss:
+                        if ds in self.smydssXX.keys():
+                            if ds not in wrong:
+                                dss[ds] = bool(self.__rnd.randint(0, 1))
+
+                    ndss = self.__rnd.randint(1, len(self.smydssXX.keys()) - 1)
+                    ldss = self.__rnd.sample(set(self.smydssXX.keys()), ndss)
+                    for ds in ldss:
+                        if ds in self.smydssXX.keys():
+                            if ds not in wrong:
+                                dss[ds] = bool(self.__rnd.randint(0, 1))
+
+                    mncps = self.__rnd.randint(1, len(self.smycps2.keys()) - 1)
+                    mcps = [
+                        cp for cp in self.__rnd.sample(
+                            set(self.smycps2.keys()), mncps)
+                        if cp not in wrong]
+
+                    adss = dict(dss)
+                    for ch in expch:
+                        if ch["name"] not in adss.keys():
+                            adss[ch["name"]] = False
+
+                    mp = json.loads(rs.profileConfiguration)
+                    mp["ComponentSelection"] = json.dumps(cps)
+                    mp["ComponentPreselection"] = json.dumps(acps)
+                    mp["DataSourceSelection"] = json.dumps(dss)
+                    self._cf.dp.SetCommandVariable(["MCPLIST",
+                                                    json.dumps(mcps)])
+                    rs.profileConfiguration = str(json.dumps(mp))
+                    mp = json.loads(rs.profileConfiguration)
+
+                    records = {}
+                    describer = Describer(self._cf.dp, True)
+                    cpres = describer.components(dstype='CLIENT')
+                    for grp in cpres:
+                        for idss in grp.values():
+                            for idsrs in idss.values():
+                                for idsr in idsrs:
+                                    records[str(idsr[2])] = "1234"
+                    dsres = describer.dataSources(
+                        dss.keys(), dstype='CLIENT')[0]
+                    for dsr in dsres.values():
+                        records[str(dsr.record)] = '2345'
+
+                    mp = json.loads(rs.profileConfiguration)
+                    mp["Timer"] = '["%s"]' % ar["name"]
+                    mp["UserData"] = json.dumps(records)
+                    rs.profileConfiguration = str(json.dumps(mp))
+                    mp = json.loads(rs.profileConfiguration)
+
+                    tmg = TestMGSetUp.TestMeasurementGroupSetUp(
+                        name='nxsmntgrp2')
+                    dv = "/".join(ar["full_name"].split("/")[0:-1])
+                    chds = rs.selectedDataSources()
+                    chds.extend(rs.componentDataSources())
+                    chds = sorted([
+                        ds for ds in chds if not ds.startswith('client')])
+
+                    mp = json.loads(rs.profileConfiguration)
+                    self.myAssertDict(
+                        json.loads(mp["ComponentPreselection"]),
+                        acps)
+                    self.myAssertDict(
+                        json.loads(mp["ComponentSelection"]), cps)
+                    self.myAssertDict(
+                        json.loads(mp["DataSourceSelection"]), adss)
+                    self.assertEqual(json.loads(mp["UnplottedComponents"]), [])
+                    self.assertEqual(json.loads(mp["OrderedChannels"]), pdss)
+                    self.myAssertDict(json.loads(mp["UserData"]), records)
+                    self.assertEqual(json.loads(mp["Timer"]), [ar["name"]])
+                    self.assertEqual(mp["MntGrp"], "nxsmntgrp2")
+
+                    wwcp = rs.components
+                    describer = Describer(self._cf.dp, True)
+                    res = describer.components(wwcp, "STEP", "")
+
+                    mdds = set()
+                    for mdss in res[0].values():
+                        if isinstance(mdss, dict):
+                            for ds in mdss.keys():
+                                adss[ds] = True
+
+                    jpcnf = rs.updateMntGrp()
+                    pcnf = json.loads(jpcnf)
+                    mgdp = PyTango.DeviceProxy(tmg.new_device_info_writer.name)
+                    jcnf = mgdp.Configuration
+                    cnf = json.loads(jcnf)
+                    mp = json.loads(rs.profileConfiguration)
+                    self.myAssertDict(
+                        json.loads(mp["ComponentPreselection"]),
+                        acps)
+                    self.myAssertDict(
+                        json.loads(mp["ComponentSelection"]), cps)
+                    self.myAssertDict(
+                        json.loads(mp["DataSourceSelection"]), adss)
+                    self.assertEqual(json.loads(mp["UnplottedComponents"]), [])
+                    self.assertEqual(json.loads(mp["OrderedChannels"]), pdss)
+                    self.myAssertDict(json.loads(mp["UserData"]), records)
+                    self.assertEqual(json.loads(mp["Timer"]), [ar["name"]])
+                    self.assertEqual(mp["MntGrp"], "nxsmntgrp2")
+                    myctrls = {}
+                    for cl in ctrls:
+                        tgc = {}
+                        for exp in expch:
+                            ds = exp["name"]
+                            if ds in chds and cl == exp['controller']:
+                                cnt = self.smychsXX[str(ds)]
+                                i = chds.index(str(ds))
+                                try:
+                                    tdv = "/".join(
+                                        cnt['source'].split("/")[:-1])
+                                    chn = {'ndim': 0,
+                                           'index': i,
+                                           'name': str(ds),
+                                           'data_type': cnt['data_type'],
+                                           'plot_type': cnt['plot_type'],
+                                           'data_units': cnt['data_units'],
+                                           'enabled': True,
+                                           'label': ds,
+                                           'instrument': None,
+                                           'shape': cnt['shape'],
+                                           '_controller_name': cl,
+                                           'conditioning': '',
+                                           'full_name': tdv,
+                                           '_unit_id': '0',
+                                           'output': True,
+                                           'plot_axes': cnt['plot_axes'],
+                                           'nexus_path': '',
+                                           'normalization': 0,
+                                           'source': cnt['source']}
+                                    tgc[tdv] = chn
+                                except:
+                                    raise
+                        if tgc:
+                            myctrls[cl] = {'units':
+                                           {'0':
+                                            {'channels': tgc,
+                                             'monitor': dv,
+                                             'id': 0,
+                                             'timer': dv,
+                                             'trigger_type': 0}}}
+
+                    smg = {"controllers": myctrls,
+                           "monitor": "%s" % dv,
+                           "description": "Measurement Group",
+                           "timer": "%s" % dv,
+                           "label": "nxsmntgrp2"}
+                    self.myAssertDict(smg, pcnf)
+                    self.myAssertDict(pcnf, cnf)
+                    rs.mntGrp = "nxsmntgrp"
+                    rs.profileConfiguration = str(json.dumps({}))
+                    rs.configDevice = val["ConfigDevice"]
+                    rs.door = val["Door"]
+                    rs.mntGrp = val["MntGrp"]
+                    rs.fetchProfile()
+                    mp = json.loads(rs.profileConfiguration)
+                    self.myAssertDict(
+                        json.loads(mp["ComponentPreselection"]),
+                        acps)
+                    self.myAssertDict(
+                        json.loads(mp["ComponentSelection"]), cps)
+                    self.myAssertDict(
+                        json.loads(mp["DataSourceSelection"]), adss)
+                    self.assertEqual(json.loads(mp["UnplottedComponents"]), [])
+                    self.assertEqual(json.loads(mp["OrderedChannels"]), pdss)
+                    self.myAssertDict(json.loads(mp["UserData"]), records)
+                    self.assertEqual(json.loads(mp["Timer"]), [ar["name"]])
+                    self.assertEqual(mp["MntGrp"], "nxsmntgrp2")
+                finally:
+                    rs.deleteProfile("nxsmntgrp2")
+                    try:
+                        tmg.tearDown()
+                    except:
+                        pass
+        finally:
+            simp2.tearDown()
+
+    ## updateMntGrp test
+    def test_updateMntGrp_components_pool_tango_unplottedcomponents(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp2'}
+
+        wrong = []
+        rs = self.openRecSelector()
+        rs.configDevice = val["ConfigDevice"]
+        rs.door = val["Door"]
+        rs.mntGrp = val["MntGrp"]
+        rs.writerDevice = val["WriterDevice"]
+        self.assertEqual(rs.configDevice, val["ConfigDevice"])
+        self.assertEqual(rs.door, val["Door"])
+
+        db = PyTango.Database()
+        db.put_device_property(self._ms.ms.keys()[0],
+                               {'PoolNames': self._pool.dp.name()})
+        pool = self._pool.dp
+        pool.ExpChannelList = []
+        self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+        self.assertEqual(rs.availableMntGrps(), [])
+        scalar_ctrl = 'ttestp09/testts/t1r228'
+        spectrum_ctrl = 'ttestp09/testts/t2r228'
+        image_ctrl = 'ttestp09/testts/t3r228'
+        ctrls = [scalar_ctrl, spectrum_ctrl, image_ctrl, "__tango__"]
+
+        simp2 = TestServerSetUp.MultiTestServerSetUp(
+            devices=['ttestp09/testts/t%02dr228' % i for i in range(1, 37)])
+        try:
+            simp2.setUp()
+
+            expch = []
+            pdss = []
+            for ds, vl in self.smychsXX.items():
+                if vl:
+                    exp = {}
+                    exp["name"] = ds
+                    exp["source"] = vl["source"]
+                    if ds.startswith("image"):
+                        exp["controller"] = image_ctrl
+                    if ds.startswith("spectrum"):
+                        exp["controller"] = spectrum_ctrl
+                    else:
+                        exp["controller"] = scalar_ctrl
+                    expch.append(exp)
+                    pdss.append(ds)
+            pdss = sorted(pdss)
+
+            acqch = [
+                {"full_name": "test/ct/01/Value", "name": "ct01"},
+                {"full_name": "test/ct/02/Value", "name": "ct02"},
+                {"full_name": "test/ct/03/value", "name": "ct03"},
+                {"full_name": "test/ct/04/value", "name": "ct04"},
+                {"full_name": "null/val", "name": "mntgrp_04"}
+            ]
+
+            for ch in expch:
+                ach = {}
+                ach["name"] = ch["name"]
+                ach["full_name"] = ch["source"]
+                acqch.append(ach)
+
+            pool.AcqChannelList = [json.dumps(a) for a in acqch]
+            pool.ExpChannelList = [json.dumps(a) for a in expch]
+
+            self.myAssertRaise(Exception, rs.updateMntGrp)
+            self._cf.dp.SetCommandVariable(
+                ["CPDICT", json.dumps(self.smycps2)])
+            self._cf.dp.SetCommandVariable(
+                ["DSDICT", json.dumps(self.smydssXX)])
+
+            for i in range(30):
+                try:
+                    ar = acqch[i % 5]
+                    cps = {}
+                    acps = {}
+                    dss = {}
+                    lcp = self.__rnd.randint(1, 40)
+                    lds = self.__rnd.randint(1, 40)
+
+                    self._cf.dp.SetCommandVariable(
+                        ["CPDICT", json.dumps(self.smycps2)])
+                    self._cf.dp.SetCommandVariable(
+                        ["DSDICT", json.dumps(self.smydssXX)])
+                    comps = set()
+
+                    ncps = self.__rnd.randint(1, len(self.smycps2.keys()) - 1)
+                    lcps = self.__rnd.sample(set(self.smycps2.keys()), ncps)
+                    for cp in lcps:
+                        if cp not in wrong:
+                            cps[cp] = bool(self.__rnd.randint(0, 1))
+                            if cps[cp]:
+                                comps.add(cp)
+
+                    ancps = self.__rnd.randint(1, len(self.smycps2.keys()) - 1)
+                    alcps = self.__rnd.sample(set(self.smycps2.keys()), ancps)
+                    for cp in alcps:
+                        if cp not in wrong:
+                            acps[cp] = bool(self.__rnd.randint(0, 1))
+                            if acps[cp]:
+                                comps.add(cp)
+
+                    ndss = self.__rnd.randint(1, len(self.smycps2.keys()) - 1)
+                    ldss = self.__rnd.sample(set(self.smycps2.keys()), ndss)
+                    for ds in ldss:
+                        if ds in self.smydssXX.keys():
+                            if ds not in wrong:
+                                dss[ds] = bool(self.__rnd.randint(0, 1))
+
+                    ndss = self.__rnd.randint(1, len(self.smydssXX.keys()) - 1)
+                    ldss = self.__rnd.sample(set(self.smydssXX.keys()), ndss)
+                    for ds in ldss:
+                        if ds in self.smydssXX.keys():
+                            if ds not in wrong:
+                                dss[ds] = bool(self.__rnd.randint(0, 1))
+
+                    mncps = self.__rnd.randint(1, len(self.smycps2.keys()) - 1)
+                    mcps = [cp for cp in self.__rnd.sample(
+                            set(self.smycps2.keys()), mncps)
+                            if cp not in wrong]
+                    for cp in mcps:
+                        comps.add(cp)
+
+                    adss = dict(dss)
+                    for ch in expch:
+                        if ch["name"] not in adss.keys():
+                            adss[ch["name"]] = False
+                    mp = json.loads(rs.profileConfiguration)
+                    mp["ComponentSelection"] = json.dumps(cps)
+                    mp["ComponentPreselection"] = json.dumps(acps)
+                    mp["DataSourceSelection"] = json.dumps(dss)
+                    self._cf.dp.SetCommandVariable(["MCPLIST",
+                                                    json.dumps(mcps)])
+                    rs.profileConfiguration = str(json.dumps(mp))
+                    mp = json.loads(rs.profileConfiguration)
+
+                    records = {}
+                    describer = Describer(self._cf.dp, True)
+                    cpres = describer.components(dstype='CLIENT')
+                    for grp in cpres:
+                        for idss in grp.values():
+                            for idsrs in idss.values():
+                                for idsr in idsrs:
+                                    records[str(idsr[2])] = "1234"
+                    dsres = describer.dataSources(
+                        dss.keys(), dstype='CLIENT')[0]
+                    for dsr in dsres.values():
+                        records[str(dsr.record)] = '2345'
+
+                    mp = json.loads(rs.profileConfiguration)
+                    mp["Timer"] = '["%s"]' % ar["name"]
+                    mp["UserData"] = json.dumps(records)
+                    rs.profileConfiguration = str(json.dumps(mp))
+                    mp = json.loads(rs.profileConfiguration)
+
+                    tmg = TestMGSetUp.TestMeasurementGroupSetUp(
+                        name='nxsmntgrp2')
+                    dv = "/".join(ar["full_name"].split("/")[0:-1])
+                    chds = [ds for ds in rs.selectedDataSources()
+                            if not ds.startswith('client')]
+                    chds1 = list(chds)
+                    chds2 = [ds for ds in rs.componentDataSources()
+                             if not ds.startswith('client')]
+                    chds.extend(chds2)
+                    chds = sorted(chds)
+
+                    lheds = []
+                    if chds:
+                        nhe = self.__rnd.randint(0, len(set(chds)) - 1)
+                        lheds = self.__rnd.sample(set(chds), nhe)
+
+                    lhecp = []
+                    if comps:
+                        nhe = self.__rnd.randint(0, len(set(comps)) - 1)
+                        lhecp = self.__rnd.sample(set(comps), nhe)
+
+                    lhe = lheds + lhecp
+
+                    mp = json.loads(rs.profileConfiguration)
+                    mp["UnplottedComponents"] = json.dumps(lhe)
+                    rs.profileConfiguration = str(json.dumps(mp))
+                    mp = json.loads(rs.profileConfiguration)
+
+                    lhe2 = []
+                    for el in lhe:
+                        found = False
+                        for cp in comps:
+                            if el in self.smycpsstep2[cp]:
+                                if cp not in lhecp:
+                                    found = True
+                        if not found:
+                            lhe2.append(el)
+
+                    self.myAssertDict(
+                        json.loads(mp["ComponentPreselection"]),
+                        acps)
+                    self.myAssertDict(
+                        json.loads(mp["ComponentSelection"]), cps)
+                    self.myAssertDict(
+                        json.loads(mp["DataSourceSelection"]), adss)
+                    self.assertEqual(
+                        set(json.loads(mp["UnplottedComponents"])),
+                        set(lhe))
+                    self.assertEqual(json.loads(mp["OrderedChannels"]), pdss)
+                    self.myAssertDict(json.loads(mp["UserData"]), records)
+                    self.assertEqual(json.loads(mp["Timer"]), [ar["name"]])
+                    self.assertEqual(mp["MntGrp"], "nxsmntgrp2")
+
+                    wwcp = rs.components
+                    describer = Describer(self._cf.dp, True)
+                    res = describer.components(wwcp, "STEP", "")
+
+                    mdds = set()
+                    for mdss in res[0].values():
+                        if isinstance(mdss, dict):
+                            for ds in mdss.keys():
+                                adss[ds] = True
+
+                    jpcnf = rs.updateMntGrp()
+                    pcnf = json.loads(jpcnf)
+                    mgdp = PyTango.DeviceProxy(tmg.new_device_info_writer.name)
+                    jcnf = mgdp.Configuration
+                    cnf = json.loads(jcnf)
+                    mp = json.loads(rs.profileConfiguration)
+                    self.myAssertDict(
+                        json.loads(mp["ComponentPreselection"]),
+                        acps)
+                    self.myAssertDict(
+                        json.loads(mp["ComponentSelection"]), cps)
+                    self.myAssertDict(
+                        json.loads(mp["DataSourceSelection"]), adss)
+                    self.assertEqual(
+                        set(json.loads(mp["UnplottedComponents"])),
+                        set(lhe2))
+                    self.assertEqual(json.loads(mp["OrderedChannels"]), pdss)
+                    self.myAssertDict(json.loads(mp["UserData"]), records)
+                    self.assertEqual(json.loads(mp["Timer"]), [ar["name"]])
+                    self.assertEqual(mp["MntGrp"], "nxsmntgrp2")
+#                    print "CNF", cnf
+#                    print "CHDS", chds
+                    myctrls = {}
+                    for cl in ctrls:
+                        tgc = {}
+                        for exp in expch:
+                            ds = exp["name"]
+                            if ds in chds and cl == exp['controller']:
+                                cnt = self.smychsXX[str(ds)]
+                                i = chds.index(str(ds))
+#                                print "INDEX", i, ds
+                                try:
+                                    tdv = "/".join(
+                                        cnt['source'].split("/")[:-1])
+                                    chn = {'ndim': 0,
+                                           'index': i,
+                                           'name': str(ds),
+                                           'data_type': cnt['data_type'],
+                                           'plot_type': (
+                                               cnt['plot_type']
+                                               if ds not in lhe2 else 0),
+                                           'data_units': cnt['data_units'],
+                                           'enabled': True,
+                                           'label': ds,
+                                           'instrument': None,
+                                           'shape': cnt['shape'],
+                                           '_controller_name': cl,
+                                           'conditioning': '',
+                                           'full_name': tdv,
+                                           '_unit_id': '0',
+                                           'output': True,
+                                           'plot_axes': (
+                                               cnt['plot_axes']
+                                               if ds not in lhe2 else []),
+                                           'nexus_path': '',
+                                           'normalization': 0,
+                                           'source': cnt['source']}
+                                    tgc[tdv] = chn
+                                except:
+                                    raise
+                        if tgc:
+                            myctrls[cl] = {
+                                'units':
+                                    {'0':
+                                     {'channels': tgc,
+                                      'monitor': dv,
+                                      'id': 0,
+                                      'timer': dv,
+                                      'trigger_type': 0}}}
+
+                    smg = {"controllers": myctrls,
+                           "monitor": "%s" % dv,
+                           "description": "Measurement Group",
+                           "timer": "%s" % dv,
+                           "label": "nxsmntgrp2"}
+#                    print "SMG", smg
+                    self.myAssertDict(smg, pcnf)
+                    self.myAssertDict(pcnf, cnf)
+                    rs.mntGrp = "nxsmntgrp"
+                    rs.profileConfiguration = str(json.dumps({}))
+                    rs.configDevice = val["ConfigDevice"]
+                    rs.door = val["Door"]
+                    rs.mntGrp = val["MntGrp"]
+                    rs.fetchProfile()
+                    mp = json.loads(rs.profileConfiguration)
+                    self.myAssertDict(
+                        json.loads(mp["ComponentPreselection"]),
+                        acps)
+                    self.myAssertDict(
+                        json.loads(mp["ComponentSelection"]), cps)
+                    self.myAssertDict(
+                        json.loads(mp["DataSourceSelection"]), adss)
+                    self.assertEqual(
+                        set(json.loads(mp["UnplottedComponents"])),
+                        set(lhe2))
+                    self.assertEqual(json.loads(mp["OrderedChannels"]), pdss)
+                    self.myAssertDict(json.loads(mp["UserData"]), records)
+                    self.assertEqual(json.loads(mp["Timer"]), [ar["name"]])
+                    self.assertEqual(mp["MntGrp"], "nxsmntgrp2")
+                finally:
+                    rs.deleteProfile("nxsmntgrp2")
+                    try:
+                        tmg.tearDown()
+                    except:
+                        pass
+        finally:
+            simp2.tearDown()
+
+    ## updateMntGrp test
+    def test_updateMntGrp_components_mixed_tango_unplottedcomponents(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp2'}
+
+        wrong = []
+        rs = self.openRecSelector()
+        rs.configDevice = val["ConfigDevice"]
+        rs.door = val["Door"]
+        rs.mntGrp = val["MntGrp"]
+        rs.writerDevice = val["WriterDevice"]
+        self.assertEqual(rs.configDevice, val["ConfigDevice"])
+        self.assertEqual(rs.door, val["Door"])
+
+        db = PyTango.Database()
+        db.put_device_property(self._ms.ms.keys()[0],
+                               {'PoolNames': self._pool.dp.name()})
+        pool = self._pool.dp
+        pool.ExpChannelList = []
+        self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+        self.assertEqual(rs.availableMntGrps(), [])
+        scalar_ctrl = 'ttestp09/testts/t1r228'
+        spectrum_ctrl = 'ttestp09/testts/t2r228'
+        image_ctrl = 'ttestp09/testts/t3r228'
+        ctrls = [scalar_ctrl, spectrum_ctrl, image_ctrl, "__tango__"]
+
+        simp2 = TestServerSetUp.MultiTestServerSetUp(
+            devices=['ttestp09/testts/t%02dr228' % i for i in range(1, 37)])
+        try:
+            simp2.setUp()
+
+            expch = []
+            pdss = []
+            for ds, vl in self.smychsXX.items():
+                if vl:
+                    exp = {}
+                    exp["name"] = ds
+                    exp["source"] = vl["source"]
+                    if ds.startswith("image"):
+                        exp["controller"] = image_ctrl
+                    if ds.startswith("spectrum"):
+                        exp["controller"] = spectrum_ctrl
+                    else:
+                        exp["controller"] = scalar_ctrl
+                    expch.append(exp)
+                    pdss.append(ds)
+            pdss = sorted(pdss)
+
+            acqch = [
+                {"full_name": "test/ct/01/Value", "name": "ct01"},
+                {"full_name": "test/ct/02/Value", "name": "ct02"},
+                {"full_name": "test/ct/03/value", "name": "ct03"},
+                {"full_name": "test/ct/04/value", "name": "ct04"},
+                {"full_name": "null/val", "name": "mntgrp_04"}
+            ]
+
+            for ch in expch:
+                ach = {}
+                ach["name"] = ch["name"]
+                ach["full_name"] = ch["source"]
+                acqch.append(ach)
+
+            pool.AcqChannelList = [json.dumps(a) for a in acqch]
+            pool.ExpChannelList = [json.dumps(a) for a in expch]
+
+            self.myAssertRaise(Exception, rs.updateMntGrp)
+            amycps = dict(self.smycps2)
+            amycps.update(self.smycps)
+            amydss = dict(self.smydssXX)
+            amydss.update(self.smydss)
+            amycpsstep = dict(self.smycpsstep)
+            amycpsstep.update(self.smycpsstep2)
+            self._cf.dp.SetCommandVariable(
+                ["CPDICT", json.dumps(amycps)])
+            self._cf.dp.SetCommandVariable(
+                ["DSDICT", json.dumps(amydss)])
+
+            for i in range(30):
+                try:
+                    ar = acqch[i % 5]
+                    cps = {}
+                    acps = {}
+                    dss = {}
+                    lcp = self.__rnd.randint(1, 40)
+                    lds = self.__rnd.randint(1, 40)
+
+                    self._cf.dp.SetCommandVariable(
+                        ["CPDICT", json.dumps(amycps)])
+                    self._cf.dp.SetCommandVariable(
+                        ["DSDICT", json.dumps(amydss)])
+                    comps = set()
+
+                    ncps = self.__rnd.randint(1, len(amycps) - 1)
+                    lcps = self.__rnd.sample(set(amycps.keys()), ncps)
+                    for cp in lcps:
+                        if cp not in wrong:
+                            cps[cp] = bool(self.__rnd.randint(0, 1))
+                            if cps[cp]:
+                                comps.add(cp)
+
+                    ancps = self.__rnd.randint(1, len(amycps.keys()) - 1)
+                    alcps = self.__rnd.sample(set(amycps.keys()), ancps)
+                    for cp in alcps:
+                        if cp not in wrong:
+                            acps[cp] = bool(self.__rnd.randint(0, 1))
+                            if acps[cp]:
+                                comps.add(cp)
+
+                    ndss = self.__rnd.randint(1, len(amycps.keys()) - 1)
+                    ldss = self.__rnd.sample(set(amycps.keys()), ndss)
+                    for ds in ldss:
+                        if ds in amydss.keys():
+                            if ds not in wrong:
+                                dss[ds] = bool(self.__rnd.randint(0, 1))
+
+                    ndss = self.__rnd.randint(1, len(amydss.keys()) - 1)
+                    ldss = self.__rnd.sample(set(amydss.keys()), ndss)
+                    for ds in ldss:
+                        if ds in amydss.keys():
+                            if ds not in wrong:
+                                dss[ds] = bool(self.__rnd.randint(0, 1))
+
+                    mncps = self.__rnd.randint(1, len(amycps.keys()) - 1)
+                    mcps = [cp for cp in self.__rnd.sample(
+                            set(amycps.keys()), mncps) if cp not in wrong]
+                    for cp in mcps:
+                        comps.add(cp)
+
+                    adss = dict(dss)
+                    for ch in expch:
+                        if ch["name"] not in adss.keys():
+                            adss[ch["name"]] = False
+                    mp = json.loads(rs.profileConfiguration)
+                    mp["ComponentSelection"] = json.dumps(cps)
+                    mp["ComponentPreselection"] = json.dumps(acps)
+                    mp["DataSourceSelection"] = json.dumps(dss)
+                    self._cf.dp.SetCommandVariable(["MCPLIST",
+                                                    json.dumps(mcps)])
+
+                    rs.profileConfiguration = str(json.dumps(mp))
+                    mp = json.loads(rs.profileConfiguration)
+                    records = {}
+                    describer = Describer(self._cf.dp, True)
+                    cpres = describer.components(dstype='CLIENT')
+                    for grp in cpres:
+                        for idss in grp.values():
+                            for idsrs in idss.values():
+                                for idsr in idsrs:
+                                    records[str(idsr[2])] = "1234"
+                    dsres = describer.dataSources(
+                        dss.keys(), dstype='CLIENT')[0]
+                    for dsr in dsres.values():
+                        records[str(dsr.record)] = '2345'
+
+                    mp = json.loads(rs.profileConfiguration)
+                    mp["Timer"] = '["%s"]' % ar["name"]
+                    mp["UserData"] = json.dumps(records)
+                    rs.profileConfiguration = str(json.dumps(mp))
+                    mp = json.loads(rs.profileConfiguration)
+
+                    tmg = TestMGSetUp.TestMeasurementGroupSetUp(
+                        name='nxsmntgrp2')
+                    dv = "/".join(ar["full_name"].split("/")[0:-1])
+                    chds = [ds for ds in rs.selectedDataSources()
+                            if not ds.startswith('client')]
+                    chds1 = list(chds)
+                    chds2 = [ds for ds in rs.componentDataSources()
+                             if not ds.startswith('client')]
+                    chds.extend(chds2)
+                    tmpchds = sorted(chds)
+                    chds = []
+                    for ds in tmpchds:
+                        if ds in pdss:
+                            chds.append(ds)
+                    for ds in tmpchds:
+                        if ds not in pdss:
+                            chds.append(ds)
+
+                    lheds = []
+                    if chds:
+                        nhe = self.__rnd.randint(0, len(set(chds)) - 1)
+                        lheds = self.__rnd.sample(set(chds), nhe)
+
+                    lhecp = []
+                    if comps:
+                        nhe = self.__rnd.randint(0, len(set(comps)) - 1)
+                        lhecp = self.__rnd.sample(set(comps), nhe)
+
+                    lhe = lheds + lhecp
+
+                    mp = json.loads(rs.profileConfiguration)
+                    mp["UnplottedComponents"] = json.dumps(lhe)
+                    mp["OrderedChannels"] = json.dumps(pdss)
+                    rs.profileConfiguration = str(json.dumps(mp))
+                    mp = json.loads(rs.profileConfiguration)
+
+                    lhe2 = []
+                    for el in lhe:
+                        found = False
+                        for cp in comps:
+                            if el in amycpsstep[cp]:
+                                if cp not in lhecp:
+                                    found = True
+                        if not found:
+                            lhe2.append(el)
+
+                    self.myAssertDict(
+                        json.loads(mp["ComponentPreselection"]),
+                        acps)
+                    self.myAssertDict(
+                        json.loads(mp["ComponentSelection"]), cps)
+                    self.myAssertDict(
+                        json.loads(mp["DataSourceSelection"]), adss)
+                    self.assertEqual(
+                        set(json.loads(mp["UnplottedComponents"])),
+                        set(lhe))
+                    self.assertEqual(json.loads(mp["OrderedChannels"]), pdss)
+                    self.myAssertDict(json.loads(mp["UserData"]), records)
+                    self.assertEqual(json.loads(mp["Timer"]), [ar["name"]])
+                    self.assertEqual(mp["MntGrp"], "nxsmntgrp2")
+
+                    wwcp = rs.components
+                    describer = Describer(self._cf.dp, True)
+                    res = describer.components(wwcp, "STEP", "")
+
+                    mdds = set()
+                    for mdss in res[0].values():
+                        if isinstance(mdss, dict):
+                            for ds in mdss.keys():
+                                adss[ds] = True
+
+                    jpcnf = rs.updateMntGrp()
+                    pcnf = json.loads(jpcnf)
+                    mgdp = PyTango.DeviceProxy(tmg.new_device_info_writer.name)
+                    jcnf = mgdp.Configuration
+                    cnf = json.loads(jcnf)
+                    mp = json.loads(rs.profileConfiguration)
+                    self.myAssertDict(
+                        json.loads(mp["ComponentPreselection"]),
+                        acps)
+                    self.myAssertDict(
+                        json.loads(mp["ComponentSelection"]), cps)
+                    self.myAssertDict(
+                        json.loads(mp["DataSourceSelection"]), adss)
+                    self.assertEqual(
+                        set(json.loads(mp["UnplottedComponents"])),
+                        set(lhe2))
+                    self.assertEqual(json.loads(mp["OrderedChannels"]), pdss)
+                    self.myAssertDict(json.loads(mp["UserData"]), records)
+                    self.assertEqual(json.loads(mp["Timer"]), [ar["name"]])
+                    self.assertEqual(mp["MntGrp"], "nxsmntgrp2")
+#                    print "CNF", cnf
+#                    print "CHDS", chds
+                    myctrls = {}
+                    for cl in ctrls:
+                        tgc = {}
+                        for exp in expch:
+                            ds = exp["name"]
+                            if ds in chds and cl == exp['controller']:
+                                if ds in self.smychsXX.keys():
+                                    cnt = self.smychsXX[str(ds)]
+                                    i = chds.index(str(ds))
+#                                    print "INDEX", i, ds
+                                    try:
+                                        tdv = "/".join(
+                                            cnt['source'].split("/")[:-1])
+                                        chn = {'ndim': 0,
+                                               'index': i,
+                                               'name': str(ds),
+                                               'data_type': cnt['data_type'],
+                                               'plot_type': (
+                                                   cnt['plot_type']
+                                                   if ds not in lhe2 else 0),
+                                               'data_units': cnt['data_units'],
+                                               'enabled': True,
+                                               'label': ds,
+                                               'instrument': None,
+                                               'shape': cnt['shape'],
+                                               '_controller_name': cl,
+                                               'conditioning': '',
+                                               'full_name': tdv,
+                                               '_unit_id': '0',
+                                               'output': True,
+                                               'plot_axes': (
+                                                   cnt['plot_axes']
+                                                   if ds not in lhe2 else []),
+                                               'nexus_path': '',
+                                               'normalization': 0,
+                                               'source': cnt['source']}
+                                        tgc[tdv] = chn
+                                    except:
+                                        raise
+                        if tgc:
+                            myctrls[cl] = {'units':
+                                           {'0':
+                                            {'channels': tgc,
+                                             'monitor': dv,
+                                             'id': 0,
+                                             'timer': dv,
+                                             'trigger_type': 0}}}
+
+                    tgc = {}
+                    for ds in chds:
+                        if ds in self.smychs:
+                            cnt = self.smychs[str(ds)]
+                            i = chds.index(str(ds))
+#                            print "INDEX", i, ds
+                            try:
+                                chn = {'ndim': 0,
+                                       'index': i,
+                                       'name': str(ds),
+                                       'data_type': cnt['data_type'],
+                                       'plot_type': (
+                                           cnt['plot_type']
+                                           if ds not in lhe2 else 0),
+                                       'data_units': cnt['data_units'],
+                                       'enabled': True,
+                                       'label': cnt['source'],
+                                       'instrument': None,
+                                       'shape': cnt['shape'],
+                                       '_controller_name': '__tango__',
+                                       'conditioning': '',
+                                       'full_name': '%s%s' % (
+                                           'tango://', cnt['source']),
+                                       '_unit_id': '0',
+                                       'output': True,
+                                       'plot_axes': (
+                                           cnt['plot_axes']
+                                           if ds not in lhe2 else []),
+                                       'nexus_path': '',
+                                       'normalization': 0,
+                                       'source': cnt['source']}
+                                tgc[chn["full_name"]] = chn
+                            except:
+                                raise
+                    if tgc:
+                        myctrls['__tango__'] = {'units':
+                                                {'0':
+                                                 {'channels': tgc,
+                                                  'monitor': dv,
+                                                  'id': 0,
+                                                  'timer': dv,
+                                                  'trigger_type': 0}}}
+
+                    smg = {"controllers": myctrls,
+                           "monitor": "%s" % dv,
+                           "description": "Measurement Group",
+                           "timer": "%s" % dv,
+                           "label": "nxsmntgrp2"}
+#                    print "SMG", smg
+                    self.myAssertDict(smg, pcnf)
+                    self.myAssertDict(pcnf, cnf)
+                    rs.mntGrp = "nxsmntgrp"
+                    rs.profileConfiguration = str(json.dumps({}))
+                    rs.configDevice = val["ConfigDevice"]
+                    rs.door = val["Door"]
+                    rs.mntGrp = val["MntGrp"]
+                    rs.fetchProfile()
+                    mp = json.loads(rs.profileConfiguration)
+                    self.myAssertDict(
+                        json.loads(mp["ComponentPreselection"]),
+                        acps)
+                    self.myAssertDict(
+                        json.loads(mp["ComponentSelection"]), cps)
+                    self.myAssertDict(
+                        json.loads(mp["DataSourceSelection"]), adss)
+                    self.assertEqual(
+                        set(json.loads(mp["UnplottedComponents"])),
+                        set(lhe2))
+                    self.assertEqual(json.loads(mp["OrderedChannels"]), pdss)
+                    self.myAssertDict(json.loads(mp["UserData"]), records)
+                    self.assertEqual(json.loads(mp["Timer"]), [ar["name"]])
+                    self.assertEqual(mp["MntGrp"], "nxsmntgrp2")
+                finally:
+                    rs.deleteProfile("nxsmntgrp2")
+                    try:
+                        tmg.tearDown()
+                    except:
+                        pass
+        finally:
+            simp2.tearDown()
+
+    ## updateMntGrp test
+    def test_updateMntGrp_components_mixed_tango_orderedchannels(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'mg2'}
+
+        wrong = []
+        rs = self.openRecSelector()
+        rs.configDevice = val["ConfigDevice"]
+        rs.door = val["Door"]
+        rs.mntGrp = val["MntGrp"]
+        rs.writerDevice = val["WriterDevice"]
+        self.assertEqual(rs.configDevice, val["ConfigDevice"])
+        self.assertEqual(rs.door, val["Door"])
+
+        db = PyTango.Database()
+        db.put_device_property(self._ms.ms.keys()[0],
+                               {'PoolNames': self._pool.dp.name()})
+        pool = self._pool.dp
+        pool.ExpChannelList = []
+        self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+        self.assertEqual(rs.availableMntGrps(), [])
+        self.myAssertRaise(Exception, rs.updateMntGrp)
+
+        db = PyTango.Database()
+        db.put_device_property(self._ms.ms.keys()[0],
+                               {'PoolNames': self._pool.dp.name()})
+        pool = self._pool.dp
+        self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+        self.assertEqual(rs.availableMntGrps(), [])
+        scalar_ctrl = 'ttestp09/testts/t1r228'
+        spectrum_ctrl = 'ttestp09/testts/t2r228'
+        image_ctrl = 'ttestp09/testts/t3r228'
+        ctrls = [scalar_ctrl, spectrum_ctrl, image_ctrl, "__tango__"]
+
+        simp2 = TestServerSetUp.MultiTestServerSetUp(
+            devices=['ttestp09/testts/t%02dr228' % i for i in range(1, 37)])
+        try:
+            simp2.setUp()
+
+            expch = []
+            pdss = []
+            for ds, vl in self.smychsXX.items():
+                if vl:
+                    exp = {}
+                    exp["name"] = ds
+                    exp["source"] = vl["source"]
+                    if ds.startswith("image"):
+                        exp["controller"] = image_ctrl
+                    if ds.startswith("spectrum"):
+                        exp["controller"] = spectrum_ctrl
+                    else:
+                        exp["controller"] = scalar_ctrl
+                    expch.append(exp)
+                    pdss.append(ds)
+            pdss = sorted(pdss)
+            self.__rnd.shuffle(pdss)
+
+            acqch = [
+                {"full_name": "test/ct/01/Value", "name": "ct01"},
+                {"full_name": "test/ct/02/Value", "name": "ct02"},
+                {"full_name": "test/ct/03/value", "name": "ct03"},
+                {"full_name": "test/ct/04/value", "name": "ct04"},
+                {"full_name": "null/val", "name": "mntgrp_04"}
+            ]
+
+            for ch in expch:
+                ach = {}
+                ach["name"] = ch["name"]
+                ach["full_name"] = ch["source"]
+                acqch.append(ach)
+
+            pool.AcqChannelList = [json.dumps(a) for a in acqch]
+            pool.ExpChannelList = [json.dumps(a) for a in expch]
+
+            self.myAssertRaise(Exception, rs.updateMntGrp)
+            amycps = dict(self.smycps2)
+            amycps.update(self.smycps)
+            amydss = dict(self.smydssXX)
+            amydss.update(self.smydss)
+            amycpsstep = dict(self.smycpsstep)
+            amycpsstep.update(self.smycpsstep2)
+            self._cf.dp.SetCommandVariable(
+                ["CPDICT", json.dumps(amycps)])
+            self._cf.dp.SetCommandVariable(
+                ["DSDICT", json.dumps(amydss)])
+
+            for i in range(30):
+                try:
+                    ar = acqch[i % 5]
+                    cps = {}
+                    acps = {}
+                    dss = {}
+                    lcp = self.__rnd.randint(1, 40)
+                    lds = self.__rnd.randint(1, 40)
+
+                    self._cf.dp.SetCommandVariable(
+                        ["CPDICT", json.dumps(amycps)])
+                    self._cf.dp.SetCommandVariable(
+                        ["DSDICT", json.dumps(amydss)])
+                    comps = set()
+
+                    ncps = self.__rnd.randint(1, len(amycps) - 1)
+                    lcps = self.__rnd.sample(set(amycps.keys()), ncps)
+                    for cp in lcps:
+                        if cp not in wrong:
+                            cps[cp] = bool(self.__rnd.randint(0, 1))
+                            if cps[cp]:
+                                comps.add(cp)
+
+                    ancps = self.__rnd.randint(1, len(amycps.keys()) - 1)
+                    alcps = self.__rnd.sample(set(amycps.keys()), ancps)
+                    for cp in alcps:
+                        if cp not in wrong:
+                            acps[cp] = bool(self.__rnd.randint(0, 1))
+                            if acps[cp]:
+                                comps.add(cp)
+
+                    ndss = self.__rnd.randint(1, len(amycps.keys()) - 1)
+                    ldss = self.__rnd.sample(set(amycps.keys()), ndss)
+                    for ds in ldss:
+                        if ds in amydss.keys():
+                            if ds not in wrong:
+                                dss[ds] = bool(self.__rnd.randint(0, 1))
+
+                    ndss = self.__rnd.randint(1, len(amydss.keys()) - 1)
+                    ldss = self.__rnd.sample(set(amydss.keys()), ndss)
+                    for ds in ldss:
+                        if ds in amydss.keys():
+                            if ds not in wrong:
+                                dss[ds] = bool(self.__rnd.randint(0, 1))
+
+                    mncps = self.__rnd.randint(1, len(amycps.keys()) - 1)
+                    mcps = [cp for cp in self.__rnd.sample(
+                        set(amycps.keys()), mncps) if cp not in wrong]
+                    for cp in mcps:
+                        comps.add(cp)
+
+                    adss = dict(dss)
+                    for ch in expch:
+                        if ch["name"] not in adss.keys():
+                            adss[ch["name"]] = False
+                    mp = json.loads(rs.profileConfiguration)
+                    mp["ComponentSelection"] = json.dumps(cps)
+                    mp["ComponentPreselection"] = json.dumps(acps)
+                    mp["DataSourceSelection"] = json.dumps(dss)
+                    self._cf.dp.SetCommandVariable(["MCPLIST",
+                                                    json.dumps(mcps)])
+                    rs.profileConfiguration = str(json.dumps(mp))
+                    mp = json.loads(rs.profileConfiguration)
+
+                    records = {}
+                    describer = Describer(self._cf.dp, True)
+                    cpres = describer.components(dstype='CLIENT')
+                    for grp in cpres:
+                        for idss in grp.values():
+                            for idsrs in idss.values():
+                                for idsr in idsrs:
+                                    records[str(idsr[2])] = "1234"
+                    dsres = describer.dataSources(
+                        dss.keys(), dstype='CLIENT')[0]
+                    for dsr in dsres.values():
+                        records[str(dsr.record)] = '2345'
+
+                    mp = json.loads(rs.profileConfiguration)
+                    mp["Timer"] = '["%s"]' % ar["name"]
+                    mp["UserData"] = json.dumps(records)
+                    rs.profileConfiguration = str(json.dumps(mp))
+                    mp = json.loads(rs.profileConfiguration)
+
+                    tmg = TestMGSetUp.TestMeasurementGroupSetUp(
+                        name='mg2')
+                    dv = "/".join(ar["full_name"].split("/")[0:-1])
+                    chds = [ds for ds in rs.selectedDataSources()
+                            if not ds.startswith('client')]
+                    chds1 = list(chds)
+                    chds2 = [ds for ds in rs.componentDataSources()
+                             if not ds.startswith('client')]
+                    chds.extend(chds2)
+                    tmpchds = sorted(chds)
+                    chds = []
+                    for ds in pdss:
+                        if ds in tmpchds:
+                            chds.append(ds)
+                    for ds in tmpchds:
+                        if ds not in pdss:
+                            chds.append(ds)
+
+                    lheds = []
+                    if chds:
+                        nhe = self.__rnd.randint(0, len(set(chds)) - 1)
+                        lheds = self.__rnd.sample(set(chds), nhe)
+
+                    lhecp = []
+                    if comps:
+                        nhe = self.__rnd.randint(0, len(set(comps)) - 1)
+                        lhecp = self.__rnd.sample(set(comps), nhe)
+
+                    lhe = lheds + lhecp
+
+                    mp = json.loads(rs.profileConfiguration)
+                    mp["UnplottedComponents"] = json.dumps(lhe)
+                    mp["OrderedChannels"] = json.dumps(pdss)
+                    rs.profileConfiguration = str(json.dumps(mp))
+                    mp = json.loads(rs.profileConfiguration)
+
+                    lhe2 = []
+                    for el in lhe:
+                        found = False
+                        for cp in comps:
+                            if el in amycpsstep[cp]:
+                                if cp not in lhecp:
+                                    found = True
+                        if not found:
+                            lhe2.append(el)
+
+#                    print "LHE", lhe
+#                    print "LHE2", lhe2
+#                    print "LHECP", lhecp
+#                    print "COMPS", comps
+
+#                    print "COMP", rs.components()
+#                    print "ACOMP", rs.preselectedComponents()
+#                    print "MCP", mcps
+#                    print "DS", rs.dataSources()
+#                    print "DDS", rs.componentDataSources()
+
+                    self.myAssertDict(
+                        json.loads(mp["ComponentPreselection"]),
+                        acps)
+                    self.myAssertDict(
+                        json.loads(mp["ComponentSelection"]), cps)
+                    self.myAssertDict(
+                        json.loads(mp["DataSourceSelection"]), adss)
+                    self.assertEqual(
+                        set(json.loads(mp["UnplottedComponents"])),
+                        set(lhe))
+                    self.assertEqual(json.loads(mp["OrderedChannels"]), pdss)
+                    self.myAssertDict(json.loads(mp["UserData"]), records)
+                    self.assertEqual(json.loads(mp["Timer"]), [ar["name"]])
+                    self.assertEqual(mp["MntGrp"], "mg2")
+
+                    wwcp = rs.components
+                    describer = Describer(self._cf.dp, True)
+                    res = describer.components(wwcp, "STEP", "")
+
+                    mdds = set()
+                    for mdss in res[0].values():
+                        if isinstance(mdss, dict):
+                            for ds in mdss.keys():
+                                adss[ds] = True
+
+                    jpcnf = rs.updateMntGrp()
+                    pcnf = json.loads(jpcnf)
+                    mgdp = PyTango.DeviceProxy(tmg.new_device_info_writer.name)
+                    jcnf = mgdp.Configuration
+                    cnf = json.loads(jcnf)
+                    mp = json.loads(rs.profileConfiguration)
+                    self.myAssertDict(
+                        json.loads(mp["ComponentPreselection"]),
+                        acps)
+                    self.myAssertDict(
+                        json.loads(mp["ComponentSelection"]), cps)
+                    self.myAssertDict(
+                        json.loads(mp["DataSourceSelection"]), adss)
+                    self.assertEqual(
+                        set(json.loads(mp["UnplottedComponents"])),
+                        set(lhe2))
+                    self.assertEqual(json.loads(mp["OrderedChannels"]), pdss)
+                    self.myAssertDict(json.loads(mp["UserData"]), records)
+                    self.assertEqual(json.loads(mp["Timer"]), [ar["name"]])
+                    self.assertEqual(mp["MntGrp"], "mg2")
+#                    print "CNF", cnf
+#                    print "CHDS", chds
+                    myctrls = {}
+                    for cl in ctrls:
+                        tgc = {}
+                        for exp in expch:
+                            ds = exp["name"]
+                            if ds in chds and cl == exp['controller']:
+                                if ds in self.smychsXX.keys():
+                                    cnt = self.smychsXX[str(ds)]
+                                    i = chds.index(str(ds))
+#                                    print "INDEX", i, ds
+                                    try:
+                                        tdv = "/".join(
+                                            cnt['source'].split("/")[:-1])
+                                        chn = {'ndim': 0,
+                                               'index': i,
+                                               'name': str(ds),
+                                               'data_type': cnt['data_type'],
+                                               'plot_type': (
+                                                   cnt['plot_type']
+                                                   if ds not in lhe2 else 0),
+                                               'data_units': cnt['data_units'],
+                                               'enabled': True,
+                                               'label': ds,
+                                               'instrument': None,
+                                               'shape': cnt['shape'],
+                                               '_controller_name': cl,
+                                               'conditioning': '',
+                                               'full_name': tdv,
+                                               '_unit_id': '0',
+                                               'output': True,
+                                               'plot_axes': (
+                                                   cnt['plot_axes']
+                                                   if ds not in lhe2 else []),
+                                               'nexus_path': '',
+                                               'normalization': 0,
+                                               'source': cnt['source']}
+                                        tgc[tdv] = chn
+                                    except:
+                                        raise
+                        if tgc:
+                            myctrls[cl] = {'units':
+                                           {'0':
+                                            {'channels': tgc,
+                                             'monitor': dv,
+                                             'id': 0,
+                                             'timer': dv,
+                                             'trigger_type': 0}}}
+
+                    tgc = {}
+                    for ds in chds:
+                        if ds in self.smychs:
+                            cnt = self.smychs[str(ds)]
+                            i = chds.index(str(ds))
+#                            print "INDEX", i, ds
+                            try:
+                                chn = {'ndim': 0,
+                                       'index': i,
+                                       'name': str(ds),
+                                       'data_type': cnt['data_type'],
+                                       'plot_type': (
+                                           cnt['plot_type']
+                                           if ds not in lhe2 else 0),
+                                       'data_units': cnt['data_units'],
+                                       'enabled': True,
+                                       'label': cnt['source'],
+                                       'instrument': None,
+                                       'shape': cnt['shape'],
+                                       '_controller_name': '__tango__',
+                                       'conditioning': '',
+                                       'full_name': '%s%s' % (
+                                           'tango://', cnt['source']),
+                                       '_unit_id': '0',
+                                       'output': True,
+                                       'plot_axes': (
+                                           cnt['plot_axes']
+                                           if ds not in lhe2 else []),
+                                       'nexus_path': '',
+                                       'normalization': 0,
+                                       'source': cnt['source']}
+                                tgc[chn["full_name"]] = chn
+                            except:
+                                raise
+
+                    if tgc:
+                        myctrls['__tango__'] = {'units':
+                                                {'0':
+                                                 {'channels': tgc,
+                                                  'monitor': dv,
+                                                  'id': 0,
+                                                  'timer': dv,
+                                                  'trigger_type': 0}}}
+
+                    smg = {"controllers": myctrls,
+                           "monitor": "%s" % dv,
+                           "description": "Measurement Group",
+                           "timer": "%s" % dv,
+                           "label": "mg2"}
+#                    print "SMG", smg
+                    self.myAssertDict(smg, pcnf)
+                    self.myAssertDict(pcnf, cnf)
+                    rs.mntGrp = "nxsmntgrp"
+                    rs.profileConfiguration = str(json.dumps({}))
+                    rs.configDevice = val["ConfigDevice"]
+                    rs.door = val["Door"]
+                    rs.mntGrp = "mg2"
+                    rs.fetchProfile()
+                    mp = json.loads(rs.profileConfiguration)
+                    self.myAssertDict(
+                        json.loads(mp["ComponentPreselection"]),
+                        acps)
+                    self.myAssertDict(
+                        json.loads(mp["ComponentSelection"]), cps)
+                    self.myAssertDict(
+                        json.loads(mp["DataSourceSelection"]), adss)
+                    self.assertEqual(
+                        set(json.loads(mp["UnplottedComponents"])),
+                        set(lhe2))
+                    self.assertEqual(json.loads(mp["OrderedChannels"]), pdss)
+                    self.myAssertDict(json.loads(mp["UserData"]), records)
+                    self.assertEqual(json.loads(mp["Timer"]), [ar["name"]])
+                    self.assertEqual(mp["MntGrp"], "mg2")
+                finally:
+                    rs.deleteProfile("mg2")
+                    try:
+                        tmg.tearDown()
+                    except:
+                        pass
+        finally:
+            simp2.tearDown()
+
+    ## updateMntGrp test
+    def test_updateMntGrp_components_mixed_tango_timers(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'mg2'}
+
+        wrong = []
+        rs = self.openRecSelector()
+        rs.configDevice = val["ConfigDevice"]
+        rs.door = val["Door"]
+        rs.mntGrp = val["MntGrp"]
+        rs.writerDevice = val["WriterDevice"]
+        self.assertEqual(rs.configDevice, val["ConfigDevice"])
+        self.assertEqual(rs.door, val["Door"])
+
+        db = PyTango.Database()
+        db.put_device_property(self._ms.ms.keys()[0],
+                               {'PoolNames': self._pool.dp.name()})
+        pool = self._pool.dp
+        pool.ExpChannelList = []
+        self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+        self.assertEqual(rs.availableMntGrps(), [])
+        self.myAssertRaise(Exception, rs.updateMntGrp)
+
+        db = PyTango.Database()
+        db.put_device_property(self._ms.ms.keys()[0],
+                               {'PoolNames': self._pool.dp.name()})
+        pool = self._pool.dp
+        self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+        self.assertEqual(rs.availableMntGrps(), [])
+        scalar_ctrl = 'ttestp09/testts/t1r228'
+        spectrum_ctrl = 'ttestp09/testts/t2r228'
+        image_ctrl = 'ttestp09/testts/t3r228'
+
+        simp2 = TestServerSetUp.MultiTestServerSetUp(
+            devices=['ttestp09/testts/t%02dr228' % i for i in range(1, 37)])
+        try:
+            simp2.setUp()
+            for i in range(30):
+
+                ctrls = [scalar_ctrl, spectrum_ctrl, image_ctrl, "__tango__"]
+                expch = []
+                pdss = []
+
+                timers = {}
+                ntms = self.__rnd.randint(1, 5)
+                tms = self.__rnd.sample(set(
+                    [ch for ch in self.smychsXX.keys()
+                     if not ch.startswith("client")]), ntms)
+                for tm in tms:
+                    myct = ("ctrl_%s" % tm).replace("_", "/")
+                    timers[myct] = tm
+                    ctrls.append(myct)
+                ltimers = timers.values()
+
+                for ds, vl in self.smychsXX.items():
+                    if vl:
+                        exp = {}
+                        exp["name"] = ds
+                        exp["source"] = vl["source"]
+                        myct = None
+                        for ct, ch in timers.items():
+                            if ds == ch:
+                                myct = ct
+                                break
+
+                        if myct:
+                            exp["controller"] = myct
+                        elif ds.startswith("image"):
+                            exp["controller"] = image_ctrl
+                        elif ds.startswith("spectrum"):
+                            exp["controller"] = spectrum_ctrl
+                        else:
+                            exp["controller"] = scalar_ctrl
+                        expch.append(exp)
+                        pdss.append(ds)
+                pdss = sorted(pdss)
+                self.__rnd.shuffle(pdss)
+
+                acqch = [
+                    {"full_name": "test/ct/01/Value", "name": "ct01"},
+                    {"full_name": "test/ct/02/Value", "name": "ct02"},
+                    {"full_name": "test/ct/03/value", "name": "ct03"},
+                    {"full_name": "test/ct/04/value", "name": "ct04"},
+                    {"full_name": "null/val", "name": "mntgrp_04"}
+                ]
+
+                for ch in expch:
+                    ach = {}
+                    ach["name"] = ch["name"]
+                    ach["full_name"] = ch["source"]
+                    acqch.append(ach)
+
+                pool.AcqChannelList = [json.dumps(a) for a in acqch]
+                pool.ExpChannelList = [json.dumps(a) for a in expch]
+
+                amycps = dict(self.smycps2)
+                amycps.update(self.smycps)
+                amydss = dict(self.smydssXX)
+                amydss.update(self.smydss)
+                amycpsstep = dict(self.smycpsstep)
+                amycpsstep.update(self.smycpsstep2)
+                self._cf.dp.SetCommandVariable(
+                    ["CPDICT", json.dumps(amycps)])
+                self._cf.dp.SetCommandVariable(
+                    ["DSDICT", json.dumps(amydss)])
+
+                try:
+                    cps = {}
+                    acps = {}
+                    dss = {}
+                    lcp = self.__rnd.randint(1, 40)
+                    lds = self.__rnd.randint(1, 40)
+
+                    self._cf.dp.SetCommandVariable(
+                        ["CPDICT", json.dumps(amycps)])
+                    self._cf.dp.SetCommandVariable(
+                        ["DSDICT", json.dumps(amydss)])
+                    comps = set()
+
+                    ncps = self.__rnd.randint(1, len(amycps) - 1)
+                    lcps = self.__rnd.sample(set(amycps.keys()), ncps)
+                    for cp in lcps:
+                        if cp not in wrong:
+                            cps[cp] = bool(self.__rnd.randint(0, 1))
+                            if cps[cp]:
+                                comps.add(cp)
+
+                    ancps = self.__rnd.randint(1, len(amycps.keys()) - 1)
+                    alcps = self.__rnd.sample(set(amycps.keys()), ancps)
+                    for cp in alcps:
+                        if cp not in wrong:
+                            acps[cp] = bool(self.__rnd.randint(0, 1))
+                            if acps[cp]:
+                                comps.add(cp)
+
+                    ndss = self.__rnd.randint(1, len(amycps.keys()) - 1)
+                    ldss = self.__rnd.sample(set(amycps.keys()), ndss)
+                    for ds in ldss:
+                        if ds in amydss.keys():
+                            if ds not in wrong:
+                                dss[ds] = bool(self.__rnd.randint(0, 1))
+
+                    ndss = self.__rnd.randint(1, len(amydss.keys()) - 1)
+                    ldss = self.__rnd.sample(set(amydss.keys()), ndss)
+                    for ds in ldss:
+                        if ds in amydss.keys():
+                            if ds not in wrong:
+                                dss[ds] = bool(self.__rnd.randint(0, 1))
+
+                    for tm in ltimers:
+                        dss[tm] = bool(self.__rnd.randint(0, 1))
+
+                    mncps = self.__rnd.randint(1, len(amycps.keys()) - 1)
+                    mcps = [cp for cp in self.__rnd.sample(
+                            set(amycps.keys()), mncps) if cp not in wrong]
+                    for cp in mcps:
+                        comps.add(cp)
+
+                    adss = dict(dss)
+                    for ch in expch:
+                        if ch["name"] not in adss.keys():
+                            adss[ch["name"]] = False
+                    mp = json.loads(rs.profileConfiguration)
+                    mp["ComponentSelection"] = json.dumps(cps)
+                    mp["ComponentPreselection"] = json.dumps(acps)
+                    mp["DataSourceSelection"] = json.dumps(dss)
+                    self._cf.dp.SetCommandVariable(["MCPLIST",
+                                                    json.dumps(mcps)])
+                    rs.profileConfiguration = str(json.dumps(mp))
+                    mp = json.loads(rs.profileConfiguration)
+
+                    records = {}
+                    describer = Describer(self._cf.dp, True)
+                    cpres = describer.components(dstype='CLIENT')
+                    for grp in cpres:
+                        for idss in grp.values():
+                            for idsrs in idss.values():
+                                for idsr in idsrs:
+                                    records[str(idsr[2])] = "1234"
+                    dsres = describer.dataSources(
+                        dss.keys(), dstype='CLIENT')[0]
+                    for dsr in dsres.values():
+                        records[str(dsr.record)] = '2345'
+
+                    mp = json.loads(rs.profileConfiguration)
+                    mp["Timer"] = json.dumps(ltimers)
+                    mp["UserData"] = json.dumps(records)
+                    rs.profileConfiguration = str(json.dumps(mp))
+                    mp = json.loads(rs.profileConfiguration)
+
+                    tmg = TestMGSetUp.TestMeasurementGroupSetUp(
+                        name='mg2')
+#                    dv = "/".join(ar["full_name"].split("/")[0:-1])
+                    chds = [ds for ds in rs.selectedDataSources()
+                            if not ds.startswith('client')]
+                    chds1 = list(chds)
+                    chds2 = [ds for ds in rs.componentDataSources()
+                             if not ds.startswith('client')]
+                    chds.extend(chds2)
+                    bchds = list(chds)
+                    chds.extend(ltimers)
+                    tmpchds = sorted(list(set(chds)))
+                    chds = []
+                    for ds in pdss:
+                        if ds in tmpchds:
+                            chds.append(ds)
+                    for ds in tmpchds:
+                        if ds not in pdss:
+                            chds.append(ds)
+
+                    lheds = []
+                    if chds:
+                        nhe = self.__rnd.randint(0, len(set(chds)) - 1)
+                        lheds = self.__rnd.sample(set(chds), nhe)
+
+                    lhecp = []
+                    if comps:
+                        nhe = self.__rnd.randint(0, len(set(comps)) - 1)
+                        lhecp = self.__rnd.sample(set(comps), nhe)
+
+                    lhe = lheds + lhecp
+
+                    mp = json.loads(rs.profileConfiguration)
+                    mp["UnplottedComponents"] = json.dumps(lhe)
+                    mp["OrderedChannels"] = json.dumps(pdss)
+                    rs.profileConfiguration = str(json.dumps(mp))
+                    mp = json.loads(rs.profileConfiguration)
+
+                    lhe2 = []
+                    for el in lhe:
+                        found = False
+                        for cp in comps:
+                            if el in amycpsstep[cp]:
+                                if cp not in lhecp:
+                                    found = True
+                        if not found:
+                            lhe2.append(el)
+
+#                    print "LHE", lhe
+#                    print "LHE2", lhe2
+#                    print "LHECP", lhecp
+#                    print "COMPS", comps
+
+#                    print "COMP", rs.components()
+#                    print "ACOMP", rs.preselectedComponents()
+#                    print "MCP", mcps
+#                    print "DS", rs.dataSources()
+#                    print "DDS", rs.componentDataSources()
+
+                    self.myAssertDict(
+                        json.loads(mp["ComponentPreselection"]),
+                        acps)
+                    self.myAssertDict(
+                        json.loads(mp["ComponentSelection"]), cps)
+                    self.myAssertDict(
+                        json.loads(mp["DataSourceSelection"]), adss)
+                    self.assertEqual(
+                        set(json.loads(mp["UnplottedComponents"])),
+                        set(lhe))
+                    self.assertEqual(json.loads(mp["OrderedChannels"]), pdss)
+                    self.myAssertDict(json.loads(mp["UserData"]), records)
+                    self.assertEqual(json.loads(mp["Timer"]), ltimers)
+                    self.assertEqual(mp["MntGrp"], "mg2")
+
+                    wwcp = rs.components
+                    describer = Describer(self._cf.dp, True)
+                    res = describer.components(wwcp, "STEP", "")
+
+                    mdds = set()
+                    for mdss in res[0].values():
+                        if isinstance(mdss, dict):
+                            for ds in mdss.keys():
+                                adss[ds] = True
+
+                    for tm in ltimers:
+                        if tm in lhe2:
+                            if tm in adss.keys():
+                                adss[tm] = False
+
+                    jpcnf = rs.updateMntGrp()
+                    pcnf = json.loads(jpcnf)
+                    mgdp = PyTango.DeviceProxy(tmg.new_device_info_writer.name)
+                    jcnf = mgdp.Configuration
+                    cnf = json.loads(jcnf)
+                    mp = json.loads(rs.profileConfiguration)
+                    self.myAssertDict(
+                        json.loads(mp["ComponentPreselection"]),
+                        acps)
+                    self.myAssertDict(
+                        json.loads(mp["ComponentSelection"]), cps)
+                    self.myAssertDict(
+                        json.loads(mp["DataSourceSelection"]), adss)
+                    self.assertEqual(
+                        set(json.loads(mp["UnplottedComponents"])),
+                        set(lhe2))
+                    self.assertEqual(json.loads(mp["OrderedChannels"]), pdss)
+                    self.myAssertDict(json.loads(mp["UserData"]), records)
+                    self.assertEqual(json.loads(mp["Timer"]), ltimers)
+                    self.assertEqual(mp["MntGrp"], "mg2")
+                    myctrls = {}
+                    fgtm = "/".join(
+                        self.smychsXX[str(ltimers[0])]['source'].split(
+                            "/")[:-1])
+                    for cl in ctrls:
+                        tgc = {}
+                        for exp in expch:
+                            ds = exp["name"]
+                            if ds in chds and cl == exp['controller']:
+                                if ds in self.smychsXX.keys():
+                                    cnt = self.smychsXX[str(ds)]
+                                    i = chds.index(str(ds))
+                                    try:
+                                        tdv = "/".join(
+                                            cnt['source'].split("/")[:-1])
+                                        chn = {'ndim': 0,
+                                               'index': i,
+                                               'name': str(ds),
+                                               'data_type': cnt['data_type'],
+                                               'plot_type': (
+                                                   cnt['plot_type']
+                                                   if (ds not in lhe2
+                                                       and ds in bchds)
+                                                   else 0),
+                                               'data_units': cnt['data_units'],
+                                               'enabled': True,
+                                               'label': ds,
+                                               'instrument': None,
+                                               'shape': cnt['shape'],
+                                               '_controller_name': cl,
+                                               'conditioning': '',
+                                               'full_name': tdv,
+                                               '_unit_id': '0',
+                                               'output': True,
+                                               'plot_axes': (
+                                                   cnt['plot_axes']
+                                                   if (ds not in lhe2
+                                                       and ds in bchds)
+                                                   else []),
+                                               'nexus_path': '',
+                                               'normalization': 0,
+                                               'source': cnt['source']}
+                                        tgc[tdv] = chn
+                                    except:
+                                        raise
+                        if tgc:
+                            ltm = timers[cl] if cl in timers.keys() \
+                                else ltimers[0]
+                            fltm = "/".join(
+                                self.smychsXX[str(ltm)]['source'].split(
+                                    "/")[:-1])
+                            myctrls[cl] = {
+                                'units':
+                                    {'0':
+                                     {
+                                         'channels': tgc,
+                                         'monitor': fltm,
+                                         'id': 0,
+                                         'timer': fltm,
+                                         'trigger_type': 0}}}
+
+                    tgc = {}
+                    for ds in chds:
+                        if ds in self.smychs:
+                            cnt = self.smychs[str(ds)]
+                            i = chds.index(str(ds))
+#                            print "INDEX", i, ds
+                            try:
+                                chn = {'ndim': 0,
+                                       'index': i,
+                                       'name': str(ds),
+                                       'data_type': cnt['data_type'],
+                                       'plot_type': (cnt['plot_type']
+                                                     if ds not in lhe2 else 0),
+                                       'data_units': cnt['data_units'],
+                                       'enabled': True,
+                                       'label': cnt['source'],
+                                       'instrument': None,
+                                       'shape': cnt['shape'],
+                                       '_controller_name': '__tango__',
+                                       'conditioning': '',
+                                       'full_name': '%s%s' % (
+                                           'tango://', cnt['source']),
+                                       '_unit_id': '0',
+                                       'output': True,
+                                       'plot_axes': (
+                                           cnt['plot_axes']
+                                           if ds not in lhe2 else []),
+                                       'nexus_path': '',
+                                       'normalization': 0,
+                                       'source': cnt['source']}
+                                tgc[chn["full_name"]] = chn
+                            except:
+                                raise
+
+                    if tgc:
+                        myctrls['__tango__'] = {'units':
+                                                {'0':
+                                                 {'channels': tgc,
+                                                  'monitor': fgtm,
+                                                  'id': 0,
+                                                  'timer': fgtm,
+                                                  'trigger_type': 0}}}
+
+                    smg = {"controllers": myctrls,
+                           "monitor": "%s" % fgtm,
+                           "description": "Measurement Group",
+                           "timer": "%s" % fgtm,
+                           "label": "mg2"}
+#                    print "SMG", smg
+                    self.myAssertDict(smg, pcnf)
+                    self.myAssertDict(pcnf, cnf)
+                    rs.mntGrp = "nxsmntgrp"
+                    rs.profileConfiguration = str(json.dumps({}))
+                    rs.configDevice = val["ConfigDevice"]
+                    rs.door = val["Door"]
+                    rs.mntGrp = "mg2"
+                    rs.fetchProfile()
+                    mp = json.loads(rs.profileConfiguration)
+                    self.myAssertDict(
+                        json.loads(mp["ComponentPreselection"]),
+                        acps)
+                    self.myAssertDict(
+                        json.loads(mp["ComponentSelection"]), cps)
+                    self.myAssertDict(
+                        json.loads(mp["DataSourceSelection"]), adss)
+                    self.assertEqual(
+                        set(json.loads(mp["UnplottedComponents"])),
+                        set(lhe2))
+                    self.assertEqual(json.loads(mp["OrderedChannels"]), pdss)
+                    self.myAssertDict(json.loads(mp["UserData"]), records)
+                    self.assertEqual(json.loads(mp["Timer"]), ltimers)
+                    self.assertEqual(mp["MntGrp"], "mg2")
+                finally:
+                    try:
+                        rs.deleteProfile("mg2")
+                    except:
+                        pass
+                    try:
+                        tmg.tearDown()
+                    except:
+                        pass
+        finally:
+            simp2.tearDown()
+
+    ## updateMntGrp test
+    def test_updateMntGrp_mntGrpConfiguration_isMntGrpUpdated(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'mg2'}
+
+        wrong = []
+        rs = self.openRecSelector()
+        rs.configDevice = val["ConfigDevice"]
+        rs.door = val["Door"]
+        rs.mntGrp = val["MntGrp"]
+        rs.writerDevice = val["WriterDevice"]
+        self.assertEqual(rs.configDevice, val["ConfigDevice"])
+        self.assertEqual(rs.door, val["Door"])
+
+        db = PyTango.Database()
+        db.put_device_property(self._ms.ms.keys()[0],
+                               {'PoolNames': self._pool.dp.name()})
+        pool = self._pool.dp
+        pool.ExpChannelList = []
+        self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+        self.assertEqual(rs.availableMntGrps(), [])
+        self.myAssertRaise(Exception, rs.updateMntGrp)
+
+        db = PyTango.Database()
+        db.put_device_property(self._ms.ms.keys()[0],
+                               {'PoolNames': self._pool.dp.name()})
+        pool = self._pool.dp
+        self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+        self.assertEqual(rs.availableMntGrps(), [])
+        scalar_ctrl = 'ttestp09/testts/t1r228'
+        spectrum_ctrl = 'ttestp09/testts/t2r228'
+        image_ctrl = 'ttestp09/testts/t3r228'
+
+        simp2 = TestServerSetUp.MultiTestServerSetUp(
+            devices=['ttestp09/testts/t%02dr228' % i for i in range(1, 37)])
+        try:
+            simp2.setUp()
+            for i in range(30):
+
+                ctrls = [scalar_ctrl, spectrum_ctrl, image_ctrl, "__tango__"]
+                expch = []
+                pdss = []
+
+                timers = {}
+                ntms = self.__rnd.randint(1, 5)
+                tms = self.__rnd.sample(set(
+                    [ch for ch in self.smychsXX.keys()
+                     if not ch.startswith("client")]), ntms)
+                for tm in tms:
+                    myct = ("ctrl_%s" % tm).replace("_", "/")
+                    timers[myct] = tm
+                    ctrls.append(myct)
+                ltimers = timers.values()
+
+                for ds, vl in self.smychsXX.items():
+                    if vl:
+                        exp = {}
+                        exp["name"] = ds
+                        exp["source"] = vl["source"]
+                        myct = None
+                        for ct, ch in timers.items():
+                            if ds == ch:
+                                myct = ct
+                                break
+
+                        if myct:
+                            exp["controller"] = myct
+                        elif ds.startswith("image"):
+                            exp["controller"] = image_ctrl
+                        elif ds.startswith("spectrum"):
+                            exp["controller"] = spectrum_ctrl
+                        else:
+                            exp["controller"] = scalar_ctrl
+                        expch.append(exp)
+                        pdss.append(ds)
+                pdss = sorted(pdss)
+                self.__rnd.shuffle(pdss)
+
+                acqch = [
+                    {"full_name": "test/ct/01/Value", "name": "ct01"},
+                    {"full_name": "test/ct/02/Value", "name": "ct02"},
+                    {"full_name": "test/ct/03/value", "name": "ct03"},
+                    {"full_name": "test/ct/04/value", "name": "ct04"},
+                    {"full_name": "null/val", "name": "mntgrp_04"}
+                ]
+
+                for ch in expch:
+                    ach = {}
+                    ach["name"] = ch["name"]
+                    ach["full_name"] = ch["source"]
+                    acqch.append(ach)
+
+                pool.AcqChannelList = [json.dumps(a) for a in acqch]
+                pool.ExpChannelList = [json.dumps(a) for a in expch]
+
+                amycps = dict(self.smycps2)
+                amycps.update(self.smycps)
+                amydss = dict(self.smydssXX)
+                amydss.update(self.smydss)
+                amycpsstep = dict(self.smycpsstep)
+                amycpsstep.update(self.smycpsstep2)
+                self._cf.dp.SetCommandVariable(
+                    ["CPDICT", json.dumps(amycps)])
+                self._cf.dp.SetCommandVariable(
+                    ["DSDICT", json.dumps(amydss)])
+
+                try:
+                    cps = {}
+                    acps = {}
+                    dss = {}
+                    lcp = self.__rnd.randint(1, 40)
+                    lds = self.__rnd.randint(1, 40)
+
+                    self._cf.dp.SetCommandVariable(
+                        ["CPDICT", json.dumps(amycps)])
+                    self._cf.dp.SetCommandVariable(
+                        ["DSDICT", json.dumps(amydss)])
+                    comps = set()
+
+                    ncps = self.__rnd.randint(1, len(amycps) - 1)
+                    lcps = self.__rnd.sample(set(amycps.keys()), ncps)
+                    for cp in lcps:
+                        if cp not in wrong:
+                            cps[cp] = bool(self.__rnd.randint(0, 1))
+                            if cps[cp]:
+                                comps.add(cp)
+
+                    ancps = self.__rnd.randint(1, len(amycps.keys()) - 1)
+                    alcps = self.__rnd.sample(set(amycps.keys()), ancps)
+                    for cp in alcps:
+                        if cp not in wrong:
+                            acps[cp] = bool(self.__rnd.randint(0, 1))
+                            if acps[cp]:
+                                comps.add(cp)
+
+                    ndss = self.__rnd.randint(1, len(amycps.keys()) - 1)
+                    ldss = self.__rnd.sample(set(amycps.keys()), ndss)
+                    for ds in ldss:
+                        if ds in amydss.keys():
+                            if ds not in wrong:
+                                dss[ds] = bool(self.__rnd.randint(0, 1))
+
+                    ndss = self.__rnd.randint(1, len(amydss.keys()) - 1)
+                    ldss = self.__rnd.sample(set(amydss.keys()), ndss)
+                    for ds in ldss:
+                        if ds in amydss.keys():
+                            if ds not in wrong:
+                                dss[ds] = bool(self.__rnd.randint(0, 1))
+
+                    nadss = self.__rnd.randint(1, len(amydss.keys()) - 1)
+                    aadss = [ds for ds in self.__rnd.sample(
+                        set(amydss.keys()), nadss)]
+                    nadss = self.__rnd.randint(1, len(amydss.keys()) - 1)
+                    indss = [ds for ds in self.__rnd.sample(
+                        set(amydss.keys()), nadss)]
+
+                    for tm in ltimers:
+                        dss[tm] = bool(self.__rnd.randint(0, 1))
+
+                    mncps = self.__rnd.randint(1, len(amycps.keys()) - 1)
+                    mcps = [cp for cp in self.__rnd.sample(
+                        set(amycps.keys()), mncps) if cp not in wrong]
+                    oncps = self.__rnd.randint(1, len(amycps.keys()) - 1)
+                    ocps = [cp for cp in self.__rnd.sample(
+                        set(amycps.keys()), oncps) if cp not in wrong]
+                    for cp in mcps:
+                        comps.add(cp)
+
+                    adss = dict(dss)
+                    for ch in expch:
+                        if ch["name"] not in adss.keys():
+                            adss[ch["name"]] = False
+                    mp = json.loads(rs.profileConfiguration)
+                    mp["ComponentSelection"] = json.dumps(cps)
+                    mp["ComponentPreselection"] = json.dumps(acps)
+                    mp["DataSourceSelection"] = json.dumps(dss)
+                    mp["PreselectedDataSources"] = json.dumps(aadss)
+                    mp["OptionalComponents"] = json.dumps(ocps)
+                    mp["InitDataSources"] = json.dumps(indss)
+                    mp["AppendEntry"] = bool(self.__rnd.randint(0, 1))
+                    mp["ComponentsFromMntGrp"] = bool(self.__rnd.randint(0, 1))
+                    mp["DynamicComponents"] = bool(self.__rnd.randint(0, 1))
+                    mp["DefaultDynamicLinks"] = bool(self.__rnd.randint(0, 1))
+                    mp["DefaultDynamicPath"] = self.getRandomName(20)
+                    mp["TimeZone"] = self.getRandomName(20)
+
+                    mp["ConfigVariables"] = json.dumps(dict(
+                        (self.getRandomName(10),
+                         self.getRandomName(15)) for _ in
+                        range(self.__rnd.randint(1, 40))))
+
+                    paths = dict(
+                        (self.getRandomName(10),
+                         self.getRandomName(15)) for _ in
+                        range(self.__rnd.randint(1, 40)))
+                    labels = dict(
+                        (self.getRandomName(10),
+                         self.getRandomName(15)) for _ in
+                        range(self.__rnd.randint(1, 40)))
+                    links = dict(
+                        (self.getRandomName(10),
+                         bool(self.__rnd.randint(0, 1))) for _ in
+                        range(self.__rnd.randint(1, 40)))
+                    types = dict(
+                        (self.getRandomName(10),
+                         self.getRandomName(15)) for _ in
+                        range(self.__rnd.randint(1, 40)))
+                    shapes = dict(
+                        (self.getRandomName(10),
+                         [self.__rnd.randint(1, 40)
+                          for _ in range(self.__rnd.randint(0, 3))])
+                        for _ in range(self.__rnd.randint(1, 40)))
+                    mp["ChannelProperties"] = json.dumps(
+                        {
+                            "label": labels,
+                            "nexus_path": paths,
+                            "link": links,
+                            "data_type": types,
+                            "shape": shapes
+                        }
+                    )
+
+                    self._cf.dp.SetCommandVariable(["MCPLIST",
+
+                                                    json.dumps(mcps)])
+
+                    rs.profileConfiguration = str(json.dumps(mp))
+                    mp = json.loads(rs.profileConfiguration)
+                    records = {}
+                    describer = Describer(self._cf.dp, True)
+                    cpres = describer.components(dstype='CLIENT')
+                    for grp in cpres:
+                        for idss in grp.values():
+                            for idsrs in idss.values():
+                                for idsr in idsrs:
+                                    records[str(idsr[2])] = "1234"
+                    dsres = describer.dataSources(
+                        dss.keys(), dstype='CLIENT')[0]
+                    for dsr in dsres.values():
+                        records[str(dsr.record)] = '2345'
+
+                    mp = json.loads(rs.profileConfiguration)
+                    mp["Timer"] = json.dumps(ltimers)
+                    mp["UserData"] = json.dumps(records)
+                    rs.profileConfiguration = str(json.dumps(mp))
+                    mp = json.loads(rs.profileConfiguration)
+
+                    tmg = TestMGSetUp.TestMeasurementGroupSetUp(
+                        name='mg2')
+#                    dv = "/".join(ar["full_name"].split("/")[0:-1])
+                    chds = [ds for ds in rs.selectedDataSources()
+                            if not ds.startswith('client')]
+                    chds1 = list(chds)
+                    chds2 = [ds for ds in rs.componentDataSources()
+                             if not ds.startswith('client')]
+                    chds.extend(chds2)
+                    bchds = list(chds)
+                    chds.extend(ltimers)
+                    tmpchds = sorted(list(set(chds)))
+                    chds = []
+                    for ds in pdss:
+                        if ds in tmpchds:
+                            chds.append(ds)
+                    for ds in tmpchds:
+                        if ds not in pdss:
+                            chds.append(ds)
+
+                    lheds = []
+                    if chds:
+                        nhe = self.__rnd.randint(0, len(set(chds)) - 1)
+                        lheds = self.__rnd.sample(set(chds), nhe)
+
+                    lhecp = []
+                    if comps:
+                        nhe = self.__rnd.randint(0, len(set(comps)) - 1)
+                        lhecp = self.__rnd.sample(set(comps), nhe)
+
+                    lhe = lheds + lhecp
+
+                    mp = json.loads(rs.profileConfiguration)
+                    mp["UnplottedComponents"] = json.dumps(lhe)
+                    mp["OrderedChannels"] = json.dumps(pdss)
+                    rs.profileConfiguration = str(json.dumps(mp))
+                    mp = json.loads(rs.profileConfiguration)
+
+                    lhe2 = []
+                    for el in lhe:
+                        found = False
+                        for cp in comps:
+                            if el in amycpsstep[cp]:
+                                if cp not in lhecp:
+                                    found = True
+                        if not found:
+                            lhe2.append(el)
+
+                    self.myAssertDict(
+                        json.loads(mp["ComponentPreselection"]),
+                        acps)
+                    self.myAssertDict(
+                        json.loads(mp["ComponentSelection"]), cps)
+                    self.myAssertDict(
+                        json.loads(mp["DataSourceSelection"]), adss)
+                    self.assertEqual(
+                        set(json.loads(mp["UnplottedComponents"])),
+                        set(lhe))
+                    self.assertEqual(json.loads(mp["OrderedChannels"]), pdss)
+                    self.myAssertDict(json.loads(mp["UserData"]), records)
+                    self.assertEqual(json.loads(mp["Timer"]), ltimers)
+                    self.assertEqual(mp["MntGrp"], "mg2")
+                    self.dump(rs)
+                    self.assertTrue(rs.isMntGrpUpdated())
+                    self.assertTrue(rs.isMntGrpUpdated())
+
+                    wwcp = rs.components
+                    describer = Describer(self._cf.dp, True)
+                    res = describer.components(wwcp, "STEP", "")
+
+                    mdds = set()
+                    for mdss in res[0].values():
+                        if isinstance(mdss, dict):
+                            for ds in mdss.keys():
+                                adss[ds] = True
+
+                    for tm in ltimers:
+                        if tm in lhe2:
+                            if tm in adss.keys():
+                                adss[tm] = False
+
+                    jpcnf = rs.updateMntGrp()
+                    self.assertTrue(not rs.isMntGrpUpdated())
+                    self.assertTrue(not rs.isMntGrpUpdated())
+                    pcnf = json.loads(jpcnf)
+                    mgdp = PyTango.DeviceProxy(tmg.new_device_info_writer.name)
+                    jcnf = rs.mntGrpConfiguration()
+                    cnf = json.loads(jcnf)
+                    mp = json.loads(rs.profileConfiguration)
+                    self.myAssertDict(
+                        json.loads(mp["ComponentPreselection"]),
+                        acps)
+                    self.myAssertDict(
+                        json.loads(mp["ComponentSelection"]), cps)
+                    self.myAssertDict(
+                        json.loads(mp["DataSourceSelection"]), adss)
+                    self.assertEqual(
+                        set(json.loads(mp["UnplottedComponents"])),
+                        set(lhe2))
+                    self.assertEqual(json.loads(mp["OrderedChannels"]), pdss)
+                    self.myAssertDict(json.loads(mp["UserData"]), records)
+                    self.assertEqual(json.loads(mp["Timer"]), ltimers)
+                    self.assertEqual(mp["MntGrp"], "mg2")
+                    myctrls = {}
+                    fgtm = "/".join(
+                        self.smychsXX[str(ltimers[0])]['source'].split(
+                            "/")[:-1])
+                    for cl in ctrls:
+                        tgc = {}
+                        for exp in expch:
+                            ds = exp["name"]
+#                            if cl == exp['controller']:
+#                                print "DS", ds , ds in chds
+                            if ds in chds and cl == exp['controller']:
+                                if ds in self.smychsXX.keys():
+                                    cnt = self.smychsXX[str(ds)]
+                                    i = chds.index(str(ds))
+#                                    print "INDEX", i, ds
+                                    try:
+                                        tdv = "/".join(
+                                            cnt['source'].split("/")[:-1])
+                                        chn = {'ndim': 0,
+                                               'index': i,
+                                               'name': str(ds),
+                                               'data_type': cnt['data_type'],
+                                               'plot_type': (
+                                                   cnt['plot_type']
+                                                   if (ds not in lhe2
+                                                       and ds in bchds)
+                                                   else 0),
+                                               'data_units': cnt['data_units'],
+                                               'enabled': True,
+                                               'label': ds,
+                                               'instrument': None,
+                                               'shape': cnt['shape'],
+                                               '_controller_name': cl,
+                                               'conditioning': '',
+                                               'full_name': tdv,
+                                               '_unit_id': '0',
+                                               'output': True,
+                                               'plot_axes': (
+                                                   cnt['plot_axes']
+                                                   if (ds not in lhe2
+                                                       and ds in bchds)
+                                                   else []),
+                                               'nexus_path': '',
+                                               'normalization': 0,
+                                               'source': cnt['source']}
+                                        tgc[tdv] = chn
+                                    except:
+                                        raise
+                        if tgc:
+                            ltm = timers[cl] if cl in timers.keys() \
+                                else ltimers[0]
+                            fltm = "/".join(
+                                self.smychsXX[str(ltm)]['source'].split(
+                                    "/")[:-1])
+                            myctrls[cl] = {
+                                'units':
+                                    {'0':
+                                     {
+                                         'channels': tgc,
+                                         'monitor': fltm,
+                                         'id': 0,
+                                         'timer': fltm,
+                                         'trigger_type': 0}}}
+
+                    tgc = {}
+                    for ds in chds:
+                        if ds in self.smychs:
+                            cnt = self.smychs[str(ds)]
+                            i = chds.index(str(ds))
+#                            print "INDEX", i, ds
+                            try:
+                                chn = {'ndim': 0,
+                                       'index': i,
+                                       'name': str(ds),
+                                       'data_type': cnt['data_type'],
+                                       'plot_type': (cnt['plot_type']
+                                                     if ds not in lhe2 else 0),
+                                       'data_units': cnt['data_units'],
+                                       'enabled': True,
+                                       'label': cnt['source'],
+                                       'instrument': None,
+                                       'shape': cnt['shape'],
+                                       '_controller_name': '__tango__',
+                                       'conditioning': '',
+                                       'full_name': '%s%s' % (
+                                           'tango://', cnt['source']),
+                                       '_unit_id': '0',
+                                       'output': True,
+                                       'plot_axes': (
+                                           cnt['plot_axes']
+                                           if ds not in lhe2 else []),
+                                       'nexus_path': '',
+                                       'normalization': 0,
+                                       'source': cnt['source']}
+                                tgc[chn["full_name"]] = chn
+                            except:
+                                raise
+
+                    if tgc:
+                        myctrls['__tango__'] = {'units':
+                                                {'0':
+                                                 {'channels': tgc,
+                                                  'monitor': fgtm,
+                                                  'id': 0,
+                                                  'timer': fgtm,
+                                                  'trigger_type': 0}}}
+
+                    smg = {"controllers": myctrls,
+                           "monitor": "%s" % fgtm,
+                           "description": "Measurement Group",
+                           "timer": "%s" % fgtm,
+                           "label": "mg2"}
+#                    print "SMG", smg
+                    self.myAssertDict(smg, pcnf)
+                    self.myAssertDict(pcnf, cnf)
+                    rs.mntGrp = "nxsmntgrp"
+                    rs.profileConfiguration = str(json.dumps({}))
+                    rs.configDevice = val["ConfigDevice"]
+                    rs.door = val["Door"]
+                    rs.mntGrp = "mg2"
+                    rs.fetchProfile()
+                    mp = json.loads(rs.profileConfiguration)
+
+                    self.assertTrue(not rs.isMntGrpUpdated())
+                    self.assertTrue(not rs.isMntGrpUpdated())
+
+                    mp = json.loads(rs.profileConfiguration)
+                    self.compareToDumpJSON(
+                        rs, ["ComponentPreselection",
+                             "ComponentSelection",
+                             "DataSourceSelection",
+                             "UnplottedComponents",
+                             "PreselectedDataSources"])
+
+                    self.myAssertDict(
+                        json.loads(mp["ComponentPreselection"]), acps)
+                    self.myAssertDict(
+                        json.loads(mp["ComponentSelection"]), cps)
+                    self.myAssertDict(
+                        json.loads(mp["DataSourceSelection"]), adss)
+                    self.assertEqual(
+                        set(json.loads(mp["PreselectedDataSources"])),
+                        set(aadss))
+                    self.assertEqual(
+                        set(json.loads(mp["UnplottedComponents"])),
+                        set(lhe2))
+                    self.assertEqual(json.loads(mp["OrderedChannels"]), pdss)
+                    self.myAssertDict(json.loads(mp["UserData"]), records)
+                    self.assertEqual(json.loads(mp["Timer"]), ltimers)
+                    self.assertEqual(mp["MntGrp"], "mg2")
+                finally:
+                    try:
+                        rs.deleteProfile("mg2")
+                    except:
+                        pass
+                    try:
+                        tmg.tearDown()
+                    except:
+                        pass
+        finally:
+            simp2.tearDown()
+
+    ## updateMntGrp test
+    def wtest_switchProfile_importMntGrp(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'mg2'}
+
+        self.maxDiff = None
+        self.tearDown()
+        try:
+            for j in range(10):
+                self.setUp()
+                db = PyTango.Database()
+                db.put_device_property(self._ms.ms.keys()[0],
+                                       {'PoolNames': self._pool.dp.name()})
+
+                wrong = []
+
+                mgs = ["mg1", "mg2", "mg3",
+                       "mntgrp", "somegroup"
+                       ]
+                mgt = {}
+                se = {}
+                msp = {}
+                tmg = {}
+                cps = {}
+                acps = {}
+                adss = {}
+                aadss = {}
+                pdss = {}
+                lhe2 = {}
+                records = {}
+                ltimers = {}
+
+                pool = self._pool.dp
+                self._ms.dps[self._ms.ms.keys()[0]].Init()
+                scalar_ctrl = 'ttestp09/testts/t1r228'
+                spectrum_ctrl = 'ttestp09/testts/t2r228'
+                image_ctrl = 'ttestp09/testts/t3r228'
+                simp2 = TestServerSetUp.MultiTestServerSetUp(
+                    devices=['ttestp09/testts/t%02dr228' %
+                             i for i in range(1, 37)])
+
+                try:
+                    simp2.setUp()
+
+                    # create mntgrps
+
+                    for i, mg in enumerate(mgs):
+
+                        msp[mg] = MacroServerPools(10)
+                        se[mg] = Selector(msp[mg], self.__version)
+                        se[mg]["Door"] = val["Door"]
+                        se[mg]["ConfigDevice"] = val["ConfigDevice"]
+                        se[mg]["MntGrp"] = mg
+                        mgt[mg] = ProfileManager(se[mg])
+                        self.assertEqual(
+                            set(mgt[mg].availableMntGrps()), set(mgs[:(i)]))
+                        self.myAssertRaise(Exception, mgt[mg].updateMntGrp)
+
+                        self.assertEqual(
+                            set(mgt[mg].availableMntGrps()), set(mgs[:(i)]))
+
+                        ctrls = [scalar_ctrl, spectrum_ctrl, image_ctrl,
+                                 "__tango__"]
+                        expch = []
+                        pdss[mg] = []
+
+                        timers = {}
+                        ntms = self.__rnd.randint(1, 5)
+                        tms = self.__rnd.sample(set(
+                            [ch for ch in self.smychsXX.keys()
+                             if not ch.startswith("client")]), ntms)
+                        for tm in tms:
+                            myct = ("ctrl_%s" % tm).replace("_", "/")
+                            timers[myct] = tm
+                            ctrls.append(myct)
+                        print "TIMERSL", tms
+                        print "TIMERSD", timers
+                        ltimers[mg] = timers.values()
+                        print "LTIMER", ltimers[mg]
+
+                        for ds, vl in self.smychsXX.items():
+                            if vl:
+                                exp = {}
+                                exp["name"] = ds
+                                exp["source"] = vl["source"]
+                                myct = None
+                                for ct, ch in timers.items():
+                                    if ds == ch:
+                                        myct = ct
+                                        break
+
+                                if myct:
+                                    exp["controller"] = myct
+                                elif ds.startswith("image"):
+                                    exp["controller"] = image_ctrl
+                                elif ds.startswith("spectrum"):
+                                    exp["controller"] = spectrum_ctrl
+                                else:
+                                    exp["controller"] = scalar_ctrl
+                                expch.append(exp)
+                                pdss[mg].append(ds)
+                        pdss[mg] = sorted(pdss[mg])
+                        self.__rnd.shuffle(pdss[mg])
+
+                        acqch = [
+                            {"full_name": "test/ct/01/Value", "name": "ct01"},
+                            {"full_name": "test/ct/02/Value", "name": "ct02"},
+                            {"full_name": "test/ct/03/value", "name": "ct03"},
+                            {"full_name": "test/ct/04/value", "name": "ct04"},
+                            {"full_name": "null/val", "name": "mntgrp_04"}
+                        ]
+
+                        for ch in expch:
+                            ach = {}
+                            ach["name"] = ch["name"]
+                            ach["full_name"] = ch["source"]
+                            acqch.append(ach)
+
+                        pool.AcqChannelList = [json.dumps(a) for a in acqch]
+                        pool.ExpChannelList = [json.dumps(a) for a in expch]
+
+                        amycps = dict(self.smycps2)
+                        amycps.update(self.smycps)
+                        amydss = dict(self.smydssXX)
+                        amydss.update(self.smydss)
+                        amycpsstep = dict(self.smycpsstep)
+                        amycpsstep.update(self.smycpsstep2)
+                        self._cf.dp.SetCommandVariable(
+                            ["CPDICT", json.dumps(amycps)])
+                        self._cf.dp.SetCommandVariable(
+                            ["DSDICT", json.dumps(amydss)])
+
+                        cps[mg] = {}
+                        acps[mg] = {}
+                        dss = {}
+                        lcp = self.__rnd.randint(1, 40)
+                        lds = self.__rnd.randint(1, 40)
+
+                        self._cf.dp.SetCommandVariable(
+                            ["CPDICT", json.dumps(amycps)])
+                        self._cf.dp.SetCommandVariable(
+                            ["DSDICT", json.dumps(amydss)])
+                        comps = set()
+
+                        ncps = self.__rnd.randint(1, len(amycps) - 1)
+                        lcps = self.__rnd.sample(set(amycps.keys()), ncps)
+                        for cp in lcps:
+                            if cp not in wrong:
+                                cps[mg][cp] = bool(self.__rnd.randint(0, 1))
+                                if cps[mg][cp]:
+                                    comps.add(cp)
+
+                        ancps = self.__rnd.randint(1, len(amycps.keys()) - 1)
+                        alcps = self.__rnd.sample(set(amycps.keys()), ancps)
+                        for cp in alcps:
+                            if cp not in wrong:
+                                acps[mg][cp] = bool(self.__rnd.randint(0, 1))
+                                if acps[mg][cp]:
+                                    comps.add(cp)
+
+                        ndss = self.__rnd.randint(1, len(amycps.keys()) - 1)
+                        ldss = self.__rnd.sample(set(amycps.keys()), ndss)
+                        for ds in ldss:
+                            if ds in amydss.keys():
+                                if ds not in wrong:
+                                    dss[ds] = bool(self.__rnd.randint(0, 1))
+
+                        ndss = self.__rnd.randint(1, len(amydss.keys()) - 1)
+                        ldss = self.__rnd.sample(set(amydss.keys()), ndss)
+                        for ds in ldss:
+                            if ds in amydss.keys():
+                                if ds not in wrong:
+                                    dss[ds] = bool(self.__rnd.randint(0, 1))
+
+                        nadss = self.__rnd.randint(1, len(amydss.keys()) - 1)
+                        aadss[mg] = [ds for ds in self.__rnd.sample(
+                            set(amydss.keys()), nadss)]
+                        nadss = self.__rnd.randint(1, len(amydss.keys()) - 1)
+                        indss = [ds for ds in self.__rnd.sample(
+                            set(amydss.keys()), nadss)]
+
+                        for tm in ltimers[mg]:
+                            dss[tm] = bool(self.__rnd.randint(0, 1))
+
+                        mncps = self.__rnd.randint(1, len(amycps.keys()) - 1)
+                        mcps = [cp for cp in self.__rnd.sample(
+                                set(amycps.keys()), mncps) if cp not in wrong]
+                        oncps = self.__rnd.randint(1, len(amycps.keys()) - 1)
+                        ocps = [cp for cp in self.__rnd.sample(
+                                set(amycps.keys()), oncps) if cp not in wrong]
+                        for cp in mcps:
+                            comps.add(cp)
+
+                        adss[mg] = dict(dss)
+                        for ch in expch:
+                            if ch["name"] not in adss[mg].keys():
+                                adss[mg][ch["name"]] = False
+                        se[mg]["ComponentSelection"] = json.dumps(cps[mg])
+                        se[mg]["ComponentPreselection"] = json.dumps(
+                            acps[mg])
+                        se[mg]["DataSourceSelection"] = json.dumps(dss)
+                        se[mg]["PreselectedDataSources"] = \
+                            json.dumps(aadss[mg])
+                        se[mg]["OptionalComponents"] = json.dumps(ocps)
+                        se[mg]["InitDataSources"] = json.dumps(indss)
+                        se[mg]["AppendEntry"] = bool(self.__rnd.randint(0, 1))
+                        se[mg]["ComponentsFromMntGrp"] = bool(
+                            self.__rnd.randint(0, 1))
+                        se[mg]["DynamicComponents"] = bool(
+                            self.__rnd.randint(0, 1))
+                        se[mg]["DefaultDynamicLinks"] = \
+                            bool(self.__rnd.randint(0, 1))
+                        se[mg]["DefaultDynamicPath"] = self.getRandomName(20)
+                        se[mg]["TimeZone"] = self.getRandomName(20)
+
+                        se[mg]["ConfigVariables"] = json.dumps(dict(
+                            (self.getRandomName(10),
+                             self.getRandomName(15)) for _ in
+                            range(self.__rnd.randint(1, 40))))
+                        paths = dict(
+                            (self.getRandomName(10),
+                             self.getRandomName(15)) for _ in
+                            range(self.__rnd.randint(1, 40)))
+                        labels = dict(
+                            (self.getRandomName(10),
+                             self.getRandomName(15)) for _ in
+                            range(self.__rnd.randint(1, 40)))
+                        links = dict(
+                            (self.getRandomName(10),
+                             bool(self.__rnd.randint(0, 1))) for _ in
+                            range(self.__rnd.randint(1, 40)))
+                        types = dict(
+                            (self.getRandomName(10),
+                             self.getRandomName(15)) for _ in
+                            range(self.__rnd.randint(1, 40)))
+                        shapes = dict(
+                            (self.getRandomName(10),
+                             [self.__rnd.randint(1, 40)
+                              for _ in range(self.__rnd.randint(0, 3))])
+                            for _ in range(self.__rnd.randint(1, 40)))
+
+                        se[mg]["ChannelProperties"] = json.dumps(
+                            {
+                                "label": labels,
+                                "nexus_path": paths,
+                                "link": links,
+                                "data_type": types,
+                                "shape": shapes
+                            }
+                        )
+
+                        self._cf.dp.SetCommandVariable(["MCPLIST",
+                                                        json.dumps(mcps)])
+
+                        records[mg] = {}
+                        describer = Describer(self._cf.dp, True)
+                        cpres = describer.components(dstype='CLIENT')
+                        for grp in cpres:
+                            for idss in grp.values():
+                                for idsrs in idss.values():
+                                    for idsr in idsrs:
+                                        records[mg][str(idsr[2])] = "1234"
+                        dsres = describer.dataSources(
+                            dss.keys(), dstype='CLIENT')[0]
+                        for dsr in dsres.values():
+                            records[mg][str(dsr.record)] = '2345'
+
+                        se[mg]["Timer"] = json.dumps(ltimers[mg])
+                        se[mg]["UserData"] = json.dumps(records[mg])
+
+                        tmg[mg] = TestMGSetUp.TestMeasurementGroupSetUp(
+                            name=mg)
+        #                    dv = "/".join(ar["full_name"].split("/")[0:-1])
+                        chds = [ds for ds in mgt[mg].dataSources()
+                                if not ds.startswith('client')]
+                        chds1 = list(chds)
+                        chds2 = [ds for ds in mgt[mg].componentDataSources()
+                                 if not ds.startswith('client')]
+                        chds.extend(chds2)
+                        bchds = list(chds)
+                        chds.extend(ltimers[mg])
+                        tmpchds = sorted(list(set(chds)))
+                        chds = []
+                        for ds in pdss[mg]:
+                            if ds in tmpchds:
+                                chds.append(ds)
+                        for ds in tmpchds:
+                            if ds not in pdss[mg]:
+                                chds.append(ds)
+
+                        lheds = []
+                        if chds:
+                            nhe = self.__rnd.randint(0, len(set(chds)) - 1)
+                            lheds = self.__rnd.sample(set(chds), nhe)
+
+                        lhecp = []
+                        if comps:
+                            nhe = self.__rnd.randint(0, len(set(comps)) - 1)
+                            lhecp = self.__rnd.sample(set(comps), nhe)
+
+                        lhe = lheds + lhecp
+
+                        se[mg]["UnplottedComponents"] = json.dumps(lhe)
+                        se[mg]["OrderedChannels"] = json.dumps(pdss[mg])
+
+                        lhe2[mg] = []
+                        for el in lhe:
+                            found = False
+                            for cp in comps:
+                                if el in amycpsstep[cp]:
+                                    if cp not in lhecp:
+                                        found = True
+                            if not found:
+                                lhe2[mg].append(el)
+
+                        self.myAssertDict(
+                            json.loads(se[mg]["ComponentPreselection"]),
+                            acps[mg])
+                        self.myAssertDict(
+                            json.loads(se[mg]["ComponentSelection"]), cps[mg])
+                        self.myAssertDict(
+                            json.loads(se[mg]["DataSourceSelection"]),
+                            adss[mg])
+                        self.assertEqual(
+                            set(json.loads(se[mg]["UnplottedComponents"])),
+                            set(lhe))
+                        self.assertEqual(
+                            json.loads(se[mg]["OrderedChannels"]), pdss[mg])
+                        self.myAssertDict(
+                            json.loads(se[mg]["UserData"]), records[mg])
+                        self.assertEqual(
+                            json.loads(se[mg]["Timer"]), ltimers[mg])
+                        self.assertEqual(se[mg]["MntGrp"], mg)
+                        self.dump(se[mg], name=mg)
+                        self.assertTrue(mgt[mg].isMntGrpUpdated())
+                        self.assertTrue(mgt[mg].isMntGrpUpdated())
+
+                        res = mgt[mg].cpdescription()
+                        mdds = set()
+                        for mdss in res[0].values():
+                            if isinstance(mdss, dict):
+                                for ds in mdss.keys():
+                                    adss[mg][ds] = True
+                        for tm in ltimers[mg]:
+                            if tm in lhe2[mg]:
+                                if tm in adss[mg].keys():
+                                    print "DES", tm
+                                    adss[mg][tm] = False
+
+                        jpcnf = mgt[mg].updateMntGrp()
+                        self.assertTrue(not mgt[mg].isMntGrpUpdated())
+                        self.assertTrue(not mgt[mg].isMntGrpUpdated())
+                        pcnf = json.loads(jpcnf)
+                        mgdp = PyTango.DeviceProxy(
+                            tmg[mg].new_device_info_writer.name)
+                        jcnf = mgt[mg].mntGrpConfiguration()
+                        cnf = json.loads(jcnf)
+                        self.myAssertDict(
+                            json.loads(se[mg]["ComponentPreselection"]),
+                            acps[mg])
+                        self.myAssertDict(
+                            json.loads(se[mg]["ComponentSelection"]), cps[mg])
+                        self.myAssertDict(
+                            json.loads(
+                                se[mg]["DataSourceSelection"]), adss[mg])
+                        self.assertEqual(
+                            set(json.loads(se[mg]["UnplottedComponents"])),
+                            set(lhe2[mg]))
+                        self.assertEqual(
+                            json.loads(se[mg]["OrderedChannels"]), pdss[mg])
+                        self.myAssertDict(
+                            json.loads(se[mg]["UserData"]), records[mg])
+                        self.assertEqual(
+                            json.loads(se[mg]["Timer"]), ltimers[mg])
+                        self.assertEqual(se[mg]["MntGrp"], mg)
+                        myctrls = {}
+                        fgtm = "/".join(
+                            self.smychsXX[str(ltimers[mg][0])]['source'].split(
+                                "/")[:-1])
+                        for cl in ctrls:
+                            tgc = {}
+                            for exp in expch:
+                                ds = exp["name"]
+                                if ds in chds and cl == exp['controller']:
+                                    if ds in self.smychsXX.keys():
+                                        cnt = self.smychsXX[str(ds)]
+                                        i = chds.index(str(ds))
+                                        try:
+                                            tdv = "/".join(
+                                                cnt['source'].split("/")[:-1])
+                                            chn = {'ndim': 0,
+                                                   'index': i,
+                                                   'name': str(ds),
+                                                   'data_type':
+                                                       cnt['data_type'],
+                                                   'plot_type': (
+                                                       cnt['plot_type']
+                                                       if (ds not in lhe2[mg]
+                                                           and ds in bchds)
+                                                       else 0),
+                                                   'data_units':
+                                                       cnt['data_units'],
+                                                   'enabled': True,
+                                                   'label': ds,
+                                                   'instrument': None,
+                                                   'shape': cnt['shape'],
+                                                   '_controller_name': cl,
+                                                   'conditioning': '',
+                                                   'full_name': tdv,
+                                                   '_unit_id': '0',
+                                                   'output': True,
+                                                   'plot_axes': (
+                                                       cnt['plot_axes']
+                                                       if (ds not in lhe2[mg]
+                                                           and ds in bchds)
+                                                       else []),
+                                                   'nexus_path': '',
+                                                   'normalization': 0,
+                                                   'source': cnt['source']}
+                                            tgc[tdv] = chn
+                                        except:
+                                            raise
+                            if tgc:
+                                ltm = timers[cl] if cl in timers.keys() \
+                                    else ltimers[mg][0]
+                                fltm = "/".join(
+                                    self.smychsXX[str(ltm)]['source'].split(
+                                        "/")[:-1])
+                                myctrls[cl] = {
+                                    'units':
+                                        {'0':
+                                         {
+                                             'channels': tgc,
+                                             'monitor': fltm,
+                                             'id': 0,
+                                             'timer': fltm,
+                                             'trigger_type': 0}}}
+
+                        tgc = {}
+                        for ds in chds:
+                            if ds in self.smychs:
+                                cnt = self.smychs[str(ds)]
+                                i = chds.index(str(ds))
+        #                            print "INDEX", i, ds
+                                try:
+                                    chn = {'ndim': 0,
+                                           'index': i,
+                                           'name': str(ds),
+                                           'data_type': cnt['data_type'],
+                                           'plot_type': (
+                                               cnt['plot_type']
+                                               if ds not in lhe2[mg] else 0),
+                                           'data_units': cnt['data_units'],
+                                           'enabled': True,
+                                           'label': cnt['source'],
+                                           'instrument': None,
+                                           'shape': cnt['shape'],
+                                           '_controller_name': '__tango__',
+                                           'conditioning': '',
+                                           'full_name': '%s%s' % (
+                                               'tango://', cnt['source']),
+                                           '_unit_id': '0',
+                                           'output': True,
+                                           'plot_axes': (
+                                               cnt['plot_axes']
+                                               if ds not in lhe2[mg] else []),
+                                           'nexus_path': '',
+                                           'normalization': 0,
+                                           'source': cnt['source']}
+                                    tgc[chn["full_name"]] = chn
+                                except:
+                                    raise
+
+                        if tgc:
+                            myctrls['__tango__'] = {
+                                'units':
+                                    {'0':
+                                     {'channels': tgc,
+                                      'monitor': fgtm,
+                                      'id': 0,
+                                      'timer': fgtm,
+                                      'trigger_type': 0}}}
+
+                        smg = {"controllers": myctrls,
+                               "monitor": "%s" % fgtm,
+                               "description": "Measurement Group",
+                               "timer": "%s" % fgtm,
+                               "label": mg}
+        #                    print "SMG", smg
+                        self.myAssertDict(smg, pcnf)
+                        self.myAssertDict(pcnf, cnf)
+                        se[mg].reset()
+                        se[mg]["Door"] = val["Door"]
+                        se[mg]["ConfigDevice"] = val["ConfigDevice"]
+                        se[mg]["MntGrp"] = mg
+                        self.myAssertRaise(Exception, mgt[mg].isMntGrpUpdated)
+                        mgt[mg].fetchProfile()
+
+                        self.assertTrue(not mgt[mg].isMntGrpUpdated())
+                        self.assertTrue(not mgt[mg].isMntGrpUpdated())
+
+                        self.compareToDumpJSON(
+                            se[mg],
+                            ["DataSourceSelection",
+                             "UnplottedComponents",
+                             "PreselectedDataSources",
+                             "UnplottedComponents"],
+                            name=mg)
+
+                        self.myAssertDict(
+                            json.loads(
+                                se[mg]["DataSourceSelection"]), adss[mg])
+                        self.assertEqual(
+                            set(json.loads(se[mg]["PreselectedDataSources"])),
+                            set(aadss[mg]))
+                        self.assertEqual(
+                            set(json.loads(se[mg]["UnplottedComponents"])),
+                            set(lhe2[mg]))
+                        self.assertEqual(
+                            json.loads(se[mg]["OrderedChannels"]), pdss[mg])
+                        self.myAssertDict(
+                            json.loads(se[mg]["UserData"]), records[mg])
+                        self.assertEqual(
+                            json.loads(se[mg]["Timer"]), ltimers[mg])
+                        self.assertEqual(se[mg]["MntGrp"], mg)
+
+                    # check profile commands
+                    mg1, mg2, mg3, mg4 = tuple(self.__rnd.sample(mgs, 4))
+
+                    lmsp = MacroServerPools(10)
+                    lse = Selector(lmsp, self.__version)
+                    lse["Door"] = val["Door"]
+                    lse["ConfigDevice"] = val["ConfigDevice"]
+                    # switch from empty profile to mg1
+                    lse["MntGrp"] = mg1
+                    lmgt = ProfileManager(lse)
+                    self.myAssertRaise(Exception, lrs.isMntGrpUpdated)
+
+                    lrs.switchProfile(False)
+
+                    self.compareToDumpJSON(
+                        lse, [
+                            "DataSourceSelection",
+                            "UnplottedComponents",
+                            "PreselectedDataSources",
+                            "Timer"
+                        ],
+                        name=mg1)
+
+                    tmpcf = json.loads(mgt[mg1].mntGrpConfiguration())
+                    ltmpcf = json.loads(lrs.mntGrpConfiguration())
+                    self.myAssertDict(tmpcf, ltmpcf)
+
+                    self.assertEqual(
+                        set(json.loads(lse["PreselectedDataSources"])),
+                        set(aadss[mg1]))
+                    self.myAssertDict(
+                        json.loads(lse["DataSourceSelection"]), adss[mg1])
+                    self.assertEqual(
+                        json.loads(lse["OrderedChannels"]), pdss[mg1])
+                    self.myAssertDict(
+                        json.loads(lse["UserData"]), records[mg1])
+                    self.assertEqual(
+                        json.loads(lse["Timer"])[0], ltimers[mg1][0])
+                    self.assertEqual(
+                        set(json.loads(lse["Timer"])), set(ltimers[mg1]))
+                    self.assertEqual(lse["MntGrp"], mg1)
+
+                    print "MGS", mg1, mg2, mg3, mg4
+
+                    # import mntgrp another defined by selector MntGrp
+                    lse["MntGrp"] = mg2
+                    self.assertTrue(lrs.isMntGrpUpdated())
+                    self.assertTrue(lrs.isMntGrpUpdated())
+
+                    lrs.importMntGrp()
+                    self.assertTrue(lrs.isMntGrpUpdated())
+                    self.assertTrue(lrs.isMntGrpUpdated())
+
+                    tmpcf1 = json.loads(mgt[mg1].mntGrpConfiguration())
+                    tmpcf2 = json.loads(mgt[mg2].mntGrpConfiguration())
+                    ltmpcf = json.loads(lrs.mntGrpConfiguration())
+#                    self.myAssertDict(tmpcf1, ltmpcf)
+                    self.myAssertDict(tmpcf2, ltmpcf)
+                    self.compareToDumpJSON(
+                        se[mg2],
+                        ["DataSourceSelection",
+                         "UnplottedComponents",
+                         "PreselectedDataSources"],
+                        name=mg2)
+
+                    self.compareToDumpJSON(
+                        lse,
+                        ["DataSourceSelection",
+                         "UnplottedComponents",
+                         "PreselectedDataSources",
+                         "Timer",
+                         "MntGrp"],
+                        name=mg1)
+
+                    tmpcf = json.loads(mgt[mg2].mntGrpConfiguration())
+                    ltmpcf = json.loads(lrs.mntGrpConfiguration())
+                    self.myAssertDict(tmpcf, ltmpcf)
+
+                    self.assertEqual(
+                        set(json.loads(lse["PreselectedDataSources"])),
+                        set(aadss[mg1]))
+                    self.assertEqual(
+                        json.loads(lse["OrderedChannels"]), pdss[mg1])
+                    self.myAssertDict(
+                        json.loads(lse["UserData"]), records[mg1])
+
+                    self.assertEqual(
+                        json.loads(lse["Timer"])[0], ltimers[mg2][0])
+                    self.assertEqual(
+                        set(json.loads(lse["Timer"])), set(ltimers[mg2]))
+                    self.assertEqual(lse["MntGrp"], mg2)
+
+                    self.myAssertDict(
+                        json.loads(se[mg1]["DataSourceSelection"]),
+                        adss[mg1])
+                    self.myAssertDict(
+                        json.loads(se[mg2]["DataSourceSelection"]),
+                        adss[mg2])
+
+                    self.assertEqual(
+                        set(json.loads(se[mg1]["UnplottedComponents"])),
+                        set(lhe2[mg1]))
+                    self.assertEqual(
+                        set(json.loads(se[mg2]["UnplottedComponents"])),
+                        set(lhe2[mg2]))
+
+                    ladss = {}
+                    llhe = set()
+                    for ds, vl in adss[mg1].items():
+                        ladss[ds] = vl
+                    for nd in lhe2[mg1]:
+                        if nd not in self.smychsXX.keys():
+                            llhe.add(nd)
+
+                    for ds, vl in adss[mg2].items():
+                        if vl:
+                            if ds in self.smychs.keys() and \
+                                    self.smychs[ds]:
+                                ladss[ds] = vl
+                                if ds in lhe2[mg2]:
+                                    llhe.add(ds)
+                                elif ds in llhe:
+                                    llhe.remove(ds)
+                            elif ds in self.smychsXX.keys() and \
+                                    self.smychsXX[ds]:
+                                ladss[ds] = vl
+                                if ds in lhe2[mg2]:
+                                    llhe.add(ds)
+                                elif ds in llhe:
+                                    llhe.remove(ds)
+                            if ds not in self.smychs.keys() and \
+                                    ds not in self.smychsXX.keys():
+                                ladss[ds] = vl
+                                if ds in lhe2[mg2]:
+                                    llhe.add(ds)
+                                elif ds in llhe:
+                                    llhe.remove(ds)
+                        elif ds in adss[mg1].keys():
+                            if ds in self.smychsXX.keys() \
+                                    and self.smychsXX[ds]:
+                                ladss[ds] = vl
+                                if ds in lhe2[mg2]:
+                                    llhe.add(ds)
+                                elif ds in llhe:
+                                    llhe.remove(ds)
+                            else:
+                                ladss[ds] = adss[mg1][ds]
+
+                    for tm in json.loads(se[mg2]["Timer"]):
+                        if tm in ladss:
+                            if tm in llhe:
+                                ladss[tm] = False
+                                llhe.remove(tm)
+                    for tm in json.loads(se[mg1]["Timer"]):
+                        if tm in ladss:
+                            if tm in json.loads(
+                                    se[mg2]["UnplottedComponents"]):
+                                ladss[tm] = False
+                                if tm not in json.loads(se[mg2]["Timer"]):
+                                    if tm in llhe:
+                                        llhe.remove(tm)
+
+                    print "T1", json.loads(se[mg1]["Timer"])
+                    print "T2", json.loads(se[mg2]["Timer"])
+                    print "LT", json.loads(lse["Timer"])
+                    # ???
+                    self.myAssertDict(
+                        json.loads(lse["DataSourceSelection"]), ladss)
+                    # ???
+                    self.assertEqual(
+                        set(json.loads(lse["UnplottedComponents"])),
+                        set(llhe))
+
+                    # import mntgrp mg2 (with content mg1)
+                    # after change in mntgrp device
+
+                    lse["MntGrp"] = mg2
+                    tmpcf = json.loads(mgt[mg1].mntGrpConfiguration())
+                    tmpcf2 = json.loads(mgt[mg2].mntGrpConfiguration())
+                    ltmpcf = json.loads(lrs.mntGrpConfiguration())
+                    self.assertEqual(ltmpcf, tmpcf2)
+                    tmpcf['label'] = mg2
+                    mgdp = PyTango.DeviceProxy(
+                        tmg[mg2].new_device_info_writer.name)
+                    print "name", tmg[mg2].new_device_info_writer.name
+                    mgdp.Configuration = json.dumps(tmpcf)
+                    self.assertTrue(lrs.isMntGrpUpdated())
+                    self.assertTrue(lrs.isMntGrpUpdated())
+
+                    tmpcf1 = json.loads(mgt[mg1].mntGrpConfiguration())
+                    tmpcf2 = json.loads(mgt[mg2].mntGrpConfiguration())
+                    ltmpcf = json.loads(lrs.mntGrpConfiguration())
+#                    self.myAssertDict(tmpcf1, ltmpcf)
+                    self.myAssertDict(tmpcf2, ltmpcf)
+
+                    lrs.importMntGrp()
+                    # ???
+
+                    ltmpcf2 = json.loads(lrs.mntGrpConfiguration())
+                    if not Utils.compareDict(ltmpcf2, ltmpcf):
+                        self.assertTrue(lrs.isMntGrpUpdated())
+                        self.assertTrue(lrs.isMntGrpUpdated())
+
+                    tmpcf1 = json.loads(mgt[mg1].mntGrpConfiguration())
+                    tmpcf2 = json.loads(mgt[mg2].mntGrpConfiguration())
+                    ltmpcf = json.loads(lrs.mntGrpConfiguration())
+#                    self.myAssertDict(tmpcf1, ltmpcf)
+                    self.myAssertDict(tmpcf2, ltmpcf)
+
+                    self.compareToDumpJSON(
+                        lse,
+                        ["ComponentPreselection",
+                         "ComponentSelection",
+                         "DataSourceSelection",
+                         "UnplottedComponents",
+                         "PreselectedDataSources",
+                         "Timer",
+                         "MntGrp"],
+                        name=mg1)
+
+                    self.compareToDump(
+                        se[mg2],
+                        ["ComponentPreselection",
+                         "ComponentSelection",
+                         "DataSourceSelection",
+                         "UnplottedComponents",
+                         "PreselectedDataSources",
+                         "Timer"],
+                        name=mg2)
+
+                    self.myAssertDict(
+                        json.loads(se[mg2]["ComponentPreselection"]),
+                        acps[mg2])
+                    self.myAssertDict(
+                        json.loads(se[mg2]["ComponentSelection"]),
+                        cps[mg2])
+                    self.myAssertDict(
+                        json.loads(se[mg2]["DataSourceSelection"]), adss[mg2])
+                    self.assertEqual(
+                        set(json.loads(se[mg2]["PreselectedDataSources"])),
+                        set(aadss[mg2]))
+                    self.assertEqual(
+                        set(json.loads(se[mg2]["UnplottedComponents"])),
+                        set(lhe2[mg2]))
+                    self.assertEqual(
+                        json.loads(se[mg2]["OrderedChannels"]), pdss[mg2])
+                    self.myAssertDict(json.loads(se[mg2]["UserData"]),
+                                      records[mg2])
+                    self.assertEqual(
+                        json.loads(se[mg2]["Timer"]), ltimers[mg2])
+                    self.assertEqual(se[mg2]["MntGrp"], mg2)
+
+                    # switch to active profile mg3
+                    lse["MntGrp"] = mg2
+                    MSUtils.setEnv('ActiveMntGrp', mg3, self._ms.ms.keys()[0])
+
+                    tmpcf1 = json.loads(mgt[mg1].mntGrpConfiguration())
+                    tmpcf2 = json.loads(mgt[mg2].mntGrpConfiguration())
+                    tmpcf3 = json.loads(mgt[mg3].mntGrpConfiguration())
+                    ltmpcf = json.loads(lrs.mntGrpConfiguration())
+#                    self.myAssertDict(tmpcf1, ltmpcf)
+                    self.myAssertDict(tmpcf2, ltmpcf)
+#                    self.myAssertDict(tmpcf3, ltmpcf)
+
+                    lrs.switchProfile()
+
+                    tmpcf1 = json.loads(mgt[mg1].mntGrpConfiguration())
+                    tmpcf2 = json.loads(mgt[mg2].mntGrpConfiguration())
+                    tmpcf3 = json.loads(mgt[mg3].mntGrpConfiguration())
+                    ltmpcf = json.loads(lrs.mntGrpConfiguration())
+                    self.myAssertDict(tmpcf3, ltmpcf)
+#                    self.myAssertDict(tmpcf1, ltmpcf)
+#                    self.myAssertDict(tmpcf2, ltmpcf)
+
+                    self.compareToDumpJSON(
+                        lse,
+                        [
+                            "DataSourceSelection",
+                            "UnplottedComponents",
+                            "PreselectedDataSources",
+                            "Timer"],
+                        name=mg3)
+                    self.myAssertDict(json.loads(lse["DataSourceSelection"]),
+                                      adss[mg3])
+                    self.assertEqual(
+                        set(json.loads(lse["PreselectedDataSources"])),
+                        set(aadss[mg3]))
+
+                    mylhe = set(lhe2[mg3])
+                    for tm in json.loads(se[mg3]["Timer"]):
+                        if tm in adss[mg3].keys():
+                            if not adss[mg3][tm]:
+                                if tm in mylhe:
+                                    mylhe.remove(tm)
+
+                    self.assertEqual(
+                        set(json.loads(lse["UnplottedComponents"])),
+                        mylhe)
+                    self.assertEqual(json.loads(lse["OrderedChannels"]),
+                                     pdss[mg3])
+                    self.myAssertDict(json.loads(lse["UserData"]),
+                                      records[mg3])
+                    self.assertEqual(json.loads(lse["Timer"])[0],
+                                     ltimers[mg3][0])
+                    self.assertEqual(set(json.loads(lse["Timer"])),
+                                     set(ltimers[mg3]))
+                    self.assertEqual(lse["MntGrp"], mg3)
+
+                    # switch to nonexisting active profile
+
+#                    self.assertTrue(lrs.isMntGrpUpdated())
+#                    self.assertTrue(lrs.isMntGrpUpdated())
+                    wmg = "wrong_mg"
+                    lse["MntGrp"] = mg3
+                    MSUtils.setEnv('ActiveMntGrp', wmg, self._ms.ms.keys()[0])
+                    lrs.switchProfile()
+                    self.assertEqual(
+                        wmg,
+                        MSUtils.getEnv('ActiveMntGrp', self._ms.ms.keys()[0]))
+
+                    self.compareToDumpJSON(
+                        lse,
+                        [
+                            "DataSourceSelection",
+                            "UnplottedComponents",
+                            "PreselectedDataSources",
+                            "Timer",
+                            "MntGrp"],
+                        name=mg3)
+                    mydsg = dict(json.loads(lse["DataSourceSelection"]))
+                    for ds in self.smychsXX.keys():
+                        if ds in expch:
+                            mydsg[ds] = False
+                    mylhe2 = set(mylhe)
+                    for ds in self.smychsXX.keys():
+                        if ds in mylhe2:
+                            mylhe2.remove(ds)
+
+                    self.myAssertDict(json.loads(lse["DataSourceSelection"]),
+                                      mydsg)
+                    self.assertEqual(
+                        set(json.loads(lse["PreselectedDataSources"])),
+                        set(aadss[mg3]))
+                    self.assertEqual(
+                        set(json.loads(lse["UnplottedComponents"])),
+                        mylhe2)
+                    self.assertEqual(json.loads(lse["OrderedChannels"]),
+                                     pdss[mg3])
+                    self.myAssertDict(json.loads(lse["UserData"]),
+                                      records[mg3])
+                    self.assertEqual(json.loads(lse["Timer"])[0],
+                                     ltimers[mg3][0])
+                    self.assertEqual(set(json.loads(lse["Timer"])),
+                                     set(ltimers[mg3]))
+                    self.assertEqual(lse["MntGrp"], wmg)
+
+                    # switch to active profile mg3
+                    lse["MntGrp"] = mg2
+                    self.assertTrue(lrs.isMntGrpUpdated())
+                    self.assertTrue(lrs.isMntGrpUpdated())
+                    MSUtils.setEnv('ActiveMntGrp', mg3, self._ms.ms.keys()[0])
+
+                    tmpcf1 = json.loads(mgt[mg1].mntGrpConfiguration())
+                    tmpcf2 = json.loads(mgt[mg2].mntGrpConfiguration())
+                    tmpcf3 = json.loads(mgt[mg3].mntGrpConfiguration())
+                    ltmpcf = json.loads(lrs.mntGrpConfiguration())
+#                    self.myAssertDict(tmpcf1, ltmpcf)
+                    self.myAssertDict(tmpcf2, ltmpcf)
+#                    self.myAssertDict(tmpcf3, ltmpcf)
+
+                    lrs.switchProfile(True)
+
+                    tmpcf1 = json.loads(mgt[mg1].mntGrpConfiguration())
+                    tmpcf2 = json.loads(mgt[mg2].mntGrpConfiguration())
+                    tmpcf3 = json.loads(mgt[mg3].mntGrpConfiguration())
+                    ltmpcf = json.loads(lrs.mntGrpConfiguration())
+                    self.myAssertDict(tmpcf3, ltmpcf)
+#                    self.myAssertDict(tmpcf1, ltmpcf)
+#                    self.myAssertDict(tmpcf2, ltmpcf)
+
+                    self.compareToDumpJSON(
+                        lse,
+                        [
+                            "DataSourceSelection",
+                            "UnplottedComponents",
+                            "PreselectedDataSources",
+                            "Timer"],
+                        name=mg3)
+                    self.myAssertDict(json.loads(lse["DataSourceSelection"]),
+                                      adss[mg3])
+                    self.assertEqual(
+                        set(json.loads(lse["PreselectedDataSources"])),
+                        set(aadss[mg3]))
+
+                    self.assertEqual(
+                        set(json.loads(lse["UnplottedComponents"])),
+                        mylhe)
+                    self.assertEqual(json.loads(lse["OrderedChannels"]),
+                                     pdss[mg3])
+                    self.myAssertDict(json.loads(lse["UserData"]),
+                                      records[mg3])
+                    self.assertEqual(json.loads(lse["Timer"])[0],
+                                     ltimers[mg3][0])
+                    self.assertEqual(set(json.loads(lse["Timer"])),
+                                     set(ltimers[mg3]))
+                    self.assertEqual(lse["MntGrp"], mg3)
+
+                    # try switch to unnamed active profile
+                    # and then to selector mg3
+
+#                    self.assertTrue(lrs.isMntGrpUpdated())
+#                    self.assertTrue(lrs.isMntGrpUpdated())
+                    wmg = ""
+                    lse["MntGrp"] = mg3
+                    MSUtils.setEnv('ActiveMntGrp', wmg, self._ms.ms.keys()[0])
+                    lrs.switchProfile()
+                    self.assertEqual(
+                        wmg,
+                        MSUtils.getEnv('ActiveMntGrp', self._ms.ms.keys()[0]))
+
+                    tmpcf1 = json.loads(mgt[mg1].mntGrpConfiguration())
+                    tmpcf2 = json.loads(mgt[mg2].mntGrpConfiguration())
+                    tmpcf3 = json.loads(mgt[mg3].mntGrpConfiguration())
+                    ltmpcf = json.loads(lrs.mntGrpConfiguration())
+                    self.myAssertDict(tmpcf3, ltmpcf)
+#                    self.myAssertDict(tmpcf1, ltmpcf)
+#                    self.myAssertDict(tmpcf2, ltmpcf)
+
+                    self.compareToDumpJSON(
+                        lse,
+                        [
+                            "DataSourceSelection",
+                            "UnplottedComponents",
+                            "PreselectedDataSources",
+                            "Timer"],
+                        name=mg3)
+                    self.myAssertDict(json.loads(lse["DataSourceSelection"]),
+                                      adss[mg3])
+                    self.assertEqual(
+                        set(json.loads(lse["PreselectedDataSources"])),
+                        set(aadss[mg3]))
+
+                    self.assertEqual(
+                        set(json.loads(lse["UnplottedComponents"])),
+                        mylhe)
+                    self.assertEqual(json.loads(lse["OrderedChannels"]),
+                                     pdss[mg3])
+                    self.myAssertDict(json.loads(lse["UserData"]),
+                                      records[mg3])
+                    self.assertEqual(json.loads(lse["Timer"])[0],
+                                     ltimers[mg3][0])
+                    self.assertEqual(set(json.loads(lse["Timer"])),
+                                     set(ltimers[mg3]))
+                    self.assertEqual(lse["MntGrp"], mg3)
+
+                    # try switch to unnamed active profile
+                    # and then to selector mg3
+
+#                    self.assertTrue(lrs.isMntGrpUpdated())
+#                    self.assertTrue(lrs.isMntGrpUpdated())
+                    wmg = ""
+                    lse["MntGrp"] = mg3
+                    MSUtils.usetEnv('ActiveMntGrp', self._ms.ms.keys()[0])
+                    lrs.switchProfile()
+
+                    tmpcf1 = json.loads(mgt[mg1].mntGrpConfiguration())
+                    tmpcf2 = json.loads(mgt[mg2].mntGrpConfiguration())
+                    tmpcf3 = json.loads(mgt[mg3].mntGrpConfiguration())
+                    ltmpcf = json.loads(lrs.mntGrpConfiguration())
+                    self.myAssertDict(tmpcf3, ltmpcf)
+#                    self.myAssertDict(tmpcf1, ltmpcf)
+#                    self.myAssertDict(tmpcf2, ltmpcf)
+
+                    self.compareToDumpJSON(
+                        lse,
+                        [
+                            "DataSourceSelection",
+                            "UnplottedComponents",
+                            "PreselectedDataSources",
+                            "Timer"],
+                        name=mg3)
+                    self.myAssertDict(json.loads(lse["DataSourceSelection"]),
+                                      adss[mg3])
+                    self.assertEqual(
+                        set(json.loads(lse["PreselectedDataSources"])),
+                        set(aadss[mg3]))
+
+                    self.assertEqual(
+                        set(json.loads(lse["UnplottedComponents"])),
+                        mylhe)
+                    self.assertEqual(json.loads(lse["OrderedChannels"]),
+                                     pdss[mg3])
+                    self.myAssertDict(json.loads(lse["UserData"]),
+                                      records[mg3])
+                    self.assertEqual(json.loads(lse["Timer"])[0],
+                                     ltimers[mg3][0])
+                    self.assertEqual(set(json.loads(lse["Timer"])),
+                                     set(ltimers[mg3]))
+                    self.assertEqual(lse["MntGrp"], mg3)
+
+                    ## fetch non-existing mg
+                    wmg = "wrong_mg2"
+                    lse["MntGrp"] = wmg
+                    lrs.fetchProfile()
+
+                    tmpcf1 = json.loads(mgt[mg1].mntGrpConfiguration())
+                    tmpcf2 = json.loads(mgt[mg2].mntGrpConfiguration())
+                    tmpcf3 = json.loads(mgt[mg3].mntGrpConfiguration())
+                    ltmpcf = json.loads(lrs.mntGrpConfiguration())
+#                    self.myAssertDict(tmpcf3, ltmpcf)
+#                    self.myAssertDict(tmpcf1, ltmpcf)
+#                    self.myAssertDict(tmpcf2, ltmpcf)
+
+                    self.compareToDumpJSON(
+                        lse,
+                        [
+                            "DataSourceSelection",
+                            "UnplottedComponents",
+                            "PreselectedDataSources",
+                            "Timer", "MntGrp"],
+                        name=mg3)
+                    self.myAssertDict(json.loads(lse["DataSourceSelection"]),
+                                      adss[mg3])
+                    self.assertEqual(
+                        set(json.loads(lse["PreselectedDataSources"])),
+                        set(aadss[mg3]))
+
+                    self.assertEqual(
+                        set(json.loads(lse["UnplottedComponents"])),
+                        mylhe)
+                    self.assertEqual(json.loads(lse["OrderedChannels"]),
+                                     pdss[mg3])
+                    self.myAssertDict(json.loads(lse["UserData"]),
+                                      records[mg3])
+                    self.assertEqual(json.loads(lse["Timer"])[0],
+                                     ltimers[mg3][0])
+                    self.assertEqual(set(json.loads(lse["Timer"])),
+                                     set(ltimers[mg3]))
+                    self.assertEqual(lse["MntGrp"], wmg)
+
+                    ## fetch non-existing selection
+                    self._cf.dp.deleteSelection(mg4)
+                    lse["MntGrp"] = mg4
+                    self.assertTrue(
+                        mg4 not in self._cf.dp.availableSelections())
+                    self.assertTrue(mg4 in lrs.availableMntGrps())
+                    if j % 2:
+                        lrs.defaultPreselectedComponents = \
+                            list(json.loads(lse["ComponentPreselection"]
+                                            ).keys())
+
+                    lrs.fetchProfile()
+                    tmpcf1 = json.loads(mgt[mg1].mntGrpConfiguration())
+                    tmpcf2 = json.loads(mgt[mg2].mntGrpConfiguration())
+                    tmpcf3 = json.loads(mgt[mg3].mntGrpConfiguration())
+                    tmpcf4 = json.loads(mgt[mg4].mntGrpConfiguration())
+                    ltmpcf = json.loads(lrs.mntGrpConfiguration())
+                    self.myAssertDict(tmpcf4, ltmpcf)
+#                    self.myAssertDict(tmpcf3, ltmpcf)
+#                    self.myAssertDict(tmpcf1, ltmpcf)
+#                    self.myAssertDict(tmpcf2, ltmpcf)
+
+                    self.compareToDumpJSON(
+                        lse,
+                        [
+                            "InitDataSources",
+                            "PreselectedDataSources",
+                            "ComponentPreselection",
+                            "Timer",
+                            "MntGrp",
+
+                            "ComponentSelection",
+                            "DataSourceSelection",
+                            "UnplottedComponents",
+                        ],
+                        name=mg3)
+                    self.assertEqual(
+                        set(json.loads(lse["PreselectedDataSources"])),
+                        set(aadss[mg3]))
+                    self.assertEqual(
+                        set(json.loads(lse["InitDataSources"])),
+                        set())
+
+                    if j % 2:
+
+                        cpgood = self.smycps.keys() + self.smycps2.keys()
+                        if "client_long" in aadss[mg3] \
+                                or "client_short" in aadss[mg3]:
+                            cpgood.remove("smycpnt1")
+                        if "client2_long" in aadss[mg3] \
+                                or "client2_short" in aadss[mg3]:
+                            cpgood.remove("s2mycpnt1")
+
+                        myacps = dict(acps[mg3])
+                        for cp in myacps.keys():
+                            myacps[cp] = cp in cpgood
+                        self.myAssertDict(
+                            json.loads(lse["ComponentPreselection"]),
+                            myacps)
+                    else:
+                        self.myAssertDict(
+                            json.loads(lse["ComponentPreselection"]),
+                            {})
+
+                    mycps = dict(cps[mg3])
+                    for cp in mycps:
+                        mycps[cp] = False
+                    self.myAssertDict(
+                        json.loads(lse["ComponentSelection"]), mycps)
+
+                    self.assertEqual(json.loads(lse["OrderedChannels"]),
+                                     pdss[mg3])
+                    self.myAssertDict(json.loads(lse["UserData"]),
+                                      records[mg3])
+                    self.assertEqual(json.loads(lse["Timer"])[0],
+                                     ltimers[mg4][0])
+                    self.assertEqual(set(json.loads(lse["Timer"])),
+                                     set(ltimers[mg4]))
+                    self.assertEqual(lse["MntGrp"], mg4)
+
+                    ladss = {}
+                    for ds, vl in adss[mg3].items():
+                        ladss[ds] = False
+
+                    for ds, vl in adss[mg4].items():
+                        if vl:
+                            if ds in self.smychs.keys() and \
+                                    self.smychs[ds]:
+                                ladss[ds] = vl
+                            elif ds in self.smychsXX.keys() and \
+                                    self.smychsXX[ds]:
+                                ladss[ds] = vl
+                            if ds not in self.smychs.keys() and \
+                                    ds not in self.smychsXX.keys():
+                                ladss[ds] = vl
+                        elif ds in adss[mg3].keys():
+                            if ds in self.smychsXX.keys() \
+                                    and self.smychsXX[ds]:
+                                ladss[ds] = vl
+                            else:
+                                ladss[ds] = vl
+
+                    llhe = set()
+
+                    for ds in json.loads(se[mg3]["UnplottedComponents"]):
+                        if ds not in self.smychsXX.keys():
+                            llhe.add(ds)
+
+                    for ds in ladss.keys():
+                        if ds in lhe2[mg4]:
+                            llhe.add(ds)
+
+                    for tm in json.loads(se[gm4]["Timer"]):
+                        if tm in ladss:
+                            if tm in llhe:
+                                ladss[tm] = False
+                                llhe.remove(tm)
+                    for tm in json.loads(se[mg3]["Timer"]):
+                        if tm in ladss:
+                            if tm in json.loads(
+                                    se[mg4]["UnplottedComponents"]):
+                                ladss[tm] = False
+                                if tm not in json.loads(se[mg4]["Timer"]):
+                                    if tm in llhe:
+                                        llhe.remove(tm)
+
+                    for ds in self.smychs.keys():
+                        if ds in llhe:
+                            if ds in lhe2[mg3] and ds not in lhe2[mg4]:
+                                if ds in ladss and ladss[ds]:
+                                    llhe.remove(ds)
+
+                    self.myAssertDict(json.loads(lse["DataSourceSelection"]),
+                                      ladss)
+
+                    self.assertEqual(
+                        set(json.loads(lse["UnplottedComponents"])),
+                        llhe)
+
+                finally:
+                    for mg in rs.keys():
+                        try:
+                            mgt[mg].deleteProfile(mgs[mg])
+                        except:
+                            pass
+                    for mg in tmg.keys():
+                        try:
+                            tmg[mg].tearDown()
+                        except:
+                            pass
+                    simp2.tearDown()
+                    try:
+                        self.tearDown()
+                    except:
+                        pass
+        finally:
+            try:
+                self.setUp()
+            except:
+                pass
 
 
 if __name__ == '__main__':
