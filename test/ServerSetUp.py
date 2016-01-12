@@ -33,12 +33,14 @@ class ServerSetUp(object):
 
     ## constructor
     # \brief defines server parameters
-    def __init__(self):
+    def __init__(self, device="testp09/testnrs/testr228", instance="NRSTEST"):
         ## information about tango writer
         self.new_device_info_writer = PyTango.DbDevInfo()
         self.new_device_info_writer._class = "NXSRecSelector"
-        self.new_device_info_writer.server = "NXSRecSelector/NRSTEST"
-        self.new_device_info_writer.name = "testp09/testnrs/testr228"
+        self.new_device_info_writer.server = "NXSRecSelector/%s" % instance
+        self.new_device_info_writer.name = device
+        ## server instance
+        self.instance = instance
 
         self._psub = None
 
@@ -53,11 +55,11 @@ class ServerSetUp(object):
 
         if os.path.isfile("../NXSRecSelector"):
             self._psub = subprocess.call(
-                "cd ..; ./NXSRecSelector NRSTEST &", stdout=None,
+                "cd ..; ./NXSRecSelector %s &" % self.instance, stdout=None,
                 stderr=None, shell=True)
         else:
             self._psub = subprocess.call(
-                "NXSRecSelector NRSTEST &", stdout=None,
+                "NXSRecSelector %s &" % self.instance, stdout=None,
                 stderr=None, shell=True)
         print "waiting for server",
 
@@ -85,7 +87,7 @@ class ServerSetUp(object):
 
         output = ""
         pipe = subprocess.Popen(
-            "ps -ef | grep 'NXSRecSelector NRSTEST'",
+            "ps -ef | grep 'NXSRecSelector %s'" % self.instance,
             stdout=subprocess.PIPE, shell=True).stdout
 
         res = pipe.read().split("\n")

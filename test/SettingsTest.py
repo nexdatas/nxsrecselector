@@ -53,6 +53,7 @@ from nxsrecconfig.Describer import Describer
 from nxsrecconfig.Settings import Settings
 from nxsrecconfig.Utils import TangoUtils, MSUtils
 from nxsconfigserver.XMLConfigurator import XMLConfigurator
+from nxsrecconfig.Utils import TangoUtils, MSUtils, Utils
 
 ## if 64-bit machione
 IS64BIT = (struct.calcsize("P") == 8)
@@ -1765,6 +1766,7 @@ class SettingsTest(unittest.TestCase):
 #        print "SE4", el["TimeZone"]
         self.assertEqual(dks, eks)
         for key in dks:
+            print " K:", key,
             if self.__dump[name][key] != self.value(el, key):
                 print "COMP", key
             self.assertEqual(self.__dump[name][key], self.value(el, key))
@@ -1773,7 +1775,6 @@ class SettingsTest(unittest.TestCase):
         return self.__dump[name][key]
 
     def value(self, rs, name):
-
         return rs.value(name)
 
     def names(self, rs):
@@ -1788,6 +1789,7 @@ class SettingsTest(unittest.TestCase):
         eks = set(self.names(el)) - exc
         self.assertEqual(dks, eks)
         for key in dks:
+            print " K:", key,
             try:
                 w1 = json.loads(self.__dump[name][key])
                 w2 = json.loads(self.value(el, key))
@@ -1868,6 +1870,9 @@ class SettingsTest(unittest.TestCase):
                 self.assertEqual(v, dct2[k])
 
     def openRecSelector(self):
+        return Settings()
+
+    def openRecSelector2(self):
         return Settings()
 
     def subtest_constructor(self):
@@ -13322,10 +13327,17 @@ class SettingsTest(unittest.TestCase):
         finally:
             simp2.tearDown()
 
-    ## updateMntGrp test
-    def wtest_switchProfile_importMntGrp(self):
+    def switchProfile(self, rs, flag):
+        rs.switchProfile(flag)
+
+    ## test
+    def test_switchProfile_importMntGrp(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        self.subtest_switchProfile_importMntGrp()
+
+    ## test
+    def subtest_switchProfile_importMntGrp(self):
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -13342,11 +13354,12 @@ class SettingsTest(unittest.TestCase):
 
                 wrong = []
 
-                mgs = ["mg1", "mg2", "mg3",
-                       "mntgrp", "somegroup"
-                       ]
-                mgt = {}
-                se = {}
+                mgs = [
+                    "mg1", "mg2", "mg3",
+                    "mntgrp", "somegroup"
+                ]
+                rs = {}
+                mp = {}
                 msp = {}
                 tmg = {}
                 cps = {}
@@ -13374,18 +13387,20 @@ class SettingsTest(unittest.TestCase):
 
                     for i, mg in enumerate(mgs):
 
-                        msp[mg] = MacroServerPools(10)
-                        se[mg] = Selector(msp[mg], self.__version)
-                        se[mg]["Door"] = val["Door"]
-                        se[mg]["ConfigDevice"] = val["ConfigDevice"]
-                        se[mg]["MntGrp"] = mg
-                        mgt[mg] = ProfileManager(se[mg])
-                        self.assertEqual(
-                            set(mgt[mg].availableMntGrps()), set(mgs[:(i)]))
-                        self.myAssertRaise(Exception, mgt[mg].updateMntGrp)
+                        rs[mg] = self.openRecSelector()
+                        rs[mg].configDevice = val["ConfigDevice"]
+                        rs[mg].door = val["Door"]
+                        rs[mg].mntGrp = mg
+                        self.assertEqual(rs[mg].configDevice,
+                                         val["ConfigDevice"])
+                        self.assertEqual(rs[mg].door, val["Door"])
 
                         self.assertEqual(
-                            set(mgt[mg].availableMntGrps()), set(mgs[:(i)]))
+                            set(rs[mg].availableMntGrps()), set(mgs[:(i)]))
+#                        self.myAssertRaise(Exception, rs[mg].updateMntGrp)
+
+                        self.assertEqual(
+                            set(rs[mg].availableMntGrps()), set(mgs[:(i)]))
 
                         ctrls = [scalar_ctrl, spectrum_ctrl, image_ctrl,
                                  "__tango__"]
@@ -13523,25 +13538,26 @@ class SettingsTest(unittest.TestCase):
                         for ch in expch:
                             if ch["name"] not in adss[mg].keys():
                                 adss[mg][ch["name"]] = False
-                        se[mg]["ComponentSelection"] = json.dumps(cps[mg])
-                        se[mg]["ComponentPreselection"] = json.dumps(
+                        mp[mg] = json.loads(rs[mg].profileConfiguration)
+                        mp[mg]["ComponentSelection"] = json.dumps(cps[mg])
+                        mp[mg]["ComponentPreselection"] = json.dumps(
                             acps[mg])
-                        se[mg]["DataSourceSelection"] = json.dumps(dss)
-                        se[mg]["PreselectedDataSources"] = \
+                        mp[mg]["DataSourceSelection"] = json.dumps(dss)
+                        mp[mg]["PreselectedDataSources"] = \
                             json.dumps(aadss[mg])
-                        se[mg]["OptionalComponents"] = json.dumps(ocps)
-                        se[mg]["InitDataSources"] = json.dumps(indss)
-                        se[mg]["AppendEntry"] = bool(self.__rnd.randint(0, 1))
-                        se[mg]["ComponentsFromMntGrp"] = bool(
+                        mp[mg]["OptionalComponents"] = json.dumps(ocps)
+                        mp[mg]["InitDataSources"] = json.dumps(indss)
+                        mp[mg]["AppendEntry"] = bool(self.__rnd.randint(0, 1))
+                        mp[mg]["ComponentsFromMntGrp"] = bool(
                             self.__rnd.randint(0, 1))
-                        se[mg]["DynamicComponents"] = bool(
+                        mp[mg]["DynamicComponents"] = bool(
                             self.__rnd.randint(0, 1))
-                        se[mg]["DefaultDynamicLinks"] = \
+                        mp[mg]["DefaultDynamicLinks"] = \
                             bool(self.__rnd.randint(0, 1))
-                        se[mg]["DefaultDynamicPath"] = self.getRandomName(20)
-                        se[mg]["TimeZone"] = self.getRandomName(20)
+                        mp[mg]["DefaultDynamicPath"] = self.getRandomName(20)
+                        mp[mg]["TimeZone"] = self.getRandomName(20)
 
-                        se[mg]["ConfigVariables"] = json.dumps(dict(
+                        mp[mg]["ConfigVariables"] = json.dumps(dict(
                             (self.getRandomName(10),
                              self.getRandomName(15)) for _ in
                             range(self.__rnd.randint(1, 40))))
@@ -13567,7 +13583,7 @@ class SettingsTest(unittest.TestCase):
                               for _ in range(self.__rnd.randint(0, 3))])
                             for _ in range(self.__rnd.randint(1, 40)))
 
-                        se[mg]["ChannelProperties"] = json.dumps(
+                        mp[mg]["ChannelProperties"] = json.dumps(
                             {
                                 "label": labels,
                                 "nexus_path": paths,
@@ -13577,6 +13593,8 @@ class SettingsTest(unittest.TestCase):
                             }
                         )
 
+                        rs[mg].profileConfiguration = str(json.dumps(mp[mg]))
+                        mp[mg] = json.loads(rs[mg].profileConfiguration)
                         self._cf.dp.SetCommandVariable(["MCPLIST",
                                                         json.dumps(mcps)])
 
@@ -13593,16 +13611,19 @@ class SettingsTest(unittest.TestCase):
                         for dsr in dsres.values():
                             records[mg][str(dsr.record)] = '2345'
 
-                        se[mg]["Timer"] = json.dumps(ltimers[mg])
-                        se[mg]["UserData"] = json.dumps(records[mg])
+                        mp[mg] = json.loads(rs[mg].profileConfiguration)
+                        mp[mg]["Timer"] = json.dumps(ltimers[mg])
+                        mp[mg]["UserData"] = json.dumps(records[mg])
+                        rs[mg].profileConfiguration = str(json.dumps(mp[mg]))
+                        mp[mg] = json.loads(rs[mg].profileConfiguration)
 
                         tmg[mg] = TestMGSetUp.TestMeasurementGroupSetUp(
                             name=mg)
         #                    dv = "/".join(ar["full_name"].split("/")[0:-1])
-                        chds = [ds for ds in mgt[mg].dataSources()
+                        chds = [ds for ds in rs[mg].selectedDataSources()
                                 if not ds.startswith('client')]
                         chds1 = list(chds)
-                        chds2 = [ds for ds in mgt[mg].componentDataSources()
+                        chds2 = [ds for ds in rs[mg].componentDataSources()
                                  if not ds.startswith('client')]
                         chds.extend(chds2)
                         bchds = list(chds)
@@ -13628,8 +13649,11 @@ class SettingsTest(unittest.TestCase):
 
                         lhe = lheds + lhecp
 
-                        se[mg]["UnplottedComponents"] = json.dumps(lhe)
-                        se[mg]["OrderedChannels"] = json.dumps(pdss[mg])
+                        mp[mg] = json.loads(rs[mg].profileConfiguration)
+                        mp[mg]["UnplottedComponents"] = json.dumps(lhe)
+                        mp[mg]["OrderedChannels"] = json.dumps(pdss[mg])
+                        rs[mg].profileConfiguration = str(json.dumps(mp[mg]))
+                        mp[mg] = json.loads(rs[mg].profileConfiguration)
 
                         lhe2[mg] = []
                         for el in lhe:
@@ -13642,65 +13666,70 @@ class SettingsTest(unittest.TestCase):
                                 lhe2[mg].append(el)
 
                         self.myAssertDict(
-                            json.loads(se[mg]["ComponentPreselection"]),
+                            json.loads(mp[mg]["ComponentPreselection"]),
                             acps[mg])
                         self.myAssertDict(
-                            json.loads(se[mg]["ComponentSelection"]), cps[mg])
+                            json.loads(mp[mg]["ComponentSelection"]), cps[mg])
                         self.myAssertDict(
-                            json.loads(se[mg]["DataSourceSelection"]),
+                            json.loads(mp[mg]["DataSourceSelection"]),
                             adss[mg])
                         self.assertEqual(
-                            set(json.loads(se[mg]["UnplottedComponents"])),
+                            set(json.loads(mp[mg]["UnplottedComponents"])),
                             set(lhe))
                         self.assertEqual(
-                            json.loads(se[mg]["OrderedChannels"]), pdss[mg])
+                            json.loads(mp[mg]["OrderedChannels"]), pdss[mg])
                         self.myAssertDict(
-                            json.loads(se[mg]["UserData"]), records[mg])
+                            json.loads(mp[mg]["UserData"]), records[mg])
                         self.assertEqual(
-                            json.loads(se[mg]["Timer"]), ltimers[mg])
-                        self.assertEqual(se[mg]["MntGrp"], mg)
-                        self.dump(se[mg], name=mg)
-                        self.assertTrue(mgt[mg].isMntGrpUpdated())
-                        self.assertTrue(mgt[mg].isMntGrpUpdated())
+                            json.loads(mp[mg]["Timer"]), ltimers[mg])
+                        self.assertEqual(mp[mg]["MntGrp"], mg)
+                        self.dump(rs[mg], name=mg)
+                        self.assertTrue(rs[mg].isMntGrpUpdated())
+                        self.assertTrue(rs[mg].isMntGrpUpdated())
 
-                        res = mgt[mg].cpdescription()
+                        wwcp = rs[mg].components
+                        describer = Describer(self._cf.dp, True)
+                        res = describer.components(wwcp, "STEP", "")
+
                         mdds = set()
                         for mdss in res[0].values():
                             if isinstance(mdss, dict):
                                 for ds in mdss.keys():
                                     adss[mg][ds] = True
+
                         for tm in ltimers[mg]:
                             if tm in lhe2[mg]:
                                 if tm in adss[mg].keys():
                                     print "DES", tm
                                     adss[mg][tm] = False
 
-                        jpcnf = mgt[mg].updateMntGrp()
-                        self.assertTrue(not mgt[mg].isMntGrpUpdated())
-                        self.assertTrue(not mgt[mg].isMntGrpUpdated())
+                        jpcnf = rs[mg].updateMntGrp()
+                        self.assertTrue(not rs[mg].isMntGrpUpdated())
+                        self.assertTrue(not rs[mg].isMntGrpUpdated())
                         pcnf = json.loads(jpcnf)
                         mgdp = PyTango.DeviceProxy(
                             tmg[mg].new_device_info_writer.name)
-                        jcnf = mgt[mg].mntGrpConfiguration()
+                        jcnf = rs[mg].mntGrpConfiguration()
                         cnf = json.loads(jcnf)
+                        mp[mg] = json.loads(rs[mg].profileConfiguration)
                         self.myAssertDict(
-                            json.loads(se[mg]["ComponentPreselection"]),
+                            json.loads(mp[mg]["ComponentPreselection"]),
                             acps[mg])
                         self.myAssertDict(
-                            json.loads(se[mg]["ComponentSelection"]), cps[mg])
+                            json.loads(mp[mg]["ComponentSelection"]), cps[mg])
                         self.myAssertDict(
                             json.loads(
-                                se[mg]["DataSourceSelection"]), adss[mg])
+                                mp[mg]["DataSourceSelection"]), adss[mg])
                         self.assertEqual(
-                            set(json.loads(se[mg]["UnplottedComponents"])),
+                            set(json.loads(mp[mg]["UnplottedComponents"])),
                             set(lhe2[mg]))
                         self.assertEqual(
-                            json.loads(se[mg]["OrderedChannels"]), pdss[mg])
+                            json.loads(mp[mg]["OrderedChannels"]), pdss[mg])
                         self.myAssertDict(
-                            json.loads(se[mg]["UserData"]), records[mg])
+                            json.loads(mp[mg]["UserData"]), records[mg])
                         self.assertEqual(
-                            json.loads(se[mg]["Timer"]), ltimers[mg])
-                        self.assertEqual(se[mg]["MntGrp"], mg)
+                            json.loads(mp[mg]["Timer"]), ltimers[mg])
+                        self.assertEqual(mp[mg]["MntGrp"], mg)
                         myctrls = {}
                         fgtm = "/".join(
                             self.smychsXX[str(ltimers[mg][0])]['source'].split(
@@ -13817,108 +13846,144 @@ class SettingsTest(unittest.TestCase):
         #                    print "SMG", smg
                         self.myAssertDict(smg, pcnf)
                         self.myAssertDict(pcnf, cnf)
-                        se[mg].reset()
-                        se[mg]["Door"] = val["Door"]
-                        se[mg]["ConfigDevice"] = val["ConfigDevice"]
-                        se[mg]["MntGrp"] = mg
-                        self.myAssertRaise(Exception, mgt[mg].isMntGrpUpdated)
-                        mgt[mg].fetchProfile()
+                        rs[mg].mntGrp = "nxsmntgrp"
+                        rs[mg].profileConfiguration = str(json.dumps({}))
+                        rs[mg].configDevice = val["ConfigDevice"]
+                        rs[mg].door = val["Door"]
+                        print "MG", mg
+                        rs[mg].mntGrp = mg
+                        rs[mg].fetchProfile()
+                        mp[mg] = json.loads(rs[mg].profileConfiguration)
+#                        self.myAssertRaise(Exception, rs[mg].isMntGrpUpdated)
+#                       rs[mg].fetchProfile()
+#                        mp[mg] = json.loads(rs[mg].profileConfiguration)
 
-                        self.assertTrue(not mgt[mg].isMntGrpUpdated())
-                        self.assertTrue(not mgt[mg].isMntGrpUpdated())
+                        self.assertTrue(not rs[mg].isMntGrpUpdated())
+                        self.assertTrue(not rs[mg].isMntGrpUpdated())
 
                         self.compareToDumpJSON(
-                            se[mg],
+                            rs[mg],
                             ["DataSourceSelection",
                              "UnplottedComponents",
                              "PreselectedDataSources",
                              "UnplottedComponents"],
                             name=mg)
-
+                        mp[mg] = json.loads(rs[mg].profileConfiguration)
                         self.myAssertDict(
                             json.loads(
-                                se[mg]["DataSourceSelection"]), adss[mg])
+                                mp[mg]["DataSourceSelection"]), adss[mg])
                         self.assertEqual(
-                            set(json.loads(se[mg]["PreselectedDataSources"])),
+                            set(json.loads(mp[mg]["PreselectedDataSources"])),
                             set(aadss[mg]))
+                        print "PDS1", set(aadss[mg])
                         self.assertEqual(
-                            set(json.loads(se[mg]["UnplottedComponents"])),
+                            set(json.loads(mp[mg]["UnplottedComponents"])),
                             set(lhe2[mg]))
                         self.assertEqual(
-                            json.loads(se[mg]["OrderedChannels"]), pdss[mg])
+                            json.loads(mp[mg]["OrderedChannels"]), pdss[mg])
                         self.myAssertDict(
-                            json.loads(se[mg]["UserData"]), records[mg])
+                            json.loads(mp[mg]["UserData"]), records[mg])
                         self.assertEqual(
-                            json.loads(se[mg]["Timer"]), ltimers[mg])
-                        self.assertEqual(se[mg]["MntGrp"], mg)
+                            json.loads(mp[mg]["Timer"]), ltimers[mg])
+                        self.assertEqual(mp[mg]["MntGrp"], mg)
 
                     # check profile commands
                     mg1, mg2, mg3, mg4 = tuple(self.__rnd.sample(mgs, 4))
-
-                    lmsp = MacroServerPools(10)
-                    lse = Selector(lmsp, self.__version)
-                    lse["Door"] = val["Door"]
-                    lse["ConfigDevice"] = val["ConfigDevice"]
-                    # switch from empty profile to mg1
-                    lse["MntGrp"] = mg1
-                    lmgt = ProfileManager(lse)
-                    self.myAssertRaise(Exception, lrs.isMntGrpUpdated)
-
-                    lrs.switchProfile(False)
+                    print "MGS", mg1, mg2, mg3, mg4
 
                     self.compareToDumpJSON(
-                        lse, [
+                        rs[mg1],
+                        ["DataSourceSelection",
+                         "UnplottedComponents",
+                         "PreselectedDataSources"],
+                        name=mg1)
+                    self.compareToDumpJSON(
+                        rs[mg2],
+                        ["DataSourceSelection",
+                         "UnplottedComponents",
+                         "PreselectedDataSources"],
+                        name=mg2)
+                    self.compareToDumpJSON(
+                        rs[mg3],
+                        ["DataSourceSelection",
+                         "UnplottedComponents",
+                         "PreselectedDataSources"],
+                        name=mg3)
+                    self.compareToDumpJSON(
+                        rs[mg4],
+                        ["DataSourceSelection",
+                         "UnplottedComponents",
+                         "PreselectedDataSources"],
+                        name=mg4)
+
+                    lrs = self.openRecSelector()
+                    lrs.configDevice = val["ConfigDevice"]
+                    lrs.door = val["Door"]
+                    lrs.mntGrp = mg1
+                    self.assertEqual(lrs.configDevice, val["ConfigDevice"])
+
+                    self.assertEqual(lrs.door, val["Door"])
+                    lmp = json.loads(lrs.profileConfiguration)
+
+#                    self.myAssertRaise(Exception, lrs.isMntGrpUpdated)
+
+                    self.switchProfile(lrs, False)
+                    lmp = json.loads(lrs.profileConfiguration)
+
+                    self.compareToDumpJSON(
+                        lrs, [
                             "DataSourceSelection",
                             "UnplottedComponents",
                             "PreselectedDataSources",
                             "Timer"
                         ],
                         name=mg1)
-
-                    tmpcf = json.loads(mgt[mg1].mntGrpConfiguration())
+                    tmpcf = json.loads(rs[mg1].mntGrpConfiguration())
                     ltmpcf = json.loads(lrs.mntGrpConfiguration())
                     self.myAssertDict(tmpcf, ltmpcf)
 
                     self.assertEqual(
-                        set(json.loads(lse["PreselectedDataSources"])),
+                        set(json.loads(lmp["PreselectedDataSources"])),
                         set(aadss[mg1]))
                     self.myAssertDict(
-                        json.loads(lse["DataSourceSelection"]), adss[mg1])
+                        json.loads(lmp["DataSourceSelection"]), adss[mg1])
                     self.assertEqual(
-                        json.loads(lse["OrderedChannels"]), pdss[mg1])
+                        json.loads(lmp["OrderedChannels"]), pdss[mg1])
                     self.myAssertDict(
-                        json.loads(lse["UserData"]), records[mg1])
+                        json.loads(lmp["UserData"]), records[mg1])
                     self.assertEqual(
-                        json.loads(lse["Timer"])[0], ltimers[mg1][0])
+                        json.loads(lmp["Timer"])[0], ltimers[mg1][0])
                     self.assertEqual(
-                        set(json.loads(lse["Timer"])), set(ltimers[mg1]))
-                    self.assertEqual(lse["MntGrp"], mg1)
+                        set(json.loads(lmp["Timer"])), set(ltimers[mg1]))
+                    self.assertEqual(lmp["MntGrp"], mg1)
 
                     print "MGS", mg1, mg2, mg3, mg4
 
                     # import mntgrp another defined by selector MntGrp
-                    lse["MntGrp"] = mg2
+                    lrs.mntGrp = mg2
+
                     self.assertTrue(lrs.isMntGrpUpdated())
                     self.assertTrue(lrs.isMntGrpUpdated())
 
                     lrs.importMntGrp()
+                    lmp = json.loads(lrs.profileConfiguration)
                     self.assertTrue(lrs.isMntGrpUpdated())
                     self.assertTrue(lrs.isMntGrpUpdated())
 
-                    tmpcf1 = json.loads(mgt[mg1].mntGrpConfiguration())
-                    tmpcf2 = json.loads(mgt[mg2].mntGrpConfiguration())
+                    tmpcf1 = json.loads(rs[mg1].mntGrpConfiguration())
+                    tmpcf2 = json.loads(rs[mg2].mntGrpConfiguration())
                     ltmpcf = json.loads(lrs.mntGrpConfiguration())
 #                    self.myAssertDict(tmpcf1, ltmpcf)
                     self.myAssertDict(tmpcf2, ltmpcf)
+                    print "RSmg2",
                     self.compareToDumpJSON(
-                        se[mg2],
+                        rs[mg2],
                         ["DataSourceSelection",
                          "UnplottedComponents",
                          "PreselectedDataSources"],
                         name=mg2)
-
                     self.compareToDumpJSON(
-                        lse,
+                        lrs,
                         ["DataSourceSelection",
                          "UnplottedComponents",
                          "PreselectedDataSources",
@@ -13926,36 +13991,36 @@ class SettingsTest(unittest.TestCase):
                          "MntGrp"],
                         name=mg1)
 
-                    tmpcf = json.loads(mgt[mg2].mntGrpConfiguration())
+                    tmpcf = json.loads(rs[mg2].mntGrpConfiguration())
                     ltmpcf = json.loads(lrs.mntGrpConfiguration())
                     self.myAssertDict(tmpcf, ltmpcf)
 
                     self.assertEqual(
-                        set(json.loads(lse["PreselectedDataSources"])),
+                        set(json.loads(lmp["PreselectedDataSources"])),
                         set(aadss[mg1]))
                     self.assertEqual(
-                        json.loads(lse["OrderedChannels"]), pdss[mg1])
+                        json.loads(lmp["OrderedChannels"]), pdss[mg1])
                     self.myAssertDict(
-                        json.loads(lse["UserData"]), records[mg1])
+                        json.loads(lmp["UserData"]), records[mg1])
 
                     self.assertEqual(
-                        json.loads(lse["Timer"])[0], ltimers[mg2][0])
+                        json.loads(lmp["Timer"])[0], ltimers[mg2][0])
                     self.assertEqual(
-                        set(json.loads(lse["Timer"])), set(ltimers[mg2]))
-                    self.assertEqual(lse["MntGrp"], mg2)
+                        set(json.loads(lmp["Timer"])), set(ltimers[mg2]))
+                    self.assertEqual(lmp["MntGrp"], mg2)
 
                     self.myAssertDict(
-                        json.loads(se[mg1]["DataSourceSelection"]),
+                        json.loads(mp[mg1]["DataSourceSelection"]),
                         adss[mg1])
                     self.myAssertDict(
-                        json.loads(se[mg2]["DataSourceSelection"]),
+                        json.loads(mp[mg2]["DataSourceSelection"]),
                         adss[mg2])
 
                     self.assertEqual(
-                        set(json.loads(se[mg1]["UnplottedComponents"])),
+                        set(json.loads(mp[mg1]["UnplottedComponents"])),
                         set(lhe2[mg1]))
                     self.assertEqual(
-                        set(json.loads(se[mg2]["UnplottedComponents"])),
+                        set(json.loads(mp[mg2]["UnplottedComponents"])),
                         set(lhe2[mg2]))
 
                     ladss = {}
@@ -14000,37 +14065,37 @@ class SettingsTest(unittest.TestCase):
                             else:
                                 ladss[ds] = adss[mg1][ds]
 
-                    for tm in json.loads(se[mg2]["Timer"]):
+                    for tm in json.loads(mp[mg2]["Timer"]):
                         if tm in ladss:
                             if tm in llhe:
                                 ladss[tm] = False
                                 llhe.remove(tm)
-                    for tm in json.loads(se[mg1]["Timer"]):
+                    for tm in json.loads(mp[mg1]["Timer"]):
                         if tm in ladss:
                             if tm in json.loads(
-                                    se[mg2]["UnplottedComponents"]):
+                                    mp[mg2]["UnplottedComponents"]):
                                 ladss[tm] = False
-                                if tm not in json.loads(se[mg2]["Timer"]):
+                                if tm not in json.loads(mp[mg2]["Timer"]):
                                     if tm in llhe:
                                         llhe.remove(tm)
 
-                    print "T1", json.loads(se[mg1]["Timer"])
-                    print "T2", json.loads(se[mg2]["Timer"])
-                    print "LT", json.loads(lse["Timer"])
+                    print "T1", json.loads(mp[mg1]["Timer"])
+                    print "T2", json.loads(mp[mg2]["Timer"])
+                    print "LT", json.loads(lmp["Timer"])
                     # ???
                     self.myAssertDict(
-                        json.loads(lse["DataSourceSelection"]), ladss)
+                        json.loads(lmp["DataSourceSelection"]), ladss)
                     # ???
                     self.assertEqual(
-                        set(json.loads(lse["UnplottedComponents"])),
+                        set(json.loads(lmp["UnplottedComponents"])),
                         set(llhe))
 
                     # import mntgrp mg2 (with content mg1)
                     # after change in mntgrp device
 
-                    lse["MntGrp"] = mg2
-                    tmpcf = json.loads(mgt[mg1].mntGrpConfiguration())
-                    tmpcf2 = json.loads(mgt[mg2].mntGrpConfiguration())
+                    lrs.mntGrp = mg2
+                    tmpcf = json.loads(rs[mg1].mntGrpConfiguration())
+                    tmpcf2 = json.loads(rs[mg2].mntGrpConfiguration())
                     ltmpcf = json.loads(lrs.mntGrpConfiguration())
                     self.assertEqual(ltmpcf, tmpcf2)
                     tmpcf['label'] = mg2
@@ -14041,8 +14106,8 @@ class SettingsTest(unittest.TestCase):
                     self.assertTrue(lrs.isMntGrpUpdated())
                     self.assertTrue(lrs.isMntGrpUpdated())
 
-                    tmpcf1 = json.loads(mgt[mg1].mntGrpConfiguration())
-                    tmpcf2 = json.loads(mgt[mg2].mntGrpConfiguration())
+                    tmpcf1 = json.loads(rs[mg1].mntGrpConfiguration())
+                    tmpcf2 = json.loads(rs[mg2].mntGrpConfiguration())
                     ltmpcf = json.loads(lrs.mntGrpConfiguration())
 #                    self.myAssertDict(tmpcf1, ltmpcf)
                     self.myAssertDict(tmpcf2, ltmpcf)
@@ -14055,14 +14120,14 @@ class SettingsTest(unittest.TestCase):
                         self.assertTrue(lrs.isMntGrpUpdated())
                         self.assertTrue(lrs.isMntGrpUpdated())
 
-                    tmpcf1 = json.loads(mgt[mg1].mntGrpConfiguration())
-                    tmpcf2 = json.loads(mgt[mg2].mntGrpConfiguration())
+                    tmpcf1 = json.loads(rs[mg1].mntGrpConfiguration())
+                    tmpcf2 = json.loads(rs[mg2].mntGrpConfiguration())
                     ltmpcf = json.loads(lrs.mntGrpConfiguration())
 #                    self.myAssertDict(tmpcf1, ltmpcf)
                     self.myAssertDict(tmpcf2, ltmpcf)
 
                     self.compareToDumpJSON(
-                        lse,
+                        lrs,
                         ["ComponentPreselection",
                          "ComponentSelection",
                          "DataSourceSelection",
@@ -14073,7 +14138,7 @@ class SettingsTest(unittest.TestCase):
                         name=mg1)
 
                     self.compareToDump(
-                        se[mg2],
+                        rs[mg2],
                         ["ComponentPreselection",
                          "ComponentSelection",
                          "DataSourceSelection",
@@ -14083,34 +14148,34 @@ class SettingsTest(unittest.TestCase):
                         name=mg2)
 
                     self.myAssertDict(
-                        json.loads(se[mg2]["ComponentPreselection"]),
+                        json.loads(mp[mg2]["ComponentPreselection"]),
                         acps[mg2])
                     self.myAssertDict(
-                        json.loads(se[mg2]["ComponentSelection"]),
+                        json.loads(mp[mg2]["ComponentSelection"]),
                         cps[mg2])
                     self.myAssertDict(
-                        json.loads(se[mg2]["DataSourceSelection"]), adss[mg2])
+                        json.loads(mp[mg2]["DataSourceSelection"]), adss[mg2])
                     self.assertEqual(
-                        set(json.loads(se[mg2]["PreselectedDataSources"])),
+                        set(json.loads(mp[mg2]["PreselectedDataSources"])),
                         set(aadss[mg2]))
                     self.assertEqual(
-                        set(json.loads(se[mg2]["UnplottedComponents"])),
+                        set(json.loads(mp[mg2]["UnplottedComponents"])),
                         set(lhe2[mg2]))
                     self.assertEqual(
-                        json.loads(se[mg2]["OrderedChannels"]), pdss[mg2])
-                    self.myAssertDict(json.loads(se[mg2]["UserData"]),
+                        json.loads(mp[mg2]["OrderedChannels"]), pdss[mg2])
+                    self.myAssertDict(json.loads(mp[mg2]["UserData"]),
                                       records[mg2])
                     self.assertEqual(
-                        json.loads(se[mg2]["Timer"]), ltimers[mg2])
-                    self.assertEqual(se[mg2]["MntGrp"], mg2)
+                        json.loads(mp[mg2]["Timer"]), ltimers[mg2])
+                    self.assertEqual(mp[mg2]["MntGrp"], mg2)
 
                     # switch to active profile mg3
-                    lse["MntGrp"] = mg2
+                    lrs.mntGrp = mg2
                     MSUtils.setEnv('ActiveMntGrp', mg3, self._ms.ms.keys()[0])
 
-                    tmpcf1 = json.loads(mgt[mg1].mntGrpConfiguration())
-                    tmpcf2 = json.loads(mgt[mg2].mntGrpConfiguration())
-                    tmpcf3 = json.loads(mgt[mg3].mntGrpConfiguration())
+                    tmpcf1 = json.loads(rs[mg1].mntGrpConfiguration())
+                    tmpcf2 = json.loads(rs[mg2].mntGrpConfiguration())
+                    tmpcf3 = json.loads(rs[mg3].mntGrpConfiguration())
                     ltmpcf = json.loads(lrs.mntGrpConfiguration())
 #                    self.myAssertDict(tmpcf1, ltmpcf)
                     self.myAssertDict(tmpcf2, ltmpcf)
@@ -14118,54 +14183,56 @@ class SettingsTest(unittest.TestCase):
 
                     lrs.switchProfile()
 
-                    tmpcf1 = json.loads(mgt[mg1].mntGrpConfiguration())
-                    tmpcf2 = json.loads(mgt[mg2].mntGrpConfiguration())
-                    tmpcf3 = json.loads(mgt[mg3].mntGrpConfiguration())
+                    tmpcf1 = json.loads(rs[mg1].mntGrpConfiguration())
+                    tmpcf2 = json.loads(rs[mg2].mntGrpConfiguration())
+                    tmpcf3 = json.loads(rs[mg3].mntGrpConfiguration())
                     ltmpcf = json.loads(lrs.mntGrpConfiguration())
                     self.myAssertDict(tmpcf3, ltmpcf)
 #                    self.myAssertDict(tmpcf1, ltmpcf)
 #                    self.myAssertDict(tmpcf2, ltmpcf)
 
                     self.compareToDumpJSON(
-                        lse,
+                        lrs,
                         [
                             "DataSourceSelection",
                             "UnplottedComponents",
                             "PreselectedDataSources",
                             "Timer"],
                         name=mg3)
-                    self.myAssertDict(json.loads(lse["DataSourceSelection"]),
+                    lmp = json.loads(lrs.profileConfiguration)
+                    self.myAssertDict(json.loads(lmp["DataSourceSelection"]),
                                       adss[mg3])
                     self.assertEqual(
-                        set(json.loads(lse["PreselectedDataSources"])),
+                        set(json.loads(lmp["PreselectedDataSources"])),
                         set(aadss[mg3]))
 
                     mylhe = set(lhe2[mg3])
-                    for tm in json.loads(se[mg3]["Timer"]):
+                    for tm in json.loads(mp[mg3]["Timer"]):
                         if tm in adss[mg3].keys():
                             if not adss[mg3][tm]:
                                 if tm in mylhe:
                                     mylhe.remove(tm)
+                    lmp = json.loads(lrs.profileConfiguration)
 
                     self.assertEqual(
-                        set(json.loads(lse["UnplottedComponents"])),
+                        set(json.loads(lmp["UnplottedComponents"])),
                         mylhe)
-                    self.assertEqual(json.loads(lse["OrderedChannels"]),
+                    self.assertEqual(json.loads(lmp["OrderedChannels"]),
                                      pdss[mg3])
-                    self.myAssertDict(json.loads(lse["UserData"]),
+                    self.myAssertDict(json.loads(lmp["UserData"]),
                                       records[mg3])
-                    self.assertEqual(json.loads(lse["Timer"])[0],
+                    self.assertEqual(json.loads(lmp["Timer"])[0],
                                      ltimers[mg3][0])
-                    self.assertEqual(set(json.loads(lse["Timer"])),
+                    self.assertEqual(set(json.loads(lmp["Timer"])),
                                      set(ltimers[mg3]))
-                    self.assertEqual(lse["MntGrp"], mg3)
+                    self.assertEqual(lmp["MntGrp"], mg3)
 
                     # switch to nonexisting active profile
 
 #                    self.assertTrue(lrs.isMntGrpUpdated())
 #                    self.assertTrue(lrs.isMntGrpUpdated())
                     wmg = "wrong_mg"
-                    lse["MntGrp"] = mg3
+                    lrs.mntGrp = mg3
                     MSUtils.setEnv('ActiveMntGrp', wmg, self._ms.ms.keys()[0])
                     lrs.switchProfile()
                     self.assertEqual(
@@ -14173,7 +14240,7 @@ class SettingsTest(unittest.TestCase):
                         MSUtils.getEnv('ActiveMntGrp', self._ms.ms.keys()[0]))
 
                     self.compareToDumpJSON(
-                        lse,
+                        lrs,
                         [
                             "DataSourceSelection",
                             "UnplottedComponents",
@@ -14181,7 +14248,8 @@ class SettingsTest(unittest.TestCase):
                             "Timer",
                             "MntGrp"],
                         name=mg3)
-                    mydsg = dict(json.loads(lse["DataSourceSelection"]))
+                    lmp = json.loads(lrs.profileConfiguration)
+                    mydsg = dict(json.loads(lmp["DataSourceSelection"]))
                     for ds in self.smychsXX.keys():
                         if ds in expch:
                             mydsg[ds] = False
@@ -14190,74 +14258,75 @@ class SettingsTest(unittest.TestCase):
                         if ds in mylhe2:
                             mylhe2.remove(ds)
 
-                    self.myAssertDict(json.loads(lse["DataSourceSelection"]),
+                    self.myAssertDict(json.loads(lmp["DataSourceSelection"]),
                                       mydsg)
                     self.assertEqual(
-                        set(json.loads(lse["PreselectedDataSources"])),
+                        set(json.loads(lmp["PreselectedDataSources"])),
                         set(aadss[mg3]))
                     self.assertEqual(
-                        set(json.loads(lse["UnplottedComponents"])),
+                        set(json.loads(lmp["UnplottedComponents"])),
                         mylhe2)
-                    self.assertEqual(json.loads(lse["OrderedChannels"]),
+                    self.assertEqual(json.loads(lmp["OrderedChannels"]),
                                      pdss[mg3])
-                    self.myAssertDict(json.loads(lse["UserData"]),
+                    self.myAssertDict(json.loads(lmp["UserData"]),
                                       records[mg3])
-                    self.assertEqual(json.loads(lse["Timer"])[0],
+                    self.assertEqual(json.loads(lmp["Timer"])[0],
                                      ltimers[mg3][0])
-                    self.assertEqual(set(json.loads(lse["Timer"])),
+                    self.assertEqual(set(json.loads(lmp["Timer"])),
                                      set(ltimers[mg3]))
-                    self.assertEqual(lse["MntGrp"], wmg)
+                    self.assertEqual(lmp["MntGrp"], wmg)
 
                     # switch to active profile mg3
-                    lse["MntGrp"] = mg2
+                    lrs.mntGrp = mg2
                     self.assertTrue(lrs.isMntGrpUpdated())
                     self.assertTrue(lrs.isMntGrpUpdated())
                     MSUtils.setEnv('ActiveMntGrp', mg3, self._ms.ms.keys()[0])
 
-                    tmpcf1 = json.loads(mgt[mg1].mntGrpConfiguration())
-                    tmpcf2 = json.loads(mgt[mg2].mntGrpConfiguration())
-                    tmpcf3 = json.loads(mgt[mg3].mntGrpConfiguration())
+                    tmpcf1 = json.loads(rs[mg1].mntGrpConfiguration())
+                    tmpcf2 = json.loads(rs[mg2].mntGrpConfiguration())
+                    tmpcf3 = json.loads(rs[mg3].mntGrpConfiguration())
                     ltmpcf = json.loads(lrs.mntGrpConfiguration())
 #                    self.myAssertDict(tmpcf1, ltmpcf)
                     self.myAssertDict(tmpcf2, ltmpcf)
 #                    self.myAssertDict(tmpcf3, ltmpcf)
 
-                    lrs.switchProfile(True)
+                    self.switchProfile(lrs, True)
 
-                    tmpcf1 = json.loads(mgt[mg1].mntGrpConfiguration())
-                    tmpcf2 = json.loads(mgt[mg2].mntGrpConfiguration())
-                    tmpcf3 = json.loads(mgt[mg3].mntGrpConfiguration())
+                    tmpcf1 = json.loads(rs[mg1].mntGrpConfiguration())
+                    tmpcf2 = json.loads(rs[mg2].mntGrpConfiguration())
+                    tmpcf3 = json.loads(rs[mg3].mntGrpConfiguration())
                     ltmpcf = json.loads(lrs.mntGrpConfiguration())
                     self.myAssertDict(tmpcf3, ltmpcf)
 #                    self.myAssertDict(tmpcf1, ltmpcf)
 #                    self.myAssertDict(tmpcf2, ltmpcf)
 
+                    lmp = json.loads(lrs.profileConfiguration)
                     self.compareToDumpJSON(
-                        lse,
+                        lrs,
                         [
                             "DataSourceSelection",
                             "UnplottedComponents",
                             "PreselectedDataSources",
                             "Timer"],
                         name=mg3)
-                    self.myAssertDict(json.loads(lse["DataSourceSelection"]),
+                    self.myAssertDict(json.loads(lmp["DataSourceSelection"]),
                                       adss[mg3])
                     self.assertEqual(
-                        set(json.loads(lse["PreselectedDataSources"])),
+                        set(json.loads(lmp["PreselectedDataSources"])),
                         set(aadss[mg3]))
 
                     self.assertEqual(
-                        set(json.loads(lse["UnplottedComponents"])),
+                        set(json.loads(lmp["UnplottedComponents"])),
                         mylhe)
-                    self.assertEqual(json.loads(lse["OrderedChannels"]),
+                    self.assertEqual(json.loads(lmp["OrderedChannels"]),
                                      pdss[mg3])
-                    self.myAssertDict(json.loads(lse["UserData"]),
+                    self.myAssertDict(json.loads(lmp["UserData"]),
                                       records[mg3])
-                    self.assertEqual(json.loads(lse["Timer"])[0],
+                    self.assertEqual(json.loads(lmp["Timer"])[0],
                                      ltimers[mg3][0])
-                    self.assertEqual(set(json.loads(lse["Timer"])),
+                    self.assertEqual(set(json.loads(lmp["Timer"])),
                                      set(ltimers[mg3]))
-                    self.assertEqual(lse["MntGrp"], mg3)
+                    self.assertEqual(lmp["MntGrp"], mg3)
 
                     # try switch to unnamed active profile
                     # and then to selector mg3
@@ -14265,47 +14334,48 @@ class SettingsTest(unittest.TestCase):
 #                    self.assertTrue(lrs.isMntGrpUpdated())
 #                    self.assertTrue(lrs.isMntGrpUpdated())
                     wmg = ""
-                    lse["MntGrp"] = mg3
+                    lrs.mntGrp = mg3
                     MSUtils.setEnv('ActiveMntGrp', wmg, self._ms.ms.keys()[0])
                     lrs.switchProfile()
                     self.assertEqual(
                         wmg,
                         MSUtils.getEnv('ActiveMntGrp', self._ms.ms.keys()[0]))
 
-                    tmpcf1 = json.loads(mgt[mg1].mntGrpConfiguration())
-                    tmpcf2 = json.loads(mgt[mg2].mntGrpConfiguration())
-                    tmpcf3 = json.loads(mgt[mg3].mntGrpConfiguration())
+                    tmpcf1 = json.loads(rs[mg1].mntGrpConfiguration())
+                    tmpcf2 = json.loads(rs[mg2].mntGrpConfiguration())
+                    tmpcf3 = json.loads(rs[mg3].mntGrpConfiguration())
                     ltmpcf = json.loads(lrs.mntGrpConfiguration())
                     self.myAssertDict(tmpcf3, ltmpcf)
 #                    self.myAssertDict(tmpcf1, ltmpcf)
 #                    self.myAssertDict(tmpcf2, ltmpcf)
 
                     self.compareToDumpJSON(
-                        lse,
+                        lrs,
                         [
                             "DataSourceSelection",
                             "UnplottedComponents",
                             "PreselectedDataSources",
                             "Timer"],
                         name=mg3)
-                    self.myAssertDict(json.loads(lse["DataSourceSelection"]),
+                    lmp = json.loads(lrs.profileConfiguration)
+                    self.myAssertDict(json.loads(lmp["DataSourceSelection"]),
                                       adss[mg3])
                     self.assertEqual(
-                        set(json.loads(lse["PreselectedDataSources"])),
+                        set(json.loads(lmp["PreselectedDataSources"])),
                         set(aadss[mg3]))
 
                     self.assertEqual(
-                        set(json.loads(lse["UnplottedComponents"])),
+                        set(json.loads(lmp["UnplottedComponents"])),
                         mylhe)
-                    self.assertEqual(json.loads(lse["OrderedChannels"]),
+                    self.assertEqual(json.loads(lmp["OrderedChannels"]),
                                      pdss[mg3])
-                    self.myAssertDict(json.loads(lse["UserData"]),
+                    self.myAssertDict(json.loads(lmp["UserData"]),
                                       records[mg3])
-                    self.assertEqual(json.loads(lse["Timer"])[0],
+                    self.assertEqual(json.loads(lmp["Timer"])[0],
                                      ltimers[mg3][0])
-                    self.assertEqual(set(json.loads(lse["Timer"])),
+                    self.assertEqual(set(json.loads(lmp["Timer"])),
                                      set(ltimers[mg3]))
-                    self.assertEqual(lse["MntGrp"], mg3)
+                    self.assertEqual(lmp["MntGrp"], mg3)
 
                     # try switch to unnamed active profile
                     # and then to selector mg3
@@ -14313,101 +14383,103 @@ class SettingsTest(unittest.TestCase):
 #                    self.assertTrue(lrs.isMntGrpUpdated())
 #                    self.assertTrue(lrs.isMntGrpUpdated())
                     wmg = ""
-                    lse["MntGrp"] = mg3
+                    lrs.mntGrp = mg3
                     MSUtils.usetEnv('ActiveMntGrp', self._ms.ms.keys()[0])
                     lrs.switchProfile()
 
-                    tmpcf1 = json.loads(mgt[mg1].mntGrpConfiguration())
-                    tmpcf2 = json.loads(mgt[mg2].mntGrpConfiguration())
-                    tmpcf3 = json.loads(mgt[mg3].mntGrpConfiguration())
+                    tmpcf1 = json.loads(rs[mg1].mntGrpConfiguration())
+                    tmpcf2 = json.loads(rs[mg2].mntGrpConfiguration())
+                    tmpcf3 = json.loads(rs[mg3].mntGrpConfiguration())
                     ltmpcf = json.loads(lrs.mntGrpConfiguration())
                     self.myAssertDict(tmpcf3, ltmpcf)
 #                    self.myAssertDict(tmpcf1, ltmpcf)
 #                    self.myAssertDict(tmpcf2, ltmpcf)
 
                     self.compareToDumpJSON(
-                        lse,
+                        lrs,
                         [
                             "DataSourceSelection",
                             "UnplottedComponents",
                             "PreselectedDataSources",
                             "Timer"],
                         name=mg3)
-                    self.myAssertDict(json.loads(lse["DataSourceSelection"]),
+                    lmp = json.loads(lrs.profileConfiguration)
+                    self.myAssertDict(json.loads(lmp["DataSourceSelection"]),
                                       adss[mg3])
                     self.assertEqual(
-                        set(json.loads(lse["PreselectedDataSources"])),
+                        set(json.loads(lmp["PreselectedDataSources"])),
                         set(aadss[mg3]))
 
                     self.assertEqual(
-                        set(json.loads(lse["UnplottedComponents"])),
+                        set(json.loads(lmp["UnplottedComponents"])),
                         mylhe)
-                    self.assertEqual(json.loads(lse["OrderedChannels"]),
+                    self.assertEqual(json.loads(lmp["OrderedChannels"]),
                                      pdss[mg3])
-                    self.myAssertDict(json.loads(lse["UserData"]),
+                    self.myAssertDict(json.loads(lmp["UserData"]),
                                       records[mg3])
-                    self.assertEqual(json.loads(lse["Timer"])[0],
+                    self.assertEqual(json.loads(lmp["Timer"])[0],
                                      ltimers[mg3][0])
-                    self.assertEqual(set(json.loads(lse["Timer"])),
+                    self.assertEqual(set(json.loads(lmp["Timer"])),
                                      set(ltimers[mg3]))
-                    self.assertEqual(lse["MntGrp"], mg3)
+                    self.assertEqual(lmp["MntGrp"], mg3)
 
                     ## fetch non-existing mg
                     wmg = "wrong_mg2"
-                    lse["MntGrp"] = wmg
+                    lrs.mntGrp = wmg
                     lrs.fetchProfile()
 
-                    tmpcf1 = json.loads(mgt[mg1].mntGrpConfiguration())
-                    tmpcf2 = json.loads(mgt[mg2].mntGrpConfiguration())
-                    tmpcf3 = json.loads(mgt[mg3].mntGrpConfiguration())
+                    tmpcf1 = json.loads(rs[mg1].mntGrpConfiguration())
+                    tmpcf2 = json.loads(rs[mg2].mntGrpConfiguration())
+                    tmpcf3 = json.loads(rs[mg3].mntGrpConfiguration())
                     ltmpcf = json.loads(lrs.mntGrpConfiguration())
 #                    self.myAssertDict(tmpcf3, ltmpcf)
 #                    self.myAssertDict(tmpcf1, ltmpcf)
 #                    self.myAssertDict(tmpcf2, ltmpcf)
 
                     self.compareToDumpJSON(
-                        lse,
+                        lrs,
                         [
                             "DataSourceSelection",
                             "UnplottedComponents",
                             "PreselectedDataSources",
                             "Timer", "MntGrp"],
                         name=mg3)
-                    self.myAssertDict(json.loads(lse["DataSourceSelection"]),
+                    lmp = json.loads(lrs.profileConfiguration)
+                    self.myAssertDict(json.loads(lmp["DataSourceSelection"]),
                                       adss[mg3])
                     self.assertEqual(
-                        set(json.loads(lse["PreselectedDataSources"])),
+                        set(json.loads(lmp["PreselectedDataSources"])),
                         set(aadss[mg3]))
 
                     self.assertEqual(
-                        set(json.loads(lse["UnplottedComponents"])),
+                        set(json.loads(lmp["UnplottedComponents"])),
                         mylhe)
-                    self.assertEqual(json.loads(lse["OrderedChannels"]),
+                    self.assertEqual(json.loads(lmp["OrderedChannels"]),
                                      pdss[mg3])
-                    self.myAssertDict(json.loads(lse["UserData"]),
+                    self.myAssertDict(json.loads(lmp["UserData"]),
                                       records[mg3])
-                    self.assertEqual(json.loads(lse["Timer"])[0],
+                    self.assertEqual(json.loads(lmp["Timer"])[0],
                                      ltimers[mg3][0])
-                    self.assertEqual(set(json.loads(lse["Timer"])),
+                    self.assertEqual(set(json.loads(lmp["Timer"])),
                                      set(ltimers[mg3]))
-                    self.assertEqual(lse["MntGrp"], wmg)
+                    self.assertEqual(lmp["MntGrp"], wmg)
 
                     ## fetch non-existing selection
                     self._cf.dp.deleteSelection(mg4)
-                    lse["MntGrp"] = mg4
+                    lrs.mntGrp = mg4
                     self.assertTrue(
                         mg4 not in self._cf.dp.availableSelections())
                     self.assertTrue(mg4 in lrs.availableMntGrps())
                     if j % 2:
                         lrs.defaultPreselectedComponents = \
-                            list(json.loads(lse["ComponentPreselection"]
+                            list(json.loads(lmp["ComponentPreselection"]
                                             ).keys())
 
                     lrs.fetchProfile()
-                    tmpcf1 = json.loads(mgt[mg1].mntGrpConfiguration())
-                    tmpcf2 = json.loads(mgt[mg2].mntGrpConfiguration())
-                    tmpcf3 = json.loads(mgt[mg3].mntGrpConfiguration())
-                    tmpcf4 = json.loads(mgt[mg4].mntGrpConfiguration())
+                    tmpcf1 = json.loads(rs[mg1].mntGrpConfiguration())
+                    tmpcf2 = json.loads(rs[mg2].mntGrpConfiguration())
+                    tmpcf3 = json.loads(rs[mg3].mntGrpConfiguration())
+                    tmpcf4 = json.loads(rs[mg4].mntGrpConfiguration())
                     ltmpcf = json.loads(lrs.mntGrpConfiguration())
                     self.myAssertDict(tmpcf4, ltmpcf)
 #                    self.myAssertDict(tmpcf3, ltmpcf)
@@ -14415,7 +14487,7 @@ class SettingsTest(unittest.TestCase):
 #                    self.myAssertDict(tmpcf2, ltmpcf)
 
                     self.compareToDumpJSON(
-                        lse,
+                        lrs,
                         [
                             "InitDataSources",
                             "PreselectedDataSources",
@@ -14428,11 +14500,12 @@ class SettingsTest(unittest.TestCase):
                             "UnplottedComponents",
                         ],
                         name=mg3)
+                    lmp = json.loads(lrs.profileConfiguration)
                     self.assertEqual(
-                        set(json.loads(lse["PreselectedDataSources"])),
+                        set(json.loads(lmp["PreselectedDataSources"])),
                         set(aadss[mg3]))
                     self.assertEqual(
-                        set(json.loads(lse["InitDataSources"])),
+                        set(json.loads(lmp["InitDataSources"])),
                         set())
 
                     if j % 2:
@@ -14449,28 +14522,28 @@ class SettingsTest(unittest.TestCase):
                         for cp in myacps.keys():
                             myacps[cp] = cp in cpgood
                         self.myAssertDict(
-                            json.loads(lse["ComponentPreselection"]),
+                            json.loads(lmp["ComponentPreselection"]),
                             myacps)
                     else:
                         self.myAssertDict(
-                            json.loads(lse["ComponentPreselection"]),
+                            json.loads(lmp["ComponentPreselection"]),
                             {})
 
                     mycps = dict(cps[mg3])
                     for cp in mycps:
                         mycps[cp] = False
                     self.myAssertDict(
-                        json.loads(lse["ComponentSelection"]), mycps)
+                        json.loads(lmp["ComponentSelection"]), mycps)
 
-                    self.assertEqual(json.loads(lse["OrderedChannels"]),
+                    self.assertEqual(json.loads(lmp["OrderedChannels"]),
                                      pdss[mg3])
-                    self.myAssertDict(json.loads(lse["UserData"]),
+                    self.myAssertDict(json.loads(lmp["UserData"]),
                                       records[mg3])
-                    self.assertEqual(json.loads(lse["Timer"])[0],
+                    self.assertEqual(json.loads(lmp["Timer"])[0],
                                      ltimers[mg4][0])
-                    self.assertEqual(set(json.loads(lse["Timer"])),
+                    self.assertEqual(set(json.loads(lmp["Timer"])),
                                      set(ltimers[mg4]))
-                    self.assertEqual(lse["MntGrp"], mg4)
+                    self.assertEqual(lmp["MntGrp"], mg4)
 
                     ladss = {}
                     for ds, vl in adss[mg3].items():
@@ -14496,7 +14569,7 @@ class SettingsTest(unittest.TestCase):
 
                     llhe = set()
 
-                    for ds in json.loads(se[mg3]["UnplottedComponents"]):
+                    for ds in json.loads(mp[mg3]["UnplottedComponents"]):
                         if ds not in self.smychsXX.keys():
                             llhe.add(ds)
 
@@ -14504,17 +14577,17 @@ class SettingsTest(unittest.TestCase):
                         if ds in lhe2[mg4]:
                             llhe.add(ds)
 
-                    for tm in json.loads(se[gm4]["Timer"]):
+                    for tm in json.loads(mp[mg4]["Timer"]):
                         if tm in ladss:
                             if tm in llhe:
                                 ladss[tm] = False
                                 llhe.remove(tm)
-                    for tm in json.loads(se[mg3]["Timer"]):
+                    for tm in json.loads(mp[mg3]["Timer"]):
                         if tm in ladss:
                             if tm in json.loads(
-                                    se[mg4]["UnplottedComponents"]):
+                                    mp[mg4]["UnplottedComponents"]):
                                 ladss[tm] = False
-                                if tm not in json.loads(se[mg4]["Timer"]):
+                                if tm not in json.loads(mp[mg4]["Timer"]):
                                     if tm in llhe:
                                         llhe.remove(tm)
 
@@ -14524,17 +14597,1356 @@ class SettingsTest(unittest.TestCase):
                                 if ds in ladss and ladss[ds]:
                                     llhe.remove(ds)
 
-                    self.myAssertDict(json.loads(lse["DataSourceSelection"]),
+                    self.myAssertDict(json.loads(lmp["DataSourceSelection"]),
                                       ladss)
 
                     self.assertEqual(
-                        set(json.loads(lse["UnplottedComponents"])),
+                        set(json.loads(lmp["UnplottedComponents"])),
                         llhe)
 
                 finally:
                     for mg in rs.keys():
                         try:
-                            mgt[mg].deleteProfile(mgs[mg])
+                            rs[mg].deleteProfile(mgs[mg])
+                        except:
+                            pass
+                    for mg in tmg.keys():
+                        try:
+                            tmg[mg].tearDown()
+                        except:
+                            pass
+                    simp2.tearDown()
+                    try:
+                        self.tearDown()
+                    except:
+                        pass
+        finally:
+            try:
+                self.setUp()
+            except:
+                pass
+
+    ## updateMntGrp test
+    def test_myswitchProfile_importMntGrp(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'mg2'}
+
+        self.maxDiff = None
+        self.tearDown()
+        try:
+            for j in range(10):
+                self.setUp()
+                db = PyTango.Database()
+                db.put_device_property(self._ms.ms.keys()[0],
+                                       {'PoolNames': self._pool.dp.name()})
+
+                wrong = []
+
+                mgs = ["mg1", "mg2", "mg3",
+                       "mntgrp", "somegroup"
+                       ]
+                ors = None
+
+                mp = {}
+                msp = {}
+                tmg = {}
+                cps = {}
+                acps = {}
+                adss = {}
+                aadss = {}
+                pdss = {}
+                lhe2 = {}
+                records = {}
+                ltimers = {}
+
+                pool = self._pool.dp
+                self._ms.dps[self._ms.ms.keys()[0]].Init()
+                scalar_ctrl = 'ttestp09/testts/t1r228'
+                spectrum_ctrl = 'ttestp09/testts/t2r228'
+                image_ctrl = 'ttestp09/testts/t3r228'
+                simp2 = TestServerSetUp.MultiTestServerSetUp(
+                    devices=['ttestp09/testts/t%02dr228' %
+                             i for i in range(1, 37)])
+
+                try:
+                    simp2.setUp()
+
+                    # create mntgrps
+
+                    for i, mg in enumerate(mgs):
+
+                        ors = self.openRecSelector()
+                        ors.configDevice = val["ConfigDevice"]
+                        ors.door = val["Door"]
+                        ors.mntGrp = mg
+                        self.assertEqual(ors.configDevice, val["ConfigDevice"])
+                        self.assertEqual(ors.door, val["Door"])
+
+                        self.assertEqual(
+                            set(ors.availableMntGrps()), set(mgs[:(i)]))
+#                        self.myAssertRaise(Exception, ors.updateMntGrp)
+
+                        self.assertEqual(
+                            set(ors.availableMntGrps()), set(mgs[:(i)]))
+
+                        ctrls = [scalar_ctrl, spectrum_ctrl, image_ctrl,
+                                 "__tango__"]
+                        expch = []
+                        pdss[mg] = []
+
+                        timers = {}
+                        ntms = self.__rnd.randint(1, 5)
+                        tms = self.__rnd.sample(set(
+                            [ch for ch in self.smychsXX.keys()
+                             if not ch.startswith("client")]), ntms)
+                        for tm in tms:
+                            myct = ("ctrl_%s" % tm).replace("_", "/")
+                            timers[myct] = tm
+                            ctrls.append(myct)
+                        print "TIMERSL", tms
+                        print "TIMERSD", timers
+                        ltimers[mg] = timers.values()
+                        print "LTIMER", ltimers[mg]
+
+                        for ds, vl in self.smychsXX.items():
+                            if vl:
+                                exp = {}
+                                exp["name"] = ds
+                                exp["source"] = vl["source"]
+                                myct = None
+                                for ct, ch in timers.items():
+                                    if ds == ch:
+                                        myct = ct
+                                        break
+
+                                if myct:
+                                    exp["controller"] = myct
+                                elif ds.startswith("image"):
+                                    exp["controller"] = image_ctrl
+                                elif ds.startswith("spectrum"):
+                                    exp["controller"] = spectrum_ctrl
+                                else:
+                                    exp["controller"] = scalar_ctrl
+                                expch.append(exp)
+                                pdss[mg].append(ds)
+                        pdss[mg] = sorted(pdss[mg])
+                        self.__rnd.shuffle(pdss[mg])
+
+                        acqch = [
+                            {"full_name": "test/ct/01/Value", "name": "ct01"},
+                            {"full_name": "test/ct/02/Value", "name": "ct02"},
+                            {"full_name": "test/ct/03/value", "name": "ct03"},
+                            {"full_name": "test/ct/04/value", "name": "ct04"},
+                            {"full_name": "null/val", "name": "mntgrp_04"}
+                        ]
+
+                        for ch in expch:
+                            ach = {}
+                            ach["name"] = ch["name"]
+                            ach["full_name"] = ch["source"]
+                            acqch.append(ach)
+
+                        pool.AcqChannelList = [json.dumps(a) for a in acqch]
+                        pool.ExpChannelList = [json.dumps(a) for a in expch]
+
+                        amycps = dict(self.smycps2)
+                        amycps.update(self.smycps)
+                        amydss = dict(self.smydssXX)
+                        amydss.update(self.smydss)
+                        amycpsstep = dict(self.smycpsstep)
+                        amycpsstep.update(self.smycpsstep2)
+                        self._cf.dp.SetCommandVariable(
+                            ["CPDICT", json.dumps(amycps)])
+                        self._cf.dp.SetCommandVariable(
+                            ["DSDICT", json.dumps(amydss)])
+
+                        cps[mg] = {}
+                        acps[mg] = {}
+                        dss = {}
+                        lcp = self.__rnd.randint(1, 40)
+                        lds = self.__rnd.randint(1, 40)
+
+                        self._cf.dp.SetCommandVariable(
+                            ["CPDICT", json.dumps(amycps)])
+                        self._cf.dp.SetCommandVariable(
+                            ["DSDICT", json.dumps(amydss)])
+                        comps = set()
+
+                        ncps = self.__rnd.randint(1, len(amycps) - 1)
+                        lcps = self.__rnd.sample(set(amycps.keys()), ncps)
+                        for cp in lcps:
+                            if cp not in wrong:
+                                cps[mg][cp] = bool(self.__rnd.randint(0, 1))
+                                if cps[mg][cp]:
+                                    comps.add(cp)
+
+                        ancps = self.__rnd.randint(1, len(amycps.keys()) - 1)
+                        alcps = self.__rnd.sample(set(amycps.keys()), ancps)
+                        for cp in alcps:
+                            if cp not in wrong:
+                                acps[mg][cp] = bool(self.__rnd.randint(0, 1))
+                                if acps[mg][cp]:
+                                    comps.add(cp)
+
+                        ndss = self.__rnd.randint(1, len(amycps.keys()) - 1)
+                        ldss = self.__rnd.sample(set(amycps.keys()), ndss)
+                        for ds in ldss:
+                            if ds in amydss.keys():
+                                if ds not in wrong:
+                                    dss[ds] = bool(self.__rnd.randint(0, 1))
+
+                        ndss = self.__rnd.randint(1, len(amydss.keys()) - 1)
+                        ldss = self.__rnd.sample(set(amydss.keys()), ndss)
+                        for ds in ldss:
+                            if ds in amydss.keys():
+                                if ds not in wrong:
+                                    dss[ds] = bool(self.__rnd.randint(0, 1))
+
+                        nadss = self.__rnd.randint(1, len(amydss.keys()) - 1)
+                        aadss[mg] = [ds for ds in self.__rnd.sample(
+                            set(amydss.keys()), nadss)]
+                        nadss = self.__rnd.randint(1, len(amydss.keys()) - 1)
+                        indss = [ds for ds in self.__rnd.sample(
+                            set(amydss.keys()), nadss)]
+
+                        for tm in ltimers[mg]:
+                            dss[tm] = bool(self.__rnd.randint(0, 1))
+
+                        mncps = self.__rnd.randint(1, len(amycps.keys()) - 1)
+                        mcps = [cp for cp in self.__rnd.sample(
+                                set(amycps.keys()), mncps) if cp not in wrong]
+                        oncps = self.__rnd.randint(1, len(amycps.keys()) - 1)
+                        ocps = [cp for cp in self.__rnd.sample(
+                                set(amycps.keys()), oncps) if cp not in wrong]
+                        for cp in mcps:
+                            comps.add(cp)
+
+                        adss[mg] = dict(dss)
+                        for ch in expch:
+                            if ch["name"] not in adss[mg].keys():
+                                adss[mg][ch["name"]] = False
+                        mp[mg] = json.loads(ors.profileConfiguration)
+                        mp[mg]["ComponentSelection"] = json.dumps(cps[mg])
+                        mp[mg]["ComponentPreselection"] = json.dumps(
+                            acps[mg])
+                        mp[mg]["DataSourceSelection"] = json.dumps(dss)
+                        mp[mg]["PreselectedDataSources"] = \
+                            json.dumps(aadss[mg])
+                        mp[mg]["OptionalComponents"] = json.dumps(ocps)
+                        mp[mg]["InitDataSources"] = json.dumps(indss)
+                        mp[mg]["AppendEntry"] = bool(self.__rnd.randint(0, 1))
+                        mp[mg]["ComponentsFromMntGrp"] = bool(
+                            self.__rnd.randint(0, 1))
+                        mp[mg]["DynamicComponents"] = bool(
+                            self.__rnd.randint(0, 1))
+                        mp[mg]["DefaultDynamicLinks"] = \
+                            bool(self.__rnd.randint(0, 1))
+                        mp[mg]["DefaultDynamicPath"] = self.getRandomName(20)
+                        mp[mg]["TimeZone"] = self.getRandomName(20)
+
+                        mp[mg]["ConfigVariables"] = json.dumps(dict(
+                            (self.getRandomName(10),
+                             self.getRandomName(15)) for _ in
+                            range(self.__rnd.randint(1, 40))))
+                        paths = dict(
+                            (self.getRandomName(10),
+                             self.getRandomName(15)) for _ in
+                            range(self.__rnd.randint(1, 40)))
+                        labels = dict(
+                            (self.getRandomName(10),
+                             self.getRandomName(15)) for _ in
+                            range(self.__rnd.randint(1, 40)))
+                        links = dict(
+                            (self.getRandomName(10),
+                             bool(self.__rnd.randint(0, 1))) for _ in
+                            range(self.__rnd.randint(1, 40)))
+                        types = dict(
+                            (self.getRandomName(10),
+                             self.getRandomName(15)) for _ in
+                            range(self.__rnd.randint(1, 40)))
+                        shapes = dict(
+                            (self.getRandomName(10),
+                             [self.__rnd.randint(1, 40)
+                              for _ in range(self.__rnd.randint(0, 3))])
+                            for _ in range(self.__rnd.randint(1, 40)))
+
+                        mp[mg]["ChannelProperties"] = json.dumps(
+                            {
+                                "label": labels,
+                                "nexus_path": paths,
+                                "link": links,
+                                "data_type": types,
+                                "shape": shapes
+                            }
+                        )
+
+                        ors.profileConfiguration = str(json.dumps(mp[mg]))
+                        mp[mg] = json.loads(ors.profileConfiguration)
+                        self._cf.dp.SetCommandVariable(["MCPLIST",
+                                                        json.dumps(mcps)])
+
+                        records[mg] = {}
+                        describer = Describer(self._cf.dp, True)
+                        cpres = describer.components(dstype='CLIENT')
+                        for grp in cpres:
+                            for idss in grp.values():
+                                for idsrs in idss.values():
+                                    for idsr in idsrs:
+                                        records[mg][str(idsr[2])] = "1234"
+                        dsres = describer.dataSources(
+                            dss.keys(), dstype='CLIENT')[0]
+                        for dsr in dsres.values():
+                            records[mg][str(dsr.record)] = '2345'
+
+                        mp[mg] = json.loads(ors.profileConfiguration)
+                        mp[mg]["Timer"] = json.dumps(ltimers[mg])
+                        mp[mg]["UserData"] = json.dumps(records[mg])
+                        ors.profileConfiguration = str(json.dumps(mp[mg]))
+                        mp[mg] = json.loads(ors.profileConfiguration)
+
+                        tmg[mg] = TestMGSetUp.TestMeasurementGroupSetUp(
+                            name=mg)
+        #                    dv = "/".join(ar["full_name"].split("/")[0:-1])
+                        chds = [ds for ds in ors.selectedDataSources()
+                                if not ds.startswith('client')]
+                        chds1 = list(chds)
+                        chds2 = [ds for ds in ors.componentDataSources()
+                                 if not ds.startswith('client')]
+                        chds.extend(chds2)
+                        bchds = list(chds)
+                        chds.extend(ltimers[mg])
+                        tmpchds = sorted(list(set(chds)))
+                        chds = []
+                        for ds in pdss[mg]:
+                            if ds in tmpchds:
+                                chds.append(ds)
+                        for ds in tmpchds:
+                            if ds not in pdss[mg]:
+                                chds.append(ds)
+
+                        lheds = []
+                        if chds:
+                            nhe = self.__rnd.randint(0, len(set(chds)) - 1)
+                            lheds = self.__rnd.sample(set(chds), nhe)
+
+                        lhecp = []
+                        if comps:
+                            nhe = self.__rnd.randint(0, len(set(comps)) - 1)
+                            lhecp = self.__rnd.sample(set(comps), nhe)
+
+                        lhe = lheds + lhecp
+
+                        mp[mg] = json.loads(ors.profileConfiguration)
+                        mp[mg]["UnplottedComponents"] = json.dumps(lhe)
+                        mp[mg]["OrderedChannels"] = json.dumps(pdss[mg])
+                        ors.profileConfiguration = str(json.dumps(mp[mg]))
+                        mp[mg] = json.loads(ors.profileConfiguration)
+
+                        lhe2[mg] = []
+                        for el in lhe:
+                            found = False
+                            for cp in comps:
+                                if el in amycpsstep[cp]:
+                                    if cp not in lhecp:
+                                        found = True
+                            if not found:
+                                lhe2[mg].append(el)
+
+                        self.myAssertDict(
+                            json.loads(mp[mg]["ComponentPreselection"]),
+                            acps[mg])
+                        self.myAssertDict(
+                            json.loads(mp[mg]["ComponentSelection"]), cps[mg])
+                        self.myAssertDict(
+                            json.loads(mp[mg]["DataSourceSelection"]),
+                            adss[mg])
+                        self.assertEqual(
+                            set(json.loads(mp[mg]["UnplottedComponents"])),
+                            set(lhe))
+                        self.assertEqual(
+                            json.loads(mp[mg]["OrderedChannels"]), pdss[mg])
+                        self.myAssertDict(
+                            json.loads(mp[mg]["UserData"]), records[mg])
+                        self.assertEqual(
+                            json.loads(mp[mg]["Timer"]), ltimers[mg])
+                        self.assertEqual(mp[mg]["MntGrp"], mg)
+                        self.dump(ors, name=mg)
+                        self.assertTrue(ors.isMntGrpUpdated())
+                        self.assertTrue(ors.isMntGrpUpdated())
+
+                        wwcp = ors.components
+                        describer = Describer(self._cf.dp, True)
+                        res = describer.components(wwcp, "STEP", "")
+
+                        mdds = set()
+                        for mdss in res[0].values():
+                            if isinstance(mdss, dict):
+                                for ds in mdss.keys():
+                                    adss[mg][ds] = True
+
+                        for tm in ltimers[mg]:
+                            if tm in lhe2[mg]:
+                                if tm in adss[mg].keys():
+                                    print "DES", tm
+                                    adss[mg][tm] = False
+
+                        jpcnf = ors.updateMntGrp()
+                        self.assertTrue(not ors.isMntGrpUpdated())
+                        self.assertTrue(not ors.isMntGrpUpdated())
+                        pcnf = json.loads(jpcnf)
+                        mgdp = PyTango.DeviceProxy(
+                            tmg[mg].new_device_info_writer.name)
+                        jcnf = ors.mntGrpConfiguration()
+                        cnf = json.loads(jcnf)
+                        mp[mg] = json.loads(ors.profileConfiguration)
+                        self.myAssertDict(
+                            json.loads(mp[mg]["ComponentPreselection"]),
+                            acps[mg])
+                        self.myAssertDict(
+                            json.loads(mp[mg]["ComponentSelection"]), cps[mg])
+                        self.myAssertDict(
+                            json.loads(
+                                mp[mg]["DataSourceSelection"]), adss[mg])
+                        self.assertEqual(
+                            set(json.loads(mp[mg]["UnplottedComponents"])),
+                            set(lhe2[mg]))
+                        self.assertEqual(
+                            json.loads(mp[mg]["OrderedChannels"]), pdss[mg])
+                        self.myAssertDict(
+                            json.loads(mp[mg]["UserData"]), records[mg])
+                        self.assertEqual(
+                            json.loads(mp[mg]["Timer"]), ltimers[mg])
+                        self.assertEqual(mp[mg]["MntGrp"], mg)
+                        myctrls = {}
+                        fgtm = "/".join(
+                            self.smychsXX[str(ltimers[mg][0])]['source'].split(
+                                "/")[:-1])
+                        for cl in ctrls:
+                            tgc = {}
+                            for exp in expch:
+                                ds = exp["name"]
+                                if ds in chds and cl == exp['controller']:
+                                    if ds in self.smychsXX.keys():
+                                        cnt = self.smychsXX[str(ds)]
+                                        i = chds.index(str(ds))
+                                        try:
+                                            tdv = "/".join(
+                                                cnt['source'].split("/")[:-1])
+                                            chn = {'ndim': 0,
+                                                   'index': i,
+                                                   'name': str(ds),
+                                                   'data_type':
+                                                       cnt['data_type'],
+                                                   'plot_type': (
+                                                       cnt['plot_type']
+                                                       if (ds not in lhe2[mg]
+                                                           and ds in bchds)
+                                                       else 0),
+                                                   'data_units':
+                                                       cnt['data_units'],
+                                                   'enabled': True,
+                                                   'label': ds,
+                                                   'instrument': None,
+                                                   'shape': cnt['shape'],
+                                                   '_controller_name': cl,
+                                                   'conditioning': '',
+                                                   'full_name': tdv,
+                                                   '_unit_id': '0',
+                                                   'output': True,
+                                                   'plot_axes': (
+                                                       cnt['plot_axes']
+                                                       if (ds not in lhe2[mg]
+                                                           and ds in bchds)
+                                                       else []),
+                                                   'nexus_path': '',
+                                                   'normalization': 0,
+                                                   'source': cnt['source']}
+                                            tgc[tdv] = chn
+                                        except:
+                                            raise
+                            if tgc:
+                                ltm = timers[cl] if cl in timers.keys() \
+                                    else ltimers[mg][0]
+                                fltm = "/".join(
+                                    self.smychsXX[str(ltm)]['source'].split(
+                                        "/")[:-1])
+                                myctrls[cl] = {
+                                    'units':
+                                        {'0':
+                                         {
+                                             'channels': tgc,
+                                             'monitor': fltm,
+                                             'id': 0,
+                                             'timer': fltm,
+                                             'trigger_type': 0}}}
+
+                        tgc = {}
+                        for ds in chds:
+                            if ds in self.smychs:
+                                cnt = self.smychs[str(ds)]
+                                i = chds.index(str(ds))
+        #                            print "INDEX", i, ds
+                                try:
+                                    chn = {'ndim': 0,
+                                           'index': i,
+                                           'name': str(ds),
+                                           'data_type': cnt['data_type'],
+                                           'plot_type': (
+                                               cnt['plot_type']
+                                               if ds not in lhe2[mg] else 0),
+                                           'data_units': cnt['data_units'],
+                                           'enabled': True,
+                                           'label': cnt['source'],
+                                           'instrument': None,
+                                           'shape': cnt['shape'],
+                                           '_controller_name': '__tango__',
+                                           'conditioning': '',
+                                           'full_name': '%s%s' % (
+                                               'tango://', cnt['source']),
+                                           '_unit_id': '0',
+                                           'output': True,
+                                           'plot_axes': (
+                                               cnt['plot_axes']
+                                               if ds not in lhe2[mg] else []),
+                                           'nexus_path': '',
+                                           'normalization': 0,
+                                           'source': cnt['source']}
+                                    tgc[chn["full_name"]] = chn
+                                except:
+                                    raise
+
+                        if tgc:
+                            myctrls['__tango__'] = {
+                                'units':
+                                    {'0':
+                                     {'channels': tgc,
+                                      'monitor': fgtm,
+                                      'id': 0,
+                                      'timer': fgtm,
+                                      'trigger_type': 0}}}
+
+                        smg = {"controllers": myctrls,
+                               "monitor": "%s" % fgtm,
+                               "description": "Measurement Group",
+                               "timer": "%s" % fgtm,
+                               "label": mg}
+        #                    print "SMG", smg
+                        self.myAssertDict(smg, pcnf)
+                        self.myAssertDict(pcnf, cnf)
+                        ors.mntGrp = "nxsmntgrp"
+                        ors.profileConfiguration = str(json.dumps({}))
+                        ors.configDevice = val["ConfigDevice"]
+                        ors.door = val["Door"]
+                        print "MG", mg
+                        ors.mntGrp = mg
+                        ors.fetchProfile()
+                        mp[mg] = json.loads(ors.profileConfiguration)
+#                        self.myAssertRaise(Exception, ors.isMntGrpUpdated)
+#                       ors.fetchProfile()
+#                        mp[mg] = json.loads(ors.profileConfiguration)
+
+                        self.assertTrue(not ors.isMntGrpUpdated())
+                        self.assertTrue(not ors.isMntGrpUpdated())
+
+                        self.compareToDumpJSON(
+                            ors,
+                            ["DataSourceSelection",
+                             "UnplottedComponents",
+                             "PreselectedDataSources",
+                             "UnplottedComponents"],
+                            name=mg)
+                        mp[mg] = json.loads(ors.profileConfiguration)
+                        self.myAssertDict(
+                            json.loads(
+                                mp[mg]["DataSourceSelection"]), adss[mg])
+                        self.assertEqual(
+                            set(json.loads(mp[mg]["PreselectedDataSources"])),
+                            set(aadss[mg]))
+                        print "PDS1", set(aadss[mg])
+                        self.assertEqual(
+                            set(json.loads(mp[mg]["UnplottedComponents"])),
+                            set(lhe2[mg]))
+                        self.assertEqual(
+                            json.loads(mp[mg]["OrderedChannels"]), pdss[mg])
+                        self.myAssertDict(
+                            json.loads(mp[mg]["UserData"]), records[mg])
+                        self.assertEqual(
+                            json.loads(mp[mg]["Timer"]), ltimers[mg])
+                        self.assertEqual(mp[mg]["MntGrp"], mg)
+                        print "WWWMG", mg
+                        self.compareToDumpJSON(
+                            ors,
+                            ["DataSourceSelection",
+                             "UnplottedComponents",
+                             "PreselectedDataSources"],
+                            name=mg)
+
+                    # check profile commands
+                    mg1, mg2, mg3, mg4 = tuple(self.__rnd.sample(mgs, 4))
+                    print "MGS", mg1, mg2, mg3, mg4
+                    ors.profileConfiguration = str(json.dumps(mp[mg1]))
+                    self.compareToDumpJSON(
+                        ors,
+                        ["DataSourceSelection",
+                         "UnplottedComponents",
+                         "PreselectedDataSources"],
+                        name=mg1)
+                    ors.profileConfiguration = str(json.dumps(mp[mg2]))
+                    self.compareToDumpJSON(
+                        ors,
+                        ["DataSourceSelection",
+                         "UnplottedComponents",
+                         "PreselectedDataSources"],
+                        name=mg2)
+                    ors.profileConfiguration = str(json.dumps(mp[mg3]))
+                    self.compareToDumpJSON(
+                        ors,
+                        ["DataSourceSelection",
+                         "UnplottedComponents",
+                         "PreselectedDataSources"],
+                        name=mg3)
+                    ors.profileConfiguration = str(json.dumps(mp[mg4]))
+                    self.compareToDumpJSON(
+                        ors,
+                        ["DataSourceSelection",
+                         "UnplottedComponents",
+                         "PreselectedDataSources"],
+                        name=mg4)
+
+                    lrs = self.openRecSelector2()
+                    lrs.configDevice = val["ConfigDevice"]
+                    lrs.door = val["Door"]
+                    lrs.mntGrp = mg1
+                    self.assertEqual(lrs.configDevice, val["ConfigDevice"])
+
+                    self.assertEqual(lrs.door, val["Door"])
+                    lmp = json.loads(lrs.profileConfiguration)
+
+#                    self.myAssertRaise(Exception, lrs.isMntGrpUpdated)
+
+                    self.switchProfile(lrs, False)
+                    lmp = json.loads(lrs.profileConfiguration)
+
+                    self.compareToDumpJSON(
+                        lrs, [
+                            "DataSourceSelection",
+                            "UnplottedComponents",
+                            "PreselectedDataSources",
+                            "Timer"
+                        ],
+                        name=mg1)
+                    ors.profileConfiguration = str(json.dumps(mp[mg1]))
+                    tmpcf = json.loads(ors.mntGrpConfiguration())
+                    ltmpcf = json.loads(lrs.mntGrpConfiguration())
+                    self.myAssertDict(tmpcf, ltmpcf)
+
+                    self.assertEqual(
+                        set(json.loads(lmp["PreselectedDataSources"])),
+                        set(aadss[mg1]))
+                    self.myAssertDict(
+                        json.loads(lmp["DataSourceSelection"]), adss[mg1])
+                    self.assertEqual(
+                        json.loads(lmp["OrderedChannels"]), pdss[mg1])
+                    self.myAssertDict(
+                        json.loads(lmp["UserData"]), records[mg1])
+                    self.assertEqual(
+                        json.loads(lmp["Timer"])[0], ltimers[mg1][0])
+                    self.assertEqual(
+                        set(json.loads(lmp["Timer"])), set(ltimers[mg1]))
+                    self.assertEqual(lmp["MntGrp"], mg1)
+
+                    print "MGS", mg1, mg2, mg3, mg4
+
+                    # import mntgrp another defined by selector MntGrp
+                    lrs.mntGrp = mg2
+
+                    self.assertTrue(lrs.isMntGrpUpdated())
+                    self.assertTrue(lrs.isMntGrpUpdated())
+
+                    lrs.importMntGrp()
+                    lmp = json.loads(lrs.profileConfiguration)
+                    self.assertTrue(lrs.isMntGrpUpdated())
+                    self.assertTrue(lrs.isMntGrpUpdated())
+
+                    ors.profileConfiguration = str(json.dumps(mp[mg1]))
+                    tmpcf1 = json.loads(ors.mntGrpConfiguration())
+                    ors.profileConfiguration = str(json.dumps(mp[mg2]))
+                    tmpcf2 = json.loads(ors.mntGrpConfiguration())
+                    ltmpcf = json.loads(lrs.mntGrpConfiguration())
+#                    self.myAssertDict(tmpcf1, ltmpcf)
+                    self.myAssertDict(tmpcf2, ltmpcf)
+                    print "RSmg2",
+                    ors.profileConfiguration = str(json.dumps(mp[mg2]))
+                    self.compareToDumpJSON(
+                        ors,
+                        ["DataSourceSelection",
+                         "UnplottedComponents",
+                         "PreselectedDataSources"],
+                        name=mg2)
+                    self.compareToDumpJSON(
+                        lrs,
+                        ["DataSourceSelection",
+                         "UnplottedComponents",
+                         "PreselectedDataSources",
+                         "Timer",
+                         "MntGrp"],
+                        name=mg1)
+
+                    continue
+                    ors.profileConfiguration = str(json.dumps(mp[mg2]))
+                    tmpcf = json.loads(ors.mntGrpConfiguration())
+                    ltmpcf = json.loads(lrs.mntGrpConfiguration())
+                    self.myAssertDict(tmpcf, ltmpcf)
+
+                    self.assertEqual(
+                        set(json.loads(lmp["PreselectedDataSources"])),
+                        set(aadss[mg1]))
+                    self.assertEqual(
+                        json.loads(lmp["OrderedChannels"]), pdss[mg1])
+                    self.myAssertDict(
+                        json.loads(lmp["UserData"]), records[mg1])
+
+                    self.assertEqual(
+                        json.loads(lmp["Timer"])[0], ltimers[mg2][0])
+                    self.assertEqual(
+                        set(json.loads(lmp["Timer"])), set(ltimers[mg2]))
+                    self.assertEqual(lmp["MntGrp"], mg2)
+
+                    self.myAssertDict(
+                        json.loads(mp[mg1]["DataSourceSelection"]),
+                        adss[mg1])
+                    self.myAssertDict(
+                        json.loads(mp[mg2]["DataSourceSelection"]),
+                        adss[mg2])
+
+                    self.assertEqual(
+                        set(json.loads(mp[mg1]["UnplottedComponents"])),
+                        set(lhe2[mg1]))
+                    self.assertEqual(
+                        set(json.loads(mp[mg2]["UnplottedComponents"])),
+                        set(lhe2[mg2]))
+
+                    ladss = {}
+                    llhe = set()
+                    for ds, vl in adss[mg1].items():
+                        ladss[ds] = vl
+                    for nd in lhe2[mg1]:
+                        if nd not in self.smychsXX.keys():
+                            llhe.add(nd)
+
+                    for ds, vl in adss[mg2].items():
+                        if vl:
+                            if ds in self.smychs.keys() and \
+                                    self.smychs[ds]:
+                                ladss[ds] = vl
+                                if ds in lhe2[mg2]:
+                                    llhe.add(ds)
+                                elif ds in llhe:
+                                    llhe.remove(ds)
+                            elif ds in self.smychsXX.keys() and \
+                                    self.smychsXX[ds]:
+                                ladss[ds] = vl
+                                if ds in lhe2[mg2]:
+                                    llhe.add(ds)
+                                elif ds in llhe:
+                                    llhe.remove(ds)
+                            if ds not in self.smychs.keys() and \
+                                    ds not in self.smychsXX.keys():
+                                ladss[ds] = vl
+                                if ds in lhe2[mg2]:
+                                    llhe.add(ds)
+                                elif ds in llhe:
+                                    llhe.remove(ds)
+                        elif ds in adss[mg1].keys():
+                            if ds in self.smychsXX.keys() \
+                                    and self.smychsXX[ds]:
+                                ladss[ds] = vl
+                                if ds in lhe2[mg2]:
+                                    llhe.add(ds)
+                                elif ds in llhe:
+                                    llhe.remove(ds)
+                            else:
+                                ladss[ds] = adss[mg1][ds]
+
+                    for tm in json.loads(mp[mg2]["Timer"]):
+                        if tm in ladss:
+                            if tm in llhe:
+                                ladss[tm] = False
+                                llhe.remove(tm)
+                    for tm in json.loads(mp[mg1]["Timer"]):
+                        if tm in ladss:
+                            if tm in json.loads(
+                                    mp[mg2]["UnplottedComponents"]):
+                                ladss[tm] = False
+                                if tm not in json.loads(mp[mg2]["Timer"]):
+                                    if tm in llhe:
+                                        llhe.remove(tm)
+
+                    print "T1", json.loads(mp[mg1]["Timer"])
+                    print "T2", json.loads(mp[mg2]["Timer"])
+                    print "LT", json.loads(lmp["Timer"])
+                    # ???
+                    self.myAssertDict(
+                        json.loads(lmp["DataSourceSelection"]), ladss)
+                    # ???
+                    self.assertEqual(
+                        set(json.loads(lmp["UnplottedComponents"])),
+                        set(llhe))
+
+                    # import mntgrp mg2 (with content mg1)
+                    # after change in mntgrp device
+
+                    lrs.mntGrp = mg2
+                    ors.profileConfiguration = str(json.dumps(mp[mg1]))
+                    tmpcf = json.loads(ors.mntGrpConfiguration())
+                    ors.profileConfiguration = str(json.dumps(mp[mg2]))
+                    tmpcf2 = json.loads(ors.mntGrpConfiguration())
+                    ltmpcf = json.loads(lrs.mntGrpConfiguration())
+                    self.assertEqual(ltmpcf, tmpcf2)
+                    tmpcf['label'] = mg2
+                    mgdp = PyTango.DeviceProxy(
+                        tmg[mg2].new_device_info_writer.name)
+                    print "name", tmg[mg2].new_device_info_writer.name
+                    mgdp.Configuration = json.dumps(tmpcf)
+                    self.assertTrue(lrs.isMntGrpUpdated())
+                    self.assertTrue(lrs.isMntGrpUpdated())
+
+                    ors.profileConfiguration = str(json.dumps(mp[mg1]))
+                    tmpcf1 = json.loads(ors.mntGrpConfiguration())
+                    ors.profileConfiguration = str(json.dumps(mp[mg2]))
+                    tmpcf2 = json.loads(ors.mntGrpConfiguration())
+                    ltmpcf = json.loads(lrs.mntGrpConfiguration())
+#                    self.myAssertDict(tmpcf1, ltmpcf)
+                    self.myAssertDict(tmpcf2, ltmpcf)
+
+                    lrs.importMntGrp()
+                    # ???
+
+                    ltmpcf2 = json.loads(lrs.mntGrpConfiguration())
+                    if not Utils.compareDict(ltmpcf2, ltmpcf):
+                        self.assertTrue(lrs.isMntGrpUpdated())
+                        self.assertTrue(lrs.isMntGrpUpdated())
+
+                    ors.profileConfiguration = str(json.dumps(mp[mg1]))
+                    tmpcf1 = json.loads(ors.mntGrpConfiguration())
+                    ors.profileConfiguration = str(json.dumps(mp[mg2]))
+                    tmpcf2 = json.loads(ors.mntGrpConfiguration())
+                    ltmpcf = json.loads(lrs.mntGrpConfiguration())
+#                    self.myAssertDict(tmpcf1, ltmpcf)
+                    self.myAssertDict(tmpcf2, ltmpcf)
+
+                    self.compareToDumpJSON(
+                        lrs,
+                        ["ComponentPreselection",
+                         "ComponentSelection",
+                         "DataSourceSelection",
+                         "UnplottedComponents",
+                         "PreselectedDataSources",
+                         "Timer",
+                         "MntGrp"],
+                        name=mg1)
+
+                    ors.profileConfiguration = str(json.dumps(mp[mg2]))
+                    self.compareToDump(
+                        ors,
+                        ["ComponentPreselection",
+                         "ComponentSelection",
+                         "DataSourceSelection",
+                         "UnplottedComponents",
+                         "PreselectedDataSources",
+                         "Timer"],
+                        name=mg2)
+
+                    self.myAssertDict(
+                        json.loads(mp[mg2]["ComponentPreselection"]),
+                        acps[mg2])
+                    self.myAssertDict(
+                        json.loads(mp[mg2]["ComponentSelection"]),
+                        cps[mg2])
+                    self.myAssertDict(
+                        json.loads(mp[mg2]["DataSourceSelection"]), adss[mg2])
+                    self.assertEqual(
+                        set(json.loads(mp[mg2]["PreselectedDataSources"])),
+                        set(aadss[mg2]))
+                    self.assertEqual(
+                        set(json.loads(mp[mg2]["UnplottedComponents"])),
+                        set(lhe2[mg2]))
+                    self.assertEqual(
+                        json.loads(mp[mg2]["OrderedChannels"]), pdss[mg2])
+                    self.myAssertDict(json.loads(mp[mg2]["UserData"]),
+                                      records[mg2])
+                    self.assertEqual(
+                        json.loads(mp[mg2]["Timer"]), ltimers[mg2])
+                    self.assertEqual(mp[mg2]["MntGrp"], mg2)
+
+                    # switch to active profile mg3
+                    lrs.mntGrp = mg2
+                    MSUtils.setEnv('ActiveMntGrp', mg3, self._ms.ms.keys()[0])
+
+                    ors.profileConfiguration = str(json.dumps(mp[mg1]))
+                    tmpcf1 = json.loads(ors.mntGrpConfiguration())
+                    ors.profileConfiguration = str(json.dumps(mp[mg2]))
+                    tmpcf2 = json.loads(ors.mntGrpConfiguration())
+                    ors.profileConfiguration = str(json.dumps(mp[mg3]))
+                    tmpcf3 = json.loads(ors.mntGrpConfiguration())
+                    ltmpcf = json.loads(lrs.mntGrpConfiguration())
+#                    self.myAssertDict(tmpcf1, ltmpcf)
+                    self.myAssertDict(tmpcf2, ltmpcf)
+#                    self.myAssertDict(tmpcf3, ltmpcf)
+
+                    lrs.switchProfile()
+
+                    ors.profileConfiguration = str(json.dumps(mp[mg1]))
+                    tmpcf1 = json.loads(ors.mntGrpConfiguration())
+                    ors.profileConfiguration = str(json.dumps(mp[mg2]))
+                    tmpcf2 = json.loads(ors.mntGrpConfiguration())
+                    ors.profileConfiguration = str(json.dumps(mp[mg3]))
+                    tmpcf3 = json.loads(ors.mntGrpConfiguration())
+                    ltmpcf = json.loads(lrs.mntGrpConfiguration())
+                    self.myAssertDict(tmpcf3, ltmpcf)
+#                    self.myAssertDict(tmpcf1, ltmpcf)
+#                    self.myAssertDict(tmpcf2, ltmpcf)
+
+                    self.compareToDumpJSON(
+                        lrs,
+                        [
+                            "DataSourceSelection",
+                            "UnplottedComponents",
+                            "PreselectedDataSources",
+                            "Timer"],
+                        name=mg3)
+                    lmp = json.loads(lrs.profileConfiguration)
+                    self.myAssertDict(json.loads(lmp["DataSourceSelection"]),
+                                      adss[mg3])
+                    self.assertEqual(
+                        set(json.loads(lmp["PreselectedDataSources"])),
+                        set(aadss[mg3]))
+
+                    mylhe = set(lhe2[mg3])
+                    for tm in json.loads(mp[mg3]["Timer"]):
+                        if tm in adss[mg3].keys():
+                            if not adss[mg3][tm]:
+                                if tm in mylhe:
+                                    mylhe.remove(tm)
+                    lmp = json.loads(lrs.profileConfiguration)
+
+                    self.assertEqual(
+                        set(json.loads(lmp["UnplottedComponents"])),
+                        mylhe)
+                    self.assertEqual(json.loads(lmp["OrderedChannels"]),
+                                     pdss[mg3])
+                    self.myAssertDict(json.loads(lmp["UserData"]),
+                                      records[mg3])
+                    self.assertEqual(json.loads(lmp["Timer"])[0],
+                                     ltimers[mg3][0])
+                    self.assertEqual(set(json.loads(lmp["Timer"])),
+                                     set(ltimers[mg3]))
+                    self.assertEqual(lmp["MntGrp"], mg3)
+
+                    # switch to nonexisting active profile
+
+#                    self.assertTrue(lrs.isMntGrpUpdated())
+#                    self.assertTrue(lrs.isMntGrpUpdated())
+                    wmg = "wrong_mg"
+                    lrs.mntGrp = mg3
+                    MSUtils.setEnv('ActiveMntGrp', wmg, self._ms.ms.keys()[0])
+                    lrs.switchProfile()
+                    self.assertEqual(
+                        wmg,
+                        MSUtils.getEnv('ActiveMntGrp', self._ms.ms.keys()[0]))
+
+                    self.compareToDumpJSON(
+                        lrs,
+                        [
+                            "DataSourceSelection",
+                            "UnplottedComponents",
+                            "PreselectedDataSources",
+                            "Timer",
+                            "MntGrp"],
+                        name=mg3)
+                    lmp = json.loads(lrs.profileConfiguration)
+                    mydsg = dict(json.loads(lmp["DataSourceSelection"]))
+                    for ds in self.smychsXX.keys():
+                        if ds in expch:
+                            mydsg[ds] = False
+                    mylhe2 = set(mylhe)
+                    for ds in self.smychsXX.keys():
+                        if ds in mylhe2:
+                            mylhe2.remove(ds)
+
+                    self.myAssertDict(json.loads(lmp["DataSourceSelection"]),
+                                      mydsg)
+                    self.assertEqual(
+                        set(json.loads(lmp["PreselectedDataSources"])),
+                        set(aadss[mg3]))
+                    self.assertEqual(
+                        set(json.loads(lmp["UnplottedComponents"])),
+                        mylhe2)
+                    self.assertEqual(json.loads(lmp["OrderedChannels"]),
+                                     pdss[mg3])
+                    self.myAssertDict(json.loads(lmp["UserData"]),
+                                      records[mg3])
+                    self.assertEqual(json.loads(lmp["Timer"])[0],
+                                     ltimers[mg3][0])
+                    self.assertEqual(set(json.loads(lmp["Timer"])),
+                                     set(ltimers[mg3]))
+                    self.assertEqual(lmp["MntGrp"], wmg)
+
+                    # switch to active profile mg3
+                    lrs.mntGrp = mg2
+                    self.assertTrue(lrs.isMntGrpUpdated())
+                    self.assertTrue(lrs.isMntGrpUpdated())
+                    MSUtils.setEnv('ActiveMntGrp', mg3, self._ms.ms.keys()[0])
+
+                    ors.profileConfiguration = str(json.dumps(mp[mg1]))
+                    tmpcf1 = json.loads(ors.mntGrpConfiguration())
+                    ors.profileConfiguration = str(json.dumps(mp[mg2]))
+                    tmpcf2 = json.loads(ors.mntGrpConfiguration())
+                    ors.profileConfiguration = str(json.dumps(mp[mg3]))
+                    tmpcf3 = json.loads(ors.mntGrpConfiguration())
+                    ltmpcf = json.loads(lrs.mntGrpConfiguration())
+#                    self.myAssertDict(tmpcf1, ltmpcf)
+                    self.myAssertDict(tmpcf2, ltmpcf)
+#                    self.myAssertDict(tmpcf3, ltmpcf)
+
+                    self.switchProfile(lrs, True)
+
+                    ors.profileConfiguration = str(json.dumps(mp[mg1]))
+                    tmpcf1 = json.loads(ors.mntGrpConfiguration())
+                    ors.profileConfiguration = str(json.dumps(mp[mg2]))
+                    tmpcf2 = json.loads(ors.mntGrpConfiguration())
+                    ors.profileConfiguration = str(json.dumps(mp[mg3]))
+                    tmpcf3 = json.loads(ors.mntGrpConfiguration())
+                    ltmpcf = json.loads(lrs.mntGrpConfiguration())
+                    self.myAssertDict(tmpcf3, ltmpcf)
+#                    self.myAssertDict(tmpcf1, ltmpcf)
+#                    self.myAssertDict(tmpcf2, ltmpcf)
+
+                    lmp = json.loads(lrs.profileConfiguration)
+                    self.compareToDumpJSON(
+                        lrs,
+                        [
+                            "DataSourceSelection",
+                            "UnplottedComponents",
+                            "PreselectedDataSources",
+                            "Timer"],
+                        name=mg3)
+                    self.myAssertDict(json.loads(lmp["DataSourceSelection"]),
+                                      adss[mg3])
+                    self.assertEqual(
+                        set(json.loads(lmp["PreselectedDataSources"])),
+                        set(aadss[mg3]))
+
+                    self.assertEqual(
+                        set(json.loads(lmp["UnplottedComponents"])),
+                        mylhe)
+                    self.assertEqual(json.loads(lmp["OrderedChannels"]),
+                                     pdss[mg3])
+                    self.myAssertDict(json.loads(lmp["UserData"]),
+                                      records[mg3])
+                    self.assertEqual(json.loads(lmp["Timer"])[0],
+                                     ltimers[mg3][0])
+                    self.assertEqual(set(json.loads(lmp["Timer"])),
+                                     set(ltimers[mg3]))
+                    self.assertEqual(lmp["MntGrp"], mg3)
+
+                    # try switch to unnamed active profile
+                    # and then to selector mg3
+
+#                    self.assertTrue(lrs.isMntGrpUpdated())
+#                    self.assertTrue(lrs.isMntGrpUpdated())
+                    wmg = ""
+                    lrs.mntGrp = mg3
+                    MSUtils.setEnv('ActiveMntGrp', wmg, self._ms.ms.keys()[0])
+                    lrs.switchProfile()
+                    self.assertEqual(
+                        wmg,
+                        MSUtils.getEnv('ActiveMntGrp', self._ms.ms.keys()[0]))
+
+                    ors.profileConfiguration = str(json.dumps(mp[mg1]))
+                    tmpcf1 = json.loads(ors.mntGrpConfiguration())
+                    ors.profileConfiguration = str(json.dumps(mp[mg2]))
+                    tmpcf2 = json.loads(ors.mntGrpConfiguration())
+                    ors.profileConfiguration = str(json.dumps(mp[mg3]))
+                    tmpcf3 = json.loads(ors.mntGrpConfiguration())
+                    ltmpcf = json.loads(lrs.mntGrpConfiguration())
+                    self.myAssertDict(tmpcf3, ltmpcf)
+#                    self.myAssertDict(tmpcf1, ltmpcf)
+#                    self.myAssertDict(tmpcf2, ltmpcf)
+
+                    self.compareToDumpJSON(
+                        lrs,
+                        [
+                            "DataSourceSelection",
+                            "UnplottedComponents",
+                            "PreselectedDataSources",
+                            "Timer"],
+                        name=mg3)
+                    lmp = json.loads(lrs.profileConfiguration)
+                    self.myAssertDict(json.loads(lmp["DataSourceSelection"]),
+                                      adss[mg3])
+                    self.assertEqual(
+                        set(json.loads(lmp["PreselectedDataSources"])),
+                        set(aadss[mg3]))
+
+                    self.assertEqual(
+                        set(json.loads(lmp["UnplottedComponents"])),
+                        mylhe)
+                    self.assertEqual(json.loads(lmp["OrderedChannels"]),
+                                     pdss[mg3])
+                    self.myAssertDict(json.loads(lmp["UserData"]),
+                                      records[mg3])
+                    self.assertEqual(json.loads(lmp["Timer"])[0],
+                                     ltimers[mg3][0])
+                    self.assertEqual(set(json.loads(lmp["Timer"])),
+                                     set(ltimers[mg3]))
+                    self.assertEqual(lmp["MntGrp"], mg3)
+
+                    # try switch to unnamed active profile
+                    # and then to selector mg3
+
+#                    self.assertTrue(lrs.isMntGrpUpdated())
+#                    self.assertTrue(lrs.isMntGrpUpdated())
+                    wmg = ""
+                    lrs.mntGrp = mg3
+                    MSUtils.usetEnv('ActiveMntGrp', self._ms.ms.keys()[0])
+                    lrs.switchProfile()
+
+                    ors.profileConfiguration = str(json.dumps(mp[mg1]))
+                    tmpcf1 = json.loads(ors.mntGrpConfiguration())
+                    ors.profileConfiguration = str(json.dumps(mp[mg2]))
+                    tmpcf2 = json.loads(ors.mntGrpConfiguration())
+                    ors.profileConfiguration = str(json.dumps(mp[mg3]))
+                    tmpcf3 = json.loads(ors.mntGrpConfiguration())
+                    ltmpcf = json.loads(lrs.mntGrpConfiguration())
+                    self.myAssertDict(tmpcf3, ltmpcf)
+#                    self.myAssertDict(tmpcf1, ltmpcf)
+#                    self.myAssertDict(tmpcf2, ltmpcf)
+
+                    self.compareToDumpJSON(
+                        lrs,
+                        [
+                            "DataSourceSelection",
+                            "UnplottedComponents",
+                            "PreselectedDataSources",
+                            "Timer"],
+                        name=mg3)
+                    lmp = json.loads(lrs.profileConfiguration)
+                    self.myAssertDict(json.loads(lmp["DataSourceSelection"]),
+                                      adss[mg3])
+                    self.assertEqual(
+                        set(json.loads(lmp["PreselectedDataSources"])),
+                        set(aadss[mg3]))
+
+                    self.assertEqual(
+                        set(json.loads(lmp["UnplottedComponents"])),
+                        mylhe)
+                    self.assertEqual(json.loads(lmp["OrderedChannels"]),
+                                     pdss[mg3])
+                    self.myAssertDict(json.loads(lmp["UserData"]),
+                                      records[mg3])
+                    self.assertEqual(json.loads(lmp["Timer"])[0],
+                                     ltimers[mg3][0])
+                    self.assertEqual(set(json.loads(lmp["Timer"])),
+                                     set(ltimers[mg3]))
+                    self.assertEqual(lmp["MntGrp"], mg3)
+
+                    ## fetch non-existing mg
+                    wmg = "wrong_mg2"
+                    lrs.mntGrp = wmg
+                    lrs.fetchProfile()
+
+                    ors.profileConfiguration = str(json.dumps(mp[mg1]))
+                    tmpcf1 = json.loads(ors.mntGrpConfiguration())
+                    ors.profileConfiguration = str(json.dumps(mp[mg2]))
+                    tmpcf2 = json.loads(ors.mntGrpConfiguration())
+                    ors.profileConfiguration = str(json.dumps(mp[mg3]))
+                    tmpcf3 = json.loads(ors.mntGrpConfiguration())
+                    ltmpcf = json.loads(lrs.mntGrpConfiguration())
+#                    self.myAssertDict(tmpcf3, ltmpcf)
+#                    self.myAssertDict(tmpcf1, ltmpcf)
+#                    self.myAssertDict(tmpcf2, ltmpcf)
+
+                    self.compareToDumpJSON(
+                        lrs,
+                        [
+                            "DataSourceSelection",
+                            "UnplottedComponents",
+                            "PreselectedDataSources",
+                            "Timer", "MntGrp"],
+                        name=mg3)
+                    lmp = json.loads(lrs.profileConfiguration)
+                    self.myAssertDict(json.loads(lmp["DataSourceSelection"]),
+                                      adss[mg3])
+                    self.assertEqual(
+                        set(json.loads(lmp["PreselectedDataSources"])),
+                        set(aadss[mg3]))
+
+                    self.assertEqual(
+                        set(json.loads(lmp["UnplottedComponents"])),
+                        mylhe)
+                    self.assertEqual(json.loads(lmp["OrderedChannels"]),
+                                     pdss[mg3])
+                    self.myAssertDict(json.loads(lmp["UserData"]),
+                                      records[mg3])
+                    self.assertEqual(json.loads(lmp["Timer"])[0],
+                                     ltimers[mg3][0])
+                    self.assertEqual(set(json.loads(lmp["Timer"])),
+                                     set(ltimers[mg3]))
+                    self.assertEqual(lmp["MntGrp"], wmg)
+
+                    ## fetch non-existing selection
+                    self._cf.dp.deleteSelection(mg4)
+                    lrs.mntGrp = mg4
+                    self.assertTrue(
+                        mg4 not in self._cf.dp.availableSelections())
+                    self.assertTrue(mg4 in lrs.availableMntGrps())
+                    if j % 2:
+                        lrs.defaultPreselectedComponents = \
+                            list(json.loads(lmp["ComponentPreselection"]
+                                            ).keys())
+
+                    lrs.fetchProfile()
+                    ors.profileConfiguration = str(json.dumps(mp[mg1]))
+                    tmpcf1 = json.loads(ors.mntGrpConfiguration())
+                    ors.profileConfiguration = str(json.dumps(mp[mg2]))
+                    tmpcf2 = json.loads(ors.mntGrpConfiguration())
+                    ors.profileConfiguration = str(json.dumps(mp[mg3]))
+                    tmpcf3 = json.loads(ors.mntGrpConfiguration())
+                    ors.profileConfiguration = str(json.dumps(mp[mg4]))
+                    tmpcf4 = json.loads(ors.mntGrpConfiguration())
+                    ltmpcf = json.loads(lrs.mntGrpConfiguration())
+                    self.myAssertDict(tmpcf4, ltmpcf)
+#                    self.myAssertDict(tmpcf3, ltmpcf)
+#                    self.myAssertDict(tmpcf1, ltmpcf)
+#                    self.myAssertDict(tmpcf2, ltmpcf)
+
+                    self.compareToDumpJSON(
+                        lrs,
+                        [
+                            "InitDataSources",
+                            "PreselectedDataSources",
+                            "ComponentPreselection",
+                            "Timer",
+                            "MntGrp",
+
+                            "ComponentSelection",
+                            "DataSourceSelection",
+                            "UnplottedComponents",
+                        ],
+                        name=mg3)
+                    lmp = json.loads(lrs.profileConfiguration)
+                    self.assertEqual(
+                        set(json.loads(lmp["PreselectedDataSources"])),
+                        set(aadss[mg3]))
+                    self.assertEqual(
+                        set(json.loads(lmp["InitDataSources"])),
+                        set())
+
+                    if j % 2:
+
+                        cpgood = self.smycps.keys() + self.smycps2.keys()
+                        if "client_long" in aadss[mg3] \
+                                or "client_short" in aadss[mg3]:
+                            cpgood.remove("smycpnt1")
+                        if "client2_long" in aadss[mg3] \
+                                or "client2_short" in aadss[mg3]:
+                            cpgood.remove("s2mycpnt1")
+
+                        myacps = dict(acps[mg3])
+                        for cp in myacps.keys():
+                            myacps[cp] = cp in cpgood
+                        self.myAssertDict(
+                            json.loads(lmp["ComponentPreselection"]),
+                            myacps)
+                    else:
+                        self.myAssertDict(
+                            json.loads(lmp["ComponentPreselection"]),
+                            {})
+
+                    mycps = dict(cps[mg3])
+                    for cp in mycps:
+                        mycps[cp] = False
+                    self.myAssertDict(
+                        json.loads(lmp["ComponentSelection"]), mycps)
+
+                    self.assertEqual(json.loads(lmp["OrderedChannels"]),
+                                     pdss[mg3])
+                    self.myAssertDict(json.loads(lmp["UserData"]),
+                                      records[mg3])
+                    self.assertEqual(json.loads(lmp["Timer"])[0],
+                                     ltimers[mg4][0])
+                    self.assertEqual(set(json.loads(lmp["Timer"])),
+                                     set(ltimers[mg4]))
+                    self.assertEqual(lmp["MntGrp"], mg4)
+
+                    ladss = {}
+                    for ds, vl in adss[mg3].items():
+                        ladss[ds] = False
+
+                    for ds, vl in adss[mg4].items():
+                        if vl:
+                            if ds in self.smychs.keys() and \
+                                    self.smychs[ds]:
+                                ladss[ds] = vl
+                            elif ds in self.smychsXX.keys() and \
+                                    self.smychsXX[ds]:
+                                ladss[ds] = vl
+                            if ds not in self.smychs.keys() and \
+                                    ds not in self.smychsXX.keys():
+                                ladss[ds] = vl
+                        elif ds in adss[mg3].keys():
+                            if ds in self.smychsXX.keys() \
+                                    and self.smychsXX[ds]:
+                                ladss[ds] = vl
+                            else:
+                                ladss[ds] = vl
+
+                    llhe = set()
+
+                    for ds in json.loads(mp[mg3]["UnplottedComponents"]):
+                        if ds not in self.smychsXX.keys():
+                            llhe.add(ds)
+
+                    for ds in ladss.keys():
+                        if ds in lhe2[mg4]:
+                            llhe.add(ds)
+
+                    for tm in json.loads(mp[mg4]["Timer"]):
+                        if tm in ladss:
+                            if tm in llhe:
+                                ladss[tm] = False
+                                llhe.remove(tm)
+                    for tm in json.loads(mp[mg3]["Timer"]):
+                        if tm in ladss:
+                            if tm in json.loads(
+                                    mp[mg4]["UnplottedComponents"]):
+                                ladss[tm] = False
+                                if tm not in json.loads(mp[mg4]["Timer"]):
+                                    if tm in llhe:
+                                        llhe.remove(tm)
+
+                    for ds in self.smychs.keys():
+                        if ds in llhe:
+                            if ds in lhe2[mg3] and ds not in lhe2[mg4]:
+                                if ds in ladss and ladss[ds]:
+                                    llhe.remove(ds)
+
+                    self.myAssertDict(json.loads(lmp["DataSourceSelection"]),
+                                      ladss)
+
+                    self.assertEqual(
+                        set(json.loads(lmp["UnplottedComponents"])),
+                        llhe)
+
+                finally:
+                    for mg in mp.keys():
+                        try:
+                            ors.deleteProfile(mgs[mg])
                         except:
                             pass
                     for mg in tmg.keys():

@@ -48,17 +48,22 @@ class NXSRecSelectorTest(SettingsTest.SettingsTest):
         SettingsTest.SettingsTest.__init__(self, methodName)
 
         self._sv = ServerSetUp.ServerSetUp()
+        self._sv2 = ServerSetUp.ServerSetUp(
+            device="testp09/testnrs2/testr228",
+            instance="NRS2TEST")
 
     ## test starter
     # \brief Common set up of Tango Server
     def setUp(self):
         SettingsTest.SettingsTest.setUp(self)
         self._sv.setUp()
+        self._sv2.setUp()
 
     ## test closer
     # \brief Common tear down oif Tango Server
     def tearDown(self):
         self._sv.tearDown()
+        self._sv2.tearDown()
         SettingsTest.SettingsTest.tearDown(self)
 
     def value(self, rs, name):
@@ -108,6 +113,38 @@ class NXSRecSelectorTest(SettingsTest.SettingsTest):
         self.assertEqual(xmlc.state(), PyTango.DevState.ON)
         return xmlc
 
+    ## opens config server
+    # \param args connection arguments
+    # \returns NXSConfigServer instance
+    def openRecSelector2(self):
+
+        found = False
+        cnt = 0
+        while not found and cnt < 1000:
+            try:
+                print "\b.",
+                xmlc = PyTango.DeviceProxy(
+                    self._sv2.new_device_info_writer.name)
+                time.sleep(0.01)
+                if xmlc.state() == PyTango.DevState.ON:
+                    found = True
+                found = True
+            except Exception as e:
+                print("%s%s" % (self._sv2.new_device_info_writer.name, e))
+                found = False
+            except:
+                found = False
+
+            cnt += 1
+
+        if not found:
+            raise Exception(
+                "Cannot connect to %s" %
+                self._sv2.new_device_info_writer.name)
+
+        self.assertEqual(xmlc.state(), PyTango.DevState.ON)
+        return xmlc
+
     def subtest_constructor(self):
         rs = self.openRecSelector()
         msp = MacroServerPools(10)
@@ -136,6 +173,16 @@ class NXSRecSelectorTest(SettingsTest.SettingsTest):
         print "Door", rs.door
         print "DeviceGroups", rs.deviceGroups
 
+    def switchProfile(self, rs, flag):
+        if flag:
+            rs.switchProfile()
+        else:
+            mg = rs.mntGrp
+            MSUtils.setEnv('ActiveMntGrp', mg, self._ms.ms.keys()[0])
+            rs.switchProfile()
+
+    def subtest_switchProfile_importMntGrp(self):
+        pass
 
 if __name__ == '__main__':
     unittest.main()
