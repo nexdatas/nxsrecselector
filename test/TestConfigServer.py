@@ -82,7 +82,7 @@ class NXSConfigServer(PyTango.Device_4Impl):
         self.attr_Selection = ""
         self.attr_JSONSettings = ""
         self.attr_STEPDataSources = ""
-        self.attr_Variables = ""
+        self.attr_Variables = "{}"
 
         self.cmd = {}
         self.cmd["CPDICT"] = {}
@@ -92,7 +92,7 @@ class NXSConfigServer(PyTango.Device_4Impl):
         self.cmd["COMMANDS"] = []
         self.cmd["MCPLIST"] = []
         self.cmd["VALUE"] = None
-        self.cmd["CHECKVARIABLES"] = ""
+        self.cmd["CHECKVARIABLES"] = "{}"
 
         self.get_device_properties(self.get_device_class())
 
@@ -248,6 +248,8 @@ class NXSConfigServer(PyTango.Device_4Impl):
         print >> self.log_info, "In ", self.get_name(), \
             "::InstantiateComponents()"
         if self.cmd["CHECKVARIABLES"] != self.attr_Variables:
+            print "CMD", self.cmd["CHECKVARIABLES"]
+            print self.attr_Variables
             raise Exception("Variables not set")
         self.cmd["VARS"].append(names)
         self.cmd["COMMANDS"].append("InstantiatedComponents")

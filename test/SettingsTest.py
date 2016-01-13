@@ -373,6 +373,71 @@ class SettingsTest(unittest.TestCase):
 
         }
 
+        self.mycpsvar = {
+            'mycp': (
+                '<?xml version=\'1.0\'?>'
+                '<definition>'
+                '<group type="NXcollection" name="dddd"/>'
+                '</definition>'),
+            'scan': (
+                '<definition><group type="NXentry" name="entry1">'
+                '<group type="NXinstrument" name="instrument">'
+                '<group type="NXdetector" name="detector">'
+                '<field units="m" type="NX_FLOAT" name="counter1">'
+                '<strategy mode="STEP"/>'
+                '<datasource type="CLIENT"><record name="exp_c01"/>'
+                '</datasource></field>'
+                '<field units="s" type="NX_FLOAT" name="counter2">'
+                '<strategy mode="STEP"/><datasource type="CLIENT">'
+                '<record name="$var.c02"/></datasource></field>'
+                '<field units="" type="NX_FLOAT" name="mca">'
+                '<dimensions rank="1"><dim value="2048" index="1"/>'
+                '</dimensions><strategy mode="STEP"/>'
+                '<datasource type="CLIENT"><record name="p09/mca/exp.02"/>'
+                '</datasource></field></group></group></group></definition>'
+            ),
+
+            'scan2': (
+                '<definition><group type="NXentry" name="entry1">'
+                '<group type="NXinstrument" name="instrument">'
+                '<group type="NXdetector" name="detector">'
+                '<field units="m" type="NX_FLOAT" name="counter1">'
+                '<strategy mode="STEP"/>'
+                '<datasource name="c01" type="CLIENT">'
+                '<record name="exp_c01"/></datasource></field>'
+                '<field units="s" type="NX_FLOAT" name="counter2">'
+                '<strategy mode="STEP"/>'
+                '<datasource type="CLIENT" name="c02">'
+                '<record name="exp_c02"/></datasource></field>'
+                '<field units="" type="NX_FLOAT" name="mca">'
+                '<dimensions rank="1"><dim value="2048" index="1"/>'
+                '</dimensions><strategy mode="STEP"/>'
+                '<datasource type="CLIENT"  name="mca">'
+                '<record name="$var.mca"/>'
+                '</datasource></field></group></group></group></definition>'
+            ),
+            'scan3': (
+                '<definition><group type="NXentry" name="entry1">'
+                '<group type="NXinstrument" name="instrument">'
+                '<group type="NXdetector" name="detector">'
+                '<field units="m" type="NX_FLOAT" name="counter1">'
+                '<strategy mode="STEP"/>'
+                '<datasource name="c01" type="CLIENT">'
+                '<record name="exp_c01"/></datasource></field>'
+                '<field units="s" type="NX_FLOAT" name="counter2">'
+                '<strategy mode="INIT"/>'
+                '<datasource type="CLIENT" name="c01">'
+                '<record name="$var.c01"/></datasource></field>'
+                '<field units="" type="NX_FLOAT" name="mca">'
+                '<dimensions rank="1"><dim value="2048" index="1"/>'
+                '</dimensions><strategy mode="STEP"/>'
+                '<datasource type="CLIENT"  name="mca">'
+                '<record name="p09/mca/exp.02"/>'
+                '</datasource></field></group></group></group></definition>'
+            ),
+
+        }
+
         self.rescps = {
             'mycp': {},
             'mycp2': {},
@@ -1725,6 +1790,42 @@ class SettingsTest(unittest.TestCase):
         self._ms.tearDown()
         self._wr.tearDown()
 
+    def checkDS(self, rv, cv):
+        self.assertEqual(sorted(rv.keys()), sorted(cv))
+        for vl in cv:
+            self.assertEqual(self.resdss[vl][0], rv[vl].name)
+            self.assertEqual(self.resdss[vl][1], rv[vl].dstype)
+            self.assertEqual(self.resdss[vl][2], rv[vl].record)
+
+    def checkDSList(self, rv, cv):
+        self.assertEqual(len(rv), len(cv))
+
+        mset = set()
+        for jr in rv:
+            rr = json.loads(jr)
+            vl = rr["dsname"]
+            mset.add(vl)
+            if not vl:
+                vl = 'nn2'
+            self.assertEqual(self.resdss[vl][0], rr["dsname"])
+            self.assertEqual(self.resdss[vl][1], rr["dstype"])
+            self.assertEqual(self.resdss[vl][2], rr["record"])
+        self.assertEqual(len(rv), len(mset))
+
+    def hasds(self, dslist, strategy, dstype):
+        for dss in dslist:
+            for ds in dss:
+                dsfound = True if dstype is None else False
+                stfound = True if strategy is None else False
+                if dsfound and stfound:
+                    break
+                if not dsfound and ds[1] == dstype:
+                    dsfound = True
+                if not stfound and ds[0] == strategy:
+                    stfound = True
+#        print "FOUND", dslist, dsfound and stfound
+        return dsfound and stfound
+
     @classmethod
     def dsfilter(cls, dss, strategy, dstype):
         res = []
@@ -1827,6 +1928,48 @@ class SettingsTest(unittest.TestCase):
         letters = string.lowercase + string.uppercase + string.digits
         size = self.__rnd.randint(1, maxsize)
         return ''.join(self.__rnd.choice(letters) for _ in range(size))
+
+    @classmethod
+    def findElement(cls, cp, ds, vds, rv):
+        found = False
+        for el in rv:
+            if el["cpname"] == cp and el["dsname"] == ds \
+                    and el["strategy"] == vds[0] \
+                    and el["dstype"] == vds[1] \
+                    and el["record"] == vds[2] \
+                    and el["nxtype"] == vds[3] \
+                    and el["shape"] == vds[4]:
+                found = True
+                break
+        if not found:
+            print "NOT FOUND", cp, ds, vds, rv
+        return found
+
+    def checkICP(self, rv, cv, strategy=None, dstype=None):
+        dscnt = 0
+        tcv = [k for k in cv if self.rescps[k]]
+        for cp in tcv:
+            for ds, dss in self.rescps[cp].items():
+                for vds in dss:
+                    if strategy is not None:
+                        if vds[0] != strategy:
+                            continue
+                    if dstype is not None:
+                        if vds[1] != dstype:
+                            continue
+                    self.assertTrue(self.findElement(cp, ds, vds, rv))
+                    dscnt += 1
+        self.assertEqual(dscnt, len(rv))
+
+    ## test starter
+    # \brief Common set up of Tango Server
+    def mySetUp(self):
+        pass
+
+    ## test closer
+    # \brief Common tear down oif Tango Server
+    def myTearDown(self):
+        pass
 
     ## Exception tester
     # \param exception expected exception
@@ -14637,6 +14780,7 @@ class SettingsTest(unittest.TestCase):
 
         self.maxDiff = None
         self.tearDown()
+        self.mySetUp()
         try:
             for j in range(10):
                 self.setUp()
@@ -15961,9 +16105,273 @@ class SettingsTest(unittest.TestCase):
                         pass
         finally:
             try:
+                self.myTearDown()
                 self.setUp()
             except:
                 pass
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_dataSourceDescription(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        dsdict = {
+            "ann": self.mydss["ann"]
+        }
+
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        rs = self.openRecSelector()
+        rs.configDevice = val["ConfigDevice"]
+        rs.door = val["Door"]
+        rs.mntGrp = val["MntGrp"]
+        self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dsdict)])
+
+        self.assertEqual(rs.dataSourceDescription(["myds2"]), [])
+
+        res = rs.dataSourceDescription(["ann"])
+        self.checkDSList(res, ["ann"])
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_dataSourceDescription_noargs(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        rs = self.openRecSelector()
+        rs.configDevice = val["ConfigDevice"]
+        rs.door = val["Door"]
+        rs.mntGrp = val["MntGrp"]
+        self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
+
+        if isinstance(rs, Settings):
+            res = rs.dataSourceDescription(None)
+            self.checkDSList(res, self.resdss.keys())
+        res = rs.dataSourceDescription(self.mydss.keys())
+        self.checkDSList(res, self.resdss.keys())
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_dataSourceDescription_names(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        rs = self.openRecSelector()
+        rs.configDevice = val["ConfigDevice"]
+        rs.door = val["Door"]
+        rs.mntGrp = val["MntGrp"]
+        self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
+
+        names_list = [
+            [],
+            ["ann3"],
+            ["ann", "nn2", "tann0", "dbtest", "slt1vgap"],
+            ['nn', 'nn2', 'ann', 'ann2', 'ann3', 'ann4', 'ann5',
+             'tann0', 'tann1', 'tann1b', 'tann1c', 'P1M_postrun',
+             'dbtest', 'dbds', 'slt1vgap']
+        ]
+
+        for names in names_list:
+            res = rs.dataSourceDescription(names)
+            self.checkDSList(res, names)
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_componentClientSources_unknown(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        dsdict = {
+            "ann": self.mydss["ann"]
+        }
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        rs = self.openRecSelector()
+        rs.configDevice = val["ConfigDevice"]
+        rs.door = val["Door"]
+        rs.mntGrp = val["MntGrp"]
+        self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dsdict)])
+
+        self.assertEqual(rs.componentClientSources([]), '[]')
+        self.assertEqual(rs.componentClientSources(["unknown"]), '[]')
+
+        self.assertEqual(rs.componentClientSources([]), '[]')
+        self.assertEqual(rs.componentClientSources(["unknown"]), '[]')
+        if isinstance(rs, Settings):
+            self.assertEqual(rs.componentClientSources(None), '[]')
+            self.assertEqual(rs.componentClientSources(["unknown"]), '[]')
+
+            self.assertEqual(rs.componentClientSources(None), '[]')
+            self.assertEqual(rs.componentClientSources(["unknown"]), '[]')
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_componentClientSources_dstype(self):
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        rs = self.openRecSelector()
+        rs.configDevice = val["ConfigDevice"]
+        rs.door = val["Door"]
+        rs.mntGrp = val["MntGrp"]
+        self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
+        self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
+
+        for cp in self.mycps.keys():
+            res = json.loads(rs.componentClientSources([cp]))
+            self.checkICP(res, [cp],
+                          strategy=None, dstype='CLIENT')
+        res = json.loads(rs.componentClientSources(self.mycps.keys()))
+        self.checkICP(res, self.rescps.keys(),
+                      strategy=None, dstype='CLIENT')
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_componentClientSources_mem(self):
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        rs = self.openRecSelector()
+        rs.configDevice = val["ConfigDevice"]
+        rs.door = val["Door"]
+        rs.mntGrp = val["MntGrp"]
+        for i in range(20):
+            self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
+            self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
+            nmem = self.__rnd.randint(1, len(self.mycps.keys()) - 1)
+            mem = self.__rnd.sample(set(self.mycps.keys()), nmem)
+            self._cf.dp.SetCommandVariable(["MCPLIST", json.dumps(mem)])
+
+            for cp in self.mycps.keys():
+                res = json.loads(rs.componentClientSources([cp]))
+                self.checkICP(res, [cp],
+                              strategy=None, dstype='CLIENT')
+            res = json.loads(rs.componentClientSources(self.mycps.keys()))
+            self.checkICP(res, self.rescps.keys(),
+                          strategy=None, dstype='CLIENT')
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_componentClientSources_cps(self):
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        rs = self.openRecSelector()
+        rs.configDevice = val["ConfigDevice"]
+        rs.door = val["Door"]
+        rs.mntGrp = val["MntGrp"]
+        for i in range(20):
+            self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
+            self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
+            nmem = self.__rnd.randint(1, len(self.mycps.keys()) - 1)
+            mem = self.__rnd.sample(set(self.mycps.keys()), nmem)
+
+            res = json.loads(rs.componentClientSources(mem))
+            self.checkICP(res, mem,
+                          strategy=None, dstype='CLIENT')
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_componentClientSources_components(self):
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        rs = self.openRecSelector()
+        rs.configDevice = val["ConfigDevice"]
+        rs.door = val["Door"]
+        rs.mntGrp = val["MntGrp"]
+        for i in range(100):
+            self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
+            self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
+            nmem = self.__rnd.randint(1, len(self.mycps.keys()) - 1)
+            mem = self.__rnd.sample(set(self.mycps.keys()), nmem)
+            self._cf.dp.SetCommandVariable(["MCPLIST", json.dumps(mem)])
+
+            nccp = self.__rnd.randint(1, len(self.mycps.keys()) - 1)
+            ccp = self.__rnd.sample(set(self.mycps.keys()), nccp)
+            cps = {}
+            for cp in ccp:
+                cps[cp] = bool(self.__rnd.randint(0, 1))
+
+            nacp = self.__rnd.randint(1, len(self.mycps.keys()) - 1)
+            acp = self.__rnd.sample(set(self.mycps.keys()), nacp)
+            acps = {}
+            for cp in acp:
+                acps[cp] = bool(self.__rnd.randint(0, 1))
+
+            cnf = json.loads(rs.profileConfiguration)
+            cnf["ComponentPreselection"] = json.dumps(acps)
+            cnf["ComponentSelection"] = json.dumps(cps)
+            rs.profileConfiguration = json.dumps(cnf)
+            # print "CPS", rs.components
+
+            res = json.loads(rs.componentClientSources([]))
+            self.checkICP(res, rs.components,
+                          strategy=None, dstype='CLIENT')
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_componentClientSources_components_var(self):
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        rs = self.openRecSelector()
+        rs.configDevice = val["ConfigDevice"]
+        rs.door = val["Door"]
+        rs.mntGrp = val["MntGrp"]
+        for i in range(100):
+            self._cf.dp.SetCommandVariable(
+                ["DSDICT", json.dumps(self.mydss)])
+            self._cf.dp.SetCommandVariable(
+                ["CPDICT", json.dumps(self.mycpsvar)])
+            nmem = self.__rnd.randint(1, len(self.mycpsvar.keys()) - 1)
+            mem = self.__rnd.sample(set(self.mycpsvar.keys()), nmem)
+            self._cf.dp.SetCommandVariable(["MCPLIST", json.dumps(mem)])
+
+            nccp = self.__rnd.randint(1, len(self.mycpsvar.keys()) - 1)
+            ccp = self.__rnd.sample(set(self.mycpsvar.keys()), nccp)
+            cps = {}
+            for cp in ccp:
+                cps[cp] = bool(self.__rnd.randint(0, 1))
+            rs.configVariables = '{"c01": "exp_c01", "c02": "exp_c02", ' + \
+                                 '"mca": "p09/mca/exp.02"}'
+            self._cf.dp.SetCommandVariable(["CHECKVARIABLES",
+                                            json.dumps(rs.configVariables)])
+            nacp = self.__rnd.randint(1, len(self.mycpsvar.keys()) - 1)
+            acp = self.__rnd.sample(set(self.mycpsvar.keys()), nacp)
+            acps = {}
+            for cp in acp:
+                acps[cp] = bool(self.__rnd.randint(0, 1))
+
+            cnf = json.loads(rs.profileConfiguration)
+            cnf["ComponentPreselection"] = json.dumps(acps)
+            cnf["ComponentSelection"] = json.dumps(cps)
+            rs.profileConfiguration = json.dumps(cnf)
+            print "CPS", rs.components
+
+            res = rs.componentClientSources([])
+            res = json.loads(
+                res.replace(
+                    "$var.c01", "exp_c01").replace(
+                        "$var.c02", "exp_c02").replace(
+                            "$var.mca", "p09/mca/exp.02"))
+            self.checkICP(res, rs.components,
+                          strategy=None, dstype='CLIENT')
 
 
 if __name__ == '__main__':

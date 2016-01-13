@@ -57,14 +57,22 @@ class NXSRecSelectorTest(SettingsTest.SettingsTest):
     def setUp(self):
         SettingsTest.SettingsTest.setUp(self)
         self._sv.setUp()
+
+    ## test starter
+    # \brief Common set up of Tango Server
+    def mySetUp(self):
         self._sv2.setUp()
 
     ## test closer
     # \brief Common tear down oif Tango Server
     def tearDown(self):
         self._sv.tearDown()
-        self._sv2.tearDown()
         SettingsTest.SettingsTest.tearDown(self)
+
+    ## test closer
+    # \brief Common tear down oif Tango Server
+    def myTearDown(self):
+        self._sv2.tearDown()
 
     def value(self, rs, name):
         print "VAL", json.loads(rs.profileConfiguration)

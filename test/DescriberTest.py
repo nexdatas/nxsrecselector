@@ -1173,8 +1173,8 @@ class DescriberTest(unittest.TestCase):
         for dst in dstypes:
             for st in strategies:
 
-                nmem = self.__rnd.randint(1, len(self.mydss.keys()) - 1)
-                mem = self.__rnd.sample(set(self.mydss.keys()), nmem)
+                nmem = self.__rnd.randint(1, len(self.mycps.keys()) - 1)
+                mem = self.__rnd.sample(set(self.mycps.keys()), nmem)
 
                 server = NoServer()
                 server.dsdict = self.mydss
