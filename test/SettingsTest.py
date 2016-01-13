@@ -16373,6 +16373,68 @@ class SettingsTest(unittest.TestCase):
             self.checkICP(res, rs.components,
                           strategy=None, dstype='CLIENT')
 
+    ## constructor test
+    # \brief It tests default settings
+    def test_create_remove_DynamicComponent(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        rs = self.openRecSelector()
+        rs.configDevice = val["ConfigDevice"]
+        rs.door = val["Door"]
+        rs.mntGrp = val["MntGrp"]
+
+        cps = {"empty":
+               '<?xml version="1.0" ?>\n<definition/>\n'}
+        dname = "__dynamic_component__"
+
+        cpname = rs.createDynamicComponent([])
+        self.assertEqual(cpname, dname)
+        self._cf.dp.Components([cpname])
+        self.assertEqual(cps["empty"], self._cf.dp.Components([cpname])[0])
+
+        cpname = rs.createDynamicComponent([])
+        self.assertEqual(cpname, dname + "x")
+        self._cf.dp.Components([cpname])
+        self.assertEqual(cps["empty"], self._cf.dp.Components([cpname])[0])
+
+        cpname = rs.createDynamicComponent([])
+        self.assertEqual(cpname, dname + "xx")
+        self._cf.dp.Components([cpname])
+        self.assertEqual(cps["empty"], self._cf.dp.Components([cpname])[0])
+
+        cpname = rs.createDynamicComponent([])
+        self.assertEqual(cpname, dname + "xxx")
+        self._cf.dp.Components([cpname])
+        self.assertEqual(cps["empty"], self._cf.dp.Components([cpname])[0])
+
+        rs.removeDynamicComponent(dname + "xx")
+        self.assertEqual(self._cf.dp.Components([dname + "xx"]), [])
+
+        cpname = rs.createDynamicComponent([])
+        self.assertEqual(cpname, dname + "xx")
+        self._cf.dp.Components([cpname])
+        self.assertEqual(cps["empty"], self._cf.dp.Components([cpname])[0])
+
+        rs.removeDynamicComponent(dname + "x")
+        self.assertEqual(self._cf.dp.Components([dname + "x"]), [])
+
+        rs.removeDynamicComponent(dname + "xxx")
+        self.assertEqual(self._cf.dp.Components([dname + "xxx"]), [])
+
+        rs.removeDynamicComponent(dname + "xx")
+        self.assertEqual(self._cf.dp.Components([dname + "xx"]), [])
+
+        rs.removeDynamicComponent(dname + "xx")
+        self.assertEqual(self._cf.dp.Components([dname + "xx"]), [])
+
+        rs.removeDynamicComponent(dname)
+        self.assertEqual(self._cf.dp.Components([dname]), [])
+
+        self.myAssertRaise(Exception, rs.removeDynamicComponent, "sdfsdf")
 
 if __name__ == '__main__':
     unittest.main()

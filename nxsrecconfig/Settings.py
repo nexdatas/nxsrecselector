@@ -353,13 +353,19 @@ class Settings(object):
 
     def channelProperties(self, ptype):
         props = json.loads(self.__selector["ChannelProperties"])
-        return json.dumps(props[ptype])
+        if ptype in props.keys():
+            return json.dumps(props[ptype])
+        else:
+            return '{}'
 
     def setChannelProperties(self, typeandvariables):
         ptype, variables = typeandvariables
         jvar = Utils.stringToDictJson(variables)
         props = json.loads(self.__selector["ChannelProperties"])
-        lvar = json.dumps(props[ptype])
+        if ptype in props.keys():
+            lvar = json.dumps(props[ptype])
+        else:
+            lvar = '{}'
         if lvar != jvar:
             props[ptype] = json.loads(jvar)
             self.__selector["ChannelProperties"] = json.dumps(props)
