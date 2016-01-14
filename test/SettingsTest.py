@@ -9898,9 +9898,9 @@ class SettingsTest(unittest.TestCase):
             common = set(cps) & set(dss)
             self.dump(rs)
 
-            mds = rs.dataSources
-            dds = rs.componentDataSources()
-            rdss = rs.selectedDataSources()
+            mds = rs.dataSources or []
+            dds = rs.componentDataSources() or []
+            rdss = rs.selectedDataSources() or []
 
             self.assertEqual(set(mds), set(dds) | set(rdss))
 
