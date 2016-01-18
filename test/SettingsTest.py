@@ -17345,6 +17345,113 @@ class SettingsTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
+    def test_create_sel(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        rs = self.openRecSelector()
+        rs.configDevice = val["ConfigDevice"]
+        rs.door = val["Door"]
+        rs.mntGrp = val["MntGrp"]
+        cnfdef = json.loads(rs.profileConfiguration)
+        cps = {
+            "empty":
+                '<?xml version="1.0" ?>\n<definition/>\n',
+            "one":
+                '<?xml version="1.0" ?>\n<definition>\n'
+            '<group name="entry$var.serialno" type="NXentry">\n'
+            '<group name="instrument" type="NXinstrument">\n'
+            '<group name="collection" type="NXcollection">\n'
+            '<field name="one" type="NX_CHAR">\n<strategy mode="STEP"/>\n'
+            '<datasource name="one" type="CLIENT">\n<record name="one"/>\n'
+            '</datasource>\n</field>\n'
+            '</group>\n</group>\n'
+            '<group name="data" type="NXdata">\n'
+            '<link name="one" target="/entry$var.serialno:'
+            'NXentry/NXinstrument/collection/one"/>\n'
+            '</group>\n</group>\n'
+            '</definition>\n',
+            "two":
+                '<?xml version="1.0" ?>\n<definition>\n'
+            '<group name="entry$var.serialno" type="NXentry">\n'
+            '<group name="instrument" type="NXinstrument">\n'
+            '<group name="collection" type="NXcollection">\n'
+            '<field name="d1" type="NX_CHAR">\n<strategy mode="STEP"/>\n'
+            '<datasource name="d1" type="CLIENT">\n<record name="d1"/>\n'
+            '</datasource>\n</field>\n'
+            '</group>\n</group>\n'
+            '<group name="data" type="NXdata">\n'
+            '<link name="d1" target="/entry$var.serialno:'
+            'NXentry/NXinstrument/collection/d1"/>\n'
+            '</group>\n</group>\n'
+            '<group name="entry$var.serialno" type="NXentry">\n'
+            '<group name="instrument" type="NXinstrument">\n'
+            '<group name="collection" type="NXcollection">\n'
+            '<field name="d2" type="NX_CHAR">\n<strategy mode="STEP"/>\n'
+            '<datasource name="d2" type="CLIENT">\n<record name="d2"/>\n'
+            '</datasource>\n</field>\n</group>\n</group>\n'
+            '<group name="data" type="NXdata">\n'
+            '<link name="d2" target="/entry$var.serialno:'
+            'NXentry/NXinstrument/collection/d2"/>\n'
+            '</group>\n</group>\n'
+            '</definition>\n',
+            "three":
+                '<?xml version="1.0" ?>\n<definition>\n'
+            '<group name="entry$var.serialno" type="NXentry">\n'
+            '<group name="instrument" type="NXinstrument">\n'
+            '<group name="collection" type="NXcollection">\n'
+            '<field name="ds1" type="NX_CHAR">\n<strategy mode="STEP"/>\n'
+            '<datasource name="ds1" type="CLIENT">\n<record name="ds1"/>\n'
+            '</datasource>\n</field>\n'
+            '</group>\n</group>\n'
+            '<group name="data" type="NXdata">\n'
+            '<link name="ds1" target="/entry$var.serialno:'
+            'NXentry/NXinstrument/collection/ds1"/>\n'
+            '</group>\n</group>\n'
+            '<group name="entry$var.serialno" type="NXentry">\n'
+            '<group name="instrument" type="NXinstrument">\n'
+            '<group name="collection" type="NXcollection">\n'
+            '<field name="ds2" type="NX_CHAR">\n<strategy mode="STEP"/>\n'
+            '<datasource name="ds2" type="CLIENT">\n<record name="ds2"/>\n'
+            '</datasource>\n</field>\n</group>\n</group>\n'
+            '<group name="data" type="NXdata">\n'
+            '<link name="ds2" target="/entry$var.serialno:'
+            'NXentry/NXinstrument/collection/ds2"/>\n'
+            '</group>\n</group>\n'
+            '<group name="entry$var.serialno" type="NXentry">\n'
+            '<group name="instrument" type="NXinstrument">\n'
+            '<group name="collection" type="NXcollection">\n'
+            '<field name="ds3" type="NX_CHAR">\n<strategy mode="STEP"/>\n'
+            '<datasource name="ds3" type="CLIENT">\n<record name="ds3"/>\n'
+            '</datasource>\n</field>\n</group>\n</group>\n'
+            '<group name="data" type="NXdata">\n'
+            '<link name="ds3" target="/entry$var.serialno:'
+            'NXentry/NXinstrument/collection/ds3"/>\n'
+            '</group>\n</group>\n'
+            '</definition>\n'
+        }
+        dsdict = {
+            "empty": [],
+            "one": ["one"],
+            "two": ["d1", "d2"],
+            "three": ["ds1", "ds2", "ds3"],
+        }
+        dname = "__dynamic_component__"
+        for lb, ds in dsdict.items():
+            cnf = dict(cnfdef)
+            cnf["DataSourceSelection"] = json.dumps(
+                dict((dd, True) for dd in ds))
+            rs.profileConfiguration = str(json.dumps(cnf))
+            print rs.selectedDataSources()
+            cpname = rs.createDynamicComponent([])
+            comp = self._cf.dp.Components([cpname])[0]
+            self.assertEqual(cps["empty"], comp)
+
+    ## constructor test
+    # \brief It tests default settings
     def test_create_step_no_type(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -18403,6 +18510,103 @@ class SettingsTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
+    def test_create_sel_typeshape_tango(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        rs = self.openRecSelector()
+        rs.configDevice = val["ConfigDevice"]
+        rs.door = val["Door"]
+        rs.mntGrp = val["MntGrp"]
+        cnfdef = json.loads(rs.profileConfiguration)
+
+        defbg = '<?xml version="1.0" ?>\n<definition>\n'
+        defend = '</definition>\n'
+        groupbg = '<group name="entry$var.serialno" type="NXentry">\n' + \
+            '<group name="instrument" type="NXinstrument">\n' + \
+            '<group name="collection" type="NXcollection">\n'
+        groupend = '</group>\n'
+
+        fieldbg = '<field name="%s" type="%s">\n<strategy mode="STEP"/>\n'
+        fieldend = '</field>\n'
+
+        link = '<group name="data" type="NXdata">\n' + \
+            '<link name="%s" target="%s/%s"/>\n</group>\n'
+
+        dimbg = '<dimensions rank="%s">\n'
+        dim = '<dim index="%s" value="%s"/>\n'
+        dimend = '</dimensions>\n'
+
+        self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
+#        dc = DynamicComponent(self._cf.dp)
+        for i in range(4):
+            for ds, dsxml in self.smydss.items():
+                ms = self.smydsspar[ds]
+                sds = ds.split("_")
+                tp = sds[1]
+                cnf = dict(cnfdef)
+                labels = {}
+                paths = {}
+                links = {}
+                types = {}
+                shapes = {}
+
+                if i == 0:
+                    cnf["DefaultDynamicLinks"] = False
+                    cnf["DefaultDynamicPath"] = self.__defaultpath
+                elif i == 1:
+                    cnf["DefaultDynamicLinks"] = True
+                    cnf["DefaultDynamicPath"] = self.__defaultpath
+                elif i == 2:
+                    links = {ds: False}
+                elif i == 3:
+                    links = {ds: True}
+                print "I = ", i
+                cnf["ChannelProperties"] = json.dumps(
+                    {
+                        "label": labels,
+                        "nexus_path": paths,
+                        "link": links,
+                        "data_type": types,
+                        "shape": shapes
+                    }
+                )
+                cnf["DataSourceSelection"] = json.dumps({ds: True})
+                rs.profileConfiguration = str(json.dumps(cnf))
+                cpname = rs.createDynamicComponent([])
+                comp = self._cf.dp.Components([cpname])[0]
+
+                indom = xml.dom.minidom.parseString(dsxml)
+                dss = indom.getElementsByTagName("datasource")
+                if not ds.startswith("client_") and sds[1] != 'encoded':
+                    nxstype = self.__npTn2[tp]
+                else:
+                    nxstype = 'NX_CHAR'
+                mycps = defbg + groupbg + fieldbg % (
+                    ds.lower(), nxstype)
+
+                mycps += dss[0].toprettyxml(indent="")
+                mstr = ""
+                if ms:
+                    mstr += dimbg % len(ms)
+                    for ind, val in enumerate(ms):
+                        mstr += dim % (ind + 1, val)
+                    mstr += dimend
+
+                mycps += mstr
+                mycps += fieldend + groupend + groupend
+                lk = link % (ds.lower(), self.__defaultpath,
+                             ds.lower())
+                mycps += lk if i % 2 else ""
+                mycps += groupend + defend
+
+                self.assertEqual(comp, mycps)
+
+    ## constructor test
+    # \brief It tests default settings
     def test_create_step_typeshape_tango(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -18585,6 +18789,184 @@ class SettingsTest(unittest.TestCase):
                 if ms:
                     mstr += dimbg % len(ms)
                     for ind, val in enumerate(ms):
+                        mstr += dim % (ind + 1, val)
+                    mstr += dimend
+
+                mycps += mstr
+                mycps += fieldend + groupend + groupend
+                lk = link % (ds.lower(), self.__defaultpath,
+                             ds.lower())
+                mycps += lk if i % 2 else ""
+                mycps += groupend + defend
+
+                self.assertEqual(comp, mycps)
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_create_sel_typeshape_tango(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        rs = self.openRecSelector()
+        rs.configDevice = val["ConfigDevice"]
+        rs.door = val["Door"]
+        rs.mntGrp = val["MntGrp"]
+        cnfdef = json.loads(rs.profileConfiguration)
+
+        defbg = '<?xml version="1.0" ?>\n<definition>\n'
+        defend = '</definition>\n'
+        groupbg = '<group name="entry$var.serialno" type="NXentry">\n' + \
+            '<group name="instrument" type="NXinstrument">\n' + \
+            '<group name="collection" type="NXcollection">\n'
+        groupend = '</group>\n'
+
+        fieldbg = '<field name="%s" type="%s">\n<strategy mode="STEP"/>\n'
+        fieldend = '</field>\n'
+
+        link = '<group name="data" type="NXdata">\n' + \
+            '<link name="%s" target="%s/%s"/>\n</group>\n'
+
+        dimbg = '<dimensions rank="%s">\n'
+        dim = '<dim index="%s" value="%s"/>\n'
+        dimend = '</dimensions>\n'
+
+        self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
+        for i, nxstp in enumerate(self.__npTn.values()):
+            for ds, dsxml in self.smydss.items():
+                ms = self.smydsspar[ds]
+                ms2 = [self.__rnd.randint(0, 3000)
+                       for _ in range(self.__rnd.randint(0, 3))]
+                lbl = self.getRandomName(20)
+                sds = ds.split("_")
+                tp = sds[1]
+                cnf = dict(cnfdef)
+                labels = {}
+                paths = {}
+                links = {}
+                types = {}
+                shapes = {}
+
+                if i == 0:
+                    cnf["DefaultDynamicLinks"] = False
+                    cnf["DefaultDynamicPath"] = self.__defaultpath
+                    types = {ds: nxstp}
+                    shapes = {ds: ms2}
+                elif i == 1:
+                    cnf["DefaultDynamicLinks"] = True
+                    cnf["DefaultDynamicPath"] = self.__defaultpath
+                    types = {ds: nxstp}
+                    shapes = {ds: ms2}
+                elif i == 2:
+                    links = {ds: False}
+                    types = {ds: nxstp}
+                    shapes = {ds: ms2}
+                elif i == 3:
+                    links = {ds: True}
+                    types = {ds: nxstp}
+                    shapes = {ds: ms2}
+                elif i == 4:
+                    cnf["DefaultDynamicLinks"] = True
+                    cnf["DefaultDynamicPath"] = self.__defaultpath
+                    links = {ds: False}
+                    types = {ds: nxstp}
+                    shapes = {ds: ms2}
+                elif i == 5:
+                    cnf["DefaultDynamicLinks"] = False
+                    cnf["DefaultDynamicPath"] = self.__defaultpath
+                    links = {ds: True}
+                    types = {ds: nxstp}
+                    shapes = {ds: ms2}
+                elif i == 6:
+                    cnf["DefaultDynamicLinks"] = False
+                    cnf["DefaultDynamicPath"] = self.__defaultpath
+                    links = {"dssd": True}
+                    types = {ds: nxstp}
+                    shapes = {ds: ms2}
+                elif i == 7:
+                    labels = {ds: lbl}
+                    types = {ds: nxstp}
+                    shapes = {ds: ms2}
+                elif i == 8:
+                    pass
+                    cnf["DefaultDynamicLinks"] = False
+                    cnf["DefaultDynamicPath"] = self.__defaultpath
+                    labels = {ds: lbl}
+                    types = {ds: nxstp}
+                    shapes = {ds: ms2}
+                elif i == 9:
+                    cnf["DefaultDynamicLinks"] = True
+                    cnf["DefaultDynamicPath"] = self.__defaultpath
+                    labels = {ds: lbl}
+                    types = {ds: nxstp}
+                    shapes = {ds: ms2}
+                elif i == 10:
+                    labels = {ds: lbl}
+                    links = {lbl: False}
+                    types = {ds: nxstp}
+                    shapes = {ds: ms2}
+                elif i == 11:
+                    labels = {ds: lbl}
+                    links = {lbl: True}
+                    types = {ds: nxstp}
+                    shapes = {ds: ms2}
+                elif i == 12:
+                    cnf["DefaultDynamicLinks"] = True
+                    cnf["DefaultDynamicPath"] = self.__defaultpath
+                    labels = {ds: lbl}
+                    links = {lbl: False}
+                    types = {ds: nxstp}
+                    shapes = {ds: ms2}
+                elif i == 13:
+                    cnf["DefaultDynamicLinks"] = False
+                    cnf["DefaultDynamicPath"] = self.__defaultpath
+                    labels = {ds: lbl}
+                    links = {lbl: True}
+                    types = {ds: nxstp}
+                    shapes = {ds: ms2}
+                elif i == 14:
+                    cnf["DefaultDynamicLinks"] = False
+                    cnf["DefaultDynamicPath"] = self.__defaultpath
+                    labels = {ds: lbl}
+                    links = {"dssd": True}
+                    types = {ds: nxstp}
+                    shapes = {ds: ms2}
+                elif i == 15:
+                    labels = {ds: lbl}
+                    types = {ds: nxstp}
+                    shapes = {ds: ms2}
+
+                cnf["ChannelProperties"] = json.dumps(
+                    {
+                        "label": labels,
+                        "nexus_path": paths,
+                        "link": links,
+                        "data_type": types,
+                        "shape": shapes
+                    }
+                )
+                print "I = ", i
+                cnf["DataSourceSelection"] = json.dumps({ds: True})
+                rs.profileConfiguration = str(json.dumps(cnf))
+                cpname = rs.createDynamicComponent([])
+
+#                dc.setStepDSources([ds])
+#                cpname = dc.create()
+                comp = self._cf.dp.Components([cpname])[0]
+
+                indom = xml.dom.minidom.parseString(dsxml)
+                dss = indom.getElementsByTagName("datasource")
+                nxstype = nxstp
+                mycps = defbg + groupbg + fieldbg % (
+                    ds.lower(), nxstype)
+
+                mycps += dss[0].toprettyxml(indent="")
+                mstr = ""
+                if ms2:
+                    mstr += dimbg % len(ms2)
+                    for ind, val in enumerate(ms2):
                         mstr += dim % (ind + 1, val)
                     mstr += dimend
 
@@ -18952,6 +19334,175 @@ class SettingsTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
+    def test_create_init_typeshape_tango_wol(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        rs = self.openRecSelector()
+        rs.configDevice = val["ConfigDevice"]
+        rs.door = val["Door"]
+        rs.mntGrp = val["MntGrp"]
+        cnfdef = json.loads(rs.profileConfiguration)
+
+        defbg = '<?xml version="1.0" ?>\n<definition>\n'
+        defend = '</definition>\n'
+        groupbg = '<group name="entry$var.serialno" type="NXentry">\n' + \
+            '<group name="instrument" type="NXinstrument">\n' + \
+            '<group name="collection" type="NXcollection">\n'
+        groupend = '</group>\n'
+
+        fieldbg = '<field name="%s" type="%s">\n<strategy mode="INIT"/>\n'
+        fieldend = '</field>\n'
+
+        link = '<group name="data" type="NXdata">\n' + \
+            '<link name="%s" target="%s/%s"/>\n</group>\n'
+
+        dimbg = '<dimensions rank="%s">\n'
+        dim = '<dim index="%s" value="%s"/>\n'
+        dimend = '</dimensions>\n'
+
+        self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
+        self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.smydss)])
+        for i, nxstp in enumerate(self.__npTn.values()):
+            for ds, dsxml in self.smydss.items():
+                ms = self.smydsspar[ds]
+                ms2 = [self.__rnd.randint(0, 3000)
+                       for _ in range(self.__rnd.randint(0, 3))]
+                lbl = self.getRandomName(20)
+                sds = ds.split("_")
+                tp = sds[1]
+                cnf = dict(cnfdef)
+                labels = {}
+                paths = {}
+                links = {}
+                types = {}
+                shapes = {}
+                if i == 0:
+                    cnf["DefaultDynamicPath"] = self.__defaultpath
+                    types = {ds: nxstp}
+                    shapes = {ds: ms2}
+                elif i == 1:
+                    cnf["DefaultDynamicLinks"] = True
+                    cnf["DefaultDynamicPath"] = self.__defaultpath
+                    types = {ds: nxstp}
+                    shapes = {ds: ms2}
+                elif i == 2:
+                    types = {ds: nxstp}
+                    shapes = {ds: ms2}
+                elif i == 3:
+                    links = {ds: True}
+                    types = {ds: nxstp}
+                    shapes = {ds: ms2}
+                elif i == 4:
+                    cnf["DefaultDynamicPath"] = self.__defaultpath
+                    types = {ds: nxstp}
+                    shapes = {ds: ms2}
+                elif i == 5:
+                    cnf["DefaultDynamicLinks"] = False
+                    cnf["DefaultDynamicPath"] = self.__defaultpath
+                    links = {ds: True}
+                    types = {ds: nxstp}
+                    shapes = {ds: ms2}
+                elif i == 6:
+                    cnf["DefaultDynamicPath"] = self.__defaultpath
+                    links = {"dssd": True}
+                    types = {ds: nxstp}
+                    shapes = {ds: ms2}
+                elif i == 7:
+                    labels = {ds: lbl}
+                    types = {ds: nxstp}
+                    shapes = {ds: ms2}
+                elif i == 8:
+                    pass
+                    cnf["DefaultDynamicPath"] = self.__defaultpath
+                    labels = {ds: lbl}
+                    types = {ds: nxstp}
+                    shapes = {ds: ms2}
+                elif i == 9:
+                    cnf["DefaultDynamicLinks"] = True
+                    cnf["DefaultDynamicPath"] = self.__defaultpath
+                    labels = {ds: lbl}
+                    types = {ds: nxstp}
+                    shapes = {ds: ms2}
+                elif i == 10:
+                    labels = {ds: lbl}
+                    types = {ds: nxstp}
+                    shapes = {ds: ms2}
+                elif i == 11:
+                    labels = {ds: lbl}
+                    links = {lbl: True}
+                    types = {ds: nxstp}
+                    shapes = {ds: ms2}
+                elif i == 12:
+                    cnf["DefaultDynamicLinks"] = True
+                    cnf["DefaultDynamicPath"] = self.__defaultpath
+                    labels = {ds: lbl}
+                    types = {ds: nxstp}
+                    shapes = {ds: ms2}
+                elif i == 13:
+                    cnf["DefaultDynamicLinks"] = False
+                    cnf["DefaultDynamicPath"] = self.__defaultpath
+                    labels = {ds: lbl}
+                    links = {lbl: True}
+                    types = {ds: nxstp}
+                    shapes = {ds: ms2}
+                elif i == 14:
+                    cnf["DefaultDynamicPath"] = self.__defaultpath
+                    labels = {ds: lbl}
+                    links = {"dssd": True}
+                    types = {ds: nxstp}
+                    shapes = {ds: ms2}
+                elif i == 15:
+                    labels = {ds: lbl}
+                    types = {ds: nxstp}
+                    shapes = {ds: ms2}
+
+                cnf["ChannelProperties"] = json.dumps(
+                    {
+                        "label": labels,
+                        "nexus_path": paths,
+                        "link": links,
+                        "data_type": types,
+                        "shape": shapes
+                    }
+                )
+                print "I = ", i
+                if i % 2 == 0:
+                    cnf["ComponentSelection"] = str(json.dumps({ds: True}))
+                rs.profileConfiguration = str(json.dumps(cnf))
+                cpname = rs.createDynamicComponent([
+                    None, None,
+                    str(json.dumps([ds]))])
+                comp = self._cf.dp.Components([cpname])[0]
+
+                indom = xml.dom.minidom.parseString(dsxml)
+                dss = indom.getElementsByTagName("datasource")
+                nxstype = nxstp
+                mycps = defbg + groupbg + fieldbg % (
+                    ds.lower(), nxstype)
+
+                mycps += dss[0].toprettyxml(indent="")
+                mstr = ""
+                if ms2:
+                    mstr += dimbg % len(ms2)
+                    for ind, val in enumerate(ms2):
+                        mstr += dim % (ind + 1, val)
+                    mstr += dimend
+
+                mycps += mstr
+                mycps += fieldend + groupend + groupend
+                lk = link % (ds.lower(), self.__defaultpath,
+                             ds.lower())
+                mycps += lk if i % 2 else ""
+                mycps += groupend + defend
+
+                self.assertEqual(comp, mycps)
+
+    ## constructor test
+    # \brief It tests default settings
     def test_create_step_fieldpath(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -19160,6 +19711,215 @@ class SettingsTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
+    def test_create_sel_fieldpath(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        rs = self.openRecSelector()
+        rs.configDevice = val["ConfigDevice"]
+        rs.door = val["Door"]
+        rs.mntGrp = val["MntGrp"]
+        cnfdef = json.loads(rs.profileConfiguration)
+        cps = {
+            "shapetype":
+            '<?xml version="1.0" ?>\n<definition>\n'
+            '<group name="entry$var.serialno" type="NXentry">\n'
+            '<group name="instrument" type="NXinstrument">\n'
+            '<group name="collection" type="NXcollection">\n%s'
+            '</group>\n</group>\n%s</group>\n</definition>\n',
+        }
+
+        defbg = '<?xml version="1.0" ?>\n<definition>\n'
+        defend = '</definition>\n'
+        groupbg = '<group name="%s" type="%s">\n'
+        groupend = '</group>\n'
+
+        field = '<field name="%s" type="%s">\n<strategy mode="STEP"/>\n' + \
+            '<datasource name="%s" type="CLIENT">\n' + \
+            '<record name="%s"/>\n</datasource>\n%s</field>\n'
+        fieldbg = '<field name="%s" type="%s">\n<strategy mode="STEP"/>\n'
+        fieldend = '</field>\n'
+
+        link = '<group name="data" type="NXdata">\n' + \
+            '<link name="%s" target="%s/%s"/>\n</group>\n'
+
+        dimbg = '<dimensions rank="%s">\n'
+        dim = '<dim index="%s" value="%s"/>\n'
+        dimend = '</dimensions>\n'
+
+        dname = "__dynamic_component__"
+
+        self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
+
+        db = PyTango.Database()
+        try:
+            for i in range(8):
+                print "I = ", i
+                for ds, dsxml in self.smydss.items():
+                    ms = self.smydsspar[ds]
+                    sds = ds.split("_")
+                    tp = sds[1]
+                    indom = xml.dom.minidom.parseString(dsxml)
+                    dss = indom.getElementsByTagName("datasource")
+                    if not ds.startswith("client_") and sds[1] != 'encoded':
+                        nxstp = self.__npTn2[tp]
+                    else:
+                        nxstp = 'NX_CHAR'
+#                    dc = DynamicComponent(self._cf.dp)
+
+                    lbl = self.getRandomName(20)
+                    fieldname = self.getRandomName(20)
+#                    print "FIELD", fieldname
+                    path = [
+                        (self.getRandomName(20)
+                         if self.__rnd.randint(0, 1) else None,
+                         ("NX" + self.getRandomName(20))
+                         if self.__rnd.randint(0, 1) else None)
+                        for _ in range(self.__rnd.randint(0, 10))]
+#                    print "path0", path, len(path)
+                    path = [nd for nd in path if (
+                            nd != (None, None) and
+                            nd[0] and not nd[0].startswith("NX"))]
+#                    print "path1", path, len(path)
+                    mypath = ""
+                    for node in path:
+                        mypath += "/"
+                        if node[0]:
+                            mypath += node[0]
+                            if node[1]:
+                                mypath += ":"
+                        if node[1]:
+                            mypath += node[1]
+#                    mypath += fieldname
+#                    print "path2", path, len(path)
+#                    print "PATH", path, mypath
+#                    print "TP = ", tp
+                    tmptp = self.__rnd.choice(self.__npTn.keys())
+                    cnf = dict(cnfdef)
+                    labels = {}
+                    paths = {}
+                    links = {}
+                    types = {}
+                    shapes = {}
+
+                    if i == 0:
+                        cnf["DefaultDynamicLinks"] = False
+                        cnf["DefaultDynamicPath"] = mypath
+                    elif i == 1:
+                        cnf["DefaultDynamicLinks"] = True
+                        cnf["DefaultDynamicPath"] = mypath
+                    elif i == 2:
+                        paths = {ds: mypath + "/" + fieldname}
+                        links = {ds: False}
+                    elif i == 3:
+                        paths = {ds: mypath + "/" + fieldname}
+                        links = {ds: True}
+                    elif i == 4:
+                        cnf["DefaultDynamicLinks"] = False
+                        cnf["DefaultDynamicPath"] = mypath
+                        labels = {ds: lbl}
+                    elif i == 5:
+                        cnf["DefaultDynamicLinks"] = True
+                        cnf["DefaultDynamicPath"] = mypath
+                        labels = {ds: lbl}
+                    elif i == 6:
+                        labels = {ds: lbl}
+                        paths = {ds: mypath + "/" + fieldname}
+                        links = {ds: False}
+                    elif i == 7:
+                        labels = {ds: lbl}
+                        paths = {ds: mypath + "/" + fieldname}
+                        links = {ds: True}
+                    cnf["ChannelProperties"] = json.dumps(
+                        {
+                            "label": labels,
+                            "nexus_path": paths,
+                            "link": links,
+                            "data_type": types,
+                            "shape": shapes
+                        }
+                    )
+                    cnf["DataSourceSelection"] = json.dumps({ds: True})
+
+                    print "I = ", i
+                    rs.profileConfiguration = str(json.dumps(cnf))
+                    cpname = rs.createDynamicComponent([])
+                    mstr = ""
+                    if ms:
+                        mstr += dimbg % len(ms)
+                        for ind, val in enumerate(ms):
+                            mstr += dim % (ind + 1, val)
+                        mstr += dimend
+
+                    comp = self._cf.dp.Components([cpname])[0]
+                    lk = link % (ds, mypath, ds)
+                    if i % 4 < 2:
+                        fd = fieldbg % (ds.lower(), nxstp)
+                    else:
+                        fname = fieldname.lower()
+                        fd = fieldbg % (fieldname.lower(), nxstp)
+                    fd += dss[0].toprettyxml(indent="") + mstr + fieldend
+
+                    if path or i % 4 > 1:
+
+                        if i % 4 < 2:
+                            lk = link % (ds.lower(), mypath, ds.lower())
+                        else:
+                            lk = link % (fieldname.lower(), mypath,
+                                         fieldname.lower())
+                        mycps = defbg
+                        for nm, gtp in path:
+                            if not nm:
+                                nm = gtp[2:]
+                            if not gtp:
+                                gtp = 'NX' + nm
+                            mycps += groupbg % (nm, gtp)
+                        mycps += fd
+
+                        for j in range(len(path) - 1):
+                            mycps += groupend
+                        mycps += lk if i % 2 else ""
+                        mycps += groupend
+                        mycps += defend
+
+                        mycps2 = defbg
+                        for k, (nm, gtp) in enumerate(path):
+                            if not nm:
+                                nm = gtp[2:]
+                            if not gtp:
+                                gtp = 'NX' + nm
+                            mycps2 += groupbg % (nm, gtp)
+                            if not k:
+                                mycps2 += lk if i % 2 else ""
+                        mycps2 += fd
+
+                        for _ in path:
+                            mycps2 += groupend
+                        mycps2 += defend
+#                        print "FIRST"
+                    else:
+                        if i % 4 < 2:
+                            lk = link % (ds.lower(),
+                                         self.__defaultpath, ds.lower())
+                        else:
+                            lk = link % (fieldname.lower(), self.__defaultpath,
+                                         fieldname.lower())
+                        mycps = cps["shapetype"] % (
+                            fd,
+                            lk if i % 2 else "")
+                        mycps2 = mycps
+                    try:
+                        self.assertEqual(comp, mycps2)
+                    except:
+                        self.assertEqual(comp, mycps)
+        finally:
+            pass
+
+    ## constructor test
+    # \brief It tests default settings
     def test_create_init_fieldpath(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -19291,6 +20051,213 @@ class SettingsTest(unittest.TestCase):
                         }
                     )
                     print "I = ", i
+                    rs.profileConfiguration = str(json.dumps(cnf))
+
+                    cpname = rs.createDynamicComponent([
+                        None, None,
+                        str(json.dumps([ds]))])
+                    mstr = ""
+                    if ms:
+                        mstr += dimbg % len(ms)
+                        for ind, val in enumerate(ms):
+                            mstr += dim % (ind + 1, val)
+                        mstr += dimend
+
+                    comp = self._cf.dp.Components([cpname])[0]
+                    lk = link % (ds, mypath, ds)
+                    if i % 4 < 2:
+                        fd = fieldbg % (ds.lower(), nxstp)
+                    else:
+                        fname = fieldname.lower()
+                        fd = fieldbg % (fieldname.lower(), nxstp)
+                    fd += dss[0].toprettyxml(indent="") + mstr + fieldend
+
+                    if path or i % 4 > 1:
+
+                        if i % 4 < 2:
+                            lk = link % (ds.lower(), mypath, ds.lower())
+                        else:
+                            lk = link % (fieldname.lower(), mypath,
+                                         fieldname.lower())
+                        mycps = defbg
+                        for nm, gtp in path:
+                            if not nm:
+                                nm = gtp[2:]
+                            if not gtp:
+                                gtp = 'NX' + nm
+                            mycps += groupbg % (nm, gtp)
+                        mycps += fd
+
+                        for j in range(len(path) - 1):
+                            mycps += groupend
+                        mycps += lk if i % 2 else ""
+                        mycps += groupend
+                        mycps += defend
+
+                        mycps2 = defbg
+                        for k, (nm, gtp) in enumerate(path):
+                            if not nm:
+                                nm = gtp[2:]
+                            if not gtp:
+                                gtp = 'NX' + nm
+                            mycps2 += groupbg % (nm, gtp)
+                            if not k:
+                                mycps2 += lk if i % 2 else ""
+                        mycps2 += fd
+
+                        for _ in path:
+                            mycps2 += groupend
+                        mycps2 += defend
+                    else:
+                        if i % 4 < 2:
+                            lk = link % (ds.lower(),
+                                         self.__defaultpath, ds.lower())
+                        else:
+                            lk = link % (fieldname.lower(), self.__defaultpath,
+                                         fieldname.lower())
+                        mycps = cps["shapetype"] % (
+                            fd,
+                            lk if i % 2 else "")
+                        mycps2 = mycps
+                    try:
+                        self.assertEqual(comp, mycps2)
+                    except:
+                        self.assertEqual(comp, mycps)
+        finally:
+            pass
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_create_init_fieldpath_wol(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        rs = self.openRecSelector()
+        rs.configDevice = val["ConfigDevice"]
+        rs.door = val["Door"]
+        rs.mntGrp = val["MntGrp"]
+        cnfdef = json.loads(rs.profileConfiguration)
+        cps = {
+            "shapetype":
+                '<?xml version="1.0" ?>\n<definition>\n'
+            '<group name="entry$var.serialno" type="NXentry">\n'
+            '<group name="instrument" type="NXinstrument">\n'
+            '<group name="collection" type="NXcollection">\n%s'
+            '</group>\n</group>\n%s</group>\n</definition>\n',
+        }
+
+        defbg = '<?xml version="1.0" ?>\n<definition>\n'
+        defend = '</definition>\n'
+        groupbg = '<group name="%s" type="%s">\n'
+        groupend = '</group>\n'
+
+        field = '<field name="%s" type="%s">\n<strategy mode="INIT"/>\n' + \
+            '<datasource name="%s" type="CLIENT">\n' + \
+            '<record name="%s"/>\n</datasource>\n%s</field>\n'
+        fieldbg = '<field name="%s" type="%s">\n<strategy mode="INIT"/>\n'
+        fieldend = '</field>\n'
+
+        link = '<group name="data" type="NXdata">\n' + \
+            '<link name="%s" target="%s/%s"/>\n</group>\n'
+
+        dimbg = '<dimensions rank="%s">\n'
+        dim = '<dim index="%s" value="%s"/>\n'
+        dimend = '</dimensions>\n'
+
+        dname = "__dynamic_component__"
+
+        self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
+        self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.smydss)])
+
+        db = PyTango.Database()
+        try:
+            for i in range(8):
+                print "I = ", i
+                for ds, dsxml in self.smydss.items():
+                    ms = self.smydsspar[ds]
+                    sds = ds.split("_")
+                    tp = sds[1]
+                    indom = xml.dom.minidom.parseString(dsxml)
+                    dss = indom.getElementsByTagName("datasource")
+                    if not ds.startswith("client_") and sds[1] != 'encoded':
+                        nxstp = self.__npTn2[tp]
+                    else:
+                        nxstp = 'NX_CHAR'
+
+                    lbl = self.getRandomName(20)
+                    fieldname = self.getRandomName(20)
+#                    print "FIELD", fieldname
+                    path = [
+                        (self.getRandomName(20)
+                         if self.__rnd.randint(0, 1) else None,
+                         ("NX" + self.getRandomName(20))
+                         if self.__rnd.randint(0, 1) else None)
+                        for _ in range(self.__rnd.randint(0, 10))]
+#                    print "path0", path, len(path)
+                    path = [nd for nd in path if (
+                            nd != (None, None) and
+                            nd[0] and not nd[0].startswith("NX"))]
+#                    print "path1", path, len(path)
+                    mypath = ""
+                    for node in path:
+                        mypath += "/"
+                        if node[0]:
+                            mypath += node[0]
+                            if node[1]:
+                                mypath += ":"
+                        if node[1]:
+                            mypath += node[1]
+#                    mypath += fieldname
+#                    print "path2", path, len(path)
+#                    print "PATH", path, mypath
+#                    print "TP = ", tp
+                    tmptp = self.__rnd.choice(self.__npTn.keys())
+                    cnf = dict(cnfdef)
+                    labels = {}
+                    paths = {}
+                    links = {}
+                    types = {}
+                    shapes = {}
+
+                    if i == 0:
+                        cnf["DefaultDynamicPath"] = mypath
+                    elif i == 1:
+                        cnf["DefaultDynamicLinks"] = True
+                        cnf["DefaultDynamicPath"] = mypath
+                    elif i == 2:
+                        paths = {ds: mypath + "/" + fieldname}
+                    elif i == 3:
+                        paths = {ds: mypath + "/" + fieldname}
+                        links = {ds: True}
+                    elif i == 4:
+                        cnf["DefaultDynamicPath"] = mypath
+                        labels = {ds: lbl}
+                    elif i == 5:
+                        cnf["DefaultDynamicLinks"] = True
+                        cnf["DefaultDynamicPath"] = mypath
+                        labels = {ds: lbl}
+                    elif i == 6:
+                        labels = {ds: lbl}
+                        paths = {ds: mypath + "/" + fieldname}
+                    elif i == 7:
+                        labels = {ds: lbl}
+                        paths = {ds: mypath + "/" + fieldname}
+                        links = {ds: True}
+                    cnf["ChannelProperties"] = json.dumps(
+                        {
+                            "label": labels,
+                            "nexus_path": paths,
+                            "link": links,
+                            "data_type": types,
+                            "shape": shapes
+                        }
+                    )
+                    print "I = ", i
+                    if i % 2 == 0:
+                        cnf["ComponentSelection"] = str(json.dumps({ds: True}))
                     rs.profileConfiguration = str(json.dumps(cnf))
 
                     cpname = rs.createDynamicComponent([
