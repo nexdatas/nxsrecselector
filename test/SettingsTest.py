@@ -16652,7 +16652,7 @@ class SettingsTest(unittest.TestCase):
         dname = "__dynamic_component__"
         for lb, ds in dsdict.items():
             print ds
-            cpname = rs.createDynamicComponent([None, str(json.dumps(ds))])
+            cpname = rs.createDynamicComponent(["", str(json.dumps(ds))])
             comp = self._cf.dp.Components([cpname])[0]
             self.assertEqual(cps[lb], comp)
 
@@ -16686,7 +16686,7 @@ class SettingsTest(unittest.TestCase):
         dname = "__dynamic_component__"
         for tp, nxstp in self.__npTn.items():
             cpname = rs.createDynamicComponent([
-                None, str(json.dumps([{"name": "ds1", "dtype": tp}]))])
+                "", str(json.dumps([{"name": "ds1", "dtype": tp}]))])
             comp = self._cf.dp.Components([cpname])[0]
             self.assertEqual(cps["type"] % nxstp, comp)
 
@@ -16727,7 +16727,7 @@ class SettingsTest(unittest.TestCase):
             ms = [self.__rnd.randint(0, 3000)
                   for _ in range(self.__rnd.randint(0, 3))]
             cpname = rs.createDynamicComponent([
-                None, str(json.dumps([{"name": "ds2", "shape": ms}]))])
+                "", str(json.dumps([{"name": "ds2", "shape": ms}]))])
 
             mstr = ""
             if ms:
@@ -16876,7 +16876,7 @@ class SettingsTest(unittest.TestCase):
                     print "I = ", i
                     rs.profileConfiguration = str(json.dumps(cnf))
                     cpname = rs.createDynamicComponent([
-                        None, str(json.dumps([{"name": ar["full_name"],
+                        "", str(json.dumps([{"name": ar["full_name"],
                                              "shape": ms,
                                                "dtype": tp}]))])
                     mstr = ""
@@ -17049,7 +17049,7 @@ class SettingsTest(unittest.TestCase):
                     print "I = ", i
                     rs.profileConfiguration = str(json.dumps(cnf))
                     cpname = rs.createDynamicComponent([
-                        None, str(json.dumps([{"name": ar["full_name"],
+                        "", str(json.dumps([{"name": ar["full_name"],
                                              "shape": ms,
                                                "dtype": tp}]))])
                     mstr = ""
@@ -17213,7 +17213,7 @@ class SettingsTest(unittest.TestCase):
                 db.put_device_alias(ar["full_name"], ar["name"])
 
                 cpname = rs.createDynamicComponent([
-                    None, str(json.dumps([{"name": ar["full_name"]}]))])
+                    "", str(json.dumps([{"name": ar["full_name"]}]))])
 
                 comp = self._cf.dp.Components([cpname])[0]
                 mycps = defbg + groupbg + fieldbg % (ar["name"], "NX_CHAR")
@@ -17517,7 +17517,7 @@ class SettingsTest(unittest.TestCase):
         dname = "__dynamic_component__"
         for tp, nxstp in self.__npTn.items():
             cpname = rs.createDynamicComponent([
-                None, None,
+                "", "",
                 str(json.dumps(["ds1"]))])
 
             comp = self._cf.dp.Components([cpname])[0]
@@ -17615,7 +17615,7 @@ class SettingsTest(unittest.TestCase):
             )
             rs.profileConfiguration = str(json.dumps(cnf))
             cpname = rs.createDynamicComponent([
-                None, None, str(json.dumps(["ds1"]))])
+                "", "", str(json.dumps(["ds1"]))])
 
             comp = self._cf.dp.Components([cpname])[0]
             self.assertEqual(cps["type"] % nxstp, comp)
@@ -17730,7 +17730,7 @@ class SettingsTest(unittest.TestCase):
             )
             rs.profileConfiguration = str(json.dumps(cnf))
             cpname = rs.createDynamicComponent([
-                None, None,
+                "", "",
                 str(json.dumps(["ds2"]))])
             mstr = ""
             if ms:
@@ -18111,7 +18111,7 @@ class SettingsTest(unittest.TestCase):
                     print "I = ", i
                     rs.profileConfiguration = str(json.dumps(cnf))
                     cpname = rs.createDynamicComponent([
-                        None, None,
+                        "", "",
                         str(json.dumps([ar["name"]]))])
                     mstr = ""
                     if ms:
@@ -18393,7 +18393,7 @@ class SettingsTest(unittest.TestCase):
             for i, ar in enumerate(arr):
                 db.put_device_alias(ar["full_name"], ar["name"])
                 cpname = rs.createDynamicComponent([
-                    None, None,
+                    "", "",
                     str(json.dumps([ar["name"]]))])
                 comp = self._cf.dp.Components([cpname])[0]
                 mycps = defbg + groupbg + fieldbg % (ar["name"], "NX_CHAR")
@@ -18487,7 +18487,7 @@ class SettingsTest(unittest.TestCase):
                 )
                 rs.profileConfiguration = str(json.dumps(cnf))
                 cpname = rs.createDynamicComponent([
-                    None, None,
+                    "", "",
                     str(json.dumps([ds]))])
 
                 comp = self._cf.dp.Components([cpname])[0]
@@ -18768,7 +18768,7 @@ class SettingsTest(unittest.TestCase):
                 )
                 rs.profileConfiguration = str(json.dumps(cnf))
                 cpname = rs.createDynamicComponent([
-                    None, None,
+                    "", "",
                     str(json.dumps([ds]))])
 
 #                dc.setInitDSources([ds])
@@ -19305,7 +19305,7 @@ class SettingsTest(unittest.TestCase):
                 print "I = ", i
                 rs.profileConfiguration = str(json.dumps(cnf))
                 cpname = rs.createDynamicComponent([
-                    None, None,
+                    "", "",
                     str(json.dumps([ds]))])
                 comp = self._cf.dp.Components([cpname])[0]
 
@@ -19474,7 +19474,7 @@ class SettingsTest(unittest.TestCase):
                     cnf["ComponentSelection"] = str(json.dumps({ds: True}))
                 rs.profileConfiguration = str(json.dumps(cnf))
                 cpname = rs.createDynamicComponent([
-                    None, None,
+                    "", "",
                     str(json.dumps([ds]))])
                 comp = self._cf.dp.Components([cpname])[0]
 
@@ -20054,7 +20054,7 @@ class SettingsTest(unittest.TestCase):
                     rs.profileConfiguration = str(json.dumps(cnf))
 
                     cpname = rs.createDynamicComponent([
-                        None, None,
+                        "", "",
                         str(json.dumps([ds]))])
                     mstr = ""
                     if ms:
@@ -20261,7 +20261,7 @@ class SettingsTest(unittest.TestCase):
                     rs.profileConfiguration = str(json.dumps(cnf))
 
                     cpname = rs.createDynamicComponent([
-                        None, None,
+                        "", "",
                         str(json.dumps([ds]))])
                     mstr = ""
                     if ms:
