@@ -2095,6 +2095,34 @@ class SettingsTest(unittest.TestCase):
                     print 'VALUES', k, v, dct2[k]
                 self.assertEqual(v, dct2[k])
 
+    def myAssertDictJSON(self, dct, dct2):
+        logger.debug('dict %s' % type(dct))
+        logger.debug("\n%s\n%s" % (dct, dct2))
+        self.assertTrue(isinstance(dct, dict))
+        if not isinstance(dct2, dict):
+            print "NOT DICT", type(dct2), dct2
+            print "DICT", type(dct), dct
+        self.assertTrue(isinstance(dct2, dict))
+        logger.debug("%s %s" % (len(dct.keys()), len(dct2.keys())))
+        if set(dct.keys()) ^ set(dct2.keys()):
+            print 'DCT', dct.keys()
+            print 'DCT2', dct2.keys()
+            print "DIFF", set(dct.keys()) ^ set(dct2.keys())
+        self.assertEqual(len(dct.keys()), len(dct2.keys()))
+        for k, v in dct.items():
+            logger.debug("%s  in %s" % (str(k), str(dct2.keys())))
+            self.assertTrue(k in dct2.keys())
+            if isinstance(v, dict):
+                self.myAssertDictJSON(v, dct2[k])
+            if isinstance(v, list):
+                self.assertEqual(set(v), set(dct2[k]))
+            else:
+                logger.debug("%s , %s" % (str(v), str(dct2[k])))
+                if v != dct2[k]:
+                    print 'VALUES', k, v, dct2[k]
+                self.assertEqual(v, dct2[k])
+
+                
     def openRecSelector(self):
         return Settings()
 
@@ -20333,6 +20361,128 @@ class SettingsTest(unittest.TestCase):
         finally:
             pass
 
+    ## test
+    def test_variableComponents_empty(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
 
+        wrong = []
+
+        rs = self.openRecSelector()
+        rs.configDevice = val["ConfigDevice"]
+        rs.door = val["Door"]
+        rs.mntGrp = val["MntGrp"]
+        self.assertEqual(rs.configDevice, val["ConfigDevice"])
+        self.assertEqual(rs.door, val["Door"])
+        self.assertEqual(rs.mntGrp, val["MntGrp"])
+
+        self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
+        self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
+        self.assertEqual(rs.variableComponents(), '{}')
+        
+    ## test
+    def test_variableComponents_cpvar(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+
+        wrong = []
+
+        rs = self.openRecSelector()
+        rs.configDevice = val["ConfigDevice"]
+        rs.door = val["Door"]
+        rs.mntGrp = val["MntGrp"]
+        self.assertEqual(rs.configDevice, val["ConfigDevice"])
+        self.assertEqual(rs.door, val["Door"])
+        self.assertEqual(rs.mntGrp, val["MntGrp"])
+
+        self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycpsvar)])
+        self.myAssertDict(
+            json.loads(rs.variableComponents()),
+            {"c01": ["scan3"], "c02": ["scan"], "mca": ["scan2"]}
+        )
+        
+    ## test
+    def test_variableComponents_mixed(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+
+        wrong = []
+        mycps = {
+            'mycp': (
+                '<?xml version=\'1.0\'?>'
+                '<definition>'
+                '<group type="NXcollection" name="$var.entry"/>'
+                '<group type="NXentry" name="$var.entry2"/>'
+                '</definition>'
+            ),
+            'mycp2': (
+                '<?xml version=\'1.0\'?>'
+                '<definition>'
+                '<group type="NXcollection" name="$var.myvar"/>'
+                '<group type="NXentry" name="$var.entry2"/>'
+                '</definition>'
+            ),
+            'mycp3': (
+                '<?xml version=\'1.0\'?>'
+                '<definition>'
+                '<group type="NXcollection" name="$var.entry"/>'
+                '<group type="NXentry" name="$var.something"/>'
+                '</definition>'
+            ),
+            'mycp4': (
+                '<?xml version=\'1.0\'?>'
+                '<definition>'
+                '<group type="NXcollection" name="$var.entry2"/>'
+                '<group type="NXentry" name="$var.something2"/>'
+                '<group type="NXentry" name="$var.new"/>'
+                '</definition>'
+            ),
+        }
+        cpvar = {
+            "mycp": ["entry", "entry2"],
+            "mycp2": ["myvar", "entry2"],
+            "mycp3": ["entry", "something"],
+            "mycp4": ["entry2", "something2", "new"],
+        }
+        rs = self.openRecSelector()
+        rs.configDevice = val["ConfigDevice"]
+        rs.door = val["Door"]
+        rs.mntGrp = val["MntGrp"]
+        self.assertEqual(rs.configDevice, val["ConfigDevice"])
+        self.assertEqual(rs.door, val["Door"])
+        self.assertEqual(rs.mntGrp, val["MntGrp"])
+
+        for i in range(20):
+            mncps = self.__rnd.randint(0, len(mycps.keys()))
+            mcps = [
+                cp for cp in self.__rnd.sample(set(mycps.keys()), mncps)
+            ]
+            
+            gencp = dict((cp, mycps[cp]) for cp in mcps)
+            self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(gencp)])
+            res = json.loads(rs.variableComponents())
+            res2 = {}
+#            print mcps
+            for cp in mcps:
+                for vr in cpvar[cp]:
+                    if vr not in res2:
+                        res2[vr] = []
+                    res2[vr].append(cp)    
+                
+            self.myAssertDictJSON(res, res2)
+        
+        
 if __name__ == '__main__':
     unittest.main()
