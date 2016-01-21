@@ -20482,7 +20482,7 @@ class SettingsTest(unittest.TestCase):
 
             self.myAssertDictJSON(res, res2)
 
-    ## userdata test
+    ## test
     def test_createWriterConfiguration_default(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -20541,7 +20541,7 @@ class SettingsTest(unittest.TestCase):
         finally:
             simp2.tearDown()
 
-    ## userdata test
+    ## test
     def test_createWriterConfiguration_given(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -20607,6 +20607,194 @@ class SettingsTest(unittest.TestCase):
                 self.assertEqual(res, res2)
         finally:
             simp2.tearDown()
+
+    ## test
+    def test_updateConfigVariables_noserialno(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+
+        wrong = []
+
+        rs = self.openRecSelector()
+        rs.configDevice = val["ConfigDevice"]
+        rs.door = val["Door"]
+        rs.mntGrp = val["MntGrp"]
+        self.assertEqual(rs.configDevice, val["ConfigDevice"])
+        self.assertEqual(rs.door, val["Door"])
+        self.assertEqual(rs.mntGrp, val["MntGrp"])
+
+        for i in range(20):
+            rs.appendEntry = bool(i % 2)
+            rscv = {}
+            lcp = self.__rnd.randint(1, 40)
+            for _ in range(lcp):
+                vrname = self.getRandomName(10)
+                if vrname != 'serialno':
+                    rscv[vrname] = self.getRandomName(
+                        self.__rnd.randint(1, 40))
+            rs.configVariables = str(json.dumps(rscv))
+
+            cscv = {}
+            lcp = self.__rnd.randint(1, 40)
+            for _ in range(lcp):
+                vrname = self.getRandomName(10)
+                if vrname != 'serialno':
+                    cscv[vrname] = self.getRandomName(
+                        self.__rnd.randint(1, 40))
+            self._cf.dp.variables = str(json.dumps(cscv))
+
+            rs.updateConfigVariables()
+
+            res = self._cf.dp.variables
+            if i % 2:
+                rscv["serialno"] = "1"
+            self.myAssertDict(json.loads(res), rscv)
+
+    ## test
+    def test_updateConfigVariables_rsserialno(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+
+        wrong = []
+
+        rs = self.openRecSelector()
+        rs.configDevice = val["ConfigDevice"]
+        rs.door = val["Door"]
+        rs.mntGrp = val["MntGrp"]
+        self.assertEqual(rs.configDevice, val["ConfigDevice"])
+        self.assertEqual(rs.door, val["Door"])
+        self.assertEqual(rs.mntGrp, val["MntGrp"])
+
+        for i in range(20):
+            rs.appendEntry = bool(i % 2)
+            rscv = {}
+            lcp = self.__rnd.randint(1, 40)
+            for _ in range(lcp):
+                vrname = self.getRandomName(10)
+                if vrname != 'serialno':
+                    rscv[vrname] = self.getRandomName(
+                        self.__rnd.randint(1, 40))
+            slno = str(self.__rnd.randint(1, 40))
+            rscv["serialno"] = str(slno)
+            rs.configVariables = str(json.dumps(rscv))
+
+            cscv = {}
+            lcp = self.__rnd.randint(1, 40)
+            for _ in range(lcp):
+                vrname = self.getRandomName(10)
+                if vrname != 'serialno':
+                    cscv[vrname] = self.getRandomName(
+                        self.__rnd.randint(1, 40))
+            self._cf.dp.variables = str(json.dumps(cscv))
+
+            rs.updateConfigVariables()
+
+            res = self._cf.dp.variables
+            self.myAssertDict(json.loads(res), rscv)
+
+    ## test
+    def test_updateConfigVariables_cfserialno(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+
+        wrong = []
+
+        rs = self.openRecSelector()
+        rs.configDevice = val["ConfigDevice"]
+        rs.door = val["Door"]
+        rs.mntGrp = val["MntGrp"]
+        self.assertEqual(rs.configDevice, val["ConfigDevice"])
+        self.assertEqual(rs.door, val["Door"])
+        self.assertEqual(rs.mntGrp, val["MntGrp"])
+
+        for i in range(20):
+            rs.appendEntry = bool(i % 2)
+            rscv = {}
+            lcp = self.__rnd.randint(1, 40)
+            for _ in range(lcp):
+                vrname = self.getRandomName(10)
+                if vrname != 'serialno':
+                    rscv[vrname] = self.getRandomName(
+                        self.__rnd.randint(1, 40))
+            rs.configVariables = str(json.dumps(rscv))
+
+            cscv = {}
+            lcp = self.__rnd.randint(1, 40)
+            for _ in range(lcp):
+                vrname = self.getRandomName(10)
+                if vrname != 'serialno':
+                    cscv[vrname] = self.getRandomName(
+                        self.__rnd.randint(1, 40))
+            slno = self.__rnd.randint(1, 40)
+            cscv["serialno"] = str(slno)
+            self._cf.dp.variables = str(json.dumps(cscv))
+
+            rs.updateConfigVariables()
+
+            res = self._cf.dp.variables
+            if i % 2:
+                rscv["serialno"] = str(slno + 1)
+            self.myAssertDict(json.loads(res), rscv)
+
+    ## test
+    def test_updateConfigVariables_rscfserialno(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+
+        wrong = []
+
+        rs = self.openRecSelector()
+        rs.configDevice = val["ConfigDevice"]
+        rs.door = val["Door"]
+        rs.mntGrp = val["MntGrp"]
+        self.assertEqual(rs.configDevice, val["ConfigDevice"])
+        self.assertEqual(rs.door, val["Door"])
+        self.assertEqual(rs.mntGrp, val["MntGrp"])
+
+        for i in range(20):
+            rs.appendEntry = bool(i % 2)
+            rscv = {}
+            lcp = self.__rnd.randint(1, 40)
+            for _ in range(lcp):
+                vrname = self.getRandomName(10)
+                if vrname != 'serialno':
+                    rscv[vrname] = self.getRandomName(
+                        self.__rnd.randint(1, 40))
+            slno = self.__rnd.randint(1, 40)
+            rscv["serialno"] = str(slno)
+            rs.configVariables = str(json.dumps(rscv))
+
+            cscv = {}
+            lcp = self.__rnd.randint(1, 40)
+            for _ in range(lcp):
+                vrname = self.getRandomName(10)
+                if vrname != 'serialno':
+                    cscv[vrname] = self.getRandomName(
+                        self.__rnd.randint(1, 40))
+            slno2 = self.__rnd.randint(1, 40)
+            cscv["serialno"] = str(slno2)
+            self._cf.dp.variables = str(json.dumps(cscv))
+
+            rs.updateConfigVariables()
+
+            res = self._cf.dp.variables
+            self.myAssertDict(json.loads(res), rscv)
 
 
 if __name__ == '__main__':
