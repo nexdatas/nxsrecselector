@@ -19,4 +19,3 @@
 # nxswriter runner
 
 """  NeXus Sardana Recorder Settings - Tango Server """
-

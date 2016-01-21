@@ -230,13 +230,14 @@ class NXSConfigServer(PyTango.Device_4Impl):
     #    argout: DevVarStringArray    list of required componentVariables
     #------------------------------------------------------------------
     def ComponentVariables(self, name):
-        print >> self.log_info, "In ", self.get_name(), "::ComponentVariables()"
+        print >> self.log_info, "In ", self.get_name(), \
+            "::ComponentVariables()"
         self.cmd["VARS"].append(name)
         self.cmd["COMMANDS"].append("ComponentVariables")
-        cp  = self.cmd["CPDICT"][name]
-        return self.findText(cp, "$var.")
+        cp = self.cmd["CPDICT"][name]
+        return self.__findText(cp, "$var.")
 
-    def findText(self, text, label):
+    def __findText(self, text, label):
         variables = []
         index = text.find(label)
         while index != -1:
@@ -252,8 +253,8 @@ class NXSConfigServer(PyTango.Device_4Impl):
             if name:
                 variables.append(name)
             index = text.find(label, index + 1)
-        return variables        
-    
+        return variables
+
     #------------------------------------------------------------------
     #    Selections command:
     #

@@ -2122,7 +2122,6 @@ class SettingsTest(unittest.TestCase):
                     print 'VALUES', k, v, dct2[k]
                 self.assertEqual(v, dct2[k])
 
-                
     def openRecSelector(self):
         return Settings()
 
@@ -16906,7 +16905,7 @@ class SettingsTest(unittest.TestCase):
                     cpname = rs.createDynamicComponent([
                         "", str(json.dumps([{"name": ar["full_name"],
                                              "shape": ms,
-                                               "dtype": tp}]))])
+                                             "dtype": tp}]))])
                     mstr = ""
                     if ms:
                         mstr += dimbg % len(ms)
@@ -17079,7 +17078,7 @@ class SettingsTest(unittest.TestCase):
                     cpname = rs.createDynamicComponent([
                         "", str(json.dumps([{"name": ar["full_name"],
                                              "shape": ms,
-                                               "dtype": tp}]))])
+                                             "dtype": tp}]))])
                     mstr = ""
                     if ms:
                         mstr += dimbg % len(ms)
@@ -20383,7 +20382,7 @@ class SettingsTest(unittest.TestCase):
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
         self.assertEqual(rs.variableComponents(), '{}')
-        
+
     ## test
     def test_variableComponents_cpvar(self):
         fun = sys._getframe().f_code.co_name
@@ -20408,7 +20407,7 @@ class SettingsTest(unittest.TestCase):
             json.loads(rs.variableComponents()),
             {"c01": ["scan3"], "c02": ["scan"], "mca": ["scan2"]}
         )
-        
+
     ## test
     def test_variableComponents_mixed(self):
         fun = sys._getframe().f_code.co_name
@@ -20469,7 +20468,7 @@ class SettingsTest(unittest.TestCase):
             mcps = [
                 cp for cp in self.__rnd.sample(set(mycps.keys()), mncps)
             ]
-            
+
             gencp = dict((cp, mycps[cp]) for cp in mcps)
             self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(gencp)])
             res = json.loads(rs.variableComponents())
@@ -20479,10 +20478,10 @@ class SettingsTest(unittest.TestCase):
                 for vr in cpvar[cp]:
                     if vr not in res2:
                         res2[vr] = []
-                    res2[vr].append(cp)    
-                
+                    res2[vr].append(cp)
+
             self.myAssertDictJSON(res, res2)
-        
+
     ## userdata test
     def test_createWriterConfiguration_default(self):
         fun = sys._getframe().f_code.co_name
@@ -20541,7 +20540,7 @@ class SettingsTest(unittest.TestCase):
                 self.assertEqual(res, res2)
         finally:
             simp2.tearDown()
-                
+
     ## userdata test
     def test_createWriterConfiguration_given(self):
         fun = sys._getframe().f_code.co_name
@@ -20608,7 +20607,7 @@ class SettingsTest(unittest.TestCase):
                 self.assertEqual(res, res2)
         finally:
             simp2.tearDown()
-                
-                
+
+
 if __name__ == '__main__':
     unittest.main()
