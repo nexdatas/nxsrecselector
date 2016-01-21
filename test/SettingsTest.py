@@ -20484,7 +20484,7 @@ class SettingsTest(unittest.TestCase):
             self.myAssertDictJSON(res, res2)
         
     ## userdata test
-    def ttest_createWriterConfiguration_default(self):
+    def test_createWriterConfiguration_default(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         self.maxDiff = None
@@ -20528,15 +20528,84 @@ class SettingsTest(unittest.TestCase):
                 components = rs.components
                 res2 = ""
                 for cp in components:
-                    res2 += self.smycps[cp]
+                    if cp in self.smycps:
+                        res2 += self.smycps[cp]
+                    else:
+                        res2 += "$components.%s " % cp
+                self._cf.dp.xmlstring = res2
+                res = rs.createWriterConfiguration([])
+                cmds = json.loads(self._cf.dp.GetCommandVariable("COMMANDS"))
+                vrs = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+                self.assertEqual(cmds[-1], "CreateConfiguration")
+                self.assertEqual(set(vrs[-1]), set(components))
+                self.assertEqual(res, res2)
+        finally:
+            simp2.tearDown()
+                
+    ## userdata test
+    def test_createWriterConfiguration_given(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        self.maxDiff = None
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+
+        db = PyTango.Database()
+        db.put_device_property(self._ms.ms.keys()[0],
+                               {'PoolNames': self._pool.dp.name()})
+        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.smycps)])
+        self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
+
+        filename = "__testprofile__.json"
+        while os.path.exists(filename):
+            filename = "_" + filename
+
+        mg = self.getRandomName(10)
+        while mg == val["MntGrp"]:
+            mg = self.getRandomName(10)
+        simp2 = TestServerSetUp.MultiTestServerSetUp(
+            devices=['ttestp09/testts/t%02dr228' %
+                     i for i in range(1, 37)])
+        sets = ["PreselectedDataSources"]
+        try:
+            simp2.setUp()
+
+            for i in range(8):
+
+                rs = self.openRecSelector()
+                rs.configDevice = val["ConfigDevice"]
+                rs.door = val["Door"]
+                rs.mntGrp = mg
+
+                mncps = self.__rnd.randint(0, len(self.smycps.keys()))
+                components = [
+                    cp for cp in self.__rnd.sample(
+                        set(self.smycps.keys()),
+                        mncps
+                    )
+                ]
+
+                res2 = ""
+                for cp in components:
+                    if cp in self.smycps:
+                        res2 += self.smycps[cp]
+                    else:
+                        res2 += "$components.%s " % cp
                 self._cf.dp.xmlstring = res2
                 res = rs.createWriterConfiguration([])
                 cmds = self._cf.dp.GetCommandVariable("COMMANDS")
                 print cmds
                 print res
+                self._cf.dp.xmlstring = res2
                 res3 = self._cf.dp.createConfiguration(components)
-                self.assertTrue(res, res2)
-                self.assertTrue(res, res3)
+                cmds = json.loads(self._cf.dp.GetCommandVariable("COMMANDS"))
+                vrs = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+                self.assertEqual(cmds[-1], "CreateConfiguration")
+                self.assertEqual(set(vrs[-1]), set(components))
+                self.assertEqual(res, res2)
         finally:
             simp2.tearDown()
                 
