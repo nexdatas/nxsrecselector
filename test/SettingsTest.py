@@ -14890,10 +14890,12 @@ class SettingsTest(unittest.TestCase):
 
         self.maxDiff = None
         self.tearDown()
-        self.mySetUp()
+        print "DOWN"
+        print "UP"
         try:
             for j in range(10):
                 self.setUp()
+                self.mySetUp()
                 db = PyTango.Database()
                 db.put_device_property(self._ms.ms.keys()[0],
                                        {'PoolNames': self._pool.dp.name()})
@@ -14927,13 +14929,15 @@ class SettingsTest(unittest.TestCase):
                              i for i in range(1, 37)])
 
                 try:
+                    print "SIMP2 SETUP"
                     simp2.setUp()
 
                     # create mntgrps
 
                     for i, mg in enumerate(mgs):
-
+                        print "OPEN RS"
                         ors = self.openRecSelector()
+                        print "OPEN RS END"
                         ors.configDevice = val["ConfigDevice"]
                         ors.door = val["Door"]
                         ors.mntGrp = mg
@@ -16211,11 +16215,11 @@ class SettingsTest(unittest.TestCase):
                     simp2.tearDown()
                     try:
                         self.tearDown()
+                        self.myTearDown()
                     except:
                         pass
         finally:
             try:
-                self.myTearDown()
                 self.setUp()
             except:
                 pass
