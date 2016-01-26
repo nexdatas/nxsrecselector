@@ -1,3 +1,8 @@
+2016-01-26 Jan Kotanski <jankotan@gmail.com>
+	* remove  assert statements
+	* improve ChannelProperties
+	* tagged as v2.0.2
+
 2016-01-05 Jan Kotanski <jankotan@gmail.com>
 	* add check for configuration server version
 	* fix for version converter 2to1
