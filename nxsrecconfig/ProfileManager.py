@@ -74,7 +74,8 @@ class ProfileManager(object):
         amntgrp = MSUtils.getEnv('ActiveMntGrp', self.__macroServerName)
         fpool = self.__getActivePool(amntgrp)
         if fpool:
-            mntgrps = PoolUtils.getMntGrps([fpool])
+            mntgrps = PoolUtils.getElementNames(
+                [fpool], 'MeasurementGroupList')
         mntgrps = mntgrps if mntgrps else []
 
         try:
@@ -156,7 +157,7 @@ class ProfileManager(object):
     def deleteProfile(self, name):
         self.__updatePools()
         for pool in self.__pools:
-            mntgrps = PoolUtils.getMntGrps([pool])
+            mntgrps = PoolUtils.getElementNames([pool], 'MeasurementGroupList')
             if name in mntgrps:
                 TangoUtils.command(
                     pool, "DeleteElement", str(name))
@@ -330,7 +331,7 @@ class ProfileManager(object):
         return changed
 
     def __clearChannels(self, dsg, hel):
-        channels = PoolUtils.getExperimentalChannels(self.__pools)
+        channels = PoolUtils.getElementNames(self.__pools, 'ExpChannelList')
         for ch in channels:
             if ch in dsg.keys():
                 dsg[ch] = False
@@ -428,7 +429,7 @@ class ProfileManager(object):
         for pool in self.__pools:
             if not fpool:
                 fpool = pool
-            mntgrps = PoolUtils.getMntGrps([pool])
+            mntgrps = PoolUtils.getElementNames([pool], 'MeasurementGroupList')
             if mntgrp in mntgrps:
                 if not apool:
                     fpool = pool

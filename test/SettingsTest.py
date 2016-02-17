@@ -2379,7 +2379,7 @@ class SettingsTest(unittest.TestCase):
 
         self._ms.dps[self._ms.ms.keys()[0]].Init()
 
-        self.assertEqual(rs.poolChannels(), [])
+        self.assertEqual(rs.poolElementNames('ExpChannelList'), [])
 
         arr = [
             {"name": "test/ct/01", "controller": "counter_01/Value"},
@@ -2399,18 +2399,18 @@ class SettingsTest(unittest.TestCase):
         pool = self._pool.dp
         pool.ExpChannelList = [json.dumps(a) for a in arr]
 
-        dd = rs.poolChannels()
+        dd = rs.poolElementNames('ExpChannelList')
         self.assertEqual(dd, [a["name"] for a in arr])
 
         pool.ExpChannelList = [
             json.dumps(
                 {"name": a[0], "controller": a[1]}) for a in arr2]
 
-        dd = rs.poolChannels()
+        dd = rs.poolElementNames('ExpChannelList')
         res = [a[0] for a in arr2]
         self.assertEqual(dd, res)
 
-        print rs.poolChannels()
+        print rs.poolElementNames('ExpChannelList')
 
     ## test
     # \brief It tests default settings
@@ -2439,7 +2439,7 @@ class SettingsTest(unittest.TestCase):
 
         self._ms.dps[self._ms.ms.keys()[0]].Init()
 
-        self.assertEqual(rs.poolChannels(), [])
+        self.assertEqual(rs.poolElementNames('ExpChannelList'), [])
 
         arr = [
             {"name": "test/ct/01", "controller": "counter_01/Value"},
@@ -2459,7 +2459,7 @@ class SettingsTest(unittest.TestCase):
         pool = self._pool.dp
         pool.ExpChannelList = [json.dumps(a) for a in arr]
 
-        dd = rs.poolChannels()
+        dd = rs.poolElementNames('ExpChannelList')
 #        self.assertEqual(dd, [a["name"] for a in arr])
         self.assertEqual(dd, [])
 
@@ -2467,12 +2467,12 @@ class SettingsTest(unittest.TestCase):
             json.dumps(
                 {"name": a[0], "controller": a[1]}) for a in arr2]
 
-        dd = rs.poolChannels()
+        dd = rs.poolElementNames('ExpChannelList')
 #        res = [a[0] for a in arr2]
         res = []
         self.assertEqual(dd, res)
 
-        print rs.poolChannels()
+        print rs.poolElementNames('ExpChannelList')
 
     ## test
     # \brief It tests default settings
@@ -2499,7 +2499,7 @@ class SettingsTest(unittest.TestCase):
 
         self._ms.dps[self._ms.ms.keys()[0]].Init()
 
-        self.assertEqual(rs.poolMotors(), [])
+        self.assertEqual(rs.poolElementNames('MotorList'), [])
 
         arr = [
             {"name": "test/ct/01", "controller": "counter_01/Value"},
@@ -2519,18 +2519,18 @@ class SettingsTest(unittest.TestCase):
         pool = self._pool.dp
         pool.MotorList = [json.dumps(a) for a in arr]
 
-        dd = rs.poolMotors()
+        dd = rs.poolElementNames('MotorList')
         self.assertEqual(dd, [a["name"] for a in arr])
 
         pool.MotorList = [
             json.dumps(
                 {"name": a[0], "controller": a[1]}) for a in arr2]
 
-        dd = rs.poolMotors()
+        dd = rs.poolElementNames('MotorList')
         res = [a[0] for a in arr2]
         self.assertEqual(dd, res)
 
-        print rs.poolMotors()
+        print rs.poolElementNames('MotorList')
 
     ## test
     # \brief It tests default settings
@@ -2559,7 +2559,7 @@ class SettingsTest(unittest.TestCase):
 
         self._ms.dps[self._ms.ms.keys()[0]].Init()
 
-        self.assertEqual(rs.poolMotors(), [])
+        self.assertEqual(rs.poolElementNames('MotorList'), [])
 
         arr = [
             {"name": "test/ct/01", "controller": "counter_01/Value"},
@@ -2579,7 +2579,7 @@ class SettingsTest(unittest.TestCase):
         pool = self._pool.dp
         pool.MotorList = [json.dumps(a) for a in arr]
 
-        dd = rs.poolMotors()
+        dd = rs.poolElementNames('MotorList')
 #        self.assertEqual(dd, [a["name"] for a in arr])
         self.assertEqual(dd, [])
 
@@ -2587,12 +2587,12 @@ class SettingsTest(unittest.TestCase):
             json.dumps(
                 {"name": a[0], "controller": a[1]}) for a in arr2]
 
-        dd = rs.poolMotors()
+        dd = rs.poolElementNames('MotorList')
 #        res = [a[0] for a in arr2]
         res = []
         self.assertEqual(dd, res)
 
-        print rs.poolMotors()
+        print rs.poolElementNames('MotorList')
 
     ## preselectComponents test
     # \brief It tests default settings

@@ -540,15 +540,11 @@ class Settings(object):
         ad = self.__configCommand("availableDataSources") or []
         return ad
 
-    ## available pool channels
-    # \returns pool channels of the macroserver pools
-    def poolChannels(self):
-        return self.__selector.poolChannels()
-
-    ## available pool motors
-    # \returns pool motors of the macroserver pools
-    def poolMotors(self):
-        return self.__selector.poolMotors()
+    ## provides names from given pool listattr
+    # \param listattr name of pool attribute with a element list
+    # \returns names from given pool listattr
+    def poolElementNames(self, listattr):
+        return self.__selector.poolElementNames(listattr)
 
     ## saves configuration
     def saveProfile(self):

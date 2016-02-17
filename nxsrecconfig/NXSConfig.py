@@ -991,17 +991,18 @@ class NXSRecSelector(PyTango.Device_4Impl):
         return True
 
     #------------------------------------------------------------------
-    #    PoolChannels command:
+    #    PoolElementNames command:
     #
     #    Description: Returns a list of available pool channels
     #
-    #    argout: DevVarStringArray    list of available pool channels
+    #    argin:  DevString            name of pool list attribute
+    #    argout: DevVarStringArray    list of available pool elements
     #------------------------------------------------------------------
-    def PoolChannels(self):
-        self.debug_stream("In PoolChannels()")
+    def PoolElementNames(self, argin):
+        self.debug_stream("In PoolElementNames()")
         try:
             self.set_state(PyTango.DevState.RUNNING)
-            argout = self.__stg.poolChannels()
+            argout = self.__stg.poolElementNames(argin)
             self.set_state(PyTango.DevState.ON)
         finally:
             if self.get_state() == PyTango.DevState.RUNNING:
@@ -1009,33 +1010,8 @@ class NXSRecSelector(PyTango.Device_4Impl):
 
         return argout
 
-    #---- PoolChannels command State Machine -----------------
-    def is_PoolChannels_allowed(self):
-        if self.get_state() in [PyTango.DevState.RUNNING]:
-            return False
-        return True
-
-    #------------------------------------------------------------------
-    #    PoolMotors command:
-    #
-    #    Description: Returns a list of available pool channels
-    #
-    #    argout: DevVarStringArray    list of available pool channels
-    #------------------------------------------------------------------
-    def PoolMotors(self):
-        self.debug_stream("In PoolMotors()")
-        try:
-            self.set_state(PyTango.DevState.RUNNING)
-            argout = self.__stg.poolMotors()
-            self.set_state(PyTango.DevState.ON)
-        finally:
-            if self.get_state() == PyTango.DevState.RUNNING:
-                self.set_state(PyTango.DevState.ON)
-
-        return argout
-
-    #---- PoolMotors command State Machine -----------------
-    def is_PoolMotors_allowed(self):
+    #---- PoolElementNames command State Machine -----------------
+    def is_PoolElementNames_allowed(self):
         if self.get_state() in [PyTango.DevState.RUNNING]:
             return False
         return True
@@ -1532,12 +1508,9 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
         'AdministratorDataNames':
             [[PyTango.DevVoid, ""],
              [PyTango.DevVarStringArray, "administrator data names"]],
-        'PoolChannels':
-            [[PyTango.DevVoid, ""],
-             [PyTango.DevVarStringArray, "list of available pool channels"]],
-        'PoolMotors':
-            [[PyTango.DevVoid, ""],
-             [PyTango.DevVarStringArray, "list of available pool motors"]],
+        'PoolElementNames':
+            [[PyTango.DevString, "pool list attribute name"],
+             [PyTango.DevVarStringArray, "list of available pool elements"]],
         'MandatoryComponents':
             [[PyTango.DevVoid, ""],
              [PyTango.DevVarStringArray, "component names"]],

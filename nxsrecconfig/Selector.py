@@ -167,11 +167,13 @@ class Selector(object):
 
     ## get method for preselectedDataSources attribute
     def __preGetPreselectedDataSources(self):
-        self.__selection.updatePreselectedDataSources(self.poolMotors())
+        self.__selection.updatePreselectedDataSources(
+            self.poolElementNames('MotorList'))
 
     ## update method for orderedChannels attribute
     def __preGetOrderedChannels(self):
-        self.__selection.updateOrderedChannels(self.poolChannels())
+        self.__selection.updateOrderedChannels(
+            self.poolElementNames('ExpChannelList'))
 
     ## update method for mntGrp attribute
     def __preGetMntGrp(self):
@@ -188,7 +190,7 @@ class Selector(object):
     ## update method for dataSourceGroup attribute
     def __preGetDataSourceSelection(self):
         self.__selection.updateDataSourceSelection(
-            self.poolChannels(),
+            PoolUtils.getElementNames(self.getPools(), 'ExpChannelList'),
             self.configCommand("availableDataSources"))
 
     ## update method for timeZone attribute
@@ -228,15 +230,11 @@ class Selector(object):
     def getMacroServer(self):
         return self.__msp.getMacroServer(self["Door"])
 
-    ## available pool channels
-    # \returns pool channels of the macroserver pools
-    def poolChannels(self):
-        return PoolUtils.getExperimentalChannels(self.getPools())
-
-    ## available pool motors
-    # \returns pool motors of the macroserver pools
-    def poolMotors(self):
-        return PoolUtils.getMotorNames(self.getPools())
+    ## provides names from given pool listattr
+    # \param listattr pool attribute with list
+    # \returns names from given pool listattr
+    def poolElementNames(self, listattr):
+        return PoolUtils.getElementNames(self.getPools(), listattr)
 
     ## sets config instances
     # \returns set config instance

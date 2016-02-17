@@ -902,11 +902,13 @@ class UtilsTest(unittest.TestCase):
         dd = PoolUtils.getFullDeviceNames([])
         self.assertEqual(dd, {})
 
-        self.myAssertRaise(Exception, PoolUtils.getMntGrps, None)
-        dd = PoolUtils.getMntGrps([pool])
+        self.myAssertRaise(Exception, PoolUtils.getElementNames, None,
+                           'MeasurementGroupList')
+        dd = PoolUtils.getElementNames([pool], 'MeasurementGroupList')
         self.assertEqual(dd, [a["name"] for a in arr])
-        self.myAssertRaise(Exception, PoolUtils.getMntGrps, None)
-        dd = PoolUtils.getMntGrps([pool, pool2])
+        self.myAssertRaise(Exception, PoolUtils.getElementNames, None,
+                           'MeasurementGroupList')
+        dd = PoolUtils.getElementNames([pool, pool2], 'MeasurementGroupList')
         res = [a["name"] for a in arr]
         res.extend([a["name"] for a in arr2])
         self.assertEqual(dd, res)
@@ -1136,15 +1138,15 @@ class UtilsTest(unittest.TestCase):
             {"name": a[0], "controller": a[1]}) for a in arr2]
 
         import nxsrecconfig
-        dd = PoolUtils.getExperimentalChannels([])
+        dd = PoolUtils.getElementNames([], 'ExpChannelList')
         self.assertEqual(dd, [])
 
-        dd = PoolUtils.getExperimentalChannels([])
+        dd = PoolUtils.getElementNames([], 'ExpChannelList')
         self.assertEqual(dd, [])
-        dd = PoolUtils.getExperimentalChannels([pool])
+        dd = PoolUtils.getElementNames([pool], 'ExpChannelList')
         self.assertEqual(dd, [a["name"] for a in arr])
 
-        dd = PoolUtils.getExperimentalChannels([pool, pool2])
+        dd = PoolUtils.getElementNames([pool, pool2], 'ExpChannelList')
         res = [a["name"] for a in arr]
         res.extend([a[0] for a in arr2])
         self.assertEqual(dd, res)
@@ -1176,15 +1178,15 @@ class UtilsTest(unittest.TestCase):
             {"name": a[0], "controller": a[1]}) for a in arr2]
 
         import nxsrecconfig
-        dd = PoolUtils.getMotorNames([])
+        dd = PoolUtils.getElementNames([], 'MotorList')
         self.assertEqual(dd, [])
 
-        dd = PoolUtils.getMotorNames([])
+        dd = PoolUtils.getElementNames([], 'MotorList')
         self.assertEqual(dd, [])
-        dd = PoolUtils.getMotorNames([pool])
+        dd = PoolUtils.getElementNames([pool], 'MotorList')
         self.assertEqual(dd, [a["name"] for a in arr])
 
-        dd = PoolUtils.getMotorNames([pool, pool2])
+        dd = PoolUtils.getElementNames([pool, pool2], 'MotorList')
         res = [a["name"] for a in arr]
         res.extend([a[0] for a in arr2])
         self.assertEqual(dd, res)

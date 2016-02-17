@@ -1,3 +1,7 @@
+2016-01-XX Jan Kotanski <jankotan@gmail.com>
+	* change poolMotors/poolExperimentalChannels commands into poolElementNames
+	* tagged as v2.2.0
+
 2016-01-26 Jan Kotanski <jankotan@gmail.com>
 	* remove  assert statements
 	* improve ChannelProperties

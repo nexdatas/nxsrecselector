@@ -1112,7 +1112,7 @@ class SelectorTest(unittest.TestCase):
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
         se = Selector(None, self.__version)
-        self.myAssertRaise(Exception, se.poolMotors)
+        self.myAssertRaise(Exception, se.poolElementNames, 'MotorList')
         msp = MacroServerPools(10)
         se = Selector(msp, self.__version)
         se["Door"] = val["Door"]
@@ -1124,7 +1124,7 @@ class SelectorTest(unittest.TestCase):
 
         pools = se.getPools()
 
-        self.assertEqual(se.poolMotors(), [])
+        self.assertEqual(se.poolElementNames('MotorList'), [])
 
         arr = [
             {"name": "test/ct/01", "controller": "counter_01/Value"},
@@ -1144,17 +1144,17 @@ class SelectorTest(unittest.TestCase):
         pool = self._pool.dp
         pool.MotorList = [json.dumps(a) for a in arr]
 
-        dd = se.poolMotors()
+        dd = se.poolElementNames('MotorList')
         self.assertEqual(dd, [a["name"] for a in arr])
 
         pool.MotorList = [json.dumps(
             {"name": a[0], "controller": a[1]}) for a in arr2]
 
-        dd = se.poolMotors()
+        dd = se.poolElementNames('MotorList')
         res = [a[0] for a in arr2]
         self.assertEqual(dd, res)
 
-        print se.poolMotors()
+        print se.poolElementNames('MotorList')
 
         self.assertEqual(len(pools), 1)
         self.assertTrue(isinstance(pools[0], PyTango.DeviceProxy))
@@ -1171,7 +1171,7 @@ class SelectorTest(unittest.TestCase):
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
         se = Selector(None, self.__version)
-        self.myAssertRaise(Exception, se.poolChannels)
+        self.myAssertRaise(Exception, se.poolElementNames, 'ExpChannelList')
         msp = MacroServerPools(10)
         se = Selector(msp, self.__version)
         se["Door"] = val["Door"]
@@ -1183,7 +1183,7 @@ class SelectorTest(unittest.TestCase):
 
         pools = se.getPools()
 
-        self.assertEqual(se.poolChannels(), [])
+        self.assertEqual(se.poolElementNames('ExpChannelList'), [])
 
         arr = [
             {"name": "test/ct/01", "controller": "counter_01/Value"},
@@ -1203,17 +1203,17 @@ class SelectorTest(unittest.TestCase):
         pool = self._pool.dp
         pool.ExpChannelList = [json.dumps(a) for a in arr]
 
-        dd = se.poolChannels()
+        dd = se.poolElementNames('ExpChannelList')
         self.assertEqual(dd, [a["name"] for a in arr])
 
         pool.ExpChannelList = [json.dumps(
             {"name": a[0], "controller": a[1]}) for a in arr2]
 
-        dd = se.poolChannels()
+        dd = se.poolElementNames('ExpChannelList')
         res = [a[0] for a in arr2]
         self.assertEqual(dd, res)
 
-        print se.poolChannels()
+        print se.poolElementNames('ExpChannelList')
 
         self.assertEqual(len(pools), 1)
         self.assertTrue(isinstance(pools[0], PyTango.DeviceProxy))
@@ -1890,7 +1890,7 @@ class SelectorTest(unittest.TestCase):
             pool.MotorList = []
             se["PreselectedDataSources"] = json.dumps([])
             self._ms.dps[self._ms.ms.keys()[0]].Init()
-            print "Motors", se.poolMotors()
+            print "Motors", se.poolElementNames('MotorList')
             se["ConfigDevice"] = val["ConfigDevice"]
             se["WriterDevice"] = val["WriterDevice"]
             self.assertEqual(len(se.keys()), len(self._keys))

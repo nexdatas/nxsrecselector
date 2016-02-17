@@ -389,38 +389,23 @@ class PoolUtils(object):
     ## provides experimental Channels
     # \param cls class instance
     # \param pools list of pool devices
-    # \returns experimental channel names
+    # \param listattr pool attribute with list
+    # \returns names from given pool listattr
     @classmethod
-    def getExperimentalChannels(cls, pools):
+    def getElementNames(cls, pools, listattr):
         lst = []
-        channels = []
+        elements = []
         for pool in pools:
-            if pool.ExpChannelList:
-                lst += pool.ExpChannelList
+            if hasattr(pool, listattr):
+                ellist = getattr(pool, listattr)
+                if ellist:
+                    lst += ellist
         for elm in lst:
             if elm:
                 chan = json.loads(elm)
                 if chan and isinstance(chan, dict):
-                    channels.append(chan['name'])
-        return channels
-
-    ## provides motor names
-    # \param cls class instance
-    # \param pools list of pool devices
-    # \returns motor names
-    @classmethod
-    def getMotorNames(cls, pools):
-        lst = []
-        motors = []
-        for pool in pools:
-            if pool.MotorList:
-                lst += pool.MotorList
-        for elm in lst:
-            if elm:
-                chan = json.loads(elm)
-                if chan and isinstance(chan, dict):
-                    motors.append(chan['name'])
-        return motors
+                    elements.append(chan['name'])
+        return elements
 
     ## find device names from aliases
     # \param cls class instance
@@ -459,22 +444,6 @@ class PoolUtils(object):
             fname = "/".join(arr[0:-1])
             if names is None or fname in names:
                 argout[fname] = chan['name']
-        return argout
-
-    ## find measurement group from alias
-    # \param cls class instance
-    # \param pools list of pool devices
-    # \returns name of measurement group
-    @classmethod
-    def getMntGrps(cls, pools):
-        lst = []
-        for pool in pools:
-            if pool.MeasurementGroupList:
-                lst += pool.MeasurementGroupList
-        argout = []
-        for elm in lst:
-            chan = json.loads(elm)
-            argout.append(chan['name'])
         return argout
 
     ## find measurement group from alias
