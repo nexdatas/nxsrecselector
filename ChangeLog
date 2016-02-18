@@ -1,4 +1,5 @@
-2016-01-XX Jan Kotanski <jankotan@gmail.com>
+2016-02-18 Jan Kotanski <jankotan@gmail.com>
+	* add mutedChannels command and MutedChannelFilters property
 	* change poolMotors/poolExperimentalChannels commands into poolElementNames
 	* tagged as v2.2.0
 
