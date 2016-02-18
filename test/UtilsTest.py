@@ -1245,15 +1245,15 @@ class UtilsTest(unittest.TestCase):
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
 
         arr = [
-            ["test/ct/01", 
+            ["test/ct/01",
              "haso228k:10000/expchan/dgg2_exp_00/1"],
-            ["test/ct/02", 
+            ["test/ct/02",
              "haso228k:10000/expchan/dgg2_exp_01/1"],
-            ["test/ct/03", 
+            ["test/ct/03",
              "haso228k:10000/expchan/dgg2_exp_02/1"],
-            ["test/ct/04", 
+            ["test/ct/04",
              "haso228k:10000/expchan/dgg2_exp_03/1"],
-            ["null", 
+            ["null",
              "haso228k:10000/expchan/dg2_exp_01/1"],
         ]
 
@@ -1293,15 +1293,15 @@ class UtilsTest(unittest.TestCase):
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
 
         arr = [
-            ["test/ct/01", 
+            ["test/ct/01",
              "haso228k:10000/expchan/dgg1_exp_00/1"],
-            ["test/ct/02", 
+            ["test/ct/02",
              "haso228k:10000/expchan/dgg2_exp_01/1"],
-            ["test/ct/03", 
+            ["test/ct/03",
              "haso228k:10000/expchan/dgg2_exp_02/1"],
-            ["test/ct/04", 
+            ["test/ct/04",
              "haso228k:10000/expchan/dgg2_exp_03/1"],
-            ["null", 
+            ["null",
              "haso228k:10000/expchan/dg2_exp_01/1"],
         ]
 
@@ -1327,18 +1327,17 @@ class UtilsTest(unittest.TestCase):
         self.assertEqual(dd, [])
 
         lst = [ar[0] for ar in arr
-               if ('dgg2_' in ar[1] or  'dg2_' in ar[1])]
+               if ('dgg2_' in ar[1] or 'dg2_' in ar[1])]
 
         dd = PoolUtils.filterNames([pool], filters=['*dgg2_*', '*dg2_*'])
         self.assertEqual(dd, lst)
 
         lst.extend([ar[0] for ar in arr2
-                    if ('dgg2_' in ar[1] or  'dg2_' in ar[1])])
+                    if ('dgg2_' in ar[1] or 'dg2_' in ar[1])])
 
         dd = PoolUtils.filterNames(
             [pool, pool2], filters=['*dgg2_*', '*dg2_*'])
         self.assertEqual(dd, lst)
-
 
     def test_getRecord(self):
         fun = sys._getframe().f_code.co_name

@@ -7214,15 +7214,15 @@ class SettingsTest(unittest.TestCase):
         self._ms.dps[self._ms.ms.keys()[0]].Init()
 
         arr = [
-            ["test/ct/01", 
+            ["test/ct/01",
              "haso228k:10000/expchan/dgg2_exp_00/1"],
-            ["test/ct/02", 
+            ["test/ct/02",
              "haso228k:10000/expchan/dgg2_exp_01/1"],
-            ["test/ct/03", 
+            ["test/ct/03",
              "haso228k:10000/expchan/tip551_exp_02/1"],
-            ["test/ct/04", 
+            ["test/ct/04",
              "haso228k:10000/expchan/dgg2_exp_03/1"],
-            ["null", 
+            ["null",
              "haso228k:10000/expchan/tip551_exp_01/1"],
         ]
 
@@ -7264,15 +7264,15 @@ class SettingsTest(unittest.TestCase):
         self._ms.dps[self._ms.ms.keys()[0]].Init()
 
         arr = [
-            ["test/ct/01", 
+            ["test/ct/01",
              "haso228k:10000/expchan/dgg2_exp_00/1"],
-            ["test/ct/02", 
+            ["test/ct/02",
              "haso228k:10000/expchan/dgg2_exp_01/1"],
-            ["test/ct/03", 
+            ["test/ct/03",
              "haso228k:10000/expchan/tip551_exp_02/1"],
-            ["test/ct/04", 
+            ["test/ct/04",
              "haso228k:10000/expchan/tip551_exp_03/1"],
-            ["null", 
+            ["null",
              "haso228k:10000/expchan/dg2_exp_01/1"],
         ]
 
@@ -7321,7 +7321,7 @@ class SettingsTest(unittest.TestCase):
              "haso228k:10000/expchan/dgg2_exp_02/1/Value"],
             ["test/ct/04",
              "haso228k:10000/expchan/dgg2_exp_03/1/Value"],
-            ["null", 
+            ["null",
              "haso228k:10000/expchan/dg2_exp_01/1/Value"],
         ]
 
@@ -7408,7 +7408,7 @@ class SettingsTest(unittest.TestCase):
                     {"name": a[0], "full_name": a[1]}
                 )
                 for a in arr2]
-            lst.extend([ar[0] for ar in arr2  if 'tip551' in ar[1]])
+            lst.extend([ar[0] for ar in arr2 if 'tip551' in ar[1]])
 
             dd = rs.mutedChannels()
             self.assertEqual(set(dd), set(lst))
@@ -7448,26 +7448,26 @@ class SettingsTest(unittest.TestCase):
             rs.mntGrp = val["MntGrp"]
 
             arr = [
-                ["test/ct/01", 
+                ["test/ct/01",
                  "haso228k:10000/expchan/dgg2_exp_00/1tip551e"],
-                ["test/ct/02", 
+                ["test/ct/02",
                  "haso228k:10000/expchan/dtip551gg2_exp_01/1/Value"],
-                ["test/ct/03", 
+                ["test/ct/03",
                  "haso228k:10000/tip551han/dgg2_exp_02/1/Value"],
-                ["test/ct/04", 
+                ["test/ct/04",
                  "haso228k:10000/expchan/dgg2_exp_03/1/Value"],
-                ["null", 
+                ["null",
                  "haso228k:10000/expchan/dg2_exp_01/1/Value"],
             ]
 
             arr2 = [
-                ["test/mca/01", 
+                ["test/mca/01",
                  "haso228k:10000/expchan/dgg2_exp_01/1/Value"],
-                ["test/mca/02", 
+                ["test/mca/02",
                  "haso228k:10000/expchan/dg2_exp_01/1/Value"],
-                ["test/sca/03", 
+                ["test/sca/03",
                  "haso228k:10000/expchan/dg2_tip551exp_01/1/Value"],
-                ["test/sca/04", 
+                ["test/sca/04",
                  "haso228k:10000/expchan/dgg2_exp_01/1tip551"],
             ]
 
@@ -7532,26 +7532,26 @@ class SettingsTest(unittest.TestCase):
             rs.mntGrp = val["MntGrp"]
 
             arr = [
-                ["test/ct/01", 
+                ["test/ct/01",
                  "haso228k:10000/expchan/dgg2_exp_00/1/Value"],
-                ["test/ct/02", 
+                ["test/ct/02",
                  "haso228k:10000/expchan/dgg2_exp_01/1/Value"],
-                ["test/ct/03", 
+                ["test/ct/03",
                  "haso228k:10000/expchan/dgg2_exp_02/1/Value"],
-                ["test/ct/04", 
+                ["test/ct/04",
                  "haso228k:10000/expchan/dgg2_exp_03/1/Value"],
-                ["null", 
+                ["null",
                  "haso228k:10000/expchan/dg2_exp_01/1/Value"],
             ]
 
             arr2 = [
-                ["test/mca/01", 
+                ["test/mca/01",
                  "haso228k:10000/expchan/dgg2_exp_01/1/Value"],
-                ["test/mca/02", 
+                ["test/mca/02",
                  "haso228k:10000/expchan/dg2_exp_01/1/Value"],
-                ["test/sca/03", 
+                ["test/sca/03",
                  "haso228k:10000/expchan/dg2_exp_01/1/Value"],
-                ["test/sca/04", 
+                ["test/sca/04",
                  "haso228k:10000/expchan/dgg2_exp_01/1/Value"],
             ]
 
@@ -7613,26 +7613,26 @@ class SettingsTest(unittest.TestCase):
             rs.mntGrp = val["MntGrp"]
 
             arr = [
-                ["test/ct/01", 
+                ["test/ct/01",
                  "haso228k:10000/expchan/dgg2_exp_00/1/Value"],
-                ["test/ct/02", 
+                ["test/ct/02",
                  "haso228k:10000/expchan/dgg2_exp_01/1/Value"],
-                ["test/ct/03", 
+                ["test/ct/03",
                  "haso228k:10000/expchan/dgg2_exp_02/1/Value"],
-                ["test/ct/04", 
+                ["test/ct/04",
                  "haso228k:10000/expchan/dgg2_exp_03/1/Value"],
-                ["null", 
+                ["null",
                  "haso228k:10000/expchan/dg2_exp_01/1/Value"],
             ]
 
             arr2 = [
-                ["test/mca/01", 
+                ["test/mca/01",
                  "haso228k:10000/expchan/dgg2_exp_01/1/Value"],
-                ["test/mca/02", 
+                ["test/mca/02",
                  "haso228k:10000/expchan/dg2_exp_01/1/Value"],
-                ["test/sca/03", 
+                ["test/sca/03",
                  "haso228k:10000/expchan/dg2_exp_01/1/Value"],
-                ["test/sca/04", 
+                ["test/sca/04",
                  "haso228k:10000/expchan/dgg2_exp_01/1/Value"],
             ]
 
@@ -7646,7 +7646,7 @@ class SettingsTest(unittest.TestCase):
                 for a in arr]
 
             lst = [ar[0] for ar in arr if (
-                    'exp_00' in ar[1] or 'exp_01' in ar[1])]
+                'exp_00' in ar[1] or 'exp_01' in ar[1])]
 
             dd = rs.mutedChannels()
             self.assertEqual(set(dd), set(lst))
@@ -7658,7 +7658,7 @@ class SettingsTest(unittest.TestCase):
                 for a in arr2]
             lst.extend(
                 [ar[0] for ar in arr2 if (
-                        'exp_00' in ar[1] or 'exp_01' in ar[1])])
+                    'exp_00' in ar[1] or 'exp_01' in ar[1])])
 
             dd = rs.mutedChannels()
             self.assertEqual(set(dd), set(lst))
@@ -7666,9 +7666,6 @@ class SettingsTest(unittest.TestCase):
         finally:
             tpool2.tearDown()
 
-
-
-            
     ## getDeviceName test
     def test_fullDeviceNames_empty(self):
         fun = sys._getframe().f_code.co_name
