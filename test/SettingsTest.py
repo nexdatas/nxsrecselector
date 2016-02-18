@@ -7169,6 +7169,509 @@ class SettingsTest(unittest.TestCase):
         finally:
             tpool2.tearDown()
 
+    ## test
+    # \brief It tests default settings
+    def test_mutedChannels_empty(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+
+        rs = self.openRecSelector()
+        rs.configDevice = val["ConfigDevice"]
+        rs.door = val["Door"]
+        rs.mntGrp = val["MntGrp"]
+
+        self.assertTrue(not rs.mutedChannels())
+
+#            rs = self.openRecSelector()
+
+    ## test
+    # \brief It tests default settings
+    def test_mutedChannels_pool1(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+
+        db = PyTango.Database()
+        db.put_device_property(self._ms.ms.keys()[0],
+                               {'PoolNames': self._pool.dp.name()})
+        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        rs = self.openRecSelector()
+        rs.configDevice = val["ConfigDevice"]
+        rs.door = val["Door"]
+        rs.mntGrp = val["MntGrp"]
+
+        db = PyTango.Database()
+        db.put_device_property(self._ms.ms.keys()[0],
+                               {'PoolNames': self._pool.dp.name()})
+
+        self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+        arr = [
+            ["test/ct/01", 
+             "haso228k:10000/expchan/dgg2_exp_00/1"],
+            ["test/ct/02", 
+             "haso228k:10000/expchan/dgg2_exp_01/1"],
+            ["test/ct/03", 
+             "haso228k:10000/expchan/tip551_exp_02/1"],
+            ["test/ct/04", 
+             "haso228k:10000/expchan/dgg2_exp_03/1"],
+            ["null", 
+             "haso228k:10000/expchan/tip551_exp_01/1"],
+        ]
+
+        pool = self._pool.dp
+
+        pool.AcqChannelList = [json.dumps(
+            {"name": a[0], "full_name": a[1]}) for a in arr]
+
+        lst = [ar[0] for ar in arr if 'tip551' in ar[1]]
+
+        dd = rs.mutedChannels()
+        self.assertEqual(set(dd), set(lst))
+
+    ## test
+    # \brief It tests default settings
+    def test_mutedChannels_pool1_bl(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+
+        db = PyTango.Database()
+        db.put_device_property(self._ms.ms.keys()[0],
+                               {'PoolNames': self._pool.dp.name()})
+        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        rs = self.openRecSelector()
+        self.setProp(rs, "poolBlacklist",
+                     [self._pool.dp.name()])
+        rs.configDevice = val["ConfigDevice"]
+        rs.door = val["Door"]
+        rs.mntGrp = val["MntGrp"]
+
+        db = PyTango.Database()
+        db.put_device_property(self._ms.ms.keys()[0],
+                               {'PoolNames': self._pool.dp.name()})
+
+        self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+        arr = [
+            ["test/ct/01", 
+             "haso228k:10000/expchan/dgg2_exp_00/1"],
+            ["test/ct/02", 
+             "haso228k:10000/expchan/dgg2_exp_01/1"],
+            ["test/ct/03", 
+             "haso228k:10000/expchan/tip551_exp_02/1"],
+            ["test/ct/04", 
+             "haso228k:10000/expchan/tip551_exp_03/1"],
+            ["null", 
+             "haso228k:10000/expchan/dg2_exp_01/1"],
+        ]
+
+        pool = self._pool.dp
+
+        pool.AcqChannelList = [json.dumps(
+            {"name": a[0], "full_name": a[1]}) for a in arr]
+
+        lst = [ar[0] for ar in arr if "tip551" in ar[1]]
+        dd = rs.mutedChannels()
+        self.assertTrue(not dd)
+
+    ## test
+    # \brief It tests default settings
+    def test_mutedChannels_pool1_filter(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+
+        db = PyTango.Database()
+        db.put_device_property(self._ms.ms.keys()[0],
+                               {'PoolNames': self._pool.dp.name()})
+        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        rs = self.openRecSelector()
+        self.setProp(rs, "mutedChannelFilters",
+                     ["*dgg2_exp_00*", "*dgg2_exp_01*"])
+        rs.configDevice = val["ConfigDevice"]
+        rs.door = val["Door"]
+        rs.mntGrp = val["MntGrp"]
+
+        db = PyTango.Database()
+        db.put_device_property(self._ms.ms.keys()[0],
+                               {'PoolNames': self._pool.dp.name()})
+
+        self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+        arr = [
+            ["test/ct/01",
+             "haso228k:10000/expchan/dgg2_exp_00/1/Value"],
+            ["test/ct/02",
+             "haso228k:10000/expchan/dgg2_exp_01/1/Value"],
+            ["test/ct/03",
+             "haso228k:10000/expchan/dgg2_exp_02/1/Value"],
+            ["test/ct/04",
+             "haso228k:10000/expchan/dgg2_exp_03/1/Value"],
+            ["null", 
+             "haso228k:10000/expchan/dg2_exp_01/1/Value"],
+        ]
+
+        pool = self._pool.dp
+
+        pool.AcqChannelList = [json.dumps(
+            {"name": a[0], "full_name": a[1]}) for a in arr]
+
+        lst = [ar[0] for ar in arr[:2]
+               if ('dgg2_exp_00' in ar[1] or 'dgg2_exp_01' in ar[1])]
+
+        dd = rs.mutedChannels()
+        self.assertEqual(set(dd), set(lst))
+
+    ## test
+    # \brief It tests default settings
+    def test_mutedChannels_2pools(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+
+        try:
+            tpool2 = TestPoolSetUp.TestPoolSetUp(
+                "pooltestp09/testts/t2r228", "POOLTESTS2")
+            tpool2.setUp()
+
+            db = PyTango.Database()
+            db.put_device_property(
+                self._ms.ms.keys()[0],
+                {'PoolNames': [
+                    tpool2.dp.name(), self._pool.dp.name()]})
+            pool = self._pool.dp
+            pool2 = tpool2.dp
+            self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+            rs = self.openRecSelector()
+            rs.configDevice = val["ConfigDevice"]
+            rs.door = val["Door"]
+            rs.mntGrp = val["MntGrp"]
+
+            arr = [
+                ["test/ct/01",
+                 "haso228k:10000/extip551pchan/dgg2_exp_00/1"],
+                ["test/ct/02",
+                 "haso228k:10000/expchan/dgg2_exp_01/1"],
+                ["test/ct/03",
+                 "haso228k:10000/expchan/dgg2_exp_02/1"],
+                ["test/ct/04",
+                 "haso228k:10000/expchan/dgg2_exp_03/1Value"],
+                ["null",
+                 "haso228k:10000/extip551p/dg2_exp_01/1Value"],
+            ]
+
+            arr2 = [
+                ["test/mca/01",
+                 "haso228k:10000/expchan/dgg2_exp_01/1Value"],
+                ["test/mca/02",
+                 "haso228k:10000/tip551/dg2_exp_01/1Value"],
+                ["test/sca/03",
+                 "haso228k:10000/expchan/dg2_exp_01/1Value"],
+                ["test/sca/04",
+                 "haso228k:10000/tip551/dgg2_exp_01/1Value"],
+            ]
+
+            dd = rs.mutedChannels()
+            self.assertTrue(not dd)
+
+            pool.AcqChannelList = [
+                json.dumps(
+                    {"name": a[0], "full_name": a[1]}
+                ) for a in arr
+            ]
+
+            lst = [ar[0] for ar in arr if 'tip551' in ar[1]]
+
+            dd = rs.mutedChannels()
+            self.assertEqual(set(dd), set(lst))
+
+            pool2.AcqChannelList = [
+                json.dumps(
+                    {"name": a[0], "full_name": a[1]}
+                )
+                for a in arr2]
+            lst.extend([ar[0] for ar in arr2  if 'tip551' in ar[1]])
+
+            dd = rs.mutedChannels()
+            self.assertEqual(set(dd), set(lst))
+
+        finally:
+            tpool2.tearDown()
+
+    ## test
+    # \brief It tests default settings
+    def test_mutedChannels_2pools_bl(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+
+        try:
+            tpool2 = TestPoolSetUp.TestPoolSetUp(
+                "pooltestp09/testts/t2r228", "POOLTESTS2")
+            tpool2.setUp()
+
+            db = PyTango.Database()
+            db.put_device_property(
+                self._ms.ms.keys()[0],
+                {'PoolNames': [
+                    tpool2.dp.name(), self._pool.dp.name()]})
+            pool = self._pool.dp
+            pool2 = tpool2.dp
+            self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+            rs = self.openRecSelector()
+            self.setProp(rs, "poolBlacklist",
+                         [tpool2.dp.name()])
+            rs.configDevice = val["ConfigDevice"]
+            rs.door = val["Door"]
+            rs.mntGrp = val["MntGrp"]
+
+            arr = [
+                ["test/ct/01", 
+                 "haso228k:10000/expchan/dgg2_exp_00/1tip551e"],
+                ["test/ct/02", 
+                 "haso228k:10000/expchan/dtip551gg2_exp_01/1/Value"],
+                ["test/ct/03", 
+                 "haso228k:10000/tip551han/dgg2_exp_02/1/Value"],
+                ["test/ct/04", 
+                 "haso228k:10000/expchan/dgg2_exp_03/1/Value"],
+                ["null", 
+                 "haso228k:10000/expchan/dg2_exp_01/1/Value"],
+            ]
+
+            arr2 = [
+                ["test/mca/01", 
+                 "haso228k:10000/expchan/dgg2_exp_01/1/Value"],
+                ["test/mca/02", 
+                 "haso228k:10000/expchan/dg2_exp_01/1/Value"],
+                ["test/sca/03", 
+                 "haso228k:10000/expchan/dg2_tip551exp_01/1/Value"],
+                ["test/sca/04", 
+                 "haso228k:10000/expchan/dgg2_exp_01/1tip551"],
+            ]
+
+            dd = rs.mutedChannels()
+            self.assertTrue(not dd)
+
+            pool.AcqChannelList = [
+                json.dumps(
+                    {"name": a[0], "full_name": a[1]}
+                ) for a in arr
+            ]
+
+            lst = [ar[0] for ar in arr if 'tip551' in ar[1]]
+
+            dd = rs.mutedChannels()
+            self.assertEqual(set(dd), set(lst))
+
+            pool2.AcqChannelList = [
+                json.dumps(
+                    {"name": a[0], "full_name": a[1]}
+                )
+                for a in arr2]
+#            lst.extend([ar[0] for ar in arr2 if "CTExpChannel" in ar[1]])
+
+            dd = rs.mutedChannels()
+            self.assertEqual(set(dd), set(lst))
+
+        finally:
+            tpool2.tearDown()
+
+    ## test
+    # \brief It tests default settings
+    def test_mutedChannels_2pools_filter_bl(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+
+        try:
+            tpool2 = TestPoolSetUp.TestPoolSetUp(
+                "pooltestp09/testts/t2r228", "POOLTESTS2")
+            tpool2.setUp()
+
+            db = PyTango.Database()
+            db.put_device_property(
+                self._ms.ms.keys()[0],
+                {'PoolNames': [
+                    tpool2.dp.name(), self._pool.dp.name()]})
+            pool = self._pool.dp
+            pool2 = tpool2.dp
+            self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+            rs = self.openRecSelector()
+            self.setProp(rs, "mutedChannelFilters",
+                         ["*exp_00*", "*exp_01*"])
+            self.setProp(rs, "poolBlacklist",
+                         [tpool2.dp.name()])
+            rs.configDevice = val["ConfigDevice"]
+            rs.door = val["Door"]
+            rs.mntGrp = val["MntGrp"]
+
+            arr = [
+                ["test/ct/01", 
+                 "haso228k:10000/expchan/dgg2_exp_00/1/Value"],
+                ["test/ct/02", 
+                 "haso228k:10000/expchan/dgg2_exp_01/1/Value"],
+                ["test/ct/03", 
+                 "haso228k:10000/expchan/dgg2_exp_02/1/Value"],
+                ["test/ct/04", 
+                 "haso228k:10000/expchan/dgg2_exp_03/1/Value"],
+                ["null", 
+                 "haso228k:10000/expchan/dg2_exp_01/1/Value"],
+            ]
+
+            arr2 = [
+                ["test/mca/01", 
+                 "haso228k:10000/expchan/dgg2_exp_01/1/Value"],
+                ["test/mca/02", 
+                 "haso228k:10000/expchan/dg2_exp_01/1/Value"],
+                ["test/sca/03", 
+                 "haso228k:10000/expchan/dg2_exp_01/1/Value"],
+                ["test/sca/04", 
+                 "haso228k:10000/expchan/dgg2_exp_01/1/Value"],
+            ]
+
+            dd = rs.mutedChannels()
+            self.assertTrue(not dd)
+
+            pool.AcqChannelList = [
+                json.dumps(
+                    {"name": a[0], "full_name": a[1]}
+                )
+                for a in arr]
+
+            lst = [ar[0] for ar in arr if (
+                'exp_00' in ar[1] or 'exp_01' in ar[1])]
+
+            dd = rs.mutedChannels()
+            self.assertEqual(set(dd), set(lst))
+
+            pool2.AcqChannelList = [
+                json.dumps(
+                    {"name": a[0], "full_name": a[1]}
+                )
+                for a in arr2]
+            dd = rs.mutedChannels()
+            self.assertEqual(set(dd), set(lst))
+
+        finally:
+            tpool2.tearDown()
+
+    ## test
+    # \brief It tests default settings
+    def test_mutedChannels_2pools_filter(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+
+        try:
+            tpool2 = TestPoolSetUp.TestPoolSetUp(
+                "pooltestp09/testts/t2r228", "POOLTESTS2")
+            tpool2.setUp()
+
+            db = PyTango.Database()
+            db.put_device_property(
+                self._ms.ms.keys()[0],
+                {'PoolNames': [
+                    tpool2.dp.name(), self._pool.dp.name()]})
+            pool = self._pool.dp
+            pool2 = tpool2.dp
+            self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+            rs = self.openRecSelector()
+            self.setProp(rs, "timerFilters",
+                         ["*exp_00*", "*exp_01*"])
+            rs.configDevice = val["ConfigDevice"]
+            rs.door = val["Door"]
+            rs.mntGrp = val["MntGrp"]
+
+            arr = [
+                ["test/ct/01", ["CTExpChannel"],
+                 "haso228k:10000/expchan/dgg2_exp_00/1/Value"],
+                ["test/ct/02", ["conem", "CTExpChannel"],
+                 "haso228k:10000/expchan/dgg2_exp_01/1/Value"],
+                ["test/ct/03", ["CTExpChannel", "ZeroDChannel"],
+                 "haso228k:10000/expchan/dgg2_exp_02/1/Value"],
+                ["test/ct/04", ["oneD", "CTExpChannel"],
+                 "haso228k:10000/expchan/dgg2_exp_03/1/Value"],
+                ["null", ["counter_04"],
+                 "haso228k:10000/expchan/dg2_exp_01/1/Value"],
+            ]
+
+            arr2 = [
+                ["test/mca/01", ["CTExpChannel"],
+                 "haso228k:10000/expchan/dgg2_exp_01/1/Value"],
+                ["test/mca/02", ["CTExpChannel2", "CTExpChannel1"],
+                 "haso228k:10000/expchan/dg2_exp_01/1/Value"],
+                ["test/sca/03", ["CTExpChannel3", "CTExpChannel123"],
+                 "haso228k:10000/expchan/dg2_exp_01/1/Value"],
+                ["test/sca/04", ["CTExpChannel", "CTExpChannel2",
+                                 "CTExpChannel3"],
+                 "haso228k:10000/expchan/dgg2_exp_01/1/Value"],
+            ]
+
+            dd = rs.mutedChannels()
+            self.assertTrue(not dd)
+
+            pool.ExpChannelList = [
+                json.dumps(
+                    {"name": a[0], "interfaces": a[1], "source": a[2]}
+                )
+                for a in arr]
+
+            lst = [ar[0] for ar in arr if (
+                "CTExpChannel" in ar[1] and (
+                    'exp_00' in ar[2] or 'exp_01' in ar[2]))]
+
+            dd = rs.mutedChannels()
+            self.assertEqual(set(dd), set(lst))
+
+            pool2.ExpChannelList = [
+                json.dumps(
+                    {"name": a[0], "interfaces": a[1], "source": a[2]}
+                )
+                for a in arr2]
+            lst.extend(
+                [ar[0] for ar in arr2 if (
+                    "CTExpChannel" in ar[1] and (
+                        'exp_00' in ar[2] or 'exp_01' in ar[2]))])
+
+            dd = rs.mutedChannels()
+            self.assertEqual(set(dd), set(lst))
+
+        finally:
+            tpool2.tearDown()
+
+
+
+            
     ## getDeviceName test
     def test_fullDeviceNames_empty(self):
         fun = sys._getframe().f_code.co_name

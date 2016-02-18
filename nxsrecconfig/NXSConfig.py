@@ -87,15 +87,13 @@ class NXSRecSelector(PyTango.Device_4Impl):
         numberofthreads = self.NumberOfThreads or None
         self.__stg = STG(self, numberofthreads)
         self.set_state(PyTango.DevState.ON)
-        self.__stg.poolBlacklist = self.PoolBlacklist \
-            if self.PoolBlacklist else []
-        self.__stg.timerFilters = self.TimerFilters \
-            if self.TimerFilters else ["*dgg*", "*/ctctrl0*"]
-        self.__stg.adminDataNames = self.AdminDataNames \
-            if self.AdminDataNames else []
+        self.__stg.poolBlacklist = self.PoolBlacklist or []
+        self.__stg.timerFilters = self.TimerFilters or ["*dgg*", "*/ctctrl0*"]
+        self.__stg.mutedChannelFilters = self.MutedChannelFilters \
+            or ["*tip551*"]
+        self.__stg.adminDataNames = self.AdminDataNames or []
         self.__stg.defaultPreselectedComponents = \
-            self.DefaultPreselectedComponents \
-            if self.DefaultPreselectedComponents else []
+            self.DefaultPreselectedComponents or []
 
     #------------------------------------------------------------------
     #    Always excuted hook method
@@ -762,6 +760,31 @@ class NXSRecSelector(PyTango.Device_4Impl):
         return True
 
     #------------------------------------------------------------------
+    #    MutedChannels command:
+    #
+    #    Description: Returns a list of muted channel names
+    #
+    #    argout: DevVarStringArray    list of muted channel names
+    #------------------------------------------------------------------
+    def MutedChannels(self):
+        self.debug_stream("In MutedChannels()")
+        try:
+            self.set_state(PyTango.DevState.RUNNING)
+            argout = self.__stg.mutedChannels()
+            self.set_state(PyTango.DevState.ON)
+        finally:
+            if self.get_state() == PyTango.DevState.RUNNING:
+                self.set_state(PyTango.DevState.ON)
+
+        return argout
+
+    #---- MutedChannels command State Machine -----------------
+    def is_MutedChannels_allowed(self):
+        if self.get_state() in [PyTango.DevState.RUNNING]:
+            return False
+        return True
+
+    #------------------------------------------------------------------
     #    AvailableComponents command:
     #
     #    Description: Returns a list of available component names
@@ -1399,6 +1422,10 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
         [PyTango.DevVarStringArray,
          "list of timer filters",
          []],
+        'MutedChannelFilters':
+        [PyTango.DevVarStringArray,
+         "list of muted channel filters",
+         []],
         'AdminDataNames':
         [PyTango.DevVarStringArray,
          "list of administrator data names",
@@ -1485,6 +1512,10 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
             [[PyTango.DevVoid, ""],
              [PyTango.DevVarStringArray,
               "list of available timers"]],
+        'MutedChannels':
+            [[PyTango.DevVoid, ""],
+             [PyTango.DevVarStringArray,
+              "list of muted channels"]],
         'ComponentDescription':
             [[PyTango.DevVoid, ""],
              [PyTango.DevString,

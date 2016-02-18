@@ -495,6 +495,33 @@ class PoolUtils(object):
                         res.append(chan['name'])
         return res
 
+    ## provides channels of given pools
+    # \param cls class instance
+    # \param pools list of pool devices
+    # \param filters device name filter list
+    # \returns list of timer names
+    @classmethod
+    def filterNames(cls, pools, filters=None):
+        lst = []
+        res = []
+        for pool in pools:
+            if pool.AcqChannelList:
+                lst += pool.AcqChannelList
+
+        if filters is None or not hasattr(filters, '__iter__'):
+            filters = ["*"]
+        for elm in lst:
+            chan = json.loads(elm)
+            fullname = chan['full_name']
+            found = False
+            for df in filters:
+                found = fnmatch.filter([fullname], df)
+                if found:
+                    break
+            if found:
+                res.append(chan['name'])
+        return res
+
     ## provides datasource from pool device
     # \param name pool device name
     # \returns source of pool device

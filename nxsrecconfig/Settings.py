@@ -61,6 +61,8 @@ class Settings(object):
 
         ## timer filters
         self.timerFilters = ["*dgg*", "*/ctctrl0*"]
+        ## timer filters
+        self.mutedChannelFilters = ["*tip551*"]
         ## default device groups
         self.__defaultDeviceGroups = \
             '{"timer": ["*exp_t*"], "dac": ["*exp_dac*"], ' \
@@ -508,6 +510,12 @@ class Settings(object):
     def availableTimers(self):
         pools = self.__selector.getPools()
         return PoolUtils.getTimers(pools, self.timerFilters)
+
+    ## provides muted channels from pool
+    # \returns muted channels from pool
+    def mutedChannels(self):
+        pools = self.__selector.getPools()
+        return PoolUtils.filterNames(pools, self.mutedChannelFilters)
 
 ##  commands
 
