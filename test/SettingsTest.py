@@ -7606,62 +7606,59 @@ class SettingsTest(unittest.TestCase):
             self._ms.dps[self._ms.ms.keys()[0]].Init()
 
             rs = self.openRecSelector()
-            self.setProp(rs, "timerFilters",
+            self.setProp(rs, "mutedChannelFilters",
                          ["*exp_00*", "*exp_01*"])
             rs.configDevice = val["ConfigDevice"]
             rs.door = val["Door"]
             rs.mntGrp = val["MntGrp"]
 
             arr = [
-                ["test/ct/01", ["CTExpChannel"],
+                ["test/ct/01", 
                  "haso228k:10000/expchan/dgg2_exp_00/1/Value"],
-                ["test/ct/02", ["conem", "CTExpChannel"],
+                ["test/ct/02", 
                  "haso228k:10000/expchan/dgg2_exp_01/1/Value"],
-                ["test/ct/03", ["CTExpChannel", "ZeroDChannel"],
+                ["test/ct/03", 
                  "haso228k:10000/expchan/dgg2_exp_02/1/Value"],
-                ["test/ct/04", ["oneD", "CTExpChannel"],
+                ["test/ct/04", 
                  "haso228k:10000/expchan/dgg2_exp_03/1/Value"],
-                ["null", ["counter_04"],
+                ["null", 
                  "haso228k:10000/expchan/dg2_exp_01/1/Value"],
             ]
 
             arr2 = [
-                ["test/mca/01", ["CTExpChannel"],
+                ["test/mca/01", 
                  "haso228k:10000/expchan/dgg2_exp_01/1/Value"],
-                ["test/mca/02", ["CTExpChannel2", "CTExpChannel1"],
+                ["test/mca/02", 
                  "haso228k:10000/expchan/dg2_exp_01/1/Value"],
-                ["test/sca/03", ["CTExpChannel3", "CTExpChannel123"],
+                ["test/sca/03", 
                  "haso228k:10000/expchan/dg2_exp_01/1/Value"],
-                ["test/sca/04", ["CTExpChannel", "CTExpChannel2",
-                                 "CTExpChannel3"],
+                ["test/sca/04", 
                  "haso228k:10000/expchan/dgg2_exp_01/1/Value"],
             ]
 
             dd = rs.mutedChannels()
             self.assertTrue(not dd)
 
-            pool.ExpChannelList = [
+            pool.AcqChannelList = [
                 json.dumps(
-                    {"name": a[0], "interfaces": a[1], "source": a[2]}
+                    {"name": a[0], "full_name": a[1]}
                 )
                 for a in arr]
 
             lst = [ar[0] for ar in arr if (
-                "CTExpChannel" in ar[1] and (
-                    'exp_00' in ar[2] or 'exp_01' in ar[2]))]
+                    'exp_00' in ar[1] or 'exp_01' in ar[1])]
 
             dd = rs.mutedChannels()
             self.assertEqual(set(dd), set(lst))
 
-            pool2.ExpChannelList = [
+            pool2.AcqChannelList = [
                 json.dumps(
-                    {"name": a[0], "interfaces": a[1], "source": a[2]}
+                    {"name": a[0], "full_name": a[1]}
                 )
                 for a in arr2]
             lst.extend(
                 [ar[0] for ar in arr2 if (
-                    "CTExpChannel" in ar[1] and (
-                        'exp_00' in ar[2] or 'exp_01' in ar[2]))])
+                        'exp_00' in ar[1] or 'exp_01' in ar[1])])
 
             dd = rs.mutedChannels()
             self.assertEqual(set(dd), set(lst))
