@@ -190,6 +190,7 @@ class DynamicComponent(object):
                     self.__links)
                 (parent, nxdata) = self.__createGroupTree(
                     root, definition, path, link)
+                created.append(ds)
 
                 shape, nxtype = None, 'NX_CHAR'
                 if ds in avds:

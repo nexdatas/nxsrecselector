@@ -1,3 +1,7 @@
+2016-02-23 Jan Kotanski <jankotan@gmail.com>
+	* fix for duplicated step and init datasources of dynamic component
+	* tagged as v2.2.1
+
 2016-02-18 Jan Kotanski <jankotan@gmail.com>
 	* add mutedChannels command and MutedChannelFilters property
 	* change poolMotors/poolExperimentalChannels commands into poolElementNames

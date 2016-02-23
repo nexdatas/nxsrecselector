@@ -1832,6 +1832,103 @@ class DynamicComponentTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
+    def test_create_step_init(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        cps = {
+            "empty":
+                '<?xml version="1.0" ?>\n<definition/>\n',
+            "one":
+                '<?xml version="1.0" ?>\n<definition>\n'
+            '<group name="entry$var.serialno" type="NXentry">\n'
+            '<group name="instrument" type="NXinstrument">\n'
+            '<group name="collection" type="NXcollection">\n'
+            '<field name="one" type="NX_CHAR">\n<strategy mode="STEP"/>\n'
+            '<datasource name="one" type="CLIENT">\n<record name="one"/>\n'
+            '</datasource>\n</field>\n'
+            '</group>\n</group>\n'
+            '<group name="data" type="NXdata">\n'
+            '<link name="one" target="/entry$var.serialno:'
+            'NXentry/NXinstrument/collection/one"/>\n'
+            '</group>\n</group>\n'
+            '</definition>\n',
+            "two":
+                '<?xml version="1.0" ?>\n<definition>\n'
+            '<group name="entry$var.serialno" type="NXentry">\n'
+            '<group name="instrument" type="NXinstrument">\n'
+            '<group name="collection" type="NXcollection">\n'
+            '<field name="d1" type="NX_CHAR">\n<strategy mode="STEP"/>\n'
+            '<datasource name="d1" type="CLIENT">\n<record name="d1"/>\n'
+            '</datasource>\n</field>\n'
+            '</group>\n</group>\n'
+            '<group name="data" type="NXdata">\n'
+            '<link name="d1" target="/entry$var.serialno:'
+            'NXentry/NXinstrument/collection/d1"/>\n'
+            '</group>\n</group>\n'
+            '<group name="entry$var.serialno" type="NXentry">\n'
+            '<group name="instrument" type="NXinstrument">\n'
+            '<group name="collection" type="NXcollection">\n'
+            '<field name="d2" type="NX_CHAR">\n<strategy mode="STEP"/>\n'
+            '<datasource name="d2" type="CLIENT">\n<record name="d2"/>\n'
+            '</datasource>\n</field>\n</group>\n</group>\n'
+            '<group name="data" type="NXdata">\n'
+            '<link name="d2" target="/entry$var.serialno:'
+            'NXentry/NXinstrument/collection/d2"/>\n'
+            '</group>\n</group>\n'
+            '</definition>\n',
+            "three":
+                '<?xml version="1.0" ?>\n<definition>\n'
+            '<group name="entry$var.serialno" type="NXentry">\n'
+            '<group name="instrument" type="NXinstrument">\n'
+            '<group name="collection" type="NXcollection">\n'
+            '<field name="ds1" type="NX_CHAR">\n<strategy mode="STEP"/>\n'
+            '<datasource name="ds1" type="CLIENT">\n<record name="ds1"/>\n'
+            '</datasource>\n</field>\n'
+            '</group>\n</group>\n'
+            '<group name="data" type="NXdata">\n'
+            '<link name="ds1" target="/entry$var.serialno:'
+            'NXentry/NXinstrument/collection/ds1"/>\n'
+            '</group>\n</group>\n'
+            '<group name="entry$var.serialno" type="NXentry">\n'
+            '<group name="instrument" type="NXinstrument">\n'
+            '<group name="collection" type="NXcollection">\n'
+            '<field name="ds2" type="NX_CHAR">\n<strategy mode="STEP"/>\n'
+            '<datasource name="ds2" type="CLIENT">\n<record name="ds2"/>\n'
+            '</datasource>\n</field>\n</group>\n</group>\n'
+            '<group name="data" type="NXdata">\n'
+            '<link name="ds2" target="/entry$var.serialno:'
+            'NXentry/NXinstrument/collection/ds2"/>\n'
+            '</group>\n</group>\n'
+            '<group name="entry$var.serialno" type="NXentry">\n'
+            '<group name="instrument" type="NXinstrument">\n'
+            '<group name="collection" type="NXcollection">\n'
+            '<field name="ds3" type="NX_CHAR">\n<strategy mode="STEP"/>\n'
+            '<datasource name="ds3" type="CLIENT">\n<record name="ds3"/>\n'
+            '</datasource>\n</field>\n</group>\n</group>\n'
+            '<group name="data" type="NXdata">\n'
+            '<link name="ds3" target="/entry$var.serialno:'
+            'NXentry/NXinstrument/collection/ds3"/>\n'
+            '</group>\n</group>\n'
+            '</definition>\n'
+        }
+        dsdict = {
+            "empty": [],
+            "one": ["one"],
+            "two": ["d1", "d2"],
+            "three": ["ds1", "ds2", "ds3"],
+        }
+        dname = "__dynamic_component__"
+        dc = DynamicComponent(self._cf.dp)
+        for lb, ds in dsdict.items():
+            dc.setStepDSources(ds)
+            dc.setInitDSources(ds)
+            cpname = dc.create()
+            comp = self._cf.dp.Components([cpname])[0]
+#            print "COMP", comp
+            self.assertEqual(cps[lb], comp)
+
+    ## constructor test
+    # \brief It tests default settings
     def test_create_step_no_type(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
