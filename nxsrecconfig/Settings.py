@@ -24,6 +24,8 @@ import json
 import gc
 import PyTango
 import nxsrecconfig
+import xml.dom.minidom
+
 from .Describer import Describer
 from .DynamicComponent import DynamicComponent
 from .Utils import Utils, TangoUtils, MSUtils, PoolUtils
@@ -515,7 +517,34 @@ class Settings(object):
     # \returns muted channels from pool
     def mutedChannels(self):
         pools = self.__selector.getPools()
-        return PoolUtils.filterNames(pools, self.mutedChannelFilters)
+        nexusconfig_device = self.__selector.setConfigInstance()
+        res = set(PoolUtils.filterNames(pools, self.mutedChannelFilters))
+        avds = TangoUtils.command(nexusconfig_device,
+                                  "availableDataSources")
+        try:
+            xmls = TangoUtils.command(
+                self.__nexusconfig_device,
+                "dataSources")
+            dsxmls = dict(zip(avds, xmls))
+        except:
+            dsxmls = {}
+            for ds in avds:
+                try:
+                    dsxmls[str(ds)] = TangoUtils.command(
+                        nexusconfig_device, "dataSources",
+                        [str(ds)])[0]
+                except:
+                    pass
+        lst = []        
+        for ds, dsxml in dsxmls.items():
+            indom = xml.dom.minidom.parseString(dsxml)
+            nodes = indom.getElementsByTagName("datasource")
+            if nodes:
+                record = Utils.getRecord(nodes[0])
+                lst.append(json.dumps({"name":ds, "full_name":record}))
+        res.update(set(PoolUtils.filterNames(
+            None, self.mutedChannelFilters, lst)))
+        return list(res)
 
 ##  commands
 

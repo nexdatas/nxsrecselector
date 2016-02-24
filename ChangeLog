@@ -1,3 +1,7 @@
+2016-02-XX Jan Kotanski <jankotan@gmail.com>
+	* add support for muting tango devices
+	* tagged as v2.3.0
+
 2016-02-23 Jan Kotanski <jankotan@gmail.com>
 	* fix for duplicated step and init datasources of dynamic component
 	* tagged as v2.2.1

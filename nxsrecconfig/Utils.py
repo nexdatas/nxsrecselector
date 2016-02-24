@@ -501,12 +501,13 @@ class PoolUtils(object):
     # \param filters device name filter list
     # \returns list of timer names
     @classmethod
-    def filterNames(cls, pools, filters=None):
-        lst = []
+    def filterNames(cls, pools, filters=None, lst=None):
         res = []
-        for pool in pools:
-            if pool.AcqChannelList:
-                lst += pool.AcqChannelList
+        if lst is None:
+            lst = []
+            for pool in pools:
+                if pool.AcqChannelList:
+                    lst += pool.AcqChannelList
 
         if filters is None or not hasattr(filters, '__iter__'):
             filters = ["*"]
