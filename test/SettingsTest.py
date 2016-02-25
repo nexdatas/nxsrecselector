@@ -7236,6 +7236,9 @@ class SettingsTest(unittest.TestCase):
         dd = rs.mutedChannels()
         self.assertEqual(set(dd), set(lst))
 
+
+
+
     ## test
     # \brief It tests default settings
     def test_mutedChannels_pool1_bl(self):
@@ -7287,6 +7290,60 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
+    def test_mutedChannels_pool1_filter_config(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+
+        db = PyTango.Database()
+        db.put_device_property(self._ms.ms.keys()[0],
+                               {'PoolNames': self._pool.dp.name()})
+        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        rs = self.openRecSelector()
+        self.setProp(rs, "mutedChannelFilters",
+                     ["*dgg2_exp_00*", "*dgg2_exp_01*", "*testts*"])
+        rs.configDevice = val["ConfigDevice"]
+        rs.door = val["Door"]
+        rs.mntGrp = val["MntGrp"]
+        self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
+
+        db = PyTango.Database()
+        db.put_device_property(self._ms.ms.keys()[0],
+                               {'PoolNames': self._pool.dp.name()})
+
+        self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+        arr = [
+            ["test/ct/01",
+             "haso228k:10000/expchan/dgg2_exp_00/1/Value"],
+            ["test/ct/02",
+             "haso228k:10000/expchan/dgg2_exp_01/1/Value"],
+            ["test/ct/03",
+             "haso228k:10000/expchan/dgg2_exp_02/1/Value"],
+            ["test/ct/04",
+             "haso228k:10000/expchan/dgg2_exp_03/1/Value"],
+            ["null",
+             "haso228k:10000/expchan/dg2_exp_01/1/Value"],
+        ]
+
+        pool = self._pool.dp
+
+        pool.AcqChannelList = [json.dumps(
+            {"name": a[0], "full_name": a[1]}) for a in arr]
+
+        lst = [ar[0] for ar in arr[:2]
+               if ('dgg2_exp_00' in ar[1] or 'dgg2_exp_01' in ar[1])]
+
+        dd = rs.mutedChannels()
+        self.assertEqual(set(dd),
+                         set(lst + self.smydss.keys())
+                         - set(['client_long', 'client_short']))
+
+    ## test
+    # \brief It tests default settings
     def test_mutedChannels_pool1_filter(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -7335,6 +7392,8 @@ class SettingsTest(unittest.TestCase):
 
         dd = rs.mutedChannels()
         self.assertEqual(set(dd), set(lst))
+
+
 
     ## test
     # \brief It tests default settings

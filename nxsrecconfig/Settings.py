@@ -535,13 +535,13 @@ class Settings(object):
                         [str(ds)])[0]
                 except:
                     pass
-        lst = []        
+        lst = []
         for ds, dsxml in dsxmls.items():
             indom = xml.dom.minidom.parseString(dsxml)
             nodes = indom.getElementsByTagName("datasource")
             if nodes:
                 record = Utils.getRecord(nodes[0])
-                lst.append(json.dumps({"name":ds, "full_name":record}))
+                lst.append(json.dumps({"name": ds, "full_name": record}))
         res.update(set(PoolUtils.filterNames(
             None, self.mutedChannelFilters, lst)))
         return list(res)
