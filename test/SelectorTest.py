@@ -137,9 +137,9 @@ class SelectorTest(unittest.TestCase):
             ("OrderedChannels", '[]'),
             ("ComponentSelection", '{}'),
             ("ComponentPreselection", '{}'),
-            ("PreselectedDataSources", '[]'),
+            ("PreselectingDataSources", '[]'),
             ("DataSourceSelection", '{}'),
-            ("InitDataSources", '[]'),
+            ("DataSourcePreselection", '{}'),
             ("OptionalComponents", '[]'),
             ("AppendEntry", False),
             ("ComponentsFromMntGrp", False),
@@ -1261,7 +1261,7 @@ class SelectorTest(unittest.TestCase):
                 ndss = json.loads(se["ComponentPreselection"])
                 for ds in dss1:
                     self.assertTrue(ds in ndss.keys())
-                    self.assertEqual(ndss[ds], False)
+                    self.assertEqual(ndss[ds], None)
             else:
                 se.reset()
                 self.assertEqual(se["ComponentPreselection"], "{}")
@@ -1871,7 +1871,7 @@ class SelectorTest(unittest.TestCase):
                     self.assertEqual(res, mres)
 
     ## updateOrderedChannels test
-    def test_PreselectedDataSources(self):
+    def test_PreselectingDataSources(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -1888,7 +1888,7 @@ class SelectorTest(unittest.TestCase):
                                    {'PoolNames': self._pool.dp.name()})
             pool = self._pool.dp
             pool.MotorList = []
-            se["PreselectedDataSources"] = json.dumps([])
+            se["PreselectingDataSources"] = json.dumps([])
             self._ms.dps[self._ms.ms.keys()[0]].Init()
             print "Motors", se.poolElementNames('MotorList')
             se["ConfigDevice"] = val["ConfigDevice"]
@@ -1908,13 +1908,13 @@ class SelectorTest(unittest.TestCase):
             dss2 = [self.getRandomName(10) for _ in range(lds2)]
             dss3 = [self.getRandomName(10) for _ in range(lds3)]
 
-            se["PreselectedDataSources"] = json.dumps(
+            se["PreselectingDataSources"] = json.dumps(
                 list(set(dss1) | set(dss2)))
             self.dump(se)
 
-            ads = se["PreselectedDataSources"]
+            ads = se["PreselectingDataSources"]
 
-            self.compareToDump(se, ["PreselectedDataSources"])
+            self.compareToDump(se, ["PreselectingDataSources"])
 
             self.assertEqual(set(list(set(dss2) | set(dss1))),
                              set(json.loads(ads)))
@@ -1924,12 +1924,12 @@ class SelectorTest(unittest.TestCase):
             pool.MotorList = [json.dumps(
                 {"name": mn, "controller": ("ctrl" + mn)}) for mn in mnames]
 
-            ads = json.loads(se["PreselectedDataSources"])
+            ads = json.loads(se["PreselectingDataSources"])
 
             self.assertEqual(set(list(set(dss3) | set(dss2) | set(dss1))),
                              set(ads))
 
-            self.compareToDump(se, ["PreselectedDataSources"])
+            self.compareToDump(se, ["PreselectingDataSources"])
 
             mydict = {}
             if (i / 2) % 2:
@@ -1941,7 +1941,7 @@ class SelectorTest(unittest.TestCase):
                 env = pickle.loads(
                     self._ms.dps[self._ms.ms.keys()[0]].Environment[1])
                 for k in se.keys():
-                    if k not in ["PreselectedDataSources"]:
+                    if k not in ["PreselectingDataSources"]:
                         try:
                             self.assertEqual(
                                 json.loads(se[k]),
@@ -1952,14 +1952,14 @@ class SelectorTest(unittest.TestCase):
                                 env["new"]["NeXusConfiguration"][k])
                     else:
                         self.assertEqual(
-                            sorted(json.loads(se["PreselectedDataSources"])),
+                            sorted(json.loads(se["PreselectingDataSources"])),
                             sorted(env["new"]["NeXusConfiguration"][k]))
             else:
                 se["MntGrp"] = val["MntGrp"]
                 se.storeSelection()
 
             se.reset()
-            ads = json.loads(se["PreselectedDataSources"])
+            ads = json.loads(se["PreselectingDataSources"])
             self.assertEqual(set(mnames), set(ads))
 
             mydata = {}
@@ -1975,10 +1975,10 @@ class SelectorTest(unittest.TestCase):
                 se["MntGrp"] = val["MntGrp"]
                 se.fetchSelection()
 
-            ads = json.loads(se["PreselectedDataSources"])
+            ads = json.loads(se["PreselectingDataSources"])
             self.assertEqual(set(list(set(dss3) | set(dss2) | set(dss1))),
                              set(ads))
-            self.compareToDump(se, ["PreselectedDataSources"])
+            self.compareToDump(se, ["PreselectingDataSources"])
 
     ## updateOrderedChannels test
     def test_OrderedChannels(self):
@@ -3198,8 +3198,8 @@ class SelectorTest(unittest.TestCase):
             ndss = json.loads(se["Timer"])
             self.assertEqual(ndss, cps)
 
-    ## InitDataSources test
-    def test_InitDataSources(self):
+    ## DataSourcePreselection test
+    def test_DataSourcePreselection(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -3225,7 +3225,7 @@ class SelectorTest(unittest.TestCase):
             cps = {}
             lcp = self.__rnd.randint(1, 40)
             cps = [self.getRandomName(10) for _ in range(lcp)]
-            se["InitDataSources"] = json.dumps(cps)
+            se["DataSourcePreselection"] = json.dumps(cps)
 
             self.dump(se)
             mydict = {}
@@ -3250,12 +3250,12 @@ class SelectorTest(unittest.TestCase):
                 se["MntGrp"] = val["MntGrp"]
                 se.storeSelection()
 
-            self.compareToDump(se, ["InitDataSources"])
-            ndss = json.loads(se["InitDataSources"])
+            self.compareToDump(se, ["DataSourcePreselection"])
+            ndss = json.loads(se["DataSourcePreselection"])
             self.assertEqual(ndss, cps)
 
             se.reset()
-            self.assertEqual(se["InitDataSources"], "[]")
+            self.assertEqual(se["DataSourcePreselection"], "{}")
             mydata = {}
             if (i / 2) % 2:
                 if (i / 2) % 4:
@@ -3269,8 +3269,8 @@ class SelectorTest(unittest.TestCase):
                 se["MntGrp"] = val["MntGrp"]
                 se.fetchSelection()
 
-            self.compareToDump(se, ["InitDataSources"])
-            ndss = json.loads(se["InitDataSources"])
+            self.compareToDump(se, ["DataSourcePreselection"])
+            ndss = json.loads(se["DataSourcePreselection"])
             self.assertEqual(ndss, cps)
 
     ## OptionalComponents test
@@ -3794,7 +3794,7 @@ class SelectorTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_updatePreselectedComponents_simple(self):
+    def test_preselect_simple(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -3808,9 +3808,9 @@ class SelectorTest(unittest.TestCase):
         se["WriterDevice"] = val["WriterDevice"]
         channelerrors = []
         se.descErrors = None
-        self.myAssertRaise(Exception, se.updatePreselectedComponents)
+        self.myAssertRaise(Exception, se.preselect)
         se.descErrors = []
-        se.updatePreselectedComponents()
+        se.preselect()
         res = se["ComponentPreselection"]
         self.assertEqual(res, '{}')
         print self._cf.dp.GetCommandVariable("COMMANDS")
@@ -3823,7 +3823,7 @@ class SelectorTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_updatePreselectedComponents_withcf(self):
+    def test_preselect_withcf(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -3843,7 +3843,7 @@ class SelectorTest(unittest.TestCase):
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
 
         se.descErrors = []
-        se.updatePreselectedComponents()
+        se.preselect()
         res = se["ComponentPreselection"]
 
         self.assertEqual(res, '{}')
@@ -3861,7 +3861,7 @@ class SelectorTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_updatePreselectedComponents_withcf_cps(self):
+    def test_preselect_withcf_cps(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -3880,10 +3880,10 @@ class SelectorTest(unittest.TestCase):
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
 
-        se["PreselectedDataSources"] = json.dumps(poolchannels)
+        se["PreselectingDataSources"] = json.dumps(poolchannels)
         se["ComponentPreselection"] = json.dumps(componentgroup)
         se.descErrors = []
-        se.updatePreselectedComponents()
+        se.preselect()
         res = se["ComponentPreselection"]
         self.myAssertDict(json.loads(res), {"mycp": True})
         self.assertEqual(channelerrors, [])
@@ -3908,14 +3908,14 @@ class SelectorTest(unittest.TestCase):
             elif key == 'ComponentPreselection':
                 self.assertEqual(set(json.loads(sed[key])),
                                  set(json.loads(res)))
-            elif key == 'PreselectedDataSources':
+            elif key == 'PreselectingDataSources':
                 self.assertEqual(set(json.loads(sed[key])), set(poolchannels))
             else:
                 self.assertEqual(sed[key], vl)
 
     ## test
     # \brief It tests default settings
-    def test_updatePreselectedComponents_withcf_cps_t(self):
+    def test_preselect_withcf_cps_t(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -3934,10 +3934,10 @@ class SelectorTest(unittest.TestCase):
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
 
-        se["PreselectedDataSources"] = json.dumps(poolchannels)
+        se["PreselectingDataSources"] = json.dumps(poolchannels)
         se["ComponentPreselection"] = json.dumps(componentgroup)
         se.descErrors = []
-        se.updatePreselectedComponents()
+        se.preselect()
         res = se["ComponentPreselection"]
         self.myAssertDict(json.loads(res), {"mycp": True})
         self.assertEqual(channelerrors, [])
@@ -3955,7 +3955,7 @@ class SelectorTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_updatePreselectedComponents_withcf_nocps(self):
+    def test_preselect_withcf_nocps(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -3974,10 +3974,10 @@ class SelectorTest(unittest.TestCase):
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
 
-        se["PreselectedDataSources"] = json.dumps(poolchannels)
+        se["PreselectingDataSources"] = json.dumps(poolchannels)
         se["ComponentPreselection"] = json.dumps(componentgroup)
         se.descErrors = []
-        se.updatePreselectedComponents()
+        se.preselect()
         res = se["ComponentPreselection"]
 
         self.myAssertDict(json.loads(res), {})
@@ -3996,7 +3996,7 @@ class SelectorTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_updatePreselectedComponents_withcf_nochnnel(self):
+    def test_preselect_withcf_nochnnel(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -4015,10 +4015,10 @@ class SelectorTest(unittest.TestCase):
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
 
-        se["PreselectedDataSources"] = json.dumps(poolchannels)
+        se["PreselectingDataSources"] = json.dumps(poolchannels)
         se["ComponentPreselection"] = json.dumps(componentgroup)
         se.descErrors = []
-        se.updatePreselectedComponents()
+        se.preselect()
         res = se["ComponentPreselection"]
 
         self.myAssertDict(json.loads(res), {"mycp": True})
@@ -4043,14 +4043,14 @@ class SelectorTest(unittest.TestCase):
             elif key == 'ComponentPreselection':
                 self.assertEqual(set(json.loads(sed[key])),
                                  set(json.loads(res)))
-            elif key == 'PreselectedDataSources':
+            elif key == 'PreselectingDataSources':
                 self.assertEqual(set(json.loads(sed[key])), set(poolchannels))
             else:
                 self.assertEqual(sed[key], vl)
 
     ## test
     # \brief It tests default settings
-    def test_updatePreselectedComponents_withcf_nochnnel_t(self):
+    def test_preselect_withcf_nochnnel_t(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -4069,10 +4069,10 @@ class SelectorTest(unittest.TestCase):
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
 
-        se["PreselectedDataSources"] = json.dumps(poolchannels)
+        se["PreselectingDataSources"] = json.dumps(poolchannels)
         se["ComponentPreselection"] = json.dumps(componentgroup)
         se.descErrors = []
-        se.updatePreselectedComponents()
+        se.preselect()
         res = se["ComponentPreselection"]
 
         self.myAssertDict(json.loads(res), {"mycp": True})
@@ -4089,7 +4089,7 @@ class SelectorTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_updatePreselectedComponents_wds_t(self):
+    def test_preselect_wds_t(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -4108,10 +4108,10 @@ class SelectorTest(unittest.TestCase):
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.smycps)])
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
 
-        se["PreselectedDataSources"] = json.dumps(poolchannels)
+        se["PreselectingDataSources"] = json.dumps(poolchannels)
         se["ComponentPreselection"] = json.dumps(componentgroup)
         se.descErrors = []
-        se.updatePreselectedComponents()
+        se.preselect()
         res = se["ComponentPreselection"]
 
         self.myAssertDict(json.loads(res), {"smycp": True})
@@ -4128,7 +4128,7 @@ class SelectorTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_updatePreselectedComponents_wds(self):
+    def test_preselect_wds(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -4147,10 +4147,10 @@ class SelectorTest(unittest.TestCase):
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.smycps)])
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
 
-        se["PreselectedDataSources"] = json.dumps(poolchannels)
+        se["PreselectingDataSources"] = json.dumps(poolchannels)
         se["ComponentPreselection"] = json.dumps(componentgroup)
         se.descErrors = []
-        se.updatePreselectedComponents()
+        se.preselect()
         res = se["ComponentPreselection"]
 
         self.myAssertDict(json.loads(res), {"smycp": True})
@@ -4182,7 +4182,7 @@ class SelectorTest(unittest.TestCase):
             elif key == 'ComponentPreselection':
                 self.assertEqual(set(json.loads(sed[key])),
                                  set(json.loads(res)))
-            elif key == 'PreselectedDataSources':
+            elif key == 'PreselectingDataSources':
                 self.assertEqual(set(json.loads(sed[key])),
                                  set(poolchannels))
             else:
@@ -4190,7 +4190,7 @@ class SelectorTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_updatePreselectedComponents_wds2(self):
+    def test_preselect_wds2(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -4209,10 +4209,10 @@ class SelectorTest(unittest.TestCase):
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.smycps)])
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
 
-        se["PreselectedDataSources"] = json.dumps(poolchannels)
+        se["PreselectingDataSources"] = json.dumps(poolchannels)
         se["ComponentPreselection"] = json.dumps(componentgroup)
         se.descErrors = []
-        se.updatePreselectedComponents()
+        se.preselect()
         res = se["ComponentPreselection"]
 
         self.myAssertDict(json.loads(res), {
@@ -4243,7 +4243,7 @@ class SelectorTest(unittest.TestCase):
             elif key == 'ComponentPreselection':
                 self.assertEqual(set(json.loads(sed[key])),
                                  set(json.loads(res)))
-            elif key == 'PreselectedDataSources':
+            elif key == 'PreselectingDataSources':
                 self.assertEqual(set(json.loads(sed[key])),
                                  set(poolchannels))
             else:
@@ -4251,7 +4251,7 @@ class SelectorTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_updatePreselectedComponents_2wds(self):
+    def test_preselect_2wds(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -4270,9 +4270,9 @@ class SelectorTest(unittest.TestCase):
             se["WriterDevice"] = val["WriterDevice"]
             channelerrors = []
             poolchannels = []
-            componentgroup = {"smycp": False, "smycp2": False, "smycp3": False,
-                              "s2mycp": False, "s2mycp2": False,
-                              "s2mycp3": False}
+            componentgroup = {"smycp": None, "smycp2": None, "smycp3": None,
+                              "s2mycp": None, "s2mycp2": None,
+                              "s2mycp3": None}
 
             cps = dict(self.smycps)
             cps.update(self.smycps2)
@@ -4282,10 +4282,10 @@ class SelectorTest(unittest.TestCase):
             self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
 
-            se["PreselectedDataSources"] = json.dumps(poolchannels)
+            se["PreselectingDataSources"] = json.dumps(poolchannels)
             se["ComponentPreselection"] = json.dumps(componentgroup)
             se.descErrors = []
-            se.updatePreselectedComponents()
+            se.preselect()
             res = se["ComponentPreselection"]
 
             self.myAssertDict(json.loads(res), {
@@ -4324,7 +4324,91 @@ class SelectorTest(unittest.TestCase):
                 elif key == 'ComponentPreselection':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(json.loads(res)))
-                elif key == 'PreselectedDataSources':
+                elif key == 'PreselectingDataSources':
+                    self.assertEqual(set(json.loads(sed[key])),
+                                     set(poolchannels))
+                else:
+                    self.assertEqual(sed[key], vl)
+        finally:
+            simps2.tearDown()
+
+
+    ## test
+    # \brief It tests default settings
+    def test_preselect_2wds_False(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        simps2 = TestServerSetUp.TestServerSetUp(
+            "ttestp09/testts/t2r228", "S2")
+        try:
+            simps2.setUp()
+            msp = MacroServerPools(1)
+            msp = MacroServerPools(10)
+            se = Selector(msp, self.__version)
+            se["Door"] = val["Door"]
+            se["ConfigDevice"] = val["ConfigDevice"]
+            se["WriterDevice"] = val["WriterDevice"]
+            channelerrors = []
+            poolchannels = []
+            componentgroup = {"smycp": False, "smycp2": False, "smycp3": False,
+                              "s2mycp": False, "s2mycp2": False,
+                              "s2mycp3": False}
+
+            cps = dict(self.smycps)
+            cps.update(self.smycps2)
+            dss = dict(self.smydss)
+            dss.update(self.smydss2)
+
+            self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
+            self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
+
+            se["PreselectingDataSources"] = json.dumps(poolchannels)
+            se["ComponentPreselection"] = json.dumps(componentgroup)
+            se.descErrors = []
+            se.preselect()
+            res = se["ComponentPreselection"]
+
+            self.myAssertDict(json.loads(res), {
+                "smycp": False, "smycp2": False, "smycp3": False,
+                "s2mycp": False, "s2mycp2": False, "s2mycp3": False})
+            self.assertEqual(len(channelerrors), 0)
+
+    #        print self._cf.dp.GetCommandVariable("COMMANDS")
+            self.assertEqual(
+                json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
+                [
+                    "AvailableComponents", "AvailableDataSources",
+                    "AvailableComponents",
+                    "Components", "DataSources", "DataSources", "DataSources",
+                    "DataSources",
+                    "Components", "DataSources", "DataSources", "DataSources",
+                    "DataSources",
+                    "Components", "DataSources", "DataSources", "DataSources",
+                    "DataSources",
+                    "Components", "DataSources", "DataSources", "DataSources",
+                    "DataSources",
+                    "Components", "DataSources", "DataSources", "DataSources",
+                    "DataSources",
+                    "Components", "DataSources", "DataSources", "DataSources",
+                    "DataSources",
+                    "AvailableDataSources", "StoreSelection"
+                ])
+            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
+            sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
+            self.assertEqual(len(sed.keys()), len(self._keys))
+            for key, vl in self._keys:
+                self.assertTrue(key in sed.keys())
+                if key in val:
+                    self.assertEqual(sed[key], val[key])
+                elif key == 'ComponentPreselection':
+                    self.assertEqual(set(json.loads(sed[key])),
+                                     set(json.loads(res)))
+                elif key == 'PreselectingDataSources':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(poolchannels))
                 else:
@@ -4334,7 +4418,7 @@ class SelectorTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_updatePreselectedComponents_2wds_dvnorunning(self):
+    def test_preselect_2wds_dvnorunning(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -4364,10 +4448,10 @@ class SelectorTest(unittest.TestCase):
             self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
 
-            se["PreselectedDataSources"] = json.dumps(poolchannels)
+            se["PreselectingDataSources"] = json.dumps(poolchannels)
             se["ComponentPreselection"] = json.dumps(componentgroup)
             se.descErrors = []
-            se.updatePreselectedComponents()
+            se.preselect()
             res = se["ComponentPreselection"]
 
             self.myAssertDict(json.loads(res), {
@@ -4405,7 +4489,7 @@ class SelectorTest(unittest.TestCase):
                 elif key == 'ComponentPreselection':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(json.loads(res)))
-                elif key == 'PreselectedDataSources':
+                elif key == 'PreselectingDataSources':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(poolchannels))
                 else:
@@ -4415,7 +4499,7 @@ class SelectorTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_updatePreselectedComponents_2wds_dvnodef(self):
+    def test_preselect_2wds_dvnodef(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -4440,10 +4524,10 @@ class SelectorTest(unittest.TestCase):
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
 
-        se["PreselectedDataSources"] = json.dumps(poolchannels)
+        se["PreselectingDataSources"] = json.dumps(poolchannels)
         se["ComponentPreselection"] = json.dumps(componentgroup)
         se.descErrors = []
-        se.updatePreselectedComponents()
+        se.preselect()
         res = se["ComponentPreselection"]
 
         self.myAssertDict(json.loads(res), {
@@ -4483,7 +4567,7 @@ class SelectorTest(unittest.TestCase):
             elif key == 'ComponentPreselection':
                 self.assertEqual(set(json.loads(sed[key])),
                                  set(json.loads(res)))
-            elif key == 'PreselectedDataSources':
+            elif key == 'PreselectingDataSources':
                 self.assertEqual(set(json.loads(sed[key])),
                                  set(poolchannels))
             else:
@@ -4491,7 +4575,7 @@ class SelectorTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_updatePreselectedComponents_2wds_nods(self):
+    def test_preselect_2wds_nods(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -4521,10 +4605,10 @@ class SelectorTest(unittest.TestCase):
             self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
 
-            se["PreselectedDataSources"] = json.dumps(poolchannels)
+            se["PreselectingDataSources"] = json.dumps(poolchannels)
             se["ComponentPreselection"] = json.dumps(componentgroup)
             se.descErrors = []
-            se.updatePreselectedComponents()
+            se.preselect()
             res = se["ComponentPreselection"]
 
             self.myAssertDict(json.loads(res), {
@@ -4543,7 +4627,7 @@ class SelectorTest(unittest.TestCase):
                 elif key == 'ComponentPreselection':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(json.loads(res)))
-                elif key == 'PreselectedDataSources':
+                elif key == 'PreselectingDataSources':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(poolchannels))
                 else:
@@ -4553,7 +4637,7 @@ class SelectorTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_updatePreselectedComponents_2wds_nodspool(self):
+    def test_preselect_2wds_nodspool(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -4583,10 +4667,10 @@ class SelectorTest(unittest.TestCase):
             self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
 
-            se["PreselectedDataSources"] = json.dumps(poolchannels)
+            se["PreselectingDataSources"] = json.dumps(poolchannels)
             se["ComponentPreselection"] = json.dumps(componentgroup)
             se.descErrors = []
-            se.updatePreselectedComponents()
+            se.preselect()
             res = se["ComponentPreselection"]
 
             self.myAssertDict(json.loads(res), {
@@ -4606,7 +4690,7 @@ class SelectorTest(unittest.TestCase):
                 elif key == 'ComponentPreselection':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(json.loads(res)))
-                elif key == 'PreselectedDataSources':
+                elif key == 'PreselectingDataSources':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(poolchannels))
                 else:
@@ -4616,7 +4700,7 @@ class SelectorTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_updatePreselectedComponents_2wds_notangods(self):
+    def test_preselect_2wds_notangods(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -4648,10 +4732,10 @@ class SelectorTest(unittest.TestCase):
             self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
 
-            se["PreselectedDataSources"] = json.dumps(poolchannels)
+            se["PreselectingDataSources"] = json.dumps(poolchannels)
             se["ComponentPreselection"] = json.dumps(componentgroup)
             se.descErrors = []
-            se.updatePreselectedComponents()
+            se.preselect()
             res = se["ComponentPreselection"]
 
             self.myAssertDict(json.loads(res), {
@@ -4672,7 +4756,7 @@ class SelectorTest(unittest.TestCase):
                 elif key == 'ComponentPreselection':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(json.loads(res)))
-                elif key == 'PreselectedDataSources':
+                elif key == 'PreselectingDataSources':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(poolchannels))
                 else:
@@ -4682,7 +4766,7 @@ class SelectorTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_updatePreselectedComponents_2wds_notangodsnopool(self):
+    def test_preselect_2wds_notangodsnopool(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -4713,10 +4797,10 @@ class SelectorTest(unittest.TestCase):
             self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
 
-            se["PreselectedDataSources"] = json.dumps(poolchannels)
+            se["PreselectingDataSources"] = json.dumps(poolchannels)
             se["ComponentPreselection"] = json.dumps(componentgroup)
             se.descErrors = []
-            se.updatePreselectedComponents()
+            se.preselect()
             res = se["ComponentPreselection"]
 
             self.myAssertDict(json.loads(res), {
@@ -4737,7 +4821,7 @@ class SelectorTest(unittest.TestCase):
                 elif key == 'ComponentPreselection':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(json.loads(res)))
-                elif key == 'PreselectedDataSources':
+                elif key == 'PreselectingDataSources':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(poolchannels))
                 else:
@@ -4747,7 +4831,7 @@ class SelectorTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_updatePreselectedComponents_2wds_notangodsnopool2(self):
+    def test_preselect_2wds_notangodsnopool2(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -4782,10 +4866,10 @@ class SelectorTest(unittest.TestCase):
             pools = msp.getPools(self._ms.door.keys()[0])
             print "POOLS", pools
 
-            se["PreselectedDataSources"] = json.dumps(poolchannels)
+            se["PreselectingDataSources"] = json.dumps(poolchannels)
             se["ComponentPreselection"] = json.dumps(componentgroup)
             se.descErrors = []
-            se.updatePreselectedComponents()
+            se.preselect()
             res = se["ComponentPreselection"]
 
             self.myAssertDict(json.loads(res), {
@@ -4806,7 +4890,7 @@ class SelectorTest(unittest.TestCase):
                 elif key == 'ComponentPreselection':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(json.loads(res)))
-                elif key == 'PreselectedDataSources':
+                elif key == 'PreselectingDataSources':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(poolchannels))
                 else:
@@ -4816,7 +4900,7 @@ class SelectorTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_updatePreselectedComponents_2wds_notangods2(self):
+    def test_preselect_2wds_notangods2(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -4863,10 +4947,10 @@ class SelectorTest(unittest.TestCase):
             pools[0].AcqChannelList = [json.dumps(a) for a in arr]
             print "POOLS", pools
 
-            se["PreselectedDataSources"] = json.dumps(poolchannels)
+            se["PreselectingDataSources"] = json.dumps(poolchannels)
             se["ComponentPreselection"] = json.dumps(componentgroup)
             se.descErrors = []
-            se.updatePreselectedComponents()
+            se.preselect()
             res = se["ComponentPreselection"]
 
             self.myAssertDict(json.loads(res), {
@@ -4887,7 +4971,7 @@ class SelectorTest(unittest.TestCase):
                 elif key == 'ComponentPreselection':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(json.loads(res)))
-                elif key == 'PreselectedDataSources':
+                elif key == 'PreselectingDataSources':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(poolchannels))
                 else:
@@ -4897,7 +4981,7 @@ class SelectorTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_updatePreselectedComponents_2wds_notangodspool_error(self):
+    def test_preselect_2wds_notangodspool_error(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -4947,10 +5031,10 @@ class SelectorTest(unittest.TestCase):
             pools[0].AcqChannelList = [json.dumps(a) for a in arr]
             print "POOLS", pools
 
-            se["PreselectedDataSources"] = json.dumps(poolchannels)
+            se["PreselectingDataSources"] = json.dumps(poolchannels)
             se["ComponentPreselection"] = json.dumps(componentgroup)
             se.descErrors = []
-            se.updatePreselectedComponents()
+            se.preselect()
             res = se["ComponentPreselection"]
 
             print res
@@ -4974,7 +5058,7 @@ class SelectorTest(unittest.TestCase):
                 elif key == 'ComponentPreselection':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(json.loads(res)))
-                elif key == 'PreselectedDataSources':
+                elif key == 'PreselectingDataSources':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(poolchannels))
                 else:
@@ -4984,7 +5068,7 @@ class SelectorTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_updatePreselectedComponents_2wds_notangodspool(self):
+    def test_preselect_2wds_notangodspool(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -5033,10 +5117,10 @@ class SelectorTest(unittest.TestCase):
             self._simps.dp.ChangeValueType("ScalarShort")
             self._simps.dp.Value = 43
 
-            se["PreselectedDataSources"] = json.dumps(poolchannels)
+            se["PreselectingDataSources"] = json.dumps(poolchannels)
             se["ComponentPreselection"] = json.dumps(componentgroup)
             se.descErrors = []
-            se.updatePreselectedComponents()
+            se.preselect()
             res = se["ComponentPreselection"]
 
             self.myAssertDict(json.loads(res), {
@@ -5057,7 +5141,7 @@ class SelectorTest(unittest.TestCase):
                 elif key == 'ComponentPreselection':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(json.loads(res)))
-                elif key == 'PreselectedDataSources':
+                elif key == 'PreselectingDataSources':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(poolchannels))
                 else:
@@ -5067,7 +5151,7 @@ class SelectorTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_updatePreselectedComponents_2wds_notangodspool_alias(self):
+    def test_preselect_2wds_notangodspool_alias(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -5115,10 +5199,10 @@ class SelectorTest(unittest.TestCase):
             self._simps.dp.ChangeValueType("ScalarShort")
             self._simps.dp.Value = 43
 
-            se["PreselectedDataSources"] = json.dumps(poolchannels)
+            se["PreselectingDataSources"] = json.dumps(poolchannels)
             se["ComponentPreselection"] = json.dumps(componentgroup)
             se.descErrors = []
-            se.updatePreselectedComponents()
+            se.preselect()
             res = se["ComponentPreselection"]
 
             self.myAssertDict(json.loads(res), {
@@ -5138,7 +5222,7 @@ class SelectorTest(unittest.TestCase):
                 elif key == 'ComponentPreselection':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(json.loads(res)))
-                elif key == 'PreselectedDataSources':
+                elif key == 'PreselectingDataSources':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(poolchannels))
                 else:
@@ -5149,7 +5233,7 @@ class SelectorTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_updatePreselectedComponents_2wds_notangodspool_alias_value(self):
+    def test_preselect_2wds_notangodspool_alias_value(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -5195,10 +5279,10 @@ class SelectorTest(unittest.TestCase):
             pools[0].AcqChannelList = [json.dumps(a) for a in arr]
             print "POOLS", pools
 
-            se["PreselectedDataSources"] = json.dumps(poolchannels)
+            se["PreselectingDataSources"] = json.dumps(poolchannels)
             se["ComponentPreselection"] = json.dumps(componentgroup)
             se.descErrors = []
-            se.updatePreselectedComponents()
+            se.preselect()
             res = se["ComponentPreselection"]
 
             self.myAssertDict(json.loads(res), {
@@ -5219,7 +5303,7 @@ class SelectorTest(unittest.TestCase):
                 elif key == 'ComponentPreselection':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(json.loads(res)))
-                elif key == 'PreselectedDataSources':
+                elif key == 'PreselectingDataSources':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(poolchannels))
                 else:
@@ -5230,7 +5314,7 @@ class SelectorTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_updatePreselectedComponents_2wds_ntdsp_alias_novalue(self):
+    def test_preselect_2wds_ntdsp_alias_novalue(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -5275,10 +5359,10 @@ class SelectorTest(unittest.TestCase):
             pools = msp.getPools(self._ms.door.keys()[0])
             pools[0].AcqChannelList = [json.dumps(a) for a in arr]
             print "POOLS", pools
-            se["PreselectedDataSources"] = json.dumps(poolchannels)
+            se["PreselectingDataSources"] = json.dumps(poolchannels)
             se["ComponentPreselection"] = json.dumps(componentgroup)
             se.descErrors = []
-            se.updatePreselectedComponents()
+            se.preselect()
             res = se["ComponentPreselection"]
 
             self.myAssertDict(json.loads(res), {
@@ -5298,7 +5382,7 @@ class SelectorTest(unittest.TestCase):
                 elif key == 'ComponentPreselection':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(json.loads(res)))
-                elif key == 'PreselectedDataSources':
+                elif key == 'PreselectingDataSources':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(poolchannels))
                 else:
@@ -5309,7 +5393,7 @@ class SelectorTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_updatePreselectedComponents_2wds_nocomponents(self):
+    def test_preselect_2wds_nocomponents(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -5347,10 +5431,10 @@ class SelectorTest(unittest.TestCase):
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
     #        print "MDSS", self._cf.dp.availableDataSources()
     #        print "XDSS", self._cf.dp.dataSources(["scalar_long"])
-            se["PreselectedDataSources"] = json.dumps(poolchannels)
+            se["PreselectingDataSources"] = json.dumps(poolchannels)
             se["ComponentPreselection"] = json.dumps(componentgroup)
             se.descErrors = []
-            se.updatePreselectedComponents()
+            se.preselect()
             res = se["ComponentPreselection"]
 
             self.myAssertDict(json.loads(res), {
@@ -5370,7 +5454,7 @@ class SelectorTest(unittest.TestCase):
                 elif key == 'ComponentPreselection':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(json.loads(res)))
-                elif key == 'PreselectedDataSources':
+                elif key == 'PreselectingDataSources':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(poolchannels))
                 else:

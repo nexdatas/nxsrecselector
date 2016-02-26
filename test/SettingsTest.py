@@ -175,9 +175,9 @@ class SettingsTest(unittest.TestCase):
             ("OrderedChannels", '[]'),
             ("ComponentSelection", '{}'),
             ("ComponentPreselection", '{}'),
-            ("PreselectedDataSources", '[]'),
+            ("PreselectingDataSources", '[]'),
             ("DataSourceSelection", '{}'),
-            ("InitDataSources", '[]'),
+            ("DataSourcePreselection", '{}'),
             ("OptionalComponents", '[]'),
             ("AppendEntry", False),
             ("ComponentsFromMntGrp", False),
@@ -2178,7 +2178,7 @@ class SettingsTest(unittest.TestCase):
         for nm in self.names(rs):
             if nm not in ["Timer",
                           "DataSourceSelection",
-                          "PreselectedDataSources"]:
+                          "PreselectingDataSources"]:
                 if self.value(rs, nm) != se[nm]:
                     print ("DICT NAME %s" % nm)
                 self.assertEqual(self.value(rs, nm), se[nm])
@@ -2681,7 +2681,7 @@ class SettingsTest(unittest.TestCase):
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
 
         cnf = json.loads(rs.profileConfiguration)
-        cnf["PreselectedDataSources"] = json.dumps(poolchannels)
+        cnf["PreselectingDataSources"] = json.dumps(poolchannels)
         cnf["ComponentPreselection"] = json.dumps(componentgroup)
         rs.profileConfiguration = json.dumps(cnf)
         rs.preselectComponents()
@@ -2699,7 +2699,7 @@ class SettingsTest(unittest.TestCase):
             elif key == 'ComponentPreselection':
                 self.assertEqual(set(json.loads(sed[key])),
                                  set(json.loads(res)))
-            elif key == 'PreselectedDataSources':
+            elif key == 'PreselectingDataSources':
                 self.assertEqual(set(json.loads(sed[key])), set(poolchannels))
             else:
                 self.assertEqual(sed[key], vl)
@@ -2732,7 +2732,7 @@ class SettingsTest(unittest.TestCase):
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
 
         cnf = json.loads(rs.profileConfiguration)
-        cnf["PreselectedDataSources"] = json.dumps(poolchannels)
+        cnf["PreselectingDataSources"] = json.dumps(poolchannels)
         cnf["ComponentPreselection"] = json.dumps(componentgroup)
         rs.profileConfiguration = json.dumps(cnf)
         rs.preselectComponents()
@@ -2770,7 +2770,7 @@ class SettingsTest(unittest.TestCase):
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
 
         cnf = json.loads(rs.profileConfiguration)
-        cnf["PreselectedDataSources"] = json.dumps(poolchannels)
+        cnf["PreselectingDataSources"] = json.dumps(poolchannels)
         cnf["ComponentPreselection"] = json.dumps(componentgroup)
         rs.profileConfiguration = json.dumps(cnf)
         rs.preselectComponents()
@@ -2811,7 +2811,7 @@ class SettingsTest(unittest.TestCase):
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
 
         cnf = json.loads(rs.profileConfiguration)
-        cnf["PreselectedDataSources"] = json.dumps(poolchannels)
+        cnf["PreselectingDataSources"] = json.dumps(poolchannels)
         cnf["ComponentPreselection"] = json.dumps(componentgroup)
         rs.profileConfiguration = json.dumps(cnf)
         rs.preselectComponents()
@@ -2832,7 +2832,7 @@ class SettingsTest(unittest.TestCase):
             elif key == 'ComponentPreselection':
                 self.assertEqual(set(json.loads(sed[key])),
                                  set(json.loads(res)))
-            elif key == 'PreselectedDataSources':
+            elif key == 'PreselectingDataSources':
                 self.assertEqual(set(json.loads(sed[key])), set(poolchannels))
             else:
                 self.assertEqual(sed[key], vl)
@@ -2865,7 +2865,7 @@ class SettingsTest(unittest.TestCase):
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
 
         cnf = json.loads(rs.profileConfiguration)
-        cnf["PreselectedDataSources"] = json.dumps(poolchannels)
+        cnf["PreselectingDataSources"] = json.dumps(poolchannels)
         cnf["ComponentPreselection"] = json.dumps(componentgroup)
         rs.profileConfiguration = json.dumps(cnf)
         rs.preselectComponents()
@@ -2904,7 +2904,7 @@ class SettingsTest(unittest.TestCase):
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
 
         cnf = json.loads(rs.profileConfiguration)
-        cnf["PreselectedDataSources"] = json.dumps(poolchannels)
+        cnf["PreselectingDataSources"] = json.dumps(poolchannels)
         cnf["ComponentPreselection"] = json.dumps(componentgroup)
         rs.profileConfiguration = json.dumps(cnf)
         rs.preselectComponents()
@@ -2943,7 +2943,7 @@ class SettingsTest(unittest.TestCase):
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
 
         cnf = json.loads(rs.profileConfiguration)
-        cnf["PreselectedDataSources"] = json.dumps(poolchannels)
+        cnf["PreselectingDataSources"] = json.dumps(poolchannels)
         cnf["ComponentPreselection"] = json.dumps(componentgroup)
         rs.profileConfiguration = json.dumps(cnf)
         rs.preselectComponents()
@@ -2962,7 +2962,7 @@ class SettingsTest(unittest.TestCase):
             elif key == 'ComponentPreselection':
                 self.assertEqual(set(json.loads(sed[key])),
                                  set(json.loads(res)))
-            elif key == 'PreselectedDataSources':
+            elif key == 'PreselectingDataSources':
                 self.assertEqual(set(json.loads(sed[key])),
                                  set(poolchannels))
             else:
@@ -2996,7 +2996,7 @@ class SettingsTest(unittest.TestCase):
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
 
         cnf = json.loads(rs.profileConfiguration)
-        cnf["PreselectedDataSources"] = json.dumps(poolchannels)
+        cnf["PreselectingDataSources"] = json.dumps(poolchannels)
         cnf["ComponentPreselection"] = json.dumps(componentgroup)
         rs.profileConfiguration = json.dumps(cnf)
         rs.preselectComponents()
@@ -3017,7 +3017,7 @@ class SettingsTest(unittest.TestCase):
             elif key == 'ComponentPreselection':
                 self.assertEqual(set(json.loads(sed[key])),
                                  set(json.loads(res)))
-            elif key == 'PreselectedDataSources':
+            elif key == 'PreselectingDataSources':
                 self.assertEqual(set(json.loads(sed[key])),
                                  set(poolchannels))
             else:
@@ -3062,7 +3062,7 @@ class SettingsTest(unittest.TestCase):
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
 
             cnf = json.loads(rs.profileConfiguration)
-            cnf["PreselectedDataSources"] = json.dumps(poolchannels)
+            cnf["PreselectingDataSources"] = json.dumps(poolchannels)
             cnf["ComponentPreselection"] = json.dumps(componentgroup)
             rs.profileConfiguration = json.dumps(cnf)
             rs.preselectComponents()
@@ -3084,7 +3084,7 @@ class SettingsTest(unittest.TestCase):
                 elif key == 'ComponentPreselection':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(json.loads(res)))
-                elif key == 'PreselectedDataSources':
+                elif key == 'PreselectingDataSources':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(poolchannels))
                 else:
@@ -3131,7 +3131,7 @@ class SettingsTest(unittest.TestCase):
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
 
             cnf = json.loads(rs.profileConfiguration)
-            cnf["PreselectedDataSources"] = json.dumps(poolchannels)
+            cnf["PreselectingDataSources"] = json.dumps(poolchannels)
             cnf["ComponentPreselection"] = json.dumps(componentgroup)
             rs.profileConfiguration = json.dumps(cnf)
             rs.preselectComponents()
@@ -3153,7 +3153,7 @@ class SettingsTest(unittest.TestCase):
                 elif key == 'ComponentPreselection':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(json.loads(res)))
-                elif key == 'PreselectedDataSources':
+                elif key == 'PreselectingDataSources':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(poolchannels))
                 else:
@@ -3195,7 +3195,7 @@ class SettingsTest(unittest.TestCase):
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
 
         cnf = json.loads(rs.profileConfiguration)
-        cnf["PreselectedDataSources"] = json.dumps(poolchannels)
+        cnf["PreselectingDataSources"] = json.dumps(poolchannels)
         cnf["ComponentPreselection"] = json.dumps(componentgroup)
         rs.profileConfiguration = json.dumps(cnf)
         rs.preselectComponents()
@@ -3217,7 +3217,7 @@ class SettingsTest(unittest.TestCase):
             elif key == 'ComponentPreselection':
                 self.assertEqual(set(json.loads(sed[key])),
                                  set(json.loads(res)))
-            elif key == 'PreselectedDataSources':
+            elif key == 'PreselectingDataSources':
                 self.assertEqual(set(json.loads(sed[key])),
                                  set(poolchannels))
             else:
@@ -3262,7 +3262,7 @@ class SettingsTest(unittest.TestCase):
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
 
             cnf = json.loads(rs.profileConfiguration)
-            cnf["PreselectedDataSources"] = json.dumps(poolchannels)
+            cnf["PreselectingDataSources"] = json.dumps(poolchannels)
             cnf["ComponentPreselection"] = json.dumps(componentgroup)
             rs.profileConfiguration = json.dumps(cnf)
             rs.preselectComponents()
@@ -3284,7 +3284,7 @@ class SettingsTest(unittest.TestCase):
                 elif key == 'ComponentPreselection':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(json.loads(res)))
-                elif key == 'PreselectedDataSources':
+                elif key == 'PreselectingDataSources':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(poolchannels))
                 else:
@@ -3329,7 +3329,7 @@ class SettingsTest(unittest.TestCase):
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
 
             cnf = json.loads(rs.profileConfiguration)
-            cnf["PreselectedDataSources"] = json.dumps(poolchannels)
+            cnf["PreselectingDataSources"] = json.dumps(poolchannels)
             cnf["ComponentPreselection"] = json.dumps(componentgroup)
             rs.profileConfiguration = json.dumps(cnf)
             rs.preselectComponents()
@@ -3351,7 +3351,7 @@ class SettingsTest(unittest.TestCase):
                 elif key == 'ComponentPreselection':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(json.loads(res)))
-                elif key == 'PreselectedDataSources':
+                elif key == 'PreselectingDataSources':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(poolchannels))
                 else:
@@ -3398,7 +3398,7 @@ class SettingsTest(unittest.TestCase):
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
 
             cnf = json.loads(rs.profileConfiguration)
-            cnf["PreselectedDataSources"] = json.dumps(poolchannels)
+            cnf["PreselectingDataSources"] = json.dumps(poolchannels)
             cnf["ComponentPreselection"] = json.dumps(componentgroup)
             rs.profileConfiguration = json.dumps(cnf)
             rs.preselectComponents()
@@ -3422,7 +3422,7 @@ class SettingsTest(unittest.TestCase):
                 elif key == 'ComponentPreselection':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(json.loads(res)))
-                elif key == 'PreselectedDataSources':
+                elif key == 'PreselectingDataSources':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(poolchannels))
                 else:
@@ -3469,7 +3469,7 @@ class SettingsTest(unittest.TestCase):
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
 
             cnf = json.loads(rs.profileConfiguration)
-            cnf["PreselectedDataSources"] = json.dumps(poolchannels)
+            cnf["PreselectingDataSources"] = json.dumps(poolchannels)
             cnf["ComponentPreselection"] = json.dumps(componentgroup)
             rs.profileConfiguration = json.dumps(cnf)
             rs.preselectComponents()
@@ -3493,7 +3493,7 @@ class SettingsTest(unittest.TestCase):
                 elif key == 'ComponentPreselection':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(json.loads(res)))
-                elif key == 'PreselectedDataSources':
+                elif key == 'PreselectingDataSources':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(poolchannels))
                 else:
@@ -3540,7 +3540,7 @@ class SettingsTest(unittest.TestCase):
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
 
             cnf = json.loads(rs.profileConfiguration)
-            cnf["PreselectedDataSources"] = json.dumps(poolchannels)
+            cnf["PreselectingDataSources"] = json.dumps(poolchannels)
             cnf["ComponentPreselection"] = json.dumps(componentgroup)
             rs.profileConfiguration = json.dumps(cnf)
             rs.preselectComponents()
@@ -3564,7 +3564,7 @@ class SettingsTest(unittest.TestCase):
                 elif key == 'ComponentPreselection':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(json.loads(res)))
-                elif key == 'PreselectedDataSources':
+                elif key == 'PreselectingDataSources':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(poolchannels))
                 else:
@@ -3625,7 +3625,7 @@ class SettingsTest(unittest.TestCase):
             pool.AcqChannelList = [json.dumps(a) for a in arr]
 
             cnf = json.loads(rs.profileConfiguration)
-            cnf["PreselectedDataSources"] = json.dumps(poolchannels)
+            cnf["PreselectingDataSources"] = json.dumps(poolchannels)
             cnf["ComponentPreselection"] = json.dumps(componentgroup)
             rs.profileConfiguration = json.dumps(cnf)
             rs.preselectComponents()
@@ -3648,7 +3648,7 @@ class SettingsTest(unittest.TestCase):
                 elif key == 'ComponentPreselection':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(json.loads(res)))
-                elif key == 'PreselectedDataSources':
+                elif key == 'PreselectingDataSources':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(poolchannels))
                 else:
@@ -3711,7 +3711,7 @@ class SettingsTest(unittest.TestCase):
             pool.AcqChannelList = [json.dumps(a) for a in arr]
 
             cnf = json.loads(rs.profileConfiguration)
-            cnf["PreselectedDataSources"] = json.dumps(poolchannels)
+            cnf["PreselectingDataSources"] = json.dumps(poolchannels)
             cnf["ComponentPreselection"] = json.dumps(componentgroup)
             rs.profileConfiguration = json.dumps(cnf)
             rs.preselectComponents()
@@ -3734,7 +3734,7 @@ class SettingsTest(unittest.TestCase):
                 elif key == 'ComponentPreselection':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(json.loads(res)))
-                elif key == 'PreselectedDataSources':
+                elif key == 'PreselectingDataSources':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(poolchannels))
                 else:
@@ -3797,7 +3797,7 @@ class SettingsTest(unittest.TestCase):
             pool.AcqChannelList = [json.dumps(a) for a in arr]
 
             cnf = json.loads(rs.profileConfiguration)
-            cnf["PreselectedDataSources"] = json.dumps(poolchannels)
+            cnf["PreselectingDataSources"] = json.dumps(poolchannels)
             cnf["ComponentPreselection"] = json.dumps(componentgroup)
             rs.profileConfiguration = json.dumps(cnf)
             rs.preselectComponents()
@@ -3821,7 +3821,7 @@ class SettingsTest(unittest.TestCase):
                 elif key == 'ComponentPreselection':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(json.loads(res)))
-                elif key == 'PreselectedDataSources':
+                elif key == 'PreselectingDataSources':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(poolchannels))
                 else:
@@ -3886,7 +3886,7 @@ class SettingsTest(unittest.TestCase):
             pool.AcqChannelList = [json.dumps(a) for a in arr]
 
             cnf = json.loads(rs.profileConfiguration)
-            cnf["PreselectedDataSources"] = json.dumps(poolchannels)
+            cnf["PreselectingDataSources"] = json.dumps(poolchannels)
             cnf["ComponentPreselection"] = json.dumps(componentgroup)
             rs.profileConfiguration = json.dumps(cnf)
             rs.preselectComponents()
@@ -3910,7 +3910,7 @@ class SettingsTest(unittest.TestCase):
                 elif key == 'ComponentPreselection':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(json.loads(res)))
-                elif key == 'PreselectedDataSources':
+                elif key == 'PreselectingDataSources':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(poolchannels))
                 else:
@@ -3973,7 +3973,7 @@ class SettingsTest(unittest.TestCase):
             self._simps.dp.Value = 43
 
             cnf = json.loads(rs.profileConfiguration)
-            cnf["PreselectedDataSources"] = json.dumps(poolchannels)
+            cnf["PreselectingDataSources"] = json.dumps(poolchannels)
             cnf["ComponentPreselection"] = json.dumps(componentgroup)
             rs.profileConfiguration = json.dumps(cnf)
             rs.preselectComponents()
@@ -3996,7 +3996,7 @@ class SettingsTest(unittest.TestCase):
                 elif key == 'ComponentPreselection':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(json.loads(res)))
-                elif key == 'PreselectedDataSources':
+                elif key == 'PreselectingDataSources':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(poolchannels))
                 else:
@@ -4059,7 +4059,7 @@ class SettingsTest(unittest.TestCase):
             self._simps.dp.Value = 43
 
             cnf = json.loads(rs.profileConfiguration)
-            cnf["PreselectedDataSources"] = json.dumps(poolchannels)
+            cnf["PreselectingDataSources"] = json.dumps(poolchannels)
             cnf["ComponentPreselection"] = json.dumps(componentgroup)
             rs.profileConfiguration = json.dumps(cnf)
             rs.preselectComponents()
@@ -4082,7 +4082,7 @@ class SettingsTest(unittest.TestCase):
                 elif key == 'ComponentPreselection':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(json.loads(res)))
-                elif key == 'PreselectedDataSources':
+                elif key == 'PreselectingDataSources':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(poolchannels))
                 else:
@@ -4148,7 +4148,7 @@ class SettingsTest(unittest.TestCase):
             self._simps.dp.Value = 43
 
             cnf = json.loads(rs.profileConfiguration)
-            cnf["PreselectedDataSources"] = json.dumps(poolchannels)
+            cnf["PreselectingDataSources"] = json.dumps(poolchannels)
             cnf["ComponentPreselection"] = json.dumps(componentgroup)
             rs.profileConfiguration = json.dumps(cnf)
             rs.preselectComponents()
@@ -4171,7 +4171,7 @@ class SettingsTest(unittest.TestCase):
                 elif key == 'ComponentPreselection':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(json.loads(res)))
-                elif key == 'PreselectedDataSources':
+                elif key == 'PreselectingDataSources':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(poolchannels))
                 else:
@@ -4233,7 +4233,7 @@ class SettingsTest(unittest.TestCase):
             pool.AcqChannelList = [json.dumps(a) for a in arr]
 
             cnf = json.loads(rs.profileConfiguration)
-            cnf["PreselectedDataSources"] = json.dumps(poolchannels)
+            cnf["PreselectingDataSources"] = json.dumps(poolchannels)
             cnf["ComponentPreselection"] = json.dumps(componentgroup)
             rs.profileConfiguration = json.dumps(cnf)
             rs.preselectComponents()
@@ -4257,7 +4257,7 @@ class SettingsTest(unittest.TestCase):
                 elif key == 'ComponentPreselection':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(json.loads(res)))
-                elif key == 'PreselectedDataSources':
+                elif key == 'PreselectingDataSources':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(poolchannels))
                 else:
@@ -4321,7 +4321,7 @@ class SettingsTest(unittest.TestCase):
             pool.AcqChannelList = [json.dumps(a) for a in arr]
 
             cnf = json.loads(rs.profileConfiguration)
-            cnf["PreselectedDataSources"] = json.dumps(poolchannels)
+            cnf["PreselectingDataSources"] = json.dumps(poolchannels)
             cnf["ComponentPreselection"] = json.dumps(componentgroup)
             rs.profileConfiguration = json.dumps(cnf)
             rs.preselectComponents()
@@ -4345,7 +4345,7 @@ class SettingsTest(unittest.TestCase):
                 elif key == 'ComponentPreselection':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(json.loads(res)))
-                elif key == 'PreselectedDataSources':
+                elif key == 'PreselectingDataSources':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(poolchannels))
                 else:
@@ -4407,7 +4407,7 @@ class SettingsTest(unittest.TestCase):
             pool.AcqChannelList = [json.dumps(a) for a in arr]
 
             cnf = json.loads(rs.profileConfiguration)
-            cnf["PreselectedDataSources"] = json.dumps(poolchannels)
+            cnf["PreselectingDataSources"] = json.dumps(poolchannels)
             cnf["ComponentPreselection"] = json.dumps(componentgroup)
             rs.profileConfiguration = json.dumps(cnf)
             rs.preselectComponents()
@@ -4430,7 +4430,7 @@ class SettingsTest(unittest.TestCase):
                 elif key == 'ComponentPreselection':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(json.loads(res)))
-                elif key == 'PreselectedDataSources':
+                elif key == 'PreselectingDataSources':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(poolchannels))
                 else:
@@ -4494,7 +4494,7 @@ class SettingsTest(unittest.TestCase):
             pool.AcqChannelList = [json.dumps(a) for a in arr]
 
             cnf = json.loads(rs.profileConfiguration)
-            cnf["PreselectedDataSources"] = json.dumps(poolchannels)
+            cnf["PreselectingDataSources"] = json.dumps(poolchannels)
             cnf["ComponentPreselection"] = json.dumps(componentgroup)
             rs.profileConfiguration = json.dumps(cnf)
             rs.preselectComponents()
@@ -4517,7 +4517,7 @@ class SettingsTest(unittest.TestCase):
                 elif key == 'ComponentPreselection':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(json.loads(res)))
-                elif key == 'PreselectedDataSources':
+                elif key == 'PreselectingDataSources':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(poolchannels))
                 else:
@@ -4570,7 +4570,7 @@ class SettingsTest(unittest.TestCase):
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
 
             cnf = json.loads(rs.profileConfiguration)
-            cnf["PreselectedDataSources"] = json.dumps(poolchannels)
+            cnf["PreselectingDataSources"] = json.dumps(poolchannels)
             cnf["ComponentPreselection"] = json.dumps(componentgroup)
             rs.profileConfiguration = json.dumps(cnf)
             rs.preselectComponents()
@@ -4593,7 +4593,7 @@ class SettingsTest(unittest.TestCase):
                 elif key == 'ComponentPreselection':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(json.loads(res)))
-                elif key == 'PreselectedDataSources':
+                elif key == 'PreselectingDataSources':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(poolchannels))
                 else:
@@ -4711,7 +4711,7 @@ class SettingsTest(unittest.TestCase):
         self._ms.dps[self._ms.ms.keys()[0]].Init()
 
         cnf = json.loads(rs.profileConfiguration)
-        cnf["PreselectedDataSources"] = json.dumps(poolchannels)
+        cnf["PreselectingDataSources"] = json.dumps(poolchannels)
         rs.profileConfiguration = json.dumps(cnf)
         # rs.defaultPreselectedComponents = list(componentgroup.keys())
         self.dump(rs)
@@ -4737,7 +4737,7 @@ class SettingsTest(unittest.TestCase):
             elif key == 'ComponentPreselection':
                 self.myAssertDict(json.loads(sed[key]), json.loads(res))
                 self.assertNotEqual(sed1[key], res)
-            elif key == 'PreselectedDataSources':
+            elif key == 'PreselectingDataSources':
                 self.assertEqual(set(json.loads(sed[key])), set(poolchannels))
                 self.assertEqual(set(json.loads(sed1[key])), set(poolchannels))
             else:
@@ -4774,7 +4774,7 @@ class SettingsTest(unittest.TestCase):
         rs.writerDevice = val["WriterDevice"]
 
         cnf = json.loads(rs.profileConfiguration)
-        cnf["PreselectedDataSources"] = json.dumps(poolchannels)
+        cnf["PreselectingDataSources"] = json.dumps(poolchannels)
         rs.profileConfiguration = json.dumps(cnf)
         self.dump(rs)
         sed1 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
@@ -4818,7 +4818,7 @@ class SettingsTest(unittest.TestCase):
         rs.writerDevice = val["WriterDevice"]
 
         cnf = json.loads(rs.profileConfiguration)
-        cnf["PreselectedDataSources"] = json.dumps(poolchannels)
+        cnf["PreselectingDataSources"] = json.dumps(poolchannels)
         rs.profileConfiguration = json.dumps(cnf)
         self.dump(rs)
         sed1 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
@@ -4864,7 +4864,7 @@ class SettingsTest(unittest.TestCase):
         self._ms.dps[self._ms.ms.keys()[0]].Init()
 
         cnf = json.loads(rs.profileConfiguration)
-        cnf["PreselectedDataSources"] = json.dumps(poolchannels)
+        cnf["PreselectingDataSources"] = json.dumps(poolchannels)
         rs.profileConfiguration = json.dumps(cnf)
         self.dump(rs)
         sed1 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
@@ -4889,7 +4889,7 @@ class SettingsTest(unittest.TestCase):
                 self.myAssertDict(json.loads(sed[key]),
                                   json.loads(res))
                 self.assertNotEqual(sed1[key], res)
-            elif key == 'PreselectedDataSources':
+            elif key == 'PreselectingDataSources':
                 self.assertEqual(set(json.loads(sed[key])), set(poolchannels))
                 self.assertEqual(set(json.loads(sed1[key])), set(poolchannels))
             else:
@@ -4925,7 +4925,7 @@ class SettingsTest(unittest.TestCase):
         self._ms.dps[self._ms.ms.keys()[0]].Init()
 
         cnf = json.loads(rs.profileConfiguration)
-        cnf["PreselectedDataSources"] = json.dumps(poolchannels)
+        cnf["PreselectingDataSources"] = json.dumps(poolchannels)
         rs.profileConfiguration = json.dumps(cnf)
         self.dump(rs)
         sed1 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
@@ -4968,7 +4968,7 @@ class SettingsTest(unittest.TestCase):
         self._ms.dps[self._ms.ms.keys()[0]].Init()
 
         cnf = json.loads(rs.profileConfiguration)
-        cnf["PreselectedDataSources"] = json.dumps(poolchannels)
+        cnf["PreselectingDataSources"] = json.dumps(poolchannels)
         rs.profileConfiguration = json.dumps(cnf)
         self.dump(rs)
         sed1 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
@@ -5012,7 +5012,7 @@ class SettingsTest(unittest.TestCase):
 
         self._ms.dps[self._ms.ms.keys()[0]].Init()
         cnf = json.loads(rs.profileConfiguration)
-        cnf["PreselectedDataSources"] = json.dumps(poolchannels)
+        cnf["PreselectingDataSources"] = json.dumps(poolchannels)
         rs.profileConfiguration = json.dumps(cnf)
         self.dump(rs)
         sed1 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
@@ -5035,7 +5035,7 @@ class SettingsTest(unittest.TestCase):
                 self.myAssertDict(json.loads(sed[key]),
                                   json.loads(res))
                 self.assertNotEqual(sed1[key], res)
-            elif key == 'PreselectedDataSources':
+            elif key == 'PreselectingDataSources':
                 self.assertEqual(set(json.loads(sed[key])),
                                  set(poolchannels))
                 self.assertEqual(set(json.loads(sed1[key])),
@@ -5074,7 +5074,7 @@ class SettingsTest(unittest.TestCase):
         self._ms.dps[self._ms.ms.keys()[0]].Init()
 
         cnf = json.loads(rs.profileConfiguration)
-        cnf["PreselectedDataSources"] = json.dumps(poolchannels)
+        cnf["PreselectingDataSources"] = json.dumps(poolchannels)
         rs.profileConfiguration = json.dumps(cnf)
         self.dump(rs)
         sed1 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
@@ -5099,7 +5099,7 @@ class SettingsTest(unittest.TestCase):
                 self.myAssertDict(json.loads(sed[key]),
                                   json.loads(res))
                 self.assertNotEqual(sed1[key], res)
-            elif key == 'PreselectedDataSources':
+            elif key == 'PreselectingDataSources':
                 self.assertEqual(set(json.loads(sed[key])),
                                  set(poolchannels))
                 self.assertEqual(set(json.loads(sed1[key])),
@@ -5149,7 +5149,7 @@ class SettingsTest(unittest.TestCase):
             self._ms.dps[self._ms.ms.keys()[0]].Init()
 
             cnf = json.loads(rs.profileConfiguration)
-            cnf["PreselectedDataSources"] = json.dumps(poolchannels)
+            cnf["PreselectingDataSources"] = json.dumps(poolchannels)
             rs.profileConfiguration = json.dumps(cnf)
             self.dump(rs)
             sed1 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
@@ -5175,7 +5175,7 @@ class SettingsTest(unittest.TestCase):
                     self.myAssertDict(json.loads(sed[key]),
                                       json.loads(res))
                     self.assertNotEqual(sed1[key], res)
-                elif key == 'PreselectedDataSources':
+                elif key == 'PreselectingDataSources':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(poolchannels))
                     self.assertEqual(set(json.loads(sed1[key])),
@@ -5228,7 +5228,7 @@ class SettingsTest(unittest.TestCase):
             self._ms.dps[self._ms.ms.keys()[0]].Init()
 
             cnf = json.loads(rs.profileConfiguration)
-            cnf["PreselectedDataSources"] = json.dumps(poolchannels)
+            cnf["PreselectingDataSources"] = json.dumps(poolchannels)
             rs.profileConfiguration = json.dumps(cnf)
             self.dump(rs)
             sed1 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
@@ -5253,7 +5253,7 @@ class SettingsTest(unittest.TestCase):
                 elif key == 'ComponentPreselection':
                     self.myAssertDict(json.loads(sed[key]), json.loads(res))
                     self.assertNotEqual(sed1[key], res)
-                elif key == 'PreselectedDataSources':
+                elif key == 'PreselectingDataSources':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(poolchannels))
                     self.assertEqual(set(json.loads(sed1[key])),
@@ -5299,7 +5299,7 @@ class SettingsTest(unittest.TestCase):
         self._ms.dps[self._ms.ms.keys()[0]].Init()
 
         cnf = json.loads(rs.profileConfiguration)
-        cnf["PreselectedDataSources"] = json.dumps(poolchannels)
+        cnf["PreselectingDataSources"] = json.dumps(poolchannels)
         rs.profileConfiguration = json.dumps(cnf)
         self.dump(rs)
         sed1 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
@@ -5324,7 +5324,7 @@ class SettingsTest(unittest.TestCase):
             elif key == 'ComponentPreselection':
                 self.myAssertDict(json.loads(sed[key]), json.loads(res))
                 self.assertNotEqual(sed1[key], res)
-            elif key == 'PreselectedDataSources':
+            elif key == 'PreselectingDataSources':
                 self.assertEqual(set(json.loads(sed[key])),
                                  set(poolchannels))
                 self.assertEqual(set(json.loads(sed1[key])),
@@ -5375,7 +5375,7 @@ class SettingsTest(unittest.TestCase):
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
 
             cnf = json.loads(rs.profileConfiguration)
-            cnf["PreselectedDataSources"] = json.dumps(poolchannels)
+            cnf["PreselectingDataSources"] = json.dumps(poolchannels)
             rs.profileConfiguration = json.dumps(cnf)
             self.dump(rs)
             sed1 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
@@ -5400,7 +5400,7 @@ class SettingsTest(unittest.TestCase):
                 elif key == 'ComponentPreselection':
                     self.myAssertDict(json.loads(sed[key]), json.loads(res))
                     self.assertNotEqual(sed1[key], res)
-                elif key == 'PreselectedDataSources':
+                elif key == 'PreselectingDataSources':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(poolchannels))
                     self.assertEqual(set(json.loads(sed1[key])),
@@ -5451,7 +5451,7 @@ class SettingsTest(unittest.TestCase):
             self._ms.dps[self._ms.ms.keys()[0]].Init()
 
             cnf = json.loads(rs.profileConfiguration)
-            cnf["PreselectedDataSources"] = json.dumps(poolchannels)
+            cnf["PreselectingDataSources"] = json.dumps(poolchannels)
             rs.profileConfiguration = json.dumps(cnf)
             self.dump(rs)
             sed1 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
@@ -5476,7 +5476,7 @@ class SettingsTest(unittest.TestCase):
                 elif key == 'ComponentPreselection':
                     self.myAssertDict(json.loads(sed[key]), json.loads(res))
                     self.assertNotEqual(sed1[key], res)
-                elif key == 'PreselectedDataSources':
+                elif key == 'PreselectingDataSources':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(poolchannels))
                     self.assertEqual(set(json.loads(sed1[key])),
@@ -5528,7 +5528,7 @@ class SettingsTest(unittest.TestCase):
             self._ms.dps[self._ms.ms.keys()[0]].Init()
 
             cnf = json.loads(rs.profileConfiguration)
-            cnf["PreselectedDataSources"] = json.dumps(poolchannels)
+            cnf["PreselectingDataSources"] = json.dumps(poolchannels)
             rs.profileConfiguration = json.dumps(cnf)
             self.dump(rs)
             sed1 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
@@ -5555,7 +5555,7 @@ class SettingsTest(unittest.TestCase):
                 elif key == 'ComponentPreselection':
                     self.myAssertDict(json.loads(sed[key]), json.loads(res))
                     self.assertNotEqual(sed1[key], res)
-                elif key == 'PreselectedDataSources':
+                elif key == 'PreselectingDataSources':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(poolchannels))
                     self.assertEqual(set(json.loads(sed1[key])),
@@ -5608,7 +5608,7 @@ class SettingsTest(unittest.TestCase):
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
 
             cnf = json.loads(rs.profileConfiguration)
-            cnf["PreselectedDataSources"] = json.dumps(poolchannels)
+            cnf["PreselectingDataSources"] = json.dumps(poolchannels)
             rs.profileConfiguration = json.dumps(cnf)
             self.dump(rs)
             sed1 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
@@ -5635,7 +5635,7 @@ class SettingsTest(unittest.TestCase):
                 elif key == 'ComponentPreselection':
                     self.myAssertDict(json.loads(sed[key]), json.loads(res))
                     self.assertNotEqual(sed1[key], res)
-                elif key == 'PreselectedDataSources':
+                elif key == 'PreselectingDataSources':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(poolchannels))
                     self.assertEqual(set(json.loads(sed1[key])),
@@ -5686,7 +5686,7 @@ class SettingsTest(unittest.TestCase):
             self._ms.dps[self._ms.ms.keys()[0]].Init()
 
             cnf = json.loads(rs.profileConfiguration)
-            cnf["PreselectedDataSources"] = json.dumps(poolchannels)
+            cnf["PreselectingDataSources"] = json.dumps(poolchannels)
             rs.profileConfiguration = json.dumps(cnf)
             self.dump(rs)
             sed1 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
@@ -5713,7 +5713,7 @@ class SettingsTest(unittest.TestCase):
                 elif key == 'ComponentPreselection':
                     self.myAssertDict(json.loads(sed[key]), json.loads(res))
                     self.assertNotEqual(sed1[key], res)
-                elif key == 'PreselectedDataSources':
+                elif key == 'PreselectingDataSources':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(poolchannels))
                     self.assertEqual(set(json.loads(sed1[key])),
@@ -5779,7 +5779,7 @@ class SettingsTest(unittest.TestCase):
             pool.AcqChannelList = [json.dumps(a) for a in arr]
 
             cnf = json.loads(rs.profileConfiguration)
-            cnf["PreselectedDataSources"] = json.dumps(poolchannels)
+            cnf["PreselectingDataSources"] = json.dumps(poolchannels)
             rs.profileConfiguration = json.dumps(cnf)
             self.dump(rs)
             sed1 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
@@ -5805,7 +5805,7 @@ class SettingsTest(unittest.TestCase):
                 elif key == 'ComponentPreselection':
                     self.myAssertDict(json.loads(sed[key]), json.loads(res))
                     self.assertNotEqual(sed1[key], res)
-                elif key == 'PreselectedDataSources':
+                elif key == 'PreselectingDataSources':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(poolchannels))
                     self.assertEqual(set(json.loads(sed1[key])),
@@ -5873,7 +5873,7 @@ class SettingsTest(unittest.TestCase):
             pool.AcqChannelList = [json.dumps(a) for a in arr]
 
             cnf = json.loads(rs.profileConfiguration)
-            cnf["PreselectedDataSources"] = json.dumps(poolchannels)
+            cnf["PreselectingDataSources"] = json.dumps(poolchannels)
             rs.profileConfiguration = json.dumps(cnf)
             self.dump(rs)
             sed1 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
@@ -5899,7 +5899,7 @@ class SettingsTest(unittest.TestCase):
                 elif key == 'ComponentPreselection':
                     self.myAssertDict(json.loads(sed[key]), json.loads(res))
                     self.assertNotEqual(sed1[key], res)
-                elif key == 'PreselectedDataSources':
+                elif key == 'PreselectingDataSources':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(poolchannels))
                     self.assertEqual(set(json.loads(sed1[key])),
@@ -5967,7 +5967,7 @@ class SettingsTest(unittest.TestCase):
             pool.AcqChannelList = [json.dumps(a) for a in arr]
 
             cnf = json.loads(rs.profileConfiguration)
-            cnf["PreselectedDataSources"] = json.dumps(poolchannels)
+            cnf["PreselectingDataSources"] = json.dumps(poolchannels)
             rs.profileConfiguration = json.dumps(cnf)
             self.dump(rs)
             sed1 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
@@ -5994,7 +5994,7 @@ class SettingsTest(unittest.TestCase):
                 elif key == 'ComponentPreselection':
                     self.myAssertDict(json.loads(sed[key]), json.loads(res))
                     self.assertNotEqual(sed1[key], res)
-                elif key == 'PreselectedDataSources':
+                elif key == 'PreselectingDataSources':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(poolchannels))
                     self.assertEqual(set(json.loads(sed1[key])),
@@ -6062,7 +6062,7 @@ class SettingsTest(unittest.TestCase):
             self._simps.dp.Value = 43
 
             cnf = json.loads(rs.profileConfiguration)
-            cnf["PreselectedDataSources"] = json.dumps(poolchannels)
+            cnf["PreselectingDataSources"] = json.dumps(poolchannels)
             rs.profileConfiguration = json.dumps(cnf)
             self.dump(rs)
             sed1 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
@@ -6088,7 +6088,7 @@ class SettingsTest(unittest.TestCase):
                 elif key == 'ComponentPreselection':
                     self.myAssertDict(json.loads(sed[key]), json.loads(res))
                     self.assertNotEqual(sed1[key], res)
-                elif key == 'PreselectedDataSources':
+                elif key == 'PreselectingDataSources':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(poolchannels))
                     self.assertEqual(set(json.loads(sed1[key])),
@@ -6156,7 +6156,7 @@ class SettingsTest(unittest.TestCase):
             self._simps.dp.Value = 43
 
             cnf = json.loads(rs.profileConfiguration)
-            cnf["PreselectedDataSources"] = json.dumps(poolchannels)
+            cnf["PreselectingDataSources"] = json.dumps(poolchannels)
             rs.profileConfiguration = json.dumps(cnf)
             self.dump(rs)
             sed1 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
@@ -6183,7 +6183,7 @@ class SettingsTest(unittest.TestCase):
                 elif key == 'ComponentPreselection':
                     self.myAssertDict(json.loads(sed[key]), json.loads(res))
                     self.assertNotEqual(sed1[key], res)
-                elif key == 'PreselectedDataSources':
+                elif key == 'PreselectingDataSources':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(poolchannels))
                     self.assertEqual(set(json.loads(sed1[key])),
@@ -6254,7 +6254,7 @@ class SettingsTest(unittest.TestCase):
             self._simps.dp.Value = 43
 
             cnf = json.loads(rs.profileConfiguration)
-            cnf["PreselectedDataSources"] = json.dumps(poolchannels)
+            cnf["PreselectingDataSources"] = json.dumps(poolchannels)
             rs.profileConfiguration = json.dumps(cnf)
             self.dump(rs)
             sed1 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
@@ -6281,7 +6281,7 @@ class SettingsTest(unittest.TestCase):
                 elif key == 'ComponentPreselection':
                     self.myAssertDict(json.loads(sed[key]), json.loads(res))
                     self.assertNotEqual(sed1[key], res)
-                elif key == 'PreselectedDataSources':
+                elif key == 'PreselectingDataSources':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(poolchannels))
                     self.assertEqual(set(json.loads(sed1[key])),
@@ -6347,7 +6347,7 @@ class SettingsTest(unittest.TestCase):
             pool.AcqChannelList = [json.dumps(a) for a in arr]
 
             cnf = json.loads(rs.profileConfiguration)
-            cnf["PreselectedDataSources"] = json.dumps(poolchannels)
+            cnf["PreselectingDataSources"] = json.dumps(poolchannels)
             rs.profileConfiguration = json.dumps(cnf)
             self.dump(rs)
             sed1 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
@@ -6375,7 +6375,7 @@ class SettingsTest(unittest.TestCase):
                 elif key == 'ComponentPreselection':
                     self.myAssertDict(json.loads(sed[key]), json.loads(res))
                     self.assertNotEqual(sed1[key], res)
-                elif key == 'PreselectedDataSources':
+                elif key == 'PreselectingDataSources':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(poolchannels))
                     self.assertEqual(set(json.loads(sed1[key])),
@@ -6443,7 +6443,7 @@ class SettingsTest(unittest.TestCase):
             pool.AcqChannelList = [json.dumps(a) for a in arr]
 
             cnf = json.loads(rs.profileConfiguration)
-            cnf["PreselectedDataSources"] = json.dumps(poolchannels)
+            cnf["PreselectingDataSources"] = json.dumps(poolchannels)
             rs.profileConfiguration = json.dumps(cnf)
             self.dump(rs)
             sed1 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
@@ -6471,7 +6471,7 @@ class SettingsTest(unittest.TestCase):
                 elif key == 'ComponentPreselection':
                     self.myAssertDict(json.loads(sed[key]), json.loads(res))
                     self.assertNotEqual(sed1[key], res)
-                elif key == 'PreselectedDataSources':
+                elif key == 'PreselectingDataSources':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(poolchannels))
                     self.assertEqual(set(json.loads(sed1[key])),
@@ -6538,7 +6538,7 @@ class SettingsTest(unittest.TestCase):
             pool.AcqChannelList = [json.dumps(a) for a in arr]
 
             cnf = json.loads(rs.profileConfiguration)
-            cnf["PreselectedDataSources"] = json.dumps(poolchannels)
+            cnf["PreselectingDataSources"] = json.dumps(poolchannels)
             rs.profileConfiguration = json.dumps(cnf)
             self.dump(rs)
             sed1 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
@@ -6565,7 +6565,7 @@ class SettingsTest(unittest.TestCase):
                 elif key == 'ComponentPreselection':
                     self.myAssertDict(json.loads(sed[key]), json.loads(res))
                     self.assertNotEqual(sed1[key], res)
-                elif key == 'PreselectedDataSources':
+                elif key == 'PreselectingDataSources':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(poolchannels))
                     self.assertEqual(set(json.loads(sed1[key])),
@@ -6623,7 +6623,7 @@ class SettingsTest(unittest.TestCase):
             self._ms.dps[self._ms.ms.keys()[0]].Init()
 
             cnf = json.loads(rs.profileConfiguration)
-            cnf["PreselectedDataSources"] = json.dumps(poolchannels)
+            cnf["PreselectingDataSources"] = json.dumps(poolchannels)
             rs.profileConfiguration = json.dumps(cnf)
             self.dump(rs)
             sed1 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
@@ -6649,7 +6649,7 @@ class SettingsTest(unittest.TestCase):
                 elif key == 'ComponentPreselection':
                     self.myAssertDict(json.loads(sed[key]), json.loads(res))
                     self.assertNotEqual(sed1[key], res)
-                elif key == 'PreselectedDataSources':
+                elif key == 'PreselectingDataSources':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(poolchannels))
                     self.assertEqual(set(json.loads(sed1[key])),
@@ -8995,10 +8995,10 @@ class SettingsTest(unittest.TestCase):
         se["ComponentPreselection"] = json.dumps(
             acps)
         se["DataSourceSelection"] = json.dumps(dss)
-        se["PreselectedDataSources"] = \
+        se["PreselectingDataSources"] = \
             json.dumps(aadss)
         se["OptionalComponents"] = json.dumps(ocps)
-        se["InitDataSources"] = json.dumps(indss)
+        se["DataSourcePreselection"] = json.dumps(indss)
         se["AppendEntry"] = bool(self.__rnd.randint(0, 1))
         se["ComponentsFromMntGrp"] = bool(
             self.__rnd.randint(0, 1))
@@ -9068,7 +9068,7 @@ class SettingsTest(unittest.TestCase):
         se["UnplottedComponents"] = json.dumps(lhe)
         se["OrderedChannels"] = json.dumps(pdss)
 
-        se.updatePreselectedComponents()
+        se.preselect()
         return str(json.dumps(se.get()))
 
     ## userdata test
@@ -9098,7 +9098,7 @@ class SettingsTest(unittest.TestCase):
         simp2 = TestServerSetUp.MultiTestServerSetUp(
             devices=['ttestp09/testts/t%02dr228' %
                      i for i in range(1, 37)])
-        sets = ["PreselectedDataSources"]
+        sets = ["PreselectingDataSources"]
         try:
             simp2.setUp()
 
@@ -9216,7 +9216,7 @@ class SettingsTest(unittest.TestCase):
         simp2 = TestServerSetUp.MultiTestServerSetUp(
             devices=['ttestp09/testts/t%02dr228' %
                      i for i in range(1, 37)])
-        sets = ["PreselectedDataSources"]
+        sets = ["PreselectingDataSources"]
         try:
             simp2.setUp()
 
@@ -13800,9 +13800,9 @@ class SettingsTest(unittest.TestCase):
                     mp["ComponentSelection"] = json.dumps(cps)
                     mp["ComponentPreselection"] = json.dumps(acps)
                     mp["DataSourceSelection"] = json.dumps(dss)
-                    mp["PreselectedDataSources"] = json.dumps(aadss)
+                    mp["PreselectingDataSources"] = json.dumps(aadss)
                     mp["OptionalComponents"] = json.dumps(ocps)
-                    mp["InitDataSources"] = json.dumps(indss)
+                    mp["DataSourcePreselection"] = json.dumps(indss)
                     mp["AppendEntry"] = bool(self.__rnd.randint(0, 1))
                     mp["ComponentsFromMntGrp"] = bool(self.__rnd.randint(0, 1))
                     mp["DynamicComponents"] = bool(self.__rnd.randint(0, 1))
@@ -14106,7 +14106,7 @@ class SettingsTest(unittest.TestCase):
                              "ComponentSelection",
                              "DataSourceSelection",
                              "UnplottedComponents",
-                             "PreselectedDataSources"])
+                             "PreselectingDataSources"])
 
                     self.myAssertDict(
                         json.loads(mp["ComponentPreselection"]), acps)
@@ -14115,7 +14115,7 @@ class SettingsTest(unittest.TestCase):
                     self.myAssertDict(
                         json.loads(mp["DataSourceSelection"]), adss)
                     self.assertEqual(
-                        set(json.loads(mp["PreselectedDataSources"])),
+                        set(json.loads(mp["PreselectingDataSources"])),
                         set(aadss))
                     self.assertEqual(
                         set(json.loads(mp["UnplottedComponents"])),
@@ -14352,10 +14352,10 @@ class SettingsTest(unittest.TestCase):
                         mp[mg]["ComponentPreselection"] = json.dumps(
                             acps[mg])
                         mp[mg]["DataSourceSelection"] = json.dumps(dss)
-                        mp[mg]["PreselectedDataSources"] = \
+                        mp[mg]["PreselectingDataSources"] = \
                             json.dumps(aadss[mg])
                         mp[mg]["OptionalComponents"] = json.dumps(ocps)
-                        mp[mg]["InitDataSources"] = json.dumps(indss)
+                        mp[mg]["DataSourcePreselection"] = json.dumps(indss)
                         mp[mg]["AppendEntry"] = bool(self.__rnd.randint(0, 1))
                         mp[mg]["ComponentsFromMntGrp"] = bool(
                             self.__rnd.randint(0, 1))
@@ -14674,7 +14674,7 @@ class SettingsTest(unittest.TestCase):
                             rs[mg],
                             ["DataSourceSelection",
                              "UnplottedComponents",
-                             "PreselectedDataSources",
+                             "PreselectingDataSources",
                              "UnplottedComponents"],
                             name=mg)
                         mp[mg] = json.loads(rs[mg].profileConfiguration)
@@ -14682,7 +14682,7 @@ class SettingsTest(unittest.TestCase):
                             json.loads(
                                 mp[mg]["DataSourceSelection"]), adss[mg])
                         self.assertEqual(
-                            set(json.loads(mp[mg]["PreselectedDataSources"])),
+                            set(json.loads(mp[mg]["PreselectingDataSources"])),
                             set(aadss[mg]))
                         print "PDS1", set(aadss[mg])
                         self.assertEqual(
@@ -14704,25 +14704,25 @@ class SettingsTest(unittest.TestCase):
                         rs[mg1],
                         ["DataSourceSelection",
                          "UnplottedComponents",
-                         "PreselectedDataSources"],
+                         "PreselectingDataSources"],
                         name=mg1)
                     self.compareToDumpJSON(
                         rs[mg2],
                         ["DataSourceSelection",
                          "UnplottedComponents",
-                         "PreselectedDataSources"],
+                         "PreselectingDataSources"],
                         name=mg2)
                     self.compareToDumpJSON(
                         rs[mg3],
                         ["DataSourceSelection",
                          "UnplottedComponents",
-                         "PreselectedDataSources"],
+                         "PreselectingDataSources"],
                         name=mg3)
                     self.compareToDumpJSON(
                         rs[mg4],
                         ["DataSourceSelection",
                          "UnplottedComponents",
-                         "PreselectedDataSources"],
+                         "PreselectingDataSources"],
                         name=mg4)
 
                     lrs = self.openRecSelector()
@@ -14743,7 +14743,7 @@ class SettingsTest(unittest.TestCase):
                         lrs, [
                             "DataSourceSelection",
                             "UnplottedComponents",
-                            "PreselectedDataSources",
+                            "PreselectingDataSources",
                             "Timer"
                         ],
                         name=mg1)
@@ -14752,7 +14752,7 @@ class SettingsTest(unittest.TestCase):
                     self.myAssertDict(tmpcf, ltmpcf)
 
                     self.assertEqual(
-                        set(json.loads(lmp["PreselectedDataSources"])),
+                        set(json.loads(lmp["PreselectingDataSources"])),
                         set(aadss[mg1]))
                     self.myAssertDict(
                         json.loads(lmp["DataSourceSelection"]), adss[mg1])
@@ -14789,13 +14789,13 @@ class SettingsTest(unittest.TestCase):
                         rs[mg2],
                         ["DataSourceSelection",
                          "UnplottedComponents",
-                         "PreselectedDataSources"],
+                         "PreselectingDataSources"],
                         name=mg2)
                     self.compareToDumpJSON(
                         lrs,
                         ["DataSourceSelection",
                          "UnplottedComponents",
-                         "PreselectedDataSources",
+                         "PreselectingDataSources",
                          "Timer",
                          "MntGrp"],
                         name=mg1)
@@ -14805,7 +14805,7 @@ class SettingsTest(unittest.TestCase):
                     self.myAssertDict(tmpcf, ltmpcf)
 
                     self.assertEqual(
-                        set(json.loads(lmp["PreselectedDataSources"])),
+                        set(json.loads(lmp["PreselectingDataSources"])),
                         set(aadss[mg1]))
                     self.assertEqual(
                         json.loads(lmp["OrderedChannels"]), pdss[mg1])
@@ -14941,7 +14941,7 @@ class SettingsTest(unittest.TestCase):
                          "ComponentSelection",
                          "DataSourceSelection",
                          "UnplottedComponents",
-                         "PreselectedDataSources",
+                         "PreselectingDataSources",
                          "Timer",
                          "MntGrp"],
                         name=mg1)
@@ -14952,7 +14952,7 @@ class SettingsTest(unittest.TestCase):
                          "ComponentSelection",
                          "DataSourceSelection",
                          "UnplottedComponents",
-                         "PreselectedDataSources",
+                         "PreselectingDataSources",
                          "Timer"],
                         name=mg2)
 
@@ -14965,7 +14965,7 @@ class SettingsTest(unittest.TestCase):
                     self.myAssertDict(
                         json.loads(mp[mg2]["DataSourceSelection"]), adss[mg2])
                     self.assertEqual(
-                        set(json.loads(mp[mg2]["PreselectedDataSources"])),
+                        set(json.loads(mp[mg2]["PreselectingDataSources"])),
                         set(aadss[mg2]))
                     self.assertEqual(
                         set(json.loads(mp[mg2]["UnplottedComponents"])),
@@ -15005,14 +15005,14 @@ class SettingsTest(unittest.TestCase):
                         [
                             "DataSourceSelection",
                             "UnplottedComponents",
-                            "PreselectedDataSources",
+                            "PreselectingDataSources",
                             "Timer"],
                         name=mg3)
                     lmp = json.loads(lrs.profileConfiguration)
                     self.myAssertDict(json.loads(lmp["DataSourceSelection"]),
                                       adss[mg3])
                     self.assertEqual(
-                        set(json.loads(lmp["PreselectedDataSources"])),
+                        set(json.loads(lmp["PreselectingDataSources"])),
                         set(aadss[mg3]))
 
                     mylhe = set(lhe2[mg3])
@@ -15053,7 +15053,7 @@ class SettingsTest(unittest.TestCase):
                         [
                             "DataSourceSelection",
                             "UnplottedComponents",
-                            "PreselectedDataSources",
+                            "PreselectingDataSources",
                             "Timer",
                             "MntGrp"],
                         name=mg3)
@@ -15070,7 +15070,7 @@ class SettingsTest(unittest.TestCase):
                     self.myAssertDict(json.loads(lmp["DataSourceSelection"]),
                                       mydsg)
                     self.assertEqual(
-                        set(json.loads(lmp["PreselectedDataSources"])),
+                        set(json.loads(lmp["PreselectingDataSources"])),
                         set(aadss[mg3]))
                     self.assertEqual(
                         set(json.loads(lmp["UnplottedComponents"])),
@@ -15115,13 +15115,13 @@ class SettingsTest(unittest.TestCase):
                         [
                             "DataSourceSelection",
                             "UnplottedComponents",
-                            "PreselectedDataSources",
+                            "PreselectingDataSources",
                             "Timer"],
                         name=mg3)
                     self.myAssertDict(json.loads(lmp["DataSourceSelection"]),
                                       adss[mg3])
                     self.assertEqual(
-                        set(json.loads(lmp["PreselectedDataSources"])),
+                        set(json.loads(lmp["PreselectingDataSources"])),
                         set(aadss[mg3]))
 
                     self.assertEqual(
@@ -15163,14 +15163,14 @@ class SettingsTest(unittest.TestCase):
                         [
                             "DataSourceSelection",
                             "UnplottedComponents",
-                            "PreselectedDataSources",
+                            "PreselectingDataSources",
                             "Timer"],
                         name=mg3)
                     lmp = json.loads(lrs.profileConfiguration)
                     self.myAssertDict(json.loads(lmp["DataSourceSelection"]),
                                       adss[mg3])
                     self.assertEqual(
-                        set(json.loads(lmp["PreselectedDataSources"])),
+                        set(json.loads(lmp["PreselectingDataSources"])),
                         set(aadss[mg3]))
 
                     self.assertEqual(
@@ -15209,14 +15209,14 @@ class SettingsTest(unittest.TestCase):
                         [
                             "DataSourceSelection",
                             "UnplottedComponents",
-                            "PreselectedDataSources",
+                            "PreselectingDataSources",
                             "Timer"],
                         name=mg3)
                     lmp = json.loads(lrs.profileConfiguration)
                     self.myAssertDict(json.loads(lmp["DataSourceSelection"]),
                                       adss[mg3])
                     self.assertEqual(
-                        set(json.loads(lmp["PreselectedDataSources"])),
+                        set(json.loads(lmp["PreselectingDataSources"])),
                         set(aadss[mg3]))
 
                     self.assertEqual(
@@ -15250,14 +15250,14 @@ class SettingsTest(unittest.TestCase):
                         [
                             "DataSourceSelection",
                             "UnplottedComponents",
-                            "PreselectedDataSources",
+                            "PreselectingDataSources",
                             "Timer", "MntGrp"],
                         name=mg3)
                     lmp = json.loads(lrs.profileConfiguration)
                     self.myAssertDict(json.loads(lmp["DataSourceSelection"]),
                                       adss[mg3])
                     self.assertEqual(
-                        set(json.loads(lmp["PreselectedDataSources"])),
+                        set(json.loads(lmp["PreselectingDataSources"])),
                         set(aadss[mg3]))
 
                     self.assertEqual(
@@ -15298,8 +15298,8 @@ class SettingsTest(unittest.TestCase):
                     self.compareToDumpJSON(
                         lrs,
                         [
-                            "InitDataSources",
-                            "PreselectedDataSources",
+                            "DataSourcePreselection",
+                            "PreselectingDataSources",
                             "ComponentPreselection",
                             "Timer",
                             "MntGrp",
@@ -15311,10 +15311,10 @@ class SettingsTest(unittest.TestCase):
                         name=mg3)
                     lmp = json.loads(lrs.profileConfiguration)
                     self.assertEqual(
-                        set(json.loads(lmp["PreselectedDataSources"])),
+                        set(json.loads(lmp["PreselectingDataSources"])),
                         set(aadss[mg3]))
                     self.assertEqual(
-                        set(json.loads(lmp["InitDataSources"])),
+                        set(json.loads(lmp["DataSourcePreselection"])),
                         set())
 
                     if j % 2:
@@ -15648,10 +15648,10 @@ class SettingsTest(unittest.TestCase):
                         mp[mg]["ComponentPreselection"] = json.dumps(
                             acps[mg])
                         mp[mg]["DataSourceSelection"] = json.dumps(dss)
-                        mp[mg]["PreselectedDataSources"] = \
+                        mp[mg]["PreselectingDataSources"] = \
                             json.dumps(aadss[mg])
                         mp[mg]["OptionalComponents"] = json.dumps(ocps)
-                        mp[mg]["InitDataSources"] = json.dumps(indss)
+                        mp[mg]["DataSourcePreselection"] = json.dumps(indss)
                         mp[mg]["AppendEntry"] = bool(self.__rnd.randint(0, 1))
                         mp[mg]["ComponentsFromMntGrp"] = bool(
                             self.__rnd.randint(0, 1))
@@ -15970,7 +15970,7 @@ class SettingsTest(unittest.TestCase):
                             ors,
                             ["DataSourceSelection",
                              "UnplottedComponents",
-                             "PreselectedDataSources",
+                             "PreselectingDataSources",
                              "UnplottedComponents"],
                             name=mg)
                         mp[mg] = json.loads(ors.profileConfiguration)
@@ -15978,7 +15978,7 @@ class SettingsTest(unittest.TestCase):
                             json.loads(
                                 mp[mg]["DataSourceSelection"]), adss[mg])
                         self.assertEqual(
-                            set(json.loads(mp[mg]["PreselectedDataSources"])),
+                            set(json.loads(mp[mg]["PreselectingDataSources"])),
                             set(aadss[mg]))
                         print "PDS1", set(aadss[mg])
                         self.assertEqual(
@@ -15996,7 +15996,7 @@ class SettingsTest(unittest.TestCase):
                             ors,
                             ["DataSourceSelection",
                              "UnplottedComponents",
-                             "PreselectedDataSources"],
+                             "PreselectingDataSources"],
                             name=mg)
 
                     # check profile commands
@@ -16007,28 +16007,28 @@ class SettingsTest(unittest.TestCase):
                         ors,
                         ["DataSourceSelection",
                          "UnplottedComponents",
-                         "PreselectedDataSources"],
+                         "PreselectingDataSources"],
                         name=mg1)
                     ors.profileConfiguration = str(json.dumps(mp[mg2]))
                     self.compareToDumpJSON(
                         ors,
                         ["DataSourceSelection",
                          "UnplottedComponents",
-                         "PreselectedDataSources"],
+                         "PreselectingDataSources"],
                         name=mg2)
                     ors.profileConfiguration = str(json.dumps(mp[mg3]))
                     self.compareToDumpJSON(
                         ors,
                         ["DataSourceSelection",
                          "UnplottedComponents",
-                         "PreselectedDataSources"],
+                         "PreselectingDataSources"],
                         name=mg3)
                     ors.profileConfiguration = str(json.dumps(mp[mg4]))
                     self.compareToDumpJSON(
                         ors,
                         ["DataSourceSelection",
                          "UnplottedComponents",
-                         "PreselectedDataSources"],
+                         "PreselectingDataSources"],
                         name=mg4)
 
                     lrs = self.openRecSelector2()
@@ -16049,7 +16049,7 @@ class SettingsTest(unittest.TestCase):
                         lrs, [
                             "DataSourceSelection",
                             "UnplottedComponents",
-                            "PreselectedDataSources",
+                            "PreselectingDataSources",
                             "Timer"
                         ],
                         name=mg1)
@@ -16059,7 +16059,7 @@ class SettingsTest(unittest.TestCase):
                     self.myAssertDict(tmpcf, ltmpcf)
 
                     self.assertEqual(
-                        set(json.loads(lmp["PreselectedDataSources"])),
+                        set(json.loads(lmp["PreselectingDataSources"])),
                         set(aadss[mg1]))
                     self.myAssertDict(
                         json.loads(lmp["DataSourceSelection"]), adss[mg1])
@@ -16099,13 +16099,13 @@ class SettingsTest(unittest.TestCase):
                         ors,
                         ["DataSourceSelection",
                          "UnplottedComponents",
-                         "PreselectedDataSources"],
+                         "PreselectingDataSources"],
                         name=mg2)
                     self.compareToDumpJSON(
                         lrs,
                         ["DataSourceSelection",
                          "UnplottedComponents",
-                         "PreselectedDataSources",
+                         "PreselectingDataSources",
                          "Timer",
                          "MntGrp"],
                         name=mg1)
@@ -16117,7 +16117,7 @@ class SettingsTest(unittest.TestCase):
                     self.myAssertDict(tmpcf, ltmpcf)
 
                     self.assertEqual(
-                        set(json.loads(lmp["PreselectedDataSources"])),
+                        set(json.loads(lmp["PreselectingDataSources"])),
                         set(aadss[mg1]))
                     self.assertEqual(
                         json.loads(lmp["OrderedChannels"]), pdss[mg1])
@@ -16259,7 +16259,7 @@ class SettingsTest(unittest.TestCase):
                          "ComponentSelection",
                          "DataSourceSelection",
                          "UnplottedComponents",
-                         "PreselectedDataSources",
+                         "PreselectingDataSources",
                          "Timer",
                          "MntGrp"],
                         name=mg1)
@@ -16271,7 +16271,7 @@ class SettingsTest(unittest.TestCase):
                          "ComponentSelection",
                          "DataSourceSelection",
                          "UnplottedComponents",
-                         "PreselectedDataSources",
+                         "PreselectingDataSources",
                          "Timer"],
                         name=mg2)
 
@@ -16284,7 +16284,7 @@ class SettingsTest(unittest.TestCase):
                     self.myAssertDict(
                         json.loads(mp[mg2]["DataSourceSelection"]), adss[mg2])
                     self.assertEqual(
-                        set(json.loads(mp[mg2]["PreselectedDataSources"])),
+                        set(json.loads(mp[mg2]["PreselectingDataSources"])),
                         set(aadss[mg2]))
                     self.assertEqual(
                         set(json.loads(mp[mg2]["UnplottedComponents"])),
@@ -16330,14 +16330,14 @@ class SettingsTest(unittest.TestCase):
                         [
                             "DataSourceSelection",
                             "UnplottedComponents",
-                            "PreselectedDataSources",
+                            "PreselectingDataSources",
                             "Timer"],
                         name=mg3)
                     lmp = json.loads(lrs.profileConfiguration)
                     self.myAssertDict(json.loads(lmp["DataSourceSelection"]),
                                       adss[mg3])
                     self.assertEqual(
-                        set(json.loads(lmp["PreselectedDataSources"])),
+                        set(json.loads(lmp["PreselectingDataSources"])),
                         set(aadss[mg3]))
 
                     mylhe = set(lhe2[mg3])
@@ -16378,7 +16378,7 @@ class SettingsTest(unittest.TestCase):
                         [
                             "DataSourceSelection",
                             "UnplottedComponents",
-                            "PreselectedDataSources",
+                            "PreselectingDataSources",
                             "Timer",
                             "MntGrp"],
                         name=mg3)
@@ -16395,7 +16395,7 @@ class SettingsTest(unittest.TestCase):
                     self.myAssertDict(json.loads(lmp["DataSourceSelection"]),
                                       mydsg)
                     self.assertEqual(
-                        set(json.loads(lmp["PreselectedDataSources"])),
+                        set(json.loads(lmp["PreselectingDataSources"])),
                         set(aadss[mg3]))
                     self.assertEqual(
                         set(json.loads(lmp["UnplottedComponents"])),
@@ -16446,13 +16446,13 @@ class SettingsTest(unittest.TestCase):
                         [
                             "DataSourceSelection",
                             "UnplottedComponents",
-                            "PreselectedDataSources",
+                            "PreselectingDataSources",
                             "Timer"],
                         name=mg3)
                     self.myAssertDict(json.loads(lmp["DataSourceSelection"]),
                                       adss[mg3])
                     self.assertEqual(
-                        set(json.loads(lmp["PreselectedDataSources"])),
+                        set(json.loads(lmp["PreselectingDataSources"])),
                         set(aadss[mg3]))
 
                     self.assertEqual(
@@ -16497,14 +16497,14 @@ class SettingsTest(unittest.TestCase):
                         [
                             "DataSourceSelection",
                             "UnplottedComponents",
-                            "PreselectedDataSources",
+                            "PreselectingDataSources",
                             "Timer"],
                         name=mg3)
                     lmp = json.loads(lrs.profileConfiguration)
                     self.myAssertDict(json.loads(lmp["DataSourceSelection"]),
                                       adss[mg3])
                     self.assertEqual(
-                        set(json.loads(lmp["PreselectedDataSources"])),
+                        set(json.loads(lmp["PreselectingDataSources"])),
                         set(aadss[mg3]))
 
                     self.assertEqual(
@@ -16546,14 +16546,14 @@ class SettingsTest(unittest.TestCase):
                         [
                             "DataSourceSelection",
                             "UnplottedComponents",
-                            "PreselectedDataSources",
+                            "PreselectingDataSources",
                             "Timer"],
                         name=mg3)
                     lmp = json.loads(lrs.profileConfiguration)
                     self.myAssertDict(json.loads(lmp["DataSourceSelection"]),
                                       adss[mg3])
                     self.assertEqual(
-                        set(json.loads(lmp["PreselectedDataSources"])),
+                        set(json.loads(lmp["PreselectingDataSources"])),
                         set(aadss[mg3]))
 
                     self.assertEqual(
@@ -16590,14 +16590,14 @@ class SettingsTest(unittest.TestCase):
                         [
                             "DataSourceSelection",
                             "UnplottedComponents",
-                            "PreselectedDataSources",
+                            "PreselectingDataSources",
                             "Timer", "MntGrp"],
                         name=mg3)
                     lmp = json.loads(lrs.profileConfiguration)
                     self.myAssertDict(json.loads(lmp["DataSourceSelection"]),
                                       adss[mg3])
                     self.assertEqual(
-                        set(json.loads(lmp["PreselectedDataSources"])),
+                        set(json.loads(lmp["PreselectingDataSources"])),
                         set(aadss[mg3]))
 
                     self.assertEqual(
@@ -16642,8 +16642,8 @@ class SettingsTest(unittest.TestCase):
                     self.compareToDumpJSON(
                         lrs,
                         [
-                            "InitDataSources",
-                            "PreselectedDataSources",
+                            "DataSourcePreselection",
+                            "PreselectingDataSources",
                             "ComponentPreselection",
                             "Timer",
                             "MntGrp",
@@ -16655,10 +16655,10 @@ class SettingsTest(unittest.TestCase):
                         name=mg3)
                     lmp = json.loads(lrs.profileConfiguration)
                     self.assertEqual(
-                        set(json.loads(lmp["PreselectedDataSources"])),
+                        set(json.loads(lmp["PreselectingDataSources"])),
                         set(aadss[mg3]))
                     self.assertEqual(
-                        set(json.loads(lmp["InitDataSources"])),
+                        set(json.loads(lmp["DataSourcePreselection"])),
                         set())
 
                     if j % 2:
@@ -21069,7 +21069,7 @@ class SettingsTest(unittest.TestCase):
         simp2 = TestServerSetUp.MultiTestServerSetUp(
             devices=['ttestp09/testts/t%02dr228' %
                      i for i in range(1, 37)])
-        sets = ["PreselectedDataSources"]
+        sets = ["PreselectingDataSources"]
         try:
             simp2.setUp()
 
@@ -21128,7 +21128,7 @@ class SettingsTest(unittest.TestCase):
         simp2 = TestServerSetUp.MultiTestServerSetUp(
             devices=['ttestp09/testts/t%02dr228' %
                      i for i in range(1, 37)])
-        sets = ["PreselectedDataSources"]
+        sets = ["PreselectingDataSources"]
         try:
             simp2.setUp()
 

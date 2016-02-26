@@ -21,7 +21,6 @@
 """  Selection converter """
 
 import json
-from .Selection import OFF, ONAUTO, ONUSER
 
 ## virtual selection converter
 class ConverterXtoY(object):
@@ -50,32 +49,28 @@ class Converter2to3(ConverterXtoY):
             "InitDataSources": "DataSourcePreselection",
         }
 
-    def seltoint(self, jselection, on=ONUSER):
+    def seltoint(self, jselection):
         sel = json.loads(jselection)
         if isinstance(sel, dict):
             return json.dumps(
-                dict((key, on if vl else OFF) for key, vl in sel.items()))
+                dict((key, True if vl else None) for key, vl in sel.items()))
         elif isinstance(sel, (list, tuple)):
-            return json.dumps(dict((key, on) for key in sel))
+            return json.dumps(dict((key, True) for key in sel))
 
 
     def convert(self, selection):
-        super(Converter1to2, self).convert(selection)
+        super(Converter2to3, self).convert(selection)
 
         selection["ComponentPreselection"] = self.seltoint(
-            selection["ComponentPreselection"], ONAUTO)
-        selection["ComponentSelection"] = self.seltoint(
-            selection["ComponentSelection"], ONUSER)
-        selection["DataSourceSelection"] = self.seltoint(
-            selection["DataSourceSelection"], ONUSER)
+            selection["ComponentPreselection"])
         selection["DataSourcePreselection"] = self.seltoint(
-            selection["DataSourcePreselection"], ONUSER)
+            selection["DataSourcePreselection"])
 
 ## Selection converter from 3 to 2
 class Converter3to2(ConverterXtoY):
 
     def __init__(self):
-        super(Converter2to3, self).__init__()
+        super(Converter3to2, self).__init__()
 
         ## names to convert
         self.names = {
@@ -86,7 +81,7 @@ class Converter3to2(ConverterXtoY):
     def seltobool(self, jselection):
         sel = json.loads(jselection)
         return json.dumps(
-            dict((key, bool(vl)) for key, vl in sel.items()))
+            dict((key, vl is not None) for key, vl in sel.items()))
 
     def seltolist(self, jselection):
         sel = json.loads(jselection)
@@ -94,14 +89,10 @@ class Converter3to2(ConverterXtoY):
 
 
     def convert(self, selection):
-        super(Converter1to2, self).convert(selection)
+        super(Converter3to2, self).convert(selection)
 
         selection["ComponentPreselection"] = self.seltobool(
             selection["ComponentPreselection"])
-        selection["ComponentSelection"] = self.seltobool(
-            selection["ComponentSelection"])
-        selection["DataSourceSelection"] = self.seltobool(
-            selection["DataSourceSelection"])
         selection["InitDataSources"] = self.seltolist(
             selection["InitDataSources"])
 

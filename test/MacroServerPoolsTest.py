@@ -1075,7 +1075,7 @@ class MacroServerPoolTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
-    def test_checkComponentChannels_simple(self):
+    def test_checkChannels_simple(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         msp = MacroServerPools(0)
@@ -1083,9 +1083,9 @@ class MacroServerPoolTest(unittest.TestCase):
         channelerrors = []
         poolchannels = []
         componentgroup = {}
-        self.myAssertRaise(Exception, msp.checkComponentChannels,
+        self.myAssertRaise(Exception, msp.checkChannels,
                            None, None, None, None, None)
-        res = msp.checkComponentChannels(self._ms.door.keys()[0],
+        res = msp.checkChannels(self._ms.door.keys()[0],
                                          self._cf.dp,
                                          poolchannels,
                                          componentgroup,
@@ -1101,7 +1101,7 @@ class MacroServerPoolTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
-    def test_checkComponentChannels_withcf(self):
+    def test_checkChannels_withcf(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         msp = MacroServerPools(0)
@@ -1113,7 +1113,7 @@ class MacroServerPoolTest(unittest.TestCase):
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
 
-        res = msp.checkComponentChannels(self._ms.door.keys()[0],
+        res = msp.checkChannels(self._ms.door.keys()[0],
                                          self._cf.dp,
                                          poolchannels,
                                          componentgroup,
@@ -1133,7 +1133,7 @@ class MacroServerPoolTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
-    def test_checkComponentChannels_withcf_cps(self):
+    def test_checkChannels_withcf_cps(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         msp = MacroServerPools(0)
@@ -1145,7 +1145,7 @@ class MacroServerPoolTest(unittest.TestCase):
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
 
-        res = msp.checkComponentChannels(self._ms.door.keys()[0],
+        res = msp.checkChannels(self._ms.door.keys()[0],
                                          self._cf.dp,
                                          poolchannels,
                                          componentgroup,
@@ -1166,7 +1166,7 @@ class MacroServerPoolTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
-    def test_checkComponentChannels_withcf_nocps(self):
+    def test_checkChannels_withcf_nocps(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         msp = MacroServerPools(0)
@@ -1178,7 +1178,7 @@ class MacroServerPoolTest(unittest.TestCase):
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
 
-        res = msp.checkComponentChannels(self._ms.door.keys()[0],
+        res = msp.checkChannels(self._ms.door.keys()[0],
                                          self._cf.dp,
                                          poolchannels,
                                          componentgroup,
@@ -1199,7 +1199,7 @@ class MacroServerPoolTest(unittest.TestCase):
 #        print self._cf.dp.availableComponents()
     ## constructor test
     # \brief It tests default settings
-    def test_checkComponentChannels_withcf_nochnnel(self):
+    def test_checkChannels_withcf_nochnnel(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         msp = MacroServerPools(0)
@@ -1211,7 +1211,7 @@ class MacroServerPoolTest(unittest.TestCase):
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
 
-        res = msp.checkComponentChannels(self._ms.door.keys()[0],
+        res = msp.checkChannels(self._ms.door.keys()[0],
                                          self._cf.dp,
                                          poolchannels,
                                          componentgroup,
@@ -1231,7 +1231,7 @@ class MacroServerPoolTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
-    def test_checkComponentChannels_wds(self):
+    def test_checkChannels_wds(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         msp = MacroServerPools(0)
@@ -1243,7 +1243,7 @@ class MacroServerPoolTest(unittest.TestCase):
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.smycps)])
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
 
-        res = msp.checkComponentChannels(self._ms.door.keys()[0],
+        res = msp.checkChannels(self._ms.door.keys()[0],
                                          self._cf.dp,
                                          poolchannels,
                                          componentgroup,
@@ -1264,7 +1264,7 @@ class MacroServerPoolTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
-    def test_checkComponentChannels_wds2(self):
+    def test_checkChannels_wds2(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         msp = MacroServerPools(0)
@@ -1276,7 +1276,7 @@ class MacroServerPoolTest(unittest.TestCase):
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.smycps)])
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
 
-        res = msp.checkComponentChannels(self._ms.door.keys()[0],
+        res = msp.checkChannels(self._ms.door.keys()[0],
                                          self._cf.dp,
                                          poolchannels,
                                          componentgroup,
@@ -1303,7 +1303,7 @@ class MacroServerPoolTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
-    def test_checkComponentChannels_2wds(self):
+    def test_checkChannels_2wds(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         simps2 = TestServerSetUp.TestServerSetUp(
@@ -1326,7 +1326,7 @@ class MacroServerPoolTest(unittest.TestCase):
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
     #        print "MDSS", self._cf.dp.availableDataSources()
     #        print "XDSS", self._cf.dp.dataSources(["scalar_long"])
-            res = msp.checkComponentChannels(self._ms.door.keys()[0],
+            res = msp.checkChannels(self._ms.door.keys()[0],
                                              self._cf.dp,
                                              poolchannels,
                                              componentgroup,
@@ -1365,7 +1365,7 @@ class MacroServerPoolTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
-    def test_checkComponentChannels_2wds_dvnorunning(self):
+    def test_checkChannels_2wds_dvnorunning(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         simps2 = TestServerSetUp.TestServerSetUp(
@@ -1388,7 +1388,7 @@ class MacroServerPoolTest(unittest.TestCase):
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
     #        print "MDSS", self._cf.dp.availableDataSources()
     #        print "XDSS", self._cf.dp.dataSources(["scalar_long"])
-            res = msp.checkComponentChannels(self._ms.door.keys()[0],
+            res = msp.checkChannels(self._ms.door.keys()[0],
                                              self._cf.dp,
                                              poolchannels,
                                              componentgroup,
@@ -1427,7 +1427,7 @@ class MacroServerPoolTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
-    def test_checkComponentChannels_2wds_dvnodef(self):
+    def test_checkChannels_2wds_dvnodef(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         msp = MacroServerPools(1)
@@ -1445,7 +1445,7 @@ class MacroServerPoolTest(unittest.TestCase):
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
 #        print "MDSS", self._cf.dp.availableDataSources()
 #        print "XDSS", self._cf.dp.dataSources(["scalar_long"])
-        res = msp.checkComponentChannels(self._ms.door.keys()[0],
+        res = msp.checkChannels(self._ms.door.keys()[0],
                                          self._cf.dp,
                                          poolchannels,
                                          componentgroup,
@@ -1482,7 +1482,7 @@ class MacroServerPoolTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
-    def test_checkComponentChannels_2wds_nods(self):
+    def test_checkChannels_2wds_nods(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         simps2 = TestServerSetUp.TestServerSetUp(
@@ -1505,7 +1505,7 @@ class MacroServerPoolTest(unittest.TestCase):
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
     #        print "MDSS", self._cf.dp.availableDataSources()
     #        print "XDSS", self._cf.dp.dataSources(["scalar_long"])
-            res = msp.checkComponentChannels(self._ms.door.keys()[0],
+            res = msp.checkChannels(self._ms.door.keys()[0],
                                              self._cf.dp,
                                              poolchannels,
                                              componentgroup,
@@ -1528,7 +1528,7 @@ class MacroServerPoolTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
-    def test_checkComponentChannels_2wds_nodspool(self):
+    def test_checkChannels_2wds_nodspool(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         simps2 = TestServerSetUp.TestServerSetUp(
@@ -1551,7 +1551,7 @@ class MacroServerPoolTest(unittest.TestCase):
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
     #        print "MDSS", self._cf.dp.availableDataSources()
     #        print "XDSS", self._cf.dp.dataSources(["scalar_long"])
-            res = msp.checkComponentChannels(self._ms.door.keys()[0],
+            res = msp.checkChannels(self._ms.door.keys()[0],
                                              self._cf.dp,
                                              poolchannels,
                                              componentgroup,
@@ -1574,7 +1574,7 @@ class MacroServerPoolTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
-    def test_checkComponentChannels_2wds_notangods(self):
+    def test_checkChannels_2wds_notangods(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         simps2 = TestServerSetUp.TestServerSetUp(
@@ -1598,7 +1598,7 @@ class MacroServerPoolTest(unittest.TestCase):
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
     #        print "MDSS", self._cf.dp.availableDataSources()
     #        print "XDSS", self._cf.dp.dataSources(["scalar_long"])
-            res = msp.checkComponentChannels(self._ms.door.keys()[0],
+            res = msp.checkChannels(self._ms.door.keys()[0],
                                              self._cf.dp,
                                              poolchannels,
                                              componentgroup,
@@ -1623,7 +1623,7 @@ class MacroServerPoolTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
-    def test_checkComponentChannels_2wds_notangodsnopool(self):
+    def test_checkChannels_2wds_notangodsnopool(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         simps2 = TestServerSetUp.TestServerSetUp(
@@ -1647,7 +1647,7 @@ class MacroServerPoolTest(unittest.TestCase):
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
     #        print "MDSS", self._cf.dp.availableDataSources()
     #        print "XDSS", self._cf.dp.dataSources(["scalar_long"])
-            res = msp.checkComponentChannels(self._ms.door.keys()[0],
+            res = msp.checkChannels(self._ms.door.keys()[0],
                                              self._cf.dp,
                                              poolchannels,
                                              componentgroup,
@@ -1672,7 +1672,7 @@ class MacroServerPoolTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
-    def test_checkComponentChannels_2wds_notangodsnopool2(self):
+    def test_checkChannels_2wds_notangodsnopool2(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         simps2 = TestServerSetUp.TestServerSetUp(
@@ -1703,7 +1703,7 @@ class MacroServerPoolTest(unittest.TestCase):
             pools = msp.getPools(self._ms.door.keys()[0])
             print "POOLS", pools
 
-            res = msp.checkComponentChannels(self._ms.door.keys()[0],
+            res = msp.checkChannels(self._ms.door.keys()[0],
                                              self._cf.dp,
                                              poolchannels,
                                              componentgroup,
@@ -1728,7 +1728,7 @@ class MacroServerPoolTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
-    def test_checkComponentChannels_2wds_notangods2(self):
+    def test_checkChannels_2wds_notangods2(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         simps2 = TestServerSetUp.TestServerSetUp(
@@ -1767,7 +1767,7 @@ class MacroServerPoolTest(unittest.TestCase):
             pools[0].AcqChannelList = [json.dumps(a) for a in arr]
             print "POOLS", pools
 
-            res = msp.checkComponentChannels(self._ms.door.keys()[0],
+            res = msp.checkChannels(self._ms.door.keys()[0],
                                              self._cf.dp,
                                              poolchannels,
                                              componentgroup,
@@ -1792,7 +1792,7 @@ class MacroServerPoolTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
-    def test_checkComponentChannels_2wds_notangodspool_error(self):
+    def test_checkChannels_2wds_notangodspool_error(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         simps2 = TestServerSetUp.TestServerSetUp(
@@ -1833,7 +1833,7 @@ class MacroServerPoolTest(unittest.TestCase):
             pools[0].AcqChannelList = [json.dumps(a) for a in arr]
             print "POOLS", pools
 
-            res = msp.checkComponentChannels(self._ms.door.keys()[0],
+            res = msp.checkChannels(self._ms.door.keys()[0],
                                              self._cf.dp,
                                              poolchannels,
                                              componentgroup,
@@ -1858,7 +1858,7 @@ class MacroServerPoolTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
-    def test_checkComponentChannels_2wds_notangodspool(self):
+    def test_checkChannels_2wds_notangodspool(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         simps2 = TestServerSetUp.TestServerSetUp(
@@ -1896,7 +1896,7 @@ class MacroServerPoolTest(unittest.TestCase):
             print "POOLS", pools
             self._simps.dp.ChangeValueType("ScalarShort")
             self._simps.dp.Value = 43
-            res = msp.checkComponentChannels(self._ms.door.keys()[0],
+            res = msp.checkChannels(self._ms.door.keys()[0],
                                              self._cf.dp,
                                              poolchannels,
                                              componentgroup,
@@ -1921,7 +1921,7 @@ class MacroServerPoolTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
-    def test_checkComponentChannels_2wds_notangodspool_alias(self):
+    def test_checkChannels_2wds_notangodspool_alias(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         simps2 = TestServerSetUp.TestServerSetUp(
@@ -1958,7 +1958,7 @@ class MacroServerPoolTest(unittest.TestCase):
             print "POOLS", pools
             self._simps.dp.ChangeValueType("ScalarShort")
             self._simps.dp.Value = 43
-            res = msp.checkComponentChannels(self._ms.door.keys()[0],
+            res = msp.checkChannels(self._ms.door.keys()[0],
                                              self._cf.dp,
                                              poolchannels,
                                              componentgroup,
@@ -1984,7 +1984,7 @@ class MacroServerPoolTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
-    def test_checkComponentChannels_2wds_notangodspool_alias_value(self):
+    def test_checkChannels_2wds_notangodspool_alias_value(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         simps2 = TestServerSetUp.TestServerSetUp(
@@ -2021,7 +2021,7 @@ class MacroServerPoolTest(unittest.TestCase):
             print "POOLS", pools
 #            self._simps.dp.ChangeValueType("ScalarShort")
 #            self._simps.dp.Value = 43
-            res = msp.checkComponentChannels(self._ms.door.keys()[0],
+            res = msp.checkChannels(self._ms.door.keys()[0],
                                              self._cf.dp,
                                              poolchannels,
                                              componentgroup,
@@ -2047,7 +2047,7 @@ class MacroServerPoolTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
-    def test_checkComponentChannels_2wds_notangodspool_alias_novalue(self):
+    def test_checkChannels_2wds_notangodspool_alias_novalue(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         simps2 = TestServerSetUp.TestServerSetUp(
@@ -2082,7 +2082,7 @@ class MacroServerPoolTest(unittest.TestCase):
             pools = msp.getPools(self._ms.door.keys()[0])
             pools[0].AcqChannelList = [json.dumps(a) for a in arr]
             print "POOLS", pools
-            res = msp.checkComponentChannels(self._ms.door.keys()[0],
+            res = msp.checkChannels(self._ms.door.keys()[0],
                                              self._cf.dp,
                                              poolchannels,
                                              componentgroup,
@@ -2106,7 +2106,7 @@ class MacroServerPoolTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
-    def test_checkComponentChannels_2wds_nocomponents(self):
+    def test_checkChannels_2wds_nocomponents(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         simps2 = TestServerSetUp.TestServerSetUp(
@@ -2129,7 +2129,7 @@ class MacroServerPoolTest(unittest.TestCase):
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
     #        print "MDSS", self._cf.dp.availableDataSources()
     #        print "XDSS", self._cf.dp.dataSources(["scalar_long"])
-            res = msp.checkComponentChannels(self._ms.door.keys()[0],
+            res = msp.checkChannels(self._ms.door.keys()[0],
                                              self._cf.dp,
                                              poolchannels,
                                              componentgroup,

@@ -523,8 +523,7 @@ class Settings(object):
                                   "availableDataSources")
         try:
             xmls = TangoUtils.command(
-                self.__nexusconfig_device,
-                "dataSources")
+                nexusconfig_device, "dataSources")
             dsxmls = dict(zip(avds, xmls))
         except:
             dsxmls = {}
@@ -652,10 +651,9 @@ class Settings(object):
             confvars = json.dumps(jvars)
         nexusconfig_device.variables = str(confvars)
 
-    ## checks existing controllers of pools for
-    #      PreselectedDataSources
+    ## checks existing controllers of pools
     def preselectComponents(self):
-        self.__selector.updatePreselectedComponents()
+        self.__selector.preselect()
         gc.collect()
 
     ## reset preselected Components to defaultPreselectedComponents
@@ -735,8 +733,9 @@ class Settings(object):
             if len(params) > 2 and params[2]:
                 dcpcreator.setInitDSources(json.loads(params[2]))
             else:
-                dcpcreator.setInitDSources(json.loads(
-                    self.__selector["InitDataSources"]))
+                dsp = json.loads(self.__selector["DataSourcePreselection"])
+                dcpcreator.setInitDSources(
+                    [ds for ds in dsp.keys() if dsp[ds]])
 
         withoutLinks = self.components
         links = json.loads(self.channelProperties("link"))

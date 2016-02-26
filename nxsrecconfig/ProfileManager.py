@@ -257,7 +257,7 @@ class ProfileManager(object):
                 self.importMntGrp()
                 self.__selector.resetPreselectedComponents(
                     self.defaultPreselectedComponents)
-                self.__selector.updatePreselectedComponents()
+                self.__selector.preselect()
 
     ## set active measurement group from components
     # \param components  component list

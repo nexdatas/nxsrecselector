@@ -23,8 +23,6 @@
 import json
 
 
-OFF, ONAUTO, ONUSER = 0, 1, 2
-
 ## Selection dictionary
 class Selection(dict):
     """ Selection Dictionary """
@@ -99,20 +97,20 @@ class Selection(dict):
         cps = json.loads(self["ComponentSelection"])
         ads = json.loads(self["DataSourceSelection"])
         for k in cps.keys():
-            cps[k] = OFF
+            cps[k] = False
         for k in ads.keys():
-            ads[k] = OFF
-        self["InitDataSources"] = '[]'
+            ads[k] = False
+        self["DataSourcePreselection"] = '{}'
         self["DataSourceSelection"] = json.dumps(ads)
         self["ComponentSelection"] = json.dumps(cps)
 
     ## update method for Preselected DataSources
     # \brief appends new datasources to Preselected DataSources
     # \param datasources
-    def updatePreselectedDataSources(self, datasources):
-        adsg = json.loads(self["PreselectedDataSources"])
+    def updatePreselectingDataSources(self, datasources):
+        adsg = json.loads(self["PreselectingDataSources"])
         adsg = list(set(adsg or []) | set(datasources or []))
-        self["PreselectedDataSources"] = json.dumps(adsg)
+        self["PreselectingDataSources"] = json.dumps(adsg)
 
     ## update method for orderedChannels attribute
     # \brief sets pool channels in order defined by OrderedChannels
@@ -148,7 +146,7 @@ class Selection(dict):
                 dsg.pop(ds)
         for pc in channels:
             if pc not in dsg.keys():
-                dsg[pc] = OFF
+                dsg[pc] = False
         self["DataSourceSelection"] = json.dumps(dsg)
 
     ## reset method for mntGrp attribute
@@ -169,5 +167,5 @@ class Selection(dict):
     def resetPreselectedComponents(self, components):
         acps = {}
         for cp in components:
-            acps[cp] = OFF
+            acps[cp] = None
         self["ComponentPreselection"] = json.dumps(acps)
