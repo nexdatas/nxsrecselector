@@ -523,8 +523,7 @@ class Settings(object):
                                   "availableDataSources")
         try:
             xmls = TangoUtils.command(
-                self.__nexusconfig_device,
-                "dataSources")
+                nexusconfig_device, "dataSources")
             dsxmls = dict(zip(avds, xmls))
         except:
             dsxmls = {}
