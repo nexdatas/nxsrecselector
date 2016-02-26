@@ -23,6 +23,8 @@
 import json
 
 
+OFF, ONAUTO, ONUSER = 0, 1, 2
+
 ## Selection dictionary
 class Selection(dict):
     """ Selection Dictionary """
@@ -50,14 +52,14 @@ class Selection(dict):
         self["OrderedChannels"] = '[]'
         ## group of electable components
         self["ComponentSelection"] = '{}'
+        ## step selected datasources
+        self["DataSourceSelection"] = '{}'
+        ## init preselected datasources
+        self["DataSourcePreselection"] = '{}'
         ## group of preselected components describing instrument state
         self["ComponentPreselection"] = '{}'
         ## preselected datasources
-        self["PreselectedDataSources"] = '[]'
-        ## selected datasources
-        self["DataSourceSelection"] = '{}'
-        ## init datasources
-        self["InitDataSources"] = '[]'
+        self["PreselectingDataSources"] = '[]'
         ## group of optional components available for preselected selqection
         self["OptionalComponents"] = '[]'
         ## appending new entries to existing file
@@ -97,9 +99,9 @@ class Selection(dict):
         cps = json.loads(self["ComponentSelection"])
         ads = json.loads(self["DataSourceSelection"])
         for k in cps.keys():
-            cps[k] = False
+            cps[k] = OFF
         for k in ads.keys():
-            ads[k] = False
+            ads[k] = OFF
         self["InitDataSources"] = '[]'
         self["DataSourceSelection"] = json.dumps(ads)
         self["ComponentSelection"] = json.dumps(cps)
@@ -146,7 +148,7 @@ class Selection(dict):
                 dsg.pop(ds)
         for pc in channels:
             if pc not in dsg.keys():
-                dsg[pc] = False
+                dsg[pc] = OFF
         self["DataSourceSelection"] = json.dumps(dsg)
 
     ## reset method for mntGrp attribute
@@ -167,5 +169,5 @@ class Selection(dict):
     def resetPreselectedComponents(self, components):
         acps = {}
         for cp in components:
-            acps[cp] = False
+            acps[cp] = OFF
         self["ComponentPreselection"] = json.dumps(acps)
