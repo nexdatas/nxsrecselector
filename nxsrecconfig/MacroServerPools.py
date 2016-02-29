@@ -119,7 +119,7 @@ class MacroServerPools(object):
                                       discomponentgroup, channels, describer)
 
         for ads in datasources:
-            cls.__createCheckItem(ads, [ads], toCheck, nonexisting,
+            cls.__createCheckItem(ads, {ads:None}, toCheck, nonexisting,
                                   discomponentgroup, channels, describer)
 
         return toCheck.values()
@@ -196,23 +196,30 @@ class MacroServerPools(object):
             if checkeritem.errords is not None:
                 discomponentgroup[checkeritem.name] = checkeritem
 
-        for acp in componentgroup.keys():
-            if acp in discomponentgroup.keys():
-                checkeritem = discomponentgroup[acp]
+        self.__updategroup(componentgroup, discomponentgroup,
+                           channelerrors)
+        self.__updategroup(datasourcegroup, discomponentgroup,
+                           channelerrors)
+
+        return (json.dumps(componentgroup), json.dumps(datasourcegroup))
+
+    def __updategroup(self, group, disgroup, channelerrors):
+        for acp in group.keys():
+            if acp in disgroup.keys():
+                checkeritem = disgroup[acp]
                 channelerrors.append(json.dumps(
                     {"component": str(acp),
                      "datasource": str(checkeritem.errords),
                      "message": str(checkeritem.message)}
                 ))
                 if checkeritem.active is False:
-                    componentgroup[acp] = None
-                elif componentgroup[acp] is not False:
-                    componentgroup[acp] = True
+                    group[acp] = None
+                elif group[acp] is not False:
+                    group[acp] = True
             else:
-                if componentgroup[acp] is not False:
-                    componentgroup[acp] = True
+                if group[acp] is not False:
+                    group[acp] = True
 
-        return json.dumps(componentgroup)
 
     ## imports Environment Data
     # \param door door device
