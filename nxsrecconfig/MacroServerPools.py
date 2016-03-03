@@ -203,7 +203,8 @@ class MacroServerPools(object):
 
         return (json.dumps(componentgroup), json.dumps(datasourcegroup))
 
-    def __updategroup(self, group, disgroup, channelerrors):
+    @classmethod
+    def __updategroup(cls, group, disgroup, channelerrors):
         for acp in group.keys():
             if acp in disgroup.keys():
                 checkeritem = disgroup[acp]

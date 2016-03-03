@@ -15,32 +15,11 @@
 #
 #    You should have received a copy of the GNU General Public License
 #    along with nexdatas.  If not, see <http://www.gnu.org/licenses/>.
-## \file __init__.py
+## \file Release.py
 # nxswriter runner
 
-"""  NeXus Sardana Recorder Settings - Tango Server """
+"""  NeXus Sardana Recorder Settings - Release """
 
 ## package version
-from .Release import __version__
+__version__ = "3.0.0"
 
-import sys
-
-
-## runs the TANGO server
-# \param argv command-line arguments
-def run(argv):
-    import PyTango
-    from .NXSConfig import NXSRecSelector as NXSRecConfig
-    from .NXSConfig import NXSRecSelectorClass as NXSRecConfigClass
-    try:
-        py = PyTango.Util(argv)
-        py.add_class(NXSRecConfigClass, NXSRecConfig)
-
-        U = PyTango.Util.instance()
-        U.server_init()
-        U.server_run()
-
-    except PyTango.DevFailed, e:
-        print('-------> Received a DevFailed exception: %s' % e)
-    except Exception, e:
-        print('-------> An unforeseen exception occured.... %s' % e)

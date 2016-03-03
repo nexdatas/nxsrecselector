@@ -4414,9 +4414,9 @@ class SelectorTest(unittest.TestCase):
         se.preselect()
         res = se["ComponentPreselection"]
 
+        resd = se["DataSourcePreselection"]
         self.myAssertDict(json.loads(res), {
             "smycp": False, "smycp2": True, "smycp3": True})
-        resd = se["DataSourcePreselection"]
         self.myAssertDict(json.loads(resd), {"scalar_uchar": True,
                                              "scalar_string": False,
                                              "scalar_ulong": True})
@@ -4610,10 +4610,10 @@ class SelectorTest(unittest.TestCase):
             se.preselect()
             res = se["ComponentPreselection"]
 
+            resd = se["DataSourcePreselection"]
             self.myAssertDict(json.loads(res), {
                 "smycp": False, "smycp2": False, "smycp3": False,
                 "s2mycp": False, "s2mycp2": False, "s2mycp3": False})
-            resd = se["DataSourcePreselection"]
             self.myAssertDict(json.loads(resd), {
                 "scalar_uchar": False, "scalar_string": False,
                 "scalar_ulong": False,
@@ -4714,11 +4714,11 @@ class SelectorTest(unittest.TestCase):
             se.descErrors = []
             se.preselect()
             res = se["ComponentPreselection"]
+            resd = se["DataSourcePreselection"]
 
             self.myAssertDict(json.loads(res), {
                 "smycp": True, "smycp2": False, "smycp3": True,
                 "s2mycp": None, "s2mycp2": None, "s2mycp3": None})
-            resd = se["DataSourcePreselection"]
             self.myAssertDict(json.loads(resd), {
                 "scalar_uchar": True, "scalar_string": True,
                 "scalar_ulong": False,
@@ -4909,11 +4909,11 @@ class SelectorTest(unittest.TestCase):
             se.descErrors = []
             se.preselect()
             res = se["ComponentPreselection"]
+            resd = se["DataSourcePreselection"]
 
             self.myAssertDict(json.loads(res), {
                 "smycp": False, "smycp2": True, "smycp3": True,
                 "s2mycp": False, "s2mycp2": True, "s2mycp3": True})
-            resd = se["DataSourcePreselection"]
             self.myAssertDict(json.loads(resd), {
                 "scalar_uchar": True, "scalar_string": True,
                 "scalar_ulong": False,

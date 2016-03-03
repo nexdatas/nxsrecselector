@@ -23,7 +23,6 @@
 import json
 import gc
 import PyTango
-import nxsrecconfig
 import xml.dom.minidom
 
 from .Describer import Describer
@@ -31,6 +30,7 @@ from .DynamicComponent import DynamicComponent
 from .Utils import Utils, TangoUtils, MSUtils, PoolUtils
 from .ProfileManager import ProfileManager
 from .Selector import Selector
+from .Release import __version__
 from .MacroServerPools import MacroServerPools
 from . import Streams
 
@@ -120,7 +120,7 @@ class Settings(object):
 
     ## server version
     def __version(self):
-        return nxsrecconfig.__version__
+        return __version__
 
     ##  server version
     version = property(
@@ -169,6 +169,11 @@ class Settings(object):
     # \returns list of available selected datasources
     def selectedDataSources(self):
         return self.__profileManager.dataSources()
+
+    ## provides preselected datasources
+    # \returns list of available preselected datasources
+    def preselectedDataSources(self):
+        return self.__profileManager.preselectedDataSources()
 
     def __dataSources(self):
         return list(
@@ -733,9 +738,7 @@ class Settings(object):
             if len(params) > 2 and params[2]:
                 dcpcreator.setInitDSources(json.loads(params[2]))
             else:
-                dsp = json.loads(self.__selector["DataSourcePreselection"])
-                dcpcreator.setInitDSources(
-                    [ds for ds in dsp.keys() if dsp[ds]])
+                dcpcreator.setInitDSources(self.preselectedDataSources())
 
         withoutLinks = self.components
         links = json.loads(self.channelProperties("link"))

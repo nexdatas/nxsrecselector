@@ -61,10 +61,12 @@ class Converter2to3(ConverterXtoY):
     def convert(self, selection):
         super(Converter2to3, self).convert(selection)
 
-        selection["ComponentPreselection"] = self.seltoint(
-            selection["ComponentPreselection"])
-        selection["DataSourcePreselection"] = self.seltoint(
-            selection["DataSourcePreselection"])
+        if 'ComponentPreselection' in selection.keys():
+            selection["ComponentPreselection"] = self.seltoint(
+                selection["ComponentPreselection"])
+        if 'DataSourcesPreselection' in selection.keys():
+            selection["DataSourcePreselection"] = self.seltoint(
+                selection["DataSourcePreselection"])
 
 ## Selection converter from 3 to 2
 class Converter3to2(ConverterXtoY):
@@ -90,11 +92,12 @@ class Converter3to2(ConverterXtoY):
 
     def convert(self, selection):
         super(Converter3to2, self).convert(selection)
-
-        selection["ComponentPreselection"] = self.seltobool(
-            selection["ComponentPreselection"])
-        selection["InitDataSources"] = self.seltolist(
-            selection["InitDataSources"])
+        if 'ComponentPreselection' in selection.keys():
+            selection["ComponentPreselection"] = self.seltobool(
+                selection["ComponentPreselection"])
+        if 'InitDataSources' in selection.keys():
+            selection['InitDataSources'] = self.seltolist(
+                selection['InitDataSources'])
 
 ## Selection converter from 1 to 2
 class Converter1to2(ConverterXtoY):
@@ -186,8 +189,8 @@ class Converter(object):
         self.minorversion = int(sver[1])
         self.patchversion = int(sver[2])
 
-        self.up = [Converter1to2()]
-        self.down = [Converter2to1()]
+        self.up = [Converter1to2(), Converter2to3()]
+        self.down = [Converter3to2(), Converter2to1()]
 
     def allkeys(self, selection):
         lkeys = set()

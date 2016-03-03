@@ -28,7 +28,9 @@ import struct
 import binascii
 import string
 
-from nxsrecconfig.Converter import Converter, Converter1to2, Converter2to1
+from nxsrecconfig.Converter import (
+    Converter, Converter1to2, Converter2to1,
+    Converter2to3, Converter3to2)
 
 ## if 64-bit machione
 IS64BIT = (struct.calcsize("P") == 8)
@@ -153,10 +155,12 @@ class ConverterTest(unittest.TestCase):
             self.assertEqual(cv.majorversion, ar[0])
             self.assertEqual(cv.minorversion, ar[1])
             self.assertEqual(cv.patchversion, ar[2])
-            self.assertEqual(len(cv.down), 1)
-            self.assertEqual(len(cv.up), 1)
+            self.assertEqual(len(cv.down), 2)
+            self.assertEqual(len(cv.up), 2)
             self.assertTrue(isinstance(cv.up[0], Converter1to2))
-            self.assertTrue(isinstance(cv.down[0], Converter2to1))
+            self.assertTrue(isinstance(cv.up[1], Converter2to3))
+            self.assertTrue(isinstance(cv.down[0], Converter3to2))
+            self.assertTrue(isinstance(cv.down[1], Converter2to1))
 
     def test_version(self):
         fun = sys._getframe().f_code.co_name
@@ -262,7 +266,9 @@ class ConverterTest(unittest.TestCase):
             'HiddenElements',
             'DataSourceGroup',
             'AutomaticDataSources',
-            'DataRecord'
+            'DataRecord',
+            'PreselectedDataSources',
+            'InitDataSources'
         ]))
 
         cv.up = []

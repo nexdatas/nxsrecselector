@@ -134,7 +134,8 @@ class ProfileManagerTest(unittest.TestCase):
 
         ## selection version
         self.__version = nxsrecconfig.__version__
-
+        print self.__version
+        
         self._keys = [
             ("Timer", '[]'),
             ("OrderedChannels", '[]'),
@@ -5735,8 +5736,8 @@ class ProfileManagerTest(unittest.TestCase):
                     aadss = [ds for ds in self.__rnd.sample(
                         set(amydss.keys()), nadss)]
                     nadss = self.__rnd.randint(1, len(amydss.keys()) - 1)
-                    indss = [ds for ds in self.__rnd.sample(
-                        set(amydss.keys()), nadss)]
+                    indss = dict((ds, True) for ds in self.__rnd.sample(
+                        set(amydss.keys()), nadss))
 
                     for tm in ltimers:
                         dss[tm] = bool(self.__rnd.randint(0, 1))
@@ -6272,8 +6273,8 @@ class ProfileManagerTest(unittest.TestCase):
                         aadss[mg] = [ds for ds in self.__rnd.sample(
                             set(amydss.keys()), nadss)]
                         nadss = self.__rnd.randint(1, len(amydss.keys()) - 1)
-                        indss = [ds for ds in self.__rnd.sample(
-                            set(amydss.keys()), nadss)]
+                        indss = dict((ds, True) for ds in self.__rnd.sample(
+                            set(amydss.keys()), nadss))
 
                         for tm in ltimers[mg]:
                             dss[tm] = bool(self.__rnd.randint(0, 1))

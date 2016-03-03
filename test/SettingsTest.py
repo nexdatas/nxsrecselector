@@ -2617,6 +2617,8 @@ class SettingsTest(unittest.TestCase):
         rs.preselectComponents()
         res = self.value(rs, "ComponentPreselection")
         self.assertEqual(res, '{}')
+        res2 = self.value(rs, "DataSourcePreselection")
+        self.assertEqual(res, '{}')
         print self._cf.dp.GetCommandVariable("COMMANDS")
 
     ## preselectComponents test
@@ -2647,8 +2649,10 @@ class SettingsTest(unittest.TestCase):
 
         rs.preselectComponents()
         res = self.value(rs, "ComponentPreselection")
-
+        res2 = self.value(rs, "DataSourcePreselection")
         self.assertEqual(res, '{}')
+
+        self.assertEqual(res2, '{}')
         self.assertEqual(componentgroup, {})
         self.assertEqual(channelerrors, [])
         print self._cf.dp.GetCommandVariable("COMMANDS")
@@ -2675,7 +2679,8 @@ class SettingsTest(unittest.TestCase):
 
         channelerrors = []
         poolchannels = ["mycp"]
-        componentgroup = {"mycp": False}
+        componentgroup = {"mycp": None}
+        datasourcegroup = {"ann2": None}
 
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
@@ -2683,10 +2688,14 @@ class SettingsTest(unittest.TestCase):
         cnf = json.loads(rs.profileConfiguration)
         cnf["PreselectingDataSources"] = json.dumps(poolchannels)
         cnf["ComponentPreselection"] = json.dumps(componentgroup)
+        cnf["DataSourcePreselection"] = json.dumps(datasourcegroup)
         rs.profileConfiguration = json.dumps(cnf)
         rs.preselectComponents()
         res = self.value(rs, "ComponentPreselection")
+        print res
+        res2 = self.value(rs, "DataSourcePreselection")
         self.myAssertDict(json.loads(res), {"mycp": True})
+        self.myAssertDict(json.loads(res2), {"ann2": True})
         self.assertEqual(channelerrors, [])
 
         self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
@@ -2699,6 +2708,9 @@ class SettingsTest(unittest.TestCase):
             elif key == 'ComponentPreselection':
                 self.assertEqual(set(json.loads(sed[key])),
                                  set(json.loads(res)))
+            elif key == 'DataSourcePreselection':
+                self.assertEqual(set(json.loads(sed[key])),
+                                 set(json.loads(res2)))
             elif key == 'PreselectingDataSources':
                 self.assertEqual(set(json.loads(sed[key])), set(poolchannels))
             else:
@@ -2706,7 +2718,66 @@ class SettingsTest(unittest.TestCase):
 
     ## test
     # \brief It tests default settings
-    def test_preselectComponents_withcf_cps_t(self):
+    def test_preselectComponents_withcf_cps_false(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+
+        db = PyTango.Database()
+        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        rs = self.openRecSelector()
+        rs.configDevice = val["ConfigDevice"]
+        rs.door = val["Door"]
+        rs.mntGrp = val["MntGrp"]
+        rs.writerDevice = val["WriterDevice"]
+
+        self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+        channelerrors = []
+        poolchannels = ["mycp"]
+        componentgroup = {"mycp": False}
+        datasourcegroup = {"ann2": False}
+
+        self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
+        self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
+
+        cnf = json.loads(rs.profileConfiguration)
+        cnf["PreselectingDataSources"] = json.dumps(poolchannels)
+        cnf["ComponentPreselection"] = json.dumps(componentgroup)
+        cnf["DataSourcePreselection"] = json.dumps(datasourcegroup)
+        rs.profileConfiguration = json.dumps(cnf)
+        rs.preselectComponents()
+        res = self.value(rs, "ComponentPreselection")
+        print res
+        res2 = self.value(rs, "DataSourcePreselection")
+        self.myAssertDict(json.loads(res), {"mycp": False})
+        self.myAssertDict(json.loads(res2), {"ann2": False})
+        self.assertEqual(channelerrors, [])
+
+        self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
+        sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
+        self.assertEqual(len(sed.keys()), len(self._keys))
+        for key, vl in self._keys:
+            self.assertTrue(key in sed.keys())
+            if key in val:
+                self.assertEqual(sed[key], val[key])
+            elif key == 'ComponentPreselection':
+                self.assertEqual(set(json.loads(sed[key])),
+                                 set(json.loads(res)))
+            elif key == 'DataSourcePreselection':
+                self.assertEqual(set(json.loads(sed[key])),
+                                 set(json.loads(res2)))
+            elif key == 'PreselectingDataSources':
+                self.assertEqual(set(json.loads(sed[key])), set(poolchannels))
+            else:
+                self.assertEqual(sed[key], vl)
+                
+    ## test
+    # \brief It tests default settings
+    def test_preselectComponents_withcf_cps_true(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2727,6 +2798,7 @@ class SettingsTest(unittest.TestCase):
         channelerrors = []
         poolchannels = ["mycp"]
         componentgroup = {"mycp": True}
+        datasourcegroup = {"ann2": True}
 
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
@@ -2734,13 +2806,34 @@ class SettingsTest(unittest.TestCase):
         cnf = json.loads(rs.profileConfiguration)
         cnf["PreselectingDataSources"] = json.dumps(poolchannels)
         cnf["ComponentPreselection"] = json.dumps(componentgroup)
+        cnf["DataSourcePreselection"] = json.dumps(datasourcegroup)
         rs.profileConfiguration = json.dumps(cnf)
         rs.preselectComponents()
         res = self.value(rs, "ComponentPreselection")
+        print res
+        res2 = self.value(rs, "DataSourcePreselection")
         self.myAssertDict(json.loads(res), {"mycp": True})
+        self.myAssertDict(json.loads(res2), {"ann2": True})
         self.assertEqual(channelerrors, [])
 
         self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
+        sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
+        self.assertEqual(len(sed.keys()), len(self._keys))
+        for key, vl in self._keys:
+            self.assertTrue(key in sed.keys())
+            if key in val:
+                self.assertEqual(sed[key], val[key])
+            elif key == 'ComponentPreselection':
+                self.assertEqual(set(json.loads(sed[key])),
+                                 set(json.loads(res)))
+            elif key == 'DataSourcePreselection':
+                self.assertEqual(set(json.loads(sed[key])),
+                                 set(json.loads(res2)))
+            elif key == 'PreselectingDataSources':
+                self.assertEqual(set(json.loads(sed[key])), set(poolchannels))
+            else:
+                self.assertEqual(sed[key], vl)
+                
 
     ## test
     # \brief It tests default settings
@@ -2765,6 +2858,7 @@ class SettingsTest(unittest.TestCase):
         channelerrors = []
         poolchannels = ["mycp"]
         componentgroup = {}
+        datasourcegroup = {}
 
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
@@ -2772,11 +2866,14 @@ class SettingsTest(unittest.TestCase):
         cnf = json.loads(rs.profileConfiguration)
         cnf["PreselectingDataSources"] = json.dumps(poolchannels)
         cnf["ComponentPreselection"] = json.dumps(componentgroup)
+        cnf["DataSourcePreselection"] = json.dumps(datasourcegroup)
         rs.profileConfiguration = json.dumps(cnf)
         rs.preselectComponents()
         res = self.value(rs, "ComponentPreselection")
 
         self.myAssertDict(json.loads(res), {})
+        res2 = self.value(rs, "DataSourcePreselection")
+        self.myAssertDict(json.loads(res2), {})
         self.assertEqual(channelerrors, [])
 
         print self._cf.dp.GetCommandVariable("COMMANDS")
@@ -2805,7 +2902,8 @@ class SettingsTest(unittest.TestCase):
 
         channelerrors = []
         poolchannels = []
-        componentgroup = {"mycp": False}
+        componentgroup = {"mycp": None}
+        datasourcegroup = {"ann2": None}
 
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
@@ -2813,11 +2911,14 @@ class SettingsTest(unittest.TestCase):
         cnf = json.loads(rs.profileConfiguration)
         cnf["PreselectingDataSources"] = json.dumps(poolchannels)
         cnf["ComponentPreselection"] = json.dumps(componentgroup)
+        cnf["DataSourcePreselection"] = json.dumps(datasourcegroup)
         rs.profileConfiguration = json.dumps(cnf)
         rs.preselectComponents()
         res = self.value(rs, "ComponentPreselection")
+        res2 = self.value(rs, "DataSourcePreselection")
 
         self.myAssertDict(json.loads(res), {"mycp": True})
+        self.myAssertDict(json.loads(res2), {"ann2": True})
         self.assertEqual(channelerrors, [])
 
         print self._cf.dp.GetCommandVariable("COMMANDS")
@@ -2832,14 +2933,76 @@ class SettingsTest(unittest.TestCase):
             elif key == 'ComponentPreselection':
                 self.assertEqual(set(json.loads(sed[key])),
                                  set(json.loads(res)))
+            elif key == 'DataSourcePreselection':
+                self.assertEqual(set(json.loads(sed[key])),
+                                 set(json.loads(res2)))
             elif key == 'PreselectingDataSources':
                 self.assertEqual(set(json.loads(sed[key])), set(poolchannels))
             else:
                 self.assertEqual(sed[key], vl)
-
     ## test
     # \brief It tests default settings
-    def test_preselectComponents_withcf_nochnnel_t(self):
+    def test_preselectComponents_withcf_nochnnel_false(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+
+        db = PyTango.Database()
+        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        rs = self.openRecSelector()
+        rs.configDevice = val["ConfigDevice"]
+        rs.door = val["Door"]
+        rs.mntGrp = val["MntGrp"]
+        rs.writerDevice = val["WriterDevice"]
+
+        self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+        channelerrors = []
+        poolchannels = []
+        componentgroup = {"mycp": False}
+        datasourcegroup = {"ann2": False}
+
+        self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
+        self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
+
+        cnf = json.loads(rs.profileConfiguration)
+        cnf["PreselectingDataSources"] = json.dumps(poolchannels)
+        cnf["ComponentPreselection"] = json.dumps(componentgroup)
+        cnf["DataSourcePreselection"] = json.dumps(datasourcegroup)
+        rs.profileConfiguration = json.dumps(cnf)
+        rs.preselectComponents()
+        res = self.value(rs, "ComponentPreselection")
+        res2 = self.value(rs, "DataSourcePreselection")
+
+        self.myAssertDict(json.loads(res), {"mycp": False})
+        self.myAssertDict(json.loads(res2), {"ann2": False})
+        self.assertEqual(channelerrors, [])
+
+        print self._cf.dp.GetCommandVariable("COMMANDS")
+        self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
+        sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
+        print sed
+        self.assertEqual(len(sed.keys()), len(self._keys))
+        for key, vl in self._keys:
+            self.assertTrue(key in sed.keys())
+            if key in val:
+                self.assertEqual(sed[key], val[key])
+            elif key == 'ComponentPreselection':
+                self.assertEqual(set(json.loads(sed[key])),
+                                 set(json.loads(res)))
+            elif key == 'DataSourcePreselection':
+                self.assertEqual(set(json.loads(sed[key])),
+                                 set(json.loads(res2)))
+            elif key == 'PreselectingDataSources':
+                self.assertEqual(set(json.loads(sed[key])), set(poolchannels))
+            else:
+                self.assertEqual(sed[key], vl)
+    ## test
+    # \brief It tests default settings
+    def test_preselectComponents_withcf_nochnnel_true(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -2860,6 +3023,7 @@ class SettingsTest(unittest.TestCase):
         channelerrors = []
         poolchannels = []
         componentgroup = {"mycp": True}
+        datasourcegroup = {"ann2": True}
 
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
@@ -2867,14 +3031,35 @@ class SettingsTest(unittest.TestCase):
         cnf = json.loads(rs.profileConfiguration)
         cnf["PreselectingDataSources"] = json.dumps(poolchannels)
         cnf["ComponentPreselection"] = json.dumps(componentgroup)
+        cnf["DataSourcePreselection"] = json.dumps(datasourcegroup)
         rs.profileConfiguration = json.dumps(cnf)
         rs.preselectComponents()
         res = self.value(rs, "ComponentPreselection")
+        res2 = self.value(rs, "DataSourcePreselection")
 
         self.myAssertDict(json.loads(res), {"mycp": True})
+        self.myAssertDict(json.loads(res2), {"ann2": True})
         self.assertEqual(channelerrors, [])
 
+        print self._cf.dp.GetCommandVariable("COMMANDS")
         self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
+        sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
+        print sed
+        self.assertEqual(len(sed.keys()), len(self._keys))
+        for key, vl in self._keys:
+            self.assertTrue(key in sed.keys())
+            if key in val:
+                self.assertEqual(sed[key], val[key])
+            elif key == 'ComponentPreselection':
+                self.assertEqual(set(json.loads(sed[key])),
+                                 set(json.loads(res)))
+            elif key == 'DataSourcePreselection':
+                self.assertEqual(set(json.loads(sed[key])),
+                                 set(json.loads(res2)))
+            elif key == 'PreselectingDataSources':
+                self.assertEqual(set(json.loads(sed[key])), set(poolchannels))
+            else:
+                self.assertEqual(sed[key], vl)
 
     ## test
     # \brief It tests default settings
@@ -2899,6 +3084,8 @@ class SettingsTest(unittest.TestCase):
         channelerrors = []
         poolchannels = []
         componentgroup = {"smycp": True}
+        datasourcegroup = {"scalar_uchar": True}
+
 
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.smycps)])
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
@@ -2906,14 +3093,77 @@ class SettingsTest(unittest.TestCase):
         cnf = json.loads(rs.profileConfiguration)
         cnf["PreselectingDataSources"] = json.dumps(poolchannels)
         cnf["ComponentPreselection"] = json.dumps(componentgroup)
+        cnf["DataSourcePreselection"] = json.dumps(datasourcegroup)
         rs.profileConfiguration = json.dumps(cnf)
         rs.preselectComponents()
         res = self.value(rs, "ComponentPreselection")
+        res2 = self.value(rs, "DataSourcePreselection")
 
         self.myAssertDict(json.loads(res), {"smycp": True})
+        self.myAssertDict(json.loads(res2), {"scalar_uchar": True})
         self.assertEqual(channelerrors, [])
 
         self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
+
+    ## test
+    # \brief It tests default settings
+    def test_preselectComponents_wds_false(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+
+        db = PyTango.Database()
+        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        rs = self.openRecSelector()
+        rs.configDevice = val["ConfigDevice"]
+        rs.door = val["Door"]
+        rs.mntGrp = val["MntGrp"]
+        rs.writerDevice = val["WriterDevice"]
+
+        self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+        channelerrors = []
+        poolchannels = []
+        componentgroup = {"smycp": False}
+        datasourcegroup = {"scalar_uchar": False}
+
+        self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.smycps)])
+        self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
+
+        cnf = json.loads(rs.profileConfiguration)
+        cnf["PreselectingDataSources"] = json.dumps(poolchannels)
+        cnf["ComponentPreselection"] = json.dumps(componentgroup)
+        cnf["DataSourcePreselection"] = json.dumps(datasourcegroup)
+        rs.profileConfiguration = json.dumps(cnf)
+        rs.preselectComponents()
+        res = self.value(rs, "ComponentPreselection")
+        res2 = self.value(rs, "DataSourcePreselection")
+
+        self.myAssertDict(json.loads(res), {"smycp": False})
+        self.myAssertDict(json.loads(res2), {"scalar_uchar": False})
+        self.assertEqual(channelerrors, [])
+
+        self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
+        sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
+        self.assertEqual(len(sed.keys()), len(self._keys))
+        for key, vl in self._keys:
+            self.assertTrue(key in sed.keys())
+            if key in val:
+                self.assertEqual(sed[key], val[key])
+            elif key == 'ComponentPreselection':
+                self.assertEqual(set(json.loads(sed[key])),
+                                 set(json.loads(res)))
+            elif key == 'PreselectingDataSources':
+                self.assertEqual(set(json.loads(sed[key])),
+                                 set(poolchannels))
+            elif key == 'DataSourcePreselection':
+                self.assertEqual(set(json.loads(sed[key])),
+                                 set(json.loads(res2)))
+            else:
+                self.assertEqual(sed[key], vl)
 
     ## test
     # \brief It tests default settings
@@ -2937,7 +3187,8 @@ class SettingsTest(unittest.TestCase):
 
         channelerrors = []
         poolchannels = []
-        componentgroup = {"smycp": False}
+        componentgroup = {"smycp": None}
+        datasourcegroup = {"scalar_uchar": None}
 
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.smycps)])
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
@@ -2945,11 +3196,14 @@ class SettingsTest(unittest.TestCase):
         cnf = json.loads(rs.profileConfiguration)
         cnf["PreselectingDataSources"] = json.dumps(poolchannels)
         cnf["ComponentPreselection"] = json.dumps(componentgroup)
+        cnf["DataSourcePreselection"] = json.dumps(datasourcegroup)
         rs.profileConfiguration = json.dumps(cnf)
         rs.preselectComponents()
         res = self.value(rs, "ComponentPreselection")
+        res2 = self.value(rs, "DataSourcePreselection")
 
         self.myAssertDict(json.loads(res), {"smycp": True})
+        self.myAssertDict(json.loads(res2), {"scalar_uchar": True})
         self.assertEqual(channelerrors, [])
 
         self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
@@ -2965,6 +3219,9 @@ class SettingsTest(unittest.TestCase):
             elif key == 'PreselectingDataSources':
                 self.assertEqual(set(json.loads(sed[key])),
                                  set(poolchannels))
+            elif key == 'DataSourcePreselection':
+                self.assertEqual(set(json.loads(sed[key])),
+                                 set(json.loads(res2)))
             else:
                 self.assertEqual(sed[key], vl)
 
@@ -2990,7 +3247,10 @@ class SettingsTest(unittest.TestCase):
 
         channelerrors = []
         poolchannels = []
-        componentgroup = {"smycp": False, "smycp2": False, "smycp3": False}
+        componentgroup = {"smycp": False, "smycp2": True, "smycp3": None}
+        datasourcegroup = {"scalar_uchar": None,
+                           "scalar_string": False,
+                           "scalar_ulong": True}
 
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.smycps)])
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
@@ -2998,12 +3258,17 @@ class SettingsTest(unittest.TestCase):
         cnf = json.loads(rs.profileConfiguration)
         cnf["PreselectingDataSources"] = json.dumps(poolchannels)
         cnf["ComponentPreselection"] = json.dumps(componentgroup)
+        cnf["DataSourcePreselection"] = json.dumps(datasourcegroup)
         rs.profileConfiguration = json.dumps(cnf)
         rs.preselectComponents()
         res = self.value(rs, "ComponentPreselection")
+        resd = self.value(rs, "DataSourcePreselection")
 
         self.myAssertDict(json.loads(res), {
-            "smycp": True, "smycp2": True, "smycp3": True})
+            "smycp": False, "smycp2": True, "smycp3": True})
+        self.myAssertDict(json.loads(resd), {"scalar_uchar": True,
+                                             "scalar_string": False,
+                                             "scalar_ulong": True})
         self.assertEqual(channelerrors, [])
 
         res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
@@ -3017,6 +3282,9 @@ class SettingsTest(unittest.TestCase):
             elif key == 'ComponentPreselection':
                 self.assertEqual(set(json.loads(sed[key])),
                                  set(json.loads(res)))
+            elif key == 'DataSourcePreselection':
+                self.assertEqual(set(json.loads(sed[key])),
+                                 set(json.loads(resd)))
             elif key == 'PreselectingDataSources':
                 self.assertEqual(set(json.loads(sed[key])),
                                  set(poolchannels))
@@ -3049,9 +3317,16 @@ class SettingsTest(unittest.TestCase):
 
             channelerrors = []
             poolchannels = []
-            componentgroup = {"smycp": False, "smycp2": False, "smycp3": False,
-                              "s2mycp": False, "s2mycp2": False,
-                              "s2mycp3": False}
+            componentgroup = {
+                "smycp": None, "smycp2": None, "smycp3": None,
+                "s2mycp": None, "s2mycp2": None, "s2mycp3": None
+            }
+            datasourcegroup = {
+                "scalar_uchar": None, "scalar_string": None,
+                "scalar_ulong": None,
+                "scalar2_uchar": None, "scalar2_string": None,
+                "scalar2_ulong": None,
+            }
 
             cps = dict(self.smycps)
             cps.update(self.smycps2)
@@ -3064,13 +3339,21 @@ class SettingsTest(unittest.TestCase):
             cnf = json.loads(rs.profileConfiguration)
             cnf["PreselectingDataSources"] = json.dumps(poolchannels)
             cnf["ComponentPreselection"] = json.dumps(componentgroup)
+            cnf["DataSourcePreselection"] = json.dumps(datasourcegroup)
             rs.profileConfiguration = json.dumps(cnf)
             rs.preselectComponents()
             res = self.value(rs, "ComponentPreselection")
-
+            resd = self.value(rs, "DataSourcePreselection")
+        
             self.myAssertDict(json.loads(res), {
                 "smycp": True, "smycp2": True, "smycp3": True,
                 "s2mycp": True, "s2mycp2": True, "s2mycp3": True})
+            self.myAssertDict(json.loads(resd), {
+                "scalar_uchar": True, "scalar_string": True,
+                "scalar_ulong": True,
+                "scalar2_uchar": True, "scalar2_string": True,
+                "scalar2_ulong": True,
+            })
             self.assertEqual(len(channelerrors), 0)
 
             res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
@@ -3084,6 +3367,96 @@ class SettingsTest(unittest.TestCase):
                 elif key == 'ComponentPreselection':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(json.loads(res)))
+                elif key == 'DataSourcePreselection':
+                    self.assertEqual(set(json.loads(sed[key])),
+                                     set(json.loads(resd)))
+                elif key == 'PreselectingDataSources':
+                    self.assertEqual(set(json.loads(sed[key])),
+                                     set(poolchannels))
+                else:
+                    self.assertEqual(sed[key], vl)
+        finally:
+            simps2.tearDown()
+
+    ## test
+    # \brief It tests default settings
+    def test_preselectComponents_2wds_false(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        simps2 = TestServerSetUp.TestServerSetUp(
+            "ttestp09/testts/t2r228", "S2")
+        try:
+            simps2.setUp()
+
+            db = PyTango.Database()
+            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            rs = self.openRecSelector()
+            rs.configDevice = val["ConfigDevice"]
+            rs.door = val["Door"]
+            rs.mntGrp = val["MntGrp"]
+            rs.writerDevice = val["WriterDevice"]
+
+            self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+            channelerrors = []
+            poolchannels = []
+            componentgroup = {
+                "smycp": False, "smycp2": False, "smycp3": False,
+                "s2mycp": False, "s2mycp2": False,
+                "s2mycp3": False}
+            datasourcegroup = {
+                "scalar_uchar": False, "scalar_string": False,
+                "scalar_ulong": False,
+                "scalar2_uchar": False, "scalar2_string": False,
+                "scalar2_ulong": False,
+            }
+
+            cps = dict(self.smycps)
+            cps.update(self.smycps2)
+            dss = dict(self.smydss)
+            dss.update(self.smydss2)
+
+            self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
+            self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
+
+            cnf = json.loads(rs.profileConfiguration)
+            cnf["PreselectingDataSources"] = json.dumps(poolchannels)
+            cnf["ComponentPreselection"] = json.dumps(componentgroup)
+            cnf["DataSourcePreselection"] = json.dumps(datasourcegroup)
+            rs.profileConfiguration = json.dumps(cnf)
+            rs.preselectComponents()
+            res = self.value(rs, "ComponentPreselection")
+            resd = self.value(rs, "DataSourcePreselection")
+        
+            self.myAssertDict(json.loads(res), {
+                "smycp": False, "smycp2": False, "smycp3": False,
+                "s2mycp": False, "s2mycp2": False, "s2mycp3": False})
+            self.myAssertDict(json.loads(resd), {
+                "scalar_uchar": False, "scalar_string": False,
+                "scalar_ulong": False,
+                "scalar2_uchar": False, "scalar2_string": False,
+                "scalar2_ulong": False,
+            })
+            self.assertEqual(len(channelerrors), 0)
+
+            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
+            sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
+            self.assertEqual(len(sed.keys()), len(self._keys))
+            for key, vl in self._keys:
+                self.assertTrue(key in sed.keys())
+                if key in val:
+                    self.assertEqual(sed[key], val[key])
+                elif key == 'ComponentPreselection':
+                    self.assertEqual(set(json.loads(sed[key])),
+                                     set(json.loads(res)))
+                elif key == 'DataSourcePreselection':
+                    self.assertEqual(set(json.loads(sed[key])),
+                                     set(json.loads(resd)))
                 elif key == 'PreselectingDataSources':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(poolchannels))
@@ -3118,9 +3491,15 @@ class SettingsTest(unittest.TestCase):
 
             channelerrors = []
             poolchannels = []
-            componentgroup = {"smycp": False, "smycp2": False, "smycp3": False,
-                              "s2mycp": False, "s2mycp2": False,
-                              "s2mycp3": False}
+            componentgroup = {
+                "smycp": True, "smycp2": False, "smycp3": None,
+                "s2mycp": True, "s2mycp2": False, "s2mycp3": None}
+            datasourcegroup = {
+                "scalar_uchar": True, "scalar_string": None,
+                "scalar_ulong": False,
+                "scalar2_uchar": True, "scalar2_string": None,
+                "scalar2_ulong": False,
+            }
 
             cps = dict(self.smycps)
             cps.update(self.smycps2)
@@ -3133,14 +3512,22 @@ class SettingsTest(unittest.TestCase):
             cnf = json.loads(rs.profileConfiguration)
             cnf["PreselectingDataSources"] = json.dumps(poolchannels)
             cnf["ComponentPreselection"] = json.dumps(componentgroup)
+            cnf["DataSourcePreselection"] = json.dumps(datasourcegroup)
             rs.profileConfiguration = json.dumps(cnf)
             rs.preselectComponents()
             res = self.value(rs, "ComponentPreselection")
+            resd = self.value(rs, "DataSourcePreselection")
 
             self.myAssertDict(json.loads(res), {
-                "smycp": True, "smycp2": True, "smycp3": True,
-                "s2mycp": False, "s2mycp2": False, "s2mycp3": False})
-            self.assertEqual(len(rs.descriptionErrors), 3)
+                "smycp": True, "smycp2": False, "smycp3": True,
+                "s2mycp": None, "s2mycp2": None, "s2mycp3": None})
+            self.myAssertDict(json.loads(resd), {
+                "scalar_uchar": True, "scalar_string": True,
+                "scalar_ulong": False,
+                "scalar2_uchar": None, "scalar2_string": None,
+                "scalar2_ulong": None,
+            })
+            self.assertEqual(len(rs.descriptionErrors), 6)
 
             res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
@@ -3153,6 +3540,9 @@ class SettingsTest(unittest.TestCase):
                 elif key == 'ComponentPreselection':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(json.loads(res)))
+                elif key == 'DataSourcePreselection':
+                    self.assertEqual(set(json.loads(sed[key])),
+                                     set(json.loads(resd)))
                 elif key == 'PreselectingDataSources':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(poolchannels))
@@ -3183,8 +3573,14 @@ class SettingsTest(unittest.TestCase):
 
         channelerrors = []
         poolchannels = []
-        componentgroup = {"smycp": False, "smycp2": False, "smycp3": False,
-                          "s2mycp": False, "s2mycp2": False, "s2mycp3": False}
+        componentgroup = {"smycp": None, "smycp2": False, "smycp3": True,
+                          "s2mycp": None, "s2mycp2": False, "s2mycp3": True}
+        datasourcegroup = {
+            "scalar_uchar": True, "scalar_string": None,
+            "scalar_ulong": False,
+            "scalar2_uchar": True, "scalar2_string": None,
+            "scalar2_ulong": False,
+        }
 
         cps = dict(self.smycps)
         cps.update(self.smycps2)
@@ -3197,14 +3593,22 @@ class SettingsTest(unittest.TestCase):
         cnf = json.loads(rs.profileConfiguration)
         cnf["PreselectingDataSources"] = json.dumps(poolchannels)
         cnf["ComponentPreselection"] = json.dumps(componentgroup)
+        cnf["DataSourcePreselection"] = json.dumps(datasourcegroup)
         rs.profileConfiguration = json.dumps(cnf)
         rs.preselectComponents()
         res = self.value(rs, "ComponentPreselection")
+        resd = self.value(rs, "DataSourcePreselection")
 
         self.myAssertDict(json.loads(res), {
-            "smycp": True, "smycp2": True, "smycp3": True,
-            "s2mycp": False, "s2mycp2": False, "s2mycp3": False})
-        self.assertEqual(len(rs.descriptionErrors), 3)
+            "smycp": True, "smycp2": False, "smycp3": True,
+            "s2mycp": None, "s2mycp2": None, "s2mycp3": None})
+        self.myAssertDict(json.loads(resd), {
+            "scalar_uchar": True, "scalar_string": True,
+            "scalar_ulong": False,
+            "scalar2_uchar": None, "scalar2_string": None,
+            "scalar2_ulong": None,
+        })
+        self.assertEqual(len(rs.descriptionErrors), 6)
 
         res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
         self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
@@ -3217,6 +3621,9 @@ class SettingsTest(unittest.TestCase):
             elif key == 'ComponentPreselection':
                 self.assertEqual(set(json.loads(sed[key])),
                                  set(json.loads(res)))
+            elif key == 'DataSourcePreselection':
+                self.assertEqual(set(json.loads(sed[key])),
+                                 set(json.loads(resd)))
             elif key == 'PreselectingDataSources':
                 self.assertEqual(set(json.loads(sed[key])),
                                  set(poolchannels))
@@ -3249,9 +3656,15 @@ class SettingsTest(unittest.TestCase):
 
             channelerrors = []
             poolchannels = []
-            componentgroup = {"smycp": False, "smycp2": False, "smycp3": False,
-                              "s2mycp": False, "s2mycp2": False,
-                              "s2mycp3": False}
+            componentgroup = {
+                "smycp": False, "smycp2": None, "smycp3": True,
+                "s2mycp": False, "s2mycp2": None, "s2mycp3": True}
+            datasourcegroup = {
+                "scalar_uchar": True, "scalar_string": None,
+                "scalar_ulong": False,
+                "scalar2_uchar": True, "scalar2_string": None,
+                "scalar2_ulong": False,
+            }
 
             cps = dict(self.smycps)
             cps.update(self.smycps2)
@@ -3264,13 +3677,22 @@ class SettingsTest(unittest.TestCase):
             cnf = json.loads(rs.profileConfiguration)
             cnf["PreselectingDataSources"] = json.dumps(poolchannels)
             cnf["ComponentPreselection"] = json.dumps(componentgroup)
+            cnf["DataSourcePreselection"] = json.dumps(datasourcegroup)
             rs.profileConfiguration = json.dumps(cnf)
             rs.preselectComponents()
             res = self.value(rs, "ComponentPreselection")
+            resd = self.value(rs, "DataSourcePreselection")
+
 
             self.myAssertDict(json.loads(res), {
-                "smycp": True, "smycp2": True, "smycp3": True,
-                "s2mycp": True, "s2mycp2": True, "s2mycp3": True})
+                "smycp": False, "smycp2": True, "smycp3": True,
+                "s2mycp": False, "s2mycp2": True, "s2mycp3": True})
+            self.myAssertDict(json.loads(resd), {
+                "scalar_uchar": True, "scalar_string": True,
+                "scalar_ulong": False,
+                "scalar2_uchar": True, "scalar2_string": True,
+                "scalar2_ulong": False,
+            })
             self.assertTrue(not rs.descriptionErrors)
 
             res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
@@ -3284,6 +3706,9 @@ class SettingsTest(unittest.TestCase):
                 elif key == 'ComponentPreselection':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(json.loads(res)))
+                elif key == 'DataSourcePreselection':
+                    self.assertEqual(set(json.loads(sed[key])),
+                                     set(json.loads(resd)))
                 elif key == 'PreselectingDataSources':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(poolchannels))
@@ -3315,10 +3740,17 @@ class SettingsTest(unittest.TestCase):
 
             self._ms.dps[self._ms.ms.keys()[0]].Init()
 
-            poolchannels = ["scalar2_long", "spectrum2_short"]
-            componentgroup = {"smycp": False, "smycp2": False, "smycp3": False,
-                              "s2mycp": False, "s2mycp2": False,
-                              "s2mycp3": False}
+            poolchannels = ["scalar2_long", "spectrum2_short",
+                            "scalar2_uchar", "scalar2_string"]
+            componentgroup = {
+                "smycp": None, "smycp2": False, "smycp3": True,
+                "s2mycp": None, "s2mycp2": False, "s2mycp3": True}
+            datasourcegroup = {
+                "scalar_uchar": True, "scalar_string": None,
+                "scalar_ulong": False,
+                "scalar2_uchar": True, "scalar2_string": None,
+                "scalar2_ulong": False,
+            }
 
             cps = dict(self.smycps)
             cps.update(self.smycps2)
@@ -3331,14 +3763,22 @@ class SettingsTest(unittest.TestCase):
             cnf = json.loads(rs.profileConfiguration)
             cnf["PreselectingDataSources"] = json.dumps(poolchannels)
             cnf["ComponentPreselection"] = json.dumps(componentgroup)
+            cnf["DataSourcePreselection"] = json.dumps(datasourcegroup)
             rs.profileConfiguration = json.dumps(cnf)
             rs.preselectComponents()
             res = self.value(rs, "ComponentPreselection")
+            resd = self.value(rs, "DataSourcePreselection")
 
             self.myAssertDict(json.loads(res), {
-                "smycp": True, "smycp2": True, "smycp3": True,
-                "s2mycp": False, "s2mycp2": False, "s2mycp3": True})
-            self.assertEqual(len(rs.descriptionErrors), 2)
+                "smycp": True, "smycp2": False, "smycp3": True,
+                "s2mycp": None, "s2mycp2": None, "s2mycp3": True})
+            self.myAssertDict(json.loads(resd), {
+                "scalar_uchar": True, "scalar_string": True,
+                "scalar_ulong": False,
+                "scalar2_uchar": None, "scalar2_string": None,
+                "scalar2_ulong": False
+            })
+            self.assertEqual(len(rs.descriptionErrors), 4)
 
             res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
@@ -3351,6 +3791,9 @@ class SettingsTest(unittest.TestCase):
                 elif key == 'ComponentPreselection':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(json.loads(res)))
+                elif key == 'DataSourcePreselection':
+                    self.assertEqual(set(json.loads(sed[key])),
+                                     set(json.loads(resd)))
                 elif key == 'PreselectingDataSources':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(poolchannels))
@@ -3384,15 +3827,23 @@ class SettingsTest(unittest.TestCase):
             self._ms.dps[self._ms.ms.keys()[0]].Init()
 
             poolchannels = ["scalar2_long", "spectrum2_short"]
-            componentgroup = {"smycp": False, "smycp2": False,
-                              "smycp3": False, "smycpnt1": False,
-                              "s2mycp": False, "s2mycp2": False,
-                              "s2mycp3": False}
+            componentgroup = {
+                "smycp": False, "smycp2": None, "smycp3": True,
+                "smycpnt1": None,
+                "s2mycp": False, "s2mycp2": None, "s2mycp3": True}
+            datasourcegroup = {
+                "scalar_uchar": True, "scalar_string": None,
+                "scalar_ulong": False,
+                "ann3": None,
+                "scalar2_uchar": True, "scalar2_string": None,
+                "scalar2_ulong": False,
+            }
 
             cps = dict(self.smycps)
             cps.update(self.smycps2)
             dss = dict(self.smydss)
             dss.update(self.smydss2)
+            dss.update(self.mydss)
 
             self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
@@ -3400,14 +3851,23 @@ class SettingsTest(unittest.TestCase):
             cnf = json.loads(rs.profileConfiguration)
             cnf["PreselectingDataSources"] = json.dumps(poolchannels)
             cnf["ComponentPreselection"] = json.dumps(componentgroup)
+            cnf["DataSourcePreselection"] = json.dumps(datasourcegroup)
             rs.profileConfiguration = json.dumps(cnf)
             rs.preselectComponents()
             res = self.value(rs, "ComponentPreselection")
+            resd = self.value(rs, "DataSourcePreselection")
 
             self.myAssertDict(json.loads(res), {
-                "smycp": True, "smycp2": True, "smycp3": True,
-                "s2mycp": True, "s2mycp2": True, "s2mycp3": True,
+                "smycp": False, "smycp2": True, "smycp3": True,
+                "s2mycp": False, "s2mycp2": True, "s2mycp3": True,
                 "smycpnt1": True})
+            self.myAssertDict(json.loads(resd), {
+                "scalar_uchar": True, "scalar_string": True,
+                "scalar_ulong": False,
+                "scalar2_uchar": True, "scalar2_string": True,
+                "scalar2_ulong": False,
+                "ann3": True,
+            })
             self.assertTrue(not rs.descriptionErrors)
 
     #        print self._cf.dp.GetCommandVariable("COMMANDS")
@@ -3422,6 +3882,9 @@ class SettingsTest(unittest.TestCase):
                 elif key == 'ComponentPreselection':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(json.loads(res)))
+                elif key == 'DataSourcePreselection':
+                    self.assertEqual(set(json.loads(sed[key])),
+                                     set(json.loads(resd)))
                 elif key == 'PreselectingDataSources':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(poolchannels))
@@ -3454,32 +3917,49 @@ class SettingsTest(unittest.TestCase):
 
             self._ms.dps[self._ms.ms.keys()[0]].Init()
 
-            poolchannels = ["scalar2_long", "spectrum2_short", "client_long"]
-            componentgroup = {"smycp": False, "smycp2": False,
-                              "smycp3": False, "smycpnt1": False,
-                              "s2mycp": False, "s2mycp2": False,
+            poolchannels = ["scalar2_long", "spectrum2_short", "client_long",
+                            "scalar2_uchar", "scalar2_string", "ann3"]
+            componentgroup = {"smycp": None, "smycp2": True,
+                              "smycp3": None, "smycpnt1": None,
+                              "s2mycp": None, "s2mycp2": True,
                               "s2mycp3": False}
+            datasourcegroup = {
+                "scalar_uchar": True, "scalar_string": None,
+                "scalar_ulong": False,
+                "ann3": None,
+                "scalar2_uchar": True, "scalar2_string": None,
+                "scalar2_ulong": False,
+            }
 
             cps = dict(self.smycps)
             cps.update(self.smycps2)
             dss = dict(self.smydss)
             dss.update(self.smydss2)
-
+            dss.update(self.mydss)
             self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
 
             cnf = json.loads(rs.profileConfiguration)
             cnf["PreselectingDataSources"] = json.dumps(poolchannels)
             cnf["ComponentPreselection"] = json.dumps(componentgroup)
+            cnf["DataSourcePreselection"] = json.dumps(datasourcegroup)
             rs.profileConfiguration = json.dumps(cnf)
             rs.preselectComponents()
             res = self.value(rs, "ComponentPreselection")
+            resd = self.value(rs, "DataSourcePreselection")
 
             self.myAssertDict(json.loads(res), {
                 "smycp": True, "smycp2": True, "smycp3": True,
-                "s2mycp": True, "s2mycp2": True, "s2mycp3": True,
-                "smycpnt1": False})
-            self.assertEqual(len(rs.descriptionErrors), 1)
+                "s2mycp": True, "s2mycp2": True, "s2mycp3": False,
+                "smycpnt1": None})
+            self.myAssertDict(json.loads(resd), {
+                "scalar_uchar": True, "scalar_string": True,
+                "scalar_ulong": False,
+                "scalar2_uchar": True, "scalar2_string": True,
+                "scalar2_ulong": False,
+                "ann3": None,
+            })
+            self.assertEqual(len(rs.descriptionErrors), 2)
 
     #        print self._cf.dp.GetCommandVariable("COMMANDS")
             res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
@@ -3493,6 +3973,98 @@ class SettingsTest(unittest.TestCase):
                 elif key == 'ComponentPreselection':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(json.loads(res)))
+                elif key == 'DataSourcePreselection':
+                    self.assertEqual(set(json.loads(sed[key])),
+                                     set(json.loads(resd)))
+                elif key == 'PreselectingDataSources':
+                    self.assertEqual(set(json.loads(sed[key])),
+                                     set(poolchannels))
+                else:
+                    self.assertEqual(sed[key], vl)
+        finally:
+            simps2.tearDown()
+
+    def test_preselectComponents_2wds_notangodsnopool_false(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        simps2 = TestServerSetUp.TestServerSetUp(
+            "ttestp09/testts/t2r228", "S2")
+        try:
+            simps2.setUp()
+
+            db = PyTango.Database()
+            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            rs = self.openRecSelector()
+            rs.configDevice = val["ConfigDevice"]
+            rs.door = val["Door"]
+            rs.mntGrp = val["MntGrp"]
+            rs.writerDevice = val["WriterDevice"]
+
+            self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+            poolchannels = ["scalar2_long", "spectrum2_short", "client_long",
+                            "scalar2_uchar", "scalar2_string", "ann3"]
+            componentgroup = {"smycp": None, "smycp2": True,
+                              "smycp3": None, "smycpnt1": False,
+                              "s2mycp": None, "s2mycp2": True,
+                              "s2mycp3": False}
+            datasourcegroup = {
+                "scalar_uchar": True, "scalar_string": None,
+                "scalar_ulong": False,
+                "ann3": False,
+                "scalar2_uchar": True, "scalar2_string": None,
+                "scalar2_ulong": False,
+            }
+
+            cps = dict(self.smycps)
+            cps.update(self.smycps2)
+            dss = dict(self.smydss)
+            dss.update(self.smydss2)
+            dss.update(self.mydss)
+            self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
+            self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
+
+            cnf = json.loads(rs.profileConfiguration)
+            cnf["PreselectingDataSources"] = json.dumps(poolchannels)
+            cnf["ComponentPreselection"] = json.dumps(componentgroup)
+            cnf["DataSourcePreselection"] = json.dumps(datasourcegroup)
+            rs.profileConfiguration = json.dumps(cnf)
+            rs.preselectComponents()
+            res = self.value(rs, "ComponentPreselection")
+            resd = self.value(rs, "DataSourcePreselection")
+
+            self.myAssertDict(json.loads(res), {
+                "smycp": True, "smycp2": True, "smycp3": True,
+                "s2mycp": True, "s2mycp2": True, "s2mycp3": False,
+                "smycpnt1": None})
+            self.myAssertDict(json.loads(resd), {
+                "scalar_uchar": True, "scalar_string": True,
+                "scalar_ulong": False,
+                "scalar2_uchar": True, "scalar2_string": True,
+                "scalar2_ulong": False,
+                "ann3": None,
+            })
+            self.assertEqual(len(rs.descriptionErrors), 2)
+
+    #        print self._cf.dp.GetCommandVariable("COMMANDS")
+            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
+            sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
+            self.assertEqual(len(sed.keys()), len(self._keys))
+            for key, vl in self._keys:
+                self.assertTrue(key in sed.keys())
+                if key in val:
+                    self.assertEqual(sed[key], val[key])
+                elif key == 'ComponentPreselection':
+                    self.assertEqual(set(json.loads(sed[key])),
+                                     set(json.loads(res)))
+                elif key == 'DataSourcePreselection':
+                    self.assertEqual(set(json.loads(sed[key])),
+                                     set(json.loads(resd)))
                 elif key == 'PreselectingDataSources':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(poolchannels))
@@ -3525,16 +4097,25 @@ class SettingsTest(unittest.TestCase):
 
             self._ms.dps[self._ms.ms.keys()[0]].Init()
 
-            poolchannels = ["scalar2_long", "spectrum2_short", "client_long"]
-            componentgroup = {"smycp": False, "smycp2": False,
-                              "smycp3": False, "smycpnt1": False,
-                              "s2mycp": False, "s2mycp2": False,
+            poolchannels = ["scalar2_long", "spectrum2_short", "client_long",
+                            "scalar2_uchar", "scalar2_string", "ann3"]
+            componentgroup = {"smycp": False, "smycp2": True,
+                              "smycp3": True, "smycpnt1": None,
+                              "s2mycp": True, "s2mycp2": True,
                               "s2mycp3": False}
+            datasourcegroup = {
+                "scalar_uchar": True, "scalar_string": None,
+                "scalar_ulong": False,
+                "ann3": None,
+                "scalar2_uchar": True, "scalar2_string": None,
+                "scalar2_ulong": False,
+            }
 
             cps = dict(self.smycps)
             cps.update(self.smycps2)
             dss = dict(self.smydss)
             dss.update(self.smydss2)
+            dss.update(self.mydss)
 
             self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
@@ -3542,15 +4123,24 @@ class SettingsTest(unittest.TestCase):
             cnf = json.loads(rs.profileConfiguration)
             cnf["PreselectingDataSources"] = json.dumps(poolchannels)
             cnf["ComponentPreselection"] = json.dumps(componentgroup)
+            cnf["DataSourcePreselection"] = json.dumps(datasourcegroup)
             rs.profileConfiguration = json.dumps(cnf)
             rs.preselectComponents()
             res = self.value(rs, "ComponentPreselection")
+            resd = self.value(rs, "DataSourcePreselection")
 
             self.myAssertDict(json.loads(res), {
-                "smycp": True, "smycp2": True, "smycp3": True,
-                "s2mycp": True, "s2mycp2": True, "s2mycp3": True,
-                "smycpnt1": False})
-            self.assertEqual(len(rs.descriptionErrors), 1)
+                "smycp": False, "smycp2": True, "smycp3": True,
+                "s2mycp": True, "s2mycp2": True, "s2mycp3": False,
+                "smycpnt1": None})
+            self.myAssertDict(json.loads(resd), {
+                "scalar_uchar": True, "scalar_string": True,
+                "scalar_ulong": False,
+                "scalar2_uchar": True, "scalar2_string": True,
+                "scalar2_ulong": False,
+                "ann3": None,
+            })
+            self.assertEqual(len(rs.descriptionErrors), 2)
 
     #        print self._cf.dp.GetCommandVariable("COMMANDS")
             res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
@@ -3564,6 +4154,101 @@ class SettingsTest(unittest.TestCase):
                 elif key == 'ComponentPreselection':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(json.loads(res)))
+                elif key == 'DataSourcePreselection':
+                    self.assertEqual(set(json.loads(sed[key])),
+                                     set(json.loads(resd)))
+                elif key == 'PreselectingDataSources':
+                    self.assertEqual(set(json.loads(sed[key])),
+                                     set(poolchannels))
+                else:
+                    self.assertEqual(sed[key], vl)
+        finally:
+            simps2.tearDown()
+
+    ## test
+    # \brief It tests default settings
+    def test_preselectComponents_2wds_notangodsnopool2_false(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        simps2 = TestServerSetUp.TestServerSetUp(
+            "ttestp09/testts/t2r228", "S2")
+        try:
+            simps2.setUp()
+
+            db = PyTango.Database()
+            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            rs = self.openRecSelector()
+            rs.configDevice = val["ConfigDevice"]
+            rs.door = val["Door"]
+            rs.mntGrp = val["MntGrp"]
+            rs.writerDevice = val["WriterDevice"]
+
+            self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+            poolchannels = ["scalar2_long", "spectrum2_short", "client_long",
+                            "scalar2_uchar", "scalar2_string", "ann3"]
+            componentgroup = {"smycp": False, "smycp2": True,
+                              "smycp3": True, "smycpnt1": False,
+                              "s2mycp": True, "s2mycp2": True,
+                              "s2mycp3": False}
+            datasourcegroup = {
+                "scalar_uchar": True, "scalar_string": None,
+                "scalar_ulong": False,
+                "ann3": False,
+                "scalar2_uchar": True, "scalar2_string": None,
+                "scalar2_ulong": False,
+            }
+
+            cps = dict(self.smycps)
+            cps.update(self.smycps2)
+            dss = dict(self.smydss)
+            dss.update(self.smydss2)
+            dss.update(self.mydss)
+
+            self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
+            self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
+
+            cnf = json.loads(rs.profileConfiguration)
+            cnf["PreselectingDataSources"] = json.dumps(poolchannels)
+            cnf["ComponentPreselection"] = json.dumps(componentgroup)
+            cnf["DataSourcePreselection"] = json.dumps(datasourcegroup)
+            rs.profileConfiguration = json.dumps(cnf)
+            rs.preselectComponents()
+            res = self.value(rs, "ComponentPreselection")
+            resd = self.value(rs, "DataSourcePreselection")
+
+            self.myAssertDict(json.loads(res), {
+                "smycp": False, "smycp2": True, "smycp3": True,
+                "s2mycp": True, "s2mycp2": True, "s2mycp3": False,
+                "smycpnt1": None})
+            self.myAssertDict(json.loads(resd), {
+                "scalar_uchar": True, "scalar_string": True,
+                "scalar_ulong": False,
+                "scalar2_uchar": True, "scalar2_string": True,
+                "scalar2_ulong": False,
+                "ann3": None,
+            })
+            self.assertEqual(len(rs.descriptionErrors), 2)
+
+    #        print self._cf.dp.GetCommandVariable("COMMANDS")
+            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
+            sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
+            self.assertEqual(len(sed.keys()), len(self._keys))
+            for key, vl in self._keys:
+                self.assertTrue(key in sed.keys())
+                if key in val:
+                    self.assertEqual(sed[key], val[key])
+                elif key == 'ComponentPreselection':
+                    self.assertEqual(set(json.loads(sed[key])),
+                                     set(json.loads(res)))
+                elif key == 'DataSourcePreselection':
+                    self.assertEqual(set(json.loads(sed[key])),
+                                     set(json.loads(resd)))
                 elif key == 'PreselectingDataSources':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(poolchannels))
@@ -3608,15 +4293,23 @@ class SettingsTest(unittest.TestCase):
 
             channelerrors = []
             poolchannels = []
-            componentgroup = {"smycp": False, "smycp2": False,
-                              "smycp3": False, "smycpnt1": False,
-                              "s2mycp": False, "s2mycp2": False,
-                              "s2mycp3": False}
+            componentgroup = {"smycp": False, "smycp2": None,
+                              "smycp3": True, "smycpnt1": None,
+                              "s2mycp": True, "s2mycp2": False,
+                              "s2mycp3": True}
+            datasourcegroup = {
+                "scalar_uchar": True, "scalar_string": None,
+                "scalar_ulong": False,
+                "ann3": None,
+                "scalar2_uchar": True, "scalar2_string": None,
+                "scalar2_ulong": False,
+            }
 
             cps = dict(self.smycps)
             cps.update(self.smycps2)
             dss = dict(self.smydss)
             dss.update(self.smydss2)
+            dss.update(self.mydss)
 
             self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
@@ -3627,14 +4320,23 @@ class SettingsTest(unittest.TestCase):
             cnf = json.loads(rs.profileConfiguration)
             cnf["PreselectingDataSources"] = json.dumps(poolchannels)
             cnf["ComponentPreselection"] = json.dumps(componentgroup)
+            cnf["DataSourcePreselection"] = json.dumps(datasourcegroup)
             rs.profileConfiguration = json.dumps(cnf)
             rs.preselectComponents()
             res = self.value(rs, "ComponentPreselection")
-
+            resd = self.value(rs, "DataSourcePreselection")
             self.myAssertDict(json.loads(res), {
-                "smycp": True, "smycp2": True, "smycp3": True,
-                "s2mycp": True, "s2mycp2": True, "s2mycp3": True,
+                "smycp": False, "smycp2": True, "smycp3": True,
+                "s2mycp": True, "s2mycp2": False, "s2mycp3": True,
                 "smycpnt1": True})
+            self.myAssertDict(json.loads(resd), {
+                "scalar_uchar": True, "scalar_string": True,
+                "scalar_ulong": False,
+                "scalar2_uchar": True, "scalar2_string": True,
+                "scalar2_ulong": False,
+                "ann3": True,
+            })
+
             self.assertTrue(not rs.descriptionErrors)
 
             res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
@@ -3648,6 +4350,113 @@ class SettingsTest(unittest.TestCase):
                 elif key == 'ComponentPreselection':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(json.loads(res)))
+                elif key == 'DataSourcePreselection':
+                    self.assertEqual(set(json.loads(sed[key])),
+                                     set(json.loads(resd)))
+                elif key == 'PreselectingDataSources':
+                    self.assertEqual(set(json.loads(sed[key])),
+                                     set(poolchannels))
+                else:
+                    self.assertEqual(sed[key], vl)
+        finally:
+            simps2.tearDown()
+
+    ## test
+    # \brief It tests default settings
+    def test_preselectComponents_2wds_notangods2_false(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        simps2 = TestServerSetUp.TestServerSetUp(
+            "ttestp09/testts/t2r228", "S2")
+
+        arr = [
+            {"name": "client_long",
+             "full_name": "ttestp09/testts/t1r228/Value"},
+            {"name": "client_short",
+             "full_name": "ttestp09/testts/t1r228/Value"},
+        ]
+
+        try:
+            simps2.setUp()
+
+            db = PyTango.Database()
+            db.put_device_property(self._ms.ms.keys()[0],
+                                   {'PoolNames': self._pool.dp.name()})
+            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            rs = self.openRecSelector()
+            rs.configDevice = val["ConfigDevice"]
+            rs.door = val["Door"]
+            rs.mntGrp = val["MntGrp"]
+            rs.writerDevice = val["WriterDevice"]
+
+            self._ms.dps[self._ms.ms.keys()[0]].Init()
+
+            channelerrors = []
+            poolchannels = []
+            componentgroup = {"smycp": False, "smycp2": None,
+                              "smycp3": True, "smycpnt1": False,
+                              "s2mycp": True, "s2mycp2": False,
+                              "s2mycp3": True}
+            datasourcegroup = {
+                "scalar_uchar": True, "scalar_string": None,
+                "scalar_ulong": False,
+                "ann3": False,
+                "scalar2_uchar": True, "scalar2_string": None,
+                "scalar2_ulong": False,
+            }
+
+            cps = dict(self.smycps)
+            cps.update(self.smycps2)
+            dss = dict(self.smydss)
+            dss.update(self.smydss2)
+            dss.update(self.mydss)
+
+            self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
+            self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
+
+            pool = self._pool.dp
+            pool.AcqChannelList = [json.dumps(a) for a in arr]
+
+            cnf = json.loads(rs.profileConfiguration)
+            cnf["PreselectingDataSources"] = json.dumps(poolchannels)
+            cnf["ComponentPreselection"] = json.dumps(componentgroup)
+            cnf["DataSourcePreselection"] = json.dumps(datasourcegroup)
+            rs.profileConfiguration = json.dumps(cnf)
+            rs.preselectComponents()
+            res = self.value(rs, "ComponentPreselection")
+            resd = self.value(rs, "DataSourcePreselection")
+            self.myAssertDict(json.loads(res), {
+                "smycp": False, "smycp2": True, "smycp3": True,
+                "s2mycp": True, "s2mycp2": False, "s2mycp3": True,
+                "smycpnt1": False})
+            self.myAssertDict(json.loads(resd), {
+                "scalar_uchar": True, "scalar_string": True,
+                "scalar_ulong": False,
+                "scalar2_uchar": True, "scalar2_string": True,
+                "scalar2_ulong": False,
+                "ann3": False,
+            })
+
+            self.assertTrue(not rs.descriptionErrors)
+
+            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
+            sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
+            self.assertEqual(len(sed.keys()), len(self._keys))
+            for key, vl in self._keys:
+                self.assertTrue(key in sed.keys())
+                if key in val:
+                    self.assertEqual(sed[key], val[key])
+                elif key == 'ComponentPreselection':
+                    self.assertEqual(set(json.loads(sed[key])),
+                                     set(json.loads(res)))
+                elif key == 'DataSourcePreselection':
+                    self.assertEqual(set(json.loads(sed[key])),
+                                     set(json.loads(resd)))
                 elif key == 'PreselectingDataSources':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(poolchannels))
@@ -3694,15 +4503,23 @@ class SettingsTest(unittest.TestCase):
 
             channelerrors = []
             poolchannels = []
-            componentgroup = {"smycp": False, "smycp2": False,
-                              "smycp3": False, "smycpnt1": False,
-                              "s2mycp": False, "s2mycp2": False,
-                              "s2mycp3": False}
+            componentgroup = {"smycp": False, "smycp2": None,
+                              "smycp3": True, "smycpnt1": None,
+                              "s2mycp": True, "s2mycp2": False,
+                              "s2mycp3": True}
+            datasourcegroup = {
+                "scalar_uchar": True, "scalar_string": None,
+                "scalar_ulong": False,
+                "ann3": None,
+                "scalar2_uchar": True, "scalar2_string": None,
+                "scalar2_ulong": False,
+            }
 
             cps = dict(self.smycps)
             cps.update(self.smycps2)
             dss = dict(self.smydss)
             dss.update(self.smydss2)
+            dss.update(self.mydss)
 
             self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
@@ -3713,14 +4530,23 @@ class SettingsTest(unittest.TestCase):
             cnf = json.loads(rs.profileConfiguration)
             cnf["PreselectingDataSources"] = json.dumps(poolchannels)
             cnf["ComponentPreselection"] = json.dumps(componentgroup)
+            cnf["DataSourcePreselection"] = json.dumps(datasourcegroup)
             rs.profileConfiguration = json.dumps(cnf)
             rs.preselectComponents()
             res = self.value(rs, "ComponentPreselection")
+            resd = self.value(rs, "DataSourcePreselection")
 
             self.myAssertDict(json.loads(res), {
-                "smycp": True, "smycp2": True, "smycp3": True,
-                "s2mycp": True, "s2mycp2": True, "s2mycp3": True,
+                "smycp": False, "smycp2": True, "smycp3": True,
+                "s2mycp": True, "s2mycp2": False, "s2mycp3": True,
                 "smycpnt1": True})
+            self.myAssertDict(json.loads(resd), {
+                "scalar_uchar": True, "scalar_string": True,
+                "scalar_ulong": False,
+                "scalar2_uchar": True, "scalar2_string": True,
+                "scalar2_ulong": False,
+                "ann3": True,
+            })
             self.assertTrue(not rs.descriptionErrors)
 
             res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
@@ -3734,6 +4560,9 @@ class SettingsTest(unittest.TestCase):
                 elif key == 'ComponentPreselection':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(json.loads(res)))
+                elif key == 'DataSourcePreselection':
+                    self.assertEqual(set(json.loads(sed[key])),
+                                     set(json.loads(resd)))
                 elif key == 'PreselectingDataSources':
                     self.assertEqual(set(json.loads(sed[key])),
                                      set(poolchannels))
@@ -8969,10 +9798,16 @@ class SettingsTest(unittest.TestCase):
                     dss[ds] = bool(self.__rnd.randint(0, 1))
 
         nadss = self.__rnd.randint(1, len(amydss.keys()) - 1)
-        aadss = [ds for ds in self.__rnd.sample(
-            set(amydss.keys()), nadss)]
-        nadss = self.__rnd.randint(1, len(amydss.keys()) - 1)
         indss = [ds for ds in self.__rnd.sample(
+            set(amydss.keys()), nadss)]
+
+        aindss = {}
+        for cp in indss:
+            if cp not in wrong:
+                aindss[cp] = bool(self.__rnd.randint(0, 1))
+
+        nadss = self.__rnd.randint(1, len(amydss.keys()) - 1)
+        aadss = [ds for ds in self.__rnd.sample(
             set(amydss.keys()), nadss)]
 
         for tm in ltimers:
@@ -8998,7 +9833,7 @@ class SettingsTest(unittest.TestCase):
         se["PreselectingDataSources"] = \
             json.dumps(aadss)
         se["OptionalComponents"] = json.dumps(ocps)
-        se["DataSourcePreselection"] = json.dumps(indss)
+        se["DataSourcePreselection"] = json.dumps(aindss)
         se["AppendEntry"] = bool(self.__rnd.randint(0, 1))
         se["ComponentsFromMntGrp"] = bool(
             self.__rnd.randint(0, 1))

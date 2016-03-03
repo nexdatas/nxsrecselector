@@ -225,6 +225,17 @@ class TangoUtils(object):
                 pass
         return device
 
+    ## provides database host and port
+    # \returns  database host and port in tuple
+    @classmethod
+    def getFullAttrName(cls, recattr):
+        if ':' in recattr:
+            return "tango://%s" % recattr
+        else:
+            db = PyTango.Database()
+            host, port = db.get_db_host(), db.get_db_port()
+            return "tango://%s:%s/%s" % (host, port, recattr)
+
     ## retrives shape type value for attribure
     @classmethod
     def getShapeTypeUnit(cls, source):
