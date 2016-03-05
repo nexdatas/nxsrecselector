@@ -50,14 +50,14 @@ class Selection(dict):
         self["OrderedChannels"] = '[]'
         ## group of electable components
         self["ComponentSelection"] = '{}'
+        ## step selected datasources
+        self["DataSourceSelection"] = '{}'
+        ## init preselected datasources
+        self["DataSourcePreselection"] = '{}'
         ## group of preselected components describing instrument state
         self["ComponentPreselection"] = '{}'
         ## preselected datasources
-        self["PreselectedDataSources"] = '[]'
-        ## selected datasources
-        self["DataSourceSelection"] = '{}'
-        ## init datasources
-        self["InitDataSources"] = '[]'
+        self["PreselectingDataSources"] = '[]'
         ## group of optional components available for preselected selqection
         self["OptionalComponents"] = '[]'
         ## appending new entries to existing file
@@ -100,17 +100,17 @@ class Selection(dict):
             cps[k] = False
         for k in ads.keys():
             ads[k] = False
-        self["InitDataSources"] = '[]'
+        self["DataSourcePreselection"] = '{}'
         self["DataSourceSelection"] = json.dumps(ads)
         self["ComponentSelection"] = json.dumps(cps)
 
     ## update method for Preselected DataSources
     # \brief appends new datasources to Preselected DataSources
     # \param datasources
-    def updatePreselectedDataSources(self, datasources):
-        adsg = json.loads(self["PreselectedDataSources"])
+    def updatePreselectingDataSources(self, datasources):
+        adsg = json.loads(self["PreselectingDataSources"])
         adsg = list(set(adsg or []) | set(datasources or []))
-        self["PreselectedDataSources"] = json.dumps(adsg)
+        self["PreselectingDataSources"] = json.dumps(adsg)
 
     ## update method for orderedChannels attribute
     # \brief sets pool channels in order defined by OrderedChannels
@@ -167,5 +167,5 @@ class Selection(dict):
     def resetPreselectedComponents(self, components):
         acps = {}
         for cp in components:
-            acps[cp] = False
+            acps[cp] = None
         self["ComponentPreselection"] = json.dumps(acps)

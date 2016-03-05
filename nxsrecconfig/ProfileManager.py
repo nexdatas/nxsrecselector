@@ -110,6 +110,15 @@ class ProfileManager(object):
         else:
             return []
 
+    ## provides preselected datasources
+    # \returns list of available preselected components
+    def preselectedDataSources(self):
+        cps = json.loads(self.__selector["DataSourcePreselection"])
+        if isinstance(cps, dict):
+            return [cp for cp in cps.keys() if cps[cp]]
+        else:
+            return []
+
     ## provides description of components
     # \param full if True describes all available ones are taken
     #        otherwise selectect, preselected and mandatory
@@ -257,7 +266,7 @@ class ProfileManager(object):
                 self.importMntGrp()
                 self.__selector.resetPreselectedComponents(
                     self.defaultPreselectedComponents)
-                self.__selector.updatePreselectedComponents()
+                self.__selector.preselect()
 
     ## set active measurement group from components
     # \param components  component list
@@ -278,10 +287,9 @@ class ProfileManager(object):
         ltimers = set()
         timer = self.__prepareTimers(cnf, ltimers)
 
-        aliases = self.__fetchChannels(
+        aliases, snapshot = self.__fetchChannels(
             components, datasources, componentdatasources,
             dontdisplay, set(ltimers) | set([timer]))
-
         mfullname = self.__prepareMntGrp(cnf, timer)
 
         index = 0
@@ -292,6 +300,8 @@ class ProfileManager(object):
                 al, dontdisplay, cnf,
                 al if al in ltimers else timer, index, fullnames, sources)
         conf = json.dumps(cnf)
+
+        MSUtils.setEnv('PreScanSnapshot', snapshot, self.__macroServerName)
         return conf, mfullname
 
     ## import setting from active measurement
@@ -474,6 +484,7 @@ class ProfileManager(object):
     def __fetchChannels(self, components, datasources, componentdatasources,
                         dontdisplay, timers):
         aliases = []
+        initsources = {}
 
         self.__checkClientRecords(components, datasources)
         if isinstance(datasources, list):
@@ -484,24 +495,34 @@ class ProfileManager(object):
             list(set(pchannels) & set(componentdatasources)))
 
         describer = Describer(self.__configServer, True)
-        res = describer.components(components, 'STEP', 'CLIENT')
+        res = describer.components(components, '', '')
         for grp in res:
             for cp, dss in grp.items():
                 ndcp = cp in dontdisplay
-                for ds in dss.keys():
-                    aliases.append(str(ds))
-                    dsg[str(ds)] = True
-                    if not ndcp and str(ds) in dontdisplay:
-                        dontdisplay.remove(str(ds))
-        res = describer.components(components, 'STEP', 'TANGO')
-        for grp in res:
-            for cp, dss in grp.items():
-                ndcp = cp in dontdisplay
-                for ds in dss.keys():
-                    aliases.append(str(ds))
-                    dsg[str(ds)] = True
-                    if not ndcp and str(ds) in dontdisplay:
-                        dontdisplay.remove(str(ds))
+                for ds, params in dss.items():
+                    for param in params:
+                        if param and len(param) > 2:
+                            if param[0] == 'STEP' \
+                               and param[1] in ['TANGO', 'CLIENT']:
+                                aliases.append(str(ds))
+                                dsg[str(ds)] = True
+                                if not ndcp and str(ds) in dontdisplay:
+                                    dontdisplay.remove(str(ds))
+                            elif param[0] in ['FINAL', 'INIT'] \
+                               and param[1] in ['TANGO']:
+                                initsources[str(ds)] = \
+                                    TangoUtils.getFullAttrName(param[2])
+
+        devices = self.preselectedDataSources()
+        if devices:
+            sds = describer.dataSources(devices)
+            if sds:
+                for ds in sds[0].values():
+                    if ds.dstype == 'TANGO':
+                        initsources[ds.name] = \
+                            TangoUtils.getFullAttrName(ds.record)
+        snapshot = [(devattr, dsname)
+                    for dsname, devattr in initsources.items()]
 
         for tm in timers:
             if tm in dontdisplay:
@@ -520,7 +541,7 @@ class ProfileManager(object):
         pchannels = [ch for ch in pchannels if ch in aliases]
         aliases = sorted(list(set(aliases) - set(pchannels)))
         pchannels.extend(aliases)
-        return pchannels
+        return pchannels, snapshot
 
     ## sets mntgrp
     def __prepareMntGrp(self, cnf, timer):

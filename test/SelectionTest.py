@@ -66,9 +66,9 @@ class SelectionTest(unittest.TestCase):
             ("OrderedChannels", '[]'),
             ("ComponentSelection", '{}'),
             ("ComponentPreselection", '{}'),
-            ("PreselectedDataSources", '[]'),
+            ("PreselectingDataSources", '[]'),
             ("DataSourceSelection", '{}'),
-            ("InitDataSources", '[]'),
+            ("DataSourcePreselection", '{}'),
             ("OptionalComponents", '[]'),
             ("AppendEntry", False),
             ("ComponentsFromMntGrp", False),
@@ -174,7 +174,7 @@ class SelectionTest(unittest.TestCase):
                 dss[self.getRandomName(10)] = bool(self.__rnd.randint(0, 1))
             el["ComponentSelection"] = json.dumps(cps)
             el["DataSourceSelection"] = json.dumps(dss)
-            el["InitDataSources"] = json.dumps(
+            el["DataSourcePreselection"] = json.dumps(
                 self.__rnd.sample(dss, self.__rnd.randint(1, len(dss))))
             self.dump(el)
 
@@ -183,7 +183,7 @@ class SelectionTest(unittest.TestCase):
             ncps = json.loads(el["ComponentSelection"])
             ndss = json.loads(el["DataSourceSelection"])
 
-            self.assertEqual(el["InitDataSources"], '[]')
+            self.assertEqual(el["DataSourcePreselection"], '{}')
             self.assertEqual(len(cps), len(ncps))
             self.assertEqual(len(dss), len(ndss))
             for key in cps.keys():
@@ -195,15 +195,15 @@ class SelectionTest(unittest.TestCase):
 
             self.compareToDump(el, ["ComponentSelection",
                                     "DataSourceSelection",
-                                    "InitDataSources"])
+                                    "DataSourcePreselection"])
 
-    ## updatePreselectedDataSources test
-    def test_updatePreselectedDataSources(self):
+    ## updatePreselectingDataSources test
+    def test_updatePreselectingDataSources(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         for i in range(20):
             el = Selection(Version=self.__version)
-            el.updatePreselectedDataSources(None)
+            el.updatePreselectingDataSources(None)
             self.assertEqual(len(el.keys()), len(self._keys))
             for key, vl in self._keys:
                 self.assertTrue(key in el.keys())
@@ -216,21 +216,21 @@ class SelectionTest(unittest.TestCase):
             dss2 = [self.getRandomName(10) for _ in range(lds2)]
             dss3 = [self.getRandomName(10) for _ in range(lds3)]
 
-            el["PreselectedDataSources"] = json.dumps(
+            el["PreselectingDataSources"] = json.dumps(
                 list(set(dss1) | set(dss2)))
             self.dump(el)
-            el.updatePreselectedDataSources(None)
+            el.updatePreselectingDataSources(None)
 
-            self.compareToDump(el, ["PreselectedDataSources"])
+            self.compareToDump(el, ["PreselectingDataSources"])
             self.assertEqual(set(list(set(dss2) | set(dss1))),
-                             set(json.loads(el["PreselectedDataSources"])))
+                             set(json.loads(el["PreselectingDataSources"])))
 
-            el.updatePreselectedDataSources(list(set(dss3) | set(dss2)))
+            el.updatePreselectingDataSources(list(set(dss3) | set(dss2)))
 
             self.assertEqual(set(list(set(dss3) | set(dss2) | set(dss1))),
-                             set(json.loads(el["PreselectedDataSources"])))
+                             set(json.loads(el["PreselectingDataSources"])))
 
-            self.compareToDump(el, ["PreselectedDataSources"])
+            self.compareToDump(el, ["PreselectingDataSources"])
 
     ## updateOrderedChannels test
     def test_updateOrderedChannels(self):
@@ -453,7 +453,7 @@ class SelectionTest(unittest.TestCase):
             ndss = json.loads(el["ComponentPreselection"])
             for ds in dss1:
                 self.assertTrue(ds in ndss.keys())
-                self.assertEqual(ndss[ds], False)
+                self.assertEqual(ndss[ds], None)
 
 
 if __name__ == '__main__':

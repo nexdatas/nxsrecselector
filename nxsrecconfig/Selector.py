@@ -1,3 +1,4 @@
+
 #!/usr/bin/env python
 #   This file is part of nxsrecconfig - NeXus Sardana Recorder Settings
 #
@@ -166,8 +167,8 @@ class Selector(object):
             self.__msp.updateMacroServer(self.__selection["Door"])
 
     ## get method for preselectedDataSources attribute
-    def __preGetPreselectedDataSources(self):
-        self.__selection.updatePreselectedDataSources(
+    def __preGetPreselectingDataSources(self):
+        self.__selection.updatePreselectingDataSources(
             self.poolElementNames('MotorList'))
 
     ## update method for orderedChannels attribute
@@ -209,15 +210,22 @@ class Selector(object):
 
     ## updates active state of preselected components
     # \returns new group of preselected components
-    def updatePreselectedComponents(self):
-        datasources = set(json.loads(self["PreselectedDataSources"]))
+    def preselect(self):
+        datasources = set(json.loads(self["PreselectingDataSources"]))
         acpgroup = json.loads(self["ComponentPreselection"])
+        adsgroup = json.loads(self["DataSourcePreselection"])
         configdevice = self.setConfigInstance()
-        jacps = self.__msp.checkComponentChannels(
-            self["Door"], configdevice, datasources, acpgroup,
-            self.descErrors)
+        jacps, jadss = self.__msp.checkChannels(
+            self["Door"], configdevice, datasources,
+            acpgroup, adsgroup, self.descErrors)
+        changed = False
         if self["ComponentPreselection"] != jacps:
             self["ComponentPreselection"] = jacps
+            changed = True
+        if self["DataSourcePreselection"] != jadss:
+            self["DataSourcePreselection"] = jadss
+            changed = True
+        if changed:
             self.storeSelection()
 
     ## provides pool proxies

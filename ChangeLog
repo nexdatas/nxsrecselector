@@ -1,6 +1,6 @@
-2016-02-26 Jan Kotanski <jankotan@gmail.com>
-	* fix for muted tango devices
-	* tagged as v2.3.1
+2016-02-XX Jan Kotanski <jankotan@gmail.com>
+	* change bool selections into int selections
+	* tagged as v3.0.0
 
 2016-02-25 Jan Kotanski <jankotan@gmail.com>
 	* add support for muting tango devices

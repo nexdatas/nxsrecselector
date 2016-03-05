@@ -99,11 +99,11 @@ class MacroServerPools(object):
         return self.__pools
 
     @classmethod
-    def __toCheck(cls, configdevice, discomponentgroup, components, channels,
-                  nonexisting):
+    def __toCheck(cls, configdevice, discomponentgroup, components, datasources,
+                  channels, nonexisting):
         describer = Describer(configdevice, True)
-        availablecomponents = TangoUtils.command(configdevice,
-                                                 "availableComponents")
+        availablecomponents = TangoUtils.command(
+            configdevice, "availableComponents")
 
         for k in set(components) - set(availablecomponents):
             discomponentgroup[str(k)] = CheckerItem(str(k))
@@ -115,33 +115,46 @@ class MacroServerPools(object):
         for acp in components:
             res = describer.components([acp], '', '')
             for cp, dss in res[0].items():
-                if isinstance(dss, dict):
-                    tgds = describer.dataSources(dss.keys(), 'TANGO')[0]
-                    for ds in dss.keys():
-                        if ds in tgds.keys():
-                            if cp not in toCheck.keys():
-                                toCheck[cp] = CheckerItem(cp)
-                            srec = tgds[ds].record.split("/")
-                            attr = srec[-1]
-                            toCheck[cp].append(
-                                TangoDSItem(str(ds),
-                                            str("/".join(srec[:-1])),
-                                            str(attr)))
-                        elif ds in nonexisting:
-                            discomponentgroup[cp] = CheckerItem(cp)
-                            discomponentgroup[cp].errords = ds
-                            discomponentgroup[cp].active = False
-                            discomponentgroup[cp].message = \
-                                "%s not defined in Pool" % ds
+                cls.__createCheckItem(cp, dss, toCheck, nonexisting,
+                                      discomponentgroup, channels, describer)
 
-                            if cp in toCheck.keys():
-                                toCheck.pop(cp)
-                            break
-                        elif ds in channels:
-                            if cp not in toCheck.keys():
-                                toCheck[cp] = CheckerItem(cp)
-                            toCheck[cp].append(TangoDSItem(str(ds)))
+        for ads in datasources:
+            cls.__createCheckItem(ads, {ads:None}, toCheck, nonexisting,
+                                  discomponentgroup, channels, describer)
+
         return toCheck.values()
+
+
+
+    @classmethod
+    def __createCheckItem(cls, name, dss, toCheck, nonexisting,
+                          discomponentgroup, channels, describer):
+        if isinstance(dss, dict):
+            tgds = describer.dataSources(dss.keys(), 'TANGO')[0]
+            for ds in dss.keys():
+                if ds in tgds.keys():
+                    if name not in toCheck.keys():
+                        toCheck[name] = CheckerItem(name)
+                    srec = tgds[ds].record.split("/")
+                    attr = srec[-1]
+                    toCheck[name].append(
+                        TangoDSItem(str(ds),
+                                    str("/".join(srec[:-1])),
+                                    str(attr)))
+                elif ds in nonexisting:
+                    discomponentgroup[name] = CheckerItem(name)
+                    discomponentgroup[name].errords = ds
+                    discomponentgroup[name].active = False
+                    discomponentgroup[name].message = \
+                        "%s not defined in Pool" % ds
+
+                    if name in toCheck.keys():
+                        toCheck.pop(name)
+                    break
+                elif ds in channels:
+                    if name not in toCheck.keys():
+                        toCheck[name] = CheckerItem(name)
+                    toCheck[name].append(TangoDSItem(str(ds)))
 
     ## checks component channels
     # \param door door device name
@@ -150,16 +163,19 @@ class MacroServerPools(object):
     # \param componentgroup preselected component group
     # \param channelerrors deactivated component errors
     # \returns json dictionary with selected active components
-    def checkComponentChannels(self, door, configdevice, channels,
-                               componentgroup, channelerrors):
+    def checkChannels(self, door, configdevice, channels,
+                      componentgroup, datasourcegroup,
+                      channelerrors):
         channelerrors[:] = []
         discomponentgroup = {}
         threads = []
         pools = self.getPools(door)
         fnames = PoolUtils.getFullDeviceNames(pools, channels)
         nonexisting = [dev for dev in channels if dev not in fnames.keys()]
+
         toCheck = self.__toCheck(configdevice, discomponentgroup,
                                  componentgroup.keys(),
+                                 datasourcegroup.keys(),
                                  channels, nonexisting)
 
         cqueue = Queue.Queue()
@@ -180,19 +196,31 @@ class MacroServerPools(object):
             if checkeritem.errords is not None:
                 discomponentgroup[checkeritem.name] = checkeritem
 
-        for acp in componentgroup.keys():
-            if acp in discomponentgroup.keys():
-                checkeritem = discomponentgroup[acp]
+        self.__updategroup(componentgroup, discomponentgroup,
+                           channelerrors)
+        self.__updategroup(datasourcegroup, discomponentgroup,
+                           channelerrors)
+
+        return (json.dumps(componentgroup), json.dumps(datasourcegroup))
+
+    @classmethod
+    def __updategroup(cls, group, disgroup, channelerrors):
+        for acp in group.keys():
+            if acp in disgroup.keys():
+                checkeritem = disgroup[acp]
                 channelerrors.append(json.dumps(
                     {"component": str(acp),
                      "datasource": str(checkeritem.errords),
                      "message": str(checkeritem.message)}
                 ))
-                componentgroup[acp] = checkeritem.active
+                if checkeritem.active is False:
+                    group[acp] = None
+                elif group[acp] is not False:
+                    group[acp] = True
             else:
-                componentgroup[acp] = True
+                if group[acp] is not False:
+                    group[acp] = True
 
-        return json.dumps(componentgroup)
 
     ## imports Environment Data
     # \param door door device

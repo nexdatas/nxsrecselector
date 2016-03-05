@@ -134,15 +134,16 @@ class ProfileManagerTest(unittest.TestCase):
 
         ## selection version
         self.__version = nxsrecconfig.__version__
-
+        print self.__version
+        
         self._keys = [
             ("Timer", '[]'),
             ("OrderedChannels", '[]'),
             ("ComponentSelection", '{}'),
             ("ComponentPreselection", '{}'),
-            ("PreselectedDataSources", '[]'),
+            ("PreselectingDataSources", '[]'),
             ("DataSourceSelection", '{}'),
-            ("InitDataSources", '[]'),
+            ("DataSourcePreselection", '{}'),
             ("OptionalComponents", '[]'),
             ("AppendEntry", False),
             ("ComponentsFromMntGrp", False),
@@ -5735,8 +5736,8 @@ class ProfileManagerTest(unittest.TestCase):
                     aadss = [ds for ds in self.__rnd.sample(
                         set(amydss.keys()), nadss)]
                     nadss = self.__rnd.randint(1, len(amydss.keys()) - 1)
-                    indss = [ds for ds in self.__rnd.sample(
-                        set(amydss.keys()), nadss)]
+                    indss = dict((ds, True) for ds in self.__rnd.sample(
+                        set(amydss.keys()), nadss))
 
                     for tm in ltimers:
                         dss[tm] = bool(self.__rnd.randint(0, 1))
@@ -5757,9 +5758,9 @@ class ProfileManagerTest(unittest.TestCase):
                     se["ComponentSelection"] = json.dumps(cps)
                     se["ComponentPreselection"] = json.dumps(acps)
                     se["DataSourceSelection"] = json.dumps(dss)
-                    se["PreselectedDataSources"] = json.dumps(aadss)
+                    se["PreselectingDataSources"] = json.dumps(aadss)
                     se["OptionalComponents"] = json.dumps(ocps)
-                    se["InitDataSources"] = json.dumps(indss)
+                    se["DataSourcePreselection"] = json.dumps(indss)
                     se["AppendEntry"] = bool(self.__rnd.randint(0, 1))
                     se["ComponentsFromMntGrp"] = bool(self.__rnd.randint(0, 1))
                     se["DynamicComponents"] = bool(self.__rnd.randint(0, 1))
@@ -6060,7 +6061,7 @@ class ProfileManagerTest(unittest.TestCase):
                              "ComponentSelection",
                              "DataSourceSelection",
                              "UnplottedComponents",
-                             "PreselectedDataSources"])
+                             "PreselectingDataSources"])
 
                     self.myAssertDict(
                         json.loads(se["ComponentPreselection"]), acps)
@@ -6069,7 +6070,7 @@ class ProfileManagerTest(unittest.TestCase):
                     self.myAssertDict(
                         json.loads(se["DataSourceSelection"]), adss)
                     self.assertEqual(
-                        set(json.loads(se["PreselectedDataSources"])),
+                        set(json.loads(se["PreselectingDataSources"])),
                         set(aadss))
                     self.assertEqual(
                         set(json.loads(se["UnplottedComponents"])),
@@ -6272,8 +6273,8 @@ class ProfileManagerTest(unittest.TestCase):
                         aadss[mg] = [ds for ds in self.__rnd.sample(
                             set(amydss.keys()), nadss)]
                         nadss = self.__rnd.randint(1, len(amydss.keys()) - 1)
-                        indss = [ds for ds in self.__rnd.sample(
-                            set(amydss.keys()), nadss)]
+                        indss = dict((ds, True) for ds in self.__rnd.sample(
+                            set(amydss.keys()), nadss))
 
                         for tm in ltimers[mg]:
                             dss[tm] = bool(self.__rnd.randint(0, 1))
@@ -6295,10 +6296,10 @@ class ProfileManagerTest(unittest.TestCase):
                         se[mg]["ComponentPreselection"] = json.dumps(
                             acps[mg])
                         se[mg]["DataSourceSelection"] = json.dumps(dss)
-                        se[mg]["PreselectedDataSources"] = \
+                        se[mg]["PreselectingDataSources"] = \
                             json.dumps(aadss[mg])
                         se[mg]["OptionalComponents"] = json.dumps(ocps)
-                        se[mg]["InitDataSources"] = json.dumps(indss)
+                        se[mg]["DataSourcePreselection"] = json.dumps(indss)
                         se[mg]["AppendEntry"] = bool(self.__rnd.randint(0, 1))
                         se[mg]["ComponentsFromMntGrp"] = bool(
                             self.__rnd.randint(0, 1))
@@ -6599,7 +6600,7 @@ class ProfileManagerTest(unittest.TestCase):
                             se[mg],
                             ["DataSourceSelection",
                              "UnplottedComponents",
-                             "PreselectedDataSources",
+                             "PreselectingDataSources",
                              "UnplottedComponents"],
                             name=mg)
 
@@ -6607,7 +6608,7 @@ class ProfileManagerTest(unittest.TestCase):
                             json.loads(
                                 se[mg]["DataSourceSelection"]), adss[mg])
                         self.assertEqual(
-                            set(json.loads(se[mg]["PreselectedDataSources"])),
+                            set(json.loads(se[mg]["PreselectingDataSources"])),
                             set(aadss[mg]))
                         self.assertEqual(
                             set(json.loads(se[mg]["UnplottedComponents"])),
@@ -6638,7 +6639,7 @@ class ProfileManagerTest(unittest.TestCase):
                         lse, [
                             "DataSourceSelection",
                             "UnplottedComponents",
-                            "PreselectedDataSources",
+                            "PreselectingDataSources",
                             "Timer"
                         ],
                         name=mg1)
@@ -6648,7 +6649,7 @@ class ProfileManagerTest(unittest.TestCase):
                     self.myAssertDict(tmpcf, ltmpcf)
 
                     self.assertEqual(
-                        set(json.loads(lse["PreselectedDataSources"])),
+                        set(json.loads(lse["PreselectingDataSources"])),
                         set(aadss[mg1]))
                     self.myAssertDict(
                         json.loads(lse["DataSourceSelection"]), adss[mg1])
@@ -6682,14 +6683,14 @@ class ProfileManagerTest(unittest.TestCase):
                         se[mg2],
                         ["DataSourceSelection",
                          "UnplottedComponents",
-                         "PreselectedDataSources"],
+                         "PreselectingDataSources"],
                         name=mg2)
 
                     self.compareToDumpJSON(
                         lse,
                         ["DataSourceSelection",
                          "UnplottedComponents",
-                         "PreselectedDataSources",
+                         "PreselectingDataSources",
                          "Timer",
                          "MntGrp"],
                         name=mg1)
@@ -6699,7 +6700,7 @@ class ProfileManagerTest(unittest.TestCase):
                     self.myAssertDict(tmpcf, ltmpcf)
 
                     self.assertEqual(
-                        set(json.loads(lse["PreselectedDataSources"])),
+                        set(json.loads(lse["PreselectingDataSources"])),
                         set(aadss[mg1]))
                     self.assertEqual(
                         json.loads(lse["OrderedChannels"]), pdss[mg1])
@@ -6835,7 +6836,7 @@ class ProfileManagerTest(unittest.TestCase):
                          "ComponentSelection",
                          "DataSourceSelection",
                          "UnplottedComponents",
-                         "PreselectedDataSources",
+                         "PreselectingDataSources",
                          "Timer",
                          "MntGrp"],
                         name=mg1)
@@ -6846,7 +6847,7 @@ class ProfileManagerTest(unittest.TestCase):
                          "ComponentSelection",
                          "DataSourceSelection",
                          "UnplottedComponents",
-                         "PreselectedDataSources",
+                         "PreselectingDataSources",
                          "Timer"],
                         name=mg2)
 
@@ -6859,7 +6860,7 @@ class ProfileManagerTest(unittest.TestCase):
                     self.myAssertDict(
                         json.loads(se[mg2]["DataSourceSelection"]), adss[mg2])
                     self.assertEqual(
-                        set(json.loads(se[mg2]["PreselectedDataSources"])),
+                        set(json.loads(se[mg2]["PreselectingDataSources"])),
                         set(aadss[mg2]))
                     self.assertEqual(
                         set(json.loads(se[mg2]["UnplottedComponents"])),
@@ -6899,13 +6900,13 @@ class ProfileManagerTest(unittest.TestCase):
                         [
                             "DataSourceSelection",
                             "UnplottedComponents",
-                            "PreselectedDataSources",
+                            "PreselectingDataSources",
                             "Timer"],
                         name=mg3)
                     self.myAssertDict(json.loads(lse["DataSourceSelection"]),
                                       adss[mg3])
                     self.assertEqual(
-                        set(json.loads(lse["PreselectedDataSources"])),
+                        set(json.loads(lse["PreselectingDataSources"])),
                         set(aadss[mg3]))
 
                     mylhe = set(lhe2[mg3])
@@ -6945,7 +6946,7 @@ class ProfileManagerTest(unittest.TestCase):
                         [
                             "DataSourceSelection",
                             "UnplottedComponents",
-                            "PreselectedDataSources",
+                            "PreselectingDataSources",
                             "Timer",
                             "MntGrp"],
                         name=mg3)
@@ -6961,7 +6962,7 @@ class ProfileManagerTest(unittest.TestCase):
                     self.myAssertDict(json.loads(lse["DataSourceSelection"]),
                                       mydsg)
                     self.assertEqual(
-                        set(json.loads(lse["PreselectedDataSources"])),
+                        set(json.loads(lse["PreselectingDataSources"])),
                         set(aadss[mg3]))
                     self.assertEqual(
                         set(json.loads(lse["UnplottedComponents"])),
@@ -7005,13 +7006,13 @@ class ProfileManagerTest(unittest.TestCase):
                         [
                             "DataSourceSelection",
                             "UnplottedComponents",
-                            "PreselectedDataSources",
+                            "PreselectingDataSources",
                             "Timer"],
                         name=mg3)
                     self.myAssertDict(json.loads(lse["DataSourceSelection"]),
                                       adss[mg3])
                     self.assertEqual(
-                        set(json.loads(lse["PreselectedDataSources"])),
+                        set(json.loads(lse["PreselectingDataSources"])),
                         set(aadss[mg3]))
 
                     self.assertEqual(
@@ -7053,13 +7054,13 @@ class ProfileManagerTest(unittest.TestCase):
                         [
                             "DataSourceSelection",
                             "UnplottedComponents",
-                            "PreselectedDataSources",
+                            "PreselectingDataSources",
                             "Timer"],
                         name=mg3)
                     self.myAssertDict(json.loads(lse["DataSourceSelection"]),
                                       adss[mg3])
                     self.assertEqual(
-                        set(json.loads(lse["PreselectedDataSources"])),
+                        set(json.loads(lse["PreselectingDataSources"])),
                         set(aadss[mg3]))
 
                     self.assertEqual(
@@ -7098,13 +7099,13 @@ class ProfileManagerTest(unittest.TestCase):
                         [
                             "DataSourceSelection",
                             "UnplottedComponents",
-                            "PreselectedDataSources",
+                            "PreselectingDataSources",
                             "Timer"],
                         name=mg3)
                     self.myAssertDict(json.loads(lse["DataSourceSelection"]),
                                       adss[mg3])
                     self.assertEqual(
-                        set(json.loads(lse["PreselectedDataSources"])),
+                        set(json.loads(lse["PreselectingDataSources"])),
                         set(aadss[mg3]))
 
                     self.assertEqual(
@@ -7138,13 +7139,13 @@ class ProfileManagerTest(unittest.TestCase):
                         [
                             "DataSourceSelection",
                             "UnplottedComponents",
-                            "PreselectedDataSources",
+                            "PreselectingDataSources",
                             "Timer", "MntGrp"],
                         name=mg3)
                     self.myAssertDict(json.loads(lse["DataSourceSelection"]),
                                       adss[mg3])
                     self.assertEqual(
-                        set(json.loads(lse["PreselectedDataSources"])),
+                        set(json.loads(lse["PreselectingDataSources"])),
                         set(aadss[mg3]))
 
                     self.assertEqual(
@@ -7185,8 +7186,8 @@ class ProfileManagerTest(unittest.TestCase):
                     self.compareToDumpJSON(
                         lse,
                         [
-                            "InitDataSources",
-                            "PreselectedDataSources",
+                            "DataSourcePreselection",
+                            "PreselectingDataSources",
                             "ComponentPreselection",
                             "Timer",
                             "MntGrp",
@@ -7197,10 +7198,10 @@ class ProfileManagerTest(unittest.TestCase):
                         ],
                         name=mg3)
                     self.assertEqual(
-                        set(json.loads(lse["PreselectedDataSources"])),
+                        set(json.loads(lse["PreselectingDataSources"])),
                         set(aadss[mg3]))
                     self.assertEqual(
-                        set(json.loads(lse["InitDataSources"])),
+                        set(json.loads(lse["DataSourcePreselection"])),
                         set())
 
                     if j % 2:
@@ -7215,7 +7216,7 @@ class ProfileManagerTest(unittest.TestCase):
 
                         myacps = dict(acps[mg3])
                         for cp in myacps.keys():
-                            myacps[cp] = cp in cpgood
+                            myacps[cp] = True if cp in cpgood else None
                         self.myAssertDict(
                             json.loads(lse["ComponentPreselection"]),
                             myacps)

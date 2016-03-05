@@ -471,8 +471,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
     #------------------------------------------------------------------
     #    PreselectComponents:
     #
-    #    Description: checks existing controllers of pools for
-    #        PreselectedDataSources
+    #    Description: checks existing controllers of pools
     #
     #------------------------------------------------------------------
     def PreselectComponents(self):
