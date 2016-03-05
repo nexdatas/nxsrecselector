@@ -171,7 +171,7 @@ class DynamicComponent(object):
                 if dd["dtype"] in self.__npTn.keys() else 'NX_CHAR'
             self.__createField(
                 root, parent, field, nxtype, alias,
-                dd["name"], dd["shape"])
+                dd["name"], dd["shape"], dstype='CLIENT')
             if link:
                 self.__createLink(root, nxdata, path, field)
 
@@ -310,7 +310,7 @@ class DynamicComponent(object):
     @classmethod
     def __createField(cls, root, parent, fname, nxtype, sname,
                       record=None, shape=None, dsnode=None,
-                      strategy='STEP'):
+                      strategy='STEP', dstype=None):
         field = root.createElement("field")
         parent.appendChild(field)
         field.setAttribute("type", nxtype)
@@ -323,7 +323,12 @@ class DynamicComponent(object):
         if dsnode:
             dsource = root.importNode(dsnode, True)
         else:
-            (attr, device, host, port) = cls.__findDataSource(sname)
+            if dstype == 'CLIENT' and record:
+                device = None
+                attr = None
+            else:
+                (attr, device, host, port) = cls.__findDataSource(sname)
+                
             if device and attr:
                 dsource = root.createElement("datasource")
                 dsource.setAttribute("name", sname)

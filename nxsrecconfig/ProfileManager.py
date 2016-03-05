@@ -331,7 +331,15 @@ class ProfileManager(object):
         return changed
 
     def __clearChannels(self, dsg, hel):
-        channels = PoolUtils.getElementNames(self.__pools, 'ExpChannelList')
+        describer = Describer(self.__configServer, True)
+        ads = TangoUtils.command(self.__configServer, "availableDataSources")
+        dsres = describer.dataSources(ads, 'TANGO')[0]
+        tanogds = [str(dsr.name) for dsr in dsres.values()]
+
+        channels = set(
+            PoolUtils.getElementNames(self.__pools, 'ExpChannelList') or [])
+        channels.update(set(tangods))
+        
         for ch in channels:
             if ch in dsg.keys():
                 dsg[ch] = False
@@ -696,7 +704,7 @@ class ProfileManager(object):
         ctrlChannels = cnf['controllers'][ctrl]['units']['0'][
             u'channels']
         if fullname not in ctrlChannels.keys():
-            dsource = PoolUtils.getSource(fullname) or source.encode()
+            dsource = source.encode() or PoolUtils.getSource(fullname)
             if not dsource:
                 dsource = '%s/%s' % (fullname.encode(), 'Value')
             shp, dt, ut = TangoUtils.getShapeTypeUnit(dsource)
