@@ -328,7 +328,7 @@ class DynamicComponent(object):
                 attr = None
             else:
                 (attr, device, host, port) = cls.__findDataSource(sname)
-                
+
             if device and attr:
                 dsource = root.createElement("datasource")
                 dsource.setAttribute("name", sname)
