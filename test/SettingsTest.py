@@ -14836,22 +14836,38 @@ class SettingsTest(unittest.TestCase):
                     llhe = set()
                     for ds, vl in adss[mg1].items():
                         ladss[ds] = vl
+                        if ds in adss[mg2].keys():
+                            ladss[ds] = adss[mg2][ds]
+                        else:
+                            if ds.startswith("client"):
+                                ladss[ds] = adss[mg1][ds]
+                            else:   
+                                ladss[ds] = False
+                        if ds in llhe and ladss[ds] == False:
+                            llhe.remove(ds)
+                        print "LA1", ds, False
                     for nd in lhe2[mg1]:
-                        if nd not in self.smychsXX.keys():
+                        if nd not in self.smychsXX.keys( ) \
+                           and nd not in self.smydss.keys() \
+                           and nd not in self.smydss2.keys():
                             llhe.add(nd)
+                            print "ADC1", nd
 
                     for ds, vl in adss[mg2].items():
                         if vl:
                             if ds in self.smychs.keys() and \
                                     self.smychs[ds]:
                                 ladss[ds] = vl
+                                print "LA2", ds, vl
                                 if ds in lhe2[mg2]:
                                     llhe.add(ds)
+                                    print "ADC2", ds
                                 elif ds in llhe:
                                     llhe.remove(ds)
                             elif ds in self.smychsXX.keys() and \
                                     self.smychsXX[ds]:
                                 ladss[ds] = vl
+                                print "LA3", ds, vl
                                 if ds in lhe2[mg2]:
                                     llhe.add(ds)
                                 elif ds in llhe:
@@ -14859,6 +14875,7 @@ class SettingsTest(unittest.TestCase):
                             if ds not in self.smychs.keys() and \
                                     ds not in self.smychsXX.keys():
                                 ladss[ds] = vl
+                                print "LA4", ds, vl
                                 if ds in lhe2[mg2]:
                                     llhe.add(ds)
                                 elif ds in llhe:
@@ -14867,23 +14884,35 @@ class SettingsTest(unittest.TestCase):
                             if ds in self.smychsXX.keys() \
                                     and self.smychsXX[ds]:
                                 ladss[ds] = vl
+                                print "LA5", ds, vl
                                 if ds in lhe2[mg2]:
                                     llhe.add(ds)
                                 elif ds in llhe:
                                     llhe.remove(ds)
                             else:
-                                ladss[ds] = adss[mg1][ds]
+                                if ds in adss[mg2]:
+                                    ladss[ds] = adss[mg2][ds]
+                                else:
+                                    if ds.startswith("client"):
+                                        ladss[ds] = adss[mg1][ds]
+                                    else:   
+                                        ladss[ds] = False
+                                if ds in llhe and ladss[ds] == False:
+                                    llhe.remove(ds)
+                                print "LA6", ds, ladss[ds]
 
                     for tm in json.loads(mp[mg2]["Timer"]):
                         if tm in ladss:
                             if tm in llhe:
                                 ladss[tm] = False
+                                print "LA7", ds, False
                                 llhe.remove(tm)
                     for tm in json.loads(mp[mg1]["Timer"]):
                         if tm in ladss:
                             if tm in json.loads(
                                     mp[mg2]["UnplottedComponents"]):
                                 ladss[tm] = False
+                                print "LA8", ds, False
                                 if tm not in json.loads(mp[mg2]["Timer"]):
                                     if tm in llhe:
                                         llhe.remove(tm)
@@ -14892,6 +14921,9 @@ class SettingsTest(unittest.TestCase):
                     print "T2", json.loads(mp[mg2]["Timer"])
                     print "LT", json.loads(lmp["Timer"])
                     # ???
+                    print "LMP ADSS", lmp["DataSourceSelection"]
+                    print "LMP CP", lmp["ComponentSelection"]
+                    print "LADSS", ladss
                     self.myAssertDict(
                         json.loads(lmp["DataSourceSelection"]), ladss)
                     # ???
@@ -17806,8 +17838,10 @@ class SettingsTest(unittest.TestCase):
                 mycps = defbg + groupbg + fieldbg % (ar["name"], "NX_CHAR")
                 if i % 2:
                     sso = ar["source"].split("/")
-                    mycps += dstango % (
-                        ar["name"], "/".join(sso[:-1]), sso[-1])
+#                    mycps += dstango % (
+#                        ar["name"], "/".join(sso[:-1]), sso[-1])
+                    mycps += dsclient % (
+                        ar["name"], ar["full_name"])
                 else:
                     mycps += dsclient % (ar["name"], ar["full_name"])
                 mycps += fieldend + groupend + groupend

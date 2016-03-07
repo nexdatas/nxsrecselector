@@ -335,7 +335,6 @@ class ProfileManager(object):
         ads = TangoUtils.command(self.__configServer, "availableDataSources")
         dsres = describer.dataSources(ads, 'TANGO')[0]
         tangods = [str(dsr.name) for dsr in dsres.values()]
-
         channels = set(
             PoolUtils.getElementNames(self.__pools, 'ExpChannelList') or [])
         channels.update(set(tangods))
