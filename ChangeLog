@@ -1,4 +1,8 @@
 2016-03-07 Jan Kotanski <jankotan@gmail.com>
+	* potspone clean channels for tango devices
+	* tagged as v2.4.1
+
+2016-03-07 Jan Kotanski <jankotan@gmail.com>
 	* extend clean channels to tango devices
 	* use DataSource attribute only if needed
 	* tagged as v2.4.0

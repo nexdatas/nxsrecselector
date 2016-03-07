@@ -333,11 +333,11 @@ class ProfileManager(object):
     def __clearChannels(self, dsg, hel):
         describer = Describer(self.__configServer, True)
         ads = TangoUtils.command(self.__configServer, "availableDataSources")
-        dsres = describer.dataSources(ads, 'TANGO')[0]
-        tangods = [str(dsr.name) for dsr in dsres.values()]
+        #        dsres = describer.dataSources(ads, 'TANGO')[0]
+        #        tangods = [str(dsr.name) for dsr in dsres.values()]
         channels = set(
             PoolUtils.getElementNames(self.__pools, 'ExpChannelList') or [])
-        channels.update(set(tangods))
+        # channels.update(set(tangods))
 
         for ch in channels:
             if ch in dsg.keys():
