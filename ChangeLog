@@ -1,5 +1,7 @@
-2016-02-XX Jan Kotanski <jankotan@gmail.com>
-	* change bool selections into int selections
+2016-03-XX Jan Kotanski <jankotan@gmail.com>
+	* change bool selections into bool/None selections
+	* change InitDataSources to DataSourcePreselection
+	* add preselection dump into PreScansnapshot
 	* tagged as v3.0.0
 
 2016-02-25 Jan Kotanski <jankotan@gmail.com>
