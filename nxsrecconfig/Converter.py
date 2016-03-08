@@ -22,6 +22,7 @@
 
 import json
 
+
 ## virtual selection converter
 class ConverterXtoY(object):
 
@@ -45,7 +46,7 @@ class Converter2to3(ConverterXtoY):
 
         ## names to convert
         self.names = {
-            "PreselectedDataSources":"PreselectingDataSources",
+            "PreselectedDataSources": "PreselectingDataSources",
             "InitDataSources": "DataSourcePreselection",
         }
 
@@ -57,7 +58,6 @@ class Converter2to3(ConverterXtoY):
         elif isinstance(sel, (list, tuple)):
             return json.dumps(dict((key, True) for key in sel))
 
-
     def convert(self, selection):
         super(Converter2to3, self).convert(selection)
 
@@ -68,6 +68,7 @@ class Converter2to3(ConverterXtoY):
             selection["DataSourcePreselection"] = self.seltoint(
                 selection["DataSourcePreselection"])
 
+
 ## Selection converter from 3 to 2
 class Converter3to2(ConverterXtoY):
 
@@ -76,8 +77,8 @@ class Converter3to2(ConverterXtoY):
 
         ## names to convert
         self.names = {
-            "PreselectingDataSources":"PreselectedDataSources",
-            "DataSourcePreselection":"InitDataSources",
+            "PreselectingDataSources": "PreselectedDataSources",
+            "DataSourcePreselection": "InitDataSources",
         }
 
     def seltobool(self, jselection):
@@ -89,7 +90,6 @@ class Converter3to2(ConverterXtoY):
         sel = json.loads(jselection)
         return json.dumps([key for key, vl in sel.items() if vl])
 
-
     def convert(self, selection):
         super(Converter3to2, self).convert(selection)
         if 'ComponentPreselection' in selection.keys():
@@ -98,6 +98,7 @@ class Converter3to2(ConverterXtoY):
         if 'InitDataSources' in selection.keys():
             selection['InitDataSources'] = self.seltolist(
                 selection['InitDataSources'])
+
 
 ## Selection converter from 1 to 2
 class Converter1to2(ConverterXtoY):

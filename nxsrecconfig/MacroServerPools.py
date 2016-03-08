@@ -99,8 +99,8 @@ class MacroServerPools(object):
         return self.__pools
 
     @classmethod
-    def __toCheck(cls, configdevice, discomponentgroup, components, datasources,
-                  channels, nonexisting):
+    def __toCheck(cls, configdevice, discomponentgroup, components,
+                  datasources, channels, nonexisting):
         describer = Describer(configdevice, True)
         availablecomponents = TangoUtils.command(
             configdevice, "availableComponents")
@@ -119,12 +119,10 @@ class MacroServerPools(object):
                                       discomponentgroup, channels, describer)
 
         for ads in datasources:
-            cls.__createCheckItem(ads, {ads:None}, toCheck, nonexisting,
+            cls.__createCheckItem(ads, {ads: None}, toCheck, nonexisting,
                                   discomponentgroup, channels, describer)
 
         return toCheck.values()
-
-
 
     @classmethod
     def __createCheckItem(cls, name, dss, toCheck, nonexisting,
@@ -220,7 +218,6 @@ class MacroServerPools(object):
             else:
                 if group[acp] is not False:
                     group[acp] = True
-
 
     ## imports Environment Data
     # \param door door device

@@ -508,8 +508,8 @@ class ProfileManager(object):
                                 dsg[str(ds)] = True
                                 if not ndcp and str(ds) in dontdisplay:
                                     dontdisplay.remove(str(ds))
-                            elif param[0] in ['FINAL', 'INIT'] \
-                               and param[1] in ['TANGO']:
+                            elif param[0] in ['FINAL', 'INIT'] and \
+                                    param[1] in ['TANGO']:
                                 initsources[str(ds)] = \
                                     TangoUtils.getFullAttrName(param[2])
 
