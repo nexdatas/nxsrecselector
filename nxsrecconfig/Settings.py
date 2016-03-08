@@ -665,6 +665,7 @@ class Settings(object):
     def resetPreselectedComponents(self):
         self.__selector.resetPreselectedComponents(
             self.defaultPreselectedComponents)
+        self.__selector["DataSourcePreselection"] = '{}'
         self.preselectComponents()
         self.storeProfile()
 
