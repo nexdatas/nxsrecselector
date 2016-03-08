@@ -717,7 +717,7 @@ class ProfileManager(object):
         ctrlChannels = cnf['controllers'][ctrl]['units']['0'][
             u'channels']
         if fullname not in ctrlChannels.keys():
-            dsource = PoolUtils.getSource(fullname) or source.encode()
+            dsource = source.encode() or PoolUtils.getSource(fullname)
             if not dsource:
                 dsource = '%s/%s' % (fullname.encode(), 'Value')
             shp, dt, ut = TangoUtils.getShapeTypeUnit(dsource)

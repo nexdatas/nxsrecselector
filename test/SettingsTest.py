@@ -18641,8 +18641,9 @@ class SettingsTest(unittest.TestCase):
                 mycps = defbg + groupbg + fieldbg % (ar["name"], "NX_CHAR")
                 if i % 2:
                     sso = ar["source"].split("/")
-                    mycps += dstango % (
-                        ar["name"], "/".join(sso[:-1]), sso[-1])
+#                    mycps += dstango % (
+#                        ar["name"], "/".join(sso[:-1]), sso[-1])
+                    mycps += dsclient % (ar["name"], ar["full_name"])
                 else:
                     mycps += dsclient % (ar["name"], ar["full_name"])
                 mycps += fieldend + groupend + groupend
