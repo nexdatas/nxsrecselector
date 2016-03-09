@@ -34,6 +34,16 @@ from .Selector import Selector
 from .MacroServerPools import MacroServerPools
 from . import Streams
 
+import  cProfile, pstats, io
+
+prf = cProfile.Profile()
+pru = cProfile.Profile()
+pri = cProfile.Profile()
+pra = cProfile.Profile()
+prc = cProfile.Profile()
+prm = cProfile.Profile()
+
+
 
 ## NeXus Sardana Recorder settings
 class Settings(object):
@@ -243,7 +253,11 @@ class Settings(object):
     ## get method for configuration attribute
     # \returns configuration
     def __getProfileConfiguration(self):
-        return json.dumps(self.__selector.get())
+#        return json.dumps(self.__selector.get())
+        prc.enable()
+        res = json.dumps(self.__selector.get())
+        prc.disable()
+        return res
 
     ## the json data string
     profileConfiguration = property(
@@ -378,7 +392,10 @@ class Settings(object):
     ## get method for mntGrp attribute
     # \returns name of mntGrp
     def __getMntGrp(self):
-        return self.__selector["MntGrp"]
+        prm.enable()
+        res = self.__selector["MntGrp"]
+        prm.disable()
+        return res
 
     ## set method for mntGrp attribute
     # \param name of mntGrp
@@ -567,7 +584,9 @@ class Settings(object):
     ## available selections
     # \returns list of available selections
     def availableProfiles(self):
+        pra.enable()
         ac = self.__configCommand("availableSelections") or []
+        pra.disable()
         return ac
 
     ## available datasources
@@ -593,7 +612,11 @@ class Settings(object):
 
     ## fetch configuration
     def fetchProfile(self):
+        prf.enable()
         self.__profileManager.fetchProfile()
+        prf.disable()
+        
+        
 
     ## loads configuration
     def loadProfile(self):
@@ -700,7 +723,29 @@ class Settings(object):
     ## set active measurement group from components
     # \returns string with mntgrp configuration
     def updateMntGrp(self):
-        return self.__profileManager.updateProfile()
+#        return self.__profileManager.updateProfile()
+        pru.enable()
+        res = self.__profileManager.updateProfile()
+        pru.disable()
+        s = io.open("/tmp/profNRS_fetch.log",mode='wb')
+        ps = pstats.Stats(prf, stream=s)
+        ps.print_stats()
+        s = io.open("/tmp/profNRS_update.log",mode='wb')
+        ps = pstats.Stats(pru, stream=s)
+        ps.print_stats()
+        s = io.open("/tmp/profNRS_import.log",mode='wb')
+        ps = pstats.Stats(pri, stream=s)
+        ps.print_stats()
+        s = io.open("/tmp/profNRS_availableProf.log",mode='wb')
+        ps = pstats.Stats(pra, stream=s)
+        ps.print_stats()
+        s = io.open("/tmp/profNRS_profileConfiguration.log",mode='wb')
+        ps = pstats.Stats(prc, stream=s)
+        ps.print_stats()
+        s = io.open("/tmp/profNRS_mntgrp.log",mode='wb')
+        ps = pstats.Stats(prm, stream=s)
+        ps.print_stats()
+        return res
 
     ## switch to active measurement
     def switchProfile(self, toActive=True):
@@ -708,7 +753,9 @@ class Settings(object):
 
     ## import setting from active measurement
     def importMntGrp(self):
+        pri.enable()
         self.__profileManager.importMntGrp()
+        pri.disable()
 
     ## available mntgrps
     # \returns list of available measurement groups
