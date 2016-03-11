@@ -193,6 +193,7 @@ class ProfileManager(object):
         self.__selector.storeSelection()
         dpmg = TangoUtils.openProxy(mntgrp)
         dpmg.Configuration = conf
+        self.__selector["MntGrpConfiguration"] = conf
         return str(dpmg.Configuration)
 
     ## switchProfile to active measurement

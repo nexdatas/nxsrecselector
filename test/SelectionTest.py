@@ -85,6 +85,7 @@ class SelectionTest(unittest.TestCase):
             ("WriterDevice", ''),
             ("Door", ''),
             ("MntGrp", ''),
+            ("MntGrpConfiguration", ''),
             ("Version", self.__version)
         ]
         self.__dump = {}
@@ -166,16 +167,21 @@ class SelectionTest(unittest.TestCase):
 
             cps = {}
             dss = {}
+            pdss = {}
             lcp = self.__rnd.randint(1, 40)
             lds = self.__rnd.randint(1, 40)
+            lds2 = self.__rnd.randint(1, 40)
             for i in range(lcp):
                 cps[self.getRandomName(10)] = bool(self.__rnd.randint(0, 1))
             for i in range(lds):
                 dss[self.getRandomName(10)] = bool(self.__rnd.randint(0, 1))
+            for i in range(lds2):
+                pdss[self.getRandomName(10)] = bool(self.__rnd.randint(0, 1))
             el["ComponentSelection"] = json.dumps(cps)
             el["DataSourceSelection"] = json.dumps(dss)
-            el["DataSourcePreselection"] = json.dumps(
+            el["UnplottedComponents"] = json.dumps(
                 self.__rnd.sample(dss, self.__rnd.randint(1, len(dss))))
+            el["DataSourcePreselection"] = json.dumps(pdss)
             self.dump(el)
 
             el.deselect()
@@ -183,6 +189,7 @@ class SelectionTest(unittest.TestCase):
             ncps = json.loads(el["ComponentSelection"])
             ndss = json.loads(el["DataSourceSelection"])
 
+            self.assertEqual(el["UnplottedComponents"], '[]')
             self.assertEqual(el["DataSourcePreselection"], '{}')
             self.assertEqual(len(cps), len(ncps))
             self.assertEqual(len(dss), len(ndss))
@@ -195,7 +202,8 @@ class SelectionTest(unittest.TestCase):
 
             self.compareToDump(el, ["ComponentSelection",
                                     "DataSourceSelection",
-                                    "DataSourcePreselection"])
+                                    "DataSourcePreselection",
+                                    "UnplottedComponents"])
 
     ## updatePreselectingDataSources test
     def test_updatePreselectingDataSources(self):

@@ -193,6 +193,7 @@ class SettingsTest(unittest.TestCase):
             ("WriterDevice", ''),
             ("Door", ''),
             ("MntGrp", ''),
+            ("MntGrpConfiguration", ''),
             ("Version", self.version)
 
         ]
@@ -2774,7 +2775,7 @@ class SettingsTest(unittest.TestCase):
                 self.assertEqual(set(json.loads(sed[key])), set(poolchannels))
             else:
                 self.assertEqual(sed[key], vl)
-                
+
     ## test
     # \brief It tests default settings
     def test_preselectComponents_withcf_cps_true(self):
@@ -2833,7 +2834,6 @@ class SettingsTest(unittest.TestCase):
                 self.assertEqual(set(json.loads(sed[key])), set(poolchannels))
             else:
                 self.assertEqual(sed[key], vl)
-                
 
     ## test
     # \brief It tests default settings
@@ -2940,6 +2940,7 @@ class SettingsTest(unittest.TestCase):
                 self.assertEqual(set(json.loads(sed[key])), set(poolchannels))
             else:
                 self.assertEqual(sed[key], vl)
+
     ## test
     # \brief It tests default settings
     def test_preselectComponents_withcf_nochnnel_false(self):
@@ -3000,6 +3001,7 @@ class SettingsTest(unittest.TestCase):
                 self.assertEqual(set(json.loads(sed[key])), set(poolchannels))
             else:
                 self.assertEqual(sed[key], vl)
+
     ## test
     # \brief It tests default settings
     def test_preselectComponents_withcf_nochnnel_true(self):
@@ -3085,7 +3087,6 @@ class SettingsTest(unittest.TestCase):
         poolchannels = []
         componentgroup = {"smycp": True}
         datasourcegroup = {"scalar_uchar": True}
-
 
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.smycps)])
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
@@ -3344,7 +3345,7 @@ class SettingsTest(unittest.TestCase):
             rs.preselectComponents()
             res = self.value(rs, "ComponentPreselection")
             resd = self.value(rs, "DataSourcePreselection")
-        
+
             self.myAssertDict(json.loads(res), {
                 "smycp": True, "smycp2": True, "smycp3": True,
                 "s2mycp": True, "s2mycp2": True, "s2mycp3": True})
@@ -3431,7 +3432,7 @@ class SettingsTest(unittest.TestCase):
             rs.preselectComponents()
             res = self.value(rs, "ComponentPreselection")
             resd = self.value(rs, "DataSourcePreselection")
-        
+
             self.myAssertDict(json.loads(res), {
                 "smycp": False, "smycp2": False, "smycp3": False,
                 "s2mycp": False, "s2mycp2": False, "s2mycp3": False})
@@ -3682,7 +3683,6 @@ class SettingsTest(unittest.TestCase):
             rs.preselectComponents()
             res = self.value(rs, "ComponentPreselection")
             resd = self.value(rs, "DataSourcePreselection")
-
 
             self.myAssertDict(json.loads(res), {
                 "smycp": False, "smycp2": True, "smycp3": True,
@@ -4678,6 +4678,7 @@ class SettingsTest(unittest.TestCase):
                     self.assertEqual(sed[key], vl)
         finally:
             simps2.tearDown()
+
     ## test
     # \brief It tests default settings
     def test_preselectComponents_2wds_notangodspool_error_false(self):
@@ -5185,7 +5186,7 @@ class SettingsTest(unittest.TestCase):
             self.myAssertDict(json.loads(res), {
                 "smycp": True, "smycp2": True, "smycp3": False,
                 "s2mycp": True, "s2mycp2": True, "s2mycp3": False,
-                "smycpnt1": True}) 
+                "smycpnt1": True})
             self.myAssertDict(json.loads(resd), {
                 "scalar_uchar": True, "scalar_string": True,
                 "scalar_ulong": False,
@@ -5217,7 +5218,6 @@ class SettingsTest(unittest.TestCase):
         finally:
             db.delete_device_alias(arr[0]["name"])
             simps2.tearDown()
-
 
     ## test
     # \brief It tests default settings
@@ -5294,7 +5294,7 @@ class SettingsTest(unittest.TestCase):
             self.myAssertDict(json.loads(res), {
                 "smycp": True, "smycp2": True, "smycp3": False,
                 "s2mycp": True, "s2mycp2": True, "s2mycp3": False,
-                "smycpnt1": False}) 
+                "smycpnt1": False})
             self.myAssertDict(json.loads(resd), {
                 "scalar_uchar": True, "scalar_string": True,
                 "scalar_ulong": False,
@@ -5404,7 +5404,7 @@ class SettingsTest(unittest.TestCase):
             self.myAssertDict(json.loads(res), {
                 "smycp": True, "smycp2": True, "smycp3": False,
                 "s2mycp": True, "s2mycp2": True, "s2mycp3": False,
-                "smycpnt1": None}) 
+                "smycpnt1": None})
             self.myAssertDict(json.loads(resd), {
                 "scalar_uchar": True, "scalar_string": True,
                 "scalar_ulong": False,
@@ -5986,7 +5986,6 @@ class SettingsTest(unittest.TestCase):
                 "smycp": False, "smycp2": True, "smycp3": None,
                 "s2mycp": False, "s2mycp2": True, "s2mycp3": None}
 
-
             cps = dict(self.smycps)
 #            cps.update(self.smycps2)
             dss = dict(self.smydss)
@@ -6153,7 +6152,8 @@ class SettingsTest(unittest.TestCase):
         print "VALUE"
         res = self.value(rs, "ComponentPreselection")
         res2 = self.value(rs, "DataSourcePreselection")
-        self.compareToDump(rs, ["ComponentPreselection", "DataSourcePreselection"])
+        self.compareToDump(
+            rs, ["ComponentPreselection", "DataSourcePreselection"])
         self.myAssertDict(json.loads(res), {"mycp": True})
         self.myAssertDict(json.loads(res2), {})
         self.assertEqual(channelerrors, [])
@@ -6220,12 +6220,14 @@ class SettingsTest(unittest.TestCase):
         sed2 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
         res = self.value(rs, "ComponentPreselection")
         res2 = self.value(rs, "DataSourcePreselection")
-        self.compareToDump(rs, ["ComponentPreselection", "DataSourcePreselection"])
+        self.compareToDump(
+            rs, ["ComponentPreselection", "DataSourcePreselection"])
         self.myAssertDict(json.loads(res), {"mycp": True})
         self.myAssertDict(json.loads(res2), {})
         self.assertEqual(channelerrors, [])
 
         self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
+
     ## test
     # \brief It tests default settings
     def test_resetPreselectedComponents_withcf_cps_false(self):
@@ -6266,7 +6268,8 @@ class SettingsTest(unittest.TestCase):
         sed2 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
         res = self.value(rs, "ComponentPreselection")
         res2 = self.value(rs, "DataSourcePreselection")
-        self.compareToDump(rs, ["ComponentPreselection", "DataSourcePreselection"])
+        self.compareToDump(
+            rs, ["ComponentPreselection", "DataSourcePreselection"])
         self.myAssertDict(json.loads(res), {"mycp": True})
         self.myAssertDict(json.loads(res2), {})
         self.assertEqual(channelerrors, [])
@@ -6358,7 +6361,8 @@ class SettingsTest(unittest.TestCase):
         sed1 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
         rs.resetPreselectedComponents()
         res = self.value(rs, "ComponentPreselection")
-        self.compareToDump(rs, ["ComponentPreselection", "DataSourcePreselection"])
+        self.compareToDump(
+            rs, ["ComponentPreselection", "DataSourcePreselection"])
         res2 = self.value(rs, "DataSourcePreselection")
 
         self.myAssertDict(json.loads(res), {"mycp": True})
@@ -6427,7 +6431,8 @@ class SettingsTest(unittest.TestCase):
         sed1 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
         rs.resetPreselectedComponents()
         res = self.value(rs, "ComponentPreselection")
-        self.compareToDump(rs, ["ComponentPreselection", "DataSourcePreselection"])
+        self.compareToDump(
+            rs, ["ComponentPreselection", "DataSourcePreselection"])
         res2 = self.value(rs, "DataSourcePreselection")
 
         self.myAssertDict(json.loads(res), {"mycp": True})
@@ -6496,7 +6501,8 @@ class SettingsTest(unittest.TestCase):
         sed1 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
         rs.resetPreselectedComponents()
         res = self.value(rs, "ComponentPreselection")
-        self.compareToDump(rs, ["ComponentPreselection", "DataSourcePreselection"])
+        self.compareToDump(
+            rs, ["ComponentPreselection", "DataSourcePreselection"])
         res2 = self.value(rs, "DataSourcePreselection")
 
         self.myAssertDict(json.loads(res), {"mycp": True})
@@ -6566,9 +6572,11 @@ class SettingsTest(unittest.TestCase):
         sed2 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
         res = self.value(rs, "ComponentPreselection")
         res2 = self.value(rs, "DataSourcePreselection")
-        self.compareToDump(rs, ["ComponentPreselection", "DataSourcePreselection"])
+        self.compareToDump(
+            rs, ["ComponentPreselection", "DataSourcePreselection"])
 
-        self.compareToDump(rs, ["ComponentPreselection", "DataSourcePreselection"])
+        self.compareToDump(
+            rs, ["ComponentPreselection", "DataSourcePreselection"])
         self.myAssertDict(json.loads(res), {"smycp": True})
         self.myAssertDict(json.loads(res2), {})
         self.assertEqual(channelerrors, [])
@@ -6614,9 +6622,11 @@ class SettingsTest(unittest.TestCase):
         sed2 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
         res = self.value(rs, "ComponentPreselection")
         res2 = self.value(rs, "DataSourcePreselection")
-        self.compareToDump(rs, ["ComponentPreselection", "DataSourcePreselection"])
+        self.compareToDump(
+            rs, ["ComponentPreselection", "DataSourcePreselection"])
 
-        self.compareToDump(rs, ["ComponentPreselection", "DataSourcePreselection"])
+        self.compareToDump(
+            rs, ["ComponentPreselection", "DataSourcePreselection"])
         self.myAssertDict(json.loads(res), {"smycp": True})
         self.myAssertDict(json.loads(res2), {})
         self.assertEqual(channelerrors, [])
@@ -6662,9 +6672,8 @@ class SettingsTest(unittest.TestCase):
         sed2 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
         res = self.value(rs, "ComponentPreselection")
         res2 = self.value(rs, "DataSourcePreselection")
-        self.compareToDump(rs, ["ComponentPreselection", "DataSourcePreselection"])
-
-        self.compareToDump(rs, ["ComponentPreselection", "DataSourcePreselection"])
+        self.compareToDump(
+            rs, ["ComponentPreselection", "DataSourcePreselection"])
         self.myAssertDict(json.loads(res), {"smycp": True})
         self.myAssertDict(json.loads(res2), {})
         self.assertEqual(channelerrors, [])
@@ -6712,7 +6721,8 @@ class SettingsTest(unittest.TestCase):
         rs.resetPreselectedComponents()
         res = self.value(rs, "ComponentPreselection")
         resd = self.value(rs, "DataSourcePreselection")
-        self.compareToDump(rs, ["ComponentPreselection", "DataSourcePreselection"])
+        self.compareToDump(
+            rs, ["ComponentPreselection", "DataSourcePreselection"])
         self.myAssertDict(json.loads(resd), {})
 
         self.myAssertDict(json.loads(res), {
@@ -6800,7 +6810,8 @@ class SettingsTest(unittest.TestCase):
             rs.resetPreselectedComponents()
             res = self.value(rs, "ComponentPreselection")
             resd = self.value(rs, "DataSourcePreselection")
-            self.compareToDump(rs, ["ComponentPreselection", "DataSourcePreselection"])
+            self.compareToDump(
+                rs, ["ComponentPreselection", "DataSourcePreselection"])
             self.myAssertDict(json.loads(resd), {})
 
             self.myAssertDict(json.loads(res), {
@@ -6892,7 +6903,8 @@ class SettingsTest(unittest.TestCase):
             rs.resetPreselectedComponents()
             res = self.value(rs, "ComponentPreselection")
             resd = self.value(rs, "DataSourcePreselection")
-            self.compareToDump(rs, ["ComponentPreselection", "DataSourcePreselection"])
+            self.compareToDump(
+                rs, ["ComponentPreselection", "DataSourcePreselection"])
             self.myAssertDict(json.loads(resd), {})
 
             self.myAssertDict(json.loads(res), {
@@ -6974,7 +6986,8 @@ class SettingsTest(unittest.TestCase):
         rs.resetPreselectedComponents()
         res = self.value(rs, "ComponentPreselection")
         resd = self.value(rs, "DataSourcePreselection")
-        self.compareToDump(rs, ["ComponentPreselection", "DataSourcePreselection"])
+        self.compareToDump(
+            rs, ["ComponentPreselection", "DataSourcePreselection"])
         self.myAssertDict(json.loads(resd), {})
 
         self.myAssertDict(json.loads(res), {
@@ -7062,7 +7075,8 @@ class SettingsTest(unittest.TestCase):
             rs.resetPreselectedComponents()
             res = self.value(rs, "ComponentPreselection")
             resd = self.value(rs, "DataSourcePreselection")
-            self.compareToDump(rs, ["ComponentPreselection", "DataSourcePreselection"])
+            self.compareToDump(
+                rs, ["ComponentPreselection", "DataSourcePreselection"])
             self.myAssertDict(json.loads(resd), {})
 
             self.myAssertDict(json.loads(res), {
@@ -7151,7 +7165,8 @@ class SettingsTest(unittest.TestCase):
             rs.resetPreselectedComponents()
             res = self.value(rs, "ComponentPreselection")
             resd = self.value(rs, "DataSourcePreselection")
-            self.compareToDump(rs, ["ComponentPreselection", "DataSourcePreselection"])
+            self.compareToDump(
+                rs, ["ComponentPreselection", "DataSourcePreselection"])
             self.myAssertDict(json.loads(resd), {})
 
             print res
@@ -7243,7 +7258,8 @@ class SettingsTest(unittest.TestCase):
             rs.resetPreselectedComponents()
             res = self.value(rs, "ComponentPreselection")
             resd = self.value(rs, "DataSourcePreselection")
-            self.compareToDump(rs, ["ComponentPreselection", "DataSourcePreselection"])
+            self.compareToDump(
+                rs, ["ComponentPreselection", "DataSourcePreselection"])
             self.myAssertDict(json.loads(resd), {})
 
             self.myAssertDict(json.loads(res), {
@@ -7337,7 +7353,8 @@ class SettingsTest(unittest.TestCase):
             rs.resetPreselectedComponents()
             res = self.value(rs, "ComponentPreselection")
             resd = self.value(rs, "DataSourcePreselection")
-            self.compareToDump(rs, ["ComponentPreselection", "DataSourcePreselection"])
+            self.compareToDump(
+                rs, ["ComponentPreselection", "DataSourcePreselection"])
             self.myAssertDict(json.loads(resd), {})
 
             self.myAssertDict(json.loads(res), {
@@ -7431,7 +7448,8 @@ class SettingsTest(unittest.TestCase):
             rs.resetPreselectedComponents()
             res = self.value(rs, "ComponentPreselection")
             resd = self.value(rs, "DataSourcePreselection")
-            self.compareToDump(rs, ["ComponentPreselection", "DataSourcePreselection"])
+            self.compareToDump(
+                rs, ["ComponentPreselection", "DataSourcePreselection"])
             self.myAssertDict(json.loads(resd), {})
 
             self.myAssertDict(json.loads(res), {
@@ -7525,7 +7543,8 @@ class SettingsTest(unittest.TestCase):
             rs.resetPreselectedComponents()
             res = self.value(rs, "ComponentPreselection")
             resd = self.value(rs, "DataSourcePreselection")
-            self.compareToDump(rs, ["ComponentPreselection", "DataSourcePreselection"])
+            self.compareToDump(
+                rs, ["ComponentPreselection", "DataSourcePreselection"])
             self.myAssertDict(json.loads(resd), {})
 
             self.myAssertDict(json.loads(res), {
@@ -7617,7 +7636,8 @@ class SettingsTest(unittest.TestCase):
             rs.resetPreselectedComponents()
             res = self.value(rs, "ComponentPreselection")
             resd = self.value(rs, "DataSourcePreselection")
-            self.compareToDump(rs, ["ComponentPreselection", "DataSourcePreselection"])
+            self.compareToDump(
+                rs, ["ComponentPreselection", "DataSourcePreselection"])
             self.myAssertDict(json.loads(resd), {})
 
             self.myAssertDict(json.loads(res), {
@@ -7709,7 +7729,8 @@ class SettingsTest(unittest.TestCase):
             rs.resetPreselectedComponents()
             res = self.value(rs, "ComponentPreselection")
             resd = self.value(rs, "DataSourcePreselection")
-            self.compareToDump(rs, ["ComponentPreselection", "DataSourcePreselection"])
+            self.compareToDump(
+                rs, ["ComponentPreselection", "DataSourcePreselection"])
             self.myAssertDict(json.loads(resd), {})
 
             self.myAssertDict(json.loads(res), {
@@ -7744,6 +7765,7 @@ class SettingsTest(unittest.TestCase):
                     self.assertEqual(sed1[key], vl)
         finally:
             simps2.tearDown()
+
     ## test
     # \brief It tests default settings
     def test_resetPreselectedComponents_2wds_notangodsnopool2_false(self):
@@ -7800,7 +7822,8 @@ class SettingsTest(unittest.TestCase):
             rs.resetPreselectedComponents()
             res = self.value(rs, "ComponentPreselection")
             resd = self.value(rs, "DataSourcePreselection")
-            self.compareToDump(rs, ["ComponentPreselection", "DataSourcePreselection"])
+            self.compareToDump(
+                rs, ["ComponentPreselection", "DataSourcePreselection"])
             self.myAssertDict(json.loads(resd), {})
 
             self.myAssertDict(json.loads(res), {
@@ -7907,7 +7930,8 @@ class SettingsTest(unittest.TestCase):
             rs.resetPreselectedComponents()
             res = self.value(rs, "ComponentPreselection")
             resd = self.value(rs, "DataSourcePreselection")
-            self.compareToDump(rs, ["ComponentPreselection", "DataSourcePreselection"])
+            self.compareToDump(
+                rs, ["ComponentPreselection", "DataSourcePreselection"])
             self.myAssertDict(json.loads(resd), {})
 
             self.myAssertDict(json.loads(res), {
@@ -9362,9 +9386,6 @@ class SettingsTest(unittest.TestCase):
         dd = rs.mutedChannels()
         self.assertEqual(set(dd), set(lst))
 
-
-
-
     ## test
     # \brief It tests default settings
     def test_mutedChannels_pool1_bl(self):
@@ -9518,8 +9539,6 @@ class SettingsTest(unittest.TestCase):
 
         dd = rs.mutedChannels()
         self.assertEqual(set(dd), set(lst))
-
-
 
     ## test
     # \brief It tests default settings
@@ -16969,13 +16988,25 @@ class SettingsTest(unittest.TestCase):
                         set(json.loads(mp[mg2]["UnplottedComponents"])),
                         set(lhe2[mg2]))
 
+                    compds = rs[mg1].componentDataSources()
+
+                    tangods = [ds for ds in
+                               set(self.smychs.keys())
+                               | set(self.smychsXX.keys())
+                               if (not ds.startswith("client")
+                                   and ds not in compds)]
+
                     ladss = {}
                     llhe = set()
                     for ds, vl in adss[mg1].items():
-                        ladss[ds] = vl
+                        if ds in tangods:
+                            ladss[ds] = False
+                        else:
+                            ladss[ds] = vl
                     for nd in lhe2[mg1]:
                         if nd not in self.smychsXX.keys():
-                            llhe.add(nd)
+                            if nd not in tangods:
+                                llhe.add(nd)
 
                     for ds, vl in adss[mg2].items():
                         if vl:
@@ -17009,7 +17040,10 @@ class SettingsTest(unittest.TestCase):
                                 elif ds in llhe:
                                     llhe.remove(ds)
                             else:
-                                ladss[ds] = adss[mg1][ds]
+                                if ds not in tangods:
+                                    ladss[ds] = adss[mg1][ds]
+                                else:
+                                    ladss[ds] = False
 
                     for tm in json.loads(mp[mg2]["Timer"]):
                         if tm in ladss:
@@ -17028,10 +17062,9 @@ class SettingsTest(unittest.TestCase):
                     print "T1", json.loads(mp[mg1]["Timer"])
                     print "T2", json.loads(mp[mg2]["Timer"])
                     print "LT", json.loads(lmp["Timer"])
-                    # ???
                     self.myAssertDict(
                         json.loads(lmp["DataSourceSelection"]), ladss)
-                    # ???
+
                     self.assertEqual(
                         set(json.loads(lmp["UnplottedComponents"])),
                         set(llhe))
@@ -17199,9 +17232,11 @@ class SettingsTest(unittest.TestCase):
                     for ds in self.smychsXX.keys():
                         if ds in expch:
                             mydsg[ds] = False
+                    cpdss = rs[mg3].componentDataSources()
                     mylhe2 = set(mylhe)
-                    for ds in self.smychsXX.keys():
-                        if ds in mylhe2:
+                    for ds in list(mylhe2):
+                        if ds in self.smychsXX.keys() or (
+                                ds in self.smychs.keys() and ds not in cpdss):
                             mylhe2.remove(ds)
 
                     self.myAssertDict(json.loads(lmp["DataSourceSelection"]),
@@ -17516,7 +17551,8 @@ class SettingsTest(unittest.TestCase):
                     llhe = set()
 
                     for ds in json.loads(mp[mg3]["UnplottedComponents"]):
-                        if ds not in self.smychsXX.keys():
+                        if ds not in self.smychsXX.keys() \
+                           and ds in self.smychs.keys() and ds in cpdss:
                             llhe.add(ds)
 
                     for ds in ladss.keys():
@@ -17540,8 +17576,7 @@ class SettingsTest(unittest.TestCase):
                     for ds in self.smychs.keys():
                         if ds in llhe:
                             if ds in lhe2[mg3] and ds not in lhe2[mg4]:
-                                if ds in ladss and ladss[ds]:
-                                    llhe.remove(ds)
+                                llhe.remove(ds)
 
                     self.myAssertDict(json.loads(lmp["DataSourceSelection"]),
                                       ladss)

@@ -186,6 +186,7 @@ class DynamicComponentTest(unittest.TestCase):
             ("ConfigDevice", ''),
             ("WriterDevice", ''),
             ("Door", ''),
+            ("MntGrpConfiguration", ''),
             ("MntGrp", '')
         ]
 

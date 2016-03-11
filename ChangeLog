@@ -2,6 +2,7 @@
 	* change bool selections into bool/None selections
 	* change InitDataSources to DataSourcePreselection
 	* add preselection dump into PreScansnapshot
+	* improve component deselect method
 	* tagged as v3.0.0
 
 2016-02-25 Jan Kotanski <jankotan@gmail.com>

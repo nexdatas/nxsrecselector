@@ -155,6 +155,7 @@ class SelectorTest(unittest.TestCase):
             ("WriterDevice", ''),
             ("Door", ''),
             ("MntGrp", ''),
+            ("MntGrpConfiguration", ''),
             ("Version", self.__version)
 
         ]
@@ -3421,6 +3422,9 @@ class SelectorTest(unittest.TestCase):
             self.compareToDump(se, ["UnplottedComponents"])
             ndss = json.loads(se["UnplottedComponents"])
             self.assertEqual(ndss, cps)
+            se.deselect()
+            ndss = json.loads(se["UnplottedComponents"])
+            self.assertEqual(ndss, [])
 
     ## DefaultDynamicPath test
     def test_DefaultDynamicPath(self):
@@ -3886,7 +3890,7 @@ class SelectorTest(unittest.TestCase):
 
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
-        
+
         se["PreselectingDataSources"] = json.dumps(poolchannels)
         se["ComponentPreselection"] = json.dumps(componentgroup)
         se["DataSourcePreselection"] = json.dumps(datasourcegroup)
@@ -3908,7 +3912,8 @@ class SelectorTest(unittest.TestCase):
              "StoreSelection"])
         self.assertEqual(
             json.loads(self._cf.dp.GetCommandVariable("VARS")),
-            [None, None, None, ['mycp'], ['ann5'], ['ann2'], None, val["MntGrp"]])
+            [None, None, None, ['mycp'], ['ann5'], ['ann2'],
+             None, val["MntGrp"]])
 
         self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
         sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
@@ -4013,11 +4018,10 @@ class SelectorTest(unittest.TestCase):
             ["AvailableComponents", "AvailableDataSources",
              "AvailableComponents", "Components",
              "DataSources",
-             "DataSources",
-         ])
+             "DataSources"])
         self.assertEqual(
             json.loads(self._cf.dp.GetCommandVariable("VARS")),
-            [None, None, None, ['mycp'],['ann5'], ['ann2']])
+            [None, None, None, ['mycp'], ['ann5'], ['ann2']])
 
         self.assertTrue(val["MntGrp"] not in self._cf.dp.availableSelections())
 
@@ -4108,7 +4112,8 @@ class SelectorTest(unittest.TestCase):
              "AvailableDataSources",
              "StoreSelection"])
         self.assertEqual(json.loads(self._cf.dp.GetCommandVariable("VARS")),
-                         [None, None, None, ['mycp'], [u'ann2'], None, val["MntGrp"]])
+                         [None, None, None, ['mycp'], [u'ann2'],
+                          None, val["MntGrp"]])
         self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
         sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
         print sed
@@ -4167,8 +4172,7 @@ class SelectorTest(unittest.TestCase):
             json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
             ["AvailableComponents", "AvailableDataSources",
              "AvailableComponents", "Components",
-             "DataSources"
-         ])
+             "DataSources"])
         self.assertEqual(json.loads(self._cf.dp.GetCommandVariable("VARS")),
                          [None, None, None, ['mycp'], ['ann3']])
         self.assertTrue(val["MntGrp"] not in self._cf.dp.availableSelections())
@@ -4212,8 +4216,7 @@ class SelectorTest(unittest.TestCase):
             json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
             ["AvailableComponents", "AvailableDataSources",
              "AvailableComponents", "Components",
-             "DataSources"
-         ])
+             "DataSources"])
         self.assertEqual(json.loads(self._cf.dp.GetCommandVariable("VARS")),
                          [None, None, None, ['mycp'], ['ann3']])
         self.assertTrue(val["MntGrp"] not in self._cf.dp.availableSelections())
@@ -4249,7 +4252,7 @@ class SelectorTest(unittest.TestCase):
         self.myAssertDict(json.loads(res), {"smycp": True})
         res2 = se["DataSourcePreselection"]
         self.myAssertDict(json.loads(res2), {"scalar_uchar": True})
-        
+
         self.assertEqual(channelerrors, [])
 
         print self._cf.dp.GetCommandVariable("COMMANDS")
@@ -4379,8 +4382,7 @@ class SelectorTest(unittest.TestCase):
                           [u'scalar_short'],
                           [u'scalar_long'],
                           [u'scalar_short'],
-                          [u'scalar_uchar']
-                      ])
+                          [u'scalar_uchar']])
         self.assertTrue(val["MntGrp"] not in self._cf.dp.availableSelections())
 
     ## test
@@ -4457,7 +4459,6 @@ class SelectorTest(unittest.TestCase):
                                  set(poolchannels))
             else:
                 self.assertEqual(sed[key], vl)
-
 
     ## test
     # \brief It tests default settings
@@ -4561,7 +4562,6 @@ class SelectorTest(unittest.TestCase):
                     self.assertEqual(sed[key], vl)
         finally:
             simps2.tearDown()
-
 
     ## test
     # \brief It tests default settings
@@ -5319,7 +5319,6 @@ class SelectorTest(unittest.TestCase):
                 "scalar2_ulong": False,
             }
 
-
             cps = dict(self.smycps)
             cps.update(self.smycps2)
             dss = dict(self.smydss)
@@ -5377,7 +5376,6 @@ class SelectorTest(unittest.TestCase):
                     self.assertEqual(sed[key], vl)
         finally:
             simps2.tearDown()
-
 
     ## test
     # \brief It tests default settings
@@ -5512,7 +5510,6 @@ class SelectorTest(unittest.TestCase):
                 "scalar2_uchar": True, "scalar2_string": None,
                 "scalar2_ulong": False,
             }
-
 
             cps = dict(self.smycps)
             cps.update(self.smycps2)
@@ -5726,12 +5723,9 @@ class SelectorTest(unittest.TestCase):
             dss = dict(self.smydss)
             dss.update(self.smydss2)
             dss.update(self.mydss)
-            
 
             self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
-    #        print "MDSS", self._cf.dp.availableDataSources()
-    #        print "XDSS", self._cf.dp.dataSources(["scalar_long"])
             msp.updateMacroServer(self._ms.door.keys()[0])
             pools = msp.getPools(self._ms.door.keys()[0])
             pools[0].AcqChannelList = [json.dumps(a) for a in arr]
@@ -5743,9 +5737,6 @@ class SelectorTest(unittest.TestCase):
             se.descErrors = []
             se.preselect()
             res = se["ComponentPreselection"]
-
-            print res
-    #        print channelerrors
 
             self.myAssertDict(json.loads(res), {
                 "smycp": False, "smycp2": True, "smycp3": True,
@@ -5784,7 +5775,6 @@ class SelectorTest(unittest.TestCase):
                     self.assertEqual(sed[key], vl)
         finally:
             simps2.tearDown()
-
 
     ## test
     # \brief It tests default settings
@@ -5832,7 +5822,6 @@ class SelectorTest(unittest.TestCase):
                 "scalar2_ulong": False,
             }
 
-
             cps = dict(self.smycps)
             cps.update(self.smycps2)
             dss = dict(self.smydss)
@@ -5841,8 +5830,6 @@ class SelectorTest(unittest.TestCase):
 
             self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
-    #        print "MDSS", self._cf.dp.availableDataSources()
-    #        print "XDSS", self._cf.dp.dataSources(["scalar_long"])
             msp.updateMacroServer(self._ms.door.keys()[0])
             pools = msp.getPools(self._ms.door.keys()[0])
             pools[0].AcqChannelList = [json.dumps(a) for a in arr]
@@ -6044,7 +6031,6 @@ class SelectorTest(unittest.TestCase):
                 "scalar2_ulong": False,
             }
 
-
             cps = dict(self.smycps)
             cps.update(self.smycps2)
             dss = dict(self.smydss)
@@ -6053,8 +6039,6 @@ class SelectorTest(unittest.TestCase):
 
             self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
-    #        print "MDSS", self._cf.dp.availableDataSources()
-    #        print "XDSS", self._cf.dp.dataSources(["scalar_long"])
             msp.updateMacroServer(self._ms.door.keys()[0])
             pools = msp.getPools(self._ms.door.keys()[0])
             pools[0].AcqChannelList = [json.dumps(a) for a in arr]
@@ -6064,7 +6048,7 @@ class SelectorTest(unittest.TestCase):
 
             se["PreselectingDataSources"] = json.dumps(poolchannels)
             se["ComponentPreselection"] = json.dumps(componentgroup)
-            se["DataSourcePreselection"] = json.dumps(datasourcegroup) 
+            se["DataSourcePreselection"] = json.dumps(datasourcegroup)
             se.descErrors = []
             se.preselect()
             res = se["ComponentPreselection"]

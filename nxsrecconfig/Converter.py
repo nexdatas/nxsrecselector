@@ -67,6 +67,8 @@ class Converter2to3(ConverterXtoY):
         if 'DataSourcesPreselection' in selection.keys():
             selection["DataSourcePreselection"] = self.seltoint(
                 selection["DataSourcePreselection"])
+        if 'MntGrpConfiguration' not in selection.keys():
+            selection['MntGrpConfiguration'] = ''
 
 
 ## Selection converter from 3 to 2
@@ -98,6 +100,8 @@ class Converter3to2(ConverterXtoY):
         if 'InitDataSources' in selection.keys():
             selection['InitDataSources'] = self.seltolist(
                 selection['InitDataSources'])
+        if 'MntGrpConfiguration' in selection.keys():
+            selection.pop('MntGrpConfiguration')
 
 
 ## Selection converter from 1 to 2

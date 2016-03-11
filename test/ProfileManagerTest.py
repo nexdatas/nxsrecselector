@@ -135,7 +135,7 @@ class ProfileManagerTest(unittest.TestCase):
         ## selection version
         self.__version = nxsrecconfig.__version__
         print self.__version
-        
+
         self._keys = [
             ("Timer", '[]'),
             ("OrderedChannels", '[]'),
@@ -158,6 +158,7 @@ class ProfileManagerTest(unittest.TestCase):
             ("ConfigDevice", ''),
             ("WriterDevice", ''),
             ("Door", ''),
+            ("MntGrpConfiguration", ''),
             ("MntGrp", ''),
             ("Version", self.__version)
 
@@ -6727,14 +6728,25 @@ class ProfileManagerTest(unittest.TestCase):
                         set(json.loads(se[mg2]["UnplottedComponents"])),
                         set(lhe2[mg2]))
 
+                    compds = mgt[mg1].componentDataSources()
+
+                    tangods = [ds for ds in
+                               set(self.smychs.keys())
+                               | set(self.smychsXX.keys())
+                               if (not ds.startswith("client")
+                                   and ds not in compds)]
+
                     ladss = {}
                     llhe = set()
                     for ds, vl in adss[mg1].items():
-                        ladss[ds] = vl
+                        if ds in tangods:
+                            ladss[ds] = False
+                        else:
+                            ladss[ds] = vl
                     for nd in lhe2[mg1]:
                         if nd not in self.smychsXX.keys():
-                            llhe.add(nd)
-
+                            if nd not in tangods:
+                                llhe.add(nd)
                     for ds, vl in adss[mg2].items():
                         if vl:
                             if ds in self.smychs.keys() and \
@@ -6767,7 +6779,10 @@ class ProfileManagerTest(unittest.TestCase):
                                 elif ds in llhe:
                                     llhe.remove(ds)
                             else:
-                                ladss[ds] = adss[mg1][ds]
+                                if ds not in tangods:
+                                    ladss[ds] = adss[mg1][ds]
+                                else:
+                                    ladss[ds] = False
 
                     for tm in json.loads(se[mg2]["Timer"]):
                         if tm in ladss:
@@ -6786,14 +6801,11 @@ class ProfileManagerTest(unittest.TestCase):
                     print "T1", json.loads(se[mg1]["Timer"])
                     print "T2", json.loads(se[mg2]["Timer"])
                     print "LT", json.loads(lse["Timer"])
-                    # ???
                     self.myAssertDict(
                         json.loads(lse["DataSourceSelection"]), ladss)
-                    # ???
                     self.assertEqual(
                         set(json.loads(lse["UnplottedComponents"])),
                         set(llhe))
-
                     # import mntgrp mg2 (with content mg1)
                     # after change in mntgrp device
 
@@ -6954,9 +6966,11 @@ class ProfileManagerTest(unittest.TestCase):
                     for ds in self.smychsXX.keys():
                         if ds in expch:
                             mydsg[ds] = False
+                    cpdss = mgt[mg3].componentDataSources()
                     mylhe2 = set(mylhe)
-                    for ds in self.smychsXX.keys():
-                        if ds in mylhe2:
+                    for ds in list(mylhe2):
+                        if ds in self.smychsXX.keys() or (
+                                ds in self.smychs.keys() and ds not in cpdss):
                             mylhe2.remove(ds)
 
                     self.myAssertDict(json.loads(lse["DataSourceSelection"]),
@@ -7160,7 +7174,7 @@ class ProfileManagerTest(unittest.TestCase):
                     self.assertEqual(set(json.loads(lse["Timer"])),
                                      set(ltimers[mg3]))
                     self.assertEqual(lse["MntGrp"], wmg)
-
+                    print "MYLHE", mylhe
                     ## fetch non-existing selection
                     self._cf.dp.deleteSelection(mg4)
                     lse["MntGrp"] = mg4
@@ -7265,10 +7279,12 @@ class ProfileManagerTest(unittest.TestCase):
 
                     llhe = set()
 
-                    for ds in json.loads(se[mg3]["UnplottedComponents"]):
-                        if ds not in self.smychsXX.keys():
-                            llhe.add(ds)
+                    cpdss = mgt[mg3].componentDataSources()
 
+                    for ds in json.loads(se[mg3]["UnplottedComponents"]):
+                        if ds not in self.smychsXX.keys() \
+                           and ds in self.smychs.keys() and ds in cpdss:
+                            llhe.add(ds)
                     for ds in ladss.keys():
                         if ds in lhe2[mg4]:
                             llhe.add(ds)
@@ -7290,15 +7306,13 @@ class ProfileManagerTest(unittest.TestCase):
                     for ds in self.smychs.keys():
                         if ds in llhe:
                             if ds in lhe2[mg3] and ds not in lhe2[mg4]:
-                                if ds in ladss and ladss[ds]:
-                                    llhe.remove(ds)
+                                llhe.remove(ds)
 
                     self.myAssertDict(json.loads(lse["DataSourceSelection"]),
                                       ladss)
 
-                    self.assertEqual(
-                        set(json.loads(lse["UnplottedComponents"])),
-                        llhe)
+                    mlhe = set(json.loads(lse["UnplottedComponents"]))
+                    self.assertEqual(mlhe, llhe)
 
                 finally:
                     for mg in mgt.keys():

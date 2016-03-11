@@ -91,6 +91,8 @@ class Selection(dict):
         self["MntGrp"] = ''
         ## version
         self["Version"] = self.__version
+        ## MntGrp configuration
+        self["MntGrpConfiguration"] = ''
 
     ## deselects components and datasources
     def deselect(self):
@@ -103,6 +105,7 @@ class Selection(dict):
         self["DataSourcePreselection"] = '{}'
         self["DataSourceSelection"] = json.dumps(ads)
         self["ComponentSelection"] = json.dumps(cps)
+        self["UnplottedComponents"] = '[]'
 
     ## update method for Preselected DataSources
     # \brief appends new datasources to Preselected DataSources
