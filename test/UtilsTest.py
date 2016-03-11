@@ -303,6 +303,31 @@ class UtilsTest(unittest.TestCase):
 
         self.myAssertDict(tTnp, TangoUtils.tTnp)
 
+    ## constructor test
+    # \brief It tests default settings
+    def test_getFullAttrName(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        db = PyTango.Database()
+        host, port = db.get_db_host(), db.get_db_port()
+        attrs = [
+            "sdfs/dasf/sdf",
+            "sdfs/dasf/sdf",
+            "sdfs/dasf/sdf",
+        ]
+
+        attrs2 = [
+            "sdfs:234/sdfs/dasf/sdf",
+            "sdfs.sdf.de:100/sdfs/dasf/sdf",
+            "sdfs.as.d:1234/dasf/sdf",
+        ]
+        for at in attrs2:
+            self.assertEqual(TangoUtils.getFullAttrName(at),
+                             "tango://%s" % at)
+        for at in attrs:
+            self.assertEqual(TangoUtils.getFullAttrName(at),
+                             "tango://%s:%s/%s" % (host, port, at))
+
     ## openProxy test
     # \brief It tests default settings
     def test_openProxy(self):
