@@ -64,7 +64,7 @@ class Converter2to3(ConverterXtoY):
         if 'ComponentPreselection' in selection.keys():
             selection["ComponentPreselection"] = self.seltoint(
                 selection["ComponentPreselection"])
-        if 'DataSourcesPreselection' in selection.keys():
+        if 'DataSourcePreselection' in selection.keys():
             selection["DataSourcePreselection"] = self.seltoint(
                 selection["DataSourcePreselection"])
         if 'MntGrpConfiguration' not in selection.keys():

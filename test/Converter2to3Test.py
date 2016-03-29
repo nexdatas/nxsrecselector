@@ -268,9 +268,17 @@ class Converter2to3Test(unittest.TestCase):
                     res[k] = vl
             res['MntGrpConfiguration'] = ''
             self.maxDiff = None
-            if 'InitDataSources' in mysel:
-                self.assertEqual(set(mysel['InitDataSources']),
-                                 set(json.dumps(mydsp)))
+            
+            if 'InitDataSources' in osel:
+                self.assertEqual(set(json.loads(osel['InitDataSources'])),
+                                 set(mydsp.keys()))
+            if 'DataSourcePreselection' in mysel:
+                dsp = json.loads(mysel['DataSourcePreselection'])
+                smdsp = mydsp
+                self.assertEqual(len(dsp), len(smdsp))
+                for ds in  smdsp:
+                    self.assertEqual(dsp[ds], True)
+                    
             self.myAssertJSONDict(mysel, res)
 
 
