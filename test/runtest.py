@@ -54,6 +54,8 @@ import ConverterTest
 import ConverterXtoYTest
 import Converter1to2Test
 import Converter2to1Test
+import Converter3to2Test
+import Converter2to3Test
 import StreamsTest
 
 #import TestServerSetUp
@@ -127,6 +129,12 @@ def main():
 
     suite.addTests(
         unittest.defaultTestLoader.loadTestsFromModule(Converter2to1Test))
+
+    suite.addTests(
+        unittest.defaultTestLoader.loadTestsFromModule(Converter3to2Test))
+
+    suite.addTests(
+        unittest.defaultTestLoader.loadTestsFromModule(Converter2to3Test))
 
     suite.addTests(
         unittest.defaultTestLoader.loadTestsFromModule(CheckerThreadTest))

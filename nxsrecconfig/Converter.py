@@ -38,6 +38,72 @@ class ConverterXtoY(object):
                 selection[new] = selection.pop(old)
 
 
+## Selection converter from 2 to 3
+class Converter2to3(ConverterXtoY):
+
+    def __init__(self):
+        super(Converter2to3, self).__init__()
+
+        ## names to convert
+        self.names = {
+            "PreselectedDataSources": "PreselectingDataSources",
+            "InitDataSources": "DataSourcePreselection",
+        }
+
+    def seltoint(self, jselection):
+        sel = json.loads(jselection)
+        if isinstance(sel, dict):
+            return json.dumps(
+                dict((key, True if vl else None) for key, vl in sel.items()))
+        elif isinstance(sel, (list, tuple)):
+            return json.dumps(dict((key, True) for key in sel))
+
+    def convert(self, selection):
+        super(Converter2to3, self).convert(selection)
+
+        if 'ComponentPreselection' in selection.keys():
+            selection["ComponentPreselection"] = self.seltoint(
+                selection["ComponentPreselection"])
+        if 'DataSourcesPreselection' in selection.keys():
+            selection["DataSourcePreselection"] = self.seltoint(
+                selection["DataSourcePreselection"])
+        if 'MntGrpConfiguration' not in selection.keys():
+            selection['MntGrpConfiguration'] = ''
+
+
+## Selection converter from 3 to 2
+class Converter3to2(ConverterXtoY):
+
+    def __init__(self):
+        super(Converter3to2, self).__init__()
+
+        ## names to convert
+        self.names = {
+            "PreselectingDataSources": "PreselectedDataSources",
+            "DataSourcePreselection": "InitDataSources",
+        }
+
+    def seltobool(self, jselection):
+        sel = json.loads(jselection)
+        return json.dumps(
+            dict((key, vl is not None) for key, vl in sel.items()))
+
+    def seltolist(self, jselection):
+        sel = json.loads(jselection)
+        return json.dumps([key for key, vl in sel.items() if vl])
+
+    def convert(self, selection):
+        super(Converter3to2, self).convert(selection)
+        if 'ComponentPreselection' in selection.keys():
+            selection["ComponentPreselection"] = self.seltobool(
+                selection["ComponentPreselection"])
+        if 'InitDataSources' in selection.keys():
+            selection['InitDataSources'] = self.seltolist(
+                selection['InitDataSources'])
+        if 'MntGrpConfiguration' in selection.keys():
+            selection.pop('MntGrpConfiguration')
+
+
 ## Selection converter from 1 to 2
 class Converter1to2(ConverterXtoY):
 
@@ -113,6 +179,7 @@ class Converter2to1(ConverterXtoY):
         if "Version" in selection:
             selection.pop("Version")
 
+
 ## Selection converter
 class Converter(object):
     """ selection converer """
@@ -127,8 +194,8 @@ class Converter(object):
         self.minorversion = int(sver[1])
         self.patchversion = int(sver[2])
 
-        self.up = [Converter1to2()]
-        self.down = [Converter2to1()]
+        self.up = [Converter1to2(), Converter2to3()]
+        self.down = [Converter3to2(), Converter2to1()]
 
     def allkeys(self, selection):
         lkeys = set()
