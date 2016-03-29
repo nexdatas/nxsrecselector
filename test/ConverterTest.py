@@ -159,8 +159,8 @@ class ConverterTest(unittest.TestCase):
             self.assertEqual(len(cv.up), 2)
             self.assertTrue(isinstance(cv.up[0], Converter1to2))
             self.assertTrue(isinstance(cv.up[1], Converter2to3))
-            self.assertTrue(isinstance(cv.down[0], Converter3to2))
-            self.assertTrue(isinstance(cv.down[1], Converter2to1))
+            self.assertTrue(isinstance(cv.down[1], Converter3to2))
+            self.assertTrue(isinstance(cv.down[0], Converter2to1))
 
     def test_version(self):
         fun = sys._getframe().f_code.co_name
