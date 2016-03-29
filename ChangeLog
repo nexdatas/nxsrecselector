@@ -1,3 +1,7 @@
+2016-03-29 Jan Kotanski <jankotan@gmail.com>
+	* add version converter 3to2
+	* tagged as v1.25.0
+
 2016-01-05 Jan Kotanski <jankotan@gmail.com>
 	* fix for version converter 2to1
 	* tagged as v1.24.1
