@@ -1888,7 +1888,7 @@ class SettingsTest(unittest.TestCase):
             self.assertEqual(rs.mntGrp, amntgrp)
         elif cf.availableSelections():
             self.assertEqual(rs.mntGrp, cf.availableSelections()[0])
-        else:
+        elif amntgrp:
             self.assertEqual('nxsmntgrp', amntgrp)
         self.assertEqual(set(self.names(rs)),
                          set([k[0] for k in self._keys]))
