@@ -1,5 +1,9 @@
+2016-03-29 Jan Kotanski <jankotan@gmail.com>
+	* add converter 3to2
+	* tagged as v2.5.0
+
 2016-03-07 Jan Kotanski <jankotan@gmail.com>
-	* potspone clean channels for tango devices
+	* postpone clean channels for tango devices
 	* tagged as v2.4.1
 
 2016-03-07 Jan Kotanski <jankotan@gmail.com>
