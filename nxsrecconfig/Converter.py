@@ -64,7 +64,7 @@ class Converter2to3(ConverterXtoY):
         if 'ComponentPreselection' in selection.keys():
             selection["ComponentPreselection"] = self.seltoint(
                 selection["ComponentPreselection"])
-        if 'DataSourcesPreselection' in selection.keys():
+        if 'DataSourcePreselection' in selection.keys():
             selection["DataSourcePreselection"] = self.seltoint(
                 selection["DataSourcePreselection"])
         if 'MntGrpConfiguration' not in selection.keys():
@@ -195,7 +195,7 @@ class Converter(object):
         self.patchversion = int(sver[2])
 
         self.up = [Converter1to2(), Converter2to3()]
-        self.down = [Converter3to2(), Converter2to1()]
+        self.down = [Converter2to1(), Converter3to2()]
 
     def allkeys(self, selection):
         lkeys = set()
