@@ -101,7 +101,17 @@ class Settings(object):
             avsel = self.availableProfiles()
             if avsel and avsel[0]:
                 self.__selector["MntGrp"] = avsel[0]
-        self.fetchProfile()
+        try:
+            self.fetchProfile()
+        except Exception:
+            import sys
+            import traceback
+            info = sys.exc_info()
+            message = str(info[1].__str__()) + "\n " + (" ").join(
+                traceback.format_tb(sys.exc_info()[2]))
+            Streams.error("Error in fetching profile: %s"
+                          % self.__selector["MntGrp"])
+            Streams.error(str(message))
 
     ## provides values of the required variable
     # \param name name of the required variable
