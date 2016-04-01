@@ -1,3 +1,7 @@
+2016-04-01 Jan Kotanski <jankotan@gmail.com>
+	* skip of wrong profile on start up
+	* tagged as v2.5.3
+
 2016-03-29 Jan Kotanski <jankotan@gmail.com>
 	* add fix for converter order
 	* tagged as v2.5.2
