@@ -1,3 +1,7 @@
+2016-04-04 Jan Kotanski <jankotan@gmail.com>
+	* fix timeout with CreateMntGrpConfiguration
+	* tagged as v3.0.1
+
 2016-04-01 Jan Kotanski <jankotan@gmail.com>
 	* change bool selections into bool/None selections
 	* change InitDataSources to DataSourcePreselection

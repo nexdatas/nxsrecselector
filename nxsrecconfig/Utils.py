@@ -169,12 +169,12 @@ class TangoUtils(object):
     # \param device device name
     # \returns DeviceProxy of device
     @classmethod
-    def openProxy(cls, device):
+    def openProxy(cls, device, counter=1000):
         found = False
         cnt = 0
         cnfServer = PyTango.DeviceProxy(str(device))
 
-        while not found and cnt < 1000:
+        while not found and cnt < counter:
             if cnt > 1:
                 time.sleep(0.01)
             try:
@@ -183,11 +183,32 @@ class TangoUtils(object):
             except (PyTango.DevFailed, PyTango.Except, PyTango.DevError):
                 time.sleep(0.01)
                 found = False
-                if cnt == 999:
+                if cnt == counter - 1:
                     raise
             cnt += 1
 
         return cnfServer
+
+    ## wait of device proxy not running
+    # \param cls class instance
+    # \param proxy device name
+    # \returns DeviceProxy of device
+    @classmethod
+    def wait(cls, proxy, counter=1000):
+        found = False
+        cnt = 0
+        while not found and cnt < counter:
+            if cnt > 1:
+                time.sleep(0.01)
+            try:
+                if cls.__command(proxy, "State") != PyTango.DevState.RUNNING:
+                    found = True
+            except (PyTango.DevFailed, PyTango.Except, PyTango.DevError):
+                time.sleep(0.01)
+                found = False
+                if cnt == counter - 1:
+                    raise
+            cnt += 1
 
     ## provides proxies of given device names
     # \param cls class instance

@@ -466,8 +466,14 @@ class ProfileManager(object):
         amntgrp = MSUtils.getEnv('ActiveMntGrp', self.__macroServerName)
         apool = self.__getActivePool(amntgrp)
         if apool:
-            TangoUtils.command(apool, "CreateMeasurementGroup",
-                               [mntGrpName, timer])
+            try:
+                TangoUtils.command(apool, "CreateMeasurementGroup",
+                                   [mntGrpName, timer])
+            except PyTango.CommunicationFailed as e:
+                if e[-1].reason == "API_DeviceTimedOut":
+                    TangoUtils.wait(apool)
+                else:
+                    raise
             mfullname = str(PoolUtils.getMntGrpName(self.__pools, mntGrpName))
         return mfullname
 
