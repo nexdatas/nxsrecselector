@@ -1189,6 +1189,31 @@ class NXSRecSelector(PyTango.Device_4Impl):
         return True
 
     #------------------------------------------------------------------
+    #    PreselectedDataSources command:
+    #
+    #    Description: Sets the preselected components
+    #
+    #    argout: DevVarStringArray    component names
+    #------------------------------------------------------------------
+    def PreselectedDataSources(self):
+        self.debug_stream("In PreselectedDataSources()")
+
+        try:
+            self.set_state(PyTango.DevState.RUNNING)
+            argout = self.__stg.preselectedDataSources()
+            self.set_state(PyTango.DevState.ON)
+        finally:
+            if self.get_state() == PyTango.DevState.RUNNING:
+                self.set_state(PyTango.DevState.ON)
+        return argout
+
+    #---- PreselectedDataSources command State Machine -----------------
+    def is_PreselectedDataSources_allowed(self):
+        if self.get_state() in [PyTango.DevState.RUNNING]:
+            return False
+        return True
+
+    #------------------------------------------------------------------
     #    CreateDynamicComponent command:
     #
     #    Description: create dynamic component
@@ -1550,6 +1575,9 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
         'PreselectedComponents':
             [[PyTango.DevVoid, ""],
              [PyTango.DevVarStringArray, "component names"]],
+        'PreselectedDataSources':
+            [[PyTango.DevVoid, ""],
+             [PyTango.DevVarStringArray, "datasources names"]],
         'CreateDynamicComponent':
             [[PyTango.DevVarStringArray,
               "list of JSON strings with datasource parameters"],
