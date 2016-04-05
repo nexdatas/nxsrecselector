@@ -72,12 +72,8 @@ class Selector(object):
     # \param state state data
     def set(self, state):
         state = dict(state)
-        print "STATE1", state.keys()
         self.__converter.convert(state)
-        print "STATE2", state.keys()
         self.reset()
-        print "STATE3", state.keys()
-        print "sel", self.__selection.keys()
         for key in state.keys():
             if key and key[0].upper() != key[0]:
                 key = key[0].upper() + key[1:]
