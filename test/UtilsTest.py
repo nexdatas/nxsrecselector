@@ -345,6 +345,24 @@ class UtilsTest(unittest.TestCase):
 
         self.myAssertRaise(PyTango.DevFailed, TangoUtils.openProxy,
                            self._simps.new_device_info_writer.name)
+    ## openProxy test
+    # \brief It tests default settings
+    def test_wait(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        self.myAssertRaise(PyTango.DevFailed, TangoUtils.openProxy,
+                           "sdf/testtestsf/d")
+
+        dp = TangoUtils.openProxy(self._simps.new_device_info_writer.name)
+        self.assertTrue(isinstance(dp, PyTango.DeviceProxy))
+        self.assertEqual(dp.name(), self._simps.new_device_info_writer.name)
+        self.assertTrue(TangoUtils.wait(dp))
+        dp.setState("RUNNING")
+        self.assertTrue(not TangoUtils.wait(dp))
+        self._simps.stop()
+
+        self.myAssertRaise(AttributeError, TangoUtils.wait,
+                           self._simps.new_device_info_writer)
 
     ## getEnv test
     def test_getsetEnv(self):

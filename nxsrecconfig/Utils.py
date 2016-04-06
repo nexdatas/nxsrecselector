@@ -194,14 +194,14 @@ class TangoUtils(object):
     # \param proxy device name
     # \returns DeviceProxy of device
     @classmethod
-    def wait(cls, proxy, counter=1000):
+    def wait(cls, proxy, counter=100):
         found = False
         cnt = 0
         while not found and cnt < counter:
             if cnt > 1:
                 time.sleep(0.01)
             try:
-                if cls.__command(proxy, "State") != PyTango.DevState.RUNNING:
+                if proxy.State() != PyTango.DevState.RUNNING:
                     found = True
             except (PyTango.DevFailed, PyTango.Except, PyTango.DevError):
                 time.sleep(0.01)
@@ -209,6 +209,7 @@ class TangoUtils(object):
                 if cnt == counter - 1:
                     raise
             cnt += 1
+        return found
 
     ## provides proxies of given device names
     # \param cls class instance

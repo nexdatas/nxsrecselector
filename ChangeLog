@@ -1,3 +1,7 @@
+2016-04-06 Jan Kotanski <jankotan@gmail.com>
+	* fix bug in TangoUtils.wait
+	* tagged as v3.0.3
+
 2016-04-05 Jan Kotanski <jankotan@gmail.com>
 	* add missing preselectedDataSources
 	* tagged as v3.0.2
