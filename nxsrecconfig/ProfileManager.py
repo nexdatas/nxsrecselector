@@ -33,7 +33,8 @@ except ImportError:
     NXSTOOLS = False
 
 DEFAULT_RECORD_KEYS = ['serialno', 'end_time', 'start_time',
-                       'point_nb', 'timestamps', 'scan_title']
+                       'point_nb', 'timestamps', 'scan_title',
+                       'filename']
 
 
 ## Manages Measurement Group and Profile from Selector
