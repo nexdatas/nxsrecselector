@@ -249,7 +249,7 @@ class ProfileManager(object):
             self.__selector.set(state)
 
         lsconf = json.loads(llconf)
-        return not Utils.compareDict(mgconf, lsconf)
+        return Utils.compareDict(mgconf, lsconf)
 
     ## import setting from active measurement
     def importMntGrp(self):

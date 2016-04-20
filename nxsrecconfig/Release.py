@@ -21,4 +21,4 @@
 """  NeXus Sardana Recorder Settings - Release """
 
 ## package version
-__version__ = "3.1.0"
+__version__ = "3.1.1"
