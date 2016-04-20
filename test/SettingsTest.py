@@ -16209,8 +16209,8 @@ class SettingsTest(unittest.TestCase):
                     self.assertEqual(json.loads(mp["Timer"]), ltimers)
                     self.assertEqual(mp["MntGrp"], "mg2")
                     self.dump(rs)
-                    self.assertTrue(rs.isMntGrpUpdated())
-                    self.assertTrue(rs.isMntGrpUpdated())
+                    self.assertTrue(not rs.isMntGrpUpdated())
+                    self.assertTrue(not rs.isMntGrpUpdated())
 
                     wwcp = rs.components
                     describer = Describer(self._cf.dp, True)
@@ -16228,8 +16228,8 @@ class SettingsTest(unittest.TestCase):
                                 adss[tm] = False
 
                     jpcnf = rs.updateMntGrp()
-                    self.assertTrue(not rs.isMntGrpUpdated())
-                    self.assertTrue(not rs.isMntGrpUpdated())
+                    self.assertTrue(rs.isMntGrpUpdated())
+                    self.assertTrue(rs.isMntGrpUpdated())
                     pcnf = json.loads(jpcnf)
                     mgdp = PyTango.DeviceProxy(tmg.new_device_info_writer.name)
                     jcnf = rs.mntGrpConfiguration()
@@ -16372,8 +16372,8 @@ class SettingsTest(unittest.TestCase):
                     rs.fetchProfile()
                     mp = json.loads(rs.profileConfiguration)
 
-                    self.assertTrue(not rs.isMntGrpUpdated())
-                    self.assertTrue(not rs.isMntGrpUpdated())
+                    self.assertTrue(rs.isMntGrpUpdated())
+                    self.assertTrue(rs.isMntGrpUpdated())
 
                     mp = json.loads(rs.profileConfiguration)
                     self.compareToDumpJSON(
@@ -16773,8 +16773,8 @@ class SettingsTest(unittest.TestCase):
                             json.loads(mp[mg]["Timer"]), ltimers[mg])
                         self.assertEqual(mp[mg]["MntGrp"], mg)
                         self.dump(rs[mg], name=mg)
-                        self.assertTrue(rs[mg].isMntGrpUpdated())
-                        self.assertTrue(rs[mg].isMntGrpUpdated())
+                        self.assertTrue(not rs[mg].isMntGrpUpdated())
+                        self.assertTrue(not rs[mg].isMntGrpUpdated())
 
                         wwcp = rs[mg].components
                         describer = Describer(self._cf.dp, True)
@@ -16793,8 +16793,8 @@ class SettingsTest(unittest.TestCase):
                                     adss[mg][tm] = False
 
                         jpcnf = rs[mg].updateMntGrp()
-                        self.assertTrue(not rs[mg].isMntGrpUpdated())
-                        self.assertTrue(not rs[mg].isMntGrpUpdated())
+                        self.assertTrue(rs[mg].isMntGrpUpdated())
+                        self.assertTrue(rs[mg].isMntGrpUpdated())
                         pcnf = json.loads(jpcnf)
                         mgdp = PyTango.DeviceProxy(
                             tmg[mg].new_device_info_writer.name)
@@ -16947,8 +16947,8 @@ class SettingsTest(unittest.TestCase):
 #                       rs[mg].fetchProfile()
 #                        mp[mg] = json.loads(rs[mg].profileConfiguration)
 
-                        self.assertTrue(not rs[mg].isMntGrpUpdated())
-                        self.assertTrue(not rs[mg].isMntGrpUpdated())
+                        self.assertTrue(rs[mg].isMntGrpUpdated())
+                        self.assertTrue(rs[mg].isMntGrpUpdated())
 
                         self.compareToDumpJSON(
                             rs[mg],
@@ -17051,13 +17051,13 @@ class SettingsTest(unittest.TestCase):
                     # import mntgrp another defined by selector MntGrp
                     lrs.mntGrp = mg2
 
-                    self.assertTrue(lrs.isMntGrpUpdated())
-                    self.assertTrue(lrs.isMntGrpUpdated())
+                    self.assertTrue(not lrs.isMntGrpUpdated())
+                    self.assertTrue(not lrs.isMntGrpUpdated())
 
                     lrs.importMntGrp()
                     lmp = json.loads(lrs.profileConfiguration)
-                    self.assertTrue(lrs.isMntGrpUpdated())
-                    self.assertTrue(lrs.isMntGrpUpdated())
+                    self.assertTrue(not lrs.isMntGrpUpdated())
+                    self.assertTrue(not lrs.isMntGrpUpdated())
 
                     tmpcf1 = json.loads(rs[mg1].mntGrpConfiguration())
                     tmpcf2 = json.loads(rs[mg2].mntGrpConfiguration())
@@ -17206,8 +17206,8 @@ class SettingsTest(unittest.TestCase):
                         tmg[mg2].new_device_info_writer.name)
                     print "name", tmg[mg2].new_device_info_writer.name
                     mgdp.Configuration = json.dumps(tmpcf)
-                    self.assertTrue(lrs.isMntGrpUpdated())
-                    self.assertTrue(lrs.isMntGrpUpdated())
+                    self.assertTrue(not lrs.isMntGrpUpdated())
+                    self.assertTrue(not lrs.isMntGrpUpdated())
 
                     tmpcf1 = json.loads(rs[mg1].mntGrpConfiguration())
                     tmpcf2 = json.loads(rs[mg2].mntGrpConfiguration())
@@ -17220,8 +17220,8 @@ class SettingsTest(unittest.TestCase):
 
                     ltmpcf2 = json.loads(lrs.mntGrpConfiguration())
                     if not Utils.compareDict(ltmpcf2, ltmpcf):
-                        self.assertTrue(lrs.isMntGrpUpdated())
-                        self.assertTrue(lrs.isMntGrpUpdated())
+                        self.assertTrue(not lrs.isMntGrpUpdated())
+                        self.assertTrue(not lrs.isMntGrpUpdated())
 
                     tmpcf1 = json.loads(rs[mg1].mntGrpConfiguration())
                     tmpcf2 = json.loads(rs[mg2].mntGrpConfiguration())
@@ -17383,8 +17383,8 @@ class SettingsTest(unittest.TestCase):
 
                     # switch to active profile mg3
                     lrs.mntGrp = mg2
-                    self.assertTrue(lrs.isMntGrpUpdated())
-                    self.assertTrue(lrs.isMntGrpUpdated())
+                    self.assertTrue(not lrs.isMntGrpUpdated())
+                    self.assertTrue(not lrs.isMntGrpUpdated())
                     MSUtils.setEnv('ActiveMntGrp', mg3, self._ms.ms.keys()[0])
 
                     tmpcf1 = json.loads(rs[mg1].mntGrpConfiguration())
@@ -18089,8 +18089,8 @@ class SettingsTest(unittest.TestCase):
                             json.loads(mp[mg]["Timer"]), ltimers[mg])
                         self.assertEqual(mp[mg]["MntGrp"], mg)
                         self.dump(ors, name=mg)
-                        self.assertTrue(ors.isMntGrpUpdated())
-                        self.assertTrue(ors.isMntGrpUpdated())
+                        self.assertTrue(not ors.isMntGrpUpdated())
+                        self.assertTrue(not ors.isMntGrpUpdated())
 
                         wwcp = ors.components
                         describer = Describer(self._cf.dp, True)
@@ -18109,8 +18109,8 @@ class SettingsTest(unittest.TestCase):
                                     adss[mg][tm] = False
 
                         jpcnf = ors.updateMntGrp()
-                        self.assertTrue(not ors.isMntGrpUpdated())
-                        self.assertTrue(not ors.isMntGrpUpdated())
+                        self.assertTrue(ors.isMntGrpUpdated())
+                        self.assertTrue(ors.isMntGrpUpdated())
                         pcnf = json.loads(jpcnf)
                         mgdp = PyTango.DeviceProxy(
                             tmg[mg].new_device_info_writer.name)
@@ -18263,8 +18263,8 @@ class SettingsTest(unittest.TestCase):
 #                       ors.fetchProfile()
 #                        mp[mg] = json.loads(ors.profileConfiguration)
 
-                        self.assertTrue(not ors.isMntGrpUpdated())
-                        self.assertTrue(not ors.isMntGrpUpdated())
+                        self.assertTrue(ors.isMntGrpUpdated())
+                        self.assertTrue(ors.isMntGrpUpdated())
 
                         self.compareToDumpJSON(
                             ors,
@@ -18378,13 +18378,13 @@ class SettingsTest(unittest.TestCase):
                     # import mntgrp another defined by selector MntGrp
                     lrs.mntGrp = mg2
 
-                    self.assertTrue(lrs.isMntGrpUpdated())
-                    self.assertTrue(lrs.isMntGrpUpdated())
+                    self.assertTrue(not lrs.isMntGrpUpdated())
+                    self.assertTrue(not lrs.isMntGrpUpdated())
 
                     lrs.importMntGrp()
                     lmp = json.loads(lrs.profileConfiguration)
-                    self.assertTrue(lrs.isMntGrpUpdated())
-                    self.assertTrue(lrs.isMntGrpUpdated())
+                    self.assertTrue(not lrs.isMntGrpUpdated())
+                    self.assertTrue(not lrs.isMntGrpUpdated())
 
                     ors.profileConfiguration = str(json.dumps(mp[mg1]))
                     tmpcf1 = json.loads(ors.mntGrpConfiguration())
@@ -18526,8 +18526,8 @@ class SettingsTest(unittest.TestCase):
                         tmg[mg2].new_device_info_writer.name)
                     print "name", tmg[mg2].new_device_info_writer.name
                     mgdp.Configuration = json.dumps(tmpcf)
-                    self.assertTrue(lrs.isMntGrpUpdated())
-                    self.assertTrue(lrs.isMntGrpUpdated())
+                    self.assertTrue(not lrs.isMntGrpUpdated())
+                    self.assertTrue(not lrs.isMntGrpUpdated())
 
                     ors.profileConfiguration = str(json.dumps(mp[mg1]))
                     tmpcf1 = json.loads(ors.mntGrpConfiguration())
@@ -18542,8 +18542,8 @@ class SettingsTest(unittest.TestCase):
 
                     ltmpcf2 = json.loads(lrs.mntGrpConfiguration())
                     if not Utils.compareDict(ltmpcf2, ltmpcf):
-                        self.assertTrue(lrs.isMntGrpUpdated())
-                        self.assertTrue(lrs.isMntGrpUpdated())
+                        self.assertTrue(not lrs.isMntGrpUpdated())
+                        self.assertTrue(not lrs.isMntGrpUpdated())
 
                     ors.profileConfiguration = str(json.dumps(mp[mg1]))
                     tmpcf1 = json.loads(ors.mntGrpConfiguration())
@@ -18712,8 +18712,8 @@ class SettingsTest(unittest.TestCase):
 
                     # switch to active profile mg3
                     lrs.mntGrp = mg2
-                    self.assertTrue(lrs.isMntGrpUpdated())
-                    self.assertTrue(lrs.isMntGrpUpdated())
+                    self.assertTrue(not lrs.isMntGrpUpdated())
+                    self.assertTrue(not lrs.isMntGrpUpdated())
                     MSUtils.setEnv('ActiveMntGrp', mg3, self._ms.ms.keys()[0])
 
                     ors.profileConfiguration = str(json.dumps(mp[mg1]))
