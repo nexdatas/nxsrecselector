@@ -3,10 +3,11 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to nxsrecconfig's documentation!
-========================================
+.. include:: ../README.rst
 
+=========
 Contents:
+=========
 
 .. toctree::
    :maxdepth: 4
@@ -14,6 +15,7 @@ Contents:
    nxsrecconfig
 
 
+==================
 Indices and tables
 ==================
 
