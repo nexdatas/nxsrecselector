@@ -1,6 +1,6 @@
 .\" Man page generated from reStructuredText.
 .
-.TH "NXSRECCONFIG" "1" "May 02, 2016" "3.1" "NXSRecSelector"
+.TH "NXSRECCONFIG" "1" "May 02, 2016" "3.2" "NXSRecSelector"
 .SH NAME
 nxsrecconfig \- nxsrecconfig Documentation
 .
@@ -31,7 +31,111 @@ level margin: \\n[rst2man-indent\\n[rst2man-indent-level]]
 .in \\n[rst2man-indent\\n[rst2man-indent-level]]u
 ..
 .sp
-Contents:
+Authors: Jan Kotanski
+Introduction
+.sp
+Tango server with Sardana Recorder settings
+.nf
+Source code: \fI\%https://github.com/nexdatas/recselector\fP
+Web page: \fI\%http://www.desy.de/~jkotan/nxsrecselector\fP
+.fi
+.sp
+.SH INSTALLATION
+.sp
+Install the dependencies:
+.INDENT 0.0
+.INDENT 3.5
+Sardana, PyTango, sphinx
+.UNINDENT
+.UNINDENT
+.SS From sources
+.sp
+Download the latest version of NeXuS Configuration Server from
+.INDENT 0.0
+.INDENT 3.5
+\fI\%https://github.com/jkotan/nexdatas/recselector/\fP
+.UNINDENT
+.UNINDENT
+.sp
+Extract the sources and run
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+$ python setup.py install
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Debian packages
+.sp
+Debian Jessie (and Wheezy) packages can be found in the HDRI repository.
+.sp
+To install the debian packages, add the PGP repository key
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+$ sudo su
+$ wget \-q \-O \- http://repos.pni\-hdri.de/debian_repo.pub.gpg | apt\-key add \-
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+and then download the corresponding source list
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+$ cd /etc/apt/sources.list.d
+$ wget http://repos.pni\-hdri.de/jessie\-pni\-hdri.list
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+Finally,
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+$ apt\-get update
+$ apt\-get install python\-nxsrecselector
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+To instal other NexDaTaS packages
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+$ apt\-get install python\-nxswriter nxsconfigtool nxstools python\-nxsconfigserver nxsconfigserver\-db
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+and
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+$ apt\-get install nxselector python\-sardana\-nxsrecorder
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+for Component Selector and Sardana related packages.
 .SH NXSRECCONFIG PACKAGE
 .SS Submodules
 .SS nxsrecconfig.CheckerThread module
