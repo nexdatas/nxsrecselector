@@ -1,6 +1,7 @@
-2016-04-XX Jan Kotanski <jankotan@gmail.com>
+2016-05-02 Jan Kotanski <jankotan@gmail.com>
+	* add sphinx docu
 	* fix allkeys in Converter
-	* tagged as v3.1.2
+	* tagged as v3.2.0
 
 2016-04-20 Jan Kotanski <jankotan@gmail.com>
 	* fix for isMntGrpUpdated
