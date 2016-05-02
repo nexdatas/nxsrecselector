@@ -1,5 +1,9 @@
 2016-03-29 Jan Kotanski <jankotan@gmail.com>
-	* add fixes for convertes
+	* fix allkeys in converters
+	* tagged as v1.25.2
+
+2016-03-29 Jan Kotanski <jankotan@gmail.com>
+	* add fixes for converters
 	* tagged as v1.25.1
 
 2016-03-29 Jan Kotanski <jankotan@gmail.com>
