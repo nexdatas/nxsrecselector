@@ -15,10 +15,9 @@
 #
 #    You should have received a copy of the GNU General Public License
 #    along with nexdatas.  If not, see <http://www.gnu.org/licenses/>.
-## \file Release.py
-# nxswriter runner
+#
 
 """  NeXus Sardana Recorder Settings - Release """
 
-## package version
-__version__ = "3.1.1"
+#: package version
+__version__ = "3.1.2"

@@ -15,43 +15,55 @@
 #
 #    You should have received a copy of the GNU General Public License
 #    along with nexdatas.  If not, see <http://www.gnu.org/licenses/>.
-## \file Converter.py
-# selection converter
+#
 
-"""  Selection converter """
+"""  Selection version converter """
 
 import json
 
 
-## virtual selection converter
 class ConverterXtoY(object):
+    """ virtual selection version converter
+    """
 
-    ## constructor
     def __init__(self):
-
-        ## names to convert
+        """ constructor
+        """
+        #: names to convert
         self.names = {}
 
     def convert(self, selection):
+        """ converts selection to the current selector version
+
+        :param selection: selection dictionary object
+        """
         for old, new in self.names.items():
             if old in selection.keys():
                 selection[new] = selection.pop(old)
 
 
-## Selection converter from 2 to 3
 class Converter2to3(ConverterXtoY):
+    """ Selection converter from version 2 to 3
+    """
 
     def __init__(self):
+        """ converter
+        """
         super(Converter2to3, self).__init__()
 
-        ## names to convert
+        #: names to convert
         self.names = {
             "PreselectedDataSources": "PreselectingDataSources",
             "InitDataSources": "DataSourcePreselection",
         }
 
-    def seltoint(self, jselection):
-        sel = json.loads(jselection)
+    def seltoint(self, jselelem):
+        """ converters list/dict of elements to dictionary with logical values
+
+        :param jselelem: json list or dict selection element
+        :returns: json dictionary
+        """
+        sel = json.loads(jselelem)
         if isinstance(sel, dict):
             return json.dumps(
                 dict((key, True if vl else None) for key, vl in sel.items()))
@@ -59,6 +71,10 @@ class Converter2to3(ConverterXtoY):
             return json.dumps(dict((key, True) for key in sel))
 
     def convert(self, selection):
+        """ converts selection from version 2 to 3
+
+        :param selection: selection dictionary object
+        """
         super(Converter2to3, self).convert(selection)
 
         if 'ComponentPreselection' in selection.keys():
@@ -71,28 +87,47 @@ class Converter2to3(ConverterXtoY):
             selection['MntGrpConfiguration'] = ''
 
 
-## Selection converter from 3 to 2
 class Converter3to2(ConverterXtoY):
+    """ Selection converter from version 3 to 2
+    """
 
     def __init__(self):
+        """ constructor
+        """
         super(Converter3to2, self).__init__()
 
-        ## names to convert
+        #: names to convert
         self.names = {
             "PreselectingDataSources": "PreselectedDataSources",
             "DataSourcePreselection": "InitDataSources",
         }
 
-    def seltobool(self, jselection):
-        sel = json.loads(jselection)
+    def seltobool(self, jselelem):
+        """ converters dictioanry with None/True/False values
+            to dictionary with True/False values
+
+        :param jselelem: json dictionary selection element
+        :returns: converter json dictionary
+        """
+        sel = json.loads(jselelem)
         return json.dumps(
             dict((key, vl is not None) for key, vl in sel.items()))
 
-    def seltolist(self, jselection):
-        sel = json.loads(jselection)
+    def seltolist(self, jselelem):
+        """ converters dictioanry with None/True/False values
+            to list of elementes with walue True
+
+        :param jselelem: json dictionary selection element
+        :returns: converter json dictionary
+        """
+        sel = json.loads(jselelem)
         return json.dumps([key for key, vl in sel.items() if vl])
 
     def convert(self, selection):
+        """ converts selection from version 3 to 2
+
+        :param selection: selection dictionary object
+        """
         super(Converter3to2, self).convert(selection)
         if 'ComponentPreselection' in selection.keys():
             selection["ComponentPreselection"] = self.seltobool(
@@ -104,13 +139,16 @@ class Converter3to2(ConverterXtoY):
             selection.pop('MntGrpConfiguration')
 
 
-## Selection converter from 1 to 2
 class Converter1to2(ConverterXtoY):
+    """ Selection converter from version 1 to 2
+    """
 
     def __init__(self):
+        """ constructor
+        """
         super(Converter1to2, self).__init__()
 
-        ## names to convert
+        #: names to convert
         self.names = {
             "AutomaticComponentGroup": "ComponentPreselection",
             "AutomaticDataSources": "PreselectedDataSources",
@@ -123,7 +161,7 @@ class Converter1to2(ConverterXtoY):
 
         }
 
-        ## names of properties
+        #: names of properties
         self.pnames = {
             "Labels": "label",
             "LabelPaths": "nexus_path",
@@ -133,6 +171,10 @@ class Converter1to2(ConverterXtoY):
         }
 
     def convert(self, selection):
+        """ converts selection from version 1 to 2
+
+        :param selection: selection dictionary object
+        """
         super(Converter1to2, self).convert(selection)
         props = {}
         for var, pn in self.pnames.items():
@@ -141,13 +183,16 @@ class Converter1to2(ConverterXtoY):
         selection["ChannelProperties"] = json.dumps(props)
 
 
-## Selection converter from 2 to 1
 class Converter2to1(ConverterXtoY):
+    """ Selection converter from version 2 to 1
+    """
 
     def __init__(self):
+        """ constructor
+        """
         super(Converter2to1, self).__init__()
 
-        ## names of properties
+        #: names of properties
         self.pnames = {
             "Labels": "label",
             "LabelPaths": "nexus_path",
@@ -156,7 +201,7 @@ class Converter2to1(ConverterXtoY):
             "LabelShapes": "shape",
         }
 
-        ## names to convert
+        #: names to convert
         self.names = {
             "ComponentSelection": "ComponentGroup",
             "ComponentPreselection": "AutomaticComponentGroup",
@@ -169,6 +214,10 @@ class Converter2to1(ConverterXtoY):
         }
 
     def convert(self, selection):
+        """ converts selection from version 2 to 1
+
+        :param selection: selection dictionary object
+        """
         super(Converter2to1, self).convert(selection)
         if "ChannelProperties" in selection:
             props = json.loads(selection["ChannelProperties"])
@@ -180,32 +229,45 @@ class Converter2to1(ConverterXtoY):
             selection.pop("Version")
 
 
-## Selection converter
 class Converter(object):
-    """ selection converer """
+    """ selection version converter """
 
-    ## constructor
-    # \param ver the required selection version
     def __init__(self, ver):
+        """ contstructor
 
-        ##  selection dictionary with Settings
+        :param ver: the required selection version
+        """
+
         sver = ver.split(".")
+        #: major selection version
         self.majorversion = int(sver[0])
+        #: minor selection version
         self.minorversion = int(sver[1])
+        #: patch selection version
         self.patchversion = int(sver[2])
 
         self.up = [Converter1to2(), Converter2to3()]
         self.down = [Converter2to1(), Converter3to2()]
 
     def allkeys(self, selection):
+        """
+
+        :param selection: selection dictionary object
+        :returns: list of selection keys
+        """
         lkeys = set()
         for cv in self.up:
             lkeys.update(cv.names.keys())
+            lkeys.update(cv.names.values())
         ak = set(selection.keys())
         ak.update(lkeys)
         return ak
 
     def convert(self, selection):
+        """ converts selection from any version to any other
+
+        :param selection: selection dictionary object
+        """
         major, _, _ = self.version(selection)
         if major == self.majorversion:
             return
@@ -221,6 +283,12 @@ class Converter(object):
 
     @classmethod
     def version(cls, selection):
+        """ fetches selection version and converts it
+            into (major, minor, patch)
+
+        :param selection: selection dictionary object
+        :returns (major, minor, patch) tuple with integers
+        """
         major = 1
         minor = 0
         patch = 0

@@ -15,20 +15,19 @@
 #
 #    You should have received a copy of the GNU General Public License
 #    along with nexdatas.  If not, see <http://www.gnu.org/licenses/>.
-## \file __init__.py
-# nxswriter runner
+#
 
 """  NeXus Sardana Recorder Settings - Tango Server """
 
-## package version
+#: package version
 from .Release import __version__
 
-import sys
 
-
-## runs the TANGO server
-# \param argv command-line arguments
 def run(argv):
+    """ runs the TANGO server
+
+    :param argv: command-line arguments
+    """
     import PyTango
     from .NXSConfig import NXSRecSelector as NXSRecConfig
     from .NXSConfig import NXSRecSelectorClass as NXSRecConfigClass

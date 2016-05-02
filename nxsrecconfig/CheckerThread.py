@@ -15,71 +15,82 @@
 #
 #    You should have received a copy of the GNU General Public License
 #    along with nexdatas.  If not, see <http://www.gnu.org/licenses/>.
-## \file CheckerThread.py
-# thread with checks tango server attributes
+#
 
-"""  Component CheckerThread """
+"""  Component CheckerThread - thread which checks tango server attributes"""
 
 import Queue
 import PyTango
 import threading
 
 
-## default attributes to check
+#: default attributes to check
 ATTRIBUTESTOCHECK = ["Value", "Position", "Counts", "Data",
                      "Voltage", "Energy", "SampleTime"]
 
 
-## Tango DataSource item
 class TangoDSItem(object):
+    """ Tango DataSource item
+    """
     __slots__ = 'name', 'device', 'attr'
 
-    ## constructor
-    # \param name datasource name
-    # \param device datasource device
-    # \param attr device attribute
     def __init__(self, name=None, device=None, attr=None):
-        ## datasource name
+        """ constructor
+
+        :param name: datasource name
+        :param device: datasource device
+        :param attr: device attribute
+        """
+        #: datasource name
         self.name = str(name) if name is not None else None
-        ## datasource device
+        #: datasource device
         self.device = str(device) if device is not None else None
-        ## datasource device attribute
+        #: datasource device attribute
         self.attr = str(attr) if attr is not None else None
 
 
-## Checker list Item
 class CheckerItem(list):
+    """ Checker list Item
+    """
 
-    ## constructor
-    # \param name checker item name
     def __init__(self, name):
+        """ constructor
+
+        :param name: checker item name
+        """
         super(CheckerItem, self).__init__()
-        ## checker name
+        #: checker name
         self.name = name
-        ## datasource with first error
+        #: datasource with first error
         self.errords = None
-        ## first error message
+        #: first error message
         self.message = None
-        ## enabled flag
+        #: enabled flag
         self.active = True
 
 
-## Single CheckerThread
 class CheckerThread(threading.Thread):
-    ## constructor
-    # \brief It creates ElementThread from the runnable element
-    # \param index the current thread index
-    # \param queue queue with tasks
+    """ Single CheckerThread
+    """
+
     def __init__(self, index, queue):
+        """ constructor
+
+        :brief: It creates ElementThread from the runnable element
+        :param index: the current thread index
+        :param queue: queue with tasks
+        """
         threading.Thread.__init__(self)
-        ## thread index
+        #: thread index
         self.index = index
-        ## queue with runnable elements
+        #: queue with runnable elements
         self.__queue = queue
 
-    ## runner
-    # \brief It runs the defined thread
     def run(self):
+        """ runner
+
+        :brief: It runs the defined thread
+        """
         full = True
         while full:
             try:
@@ -91,6 +102,10 @@ class CheckerThread(threading.Thread):
 
     @classmethod
     def __check(cls, checkeritem):
+        """ checks oen device list item which usually corresponds to one components
+
+        :param checkeritem: device list item
+        """
         for ds in checkeritem:
             try:
                 dp = PyTango.DeviceProxy(ds.device or ds.name)
@@ -116,11 +131,11 @@ class CheckerThread(threading.Thread):
                 break
 
 
-## Alarm State Exception class
 class AlarmStateError(Exception):
-    pass
+    """ Alarm State Exception class
+    """
 
 
-## Fault State Exception class
 class FaultStateError(Exception):
-    pass
+    """ Fault State Exception class
+    """

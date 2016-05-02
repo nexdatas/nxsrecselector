@@ -15,8 +15,7 @@
 #
 #    You should have received a copy of the GNU General Public License
 #    along with nexdatas.  If not, see <http://www.gnu.org/licenses/>.
-## \file setup.py
-# nxswriter installer
+#
 
 """ setup.py for Nexus Recorder Selector Server """
 
@@ -24,34 +23,38 @@
 import os
 from distutils.core import setup, Command
 
-## package name
+#: package name
 NDTS = "nxsrecconfig"
-## nxswriter imported package
+#: nxswriter imported package
 INDTS = __import__(NDTS)
 
+from sphinx.setup_command import BuildDoc
 
-#__requires__ = 'nextdata ==%s' % INDTS.__version__
 
-## reading a file
 def read(fname):
+    """ reading a file
+
+    :param fname: readme file name
+    """
     return open(os.path.join(os.path.dirname(__file__), fname)).read()
 
 
-## test command class
 class TestCommand(Command):
+    """ test command class
+    """
 
-    ## user options
+    #: user options
     user_options = []
 
-    ## initializes options
+    #: initializes options
     def initialize_options(self):
         pass
 
-    ## finalizes options
+    #: finalizes options
     def finalize_options(self):
         pass
 
-    ## runs command
+    #: runs command
     def run(self):
         import sys
         import subprocess
@@ -59,13 +62,17 @@ class TestCommand(Command):
         raise SystemExit(errno)
 
 
-## required files
+#: required files
 required = [
     'numpy (>=1.5.0)',
     'PyTango (>=7.2.2)'
 ]
 
-## metadata for distutils
+release = INDTS.__version__
+version = ".".join(release.split(".")[:2])
+name = "NXSRecSelector"
+
+#: metadata for distutils
 SETUPDATA = dict(
     name="nxsrecselector",
     version=INDTS.__version__,
@@ -78,13 +85,18 @@ SETUPDATA = dict(
     packages=[NDTS],
     requires=required,
     scripts=['NXSRecSelector'],
-    cmdclass={'test': TestCommand},
-    long_description=read('README')
+    cmdclass={'test': TestCommand, 'build_sphinx': BuildDoc},
+    command_options={
+        'build_sphinx': {
+            'project': ('setup.py', name),
+            'version': ('setup.py', version),
+            'release': ('setup.py', release)}},
+    long_description=read('README.rst')
 )
 
 
-## the main function
 def main():
+    """ the main function """
     setup(**SETUPDATA)
 
 

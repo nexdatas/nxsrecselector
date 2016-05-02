@@ -1,3 +1,7 @@
+2016-04-XX Jan Kotanski <jankotan@gmail.com>
+	* fix allkeys in Converter
+	* tagged as v3.1.2
+
 2016-04-20 Jan Kotanski <jankotan@gmail.com>
 	* fix for isMntGrpUpdated
 	* tagged as v3.1.1
