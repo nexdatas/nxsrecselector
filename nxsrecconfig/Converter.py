@@ -287,7 +287,7 @@ class Converter(object):
             into (major, minor, patch)
 
         :param selection: selection dictionary object
-        :returns (major, minor, patch) tuple with integers
+        :returns: (major, minor, patch) tuple with integers
         """
         major = 1
         minor = 0
