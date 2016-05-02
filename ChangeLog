@@ -1,3 +1,7 @@
+2016-05-02 Jan Kotanski <jankotan@gmail.com>
+	* fix allkeys in Converter
+	* tagged as v2.5.4
+
 2016-04-01 Jan Kotanski <jankotan@gmail.com>
 	* skip of wrong profile on start up
 	* tagged as v2.5.3
