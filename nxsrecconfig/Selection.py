@@ -15,87 +15,89 @@
 #
 #    You should have received a copy of the GNU General Public License
 #    along with nexdatas.  If not, see <http://www.gnu.org/licenses/>.
-## \file Selection.py
-# component describer
+#
 
 """  Selection state """
 
 import json
 
 
-## Selection dictionary
 class Selection(dict):
     """ Selection Dictionary """
 
-    ## constructor
-    # \param args dictionary args
-    # \param kw dictionary kw
     def __init__(self, *args, **kw):
+        """ constructor
+
+        :param args: dictionary args
+        :param kw: dictionary kw
+        """
         super(Selection, self).__init__(*args, **kw)
 
-        ## default zone
+        #: default zone
         self.__defaultzone = 'Europe/Berlin'
 
-        ## default mntgrp
+        #: default mntgrp
         self.__defaultmntgrp = 'nxsmntgrp'
         self.__version = self["Version"] if "Version" in self else "1.0.0"
         self.reset()
 
-    ## resets dictionary to default value
     def reset(self):
+        """ resets dictionary to default value
+        """
         self.clear()
-        ## timer
+        # timer
         self["Timer"] = '[]'
-        ## ordered channels
+        # ordered channels
         self["OrderedChannels"] = '[]'
-        ## group of electable components
+        # group of electable components
         self["ComponentSelection"] = '{}'
-        ## step selected datasources
+        # step selected datasources
         self["DataSourceSelection"] = '{}'
-        ## init preselected datasources
+        # init preselected datasources
         self["DataSourcePreselection"] = '{}'
-        ## group of preselected components describing instrument state
+        # group of preselected components describing instrument state
         self["ComponentPreselection"] = '{}'
-        ## preselected datasources
+        # preselected datasources
         self["PreselectingDataSources"] = '[]'
-        ## group of optional components available for preselected selqection
+        # group of optional components available for preselected selqection
         self["OptionalComponents"] = '[]'
-        ## appending new entries to existing file
+        # appending new entries to existing file
         self["AppendEntry"] = False
-        ## select components from the active measurement group
+        # select components from the active measurement group
         self["ComponentsFromMntGrp"] = False
-        ## Configuration Server variables
+        # Configuration Server variables
         self["ConfigVariables"] = '{}'
-        ## JSON with Client Data Record
+        # JSON with Client Data Record
         self["UserData"] = '{}'
-        ## JSON with channel properties
+        # JSON with channel properties
         self["ChannelProperties"] = '{}'
-        ## JSON with NeXus paths for Label Paths
+        # JSON with NeXus paths for Label Paths
         self["UnplottedComponents"] = '[]'
-        ## create dynamic components
+        # create dynamic components
         self["DynamicComponents"] = True
-        ## create links for dynamic components
+        # create links for dynamic components
         self["DefaultDynamicLinks"] = True
-        ## path for dynamic components
+        # path for dynamic components
         self["DefaultDynamicPath"] = \
             '/entry$var.serialno:NXentry/NXinstrument/collection'
-        ## timezone
+        # timezone
         self["TimeZone"] = self.__defaultzone
-        ## Configuration Server device name
+        # Configuration Server device name
         self["ConfigDevice"] = ''
-        ## NeXus Data Writer device
+        # NeXus Data Writer device
         self["WriterDevice"] = ''
-        ## Door device name
+        # Door device name
         self["Door"] = ''
-        ## MntGrp
+        # MntGrp
         self["MntGrp"] = ''
-        ## version
+        # version
         self["Version"] = self.__version
-        ## MntGrp configuration
+        # MntGrp configuration
         self["MntGrpConfiguration"] = ''
 
-    ## deselects components and datasources
     def deselect(self):
+        """ deselects components and datasources
+        """
         cps = json.loads(self["ComponentSelection"])
         ads = json.loads(self["DataSourceSelection"])
         for k in cps.keys():
@@ -107,27 +109,33 @@ class Selection(dict):
         self["ComponentSelection"] = json.dumps(cps)
         self["UnplottedComponents"] = '[]'
 
-    ## update method for Preselected DataSources
-    # \brief appends new datasources to Preselected DataSources
-    # \param datasources
     def updatePreselectingDataSources(self, datasources):
+        """ update method for Preselected DataSources
+
+        :brief: appends new datasources to Preselected DataSources
+        :param datasources: list of datasources
+        """
         adsg = json.loads(self["PreselectingDataSources"])
         adsg = list(set(adsg or []) | set(datasources or []))
         self["PreselectingDataSources"] = json.dumps(adsg)
 
-    ## update method for orderedChannels attribute
-    # \brief sets pool channels in order defined by OrderedChannels
-    # \param channels pool channels
     def updateOrderedChannels(self, channels):
+        """ update method for orderedChannels attribute
+
+        :brief: sets pool channels in order defined by OrderedChannels
+        :param channels: pool channels
+        """
         och = json.loads(self["OrderedChannels"])
         ordchannels = [ch for ch in och if ch in channels]
         uordchannels = list(set(channels) - set(och))
         ordchannels.extend(sorted(uordchannels))
         self["OrderedChannels"] = json.dumps(ordchannels)
 
-    ## update method for componentGroup attribute
-    # \brief It removes datasource components from component group
     def updateComponentSelection(self):
+        """ update method for componentGroup attribute
+
+        :brief: It removes datasource components from component group
+        """
         cpg = json.loads(self["ComponentSelection"])
         dss = json.loads(self["DataSourceSelection"]).keys()
         for cp in set(cpg.keys()):
@@ -135,13 +143,15 @@ class Selection(dict):
                 cpg.pop(cp)
         self["ComponentSelection"] = json.dumps(cpg)
 
-    ## update method for dataSourceGroup attribute
-    # \brief It removes datasources from DataSourceSelection if they are
-    #        neither in poolchannels nor in avaiblable datasources
-    #        It adds new channels to DataSourceSelection
-    # \param channels pool channels
-    # \param datasources available datasources
     def updateDataSourceSelection(self, channels, datasources):
+        """ update method for dataSourceGroup attribute
+
+        :brief: It removes datasources from DataSourceSelection if they are
+                neither in poolchannels nor in avaiblable datasources
+                It adds new channels to DataSourceSelection
+        :param channels: pool channels
+        :param datasources: available datasources
+        """
         dsg = json.loads(self["DataSourceSelection"])
         datasources = datasources or []
         for ds in tuple(dsg.keys()):
@@ -152,22 +162,27 @@ class Selection(dict):
                 dsg[pc] = False
         self["DataSourceSelection"] = json.dumps(dsg)
 
-    ## reset method for mntGrp attribute
-    # \brief If MntGrp not defined set it to default value
     def resetMntGrp(self):
+        """ reset method for mntGrp attribute
+
+        :brief: If MntGrp not defined set it to default value
+        """
         if "MntGrp" not in self.keys() or not self["MntGrp"]:
             self["MntGrp"] = self.__defaultmntgrp
 
-    ## reset method for timeZone attribute
-    # \brief If TimeZone not defined set it to default value
     def resetTimeZone(self):
+        """ reset method for timeZone attribute
+
+        :brief: If TimeZone not defined set it to default value
+        """
         if "TimeZone" not in self.keys() or not self["TimeZone"]:
             self["TimeZone"] = self.__defaultzone
 
-    ## resets Preselected Components with given components and set them
-    #  to not active
-    # \param components list of components to be set
     def resetPreselectedComponents(self, components):
+        """ resets Preselected Components with given components and set them
+        to not active
+        :param components: list of components to be set
+        """
         acps = {}
         for cp in components:
             acps[cp] = None

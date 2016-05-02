@@ -15,8 +15,7 @@
 #
 #    You should have received a copy of the GNU General Public License
 #    along with nexdatas.  If not, see <http://www.gnu.org/licenses/>.
-## \file ProfileManager.py
-# tango utilities
+#
 
 """  ProfileManager """
 
@@ -27,48 +26,58 @@ from .Describer import Describer
 
 try:
     from nxstools.nxsxml import (XMLFile, NDSource)
-    ## flag for nxstools installed
+    #: flag for nxstools installed
     NXSTOOLS = True
 except ImportError:
     NXSTOOLS = False
 
+#: default data names
 DEFAULT_RECORD_KEYS = ['serialno', 'end_time', 'start_time',
                        'point_nb', 'timestamps', 'scan_title',
                        'filename']
 
 
-## Manages Measurement Group and Profile from Selector
 class ProfileManager(object):
-    """  MntGrp Tools """
+    """  Manages Measurement Group and Profile from Selector"""
 
-    ## constructor
-    # \param selector selector object
     def __init__(self, selector):
-        ## configuration selector
+        """ constructor
+
+        :param selector selector object
+        """
+        #: configuration selector
         self.__selector = selector
 
-        ## macro server name
+        #: macro server name
         self.__macroServerName = None
-        ## configuration server proxy
+        #: configuration server proxy
         self.__configServer = None
-        ## pool server proxies
+        #: pool server proxies
         self.__pools = None
 
-        ## default preselectedComponents
+        #: default preselectedComponents
         self.defaultPreselectedComponents = []
 
     def __updateMacroServer(self):
+        """ updatas MacroServer name
+        """
         self.__macroServerName = self.__selector.getMacroServer()
 
     def __updateConfigServer(self):
+        """ update configuration server device proxy
+        """
         self.__configServer = self.__selector.setConfigInstance()
 
     def __updatePools(self):
+        """ update device pool proxy list
+        """
         self.__pools = self.__selector.getPools()
 
-    ## available mntgrps
-    # \returns list of available measurement groups
     def availableMntGrps(self):
+        """ available mntgrps
+
+        :returns: list of available measurement groups
+        """
         self.__updateMacroServer()
         self.__updatePools()
         mntgrps = None
@@ -87,9 +96,11 @@ class ProfileManager(object):
             pass
         return mntgrps
 
-    ## provides selected components
-    # \returns list of available selected components
     def components(self):
+        """ provides selected components
+
+        :returns: list of available selected components
+        """
         cps = json.loads(self.__selector["ComponentSelection"])
         ads = json.loads(self.__selector["DataSourceSelection"])
         dss = [ds for ds in ads if ads[ds]]
@@ -102,29 +113,35 @@ class ProfileManager(object):
                     res.append(ds)
         return res
 
-    ## provides preselected components
-    # \returns list of available preselected components
     def preselectedComponents(self):
+        """ provides preselected components
+
+        :returns: list of available preselected components
+        """
         cps = json.loads(self.__selector["ComponentPreselection"])
         if isinstance(cps, dict):
             return [cp for cp in cps.keys() if cps[cp]]
         else:
             return []
 
-    ## provides preselected datasources
-    # \returns list of available preselected components
     def preselectedDataSources(self):
+        """ provides preselected datasources
+
+        :returns: list of available preselected components
+        """
         cps = json.loads(self.__selector["DataSourcePreselection"])
         if isinstance(cps, dict):
             return [cp for cp in cps.keys() if cps[cp]]
         else:
             return []
 
-    ## provides description of components
-    # \param full if True describes all available ones are taken
-    #        otherwise selectect, preselected and mandatory
-    # \returns description of required components
     def cpdescription(self, full=False):
+        """ provides description of components
+
+        :param full: if True describes all available ones are taken
+                     otherwise selectect, preselected and mandatory
+        :returns: description of required components
+        """
         self.__updateConfigServer()
         describer = Describer(self.__configServer, True)
         cp = None
@@ -138,9 +155,11 @@ class ProfileManager(object):
             res = describer.components(cp, '', '')
         return res
 
-    ## provides a list of Component DataSources
-    # \returns list of component datasources
     def componentDataSources(self):
+        """ provides a list of Component DataSources
+
+        :returns: list of component datasources
+        """
         res = self.cpdescription()
         dds = set()
 
@@ -150,9 +169,11 @@ class ProfileManager(object):
                     dds.add(ds)
         return list(dds)
 
-    ## provides selected datasources
-    # \returns list of available selected datasources
     def dataSources(self):
+        """ provides selected datasources
+
+        :returns: list of available selected datasources
+        """
         dds = self.componentDataSources()
         if not isinstance(dds, list):
             dds = []
@@ -162,9 +183,11 @@ class ProfileManager(object):
         else:
             return []
 
-    ## deletes mntgrp
-    # \param name mntgrp name
     def deleteProfile(self, name):
+        """ deletes mntgrp
+
+        :param name: mntgrp name
+        """
         self.__updatePools()
         for pool in self.__pools:
             mntgrps = PoolUtils.getElementNames([pool], 'MeasurementGroupList')
@@ -177,12 +200,14 @@ class ProfileManager(object):
         if name in inst.AvailableSelections():
             inst.deleteSelection(name)
 
-    ## set active measurement group from components
-    # \param components  component list
-    # \param datasources datasource list
-    # \param componentdatasources component datasource list
-    # \returns string with mntgrp configuration
     def updateProfile(self):
+        """ set active measurement group from components
+
+        :param components: component list
+        :param datasources: datasource list
+        :param componentdatasources: component datasource list
+        :returns: string with mntgrp configuration
+        """
         mcp = self.__selector.configCommand("mandatoryComponents") or []
         datasources = self.dataSources()
         componentdatasources = self.componentDataSources()
@@ -198,8 +223,11 @@ class ProfileManager(object):
         self.__selector["MntGrpConfiguration"] = conf
         return str(dpmg.Configuration)
 
-    ## switchProfile to active measurement
     def switchProfile(self, toActive=True):
+        """ switchProfile to active measurement
+
+        :param toActive: if False update the current profile
+        """
         if toActive:
             ms = self.__selector.getMacroServer()
             amntgrp = MSUtils.getEnv('ActiveMntGrp', ms)
@@ -211,9 +239,11 @@ class ProfileManager(object):
         if self.__setFromMntGrpConf(jconf):
             self.__selector.storeSelection()
 
-    ## provides configuration of mntgrp
-    # \returns string with mntgrp configuration
     def mntGrpConfiguration(self):
+        """ provides configuration of mntgrp
+
+        :returns: string with mntgrp configuration
+        """
         self.__updatePools()
         self.__updateMacroServer()
         mntGrpName = self.__selector["MntGrp"]
@@ -223,9 +253,11 @@ class ProfileManager(object):
             return "{}"
         return str(dpmg.Configuration)
 
-    ## check if active measurement group was changed
-    # \returns True if it is different to the current setting
     def isMntGrpUpdated(self):
+        """ check if active measurement group was changed
+
+        :returns: True if it is different to the current setting
+        """
         mcp = self.__selector.configCommand("mandatoryComponents") or []
         datasources = self.dataSources()
         componentdatasources = self.componentDataSources()
@@ -251,16 +283,18 @@ class ProfileManager(object):
         lsconf = json.loads(llconf)
         return Utils.compareDict(mgconf, lsconf)
 
-    ## import setting from active measurement
     def importMntGrp(self):
+        """ import setting from active measurement
+        """
         self.__updateMacroServer()
         self.__updateConfigServer()
         jconf = self.mntGrpConfiguration()
         if self.__setFromMntGrpConf(jconf):
             self.__selector.storeSelection()
 
-    ## fetch configuration
     def fetchProfile(self):
+        """ fetches the profile configuration
+        """
         self.__updateConfigServer()
         if self.__selector.fetchSelection() is False:
             avmg = self.availableMntGrps()
@@ -271,13 +305,15 @@ class ProfileManager(object):
                     self.defaultPreselectedComponents)
                 self.__selector.preselect()
 
-    ## set active measurement group from components
-    # \param components  component list
-    # \param datasources datasource list
-    # \param componentdatasources component datasource list
-    # \returns tuple of MntGrp configuration and MntGrp Device name
     def __createMntGrpConf(self, components, datasources,
                            componentdatasources):
+        """ sets active measurement group from components
+
+        :param components:  component list
+        :param datasources: datasource list
+        :param componentdatasources: component datasource list
+        :returns: tuple of MntGrp configuration and MntGrp Device name
+        """
         self.__updatePools()
         self.__updateMacroServer()
         cnf = {}
@@ -307,8 +343,12 @@ class ProfileManager(object):
         MSUtils.setEnv('PreScanSnapshot', snapshot, self.__macroServerName)
         return conf, mfullname
 
-    ## import setting from active measurement
     def __setFromMntGrpConf(self, jconf):
+        """ import setting from active measurement
+
+        :param jconf: json with mntgrp configuration
+        :returns: if profile has been changed
+        """
         self.__updatePools()
         conf = json.loads(jconf)
         otimers = None
@@ -344,6 +384,11 @@ class ProfileManager(object):
         return changed
 
     def __clearChannels(self, dsg, hel):
+        """ clears profile channels
+
+        :param dsg: datasource selection dictionary
+        :param hel: list of hidden elements
+        """
         dds = self.componentDataSources()
         describer = Describer(self.__configServer, True)
         ads = TangoUtils.command(self.__configServer, "availableDataSources")
@@ -362,6 +407,14 @@ class ProfileManager(object):
 
     @classmethod
     def __readChannels(cls, conf, timers, dsg, hel):
+        """ reads channels from mntgrp configutation
+
+        :param conf: mntgrp configuration
+        :param timers: timer dictionary
+        :param dsg: datasource selection dictionary
+        :param hel: list of hidden elements
+        :returns: tango datasources list with elements (name, label, source)
+        """
         tangods = []
         timers[conf["timer"]] = ''
         for ctrl in conf["controllers"].values():
@@ -385,6 +438,14 @@ class ProfileManager(object):
         return tangods
 
     def __readTangoChannels(self, conf, tangods, dsg, hel):
+        """ reads Tango channels from mntgrp configutation
+
+        :param conf: mntgrp configuration
+        :param tangods: tango datasources list
+                        with elements (name, label, source)
+        :param dsg: datasource selection dictionary
+        :param hel: list of hidden elements
+        """
         if tangods and NXSTOOLS:
             jds = self.__createDataSources(tangods, dsg)
             for ctrl in conf["controllers"].values():
@@ -403,6 +464,14 @@ class ProfileManager(object):
                                         hel.remove(name)
 
     def __reorderTimers(self, conf, timers, dsg, hel):
+        """ reads timer aliases and reoder it according to mntgrp
+
+        :param conf: mntgrp configuration
+        :param timers: timer device name list
+        :param dsg: datasource selection dictionary
+        :param hel: list of hidden elements
+        :returns: timer alias list
+        """
         dtimers = PoolUtils.getAliases(self.__pools, timers)
         otimers = list(dtimers.values())
         otimers.remove(dtimers[conf["timer"]])
@@ -418,8 +487,12 @@ class ProfileManager(object):
                     hel.remove(tm)
         return otimers
 
-    ## checks client records
     def __checkClientRecords(self, components, datasources):
+        """ checks client records
+
+        :param components: component list
+        :param datasources: datasource list
+        """
 
         describer = Describer(self.__configServer, True)
         frecords = PoolUtils.getFullDeviceNames(self.__pools)
@@ -445,6 +518,11 @@ class ProfileManager(object):
                 "User Data not defined %s" % str(missing))
 
     def __getActivePool(self, mntgrp=None):
+        """ get the active pool
+
+        :param mntgrp: current mntgrp
+        :returns: active pool proxy
+        """
         apool = []
         lpool = [None, 0]
         fpool = None
@@ -464,6 +542,12 @@ class ProfileManager(object):
         return fpool
 
     def __createMntGrpDevice(self, mntGrpName, timer):
+        """ creates mntgrp devices
+
+        :param mntgrpName: measurement group name
+        :param time: master timer name
+        :returns: measurement group full name
+        """
         amntgrp = MSUtils.getEnv('ActiveMntGrp', self.__macroServerName)
         apool = self.__getActivePool(amntgrp)
         if apool:
@@ -478,8 +562,13 @@ class ProfileManager(object):
             mfullname = str(PoolUtils.getMntGrpName(self.__pools, mntGrpName))
         return mfullname
 
-    ## prepares timers
     def __prepareTimers(self, cnf, ltimers):
+        """ prepares timers
+
+        :param cnf: mntgrp configuration
+        :param ltimers: slave timer list
+        :returns: master timer
+        """
         mtimers = json.loads(self.__selector["Timer"])
         timer = mtimers[0] if mtimers else ''
         if not timer:
@@ -501,6 +590,17 @@ class ProfileManager(object):
 
     def __fetchChannels(self, components, datasources, componentdatasources,
                         dontdisplay, timers):
+        """ fetches component channels from config server
+            and preselect datasources
+
+        :param components: component list
+        :param datasources: datasource list
+        :param componentdatasources: component datasources
+        :param dontdisplay: hidden channel list
+        :param timers: timers list
+        :return:  (ordered pool channels, snapshot tuple list)
+
+        """
         aliases = []
         initsources = {}
 
@@ -561,8 +661,12 @@ class ProfileManager(object):
         pchannels.extend(aliases)
         return pchannels, snapshot
 
-    ## sets mntgrp
     def __prepareMntGrp(self, cnf, timer):
+        """ sets mntgrp
+
+        :param cnf: mntgrp configuration
+        :param timer: master timer
+        """
         mntGrpName = self.__selector["MntGrp"]
         mfullname = str(PoolUtils.getMntGrpName(self.__pools, mntGrpName))
 
@@ -575,6 +679,16 @@ class ProfileManager(object):
 
     @classmethod
     def __findSources(cls, tangods, extangods, exsource):
+        """ finds sources of tango datasources
+
+        :param tangods: tango datasources list
+                        with elements (name, label, source)
+        :param extangods: tango datasources list
+                        with elements
+                        (ds name, input source,
+                         source without 'tango://',
+                         sources with host)
+        """
         for name, _, initsource in tangods:
             source = initsource if initsource[:8] != 'tango://' \
                 else initsource[8:]
@@ -594,6 +708,17 @@ class ProfileManager(object):
 
     @classmethod
     def __addKnownSources(cls, extangods, sds, existing=None):
+        """ adds known sources
+
+        :param extangods: tango datasources list
+                        with elements
+                        (ds name, input source,
+                         source without 'tango://',
+                         sources with host)
+        :param sds: list of json datasource descriptions
+        :param existing: list of existing datasources
+        :returns: dictionary with known sources
+        """
         jds = {}
         found = set()
         if not existing:
@@ -627,6 +752,14 @@ class ProfileManager(object):
 
     @classmethod
     def __createXMLSource(cls, name, source, exsource):
+        """ creates datasource XML for sources
+
+        :param name: datasource name
+        :param source: datasource source string
+        :param exsource: dictioanry of source attributes
+         with value (host, port, device, attribute)
+        :returns: xml string
+        """
         host, port, device, attribute = exsource[source]
         df = XMLFile("ds.xml")
         sr = NDSource(df)
@@ -636,6 +769,18 @@ class ProfileManager(object):
         return df.prettyPrint()
 
     def __createUnknownSources(self, extangods, exsource, ads, jds):
+        """ creates datasource XMLs for unknown datasources
+
+        :param extangods: tango datasources list
+                        with elements
+                        (ds name, input source,
+                         source without 'tango://',
+                         sources with host)
+        :param exsource: dictioanry of source attributes
+         with value (host, port, device, attribute)
+        :param ads: availaible datasources
+        :param jds: dictionary with of source alias names
+        """
         for name, initsource, source, _ in extangods:
             if initsource not in jds:
                 jds[initsource] = None
@@ -653,6 +798,13 @@ class ProfileManager(object):
                     jds[initsource] = name
 
     def __createDataSources(self, tangods, dsg):
+        """adds known and creates unknown datasources
+
+        :param tangods: tango datasources list
+                        with elements (name, label, source)
+        :param dsg: datasource selection dictionary
+        :returns: dictionary with of source alias names
+        """
         extangods = []
         exsource = {}
 
@@ -666,17 +818,18 @@ class ProfileManager(object):
         self.__createUnknownSources(extangods, exsource, ads, jds)
         return jds
 
-    ## adds device into configuration dictionary
-    # \param cls class instance
-    # \param device device alias
-    # \param dontdisplay list of devices component for display
-    # \param cnf configuration dictionary
-    # \param timer device timer
-    # \param index device index
-    # \param fullnames dictionary with full names
-    # \returns next device index
     def __addDevice(self, device, dontdisplay, cnf,
                     timer, index, fullnames=None, sources=None):
+        """ adds device into configuration dictionary
+
+        :param device: device alias
+        :param dontdisplay: list of devices component for display
+        :param cnf: mntgrp configuration dictionary
+        :param timer: device timer
+        :param index: device index
+        :param fullnames: dictionary with full names
+        :returns: next device index
+        """
         if not fullnames:
             fullnames = PoolUtils.getFullDeviceNames(
                 self.__pools, [device, timer])
@@ -708,9 +861,14 @@ class ProfileManager(object):
 
         return index
 
-    ## adds controller into configuration dictionary
     @classmethod
     def __addController(cls, cnf, ctrl, fulltimer):
+        """ adds controller into mntgrp configuration dictionary
+
+        :param cnf: mntgrp configuration dictionary
+        :param ctrl: controller device name
+        :param fulltimer: full timer name
+        """
         if 'controllers' not in cnf.keys():
             cnf['controllers'] = {}
         if ctrl not in cnf['controllers'].keys():
@@ -727,11 +885,20 @@ class ProfileManager(object):
             cnf['controllers'][ctrl]['units']['0'][
                 u'trigger_type'] = 0
 
-    ## adds channel into configuration dictionary
     @classmethod
     def __addChannel(cls, cnf, ctrl, device, fullname, dontdisplay, index,
                      source):
+        """ adds channel into mngrp configuration dictionary
 
+        :param cnf: mntgrp configuration dictionary
+        :param ctrl: controller device name
+        :param device: alias device name
+        :param fullname: full device name
+        :param dontdisplay: hidden channels
+        :param index: channel index
+        :param source: channel source
+        :returns: next index
+        """
         ctrlChannels = cnf['controllers'][ctrl]['units']['0'][
             u'channels']
         if fullname not in ctrlChannels.keys():
@@ -776,9 +943,18 @@ class ProfileManager(object):
 
         return index
 
-    ## adds  tango channel into configuration dictionary
     @classmethod
     def __addTangoChannel(cls, cnf, ctrl, device, record, dontdisplay, index):
+        """ adds tango channel into mntgrp configuration dictionary
+
+        :param cnf: mntgrp configuration dictionary
+        :param ctrl: controller device name
+        :param device: alias device name
+        :param record: tango channel sources
+        :param dontdisplay: hidden channels
+        :param index: channel index
+        :returns: next index
+        """
 
         ctrlChannels = cnf['controllers'][ctrl]['units']['0'][
             u'channels']
