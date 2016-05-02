@@ -259,6 +259,15 @@ class ConverterTest(unittest.TestCase):
         myver = "1.2.3"
         cv = Converter(myver)
         self.assertEqual(cv.allkeys({}), set([
+            'UserData',
+            'UnplottedComponents',
+            'DataSourceSelection',
+            'DefaultDynamicLinks',
+            'DataSourcePreselection',
+            'PreselectingDataSources',
+            'ComponentPreselection',
+            'ComponentSelection',
+            'DefaultDynamicPath',
             'DynamicPath',
             'AutomaticComponentGroup',
             'DynamicLinks',
@@ -292,6 +301,7 @@ class ConverterTest(unittest.TestCase):
             res = set(names.keys())
             for ll in lk:
                 res.update(ll.names.keys())
+                res.update(ll.names.values())
             self.assertEqual(cv.allkeys(names), res)
 
 

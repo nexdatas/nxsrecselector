@@ -201,6 +201,7 @@ class Converter(object):
         lkeys = set()
         for cv in self.up:
             lkeys.update(cv.names.keys())
+            lkeys.update(cv.names.values())
         ak = set(selection.keys())
         ak.update(lkeys)
         return ak
