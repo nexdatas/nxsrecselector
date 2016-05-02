@@ -15,8 +15,7 @@
 #
 #    You should have received a copy of the GNU General Public License
 #    along with nexdatas.  If not, see <http://www.gnu.org/licenses/>.
-## \file DynamicComponent.py
-# dynamic component creator
+#
 
 """  Dynamic Component """
 
@@ -27,20 +26,21 @@ import PyTango
 from .Utils import Utils, TangoUtils, PoolUtils
 
 
-## NeXus Sardana Recorder settings
 class DynamicComponent(object):
     """ Creates dynamic component
         of given component """
 
-    ## constructor
-    # \param nexusconfig_device configserver configuration server name
     def __init__(self, nexusconfig_device):
+        """ constructor
+
+        :param nexusconfig_device: configserver configuration server name
+        """
         self.__nexusconfig_device = nexusconfig_device
 
         self.__stepdsourcesDict = []
         self.__stepdsources = []
         self.__initdsources = []
-        ## dynamic components
+        #: dynamic components
         self.__defaultCP = "__dynamic_component__"
         self.__dynamicCP = ""
         self.__nexuslabels = {}
@@ -56,7 +56,7 @@ class DynamicComponent(object):
         self.__defaultpath = self.__ldefaultpath
         self.__links = True
 
-        ## map of numpy types : NEXUS
+        #: map of numpy types : NEXUS
         self.__npTn = {"float32": "NX_FLOAT32", "float64": "NX_FLOAT64",
                        "float": "NX_FLOAT32", "double": "NX_FLOAT64",
                        "int": "NX_INT", "int64": "NX_INT64",
@@ -66,10 +66,12 @@ class DynamicComponent(object):
                        "uint8": "NX_UINT8", "uint": "NX_UINT64",
                        "string": "NX_CHAR", "bool": "NX_BOOLEAN"}
 
-    ## provides a device alias
-    # \param name device name
-    # \return device alias
     def __get_alias(self, name):
+        """ provides a device alias
+
+        :param name: device name
+        :returns: device alias
+        """
         # if name does not contain a "/" it's probably an alias
         if name.find("/") == -1:
             return name
@@ -80,10 +82,12 @@ class DynamicComponent(object):
             name = "/".join(lst[1:])
         return self.__db.get_alias(name)
 
-    ## sets user datasources with type and shape
-    # \param dctlist json list of parameter dictionaries
-    #        [{"name": <dsname>, "dtype": <num_type>, "shape":<list>}, ...]
     def setStepDictDSources(self, dctlist):
+        """ sets user datasources with type and shape
+
+        :param dctlist: json list of parameter dictionaries
+               [{"name": <dsname>, "dtype": <num_type>, "shape":<list>}, ...]
+        """
         self.__stepdsourcesDict = []
         if isinstance(dctlist, list):
             for dct in dctlist:
@@ -95,27 +99,35 @@ class DynamicComponent(object):
                 if "shape" not in dct.keys():
                     self.__stepdsourcesDict[-1]["shape"] = []
 
-    ## sets step datasources
-    # \param dsources list of step datasources
     def setStepDSources(self, dsources):
+        """ sets step datasources
+
+        :param dsources: list of step datasources
+        """
         self.__stepdsources = list(dsources)
         if not isinstance(self.__stepdsources, list):
             self.__stepdsources = []
 
-    ## sets init datasources
-    # \param dsources list of init datasources
+    ##
     def setInitDSources(self, dsources):
+        """ sets init datasources
+
+        :param dsources: list of init datasources
+        """
         self.__initdsources = list(dsources)
         if not isinstance(self.__initdsources, list):
             self.__initdsources = []
 
-    ## sets label parameters for specific dynamic components
-    # \param labels label dictionaries
-    # \param paths nexus path dictionaries
-    # \param links link dictionaries
-    # \param types nexus type dictionaries
-    # \param shapes data shape dictionaries
+    ##
     def setLabelParams(self, labels, paths, links, types, shapes):
+        """ sets label parameters for specific dynamic components
+
+        :param labels: label dictionaries
+        :param paths: nexus path dictionaries
+        :param links: link dictionaries
+        :param types: nexus type dictionaries
+        :param shapes: data shape dictionaries
+        """
         self.__nexuslabels = json.loads(labels)
         if not isinstance(self.__nexuslabels, dict):
             self.__nexuslabels = {}
@@ -132,17 +144,24 @@ class DynamicComponent(object):
         if not isinstance(self.__nexusshapes, dict):
             self.__nexusshapes = {}
 
-    ## sets default nexus path and link flag for dynamic components
-    # \brief if dynamicPath is None or "" it is reset to default one
-    # \param dynamicPath nexus default path
-    # \param dynamicLinks default link flag
     def setDefaultLinkPath(self, dynamicLinks, dynamicPath):
+        """ sets default nexus path and link flag for dynamic components
+
+        :brief: if dynamicPath is None or "" it is reset to default one
+        :param dynamicPath: nexus default path
+        :param dynamicLinks: default link flag
+        """
         self.__links = dynamicLinks
         self.__defaultpath = dynamicPath
         if not self.__defaultpath:
             self.__defaultpath = self.__ldefaultpath
 
     def __shapeFromTango(self, ds):
+        """ provices datasource shape and NeXus type from Tango device
+
+        :param ds: datasource name
+        :returns: (shape, NeXus type) tuple
+        """
         nxtype = None
         dstype = None
         shape = None
@@ -156,6 +175,12 @@ class DynamicComponent(object):
         return shape, nxtype
 
     def __createSardanaNodes(self, created, root, definition):
+        """ creates XML nodes for sardana devices
+
+        :param created: list of created devices
+        :param root: root node
+        :param definition: definition node
+        """
         for dd in self.__stepdsourcesDict:
             alias = self.__get_alias(str(dd["name"]))
             path, field = self.__getPathField(
@@ -177,6 +202,13 @@ class DynamicComponent(object):
 
     def __createNonSardanaNodes(self, created, avds, root, definition,
                                 strategy="STEP"):
+        """ creates XML nodes for non sardana devices
+
+        :param created: list of created devices
+        :param avds: available datasources
+        :param root: root node
+        :param definition: definition node
+        """
         dsources = self.__initdsources \
             if strategy == 'INIT' else self.__stepdsources
         for ds in dsources:
@@ -219,8 +251,11 @@ class DynamicComponent(object):
                 if link:
                     self.__createLink(root, nxdata, path, field)
 
-    ## creates dynamic component
     def create(self):
+        """ creates dynamic component
+
+        :returns: dynanic component name
+        """
         cps = TangoUtils.command(self.__nexusconfig_device,
                                  "availableComponents")
         name = self.__defaultCP
@@ -248,6 +283,13 @@ class DynamicComponent(object):
 
     @classmethod
     def __getProp(cls, nexusprop, nexuslabels, name, default):
+        """ gets the property value for the given datasource
+
+        :param nexusprop: nexus property dictionary
+        :param nexuslabel: nexus label dictionary
+        :param default: default value if porperty is not defined
+        :returns: propery value
+        """
         prop = nexusprop.get(nexuslabels.get(name, ""), None)
         if prop is None:
             prop = nexusprop.get(name, default)
@@ -255,6 +297,14 @@ class DynamicComponent(object):
 
     @classmethod
     def __getPathField(cls, nexuspaths, nexuslabels, alias, defaultpath):
+        """ gets the Nexus path and for the given datasource
+
+        :param nexuspaths: nexus property path dictionary
+        :param nexuslabel: nexus label dictionary
+        :param alias : datasource alias
+        :param defaultpath: default path if path is not defined
+        :returns: propery value
+        """
         path = nexuspaths.get(nexuslabels.get(alias, ""), "")
         if not path:
             path = nexuspaths.get(alias, "")
@@ -274,6 +324,13 @@ class DynamicComponent(object):
 
     @classmethod
     def __createLink(cls, root, entry, path, name):
+        """ creates XML node for nexus link
+
+        :param root: root node
+        :param entry: entry node
+        :param path: nexus path
+        :param name: link name
+        """
         if name and entry:
             link = root.createElement("link")
             entry.appendChild(link)
@@ -282,6 +339,12 @@ class DynamicComponent(object):
 
     @classmethod
     def __findDataSource(cls, name):
+        """ finds datasource details:
+        (attribute name, device name, host, port) tuple
+
+        :param: datasource name
+        :returns: (attribute name, device name, host, port) tuple
+        """
         attr = None
         device = None
         host = None
@@ -311,6 +374,19 @@ class DynamicComponent(object):
     def __createField(cls, root, parent, fname, nxtype, sname,
                       record=None, shape=None, dsnode=None,
                       strategy='STEP', dstype=None):
+        """ creates XML node for NeXus field
+
+        :param root: root node
+        :param parent: parent node
+        :param fname: field name
+        :param nxtype: field NeXus type
+        :param sname: data source name
+        :param record: record attribute
+        :param shape: field shape
+        :param dsnode: datasource node
+        :param strategy: strategy mode
+        :param dstype: datasource type
+        """
         field = root.createElement("field")
         parent.appendChild(field)
         field.setAttribute("type", nxtype)
@@ -361,9 +437,11 @@ class DynamicComponent(object):
                 dim.setAttribute("index", str(i + 1))
                 dim.setAttribute("value", str(shape[i]))
 
-    ## removes dynamic component
-    # \param name dynamic component name
     def remove(self, name):
+        """ removes dynamic component
+
+        :param name: dynamic component name
+        """
         if self.__defaultCP not in name:
             raise Exception(
                 "Dynamic component name should contain: %s" % self.__defaultCP)
@@ -375,7 +453,14 @@ class DynamicComponent(object):
 
     @classmethod
     def __createGroupTree(cls, root, definition, path, links=False):
-        # create group tree
+        """ creates group tree
+
+        :param root: root node
+        :param definition: definition node
+        :param path: NeXus path
+        :param links: if NXdata should be created
+        :returns (last group node, nxdata group node) tuple
+        """
 
         spath = path.split('/')
         entry = None

@@ -15,8 +15,7 @@
 #
 #    You should have received a copy of the GNU General Public License
 #    along with nexdatas.  If not, see <http://www.gnu.org/licenses/>.
-## \file MacroServerPools.py
-# sardana macro server and pools
+#
 
 """  Selection state """
 
@@ -29,28 +28,31 @@ from .Describer import Describer
 from .CheckerThread import CheckerThread, TangoDSItem, CheckerItem
 
 
-## NeXus Sardana Recorder settings
 class MacroServerPools(object):
     """ sardanamacro server and pools """
 
-    ## constructor
-    # \param numberOfThreads number of threads
+    ##
     def __init__(self, numberOfThreads):
+        """ constructor
 
+        :param numberOfThreads: number of threads
+        """
         self.__numberOfThreads = numberOfThreads
 
-        ## tango database
+        #: tango database
         self.__db = PyTango.Database()
 
+        #: nexus configuration variable name in ms
         self.__nxsenv = "NeXusConfiguration"
 
-        ## macro server instance
+        #: macro server instance
         self.__macroserver = ""
-        ## pool instances
+        #: pool instances
         self.__pools = []
-        ## black list of pools
+        #: black list of pools
         self.poolBlacklist = []
 
+        #: pure variables
         self.__pureVar = [
             "AppendEntry",
             "ComponentsFromMntGrp",
@@ -65,9 +67,11 @@ class MacroServerPools(object):
             "ScanDir"
         ]
 
-    ## updates MacroServer and sardana pools for given door
-    # \param door door device name
     def updateMacroServer(self, door):
+        """ updates MacroServer and sardana pools for given door
+
+        :param door: door device name
+        """
         self.__macroserver = ""
         self.__pools = []
         if not door:
@@ -82,18 +86,21 @@ class MacroServerPools(object):
         self.__pools = TangoUtils.getProxies(poolNames)
         self.__macroserver = macroserver
 
-    ## door macro server device name
-    # \param door door device name
-    # \returns macroserver device name
     def getMacroServer(self, door):
+        """ door macro server device name
+
+        :param door: door device name
+        :returns: macroserver device name
+        """
         if not self.__macroserver:
             self.updateMacroServer(door)
         return self.__macroserver
 
-    ## door pool device proxies
-    # \param door door device name
-    # \returns pool device proxies
     def getPools(self, door):
+        """ door pool device proxies
+        :param door: door device name
+        :returns: pool device proxies
+        """
         if not self.__pools:
             self.updateMacroServer(door)
         return self.__pools
@@ -101,6 +108,16 @@ class MacroServerPools(object):
     @classmethod
     def __toCheck(cls, configdevice, discomponentgroup, components,
                   datasources, channels, nonexisting):
+        """ prepares list of channels to check
+
+        :param configdevice: configuration device proxy
+        :param discomponentgroup: name dictionary of checker items
+        :param components: component list
+        :param datasources: datasource list
+        :param channel: pool channel list
+        :param nonexisting: non-exising pool channels
+        :returns: list of CheckerItems
+        """
         describer = Describer(configdevice, True)
         availablecomponents = TangoUtils.command(
             configdevice, "availableComponents")
@@ -127,6 +144,16 @@ class MacroServerPools(object):
     @classmethod
     def __createCheckItem(cls, name, dss, toCheck, nonexisting,
                           discomponentgroup, channels, describer):
+        """ creates Checker Item
+
+        :param name: item name
+        :param dss: datasource dictionary
+        :param toCheck: dictionary with checker items
+        :param nonexisting: non-exising pool channels
+        :param discomponentgroup: name dictionary of checker items
+        :param channel: pool channel list
+        :param describer: describer instance
+        """
         if isinstance(dss, dict):
             tgds = describer.dataSources(dss.keys(), 'TANGO')[0]
             for ds in dss.keys():
@@ -154,16 +181,18 @@ class MacroServerPools(object):
                         toCheck[name] = CheckerItem(name)
                     toCheck[name].append(TangoDSItem(str(ds)))
 
-    ## checks component channels
-    # \param door door device name
-    # \param configdevice configuration server
-    # \param channels pool channels
-    # \param componentgroup preselected component group
-    # \param channelerrors deactivated component errors
-    # \returns json dictionary with selected active components
     def checkChannels(self, door, configdevice, channels,
                       componentgroup, datasourcegroup,
                       channelerrors):
+        """ checks component channels
+
+        :param door: door device name
+        :param configdevice: configuration server
+        :param channels: pool channels
+        :param componentgroup: preselected component group
+        :param channelerrors: deactivated component errors
+        :returns: json dictionary with selected active components
+        """
         channelerrors[:] = []
         discomponentgroup = {}
         threads = []
@@ -203,6 +232,12 @@ class MacroServerPools(object):
 
     @classmethod
     def __updategroup(cls, group, disgroup, channelerrors):
+        """ updates selection dictionary
+
+        :param group: selection dictionary
+        :param disgroup: dictionary with checker items
+        :param channelerrors: list with channel errors
+        """
         for acp in group.keys():
             if acp in disgroup.keys():
                 checkeritem = disgroup[acp]
@@ -219,11 +254,13 @@ class MacroServerPools(object):
                 if group[acp] is not False:
                     group[acp] = True
 
-    ## imports Environment Data
-    # \param door door device
-    # \param names names of required variables
-    # \param data dictionary with resulting data
     def getSelectorEnv(self, door, names, data):
+        """ imports Environment Data
+
+        :param door: door device
+        :param names: names of required variables
+        :param data: dictionary with resulting data
+        """
         params = ["ScanDir",
                   "ScanFile"]
 
@@ -248,11 +285,13 @@ class MacroServerPools(object):
                         vl = json.dumps(vl)
                     data[var] = vl
 
-    ## exports all Environment Data
-    # \param door door device
-    # \param data data dictionary
-    # \param cmddata command data dictionary
     def setSelectorEnv(self, door, data, cmddata=None):
+        """ exports all Environment Data
+
+        :param door: door device
+        :param data: data dictionary
+        :param cmddata: command data dictionary
+        """
         params = ["ScanDir",
                   "ScanFile"]
 
@@ -284,10 +323,12 @@ class MacroServerPools(object):
                 pk = pickle.dumps(dc)
                 msp.Environment = ['pickle', pk]
 
-    ## fetches Scan Environment Data
-    # \param door door device
-    # \returns JSON String with important variables
     def getScanEnv(self, door):
+        """ fetches Scan Environment Data
+
+        :param door: door device
+        :returns: JSON String with important variables
+        """
         params = ["ScanDir",
                   "ScanFile",
                   "ScanID",
@@ -304,10 +345,12 @@ class MacroServerPools(object):
                         res[var] = dc['new'][var]
         return json.dumps(res)
 
-    ## stores Scan Environment Data
-    # \param door door device
-    # \param jdata JSON String with important variables
     def setScanEnv(self, door, jdata):
+        """ stores Scan Environment Data
+
+        :param door: door device
+        :param jdata: JSON String with important variables
+        """
         jdata = Utils.stringToDictJson(jdata)
         data = json.loads(jdata)
         scanID = -1

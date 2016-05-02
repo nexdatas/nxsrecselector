@@ -15,8 +15,7 @@
 #
 #    You should have received a copy of the GNU General Public License
 #    along with nexdatas.  If not, see <http://www.gnu.org/licenses/>.
-## \file Describer.py
-# component describer
+#
 
 """  Component Describer """
 
@@ -27,22 +26,26 @@ import xml.dom.minidom
 from .Utils import Utils, TangoUtils
 
 
-## Basic DataSource item
 class DSItem(object):
+    """ Basic DataSource item
+    """
     __slots__ = 'name', 'dstype', 'record'
 
-    ## constructor
-    # \param name datasource name
-    # \param dstype datasource type
-    # \param record datasource record
-    # \param dsitem datasource item
+    ##
     def __init__(self, name=None, dstype=None, record=None, dsitem=None):
+        """ constructor
+
+        :param name: datasource name
+        :param dstype: datasource type
+        :param record: datasource record
+        :param dsitem: datasource item
+        """
         if dsitem:
-            ## datasource name
+            #: datasource name
             self.name = dsitem.name
-            ## datasource type
+            #: datasource type
             self.dstype = dsitem.dstype
-            ## datasource record
+            #: datasource record
             self.record = dsitem.record
         else:
             self.name = str(name) if name is not None else None
@@ -50,44 +53,53 @@ class DSItem(object):
             self.record = str(record) if record is not None else None
 
 
-## Extended DataSource item
 class ExDSItem(DSItem):
+    """ Extended DataSource item
+    """
     __slots__ = 'mode', 'nxtype', 'shape'
 
-    ## constructor
-    # \param dsitem datasource item
-    # \param mode writing mode
-    # \param nxtype nexus type
-    # \param shape datasource shape
+    ##
     def __init__(self, dsitem=None, mode=None, nxtype=None, shape=None):
+        """ constructor
+
+        :param dsitem: datasource item
+        :param mode: writing mode
+        :param nxtype: nexus type
+        :param shape: datasource shape
+        """
         DSItem.__init__(self, dsitem=dsitem)
-        ## writing mode
+        #: writing mode
         self.mode = str(mode) if mode is not None else None
-        ## nexus type
+        #: nexus type
         self.nxtype = str(nxtype) if nxtype is not None else None
-        ## datasource shape
+        #: datasource shape
         self.shape = shape
 
 
-## Extended DataSource Dictionary
 class ExDSDict(dict):
+    """ Extended DataSource Dictionary
+    """
 
-    ## constructor
-    # \param args dict args
-    # \param kw dict kw
     def __init__(self, *args, **kw):
+        """ constructor
+
+        :param args: dict args
+        :param kw: dict kw
+        """
         super(ExDSDict, self).__init__(*args, **kw)
         self.__counter = 1
         self.__prefix = '__unnamed__'
 
-    ## appends a list of ExDSItem
-    # \param dslist DSItem list
-    # \param mode startegy mode
-    # \param nxtype NeXus type
-    # \param shape data shape
-    # \returns datasource name for first added datasource
-    #          or None if not appended
     def appendDSList(self, dslist, mode, nxtype=None, shape=None):
+        """ appends a list of ExDSItem
+
+        :param dslist: DSItem list
+        :param mode: startegy mode
+        :param nxtype: NeXus type
+        :param shape: data shape
+        :returns: datasource name for first added datasource
+              or None if not appended
+        """
         fname = None
         for dsitem in dslist:
             name = dsitem.name
@@ -108,15 +120,16 @@ class ExDSDict(dict):
         return fname
 
 
-## NeXus Sardana Recorder settings
 class Describer(object):
     """ Lists datasources, strategy, dstype and record name
         of given component """
 
-    ## constructor
-    # \param nexusconfig_device configserver configuration server name
-    # \param tree output flag for dictionary tree
     def __init__(self, nexusconfig_device, tree=False):
+        """ constructor
+
+        :param nexusconfig_device: configserver configuration server name
+        :param tree: output flag for dictionary tree
+        """
         self.__nexusconfig_device = nexusconfig_device
         self.__treeOutput = tree
         self.__availableComponents = TangoUtils.command(
@@ -126,16 +139,18 @@ class Describer(object):
             self.__nexusconfig_device,
             "availableDataSources")
 
-    ## describes given components
-    # \param components given components.
-    #        If None all available ones are taken
-    # \param strategy list datasets only with given strategy.
-    #        If '' all available ones are taken
-    # \param dstype list datasets only with given datasource type.
-    #        If '' all available ones are taken
-    # \param cfvars configuration variables
-    # \returns list of dictionary with description of components
     def components(self, components=None, strategy='', dstype='', cfvars=None):
+        """ describes given components
+
+        :param components: given components.
+                           If None all available ones are taken
+        :param strategy: list datasets only with given strategy.
+                         If '' all available ones are taken
+        :param dstype: list datasets only with given datasource type.
+                       If '' all available ones are taken
+        :param cfvars: configuration variables
+        :returns: list of dictionary with description of components
+        """
         result = []
 
         if components is not None:
@@ -152,6 +167,14 @@ class Describer(object):
         return result
 
     def __fillinlist(self, cps, strategy, dstype, cfvars):
+        """ fills in the list of output elements
+
+        :param cps: component list
+        :param strategy: required strategy or None
+        :param dstype: required datasource type or None
+        :param cfvars: dictionary with configuration variables
+        :returns: list of output dictionary elements
+        """
         result = []
         for cp in cps:
             dss = self.__getInstDataSourceAttributes(cp, cfvars)
@@ -171,6 +194,13 @@ class Describer(object):
         return result
 
     def __fillintree(self, cps, strategy, dstype):
+        """ fills in the dictionary of output elements
+
+        :param cps: component list
+        :param strategy: required strategy or None
+        :param dstype: required datasource type or None
+        :returns: dictionary of output dictionary elements
+        """
         result = {}
         for cp in cps:
             dss = self.__getDataSourceAttributes(cp)
@@ -187,6 +217,11 @@ class Describer(object):
         return result
 
     def __getDSFromNode(self, node, dsl=None):
+        """ provides datasource item from XML node
+
+        :param node: xml node
+        :param dsl: list with datasource items (DSItem)
+        """
         label = 'datasources'
         name = None
         dstype = None
@@ -227,6 +262,11 @@ class Describer(object):
 
     @classmethod
     def __getShape(cls, node):
+        """ provides shape from node
+
+        :param node: xml node
+        :returns: shape of node
+        """
         rank = int(node.attributes["rank"].value)
         shape = [None] * rank
         dims = node.getElementsByTagName("dim")
@@ -260,6 +300,11 @@ class Describer(object):
         return shape
 
     def __getDataSourceAttributes(self, cp):
+        """ provides datasource ExDSDict of given component
+
+        :param cp : component name
+        :returns: datasource ExDSDict
+        """
         xmlc = TangoUtils.command(self.__nexusconfig_device,
                                   "components", [cp])
         if not len(xmlc) > 0:
@@ -267,6 +312,12 @@ class Describer(object):
         return self.__getDSFromXML(xmlc[0])
 
     def __getInstDataSourceAttributes(self, cp, cfvars=None):
+        """ provides datasource ExDSDict of given instantiated component
+
+        :param cp : component name
+        :param cfvars : component variables
+        :returns: datasource ExDSDict
+        """
         if cfvars:
             cv = json.loads(self.__nexusconfig_device.variables)
             sv = json.loads(cfvars)
@@ -280,6 +331,11 @@ class Describer(object):
         return self.__getDSFromXML(xmlc[0])
 
     def __getDSFromXML(self, cpxml):
+        """ provides datasource ExDSDict of given component xml
+
+        :param cpxml : component xml
+        :returns: datasource ExDSDict
+        """
         indom = xml.dom.minidom.parseString(cpxml)
         strategy = indom.getElementsByTagName("strategy")
 
@@ -323,13 +379,15 @@ class Describer(object):
 
         return dss
 
-    ## describes given datasources
-    # \param names given datasources.
-    #        If None all available ones are taken
-    # \param dstype list datasources only with given type.
-    #        If '' all available ones are taken
-    # \returns list of dictionary with description of datasources
     def dataSources(self, names=None, dstype=''):
+        """ describes given datasources
+
+        :param names: given datasources.
+                      If None all available ones are taken
+        :param dstype: list datasources only with given type.
+                       If '' all available ones are taken
+        :returns: list of dictionary with description of datasources
+        """
         ads = list(self.__availableDataSources)
         if names is not None:
             dss = [name for name in names if name in ads]
@@ -360,6 +418,8 @@ class Describer(object):
         return dslist
 
     def __describeDataSource(self, name):
+        """
+        """
         dstype = None
         record = None
         try:
