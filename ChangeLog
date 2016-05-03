@@ -1,3 +1,7 @@
+2016-05-03 Jan Kotanski <jankotan@gmail.com>
+	* Utils: add setEnvs
+	* tagged as v3.3.0
+
 2016-05-02 Jan Kotanski <jankotan@gmail.com>
 	* add sphinx docu
 	* fix allkeys in Converter

@@ -340,7 +340,9 @@ class ProfileManager(object):
                 al if al in ltimers else timer, index, fullnames, sources)
         conf = json.dumps(cnf)
 
-        MSUtils.setEnv('PreScanSnapshot', snapshot, self.__macroServerName)
+        MSUtils.setEnvs({'PreScanSnapshot': snapshot,
+                         'ActiveMntGrp': cnf['label']},
+                        self.__macroServerName)
         return conf, mfullname
 
     def __setFromMntGrpConf(self, jconf):
@@ -662,10 +664,11 @@ class ProfileManager(object):
         return pchannels, snapshot
 
     def __prepareMntGrp(self, cnf, timer):
-        """ sets mntgrp
+        """ creates mntgrp if does not exists
 
         :param cnf: mntgrp configuration
         :param timer: master timer
+        :returns: full mntgrp name
         """
         mntGrpName = self.__selector["MntGrp"]
         mfullname = str(PoolUtils.getMntGrpName(self.__pools, mntGrpName))
@@ -673,7 +676,6 @@ class ProfileManager(object):
         if not mfullname:
             mfullname = self.__createMntGrpDevice(mntGrpName, timer)
 
-        MSUtils.setEnv('ActiveMntGrp', str(mntGrpName), self.__macroServerName)
         cnf['label'] = mntGrpName
         return mfullname
 
