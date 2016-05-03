@@ -393,12 +393,19 @@ class Describer(object):
             dss = [name for name in names if name in ads]
         else:
             dss = ads
+        try:
+            xmls = TangoUtils.command(self.__nexusconfig_device,
+                                      "dataSources", dss)
+        except:
+            xmls = None
 
         dslist = []
         dsres = {}
-        for name in dss:
+        for i, name in enumerate(dss):
             if name:
-                dsitem = self.__describeDataSource(name)
+                if xmls:
+                    dsxml = xmls[i]
+                dsitem = self.__describeDataSource(name, dsxml)
                 if dstype and dsitem.dstype != dstype:
                     continue
                 dsres[name] = dsitem
@@ -417,14 +424,17 @@ class Describer(object):
                     dslist.append(str(json.dumps(elem)))
         return dslist
 
-    def __describeDataSource(self, name):
+    def __describeDataSource(self, name, dsxml=None):
         """
         """
         dstype = None
         record = None
         try:
-            dsource = TangoUtils.command(self.__nexusconfig_device,
-                                         "dataSources", [str(name)])
+            if not dsxml:
+                dsource = TangoUtils.command(self.__nexusconfig_device,
+                                             "dataSources", [str(name)])
+            else:
+                dsource = [dsxml]
         except (PyTango.DevFailed, PyTango.Except, PyTango.DevError):
             dsource = []
         if len(dsource) > 0:
