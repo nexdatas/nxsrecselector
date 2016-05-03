@@ -387,6 +387,29 @@ class UtilsTest(unittest.TestCase):
                            self._simps.new_device_info_writer.name)
             self.assertEqual(vl[1], MSUtils.getEnv(
                 k, self._simps.new_device_info_writer.name))
+    ## getEnv test
+    def test_getsetEnvs(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+
+        arr = {
+            "ScanDir": [u'/tmp/', "/tmp/sardana/"],
+            "ScanFile": [[u'sar4r.nxs'], [u'sar4r.nxs', u'sar5r.nxs']],
+            "ScanID": [192, 123],
+            "ScanNone": ["", "Something new"],
+            "_ViewOptions": [{'ShowDial': True}, {'ShowDial': False}],
+        }
+
+        for k, vl in arr.items():
+            self.assertEqual(
+                vl[0], MSUtils.getEnv(
+                    k, self._simps.new_device_info_writer.name))
+
+        MSUtils.setEnvs(dict((key,arr[key][1]) for key in arr.keys()),
+                       self._simps.new_device_info_writer.name)
+        for k, vl in arr.items():
+            self.assertEqual(vl[1], MSUtils.getEnv(
+                k, self._simps.new_device_info_writer.name))
 
     ## getEnv test
     def test_getEnv(self):
@@ -439,6 +462,34 @@ class UtilsTest(unittest.TestCase):
         for k, vl in arr.items():
             MSUtils.setEnv(k, vl[1],
                            self._simps.new_device_info_writer.name)
+
+            self.assertEqual(self._simps.dp.Environment[0], 'pickle')
+            en = pickle.loads(self._simps.dp.Environment[1])['new']
+            self.assertEqual(en[k], MSUtils.getEnv(
+                k, self._simps.new_device_info_writer.name))
+
+    ## setEnv test
+    def test_setEnvs(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+
+        arr = {
+            "ScanDir": [u'/tmp/', "/tmp/sardana/"],
+            "ScanFile": [[u'sar4r.nxs'], [u'sar4r.nxs', u'sar5r.nxs']],
+            "ScanFile": [[u'sar4r.nxs'], [u'sar5r.nxs']],
+            "ScanID": [192, 123],
+            "ScanNone": ["", "Something new"],
+            "_ViewOptions": [{'ShowDial': True}, {'ShowDial': False}],
+        }
+
+        for k, vl in arr.items():
+            self.assertEqual(
+                vl[0], MSUtils.getEnv(
+                    k, self._simps.new_device_info_writer.name))
+
+        MSUtils.setEnvs(dict((key,arr[key][1]) for key in arr.keys()),
+                        self._simps.new_device_info_writer.name)
+        for k, vl in arr.items():
 
             self.assertEqual(self._simps.dp.Environment[0], 'pickle')
             en = pickle.loads(self._simps.dp.Environment[1])['new']

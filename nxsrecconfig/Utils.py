@@ -367,6 +367,23 @@ class MSUtils(object):
                 dp.Environment = ['pickle', pk]
 
     @classmethod
+    def setEnvs(cls, varvalues, ms):
+        """ sets environment variable value
+
+        :param varvalues: variable value dictionary
+        :param ms: macroserver
+        """
+        dp = TangoUtils.openProxy(ms)
+        rec = dp.Environment
+        if rec[0] == 'pickle':
+            dc = pickle.loads(rec[1])
+            if 'new' in dc.keys():
+                for var, value in varvalues.items():
+                    dc['new'][var] = value
+                pk = pickle.dumps(dc)
+                dp.Environment = ['pickle', pk]
+
+    @classmethod
     def usetEnv(cls, var, ms):
         """ unsets environment variable
 
