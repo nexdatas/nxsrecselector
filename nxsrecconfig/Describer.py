@@ -394,8 +394,11 @@ class Describer(object):
         else:
             dss = ads
         try:
-            xmls = TangoUtils.command(self.__nexusconfig_device,
-                                      "dataSources", dss)
+            if dss:
+                xmls = TangoUtils.command(self.__nexusconfig_device,
+                                          "dataSources", dss)
+            else:
+                xmls = []
         except:
             xmls = None
 

@@ -1,3 +1,7 @@
+2016-05-XX Jan Kotanski <jankotan@gmail.com>
+	* skip unneeded datasources calls
+	* tagged as v3.3.1
+
 2016-05-03 Jan Kotanski <jankotan@gmail.com>
 	* Utils: add setEnvs
 	* tagged as v3.3.0
