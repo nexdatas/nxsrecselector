@@ -3907,7 +3907,8 @@ class SelectorTest(unittest.TestCase):
             json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
             ["AvailableComponents", "AvailableDataSources",
              "AvailableComponents", "Components",
-             "DataSources", "DataSources",
+             "DataSources",
+             "DataSources",
              "AvailableDataSources",
              "StoreSelection"])
         self.assertEqual(
@@ -3964,7 +3965,7 @@ class SelectorTest(unittest.TestCase):
         self.myAssertDict(json.loads(res), {"mycp": False})
         self.assertEqual(channelerrors, [])
 
-        print self._cf.dp.GetCommandVariable("COMMANDS")
+        #        print self._cf.dp.GetCommandVariable("COMMANDS")
         self.assertEqual(
             json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
             ["AvailableComponents",
@@ -4260,7 +4261,7 @@ class SelectorTest(unittest.TestCase):
             json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
             ["AvailableComponents", "AvailableDataSources",
              "AvailableComponents",
-             "Components", "DataSources", "DataSources", "DataSources",
+             "Components", "DataSources", "DataSources",
              "DataSources", "DataSources"])
         self.assertTrue(val["MntGrp"] not in self._cf.dp.availableSelections())
 
@@ -4303,7 +4304,7 @@ class SelectorTest(unittest.TestCase):
             ["AvailableComponents", "AvailableDataSources",
              "AvailableComponents",
              "Components", "DataSources", "DataSources",
-             "DataSources", "DataSources",
+             "DataSources",
              "DataSources", "AvailableDataSources",
              "StoreSelection"])
         self.assertEqual(json.loads(self._cf.dp.GetCommandVariable("VARS")),
@@ -4311,8 +4312,7 @@ class SelectorTest(unittest.TestCase):
                           [u'smycp'],
                           [u'scalar_long'],
                           [u'scalar_short'],
-                          [u'scalar_long'],
-                          [u'scalar_short'],
+                          [u'scalar_long', u'scalar_short'],
                           [u'scalar_uchar'],
                           None, val["MntGrp"]])
         self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
@@ -4373,15 +4373,14 @@ class SelectorTest(unittest.TestCase):
             json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
             ["AvailableComponents", "AvailableDataSources",
              "AvailableComponents",
-             "Components", "DataSources", "DataSources", "DataSources",
+             "Components", "DataSources", "DataSources",
              "DataSources", "DataSources"])
         self.assertEqual(json.loads(self._cf.dp.GetCommandVariable("VARS")),
                          [None, None, None,
                           [u'smycp'],
                           [u'scalar_long'],
                           [u'scalar_short'],
-                          [u'scalar_long'],
-                          [u'scalar_short'],
+                          [u'scalar_long', u'scalar_short'],
                           [u'scalar_uchar']])
         self.assertTrue(val["MntGrp"] not in self._cf.dp.availableSelections())
 
@@ -4430,11 +4429,8 @@ class SelectorTest(unittest.TestCase):
             ["AvailableComponents", "AvailableDataSources",
              "AvailableComponents",
              "Components", "DataSources", "DataSources", "DataSources",
-             "DataSources",
              "Components", "DataSources", "DataSources", "DataSources",
-             "DataSources",
              "Components", "DataSources", "DataSources", "DataSources",
-             "DataSources",
              "DataSources",
              "DataSources",
              "DataSources",
@@ -4519,26 +4515,21 @@ class SelectorTest(unittest.TestCase):
             })
             self.assertEqual(len(channelerrors), 0)
 
-    #        print self._cf.dp.GetCommandVariable("COMMANDS")
+            # print self._cf.dp.GetCommandVariable("COMMANDS")
+            # self.maxDiff = None
             self.assertEqual(
                 json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
                 [
-                    "AvailableComponents", "AvailableDataSources",
                     "AvailableComponents",
+                    "AvailableDataSources", "AvailableComponents",
                     "Components", "DataSources", "DataSources", "DataSources",
-                    "DataSources",
                     "Components", "DataSources", "DataSources", "DataSources",
-                    "DataSources",
                     "Components", "DataSources", "DataSources", "DataSources",
-                    "DataSources",
                     "Components", "DataSources", "DataSources", "DataSources",
-                    "DataSources",
                     "Components", "DataSources", "DataSources", "DataSources",
-                    "DataSources",
                     "Components", "DataSources", "DataSources", "DataSources",
-                    "DataSources",
-                    "DataSources", "DataSources", "DataSources",
-                    "DataSources", "DataSources", "DataSources",
+                    "DataSources", "DataSources", "DataSources", "DataSources",
+                    "DataSources", "DataSources",
                     "AvailableDataSources", "StoreSelection"
                 ])
             res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
@@ -4622,32 +4613,21 @@ class SelectorTest(unittest.TestCase):
             })
             self.assertEqual(len(channelerrors), 0)
 
-    #        print self._cf.dp.GetCommandVariable("COMMANDS")
+            print self._cf.dp.GetCommandVariable("COMMANDS")
             self.assertEqual(
                 json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
-                [
-                    "AvailableComponents", "AvailableDataSources",
-                    "AvailableComponents",
-                    "Components", "DataSources", "DataSources", "DataSources",
-                    "DataSources",
-                    "Components", "DataSources", "DataSources", "DataSources",
-                    "DataSources",
-                    "Components", "DataSources", "DataSources", "DataSources",
-                    "DataSources",
-                    "Components", "DataSources", "DataSources", "DataSources",
-                    "DataSources",
-                    "Components", "DataSources", "DataSources", "DataSources",
-                    "DataSources",
-                    "Components", "DataSources", "DataSources", "DataSources",
-                    "DataSources",
-                    "DataSources",
-                    "DataSources",
-                    "DataSources",
-                    "DataSources",
-                    "DataSources",
-                    "DataSources",
-                    "AvailableDataSources", "StoreSelection"
-                ])
+                ["AvailableComponents", "AvailableDataSources",
+                 "AvailableComponents",
+                 "Components", "DataSources", "DataSources", "DataSources",
+                 "Components", "DataSources", "DataSources", "DataSources",
+                 "Components", "DataSources", "DataSources", "DataSources",
+                 "Components", "DataSources", "DataSources", "DataSources",
+                 "Components", "DataSources", "DataSources", "DataSources",
+                 "Components", "DataSources", "DataSources", "DataSources",
+                 "DataSources", "DataSources", "DataSources", "DataSources",
+                 "DataSources", "DataSources",
+                 "AvailableDataSources", "StoreSelection"]
+            )
             res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
@@ -4734,17 +4714,11 @@ class SelectorTest(unittest.TestCase):
                     "AvailableComponents", "AvailableDataSources",
                     "AvailableComponents",
                     "Components", "DataSources", "DataSources", "DataSources",
-                    "DataSources",
                     "Components", "DataSources", "DataSources", "DataSources",
-                    "DataSources",
                     "Components", "DataSources", "DataSources", "DataSources",
-                    "DataSources",
                     "Components", "DataSources", "DataSources", "DataSources",
-                    "DataSources",
                     "Components", "DataSources", "DataSources", "DataSources",
-                    "DataSources",
                     "Components", "DataSources", "DataSources", "DataSources",
-                    "DataSources",
                     "DataSources", "DataSources", "DataSources",
                     "DataSources", "DataSources", "DataSources",
                     "AvailableDataSources", "StoreSelection"])
@@ -4822,6 +4796,7 @@ class SelectorTest(unittest.TestCase):
         })
         self.assertEqual(len(se.descErrors), 6)
 
+        
         self.assertEqual(
             json.loads(
                 self._cf.dp.GetCommandVariable("COMMANDS")),
@@ -4829,17 +4804,11 @@ class SelectorTest(unittest.TestCase):
                 "AvailableComponents", "AvailableDataSources",
                 "AvailableComponents",
                 "Components", "DataSources", "DataSources", "DataSources",
-                "DataSources",
                 "Components", "DataSources", "DataSources", "DataSources",
-                "DataSources",
                 "Components", "DataSources", "DataSources", "DataSources",
-                "DataSources",
                 "Components", "DataSources", "DataSources", "DataSources",
-                "DataSources",
                 "Components", "DataSources", "DataSources", "DataSources",
-                "DataSources",
                 "Components", "DataSources", "DataSources", "DataSources",
-                "DataSources",
                 "DataSources", "DataSources", "DataSources",
                 "DataSources", "DataSources", "DataSources",
                 "AvailableDataSources", "StoreSelection"
