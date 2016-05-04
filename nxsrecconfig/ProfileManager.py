@@ -160,28 +160,51 @@ class ProfileManager(object):
 
         :returns: list of component datasources
         """
-        res = self.cpdescription()
+        return self.__componentDataSources(self.cpdescription())
+
+    def __componentDataSources(self, description=None):
+        """ provides a list of Component DataSources
+
+        :param description: component description
+        :returns: list of component datasources
+        """
+        if description is None:
+            description = self.cpdescription()
+
         dds = set()
 
-        for dss in res[0].values():
+        for dss in description[0].values():
             if isinstance(dss, dict):
-                for ds in dss.keys():
-                    dds.add(ds)
+                for ds, params in dss.items():
+                    for param in params:
+                        if param and len(param) > 2:
+                            if param[0] == 'STEP':
+                                dds.add(ds)
         return list(dds)
+
+    def __dataSources(self, compdatasources=None):
+        """ provides selected datasources
+
+        :param componentdatasources: component datasources
+        :returns: list of available selected datasources
+        """
+        if compdatasources is None:
+            compdatasources = self.__componentDataSources()
+        if not isinstance(compdatasources, list):
+            compdatasources = []
+        dss = json.loads(self.__selector["DataSourceSelection"])
+        if isinstance(dss, dict):
+            return [ds for ds in dss.keys()
+                    if dss[ds] and ds not in compdatasources]
+        else:
+            return []
 
     def dataSources(self):
         """ provides selected datasources
 
         :returns: list of available selected datasources
         """
-        dds = self.componentDataSources()
-        if not isinstance(dds, list):
-            dds = []
-        dss = json.loads(self.__selector["DataSourceSelection"])
-        if isinstance(dss, dict):
-            return [ds for ds in dss.keys() if dss[ds] and ds not in dds]
-        else:
-            return []
+        return self.__dataSources()
 
     def deleteProfile(self, name):
         """ deletes mntgrp
@@ -200,27 +223,31 @@ class ProfileManager(object):
         if name in inst.AvailableSelections():
             inst.deleteSelection(name)
 
-    def updateProfile(self):
-        """ set active measurement group from components
+    def updateProfile(self, sync=False):
+        """ sets active measurement group from components and
+        import setting from active measurement
 
-        :param components: component list
-        :param datasources: datasource list
-        :param componentdatasources: component datasource list
         :returns: string with mntgrp configuration
         """
         mcp = self.__selector.configCommand("mandatoryComponents") or []
-        datasources = self.dataSources()
-        componentdatasources = self.componentDataSources()
         components = list(
             set(self.components()) | set(self.preselectedComponents()) |
             set(mcp))
+
+        self.__updateConfigServer()
+        describer = Describer(self.__configServer, True)
+        description = describer.components(components, '', '')
+        componentdatasources = self.__componentDataSources(description)
+        datasources = self.__dataSources(componentdatasources)
         conf, mntgrp = self.__createMntGrpConf(
-            components, datasources, componentdatasources)
-        self.__selector.storeSelection()
+            components, datasources, componentdatasources, description)
         dpmg = TangoUtils.openProxy(mntgrp)
         dpmg.Configuration = conf
         conf = dpmg.Configuration
-        self.__selector["MntGrpConfiguration"] = conf
+        self.__selector["MntGrpConfiguration"] = str(conf)
+        if sync:
+            self.__setFromMntGrpConf(conf, componentdatasources)
+        self.__selector.storeSelection()
         return str(dpmg.Configuration)
 
     def switchProfile(self, toActive=True):
@@ -259,19 +286,22 @@ class ProfileManager(object):
         :returns: True if it is different to the current setting
         """
         mcp = self.__selector.configCommand("mandatoryComponents") or []
-        datasources = self.dataSources()
-        componentdatasources = self.componentDataSources()
         components = list(
             set(self.components()) | set(self.preselectedComponents()) |
             set(mcp))
 
+        self.__updateConfigServer()
+        describer = Describer(self.__configServer, True)
+        description = describer.components(components, '', '')
+        componentdatasources = self.__componentDataSources(description)
+        datasources = self.__dataSources(componentdatasources)
         mgconf = json.loads(self.mntGrpConfiguration())
 
         state = self.__selector.get()
         amg = MSUtils.getEnv('ActiveMntGrp', self.__macroServerName)
 
         llconf, _ = self.__createMntGrpConf(
-            components, datasources, componentdatasources)
+            components, datasources, componentdatasources, description)
 
         amg2 = MSUtils.getEnv('ActiveMntGrp', self.__macroServerName)
         if amg != amg2:
@@ -306,12 +336,13 @@ class ProfileManager(object):
                 self.__selector.preselect()
 
     def __createMntGrpConf(self, components, datasources,
-                           componentdatasources):
+                           componentdatasources, description):
         """ sets active measurement group from components
 
         :param components:  component list
         :param datasources: datasource list
         :param componentdatasources: component datasource list
+        :param description: component description
         :returns: tuple of MntGrp configuration and MntGrp Device name
         """
         self.__updatePools()
@@ -328,7 +359,7 @@ class ProfileManager(object):
 
         aliases, snapshot = self.__fetchChannels(
             components, datasources, componentdatasources,
-            dontdisplay, set(ltimers) | set([timer]))
+            dontdisplay, set(ltimers) | set([timer]), description)
         mfullname = self.__prepareMntGrp(cnf, timer)
 
         index = 0
@@ -345,10 +376,11 @@ class ProfileManager(object):
                         self.__macroServerName)
         return conf, mfullname
 
-    def __setFromMntGrpConf(self, jconf):
+    def __setFromMntGrpConf(self, jconf, compdatasources=None):
         """ import setting from active measurement
 
         :param jconf: json with mntgrp configuration
+        :param componentdatasources: component datasources
         :returns: if profile has been changed
         """
         self.__updatePools()
@@ -358,7 +390,7 @@ class ProfileManager(object):
 
         dsg = json.loads(self.__selector["DataSourceSelection"])
         hel = set(json.loads(self.__selector["UnplottedComponents"]))
-        self.__clearChannels(dsg, hel)
+        self.__clearChannels(dsg, hel, compdatasources)
 
         # fill in dsg, timers hel
         if "timer" in conf.keys() and "controllers" in conf.keys():
@@ -385,18 +417,20 @@ class ProfileManager(object):
             changed = True
         return changed
 
-    def __clearChannels(self, dsg, hel):
+    def __clearChannels(self, dsg, hel, compdatasources=None):
         """ clears profile channels
 
         :param dsg: datasource selection dictionary
         :param hel: list of hidden elements
+        :param componentdatasources: component datasources
         """
-        dds = self.componentDataSources()
+        if compdatasources is None:
+            compdatasources = self.componentDataSources()
         describer = Describer(self.__configServer, True)
         ads = TangoUtils.command(self.__configServer, "availableDataSources")
         dsres = describer.dataSources(ads, 'TANGO')[0]
         tangods = [str(dsr.name) for dsr in dsres.values()
-                   if dsr.name not in dds]
+                   if dsr.name not in compdatasources]
         channels = set(
             PoolUtils.getElementNames(self.__pools, 'ExpChannelList') or [])
         channels.update(set(tangods))
@@ -489,11 +523,12 @@ class ProfileManager(object):
                     hel.remove(tm)
         return otimers
 
-    def __checkClientRecords(self, components, datasources):
+    def __checkClientRecords(self, components, datasources, description):
         """ checks client records
 
         :param components: component list
         :param datasources: datasource list
+        :param description: component description
         """
 
         describer = Describer(self.__configServer, True)
@@ -502,12 +537,13 @@ class ProfileManager(object):
             set(datasources) - set(frecords.keys()), 'CLIENT')[0]
         records = [str(dsr.record) for dsr in dsres.values()]
 
-        cpres = describer.components(components, '', 'CLIENT')
-        for grp in cpres:
+#        cpres = describer.components(components, '', 'CLIENT')
+        for grp in description:
             for dss in grp.values():
                 for dsrs in dss.values():
                     for dsr in dsrs:
-                        records.append(str(dsr[2]))
+                        if dsr[1] == 'CLIENT':
+                            records.append(str(dsr[2]))
 
         urecords = json.loads(self.__selector["UserData"]).keys()
         precords = frecords.values()
@@ -591,7 +627,7 @@ class ProfileManager(object):
         return timer
 
     def __fetchChannels(self, components, datasources, componentdatasources,
-                        dontdisplay, timers):
+                        dontdisplay, timers, description):
         """ fetches component channels from config server
             and preselect datasources
 
@@ -600,13 +636,14 @@ class ProfileManager(object):
         :param componentdatasources: component datasources
         :param dontdisplay: hidden channel list
         :param timers: timers list
+        :param description: component description
         :return:  (ordered pool channels, snapshot tuple list)
 
         """
         aliases = []
         initsources = {}
 
-        self.__checkClientRecords(components, datasources)
+        self.__checkClientRecords(components, datasources, description)
         if isinstance(datasources, list):
             aliases = list(datasources)
         pchannels = json.loads(self.__selector["OrderedChannels"])
@@ -615,8 +652,8 @@ class ProfileManager(object):
             list(set(pchannels) & set(componentdatasources)))
 
         describer = Describer(self.__configServer, True)
-        res = describer.components(components, '', '')
-        for grp in res:
+#        res = describer.components(components, '', '')
+        for grp in description:
             for cp, dss in grp.items():
                 ndcp = cp in dontdisplay
                 for ds, params in dss.items():

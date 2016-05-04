@@ -1754,6 +1754,7 @@ class ProfileManagerTest(unittest.TestCase):
         self.__dump[name] = {}
 
         for key in el.keys():
+#            print "key", key, el[key]
             self.__dump[name][key] = el[key]
 
     def compareToDump(self, el, excluded=None, name="default"):
@@ -1780,6 +1781,8 @@ class ProfileManagerTest(unittest.TestCase):
                 w1 = json.loads(self.__dump[name][key])
                 w2 = json.loads(el[key])
             except:
+                if self.__dump[name][key] != el[key]:
+                    print key
                 self.assertEqual(self.__dump[name][key], el[key])
             else:
                 if isinstance(w1, dict):
@@ -5912,6 +5915,7 @@ class ProfileManagerTest(unittest.TestCase):
                                 adss[tm] = False
 
                     jpcnf = mgt.updateProfile()
+                    self.dump(se)
                     self.assertTrue(mgt.isMntGrpUpdated())
                     self.assertTrue(mgt.isMntGrpUpdated())
                     pcnf = json.loads(jpcnf)
@@ -6446,6 +6450,7 @@ class ProfileManagerTest(unittest.TestCase):
                                     adss[mg][tm] = False
 
                         jpcnf = mgt[mg].updateProfile()
+                        self.dump(se[mg], name=mg)
                         self.assertTrue(mgt[mg].isMntGrpUpdated())
                         self.assertTrue(mgt[mg].isMntGrpUpdated())
                         pcnf = json.loads(jpcnf)
@@ -6596,7 +6601,6 @@ class ProfileManagerTest(unittest.TestCase):
 
                         self.assertTrue(mgt[mg].isMntGrpUpdated())
                         self.assertTrue(mgt[mg].isMntGrpUpdated())
-
                         self.compareToDumpJSON(
                             se[mg],
                             ["DataSourceSelection",

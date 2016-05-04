@@ -16228,6 +16228,7 @@ class SettingsTest(unittest.TestCase):
                                 adss[tm] = False
 
                     jpcnf = rs.updateMntGrp()
+                    self.dump(rs)
                     self.assertTrue(rs.isMntGrpUpdated())
                     self.assertTrue(rs.isMntGrpUpdated())
                     pcnf = json.loads(jpcnf)
@@ -16793,6 +16794,7 @@ class SettingsTest(unittest.TestCase):
                                     adss[mg][tm] = False
 
                         jpcnf = rs[mg].updateMntGrp()
+                        self.dump(rs[mg], name=mg)
                         self.assertTrue(rs[mg].isMntGrpUpdated())
                         self.assertTrue(rs[mg].isMntGrpUpdated())
                         pcnf = json.loads(jpcnf)
@@ -18108,6 +18110,7 @@ class SettingsTest(unittest.TestCase):
                                     print "DES", tm
                                     adss[mg][tm] = False
 
+                        self.dump(ors, name=mg)
                         jpcnf = ors.updateMntGrp()
                         self.assertTrue(ors.isMntGrpUpdated())
                         self.assertTrue(ors.isMntGrpUpdated())

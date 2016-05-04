@@ -873,6 +873,11 @@ class Settings(object):
         """
         self.__profileManager.switchProfile(toActive)
 
+    def updateProfile(self):
+        """ update profile and measurement group
+        """
+        self.__profileManager.updateProfile(True)
+
     def importMntGrp(self):
         """ import setting from active measurement
         """
