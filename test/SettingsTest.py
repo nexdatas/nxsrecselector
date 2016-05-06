@@ -18110,8 +18110,8 @@ class SettingsTest(unittest.TestCase):
                                     print "DES", tm
                                     adss[mg][tm] = False
 
-                        self.dump(ors, name=mg)
                         jpcnf = ors.updateMntGrp()
+                        self.dump(ors, name=mg)
                         self.assertTrue(ors.isMntGrpUpdated())
                         self.assertTrue(ors.isMntGrpUpdated())
                         pcnf = json.loads(jpcnf)
