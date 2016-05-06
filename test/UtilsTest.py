@@ -37,6 +37,7 @@ logger = logging.getLogger()
 
 
 import TestServerSetUp
+import TestMacroServerSetUp
 
 from nxsrecconfig.Utils import Utils, TangoUtils, MSUtils, PoolUtils
 
@@ -139,6 +140,7 @@ class UtilsTest(unittest.TestCase):
         self._bfloat = "float64" if IS64BIT else "float32"
 
         self._simps = TestServerSetUp.TestServerSetUp()
+        self._ms = TestMacroServerSetUp.TestMacroServerSetUp()
         self._simps2 = TestServerSetUp.TestServerSetUp(
             "ttestp09/testts/t2r228", "S2")
         self._simps3 = TestServerSetUp.TestServerSetUp(
@@ -237,6 +239,7 @@ class UtilsTest(unittest.TestCase):
     # \brief Common set up
     def setUp(self):
         print "SEED =", self.__seed
+        self._ms.setUp()
         self._simps.setUp()
         self._simps2.setUp()
         self._simps3.setUp()
@@ -249,6 +252,7 @@ class UtilsTest(unittest.TestCase):
         self._simps3.tearDown()
         self._simps2.tearDown()
         self._simps.tearDown()
+        self._ms.tearDown()
 
     ## Exception tester
     # \param exception expected exception
@@ -440,6 +444,66 @@ class UtilsTest(unittest.TestCase):
             self.assertEqual(vl[1], MSUtils.getEnv(
                 k, self._simps.new_device_info_writer.name))
 
+    ## getEnv test
+    def test_getEnv_2(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+
+        arr = {
+            "ScanDir": [u'/tmp/', "/tmp/sardana/"],
+            "ScanFile": [[u'sar4r.nxs'], [u'sar4r.nxs', u'sar5r.nxs']],
+            "ScanID": [192, 123],
+            "blebleble": ["", "Something new"],
+            "_ViewOptions": [{'ShowDial': True}, {'ShowDial': False}],
+        }
+
+        for k, vl in arr.items():
+            self.assertEqual(
+                vl[0], MSUtils.getEnv(
+                    k, self._ms.ms.keys()[0]))
+
+        msdp = self._ms.dps[self._ms.ms.keys()[0]]
+
+        self.assertEqual(msdp.Environment[0], 'pickle')
+        en = pickle.loads(msdp.Environment[1])['new']
+
+        for k, vl in arr.items():
+            en[k] = vl[1]
+            msdp.Environment = (
+                'pickle',
+                pickle.dumps({'new': en}))
+            self.assertEqual(vl[1], MSUtils.getEnv(
+                k, self._ms.ms.keys()[0]))
+
+            
+    ## setEnv test
+    def test_setEnv_2(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+
+        arr = {
+            "ScanDir": [u'/tmp/', "/tmp/sardana/"],
+            "ScanFile": [[u'sar4r.nxs'], [u'sar4r.nxs', u'sar5r.nxs']],
+            "ScanFile": [[u'sar4r.nxs'], [u'sar5r.nxs']],
+            "ScanID": [192, 123],
+            "ScanNone": ["", "Something new"],
+            "_ViewOptions": [{'ShowDial': True}, {'ShowDial': False}],
+        }
+
+        for k, vl in arr.items():
+            self.assertEqual(
+                vl[0], MSUtils.getEnv(
+                    k, self._ms.ms.keys()[0]))
+            
+        msdp = self._ms.dps[self._ms.ms.keys()[0]]
+
+        for k, vl in arr.items():
+            MSUtils.setEnv(k, vl[1], self._ms.ms.keys()[0])
+
+            self.assertEqual(msdp.Environment[0], 'pickle')
+            en = pickle.loads(msdp.Environment[1])['new']
+            self.assertEqual(en[k], MSUtils.getEnv(k, self._ms.ms.keys()[0]))
+
     ## setEnv test
     def test_setEnv(self):
         fun = sys._getframe().f_code.co_name
@@ -468,6 +532,34 @@ class UtilsTest(unittest.TestCase):
             self.assertEqual(en[k], MSUtils.getEnv(
                 k, self._simps.new_device_info_writer.name))
 
+    ## setEnv test
+    def test_setEnvs_2(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+
+        arr = {
+            "ScanDir": [u'/tmp/', "/tmp/sardana/"],
+            "ScanFile": [[u'sar4r.nxs'], [u'sar4r.nxs', u'sar5r.nxs']],
+            "ScanFile": [[u'sar4r.nxs'], [u'sar5r.nxs']],
+            "ScanID": [192, 123],
+            "ScanNone": ["", "Something new"],
+            "_ViewOptions": [{'ShowDial': True}, {'ShowDial': False}],
+        }
+        msdp = self._ms.dps[self._ms.ms.keys()[0]]
+
+        for k, vl in arr.items():
+            self.assertEqual(
+                vl[0], MSUtils.getEnv(
+                    k, self._ms.ms.keys()[0]))
+
+        MSUtils.setEnvs(dict((key,arr[key][1]) for key in arr.keys()),
+                        self._ms.ms.keys()[0])
+        for k, vl in arr.items():
+
+            self.assertEqual(msdp.Environment[0], 'pickle')
+            en = pickle.loads(msdp.Environment[1])['new']
+            self.assertEqual(en[k], MSUtils.getEnv(
+                k, self._ms.ms.keys()[0]))
     ## setEnv test
     def test_setEnvs(self):
         fun = sys._getframe().f_code.co_name
@@ -512,15 +604,16 @@ class UtilsTest(unittest.TestCase):
         for k, vl in arr.items():
             self.assertEqual(
                 vl[0], MSUtils.getEnv(
-                    k, self._simps.new_device_info_writer.name))
-
+                    k, self._ms.ms.keys()[0]))
+        msdp = self._ms.dps[self._ms.ms.keys()[0]]
+            
         for k, vl in arr.items():
-            MSUtils.usetEnv(k, self._simps.new_device_info_writer.name)
+            MSUtils.usetEnv(k, self._ms.ms.keys()[0])
 
-            self.assertEqual(self._simps.dp.Environment[0], 'pickle')
-            en = pickle.loads(self._simps.dp.Environment[1])['new']
+            self.assertEqual(msdp.Environment[0], 'pickle')
+            en = pickle.loads(msdp.Environment[1])['new']
             self.assertEqual('', MSUtils.getEnv(
-                k, self._simps.new_device_info_writer.name))
+                k, self._ms.ms.keys()[0]))
 
     ## getProxies test
     def test_getProxies(self):

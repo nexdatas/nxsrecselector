@@ -1,6 +1,8 @@
 2016-05-XX Jan Kotanski <jankotan@gmail.com>
+	* add updateProfile
 	* skip unneeded datasources calls
-	* tagged as v3.3.1
+	* fix usetEnv
+	* tagged as v3.4.0
 
 2016-05-03 Jan Kotanski <jankotan@gmail.com>
 	* Utils: add setEnvs

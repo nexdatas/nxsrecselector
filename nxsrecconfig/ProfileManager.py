@@ -23,6 +23,7 @@ import json
 
 from .Utils import TangoUtils, PoolUtils, MSUtils, Utils
 from .Describer import Describer
+import PyTango
 
 try:
     from nxstools.nxsxml import (XMLFile, NDSource)
@@ -227,7 +228,9 @@ class ProfileManager(object):
         """ sets active measurement group from components and
         import setting from active measurement
 
-        :returns: string with mntgrp configuration
+
+        :param sync: make profile and mntgrp synchronization
+        :returns: dictionary with mntgrp configuration information
         """
         mcp = self.__selector.configCommand("mandatoryComponents") or []
         components = list(
@@ -239,16 +242,24 @@ class ProfileManager(object):
         description = describer.components(components, '', '')
         componentdatasources = self.__componentDataSources(description)
         datasources = self.__dataSources(componentdatasources)
-        conf, mntgrp = self.__createMntGrpConf(
-            components, datasources, componentdatasources, description)
-        dpmg = TangoUtils.openProxy(mntgrp)
+#        conf, mntgrp
+        mginfo = self.__createMntGrpConf(
+            datasources, componentdatasources, description)
+        conf = mginfo['configuration']
+        dpmg = TangoUtils.openProxy(str(mginfo['device']))
         dpmg.Configuration = conf
-        conf = dpmg.Configuration
-        self.__selector["MntGrpConfiguration"] = str(conf)
+        conf = str(dpmg.configuration)
+        self.__selector['MntGrpConfiguration'] = conf
+        mginfo['configuration'] = conf
         if sync:
             self.__setFromMntGrpConf(conf, componentdatasources)
         self.__selector.storeSelection()
-        return str(dpmg.Configuration)
+        MSUtils.setEnvs(
+            {'PreScanSnapshot': mginfo['snapshot'],
+             'ActiveMntGrp': mginfo['alias']},
+            self.__macroServerName
+        )
+        return conf
 
     def switchProfile(self, toActive=True):
         """ switchProfile to active measurement
@@ -300,8 +311,9 @@ class ProfileManager(object):
         state = self.__selector.get()
         amg = MSUtils.getEnv('ActiveMntGrp', self.__macroServerName)
 
-        llconf, _ = self.__createMntGrpConf(
-            components, datasources, componentdatasources, description)
+        mginfo = self.__createMntGrpConf(
+            datasources, componentdatasources, description)
+        llconf = str(mginfo["configuration"])
 
         amg2 = MSUtils.getEnv('ActiveMntGrp', self.__macroServerName)
         if amg != amg2:
@@ -335,7 +347,7 @@ class ProfileManager(object):
                     self.defaultPreselectedComponents)
                 self.__selector.preselect()
 
-    def __createMntGrpConf(self, components, datasources,
+    def __createMntGrpConf(self, datasources,
                            componentdatasources, description):
         """ sets active measurement group from components
 
@@ -358,7 +370,7 @@ class ProfileManager(object):
         timer = self.__prepareTimers(cnf, ltimers)
 
         aliases, snapshot = self.__fetchChannels(
-            components, datasources, componentdatasources,
+            datasources, componentdatasources,
             dontdisplay, set(ltimers) | set([timer]), description)
         mfullname = self.__prepareMntGrp(cnf, timer)
 
@@ -371,10 +383,13 @@ class ProfileManager(object):
                 al if al in ltimers else timer, index, fullnames, sources)
         conf = json.dumps(cnf)
 
-        MSUtils.setEnvs({'PreScanSnapshot': snapshot,
-                         'ActiveMntGrp': cnf['label']},
-                        self.__macroServerName)
-        return conf, mfullname
+        mginfo = {
+            "alias": str(cnf['label']),
+            "device": mfullname,
+            "configuration": str(conf),
+            "snapshot": snapshot
+        }
+        return mginfo
 
     def __setFromMntGrpConf(self, jconf, compdatasources=None):
         """ import setting from active measurement
@@ -523,10 +538,9 @@ class ProfileManager(object):
                     hel.remove(tm)
         return otimers
 
-    def __checkClientRecords(self, components, datasources, description):
+    def __checkClientRecords(self, datasources, description):
         """ checks client records
 
-        :param components: component list
         :param datasources: datasource list
         :param description: component description
         """
@@ -537,7 +551,6 @@ class ProfileManager(object):
             set(datasources) - set(frecords.keys()), 'CLIENT')[0]
         records = [str(dsr.record) for dsr in dsres.values()]
 
-#        cpres = describer.components(components, '', 'CLIENT')
         for grp in description:
             for dss in grp.values():
                 for dsrs in dss.values():
@@ -626,7 +639,7 @@ class ProfileManager(object):
                 ltimers.remove(timer)
         return timer
 
-    def __fetchChannels(self, components, datasources, componentdatasources,
+    def __fetchChannels(self, datasources, componentdatasources,
                         dontdisplay, timers, description):
         """ fetches component channels from config server
             and preselect datasources
@@ -643,7 +656,7 @@ class ProfileManager(object):
         aliases = []
         initsources = {}
 
-        self.__checkClientRecords(components, datasources, description)
+        self.__checkClientRecords(datasources, description)
         if isinstance(datasources, list):
             aliases = list(datasources)
         pchannels = json.loads(self.__selector["OrderedChannels"])
@@ -652,7 +665,6 @@ class ProfileManager(object):
             list(set(pchannels) & set(componentdatasources)))
 
         describer = Describer(self.__configServer, True)
-#        res = describer.components(components, '', '')
         for grp in description:
             for cp, dss in grp.items():
                 ndcp = cp in dontdisplay

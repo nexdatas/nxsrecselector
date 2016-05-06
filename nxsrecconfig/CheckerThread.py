@@ -102,7 +102,8 @@ class CheckerThread(threading.Thread):
 
     @classmethod
     def __check(cls, checkeritem):
-        """ checks oen device list item which usually corresponds to one components
+        """ checks oen device list item which usually corresponds
+        to one components
 
         :param checkeritem: device list item
         """

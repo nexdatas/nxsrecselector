@@ -864,7 +864,7 @@ class Settings(object):
 
         :returns: string with mntgrp configuration
         """
-        return self.__profileManager.updateProfile()
+        return self.__profileManager.updateProfile(False)
 
     def switchProfile(self, toActive=True):
         """ switch to active measurement
@@ -875,8 +875,11 @@ class Settings(object):
 
     def updateProfile(self):
         """ update profile and measurement group
+
+        :param setenv: set ActiveMntGrp and PreScanSnapshot variables
+        :returns: string with mntgrp configuration
         """
-        self.__profileManager.updateProfile(True)
+        return self.__profileManager.updateProfile(True)
 
     def importMntGrp(self):
         """ import setting from active measurement

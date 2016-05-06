@@ -138,7 +138,28 @@ class MacroServer(PyTango.Device_4Impl):
 
         #    Add your own code here
 
-        self.attr_Environment = attr.get_write_value()
+        env = attr.get_write_value()
+        envnew = {}
+        envchange = {}
+        envdel = []
+        if env[0] == 'pickle':
+            edict = pickle.loads(env[1])
+            if 'new' in edict.keys():
+                envnew = edict['new']
+            if 'change' in edict.keys():
+                envchange = edict['change']
+            if 'del' in edict.keys():
+                envdel = edict['del']
+            envdict = pickle.loads(self.attr_Environment[1])
+            if 'new' not in envdict.keys():
+                envdict['new'] = {}
+            newdict = envdict['new']
+            newdict.update(envnew)    
+            newdict.update(envchange)    
+            for ed in envdel:
+                if ed in newdict.keys():
+                    newdict.pop(ed)
+            self.attr_Environment = ("pickle", pickle.dumps(envdict))
         print "Attribute value = ", self.attr_Environment
 
     #

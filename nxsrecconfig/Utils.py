@@ -358,13 +358,10 @@ class MSUtils(object):
         :param ms: macroserver
         """
         dp = TangoUtils.openProxy(ms)
-        rec = dp.Environment
-        if rec[0] == 'pickle':
-            dc = pickle.loads(rec[1])
-            if 'new' in dc.keys():
-                dc['new'][var] = value
-                pk = pickle.dumps(dc)
-                dp.Environment = ['pickle', pk]
+        dc = {'new': {}}
+        dc['new'][var] = value
+        pk = pickle.dumps(dc)
+        dp.Environment = ['pickle', pk]
 
     @classmethod
     def setEnvs(cls, varvalues, ms):
@@ -374,14 +371,13 @@ class MSUtils(object):
         :param ms: macroserver
         """
         dp = TangoUtils.openProxy(ms)
-        rec = dp.Environment
-        if rec[0] == 'pickle':
-            dc = pickle.loads(rec[1])
-            if 'new' in dc.keys():
-                for var, value in varvalues.items():
-                    dc['new'][var] = value
-                pk = pickle.dumps(dc)
-                dp.Environment = ['pickle', pk]
+
+        dp = TangoUtils.openProxy(ms)
+        dc = {'new': {}}
+        for var, value in varvalues.items():
+            dc['new'][var] = value
+        pk = pickle.dumps(dc)
+        dp.Environment = ['pickle', pk]
 
     @classmethod
     def usetEnv(cls, var, ms):
@@ -391,14 +387,10 @@ class MSUtils(object):
         :param ms: macroserver
         """
         dp = TangoUtils.openProxy(ms)
-        rec = dp.Environment
-        if rec[0] == 'pickle':
-            dc = pickle.loads(rec[1])
-            if 'new' in dc.keys():
-                if var in dc['new']:
-                    dc['new'].pop(var)
-                pk = pickle.dumps(dc)
-                dp.Environment = ['pickle', pk]
+        dp = TangoUtils.openProxy(ms)
+        dc = {'del': [var]}
+        pk = pickle.dumps(dc)
+        dp.Environment = ['pickle', pk]
 
     @classmethod
     def getMacroServer(cls, db, door):

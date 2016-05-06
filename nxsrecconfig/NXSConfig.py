@@ -32,17 +32,12 @@
 
 """ Selector Server for NeXus Sardana Recorder """
 
-import PyTango
-import cProfile, pstats, io
-#pru = cProfile.Profile()
-#pri = cProfile.Profile()
-#prs = cProfile.Profile()
-import time
 # ==================================================================
 #   NXSRecSelector Class Description:
 #
 # ==================================================================
 
+import PyTango
 from .Settings import Settings as STG
 
 
@@ -629,8 +624,8 @@ class NXSRecSelector(PyTango.Device_4Impl):
         """ UpdateProfile command
 
         :brief: updates mntgrp configuration
+        :returns: JSON string with mntgrp configuration info
         """
-#        prs.enable()
         self.debug_stream("In UpdateProfile()")
         try:
             self.set_state(PyTango.DevState.RUNNING)
@@ -639,11 +634,6 @@ class NXSRecSelector(PyTango.Device_4Impl):
         finally:
             if self.get_state() == PyTango.DevState.RUNNING:
                 self.set_state(PyTango.DevState.ON)
-#        prs.disable()
-#        s = io.open("/tmp/profs_%s.log" % time.ctime().replace(" ","_"),
-#                mode='wb')
-#        ps = pstats.Stats(prs, stream=s)
-#        ps.print_stats()
         return conf
 
     def is_UpdateProfile_allowed(self):
@@ -657,8 +647,8 @@ class NXSRecSelector(PyTango.Device_4Impl):
         """ UpdateMntGrp command
 
         :brief: updates mntgrp configuration
+        :returns: mntgrp configuration string
         """
-#        pru.enable()
         self.debug_stream("In UpdateMntGrp()")
         try:
             self.set_state(PyTango.DevState.RUNNING)
@@ -667,11 +657,6 @@ class NXSRecSelector(PyTango.Device_4Impl):
         finally:
             if self.get_state() == PyTango.DevState.RUNNING:
                 self.set_state(PyTango.DevState.ON)
-#        pru.disable()
-#        s = io.open("/tmp/profu_%s.log" % time.ctime().replace(" ","_"),
-#                mode='wb')
-#        ps = pstats.Stats(pru, stream=s)
-#        ps.print_stats()
         return conf
 
     def is_UpdateMntGrp_allowed(self):
@@ -709,7 +694,6 @@ class NXSRecSelector(PyTango.Device_4Impl):
 
         :brief: imports active mntgrp configuration
         """
-#        pri.enable()
         self.debug_stream("In ImportMntGrp()")
         try:
             self.set_state(PyTango.DevState.RUNNING)
@@ -718,11 +702,6 @@ class NXSRecSelector(PyTango.Device_4Impl):
         finally:
             if self.get_state() == PyTango.DevState.RUNNING:
                 self.set_state(PyTango.DevState.ON)
-#        pri.disable()
-#        s = io.open("/tmp/profi_%s.log" % time.ctime().replace(" ","_"),
-#                mode='wb')
-#        ps = pstats.Stats(pri, stream=s)
-#        ps.print_stats()
 
     def is_ImportMntGrp_allowed(self):
         """ ImportMntGrp command State Machine
@@ -1522,13 +1501,13 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
              [PyTango.DevString, "configuration"]],
         'UpdateProfile':
             [[PyTango.DevVoid, ""],
-             [PyTango.DevString, "configuration"]],
+             [PyTango.DevString, "mntgrp configuration string"]],
         'SwitchProfile':
             [[PyTango.DevVoid, ""],
              [PyTango.DevString, "configuration"]],
         'MntGrpConfiguration':
             [[PyTango.DevVoid, ""],
-             [PyTango.DevString, " mntcrp configuration"]],
+             [PyTango.DevString, " mntgrp configuration string"]],
         'IsMntGrpUpdated':
             [[PyTango.DevVoid, ""],
              [PyTango.DevBoolean, "true if mntgrp changed"]],
