@@ -6669,13 +6669,18 @@ class SelectorTest(unittest.TestCase):
         se["Door"] = val["Door"]
         se["WriterDevice"] = val["WriterDevice"]
         se.importEnv([], {})
+        dwt = se.getScanEnvVariables()
         for i, dt in enumerate(edats):
 
             data = {}
+            edl = json.loads(dwt).keys()
+            self._ms.dps[self._ms.ms.keys()[0]].Environment = (
+                'pickle', pickle.dumps({"del": edl}))
             self._ms.dps[self._ms.ms.keys()[0]].Environment = (
                 'pickle', envs[0])
             se.importEnv(enms[i], data)
 #            print "data",data
+            dwt = se.getScanEnvVariables()
             self.myAssertDict(data, dt)
 
     ## test
@@ -6781,7 +6786,7 @@ class SelectorTest(unittest.TestCase):
              "ConfigServer": "ptr/ert/ert"},
             {"ScanDir": "/tmp",
              "ScanFile": json.dumps(["file.nxs", "file2.nxs"]),
-             "ConfigServer": "ptr/ert/ert2"},
+             "ConfigServer": "ptr/ert/ert"},
             {"ScanDir": "/tmp", "ScanFile": "file.nxs",
              "ConfigServer": "ptr/ert/ert"},
             {"ScanDir": "/tmp", "ScanFile": json.dumps(["file.nxs"]),
@@ -6804,11 +6809,17 @@ class SelectorTest(unittest.TestCase):
         se["ConfigDevice"] = val["ConfigDevice"]
         se["WriterDevice"] = val["WriterDevice"]
         se.importEnv([], {})
+        dwt = se.getScanEnvVariables()
         for i, dt in enumerate(edats):
             data = {}
+            edl = json.loads(dwt).keys()
+            self._ms.dps[self._ms.ms.keys()[0]].Environment = (
+                'pickle', pickle.dumps({"del": edl}))
             self._ms.dps[self._ms.ms.keys()[0]].Environment = (
                 'pickle', envs[i])
             se.importEnv(enms[i], data)
+            dwt = se.getScanEnvVariables()
+            
             self.myAssertDict(data, dt)
 
     ## test
@@ -7160,12 +7171,18 @@ class SelectorTest(unittest.TestCase):
                 "ScanFile": ["sar4r.nxs"], "ScanDir": "/tmp/"}
         res = se.getScanEnvVariables()
         self.myAssertDict(json.loads(res), data)
+        edl = []
+        dwt = se.getScanEnvVariables()
         for i, dt in enumerate(edats):
             data = {}
+            edl = json.loads(dwt).keys()
+            self._ms.dps[self._ms.ms.keys()[0]].Environment = (
+                'pickle', pickle.dumps({"del": edl}))
             self._ms.dps[self._ms.ms.keys()[0]].Environment = (
                 'pickle', envs[i])
-            dt = se.getScanEnvVariables()
-            self.myAssertDict(edats[i], json.loads(dt))
+            dwt = se.getScanEnvVariables()
+            self.myAssertDict(edats[i], json.loads(dwt))
+            self.myAssertDict(edats[i], dt)
 
     ## test
     # \brief It tests default settings
@@ -7393,6 +7410,14 @@ class SelectorTest(unittest.TestCase):
 
         self.assertEqual(se.setScanEnvVariables("{}"), 192)
         self._ms.dps[self._ms.ms.keys()[0]].Environment = ('pickle', envs[0])
+        self.assertEqual(se.setScanEnvVariables("{}"), 192)
+        self._ms.dps[self._ms.ms.keys()[0]].Environment = (
+            'pickle', pickle.dumps({"del": ["ScanID"]}))
+        self.assertEqual(se.setScanEnvVariables("{}"), -1)
+        self._ms.dps[self._ms.ms.keys()[0]].Environment = ('pickle', envs[0])
+        self.assertEqual(se.setScanEnvVariables("{}"), -1)
+        self._ms.dps[self._ms.ms.keys()[0]].Environment = (
+            'pickle', pickle.dumps({"del": ["ScanID"]}))
         self.assertEqual(se.setScanEnvVariables("{}"), -1)
         self._ms.dps[self._ms.ms.keys()[0]].Environment = ('pickle', envs[1])
         self.assertEqual(se.setScanEnvVariables("{}"), 12)
