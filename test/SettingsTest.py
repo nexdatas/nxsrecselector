@@ -2219,6 +2219,8 @@ class SettingsTest(unittest.TestCase):
         self.assertEqual(rs.configDevice, val["ConfigDevice"])
         self.assertEqual(rs.door, val["Door"])
         self.assertEqual(rs.mntGrp, val["MntGrp"])
+        self.assertEqual(rs.macroServer, self._ms.ms.keys()[0])
+        self.assertEqual(rs.mntGrp, val["MntGrp"])
 
     ## test
     def test_mandatory_components(self):
@@ -2238,6 +2240,7 @@ class SettingsTest(unittest.TestCase):
         self.assertEqual(rs.configDevice, val["ConfigDevice"])
         self.assertEqual(rs.door, val["Door"])
         self.assertEqual(rs.mntGrp, val["MntGrp"])
+        self.assertEqual(rs.macroServer, self._ms.ms.keys()[0])
 
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
@@ -2271,6 +2274,7 @@ class SettingsTest(unittest.TestCase):
         self.assertEqual(rs.configDevice, val["ConfigDevice"])
         self.assertEqual(rs.door, val["Door"])
         self.assertEqual(rs.mntGrp, val["MntGrp"])
+        self.assertEqual(rs.macroServer, self._ms.ms.keys()[0])
 
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
@@ -2304,6 +2308,7 @@ class SettingsTest(unittest.TestCase):
         self.assertEqual(rs.configDevice, val["ConfigDevice"])
         self.assertEqual(rs.door, val["Door"])
         self.assertEqual(rs.mntGrp, val["MntGrp"])
+        self.assertEqual(rs.macroServer, self._ms.ms.keys()[0])
         self.assertEqual(set(rs.availableComponents()), set())
         self.assertEqual(set(rs.availableDataSources()), set())
 
@@ -2338,6 +2343,7 @@ class SettingsTest(unittest.TestCase):
 
         self.assertEqual(rs.configDevice, val["ConfigDevice"])
         self.assertEqual(rs.door, val["Door"])
+        self.assertEqual(rs.macroServer, self._ms.ms.keys()[0])
         self.assertEqual(rs.mntGrp, val["MntGrp"])
         self.assertEqual(set(rs.availableComponents()), set())
         self.assertEqual(set(rs.availableDataSources()), set())
@@ -2380,6 +2386,7 @@ class SettingsTest(unittest.TestCase):
 
         self._ms.dps[self._ms.ms.keys()[0]].Init()
 
+        self.assertEqual(rs.macroServer, self._ms.ms.keys()[0])
         self.assertEqual(rs.poolElementNames('ExpChannelList'), [])
 
         arr = [
@@ -2440,6 +2447,7 @@ class SettingsTest(unittest.TestCase):
 
         self._ms.dps[self._ms.ms.keys()[0]].Init()
 
+        self.assertEqual(rs.macroServer, self._ms.ms.keys()[0])
         self.assertEqual(rs.poolElementNames('ExpChannelList'), [])
 
         arr = [
@@ -2500,6 +2508,7 @@ class SettingsTest(unittest.TestCase):
 
         self._ms.dps[self._ms.ms.keys()[0]].Init()
 
+        self.assertEqual(rs.macroServer, self._ms.ms.keys()[0])
         self.assertEqual(rs.poolElementNames('MotorList'), [])
 
         arr = [
@@ -2560,6 +2569,7 @@ class SettingsTest(unittest.TestCase):
 
         self._ms.dps[self._ms.ms.keys()[0]].Init()
 
+        self.assertEqual(rs.macroServer, self._ms.ms.keys()[0])
         self.assertEqual(rs.poolElementNames('MotorList'), [])
 
         arr = [
@@ -2613,6 +2623,7 @@ class SettingsTest(unittest.TestCase):
         rs.mntGrp = val["MntGrp"]
 
         self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self.assertEqual(rs.macroServer, self._ms.ms.keys()[0])
 
         channelerrors = []
         rs.preselectComponents()
@@ -2641,6 +2652,7 @@ class SettingsTest(unittest.TestCase):
 
         self._ms.dps[self._ms.ms.keys()[0]].Init()
 
+        self.assertEqual(rs.macroServer, self._ms.ms.keys()[0])
         channelerrors = []
         poolchannels = []
         componentgroup = {}
@@ -10879,6 +10891,7 @@ class SettingsTest(unittest.TestCase):
                 rs.mntGrp = mg
                 self.assertEqual(rs.mntGrp, mg)
                 self.assertEqual(rs.door, doors[i % 3])
+                self.assertEqual(rs.macroServer, ms2.ms.keys()[0])
 
                 rs.profileFile = filename
 
@@ -10944,6 +10957,7 @@ class SettingsTest(unittest.TestCase):
                 self.compareToDumpJSON(rs, [])
                 self.compareToDump(rs, ["PreselectingDataSources"])
                 self.assertEqual(rs.door, doors[i % 3])
+                self.assertEqual(rs.macroServer, ms2.ms.keys()[0])
             os.remove(filename)
         finally:
             ms2.tearDown()

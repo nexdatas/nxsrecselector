@@ -131,6 +131,14 @@ class NXSRecSelector(PyTango.Device_4Impl):
         self.debug_stream("In read_Version()")
         attr.set_value(self.__stg.version)
 
+    def read_MacroServer(self, attr):
+        """ Read MacroServer attribute
+
+        :param attr: read attribute
+        """
+        self.debug_stream("In read_MacroServer()")
+        attr.set_value(self.__stg.macroServer)
+
     def read_Door(self, attr):
         """ Read Door attribute
 
@@ -1650,6 +1658,14 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
              {
                  'label': "Version",
                  'description': "server version",
+            }],
+        'MacroServer':
+            [[PyTango.DevString,
+              PyTango.SCALAR,
+              PyTango.READ],
+             {
+                 'label': "MacroServer",
+                 'description': "Macro Server device name",
             }],
         'MntGrp':
             [[PyTango.DevString,

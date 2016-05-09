@@ -1,4 +1,5 @@
 2016-05-XX Jan Kotanski <jankotan@gmail.com>
+	* add MacroServer read-only attribute
 	* add updateProfile
 	* skip unneeded datasources calls
 	* fix usetEnv

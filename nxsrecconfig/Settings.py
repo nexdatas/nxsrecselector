@@ -507,6 +507,17 @@ class Settings(object):
     door = property(__getDoor, __setDoor,
                     doc='door server device name')
 
+    def __getMacroServer(self):
+        """ get method for macro server attribute
+
+        :returns: name of macro server
+        """
+        return self.__msp.getMacroServer(self.__selector["Door"])
+
+    #: the json data string
+    macroServer = property(__getMacroServer,
+                           doc='macroserver device name')
+
     def __getWriterDevice(self):
         """ get method for writerDevice attribute
 
