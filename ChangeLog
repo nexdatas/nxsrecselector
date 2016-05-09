@@ -1,4 +1,4 @@
-2016-05-XX Jan Kotanski <jankotan@gmail.com>
+2016-05-09 Jan Kotanski <jankotan@gmail.com>
 	* add MacroServer read-only attribute
 	* add updateProfile
 	* skip unneeded datasources calls
