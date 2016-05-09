@@ -313,7 +313,13 @@ class ProfileManager(object):
 
         mginfo = self.__createMntGrpConf(
             datasources, componentdatasources, description)
-        llconf = str(mginfo["configuration"])
+        llconf = mginfo["configuration"]
+
+        dpmg = TangoUtils.openProxy(str(mginfo['device']))
+        oldconf = str(dpmg.configuration)
+        dpmg.Configuration = llconf
+        llconf = str(dpmg.configuration)
+        dpmg.Configuration = oldconf
 
         amg2 = MSUtils.getEnv('ActiveMntGrp', self.__macroServerName)
         if amg != amg2:
