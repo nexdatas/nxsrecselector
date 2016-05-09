@@ -1,6 +1,6 @@
 .\" Man page generated from reStructuredText.
 .
-.TH "NXSRECCONFIG" "1" "May 03, 2016" "3.3" "NXSRecSelector"
+.TH "NXSRECCONFIG" "1" "May 09, 2016" "3.4" "NXSRecSelector"
 .SH NAME
 nxsrecconfig \- nxsrecconfig Documentation
 .
@@ -1355,6 +1355,22 @@ UpdateMntGrp command
 .TP
 .B Brief
 updates mntgrp configuration
+.TP
+.B Returns
+mntgrp configuration string
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B UpdateProfile()
+UpdateProfile command
+.INDENT 7.0
+.TP
+.B Brief
+updates mntgrp configuration
+.TP
+.B Returns
+JSON string with mntgrp configuration info
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -1597,6 +1613,11 @@ UpdateMntGrp command State Machine
 .UNINDENT
 .INDENT 7.0
 .TP
+.B is_UpdateProfile_allowed()
+UpdateProfile command State Machine
+.UNINDENT
+.INDENT 7.0
+.TP
 .B is_VariableComponents_allowed()
 VariableComponents command State Machine
 .UNINDENT
@@ -1674,6 +1695,16 @@ Read DeviceGroups attribute
 .TP
 .B read_Door(attr)
 Read Door attribute
+.INDENT 7.0
+.TP
+.B Parameters
+\fBattr\fP \-\- read attribute
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B read_MacroServer(attr)
+Read MacroServer attribute
 .INDENT 7.0
 .TP
 .B Parameters
@@ -1922,7 +1953,7 @@ Write WriterDevice attribute
 Bases: \fBPyTango._PyTango.DeviceClass\fP
 .INDENT 7.0
 .TP
-.B attr_list = {\(aqUserData\(aq: [[PyTango._PyTango.CmdArgType.DevString, PyTango._PyTango.AttrDataFormat.SCALAR, PyTango._PyTango.AttrWriteType.READ_WRITE], {\(aqdescription\(aq: \(aqJSON dictionary with User Data\(aq, \(aqDisplay level\(aq: PyTango._PyTango.DispLevel.EXPERT, \(aqlabel\(aq: \(aqClient Data\(aq}], \(aqScanID\(aq: [[PyTango._PyTango.CmdArgType.DevLong, PyTango._PyTango.AttrDataFormat.SCALAR, PyTango._PyTango.AttrWriteType.READ_WRITE], {\(aqdescription\(aq: \(aqScan ID\(aq, \(aqlabel\(aq: \(aqScan ID\(aq}], \(aqVersion\(aq: [[PyTango._PyTango.CmdArgType.DevString, PyTango._PyTango.AttrDataFormat.SCALAR, PyTango._PyTango.AttrWriteType.READ], {\(aqdescription\(aq: \(aqserver version\(aq, \(aqlabel\(aq: \(aqVersion\(aq}], \(aqDataSources\(aq: [[PyTango._PyTango.CmdArgType.DevString, PyTango._PyTango.AttrDataFormat.SPECTRUM, PyTango._PyTango.AttrWriteType.READ, 10000], {\(aqdescription\(aq: \(aqlist of Selected Datasources\(aq, \(aqlabel\(aq: \(aqSelected Datasources\(aq}], \(aqWriterDevice\(aq: [[PyTango._PyTango.CmdArgType.DevString, PyTango._PyTango.AttrDataFormat.SCALAR, PyTango._PyTango.AttrWriteType.READ_WRITE], {\(aqdescription\(aq: \(aqWriter device\(aq, \(aqlabel\(aq: \(aqWriter Device\(aq}], \(aqConfigDevice\(aq: [[PyTango._PyTango.CmdArgType.DevString, PyTango._PyTango.AttrDataFormat.SCALAR, PyTango._PyTango.AttrWriteType.READ_WRITE], {\(aqMemorized\(aq: \(aqtrue\(aq, \(aqdescription\(aq: \(aqConfiguration device\(aq, \(aqlabel\(aq: \(aqConfiguration Device\(aq}], \(aqScanFile\(aq: [[PyTango._PyTango.CmdArgType.DevString, PyTango._PyTango.AttrDataFormat.SCALAR, PyTango._PyTango.AttrWriteType.READ_WRITE], {\(aqdescription\(aq: \(aqScan File(s)\(aq, \(aqlabel\(aq: \(aqScan File(s)\(aq}], \(aqAppendEntry\(aq: [[PyTango._PyTango.CmdArgType.DevBoolean, PyTango._PyTango.AttrDataFormat.SCALAR, PyTango._PyTango.AttrWriteType.READ_WRITE], {\(aqdescription\(aq: \(aqflag for entry  appending \(aq, \(aqlabel\(aq: \(aqAppend Entry\(aq}], \(aqMntGrp\(aq: [[PyTango._PyTango.CmdArgType.DevString, PyTango._PyTango.AttrDataFormat.SCALAR, PyTango._PyTango.AttrWriteType.READ_WRITE], {\(aqdescription\(aq: \(aq Measurement Group\(aq, \(aqlabel\(aq: \(aq Measurement Group\(aq}], \(aqStepDataSources\(aq: [[PyTango._PyTango.CmdArgType.DevString, PyTango._PyTango.AttrDataFormat.SCALAR, PyTango._PyTango.AttrWriteType.READ_WRITE], {\(aqdescription\(aq: \(aqlist of datasources to be switched into step mode\(aq, \(aqDisplay level\(aq: PyTango._PyTango.DispLevel.EXPERT, \(aqlabel\(aq: \(aqlist of datasources to be switch into step mode\(aq}], \(aqConfigVariables\(aq: [[PyTango._PyTango.CmdArgType.DevString, PyTango._PyTango.AttrDataFormat.SCALAR, PyTango._PyTango.AttrWriteType.READ_WRITE], {\(aqdescription\(aq: \(aqJSON dictionary with configuration variablesfor templated components\(aq, \(aqDisplay level\(aq: PyTango._PyTango.DispLevel.EXPERT, \(aqlabel\(aq: \(aqConfiguration Variables\(aq}], \(aqComponents\(aq: [[PyTango._PyTango.CmdArgType.DevString, PyTango._PyTango.AttrDataFormat.SPECTRUM, PyTango._PyTango.AttrWriteType.READ, 10000], {\(aqdescription\(aq: \(aqlist of Selected Components\(aq, \(aqlabel\(aq: \(aqSelected Components\(aq}], \(aqProfileConfiguration\(aq: [[PyTango._PyTango.CmdArgType.DevString, PyTango._PyTango.AttrDataFormat.SCALAR, PyTango._PyTango.AttrWriteType.READ_WRITE], {\(aqdescription\(aq: \(aqJSON dict of server configuration\(aq, \(aqDisplay level\(aq: PyTango._PyTango.DispLevel.EXPERT, \(aqlabel\(aq: \(aqProfile Configuration\(aq}], \(aqDoor\(aq: [[PyTango._PyTango.CmdArgType.DevString, PyTango._PyTango.AttrDataFormat.SCALAR, PyTango._PyTango.AttrWriteType.READ_WRITE], {\(aqMemorized\(aq: \(aqtrue\(aq, \(aqdescription\(aq: \(aqDoor\(aq, \(aqlabel\(aq: \(aqDoor\(aq}], \(aqDeviceGroups\(aq: [[PyTango._PyTango.CmdArgType.DevString, PyTango._PyTango.AttrDataFormat.SCALAR, PyTango._PyTango.AttrWriteType.READ_WRITE], {\(aqMemorized\(aq: \(aqtrue\(aq, \(aqdescription\(aq: \(aqJSON dictionary with device groups\(aq, \(aqDisplay level\(aq: PyTango._PyTango.DispLevel.EXPERT, \(aqlabel\(aq: \(aqDevice groups\(aq}], \(aqProfileFile\(aq: [[PyTango._PyTango.CmdArgType.DevString, PyTango._PyTango.AttrDataFormat.SCALAR, PyTango._PyTango.AttrWriteType.READ_WRITE], {\(aqMemorized\(aq: \(aqtrue\(aq, \(aqdescription\(aq: \(aqconfig file with its full path\(aq, \(aqlabel\(aq: \(aqProfile File with its Path\(aq}], \(aqDescriptionErrors\(aq: [[PyTango._PyTango.CmdArgType.DevString, PyTango._PyTango.AttrDataFormat.SPECTRUM, PyTango._PyTango.AttrWriteType.READ, 10000], {\(aqdescription\(aq: \(aqlist of Description Component Errors\(aq, \(aqlabel\(aq: \(aqDescription Component Errors\(aq}], \(aqScanDir\(aq: [[PyTango._PyTango.CmdArgType.DevString, PyTango._PyTango.AttrDataFormat.SCALAR, PyTango._PyTango.AttrWriteType.READ_WRITE], {\(aqdescription\(aq: \(aqScan Directory\(aq, \(aqlabel\(aq: \(aqScan Directory\(aq}]}
+.B attr_list = {\(aqUserData\(aq: [[PyTango._PyTango.CmdArgType.DevString, PyTango._PyTango.AttrDataFormat.SCALAR, PyTango._PyTango.AttrWriteType.READ_WRITE], {\(aqdescription\(aq: \(aqJSON dictionary with User Data\(aq, \(aqDisplay level\(aq: PyTango._PyTango.DispLevel.EXPERT, \(aqlabel\(aq: \(aqClient Data\(aq}], \(aqScanID\(aq: [[PyTango._PyTango.CmdArgType.DevLong, PyTango._PyTango.AttrDataFormat.SCALAR, PyTango._PyTango.AttrWriteType.READ_WRITE], {\(aqdescription\(aq: \(aqScan ID\(aq, \(aqlabel\(aq: \(aqScan ID\(aq}], \(aqVersion\(aq: [[PyTango._PyTango.CmdArgType.DevString, PyTango._PyTango.AttrDataFormat.SCALAR, PyTango._PyTango.AttrWriteType.READ], {\(aqdescription\(aq: \(aqserver version\(aq, \(aqlabel\(aq: \(aqVersion\(aq}], \(aqMacroServer\(aq: [[PyTango._PyTango.CmdArgType.DevString, PyTango._PyTango.AttrDataFormat.SCALAR, PyTango._PyTango.AttrWriteType.READ], {\(aqdescription\(aq: \(aqMacro Server device name\(aq, \(aqlabel\(aq: \(aqMacroServer\(aq}], \(aqWriterDevice\(aq: [[PyTango._PyTango.CmdArgType.DevString, PyTango._PyTango.AttrDataFormat.SCALAR, PyTango._PyTango.AttrWriteType.READ_WRITE], {\(aqdescription\(aq: \(aqWriter device\(aq, \(aqlabel\(aq: \(aqWriter Device\(aq}], \(aqDataSources\(aq: [[PyTango._PyTango.CmdArgType.DevString, PyTango._PyTango.AttrDataFormat.SPECTRUM, PyTango._PyTango.AttrWriteType.READ, 10000], {\(aqdescription\(aq: \(aqlist of Selected Datasources\(aq, \(aqlabel\(aq: \(aqSelected Datasources\(aq}], \(aqConfigDevice\(aq: [[PyTango._PyTango.CmdArgType.DevString, PyTango._PyTango.AttrDataFormat.SCALAR, PyTango._PyTango.AttrWriteType.READ_WRITE], {\(aqMemorized\(aq: \(aqtrue\(aq, \(aqdescription\(aq: \(aqConfiguration device\(aq, \(aqlabel\(aq: \(aqConfiguration Device\(aq}], \(aqScanFile\(aq: [[PyTango._PyTango.CmdArgType.DevString, PyTango._PyTango.AttrDataFormat.SCALAR, PyTango._PyTango.AttrWriteType.READ_WRITE], {\(aqdescription\(aq: \(aqScan File(s)\(aq, \(aqlabel\(aq: \(aqScan File(s)\(aq}], \(aqAppendEntry\(aq: [[PyTango._PyTango.CmdArgType.DevBoolean, PyTango._PyTango.AttrDataFormat.SCALAR, PyTango._PyTango.AttrWriteType.READ_WRITE], {\(aqdescription\(aq: \(aqflag for entry  appending \(aq, \(aqlabel\(aq: \(aqAppend Entry\(aq}], \(aqMntGrp\(aq: [[PyTango._PyTango.CmdArgType.DevString, PyTango._PyTango.AttrDataFormat.SCALAR, PyTango._PyTango.AttrWriteType.READ_WRITE], {\(aqdescription\(aq: \(aq Measurement Group\(aq, \(aqlabel\(aq: \(aq Measurement Group\(aq}], \(aqStepDataSources\(aq: [[PyTango._PyTango.CmdArgType.DevString, PyTango._PyTango.AttrDataFormat.SCALAR, PyTango._PyTango.AttrWriteType.READ_WRITE], {\(aqdescription\(aq: \(aqlist of datasources to be switched into step mode\(aq, \(aqDisplay level\(aq: PyTango._PyTango.DispLevel.EXPERT, \(aqlabel\(aq: \(aqlist of datasources to be switch into step mode\(aq}], \(aqConfigVariables\(aq: [[PyTango._PyTango.CmdArgType.DevString, PyTango._PyTango.AttrDataFormat.SCALAR, PyTango._PyTango.AttrWriteType.READ_WRITE], {\(aqdescription\(aq: \(aqJSON dictionary with configuration variablesfor templated components\(aq, \(aqDisplay level\(aq: PyTango._PyTango.DispLevel.EXPERT, \(aqlabel\(aq: \(aqConfiguration Variables\(aq}], \(aqComponents\(aq: [[PyTango._PyTango.CmdArgType.DevString, PyTango._PyTango.AttrDataFormat.SPECTRUM, PyTango._PyTango.AttrWriteType.READ, 10000], {\(aqdescription\(aq: \(aqlist of Selected Components\(aq, \(aqlabel\(aq: \(aqSelected Components\(aq}], \(aqProfileConfiguration\(aq: [[PyTango._PyTango.CmdArgType.DevString, PyTango._PyTango.AttrDataFormat.SCALAR, PyTango._PyTango.AttrWriteType.READ_WRITE], {\(aqdescription\(aq: \(aqJSON dict of server configuration\(aq, \(aqDisplay level\(aq: PyTango._PyTango.DispLevel.EXPERT, \(aqlabel\(aq: \(aqProfile Configuration\(aq}], \(aqDoor\(aq: [[PyTango._PyTango.CmdArgType.DevString, PyTango._PyTango.AttrDataFormat.SCALAR, PyTango._PyTango.AttrWriteType.READ_WRITE], {\(aqMemorized\(aq: \(aqtrue\(aq, \(aqdescription\(aq: \(aqDoor\(aq, \(aqlabel\(aq: \(aqDoor\(aq}], \(aqDeviceGroups\(aq: [[PyTango._PyTango.CmdArgType.DevString, PyTango._PyTango.AttrDataFormat.SCALAR, PyTango._PyTango.AttrWriteType.READ_WRITE], {\(aqMemorized\(aq: \(aqtrue\(aq, \(aqdescription\(aq: \(aqJSON dictionary with device groups\(aq, \(aqDisplay level\(aq: PyTango._PyTango.DispLevel.EXPERT, \(aqlabel\(aq: \(aqDevice groups\(aq}], \(aqProfileFile\(aq: [[PyTango._PyTango.CmdArgType.DevString, PyTango._PyTango.AttrDataFormat.SCALAR, PyTango._PyTango.AttrWriteType.READ_WRITE], {\(aqMemorized\(aq: \(aqtrue\(aq, \(aqdescription\(aq: \(aqconfig file with its full path\(aq, \(aqlabel\(aq: \(aqProfile File with its Path\(aq}], \(aqDescriptionErrors\(aq: [[PyTango._PyTango.CmdArgType.DevString, PyTango._PyTango.AttrDataFormat.SPECTRUM, PyTango._PyTango.AttrWriteType.READ, 10000], {\(aqdescription\(aq: \(aqlist of Description Component Errors\(aq, \(aqlabel\(aq: \(aqDescription Component Errors\(aq}], \(aqScanDir\(aq: [[PyTango._PyTango.CmdArgType.DevString, PyTango._PyTango.AttrDataFormat.SCALAR, PyTango._PyTango.AttrWriteType.READ_WRITE], {\(aqdescription\(aq: \(aqScan Directory\(aq, \(aqlabel\(aq: \(aqScan Directory\(aq}]}
 .INDENT 7.0
 .INDENT 3.5
 Attribute definitions
@@ -1940,7 +1971,7 @@ Class Properties
 .UNINDENT
 .INDENT 7.0
 .TP
-.B cmd_list = {\(aqCreateWriterConfiguration\(aq: [[PyTango._PyTango.CmdArgType.DevVarStringArray, \(aqlist of required components\(aq], [PyTango._PyTango.CmdArgType.DevString, \(aqXML Settinges\(aq]], \(aqCreateDynamicComponent\(aq: [[PyTango._PyTango.CmdArgType.DevVarStringArray, \(aqlist of JSON strings with datasource parameters\(aq], [PyTango._PyTango.CmdArgType.DevString, \(aqname of dynamic Component\(aq]], \(aqSetChannelProperties\(aq: [[PyTango._PyTango.CmdArgType.DevVarStringArray, \(aqa two element list with a property type and JSON value dictionary {channel:property}\(aq], [PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq]], \(aqImportMntGrp\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq]], \(aqComponentDescription\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevString, \(aqJSON component description\(aq]], \(aqAvailableComponents\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevVarStringArray, \(aqlist of available component names\(aq]], \(aqVariableComponents\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevString, \(aqJSON Dictionary with all Components for   configuration variable\(aq]], \(aqLoadProfile\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq]], \(aqPreselectedComponents\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevVarStringArray, \(aqcomponent names\(aq]], \(aqRemoveDynamicComponent\(aq: [[PyTango._PyTango.CmdArgType.DevString, \(aqname of dynamic Component\(aq], [PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq]], \(aqScanEnvVariables\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevString, \(aqenvironment data\(aq]], \(aqSelectedComponents\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevVarStringArray, \(aqcomponent names\(aq]], \(aqComponentClientSources\(aq: [[PyTango._PyTango.CmdArgType.DevVarStringArray, \(aqlist of required components\(aq], [PyTango._PyTango.CmdArgType.DevString, \(aqJSON with description of CLIENT Datasources\(aq]], \(aqMntGrpConfiguration\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevString, \(aq mntcrp configuration\(aq]], \(aqFetchProfile\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq]], \(aqSelectedDataSources\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevVarStringArray, \(aqprofile component datasources\(aq]], \(aqMutedChannels\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevVarStringArray, \(aqlist of muted channels\(aq]], \(aqUpdateConfigVariables\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq]], \(aqSwitchProfile\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevString, \(aqconfiguration\(aq]], \(aqAvailableTimers\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevVarStringArray, \(aqlist of available timers\(aq]], \(aqComponentDataSources\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevVarStringArray, \(aqprofile component datasources\(aq]], \(aqDeleteAllProfiles\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq]], \(aqFullDeviceNames\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevString, \(aqJSON Dictionary with full device names for  all aliases \(aq]], \(aqAvailableMntGrps\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevVarStringArray, \(aqlist of available mntgrp names\(aq]], \(aqAvailableProfiles\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevVarStringArray, \(aqlist of available selection names\(aq]], \(aqAvailableDataSources\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevVarStringArray, \(aqlist of available DataSource names\(aq]], \(aqSetScanEnvVariables\(aq: [[PyTango._PyTango.CmdArgType.DevString, \(aqenvironment data\(aq], [PyTango._PyTango.CmdArgType.DevLong, \(aqscanID\(aq]], \(aqSaveProfile\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq]], \(aqAdministratorDataNames\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevVarStringArray, \(aqadministrator data names\(aq]], \(aqPreselectedDataSources\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevVarStringArray, \(aqdatasources names\(aq]], \(aqDeleteProfile\(aq: [[PyTango._PyTango.CmdArgType.DevString, \(aqmntgrp name\(aq], [PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq]], \(aqMandatoryComponents\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevVarStringArray, \(aqcomponent names\(aq]], \(aqImportEnvProfile\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq]], \(aqDataSourceDescription\(aq: [[PyTango._PyTango.CmdArgType.DevVarStringArray, \(aqlist of required datasources\(aq], [PyTango._PyTango.CmdArgType.DevVarStringArray, \(aqlist of JSON with description of CLIENT Datasources\(aq]], \(aqIsMntGrpUpdated\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevBoolean, \(aqtrue if mntgrp changed\(aq]], \(aqPoolElementNames\(aq: [[PyTango._PyTango.CmdArgType.DevString, \(aqpool list attribute name\(aq], [PyTango._PyTango.CmdArgType.DevVarStringArray, \(aqlist of available pool elements\(aq]], \(aqUpdateMntGrp\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevString, \(aqconfiguration\(aq]], \(aqStoreProfile\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq]], \(aqPreselectComponents\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq]], \(aqChannelProperties\(aq: [[PyTango._PyTango.CmdArgType.DevString, \(aqproperty type\(aq], [PyTango._PyTango.CmdArgType.DevString, \(aqJSON dictionary with channel properties {channel:property}\(aq]], \(aqExportEnvProfile\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq]], \(aqResetPreselectedComponents\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq]]}
+.B cmd_list = {\(aqMutedChannels\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevVarStringArray, \(aqlist of muted channels\(aq]], \(aqDeleteAllProfiles\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq]], \(aqSaveProfile\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq]], \(aqDeleteProfile\(aq: [[PyTango._PyTango.CmdArgType.DevString, \(aqmntgrp name\(aq], [PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq]], \(aqResetPreselectedComponents\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq]], \(aqStoreProfile\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq]], \(aqAvailableTimers\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevVarStringArray, \(aqlist of available timers\(aq]], \(aqIsMntGrpUpdated\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevBoolean, \(aqtrue if mntgrp changed\(aq]], \(aqSetChannelProperties\(aq: [[PyTango._PyTango.CmdArgType.DevVarStringArray, \(aqa two element list with a property type and JSON value dictionary {channel:property}\(aq], [PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq]], \(aqImportMntGrp\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq]], \(aqAvailableComponents\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevVarStringArray, \(aqlist of available component names\(aq]], \(aqLoadProfile\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq]], \(aqFetchProfile\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq]], \(aqSelectedComponents\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevVarStringArray, \(aqcomponent names\(aq]], \(aqDataSourceDescription\(aq: [[PyTango._PyTango.CmdArgType.DevVarStringArray, \(aqlist of required datasources\(aq], [PyTango._PyTango.CmdArgType.DevVarStringArray, \(aqlist of JSON with description of CLIENT Datasources\(aq]], \(aqCreateWriterConfiguration\(aq: [[PyTango._PyTango.CmdArgType.DevVarStringArray, \(aqlist of required components\(aq], [PyTango._PyTango.CmdArgType.DevString, \(aqXML Settinges\(aq]], \(aqAvailableProfiles\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevVarStringArray, \(aqlist of available selection names\(aq]], \(aqChannelProperties\(aq: [[PyTango._PyTango.CmdArgType.DevString, \(aqproperty type\(aq], [PyTango._PyTango.CmdArgType.DevString, \(aqJSON dictionary with channel properties {channel:property}\(aq]], \(aqAdministratorDataNames\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevVarStringArray, \(aqadministrator data names\(aq]], \(aqPreselectedDataSources\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevVarStringArray, \(aqdatasources names\(aq]], \(aqPreselectedComponents\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevVarStringArray, \(aqcomponent names\(aq]], \(aqExportEnvProfile\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq]], \(aqScanEnvVariables\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevString, \(aqenvironment data\(aq]], \(aqComponentClientSources\(aq: [[PyTango._PyTango.CmdArgType.DevVarStringArray, \(aqlist of required components\(aq], [PyTango._PyTango.CmdArgType.DevString, \(aqJSON with description of CLIENT Datasources\(aq]], \(aqMntGrpConfiguration\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevString, \(aq mntgrp configuration string\(aq]], \(aqUpdateConfigVariables\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq]], \(aqFullDeviceNames\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevString, \(aqJSON Dictionary with full device names for  all aliases \(aq]], \(aqSetScanEnvVariables\(aq: [[PyTango._PyTango.CmdArgType.DevString, \(aqenvironment data\(aq], [PyTango._PyTango.CmdArgType.DevLong, \(aqscanID\(aq]], \(aqVariableComponents\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevString, \(aqJSON Dictionary with all Components for   configuration variable\(aq]], \(aqComponentDescription\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevString, \(aqJSON component description\(aq]], \(aqRemoveDynamicComponent\(aq: [[PyTango._PyTango.CmdArgType.DevString, \(aqname of dynamic Component\(aq], [PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq]], \(aqAvailableDataSources\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevVarStringArray, \(aqlist of available DataSource names\(aq]], \(aqSwitchProfile\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevString, \(aqconfiguration\(aq]], \(aqSelectedDataSources\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevVarStringArray, \(aqprofile component datasources\(aq]], \(aqComponentDataSources\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevVarStringArray, \(aqprofile component datasources\(aq]], \(aqCreateDynamicComponent\(aq: [[PyTango._PyTango.CmdArgType.DevVarStringArray, \(aqlist of JSON strings with datasource parameters\(aq], [PyTango._PyTango.CmdArgType.DevString, \(aqname of dynamic Component\(aq]], \(aqPreselectComponents\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq]], \(aqUpdateProfile\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevString, \(aqmntgrp configuration string\(aq]], \(aqMandatoryComponents\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevVarStringArray, \(aqcomponent names\(aq]], \(aqImportEnvProfile\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq]], \(aqPoolElementNames\(aq: [[PyTango._PyTango.CmdArgType.DevString, \(aqpool list attribute name\(aq], [PyTango._PyTango.CmdArgType.DevVarStringArray, \(aqlist of available pool elements\(aq]], \(aqUpdateMntGrp\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevString, \(aqconfiguration\(aq]], \(aqAvailableMntGrps\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevVarStringArray, \(aqlist of available mntgrp names\(aq]]}
 .INDENT 7.0
 .INDENT 3.5
 Command definitions
@@ -2107,22 +2138,16 @@ switchProfile to active measurement
 .UNINDENT
 .INDENT 7.0
 .TP
-.B updateProfile()
-set active measurement group from components
+.B updateProfile(sync=False)
+sets active measurement group from components and
+import setting from active measurement
 .INDENT 7.0
 .TP
 .B Parameters
-.INDENT 7.0
-.IP \(bu 2
-\fBcomponents\fP \-\- component list
-.IP \(bu 2
-\fBdatasources\fP \-\- datasource list
-.IP \(bu 2
-\fBcomponentdatasources\fP \-\- component datasource list
-.UNINDENT
+\fBsync\fP \-\- make profile and mntgrp synchronization
 .TP
 .B Returns
-string with mntgrp configuration
+dictionary with mntgrp configuration information
 .UNINDENT
 .UNINDENT
 .UNINDENT
@@ -2677,6 +2702,11 @@ loads configuration
 .UNINDENT
 .INDENT 7.0
 .TP
+.B macroServer
+the json data string
+.UNINDENT
+.INDENT 7.0
+.TP
 .B mandatoryComponents()
 mandatory components
 .INDENT 7.0
@@ -2900,6 +2930,19 @@ and updates serialno if appendEntry selected
 .B updateMntGrp()
 set active measurement group from components
 .INDENT 7.0
+.TP
+.B Returns
+string with mntgrp configuration
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B updateProfile()
+update profile and measurement group
+.INDENT 7.0
+.TP
+.B Parameters
+\fBsetenv\fP \-\- set ActiveMntGrp and PreScanSnapshot variables
 .TP
 .B Returns
 string with mntgrp configuration
