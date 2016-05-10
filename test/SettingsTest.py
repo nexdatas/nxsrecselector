@@ -21093,7 +21093,7 @@ class SettingsTest(unittest.TestCase):
                         res2 += self.smycps[cp]
                     else:
                         res2 += "$components.%s " % cp
-                self._cf.dp.xmlstring = res2
+                self._cf.dp.xmlstring = str(res2)
                 res = rs.createWriterConfiguration([])
                 cmds = json.loads(self._cf.dp.GetCommandVariable("COMMANDS"))
                 vrs = json.loads(self._cf.dp.GetCommandVariable("VARS"))
@@ -21155,12 +21155,12 @@ class SettingsTest(unittest.TestCase):
                         res2 += self.smycps[cp]
                     else:
                         res2 += "$components.%s " % cp
-                self._cf.dp.xmlstring = res2
+                self._cf.dp.xmlstring = str(res2)
                 res = rs.createWriterConfiguration([])
                 cmds = self._cf.dp.GetCommandVariable("COMMANDS")
                 print cmds
                 print res
-                self._cf.dp.xmlstring = res2
+                self._cf.dp.xmlstring = str(res2)
                 res3 = self._cf.dp.createConfiguration(components)
                 cmds = json.loads(self._cf.dp.GetCommandVariable("COMMANDS"))
                 vrs = json.loads(self._cf.dp.GetCommandVariable("VARS"))
