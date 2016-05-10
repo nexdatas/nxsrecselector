@@ -6152,7 +6152,10 @@ class SettingsTest(unittest.TestCase):
         sed2 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
         res = self.value(rs, "ComponentPreselection")
         res2 = self.value(rs, "DataSourcePreselection")
-        self.compareToDump(rs, ["ComponentPreselection"])
+        self.compareToDump(rs, ["ComponentPreselection",
+                                "PreselectingDataSources"])
+        self.assertEqual(set(self.value(rs, "PreselectingDataSources")),
+                         set(self.getDump("PreselectingDataSources")))
 
         self.assertEqual(res, '{}')
         self.assertEqual(res2, '{}')
@@ -10377,7 +10380,8 @@ class SettingsTest(unittest.TestCase):
 
             self.compareToDump(
                 rs, ["ConfigVariables", "PreselectingDataSources"])
-            self.compareToDumpJSON(rs, ["ConfigVariables"])
+            self.assertEqual(set(self.value(rs, "PreselectingDataSources")),
+                             set(self.getDump("PreselectingDataSources")))
 
             ndss = json.loads(rs.configVariables)
             for ds in cps.keys():
@@ -10491,8 +10495,9 @@ class SettingsTest(unittest.TestCase):
                 rs.mntGrp = mg
                 rs.storeProfile()
 
-            self.compareToDumpJSON(rs, ["UserData"])
             self.compareToDump(rs, ["PreselectingDataSources", "UserData"])
+            self.assertEqual(set(self.value(rs, "PreselectingDataSources")),
+                             set(self.getDump("PreselectingDataSources")))
 
             ndss = json.loads(rs.userData)
             for ds in cps.keys():
@@ -10629,7 +10634,8 @@ class SettingsTest(unittest.TestCase):
                 rs.fetchProfile()
 
             self.compareToDump(rs, ["MntGrp", "PreselectingDataSources"])
-            self.compareToDumpJSON(rs, ["MntGrp"])
+            self.assertEqual(set(self.value(rs, "PreselectingDataSources")),
+                             set(self.getDump("PreselectingDataSources")))
             self.assertEqual(rs.mntGrp, mg)
 
         os.remove(filename)
@@ -10738,7 +10744,8 @@ class SettingsTest(unittest.TestCase):
 
             self.compareToDump(rs, ["AppendEntry", "PreselectingDataSources"])
             self.assertEqual(rs.appendEntry, ap)
-            self.compareToDumpJSON(rs, ["AppendEntry"])
+            self.assertEqual(set(self.value(rs, "PreselectingDataSources")),
+                             set(self.getDump("PreselectingDataSources")))
 
         os.remove(filename)
 
@@ -10844,7 +10851,8 @@ class SettingsTest(unittest.TestCase):
                 rs.fetchProfile()
 
             self.compareToDump(rs, ["WriterDevice", "PreselectingDataSources"])
-            self.compareToDumpJSON(rs, ["WriterDevice"])
+            self.assertEqual(set(self.value(rs, "PreselectingDataSources")),
+                             set(self.getDump("PreselectingDataSources")))
             self.assertEqual(rs.writerDevice, wd)
 
         os.remove(filename)
@@ -10954,8 +10962,9 @@ class SettingsTest(unittest.TestCase):
                     rs.mntGrp = mg
                     rs.fetchProfile()
 
-                self.compareToDumpJSON(rs, [])
                 self.compareToDump(rs, ["PreselectingDataSources"])
+                self.assertEqual(set(self.value(rs, "PreselectingDataSources")),
+                                 set(self.getDump("PreselectingDataSources")))
                 self.assertEqual(rs.door, doors[i % 3])
                 self.assertEqual(rs.macroServer, ms2.ms.keys()[0])
             os.remove(filename)
@@ -11067,7 +11076,8 @@ class SettingsTest(unittest.TestCase):
                 rs.fetchProfile()
 
             self.compareToDump(rs, ["PreselectingDataSources"])
-            self.compareToDumpJSON(rs)
+            self.assertEqual(set(self.value(rs, "PreselectingDataSources")),
+                             set(self.getDump("PreselectingDataSources")))
 
         os.remove(filename)
 
@@ -12422,7 +12432,8 @@ class SettingsTest(unittest.TestCase):
             self.compareToDump(
                 rs,
                 ["ComponentPreselection", "PreselectingDataSources"])
-            self.compareToDumpJSON(rs, ["ComponentPreselection"])
+            self.assertEqual(set(self.value(rs, "PreselectingDataSources")),
+                             set(self.getDump("PreselectingDataSources")))
             ndss = json.loads(mp["ComponentPreselection"])
 
             acp = []
