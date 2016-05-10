@@ -371,8 +371,6 @@ class MSUtils(object):
         :param ms: macroserver
         """
         dp = TangoUtils.openProxy(ms)
-
-        dp = TangoUtils.openProxy(ms)
         dc = {'new': {}}
         for var, value in varvalues.items():
             dc['new'][var] = value
@@ -386,7 +384,6 @@ class MSUtils(object):
         :param var: variable name
         :param ms: macroserver
         """
-        dp = TangoUtils.openProxy(ms)
         dp = TangoUtils.openProxy(ms)
         dc = {'del': [var]}
         pk = pickle.dumps(dc)
