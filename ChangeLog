@@ -1,3 +1,7 @@
+2016-05-10 Jan Kotanski <jankotan@gmail.com>
+	* fix for usetenv
+	* tagged as v2.5.5
+
 2016-05-02 Jan Kotanski <jankotan@gmail.com>
 	* fix allkeys in Converter
 	* tagged as v2.5.4

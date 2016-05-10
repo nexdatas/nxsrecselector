@@ -299,13 +299,10 @@ class MSUtils(object):
     @classmethod
     def setEnv(cls, var, value, ms):
         dp = TangoUtils.openProxy(ms)
-        rec = dp.Environment
-        if rec[0] == 'pickle':
-            dc = pickle.loads(rec[1])
-            if 'new' in dc.keys():
-                dc['new'][var] = value
-                pk = pickle.dumps(dc)
-                dp.Environment = ['pickle', pk]
+        dc = {'new': {}}
+        dc['new'][var] = value
+        pk = pickle.dumps(dc)
+        dp.Environment = ['pickle', pk]
 
     ## unsets environment variable
     # \param cls class instance
@@ -314,14 +311,9 @@ class MSUtils(object):
     @classmethod
     def usetEnv(cls, var, ms):
         dp = TangoUtils.openProxy(ms)
-        rec = dp.Environment
-        if rec[0] == 'pickle':
-            dc = pickle.loads(rec[1])
-            if 'new' in dc.keys():
-                if var in dc['new']:
-                    dc['new'].pop(var)
-                pk = pickle.dumps(dc)
-                dp.Environment = ['pickle', pk]
+        dc = {'del': [var]}
+        pk = pickle.dumps(dc)
+        dp.Environment = ['pickle', pk]
 
     ## provides macro server of given door
     # \param cls class instance
