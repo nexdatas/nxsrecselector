@@ -60,6 +60,8 @@ class NXSRecSelector(PyTango.Device_4Impl):
         self.debug_stream("In __init__()")
         #: Recorder Settings
         self.__stg = None
+        #: self device proxy
+        self.__dp = None
         #: memorize attribute to be updated on conf change
         self.__toupdate = ['ConfigDevice', 'Door']
         NXSRecSelector.init_device(self)
@@ -331,11 +333,12 @@ class NXSRecSelector(PyTango.Device_4Impl):
         self.debug_stream("In write_ProfileConfiguration()")
         self.__stg.profileConfiguration = attr.get_write_value()
         try:
-            dp = PyTango.DeviceProxy(str(self.get_name()))
+            self.__dp = self.__dp or PyTango.DeviceProxy(str(self.get_name()))
             for var in self.__toupdate:
                 if var in self.__stg.names():
-                    if hasattr(dp, var):
-                        dp.write_attribute(str(var), self.__stg.value(var))
+                    if hasattr(self.__dp, var):
+                        self.__dp.write_attribute(
+                            str(var), self.__stg.value(var))
 
             self.set_state(PyTango.DevState.ON)
         finally:
@@ -407,11 +410,12 @@ class NXSRecSelector(PyTango.Device_4Impl):
             self.__stg.loadProfile()
 
             # updating memorized attributes
-            dp = PyTango.DeviceProxy(str(self.get_name()))
+            self.__dp = self.__dp or PyTango.DeviceProxy(str(self.get_name()))
             for var in self.__toupdate:
                 if var in self.__stg.names():
-                    if hasattr(dp, var):
-                        dp.write_attribute(str(var), self.__stg.value(var))
+                    if hasattr(self.__dp, var):
+                        self.__dp.write_attribute(
+                            str(var), self.__stg.value(var))
 
             self.set_state(PyTango.DevState.ON)
         finally:
@@ -436,11 +440,12 @@ class NXSRecSelector(PyTango.Device_4Impl):
             self.__stg.fetchProfile()
 
             # updating memorized attributes
-            dp = PyTango.DeviceProxy(str(self.get_name()))
+            self.__dp = self.__dp or PyTango.DeviceProxy(str(self.get_name()))
             for var in self.__toupdate:
                 if var in self.__stg.names():
-                    if hasattr(dp, var):
-                        dp.write_attribute(str(var), self.__stg.value(var))
+                    if hasattr(self.__dp, var):
+                        self.__dp.write_attribute(
+                            str(var), self.__stg.value(var))
 
             self.set_state(PyTango.DevState.ON)
         finally:
@@ -729,11 +734,12 @@ class NXSRecSelector(PyTango.Device_4Impl):
             self.__stg.importEnvProfile()
 
             # updating memorized attributes
-            dp = PyTango.DeviceProxy(str(self.get_name()))
+            self.__dp = self.__dp or PyTango.DeviceProxy(str(self.get_name()))
             for var in self.__toupdate:
                 if var in self.__stg.names():
-                    if hasattr(dp, var):
-                        dp.write_attribute(str(var), self.__stg.value(var))
+                    if hasattr(self.__dp, var):
+                        self.__dp.write_attribute(
+                            str(var), self.__stg.value(var))
 
             self.set_state(PyTango.DevState.ON)
         finally:

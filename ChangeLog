@@ -1,3 +1,7 @@
+2016-05-10 Jan Kotanski <jankotan@gmail.com>
+	* create device proxy class variable in NXSConfig
+	* tagged as v3.4.1
+
 2016-05-09 Jan Kotanski <jankotan@gmail.com>
 	* add MacroServer read-only attribute
 	* add updateProfile
