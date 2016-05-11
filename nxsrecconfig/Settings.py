@@ -110,8 +110,9 @@ class Settings(object):
             import traceback
             message = str(info[1].__str__()) + "\n " + (" ").join(
                 traceback.format_tb(sys.exc_info()[2]))
-            
-            Streams.error("Error in fetching profile: %s" % self.__selector["MntGrp"])
+
+            Streams.error("Error in fetching profile: %s"
+                          % self.__selector["MntGrp"])
             Streams.error(str(message))
 
     ## provides values of the required variable

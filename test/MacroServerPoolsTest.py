@@ -2176,14 +2176,19 @@ class MacroServerPoolTest(unittest.TestCase):
         msp = MacroServerPools(10)
         self.myAssertRaise(Exception, msp.getSelectorEnv, None, [], {})
         msp.getSelectorEnv(self._ms.door.keys()[0], [], {})
+        res = msp.getScanEnv(self._ms.door.keys()[0])
         for i, dt in enumerate(edats):
 
             data = {}
+            edl = json.loads(res).keys()
+            self._ms.dps[self._ms.ms.keys()[0]].Environment = (
+                'pickle', pickle.dumps({"del": edl}))
             self._ms.dps[self._ms.ms.keys()[0]].Environment = (
                 'pickle', envs[0])
             msp.getSelectorEnv(self._ms.door.keys()[0], enms[i], data)
 #            print "data",data
             self.myAssertDict(data, dt)
+            res = msp.getScanEnv(self._ms.door.keys()[0])
 
     ## constructor test
     # \brief It tests default settings
@@ -2285,7 +2290,7 @@ class MacroServerPoolTest(unittest.TestCase):
              "ConfigServer": "ptr/ert/ert"},
             {"ScanDir": "/tmp",
              "ScanFile": json.dumps(["file.nxs", "file2.nxs"]),
-             "ConfigServer": "ptr/ert/ert2"},
+             "ConfigServer": "ptr/ert/ert"},
             {"ScanDir": "/tmp", "ScanFile": "file.nxs",
              "ConfigServer": "ptr/ert/ert"},
             {
@@ -2663,10 +2668,14 @@ class MacroServerPoolTest(unittest.TestCase):
         self.myAssertDict(json.loads(res), data)
         for i, dt in enumerate(edats):
             data = {}
+            edl = json.loads(res).keys()
+            self._ms.dps[self._ms.ms.keys()[0]].Environment = (
+                'pickle', pickle.dumps({"del": edl}))
             self._ms.dps[self._ms.ms.keys()[0]].Environment = (
                 'pickle', envs[i])
-            dt = msp.getScanEnv(self._ms.door.keys()[0])
-            self.myAssertDict(edats[i], json.loads(dt))
+            res = msp.getScanEnv(self._ms.door.keys()[0])
+            self.myAssertDict(edats[i], dt)
+            self.myAssertDict(edats[i], json.loads(res))
 
     ## constructor test
     # \brief It tests default settings
@@ -2887,6 +2896,14 @@ class MacroServerPoolTest(unittest.TestCase):
         self.myAssertRaise(Exception, msp.setScanEnv, None, "{}")
         self.assertEqual(msp.setScanEnv(self._ms.door.keys()[0], "{}"), 192)
         self._ms.dps[self._ms.ms.keys()[0]].Environment = ('pickle', envs[0])
+        self.assertEqual(msp.setScanEnv(self._ms.door.keys()[0], "{}"), 192)
+        self._ms.dps[self._ms.ms.keys()[0]].Environment = (
+            'pickle', pickle.dumps({"del": ["ScanID"]}))
+        self.assertEqual(msp.setScanEnv(self._ms.door.keys()[0], "{}"), -1)
+        self._ms.dps[self._ms.ms.keys()[0]].Environment = ('pickle', envs[0])
+        self.assertEqual(msp.setScanEnv(self._ms.door.keys()[0], "{}"), -1)
+        self._ms.dps[self._ms.ms.keys()[0]].Environment = (
+            'pickle', pickle.dumps({"del": ["ScanID"]}))
         self.assertEqual(msp.setScanEnv(self._ms.door.keys()[0], "{}"), -1)
         self._ms.dps[self._ms.ms.keys()[0]].Environment = ('pickle', envs[1])
         self.assertEqual(msp.setScanEnv(self._ms.door.keys()[0], "{}"), 12)

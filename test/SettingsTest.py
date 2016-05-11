@@ -9438,10 +9438,14 @@ class SettingsTest(unittest.TestCase):
         self.myAssertDict(json.loads(res), data)
         for i, dt in enumerate(edats):
             data = {}
+            edl = json.loads(res).keys()
+            self._ms.dps[self._ms.ms.keys()[0]].Environment = (
+                'pickle', pickle.dumps({"del": edl}))
             self._ms.dps[self._ms.ms.keys()[0]].Environment = (
                 'pickle', envs[i])
-            dt = rs.scanEnvVariables()
-            self.myAssertDict(edats[i], json.loads(dt))
+            res = rs.scanEnvVariables()
+            self.myAssertDict(edats[i], dt)
+            self.myAssertDict(edats[i], json.loads(res))
 
     ## test
     # \brief It tests default settings
