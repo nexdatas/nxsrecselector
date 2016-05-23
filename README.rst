@@ -87,6 +87,7 @@ If sardana is not yet set up run
 	  $ Pool
 
 and
+
 - enter a new instance name
 - create the new instance
 
@@ -97,6 +98,7 @@ Then wait a while until Pool is started and in a new terminal run
 	  $ MacroServer
 
 and
+	  
 - enter a new instance name
 - create the new instance
 - connect pool
@@ -104,20 +106,20 @@ and
 Next, run Astor and change start-up levels: for Pool to 2,
 for MacroServer to 3 and restart servers.
 
-Alternatively, terminate Pool and MacroServer in the terminals and
+Alternatively, terminate Pool and MacroServer in the terminals and run
 
 .. code:: bash
 
           $ nxsetup -s Pool -l2
 
-- wait until Pool is started and
+wait until Pool is started and run
 
 .. code:: bash
 
           $ nxsetup -s MacroServer -l3
 
 
-Additionally, one can create dummy devices by running *sar_demo* in
+Additionally, one can create dummy devices by running `sar_demo` in
 
 .. code:: bash
 
@@ -144,10 +146,10 @@ or
 
 for specific servers.
 
-If the RecoderPath property is not set one can do it by
+If the `RecoderPath` property is not set one can do it by
 
 .. code:: bash
 
 	  $ nxsetup -a /usr/lib/python2.7/dist-packages/sardananxsrecorder
 
-where the path should point the 'sardananxsrecorder' package.
+where the path should point the `sardananxsrecorder` package.
