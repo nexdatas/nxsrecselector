@@ -142,7 +142,7 @@ or
 
 for specific servers.
 
-If the `RecoderPath` property is not set one can do it by
+If the `RecoderPath` property of MacroServer is not set one can do it by
 
 .. code:: bash
 
