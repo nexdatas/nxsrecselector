@@ -71,3 +71,83 @@ and
 	  $ apt-get install nxselector python-sardana-nxsrecorder
 
 for Component Selector and Sardana related packages.
+
+-------------------
+Setting environment
+-------------------
+
+
+Setting Saradna
+^^^^^^^^^^^^^^^
+If sardana is not yet set up run
+
+
+.. code:: bash
+
+	  $ Pool
+
+and
+- enter a new instance name
+- create the new instance
+
+Then wait a while until Pool is started and in a new terminal run
+
+.. code:: bash
+
+	  $ MacroServer
+
+and
+- enter a new instance name
+- create the new instance
+- connect pool
+
+Next, run Astor and change start-up levels: for Pool to 2,
+for MacroServer to 3 and restart servers.
+
+Alternatively, terminate Pool and MacroServer in the terminals and
+
+.. code:: bash
+
+          $ nxsetup -s Pool -l2
+
+- wait until Pool is started and
+
+.. code:: bash
+
+          $ nxsetup -s MacroServer -l3
+
+
+Additionally, one can create dummy devices by running *sar_demo* in
+
+.. code:: bash
+
+	  $ spock
+
+
+
+Setting NeXus Servers
+^^^^^^^^^^^^^^^^^^^^^
+
+To set up  NeXus Servers run
+
+.. code:: bash
+
+	  $ nxsetup -x
+
+or
+
+.. code:: bash
+
+          $ nxsetup -x NXSDataWriter
+          $ nxsetup -x NXSConfigServer
+	  $ nxsetup -x NXSRecSelector
+
+for specific servers.
+
+If the RecoderPath property is not set one can do it by
+
+.. code:: bash
+
+	  $ nxsetup -a /usr/lib/python2.7/dist-packages/sardananxsrecorder
+
+where the path should point the 'sardananxsrecorder' package.
