@@ -86,8 +86,6 @@ If sardana is not yet set up run
 
 	  $ Pool
 
-and
-
 - enter a new instance name
 - create the new instance
 
@@ -97,8 +95,6 @@ Then wait a while until Pool is started and in a new terminal run
 
 	  $ MacroServer
 
-and
-	  
 - enter a new instance name
 - create the new instance
 - connect pool
