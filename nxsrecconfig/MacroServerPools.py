@@ -118,7 +118,7 @@ class MacroServerPools(object):
         :param nonexisting: non-exising pool channels
         :returns: list of CheckerItems
         """
-        describer = Describer(configdevice, True)
+        describer = Describer(configdevice, True, pyevalfromscript=True)
         availablecomponents = TangoUtils.command(
             configdevice, "availableComponents")
 

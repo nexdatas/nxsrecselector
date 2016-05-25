@@ -1,3 +1,7 @@
+2016-05-XX Jan Kotanski <jankotan@gmail.com>
+	* add pyeval tango datasources to check
+	* tagged as v3.5.0
+
 2016-05-10 Jan Kotanski <jankotan@gmail.com>
 	* remove duplicated proxy
 	* tagged as v3.4.2
