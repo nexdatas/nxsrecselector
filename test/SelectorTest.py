@@ -4959,6 +4959,7 @@ class SelectorTest(unittest.TestCase):
             se.preselect()
             res = se["ComponentPreselection"]
 
+            print res
             self.myAssertDict(json.loads(res), {
                 "smycp": True, "smycp2": False, "smycp3": True,
                 "s2mycp": None, "s2mycp2": None, "s2mycp3": True})

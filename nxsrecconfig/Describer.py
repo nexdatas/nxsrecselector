@@ -229,7 +229,7 @@ class Describer(object):
         dstype = None
         record = None
         dslist = dsl if dsl else []
-        dsxml = None
+        dsxmls = None
 
         if node.nodeName == 'datasource':
             if node.hasAttribute("type"):
@@ -251,16 +251,20 @@ class Describer(object):
                 except (StopIteration, IndexError):
                     subc = ''
                 name = subc.strip() if subc else ""
-                dsxml = TangoUtils.command(self.__nexusconfig_device,
-                                           "dataSources", [str(name)])[0]
-                dsitem = self.__describeDataSource(name, dsxml)
-                if dsitem.dstype:
-                    dstype = dsitem.dstype
-                    break
+                dsxmls = TangoUtils.command(self.__nexusconfig_device,
+                                            "dataSources", [str(name)])
+                if dsxmls:
+                    dsitem = self.__describeDataSource(name, dsxmls[0])
+                    if dsitem.dstype:
+                        dstype = dsitem.dstype
+                        break
+                else:
+                    dsitem = DSItem(name, None, None)
                 index = dstxt.find("$%s." % label, index + 1)
             dslist.append(dsitem)
         if name and str(dstype) == 'PYEVAL':
-            if dsxml and self.__pyevalfromscript:
+            if dsxmls and self.__pyevalfromscript:
+                dsxml = dsxmls[0]
                 result = ""
                 indom = xml.dom.minidom.parseString(dsxml)
                 cnode = indom.getElementsByTagName("datasource")[0]
