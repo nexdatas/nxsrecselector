@@ -265,7 +265,7 @@ class SettingsTest(unittest.TestCase):
                 '</datasource>'
                 '<strategy mode="INIT"/>'
                 '<dimensions rank="1">'
-                '<dim index="1" value="$datasource.ann">'
+                '<dim index="1" value="$datasources.ann">'
                 '</dim></dimensions>'
                 '</field></group>'
                 '</definition>'),
@@ -291,7 +291,7 @@ class SettingsTest(unittest.TestCase):
                 '</datasource>'
                 '<strategy mode="INIT"/>'
                 '<dimensions rank="1">'
-                '<dim index="1">$datasource.ann2<strategy mode="CONFIG" />'
+                '<dim index="1">$datasources.ann2<strategy mode="CONFIG" />'
                 '</dim></dimensions>'
                 '</field></group>'
                 '</definition>'),
@@ -318,7 +318,7 @@ class SettingsTest(unittest.TestCase):
                 '</datasource>'
                 '<strategy mode="INIT"/>'
                 '<dimensions rank="2">'
-                '<dim index="1" value="$datasource.ann" />'
+                '<dim index="1" value="$datasources.ann" />'
                 '<dim index="2" value="123" />'
                 '</dimensions>'
                 '</field></group>'
@@ -485,7 +485,7 @@ class SettingsTest(unittest.TestCase):
             'dim2': {
                 'tann1c': [
                     ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8',
-                     ['$datasource.ann'])]},
+                     ['$datasources.ann'])]},
             'dim3': {
                 'tann1c': [
                     ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8',
@@ -493,16 +493,16 @@ class SettingsTest(unittest.TestCase):
             'dim4': {
                 'tann1c': [
                     ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8',
-                     ['$datasource.ann2'])]},
+                     ['$datasources.ann2'])]},
             'dim5': {
                 'tann1c': [
                     ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8',
-                     ['$datasource.ann'])],
+                     ['$datasources.ann'])],
                 'ann': [('CONFIG', 'TANGO', '', None, None)],
             },
             'dim6': {'tann1c': [
                 ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8',
-                 ['$datasource.ann', 123])]},
+                 ['$datasources.ann', 123])]},
             'dim7': {'tann1c': [
                 ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8',
                  [None, None])]},

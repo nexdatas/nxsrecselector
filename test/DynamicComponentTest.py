@@ -245,7 +245,7 @@ class DynamicComponentTest(unittest.TestCase):
                 '</datasource>'
                 '<strategy mode="INIT"/>'
                 '<dimensions rank="1">'
-                '<dim index="1" value="$datasource.ann">'
+                '<dim index="1" value="$datasources.ann">'
                 '</dim></dimensions>'
                 '</field></group>'
                 '</definition>'),
@@ -271,7 +271,7 @@ class DynamicComponentTest(unittest.TestCase):
                 '</datasource>'
                 '<strategy mode="INIT"/>'
                 '<dimensions rank="1">'
-                '<dim index="1">$datasource.ann2<strategy mode="CONFIG" />'
+                '<dim index="1">$datasources.ann2<strategy mode="CONFIG" />'
                 '</dim></dimensions>'
                 '</field></group>'
                 '</definition>'),
@@ -298,7 +298,7 @@ class DynamicComponentTest(unittest.TestCase):
                 '</datasource>'
                 '<strategy mode="INIT"/>'
                 '<dimensions rank="2">'
-                '<dim index="1" value="$datasource.ann" />'
+                '<dim index="1" value="$datasources.ann" />'
                 '<dim index="2" value="123" />'
                 '</dimensions>'
                 '</field></group>'

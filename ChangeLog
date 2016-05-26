@@ -1,3 +1,7 @@
+2016-05-26 Jan Kotanski <jankotan@gmail.com>
+	* fix for dim $datasources
+	* tagged as v2.5.6
+
 2016-05-10 Jan Kotanski <jankotan@gmail.com>
 	* fix for usetenv
 	* tagged as v2.5.5

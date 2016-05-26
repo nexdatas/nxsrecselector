@@ -245,7 +245,7 @@ class Describer(object):
                         value = dss[0].attributes["name"].value
                     else:
                         value = '__unnamed__'
-                    shape[index - 1] = "$datasource.%s" % value
+                    shape[index - 1] = "$datasources.%s" % value
                 else:
                     value = " ".join(t.nodeValue for t in dim.childNodes
                                      if t.nodeType == t.TEXT_NODE)
