@@ -316,17 +316,46 @@ class DescriberTest(unittest.TestCase):
                 '</field></group>'
                 '</definition>'
             ),
-#            'pyeval1': (
-#                '<definition><group type="NXentry">'
-#                '<field type="NX_INT8" name="field1">'
-#                '<datasource type="TANGO" name="tann1c">'
-#                '<record name="myattr2"/>'
-#                '<device member="attribute" name="dsf/sd/we"/>'
-#                '</datasource>'
-#                '<strategy mode="INIT"/>'
-#                '</field></group>'
-#                '</definition>'),
-
+            'pyeval1': (
+                '<definition><group type="NXentry">'
+                '<field type="NX_INT32" name="field1">'
+                '$datasources.pyeval1ds'
+                '<strategy mode="STEP"/>'
+                '</field></group>'
+                '</definition>'
+            ),
+            'pyeval1a': (
+                '<definition><group type="NXentry">'
+                '<field type="NX_INT32" name="field1">'
+                '$datasources.pyeval1ads'
+                '<strategy mode="STEP"/>'
+                '</field></group>'
+                '</definition>'
+            ),
+            'pyeval2': (
+                '<definition><group type="NXentry">'
+                '<field type="NX_FLOAT" name="field1">'
+                '$datasources.pyeval2ds'
+                '<strategy mode="STEP"/>'
+                '</field></group>'
+                '</definition>'
+            ),
+            'pyeval2a': (
+                '<definition><group type="NXentry">'
+                '<field type="NX_FLOAT" name="field1">'
+                '$datasources.pyeval2ads'
+                '<strategy mode="STEP"/>'
+                '</field></group>'
+                '</definition>'
+            ),
+            'pyeval2b': (
+                '<definition><group type="NXentry">'
+                '<field type="NX_FLOAT64" name="field1">'
+                '$datasources.pyeval2bds'
+                '<strategy mode="FINAL"/>'
+                '</field></group>'
+                '</definition>'
+            ),
         }
 
         self.rescps = {
@@ -387,6 +416,45 @@ class DescriberTest(unittest.TestCase):
             },
             'pyeval0': {
                 'pyeval0ds': [('INIT', 'PYEVAL', '', 'NX_INT8', None)],
+            },
+            'pyeval1': {
+                'pyeval1ds': [('STEP', 'PYEVAL', '', 'NX_INT32', None)],
+            },
+            'pyeval1a': {
+                'pyeval1ads': [('STEP', 'PYEVAL', '', 'NX_INT32', None)],
+            },
+            'pyeval2': {
+                'pyeval2ds': [('STEP', 'PYEVAL', '', 'NX_FLOAT', None)],
+            },
+            'pyeval2a': {
+                'pyeval2ads': [('STEP', 'PYEVAL', '', 'NX_FLOAT', None)],
+            },
+            'pyeval2b': {
+                'pyeval2bds': [('FINAL', 'PYEVAL', '', 'NX_FLOAT64', None)],
+            },
+        }
+
+        self.rescps_pfs = {
+            'pyeval1a': {
+                'pyeval1ads': [('STEP', 'PYEVAL', '', 'NX_INT32', None)],
+                'tann1c': [
+                    ('STEP', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT32',
+                     None)],
+            },
+            'pyeval2a': {
+                'pyeval2ads': [('STEP', 'PYEVAL', '', 'NX_FLOAT', None)],
+                'tann1c': [
+                    ('STEP', 'TANGO', 'dsf/sd/we/myattr2', 'NX_FLOAT',
+                     None)],
+                'tann0': [
+                    ('STEP', 'TANGO', 'sf:12345/dsff/myattr', 'NX_FLOAT',
+                     None)],
+            },
+            'pyeval2b': {
+                'pyeval2bds': [('FINAL', 'PYEVAL', '', 'NX_FLOAT64', None)],
+                'tann0': [
+                    ('FINAL', 'TANGO', 'sf:12345/dsff/myattr', 'NX_FLOAT64',
+                     None)],
             },
         }
 
@@ -467,6 +535,59 @@ class DescriberTest(unittest.TestCase):
                 '</datasource>'
                 '</definition>'
             ),
+            'pyeval1ds': (
+                '<definition>'
+                '<datasource type="PYEVAL" name="pyeval1ds">'
+                '$datasources.tann0'
+                '<result name="myattr2">'
+                'ds.myattr2 = "SomeThing"'
+                '</result>'
+                '</datasource>'
+                '</definition>'
+            ),
+            'pyeval1ads': (
+                '<definition>'
+                '<datasource type="PYEVAL" name="pyeval1ads">'
+                '$datasources.tann1c'
+                '<result name="myattr2">'
+                'ds.myattr2 = ds.tann1c'
+                '</result>'
+                '</datasource>'
+                '</definition>'
+            ),
+            'pyeval2ds': (
+                '<definition>'
+                '<datasource type="PYEVAL" name="pyeval2ds">'
+                '$datasources.tann1c'
+                '$datasources.tann0'
+                '<result name="myattr2">'
+                'ds.myattr2 = "OMSS"'
+                '</result>'
+                '</datasource>'
+                '</definition>'
+            ),
+            'pyeval2ads': (
+                '<definition>'
+                '<datasource type="PYEVAL" name="pyeval2ads">'
+                '$datasources.tann1c'
+                '$datasources.tann0'
+                '<result name="myattr2">'
+                'ds.myattr2 = ds.tann0 + ds.tann1c'
+                '</result>'
+                '</datasource>'
+                '</definition>'
+            ),
+            'pyeval2bds': (
+                '<definition>'
+                '<datasource type="PYEVAL" name="pyeval2bds">'
+                '$datasources.tann1c'
+                '$datasources.tann0'
+                '<result name="myattr2">'
+                'ds.myattr2 = ds.tann0'
+                '</result>'
+                '</datasource>'
+                '</definition>'
+            ),
         }
 
         self.resdss = {
@@ -486,6 +607,11 @@ class DescriberTest(unittest.TestCase):
             'dbds': ('dbds', "DB", ""),
             'slt1vgap': ('slt1vgap', "CLIENT", "p02/slt/exp.07"),
             'pyeval0ds': ('pyeval0ds', "PYEVAL", ""),
+            'pyeval1ds': ('pyeval1ds', "PYEVAL", ""),
+            'pyeval1ads': ('pyeval1ads', "PYEVAL", ""),
+            'pyeval2ds': ('pyeval2ds', "PYEVAL", ""),
+            'pyeval2ads': ('pyeval2ads', "PYEVAL", ""),
+            'pyeval2bds': ('pyeval2bds', "PYEVAL", ""),
         }
 
     ## Exception tester
@@ -565,11 +691,12 @@ class DescriberTest(unittest.TestCase):
                 res.append(ds)
         return res
 
-    def checkCP(self, rv, cv, strategy=None, dstype=None):
+    def checkCP(self, rv, cv, strategy=None, dstype=None, dct=None):
+        rescps = dct or self.rescps
         self.assertEqual(sorted(set(rv[0].keys())), sorted(cv))
         for i in range(1):
             for cp, vl in rv[i].items():
-                cres = self.rescps[cp]
+                cres = rescps[cp]
                 cresk = [ds for ds in cres.keys()
                          if self.dsfilter(cres[ds], strategy, dstype)]
 
@@ -595,11 +722,12 @@ class DescriberTest(unittest.TestCase):
             print "NOT FOUND", cp, ds, vds, rv
         return found
 
-    def checkICP(self, rv, cv, strategy=None, dstype=None):
+    def checkICP(self, rv, cv, strategy=None, dstype=None, dct=None):
+        rescps = dct or self.rescps
         dscnt = 0
-        tcv = [k for k in cv if self.rescps[k]]
+        tcv = [k for k in cv if rescps[k]]
         for cp in tcv:
-            for ds, dss in self.rescps[cp].items():
+            for ds, dss in rescps[cp].items():
                 for vds in dss:
                     if strategy is not None:
                         if vds[0] != strategy:
@@ -1126,8 +1254,9 @@ class DescriberTest(unittest.TestCase):
         server.cpdict = self.mycps
         des = Describer(server, pyevalfromscript=True)
         res = des.components()
-        self.checkICP(res, self.rescps.keys())
-        print des.components(['scan3'])
+        res2 = dict(self.rescps)
+        res2.update(self.rescps_pfs)
+        self.checkICP(res, res2.keys(), dct=res2)
 
     ## constructor test
     # \brief It tests default settings
@@ -1141,6 +1270,18 @@ class DescriberTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
+    def test_components_noarg_tree_pfs(self):
+        server = NoServer()
+        server.dsdict = self.mydss
+        server.cpdict = self.mycps
+        des = Describer(server, True, True)
+        res = des.components()
+        res2 = dict(self.rescps)
+        res2.update(self.rescps_pfs)
+        self.checkCP(res, self.rescps.keys(), dct=res2)
+
+    ## constructor test
+    # \brief It tests default settings
     def test_components_noarg_server(self):
         server = Server()
         server.dsdict = self.mydss
@@ -1151,6 +1292,18 @@ class DescriberTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
+    def test_components_noarg_server_pfs(self):
+        server = Server()
+        server.dsdict = self.mydss
+        server.cpdict = self.mycps
+        des = Describer(server, pyevalfromscript=True)
+        res = des.components()
+        res2 = dict(self.rescps)
+        res2.update(self.rescps_pfs)
+        self.checkICP(res, self.rescps.keys(), dct=res2)
+
+    ## constructor test
+    # \brief It tests default settings
     def test_components_noarg_tree_server(self):
         server = Server()
         server.dsdict = self.mydss
@@ -1158,6 +1311,18 @@ class DescriberTest(unittest.TestCase):
         des = Describer(server, True)
         res = des.components()
         self.checkCP(res, self.rescps.keys())
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_components_noarg_tree_server_pfs(self):
+        server = Server()
+        server.dsdict = self.mydss
+        server.cpdict = self.mycps
+        des = Describer(server, True, True)
+        res = des.components()
+        res2 = dict(self.rescps)
+        res2.update(self.rescps_pfs)
+        self.checkCP(res, self.rescps.keys(), dct=res2)
 
     ## constructor test
     # \brief It tests default settings
@@ -1178,6 +1343,25 @@ class DescriberTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
+    def test_components_strategy_dstype_pfs(self):
+        server = NoServer()
+        server.dsdict = self.mydss
+        server.cpdict = self.mycps
+
+        dstypes = [None, 'CLIENT', 'TANGO', 'PYEVAL', 'NEW', 'UNKNOWN']
+        strategies = [None, 'CONFIG', 'INIT', 'STEP', 'FINAL']
+
+        for dst in dstypes:
+            for st in strategies:
+                des = Describer(server, pyevalfromscript=True)
+                res = des.components(strategy=st, dstype=dst)
+                res2 = dict(self.rescps)
+                res2.update(self.rescps_pfs)
+                self.checkICP(res, self.rescps.keys(),
+                              strategy=st, dstype=dst, dct=res2)
+
+    ## constructor test
+    # \brief It tests default settings
     def test_components_strategy_dstype_server(self):
         server = Server()
         server.dsdict = self.mydss
@@ -1192,6 +1376,44 @@ class DescriberTest(unittest.TestCase):
                 res = des.components(strategy=st, dstype=dst)
                 self.checkICP(res, self.rescps.keys(),
                               strategy=st, dstype=dst)
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_components_strategy_dstype_server_pfs(self):
+        server = Server()
+        server.dsdict = self.mydss
+        server.cpdict = self.mycps
+
+        dstypes = [None, 'CLIENT', 'TANGO', 'PYEVAL', 'NEW', 'UNKNOWN']
+        strategies = [None, 'CONFIG', 'INIT', 'STEP', 'FINAL']
+
+        for dst in dstypes:
+            for st in strategies:
+                des = Describer(server, pyevalfromscript=True)
+                res = des.components(strategy=st, dstype=dst)
+                res2 = dict(self.rescps)
+                res2.update(self.rescps_pfs)
+                self.checkICP(res, self.rescps.keys(),
+                              strategy=st, dstype=dst, dct=res2)
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_components_strategy_dstype_tree_pfs(self):
+        server = NoServer()
+        server.dsdict = self.mydss
+        server.cpdict = self.mycps
+
+        dstypes = [None, 'CLIENT', 'TANGO', 'PYEVAL', 'NEW', 'UNKNOWN']
+        strategies = [None, 'CONFIG', 'INIT', 'STEP', 'FINAL']
+
+        for dst in dstypes:
+            for st in strategies:
+                des = Describer(server, True, pyevalfromscript=True)
+                res = des.components(strategy=st, dstype=dst)
+                res2 = dict(self.rescps)
+                res2.update(self.rescps_pfs)
+                self.checkCP(res, self.rescps.keys(),
+                             strategy=st, dstype=dst, dct=res2)
 
     ## constructor test
     # \brief It tests default settings
@@ -1226,6 +1448,25 @@ class DescriberTest(unittest.TestCase):
                 res = des.components(strategy=st, dstype=dst)
                 self.checkCP(res, self.rescps.keys(),
                              strategy=st, dstype=dst)
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_components_strategy_dstype_server_tree_pfs(self):
+        server = Server()
+        server.dsdict = self.mydss
+        server.cpdict = self.mycps
+
+        dstypes = [None, 'CLIENT', 'TANGO', 'PYEVAL', 'NEW', 'UNKNOWN']
+        strategies = [None, 'CONFIG', 'INIT', 'STEP', 'FINAL']
+
+        for dst in dstypes:
+            for st in strategies:
+                des = Describer(server, True, True)
+                res = des.components(strategy=st, dstype=dst)
+                res2 = dict(self.rescps)
+                res2.update(self.rescps_pfs)
+                self.checkCP(res, self.rescps.keys(),
+                             strategy=st, dstype=dst, dct=res2)
 
     ## constructor test
     # \brief It tests default settings
@@ -1333,6 +1574,28 @@ class DescriberTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
+    def test_components_noarg_comp_pfs(self):
+        dstypes = [None, 'CLIENT', 'TANGO', 'PYEVAL', 'NEW', 'UNKNOWN']
+        strategies = [None, 'CONFIG', 'INIT', 'STEP', 'FINAL']
+
+        for dst in dstypes:
+            for st in strategies:
+
+                ncps = self.__rnd.randint(1, len(self.mycps.keys()) - 1)
+                cps = self.__rnd.sample(set(self.mycps.keys()), ncps)
+
+                server = NoServer()
+                server.dsdict = self.mydss
+                server.cpdict = self.mycps
+                des = Describer(server, pyevalfromscript=True)
+                res = des.components(cps, strategy=st, dstype=dst)
+                res2 = dict(self.rescps)
+                res2.update(self.rescps_pfs)
+                self.checkICP(res, cps,
+                              strategy=st, dstype=dst, dct=res2)
+
+    ## constructor test
+    # \brief It tests default settings
     def test_components_noarg_tree_comp(self):
 
         dstypes = [None, 'CLIENT', 'TANGO', 'PYEVAL', 'NEW', 'UNKNOWN']
@@ -1350,6 +1613,28 @@ class DescriberTest(unittest.TestCase):
                 res = des.components(cps, strategy=st, dstype=dst)
                 self.checkCP(res, cps,
                              strategy=st, dstype=dst)
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_components_noarg_tree_comp_pfs(self):
+
+        dstypes = [None, 'CLIENT', 'TANGO', 'PYEVAL', 'NEW', 'UNKNOWN']
+        strategies = [None, 'CONFIG', 'INIT', 'STEP', 'FINAL']
+
+        for dst in dstypes:
+            for st in strategies:
+                ncps = self.__rnd.randint(1, len(self.mycps.keys()) - 1)
+                cps = self.__rnd.sample(set(self.mycps.keys()), ncps)
+
+                server = NoServer()
+                server.dsdict = self.mydss
+                server.cpdict = self.mycps
+                des = Describer(server, True, pyevalfromscript=True)
+                res = des.components(cps, strategy=st, dstype=dst)
+                res2 = dict(self.rescps)
+                res2.update(self.rescps_pfs)
+                self.checkCP(res, cps,
+                             strategy=st, dstype=dst, dct=res2)
 
     ## constructor test
     # \brief It tests default settings
@@ -1373,6 +1658,28 @@ class DescriberTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
+    def test_components_noarg_comp_server_pfs(self):
+        dstypes = [None, 'CLIENT', 'TANGO', 'PYEVAL', 'NEW', 'UNKNOWN']
+        strategies = [None, 'CONFIG', 'INIT', 'STEP', 'FINAL']
+
+        for dst in dstypes:
+            for st in strategies:
+
+                ncps = self.__rnd.randint(1, len(self.mycps.keys()) - 1)
+                cps = self.__rnd.sample(set(self.mycps.keys()), ncps)
+
+                server = Server()
+                server.dsdict = self.mydss
+                server.cpdict = self.mycps
+                des = Describer(server, pyevalfromscript=True)
+                res = des.components(cps, strategy=st, dstype=dst)
+                res2 = dict(self.rescps)
+                res2.update(self.rescps_pfs)
+                self.checkICP(res, cps,
+                              strategy=st, dstype=dst, dct=res2)
+
+    ## constructor test
+    # \brief It tests default settings
     def test_components_noarg_tree_comp_server(self):
 
         dstypes = [None, 'CLIENT', 'TANGO', 'PYEVAL', 'NEW', 'UNKNOWN']
@@ -1390,6 +1697,28 @@ class DescriberTest(unittest.TestCase):
                 res = des.components(cps, strategy=st, dstype=dst)
                 self.checkCP(res, cps,
                              strategy=st, dstype=dst)
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_components_noarg_tree_comp_server_pfs(self):
+
+        dstypes = [None, 'CLIENT', 'TANGO', 'PYEVAL', 'NEW', 'UNKNOWN']
+        strategies = [None, 'CONFIG', 'INIT', 'STEP', 'FINAL']
+
+        for dst in dstypes:
+            for st in strategies:
+                ncps = self.__rnd.randint(1, len(self.mycps.keys()) - 1)
+                cps = self.__rnd.sample(set(self.mycps.keys()), ncps)
+
+                server = Server()
+                server.dsdict = self.mydss
+                server.cpdict = self.mycps
+                des = Describer(server, True, True)
+                res = des.components(cps, strategy=st, dstype=dst)
+                res2 = dict(self.rescps)
+                res2.update(self.rescps_pfs)
+                self.checkCP(res, cps,
+                             strategy=st, dstype=dst, dct=res2)
 
     ## constructor test
     # \brief It tests default settings
