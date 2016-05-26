@@ -494,7 +494,10 @@ class SettingsTest(unittest.TestCase):
             'dim4': {
                 'tann1c': [
                     ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8',
-                     ['$datasources.ann2'])]},
+                 ['$datasources.ann2'])],
+                     'ann2': [
+                         ('CONFIG', 'CLIENT', '', None, None)],
+                 },
             'dim5': {
                 'tann1c': [
                     ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8',

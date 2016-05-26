@@ -308,14 +308,14 @@ class DescriberTest(unittest.TestCase):
                 '<record name="p09/mca/exp.02"/>'
                 '</datasource></field></group></group></group></definition>'
             ),
-#            'pyeval0': (
-#                '<definition><group type="NXentry">'
-#                '<field type="NX_INT8" name="field1">'
-#                '$datasources.pyeval0ds'
-#                '<strategy mode="INIT"/>'
-#                '</field></group>'
-#                '</definition>'
-#            ),
+            'pyeval0': (
+                '<definition><group type="NXentry">'
+                '<field type="NX_INT8" name="field1">'
+                '$datasources.pyeval0ds'
+                '<strategy mode="INIT"/>'
+                '</field></group>'
+                '</definition>'
+            ),
 #            'pyeval1': (
 #                '<definition><group type="NXentry">'
 #                '<field type="NX_INT8" name="field1">'
@@ -385,9 +385,9 @@ class DescriberTest(unittest.TestCase):
                 'mca': [('STEP', 'CLIENT', 'p09/mca/exp.02', 'NX_FLOAT',
                          [2048])],
             },
-#            'pyeval0': {
-#                'pyeval0': [('INIT', 'PYEVAL', 'pyeval0ds', 'NX_INT8', None)],
-#            },
+            'pyeval0': {
+                'pyeval0ds': [('INIT', 'PYEVAL', '', 'NX_INT8', None)],
+            },
         }
 
         self.mydss = {
@@ -458,15 +458,15 @@ class DescriberTest(unittest.TestCase):
                 '</datasource>'
                 '</definition>'
             ),
-#            'pyeval0ds': (
-#                '<definition>'
-#                '<datasource type="PYEVAL" name="pyeval0ds">'
-#                '<result name="myattr2">'
-#                'ds.myattr = "SomeThing"'
-#                '</result>'
-#                '</datasource>'
-#                '</definition>'
-#            ),
+            'pyeval0ds': (
+                '<definition>'
+                '<datasource type="PYEVAL" name="pyeval0ds">'
+                '<result name="myattr2">'
+                'ds.myattr = "SomeThing"'
+                '</result>'
+                '</datasource>'
+                '</definition>'
+            ),
         }
 
         self.resdss = {
@@ -485,7 +485,7 @@ class DescriberTest(unittest.TestCase):
             'dbtest': ('dbtest', "DB", ""),
             'dbds': ('dbds', "DB", ""),
             'slt1vgap': ('slt1vgap', "CLIENT", "p02/slt/exp.07"),
-#            'pyeval0ds': ('pyeval0ds', "PYEVAL", ""),
+            'pyeval0ds': ('pyeval0ds', "PYEVAL", ""),
         }
 
     ## Exception tester
