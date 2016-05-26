@@ -170,7 +170,7 @@ class DescriberTest(unittest.TestCase):
                 '</datasource>'
                 '<strategy mode="INIT"/>'
                 '<dimensions rank="1">'
-                '<dim index="1" value="$datasource.ann">'
+                '<dim index="1" value="$datasources.ann">'
                 '</dim></dimensions>'
                 '</field></group>'
                 '</definition>'),
@@ -196,7 +196,7 @@ class DescriberTest(unittest.TestCase):
                 '</datasource>'
                 '<strategy mode="INIT"/>'
                 '<dimensions rank="1">'
-                '<dim index="1">$datasource.ann2<strategy mode="CONFIG" />'
+                '<dim index="1">$datasources.ann2<strategy mode="CONFIG" />'
                 '</dim></dimensions>'
                 '</field></group>'
                 '</definition>'),
@@ -223,7 +223,7 @@ class DescriberTest(unittest.TestCase):
                 '</datasource>'
                 '<strategy mode="INIT"/>'
                 '<dimensions rank="2">'
-                '<dim index="1" value="$datasource.ann" />'
+                '<dim index="1" value="$datasources.ann" />'
                 '<dim index="2" value="123" />'
                 '</dimensions>'
                 '</field></group>'
@@ -308,6 +308,24 @@ class DescriberTest(unittest.TestCase):
                 '<record name="p09/mca/exp.02"/>'
                 '</datasource></field></group></group></group></definition>'
             ),
+#            'pyeval0': (
+#                '<definition><group type="NXentry">'
+#                '<field type="NX_INT8" name="field1">'
+#                '$datasources.pyeval0ds'
+#                '<strategy mode="INIT"/>'
+#                '</field></group>'
+#                '</definition>'
+#            ),
+#            'pyeval1': (
+#                '<definition><group type="NXentry">'
+#                '<field type="NX_INT8" name="field1">'
+#                '<datasource type="TANGO" name="tann1c">'
+#                '<record name="myattr2"/>'
+#                '<device member="attribute" name="dsf/sd/we"/>'
+#                '</datasource>'
+#                '<strategy mode="INIT"/>'
+#                '</field></group>'
+#                '</definition>'),
 
         }
 
@@ -322,22 +340,25 @@ class DescriberTest(unittest.TestCase):
                 ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8', [34])]},
             'dim2': {'tann1c': [
                 ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8',
-                 ['$datasource.ann'])]},
+                 ['$datasources.ann'])]},
             'dim3': {'tann1c': [
                 ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8',
                  [1234])]},
             'dim4': {'tann1c': [
                 ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8',
-                 ['$datasource.ann2'])]},
+                 ['$datasources.ann2'])],
+                     'ann2': [
+                         ('CONFIG', 'CLIENT', '', None, None)],
+                 },
             'dim5': {
                 'tann1c': [
                     ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8',
-                     ['$datasource.ann'])],
+                     ['$datasources.ann'])],
                 'ann': [('CONFIG', 'TANGO', '', None, None)],
             },
             'dim6': {'tann1c': [
                 ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8',
-                 ['$datasource.ann', 123])]},
+                 ['$datasources.ann', 123])]},
             'dim7': {'tann1c': [
                 ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8',
                  [None, None])]},
@@ -364,6 +385,9 @@ class DescriberTest(unittest.TestCase):
                 'mca': [('STEP', 'CLIENT', 'p09/mca/exp.02', 'NX_FLOAT',
                          [2048])],
             },
+#            'pyeval0': {
+#                'pyeval0': [('INIT', 'PYEVAL', 'pyeval0ds', 'NX_INT8', None)],
+#            },
         }
 
         self.mydss = {
@@ -434,6 +458,15 @@ class DescriberTest(unittest.TestCase):
                 '</datasource>'
                 '</definition>'
             ),
+#            'pyeval0ds': (
+#                '<definition>'
+#                '<datasource type="PYEVAL" name="pyeval0ds">'
+#                '<result name="myattr2">'
+#                'ds.myattr = "SomeThing"'
+#                '</result>'
+#                '</datasource>'
+#                '</definition>'
+#            ),
         }
 
         self.resdss = {
@@ -452,6 +485,7 @@ class DescriberTest(unittest.TestCase):
             'dbtest': ('dbtest', "DB", ""),
             'dbds': ('dbds', "DB", ""),
             'slt1vgap': ('slt1vgap', "CLIENT", "p02/slt/exp.07"),
+#            'pyeval0ds': ('pyeval0ds', "PYEVAL", ""),
         }
 
     ## Exception tester
@@ -585,6 +619,8 @@ class DescriberTest(unittest.TestCase):
         self.myAssertRaise(Exception, Describer, None, None)
         self.myAssertRaise(Exception, Describer, None, False)
         self.myAssertRaise(Exception, Describer, None, True)
+        self.myAssertRaise(Exception, Describer, None, True, True)
+        self.myAssertRaise(Exception, Describer, None, True, False)
 
     ## constructor test
     # \brief It tests default settings
@@ -614,6 +650,7 @@ class DescriberTest(unittest.TestCase):
         des = Describer(server)
         res = des.dataSources(["ann"], "CLIENT")
         self.checkDSList(res, [])
+
 
     ## constructor test
     # \brief It tests default settings
@@ -804,7 +841,6 @@ class DescriberTest(unittest.TestCase):
         for names in names_list:
             des = Describer(server)
             res = des.dataSources(names)
-            print res
             self.checkDSList(res, names)
 
     ## constructor test
@@ -1056,6 +1092,22 @@ class DescriberTest(unittest.TestCase):
         self.assertEqual(des.components(), [{}])
         self.assertEqual(des.components(["unknown"]), [{}])
 
+        des = Describer(server, True, True)
+        self.assertEqual(des.components(), [{}])
+        self.assertEqual(des.components(["unknown"]), [{}])
+
+        des = Describer(server, True, False)
+        self.assertEqual(des.components(), [{}])
+        self.assertEqual(des.components(["unknown"]), [{}])
+
+        des = Describer(server, False, True)
+        self.assertEqual(des.components(), [])
+        self.assertEqual(des.components(["unknown"]), [])
+
+        des = Describer(server, False, False)
+        self.assertEqual(des.components(), [])
+        self.assertEqual(des.components(["unknown"]), [])
+
     ## constructor test
     # \brief It tests default settings
     def test_components_noarg(self):
@@ -1065,6 +1117,17 @@ class DescriberTest(unittest.TestCase):
         des = Describer(server)
         res = des.components()
         self.checkICP(res, self.rescps.keys())
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_components_noarg_pfs(self):
+        server = NoServer()
+        server.dsdict = self.mydss
+        server.cpdict = self.mycps
+        des = Describer(server, pyevalfromscript=True)
+        res = des.components()
+        self.checkICP(res, self.rescps.keys())
+        print des.components(['scan3'])
 
     ## constructor test
     # \brief It tests default settings
