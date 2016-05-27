@@ -136,7 +136,10 @@ class MacroServerPools(object):
                                       discomponentgroup, channels, describer)
 
         for ads in datasources:
-            cls.__createCheckItem(ads, {ads: None}, toCheck, nonexisting,
+            res = describer.dataSources([ads])
+            if ads not in res[0].keys():
+                res[0][ads] = None
+            cls.__createCheckItem(ads, res[0], toCheck, nonexisting,
                                   discomponentgroup, channels, describer)
 
         return toCheck.values()

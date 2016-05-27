@@ -418,6 +418,141 @@ class SelectorTest(unittest.TestCase):
                 '</group></definition>'),
         }
 
+        self.specps = {
+            'pyeval0': (
+                '<definition><group type="NXentry">'
+                '<field type="NX_INT8" name="field1">'
+                '$datasources.pyeval0ds'
+                '<strategy mode="INIT"/>'
+                '</field></group>'
+                '</definition>'
+            ),
+            'pyeval1': (
+                '<definition><group type="NXentry">'
+                '<field type="NX_INT32" name="field1">'
+                '$datasources.pyeval1ds'
+                '<strategy mode="STEP"/>'
+                '</field></group>'
+                '</definition>'
+            ),
+            'pyeval1a': (
+                '<definition><group type="NXentry">'
+                '<field type="NX_INT32" name="field1">'
+                '$datasources.pyeval1ads'
+                '<strategy mode="STEP"/>'
+                '</field></group>'
+                '</definition>'
+            ),
+            'pyeval2': (
+                '<definition><group type="NXentry">'
+                '<field type="NX_FLOAT" name="field1">'
+                '$datasources.pyeval2ds'
+                '<strategy mode="STEP"/>'
+                '</field></group>'
+                '</definition>'
+            ),
+            'pyeval2a': (
+                '<definition><group type="NXentry">'
+                '<field type="NX_FLOAT" name="field1">'
+                '$datasources.pyeval2ads'
+                '<strategy mode="STEP"/>'
+                '</field></group>'
+                '</definition>'
+            ),
+            'pyeval2b': (
+                '<definition><group type="NXentry">'
+                '<field type="NX_FLOAT64" name="field1">'
+                '$datasources.pyeval2bds'
+                '<strategy mode="FINAL"/>'
+                '</field></group>'
+                '</definition>'
+            ),
+            'pyeval2c': (
+                '<definition><group type="NXentry">'
+                '<field type="NX_FLOAT64" name="field1">'
+                '$datasources.pyeval2cds'
+                '<strategy mode="FINAL"/>'
+                '</field></group>'
+                '</definition>'
+            )
+        }
+
+        self.spedss = {
+            'pyeval0ds': (
+                '<definition>'
+                '<datasource type="PYEVAL" name="pyeval0ds">'
+                '<result name="myattr2">'
+                'ds.myattr = "SomeThing"'
+                '</result>'
+                '</datasource>'
+                '</definition>'
+            ),
+            'pyeval1ds': (
+                '<definition>'
+                '<datasource type="PYEVAL" name="pyeval1ds">'
+                '$datasources.scalar2_uchar'
+                '<result name="myattr2">'
+                'ds.myattr2 = 12'
+                '</result>'
+                '</datasource>'
+                '</definition>'
+            ),
+            'pyeval1ads': (
+                '<definition>'
+                '<datasource type="PYEVAL" name="pyeval1ads">'
+                '$datasources.scalar2_long'
+                '<result name="myattr2">'
+                'ds.myattr2 = ds.tann1c'
+                '</result>'
+                '</datasource>'
+                '</definition>'
+            ),
+            'pyeval2ds': (
+                '<definition>'
+                '<datasource type="PYEVAL" name="pyeval2ds">'
+                '$datasources.scalar2_long'
+                '$datasources.scalar2_uchar'
+                '<result name="myattr2">'
+                'ds.myattr2 = 123.3'
+                '</result>'
+                '</datasource>'
+                '</definition>'
+            ),
+            'pyeval2ads': (
+                '<definition>'
+                '<datasource type="PYEVAL" name="pyeval2ads">'
+                '$datasources.scalar_long'
+                '$datasources.scalar2_uchar'
+                '<result name="myattr2">'
+                'ds.myattr2 = float(ds.scalar_long + ds.scalar2_uchar)'
+                '</result>'
+                '</datasource>'
+                '</definition>'
+            ),
+            'pyeval2bds': (
+                '<definition>'
+                '<datasource type="PYEVAL" name="pyeval2bds">'
+                '$datasources.scalar_long'
+                '$datasources.scalar2_uchar'
+                '<result name="myattr2">'
+                'ds.myattr2 = float(ds.scalar_long)'
+                '</result>'
+                '</datasource>'
+                '</definition>'
+            ),
+            'pyeval2cds': (
+                '<definition>'
+                '<datasource type="PYEVAL" name="pyeval2cds">'
+                '$datasources.scalar_long'
+                '$datasources.scalar2_uchar'
+                '<result name="myattr2">'
+                'ds.myattr2 = float(ds.scalar2_uchar)'
+                '</result>'
+                '</datasource>'
+                '</definition>'
+            ),
+        }
+
         self.smydss = {
             'scalar_long': (
                 '<definition><datasource type="TANGO" name="scalar_long">'
@@ -808,6 +943,7 @@ class SelectorTest(unittest.TestCase):
                  '</datasource></definition>'),
         }
 
+        
         self.mydss = {
             'nn':
             ('<?xml version=\'1.0\'?><definition><datasource type="TANGO">'
@@ -3909,11 +4045,13 @@ class SelectorTest(unittest.TestCase):
              "AvailableComponents", "Components",
              "DataSources",
              "DataSources",
+             "DataSources",
+             "DataSources",
              "AvailableDataSources",
              "StoreSelection"])
         self.assertEqual(
             json.loads(self._cf.dp.GetCommandVariable("VARS")),
-            [None, None, None, ['mycp'], ['ann5'], ['ann2'],
+            [None, None, None, ['mycp'], ['ann5'], ['ann5'], ['ann2'], ['ann2'],
              None, val["MntGrp"]])
 
         self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
@@ -3973,10 +4111,13 @@ class SelectorTest(unittest.TestCase):
              "AvailableComponents",
              "Components",
              "DataSources",
-             "DataSources"])
+             "DataSources",
+             "DataSources",
+             "DataSources"
+         ])
         self.assertEqual(
             json.loads(self._cf.dp.GetCommandVariable("VARS")),
-            [None, None, None, ['mycp'], ['ann5'], ['ann2']])
+            [None, None, None, ['mycp'], ['ann5'], ['ann5'], ['ann2'], ['ann2']])
 
         self.assertTrue(val["MntGrp"] not in self._cf.dp.availableSelections())
 
@@ -4019,10 +4160,12 @@ class SelectorTest(unittest.TestCase):
             ["AvailableComponents", "AvailableDataSources",
              "AvailableComponents", "Components",
              "DataSources",
+             "DataSources",
+             "DataSources",
              "DataSources"])
         self.assertEqual(
             json.loads(self._cf.dp.GetCommandVariable("VARS")),
-            [None, None, None, ['mycp'], ['ann5'], ['ann2']])
+            [None, None, None, ['mycp'], ['ann5'], ['ann5'], ['ann2'], ['ann2']])
 
         self.assertTrue(val["MntGrp"] not in self._cf.dp.availableSelections())
 
@@ -4110,10 +4253,11 @@ class SelectorTest(unittest.TestCase):
             ["AvailableComponents", "AvailableDataSources",
              "AvailableComponents", "Components",
              "DataSources",
+             "DataSources",
              "AvailableDataSources",
              "StoreSelection"])
         self.assertEqual(json.loads(self._cf.dp.GetCommandVariable("VARS")),
-                         [None, None, None, ['mycp'], [u'ann2'],
+                         [None, None, None, ['mycp'], [u'ann2'], [u'ann2'],
                           None, val["MntGrp"]])
         self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
         sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
@@ -4173,9 +4317,9 @@ class SelectorTest(unittest.TestCase):
             json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
             ["AvailableComponents", "AvailableDataSources",
              "AvailableComponents", "Components",
-             "DataSources"])
+             "DataSources", "DataSources"])
         self.assertEqual(json.loads(self._cf.dp.GetCommandVariable("VARS")),
-                         [None, None, None, ['mycp'], ['ann3']])
+                         [None, None, None, ['mycp'], ['ann3'], ['ann3']])
         self.assertTrue(val["MntGrp"] not in self._cf.dp.availableSelections())
 
     ## test
@@ -4217,9 +4361,9 @@ class SelectorTest(unittest.TestCase):
             json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
             ["AvailableComponents", "AvailableDataSources",
              "AvailableComponents", "Components",
-             "DataSources"])
+             "DataSources", "DataSources"])
         self.assertEqual(json.loads(self._cf.dp.GetCommandVariable("VARS")),
-                         [None, None, None, ['mycp'], ['ann3']])
+                         [None, None, None, ['mycp'], ['ann3'], ['ann3']])
         self.assertTrue(val["MntGrp"] not in self._cf.dp.availableSelections())
 
     ## test
@@ -4262,7 +4406,7 @@ class SelectorTest(unittest.TestCase):
             ["AvailableComponents", "AvailableDataSources",
              "AvailableComponents",
              "Components", "DataSources", "DataSources",
-             "DataSources", "DataSources"])
+             "DataSources", "DataSources", "DataSources"])
         self.assertTrue(val["MntGrp"] not in self._cf.dp.availableSelections())
 
     ## test
@@ -4305,6 +4449,7 @@ class SelectorTest(unittest.TestCase):
              "AvailableComponents",
              "Components", "DataSources", "DataSources",
              "DataSources",
+             "DataSources",
              "DataSources", "AvailableDataSources",
              "StoreSelection"])
         self.assertEqual(json.loads(self._cf.dp.GetCommandVariable("VARS")),
@@ -4313,6 +4458,7 @@ class SelectorTest(unittest.TestCase):
                           [u'scalar_long'],
                           [u'scalar_short'],
                           [u'scalar_long', u'scalar_short'],
+                          [u'scalar_uchar'],
                           [u'scalar_uchar'],
                           None, val["MntGrp"]])
         self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
@@ -4374,14 +4520,16 @@ class SelectorTest(unittest.TestCase):
             ["AvailableComponents", "AvailableDataSources",
              "AvailableComponents",
              "Components", "DataSources", "DataSources",
-             "DataSources", "DataSources"])
+             "DataSources", "DataSources", "DataSources"])
         self.assertEqual(json.loads(self._cf.dp.GetCommandVariable("VARS")),
                          [None, None, None,
                           [u'smycp'],
                           [u'scalar_long'],
                           [u'scalar_short'],
                           [u'scalar_long', u'scalar_short'],
-                          [u'scalar_uchar']])
+                          [u'scalar_uchar'],
+                          [u'scalar_uchar']
+                      ])
         self.assertTrue(val["MntGrp"] not in self._cf.dp.availableSelections())
 
     ## test
@@ -4431,6 +4579,9 @@ class SelectorTest(unittest.TestCase):
              "Components", "DataSources", "DataSources", "DataSources",
              "Components", "DataSources", "DataSources", "DataSources",
              "Components", "DataSources", "DataSources", "DataSources",
+             "DataSources",
+             "DataSources",
+             "DataSources",
              "DataSources",
              "DataSources",
              "DataSources",
@@ -4530,6 +4681,8 @@ class SelectorTest(unittest.TestCase):
                     "Components", "DataSources", "DataSources", "DataSources",
                     "DataSources", "DataSources", "DataSources", "DataSources",
                     "DataSources", "DataSources",
+                    "DataSources", "DataSources", "DataSources", "DataSources",
+                    "DataSources", "DataSources",
                     "AvailableDataSources", "StoreSelection"
                 ])
             res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
@@ -4624,6 +4777,8 @@ class SelectorTest(unittest.TestCase):
                  "Components", "DataSources", "DataSources", "DataSources",
                  "Components", "DataSources", "DataSources", "DataSources",
                  "Components", "DataSources", "DataSources", "DataSources",
+                 "DataSources", "DataSources", "DataSources", "DataSources",
+                 "DataSources", "DataSources",
                  "DataSources", "DataSources", "DataSources", "DataSources",
                  "DataSources", "DataSources",
                  "AvailableDataSources", "StoreSelection"]
@@ -4721,7 +4876,430 @@ class SelectorTest(unittest.TestCase):
                     "Components", "DataSources", "DataSources", "DataSources",
                     "DataSources", "DataSources", "DataSources",
                     "DataSources", "DataSources", "DataSources",
+                    "DataSources", "DataSources", "DataSources",
+                    "DataSources", "DataSources", "DataSources",
                     "AvailableDataSources", "StoreSelection"])
+            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
+            sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
+            self.assertEqual(len(sed.keys()), len(self._keys))
+            for key, vl in self._keys:
+                self.assertTrue(key in sed.keys())
+                if key in val:
+                    self.assertEqual(sed[key], val[key])
+                elif key == 'ComponentPreselection':
+                    self.assertEqual(set(json.loads(sed[key])),
+                                     set(json.loads(res)))
+                elif key == 'DataSourcePreselection':
+                    self.assertEqual(set(json.loads(sed[key])),
+                                     set(json.loads(resd)))
+                elif key == 'PreselectingDataSources':
+                    self.assertEqual(set(json.loads(sed[key])),
+                                     set(poolchannels))
+                else:
+                    self.assertEqual(sed[key], vl)
+        finally:
+            simps2.delete()
+
+    ## test
+    # \brief It tests default settings
+    def test_preselect_2wds_dvnorunning_pe(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        simps2 = TestServerSetUp.TestServerSetUp(
+            "ttestp09/testts/t2r228", "S2")
+        try:
+            simps2.add()
+            msp = MacroServerPools(1)
+            se = Selector(msp, self.__version)
+            se["Door"] = val["Door"]
+            se["ConfigDevice"] = val["ConfigDevice"]
+            se["WriterDevice"] = val["WriterDevice"]
+            channelerrors = []
+            poolchannels = []
+            componentgroup = dict((k, None) for k in self.specps.keys())
+            datasourcegroup = dict((k, None) for k in self.spedss.keys())
+
+            cps = dict(self.smycps)
+            cps.update(self.smycps2)
+            cps.update(self.specps)
+            dss = dict(self.smydss)
+            dss.update(self.smydss2)
+            dss.update(self.spedss)
+
+            self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
+            self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
+
+            se["PreselectingDataSources"] = json.dumps(poolchannels)
+            se["ComponentPreselection"] = json.dumps(componentgroup)
+            se["DataSourcePreselection"] = json.dumps(datasourcegroup)
+            se.descErrors = []
+            se.preselect()
+            res = se["ComponentPreselection"]
+            resd = se["DataSourcePreselection"]
+
+            print res
+            self.myAssertDict(json.loads(res), {
+                u'pyeval1a': True, u'pyeval2a': None, u'pyeval2c': None,
+                u'pyeval2b': True, u'pyeval2': True, u'pyeval0': True,
+                u'pyeval1': True})
+            self.myAssertDict(json.loads(resd), {
+                u'pyeval1ads': True, u'pyeval2ads': None, u'pyeval2bds': True,
+                u'pyeval2cds': None, u'pyeval0ds': True, u'pyeval1ds': True,
+                u'pyeval2ds': True}
+            )
+            self.assertEqual(len(se.descErrors), 4)
+
+    #        print self._cf.dp.GetCommandVariable("COMMANDS")
+            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
+            sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
+            self.assertEqual(len(sed.keys()), len(self._keys))
+            for key, vl in self._keys:
+                self.assertTrue(key in sed.keys())
+                if key in val:
+                    self.assertEqual(sed[key], val[key])
+                elif key == 'ComponentPreselection':
+                    self.assertEqual(set(json.loads(sed[key])),
+                                     set(json.loads(res)))
+                elif key == 'DataSourcePreselection':
+                    self.assertEqual(set(json.loads(sed[key])),
+                                     set(json.loads(resd)))
+                elif key == 'PreselectingDataSources':
+                    self.assertEqual(set(json.loads(sed[key])),
+                                     set(poolchannels))
+                else:
+                    self.assertEqual(sed[key], vl)
+        finally:
+            simps2.delete()
+
+    ## test
+    # \brief It tests default settings
+    def test_preselect_2wds2_dvnorunning_pe(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        simps2 = TestServerSetUp.TestServerSetUp(
+            "ttestp09/testts/t2r228", "S2")
+        try:
+            simps2.setUp()
+            msp = MacroServerPools(1)
+            se = Selector(msp, self.__version)
+            se["Door"] = val["Door"]
+            se["ConfigDevice"] = val["ConfigDevice"]
+            se["WriterDevice"] = val["WriterDevice"]
+            channelerrors = []
+            poolchannels = []
+            componentgroup = dict((k, None) for k in self.specps.keys())
+            datasourcegroup = dict((k, None) for k in self.spedss.keys())
+
+            cps = dict(self.smycps)
+            cps.update(self.smycps2)
+            cps.update(self.specps)
+            dss = dict(self.smydss)
+            dss.update(self.smydss2)
+            dss.update(self.spedss)
+
+            self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
+            self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
+
+            se["PreselectingDataSources"] = json.dumps(poolchannels)
+            se["ComponentPreselection"] = json.dumps(componentgroup)
+            se["DataSourcePreselection"] = json.dumps(datasourcegroup)
+            se.descErrors = []
+            se.preselect()
+            res = se["ComponentPreselection"]
+            resd = se["DataSourcePreselection"]
+
+            print res
+            self.myAssertDict(json.loads(res), {
+                u'pyeval1a': True, u'pyeval2a': True, u'pyeval2c': True,
+                u'pyeval2b': True, u'pyeval2': True, u'pyeval0': True,
+                u'pyeval1': True})
+            self.myAssertDict(json.loads(resd), {
+                u'pyeval1ads': True, u'pyeval2ads': True, u'pyeval2bds': True,
+                u'pyeval2cds': True, u'pyeval0ds': True, u'pyeval1ds': True,
+                u'pyeval2ds': True}
+            )
+            self.assertEqual(len(se.descErrors), 0)
+
+    #        print self._cf.dp.GetCommandVariable("COMMANDS")
+            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
+            sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
+            self.assertEqual(len(sed.keys()), len(self._keys))
+            for key, vl in self._keys:
+                self.assertTrue(key in sed.keys())
+                if key in val:
+                    self.assertEqual(sed[key], val[key])
+                elif key == 'ComponentPreselection':
+                    self.assertEqual(set(json.loads(sed[key])),
+                                     set(json.loads(res)))
+                elif key == 'DataSourcePreselection':
+                    self.assertEqual(set(json.loads(sed[key])),
+                                     set(json.loads(resd)))
+                elif key == 'PreselectingDataSources':
+                    self.assertEqual(set(json.loads(sed[key])),
+                                     set(poolchannels))
+                else:
+                    self.assertEqual(sed[key], vl)
+        finally:
+            simps2.tearDown()
+
+    ## test
+    # \brief It tests default settings
+    def test_preselect_2wds2_dvnorunning_pe_true(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        simps2 = TestServerSetUp.TestServerSetUp(
+            "ttestp09/testts/t2r228", "S2")
+        try:
+            simps2.setUp()
+            msp = MacroServerPools(1)
+            se = Selector(msp, self.__version)
+            se["Door"] = val["Door"]
+            se["ConfigDevice"] = val["ConfigDevice"]
+            se["WriterDevice"] = val["WriterDevice"]
+            channelerrors = []
+            poolchannels = []
+            componentgroup = dict((k, True) for k in self.specps.keys())
+            datasourcegroup = dict((k, True) for k in self.spedss.keys())
+
+            cps = dict(self.smycps)
+            cps.update(self.smycps2)
+            cps.update(self.specps)
+            dss = dict(self.smydss)
+            dss.update(self.smydss2)
+            dss.update(self.spedss)
+
+            self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
+            self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
+
+            se["PreselectingDataSources"] = json.dumps(poolchannels)
+            se["ComponentPreselection"] = json.dumps(componentgroup)
+            se["DataSourcePreselection"] = json.dumps(datasourcegroup)
+            se.descErrors = []
+            se.preselect()
+            res = se["ComponentPreselection"]
+            resd = se["DataSourcePreselection"]
+
+            print res
+            self.myAssertDict(json.loads(res), {
+                u'pyeval1a': True, u'pyeval2a': True, u'pyeval2c': True,
+                u'pyeval2b': True, u'pyeval2': True, u'pyeval0': True,
+                u'pyeval1': True})
+            self.myAssertDict(json.loads(resd), {
+                u'pyeval1ads': True, u'pyeval2ads': True, u'pyeval2bds': True,
+                u'pyeval2cds': True, u'pyeval0ds': True, u'pyeval1ds': True,
+                u'pyeval2ds': True}
+            )
+            self.assertEqual(len(se.descErrors), 0)
+
+    #        print self._cf.dp.GetCommandVariable("COMMANDS")
+            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            self.assertTrue(not val["MntGrp"] in self._cf.dp.availableSelections())
+        finally:
+            simps2.tearDown()
+    ## test
+    # \brief It tests default settings
+    def test_preselect_2wds2_dvnorunning_pe_false(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        simps2 = TestServerSetUp.TestServerSetUp(
+            "ttestp09/testts/t2r228", "S2")
+        try:
+            simps2.setUp()
+            msp = MacroServerPools(1)
+            se = Selector(msp, self.__version)
+            se["Door"] = val["Door"]
+            se["ConfigDevice"] = val["ConfigDevice"]
+            se["WriterDevice"] = val["WriterDevice"]
+            channelerrors = []
+            poolchannels = []
+            componentgroup = dict((k, False) for k in self.specps.keys())
+            datasourcegroup = dict((k, False) for k in self.spedss.keys())
+
+            cps = dict(self.smycps)
+            cps.update(self.smycps2)
+            cps.update(self.specps)
+            dss = dict(self.smydss)
+            dss.update(self.smydss2)
+            dss.update(self.spedss)
+
+            self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
+            self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
+
+            se["PreselectingDataSources"] = json.dumps(poolchannels)
+            se["ComponentPreselection"] = json.dumps(componentgroup)
+            se["DataSourcePreselection"] = json.dumps(datasourcegroup)
+            se.descErrors = []
+            se.preselect()
+            res = se["ComponentPreselection"]
+            resd = se["DataSourcePreselection"]
+
+            print res
+            self.myAssertDict(json.loads(res), {
+                u'pyeval1a': False, u'pyeval2a': False, u'pyeval2c': False,
+                u'pyeval2b': False, u'pyeval2': False, u'pyeval0': False,
+                u'pyeval1': False})
+            self.myAssertDict(json.loads(resd), {
+                u'pyeval1ads': False, u'pyeval2ads': False, u'pyeval2bds': False,
+                u'pyeval2cds': False, u'pyeval0ds': False, u'pyeval1ds': False,
+                u'pyeval2ds': False}
+            )
+            self.assertEqual(len(se.descErrors), 0)
+
+    #        print self._cf.dp.GetCommandVariable("COMMANDS")
+            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            self.assertTrue(not val["MntGrp"] in self._cf.dp.availableSelections())
+        finally:
+            simps2.tearDown()
+
+    ## test
+    # \brief It tests default settings
+    def test_preselect_2wds_dvnorunning_pe_true(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        simps2 = TestServerSetUp.TestServerSetUp(
+            "ttestp09/testts/t2r228", "S2")
+        try:
+            simps2.add()
+            msp = MacroServerPools(1)
+            se = Selector(msp, self.__version)
+            se["Door"] = val["Door"]
+            se["ConfigDevice"] = val["ConfigDevice"]
+            se["WriterDevice"] = val["WriterDevice"]
+            channelerrors = []
+            poolchannels = []
+            componentgroup = dict((k, True) for k in self.specps.keys())
+            datasourcegroup = dict((k, True) for k in self.spedss.keys())
+
+            cps = dict(self.smycps)
+            cps.update(self.smycps2)
+            cps.update(self.specps)
+            dss = dict(self.smydss)
+            dss.update(self.smydss2)
+            dss.update(self.spedss)
+
+            self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
+            self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
+
+            se["PreselectingDataSources"] = json.dumps(poolchannels)
+            se["ComponentPreselection"] = json.dumps(componentgroup)
+            se["DataSourcePreselection"] = json.dumps(datasourcegroup)
+            se.descErrors = []
+            se.preselect()
+            res = se["ComponentPreselection"]
+            resd = se["DataSourcePreselection"]
+
+            print res
+            self.myAssertDict(json.loads(res), {
+                u'pyeval1a': True, u'pyeval2a': None, u'pyeval2c': None,
+                u'pyeval2b': True, u'pyeval2': True, u'pyeval0': True,
+                u'pyeval1': True})
+            self.myAssertDict(json.loads(resd), {
+                u'pyeval1ads': True, u'pyeval2ads': None, u'pyeval2bds': True,
+                u'pyeval2cds': None, u'pyeval0ds': True, u'pyeval1ds': True,
+                u'pyeval2ds': True}
+            )
+            self.assertEqual(len(se.descErrors), 4)
+
+    #        print self._cf.dp.GetCommandVariable("COMMANDS")
+            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
+            sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
+            self.assertEqual(len(sed.keys()), len(self._keys))
+            for key, vl in self._keys:
+                self.assertTrue(key in sed.keys())
+                if key in val:
+                    self.assertEqual(sed[key], val[key])
+                elif key == 'ComponentPreselection':
+                    self.assertEqual(set(json.loads(sed[key])),
+                                     set(json.loads(res)))
+                elif key == 'DataSourcePreselection':
+                    self.assertEqual(set(json.loads(sed[key])),
+                                     set(json.loads(resd)))
+                elif key == 'PreselectingDataSources':
+                    self.assertEqual(set(json.loads(sed[key])),
+                                     set(poolchannels))
+                else:
+                    self.assertEqual(sed[key], vl)
+        finally:
+            simps2.delete()
+
+    ## test
+    # \brief It tests default settings
+    def test_preselect_2wds_dvnorunning_pe_false(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        simps2 = TestServerSetUp.TestServerSetUp(
+            "ttestp09/testts/t2r228", "S2")
+        try:
+            simps2.add()
+            msp = MacroServerPools(1)
+            se = Selector(msp, self.__version)
+            se["Door"] = val["Door"]
+            se["ConfigDevice"] = val["ConfigDevice"]
+            se["WriterDevice"] = val["WriterDevice"]
+            channelerrors = []
+            poolchannels = []
+            componentgroup = dict((k, False) for k in self.specps.keys())
+            datasourcegroup = dict((k, False) for k in self.spedss.keys())
+
+            cps = dict(self.smycps)
+            cps.update(self.smycps2)
+            cps.update(self.specps)
+            dss = dict(self.smydss)
+            dss.update(self.smydss2)
+            dss.update(self.spedss)
+
+            self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
+            self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
+
+            se["PreselectingDataSources"] = json.dumps(poolchannels)
+            se["ComponentPreselection"] = json.dumps(componentgroup)
+            se["DataSourcePreselection"] = json.dumps(datasourcegroup)
+            se.descErrors = []
+            se.preselect()
+            res = se["ComponentPreselection"]
+            resd = se["DataSourcePreselection"]
+
+            self.myAssertDict(json.loads(res), {
+                "pyeval1a": False, "pyeval2a": None, "pyeval2c": None,
+                "pyeval2b": False, "pyeval2": False, "pyeval0": False,
+                "pyeval1": False}
+            )
+            self.myAssertDict(json.loads(resd), {
+                u'pyeval1ads': False, u'pyeval2ads': None, u'pyeval2bds': False,
+                u'pyeval2cds': None, u'pyeval0ds': False, u'pyeval1ds': False,
+                u'pyeval2ds': False}
+            )
+            self.assertEqual(len(se.descErrors), 4)
+
+    #        print self._cf.dp.GetCommandVariable("COMMANDS")
             res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
@@ -4809,6 +5387,8 @@ class SelectorTest(unittest.TestCase):
                 "Components", "DataSources", "DataSources", "DataSources",
                 "Components", "DataSources", "DataSources", "DataSources",
                 "Components", "DataSources", "DataSources", "DataSources",
+                "DataSources", "DataSources", "DataSources",
+                "DataSources", "DataSources", "DataSources",
                 "DataSources", "DataSources", "DataSources",
                 "DataSources", "DataSources", "DataSources",
                 "AvailableDataSources", "StoreSelection"

@@ -264,37 +264,42 @@ class Describer(object):
             dslist.append(dsitem)
         if name and str(dstype) == 'PYEVAL':
             if dsxmls and self.__pyevalfromscript:
-                dsxml = dsxmls[0]
-                result = ""
-                indom = xml.dom.minidom.parseString(dsxml)
-                cnode = indom.getElementsByTagName("datasource")[0]
-                for child in cnode.childNodes:
-                    if child.nodeName == 'result':
-                        for content in child.childNodes:
-                            if content.nodeType == content.TEXT_NODE:
-                                result += str(content.data)
-
-                index = dsxml.find("$%s." % label)
-                while index != -1:
-                    try:
-                        subc = re.finditer(
-                            r"[\w]+",
-                            dsxml[(index + len(label) + 2):]).next().group(0)
-                    except (StopIteration, IndexError):
-                        subc = ''
-                    name = subc.strip() if subc else ""
-                    if name in result:
-                        chdsxml = TangoUtils.command(
-                            self.__nexusconfig_device,
-                            "dataSources", [str(name)])
-                        dsitem = self.__describeDataSource(name, chdsxml[0])
-                        if dsitem.dstype:
-                            dslist.append(dsitem)
-                    index = dsxml.find("$%s." % label, index + 1)
+                dslist.extend(self.__findsubdatasources(dsxmls[0]))
             else:
                 for child in node.childNodes:
                     self.__getDSFromNode(child, dslist)
 
+        return dslist
+
+    def __findsubdatasources(self, dsxml):
+        dslist = []
+        result = ""
+        label = 'datasources'
+        indom = xml.dom.minidom.parseString(dsxml)
+        cnode = indom.getElementsByTagName("datasource")[0]
+        for child in cnode.childNodes:
+            if child.nodeName == 'result':
+                for content in child.childNodes:
+                    if content.nodeType == content.TEXT_NODE:
+                        result += str(content.data)
+
+        index = dsxml.find("$%s." % label)
+        while index != -1:
+            try:
+                subc = re.finditer(
+                    r"[\w]+",
+                    dsxml[(index + len(label) + 2):]).next().group(0)
+            except (StopIteration, IndexError):
+                subc = ''
+            name = subc.strip() if subc else ""
+            if name in result:
+                chdsxml = TangoUtils.command(
+                    self.__nexusconfig_device,
+                    "dataSources", [str(name)])
+                dsitem = self.__describeDataSource(name, chdsxml[0])
+                if dsitem.dstype:
+                    dslist.append(dsitem)
+            index = dsxml.find("$%s." % label, index + 1)
         return dslist
 
     @classmethod
@@ -449,6 +454,10 @@ class Describer(object):
                 if dstype and dsitem.dstype != dstype:
                     continue
                 dsres[name] = dsitem
+                if dsxml and self.__pyevalfromscript:
+                    dsitems = self.__findsubdatasources(dsxml)
+                    for itm in dsitems:
+                        dsres[itm.name] = itm
 
         if self.__treeOutput:
             dslist = [{}]

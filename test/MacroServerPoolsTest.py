@@ -325,6 +325,141 @@ class MacroServerPoolsTest(unittest.TestCase):
                 '</group></definition>'),
         }
 
+        self.specps = {
+            'pyeval0': (
+                '<definition><group type="NXentry">'
+                '<field type="NX_INT8" name="field1">'
+                '$datasources.pyeval0ds'
+                '<strategy mode="INIT"/>'
+                '</field></group>'
+                '</definition>'
+            ),
+            'pyeval1': (
+                '<definition><group type="NXentry">'
+                '<field type="NX_INT32" name="field1">'
+                '$datasources.pyeval1ds'
+                '<strategy mode="STEP"/>'
+                '</field></group>'
+                '</definition>'
+            ),
+            'pyeval1a': (
+                '<definition><group type="NXentry">'
+                '<field type="NX_INT32" name="field1">'
+                '$datasources.pyeval1ads'
+                '<strategy mode="STEP"/>'
+                '</field></group>'
+                '</definition>'
+            ),
+            'pyeval2': (
+                '<definition><group type="NXentry">'
+                '<field type="NX_FLOAT" name="field1">'
+                '$datasources.pyeval2ds'
+                '<strategy mode="STEP"/>'
+                '</field></group>'
+                '</definition>'
+            ),
+            'pyeval2a': (
+                '<definition><group type="NXentry">'
+                '<field type="NX_FLOAT" name="field1">'
+                '$datasources.pyeval2ads'
+                '<strategy mode="STEP"/>'
+                '</field></group>'
+                '</definition>'
+            ),
+            'pyeval2b': (
+                '<definition><group type="NXentry">'
+                '<field type="NX_FLOAT64" name="field1">'
+                '$datasources.pyeval2bds'
+                '<strategy mode="FINAL"/>'
+                '</field></group>'
+                '</definition>'
+            ),
+            'pyeval2c': (
+                '<definition><group type="NXentry">'
+                '<field type="NX_FLOAT64" name="field1">'
+                '$datasources.pyeval2cds'
+                '<strategy mode="FINAL"/>'
+                '</field></group>'
+                '</definition>'
+            )
+        }
+
+        self.spedss = {
+            'pyeval0ds': (
+                '<definition>'
+                '<datasource type="PYEVAL" name="pyeval0ds">'
+                '<result name="myattr2">'
+                'ds.myattr = "SomeThing"'
+                '</result>'
+                '</datasource>'
+                '</definition>'
+            ),
+            'pyeval1ds': (
+                '<definition>'
+                '<datasource type="PYEVAL" name="pyeval1ds">'
+                '$datasources.scalar2_uchar'
+                '<result name="myattr2">'
+                'ds.myattr2 = 12'
+                '</result>'
+                '</datasource>'
+                '</definition>'
+            ),
+            'pyeval1ads': (
+                '<definition>'
+                '<datasource type="PYEVAL" name="pyeval1ads">'
+                '$datasources.scalar2_long'
+                '<result name="myattr2">'
+                'ds.myattr2 = ds.tann1c'
+                '</result>'
+                '</datasource>'
+                '</definition>'
+            ),
+            'pyeval2ds': (
+                '<definition>'
+                '<datasource type="PYEVAL" name="pyeval2ds">'
+                '$datasources.scalar2_long'
+                '$datasources.scalar2_uchar'
+                '<result name="myattr2">'
+                'ds.myattr2 = 123.3'
+                '</result>'
+                '</datasource>'
+                '</definition>'
+            ),
+            'pyeval2ads': (
+                '<definition>'
+                '<datasource type="PYEVAL" name="pyeval2ads">'
+                '$datasources.scalar_long'
+                '$datasources.scalar2_uchar'
+                '<result name="myattr2">'
+                'ds.myattr2 = float(ds.scalar_long + ds.scalar2_uchar)'
+                '</result>'
+                '</datasource>'
+                '</definition>'
+            ),
+            'pyeval2bds': (
+                '<definition>'
+                '<datasource type="PYEVAL" name="pyeval2bds">'
+                '$datasources.scalar_long'
+                '$datasources.scalar2_uchar'
+                '<result name="myattr2">'
+                'ds.myattr2 = float(ds.scalar_long)'
+                '</result>'
+                '</datasource>'
+                '</definition>'
+            ),
+            'pyeval2cds': (
+                '<definition>'
+                '<datasource type="PYEVAL" name="pyeval2cds">'
+                '$datasources.scalar_long'
+                '$datasources.scalar2_uchar'
+                '<result name="myattr2">'
+                'ds.myattr2 = float(ds.scalar2_uchar)'
+                '</result>'
+                '</datasource>'
+                '</definition>'
+            ),
+        }
+
         self.smydss = {
             'scalar_long': (
                 '<definition><datasource type="TANGO" name="scalar_long">'
@@ -1169,10 +1304,11 @@ class MacroServerPoolsTest(unittest.TestCase):
         self.assertEqual(
             json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
             ["AvailableComponents", "AvailableDataSources",
-             "AvailableComponents", "Components", "DataSources"])
+             "AvailableComponents", "Components",
+             "DataSources", "DataSources"])
         self.assertEqual(
             json.loads(self._cf.dp.GetCommandVariable("VARS")),
-            [None, None, None, ['mycp'], ['ann2']])
+            [None, None, None, ['mycp'], ['ann2'], ['ann2']])
 
     ## constructor test
     # \brief It tests default settings
@@ -1205,10 +1341,11 @@ class MacroServerPoolsTest(unittest.TestCase):
         self.assertEqual(
             json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
             ["AvailableComponents", "AvailableDataSources",
-             "AvailableComponents", "Components", "DataSources"])
+             "AvailableComponents", "Components",
+             "DataSources", "DataSources"])
         self.assertEqual(
             json.loads(self._cf.dp.GetCommandVariable("VARS")),
-            [None, None, None, ['mycp'], ['ann2']])
+            [None, None, None, ['mycp'], ['ann2'], ['ann2']])
 
     ## constructor test
     # \brief It tests default settings
@@ -1241,10 +1378,11 @@ class MacroServerPoolsTest(unittest.TestCase):
         self.assertEqual(
             json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
             ["AvailableComponents", "AvailableDataSources",
-             "AvailableComponents", "Components", "DataSources"])
+             "AvailableComponents", "Components", "DataSources",
+             "DataSources"])
         self.assertEqual(
             json.loads(self._cf.dp.GetCommandVariable("VARS")),
-            [None, None, None, ['mycp'], ['ann2']])
+            [None, None, None, ['mycp'], ['ann2'], ['ann2']])
 #        print self._cf.dp.availableComponents()
 
     ## constructor test
@@ -1315,9 +1453,10 @@ class MacroServerPoolsTest(unittest.TestCase):
         self.assertEqual(
             json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
             ["AvailableComponents", "AvailableDataSources",
-             "AvailableComponents", "Components", "DataSources"])
+             "AvailableComponents", "Components",
+             "DataSources", "DataSources"])
         self.assertEqual(json.loads(self._cf.dp.GetCommandVariable("VARS")),
-                         [None, None, None, ['mycp'], ['ann2']])
+                         [None, None, None, ['mycp'], ['ann2'], ['ann2']])
 
     ## constructor test
     # \brief It tests default settings
@@ -1350,9 +1489,10 @@ class MacroServerPoolsTest(unittest.TestCase):
         self.assertEqual(
             json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
             ["AvailableComponents", "AvailableDataSources",
-             "AvailableComponents", "Components", "DataSources"])
+             "AvailableComponents", "Components",
+             "DataSources", "DataSources"])
         self.assertEqual(json.loads(self._cf.dp.GetCommandVariable("VARS")),
-                         [None, None, None, ['mycp'], ['ann2']])
+                         [None, None, None, ['mycp'], ['ann2'], ['ann2']])
 
     ## constructor test
     # \brief It tests default settings
@@ -1385,9 +1525,10 @@ class MacroServerPoolsTest(unittest.TestCase):
         self.assertEqual(
             json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
             ["AvailableComponents", "AvailableDataSources",
-             "AvailableComponents", "Components", "DataSources"])
+             "AvailableComponents", "Components", "DataSources",
+             "DataSources"])
         self.assertEqual(json.loads(self._cf.dp.GetCommandVariable("VARS")),
-                         [None, None, None, ['mycp'], ['ann2']])
+                         [None, None, None, ['mycp'], ['ann2'], ['ann2']])
 
     ## constructor test
     # \brief It tests default settings
@@ -1423,7 +1564,9 @@ class MacroServerPoolsTest(unittest.TestCase):
             json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
             ["AvailableComponents", "AvailableDataSources",
              "AvailableComponents",
-             "Components", "DataSources", "DataSources", "DataSources",
+             "Components", "DataSources", "DataSources",
+             "DataSources",
+             "DataSources",
              "DataSources"])
 
     ## constructor test
@@ -1460,7 +1603,9 @@ class MacroServerPoolsTest(unittest.TestCase):
             json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
             ["AvailableComponents", "AvailableDataSources",
              "AvailableComponents",
-             "Components", "DataSources", "DataSources", "DataSources",
+             "Components", "DataSources", "DataSources",
+             "DataSources",
+             "DataSources",
              "DataSources"])
 
     ## constructor test
@@ -1497,7 +1642,9 @@ class MacroServerPoolsTest(unittest.TestCase):
             json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
             ["AvailableComponents", "AvailableDataSources",
              "AvailableComponents",
-             "Components", "DataSources", "DataSources", "DataSources",
+             "Components", "DataSources", "DataSources",
+             "DataSources",
+             "DataSources",
              "DataSources"])
 
     ## constructor test
@@ -1542,6 +1689,9 @@ class MacroServerPoolsTest(unittest.TestCase):
              "Components", "DataSources", "DataSources", "DataSources",
              "Components", "DataSources", "DataSources", "DataSources",
              "Components", "DataSources", "DataSources", "DataSources",
+             "DataSources",
+             "DataSources",
+             "DataSources",
              "DataSources",
              "DataSources",
              "DataSources"])
@@ -1601,7 +1751,7 @@ class MacroServerPoolsTest(unittest.TestCase):
             self.myAssertDict(componentgroup, json.loads(res))
             self.assertEqual(len(channelerrors), 0)
 
-    #        print self._cf.dp.GetCommandVariable("COMMANDS")
+            print self._cf.dp.GetCommandVariable("COMMANDS")
             self.assertEqual(
                 json.loads(self._cf.dp.GetCommandVariable("COMMANDS")), [
                     "AvailableComponents", "AvailableDataSources",
@@ -1615,8 +1765,10 @@ class MacroServerPoolsTest(unittest.TestCase):
                     "DataSources", "DataSources",
                     "DataSources", "DataSources",
                     "DataSources", "DataSources",
+                    "DataSources", "DataSources",
+                    "DataSources", "DataSources",
+                    "DataSources", "DataSources",
                 ])
-            res = json.loads(self._cf.dp.GetCommandVariable("VARS"))
         finally:
             simps2.tearDown()
 
@@ -1685,6 +1837,9 @@ class MacroServerPoolsTest(unittest.TestCase):
                     "Components", "DataSources", "DataSources", "DataSources",
                     "Components", "DataSources", "DataSources", "DataSources",
                     "Components", "DataSources", "DataSources", "DataSources",
+                    "DataSources", "DataSources",
+                    "DataSources", "DataSources",
+                    "DataSources", "DataSources",
                     "DataSources", "DataSources",
                     "DataSources", "DataSources",
                     "DataSources", "DataSources",
@@ -1760,8 +1915,322 @@ class MacroServerPoolsTest(unittest.TestCase):
                     "DataSources",
                     "DataSources", "DataSources",
                     "DataSources", "DataSources",
+                    "DataSources", "DataSources",
+                    "DataSources", "DataSources",
+                    "DataSources", "DataSources",
                     "DataSources"])
             res = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+        finally:
+            simps2.delete()
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_checkChannels_2wds_dvnorunning_pe(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        simps2 = TestServerSetUp.TestServerSetUp(
+            "ttestp09/testts/t2r228", "S2")
+        try:
+            simps2.add()
+            msp = MacroServerPools(1)
+            channelerrors = []
+            poolchannels = []
+            componentgroup = dict((k, None) for k in self.specps.keys())
+            datasourcegroup = dict((k, None) for k in self.spedss.keys())
+
+            cps = dict(self.smycps)
+            cps.update(self.smycps2)
+            cps.update(self.specps)
+            dss = dict(self.smydss)
+            dss.update(self.smydss2)
+            dss.update(self.spedss)
+
+            self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
+            self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
+    #        print "MDSS", self._cf.dp.availableDataSources()
+    #        print "XDSS", self._cf.dp.dataSources(["scalar_long"])
+            res, res2 = msp.checkChannels(self._ms.door.keys()[0],
+                                          self._cf.dp,
+                                          poolchannels,
+                                          componentgroup,
+                                          datasourcegroup,
+                                          channelerrors)
+#            print json.loads(res)
+#            print json.loads(res2)
+#            print channelerrors
+
+            self.myAssertDict(json.loads(res), {
+                u'pyeval1a': True, u'pyeval2a': None, u'pyeval2c': None,
+                u'pyeval2b': True, u'pyeval2': True, u'pyeval0': True,
+                u'pyeval1': True})
+            self.myAssertDict(datasourcegroup, json.loads(res2))
+            self.myAssertDict(json.loads(res2), {
+                u'pyeval1ads': True, u'pyeval2ads': None, u'pyeval2bds': True,
+                u'pyeval2cds': None, u'pyeval0ds': True, u'pyeval1ds': True,
+                u'pyeval2ds': True}
+            )
+            self.myAssertDict(componentgroup, json.loads(res))
+            self.assertEqual(len(channelerrors), 4)
+
+        finally:
+            simps2.delete()
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_checkChannels_2wds2_dvnorunning_pe(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        simps2 = TestServerSetUp.TestServerSetUp(
+            "ttestp09/testts/t2r228", "S2")
+        try:
+            simps2.setUp()
+            msp = MacroServerPools(1)
+            channelerrors = []
+            poolchannels = []
+            componentgroup = dict((k, None) for k in self.specps.keys())
+            datasourcegroup = dict((k, None) for k in self.spedss.keys())
+
+            cps = dict(self.smycps)
+            cps.update(self.smycps2)
+            cps.update(self.specps)
+            dss = dict(self.smydss)
+            dss.update(self.smydss2)
+            dss.update(self.spedss)
+
+            self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
+            self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
+    #        print "MDSS", self._cf.dp.availableDataSources()
+    #        print "XDSS", self._cf.dp.dataSources(["scalar_long"])
+            res, res2 = msp.checkChannels(self._ms.door.keys()[0],
+                                          self._cf.dp,
+                                          poolchannels,
+                                          componentgroup,
+                                          datasourcegroup,
+                                          channelerrors)
+#            print json.loads(res)
+#            print json.loads(res2)
+#            print channelerrors
+
+            self.myAssertDict(json.loads(res), {
+                u'pyeval1a': True, u'pyeval2a': True, u'pyeval2c': True,
+                u'pyeval2b': True, u'pyeval2': True, u'pyeval0': True,
+                u'pyeval1': True})
+            self.myAssertDict(datasourcegroup, json.loads(res2))
+            self.myAssertDict(json.loads(res2), {
+                u'pyeval1ads': True, u'pyeval2ads': True, u'pyeval2bds': True,
+                u'pyeval2cds': True, u'pyeval0ds': True, u'pyeval1ds': True,
+                u'pyeval2ds': True}
+            )
+            self.myAssertDict(componentgroup, json.loads(res))
+            self.assertEqual(len(channelerrors), 0)
+
+        finally:
+            simps2.tearDown()
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_checkChannels_2wds2_dvnorunning_pe_true(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        simps2 = TestServerSetUp.TestServerSetUp(
+            "ttestp09/testts/t2r228", "S2")
+        try:
+            simps2.setUp()
+            msp = MacroServerPools(1)
+            channelerrors = []
+            poolchannels = []
+            componentgroup = dict((k, True) for k in self.specps.keys())
+            datasourcegroup = dict((k, True) for k in self.spedss.keys())
+
+            cps = dict(self.smycps)
+            cps.update(self.smycps2)
+            cps.update(self.specps)
+            dss = dict(self.smydss)
+            dss.update(self.smydss2)
+            dss.update(self.spedss)
+
+            self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
+            self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
+    #        print "MDSS", self._cf.dp.availableDataSources()
+    #        print "XDSS", self._cf.dp.dataSources(["scalar_long"])
+            res, res2 = msp.checkChannels(self._ms.door.keys()[0],
+                                          self._cf.dp,
+                                          poolchannels,
+                                          componentgroup,
+                                          datasourcegroup,
+                                          channelerrors)
+#            print json.loads(res)
+#            print json.loads(res2)
+#            print channelerrors
+
+            self.myAssertDict(json.loads(res), {
+                u'pyeval1a': True, u'pyeval2a': True, u'pyeval2c': True,
+                u'pyeval2b': True, u'pyeval2': True, u'pyeval0': True,
+                u'pyeval1': True})
+            self.myAssertDict(datasourcegroup, json.loads(res2))
+            self.myAssertDict(json.loads(res2), {
+                u'pyeval1ads': True, u'pyeval2ads': True, u'pyeval2bds': True,
+                u'pyeval2cds': True, u'pyeval0ds': True, u'pyeval1ds': True,
+                u'pyeval2ds': True}
+            )
+            self.myAssertDict(componentgroup, json.loads(res))
+            self.assertEqual(len(channelerrors), 0)
+
+        finally:
+            simps2.tearDown()
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_checkChannels_2wds2_dvnorunning_pe_false(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        simps2 = TestServerSetUp.TestServerSetUp(
+            "ttestp09/testts/t2r228", "S2")
+        try:
+            simps2.setUp()
+            msp = MacroServerPools(1)
+            channelerrors = []
+            poolchannels = []
+            componentgroup = dict((k, False) for k in self.specps.keys())
+            datasourcegroup = dict((k, False) for k in self.spedss.keys())
+
+            cps = dict(self.smycps)
+            cps.update(self.smycps2)
+            cps.update(self.specps)
+            dss = dict(self.smydss)
+            dss.update(self.smydss2)
+            dss.update(self.spedss)
+
+            self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
+            self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
+    #        print "MDSS", self._cf.dp.availableDataSources()
+    #        print "XDSS", self._cf.dp.dataSources(["scalar_long"])
+            res, res2 = msp.checkChannels(self._ms.door.keys()[0],
+                                          self._cf.dp,
+                                          poolchannels,
+                                          componentgroup,
+                                          datasourcegroup,
+                                          channelerrors)
+#            print json.loads(res)
+#            print json.loads(res2)
+#            print channelerrors
+
+            self.myAssertDict(json.loads(res), {
+                u'pyeval1a': False, u'pyeval2a': False, u'pyeval2c': False,
+                u'pyeval2b': False, u'pyeval2': False, u'pyeval0': False,
+                u'pyeval1': False})
+            self.myAssertDict(datasourcegroup, json.loads(res2))
+            self.myAssertDict(json.loads(res2), {
+                u'pyeval1ads': False, u'pyeval2ads': False, u'pyeval2bds': False,
+                u'pyeval2cds': False, u'pyeval0ds': False, u'pyeval1ds': False,
+                u'pyeval2ds': False}
+            )
+            self.myAssertDict(componentgroup, json.loads(res))
+            self.assertEqual(len(channelerrors), 0)
+
+        finally:
+            simps2.tearDown()
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_checkChannels_2wds_dvnorunning_pe_true(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        simps2 = TestServerSetUp.TestServerSetUp(
+            "ttestp09/testts/t2r228", "S2")
+        try:
+            simps2.add()
+            msp = MacroServerPools(1)
+            channelerrors = []
+            poolchannels = []
+            componentgroup = dict((k, True) for k in self.specps.keys())
+            datasourcegroup = dict((k, True) for k in self.spedss.keys())
+
+            cps = dict(self.smycps)
+            cps.update(self.smycps2)
+            cps.update(self.specps)
+            dss = dict(self.smydss)
+            dss.update(self.smydss2)
+            dss.update(self.spedss)
+
+            self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
+            self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
+    #        print "MDSS", self._cf.dp.availableDataSources()
+    #        print "XDSS", self._cf.dp.dataSources(["scalar_long"])
+            res, res2 = msp.checkChannels(self._ms.door.keys()[0],
+                                          self._cf.dp,
+                                          poolchannels,
+                                          componentgroup,
+                                          datasourcegroup,
+                                          channelerrors)
+#            print json.loads(res)
+#            print json.loads(res2)
+#            print channelerrors
+
+            self.myAssertDict(json.loads(res), {
+                u'pyeval1a': True, u'pyeval2a': None, u'pyeval2c': None,
+                u'pyeval2b': True, u'pyeval2': True, u'pyeval0': True,
+                u'pyeval1': True})
+            self.myAssertDict(datasourcegroup, json.loads(res2))
+            self.myAssertDict(json.loads(res2), {
+                u'pyeval1ads': True, u'pyeval2ads': None, u'pyeval2bds': True,
+                u'pyeval2cds': None, u'pyeval0ds': True, u'pyeval1ds': True,
+                u'pyeval2ds': True}
+            )
+            self.myAssertDict(componentgroup, json.loads(res))
+            self.assertEqual(len(channelerrors), 4)
+
+        finally:
+            simps2.delete()
+    ## constructor test
+    # \brief It tests default settings
+    def test_checkChannels_2wds_dvnorunning_pe_false(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        simps2 = TestServerSetUp.TestServerSetUp(
+            "ttestp09/testts/t2r228", "S2")
+        try:
+            simps2.add()
+            msp = MacroServerPools(1)
+            channelerrors = []
+            poolchannels = []
+            componentgroup = dict((k, False) for k in self.specps.keys())
+            datasourcegroup = dict((k, False) for k in self.spedss.keys())
+
+            cps = dict(self.smycps)
+            cps.update(self.smycps2)
+            cps.update(self.specps)
+            dss = dict(self.smydss)
+            dss.update(self.smydss2)
+            dss.update(self.spedss)
+
+            self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
+            self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
+    #        print "MDSS", self._cf.dp.availableDataSources()
+    #        print "XDSS", self._cf.dp.dataSources(["scalar_long"])
+            res, res2 = msp.checkChannels(self._ms.door.keys()[0],
+                                          self._cf.dp,
+                                          poolchannels,
+                                          componentgroup,
+                                          datasourcegroup,
+                                          channelerrors)
+#            print json.loads(res)
+#            print json.loads(res2)
+#            print channelerrors
+
+            self.myAssertDict(json.loads(res), {
+                u'pyeval1a': False, u'pyeval2a': None, u'pyeval2c': None,
+                u'pyeval2b': False, u'pyeval2': False, u'pyeval0': False,
+                u'pyeval1': False})
+            self.myAssertDict(datasourcegroup, json.loads(res2))
+            self.myAssertDict(json.loads(res2), {
+                u'pyeval1ads': False, u'pyeval2ads': None, u'pyeval2bds': False,
+                u'pyeval2cds': None, u'pyeval0ds': False, u'pyeval1ds': False,
+                u'pyeval2ds': False}
+            )
+            self.myAssertDict(componentgroup, json.loads(res))
+            self.assertEqual(len(channelerrors), 4)
+
         finally:
             simps2.delete()
 
@@ -1824,8 +2293,9 @@ class MacroServerPoolsTest(unittest.TestCase):
                 "Components", "DataSources", "DataSources", "DataSources",
                 "Components", "DataSources", "DataSources", "DataSources",
                 "Components", "DataSources", "DataSources", "DataSources",
-                "DataSources",
-                "DataSources", "DataSources",
+                "DataSources", "DataSources", "DataSources",
+                "DataSources", "DataSources", "DataSources",
+                "DataSources", "DataSources", "DataSources",
                 "DataSources", "DataSources",
                 "DataSources"])
         res = json.loads(self._cf.dp.GetCommandVariable("VARS"))
@@ -1926,7 +2396,7 @@ class MacroServerPoolsTest(unittest.TestCase):
                                           datasourcegroup,
                                           channelerrors)
 
-            print res2
+    #        print res2
     #        print channelerrors
 
             self.myAssertDict(json.loads(res), {
