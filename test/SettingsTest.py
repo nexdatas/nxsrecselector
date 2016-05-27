@@ -3854,7 +3854,7 @@ class SettingsTest(unittest.TestCase):
                 u'pyeval2cds': True, u'pyeval0ds': True, u'pyeval1ds': True,
                 u'pyeval2ds': True}
             )
-            self.assertEqual(len(rs.descriptionErrors), 0)
+            self.assertTrue(not rs.descriptionErrors)
 
             res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
@@ -3935,7 +3935,7 @@ class SettingsTest(unittest.TestCase):
                 u'pyeval2cds': True, u'pyeval0ds': True, u'pyeval1ds': True,
                 u'pyeval2ds': True}
             )
-            self.assertEqual(len(rs.descriptionErrors), 0)
+            self.assertTrue(not rs.descriptionErrors)
 
             res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
@@ -4015,7 +4015,7 @@ class SettingsTest(unittest.TestCase):
                 u'pyeval2cds': False, u'pyeval0ds': False, u'pyeval1ds': False,
                 u'pyeval2ds': False}
             )
-            self.assertEqual(len(rs.descriptionErrors), 0)
+            self.assertTrue(not rs.descriptionErrors)
 
             res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
