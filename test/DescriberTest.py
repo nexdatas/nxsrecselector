@@ -590,6 +590,13 @@ class DescriberTest(unittest.TestCase):
             ),
         }
 
+        self.resdss_pfs = {
+            'P1M_fileStartNum': ("P1M_fileStartNum", None, None),
+            'P1M_fileDir': ("P1M_fileDir", None, None),
+            'P1M_filePostfix': ("P1M_filePostfix", None, None),
+            'P1M_filePrefix': ("P1M_filePrefix", None, None),
+        }    
+        
         self.resdss = {
             'nn': ("nn", "TANGO", ""),
             'nn2': ("", "TANGO", ""),
@@ -641,16 +648,17 @@ class DescriberTest(unittest.TestCase):
     def tearDown(self):
         print "tearing down ..."
 
-    def checkDS(self, rv, cv):
+    def checkDS(self, rv, cv, dct=None):
+        resdss = dct or self.resdss
         self.assertEqual(sorted(rv.keys()), sorted(cv))
         for vl in cv:
-            self.assertEqual(self.resdss[vl][0], rv[vl].name)
-            self.assertEqual(self.resdss[vl][1], rv[vl].dstype)
-            self.assertEqual(self.resdss[vl][2], rv[vl].record)
+            self.assertEqual(resdss[vl][0], rv[vl].name)
+            self.assertEqual(resdss[vl][1], rv[vl].dstype)
+            self.assertEqual(resdss[vl][2], rv[vl].record)
 
-    def checkDSList(self, rv, cv):
-        self.assertEqual(len(rv), len(cv))
+    def checkDSList(self, rv, cv, dct=None):
 
+        resdss = dct or self.resdss
         mset = set()
         for jr in rv:
             rr = json.loads(jr)
@@ -658,9 +666,10 @@ class DescriberTest(unittest.TestCase):
             mset.add(vl)
             if not vl:
                 vl = 'nn2'
-            self.assertEqual(self.resdss[vl][0], rr["dsname"])
-            self.assertEqual(self.resdss[vl][1], rr["dstype"])
-            self.assertEqual(self.resdss[vl][2], rr["record"])
+            self.assertEqual(resdss[vl][0], rr["dsname"])
+            self.assertEqual(resdss[vl][1], rr["dstype"])
+            self.assertEqual(resdss[vl][2], rr["record"])
+        self.assertEqual(len(rv), len(cv))
         self.assertEqual(len(rv), len(mset))
 
     def hasds(self, dslist, strategy, dstype):
@@ -821,6 +830,36 @@ class DescriberTest(unittest.TestCase):
         des = Describer(server)
         res = des.dataSources()
         self.checkDSList(res, self.resdss.keys())
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_datasources_noargs_pfs(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+
+        server = NoServer()
+        server.dsdict = self.mydss
+
+        des = Describer(server, pyevalfromscript=True)
+        res = des.dataSources()
+        res2 = dict(self.resdss)
+        res2.update(self.resdss_pfs)
+        self.checkDSList(res, res2.keys(), dct=res2)
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_datasources_noargs_server_pfs(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+
+        server = Server()
+        server.dsdict = self.mydss
+
+        des = Describer(server, pyevalfromscript=True)
+        res = des.dataSources()
+        res2 = dict(self.resdss)
+        res2.update(self.resdss_pfs)
+        self.checkDSList(res, res2.keys(), dct=res2)
 
     ## constructor test
     # \brief It tests default settings
@@ -1044,6 +1083,21 @@ class DescriberTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
+    def test_datasources_noargs_tree_pfs(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+
+        server = NoServer()
+        server.dsdict = self.mydss
+
+        des = Describer(server, True, pyevalfromscript=True)
+        res = des.dataSources()[0]
+        res2 = dict(self.resdss)
+        res2.update(self.resdss_pfs)
+        self.checkDS(res, res2.keys(), dct=res2)
+
+    ## constructor test
+    # \brief It tests default settings
     def test_datasources_noargs_server_tree(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -1054,6 +1108,21 @@ class DescriberTest(unittest.TestCase):
         des = Describer(server, True)
         res = des.dataSources()[0]
         self.checkDS(res, self.resdss.keys())
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_datasources_noargs_server_tree_pfs(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+
+        server = Server()
+        server.dsdict = self.mydss
+
+        des = Describer(server, True, pyevalfromscript=True)
+        res = des.dataSources()[0]
+        res2 = dict(self.resdss)
+        res2.update(self.resdss_pfs)
+        self.checkDS(res, res2.keys(), dct=res2)
 
     ## constructor test
     # \brief It tests default settings

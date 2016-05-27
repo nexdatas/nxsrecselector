@@ -296,9 +296,12 @@ class Describer(object):
                 chdsxml = TangoUtils.command(
                     self.__nexusconfig_device,
                     "dataSources", [str(name)])
-                dsitem = self.__describeDataSource(name, chdsxml[0])
-                if dsitem.dstype:
-                    dslist.append(dsitem)
+                if chdsxml:
+                    dsitem = self.__describeDataSource(name, chdsxml[0])
+                    if dsitem.dstype: 
+                        dslist.append(dsitem)
+                else:
+                    dslist.append(DSItem(name, None, None))
             index = dsxml.find("$%s." % label, index + 1)
         return dslist
 
