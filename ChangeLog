@@ -1,4 +1,4 @@
-2016-05-XX Jan Kotanski <jankotan@gmail.com>
+2016-05-30 Jan Kotanski <jankotan@gmail.com>
 	* add pyeval tango datasources to check
 	* fixes in $datasources dimensions
 	* tagged as v3.5.0
