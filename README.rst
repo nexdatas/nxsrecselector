@@ -8,7 +8,7 @@ Introduction
 Tango server with Sardana Recorder settings
 
 | Source code: https://github.com/nexdatas/recselector
-| Web page: http://www.desy.de/~jkotan/nxsrecselector
+| Web page: https://nexdatas.github.io/recselector
 
 
 ------------
@@ -24,7 +24,7 @@ From sources
 
 Download the latest version of NeXuS Configuration Server from
 
-    https://github.com/jkotan/nexdatas/recselector/
+    https://github.com/nexdatas/recselector
 
 Extract the sources and run
 
