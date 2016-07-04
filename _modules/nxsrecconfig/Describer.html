@@ -1,0 +1,598 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>nxsrecconfig.Describer &mdash; NXSRecSelector 3.5.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '3.5.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="NXSRecSelector 3.5.0 documentation" href="../../index.html" />
+    <link rel="up" title="nxsrecconfig" href="../nxsrecconfig.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">NXSRecSelector 3.5.0 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Module code</a> &raquo;</li>
+          <li><a href="../nxsrecconfig.html" accesskey="U">nxsrecconfig</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for nxsrecconfig.Describer</h1><div class="highlight"><pre>
+<span class="c">#!/usr/bin/env python</span>
+<span class="c">#   This file is part of nxsrecconfig - NeXus Sardana Recorder Settings</span>
+<span class="c">#</span>
+<span class="c">#    Copyright (C) 2014-2016 DESY, Jan Kotanski &lt;jkotan@mail.desy.de&gt;</span>
+<span class="c">#</span>
+<span class="c">#    nexdatas is free software: you can redistribute it and/or modify</span>
+<span class="c">#    it under the terms of the GNU General Public License as published by</span>
+<span class="c">#    the Free Software Foundation, either version 3 of the License, or</span>
+<span class="c">#    (at your option) any later version.</span>
+<span class="c">#</span>
+<span class="c">#    nexdatas is distributed in the hope that it will be useful,</span>
+<span class="c">#    but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c">#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="c">#    GNU General Public License for more details.</span>
+<span class="c">#</span>
+<span class="c">#    You should have received a copy of the GNU General Public License</span>
+<span class="c">#    along with nexdatas.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+<span class="c">#</span>
+
+<span class="sd">&quot;&quot;&quot;  Component Describer &quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">PyTango</span>
+<span class="kn">import</span> <span class="nn">xml.dom.minidom</span>
+<span class="kn">from</span> <span class="nn">.Utils</span> <span class="kn">import</span> <span class="n">Utils</span><span class="p">,</span> <span class="n">TangoUtils</span>
+
+
+<div class="viewcode-block" id="DSItem"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Describer.DSItem">[docs]</a><span class="k">class</span> <span class="nc">DSItem</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Basic DataSource item</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">__slots__</span> <span class="o">=</span> <span class="s">&#39;name&#39;</span><span class="p">,</span> <span class="s">&#39;dstype&#39;</span><span class="p">,</span> <span class="s">&#39;record&#39;</span>
+
+    <span class="c">##</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">dstype</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">record</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">dsitem</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; constructor</span>
+
+<span class="sd">        :param name: datasource name</span>
+<span class="sd">        :param dstype: datasource type</span>
+<span class="sd">        :param record: datasource record</span>
+<span class="sd">        :param dsitem: datasource item</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">dsitem</span><span class="p">:</span>
+            <span class="c">#: datasource name</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">dsitem</span><span class="o">.</span><span class="n">name</span>
+            <span class="c">#: datasource type</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dstype</span> <span class="o">=</span> <span class="n">dsitem</span><span class="o">.</span><span class="n">dstype</span>
+            <span class="c">#: datasource record</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">record</span> <span class="o">=</span> <span class="n">dsitem</span><span class="o">.</span><span class="n">record</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="k">if</span> <span class="n">name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="k">else</span> <span class="bp">None</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dstype</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">dstype</span><span class="p">)</span> <span class="k">if</span> <span class="n">dstype</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="k">else</span> <span class="bp">None</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">record</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">record</span><span class="p">)</span> <span class="k">if</span> <span class="n">record</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="k">else</span> <span class="bp">None</span>
+
+</div>
+<div class="viewcode-block" id="ExDSItem"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Describer.ExDSItem">[docs]</a><span class="k">class</span> <span class="nc">ExDSItem</span><span class="p">(</span><span class="n">DSItem</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Extended DataSource item</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">__slots__</span> <span class="o">=</span> <span class="s">&#39;mode&#39;</span><span class="p">,</span> <span class="s">&#39;nxtype&#39;</span><span class="p">,</span> <span class="s">&#39;shape&#39;</span>
+
+    <span class="c">##</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dsitem</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">nxtype</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; constructor</span>
+
+<span class="sd">        :param dsitem: datasource item</span>
+<span class="sd">        :param mode: writing mode</span>
+<span class="sd">        :param nxtype: nexus type</span>
+<span class="sd">        :param shape: datasource shape</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">DSItem</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dsitem</span><span class="o">=</span><span class="n">dsitem</span><span class="p">)</span>
+        <span class="c">#: writing mode</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mode</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">mode</span><span class="p">)</span> <span class="k">if</span> <span class="n">mode</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="k">else</span> <span class="bp">None</span>
+        <span class="c">#: nexus type</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nxtype</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">nxtype</span><span class="p">)</span> <span class="k">if</span> <span class="n">nxtype</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="k">else</span> <span class="bp">None</span>
+        <span class="c">#: datasource shape</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">shape</span> <span class="o">=</span> <span class="n">shape</span>
+
+</div>
+<div class="viewcode-block" id="ExDSDict"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Describer.ExDSDict">[docs]</a><span class="k">class</span> <span class="nc">ExDSDict</span><span class="p">(</span><span class="nb">dict</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Extended DataSource Dictionary</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; constructor</span>
+
+<span class="sd">        :param args: dict args</span>
+<span class="sd">        :param kw: dict kw</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">ExDSDict</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__counter</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__prefix</span> <span class="o">=</span> <span class="s">&#39;__unnamed__&#39;</span>
+
+<div class="viewcode-block" id="ExDSDict.appendDSList"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Describer.ExDSDict.appendDSList">[docs]</a>    <span class="k">def</span> <span class="nf">appendDSList</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dslist</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">nxtype</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; appends a list of ExDSItem</span>
+
+<span class="sd">        :param dslist: DSItem list</span>
+<span class="sd">        :param mode: startegy mode</span>
+<span class="sd">        :param nxtype: NeXus type</span>
+<span class="sd">        :param shape: data shape</span>
+<span class="sd">        :returns: datasource name for first added datasource</span>
+<span class="sd">              or None if not appended</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">fname</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="k">for</span> <span class="n">dsitem</span> <span class="ow">in</span> <span class="n">dslist</span><span class="p">:</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="n">dsitem</span><span class="o">.</span><span class="n">name</span>
+            <span class="k">if</span> <span class="n">name</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                    <span class="bp">self</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="bp">self</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ExDSItem</span><span class="p">(</span><span class="n">dsitem</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">nxtype</span><span class="p">,</span> <span class="n">shape</span><span class="p">))</span>
+            <span class="k">elif</span> <span class="n">dsitem</span><span class="o">.</span><span class="n">dstype</span><span class="p">:</span>
+                <span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__prefix</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__counter</span><span class="p">)</span>
+                <span class="k">while</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                    <span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__prefix</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__counter</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__counter</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__counter</span> <span class="o">+</span> <span class="mi">1</span>
+                <span class="bp">self</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="bp">self</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ExDSItem</span><span class="p">(</span><span class="n">dsitem</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">nxtype</span><span class="p">,</span> <span class="n">shape</span><span class="p">))</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">fname</span><span class="p">:</span>
+                <span class="n">fname</span> <span class="o">=</span> <span class="n">name</span>
+
+        <span class="k">return</span> <span class="n">fname</span>
+
+</div></div>
+<div class="viewcode-block" id="Describer"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Describer.Describer">[docs]</a><span class="k">class</span> <span class="nc">Describer</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Lists datasources, strategy, dstype and record name</span>
+<span class="sd">        of given component &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nexusconfig_device</span><span class="p">,</span> <span class="n">tree</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">pyevalfromscript</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; constructor</span>
+
+<span class="sd">        :param nexusconfig_device: configserver configuration server name</span>
+<span class="sd">        :param tree: output flag for dictionary tree</span>
+<span class="sd">        :param tree: output flag for dictionary tree</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__nexusconfig_device</span> <span class="o">=</span> <span class="n">nexusconfig_device</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__treeOutput</span> <span class="o">=</span> <span class="n">tree</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__pyevalfromscript</span> <span class="o">=</span> <span class="n">pyevalfromscript</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__availableComponents</span> <span class="o">=</span> <span class="n">TangoUtils</span><span class="o">.</span><span class="n">command</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__nexusconfig_device</span><span class="p">,</span>
+            <span class="s">&quot;availableComponents&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__availableDataSources</span> <span class="o">=</span> <span class="n">TangoUtils</span><span class="o">.</span><span class="n">command</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__nexusconfig_device</span><span class="p">,</span>
+            <span class="s">&quot;availableDataSources&quot;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Describer.components"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Describer.Describer.components">[docs]</a>    <span class="k">def</span> <span class="nf">components</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">components</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">strategy</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">,</span> <span class="n">dstype</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">,</span> <span class="n">cfvars</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; describes given components</span>
+
+<span class="sd">        :param components: given components.</span>
+<span class="sd">                           If None all available ones are taken</span>
+<span class="sd">        :param strategy: list datasets only with given strategy.</span>
+<span class="sd">                         If &#39;&#39; all available ones are taken</span>
+<span class="sd">        :param dstype: list datasets only with given datasource type.</span>
+<span class="sd">                       If &#39;&#39; all available ones are taken</span>
+<span class="sd">        :param cfvars: configuration variables</span>
+<span class="sd">        :returns: list of dictionary with description of components</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">if</span> <span class="n">components</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">cps</span> <span class="o">=</span> <span class="p">[</span><span class="n">cp</span> <span class="k">for</span> <span class="n">cp</span> <span class="ow">in</span> <span class="n">components</span> <span class="k">if</span> <span class="n">cp</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__availableComponents</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">cps</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__availableComponents</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__treeOutput</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="p">[{}]</span>
+            <span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__fillintree</span><span class="p">(</span><span class="n">cps</span><span class="p">,</span> <span class="n">strategy</span><span class="p">,</span> <span class="n">dstype</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__fillinlist</span><span class="p">(</span><span class="n">cps</span><span class="p">,</span> <span class="n">strategy</span><span class="p">,</span> <span class="n">dstype</span><span class="p">,</span> <span class="n">cfvars</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">result</span>
+</div>
+    <span class="k">def</span> <span class="nf">__fillinlist</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cps</span><span class="p">,</span> <span class="n">strategy</span><span class="p">,</span> <span class="n">dstype</span><span class="p">,</span> <span class="n">cfvars</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; fills in the list of output elements</span>
+
+<span class="sd">        :param cps: component list</span>
+<span class="sd">        :param strategy: required strategy or None</span>
+<span class="sd">        :param dstype: required datasource type or None</span>
+<span class="sd">        :param cfvars: dictionary with configuration variables</span>
+<span class="sd">        :returns: list of output dictionary elements</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">cp</span> <span class="ow">in</span> <span class="n">cps</span><span class="p">:</span>
+            <span class="n">dss</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__getInstDataSourceAttributes</span><span class="p">(</span><span class="n">cp</span><span class="p">,</span> <span class="n">cfvars</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">ds</span> <span class="ow">in</span> <span class="n">dss</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="k">for</span> <span class="n">vds</span> <span class="ow">in</span> <span class="n">dss</span><span class="p">[</span><span class="n">ds</span><span class="p">]:</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">strategy</span> <span class="ow">or</span> <span class="n">vds</span><span class="o">.</span><span class="n">mode</span> <span class="o">==</span> <span class="n">strategy</span><span class="p">)</span> <span class="ow">and</span> \
+                       <span class="p">(</span><span class="ow">not</span> <span class="n">dstype</span> <span class="ow">or</span> <span class="n">vds</span><span class="o">.</span><span class="n">dstype</span> <span class="o">==</span> <span class="n">dstype</span><span class="p">):</span>
+                        <span class="n">elem</span> <span class="o">=</span> <span class="p">{}</span>
+                        <span class="n">elem</span><span class="p">[</span><span class="s">&quot;dsname&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ds</span>
+                        <span class="n">elem</span><span class="p">[</span><span class="s">&quot;strategy&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">vds</span><span class="o">.</span><span class="n">mode</span>
+                        <span class="n">elem</span><span class="p">[</span><span class="s">&quot;dstype&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">vds</span><span class="o">.</span><span class="n">dstype</span>
+                        <span class="n">elem</span><span class="p">[</span><span class="s">&quot;record&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">vds</span><span class="o">.</span><span class="n">record</span>
+                        <span class="n">elem</span><span class="p">[</span><span class="s">&quot;nxtype&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">vds</span><span class="o">.</span><span class="n">nxtype</span>
+                        <span class="n">elem</span><span class="p">[</span><span class="s">&quot;shape&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">vds</span><span class="o">.</span><span class="n">shape</span>
+                        <span class="n">elem</span><span class="p">[</span><span class="s">&quot;cpname&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cp</span>
+                        <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">elem</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">result</span>
+
+    <span class="k">def</span> <span class="nf">__fillintree</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cps</span><span class="p">,</span> <span class="n">strategy</span><span class="p">,</span> <span class="n">dstype</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; fills in the dictionary of output elements</span>
+
+<span class="sd">        :param cps: component list</span>
+<span class="sd">        :param strategy: required strategy or None</span>
+<span class="sd">        :param dstype: required datasource type or None</span>
+<span class="sd">        :returns: dictionary of output dictionary elements</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">cp</span> <span class="ow">in</span> <span class="n">cps</span><span class="p">:</span>
+            <span class="n">dss</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__getDataSourceAttributes</span><span class="p">(</span><span class="n">cp</span><span class="p">)</span>
+            <span class="n">tr</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="k">for</span> <span class="n">ds</span> <span class="ow">in</span> <span class="n">dss</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="k">for</span> <span class="n">vds</span> <span class="ow">in</span> <span class="n">dss</span><span class="p">[</span><span class="n">ds</span><span class="p">]:</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">strategy</span> <span class="ow">or</span> <span class="n">vds</span><span class="o">.</span><span class="n">mode</span> <span class="o">==</span> <span class="n">strategy</span><span class="p">)</span> <span class="ow">and</span> \
+                            <span class="p">(</span><span class="ow">not</span> <span class="n">dstype</span> <span class="ow">or</span> <span class="n">vds</span><span class="o">.</span><span class="n">dstype</span> <span class="o">==</span> <span class="n">dstype</span><span class="p">):</span>
+                        <span class="k">if</span> <span class="n">ds</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">tr</span><span class="p">:</span>
+                            <span class="n">tr</span><span class="p">[</span><span class="n">ds</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+                        <span class="n">tr</span><span class="p">[</span><span class="n">ds</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">vds</span><span class="o">.</span><span class="n">mode</span><span class="p">,</span> <span class="n">vds</span><span class="o">.</span><span class="n">dstype</span><span class="p">,</span> <span class="n">vds</span><span class="o">.</span><span class="n">record</span><span class="p">,</span>
+                                       <span class="n">vds</span><span class="o">.</span><span class="n">nxtype</span><span class="p">,</span> <span class="n">vds</span><span class="o">.</span><span class="n">shape</span><span class="p">))</span>
+            <span class="n">result</span><span class="p">[</span><span class="n">cp</span><span class="p">]</span> <span class="o">=</span> <span class="n">tr</span>
+        <span class="k">return</span> <span class="n">result</span>
+
+    <span class="k">def</span> <span class="nf">__getDSFromNode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">dsl</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; provides datasource item from XML node</span>
+
+<span class="sd">        :param node: xml node</span>
+<span class="sd">        :param dsl: list with datasource items (DSItem)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">label</span> <span class="o">=</span> <span class="s">&#39;datasources&#39;</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="n">dstype</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="n">record</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="n">dslist</span> <span class="o">=</span> <span class="n">dsl</span> <span class="k">if</span> <span class="n">dsl</span> <span class="k">else</span> <span class="p">[]</span>
+        <span class="n">dsxmls</span> <span class="o">=</span> <span class="bp">None</span>
+
+        <span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">nodeName</span> <span class="o">==</span> <span class="s">&#39;datasource&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">hasAttribute</span><span class="p">(</span><span class="s">&quot;type&quot;</span><span class="p">):</span>
+                <span class="n">dstype</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">attributes</span><span class="p">[</span><span class="s">&quot;type&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+            <span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">hasAttribute</span><span class="p">(</span><span class="s">&quot;name&quot;</span><span class="p">):</span>
+                <span class="n">name</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">attributes</span><span class="p">[</span><span class="s">&quot;name&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+            <span class="n">record</span> <span class="o">=</span> <span class="n">Utils</span><span class="o">.</span><span class="n">getRecord</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+            <span class="n">dslist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">DSItem</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">dstype</span><span class="p">,</span> <span class="n">record</span><span class="p">))</span>
+
+        <span class="k">elif</span> <span class="n">node</span><span class="o">.</span><span class="n">nodeType</span> <span class="o">==</span> <span class="n">node</span><span class="o">.</span><span class="n">TEXT_NODE</span><span class="p">:</span>
+            <span class="n">dsitem</span> <span class="o">=</span> <span class="n">DSItem</span><span class="p">()</span>
+            <span class="n">dstxt</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">data</span>
+            <span class="n">index</span> <span class="o">=</span> <span class="n">dstxt</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s">&quot;$</span><span class="si">%s</span><span class="s">.&quot;</span> <span class="o">%</span> <span class="n">label</span><span class="p">)</span>
+            <span class="k">while</span> <span class="n">index</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">subc</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">finditer</span><span class="p">(</span>
+                        <span class="s">r&quot;[\w]+&quot;</span><span class="p">,</span>
+                        <span class="n">dstxt</span><span class="p">[(</span><span class="n">index</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">label</span><span class="p">)</span> <span class="o">+</span> <span class="mi">2</span><span class="p">):])</span><span class="o">.</span><span class="n">next</span><span class="p">()</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+                <span class="k">except</span> <span class="p">(</span><span class="ne">StopIteration</span><span class="p">,</span> <span class="ne">IndexError</span><span class="p">):</span>
+                    <span class="n">subc</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
+                <span class="n">name</span> <span class="o">=</span> <span class="n">subc</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">if</span> <span class="n">subc</span> <span class="k">else</span> <span class="s">&quot;&quot;</span>
+                <span class="n">dsxmls</span> <span class="o">=</span> <span class="n">TangoUtils</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__nexusconfig_device</span><span class="p">,</span>
+                                            <span class="s">&quot;dataSources&quot;</span><span class="p">,</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">name</span><span class="p">)])</span>
+                <span class="k">if</span> <span class="n">dsxmls</span><span class="p">:</span>
+                    <span class="n">dsitem</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__describeDataSource</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">dsxmls</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                    <span class="k">if</span> <span class="n">dsitem</span><span class="o">.</span><span class="n">dstype</span><span class="p">:</span>
+                        <span class="n">dstype</span> <span class="o">=</span> <span class="n">dsitem</span><span class="o">.</span><span class="n">dstype</span>
+                        <span class="k">break</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">dsitem</span> <span class="o">=</span> <span class="n">DSItem</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+                <span class="n">index</span> <span class="o">=</span> <span class="n">dstxt</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s">&quot;$</span><span class="si">%s</span><span class="s">.&quot;</span> <span class="o">%</span> <span class="n">label</span><span class="p">,</span> <span class="n">index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">dslist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dsitem</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">and</span> <span class="nb">str</span><span class="p">(</span><span class="n">dstype</span><span class="p">)</span> <span class="o">==</span> <span class="s">&#39;PYEVAL&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">dsxmls</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">__pyevalfromscript</span><span class="p">:</span>
+                <span class="n">dslist</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__findsubdatasources</span><span class="p">(</span><span class="n">dsxmls</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">node</span><span class="o">.</span><span class="n">childNodes</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__getDSFromNode</span><span class="p">(</span><span class="n">child</span><span class="p">,</span> <span class="n">dslist</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">dslist</span>
+
+    <span class="k">def</span> <span class="nf">__findsubdatasources</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dsxml</span><span class="p">):</span>
+        <span class="n">dslist</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="s">&quot;&quot;</span>
+        <span class="n">label</span> <span class="o">=</span> <span class="s">&#39;datasources&#39;</span>
+        <span class="n">indom</span> <span class="o">=</span> <span class="n">xml</span><span class="o">.</span><span class="n">dom</span><span class="o">.</span><span class="n">minidom</span><span class="o">.</span><span class="n">parseString</span><span class="p">(</span><span class="n">dsxml</span><span class="p">)</span>
+        <span class="n">cnode</span> <span class="o">=</span> <span class="n">indom</span><span class="o">.</span><span class="n">getElementsByTagName</span><span class="p">(</span><span class="s">&quot;datasource&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">cnode</span><span class="o">.</span><span class="n">childNodes</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">child</span><span class="o">.</span><span class="n">nodeName</span> <span class="o">==</span> <span class="s">&#39;result&#39;</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">content</span> <span class="ow">in</span> <span class="n">child</span><span class="o">.</span><span class="n">childNodes</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">content</span><span class="o">.</span><span class="n">nodeType</span> <span class="o">==</span> <span class="n">content</span><span class="o">.</span><span class="n">TEXT_NODE</span><span class="p">:</span>
+                        <span class="n">result</span> <span class="o">+=</span> <span class="nb">str</span><span class="p">(</span><span class="n">content</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+
+        <span class="n">index</span> <span class="o">=</span> <span class="n">dsxml</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s">&quot;$</span><span class="si">%s</span><span class="s">.&quot;</span> <span class="o">%</span> <span class="n">label</span><span class="p">)</span>
+        <span class="k">while</span> <span class="n">index</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">subc</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">finditer</span><span class="p">(</span>
+                    <span class="s">r&quot;[\w]+&quot;</span><span class="p">,</span>
+                    <span class="n">dsxml</span><span class="p">[(</span><span class="n">index</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">label</span><span class="p">)</span> <span class="o">+</span> <span class="mi">2</span><span class="p">):])</span><span class="o">.</span><span class="n">next</span><span class="p">()</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+            <span class="k">except</span> <span class="p">(</span><span class="ne">StopIteration</span><span class="p">,</span> <span class="ne">IndexError</span><span class="p">):</span>
+                <span class="n">subc</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="n">subc</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">if</span> <span class="n">subc</span> <span class="k">else</span> <span class="s">&quot;&quot;</span>
+            <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">result</span><span class="p">:</span>
+                <span class="n">chdsxml</span> <span class="o">=</span> <span class="n">TangoUtils</span><span class="o">.</span><span class="n">command</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__nexusconfig_device</span><span class="p">,</span>
+                    <span class="s">&quot;dataSources&quot;</span><span class="p">,</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">name</span><span class="p">)])</span>
+                <span class="k">if</span> <span class="n">chdsxml</span><span class="p">:</span>
+                    <span class="n">dsitem</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__describeDataSource</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">chdsxml</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                    <span class="k">if</span> <span class="n">dsitem</span><span class="o">.</span><span class="n">dstype</span><span class="p">:</span> 
+                        <span class="n">dslist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dsitem</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">dslist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">DSItem</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="bp">None</span><span class="p">))</span>
+            <span class="n">index</span> <span class="o">=</span> <span class="n">dsxml</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s">&quot;$</span><span class="si">%s</span><span class="s">.&quot;</span> <span class="o">%</span> <span class="n">label</span><span class="p">,</span> <span class="n">index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">dslist</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">__getShape</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; provides shape from node</span>
+
+<span class="sd">        :param node: xml node</span>
+<span class="sd">        :returns: shape of node</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">rank</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">attributes</span><span class="p">[</span><span class="s">&quot;rank&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+        <span class="n">shape</span> <span class="o">=</span> <span class="p">[</span><span class="bp">None</span><span class="p">]</span> <span class="o">*</span> <span class="n">rank</span>
+        <span class="n">dims</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">getElementsByTagName</span><span class="p">(</span><span class="s">&quot;dim&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">dim</span> <span class="ow">in</span> <span class="n">dims</span><span class="p">:</span>
+            <span class="n">index</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">dim</span><span class="o">.</span><span class="n">attributes</span><span class="p">[</span><span class="s">&quot;index&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">dim</span><span class="o">.</span><span class="n">hasAttribute</span><span class="p">(</span><span class="s">&quot;value&quot;</span><span class="p">):</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">value</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">dim</span><span class="o">.</span><span class="n">attributes</span><span class="p">[</span><span class="s">&quot;value&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+                <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+                    <span class="n">value</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">dim</span><span class="o">.</span><span class="n">attributes</span><span class="p">[</span><span class="s">&quot;value&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+                <span class="n">shape</span><span class="p">[</span><span class="n">index</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">dss</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">getElementsByTagName</span><span class="p">(</span><span class="s">&quot;datasource&quot;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">dss</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">dss</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">hasAttribute</span><span class="p">(</span><span class="s">&quot;name&quot;</span><span class="p">):</span>
+                        <span class="n">value</span> <span class="o">=</span> <span class="n">dss</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">attributes</span><span class="p">[</span><span class="s">&quot;name&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">value</span> <span class="o">=</span> <span class="s">&#39;__unnamed__&#39;</span>
+                    <span class="n">shape</span><span class="p">[</span><span class="n">index</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="s">&quot;$datasources.</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">value</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">value</span> <span class="o">=</span> <span class="s">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">nodeValue</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">dim</span><span class="o">.</span><span class="n">childNodes</span>
+                                     <span class="k">if</span> <span class="n">t</span><span class="o">.</span><span class="n">nodeType</span> <span class="o">==</span> <span class="n">t</span><span class="o">.</span><span class="n">TEXT_NODE</span><span class="p">)</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">value</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+                    <span class="k">except</span><span class="p">:</span>
+                        <span class="n">value</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                        <span class="k">if</span> <span class="ow">not</span> <span class="n">value</span><span class="p">:</span>
+                            <span class="n">value</span> <span class="o">=</span> <span class="bp">None</span>
+                    <span class="n">shape</span><span class="p">[</span><span class="n">index</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+
+        <span class="k">return</span> <span class="n">shape</span>
+
+    <span class="k">def</span> <span class="nf">__getDataSourceAttributes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cp</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; provides datasource ExDSDict of given component</span>
+
+<span class="sd">        :param cp : component name</span>
+<span class="sd">        :returns: datasource ExDSDict</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">xmlc</span> <span class="o">=</span> <span class="n">TangoUtils</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__nexusconfig_device</span><span class="p">,</span>
+                                  <span class="s">&quot;components&quot;</span><span class="p">,</span> <span class="p">[</span><span class="n">cp</span><span class="p">])</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">len</span><span class="p">(</span><span class="n">xmlc</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">ExDSDict</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__getDSFromXML</span><span class="p">(</span><span class="n">xmlc</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="nf">__getInstDataSourceAttributes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cp</span><span class="p">,</span> <span class="n">cfvars</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; provides datasource ExDSDict of given instantiated component</span>
+
+<span class="sd">        :param cp : component name</span>
+<span class="sd">        :param cfvars : component variables</span>
+<span class="sd">        :returns: datasource ExDSDict</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">cfvars</span><span class="p">:</span>
+            <span class="n">cv</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__nexusconfig_device</span><span class="o">.</span><span class="n">variables</span><span class="p">)</span>
+            <span class="n">sv</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">cfvars</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">sv</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sv</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                <span class="n">cv</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">sv</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__nexusconfig_device</span><span class="o">.</span><span class="n">variables</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">cv</span><span class="p">)</span>
+        <span class="n">xmlc</span> <span class="o">=</span> <span class="n">TangoUtils</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__nexusconfig_device</span><span class="p">,</span>
+                                  <span class="s">&quot;instantiatedComponents&quot;</span><span class="p">,</span> <span class="p">[</span><span class="n">cp</span><span class="p">])</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">len</span><span class="p">(</span><span class="n">xmlc</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">ExDSDict</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__getDSFromXML</span><span class="p">(</span><span class="n">xmlc</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="nf">__getDSFromXML</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cpxml</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; provides datasource ExDSDict of given component xml</span>
+
+<span class="sd">        :param cpxml : component xml</span>
+<span class="sd">        :returns: datasource ExDSDict</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">indom</span> <span class="o">=</span> <span class="n">xml</span><span class="o">.</span><span class="n">dom</span><span class="o">.</span><span class="n">minidom</span><span class="o">.</span><span class="n">parseString</span><span class="p">(</span><span class="n">cpxml</span><span class="p">)</span>
+        <span class="n">strategy</span> <span class="o">=</span> <span class="n">indom</span><span class="o">.</span><span class="n">getElementsByTagName</span><span class="p">(</span><span class="s">&quot;strategy&quot;</span><span class="p">)</span>
+
+        <span class="n">dss</span> <span class="o">=</span> <span class="n">ExDSDict</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">sg</span> <span class="ow">in</span> <span class="n">strategy</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">sg</span><span class="o">.</span><span class="n">hasAttribute</span><span class="p">(</span><span class="s">&quot;mode&quot;</span><span class="p">):</span>
+                <span class="n">mode</span> <span class="o">=</span> <span class="n">sg</span><span class="o">.</span><span class="n">attributes</span><span class="p">[</span><span class="s">&quot;mode&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+                <span class="n">name</span> <span class="o">=</span> <span class="bp">None</span>
+                <span class="n">nxtype</span> <span class="o">=</span> <span class="bp">None</span>
+                <span class="n">dset</span> <span class="o">=</span> <span class="n">sg</span><span class="o">.</span><span class="n">parentNode</span>
+                <span class="k">if</span> <span class="n">dset</span><span class="o">.</span><span class="n">hasAttribute</span><span class="p">(</span><span class="s">&quot;type&quot;</span><span class="p">):</span>
+                    <span class="n">nxtype</span> <span class="o">=</span> <span class="n">dset</span><span class="o">.</span><span class="n">attributes</span><span class="p">[</span><span class="s">&quot;type&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+
+                <span class="n">nxt</span> <span class="o">=</span> <span class="n">sg</span><span class="o">.</span><span class="n">nextSibling</span>
+                <span class="n">loop</span> <span class="o">=</span> <span class="bp">True</span>
+                <span class="n">shape</span> <span class="o">=</span> <span class="bp">None</span>
+                <span class="k">while</span> <span class="n">nxt</span> <span class="ow">and</span> <span class="n">loop</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">nxt</span><span class="o">.</span><span class="n">nodeName</span> <span class="o">==</span> <span class="s">&#39;dimensions&#39;</span><span class="p">:</span>
+                        <span class="n">shape</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__getShape</span><span class="p">(</span><span class="n">nxt</span><span class="p">)</span>
+                        <span class="n">loop</span> <span class="o">=</span> <span class="bp">False</span>
+                    <span class="n">nxt</span> <span class="o">=</span> <span class="n">nxt</span><span class="o">.</span><span class="n">nextSibling</span>
+
+                <span class="n">prev</span> <span class="o">=</span> <span class="n">sg</span><span class="o">.</span><span class="n">previousSibling</span>
+                <span class="k">while</span> <span class="n">prev</span> <span class="ow">and</span> <span class="n">loop</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">prev</span><span class="o">.</span><span class="n">nodeName</span> <span class="o">==</span> <span class="s">&#39;dimensions&#39;</span><span class="p">:</span>
+                        <span class="n">shape</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__getShape</span><span class="p">(</span><span class="n">prev</span><span class="p">)</span>
+                        <span class="n">loop</span> <span class="o">=</span> <span class="bp">False</span>
+                    <span class="n">prev</span> <span class="o">=</span> <span class="n">prev</span><span class="o">.</span><span class="n">previousSibling</span>
+
+                <span class="n">nxt</span> <span class="o">=</span> <span class="n">sg</span><span class="o">.</span><span class="n">nextSibling</span>
+                <span class="k">while</span> <span class="n">nxt</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">name</span><span class="p">:</span>
+                    <span class="n">name</span> <span class="o">=</span> <span class="n">dss</span><span class="o">.</span><span class="n">appendDSList</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__getDSFromNode</span><span class="p">(</span><span class="n">nxt</span><span class="p">),</span>
+                                            <span class="n">mode</span><span class="p">,</span> <span class="n">nxtype</span><span class="p">,</span> <span class="n">shape</span><span class="p">)</span>
+                    <span class="n">nxt</span> <span class="o">=</span> <span class="n">nxt</span><span class="o">.</span><span class="n">nextSibling</span>
+
+                <span class="n">prev</span> <span class="o">=</span> <span class="n">sg</span><span class="o">.</span><span class="n">previousSibling</span>
+                <span class="k">while</span> <span class="n">prev</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">name</span><span class="p">:</span>
+                    <span class="n">name</span> <span class="o">=</span> <span class="n">dss</span><span class="o">.</span><span class="n">appendDSList</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__getDSFromNode</span><span class="p">(</span><span class="n">prev</span><span class="p">),</span>
+                                            <span class="n">mode</span><span class="p">,</span> <span class="n">nxtype</span><span class="p">,</span> <span class="n">shape</span><span class="p">)</span>
+                    <span class="n">prev</span> <span class="o">=</span> <span class="n">prev</span><span class="o">.</span><span class="n">previousSibling</span>
+
+        <span class="k">return</span> <span class="n">dss</span>
+
+<div class="viewcode-block" id="Describer.dataSources"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Describer.Describer.dataSources">[docs]</a>    <span class="k">def</span> <span class="nf">dataSources</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">names</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">dstype</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; describes given datasources</span>
+
+<span class="sd">        :param names: given datasources.</span>
+<span class="sd">                      If None all available ones are taken</span>
+<span class="sd">        :param dstype: list datasources only with given type.</span>
+<span class="sd">                       If &#39;&#39; all available ones are taken</span>
+<span class="sd">        :returns: list of dictionary with description of datasources</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">ads</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__availableDataSources</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">names</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">dss</span> <span class="o">=</span> <span class="p">[</span><span class="n">name</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">names</span> <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">ads</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">dss</span> <span class="o">=</span> <span class="n">ads</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">dss</span><span class="p">:</span>
+                <span class="n">xmls</span> <span class="o">=</span> <span class="n">TangoUtils</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__nexusconfig_device</span><span class="p">,</span>
+                                          <span class="s">&quot;dataSources&quot;</span><span class="p">,</span> <span class="n">dss</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">xmls</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">xmls</span> <span class="o">=</span> <span class="bp">None</span>
+
+        <span class="n">dslist</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">dsres</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">dss</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">name</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">xmls</span><span class="p">:</span>
+                    <span class="n">dsxml</span> <span class="o">=</span> <span class="n">xmls</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                <span class="n">dsitem</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__describeDataSource</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">dsxml</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">dstype</span> <span class="ow">and</span> <span class="n">dsitem</span><span class="o">.</span><span class="n">dstype</span> <span class="o">!=</span> <span class="n">dstype</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                <span class="n">dsres</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">dsitem</span>
+                <span class="k">if</span> <span class="n">dsxml</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">__pyevalfromscript</span><span class="p">:</span>
+                    <span class="n">dsitems</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__findsubdatasources</span><span class="p">(</span><span class="n">dsxml</span><span class="p">)</span>
+                    <span class="k">for</span> <span class="n">itm</span> <span class="ow">in</span> <span class="n">dsitems</span><span class="p">:</span>
+                        <span class="n">dsres</span><span class="p">[</span><span class="n">itm</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">itm</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__treeOutput</span><span class="p">:</span>
+            <span class="n">dslist</span> <span class="o">=</span> <span class="p">[{}]</span>
+            <span class="n">dslist</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">dsres</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">dslist</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dsres</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">ds</span> <span class="ow">in</span> <span class="n">dsres</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+                    <span class="n">elem</span> <span class="o">=</span> <span class="p">{}</span>
+                    <span class="n">elem</span><span class="p">[</span><span class="s">&quot;dsname&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">name</span>
+                    <span class="n">elem</span><span class="p">[</span><span class="s">&quot;dstype&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">dstype</span>
+                    <span class="n">elem</span><span class="p">[</span><span class="s">&quot;record&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">record</span>
+                    <span class="n">dslist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">elem</span><span class="p">)))</span>
+        <span class="k">return</span> <span class="n">dslist</span>
+</div>
+    <span class="k">def</span> <span class="nf">__describeDataSource</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">dsxml</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">dstype</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="n">record</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">dsxml</span><span class="p">:</span>
+                <span class="n">dsource</span> <span class="o">=</span> <span class="n">TangoUtils</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__nexusconfig_device</span><span class="p">,</span>
+                                             <span class="s">&quot;dataSources&quot;</span><span class="p">,</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">name</span><span class="p">)])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">dsource</span> <span class="o">=</span> <span class="p">[</span><span class="n">dsxml</span><span class="p">]</span>
+        <span class="k">except</span> <span class="p">(</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevFailed</span><span class="p">,</span> <span class="n">PyTango</span><span class="o">.</span><span class="n">Except</span><span class="p">,</span> <span class="n">PyTango</span><span class="o">.</span><span class="n">DevError</span><span class="p">):</span>
+            <span class="n">dsource</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">dsource</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">indom</span> <span class="o">=</span> <span class="n">xml</span><span class="o">.</span><span class="n">dom</span><span class="o">.</span><span class="n">minidom</span><span class="o">.</span><span class="n">parseString</span><span class="p">(</span><span class="n">dsource</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">dss</span> <span class="o">=</span> <span class="n">indom</span><span class="o">.</span><span class="n">getElementsByTagName</span><span class="p">(</span><span class="s">&quot;datasource&quot;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">ds</span> <span class="ow">in</span> <span class="n">dss</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">ds</span><span class="o">.</span><span class="n">nodeName</span> <span class="o">==</span> <span class="s">&#39;datasource&#39;</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">ds</span><span class="o">.</span><span class="n">hasAttribute</span><span class="p">(</span><span class="s">&quot;type&quot;</span><span class="p">):</span>
+                        <span class="n">dstype</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">attributes</span><span class="p">[</span><span class="s">&quot;type&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+                    <span class="k">if</span> <span class="n">ds</span><span class="o">.</span><span class="n">hasAttribute</span><span class="p">(</span><span class="s">&quot;name&quot;</span><span class="p">):</span>
+                        <span class="n">name</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">attributes</span><span class="p">[</span><span class="s">&quot;name&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+                    <span class="n">record</span> <span class="o">=</span> <span class="n">Utils</span><span class="o">.</span><span class="n">getRecord</span><span class="p">(</span><span class="n">ds</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">DSItem</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">dstype</span><span class="p">,</span> <span class="n">record</span><span class="p">)</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">NXSRecSelector 3.5.0 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Module code</a> &raquo;</li>
+          <li><a href="../nxsrecconfig.html" >nxsrecconfig</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012-2016 DESY, Jan Kotanski &lt;jkotan@mail.desy.de&gt;
+
+GNU GENERAL PUBLIC LICENSE, version 3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    </div>
+  </body>
+</html>

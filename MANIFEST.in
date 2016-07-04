@@ -1,4 +1,0 @@
-include COPYRIGHT
-include README.rst
-include man/NXSRecSelector.1
-include man/nxsrecconfig.1

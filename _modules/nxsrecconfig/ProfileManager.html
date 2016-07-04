@@ -1,0 +1,1158 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>nxsrecconfig.ProfileManager &mdash; NXSRecSelector 3.5.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '3.5.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="NXSRecSelector 3.5.0 documentation" href="../../index.html" />
+    <link rel="up" title="nxsrecconfig" href="../nxsrecconfig.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">NXSRecSelector 3.5.0 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Module code</a> &raquo;</li>
+          <li><a href="../nxsrecconfig.html" accesskey="U">nxsrecconfig</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for nxsrecconfig.ProfileManager</h1><div class="highlight"><pre>
+<span class="c">#!/usr/bin/env python</span>
+<span class="c">#   This file is part of nxsrecconfig - NeXus Sardana Recorder Settings</span>
+<span class="c">#</span>
+<span class="c">#    Copyright (C) 2014-2016 DESY, Jan Kotanski &lt;jkotan@mail.desy.de&gt;</span>
+<span class="c">#</span>
+<span class="c">#    nexdatas is free software: you can redistribute it and/or modify</span>
+<span class="c">#    it under the terms of the GNU General Public License as published by</span>
+<span class="c">#    the Free Software Foundation, either version 3 of the License, or</span>
+<span class="c">#    (at your option) any later version.</span>
+<span class="c">#</span>
+<span class="c">#    nexdatas is distributed in the hope that it will be useful,</span>
+<span class="c">#    but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c">#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="c">#    GNU General Public License for more details.</span>
+<span class="c">#</span>
+<span class="c">#    You should have received a copy of the GNU General Public License</span>
+<span class="c">#    along with nexdatas.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+<span class="c">#</span>
+
+<span class="sd">&quot;&quot;&quot;  ProfileManager &quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">json</span>
+
+<span class="kn">from</span> <span class="nn">.Utils</span> <span class="kn">import</span> <span class="n">TangoUtils</span><span class="p">,</span> <span class="n">PoolUtils</span><span class="p">,</span> <span class="n">MSUtils</span><span class="p">,</span> <span class="n">Utils</span>
+<span class="kn">from</span> <span class="nn">.Describer</span> <span class="kn">import</span> <span class="n">Describer</span>
+<span class="kn">import</span> <span class="nn">PyTango</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">nxstools.nxsxml</span> <span class="kn">import</span> <span class="p">(</span><span class="n">XMLFile</span><span class="p">,</span> <span class="n">NDSource</span><span class="p">)</span>
+    <span class="c">#: flag for nxstools installed</span>
+    <span class="n">NXSTOOLS</span> <span class="o">=</span> <span class="bp">True</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="n">NXSTOOLS</span> <span class="o">=</span> <span class="bp">False</span>
+
+<span class="c">#: default data names</span>
+<span class="n">DEFAULT_RECORD_KEYS</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;serialno&#39;</span><span class="p">,</span> <span class="s">&#39;end_time&#39;</span><span class="p">,</span> <span class="s">&#39;start_time&#39;</span><span class="p">,</span>
+                       <span class="s">&#39;point_nb&#39;</span><span class="p">,</span> <span class="s">&#39;timestamps&#39;</span><span class="p">,</span> <span class="s">&#39;scan_title&#39;</span><span class="p">,</span>
+                       <span class="s">&#39;filename&#39;</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="ProfileManager"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.ProfileManager.ProfileManager">[docs]</a><span class="k">class</span> <span class="nc">ProfileManager</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;  Manages Measurement Group and Profile from Selector&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">selector</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; constructor</span>
+
+<span class="sd">        :param selector selector object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c">#: configuration selector</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span> <span class="o">=</span> <span class="n">selector</span>
+
+        <span class="c">#: macro server name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__macroServerName</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="c">#: configuration server proxy</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__configServer</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="c">#: pool server proxies</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__pools</span> <span class="o">=</span> <span class="bp">None</span>
+
+        <span class="c">#: default preselectedComponents</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">defaultPreselectedComponents</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">def</span> <span class="nf">__updateMacroServer</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; updatas MacroServer name</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__macroServerName</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="o">.</span><span class="n">getMacroServer</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">__updateConfigServer</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; update configuration server device proxy</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__configServer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="o">.</span><span class="n">setConfigInstance</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">__updatePools</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; update device pool proxy list</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__pools</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="o">.</span><span class="n">getPools</span><span class="p">()</span>
+
+<div class="viewcode-block" id="ProfileManager.availableMntGrps"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.ProfileManager.ProfileManager.availableMntGrps">[docs]</a>    <span class="k">def</span> <span class="nf">availableMntGrps</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; available mntgrps</span>
+
+<span class="sd">        :returns: list of available measurement groups</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__updateMacroServer</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__updatePools</span><span class="p">()</span>
+        <span class="n">mntgrps</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="n">amntgrp</span> <span class="o">=</span> <span class="n">MSUtils</span><span class="o">.</span><span class="n">getEnv</span><span class="p">(</span><span class="s">&#39;ActiveMntGrp&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__macroServerName</span><span class="p">)</span>
+        <span class="n">fpool</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__getActivePool</span><span class="p">(</span><span class="n">amntgrp</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">fpool</span><span class="p">:</span>
+            <span class="n">mntgrps</span> <span class="o">=</span> <span class="n">PoolUtils</span><span class="o">.</span><span class="n">getElementNames</span><span class="p">(</span>
+                <span class="p">[</span><span class="n">fpool</span><span class="p">],</span> <span class="s">&#39;MeasurementGroupList&#39;</span><span class="p">)</span>
+        <span class="n">mntgrps</span> <span class="o">=</span> <span class="n">mntgrps</span> <span class="k">if</span> <span class="n">mntgrps</span> <span class="k">else</span> <span class="p">[]</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">mntgrps</span><span class="p">:</span>
+                <span class="n">ind</span> <span class="o">=</span> <span class="n">mntgrps</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">amntgrp</span><span class="p">)</span>
+                <span class="n">mntgrps</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">mntgrps</span><span class="p">[</span><span class="n">ind</span><span class="p">]</span> <span class="o">=</span> <span class="n">mntgrps</span><span class="p">[</span><span class="n">ind</span><span class="p">],</span> <span class="n">mntgrps</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="k">return</span> <span class="n">mntgrps</span>
+</div>
+<div class="viewcode-block" id="ProfileManager.components"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.ProfileManager.ProfileManager.components">[docs]</a>    <span class="k">def</span> <span class="nf">components</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; provides selected components</span>
+
+<span class="sd">        :returns: list of available selected components</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">cps</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="p">[</span><span class="s">&quot;ComponentSelection&quot;</span><span class="p">])</span>
+        <span class="n">ads</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="p">[</span><span class="s">&quot;DataSourceSelection&quot;</span><span class="p">])</span>
+        <span class="n">dss</span> <span class="o">=</span> <span class="p">[</span><span class="n">ds</span> <span class="k">for</span> <span class="n">ds</span> <span class="ow">in</span> <span class="n">ads</span> <span class="k">if</span> <span class="n">ads</span><span class="p">[</span><span class="n">ds</span><span class="p">]]</span>
+        <span class="n">acp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="o">.</span><span class="n">configCommand</span><span class="p">(</span><span class="s">&quot;availableComponents&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">[]</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">cps</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="n">res</span> <span class="o">=</span> <span class="p">[</span><span class="n">cp</span> <span class="k">for</span> <span class="n">cp</span> <span class="ow">in</span> <span class="n">cps</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="k">if</span> <span class="n">cps</span><span class="p">[</span><span class="n">cp</span><span class="p">]]</span>
+            <span class="k">for</span> <span class="n">ds</span> <span class="ow">in</span> <span class="n">dss</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">ds</span> <span class="ow">in</span> <span class="n">acp</span><span class="p">:</span>
+                    <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ds</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">res</span>
+</div>
+<div class="viewcode-block" id="ProfileManager.preselectedComponents"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.ProfileManager.ProfileManager.preselectedComponents">[docs]</a>    <span class="k">def</span> <span class="nf">preselectedComponents</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; provides preselected components</span>
+
+<span class="sd">        :returns: list of available preselected components</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">cps</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="p">[</span><span class="s">&quot;ComponentPreselection&quot;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">cps</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="k">return</span> <span class="p">[</span><span class="n">cp</span> <span class="k">for</span> <span class="n">cp</span> <span class="ow">in</span> <span class="n">cps</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="k">if</span> <span class="n">cps</span><span class="p">[</span><span class="n">cp</span><span class="p">]]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[]</span>
+</div>
+<div class="viewcode-block" id="ProfileManager.preselectedDataSources"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.ProfileManager.ProfileManager.preselectedDataSources">[docs]</a>    <span class="k">def</span> <span class="nf">preselectedDataSources</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; provides preselected datasources</span>
+
+<span class="sd">        :returns: list of available preselected components</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">cps</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="p">[</span><span class="s">&quot;DataSourcePreselection&quot;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">cps</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="k">return</span> <span class="p">[</span><span class="n">cp</span> <span class="k">for</span> <span class="n">cp</span> <span class="ow">in</span> <span class="n">cps</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="k">if</span> <span class="n">cps</span><span class="p">[</span><span class="n">cp</span><span class="p">]]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[]</span>
+</div>
+<div class="viewcode-block" id="ProfileManager.cpdescription"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.ProfileManager.ProfileManager.cpdescription">[docs]</a>    <span class="k">def</span> <span class="nf">cpdescription</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">full</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; provides description of components</span>
+
+<span class="sd">        :param full: if True describes all available ones are taken</span>
+<span class="sd">                     otherwise selectect, preselected and mandatory</span>
+<span class="sd">        :returns: description of required components</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__updateConfigServer</span><span class="p">()</span>
+        <span class="n">describer</span> <span class="o">=</span> <span class="n">Describer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__configServer</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span>
+        <span class="n">cp</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">full</span><span class="p">:</span>
+            <span class="n">mcp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="o">.</span><span class="n">configCommand</span><span class="p">(</span><span class="s">&quot;mandatoryComponents&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">[]</span>
+            <span class="n">cp</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span>
+                <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">components</span><span class="p">())</span> <span class="o">|</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">preselectedComponents</span><span class="p">())</span> <span class="o">|</span>
+                <span class="nb">set</span><span class="p">(</span><span class="n">mcp</span><span class="p">))</span>
+            <span class="n">res</span> <span class="o">=</span> <span class="n">describer</span><span class="o">.</span><span class="n">components</span><span class="p">(</span><span class="n">cp</span><span class="p">,</span> <span class="s">&#39;STEP&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">res</span> <span class="o">=</span> <span class="n">describer</span><span class="o">.</span><span class="n">components</span><span class="p">(</span><span class="n">cp</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">res</span>
+</div>
+<div class="viewcode-block" id="ProfileManager.componentDataSources"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.ProfileManager.ProfileManager.componentDataSources">[docs]</a>    <span class="k">def</span> <span class="nf">componentDataSources</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; provides a list of Component DataSources</span>
+
+<span class="sd">        :returns: list of component datasources</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__componentDataSources</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cpdescription</span><span class="p">())</span>
+</div>
+    <span class="k">def</span> <span class="nf">__componentDataSources</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; provides a list of Component DataSources</span>
+
+<span class="sd">        :param description: component description</span>
+<span class="sd">        :returns: list of component datasources</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">description</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">description</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cpdescription</span><span class="p">()</span>
+
+        <span class="n">dds</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="n">dss</span> <span class="ow">in</span> <span class="n">description</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dss</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">ds</span><span class="p">,</span> <span class="n">params</span> <span class="ow">in</span> <span class="n">dss</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                    <span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">params</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">param</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">param</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
+                            <span class="k">if</span> <span class="n">param</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;STEP&#39;</span><span class="p">:</span>
+                                <span class="n">dds</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">ds</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">dds</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__dataSources</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">compdatasources</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; provides selected datasources</span>
+
+<span class="sd">        :param componentdatasources: component datasources</span>
+<span class="sd">        :returns: list of available selected datasources</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">compdatasources</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">compdatasources</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__componentDataSources</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">compdatasources</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">compdatasources</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">dss</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="p">[</span><span class="s">&quot;DataSourceSelection&quot;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dss</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="k">return</span> <span class="p">[</span><span class="n">ds</span> <span class="k">for</span> <span class="n">ds</span> <span class="ow">in</span> <span class="n">dss</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+                    <span class="k">if</span> <span class="n">dss</span><span class="p">[</span><span class="n">ds</span><span class="p">]</span> <span class="ow">and</span> <span class="n">ds</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">compdatasources</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[]</span>
+
+<div class="viewcode-block" id="ProfileManager.dataSources"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.ProfileManager.ProfileManager.dataSources">[docs]</a>    <span class="k">def</span> <span class="nf">dataSources</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; provides selected datasources</span>
+
+<span class="sd">        :returns: list of available selected datasources</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__dataSources</span><span class="p">()</span>
+</div>
+<div class="viewcode-block" id="ProfileManager.deleteProfile"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.ProfileManager.ProfileManager.deleteProfile">[docs]</a>    <span class="k">def</span> <span class="nf">deleteProfile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; deletes mntgrp</span>
+
+<span class="sd">        :param name: mntgrp name</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__updatePools</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">pool</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__pools</span><span class="p">:</span>
+            <span class="n">mntgrps</span> <span class="o">=</span> <span class="n">PoolUtils</span><span class="o">.</span><span class="n">getElementNames</span><span class="p">([</span><span class="n">pool</span><span class="p">],</span> <span class="s">&#39;MeasurementGroupList&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">mntgrps</span><span class="p">:</span>
+                <span class="n">TangoUtils</span><span class="o">.</span><span class="n">command</span><span class="p">(</span>
+                    <span class="n">pool</span><span class="p">,</span> <span class="s">&quot;DeleteElement&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">MSUtils</span><span class="o">.</span><span class="n">getEnv</span><span class="p">(</span><span class="s">&#39;ActiveMntGrp&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__macroServerName</span><span class="p">)</span> <span class="o">==</span> <span class="n">name</span><span class="p">:</span>
+            <span class="n">MSUtils</span><span class="o">.</span><span class="n">usetEnv</span><span class="p">(</span><span class="s">&quot;ActiveMntGrp&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__macroServerName</span><span class="p">)</span>
+        <span class="n">inst</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="o">.</span><span class="n">setConfigInstance</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">inst</span><span class="o">.</span><span class="n">AvailableSelections</span><span class="p">():</span>
+            <span class="n">inst</span><span class="o">.</span><span class="n">deleteSelection</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="ProfileManager.updateProfile"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.ProfileManager.ProfileManager.updateProfile">[docs]</a>    <span class="k">def</span> <span class="nf">updateProfile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sync</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; sets active measurement group from components and</span>
+<span class="sd">        import setting from active measurement</span>
+
+
+<span class="sd">        :param sync: make profile and mntgrp synchronization</span>
+<span class="sd">        :returns: dictionary with mntgrp configuration information</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">mcp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="o">.</span><span class="n">configCommand</span><span class="p">(</span><span class="s">&quot;mandatoryComponents&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">[]</span>
+        <span class="n">components</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span>
+            <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">components</span><span class="p">())</span> <span class="o">|</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">preselectedComponents</span><span class="p">())</span> <span class="o">|</span>
+            <span class="nb">set</span><span class="p">(</span><span class="n">mcp</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">__updateConfigServer</span><span class="p">()</span>
+        <span class="n">describer</span> <span class="o">=</span> <span class="n">Describer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__configServer</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span>
+        <span class="n">description</span> <span class="o">=</span> <span class="n">describer</span><span class="o">.</span><span class="n">components</span><span class="p">(</span><span class="n">components</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">)</span>
+        <span class="n">componentdatasources</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__componentDataSources</span><span class="p">(</span><span class="n">description</span><span class="p">)</span>
+        <span class="n">datasources</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__dataSources</span><span class="p">(</span><span class="n">componentdatasources</span><span class="p">)</span>
+<span class="c">#        conf, mntgrp</span>
+        <span class="n">mginfo</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__createMntGrpConf</span><span class="p">(</span>
+            <span class="n">datasources</span><span class="p">,</span> <span class="n">componentdatasources</span><span class="p">,</span> <span class="n">description</span><span class="p">)</span>
+        <span class="n">conf</span> <span class="o">=</span> <span class="n">mginfo</span><span class="p">[</span><span class="s">&#39;configuration&#39;</span><span class="p">]</span>
+        <span class="n">dpmg</span> <span class="o">=</span> <span class="n">TangoUtils</span><span class="o">.</span><span class="n">openProxy</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">mginfo</span><span class="p">[</span><span class="s">&#39;device&#39;</span><span class="p">]))</span>
+        <span class="n">dpmg</span><span class="o">.</span><span class="n">Configuration</span> <span class="o">=</span> <span class="n">conf</span>
+        <span class="n">conf</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">dpmg</span><span class="o">.</span><span class="n">configuration</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="p">[</span><span class="s">&#39;MntGrpConfiguration&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">conf</span>
+        <span class="n">mginfo</span><span class="p">[</span><span class="s">&#39;configuration&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">conf</span>
+        <span class="k">if</span> <span class="n">sync</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__setFromMntGrpConf</span><span class="p">(</span><span class="n">conf</span><span class="p">,</span> <span class="n">componentdatasources</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="o">.</span><span class="n">storeSelection</span><span class="p">()</span>
+        <span class="n">MSUtils</span><span class="o">.</span><span class="n">setEnvs</span><span class="p">(</span>
+            <span class="p">{</span><span class="s">&#39;PreScanSnapshot&#39;</span><span class="p">:</span> <span class="n">mginfo</span><span class="p">[</span><span class="s">&#39;snapshot&#39;</span><span class="p">],</span>
+             <span class="s">&#39;ActiveMntGrp&#39;</span><span class="p">:</span> <span class="n">mginfo</span><span class="p">[</span><span class="s">&#39;alias&#39;</span><span class="p">]},</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__macroServerName</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">conf</span>
+</div>
+<div class="viewcode-block" id="ProfileManager.switchProfile"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.ProfileManager.ProfileManager.switchProfile">[docs]</a>    <span class="k">def</span> <span class="nf">switchProfile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">toActive</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; switchProfile to active measurement</span>
+
+<span class="sd">        :param toActive: if False update the current profile</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">toActive</span><span class="p">:</span>
+            <span class="n">ms</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="o">.</span><span class="n">getMacroServer</span><span class="p">()</span>
+            <span class="n">amntgrp</span> <span class="o">=</span> <span class="n">MSUtils</span><span class="o">.</span><span class="n">getEnv</span><span class="p">(</span><span class="s">&#39;ActiveMntGrp&#39;</span><span class="p">,</span> <span class="n">ms</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">toActive</span> <span class="ow">or</span> <span class="n">amntgrp</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="p">[</span><span class="s">&quot;MntGrp&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">amntgrp</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fetchProfile</span><span class="p">()</span>
+        <span class="n">jconf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mntGrpConfiguration</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__updateConfigServer</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__setFromMntGrpConf</span><span class="p">(</span><span class="n">jconf</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="o">.</span><span class="n">storeSelection</span><span class="p">()</span>
+</div>
+<div class="viewcode-block" id="ProfileManager.mntGrpConfiguration"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.ProfileManager.ProfileManager.mntGrpConfiguration">[docs]</a>    <span class="k">def</span> <span class="nf">mntGrpConfiguration</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; provides configuration of mntgrp</span>
+
+<span class="sd">        :returns: string with mntgrp configuration</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__updatePools</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__updateMacroServer</span><span class="p">()</span>
+        <span class="n">mntGrpName</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="p">[</span><span class="s">&quot;MntGrp&quot;</span><span class="p">]</span>
+        <span class="n">fullname</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">PoolUtils</span><span class="o">.</span><span class="n">getMntGrpName</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__pools</span><span class="p">,</span> <span class="n">mntGrpName</span><span class="p">))</span>
+        <span class="n">dpmg</span> <span class="o">=</span> <span class="n">TangoUtils</span><span class="o">.</span><span class="n">openProxy</span><span class="p">(</span><span class="n">fullname</span><span class="p">)</span> <span class="k">if</span> <span class="n">fullname</span> <span class="k">else</span> <span class="bp">None</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">dpmg</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s">&quot;{}&quot;</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">dpmg</span><span class="o">.</span><span class="n">Configuration</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="ProfileManager.isMntGrpUpdated"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.ProfileManager.ProfileManager.isMntGrpUpdated">[docs]</a>    <span class="k">def</span> <span class="nf">isMntGrpUpdated</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; check if active measurement group was changed</span>
+
+<span class="sd">        :returns: True if it is different to the current setting</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">mcp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="o">.</span><span class="n">configCommand</span><span class="p">(</span><span class="s">&quot;mandatoryComponents&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">[]</span>
+        <span class="n">components</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span>
+            <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">components</span><span class="p">())</span> <span class="o">|</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">preselectedComponents</span><span class="p">())</span> <span class="o">|</span>
+            <span class="nb">set</span><span class="p">(</span><span class="n">mcp</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">__updateConfigServer</span><span class="p">()</span>
+        <span class="n">describer</span> <span class="o">=</span> <span class="n">Describer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__configServer</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span>
+        <span class="n">description</span> <span class="o">=</span> <span class="n">describer</span><span class="o">.</span><span class="n">components</span><span class="p">(</span><span class="n">components</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">)</span>
+        <span class="n">componentdatasources</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__componentDataSources</span><span class="p">(</span><span class="n">description</span><span class="p">)</span>
+        <span class="n">datasources</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__dataSources</span><span class="p">(</span><span class="n">componentdatasources</span><span class="p">)</span>
+        <span class="n">mgconf</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mntGrpConfiguration</span><span class="p">())</span>
+
+        <span class="n">state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+        <span class="n">amg</span> <span class="o">=</span> <span class="n">MSUtils</span><span class="o">.</span><span class="n">getEnv</span><span class="p">(</span><span class="s">&#39;ActiveMntGrp&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__macroServerName</span><span class="p">)</span>
+
+        <span class="n">mginfo</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__createMntGrpConf</span><span class="p">(</span>
+            <span class="n">datasources</span><span class="p">,</span> <span class="n">componentdatasources</span><span class="p">,</span> <span class="n">description</span><span class="p">)</span>
+        <span class="n">llconf</span> <span class="o">=</span> <span class="n">mginfo</span><span class="p">[</span><span class="s">&quot;configuration&quot;</span><span class="p">]</span>
+
+        <span class="n">dpmg</span> <span class="o">=</span> <span class="n">TangoUtils</span><span class="o">.</span><span class="n">openProxy</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">mginfo</span><span class="p">[</span><span class="s">&#39;device&#39;</span><span class="p">]))</span>
+        <span class="n">oldconf</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">dpmg</span><span class="o">.</span><span class="n">configuration</span><span class="p">)</span>
+        <span class="n">dpmg</span><span class="o">.</span><span class="n">Configuration</span> <span class="o">=</span> <span class="n">llconf</span>
+        <span class="n">llconf</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">dpmg</span><span class="o">.</span><span class="n">configuration</span><span class="p">)</span>
+        <span class="n">dpmg</span><span class="o">.</span><span class="n">Configuration</span> <span class="o">=</span> <span class="n">oldconf</span>
+
+        <span class="n">amg2</span> <span class="o">=</span> <span class="n">MSUtils</span><span class="o">.</span><span class="n">getEnv</span><span class="p">(</span><span class="s">&#39;ActiveMntGrp&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__macroServerName</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">amg</span> <span class="o">!=</span> <span class="n">amg2</span><span class="p">:</span>
+            <span class="n">MSUtils</span><span class="o">.</span><span class="n">setEnv</span><span class="p">(</span><span class="s">&#39;ActiveMntGrp&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">amg</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">__macroServerName</span><span class="p">)</span>
+        <span class="n">state2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">state</span><span class="p">)</span> <span class="o">!=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">state2</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+
+        <span class="n">lsconf</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">llconf</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Utils</span><span class="o">.</span><span class="n">compareDict</span><span class="p">(</span><span class="n">mgconf</span><span class="p">,</span> <span class="n">lsconf</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="ProfileManager.importMntGrp"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.ProfileManager.ProfileManager.importMntGrp">[docs]</a>    <span class="k">def</span> <span class="nf">importMntGrp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; import setting from active measurement</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__updateMacroServer</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__updateConfigServer</span><span class="p">()</span>
+        <span class="n">jconf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mntGrpConfiguration</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__setFromMntGrpConf</span><span class="p">(</span><span class="n">jconf</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="o">.</span><span class="n">storeSelection</span><span class="p">()</span>
+</div>
+<div class="viewcode-block" id="ProfileManager.fetchProfile"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.ProfileManager.ProfileManager.fetchProfile">[docs]</a>    <span class="k">def</span> <span class="nf">fetchProfile</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; fetches the profile configuration</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__updateConfigServer</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="o">.</span><span class="n">fetchSelection</span><span class="p">()</span> <span class="ow">is</span> <span class="bp">False</span><span class="p">:</span>
+            <span class="n">avmg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">availableMntGrps</span><span class="p">()</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="p">[</span><span class="s">&quot;MntGrp&quot;</span><span class="p">]</span> <span class="ow">in</span> <span class="n">avmg</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="o">.</span><span class="n">deselect</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">importMntGrp</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="o">.</span><span class="n">resetPreselectedComponents</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">defaultPreselectedComponents</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="o">.</span><span class="n">preselect</span><span class="p">()</span>
+</div>
+    <span class="k">def</span> <span class="nf">__createMntGrpConf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">datasources</span><span class="p">,</span>
+                           <span class="n">componentdatasources</span><span class="p">,</span> <span class="n">description</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; sets active measurement group from components</span>
+
+<span class="sd">        :param components:  component list</span>
+<span class="sd">        :param datasources: datasource list</span>
+<span class="sd">        :param componentdatasources: component datasource list</span>
+<span class="sd">        :param description: component description</span>
+<span class="sd">        :returns: tuple of MntGrp configuration and MntGrp Device name</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__updatePools</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__updateMacroServer</span><span class="p">()</span>
+        <span class="n">cnf</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">cnf</span><span class="p">[</span><span class="s">&#39;controllers&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">cnf</span><span class="p">[</span><span class="s">&#39;description&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&quot;Measurement Group&quot;</span>
+        <span class="n">cnf</span><span class="p">[</span><span class="s">&#39;label&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&quot;&quot;</span>
+
+        <span class="n">dontdisplay</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="p">[</span><span class="s">&quot;UnplottedComponents&quot;</span><span class="p">]))</span>
+
+        <span class="n">ltimers</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="n">timer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__prepareTimers</span><span class="p">(</span><span class="n">cnf</span><span class="p">,</span> <span class="n">ltimers</span><span class="p">)</span>
+
+        <span class="n">aliases</span><span class="p">,</span> <span class="n">snapshot</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__fetchChannels</span><span class="p">(</span>
+            <span class="n">datasources</span><span class="p">,</span> <span class="n">componentdatasources</span><span class="p">,</span>
+            <span class="n">dontdisplay</span><span class="p">,</span> <span class="nb">set</span><span class="p">(</span><span class="n">ltimers</span><span class="p">)</span> <span class="o">|</span> <span class="nb">set</span><span class="p">([</span><span class="n">timer</span><span class="p">]),</span> <span class="n">description</span><span class="p">)</span>
+        <span class="n">mfullname</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__prepareMntGrp</span><span class="p">(</span><span class="n">cnf</span><span class="p">,</span> <span class="n">timer</span><span class="p">)</span>
+
+        <span class="n">index</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">fullnames</span> <span class="o">=</span> <span class="n">PoolUtils</span><span class="o">.</span><span class="n">getFullDeviceNames</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__pools</span><span class="p">,</span> <span class="n">aliases</span><span class="p">)</span>
+        <span class="n">sources</span> <span class="o">=</span> <span class="n">PoolUtils</span><span class="o">.</span><span class="n">getChannelSources</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__pools</span><span class="p">,</span> <span class="n">aliases</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">al</span> <span class="ow">in</span> <span class="n">aliases</span><span class="p">:</span>
+            <span class="n">index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__addDevice</span><span class="p">(</span>
+                <span class="n">al</span><span class="p">,</span> <span class="n">dontdisplay</span><span class="p">,</span> <span class="n">cnf</span><span class="p">,</span>
+                <span class="n">al</span> <span class="k">if</span> <span class="n">al</span> <span class="ow">in</span> <span class="n">ltimers</span> <span class="k">else</span> <span class="n">timer</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">fullnames</span><span class="p">,</span> <span class="n">sources</span><span class="p">)</span>
+        <span class="n">conf</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">cnf</span><span class="p">)</span>
+
+        <span class="n">mginfo</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s">&quot;alias&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">cnf</span><span class="p">[</span><span class="s">&#39;label&#39;</span><span class="p">]),</span>
+            <span class="s">&quot;device&quot;</span><span class="p">:</span> <span class="n">mfullname</span><span class="p">,</span>
+            <span class="s">&quot;configuration&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">conf</span><span class="p">),</span>
+            <span class="s">&quot;snapshot&quot;</span><span class="p">:</span> <span class="n">snapshot</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">mginfo</span>
+
+    <span class="k">def</span> <span class="nf">__setFromMntGrpConf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">jconf</span><span class="p">,</span> <span class="n">compdatasources</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; import setting from active measurement</span>
+
+<span class="sd">        :param jconf: json with mntgrp configuration</span>
+<span class="sd">        :param componentdatasources: component datasources</span>
+<span class="sd">        :returns: if profile has been changed</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__updatePools</span><span class="p">()</span>
+        <span class="n">conf</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">jconf</span><span class="p">)</span>
+        <span class="n">otimers</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="n">timers</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="n">dsg</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="p">[</span><span class="s">&quot;DataSourceSelection&quot;</span><span class="p">])</span>
+        <span class="n">hel</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="p">[</span><span class="s">&quot;UnplottedComponents&quot;</span><span class="p">]))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__clearChannels</span><span class="p">(</span><span class="n">dsg</span><span class="p">,</span> <span class="n">hel</span><span class="p">,</span> <span class="n">compdatasources</span><span class="p">)</span>
+
+        <span class="c"># fill in dsg, timers hel</span>
+        <span class="k">if</span> <span class="s">&quot;timer&quot;</span> <span class="ow">in</span> <span class="n">conf</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="ow">and</span> <span class="s">&quot;controllers&quot;</span> <span class="ow">in</span> <span class="n">conf</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">tangods</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__readChannels</span><span class="p">(</span><span class="n">conf</span><span class="p">,</span> <span class="n">timers</span><span class="p">,</span> <span class="n">dsg</span><span class="p">,</span> <span class="n">hel</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__readTangoChannels</span><span class="p">(</span><span class="n">conf</span><span class="p">,</span> <span class="n">tangods</span><span class="p">,</span> <span class="n">dsg</span><span class="p">,</span> <span class="n">hel</span><span class="p">)</span>
+            <span class="n">otimers</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__reorderTimers</span><span class="p">(</span><span class="n">conf</span><span class="p">,</span> <span class="n">timers</span><span class="p">,</span> <span class="n">dsg</span><span class="p">,</span> <span class="n">hel</span><span class="p">)</span>
+
+        <span class="n">changed</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="n">jdsg</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">dsg</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="p">[</span><span class="s">&quot;DataSourceSelection&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="n">jdsg</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="p">[</span><span class="s">&quot;DataSourceSelection&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">jdsg</span>
+            <span class="n">changed</span> <span class="o">=</span> <span class="bp">True</span>
+
+        <span class="k">if</span> <span class="nb">set</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="p">[</span><span class="s">&quot;UnplottedComponents&quot;</span><span class="p">]))</span> <span class="o">!=</span> <span class="n">hel</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="p">[</span><span class="s">&quot;UnplottedComponents&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">hel</span><span class="p">))</span>
+            <span class="n">changed</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="k">if</span> <span class="n">otimers</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">jtimers</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">otimers</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="p">[</span><span class="s">&quot;Timer&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="n">jtimers</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="p">[</span><span class="s">&quot;Timer&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">jtimers</span>
+                <span class="n">changed</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="p">[</span><span class="s">&quot;MntGrp&quot;</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> \
+           <span class="bp">self</span><span class="o">.</span><span class="n">__configServer</span><span class="o">.</span><span class="n">availableSelections</span><span class="p">():</span>
+            <span class="n">changed</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="k">return</span> <span class="n">changed</span>
+
+    <span class="k">def</span> <span class="nf">__clearChannels</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dsg</span><span class="p">,</span> <span class="n">hel</span><span class="p">,</span> <span class="n">compdatasources</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; clears profile channels</span>
+
+<span class="sd">        :param dsg: datasource selection dictionary</span>
+<span class="sd">        :param hel: list of hidden elements</span>
+<span class="sd">        :param componentdatasources: component datasources</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">compdatasources</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">compdatasources</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">componentDataSources</span><span class="p">()</span>
+        <span class="n">describer</span> <span class="o">=</span> <span class="n">Describer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__configServer</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span>
+        <span class="n">ads</span> <span class="o">=</span> <span class="n">TangoUtils</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__configServer</span><span class="p">,</span> <span class="s">&quot;availableDataSources&quot;</span><span class="p">)</span>
+        <span class="n">dsres</span> <span class="o">=</span> <span class="n">describer</span><span class="o">.</span><span class="n">dataSources</span><span class="p">(</span><span class="n">ads</span><span class="p">,</span> <span class="s">&#39;TANGO&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">tangods</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">dsr</span><span class="o">.</span><span class="n">name</span><span class="p">)</span> <span class="k">for</span> <span class="n">dsr</span> <span class="ow">in</span> <span class="n">dsres</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+                   <span class="k">if</span> <span class="n">dsr</span><span class="o">.</span><span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">compdatasources</span><span class="p">]</span>
+        <span class="n">channels</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span>
+            <span class="n">PoolUtils</span><span class="o">.</span><span class="n">getElementNames</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__pools</span><span class="p">,</span> <span class="s">&#39;ExpChannelList&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">[])</span>
+        <span class="n">channels</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">tangods</span><span class="p">))</span>
+
+        <span class="k">for</span> <span class="n">ch</span> <span class="ow">in</span> <span class="n">channels</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">ch</span> <span class="ow">in</span> <span class="n">dsg</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="n">dsg</span><span class="p">[</span><span class="n">ch</span><span class="p">]</span> <span class="o">=</span> <span class="bp">False</span>
+            <span class="k">if</span> <span class="n">ch</span> <span class="ow">in</span> <span class="n">hel</span><span class="p">:</span>
+                <span class="n">hel</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">ch</span><span class="p">)</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">__readChannels</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">conf</span><span class="p">,</span> <span class="n">timers</span><span class="p">,</span> <span class="n">dsg</span><span class="p">,</span> <span class="n">hel</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; reads channels from mntgrp configutation</span>
+
+<span class="sd">        :param conf: mntgrp configuration</span>
+<span class="sd">        :param timers: timer dictionary</span>
+<span class="sd">        :param dsg: datasource selection dictionary</span>
+<span class="sd">        :param hel: list of hidden elements</span>
+<span class="sd">        :returns: tango datasources list with elements (name, label, source)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">tangods</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">timers</span><span class="p">[</span><span class="n">conf</span><span class="p">[</span><span class="s">&quot;timer&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
+        <span class="k">for</span> <span class="n">ctrl</span> <span class="ow">in</span> <span class="n">conf</span><span class="p">[</span><span class="s">&quot;controllers&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="k">if</span> <span class="s">&#39;units&#39;</span> <span class="ow">in</span> <span class="n">ctrl</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="ow">and</span> \
+                    <span class="s">&#39;0&#39;</span> <span class="ow">in</span> <span class="n">ctrl</span><span class="p">[</span><span class="s">&#39;units&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="k">if</span> <span class="s">&#39;timer&#39;</span> <span class="ow">in</span> <span class="n">ctrl</span><span class="p">[</span><span class="s">&#39;units&#39;</span><span class="p">][</span><span class="s">&#39;0&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                    <span class="n">timers</span><span class="p">[</span><span class="n">ctrl</span><span class="p">[</span><span class="s">&#39;units&#39;</span><span class="p">][</span><span class="s">&#39;0&#39;</span><span class="p">][</span><span class="s">&#39;timer&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
+                <span class="k">if</span> <span class="s">&#39;channels&#39;</span> <span class="ow">in</span> <span class="n">ctrl</span><span class="p">[</span><span class="s">&#39;units&#39;</span><span class="p">][</span><span class="s">&#39;0&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                    <span class="k">for</span> <span class="n">ch</span> <span class="ow">in</span> <span class="n">ctrl</span><span class="p">[</span><span class="s">&#39;units&#39;</span><span class="p">][</span><span class="s">&#39;0&#39;</span><span class="p">][</span><span class="s">&#39;channels&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+                        <span class="k">if</span> <span class="s">&#39;_controller_name&#39;</span> <span class="ow">in</span> <span class="n">ch</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="ow">and</span> \
+                                <span class="n">ch</span><span class="p">[</span><span class="s">&#39;_controller_name&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;__tango__&#39;</span><span class="p">:</span>
+                            <span class="n">tangods</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                                <span class="p">[</span><span class="n">ch</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">],</span> <span class="n">ch</span><span class="p">[</span><span class="s">&#39;label&#39;</span><span class="p">],</span> <span class="n">ch</span><span class="p">[</span><span class="s">&quot;source&quot;</span><span class="p">]])</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">dsg</span><span class="p">[</span><span class="n">ch</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">True</span>
+                            <span class="k">if</span> <span class="ow">not</span> <span class="nb">bool</span><span class="p">(</span><span class="n">ch</span><span class="p">[</span><span class="s">&#39;plot_type&#39;</span><span class="p">]):</span>
+                                <span class="n">hel</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">ch</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">])</span>
+                            <span class="k">elif</span> <span class="n">ch</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">]</span> <span class="ow">in</span> <span class="n">hel</span><span class="p">:</span>
+                                <span class="n">hel</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">ch</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">])</span>
+
+        <span class="k">return</span> <span class="n">tangods</span>
+
+    <span class="k">def</span> <span class="nf">__readTangoChannels</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">conf</span><span class="p">,</span> <span class="n">tangods</span><span class="p">,</span> <span class="n">dsg</span><span class="p">,</span> <span class="n">hel</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; reads Tango channels from mntgrp configutation</span>
+
+<span class="sd">        :param conf: mntgrp configuration</span>
+<span class="sd">        :param tangods: tango datasources list</span>
+<span class="sd">                        with elements (name, label, source)</span>
+<span class="sd">        :param dsg: datasource selection dictionary</span>
+<span class="sd">        :param hel: list of hidden elements</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">tangods</span> <span class="ow">and</span> <span class="n">NXSTOOLS</span><span class="p">:</span>
+            <span class="n">jds</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__createDataSources</span><span class="p">(</span><span class="n">tangods</span><span class="p">,</span> <span class="n">dsg</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">ctrl</span> <span class="ow">in</span> <span class="n">conf</span><span class="p">[</span><span class="s">&quot;controllers&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+                <span class="k">if</span> <span class="s">&#39;units&#39;</span> <span class="ow">in</span> <span class="n">ctrl</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="ow">and</span> \
+                        <span class="s">&#39;0&#39;</span> <span class="ow">in</span> <span class="n">ctrl</span><span class="p">[</span><span class="s">&#39;units&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                    <span class="k">if</span> <span class="s">&#39;channels&#39;</span> <span class="ow">in</span> <span class="n">ctrl</span><span class="p">[</span><span class="s">&#39;units&#39;</span><span class="p">][</span><span class="s">&#39;0&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                        <span class="k">for</span> <span class="n">ch</span> <span class="ow">in</span> <span class="n">ctrl</span><span class="p">[</span><span class="s">&#39;units&#39;</span><span class="p">][</span><span class="s">&#39;0&#39;</span><span class="p">][</span><span class="s">&#39;channels&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+                            <span class="k">if</span> <span class="s">&#39;_controller_name&#39;</span> <span class="ow">in</span> <span class="n">ch</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="ow">and</span> \
+                                    <span class="n">ch</span><span class="p">[</span><span class="s">&#39;_controller_name&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;__tango__&#39;</span><span class="p">:</span>
+                                <span class="k">if</span> <span class="n">ch</span><span class="p">[</span><span class="s">&quot;source&quot;</span><span class="p">]</span> <span class="ow">in</span> <span class="n">jds</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                                    <span class="n">name</span> <span class="o">=</span> <span class="n">jds</span><span class="p">[</span><span class="n">ch</span><span class="p">[</span><span class="s">&quot;source&quot;</span><span class="p">]]</span>
+                                    <span class="n">dsg</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
+                                    <span class="k">if</span> <span class="ow">not</span> <span class="nb">bool</span><span class="p">(</span><span class="n">ch</span><span class="p">[</span><span class="s">&#39;plot_type&#39;</span><span class="p">]):</span>
+                                        <span class="n">hel</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+                                    <span class="k">elif</span> <span class="n">ch</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">]</span> <span class="ow">in</span> <span class="n">hel</span><span class="p">:</span>
+                                        <span class="n">hel</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__reorderTimers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">conf</span><span class="p">,</span> <span class="n">timers</span><span class="p">,</span> <span class="n">dsg</span><span class="p">,</span> <span class="n">hel</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; reads timer aliases and reoder it according to mntgrp</span>
+
+<span class="sd">        :param conf: mntgrp configuration</span>
+<span class="sd">        :param timers: timer device name list</span>
+<span class="sd">        :param dsg: datasource selection dictionary</span>
+<span class="sd">        :param hel: list of hidden elements</span>
+<span class="sd">        :returns: timer alias list</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">dtimers</span> <span class="o">=</span> <span class="n">PoolUtils</span><span class="o">.</span><span class="n">getAliases</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__pools</span><span class="p">,</span> <span class="n">timers</span><span class="p">)</span>
+        <span class="n">otimers</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">dtimers</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+        <span class="n">otimers</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">dtimers</span><span class="p">[</span><span class="n">conf</span><span class="p">[</span><span class="s">&quot;timer&quot;</span><span class="p">]])</span>
+        <span class="n">otimers</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">dtimers</span><span class="p">[</span><span class="n">conf</span><span class="p">[</span><span class="s">&quot;timer&quot;</span><span class="p">]])</span>
+
+        <span class="n">tms</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="p">[</span><span class="s">&quot;Timer&quot;</span><span class="p">])</span>
+        <span class="n">tms</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">otimers</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">tm</span> <span class="ow">in</span> <span class="n">tms</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">tm</span> <span class="ow">in</span> <span class="n">hel</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">tm</span> <span class="ow">in</span> <span class="n">dsg</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                    <span class="n">dsg</span><span class="p">[</span><span class="n">tm</span><span class="p">]</span> <span class="o">=</span> <span class="bp">False</span>
+                    <span class="n">hel</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">tm</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">otimers</span>
+
+    <span class="k">def</span> <span class="nf">__checkClientRecords</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">datasources</span><span class="p">,</span> <span class="n">description</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; checks client records</span>
+
+<span class="sd">        :param datasources: datasource list</span>
+<span class="sd">        :param description: component description</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">describer</span> <span class="o">=</span> <span class="n">Describer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__configServer</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span>
+        <span class="n">frecords</span> <span class="o">=</span> <span class="n">PoolUtils</span><span class="o">.</span><span class="n">getFullDeviceNames</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__pools</span><span class="p">)</span>
+        <span class="n">dsres</span> <span class="o">=</span> <span class="n">describer</span><span class="o">.</span><span class="n">dataSources</span><span class="p">(</span>
+            <span class="nb">set</span><span class="p">(</span><span class="n">datasources</span><span class="p">)</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="n">frecords</span><span class="o">.</span><span class="n">keys</span><span class="p">()),</span> <span class="s">&#39;CLIENT&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">records</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">dsr</span><span class="o">.</span><span class="n">record</span><span class="p">)</span> <span class="k">for</span> <span class="n">dsr</span> <span class="ow">in</span> <span class="n">dsres</span><span class="o">.</span><span class="n">values</span><span class="p">()]</span>
+
+        <span class="k">for</span> <span class="n">grp</span> <span class="ow">in</span> <span class="n">description</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">dss</span> <span class="ow">in</span> <span class="n">grp</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+                <span class="k">for</span> <span class="n">dsrs</span> <span class="ow">in</span> <span class="n">dss</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+                    <span class="k">for</span> <span class="n">dsr</span> <span class="ow">in</span> <span class="n">dsrs</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">dsr</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;CLIENT&#39;</span><span class="p">:</span>
+                            <span class="n">records</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">dsr</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
+
+        <span class="n">urecords</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="p">[</span><span class="s">&quot;UserData&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+        <span class="n">precords</span> <span class="o">=</span> <span class="n">frecords</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+        <span class="n">missing</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">records</span><span class="p">)</span>
+                         <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="n">DEFAULT_RECORD_KEYS</span><span class="p">)</span>
+                         <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="n">urecords</span><span class="p">)</span>
+                         <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="n">precords</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">missing</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
+                <span class="s">&quot;User Data not defined </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="nb">str</span><span class="p">(</span><span class="n">missing</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">__getActivePool</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mntgrp</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; get the active pool</span>
+
+<span class="sd">        :param mntgrp: current mntgrp</span>
+<span class="sd">        :returns: active pool proxy</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">apool</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">lpool</span> <span class="o">=</span> <span class="p">[</span><span class="bp">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+        <span class="n">fpool</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="k">for</span> <span class="n">pool</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__pools</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">fpool</span><span class="p">:</span>
+                <span class="n">fpool</span> <span class="o">=</span> <span class="n">pool</span>
+            <span class="n">mntgrps</span> <span class="o">=</span> <span class="n">PoolUtils</span><span class="o">.</span><span class="n">getElementNames</span><span class="p">([</span><span class="n">pool</span><span class="p">],</span> <span class="s">&#39;MeasurementGroupList&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">mntgrp</span> <span class="ow">in</span> <span class="n">mntgrps</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">apool</span><span class="p">:</span>
+                    <span class="n">fpool</span> <span class="o">=</span> <span class="n">pool</span>
+                <span class="n">apool</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pool</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">lpool</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">mntgrps</span><span class="p">):</span>
+                <span class="n">lpool</span> <span class="o">=</span> <span class="p">[</span><span class="n">pool</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">mntgrps</span><span class="p">)]</span>
+
+        <span class="k">if</span> <span class="n">fpool</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">fpool</span> <span class="o">=</span> <span class="n">lpool</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">fpool</span>
+
+    <span class="k">def</span> <span class="nf">__createMntGrpDevice</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mntGrpName</span><span class="p">,</span> <span class="n">timer</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; creates mntgrp devices</span>
+
+<span class="sd">        :param mntgrpName: measurement group name</span>
+<span class="sd">        :param time: master timer name</span>
+<span class="sd">        :returns: measurement group full name</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">amntgrp</span> <span class="o">=</span> <span class="n">MSUtils</span><span class="o">.</span><span class="n">getEnv</span><span class="p">(</span><span class="s">&#39;ActiveMntGrp&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__macroServerName</span><span class="p">)</span>
+        <span class="n">apool</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__getActivePool</span><span class="p">(</span><span class="n">amntgrp</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">apool</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">TangoUtils</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="n">apool</span><span class="p">,</span> <span class="s">&quot;CreateMeasurementGroup&quot;</span><span class="p">,</span>
+                                   <span class="p">[</span><span class="n">mntGrpName</span><span class="p">,</span> <span class="n">timer</span><span class="p">])</span>
+            <span class="k">except</span> <span class="n">PyTango</span><span class="o">.</span><span class="n">CommunicationFailed</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">e</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">reason</span> <span class="o">==</span> <span class="s">&quot;API_DeviceTimedOut&quot;</span><span class="p">:</span>
+                    <span class="n">TangoUtils</span><span class="o">.</span><span class="n">wait</span><span class="p">(</span><span class="n">apool</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">raise</span>
+            <span class="n">mfullname</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">PoolUtils</span><span class="o">.</span><span class="n">getMntGrpName</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__pools</span><span class="p">,</span> <span class="n">mntGrpName</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">mfullname</span>
+
+    <span class="k">def</span> <span class="nf">__prepareTimers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cnf</span><span class="p">,</span> <span class="n">ltimers</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; prepares timers</span>
+
+<span class="sd">        :param cnf: mntgrp configuration</span>
+<span class="sd">        :param ltimers: slave timer list</span>
+<span class="sd">        :returns: master timer</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">mtimers</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="p">[</span><span class="s">&quot;Timer&quot;</span><span class="p">])</span>
+        <span class="n">timer</span> <span class="o">=</span> <span class="n">mtimers</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="n">mtimers</span> <span class="k">else</span> <span class="s">&#39;&#39;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">timer</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
+                <span class="s">&quot;Timer or Monitor not defined&quot;</span><span class="p">)</span>
+        <span class="n">fullname</span> <span class="o">=</span> <span class="n">PoolUtils</span><span class="o">.</span><span class="n">getFullDeviceNames</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__pools</span><span class="p">,</span> <span class="p">[</span><span class="n">timer</span><span class="p">])[</span><span class="n">timer</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">fullname</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
+                <span class="s">&quot;Timer or Monitor cannot be found amount the servers&quot;</span><span class="p">)</span>
+        <span class="n">cnf</span><span class="p">[</span><span class="s">&#39;monitor&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fullname</span>
+        <span class="n">cnf</span><span class="p">[</span><span class="s">&#39;timer&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fullname</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">mtimers</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">ltimers</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+            <span class="n">ltimers</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">mtimers</span><span class="p">[</span><span class="mi">1</span><span class="p">:]))</span>
+            <span class="k">if</span> <span class="n">timer</span> <span class="ow">in</span> <span class="n">ltimers</span><span class="p">:</span>
+                <span class="n">ltimers</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">timer</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">timer</span>
+
+    <span class="k">def</span> <span class="nf">__fetchChannels</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">datasources</span><span class="p">,</span> <span class="n">componentdatasources</span><span class="p">,</span>
+                        <span class="n">dontdisplay</span><span class="p">,</span> <span class="n">timers</span><span class="p">,</span> <span class="n">description</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; fetches component channels from config server</span>
+<span class="sd">            and preselect datasources</span>
+
+<span class="sd">        :param components: component list</span>
+<span class="sd">        :param datasources: datasource list</span>
+<span class="sd">        :param componentdatasources: component datasources</span>
+<span class="sd">        :param dontdisplay: hidden channel list</span>
+<span class="sd">        :param timers: timers list</span>
+<span class="sd">        :param description: component description</span>
+<span class="sd">        :return:  (ordered pool channels, snapshot tuple list)</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">aliases</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">initsources</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">__checkClientRecords</span><span class="p">(</span><span class="n">datasources</span><span class="p">,</span> <span class="n">description</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">datasources</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">aliases</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">datasources</span><span class="p">)</span>
+        <span class="n">pchannels</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="p">[</span><span class="s">&quot;OrderedChannels&quot;</span><span class="p">])</span>
+        <span class="n">dsg</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="p">[</span><span class="s">&quot;DataSourceSelection&quot;</span><span class="p">])</span>
+        <span class="n">aliases</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
+            <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">pchannels</span><span class="p">)</span> <span class="o">&amp;</span> <span class="nb">set</span><span class="p">(</span><span class="n">componentdatasources</span><span class="p">)))</span>
+
+        <span class="n">describer</span> <span class="o">=</span> <span class="n">Describer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__configServer</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">grp</span> <span class="ow">in</span> <span class="n">description</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">cp</span><span class="p">,</span> <span class="n">dss</span> <span class="ow">in</span> <span class="n">grp</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">ndcp</span> <span class="o">=</span> <span class="n">cp</span> <span class="ow">in</span> <span class="n">dontdisplay</span>
+                <span class="k">for</span> <span class="n">ds</span><span class="p">,</span> <span class="n">params</span> <span class="ow">in</span> <span class="n">dss</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                    <span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">params</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">param</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">param</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
+                            <span class="k">if</span> <span class="n">param</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;STEP&#39;</span> \
+                               <span class="ow">and</span> <span class="n">param</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">in</span> <span class="p">[</span><span class="s">&#39;TANGO&#39;</span><span class="p">,</span> <span class="s">&#39;CLIENT&#39;</span><span class="p">]:</span>
+                                <span class="n">aliases</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">ds</span><span class="p">))</span>
+                                <span class="n">dsg</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">ds</span><span class="p">)]</span> <span class="o">=</span> <span class="bp">True</span>
+                                <span class="k">if</span> <span class="ow">not</span> <span class="n">ndcp</span> <span class="ow">and</span> <span class="nb">str</span><span class="p">(</span><span class="n">ds</span><span class="p">)</span> <span class="ow">in</span> <span class="n">dontdisplay</span><span class="p">:</span>
+                                    <span class="n">dontdisplay</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">ds</span><span class="p">))</span>
+                            <span class="k">elif</span> <span class="n">param</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="p">[</span><span class="s">&#39;FINAL&#39;</span><span class="p">,</span> <span class="s">&#39;INIT&#39;</span><span class="p">]</span> <span class="ow">and</span> \
+                                    <span class="n">param</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">in</span> <span class="p">[</span><span class="s">&#39;TANGO&#39;</span><span class="p">]:</span>
+                                <span class="n">initsources</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">ds</span><span class="p">)]</span> <span class="o">=</span> \
+                                    <span class="n">TangoUtils</span><span class="o">.</span><span class="n">getFullAttrName</span><span class="p">(</span><span class="n">param</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+
+        <span class="n">devices</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">preselectedDataSources</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">devices</span><span class="p">:</span>
+            <span class="n">sds</span> <span class="o">=</span> <span class="n">describer</span><span class="o">.</span><span class="n">dataSources</span><span class="p">(</span><span class="n">devices</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">sds</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">ds</span> <span class="ow">in</span> <span class="n">sds</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+                    <span class="k">if</span> <span class="n">ds</span><span class="o">.</span><span class="n">dstype</span> <span class="o">==</span> <span class="s">&#39;TANGO&#39;</span><span class="p">:</span>
+                        <span class="n">initsources</span><span class="p">[</span><span class="n">ds</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> \
+                            <span class="n">TangoUtils</span><span class="o">.</span><span class="n">getFullAttrName</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">record</span><span class="p">)</span>
+        <span class="n">snapshot</span> <span class="o">=</span> <span class="p">[(</span><span class="n">devattr</span><span class="p">,</span> <span class="n">dsname</span><span class="p">)</span>
+                    <span class="k">for</span> <span class="n">dsname</span><span class="p">,</span> <span class="n">devattr</span> <span class="ow">in</span> <span class="n">initsources</span><span class="o">.</span><span class="n">items</span><span class="p">()]</span>
+
+        <span class="k">for</span> <span class="n">tm</span> <span class="ow">in</span> <span class="n">timers</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">tm</span> <span class="ow">in</span> <span class="n">dontdisplay</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">tm</span> <span class="ow">in</span> <span class="n">dsg</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                    <span class="n">dsg</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">tm</span><span class="p">)]</span> <span class="o">=</span> <span class="bp">False</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="p">[</span><span class="s">&quot;DataSourceSelection&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">dsg</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="p">[</span><span class="s">&quot;UnplottedComponents&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">dontdisplay</span><span class="p">))</span>
+        <span class="n">aliases</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">aliases</span><span class="p">))</span>
+
+        <span class="k">for</span> <span class="n">tm</span> <span class="ow">in</span> <span class="n">timers</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">tm</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">aliases</span><span class="p">:</span>
+                <span class="n">aliases</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tm</span><span class="p">)</span>
+                <span class="n">dontdisplay</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">tm</span><span class="p">)</span>
+
+        <span class="n">pchannels</span> <span class="o">=</span> <span class="p">[</span><span class="n">ch</span> <span class="k">for</span> <span class="n">ch</span> <span class="ow">in</span> <span class="n">pchannels</span> <span class="k">if</span> <span class="n">ch</span> <span class="ow">in</span> <span class="n">aliases</span><span class="p">]</span>
+        <span class="n">aliases</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">aliases</span><span class="p">)</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="n">pchannels</span><span class="p">)))</span>
+        <span class="n">pchannels</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">aliases</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">pchannels</span><span class="p">,</span> <span class="n">snapshot</span>
+
+    <span class="k">def</span> <span class="nf">__prepareMntGrp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cnf</span><span class="p">,</span> <span class="n">timer</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; creates mntgrp if does not exists</span>
+
+<span class="sd">        :param cnf: mntgrp configuration</span>
+<span class="sd">        :param timer: master timer</span>
+<span class="sd">        :returns: full mntgrp name</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">mntGrpName</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="p">[</span><span class="s">&quot;MntGrp&quot;</span><span class="p">]</span>
+        <span class="n">mfullname</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">PoolUtils</span><span class="o">.</span><span class="n">getMntGrpName</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__pools</span><span class="p">,</span> <span class="n">mntGrpName</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">mfullname</span><span class="p">:</span>
+            <span class="n">mfullname</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__createMntGrpDevice</span><span class="p">(</span><span class="n">mntGrpName</span><span class="p">,</span> <span class="n">timer</span><span class="p">)</span>
+
+        <span class="n">cnf</span><span class="p">[</span><span class="s">&#39;label&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mntGrpName</span>
+        <span class="k">return</span> <span class="n">mfullname</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">__findSources</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">tangods</span><span class="p">,</span> <span class="n">extangods</span><span class="p">,</span> <span class="n">exsource</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; finds sources of tango datasources</span>
+
+<span class="sd">        :param tangods: tango datasources list</span>
+<span class="sd">                        with elements (name, label, source)</span>
+<span class="sd">        :param extangods: tango datasources list</span>
+<span class="sd">                        with elements</span>
+<span class="sd">                        (ds name, input source,</span>
+<span class="sd">                         source without &#39;tango://&#39;,</span>
+<span class="sd">                         sources with host)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">initsource</span> <span class="ow">in</span> <span class="n">tangods</span><span class="p">:</span>
+            <span class="n">source</span> <span class="o">=</span> <span class="n">initsource</span> <span class="k">if</span> <span class="n">initsource</span><span class="p">[:</span><span class="mi">8</span><span class="p">]</span> <span class="o">!=</span> <span class="s">&#39;tango://&#39;</span> \
+                <span class="k">else</span> <span class="n">initsource</span><span class="p">[</span><span class="mi">8</span><span class="p">:]</span>
+            <span class="n">msource</span> <span class="o">=</span> <span class="bp">None</span>
+            <span class="n">spsource</span> <span class="o">=</span> <span class="n">source</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&quot;/&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">spsource</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">3</span> <span class="ow">and</span> <span class="s">&quot;:&quot;</span> <span class="ow">in</span> <span class="n">spsource</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+                <span class="n">host</span><span class="p">,</span> <span class="n">port</span> <span class="o">=</span> <span class="n">spsource</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&quot;:&quot;</span><span class="p">)</span>
+                <span class="n">mhost</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&quot;.&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">msource</span> <span class="o">=</span> <span class="s">&quot;/&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">spsource</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
+                <span class="k">if</span> <span class="n">mhost</span> <span class="o">!=</span> <span class="n">host</span><span class="p">:</span>
+                    <span class="n">msource</span> <span class="o">=</span> <span class="s">&quot;</span><span class="si">%s</span><span class="s">:</span><span class="si">%s</span><span class="s">/</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">mhost</span><span class="p">,</span> <span class="n">port</span><span class="p">,</span> <span class="n">msource</span><span class="p">)</span>
+                <span class="n">device</span> <span class="o">=</span> <span class="s">&quot;/&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">spsource</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+                <span class="n">attribute</span> <span class="o">=</span> <span class="n">spsource</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                <span class="n">exsource</span><span class="p">[</span><span class="n">source</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="n">attribute</span><span class="p">]</span>
+            <span class="n">extangods</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="p">[</span><span class="n">name</span><span class="p">,</span> <span class="n">initsource</span><span class="p">,</span> <span class="n">source</span><span class="p">,</span> <span class="n">msource</span><span class="p">])</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">__addKnownSources</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">extangods</span><span class="p">,</span> <span class="n">sds</span><span class="p">,</span> <span class="n">existing</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; adds known sources</span>
+
+<span class="sd">        :param extangods: tango datasources list</span>
+<span class="sd">                        with elements</span>
+<span class="sd">                        (ds name, input source,</span>
+<span class="sd">                         source without &#39;tango://&#39;,</span>
+<span class="sd">                         sources with host)</span>
+<span class="sd">        :param sds: list of json datasource descriptions</span>
+<span class="sd">        :param existing: list of existing datasources</span>
+<span class="sd">        :returns: dictionary with known sources</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">jds</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">found</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">existing</span><span class="p">:</span>
+            <span class="n">existing</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">ds</span> <span class="ow">in</span> <span class="n">sds</span><span class="p">:</span>
+            <span class="n">js</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">ds</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">js</span><span class="p">[</span><span class="s">&quot;dsname&quot;</span><span class="p">]</span> <span class="ow">in</span> <span class="n">existing</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">initsource</span><span class="p">,</span> <span class="n">source</span><span class="p">,</span> <span class="n">msource</span> <span class="ow">in</span> <span class="n">extangods</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">source</span> <span class="o">==</span> <span class="n">js</span><span class="p">[</span><span class="s">&quot;record&quot;</span><span class="p">]:</span>
+                        <span class="n">jds</span><span class="p">[</span><span class="n">initsource</span><span class="p">]</span> <span class="o">=</span> <span class="n">js</span><span class="p">[</span><span class="s">&quot;dsname&quot;</span><span class="p">]</span>
+                        <span class="n">found</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">js</span><span class="p">[</span><span class="s">&quot;record&quot;</span><span class="p">]))</span>
+                        <span class="k">break</span>
+                    <span class="k">elif</span> <span class="n">msource</span> <span class="o">==</span> <span class="n">js</span><span class="p">[</span><span class="s">&quot;record&quot;</span><span class="p">]:</span>
+                        <span class="n">jds</span><span class="p">[</span><span class="n">initsource</span><span class="p">]</span> <span class="o">=</span> <span class="n">js</span><span class="p">[</span><span class="s">&quot;dsname&quot;</span><span class="p">]</span>
+                        <span class="n">found</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">js</span><span class="p">[</span><span class="s">&quot;record&quot;</span><span class="p">]))</span>
+                        <span class="k">break</span>
+        <span class="k">for</span> <span class="n">ds</span> <span class="ow">in</span> <span class="n">sds</span><span class="p">:</span>
+            <span class="n">js</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">ds</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">js</span><span class="p">[</span><span class="s">&quot;dsname&quot;</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">existing</span> <span class="ow">and</span> \
+                    <span class="n">js</span><span class="p">[</span><span class="s">&quot;record&quot;</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">found</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">initsource</span><span class="p">,</span> <span class="n">source</span><span class="p">,</span> <span class="n">msource</span> <span class="ow">in</span> <span class="n">extangods</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">source</span> <span class="o">==</span> <span class="n">js</span><span class="p">[</span><span class="s">&quot;record&quot;</span><span class="p">]:</span>
+                        <span class="n">jds</span><span class="p">[</span><span class="n">initsource</span><span class="p">]</span> <span class="o">=</span> <span class="n">js</span><span class="p">[</span><span class="s">&quot;dsname&quot;</span><span class="p">]</span>
+                        <span class="n">found</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">js</span><span class="p">[</span><span class="s">&quot;dsname&quot;</span><span class="p">]))</span>
+                        <span class="k">break</span>
+                    <span class="k">elif</span> <span class="n">msource</span> <span class="o">==</span> <span class="n">js</span><span class="p">[</span><span class="s">&quot;record&quot;</span><span class="p">]:</span>
+                        <span class="n">jds</span><span class="p">[</span><span class="n">initsource</span><span class="p">]</span> <span class="o">=</span> <span class="n">js</span><span class="p">[</span><span class="s">&quot;dsname&quot;</span><span class="p">]</span>
+                        <span class="n">found</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">js</span><span class="p">[</span><span class="s">&quot;dsname&quot;</span><span class="p">]))</span>
+                        <span class="k">break</span>
+        <span class="k">return</span> <span class="n">jds</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">__createXMLSource</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">source</span><span class="p">,</span> <span class="n">exsource</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; creates datasource XML for sources</span>
+
+<span class="sd">        :param name: datasource name</span>
+<span class="sd">        :param source: datasource source string</span>
+<span class="sd">        :param exsource: dictioanry of source attributes</span>
+<span class="sd">         with value (host, port, device, attribute)</span>
+<span class="sd">        :returns: xml string</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="n">attribute</span> <span class="o">=</span> <span class="n">exsource</span><span class="p">[</span><span class="n">source</span><span class="p">]</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">XMLFile</span><span class="p">(</span><span class="s">&quot;ds.xml&quot;</span><span class="p">)</span>
+        <span class="n">sr</span> <span class="o">=</span> <span class="n">NDSource</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+        <span class="n">sr</span><span class="o">.</span><span class="n">initTango</span><span class="p">(</span>
+            <span class="n">name</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="s">&quot;attribute&quot;</span><span class="p">,</span> <span class="n">attribute</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="p">,</span>
+            <span class="n">group</span><span class="o">=</span><span class="s">&#39;__CLIENT__&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">df</span><span class="o">.</span><span class="n">prettyPrint</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">__createUnknownSources</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">extangods</span><span class="p">,</span> <span class="n">exsource</span><span class="p">,</span> <span class="n">ads</span><span class="p">,</span> <span class="n">jds</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; creates datasource XMLs for unknown datasources</span>
+
+<span class="sd">        :param extangods: tango datasources list</span>
+<span class="sd">                        with elements</span>
+<span class="sd">                        (ds name, input source,</span>
+<span class="sd">                         source without &#39;tango://&#39;,</span>
+<span class="sd">                         sources with host)</span>
+<span class="sd">        :param exsource: dictioanry of source attributes</span>
+<span class="sd">         with value (host, port, device, attribute)</span>
+<span class="sd">        :param ads: availaible datasources</span>
+<span class="sd">        :param jds: dictionary with of source alias names</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">initsource</span><span class="p">,</span> <span class="n">source</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">extangods</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">initsource</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">jds</span><span class="p">:</span>
+                <span class="n">jds</span><span class="p">[</span><span class="n">initsource</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span>
+                <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="n">nname</span> <span class="o">=</span> <span class="n">name</span>
+                <span class="k">while</span> <span class="n">nname</span> <span class="ow">in</span> <span class="n">ads</span><span class="p">:</span>
+                    <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+                    <span class="n">nname</span> <span class="o">=</span> <span class="s">&quot;</span><span class="si">%s</span><span class="s">_</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+                <span class="n">name</span> <span class="o">=</span> <span class="n">nname</span>
+                <span class="k">if</span> <span class="n">source</span> <span class="ow">in</span> <span class="n">exsource</span><span class="p">:</span>
+                    <span class="n">xml</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__createXMLSource</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">source</span><span class="p">,</span> <span class="n">exsource</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__configServer</span><span class="o">.</span><span class="n">xmlstring</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">xml</span><span class="p">)</span>
+                    <span class="n">TangoUtils</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__configServer</span><span class="p">,</span> <span class="s">&quot;storeDataSource&quot;</span><span class="p">,</span>
+                                       <span class="nb">str</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
+                    <span class="n">jds</span><span class="p">[</span><span class="n">initsource</span><span class="p">]</span> <span class="o">=</span> <span class="n">name</span>
+
+    <span class="k">def</span> <span class="nf">__createDataSources</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tangods</span><span class="p">,</span> <span class="n">dsg</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;adds known and creates unknown datasources</span>
+
+<span class="sd">        :param tangods: tango datasources list</span>
+<span class="sd">                        with elements (name, label, source)</span>
+<span class="sd">        :param dsg: datasource selection dictionary</span>
+<span class="sd">        :returns: dictionary with of source alias names</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">extangods</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">exsource</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="n">ads</span> <span class="o">=</span> <span class="n">TangoUtils</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__configServer</span><span class="p">,</span> <span class="s">&quot;availableDataSources&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">ads</span><span class="p">:</span>
+            <span class="n">ads</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">describer</span> <span class="o">=</span> <span class="n">Describer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__configServer</span><span class="p">)</span>
+        <span class="n">sds</span> <span class="o">=</span> <span class="n">describer</span><span class="o">.</span><span class="n">dataSources</span><span class="p">(</span><span class="n">ads</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__findSources</span><span class="p">(</span><span class="n">tangods</span><span class="p">,</span> <span class="n">extangods</span><span class="p">,</span> <span class="n">exsource</span><span class="p">)</span>
+        <span class="n">jds</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__addKnownSources</span><span class="p">(</span><span class="n">extangods</span><span class="p">,</span> <span class="n">sds</span><span class="p">,</span> <span class="n">dsg</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__createUnknownSources</span><span class="p">(</span><span class="n">extangods</span><span class="p">,</span> <span class="n">exsource</span><span class="p">,</span> <span class="n">ads</span><span class="p">,</span> <span class="n">jds</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">jds</span>
+
+    <span class="k">def</span> <span class="nf">__addDevice</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="n">dontdisplay</span><span class="p">,</span> <span class="n">cnf</span><span class="p">,</span>
+                    <span class="n">timer</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">fullnames</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">sources</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; adds device into configuration dictionary</span>
+
+<span class="sd">        :param device: device alias</span>
+<span class="sd">        :param dontdisplay: list of devices component for display</span>
+<span class="sd">        :param cnf: mntgrp configuration dictionary</span>
+<span class="sd">        :param timer: device timer</span>
+<span class="sd">        :param index: device index</span>
+<span class="sd">        :param fullnames: dictionary with full names</span>
+<span class="sd">        :returns: next device index</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">fullnames</span><span class="p">:</span>
+            <span class="n">fullnames</span> <span class="o">=</span> <span class="n">PoolUtils</span><span class="o">.</span><span class="n">getFullDeviceNames</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__pools</span><span class="p">,</span> <span class="p">[</span><span class="n">device</span><span class="p">,</span> <span class="n">timer</span><span class="p">])</span>
+
+        <span class="n">ctrls</span> <span class="o">=</span> <span class="n">PoolUtils</span><span class="o">.</span><span class="n">getDeviceControllers</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__pools</span><span class="p">,</span> <span class="p">[</span><span class="n">device</span><span class="p">])</span>
+        <span class="n">ctrl</span> <span class="o">=</span> <span class="n">ctrls</span><span class="p">[</span><span class="n">device</span><span class="p">]</span> <span class="k">if</span> <span class="n">ctrls</span> <span class="ow">and</span> <span class="n">device</span> <span class="ow">in</span> <span class="n">ctrls</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="k">else</span> <span class="s">&quot;&quot;</span>
+        <span class="n">timers</span> <span class="o">=</span> <span class="n">PoolUtils</span><span class="o">.</span><span class="n">getFullDeviceNames</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__pools</span><span class="p">,</span> <span class="p">[</span><span class="n">timer</span><span class="p">])</span>
+        <span class="n">fulltimer</span> <span class="o">=</span> <span class="n">fullnames</span><span class="p">[</span><span class="n">timer</span><span class="p">]</span> \
+            <span class="k">if</span> <span class="n">timers</span> <span class="ow">and</span> <span class="n">timer</span> <span class="ow">in</span> <span class="n">fullnames</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="k">else</span> <span class="s">&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">ctrl</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__addController</span><span class="p">(</span><span class="n">cnf</span><span class="p">,</span> <span class="n">ctrl</span><span class="p">,</span> <span class="n">fulltimer</span><span class="p">)</span>
+            <span class="n">fullname</span> <span class="o">=</span> <span class="n">fullnames</span><span class="p">[</span><span class="n">device</span><span class="p">]</span> \
+                <span class="k">if</span> <span class="n">fullnames</span> <span class="ow">and</span> <span class="n">device</span> <span class="ow">in</span> <span class="n">fullnames</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="k">else</span> <span class="s">&quot;&quot;</span>
+            <span class="n">source</span> <span class="o">=</span> <span class="n">sources</span><span class="p">[</span><span class="n">device</span><span class="p">]</span> \
+                <span class="k">if</span> <span class="n">sources</span> <span class="ow">and</span> <span class="n">device</span> <span class="ow">in</span> <span class="n">sources</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="k">else</span> <span class="s">&quot;&quot;</span>
+            <span class="n">index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__addChannel</span><span class="p">(</span><span class="n">cnf</span><span class="p">,</span> <span class="n">ctrl</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="n">fullname</span><span class="p">,</span>
+                                      <span class="n">dontdisplay</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">source</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">describer</span> <span class="o">=</span> <span class="n">Describer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__configServer</span><span class="p">)</span>
+            <span class="n">sds</span> <span class="o">=</span> <span class="n">describer</span><span class="o">.</span><span class="n">dataSources</span><span class="p">([</span><span class="n">device</span><span class="p">])</span>
+            <span class="k">if</span> <span class="n">sds</span><span class="p">:</span>
+                <span class="n">js</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">sds</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                <span class="k">if</span> <span class="n">js</span><span class="p">[</span><span class="s">&quot;dstype&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;TANGO&#39;</span><span class="p">:</span>
+                    <span class="n">ctrl</span> <span class="o">=</span> <span class="s">&quot;__tango__&quot;</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__addController</span><span class="p">(</span><span class="n">cnf</span><span class="p">,</span> <span class="n">ctrl</span><span class="p">,</span> <span class="n">fulltimer</span><span class="p">)</span>
+                    <span class="n">index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__addTangoChannel</span><span class="p">(</span>
+                        <span class="n">cnf</span><span class="p">,</span> <span class="n">ctrl</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">js</span><span class="p">[</span><span class="s">&quot;record&quot;</span><span class="p">]),</span>
+                        <span class="n">dontdisplay</span><span class="p">,</span> <span class="n">index</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">index</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">__addController</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">cnf</span><span class="p">,</span> <span class="n">ctrl</span><span class="p">,</span> <span class="n">fulltimer</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; adds controller into mntgrp configuration dictionary</span>
+
+<span class="sd">        :param cnf: mntgrp configuration dictionary</span>
+<span class="sd">        :param ctrl: controller device name</span>
+<span class="sd">        :param fulltimer: full timer name</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="s">&#39;controllers&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">cnf</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">cnf</span><span class="p">[</span><span class="s">&#39;controllers&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">if</span> <span class="n">ctrl</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">cnf</span><span class="p">[</span><span class="s">&#39;controllers&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">cnf</span><span class="p">[</span><span class="s">&#39;controllers&#39;</span><span class="p">][</span><span class="n">ctrl</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="n">cnf</span><span class="p">[</span><span class="s">&#39;controllers&#39;</span><span class="p">][</span><span class="n">ctrl</span><span class="p">][</span><span class="s">&#39;units&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="n">cnf</span><span class="p">[</span><span class="s">&#39;controllers&#39;</span><span class="p">][</span><span class="n">ctrl</span><span class="p">][</span><span class="s">&#39;units&#39;</span><span class="p">][</span><span class="s">&#39;0&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="n">cnf</span><span class="p">[</span><span class="s">&#39;controllers&#39;</span><span class="p">][</span><span class="n">ctrl</span><span class="p">][</span><span class="s">&#39;units&#39;</span><span class="p">][</span><span class="s">&#39;0&#39;</span><span class="p">][</span>
+                <span class="s">u&#39;channels&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="n">cnf</span><span class="p">[</span><span class="s">&#39;controllers&#39;</span><span class="p">][</span><span class="n">ctrl</span><span class="p">][</span><span class="s">&#39;units&#39;</span><span class="p">][</span><span class="s">&#39;0&#39;</span><span class="p">][</span><span class="s">&#39;id&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">cnf</span><span class="p">[</span><span class="s">&#39;controllers&#39;</span><span class="p">][</span><span class="n">ctrl</span><span class="p">][</span><span class="s">&#39;units&#39;</span><span class="p">][</span><span class="s">&#39;0&#39;</span><span class="p">][</span>
+                <span class="s">u&#39;monitor&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fulltimer</span>
+            <span class="n">cnf</span><span class="p">[</span><span class="s">&#39;controllers&#39;</span><span class="p">][</span><span class="n">ctrl</span><span class="p">][</span><span class="s">&#39;units&#39;</span><span class="p">][</span><span class="s">&#39;0&#39;</span><span class="p">][</span>
+                <span class="s">u&#39;timer&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fulltimer</span>
+            <span class="n">cnf</span><span class="p">[</span><span class="s">&#39;controllers&#39;</span><span class="p">][</span><span class="n">ctrl</span><span class="p">][</span><span class="s">&#39;units&#39;</span><span class="p">][</span><span class="s">&#39;0&#39;</span><span class="p">][</span>
+                <span class="s">u&#39;trigger_type&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">__addChannel</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">cnf</span><span class="p">,</span> <span class="n">ctrl</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="n">fullname</span><span class="p">,</span> <span class="n">dontdisplay</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span>
+                     <span class="n">source</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; adds channel into mngrp configuration dictionary</span>
+
+<span class="sd">        :param cnf: mntgrp configuration dictionary</span>
+<span class="sd">        :param ctrl: controller device name</span>
+<span class="sd">        :param device: alias device name</span>
+<span class="sd">        :param fullname: full device name</span>
+<span class="sd">        :param dontdisplay: hidden channels</span>
+<span class="sd">        :param index: channel index</span>
+<span class="sd">        :param source: channel source</span>
+<span class="sd">        :returns: next index</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">ctrlChannels</span> <span class="o">=</span> <span class="n">cnf</span><span class="p">[</span><span class="s">&#39;controllers&#39;</span><span class="p">][</span><span class="n">ctrl</span><span class="p">][</span><span class="s">&#39;units&#39;</span><span class="p">][</span><span class="s">&#39;0&#39;</span><span class="p">][</span>
+            <span class="s">u&#39;channels&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">fullname</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">ctrlChannels</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">dsource</span> <span class="o">=</span> <span class="n">source</span><span class="o">.</span><span class="n">encode</span><span class="p">()</span> <span class="ow">or</span> <span class="n">PoolUtils</span><span class="o">.</span><span class="n">getSource</span><span class="p">(</span><span class="n">fullname</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">dsource</span><span class="p">:</span>
+                <span class="n">dsource</span> <span class="o">=</span> <span class="s">&#39;</span><span class="si">%s</span><span class="s">/</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">fullname</span><span class="o">.</span><span class="n">encode</span><span class="p">(),</span> <span class="s">&#39;Value&#39;</span><span class="p">)</span>
+            <span class="n">shp</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">ut</span> <span class="o">=</span> <span class="n">TangoUtils</span><span class="o">.</span><span class="n">getShapeTypeUnit</span><span class="p">(</span><span class="n">dsource</span><span class="p">)</span>
+            <span class="n">dct</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="n">dct</span><span class="p">[</span><span class="s">&#39;_controller_name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">unicode</span><span class="p">(</span><span class="n">ctrl</span><span class="p">)</span>
+            <span class="n">dct</span><span class="p">[</span><span class="s">&#39;_unit_id&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">u&#39;0&#39;</span>
+            <span class="n">dct</span><span class="p">[</span><span class="s">&#39;conditioning&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">u&#39;&#39;</span>
+            <span class="n">dct</span><span class="p">[</span><span class="s">&#39;data_type&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dt</span>
+            <span class="n">dct</span><span class="p">[</span><span class="s">&#39;data_units&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ut</span>
+            <span class="n">dct</span><span class="p">[</span><span class="s">&#39;enabled&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
+            <span class="n">dct</span><span class="p">[</span><span class="s">&#39;full_name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fullname</span>
+            <span class="n">dct</span><span class="p">[</span><span class="s">&#39;index&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">index</span>
+            <span class="n">index</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">dct</span><span class="p">[</span><span class="s">&#39;instrument&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span>
+            <span class="n">dct</span><span class="p">[</span><span class="s">&#39;label&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">unicode</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+            <span class="n">dct</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">unicode</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+            <span class="n">dct</span><span class="p">[</span><span class="s">&#39;ndim&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">dct</span><span class="p">[</span><span class="s">&#39;nexus_path&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">u&#39;&#39;</span>
+            <span class="n">dct</span><span class="p">[</span><span class="s">&#39;normalization&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">dct</span><span class="p">[</span><span class="s">&#39;output&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
+            <span class="n">dct</span><span class="p">[</span><span class="s">&#39;shape&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">shp</span>
+
+            <span class="k">if</span> <span class="n">device</span> <span class="ow">in</span> <span class="n">dontdisplay</span><span class="p">:</span>
+                <span class="n">dct</span><span class="p">[</span><span class="s">&#39;plot_axes&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="n">dct</span><span class="p">[</span><span class="s">&#39;plot_type&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">elif</span> <span class="n">dct</span><span class="p">[</span><span class="s">&#39;shape&#39;</span><span class="p">]</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">dct</span><span class="p">[</span><span class="s">&#39;shape&#39;</span><span class="p">])</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">dct</span><span class="p">[</span><span class="s">&#39;plot_axes&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;&lt;idx&gt;&#39;</span><span class="p">]</span>
+                <span class="n">dct</span><span class="p">[</span><span class="s">&#39;plot_type&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="k">elif</span> <span class="n">dct</span><span class="p">[</span><span class="s">&#39;shape&#39;</span><span class="p">]</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">dct</span><span class="p">[</span><span class="s">&#39;shape&#39;</span><span class="p">])</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="n">dct</span><span class="p">[</span><span class="s">&#39;plot_axes&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;&lt;idx&gt;&#39;</span><span class="p">,</span> <span class="s">&#39;&lt;idx&gt;&#39;</span><span class="p">]</span>
+                <span class="n">dct</span><span class="p">[</span><span class="s">&#39;plot_type&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">dct</span><span class="p">[</span><span class="s">&#39;plot_axes&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;&lt;mov&gt;&#39;</span><span class="p">]</span>
+                <span class="n">dct</span><span class="p">[</span><span class="s">&#39;plot_type&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+
+            <span class="n">dct</span><span class="p">[</span><span class="s">&#39;source&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dsource</span>
+            <span class="n">ctrlChannels</span><span class="p">[</span><span class="n">fullname</span><span class="p">]</span> <span class="o">=</span> <span class="n">dct</span>
+
+        <span class="k">return</span> <span class="n">index</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">__addTangoChannel</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">cnf</span><span class="p">,</span> <span class="n">ctrl</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">dontdisplay</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; adds tango channel into mntgrp configuration dictionary</span>
+
+<span class="sd">        :param cnf: mntgrp configuration dictionary</span>
+<span class="sd">        :param ctrl: controller device name</span>
+<span class="sd">        :param device: alias device name</span>
+<span class="sd">        :param record: tango channel sources</span>
+<span class="sd">        :param dontdisplay: hidden channels</span>
+<span class="sd">        :param index: channel index</span>
+<span class="sd">        :returns: next index</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">ctrlChannels</span> <span class="o">=</span> <span class="n">cnf</span><span class="p">[</span><span class="s">&#39;controllers&#39;</span><span class="p">][</span><span class="n">ctrl</span><span class="p">][</span><span class="s">&#39;units&#39;</span><span class="p">][</span><span class="s">&#39;0&#39;</span><span class="p">][</span>
+            <span class="s">u&#39;channels&#39;</span><span class="p">]</span>
+        <span class="n">fullname</span> <span class="o">=</span> <span class="s">&quot;tango://</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">record</span>
+        <span class="n">srecord</span> <span class="o">=</span> <span class="n">record</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&quot;/&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">srecord</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">srecord</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">and</span> <span class="s">&quot;:&quot;</span> <span class="ow">in</span> <span class="n">srecord</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+            <span class="n">label</span> <span class="o">=</span> <span class="s">&quot;/&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">srecord</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">label</span> <span class="o">=</span> <span class="n">record</span>
+        <span class="k">if</span> <span class="n">fullname</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">ctrlChannels</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">source</span> <span class="o">=</span> <span class="n">record</span>
+            <span class="n">shp</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">ut</span> <span class="o">=</span> <span class="n">TangoUtils</span><span class="o">.</span><span class="n">getShapeTypeUnit</span><span class="p">(</span><span class="n">source</span><span class="p">)</span>
+            <span class="n">dct</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="n">dct</span><span class="p">[</span><span class="s">&#39;_controller_name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">unicode</span><span class="p">(</span><span class="n">ctrl</span><span class="p">)</span>
+            <span class="n">dct</span><span class="p">[</span><span class="s">&#39;_unit_id&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">u&#39;0&#39;</span>
+            <span class="n">dct</span><span class="p">[</span><span class="s">&#39;conditioning&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">u&#39;&#39;</span>
+            <span class="n">dct</span><span class="p">[</span><span class="s">&#39;data_type&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dt</span>
+            <span class="n">dct</span><span class="p">[</span><span class="s">&#39;data_units&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ut</span>
+            <span class="n">dct</span><span class="p">[</span><span class="s">&#39;enabled&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
+            <span class="n">dct</span><span class="p">[</span><span class="s">&#39;full_name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fullname</span>
+            <span class="n">dct</span><span class="p">[</span><span class="s">&#39;index&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">index</span>
+            <span class="n">index</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">dct</span><span class="p">[</span><span class="s">&#39;instrument&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span>
+            <span class="n">dct</span><span class="p">[</span><span class="s">&#39;label&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">unicode</span><span class="p">(</span><span class="n">label</span><span class="p">)</span>
+            <span class="n">dct</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">unicode</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+            <span class="n">dct</span><span class="p">[</span><span class="s">&#39;ndim&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">dct</span><span class="p">[</span><span class="s">&#39;nexus_path&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">u&#39;&#39;</span>
+            <span class="n">dct</span><span class="p">[</span><span class="s">&#39;normalization&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">dct</span><span class="p">[</span><span class="s">&#39;output&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
+            <span class="n">dct</span><span class="p">[</span><span class="s">&#39;shape&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">shp</span>
+
+            <span class="k">if</span> <span class="n">device</span> <span class="ow">in</span> <span class="n">dontdisplay</span><span class="p">:</span>
+                <span class="n">dct</span><span class="p">[</span><span class="s">&#39;plot_axes&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="n">dct</span><span class="p">[</span><span class="s">&#39;plot_type&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">elif</span> <span class="n">dct</span><span class="p">[</span><span class="s">&#39;shape&#39;</span><span class="p">]</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">dct</span><span class="p">[</span><span class="s">&#39;shape&#39;</span><span class="p">])</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">dct</span><span class="p">[</span><span class="s">&#39;plot_axes&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;&lt;idx&gt;&#39;</span><span class="p">]</span>
+                <span class="n">dct</span><span class="p">[</span><span class="s">&#39;plot_type&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="k">elif</span> <span class="n">dct</span><span class="p">[</span><span class="s">&#39;shape&#39;</span><span class="p">]</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">dct</span><span class="p">[</span><span class="s">&#39;shape&#39;</span><span class="p">])</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="n">dct</span><span class="p">[</span><span class="s">&#39;plot_axes&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;&lt;idx&gt;&#39;</span><span class="p">,</span> <span class="s">&#39;&lt;idx&gt;&#39;</span><span class="p">]</span>
+                <span class="n">dct</span><span class="p">[</span><span class="s">&#39;plot_type&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">dct</span><span class="p">[</span><span class="s">&#39;plot_axes&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;&lt;mov&gt;&#39;</span><span class="p">]</span>
+                <span class="n">dct</span><span class="p">[</span><span class="s">&#39;plot_type&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+
+            <span class="n">dct</span><span class="p">[</span><span class="s">&#39;source&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">source</span>
+            <span class="n">ctrlChannels</span><span class="p">[</span><span class="n">fullname</span><span class="p">]</span> <span class="o">=</span> <span class="n">dct</span>
+
+        <span class="k">return</span> <span class="n">index</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">NXSRecSelector 3.5.0 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Module code</a> &raquo;</li>
+          <li><a href="../nxsrecconfig.html" >nxsrecconfig</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012-2016 DESY, Jan Kotanski &lt;jkotan@mail.desy.de&gt;
+
+GNU GENERAL PUBLIC LICENSE, version 3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,713 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>nxsrecconfig.Utils &mdash; NXSRecSelector 3.5.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '3.5.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="NXSRecSelector 3.5.0 documentation" href="../../index.html" />
+    <link rel="up" title="nxsrecconfig" href="../nxsrecconfig.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">NXSRecSelector 3.5.0 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Module code</a> &raquo;</li>
+          <li><a href="../nxsrecconfig.html" accesskey="U">nxsrecconfig</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for nxsrecconfig.Utils</h1><div class="highlight"><pre>
+<span class="c">#!/usr/bin/env python</span>
+<span class="c">#   This file is part of nxsrecconfig - NeXus Sardana Recorder Settings</span>
+<span class="c">#</span>
+<span class="c">#    Copyright (C) 2014-2016 DESY, Jan Kotanski &lt;jkotan@mail.desy.de&gt;</span>
+<span class="c">#</span>
+<span class="c">#    nexdatas is free software: you can redistribute it and/or modify</span>
+<span class="c">#    it under the terms of the GNU General Public License as published by</span>
+<span class="c">#    the Free Software Foundation, either version 3 of the License, or</span>
+<span class="c">#    (at your option) any later version.</span>
+<span class="c">#</span>
+<span class="c">#    nexdatas is distributed in the hope that it will be useful,</span>
+<span class="c">#    but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c">#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="c">#    GNU General Public License for more details.</span>
+<span class="c">#</span>
+<span class="c">#    You should have received a copy of the GNU General Public License</span>
+<span class="c">#    along with nexdatas.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+<span class="c">#</span>
+
+<span class="sd">&quot;&quot;&quot;  Tango Utilities &quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">PyTango</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">pickle</span>
+<span class="kn">import</span> <span class="nn">numpy</span>
+<span class="kn">import</span> <span class="nn">fnmatch</span>
+
+
+<div class="viewcode-block" id="Utils"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.Utils">[docs]</a><span class="k">class</span> <span class="nc">Utils</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;  Miscellaneous Utilities &quot;&quot;&quot;</span>
+
+    <span class="c">##</span>
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="Utils.compareDict"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.Utils.compareDict">[docs]</a>    <span class="k">def</span> <span class="nf">compareDict</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">dct</span><span class="p">,</span> <span class="n">dct2</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; copares two dictionaries</span>
+
+<span class="sd">        :param dct: first dictinary</span>
+<span class="sd">        :param dct2: second dictinary</span>
+<span class="sd">        :returns: if dictionaries are the same</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dct</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">False</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dct2</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">False</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">dct</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">dct2</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+            <span class="k">return</span> <span class="bp">False</span>
+        <span class="n">status</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">dct</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dct2</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="n">status</span> <span class="o">=</span> <span class="bp">False</span>
+                <span class="k">break</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                <span class="n">status</span> <span class="o">=</span> <span class="n">Utils</span><span class="o">.</span><span class="n">compareDict</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">dct2</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">status</span><span class="p">:</span>
+                    <span class="k">break</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">v</span> <span class="o">!=</span> <span class="n">dct2</span><span class="p">[</span><span class="n">k</span><span class="p">]:</span>
+                    <span class="n">status</span> <span class="o">=</span> <span class="bp">False</span>
+                    <span class="k">break</span>
+        <span class="k">return</span> <span class="n">status</span>
+</div>
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="Utils.getRecord"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.Utils.getRecord">[docs]</a>    <span class="k">def</span> <span class="nf">getRecord</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; provides datasource record from xml dom node</span>
+
+<span class="sd">        :param node: xml DOM node</span>
+<span class="sd">        :returns: datasource record</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
+        <span class="n">host</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="n">port</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="n">dname</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="n">rname</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="n">device</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">getElementsByTagName</span><span class="p">(</span><span class="s">&quot;device&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">device</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">device</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">device</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">hasAttribute</span><span class="p">(</span><span class="s">&quot;hostname&quot;</span><span class="p">):</span>
+                <span class="n">host</span> <span class="o">=</span> <span class="n">device</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">attributes</span><span class="p">[</span><span class="s">&quot;hostname&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+            <span class="k">if</span> <span class="n">device</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">hasAttribute</span><span class="p">(</span><span class="s">&quot;port&quot;</span><span class="p">):</span>
+                <span class="n">port</span> <span class="o">=</span> <span class="n">device</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">attributes</span><span class="p">[</span><span class="s">&quot;port&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+            <span class="k">if</span> <span class="n">device</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">hasAttribute</span><span class="p">(</span><span class="s">&quot;name&quot;</span><span class="p">):</span>
+                <span class="n">dname</span> <span class="o">=</span> <span class="n">device</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">attributes</span><span class="p">[</span><span class="s">&quot;name&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+
+        <span class="n">record</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">getElementsByTagName</span><span class="p">(</span><span class="s">&quot;record&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">record</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">record</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">record</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">hasAttribute</span><span class="p">(</span><span class="s">&quot;name&quot;</span><span class="p">):</span>
+                <span class="n">rname</span> <span class="o">=</span> <span class="n">record</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">attributes</span><span class="p">[</span><span class="s">&quot;name&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+                <span class="k">if</span> <span class="n">dname</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">host</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="ow">not</span> <span class="n">port</span><span class="p">:</span>
+                            <span class="n">port</span> <span class="o">=</span> <span class="s">&#39;10000&#39;</span>
+                        <span class="n">res</span> <span class="o">=</span> <span class="s">&#39;</span><span class="si">%s</span><span class="s">:</span><span class="si">%s</span><span class="s">/</span><span class="si">%s</span><span class="s">/</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="p">,</span> <span class="n">dname</span><span class="p">,</span> <span class="n">rname</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">res</span> <span class="o">=</span> <span class="s">&#39;</span><span class="si">%s</span><span class="s">/</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">dname</span><span class="p">,</span> <span class="n">rname</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">res</span> <span class="o">=</span> <span class="n">rname</span>
+        <span class="k">return</span> <span class="n">res</span>
+</div>
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="Utils.stringToDictJson"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.Utils.stringToDictJson">[docs]</a>    <span class="k">def</span> <span class="nf">stringToDictJson</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">string</span><span class="p">,</span> <span class="n">toBool</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; converts string to json dictionary</span>
+
+<span class="sd">        :param string: string with list of item or json dictionary</span>
+<span class="sd">        :param toBool: if true convert dictionary values to bool</span>
+<span class="sd">        :returns: json dictionary</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">string</span> <span class="ow">or</span> <span class="n">string</span> <span class="o">==</span> <span class="s">&quot;Not initialised&quot;</span><span class="p">:</span>
+                <span class="k">return</span> <span class="s">&quot;{}&quot;</span>
+            <span class="n">acps</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">string</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">acps</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">AssertionError</span><span class="p">()</span>
+            <span class="n">jstring</span> <span class="o">=</span> <span class="n">string</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="ne">AssertionError</span><span class="p">):</span>
+            <span class="n">lst</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s">&quot;[:,;]&quot;</span><span class="p">,</span> <span class="s">&quot; &quot;</span><span class="p">,</span> <span class="n">string</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">lst</span><span class="p">)</span> <span class="o">%</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="n">lst</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&quot;&quot;</span><span class="p">)</span>
+            <span class="n">dct</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="nb">iter</span><span class="p">(</span><span class="n">lst</span><span class="p">)]</span> <span class="o">*</span> <span class="mi">2</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">toBool</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">dct</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                    <span class="n">dct</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="bp">False</span> \
+                        <span class="k">if</span> <span class="n">dct</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s">&#39;false&#39;</span> <span class="k">else</span> <span class="bp">True</span>
+            <span class="n">jstring</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">dct</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">jstring</span>
+</div>
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="Utils.stringToListJson"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.Utils.stringToListJson">[docs]</a>    <span class="k">def</span> <span class="nf">stringToListJson</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">string</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; converts string to json list</span>
+
+<span class="sd">        :param string: with list of item or json list</span>
+<span class="sd">        :returns: json list</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">string</span> <span class="ow">or</span> <span class="n">string</span> <span class="o">==</span> <span class="s">&quot;Not initialised&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s">&quot;[]&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">acps</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">string</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">acps</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)):</span>
+                <span class="k">raise</span> <span class="ne">AssertionError</span><span class="p">()</span>
+            <span class="n">jstring</span> <span class="o">=</span> <span class="n">string</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="ne">AssertionError</span><span class="p">):</span>
+            <span class="n">lst</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s">&quot;[:,;]&quot;</span><span class="p">,</span> <span class="s">&quot;  &quot;</span><span class="p">,</span> <span class="n">string</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+            <span class="n">jstring</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">lst</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">jstring</span>
+</div>
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="Utils.toString"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.Utils.toString">[docs]</a>    <span class="k">def</span> <span class="nf">toString</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; converts list/dict/object of unicode/string to string object</span>
+
+<span class="sd">        :param obj: given unicode/string object</span>
+<span class="sd">        :returns: string object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="nb">unicode</span><span class="p">):</span>
+            <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="k">return</span> <span class="p">[</span><span class="n">cls</span><span class="o">.</span><span class="n">toString</span><span class="p">(</span><span class="n">el</span><span class="p">)</span> <span class="k">for</span> <span class="n">el</span> <span class="ow">in</span> <span class="n">obj</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="k">return</span> <span class="nb">dict</span><span class="p">([(</span><span class="n">cls</span><span class="o">.</span><span class="n">toString</span><span class="p">(</span><span class="n">key</span><span class="p">),</span> <span class="n">cls</span><span class="o">.</span><span class="n">toString</span><span class="p">(</span><span class="n">value</span><span class="p">))</span>
+                         <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">obj</span><span class="o">.</span><span class="n">iteritems</span><span class="p">()])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">obj</span>
+
+</div></div>
+<div class="viewcode-block" id="TangoUtils"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.TangoUtils">[docs]</a><span class="k">class</span> <span class="nc">TangoUtils</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;  Tango Utilities &quot;&quot;&quot;</span>
+
+    <span class="c">#: map of Tango:Numpy types</span>
+    <span class="n">tTnp</span> <span class="o">=</span> <span class="p">{</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevLong64</span><span class="p">:</span> <span class="s">&quot;int64&quot;</span><span class="p">,</span> <span class="n">PyTango</span><span class="o">.</span><span class="n">DevLong</span><span class="p">:</span> <span class="s">&quot;int32&quot;</span><span class="p">,</span>
+            <span class="n">PyTango</span><span class="o">.</span><span class="n">DevShort</span><span class="p">:</span> <span class="s">&quot;int16&quot;</span><span class="p">,</span> <span class="n">PyTango</span><span class="o">.</span><span class="n">DevUChar</span><span class="p">:</span> <span class="s">&quot;uint8&quot;</span><span class="p">,</span>
+            <span class="n">PyTango</span><span class="o">.</span><span class="n">DevULong64</span><span class="p">:</span> <span class="s">&quot;uint64&quot;</span><span class="p">,</span> <span class="n">PyTango</span><span class="o">.</span><span class="n">DevULong</span><span class="p">:</span> <span class="s">&quot;uint32&quot;</span><span class="p">,</span>
+            <span class="n">PyTango</span><span class="o">.</span><span class="n">DevUShort</span><span class="p">:</span> <span class="s">&quot;uint16&quot;</span><span class="p">,</span> <span class="n">PyTango</span><span class="o">.</span><span class="n">DevDouble</span><span class="p">:</span> <span class="s">&quot;float64&quot;</span><span class="p">,</span>
+            <span class="n">PyTango</span><span class="o">.</span><span class="n">DevFloat</span><span class="p">:</span> <span class="s">&quot;float32&quot;</span><span class="p">,</span> <span class="n">PyTango</span><span class="o">.</span><span class="n">DevString</span><span class="p">:</span> <span class="s">&quot;string&quot;</span><span class="p">,</span>
+            <span class="n">PyTango</span><span class="o">.</span><span class="n">DevBoolean</span><span class="p">:</span> <span class="s">&quot;bool&quot;</span><span class="p">,</span> <span class="n">PyTango</span><span class="o">.</span><span class="n">DevEncoded</span><span class="p">:</span> <span class="s">&quot;encoded&quot;</span><span class="p">}</span>
+
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="TangoUtils.openProxy"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.TangoUtils.openProxy">[docs]</a>    <span class="k">def</span> <span class="nf">openProxy</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="n">counter</span><span class="o">=</span><span class="mi">1000</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; opens device proxy of the given device</span>
+
+<span class="sd">        :param device: device name</span>
+<span class="sd">        :returns: DeviceProxy of device</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">found</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="n">cnt</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">cnfServer</span> <span class="o">=</span> <span class="n">PyTango</span><span class="o">.</span><span class="n">DeviceProxy</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">device</span><span class="p">))</span>
+
+        <span class="k">while</span> <span class="ow">not</span> <span class="n">found</span> <span class="ow">and</span> <span class="n">cnt</span> <span class="o">&lt;</span> <span class="n">counter</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">cnt</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.01</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">cnfServer</span><span class="o">.</span><span class="n">ping</span><span class="p">()</span>
+                <span class="n">found</span> <span class="o">=</span> <span class="bp">True</span>
+            <span class="k">except</span> <span class="p">(</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevFailed</span><span class="p">,</span> <span class="n">PyTango</span><span class="o">.</span><span class="n">Except</span><span class="p">,</span> <span class="n">PyTango</span><span class="o">.</span><span class="n">DevError</span><span class="p">):</span>
+                <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.01</span><span class="p">)</span>
+                <span class="n">found</span> <span class="o">=</span> <span class="bp">False</span>
+                <span class="k">if</span> <span class="n">cnt</span> <span class="o">==</span> <span class="n">counter</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="k">raise</span>
+            <span class="n">cnt</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="k">return</span> <span class="n">cnfServer</span>
+</div>
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="TangoUtils.wait"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.TangoUtils.wait">[docs]</a>    <span class="k">def</span> <span class="nf">wait</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">proxy</span><span class="p">,</span> <span class="n">counter</span><span class="o">=</span><span class="mi">100</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;waits for device proxy not running</span>
+
+<span class="sd">        :param proxy: device name</span>
+<span class="sd">        :returns: DeviceProxy of device</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">found</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="n">cnt</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">while</span> <span class="ow">not</span> <span class="n">found</span> <span class="ow">and</span> <span class="n">cnt</span> <span class="o">&lt;</span> <span class="n">counter</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">cnt</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.01</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">proxy</span><span class="o">.</span><span class="n">State</span><span class="p">()</span> <span class="o">!=</span> <span class="n">PyTango</span><span class="o">.</span><span class="n">DevState</span><span class="o">.</span><span class="n">RUNNING</span><span class="p">:</span>
+                    <span class="n">found</span> <span class="o">=</span> <span class="bp">True</span>
+            <span class="k">except</span> <span class="p">(</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevFailed</span><span class="p">,</span> <span class="n">PyTango</span><span class="o">.</span><span class="n">Except</span><span class="p">,</span> <span class="n">PyTango</span><span class="o">.</span><span class="n">DevError</span><span class="p">):</span>
+                <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.01</span><span class="p">)</span>
+                <span class="n">found</span> <span class="o">=</span> <span class="bp">False</span>
+                <span class="k">if</span> <span class="n">cnt</span> <span class="o">==</span> <span class="n">counter</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="k">raise</span>
+            <span class="n">cnt</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="n">found</span>
+</div>
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="TangoUtils.getProxies"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.TangoUtils.getProxies">[docs]</a>    <span class="k">def</span> <span class="nf">getProxies</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">names</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; provides proxies of given device names</span>
+
+<span class="sd">        :param names: given device names</span>
+<span class="sd">        :returns: list of device DeviceProxies</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">dps</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">names</span><span class="p">:</span>
+            <span class="n">dp</span> <span class="o">=</span> <span class="n">PyTango</span><span class="o">.</span><span class="n">DeviceProxy</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">dp</span><span class="o">.</span><span class="n">ping</span><span class="p">()</span>
+                <span class="n">dps</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dp</span><span class="p">)</span>
+            <span class="k">except</span> <span class="p">(</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevFailed</span><span class="p">,</span> <span class="n">PyTango</span><span class="o">.</span><span class="n">Except</span><span class="p">,</span> <span class="n">PyTango</span><span class="o">.</span><span class="n">DevError</span><span class="p">):</span>
+                <span class="k">pass</span>
+        <span class="k">return</span> <span class="n">dps</span>
+</div>
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="TangoUtils.getDeviceName"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.TangoUtils.getDeviceName">[docs]</a>    <span class="k">def</span> <span class="nf">getDeviceName</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">db</span><span class="p">,</span> <span class="n">cname</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; finds device of give class</span>
+
+<span class="sd">        :param db: tango database</span>
+<span class="sd">        :param cname: device class name</span>
+<span class="sd">        :returns: device name if exists</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">servers</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">get_device_exported_for_class</span><span class="p">(</span>
+            <span class="n">cname</span><span class="p">)</span><span class="o">.</span><span class="n">value_string</span>
+        <span class="n">device</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
+        <span class="k">for</span> <span class="n">server</span> <span class="ow">in</span> <span class="n">servers</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">dp</span> <span class="o">=</span> <span class="n">PyTango</span><span class="o">.</span><span class="n">DeviceProxy</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">server</span><span class="p">))</span>
+                <span class="n">dp</span><span class="o">.</span><span class="n">ping</span><span class="p">()</span>
+                <span class="n">device</span> <span class="o">=</span> <span class="n">server</span>
+                <span class="k">break</span>
+            <span class="k">except</span> <span class="p">(</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevFailed</span><span class="p">,</span> <span class="n">PyTango</span><span class="o">.</span><span class="n">Except</span><span class="p">,</span> <span class="n">PyTango</span><span class="o">.</span><span class="n">DevError</span><span class="p">):</span>
+                <span class="k">pass</span>
+        <span class="k">return</span> <span class="n">device</span>
+</div>
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="TangoUtils.getFullAttrName"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.TangoUtils.getFullAttrName">[docs]</a>    <span class="k">def</span> <span class="nf">getFullAttrName</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">source</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; provides tango device full name with host and port</span>
+
+<span class="sd">        :param source: string witg device name and its attribute</span>
+<span class="sd">        :returns: database host and port in tuple</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="s">&#39;:&#39;</span> <span class="ow">in</span> <span class="n">source</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s">&quot;tango://</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">source</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">db</span> <span class="o">=</span> <span class="n">PyTango</span><span class="o">.</span><span class="n">Database</span><span class="p">()</span>
+            <span class="n">host</span><span class="p">,</span> <span class="n">port</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">get_db_host</span><span class="p">(),</span> <span class="n">db</span><span class="o">.</span><span class="n">get_db_port</span><span class="p">()</span>
+            <span class="k">return</span> <span class="s">&quot;tango://</span><span class="si">%s</span><span class="s">:</span><span class="si">%s</span><span class="s">/</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="p">,</span> <span class="n">source</span><span class="p">)</span>
+</div>
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="TangoUtils.getShapeTypeUnit"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.TangoUtils.getShapeTypeUnit">[docs]</a>    <span class="k">def</span> <span class="nf">getShapeTypeUnit</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">source</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; retrives shape type units for attribure</span>
+
+<span class="sd">        :param source: string with device name and its attribute</span>
+<span class="sd">        :returns: (shape, data_type, units)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">vl</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="n">shp</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">dt</span> <span class="o">=</span> <span class="s">&#39;float64&#39;</span>
+        <span class="n">ut</span> <span class="o">=</span> <span class="s">&#39;No units&#39;</span>
+        <span class="n">ap</span> <span class="o">=</span> <span class="n">PyTango</span><span class="o">.</span><span class="n">AttributeProxy</span><span class="p">(</span><span class="n">source</span><span class="p">)</span>
+        <span class="n">da</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="n">ac</span> <span class="o">=</span> <span class="bp">None</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">ac</span> <span class="o">=</span> <span class="n">ap</span><span class="o">.</span><span class="n">get_config</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">ac</span><span class="o">.</span><span class="n">data_format</span> <span class="o">!=</span> <span class="n">PyTango</span><span class="o">.</span><span class="n">AttrDataFormat</span><span class="o">.</span><span class="n">SCALAR</span><span class="p">:</span>
+                <span class="n">da</span> <span class="o">=</span> <span class="n">ap</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+                <span class="n">vl</span> <span class="o">=</span> <span class="n">da</span><span class="o">.</span><span class="n">value</span>
+        <span class="k">except</span> <span class="p">(</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevFailed</span><span class="p">,</span> <span class="n">PyTango</span><span class="o">.</span><span class="n">Except</span><span class="p">,</span> <span class="n">PyTango</span><span class="o">.</span><span class="n">DevError</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">ac</span> <span class="ow">and</span> <span class="n">ac</span><span class="o">.</span><span class="n">data_format</span> <span class="o">!=</span> <span class="n">PyTango</span><span class="o">.</span><span class="n">AttrDataFormat</span><span class="o">.</span><span class="n">SCALAR</span> \
+                    <span class="ow">and</span> <span class="p">(</span><span class="n">da</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">da</span><span class="p">,</span> <span class="s">&#39;dim_x&#39;</span><span class="p">)):</span>
+                <span class="k">raise</span>
+
+        <span class="k">if</span> <span class="n">vl</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">shp</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">vl</span><span class="p">))</span>
+        <span class="k">elif</span> <span class="n">ac</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">ac</span><span class="o">.</span><span class="n">data_format</span> <span class="o">!=</span> <span class="n">PyTango</span><span class="o">.</span><span class="n">AttrDataFormat</span><span class="o">.</span><span class="n">SCALAR</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">da</span><span class="o">.</span><span class="n">dim_x</span> <span class="ow">and</span> <span class="n">da</span><span class="o">.</span><span class="n">dim_x</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="n">shp</span> <span class="o">=</span> <span class="p">[</span><span class="n">da</span><span class="o">.</span><span class="n">dim_y</span><span class="p">,</span> <span class="n">da</span><span class="o">.</span><span class="n">dim_x</span><span class="p">]</span> \
+                        <span class="k">if</span> <span class="n">da</span><span class="o">.</span><span class="n">dim_y</span> \
+                        <span class="k">else</span> <span class="p">[</span><span class="n">da</span><span class="o">.</span><span class="n">dim_x</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">ac</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">dt</span> <span class="o">=</span> <span class="n">cls</span><span class="o">.</span><span class="n">tTnp</span><span class="p">[</span><span class="n">ac</span><span class="o">.</span><span class="n">data_type</span><span class="p">]</span>
+            <span class="n">ut</span> <span class="o">=</span> <span class="n">ac</span><span class="o">.</span><span class="n">unit</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">shp</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">ut</span><span class="p">)</span>
+</div>
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="TangoUtils.command"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.TangoUtils.command">[docs]</a>    <span class="k">def</span> <span class="nf">command</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">server</span><span class="p">,</span> <span class="n">command</span><span class="p">,</span> <span class="o">*</span><span class="n">var</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; executes command on server on python package</span>
+
+<span class="sd">        :param server: tango server name or package name</span>
+<span class="sd">        :param command: command name</span>
+<span class="sd">        :param var: command variable list</span>
+<span class="sd">        :returns: command result</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">server</span><span class="p">,</span> <span class="s">&quot;command_inout&quot;</span><span class="p">):</span>
+            <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">server</span><span class="p">,</span> <span class="n">command</span><span class="p">)(</span><span class="o">*</span><span class="n">var</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">var</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">server</span><span class="o">.</span><span class="n">command_inout</span><span class="p">(</span><span class="n">command</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">server</span><span class="o">.</span><span class="n">command_inout</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="o">*</span><span class="n">var</span><span class="p">)</span>
+
+</div></div>
+<div class="viewcode-block" id="MSUtils"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.MSUtils">[docs]</a><span class="k">class</span> <span class="nc">MSUtils</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;  MacroServer Utilities &quot;&quot;&quot;</span>
+
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="MSUtils.getEnv"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.MSUtils.getEnv">[docs]</a>    <span class="k">def</span> <span class="nf">getEnv</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">var</span><span class="p">,</span> <span class="n">ms</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; provides environment variable value</span>
+
+<span class="sd">        :param var: variable name</span>
+<span class="sd">        :param ms: macroserver</span>
+<span class="sd">        :returns: environment variable value</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">active</span> <span class="o">=</span> <span class="s">&quot;&quot;</span>
+        <span class="n">dp</span> <span class="o">=</span> <span class="n">TangoUtils</span><span class="o">.</span><span class="n">openProxy</span><span class="p">(</span><span class="n">ms</span><span class="p">)</span>
+        <span class="n">rec</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">Environment</span>
+        <span class="k">if</span> <span class="n">rec</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;pickle&#39;</span><span class="p">:</span>
+            <span class="n">dc</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">rec</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+            <span class="k">if</span> <span class="s">&#39;new&#39;</span> <span class="ow">in</span> <span class="n">dc</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="ow">and</span> \
+                    <span class="n">var</span> <span class="ow">in</span> <span class="n">dc</span><span class="p">[</span><span class="s">&#39;new&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="n">active</span> <span class="o">=</span> <span class="n">dc</span><span class="p">[</span><span class="s">&#39;new&#39;</span><span class="p">][</span><span class="n">var</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">active</span>
+</div>
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="MSUtils.setEnv"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.MSUtils.setEnv">[docs]</a>    <span class="k">def</span> <span class="nf">setEnv</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">var</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">ms</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; sets environment variable value</span>
+
+<span class="sd">        :param var: variable name</span>
+<span class="sd">        :param value: variable value</span>
+<span class="sd">        :param ms: macroserver</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">dp</span> <span class="o">=</span> <span class="n">TangoUtils</span><span class="o">.</span><span class="n">openProxy</span><span class="p">(</span><span class="n">ms</span><span class="p">)</span>
+        <span class="n">dc</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;new&#39;</span><span class="p">:</span> <span class="p">{}}</span>
+        <span class="n">dc</span><span class="p">[</span><span class="s">&#39;new&#39;</span><span class="p">][</span><span class="n">var</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="n">pk</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">dc</span><span class="p">)</span>
+        <span class="n">dp</span><span class="o">.</span><span class="n">Environment</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;pickle&#39;</span><span class="p">,</span> <span class="n">pk</span><span class="p">]</span>
+</div>
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="MSUtils.setEnvs"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.MSUtils.setEnvs">[docs]</a>    <span class="k">def</span> <span class="nf">setEnvs</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">varvalues</span><span class="p">,</span> <span class="n">ms</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; sets environment variable value</span>
+
+<span class="sd">        :param varvalues: variable value dictionary</span>
+<span class="sd">        :param ms: macroserver</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">dp</span> <span class="o">=</span> <span class="n">TangoUtils</span><span class="o">.</span><span class="n">openProxy</span><span class="p">(</span><span class="n">ms</span><span class="p">)</span>
+        <span class="n">dc</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;new&#39;</span><span class="p">:</span> <span class="p">{}}</span>
+        <span class="k">for</span> <span class="n">var</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">varvalues</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">dc</span><span class="p">[</span><span class="s">&#39;new&#39;</span><span class="p">][</span><span class="n">var</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="n">pk</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">dc</span><span class="p">)</span>
+        <span class="n">dp</span><span class="o">.</span><span class="n">Environment</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;pickle&#39;</span><span class="p">,</span> <span class="n">pk</span><span class="p">]</span>
+</div>
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="MSUtils.usetEnv"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.MSUtils.usetEnv">[docs]</a>    <span class="k">def</span> <span class="nf">usetEnv</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">var</span><span class="p">,</span> <span class="n">ms</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; unsets environment variable</span>
+
+<span class="sd">        :param var: variable name</span>
+<span class="sd">        :param ms: macroserver</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">dp</span> <span class="o">=</span> <span class="n">TangoUtils</span><span class="o">.</span><span class="n">openProxy</span><span class="p">(</span><span class="n">ms</span><span class="p">)</span>
+        <span class="n">dc</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;del&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">var</span><span class="p">]}</span>
+        <span class="n">pk</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">dc</span><span class="p">)</span>
+        <span class="n">dp</span><span class="o">.</span><span class="n">Environment</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;pickle&#39;</span><span class="p">,</span> <span class="n">pk</span><span class="p">]</span>
+</div>
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="MSUtils.getMacroServer"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.MSUtils.getMacroServer">[docs]</a>    <span class="k">def</span> <span class="nf">getMacroServer</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">db</span><span class="p">,</span> <span class="n">door</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; provides macro server of given door</span>
+
+<span class="sd">        :param db: tango database</span>
+<span class="sd">        :param door: given door</span>
+<span class="sd">        :returns: first MacroServer of the given door</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">servers</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">get_device_exported_for_class</span><span class="p">(</span>
+            <span class="s">&quot;MacroServer&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">value_string</span>
+        <span class="n">ms</span> <span class="o">=</span> <span class="s">&quot;&quot;</span>
+        <span class="n">sdoor</span> <span class="o">=</span> <span class="n">door</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&quot;/&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sdoor</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">and</span> <span class="s">&quot;:&quot;</span> <span class="ow">in</span> <span class="n">sdoor</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+            <span class="n">door</span> <span class="o">=</span> <span class="s">&quot;/&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">sdoor</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
+        <span class="k">for</span> <span class="n">server</span> <span class="ow">in</span> <span class="n">servers</span><span class="p">:</span>
+            <span class="n">dp</span> <span class="o">=</span> <span class="n">PyTango</span><span class="o">.</span><span class="n">DeviceProxy</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">server</span><span class="p">))</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">dp</span><span class="p">,</span> <span class="s">&quot;DoorList&quot;</span><span class="p">):</span>
+                <span class="n">lst</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">DoorList</span>
+                <span class="k">if</span> <span class="n">lst</span> <span class="ow">and</span> <span class="n">door</span> <span class="ow">in</span> <span class="n">lst</span><span class="p">:</span>
+                    <span class="n">ms</span> <span class="o">=</span> <span class="n">server</span>
+                    <span class="k">break</span>
+        <span class="k">return</span> <span class="n">ms</span>
+
+</div></div>
+<div class="viewcode-block" id="PoolUtils"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.PoolUtils">[docs]</a><span class="k">class</span> <span class="nc">PoolUtils</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;  Pool Utilities &quot;&quot;&quot;</span>
+
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="PoolUtils.getDeviceControllers"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.PoolUtils.getDeviceControllers">[docs]</a>    <span class="k">def</span> <span class="nf">getDeviceControllers</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">pools</span><span class="p">,</span> <span class="n">devices</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; provides device controller full names</span>
+
+<span class="sd">        :param pools: list of pool devices</span>
+<span class="sd">        :param devices: alias names</span>
+<span class="sd">        :returns: device controller full names</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">lst</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">pool</span> <span class="ow">in</span> <span class="n">pools</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">pool</span><span class="o">.</span><span class="n">ExpChannelList</span><span class="p">:</span>
+                <span class="n">lst</span> <span class="o">+=</span> <span class="n">pool</span><span class="o">.</span><span class="n">ExpChannelList</span>
+        <span class="n">ctrls</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">elm</span> <span class="ow">in</span> <span class="n">lst</span><span class="p">:</span>
+            <span class="n">chan</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">elm</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">chan</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">]</span> <span class="ow">in</span> <span class="n">devices</span><span class="p">:</span>
+                <span class="n">ctrls</span><span class="p">[</span><span class="n">chan</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">chan</span><span class="p">[</span><span class="s">&#39;controller&#39;</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">ctrls</span>
+</div>
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="PoolUtils.getChannelSources"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.PoolUtils.getChannelSources">[docs]</a>    <span class="k">def</span> <span class="nf">getChannelSources</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">pools</span><span class="p">,</span> <span class="n">devices</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; provides channel sources</span>
+
+<span class="sd">        :param pools: list of pool devices</span>
+<span class="sd">        :param devices: alias names</span>
+<span class="sd">        :returns: device sources</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">lst</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">pool</span> <span class="ow">in</span> <span class="n">pools</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">pool</span><span class="o">.</span><span class="n">ExpChannelList</span><span class="p">:</span>
+                <span class="n">lst</span> <span class="o">+=</span> <span class="n">pool</span><span class="o">.</span><span class="n">ExpChannelList</span>
+        <span class="n">srs</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">elm</span> <span class="ow">in</span> <span class="n">lst</span><span class="p">:</span>
+            <span class="n">chan</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">elm</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">chan</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">]</span> <span class="ow">in</span> <span class="n">devices</span><span class="p">:</span>
+                <span class="n">srs</span><span class="p">[</span><span class="n">chan</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">chan</span><span class="p">[</span><span class="s">&#39;source&#39;</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">srs</span>
+</div>
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="PoolUtils.getElementNames"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.PoolUtils.getElementNames">[docs]</a>    <span class="k">def</span> <span class="nf">getElementNames</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">pools</span><span class="p">,</span> <span class="n">listattr</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; provides experimental Channels</span>
+
+<span class="sd">        :param pools: list of pool devices</span>
+<span class="sd">        :param listattr: pool attribute with list</span>
+<span class="sd">        :returns: names from given pool listattr</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">lst</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">elements</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">pool</span> <span class="ow">in</span> <span class="n">pools</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">pool</span><span class="p">,</span> <span class="n">listattr</span><span class="p">):</span>
+                <span class="n">ellist</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">pool</span><span class="p">,</span> <span class="n">listattr</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">ellist</span><span class="p">:</span>
+                    <span class="n">lst</span> <span class="o">+=</span> <span class="n">ellist</span>
+        <span class="k">for</span> <span class="n">elm</span> <span class="ow">in</span> <span class="n">lst</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">elm</span><span class="p">:</span>
+                <span class="n">chan</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">elm</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">chan</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">chan</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                    <span class="n">elements</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">chan</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">elements</span>
+</div>
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="PoolUtils.getFullDeviceNames"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.PoolUtils.getFullDeviceNames">[docs]</a>    <span class="k">def</span> <span class="nf">getFullDeviceNames</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">pools</span><span class="p">,</span> <span class="n">names</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; find device names from aliases</span>
+
+<span class="sd">        :param pools: list of pool devices</span>
+<span class="sd">        :param names: alias names if None returns name for all aliases</span>
+<span class="sd">        :returns: full device name</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">lst</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">pool</span> <span class="ow">in</span> <span class="n">pools</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">pool</span><span class="o">.</span><span class="n">AcqChannelList</span><span class="p">:</span>
+                <span class="n">lst</span> <span class="o">+=</span> <span class="n">pool</span><span class="o">.</span><span class="n">AcqChannelList</span>
+        <span class="n">argout</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">elm</span> <span class="ow">in</span> <span class="n">lst</span><span class="p">:</span>
+            <span class="n">chan</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">elm</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">names</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">or</span> <span class="n">chan</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">]</span> <span class="ow">in</span> <span class="n">names</span><span class="p">:</span>
+                <span class="n">arr</span> <span class="o">=</span> <span class="n">chan</span><span class="p">[</span><span class="s">&#39;full_name&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&quot;/&quot;</span><span class="p">)</span>
+                <span class="n">argout</span><span class="p">[</span><span class="n">chan</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="s">&quot;/&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">arr</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">argout</span>
+</div>
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="PoolUtils.getAliases"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.PoolUtils.getAliases">[docs]</a>    <span class="k">def</span> <span class="nf">getAliases</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">pools</span><span class="p">,</span> <span class="n">names</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; find aliases from fullnames</span>
+
+<span class="sd">        :param pools: list of pool devices</span>
+<span class="sd">        :param names: fullnames if None returns all aliases</span>
+<span class="sd">        :returns: full device name</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">lst</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">pool</span> <span class="ow">in</span> <span class="n">pools</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">pool</span><span class="o">.</span><span class="n">AcqChannelList</span><span class="p">:</span>
+                <span class="n">lst</span> <span class="o">+=</span> <span class="n">pool</span><span class="o">.</span><span class="n">AcqChannelList</span>
+        <span class="n">argout</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">elm</span> <span class="ow">in</span> <span class="n">lst</span><span class="p">:</span>
+            <span class="n">chan</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">elm</span><span class="p">)</span>
+            <span class="n">arr</span> <span class="o">=</span> <span class="n">chan</span><span class="p">[</span><span class="s">&#39;full_name&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&quot;/&quot;</span><span class="p">)</span>
+            <span class="n">fname</span> <span class="o">=</span> <span class="s">&quot;/&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">arr</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+            <span class="k">if</span> <span class="n">names</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">or</span> <span class="n">fname</span> <span class="ow">in</span> <span class="n">names</span><span class="p">:</span>
+                <span class="n">argout</span><span class="p">[</span><span class="n">fname</span><span class="p">]</span> <span class="o">=</span> <span class="n">chan</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">argout</span>
+</div>
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="PoolUtils.getMntGrpName"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.PoolUtils.getMntGrpName">[docs]</a>    <span class="k">def</span> <span class="nf">getMntGrpName</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">pools</span><span class="p">,</span> <span class="n">alias</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; find measurement group name from alias</span>
+
+<span class="sd">        :param pools: list of pool devices</span>
+<span class="sd">        :param alias: mntgrp alias</span>
+<span class="sd">        :returns: full name of the measurement group alias</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">lst</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">pool</span> <span class="ow">in</span> <span class="n">pools</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">pool</span><span class="o">.</span><span class="n">MeasurementGroupList</span><span class="p">:</span>
+                <span class="n">lst</span> <span class="o">+=</span> <span class="n">pool</span><span class="o">.</span><span class="n">MeasurementGroupList</span>
+        <span class="n">argout</span> <span class="o">=</span> <span class="s">&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">elm</span> <span class="ow">in</span> <span class="n">lst</span><span class="p">:</span>
+            <span class="n">chan</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">elm</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">alias</span> <span class="o">==</span> <span class="n">chan</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">]:</span>
+                <span class="n">argout</span> <span class="o">=</span> <span class="n">chan</span><span class="p">[</span><span class="s">&#39;full_name&#39;</span><span class="p">]</span>
+                <span class="k">break</span>
+        <span class="k">return</span> <span class="n">argout</span>
+</div>
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="PoolUtils.getTimers"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.PoolUtils.getTimers">[docs]</a>    <span class="k">def</span> <span class="nf">getTimers</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">pools</span><span class="p">,</span> <span class="n">filters</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; provides tiemrs of given pools</span>
+
+<span class="sd">        :param pools: list of pool devices</span>
+<span class="sd">        :param filters: device name filter list</span>
+<span class="sd">        :returns: list of timer names</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">lst</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">pool</span> <span class="ow">in</span> <span class="n">pools</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">pool</span><span class="o">.</span><span class="n">ExpChannelList</span><span class="p">:</span>
+                <span class="n">lst</span> <span class="o">+=</span> <span class="n">pool</span><span class="o">.</span><span class="n">ExpChannelList</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">filters</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">filters</span><span class="p">,</span> <span class="s">&#39;__iter__&#39;</span><span class="p">):</span>
+            <span class="n">filters</span> <span class="o">=</span> <span class="p">[</span><span class="s">&quot;*dgg*&quot;</span><span class="p">,</span> <span class="s">&quot;*/ctctrl0*&quot;</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">elm</span> <span class="ow">in</span> <span class="n">lst</span><span class="p">:</span>
+            <span class="n">chan</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">elm</span><span class="p">)</span>
+            <span class="n">inter</span> <span class="o">=</span> <span class="n">chan</span><span class="p">[</span><span class="s">&#39;interfaces&#39;</span><span class="p">]</span>
+            <span class="n">source</span> <span class="o">=</span> <span class="n">chan</span><span class="p">[</span><span class="s">&#39;source&#39;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">inter</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)):</span>
+                <span class="k">if</span> <span class="s">&#39;CTExpChannel&#39;</span> <span class="ow">in</span> <span class="n">inter</span><span class="p">:</span>
+                    <span class="n">found</span> <span class="o">=</span> <span class="bp">False</span>
+                    <span class="k">for</span> <span class="n">df</span> <span class="ow">in</span> <span class="n">filters</span><span class="p">:</span>
+                        <span class="n">found</span> <span class="o">=</span> <span class="n">fnmatch</span><span class="o">.</span><span class="n">filter</span><span class="p">([</span><span class="n">source</span><span class="p">],</span> <span class="n">df</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="n">found</span><span class="p">:</span>
+                            <span class="k">break</span>
+                    <span class="k">if</span> <span class="n">found</span><span class="p">:</span>
+                        <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">chan</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">res</span>
+</div>
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="PoolUtils.filterNames"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.PoolUtils.filterNames">[docs]</a>    <span class="k">def</span> <span class="nf">filterNames</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">pools</span><span class="p">,</span> <span class="n">filters</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">lst</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; provides channels of given pools</span>
+
+<span class="sd">        :param pools: list of pool devices</span>
+<span class="sd">        :param filters: device name filter list</span>
+<span class="sd">        :returns: list of timer names</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="n">lst</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">lst</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">pool</span> <span class="ow">in</span> <span class="n">pools</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">pool</span><span class="o">.</span><span class="n">AcqChannelList</span><span class="p">:</span>
+                    <span class="n">lst</span> <span class="o">+=</span> <span class="n">pool</span><span class="o">.</span><span class="n">AcqChannelList</span>
+
+        <span class="k">if</span> <span class="n">filters</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">filters</span><span class="p">,</span> <span class="s">&#39;__iter__&#39;</span><span class="p">):</span>
+            <span class="n">filters</span> <span class="o">=</span> <span class="p">[</span><span class="s">&quot;*&quot;</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">elm</span> <span class="ow">in</span> <span class="n">lst</span><span class="p">:</span>
+            <span class="n">chan</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">elm</span><span class="p">)</span>
+            <span class="n">fullname</span> <span class="o">=</span> <span class="n">chan</span><span class="p">[</span><span class="s">&#39;full_name&#39;</span><span class="p">]</span>
+            <span class="n">found</span> <span class="o">=</span> <span class="bp">False</span>
+            <span class="k">for</span> <span class="n">df</span> <span class="ow">in</span> <span class="n">filters</span><span class="p">:</span>
+                <span class="n">found</span> <span class="o">=</span> <span class="n">fnmatch</span><span class="o">.</span><span class="n">filter</span><span class="p">([</span><span class="n">fullname</span><span class="p">],</span> <span class="n">df</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">found</span><span class="p">:</span>
+                    <span class="k">break</span>
+            <span class="k">if</span> <span class="n">found</span><span class="p">:</span>
+                <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">chan</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">res</span>
+</div>
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="PoolUtils.getSource"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.PoolUtils.getSource">[docs]</a>    <span class="k">def</span> <span class="nf">getSource</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; provides datasource from pool device</span>
+
+<span class="sd">        :param name: pool device name</span>
+<span class="sd">        :returns: source of pool device</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">source</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">dp</span> <span class="o">=</span> <span class="n">PyTango</span><span class="o">.</span><span class="n">DeviceProxy</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">dp</span><span class="p">,</span> <span class="s">&#39;DataSource&#39;</span><span class="p">):</span>
+                <span class="n">ds</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">DataSource</span>
+                <span class="n">sds</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&quot;://&quot;</span><span class="p">)</span>
+                <span class="n">_</span> <span class="o">=</span> <span class="n">PyTango</span><span class="o">.</span><span class="n">AttributeProxy</span><span class="p">(</span><span class="n">sds</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+                <span class="n">source</span> <span class="o">=</span> <span class="n">sds</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">except</span> <span class="p">(</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevFailed</span><span class="p">,</span> <span class="n">PyTango</span><span class="o">.</span><span class="n">Except</span><span class="p">,</span> <span class="n">PyTango</span><span class="o">.</span><span class="n">DevError</span><span class="p">):</span>
+            <span class="k">pass</span>
+        <span class="k">return</span> <span class="n">source</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">NXSRecSelector 3.5.0 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Module code</a> &raquo;</li>
+          <li><a href="../nxsrecconfig.html" >nxsrecconfig</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012-2016 DESY, Jan Kotanski &lt;jkotan@mail.desy.de&gt;
+
+GNU GENERAL PUBLIC LICENSE, version 3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    </div>
+  </body>
+</html>

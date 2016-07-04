@@ -1,0 +1,397 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>nxsrecconfig.Converter &mdash; NXSRecSelector 3.5.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '3.5.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="NXSRecSelector 3.5.0 documentation" href="../../index.html" />
+    <link rel="up" title="nxsrecconfig" href="../nxsrecconfig.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">NXSRecSelector 3.5.0 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Module code</a> &raquo;</li>
+          <li><a href="../nxsrecconfig.html" accesskey="U">nxsrecconfig</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for nxsrecconfig.Converter</h1><div class="highlight"><pre>
+<span class="c">#!/usr/bin/env python</span>
+<span class="c">#   This file is part of nxsrecconfig - NeXus Sardana Recorder Settings</span>
+<span class="c">#</span>
+<span class="c">#    Copyright (C) 2014-2016 DESY, Jan Kotanski &lt;jkotan@mail.desy.de&gt;</span>
+<span class="c">#</span>
+<span class="c">#    nexdatas is free software: you can redistribute it and/or modify</span>
+<span class="c">#    it under the terms of the GNU General Public License as published by</span>
+<span class="c">#    the Free Software Foundation, either version 3 of the License, or</span>
+<span class="c">#    (at your option) any later version.</span>
+<span class="c">#</span>
+<span class="c">#    nexdatas is distributed in the hope that it will be useful,</span>
+<span class="c">#    but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c">#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="c">#    GNU General Public License for more details.</span>
+<span class="c">#</span>
+<span class="c">#    You should have received a copy of the GNU General Public License</span>
+<span class="c">#    along with nexdatas.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+<span class="c">#</span>
+
+<span class="sd">&quot;&quot;&quot;  Selection version converter &quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">json</span>
+
+
+<div class="viewcode-block" id="ConverterXtoY"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Converter.ConverterXtoY">[docs]</a><span class="k">class</span> <span class="nc">ConverterXtoY</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; virtual selection version converter</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; constructor</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c">#: names to convert</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">names</span> <span class="o">=</span> <span class="p">{}</span>
+
+<div class="viewcode-block" id="ConverterXtoY.convert"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Converter.ConverterXtoY.convert">[docs]</a>    <span class="k">def</span> <span class="nf">convert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">selection</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; converts selection to the current selector version</span>
+
+<span class="sd">        :param selection: selection dictionary object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">old</span><span class="p">,</span> <span class="n">new</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">names</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">old</span> <span class="ow">in</span> <span class="n">selection</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="n">selection</span><span class="p">[</span><span class="n">new</span><span class="p">]</span> <span class="o">=</span> <span class="n">selection</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">old</span><span class="p">)</span>
+
+</div></div>
+<div class="viewcode-block" id="Converter2to3"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Converter.Converter2to3">[docs]</a><span class="k">class</span> <span class="nc">Converter2to3</span><span class="p">(</span><span class="n">ConverterXtoY</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Selection converter from version 2 to 3</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; converter</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Converter2to3</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">()</span>
+
+        <span class="c">#: names to convert</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">names</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s">&quot;PreselectedDataSources&quot;</span><span class="p">:</span> <span class="s">&quot;PreselectingDataSources&quot;</span><span class="p">,</span>
+            <span class="s">&quot;InitDataSources&quot;</span><span class="p">:</span> <span class="s">&quot;DataSourcePreselection&quot;</span><span class="p">,</span>
+        <span class="p">}</span>
+
+<div class="viewcode-block" id="Converter2to3.seltoint"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Converter.Converter2to3.seltoint">[docs]</a>    <span class="k">def</span> <span class="nf">seltoint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">jselelem</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; converters list/dict of elements to dictionary with logical values</span>
+
+<span class="sd">        :param jselelem: json list or dict selection element</span>
+<span class="sd">        :returns: json dictionary</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">sel</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">jselelem</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sel</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span>
+                <span class="nb">dict</span><span class="p">((</span><span class="n">key</span><span class="p">,</span> <span class="bp">True</span> <span class="k">if</span> <span class="n">vl</span> <span class="k">else</span> <span class="bp">None</span><span class="p">)</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">vl</span> <span class="ow">in</span> <span class="n">sel</span><span class="o">.</span><span class="n">items</span><span class="p">()))</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sel</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)):</span>
+            <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="nb">dict</span><span class="p">((</span><span class="n">key</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">sel</span><span class="p">))</span>
+</div>
+<div class="viewcode-block" id="Converter2to3.convert"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Converter.Converter2to3.convert">[docs]</a>    <span class="k">def</span> <span class="nf">convert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">selection</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; converts selection from version 2 to 3</span>
+
+<span class="sd">        :param selection: selection dictionary object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Converter2to3</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="n">selection</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="s">&#39;ComponentPreselection&#39;</span> <span class="ow">in</span> <span class="n">selection</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">selection</span><span class="p">[</span><span class="s">&quot;ComponentPreselection&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">seltoint</span><span class="p">(</span>
+                <span class="n">selection</span><span class="p">[</span><span class="s">&quot;ComponentPreselection&quot;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="s">&#39;DataSourcePreselection&#39;</span> <span class="ow">in</span> <span class="n">selection</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">selection</span><span class="p">[</span><span class="s">&quot;DataSourcePreselection&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">seltoint</span><span class="p">(</span>
+                <span class="n">selection</span><span class="p">[</span><span class="s">&quot;DataSourcePreselection&quot;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="s">&#39;MntGrpConfiguration&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">selection</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">selection</span><span class="p">[</span><span class="s">&#39;MntGrpConfiguration&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
+
+</div></div>
+<div class="viewcode-block" id="Converter3to2"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Converter.Converter3to2">[docs]</a><span class="k">class</span> <span class="nc">Converter3to2</span><span class="p">(</span><span class="n">ConverterXtoY</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Selection converter from version 3 to 2</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; constructor</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Converter3to2</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">()</span>
+
+        <span class="c">#: names to convert</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">names</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s">&quot;PreselectingDataSources&quot;</span><span class="p">:</span> <span class="s">&quot;PreselectedDataSources&quot;</span><span class="p">,</span>
+            <span class="s">&quot;DataSourcePreselection&quot;</span><span class="p">:</span> <span class="s">&quot;InitDataSources&quot;</span><span class="p">,</span>
+        <span class="p">}</span>
+
+<div class="viewcode-block" id="Converter3to2.seltobool"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Converter.Converter3to2.seltobool">[docs]</a>    <span class="k">def</span> <span class="nf">seltobool</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">jselelem</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; converters dictioanry with None/True/False values</span>
+<span class="sd">            to dictionary with True/False values</span>
+
+<span class="sd">        :param jselelem: json dictionary selection element</span>
+<span class="sd">        :returns: converter json dictionary</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">sel</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">jselelem</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span>
+            <span class="nb">dict</span><span class="p">((</span><span class="n">key</span><span class="p">,</span> <span class="n">vl</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">)</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">vl</span> <span class="ow">in</span> <span class="n">sel</span><span class="o">.</span><span class="n">items</span><span class="p">()))</span>
+</div>
+<div class="viewcode-block" id="Converter3to2.seltolist"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Converter.Converter3to2.seltolist">[docs]</a>    <span class="k">def</span> <span class="nf">seltolist</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">jselelem</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; converters dictioanry with None/True/False values</span>
+<span class="sd">            to list of elementes with walue True</span>
+
+<span class="sd">        :param jselelem: json dictionary selection element</span>
+<span class="sd">        :returns: converter json dictionary</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">sel</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">jselelem</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">([</span><span class="n">key</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">vl</span> <span class="ow">in</span> <span class="n">sel</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">vl</span><span class="p">])</span>
+</div>
+<div class="viewcode-block" id="Converter3to2.convert"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Converter.Converter3to2.convert">[docs]</a>    <span class="k">def</span> <span class="nf">convert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">selection</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; converts selection from version 3 to 2</span>
+
+<span class="sd">        :param selection: selection dictionary object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Converter3to2</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="n">selection</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s">&#39;ComponentPreselection&#39;</span> <span class="ow">in</span> <span class="n">selection</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">selection</span><span class="p">[</span><span class="s">&quot;ComponentPreselection&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">seltobool</span><span class="p">(</span>
+                <span class="n">selection</span><span class="p">[</span><span class="s">&quot;ComponentPreselection&quot;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="s">&#39;InitDataSources&#39;</span> <span class="ow">in</span> <span class="n">selection</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">selection</span><span class="p">[</span><span class="s">&#39;InitDataSources&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">seltolist</span><span class="p">(</span>
+                <span class="n">selection</span><span class="p">[</span><span class="s">&#39;InitDataSources&#39;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="s">&#39;MntGrpConfiguration&#39;</span> <span class="ow">in</span> <span class="n">selection</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">selection</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&#39;MntGrpConfiguration&#39;</span><span class="p">)</span>
+
+</div></div>
+<div class="viewcode-block" id="Converter1to2"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Converter.Converter1to2">[docs]</a><span class="k">class</span> <span class="nc">Converter1to2</span><span class="p">(</span><span class="n">ConverterXtoY</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Selection converter from version 1 to 2</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; constructor</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Converter1to2</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">()</span>
+
+        <span class="c">#: names to convert</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">names</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s">&quot;AutomaticComponentGroup&quot;</span><span class="p">:</span> <span class="s">&quot;ComponentPreselection&quot;</span><span class="p">,</span>
+            <span class="s">&quot;AutomaticDataSources&quot;</span><span class="p">:</span> <span class="s">&quot;PreselectedDataSources&quot;</span><span class="p">,</span>
+            <span class="s">&quot;ComponentGroup&quot;</span><span class="p">:</span> <span class="s">&quot;ComponentSelection&quot;</span><span class="p">,</span>
+            <span class="s">&quot;DataSourceGroup&quot;</span><span class="p">:</span> <span class="s">&quot;DataSourceSelection&quot;</span><span class="p">,</span>
+            <span class="s">&quot;DataRecord&quot;</span><span class="p">:</span> <span class="s">&quot;UserData&quot;</span><span class="p">,</span>
+            <span class="s">&quot;HiddenElements&quot;</span><span class="p">:</span> <span class="s">&quot;UnplottedComponents&quot;</span><span class="p">,</span>
+            <span class="s">&quot;DynamicLinks&quot;</span><span class="p">:</span> <span class="s">&quot;DefaultDynamicLinks&quot;</span><span class="p">,</span>
+            <span class="s">&quot;DynamicPath&quot;</span><span class="p">:</span> <span class="s">&quot;DefaultDynamicPath&quot;</span>
+
+        <span class="p">}</span>
+
+        <span class="c">#: names of properties</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pnames</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s">&quot;Labels&quot;</span><span class="p">:</span> <span class="s">&quot;label&quot;</span><span class="p">,</span>
+            <span class="s">&quot;LabelPaths&quot;</span><span class="p">:</span> <span class="s">&quot;nexus_path&quot;</span><span class="p">,</span>
+            <span class="s">&quot;LabelLinks&quot;</span><span class="p">:</span> <span class="s">&quot;link&quot;</span><span class="p">,</span>
+            <span class="s">&quot;LabelTypes&quot;</span><span class="p">:</span> <span class="s">&quot;data_type&quot;</span><span class="p">,</span>
+            <span class="s">&quot;LabelShapes&quot;</span><span class="p">:</span> <span class="s">&quot;shape&quot;</span><span class="p">,</span>
+        <span class="p">}</span>
+
+<div class="viewcode-block" id="Converter1to2.convert"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Converter.Converter1to2.convert">[docs]</a>    <span class="k">def</span> <span class="nf">convert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">selection</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; converts selection from version 1 to 2</span>
+
+<span class="sd">        :param selection: selection dictionary object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Converter1to2</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="n">selection</span><span class="p">)</span>
+        <span class="n">props</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">var</span><span class="p">,</span> <span class="n">pn</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">pnames</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">selection</span><span class="p">:</span>
+                <span class="n">props</span><span class="p">[</span><span class="n">pn</span><span class="p">]</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">selection</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">var</span><span class="p">))</span>
+        <span class="n">selection</span><span class="p">[</span><span class="s">&quot;ChannelProperties&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">props</span><span class="p">)</span>
+
+</div></div>
+<div class="viewcode-block" id="Converter2to1"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Converter.Converter2to1">[docs]</a><span class="k">class</span> <span class="nc">Converter2to1</span><span class="p">(</span><span class="n">ConverterXtoY</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Selection converter from version 2 to 1</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; constructor</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Converter2to1</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">()</span>
+
+        <span class="c">#: names of properties</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pnames</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s">&quot;Labels&quot;</span><span class="p">:</span> <span class="s">&quot;label&quot;</span><span class="p">,</span>
+            <span class="s">&quot;LabelPaths&quot;</span><span class="p">:</span> <span class="s">&quot;nexus_path&quot;</span><span class="p">,</span>
+            <span class="s">&quot;LabelLinks&quot;</span><span class="p">:</span> <span class="s">&quot;link&quot;</span><span class="p">,</span>
+            <span class="s">&quot;LabelTypes&quot;</span><span class="p">:</span> <span class="s">&quot;data_type&quot;</span><span class="p">,</span>
+            <span class="s">&quot;LabelShapes&quot;</span><span class="p">:</span> <span class="s">&quot;shape&quot;</span><span class="p">,</span>
+        <span class="p">}</span>
+
+        <span class="c">#: names to convert</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">names</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s">&quot;ComponentSelection&quot;</span><span class="p">:</span> <span class="s">&quot;ComponentGroup&quot;</span><span class="p">,</span>
+            <span class="s">&quot;ComponentPreselection&quot;</span><span class="p">:</span> <span class="s">&quot;AutomaticComponentGroup&quot;</span><span class="p">,</span>
+            <span class="s">&quot;PreselectedDataSources&quot;</span><span class="p">:</span> <span class="s">&quot;AutomaticDataSources&quot;</span><span class="p">,</span>
+            <span class="s">&quot;DataSourceSelection&quot;</span><span class="p">:</span> <span class="s">&quot;DataSourceGroup&quot;</span><span class="p">,</span>
+            <span class="s">&quot;UserData&quot;</span><span class="p">:</span> <span class="s">&quot;DataRecord&quot;</span><span class="p">,</span>
+            <span class="s">&quot;UnplottedComponents&quot;</span><span class="p">:</span> <span class="s">&quot;HiddenElements&quot;</span><span class="p">,</span>
+            <span class="s">&quot;DefaultDynamicLinks&quot;</span><span class="p">:</span> <span class="s">&quot;DynamicLinks&quot;</span><span class="p">,</span>
+            <span class="s">&quot;DefaultDynamicPath&quot;</span><span class="p">:</span> <span class="s">&quot;DynamicPath&quot;</span>
+        <span class="p">}</span>
+
+<div class="viewcode-block" id="Converter2to1.convert"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Converter.Converter2to1.convert">[docs]</a>    <span class="k">def</span> <span class="nf">convert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">selection</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; converts selection from version 2 to 1</span>
+
+<span class="sd">        :param selection: selection dictionary object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Converter2to1</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="n">selection</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s">&quot;ChannelProperties&quot;</span> <span class="ow">in</span> <span class="n">selection</span><span class="p">:</span>
+            <span class="n">props</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">selection</span><span class="p">[</span><span class="s">&quot;ChannelProperties&quot;</span><span class="p">])</span>
+            <span class="k">for</span> <span class="n">var</span><span class="p">,</span> <span class="n">pn</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">pnames</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">pn</span> <span class="ow">in</span> <span class="n">props</span><span class="p">:</span>
+                    <span class="n">selection</span><span class="p">[</span><span class="n">var</span><span class="p">]</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">props</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">pn</span><span class="p">))</span>
+            <span class="n">selection</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&quot;ChannelProperties&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s">&quot;Version&quot;</span> <span class="ow">in</span> <span class="n">selection</span><span class="p">:</span>
+            <span class="n">selection</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&quot;Version&quot;</span><span class="p">)</span>
+
+</div></div>
+<div class="viewcode-block" id="Converter"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Converter.Converter">[docs]</a><span class="k">class</span> <span class="nc">Converter</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; selection version converter &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ver</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; contstructor</span>
+
+<span class="sd">        :param ver: the required selection version</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">sver</span> <span class="o">=</span> <span class="n">ver</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&quot;.&quot;</span><span class="p">)</span>
+        <span class="c">#: major selection version</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">majorversion</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">sver</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="c">#: minor selection version</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">minorversion</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">sver</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="c">#: patch selection version</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">patchversion</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">sver</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">up</span> <span class="o">=</span> <span class="p">[</span><span class="n">Converter1to2</span><span class="p">(),</span> <span class="n">Converter2to3</span><span class="p">()]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">down</span> <span class="o">=</span> <span class="p">[</span><span class="n">Converter2to1</span><span class="p">(),</span> <span class="n">Converter3to2</span><span class="p">()]</span>
+
+<div class="viewcode-block" id="Converter.allkeys"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Converter.Converter.allkeys">[docs]</a>    <span class="k">def</span> <span class="nf">allkeys</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">selection</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :param selection: selection dictionary object</span>
+<span class="sd">        :returns: list of selection keys</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">lkeys</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">cv</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">up</span><span class="p">:</span>
+            <span class="n">lkeys</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">cv</span><span class="o">.</span><span class="n">names</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+            <span class="n">lkeys</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">cv</span><span class="o">.</span><span class="n">names</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+        <span class="n">ak</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">selection</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="n">ak</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">lkeys</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">ak</span>
+</div>
+<div class="viewcode-block" id="Converter.convert"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Converter.Converter.convert">[docs]</a>    <span class="k">def</span> <span class="nf">convert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">selection</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; converts selection from any version to any other</span>
+
+<span class="sd">        :param selection: selection dictionary object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">major</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">version</span><span class="p">(</span><span class="n">selection</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">major</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">majorversion</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="k">if</span> <span class="n">major</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">majorversion</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">major</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">majorversion</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">up</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="n">selection</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">major</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">majorversion</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">major</span> <span class="o">-</span> <span class="mi">2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">majorversion</span> <span class="o">-</span> <span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">down</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="n">selection</span><span class="p">)</span>
+        <span class="n">selection</span><span class="p">[</span><span class="s">&quot;Version&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&quot;</span><span class="si">%s</span><span class="s">.</span><span class="si">%s</span><span class="s">.</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">majorversion</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">minorversion</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">patchversion</span><span class="p">)</span>
+</div>
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="Converter.version"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Converter.Converter.version">[docs]</a>    <span class="k">def</span> <span class="nf">version</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">selection</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; fetches selection version and converts it</span>
+<span class="sd">            into (major, minor, patch)</span>
+
+<span class="sd">        :param selection: selection dictionary object</span>
+<span class="sd">        :returns: (major, minor, patch) tuple with integers</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">major</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">minor</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">patch</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">if</span> <span class="s">&#39;Version&#39;</span> <span class="ow">in</span> <span class="n">selection</span><span class="p">:</span>
+            <span class="n">ver</span> <span class="o">=</span> <span class="n">selection</span><span class="p">[</span><span class="s">&#39;Version&#39;</span><span class="p">]</span>
+            <span class="n">sver</span> <span class="o">=</span> <span class="n">ver</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&quot;.&quot;</span><span class="p">)</span>
+            <span class="n">major</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">sver</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">minor</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">sver</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+            <span class="n">patch</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">sver</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">major</span><span class="p">,</span> <span class="n">minor</span><span class="p">,</span> <span class="n">patch</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">NXSRecSelector 3.5.0 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Module code</a> &raquo;</li>
+          <li><a href="../nxsrecconfig.html" >nxsrecconfig</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012-2016 DESY, Jan Kotanski &lt;jkotan@mail.desy.de&gt;
+
+GNU GENERAL PUBLIC LICENSE, version 3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    </div>
+  </body>
+</html>

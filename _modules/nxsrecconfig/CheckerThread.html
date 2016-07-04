@@ -1,0 +1,238 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>nxsrecconfig.CheckerThread &mdash; NXSRecSelector 3.5.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '3.5.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="NXSRecSelector 3.5.0 documentation" href="../../index.html" />
+    <link rel="up" title="nxsrecconfig" href="../nxsrecconfig.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">NXSRecSelector 3.5.0 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Module code</a> &raquo;</li>
+          <li><a href="../nxsrecconfig.html" accesskey="U">nxsrecconfig</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for nxsrecconfig.CheckerThread</h1><div class="highlight"><pre>
+<span class="c">#!/usr/bin/env python</span>
+<span class="c">#   This file is part of nxsrecconfig - NeXus Sardana Recorder Settings</span>
+<span class="c">#</span>
+<span class="c">#    Copyright (C) 2014-2016 DESY, Jan Kotanski &lt;jkotan@mail.desy.de&gt;</span>
+<span class="c">#</span>
+<span class="c">#    nexdatas is free software: you can redistribute it and/or modify</span>
+<span class="c">#    it under the terms of the GNU General Public License as published by</span>
+<span class="c">#    the Free Software Foundation, either version 3 of the License, or</span>
+<span class="c">#    (at your option) any later version.</span>
+<span class="c">#</span>
+<span class="c">#    nexdatas is distributed in the hope that it will be useful,</span>
+<span class="c">#    but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c">#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="c">#    GNU General Public License for more details.</span>
+<span class="c">#</span>
+<span class="c">#    You should have received a copy of the GNU General Public License</span>
+<span class="c">#    along with nexdatas.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+<span class="c">#</span>
+
+<span class="sd">&quot;&quot;&quot;  Component CheckerThread - thread which checks tango server attributes&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">Queue</span>
+<span class="kn">import</span> <span class="nn">PyTango</span>
+<span class="kn">import</span> <span class="nn">threading</span>
+
+
+<span class="c">#: default attributes to check</span>
+<span class="n">ATTRIBUTESTOCHECK</span> <span class="o">=</span> <span class="p">[</span><span class="s">&quot;Value&quot;</span><span class="p">,</span> <span class="s">&quot;Position&quot;</span><span class="p">,</span> <span class="s">&quot;Counts&quot;</span><span class="p">,</span> <span class="s">&quot;Data&quot;</span><span class="p">,</span>
+                     <span class="s">&quot;Voltage&quot;</span><span class="p">,</span> <span class="s">&quot;Energy&quot;</span><span class="p">,</span> <span class="s">&quot;SampleTime&quot;</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="TangoDSItem"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.CheckerThread.TangoDSItem">[docs]</a><span class="k">class</span> <span class="nc">TangoDSItem</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Tango DataSource item</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">__slots__</span> <span class="o">=</span> <span class="s">&#39;name&#39;</span><span class="p">,</span> <span class="s">&#39;device&#39;</span><span class="p">,</span> <span class="s">&#39;attr&#39;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">attr</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; constructor</span>
+
+<span class="sd">        :param name: datasource name</span>
+<span class="sd">        :param device: datasource device</span>
+<span class="sd">        :param attr: device attribute</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c">#: datasource name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="k">if</span> <span class="n">name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="k">else</span> <span class="bp">None</span>
+        <span class="c">#: datasource device</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">device</span><span class="p">)</span> <span class="k">if</span> <span class="n">device</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="k">else</span> <span class="bp">None</span>
+        <span class="c">#: datasource device attribute</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">attr</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">attr</span><span class="p">)</span> <span class="k">if</span> <span class="n">attr</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="k">else</span> <span class="bp">None</span>
+
+</div>
+<div class="viewcode-block" id="CheckerItem"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.CheckerThread.CheckerItem">[docs]</a><span class="k">class</span> <span class="nc">CheckerItem</span><span class="p">(</span><span class="nb">list</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Checker list Item</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; constructor</span>
+
+<span class="sd">        :param name: checker item name</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">CheckerItem</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">()</span>
+        <span class="c">#: checker name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="c">#: datasource with first error</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">errords</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="c">#: first error message</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">message</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="c">#: enabled flag</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">active</span> <span class="o">=</span> <span class="bp">True</span>
+
+</div>
+<div class="viewcode-block" id="CheckerThread"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.CheckerThread.CheckerThread">[docs]</a><span class="k">class</span> <span class="nc">CheckerThread</span><span class="p">(</span><span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Single CheckerThread</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">queue</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; constructor</span>
+
+<span class="sd">        :brief: It creates ElementThread from the runnable element</span>
+<span class="sd">        :param index: the current thread index</span>
+<span class="sd">        :param queue: queue with tasks</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="c">#: thread index</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">index</span>
+        <span class="c">#: queue with runnable elements</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__queue</span> <span class="o">=</span> <span class="n">queue</span>
+
+<div class="viewcode-block" id="CheckerThread.run"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.CheckerThread.CheckerThread.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; runner</span>
+
+<span class="sd">        :brief: It runs the defined thread</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">full</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="k">while</span> <span class="n">full</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">elem</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__queue</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">block</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__check</span><span class="p">(</span><span class="n">elem</span><span class="p">)</span>
+
+            <span class="k">except</span> <span class="n">Queue</span><span class="o">.</span><span class="n">Empty</span><span class="p">:</span>
+                <span class="n">full</span> <span class="o">=</span> <span class="bp">False</span>
+</div>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">__check</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">checkeritem</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; checks oen device list item which usually corresponds</span>
+<span class="sd">        to one components</span>
+
+<span class="sd">        :param checkeritem: device list item</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">ds</span> <span class="ow">in</span> <span class="n">checkeritem</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">dp</span> <span class="o">=</span> <span class="n">PyTango</span><span class="o">.</span><span class="n">DeviceProxy</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">device</span> <span class="ow">or</span> <span class="n">ds</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+                <span class="n">state</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">command_inout</span><span class="p">(</span><span class="s">&quot;State&quot;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">state</span> <span class="ow">in</span> <span class="p">[</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevState</span><span class="o">.</span><span class="n">FAULT</span><span class="p">]:</span>
+                    <span class="k">raise</span> <span class="n">FaultStateError</span><span class="p">(</span><span class="s">&quot;FAULT STATE&quot;</span><span class="p">)</span>
+                <span class="n">dp</span><span class="o">.</span><span class="n">ping</span><span class="p">()</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">ds</span><span class="o">.</span><span class="n">attr</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">gattr</span> <span class="ow">in</span> <span class="n">ATTRIBUTESTOCHECK</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">dp</span><span class="p">,</span> <span class="n">gattr</span><span class="p">):</span>
+                            <span class="n">_</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">dp</span><span class="p">,</span> <span class="n">gattr</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">_</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">dp</span><span class="p">,</span> <span class="n">ds</span><span class="o">.</span><span class="n">attr</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">state</span> <span class="ow">in</span> <span class="p">[</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevState</span><span class="o">.</span><span class="n">ALARM</span><span class="p">]:</span>
+                    <span class="k">raise</span> <span class="n">AlarmStateError</span><span class="p">(</span><span class="s">&quot;ALARM STATE&quot;</span><span class="p">)</span>
+            <span class="k">except</span> <span class="n">AlarmStateError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="n">checkeritem</span><span class="o">.</span><span class="n">message</span> <span class="o">=</span> <span class="s">&quot;ALARM_STATE&quot;</span>
+                <span class="n">checkeritem</span><span class="o">.</span><span class="n">errords</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">name</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="n">checkeritem</span><span class="o">.</span><span class="n">message</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+                <span class="n">checkeritem</span><span class="o">.</span><span class="n">errords</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">name</span>
+                <span class="n">checkeritem</span><span class="o">.</span><span class="n">active</span> <span class="o">=</span> <span class="bp">False</span>
+                <span class="k">break</span>
+
+</div>
+<div class="viewcode-block" id="AlarmStateError"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.CheckerThread.AlarmStateError">[docs]</a><span class="k">class</span> <span class="nc">AlarmStateError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Alarm State Exception class</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+</div>
+<div class="viewcode-block" id="FaultStateError"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.CheckerThread.FaultStateError">[docs]</a><span class="k">class</span> <span class="nc">FaultStateError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Fault State Exception class</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">NXSRecSelector 3.5.0 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Module code</a> &raquo;</li>
+          <li><a href="../nxsrecconfig.html" >nxsrecconfig</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012-2016 DESY, Jan Kotanski &lt;jkotan@mail.desy.de&gt;
+
+GNU GENERAL PUBLIC LICENSE, version 3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    </div>
+  </body>
+</html>
