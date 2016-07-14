@@ -338,6 +338,7 @@ class Selector(object):
 
     def importEnv(self, names=None, data=None):
         """ imports Selector Environment Data
+
         :param names: names of required variables
         :param data: dictionary with resulting data
         """

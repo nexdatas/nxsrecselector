@@ -14,6 +14,8 @@
 
 import sys
 import os
+# import sphinx_rtd_theme
+import sphinx_bootstrap_theme
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
@@ -29,6 +31,7 @@ import os
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
+    'sphinx.ext.intersphinx',
     'sphinx.ext.autodoc',
     'sphinx.ext.viewcode',
 ]
@@ -103,15 +106,96 @@ pygments_style = 'sphinx'
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #html_theme = 'default'
-html_theme = 'sphinxdoc'
+#html_theme = 'sphinxdoc'
+#html_theme = 'sphinx_rtd_theme'
+html_theme = 'bootstrap'
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
 # documentation.
 #html_theme_options = {}
+html_theme_options = {
+    # Navigation bar title. (Default: ``project`` value)
+    # 'navbar_title': "Demo",
+
+    # Tab name for entire site. (Default: "Site")
+    # 'navbar_site_name': "Site",
+
+    # A list of tuples containing pages or urls to link to.
+    # Valid tuples should be in the following forms:
+    #    (name, page)                 # a link to a page
+    #    (name, "/aa/bb", 1)          # a link to an arbitrary relative url
+    #    (name, "http://example.com", True) # arbitrary absolute url
+    # Note the "1" or "True" value above as the third argument to indicate
+    # an arbitrary url.
+    # 'navbar_links': [
+    #     ("Examples", "examples"),
+    #    ("Link", "http://example.com", True),
+    # ],
+
+    # Render the next and previous page links in navbar. (Default: true)
+    # 'navbar_sidebarrel': True,
+
+    # Render the current pages TOC in the navbar. (Default: true)
+    # 'navbar_pagenav': True,
+
+    # Tab name for the current pages TOC. (Default: "Page")
+    # 'navbar_pagenav_name': "Page",
+
+    # Global TOC depth for "site" navbar tab. (Default: 1)
+    # Switching to -1 shows all levels.
+     'globaltoc_depth': 2,
+    # 'globaltoc_depth': -1,
+
+    # Include hidden TOCs in Site navbar?
+    #
+    # Note: If this is "false", you cannot have mixed ``:hidden:`` and
+    # non-hidden ``toctree`` directives in the same page, or else the build
+    # will break.
+    #
+    # Values: "true" (default) or "false"
+    'globaltoc_includehidden': "true",
+
+    # HTML navbar class (Default: "navbar") to attach to <div> element.
+    # For black navbar, do "navbar navbar-inverse"
+    # 'navbar_class': "navbar navbar-inverse",
+
+    # Fix navigation bar to top of page?
+    # Values: "true" (default) or "false"
+    # 'navbar_fixed_top': "true",
+
+    # Location of link to source.
+    # Options are "nav" (default), "footer" or anything else to exclude.
+    'source_link_position': "none",
+
+    # Bootswatch (http://bootswatch.com/) theme.
+    #
+    # Options are nothing (default) or the name of a valid theme
+    # such as "amelia" or "cosmo".
+    # 'bootswatch_theme': "united",
+    # 'bootswatch_theme': "cosmo",
+    # 'bootswatch_theme': "sandstone",
+    # 'bootswatch_theme': "cerulean",
+    ## 'bootswatch_theme': "flatly",
+    # 'bootswatch_theme': "amelia",
+    # 'bootswatch_theme': "cyborg",
+    # 'bootswatch_theme': "journal",
+    # 'bootswatch_theme': "readable",
+    # 'bootswatch_theme': "simplex",
+    # 'bootswatch_theme': "slate",
+    # 'bootswatch_theme': "spacelab",
+    # 'bootswatch_theme': "spruce",
+    # 'bootswatch_theme': "superhero",
+
+    # Choose Bootstrap version.
+    # Values: "3" (default) or "2" (in quotes)
+    'bootstrap_version': "3",
+}
 
 # Add any paths that contain custom themes here, relative to this directory.
 #html_theme_path = []
+# html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
+html_theme_path = sphinx_bootstrap_theme.get_html_theme_path()
 
 # The name for this set of Sphinx documents.  If None, it defaults to
 # "<project> v<release> documentation".
@@ -331,3 +415,14 @@ epub_exclude_files = ['search.html']
 
 # If false, no index is generated.
 #epub_use_index = True
+
+autoclass_content = 'both'
+
+intersphinx_mapping = {
+    'https://nexdatas.github.io/configserver/':None,
+    'https://nexdatas.github.io/writer/':None,
+    'http://docs.python.org/2.7/': None,
+    'http://docs.scipy.org/doc/scipy/reference': None,
+    'http://docs.scipy.org/doc/numpy': None,
+    'http://www.esrf.fr/computing/cs/tango/tango_doc/kernel_doc/pytango/latest/': None,
+}

@@ -1,6 +1,6 @@
 .\" Man page generated from reStructuredText.
 .
-.TH "NXSRECCONFIG" "1" "July 04, 2016" "3.5" "NXSRecSelector"
+.TH "NXSRECCONFIG" "1" "July 14, 2016" "3.5" "NXSRecSelector"
 .SH NAME
 nxsrecconfig \- nxsrecconfig Documentation
 .
@@ -38,24 +38,23 @@ Tango server with Sardana Recorder settings
 .nf
 Source code: \fI\%https://github.com/nexdatas/recselector\fP
 Web page: \fI\%https://nexdatas.github.io/recselector\fP
+NexDaTaS Web page: \fI\%https://nexdatas.github.io\fP
 .fi
 .sp
 .SH INSTALLATION
 .sp
 Install the dependencies:
-.INDENT 0.0
-.INDENT 3.5
+.nf
 Sardana, PyTango, sphinx
-.UNINDENT
-.UNINDENT
+.fi
+.sp
 .SS From sources
 .sp
 Download the latest version of NeXuS Configuration Server from
-.INDENT 0.0
-.INDENT 3.5
+.nf
 \fI\%https://github.com/nexdatas/recselector\fP
-.UNINDENT
-.UNINDENT
+.fi
+.sp
 .sp
 Extract the sources and run
 .INDENT 0.0
@@ -271,16 +270,23 @@ default attributes to check
 .INDENT 0.0
 .TP
 .B exception nxsrecconfig.CheckerThread.AlarmStateError
-Bases: \fBexceptions.Exception\fP
+Bases: \fI\%exceptions.Exception\fP
 .sp
 Alarm State Exception class
 .UNINDENT
 .INDENT 0.0
 .TP
 .B class nxsrecconfig.CheckerThread.CheckerItem(name)
-Bases: \fBlist\fP
+Bases: \fI\%list\fP
 .sp
 Checker list Item
+.sp
+constructor
+.INDENT 7.0
+.TP
+.B Parameters
+\fBname\fP \-\- checker item name
+.UNINDENT
 .INDENT 7.0
 .TP
 .B active = None
@@ -305,9 +311,24 @@ checker name
 .INDENT 0.0
 .TP
 .B class nxsrecconfig.CheckerThread.CheckerThread(index, queue)
-Bases: \fBthreading.Thread\fP
+Bases: \fI\%threading.Thread\fP
 .sp
 Single CheckerThread
+.sp
+constructor
+.INDENT 7.0
+.TP
+.B Brief
+It creates ElementThread from the runnable element
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBindex\fP \-\- the current thread index
+.IP \(bu 2
+\fBqueue\fP \-\- queue with tasks
+.UNINDENT
+.UNINDENT
 .INDENT 7.0
 .TP
 .B index = None
@@ -327,16 +348,30 @@ It runs the defined thread
 .INDENT 0.0
 .TP
 .B exception nxsrecconfig.CheckerThread.FaultStateError
-Bases: \fBexceptions.Exception\fP
+Bases: \fI\%exceptions.Exception\fP
 .sp
 Fault State Exception class
 .UNINDENT
 .INDENT 0.0
 .TP
 .B class nxsrecconfig.CheckerThread.TangoDSItem(name=None, device=None, attr=None)
-Bases: \fBobject\fP
+Bases: \fI\%object\fP
 .sp
 Tango DataSource item
+.sp
+constructor
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBname\fP \-\- datasource name
+.IP \(bu 2
+\fBdevice\fP \-\- datasource device
+.IP \(bu 2
+\fBattr\fP \-\- device attribute
+.UNINDENT
+.UNINDENT
 .INDENT 7.0
 .TP
 .B attr
@@ -359,9 +394,16 @@ Selection version converter
 .INDENT 0.0
 .TP
 .B class nxsrecconfig.Converter.Converter(ver)
-Bases: \fBobject\fP
+Bases: \fI\%object\fP
 .sp
 selection version converter
+.sp
+contstructor
+.INDENT 7.0
+.TP
+.B Parameters
+\fBver\fP \-\- the required selection version
+.UNINDENT
 .INDENT 7.0
 .TP
 .B allkeys(selection)
@@ -423,6 +465,8 @@ into (major, minor, patch)
 Bases: \fBnxsrecconfig.Converter.ConverterXtoY\fP
 .sp
 Selection converter from version 1 to 2
+.sp
+constructor
 .INDENT 7.0
 .TP
 .B convert(selection)
@@ -450,6 +494,8 @@ names of properties
 Bases: \fBnxsrecconfig.Converter.ConverterXtoY\fP
 .sp
 Selection converter from version 2 to 1
+.sp
+constructor
 .INDENT 7.0
 .TP
 .B convert(selection)
@@ -477,6 +523,8 @@ names of properties
 Bases: \fBnxsrecconfig.Converter.ConverterXtoY\fP
 .sp
 Selection converter from version 2 to 3
+.sp
+converter
 .INDENT 7.0
 .TP
 .B convert(selection)
@@ -512,6 +560,8 @@ json dictionary
 Bases: \fBnxsrecconfig.Converter.ConverterXtoY\fP
 .sp
 Selection converter from version 3 to 2
+.sp
+constructor
 .INDENT 7.0
 .TP
 .B convert(selection)
@@ -565,9 +615,11 @@ converter json dictionary
 .INDENT 0.0
 .TP
 .B class nxsrecconfig.Converter.ConverterXtoY
-Bases: \fBobject\fP
+Bases: \fI\%object\fP
 .sp
 virtual selection version converter
+.sp
+constructor
 .INDENT 7.0
 .TP
 .B convert(selection)
@@ -590,9 +642,25 @@ Component Describer
 .INDENT 0.0
 .TP
 .B class nxsrecconfig.Describer.DSItem(name=None, dstype=None, record=None, dsitem=None)
-Bases: \fBobject\fP
+Bases: \fI\%object\fP
 .sp
 Basic DataSource item
+.sp
+constructor
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBname\fP \-\- datasource name
+.IP \(bu 2
+\fBdstype\fP \-\- datasource type
+.IP \(bu 2
+\fBrecord\fP \-\- datasource record
+.IP \(bu 2
+\fBdsitem\fP \-\- datasource item
+.UNINDENT
+.UNINDENT
 .INDENT 7.0
 .TP
 .B dstype
@@ -612,10 +680,24 @@ datasource record
 .INDENT 0.0
 .TP
 .B class nxsrecconfig.Describer.Describer(nexusconfig_device, tree=False, pyevalfromscript=False)
-Bases: \fBobject\fP
+Bases: \fI\%object\fP
 .sp
 Lists datasources, strategy, dstype and record name
 of given component
+.sp
+constructor
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBnexusconfig_device\fP \-\- configserver configuration server name
+.IP \(bu 2
+\fBtree\fP \-\- output flag for dictionary tree
+.IP \(bu 2
+\fBtree\fP \-\- output flag for dictionary tree
+.UNINDENT
+.UNINDENT
 .INDENT 7.0
 .TP
 .B components(components=None, strategy=\(aq\(aq, dstype=\(aq\(aq, cfvars=None)
@@ -665,9 +747,21 @@ list of dictionary with description of datasources
 .INDENT 0.0
 .TP
 .B class nxsrecconfig.Describer.ExDSDict(*args, **kw)
-Bases: \fBdict\fP
+Bases: \fI\%dict\fP
 .sp
 Extended DataSource Dictionary
+.sp
+constructor
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBargs\fP \-\- dict args
+.IP \(bu 2
+\fBkw\fP \-\- dict kw
+.UNINDENT
+.UNINDENT
 .INDENT 7.0
 .TP
 .B appendDSList(dslist, mode, nxtype=None, shape=None)
@@ -698,6 +792,22 @@ or None if not appended
 Bases: \fBnxsrecconfig.Describer.DSItem\fP
 .sp
 Extended DataSource item
+.sp
+constructor
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBdsitem\fP \-\- datasource item
+.IP \(bu 2
+\fBmode\fP \-\- writing mode
+.IP \(bu 2
+\fBnxtype\fP \-\- nexus type
+.IP \(bu 2
+\fBshape\fP \-\- datasource shape
+.UNINDENT
+.UNINDENT
 .INDENT 7.0
 .TP
 .B mode
@@ -720,10 +830,17 @@ Dynamic Component
 .INDENT 0.0
 .TP
 .B class nxsrecconfig.DynamicComponent.DynamicComponent(nexusconfig_device)
-Bases: \fBobject\fP
+Bases: \fI\%object\fP
 .sp
 Creates dynamic component
 of given component
+.sp
+constructor
+.INDENT 7.0
+.TP
+.B Parameters
+\fBnexusconfig_device\fP \-\- configserver configuration server name
+.UNINDENT
 .INDENT 7.0
 .TP
 .B create()
@@ -821,9 +938,16 @@ Selection state
 .INDENT 0.0
 .TP
 .B class nxsrecconfig.MacroServerPools.MacroServerPools(numberOfThreads)
-Bases: \fBobject\fP
+Bases: \fI\%object\fP
 .sp
 sardanamacro server and pools
+.sp
+constructor
+.INDENT 7.0
+.TP
+.B Parameters
+\fBnumberOfThreads\fP \-\- number of threads
+.UNINDENT
 .INDENT 7.0
 .TP
 .B checkChannels(door, configdevice, channels, componentgroup, datasourcegroup, channelerrors)
@@ -962,6 +1086,18 @@ Tango Server for Nexus Sardana Recorder Settings.
 Device States Description:
 DevState.ON \- Server is ON,
 DevState.RUNNING \- Performing a query
+.UNINDENT
+.sp
+Device constructor
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBcl\fP \-\- class name
+.IP \(bu 2
+\fBname\fP \-\- device name
+.UNINDENT
 .UNINDENT
 .INDENT 7.0
 .TP
@@ -2073,6 +2209,8 @@ Write WriterDevice attribute
 .TP
 .B class nxsrecconfig.NXSConfig.NXSRecSelectorClass(name)
 Bases: \fBPyTango._PyTango.DeviceClass\fP
+.sp
+NXSRecSelectorclass Constructor
 .INDENT 7.0
 .TP
 .B attr_list = {\(aqUserData\(aq: [[PyTango._PyTango.CmdArgType.DevString, PyTango._PyTango.AttrDataFormat.SCALAR, PyTango._PyTango.AttrWriteType.READ_WRITE], {\(aqdescription\(aq: \(aqJSON dictionary with User Data\(aq, \(aqDisplay level\(aq: PyTango._PyTango.DispLevel.EXPERT, \(aqlabel\(aq: \(aqClient Data\(aq}], \(aqScanID\(aq: [[PyTango._PyTango.CmdArgType.DevLong, PyTango._PyTango.AttrDataFormat.SCALAR, PyTango._PyTango.AttrWriteType.READ_WRITE], {\(aqdescription\(aq: \(aqScan ID\(aq, \(aqlabel\(aq: \(aqScan ID\(aq}], \(aqVersion\(aq: [[PyTango._PyTango.CmdArgType.DevString, PyTango._PyTango.AttrDataFormat.SCALAR, PyTango._PyTango.AttrWriteType.READ], {\(aqdescription\(aq: \(aqserver version\(aq, \(aqlabel\(aq: \(aqVersion\(aq}], \(aqMacroServer\(aq: [[PyTango._PyTango.CmdArgType.DevString, PyTango._PyTango.AttrDataFormat.SCALAR, PyTango._PyTango.AttrWriteType.READ], {\(aqdescription\(aq: \(aqMacro Server device name\(aq, \(aqlabel\(aq: \(aqMacroServer\(aq}], \(aqWriterDevice\(aq: [[PyTango._PyTango.CmdArgType.DevString, PyTango._PyTango.AttrDataFormat.SCALAR, PyTango._PyTango.AttrWriteType.READ_WRITE], {\(aqdescription\(aq: \(aqWriter device\(aq, \(aqlabel\(aq: \(aqWriter Device\(aq}], \(aqDataSources\(aq: [[PyTango._PyTango.CmdArgType.DevString, PyTango._PyTango.AttrDataFormat.SPECTRUM, PyTango._PyTango.AttrWriteType.READ, 10000], {\(aqdescription\(aq: \(aqlist of Selected Datasources\(aq, \(aqlabel\(aq: \(aqSelected Datasources\(aq}], \(aqConfigDevice\(aq: [[PyTango._PyTango.CmdArgType.DevString, PyTango._PyTango.AttrDataFormat.SCALAR, PyTango._PyTango.AttrWriteType.READ_WRITE], {\(aqMemorized\(aq: \(aqtrue\(aq, \(aqdescription\(aq: \(aqConfiguration device\(aq, \(aqlabel\(aq: \(aqConfiguration Device\(aq}], \(aqScanFile\(aq: [[PyTango._PyTango.CmdArgType.DevString, PyTango._PyTango.AttrDataFormat.SCALAR, PyTango._PyTango.AttrWriteType.READ_WRITE], {\(aqdescription\(aq: \(aqScan File(s)\(aq, \(aqlabel\(aq: \(aqScan File(s)\(aq}], \(aqAppendEntry\(aq: [[PyTango._PyTango.CmdArgType.DevBoolean, PyTango._PyTango.AttrDataFormat.SCALAR, PyTango._PyTango.AttrWriteType.READ_WRITE], {\(aqdescription\(aq: \(aqflag for entry  appending \(aq, \(aqlabel\(aq: \(aqAppend Entry\(aq}], \(aqMntGrp\(aq: [[PyTango._PyTango.CmdArgType.DevString, PyTango._PyTango.AttrDataFormat.SCALAR, PyTango._PyTango.AttrWriteType.READ_WRITE], {\(aqdescription\(aq: \(aq Measurement Group\(aq, \(aqlabel\(aq: \(aq Measurement Group\(aq}], \(aqStepDataSources\(aq: [[PyTango._PyTango.CmdArgType.DevString, PyTango._PyTango.AttrDataFormat.SCALAR, PyTango._PyTango.AttrWriteType.READ_WRITE], {\(aqdescription\(aq: \(aqlist of datasources to be switched into step mode\(aq, \(aqDisplay level\(aq: PyTango._PyTango.DispLevel.EXPERT, \(aqlabel\(aq: \(aqlist of datasources to be switch into step mode\(aq}], \(aqConfigVariables\(aq: [[PyTango._PyTango.CmdArgType.DevString, PyTango._PyTango.AttrDataFormat.SCALAR, PyTango._PyTango.AttrWriteType.READ_WRITE], {\(aqdescription\(aq: \(aqJSON dictionary with configuration variablesfor templated components\(aq, \(aqDisplay level\(aq: PyTango._PyTango.DispLevel.EXPERT, \(aqlabel\(aq: \(aqConfiguration Variables\(aq}], \(aqComponents\(aq: [[PyTango._PyTango.CmdArgType.DevString, PyTango._PyTango.AttrDataFormat.SPECTRUM, PyTango._PyTango.AttrWriteType.READ, 10000], {\(aqdescription\(aq: \(aqlist of Selected Components\(aq, \(aqlabel\(aq: \(aqSelected Components\(aq}], \(aqProfileConfiguration\(aq: [[PyTango._PyTango.CmdArgType.DevString, PyTango._PyTango.AttrDataFormat.SCALAR, PyTango._PyTango.AttrWriteType.READ_WRITE], {\(aqdescription\(aq: \(aqJSON dict of server configuration\(aq, \(aqDisplay level\(aq: PyTango._PyTango.DispLevel.EXPERT, \(aqlabel\(aq: \(aqProfile Configuration\(aq}], \(aqDoor\(aq: [[PyTango._PyTango.CmdArgType.DevString, PyTango._PyTango.AttrDataFormat.SCALAR, PyTango._PyTango.AttrWriteType.READ_WRITE], {\(aqMemorized\(aq: \(aqtrue\(aq, \(aqdescription\(aq: \(aqDoor\(aq, \(aqlabel\(aq: \(aqDoor\(aq}], \(aqDeviceGroups\(aq: [[PyTango._PyTango.CmdArgType.DevString, PyTango._PyTango.AttrDataFormat.SCALAR, PyTango._PyTango.AttrWriteType.READ_WRITE], {\(aqMemorized\(aq: \(aqtrue\(aq, \(aqdescription\(aq: \(aqJSON dictionary with device groups\(aq, \(aqDisplay level\(aq: PyTango._PyTango.DispLevel.EXPERT, \(aqlabel\(aq: \(aqDevice groups\(aq}], \(aqProfileFile\(aq: [[PyTango._PyTango.CmdArgType.DevString, PyTango._PyTango.AttrDataFormat.SCALAR, PyTango._PyTango.AttrWriteType.READ_WRITE], {\(aqMemorized\(aq: \(aqtrue\(aq, \(aqdescription\(aq: \(aqconfig file with its full path\(aq, \(aqlabel\(aq: \(aqProfile File with its Path\(aq}], \(aqDescriptionErrors\(aq: [[PyTango._PyTango.CmdArgType.DevString, PyTango._PyTango.AttrDataFormat.SPECTRUM, PyTango._PyTango.AttrWriteType.READ, 10000], {\(aqdescription\(aq: \(aqlist of Description Component Errors\(aq, \(aqlabel\(aq: \(aqDescription Component Errors\(aq}], \(aqScanDir\(aq: [[PyTango._PyTango.CmdArgType.DevString, PyTango._PyTango.AttrDataFormat.SCALAR, PyTango._PyTango.AttrWriteType.READ_WRITE], {\(aqdescription\(aq: \(aqScan Directory\(aq, \(aqlabel\(aq: \(aqScan Directory\(aq}]}
@@ -2126,9 +2264,13 @@ flag for nxstools installed
 .INDENT 0.0
 .TP
 .B class nxsrecconfig.ProfileManager.ProfileManager(selector)
-Bases: \fBobject\fP
+Bases: \fI\%object\fP
 .sp
 Manages Measurement Group and Profile from Selector
+.sp
+constructor
+.sp
+:param selector selector object
 .INDENT 7.0
 .TP
 .B availableMntGrps()
@@ -2282,9 +2424,21 @@ Selection state
 .INDENT 0.0
 .TP
 .B class nxsrecconfig.Selection.Selection(*args, **kw)
-Bases: \fBdict\fP
+Bases: \fI\%dict\fP
 .sp
 Selection Dictionary
+.sp
+constructor
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBargs\fP \-\- dictionary args
+.IP \(bu 2
+\fBkw\fP \-\- dictionary kw
+.UNINDENT
+.UNINDENT
 .INDENT 7.0
 .TP
 .B deselect()
@@ -2385,9 +2539,21 @@ Selection state
 .INDENT 0.0
 .TP
 .B class nxsrecconfig.Selector.Selector(macroserverpools, version)
-Bases: \fBobject\fP
+Bases: \fI\%object\fP
 .sp
 access class to Selection dictionary and Config Device
+.sp
+constructor
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBmacroserverpools\fP \-\- MacroServerPools object
+.IP \(bu 2
+\fBversion\fP \-\- selector version
+.UNINDENT
+.UNINDENT
 .INDENT 7.0
 .TP
 .B configCommand(command, *var)
@@ -2477,8 +2643,16 @@ JSON String with important variables
 .TP
 .B importEnv(names=None, data=None)
 imports Selector Environment Data
-:param names: names of required variables
-:param data: dictionary with resulting data
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBnames\fP \-\- names of required variables
+.IP \(bu 2
+\fBdata\fP \-\- dictionary with resulting data
+.UNINDENT
+.UNINDENT
 .UNINDENT
 .INDENT 7.0
 .TP
@@ -2570,9 +2744,21 @@ NeXus Sardana Recorder Settings implementation
 .INDENT 0.0
 .TP
 .B class nxsrecconfig.Settings.Settings(server=None, numberofthreads=None)
-Bases: \fBobject\fP
+Bases: \fI\%object\fP
 .sp
 NeXus Sardana Recorder settings
+.sp
+contructor
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBserver\fP \-\- NXSRecSelector server
+.IP \(bu 2
+\fBnumberofthreads\fP \-\- number of threads used to check device state
+.UNINDENT
+.UNINDENT
 .INDENT 7.0
 .TP
 .B adminDataNames = None
@@ -3223,7 +3409,7 @@ Tango Utilities
 .INDENT 0.0
 .TP
 .B class nxsrecconfig.Utils.MSUtils
-Bases: \fBobject\fP
+Bases: \fI\%object\fP
 .sp
 MacroServer Utilities
 .INDENT 7.0
@@ -3313,7 +3499,7 @@ unsets environment variable
 .INDENT 0.0
 .TP
 .B class nxsrecconfig.Utils.PoolUtils
-Bases: \fBobject\fP
+Bases: \fI\%object\fP
 .sp
 Pool Utilities
 .INDENT 7.0
@@ -3477,7 +3663,7 @@ list of timer names
 .INDENT 0.0
 .TP
 .B class nxsrecconfig.Utils.TangoUtils
-Bases: \fBobject\fP
+Bases: \fI\%object\fP
 .sp
 Tango Utilities
 .INDENT 7.0
@@ -3592,7 +3778,7 @@ DeviceProxy of device
 .INDENT 0.0
 .TP
 .B class nxsrecconfig.Utils.Utils
-Bases: \fBobject\fP
+Bases: \fI\%object\fP
 .sp
 Miscellaneous Utilities
 .INDENT 7.0

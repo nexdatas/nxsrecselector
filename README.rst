@@ -9,7 +9,7 @@ Tango server with Sardana Recorder settings
 
 | Source code: https://github.com/nexdatas/recselector
 | Web page: https://nexdatas.github.io/recselector
-
+| NexDaTaS Web page: https://nexdatas.github.io
 
 ------------
 Installation
@@ -17,14 +17,14 @@ Installation
 
 Install the dependencies:
 
-    Sardana, PyTango, sphinx
+|    Sardana, PyTango, sphinx
 
 From sources
 ^^^^^^^^^^^^
 
 Download the latest version of NeXuS Configuration Server from
 
-    https://github.com/nexdatas/recselector
+|    https://github.com/nexdatas/recselector
 
 Extract the sources and run
 
