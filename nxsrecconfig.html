@@ -1,5 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -8,8 +7,11 @@
     
     <title>nxsrecconfig package &mdash; NXSRecSelector 3.5.0 documentation</title>
     
-    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/bootstrap-3.3.4/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="_static/bootstrap-3.3.4/css/bootstrap-theme.min.css" type="text/css" />
+    <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
@@ -23,29 +25,78 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="_static/bootstrap-3.3.4/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
     <link rel="top" title="NXSRecSelector 3.5.0 documentation" href="index.html" />
-    <link rel="prev" title="Welcome to nxsrecconfig’s documentation!" href="index.html" /> 
+    <link rel="prev" title="Welcome to nxsrecconfig’s documentation!" href="index.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
   </head>
   <body>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="index.html" title="Welcome to nxsrecconfig’s documentation!"
-             accesskey="P">previous</a> |</li>
-        <li><a href="index.html">NXSRecSelector 3.5.0 documentation</a> &raquo;</li> 
-      </ul>
-    </div>
-      <div class="sphinxsidebar">
-        <div class="sphinxsidebarwrapper">
-  <h3><a href="index.html">Table Of Contents</a></h3>
-  <ul>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="index.html">
+          NXSRecSelector</a>
+        <span class="navbar-text navbar-version pull-left"><b>3.5</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="">nxsrecconfig package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-nxsrecconfig.CheckerThread">nxsrecconfig.CheckerThread module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-nxsrecconfig.Converter">nxsrecconfig.Converter module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-nxsrecconfig.Describer">nxsrecconfig.Describer module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-nxsrecconfig.DynamicComponent">nxsrecconfig.DynamicComponent module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-nxsrecconfig.MacroServerPools">nxsrecconfig.MacroServerPools module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-nxsrecconfig.NXSConfig">nxsrecconfig.NXSConfig module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-nxsrecconfig.ProfileManager">nxsrecconfig.ProfileManager module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-nxsrecconfig.Release">nxsrecconfig.Release module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-nxsrecconfig.Selection">nxsrecconfig.Selection module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-nxsrecconfig.Selector">nxsrecconfig.Selector module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-nxsrecconfig.Settings">nxsrecconfig.Settings module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-nxsrecconfig.Streams">nxsrecconfig.Streams module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-nxsrecconfig.Utils">nxsrecconfig.Utils module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-nxsrecconfig">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
 <li><a class="reference internal" href="#">nxsrecconfig package</a><ul>
 <li><a class="reference internal" href="#submodules">Submodules</a></li>
 <li><a class="reference internal" href="#module-nxsrecconfig.CheckerThread">nxsrecconfig.CheckerThread module</a></li>
@@ -65,36 +116,42 @@
 </ul>
 </li>
 </ul>
-
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="index.html"
-                        title="previous chapter">Welcome to nxsrecconfig&#8217;s documentation!</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="_sources/nxsrecconfig.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
-  <h3>Quick search</h3>
-    <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
-    </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
-        </div>
-      </div>
-
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          <div class="body">
+</ul>
+</li>
+              
             
+            
+              
+                
+  <li>
+    <a href="index.html" title="Previous Chapter: Welcome to nxsrecconfig’s documentation!"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Welcome to nxsre...</span>
+    </a>
+  </li>
+              
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 content">
+      
   <div class="section" id="nxsrecconfig-package">
 <h1>nxsrecconfig package<a class="headerlink" href="#nxsrecconfig-package" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="submodules">
@@ -112,15 +169,24 @@
 <dl class="exception">
 <dt id="nxsrecconfig.CheckerThread.AlarmStateError">
 <em class="property">exception </em><tt class="descclassname">nxsrecconfig.CheckerThread.</tt><tt class="descname">AlarmStateError</tt><a class="reference internal" href="_modules/nxsrecconfig/CheckerThread.html#AlarmStateError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nxsrecconfig.CheckerThread.AlarmStateError" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">exceptions.Exception</span></tt></p>
+<dd><p>Bases: <a class="reference external" href="http://docs.python.org/2.7/library/exceptions.html#exceptions.Exception" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">exceptions.Exception</span></tt></a></p>
 <p>Alarm State Exception class</p>
 </dd></dl>
 
 <dl class="class">
 <dt id="nxsrecconfig.CheckerThread.CheckerItem">
 <em class="property">class </em><tt class="descclassname">nxsrecconfig.CheckerThread.</tt><tt class="descname">CheckerItem</tt><big>(</big><em>name</em><big>)</big><a class="reference internal" href="_modules/nxsrecconfig/CheckerThread.html#CheckerItem"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nxsrecconfig.CheckerThread.CheckerItem" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">list</span></tt></p>
+<dd><p>Bases: <a class="reference external" href="http://docs.python.org/2.7/library/functions.html#list" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">list</span></tt></a></p>
 <p>Checker list Item</p>
+<p>constructor</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> &#8211; checker item name</td>
+</tr>
+</tbody>
+</table>
 <dl class="attribute">
 <dt id="nxsrecconfig.CheckerThread.CheckerItem.active">
 <tt class="descname">active</tt><em class="property"> = None</em><a class="headerlink" href="#nxsrecconfig.CheckerThread.CheckerItem.active" title="Permalink to this definition">¶</a></dt>
@@ -150,8 +216,24 @@
 <dl class="class">
 <dt id="nxsrecconfig.CheckerThread.CheckerThread">
 <em class="property">class </em><tt class="descclassname">nxsrecconfig.CheckerThread.</tt><tt class="descname">CheckerThread</tt><big>(</big><em>index</em>, <em>queue</em><big>)</big><a class="reference internal" href="_modules/nxsrecconfig/CheckerThread.html#CheckerThread"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nxsrecconfig.CheckerThread.CheckerThread" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">threading.Thread</span></tt></p>
+<dd><p>Bases: <a class="reference external" href="http://docs.python.org/2.7/library/threading.html#threading.Thread" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">threading.Thread</span></tt></a></p>
 <p>Single CheckerThread</p>
+<p>constructor</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Brief:</th><td class="field-body"><p class="first">It creates ElementThread from the runnable element</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>index</strong> &#8211; the current thread index</li>
+<li><strong>queue</strong> &#8211; queue with tasks</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 <dl class="attribute">
 <dt id="nxsrecconfig.CheckerThread.CheckerThread.index">
 <tt class="descname">index</tt><em class="property"> = None</em><a class="headerlink" href="#nxsrecconfig.CheckerThread.CheckerThread.index" title="Permalink to this definition">¶</a></dt>
@@ -177,15 +259,29 @@
 <dl class="exception">
 <dt id="nxsrecconfig.CheckerThread.FaultStateError">
 <em class="property">exception </em><tt class="descclassname">nxsrecconfig.CheckerThread.</tt><tt class="descname">FaultStateError</tt><a class="reference internal" href="_modules/nxsrecconfig/CheckerThread.html#FaultStateError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nxsrecconfig.CheckerThread.FaultStateError" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">exceptions.Exception</span></tt></p>
+<dd><p>Bases: <a class="reference external" href="http://docs.python.org/2.7/library/exceptions.html#exceptions.Exception" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">exceptions.Exception</span></tt></a></p>
 <p>Fault State Exception class</p>
 </dd></dl>
 
 <dl class="class">
 <dt id="nxsrecconfig.CheckerThread.TangoDSItem">
 <em class="property">class </em><tt class="descclassname">nxsrecconfig.CheckerThread.</tt><tt class="descname">TangoDSItem</tt><big>(</big><em>name=None</em>, <em>device=None</em>, <em>attr=None</em><big>)</big><a class="reference internal" href="_modules/nxsrecconfig/CheckerThread.html#TangoDSItem"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nxsrecconfig.CheckerThread.TangoDSItem" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<dd><p>Bases: <a class="reference external" href="http://docs.python.org/2.7/library/functions.html#object" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></a></p>
 <p>Tango DataSource item</p>
+<p>constructor</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>name</strong> &#8211; datasource name</li>
+<li><strong>device</strong> &#8211; datasource device</li>
+<li><strong>attr</strong> &#8211; device attribute</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 <dl class="attribute">
 <dt id="nxsrecconfig.CheckerThread.TangoDSItem.attr">
 <tt class="descname">attr</tt><a class="headerlink" href="#nxsrecconfig.CheckerThread.TangoDSItem.attr" title="Permalink to this definition">¶</a></dt>
@@ -213,8 +309,17 @@
 <dl class="class">
 <dt id="nxsrecconfig.Converter.Converter">
 <em class="property">class </em><tt class="descclassname">nxsrecconfig.Converter.</tt><tt class="descname">Converter</tt><big>(</big><em>ver</em><big>)</big><a class="reference internal" href="_modules/nxsrecconfig/Converter.html#Converter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nxsrecconfig.Converter.Converter" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<dd><p>Bases: <a class="reference external" href="http://docs.python.org/2.7/library/functions.html#object" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></a></p>
 <p>selection version converter</p>
+<p>contstructor</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>ver</strong> &#8211; the required selection version</td>
+</tr>
+</tbody>
+</table>
 <dl class="method">
 <dt id="nxsrecconfig.Converter.Converter.allkeys">
 <tt class="descname">allkeys</tt><big>(</big><em>selection</em><big>)</big><a class="reference internal" href="_modules/nxsrecconfig/Converter.html#Converter.allkeys"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nxsrecconfig.Converter.Converter.allkeys" title="Permalink to this definition">¶</a></dt>
@@ -288,6 +393,7 @@
 <em class="property">class </em><tt class="descclassname">nxsrecconfig.Converter.</tt><tt class="descname">Converter1to2</tt><a class="reference internal" href="_modules/nxsrecconfig/Converter.html#Converter1to2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nxsrecconfig.Converter.Converter1to2" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#nxsrecconfig.Converter.ConverterXtoY" title="nxsrecconfig.Converter.ConverterXtoY"><tt class="xref py py-class docutils literal"><span class="pre">nxsrecconfig.Converter.ConverterXtoY</span></tt></a></p>
 <p>Selection converter from version 1 to 2</p>
+<p>constructor</p>
 <dl class="method">
 <dt id="nxsrecconfig.Converter.Converter1to2.convert">
 <tt class="descname">convert</tt><big>(</big><em>selection</em><big>)</big><a class="reference internal" href="_modules/nxsrecconfig/Converter.html#Converter1to2.convert"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nxsrecconfig.Converter.Converter1to2.convert" title="Permalink to this definition">¶</a></dt>
@@ -321,6 +427,7 @@
 <em class="property">class </em><tt class="descclassname">nxsrecconfig.Converter.</tt><tt class="descname">Converter2to1</tt><a class="reference internal" href="_modules/nxsrecconfig/Converter.html#Converter2to1"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nxsrecconfig.Converter.Converter2to1" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#nxsrecconfig.Converter.ConverterXtoY" title="nxsrecconfig.Converter.ConverterXtoY"><tt class="xref py py-class docutils literal"><span class="pre">nxsrecconfig.Converter.ConverterXtoY</span></tt></a></p>
 <p>Selection converter from version 2 to 1</p>
+<p>constructor</p>
 <dl class="method">
 <dt id="nxsrecconfig.Converter.Converter2to1.convert">
 <tt class="descname">convert</tt><big>(</big><em>selection</em><big>)</big><a class="reference internal" href="_modules/nxsrecconfig/Converter.html#Converter2to1.convert"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nxsrecconfig.Converter.Converter2to1.convert" title="Permalink to this definition">¶</a></dt>
@@ -354,6 +461,7 @@
 <em class="property">class </em><tt class="descclassname">nxsrecconfig.Converter.</tt><tt class="descname">Converter2to3</tt><a class="reference internal" href="_modules/nxsrecconfig/Converter.html#Converter2to3"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nxsrecconfig.Converter.Converter2to3" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#nxsrecconfig.Converter.ConverterXtoY" title="nxsrecconfig.Converter.ConverterXtoY"><tt class="xref py py-class docutils literal"><span class="pre">nxsrecconfig.Converter.ConverterXtoY</span></tt></a></p>
 <p>Selection converter from version 2 to 3</p>
+<p>converter</p>
 <dl class="method">
 <dt id="nxsrecconfig.Converter.Converter2to3.convert">
 <tt class="descname">convert</tt><big>(</big><em>selection</em><big>)</big><a class="reference internal" href="_modules/nxsrecconfig/Converter.html#Converter2to3.convert"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nxsrecconfig.Converter.Converter2to3.convert" title="Permalink to this definition">¶</a></dt>
@@ -397,6 +505,7 @@
 <em class="property">class </em><tt class="descclassname">nxsrecconfig.Converter.</tt><tt class="descname">Converter3to2</tt><a class="reference internal" href="_modules/nxsrecconfig/Converter.html#Converter3to2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nxsrecconfig.Converter.Converter3to2" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#nxsrecconfig.Converter.ConverterXtoY" title="nxsrecconfig.Converter.ConverterXtoY"><tt class="xref py py-class docutils literal"><span class="pre">nxsrecconfig.Converter.ConverterXtoY</span></tt></a></p>
 <p>Selection converter from version 3 to 2</p>
+<p>constructor</p>
 <dl class="method">
 <dt id="nxsrecconfig.Converter.Converter3to2.convert">
 <tt class="descname">convert</tt><big>(</big><em>selection</em><big>)</big><a class="reference internal" href="_modules/nxsrecconfig/Converter.html#Converter3to2.convert"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nxsrecconfig.Converter.Converter3to2.convert" title="Permalink to this definition">¶</a></dt>
@@ -460,8 +569,9 @@
 <dl class="class">
 <dt id="nxsrecconfig.Converter.ConverterXtoY">
 <em class="property">class </em><tt class="descclassname">nxsrecconfig.Converter.</tt><tt class="descname">ConverterXtoY</tt><a class="reference internal" href="_modules/nxsrecconfig/Converter.html#ConverterXtoY"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nxsrecconfig.Converter.ConverterXtoY" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<dd><p>Bases: <a class="reference external" href="http://docs.python.org/2.7/library/functions.html#object" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></a></p>
 <p>virtual selection version converter</p>
+<p>constructor</p>
 <dl class="method">
 <dt id="nxsrecconfig.Converter.ConverterXtoY.convert">
 <tt class="descname">convert</tt><big>(</big><em>selection</em><big>)</big><a class="reference internal" href="_modules/nxsrecconfig/Converter.html#ConverterXtoY.convert"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nxsrecconfig.Converter.ConverterXtoY.convert" title="Permalink to this definition">¶</a></dt>
@@ -491,8 +601,23 @@
 <dl class="class">
 <dt id="nxsrecconfig.Describer.DSItem">
 <em class="property">class </em><tt class="descclassname">nxsrecconfig.Describer.</tt><tt class="descname">DSItem</tt><big>(</big><em>name=None</em>, <em>dstype=None</em>, <em>record=None</em>, <em>dsitem=None</em><big>)</big><a class="reference internal" href="_modules/nxsrecconfig/Describer.html#DSItem"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nxsrecconfig.Describer.DSItem" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<dd><p>Bases: <a class="reference external" href="http://docs.python.org/2.7/library/functions.html#object" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></a></p>
 <p>Basic DataSource item</p>
+<p>constructor</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>name</strong> &#8211; datasource name</li>
+<li><strong>dstype</strong> &#8211; datasource type</li>
+<li><strong>record</strong> &#8211; datasource record</li>
+<li><strong>dsitem</strong> &#8211; datasource item</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 <dl class="attribute">
 <dt id="nxsrecconfig.Describer.DSItem.dstype">
 <tt class="descname">dstype</tt><a class="headerlink" href="#nxsrecconfig.Describer.DSItem.dstype" title="Permalink to this definition">¶</a></dt>
@@ -516,9 +641,23 @@
 <dl class="class">
 <dt id="nxsrecconfig.Describer.Describer">
 <em class="property">class </em><tt class="descclassname">nxsrecconfig.Describer.</tt><tt class="descname">Describer</tt><big>(</big><em>nexusconfig_device</em>, <em>tree=False</em>, <em>pyevalfromscript=False</em><big>)</big><a class="reference internal" href="_modules/nxsrecconfig/Describer.html#Describer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nxsrecconfig.Describer.Describer" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<dd><p>Bases: <a class="reference external" href="http://docs.python.org/2.7/library/functions.html#object" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></a></p>
 <p>Lists datasources, strategy, dstype and record name
 of given component</p>
+<p>constructor</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>nexusconfig_device</strong> &#8211; configserver configuration server name</li>
+<li><strong>tree</strong> &#8211; output flag for dictionary tree</li>
+<li><strong>tree</strong> &#8211; output flag for dictionary tree</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 <dl class="method">
 <dt id="nxsrecconfig.Describer.Describer.components">
 <tt class="descname">components</tt><big>(</big><em>components=None</em>, <em>strategy=''</em>, <em>dstype=''</em>, <em>cfvars=None</em><big>)</big><a class="reference internal" href="_modules/nxsrecconfig/Describer.html#Describer.components"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nxsrecconfig.Describer.Describer.components" title="Permalink to this definition">¶</a></dt>
@@ -573,8 +712,21 @@ If &#8216;&#8217; all available ones are taken</li>
 <dl class="class">
 <dt id="nxsrecconfig.Describer.ExDSDict">
 <em class="property">class </em><tt class="descclassname">nxsrecconfig.Describer.</tt><tt class="descname">ExDSDict</tt><big>(</big><em>*args</em>, <em>**kw</em><big>)</big><a class="reference internal" href="_modules/nxsrecconfig/Describer.html#ExDSDict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nxsrecconfig.Describer.ExDSDict" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">dict</span></tt></p>
+<dd><p>Bases: <a class="reference external" href="http://docs.python.org/2.7/library/stdtypes.html#dict" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">dict</span></tt></a></p>
 <p>Extended DataSource Dictionary</p>
+<p>constructor</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>args</strong> &#8211; dict args</li>
+<li><strong>kw</strong> &#8211; dict kw</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 <dl class="method">
 <dt id="nxsrecconfig.Describer.ExDSDict.appendDSList">
 <tt class="descname">appendDSList</tt><big>(</big><em>dslist</em>, <em>mode</em>, <em>nxtype=None</em>, <em>shape=None</em><big>)</big><a class="reference internal" href="_modules/nxsrecconfig/Describer.html#ExDSDict.appendDSList"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nxsrecconfig.Describer.ExDSDict.appendDSList" title="Permalink to this definition">¶</a></dt>
@@ -606,6 +758,21 @@ or None if not appended</p>
 <em class="property">class </em><tt class="descclassname">nxsrecconfig.Describer.</tt><tt class="descname">ExDSItem</tt><big>(</big><em>dsitem=None</em>, <em>mode=None</em>, <em>nxtype=None</em>, <em>shape=None</em><big>)</big><a class="reference internal" href="_modules/nxsrecconfig/Describer.html#ExDSItem"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nxsrecconfig.Describer.ExDSItem" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#nxsrecconfig.Describer.DSItem" title="nxsrecconfig.Describer.DSItem"><tt class="xref py py-class docutils literal"><span class="pre">nxsrecconfig.Describer.DSItem</span></tt></a></p>
 <p>Extended DataSource item</p>
+<p>constructor</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>dsitem</strong> &#8211; datasource item</li>
+<li><strong>mode</strong> &#8211; writing mode</li>
+<li><strong>nxtype</strong> &#8211; nexus type</li>
+<li><strong>shape</strong> &#8211; datasource shape</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 <dl class="attribute">
 <dt id="nxsrecconfig.Describer.ExDSItem.mode">
 <tt class="descname">mode</tt><a class="headerlink" href="#nxsrecconfig.Describer.ExDSItem.mode" title="Permalink to this definition">¶</a></dt>
@@ -633,9 +800,18 @@ or None if not appended</p>
 <dl class="class">
 <dt id="nxsrecconfig.DynamicComponent.DynamicComponent">
 <em class="property">class </em><tt class="descclassname">nxsrecconfig.DynamicComponent.</tt><tt class="descname">DynamicComponent</tt><big>(</big><em>nexusconfig_device</em><big>)</big><a class="reference internal" href="_modules/nxsrecconfig/DynamicComponent.html#DynamicComponent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nxsrecconfig.DynamicComponent.DynamicComponent" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<dd><p>Bases: <a class="reference external" href="http://docs.python.org/2.7/library/functions.html#object" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></a></p>
 <p>Creates dynamic component
 of given component</p>
+<p>constructor</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>nexusconfig_device</strong> &#8211; configserver configuration server name</td>
+</tr>
+</tbody>
+</table>
 <dl class="method">
 <dt id="nxsrecconfig.DynamicComponent.DynamicComponent.create">
 <tt class="descname">create</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/nxsrecconfig/DynamicComponent.html#DynamicComponent.create"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nxsrecconfig.DynamicComponent.DynamicComponent.create" title="Permalink to this definition">¶</a></dt>
@@ -758,8 +934,17 @@ of given component</p>
 <dl class="class">
 <dt id="nxsrecconfig.MacroServerPools.MacroServerPools">
 <em class="property">class </em><tt class="descclassname">nxsrecconfig.MacroServerPools.</tt><tt class="descname">MacroServerPools</tt><big>(</big><em>numberOfThreads</em><big>)</big><a class="reference internal" href="_modules/nxsrecconfig/MacroServerPools.html#MacroServerPools"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nxsrecconfig.MacroServerPools.MacroServerPools" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<dd><p>Bases: <a class="reference external" href="http://docs.python.org/2.7/library/functions.html#object" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></a></p>
 <p>sardanamacro server and pools</p>
+<p>constructor</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>numberOfThreads</strong> &#8211; number of threads</td>
+</tr>
+</tbody>
+</table>
 <dl class="method">
 <dt id="nxsrecconfig.MacroServerPools.MacroServerPools.checkChannels">
 <tt class="descname">checkChannels</tt><big>(</big><em>door</em>, <em>configdevice</em>, <em>channels</em>, <em>componentgroup</em>, <em>datasourcegroup</em>, <em>channelerrors</em><big>)</big><a class="reference internal" href="_modules/nxsrecconfig/MacroServerPools.html#MacroServerPools.checkChannels"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nxsrecconfig.MacroServerPools.MacroServerPools.checkChannels" title="Permalink to this definition">¶</a></dt>
@@ -919,6 +1104,19 @@ of given component</p>
 Device States Description:
 DevState.ON - Server is ON,
 DevState.RUNNING - Performing a query</td>
+</tr>
+</tbody>
+</table>
+<p>Device constructor</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>cl</strong> &#8211; class name</li>
+<li><strong>name</strong> &#8211; device name</li>
+</ul>
+</td>
 </tr>
 </tbody>
 </table>
@@ -2343,6 +2541,7 @@ and updates serialno if appendEntry selected</td>
 <dt id="nxsrecconfig.NXSConfig.NXSRecSelectorClass">
 <em class="property">class </em><tt class="descclassname">nxsrecconfig.NXSConfig.</tt><tt class="descname">NXSRecSelectorClass</tt><big>(</big><em>name</em><big>)</big><a class="reference internal" href="_modules/nxsrecconfig/NXSConfig.html#NXSRecSelectorClass"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nxsrecconfig.NXSConfig.NXSRecSelectorClass" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">PyTango._PyTango.DeviceClass</span></tt></p>
+<p>NXSRecSelectorclass Constructor</p>
 <dl class="attribute">
 <dt id="nxsrecconfig.NXSConfig.NXSRecSelectorClass.attr_list">
 <tt class="descname">attr_list</tt><em class="property"> = {'UserData': [[PyTango._PyTango.CmdArgType.DevString, PyTango._PyTango.AttrDataFormat.SCALAR, PyTango._PyTango.AttrWriteType.READ_WRITE], {'description': 'JSON dictionary with User Data', 'Display level': PyTango._PyTango.DispLevel.EXPERT, 'label': 'Client Data'}], 'ScanID': [[PyTango._PyTango.CmdArgType.DevLong, PyTango._PyTango.AttrDataFormat.SCALAR, PyTango._PyTango.AttrWriteType.READ_WRITE], {'description': 'Scan ID', 'label': 'Scan ID'}], 'Version': [[PyTango._PyTango.CmdArgType.DevString, PyTango._PyTango.AttrDataFormat.SCALAR, PyTango._PyTango.AttrWriteType.READ], {'description': 'server version', 'label': 'Version'}], 'MacroServer': [[PyTango._PyTango.CmdArgType.DevString, PyTango._PyTango.AttrDataFormat.SCALAR, PyTango._PyTango.AttrWriteType.READ], {'description': 'Macro Server device name', 'label': 'MacroServer'}], 'WriterDevice': [[PyTango._PyTango.CmdArgType.DevString, PyTango._PyTango.AttrDataFormat.SCALAR, PyTango._PyTango.AttrWriteType.READ_WRITE], {'description': 'Writer device', 'label': 'Writer Device'}], 'DataSources': [[PyTango._PyTango.CmdArgType.DevString, PyTango._PyTango.AttrDataFormat.SPECTRUM, PyTango._PyTango.AttrWriteType.READ, 10000], {'description': 'list of Selected Datasources', 'label': 'Selected Datasources'}], 'ConfigDevice': [[PyTango._PyTango.CmdArgType.DevString, PyTango._PyTango.AttrDataFormat.SCALAR, PyTango._PyTango.AttrWriteType.READ_WRITE], {'Memorized': 'true', 'description': 'Configuration device', 'label': 'Configuration Device'}], 'ScanFile': [[PyTango._PyTango.CmdArgType.DevString, PyTango._PyTango.AttrDataFormat.SCALAR, PyTango._PyTango.AttrWriteType.READ_WRITE], {'description': 'Scan File(s)', 'label': 'Scan File(s)'}], 'AppendEntry': [[PyTango._PyTango.CmdArgType.DevBoolean, PyTango._PyTango.AttrDataFormat.SCALAR, PyTango._PyTango.AttrWriteType.READ_WRITE], {'description': 'flag for entry  appending ', 'label': 'Append Entry'}], 'MntGrp': [[PyTango._PyTango.CmdArgType.DevString, PyTango._PyTango.AttrDataFormat.SCALAR, PyTango._PyTango.AttrWriteType.READ_WRITE], {'description': ' Measurement Group', 'label': ' Measurement Group'}], 'StepDataSources': [[PyTango._PyTango.CmdArgType.DevString, PyTango._PyTango.AttrDataFormat.SCALAR, PyTango._PyTango.AttrWriteType.READ_WRITE], {'description': 'list of datasources to be switched into step mode', 'Display level': PyTango._PyTango.DispLevel.EXPERT, 'label': 'list of datasources to be switch into step mode'}], 'ConfigVariables': [[PyTango._PyTango.CmdArgType.DevString, PyTango._PyTango.AttrDataFormat.SCALAR, PyTango._PyTango.AttrWriteType.READ_WRITE], {'description': 'JSON dictionary with configuration variablesfor templated components', 'Display level': PyTango._PyTango.DispLevel.EXPERT, 'label': 'Configuration Variables'}], 'Components': [[PyTango._PyTango.CmdArgType.DevString, PyTango._PyTango.AttrDataFormat.SPECTRUM, PyTango._PyTango.AttrWriteType.READ, 10000], {'description': 'list of Selected Components', 'label': 'Selected Components'}], 'ProfileConfiguration': [[PyTango._PyTango.CmdArgType.DevString, PyTango._PyTango.AttrDataFormat.SCALAR, PyTango._PyTango.AttrWriteType.READ_WRITE], {'description': 'JSON dict of server configuration', 'Display level': PyTango._PyTango.DispLevel.EXPERT, 'label': 'Profile Configuration'}], 'Door': [[PyTango._PyTango.CmdArgType.DevString, PyTango._PyTango.AttrDataFormat.SCALAR, PyTango._PyTango.AttrWriteType.READ_WRITE], {'Memorized': 'true', 'description': 'Door', 'label': 'Door'}], 'DeviceGroups': [[PyTango._PyTango.CmdArgType.DevString, PyTango._PyTango.AttrDataFormat.SCALAR, PyTango._PyTango.AttrWriteType.READ_WRITE], {'Memorized': 'true', 'description': 'JSON dictionary with device groups', 'Display level': PyTango._PyTango.DispLevel.EXPERT, 'label': 'Device groups'}], 'ProfileFile': [[PyTango._PyTango.CmdArgType.DevString, PyTango._PyTango.AttrDataFormat.SCALAR, PyTango._PyTango.AttrWriteType.READ_WRITE], {'Memorized': 'true', 'description': 'config file with its full path', 'label': 'Profile File with its Path'}], 'DescriptionErrors': [[PyTango._PyTango.CmdArgType.DevString, PyTango._PyTango.AttrDataFormat.SPECTRUM, PyTango._PyTango.AttrWriteType.READ, 10000], {'description': 'list of Description Component Errors', 'label': 'Description Component Errors'}], 'ScanDir': [[PyTango._PyTango.CmdArgType.DevString, PyTango._PyTango.AttrDataFormat.SCALAR, PyTango._PyTango.AttrWriteType.READ_WRITE], {'description': 'Scan Directory', 'label': 'Scan Directory'}]}</em><a class="headerlink" href="#nxsrecconfig.NXSConfig.NXSRecSelectorClass.attr_list" title="Permalink to this definition">¶</a></dt>
@@ -2392,8 +2591,10 @@ and updates serialno if appendEntry selected</td>
 <dl class="class">
 <dt id="nxsrecconfig.ProfileManager.ProfileManager">
 <em class="property">class </em><tt class="descclassname">nxsrecconfig.ProfileManager.</tt><tt class="descname">ProfileManager</tt><big>(</big><em>selector</em><big>)</big><a class="reference internal" href="_modules/nxsrecconfig/ProfileManager.html#ProfileManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nxsrecconfig.ProfileManager.ProfileManager" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<dd><p>Bases: <a class="reference external" href="http://docs.python.org/2.7/library/functions.html#object" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></a></p>
 <p>Manages Measurement Group and Profile from Selector</p>
+<p>constructor</p>
+<p>:param selector selector object</p>
 <dl class="method">
 <dt id="nxsrecconfig.ProfileManager.ProfileManager.availableMntGrps">
 <tt class="descname">availableMntGrps</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/nxsrecconfig/ProfileManager.html#ProfileManager.availableMntGrps"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nxsrecconfig.ProfileManager.ProfileManager.availableMntGrps" title="Permalink to this definition">¶</a></dt>
@@ -2599,8 +2800,21 @@ import setting from active measurement</p>
 <dl class="class">
 <dt id="nxsrecconfig.Selection.Selection">
 <em class="property">class </em><tt class="descclassname">nxsrecconfig.Selection.</tt><tt class="descname">Selection</tt><big>(</big><em>*args</em>, <em>**kw</em><big>)</big><a class="reference internal" href="_modules/nxsrecconfig/Selection.html#Selection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nxsrecconfig.Selection.Selection" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">dict</span></tt></p>
+<dd><p>Bases: <a class="reference external" href="http://docs.python.org/2.7/library/stdtypes.html#dict" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">dict</span></tt></a></p>
 <p>Selection Dictionary</p>
+<p>constructor</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>args</strong> &#8211; dictionary args</li>
+<li><strong>kw</strong> &#8211; dictionary kw</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 <dl class="method">
 <dt id="nxsrecconfig.Selection.Selection.deselect">
 <tt class="descname">deselect</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/nxsrecconfig/Selection.html#Selection.deselect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nxsrecconfig.Selection.Selection.deselect" title="Permalink to this definition">¶</a></dt>
@@ -2727,8 +2941,21 @@ It adds new channels to DataSourceSelection</p>
 <dl class="class">
 <dt id="nxsrecconfig.Selector.Selector">
 <em class="property">class </em><tt class="descclassname">nxsrecconfig.Selector.</tt><tt class="descname">Selector</tt><big>(</big><em>macroserverpools</em>, <em>version</em><big>)</big><a class="reference internal" href="_modules/nxsrecconfig/Selector.html#Selector"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nxsrecconfig.Selector.Selector" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<dd><p>Bases: <a class="reference external" href="http://docs.python.org/2.7/library/functions.html#object" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></a></p>
 <p>access class to Selection dictionary and Config Device</p>
+<p>constructor</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>macroserverpools</strong> &#8211; MacroServerPools object</li>
+<li><strong>version</strong> &#8211; selector version</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 <dl class="method">
 <dt id="nxsrecconfig.Selector.Selector.configCommand">
 <tt class="descname">configCommand</tt><big>(</big><em>command</em>, <em>*var</em><big>)</big><a class="reference internal" href="_modules/nxsrecconfig/Selector.html#Selector.configCommand"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nxsrecconfig.Selector.Selector.configCommand" title="Permalink to this definition">¶</a></dt>
@@ -2846,9 +3073,19 @@ It adds new channels to DataSourceSelection</p>
 <dl class="method">
 <dt id="nxsrecconfig.Selector.Selector.importEnv">
 <tt class="descname">importEnv</tt><big>(</big><em>names=None</em>, <em>data=None</em><big>)</big><a class="reference internal" href="_modules/nxsrecconfig/Selector.html#Selector.importEnv"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nxsrecconfig.Selector.Selector.importEnv" title="Permalink to this definition">¶</a></dt>
-<dd><p>imports Selector Environment Data
-:param names: names of required variables
-:param data: dictionary with resulting data</p>
+<dd><p>imports Selector Environment Data</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>names</strong> &#8211; names of required variables</li>
+<li><strong>data</strong> &#8211; dictionary with resulting data</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -2970,8 +3207,21 @@ It adds new channels to DataSourceSelection</p>
 <dl class="class">
 <dt id="nxsrecconfig.Settings.Settings">
 <em class="property">class </em><tt class="descclassname">nxsrecconfig.Settings.</tt><tt class="descname">Settings</tt><big>(</big><em>server=None</em>, <em>numberofthreads=None</em><big>)</big><a class="reference internal" href="_modules/nxsrecconfig/Settings.html#Settings"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nxsrecconfig.Settings.Settings" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<dd><p>Bases: <a class="reference external" href="http://docs.python.org/2.7/library/functions.html#object" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></a></p>
 <p>NeXus Sardana Recorder settings</p>
+<p>contructor</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>server</strong> &#8211; NXSRecSelector server</li>
+<li><strong>numberofthreads</strong> &#8211; number of threads used to check device state</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 <dl class="attribute">
 <dt id="nxsrecconfig.Settings.Settings.adminDataNames">
 <tt class="descname">adminDataNames</tt><em class="property"> = None</em><a class="headerlink" href="#nxsrecconfig.Settings.Settings.adminDataNames" title="Permalink to this definition">¶</a></dt>
@@ -3804,7 +4054,7 @@ when log stream does not exist</li>
 <dl class="class">
 <dt id="nxsrecconfig.Utils.MSUtils">
 <em class="property">class </em><tt class="descclassname">nxsrecconfig.Utils.</tt><tt class="descname">MSUtils</tt><a class="reference internal" href="_modules/nxsrecconfig/Utils.html#MSUtils"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nxsrecconfig.Utils.MSUtils" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<dd><p>Bases: <a class="reference external" href="http://docs.python.org/2.7/library/functions.html#object" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></a></p>
 <p>MacroServer Utilities</p>
 <dl class="classmethod">
 <dt id="nxsrecconfig.Utils.MSUtils.getEnv">
@@ -3908,7 +4158,7 @@ when log stream does not exist</li>
 <dl class="class">
 <dt id="nxsrecconfig.Utils.PoolUtils">
 <em class="property">class </em><tt class="descclassname">nxsrecconfig.Utils.</tt><tt class="descname">PoolUtils</tt><a class="reference internal" href="_modules/nxsrecconfig/Utils.html#PoolUtils"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nxsrecconfig.Utils.PoolUtils" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<dd><p>Bases: <a class="reference external" href="http://docs.python.org/2.7/library/functions.html#object" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></a></p>
 <p>Pool Utilities</p>
 <dl class="classmethod">
 <dt id="nxsrecconfig.Utils.PoolUtils.filterNames">
@@ -4099,7 +4349,7 @@ when log stream does not exist</li>
 <dl class="class">
 <dt id="nxsrecconfig.Utils.TangoUtils">
 <em class="property">class </em><tt class="descclassname">nxsrecconfig.Utils.</tt><tt class="descname">TangoUtils</tt><a class="reference internal" href="_modules/nxsrecconfig/Utils.html#TangoUtils"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nxsrecconfig.Utils.TangoUtils" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<dd><p>Bases: <a class="reference external" href="http://docs.python.org/2.7/library/functions.html#object" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></a></p>
 <p>Tango Utilities</p>
 <dl class="classmethod">
 <dt id="nxsrecconfig.Utils.TangoUtils.command">
@@ -4235,7 +4485,7 @@ when log stream does not exist</li>
 <dl class="class">
 <dt id="nxsrecconfig.Utils.Utils">
 <em class="property">class </em><tt class="descclassname">nxsrecconfig.Utils.</tt><tt class="descname">Utils</tt><a class="reference internal" href="_modules/nxsrecconfig/Utils.html#Utils"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nxsrecconfig.Utils.Utils" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<dd><p>Bases: <a class="reference external" href="http://docs.python.org/2.7/library/functions.html#object" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></a></p>
 <p>Miscellaneous Utilities</p>
 <dl class="classmethod">
 <dt id="nxsrecconfig.Utils.Utils.compareDict">
@@ -4351,31 +4601,23 @@ when log stream does not exist</li>
 </div>
 
 
-          </div>
-        </div>
-      </div>
-      <div class="clearer"></div>
     </div>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="index.html" title="Welcome to nxsrecconfig’s documentation!"
-             >previous</a> |</li>
-        <li><a href="index.html">NXSRecSelector 3.5.0 documentation</a> &raquo;</li> 
-      </ul>
-    </div>
-    <div class="footer">
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
         &copy; Copyright 2012-2016 DESY, Jan Kotanski &lt;jkotan@mail.desy.de&gt;
 
-GNU GENERAL PUBLIC LICENSE, version 3.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
-    </div>
+GNU GENERAL PUBLIC LICENSE, version 3.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.<br/>
+    </p>
+  </div>
+</footer>
   </body>
 </html>
