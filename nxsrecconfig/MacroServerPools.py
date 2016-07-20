@@ -121,6 +121,8 @@ class MacroServerPools(object):
         describer = Describer(configdevice, True, pyevalfromscript=True)
         availablecomponents = TangoUtils.command(
             configdevice, "availableComponents")
+        availabledatasouces = TangoUtils.command(
+            configdevice, "availableDataSources")
 
         for k in set(components) - set(availablecomponents):
             discomponentgroup[str(k)] = CheckerItem(str(k))
@@ -128,20 +130,35 @@ class MacroServerPools(object):
             discomponentgroup[str(k)].active = False
             discomponentgroup[str(k)].message = \
                 "%s not defined in Configuration Server" % k
+        for k in set(datasources) - set(availabledatasouces):
+            discomponentgroup[str(k)] = CheckerItem(str(k))
+            discomponentgroup[str(k)].errords = k
+            discomponentgroup[str(k)].active = False
+            discomponentgroup[str(k)].message = \
+                "%s not defined in Configuration Server" % k
         toCheck = {}
-        for acp in components:
+        cps = set(components) & set(availablecomponents)
+        for acp in cps:
             res = describer.components([acp], '', '')
             for cp, dss in res[0].items():
+                for ds in dss.keys():
+                    if ds not in availabledatasouces:
+                        discomponentgroup[str(cp)] = CheckerItem(str(cp))
+                        discomponentgroup[str(cp)].errords = ds
+                        discomponentgroup[str(cp)].active = False
+                        discomponentgroup[str(cp)].message = \
+                            "%s of %s not defined in Configuration Server" \
+                            % (ds, cp)
+                        break
                 cls.__createCheckItem(cp, dss, toCheck, nonexisting,
                                       discomponentgroup, channels, describer)
-
-        for ads in datasources:
+        adss = set(datasources) & set(availabledatasouces)
+        for ads in adss:
             res = describer.dataSources([ads])
             if ads not in res[0].keys():
                 res[0][ads] = None
             cls.__createCheckItem(ads, res[0], toCheck, nonexisting,
                                   discomponentgroup, channels, describer)
-
         return toCheck.values()
 
     @classmethod

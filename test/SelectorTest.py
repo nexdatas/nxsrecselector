@@ -3959,9 +3959,9 @@ class SelectorTest(unittest.TestCase):
         self.assertEqual(
             json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
             ['AvailableComponents', 'AvailableDataSources',
-             'AvailableComponents'])
+             'AvailableComponents', 'AvailableDataSources'])
         self.assertEqual(json.loads(
-            self._cf.dp.GetCommandVariable("VARS")), [None, None, None])
+            self._cf.dp.GetCommandVariable("VARS")), [None, None, None, None])
 
     ## test
     # \brief It tests default settings
@@ -3999,10 +3999,10 @@ class SelectorTest(unittest.TestCase):
         self.assertEqual(
             json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
             ["AvailableComponents", "AvailableDataSources",
-             "AvailableComponents"])
+             "AvailableComponents", "AvailableDataSources"])
         self.assertEqual(
             json.loads(self._cf.dp.GetCommandVariable("VARS")),
-            [None, None, None])
+            [None, None, None, None])
 #        print self._cf.dp.availableComponents()
 
     ## test
@@ -4042,7 +4042,8 @@ class SelectorTest(unittest.TestCase):
         self.assertEqual(
             json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
             ["AvailableComponents", "AvailableDataSources",
-             "AvailableComponents", "Components",
+             "AvailableComponents", "AvailableDataSources",
+             "Components",
              "DataSources",
              "DataSources",
              "DataSources",
@@ -4051,7 +4052,8 @@ class SelectorTest(unittest.TestCase):
              "StoreSelection"])
         self.assertEqual(
             json.loads(self._cf.dp.GetCommandVariable("VARS")),
-            [None, None, None, ['mycp'], ['ann5'], ['ann5'], ['ann2'], ['ann2'],
+            [None, None, None, None,
+             ['mycp'], ['ann5'], ['ann5'], ['ann2'], ['ann2'],
              None, val["MntGrp"]])
 
         self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
@@ -4109,6 +4111,7 @@ class SelectorTest(unittest.TestCase):
             ["AvailableComponents",
              "AvailableDataSources",
              "AvailableComponents",
+             "AvailableDataSources",
              "Components",
              "DataSources",
              "DataSources",
@@ -4117,7 +4120,8 @@ class SelectorTest(unittest.TestCase):
          ])
         self.assertEqual(
             json.loads(self._cf.dp.GetCommandVariable("VARS")),
-            [None, None, None, ['mycp'], ['ann5'], ['ann5'], ['ann2'], ['ann2']])
+            [None, None, None, None,
+             ['mycp'], ['ann5'], ['ann5'], ['ann2'], ['ann2']])
 
         self.assertTrue(val["MntGrp"] not in self._cf.dp.availableSelections())
 
@@ -4158,14 +4162,16 @@ class SelectorTest(unittest.TestCase):
         self.assertEqual(
             json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
             ["AvailableComponents", "AvailableDataSources",
-             "AvailableComponents", "Components",
+             "AvailableComponents", "AvailableDataSources",
+             "Components",
              "DataSources",
              "DataSources",
              "DataSources",
              "DataSources"])
         self.assertEqual(
             json.loads(self._cf.dp.GetCommandVariable("VARS")),
-            [None, None, None, ['mycp'], ['ann5'], ['ann5'], ['ann2'], ['ann2']])
+            [None, None, None, None,
+             ['mycp'], ['ann5'], ['ann5'], ['ann2'], ['ann2']])
 
         self.assertTrue(val["MntGrp"] not in self._cf.dp.availableSelections())
 
@@ -4206,10 +4212,10 @@ class SelectorTest(unittest.TestCase):
         self.assertEqual(
             json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
             ["AvailableComponents", "AvailableDataSources",
-             "AvailableComponents"])
+             "AvailableComponents", "AvailableDataSources"])
         self.assertEqual(
             json.loads(self._cf.dp.GetCommandVariable("VARS")),
-            [None, None, None])
+            [None, None, None, None])
 
         self.assertTrue(val["MntGrp"] not in self._cf.dp.availableSelections())
 
@@ -4251,13 +4257,15 @@ class SelectorTest(unittest.TestCase):
         self.assertEqual(
             json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
             ["AvailableComponents", "AvailableDataSources",
-             "AvailableComponents", "Components",
+             "AvailableComponents", "AvailableDataSources",
+             "Components",
              "DataSources",
              "DataSources",
              "AvailableDataSources",
              "StoreSelection"])
         self.assertEqual(json.loads(self._cf.dp.GetCommandVariable("VARS")),
-                         [None, None, None, ['mycp'], [u'ann2'], [u'ann2'],
+                         [None, None, None, None,
+                          ['mycp'], [u'ann2'], [u'ann2'],
                           None, val["MntGrp"]])
         self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
         sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
@@ -4316,10 +4324,12 @@ class SelectorTest(unittest.TestCase):
         self.assertEqual(
             json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
             ["AvailableComponents", "AvailableDataSources",
-             "AvailableComponents", "Components",
+             "AvailableComponents", "AvailableDataSources",
+             "Components",
              "DataSources", "DataSources"])
         self.assertEqual(json.loads(self._cf.dp.GetCommandVariable("VARS")),
-                         [None, None, None, ['mycp'], ['ann3'], ['ann3']])
+                         [None, None, None, None,
+                          ['mycp'], ['ann3'], ['ann3']])
         self.assertTrue(val["MntGrp"] not in self._cf.dp.availableSelections())
 
     ## test
@@ -4360,10 +4370,11 @@ class SelectorTest(unittest.TestCase):
         self.assertEqual(
             json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
             ["AvailableComponents", "AvailableDataSources",
-             "AvailableComponents", "Components",
+             "AvailableComponents", "AvailableDataSources",
+             "Components",
              "DataSources", "DataSources"])
         self.assertEqual(json.loads(self._cf.dp.GetCommandVariable("VARS")),
-                         [None, None, None, ['mycp'], ['ann3'], ['ann3']])
+                         [None, None, None, None, ['mycp'], ['ann3'], ['ann3']])
         self.assertTrue(val["MntGrp"] not in self._cf.dp.availableSelections())
 
     ## test
@@ -4404,7 +4415,7 @@ class SelectorTest(unittest.TestCase):
         self.assertEqual(
             json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
             ["AvailableComponents", "AvailableDataSources",
-             "AvailableComponents",
+             "AvailableComponents", "AvailableDataSources",
              "Components", "DataSources", "DataSources",
              "DataSources", "DataSources", "DataSources"])
         self.assertTrue(val["MntGrp"] not in self._cf.dp.availableSelections())
@@ -4446,14 +4457,14 @@ class SelectorTest(unittest.TestCase):
         self.assertEqual(
             json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
             ["AvailableComponents", "AvailableDataSources",
-             "AvailableComponents",
+             "AvailableComponents", "AvailableDataSources",
              "Components", "DataSources", "DataSources",
              "DataSources",
              "DataSources",
              "DataSources", "AvailableDataSources",
              "StoreSelection"])
         self.assertEqual(json.loads(self._cf.dp.GetCommandVariable("VARS")),
-                         [None, None, None,
+                         [None, None, None, None,
                           [u'smycp'],
                           [u'scalar_long'],
                           [u'scalar_short'],
@@ -4518,11 +4529,11 @@ class SelectorTest(unittest.TestCase):
         self.assertEqual(
             json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
             ["AvailableComponents", "AvailableDataSources",
-             "AvailableComponents",
+             "AvailableComponents", "AvailableDataSources",
              "Components", "DataSources", "DataSources",
              "DataSources", "DataSources", "DataSources"])
         self.assertEqual(json.loads(self._cf.dp.GetCommandVariable("VARS")),
-                         [None, None, None,
+                         [None, None, None, None,
                           [u'smycp'],
                           [u'scalar_long'],
                           [u'scalar_short'],
@@ -4575,7 +4586,7 @@ class SelectorTest(unittest.TestCase):
         self.assertEqual(
             json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
             ["AvailableComponents", "AvailableDataSources",
-             "AvailableComponents",
+             "AvailableComponents", "AvailableDataSources",
              "Components", "DataSources", "DataSources", "DataSources",
              "Components", "DataSources", "DataSources", "DataSources",
              "Components", "DataSources", "DataSources", "DataSources",
@@ -4671,8 +4682,8 @@ class SelectorTest(unittest.TestCase):
             self.assertEqual(
                 json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
                 [
-                    "AvailableComponents",
-                    "AvailableDataSources", "AvailableComponents",
+                    "AvailableComponents", "AvailableDataSources",
+                    "AvailableComponents", "AvailableDataSources",
                     "Components", "DataSources", "DataSources", "DataSources",
                     "Components", "DataSources", "DataSources", "DataSources",
                     "Components", "DataSources", "DataSources", "DataSources",
@@ -4770,7 +4781,7 @@ class SelectorTest(unittest.TestCase):
             self.assertEqual(
                 json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
                 ["AvailableComponents", "AvailableDataSources",
-                 "AvailableComponents",
+                 "AvailableComponents", "AvailableDataSources",
                  "Components", "DataSources", "DataSources", "DataSources",
                  "Components", "DataSources", "DataSources", "DataSources",
                  "Components", "DataSources", "DataSources", "DataSources",
@@ -4867,7 +4878,7 @@ class SelectorTest(unittest.TestCase):
                 json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
                 [
                     "AvailableComponents", "AvailableDataSources",
-                    "AvailableComponents",
+                    "AvailableComponents", "AvailableDataSources",
                     "Components", "DataSources", "DataSources", "DataSources",
                     "Components", "DataSources", "DataSources", "DataSources",
                     "Components", "DataSources", "DataSources", "DataSources",
@@ -5380,7 +5391,7 @@ class SelectorTest(unittest.TestCase):
                 self._cf.dp.GetCommandVariable("COMMANDS")),
             [
                 "AvailableComponents", "AvailableDataSources",
-                "AvailableComponents",
+                "AvailableComponents", "AvailableDataSources",
                 "Components", "DataSources", "DataSources", "DataSources",
                 "Components", "DataSources", "DataSources", "DataSources",
                 "Components", "DataSources", "DataSources", "DataSources",
@@ -5462,14 +5473,14 @@ class SelectorTest(unittest.TestCase):
 
             self.myAssertDict(json.loads(res), {
                 "smycp": False, "smycp2": True, "smycp3": True,
-                "s2mycp": False, "s2mycp2": True, "s2mycp3": True})
+                "s2mycp": None, "s2mycp2": None, "s2mycp3": None})
             self.myAssertDict(json.loads(resd), {
                 "scalar_uchar": True, "scalar_string": True,
                 "scalar_ulong": False,
-                "scalar2_uchar": True, "scalar2_string": True,
-                "scalar2_ulong": False,
+                "scalar2_uchar": None, "scalar2_string": None,
+                "scalar2_ulong": None,
             })
-            self.assertEqual(len(se.descErrors), 0)
+            self.assertEqual(len(se.descErrors), 6)
 
             res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
@@ -5542,16 +5553,16 @@ class SelectorTest(unittest.TestCase):
             print res
             self.myAssertDict(json.loads(res), {
                 "smycp": True, "smycp2": False, "smycp3": True,
-                "s2mycp": None, "s2mycp2": None, "s2mycp3": True})
+                "s2mycp": None, "s2mycp2": None, "s2mycp3": None})
             resd = se["DataSourcePreselection"]
             print resd
             self.myAssertDict(json.loads(resd), {
                 "scalar_uchar": True, "scalar_string": True,
                 "scalar_ulong": False,
                 "scalar2_uchar": None, "scalar2_string": None,
-                "scalar2_ulong": False
+                "scalar2_ulong": None
             })
-            self.assertEqual(len(se.descErrors), 4)
+            self.assertEqual(len(se.descErrors), 6)
 
     #        print self._cf.dp.GetCommandVariable("COMMANDS")
             res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))

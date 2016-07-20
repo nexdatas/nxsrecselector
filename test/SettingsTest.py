@@ -4339,14 +4339,14 @@ class SettingsTest(unittest.TestCase):
 
             self.myAssertDict(json.loads(res), {
                 "smycp": False, "smycp2": True, "smycp3": True,
-                "s2mycp": False, "s2mycp2": True, "s2mycp3": True})
+                "s2mycp": None, "s2mycp2": None, "s2mycp3": None})
             self.myAssertDict(json.loads(resd), {
                 "scalar_uchar": True, "scalar_string": True,
                 "scalar_ulong": False,
-                "scalar2_uchar": True, "scalar2_string": True,
-                "scalar2_ulong": False,
+                "scalar2_uchar": None, "scalar2_string": None,
+                "scalar2_ulong": None,
             })
-            self.assertTrue(not rs.descriptionErrors)
+            self.assertEqual(len(rs.descriptionErrors), 6)
 
             res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
@@ -4425,14 +4425,14 @@ class SettingsTest(unittest.TestCase):
 
             self.myAssertDict(json.loads(res), {
                 "smycp": True, "smycp2": False, "smycp3": True,
-                "s2mycp": None, "s2mycp2": None, "s2mycp3": True})
+                "s2mycp": None, "s2mycp2": None, "s2mycp3": None})
             self.myAssertDict(json.loads(resd), {
                 "scalar_uchar": True, "scalar_string": True,
                 "scalar_ulong": False,
                 "scalar2_uchar": None, "scalar2_string": None,
-                "scalar2_ulong": False
+                "scalar2_ulong": None
             })
-            self.assertEqual(len(rs.descriptionErrors), 4)
+            self.assertEqual(len(rs.descriptionErrors), 6)
 
             res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
@@ -8306,8 +8306,8 @@ class SettingsTest(unittest.TestCase):
 
             self.myAssertDict(json.loads(res), {
                 "smycp": True, "smycp2": True, "smycp3": True,
-                "s2mycp": True, "s2mycp2": True, "s2mycp3": True})
-            self.assertTrue(not rs.descriptionErrors)
+                "s2mycp": None, "s2mycp2": None, "s2mycp3": None})
+            self.assertEqual(len(rs.descriptionErrors), 3)
 
             res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
@@ -8398,8 +8398,8 @@ class SettingsTest(unittest.TestCase):
             print res
             self.myAssertDict(json.loads(res), {
                 "smycp": True, "smycp2": True, "smycp3": True,
-                "s2mycp": None, "s2mycp2": None, "s2mycp3": True})
-            self.assertEqual(len(rs.descriptionErrors), 2)
+                "s2mycp": None, "s2mycp2": None, "s2mycp3": None})
+            self.assertEqual(len(rs.descriptionErrors), 3)
             print "DES", rs.descriptionErrors
 
             res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))

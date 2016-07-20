@@ -251,8 +251,12 @@ class Describer(object):
                 except (StopIteration, IndexError):
                     subc = ''
                 name = subc.strip() if subc else ""
-                dsxmls = TangoUtils.command(self.__nexusconfig_device,
-                                            "dataSources", [str(name)])
+                if str(name) in self.__availableDataSources:
+                    dsxmls = TangoUtils.command(self.__nexusconfig_device,
+                                                "dataSources", [str(name)])
+                else:
+                    dsxmls = None
+                    dsitem = DSItem(name, "__ERROR__", "__ERROR__")
                 if dsxmls:
                     dsitem = self.__describeDataSource(name, dsxmls[0])
                     if dsitem.dstype:
@@ -298,7 +302,7 @@ class Describer(object):
                     "dataSources", [str(name)])
                 if chdsxml:
                     dsitem = self.__describeDataSource(name, chdsxml[0])
-                    if dsitem.dstype: 
+                    if dsitem.dstype:
                         dslist.append(dsitem)
                 else:
                     dslist.append(DSItem(name, None, None))
