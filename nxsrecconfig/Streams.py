@@ -21,15 +21,15 @@
 
 import sys
 
-#: Tango fatal log stream
+#: (:class:`PyTango.log4tango.TangoStream`) Tango fatal log stream
 log_fatal = None
-#: Tango error log stream
+#: (:class:`PyTango.log4tango.TangoStream`) Tango error log stream
 log_error = None
-#: Tango warn log stream
+#: (:class:`PyTango.log4tango.TangoStream`) Tango warn log stream
 log_warn = None
-#: Tango info log stream
+#: (:class:`PyTango.log4tango.TangoStream`) Tango info log stream
 log_info = None
-#: Tango debug log stream
+#: (:class:`PyTango.log4tango.TangoStream`) Tango debug log stream
 log_debug = None
 
 
@@ -37,8 +37,10 @@ def fatal(message, std=True):
     """ writes fatal error message
 
     :param message: error message
+    :type message: :obj:`str`
     :param std: it writes to sys stream
                 when log stream does not exist
+    :type std: :obj:`bool`
     """
     if log_fatal:
         try:
@@ -54,8 +56,10 @@ def error(message, std=True):
     """ writes error message
 
     :param message: error message
+    :type message: :obj:`str`
     :param std: it writes to sys stream
                 when log stream does not exist
+    :type std: :obj:`bool`
    """
     if log_error:
         try:
@@ -71,8 +75,10 @@ def warn(message, std=True):
     """ writes warning message
 
     :param message: warning message
+    :type message: :obj:`str`
     :param std: it writes to sys stream
                 when log stream does not exist
+    :type std: :obj:`bool`
    """
     if log_warn:
         try:
@@ -88,8 +94,10 @@ def info(message, std=True):
     """ writes info message
 
     :param message: info message
+    :type message: :obj:`str`
     :param std: it writes to sys stream
                 when log stream does not exist
+    :type std: :obj:`bool`
     """
     if log_info:
         try:
@@ -105,8 +113,10 @@ def debug(message, std=True):
     """ writes debug message
 
     :param message: debug message
+    :type message: :obj:`str`
     :param std: it writes to sys stream
                 when log stream does not exist
+    :type std: :obj:`bool`
    """
     if log_debug:
         try:
