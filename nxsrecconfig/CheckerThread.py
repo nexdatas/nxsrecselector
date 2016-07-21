@@ -24,7 +24,7 @@ import PyTango
 import threading
 
 
-#: default attributes to check
+#: (:obj:`list` < :obj:`str`>) default attributes to check
 ATTRIBUTESTOCHECK = ["Value", "Position", "Counts", "Data",
                      "Voltage", "Energy", "SampleTime"]
 
@@ -38,14 +38,17 @@ class TangoDSItem(object):
         """ constructor
 
         :param name: datasource name
+        :type name: :obj:`str`
         :param device: datasource device
+        :type device: :obj:`str`
         :param attr: device attribute
+        :type attr: :obj:`str`
         """
-        #: datasource name
+        #: (:obj:`str`) datasource name
         self.name = str(name) if name is not None else None
-        #: datasource device
+        #: (:obj:`str`) datasource device
         self.device = str(device) if device is not None else None
-        #: datasource device attribute
+        #: (:obj:`str`) datasource device attribute
         self.attr = str(attr) if attr is not None else None
 
 
@@ -57,15 +60,16 @@ class CheckerItem(list):
         """ constructor
 
         :param name: checker item name
+        :type name: :obj:`str`
         """
         super(CheckerItem, self).__init__()
-        #: checker name
+        #: (:obj:`str`) checker name
         self.name = name
-        #: datasource with first error
+        #: (:obj:`str`) datasource with first error
         self.errords = None
-        #: first error message
+        #: (:obj:`str`) first error message
         self.message = None
-        #: enabled flag
+        #: (:obj:`bool`) enabled flag
         self.active = True
 
 
@@ -78,12 +82,14 @@ class CheckerThread(threading.Thread):
 
         :brief: It creates ElementThread from the runnable element
         :param index: the current thread index
+        :type index: :obj:`int`
         :param queue: queue with tasks
+        :type queue: :class:`Queue.Queue`
         """
         threading.Thread.__init__(self)
-        #: thread index
+        #: (:obj:`int`) thread index
         self.index = index
-        #: queue with runnable elements
+        #: (:class:`Queue.Queue`) queue with runnable elements
         self.__queue = queue
 
     def run(self):
@@ -106,6 +112,7 @@ class CheckerThread(threading.Thread):
         to one components
 
         :param checkeritem: device list item
+        :type checkeritem: :obj:`list` <:class:`CheckerItem`>
         """
         for ds in checkeritem:
             try:

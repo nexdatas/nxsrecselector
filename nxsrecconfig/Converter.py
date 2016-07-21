@@ -29,13 +29,14 @@ class ConverterXtoY(object):
     def __init__(self):
         """ constructor
         """
-        #: names to convert
+        #: (:obj:`dict` <:obj:`str`, :obj:`str`>) names to convert
         self.names = {}
 
     def convert(self, selection):
         """ converts selection to the current selector version
 
         :param selection: selection dictionary object
+        :type selection: nxsrecconfig.Selection.Selection
         """
         for old, new in self.names.items():
             if old in selection.keys():
@@ -51,7 +52,7 @@ class Converter2to3(ConverterXtoY):
         """
         super(Converter2to3, self).__init__()
 
-        #: names to convert
+        #: (:obj:`dict` <:obj:`str`, :obj:`str`>) names to convert
         self.names = {
             "PreselectedDataSources": "PreselectingDataSources",
             "InitDataSources": "DataSourcePreselection",
@@ -61,7 +62,9 @@ class Converter2to3(ConverterXtoY):
         """ converters list/dict of elements to dictionary with logical values
 
         :param jselelem: json list or dict selection element
+        :type jselelem: :obj:`str`
         :returns: json dictionary
+        :rtype: :obj:`str`
         """
         sel = json.loads(jselelem)
         if isinstance(sel, dict):
@@ -74,6 +77,7 @@ class Converter2to3(ConverterXtoY):
         """ converts selection from version 2 to 3
 
         :param selection: selection dictionary object
+        :type selection: nxsrecconfig.Selection.Selection
         """
         super(Converter2to3, self).convert(selection)
 
@@ -96,7 +100,7 @@ class Converter3to2(ConverterXtoY):
         """
         super(Converter3to2, self).__init__()
 
-        #: names to convert
+        #: (:obj:`dict` <:obj:`str`, :obj:`str`>) names to convert
         self.names = {
             "PreselectingDataSources": "PreselectedDataSources",
             "DataSourcePreselection": "InitDataSources",
@@ -107,7 +111,9 @@ class Converter3to2(ConverterXtoY):
             to dictionary with True/False values
 
         :param jselelem: json dictionary selection element
+        :type jselelem: :obj:`str`
         :returns: converter json dictionary
+        :rtype: :obj:`str`
         """
         sel = json.loads(jselelem)
         return json.dumps(
@@ -118,7 +124,9 @@ class Converter3to2(ConverterXtoY):
             to list of elementes with walue True
 
         :param jselelem: json dictionary selection element
+        :type jselelem: :obj:`str`
         :returns: converter json dictionary
+        :rtype: :obj:`str`
         """
         sel = json.loads(jselelem)
         return json.dumps([key for key, vl in sel.items() if vl])
@@ -127,6 +135,7 @@ class Converter3to2(ConverterXtoY):
         """ converts selection from version 3 to 2
 
         :param selection: selection dictionary object
+        :type selection: nxsrecconfig.Selection.Selection
         """
         super(Converter3to2, self).convert(selection)
         if 'ComponentPreselection' in selection.keys():
@@ -148,7 +157,7 @@ class Converter1to2(ConverterXtoY):
         """
         super(Converter1to2, self).__init__()
 
-        #: names to convert
+        #: (:obj:`dict` <:obj:`str`, :obj:`str`>) names to convert
         self.names = {
             "AutomaticComponentGroup": "ComponentPreselection",
             "AutomaticDataSources": "PreselectedDataSources",
@@ -161,7 +170,7 @@ class Converter1to2(ConverterXtoY):
 
         }
 
-        #: names of properties
+        #: (:obj:`dict` <:obj:`str`, :obj:`str`>) names of properties
         self.pnames = {
             "Labels": "label",
             "LabelPaths": "nexus_path",
@@ -174,6 +183,7 @@ class Converter1to2(ConverterXtoY):
         """ converts selection from version 1 to 2
 
         :param selection: selection dictionary object
+        :type selection: nxsrecconfig.Selection.Selection
         """
         super(Converter1to2, self).convert(selection)
         props = {}
@@ -192,7 +202,7 @@ class Converter2to1(ConverterXtoY):
         """
         super(Converter2to1, self).__init__()
 
-        #: names of properties
+        #: (:obj:`dict` <:obj:`str`, :obj:`str`>) names of properties
         self.pnames = {
             "Labels": "label",
             "LabelPaths": "nexus_path",
@@ -201,7 +211,7 @@ class Converter2to1(ConverterXtoY):
             "LabelShapes": "shape",
         }
 
-        #: names to convert
+        #: (:obj:`dict` <:obj:`str`, :obj:`str`>) names to convert
         self.names = {
             "ComponentSelection": "ComponentGroup",
             "ComponentPreselection": "AutomaticComponentGroup",
@@ -217,6 +227,7 @@ class Converter2to1(ConverterXtoY):
         """ converts selection from version 2 to 1
 
         :param selection: selection dictionary object
+        :type selection: nxsrecconfig.Selection.Selection
         """
         super(Converter2to1, self).convert(selection)
         if "ChannelProperties" in selection:
@@ -236,24 +247,29 @@ class Converter(object):
         """ contstructor
 
         :param ver: the required selection version
+        :type ver: :obj:`str`
         """
 
         sver = ver.split(".")
-        #: major selection version
+        #: (:obj:`int`) major selection version
         self.majorversion = int(sver[0])
-        #: minor selection version
+        #: (:obj:`int`) minor selection version
         self.minorversion = int(sver[1])
-        #: patch selection version
+        #: (:obj:`int`) patch selection version
         self.patchversion = int(sver[2])
 
+        #: (:obj:`list` <:class:`ConverterXtoY`>) converter up sequence
         self.up = [Converter1to2(), Converter2to3()]
+        #: (:obj:`list` <:class:`ConverterXtoY`>) converter down sequence
         self.down = [Converter2to1(), Converter3to2()]
 
     def allkeys(self, selection):
         """
 
         :param selection: selection dictionary object
-        :returns: list of selection keys
+        :type selection: nxsrecconfig.Selection.Selection
+        :returns: selection keys
+        :rtype: :obj:`set`
         """
         lkeys = set()
         for cv in self.up:
@@ -267,6 +283,7 @@ class Converter(object):
         """ converts selection from any version to any other
 
         :param selection: selection dictionary object
+        :type selection: nxsrecconfig.Selection.Selection
         """
         major, _, _ = self.version(selection)
         if major == self.majorversion:
@@ -287,7 +304,9 @@ class Converter(object):
             into (major, minor, patch)
 
         :param selection: selection dictionary object
+        :type selection: nxsrecconfig.Selection.Selection
         :returns: (major, minor, patch) tuple with integers
+        :rtype: (:obj:`int` , :obj:`int` , :obj:`int`)
         """
         major = 1
         minor = 0

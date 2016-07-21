@@ -36,16 +36,20 @@ class DSItem(object):
         """ constructor
 
         :param name: datasource name
+        :type name: :obj:`str`
         :param dstype: datasource type
+        :type dstype: :obj:`str`
         :param record: datasource record
+        :type record: :obj:`str`
         :param dsitem: datasource item
+        :type dsitem: :class:`DSItem`
         """
         if dsitem:
-            #: datasource name
+            #: (:obj:`str`) datasource name
             self.name = dsitem.name
-            #: datasource type
+            #: (:obj:`str`) datasource type
             self.dstype = dsitem.dstype
-            #: datasource record
+            #: (:obj:`str`) datasource record
             self.record = dsitem.record
         else:
             self.name = str(name) if name is not None else None
@@ -63,16 +67,20 @@ class ExDSItem(DSItem):
         """ constructor
 
         :param dsitem: datasource item
-        :param mode: writing mode
+        :type dsitem: :class:`DSItem`
+        :param mode: writing strategy mode
+        :type mode: :obj:`str`
         :param nxtype: nexus type
+        :type nxstype: :obj:`str`
         :param shape: datasource shape
+        :type shape: :obj:`list` <:obj:`int`>
         """
         DSItem.__init__(self, dsitem=dsitem)
-        #: writing mode
+        #: (:obj:`str`) writing strategy mode
         self.mode = str(mode) if mode is not None else None
-        #: nexus type
+        #: (:obj:`str`) nexus type
         self.nxtype = str(nxtype) if nxtype is not None else None
-        #: datasource shape
+        #: (:obj:`list` <:obj:`int`>) datasource shape
         self.shape = shape
 
 
@@ -84,21 +92,30 @@ class ExDSDict(dict):
         """ constructor
 
         :param args: dict args
+        :type args: :obj:`list` <`any`>
         :param kw: dict kw
+        :type kw: :obj:`dict` <`any` , `any`>
         """
         super(ExDSDict, self).__init__(*args, **kw)
+        #: (:obj:`int`) counter
         self.__counter = 1
+        #: (:obj:`str`) noname datasource prefix
         self.__prefix = '__unnamed__'
 
     def appendDSList(self, dslist, mode, nxtype=None, shape=None):
         """ appends a list of ExDSItem
 
         :param dslist: DSItem list
+        :type dslist: :obj:`list` <:class:`DSItem`>
         :param mode: startegy mode
+        :type mode: :obj:`str`
         :param nxtype: NeXus type
+        :type nxstype: :obj:`str`
         :param shape: data shape
+        :type shape: :obj:`list` <:obj:`int`>
         :returns: datasource name for first added datasource
               or None if not appended
+        :rtype: :obj:`str`
         """
         fname = None
         for dsitem in dslist:
@@ -127,31 +144,65 @@ class Describer(object):
     def __init__(self, nexusconfig_device, tree=False, pyevalfromscript=False):
         """ constructor
 
-        :param nexusconfig_device: configserver configuration server name
-        :param tree: output flag for dictionary tree
-        :param tree: output flag for dictionary tree
+        :param nexusconfig_device: configserver configuration server
+        :type nexusconfig_device: :class:`PyTango.DeviceProxy` \
+             or :class:`nxsconfigserver.XMLConfigurator.XMLConfigurator`
+        :param tree: flag for output tree dictionary
+        :type tree: :obj:`bool`
+        :param pyevalfromscript: if evalulate PYEVAL datasources from script
+        :type pyevalfromscript: :obj:`bool`
         """
+        #: (:class:`PyTango.DeviceProxy` \
+        #: or :class:`nxsconfigserver.XMLConfigurator.XMLConfigurator`) \
+        #:    configuration server
         self.__nexusconfig_device = nexusconfig_device
+        #: (:obj:`bool`) flag for output tree dictionary
         self.__treeOutput = tree
+        #: (:obj:`bool`) flag for evalulating PYEVAL datasources from script
         self.__pyevalfromscript = pyevalfromscript
+        #: (:obj:`list` <:obj:`str`>) available configuration server components
         self.__availableComponents = TangoUtils.command(
             self.__nexusconfig_device,
             "availableComponents")
+        #: (:obj:`list` <:obj:`str`>) \
+        #:     available configuration server datasources
         self.__availableDataSources = TangoUtils.command(
             self.__nexusconfig_device,
             "availableDataSources")
 
     def components(self, components=None, strategy='', dstype='', cfvars=None):
-        """ describes given components
+        """ describes given components. If :obj:`tree` = True it returns
+
+        |   [{ cpname : { dsname : [ \
+        |           (strategy, dstype, record, nxstype, shape), ...] } } ]
+
+        else
+
+        |   [{"dsname": dsname, "strategy": strategy, "dstype": dstype, \
+        |     "record": record, "nxstype": nxstype, "shape": shape , \
+        |     "cpname": cpname}, ...]
+
 
         :param components: given components.
                            If None all available ones are taken
+        :type components: :obj:`list` <:obj:`str`>
         :param strategy: list datasets only with given strategy.
                          If '' all available ones are taken
+        :type strategy: :obj:`str`
         :param dstype: list datasets only with given datasource type.
                        If '' all available ones are taken
-        :param cfvars: configuration variables
-        :returns: list of dictionary with description of components
+        :type dstype: :obj:`str`
+        :param cfvars: configuration variables in JSON dictionary
+        :type cfvars: :obj:`str`
+        :returns: list of dictionary with description of components \
+
+        :rtype: [:obj:`dict` <:obj:`str`, :obj:`dict` <:obj:`str`, \
+                 :obj:`list` <(:obj:`str`, :obj:`str`, :obj:`str`, \
+                      :obj:`str`, :obj:`list` <:obj:`int`>)> > > ] or \
+                [{"dsname": :obj:`str`, "strategy": :obj:`str`, \
+                  "dstype": :obj:`str`, "record": :obj:`str`, \
+                  "nxstype": :obj:`str`, "shape": :obj:`list` <:obj:`int`> , \
+          "cpname": :obj:`str`}, ...]
         """
         result = []
 
@@ -172,10 +223,18 @@ class Describer(object):
         """ fills in the list of output elements
 
         :param cps: component list
+        :type components: :obj:`list` <:obj:`str`>
         :param strategy: required strategy or None
+        :type strategy: :obj:`str`
         :param dstype: required datasource type or None
+        :type dstype: :obj:`str`
         :param cfvars: dictionary with configuration variables
+        :type cfvars: :obj:`str`
         :returns: list of output dictionary elements
+        :rtype: [{"dsname": :obj:`str`, "strategy": :obj:`str`, \
+                  "dstype": :obj:`str`, "record": :obj:`str`, \
+                  "nxstype": :obj:`str`, "shape": :obj:`list` <:obj:`int`> , \
+          "cpname": :obj:`str`}, ...]
         """
         result = []
         for cp in cps:
@@ -199,9 +258,15 @@ class Describer(object):
         """ fills in the dictionary of output elements
 
         :param cps: component list
+        :type components: :obj:`list` <:obj:`str`>
         :param strategy: required strategy or None
+        :type strategy: :obj:`str`
         :param dstype: required datasource type or None
+        :type dstype: :obj:`str`
         :returns: dictionary of output dictionary elements
+        :rtype: [:obj:`dict` <:obj:`str`, :obj:`dict` <:obj:`str`, \
+                 :obj:`list` <(:obj:`str`, :obj:`str`, :obj:`str`, \
+                      :obj:`str`, :obj:`list` <:obj:`int`>)> > > ]
         """
         result = {}
         for cp in cps:
@@ -222,7 +287,11 @@ class Describer(object):
         """ provides datasource item from XML node
 
         :param node: xml node
+        :type node: :class:`xml.dom.minidom.Node`
         :param dsl: list with datasource items (DSItem)
+        :type dsl: :obj:`list` <:class:`DSItem`>
+        :returns: list with datasource items (DSItem)
+        :rtype: :obj:`list` <:class:`DSItem`>
         """
         label = 'datasources'
         name = None
@@ -276,6 +345,13 @@ class Describer(object):
         return dslist
 
     def __findsubdatasources(self, dsxml):
+        """ finds datasources in pyeval scripts
+
+        :param dsxml: pyeval xml
+        :type dsxml: :obj:`str`
+        :returns: list with datasource items (DSItem)
+        :rtype: :obj:`list` <:class:`DSItem`>
+        """
         dslist = []
         result = ""
         label = 'datasources'
@@ -314,7 +390,9 @@ class Describer(object):
         """ provides shape from node
 
         :param node: xml node
+        :type node: :class:`xml.dom.minidom.Node`
         :returns: shape of node
+        :rtype :obj:`list` <:obj:`int`>
         """
         rank = int(node.attributes["rank"].value)
         shape = [None] * rank
@@ -352,7 +430,9 @@ class Describer(object):
         """ provides datasource ExDSDict of given component
 
         :param cp : component name
+        :type cp : :obj:`str`
         :returns: datasource ExDSDict
+        :rtype: :class:`ExDSDict`
         """
         xmlc = TangoUtils.command(self.__nexusconfig_device,
                                   "components", [cp])
@@ -364,8 +444,11 @@ class Describer(object):
         """ provides datasource ExDSDict of given instantiated component
 
         :param cp : component name
+        :type cp : :obj:`str`
         :param cfvars : component variables
+        :type cpvars : :obj:`str`
         :returns: datasource ExDSDict
+        :rtype: :class:`ExDSDict`
         """
         if cfvars:
             cv = json.loads(self.__nexusconfig_device.variables)
@@ -383,7 +466,9 @@ class Describer(object):
         """ provides datasource ExDSDict of given component xml
 
         :param cpxml : component xml
+        :type cpxml : :obj:`str`
         :returns: datasource ExDSDict
+        :rtype: :class:`ExDSDict`
         """
         indom = xml.dom.minidom.parseString(cpxml)
         strategy = indom.getElementsByTagName("strategy")
@@ -433,9 +518,14 @@ class Describer(object):
 
         :param names: given datasources.
                       If None all available ones are taken
+        :type names: :obj:`list` <:obj:`str`>
         :param dstype: list datasources only with given type.
                        If '' all available ones are taken
+        :type dstype: :obj:`str`
         :returns: list of dictionary with description of datasources
+        :rtype: [:obj:`dict` <:obj:`str`, :class:`ExDSDict` > ] or \
+                [{"dsname": :obj:`str`, "dstype": :obj:`str`, \
+                  "record": :obj:`str`}, ...]
         """
         ads = list(self.__availableDataSources)
         if names is not None:
@@ -481,7 +571,14 @@ class Describer(object):
         return dslist
 
     def __describeDataSource(self, name, dsxml=None):
-        """
+        """ describes the datasource
+
+        :param name: datasource name
+        :param type: :obj:`str`
+        :param dsxml: datasource xml
+        :param dsxml: :obj:`str`
+        :returns: datasource DSItem
+        :rtype: :class:`DSItem`
         """
         dstype = None
         record = None
