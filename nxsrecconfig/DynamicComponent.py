@@ -33,30 +33,55 @@ class DynamicComponent(object):
     def __init__(self, nexusconfig_device):
         """ constructor
 
-        :param nexusconfig_device: configserver configuration server name
+        :param nexusconfig_device: configserver configuration server
+        :type  nexusconfig_device: :obj:`PyTango.DeviceProxy` \
+             or :class:`nxsconfigserver.XMLConfigurator.XMLConfigurator`
         """
+        #: (:class:`PyTango.DeviceProxy` \
+        #: or :class:`nxsconfigserver.XMLConfigurator.XMLConfigurator`) \
+        #:    configuration server
         self.__nexusconfig_device = nexusconfig_device
 
+        #: (:obj:`list` <:obj:`dict` <:obj:`str` , `any`> >) \
+        #:    step datasources
         self.__stepdsourcesDict = []
+        #: (:obj:`list` <:obj:`str`>) step datasources
         self.__stepdsources = []
+        #: (:obj:`list` <:obj:`str`>) init datasources
         self.__initdsources = []
-        #: dynamic components
+        #: (:obj:`str`) default dynamic component name
         self.__defaultCP = "__dynamic_component__"
+        #: (:obj:`str`) dynamic component name
         self.__dynamicCP = ""
+        #: (:obj:`dict` <:obj:`str` , :obj:`str`> ) \
+        #:       alias label dictionary
         self.__nexuslabels = {}
+        #: (:obj:`dict` <:obj:`str` , :obj:`str`> ) \
+        #:       alias path dictionary
         self.__nexuspaths = {}
+        #: (:obj:`dict` <:obj:`str` , :obj:`bool`> ) \
+        #:       alias link dictionary
         self.__nexuslinks = {}
+        #: (:obj:`dict` <:obj:`str` , :obj:`str`> ) \
+        #:       alias nexus types dictionary
         self.__nexustypes = {}
+        #: (:obj:`dict` <:obj:`str` , :obj:`list` <:obj:`int`> > ) \
+        #:       alias nexus types dictionary
         self.__nexusshapes = {}
 
+        #: (:class:`PyTango.Database` ) pytango database server
         self.__db = PyTango.Database()
 
+        #: (:obj:`str`) default dynamic component path
         self.__ldefaultpath = \
             "/entry$var.serialno:NXentry/NXinstrument/collection"
+        #: (:obj:`str`) standard dynamic component path
         self.__defaultpath = self.__ldefaultpath
+        #: (:obj:`bool`) standard dynamic component path
         self.__links = True
 
-        #: map of numpy types : NEXUS
+        #: (:obj:`dict` <:obj:`str` , :obj:`str`> ) \
+        #:    map of numpy types : NEXUS
         self.__npTn = {"float32": "NX_FLOAT32", "float64": "NX_FLOAT64",
                        "float": "NX_FLOAT32", "double": "NX_FLOAT64",
                        "int": "NX_INT", "int64": "NX_INT64",
@@ -70,7 +95,9 @@ class DynamicComponent(object):
         """ provides a device alias
 
         :param name: device name
+        :type name: :obj:`str`
         :returns: device alias
+        :rtype: :obj:`str`
         """
         # if name does not contain a "/" it's probably an alias
         if name.find("/") == -1:
@@ -87,6 +114,7 @@ class DynamicComponent(object):
 
         :param dctlist: json list of parameter dictionaries
                [{"name": <dsname>, "dtype": <num_type>, "shape":<list>}, ...]
+        :type dctlist: :obj:`str`
         """
         self.__stepdsourcesDict = []
         if isinstance(dctlist, list):
@@ -103,6 +131,7 @@ class DynamicComponent(object):
         """ sets step datasources
 
         :param dsources: list of step datasources
+        :type dsources: :obj:`list` <:obj:`str`>
         """
         self.__stepdsources = list(dsources)
         if not isinstance(self.__stepdsources, list):
@@ -113,6 +142,7 @@ class DynamicComponent(object):
         """ sets init datasources
 
         :param dsources: list of init datasources
+        :type dsources: :obj:`list` <:obj:`str`>
         """
         self.__initdsources = list(dsources)
         if not isinstance(self.__initdsources, list):
@@ -123,10 +153,15 @@ class DynamicComponent(object):
         """ sets label parameters for specific dynamic components
 
         :param labels: label dictionaries
+        :type labels: :obj:`dict` <:obj:`str` , :obj:`str`> 
         :param paths: nexus path dictionaries
+        :type paths: :obj:`dict` <:obj:`str` , :obj:`str`> 
         :param links: link dictionaries
+        :type links: :obj:`dict` <:obj:`str` , :obj:`bool`> 
         :param types: nexus type dictionaries
+        :type types: :obj:`dict` <:obj:`str` , :obj:`str`> 
         :param shapes: data shape dictionaries
+        :type shapes: :obj:`dict` <:obj:`str` , :obj:`list` <:obj:`int`> > 
         """
         self.__nexuslabels = json.loads(labels)
         if not isinstance(self.__nexuslabels, dict):
@@ -149,7 +184,9 @@ class DynamicComponent(object):
 
         :brief: if dynamicPath is None or "" it is reset to default one
         :param dynamicPath: nexus default path
+        :type dynamicPath: :obj:`str`
         :param dynamicLinks: default link flag
+        :type dynamicLinks: :obj:`bool`
         """
         self.__links = dynamicLinks
         self.__defaultpath = dynamicPath
@@ -160,7 +197,9 @@ class DynamicComponent(object):
         """ provices datasource shape and NeXus type from Tango device
 
         :param ds: datasource name
+        :type ds: :obj:`str`
         :returns: (shape, NeXus type) tuple
+        :returns: (:obj:`list` <:obj:`int`>, :obj:`str`) tuple
         """
         nxtype = None
         dstype = None
@@ -178,8 +217,11 @@ class DynamicComponent(object):
         """ creates XML nodes for sardana devices
 
         :param created: list of created devices
+        :type created: :obj:`list` <:obj:`str`>
         :param root: root node
+        :type root: :class:`xml.dom.minidom.Node`
         :param definition: definition node
+        :type definition: :class:`xml.dom.minidom.Node`
         """
         for dd in self.__stepdsourcesDict:
             alias = self.__get_alias(str(dd["name"]))
@@ -205,9 +247,13 @@ class DynamicComponent(object):
         """ creates XML nodes for non sardana devices
 
         :param created: list of created devices
+        :type created: :obj:`list` <:obj:`str`>
         :param avds: available datasources
+        :type avds: :obj:`list` <:obj:`str`>
         :param root: root node
+        :type root: :class:`xml.dom.minidom.Node`
         :param definition: definition node
+        :type definition: :class:`xml.dom.minidom.Node`
         """
         dsources = self.__initdsources \
             if strategy == 'INIT' else self.__stepdsources
@@ -255,6 +301,7 @@ class DynamicComponent(object):
         """ creates dynamic component
 
         :returns: dynanic component name
+        :rtype: :obj:`str`
         """
         cps = TangoUtils.command(self.__nexusconfig_device,
                                  "availableComponents")
@@ -286,9 +333,13 @@ class DynamicComponent(object):
         """ gets the property value for the given datasource
 
         :param nexusprop: nexus property dictionary
+        :type nexusprop: :obj:`dict` <:obj:`str` , :`any`> 
         :param nexuslabel: nexus label dictionary
-        :param default: default value if porperty is not defined
+        :type nexuslabels: :obj:`dict` <:obj:`str` , :obj:`str`> 
+        :param default: default value if property is not defined
+        :type default: `any`
         :returns: propery value
+        :rtype: `any`
         """
         prop = nexusprop.get(nexuslabels.get(name, ""), None)
         if prop is None:
@@ -300,10 +351,15 @@ class DynamicComponent(object):
         """ gets the Nexus path and for the given datasource
 
         :param nexuspaths: nexus property path dictionary
-        :param nexuslabel: nexus label dictionary
+        :type nexuspaths: :obj:`dict` <:obj:`str` , :obj:`str`> 
+        :param nexuslabels: nexus label dictionary
+        :type nexuslabels: :obj:`dict` <:obj:`str` , :obj:`str`> 
         :param alias : datasource alias
+        :type alias : :obj:`str`
         :param defaultpath: default path if path is not defined
-        :returns: propery value
+        :type defaultpath: :obj:`str`
+        :returns: (path, fieldname)
+        :rtype: (:obj:`str` , :obj:`str`)
         """
         path = nexuspaths.get(nexuslabels.get(alias, ""), "")
         if not path:
@@ -327,9 +383,13 @@ class DynamicComponent(object):
         """ creates XML node for nexus link
 
         :param root: root node
+        :type root: :class:`xml.dom.minidom.Node`
         :param entry: entry node
+        :type entry: :class:`xml.dom.minidom.Node`
         :param path: nexus path
+        :type path: :obj:`str`
         :param name: link name
+        :type name: :obj:`str`
         """
         if name and entry:
             link = root.createElement("link")
@@ -342,8 +402,10 @@ class DynamicComponent(object):
         """ finds datasource details:
         (attribute name, device name, host, port) tuple
 
-        :param: datasource name
+        :param name: datasource name
+        :type name: :obj:`str`
         :returns: (attribute name, device name, host, port) tuple
+        :rtype: (:obj:`str`, :obj:`str`, :obj:`str`)
         """
         attr = None
         device = None
@@ -377,15 +439,25 @@ class DynamicComponent(object):
         """ creates XML node for NeXus field
 
         :param root: root node
+        :type root: :class:`xml.dom.minidom.Node`
         :param parent: parent node
+        :type parent: :class:`xml.dom.minidom.Node`
         :param fname: field name
+        :type fname: :obj:`str`
         :param nxtype: field NeXus type
+        :type nxtype: :obj:`str`
         :param sname: data source name
+        :type sname: :obj:`str`
         :param record: record attribute
+        :type record: :obj:`str`
         :param shape: field shape
+        :type shape: :obj:`list`< :obj:`int`>:
         :param dsnode: datasource node
+        :type dsnode: :obj:`str`
         :param strategy: strategy mode
+        :type strategy: :obj:`str`
         :param dstype: datasource type
+        :type dstyp: :obj:`str`
         """
         field = root.createElement("field")
         parent.appendChild(field)
@@ -441,6 +513,7 @@ class DynamicComponent(object):
         """ removes dynamic component
 
         :param name: dynamic component name
+        :type name: :obj:`str`
         """
         if self.__defaultCP not in name:
             raise Exception(
@@ -456,10 +529,15 @@ class DynamicComponent(object):
         """ creates group tree
 
         :param root: root node
+        :type root: :class:`xml.dom.minidom.Node` 
         :param definition: definition node
+        :type definition: :class:`xml.dom.minidom.Node`
         :param path: NeXus path
+        :type path: :obj:`str`
         :param links: if NXdata should be created
+        :type links: :obj:`bool`
         :returns (last group node, nxdata group node) tuple
+        :rtype (:class:`xml.dom.minidom.Node`, :class:`xml.dom.minidom.Node`)
         """
 
         spath = path.split('/')
