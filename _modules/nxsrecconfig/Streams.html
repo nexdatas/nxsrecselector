@@ -152,15 +152,15 @@
 
 <span class="kn">import</span> <span class="nn">sys</span>
 
-<span class="c">#: Tango fatal log stream</span>
+<span class="c">#: (:class:`PyTango.log4tango.TangoStream`) Tango fatal log stream</span>
 <span class="n">log_fatal</span> <span class="o">=</span> <span class="bp">None</span>
-<span class="c">#: Tango error log stream</span>
+<span class="c">#: (:class:`PyTango.log4tango.TangoStream`) Tango error log stream</span>
 <span class="n">log_error</span> <span class="o">=</span> <span class="bp">None</span>
-<span class="c">#: Tango warn log stream</span>
+<span class="c">#: (:class:`PyTango.log4tango.TangoStream`) Tango warn log stream</span>
 <span class="n">log_warn</span> <span class="o">=</span> <span class="bp">None</span>
-<span class="c">#: Tango info log stream</span>
+<span class="c">#: (:class:`PyTango.log4tango.TangoStream`) Tango info log stream</span>
 <span class="n">log_info</span> <span class="o">=</span> <span class="bp">None</span>
-<span class="c">#: Tango debug log stream</span>
+<span class="c">#: (:class:`PyTango.log4tango.TangoStream`) Tango debug log stream</span>
 <span class="n">log_debug</span> <span class="o">=</span> <span class="bp">None</span>
 
 
@@ -168,8 +168,10 @@
     <span class="sd">&quot;&quot;&quot; writes fatal error message</span>
 
 <span class="sd">    :param message: error message</span>
+<span class="sd">    :type message: :obj:`str`</span>
 <span class="sd">    :param std: it writes to sys stream</span>
 <span class="sd">                when log stream does not exist</span>
+<span class="sd">    :type std: :obj:`bool`</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">log_fatal</span><span class="p">:</span>
         <span class="k">try</span><span class="p">:</span>
@@ -185,8 +187,10 @@
     <span class="sd">&quot;&quot;&quot; writes error message</span>
 
 <span class="sd">    :param message: error message</span>
+<span class="sd">    :type message: :obj:`str`</span>
 <span class="sd">    :param std: it writes to sys stream</span>
 <span class="sd">                when log stream does not exist</span>
+<span class="sd">    :type std: :obj:`bool`</span>
 <span class="sd">   &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">log_error</span><span class="p">:</span>
         <span class="k">try</span><span class="p">:</span>
@@ -202,8 +206,10 @@
     <span class="sd">&quot;&quot;&quot; writes warning message</span>
 
 <span class="sd">    :param message: warning message</span>
+<span class="sd">    :type message: :obj:`str`</span>
 <span class="sd">    :param std: it writes to sys stream</span>
 <span class="sd">                when log stream does not exist</span>
+<span class="sd">    :type std: :obj:`bool`</span>
 <span class="sd">   &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">log_warn</span><span class="p">:</span>
         <span class="k">try</span><span class="p">:</span>
@@ -219,8 +225,10 @@
     <span class="sd">&quot;&quot;&quot; writes info message</span>
 
 <span class="sd">    :param message: info message</span>
+<span class="sd">    :type message: :obj:`str`</span>
 <span class="sd">    :param std: it writes to sys stream</span>
 <span class="sd">                when log stream does not exist</span>
+<span class="sd">    :type std: :obj:`bool`</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">log_info</span><span class="p">:</span>
         <span class="k">try</span><span class="p">:</span>
@@ -236,8 +244,10 @@
     <span class="sd">&quot;&quot;&quot; writes debug message</span>
 
 <span class="sd">    :param message: debug message</span>
+<span class="sd">    :type message: :obj:`str`</span>
 <span class="sd">    :param std: it writes to sys stream</span>
 <span class="sd">                when log stream does not exist</span>
+<span class="sd">    :type std: :obj:`bool`</span>
 <span class="sd">   &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">log_debug</span><span class="p">:</span>
         <span class="k">try</span><span class="p">:</span>

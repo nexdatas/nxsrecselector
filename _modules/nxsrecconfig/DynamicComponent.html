@@ -164,30 +164,55 @@
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nexusconfig_device</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; constructor</span>
 
-<span class="sd">        :param nexusconfig_device: configserver configuration server name</span>
+<span class="sd">        :param nexusconfig_device: configserver configuration server</span>
+<span class="sd">        :type  nexusconfig_device: :obj:`PyTango.DeviceProxy` \</span>
+<span class="sd">             or :class:`nxsconfigserver.XMLConfigurator.XMLConfigurator`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c">#: (:class:`PyTango.DeviceProxy` \</span>
+        <span class="c">#: or :class:`nxsconfigserver.XMLConfigurator.XMLConfigurator`) \</span>
+        <span class="c">#:    configuration server</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__nexusconfig_device</span> <span class="o">=</span> <span class="n">nexusconfig_device</span>
 
+        <span class="c">#: (:obj:`list` &lt;:obj:`dict` &lt;:obj:`str` , `any`&gt; &gt;) \</span>
+        <span class="c">#:    step datasources</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__stepdsourcesDict</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="c">#: (:obj:`list` &lt;:obj:`str`&gt;) step datasources</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__stepdsources</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="c">#: (:obj:`list` &lt;:obj:`str`&gt;) init datasources</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__initdsources</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="c">#: dynamic components</span>
+        <span class="c">#: (:obj:`str`) default dynamic component name</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__defaultCP</span> <span class="o">=</span> <span class="s">&quot;__dynamic_component__&quot;</span>
+        <span class="c">#: (:obj:`str`) dynamic component name</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__dynamicCP</span> <span class="o">=</span> <span class="s">&quot;&quot;</span>
+        <span class="c">#: (:obj:`dict` &lt;:obj:`str` , :obj:`str`&gt; ) \</span>
+        <span class="c">#:       alias label dictionary</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__nexuslabels</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="c">#: (:obj:`dict` &lt;:obj:`str` , :obj:`str`&gt; ) \</span>
+        <span class="c">#:       alias path dictionary</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__nexuspaths</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="c">#: (:obj:`dict` &lt;:obj:`str` , :obj:`bool`&gt; ) \</span>
+        <span class="c">#:       alias link dictionary</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__nexuslinks</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="c">#: (:obj:`dict` &lt;:obj:`str` , :obj:`str`&gt; ) \</span>
+        <span class="c">#:       alias nexus types dictionary</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__nexustypes</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="c">#: (:obj:`dict` &lt;:obj:`str` , :obj:`list` &lt;:obj:`int`&gt; &gt; ) \</span>
+        <span class="c">#:       alias nexus types dictionary</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__nexusshapes</span> <span class="o">=</span> <span class="p">{}</span>
 
+        <span class="c">#: (:class:`PyTango.Database` ) pytango database server</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__db</span> <span class="o">=</span> <span class="n">PyTango</span><span class="o">.</span><span class="n">Database</span><span class="p">()</span>
 
+        <span class="c">#: (:obj:`str`) default dynamic component path</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__ldefaultpath</span> <span class="o">=</span> \
             <span class="s">&quot;/entry$var.serialno:NXentry/NXinstrument/collection&quot;</span>
+        <span class="c">#: (:obj:`str`) standard dynamic component path</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__defaultpath</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ldefaultpath</span>
+        <span class="c">#: (:obj:`bool`) standard dynamic component path</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__links</span> <span class="o">=</span> <span class="bp">True</span>
 
-        <span class="c">#: map of numpy types : NEXUS</span>
+        <span class="c">#: (:obj:`dict` &lt;:obj:`str` , :obj:`str`&gt; ) \</span>
+        <span class="c">#:    map of numpy types : NEXUS</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__npTn</span> <span class="o">=</span> <span class="p">{</span><span class="s">&quot;float32&quot;</span><span class="p">:</span> <span class="s">&quot;NX_FLOAT32&quot;</span><span class="p">,</span> <span class="s">&quot;float64&quot;</span><span class="p">:</span> <span class="s">&quot;NX_FLOAT64&quot;</span><span class="p">,</span>
                        <span class="s">&quot;float&quot;</span><span class="p">:</span> <span class="s">&quot;NX_FLOAT32&quot;</span><span class="p">,</span> <span class="s">&quot;double&quot;</span><span class="p">:</span> <span class="s">&quot;NX_FLOAT64&quot;</span><span class="p">,</span>
                        <span class="s">&quot;int&quot;</span><span class="p">:</span> <span class="s">&quot;NX_INT&quot;</span><span class="p">,</span> <span class="s">&quot;int64&quot;</span><span class="p">:</span> <span class="s">&quot;NX_INT64&quot;</span><span class="p">,</span>
@@ -201,7 +226,9 @@
         <span class="sd">&quot;&quot;&quot; provides a device alias</span>
 
 <span class="sd">        :param name: device name</span>
+<span class="sd">        :type name: :obj:`str`</span>
 <span class="sd">        :returns: device alias</span>
+<span class="sd">        :rtype: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c"># if name does not contain a &quot;/&quot; it&#39;s probably an alias</span>
         <span class="k">if</span> <span class="n">name</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s">&quot;/&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
@@ -218,6 +245,7 @@
 
 <span class="sd">        :param dctlist: json list of parameter dictionaries</span>
 <span class="sd">               [{&quot;name&quot;: &lt;dsname&gt;, &quot;dtype&quot;: &lt;num_type&gt;, &quot;shape&quot;:&lt;list&gt;}, ...]</span>
+<span class="sd">        :type dctlist: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__stepdsourcesDict</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dctlist</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
@@ -234,6 +262,7 @@
         <span class="sd">&quot;&quot;&quot; sets step datasources</span>
 
 <span class="sd">        :param dsources: list of step datasources</span>
+<span class="sd">        :type dsources: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__stepdsources</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">dsources</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__stepdsources</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
@@ -244,6 +273,7 @@
         <span class="sd">&quot;&quot;&quot; sets init datasources</span>
 
 <span class="sd">        :param dsources: list of init datasources</span>
+<span class="sd">        :type dsources: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__initdsources</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">dsources</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__initdsources</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
@@ -254,10 +284,15 @@
         <span class="sd">&quot;&quot;&quot; sets label parameters for specific dynamic components</span>
 
 <span class="sd">        :param labels: label dictionaries</span>
+<span class="sd">        :type labels: :obj:`dict` &lt;:obj:`str` , :obj:`str`&gt; </span>
 <span class="sd">        :param paths: nexus path dictionaries</span>
+<span class="sd">        :type paths: :obj:`dict` &lt;:obj:`str` , :obj:`str`&gt; </span>
 <span class="sd">        :param links: link dictionaries</span>
+<span class="sd">        :type links: :obj:`dict` &lt;:obj:`str` , :obj:`bool`&gt; </span>
 <span class="sd">        :param types: nexus type dictionaries</span>
+<span class="sd">        :type types: :obj:`dict` &lt;:obj:`str` , :obj:`str`&gt; </span>
 <span class="sd">        :param shapes: data shape dictionaries</span>
+<span class="sd">        :type shapes: :obj:`dict` &lt;:obj:`str` , :obj:`list` &lt;:obj:`int`&gt; &gt; </span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__nexuslabels</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">labels</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__nexuslabels</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
@@ -280,7 +315,9 @@
 
 <span class="sd">        :brief: if dynamicPath is None or &quot;&quot; it is reset to default one</span>
 <span class="sd">        :param dynamicPath: nexus default path</span>
+<span class="sd">        :type dynamicPath: :obj:`str`</span>
 <span class="sd">        :param dynamicLinks: default link flag</span>
+<span class="sd">        :type dynamicLinks: :obj:`bool`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__links</span> <span class="o">=</span> <span class="n">dynamicLinks</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__defaultpath</span> <span class="o">=</span> <span class="n">dynamicPath</span>
@@ -291,7 +328,9 @@
         <span class="sd">&quot;&quot;&quot; provices datasource shape and NeXus type from Tango device</span>
 
 <span class="sd">        :param ds: datasource name</span>
+<span class="sd">        :type ds: :obj:`str`</span>
 <span class="sd">        :returns: (shape, NeXus type) tuple</span>
+<span class="sd">        :returns: (:obj:`list` &lt;:obj:`int`&gt;, :obj:`str`) tuple</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">nxtype</span> <span class="o">=</span> <span class="bp">None</span>
         <span class="n">dstype</span> <span class="o">=</span> <span class="bp">None</span>
@@ -309,8 +348,11 @@
         <span class="sd">&quot;&quot;&quot; creates XML nodes for sardana devices</span>
 
 <span class="sd">        :param created: list of created devices</span>
+<span class="sd">        :type created: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        :param root: root node</span>
+<span class="sd">        :type root: :class:`xml.dom.minidom.Node`</span>
 <span class="sd">        :param definition: definition node</span>
+<span class="sd">        :type definition: :class:`xml.dom.minidom.Node`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">dd</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__stepdsourcesDict</span><span class="p">:</span>
             <span class="n">alias</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__get_alias</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">dd</span><span class="p">[</span><span class="s">&quot;name&quot;</span><span class="p">]))</span>
@@ -336,9 +378,13 @@
         <span class="sd">&quot;&quot;&quot; creates XML nodes for non sardana devices</span>
 
 <span class="sd">        :param created: list of created devices</span>
+<span class="sd">        :type created: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        :param avds: available datasources</span>
+<span class="sd">        :type avds: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        :param root: root node</span>
+<span class="sd">        :type root: :class:`xml.dom.minidom.Node`</span>
 <span class="sd">        :param definition: definition node</span>
+<span class="sd">        :type definition: :class:`xml.dom.minidom.Node`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">dsources</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__initdsources</span> \
             <span class="k">if</span> <span class="n">strategy</span> <span class="o">==</span> <span class="s">&#39;INIT&#39;</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">__stepdsources</span>
@@ -386,6 +432,7 @@
         <span class="sd">&quot;&quot;&quot; creates dynamic component</span>
 
 <span class="sd">        :returns: dynanic component name</span>
+<span class="sd">        :rtype: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">cps</span> <span class="o">=</span> <span class="n">TangoUtils</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__nexusconfig_device</span><span class="p">,</span>
                                  <span class="s">&quot;availableComponents&quot;</span><span class="p">)</span>
@@ -417,9 +464,13 @@
         <span class="sd">&quot;&quot;&quot; gets the property value for the given datasource</span>
 
 <span class="sd">        :param nexusprop: nexus property dictionary</span>
+<span class="sd">        :type nexusprop: :obj:`dict` &lt;:obj:`str` , :`any`&gt; </span>
 <span class="sd">        :param nexuslabel: nexus label dictionary</span>
-<span class="sd">        :param default: default value if porperty is not defined</span>
+<span class="sd">        :type nexuslabels: :obj:`dict` &lt;:obj:`str` , :obj:`str`&gt; </span>
+<span class="sd">        :param default: default value if property is not defined</span>
+<span class="sd">        :type default: `any`</span>
 <span class="sd">        :returns: propery value</span>
+<span class="sd">        :rtype: `any`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">prop</span> <span class="o">=</span> <span class="n">nexusprop</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">nexuslabels</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="s">&quot;&quot;</span><span class="p">),</span> <span class="bp">None</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">prop</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
@@ -431,10 +482,15 @@
         <span class="sd">&quot;&quot;&quot; gets the Nexus path and for the given datasource</span>
 
 <span class="sd">        :param nexuspaths: nexus property path dictionary</span>
-<span class="sd">        :param nexuslabel: nexus label dictionary</span>
+<span class="sd">        :type nexuspaths: :obj:`dict` &lt;:obj:`str` , :obj:`str`&gt; </span>
+<span class="sd">        :param nexuslabels: nexus label dictionary</span>
+<span class="sd">        :type nexuslabels: :obj:`dict` &lt;:obj:`str` , :obj:`str`&gt; </span>
 <span class="sd">        :param alias : datasource alias</span>
+<span class="sd">        :type alias : :obj:`str`</span>
 <span class="sd">        :param defaultpath: default path if path is not defined</span>
-<span class="sd">        :returns: propery value</span>
+<span class="sd">        :type defaultpath: :obj:`str`</span>
+<span class="sd">        :returns: (path, fieldname)</span>
+<span class="sd">        :rtype: (:obj:`str` , :obj:`str`)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">path</span> <span class="o">=</span> <span class="n">nexuspaths</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">nexuslabels</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">alias</span><span class="p">,</span> <span class="s">&quot;&quot;</span><span class="p">),</span> <span class="s">&quot;&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">path</span><span class="p">:</span>
@@ -458,9 +514,13 @@
         <span class="sd">&quot;&quot;&quot; creates XML node for nexus link</span>
 
 <span class="sd">        :param root: root node</span>
+<span class="sd">        :type root: :class:`xml.dom.minidom.Node`</span>
 <span class="sd">        :param entry: entry node</span>
+<span class="sd">        :type entry: :class:`xml.dom.minidom.Node`</span>
 <span class="sd">        :param path: nexus path</span>
+<span class="sd">        :type path: :obj:`str`</span>
 <span class="sd">        :param name: link name</span>
+<span class="sd">        :type name: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">name</span> <span class="ow">and</span> <span class="n">entry</span><span class="p">:</span>
             <span class="n">link</span> <span class="o">=</span> <span class="n">root</span><span class="o">.</span><span class="n">createElement</span><span class="p">(</span><span class="s">&quot;link&quot;</span><span class="p">)</span>
@@ -473,8 +533,10 @@
         <span class="sd">&quot;&quot;&quot; finds datasource details:</span>
 <span class="sd">        (attribute name, device name, host, port) tuple</span>
 
-<span class="sd">        :param: datasource name</span>
+<span class="sd">        :param name: datasource name</span>
+<span class="sd">        :type name: :obj:`str`</span>
 <span class="sd">        :returns: (attribute name, device name, host, port) tuple</span>
+<span class="sd">        :rtype: (:obj:`str`, :obj:`str`, :obj:`str`)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">attr</span> <span class="o">=</span> <span class="bp">None</span>
         <span class="n">device</span> <span class="o">=</span> <span class="bp">None</span>
@@ -508,15 +570,25 @@
         <span class="sd">&quot;&quot;&quot; creates XML node for NeXus field</span>
 
 <span class="sd">        :param root: root node</span>
+<span class="sd">        :type root: :class:`xml.dom.minidom.Node`</span>
 <span class="sd">        :param parent: parent node</span>
+<span class="sd">        :type parent: :class:`xml.dom.minidom.Node`</span>
 <span class="sd">        :param fname: field name</span>
+<span class="sd">        :type fname: :obj:`str`</span>
 <span class="sd">        :param nxtype: field NeXus type</span>
+<span class="sd">        :type nxtype: :obj:`str`</span>
 <span class="sd">        :param sname: data source name</span>
+<span class="sd">        :type sname: :obj:`str`</span>
 <span class="sd">        :param record: record attribute</span>
+<span class="sd">        :type record: :obj:`str`</span>
 <span class="sd">        :param shape: field shape</span>
+<span class="sd">        :type shape: :obj:`list`&lt; :obj:`int`&gt;:</span>
 <span class="sd">        :param dsnode: datasource node</span>
+<span class="sd">        :type dsnode: :obj:`str`</span>
 <span class="sd">        :param strategy: strategy mode</span>
+<span class="sd">        :type strategy: :obj:`str`</span>
 <span class="sd">        :param dstype: datasource type</span>
+<span class="sd">        :type dstyp: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">field</span> <span class="o">=</span> <span class="n">root</span><span class="o">.</span><span class="n">createElement</span><span class="p">(</span><span class="s">&quot;field&quot;</span><span class="p">)</span>
         <span class="n">parent</span><span class="o">.</span><span class="n">appendChild</span><span class="p">(</span><span class="n">field</span><span class="p">)</span>
@@ -572,6 +644,7 @@
         <span class="sd">&quot;&quot;&quot; removes dynamic component</span>
 
 <span class="sd">        :param name: dynamic component name</span>
+<span class="sd">        :type name: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__defaultCP</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">name</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
@@ -587,10 +660,15 @@
         <span class="sd">&quot;&quot;&quot; creates group tree</span>
 
 <span class="sd">        :param root: root node</span>
+<span class="sd">        :type root: :class:`xml.dom.minidom.Node` </span>
 <span class="sd">        :param definition: definition node</span>
+<span class="sd">        :type definition: :class:`xml.dom.minidom.Node`</span>
 <span class="sd">        :param path: NeXus path</span>
+<span class="sd">        :type path: :obj:`str`</span>
 <span class="sd">        :param links: if NXdata should be created</span>
+<span class="sd">        :type links: :obj:`bool`</span>
 <span class="sd">        :returns (last group node, nxdata group node) tuple</span>
+<span class="sd">        :rtype (:class:`xml.dom.minidom.Node`, :class:`xml.dom.minidom.Node`)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">spath</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;/&#39;</span><span class="p">)</span>

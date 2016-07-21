@@ -846,7 +846,7 @@ of given component</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>nexusconfig_device</strong> &#8211; configserver configuration server name</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>nexusconfig_device</strong> (<a class="reference external" href="http://www.esrf.fr/computing/cs/tango/tango_doc/kernel_doc/pytango/latest/client_api/device_proxy.html#PyTango.DeviceProxy" title="(in PyTango v8.1)"><tt class="xref py py-obj docutils literal"><span class="pre">PyTango.DeviceProxy</span></tt></a>              or <a class="reference external" href="https://nexdatas.github.io/configserver/nxsconfigserver.html#nxsconfigserver.XMLConfigurator.XMLConfigurator" title="(in NXSConfigServer v2.4)"><tt class="xref py py-class docutils literal"><span class="pre">nxsconfigserver.XMLConfigurator.XMLConfigurator</span></tt></a>) &#8211; configserver configuration server</td>
 </tr>
 </tbody>
 </table>
@@ -860,6 +860,8 @@ of given component</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">dynanic component name</td>
 </tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a></td>
+</tr>
 </tbody>
 </table>
 </dd></dl>
@@ -872,7 +874,7 @@ of given component</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> &#8211; dynamic component name</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> (<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>) &#8211; dynamic component name</td>
 </tr>
 </tbody>
 </table>
@@ -890,8 +892,8 @@ of given component</p>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>dynamicPath</strong> &#8211; nexus default path</li>
-<li><strong>dynamicLinks</strong> &#8211; default link flag</li>
+<li><strong>dynamicPath</strong> (<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>) &#8211; nexus default path</li>
+<li><strong>dynamicLinks</strong> (<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">bool</span></tt></a>) &#8211; default link flag</li>
 </ul>
 </td>
 </tr>
@@ -907,7 +909,7 @@ of given component</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>dsources</strong> &#8211; list of init datasources</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>dsources</strong> (<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#list" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">list</span></tt></a> &lt;<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>&gt;) &#8211; list of init datasources</td>
 </tr>
 </tbody>
 </table>
@@ -922,11 +924,11 @@ of given component</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>labels</strong> &#8211; label dictionaries</li>
-<li><strong>paths</strong> &#8211; nexus path dictionaries</li>
-<li><strong>links</strong> &#8211; link dictionaries</li>
-<li><strong>types</strong> &#8211; nexus type dictionaries</li>
-<li><strong>shapes</strong> &#8211; data shape dictionaries</li>
+<li><strong>labels</strong> (<a class="reference external" href="http://docs.python.org/2.7/library/stdtypes.html#dict" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">dict</span></tt></a> &lt;<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a> , <a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>&gt;) &#8211; label dictionaries</li>
+<li><strong>paths</strong> (<a class="reference external" href="http://docs.python.org/2.7/library/stdtypes.html#dict" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">dict</span></tt></a> &lt;<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a> , <a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>&gt;) &#8211; nexus path dictionaries</li>
+<li><strong>links</strong> (<a class="reference external" href="http://docs.python.org/2.7/library/stdtypes.html#dict" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">dict</span></tt></a> &lt;<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a> , <a class="reference external" href="http://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">bool</span></tt></a>&gt;) &#8211; link dictionaries</li>
+<li><strong>types</strong> (<a class="reference external" href="http://docs.python.org/2.7/library/stdtypes.html#dict" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">dict</span></tt></a> &lt;<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a> , <a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>&gt;) &#8211; nexus type dictionaries</li>
+<li><strong>shapes</strong> (<a class="reference external" href="http://docs.python.org/2.7/library/stdtypes.html#dict" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">dict</span></tt></a> &lt;<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a> , <a class="reference external" href="http://docs.python.org/2.7/library/functions.html#list" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">list</span></tt></a> &lt;<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">int</span></tt></a>&gt; &gt;) &#8211; data shape dictionaries</li>
 </ul>
 </td>
 </tr>
@@ -942,7 +944,7 @@ of given component</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>dsources</strong> &#8211; list of step datasources</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>dsources</strong> (<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#list" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">list</span></tt></a> &lt;<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>&gt;) &#8211; list of step datasources</td>
 </tr>
 </tbody>
 </table>
@@ -956,7 +958,7 @@ of given component</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>dctlist</strong> &#8211; json list of parameter dictionaries
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>dctlist</strong> (<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>) &#8211; json list of parameter dictionaries
 [{&#8220;name&#8221;: &lt;dsname&gt;, &#8220;dtype&#8221;: &lt;num_type&gt;, &#8220;shape&#8221;:&lt;list&gt;}, ...]</td>
 </tr>
 </tbody>
@@ -3969,8 +3971,8 @@ and updates serialno if appendEntry selected</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>message</strong> &#8211; debug message</li>
-<li><strong>std</strong> &#8211; it writes to sys stream
+<li><strong>message</strong> (<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>) &#8211; debug message</li>
+<li><strong>std</strong> (<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">bool</span></tt></a>) &#8211; it writes to sys stream
 when log stream does not exist</li>
 </ul>
 </td>
@@ -3988,8 +3990,8 @@ when log stream does not exist</li>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>message</strong> &#8211; error message</li>
-<li><strong>std</strong> &#8211; it writes to sys stream
+<li><strong>message</strong> (<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>) &#8211; error message</li>
+<li><strong>std</strong> (<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">bool</span></tt></a>) &#8211; it writes to sys stream
 when log stream does not exist</li>
 </ul>
 </td>
@@ -4007,8 +4009,8 @@ when log stream does not exist</li>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>message</strong> &#8211; error message</li>
-<li><strong>std</strong> &#8211; it writes to sys stream
+<li><strong>message</strong> (<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>) &#8211; error message</li>
+<li><strong>std</strong> (<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">bool</span></tt></a>) &#8211; it writes to sys stream
 when log stream does not exist</li>
 </ul>
 </td>
@@ -4026,8 +4028,8 @@ when log stream does not exist</li>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>message</strong> &#8211; info message</li>
-<li><strong>std</strong> &#8211; it writes to sys stream
+<li><strong>message</strong> (<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>) &#8211; info message</li>
+<li><strong>std</strong> (<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">bool</span></tt></a>) &#8211; it writes to sys stream
 when log stream does not exist</li>
 </ul>
 </td>
@@ -4039,31 +4041,31 @@ when log stream does not exist</li>
 <dl class="data">
 <dt id="nxsrecconfig.Streams.log_debug">
 <tt class="descclassname">nxsrecconfig.Streams.</tt><tt class="descname">log_debug</tt><em class="property"> = None</em><a class="headerlink" href="#nxsrecconfig.Streams.log_debug" title="Permalink to this definition">¶</a></dt>
-<dd><p>Tango debug log stream</p>
+<dd><p>(<tt class="xref py py-class docutils literal"><span class="pre">PyTango.log4tango.TangoStream</span></tt>) Tango debug log stream</p>
 </dd></dl>
 
 <dl class="data">
 <dt id="nxsrecconfig.Streams.log_error">
 <tt class="descclassname">nxsrecconfig.Streams.</tt><tt class="descname">log_error</tt><em class="property"> = None</em><a class="headerlink" href="#nxsrecconfig.Streams.log_error" title="Permalink to this definition">¶</a></dt>
-<dd><p>Tango error log stream</p>
+<dd><p>(<tt class="xref py py-class docutils literal"><span class="pre">PyTango.log4tango.TangoStream</span></tt>) Tango error log stream</p>
 </dd></dl>
 
 <dl class="data">
 <dt id="nxsrecconfig.Streams.log_fatal">
 <tt class="descclassname">nxsrecconfig.Streams.</tt><tt class="descname">log_fatal</tt><em class="property"> = None</em><a class="headerlink" href="#nxsrecconfig.Streams.log_fatal" title="Permalink to this definition">¶</a></dt>
-<dd><p>Tango fatal log stream</p>
+<dd><p>(<tt class="xref py py-class docutils literal"><span class="pre">PyTango.log4tango.TangoStream</span></tt>) Tango fatal log stream</p>
 </dd></dl>
 
 <dl class="data">
 <dt id="nxsrecconfig.Streams.log_info">
 <tt class="descclassname">nxsrecconfig.Streams.</tt><tt class="descname">log_info</tt><em class="property"> = None</em><a class="headerlink" href="#nxsrecconfig.Streams.log_info" title="Permalink to this definition">¶</a></dt>
-<dd><p>Tango info log stream</p>
+<dd><p>(<tt class="xref py py-class docutils literal"><span class="pre">PyTango.log4tango.TangoStream</span></tt>) Tango info log stream</p>
 </dd></dl>
 
 <dl class="data">
 <dt id="nxsrecconfig.Streams.log_warn">
 <tt class="descclassname">nxsrecconfig.Streams.</tt><tt class="descname">log_warn</tt><em class="property"> = None</em><a class="headerlink" href="#nxsrecconfig.Streams.log_warn" title="Permalink to this definition">¶</a></dt>
-<dd><p>Tango warn log stream</p>
+<dd><p>(<tt class="xref py py-class docutils literal"><span class="pre">PyTango.log4tango.TangoStream</span></tt>) Tango warn log stream</p>
 </dd></dl>
 
 <dl class="function">
@@ -4075,8 +4077,8 @@ when log stream does not exist</li>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>message</strong> &#8211; warning message</li>
-<li><strong>std</strong> &#8211; it writes to sys stream
+<li><strong>message</strong> (<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>) &#8211; warning message</li>
+<li><strong>std</strong> (<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">bool</span></tt></a>) &#8211; it writes to sys stream
 when log stream does not exist</li>
 </ul>
 </td>
