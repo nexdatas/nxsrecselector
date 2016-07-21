@@ -5,7 +5,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>nxsrecconfig package &mdash; NXSRecSelector 3.5.0 documentation</title>
+    <title>nxsrecconfig package &mdash; NXSRecSelector 3.5.1 documentation</title>
     
     <link rel="stylesheet" href="_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '3.5.0',
+        VERSION:     '3.5.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -29,7 +29,7 @@
     <script type="text/javascript" src="_static/js/jquery-fix.js"></script>
     <script type="text/javascript" src="_static/bootstrap-3.3.4/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
-    <link rel="top" title="NXSRecSelector 3.5.0 documentation" href="index.html" />
+    <link rel="top" title="NXSRecSelector 3.5.1 documentation" href="index.html" />
     <link rel="prev" title="Welcome to nxsrecconfig’s documentation!" href="index.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
@@ -163,7 +163,7 @@
 <dl class="data">
 <dt id="nxsrecconfig.CheckerThread.ATTRIBUTESTOCHECK">
 <tt class="descclassname">nxsrecconfig.CheckerThread.</tt><tt class="descname">ATTRIBUTESTOCHECK</tt><em class="property"> = ['Value', 'Position', 'Counts', 'Data', 'Voltage', 'Energy', 'SampleTime']</em><a class="headerlink" href="#nxsrecconfig.CheckerThread.ATTRIBUTESTOCHECK" title="Permalink to this definition">¶</a></dt>
-<dd><p>default attributes to check</p>
+<dd><p>(<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#list" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">list</span></tt></a> &lt; <a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>&gt;) default attributes to check</p>
 </dd></dl>
 
 <dl class="exception">
@@ -183,32 +183,32 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> &#8211; checker item name</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> (<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>) &#8211; checker item name</td>
 </tr>
 </tbody>
 </table>
 <dl class="attribute">
 <dt id="nxsrecconfig.CheckerThread.CheckerItem.active">
 <tt class="descname">active</tt><em class="property"> = None</em><a class="headerlink" href="#nxsrecconfig.CheckerThread.CheckerItem.active" title="Permalink to this definition">¶</a></dt>
-<dd><p>enabled flag</p>
+<dd><p>(<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">bool</span></tt></a>) enabled flag</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="nxsrecconfig.CheckerThread.CheckerItem.errords">
 <tt class="descname">errords</tt><em class="property"> = None</em><a class="headerlink" href="#nxsrecconfig.CheckerThread.CheckerItem.errords" title="Permalink to this definition">¶</a></dt>
-<dd><p>datasource with first error</p>
+<dd><p>(<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>) datasource with first error</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="nxsrecconfig.CheckerThread.CheckerItem.message">
 <tt class="descname">message</tt><em class="property"> = None</em><a class="headerlink" href="#nxsrecconfig.CheckerThread.CheckerItem.message" title="Permalink to this definition">¶</a></dt>
-<dd><p>first error message</p>
+<dd><p>(<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>) first error message</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="nxsrecconfig.CheckerThread.CheckerItem.name">
 <tt class="descname">name</tt><em class="property"> = None</em><a class="headerlink" href="#nxsrecconfig.CheckerThread.CheckerItem.name" title="Permalink to this definition">¶</a></dt>
-<dd><p>checker name</p>
+<dd><p>(<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>) checker name</p>
 </dd></dl>
 
 </dd></dl>
@@ -227,8 +227,8 @@
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>index</strong> &#8211; the current thread index</li>
-<li><strong>queue</strong> &#8211; queue with tasks</li>
+<li><strong>index</strong> (<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">int</span></tt></a>) &#8211; the current thread index</li>
+<li><strong>queue</strong> (<a class="reference external" href="http://docs.python.org/2.7/library/queue.html#Queue.Queue" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">Queue.Queue</span></tt></a>) &#8211; queue with tasks</li>
 </ul>
 </td>
 </tr>
@@ -237,7 +237,7 @@
 <dl class="attribute">
 <dt id="nxsrecconfig.CheckerThread.CheckerThread.index">
 <tt class="descname">index</tt><em class="property"> = None</em><a class="headerlink" href="#nxsrecconfig.CheckerThread.CheckerThread.index" title="Permalink to this definition">¶</a></dt>
-<dd><p>thread index</p>
+<dd><p>(<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">int</span></tt></a>) thread index</p>
 </dd></dl>
 
 <dl class="method">
@@ -274,9 +274,9 @@
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>name</strong> &#8211; datasource name</li>
-<li><strong>device</strong> &#8211; datasource device</li>
-<li><strong>attr</strong> &#8211; device attribute</li>
+<li><strong>name</strong> (<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>) &#8211; datasource name</li>
+<li><strong>device</strong> (<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>) &#8211; datasource device</li>
+<li><strong>attr</strong> (<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>) &#8211; device attribute</li>
 </ul>
 </td>
 </tr>
@@ -285,19 +285,19 @@
 <dl class="attribute">
 <dt id="nxsrecconfig.CheckerThread.TangoDSItem.attr">
 <tt class="descname">attr</tt><a class="headerlink" href="#nxsrecconfig.CheckerThread.TangoDSItem.attr" title="Permalink to this definition">¶</a></dt>
-<dd><p>datasource device attribute</p>
+<dd><p>(<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>) datasource device attribute</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="nxsrecconfig.CheckerThread.TangoDSItem.device">
 <tt class="descname">device</tt><a class="headerlink" href="#nxsrecconfig.CheckerThread.TangoDSItem.device" title="Permalink to this definition">¶</a></dt>
-<dd><p>datasource device</p>
+<dd><p>(<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>) datasource device</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="nxsrecconfig.CheckerThread.TangoDSItem.name">
 <tt class="descname">name</tt><a class="headerlink" href="#nxsrecconfig.CheckerThread.TangoDSItem.name" title="Permalink to this definition">¶</a></dt>
-<dd><p>datasource name</p>
+<dd><p>(<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>) datasource name</p>
 </dd></dl>
 
 </dd></dl>
@@ -316,7 +316,7 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>ver</strong> &#8211; the required selection version</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>ver</strong> (<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>) &#8211; the required selection version</td>
 </tr>
 </tbody>
 </table>
@@ -327,9 +327,11 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>selection</strong> &#8211; selection dictionary object</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>selection</strong> (<a class="reference internal" href="#nxsrecconfig.Selection.Selection" title="nxsrecconfig.Selection.Selection"><em>nxsrecconfig.Selection.Selection</em></a>) &#8211; selection dictionary object</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">list of selection keys</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">selection keys</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="http://docs.python.org/2.7/library/stdtypes.html#set" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">set</span></tt></a></td>
 </tr>
 </tbody>
 </table>
@@ -343,28 +345,40 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>selection</strong> &#8211; selection dictionary object</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>selection</strong> (<a class="reference internal" href="#nxsrecconfig.Selection.Selection" title="nxsrecconfig.Selection.Selection"><em>nxsrecconfig.Selection.Selection</em></a>) &#8211; selection dictionary object</td>
 </tr>
 </tbody>
 </table>
 </dd></dl>
 
 <dl class="attribute">
+<dt id="nxsrecconfig.Converter.Converter.down">
+<tt class="descname">down</tt><em class="property"> = None</em><a class="headerlink" href="#nxsrecconfig.Converter.Converter.down" title="Permalink to this definition">¶</a></dt>
+<dd><p>(<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#list" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">list</span></tt></a> &lt;<a class="reference internal" href="#nxsrecconfig.Converter.ConverterXtoY" title="nxsrecconfig.Converter.ConverterXtoY"><tt class="xref py py-class docutils literal"><span class="pre">ConverterXtoY</span></tt></a>&gt;) converter down sequence</p>
+</dd></dl>
+
+<dl class="attribute">
 <dt id="nxsrecconfig.Converter.Converter.majorversion">
 <tt class="descname">majorversion</tt><em class="property"> = None</em><a class="headerlink" href="#nxsrecconfig.Converter.Converter.majorversion" title="Permalink to this definition">¶</a></dt>
-<dd><p>major selection version</p>
+<dd><p>(<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">int</span></tt></a>) major selection version</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="nxsrecconfig.Converter.Converter.minorversion">
 <tt class="descname">minorversion</tt><em class="property"> = None</em><a class="headerlink" href="#nxsrecconfig.Converter.Converter.minorversion" title="Permalink to this definition">¶</a></dt>
-<dd><p>minor selection version</p>
+<dd><p>(<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">int</span></tt></a>) minor selection version</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="nxsrecconfig.Converter.Converter.patchversion">
 <tt class="descname">patchversion</tt><em class="property"> = None</em><a class="headerlink" href="#nxsrecconfig.Converter.Converter.patchversion" title="Permalink to this definition">¶</a></dt>
-<dd><p>patch selection version</p>
+<dd><p>(<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">int</span></tt></a>) patch selection version</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="nxsrecconfig.Converter.Converter.up">
+<tt class="descname">up</tt><em class="property"> = None</em><a class="headerlink" href="#nxsrecconfig.Converter.Converter.up" title="Permalink to this definition">¶</a></dt>
+<dd><p>(<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#list" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">list</span></tt></a> &lt;<a class="reference internal" href="#nxsrecconfig.Converter.ConverterXtoY" title="nxsrecconfig.Converter.ConverterXtoY"><tt class="xref py py-class docutils literal"><span class="pre">ConverterXtoY</span></tt></a>&gt;) converter up sequence</p>
 </dd></dl>
 
 <dl class="classmethod">
@@ -378,9 +392,11 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>selection</strong> &#8211; selection dictionary object</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>selection</strong> (<a class="reference internal" href="#nxsrecconfig.Selection.Selection" title="nxsrecconfig.Selection.Selection"><em>nxsrecconfig.Selection.Selection</em></a>) &#8211; selection dictionary object</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">(major, minor, patch) tuple with integers</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">(<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">int</span></tt></a> , <a class="reference external" href="http://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">int</span></tt></a> , <a class="reference external" href="http://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">int</span></tt></a>)</td>
 </tr>
 </tbody>
 </table>
@@ -402,7 +418,7 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>selection</strong> &#8211; selection dictionary object</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>selection</strong> (<a class="reference internal" href="#nxsrecconfig.Selection.Selection" title="nxsrecconfig.Selection.Selection"><em>nxsrecconfig.Selection.Selection</em></a>) &#8211; selection dictionary object</td>
 </tr>
 </tbody>
 </table>
@@ -411,13 +427,13 @@
 <dl class="attribute">
 <dt id="nxsrecconfig.Converter.Converter1to2.names">
 <tt class="descname">names</tt><em class="property"> = None</em><a class="headerlink" href="#nxsrecconfig.Converter.Converter1to2.names" title="Permalink to this definition">¶</a></dt>
-<dd><p>names to convert</p>
+<dd><p>(<a class="reference external" href="http://docs.python.org/2.7/library/stdtypes.html#dict" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">dict</span></tt></a> &lt;<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>, <a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>&gt;) names to convert</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="nxsrecconfig.Converter.Converter1to2.pnames">
 <tt class="descname">pnames</tt><em class="property"> = None</em><a class="headerlink" href="#nxsrecconfig.Converter.Converter1to2.pnames" title="Permalink to this definition">¶</a></dt>
-<dd><p>names of properties</p>
+<dd><p>(<a class="reference external" href="http://docs.python.org/2.7/library/stdtypes.html#dict" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">dict</span></tt></a> &lt;<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>, <a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>&gt;) names of properties</p>
 </dd></dl>
 
 </dd></dl>
@@ -436,7 +452,7 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>selection</strong> &#8211; selection dictionary object</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>selection</strong> (<a class="reference internal" href="#nxsrecconfig.Selection.Selection" title="nxsrecconfig.Selection.Selection"><em>nxsrecconfig.Selection.Selection</em></a>) &#8211; selection dictionary object</td>
 </tr>
 </tbody>
 </table>
@@ -445,13 +461,13 @@
 <dl class="attribute">
 <dt id="nxsrecconfig.Converter.Converter2to1.names">
 <tt class="descname">names</tt><em class="property"> = None</em><a class="headerlink" href="#nxsrecconfig.Converter.Converter2to1.names" title="Permalink to this definition">¶</a></dt>
-<dd><p>names to convert</p>
+<dd><p>(<a class="reference external" href="http://docs.python.org/2.7/library/stdtypes.html#dict" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">dict</span></tt></a> &lt;<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>, <a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>&gt;) names to convert</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="nxsrecconfig.Converter.Converter2to1.pnames">
 <tt class="descname">pnames</tt><em class="property"> = None</em><a class="headerlink" href="#nxsrecconfig.Converter.Converter2to1.pnames" title="Permalink to this definition">¶</a></dt>
-<dd><p>names of properties</p>
+<dd><p>(<a class="reference external" href="http://docs.python.org/2.7/library/stdtypes.html#dict" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">dict</span></tt></a> &lt;<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>, <a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>&gt;) names of properties</p>
 </dd></dl>
 
 </dd></dl>
@@ -470,7 +486,7 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>selection</strong> &#8211; selection dictionary object</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>selection</strong> (<a class="reference internal" href="#nxsrecconfig.Selection.Selection" title="nxsrecconfig.Selection.Selection"><em>nxsrecconfig.Selection.Selection</em></a>) &#8211; selection dictionary object</td>
 </tr>
 </tbody>
 </table>
@@ -479,7 +495,7 @@
 <dl class="attribute">
 <dt id="nxsrecconfig.Converter.Converter2to3.names">
 <tt class="descname">names</tt><em class="property"> = None</em><a class="headerlink" href="#nxsrecconfig.Converter.Converter2to3.names" title="Permalink to this definition">¶</a></dt>
-<dd><p>names to convert</p>
+<dd><p>(<a class="reference external" href="http://docs.python.org/2.7/library/stdtypes.html#dict" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">dict</span></tt></a> &lt;<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>, <a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>&gt;) names to convert</p>
 </dd></dl>
 
 <dl class="method">
@@ -490,9 +506,11 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>jselelem</strong> &#8211; json list or dict selection element</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>jselelem</strong> (<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>) &#8211; json list or dict selection element</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">json dictionary</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a></td>
 </tr>
 </tbody>
 </table>
@@ -514,7 +532,7 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>selection</strong> &#8211; selection dictionary object</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>selection</strong> (<a class="reference internal" href="#nxsrecconfig.Selection.Selection" title="nxsrecconfig.Selection.Selection"><em>nxsrecconfig.Selection.Selection</em></a>) &#8211; selection dictionary object</td>
 </tr>
 </tbody>
 </table>
@@ -523,7 +541,7 @@
 <dl class="attribute">
 <dt id="nxsrecconfig.Converter.Converter3to2.names">
 <tt class="descname">names</tt><em class="property"> = None</em><a class="headerlink" href="#nxsrecconfig.Converter.Converter3to2.names" title="Permalink to this definition">¶</a></dt>
-<dd><p>names to convert</p>
+<dd><p>(<a class="reference external" href="http://docs.python.org/2.7/library/stdtypes.html#dict" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">dict</span></tt></a> &lt;<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>, <a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>&gt;) names to convert</p>
 </dd></dl>
 
 <dl class="method">
@@ -537,9 +555,11 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>jselelem</strong> &#8211; json dictionary selection element</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>jselelem</strong> (<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>) &#8211; json dictionary selection element</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">converter json dictionary</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a></td>
 </tr>
 </tbody>
 </table>
@@ -556,9 +576,11 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>jselelem</strong> &#8211; json dictionary selection element</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>jselelem</strong> (<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>) &#8211; json dictionary selection element</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">converter json dictionary</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a></td>
 </tr>
 </tbody>
 </table>
@@ -580,7 +602,7 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>selection</strong> &#8211; selection dictionary object</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>selection</strong> (<a class="reference internal" href="#nxsrecconfig.Selection.Selection" title="nxsrecconfig.Selection.Selection"><em>nxsrecconfig.Selection.Selection</em></a>) &#8211; selection dictionary object</td>
 </tr>
 </tbody>
 </table>
@@ -589,7 +611,7 @@
 <dl class="attribute">
 <dt id="nxsrecconfig.Converter.ConverterXtoY.names">
 <tt class="descname">names</tt><em class="property"> = None</em><a class="headerlink" href="#nxsrecconfig.Converter.ConverterXtoY.names" title="Permalink to this definition">¶</a></dt>
-<dd><p>names to convert</p>
+<dd><p>(<a class="reference external" href="http://docs.python.org/2.7/library/stdtypes.html#dict" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">dict</span></tt></a> &lt;<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>, <a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>&gt;) names to convert</p>
 </dd></dl>
 
 </dd></dl>
@@ -609,10 +631,10 @@
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>name</strong> &#8211; datasource name</li>
-<li><strong>dstype</strong> &#8211; datasource type</li>
-<li><strong>record</strong> &#8211; datasource record</li>
-<li><strong>dsitem</strong> &#8211; datasource item</li>
+<li><strong>name</strong> (<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>) &#8211; datasource name</li>
+<li><strong>dstype</strong> (<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>) &#8211; datasource type</li>
+<li><strong>record</strong> (<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>) &#8211; datasource record</li>
+<li><strong>dsitem</strong> (<a class="reference internal" href="#nxsrecconfig.Describer.DSItem" title="nxsrecconfig.Describer.DSItem"><tt class="xref py py-class docutils literal"><span class="pre">DSItem</span></tt></a>) &#8211; datasource item</li>
 </ul>
 </td>
 </tr>
@@ -621,19 +643,19 @@
 <dl class="attribute">
 <dt id="nxsrecconfig.Describer.DSItem.dstype">
 <tt class="descname">dstype</tt><a class="headerlink" href="#nxsrecconfig.Describer.DSItem.dstype" title="Permalink to this definition">¶</a></dt>
-<dd><p>datasource type</p>
+<dd><p>(<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>) datasource type</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="nxsrecconfig.Describer.DSItem.name">
 <tt class="descname">name</tt><a class="headerlink" href="#nxsrecconfig.Describer.DSItem.name" title="Permalink to this definition">¶</a></dt>
-<dd><p>datasource name</p>
+<dd><p>(<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>) datasource name</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="nxsrecconfig.Describer.DSItem.record">
 <tt class="descname">record</tt><a class="headerlink" href="#nxsrecconfig.Describer.DSItem.record" title="Permalink to this definition">¶</a></dt>
-<dd><p>datasource record</p>
+<dd><p>(<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>) datasource record</p>
 </dd></dl>
 
 </dd></dl>
@@ -650,9 +672,9 @@ of given component</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>nexusconfig_device</strong> &#8211; configserver configuration server name</li>
-<li><strong>tree</strong> &#8211; output flag for dictionary tree</li>
-<li><strong>tree</strong> &#8211; output flag for dictionary tree</li>
+<li><strong>nexusconfig_device</strong> (<a class="reference external" href="http://www.esrf.fr/computing/cs/tango/tango_doc/kernel_doc/pytango/latest/client_api/device_proxy.html#PyTango.DeviceProxy" title="(in PyTango v8.1)"><tt class="xref py py-class docutils literal"><span class="pre">PyTango.DeviceProxy</span></tt></a>              or <a class="reference external" href="https://nexdatas.github.io/configserver/nxsconfigserver.html#nxsconfigserver.XMLConfigurator.XMLConfigurator" title="(in NXSConfigServer v2.4)"><tt class="xref py py-class docutils literal"><span class="pre">nxsconfigserver.XMLConfigurator.XMLConfigurator</span></tt></a>) &#8211; configserver configuration server</li>
+<li><strong>tree</strong> (<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">bool</span></tt></a>) &#8211; flag for output tree dictionary</li>
+<li><strong>pyevalfromscript</strong> (<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">bool</span></tt></a>) &#8211; if evalulate PYEVAL datasources from script</li>
 </ul>
 </td>
 </tr>
@@ -661,23 +683,33 @@ of given component</p>
 <dl class="method">
 <dt id="nxsrecconfig.Describer.Describer.components">
 <tt class="descname">components</tt><big>(</big><em>components=None</em>, <em>strategy=''</em>, <em>dstype=''</em>, <em>cfvars=None</em><big>)</big><a class="reference internal" href="_modules/nxsrecconfig/Describer.html#Describer.components"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nxsrecconfig.Describer.Describer.components" title="Permalink to this definition">¶</a></dt>
-<dd><p>describes given components</p>
+<dd><p>describes given components. If <tt class="xref py py-obj docutils literal"><span class="pre">tree</span></tt> = True it returns</p>
+<div class="line-block">
+<div class="line">[{ cpname : { dsname : [         |           (strategy, dstype, record, nxstype, shape), ...] } } ]</div>
+</div>
+<p>else</p>
+<div class="line-block">
+<div class="line">[{&#8220;dsname&#8221;: dsname, &#8220;strategy&#8221;: strategy, &#8220;dstype&#8221;: dstype,         |     &#8220;record&#8221;: record, &#8220;nxstype&#8221;: nxstype, &#8220;shape&#8221;: shape ,         |     &#8220;cpname&#8221;: cpname}, ...]</div>
+</div>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>components</strong> &#8211; given components.
+<li><strong>components</strong> (<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#list" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">list</span></tt></a> &lt;<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>&gt;) &#8211; given components.
 If None all available ones are taken</li>
-<li><strong>strategy</strong> &#8211; list datasets only with given strategy.
+<li><strong>strategy</strong> (<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>) &#8211; list datasets only with given strategy.
 If &#8216;&#8217; all available ones are taken</li>
-<li><strong>dstype</strong> &#8211; list datasets only with given datasource type.
+<li><strong>dstype</strong> (<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>) &#8211; list datasets only with given datasource type.
 If &#8216;&#8217; all available ones are taken</li>
-<li><strong>cfvars</strong> &#8211; configuration variables</li>
+<li><strong>cfvars</strong> (<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>) &#8211; configuration variables in JSON dictionary</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">list of dictionary with description of components</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">list of dictionary with description of components</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">[<a class="reference external" href="http://docs.python.org/2.7/library/stdtypes.html#dict" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">dict</span></tt></a> &lt;<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>, <a class="reference external" href="http://docs.python.org/2.7/library/stdtypes.html#dict" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">dict</span></tt></a> &lt;<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>,                  <a class="reference external" href="http://docs.python.org/2.7/library/functions.html#list" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">list</span></tt></a> &lt;(<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>, <a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>, <a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>,                       <a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>, <a class="reference external" href="http://docs.python.org/2.7/library/functions.html#list" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">list</span></tt></a> &lt;<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">int</span></tt></a>&gt;)&gt; &gt; &gt; ] or                 [{&#8220;dsname&#8221;: <a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>, &#8220;strategy&#8221;: <a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>,                   &#8220;dstype&#8221;: <a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>, &#8220;record&#8221;: <a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>,                   &#8220;nxstype&#8221;: <a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>, &#8220;shape&#8221;: <a class="reference external" href="http://docs.python.org/2.7/library/functions.html#list" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">list</span></tt></a> &lt;<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">int</span></tt></a>&gt; ,           &#8220;cpname&#8221;: <a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>}, ...]</p>
 </td>
 </tr>
 </tbody>
@@ -693,14 +725,17 @@ If &#8216;&#8217; all available ones are taken</li>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>names</strong> &#8211; given datasources.
+<li><strong>names</strong> (<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#list" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">list</span></tt></a> &lt;<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>&gt;) &#8211; given datasources.
 If None all available ones are taken</li>
-<li><strong>dstype</strong> &#8211; list datasources only with given type.
+<li><strong>dstype</strong> (<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>) &#8211; list datasources only with given type.
 If &#8216;&#8217; all available ones are taken</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">list of dictionary with description of datasources</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">list of dictionary with description of datasources</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">[<a class="reference external" href="http://docs.python.org/2.7/library/stdtypes.html#dict" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">dict</span></tt></a> &lt;<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>, <a class="reference internal" href="#nxsrecconfig.Describer.ExDSDict" title="nxsrecconfig.Describer.ExDSDict"><tt class="xref py py-class docutils literal"><span class="pre">ExDSDict</span></tt></a> &gt; ] or                 [{&#8220;dsname&#8221;: <a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>, &#8220;dstype&#8221;: <a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>,                   &#8220;record&#8221;: <a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>}, ...]</p>
 </td>
 </tr>
 </tbody>
@@ -720,8 +755,8 @@ If &#8216;&#8217; all available ones are taken</li>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>args</strong> &#8211; dict args</li>
-<li><strong>kw</strong> &#8211; dict kw</li>
+<li><strong>args</strong> (<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#list" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">list</span></tt></a> &lt;<cite>any</cite>&gt;) &#8211; dict args</li>
+<li><strong>kw</strong> (<a class="reference external" href="http://docs.python.org/2.7/library/stdtypes.html#dict" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">dict</span></tt></a> &lt;<cite>any</cite> , <cite>any</cite>&gt;) &#8211; dict kw</li>
 </ul>
 </td>
 </tr>
@@ -736,15 +771,18 @@ If &#8216;&#8217; all available ones are taken</li>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>dslist</strong> &#8211; DSItem list</li>
-<li><strong>mode</strong> &#8211; startegy mode</li>
+<li><strong>dslist</strong> (<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#list" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">list</span></tt></a> &lt;<a class="reference internal" href="#nxsrecconfig.Describer.DSItem" title="nxsrecconfig.Describer.DSItem"><tt class="xref py py-class docutils literal"><span class="pre">DSItem</span></tt></a>&gt;) &#8211; DSItem list</li>
+<li><strong>mode</strong> (<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>) &#8211; startegy mode</li>
 <li><strong>nxtype</strong> &#8211; NeXus type</li>
-<li><strong>shape</strong> &#8211; data shape</li>
+<li><strong>shape</strong> (<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#list" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">list</span></tt></a> &lt;<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">int</span></tt></a>&gt;) &#8211; data shape</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">datasource name for first added datasource
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">datasource name for first added datasource
 or None if not appended</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a></p>
 </td>
 </tr>
 </tbody>
@@ -764,10 +802,10 @@ or None if not appended</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>dsitem</strong> &#8211; datasource item</li>
-<li><strong>mode</strong> &#8211; writing mode</li>
+<li><strong>dsitem</strong> (<a class="reference internal" href="#nxsrecconfig.Describer.DSItem" title="nxsrecconfig.Describer.DSItem"><tt class="xref py py-class docutils literal"><span class="pre">DSItem</span></tt></a>) &#8211; datasource item</li>
+<li><strong>mode</strong> (<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>) &#8211; writing strategy mode</li>
 <li><strong>nxtype</strong> &#8211; nexus type</li>
-<li><strong>shape</strong> &#8211; datasource shape</li>
+<li><strong>shape</strong> (<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#list" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">list</span></tt></a> &lt;<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">int</span></tt></a>&gt;) &#8211; datasource shape</li>
 </ul>
 </td>
 </tr>
@@ -776,19 +814,19 @@ or None if not appended</p>
 <dl class="attribute">
 <dt id="nxsrecconfig.Describer.ExDSItem.mode">
 <tt class="descname">mode</tt><a class="headerlink" href="#nxsrecconfig.Describer.ExDSItem.mode" title="Permalink to this definition">¶</a></dt>
-<dd><p>writing mode</p>
+<dd><p>(<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>) writing strategy mode</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="nxsrecconfig.Describer.ExDSItem.nxtype">
 <tt class="descname">nxtype</tt><a class="headerlink" href="#nxsrecconfig.Describer.ExDSItem.nxtype" title="Permalink to this definition">¶</a></dt>
-<dd><p>nexus type</p>
+<dd><p>(<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>) nexus type</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="nxsrecconfig.Describer.ExDSItem.shape">
 <tt class="descname">shape</tt><a class="headerlink" href="#nxsrecconfig.Describer.ExDSItem.shape" title="Permalink to this definition">¶</a></dt>
-<dd><p>datasource shape</p>
+<dd><p>(<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#list" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">list</span></tt></a> &lt;<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">int</span></tt></a>&gt;) datasource shape</p>
 </dd></dl>
 
 </dd></dl>

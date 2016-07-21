@@ -5,7 +5,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>nxsrecconfig.Converter &mdash; NXSRecSelector 3.5.0 documentation</title>
+    <title>nxsrecconfig.Converter &mdash; NXSRecSelector 3.5.1 documentation</title>
     
     <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '3.5.0',
+        VERSION:     '3.5.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -29,7 +29,7 @@
     <script type="text/javascript" src="../../_static/js/jquery-fix.js"></script>
     <script type="text/javascript" src="../../_static/bootstrap-3.3.4/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../../_static/bootstrap-sphinx.js"></script>
-    <link rel="top" title="NXSRecSelector 3.5.0 documentation" href="../../index.html" />
+    <link rel="top" title="NXSRecSelector 3.5.1 documentation" href="../../index.html" />
     <link rel="up" title="nxsrecconfig" href="../nxsrecconfig.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
@@ -160,13 +160,14 @@
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; constructor</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c">#: names to convert</span>
+        <span class="c">#: (:obj:`dict` &lt;:obj:`str`, :obj:`str`&gt;) names to convert</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">names</span> <span class="o">=</span> <span class="p">{}</span>
 
 <div class="viewcode-block" id="ConverterXtoY.convert"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Converter.ConverterXtoY.convert">[docs]</a>    <span class="k">def</span> <span class="nf">convert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">selection</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; converts selection to the current selector version</span>
 
 <span class="sd">        :param selection: selection dictionary object</span>
+<span class="sd">        :type selection: nxsrecconfig.Selection.Selection</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">old</span><span class="p">,</span> <span class="n">new</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">names</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="k">if</span> <span class="n">old</span> <span class="ow">in</span> <span class="n">selection</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
@@ -182,7 +183,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Converter2to3</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">()</span>
 
-        <span class="c">#: names to convert</span>
+        <span class="c">#: (:obj:`dict` &lt;:obj:`str`, :obj:`str`&gt;) names to convert</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">names</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s">&quot;PreselectedDataSources&quot;</span><span class="p">:</span> <span class="s">&quot;PreselectingDataSources&quot;</span><span class="p">,</span>
             <span class="s">&quot;InitDataSources&quot;</span><span class="p">:</span> <span class="s">&quot;DataSourcePreselection&quot;</span><span class="p">,</span>
@@ -192,7 +193,9 @@
         <span class="sd">&quot;&quot;&quot; converters list/dict of elements to dictionary with logical values</span>
 
 <span class="sd">        :param jselelem: json list or dict selection element</span>
+<span class="sd">        :type jselelem: :obj:`str`</span>
 <span class="sd">        :returns: json dictionary</span>
+<span class="sd">        :rtype: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">sel</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">jselelem</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sel</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
@@ -205,6 +208,7 @@
         <span class="sd">&quot;&quot;&quot; converts selection from version 2 to 3</span>
 
 <span class="sd">        :param selection: selection dictionary object</span>
+<span class="sd">        :type selection: nxsrecconfig.Selection.Selection</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Converter2to3</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="n">selection</span><span class="p">)</span>
 
@@ -227,7 +231,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Converter3to2</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">()</span>
 
-        <span class="c">#: names to convert</span>
+        <span class="c">#: (:obj:`dict` &lt;:obj:`str`, :obj:`str`&gt;) names to convert</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">names</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s">&quot;PreselectingDataSources&quot;</span><span class="p">:</span> <span class="s">&quot;PreselectedDataSources&quot;</span><span class="p">,</span>
             <span class="s">&quot;DataSourcePreselection&quot;</span><span class="p">:</span> <span class="s">&quot;InitDataSources&quot;</span><span class="p">,</span>
@@ -238,7 +242,9 @@
 <span class="sd">            to dictionary with True/False values</span>
 
 <span class="sd">        :param jselelem: json dictionary selection element</span>
+<span class="sd">        :type jselelem: :obj:`str`</span>
 <span class="sd">        :returns: converter json dictionary</span>
+<span class="sd">        :rtype: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">sel</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">jselelem</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span>
@@ -249,7 +255,9 @@
 <span class="sd">            to list of elementes with walue True</span>
 
 <span class="sd">        :param jselelem: json dictionary selection element</span>
+<span class="sd">        :type jselelem: :obj:`str`</span>
 <span class="sd">        :returns: converter json dictionary</span>
+<span class="sd">        :rtype: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">sel</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">jselelem</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">([</span><span class="n">key</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">vl</span> <span class="ow">in</span> <span class="n">sel</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">vl</span><span class="p">])</span>
@@ -258,6 +266,7 @@
         <span class="sd">&quot;&quot;&quot; converts selection from version 3 to 2</span>
 
 <span class="sd">        :param selection: selection dictionary object</span>
+<span class="sd">        :type selection: nxsrecconfig.Selection.Selection</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Converter3to2</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="n">selection</span><span class="p">)</span>
         <span class="k">if</span> <span class="s">&#39;ComponentPreselection&#39;</span> <span class="ow">in</span> <span class="n">selection</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
@@ -279,7 +288,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Converter1to2</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">()</span>
 
-        <span class="c">#: names to convert</span>
+        <span class="c">#: (:obj:`dict` &lt;:obj:`str`, :obj:`str`&gt;) names to convert</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">names</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s">&quot;AutomaticComponentGroup&quot;</span><span class="p">:</span> <span class="s">&quot;ComponentPreselection&quot;</span><span class="p">,</span>
             <span class="s">&quot;AutomaticDataSources&quot;</span><span class="p">:</span> <span class="s">&quot;PreselectedDataSources&quot;</span><span class="p">,</span>
@@ -292,7 +301,7 @@
 
         <span class="p">}</span>
 
-        <span class="c">#: names of properties</span>
+        <span class="c">#: (:obj:`dict` &lt;:obj:`str`, :obj:`str`&gt;) names of properties</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pnames</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s">&quot;Labels&quot;</span><span class="p">:</span> <span class="s">&quot;label&quot;</span><span class="p">,</span>
             <span class="s">&quot;LabelPaths&quot;</span><span class="p">:</span> <span class="s">&quot;nexus_path&quot;</span><span class="p">,</span>
@@ -305,6 +314,7 @@
         <span class="sd">&quot;&quot;&quot; converts selection from version 1 to 2</span>
 
 <span class="sd">        :param selection: selection dictionary object</span>
+<span class="sd">        :type selection: nxsrecconfig.Selection.Selection</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Converter1to2</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="n">selection</span><span class="p">)</span>
         <span class="n">props</span> <span class="o">=</span> <span class="p">{}</span>
@@ -323,7 +333,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Converter2to1</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">()</span>
 
-        <span class="c">#: names of properties</span>
+        <span class="c">#: (:obj:`dict` &lt;:obj:`str`, :obj:`str`&gt;) names of properties</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pnames</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s">&quot;Labels&quot;</span><span class="p">:</span> <span class="s">&quot;label&quot;</span><span class="p">,</span>
             <span class="s">&quot;LabelPaths&quot;</span><span class="p">:</span> <span class="s">&quot;nexus_path&quot;</span><span class="p">,</span>
@@ -332,7 +342,7 @@
             <span class="s">&quot;LabelShapes&quot;</span><span class="p">:</span> <span class="s">&quot;shape&quot;</span><span class="p">,</span>
         <span class="p">}</span>
 
-        <span class="c">#: names to convert</span>
+        <span class="c">#: (:obj:`dict` &lt;:obj:`str`, :obj:`str`&gt;) names to convert</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">names</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s">&quot;ComponentSelection&quot;</span><span class="p">:</span> <span class="s">&quot;ComponentGroup&quot;</span><span class="p">,</span>
             <span class="s">&quot;ComponentPreselection&quot;</span><span class="p">:</span> <span class="s">&quot;AutomaticComponentGroup&quot;</span><span class="p">,</span>
@@ -348,6 +358,7 @@
         <span class="sd">&quot;&quot;&quot; converts selection from version 2 to 1</span>
 
 <span class="sd">        :param selection: selection dictionary object</span>
+<span class="sd">        :type selection: nxsrecconfig.Selection.Selection</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Converter2to1</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="n">selection</span><span class="p">)</span>
         <span class="k">if</span> <span class="s">&quot;ChannelProperties&quot;</span> <span class="ow">in</span> <span class="n">selection</span><span class="p">:</span>
@@ -367,24 +378,29 @@
         <span class="sd">&quot;&quot;&quot; contstructor</span>
 
 <span class="sd">        :param ver: the required selection version</span>
+<span class="sd">        :type ver: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">sver</span> <span class="o">=</span> <span class="n">ver</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&quot;.&quot;</span><span class="p">)</span>
-        <span class="c">#: major selection version</span>
+        <span class="c">#: (:obj:`int`) major selection version</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">majorversion</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">sver</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-        <span class="c">#: minor selection version</span>
+        <span class="c">#: (:obj:`int`) minor selection version</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">minorversion</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">sver</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-        <span class="c">#: patch selection version</span>
+        <span class="c">#: (:obj:`int`) patch selection version</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">patchversion</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">sver</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
 
+        <span class="c">#: (:obj:`list` &lt;:class:`ConverterXtoY`&gt;) converter up sequence</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">up</span> <span class="o">=</span> <span class="p">[</span><span class="n">Converter1to2</span><span class="p">(),</span> <span class="n">Converter2to3</span><span class="p">()]</span>
+        <span class="c">#: (:obj:`list` &lt;:class:`ConverterXtoY`&gt;) converter down sequence</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">down</span> <span class="o">=</span> <span class="p">[</span><span class="n">Converter2to1</span><span class="p">(),</span> <span class="n">Converter3to2</span><span class="p">()]</span>
 
 <div class="viewcode-block" id="Converter.allkeys"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Converter.Converter.allkeys">[docs]</a>    <span class="k">def</span> <span class="nf">allkeys</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">selection</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="sd">        :param selection: selection dictionary object</span>
-<span class="sd">        :returns: list of selection keys</span>
+<span class="sd">        :type selection: nxsrecconfig.Selection.Selection</span>
+<span class="sd">        :returns: selection keys</span>
+<span class="sd">        :rtype: :obj:`set`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">lkeys</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
         <span class="k">for</span> <span class="n">cv</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">up</span><span class="p">:</span>
@@ -398,6 +414,7 @@
         <span class="sd">&quot;&quot;&quot; converts selection from any version to any other</span>
 
 <span class="sd">        :param selection: selection dictionary object</span>
+<span class="sd">        :type selection: nxsrecconfig.Selection.Selection</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">major</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">version</span><span class="p">(</span><span class="n">selection</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">major</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">majorversion</span><span class="p">:</span>
@@ -418,7 +435,9 @@
 <span class="sd">            into (major, minor, patch)</span>
 
 <span class="sd">        :param selection: selection dictionary object</span>
+<span class="sd">        :type selection: nxsrecconfig.Selection.Selection</span>
 <span class="sd">        :returns: (major, minor, patch) tuple with integers</span>
+<span class="sd">        :rtype: (:obj:`int` , :obj:`int` , :obj:`int`)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">major</span> <span class="o">=</span> <span class="mi">1</span>
         <span class="n">minor</span> <span class="o">=</span> <span class="mi">0</span>

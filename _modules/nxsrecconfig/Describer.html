@@ -5,7 +5,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>nxsrecconfig.Describer &mdash; NXSRecSelector 3.5.0 documentation</title>
+    <title>nxsrecconfig.Describer &mdash; NXSRecSelector 3.5.1 documentation</title>
     
     <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '3.5.0',
+        VERSION:     '3.5.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -29,7 +29,7 @@
     <script type="text/javascript" src="../../_static/js/jquery-fix.js"></script>
     <script type="text/javascript" src="../../_static/bootstrap-3.3.4/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../../_static/bootstrap-sphinx.js"></script>
-    <link rel="top" title="NXSRecSelector 3.5.0 documentation" href="../../index.html" />
+    <link rel="top" title="NXSRecSelector 3.5.1 documentation" href="../../index.html" />
     <link rel="up" title="nxsrecconfig" href="../nxsrecconfig.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
@@ -167,16 +167,20 @@
         <span class="sd">&quot;&quot;&quot; constructor</span>
 
 <span class="sd">        :param name: datasource name</span>
+<span class="sd">        :type name: :obj:`str`</span>
 <span class="sd">        :param dstype: datasource type</span>
+<span class="sd">        :type dstype: :obj:`str`</span>
 <span class="sd">        :param record: datasource record</span>
+<span class="sd">        :type record: :obj:`str`</span>
 <span class="sd">        :param dsitem: datasource item</span>
+<span class="sd">        :type dsitem: :class:`DSItem`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">dsitem</span><span class="p">:</span>
-            <span class="c">#: datasource name</span>
+            <span class="c">#: (:obj:`str`) datasource name</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">dsitem</span><span class="o">.</span><span class="n">name</span>
-            <span class="c">#: datasource type</span>
+            <span class="c">#: (:obj:`str`) datasource type</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">dstype</span> <span class="o">=</span> <span class="n">dsitem</span><span class="o">.</span><span class="n">dstype</span>
-            <span class="c">#: datasource record</span>
+            <span class="c">#: (:obj:`str`) datasource record</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">record</span> <span class="o">=</span> <span class="n">dsitem</span><span class="o">.</span><span class="n">record</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="k">if</span> <span class="n">name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="k">else</span> <span class="bp">None</span>
@@ -194,16 +198,20 @@
         <span class="sd">&quot;&quot;&quot; constructor</span>
 
 <span class="sd">        :param dsitem: datasource item</span>
-<span class="sd">        :param mode: writing mode</span>
+<span class="sd">        :type dsitem: :class:`DSItem`</span>
+<span class="sd">        :param mode: writing strategy mode</span>
+<span class="sd">        :type mode: :obj:`str`</span>
 <span class="sd">        :param nxtype: nexus type</span>
+<span class="sd">        :type nxstype: :obj:`str`</span>
 <span class="sd">        :param shape: datasource shape</span>
+<span class="sd">        :type shape: :obj:`list` &lt;:obj:`int`&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">DSItem</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dsitem</span><span class="o">=</span><span class="n">dsitem</span><span class="p">)</span>
-        <span class="c">#: writing mode</span>
+        <span class="c">#: (:obj:`str`) writing strategy mode</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">mode</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">mode</span><span class="p">)</span> <span class="k">if</span> <span class="n">mode</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="k">else</span> <span class="bp">None</span>
-        <span class="c">#: nexus type</span>
+        <span class="c">#: (:obj:`str`) nexus type</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">nxtype</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">nxtype</span><span class="p">)</span> <span class="k">if</span> <span class="n">nxtype</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="k">else</span> <span class="bp">None</span>
-        <span class="c">#: datasource shape</span>
+        <span class="c">#: (:obj:`list` &lt;:obj:`int`&gt;) datasource shape</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">shape</span> <span class="o">=</span> <span class="n">shape</span>
 
 </div>
@@ -215,21 +223,30 @@
         <span class="sd">&quot;&quot;&quot; constructor</span>
 
 <span class="sd">        :param args: dict args</span>
+<span class="sd">        :type args: :obj:`list` &lt;`any`&gt;</span>
 <span class="sd">        :param kw: dict kw</span>
+<span class="sd">        :type kw: :obj:`dict` &lt;`any` , `any`&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">ExDSDict</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+        <span class="c">#: (:obj:`int`) counter</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__counter</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="c">#: (:obj:`str`) noname datasource prefix</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__prefix</span> <span class="o">=</span> <span class="s">&#39;__unnamed__&#39;</span>
 
 <div class="viewcode-block" id="ExDSDict.appendDSList"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Describer.ExDSDict.appendDSList">[docs]</a>    <span class="k">def</span> <span class="nf">appendDSList</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dslist</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">nxtype</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; appends a list of ExDSItem</span>
 
 <span class="sd">        :param dslist: DSItem list</span>
+<span class="sd">        :type dslist: :obj:`list` &lt;:class:`DSItem`&gt;</span>
 <span class="sd">        :param mode: startegy mode</span>
+<span class="sd">        :type mode: :obj:`str`</span>
 <span class="sd">        :param nxtype: NeXus type</span>
+<span class="sd">        :type nxstype: :obj:`str`</span>
 <span class="sd">        :param shape: data shape</span>
+<span class="sd">        :type shape: :obj:`list` &lt;:obj:`int`&gt;</span>
 <span class="sd">        :returns: datasource name for first added datasource</span>
 <span class="sd">              or None if not appended</span>
+<span class="sd">        :rtype: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">fname</span> <span class="o">=</span> <span class="bp">None</span>
         <span class="k">for</span> <span class="n">dsitem</span> <span class="ow">in</span> <span class="n">dslist</span><span class="p">:</span>
@@ -258,31 +275,65 @@
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nexusconfig_device</span><span class="p">,</span> <span class="n">tree</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">pyevalfromscript</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; constructor</span>
 
-<span class="sd">        :param nexusconfig_device: configserver configuration server name</span>
-<span class="sd">        :param tree: output flag for dictionary tree</span>
-<span class="sd">        :param tree: output flag for dictionary tree</span>
+<span class="sd">        :param nexusconfig_device: configserver configuration server</span>
+<span class="sd">        :type nexusconfig_device: :class:`PyTango.DeviceProxy` \</span>
+<span class="sd">             or :class:`nxsconfigserver.XMLConfigurator.XMLConfigurator`</span>
+<span class="sd">        :param tree: flag for output tree dictionary</span>
+<span class="sd">        :type tree: :obj:`bool`</span>
+<span class="sd">        :param pyevalfromscript: if evalulate PYEVAL datasources from script</span>
+<span class="sd">        :type pyevalfromscript: :obj:`bool`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c">#: (:class:`PyTango.DeviceProxy` \</span>
+        <span class="c">#: or :class:`nxsconfigserver.XMLConfigurator.XMLConfigurator`) \</span>
+        <span class="c">#:    configuration server</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__nexusconfig_device</span> <span class="o">=</span> <span class="n">nexusconfig_device</span>
+        <span class="c">#: (:obj:`bool`) flag for output tree dictionary</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__treeOutput</span> <span class="o">=</span> <span class="n">tree</span>
+        <span class="c">#: (:obj:`bool`) flag for evalulating PYEVAL datasources from script</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__pyevalfromscript</span> <span class="o">=</span> <span class="n">pyevalfromscript</span>
+        <span class="c">#: (:obj:`list` &lt;:obj:`str`&gt;) available configuration server components</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__availableComponents</span> <span class="o">=</span> <span class="n">TangoUtils</span><span class="o">.</span><span class="n">command</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__nexusconfig_device</span><span class="p">,</span>
             <span class="s">&quot;availableComponents&quot;</span><span class="p">)</span>
+        <span class="c">#: (:obj:`list` &lt;:obj:`str`&gt;) \</span>
+        <span class="c">#:     available configuration server datasources</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__availableDataSources</span> <span class="o">=</span> <span class="n">TangoUtils</span><span class="o">.</span><span class="n">command</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__nexusconfig_device</span><span class="p">,</span>
             <span class="s">&quot;availableDataSources&quot;</span><span class="p">)</span>
 
 <div class="viewcode-block" id="Describer.components"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Describer.Describer.components">[docs]</a>    <span class="k">def</span> <span class="nf">components</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">components</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">strategy</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">,</span> <span class="n">dstype</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">,</span> <span class="n">cfvars</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; describes given components</span>
+        <span class="sd">&quot;&quot;&quot; describes given components. If :obj:`tree` = True it returns</span>
+
+<span class="sd">        |   [{ cpname : { dsname : [ \</span>
+<span class="sd">        |           (strategy, dstype, record, nxstype, shape), ...] } } ]</span>
+
+<span class="sd">        else</span>
+
+<span class="sd">        |   [{&quot;dsname&quot;: dsname, &quot;strategy&quot;: strategy, &quot;dstype&quot;: dstype, \</span>
+<span class="sd">        |     &quot;record&quot;: record, &quot;nxstype&quot;: nxstype, &quot;shape&quot;: shape , \</span>
+<span class="sd">        |     &quot;cpname&quot;: cpname}, ...]</span>
+
 
 <span class="sd">        :param components: given components.</span>
 <span class="sd">                           If None all available ones are taken</span>
+<span class="sd">        :type components: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        :param strategy: list datasets only with given strategy.</span>
 <span class="sd">                         If &#39;&#39; all available ones are taken</span>
+<span class="sd">        :type strategy: :obj:`str`</span>
 <span class="sd">        :param dstype: list datasets only with given datasource type.</span>
 <span class="sd">                       If &#39;&#39; all available ones are taken</span>
-<span class="sd">        :param cfvars: configuration variables</span>
-<span class="sd">        :returns: list of dictionary with description of components</span>
+<span class="sd">        :type dstype: :obj:`str`</span>
+<span class="sd">        :param cfvars: configuration variables in JSON dictionary</span>
+<span class="sd">        :type cfvars: :obj:`str`</span>
+<span class="sd">        :returns: list of dictionary with description of components \</span>
+
+<span class="sd">        :rtype: [:obj:`dict` &lt;:obj:`str`, :obj:`dict` &lt;:obj:`str`, \</span>
+<span class="sd">                 :obj:`list` &lt;(:obj:`str`, :obj:`str`, :obj:`str`, \</span>
+<span class="sd">                      :obj:`str`, :obj:`list` &lt;:obj:`int`&gt;)&gt; &gt; &gt; ] or \</span>
+<span class="sd">                [{&quot;dsname&quot;: :obj:`str`, &quot;strategy&quot;: :obj:`str`, \</span>
+<span class="sd">                  &quot;dstype&quot;: :obj:`str`, &quot;record&quot;: :obj:`str`, \</span>
+<span class="sd">                  &quot;nxstype&quot;: :obj:`str`, &quot;shape&quot;: :obj:`list` &lt;:obj:`int`&gt; , \</span>
+<span class="sd">          &quot;cpname&quot;: :obj:`str`}, ...]</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
 
@@ -303,10 +354,18 @@
         <span class="sd">&quot;&quot;&quot; fills in the list of output elements</span>
 
 <span class="sd">        :param cps: component list</span>
+<span class="sd">        :type components: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        :param strategy: required strategy or None</span>
+<span class="sd">        :type strategy: :obj:`str`</span>
 <span class="sd">        :param dstype: required datasource type or None</span>
+<span class="sd">        :type dstype: :obj:`str`</span>
 <span class="sd">        :param cfvars: dictionary with configuration variables</span>
+<span class="sd">        :type cfvars: :obj:`str`</span>
 <span class="sd">        :returns: list of output dictionary elements</span>
+<span class="sd">        :rtype: [{&quot;dsname&quot;: :obj:`str`, &quot;strategy&quot;: :obj:`str`, \</span>
+<span class="sd">                  &quot;dstype&quot;: :obj:`str`, &quot;record&quot;: :obj:`str`, \</span>
+<span class="sd">                  &quot;nxstype&quot;: :obj:`str`, &quot;shape&quot;: :obj:`list` &lt;:obj:`int`&gt; , \</span>
+<span class="sd">          &quot;cpname&quot;: :obj:`str`}, ...]</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">cp</span> <span class="ow">in</span> <span class="n">cps</span><span class="p">:</span>
@@ -330,9 +389,15 @@
         <span class="sd">&quot;&quot;&quot; fills in the dictionary of output elements</span>
 
 <span class="sd">        :param cps: component list</span>
+<span class="sd">        :type components: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        :param strategy: required strategy or None</span>
+<span class="sd">        :type strategy: :obj:`str`</span>
 <span class="sd">        :param dstype: required datasource type or None</span>
+<span class="sd">        :type dstype: :obj:`str`</span>
 <span class="sd">        :returns: dictionary of output dictionary elements</span>
+<span class="sd">        :rtype: [:obj:`dict` &lt;:obj:`str`, :obj:`dict` &lt;:obj:`str`, \</span>
+<span class="sd">                 :obj:`list` &lt;(:obj:`str`, :obj:`str`, :obj:`str`, \</span>
+<span class="sd">                      :obj:`str`, :obj:`list` &lt;:obj:`int`&gt;)&gt; &gt; &gt; ]</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">result</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">for</span> <span class="n">cp</span> <span class="ow">in</span> <span class="n">cps</span><span class="p">:</span>
@@ -353,7 +418,11 @@
         <span class="sd">&quot;&quot;&quot; provides datasource item from XML node</span>
 
 <span class="sd">        :param node: xml node</span>
+<span class="sd">        :type node: :class:`xml.dom.minidom.Node`</span>
 <span class="sd">        :param dsl: list with datasource items (DSItem)</span>
+<span class="sd">        :type dsl: :obj:`list` &lt;:class:`DSItem`&gt;</span>
+<span class="sd">        :returns: list with datasource items (DSItem)</span>
+<span class="sd">        :rtype: :obj:`list` &lt;:class:`DSItem`&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">label</span> <span class="o">=</span> <span class="s">&#39;datasources&#39;</span>
         <span class="n">name</span> <span class="o">=</span> <span class="bp">None</span>
@@ -382,8 +451,12 @@
                 <span class="k">except</span> <span class="p">(</span><span class="ne">StopIteration</span><span class="p">,</span> <span class="ne">IndexError</span><span class="p">):</span>
                     <span class="n">subc</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
                 <span class="n">name</span> <span class="o">=</span> <span class="n">subc</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">if</span> <span class="n">subc</span> <span class="k">else</span> <span class="s">&quot;&quot;</span>
-                <span class="n">dsxmls</span> <span class="o">=</span> <span class="n">TangoUtils</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__nexusconfig_device</span><span class="p">,</span>
-                                            <span class="s">&quot;dataSources&quot;</span><span class="p">,</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">name</span><span class="p">)])</span>
+                <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__availableDataSources</span><span class="p">:</span>
+                    <span class="n">dsxmls</span> <span class="o">=</span> <span class="n">TangoUtils</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__nexusconfig_device</span><span class="p">,</span>
+                                                <span class="s">&quot;dataSources&quot;</span><span class="p">,</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">name</span><span class="p">)])</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">dsxmls</span> <span class="o">=</span> <span class="bp">None</span>
+                    <span class="n">dsitem</span> <span class="o">=</span> <span class="n">DSItem</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="s">&quot;__ERROR__&quot;</span><span class="p">,</span> <span class="s">&quot;__ERROR__&quot;</span><span class="p">)</span>
                 <span class="k">if</span> <span class="n">dsxmls</span><span class="p">:</span>
                     <span class="n">dsitem</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__describeDataSource</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">dsxmls</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
                     <span class="k">if</span> <span class="n">dsitem</span><span class="o">.</span><span class="n">dstype</span><span class="p">:</span>
@@ -403,6 +476,13 @@
         <span class="k">return</span> <span class="n">dslist</span>
 
     <span class="k">def</span> <span class="nf">__findsubdatasources</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dsxml</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; finds datasources in pyeval scripts</span>
+
+<span class="sd">        :param dsxml: pyeval xml</span>
+<span class="sd">        :type dsxml: :obj:`str`</span>
+<span class="sd">        :returns: list with datasource items (DSItem)</span>
+<span class="sd">        :rtype: :obj:`list` &lt;:class:`DSItem`&gt;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">dslist</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">result</span> <span class="o">=</span> <span class="s">&quot;&quot;</span>
         <span class="n">label</span> <span class="o">=</span> <span class="s">&#39;datasources&#39;</span>
@@ -429,7 +509,7 @@
                     <span class="s">&quot;dataSources&quot;</span><span class="p">,</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">name</span><span class="p">)])</span>
                 <span class="k">if</span> <span class="n">chdsxml</span><span class="p">:</span>
                     <span class="n">dsitem</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__describeDataSource</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">chdsxml</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-                    <span class="k">if</span> <span class="n">dsitem</span><span class="o">.</span><span class="n">dstype</span><span class="p">:</span> 
+                    <span class="k">if</span> <span class="n">dsitem</span><span class="o">.</span><span class="n">dstype</span><span class="p">:</span>
                         <span class="n">dslist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dsitem</span><span class="p">)</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">dslist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">DSItem</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="bp">None</span><span class="p">))</span>
@@ -441,7 +521,9 @@
         <span class="sd">&quot;&quot;&quot; provides shape from node</span>
 
 <span class="sd">        :param node: xml node</span>
+<span class="sd">        :type node: :class:`xml.dom.minidom.Node`</span>
 <span class="sd">        :returns: shape of node</span>
+<span class="sd">        :rtype :obj:`list` &lt;:obj:`int`&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">rank</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">attributes</span><span class="p">[</span><span class="s">&quot;rank&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
         <span class="n">shape</span> <span class="o">=</span> <span class="p">[</span><span class="bp">None</span><span class="p">]</span> <span class="o">*</span> <span class="n">rank</span>
@@ -479,7 +561,9 @@
         <span class="sd">&quot;&quot;&quot; provides datasource ExDSDict of given component</span>
 
 <span class="sd">        :param cp : component name</span>
+<span class="sd">        :type cp : :obj:`str`</span>
 <span class="sd">        :returns: datasource ExDSDict</span>
+<span class="sd">        :rtype: :class:`ExDSDict`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">xmlc</span> <span class="o">=</span> <span class="n">TangoUtils</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__nexusconfig_device</span><span class="p">,</span>
                                   <span class="s">&quot;components&quot;</span><span class="p">,</span> <span class="p">[</span><span class="n">cp</span><span class="p">])</span>
@@ -491,8 +575,11 @@
         <span class="sd">&quot;&quot;&quot; provides datasource ExDSDict of given instantiated component</span>
 
 <span class="sd">        :param cp : component name</span>
+<span class="sd">        :type cp : :obj:`str`</span>
 <span class="sd">        :param cfvars : component variables</span>
+<span class="sd">        :type cpvars : :obj:`str`</span>
 <span class="sd">        :returns: datasource ExDSDict</span>
+<span class="sd">        :rtype: :class:`ExDSDict`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">cfvars</span><span class="p">:</span>
             <span class="n">cv</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__nexusconfig_device</span><span class="o">.</span><span class="n">variables</span><span class="p">)</span>
@@ -510,7 +597,9 @@
         <span class="sd">&quot;&quot;&quot; provides datasource ExDSDict of given component xml</span>
 
 <span class="sd">        :param cpxml : component xml</span>
+<span class="sd">        :type cpxml : :obj:`str`</span>
 <span class="sd">        :returns: datasource ExDSDict</span>
+<span class="sd">        :rtype: :class:`ExDSDict`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">indom</span> <span class="o">=</span> <span class="n">xml</span><span class="o">.</span><span class="n">dom</span><span class="o">.</span><span class="n">minidom</span><span class="o">.</span><span class="n">parseString</span><span class="p">(</span><span class="n">cpxml</span><span class="p">)</span>
         <span class="n">strategy</span> <span class="o">=</span> <span class="n">indom</span><span class="o">.</span><span class="n">getElementsByTagName</span><span class="p">(</span><span class="s">&quot;strategy&quot;</span><span class="p">)</span>
@@ -560,9 +649,14 @@
 
 <span class="sd">        :param names: given datasources.</span>
 <span class="sd">                      If None all available ones are taken</span>
+<span class="sd">        :type names: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        :param dstype: list datasources only with given type.</span>
 <span class="sd">                       If &#39;&#39; all available ones are taken</span>
+<span class="sd">        :type dstype: :obj:`str`</span>
 <span class="sd">        :returns: list of dictionary with description of datasources</span>
+<span class="sd">        :rtype: [:obj:`dict` &lt;:obj:`str`, :class:`ExDSDict` &gt; ] or \</span>
+<span class="sd">                [{&quot;dsname&quot;: :obj:`str`, &quot;dstype&quot;: :obj:`str`, \</span>
+<span class="sd">                  &quot;record&quot;: :obj:`str`}, ...]</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">ads</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__availableDataSources</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">names</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
@@ -608,7 +702,14 @@
         <span class="k">return</span> <span class="n">dslist</span>
 </div>
     <span class="k">def</span> <span class="nf">__describeDataSource</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">dsxml</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot; describes the datasource</span>
+
+<span class="sd">        :param name: datasource name</span>
+<span class="sd">        :param type: :obj:`str`</span>
+<span class="sd">        :param dsxml: datasource xml</span>
+<span class="sd">        :param dsxml: :obj:`str`</span>
+<span class="sd">        :returns: datasource DSItem</span>
+<span class="sd">        :rtype: :class:`DSItem`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">dstype</span> <span class="o">=</span> <span class="bp">None</span>
         <span class="n">record</span> <span class="o">=</span> <span class="bp">None</span>

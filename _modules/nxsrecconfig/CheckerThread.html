@@ -5,7 +5,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>nxsrecconfig.CheckerThread &mdash; NXSRecSelector 3.5.0 documentation</title>
+    <title>nxsrecconfig.CheckerThread &mdash; NXSRecSelector 3.5.1 documentation</title>
     
     <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '3.5.0',
+        VERSION:     '3.5.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -29,7 +29,7 @@
     <script type="text/javascript" src="../../_static/js/jquery-fix.js"></script>
     <script type="text/javascript" src="../../_static/bootstrap-3.3.4/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../../_static/bootstrap-sphinx.js"></script>
-    <link rel="top" title="NXSRecSelector 3.5.0 documentation" href="../../index.html" />
+    <link rel="top" title="NXSRecSelector 3.5.1 documentation" href="../../index.html" />
     <link rel="up" title="nxsrecconfig" href="../nxsrecconfig.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
@@ -155,7 +155,7 @@
 <span class="kn">import</span> <span class="nn">threading</span>
 
 
-<span class="c">#: default attributes to check</span>
+<span class="c">#: (:obj:`list` &lt; :obj:`str`&gt;) default attributes to check</span>
 <span class="n">ATTRIBUTESTOCHECK</span> <span class="o">=</span> <span class="p">[</span><span class="s">&quot;Value&quot;</span><span class="p">,</span> <span class="s">&quot;Position&quot;</span><span class="p">,</span> <span class="s">&quot;Counts&quot;</span><span class="p">,</span> <span class="s">&quot;Data&quot;</span><span class="p">,</span>
                      <span class="s">&quot;Voltage&quot;</span><span class="p">,</span> <span class="s">&quot;Energy&quot;</span><span class="p">,</span> <span class="s">&quot;SampleTime&quot;</span><span class="p">]</span>
 
@@ -169,14 +169,17 @@
         <span class="sd">&quot;&quot;&quot; constructor</span>
 
 <span class="sd">        :param name: datasource name</span>
+<span class="sd">        :type name: :obj:`str`</span>
 <span class="sd">        :param device: datasource device</span>
+<span class="sd">        :type device: :obj:`str`</span>
 <span class="sd">        :param attr: device attribute</span>
+<span class="sd">        :type attr: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c">#: datasource name</span>
+        <span class="c">#: (:obj:`str`) datasource name</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="k">if</span> <span class="n">name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="k">else</span> <span class="bp">None</span>
-        <span class="c">#: datasource device</span>
+        <span class="c">#: (:obj:`str`) datasource device</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">device</span><span class="p">)</span> <span class="k">if</span> <span class="n">device</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="k">else</span> <span class="bp">None</span>
-        <span class="c">#: datasource device attribute</span>
+        <span class="c">#: (:obj:`str`) datasource device attribute</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">attr</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">attr</span><span class="p">)</span> <span class="k">if</span> <span class="n">attr</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="k">else</span> <span class="bp">None</span>
 
 </div>
@@ -188,15 +191,16 @@
         <span class="sd">&quot;&quot;&quot; constructor</span>
 
 <span class="sd">        :param name: checker item name</span>
+<span class="sd">        :type name: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">CheckerItem</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">()</span>
-        <span class="c">#: checker name</span>
+        <span class="c">#: (:obj:`str`) checker name</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
-        <span class="c">#: datasource with first error</span>
+        <span class="c">#: (:obj:`str`) datasource with first error</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">errords</span> <span class="o">=</span> <span class="bp">None</span>
-        <span class="c">#: first error message</span>
+        <span class="c">#: (:obj:`str`) first error message</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">message</span> <span class="o">=</span> <span class="bp">None</span>
-        <span class="c">#: enabled flag</span>
+        <span class="c">#: (:obj:`bool`) enabled flag</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">active</span> <span class="o">=</span> <span class="bp">True</span>
 
 </div>
@@ -209,12 +213,14 @@
 
 <span class="sd">        :brief: It creates ElementThread from the runnable element</span>
 <span class="sd">        :param index: the current thread index</span>
+<span class="sd">        :type index: :obj:`int`</span>
 <span class="sd">        :param queue: queue with tasks</span>
+<span class="sd">        :type queue: :class:`Queue.Queue`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
-        <span class="c">#: thread index</span>
+        <span class="c">#: (:obj:`int`) thread index</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">index</span>
-        <span class="c">#: queue with runnable elements</span>
+        <span class="c">#: (:class:`Queue.Queue`) queue with runnable elements</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__queue</span> <span class="o">=</span> <span class="n">queue</span>
 
 <div class="viewcode-block" id="CheckerThread.run"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.CheckerThread.CheckerThread.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -237,6 +243,7 @@
 <span class="sd">        to one components</span>
 
 <span class="sd">        :param checkeritem: device list item</span>
+<span class="sd">        :type checkeritem: :obj:`list` &lt;:class:`CheckerItem`&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">ds</span> <span class="ow">in</span> <span class="n">checkeritem</span><span class="p">:</span>
             <span class="k">try</span><span class="p">:</span>

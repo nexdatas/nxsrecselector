@@ -5,7 +5,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>nxsrecconfig.MacroServerPools &mdash; NXSRecSelector 3.5.0 documentation</title>
+    <title>nxsrecconfig.MacroServerPools &mdash; NXSRecSelector 3.5.1 documentation</title>
     
     <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '3.5.0',
+        VERSION:     '3.5.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -29,7 +29,7 @@
     <script type="text/javascript" src="../../_static/js/jquery-fix.js"></script>
     <script type="text/javascript" src="../../_static/bootstrap-3.3.4/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../../_static/bootstrap-sphinx.js"></script>
-    <link rel="top" title="NXSRecSelector 3.5.0 documentation" href="../../index.html" />
+    <link rel="top" title="NXSRecSelector 3.5.1 documentation" href="../../index.html" />
     <link rel="up" title="nxsrecconfig" href="../nxsrecconfig.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
@@ -252,6 +252,8 @@
         <span class="n">describer</span> <span class="o">=</span> <span class="n">Describer</span><span class="p">(</span><span class="n">configdevice</span><span class="p">,</span> <span class="bp">True</span><span class="p">,</span> <span class="n">pyevalfromscript</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
         <span class="n">availablecomponents</span> <span class="o">=</span> <span class="n">TangoUtils</span><span class="o">.</span><span class="n">command</span><span class="p">(</span>
             <span class="n">configdevice</span><span class="p">,</span> <span class="s">&quot;availableComponents&quot;</span><span class="p">)</span>
+        <span class="n">availabledatasouces</span> <span class="o">=</span> <span class="n">TangoUtils</span><span class="o">.</span><span class="n">command</span><span class="p">(</span>
+            <span class="n">configdevice</span><span class="p">,</span> <span class="s">&quot;availableDataSources&quot;</span><span class="p">)</span>
 
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">set</span><span class="p">(</span><span class="n">components</span><span class="p">)</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="n">availablecomponents</span><span class="p">):</span>
             <span class="n">discomponentgroup</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">k</span><span class="p">)]</span> <span class="o">=</span> <span class="n">CheckerItem</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">k</span><span class="p">))</span>
@@ -259,20 +261,35 @@
             <span class="n">discomponentgroup</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">k</span><span class="p">)]</span><span class="o">.</span><span class="n">active</span> <span class="o">=</span> <span class="bp">False</span>
             <span class="n">discomponentgroup</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">k</span><span class="p">)]</span><span class="o">.</span><span class="n">message</span> <span class="o">=</span> \
                 <span class="s">&quot;</span><span class="si">%s</span><span class="s"> not defined in Configuration Server&quot;</span> <span class="o">%</span> <span class="n">k</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">set</span><span class="p">(</span><span class="n">datasources</span><span class="p">)</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="n">availabledatasouces</span><span class="p">):</span>
+            <span class="n">discomponentgroup</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">k</span><span class="p">)]</span> <span class="o">=</span> <span class="n">CheckerItem</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">k</span><span class="p">))</span>
+            <span class="n">discomponentgroup</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">k</span><span class="p">)]</span><span class="o">.</span><span class="n">errords</span> <span class="o">=</span> <span class="n">k</span>
+            <span class="n">discomponentgroup</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">k</span><span class="p">)]</span><span class="o">.</span><span class="n">active</span> <span class="o">=</span> <span class="bp">False</span>
+            <span class="n">discomponentgroup</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">k</span><span class="p">)]</span><span class="o">.</span><span class="n">message</span> <span class="o">=</span> \
+                <span class="s">&quot;</span><span class="si">%s</span><span class="s"> not defined in Configuration Server&quot;</span> <span class="o">%</span> <span class="n">k</span>
         <span class="n">toCheck</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="k">for</span> <span class="n">acp</span> <span class="ow">in</span> <span class="n">components</span><span class="p">:</span>
+        <span class="n">cps</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">components</span><span class="p">)</span> <span class="o">&amp;</span> <span class="nb">set</span><span class="p">(</span><span class="n">availablecomponents</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">acp</span> <span class="ow">in</span> <span class="n">cps</span><span class="p">:</span>
             <span class="n">res</span> <span class="o">=</span> <span class="n">describer</span><span class="o">.</span><span class="n">components</span><span class="p">([</span><span class="n">acp</span><span class="p">],</span> <span class="s">&#39;&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">cp</span><span class="p">,</span> <span class="n">dss</span> <span class="ow">in</span> <span class="n">res</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">for</span> <span class="n">ds</span> <span class="ow">in</span> <span class="n">dss</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                    <span class="k">if</span> <span class="n">ds</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">availabledatasouces</span><span class="p">:</span>
+                        <span class="n">discomponentgroup</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">cp</span><span class="p">)]</span> <span class="o">=</span> <span class="n">CheckerItem</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">cp</span><span class="p">))</span>
+                        <span class="n">discomponentgroup</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">cp</span><span class="p">)]</span><span class="o">.</span><span class="n">errords</span> <span class="o">=</span> <span class="n">ds</span>
+                        <span class="n">discomponentgroup</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">cp</span><span class="p">)]</span><span class="o">.</span><span class="n">active</span> <span class="o">=</span> <span class="bp">False</span>
+                        <span class="n">discomponentgroup</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">cp</span><span class="p">)]</span><span class="o">.</span><span class="n">message</span> <span class="o">=</span> \
+                            <span class="s">&quot;</span><span class="si">%s</span><span class="s"> of </span><span class="si">%s</span><span class="s"> not defined in Configuration Server&quot;</span> \
+                            <span class="o">%</span> <span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">cp</span><span class="p">)</span>
+                        <span class="k">break</span>
                 <span class="n">cls</span><span class="o">.</span><span class="n">__createCheckItem</span><span class="p">(</span><span class="n">cp</span><span class="p">,</span> <span class="n">dss</span><span class="p">,</span> <span class="n">toCheck</span><span class="p">,</span> <span class="n">nonexisting</span><span class="p">,</span>
                                       <span class="n">discomponentgroup</span><span class="p">,</span> <span class="n">channels</span><span class="p">,</span> <span class="n">describer</span><span class="p">)</span>
-
-        <span class="k">for</span> <span class="n">ads</span> <span class="ow">in</span> <span class="n">datasources</span><span class="p">:</span>
+        <span class="n">adss</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">datasources</span><span class="p">)</span> <span class="o">&amp;</span> <span class="nb">set</span><span class="p">(</span><span class="n">availabledatasouces</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">ads</span> <span class="ow">in</span> <span class="n">adss</span><span class="p">:</span>
             <span class="n">res</span> <span class="o">=</span> <span class="n">describer</span><span class="o">.</span><span class="n">dataSources</span><span class="p">([</span><span class="n">ads</span><span class="p">])</span>
             <span class="k">if</span> <span class="n">ads</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">res</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
                 <span class="n">res</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">ads</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span>
             <span class="n">cls</span><span class="o">.</span><span class="n">__createCheckItem</span><span class="p">(</span><span class="n">ads</span><span class="p">,</span> <span class="n">res</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">toCheck</span><span class="p">,</span> <span class="n">nonexisting</span><span class="p">,</span>
                                   <span class="n">discomponentgroup</span><span class="p">,</span> <span class="n">channels</span><span class="p">,</span> <span class="n">describer</span><span class="p">)</span>
-
         <span class="k">return</span> <span class="n">toCheck</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
 
     <span class="nd">@classmethod</span>
