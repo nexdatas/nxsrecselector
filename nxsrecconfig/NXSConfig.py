@@ -33,8 +33,6 @@
 """ Selector Server for NeXus Sardana Recorder """
 
 # ==================================================================
-#   NXSRecSelector Class Description:
-#
 # ==================================================================
 
 import PyTango
@@ -54,15 +52,19 @@ class NXSRecSelector(PyTango.Device_4Impl):
         """  Device constructor
 
         :param cl: class name
+        :type cl: :obj:`str`
         :param name: device name
+        :type name: :obj:`str`
         """
         PyTango.Device_4Impl.__init__(self, cl, name)
         self.debug_stream("In __init__()")
-        #: Recorder Settings
+        #: (:class:`nxsrecconfig.Settings.Settings`) \
+        #:     Recorder Settings
         self.__stg = None
-        #: self device proxy
+        #: (:class:`PyTango.DeviceProxy`) self device proxy
         self.__dp = None
-        #: memorize attribute to be updated on conf change
+        #: (:obj:`list` <:obj:`str`>) \
+        #:     memorize attribute to be updated on conf change
         self.__toupdate = ['ConfigDevice', 'Door']
         NXSRecSelector.init_device(self)
 
@@ -113,6 +115,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         """ Read Components attribute
 
         :param attr: read attribute
+        :type attr: :class:`PyTango.Attribute`
         """
         self.debug_stream("In read_Components()")
         attr.set_value(self.__stg.components)
@@ -121,6 +124,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         """ Read DescriptionErrors attribute
 
         :param attr: read attribute
+        :type attr: :class:`PyTango.Attribute`
         """
         self.debug_stream("In read_DescriptionErrors()")
         attr.set_value(self.__stg.descriptionErrors)
@@ -129,6 +133,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         """ Read Version attribute
 
         :param attr: read attribute
+        :type attr: :class:`PyTango.Attribute`
         """
         self.debug_stream("In read_Version()")
         attr.set_value(self.__stg.version)
@@ -137,6 +142,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         """ Read MacroServer attribute
 
         :param attr: read attribute
+        :type attr: :class:`PyTango.Attribute`
         """
         self.debug_stream("In read_MacroServer()")
         attr.set_value(self.__stg.macroServer)
@@ -145,6 +151,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         """ Read Door attribute
 
         :param attr: read attribute
+        :type attr: :class:`PyTango.Attribute`
         """
         self.debug_stream("In read_Door()")
         attr.set_value(self.__stg.door)
@@ -153,6 +160,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         """ Write Door attribute
 
         :param attr: written attribute
+        :type attr: :class:`PyTango.Attribute`
         """
         self.debug_stream("In write_Door()")
         self.__stg.door = attr.get_write_value()
@@ -161,6 +169,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         """ Read StepDataSources attribute
 
         :param attr: read attribute
+        :type attr: :class:`PyTango.Attribute`
         """
         self.debug_stream("In read_StepDataSources()")
         attr.set_value(self.__stg.stepdatasources or "")
@@ -169,6 +178,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         """ Write StepDataSources attribute
 
         :param attr: written attribute
+        :type attr: :class:`PyTango.Attribute`
         """
         self.debug_stream("In write_StepDataSources()")
         if self.is_StepDataSources_write_allowed():
@@ -180,6 +190,9 @@ class NXSRecSelector(PyTango.Device_4Impl):
 
     def is_StepDataSources_write_allowed(self):
         """ StepDataSources attribute Write State Machine
+
+        :returns: True if the operation allowed
+        :rtype: :obj:`bool`
         """
         if self.get_state() in [PyTango.DevState.RUNNING]:
             return False
@@ -189,6 +202,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         """ Read ConfigDevice attribute
 
         :param attr: read attribute
+        :type attr: :class:`PyTango.Attribute`
         """
         self.debug_stream("In read_ConfigDevice()")
         attr.set_value(self.__stg.configDevice)
@@ -197,6 +211,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         """ Write ConfigDevice attribute
 
         :param attr: written attribute
+        :type attr: :class:`PyTango.Attribute`
         """
         self.debug_stream("In write_ConfigDevice()")
         self.__stg.configDevice = attr.get_write_value()
@@ -205,6 +220,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         """ Read MntGrp attribute
 
         :param attr: read attribute
+        :type attr: :class:`PyTango.Attribute`
         """
         self.debug_stream("In read_MntGrp()")
         attr.set_value(self.__stg.mntGrp)
@@ -213,6 +229,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         """ Write MntGrp attribute
 
         :param attr: written attribute
+        :type attr: :class:`PyTango.Attribute`
         """
         self.debug_stream("In write_MntGrp()")
         self.__stg.mntGrp = attr.get_write_value()
@@ -221,6 +238,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         """ Read ScanDir attribute
 
         :param attr: read attribute
+        :type attr: :class:`PyTango.Attribute`
         """
         self.debug_stream("In read_ScanDir()")
         attr.set_value(self.__stg.scanDir)
@@ -229,6 +247,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         """ Write ScanDir attribute
 
         :param attr: written attribute
+        :type attr: :class:`PyTango.Attribute`
         """
         self.debug_stream("In write_ScanDir()")
         self.__stg.scanDir = attr.get_write_value()
@@ -237,6 +256,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         """ Read ScanFile attribute
 
         :param attr: read attribute
+        :type attr: :class:`PyTango.Attribute`
         """
         self.debug_stream("In read_ScanFile()")
         attr.set_value(self.__stg.scanFile or "")
@@ -245,6 +265,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         """ Write ScanFile attribute
 
         :param attr: written attribute
+        :type attr: :class:`PyTango.Attribute`
         """
         self.debug_stream("In write_ScanFile()")
         self.__stg.scanFile = attr.get_write_value() or ""
@@ -253,6 +274,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         """ Read ScanID attribute
 
         :param attr: read attribute
+        :type attr: :class:`PyTango.Attribute`
         """
         self.debug_stream("In read_ScanID()")
         attr.set_value(self.__stg.scanID)
@@ -261,6 +283,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         """ Write ScanID attribute
 
         :param attr: written attribute
+        :type attr: :class:`PyTango.Attribute`
         """
         self.debug_stream("In write_ScanID()")
         self.__stg.scanID = attr.get_write_value()
@@ -269,6 +292,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         """ Read WriterDevice attribute
 
         :param attr: read attribute
+        :type attr: :class:`PyTango.Attribute`
         """
         self.debug_stream("In read_WriterDevice()")
         attr.set_value(self.__stg.writerDevice)
@@ -277,6 +301,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         """ Write WriterDevice attribute
 
         :param attr: written attribute
+        :type attr: :class:`PyTango.Attribute`
         """
         self.debug_stream("In write_WriterDevice()")
         self.__stg.writerDevice = attr.get_write_value()
@@ -285,6 +310,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         """ Read DeviceGroups attribute
 
         :param attr: read attribute
+        :type attr: :class:`PyTango.Attribute`
         """
         self.debug_stream("In read_DeviceGroups()")
         attr.set_value(self.__stg.deviceGroups)
@@ -293,18 +319,25 @@ class NXSRecSelector(PyTango.Device_4Impl):
         """ Write DeviceGroups attribute
 
         :param attr: written attribute
+        :type attr: :class:`PyTango.Attribute`
         """
         self.debug_stream("In write_DeviceGroups()")
         self.__stg.deviceGroups = attr.get_write_value()
 
     def read_UserData(self, attr):
         """ Read UserData attribute
+
+        :param attr: read attribute
+        :type attr: :class:`PyTango.Attribute`
         """
         self.debug_stream("In read_UserData()")
         attr.set_value(self.__stg.userData)
 
     def write_UserData(self, attr):
         """ Write UserData attribute
+
+        :param attr: written attribute
+        :type attr: :class:`PyTango.Attribute`
         """
         self.debug_stream("In write_UserData()")
         self.__stg.userData = attr.get_write_value()
@@ -313,6 +346,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         """ Read DataSources attribute
 
         :param attr: read attribute
+        :type attr: :class:`PyTango.Attribute`
         """
         self.debug_stream("In read_DataSources()")
         attr.set_value(self.__stg.dataSources)
@@ -321,6 +355,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         """ Read ProfileConfiguration attribute
 
         :param attr: read attribute
+        :type attr: :class:`PyTango.Attribute`
         """
         self.debug_stream("In read_DataSources()")
         attr.set_value(self.__stg.profileConfiguration)
@@ -329,6 +364,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         """ Write ProfileConfiguration attribute
 
         :param attr: written attribute
+        :type attr: :class:`PyTango.Attribute`
         """
         self.debug_stream("In write_ProfileConfiguration()")
         self.__stg.profileConfiguration = attr.get_write_value()
@@ -349,6 +385,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         """ Read AppendEntry attribute
 
         :param attr: read attribute
+        :type attr: :class:`PyTango.Attribute`
         """
         self.debug_stream("In read_AppendEntry()")
         attr.set_value(self.__stg.appendEntry)
@@ -357,6 +394,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         """ Write AppendEntry attribute
 
         :param attr: written attribute
+        :type attr: :class:`PyTango.Attribute`
         """
         self.debug_stream("In write_AppendEntry()")
         self.__stg.appendEntry = attr.get_write_value()
@@ -365,6 +403,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         """ Read ConfigVariables attribute
 
         :param attr: read attribute
+        :type attr: :class:`PyTango.Attribute`
         """
         self.debug_stream("In read_ConfigVariables()")
         attr.set_value(self.__stg.configVariables)
@@ -373,6 +412,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         """ Write ConfigVariables attribute
 
         :param attr: written attribute
+        :type attr: :class:`PyTango.Attribute`
         """
         self.debug_stream("In write_ConfigVariables()")
         self.__stg.configVariables = attr.get_write_value()
@@ -381,6 +421,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         """ Read ProfileFile attribute
 
         :param attr: read attribute
+        :type attr: :class:`PyTango.Attribute`
         """
         self.debug_stream("In read_ProfileFile()")
         attr.set_value(self.__stg.profileFile)
@@ -389,6 +430,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         """ Write ProfileFile attribute
 
         :param attr: written attribute
+        :type attr: :class:`PyTango.Attribute`
         """
         self.debug_stream("In write_ProfileFile()")
         self.__stg.profileFile = attr.get_write_value()
@@ -424,6 +466,9 @@ class NXSRecSelector(PyTango.Device_4Impl):
 
     def is_LoadProfile_allowed(self):
         """ LoadProfile command State Machine
+
+        :returns: True if the operation allowed
+        :rtype: :obj:`bool`
         """
         if self.get_state() in [PyTango.DevState.RUNNING]:
             return False
@@ -454,6 +499,9 @@ class NXSRecSelector(PyTango.Device_4Impl):
 
     def is_FetchProfile_allowed(self):
         """ FetchProfile command State Machine
+
+        :returns: True if the operation allowed
+        :rtype: :obj:`bool`
         """
         if self.get_state() in [PyTango.DevState.RUNNING]:
             return False
@@ -475,6 +523,9 @@ class NXSRecSelector(PyTango.Device_4Impl):
 
     def is_SaveProfile_allowed(self):
         """ SaveProfile command State Machine
+
+        :returns: True if the operation allowed
+        :rtype: :obj:`bool`
         """
         if self.get_state() in [PyTango.DevState.RUNNING]:
             return False
@@ -496,6 +547,9 @@ class NXSRecSelector(PyTango.Device_4Impl):
 
     def is_StoreProfile_allowed(self):
         """ StoreProfile command State Machine
+
+        :returns: True if the operation allowed
+        :rtype: :obj:`bool`
         """
         if self.get_state() in [PyTango.DevState.RUNNING]:
             return False
@@ -517,6 +571,9 @@ class NXSRecSelector(PyTango.Device_4Impl):
 
     def is_PreselectComponents_allowed(self):
         """ PreselectComponents command State Machine
+
+        :returns: True if the operation allowed
+        :rtype: :obj:`bool`
         """
         if self.get_state() in [PyTango.DevState.RUNNING]:
             return False
@@ -539,6 +596,9 @@ class NXSRecSelector(PyTango.Device_4Impl):
 
     def is_ResetPreselectedComponents_allowed(self):
         """ ResetPreselectedComponents command State Machine
+
+        :returns: True if the operation allowed
+        :rtype: :obj:`bool`
         """
         if self.get_state() in [PyTango.DevState.RUNNING]:
             return False
@@ -560,6 +620,9 @@ class NXSRecSelector(PyTango.Device_4Impl):
 
     def is_DeleteAllProfiles_allowed(self):
         """ DeleteAllProfiles command State Machine
+
+        :returns: True if the operation allowed
+        :rtype: :obj:`bool`
         """
         if self.get_state() in [PyTango.DevState.RUNNING]:
             return False
@@ -582,6 +645,9 @@ class NXSRecSelector(PyTango.Device_4Impl):
 
     def is_UpdateConfigVariables_allowed(self):
         """ UpdateConfigVariables command State Machine
+
+        :returns: True if the operation allowed
+        :rtype: :obj:`bool`
         """
         if self.get_state() in [PyTango.DevState.RUNNING]:
             return False
@@ -590,7 +656,8 @@ class NXSRecSelector(PyTango.Device_4Impl):
     def IsMntGrpUpdated(self):
         """ IsMntGrpUpdated command
 
-        :brief:  returns true if mntgrp was changed
+        :returns: True if mntgrp was changed
+        :rtype: :obj:`bool`
         """
         self.debug_stream("In IsMntGrpUpdated()")
         try:
@@ -605,6 +672,9 @@ class NXSRecSelector(PyTango.Device_4Impl):
 
     def is_IsMntGrpUpdated_allowed(self):
         """ IsMntGrpUpdated command State Machine
+
+        :returns: True if the operation allowed
+        :rtype: :obj:`bool`
         """
         if self.get_state() in [PyTango.DevState.RUNNING]:
             return False
@@ -614,6 +684,9 @@ class NXSRecSelector(PyTango.Device_4Impl):
         """ MntGrpConfiguration command
 
         :brief:  returns mntgrp configuration
+
+        :returns: mntgrp configuration in json string
+        :rtype: :obj:`str`
         """
         self.debug_stream("In MntGrpConfiguration()")
         try:
@@ -628,6 +701,9 @@ class NXSRecSelector(PyTango.Device_4Impl):
 
     def is_MntGrpConfiguration_allowed(self):
         """ MntGrpConfiguration command State Machine
+
+        :returns: True if the operation allowed
+        :rtype: :obj:`bool`
         """
         if self.get_state() in [PyTango.DevState.RUNNING]:
             return False
@@ -638,6 +714,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
 
         :brief: updates mntgrp configuration
         :returns: JSON string with mntgrp configuration info
+        :rtype: :obj:`str`
         """
         self.debug_stream("In UpdateProfile()")
         try:
@@ -651,6 +728,9 @@ class NXSRecSelector(PyTango.Device_4Impl):
 
     def is_UpdateProfile_allowed(self):
         """ UpdateProfile command State Machine
+
+        :returns: True if the operation allowed
+        :rtype: :obj:`bool`
         """
         if self.get_state() in [PyTango.DevState.RUNNING]:
             return False
@@ -661,6 +741,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
 
         :brief: updates mntgrp configuration
         :returns: mntgrp configuration string
+        :rtype: :obj:`str`
         """
         self.debug_stream("In UpdateMntGrp()")
         try:
@@ -674,6 +755,9 @@ class NXSRecSelector(PyTango.Device_4Impl):
 
     def is_UpdateMntGrp_allowed(self):
         """ UpdateMntGrp command State Machine
+
+        :returns: True if the operation allowed
+        :rtype: :obj:`bool`
         """
         if self.get_state() in [PyTango.DevState.RUNNING]:
             return False
@@ -687,16 +771,17 @@ class NXSRecSelector(PyTango.Device_4Impl):
         self.debug_stream("In SwitchProfile()")
         try:
             self.set_state(PyTango.DevState.RUNNING)
-            conf = str(self.__stg.switchProfile())
+            self.__stg.switchProfile()
             self.set_state(PyTango.DevState.ON)
         finally:
             if self.get_state() == PyTango.DevState.RUNNING:
                 self.set_state(PyTango.DevState.ON)
 
-        return conf
-
     def is_SwitchProfile_allowed(self):
         """ SwitchProfile command State Machine
+
+        :returns: True if the operation allowed
+        :rtype: :obj:`bool`
         """
         if self.get_state() in [PyTango.DevState.RUNNING]:
             return False
@@ -718,6 +803,9 @@ class NXSRecSelector(PyTango.Device_4Impl):
 
     def is_ImportMntGrp_allowed(self):
         """ ImportMntGrp command State Machine
+
+        :returns: True if the operation allowed
+        :rtype: :obj:`bool`
         """
         if self.get_state() in [PyTango.DevState.RUNNING]:
             return False
@@ -748,6 +836,9 @@ class NXSRecSelector(PyTango.Device_4Impl):
 
     def is_ImportEnv_allowed(self):
         """ ImportMntGrp command State Machine
+
+        :returns: True if the operation allowed
+        :rtype: :obj:`bool`
         """
         if self.get_state() in [PyTango.DevState.RUNNING]:
             return False
@@ -769,6 +860,9 @@ class NXSRecSelector(PyTango.Device_4Impl):
 
     def is_ExportEnv_allowed(self):
         """ ExportMntGrp command State Machine
+
+        :returns: True if the operation allowed
+        :rtype: :obj:`bool`
         """
         if self.get_state() in [PyTango.DevState.RUNNING]:
             return False
@@ -780,6 +874,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         :brief: Returns a list of available component names
 
         :returns: DevVarStringArray    list of available component names
+        :rtype: :obj:`list` <:obj:`str`>
         """
         self.debug_stream("In AvailableTimers()")
         try:
@@ -794,6 +889,9 @@ class NXSRecSelector(PyTango.Device_4Impl):
 
     def is_AvailableTimers_allowed(self):
         """ AvailableTimers command State Machine
+
+        :returns: True if the operation allowed
+        :rtype: :obj:`bool`
         """
         if self.get_state() in [PyTango.DevState.RUNNING]:
             return False
@@ -804,6 +902,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
 
         :brief: Returns a list of muted channel names
         :returns: DevVarStringArray    list of muted channel names
+        :rtype: :obj:`list` <:obj:`str`>
         """
         self.debug_stream("In MutedChannels()")
         try:
@@ -818,6 +917,9 @@ class NXSRecSelector(PyTango.Device_4Impl):
 
     def is_MutedChannels_allowed(self):
         """ MutedChannels command State Machine
+
+        :returns: True if the operation allowed
+        :rtype: :obj:`bool`
         """
         if self.get_state() in [PyTango.DevState.RUNNING]:
             return False
@@ -828,6 +930,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
 
         :brief: Returns a list of available component names
         :returns: DevVarStringArray    list of available component names
+        :rtype: :obj:`list` <:obj:`str`>
 
         """
         self.debug_stream("In AvailableComponents()")
@@ -843,6 +946,9 @@ class NXSRecSelector(PyTango.Device_4Impl):
 
     def is_AvailableComponents_allowed(self):
         """ AvailableComponents command State Machine
+
+        :returns: True if the operation allowed
+        :rtype: :obj:`bool`
         """
         if self.get_state() in [PyTango.DevState.RUNNING]:
             return False
@@ -853,6 +959,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
 
         :brief: Returns a list of available component names
         :returns: DevString   list of available component names
+        :rtype: :obj:`str`
         """
         self.debug_stream("In ComponentDescription()")
         try:
@@ -867,6 +974,9 @@ class NXSRecSelector(PyTango.Device_4Impl):
 
     def is_ComponentDescription_allowed(self):
         """ ComponentDescription command State Machine
+
+        :returns: True if the operation allowed
+        :rtype: :obj:`bool`
         """
         if self.get_state() in [PyTango.DevState.RUNNING]:
             return False
@@ -877,8 +987,10 @@ class NXSRecSelector(PyTango.Device_4Impl):
 
         :brief: Stores ScanDir, ScanFile and NeXusSelectorDevice
                       in environment variables
-        :returns: DevString    json dictionary with environment data
+        :param argin: json dictionary with environment data
+        :type argin: :obj:`str`
         :returns: DevLong    scan ID
+        :rtype: :obj:`int`
         """
         self.debug_stream("In SetScanEnvVariables()")
         try:
@@ -893,6 +1005,9 @@ class NXSRecSelector(PyTango.Device_4Impl):
 
     def is_SetScanEnvVariables_allowed(self):
         """ SetScanEnvVariables command State Machine
+
+        :returns: True if the operation allowed
+        :rtype: :obj:`bool`
         """
         if self.get_state() in [PyTango.DevState.RUNNING]:
             return False
@@ -903,6 +1018,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
 
         :brief: Returns a JSON with full device names for all aliases
         :returns: DevString JSON dictionary with full device names
+        :rtype: :obj:`str`
         """
         self.debug_stream("In FullDeviceNames()")
         try:
@@ -917,6 +1033,9 @@ class NXSRecSelector(PyTango.Device_4Impl):
 
     def is_FullDeviceNames_allowed(self):
         """ FullDeviceNames command State Machine
+
+        :returns: True if the operation allowed
+        :rtype: :obj:`bool`
         """
         if self.get_state() in [PyTango.DevState.RUNNING]:
             return False
@@ -929,6 +1048,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
                       NeXusSelectorDevice
                       in environment variables
         :returns: DevString    json dictionary with environment data
+        :rtype: :obj:`str`
         """
 
         self.debug_stream("In ScanEnvVariables()")
@@ -944,6 +1064,9 @@ class NXSRecSelector(PyTango.Device_4Impl):
 
     def is_ScanEnvVariables_allowed(self):
         """ ScanEnvVariables command State Machine
+
+        :returns: True if the operation allowed
+        :rtype: :obj:`bool`
         """
         if self.get_state() in [PyTango.DevState.RUNNING]:
             return False
@@ -954,6 +1077,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
 
         :brief: Returns a list of available component names
         :returns: DevString    list of available component names
+        :rtype: :obj:`str`
         """
         self.debug_stream("In VariableComponents()")
         try:
@@ -968,6 +1092,9 @@ class NXSRecSelector(PyTango.Device_4Impl):
 
     def is_VariableComponents_allowed(self):
         """ VariableComponents command State Machine
+
+        :returns: True if the operation allowed
+        :rtype: :obj:`bool`
         """
         if self.get_state() in [PyTango.DevState.RUNNING]:
             return False
@@ -978,6 +1105,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
 
         :brief: Returns a list of available selection names
         :returns: DevVarStringArray    list of available selection names
+        :rtype: :obj:`list` <:obj:`str`>
         """
         self.debug_stream("In AvailableProfiles()")
         try:
@@ -992,6 +1120,9 @@ class NXSRecSelector(PyTango.Device_4Impl):
 
     def is_AvailableProfiles_allowed(self):
         """ AvailableProfiles command State Machine
+
+        :returns: True if the operation allowed
+        :rtype: :obj:`bool`
         """
         if self.get_state() in [PyTango.DevState.RUNNING]:
             return False
@@ -1002,6 +1133,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
 
         :brief: Returns a list of available mntgrp names
         :returns: DevVarStringArray    list of available mntgrp names
+        :rtype: :obj:`list` <:obj:`str`>
         """
         self.debug_stream("In AvailableMntGrps()")
         try:
@@ -1016,6 +1148,9 @@ class NXSRecSelector(PyTango.Device_4Impl):
 
     def is_AvailableMntGrps_allowed(self):
         """ AvailableMntGrps command State Machine
+
+        :returns: True if the operation allowed
+        :rtype: :obj:`bool`
         """
         if self.get_state() in [PyTango.DevState.RUNNING]:
             return False
@@ -1026,6 +1161,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
 
         :brief: Returns a list of available DataSource names
         :returns: DevVarStringArray    list of available DataSource names
+        :rtype: :obj:`list` <:obj:`str`>
         """
         self.debug_stream("In AvailableDataSources()")
         try:
@@ -1040,6 +1176,9 @@ class NXSRecSelector(PyTango.Device_4Impl):
 
     def is_AvailableDataSources_allowed(self):
         """ AvailableDataSources command State Machine
+
+        :returns: True if the operation allowed
+        :rtype: :obj:`bool`
         """
         if self.get_state() in [PyTango.DevState.RUNNING]:
             return False
@@ -1051,7 +1190,9 @@ class NXSRecSelector(PyTango.Device_4Impl):
         :brief: Returns a list of available pool channels
 
         :param argin:  DevString            name of pool list attribute
+        :type argin:  :obj:`str`
         :returns: DevVarStringArray    list of available pool elements
+        :rtype: :obj:`list` <:obj:`str`>
         """
         self.debug_stream("In PoolElementNames()")
         try:
@@ -1066,6 +1207,9 @@ class NXSRecSelector(PyTango.Device_4Impl):
 
     def is_PoolElementNames_allowed(self):
         """ PoolElementNames command State Machine
+
+        :returns: True if the operation allowed
+        :rtype: :obj:`bool`
         """
         if self.get_state() in [PyTango.DevState.RUNNING]:
             return False
@@ -1076,6 +1220,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
 
         :brief: Provides the component datasources
         :returns: DevVarStringArray    component names
+        :rtype: :obj:`list` <:obj:`str`>
         """
         self.debug_stream("In ComponentDataSources()")
 
@@ -1090,6 +1235,9 @@ class NXSRecSelector(PyTango.Device_4Impl):
 
     def is_ComponentDataSources_allowed(self):
         """ ComponentDataSources command State Machine
+
+        :returns: True if the operation allowed
+        :rtype: :obj:`bool`
         """
         if self.get_state() in [PyTango.DevState.RUNNING]:
             return False
@@ -1100,6 +1248,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
 
         :brief: Provides the selected datasources
         :returns: DevVarStringArray    component names
+        :rtype: :obj:`list` <:obj:`str`>
         """
         self.debug_stream("In SelectedDataSources()")
 
@@ -1124,6 +1273,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
 
         :brief: Provides Administrator Data Names
         :returns: DevVarStringArray    data record names
+        :rtype: :obj:`list` <:obj:`str`>
         """
         self.debug_stream("In AdministratorDataNames()")
 
@@ -1138,6 +1288,9 @@ class NXSRecSelector(PyTango.Device_4Impl):
 
     def is_AdministratorDataNames_allowed(self):
         """ AdministratorDataNames command State Machine
+
+        :returns: True if the operation allowed
+        :rtype: :obj:`bool`
         """
         if self.get_state() in [PyTango.DevState.RUNNING]:
             return False
@@ -1148,6 +1301,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
 
         :brief: Sets the mandatory components
         :returns: DevVarStringArray    component names
+        :rtype: :obj:`list` <:obj:`str`>
         """
         self.debug_stream("In MandatoryComponents()")
 
@@ -1162,6 +1316,9 @@ class NXSRecSelector(PyTango.Device_4Impl):
 
     def is_MandatoryComponents_allowed(self):
         """ MandatoryComponents command State Machine
+
+        :returns: True if the operation allowed
+        :rtype: :obj:`bool`
         """
         if self.get_state() in [PyTango.DevState.RUNNING]:
             return False
@@ -1172,6 +1329,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
 
         :brief: Sets the selected components
         :returns: DevVarStringArray    component names
+        :rtype: :obj:`list` <:obj:`str`>
         """
         self.debug_stream("In SelectedComponents()")
 
@@ -1186,6 +1344,9 @@ class NXSRecSelector(PyTango.Device_4Impl):
 
     def is_SelectedComponents_allowed(self):
         """ SelectedComponents command State Machine
+
+        :returns: True if the operation allowed
+        :rtype: :obj:`bool`
         """
         if self.get_state() in [PyTango.DevState.RUNNING]:
             return False
@@ -1196,6 +1357,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
 
         :brief: Sets the preselected components
         :returns: DevVarStringArray    component names
+        :rtype: :obj:`list` <:obj:`str`>
         """
         self.debug_stream("In PreselectedComponents()")
 
@@ -1210,6 +1372,9 @@ class NXSRecSelector(PyTango.Device_4Impl):
 
     def is_PreselectedComponents_allowed(self):
         """ PreselectedComponents command State Machine
+
+        :returns: True if the operation allowed
+        :rtype: :obj:`bool`
         """
         if self.get_state() in [PyTango.DevState.RUNNING]:
             return False
@@ -1220,6 +1385,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
 
         :brief: Sets the preselected components
         :returns: DevVarStringArray    component names
+        :rtype: :obj:`list` <:obj:`str`>
         """
         self.debug_stream("In PreselectedDataSources()")
 
@@ -1234,6 +1400,9 @@ class NXSRecSelector(PyTango.Device_4Impl):
 
     def is_PreselectedDataSources_allowed(self):
         """ PreselectedDataSources command State Machine
+
+        :returns: True if the operation allowed
+        :rtype: :obj:`bool`
         """
         if self.get_state() in [PyTango.DevState.RUNNING]:
             return False
@@ -1244,7 +1413,9 @@ class NXSRecSelector(PyTango.Device_4Impl):
 
         :brief: create dynamic component
         :param argin:  DevVarStringArray    list of datasource parameters
+        :type argin: :obj:`list` <:obj:`str`>
         :returns: DevVarString         name of created dynamic component
+        :rtype: :obj:`str`
         """
         self.debug_stream("In CreateDynamicComponent()")
         try:
@@ -1259,6 +1430,9 @@ class NXSRecSelector(PyTango.Device_4Impl):
 
     def is_CreateDynamicComponent_allowed(self):
         """ CreateDynamicComponent command State Machine
+
+        :returns: True if the operation allowed
+        :rtype: :obj:`bool`
         """
         if self.get_state() in [PyTango.DevState.RUNNING]:
             return False
@@ -1269,6 +1443,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
 
         :brief: Deletes the given dynamic component
         :param argin:  DevString  dynamic component name
+        :type argin: :obj:`str`
         """
         self.debug_stream("In RemoveDynamicComponent()")
         try:
@@ -1281,6 +1456,9 @@ class NXSRecSelector(PyTango.Device_4Impl):
 
     def is_RemoveDynamicComponent_allowed(self):
         """ RemoveDynamicComponent command State Machine
+
+        :returns: True if the operation allowed
+        :rtype: :obj:`bool`
         """
         if self.get_state() in [PyTango.DevState.RUNNING]:
             return False
@@ -1291,6 +1469,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
 
         :brief: Deletes the given mntgrp
         :param argin:  DevString  measurement group name
+        :type argin: :obj:`str`
         """
         self.debug_stream("In DeleteProfile()")
         try:
@@ -1303,6 +1482,9 @@ class NXSRecSelector(PyTango.Device_4Impl):
 
     def is_DeleteProfile_allowed(self):
         """ DeleteProfile command State Machine
+
+        :returns: True if the operation allowed
+        :rtype: :obj:`bool`
         """
         if self.get_state() in [PyTango.DevState.RUNNING]:
             return False
@@ -1314,7 +1496,9 @@ class NXSRecSelector(PyTango.Device_4Impl):
         :brief: JSON dictionary with channel properties
                       {channel:property}
         :param argin:  DevString    property type
+        :type argin: :obj:`str`
         :returns: DevString    JSON dictionary with channel properties
+        :rtype: :obj:`str`
 
         """
         self.debug_stream("In ChannelProperties()")
@@ -1330,6 +1514,9 @@ class NXSRecSelector(PyTango.Device_4Impl):
 
     def is_ChannelProperties_allowed(self):
         """ ChannelProperties command State Machine
+
+        :returns: True if the operation allowed
+        :rtype: :obj:`bool`
         """
         if self.get_state() in [PyTango.DevState.RUNNING]:
             return False
@@ -1341,6 +1528,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         :brief: set Channel Properties of given type
         :param argin: DevVarStringArray two element list with a property type
                       and JSON value dictionary {channel:property}
+        :type argin: [:obj:`str`, :obj:`str`]
 
         """
         self.debug_stream("In SetChannelProperties()")
@@ -1356,6 +1544,9 @@ class NXSRecSelector(PyTango.Device_4Impl):
 
     def is_SetChannelProperties_allowed(self):
         """ SetChannelProperties command State Machine
+
+        :returns: True if the operation allowed
+        :rtype: :obj:`bool`
         """
         if self.get_state() in [PyTango.DevState.RUNNING]:
             return False
@@ -1366,7 +1557,9 @@ class NXSRecSelector(PyTango.Device_4Impl):
 
         :brief: describes client datasources from components
         :param argin:  DevVarStringArray    list of component names
+        :type argin: :obj:`list` <:obj:`str`>
         :returns: DevVarString         description of component datasources
+        :rtype: :obj:`str`
         """
         self.debug_stream("In ComponentClientSources()")
         try:
@@ -1381,6 +1574,9 @@ class NXSRecSelector(PyTango.Device_4Impl):
 
     def is_ComponentClientSources_allowed(self):
         """ ComponentClientSources command State Machine
+
+        :returns: True if the operation allowed
+        :rtype: :obj:`bool`
         """
         if self.get_state() in [PyTango.DevState.RUNNING]:
             return False
@@ -1391,7 +1587,9 @@ class NXSRecSelector(PyTango.Device_4Impl):
 
         :brief: descrive datasources
         :param argin:  DevVarStringArray    list of datasource names
+        :type argin: :obj:`list` <:obj:`str`>
         :returns: DevVarStringArray    description of datasources
+        :rtypes: :obj:`list` <:obj:`str`>
 
         """
         self.debug_stream("In DataSourceDescription()")
@@ -1407,6 +1605,9 @@ class NXSRecSelector(PyTango.Device_4Impl):
 
     def is_DataSourceDescription_allowed(self):
         """ DataSourceDescription command State Machine
+
+        :returns: True if the operation allowed
+        :rtype: :obj:`bool`
         """
         if self.get_state() in [PyTango.DevState.RUNNING]:
             return False
@@ -1418,7 +1619,9 @@ class NXSRecSelector(PyTango.Device_4Impl):
         :brief: create configuration from the given components
 
         :param argin:  DevVarStringArray    list of component names
+        :type argin: :obj:`list` <:obj:`str`>
         :returns: DevVarString         XML configuration string
+        :rtype: :obj:`str`
         """
         self.debug_stream("In CreateWriterConfiguration()")
         try:
@@ -1433,6 +1636,9 @@ class NXSRecSelector(PyTango.Device_4Impl):
 
     def is_CreateWriterConfiguration_allowed(self):
         """ CreateWriterConfiguration command State Machine
+
+        :returns: True if the operation allowed
+        :rtype: :obj:`bool`
         """
         if self.get_state() in [PyTango.DevState.RUNNING]:
             return False
@@ -1446,11 +1652,15 @@ class NXSRecSelector(PyTango.Device_4Impl):
 # ==================================================================
 class NXSRecSelectorClass(PyTango.DeviceClass):
 
-    #:    Class Properties
+    #: (:obj:`dict` <:obj:`str`, \
+    #:       [ :obj:`str`, :class:`PyTango.CmdArgType`, \
+    #:       [ :obj:`list` <:obj:`int`> ] ] > ) Class Properties
     class_property_list = {
     }
 
-    #:    Device Properties
+    #: (:obj:`dict` <:obj:`str`, \
+    #:       [ :obj:`str`, :class:`PyTango.CmdArgType`, \
+    #:       [ :obj:`list` <:obj:`int`> ] ] > ) Device Properties
     device_property_list = {
         'NumberOfThreads':
         [PyTango.DevLong,
@@ -1478,7 +1688,9 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
          []],
     }
 
-    #:    Command definitions
+    #: (:obj:`dict` <:obj:`str`, \
+    #:       [[ :class:`PyTango.CmdArgType`, :obj:`str`]] >)
+    #:       Command definitions
     cmd_list = {
         'SetScanEnvVariables':
             [[PyTango.DevString, "environment data"],
@@ -1518,7 +1730,7 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
              [PyTango.DevString, "mntgrp configuration string"]],
         'SwitchProfile':
             [[PyTango.DevVoid, ""],
-             [PyTango.DevString, "configuration"]],
+             [PyTango.DevVoid, ""]],
         'MntGrpConfiguration':
             [[PyTango.DevVoid, ""],
              [PyTango.DevString, " mntgrp configuration string"]],
@@ -1629,7 +1841,11 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
              [PyTango.DevVoid, ""]],
     }
 
-    #:    Attribute definitions
+    #: (:obj:`dict` <:obj:`str`, \
+    #:       [[ :class:`PyTango.CmdArgType`, \
+    #:          :class:`PyTango.AttrDataFormat`, \
+    #:          :class:`PyTango.AttrWriteType` ], \
+    #:          :obj:`dict` <:obj:`str` , any> ] > ) Attribute definitions
     attr_list = {
         'Components':
             [[PyTango.DevString,

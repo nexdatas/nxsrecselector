@@ -36,23 +36,24 @@ class MacroServerPools(object):
         """ constructor
 
         :param numberOfThreads: number of threads
+        :type numberOfThreads: :obj:`str`
         """
         self.__numberOfThreads = numberOfThreads
 
-        #: tango database
+        #: (:class:`PyTango.Database`) tango database
         self.__db = PyTango.Database()
 
-        #: nexus configuration variable name in ms
+        #: (:obj:`str`) nexus configuration variable name in ms
         self.__nxsenv = "NeXusConfiguration"
 
-        #: macro server instance
+        #: (:obj:`str`) macro server device name
         self.__macroserver = ""
-        #: pool instances
+        #: (:obj:`list` <:obj:`PyTango.DeviceProxy`>) pool instances
         self.__pools = []
-        #: black list of pools
+        #: (:obj:`list` <:obj:`str`>) black list of pools
         self.poolBlacklist = []
 
-        #: pure variables
+        #: (:obj:`list` <:obj:`str`>) pure variables
         self.__pureVar = [
             "AppendEntry",
             "ComponentsFromMntGrp",
@@ -71,6 +72,7 @@ class MacroServerPools(object):
         """ updates MacroServer and sardana pools for given door
 
         :param door: door device name
+        :type door: :obj:`str`
         """
         self.__macroserver = ""
         self.__pools = []
@@ -90,7 +92,9 @@ class MacroServerPools(object):
         """ door macro server device name
 
         :param door: door device name
+        :type door: :obj:`str`
         :returns: macroserver device name
+        :rtype: :obj:`str`
         """
         if not self.__macroserver:
             self.updateMacroServer(door)
@@ -98,8 +102,11 @@ class MacroServerPools(object):
 
     def getPools(self, door):
         """ door pool device proxies
+
         :param door: door device name
+        :type door: :obj:`str`
         :returns: pool device proxies
+        :rtype: :obj:`list` <:obj:`PyTango.DeviceProxy`>
         """
         if not self.__pools:
             self.updateMacroServer(door)
@@ -111,12 +118,21 @@ class MacroServerPools(object):
         """ prepares list of channels to check
 
         :param configdevice: configuration device proxy
+        :type configdevice: :class:`PyTango.DeviceProxy` \
+             or :class:`nxsconfigserver.XMLConfigurator.XMLConfigurator`
         :param discomponentgroup: name dictionary of checker items
+        :type discomponentgroup: :obj:`dict` <:obj:`str` ,
+            :class:`nxsrecconfig.CheckerThread.CheckerItem`>
         :param components: component list
+        :type components: :obj:`list` <:obj:`str`>
         :param datasources: datasource list
-        :param channel: pool channel list
+        :type datasources: :obj:`list` <:obj:`str`>
+        :param channels: pool channel list
+        :type channels: :obj:`list` <:obj:`str`>
         :param nonexisting: non-exising pool channels
+        :type nonexisting: :obj:`list` <:obj:`str`>
         :returns: list of CheckerItems
+        :rtype: :obj:`list` <:class:`nxsrecconfig.CheckerThread.CheckerItem`>
         """
         describer = Describer(configdevice, True, pyevalfromscript=True)
         availablecomponents = TangoUtils.command(
@@ -167,12 +183,21 @@ class MacroServerPools(object):
         """ creates Checker Item
 
         :param name: item name
+        :type name: :obj:`str`
         :param dss: datasource dictionary
+        :type dss: :obj:`dict` <:obj:`str`, `any`>
         :param toCheck: dictionary with checker items
+        :type toCheck: :obj:`dict` <:obj:`str` ,
+            :class:`nxsrecconfig.CheckerThread.CheckerItem`>
         :param nonexisting: non-exising pool channels
+        :type nonexisting: :obj:`list` <:obj:`str`>
         :param discomponentgroup: name dictionary of checker items
-        :param channel: pool channel list
+        :type discomponentgroup: :obj:`dict` <:obj:`str` ,
+            :class:`nxsrecconfig.CheckerThread.CheckerItem`>
+        :param channels: pool channel list
+        :type channels: :obj:`list` <:obj:`str`>
         :param describer: describer instance
+        :type describer: :class:`nxsrecconfig.Describer.Describer`
         """
         if isinstance(dss, dict):
             tgds = describer.dataSources(dss.keys(), 'TANGO')[0]
@@ -207,11 +232,18 @@ class MacroServerPools(object):
         """ checks component channels
 
         :param door: door device name
+        :type door: :obj:`str`
         :param configdevice: configuration server
+        :type configdevice: :class:`PyTango.DeviceProxy` \
+             or :class:`nxsconfigserver.XMLConfigurator.XMLConfigurator`
         :param channels: pool channels
+        :type channels: :obj:`list` <:obj:`str`>
         :param componentgroup: preselected component group
-        :param channelerrors: deactivated component errors
+        :type componentgroup: :obj:`dict` <:obj:`str` , :obj:`bool`>
+        :param channelerrors: list of deactivated component errors
+        :type channelerrors: :obj:`list` <:obj:`str`>
         :returns: json dictionary with selected active components
+        :rtype: :obj:`str`
         """
         channelerrors[:] = []
         discomponentgroup = {}
@@ -255,8 +287,12 @@ class MacroServerPools(object):
         """ updates selection dictionary
 
         :param group: selection dictionary
+        :type group: :obj:`dict` <:obj:`str` , :obj:`bool`>
         :param disgroup: dictionary with checker items
+        :type disgroup: :obj:`dict` <:obj:`str` ,
+            :class:`nxsrecconfig.CheckerThread.CheckerItem`>
         :param channelerrors: list with channel errors
+        :type channelerrors: :obj:`list` <:obj:`str`>
         """
         for acp in group.keys():
             if acp in disgroup.keys():
@@ -278,8 +314,11 @@ class MacroServerPools(object):
         """ imports Environment Data
 
         :param door: door device
+        :type door: :obj:`str`
         :param names: names of required variables
+        :type names: :obj:`list` <:obj:`str`>
         :param data: dictionary with resulting data
+        :type data: :obj:`dict` <:obj:`str` , `any`>
         """
         params = ["ScanDir",
                   "ScanFile"]
@@ -309,8 +348,11 @@ class MacroServerPools(object):
         """ exports all Environment Data
 
         :param door: door device
+        :type door: :obj:`str`
         :param data: data dictionary
+        :type data: :obj:`dict` <:obj:`str` , `any`>
         :param cmddata: command data dictionary
+        :type cmddata: :obj:`dict` <:obj:`str` , `any`>
         """
         params = ["ScanDir",
                   "ScanFile"]
@@ -347,7 +389,9 @@ class MacroServerPools(object):
         """ fetches Scan Environment Data
 
         :param door: door device
+        :type door: :obj:`str`
         :returns: JSON String with important variables
+        :rtype: :obj:`str`
         """
         params = ["ScanDir",
                   "ScanFile",
@@ -369,7 +413,9 @@ class MacroServerPools(object):
         """ stores Scan Environment Data
 
         :param door: door device
+        :type door: :obj:`str`
         :param jdata: JSON String with important variables
+        :type jdata: :obj:`str`
         """
         jdata = Utils.stringToDictJson(jdata)
         data = json.loads(jdata)
