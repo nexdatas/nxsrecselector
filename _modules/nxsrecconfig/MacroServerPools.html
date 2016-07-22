@@ -167,23 +167,24 @@
         <span class="sd">&quot;&quot;&quot; constructor</span>
 
 <span class="sd">        :param numberOfThreads: number of threads</span>
+<span class="sd">        :type numberOfThreads: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__numberOfThreads</span> <span class="o">=</span> <span class="n">numberOfThreads</span>
 
-        <span class="c">#: tango database</span>
+        <span class="c">#: (:class:`PyTango.Database`) tango database</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__db</span> <span class="o">=</span> <span class="n">PyTango</span><span class="o">.</span><span class="n">Database</span><span class="p">()</span>
 
-        <span class="c">#: nexus configuration variable name in ms</span>
+        <span class="c">#: (:obj:`str`) nexus configuration variable name in ms</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__nxsenv</span> <span class="o">=</span> <span class="s">&quot;NeXusConfiguration&quot;</span>
 
-        <span class="c">#: macro server instance</span>
+        <span class="c">#: (:obj:`str`) macro server device name</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__macroserver</span> <span class="o">=</span> <span class="s">&quot;&quot;</span>
-        <span class="c">#: pool instances</span>
+        <span class="c">#: (:obj:`list` &lt;:obj:`PyTango.DeviceProxy`&gt;) pool instances</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__pools</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="c">#: black list of pools</span>
+        <span class="c">#: (:obj:`list` &lt;:obj:`str`&gt;) black list of pools</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">poolBlacklist</span> <span class="o">=</span> <span class="p">[]</span>
 
-        <span class="c">#: pure variables</span>
+        <span class="c">#: (:obj:`list` &lt;:obj:`str`&gt;) pure variables</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__pureVar</span> <span class="o">=</span> <span class="p">[</span>
             <span class="s">&quot;AppendEntry&quot;</span><span class="p">,</span>
             <span class="s">&quot;ComponentsFromMntGrp&quot;</span><span class="p">,</span>
@@ -202,6 +203,7 @@
         <span class="sd">&quot;&quot;&quot; updates MacroServer and sardana pools for given door</span>
 
 <span class="sd">        :param door: door device name</span>
+<span class="sd">        :type door: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__macroserver</span> <span class="o">=</span> <span class="s">&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__pools</span> <span class="o">=</span> <span class="p">[]</span>
@@ -221,7 +223,9 @@
         <span class="sd">&quot;&quot;&quot; door macro server device name</span>
 
 <span class="sd">        :param door: door device name</span>
+<span class="sd">        :type door: :obj:`str`</span>
 <span class="sd">        :returns: macroserver device name</span>
+<span class="sd">        :rtype: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__macroserver</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">updateMacroServer</span><span class="p">(</span><span class="n">door</span><span class="p">)</span>
@@ -229,8 +233,11 @@
 </div>
 <div class="viewcode-block" id="MacroServerPools.getPools"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.MacroServerPools.MacroServerPools.getPools">[docs]</a>    <span class="k">def</span> <span class="nf">getPools</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">door</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; door pool device proxies</span>
+
 <span class="sd">        :param door: door device name</span>
+<span class="sd">        :type door: :obj:`str`</span>
 <span class="sd">        :returns: pool device proxies</span>
+<span class="sd">        :rtype: :obj:`list` &lt;:obj:`PyTango.DeviceProxy`&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__pools</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">updateMacroServer</span><span class="p">(</span><span class="n">door</span><span class="p">)</span>
@@ -242,12 +249,21 @@
         <span class="sd">&quot;&quot;&quot; prepares list of channels to check</span>
 
 <span class="sd">        :param configdevice: configuration device proxy</span>
+<span class="sd">        :type configdevice: :class:`PyTango.DeviceProxy` \</span>
+<span class="sd">             or :class:`nxsconfigserver.XMLConfigurator.XMLConfigurator`</span>
 <span class="sd">        :param discomponentgroup: name dictionary of checker items</span>
+<span class="sd">        :type discomponentgroup: :obj:`dict` &lt;:obj:`str` ,</span>
+<span class="sd">            :class:`nxsrecconfig.CheckerThread.CheckerItem`&gt;</span>
 <span class="sd">        :param components: component list</span>
+<span class="sd">        :type components: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        :param datasources: datasource list</span>
-<span class="sd">        :param channel: pool channel list</span>
+<span class="sd">        :type datasources: :obj:`list` &lt;:obj:`str`&gt;</span>
+<span class="sd">        :param channels: pool channel list</span>
+<span class="sd">        :type channels: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        :param nonexisting: non-exising pool channels</span>
+<span class="sd">        :type nonexisting: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        :returns: list of CheckerItems</span>
+<span class="sd">        :rtype: :obj:`list` &lt;:class:`nxsrecconfig.CheckerThread.CheckerItem`&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">describer</span> <span class="o">=</span> <span class="n">Describer</span><span class="p">(</span><span class="n">configdevice</span><span class="p">,</span> <span class="bp">True</span><span class="p">,</span> <span class="n">pyevalfromscript</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
         <span class="n">availablecomponents</span> <span class="o">=</span> <span class="n">TangoUtils</span><span class="o">.</span><span class="n">command</span><span class="p">(</span>
@@ -298,12 +314,21 @@
         <span class="sd">&quot;&quot;&quot; creates Checker Item</span>
 
 <span class="sd">        :param name: item name</span>
+<span class="sd">        :type name: :obj:`str`</span>
 <span class="sd">        :param dss: datasource dictionary</span>
+<span class="sd">        :type dss: :obj:`dict` &lt;:obj:`str`, `any`&gt;</span>
 <span class="sd">        :param toCheck: dictionary with checker items</span>
+<span class="sd">        :type toCheck: :obj:`dict` &lt;:obj:`str` ,</span>
+<span class="sd">            :class:`nxsrecconfig.CheckerThread.CheckerItem`&gt;</span>
 <span class="sd">        :param nonexisting: non-exising pool channels</span>
+<span class="sd">        :type nonexisting: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        :param discomponentgroup: name dictionary of checker items</span>
-<span class="sd">        :param channel: pool channel list</span>
+<span class="sd">        :type discomponentgroup: :obj:`dict` &lt;:obj:`str` ,</span>
+<span class="sd">            :class:`nxsrecconfig.CheckerThread.CheckerItem`&gt;</span>
+<span class="sd">        :param channels: pool channel list</span>
+<span class="sd">        :type channels: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        :param describer: describer instance</span>
+<span class="sd">        :type describer: :class:`nxsrecconfig.Describer.Describer`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dss</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
             <span class="n">tgds</span> <span class="o">=</span> <span class="n">describer</span><span class="o">.</span><span class="n">dataSources</span><span class="p">(</span><span class="n">dss</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span> <span class="s">&#39;TANGO&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
@@ -338,11 +363,18 @@
         <span class="sd">&quot;&quot;&quot; checks component channels</span>
 
 <span class="sd">        :param door: door device name</span>
+<span class="sd">        :type door: :obj:`str`</span>
 <span class="sd">        :param configdevice: configuration server</span>
+<span class="sd">        :type configdevice: :class:`PyTango.DeviceProxy` \</span>
+<span class="sd">             or :class:`nxsconfigserver.XMLConfigurator.XMLConfigurator`</span>
 <span class="sd">        :param channels: pool channels</span>
+<span class="sd">        :type channels: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        :param componentgroup: preselected component group</span>
-<span class="sd">        :param channelerrors: deactivated component errors</span>
+<span class="sd">        :type componentgroup: :obj:`dict` &lt;:obj:`str` , :obj:`bool`&gt;</span>
+<span class="sd">        :param channelerrors: list of deactivated component errors</span>
+<span class="sd">        :type channelerrors: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        :returns: json dictionary with selected active components</span>
+<span class="sd">        :rtype: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">channelerrors</span><span class="p">[:]</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">discomponentgroup</span> <span class="o">=</span> <span class="p">{}</span>
@@ -386,8 +418,12 @@
         <span class="sd">&quot;&quot;&quot; updates selection dictionary</span>
 
 <span class="sd">        :param group: selection dictionary</span>
+<span class="sd">        :type group: :obj:`dict` &lt;:obj:`str` , :obj:`bool`&gt;</span>
 <span class="sd">        :param disgroup: dictionary with checker items</span>
+<span class="sd">        :type disgroup: :obj:`dict` &lt;:obj:`str` ,</span>
+<span class="sd">            :class:`nxsrecconfig.CheckerThread.CheckerItem`&gt;</span>
 <span class="sd">        :param channelerrors: list with channel errors</span>
+<span class="sd">        :type channelerrors: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">acp</span> <span class="ow">in</span> <span class="n">group</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="k">if</span> <span class="n">acp</span> <span class="ow">in</span> <span class="n">disgroup</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
@@ -409,8 +445,11 @@
         <span class="sd">&quot;&quot;&quot; imports Environment Data</span>
 
 <span class="sd">        :param door: door device</span>
+<span class="sd">        :type door: :obj:`str`</span>
 <span class="sd">        :param names: names of required variables</span>
+<span class="sd">        :type names: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        :param data: dictionary with resulting data</span>
+<span class="sd">        :type data: :obj:`dict` &lt;:obj:`str` , `any`&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">params</span> <span class="o">=</span> <span class="p">[</span><span class="s">&quot;ScanDir&quot;</span><span class="p">,</span>
                   <span class="s">&quot;ScanFile&quot;</span><span class="p">]</span>
@@ -440,8 +479,11 @@
         <span class="sd">&quot;&quot;&quot; exports all Environment Data</span>
 
 <span class="sd">        :param door: door device</span>
+<span class="sd">        :type door: :obj:`str`</span>
 <span class="sd">        :param data: data dictionary</span>
+<span class="sd">        :type data: :obj:`dict` &lt;:obj:`str` , `any`&gt;</span>
 <span class="sd">        :param cmddata: command data dictionary</span>
+<span class="sd">        :type cmddata: :obj:`dict` &lt;:obj:`str` , `any`&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">params</span> <span class="o">=</span> <span class="p">[</span><span class="s">&quot;ScanDir&quot;</span><span class="p">,</span>
                   <span class="s">&quot;ScanFile&quot;</span><span class="p">]</span>
@@ -478,7 +520,9 @@
         <span class="sd">&quot;&quot;&quot; fetches Scan Environment Data</span>
 
 <span class="sd">        :param door: door device</span>
+<span class="sd">        :type door: :obj:`str`</span>
 <span class="sd">        :returns: JSON String with important variables</span>
+<span class="sd">        :rtype: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">params</span> <span class="o">=</span> <span class="p">[</span><span class="s">&quot;ScanDir&quot;</span><span class="p">,</span>
                   <span class="s">&quot;ScanFile&quot;</span><span class="p">,</span>
@@ -500,7 +544,9 @@
         <span class="sd">&quot;&quot;&quot; stores Scan Environment Data</span>
 
 <span class="sd">        :param door: door device</span>
+<span class="sd">        :type door: :obj:`str`</span>
 <span class="sd">        :param jdata: JSON String with important variables</span>
+<span class="sd">        :type jdata: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">jdata</span> <span class="o">=</span> <span class="n">Utils</span><span class="o">.</span><span class="n">stringToDictJson</span><span class="p">(</span><span class="n">jdata</span><span class="p">)</span>
         <span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">jdata</span><span class="p">)</span>

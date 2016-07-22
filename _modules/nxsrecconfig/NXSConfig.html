@@ -164,8 +164,6 @@
 <span class="sd">&quot;&quot;&quot; Selector Server for NeXus Sardana Recorder &quot;&quot;&quot;</span>
 
 <span class="c"># ==================================================================</span>
-<span class="c">#   NXSRecSelector Class Description:</span>
-<span class="c">#</span>
 <span class="c"># ==================================================================</span>
 
 <span class="kn">import</span> <span class="nn">PyTango</span>
@@ -185,15 +183,19 @@
         <span class="sd">&quot;&quot;&quot;  Device constructor</span>
 
 <span class="sd">        :param cl: class name</span>
+<span class="sd">        :type cl: :obj:`str`</span>
 <span class="sd">        :param name: device name</span>
+<span class="sd">        :type name: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">PyTango</span><span class="o">.</span><span class="n">Device_4Impl</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cl</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">debug_stream</span><span class="p">(</span><span class="s">&quot;In __init__()&quot;</span><span class="p">)</span>
-        <span class="c">#: Recorder Settings</span>
+        <span class="c">#: (:class:`nxsrecconfig.Settings.Settings`) \</span>
+        <span class="c">#:     Recorder Settings</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__stg</span> <span class="o">=</span> <span class="bp">None</span>
-        <span class="c">#: self device proxy</span>
+        <span class="c">#: (:class:`PyTango.DeviceProxy`) self device proxy</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__dp</span> <span class="o">=</span> <span class="bp">None</span>
-        <span class="c">#: memorize attribute to be updated on conf change</span>
+        <span class="c">#: (:obj:`list` &lt;:obj:`str`&gt;) \</span>
+        <span class="c">#:     memorize attribute to be updated on conf change</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__toupdate</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;ConfigDevice&#39;</span><span class="p">,</span> <span class="s">&#39;Door&#39;</span><span class="p">]</span>
         <span class="n">NXSRecSelector</span><span class="o">.</span><span class="n">init_device</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
@@ -244,6 +246,7 @@
         <span class="sd">&quot;&quot;&quot; Read Components attribute</span>
 
 <span class="sd">        :param attr: read attribute</span>
+<span class="sd">        :type attr: :class:`PyTango.Attribute`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">debug_stream</span><span class="p">(</span><span class="s">&quot;In read_Components()&quot;</span><span class="p">)</span>
         <span class="n">attr</span><span class="o">.</span><span class="n">set_value</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__stg</span><span class="o">.</span><span class="n">components</span><span class="p">)</span>
@@ -252,6 +255,7 @@
         <span class="sd">&quot;&quot;&quot; Read DescriptionErrors attribute</span>
 
 <span class="sd">        :param attr: read attribute</span>
+<span class="sd">        :type attr: :class:`PyTango.Attribute`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">debug_stream</span><span class="p">(</span><span class="s">&quot;In read_DescriptionErrors()&quot;</span><span class="p">)</span>
         <span class="n">attr</span><span class="o">.</span><span class="n">set_value</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__stg</span><span class="o">.</span><span class="n">descriptionErrors</span><span class="p">)</span>
@@ -260,6 +264,7 @@
         <span class="sd">&quot;&quot;&quot; Read Version attribute</span>
 
 <span class="sd">        :param attr: read attribute</span>
+<span class="sd">        :type attr: :class:`PyTango.Attribute`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">debug_stream</span><span class="p">(</span><span class="s">&quot;In read_Version()&quot;</span><span class="p">)</span>
         <span class="n">attr</span><span class="o">.</span><span class="n">set_value</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__stg</span><span class="o">.</span><span class="n">version</span><span class="p">)</span>
@@ -268,6 +273,7 @@
         <span class="sd">&quot;&quot;&quot; Read MacroServer attribute</span>
 
 <span class="sd">        :param attr: read attribute</span>
+<span class="sd">        :type attr: :class:`PyTango.Attribute`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">debug_stream</span><span class="p">(</span><span class="s">&quot;In read_MacroServer()&quot;</span><span class="p">)</span>
         <span class="n">attr</span><span class="o">.</span><span class="n">set_value</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__stg</span><span class="o">.</span><span class="n">macroServer</span><span class="p">)</span>
@@ -276,6 +282,7 @@
         <span class="sd">&quot;&quot;&quot; Read Door attribute</span>
 
 <span class="sd">        :param attr: read attribute</span>
+<span class="sd">        :type attr: :class:`PyTango.Attribute`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">debug_stream</span><span class="p">(</span><span class="s">&quot;In read_Door()&quot;</span><span class="p">)</span>
         <span class="n">attr</span><span class="o">.</span><span class="n">set_value</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__stg</span><span class="o">.</span><span class="n">door</span><span class="p">)</span>
@@ -284,6 +291,7 @@
         <span class="sd">&quot;&quot;&quot; Write Door attribute</span>
 
 <span class="sd">        :param attr: written attribute</span>
+<span class="sd">        :type attr: :class:`PyTango.Attribute`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">debug_stream</span><span class="p">(</span><span class="s">&quot;In write_Door()&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__stg</span><span class="o">.</span><span class="n">door</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">get_write_value</span><span class="p">()</span>
@@ -292,6 +300,7 @@
         <span class="sd">&quot;&quot;&quot; Read StepDataSources attribute</span>
 
 <span class="sd">        :param attr: read attribute</span>
+<span class="sd">        :type attr: :class:`PyTango.Attribute`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">debug_stream</span><span class="p">(</span><span class="s">&quot;In read_StepDataSources()&quot;</span><span class="p">)</span>
         <span class="n">attr</span><span class="o">.</span><span class="n">set_value</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__stg</span><span class="o">.</span><span class="n">stepdatasources</span> <span class="ow">or</span> <span class="s">&quot;&quot;</span><span class="p">)</span>
@@ -300,6 +309,7 @@
         <span class="sd">&quot;&quot;&quot; Write StepDataSources attribute</span>
 
 <span class="sd">        :param attr: written attribute</span>
+<span class="sd">        :type attr: :class:`PyTango.Attribute`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">debug_stream</span><span class="p">(</span><span class="s">&quot;In write_StepDataSources()&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_StepDataSources_write_allowed</span><span class="p">():</span>
@@ -311,6 +321,9 @@
 </div>
 <div class="viewcode-block" id="NXSRecSelector.is_StepDataSources_write_allowed"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_StepDataSources_write_allowed">[docs]</a>    <span class="k">def</span> <span class="nf">is_StepDataSources_write_allowed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; StepDataSources attribute Write State Machine</span>
+
+<span class="sd">        :returns: True if the operation allowed</span>
+<span class="sd">        :rtype: :obj:`bool`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_state</span><span class="p">()</span> <span class="ow">in</span> <span class="p">[</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevState</span><span class="o">.</span><span class="n">RUNNING</span><span class="p">]:</span>
             <span class="k">return</span> <span class="bp">False</span>
@@ -320,6 +333,7 @@
         <span class="sd">&quot;&quot;&quot; Read ConfigDevice attribute</span>
 
 <span class="sd">        :param attr: read attribute</span>
+<span class="sd">        :type attr: :class:`PyTango.Attribute`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">debug_stream</span><span class="p">(</span><span class="s">&quot;In read_ConfigDevice()&quot;</span><span class="p">)</span>
         <span class="n">attr</span><span class="o">.</span><span class="n">set_value</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__stg</span><span class="o">.</span><span class="n">configDevice</span><span class="p">)</span>
@@ -328,6 +342,7 @@
         <span class="sd">&quot;&quot;&quot; Write ConfigDevice attribute</span>
 
 <span class="sd">        :param attr: written attribute</span>
+<span class="sd">        :type attr: :class:`PyTango.Attribute`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">debug_stream</span><span class="p">(</span><span class="s">&quot;In write_ConfigDevice()&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__stg</span><span class="o">.</span><span class="n">configDevice</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">get_write_value</span><span class="p">()</span>
@@ -336,6 +351,7 @@
         <span class="sd">&quot;&quot;&quot; Read MntGrp attribute</span>
 
 <span class="sd">        :param attr: read attribute</span>
+<span class="sd">        :type attr: :class:`PyTango.Attribute`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">debug_stream</span><span class="p">(</span><span class="s">&quot;In read_MntGrp()&quot;</span><span class="p">)</span>
         <span class="n">attr</span><span class="o">.</span><span class="n">set_value</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__stg</span><span class="o">.</span><span class="n">mntGrp</span><span class="p">)</span>
@@ -344,6 +360,7 @@
         <span class="sd">&quot;&quot;&quot; Write MntGrp attribute</span>
 
 <span class="sd">        :param attr: written attribute</span>
+<span class="sd">        :type attr: :class:`PyTango.Attribute`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">debug_stream</span><span class="p">(</span><span class="s">&quot;In write_MntGrp()&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__stg</span><span class="o">.</span><span class="n">mntGrp</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">get_write_value</span><span class="p">()</span>
@@ -352,6 +369,7 @@
         <span class="sd">&quot;&quot;&quot; Read ScanDir attribute</span>
 
 <span class="sd">        :param attr: read attribute</span>
+<span class="sd">        :type attr: :class:`PyTango.Attribute`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">debug_stream</span><span class="p">(</span><span class="s">&quot;In read_ScanDir()&quot;</span><span class="p">)</span>
         <span class="n">attr</span><span class="o">.</span><span class="n">set_value</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__stg</span><span class="o">.</span><span class="n">scanDir</span><span class="p">)</span>
@@ -360,6 +378,7 @@
         <span class="sd">&quot;&quot;&quot; Write ScanDir attribute</span>
 
 <span class="sd">        :param attr: written attribute</span>
+<span class="sd">        :type attr: :class:`PyTango.Attribute`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">debug_stream</span><span class="p">(</span><span class="s">&quot;In write_ScanDir()&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__stg</span><span class="o">.</span><span class="n">scanDir</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">get_write_value</span><span class="p">()</span>
@@ -368,6 +387,7 @@
         <span class="sd">&quot;&quot;&quot; Read ScanFile attribute</span>
 
 <span class="sd">        :param attr: read attribute</span>
+<span class="sd">        :type attr: :class:`PyTango.Attribute`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">debug_stream</span><span class="p">(</span><span class="s">&quot;In read_ScanFile()&quot;</span><span class="p">)</span>
         <span class="n">attr</span><span class="o">.</span><span class="n">set_value</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__stg</span><span class="o">.</span><span class="n">scanFile</span> <span class="ow">or</span> <span class="s">&quot;&quot;</span><span class="p">)</span>
@@ -376,6 +396,7 @@
         <span class="sd">&quot;&quot;&quot; Write ScanFile attribute</span>
 
 <span class="sd">        :param attr: written attribute</span>
+<span class="sd">        :type attr: :class:`PyTango.Attribute`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">debug_stream</span><span class="p">(</span><span class="s">&quot;In write_ScanFile()&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__stg</span><span class="o">.</span><span class="n">scanFile</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">get_write_value</span><span class="p">()</span> <span class="ow">or</span> <span class="s">&quot;&quot;</span>
@@ -384,6 +405,7 @@
         <span class="sd">&quot;&quot;&quot; Read ScanID attribute</span>
 
 <span class="sd">        :param attr: read attribute</span>
+<span class="sd">        :type attr: :class:`PyTango.Attribute`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">debug_stream</span><span class="p">(</span><span class="s">&quot;In read_ScanID()&quot;</span><span class="p">)</span>
         <span class="n">attr</span><span class="o">.</span><span class="n">set_value</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__stg</span><span class="o">.</span><span class="n">scanID</span><span class="p">)</span>
@@ -392,6 +414,7 @@
         <span class="sd">&quot;&quot;&quot; Write ScanID attribute</span>
 
 <span class="sd">        :param attr: written attribute</span>
+<span class="sd">        :type attr: :class:`PyTango.Attribute`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">debug_stream</span><span class="p">(</span><span class="s">&quot;In write_ScanID()&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__stg</span><span class="o">.</span><span class="n">scanID</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">get_write_value</span><span class="p">()</span>
@@ -400,6 +423,7 @@
         <span class="sd">&quot;&quot;&quot; Read WriterDevice attribute</span>
 
 <span class="sd">        :param attr: read attribute</span>
+<span class="sd">        :type attr: :class:`PyTango.Attribute`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">debug_stream</span><span class="p">(</span><span class="s">&quot;In read_WriterDevice()&quot;</span><span class="p">)</span>
         <span class="n">attr</span><span class="o">.</span><span class="n">set_value</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__stg</span><span class="o">.</span><span class="n">writerDevice</span><span class="p">)</span>
@@ -408,6 +432,7 @@
         <span class="sd">&quot;&quot;&quot; Write WriterDevice attribute</span>
 
 <span class="sd">        :param attr: written attribute</span>
+<span class="sd">        :type attr: :class:`PyTango.Attribute`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">debug_stream</span><span class="p">(</span><span class="s">&quot;In write_WriterDevice()&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__stg</span><span class="o">.</span><span class="n">writerDevice</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">get_write_value</span><span class="p">()</span>
@@ -416,6 +441,7 @@
         <span class="sd">&quot;&quot;&quot; Read DeviceGroups attribute</span>
 
 <span class="sd">        :param attr: read attribute</span>
+<span class="sd">        :type attr: :class:`PyTango.Attribute`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">debug_stream</span><span class="p">(</span><span class="s">&quot;In read_DeviceGroups()&quot;</span><span class="p">)</span>
         <span class="n">attr</span><span class="o">.</span><span class="n">set_value</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__stg</span><span class="o">.</span><span class="n">deviceGroups</span><span class="p">)</span>
@@ -424,18 +450,25 @@
         <span class="sd">&quot;&quot;&quot; Write DeviceGroups attribute</span>
 
 <span class="sd">        :param attr: written attribute</span>
+<span class="sd">        :type attr: :class:`PyTango.Attribute`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">debug_stream</span><span class="p">(</span><span class="s">&quot;In write_DeviceGroups()&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__stg</span><span class="o">.</span><span class="n">deviceGroups</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">get_write_value</span><span class="p">()</span>
 </div>
 <div class="viewcode-block" id="NXSRecSelector.read_UserData"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.read_UserData">[docs]</a>    <span class="k">def</span> <span class="nf">read_UserData</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Read UserData attribute</span>
+
+<span class="sd">        :param attr: read attribute</span>
+<span class="sd">        :type attr: :class:`PyTango.Attribute`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">debug_stream</span><span class="p">(</span><span class="s">&quot;In read_UserData()&quot;</span><span class="p">)</span>
         <span class="n">attr</span><span class="o">.</span><span class="n">set_value</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__stg</span><span class="o">.</span><span class="n">userData</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="NXSRecSelector.write_UserData"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.write_UserData">[docs]</a>    <span class="k">def</span> <span class="nf">write_UserData</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Write UserData attribute</span>
+
+<span class="sd">        :param attr: written attribute</span>
+<span class="sd">        :type attr: :class:`PyTango.Attribute`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">debug_stream</span><span class="p">(</span><span class="s">&quot;In write_UserData()&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__stg</span><span class="o">.</span><span class="n">userData</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">get_write_value</span><span class="p">()</span>
@@ -444,6 +477,7 @@
         <span class="sd">&quot;&quot;&quot; Read DataSources attribute</span>
 
 <span class="sd">        :param attr: read attribute</span>
+<span class="sd">        :type attr: :class:`PyTango.Attribute`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">debug_stream</span><span class="p">(</span><span class="s">&quot;In read_DataSources()&quot;</span><span class="p">)</span>
         <span class="n">attr</span><span class="o">.</span><span class="n">set_value</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__stg</span><span class="o">.</span><span class="n">dataSources</span><span class="p">)</span>
@@ -452,6 +486,7 @@
         <span class="sd">&quot;&quot;&quot; Read ProfileConfiguration attribute</span>
 
 <span class="sd">        :param attr: read attribute</span>
+<span class="sd">        :type attr: :class:`PyTango.Attribute`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">debug_stream</span><span class="p">(</span><span class="s">&quot;In read_DataSources()&quot;</span><span class="p">)</span>
         <span class="n">attr</span><span class="o">.</span><span class="n">set_value</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__stg</span><span class="o">.</span><span class="n">profileConfiguration</span><span class="p">)</span>
@@ -460,6 +495,7 @@
         <span class="sd">&quot;&quot;&quot; Write ProfileConfiguration attribute</span>
 
 <span class="sd">        :param attr: written attribute</span>
+<span class="sd">        :type attr: :class:`PyTango.Attribute`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">debug_stream</span><span class="p">(</span><span class="s">&quot;In write_ProfileConfiguration()&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__stg</span><span class="o">.</span><span class="n">profileConfiguration</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">get_write_value</span><span class="p">()</span>
@@ -480,6 +516,7 @@
         <span class="sd">&quot;&quot;&quot; Read AppendEntry attribute</span>
 
 <span class="sd">        :param attr: read attribute</span>
+<span class="sd">        :type attr: :class:`PyTango.Attribute`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">debug_stream</span><span class="p">(</span><span class="s">&quot;In read_AppendEntry()&quot;</span><span class="p">)</span>
         <span class="n">attr</span><span class="o">.</span><span class="n">set_value</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__stg</span><span class="o">.</span><span class="n">appendEntry</span><span class="p">)</span>
@@ -488,6 +525,7 @@
         <span class="sd">&quot;&quot;&quot; Write AppendEntry attribute</span>
 
 <span class="sd">        :param attr: written attribute</span>
+<span class="sd">        :type attr: :class:`PyTango.Attribute`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">debug_stream</span><span class="p">(</span><span class="s">&quot;In write_AppendEntry()&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__stg</span><span class="o">.</span><span class="n">appendEntry</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">get_write_value</span><span class="p">()</span>
@@ -496,6 +534,7 @@
         <span class="sd">&quot;&quot;&quot; Read ConfigVariables attribute</span>
 
 <span class="sd">        :param attr: read attribute</span>
+<span class="sd">        :type attr: :class:`PyTango.Attribute`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">debug_stream</span><span class="p">(</span><span class="s">&quot;In read_ConfigVariables()&quot;</span><span class="p">)</span>
         <span class="n">attr</span><span class="o">.</span><span class="n">set_value</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__stg</span><span class="o">.</span><span class="n">configVariables</span><span class="p">)</span>
@@ -504,6 +543,7 @@
         <span class="sd">&quot;&quot;&quot; Write ConfigVariables attribute</span>
 
 <span class="sd">        :param attr: written attribute</span>
+<span class="sd">        :type attr: :class:`PyTango.Attribute`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">debug_stream</span><span class="p">(</span><span class="s">&quot;In write_ConfigVariables()&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__stg</span><span class="o">.</span><span class="n">configVariables</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">get_write_value</span><span class="p">()</span>
@@ -512,6 +552,7 @@
         <span class="sd">&quot;&quot;&quot; Read ProfileFile attribute</span>
 
 <span class="sd">        :param attr: read attribute</span>
+<span class="sd">        :type attr: :class:`PyTango.Attribute`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">debug_stream</span><span class="p">(</span><span class="s">&quot;In read_ProfileFile()&quot;</span><span class="p">)</span>
         <span class="n">attr</span><span class="o">.</span><span class="n">set_value</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__stg</span><span class="o">.</span><span class="n">profileFile</span><span class="p">)</span>
@@ -520,6 +561,7 @@
         <span class="sd">&quot;&quot;&quot; Write ProfileFile attribute</span>
 
 <span class="sd">        :param attr: written attribute</span>
+<span class="sd">        :type attr: :class:`PyTango.Attribute`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">debug_stream</span><span class="p">(</span><span class="s">&quot;In write_ProfileFile()&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__stg</span><span class="o">.</span><span class="n">profileFile</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">get_write_value</span><span class="p">()</span>
@@ -555,6 +597,9 @@
 </div>
 <div class="viewcode-block" id="NXSRecSelector.is_LoadProfile_allowed"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_LoadProfile_allowed">[docs]</a>    <span class="k">def</span> <span class="nf">is_LoadProfile_allowed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; LoadProfile command State Machine</span>
+
+<span class="sd">        :returns: True if the operation allowed</span>
+<span class="sd">        :rtype: :obj:`bool`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_state</span><span class="p">()</span> <span class="ow">in</span> <span class="p">[</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevState</span><span class="o">.</span><span class="n">RUNNING</span><span class="p">]:</span>
             <span class="k">return</span> <span class="bp">False</span>
@@ -585,6 +630,9 @@
 </div>
 <div class="viewcode-block" id="NXSRecSelector.is_FetchProfile_allowed"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_FetchProfile_allowed">[docs]</a>    <span class="k">def</span> <span class="nf">is_FetchProfile_allowed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; FetchProfile command State Machine</span>
+
+<span class="sd">        :returns: True if the operation allowed</span>
+<span class="sd">        :rtype: :obj:`bool`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_state</span><span class="p">()</span> <span class="ow">in</span> <span class="p">[</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevState</span><span class="o">.</span><span class="n">RUNNING</span><span class="p">]:</span>
             <span class="k">return</span> <span class="bp">False</span>
@@ -606,6 +654,9 @@
 </div>
 <div class="viewcode-block" id="NXSRecSelector.is_SaveProfile_allowed"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_SaveProfile_allowed">[docs]</a>    <span class="k">def</span> <span class="nf">is_SaveProfile_allowed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; SaveProfile command State Machine</span>
+
+<span class="sd">        :returns: True if the operation allowed</span>
+<span class="sd">        :rtype: :obj:`bool`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_state</span><span class="p">()</span> <span class="ow">in</span> <span class="p">[</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevState</span><span class="o">.</span><span class="n">RUNNING</span><span class="p">]:</span>
             <span class="k">return</span> <span class="bp">False</span>
@@ -627,6 +678,9 @@
 </div>
 <div class="viewcode-block" id="NXSRecSelector.is_StoreProfile_allowed"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_StoreProfile_allowed">[docs]</a>    <span class="k">def</span> <span class="nf">is_StoreProfile_allowed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; StoreProfile command State Machine</span>
+
+<span class="sd">        :returns: True if the operation allowed</span>
+<span class="sd">        :rtype: :obj:`bool`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_state</span><span class="p">()</span> <span class="ow">in</span> <span class="p">[</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevState</span><span class="o">.</span><span class="n">RUNNING</span><span class="p">]:</span>
             <span class="k">return</span> <span class="bp">False</span>
@@ -648,6 +702,9 @@
 </div>
 <div class="viewcode-block" id="NXSRecSelector.is_PreselectComponents_allowed"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_PreselectComponents_allowed">[docs]</a>    <span class="k">def</span> <span class="nf">is_PreselectComponents_allowed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; PreselectComponents command State Machine</span>
+
+<span class="sd">        :returns: True if the operation allowed</span>
+<span class="sd">        :rtype: :obj:`bool`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_state</span><span class="p">()</span> <span class="ow">in</span> <span class="p">[</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevState</span><span class="o">.</span><span class="n">RUNNING</span><span class="p">]:</span>
             <span class="k">return</span> <span class="bp">False</span>
@@ -670,6 +727,9 @@
 </div>
 <div class="viewcode-block" id="NXSRecSelector.is_ResetPreselectedComponents_allowed"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_ResetPreselectedComponents_allowed">[docs]</a>    <span class="k">def</span> <span class="nf">is_ResetPreselectedComponents_allowed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; ResetPreselectedComponents command State Machine</span>
+
+<span class="sd">        :returns: True if the operation allowed</span>
+<span class="sd">        :rtype: :obj:`bool`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_state</span><span class="p">()</span> <span class="ow">in</span> <span class="p">[</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevState</span><span class="o">.</span><span class="n">RUNNING</span><span class="p">]:</span>
             <span class="k">return</span> <span class="bp">False</span>
@@ -691,6 +751,9 @@
 </div>
 <div class="viewcode-block" id="NXSRecSelector.is_DeleteAllProfiles_allowed"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_DeleteAllProfiles_allowed">[docs]</a>    <span class="k">def</span> <span class="nf">is_DeleteAllProfiles_allowed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; DeleteAllProfiles command State Machine</span>
+
+<span class="sd">        :returns: True if the operation allowed</span>
+<span class="sd">        :rtype: :obj:`bool`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_state</span><span class="p">()</span> <span class="ow">in</span> <span class="p">[</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevState</span><span class="o">.</span><span class="n">RUNNING</span><span class="p">]:</span>
             <span class="k">return</span> <span class="bp">False</span>
@@ -713,6 +776,9 @@
 </div>
 <div class="viewcode-block" id="NXSRecSelector.is_UpdateConfigVariables_allowed"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_UpdateConfigVariables_allowed">[docs]</a>    <span class="k">def</span> <span class="nf">is_UpdateConfigVariables_allowed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; UpdateConfigVariables command State Machine</span>
+
+<span class="sd">        :returns: True if the operation allowed</span>
+<span class="sd">        :rtype: :obj:`bool`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_state</span><span class="p">()</span> <span class="ow">in</span> <span class="p">[</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevState</span><span class="o">.</span><span class="n">RUNNING</span><span class="p">]:</span>
             <span class="k">return</span> <span class="bp">False</span>
@@ -721,7 +787,8 @@
 <div class="viewcode-block" id="NXSRecSelector.IsMntGrpUpdated"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.IsMntGrpUpdated">[docs]</a>    <span class="k">def</span> <span class="nf">IsMntGrpUpdated</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; IsMntGrpUpdated command</span>
 
-<span class="sd">        :brief:  returns true if mntgrp was changed</span>
+<span class="sd">        :returns: True if mntgrp was changed</span>
+<span class="sd">        :rtype: :obj:`bool`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">debug_stream</span><span class="p">(</span><span class="s">&quot;In IsMntGrpUpdated()&quot;</span><span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
@@ -736,6 +803,9 @@
 </div>
 <div class="viewcode-block" id="NXSRecSelector.is_IsMntGrpUpdated_allowed"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_IsMntGrpUpdated_allowed">[docs]</a>    <span class="k">def</span> <span class="nf">is_IsMntGrpUpdated_allowed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; IsMntGrpUpdated command State Machine</span>
+
+<span class="sd">        :returns: True if the operation allowed</span>
+<span class="sd">        :rtype: :obj:`bool`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_state</span><span class="p">()</span> <span class="ow">in</span> <span class="p">[</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevState</span><span class="o">.</span><span class="n">RUNNING</span><span class="p">]:</span>
             <span class="k">return</span> <span class="bp">False</span>
@@ -745,6 +815,9 @@
         <span class="sd">&quot;&quot;&quot; MntGrpConfiguration command</span>
 
 <span class="sd">        :brief:  returns mntgrp configuration</span>
+
+<span class="sd">        :returns: mntgrp configuration in json string</span>
+<span class="sd">        :rtype: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">debug_stream</span><span class="p">(</span><span class="s">&quot;In MntGrpConfiguration()&quot;</span><span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
@@ -759,6 +832,9 @@
 </div>
 <div class="viewcode-block" id="NXSRecSelector.is_MntGrpConfiguration_allowed"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_MntGrpConfiguration_allowed">[docs]</a>    <span class="k">def</span> <span class="nf">is_MntGrpConfiguration_allowed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; MntGrpConfiguration command State Machine</span>
+
+<span class="sd">        :returns: True if the operation allowed</span>
+<span class="sd">        :rtype: :obj:`bool`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_state</span><span class="p">()</span> <span class="ow">in</span> <span class="p">[</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevState</span><span class="o">.</span><span class="n">RUNNING</span><span class="p">]:</span>
             <span class="k">return</span> <span class="bp">False</span>
@@ -769,6 +845,7 @@
 
 <span class="sd">        :brief: updates mntgrp configuration</span>
 <span class="sd">        :returns: JSON string with mntgrp configuration info</span>
+<span class="sd">        :rtype: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">debug_stream</span><span class="p">(</span><span class="s">&quot;In UpdateProfile()&quot;</span><span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
@@ -782,6 +859,9 @@
 </div>
 <div class="viewcode-block" id="NXSRecSelector.is_UpdateProfile_allowed"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_UpdateProfile_allowed">[docs]</a>    <span class="k">def</span> <span class="nf">is_UpdateProfile_allowed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; UpdateProfile command State Machine</span>
+
+<span class="sd">        :returns: True if the operation allowed</span>
+<span class="sd">        :rtype: :obj:`bool`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_state</span><span class="p">()</span> <span class="ow">in</span> <span class="p">[</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevState</span><span class="o">.</span><span class="n">RUNNING</span><span class="p">]:</span>
             <span class="k">return</span> <span class="bp">False</span>
@@ -792,6 +872,7 @@
 
 <span class="sd">        :brief: updates mntgrp configuration</span>
 <span class="sd">        :returns: mntgrp configuration string</span>
+<span class="sd">        :rtype: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">debug_stream</span><span class="p">(</span><span class="s">&quot;In UpdateMntGrp()&quot;</span><span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
@@ -805,6 +886,9 @@
 </div>
 <div class="viewcode-block" id="NXSRecSelector.is_UpdateMntGrp_allowed"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_UpdateMntGrp_allowed">[docs]</a>    <span class="k">def</span> <span class="nf">is_UpdateMntGrp_allowed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; UpdateMntGrp command State Machine</span>
+
+<span class="sd">        :returns: True if the operation allowed</span>
+<span class="sd">        :rtype: :obj:`bool`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_state</span><span class="p">()</span> <span class="ow">in</span> <span class="p">[</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevState</span><span class="o">.</span><span class="n">RUNNING</span><span class="p">]:</span>
             <span class="k">return</span> <span class="bp">False</span>
@@ -818,16 +902,17 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">debug_stream</span><span class="p">(</span><span class="s">&quot;In SwitchProfile()&quot;</span><span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">set_state</span><span class="p">(</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevState</span><span class="o">.</span><span class="n">RUNNING</span><span class="p">)</span>
-            <span class="n">conf</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__stg</span><span class="o">.</span><span class="n">switchProfile</span><span class="p">())</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__stg</span><span class="o">.</span><span class="n">switchProfile</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">set_state</span><span class="p">(</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevState</span><span class="o">.</span><span class="n">ON</span><span class="p">)</span>
         <span class="k">finally</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_state</span><span class="p">()</span> <span class="o">==</span> <span class="n">PyTango</span><span class="o">.</span><span class="n">DevState</span><span class="o">.</span><span class="n">RUNNING</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">set_state</span><span class="p">(</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevState</span><span class="o">.</span><span class="n">ON</span><span class="p">)</span>
-
-        <span class="k">return</span> <span class="n">conf</span>
 </div>
 <div class="viewcode-block" id="NXSRecSelector.is_SwitchProfile_allowed"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_SwitchProfile_allowed">[docs]</a>    <span class="k">def</span> <span class="nf">is_SwitchProfile_allowed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; SwitchProfile command State Machine</span>
+
+<span class="sd">        :returns: True if the operation allowed</span>
+<span class="sd">        :rtype: :obj:`bool`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_state</span><span class="p">()</span> <span class="ow">in</span> <span class="p">[</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevState</span><span class="o">.</span><span class="n">RUNNING</span><span class="p">]:</span>
             <span class="k">return</span> <span class="bp">False</span>
@@ -849,6 +934,9 @@
 </div>
 <div class="viewcode-block" id="NXSRecSelector.is_ImportMntGrp_allowed"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_ImportMntGrp_allowed">[docs]</a>    <span class="k">def</span> <span class="nf">is_ImportMntGrp_allowed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; ImportMntGrp command State Machine</span>
+
+<span class="sd">        :returns: True if the operation allowed</span>
+<span class="sd">        :rtype: :obj:`bool`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_state</span><span class="p">()</span> <span class="ow">in</span> <span class="p">[</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevState</span><span class="o">.</span><span class="n">RUNNING</span><span class="p">]:</span>
             <span class="k">return</span> <span class="bp">False</span>
@@ -879,6 +967,9 @@
 </div>
 <div class="viewcode-block" id="NXSRecSelector.is_ImportEnv_allowed"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_ImportEnv_allowed">[docs]</a>    <span class="k">def</span> <span class="nf">is_ImportEnv_allowed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; ImportMntGrp command State Machine</span>
+
+<span class="sd">        :returns: True if the operation allowed</span>
+<span class="sd">        :rtype: :obj:`bool`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_state</span><span class="p">()</span> <span class="ow">in</span> <span class="p">[</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevState</span><span class="o">.</span><span class="n">RUNNING</span><span class="p">]:</span>
             <span class="k">return</span> <span class="bp">False</span>
@@ -900,6 +991,9 @@
 </div>
 <div class="viewcode-block" id="NXSRecSelector.is_ExportEnv_allowed"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_ExportEnv_allowed">[docs]</a>    <span class="k">def</span> <span class="nf">is_ExportEnv_allowed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; ExportMntGrp command State Machine</span>
+
+<span class="sd">        :returns: True if the operation allowed</span>
+<span class="sd">        :rtype: :obj:`bool`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_state</span><span class="p">()</span> <span class="ow">in</span> <span class="p">[</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevState</span><span class="o">.</span><span class="n">RUNNING</span><span class="p">]:</span>
             <span class="k">return</span> <span class="bp">False</span>
@@ -911,6 +1005,7 @@
 <span class="sd">        :brief: Returns a list of available component names</span>
 
 <span class="sd">        :returns: DevVarStringArray    list of available component names</span>
+<span class="sd">        :rtype: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">debug_stream</span><span class="p">(</span><span class="s">&quot;In AvailableTimers()&quot;</span><span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
@@ -925,6 +1020,9 @@
 </div>
 <div class="viewcode-block" id="NXSRecSelector.is_AvailableTimers_allowed"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_AvailableTimers_allowed">[docs]</a>    <span class="k">def</span> <span class="nf">is_AvailableTimers_allowed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; AvailableTimers command State Machine</span>
+
+<span class="sd">        :returns: True if the operation allowed</span>
+<span class="sd">        :rtype: :obj:`bool`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_state</span><span class="p">()</span> <span class="ow">in</span> <span class="p">[</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevState</span><span class="o">.</span><span class="n">RUNNING</span><span class="p">]:</span>
             <span class="k">return</span> <span class="bp">False</span>
@@ -935,6 +1033,7 @@
 
 <span class="sd">        :brief: Returns a list of muted channel names</span>
 <span class="sd">        :returns: DevVarStringArray    list of muted channel names</span>
+<span class="sd">        :rtype: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">debug_stream</span><span class="p">(</span><span class="s">&quot;In MutedChannels()&quot;</span><span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
@@ -949,6 +1048,9 @@
 </div>
 <div class="viewcode-block" id="NXSRecSelector.is_MutedChannels_allowed"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_MutedChannels_allowed">[docs]</a>    <span class="k">def</span> <span class="nf">is_MutedChannels_allowed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; MutedChannels command State Machine</span>
+
+<span class="sd">        :returns: True if the operation allowed</span>
+<span class="sd">        :rtype: :obj:`bool`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_state</span><span class="p">()</span> <span class="ow">in</span> <span class="p">[</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevState</span><span class="o">.</span><span class="n">RUNNING</span><span class="p">]:</span>
             <span class="k">return</span> <span class="bp">False</span>
@@ -959,6 +1061,7 @@
 
 <span class="sd">        :brief: Returns a list of available component names</span>
 <span class="sd">        :returns: DevVarStringArray    list of available component names</span>
+<span class="sd">        :rtype: :obj:`list` &lt;:obj:`str`&gt;</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">debug_stream</span><span class="p">(</span><span class="s">&quot;In AvailableComponents()&quot;</span><span class="p">)</span>
@@ -974,6 +1077,9 @@
 </div>
 <div class="viewcode-block" id="NXSRecSelector.is_AvailableComponents_allowed"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_AvailableComponents_allowed">[docs]</a>    <span class="k">def</span> <span class="nf">is_AvailableComponents_allowed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; AvailableComponents command State Machine</span>
+
+<span class="sd">        :returns: True if the operation allowed</span>
+<span class="sd">        :rtype: :obj:`bool`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_state</span><span class="p">()</span> <span class="ow">in</span> <span class="p">[</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevState</span><span class="o">.</span><span class="n">RUNNING</span><span class="p">]:</span>
             <span class="k">return</span> <span class="bp">False</span>
@@ -984,6 +1090,7 @@
 
 <span class="sd">        :brief: Returns a list of available component names</span>
 <span class="sd">        :returns: DevString   list of available component names</span>
+<span class="sd">        :rtype: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">debug_stream</span><span class="p">(</span><span class="s">&quot;In ComponentDescription()&quot;</span><span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
@@ -998,6 +1105,9 @@
 </div>
 <div class="viewcode-block" id="NXSRecSelector.is_ComponentDescription_allowed"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_ComponentDescription_allowed">[docs]</a>    <span class="k">def</span> <span class="nf">is_ComponentDescription_allowed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; ComponentDescription command State Machine</span>
+
+<span class="sd">        :returns: True if the operation allowed</span>
+<span class="sd">        :rtype: :obj:`bool`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_state</span><span class="p">()</span> <span class="ow">in</span> <span class="p">[</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevState</span><span class="o">.</span><span class="n">RUNNING</span><span class="p">]:</span>
             <span class="k">return</span> <span class="bp">False</span>
@@ -1008,8 +1118,10 @@
 
 <span class="sd">        :brief: Stores ScanDir, ScanFile and NeXusSelectorDevice</span>
 <span class="sd">                      in environment variables</span>
-<span class="sd">        :returns: DevString    json dictionary with environment data</span>
+<span class="sd">        :param argin: json dictionary with environment data</span>
+<span class="sd">        :type argin: :obj:`str`</span>
 <span class="sd">        :returns: DevLong    scan ID</span>
+<span class="sd">        :rtype: :obj:`int`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">debug_stream</span><span class="p">(</span><span class="s">&quot;In SetScanEnvVariables()&quot;</span><span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
@@ -1024,6 +1136,9 @@
 </div>
 <div class="viewcode-block" id="NXSRecSelector.is_SetScanEnvVariables_allowed"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_SetScanEnvVariables_allowed">[docs]</a>    <span class="k">def</span> <span class="nf">is_SetScanEnvVariables_allowed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; SetScanEnvVariables command State Machine</span>
+
+<span class="sd">        :returns: True if the operation allowed</span>
+<span class="sd">        :rtype: :obj:`bool`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_state</span><span class="p">()</span> <span class="ow">in</span> <span class="p">[</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevState</span><span class="o">.</span><span class="n">RUNNING</span><span class="p">]:</span>
             <span class="k">return</span> <span class="bp">False</span>
@@ -1034,6 +1149,7 @@
 
 <span class="sd">        :brief: Returns a JSON with full device names for all aliases</span>
 <span class="sd">        :returns: DevString JSON dictionary with full device names</span>
+<span class="sd">        :rtype: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">debug_stream</span><span class="p">(</span><span class="s">&quot;In FullDeviceNames()&quot;</span><span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
@@ -1048,6 +1164,9 @@
 </div>
 <div class="viewcode-block" id="NXSRecSelector.is_FullDeviceNames_allowed"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_FullDeviceNames_allowed">[docs]</a>    <span class="k">def</span> <span class="nf">is_FullDeviceNames_allowed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; FullDeviceNames command State Machine</span>
+
+<span class="sd">        :returns: True if the operation allowed</span>
+<span class="sd">        :rtype: :obj:`bool`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_state</span><span class="p">()</span> <span class="ow">in</span> <span class="p">[</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevState</span><span class="o">.</span><span class="n">RUNNING</span><span class="p">]:</span>
             <span class="k">return</span> <span class="bp">False</span>
@@ -1060,6 +1179,7 @@
 <span class="sd">                      NeXusSelectorDevice</span>
 <span class="sd">                      in environment variables</span>
 <span class="sd">        :returns: DevString    json dictionary with environment data</span>
+<span class="sd">        :rtype: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">debug_stream</span><span class="p">(</span><span class="s">&quot;In ScanEnvVariables()&quot;</span><span class="p">)</span>
@@ -1075,6 +1195,9 @@
 </div>
 <div class="viewcode-block" id="NXSRecSelector.is_ScanEnvVariables_allowed"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_ScanEnvVariables_allowed">[docs]</a>    <span class="k">def</span> <span class="nf">is_ScanEnvVariables_allowed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; ScanEnvVariables command State Machine</span>
+
+<span class="sd">        :returns: True if the operation allowed</span>
+<span class="sd">        :rtype: :obj:`bool`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_state</span><span class="p">()</span> <span class="ow">in</span> <span class="p">[</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevState</span><span class="o">.</span><span class="n">RUNNING</span><span class="p">]:</span>
             <span class="k">return</span> <span class="bp">False</span>
@@ -1085,6 +1208,7 @@
 
 <span class="sd">        :brief: Returns a list of available component names</span>
 <span class="sd">        :returns: DevString    list of available component names</span>
+<span class="sd">        :rtype: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">debug_stream</span><span class="p">(</span><span class="s">&quot;In VariableComponents()&quot;</span><span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
@@ -1099,6 +1223,9 @@
 </div>
 <div class="viewcode-block" id="NXSRecSelector.is_VariableComponents_allowed"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_VariableComponents_allowed">[docs]</a>    <span class="k">def</span> <span class="nf">is_VariableComponents_allowed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; VariableComponents command State Machine</span>
+
+<span class="sd">        :returns: True if the operation allowed</span>
+<span class="sd">        :rtype: :obj:`bool`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_state</span><span class="p">()</span> <span class="ow">in</span> <span class="p">[</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevState</span><span class="o">.</span><span class="n">RUNNING</span><span class="p">]:</span>
             <span class="k">return</span> <span class="bp">False</span>
@@ -1109,6 +1236,7 @@
 
 <span class="sd">        :brief: Returns a list of available selection names</span>
 <span class="sd">        :returns: DevVarStringArray    list of available selection names</span>
+<span class="sd">        :rtype: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">debug_stream</span><span class="p">(</span><span class="s">&quot;In AvailableProfiles()&quot;</span><span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
@@ -1123,6 +1251,9 @@
 </div>
 <div class="viewcode-block" id="NXSRecSelector.is_AvailableProfiles_allowed"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_AvailableProfiles_allowed">[docs]</a>    <span class="k">def</span> <span class="nf">is_AvailableProfiles_allowed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; AvailableProfiles command State Machine</span>
+
+<span class="sd">        :returns: True if the operation allowed</span>
+<span class="sd">        :rtype: :obj:`bool`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_state</span><span class="p">()</span> <span class="ow">in</span> <span class="p">[</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevState</span><span class="o">.</span><span class="n">RUNNING</span><span class="p">]:</span>
             <span class="k">return</span> <span class="bp">False</span>
@@ -1133,6 +1264,7 @@
 
 <span class="sd">        :brief: Returns a list of available mntgrp names</span>
 <span class="sd">        :returns: DevVarStringArray    list of available mntgrp names</span>
+<span class="sd">        :rtype: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">debug_stream</span><span class="p">(</span><span class="s">&quot;In AvailableMntGrps()&quot;</span><span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
@@ -1147,6 +1279,9 @@
 </div>
 <div class="viewcode-block" id="NXSRecSelector.is_AvailableMntGrps_allowed"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_AvailableMntGrps_allowed">[docs]</a>    <span class="k">def</span> <span class="nf">is_AvailableMntGrps_allowed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; AvailableMntGrps command State Machine</span>
+
+<span class="sd">        :returns: True if the operation allowed</span>
+<span class="sd">        :rtype: :obj:`bool`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_state</span><span class="p">()</span> <span class="ow">in</span> <span class="p">[</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevState</span><span class="o">.</span><span class="n">RUNNING</span><span class="p">]:</span>
             <span class="k">return</span> <span class="bp">False</span>
@@ -1157,6 +1292,7 @@
 
 <span class="sd">        :brief: Returns a list of available DataSource names</span>
 <span class="sd">        :returns: DevVarStringArray    list of available DataSource names</span>
+<span class="sd">        :rtype: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">debug_stream</span><span class="p">(</span><span class="s">&quot;In AvailableDataSources()&quot;</span><span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
@@ -1171,6 +1307,9 @@
 </div>
 <div class="viewcode-block" id="NXSRecSelector.is_AvailableDataSources_allowed"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_AvailableDataSources_allowed">[docs]</a>    <span class="k">def</span> <span class="nf">is_AvailableDataSources_allowed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; AvailableDataSources command State Machine</span>
+
+<span class="sd">        :returns: True if the operation allowed</span>
+<span class="sd">        :rtype: :obj:`bool`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_state</span><span class="p">()</span> <span class="ow">in</span> <span class="p">[</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevState</span><span class="o">.</span><span class="n">RUNNING</span><span class="p">]:</span>
             <span class="k">return</span> <span class="bp">False</span>
@@ -1182,7 +1321,9 @@
 <span class="sd">        :brief: Returns a list of available pool channels</span>
 
 <span class="sd">        :param argin:  DevString            name of pool list attribute</span>
+<span class="sd">        :type argin:  :obj:`str`</span>
 <span class="sd">        :returns: DevVarStringArray    list of available pool elements</span>
+<span class="sd">        :rtype: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">debug_stream</span><span class="p">(</span><span class="s">&quot;In PoolElementNames()&quot;</span><span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
@@ -1197,6 +1338,9 @@
 </div>
 <div class="viewcode-block" id="NXSRecSelector.is_PoolElementNames_allowed"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_PoolElementNames_allowed">[docs]</a>    <span class="k">def</span> <span class="nf">is_PoolElementNames_allowed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; PoolElementNames command State Machine</span>
+
+<span class="sd">        :returns: True if the operation allowed</span>
+<span class="sd">        :rtype: :obj:`bool`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_state</span><span class="p">()</span> <span class="ow">in</span> <span class="p">[</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevState</span><span class="o">.</span><span class="n">RUNNING</span><span class="p">]:</span>
             <span class="k">return</span> <span class="bp">False</span>
@@ -1207,6 +1351,7 @@
 
 <span class="sd">        :brief: Provides the component datasources</span>
 <span class="sd">        :returns: DevVarStringArray    component names</span>
+<span class="sd">        :rtype: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">debug_stream</span><span class="p">(</span><span class="s">&quot;In ComponentDataSources()&quot;</span><span class="p">)</span>
 
@@ -1221,6 +1366,9 @@
 </div>
 <div class="viewcode-block" id="NXSRecSelector.is_ComponentDataSources_allowed"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_ComponentDataSources_allowed">[docs]</a>    <span class="k">def</span> <span class="nf">is_ComponentDataSources_allowed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; ComponentDataSources command State Machine</span>
+
+<span class="sd">        :returns: True if the operation allowed</span>
+<span class="sd">        :rtype: :obj:`bool`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_state</span><span class="p">()</span> <span class="ow">in</span> <span class="p">[</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevState</span><span class="o">.</span><span class="n">RUNNING</span><span class="p">]:</span>
             <span class="k">return</span> <span class="bp">False</span>
@@ -1231,6 +1379,7 @@
 
 <span class="sd">        :brief: Provides the selected datasources</span>
 <span class="sd">        :returns: DevVarStringArray    component names</span>
+<span class="sd">        :rtype: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">debug_stream</span><span class="p">(</span><span class="s">&quot;In SelectedDataSources()&quot;</span><span class="p">)</span>
 
@@ -1255,6 +1404,7 @@
 
 <span class="sd">        :brief: Provides Administrator Data Names</span>
 <span class="sd">        :returns: DevVarStringArray    data record names</span>
+<span class="sd">        :rtype: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">debug_stream</span><span class="p">(</span><span class="s">&quot;In AdministratorDataNames()&quot;</span><span class="p">)</span>
 
@@ -1269,6 +1419,9 @@
 </div>
 <div class="viewcode-block" id="NXSRecSelector.is_AdministratorDataNames_allowed"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_AdministratorDataNames_allowed">[docs]</a>    <span class="k">def</span> <span class="nf">is_AdministratorDataNames_allowed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; AdministratorDataNames command State Machine</span>
+
+<span class="sd">        :returns: True if the operation allowed</span>
+<span class="sd">        :rtype: :obj:`bool`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_state</span><span class="p">()</span> <span class="ow">in</span> <span class="p">[</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevState</span><span class="o">.</span><span class="n">RUNNING</span><span class="p">]:</span>
             <span class="k">return</span> <span class="bp">False</span>
@@ -1279,6 +1432,7 @@
 
 <span class="sd">        :brief: Sets the mandatory components</span>
 <span class="sd">        :returns: DevVarStringArray    component names</span>
+<span class="sd">        :rtype: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">debug_stream</span><span class="p">(</span><span class="s">&quot;In MandatoryComponents()&quot;</span><span class="p">)</span>
 
@@ -1293,6 +1447,9 @@
 </div>
 <div class="viewcode-block" id="NXSRecSelector.is_MandatoryComponents_allowed"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_MandatoryComponents_allowed">[docs]</a>    <span class="k">def</span> <span class="nf">is_MandatoryComponents_allowed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; MandatoryComponents command State Machine</span>
+
+<span class="sd">        :returns: True if the operation allowed</span>
+<span class="sd">        :rtype: :obj:`bool`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_state</span><span class="p">()</span> <span class="ow">in</span> <span class="p">[</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevState</span><span class="o">.</span><span class="n">RUNNING</span><span class="p">]:</span>
             <span class="k">return</span> <span class="bp">False</span>
@@ -1303,6 +1460,7 @@
 
 <span class="sd">        :brief: Sets the selected components</span>
 <span class="sd">        :returns: DevVarStringArray    component names</span>
+<span class="sd">        :rtype: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">debug_stream</span><span class="p">(</span><span class="s">&quot;In SelectedComponents()&quot;</span><span class="p">)</span>
 
@@ -1317,6 +1475,9 @@
 </div>
 <div class="viewcode-block" id="NXSRecSelector.is_SelectedComponents_allowed"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_SelectedComponents_allowed">[docs]</a>    <span class="k">def</span> <span class="nf">is_SelectedComponents_allowed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; SelectedComponents command State Machine</span>
+
+<span class="sd">        :returns: True if the operation allowed</span>
+<span class="sd">        :rtype: :obj:`bool`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_state</span><span class="p">()</span> <span class="ow">in</span> <span class="p">[</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevState</span><span class="o">.</span><span class="n">RUNNING</span><span class="p">]:</span>
             <span class="k">return</span> <span class="bp">False</span>
@@ -1327,6 +1488,7 @@
 
 <span class="sd">        :brief: Sets the preselected components</span>
 <span class="sd">        :returns: DevVarStringArray    component names</span>
+<span class="sd">        :rtype: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">debug_stream</span><span class="p">(</span><span class="s">&quot;In PreselectedComponents()&quot;</span><span class="p">)</span>
 
@@ -1341,6 +1503,9 @@
 </div>
 <div class="viewcode-block" id="NXSRecSelector.is_PreselectedComponents_allowed"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_PreselectedComponents_allowed">[docs]</a>    <span class="k">def</span> <span class="nf">is_PreselectedComponents_allowed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; PreselectedComponents command State Machine</span>
+
+<span class="sd">        :returns: True if the operation allowed</span>
+<span class="sd">        :rtype: :obj:`bool`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_state</span><span class="p">()</span> <span class="ow">in</span> <span class="p">[</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevState</span><span class="o">.</span><span class="n">RUNNING</span><span class="p">]:</span>
             <span class="k">return</span> <span class="bp">False</span>
@@ -1351,6 +1516,7 @@
 
 <span class="sd">        :brief: Sets the preselected components</span>
 <span class="sd">        :returns: DevVarStringArray    component names</span>
+<span class="sd">        :rtype: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">debug_stream</span><span class="p">(</span><span class="s">&quot;In PreselectedDataSources()&quot;</span><span class="p">)</span>
 
@@ -1365,6 +1531,9 @@
 </div>
 <div class="viewcode-block" id="NXSRecSelector.is_PreselectedDataSources_allowed"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_PreselectedDataSources_allowed">[docs]</a>    <span class="k">def</span> <span class="nf">is_PreselectedDataSources_allowed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; PreselectedDataSources command State Machine</span>
+
+<span class="sd">        :returns: True if the operation allowed</span>
+<span class="sd">        :rtype: :obj:`bool`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_state</span><span class="p">()</span> <span class="ow">in</span> <span class="p">[</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevState</span><span class="o">.</span><span class="n">RUNNING</span><span class="p">]:</span>
             <span class="k">return</span> <span class="bp">False</span>
@@ -1375,7 +1544,9 @@
 
 <span class="sd">        :brief: create dynamic component</span>
 <span class="sd">        :param argin:  DevVarStringArray    list of datasource parameters</span>
+<span class="sd">        :type argin: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        :returns: DevVarString         name of created dynamic component</span>
+<span class="sd">        :rtype: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">debug_stream</span><span class="p">(</span><span class="s">&quot;In CreateDynamicComponent()&quot;</span><span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
@@ -1390,6 +1561,9 @@
 </div>
 <div class="viewcode-block" id="NXSRecSelector.is_CreateDynamicComponent_allowed"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_CreateDynamicComponent_allowed">[docs]</a>    <span class="k">def</span> <span class="nf">is_CreateDynamicComponent_allowed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; CreateDynamicComponent command State Machine</span>
+
+<span class="sd">        :returns: True if the operation allowed</span>
+<span class="sd">        :rtype: :obj:`bool`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_state</span><span class="p">()</span> <span class="ow">in</span> <span class="p">[</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevState</span><span class="o">.</span><span class="n">RUNNING</span><span class="p">]:</span>
             <span class="k">return</span> <span class="bp">False</span>
@@ -1400,6 +1574,7 @@
 
 <span class="sd">        :brief: Deletes the given dynamic component</span>
 <span class="sd">        :param argin:  DevString  dynamic component name</span>
+<span class="sd">        :type argin: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">debug_stream</span><span class="p">(</span><span class="s">&quot;In RemoveDynamicComponent()&quot;</span><span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
@@ -1412,6 +1587,9 @@
 </div>
 <div class="viewcode-block" id="NXSRecSelector.is_RemoveDynamicComponent_allowed"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_RemoveDynamicComponent_allowed">[docs]</a>    <span class="k">def</span> <span class="nf">is_RemoveDynamicComponent_allowed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; RemoveDynamicComponent command State Machine</span>
+
+<span class="sd">        :returns: True if the operation allowed</span>
+<span class="sd">        :rtype: :obj:`bool`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_state</span><span class="p">()</span> <span class="ow">in</span> <span class="p">[</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevState</span><span class="o">.</span><span class="n">RUNNING</span><span class="p">]:</span>
             <span class="k">return</span> <span class="bp">False</span>
@@ -1422,6 +1600,7 @@
 
 <span class="sd">        :brief: Deletes the given mntgrp</span>
 <span class="sd">        :param argin:  DevString  measurement group name</span>
+<span class="sd">        :type argin: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">debug_stream</span><span class="p">(</span><span class="s">&quot;In DeleteProfile()&quot;</span><span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
@@ -1434,6 +1613,9 @@
 </div>
 <div class="viewcode-block" id="NXSRecSelector.is_DeleteProfile_allowed"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_DeleteProfile_allowed">[docs]</a>    <span class="k">def</span> <span class="nf">is_DeleteProfile_allowed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; DeleteProfile command State Machine</span>
+
+<span class="sd">        :returns: True if the operation allowed</span>
+<span class="sd">        :rtype: :obj:`bool`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_state</span><span class="p">()</span> <span class="ow">in</span> <span class="p">[</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevState</span><span class="o">.</span><span class="n">RUNNING</span><span class="p">]:</span>
             <span class="k">return</span> <span class="bp">False</span>
@@ -1445,7 +1627,9 @@
 <span class="sd">        :brief: JSON dictionary with channel properties</span>
 <span class="sd">                      {channel:property}</span>
 <span class="sd">        :param argin:  DevString    property type</span>
+<span class="sd">        :type argin: :obj:`str`</span>
 <span class="sd">        :returns: DevString    JSON dictionary with channel properties</span>
+<span class="sd">        :rtype: :obj:`str`</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">debug_stream</span><span class="p">(</span><span class="s">&quot;In ChannelProperties()&quot;</span><span class="p">)</span>
@@ -1461,6 +1645,9 @@
 </div>
 <div class="viewcode-block" id="NXSRecSelector.is_ChannelProperties_allowed"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_ChannelProperties_allowed">[docs]</a>    <span class="k">def</span> <span class="nf">is_ChannelProperties_allowed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; ChannelProperties command State Machine</span>
+
+<span class="sd">        :returns: True if the operation allowed</span>
+<span class="sd">        :rtype: :obj:`bool`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_state</span><span class="p">()</span> <span class="ow">in</span> <span class="p">[</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevState</span><span class="o">.</span><span class="n">RUNNING</span><span class="p">]:</span>
             <span class="k">return</span> <span class="bp">False</span>
@@ -1472,6 +1659,7 @@
 <span class="sd">        :brief: set Channel Properties of given type</span>
 <span class="sd">        :param argin: DevVarStringArray two element list with a property type</span>
 <span class="sd">                      and JSON value dictionary {channel:property}</span>
+<span class="sd">        :type argin: [:obj:`str`, :obj:`str`]</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">debug_stream</span><span class="p">(</span><span class="s">&quot;In SetChannelProperties()&quot;</span><span class="p">)</span>
@@ -1487,6 +1675,9 @@
 </div>
 <div class="viewcode-block" id="NXSRecSelector.is_SetChannelProperties_allowed"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_SetChannelProperties_allowed">[docs]</a>    <span class="k">def</span> <span class="nf">is_SetChannelProperties_allowed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; SetChannelProperties command State Machine</span>
+
+<span class="sd">        :returns: True if the operation allowed</span>
+<span class="sd">        :rtype: :obj:`bool`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_state</span><span class="p">()</span> <span class="ow">in</span> <span class="p">[</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevState</span><span class="o">.</span><span class="n">RUNNING</span><span class="p">]:</span>
             <span class="k">return</span> <span class="bp">False</span>
@@ -1497,7 +1688,9 @@
 
 <span class="sd">        :brief: describes client datasources from components</span>
 <span class="sd">        :param argin:  DevVarStringArray    list of component names</span>
+<span class="sd">        :type argin: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        :returns: DevVarString         description of component datasources</span>
+<span class="sd">        :rtype: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">debug_stream</span><span class="p">(</span><span class="s">&quot;In ComponentClientSources()&quot;</span><span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
@@ -1512,6 +1705,9 @@
 </div>
 <div class="viewcode-block" id="NXSRecSelector.is_ComponentClientSources_allowed"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_ComponentClientSources_allowed">[docs]</a>    <span class="k">def</span> <span class="nf">is_ComponentClientSources_allowed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; ComponentClientSources command State Machine</span>
+
+<span class="sd">        :returns: True if the operation allowed</span>
+<span class="sd">        :rtype: :obj:`bool`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_state</span><span class="p">()</span> <span class="ow">in</span> <span class="p">[</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevState</span><span class="o">.</span><span class="n">RUNNING</span><span class="p">]:</span>
             <span class="k">return</span> <span class="bp">False</span>
@@ -1522,7 +1718,9 @@
 
 <span class="sd">        :brief: descrive datasources</span>
 <span class="sd">        :param argin:  DevVarStringArray    list of datasource names</span>
+<span class="sd">        :type argin: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        :returns: DevVarStringArray    description of datasources</span>
+<span class="sd">        :rtypes: :obj:`list` &lt;:obj:`str`&gt;</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">debug_stream</span><span class="p">(</span><span class="s">&quot;In DataSourceDescription()&quot;</span><span class="p">)</span>
@@ -1538,6 +1736,9 @@
 </div>
 <div class="viewcode-block" id="NXSRecSelector.is_DataSourceDescription_allowed"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_DataSourceDescription_allowed">[docs]</a>    <span class="k">def</span> <span class="nf">is_DataSourceDescription_allowed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; DataSourceDescription command State Machine</span>
+
+<span class="sd">        :returns: True if the operation allowed</span>
+<span class="sd">        :rtype: :obj:`bool`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_state</span><span class="p">()</span> <span class="ow">in</span> <span class="p">[</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevState</span><span class="o">.</span><span class="n">RUNNING</span><span class="p">]:</span>
             <span class="k">return</span> <span class="bp">False</span>
@@ -1549,7 +1750,9 @@
 <span class="sd">        :brief: create configuration from the given components</span>
 
 <span class="sd">        :param argin:  DevVarStringArray    list of component names</span>
+<span class="sd">        :type argin: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        :returns: DevVarString         XML configuration string</span>
+<span class="sd">        :rtype: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">debug_stream</span><span class="p">(</span><span class="s">&quot;In CreateWriterConfiguration()&quot;</span><span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
@@ -1564,6 +1767,9 @@
 </div>
 <div class="viewcode-block" id="NXSRecSelector.is_CreateWriterConfiguration_allowed"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_CreateWriterConfiguration_allowed">[docs]</a>    <span class="k">def</span> <span class="nf">is_CreateWriterConfiguration_allowed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; CreateWriterConfiguration command State Machine</span>
+
+<span class="sd">        :returns: True if the operation allowed</span>
+<span class="sd">        :rtype: :obj:`bool`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_state</span><span class="p">()</span> <span class="ow">in</span> <span class="p">[</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevState</span><span class="o">.</span><span class="n">RUNNING</span><span class="p">]:</span>
             <span class="k">return</span> <span class="bp">False</span>
@@ -1577,11 +1783,15 @@
 <span class="c"># ==================================================================</span></div></div>
 <div class="viewcode-block" id="NXSRecSelectorClass"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelectorClass">[docs]</a><span class="k">class</span> <span class="nc">NXSRecSelectorClass</span><span class="p">(</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DeviceClass</span><span class="p">):</span>
 
-    <span class="c">#:    Class Properties</span>
+    <span class="c">#: (:obj:`dict` &lt;:obj:`str`, \</span>
+    <span class="c">#:       [ :obj:`str`, :class:`PyTango.CmdArgType`, \</span>
+    <span class="c">#:       [ :obj:`list` &lt;:obj:`int`&gt; ] ] &gt; ) Class Properties</span>
     <span class="n">class_property_list</span> <span class="o">=</span> <span class="p">{</span>
     <span class="p">}</span>
 
-    <span class="c">#:    Device Properties</span>
+    <span class="c">#: (:obj:`dict` &lt;:obj:`str`, \</span>
+    <span class="c">#:       [ :obj:`str`, :class:`PyTango.CmdArgType`, \</span>
+    <span class="c">#:       [ :obj:`list` &lt;:obj:`int`&gt; ] ] &gt; ) Device Properties</span>
     <span class="n">device_property_list</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s">&#39;NumberOfThreads&#39;</span><span class="p">:</span>
         <span class="p">[</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevLong</span><span class="p">,</span>
@@ -1609,7 +1819,9 @@
          <span class="p">[]],</span>
     <span class="p">}</span>
 
-    <span class="c">#:    Command definitions</span>
+    <span class="c">#: (:obj:`dict` &lt;:obj:`str`, \</span>
+    <span class="c">#:       [[ :class:`PyTango.CmdArgType`, :obj:`str`]] &gt;)</span>
+    <span class="c">#:       Command definitions</span>
     <span class="n">cmd_list</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s">&#39;SetScanEnvVariables&#39;</span><span class="p">:</span>
             <span class="p">[[</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevString</span><span class="p">,</span> <span class="s">&quot;environment data&quot;</span><span class="p">],</span>
@@ -1649,7 +1861,7 @@
              <span class="p">[</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevString</span><span class="p">,</span> <span class="s">&quot;mntgrp configuration string&quot;</span><span class="p">]],</span>
         <span class="s">&#39;SwitchProfile&#39;</span><span class="p">:</span>
             <span class="p">[[</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevVoid</span><span class="p">,</span> <span class="s">&quot;&quot;</span><span class="p">],</span>
-             <span class="p">[</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevString</span><span class="p">,</span> <span class="s">&quot;configuration&quot;</span><span class="p">]],</span>
+             <span class="p">[</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevVoid</span><span class="p">,</span> <span class="s">&quot;&quot;</span><span class="p">]],</span>
         <span class="s">&#39;MntGrpConfiguration&#39;</span><span class="p">:</span>
             <span class="p">[[</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevVoid</span><span class="p">,</span> <span class="s">&quot;&quot;</span><span class="p">],</span>
              <span class="p">[</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevString</span><span class="p">,</span> <span class="s">&quot; mntgrp configuration string&quot;</span><span class="p">]],</span>
@@ -1760,7 +1972,11 @@
              <span class="p">[</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevVoid</span><span class="p">,</span> <span class="s">&quot;&quot;</span><span class="p">]],</span>
     <span class="p">}</span>
 
-    <span class="c">#:    Attribute definitions</span>
+    <span class="c">#: (:obj:`dict` &lt;:obj:`str`, \</span>
+    <span class="c">#:       [[ :class:`PyTango.CmdArgType`, \</span>
+    <span class="c">#:          :class:`PyTango.AttrDataFormat`, \</span>
+    <span class="c">#:          :class:`PyTango.AttrWriteType` ], \</span>
+    <span class="c">#:          :obj:`dict` &lt;:obj:`str` , any&gt; ] &gt; ) Attribute definitions</span>
     <span class="n">attr_list</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s">&#39;Components&#39;</span><span class="p">:</span>
             <span class="p">[[</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevString</span><span class="p">,</span>

@@ -981,7 +981,7 @@ of given component</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>numberOfThreads</strong> &#8211; number of threads</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>numberOfThreads</strong> (<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>) &#8211; number of threads</td>
 </tr>
 </tbody>
 </table>
@@ -994,15 +994,18 @@ of given component</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>door</strong> &#8211; door device name</li>
-<li><strong>configdevice</strong> &#8211; configuration server</li>
-<li><strong>channels</strong> &#8211; pool channels</li>
-<li><strong>componentgroup</strong> &#8211; preselected component group</li>
-<li><strong>channelerrors</strong> &#8211; deactivated component errors</li>
+<li><strong>door</strong> (<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>) &#8211; door device name</li>
+<li><strong>configdevice</strong> (<a class="reference external" href="http://www.esrf.fr/computing/cs/tango/tango_doc/kernel_doc/pytango/latest/client_api/device_proxy.html#PyTango.DeviceProxy" title="(in PyTango v8.1)"><tt class="xref py py-class docutils literal"><span class="pre">PyTango.DeviceProxy</span></tt></a>              or <a class="reference external" href="https://nexdatas.github.io/configserver/nxsconfigserver.html#nxsconfigserver.XMLConfigurator.XMLConfigurator" title="(in NXSConfigServer v2.4)"><tt class="xref py py-class docutils literal"><span class="pre">nxsconfigserver.XMLConfigurator.XMLConfigurator</span></tt></a>) &#8211; configuration server</li>
+<li><strong>channels</strong> (<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#list" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">list</span></tt></a> &lt;<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>&gt;) &#8211; pool channels</li>
+<li><strong>componentgroup</strong> (<a class="reference external" href="http://docs.python.org/2.7/library/stdtypes.html#dict" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">dict</span></tt></a> &lt;<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a> , <a class="reference external" href="http://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">bool</span></tt></a>&gt;) &#8211; preselected component group</li>
+<li><strong>channelerrors</strong> (<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#list" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">list</span></tt></a> &lt;<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>&gt;) &#8211; list of deactivated component errors</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">json dictionary with selected active components</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">json dictionary with selected active components</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a></p>
 </td>
 </tr>
 </tbody>
@@ -1017,9 +1020,11 @@ of given component</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>door</strong> &#8211; door device name</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>door</strong> (<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>) &#8211; door device name</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">macroserver device name</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a></td>
 </tr>
 </tbody>
 </table>
@@ -1028,9 +1033,19 @@ of given component</p>
 <dl class="method">
 <dt id="nxsrecconfig.MacroServerPools.MacroServerPools.getPools">
 <tt class="descname">getPools</tt><big>(</big><em>door</em><big>)</big><a class="reference internal" href="_modules/nxsrecconfig/MacroServerPools.html#MacroServerPools.getPools"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nxsrecconfig.MacroServerPools.MacroServerPools.getPools" title="Permalink to this definition">¶</a></dt>
-<dd><p>door pool device proxies
-:param door: door device name
-:returns: pool device proxies</p>
+<dd><p>door pool device proxies</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>door</strong> (<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>) &#8211; door device name</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">pool device proxies</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="http://docs.python.org/2.7/library/functions.html#list" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">list</span></tt></a> &lt;<a class="reference external" href="http://www.esrf.fr/computing/cs/tango/tango_doc/kernel_doc/pytango/latest/client_api/device_proxy.html#PyTango.DeviceProxy" title="(in PyTango v8.1)"><tt class="xref py py-obj docutils literal"><span class="pre">PyTango.DeviceProxy</span></tt></a>&gt;</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -1041,9 +1056,11 @@ of given component</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>door</strong> &#8211; door device</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>door</strong> (<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>) &#8211; door device</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">JSON String with important variables</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a></td>
 </tr>
 </tbody>
 </table>
@@ -1058,9 +1075,9 @@ of given component</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>door</strong> &#8211; door device</li>
-<li><strong>names</strong> &#8211; names of required variables</li>
-<li><strong>data</strong> &#8211; dictionary with resulting data</li>
+<li><strong>door</strong> (<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>) &#8211; door device</li>
+<li><strong>names</strong> (<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#list" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">list</span></tt></a> &lt;<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>&gt;) &#8211; names of required variables</li>
+<li><strong>data</strong> (<a class="reference external" href="http://docs.python.org/2.7/library/stdtypes.html#dict" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">dict</span></tt></a> &lt;<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a> , <cite>any</cite>&gt;) &#8211; dictionary with resulting data</li>
 </ul>
 </td>
 </tr>
@@ -1071,7 +1088,7 @@ of given component</p>
 <dl class="attribute">
 <dt id="nxsrecconfig.MacroServerPools.MacroServerPools.poolBlacklist">
 <tt class="descname">poolBlacklist</tt><em class="property"> = None</em><a class="headerlink" href="#nxsrecconfig.MacroServerPools.MacroServerPools.poolBlacklist" title="Permalink to this definition">¶</a></dt>
-<dd><p>black list of pools</p>
+<dd><p>(<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#list" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">list</span></tt></a> &lt;<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>&gt;) black list of pools</p>
 </dd></dl>
 
 <dl class="method">
@@ -1083,8 +1100,8 @@ of given component</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>door</strong> &#8211; door device</li>
-<li><strong>jdata</strong> &#8211; JSON String with important variables</li>
+<li><strong>door</strong> (<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>) &#8211; door device</li>
+<li><strong>jdata</strong> (<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>) &#8211; JSON String with important variables</li>
 </ul>
 </td>
 </tr>
@@ -1101,9 +1118,9 @@ of given component</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>door</strong> &#8211; door device</li>
-<li><strong>data</strong> &#8211; data dictionary</li>
-<li><strong>cmddata</strong> &#8211; command data dictionary</li>
+<li><strong>door</strong> (<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>) &#8211; door device</li>
+<li><strong>data</strong> (<a class="reference external" href="http://docs.python.org/2.7/library/stdtypes.html#dict" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">dict</span></tt></a> &lt;<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a> , <cite>any</cite>&gt;) &#8211; data dictionary</li>
+<li><strong>cmddata</strong> (<a class="reference external" href="http://docs.python.org/2.7/library/stdtypes.html#dict" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">dict</span></tt></a> &lt;<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a> , <cite>any</cite>&gt;) &#8211; command data dictionary</li>
 </ul>
 </td>
 </tr>
@@ -1119,7 +1136,7 @@ of given component</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>door</strong> &#8211; door device name</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>door</strong> (<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>) &#8211; door device name</td>
 </tr>
 </tbody>
 </table>
@@ -1153,8 +1170,8 @@ DevState.RUNNING - Performing a query</td>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>cl</strong> &#8211; class name</li>
-<li><strong>name</strong> &#8211; device name</li>
+<li><strong>cl</strong> (<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>) &#8211; class name</li>
+<li><strong>name</strong> (<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>) &#8211; device name</li>
 </ul>
 </td>
 </tr>
@@ -1172,6 +1189,8 @@ DevState.RUNNING - Performing a query</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">DevVarStringArray    data record names</td>
 </tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="http://docs.python.org/2.7/library/functions.html#list" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">list</span></tt></a> &lt;<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>&gt;</td>
+</tr>
 </tbody>
 </table>
 </dd></dl>
@@ -1187,6 +1206,8 @@ DevState.RUNNING - Performing a query</td>
 <tr class="field-odd field"><th class="field-name">Brief:</th><td class="field-body">Returns a list of available component names</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">DevVarStringArray    list of available component names</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="http://docs.python.org/2.7/library/functions.html#list" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">list</span></tt></a> &lt;<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>&gt;</td>
 </tr>
 </tbody>
 </table>
@@ -1204,6 +1225,8 @@ DevState.RUNNING - Performing a query</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">DevVarStringArray    list of available DataSource names</td>
 </tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="http://docs.python.org/2.7/library/functions.html#list" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">list</span></tt></a> &lt;<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>&gt;</td>
+</tr>
 </tbody>
 </table>
 </dd></dl>
@@ -1219,6 +1242,8 @@ DevState.RUNNING - Performing a query</td>
 <tr class="field-odd field"><th class="field-name">Brief:</th><td class="field-body">Returns a list of available mntgrp names</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">DevVarStringArray    list of available mntgrp names</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="http://docs.python.org/2.7/library/functions.html#list" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">list</span></tt></a> &lt;<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>&gt;</td>
 </tr>
 </tbody>
 </table>
@@ -1236,6 +1261,8 @@ DevState.RUNNING - Performing a query</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">DevVarStringArray    list of available selection names</td>
 </tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="http://docs.python.org/2.7/library/functions.html#list" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">list</span></tt></a> &lt;<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>&gt;</td>
+</tr>
 </tbody>
 </table>
 </dd></dl>
@@ -1252,6 +1279,8 @@ DevState.RUNNING - Performing a query</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">DevVarStringArray    list of available component names</td>
 </tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="http://docs.python.org/2.7/library/functions.html#list" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">list</span></tt></a> &lt;<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>&gt;</td>
+</tr>
 </tbody>
 </table>
 </dd></dl>
@@ -1267,9 +1296,11 @@ DevState.RUNNING - Performing a query</td>
 <tr class="field-odd field"><th class="field-name">Brief:</th><td class="field-body">JSON dictionary with channel properties
 {channel:property}</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><strong>argin</strong> &#8211; DevString    property type</td>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><strong>argin</strong> (<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>) &#8211; DevString    property type</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">DevString    JSON dictionary with channel properties</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a></td>
 </tr>
 </tbody>
 </table>
@@ -1285,9 +1316,11 @@ DevState.RUNNING - Performing a query</td>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Brief:</th><td class="field-body">describes client datasources from components</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><strong>argin</strong> &#8211; DevVarStringArray    list of component names</td>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><strong>argin</strong> (<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#list" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">list</span></tt></a> &lt;<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>&gt;) &#8211; DevVarStringArray    list of component names</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">DevVarString         description of component datasources</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a></td>
 </tr>
 </tbody>
 </table>
@@ -1305,6 +1338,8 @@ DevState.RUNNING - Performing a query</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">DevVarStringArray    component names</td>
 </tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="http://docs.python.org/2.7/library/functions.html#list" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">list</span></tt></a> &lt;<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>&gt;</td>
+</tr>
 </tbody>
 </table>
 </dd></dl>
@@ -1321,6 +1356,8 @@ DevState.RUNNING - Performing a query</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">DevString   list of available component names</td>
 </tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a></td>
+</tr>
 </tbody>
 </table>
 </dd></dl>
@@ -1335,9 +1372,11 @@ DevState.RUNNING - Performing a query</td>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Brief:</th><td class="field-body">create dynamic component</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><strong>argin</strong> &#8211; DevVarStringArray    list of datasource parameters</td>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><strong>argin</strong> (<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#list" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">list</span></tt></a> &lt;<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>&gt;) &#8211; DevVarStringArray    list of datasource parameters</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">DevVarString         name of created dynamic component</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a></td>
 </tr>
 </tbody>
 </table>
@@ -1353,9 +1392,11 @@ DevState.RUNNING - Performing a query</td>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Brief:</th><td class="field-body">create configuration from the given components</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><strong>argin</strong> &#8211; DevVarStringArray    list of component names</td>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><strong>argin</strong> (<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#list" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">list</span></tt></a> &lt;<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>&gt;) &#8211; DevVarStringArray    list of component names</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">DevVarString         XML configuration string</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a></td>
 </tr>
 </tbody>
 </table>
@@ -1371,9 +1412,11 @@ DevState.RUNNING - Performing a query</td>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Brief:</th><td class="field-body">descrive datasources</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><strong>argin</strong> &#8211; DevVarStringArray    list of datasource names</td>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><strong>argin</strong> (<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#list" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">list</span></tt></a> &lt;<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>&gt;) &#8211; DevVarStringArray    list of datasource names</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">DevVarStringArray    description of datasources</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Rtypes:</th><td class="field-body"><a class="reference external" href="http://docs.python.org/2.7/library/functions.html#list" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">list</span></tt></a> &lt;<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>&gt;</td>
 </tr>
 </tbody>
 </table>
@@ -1403,7 +1446,7 @@ DevState.RUNNING - Performing a query</td>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Brief:</th><td class="field-body">Deletes the given mntgrp</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><strong>argin</strong> &#8211; DevString  measurement group name</td>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><strong>argin</strong> (<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>) &#8211; DevString  measurement group name</td>
 </tr>
 </tbody>
 </table>
@@ -1449,6 +1492,8 @@ DevState.RUNNING - Performing a query</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">DevString JSON dictionary with full device names</td>
 </tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a></td>
+</tr>
 </tbody>
 </table>
 </dd></dl>
@@ -1489,7 +1534,9 @@ DevState.RUNNING - Performing a query</td>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Brief:</th><td class="field-body">returns true if mntgrp was changed</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if mntgrp was changed</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="http://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">bool</span></tt></a></td>
 </tr>
 </tbody>
 </table>
@@ -1521,6 +1568,8 @@ DevState.RUNNING - Performing a query</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">DevVarStringArray    component names</td>
 </tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="http://docs.python.org/2.7/library/functions.html#list" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">list</span></tt></a> &lt;<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>&gt;</td>
+</tr>
 </tbody>
 </table>
 </dd></dl>
@@ -1534,6 +1583,10 @@ DevState.RUNNING - Performing a query</td>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Brief:</th><td class="field-body">returns mntgrp configuration</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">mntgrp configuration in json string</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a></td>
 </tr>
 </tbody>
 </table>
@@ -1551,6 +1604,8 @@ DevState.RUNNING - Performing a query</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">DevVarStringArray    list of muted channel names</td>
 </tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="http://docs.python.org/2.7/library/functions.html#list" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">list</span></tt></a> &lt;<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>&gt;</td>
+</tr>
 </tbody>
 </table>
 </dd></dl>
@@ -1565,9 +1620,11 @@ DevState.RUNNING - Performing a query</td>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Brief:</th><td class="field-body">Returns a list of available pool channels</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><strong>argin</strong> &#8211; DevString            name of pool list attribute</td>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><strong>argin</strong> (<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>) &#8211; DevString            name of pool list attribute</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">DevVarStringArray    list of available pool elements</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="http://docs.python.org/2.7/library/functions.html#list" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">list</span></tt></a> &lt;<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>&gt;</td>
 </tr>
 </tbody>
 </table>
@@ -1599,6 +1656,8 @@ DevState.RUNNING - Performing a query</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">DevVarStringArray    component names</td>
 </tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="http://docs.python.org/2.7/library/functions.html#list" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">list</span></tt></a> &lt;<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>&gt;</td>
+</tr>
 </tbody>
 </table>
 </dd></dl>
@@ -1615,6 +1674,8 @@ DevState.RUNNING - Performing a query</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">DevVarStringArray    component names</td>
 </tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="http://docs.python.org/2.7/library/functions.html#list" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">list</span></tt></a> &lt;<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>&gt;</td>
+</tr>
 </tbody>
 </table>
 </dd></dl>
@@ -1629,7 +1690,7 @@ DevState.RUNNING - Performing a query</td>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Brief:</th><td class="field-body">Deletes the given dynamic component</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><strong>argin</strong> &#8211; DevString  dynamic component name</td>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><strong>argin</strong> (<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>) &#8211; DevString  dynamic component name</td>
 </tr>
 </tbody>
 </table>
@@ -1678,6 +1739,8 @@ in environment variables</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">DevString    json dictionary with environment data</td>
 </tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a></td>
+</tr>
 </tbody>
 </table>
 </dd></dl>
@@ -1693,6 +1756,8 @@ in environment variables</td>
 <tr class="field-odd field"><th class="field-name">Brief:</th><td class="field-body">Sets the selected components</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">DevVarStringArray    component names</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="http://docs.python.org/2.7/library/functions.html#list" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">list</span></tt></a> &lt;<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>&gt;</td>
 </tr>
 </tbody>
 </table>
@@ -1710,6 +1775,8 @@ in environment variables</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">DevVarStringArray    component names</td>
 </tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="http://docs.python.org/2.7/library/functions.html#list" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">list</span></tt></a> &lt;<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>&gt;</td>
+</tr>
 </tbody>
 </table>
 </dd></dl>
@@ -1724,7 +1791,7 @@ in environment variables</td>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Brief:</th><td class="field-body">set Channel Properties of given type</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><strong>argin</strong> &#8211; DevVarStringArray two element list with a property type
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><strong>argin</strong> ([<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>, <a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>]) &#8211; DevVarStringArray two element list with a property type
 and JSON value dictionary {channel:property}</td>
 </tr>
 </tbody>
@@ -1742,9 +1809,11 @@ and JSON value dictionary {channel:property}</td>
 <tr class="field-odd field"><th class="field-name">Brief:</th><td class="field-body">Stores ScanDir, ScanFile and NeXusSelectorDevice
 in environment variables</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">DevString    json dictionary with environment data</td>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><strong>argin</strong> (<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>) &#8211; json dictionary with environment data</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">DevLong    scan ID</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="http://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">int</span></tt></a></td>
 </tr>
 </tbody>
 </table>
@@ -1805,6 +1874,8 @@ and updates serialno if appendEntry selected</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">mntgrp configuration string</td>
 </tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a></td>
+</tr>
 </tbody>
 </table>
 </dd></dl>
@@ -1821,6 +1892,8 @@ and updates serialno if appendEntry selected</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">JSON string with mntgrp configuration info</td>
 </tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a></td>
+</tr>
 </tbody>
 </table>
 </dd></dl>
@@ -1836,6 +1909,8 @@ and updates serialno if appendEntry selected</td>
 <tr class="field-odd field"><th class="field-name">Brief:</th><td class="field-body">Returns a list of available component names</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">DevString    list of available component names</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a></td>
 </tr>
 </tbody>
 </table>
@@ -1863,204 +1938,544 @@ and updates serialno if appendEntry selected</td>
 <dt id="nxsrecconfig.NXSConfig.NXSRecSelector.is_AdministratorDataNames_allowed">
 <tt class="descname">is_AdministratorDataNames_allowed</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/nxsrecconfig/NXSConfig.html#NXSRecSelector.is_AdministratorDataNames_allowed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nxsrecconfig.NXSConfig.NXSRecSelector.is_AdministratorDataNames_allowed" title="Permalink to this definition">¶</a></dt>
 <dd><p>AdministratorDataNames command State Machine</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if the operation allowed</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="http://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">bool</span></tt></a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="nxsrecconfig.NXSConfig.NXSRecSelector.is_AvailableComponents_allowed">
 <tt class="descname">is_AvailableComponents_allowed</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/nxsrecconfig/NXSConfig.html#NXSRecSelector.is_AvailableComponents_allowed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nxsrecconfig.NXSConfig.NXSRecSelector.is_AvailableComponents_allowed" title="Permalink to this definition">¶</a></dt>
 <dd><p>AvailableComponents command State Machine</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if the operation allowed</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="http://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">bool</span></tt></a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="nxsrecconfig.NXSConfig.NXSRecSelector.is_AvailableDataSources_allowed">
 <tt class="descname">is_AvailableDataSources_allowed</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/nxsrecconfig/NXSConfig.html#NXSRecSelector.is_AvailableDataSources_allowed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nxsrecconfig.NXSConfig.NXSRecSelector.is_AvailableDataSources_allowed" title="Permalink to this definition">¶</a></dt>
 <dd><p>AvailableDataSources command State Machine</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if the operation allowed</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="http://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">bool</span></tt></a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="nxsrecconfig.NXSConfig.NXSRecSelector.is_AvailableMntGrps_allowed">
 <tt class="descname">is_AvailableMntGrps_allowed</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/nxsrecconfig/NXSConfig.html#NXSRecSelector.is_AvailableMntGrps_allowed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nxsrecconfig.NXSConfig.NXSRecSelector.is_AvailableMntGrps_allowed" title="Permalink to this definition">¶</a></dt>
 <dd><p>AvailableMntGrps command State Machine</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if the operation allowed</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="http://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">bool</span></tt></a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="nxsrecconfig.NXSConfig.NXSRecSelector.is_AvailableProfiles_allowed">
 <tt class="descname">is_AvailableProfiles_allowed</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/nxsrecconfig/NXSConfig.html#NXSRecSelector.is_AvailableProfiles_allowed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nxsrecconfig.NXSConfig.NXSRecSelector.is_AvailableProfiles_allowed" title="Permalink to this definition">¶</a></dt>
 <dd><p>AvailableProfiles command State Machine</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if the operation allowed</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="http://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">bool</span></tt></a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="nxsrecconfig.NXSConfig.NXSRecSelector.is_AvailableTimers_allowed">
 <tt class="descname">is_AvailableTimers_allowed</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/nxsrecconfig/NXSConfig.html#NXSRecSelector.is_AvailableTimers_allowed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nxsrecconfig.NXSConfig.NXSRecSelector.is_AvailableTimers_allowed" title="Permalink to this definition">¶</a></dt>
 <dd><p>AvailableTimers command State Machine</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if the operation allowed</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="http://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">bool</span></tt></a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="nxsrecconfig.NXSConfig.NXSRecSelector.is_ChannelProperties_allowed">
 <tt class="descname">is_ChannelProperties_allowed</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/nxsrecconfig/NXSConfig.html#NXSRecSelector.is_ChannelProperties_allowed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nxsrecconfig.NXSConfig.NXSRecSelector.is_ChannelProperties_allowed" title="Permalink to this definition">¶</a></dt>
 <dd><p>ChannelProperties command State Machine</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if the operation allowed</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="http://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">bool</span></tt></a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="nxsrecconfig.NXSConfig.NXSRecSelector.is_ComponentClientSources_allowed">
 <tt class="descname">is_ComponentClientSources_allowed</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/nxsrecconfig/NXSConfig.html#NXSRecSelector.is_ComponentClientSources_allowed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nxsrecconfig.NXSConfig.NXSRecSelector.is_ComponentClientSources_allowed" title="Permalink to this definition">¶</a></dt>
 <dd><p>ComponentClientSources command State Machine</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if the operation allowed</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="http://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">bool</span></tt></a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="nxsrecconfig.NXSConfig.NXSRecSelector.is_ComponentDataSources_allowed">
 <tt class="descname">is_ComponentDataSources_allowed</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/nxsrecconfig/NXSConfig.html#NXSRecSelector.is_ComponentDataSources_allowed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nxsrecconfig.NXSConfig.NXSRecSelector.is_ComponentDataSources_allowed" title="Permalink to this definition">¶</a></dt>
 <dd><p>ComponentDataSources command State Machine</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if the operation allowed</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="http://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">bool</span></tt></a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="nxsrecconfig.NXSConfig.NXSRecSelector.is_ComponentDescription_allowed">
 <tt class="descname">is_ComponentDescription_allowed</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/nxsrecconfig/NXSConfig.html#NXSRecSelector.is_ComponentDescription_allowed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nxsrecconfig.NXSConfig.NXSRecSelector.is_ComponentDescription_allowed" title="Permalink to this definition">¶</a></dt>
 <dd><p>ComponentDescription command State Machine</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if the operation allowed</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="http://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">bool</span></tt></a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="nxsrecconfig.NXSConfig.NXSRecSelector.is_CreateDynamicComponent_allowed">
 <tt class="descname">is_CreateDynamicComponent_allowed</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/nxsrecconfig/NXSConfig.html#NXSRecSelector.is_CreateDynamicComponent_allowed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nxsrecconfig.NXSConfig.NXSRecSelector.is_CreateDynamicComponent_allowed" title="Permalink to this definition">¶</a></dt>
 <dd><p>CreateDynamicComponent command State Machine</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if the operation allowed</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="http://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">bool</span></tt></a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="nxsrecconfig.NXSConfig.NXSRecSelector.is_CreateWriterConfiguration_allowed">
 <tt class="descname">is_CreateWriterConfiguration_allowed</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/nxsrecconfig/NXSConfig.html#NXSRecSelector.is_CreateWriterConfiguration_allowed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nxsrecconfig.NXSConfig.NXSRecSelector.is_CreateWriterConfiguration_allowed" title="Permalink to this definition">¶</a></dt>
 <dd><p>CreateWriterConfiguration command State Machine</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if the operation allowed</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="http://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">bool</span></tt></a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="nxsrecconfig.NXSConfig.NXSRecSelector.is_DataSourceDescription_allowed">
 <tt class="descname">is_DataSourceDescription_allowed</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/nxsrecconfig/NXSConfig.html#NXSRecSelector.is_DataSourceDescription_allowed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nxsrecconfig.NXSConfig.NXSRecSelector.is_DataSourceDescription_allowed" title="Permalink to this definition">¶</a></dt>
 <dd><p>DataSourceDescription command State Machine</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if the operation allowed</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="http://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">bool</span></tt></a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="nxsrecconfig.NXSConfig.NXSRecSelector.is_DeleteAllProfiles_allowed">
 <tt class="descname">is_DeleteAllProfiles_allowed</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/nxsrecconfig/NXSConfig.html#NXSRecSelector.is_DeleteAllProfiles_allowed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nxsrecconfig.NXSConfig.NXSRecSelector.is_DeleteAllProfiles_allowed" title="Permalink to this definition">¶</a></dt>
 <dd><p>DeleteAllProfiles command State Machine</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if the operation allowed</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="http://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">bool</span></tt></a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="nxsrecconfig.NXSConfig.NXSRecSelector.is_DeleteProfile_allowed">
 <tt class="descname">is_DeleteProfile_allowed</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/nxsrecconfig/NXSConfig.html#NXSRecSelector.is_DeleteProfile_allowed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nxsrecconfig.NXSConfig.NXSRecSelector.is_DeleteProfile_allowed" title="Permalink to this definition">¶</a></dt>
 <dd><p>DeleteProfile command State Machine</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if the operation allowed</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="http://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">bool</span></tt></a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="nxsrecconfig.NXSConfig.NXSRecSelector.is_ExportEnv_allowed">
 <tt class="descname">is_ExportEnv_allowed</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/nxsrecconfig/NXSConfig.html#NXSRecSelector.is_ExportEnv_allowed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nxsrecconfig.NXSConfig.NXSRecSelector.is_ExportEnv_allowed" title="Permalink to this definition">¶</a></dt>
 <dd><p>ExportMntGrp command State Machine</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if the operation allowed</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="http://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">bool</span></tt></a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="nxsrecconfig.NXSConfig.NXSRecSelector.is_FetchProfile_allowed">
 <tt class="descname">is_FetchProfile_allowed</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/nxsrecconfig/NXSConfig.html#NXSRecSelector.is_FetchProfile_allowed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nxsrecconfig.NXSConfig.NXSRecSelector.is_FetchProfile_allowed" title="Permalink to this definition">¶</a></dt>
 <dd><p>FetchProfile command State Machine</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if the operation allowed</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="http://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">bool</span></tt></a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="nxsrecconfig.NXSConfig.NXSRecSelector.is_FullDeviceNames_allowed">
 <tt class="descname">is_FullDeviceNames_allowed</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/nxsrecconfig/NXSConfig.html#NXSRecSelector.is_FullDeviceNames_allowed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nxsrecconfig.NXSConfig.NXSRecSelector.is_FullDeviceNames_allowed" title="Permalink to this definition">¶</a></dt>
 <dd><p>FullDeviceNames command State Machine</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if the operation allowed</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="http://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">bool</span></tt></a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="nxsrecconfig.NXSConfig.NXSRecSelector.is_ImportEnv_allowed">
 <tt class="descname">is_ImportEnv_allowed</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/nxsrecconfig/NXSConfig.html#NXSRecSelector.is_ImportEnv_allowed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nxsrecconfig.NXSConfig.NXSRecSelector.is_ImportEnv_allowed" title="Permalink to this definition">¶</a></dt>
 <dd><p>ImportMntGrp command State Machine</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if the operation allowed</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="http://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">bool</span></tt></a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="nxsrecconfig.NXSConfig.NXSRecSelector.is_ImportMntGrp_allowed">
 <tt class="descname">is_ImportMntGrp_allowed</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/nxsrecconfig/NXSConfig.html#NXSRecSelector.is_ImportMntGrp_allowed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nxsrecconfig.NXSConfig.NXSRecSelector.is_ImportMntGrp_allowed" title="Permalink to this definition">¶</a></dt>
 <dd><p>ImportMntGrp command State Machine</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if the operation allowed</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="http://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">bool</span></tt></a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="nxsrecconfig.NXSConfig.NXSRecSelector.is_IsMntGrpUpdated_allowed">
 <tt class="descname">is_IsMntGrpUpdated_allowed</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/nxsrecconfig/NXSConfig.html#NXSRecSelector.is_IsMntGrpUpdated_allowed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nxsrecconfig.NXSConfig.NXSRecSelector.is_IsMntGrpUpdated_allowed" title="Permalink to this definition">¶</a></dt>
 <dd><p>IsMntGrpUpdated command State Machine</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if the operation allowed</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="http://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">bool</span></tt></a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="nxsrecconfig.NXSConfig.NXSRecSelector.is_LoadProfile_allowed">
 <tt class="descname">is_LoadProfile_allowed</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/nxsrecconfig/NXSConfig.html#NXSRecSelector.is_LoadProfile_allowed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nxsrecconfig.NXSConfig.NXSRecSelector.is_LoadProfile_allowed" title="Permalink to this definition">¶</a></dt>
 <dd><p>LoadProfile command State Machine</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if the operation allowed</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="http://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">bool</span></tt></a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="nxsrecconfig.NXSConfig.NXSRecSelector.is_MandatoryComponents_allowed">
 <tt class="descname">is_MandatoryComponents_allowed</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/nxsrecconfig/NXSConfig.html#NXSRecSelector.is_MandatoryComponents_allowed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nxsrecconfig.NXSConfig.NXSRecSelector.is_MandatoryComponents_allowed" title="Permalink to this definition">¶</a></dt>
 <dd><p>MandatoryComponents command State Machine</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if the operation allowed</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="http://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">bool</span></tt></a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="nxsrecconfig.NXSConfig.NXSRecSelector.is_MntGrpConfiguration_allowed">
 <tt class="descname">is_MntGrpConfiguration_allowed</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/nxsrecconfig/NXSConfig.html#NXSRecSelector.is_MntGrpConfiguration_allowed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nxsrecconfig.NXSConfig.NXSRecSelector.is_MntGrpConfiguration_allowed" title="Permalink to this definition">¶</a></dt>
 <dd><p>MntGrpConfiguration command State Machine</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if the operation allowed</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="http://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">bool</span></tt></a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="nxsrecconfig.NXSConfig.NXSRecSelector.is_MutedChannels_allowed">
 <tt class="descname">is_MutedChannels_allowed</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/nxsrecconfig/NXSConfig.html#NXSRecSelector.is_MutedChannels_allowed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nxsrecconfig.NXSConfig.NXSRecSelector.is_MutedChannels_allowed" title="Permalink to this definition">¶</a></dt>
 <dd><p>MutedChannels command State Machine</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if the operation allowed</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="http://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">bool</span></tt></a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="nxsrecconfig.NXSConfig.NXSRecSelector.is_PoolElementNames_allowed">
 <tt class="descname">is_PoolElementNames_allowed</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/nxsrecconfig/NXSConfig.html#NXSRecSelector.is_PoolElementNames_allowed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nxsrecconfig.NXSConfig.NXSRecSelector.is_PoolElementNames_allowed" title="Permalink to this definition">¶</a></dt>
 <dd><p>PoolElementNames command State Machine</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if the operation allowed</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="http://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">bool</span></tt></a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="nxsrecconfig.NXSConfig.NXSRecSelector.is_PreselectComponents_allowed">
 <tt class="descname">is_PreselectComponents_allowed</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/nxsrecconfig/NXSConfig.html#NXSRecSelector.is_PreselectComponents_allowed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nxsrecconfig.NXSConfig.NXSRecSelector.is_PreselectComponents_allowed" title="Permalink to this definition">¶</a></dt>
 <dd><p>PreselectComponents command State Machine</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if the operation allowed</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="http://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">bool</span></tt></a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="nxsrecconfig.NXSConfig.NXSRecSelector.is_PreselectedComponents_allowed">
 <tt class="descname">is_PreselectedComponents_allowed</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/nxsrecconfig/NXSConfig.html#NXSRecSelector.is_PreselectedComponents_allowed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nxsrecconfig.NXSConfig.NXSRecSelector.is_PreselectedComponents_allowed" title="Permalink to this definition">¶</a></dt>
 <dd><p>PreselectedComponents command State Machine</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if the operation allowed</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="http://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">bool</span></tt></a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="nxsrecconfig.NXSConfig.NXSRecSelector.is_PreselectedDataSources_allowed">
 <tt class="descname">is_PreselectedDataSources_allowed</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/nxsrecconfig/NXSConfig.html#NXSRecSelector.is_PreselectedDataSources_allowed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nxsrecconfig.NXSConfig.NXSRecSelector.is_PreselectedDataSources_allowed" title="Permalink to this definition">¶</a></dt>
 <dd><p>PreselectedDataSources command State Machine</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if the operation allowed</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="http://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">bool</span></tt></a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="nxsrecconfig.NXSConfig.NXSRecSelector.is_RemoveDynamicComponent_allowed">
 <tt class="descname">is_RemoveDynamicComponent_allowed</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/nxsrecconfig/NXSConfig.html#NXSRecSelector.is_RemoveDynamicComponent_allowed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nxsrecconfig.NXSConfig.NXSRecSelector.is_RemoveDynamicComponent_allowed" title="Permalink to this definition">¶</a></dt>
 <dd><p>RemoveDynamicComponent command State Machine</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if the operation allowed</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="http://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">bool</span></tt></a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="nxsrecconfig.NXSConfig.NXSRecSelector.is_ResetPreselectedComponents_allowed">
 <tt class="descname">is_ResetPreselectedComponents_allowed</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/nxsrecconfig/NXSConfig.html#NXSRecSelector.is_ResetPreselectedComponents_allowed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nxsrecconfig.NXSConfig.NXSRecSelector.is_ResetPreselectedComponents_allowed" title="Permalink to this definition">¶</a></dt>
 <dd><p>ResetPreselectedComponents command State Machine</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if the operation allowed</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="http://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">bool</span></tt></a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="nxsrecconfig.NXSConfig.NXSRecSelector.is_SaveProfile_allowed">
 <tt class="descname">is_SaveProfile_allowed</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/nxsrecconfig/NXSConfig.html#NXSRecSelector.is_SaveProfile_allowed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nxsrecconfig.NXSConfig.NXSRecSelector.is_SaveProfile_allowed" title="Permalink to this definition">¶</a></dt>
 <dd><p>SaveProfile command State Machine</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if the operation allowed</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="http://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">bool</span></tt></a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="nxsrecconfig.NXSConfig.NXSRecSelector.is_ScanEnvVariables_allowed">
 <tt class="descname">is_ScanEnvVariables_allowed</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/nxsrecconfig/NXSConfig.html#NXSRecSelector.is_ScanEnvVariables_allowed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nxsrecconfig.NXSConfig.NXSRecSelector.is_ScanEnvVariables_allowed" title="Permalink to this definition">¶</a></dt>
 <dd><p>ScanEnvVariables command State Machine</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if the operation allowed</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="http://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">bool</span></tt></a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="nxsrecconfig.NXSConfig.NXSRecSelector.is_SelectedComponents_allowed">
 <tt class="descname">is_SelectedComponents_allowed</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/nxsrecconfig/NXSConfig.html#NXSRecSelector.is_SelectedComponents_allowed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nxsrecconfig.NXSConfig.NXSRecSelector.is_SelectedComponents_allowed" title="Permalink to this definition">¶</a></dt>
 <dd><p>SelectedComponents command State Machine</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if the operation allowed</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="http://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">bool</span></tt></a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -2073,54 +2488,144 @@ and updates serialno if appendEntry selected</td>
 <dt id="nxsrecconfig.NXSConfig.NXSRecSelector.is_SetChannelProperties_allowed">
 <tt class="descname">is_SetChannelProperties_allowed</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/nxsrecconfig/NXSConfig.html#NXSRecSelector.is_SetChannelProperties_allowed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nxsrecconfig.NXSConfig.NXSRecSelector.is_SetChannelProperties_allowed" title="Permalink to this definition">¶</a></dt>
 <dd><p>SetChannelProperties command State Machine</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if the operation allowed</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="http://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">bool</span></tt></a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="nxsrecconfig.NXSConfig.NXSRecSelector.is_SetScanEnvVariables_allowed">
 <tt class="descname">is_SetScanEnvVariables_allowed</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/nxsrecconfig/NXSConfig.html#NXSRecSelector.is_SetScanEnvVariables_allowed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nxsrecconfig.NXSConfig.NXSRecSelector.is_SetScanEnvVariables_allowed" title="Permalink to this definition">¶</a></dt>
 <dd><p>SetScanEnvVariables command State Machine</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if the operation allowed</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="http://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">bool</span></tt></a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="nxsrecconfig.NXSConfig.NXSRecSelector.is_StepDataSources_write_allowed">
 <tt class="descname">is_StepDataSources_write_allowed</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/nxsrecconfig/NXSConfig.html#NXSRecSelector.is_StepDataSources_write_allowed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nxsrecconfig.NXSConfig.NXSRecSelector.is_StepDataSources_write_allowed" title="Permalink to this definition">¶</a></dt>
 <dd><p>StepDataSources attribute Write State Machine</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if the operation allowed</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="http://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">bool</span></tt></a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="nxsrecconfig.NXSConfig.NXSRecSelector.is_StoreProfile_allowed">
 <tt class="descname">is_StoreProfile_allowed</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/nxsrecconfig/NXSConfig.html#NXSRecSelector.is_StoreProfile_allowed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nxsrecconfig.NXSConfig.NXSRecSelector.is_StoreProfile_allowed" title="Permalink to this definition">¶</a></dt>
 <dd><p>StoreProfile command State Machine</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if the operation allowed</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="http://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">bool</span></tt></a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="nxsrecconfig.NXSConfig.NXSRecSelector.is_SwitchProfile_allowed">
 <tt class="descname">is_SwitchProfile_allowed</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/nxsrecconfig/NXSConfig.html#NXSRecSelector.is_SwitchProfile_allowed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nxsrecconfig.NXSConfig.NXSRecSelector.is_SwitchProfile_allowed" title="Permalink to this definition">¶</a></dt>
 <dd><p>SwitchProfile command State Machine</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if the operation allowed</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="http://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">bool</span></tt></a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="nxsrecconfig.NXSConfig.NXSRecSelector.is_UpdateConfigVariables_allowed">
 <tt class="descname">is_UpdateConfigVariables_allowed</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/nxsrecconfig/NXSConfig.html#NXSRecSelector.is_UpdateConfigVariables_allowed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nxsrecconfig.NXSConfig.NXSRecSelector.is_UpdateConfigVariables_allowed" title="Permalink to this definition">¶</a></dt>
 <dd><p>UpdateConfigVariables command State Machine</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if the operation allowed</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="http://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">bool</span></tt></a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="nxsrecconfig.NXSConfig.NXSRecSelector.is_UpdateMntGrp_allowed">
 <tt class="descname">is_UpdateMntGrp_allowed</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/nxsrecconfig/NXSConfig.html#NXSRecSelector.is_UpdateMntGrp_allowed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nxsrecconfig.NXSConfig.NXSRecSelector.is_UpdateMntGrp_allowed" title="Permalink to this definition">¶</a></dt>
 <dd><p>UpdateMntGrp command State Machine</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if the operation allowed</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="http://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">bool</span></tt></a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="nxsrecconfig.NXSConfig.NXSRecSelector.is_UpdateProfile_allowed">
 <tt class="descname">is_UpdateProfile_allowed</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/nxsrecconfig/NXSConfig.html#NXSRecSelector.is_UpdateProfile_allowed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nxsrecconfig.NXSConfig.NXSRecSelector.is_UpdateProfile_allowed" title="Permalink to this definition">¶</a></dt>
 <dd><p>UpdateProfile command State Machine</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if the operation allowed</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="http://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">bool</span></tt></a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="nxsrecconfig.NXSConfig.NXSRecSelector.is_VariableComponents_allowed">
 <tt class="descname">is_VariableComponents_allowed</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/nxsrecconfig/NXSConfig.html#NXSRecSelector.is_VariableComponents_allowed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nxsrecconfig.NXSConfig.NXSRecSelector.is_VariableComponents_allowed" title="Permalink to this definition">¶</a></dt>
 <dd><p>VariableComponents command State Machine</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if the operation allowed</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="http://docs.python.org/2.7/library/functions.html#bool" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">bool</span></tt></a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -2131,7 +2636,7 @@ and updates serialno if appendEntry selected</td>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>attr</strong> &#8211; read attribute</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>attr</strong> (<a class="reference external" href="http://www.esrf.fr/computing/cs/tango/tango_doc/kernel_doc/pytango/latest/server_api/attribute.html#PyTango.Attribute" title="(in PyTango v8.1)"><tt class="xref py py-class docutils literal"><span class="pre">PyTango.Attribute</span></tt></a>) &#8211; read attribute</td>
 </tr>
 </tbody>
 </table>
@@ -2145,7 +2650,7 @@ and updates serialno if appendEntry selected</td>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>attr</strong> &#8211; read attribute</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>attr</strong> (<a class="reference external" href="http://www.esrf.fr/computing/cs/tango/tango_doc/kernel_doc/pytango/latest/server_api/attribute.html#PyTango.Attribute" title="(in PyTango v8.1)"><tt class="xref py py-class docutils literal"><span class="pre">PyTango.Attribute</span></tt></a>) &#8211; read attribute</td>
 </tr>
 </tbody>
 </table>
@@ -2159,7 +2664,7 @@ and updates serialno if appendEntry selected</td>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>attr</strong> &#8211; read attribute</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>attr</strong> (<a class="reference external" href="http://www.esrf.fr/computing/cs/tango/tango_doc/kernel_doc/pytango/latest/server_api/attribute.html#PyTango.Attribute" title="(in PyTango v8.1)"><tt class="xref py py-class docutils literal"><span class="pre">PyTango.Attribute</span></tt></a>) &#8211; read attribute</td>
 </tr>
 </tbody>
 </table>
@@ -2173,7 +2678,7 @@ and updates serialno if appendEntry selected</td>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>attr</strong> &#8211; read attribute</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>attr</strong> (<a class="reference external" href="http://www.esrf.fr/computing/cs/tango/tango_doc/kernel_doc/pytango/latest/server_api/attribute.html#PyTango.Attribute" title="(in PyTango v8.1)"><tt class="xref py py-class docutils literal"><span class="pre">PyTango.Attribute</span></tt></a>) &#8211; read attribute</td>
 </tr>
 </tbody>
 </table>
@@ -2187,7 +2692,7 @@ and updates serialno if appendEntry selected</td>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>attr</strong> &#8211; read attribute</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>attr</strong> (<a class="reference external" href="http://www.esrf.fr/computing/cs/tango/tango_doc/kernel_doc/pytango/latest/server_api/attribute.html#PyTango.Attribute" title="(in PyTango v8.1)"><tt class="xref py py-class docutils literal"><span class="pre">PyTango.Attribute</span></tt></a>) &#8211; read attribute</td>
 </tr>
 </tbody>
 </table>
@@ -2201,7 +2706,7 @@ and updates serialno if appendEntry selected</td>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>attr</strong> &#8211; read attribute</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>attr</strong> (<a class="reference external" href="http://www.esrf.fr/computing/cs/tango/tango_doc/kernel_doc/pytango/latest/server_api/attribute.html#PyTango.Attribute" title="(in PyTango v8.1)"><tt class="xref py py-class docutils literal"><span class="pre">PyTango.Attribute</span></tt></a>) &#8211; read attribute</td>
 </tr>
 </tbody>
 </table>
@@ -2215,7 +2720,7 @@ and updates serialno if appendEntry selected</td>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>attr</strong> &#8211; read attribute</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>attr</strong> (<a class="reference external" href="http://www.esrf.fr/computing/cs/tango/tango_doc/kernel_doc/pytango/latest/server_api/attribute.html#PyTango.Attribute" title="(in PyTango v8.1)"><tt class="xref py py-class docutils literal"><span class="pre">PyTango.Attribute</span></tt></a>) &#8211; read attribute</td>
 </tr>
 </tbody>
 </table>
@@ -2229,7 +2734,7 @@ and updates serialno if appendEntry selected</td>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>attr</strong> &#8211; read attribute</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>attr</strong> (<a class="reference external" href="http://www.esrf.fr/computing/cs/tango/tango_doc/kernel_doc/pytango/latest/server_api/attribute.html#PyTango.Attribute" title="(in PyTango v8.1)"><tt class="xref py py-class docutils literal"><span class="pre">PyTango.Attribute</span></tt></a>) &#8211; read attribute</td>
 </tr>
 </tbody>
 </table>
@@ -2243,7 +2748,7 @@ and updates serialno if appendEntry selected</td>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>attr</strong> &#8211; read attribute</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>attr</strong> (<a class="reference external" href="http://www.esrf.fr/computing/cs/tango/tango_doc/kernel_doc/pytango/latest/server_api/attribute.html#PyTango.Attribute" title="(in PyTango v8.1)"><tt class="xref py py-class docutils literal"><span class="pre">PyTango.Attribute</span></tt></a>) &#8211; read attribute</td>
 </tr>
 </tbody>
 </table>
@@ -2257,7 +2762,7 @@ and updates serialno if appendEntry selected</td>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>attr</strong> &#8211; read attribute</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>attr</strong> (<a class="reference external" href="http://www.esrf.fr/computing/cs/tango/tango_doc/kernel_doc/pytango/latest/server_api/attribute.html#PyTango.Attribute" title="(in PyTango v8.1)"><tt class="xref py py-class docutils literal"><span class="pre">PyTango.Attribute</span></tt></a>) &#8211; read attribute</td>
 </tr>
 </tbody>
 </table>
@@ -2271,7 +2776,7 @@ and updates serialno if appendEntry selected</td>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>attr</strong> &#8211; read attribute</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>attr</strong> (<a class="reference external" href="http://www.esrf.fr/computing/cs/tango/tango_doc/kernel_doc/pytango/latest/server_api/attribute.html#PyTango.Attribute" title="(in PyTango v8.1)"><tt class="xref py py-class docutils literal"><span class="pre">PyTango.Attribute</span></tt></a>) &#8211; read attribute</td>
 </tr>
 </tbody>
 </table>
@@ -2285,7 +2790,7 @@ and updates serialno if appendEntry selected</td>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>attr</strong> &#8211; read attribute</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>attr</strong> (<a class="reference external" href="http://www.esrf.fr/computing/cs/tango/tango_doc/kernel_doc/pytango/latest/server_api/attribute.html#PyTango.Attribute" title="(in PyTango v8.1)"><tt class="xref py py-class docutils literal"><span class="pre">PyTango.Attribute</span></tt></a>) &#8211; read attribute</td>
 </tr>
 </tbody>
 </table>
@@ -2299,7 +2804,7 @@ and updates serialno if appendEntry selected</td>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>attr</strong> &#8211; read attribute</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>attr</strong> (<a class="reference external" href="http://www.esrf.fr/computing/cs/tango/tango_doc/kernel_doc/pytango/latest/server_api/attribute.html#PyTango.Attribute" title="(in PyTango v8.1)"><tt class="xref py py-class docutils literal"><span class="pre">PyTango.Attribute</span></tt></a>) &#8211; read attribute</td>
 </tr>
 </tbody>
 </table>
@@ -2313,7 +2818,7 @@ and updates serialno if appendEntry selected</td>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>attr</strong> &#8211; read attribute</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>attr</strong> (<a class="reference external" href="http://www.esrf.fr/computing/cs/tango/tango_doc/kernel_doc/pytango/latest/server_api/attribute.html#PyTango.Attribute" title="(in PyTango v8.1)"><tt class="xref py py-class docutils literal"><span class="pre">PyTango.Attribute</span></tt></a>) &#8211; read attribute</td>
 </tr>
 </tbody>
 </table>
@@ -2327,7 +2832,7 @@ and updates serialno if appendEntry selected</td>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>attr</strong> &#8211; read attribute</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>attr</strong> (<a class="reference external" href="http://www.esrf.fr/computing/cs/tango/tango_doc/kernel_doc/pytango/latest/server_api/attribute.html#PyTango.Attribute" title="(in PyTango v8.1)"><tt class="xref py py-class docutils literal"><span class="pre">PyTango.Attribute</span></tt></a>) &#8211; read attribute</td>
 </tr>
 </tbody>
 </table>
@@ -2341,7 +2846,7 @@ and updates serialno if appendEntry selected</td>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>attr</strong> &#8211; read attribute</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>attr</strong> (<a class="reference external" href="http://www.esrf.fr/computing/cs/tango/tango_doc/kernel_doc/pytango/latest/server_api/attribute.html#PyTango.Attribute" title="(in PyTango v8.1)"><tt class="xref py py-class docutils literal"><span class="pre">PyTango.Attribute</span></tt></a>) &#8211; read attribute</td>
 </tr>
 </tbody>
 </table>
@@ -2351,6 +2856,14 @@ and updates serialno if appendEntry selected</td>
 <dt id="nxsrecconfig.NXSConfig.NXSRecSelector.read_UserData">
 <tt class="descname">read_UserData</tt><big>(</big><em>attr</em><big>)</big><a class="reference internal" href="_modules/nxsrecconfig/NXSConfig.html#NXSRecSelector.read_UserData"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nxsrecconfig.NXSConfig.NXSRecSelector.read_UserData" title="Permalink to this definition">¶</a></dt>
 <dd><p>Read UserData attribute</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>attr</strong> (<a class="reference external" href="http://www.esrf.fr/computing/cs/tango/tango_doc/kernel_doc/pytango/latest/server_api/attribute.html#PyTango.Attribute" title="(in PyTango v8.1)"><tt class="xref py py-class docutils literal"><span class="pre">PyTango.Attribute</span></tt></a>) &#8211; read attribute</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -2361,7 +2874,7 @@ and updates serialno if appendEntry selected</td>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>attr</strong> &#8211; read attribute</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>attr</strong> (<a class="reference external" href="http://www.esrf.fr/computing/cs/tango/tango_doc/kernel_doc/pytango/latest/server_api/attribute.html#PyTango.Attribute" title="(in PyTango v8.1)"><tt class="xref py py-class docutils literal"><span class="pre">PyTango.Attribute</span></tt></a>) &#8211; read attribute</td>
 </tr>
 </tbody>
 </table>
@@ -2375,7 +2888,7 @@ and updates serialno if appendEntry selected</td>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>attr</strong> &#8211; read attribute</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>attr</strong> (<a class="reference external" href="http://www.esrf.fr/computing/cs/tango/tango_doc/kernel_doc/pytango/latest/server_api/attribute.html#PyTango.Attribute" title="(in PyTango v8.1)"><tt class="xref py py-class docutils literal"><span class="pre">PyTango.Attribute</span></tt></a>) &#8211; read attribute</td>
 </tr>
 </tbody>
 </table>
@@ -2395,7 +2908,7 @@ and updates serialno if appendEntry selected</td>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>attr</strong> &#8211; written attribute</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>attr</strong> (<a class="reference external" href="http://www.esrf.fr/computing/cs/tango/tango_doc/kernel_doc/pytango/latest/server_api/attribute.html#PyTango.Attribute" title="(in PyTango v8.1)"><tt class="xref py py-class docutils literal"><span class="pre">PyTango.Attribute</span></tt></a>) &#8211; written attribute</td>
 </tr>
 </tbody>
 </table>
@@ -2409,7 +2922,7 @@ and updates serialno if appendEntry selected</td>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>attr</strong> &#8211; written attribute</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>attr</strong> (<a class="reference external" href="http://www.esrf.fr/computing/cs/tango/tango_doc/kernel_doc/pytango/latest/server_api/attribute.html#PyTango.Attribute" title="(in PyTango v8.1)"><tt class="xref py py-class docutils literal"><span class="pre">PyTango.Attribute</span></tt></a>) &#8211; written attribute</td>
 </tr>
 </tbody>
 </table>
@@ -2423,7 +2936,7 @@ and updates serialno if appendEntry selected</td>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>attr</strong> &#8211; written attribute</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>attr</strong> (<a class="reference external" href="http://www.esrf.fr/computing/cs/tango/tango_doc/kernel_doc/pytango/latest/server_api/attribute.html#PyTango.Attribute" title="(in PyTango v8.1)"><tt class="xref py py-class docutils literal"><span class="pre">PyTango.Attribute</span></tt></a>) &#8211; written attribute</td>
 </tr>
 </tbody>
 </table>
@@ -2437,7 +2950,7 @@ and updates serialno if appendEntry selected</td>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>attr</strong> &#8211; written attribute</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>attr</strong> (<a class="reference external" href="http://www.esrf.fr/computing/cs/tango/tango_doc/kernel_doc/pytango/latest/server_api/attribute.html#PyTango.Attribute" title="(in PyTango v8.1)"><tt class="xref py py-class docutils literal"><span class="pre">PyTango.Attribute</span></tt></a>) &#8211; written attribute</td>
 </tr>
 </tbody>
 </table>
@@ -2451,7 +2964,7 @@ and updates serialno if appendEntry selected</td>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>attr</strong> &#8211; written attribute</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>attr</strong> (<a class="reference external" href="http://www.esrf.fr/computing/cs/tango/tango_doc/kernel_doc/pytango/latest/server_api/attribute.html#PyTango.Attribute" title="(in PyTango v8.1)"><tt class="xref py py-class docutils literal"><span class="pre">PyTango.Attribute</span></tt></a>) &#8211; written attribute</td>
 </tr>
 </tbody>
 </table>
@@ -2465,7 +2978,7 @@ and updates serialno if appendEntry selected</td>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>attr</strong> &#8211; written attribute</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>attr</strong> (<a class="reference external" href="http://www.esrf.fr/computing/cs/tango/tango_doc/kernel_doc/pytango/latest/server_api/attribute.html#PyTango.Attribute" title="(in PyTango v8.1)"><tt class="xref py py-class docutils literal"><span class="pre">PyTango.Attribute</span></tt></a>) &#8211; written attribute</td>
 </tr>
 </tbody>
 </table>
@@ -2479,7 +2992,7 @@ and updates serialno if appendEntry selected</td>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>attr</strong> &#8211; written attribute</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>attr</strong> (<a class="reference external" href="http://www.esrf.fr/computing/cs/tango/tango_doc/kernel_doc/pytango/latest/server_api/attribute.html#PyTango.Attribute" title="(in PyTango v8.1)"><tt class="xref py py-class docutils literal"><span class="pre">PyTango.Attribute</span></tt></a>) &#8211; written attribute</td>
 </tr>
 </tbody>
 </table>
@@ -2493,7 +3006,7 @@ and updates serialno if appendEntry selected</td>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>attr</strong> &#8211; written attribute</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>attr</strong> (<a class="reference external" href="http://www.esrf.fr/computing/cs/tango/tango_doc/kernel_doc/pytango/latest/server_api/attribute.html#PyTango.Attribute" title="(in PyTango v8.1)"><tt class="xref py py-class docutils literal"><span class="pre">PyTango.Attribute</span></tt></a>) &#8211; written attribute</td>
 </tr>
 </tbody>
 </table>
@@ -2507,7 +3020,7 @@ and updates serialno if appendEntry selected</td>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>attr</strong> &#8211; written attribute</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>attr</strong> (<a class="reference external" href="http://www.esrf.fr/computing/cs/tango/tango_doc/kernel_doc/pytango/latest/server_api/attribute.html#PyTango.Attribute" title="(in PyTango v8.1)"><tt class="xref py py-class docutils literal"><span class="pre">PyTango.Attribute</span></tt></a>) &#8211; written attribute</td>
 </tr>
 </tbody>
 </table>
@@ -2521,7 +3034,7 @@ and updates serialno if appendEntry selected</td>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>attr</strong> &#8211; written attribute</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>attr</strong> (<a class="reference external" href="http://www.esrf.fr/computing/cs/tango/tango_doc/kernel_doc/pytango/latest/server_api/attribute.html#PyTango.Attribute" title="(in PyTango v8.1)"><tt class="xref py py-class docutils literal"><span class="pre">PyTango.Attribute</span></tt></a>) &#8211; written attribute</td>
 </tr>
 </tbody>
 </table>
@@ -2535,7 +3048,7 @@ and updates serialno if appendEntry selected</td>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>attr</strong> &#8211; written attribute</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>attr</strong> (<a class="reference external" href="http://www.esrf.fr/computing/cs/tango/tango_doc/kernel_doc/pytango/latest/server_api/attribute.html#PyTango.Attribute" title="(in PyTango v8.1)"><tt class="xref py py-class docutils literal"><span class="pre">PyTango.Attribute</span></tt></a>) &#8211; written attribute</td>
 </tr>
 </tbody>
 </table>
@@ -2549,7 +3062,7 @@ and updates serialno if appendEntry selected</td>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>attr</strong> &#8211; written attribute</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>attr</strong> (<a class="reference external" href="http://www.esrf.fr/computing/cs/tango/tango_doc/kernel_doc/pytango/latest/server_api/attribute.html#PyTango.Attribute" title="(in PyTango v8.1)"><tt class="xref py py-class docutils literal"><span class="pre">PyTango.Attribute</span></tt></a>) &#8211; written attribute</td>
 </tr>
 </tbody>
 </table>
@@ -2559,6 +3072,14 @@ and updates serialno if appendEntry selected</td>
 <dt id="nxsrecconfig.NXSConfig.NXSRecSelector.write_UserData">
 <tt class="descname">write_UserData</tt><big>(</big><em>attr</em><big>)</big><a class="reference internal" href="_modules/nxsrecconfig/NXSConfig.html#NXSRecSelector.write_UserData"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nxsrecconfig.NXSConfig.NXSRecSelector.write_UserData" title="Permalink to this definition">¶</a></dt>
 <dd><p>Write UserData attribute</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>attr</strong> (<a class="reference external" href="http://www.esrf.fr/computing/cs/tango/tango_doc/kernel_doc/pytango/latest/server_api/attribute.html#PyTango.Attribute" title="(in PyTango v8.1)"><tt class="xref py py-class docutils literal"><span class="pre">PyTango.Attribute</span></tt></a>) &#8211; written attribute</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -2569,7 +3090,7 @@ and updates serialno if appendEntry selected</td>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>attr</strong> &#8211; written attribute</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>attr</strong> (<a class="reference external" href="http://www.esrf.fr/computing/cs/tango/tango_doc/kernel_doc/pytango/latest/server_api/attribute.html#PyTango.Attribute" title="(in PyTango v8.1)"><tt class="xref py py-class docutils literal"><span class="pre">PyTango.Attribute</span></tt></a>) &#8211; written attribute</td>
 </tr>
 </tbody>
 </table>
@@ -2585,29 +3106,42 @@ and updates serialno if appendEntry selected</td>
 <dl class="attribute">
 <dt id="nxsrecconfig.NXSConfig.NXSRecSelectorClass.attr_list">
 <tt class="descname">attr_list</tt><em class="property"> = {'UserData': [[PyTango._PyTango.CmdArgType.DevString, PyTango._PyTango.AttrDataFormat.SCALAR, PyTango._PyTango.AttrWriteType.READ_WRITE], {'description': 'JSON dictionary with User Data', 'Display level': PyTango._PyTango.DispLevel.EXPERT, 'label': 'Client Data'}], 'ScanID': [[PyTango._PyTango.CmdArgType.DevLong, PyTango._PyTango.AttrDataFormat.SCALAR, PyTango._PyTango.AttrWriteType.READ_WRITE], {'description': 'Scan ID', 'label': 'Scan ID'}], 'Version': [[PyTango._PyTango.CmdArgType.DevString, PyTango._PyTango.AttrDataFormat.SCALAR, PyTango._PyTango.AttrWriteType.READ], {'description': 'server version', 'label': 'Version'}], 'MacroServer': [[PyTango._PyTango.CmdArgType.DevString, PyTango._PyTango.AttrDataFormat.SCALAR, PyTango._PyTango.AttrWriteType.READ], {'description': 'Macro Server device name', 'label': 'MacroServer'}], 'WriterDevice': [[PyTango._PyTango.CmdArgType.DevString, PyTango._PyTango.AttrDataFormat.SCALAR, PyTango._PyTango.AttrWriteType.READ_WRITE], {'description': 'Writer device', 'label': 'Writer Device'}], 'DataSources': [[PyTango._PyTango.CmdArgType.DevString, PyTango._PyTango.AttrDataFormat.SPECTRUM, PyTango._PyTango.AttrWriteType.READ, 10000], {'description': 'list of Selected Datasources', 'label': 'Selected Datasources'}], 'ConfigDevice': [[PyTango._PyTango.CmdArgType.DevString, PyTango._PyTango.AttrDataFormat.SCALAR, PyTango._PyTango.AttrWriteType.READ_WRITE], {'Memorized': 'true', 'description': 'Configuration device', 'label': 'Configuration Device'}], 'ScanFile': [[PyTango._PyTango.CmdArgType.DevString, PyTango._PyTango.AttrDataFormat.SCALAR, PyTango._PyTango.AttrWriteType.READ_WRITE], {'description': 'Scan File(s)', 'label': 'Scan File(s)'}], 'AppendEntry': [[PyTango._PyTango.CmdArgType.DevBoolean, PyTango._PyTango.AttrDataFormat.SCALAR, PyTango._PyTango.AttrWriteType.READ_WRITE], {'description': 'flag for entry  appending ', 'label': 'Append Entry'}], 'MntGrp': [[PyTango._PyTango.CmdArgType.DevString, PyTango._PyTango.AttrDataFormat.SCALAR, PyTango._PyTango.AttrWriteType.READ_WRITE], {'description': ' Measurement Group', 'label': ' Measurement Group'}], 'StepDataSources': [[PyTango._PyTango.CmdArgType.DevString, PyTango._PyTango.AttrDataFormat.SCALAR, PyTango._PyTango.AttrWriteType.READ_WRITE], {'description': 'list of datasources to be switched into step mode', 'Display level': PyTango._PyTango.DispLevel.EXPERT, 'label': 'list of datasources to be switch into step mode'}], 'ConfigVariables': [[PyTango._PyTango.CmdArgType.DevString, PyTango._PyTango.AttrDataFormat.SCALAR, PyTango._PyTango.AttrWriteType.READ_WRITE], {'description': 'JSON dictionary with configuration variablesfor templated components', 'Display level': PyTango._PyTango.DispLevel.EXPERT, 'label': 'Configuration Variables'}], 'Components': [[PyTango._PyTango.CmdArgType.DevString, PyTango._PyTango.AttrDataFormat.SPECTRUM, PyTango._PyTango.AttrWriteType.READ, 10000], {'description': 'list of Selected Components', 'label': 'Selected Components'}], 'ProfileConfiguration': [[PyTango._PyTango.CmdArgType.DevString, PyTango._PyTango.AttrDataFormat.SCALAR, PyTango._PyTango.AttrWriteType.READ_WRITE], {'description': 'JSON dict of server configuration', 'Display level': PyTango._PyTango.DispLevel.EXPERT, 'label': 'Profile Configuration'}], 'Door': [[PyTango._PyTango.CmdArgType.DevString, PyTango._PyTango.AttrDataFormat.SCALAR, PyTango._PyTango.AttrWriteType.READ_WRITE], {'Memorized': 'true', 'description': 'Door', 'label': 'Door'}], 'DeviceGroups': [[PyTango._PyTango.CmdArgType.DevString, PyTango._PyTango.AttrDataFormat.SCALAR, PyTango._PyTango.AttrWriteType.READ_WRITE], {'Memorized': 'true', 'description': 'JSON dictionary with device groups', 'Display level': PyTango._PyTango.DispLevel.EXPERT, 'label': 'Device groups'}], 'ProfileFile': [[PyTango._PyTango.CmdArgType.DevString, PyTango._PyTango.AttrDataFormat.SCALAR, PyTango._PyTango.AttrWriteType.READ_WRITE], {'Memorized': 'true', 'description': 'config file with its full path', 'label': 'Profile File with its Path'}], 'DescriptionErrors': [[PyTango._PyTango.CmdArgType.DevString, PyTango._PyTango.AttrDataFormat.SPECTRUM, PyTango._PyTango.AttrWriteType.READ, 10000], {'description': 'list of Description Component Errors', 'label': 'Description Component Errors'}], 'ScanDir': [[PyTango._PyTango.CmdArgType.DevString, PyTango._PyTango.AttrDataFormat.SCALAR, PyTango._PyTango.AttrWriteType.READ_WRITE], {'description': 'Scan Directory', 'label': 'Scan Directory'}]}</em><a class="headerlink" href="#nxsrecconfig.NXSConfig.NXSRecSelectorClass.attr_list" title="Permalink to this definition">¶</a></dt>
-<dd><blockquote>
-<div>Attribute definitions</div></blockquote>
+<dd><dl class="docutils">
+<dt>(<a class="reference external" href="http://docs.python.org/2.7/library/stdtypes.html#dict" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">dict</span></tt></a> &lt;<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>, </dt>
+<dd><dl class="first last docutils">
+<dt>[[ <a class="reference external" href="http://www.esrf.fr/computing/cs/tango/tango_doc/kernel_doc/pytango/latest/client_api/other.html#PyTango.CmdArgType" title="(in PyTango v8.1)"><tt class="xref py py-class docutils literal"><span class="pre">PyTango.CmdArgType</span></tt></a>, </dt>
+<dd><a class="reference external" href="http://www.esrf.fr/computing/cs/tango/tango_doc/kernel_doc/pytango/latest/client_api/other.html#PyTango.AttrDataFormat" title="(in PyTango v8.1)"><tt class="xref py py-class docutils literal"><span class="pre">PyTango.AttrDataFormat</span></tt></a>, <a class="reference external" href="http://www.esrf.fr/computing/cs/tango/tango_doc/kernel_doc/pytango/latest/client_api/other.html#PyTango.AttrWriteType" title="(in PyTango v8.1)"><tt class="xref py py-class docutils literal"><span class="pre">PyTango.AttrWriteType</span></tt></a> ], <a class="reference external" href="http://docs.python.org/2.7/library/stdtypes.html#dict" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">dict</span></tt></a> &lt;<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a> , any&gt; ] &gt; ) Attribute definitions</dd>
+</dl>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="nxsrecconfig.NXSConfig.NXSRecSelectorClass.class_property_list">
 <tt class="descname">class_property_list</tt><em class="property"> = {}</em><a class="headerlink" href="#nxsrecconfig.NXSConfig.NXSRecSelectorClass.class_property_list" title="Permalink to this definition">¶</a></dt>
-<dd><blockquote>
-<div>Class Properties</div></blockquote>
+<dd><dl class="docutils">
+<dt>(<a class="reference external" href="http://docs.python.org/2.7/library/stdtypes.html#dict" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">dict</span></tt></a> &lt;<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>, </dt>
+<dd>[ <a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>, <a class="reference external" href="http://www.esrf.fr/computing/cs/tango/tango_doc/kernel_doc/pytango/latest/client_api/other.html#PyTango.CmdArgType" title="(in PyTango v8.1)"><tt class="xref py py-class docutils literal"><span class="pre">PyTango.CmdArgType</span></tt></a>, [ <a class="reference external" href="http://docs.python.org/2.7/library/functions.html#list" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">list</span></tt></a> &lt;<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">int</span></tt></a>&gt; ] ] &gt; ) Class Properties</dd>
+</dl>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="nxsrecconfig.NXSConfig.NXSRecSelectorClass.cmd_list">
-<tt class="descname">cmd_list</tt><em class="property"> = {'MutedChannels': [[PyTango._PyTango.CmdArgType.DevVoid, ''], [PyTango._PyTango.CmdArgType.DevVarStringArray, 'list of muted channels']], 'DeleteAllProfiles': [[PyTango._PyTango.CmdArgType.DevVoid, ''], [PyTango._PyTango.CmdArgType.DevVoid, '']], 'SaveProfile': [[PyTango._PyTango.CmdArgType.DevVoid, ''], [PyTango._PyTango.CmdArgType.DevVoid, '']], 'DeleteProfile': [[PyTango._PyTango.CmdArgType.DevString, 'mntgrp name'], [PyTango._PyTango.CmdArgType.DevVoid, '']], 'ResetPreselectedComponents': [[PyTango._PyTango.CmdArgType.DevVoid, ''], [PyTango._PyTango.CmdArgType.DevVoid, '']], 'StoreProfile': [[PyTango._PyTango.CmdArgType.DevVoid, ''], [PyTango._PyTango.CmdArgType.DevVoid, '']], 'AvailableTimers': [[PyTango._PyTango.CmdArgType.DevVoid, ''], [PyTango._PyTango.CmdArgType.DevVarStringArray, 'list of available timers']], 'IsMntGrpUpdated': [[PyTango._PyTango.CmdArgType.DevVoid, ''], [PyTango._PyTango.CmdArgType.DevBoolean, 'true if mntgrp changed']], 'SetChannelProperties': [[PyTango._PyTango.CmdArgType.DevVarStringArray, 'a two element list with a property type and JSON value dictionary {channel:property}'], [PyTango._PyTango.CmdArgType.DevVoid, '']], 'ImportMntGrp': [[PyTango._PyTango.CmdArgType.DevVoid, ''], [PyTango._PyTango.CmdArgType.DevVoid, '']], 'AvailableComponents': [[PyTango._PyTango.CmdArgType.DevVoid, ''], [PyTango._PyTango.CmdArgType.DevVarStringArray, 'list of available component names']], 'LoadProfile': [[PyTango._PyTango.CmdArgType.DevVoid, ''], [PyTango._PyTango.CmdArgType.DevVoid, '']], 'FetchProfile': [[PyTango._PyTango.CmdArgType.DevVoid, ''], [PyTango._PyTango.CmdArgType.DevVoid, '']], 'SelectedComponents': [[PyTango._PyTango.CmdArgType.DevVoid, ''], [PyTango._PyTango.CmdArgType.DevVarStringArray, 'component names']], 'DataSourceDescription': [[PyTango._PyTango.CmdArgType.DevVarStringArray, 'list of required datasources'], [PyTango._PyTango.CmdArgType.DevVarStringArray, 'list of JSON with description of CLIENT Datasources']], 'CreateWriterConfiguration': [[PyTango._PyTango.CmdArgType.DevVarStringArray, 'list of required components'], [PyTango._PyTango.CmdArgType.DevString, 'XML Settinges']], 'AvailableProfiles': [[PyTango._PyTango.CmdArgType.DevVoid, ''], [PyTango._PyTango.CmdArgType.DevVarStringArray, 'list of available selection names']], 'ChannelProperties': [[PyTango._PyTango.CmdArgType.DevString, 'property type'], [PyTango._PyTango.CmdArgType.DevString, 'JSON dictionary with channel properties {channel:property}']], 'AdministratorDataNames': [[PyTango._PyTango.CmdArgType.DevVoid, ''], [PyTango._PyTango.CmdArgType.DevVarStringArray, 'administrator data names']], 'PreselectedDataSources': [[PyTango._PyTango.CmdArgType.DevVoid, ''], [PyTango._PyTango.CmdArgType.DevVarStringArray, 'datasources names']], 'PreselectedComponents': [[PyTango._PyTango.CmdArgType.DevVoid, ''], [PyTango._PyTango.CmdArgType.DevVarStringArray, 'component names']], 'ExportEnvProfile': [[PyTango._PyTango.CmdArgType.DevVoid, ''], [PyTango._PyTango.CmdArgType.DevVoid, '']], 'ScanEnvVariables': [[PyTango._PyTango.CmdArgType.DevVoid, ''], [PyTango._PyTango.CmdArgType.DevString, 'environment data']], 'ComponentClientSources': [[PyTango._PyTango.CmdArgType.DevVarStringArray, 'list of required components'], [PyTango._PyTango.CmdArgType.DevString, 'JSON with description of CLIENT Datasources']], 'MntGrpConfiguration': [[PyTango._PyTango.CmdArgType.DevVoid, ''], [PyTango._PyTango.CmdArgType.DevString, ' mntgrp configuration string']], 'UpdateConfigVariables': [[PyTango._PyTango.CmdArgType.DevVoid, ''], [PyTango._PyTango.CmdArgType.DevVoid, '']], 'FullDeviceNames': [[PyTango._PyTango.CmdArgType.DevVoid, ''], [PyTango._PyTango.CmdArgType.DevString, 'JSON Dictionary with full device names for  all aliases ']], 'SetScanEnvVariables': [[PyTango._PyTango.CmdArgType.DevString, 'environment data'], [PyTango._PyTango.CmdArgType.DevLong, 'scanID']], 'VariableComponents': [[PyTango._PyTango.CmdArgType.DevVoid, ''], [PyTango._PyTango.CmdArgType.DevString, 'JSON Dictionary with all Components for   configuration variable']], 'ComponentDescription': [[PyTango._PyTango.CmdArgType.DevVoid, ''], [PyTango._PyTango.CmdArgType.DevString, 'JSON component description']], 'RemoveDynamicComponent': [[PyTango._PyTango.CmdArgType.DevString, 'name of dynamic Component'], [PyTango._PyTango.CmdArgType.DevVoid, '']], 'AvailableDataSources': [[PyTango._PyTango.CmdArgType.DevVoid, ''], [PyTango._PyTango.CmdArgType.DevVarStringArray, 'list of available DataSource names']], 'SwitchProfile': [[PyTango._PyTango.CmdArgType.DevVoid, ''], [PyTango._PyTango.CmdArgType.DevString, 'configuration']], 'SelectedDataSources': [[PyTango._PyTango.CmdArgType.DevVoid, ''], [PyTango._PyTango.CmdArgType.DevVarStringArray, 'profile component datasources']], 'ComponentDataSources': [[PyTango._PyTango.CmdArgType.DevVoid, ''], [PyTango._PyTango.CmdArgType.DevVarStringArray, 'profile component datasources']], 'CreateDynamicComponent': [[PyTango._PyTango.CmdArgType.DevVarStringArray, 'list of JSON strings with datasource parameters'], [PyTango._PyTango.CmdArgType.DevString, 'name of dynamic Component']], 'PreselectComponents': [[PyTango._PyTango.CmdArgType.DevVoid, ''], [PyTango._PyTango.CmdArgType.DevVoid, '']], 'UpdateProfile': [[PyTango._PyTango.CmdArgType.DevVoid, ''], [PyTango._PyTango.CmdArgType.DevString, 'mntgrp configuration string']], 'MandatoryComponents': [[PyTango._PyTango.CmdArgType.DevVoid, ''], [PyTango._PyTango.CmdArgType.DevVarStringArray, 'component names']], 'ImportEnvProfile': [[PyTango._PyTango.CmdArgType.DevVoid, ''], [PyTango._PyTango.CmdArgType.DevVoid, '']], 'PoolElementNames': [[PyTango._PyTango.CmdArgType.DevString, 'pool list attribute name'], [PyTango._PyTango.CmdArgType.DevVarStringArray, 'list of available pool elements']], 'UpdateMntGrp': [[PyTango._PyTango.CmdArgType.DevVoid, ''], [PyTango._PyTango.CmdArgType.DevString, 'configuration']], 'AvailableMntGrps': [[PyTango._PyTango.CmdArgType.DevVoid, ''], [PyTango._PyTango.CmdArgType.DevVarStringArray, 'list of available mntgrp names']]}</em><a class="headerlink" href="#nxsrecconfig.NXSConfig.NXSRecSelectorClass.cmd_list" title="Permalink to this definition">¶</a></dt>
-<dd><blockquote>
-<div>Command definitions</div></blockquote>
+<tt class="descname">cmd_list</tt><em class="property"> = {'MutedChannels': [[PyTango._PyTango.CmdArgType.DevVoid, ''], [PyTango._PyTango.CmdArgType.DevVarStringArray, 'list of muted channels']], 'DeleteAllProfiles': [[PyTango._PyTango.CmdArgType.DevVoid, ''], [PyTango._PyTango.CmdArgType.DevVoid, '']], 'SaveProfile': [[PyTango._PyTango.CmdArgType.DevVoid, ''], [PyTango._PyTango.CmdArgType.DevVoid, '']], 'DeleteProfile': [[PyTango._PyTango.CmdArgType.DevString, 'mntgrp name'], [PyTango._PyTango.CmdArgType.DevVoid, '']], 'ResetPreselectedComponents': [[PyTango._PyTango.CmdArgType.DevVoid, ''], [PyTango._PyTango.CmdArgType.DevVoid, '']], 'StoreProfile': [[PyTango._PyTango.CmdArgType.DevVoid, ''], [PyTango._PyTango.CmdArgType.DevVoid, '']], 'AvailableTimers': [[PyTango._PyTango.CmdArgType.DevVoid, ''], [PyTango._PyTango.CmdArgType.DevVarStringArray, 'list of available timers']], 'IsMntGrpUpdated': [[PyTango._PyTango.CmdArgType.DevVoid, ''], [PyTango._PyTango.CmdArgType.DevBoolean, 'true if mntgrp changed']], 'SetChannelProperties': [[PyTango._PyTango.CmdArgType.DevVarStringArray, 'a two element list with a property type and JSON value dictionary {channel:property}'], [PyTango._PyTango.CmdArgType.DevVoid, '']], 'ImportMntGrp': [[PyTango._PyTango.CmdArgType.DevVoid, ''], [PyTango._PyTango.CmdArgType.DevVoid, '']], 'AvailableComponents': [[PyTango._PyTango.CmdArgType.DevVoid, ''], [PyTango._PyTango.CmdArgType.DevVarStringArray, 'list of available component names']], 'LoadProfile': [[PyTango._PyTango.CmdArgType.DevVoid, ''], [PyTango._PyTango.CmdArgType.DevVoid, '']], 'FetchProfile': [[PyTango._PyTango.CmdArgType.DevVoid, ''], [PyTango._PyTango.CmdArgType.DevVoid, '']], 'SelectedComponents': [[PyTango._PyTango.CmdArgType.DevVoid, ''], [PyTango._PyTango.CmdArgType.DevVarStringArray, 'component names']], 'DataSourceDescription': [[PyTango._PyTango.CmdArgType.DevVarStringArray, 'list of required datasources'], [PyTango._PyTango.CmdArgType.DevVarStringArray, 'list of JSON with description of CLIENT Datasources']], 'CreateWriterConfiguration': [[PyTango._PyTango.CmdArgType.DevVarStringArray, 'list of required components'], [PyTango._PyTango.CmdArgType.DevString, 'XML Settinges']], 'AvailableProfiles': [[PyTango._PyTango.CmdArgType.DevVoid, ''], [PyTango._PyTango.CmdArgType.DevVarStringArray, 'list of available selection names']], 'ChannelProperties': [[PyTango._PyTango.CmdArgType.DevString, 'property type'], [PyTango._PyTango.CmdArgType.DevString, 'JSON dictionary with channel properties {channel:property}']], 'AdministratorDataNames': [[PyTango._PyTango.CmdArgType.DevVoid, ''], [PyTango._PyTango.CmdArgType.DevVarStringArray, 'administrator data names']], 'PreselectedDataSources': [[PyTango._PyTango.CmdArgType.DevVoid, ''], [PyTango._PyTango.CmdArgType.DevVarStringArray, 'datasources names']], 'PreselectedComponents': [[PyTango._PyTango.CmdArgType.DevVoid, ''], [PyTango._PyTango.CmdArgType.DevVarStringArray, 'component names']], 'ExportEnvProfile': [[PyTango._PyTango.CmdArgType.DevVoid, ''], [PyTango._PyTango.CmdArgType.DevVoid, '']], 'ScanEnvVariables': [[PyTango._PyTango.CmdArgType.DevVoid, ''], [PyTango._PyTango.CmdArgType.DevString, 'environment data']], 'ComponentClientSources': [[PyTango._PyTango.CmdArgType.DevVarStringArray, 'list of required components'], [PyTango._PyTango.CmdArgType.DevString, 'JSON with description of CLIENT Datasources']], 'MntGrpConfiguration': [[PyTango._PyTango.CmdArgType.DevVoid, ''], [PyTango._PyTango.CmdArgType.DevString, ' mntgrp configuration string']], 'UpdateConfigVariables': [[PyTango._PyTango.CmdArgType.DevVoid, ''], [PyTango._PyTango.CmdArgType.DevVoid, '']], 'FullDeviceNames': [[PyTango._PyTango.CmdArgType.DevVoid, ''], [PyTango._PyTango.CmdArgType.DevString, 'JSON Dictionary with full device names for  all aliases ']], 'SetScanEnvVariables': [[PyTango._PyTango.CmdArgType.DevString, 'environment data'], [PyTango._PyTango.CmdArgType.DevLong, 'scanID']], 'VariableComponents': [[PyTango._PyTango.CmdArgType.DevVoid, ''], [PyTango._PyTango.CmdArgType.DevString, 'JSON Dictionary with all Components for   configuration variable']], 'ComponentDescription': [[PyTango._PyTango.CmdArgType.DevVoid, ''], [PyTango._PyTango.CmdArgType.DevString, 'JSON component description']], 'RemoveDynamicComponent': [[PyTango._PyTango.CmdArgType.DevString, 'name of dynamic Component'], [PyTango._PyTango.CmdArgType.DevVoid, '']], 'AvailableDataSources': [[PyTango._PyTango.CmdArgType.DevVoid, ''], [PyTango._PyTango.CmdArgType.DevVarStringArray, 'list of available DataSource names']], 'SwitchProfile': [[PyTango._PyTango.CmdArgType.DevVoid, ''], [PyTango._PyTango.CmdArgType.DevVoid, '']], 'SelectedDataSources': [[PyTango._PyTango.CmdArgType.DevVoid, ''], [PyTango._PyTango.CmdArgType.DevVarStringArray, 'profile component datasources']], 'ComponentDataSources': [[PyTango._PyTango.CmdArgType.DevVoid, ''], [PyTango._PyTango.CmdArgType.DevVarStringArray, 'profile component datasources']], 'CreateDynamicComponent': [[PyTango._PyTango.CmdArgType.DevVarStringArray, 'list of JSON strings with datasource parameters'], [PyTango._PyTango.CmdArgType.DevString, 'name of dynamic Component']], 'PreselectComponents': [[PyTango._PyTango.CmdArgType.DevVoid, ''], [PyTango._PyTango.CmdArgType.DevVoid, '']], 'UpdateProfile': [[PyTango._PyTango.CmdArgType.DevVoid, ''], [PyTango._PyTango.CmdArgType.DevString, 'mntgrp configuration string']], 'MandatoryComponents': [[PyTango._PyTango.CmdArgType.DevVoid, ''], [PyTango._PyTango.CmdArgType.DevVarStringArray, 'component names']], 'ImportEnvProfile': [[PyTango._PyTango.CmdArgType.DevVoid, ''], [PyTango._PyTango.CmdArgType.DevVoid, '']], 'PoolElementNames': [[PyTango._PyTango.CmdArgType.DevString, 'pool list attribute name'], [PyTango._PyTango.CmdArgType.DevVarStringArray, 'list of available pool elements']], 'UpdateMntGrp': [[PyTango._PyTango.CmdArgType.DevVoid, ''], [PyTango._PyTango.CmdArgType.DevString, 'configuration']], 'AvailableMntGrps': [[PyTango._PyTango.CmdArgType.DevVoid, ''], [PyTango._PyTango.CmdArgType.DevVarStringArray, 'list of available mntgrp names']]}</em><a class="headerlink" href="#nxsrecconfig.NXSConfig.NXSRecSelectorClass.cmd_list" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>(<a class="reference external" href="http://docs.python.org/2.7/library/stdtypes.html#dict" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">dict</span></tt></a> &lt;<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>, </dt>
+<dd>[[ <a class="reference external" href="http://www.esrf.fr/computing/cs/tango/tango_doc/kernel_doc/pytango/latest/client_api/other.html#PyTango.CmdArgType" title="(in PyTango v8.1)"><tt class="xref py py-class docutils literal"><span class="pre">PyTango.CmdArgType</span></tt></a>, <a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>]] &gt;)
+Command definitions</dd>
+</dl>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="nxsrecconfig.NXSConfig.NXSRecSelectorClass.device_property_list">
 <tt class="descname">device_property_list</tt><em class="property"> = {'MutedChannelFilters': [PyTango._PyTango.CmdArgType.DevVarStringArray, 'list of muted channel filters', []], 'PoolBlacklist': [PyTango._PyTango.CmdArgType.DevVarStringArray, 'blacklist of pools', []], 'NumberOfThreads': [PyTango._PyTango.CmdArgType.DevLong, 'maximal number of threads', [20]], 'AdminDataNames': [PyTango._PyTango.CmdArgType.DevVarStringArray, 'list of administrator data names', []], 'TimerFilters': [PyTango._PyTango.CmdArgType.DevVarStringArray, 'list of timer filters', []], 'DefaultPreselectedComponents': [PyTango._PyTango.CmdArgType.DevVarStringArray, 'list of default preselected components', []]}</em><a class="headerlink" href="#nxsrecconfig.NXSConfig.NXSRecSelectorClass.device_property_list" title="Permalink to this definition">¶</a></dt>
-<dd><blockquote>
-<div>Device Properties</div></blockquote>
+<dd><dl class="docutils">
+<dt>(<a class="reference external" href="http://docs.python.org/2.7/library/stdtypes.html#dict" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">dict</span></tt></a> &lt;<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>, </dt>
+<dd>[ <a class="reference external" href="http://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">str</span></tt></a>, <a class="reference external" href="http://www.esrf.fr/computing/cs/tango/tango_doc/kernel_doc/pytango/latest/client_api/other.html#PyTango.CmdArgType" title="(in PyTango v8.1)"><tt class="xref py py-class docutils literal"><span class="pre">PyTango.CmdArgType</span></tt></a>, [ <a class="reference external" href="http://docs.python.org/2.7/library/functions.html#list" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">list</span></tt></a> &lt;<a class="reference external" href="http://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><tt class="xref py py-obj docutils literal"><span class="pre">int</span></tt></a>&gt; ] ] &gt; ) Device Properties</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
