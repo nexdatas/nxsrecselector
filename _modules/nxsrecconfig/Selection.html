@@ -5,7 +5,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>nxsrecconfig.Selection &mdash; NXSRecSelector 3.5.1 documentation</title>
+    <title>nxsrecconfig.Selection &mdash; NXSRecSelector 3.5.2 documentation</title>
     
     <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '3.5.1',
+        VERSION:     '3.5.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -29,7 +29,7 @@
     <script type="text/javascript" src="../../_static/js/jquery-fix.js"></script>
     <script type="text/javascript" src="../../_static/bootstrap-3.3.4/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../../_static/bootstrap-sphinx.js"></script>
-    <link rel="top" title="NXSRecSelector 3.5.1 documentation" href="../../index.html" />
+    <link rel="top" title="NXSRecSelector 3.5.2 documentation" href="../../index.html" />
     <link rel="up" title="nxsrecconfig" href="../nxsrecconfig.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
@@ -154,21 +154,53 @@
 
 
 <div class="viewcode-block" id="Selection"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Selection.Selection">[docs]</a><span class="k">class</span> <span class="nc">Selection</span><span class="p">(</span><span class="nb">dict</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Selection Dictionary &quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot; Selection Dictionary which contains the following records:</span>
+<span class="sd">    {</span>
+<span class="sd">    &quot;Timer&quot;:  &#39;[]&#39;,</span>
+<span class="sd">    &quot;OrderedChannels&quot;:  &#39;[]&#39;,</span>
+<span class="sd">    &quot;ComponentSelection&quot;:  &#39;{}&#39;,</span>
+<span class="sd">    &quot;DataSourceSelection&quot;:  &#39;{}&#39;,</span>
+<span class="sd">    &quot;DataSourcePreselection&quot;:  &#39;{}&#39;,</span>
+<span class="sd">    &quot;ComponentPreselection&quot;:  &#39;{}&#39;,</span>
+<span class="sd">    &quot;PreselectingDataSources&quot;:  &#39;[]&#39;,</span>
+<span class="sd">    &quot;OptionalComponents&quot;:  &#39;[]&#39;,</span>
+<span class="sd">    &quot;AppendEntry&quot;:  False,</span>
+<span class="sd">    &quot;ComponentsFromMntGrp&quot;:  False,</span>
+<span class="sd">    &quot;ConfigVariables&quot;:  &#39;{}&#39;,</span>
+<span class="sd">    &quot;UserData&quot;:  &#39;{}&#39;,</span>
+<span class="sd">    &quot;ChannelProperties&quot;:  &#39;{}&#39;,</span>
+<span class="sd">    &quot;UnplottedComponents&quot;:  &#39;[]&#39;,</span>
+<span class="sd">    &quot;DynamicComponents&quot;:  True,</span>
+<span class="sd">    &quot;DefaultDynamicLinks&quot;:  True,</span>
+<span class="sd">    &quot;DefaultDynamicPath&quot;:  \</span>
+<span class="sd">    &#39;/entry$var.serialno:NXentry/NXinstrument/collection&#39;,</span>
+<span class="sd">    &quot;TimeZone&quot;:  self.__defaultzone,</span>
+<span class="sd">    &quot;ConfigDevice&quot;:  &#39;&#39;,</span>
+<span class="sd">    &quot;WriterDevice&quot;:  &#39;&#39;,</span>
+<span class="sd">    &quot;Door&quot;:  &#39;&#39;,</span>
+<span class="sd">    &quot;MntGrp&quot;:  &#39;&#39;,</span>
+<span class="sd">    &quot;Version&quot;:  self.__version,</span>
+<span class="sd">    &quot;MntGrpConfiguration&quot;:  &#39;&#39;</span>
+<span class="sd">    }</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; constructor</span>
 
 <span class="sd">        :param args: dictionary args</span>
+<span class="sd">        :type args: :obj:`list` &lt;`any`&gt;</span>
 <span class="sd">        :param kw: dictionary kw</span>
+<span class="sd">        :type kw: :obj:`dict` &lt;:obj:`str`, `any`&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Selection</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
 
-        <span class="c">#: default zone</span>
+        <span class="c">#: (:obj:`str`) default zone</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__defaultzone</span> <span class="o">=</span> <span class="s">&#39;Europe/Berlin&#39;</span>
 
-        <span class="c">#: default mntgrp</span>
+        <span class="c">#: (:obj:`str`) default mntgrp</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__defaultmntgrp</span> <span class="o">=</span> <span class="s">&#39;nxsmntgrp&#39;</span>
+        <span class="c">#: (:obj:`str`) version string</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__version</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="s">&quot;Version&quot;</span><span class="p">]</span> <span class="k">if</span> <span class="s">&quot;Version&quot;</span> <span class="ow">in</span> <span class="bp">self</span> <span class="k">else</span> <span class="s">&quot;1.0.0&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
 
@@ -245,6 +277,7 @@
 
 <span class="sd">        :brief: appends new datasources to Preselected DataSources</span>
 <span class="sd">        :param datasources: list of datasources</span>
+<span class="sd">        :type datasources: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">adsg</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="s">&quot;PreselectingDataSources&quot;</span><span class="p">])</span>
         <span class="n">adsg</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">adsg</span> <span class="ow">or</span> <span class="p">[])</span> <span class="o">|</span> <span class="nb">set</span><span class="p">(</span><span class="n">datasources</span> <span class="ow">or</span> <span class="p">[]))</span>
@@ -255,6 +288,7 @@
 
 <span class="sd">        :brief: sets pool channels in order defined by OrderedChannels</span>
 <span class="sd">        :param channels: pool channels</span>
+<span class="sd">        :type channels: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">och</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="s">&quot;OrderedChannels&quot;</span><span class="p">])</span>
         <span class="n">ordchannels</span> <span class="o">=</span> <span class="p">[</span><span class="n">ch</span> <span class="k">for</span> <span class="n">ch</span> <span class="ow">in</span> <span class="n">och</span> <span class="k">if</span> <span class="n">ch</span> <span class="ow">in</span> <span class="n">channels</span><span class="p">]</span>
@@ -281,7 +315,9 @@
 <span class="sd">                neither in poolchannels nor in avaiblable datasources</span>
 <span class="sd">                It adds new channels to DataSourceSelection</span>
 <span class="sd">        :param channels: pool channels</span>
+<span class="sd">        :type channels: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        :param datasources: available datasources</span>
+<span class="sd">        :type datasources: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">dsg</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="s">&quot;DataSourceSelection&quot;</span><span class="p">])</span>
         <span class="n">datasources</span> <span class="o">=</span> <span class="n">datasources</span> <span class="ow">or</span> <span class="p">[]</span>
@@ -313,6 +349,7 @@
         <span class="sd">&quot;&quot;&quot; resets Preselected Components with given components and set them</span>
 <span class="sd">        to not active</span>
 <span class="sd">        :param components: list of components to be set</span>
+<span class="sd">        :type components: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">acps</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">for</span> <span class="n">cp</span> <span class="ow">in</span> <span class="n">components</span><span class="p">:</span>

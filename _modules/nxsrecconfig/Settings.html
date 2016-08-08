@@ -5,7 +5,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>nxsrecconfig.Settings &mdash; NXSRecSelector 3.5.1 documentation</title>
+    <title>nxsrecconfig.Settings &mdash; NXSRecSelector 3.5.2 documentation</title>
     
     <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '3.5.1',
+        VERSION:     '3.5.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -29,7 +29,7 @@
     <script type="text/javascript" src="../../_static/js/jquery-fix.js"></script>
     <script type="text/javascript" src="../../_static/bootstrap-3.3.4/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../../_static/bootstrap-sphinx.js"></script>
-    <link rel="top" title="NXSRecSelector 3.5.1 documentation" href="../../index.html" />
+    <link rel="top" title="NXSRecSelector 3.5.2 documentation" href="../../index.html" />
     <link rel="up" title="nxsrecconfig" href="../nxsrecconfig.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
@@ -173,41 +173,46 @@
         <span class="sd">&quot;&quot;&quot; contructor</span>
 
 <span class="sd">        :param server: NXSRecSelector server</span>
+<span class="sd">        :type server: :class:`nxsrecconfig.NXSConfig.NXSRecSelector`</span>
 <span class="sd">        :param numberofthreads: number of threads used to check device state</span>
+<span class="sd">        :type numberofthreads: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c">#: Tango server</span>
+        <span class="c">#: (:class:`nxsrecconfig.NXSConfig.NXSRecSelector`) Tango server</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__server</span> <span class="o">=</span> <span class="n">server</span>
-        <span class="c">#: number of threads</span>
+        <span class="c">#: (:obj:`int`) number of threads</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">numberOfThreads</span> <span class="o">=</span> <span class="n">numberofthreads</span> <span class="ow">or</span> <span class="mi">20</span>
 
-        <span class="c">#: configuration selection</span>
+        <span class="c">#: (:class:`nxsrecconfg.MacroServerPools.MacroServerPools`) \</span>
+        <span class="c">#:     configuration selection</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__msp</span> <span class="o">=</span> <span class="n">MacroServerPools</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">numberOfThreads</span><span class="p">)</span>
 
-        <span class="c">#: configuration selection</span>
+        <span class="c">#: (:class:`nxsrecconfg.Selector.Selector`) \</span>
+        <span class="c">#:   configuration selector</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span> <span class="o">=</span> <span class="n">Selector</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__msp</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">version</span><span class="p">)</span>
 
+        <span class="c">#: (:class:`nxsrecconfg.ProfileManager.ProfileManager) \</span>
         <span class="c">#: profile</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__profileManager</span> <span class="o">=</span> <span class="n">ProfileManager</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="p">)</span>
 
-        <span class="c">#: configuration file</span>
+        <span class="c">#: (:obj:`str`) configuration file</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">profileFile</span> <span class="o">=</span> <span class="s">&#39;/tmp/nxsrecconfig.cfg&#39;</span>
 
-        <span class="c">#: tango database</span>
+        <span class="c">#: (:class:`PyTango.Database`) tango database</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__db</span> <span class="o">=</span> <span class="n">PyTango</span><span class="o">.</span><span class="n">Database</span><span class="p">()</span>
 
-        <span class="c">#: timer filters</span>
+        <span class="c">#: (:obj:`list` &lt;:obj:`str`&gt;) timer filters</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">timerFilters</span> <span class="o">=</span> <span class="p">[</span><span class="s">&quot;*dgg*&quot;</span><span class="p">,</span> <span class="s">&quot;*/ctctrl0*&quot;</span><span class="p">]</span>
-        <span class="c">#: timer filters</span>
+        <span class="c">#:  (:obj:`list` &lt;:obj:`str`&gt;) timer filters</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">mutedChannelFilters</span> <span class="o">=</span> <span class="p">[</span><span class="s">&quot;*tip551*&quot;</span><span class="p">]</span>
-        <span class="c">#: default device groups</span>
+        <span class="c">#: (:obj:`str`) default device groups</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__defaultDeviceGroups</span> <span class="o">=</span> \
             <span class="s">&#39;{&quot;timer&quot;: [&quot;*exp_t*&quot;], &quot;dac&quot;: [&quot;*exp_dac*&quot;], &#39;</span> \
             <span class="o">+</span> <span class="s">&#39;&quot;counter&quot;: [&quot;*exp_c*&quot;], &quot;mca&quot;: [&quot;*exp_mca*&quot;], &#39;</span> \
             <span class="o">+</span> <span class="s">&#39;&quot;adc&quot;: [&quot;*exp_adc*&quot;], &quot;motor&quot;: [&quot;*exp_mot*&quot;]}&#39;</span>
 
-        <span class="c">#: device groups</span>
+        <span class="c">#: (:obj:`str`) device groups</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__deviceGroups</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__defaultDeviceGroups</span><span class="p">)</span>
-        <span class="c">#: administator data</span>
+        <span class="c">#: (:obj:`list` &lt;:obj:`str`&gt;) administator data</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">adminDataNames</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="k">if</span> <span class="n">server</span><span class="p">:</span>
@@ -253,7 +258,9 @@
         <span class="sd">&quot;&quot;&quot; provides values of the required variable</span>
 
 <span class="sd">        :param name: name of the required variable</span>
+<span class="sd">        :type name: :obj:`str`</span>
 <span class="sd">        :returns: values of the required variable</span>
+<span class="sd">        :rtype: `any`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">vl</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
         <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
@@ -266,6 +273,7 @@
         <span class="sd">&quot;&quot;&quot; provides names of variables</span>
 
 <span class="sd">        :returns:  all names of variables</span>
+<span class="sd">        :rtypes: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
 </div>
@@ -273,10 +281,11 @@
         <span class="sd">&quot;&quot;&quot; provides server version</span>
 
 <span class="sd">        :returns: server version</span>
+<span class="sd">        :rtype: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">__version__</span>
 
-    <span class="c">#: server version</span>
+    <span class="c">#: (:obj:`str`) server version</span>
     <span class="n">version</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span>
         <span class="n">__version</span><span class="p">,</span>
         <span class="n">doc</span><span class="o">=</span><span class="s">&#39;server version&#39;</span><span class="p">)</span>
@@ -287,6 +296,7 @@
         <span class="sd">&quot;&quot;&quot; provides administrator data names</span>
 
 <span class="sd">        :returns: list of provides administrator data names</span>
+<span class="sd">        :rtype: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">adminDataNames</span><span class="p">)</span>
 </div>
@@ -294,6 +304,7 @@
         <span class="sd">&quot;&quot;&quot; provides user selected components</span>
 
 <span class="sd">        :returns: list of available selected components</span>
+<span class="sd">        :rtype: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__profileManager</span><span class="o">.</span><span class="n">components</span><span class="p">()</span>
 </div>
@@ -301,12 +312,13 @@
         <span class="sd">&quot;&quot;&quot; provides all configuration components</span>
 
 <span class="sd">        :returns: list of available selected components</span>
+<span class="sd">        :rtype: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">selectedComponents</span><span class="p">())</span> <span class="o">|</span>
                     <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">preselectedComponents</span><span class="p">())</span> <span class="o">|</span>
                     <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mandatoryComponents</span><span class="p">()))</span>
 
-    <span class="c">#: provides selected components</span>
+    <span class="c">#: (:obj:`list` &lt;:obj:`str`&gt;) provides selected components</span>
     <span class="n">components</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span>
         <span class="n">__components</span><span class="p">,</span>
         <span class="n">doc</span><span class="o">=</span><span class="s">&#39;provides selected components&#39;</span><span class="p">)</span>
@@ -315,6 +327,7 @@
         <span class="sd">&quot;&quot;&quot; provides preselected components</span>
 
 <span class="sd">        :returns: list of available preselected components</span>
+<span class="sd">        :rtype: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__profileManager</span><span class="o">.</span><span class="n">preselectedComponents</span><span class="p">()</span>
 </div>
@@ -322,10 +335,11 @@
         <span class="sd">&quot;&quot;&quot; provides description component errors</span>
 
 <span class="sd">        :returns: list of available description component errors</span>
+<span class="sd">        :rtype: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="o">.</span><span class="n">descErrors</span>
 
-    <span class="c">#: provides preselected components</span>
+    <span class="c">#: (:obj:`list` &lt;:obj:`str`&gt;) provides preselected components</span>
     <span class="n">descriptionErrors</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">__getDescriptionErrors</span><span class="p">,</span>
                                  <span class="n">doc</span><span class="o">=</span><span class="s">&#39;provides description component errors&#39;</span><span class="p">)</span>
 
@@ -340,6 +354,7 @@
         <span class="sd">&quot;&quot;&quot; provides preselected datasources</span>
 
 <span class="sd">        :returns: list of available preselected datasources</span>
+<span class="sd">        :rtype: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__profileManager</span><span class="o">.</span><span class="n">preselectedDataSources</span><span class="p">()</span>
 </div>
@@ -347,13 +362,14 @@
         <span class="sd">&quot;&quot;&quot; provides all selected data sources</span>
 
 <span class="sd">        :returns: all selected data sources</span>
+<span class="sd">        :rtype: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">list</span><span class="p">(</span>
             <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">selectedDataSources</span><span class="p">())</span> <span class="o">|</span>
             <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">componentDataSources</span><span class="p">())</span>
         <span class="p">)</span>
 
-    <span class="c">#: provides all selected data sources</span>
+    <span class="c">#: (:obj:`list` &lt;:obj:`str`&gt;) provides all selected data sources</span>
     <span class="n">dataSources</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span>
         <span class="n">__dataSources</span><span class="p">,</span>
         <span class="n">doc</span><span class="o">=</span><span class="s">&#39; provides selected data sources&#39;</span><span class="p">)</span>
@@ -362,6 +378,7 @@
         <span class="sd">&quot;&quot;&quot; provides a list of profile component DataSources</span>
 
 <span class="sd">        :returns: list of profile component datasources</span>
+<span class="sd">        :rtype: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__profileManager</span><span class="o">.</span><span class="n">componentDataSources</span><span class="p">()</span>
 
@@ -371,6 +388,7 @@
         <span class="sd">&quot;&quot;&quot; get method for defaultPreselectedComponents attribute</span>
 
 <span class="sd">        :returns: list of components</span>
+<span class="sd">        :rtype: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__profileManager</span><span class="o">.</span><span class="n">defaultPreselectedComponents</span>
 
@@ -378,10 +396,11 @@
         <span class="sd">&quot;&quot;&quot; set method for defaultPreselectedComponents attribute</span>
 
 <span class="sd">        :param components: list of components</span>
+<span class="sd">        :type components: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__profileManager</span><span class="o">.</span><span class="n">defaultPreselectedComponents</span> <span class="o">=</span> <span class="n">components</span>
 
-    <span class="c">#: default PreselectedComponents</span>
+    <span class="c">#: (:obj:`list` &lt;:obj:`str`&gt;) default PreselectedComponents</span>
     <span class="n">defaultPreselectedComponents</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span>
         <span class="n">__getDefaultPreselectedComponents</span><span class="p">,</span>
         <span class="n">__setDefaultPreselectedComponents</span><span class="p">,</span>
@@ -391,6 +410,7 @@
         <span class="sd">&quot;&quot;&quot; get method for configDevice attribute</span>
 
 <span class="sd">        :returns: name of configDevice</span>
+<span class="sd">        :rtype: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="p">[</span><span class="s">&quot;ConfigDevice&quot;</span><span class="p">]</span>
 
@@ -398,12 +418,13 @@
         <span class="sd">&quot;&quot;&quot; set method for configDevice attribute</span>
 
 <span class="sd">        :param name: name of configDevice</span>
+<span class="sd">        :type name: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">name</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="p">[</span><span class="s">&quot;ConfigDevice&quot;</span><span class="p">]:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="p">[</span><span class="s">&quot;ConfigDevice&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">name</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">switchProfile</span><span class="p">(</span><span class="n">toActive</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
 
-    <span class="c">#: the json data string</span>
+    <span class="c">#: (:obj:`str`) the json data string</span>
     <span class="n">configDevice</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">__getConfigDevice</span><span class="p">,</span> <span class="n">__setConfigDevice</span><span class="p">,</span>
                             <span class="n">doc</span><span class="o">=</span><span class="s">&#39;configuration server device name&#39;</span><span class="p">)</span>
 
@@ -411,23 +432,27 @@
         <span class="sd">&quot;&quot;&quot; get method for poolBlacklist attribute</span>
 
 <span class="sd">        :returns: name of poolBlacklist</span>
+<span class="sd">        :rtype: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__msp</span><span class="o">.</span><span class="n">poolBlacklist</span>
 
-    <span class="k">def</span> <span class="nf">__setPoolBlacklist</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__setPoolBlacklist</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">names</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; set method for poolBlacklist attribute</span>
 
-<span class="sd">        :param name: name of poolBlacklist</span>
+<span class="sd">        :param names: names of poolBlacklist</span>
+<span class="sd">        :type names: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__msp</span><span class="o">.</span><span class="n">poolBlacklist</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__msp</span><span class="o">.</span><span class="n">poolBlacklist</span> <span class="o">=</span> <span class="n">names</span>
 
-    <span class="c">#: black list of pools</span>
+    <span class="c">#: (:obj:`list` &lt;:obj:`str`&gt;) black list of pools</span>
     <span class="n">poolBlacklist</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">__getPoolBlacklist</span><span class="p">,</span> <span class="n">__setPoolBlacklist</span><span class="p">,</span>
                              <span class="n">doc</span><span class="o">=</span><span class="s">&#39;pool black list&#39;</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">__setProfileConfiguration</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">jconf</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; set method for configuration attribute</span>
+
 <span class="sd">        :param name: name of configuration</span>
+<span class="sd">        :type name: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">jconf</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">storeProfile</span><span class="p">()</span>
@@ -436,10 +461,11 @@
         <span class="sd">&quot;&quot;&quot; get method for configuration attribute</span>
 
 <span class="sd">        :returns: configuration</span>
+<span class="sd">        :rtype: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="o">.</span><span class="n">get</span><span class="p">())</span>
 
-    <span class="c">#: the json data string</span>
+    <span class="c">#: (:obj:`str`) the json data string</span>
     <span class="n">profileConfiguration</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span>
         <span class="n">__getProfileConfiguration</span><span class="p">,</span>
         <span class="n">__setProfileConfiguration</span><span class="p">,</span>
@@ -447,46 +473,48 @@
 
     <span class="k">def</span> <span class="nf">__setAppendEntry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ae</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; set method for appendEntry attribute</span>
-<span class="sd">        :param name: name of appendEntry</span>
+
+<span class="sd">        :param ae: appendEntry flag</span>
+<span class="sd">        :type ae: :obj:`bool`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="p">[</span><span class="s">&quot;AppendEntry&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">ae</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">storeProfile</span><span class="p">()</span>
 
-    <span class="c">##</span>
     <span class="k">def</span> <span class="nf">__getAppendEntry</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; get method for appendEntry attribute</span>
 
 <span class="sd">        :returns: flag of appendEntry</span>
+<span class="sd">        :rtype: :obj:`bool`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="p">[</span><span class="s">&quot;AppendEntry&quot;</span><span class="p">])</span>
 
-    <span class="c">#: the json data string</span>
+    <span class="c">#: (:obj:`bool`) the json data string</span>
     <span class="n">appendEntry</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span>
         <span class="n">__getAppendEntry</span><span class="p">,</span>
         <span class="n">__setAppendEntry</span><span class="p">,</span>
         <span class="n">doc</span><span class="o">=</span><span class="s">&#39;flag for append entry&#39;</span><span class="p">)</span>
 
-    <span class="c">##</span>
     <span class="k">def</span> <span class="nf">__getUserData</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; get method for userData attribute</span>
 
-<span class="sd">        :returns: name of userData</span>
+<span class="sd">        :returns: userData json dictionary</span>
+<span class="sd">        :rtype: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="p">[</span><span class="s">&quot;UserData&quot;</span><span class="p">]</span>
 
-    <span class="c">##</span>
-    <span class="k">def</span> <span class="nf">__setUserData</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__setUserData</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">udata</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        set method for userData attribute</span>
 
-<span class="sd">        :param name: name of userData</span>
+<span class="sd">        :param udata: userData json dictionary</span>
+<span class="sd">        :type udata: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">jname</span> <span class="o">=</span> <span class="n">Utils</span><span class="o">.</span><span class="n">stringToDictJson</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">jname</span> <span class="o">=</span> <span class="n">Utils</span><span class="o">.</span><span class="n">stringToDictJson</span><span class="p">(</span><span class="n">udata</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="p">[</span><span class="s">&quot;UserData&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="n">jname</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="p">[</span><span class="s">&quot;UserData&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">jname</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">storeProfile</span><span class="p">()</span>
 
-    <span class="c">#: the json data string</span>
+    <span class="c">#: (:obj:`str`) the json data string</span>
     <span class="n">userData</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span>
         <span class="n">__getUserData</span><span class="p">,</span>
         <span class="n">__setUserData</span><span class="p">,</span>
@@ -495,7 +523,8 @@
     <span class="k">def</span> <span class="nf">__getDeviceGroups</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; get method for deviceGroups attribute</span>
 
-<span class="sd">        :returns: name of deviceGroups</span>
+<span class="sd">        :returns: deviceGroups json dictionary</span>
+<span class="sd">        :rtype: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">ldct</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__deviceGroups</span><span class="p">)</span>
@@ -509,16 +538,17 @@
         <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__defaultDeviceGroups</span>
 
-    <span class="k">def</span> <span class="nf">__setDeviceGroups</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__setDeviceGroups</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">groups</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; sets method for deviceGroups attribute</span>
 
-<span class="sd">        :param name: name of deviceGroups</span>
+<span class="sd">        :param groups: name of deviceGroups</span>
+<span class="sd">        :type groups: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">jname</span> <span class="o">=</span> <span class="n">Utils</span><span class="o">.</span><span class="n">stringToDictJson</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">jname</span> <span class="o">=</span> <span class="n">Utils</span><span class="o">.</span><span class="n">stringToDictJson</span><span class="p">(</span><span class="n">groups</span><span class="p">)</span>
         <span class="c">#: device groups</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__deviceGroups</span> <span class="o">=</span> <span class="n">jname</span>
 
-    <span class="c">#: the json data string</span>
+    <span class="c">#: (:obj:`str`) the json data string</span>
     <span class="n">deviceGroups</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span>
         <span class="n">__getDeviceGroups</span><span class="p">,</span>
         <span class="n">__setDeviceGroups</span><span class="p">,</span>
@@ -528,6 +558,7 @@
         <span class="sd">&quot;&quot;&quot; get method for configVariables attribute</span>
 
 <span class="sd">        :returns: name of configVariables</span>
+<span class="sd">        :rtype: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="p">[</span><span class="s">&quot;ConfigVariables&quot;</span><span class="p">]</span>
 
@@ -535,13 +566,14 @@
         <span class="sd">&quot;&quot;&quot; set method for configVariables attribute</span>
 
 <span class="sd">        :param name: name of configVariables</span>
+<span class="sd">        :type name: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">jname</span> <span class="o">=</span> <span class="n">Utils</span><span class="o">.</span><span class="n">stringToDictJson</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="p">[</span><span class="s">&quot;ConfigVariables&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="n">jname</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="p">[</span><span class="s">&quot;ConfigVariables&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">jname</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">storeProfile</span><span class="p">()</span>
 
-    <span class="c">#: the json variables string</span>
+    <span class="c">#: (:obj:`str`) the json variables string</span>
     <span class="n">configVariables</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span>
         <span class="n">__getConfigVariables</span><span class="p">,</span>
         <span class="n">__setConfigVariables</span><span class="p">,</span>
@@ -551,6 +583,7 @@
         <span class="sd">&quot;&quot;&quot; get method for dataSourceGroup attribute</span>
 
 <span class="sd">        :returns: names of STEP dataSources</span>
+<span class="sd">        :rtype: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">inst</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="o">.</span><span class="n">setConfigInstance</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">inst</span><span class="o">.</span><span class="n">stepdatasources</span><span class="p">:</span>
@@ -561,11 +594,12 @@
     <span class="k">def</span> <span class="nf">__setStepDatSources</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">names</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; set method for dataSourceGroup attribute</span>
 <span class="sd">        :param names: names of STEP dataSources</span>
+<span class="sd">        :type names: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">inst</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="o">.</span><span class="n">setConfigInstance</span><span class="p">()</span>
         <span class="n">inst</span><span class="o">.</span><span class="n">stepdatasources</span> <span class="o">=</span> <span class="n">names</span>
 
-    <span class="c">#: the json data string</span>
+    <span class="c">#: (:obj:`str`) the json data string</span>
     <span class="n">stepdatasources</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span>
         <span class="n">__getStepDatSources</span><span class="p">,</span>
         <span class="n">__setStepDatSources</span><span class="p">,</span>
@@ -575,7 +609,9 @@
         <span class="sd">&quot;&quot;&quot; provides channel properties of the given type</span>
 
 <span class="sd">        :param ptype: property type</span>
+<span class="sd">        :type ptype: :obj:`str`</span>
 <span class="sd">        :returns:  json dictionary with channel properties</span>
+<span class="sd">        :rtype: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">props</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="p">[</span><span class="s">&quot;ChannelProperties&quot;</span><span class="p">])</span>
         <span class="k">if</span> <span class="n">ptype</span> <span class="ow">in</span> <span class="n">props</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
@@ -588,6 +624,7 @@
 
 <span class="sd">        :param typeandvariables:</span>
 <span class="sd">               (property type, json dictionary of channel propertie values)</span>
+<span class="sd">        :type typeandvariables: (:obj:`str`, :obj:`str`)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">ptype</span><span class="p">,</span> <span class="n">variables</span> <span class="o">=</span> <span class="n">typeandvariables</span>
         <span class="n">jvar</span> <span class="o">=</span> <span class="n">Utils</span><span class="o">.</span><span class="n">stringToDictJson</span><span class="p">(</span><span class="n">variables</span><span class="p">)</span>
@@ -605,6 +642,7 @@
         <span class="sd">&quot;&quot;&quot; get method for mntGrp attribute</span>
 
 <span class="sd">        :returns: name of mntGrp</span>
+<span class="sd">        :rtype: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="p">[</span><span class="s">&quot;MntGrp&quot;</span><span class="p">]</span>
 
@@ -612,16 +650,18 @@
         <span class="sd">&quot;&quot;&quot; set method for mntGrp attribute</span>
 
 <span class="sd">        :param name: name of mntGrp</span>
+<span class="sd">        :type name: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="p">[</span><span class="s">&quot;MntGrp&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">name</span>
 
-    <span class="c">#: the json data string</span>
+    <span class="c">#: (:obj:`str`) the json data string</span>
     <span class="n">mntGrp</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">__getMntGrp</span><span class="p">,</span> <span class="n">__setMntGrp</span><span class="p">,</span>
                       <span class="n">doc</span><span class="o">=</span><span class="s">&#39;measurement group&#39;</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">__getDoor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; get method for door attribute</span>
 
+<span class="sd">        :rtype: :obj:`str`</span>
 <span class="sd">        :returns: name of door</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="p">[</span><span class="s">&quot;Door&quot;</span><span class="p">]</span>
@@ -629,12 +669,13 @@
     <span class="k">def</span> <span class="nf">__setDoor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; set method for door attribute</span>
 
+<span class="sd">        :type name: :obj:`str`</span>
 <span class="sd">        :param name: name of door</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="p">[</span><span class="s">&quot;Door&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">name</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__msp</span><span class="o">.</span><span class="n">updateMacroServer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="p">[</span><span class="s">&quot;Door&quot;</span><span class="p">])</span>
 
-    <span class="c">#: the json data string</span>
+    <span class="c">#: (:obj:`str`) the json data string</span>
     <span class="n">door</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">__getDoor</span><span class="p">,</span> <span class="n">__setDoor</span><span class="p">,</span>
                     <span class="n">doc</span><span class="o">=</span><span class="s">&#39;door server device name&#39;</span><span class="p">)</span>
 
@@ -642,10 +683,11 @@
         <span class="sd">&quot;&quot;&quot; get method for macro server attribute</span>
 
 <span class="sd">        :returns: name of macro server</span>
+<span class="sd">        :rtype :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__msp</span><span class="o">.</span><span class="n">getMacroServer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="p">[</span><span class="s">&quot;Door&quot;</span><span class="p">])</span>
 
-    <span class="c">#: the json data string</span>
+    <span class="c">#: (:obj:`str`) the json data string</span>
     <span class="n">macroServer</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">__getMacroServer</span><span class="p">,</span>
                            <span class="n">doc</span><span class="o">=</span><span class="s">&#39;macroserver device name&#39;</span><span class="p">)</span>
 
@@ -653,6 +695,7 @@
         <span class="sd">&quot;&quot;&quot; get method for writerDevice attribute</span>
 
 <span class="sd">        :returns: name of writerDevice</span>
+<span class="sd">        :rtype: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="p">[</span><span class="s">&quot;WriterDevice&quot;</span><span class="p">]</span>
 
@@ -660,11 +703,12 @@
         <span class="sd">&quot;&quot;&quot; set method for writerDevice attribute</span>
 
 <span class="sd">        :param name: name of writerDevice</span>
+<span class="sd">        :type name: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="p">[</span><span class="s">&quot;WriterDevice&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">name</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">storeProfile</span><span class="p">()</span>
 
-    <span class="c">#: the json data string</span>
+    <span class="c">#: (:obj:`str`) the json data string</span>
     <span class="n">writerDevice</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">__getWriterDevice</span><span class="p">,</span> <span class="n">__setWriterDevice</span><span class="p">,</span>
                             <span class="n">doc</span><span class="o">=</span><span class="s">&#39;Writer device name&#39;</span><span class="p">)</span>
 
@@ -672,6 +716,7 @@
         <span class="sd">&quot;&quot;&quot; get method for ScanDir attribute</span>
 
 <span class="sd">        :returns: name of ScanDir</span>
+<span class="sd">        :rtype: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">ms</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="o">.</span><span class="n">getMacroServer</span><span class="p">()</span>
         <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">MSUtils</span><span class="o">.</span><span class="n">getEnv</span><span class="p">(</span><span class="s">&#39;ScanDir&#39;</span><span class="p">,</span> <span class="n">ms</span><span class="p">))</span>
@@ -680,6 +725,7 @@
         <span class="sd">&quot;&quot;&quot; set method for ScanDir attribute</span>
 
 <span class="sd">        :param name: name of ScanDir</span>
+<span class="sd">        :type name: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">ms</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="o">.</span><span class="n">getMacroServer</span><span class="p">()</span>
         <span class="n">MSUtils</span><span class="o">.</span><span class="n">setEnv</span><span class="p">(</span><span class="s">&#39;ScanDir&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">name</span><span class="p">),</span> <span class="n">ms</span><span class="p">)</span>
@@ -692,6 +738,7 @@
         <span class="sd">&quot;&quot;&quot; get method for ScanID attribute</span>
 
 <span class="sd">        :returns: name of ScanID</span>
+<span class="sd">        :rtype: :obj:`int`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">ms</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="o">.</span><span class="n">getMacroServer</span><span class="p">()</span>
         <span class="n">sid</span> <span class="o">=</span> <span class="n">MSUtils</span><span class="o">.</span><span class="n">getEnv</span><span class="p">(</span><span class="s">&#39;ScanID&#39;</span><span class="p">,</span> <span class="n">ms</span><span class="p">)</span>
@@ -705,11 +752,12 @@
         <span class="sd">&quot;&quot;&quot; set method for ScanID attribute</span>
 
 <span class="sd">        :param name: name of ScanID</span>
+<span class="sd">        :type name: :obj:`int`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">ms</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="o">.</span><span class="n">getMacroServer</span><span class="p">()</span>
         <span class="n">MSUtils</span><span class="o">.</span><span class="n">setEnv</span><span class="p">(</span><span class="s">&#39;ScanID&#39;</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">ms</span><span class="p">)</span>
 
-    <span class="c">#: the json data string</span>
+    <span class="c">#: (:obj:`int`) the json data string</span>
     <span class="n">scanID</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">__getScanID</span><span class="p">,</span> <span class="n">__setScanID</span><span class="p">,</span>
                       <span class="n">doc</span><span class="o">=</span><span class="s">&#39;scan id&#39;</span><span class="p">)</span>
 
@@ -717,6 +765,7 @@
         <span class="sd">&quot;&quot;&quot; get method for ScanFile attribute</span>
 
 <span class="sd">        :returns: name of ScanFile</span>
+<span class="sd">        :rtype: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">ms</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="o">.</span><span class="n">getMacroServer</span><span class="p">()</span>
         <span class="n">val</span> <span class="o">=</span> <span class="n">MSUtils</span><span class="o">.</span><span class="n">getEnv</span><span class="p">(</span><span class="s">&#39;ScanFile&#39;</span><span class="p">,</span> <span class="n">ms</span><span class="p">)</span>
@@ -727,6 +776,7 @@
         <span class="sd">&quot;&quot;&quot; set method for ScanFile attribute</span>
 
 <span class="sd">        :param name: name of ScanFile</span>
+<span class="sd">        :type name: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">jname</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">Utils</span><span class="o">.</span><span class="n">stringToListJson</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
 
@@ -735,14 +785,15 @@
             <span class="n">jname</span> <span class="o">=</span> <span class="n">jname</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">MSUtils</span><span class="o">.</span><span class="n">setEnv</span><span class="p">(</span><span class="s">&#39;ScanFile&#39;</span><span class="p">,</span> <span class="n">jname</span><span class="p">,</span> <span class="n">ms</span><span class="p">)</span>
 
-    <span class="c">#: the json data string</span>
+    <span class="c">#: (:obj:`str`) the json data string</span>
     <span class="n">scanFile</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">__getScanFile</span><span class="p">,</span> <span class="n">__setScanFile</span><span class="p">,</span>
                         <span class="n">doc</span><span class="o">=</span><span class="s">&#39;scan file(s)&#39;</span><span class="p">)</span>
 
 <div class="viewcode-block" id="Settings.variableComponents"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Settings.Settings.variableComponents">[docs]</a>    <span class="k">def</span> <span class="nf">variableComponents</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; provides components for all variables</span>
 
-<span class="sd">        :returns: dictionary with components for all variables</span>
+<span class="sd">        :returns: json dictionary with components for all variables</span>
+<span class="sd">        :rtype: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">acps</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">availableComponents</span><span class="p">()</span>
         <span class="n">vrs</span> <span class="o">=</span> <span class="p">{}</span>
@@ -761,6 +812,7 @@
         <span class="sd">&quot;&quot;&quot; provides description of all components</span>
 
 <span class="sd">        :returns: JSON string with description of all components</span>
+<span class="sd">        :rtype: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">dc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__profileManager</span><span class="o">.</span><span class="n">cpdescription</span><span class="p">(</span><span class="n">full</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
         <span class="n">jdc</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">dc</span><span class="p">)</span>
@@ -770,6 +822,7 @@
         <span class="sd">&quot;&quot;&quot; provides full names of pool devices</span>
 
 <span class="sd">        :returns: JSON string with full names of pool devices</span>
+<span class="sd">        :rtype: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">pools</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="o">.</span><span class="n">getPools</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">PoolUtils</span><span class="o">.</span><span class="n">getFullDeviceNames</span><span class="p">(</span><span class="n">pools</span><span class="p">))</span>
@@ -778,6 +831,7 @@
         <span class="sd">&quot;&quot;&quot; provides available Timers from MacroServer pools</span>
 
 <span class="sd">        :returns:  available Timers from MacroServer pools</span>
+<span class="sd">        :rtype: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">pools</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="o">.</span><span class="n">getPools</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">PoolUtils</span><span class="o">.</span><span class="n">getTimers</span><span class="p">(</span><span class="n">pools</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">timerFilters</span><span class="p">)</span>
@@ -786,6 +840,7 @@
         <span class="sd">&quot;&quot;&quot; provides muted channels from pool</span>
 
 <span class="sd">        :returns: muted channels from pool</span>
+<span class="sd">        :rtype: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">pools</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="o">.</span><span class="n">getPools</span><span class="p">()</span>
         <span class="n">nexusconfig_device</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="o">.</span><span class="n">setConfigInstance</span><span class="p">()</span>
@@ -822,8 +877,11 @@
         <span class="sd">&quot;&quot;&quot; executes command on configuration server</span>
 
 <span class="sd">        :param command: command name</span>
+<span class="sd">        :type command: :obj:`str`</span>
 <span class="sd">        :param var: command parameter list</span>
+<span class="sd">        :type var: [ `any` ]</span>
 <span class="sd">        :returns: command result</span>
+<span class="sd">        :rtype: `any`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="o">.</span><span class="n">configCommand</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="o">*</span><span class="n">var</span><span class="p">)</span>
 
@@ -831,6 +889,7 @@
         <span class="sd">&quot;&quot;&quot; mandatory components</span>
 
 <span class="sd">        :returns: list of mandatory components</span>
+<span class="sd">        :rtype: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">mc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__configCommand</span><span class="p">(</span><span class="s">&quot;mandatoryComponents&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">[]</span>
         <span class="k">return</span> <span class="n">mc</span>
@@ -839,6 +898,7 @@
         <span class="sd">&quot;&quot;&quot; available components</span>
 
 <span class="sd">        :returns: list of available components</span>
+<span class="sd">        :rtype: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">ac</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__configCommand</span><span class="p">(</span><span class="s">&quot;availableComponents&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">[]</span>
         <span class="k">return</span> <span class="n">ac</span>
@@ -847,6 +907,7 @@
         <span class="sd">&quot;&quot;&quot; available selections</span>
 
 <span class="sd">        :returns: list of available selections</span>
+<span class="sd">        :rtype: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">ac</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__configCommand</span><span class="p">(</span><span class="s">&quot;availableSelections&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">[]</span>
         <span class="k">return</span> <span class="n">ac</span>
@@ -855,6 +916,7 @@
         <span class="sd">&quot;&quot;&quot; available datasources</span>
 
 <span class="sd">        :returns: list of available datasources</span>
+<span class="sd">        :rtype: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">ad</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__configCommand</span><span class="p">(</span><span class="s">&quot;availableDataSources&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">[]</span>
         <span class="k">return</span> <span class="n">ad</span>
@@ -863,7 +925,9 @@
         <span class="sd">&quot;&quot;&quot; provides names from given pool listattr</span>
 
 <span class="sd">        :param listattr: name of pool attribute with a element list</span>
+<span class="sd">        :type listattr: :obj:`str`</span>
 <span class="sd">        :returns: names from given pool listattr</span>
+<span class="sd">        :rtype: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="o">.</span><span class="n">poolElementNames</span><span class="p">(</span><span class="n">listattr</span><span class="p">)</span>
 </div>
@@ -893,7 +957,9 @@
         <span class="sd">&quot;&quot;&quot; provides description of client datasources</span>
 
 <span class="sd">        :param cps: component names</span>
+<span class="sd">        :type cps: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        :returns: JSON string with description of client datasources</span>
+<span class="sd">        :rtype: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">nexusconfig_device</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="o">.</span><span class="n">setConfigInstance</span><span class="p">()</span>
         <span class="n">describer</span> <span class="o">=</span> <span class="n">Describer</span><span class="p">(</span><span class="n">nexusconfig_device</span><span class="p">)</span>
@@ -909,7 +975,9 @@
         <span class="sd">&quot;&quot;&quot; create configuration</span>
 
 <span class="sd">        :param cps: component names</span>
+<span class="sd">        :type cps: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        :returns: JSON string with description of client datasources</span>
+<span class="sd">        :rtype: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">nexusconfig_device</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="o">.</span><span class="n">setConfigInstance</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">cps</span><span class="p">:</span>
@@ -971,8 +1039,12 @@
 </div>
 <div class="viewcode-block" id="Settings.dataSourceDescription"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Settings.Settings.dataSourceDescription">[docs]</a>    <span class="k">def</span> <span class="nf">dataSourceDescription</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">datasources</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; describe datasources</span>
+
 <span class="sd">        :param datasources: list for datasource names</span>
+<span class="sd">        :type datasources: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        :returns: list of dictionary with description of datasources</span>
+<span class="sd">        :rtype: [{&quot;dsname&quot;: :obj:`str`, &quot;dstype&quot;: :obj:`str`, \</span>
+<span class="sd">                  &quot;record&quot;: :obj:`str`}, ...]</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">nexusconfig_device</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="o">.</span><span class="n">setConfigInstance</span><span class="p">()</span>
         <span class="n">describer</span> <span class="o">=</span> <span class="n">Describer</span><span class="p">(</span><span class="n">nexusconfig_device</span><span class="p">)</span>
@@ -984,6 +1056,7 @@
         <span class="sd">&quot;&quot;&quot; deletes mntgrp</span>
 
 <span class="sd">        :param name: mntgrp name</span>
+<span class="sd">        :type name: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__profileManager</span><span class="o">.</span><span class="n">deleteProfile</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
 </div>
@@ -991,6 +1064,7 @@
         <span class="sd">&quot;&quot;&quot; provides configuration of mntgrp</span>
 
 <span class="sd">        :returns: string with mntgrp configuration</span>
+<span class="sd">        :rtype: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__profileManager</span><span class="o">.</span><span class="n">mntGrpConfiguration</span><span class="p">()</span>
 </div>
@@ -998,6 +1072,7 @@
         <span class="sd">&quot;&quot;&quot; check if active measurement group was changed</span>
 
 <span class="sd">        :returns: True if it is different to the current setting</span>
+<span class="sd">        :rtype: :obj:`bool`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__profileManager</span><span class="o">.</span><span class="n">isMntGrpUpdated</span><span class="p">()</span>
 </div>
@@ -1005,6 +1080,7 @@
         <span class="sd">&quot;&quot;&quot; set active measurement group from components</span>
 
 <span class="sd">        :returns: string with mntgrp configuration</span>
+<span class="sd">        :rtype: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__profileManager</span><span class="o">.</span><span class="n">updateProfile</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span>
 </div>
@@ -1012,14 +1088,15 @@
         <span class="sd">&quot;&quot;&quot; switch to active measurement</span>
 
 <span class="sd">        :param toActive: if False update the current profile</span>
+<span class="sd">        :type toActive: :obj:`bool`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__profileManager</span><span class="o">.</span><span class="n">switchProfile</span><span class="p">(</span><span class="n">toActive</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="Settings.updateProfile"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Settings.Settings.updateProfile">[docs]</a>    <span class="k">def</span> <span class="nf">updateProfile</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; update profile and measurement group</span>
 
-<span class="sd">        :param setenv: set ActiveMntGrp and PreScanSnapshot variables</span>
 <span class="sd">        :returns: string with mntgrp configuration</span>
+<span class="sd">        :rtype: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__profileManager</span><span class="o">.</span><span class="n">updateProfile</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
 </div>
@@ -1032,6 +1109,7 @@
         <span class="sd">&quot;&quot;&quot; available mntgrps</span>
 
 <span class="sd">        :returns: list of available measurement groups</span>
+<span class="sd">        :rtype: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__profileManager</span><span class="o">.</span><span class="n">availableMntGrps</span><span class="p">()</span>
 
@@ -1041,7 +1119,9 @@
         <span class="sd">&quot;&quot;&quot; creates dynamic component</span>
 
 <span class="sd">        :param params: datasource parameters</span>
+<span class="sd">        :type params: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        :returns: dynamic component name</span>
+<span class="sd">        :rtype: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">nexusconfig_device</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="o">.</span><span class="n">setConfigInstance</span><span class="p">()</span>
         <span class="n">dcpcreator</span> <span class="o">=</span> <span class="n">DynamicComponent</span><span class="p">(</span><span class="n">nexusconfig_device</span><span class="p">)</span>
@@ -1079,6 +1159,7 @@
         <span class="sd">&quot;&quot;&quot; removes dynamic component</span>
 
 <span class="sd">        :param name: dynamic component name</span>
+<span class="sd">        :type name: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">nexusconfig_device</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="o">.</span><span class="n">setConfigInstance</span><span class="p">()</span>
         <span class="n">dcpcreator</span> <span class="o">=</span> <span class="n">DynamicComponent</span><span class="p">(</span><span class="n">nexusconfig_device</span><span class="p">)</span>
@@ -1090,12 +1171,15 @@
         <span class="sd">&quot;&quot;&quot; gets Scan Environment Data</span>
 
 <span class="sd">        :returns: JSON String with important variables</span>
+<span class="sd">        :rtype: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="o">.</span><span class="n">getScanEnvVariables</span><span class="p">()</span>
 </div>
 <div class="viewcode-block" id="Settings.setScanEnvVariables"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Settings.Settings.setScanEnvVariables">[docs]</a>    <span class="k">def</span> <span class="nf">setScanEnvVariables</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">jdata</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; sets Scan Environment Data</span>
+
 <span class="sd">        :param jdata: JSON String with important variables</span>
+<span class="sd">        :type jdata: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="o">.</span><span class="n">setScanEnvVariables</span><span class="p">(</span><span class="n">jdata</span><span class="p">)</span>
 </div>

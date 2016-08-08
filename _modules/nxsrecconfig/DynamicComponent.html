@@ -5,7 +5,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>nxsrecconfig.DynamicComponent &mdash; NXSRecSelector 3.5.1 documentation</title>
+    <title>nxsrecconfig.DynamicComponent &mdash; NXSRecSelector 3.5.2 documentation</title>
     
     <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '3.5.1',
+        VERSION:     '3.5.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -29,7 +29,7 @@
     <script type="text/javascript" src="../../_static/js/jquery-fix.js"></script>
     <script type="text/javascript" src="../../_static/bootstrap-3.3.4/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../../_static/bootstrap-sphinx.js"></script>
-    <link rel="top" title="NXSRecSelector 3.5.1 documentation" href="../../index.html" />
+    <link rel="top" title="NXSRecSelector 3.5.2 documentation" href="../../index.html" />
     <link rel="up" title="nxsrecconfig" href="../nxsrecconfig.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
@@ -284,15 +284,15 @@
         <span class="sd">&quot;&quot;&quot; sets label parameters for specific dynamic components</span>
 
 <span class="sd">        :param labels: label dictionaries</span>
-<span class="sd">        :type labels: :obj:`dict` &lt;:obj:`str` , :obj:`str`&gt; </span>
+<span class="sd">        :type labels: :obj:`dict` &lt;:obj:`str` , :obj:`str`&gt;</span>
 <span class="sd">        :param paths: nexus path dictionaries</span>
-<span class="sd">        :type paths: :obj:`dict` &lt;:obj:`str` , :obj:`str`&gt; </span>
+<span class="sd">        :type paths: :obj:`dict` &lt;:obj:`str` , :obj:`str`&gt;</span>
 <span class="sd">        :param links: link dictionaries</span>
-<span class="sd">        :type links: :obj:`dict` &lt;:obj:`str` , :obj:`bool`&gt; </span>
+<span class="sd">        :type links: :obj:`dict` &lt;:obj:`str` , :obj:`bool`&gt;</span>
 <span class="sd">        :param types: nexus type dictionaries</span>
-<span class="sd">        :type types: :obj:`dict` &lt;:obj:`str` , :obj:`str`&gt; </span>
+<span class="sd">        :type types: :obj:`dict` &lt;:obj:`str` , :obj:`str`&gt;</span>
 <span class="sd">        :param shapes: data shape dictionaries</span>
-<span class="sd">        :type shapes: :obj:`dict` &lt;:obj:`str` , :obj:`list` &lt;:obj:`int`&gt; &gt; </span>
+<span class="sd">        :type shapes: :obj:`dict` &lt;:obj:`str` , :obj:`list` &lt;:obj:`int`&gt; &gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__nexuslabels</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">labels</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__nexuslabels</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
@@ -464,9 +464,9 @@
         <span class="sd">&quot;&quot;&quot; gets the property value for the given datasource</span>
 
 <span class="sd">        :param nexusprop: nexus property dictionary</span>
-<span class="sd">        :type nexusprop: :obj:`dict` &lt;:obj:`str` , :`any`&gt; </span>
+<span class="sd">        :type nexusprop: :obj:`dict` &lt;:obj:`str` , :`any`&gt;</span>
 <span class="sd">        :param nexuslabel: nexus label dictionary</span>
-<span class="sd">        :type nexuslabels: :obj:`dict` &lt;:obj:`str` , :obj:`str`&gt; </span>
+<span class="sd">        :type nexuslabels: :obj:`dict` &lt;:obj:`str` , :obj:`str`&gt;</span>
 <span class="sd">        :param default: default value if property is not defined</span>
 <span class="sd">        :type default: `any`</span>
 <span class="sd">        :returns: propery value</span>
@@ -482,9 +482,9 @@
         <span class="sd">&quot;&quot;&quot; gets the Nexus path and for the given datasource</span>
 
 <span class="sd">        :param nexuspaths: nexus property path dictionary</span>
-<span class="sd">        :type nexuspaths: :obj:`dict` &lt;:obj:`str` , :obj:`str`&gt; </span>
+<span class="sd">        :type nexuspaths: :obj:`dict` &lt;:obj:`str` , :obj:`str`&gt;</span>
 <span class="sd">        :param nexuslabels: nexus label dictionary</span>
-<span class="sd">        :type nexuslabels: :obj:`dict` &lt;:obj:`str` , :obj:`str`&gt; </span>
+<span class="sd">        :type nexuslabels: :obj:`dict` &lt;:obj:`str` , :obj:`str`&gt;</span>
 <span class="sd">        :param alias : datasource alias</span>
 <span class="sd">        :type alias : :obj:`str`</span>
 <span class="sd">        :param defaultpath: default path if path is not defined</span>
@@ -660,7 +660,7 @@
         <span class="sd">&quot;&quot;&quot; creates group tree</span>
 
 <span class="sd">        :param root: root node</span>
-<span class="sd">        :type root: :class:`xml.dom.minidom.Node` </span>
+<span class="sd">        :type root: :class:`xml.dom.minidom.Node`</span>
 <span class="sd">        :param definition: definition node</span>
 <span class="sd">        :type definition: :class:`xml.dom.minidom.Node`</span>
 <span class="sd">        :param path: NeXus path</span>

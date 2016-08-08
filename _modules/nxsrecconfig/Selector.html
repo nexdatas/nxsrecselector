@@ -5,7 +5,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>nxsrecconfig.Selector &mdash; NXSRecSelector 3.5.1 documentation</title>
+    <title>nxsrecconfig.Selector &mdash; NXSRecSelector 3.5.2 documentation</title>
     
     <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '3.5.1',
+        VERSION:     '3.5.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -29,7 +29,7 @@
     <script type="text/javascript" src="../../_static/js/jquery-fix.js"></script>
     <script type="text/javascript" src="../../_static/bootstrap-3.3.4/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../../_static/bootstrap-sphinx.js"></script>
-    <link rel="top" title="NXSRecSelector 3.5.1 documentation" href="../../index.html" />
+    <link rel="top" title="NXSRecSelector 3.5.2 documentation" href="../../index.html" />
     <link rel="up" title="nxsrecconfig" href="../nxsrecconfig.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
@@ -166,26 +166,32 @@
         <span class="sd">&quot;&quot;&quot; constructor</span>
 
 <span class="sd">        :param macroserverpools: MacroServerPools object</span>
+<span class="sd">        :type macroserverpools: \</span>
+<span class="sd">            :class:`nxsrecconfig.MacroServerPools.MacroServerPools`</span>
 <span class="sd">        :param version: selector version</span>
+<span class="sd">        :type version: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="c">#: macro server and pools</span>
+        <span class="c">#: (:class:`nxsrecconfig.MacroServerPools.MacroServerPools`) \</span>
+        <span class="c">#:  macro server and pools</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__msp</span> <span class="o">=</span> <span class="n">macroserverpools</span>
 
+        <span class="c">#: (:class:`nxsrecconfig.Selection.Selection`) \</span>
         <span class="c">#:  selection dictionary with Settings</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__selection</span> <span class="o">=</span> <span class="n">Selection</span><span class="p">(</span><span class="n">Version</span><span class="o">=</span><span class="n">version</span><span class="p">)</span>
+        <span class="c">#: (:class:`nxsrecconfig.Converter.Converter`) \</span>
         <span class="c">#:  selection dictionary with Settings</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__converter</span> <span class="o">=</span> <span class="n">Converter</span><span class="p">(</span><span class="n">version</span><span class="p">)</span>
 
-        <span class="c">#:  selection dictionary with Settings</span>
+        <span class="c">#: (:obj:`str`) selection dictionary with Settings</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__version</span> <span class="o">=</span> <span class="n">version</span>
 
-        <span class="c">#: tango database</span>
+        <span class="c">#: (:class:`PyTango.Database`) tango database</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__db</span> <span class="o">=</span> <span class="n">PyTango</span><span class="o">.</span><span class="n">Database</span><span class="p">()</span>
 
-        <span class="c">#: module label</span>
+        <span class="c">#: (:obj:`str`) module label</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">moduleLabel</span> <span class="o">=</span> <span class="s">&#39;module&#39;</span>
-        <span class="c">#: error descriptions</span>
+        <span class="c">#: (:obj:`list` &lt;:obj:`str`&gt;) error descriptions</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">descErrors</span> <span class="o">=</span> <span class="p">[]</span>
 
 <div class="viewcode-block" id="Selector.reset"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Selector.Selector.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -206,6 +212,7 @@
         <span class="sd">&quot;&quot;&quot; sets selection from state data</span>
 
 <span class="sd">        :param state: state data</span>
+<span class="sd">        :type state: :obj:`dict` &lt;:obj:`str`, `any`&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">state</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__converter</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
@@ -222,6 +229,9 @@
 </div>
 <div class="viewcode-block" id="Selector.keys"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Selector.Selector.keys">[docs]</a>    <span class="k">def</span> <span class="nf">keys</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; provides all names of variables</span>
+
+<span class="sd">        :returns: selection keys</span>
+<span class="sd">        :rtype: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__selection</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
 </div>
@@ -229,6 +239,7 @@
         <span class="sd">&quot;&quot;&quot; provides selection data</span>
 
 <span class="sd">        :returns: selection data</span>
+<span class="sd">        :rtype: :obj:`dict` &lt;:obj:`str`, `any`&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s">&quot;_Selector__preGet&quot;</span> <span class="o">+</span> <span class="n">key</span><span class="p">):</span>
@@ -240,7 +251,9 @@
         <span class="sd">&quot;&quot;&quot; provides value of selection item</span>
 
 <span class="sd">        :param key: selection item name</span>
+<span class="sd">        :type key: :obj:`str`</span>
 <span class="sd">        :returns: selection item value</span>
+<span class="sd">        :rtype: `any`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="k">if</span> <span class="n">key</span> <span class="ow">and</span> <span class="n">key</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">!=</span> <span class="n">key</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
@@ -255,7 +268,9 @@
         <span class="sd">&quot;&quot;&quot; sets value of selection item</span>
 
 <span class="sd">        :param key: selection item name</span>
+<span class="sd">        :type key: :obj:`str`</span>
 <span class="sd">        :param value: selection item value</span>
+<span class="sd">        :type value: `any`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">changed</span> <span class="o">=</span> <span class="bp">False</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__selection</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">!=</span> <span class="n">value</span><span class="p">:</span>
@@ -284,8 +299,6 @@
 
     <span class="k">def</span> <span class="nf">__preGetWriterDevice</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; update method for writerDevice attribute</span>
-
-<span class="sd">        :returns: name of writerDevice</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="s">&quot;WriterDevice&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__selection</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> \
                 <span class="ow">or</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__selection</span><span class="p">[</span><span class="s">&quot;WriterDevice&quot;</span><span class="p">]:</span>
@@ -312,6 +325,7 @@
         <span class="sd">&quot;&quot;&quot; set method for door attribute</span>
 
 <span class="sd">        :param changed: True if selection element has been changed</span>
+<span class="sd">        :type changed: :obj:`bool`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__selection</span><span class="p">[</span><span class="s">&quot;Door&quot;</span><span class="p">]:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__selection</span><span class="p">[</span><span class="s">&quot;Door&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">TangoUtils</span><span class="o">.</span><span class="n">getDeviceName</span><span class="p">(</span>
@@ -368,13 +382,14 @@
         <span class="sd">&quot;&quot;&quot; resets preselected components to set of given components</span>
 
 <span class="sd">        :param components: new selection preselected components</span>
+<span class="sd">        :type components: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__selection</span><span class="o">.</span><span class="n">resetPreselectedComponents</span><span class="p">(</span><span class="n">components</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="Selector.preselect"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Selector.Selector.preselect">[docs]</a>    <span class="k">def</span> <span class="nf">preselect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; updates active state of preselected components</span>
 
-<span class="sd">        :returns: new group of preselected components</span>
+<span class="sd">        :brief: It provides new group of preselected components</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">datasources</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="s">&quot;PreselectingDataSources&quot;</span><span class="p">]))</span>
         <span class="n">acpgroup</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="s">&quot;ComponentPreselection&quot;</span><span class="p">])</span>
@@ -397,6 +412,7 @@
         <span class="sd">&quot;&quot;&quot; provides pool proxies</span>
 
 <span class="sd">        :returns: list of pool proxies</span>
+<span class="sd">        :rtype: :obj:`list` &lt;:obj:`PyTango.DeviceProxy`&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__msp</span><span class="o">.</span><span class="n">getPools</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="s">&quot;Door&quot;</span><span class="p">])</span>
 </div>
@@ -404,6 +420,7 @@
         <span class="sd">&quot;&quot;&quot; provides MacroServer name</span>
 
 <span class="sd">        :returns: MacroServer name</span>
+<span class="sd">        :rtype: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__msp</span><span class="o">.</span><span class="n">getMacroServer</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="s">&quot;Door&quot;</span><span class="p">])</span>
 </div>
@@ -411,7 +428,9 @@
         <span class="sd">&quot;&quot;&quot; provides names from the given pool listattr</span>
 
 <span class="sd">        :param listattr: pool attribute with list</span>
+<span class="sd">        :type listattr: :obj:`str`</span>
 <span class="sd">        :returns: names from given pool listattr</span>
+<span class="sd">        :rtype: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">PoolUtils</span><span class="o">.</span><span class="n">getElementNames</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">getPools</span><span class="p">(),</span> <span class="n">listattr</span><span class="p">)</span>
 </div>
@@ -419,6 +438,8 @@
         <span class="sd">&quot;&quot;&quot; sets config instances</span>
 
 <span class="sd">        :returns: set config instance</span>
+<span class="sd">        :rtype: :class:`PyTango.DeviceProxy` \</span>
+<span class="sd">             or :class:`nxsconfigserver.XMLConfigurator.XMLConfigurator`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">configDevice</span> <span class="o">=</span> <span class="bp">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__preGetConfigDevice</span><span class="p">()</span>
@@ -462,7 +483,12 @@
 <div class="viewcode-block" id="Selector.configCommand"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Selector.Selector.configCommand">[docs]</a>    <span class="k">def</span> <span class="nf">configCommand</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">command</span><span class="p">,</span> <span class="o">*</span><span class="n">var</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; executes command on configuration server</span>
 
+<span class="sd">        :param command: command name</span>
+<span class="sd">        :type command: :obj:`str`</span>
+<span class="sd">        :param var: parameter list</span>
+<span class="sd">        :type var: [ `any` ]</span>
 <span class="sd">        :returns: command result</span>
+<span class="sd">        :rtype: `any`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">configdevice</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">setConfigInstance</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">TangoUtils</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="n">configdevice</span><span class="p">,</span> <span class="n">command</span><span class="p">,</span> <span class="o">*</span><span class="n">var</span><span class="p">)</span>
@@ -471,7 +497,9 @@
         <span class="sd">&quot;&quot;&quot; imports Selector Environment Data</span>
 
 <span class="sd">        :param names: names of required variables</span>
+<span class="sd">        :type names: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        :param data: dictionary with resulting data</span>
+<span class="sd">        :type data: :obj:`dict` &lt;:obj:`str` , `any`&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">update</span> <span class="o">=</span> <span class="bp">False</span>
         <span class="k">if</span> <span class="n">names</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
@@ -487,7 +515,9 @@
         <span class="sd">&quot;&quot;&quot; exports Selector Environment Data</span>
 
 <span class="sd">        :param data: dictionary with input data</span>
+<span class="sd">        :type data: :obj:`dict` &lt;:obj:`str` , `any`&gt;</span>
 <span class="sd">        :param cmddata: dictionary with command input data</span>
+<span class="sd">        :type cmddata: :obj:`dict` &lt;:obj:`str` , `any`&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">data</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
             <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span>
@@ -497,6 +527,7 @@
         <span class="sd">&quot;&quot;&quot; gets Scan Environment Data</span>
 
 <span class="sd">        :returns: JSON String with important variables</span>
+<span class="sd">        :rtype: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__msp</span><span class="o">.</span><span class="n">getScanEnv</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="s">&quot;Door&quot;</span><span class="p">])</span>
 </div>
@@ -504,6 +535,7 @@
         <span class="sd">&quot;&quot;&quot; sets Scan Environment Data</span>
 
 <span class="sd">        :param jdata: JSON String with important variables</span>
+<span class="sd">        :type jdata: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__msp</span><span class="o">.</span><span class="n">setScanEnv</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="s">&quot;Door&quot;</span><span class="p">],</span> <span class="n">jdata</span><span class="p">)</span>
 </div>
@@ -519,6 +551,7 @@
         <span class="sd">&quot;&quot;&quot; fetch configuration</span>
 
 <span class="sd">        :returns: if configuration was fetched</span>
+<span class="sd">        :rtype: :obj:`bool`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">inst</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">setConfigInstance</span><span class="p">()</span>
         <span class="n">cnfdv</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="s">&quot;ConfigDevice&quot;</span><span class="p">]</span>

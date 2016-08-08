@@ -5,7 +5,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>nxsrecconfig.ProfileManager &mdash; NXSRecSelector 3.5.1 documentation</title>
+    <title>nxsrecconfig.ProfileManager &mdash; NXSRecSelector 3.5.2 documentation</title>
     
     <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '3.5.1',
+        VERSION:     '3.5.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -29,7 +29,7 @@
     <script type="text/javascript" src="../../_static/js/jquery-fix.js"></script>
     <script type="text/javascript" src="../../_static/bootstrap-3.3.4/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../../_static/bootstrap-sphinx.js"></script>
-    <link rel="top" title="NXSRecSelector 3.5.1 documentation" href="../../index.html" />
+    <link rel="top" title="NXSRecSelector 3.5.2 documentation" href="../../index.html" />
     <link rel="up" title="nxsrecconfig" href="../nxsrecconfig.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
@@ -158,12 +158,12 @@
 
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">nxstools.nxsxml</span> <span class="kn">import</span> <span class="p">(</span><span class="n">XMLFile</span><span class="p">,</span> <span class="n">NDSource</span><span class="p">)</span>
-    <span class="c">#: flag for nxstools installed</span>
+    <span class="c">#: (:obj:`bool`) flag for nxstools installed</span>
     <span class="n">NXSTOOLS</span> <span class="o">=</span> <span class="bp">True</span>
 <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
     <span class="n">NXSTOOLS</span> <span class="o">=</span> <span class="bp">False</span>
 
-<span class="c">#: default data names</span>
+<span class="c">#: (:obj:`list` &lt;:obj:`str`&gt;) default data names</span>
 <span class="n">DEFAULT_RECORD_KEYS</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;serialno&#39;</span><span class="p">,</span> <span class="s">&#39;end_time&#39;</span><span class="p">,</span> <span class="s">&#39;start_time&#39;</span><span class="p">,</span>
                        <span class="s">&#39;point_nb&#39;</span><span class="p">,</span> <span class="s">&#39;timestamps&#39;</span><span class="p">,</span> <span class="s">&#39;scan_title&#39;</span><span class="p">,</span>
                        <span class="s">&#39;filename&#39;</span><span class="p">]</span>
@@ -175,19 +175,22 @@
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">selector</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; constructor</span>
 
-<span class="sd">        :param selector selector object</span>
+<span class="sd">        :param selector: selector object</span>
+<span class="sd">        :type selector: :class:`nxsrecconfig.Selector.Selector`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c">#: configuration selector</span>
+        <span class="c">#: (:class:`nxsrecconfig.Selector.Selector`) configuration selector</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span> <span class="o">=</span> <span class="n">selector</span>
 
-        <span class="c">#: macro server name</span>
+        <span class="c">#: (:obj:`str`) macro server name</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__macroServerName</span> <span class="o">=</span> <span class="bp">None</span>
-        <span class="c">#: configuration server proxy</span>
+        <span class="c">#: (:class:`PyTango.DeviceProxy` \</span>
+        <span class="c">#: or :class:`nxsconfigserver.XMLConfigurator.XMLConfigurator`) \</span>
+        <span class="c">#:     configuration server proxy</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__configServer</span> <span class="o">=</span> <span class="bp">None</span>
-        <span class="c">#: pool server proxies</span>
+        <span class="c">#: (:obj:`list` &lt;:obj:`PyTango.DeviceProxy`&gt;) pool server proxies</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__pools</span> <span class="o">=</span> <span class="bp">None</span>
 
-        <span class="c">#: default preselectedComponents</span>
+        <span class="c">#: (:obj:`list` &lt;:obj:`str`&gt;) default preselectedComponents</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">defaultPreselectedComponents</span> <span class="o">=</span> <span class="p">[]</span>
 
     <span class="k">def</span> <span class="nf">__updateMacroServer</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -209,6 +212,7 @@
         <span class="sd">&quot;&quot;&quot; available mntgrps</span>
 
 <span class="sd">        :returns: list of available measurement groups</span>
+<span class="sd">        :rtype: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__updateMacroServer</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__updatePools</span><span class="p">()</span>
@@ -232,6 +236,7 @@
         <span class="sd">&quot;&quot;&quot; provides selected components</span>
 
 <span class="sd">        :returns: list of available selected components</span>
+<span class="sd">        :rtype: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">cps</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="p">[</span><span class="s">&quot;ComponentSelection&quot;</span><span class="p">])</span>
         <span class="n">ads</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="p">[</span><span class="s">&quot;DataSourceSelection&quot;</span><span class="p">])</span>
@@ -249,6 +254,7 @@
         <span class="sd">&quot;&quot;&quot; provides preselected components</span>
 
 <span class="sd">        :returns: list of available preselected components</span>
+<span class="sd">        :rtype: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">cps</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="p">[</span><span class="s">&quot;ComponentPreselection&quot;</span><span class="p">])</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">cps</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
@@ -260,6 +266,7 @@
         <span class="sd">&quot;&quot;&quot; provides preselected datasources</span>
 
 <span class="sd">        :returns: list of available preselected components</span>
+<span class="sd">        :rtype: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">cps</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="p">[</span><span class="s">&quot;DataSourcePreselection&quot;</span><span class="p">])</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">cps</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
@@ -272,7 +279,15 @@
 
 <span class="sd">        :param full: if True describes all available ones are taken</span>
 <span class="sd">                     otherwise selectect, preselected and mandatory</span>
+<span class="sd">        :type full: :obj:`bool`</span>
 <span class="sd">        :returns: description of required components</span>
+<span class="sd">        :rtype: [:obj:`dict` &lt;:obj:`str`, :obj:`dict` &lt;:obj:`str`, \</span>
+<span class="sd">                 :obj:`list` &lt;(:obj:`str`, :obj:`str`, :obj:`str`, \</span>
+<span class="sd">                      :obj:`str`, :obj:`list` &lt;:obj:`int`&gt;)&gt; &gt; &gt; ] or \</span>
+<span class="sd">                [{&quot;dsname&quot;: :obj:`str`, &quot;strategy&quot;: :obj:`str`, \</span>
+<span class="sd">                  &quot;dstype&quot;: :obj:`str`, &quot;record&quot;: :obj:`str`, \</span>
+<span class="sd">                  &quot;nxstype&quot;: :obj:`str`, &quot;shape&quot;: :obj:`list` &lt;:obj:`int`&gt; , \</span>
+<span class="sd">          &quot;cpname&quot;: :obj:`str`}, ...]</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__updateConfigServer</span><span class="p">()</span>
         <span class="n">describer</span> <span class="o">=</span> <span class="n">Describer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__configServer</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span>
@@ -291,6 +306,7 @@
         <span class="sd">&quot;&quot;&quot; provides a list of Component DataSources</span>
 
 <span class="sd">        :returns: list of component datasources</span>
+<span class="sd">        :rtype: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__componentDataSources</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cpdescription</span><span class="p">())</span>
 </div>
@@ -298,7 +314,9 @@
         <span class="sd">&quot;&quot;&quot; provides a list of Component DataSources</span>
 
 <span class="sd">        :param description: component description</span>
+<span class="sd">        :type description: :obj:`bool`</span>
 <span class="sd">        :returns: list of component datasources</span>
+<span class="sd">        :rtype: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">description</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
             <span class="n">description</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cpdescription</span><span class="p">()</span>
@@ -318,7 +336,9 @@
         <span class="sd">&quot;&quot;&quot; provides selected datasources</span>
 
 <span class="sd">        :param componentdatasources: component datasources</span>
+<span class="sd">        :type componentdatasources: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        :returns: list of available selected datasources</span>
+<span class="sd">        :rtype: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">compdatasources</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
             <span class="n">compdatasources</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__componentDataSources</span><span class="p">()</span>
@@ -335,6 +355,7 @@
         <span class="sd">&quot;&quot;&quot; provides selected datasources</span>
 
 <span class="sd">        :returns: list of available selected datasources</span>
+<span class="sd">        :rtype: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__dataSources</span><span class="p">()</span>
 </div>
@@ -342,6 +363,7 @@
         <span class="sd">&quot;&quot;&quot; deletes mntgrp</span>
 
 <span class="sd">        :param name: mntgrp name</span>
+<span class="sd">        :type name: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__updatePools</span><span class="p">()</span>
         <span class="k">for</span> <span class="n">pool</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__pools</span><span class="p">:</span>
@@ -361,7 +383,9 @@
 
 
 <span class="sd">        :param sync: make profile and mntgrp synchronization</span>
-<span class="sd">        :returns: dictionary with mntgrp configuration information</span>
+<span class="sd">        :type sync: :obj:`bool`</span>
+<span class="sd">        :returns: json dictionary with mntgrp configuration information</span>
+<span class="sd">        :rtype: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">mcp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="o">.</span><span class="n">configCommand</span><span class="p">(</span><span class="s">&quot;mandatoryComponents&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">[]</span>
         <span class="n">components</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span>
@@ -396,6 +420,7 @@
         <span class="sd">&quot;&quot;&quot; switchProfile to active measurement</span>
 
 <span class="sd">        :param toActive: if False update the current profile</span>
+<span class="sd">        :type toActive: :obj:`bool`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">toActive</span><span class="p">:</span>
             <span class="n">ms</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="o">.</span><span class="n">getMacroServer</span><span class="p">()</span>
@@ -412,6 +437,7 @@
         <span class="sd">&quot;&quot;&quot; provides configuration of mntgrp</span>
 
 <span class="sd">        :returns: string with mntgrp configuration</span>
+<span class="sd">        :rtype: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__updatePools</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__updateMacroServer</span><span class="p">()</span>
@@ -426,6 +452,7 @@
         <span class="sd">&quot;&quot;&quot; check if active measurement group was changed</span>
 
 <span class="sd">        :returns: True if it is different to the current setting</span>
+<span class="sd">        :rtype: :obj:`bool`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">mcp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="o">.</span><span class="n">configCommand</span><span class="p">(</span><span class="s">&quot;mandatoryComponents&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">[]</span>
         <span class="n">components</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span>
@@ -489,10 +516,19 @@
         <span class="sd">&quot;&quot;&quot; sets active measurement group from components</span>
 
 <span class="sd">        :param components:  component list</span>
+<span class="sd">        :type components: :obj:`list` &lt;:obj:`int`&gt;</span>
 <span class="sd">        :param datasources: datasource list</span>
+<span class="sd">        :type datasources: :obj:`list` &lt;:obj:`int`&gt;</span>
 <span class="sd">        :param componentdatasources: component datasource list</span>
+<span class="sd">        :type componentdatasources: :obj:`list` &lt;:obj:`int`&gt;</span>
 <span class="sd">        :param description: component description</span>
-<span class="sd">        :returns: tuple of MntGrp configuration and MntGrp Device name</span>
+<span class="sd">        :type description: [:obj:`dict` &lt;:obj:`str`, :obj:`dict` &lt;:obj:`str`, \</span>
+<span class="sd">            :obj:`list` &lt;(:obj:`str`, :obj:`str`, :obj:`str`, \</span>
+<span class="sd">            :obj:`str`, :obj:`list` &lt;:obj:`int`&gt;)&gt; &gt; &gt; ]</span>
+<span class="sd">        :returns: dictionary of MntGrp configuration and MntGrp Device name</span>
+<span class="sd">        :rtype: {&quot;alias&quot;: :obj:`str` , &quot;device&quot;: :obj:`str` , \</span>
+<span class="sd">            &quot;configuration&quot;: :obj:`str` ,  \</span>
+<span class="sd">            &quot;snapshot&quot;: :obj:`list` &lt;(:obj:`str` , :obj:`str` )&gt;}</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__updatePools</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__updateMacroServer</span><span class="p">()</span>
@@ -532,8 +568,11 @@
         <span class="sd">&quot;&quot;&quot; import setting from active measurement</span>
 
 <span class="sd">        :param jconf: json with mntgrp configuration</span>
+<span class="sd">        :type jconf: :obj:`str`</span>
 <span class="sd">        :param componentdatasources: component datasources</span>
+<span class="sd">        :type componentdatasources: :obj:`list` &lt;:obj:`int`&gt;</span>
 <span class="sd">        :returns: if profile has been changed</span>
+<span class="sd">        :rtype: :obj:`bool`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__updatePools</span><span class="p">()</span>
         <span class="n">conf</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">jconf</span><span class="p">)</span>
@@ -573,8 +612,11 @@
         <span class="sd">&quot;&quot;&quot; clears profile channels</span>
 
 <span class="sd">        :param dsg: datasource selection dictionary</span>
+<span class="sd">        :type dsg: :obj:`dict` &lt;:obj:`str`, :obj:`bool` or `None`&gt;</span>
 <span class="sd">        :param hel: list of hidden elements</span>
+<span class="sd">        :type hel: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        :param componentdatasources: component datasources</span>
+<span class="sd">        :type componentdatasources: :obj:`list` &lt;:obj:`int`&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">compdatasources</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
             <span class="n">compdatasources</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">componentDataSources</span><span class="p">()</span>
@@ -598,10 +640,15 @@
         <span class="sd">&quot;&quot;&quot; reads channels from mntgrp configutation</span>
 
 <span class="sd">        :param conf: mntgrp configuration</span>
+<span class="sd">        :type jconf: :obj:`str`</span>
 <span class="sd">        :param timers: timer dictionary</span>
+<span class="sd">        :type timers: :obj:`dict` &lt;:obj:`str`, :obj:`str`&gt;</span>
 <span class="sd">        :param dsg: datasource selection dictionary</span>
+<span class="sd">        :type dsg: :obj:`dict` &lt;:obj:`str`, :obj:`bool` or `None`&gt;</span>
 <span class="sd">        :param hel: list of hidden elements</span>
+<span class="sd">        :type hel: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        :returns: tango datasources list with elements (name, label, source)</span>
+<span class="sd">        :rtype: :obj:`list` &lt; [:obj:`str` , :obj:`str` , :obj:`str` ] &gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">tangods</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">timers</span><span class="p">[</span><span class="n">conf</span><span class="p">[</span><span class="s">&quot;timer&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
@@ -629,10 +676,14 @@
         <span class="sd">&quot;&quot;&quot; reads Tango channels from mntgrp configutation</span>
 
 <span class="sd">        :param conf: mntgrp configuration</span>
+<span class="sd">        :type conf: :obj:`dict` &lt;:obj:`str`, `any`&gt;</span>
 <span class="sd">        :param tangods: tango datasources list</span>
 <span class="sd">                        with elements (name, label, source)</span>
+<span class="sd">        :type tangods: :obj:`list` &lt; [:obj:`str` , :obj:`str` , :obj:`str` ] &gt;</span>
 <span class="sd">        :param dsg: datasource selection dictionary</span>
+<span class="sd">        :type dsg: :obj:`dict` &lt;:obj:`str`, :obj:`bool` or `None`&gt;</span>
 <span class="sd">        :param hel: list of hidden elements</span>
+<span class="sd">        :type hel: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">tangods</span> <span class="ow">and</span> <span class="n">NXSTOOLS</span><span class="p">:</span>
             <span class="n">jds</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__createDataSources</span><span class="p">(</span><span class="n">tangods</span><span class="p">,</span> <span class="n">dsg</span><span class="p">)</span>
@@ -655,10 +706,15 @@
         <span class="sd">&quot;&quot;&quot; reads timer aliases and reoder it according to mntgrp</span>
 
 <span class="sd">        :param conf: mntgrp configuration</span>
+<span class="sd">        :type conf: :obj:`dict` &lt;:obj:`str`, `any`&gt;</span>
 <span class="sd">        :param timers: timer device name list</span>
+<span class="sd">        :type timers: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        :param dsg: datasource selection dictionary</span>
+<span class="sd">        :type dsg: :obj:`dict` &lt;:obj:`str`, :obj:`bool` or `None`&gt;</span>
 <span class="sd">        :param hel: list of hidden elements</span>
+<span class="sd">        :type hel: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        :returns: timer alias list</span>
+<span class="sd">        :rtype: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">dtimers</span> <span class="o">=</span> <span class="n">PoolUtils</span><span class="o">.</span><span class="n">getAliases</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__pools</span><span class="p">,</span> <span class="n">timers</span><span class="p">)</span>
         <span class="n">otimers</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">dtimers</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
@@ -679,7 +735,11 @@
         <span class="sd">&quot;&quot;&quot; checks client records</span>
 
 <span class="sd">        :param datasources: datasource list</span>
+<span class="sd">        :type datasources: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        :param description: component description</span>
+<span class="sd">        :type description: [:obj:`dict` &lt;:obj:`str`, :obj:`dict` &lt;:obj:`str`, \</span>
+<span class="sd">            :obj:`list` &lt;(:obj:`str`, :obj:`str`, :obj:`str`, \</span>
+<span class="sd">            :obj:`str`, :obj:`list` &lt;:obj:`int`&gt;)&gt; &gt; &gt; ]</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">describer</span> <span class="o">=</span> <span class="n">Describer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__configServer</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span>
@@ -709,7 +769,9 @@
         <span class="sd">&quot;&quot;&quot; get the active pool</span>
 
 <span class="sd">        :param mntgrp: current mntgrp</span>
+<span class="sd">        :type mntgrp: :obj:`str`</span>
 <span class="sd">        :returns: active pool proxy</span>
+<span class="sd">        :rtype: :obj:`PyTango.DeviceProxy`:</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">apool</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">lpool</span> <span class="o">=</span> <span class="p">[</span><span class="bp">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
@@ -733,8 +795,11 @@
         <span class="sd">&quot;&quot;&quot; creates mntgrp devices</span>
 
 <span class="sd">        :param mntgrpName: measurement group name</span>
-<span class="sd">        :param time: master timer name</span>
+<span class="sd">        :type mntgrpName: :obj:`str`</span>
+<span class="sd">        :param timer: master timer name</span>
+<span class="sd">        :type time: :obj:`str`</span>
 <span class="sd">        :returns: measurement group full name</span>
+<span class="sd">        :rtype: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">amntgrp</span> <span class="o">=</span> <span class="n">MSUtils</span><span class="o">.</span><span class="n">getEnv</span><span class="p">(</span><span class="s">&#39;ActiveMntGrp&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__macroServerName</span><span class="p">)</span>
         <span class="n">apool</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__getActivePool</span><span class="p">(</span><span class="n">amntgrp</span><span class="p">)</span>
@@ -754,8 +819,11 @@
         <span class="sd">&quot;&quot;&quot; prepares timers</span>
 
 <span class="sd">        :param cnf: mntgrp configuration</span>
+<span class="sd">        :type cnf: :obj:`dict` &lt;:obj:`str`, `any`&gt;</span>
 <span class="sd">        :param ltimers: slave timer list</span>
+<span class="sd">        :type ltimers: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        :returns: master timer</span>
+<span class="sd">        :rtype: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">mtimers</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="p">[</span><span class="s">&quot;Timer&quot;</span><span class="p">])</span>
         <span class="n">timer</span> <span class="o">=</span> <span class="n">mtimers</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="n">mtimers</span> <span class="k">else</span> <span class="s">&#39;&#39;</span>
@@ -782,13 +850,22 @@
 <span class="sd">            and preselect datasources</span>
 
 <span class="sd">        :param components: component list</span>
+<span class="sd">        :type components: :obj:`list` &lt;:obj:`int`&gt;</span>
 <span class="sd">        :param datasources: datasource list</span>
+<span class="sd">        :type datasources: :obj:`list` &lt;:obj:`int`&gt;</span>
 <span class="sd">        :param componentdatasources: component datasources</span>
+<span class="sd">        :param componentdatasources: component datasource list</span>
 <span class="sd">        :param dontdisplay: hidden channel list</span>
+<span class="sd">        :type dontdisplay: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        :param timers: timers list</span>
+<span class="sd">        :type timers: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        :param description: component description</span>
-<span class="sd">        :return:  (ordered pool channels, snapshot tuple list)</span>
-
+<span class="sd">        :type description: [:obj:`dict` &lt;:obj:`str`, :obj:`dict` &lt;:obj:`str`, \</span>
+<span class="sd">            :obj:`list` &lt;(:obj:`str`, :obj:`str`, :obj:`str`, \</span>
+<span class="sd">            :obj:`str`, :obj:`list` &lt;:obj:`int`&gt;)&gt; &gt; &gt; ]</span>
+<span class="sd">        :returns:  (ordered pool channels, snapshot tuple list)</span>
+<span class="sd">        :rtype: (:obj:`list` &lt;:obj:`str`&gt; ,  \</span>
+<span class="sd">            :obj:`list` &lt;(:obj:`str` , :obj:`str` )&gt;)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">aliases</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">initsources</span> <span class="o">=</span> <span class="p">{}</span>
@@ -853,8 +930,11 @@
         <span class="sd">&quot;&quot;&quot; creates mntgrp if does not exists</span>
 
 <span class="sd">        :param cnf: mntgrp configuration</span>
+<span class="sd">        :type cnf: :obj:`dict` &lt;:obj:`str`, `any`&gt;</span>
 <span class="sd">        :param timer: master timer</span>
+<span class="sd">        :type timer: :obj:`str`</span>
 <span class="sd">        :returns: full mntgrp name</span>
+<span class="sd">        :rtype: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">mntGrpName</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="p">[</span><span class="s">&quot;MntGrp&quot;</span><span class="p">]</span>
         <span class="n">mfullname</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">PoolUtils</span><span class="o">.</span><span class="n">getMntGrpName</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__pools</span><span class="p">,</span> <span class="n">mntGrpName</span><span class="p">))</span>
@@ -871,11 +951,14 @@
 
 <span class="sd">        :param tangods: tango datasources list</span>
 <span class="sd">                        with elements (name, label, source)</span>
+<span class="sd">        :type tangods: :obj:`list` &lt; [:obj:`str` , :obj:`str` , :obj:`str` ] &gt;</span>
 <span class="sd">        :param extangods: tango datasources list</span>
 <span class="sd">                        with elements</span>
 <span class="sd">                        (ds name, input source,</span>
 <span class="sd">                         source without &#39;tango://&#39;,</span>
 <span class="sd">                         sources with host)</span>
+<span class="sd">        :type extangods: :obj:`list` &lt; [:obj:`str` , :obj:`str` , \</span>
+<span class="sd">               :obj:`str` ,:obj:`str` ,:obj:`str` ] &gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">initsource</span> <span class="ow">in</span> <span class="n">tangods</span><span class="p">:</span>
             <span class="n">source</span> <span class="o">=</span> <span class="n">initsource</span> <span class="k">if</span> <span class="n">initsource</span><span class="p">[:</span><span class="mi">8</span><span class="p">]</span> <span class="o">!=</span> <span class="s">&#39;tango://&#39;</span> \
@@ -903,9 +986,14 @@
 <span class="sd">                        (ds name, input source,</span>
 <span class="sd">                         source without &#39;tango://&#39;,</span>
 <span class="sd">                         sources with host)</span>
+<span class="sd">        :type extangods: :obj:`list` &lt; [:obj:`str` , :obj:`str` , \</span>
+<span class="sd">               :obj:`str` ,:obj:`str` ,:obj:`str` ] &gt;</span>
 <span class="sd">        :param sds: list of json datasource descriptions</span>
+<span class="sd">        :type sds: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        :param existing: list of existing datasources</span>
+<span class="sd">        :type existing: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        :returns: dictionary with known sources</span>
+<span class="sd">        :rtype: :obj:`dict` &lt;:obj:`str`, :obj:`str`&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">jds</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="n">found</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
@@ -943,10 +1031,15 @@
         <span class="sd">&quot;&quot;&quot; creates datasource XML for sources</span>
 
 <span class="sd">        :param name: datasource name</span>
+<span class="sd">        :type name: :obj:`str`</span>
 <span class="sd">        :param source: datasource source string</span>
-<span class="sd">        :param exsource: dictioanry of source attributes</span>
-<span class="sd">         with value (host, port, device, attribute)</span>
+<span class="sd">        :type source: :obj:`str`</span>
+<span class="sd">        :param exsource: dictioanry of source attributes \</span>
+<span class="sd">           with value (host, port, device, attribute)</span>
+<span class="sd">        :type exsource: :obj:`dict` &lt;:obj:`str` , \</span>
+<span class="sd">         (:obj:`str` , :obj:`str` , :obj:`str` , :obj:`str` )&gt;</span>
 <span class="sd">        :returns: xml string</span>
+<span class="sd">        :rtype :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="n">attribute</span> <span class="o">=</span> <span class="n">exsource</span><span class="p">[</span><span class="n">source</span><span class="p">]</span>
         <span class="n">df</span> <span class="o">=</span> <span class="n">XMLFile</span><span class="p">(</span><span class="s">&quot;ds.xml&quot;</span><span class="p">)</span>
@@ -964,10 +1057,16 @@
 <span class="sd">                        (ds name, input source,</span>
 <span class="sd">                         source without &#39;tango://&#39;,</span>
 <span class="sd">                         sources with host)</span>
-<span class="sd">        :param exsource: dictioanry of source attributes</span>
+<span class="sd">        :type extangods: :obj:`list` &lt; [:obj:`str` , :obj:`str` , \</span>
+<span class="sd">               :obj:`str` ,:obj:`str` ,:obj:`str` ] &gt;</span>
+<span class="sd">        :param exsource: dictioanry of source attributes \</span>
 <span class="sd">         with value (host, port, device, attribute)</span>
+<span class="sd">        :type exsource: :obj:`dict` &lt;:obj:`str` , \</span>
+<span class="sd">         (:obj:`str` , :obj:`str` , :obj:`str` , :obj:`str` )&gt;</span>
 <span class="sd">        :param ads: availaible datasources</span>
+<span class="sd">        :type ads: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        :param jds: dictionary with of source alias names</span>
+<span class="sd">        :type jds: :obj:`dict` &lt;:obj:`str` ,  :obj:`str` &gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">initsource</span><span class="p">,</span> <span class="n">source</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">extangods</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">initsource</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">jds</span><span class="p">:</span>
@@ -990,8 +1089,11 @@
 
 <span class="sd">        :param tangods: tango datasources list</span>
 <span class="sd">                        with elements (name, label, source)</span>
+<span class="sd">        :type tangods: :obj:`list` &lt; [:obj:`str` , :obj:`str` , :obj:`str` ] &gt;</span>
 <span class="sd">        :param dsg: datasource selection dictionary</span>
+<span class="sd">        :type dsg: :obj:`dict` &lt;:obj:`str`, :obj:`bool` or `None`&gt;</span>
 <span class="sd">        :returns: dictionary with of source alias names</span>
+<span class="sd">        :rtype:  :obj:`dict` &lt;:obj:`str` ,  :obj:`str` &gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">extangods</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">exsource</span> <span class="o">=</span> <span class="p">{}</span>
@@ -1011,12 +1113,19 @@
         <span class="sd">&quot;&quot;&quot; adds device into configuration dictionary</span>
 
 <span class="sd">        :param device: device alias</span>
+<span class="sd">        :type device: :obj:`str`</span>
 <span class="sd">        :param dontdisplay: list of devices component for display</span>
+<span class="sd">        :type dontdisplay: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        :param cnf: mntgrp configuration dictionary</span>
+<span class="sd">        :type cnf: :obj:`dict` &lt;:obj:`str`, `any`&gt;</span>
 <span class="sd">        :param timer: device timer</span>
+<span class="sd">        :type timer: :obj:`str`</span>
 <span class="sd">        :param index: device index</span>
+<span class="sd">        :type index: :obj:`int`</span>
 <span class="sd">        :param fullnames: dictionary with full names</span>
+<span class="sd">        :type fullnames: :obj:`dict` &lt;:obj:`str`, :obj:`str`&gt;</span>
 <span class="sd">        :returns: next device index</span>
+<span class="sd">        :rtype: :obj:`int`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">fullnames</span><span class="p">:</span>
             <span class="n">fullnames</span> <span class="o">=</span> <span class="n">PoolUtils</span><span class="o">.</span><span class="n">getFullDeviceNames</span><span class="p">(</span>
@@ -1054,8 +1163,11 @@
         <span class="sd">&quot;&quot;&quot; adds controller into mntgrp configuration dictionary</span>
 
 <span class="sd">        :param cnf: mntgrp configuration dictionary</span>
+<span class="sd">        :type cnf: :obj:`dict` &lt;:obj:`str`, `any`&gt;</span>
 <span class="sd">        :param ctrl: controller device name</span>
+<span class="sd">        :type ctrl: :obj:`str`</span>
 <span class="sd">        :param fulltimer: full timer name</span>
+<span class="sd">        :rtype: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="s">&#39;controllers&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">cnf</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="n">cnf</span><span class="p">[</span><span class="s">&#39;controllers&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
@@ -1079,13 +1191,21 @@
         <span class="sd">&quot;&quot;&quot; adds channel into mngrp configuration dictionary</span>
 
 <span class="sd">        :param cnf: mntgrp configuration dictionary</span>
+<span class="sd">        :type cnf: :obj:`dict` &lt;:obj:`str`, `any`&gt;</span>
 <span class="sd">        :param ctrl: controller device name</span>
+<span class="sd">        :type ctrl: :obj:`str`</span>
 <span class="sd">        :param device: alias device name</span>
+<span class="sd">        :type device: :obj:`str`</span>
 <span class="sd">        :param fullname: full device name</span>
+<span class="sd">        :type fullname: :obj:`str`</span>
 <span class="sd">        :param dontdisplay: hidden channels</span>
+<span class="sd">        :type dontdisplay: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        :param index: channel index</span>
+<span class="sd">        :type index: :obj:`int`</span>
 <span class="sd">        :param source: channel source</span>
+<span class="sd">        :type source: :obj:`str`</span>
 <span class="sd">        :returns: next index</span>
+<span class="sd">        :rtype: :obj:`int`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">ctrlChannels</span> <span class="o">=</span> <span class="n">cnf</span><span class="p">[</span><span class="s">&#39;controllers&#39;</span><span class="p">][</span><span class="n">ctrl</span><span class="p">][</span><span class="s">&#39;units&#39;</span><span class="p">][</span><span class="s">&#39;0&#39;</span><span class="p">][</span>
             <span class="s">u&#39;channels&#39;</span><span class="p">]</span>
@@ -1136,12 +1256,19 @@
         <span class="sd">&quot;&quot;&quot; adds tango channel into mntgrp configuration dictionary</span>
 
 <span class="sd">        :param cnf: mntgrp configuration dictionary</span>
+<span class="sd">        :type cnf: :obj:`dict` &lt;:obj:`str`, `any`&gt;</span>
 <span class="sd">        :param ctrl: controller device name</span>
+<span class="sd">        :type ctrl: :obj:`str`</span>
 <span class="sd">        :param device: alias device name</span>
+<span class="sd">        :type device: :obj:`str`</span>
 <span class="sd">        :param record: tango channel sources</span>
+<span class="sd">        :type record: :obj:`str`</span>
 <span class="sd">        :param dontdisplay: hidden channels</span>
+<span class="sd">        :type dontdisplay: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        :param index: channel index</span>
+<span class="sd">        :type index: :obj:`int`</span>
 <span class="sd">        :returns: next index</span>
+<span class="sd">        :rtype: :obj:`int`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">ctrlChannels</span> <span class="o">=</span> <span class="n">cnf</span><span class="p">[</span><span class="s">&#39;controllers&#39;</span><span class="p">][</span><span class="n">ctrl</span><span class="p">][</span><span class="s">&#39;units&#39;</span><span class="p">][</span><span class="s">&#39;0&#39;</span><span class="p">][</span>

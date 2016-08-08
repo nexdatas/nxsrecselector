@@ -5,7 +5,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>nxsrecconfig.Utils &mdash; NXSRecSelector 3.5.1 documentation</title>
+    <title>nxsrecconfig.Utils &mdash; NXSRecSelector 3.5.2 documentation</title>
     
     <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '3.5.1',
+        VERSION:     '3.5.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -29,7 +29,7 @@
     <script type="text/javascript" src="../../_static/js/jquery-fix.js"></script>
     <script type="text/javascript" src="../../_static/bootstrap-3.3.4/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../../_static/bootstrap-sphinx.js"></script>
-    <link rel="top" title="NXSRecSelector 3.5.1 documentation" href="../../index.html" />
+    <link rel="top" title="NXSRecSelector 3.5.2 documentation" href="../../index.html" />
     <link rel="up" title="nxsrecconfig" href="../nxsrecconfig.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
@@ -168,8 +168,11 @@
         <span class="sd">&quot;&quot;&quot; copares two dictionaries</span>
 
 <span class="sd">        :param dct: first dictinary</span>
+<span class="sd">        :type dct: :obj:`dict`</span>
 <span class="sd">        :param dct2: second dictinary</span>
+<span class="sd">        :type dct2: :obj:`dict`</span>
 <span class="sd">        :returns: if dictionaries are the same</span>
+<span class="sd">        :rtype: :obj:`bool`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dct</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
             <span class="k">return</span> <span class="bp">False</span>
@@ -197,7 +200,9 @@
         <span class="sd">&quot;&quot;&quot; provides datasource record from xml dom node</span>
 
 <span class="sd">        :param node: xml DOM node</span>
+<span class="sd">        :type node: :class:`xml.dom.minidom.Node`</span>
 <span class="sd">        :returns: datasource record</span>
+<span class="sd">        :rtype: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">res</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
         <span class="n">host</span> <span class="o">=</span> <span class="bp">None</span>
@@ -233,8 +238,11 @@
         <span class="sd">&quot;&quot;&quot; converts string to json dictionary</span>
 
 <span class="sd">        :param string: string with list of item or json dictionary</span>
+<span class="sd">        :type string: :obj:`str`</span>
 <span class="sd">        :param toBool: if true convert dictionary values to bool</span>
+<span class="sd">        :type toBool: :obj:`bool`</span>
 <span class="sd">        :returns: json dictionary</span>
+<span class="sd">        :rtype: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">string</span> <span class="ow">or</span> <span class="n">string</span> <span class="o">==</span> <span class="s">&quot;Not initialised&quot;</span><span class="p">:</span>
@@ -260,7 +268,9 @@
         <span class="sd">&quot;&quot;&quot; converts string to json list</span>
 
 <span class="sd">        :param string: with list of item or json list</span>
+<span class="sd">        :type string: :obj:`str`</span>
 <span class="sd">        :returns: json list</span>
+<span class="sd">        :rtype: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">string</span> <span class="ow">or</span> <span class="n">string</span> <span class="o">==</span> <span class="s">&quot;Not initialised&quot;</span><span class="p">:</span>
             <span class="k">return</span> <span class="s">&quot;[]&quot;</span>
@@ -279,7 +289,9 @@
         <span class="sd">&quot;&quot;&quot; converts list/dict/object of unicode/string to string object</span>
 
 <span class="sd">        :param obj: given unicode/string object</span>
+<span class="sd">        :type obj: `any`</span>
 <span class="sd">        :returns: string object</span>
+<span class="sd">        :rtype: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="nb">unicode</span><span class="p">):</span>
             <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
@@ -295,6 +307,7 @@
 <div class="viewcode-block" id="TangoUtils"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.TangoUtils">[docs]</a><span class="k">class</span> <span class="nc">TangoUtils</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;  Tango Utilities &quot;&quot;&quot;</span>
 
+    <span class="c">#: (:obj:`dict` &lt;:class:`PyTango.CmdArgType`, :obj:`str`&gt;)</span>
     <span class="c">#: map of Tango:Numpy types</span>
     <span class="n">tTnp</span> <span class="o">=</span> <span class="p">{</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevLong64</span><span class="p">:</span> <span class="s">&quot;int64&quot;</span><span class="p">,</span> <span class="n">PyTango</span><span class="o">.</span><span class="n">DevLong</span><span class="p">:</span> <span class="s">&quot;int32&quot;</span><span class="p">,</span>
             <span class="n">PyTango</span><span class="o">.</span><span class="n">DevShort</span><span class="p">:</span> <span class="s">&quot;int16&quot;</span><span class="p">,</span> <span class="n">PyTango</span><span class="o">.</span><span class="n">DevUChar</span><span class="p">:</span> <span class="s">&quot;uint8&quot;</span><span class="p">,</span>
@@ -308,7 +321,9 @@
         <span class="sd">&quot;&quot;&quot; opens device proxy of the given device</span>
 
 <span class="sd">        :param device: device name</span>
+<span class="sd">        :type device: :obj:`str`</span>
 <span class="sd">        :returns: DeviceProxy of device</span>
+<span class="sd">        :rtype: :class:`PyTango.DeviceProxy`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">found</span> <span class="o">=</span> <span class="bp">False</span>
         <span class="n">cnt</span> <span class="o">=</span> <span class="mi">0</span>
@@ -333,8 +348,10 @@
 <div class="viewcode-block" id="TangoUtils.wait"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.TangoUtils.wait">[docs]</a>    <span class="k">def</span> <span class="nf">wait</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">proxy</span><span class="p">,</span> <span class="n">counter</span><span class="o">=</span><span class="mi">100</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;waits for device proxy not running</span>
 
-<span class="sd">        :param proxy: device name</span>
-<span class="sd">        :returns: DeviceProxy of device</span>
+<span class="sd">        :param proxy: device proxy</span>
+<span class="sd">        :type proxy: :class:`PyTango.DeviceProxy`</span>
+<span class="sd">        :returns: if proxy device ready</span>
+<span class="sd">        :rtype: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">found</span> <span class="o">=</span> <span class="bp">False</span>
         <span class="n">cnt</span> <span class="o">=</span> <span class="mi">0</span>
@@ -357,7 +374,9 @@
         <span class="sd">&quot;&quot;&quot; provides proxies of given device names</span>
 
 <span class="sd">        :param names: given device names</span>
+<span class="sd">        :type names: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        :returns: list of device DeviceProxies</span>
+<span class="sd">        :rtype: :obj:`list` &lt;:class:`PyTango.DeviceProxy`&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">dps</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">names</span><span class="p">:</span>
@@ -374,8 +393,11 @@
         <span class="sd">&quot;&quot;&quot; finds device of give class</span>
 
 <span class="sd">        :param db: tango database</span>
+<span class="sd">        :type db: :class:`PyTango.DeviceProxy`</span>
 <span class="sd">        :param cname: device class name</span>
+<span class="sd">        :type cname: :obj:`str`</span>
 <span class="sd">        :returns: device name if exists</span>
+<span class="sd">        :rtype: :obj:`bool`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">servers</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">get_device_exported_for_class</span><span class="p">(</span>
             <span class="n">cname</span><span class="p">)</span><span class="o">.</span><span class="n">value_string</span>
@@ -395,7 +417,9 @@
         <span class="sd">&quot;&quot;&quot; provides tango device full name with host and port</span>
 
 <span class="sd">        :param source: string witg device name and its attribute</span>
-<span class="sd">        :returns: database host and port in tuple</span>
+<span class="sd">        :type source: :obj:`str`</span>
+<span class="sd">        :returns: database host and port in url string</span>
+<span class="sd">        :rtype: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="s">&#39;:&#39;</span> <span class="ow">in</span> <span class="n">source</span><span class="p">:</span>
             <span class="k">return</span> <span class="s">&quot;tango://</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">source</span>
@@ -409,7 +433,9 @@
         <span class="sd">&quot;&quot;&quot; retrives shape type units for attribure</span>
 
 <span class="sd">        :param source: string with device name and its attribute</span>
+<span class="sd">        :type source: :obj:`str`</span>
 <span class="sd">        :returns: (shape, data_type, units)</span>
+<span class="sd">        :rtype: (:obj:`list` &lt;:obj:`int`&gt;, :obj:`str`, :obj:`str`)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">vl</span> <span class="o">=</span> <span class="bp">None</span>
         <span class="n">shp</span> <span class="o">=</span> <span class="p">[]</span>
@@ -447,9 +473,14 @@
         <span class="sd">&quot;&quot;&quot; executes command on server on python package</span>
 
 <span class="sd">        :param server: tango server name or package name</span>
+<span class="sd">        :type server: :class:`PyTango.DeviceProxy` \</span>
+<span class="sd">             or :class:`nxsconfigserver.XMLConfigurator.XMLConfigurator`</span>
 <span class="sd">        :param command: command name</span>
+<span class="sd">        :type command: :obj:`str`</span>
 <span class="sd">        :param var: command variable list</span>
+<span class="sd">        :type var: [ `any` ]</span>
 <span class="sd">        :returns: command result</span>
+<span class="sd">        :rtype: `any`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">server</span><span class="p">,</span> <span class="s">&quot;command_inout&quot;</span><span class="p">):</span>
             <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">server</span><span class="p">,</span> <span class="n">command</span><span class="p">)(</span><span class="o">*</span><span class="n">var</span><span class="p">)</span>
@@ -467,8 +498,11 @@
         <span class="sd">&quot;&quot;&quot; provides environment variable value</span>
 
 <span class="sd">        :param var: variable name</span>
+<span class="sd">        :type var: :obj:`str`</span>
 <span class="sd">        :param ms: macroserver</span>
+<span class="sd">        :type ms: :obj:`str`</span>
 <span class="sd">        :returns: environment variable value</span>
+<span class="sd">        :rtype: `any`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">active</span> <span class="o">=</span> <span class="s">&quot;&quot;</span>
         <span class="n">dp</span> <span class="o">=</span> <span class="n">TangoUtils</span><span class="o">.</span><span class="n">openProxy</span><span class="p">(</span><span class="n">ms</span><span class="p">)</span>
@@ -485,8 +519,11 @@
         <span class="sd">&quot;&quot;&quot; sets environment variable value</span>
 
 <span class="sd">        :param var: variable name</span>
+<span class="sd">        :type var: :obj:`str`</span>
 <span class="sd">        :param value: variable value</span>
+<span class="sd">        :type value: `any`</span>
 <span class="sd">        :param ms: macroserver</span>
+<span class="sd">        :type ms: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">dp</span> <span class="o">=</span> <span class="n">TangoUtils</span><span class="o">.</span><span class="n">openProxy</span><span class="p">(</span><span class="n">ms</span><span class="p">)</span>
         <span class="n">dc</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;new&#39;</span><span class="p">:</span> <span class="p">{}}</span>
@@ -499,7 +536,9 @@
         <span class="sd">&quot;&quot;&quot; sets environment variable value</span>
 
 <span class="sd">        :param varvalues: variable value dictionary</span>
+<span class="sd">        :type varvalues: :obj:`dict` &lt;:obj:`str` , `any`&gt;</span>
 <span class="sd">        :param ms: macroserver</span>
+<span class="sd">        :type ms: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">dp</span> <span class="o">=</span> <span class="n">TangoUtils</span><span class="o">.</span><span class="n">openProxy</span><span class="p">(</span><span class="n">ms</span><span class="p">)</span>
         <span class="n">dc</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;new&#39;</span><span class="p">:</span> <span class="p">{}}</span>
@@ -513,7 +552,9 @@
         <span class="sd">&quot;&quot;&quot; unsets environment variable</span>
 
 <span class="sd">        :param var: variable name</span>
+<span class="sd">        :type var: :obj:`str`</span>
 <span class="sd">        :param ms: macroserver</span>
+<span class="sd">        :type ms: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">dp</span> <span class="o">=</span> <span class="n">TangoUtils</span><span class="o">.</span><span class="n">openProxy</span><span class="p">(</span><span class="n">ms</span><span class="p">)</span>
         <span class="n">dc</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;del&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">var</span><span class="p">]}</span>
@@ -525,8 +566,11 @@
         <span class="sd">&quot;&quot;&quot; provides macro server of given door</span>
 
 <span class="sd">        :param db: tango database</span>
+<span class="sd">        :type db: :class:`PyTango.Database`</span>
 <span class="sd">        :param door: given door</span>
+<span class="sd">        :type door: :obj:`str`</span>
 <span class="sd">        :returns: first MacroServer of the given door</span>
+<span class="sd">        :rtype: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">servers</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">get_device_exported_for_class</span><span class="p">(</span>
             <span class="s">&quot;MacroServer&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">value_string</span>
@@ -552,8 +596,11 @@
         <span class="sd">&quot;&quot;&quot; provides device controller full names</span>
 
 <span class="sd">        :param pools: list of pool devices</span>
+<span class="sd">        :type pools: :obj:`list` &lt;:class:`PyTango.DeviceProxy`&gt;</span>
 <span class="sd">        :param devices: alias names</span>
+<span class="sd">        :type devices: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        :returns: device controller full names</span>
+<span class="sd">        :rtype: :obj:`dict` &lt;:obj:`str`, :obj:`str`&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">lst</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">pool</span> <span class="ow">in</span> <span class="n">pools</span><span class="p">:</span>
@@ -571,8 +618,11 @@
         <span class="sd">&quot;&quot;&quot; provides channel sources</span>
 
 <span class="sd">        :param pools: list of pool devices</span>
+<span class="sd">        :type pools: :obj:`list` &lt;:class:`PyTango.DeviceProxy`&gt;</span>
 <span class="sd">        :param devices: alias names</span>
+<span class="sd">        :type devices: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        :returns: device sources</span>
+<span class="sd">        :rtype: :obj:`dict` &lt;:obj:`str`, :obj:`str`&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">lst</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">pool</span> <span class="ow">in</span> <span class="n">pools</span><span class="p">:</span>
@@ -590,8 +640,11 @@
         <span class="sd">&quot;&quot;&quot; provides experimental Channels</span>
 
 <span class="sd">        :param pools: list of pool devices</span>
+<span class="sd">        :type pools: :obj:`list` &lt;:class:`PyTango.DeviceProxy`&gt;</span>
 <span class="sd">        :param listattr: pool attribute with list</span>
+<span class="sd">        :type listattr: :obj:`str`</span>
 <span class="sd">        :returns: names from given pool listattr</span>
+<span class="sd">        :rtype: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">lst</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">elements</span> <span class="o">=</span> <span class="p">[]</span>
@@ -612,8 +665,11 @@
         <span class="sd">&quot;&quot;&quot; find device names from aliases</span>
 
 <span class="sd">        :param pools: list of pool devices</span>
+<span class="sd">        :type pools: :obj:`list` &lt;:class:`PyTango.DeviceProxy`&gt;</span>
 <span class="sd">        :param names: alias names if None returns name for all aliases</span>
+<span class="sd">        :type names: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        :returns: full device name</span>
+<span class="sd">        :rtype: :obj:`dict` &lt;:obj:`str`, :obj:`str`&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">lst</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">pool</span> <span class="ow">in</span> <span class="n">pools</span><span class="p">:</span>
@@ -632,8 +688,11 @@
         <span class="sd">&quot;&quot;&quot; find aliases from fullnames</span>
 
 <span class="sd">        :param pools: list of pool devices</span>
+<span class="sd">        :type pools: :obj:`list` &lt;:class:`PyTango.DeviceProxy`&gt;</span>
 <span class="sd">        :param names: fullnames if None returns all aliases</span>
+<span class="sd">        :type names: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        :returns: full device name</span>
+<span class="sd">        :rtype: :obj:`dict` &lt;:obj:`str`, :obj:`str`&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">lst</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">pool</span> <span class="ow">in</span> <span class="n">pools</span><span class="p">:</span>
@@ -653,8 +712,11 @@
         <span class="sd">&quot;&quot;&quot; find measurement group name from alias</span>
 
 <span class="sd">        :param pools: list of pool devices</span>
+<span class="sd">        :type pools: :obj:`list` &lt;:class:`PyTango.DeviceProxy`&gt;</span>
 <span class="sd">        :param alias: mntgrp alias</span>
+<span class="sd">        :type alias: :obj:`str`</span>
 <span class="sd">        :returns: full name of the measurement group alias</span>
+<span class="sd">        :rtype: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">lst</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">pool</span> <span class="ow">in</span> <span class="n">pools</span><span class="p">:</span>
@@ -673,8 +735,11 @@
         <span class="sd">&quot;&quot;&quot; provides tiemrs of given pools</span>
 
 <span class="sd">        :param pools: list of pool devices</span>
+<span class="sd">        :type pools: :obj:`list` &lt;:class:`PyTango.DeviceProxy`&gt;</span>
 <span class="sd">        :param filters: device name filter list</span>
+<span class="sd">        :type filters: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        :returns: list of timer names</span>
+<span class="sd">        :rtype: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">lst</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">res</span> <span class="o">=</span> <span class="p">[]</span>
@@ -704,8 +769,11 @@
         <span class="sd">&quot;&quot;&quot; provides channels of given pools</span>
 
 <span class="sd">        :param pools: list of pool devices</span>
+<span class="sd">        :type pools: :obj:`list` &lt;:class:`PyTango.DeviceProxy`&gt;</span>
 <span class="sd">        :param filters: device name filter list</span>
-<span class="sd">        :returns: list of timer names</span>
+<span class="sd">        :type filters: :obj:`list` &lt;:obj:`str`&gt;</span>
+<span class="sd">        :returns: list of channel names</span>
+<span class="sd">        :rtype: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">res</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">if</span> <span class="n">lst</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
@@ -733,7 +801,9 @@
         <span class="sd">&quot;&quot;&quot; provides datasource from pool device</span>
 
 <span class="sd">        :param name: pool device name</span>
+<span class="sd">        :type name:  :obj:`str`</span>
 <span class="sd">        :returns: source of pool device</span>
+<span class="sd">        :rtype:  :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">source</span> <span class="o">=</span> <span class="bp">None</span>
         <span class="k">try</span><span class="p">:</span>
