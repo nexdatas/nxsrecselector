@@ -42,11 +42,11 @@ class Settings(object):
         """ contructor
 
         :param server: NXSRecSelector server
-        :type server: :class:`nxsrecconfig.NXSRecSelector.NXSRecSelector`
+        :type server: :class:`nxsrecconfig.NXSConfig.NXSRecSelector`
         :param numberofthreads: number of threads used to check device state
         :type numberofthreads: :obj:`str`
         """
-        #: (:class:`nxsrecconfig.NXSRecSelector.NXSRecSelector`) Tango server
+        #: (:class:`nxsrecconfig.NXSConfig.NXSRecSelector`) Tango server
         self.__server = server
         #: (:obj:`int`) number of threads
         self.numberOfThreads = numberofthreads or 20
