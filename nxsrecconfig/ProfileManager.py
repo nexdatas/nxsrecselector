@@ -27,12 +27,12 @@ import PyTango
 
 try:
     from nxstools.nxsxml import (XMLFile, NDSource)
-    #: flag for nxstools installed
+    #: (:obj:`bool`) flag for nxstools installed
     NXSTOOLS = True
 except ImportError:
     NXSTOOLS = False
 
-#: default data names
+#: (:obj:`list` <:obj:`str`>) default data names
 DEFAULT_RECORD_KEYS = ['serialno', 'end_time', 'start_time',
                        'point_nb', 'timestamps', 'scan_title',
                        'filename']
@@ -44,19 +44,22 @@ class ProfileManager(object):
     def __init__(self, selector):
         """ constructor
 
-        :param selector selector object
+        :param selector: selector object
+        :type selector: :class:`nxsrecconfig.Selector.Selector`
         """
-        #: configuration selector
+        #: (:class:`nxsrecconfig.Selector.Selector`) configuration selector
         self.__selector = selector
 
-        #: macro server name
+        #: (:obj:`str`) macro server name
         self.__macroServerName = None
-        #: configuration server proxy
+        #: (:class:`PyTango.DeviceProxy` \
+        #: or :class:`nxsconfigserver.XMLConfigurator.XMLConfigurator`) \
+        #:     configuration server proxy
         self.__configServer = None
-        #: pool server proxies
+        #: (:obj:`list` <:obj:`PyTango.DeviceProxy`>) pool server proxies
         self.__pools = None
 
-        #: default preselectedComponents
+        #: (:obj:`list` <:obj:`str`>) default preselectedComponents
         self.defaultPreselectedComponents = []
 
     def __updateMacroServer(self):
@@ -78,6 +81,7 @@ class ProfileManager(object):
         """ available mntgrps
 
         :returns: list of available measurement groups
+        :rtype: :obj:`list` <:obj:`str`>
         """
         self.__updateMacroServer()
         self.__updatePools()
@@ -101,6 +105,7 @@ class ProfileManager(object):
         """ provides selected components
 
         :returns: list of available selected components
+        :rtype: :obj:`list` <:obj:`str`>
         """
         cps = json.loads(self.__selector["ComponentSelection"])
         ads = json.loads(self.__selector["DataSourceSelection"])
@@ -118,6 +123,7 @@ class ProfileManager(object):
         """ provides preselected components
 
         :returns: list of available preselected components
+        :rtype: :obj:`list` <:obj:`str`>
         """
         cps = json.loads(self.__selector["ComponentPreselection"])
         if isinstance(cps, dict):
@@ -129,6 +135,7 @@ class ProfileManager(object):
         """ provides preselected datasources
 
         :returns: list of available preselected components
+        :rtype: :obj:`list` <:obj:`str`>
         """
         cps = json.loads(self.__selector["DataSourcePreselection"])
         if isinstance(cps, dict):
@@ -141,7 +148,15 @@ class ProfileManager(object):
 
         :param full: if True describes all available ones are taken
                      otherwise selectect, preselected and mandatory
+        :type full: :obj:`bool`
         :returns: description of required components
+        :rtype: [:obj:`dict` <:obj:`str`, :obj:`dict` <:obj:`str`, \
+                 :obj:`list` <(:obj:`str`, :obj:`str`, :obj:`str`, \
+                      :obj:`str`, :obj:`list` <:obj:`int`>)> > > ] or \
+                [{"dsname": :obj:`str`, "strategy": :obj:`str`, \
+                  "dstype": :obj:`str`, "record": :obj:`str`, \
+                  "nxstype": :obj:`str`, "shape": :obj:`list` <:obj:`int`> , \
+          "cpname": :obj:`str`}, ...]
         """
         self.__updateConfigServer()
         describer = Describer(self.__configServer, True)
@@ -160,6 +175,7 @@ class ProfileManager(object):
         """ provides a list of Component DataSources
 
         :returns: list of component datasources
+        :rtype: :obj:`list` <:obj:`str`>
         """
         return self.__componentDataSources(self.cpdescription())
 
@@ -167,7 +183,9 @@ class ProfileManager(object):
         """ provides a list of Component DataSources
 
         :param description: component description
+        :type description: :obj:`bool`
         :returns: list of component datasources
+        :rtype: :obj:`list` <:obj:`str`>
         """
         if description is None:
             description = self.cpdescription()
@@ -187,7 +205,9 @@ class ProfileManager(object):
         """ provides selected datasources
 
         :param componentdatasources: component datasources
+        :type componentdatasources: :obj:`list` <:obj:`str`>
         :returns: list of available selected datasources
+        :rtype: :obj:`list` <:obj:`str`>
         """
         if compdatasources is None:
             compdatasources = self.__componentDataSources()
@@ -204,6 +224,7 @@ class ProfileManager(object):
         """ provides selected datasources
 
         :returns: list of available selected datasources
+        :rtype: :obj:`list` <:obj:`str`>
         """
         return self.__dataSources()
 
@@ -211,6 +232,7 @@ class ProfileManager(object):
         """ deletes mntgrp
 
         :param name: mntgrp name
+        :type name: :obj:`str`
         """
         self.__updatePools()
         for pool in self.__pools:
@@ -230,7 +252,9 @@ class ProfileManager(object):
 
 
         :param sync: make profile and mntgrp synchronization
-        :returns: dictionary with mntgrp configuration information
+        :type sync: :obj:`bool`
+        :returns: json dictionary with mntgrp configuration information
+        :rtype: :obj:`str`
         """
         mcp = self.__selector.configCommand("mandatoryComponents") or []
         components = list(
@@ -265,6 +289,7 @@ class ProfileManager(object):
         """ switchProfile to active measurement
 
         :param toActive: if False update the current profile
+        :type toActive: :obj:`bool`
         """
         if toActive:
             ms = self.__selector.getMacroServer()
@@ -281,6 +306,7 @@ class ProfileManager(object):
         """ provides configuration of mntgrp
 
         :returns: string with mntgrp configuration
+        :rtype: :obj:`str`
         """
         self.__updatePools()
         self.__updateMacroServer()
@@ -295,6 +321,7 @@ class ProfileManager(object):
         """ check if active measurement group was changed
 
         :returns: True if it is different to the current setting
+        :rtype: :obj:`bool`
         """
         mcp = self.__selector.configCommand("mandatoryComponents") or []
         components = list(
@@ -358,10 +385,19 @@ class ProfileManager(object):
         """ sets active measurement group from components
 
         :param components:  component list
+        :type components: :obj:`list` <:obj:`int`>
         :param datasources: datasource list
+        :type datasources: :obj:`list` <:obj:`int`>
         :param componentdatasources: component datasource list
+        :type componentdatasources: :obj:`list` <:obj:`int`>
         :param description: component description
-        :returns: tuple of MntGrp configuration and MntGrp Device name
+        :type description: [:obj:`dict` <:obj:`str`, :obj:`dict` <:obj:`str`, \
+            :obj:`list` <(:obj:`str`, :obj:`str`, :obj:`str`, \
+            :obj:`str`, :obj:`list` <:obj:`int`>)> > > ]
+        :returns: dictionary of MntGrp configuration and MntGrp Device name
+        :rtype: {"alias": :obj:`str` , "device": :obj:`str` , \
+            "configuration": :obj:`str` ,  \
+            "snapshot": :obj:`list` <(:obj:`str` , :obj:`str` )>}
         """
         self.__updatePools()
         self.__updateMacroServer()
@@ -401,8 +437,11 @@ class ProfileManager(object):
         """ import setting from active measurement
 
         :param jconf: json with mntgrp configuration
+        :type jconf: :obj:`str`
         :param componentdatasources: component datasources
+        :type componentdatasources: :obj:`list` <:obj:`int`>
         :returns: if profile has been changed
+        :rtype: :obj:`bool`
         """
         self.__updatePools()
         conf = json.loads(jconf)
@@ -442,8 +481,11 @@ class ProfileManager(object):
         """ clears profile channels
 
         :param dsg: datasource selection dictionary
+        :type dsg: :obj:`dict` <:obj:`str`, :obj:`bool` or `None`>
         :param hel: list of hidden elements
+        :type hel: :obj:`list` <:obj:`str`>
         :param componentdatasources: component datasources
+        :type componentdatasources: :obj:`list` <:obj:`int`>
         """
         if compdatasources is None:
             compdatasources = self.componentDataSources()
@@ -467,10 +509,15 @@ class ProfileManager(object):
         """ reads channels from mntgrp configutation
 
         :param conf: mntgrp configuration
+        :type jconf: :obj:`str`
         :param timers: timer dictionary
+        :type timers: :obj:`dict` <:obj:`str`, :obj:`str`>
         :param dsg: datasource selection dictionary
+        :type dsg: :obj:`dict` <:obj:`str`, :obj:`bool` or `None`>
         :param hel: list of hidden elements
+        :type hel: :obj:`list` <:obj:`str`>
         :returns: tango datasources list with elements (name, label, source)
+        :rtype: :obj:`list` < [:obj:`str` , :obj:`str` , :obj:`str` ] >
         """
         tangods = []
         timers[conf["timer"]] = ''
@@ -498,10 +545,14 @@ class ProfileManager(object):
         """ reads Tango channels from mntgrp configutation
 
         :param conf: mntgrp configuration
+        :type conf: :obj:`dict` <:obj:`str`, `any`>
         :param tangods: tango datasources list
                         with elements (name, label, source)
+        :type tangods: :obj:`list` < [:obj:`str` , :obj:`str` , :obj:`str` ] >
         :param dsg: datasource selection dictionary
+        :type dsg: :obj:`dict` <:obj:`str`, :obj:`bool` or `None`>
         :param hel: list of hidden elements
+        :type hel: :obj:`list` <:obj:`str`>
         """
         if tangods and NXSTOOLS:
             jds = self.__createDataSources(tangods, dsg)
@@ -524,10 +575,15 @@ class ProfileManager(object):
         """ reads timer aliases and reoder it according to mntgrp
 
         :param conf: mntgrp configuration
+        :type conf: :obj:`dict` <:obj:`str`, `any`>
         :param timers: timer device name list
+        :type timers: :obj:`list` <:obj:`str`>
         :param dsg: datasource selection dictionary
+        :type dsg: :obj:`dict` <:obj:`str`, :obj:`bool` or `None`>
         :param hel: list of hidden elements
+        :type hel: :obj:`list` <:obj:`str`>
         :returns: timer alias list
+        :rtype: :obj:`list` <:obj:`str`>
         """
         dtimers = PoolUtils.getAliases(self.__pools, timers)
         otimers = list(dtimers.values())
@@ -548,7 +604,11 @@ class ProfileManager(object):
         """ checks client records
 
         :param datasources: datasource list
+        :type datasources: :obj:`list` <:obj:`str`>
         :param description: component description
+        :type description: [:obj:`dict` <:obj:`str`, :obj:`dict` <:obj:`str`, \
+            :obj:`list` <(:obj:`str`, :obj:`str`, :obj:`str`, \
+            :obj:`str`, :obj:`list` <:obj:`int`>)> > > ]
         """
 
         describer = Describer(self.__configServer, True)
@@ -578,7 +638,9 @@ class ProfileManager(object):
         """ get the active pool
 
         :param mntgrp: current mntgrp
+        :type mntgrp: :obj:`str`
         :returns: active pool proxy
+        :rtype: :obj:`PyTango.DeviceProxy`:
         """
         apool = []
         lpool = [None, 0]
@@ -602,8 +664,11 @@ class ProfileManager(object):
         """ creates mntgrp devices
 
         :param mntgrpName: measurement group name
-        :param time: master timer name
+        :type mntgrpName: :obj:`str`
+        :param timer: master timer name
+        :type time: :obj:`str`
         :returns: measurement group full name
+        :rtype: :obj:`str`
         """
         amntgrp = MSUtils.getEnv('ActiveMntGrp', self.__macroServerName)
         apool = self.__getActivePool(amntgrp)
@@ -623,8 +688,11 @@ class ProfileManager(object):
         """ prepares timers
 
         :param cnf: mntgrp configuration
+        :type cnf: :obj:`dict` <:obj:`str`, `any`>
         :param ltimers: slave timer list
+        :type ltimers: :obj:`list` <:obj:`str`>
         :returns: master timer
+        :rtype: :obj:`str`
         """
         mtimers = json.loads(self.__selector["Timer"])
         timer = mtimers[0] if mtimers else ''
@@ -651,13 +719,22 @@ class ProfileManager(object):
             and preselect datasources
 
         :param components: component list
+        :type components: :obj:`list` <:obj:`int`>
         :param datasources: datasource list
+        :type datasources: :obj:`list` <:obj:`int`>
         :param componentdatasources: component datasources
+        :param componentdatasources: component datasource list
         :param dontdisplay: hidden channel list
+        :type dontdisplay: :obj:`list` <:obj:`str`>
         :param timers: timers list
+        :type timers: :obj:`list` <:obj:`str`>
         :param description: component description
-        :return:  (ordered pool channels, snapshot tuple list)
-
+        :type description: [:obj:`dict` <:obj:`str`, :obj:`dict` <:obj:`str`, \
+            :obj:`list` <(:obj:`str`, :obj:`str`, :obj:`str`, \
+            :obj:`str`, :obj:`list` <:obj:`int`>)> > > ]
+        :returns:  (ordered pool channels, snapshot tuple list)
+        :rtype: (:obj:`list` <:obj:`str`> ,  \
+            :obj:`list` <(:obj:`str` , :obj:`str` )>)
         """
         aliases = []
         initsources = {}
@@ -722,8 +799,11 @@ class ProfileManager(object):
         """ creates mntgrp if does not exists
 
         :param cnf: mntgrp configuration
+        :type cnf: :obj:`dict` <:obj:`str`, `any`>
         :param timer: master timer
+        :type timer: :obj:`str`
         :returns: full mntgrp name
+        :rtype: :obj:`str`
         """
         mntGrpName = self.__selector["MntGrp"]
         mfullname = str(PoolUtils.getMntGrpName(self.__pools, mntGrpName))
@@ -740,11 +820,14 @@ class ProfileManager(object):
 
         :param tangods: tango datasources list
                         with elements (name, label, source)
+        :type tangods: :obj:`list` < [:obj:`str` , :obj:`str` , :obj:`str` ] >
         :param extangods: tango datasources list
                         with elements
                         (ds name, input source,
                          source without 'tango://',
                          sources with host)
+        :type extangods: :obj:`list` < [:obj:`str` , :obj:`str` , \
+               :obj:`str` ,:obj:`str` ,:obj:`str` ] >
         """
         for name, _, initsource in tangods:
             source = initsource if initsource[:8] != 'tango://' \
@@ -772,9 +855,14 @@ class ProfileManager(object):
                         (ds name, input source,
                          source without 'tango://',
                          sources with host)
+        :type extangods: :obj:`list` < [:obj:`str` , :obj:`str` , \
+               :obj:`str` ,:obj:`str` ,:obj:`str` ] >
         :param sds: list of json datasource descriptions
+        :type sds: :obj:`list` <:obj:`str`>
         :param existing: list of existing datasources
+        :type existing: :obj:`list` <:obj:`str`>
         :returns: dictionary with known sources
+        :rtype: :obj:`dict` <:obj:`str`, :obj:`str`>
         """
         jds = {}
         found = set()
@@ -812,10 +900,15 @@ class ProfileManager(object):
         """ creates datasource XML for sources
 
         :param name: datasource name
+        :type name: :obj:`str`
         :param source: datasource source string
-        :param exsource: dictioanry of source attributes
-         with value (host, port, device, attribute)
+        :type source: :obj:`str`
+        :param exsource: dictioanry of source attributes \
+           with value (host, port, device, attribute)
+        :type exsource: :obj:`dict` <:obj:`str` , \
+         (:obj:`str` , :obj:`str` , :obj:`str` , :obj:`str` )>
         :returns: xml string
+        :rtype :obj:`str`
         """
         host, port, device, attribute = exsource[source]
         df = XMLFile("ds.xml")
@@ -833,10 +926,16 @@ class ProfileManager(object):
                         (ds name, input source,
                          source without 'tango://',
                          sources with host)
-        :param exsource: dictioanry of source attributes
+        :type extangods: :obj:`list` < [:obj:`str` , :obj:`str` , \
+               :obj:`str` ,:obj:`str` ,:obj:`str` ] >
+        :param exsource: dictioanry of source attributes \
          with value (host, port, device, attribute)
+        :type exsource: :obj:`dict` <:obj:`str` , \
+         (:obj:`str` , :obj:`str` , :obj:`str` , :obj:`str` )>
         :param ads: availaible datasources
+        :type ads: :obj:`list` <:obj:`str`>
         :param jds: dictionary with of source alias names
+        :type jds: :obj:`dict` <:obj:`str` ,  :obj:`str` >
         """
         for name, initsource, source, _ in extangods:
             if initsource not in jds:
@@ -859,8 +958,11 @@ class ProfileManager(object):
 
         :param tangods: tango datasources list
                         with elements (name, label, source)
+        :type tangods: :obj:`list` < [:obj:`str` , :obj:`str` , :obj:`str` ] >
         :param dsg: datasource selection dictionary
+        :type dsg: :obj:`dict` <:obj:`str`, :obj:`bool` or `None`>
         :returns: dictionary with of source alias names
+        :rtype:  :obj:`dict` <:obj:`str` ,  :obj:`str` >
         """
         extangods = []
         exsource = {}
@@ -880,12 +982,19 @@ class ProfileManager(object):
         """ adds device into configuration dictionary
 
         :param device: device alias
+        :type device: :obj:`str`
         :param dontdisplay: list of devices component for display
+        :type dontdisplay: :obj:`list` <:obj:`str`>
         :param cnf: mntgrp configuration dictionary
+        :type cnf: :obj:`dict` <:obj:`str`, `any`>
         :param timer: device timer
+        :type timer: :obj:`str`
         :param index: device index
+        :type index: :obj:`int`
         :param fullnames: dictionary with full names
+        :type fullnames: :obj:`dict` <:obj:`str`, :obj:`str`>
         :returns: next device index
+        :rtype: :obj:`int`
         """
         if not fullnames:
             fullnames = PoolUtils.getFullDeviceNames(
@@ -923,8 +1032,11 @@ class ProfileManager(object):
         """ adds controller into mntgrp configuration dictionary
 
         :param cnf: mntgrp configuration dictionary
+        :type cnf: :obj:`dict` <:obj:`str`, `any`>
         :param ctrl: controller device name
+        :type ctrl: :obj:`str`
         :param fulltimer: full timer name
+        :rtype: :obj:`str`
         """
         if 'controllers' not in cnf.keys():
             cnf['controllers'] = {}
@@ -948,13 +1060,21 @@ class ProfileManager(object):
         """ adds channel into mngrp configuration dictionary
 
         :param cnf: mntgrp configuration dictionary
+        :type cnf: :obj:`dict` <:obj:`str`, `any`>
         :param ctrl: controller device name
+        :type ctrl: :obj:`str`
         :param device: alias device name
+        :type device: :obj:`str`
         :param fullname: full device name
+        :type fullname: :obj:`str`
         :param dontdisplay: hidden channels
+        :type dontdisplay: :obj:`list` <:obj:`str`>
         :param index: channel index
+        :type index: :obj:`int`
         :param source: channel source
+        :type source: :obj:`str`
         :returns: next index
+        :rtype: :obj:`int`
         """
         ctrlChannels = cnf['controllers'][ctrl]['units']['0'][
             u'channels']
@@ -1005,12 +1125,19 @@ class ProfileManager(object):
         """ adds tango channel into mntgrp configuration dictionary
 
         :param cnf: mntgrp configuration dictionary
+        :type cnf: :obj:`dict` <:obj:`str`, `any`>
         :param ctrl: controller device name
+        :type ctrl: :obj:`str`
         :param device: alias device name
+        :type device: :obj:`str`
         :param record: tango channel sources
+        :type record: :obj:`str`
         :param dontdisplay: hidden channels
+        :type dontdisplay: :obj:`list` <:obj:`str`>
         :param index: channel index
+        :type index: :obj:`int`
         :returns: next index
+        :rtype: :obj:`int`
         """
 
         ctrlChannels = cnf['controllers'][ctrl]['units']['0'][

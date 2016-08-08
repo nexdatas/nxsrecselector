@@ -23,21 +23,53 @@ import json
 
 
 class Selection(dict):
-    """ Selection Dictionary """
+    """ Selection Dictionary which contains the following records:
+    {
+    "Timer":  '[]',
+    "OrderedChannels":  '[]',
+    "ComponentSelection":  '{}',
+    "DataSourceSelection":  '{}',
+    "DataSourcePreselection":  '{}',
+    "ComponentPreselection":  '{}',
+    "PreselectingDataSources":  '[]',
+    "OptionalComponents":  '[]',
+    "AppendEntry":  False,
+    "ComponentsFromMntGrp":  False,
+    "ConfigVariables":  '{}',
+    "UserData":  '{}',
+    "ChannelProperties":  '{}',
+    "UnplottedComponents":  '[]',
+    "DynamicComponents":  True,
+    "DefaultDynamicLinks":  True,
+    "DefaultDynamicPath":  \
+    '/entry$var.serialno:NXentry/NXinstrument/collection',
+    "TimeZone":  self.__defaultzone,
+    "ConfigDevice":  '',
+    "WriterDevice":  '',
+    "Door":  '',
+    "MntGrp":  '',
+    "Version":  self.__version,
+    "MntGrpConfiguration":  ''
+    }
+
+    """
 
     def __init__(self, *args, **kw):
         """ constructor
 
         :param args: dictionary args
+        :type args: :obj:`list` <`any`>
         :param kw: dictionary kw
+        :type kw: :obj:`dict` <:obj:`str`, `any`>
         """
         super(Selection, self).__init__(*args, **kw)
 
-        #: default zone
+        #: (:obj:`str`) default zone
         self.__defaultzone = 'Europe/Berlin'
 
-        #: default mntgrp
+        #: (:obj:`str`) default mntgrp
         self.__defaultmntgrp = 'nxsmntgrp'
+        #: (:obj:`str`) version string
         self.__version = self["Version"] if "Version" in self else "1.0.0"
         self.reset()
 
@@ -114,6 +146,7 @@ class Selection(dict):
 
         :brief: appends new datasources to Preselected DataSources
         :param datasources: list of datasources
+        :type datasources: :obj:`list` <:obj:`str`>
         """
         adsg = json.loads(self["PreselectingDataSources"])
         adsg = list(set(adsg or []) | set(datasources or []))
@@ -124,6 +157,7 @@ class Selection(dict):
 
         :brief: sets pool channels in order defined by OrderedChannels
         :param channels: pool channels
+        :type channels: :obj:`list` <:obj:`str`>
         """
         och = json.loads(self["OrderedChannels"])
         ordchannels = [ch for ch in och if ch in channels]
@@ -150,7 +184,9 @@ class Selection(dict):
                 neither in poolchannels nor in avaiblable datasources
                 It adds new channels to DataSourceSelection
         :param channels: pool channels
+        :type channels: :obj:`list` <:obj:`str`>
         :param datasources: available datasources
+        :type datasources: :obj:`list` <:obj:`str`>
         """
         dsg = json.loads(self["DataSourceSelection"])
         datasources = datasources or []
@@ -182,6 +218,7 @@ class Selection(dict):
         """ resets Preselected Components with given components and set them
         to not active
         :param components: list of components to be set
+        :type components: :obj:`list` <:obj:`str`>
         """
         acps = {}
         for cp in components:

@@ -153,15 +153,15 @@ class DynamicComponent(object):
         """ sets label parameters for specific dynamic components
 
         :param labels: label dictionaries
-        :type labels: :obj:`dict` <:obj:`str` , :obj:`str`> 
+        :type labels: :obj:`dict` <:obj:`str` , :obj:`str`>
         :param paths: nexus path dictionaries
-        :type paths: :obj:`dict` <:obj:`str` , :obj:`str`> 
+        :type paths: :obj:`dict` <:obj:`str` , :obj:`str`>
         :param links: link dictionaries
-        :type links: :obj:`dict` <:obj:`str` , :obj:`bool`> 
+        :type links: :obj:`dict` <:obj:`str` , :obj:`bool`>
         :param types: nexus type dictionaries
-        :type types: :obj:`dict` <:obj:`str` , :obj:`str`> 
+        :type types: :obj:`dict` <:obj:`str` , :obj:`str`>
         :param shapes: data shape dictionaries
-        :type shapes: :obj:`dict` <:obj:`str` , :obj:`list` <:obj:`int`> > 
+        :type shapes: :obj:`dict` <:obj:`str` , :obj:`list` <:obj:`int`> >
         """
         self.__nexuslabels = json.loads(labels)
         if not isinstance(self.__nexuslabels, dict):
@@ -333,9 +333,9 @@ class DynamicComponent(object):
         """ gets the property value for the given datasource
 
         :param nexusprop: nexus property dictionary
-        :type nexusprop: :obj:`dict` <:obj:`str` , :`any`> 
+        :type nexusprop: :obj:`dict` <:obj:`str` , :`any`>
         :param nexuslabel: nexus label dictionary
-        :type nexuslabels: :obj:`dict` <:obj:`str` , :obj:`str`> 
+        :type nexuslabels: :obj:`dict` <:obj:`str` , :obj:`str`>
         :param default: default value if property is not defined
         :type default: `any`
         :returns: propery value
@@ -351,9 +351,9 @@ class DynamicComponent(object):
         """ gets the Nexus path and for the given datasource
 
         :param nexuspaths: nexus property path dictionary
-        :type nexuspaths: :obj:`dict` <:obj:`str` , :obj:`str`> 
+        :type nexuspaths: :obj:`dict` <:obj:`str` , :obj:`str`>
         :param nexuslabels: nexus label dictionary
-        :type nexuslabels: :obj:`dict` <:obj:`str` , :obj:`str`> 
+        :type nexuslabels: :obj:`dict` <:obj:`str` , :obj:`str`>
         :param alias : datasource alias
         :type alias : :obj:`str`
         :param defaultpath: default path if path is not defined
@@ -529,7 +529,7 @@ class DynamicComponent(object):
         """ creates group tree
 
         :param root: root node
-        :type root: :class:`xml.dom.minidom.Node` 
+        :type root: :class:`xml.dom.minidom.Node`
         :param definition: definition node
         :type definition: :class:`xml.dom.minidom.Node`
         :param path: NeXus path

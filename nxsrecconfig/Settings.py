@@ -42,41 +42,46 @@ class Settings(object):
         """ contructor
 
         :param server: NXSRecSelector server
+        :type server: :class:`nxsrecconfig.NXSRecSelector.NXSRecSelector`
         :param numberofthreads: number of threads used to check device state
+        :type numberofthreads: :obj:`str`
         """
-        #: Tango server
+        #: (:class:`nxsrecconfig.NXSRecSelector.NXSRecSelector`) Tango server
         self.__server = server
-        #: number of threads
+        #: (:obj:`int`) number of threads
         self.numberOfThreads = numberofthreads or 20
 
-        #: configuration selection
+        #: (:class:`nxsrecconfg.MacroServerPools.MacroServerPools`) \
+        #:     configuration selection
         self.__msp = MacroServerPools(self.numberOfThreads)
 
-        #: configuration selection
+        #: (:class:`nxsrecconfg.Selector.Selector`) \
+        #:   configuration selector
         self.__selector = Selector(self.__msp, self.version)
 
+        #: (:class:`nxsrecconfg.ProfileManager.ProfileManager) \
         #: profile
         self.__profileManager = ProfileManager(self.__selector)
 
-        #: configuration file
+        #: (:obj:`str`) configuration file
         self.profileFile = '/tmp/nxsrecconfig.cfg'
 
-        #: tango database
+        #: (:class:`PyTango.Database`) tango database
         self.__db = PyTango.Database()
 
-        #: timer filters
+        #: (:obj:`list` <:obj:`str`>) timer filters
         self.timerFilters = ["*dgg*", "*/ctctrl0*"]
-        #: timer filters
+        #:  (:obj:`list` <:obj:`str`>) timer filters
         self.mutedChannelFilters = ["*tip551*"]
-        #: default device groups
+        #: (:obj:`str`) default device groups
         self.__defaultDeviceGroups = \
             '{"timer": ["*exp_t*"], "dac": ["*exp_dac*"], ' \
             + '"counter": ["*exp_c*"], "mca": ["*exp_mca*"], ' \
             + '"adc": ["*exp_adc*"], "motor": ["*exp_mot*"]}'
 
-        #: device groups
+        #: (:obj:`str`) device groups
         self.__deviceGroups = str(self.__defaultDeviceGroups)
-        #: administator data
+        #: (:obj:`list` <:obj:`str`>) administator data
         self.adminDataNames = []
 
         if server:
@@ -122,7 +127,9 @@ class Settings(object):
         """ provides values of the required variable
 
         :param name: name of the required variable
+        :type name: :obj:`str`
         :returns: values of the required variable
+        :rtype: `any`
         """
         vl = ''
         if name in self.__selector.keys():
@@ -135,6 +142,7 @@ class Settings(object):
         """ provides names of variables
 
         :returns:  all names of variables
+        :rtypes: :obj:`list` <:obj:`str`>
         """
         return self.__selector.keys()
 
@@ -142,10 +150,11 @@ class Settings(object):
         """ provides server version
 
         :returns: server version
+        :rtype: :obj:`str`
         """
         return __version__
 
-    #: server version
+    #: (:obj:`str`) server version
     version = property(
         __version,
         doc='server version')
@@ -156,6 +165,7 @@ class Settings(object):
         """ provides administrator data names
 
         :returns: list of provides administrator data names
+        :rtype: :obj:`list` <:obj:`str`>
         """
         return list(self.adminDataNames)
 
@@ -163,6 +173,7 @@ class Settings(object):
         """ provides user selected components
 
         :returns: list of available selected components
+        :rtype: :obj:`list` <:obj:`str`>
         """
         return self.__profileManager.components()
 
@@ -170,12 +181,13 @@ class Settings(object):
         """ provides all configuration components
 
         :returns: list of available selected components
+        :rtype: :obj:`list` <:obj:`str`>
         """
         return list(set(self.selectedComponents()) |
                     set(self.preselectedComponents()) |
                     set(self.mandatoryComponents()))
 
-    #: provides selected components
+    #: (:obj:`list` <:obj:`str`>) provides selected components
     components = property(
         __components,
         doc='provides selected components')
@@ -184,6 +196,7 @@ class Settings(object):
         """ provides preselected components
 
         :returns: list of available preselected components
+        :rtype: :obj:`list` <:obj:`str`>
         """
         return self.__profileManager.preselectedComponents()
 
@@ -191,10 +204,11 @@ class Settings(object):
         """ provides description component errors
 
         :returns: list of available description component errors
+        :rtype: :obj:`list` <:obj:`str`>
         """
         return self.__selector.descErrors
 
-    #: provides preselected components
+    #: (:obj:`list` <:obj:`str`>) provides preselected components
     descriptionErrors = property(__getDescriptionErrors,
                                  doc='provides description component errors')
 
@@ -209,6 +223,7 @@ class Settings(object):
         """ provides preselected datasources
 
         :returns: list of available preselected datasources
+        :rtype: :obj:`list` <:obj:`str`>
         """
         return self.__profileManager.preselectedDataSources()
 
@@ -216,13 +231,14 @@ class Settings(object):
         """ provides all selected data sources
 
         :returns: all selected data sources
+        :rtype: :obj:`list` <:obj:`str`>
         """
         return list(
             set(self.selectedDataSources()) |
             set(self.componentDataSources())
         )
 
-    #: provides all selected data sources
+    #: (:obj:`list` <:obj:`str`>) provides all selected data sources
     dataSources = property(
         __dataSources,
         doc=' provides selected data sources')
@@ -231,6 +247,7 @@ class Settings(object):
         """ provides a list of profile component DataSources
 
         :returns: list of profile component datasources
+        :rtype: :obj:`list` <:obj:`str`>
         """
         return self.__profileManager.componentDataSources()
 
@@ -240,6 +257,7 @@ class Settings(object):
         """ get method for defaultPreselectedComponents attribute
 
         :returns: list of components
+        :rtype: :obj:`list` <:obj:`str`>
         """
         return self.__profileManager.defaultPreselectedComponents
 
@@ -247,10 +265,11 @@ class Settings(object):
         """ set method for defaultPreselectedComponents attribute
 
         :param components: list of components
+        :type components: :obj:`list` <:obj:`str`>
         """
         self.__profileManager.defaultPreselectedComponents = components
 
-    #: default PreselectedComponents
+    #: (:obj:`list` <:obj:`str`>) default PreselectedComponents
     defaultPreselectedComponents = property(
         __getDefaultPreselectedComponents,
         __setDefaultPreselectedComponents,
@@ -260,6 +279,7 @@ class Settings(object):
         """ get method for configDevice attribute
 
         :returns: name of configDevice
+        :rtype: :obj:`str`
         """
         return self.__selector["ConfigDevice"]
 
@@ -267,12 +287,13 @@ class Settings(object):
         """ set method for configDevice attribute
 
         :param name: name of configDevice
+        :type name: :obj:`str`
         """
         if name != self.__selector["ConfigDevice"]:
             self.__selector["ConfigDevice"] = name
             self.switchProfile(toActive=False)
 
-    #: the json data string
+    #: (:obj:`str`) the json data string
     configDevice = property(__getConfigDevice, __setConfigDevice,
                             doc='configuration server device name')
 
@@ -280,23 +301,27 @@ class Settings(object):
         """ get method for poolBlacklist attribute
 
         :returns: name of poolBlacklist
+        :rtype: :obj:`list` <:obj:`str`>
         """
         return self.__msp.poolBlacklist
 
-    def __setPoolBlacklist(self, name):
+    def __setPoolBlacklist(self, names):
         """ set method for poolBlacklist attribute
 
-        :param name: name of poolBlacklist
+        :param names: names of poolBlacklist
+        :type names: :obj:`list` <:obj:`str`>
         """
-        self.__msp.poolBlacklist = name
+        self.__msp.poolBlacklist = names
 
-    #: black list of pools
+    #: (:obj:`list` <:obj:`str`>) black list of pools
     poolBlacklist = property(__getPoolBlacklist, __setPoolBlacklist,
                              doc='pool black list')
 
     def __setProfileConfiguration(self, jconf):
         """ set method for configuration attribute
+
         :param name: name of configuration
+        :type name: :obj:`str`
         """
         self.__selector.set(json.loads(jconf))
         self.storeProfile()
@@ -305,10 +330,11 @@ class Settings(object):
         """ get method for configuration attribute
 
         :returns: configuration
+        :rtype: :obj:`str`
         """
         return json.dumps(self.__selector.get())
 
-    #: the json data string
+    #: (:obj:`str`) the json data string
     profileConfiguration = property(
         __getProfileConfiguration,
         __setProfileConfiguration,
@@ -316,46 +342,48 @@ class Settings(object):
 
     def __setAppendEntry(self, ae):
         """ set method for appendEntry attribute
-        :param name: name of appendEntry
+
+        :param ae: appendEntry flag
+        :type ae: :obj:`bool`
         """
         self.__selector["AppendEntry"] = bool(ae)
         self.storeProfile()
 
-    ##
     def __getAppendEntry(self):
         """ get method for appendEntry attribute
 
         :returns: flag of appendEntry
+        :rtype: :obj:`bool`
         """
         return bool(self.__selector["AppendEntry"])
 
-    #: the json data string
+    #: (:obj:`bool`) the json data string
     appendEntry = property(
         __getAppendEntry,
         __setAppendEntry,
         doc='flag for append entry')
 
-    ##
     def __getUserData(self):
         """ get method for userData attribute
 
-        :returns: name of userData
+        :returns: userData json dictionary
+        :rtype: :obj:`str`
         """
         return self.__selector["UserData"]
 
-    ##
-    def __setUserData(self, name):
+    def __setUserData(self, udata):
         """
         set method for userData attribute
 
-        :param name: name of userData
+        :param udata: userData json dictionary
+        :type udata: :obj:`str`
         """
-        jname = Utils.stringToDictJson(name)
+        jname = Utils.stringToDictJson(udata)
         if self.__selector["UserData"] != jname:
             self.__selector["UserData"] = jname
             self.storeProfile()
 
-    #: the json data string
+    #: (:obj:`str`) the json data string
     userData = property(
         __getUserData,
         __setUserData,
@@ -364,7 +392,8 @@ class Settings(object):
     def __getDeviceGroups(self):
         """ get method for deviceGroups attribute
 
-        :returns: name of deviceGroups
+        :returns: deviceGroups json dictionary
+        :rtype: :obj:`str`
         """
         try:
             ldct = json.loads(self.__deviceGroups)
@@ -378,16 +407,17 @@ class Settings(object):
         except Exception:
             return self.__defaultDeviceGroups
 
-    def __setDeviceGroups(self, name):
+    def __setDeviceGroups(self, groups):
         """ sets method for deviceGroups attribute
 
-        :param name: name of deviceGroups
+        :param groups: name of deviceGroups
+        :type groups: :obj:`str`
         """
-        jname = Utils.stringToDictJson(name)
+        jname = Utils.stringToDictJson(groups)
         #: device groups
         self.__deviceGroups = jname
 
-    #: the json data string
+    #: (:obj:`str`) the json data string
     deviceGroups = property(
         __getDeviceGroups,
         __setDeviceGroups,
@@ -397,6 +427,7 @@ class Settings(object):
         """ get method for configVariables attribute
 
         :returns: name of configVariables
+        :rtype: :obj:`str`
         """
         return self.__selector["ConfigVariables"]
 
@@ -404,13 +435,14 @@ class Settings(object):
         """ set method for configVariables attribute
 
         :param name: name of configVariables
+        :type name: :obj:`str`
         """
         jname = Utils.stringToDictJson(name)
         if self.__selector["ConfigVariables"] != jname:
             self.__selector["ConfigVariables"] = jname
             self.storeProfile()
 
-    #: the json variables string
+    #: (:obj:`str`) the json variables string
     configVariables = property(
         __getConfigVariables,
         __setConfigVariables,
@@ -420,6 +452,7 @@ class Settings(object):
         """ get method for dataSourceGroup attribute
 
         :returns: names of STEP dataSources
+        :rtype: :obj:`str`
         """
         inst = self.__selector.setConfigInstance()
         if inst.stepdatasources:
@@ -430,11 +463,12 @@ class Settings(object):
     def __setStepDatSources(self, names):
         """ set method for dataSourceGroup attribute
         :param names: names of STEP dataSources
+        :type names: :obj:`str`
         """
         inst = self.__selector.setConfigInstance()
         inst.stepdatasources = names
 
-    #: the json data string
+    #: (:obj:`str`) the json data string
     stepdatasources = property(
         __getStepDatSources,
         __setStepDatSources,
@@ -444,7 +478,9 @@ class Settings(object):
         """ provides channel properties of the given type
 
         :param ptype: property type
+        :type ptype: :obj:`str`
         :returns:  json dictionary with channel properties
+        :rtype: :obj:`str`
         """
         props = json.loads(self.__selector["ChannelProperties"])
         if ptype in props.keys():
@@ -457,6 +493,7 @@ class Settings(object):
 
         :param typeandvariables:
                (property type, json dictionary of channel propertie values)
+        :type typeandvariables: (:obj:`str`, :obj:`str`)
         """
         ptype, variables = typeandvariables
         jvar = Utils.stringToDictJson(variables)
@@ -474,6 +511,7 @@ class Settings(object):
         """ get method for mntGrp attribute
 
         :returns: name of mntGrp
+        :rtype: :obj:`str`
         """
         return self.__selector["MntGrp"]
 
@@ -481,16 +519,18 @@ class Settings(object):
         """ set method for mntGrp attribute
 
         :param name: name of mntGrp
+        :type name: :obj:`str`
         """
         self.__selector["MntGrp"] = name
 
-    #: the json data string
+    #: (:obj:`str`) the json data string
     mntGrp = property(__getMntGrp, __setMntGrp,
                       doc='measurement group')
 
     def __getDoor(self):
         """ get method for door attribute
 
+        :rtype: :obj:`str`
         :returns: name of door
         """
         return self.__selector["Door"]
@@ -498,12 +538,13 @@ class Settings(object):
     def __setDoor(self, name):
         """ set method for door attribute
 
+        :type name: :obj:`str`
         :param name: name of door
         """
         self.__selector["Door"] = name
         self.__msp.updateMacroServer(self.__selector["Door"])
 
-    #: the json data string
+    #: (:obj:`str`) the json data string
     door = property(__getDoor, __setDoor,
                     doc='door server device name')
 
@@ -511,10 +552,11 @@ class Settings(object):
         """ get method for macro server attribute
 
         :returns: name of macro server
+        :rtype :obj:`str`
         """
         return self.__msp.getMacroServer(self.__selector["Door"])
 
-    #: the json data string
+    #: (:obj:`str`) the json data string
     macroServer = property(__getMacroServer,
                            doc='macroserver device name')
 
@@ -522,6 +564,7 @@ class Settings(object):
         """ get method for writerDevice attribute
 
         :returns: name of writerDevice
+        :rtype: :obj:`str`
         """
         return self.__selector["WriterDevice"]
 
@@ -529,11 +572,12 @@ class Settings(object):
         """ set method for writerDevice attribute
 
         :param name: name of writerDevice
+        :type name: :obj:`str`
         """
         self.__selector["WriterDevice"] = name
         self.storeProfile()
 
-    #: the json data string
+    #: (:obj:`str`) the json data string
     writerDevice = property(__getWriterDevice, __setWriterDevice,
                             doc='Writer device name')
 
@@ -541,6 +585,7 @@ class Settings(object):
         """ get method for ScanDir attribute
 
         :returns: name of ScanDir
+        :rtype: :obj:`str`
         """
         ms = self.__selector.getMacroServer()
         return str(MSUtils.getEnv('ScanDir', ms))
@@ -549,6 +594,7 @@ class Settings(object):
         """ set method for ScanDir attribute
 
         :param name: name of ScanDir
+        :type name: :obj:`str`
         """
         ms = self.__selector.getMacroServer()
         MSUtils.setEnv('ScanDir', str(name), ms)
@@ -561,6 +607,7 @@ class Settings(object):
         """ get method for ScanID attribute
 
         :returns: name of ScanID
+        :rtype: :obj:`int`
         """
         ms = self.__selector.getMacroServer()
         sid = MSUtils.getEnv('ScanID', ms)
@@ -574,11 +621,12 @@ class Settings(object):
         """ set method for ScanID attribute
 
         :param name: name of ScanID
+        :type name: :obj:`int`
         """
         ms = self.__selector.getMacroServer()
         MSUtils.setEnv('ScanID', name, ms)
 
-    #: the json data string
+    #: (:obj:`int`) the json data string
     scanID = property(__getScanID, __setScanID,
                       doc='scan id')
 
@@ -586,6 +634,7 @@ class Settings(object):
         """ get method for ScanFile attribute
 
         :returns: name of ScanFile
+        :rtype: :obj:`str`
         """
         ms = self.__selector.getMacroServer()
         val = MSUtils.getEnv('ScanFile', ms)
@@ -596,6 +645,7 @@ class Settings(object):
         """ set method for ScanFile attribute
 
         :param name: name of ScanFile
+        :type name: :obj:`str`
         """
         jname = json.loads(Utils.stringToListJson(name))
 
@@ -604,14 +654,15 @@ class Settings(object):
             jname = jname[0]
         MSUtils.setEnv('ScanFile', jname, ms)
 
-    #: the json data string
+    #: (:obj:`str`) the json data string
     scanFile = property(__getScanFile, __setScanFile,
                         doc='scan file(s)')
 
     def variableComponents(self):
         """ provides components for all variables
 
-        :returns: dictionary with components for all variables
+        :returns: json dictionary with components for all variables
+        :rtype: :obj:`str`
         """
         acps = self.availableComponents()
         vrs = {}
@@ -630,6 +681,7 @@ class Settings(object):
         """ provides description of all components
 
         :returns: JSON string with description of all components
+        :rtype: :obj:`str`
         """
         dc = self.__profileManager.cpdescription(full=True)
         jdc = json.dumps(dc)
@@ -639,6 +691,7 @@ class Settings(object):
         """ provides full names of pool devices
 
         :returns: JSON string with full names of pool devices
+        :rtype: :obj:`str`
         """
         pools = self.__selector.getPools()
         return json.dumps(PoolUtils.getFullDeviceNames(pools))
@@ -647,6 +700,7 @@ class Settings(object):
         """ provides available Timers from MacroServer pools
 
         :returns:  available Timers from MacroServer pools
+        :rtype: :obj:`list` <:obj:`str`>
         """
         pools = self.__selector.getPools()
         return PoolUtils.getTimers(pools, self.timerFilters)
@@ -655,6 +709,7 @@ class Settings(object):
         """ provides muted channels from pool
 
         :returns: muted channels from pool
+        :rtype: :obj:`list` <:obj:`str`>
         """
         pools = self.__selector.getPools()
         nexusconfig_device = self.__selector.setConfigInstance()
@@ -691,8 +746,11 @@ class Settings(object):
         """ executes command on configuration server
 
         :param command: command name
+        :type command: :obj:`str`
         :param var: command parameter list
+        :type var: [ `any` ]
         :returns: command result
+        :rtype: `any`
         """
         return self.__selector.configCommand(command, *var)
 
@@ -700,6 +758,7 @@ class Settings(object):
         """ mandatory components
 
         :returns: list of mandatory components
+        :rtype: :obj:`list` <:obj:`str`>
         """
         mc = self.__configCommand("mandatoryComponents") or []
         return mc
@@ -708,6 +767,7 @@ class Settings(object):
         """ available components
 
         :returns: list of available components
+        :rtype: :obj:`list` <:obj:`str`>
         """
         ac = self.__configCommand("availableComponents") or []
         return ac
@@ -716,6 +776,7 @@ class Settings(object):
         """ available selections
 
         :returns: list of available selections
+        :rtype: :obj:`list` <:obj:`str`>
         """
         ac = self.__configCommand("availableSelections") or []
         return ac
@@ -724,6 +785,7 @@ class Settings(object):
         """ available datasources
 
         :returns: list of available datasources
+        :rtype: :obj:`list` <:obj:`str`>
         """
         ad = self.__configCommand("availableDataSources") or []
         return ad
@@ -732,7 +794,9 @@ class Settings(object):
         """ provides names from given pool listattr
 
         :param listattr: name of pool attribute with a element list
+        :type listattr: :obj:`str`
         :returns: names from given pool listattr
+        :rtype: :obj:`list` <:obj:`str`>
         """
         return self.__selector.poolElementNames(listattr)
 
@@ -762,7 +826,9 @@ class Settings(object):
         """ provides description of client datasources
 
         :param cps: component names
+        :type cps: :obj:`list` <:obj:`str`>
         :returns: JSON string with description of client datasources
+        :rtype: :obj:`str`
         """
         nexusconfig_device = self.__selector.setConfigInstance()
         describer = Describer(nexusconfig_device)
@@ -778,7 +844,9 @@ class Settings(object):
         """ create configuration
 
         :param cps: component names
+        :type cps: :obj:`list` <:obj:`str`>
         :returns: JSON string with description of client datasources
+        :rtype: :obj:`str`
         """
         nexusconfig_device = self.__selector.setConfigInstance()
         if cps:
@@ -840,8 +908,12 @@ class Settings(object):
 
     def dataSourceDescription(self, datasources):
         """ describe datasources
+
         :param datasources: list for datasource names
+        :type datasources: :obj:`list` <:obj:`str`>
         :returns: list of dictionary with description of datasources
+        :rtype: [{"dsname": :obj:`str`, "dstype": :obj:`str`, \
+                  "record": :obj:`str`}, ...]
         """
         nexusconfig_device = self.__selector.setConfigInstance()
         describer = Describer(nexusconfig_device)
@@ -853,6 +925,7 @@ class Settings(object):
         """ deletes mntgrp
 
         :param name: mntgrp name
+        :type name: :obj:`str`
         """
         self.__profileManager.deleteProfile(name)
 
@@ -860,6 +933,7 @@ class Settings(object):
         """ provides configuration of mntgrp
 
         :returns: string with mntgrp configuration
+        :rtype: :obj:`str`
         """
         return self.__profileManager.mntGrpConfiguration()
 
@@ -867,6 +941,7 @@ class Settings(object):
         """ check if active measurement group was changed
 
         :returns: True if it is different to the current setting
+        :rtype: :obj:`bool`
         """
         return self.__profileManager.isMntGrpUpdated()
 
@@ -874,6 +949,7 @@ class Settings(object):
         """ set active measurement group from components
 
         :returns: string with mntgrp configuration
+        :rtype: :obj:`str`
         """
         return self.__profileManager.updateProfile(False)
 
@@ -881,14 +957,15 @@ class Settings(object):
         """ switch to active measurement
 
         :param toActive: if False update the current profile
+        :type toActive: :obj:`bool`
         """
         self.__profileManager.switchProfile(toActive)
 
     def updateProfile(self):
         """ update profile and measurement group
 
-        :param setenv: set ActiveMntGrp and PreScanSnapshot variables
         :returns: string with mntgrp configuration
+        :rtype: :obj:`str`
         """
         return self.__profileManager.updateProfile(True)
 
@@ -901,6 +978,7 @@ class Settings(object):
         """ available mntgrps
 
         :returns: list of available measurement groups
+        :rtype: :obj:`list` <:obj:`str`>
         """
         return self.__profileManager.availableMntGrps()
 
@@ -910,7 +988,9 @@ class Settings(object):
         """ creates dynamic component
 
         :param params: datasource parameters
+        :type params: :obj:`list` <:obj:`str`>
         :returns: dynamic component name
+        :rtype: :obj:`str`
         """
         nexusconfig_device = self.__selector.setConfigInstance()
         dcpcreator = DynamicComponent(nexusconfig_device)
@@ -948,6 +1028,7 @@ class Settings(object):
         """ removes dynamic component
 
         :param name: dynamic component name
+        :type name: :obj:`str`
         """
         nexusconfig_device = self.__selector.setConfigInstance()
         dcpcreator = DynamicComponent(nexusconfig_device)
@@ -959,12 +1040,15 @@ class Settings(object):
         """ gets Scan Environment Data
 
         :returns: JSON String with important variables
+        :rtype: :obj:`str`
         """
         return self.__selector.getScanEnvVariables()
 
     def setScanEnvVariables(self, jdata):
         """ sets Scan Environment Data
+
         :param jdata: JSON String with important variables
+        :type jdata: :obj:`str`
         """
         return self.__selector.setScanEnvVariables(jdata)
 

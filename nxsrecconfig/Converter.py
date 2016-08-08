@@ -36,7 +36,7 @@ class ConverterXtoY(object):
         """ converts selection to the current selector version
 
         :param selection: selection dictionary object
-        :type selection: nxsrecconfig.Selection.Selection
+        :type selection: :obj:`dict` <:obj:`str`, `any`>
         """
         for old, new in self.names.items():
             if old in selection.keys():
@@ -77,7 +77,7 @@ class Converter2to3(ConverterXtoY):
         """ converts selection from version 2 to 3
 
         :param selection: selection dictionary object
-        :type selection: nxsrecconfig.Selection.Selection
+        :type selection: :obj:`dict` <:obj:`str`, `any`>
         """
         super(Converter2to3, self).convert(selection)
 
@@ -135,7 +135,7 @@ class Converter3to2(ConverterXtoY):
         """ converts selection from version 3 to 2
 
         :param selection: selection dictionary object
-        :type selection: nxsrecconfig.Selection.Selection
+        :type selection: :obj:`dict` <:obj:`str`, `any`>
         """
         super(Converter3to2, self).convert(selection)
         if 'ComponentPreselection' in selection.keys():
@@ -183,7 +183,7 @@ class Converter1to2(ConverterXtoY):
         """ converts selection from version 1 to 2
 
         :param selection: selection dictionary object
-        :type selection: nxsrecconfig.Selection.Selection
+        :type selection: :obj:`dict` <:obj:`str`, `any`>
         """
         super(Converter1to2, self).convert(selection)
         props = {}
@@ -227,7 +227,7 @@ class Converter2to1(ConverterXtoY):
         """ converts selection from version 2 to 1
 
         :param selection: selection dictionary object
-        :type selection: nxsrecconfig.Selection.Selection
+        :type selection: :obj:`dict` <:obj:`str`, `any`>
         """
         super(Converter2to1, self).convert(selection)
         if "ChannelProperties" in selection:
@@ -283,7 +283,7 @@ class Converter(object):
         """ converts selection from any version to any other
 
         :param selection: selection dictionary object
-        :type selection: nxsrecconfig.Selection.Selection
+        :type selection: :obj:`dict` <:obj:`str`, `any`>
         """
         major, _, _ = self.version(selection)
         if major == self.majorversion:

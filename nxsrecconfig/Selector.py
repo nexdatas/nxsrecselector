@@ -35,26 +35,32 @@ class Selector(object):
         """ constructor
 
         :param macroserverpools: MacroServerPools object
+        :type macroserverpools: \
+            :class:`nxsrecconfig.MacroServerPools.MacroServerPools`
         :param version: selector version
+        :type version: :obj:`str`
         """
 
-        #: macro server and pools
+        #: (:class:`nxsrecconfig.MacroServerPools.MacroServerPools`) \
+        #:  macro server and pools
         self.__msp = macroserverpools
 
+        #: (:class:`nxsrecconfig.Selection.Selection`) \
         #:  selection dictionary with Settings
         self.__selection = Selection(Version=version)
+        #: (:class:`nxsrecconfig.Converter.Converter`) \
         #:  selection dictionary with Settings
         self.__converter = Converter(version)
 
-        #:  selection dictionary with Settings
+        #: (:obj:`str`) selection dictionary with Settings
         self.__version = version
 
-        #: tango database
+        #: (:class:`PyTango.Database`) tango database
         self.__db = PyTango.Database()
 
-        #: module label
+        #: (:obj:`str`) module label
         self.moduleLabel = 'module'
-        #: error descriptions
+        #: (:obj:`list` <:obj:`str`>) error descriptions
         self.descErrors = []
 
     def reset(self):
@@ -75,6 +81,7 @@ class Selector(object):
         """ sets selection from state data
 
         :param state: state data
+        :type state: :obj:`dict` <:obj:`str`, `any`>
         """
         state = dict(state)
         self.__converter.convert(state)
@@ -91,6 +98,9 @@ class Selector(object):
 
     def keys(self):
         """ provides all names of variables
+
+        :returns: selection keys
+        :rtype: :obj:`list` <:obj:`str`>
         """
         return self.__selection.keys()
 
@@ -98,6 +108,7 @@ class Selector(object):
         """ provides selection data
 
         :returns: selection data
+        :rtype: :obj:`dict` <:obj:`str`, `any`>
         """
         for key in self.keys():
             if hasattr(self, "_Selector__preGet" + key):
@@ -109,7 +120,9 @@ class Selector(object):
         """ provides value of selection item
 
         :param key: selection item name
+        :type key: :obj:`str`
         :returns: selection item value
+        :rtype: `any`
         """
         if key in self.keys():
             if key and key[0].upper() != key[0]:
@@ -124,7 +137,9 @@ class Selector(object):
         """ sets value of selection item
 
         :param key: selection item name
+        :type key: :obj:`str`
         :param value: selection item value
+        :type value: `any`
         """
         changed = False
         if self.__selection[key] != value:
@@ -153,8 +168,6 @@ class Selector(object):
 
     def __preGetWriterDevice(self):
         """ update method for writerDevice attribute
-
-        :returns: name of writerDevice
         """
         if "WriterDevice" not in self.__selection.keys() \
                 or not self.__selection["WriterDevice"]:
@@ -181,6 +194,7 @@ class Selector(object):
         """ set method for door attribute
 
         :param changed: True if selection element has been changed
+        :type changed: :obj:`bool`
         """
         if not self.__selection["Door"]:
             self.__selection["Door"] = TangoUtils.getDeviceName(
@@ -237,13 +251,14 @@ class Selector(object):
         """ resets preselected components to set of given components
 
         :param components: new selection preselected components
+        :type components: :obj:`list` <:obj:`str`>
         """
         self.__selection.resetPreselectedComponents(components)
 
     def preselect(self):
         """ updates active state of preselected components
 
-        :returns: new group of preselected components
+        :brief: It provides new group of preselected components
         """
         datasources = set(json.loads(self["PreselectingDataSources"]))
         acpgroup = json.loads(self["ComponentPreselection"])
@@ -266,6 +281,7 @@ class Selector(object):
         """ provides pool proxies
 
         :returns: list of pool proxies
+        :rtype: :obj:`list` <:obj:`PyTango.DeviceProxy`>
         """
         return self.__msp.getPools(self["Door"])
 
@@ -273,6 +289,7 @@ class Selector(object):
         """ provides MacroServer name
 
         :returns: MacroServer name
+        :rtype: :obj:`str`
         """
         return self.__msp.getMacroServer(self["Door"])
 
@@ -280,7 +297,9 @@ class Selector(object):
         """ provides names from the given pool listattr
 
         :param listattr: pool attribute with list
+        :type listattr: :obj:`str`
         :returns: names from given pool listattr
+        :rtype: :obj:`list` <:obj:`str`>
         """
         return PoolUtils.getElementNames(self.getPools(), listattr)
 
@@ -288,6 +307,8 @@ class Selector(object):
         """ sets config instances
 
         :returns: set config instance
+        :rtype: :class:`PyTango.DeviceProxy` \
+             or :class:`nxsconfigserver.XMLConfigurator.XMLConfigurator`
         """
         configDevice = None
         self.__preGetConfigDevice()
@@ -331,7 +352,12 @@ class Selector(object):
     def configCommand(self, command, *var):
         """ executes command on configuration server
 
+        :param command: command name
+        :type command: :obj:`str`
+        :param var: parameter list
+        :type var: [ `any` ]
         :returns: command result
+        :rtype: `any`
         """
         configdevice = self.setConfigInstance()
         return TangoUtils.command(configdevice, command, *var)
@@ -340,7 +366,9 @@ class Selector(object):
         """ imports Selector Environment Data
 
         :param names: names of required variables
+        :type names: :obj:`list` <:obj:`str`>
         :param data: dictionary with resulting data
+        :type data: :obj:`dict` <:obj:`str` , `any`>
         """
         update = False
         if names is None:
@@ -356,7 +384,9 @@ class Selector(object):
         """ exports Selector Environment Data
 
         :param data: dictionary with input data
+        :type data: :obj:`dict` <:obj:`str` , `any`>
         :param cmddata: dictionary with command input data
+        :type cmddata: :obj:`dict` <:obj:`str` , `any`>
         """
         if data is None:
             data = self
@@ -366,6 +396,7 @@ class Selector(object):
         """ gets Scan Environment Data
 
         :returns: JSON String with important variables
+        :rtype: :obj:`str`
         """
         return self.__msp.getScanEnv(self["Door"])
 
@@ -373,6 +404,7 @@ class Selector(object):
         """ sets Scan Environment Data
 
         :param jdata: JSON String with important variables
+        :type jdata: :obj:`str`
         """
         return self.__msp.setScanEnv(self["Door"], jdata)
 
@@ -388,6 +420,7 @@ class Selector(object):
         """ fetch configuration
 
         :returns: if configuration was fetched
+        :rtype: :obj:`bool`
         """
         inst = self.setConfigInstance()
         cnfdv = self["ConfigDevice"]

@@ -37,8 +37,11 @@ class Utils(object):
         """ copares two dictionaries
 
         :param dct: first dictinary
+        :type dct: :obj:`dict`
         :param dct2: second dictinary
+        :type dct2: :obj:`dict`
         :returns: if dictionaries are the same
+        :rtype: :obj:`bool`
         """
         if not isinstance(dct, dict):
             return False
@@ -66,7 +69,9 @@ class Utils(object):
         """ provides datasource record from xml dom node
 
         :param node: xml DOM node
+        :type node: :class:`xml.dom.minidom.Node`
         :returns: datasource record
+        :rtype: :obj:`str`
         """
         res = ''
         host = None
@@ -102,8 +107,11 @@ class Utils(object):
         """ converts string to json dictionary
 
         :param string: string with list of item or json dictionary
+        :type string: :obj:`str`
         :param toBool: if true convert dictionary values to bool
+        :type toBool: :obj:`bool`
         :returns: json dictionary
+        :rtype: :obj:`str`
         """
         try:
             if not string or string == "Not initialised":
@@ -129,7 +137,9 @@ class Utils(object):
         """ converts string to json list
 
         :param string: with list of item or json list
+        :type string: :obj:`str`
         :returns: json list
+        :rtype: :obj:`str`
         """
         if not string or string == "Not initialised":
             return "[]"
@@ -148,7 +158,9 @@ class Utils(object):
         """ converts list/dict/object of unicode/string to string object
 
         :param obj: given unicode/string object
+        :type obj: `any`
         :returns: string object
+        :rtype: :obj:`str`
         """
         if isinstance(obj, unicode):
             return str(obj)
@@ -164,6 +176,7 @@ class Utils(object):
 class TangoUtils(object):
     """  Tango Utilities """
 
+    #: (:obj:`dict` <:class:`PyTango.CmdArgType`, :obj:`str`>)
     #: map of Tango:Numpy types
     tTnp = {PyTango.DevLong64: "int64", PyTango.DevLong: "int32",
             PyTango.DevShort: "int16", PyTango.DevUChar: "uint8",
@@ -177,7 +190,9 @@ class TangoUtils(object):
         """ opens device proxy of the given device
 
         :param device: device name
+        :type device: :obj:`str`
         :returns: DeviceProxy of device
+        :rtype: :class:`PyTango.DeviceProxy`
         """
         found = False
         cnt = 0
@@ -202,8 +217,10 @@ class TangoUtils(object):
     def wait(cls, proxy, counter=100):
         """waits for device proxy not running
 
-        :param proxy: device name
-        :returns: DeviceProxy of device
+        :param proxy: device proxy
+        :type proxy: :class:`PyTango.DeviceProxy`
+        :returns: if proxy device ready
+        :rtype: :obj:`str`
         """
         found = False
         cnt = 0
@@ -226,7 +243,9 @@ class TangoUtils(object):
         """ provides proxies of given device names
 
         :param names: given device names
+        :type names: :obj:`list` <:obj:`str`>
         :returns: list of device DeviceProxies
+        :rtype: :obj:`list` <:class:`PyTango.DeviceProxy`>
         """
         dps = []
         for name in names:
@@ -243,8 +262,11 @@ class TangoUtils(object):
         """ finds device of give class
 
         :param db: tango database
+        :type db: :class:`PyTango.DeviceProxy`
         :param cname: device class name
+        :type cname: :obj:`str`
         :returns: device name if exists
+        :rtype: :obj:`bool`
         """
         servers = db.get_device_exported_for_class(
             cname).value_string
@@ -264,7 +286,9 @@ class TangoUtils(object):
         """ provides tango device full name with host and port
 
         :param source: string witg device name and its attribute
-        :returns: database host and port in tuple
+        :type source: :obj:`str`
+        :returns: database host and port in url string
+        :rtype: :obj:`str`
         """
         if ':' in source:
             return "tango://%s" % source
@@ -278,7 +302,9 @@ class TangoUtils(object):
         """ retrives shape type units for attribure
 
         :param source: string with device name and its attribute
+        :type source: :obj:`str`
         :returns: (shape, data_type, units)
+        :rtype: (:obj:`list` <:obj:`int`>, :obj:`str`, :obj:`str`)
         """
         vl = None
         shp = []
@@ -316,9 +342,14 @@ class TangoUtils(object):
         """ executes command on server on python package
 
         :param server: tango server name or package name
+        :type server: :class:`PyTango.DeviceProxy` \
+             or :class:`nxsconfigserver.XMLConfigurator.XMLConfigurator`
         :param command: command name
+        :type command: :obj:`str`
         :param var: command variable list
+        :type var: [ `any` ]
         :returns: command result
+        :rtype: `any`
         """
         if not hasattr(server, "command_inout"):
             return getattr(server, command)(*var)
@@ -336,8 +367,11 @@ class MSUtils(object):
         """ provides environment variable value
 
         :param var: variable name
+        :type var: :obj:`str`
         :param ms: macroserver
+        :type ms: :obj:`str`
         :returns: environment variable value
+        :rtype: `any`
         """
         active = ""
         dp = TangoUtils.openProxy(ms)
@@ -354,8 +388,11 @@ class MSUtils(object):
         """ sets environment variable value
 
         :param var: variable name
+        :type var: :obj:`str`
         :param value: variable value
+        :type value: `any`
         :param ms: macroserver
+        :type ms: :obj:`str`
         """
         dp = TangoUtils.openProxy(ms)
         dc = {'new': {}}
@@ -368,7 +405,9 @@ class MSUtils(object):
         """ sets environment variable value
 
         :param varvalues: variable value dictionary
+        :type varvalues: :obj:`dict` <:obj:`str` , `any`>
         :param ms: macroserver
+        :type ms: :obj:`str`
         """
         dp = TangoUtils.openProxy(ms)
         dc = {'new': {}}
@@ -382,7 +421,9 @@ class MSUtils(object):
         """ unsets environment variable
 
         :param var: variable name
+        :type var: :obj:`str`
         :param ms: macroserver
+        :type ms: :obj:`str`
         """
         dp = TangoUtils.openProxy(ms)
         dc = {'del': [var]}
@@ -394,8 +435,11 @@ class MSUtils(object):
         """ provides macro server of given door
 
         :param db: tango database
+        :type db: :class:`PyTango.Database`
         :param door: given door
+        :type door: :obj:`str`
         :returns: first MacroServer of the given door
+        :rtype: :obj:`str`
         """
         servers = db.get_device_exported_for_class(
             "MacroServer").value_string
@@ -421,8 +465,11 @@ class PoolUtils(object):
         """ provides device controller full names
 
         :param pools: list of pool devices
+        :type pools: :obj:`list` <:class:`PyTango.DeviceProxy`>
         :param devices: alias names
+        :type devices: :obj:`list` <:obj:`str`>
         :returns: device controller full names
+        :rtype: :obj:`dict` <:obj:`str`, :obj:`str`>
         """
         lst = []
         for pool in pools:
@@ -440,8 +487,11 @@ class PoolUtils(object):
         """ provides channel sources
 
         :param pools: list of pool devices
+        :type pools: :obj:`list` <:class:`PyTango.DeviceProxy`>
         :param devices: alias names
+        :type devices: :obj:`list` <:obj:`str`>
         :returns: device sources
+        :rtype: :obj:`dict` <:obj:`str`, :obj:`str`>
         """
         lst = []
         for pool in pools:
@@ -459,8 +509,11 @@ class PoolUtils(object):
         """ provides experimental Channels
 
         :param pools: list of pool devices
+        :type pools: :obj:`list` <:class:`PyTango.DeviceProxy`>
         :param listattr: pool attribute with list
+        :type listattr: :obj:`str`
         :returns: names from given pool listattr
+        :rtype: :obj:`list` <:obj:`str`>
         """
         lst = []
         elements = []
@@ -481,8 +534,11 @@ class PoolUtils(object):
         """ find device names from aliases
 
         :param pools: list of pool devices
+        :type pools: :obj:`list` <:class:`PyTango.DeviceProxy`>
         :param names: alias names if None returns name for all aliases
+        :type names: :obj:`list` <:obj:`str`>
         :returns: full device name
+        :rtype: :obj:`dict` <:obj:`str`, :obj:`str`>
         """
         lst = []
         for pool in pools:
@@ -501,8 +557,11 @@ class PoolUtils(object):
         """ find aliases from fullnames
 
         :param pools: list of pool devices
+        :type pools: :obj:`list` <:class:`PyTango.DeviceProxy`>
         :param names: fullnames if None returns all aliases
+        :type names: :obj:`list` <:obj:`str`>
         :returns: full device name
+        :rtype: :obj:`dict` <:obj:`str`, :obj:`str`>
         """
         lst = []
         for pool in pools:
@@ -522,8 +581,11 @@ class PoolUtils(object):
         """ find measurement group name from alias
 
         :param pools: list of pool devices
+        :type pools: :obj:`list` <:class:`PyTango.DeviceProxy`>
         :param alias: mntgrp alias
+        :type alias: :obj:`str`
         :returns: full name of the measurement group alias
+        :rtype: :obj:`str`
         """
         lst = []
         for pool in pools:
@@ -542,8 +604,11 @@ class PoolUtils(object):
         """ provides tiemrs of given pools
 
         :param pools: list of pool devices
+        :type pools: :obj:`list` <:class:`PyTango.DeviceProxy`>
         :param filters: device name filter list
+        :type filters: :obj:`list` <:obj:`str`>
         :returns: list of timer names
+        :rtype: :obj:`list` <:obj:`str`>
         """
         lst = []
         res = []
@@ -573,8 +638,11 @@ class PoolUtils(object):
         """ provides channels of given pools
 
         :param pools: list of pool devices
+        :type pools: :obj:`list` <:class:`PyTango.DeviceProxy`>
         :param filters: device name filter list
-        :returns: list of timer names
+        :type filters: :obj:`list` <:obj:`str`>
+        :returns: list of channel names
+        :rtype: :obj:`list` <:obj:`str`>
         """
         res = []
         if lst is None:
@@ -602,7 +670,9 @@ class PoolUtils(object):
         """ provides datasource from pool device
 
         :param name: pool device name
+        :type name:  :obj:`str`
         :returns: source of pool device
+        :rtype:  :obj:`str`
         """
         source = None
         try:
