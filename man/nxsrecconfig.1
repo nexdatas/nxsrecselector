@@ -1,6 +1,6 @@
 .\" Man page generated from reStructuredText.
 .
-.TH "NXSRECCONFIG" "1" "July 20, 2016" "3.5" "NXSRecSelector"
+.TH "NXSRECCONFIG" "1" "August 08, 2016" "3.5" "NXSRecSelector"
 .SH NAME
 nxsrecconfig \- nxsrecconfig Documentation
 .
@@ -265,7 +265,7 @@ Component CheckerThread \- thread which checks tango server attributes
 .INDENT 0.0
 .TP
 .B nxsrecconfig.CheckerThread.ATTRIBUTESTOCHECK = [\(aqValue\(aq, \(aqPosition\(aq, \(aqCounts\(aq, \(aqData\(aq, \(aqVoltage\(aq, \(aqEnergy\(aq, \(aqSampleTime\(aq]
-default attributes to check
+(\fI\%list\fP < \fI\%str\fP>) default attributes to check
 .UNINDENT
 .INDENT 0.0
 .TP
@@ -285,27 +285,27 @@ constructor
 .INDENT 7.0
 .TP
 .B Parameters
-\fBname\fP \-\- checker item name
+\fBname\fP (\fI\%str\fP) \-\- checker item name
 .UNINDENT
 .INDENT 7.0
 .TP
 .B active = None
-enabled flag
+(\fI\%bool\fP) enabled flag
 .UNINDENT
 .INDENT 7.0
 .TP
 .B errords = None
-datasource with first error
+(\fI\%str\fP) datasource with first error
 .UNINDENT
 .INDENT 7.0
 .TP
 .B message = None
-first error message
+(\fI\%str\fP) first error message
 .UNINDENT
 .INDENT 7.0
 .TP
 .B name = None
-checker name
+(\fI\%str\fP) checker name
 .UNINDENT
 .UNINDENT
 .INDENT 0.0
@@ -324,15 +324,15 @@ It creates ElementThread from the runnable element
 .B Parameters
 .INDENT 7.0
 .IP \(bu 2
-\fBindex\fP \-\- the current thread index
+\fBindex\fP (\fI\%int\fP) \-\- the current thread index
 .IP \(bu 2
-\fBqueue\fP \-\- queue with tasks
+\fBqueue\fP (\fI\%Queue.Queue\fP) \-\- queue with tasks
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
 .TP
 .B index = None
-thread index
+(\fI\%int\fP) thread index
 .UNINDENT
 .INDENT 7.0
 .TP
@@ -365,27 +365,27 @@ constructor
 .B Parameters
 .INDENT 7.0
 .IP \(bu 2
-\fBname\fP \-\- datasource name
+\fBname\fP (\fI\%str\fP) \-\- datasource name
 .IP \(bu 2
-\fBdevice\fP \-\- datasource device
+\fBdevice\fP (\fI\%str\fP) \-\- datasource device
 .IP \(bu 2
-\fBattr\fP \-\- device attribute
+\fBattr\fP (\fI\%str\fP) \-\- device attribute
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
 .TP
 .B attr
-datasource device attribute
+(\fI\%str\fP) datasource device attribute
 .UNINDENT
 .INDENT 7.0
 .TP
 .B device
-datasource device
+(\fI\%str\fP) datasource device
 .UNINDENT
 .INDENT 7.0
 .TP
 .B name
-datasource name
+(\fI\%str\fP) datasource name
 .UNINDENT
 .UNINDENT
 .SS nxsrecconfig.Converter module
@@ -402,7 +402,7 @@ contstructor
 .INDENT 7.0
 .TP
 .B Parameters
-\fBver\fP \-\- the required selection version
+\fBver\fP (\fI\%str\fP) \-\- the required selection version
 .UNINDENT
 .INDENT 7.0
 .TP
@@ -410,10 +410,13 @@ contstructor
 .INDENT 7.0
 .TP
 .B Parameters
-\fBselection\fP \-\- selection dictionary object
+\fBselection\fP (\fInxsrecconfig.Selection.Selection\fP) \-\- selection dictionary object
 .TP
 .B Returns
-list of selection keys
+selection keys
+.TP
+.B Return type
+\fI\%set\fP
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -423,23 +426,33 @@ converts selection from any version to any other
 .INDENT 7.0
 .TP
 .B Parameters
-\fBselection\fP \-\- selection dictionary object
+\fBselection\fP (\fI\%dict\fP <\fI\%str\fP, \fIany\fP>) \-\- selection dictionary object
 .UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B down = None
+(\fI\%list\fP <\fBConverterXtoY\fP>) converter down sequence
 .UNINDENT
 .INDENT 7.0
 .TP
 .B majorversion = None
-major selection version
+(\fI\%int\fP) major selection version
 .UNINDENT
 .INDENT 7.0
 .TP
 .B minorversion = None
-minor selection version
+(\fI\%int\fP) minor selection version
 .UNINDENT
 .INDENT 7.0
 .TP
 .B patchversion = None
-patch selection version
+(\fI\%int\fP) patch selection version
+.UNINDENT
+.INDENT 7.0
+.TP
+.B up = None
+(\fI\%list\fP <\fBConverterXtoY\fP>) converter up sequence
 .UNINDENT
 .INDENT 7.0
 .TP
@@ -452,10 +465,13 @@ into (major, minor, patch)
 .INDENT 7.0
 .TP
 .B Parameters
-\fBselection\fP \-\- selection dictionary object
+\fBselection\fP (\fInxsrecconfig.Selection.Selection\fP) \-\- selection dictionary object
 .TP
 .B Returns
 (major, minor, patch) tuple with integers
+.TP
+.B Return type
+(\fI\%int\fP , \fI\%int\fP , \fI\%int\fP)
 .UNINDENT
 .UNINDENT
 .UNINDENT
@@ -474,18 +490,18 @@ converts selection from version 1 to 2
 .INDENT 7.0
 .TP
 .B Parameters
-\fBselection\fP \-\- selection dictionary object
+\fBselection\fP (\fI\%dict\fP <\fI\%str\fP, \fIany\fP>) \-\- selection dictionary object
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
 .TP
 .B names = None
-names to convert
+(\fI\%dict\fP <\fI\%str\fP, \fI\%str\fP>) names to convert
 .UNINDENT
 .INDENT 7.0
 .TP
 .B pnames = None
-names of properties
+(\fI\%dict\fP <\fI\%str\fP, \fI\%str\fP>) names of properties
 .UNINDENT
 .UNINDENT
 .INDENT 0.0
@@ -503,18 +519,18 @@ converts selection from version 2 to 1
 .INDENT 7.0
 .TP
 .B Parameters
-\fBselection\fP \-\- selection dictionary object
+\fBselection\fP (\fI\%dict\fP <\fI\%str\fP, \fIany\fP>) \-\- selection dictionary object
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
 .TP
 .B names = None
-names to convert
+(\fI\%dict\fP <\fI\%str\fP, \fI\%str\fP>) names to convert
 .UNINDENT
 .INDENT 7.0
 .TP
 .B pnames = None
-names of properties
+(\fI\%dict\fP <\fI\%str\fP, \fI\%str\fP>) names of properties
 .UNINDENT
 .UNINDENT
 .INDENT 0.0
@@ -532,13 +548,13 @@ converts selection from version 2 to 3
 .INDENT 7.0
 .TP
 .B Parameters
-\fBselection\fP \-\- selection dictionary object
+\fBselection\fP (\fI\%dict\fP <\fI\%str\fP, \fIany\fP>) \-\- selection dictionary object
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
 .TP
 .B names = None
-names to convert
+(\fI\%dict\fP <\fI\%str\fP, \fI\%str\fP>) names to convert
 .UNINDENT
 .INDENT 7.0
 .TP
@@ -547,10 +563,13 @@ converters list/dict of elements to dictionary with logical values
 .INDENT 7.0
 .TP
 .B Parameters
-\fBjselelem\fP \-\- json list or dict selection element
+\fBjselelem\fP (\fI\%str\fP) \-\- json list or dict selection element
 .TP
 .B Returns
 json dictionary
+.TP
+.B Return type
+\fI\%str\fP
 .UNINDENT
 .UNINDENT
 .UNINDENT
@@ -569,13 +588,13 @@ converts selection from version 3 to 2
 .INDENT 7.0
 .TP
 .B Parameters
-\fBselection\fP \-\- selection dictionary object
+\fBselection\fP (\fI\%dict\fP <\fI\%str\fP, \fIany\fP>) \-\- selection dictionary object
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
 .TP
 .B names = None
-names to convert
+(\fI\%dict\fP <\fI\%str\fP, \fI\%str\fP>) names to convert
 .UNINDENT
 .INDENT 7.0
 .TP
@@ -588,10 +607,13 @@ to dictionary with True/False values
 .INDENT 7.0
 .TP
 .B Parameters
-\fBjselelem\fP \-\- json dictionary selection element
+\fBjselelem\fP (\fI\%str\fP) \-\- json dictionary selection element
 .TP
 .B Returns
 converter json dictionary
+.TP
+.B Return type
+\fI\%str\fP
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -605,10 +627,13 @@ to list of elementes with walue True
 .INDENT 7.0
 .TP
 .B Parameters
-\fBjselelem\fP \-\- json dictionary selection element
+\fBjselelem\fP (\fI\%str\fP) \-\- json dictionary selection element
 .TP
 .B Returns
 converter json dictionary
+.TP
+.B Return type
+\fI\%str\fP
 .UNINDENT
 .UNINDENT
 .UNINDENT
@@ -627,13 +652,13 @@ converts selection to the current selector version
 .INDENT 7.0
 .TP
 .B Parameters
-\fBselection\fP \-\- selection dictionary object
+\fBselection\fP (\fI\%dict\fP <\fI\%str\fP, \fIany\fP>) \-\- selection dictionary object
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
 .TP
 .B names = None
-names to convert
+(\fI\%dict\fP <\fI\%str\fP, \fI\%str\fP>) names to convert
 .UNINDENT
 .UNINDENT
 .SS nxsrecconfig.Describer module
@@ -652,29 +677,29 @@ constructor
 .B Parameters
 .INDENT 7.0
 .IP \(bu 2
-\fBname\fP \-\- datasource name
+\fBname\fP (\fI\%str\fP) \-\- datasource name
 .IP \(bu 2
-\fBdstype\fP \-\- datasource type
+\fBdstype\fP (\fI\%str\fP) \-\- datasource type
 .IP \(bu 2
-\fBrecord\fP \-\- datasource record
+\fBrecord\fP (\fI\%str\fP) \-\- datasource record
 .IP \(bu 2
-\fBdsitem\fP \-\- datasource item
+\fBdsitem\fP (\fBDSItem\fP) \-\- datasource item
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
 .TP
 .B dstype
-datasource type
+(\fI\%str\fP) datasource type
 .UNINDENT
 .INDENT 7.0
 .TP
 .B name
-datasource name
+(\fI\%str\fP) datasource name
 .UNINDENT
 .INDENT 7.0
 .TP
 .B record
-datasource record
+(\fI\%str\fP) datasource record
 .UNINDENT
 .UNINDENT
 .INDENT 0.0
@@ -691,36 +716,49 @@ constructor
 .B Parameters
 .INDENT 7.0
 .IP \(bu 2
-\fBnexusconfig_device\fP \-\- configserver configuration server name
+\fBnexusconfig_device\fP (\fI\%PyTango.DeviceProxy\fP              or \fI\%nxsconfigserver.XMLConfigurator.XMLConfigurator\fP) \-\- configserver configuration server
 .IP \(bu 2
-\fBtree\fP \-\- output flag for dictionary tree
+\fBtree\fP (\fI\%bool\fP) \-\- flag for output tree dictionary
 .IP \(bu 2
-\fBtree\fP \-\- output flag for dictionary tree
+\fBpyevalfromscript\fP (\fI\%bool\fP) \-\- if evalulate PYEVAL datasources from script
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
 .TP
 .B components(components=None, strategy=\(aq\(aq, dstype=\(aq\(aq, cfvars=None)
-describes given components
+describes given components. If \fBtree\fP = True it returns
+.nf
+[{ cpname : { dsname : [         |           (strategy, dstype, record, nxstype, shape), ...] } } ]
+.fi
+.sp
+.sp
+else
+.nf
+[{"dsname": dsname, "strategy": strategy, "dstype": dstype,         |     "record": record, "nxstype": nxstype, "shape": shape ,         |     "cpname": cpname}, ...]
+.fi
+.sp
 .INDENT 7.0
 .TP
 .B Parameters
 .INDENT 7.0
 .IP \(bu 2
-\fBcomponents\fP \-\- given components.
+\fBcomponents\fP (\fI\%list\fP <\fI\%str\fP>) \-\- given components.
 If None all available ones are taken
 .IP \(bu 2
-\fBstrategy\fP \-\- list datasets only with given strategy.
+\fBstrategy\fP (\fI\%str\fP) \-\- list datasets only with given strategy.
 If \(aq\(aq all available ones are taken
 .IP \(bu 2
-\fBdstype\fP \-\- list datasets only with given datasource type.
+\fBdstype\fP (\fI\%str\fP) \-\- list datasets only with given datasource type.
 If \(aq\(aq all available ones are taken
 .IP \(bu 2
-\fBcfvars\fP \-\- configuration variables
+\fBcfvars\fP (\fI\%str\fP) \-\- configuration variables in JSON dictionary
 .UNINDENT
 .TP
 .B Returns
 list of dictionary with description of components
+.TP
+.B Return type
+[\fI\%dict\fP <\fI\%str\fP, \fI\%dict\fP <\fI\%str\fP,                  \fI\%list\fP <(\fI\%str\fP, \fI\%str\fP, \fI\%str\fP,                       \fI\%str\fP, \fI\%list\fP <\fI\%int\fP>)> > > ] or                 [{"dsname": \fI\%str\fP, "strategy": \fI\%str\fP,                   "dstype": \fI\%str\fP, "record": \fI\%str\fP,                   "nxstype": \fI\%str\fP, "shape": \fI\%list\fP <\fI\%int\fP> ,           "cpname": \fI\%str\fP}, ...]
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -732,15 +770,18 @@ describes given datasources
 .B Parameters
 .INDENT 7.0
 .IP \(bu 2
-\fBnames\fP \-\- given datasources.
+\fBnames\fP (\fI\%list\fP <\fI\%str\fP>) \-\- given datasources.
 If None all available ones are taken
 .IP \(bu 2
-\fBdstype\fP \-\- list datasources only with given type.
+\fBdstype\fP (\fI\%str\fP) \-\- list datasources only with given type.
 If \(aq\(aq all available ones are taken
 .UNINDENT
 .TP
 .B Returns
 list of dictionary with description of datasources
+.TP
+.B Return type
+[\fI\%dict\fP <\fI\%str\fP, \fBExDSDict\fP > ] or                 [{"dsname": \fI\%str\fP, "dstype": \fI\%str\fP,                   "record": \fI\%str\fP}, ...]
 .UNINDENT
 .UNINDENT
 .UNINDENT
@@ -757,9 +798,9 @@ constructor
 .B Parameters
 .INDENT 7.0
 .IP \(bu 2
-\fBargs\fP \-\- dict args
+\fBargs\fP (\fI\%list\fP <\fIany\fP>) \-\- dict args
 .IP \(bu 2
-\fBkw\fP \-\- dict kw
+\fBkw\fP (\fI\%dict\fP <\fIany\fP , \fIany\fP>) \-\- dict kw
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -771,18 +812,21 @@ appends a list of ExDSItem
 .B Parameters
 .INDENT 7.0
 .IP \(bu 2
-\fBdslist\fP \-\- DSItem list
+\fBdslist\fP (\fI\%list\fP <\fBDSItem\fP>) \-\- DSItem list
 .IP \(bu 2
-\fBmode\fP \-\- startegy mode
+\fBmode\fP (\fI\%str\fP) \-\- startegy mode
 .IP \(bu 2
 \fBnxtype\fP \-\- NeXus type
 .IP \(bu 2
-\fBshape\fP \-\- data shape
+\fBshape\fP (\fI\%list\fP <\fI\%int\fP>) \-\- data shape
 .UNINDENT
 .TP
 .B Returns
 datasource name for first added datasource
 or None if not appended
+.TP
+.B Return type
+\fI\%str\fP
 .UNINDENT
 .UNINDENT
 .UNINDENT
@@ -799,29 +843,29 @@ constructor
 .B Parameters
 .INDENT 7.0
 .IP \(bu 2
-\fBdsitem\fP \-\- datasource item
+\fBdsitem\fP (\fBDSItem\fP) \-\- datasource item
 .IP \(bu 2
-\fBmode\fP \-\- writing mode
+\fBmode\fP (\fI\%str\fP) \-\- writing strategy mode
 .IP \(bu 2
 \fBnxtype\fP \-\- nexus type
 .IP \(bu 2
-\fBshape\fP \-\- datasource shape
+\fBshape\fP (\fI\%list\fP <\fI\%int\fP>) \-\- datasource shape
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
 .TP
 .B mode
-writing mode
+(\fI\%str\fP) writing strategy mode
 .UNINDENT
 .INDENT 7.0
 .TP
 .B nxtype
-nexus type
+(\fI\%str\fP) nexus type
 .UNINDENT
 .INDENT 7.0
 .TP
 .B shape
-datasource shape
+(\fI\%list\fP <\fI\%int\fP>) datasource shape
 .UNINDENT
 .UNINDENT
 .SS nxsrecconfig.DynamicComponent module
@@ -839,7 +883,7 @@ constructor
 .INDENT 7.0
 .TP
 .B Parameters
-\fBnexusconfig_device\fP \-\- configserver configuration server name
+\fBnexusconfig_device\fP (\fI\%PyTango.DeviceProxy\fP              or \fI\%nxsconfigserver.XMLConfigurator.XMLConfigurator\fP) \-\- configserver configuration server
 .UNINDENT
 .INDENT 7.0
 .TP
@@ -849,6 +893,9 @@ creates dynamic component
 .TP
 .B Returns
 dynanic component name
+.TP
+.B Return type
+\fI\%str\fP
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -858,7 +905,7 @@ removes dynamic component
 .INDENT 7.0
 .TP
 .B Parameters
-\fBname\fP \-\- dynamic component name
+\fBname\fP (\fI\%str\fP) \-\- dynamic component name
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -873,9 +920,9 @@ if dynamicPath is None or "" it is reset to default one
 .B Parameters
 .INDENT 7.0
 .IP \(bu 2
-\fBdynamicPath\fP \-\- nexus default path
+\fBdynamicPath\fP (\fI\%str\fP) \-\- nexus default path
 .IP \(bu 2
-\fBdynamicLinks\fP \-\- default link flag
+\fBdynamicLinks\fP (\fI\%bool\fP) \-\- default link flag
 .UNINDENT
 .UNINDENT
 .UNINDENT
@@ -886,7 +933,7 @@ sets init datasources
 .INDENT 7.0
 .TP
 .B Parameters
-\fBdsources\fP \-\- list of init datasources
+\fBdsources\fP (\fI\%list\fP <\fI\%str\fP>) \-\- list of init datasources
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -898,15 +945,15 @@ sets label parameters for specific dynamic components
 .B Parameters
 .INDENT 7.0
 .IP \(bu 2
-\fBlabels\fP \-\- label dictionaries
+\fBlabels\fP (\fI\%dict\fP <\fI\%str\fP , \fI\%str\fP>) \-\- label dictionaries
 .IP \(bu 2
-\fBpaths\fP \-\- nexus path dictionaries
+\fBpaths\fP (\fI\%dict\fP <\fI\%str\fP , \fI\%str\fP>) \-\- nexus path dictionaries
 .IP \(bu 2
-\fBlinks\fP \-\- link dictionaries
+\fBlinks\fP (\fI\%dict\fP <\fI\%str\fP , \fI\%bool\fP>) \-\- link dictionaries
 .IP \(bu 2
-\fBtypes\fP \-\- nexus type dictionaries
+\fBtypes\fP (\fI\%dict\fP <\fI\%str\fP , \fI\%str\fP>) \-\- nexus type dictionaries
 .IP \(bu 2
-\fBshapes\fP \-\- data shape dictionaries
+\fBshapes\fP (\fI\%dict\fP <\fI\%str\fP , \fI\%list\fP <\fI\%int\fP> >) \-\- data shape dictionaries
 .UNINDENT
 .UNINDENT
 .UNINDENT
@@ -917,7 +964,7 @@ sets step datasources
 .INDENT 7.0
 .TP
 .B Parameters
-\fBdsources\fP \-\- list of step datasources
+\fBdsources\fP (\fI\%list\fP <\fI\%str\fP>) \-\- list of step datasources
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -927,7 +974,7 @@ sets user datasources with type and shape
 .INDENT 7.0
 .TP
 .B Parameters
-\fBdctlist\fP \-\- json list of parameter dictionaries
+\fBdctlist\fP (\fI\%str\fP) \-\- json list of parameter dictionaries
 [{"name": <dsname>, "dtype": <num_type>, "shape":<list>}, ...]
 .UNINDENT
 .UNINDENT
@@ -946,7 +993,7 @@ constructor
 .INDENT 7.0
 .TP
 .B Parameters
-\fBnumberOfThreads\fP \-\- number of threads
+\fBnumberOfThreads\fP (\fI\%str\fP) \-\- number of threads
 .UNINDENT
 .INDENT 7.0
 .TP
@@ -957,19 +1004,22 @@ checks component channels
 .B Parameters
 .INDENT 7.0
 .IP \(bu 2
-\fBdoor\fP \-\- door device name
+\fBdoor\fP (\fI\%str\fP) \-\- door device name
 .IP \(bu 2
-\fBconfigdevice\fP \-\- configuration server
+\fBconfigdevice\fP (\fI\%PyTango.DeviceProxy\fP              or \fI\%nxsconfigserver.XMLConfigurator.XMLConfigurator\fP) \-\- configuration server
 .IP \(bu 2
-\fBchannels\fP \-\- pool channels
+\fBchannels\fP (\fI\%list\fP <\fI\%str\fP>) \-\- pool channels
 .IP \(bu 2
-\fBcomponentgroup\fP \-\- preselected component group
+\fBcomponentgroup\fP (\fI\%dict\fP <\fI\%str\fP , \fI\%bool\fP>) \-\- preselected component group
 .IP \(bu 2
-\fBchannelerrors\fP \-\- deactivated component errors
+\fBchannelerrors\fP (\fI\%list\fP <\fI\%str\fP>) \-\- list of deactivated component errors
 .UNINDENT
 .TP
 .B Returns
 json dictionary with selected active components
+.TP
+.B Return type
+\fI\%str\fP
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -979,18 +1029,30 @@ door macro server device name
 .INDENT 7.0
 .TP
 .B Parameters
-\fBdoor\fP \-\- door device name
+\fBdoor\fP (\fI\%str\fP) \-\- door device name
 .TP
 .B Returns
 macroserver device name
+.TP
+.B Return type
+\fI\%str\fP
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
 .TP
 .B getPools(door)
 door pool device proxies
-:param door: door device name
-:returns: pool device proxies
+.INDENT 7.0
+.TP
+.B Parameters
+\fBdoor\fP (\fI\%str\fP) \-\- door device name
+.TP
+.B Returns
+pool device proxies
+.TP
+.B Return type
+\fI\%list\fP <\fI\%PyTango.DeviceProxy\fP>
+.UNINDENT
 .UNINDENT
 .INDENT 7.0
 .TP
@@ -999,10 +1061,13 @@ fetches Scan Environment Data
 .INDENT 7.0
 .TP
 .B Parameters
-\fBdoor\fP \-\- door device
+\fBdoor\fP (\fI\%str\fP) \-\- door device
 .TP
 .B Returns
 JSON String with important variables
+.TP
+.B Return type
+\fI\%str\fP
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -1014,18 +1079,18 @@ imports Environment Data
 .B Parameters
 .INDENT 7.0
 .IP \(bu 2
-\fBdoor\fP \-\- door device
+\fBdoor\fP (\fI\%str\fP) \-\- door device
 .IP \(bu 2
-\fBnames\fP \-\- names of required variables
+\fBnames\fP (\fI\%list\fP <\fI\%str\fP>) \-\- names of required variables
 .IP \(bu 2
-\fBdata\fP \-\- dictionary with resulting data
+\fBdata\fP (\fI\%dict\fP <\fI\%str\fP , \fIany\fP>) \-\- dictionary with resulting data
 .UNINDENT
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
 .TP
 .B poolBlacklist = None
-black list of pools
+(\fI\%list\fP <\fI\%str\fP>) black list of pools
 .UNINDENT
 .INDENT 7.0
 .TP
@@ -1036,9 +1101,9 @@ stores Scan Environment Data
 .B Parameters
 .INDENT 7.0
 .IP \(bu 2
-\fBdoor\fP \-\- door device
+\fBdoor\fP (\fI\%str\fP) \-\- door device
 .IP \(bu 2
-\fBjdata\fP \-\- JSON String with important variables
+\fBjdata\fP (\fI\%str\fP) \-\- JSON String with important variables
 .UNINDENT
 .UNINDENT
 .UNINDENT
@@ -1051,11 +1116,11 @@ exports all Environment Data
 .B Parameters
 .INDENT 7.0
 .IP \(bu 2
-\fBdoor\fP \-\- door device
+\fBdoor\fP (\fI\%str\fP) \-\- door device
 .IP \(bu 2
-\fBdata\fP \-\- data dictionary
+\fBdata\fP (\fI\%dict\fP <\fI\%str\fP , \fIany\fP>) \-\- data dictionary
 .IP \(bu 2
-\fBcmddata\fP \-\- command data dictionary
+\fBcmddata\fP (\fI\%dict\fP <\fI\%str\fP , \fIany\fP>) \-\- command data dictionary
 .UNINDENT
 .UNINDENT
 .UNINDENT
@@ -1066,7 +1131,7 @@ updates MacroServer and sardana pools for given door
 .INDENT 7.0
 .TP
 .B Parameters
-\fBdoor\fP \-\- door device name
+\fBdoor\fP (\fI\%str\fP) \-\- door device name
 .UNINDENT
 .UNINDENT
 .UNINDENT
@@ -1094,9 +1159,9 @@ Device constructor
 .B Parameters
 .INDENT 7.0
 .IP \(bu 2
-\fBcl\fP \-\- class name
+\fBcl\fP (\fI\%str\fP) \-\- class name
 .IP \(bu 2
-\fBname\fP \-\- device name
+\fBname\fP (\fI\%str\fP) \-\- device name
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -1110,6 +1175,9 @@ Provides Administrator Data Names
 .TP
 .B Returns
 DevVarStringArray    data record names
+.TP
+.B Return type
+\fI\%list\fP <\fI\%str\fP>
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -1123,6 +1191,9 @@ Returns a list of available component names
 .TP
 .B Returns
 DevVarStringArray    list of available component names
+.TP
+.B Return type
+\fI\%list\fP <\fI\%str\fP>
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -1136,6 +1207,9 @@ Returns a list of available DataSource names
 .TP
 .B Returns
 DevVarStringArray    list of available DataSource names
+.TP
+.B Return type
+\fI\%list\fP <\fI\%str\fP>
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -1149,6 +1223,9 @@ Returns a list of available mntgrp names
 .TP
 .B Returns
 DevVarStringArray    list of available mntgrp names
+.TP
+.B Return type
+\fI\%list\fP <\fI\%str\fP>
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -1162,6 +1239,9 @@ Returns a list of available selection names
 .TP
 .B Returns
 DevVarStringArray    list of available selection names
+.TP
+.B Return type
+\fI\%list\fP <\fI\%str\fP>
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -1175,6 +1255,9 @@ Returns a list of available component names
 .TP
 .B Returns
 DevVarStringArray    list of available component names
+.TP
+.B Return type
+\fI\%list\fP <\fI\%str\fP>
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -1188,10 +1271,13 @@ JSON dictionary with channel properties
 {channel:property}
 .TP
 .B Parameters
-\fBargin\fP \-\- DevString    property type
+\fBargin\fP (\fI\%str\fP) \-\- DevString    property type
 .TP
 .B Returns
 DevString    JSON dictionary with channel properties
+.TP
+.B Return type
+\fI\%str\fP
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -1204,10 +1290,13 @@ ComponentClientSources command
 describes client datasources from components
 .TP
 .B Parameters
-\fBargin\fP \-\- DevVarStringArray    list of component names
+\fBargin\fP (\fI\%list\fP <\fI\%str\fP>) \-\- DevVarStringArray    list of component names
 .TP
 .B Returns
 DevVarString         description of component datasources
+.TP
+.B Return type
+\fI\%str\fP
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -1221,6 +1310,9 @@ Provides the component datasources
 .TP
 .B Returns
 DevVarStringArray    component names
+.TP
+.B Return type
+\fI\%list\fP <\fI\%str\fP>
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -1234,6 +1326,9 @@ Returns a list of available component names
 .TP
 .B Returns
 DevString   list of available component names
+.TP
+.B Return type
+\fI\%str\fP
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -1246,10 +1341,13 @@ CreateDynamicComponent command
 create dynamic component
 .TP
 .B Parameters
-\fBargin\fP \-\- DevVarStringArray    list of datasource parameters
+\fBargin\fP (\fI\%list\fP <\fI\%str\fP>) \-\- DevVarStringArray    list of datasource parameters
 .TP
 .B Returns
 DevVarString         name of created dynamic component
+.TP
+.B Return type
+\fI\%str\fP
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -1262,10 +1360,13 @@ CreateWriterConfiguration command
 create configuration from the given components
 .TP
 .B Parameters
-\fBargin\fP \-\- DevVarStringArray    list of component names
+\fBargin\fP (\fI\%list\fP <\fI\%str\fP>) \-\- DevVarStringArray    list of component names
 .TP
 .B Returns
 DevVarString         XML configuration string
+.TP
+.B Return type
+\fI\%str\fP
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -1278,10 +1379,13 @@ DataSourceDescription command
 descrive datasources
 .TP
 .B Parameters
-\fBargin\fP \-\- DevVarStringArray    list of datasource names
+\fBargin\fP (\fI\%list\fP <\fI\%str\fP>) \-\- DevVarStringArray    list of datasource names
 .TP
 .B Returns
 DevVarStringArray    description of datasources
+.TP
+.B Rtypes
+\fI\%list\fP <\fI\%str\fP>
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -1304,7 +1408,7 @@ DeleteProfile command
 Deletes the given mntgrp
 .TP
 .B Parameters
-\fBargin\fP \-\- DevString  measurement group name
+\fBargin\fP (\fI\%str\fP) \-\- DevString  measurement group name
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -1338,6 +1442,9 @@ Returns a JSON with full device names for all aliases
 .TP
 .B Returns
 DevString JSON dictionary with full device names
+.TP
+.B Return type
+\fI\%str\fP
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -1366,8 +1473,11 @@ imports active mntgrp configuration
 IsMntGrpUpdated command
 .INDENT 7.0
 .TP
-.B Brief
-returns true if mntgrp was changed
+.B Returns
+True if mntgrp was changed
+.TP
+.B Return type
+\fI\%bool\fP
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -1391,6 +1501,9 @@ Sets the mandatory components
 .TP
 .B Returns
 DevVarStringArray    component names
+.TP
+.B Return type
+\fI\%list\fP <\fI\%str\fP>
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -1401,6 +1514,12 @@ MntGrpConfiguration command
 .TP
 .B Brief
 returns mntgrp configuration
+.TP
+.B Returns
+mntgrp configuration in json string
+.TP
+.B Return type
+\fI\%str\fP
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -1414,6 +1533,9 @@ Returns a list of muted channel names
 .TP
 .B Returns
 DevVarStringArray    list of muted channel names
+.TP
+.B Return type
+\fI\%list\fP <\fI\%str\fP>
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -1426,10 +1548,13 @@ PoolElementNames command
 Returns a list of available pool channels
 .TP
 .B Parameters
-\fBargin\fP \-\- DevString            name of pool list attribute
+\fBargin\fP (\fI\%str\fP) \-\- DevString            name of pool list attribute
 .TP
 .B Returns
 DevVarStringArray    list of available pool elements
+.TP
+.B Return type
+\fI\%list\fP <\fI\%str\fP>
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -1453,6 +1578,9 @@ Sets the preselected components
 .TP
 .B Returns
 DevVarStringArray    component names
+.TP
+.B Return type
+\fI\%list\fP <\fI\%str\fP>
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -1466,6 +1594,9 @@ Sets the preselected components
 .TP
 .B Returns
 DevVarStringArray    component names
+.TP
+.B Return type
+\fI\%list\fP <\fI\%str\fP>
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -1478,7 +1609,7 @@ RemoveDynamicComponent command
 Deletes the given dynamic component
 .TP
 .B Parameters
-\fBargin\fP \-\- DevString  dynamic component name
+\fBargin\fP (\fI\%str\fP) \-\- DevString  dynamic component name
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -1515,6 +1646,9 @@ in environment variables
 .TP
 .B Returns
 DevString    json dictionary with environment data
+.TP
+.B Return type
+\fI\%str\fP
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -1528,6 +1662,9 @@ Sets the selected components
 .TP
 .B Returns
 DevVarStringArray    component names
+.TP
+.B Return type
+\fI\%list\fP <\fI\%str\fP>
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -1541,6 +1678,9 @@ Provides the selected datasources
 .TP
 .B Returns
 DevVarStringArray    component names
+.TP
+.B Return type
+\fI\%list\fP <\fI\%str\fP>
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -1553,7 +1693,7 @@ SetChannelProperties command SetChannelProperties
 set Channel Properties of given type
 .TP
 .B Parameters
-\fBargin\fP \-\- DevVarStringArray two element list with a property type
+\fBargin\fP ([\fI\%str\fP, \fI\%str\fP]) \-\- DevVarStringArray two element list with a property type
 and JSON value dictionary {channel:property}
 .UNINDENT
 .UNINDENT
@@ -1567,11 +1707,14 @@ SetScanEnvVariables command
 Stores ScanDir, ScanFile and NeXusSelectorDevice
 in environment variables
 .TP
-.B Returns
-DevString    json dictionary with environment data
+.B Parameters
+\fBargin\fP (\fI\%str\fP) \-\- json dictionary with environment data
 .TP
 .B Returns
 DevLong    scan ID
+.TP
+.B Return type
+\fI\%int\fP
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -1616,6 +1759,9 @@ updates mntgrp configuration
 .TP
 .B Returns
 mntgrp configuration string
+.TP
+.B Return type
+\fI\%str\fP
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -1629,6 +1775,9 @@ updates mntgrp configuration
 .TP
 .B Returns
 JSON string with mntgrp configuration info
+.TP
+.B Return type
+\fI\%str\fP
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -1642,6 +1791,9 @@ Returns a list of available component names
 .TP
 .B Returns
 DevString    list of available component names
+.TP
+.B Return type
+\fI\%str\fP
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -1663,171 +1815,443 @@ Device initialization
 .TP
 .B is_AdministratorDataNames_allowed()
 AdministratorDataNames command State Machine
+.INDENT 7.0
+.TP
+.B Returns
+True if the operation allowed
+.TP
+.B Return type
+\fI\%bool\fP
+.UNINDENT
 .UNINDENT
 .INDENT 7.0
 .TP
 .B is_AvailableComponents_allowed()
 AvailableComponents command State Machine
+.INDENT 7.0
+.TP
+.B Returns
+True if the operation allowed
+.TP
+.B Return type
+\fI\%bool\fP
+.UNINDENT
 .UNINDENT
 .INDENT 7.0
 .TP
 .B is_AvailableDataSources_allowed()
 AvailableDataSources command State Machine
+.INDENT 7.0
+.TP
+.B Returns
+True if the operation allowed
+.TP
+.B Return type
+\fI\%bool\fP
+.UNINDENT
 .UNINDENT
 .INDENT 7.0
 .TP
 .B is_AvailableMntGrps_allowed()
 AvailableMntGrps command State Machine
+.INDENT 7.0
+.TP
+.B Returns
+True if the operation allowed
+.TP
+.B Return type
+\fI\%bool\fP
+.UNINDENT
 .UNINDENT
 .INDENT 7.0
 .TP
 .B is_AvailableProfiles_allowed()
 AvailableProfiles command State Machine
+.INDENT 7.0
+.TP
+.B Returns
+True if the operation allowed
+.TP
+.B Return type
+\fI\%bool\fP
+.UNINDENT
 .UNINDENT
 .INDENT 7.0
 .TP
 .B is_AvailableTimers_allowed()
 AvailableTimers command State Machine
+.INDENT 7.0
+.TP
+.B Returns
+True if the operation allowed
+.TP
+.B Return type
+\fI\%bool\fP
+.UNINDENT
 .UNINDENT
 .INDENT 7.0
 .TP
 .B is_ChannelProperties_allowed()
 ChannelProperties command State Machine
+.INDENT 7.0
+.TP
+.B Returns
+True if the operation allowed
+.TP
+.B Return type
+\fI\%bool\fP
+.UNINDENT
 .UNINDENT
 .INDENT 7.0
 .TP
 .B is_ComponentClientSources_allowed()
 ComponentClientSources command State Machine
+.INDENT 7.0
+.TP
+.B Returns
+True if the operation allowed
+.TP
+.B Return type
+\fI\%bool\fP
+.UNINDENT
 .UNINDENT
 .INDENT 7.0
 .TP
 .B is_ComponentDataSources_allowed()
 ComponentDataSources command State Machine
+.INDENT 7.0
+.TP
+.B Returns
+True if the operation allowed
+.TP
+.B Return type
+\fI\%bool\fP
+.UNINDENT
 .UNINDENT
 .INDENT 7.0
 .TP
 .B is_ComponentDescription_allowed()
 ComponentDescription command State Machine
+.INDENT 7.0
+.TP
+.B Returns
+True if the operation allowed
+.TP
+.B Return type
+\fI\%bool\fP
+.UNINDENT
 .UNINDENT
 .INDENT 7.0
 .TP
 .B is_CreateDynamicComponent_allowed()
 CreateDynamicComponent command State Machine
+.INDENT 7.0
+.TP
+.B Returns
+True if the operation allowed
+.TP
+.B Return type
+\fI\%bool\fP
+.UNINDENT
 .UNINDENT
 .INDENT 7.0
 .TP
 .B is_CreateWriterConfiguration_allowed()
 CreateWriterConfiguration command State Machine
+.INDENT 7.0
+.TP
+.B Returns
+True if the operation allowed
+.TP
+.B Return type
+\fI\%bool\fP
+.UNINDENT
 .UNINDENT
 .INDENT 7.0
 .TP
 .B is_DataSourceDescription_allowed()
 DataSourceDescription command State Machine
+.INDENT 7.0
+.TP
+.B Returns
+True if the operation allowed
+.TP
+.B Return type
+\fI\%bool\fP
+.UNINDENT
 .UNINDENT
 .INDENT 7.0
 .TP
 .B is_DeleteAllProfiles_allowed()
 DeleteAllProfiles command State Machine
+.INDENT 7.0
+.TP
+.B Returns
+True if the operation allowed
+.TP
+.B Return type
+\fI\%bool\fP
+.UNINDENT
 .UNINDENT
 .INDENT 7.0
 .TP
 .B is_DeleteProfile_allowed()
 DeleteProfile command State Machine
+.INDENT 7.0
+.TP
+.B Returns
+True if the operation allowed
+.TP
+.B Return type
+\fI\%bool\fP
+.UNINDENT
 .UNINDENT
 .INDENT 7.0
 .TP
 .B is_ExportEnv_allowed()
 ExportMntGrp command State Machine
+.INDENT 7.0
+.TP
+.B Returns
+True if the operation allowed
+.TP
+.B Return type
+\fI\%bool\fP
+.UNINDENT
 .UNINDENT
 .INDENT 7.0
 .TP
 .B is_FetchProfile_allowed()
 FetchProfile command State Machine
+.INDENT 7.0
+.TP
+.B Returns
+True if the operation allowed
+.TP
+.B Return type
+\fI\%bool\fP
+.UNINDENT
 .UNINDENT
 .INDENT 7.0
 .TP
 .B is_FullDeviceNames_allowed()
 FullDeviceNames command State Machine
+.INDENT 7.0
+.TP
+.B Returns
+True if the operation allowed
+.TP
+.B Return type
+\fI\%bool\fP
+.UNINDENT
 .UNINDENT
 .INDENT 7.0
 .TP
 .B is_ImportEnv_allowed()
 ImportMntGrp command State Machine
+.INDENT 7.0
+.TP
+.B Returns
+True if the operation allowed
+.TP
+.B Return type
+\fI\%bool\fP
+.UNINDENT
 .UNINDENT
 .INDENT 7.0
 .TP
 .B is_ImportMntGrp_allowed()
 ImportMntGrp command State Machine
+.INDENT 7.0
+.TP
+.B Returns
+True if the operation allowed
+.TP
+.B Return type
+\fI\%bool\fP
+.UNINDENT
 .UNINDENT
 .INDENT 7.0
 .TP
 .B is_IsMntGrpUpdated_allowed()
 IsMntGrpUpdated command State Machine
+.INDENT 7.0
+.TP
+.B Returns
+True if the operation allowed
+.TP
+.B Return type
+\fI\%bool\fP
+.UNINDENT
 .UNINDENT
 .INDENT 7.0
 .TP
 .B is_LoadProfile_allowed()
 LoadProfile command State Machine
+.INDENT 7.0
+.TP
+.B Returns
+True if the operation allowed
+.TP
+.B Return type
+\fI\%bool\fP
+.UNINDENT
 .UNINDENT
 .INDENT 7.0
 .TP
 .B is_MandatoryComponents_allowed()
 MandatoryComponents command State Machine
+.INDENT 7.0
+.TP
+.B Returns
+True if the operation allowed
+.TP
+.B Return type
+\fI\%bool\fP
+.UNINDENT
 .UNINDENT
 .INDENT 7.0
 .TP
 .B is_MntGrpConfiguration_allowed()
 MntGrpConfiguration command State Machine
+.INDENT 7.0
+.TP
+.B Returns
+True if the operation allowed
+.TP
+.B Return type
+\fI\%bool\fP
+.UNINDENT
 .UNINDENT
 .INDENT 7.0
 .TP
 .B is_MutedChannels_allowed()
 MutedChannels command State Machine
+.INDENT 7.0
+.TP
+.B Returns
+True if the operation allowed
+.TP
+.B Return type
+\fI\%bool\fP
+.UNINDENT
 .UNINDENT
 .INDENT 7.0
 .TP
 .B is_PoolElementNames_allowed()
 PoolElementNames command State Machine
+.INDENT 7.0
+.TP
+.B Returns
+True if the operation allowed
+.TP
+.B Return type
+\fI\%bool\fP
+.UNINDENT
 .UNINDENT
 .INDENT 7.0
 .TP
 .B is_PreselectComponents_allowed()
 PreselectComponents command State Machine
+.INDENT 7.0
+.TP
+.B Returns
+True if the operation allowed
+.TP
+.B Return type
+\fI\%bool\fP
+.UNINDENT
 .UNINDENT
 .INDENT 7.0
 .TP
 .B is_PreselectedComponents_allowed()
 PreselectedComponents command State Machine
+.INDENT 7.0
+.TP
+.B Returns
+True if the operation allowed
+.TP
+.B Return type
+\fI\%bool\fP
+.UNINDENT
 .UNINDENT
 .INDENT 7.0
 .TP
 .B is_PreselectedDataSources_allowed()
 PreselectedDataSources command State Machine
+.INDENT 7.0
+.TP
+.B Returns
+True if the operation allowed
+.TP
+.B Return type
+\fI\%bool\fP
+.UNINDENT
 .UNINDENT
 .INDENT 7.0
 .TP
 .B is_RemoveDynamicComponent_allowed()
 RemoveDynamicComponent command State Machine
+.INDENT 7.0
+.TP
+.B Returns
+True if the operation allowed
+.TP
+.B Return type
+\fI\%bool\fP
+.UNINDENT
 .UNINDENT
 .INDENT 7.0
 .TP
 .B is_ResetPreselectedComponents_allowed()
 ResetPreselectedComponents command State Machine
+.INDENT 7.0
+.TP
+.B Returns
+True if the operation allowed
+.TP
+.B Return type
+\fI\%bool\fP
+.UNINDENT
 .UNINDENT
 .INDENT 7.0
 .TP
 .B is_SaveProfile_allowed()
 SaveProfile command State Machine
+.INDENT 7.0
+.TP
+.B Returns
+True if the operation allowed
+.TP
+.B Return type
+\fI\%bool\fP
+.UNINDENT
 .UNINDENT
 .INDENT 7.0
 .TP
 .B is_ScanEnvVariables_allowed()
 ScanEnvVariables command State Machine
+.INDENT 7.0
+.TP
+.B Returns
+True if the operation allowed
+.TP
+.B Return type
+\fI\%bool\fP
+.UNINDENT
 .UNINDENT
 .INDENT 7.0
 .TP
 .B is_SelectedComponents_allowed()
 SelectedComponents command State Machine
+.INDENT 7.0
+.TP
+.B Returns
+True if the operation allowed
+.TP
+.B Return type
+\fI\%bool\fP
+.UNINDENT
 .UNINDENT
 .INDENT 7.0
 .TP
@@ -1838,46 +2262,118 @@ SelectedDataSources command State Machine
 .TP
 .B is_SetChannelProperties_allowed()
 SetChannelProperties command State Machine
+.INDENT 7.0
+.TP
+.B Returns
+True if the operation allowed
+.TP
+.B Return type
+\fI\%bool\fP
+.UNINDENT
 .UNINDENT
 .INDENT 7.0
 .TP
 .B is_SetScanEnvVariables_allowed()
 SetScanEnvVariables command State Machine
+.INDENT 7.0
+.TP
+.B Returns
+True if the operation allowed
+.TP
+.B Return type
+\fI\%bool\fP
+.UNINDENT
 .UNINDENT
 .INDENT 7.0
 .TP
 .B is_StepDataSources_write_allowed()
 StepDataSources attribute Write State Machine
+.INDENT 7.0
+.TP
+.B Returns
+True if the operation allowed
+.TP
+.B Return type
+\fI\%bool\fP
+.UNINDENT
 .UNINDENT
 .INDENT 7.0
 .TP
 .B is_StoreProfile_allowed()
 StoreProfile command State Machine
+.INDENT 7.0
+.TP
+.B Returns
+True if the operation allowed
+.TP
+.B Return type
+\fI\%bool\fP
+.UNINDENT
 .UNINDENT
 .INDENT 7.0
 .TP
 .B is_SwitchProfile_allowed()
 SwitchProfile command State Machine
+.INDENT 7.0
+.TP
+.B Returns
+True if the operation allowed
+.TP
+.B Return type
+\fI\%bool\fP
+.UNINDENT
 .UNINDENT
 .INDENT 7.0
 .TP
 .B is_UpdateConfigVariables_allowed()
 UpdateConfigVariables command State Machine
+.INDENT 7.0
+.TP
+.B Returns
+True if the operation allowed
+.TP
+.B Return type
+\fI\%bool\fP
+.UNINDENT
 .UNINDENT
 .INDENT 7.0
 .TP
 .B is_UpdateMntGrp_allowed()
 UpdateMntGrp command State Machine
+.INDENT 7.0
+.TP
+.B Returns
+True if the operation allowed
+.TP
+.B Return type
+\fI\%bool\fP
+.UNINDENT
 .UNINDENT
 .INDENT 7.0
 .TP
 .B is_UpdateProfile_allowed()
 UpdateProfile command State Machine
+.INDENT 7.0
+.TP
+.B Returns
+True if the operation allowed
+.TP
+.B Return type
+\fI\%bool\fP
+.UNINDENT
 .UNINDENT
 .INDENT 7.0
 .TP
 .B is_VariableComponents_allowed()
 VariableComponents command State Machine
+.INDENT 7.0
+.TP
+.B Returns
+True if the operation allowed
+.TP
+.B Return type
+\fI\%bool\fP
+.UNINDENT
 .UNINDENT
 .INDENT 7.0
 .TP
@@ -1886,7 +2382,7 @@ Read AppendEntry attribute
 .INDENT 7.0
 .TP
 .B Parameters
-\fBattr\fP \-\- read attribute
+\fBattr\fP (\fI\%PyTango.Attribute\fP) \-\- read attribute
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -1896,7 +2392,7 @@ Read Components attribute
 .INDENT 7.0
 .TP
 .B Parameters
-\fBattr\fP \-\- read attribute
+\fBattr\fP (\fI\%PyTango.Attribute\fP) \-\- read attribute
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -1906,7 +2402,7 @@ Read ConfigDevice attribute
 .INDENT 7.0
 .TP
 .B Parameters
-\fBattr\fP \-\- read attribute
+\fBattr\fP (\fI\%PyTango.Attribute\fP) \-\- read attribute
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -1916,7 +2412,7 @@ Read ConfigVariables attribute
 .INDENT 7.0
 .TP
 .B Parameters
-\fBattr\fP \-\- read attribute
+\fBattr\fP (\fI\%PyTango.Attribute\fP) \-\- read attribute
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -1926,7 +2422,7 @@ Read DataSources attribute
 .INDENT 7.0
 .TP
 .B Parameters
-\fBattr\fP \-\- read attribute
+\fBattr\fP (\fI\%PyTango.Attribute\fP) \-\- read attribute
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -1936,7 +2432,7 @@ Read DescriptionErrors attribute
 .INDENT 7.0
 .TP
 .B Parameters
-\fBattr\fP \-\- read attribute
+\fBattr\fP (\fI\%PyTango.Attribute\fP) \-\- read attribute
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -1946,7 +2442,7 @@ Read DeviceGroups attribute
 .INDENT 7.0
 .TP
 .B Parameters
-\fBattr\fP \-\- read attribute
+\fBattr\fP (\fI\%PyTango.Attribute\fP) \-\- read attribute
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -1956,7 +2452,7 @@ Read Door attribute
 .INDENT 7.0
 .TP
 .B Parameters
-\fBattr\fP \-\- read attribute
+\fBattr\fP (\fI\%PyTango.Attribute\fP) \-\- read attribute
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -1966,7 +2462,7 @@ Read MacroServer attribute
 .INDENT 7.0
 .TP
 .B Parameters
-\fBattr\fP \-\- read attribute
+\fBattr\fP (\fI\%PyTango.Attribute\fP) \-\- read attribute
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -1976,7 +2472,7 @@ Read MntGrp attribute
 .INDENT 7.0
 .TP
 .B Parameters
-\fBattr\fP \-\- read attribute
+\fBattr\fP (\fI\%PyTango.Attribute\fP) \-\- read attribute
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -1986,7 +2482,7 @@ Read ProfileConfiguration attribute
 .INDENT 7.0
 .TP
 .B Parameters
-\fBattr\fP \-\- read attribute
+\fBattr\fP (\fI\%PyTango.Attribute\fP) \-\- read attribute
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -1996,7 +2492,7 @@ Read ProfileFile attribute
 .INDENT 7.0
 .TP
 .B Parameters
-\fBattr\fP \-\- read attribute
+\fBattr\fP (\fI\%PyTango.Attribute\fP) \-\- read attribute
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -2006,7 +2502,7 @@ Read ScanDir attribute
 .INDENT 7.0
 .TP
 .B Parameters
-\fBattr\fP \-\- read attribute
+\fBattr\fP (\fI\%PyTango.Attribute\fP) \-\- read attribute
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -2016,7 +2512,7 @@ Read ScanFile attribute
 .INDENT 7.0
 .TP
 .B Parameters
-\fBattr\fP \-\- read attribute
+\fBattr\fP (\fI\%PyTango.Attribute\fP) \-\- read attribute
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -2026,7 +2522,7 @@ Read ScanID attribute
 .INDENT 7.0
 .TP
 .B Parameters
-\fBattr\fP \-\- read attribute
+\fBattr\fP (\fI\%PyTango.Attribute\fP) \-\- read attribute
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -2036,13 +2532,18 @@ Read StepDataSources attribute
 .INDENT 7.0
 .TP
 .B Parameters
-\fBattr\fP \-\- read attribute
+\fBattr\fP (\fI\%PyTango.Attribute\fP) \-\- read attribute
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
 .TP
 .B read_UserData(attr)
 Read UserData attribute
+.INDENT 7.0
+.TP
+.B Parameters
+\fBattr\fP (\fI\%PyTango.Attribute\fP) \-\- read attribute
+.UNINDENT
 .UNINDENT
 .INDENT 7.0
 .TP
@@ -2051,7 +2552,7 @@ Read Version attribute
 .INDENT 7.0
 .TP
 .B Parameters
-\fBattr\fP \-\- read attribute
+\fBattr\fP (\fI\%PyTango.Attribute\fP) \-\- read attribute
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -2061,7 +2562,7 @@ Read WriterDevice attribute
 .INDENT 7.0
 .TP
 .B Parameters
-\fBattr\fP \-\- read attribute
+\fBattr\fP (\fI\%PyTango.Attribute\fP) \-\- read attribute
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -2076,7 +2577,7 @@ Write AppendEntry attribute
 .INDENT 7.0
 .TP
 .B Parameters
-\fBattr\fP \-\- written attribute
+\fBattr\fP (\fI\%PyTango.Attribute\fP) \-\- written attribute
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -2086,7 +2587,7 @@ Write ConfigDevice attribute
 .INDENT 7.0
 .TP
 .B Parameters
-\fBattr\fP \-\- written attribute
+\fBattr\fP (\fI\%PyTango.Attribute\fP) \-\- written attribute
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -2096,7 +2597,7 @@ Write ConfigVariables attribute
 .INDENT 7.0
 .TP
 .B Parameters
-\fBattr\fP \-\- written attribute
+\fBattr\fP (\fI\%PyTango.Attribute\fP) \-\- written attribute
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -2106,7 +2607,7 @@ Write DeviceGroups attribute
 .INDENT 7.0
 .TP
 .B Parameters
-\fBattr\fP \-\- written attribute
+\fBattr\fP (\fI\%PyTango.Attribute\fP) \-\- written attribute
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -2116,7 +2617,7 @@ Write Door attribute
 .INDENT 7.0
 .TP
 .B Parameters
-\fBattr\fP \-\- written attribute
+\fBattr\fP (\fI\%PyTango.Attribute\fP) \-\- written attribute
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -2126,7 +2627,7 @@ Write MntGrp attribute
 .INDENT 7.0
 .TP
 .B Parameters
-\fBattr\fP \-\- written attribute
+\fBattr\fP (\fI\%PyTango.Attribute\fP) \-\- written attribute
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -2136,7 +2637,7 @@ Write ProfileConfiguration attribute
 .INDENT 7.0
 .TP
 .B Parameters
-\fBattr\fP \-\- written attribute
+\fBattr\fP (\fI\%PyTango.Attribute\fP) \-\- written attribute
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -2146,7 +2647,7 @@ Write ProfileFile attribute
 .INDENT 7.0
 .TP
 .B Parameters
-\fBattr\fP \-\- written attribute
+\fBattr\fP (\fI\%PyTango.Attribute\fP) \-\- written attribute
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -2156,7 +2657,7 @@ Write ScanDir attribute
 .INDENT 7.0
 .TP
 .B Parameters
-\fBattr\fP \-\- written attribute
+\fBattr\fP (\fI\%PyTango.Attribute\fP) \-\- written attribute
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -2166,7 +2667,7 @@ Write ScanFile attribute
 .INDENT 7.0
 .TP
 .B Parameters
-\fBattr\fP \-\- written attribute
+\fBattr\fP (\fI\%PyTango.Attribute\fP) \-\- written attribute
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -2176,7 +2677,7 @@ Write ScanID attribute
 .INDENT 7.0
 .TP
 .B Parameters
-\fBattr\fP \-\- written attribute
+\fBattr\fP (\fI\%PyTango.Attribute\fP) \-\- written attribute
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -2186,13 +2687,18 @@ Write StepDataSources attribute
 .INDENT 7.0
 .TP
 .B Parameters
-\fBattr\fP \-\- written attribute
+\fBattr\fP (\fI\%PyTango.Attribute\fP) \-\- written attribute
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
 .TP
 .B write_UserData(attr)
 Write UserData attribute
+.INDENT 7.0
+.TP
+.B Parameters
+\fBattr\fP (\fI\%PyTango.Attribute\fP) \-\- written attribute
+.UNINDENT
 .UNINDENT
 .INDENT 7.0
 .TP
@@ -2201,7 +2707,7 @@ Write WriterDevice attribute
 .INDENT 7.0
 .TP
 .B Parameters
-\fBattr\fP \-\- written attribute
+\fBattr\fP (\fI\%PyTango.Attribute\fP) \-\- written attribute
 .UNINDENT
 .UNINDENT
 .UNINDENT
@@ -2215,8 +2721,12 @@ NXSRecSelectorclass Constructor
 .TP
 .B attr_list = {\(aqUserData\(aq: [[PyTango._PyTango.CmdArgType.DevString, PyTango._PyTango.AttrDataFormat.SCALAR, PyTango._PyTango.AttrWriteType.READ_WRITE], {\(aqdescription\(aq: \(aqJSON dictionary with User Data\(aq, \(aqDisplay level\(aq: PyTango._PyTango.DispLevel.EXPERT, \(aqlabel\(aq: \(aqClient Data\(aq}], \(aqScanID\(aq: [[PyTango._PyTango.CmdArgType.DevLong, PyTango._PyTango.AttrDataFormat.SCALAR, PyTango._PyTango.AttrWriteType.READ_WRITE], {\(aqdescription\(aq: \(aqScan ID\(aq, \(aqlabel\(aq: \(aqScan ID\(aq}], \(aqVersion\(aq: [[PyTango._PyTango.CmdArgType.DevString, PyTango._PyTango.AttrDataFormat.SCALAR, PyTango._PyTango.AttrWriteType.READ], {\(aqdescription\(aq: \(aqserver version\(aq, \(aqlabel\(aq: \(aqVersion\(aq}], \(aqMacroServer\(aq: [[PyTango._PyTango.CmdArgType.DevString, PyTango._PyTango.AttrDataFormat.SCALAR, PyTango._PyTango.AttrWriteType.READ], {\(aqdescription\(aq: \(aqMacro Server device name\(aq, \(aqlabel\(aq: \(aqMacroServer\(aq}], \(aqWriterDevice\(aq: [[PyTango._PyTango.CmdArgType.DevString, PyTango._PyTango.AttrDataFormat.SCALAR, PyTango._PyTango.AttrWriteType.READ_WRITE], {\(aqdescription\(aq: \(aqWriter device\(aq, \(aqlabel\(aq: \(aqWriter Device\(aq}], \(aqDataSources\(aq: [[PyTango._PyTango.CmdArgType.DevString, PyTango._PyTango.AttrDataFormat.SPECTRUM, PyTango._PyTango.AttrWriteType.READ, 10000], {\(aqdescription\(aq: \(aqlist of Selected Datasources\(aq, \(aqlabel\(aq: \(aqSelected Datasources\(aq}], \(aqConfigDevice\(aq: [[PyTango._PyTango.CmdArgType.DevString, PyTango._PyTango.AttrDataFormat.SCALAR, PyTango._PyTango.AttrWriteType.READ_WRITE], {\(aqMemorized\(aq: \(aqtrue\(aq, \(aqdescription\(aq: \(aqConfiguration device\(aq, \(aqlabel\(aq: \(aqConfiguration Device\(aq}], \(aqScanFile\(aq: [[PyTango._PyTango.CmdArgType.DevString, PyTango._PyTango.AttrDataFormat.SCALAR, PyTango._PyTango.AttrWriteType.READ_WRITE], {\(aqdescription\(aq: \(aqScan File(s)\(aq, \(aqlabel\(aq: \(aqScan File(s)\(aq}], \(aqAppendEntry\(aq: [[PyTango._PyTango.CmdArgType.DevBoolean, PyTango._PyTango.AttrDataFormat.SCALAR, PyTango._PyTango.AttrWriteType.READ_WRITE], {\(aqdescription\(aq: \(aqflag for entry  appending \(aq, \(aqlabel\(aq: \(aqAppend Entry\(aq}], \(aqMntGrp\(aq: [[PyTango._PyTango.CmdArgType.DevString, PyTango._PyTango.AttrDataFormat.SCALAR, PyTango._PyTango.AttrWriteType.READ_WRITE], {\(aqdescription\(aq: \(aq Measurement Group\(aq, \(aqlabel\(aq: \(aq Measurement Group\(aq}], \(aqStepDataSources\(aq: [[PyTango._PyTango.CmdArgType.DevString, PyTango._PyTango.AttrDataFormat.SCALAR, PyTango._PyTango.AttrWriteType.READ_WRITE], {\(aqdescription\(aq: \(aqlist of datasources to be switched into step mode\(aq, \(aqDisplay level\(aq: PyTango._PyTango.DispLevel.EXPERT, \(aqlabel\(aq: \(aqlist of datasources to be switch into step mode\(aq}], \(aqConfigVariables\(aq: [[PyTango._PyTango.CmdArgType.DevString, PyTango._PyTango.AttrDataFormat.SCALAR, PyTango._PyTango.AttrWriteType.READ_WRITE], {\(aqdescription\(aq: \(aqJSON dictionary with configuration variablesfor templated components\(aq, \(aqDisplay level\(aq: PyTango._PyTango.DispLevel.EXPERT, \(aqlabel\(aq: \(aqConfiguration Variables\(aq}], \(aqComponents\(aq: [[PyTango._PyTango.CmdArgType.DevString, PyTango._PyTango.AttrDataFormat.SPECTRUM, PyTango._PyTango.AttrWriteType.READ, 10000], {\(aqdescription\(aq: \(aqlist of Selected Components\(aq, \(aqlabel\(aq: \(aqSelected Components\(aq}], \(aqProfileConfiguration\(aq: [[PyTango._PyTango.CmdArgType.DevString, PyTango._PyTango.AttrDataFormat.SCALAR, PyTango._PyTango.AttrWriteType.READ_WRITE], {\(aqdescription\(aq: \(aqJSON dict of server configuration\(aq, \(aqDisplay level\(aq: PyTango._PyTango.DispLevel.EXPERT, \(aqlabel\(aq: \(aqProfile Configuration\(aq}], \(aqDoor\(aq: [[PyTango._PyTango.CmdArgType.DevString, PyTango._PyTango.AttrDataFormat.SCALAR, PyTango._PyTango.AttrWriteType.READ_WRITE], {\(aqMemorized\(aq: \(aqtrue\(aq, \(aqdescription\(aq: \(aqDoor\(aq, \(aqlabel\(aq: \(aqDoor\(aq}], \(aqDeviceGroups\(aq: [[PyTango._PyTango.CmdArgType.DevString, PyTango._PyTango.AttrDataFormat.SCALAR, PyTango._PyTango.AttrWriteType.READ_WRITE], {\(aqMemorized\(aq: \(aqtrue\(aq, \(aqdescription\(aq: \(aqJSON dictionary with device groups\(aq, \(aqDisplay level\(aq: PyTango._PyTango.DispLevel.EXPERT, \(aqlabel\(aq: \(aqDevice groups\(aq}], \(aqProfileFile\(aq: [[PyTango._PyTango.CmdArgType.DevString, PyTango._PyTango.AttrDataFormat.SCALAR, PyTango._PyTango.AttrWriteType.READ_WRITE], {\(aqMemorized\(aq: \(aqtrue\(aq, \(aqdescription\(aq: \(aqconfig file with its full path\(aq, \(aqlabel\(aq: \(aqProfile File with its Path\(aq}], \(aqDescriptionErrors\(aq: [[PyTango._PyTango.CmdArgType.DevString, PyTango._PyTango.AttrDataFormat.SPECTRUM, PyTango._PyTango.AttrWriteType.READ, 10000], {\(aqdescription\(aq: \(aqlist of Description Component Errors\(aq, \(aqlabel\(aq: \(aqDescription Component Errors\(aq}], \(aqScanDir\(aq: [[PyTango._PyTango.CmdArgType.DevString, PyTango._PyTango.AttrDataFormat.SCALAR, PyTango._PyTango.AttrWriteType.READ_WRITE], {\(aqdescription\(aq: \(aqScan Directory\(aq, \(aqlabel\(aq: \(aqScan Directory\(aq}]}
 .INDENT 7.0
-.INDENT 3.5
-Attribute definitions
+.TP
+.B (\fI\%dict\fP <\fI\%str\fP, 
+.INDENT 7.0
+.TP
+.B [[ \fI\%PyTango.CmdArgType\fP, 
+\fI\%PyTango.AttrDataFormat\fP, \fI\%PyTango.AttrWriteType\fP ], \fI\%dict\fP <\fI\%str\fP , any> ] > ) Attribute definitions
 .UNINDENT
 .UNINDENT
 .UNINDENT
@@ -2224,27 +2734,28 @@ Attribute definitions
 .TP
 .B class_property_list = {}
 .INDENT 7.0
-.INDENT 3.5
-Class Properties
-.UNINDENT
+.TP
+.B (\fI\%dict\fP <\fI\%str\fP, 
+[ \fI\%str\fP, \fI\%PyTango.CmdArgType\fP, [ \fI\%list\fP <\fI\%int\fP> ] ] > ) Class Properties
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
 .TP
-.B cmd_list = {\(aqMutedChannels\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevVarStringArray, \(aqlist of muted channels\(aq]], \(aqDeleteAllProfiles\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq]], \(aqSaveProfile\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq]], \(aqDeleteProfile\(aq: [[PyTango._PyTango.CmdArgType.DevString, \(aqmntgrp name\(aq], [PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq]], \(aqResetPreselectedComponents\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq]], \(aqStoreProfile\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq]], \(aqAvailableTimers\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevVarStringArray, \(aqlist of available timers\(aq]], \(aqIsMntGrpUpdated\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevBoolean, \(aqtrue if mntgrp changed\(aq]], \(aqSetChannelProperties\(aq: [[PyTango._PyTango.CmdArgType.DevVarStringArray, \(aqa two element list with a property type and JSON value dictionary {channel:property}\(aq], [PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq]], \(aqImportMntGrp\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq]], \(aqAvailableComponents\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevVarStringArray, \(aqlist of available component names\(aq]], \(aqLoadProfile\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq]], \(aqFetchProfile\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq]], \(aqSelectedComponents\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevVarStringArray, \(aqcomponent names\(aq]], \(aqDataSourceDescription\(aq: [[PyTango._PyTango.CmdArgType.DevVarStringArray, \(aqlist of required datasources\(aq], [PyTango._PyTango.CmdArgType.DevVarStringArray, \(aqlist of JSON with description of CLIENT Datasources\(aq]], \(aqCreateWriterConfiguration\(aq: [[PyTango._PyTango.CmdArgType.DevVarStringArray, \(aqlist of required components\(aq], [PyTango._PyTango.CmdArgType.DevString, \(aqXML Settinges\(aq]], \(aqAvailableProfiles\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevVarStringArray, \(aqlist of available selection names\(aq]], \(aqChannelProperties\(aq: [[PyTango._PyTango.CmdArgType.DevString, \(aqproperty type\(aq], [PyTango._PyTango.CmdArgType.DevString, \(aqJSON dictionary with channel properties {channel:property}\(aq]], \(aqAdministratorDataNames\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevVarStringArray, \(aqadministrator data names\(aq]], \(aqPreselectedDataSources\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevVarStringArray, \(aqdatasources names\(aq]], \(aqPreselectedComponents\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevVarStringArray, \(aqcomponent names\(aq]], \(aqExportEnvProfile\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq]], \(aqScanEnvVariables\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevString, \(aqenvironment data\(aq]], \(aqComponentClientSources\(aq: [[PyTango._PyTango.CmdArgType.DevVarStringArray, \(aqlist of required components\(aq], [PyTango._PyTango.CmdArgType.DevString, \(aqJSON with description of CLIENT Datasources\(aq]], \(aqMntGrpConfiguration\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevString, \(aq mntgrp configuration string\(aq]], \(aqUpdateConfigVariables\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq]], \(aqFullDeviceNames\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevString, \(aqJSON Dictionary with full device names for  all aliases \(aq]], \(aqSetScanEnvVariables\(aq: [[PyTango._PyTango.CmdArgType.DevString, \(aqenvironment data\(aq], [PyTango._PyTango.CmdArgType.DevLong, \(aqscanID\(aq]], \(aqVariableComponents\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevString, \(aqJSON Dictionary with all Components for   configuration variable\(aq]], \(aqComponentDescription\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevString, \(aqJSON component description\(aq]], \(aqRemoveDynamicComponent\(aq: [[PyTango._PyTango.CmdArgType.DevString, \(aqname of dynamic Component\(aq], [PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq]], \(aqAvailableDataSources\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevVarStringArray, \(aqlist of available DataSource names\(aq]], \(aqSwitchProfile\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevString, \(aqconfiguration\(aq]], \(aqSelectedDataSources\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevVarStringArray, \(aqprofile component datasources\(aq]], \(aqComponentDataSources\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevVarStringArray, \(aqprofile component datasources\(aq]], \(aqCreateDynamicComponent\(aq: [[PyTango._PyTango.CmdArgType.DevVarStringArray, \(aqlist of JSON strings with datasource parameters\(aq], [PyTango._PyTango.CmdArgType.DevString, \(aqname of dynamic Component\(aq]], \(aqPreselectComponents\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq]], \(aqUpdateProfile\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevString, \(aqmntgrp configuration string\(aq]], \(aqMandatoryComponents\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevVarStringArray, \(aqcomponent names\(aq]], \(aqImportEnvProfile\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq]], \(aqPoolElementNames\(aq: [[PyTango._PyTango.CmdArgType.DevString, \(aqpool list attribute name\(aq], [PyTango._PyTango.CmdArgType.DevVarStringArray, \(aqlist of available pool elements\(aq]], \(aqUpdateMntGrp\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevString, \(aqconfiguration\(aq]], \(aqAvailableMntGrps\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevVarStringArray, \(aqlist of available mntgrp names\(aq]]}
+.B cmd_list = {\(aqMutedChannels\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevVarStringArray, \(aqlist of muted channels\(aq]], \(aqDeleteAllProfiles\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq]], \(aqSaveProfile\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq]], \(aqDeleteProfile\(aq: [[PyTango._PyTango.CmdArgType.DevString, \(aqmntgrp name\(aq], [PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq]], \(aqResetPreselectedComponents\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq]], \(aqStoreProfile\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq]], \(aqAvailableTimers\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevVarStringArray, \(aqlist of available timers\(aq]], \(aqIsMntGrpUpdated\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevBoolean, \(aqtrue if mntgrp changed\(aq]], \(aqSetChannelProperties\(aq: [[PyTango._PyTango.CmdArgType.DevVarStringArray, \(aqa two element list with a property type and JSON value dictionary {channel:property}\(aq], [PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq]], \(aqImportMntGrp\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq]], \(aqAvailableComponents\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevVarStringArray, \(aqlist of available component names\(aq]], \(aqLoadProfile\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq]], \(aqFetchProfile\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq]], \(aqSelectedComponents\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevVarStringArray, \(aqcomponent names\(aq]], \(aqDataSourceDescription\(aq: [[PyTango._PyTango.CmdArgType.DevVarStringArray, \(aqlist of required datasources\(aq], [PyTango._PyTango.CmdArgType.DevVarStringArray, \(aqlist of JSON with description of CLIENT Datasources\(aq]], \(aqCreateWriterConfiguration\(aq: [[PyTango._PyTango.CmdArgType.DevVarStringArray, \(aqlist of required components\(aq], [PyTango._PyTango.CmdArgType.DevString, \(aqXML Settinges\(aq]], \(aqAvailableProfiles\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevVarStringArray, \(aqlist of available selection names\(aq]], \(aqChannelProperties\(aq: [[PyTango._PyTango.CmdArgType.DevString, \(aqproperty type\(aq], [PyTango._PyTango.CmdArgType.DevString, \(aqJSON dictionary with channel properties {channel:property}\(aq]], \(aqAdministratorDataNames\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevVarStringArray, \(aqadministrator data names\(aq]], \(aqPreselectedDataSources\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevVarStringArray, \(aqdatasources names\(aq]], \(aqPreselectedComponents\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevVarStringArray, \(aqcomponent names\(aq]], \(aqExportEnvProfile\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq]], \(aqScanEnvVariables\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevString, \(aqenvironment data\(aq]], \(aqComponentClientSources\(aq: [[PyTango._PyTango.CmdArgType.DevVarStringArray, \(aqlist of required components\(aq], [PyTango._PyTango.CmdArgType.DevString, \(aqJSON with description of CLIENT Datasources\(aq]], \(aqMntGrpConfiguration\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevString, \(aq mntgrp configuration string\(aq]], \(aqUpdateConfigVariables\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq]], \(aqFullDeviceNames\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevString, \(aqJSON Dictionary with full device names for  all aliases \(aq]], \(aqSetScanEnvVariables\(aq: [[PyTango._PyTango.CmdArgType.DevString, \(aqenvironment data\(aq], [PyTango._PyTango.CmdArgType.DevLong, \(aqscanID\(aq]], \(aqVariableComponents\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevString, \(aqJSON Dictionary with all Components for   configuration variable\(aq]], \(aqComponentDescription\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevString, \(aqJSON component description\(aq]], \(aqRemoveDynamicComponent\(aq: [[PyTango._PyTango.CmdArgType.DevString, \(aqname of dynamic Component\(aq], [PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq]], \(aqAvailableDataSources\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevVarStringArray, \(aqlist of available DataSource names\(aq]], \(aqSwitchProfile\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq]], \(aqSelectedDataSources\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevVarStringArray, \(aqprofile component datasources\(aq]], \(aqComponentDataSources\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevVarStringArray, \(aqprofile component datasources\(aq]], \(aqCreateDynamicComponent\(aq: [[PyTango._PyTango.CmdArgType.DevVarStringArray, \(aqlist of JSON strings with datasource parameters\(aq], [PyTango._PyTango.CmdArgType.DevString, \(aqname of dynamic Component\(aq]], \(aqPreselectComponents\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq]], \(aqUpdateProfile\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevString, \(aqmntgrp configuration string\(aq]], \(aqMandatoryComponents\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevVarStringArray, \(aqcomponent names\(aq]], \(aqImportEnvProfile\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq]], \(aqPoolElementNames\(aq: [[PyTango._PyTango.CmdArgType.DevString, \(aqpool list attribute name\(aq], [PyTango._PyTango.CmdArgType.DevVarStringArray, \(aqlist of available pool elements\(aq]], \(aqUpdateMntGrp\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevString, \(aqconfiguration\(aq]], \(aqAvailableMntGrps\(aq: [[PyTango._PyTango.CmdArgType.DevVoid, \(aq\(aq], [PyTango._PyTango.CmdArgType.DevVarStringArray, \(aqlist of available mntgrp names\(aq]]}
 .INDENT 7.0
-.INDENT 3.5
+.TP
+.B (\fI\%dict\fP <\fI\%str\fP, 
+[[ \fI\%PyTango.CmdArgType\fP, \fI\%str\fP]] >)
 Command definitions
-.UNINDENT
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
 .TP
 .B device_property_list = {\(aqMutedChannelFilters\(aq: [PyTango._PyTango.CmdArgType.DevVarStringArray, \(aqlist of muted channel filters\(aq, []], \(aqPoolBlacklist\(aq: [PyTango._PyTango.CmdArgType.DevVarStringArray, \(aqblacklist of pools\(aq, []], \(aqNumberOfThreads\(aq: [PyTango._PyTango.CmdArgType.DevLong, \(aqmaximal number of threads\(aq, [20]], \(aqAdminDataNames\(aq: [PyTango._PyTango.CmdArgType.DevVarStringArray, \(aqlist of administrator data names\(aq, []], \(aqTimerFilters\(aq: [PyTango._PyTango.CmdArgType.DevVarStringArray, \(aqlist of timer filters\(aq, []], \(aqDefaultPreselectedComponents\(aq: [PyTango._PyTango.CmdArgType.DevVarStringArray, \(aqlist of default preselected components\(aq, []]}
 .INDENT 7.0
-.INDENT 3.5
-Device Properties
-.UNINDENT
+.TP
+.B (\fI\%dict\fP <\fI\%str\fP, 
+[ \fI\%str\fP, \fI\%PyTango.CmdArgType\fP, [ \fI\%list\fP <\fI\%int\fP> ] ] > ) Device Properties
 .UNINDENT
 .UNINDENT
 .UNINDENT
@@ -2254,12 +2765,12 @@ ProfileManager
 .INDENT 0.0
 .TP
 .B nxsrecconfig.ProfileManager.DEFAULT_RECORD_KEYS = [\(aqserialno\(aq, \(aqend_time\(aq, \(aqstart_time\(aq, \(aqpoint_nb\(aq, \(aqtimestamps\(aq, \(aqscan_title\(aq, \(aqfilename\(aq]
-default data names
+(\fI\%list\fP <\fI\%str\fP>) default data names
 .UNINDENT
 .INDENT 0.0
 .TP
 .B nxsrecconfig.ProfileManager.NXSTOOLS = True
-flag for nxstools installed
+(\fI\%bool\fP) flag for nxstools installed
 .UNINDENT
 .INDENT 0.0
 .TP
@@ -2269,8 +2780,11 @@ Bases: \fI\%object\fP
 Manages Measurement Group and Profile from Selector
 .sp
 constructor
-.sp
-:param selector selector object
+.INDENT 7.0
+.TP
+.B Parameters
+\fBselector\fP (\fBnxsrecconfig.Selector.Selector\fP) \-\- selector object
+.UNINDENT
 .INDENT 7.0
 .TP
 .B availableMntGrps()
@@ -2279,6 +2793,9 @@ available mntgrps
 .TP
 .B Returns
 list of available measurement groups
+.TP
+.B Return type
+\fI\%list\fP <\fI\%str\fP>
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -2289,6 +2806,9 @@ provides a list of Component DataSources
 .TP
 .B Returns
 list of component datasources
+.TP
+.B Return type
+\fI\%list\fP <\fI\%str\fP>
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -2299,6 +2819,9 @@ provides selected components
 .TP
 .B Returns
 list of available selected components
+.TP
+.B Return type
+\fI\%list\fP <\fI\%str\fP>
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -2308,11 +2831,14 @@ provides description of components
 .INDENT 7.0
 .TP
 .B Parameters
-\fBfull\fP \-\- if True describes all available ones are taken
+\fBfull\fP (\fI\%bool\fP) \-\- if True describes all available ones are taken
 otherwise selectect, preselected and mandatory
 .TP
 .B Returns
 description of required components
+.TP
+.B Return type
+[\fI\%dict\fP <\fI\%str\fP, \fI\%dict\fP <\fI\%str\fP,                  \fI\%list\fP <(\fI\%str\fP, \fI\%str\fP, \fI\%str\fP,                       \fI\%str\fP, \fI\%list\fP <\fI\%int\fP>)> > > ] or                 [{"dsname": \fI\%str\fP, "strategy": \fI\%str\fP,                   "dstype": \fI\%str\fP, "record": \fI\%str\fP,                   "nxstype": \fI\%str\fP, "shape": \fI\%list\fP <\fI\%int\fP> ,           "cpname": \fI\%str\fP}, ...]
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -2323,12 +2849,15 @@ provides selected datasources
 .TP
 .B Returns
 list of available selected datasources
+.TP
+.B Return type
+\fI\%list\fP <\fI\%str\fP>
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
 .TP
 .B defaultPreselectedComponents = None
-default preselectedComponents
+(\fI\%list\fP <\fI\%str\fP>) default preselectedComponents
 .UNINDENT
 .INDENT 7.0
 .TP
@@ -2337,7 +2866,7 @@ deletes mntgrp
 .INDENT 7.0
 .TP
 .B Parameters
-\fBname\fP \-\- mntgrp name
+\fBname\fP (\fI\%str\fP) \-\- mntgrp name
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -2358,6 +2887,9 @@ check if active measurement group was changed
 .TP
 .B Returns
 True if it is different to the current setting
+.TP
+.B Return type
+\fI\%bool\fP
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -2368,6 +2900,9 @@ provides configuration of mntgrp
 .TP
 .B Returns
 string with mntgrp configuration
+.TP
+.B Return type
+\fI\%str\fP
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -2378,6 +2913,9 @@ provides preselected components
 .TP
 .B Returns
 list of available preselected components
+.TP
+.B Return type
+\fI\%list\fP <\fI\%str\fP>
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -2388,6 +2926,9 @@ provides preselected datasources
 .TP
 .B Returns
 list of available preselected components
+.TP
+.B Return type
+\fI\%list\fP <\fI\%str\fP>
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -2397,7 +2938,7 @@ switchProfile to active measurement
 .INDENT 7.0
 .TP
 .B Parameters
-\fBtoActive\fP \-\- if False update the current profile
+\fBtoActive\fP (\fI\%bool\fP) \-\- if False update the current profile
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -2408,10 +2949,13 @@ import setting from active measurement
 .INDENT 7.0
 .TP
 .B Parameters
-\fBsync\fP \-\- make profile and mntgrp synchronization
+\fBsync\fP (\fI\%bool\fP) \-\- make profile and mntgrp synchronization
 .TP
 .B Returns
-dictionary with mntgrp configuration information
+json dictionary with mntgrp configuration information
+.TP
+.B Return type
+\fI\%str\fP
 .UNINDENT
 .UNINDENT
 .UNINDENT
@@ -2426,7 +2970,33 @@ Selection state
 .B class nxsrecconfig.Selection.Selection(*args, **kw)
 Bases: \fI\%dict\fP
 .sp
-Selection Dictionary
+Selection Dictionary which contains the following records:
+{
+"Timer":  \(aq[]\(aq,
+"OrderedChannels":  \(aq[]\(aq,
+"ComponentSelection":  \(aq{}\(aq,
+"DataSourceSelection":  \(aq{}\(aq,
+"DataSourcePreselection":  \(aq{}\(aq,
+"ComponentPreselection":  \(aq{}\(aq,
+"PreselectingDataSources":  \(aq[]\(aq,
+"OptionalComponents":  \(aq[]\(aq,
+"AppendEntry":  False,
+"ComponentsFromMntGrp":  False,
+"ConfigVariables":  \(aq{}\(aq,
+"UserData":  \(aq{}\(aq,
+"ChannelProperties":  \(aq{}\(aq,
+"UnplottedComponents":  \(aq[]\(aq,
+"DynamicComponents":  True,
+"DefaultDynamicLinks":  True,
+"DefaultDynamicPath":      \(aq/entry$var.serialno:NXentry/NXinstrument/collection\(aq,
+"TimeZone":  self.__defaultzone,
+"ConfigDevice":  \(aq\(aq,
+"WriterDevice":  \(aq\(aq,
+"Door":  \(aq\(aq,
+"MntGrp":  \(aq\(aq,
+"Version":  self.__version,
+"MntGrpConfiguration":  \(aq\(aq
+}
 .sp
 constructor
 .INDENT 7.0
@@ -2434,9 +3004,9 @@ constructor
 .B Parameters
 .INDENT 7.0
 .IP \(bu 2
-\fBargs\fP \-\- dictionary args
+\fBargs\fP (\fI\%list\fP <\fIany\fP>) \-\- dictionary args
 .IP \(bu 2
-\fBkw\fP \-\- dictionary kw
+\fBkw\fP (\fI\%dict\fP <\fI\%str\fP, \fIany\fP>) \-\- dictionary kw
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -2465,6 +3035,7 @@ If MntGrp not defined set it to default value
 resets Preselected Components with given components and set them
 to not active
 :param components: list of components to be set
+:type components: \fI\%list\fP <\fI\%str\fP>
 .UNINDENT
 .INDENT 7.0
 .TP
@@ -2500,9 +3071,9 @@ It adds new channels to DataSourceSelection
 .B Parameters
 .INDENT 7.0
 .IP \(bu 2
-\fBchannels\fP \-\- pool channels
+\fBchannels\fP (\fI\%list\fP <\fI\%str\fP>) \-\- pool channels
 .IP \(bu 2
-\fBdatasources\fP \-\- available datasources
+\fBdatasources\fP (\fI\%list\fP <\fI\%str\fP>) \-\- available datasources
 .UNINDENT
 .UNINDENT
 .UNINDENT
@@ -2516,7 +3087,7 @@ update method for orderedChannels attribute
 sets pool channels in order defined by OrderedChannels
 .TP
 .B Parameters
-\fBchannels\fP \-\- pool channels
+\fBchannels\fP (\fI\%list\fP <\fI\%str\fP>) \-\- pool channels
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -2529,7 +3100,7 @@ update method for Preselected DataSources
 appends new datasources to Preselected DataSources
 .TP
 .B Parameters
-\fBdatasources\fP \-\- list of datasources
+\fBdatasources\fP (\fI\%list\fP <\fI\%str\fP>) \-\- list of datasources
 .UNINDENT
 .UNINDENT
 .UNINDENT
@@ -2549,9 +3120,9 @@ constructor
 .B Parameters
 .INDENT 7.0
 .IP \(bu 2
-\fBmacroserverpools\fP \-\- MacroServerPools object
+\fBmacroserverpools\fP (\fBnxsrecconfig.MacroServerPools.MacroServerPools\fP) \-\- MacroServerPools object
 .IP \(bu 2
-\fBversion\fP \-\- selector version
+\fBversion\fP (\fI\%str\fP) \-\- selector version
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -2560,14 +3131,25 @@ constructor
 executes command on configuration server
 .INDENT 7.0
 .TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBcommand\fP (\fI\%str\fP) \-\- command name
+.IP \(bu 2
+\fBvar\fP ([ \fIany\fP ]) \-\- parameter list
+.UNINDENT
+.TP
 .B Returns
 command result
+.TP
+.B Return type
+\fIany\fP
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
 .TP
 .B descErrors = None
-error descriptions
+(\fI\%list\fP <\fI\%str\fP>) error descriptions
 .UNINDENT
 .INDENT 7.0
 .TP
@@ -2583,9 +3165,9 @@ exports Selector Environment Data
 .B Parameters
 .INDENT 7.0
 .IP \(bu 2
-\fBdata\fP \-\- dictionary with input data
+\fBdata\fP (\fI\%dict\fP <\fI\%str\fP , \fIany\fP>) \-\- dictionary with input data
 .IP \(bu 2
-\fBcmddata\fP \-\- dictionary with command input data
+\fBcmddata\fP (\fI\%dict\fP <\fI\%str\fP , \fIany\fP>) \-\- dictionary with command input data
 .UNINDENT
 .UNINDENT
 .UNINDENT
@@ -2597,6 +3179,9 @@ fetch configuration
 .TP
 .B Returns
 if configuration was fetched
+.TP
+.B Return type
+\fI\%bool\fP
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -2607,6 +3192,9 @@ provides selection data
 .TP
 .B Returns
 selection data
+.TP
+.B Return type
+\fI\%dict\fP <\fI\%str\fP, \fIany\fP>
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -2617,6 +3205,9 @@ provides MacroServer name
 .TP
 .B Returns
 MacroServer name
+.TP
+.B Return type
+\fI\%str\fP
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -2627,6 +3218,9 @@ provides pool proxies
 .TP
 .B Returns
 list of pool proxies
+.TP
+.B Return type
+\fI\%list\fP <\fI\%PyTango.DeviceProxy\fP>
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -2637,6 +3231,9 @@ gets Scan Environment Data
 .TP
 .B Returns
 JSON String with important variables
+.TP
+.B Return type
+\fI\%str\fP
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -2648,9 +3245,9 @@ imports Selector Environment Data
 .B Parameters
 .INDENT 7.0
 .IP \(bu 2
-\fBnames\fP \-\- names of required variables
+\fBnames\fP (\fI\%list\fP <\fI\%str\fP>) \-\- names of required variables
 .IP \(bu 2
-\fBdata\fP \-\- dictionary with resulting data
+\fBdata\fP (\fI\%dict\fP <\fI\%str\fP , \fIany\fP>) \-\- dictionary with resulting data
 .UNINDENT
 .UNINDENT
 .UNINDENT
@@ -2658,11 +3255,19 @@ imports Selector Environment Data
 .TP
 .B keys()
 provides all names of variables
+.INDENT 7.0
+.TP
+.B Returns
+selection keys
+.TP
+.B Return type
+\fI\%list\fP <\fI\%str\fP>
+.UNINDENT
 .UNINDENT
 .INDENT 7.0
 .TP
 .B moduleLabel = None
-module label
+(\fI\%str\fP) module label
 .UNINDENT
 .INDENT 7.0
 .TP
@@ -2671,10 +3276,13 @@ provides names from the given pool listattr
 .INDENT 7.0
 .TP
 .B Parameters
-\fBlistattr\fP \-\- pool attribute with list
+\fBlistattr\fP (\fI\%str\fP) \-\- pool attribute with list
 .TP
 .B Returns
 names from given pool listattr
+.TP
+.B Return type
+\fI\%list\fP <\fI\%str\fP>
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -2683,8 +3291,8 @@ names from given pool listattr
 updates active state of preselected components
 .INDENT 7.0
 .TP
-.B Returns
-new group of preselected components
+.B Brief
+It provides new group of preselected components
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -2699,7 +3307,7 @@ resets preselected components to set of given components
 .INDENT 7.0
 .TP
 .B Parameters
-\fBcomponents\fP \-\- new selection preselected components
+\fBcomponents\fP (\fI\%list\fP <\fI\%str\fP>) \-\- new selection preselected components
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -2709,7 +3317,7 @@ sets selection from state data
 .INDENT 7.0
 .TP
 .B Parameters
-\fBstate\fP \-\- state data
+\fBstate\fP (\fI\%dict\fP <\fI\%str\fP, \fIany\fP>) \-\- state data
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -2720,6 +3328,9 @@ sets config instances
 .TP
 .B Returns
 set config instance
+.TP
+.B Return type
+\fI\%PyTango.DeviceProxy\fP              or \fI\%nxsconfigserver.XMLConfigurator.XMLConfigurator\fP
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -2729,7 +3340,7 @@ sets Scan Environment Data
 .INDENT 7.0
 .TP
 .B Parameters
-\fBjdata\fP \-\- JSON String with important variables
+\fBjdata\fP (\fI\%str\fP) \-\- JSON String with important variables
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -2754,15 +3365,15 @@ contructor
 .B Parameters
 .INDENT 7.0
 .IP \(bu 2
-\fBserver\fP \-\- NXSRecSelector server
+\fBserver\fP (\fBnxsrecconfig.NXSConfig.NXSRecSelector\fP) \-\- NXSRecSelector server
 .IP \(bu 2
-\fBnumberofthreads\fP \-\- number of threads used to check device state
+\fBnumberofthreads\fP (\fI\%str\fP) \-\- number of threads used to check device state
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
 .TP
 .B adminDataNames = None
-administator data
+(\fI\%list\fP <\fI\%str\fP>) administator data
 .UNINDENT
 .INDENT 7.0
 .TP
@@ -2772,12 +3383,15 @@ provides administrator data names
 .TP
 .B Returns
 list of provides administrator data names
+.TP
+.B Return type
+\fI\%list\fP <\fI\%str\fP>
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
 .TP
 .B appendEntry
-the json data string
+(\fI\%bool\fP) the json data string
 .UNINDENT
 .INDENT 7.0
 .TP
@@ -2787,6 +3401,9 @@ available components
 .TP
 .B Returns
 list of available components
+.TP
+.B Return type
+\fI\%list\fP <\fI\%str\fP>
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -2797,6 +3414,9 @@ available datasources
 .TP
 .B Returns
 list of available datasources
+.TP
+.B Return type
+\fI\%list\fP <\fI\%str\fP>
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -2807,6 +3427,9 @@ available mntgrps
 .TP
 .B Returns
 list of available measurement groups
+.TP
+.B Return type
+\fI\%list\fP <\fI\%str\fP>
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -2817,6 +3440,9 @@ available selections
 .TP
 .B Returns
 list of available selections
+.TP
+.B Return type
+\fI\%list\fP <\fI\%str\fP>
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -2827,6 +3453,9 @@ provides available Timers from MacroServer pools
 .TP
 .B Returns
 available Timers from MacroServer pools
+.TP
+.B Return type
+\fI\%list\fP <\fI\%str\fP>
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -2836,10 +3465,13 @@ provides channel properties of the given type
 .INDENT 7.0
 .TP
 .B Parameters
-\fBptype\fP \-\- property type
+\fBptype\fP (\fI\%str\fP) \-\- property type
 .TP
 .B Returns
 json dictionary with channel properties
+.TP
+.B Return type
+\fI\%str\fP
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -2849,10 +3481,13 @@ provides description of client datasources
 .INDENT 7.0
 .TP
 .B Parameters
-\fBcps\fP \-\- component names
+\fBcps\fP (\fI\%list\fP <\fI\%str\fP>) \-\- component names
 .TP
 .B Returns
 JSON string with description of client datasources
+.TP
+.B Return type
+\fI\%str\fP
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -2863,6 +3498,9 @@ provides a list of profile component DataSources
 .TP
 .B Returns
 list of profile component datasources
+.TP
+.B Return type
+\fI\%list\fP <\fI\%str\fP>
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -2873,22 +3511,25 @@ provides description of all components
 .TP
 .B Returns
 JSON string with description of all components
+.TP
+.B Return type
+\fI\%str\fP
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
 .TP
 .B components
-provides selected components
+(\fI\%list\fP <\fI\%str\fP>) provides selected components
 .UNINDENT
 .INDENT 7.0
 .TP
 .B configDevice
-the json data string
+(\fI\%str\fP) the json data string
 .UNINDENT
 .INDENT 7.0
 .TP
 .B configVariables
-the json variables string
+(\fI\%str\fP) the json variables string
 .UNINDENT
 .INDENT 7.0
 .TP
@@ -2897,10 +3538,13 @@ creates dynamic component
 .INDENT 7.0
 .TP
 .B Parameters
-\fBparams\fP \-\- datasource parameters
+\fBparams\fP (\fI\%list\fP <\fI\%str\fP>) \-\- datasource parameters
 .TP
 .B Returns
 dynamic component name
+.TP
+.B Return type
+\fI\%str\fP
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -2910,28 +3554,40 @@ create configuration
 .INDENT 7.0
 .TP
 .B Parameters
-\fBcps\fP \-\- component names
+\fBcps\fP (\fI\%list\fP <\fI\%str\fP>) \-\- component names
 .TP
 .B Returns
 JSON string with description of client datasources
+.TP
+.B Return type
+\fI\%str\fP
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
 .TP
 .B dataSourceDescription(datasources)
 describe datasources
-:param datasources: list for datasource names
-:returns: list of dictionary with description of datasources
+.INDENT 7.0
+.TP
+.B Parameters
+\fBdatasources\fP (\fI\%list\fP <\fI\%str\fP>) \-\- list for datasource names
+.TP
+.B Returns
+list of dictionary with description of datasources
+.TP
+.B Return type
+[{"dsname": \fI\%str\fP, "dstype": \fI\%str\fP,                   "record": \fI\%str\fP}, ...]
+.UNINDENT
 .UNINDENT
 .INDENT 7.0
 .TP
 .B dataSources
-provides all selected data sources
+(\fI\%list\fP <\fI\%str\fP>) provides all selected data sources
 .UNINDENT
 .INDENT 7.0
 .TP
 .B defaultPreselectedComponents
-default PreselectedComponents
+(\fI\%list\fP <\fI\%str\fP>) default PreselectedComponents
 .UNINDENT
 .INDENT 7.0
 .TP
@@ -2945,23 +3601,23 @@ deletes mntgrp
 .INDENT 7.0
 .TP
 .B Parameters
-\fBname\fP \-\- mntgrp name
+\fBname\fP (\fI\%str\fP) \-\- mntgrp name
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
 .TP
 .B descriptionErrors
-provides preselected components
+(\fI\%list\fP <\fI\%str\fP>) provides preselected components
 .UNINDENT
 .INDENT 7.0
 .TP
 .B deviceGroups
-the json data string
+(\fI\%str\fP) the json data string
 .UNINDENT
 .INDENT 7.0
 .TP
 .B door
-the json data string
+(\fI\%str\fP) the json data string
 .UNINDENT
 .INDENT 7.0
 .TP
@@ -2981,6 +3637,9 @@ provides full names of pool devices
 .TP
 .B Returns
 JSON string with full names of pool devices
+.TP
+.B Return type
+\fI\%str\fP
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -3001,6 +3660,9 @@ check if active measurement group was changed
 .TP
 .B Returns
 True if it is different to the current setting
+.TP
+.B Return type
+\fI\%bool\fP
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -3011,7 +3673,7 @@ loads configuration
 .INDENT 7.0
 .TP
 .B macroServer
-the json data string
+(\fI\%str\fP) the json data string
 .UNINDENT
 .INDENT 7.0
 .TP
@@ -3021,12 +3683,15 @@ mandatory components
 .TP
 .B Returns
 list of mandatory components
+.TP
+.B Return type
+\fI\%list\fP <\fI\%str\fP>
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
 .TP
 .B mntGrp
-the json data string
+(\fI\%str\fP) the json data string
 .UNINDENT
 .INDENT 7.0
 .TP
@@ -3036,12 +3701,19 @@ provides configuration of mntgrp
 .TP
 .B Returns
 string with mntgrp configuration
+.TP
+.B Return type
+\fI\%str\fP
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
 .TP
 .B mutedChannelFilters = None
-timer filters
+.INDENT 7.0
+.INDENT 3.5
+(\fI\%list\fP <\fI\%str\fP>) timer filters
+.UNINDENT
+.UNINDENT
 .UNINDENT
 .INDENT 7.0
 .TP
@@ -3051,6 +3723,9 @@ provides muted channels from pool
 .TP
 .B Returns
 muted channels from pool
+.TP
+.B Return type
+\fI\%list\fP <\fI\%str\fP>
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -3061,17 +3736,20 @@ provides names of variables
 .TP
 .B Returns
 all names of variables
+.TP
+.B Rtypes
+\fI\%list\fP <\fI\%str\fP>
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
 .TP
 .B numberOfThreads = None
-number of threads
+(\fI\%int\fP) number of threads
 .UNINDENT
 .INDENT 7.0
 .TP
 .B poolBlacklist
-black list of pools
+(\fI\%list\fP <\fI\%str\fP>) black list of pools
 .UNINDENT
 .INDENT 7.0
 .TP
@@ -3080,10 +3758,13 @@ provides names from given pool listattr
 .INDENT 7.0
 .TP
 .B Parameters
-\fBlistattr\fP \-\- name of pool attribute with a element list
+\fBlistattr\fP (\fI\%str\fP) \-\- name of pool attribute with a element list
 .TP
 .B Returns
 names from given pool listattr
+.TP
+.B Return type
+\fI\%list\fP <\fI\%str\fP>
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -3099,6 +3780,9 @@ provides preselected components
 .TP
 .B Returns
 list of available preselected components
+.TP
+.B Return type
+\fI\%list\fP <\fI\%str\fP>
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -3109,17 +3793,20 @@ provides preselected datasources
 .TP
 .B Returns
 list of available preselected datasources
+.TP
+.B Return type
+\fI\%list\fP <\fI\%str\fP>
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
 .TP
 .B profileConfiguration
-the json data string
+(\fI\%str\fP) the json data string
 .UNINDENT
 .INDENT 7.0
 .TP
 .B profileFile = None
-configuration file
+(\fI\%str\fP) configuration file
 .UNINDENT
 .INDENT 7.0
 .TP
@@ -3128,7 +3815,7 @@ removes dynamic component
 .INDENT 7.0
 .TP
 .B Parameters
-\fBname\fP \-\- dynamic component name
+\fBname\fP (\fI\%str\fP) \-\- dynamic component name
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -3154,17 +3841,20 @@ gets Scan Environment Data
 .TP
 .B Returns
 JSON String with important variables
+.TP
+.B Return type
+\fI\%str\fP
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
 .TP
 .B scanFile
-the json data string
+(\fI\%str\fP) the json data string
 .UNINDENT
 .INDENT 7.0
 .TP
 .B scanID
-the json data string
+(\fI\%int\fP) the json data string
 .UNINDENT
 .INDENT 7.0
 .TP
@@ -3174,6 +3864,9 @@ provides user selected components
 .TP
 .B Returns
 list of available selected components
+.TP
+.B Return type
+\fI\%list\fP <\fI\%str\fP>
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -3193,19 +3886,23 @@ sets channel properties of the given type
 .INDENT 7.0
 .TP
 .B Parameters
-\fBtypeandvariables\fP \-\- (property type, json dictionary of channel propertie values)
+\fBtypeandvariables\fP ((\fI\%str\fP, \fI\%str\fP)) \-\- (property type, json dictionary of channel propertie values)
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
 .TP
 .B setScanEnvVariables(jdata)
 sets Scan Environment Data
-:param jdata: JSON String with important variables
+.INDENT 7.0
+.TP
+.B Parameters
+\fBjdata\fP (\fI\%str\fP) \-\- JSON String with important variables
+.UNINDENT
 .UNINDENT
 .INDENT 7.0
 .TP
 .B stepdatasources
-the json data string
+(\fI\%str\fP) the json data string
 .UNINDENT
 .INDENT 7.0
 .TP
@@ -3219,13 +3916,13 @@ switch to active measurement
 .INDENT 7.0
 .TP
 .B Parameters
-\fBtoActive\fP \-\- if False update the current profile
+\fBtoActive\fP (\fI\%bool\fP) \-\- if False update the current profile
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
 .TP
 .B timerFilters = None
-timer filters
+(\fI\%list\fP <\fI\%str\fP>) timer filters
 .UNINDENT
 .INDENT 7.0
 .TP
@@ -3241,6 +3938,9 @@ set active measurement group from components
 .TP
 .B Returns
 string with mntgrp configuration
+.TP
+.B Return type
+\fI\%str\fP
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -3249,17 +3949,17 @@ string with mntgrp configuration
 update profile and measurement group
 .INDENT 7.0
 .TP
-.B Parameters
-\fBsetenv\fP \-\- set ActiveMntGrp and PreScanSnapshot variables
-.TP
 .B Returns
 string with mntgrp configuration
+.TP
+.B Return type
+\fI\%str\fP
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
 .TP
 .B userData
-the json data string
+(\fI\%str\fP) the json data string
 .UNINDENT
 .INDENT 7.0
 .TP
@@ -3268,10 +3968,13 @@ provides values of the required variable
 .INDENT 7.0
 .TP
 .B Parameters
-\fBname\fP \-\- name of the required variable
+\fBname\fP (\fI\%str\fP) \-\- name of the required variable
 .TP
 .B Returns
 values of the required variable
+.TP
+.B Return type
+\fIany\fP
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -3281,18 +3984,21 @@ provides components for all variables
 .INDENT 7.0
 .TP
 .B Returns
-dictionary with components for all variables
+json dictionary with components for all variables
+.TP
+.B Return type
+\fI\%str\fP
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
 .TP
 .B version
-server version
+(\fI\%str\fP) server version
 .UNINDENT
 .INDENT 7.0
 .TP
 .B writerDevice
-the json data string
+(\fI\%str\fP) the json data string
 .UNINDENT
 .UNINDENT
 .SS nxsrecconfig.Streams module
@@ -3307,9 +4013,9 @@ writes debug message
 .B Parameters
 .INDENT 7.0
 .IP \(bu 2
-\fBmessage\fP \-\- debug message
+\fBmessage\fP (\fI\%str\fP) \-\- debug message
 .IP \(bu 2
-\fBstd\fP \-\- it writes to sys stream
+\fBstd\fP (\fI\%bool\fP) \-\- it writes to sys stream
 when log stream does not exist
 .UNINDENT
 .UNINDENT
@@ -3323,9 +4029,9 @@ writes error message
 .B Parameters
 .INDENT 7.0
 .IP \(bu 2
-\fBmessage\fP \-\- error message
+\fBmessage\fP (\fI\%str\fP) \-\- error message
 .IP \(bu 2
-\fBstd\fP \-\- it writes to sys stream
+\fBstd\fP (\fI\%bool\fP) \-\- it writes to sys stream
 when log stream does not exist
 .UNINDENT
 .UNINDENT
@@ -3339,9 +4045,9 @@ writes fatal error message
 .B Parameters
 .INDENT 7.0
 .IP \(bu 2
-\fBmessage\fP \-\- error message
+\fBmessage\fP (\fI\%str\fP) \-\- error message
 .IP \(bu 2
-\fBstd\fP \-\- it writes to sys stream
+\fBstd\fP (\fI\%bool\fP) \-\- it writes to sys stream
 when log stream does not exist
 .UNINDENT
 .UNINDENT
@@ -3355,9 +4061,9 @@ writes info message
 .B Parameters
 .INDENT 7.0
 .IP \(bu 2
-\fBmessage\fP \-\- info message
+\fBmessage\fP (\fI\%str\fP) \-\- info message
 .IP \(bu 2
-\fBstd\fP \-\- it writes to sys stream
+\fBstd\fP (\fI\%bool\fP) \-\- it writes to sys stream
 when log stream does not exist
 .UNINDENT
 .UNINDENT
@@ -3365,27 +4071,27 @@ when log stream does not exist
 .INDENT 0.0
 .TP
 .B nxsrecconfig.Streams.log_debug = None
-Tango debug log stream
+(\fBPyTango.log4tango.TangoStream\fP) Tango debug log stream
 .UNINDENT
 .INDENT 0.0
 .TP
 .B nxsrecconfig.Streams.log_error = None
-Tango error log stream
+(\fBPyTango.log4tango.TangoStream\fP) Tango error log stream
 .UNINDENT
 .INDENT 0.0
 .TP
 .B nxsrecconfig.Streams.log_fatal = None
-Tango fatal log stream
+(\fBPyTango.log4tango.TangoStream\fP) Tango fatal log stream
 .UNINDENT
 .INDENT 0.0
 .TP
 .B nxsrecconfig.Streams.log_info = None
-Tango info log stream
+(\fBPyTango.log4tango.TangoStream\fP) Tango info log stream
 .UNINDENT
 .INDENT 0.0
 .TP
 .B nxsrecconfig.Streams.log_warn = None
-Tango warn log stream
+(\fBPyTango.log4tango.TangoStream\fP) Tango warn log stream
 .UNINDENT
 .INDENT 0.0
 .TP
@@ -3396,9 +4102,9 @@ writes warning message
 .B Parameters
 .INDENT 7.0
 .IP \(bu 2
-\fBmessage\fP \-\- warning message
+\fBmessage\fP (\fI\%str\fP) \-\- warning message
 .IP \(bu 2
-\fBstd\fP \-\- it writes to sys stream
+\fBstd\fP (\fI\%bool\fP) \-\- it writes to sys stream
 when log stream does not exist
 .UNINDENT
 .UNINDENT
@@ -3421,13 +4127,16 @@ provides environment variable value
 .B Parameters
 .INDENT 7.0
 .IP \(bu 2
-\fBvar\fP \-\- variable name
+\fBvar\fP (\fI\%str\fP) \-\- variable name
 .IP \(bu 2
-\fBms\fP \-\- macroserver
+\fBms\fP (\fI\%str\fP) \-\- macroserver
 .UNINDENT
 .TP
 .B Returns
 environment variable value
+.TP
+.B Return type
+\fIany\fP
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -3439,13 +4148,16 @@ provides macro server of given door
 .B Parameters
 .INDENT 7.0
 .IP \(bu 2
-\fBdb\fP \-\- tango database
+\fBdb\fP (\fI\%PyTango.Database\fP) \-\- tango database
 .IP \(bu 2
-\fBdoor\fP \-\- given door
+\fBdoor\fP (\fI\%str\fP) \-\- given door
 .UNINDENT
 .TP
 .B Returns
 first MacroServer of the given door
+.TP
+.B Return type
+\fI\%str\fP
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -3457,11 +4169,11 @@ sets environment variable value
 .B Parameters
 .INDENT 7.0
 .IP \(bu 2
-\fBvar\fP \-\- variable name
+\fBvar\fP (\fI\%str\fP) \-\- variable name
 .IP \(bu 2
-\fBvalue\fP \-\- variable value
+\fBvalue\fP (\fIany\fP) \-\- variable value
 .IP \(bu 2
-\fBms\fP \-\- macroserver
+\fBms\fP (\fI\%str\fP) \-\- macroserver
 .UNINDENT
 .UNINDENT
 .UNINDENT
@@ -3474,9 +4186,9 @@ sets environment variable value
 .B Parameters
 .INDENT 7.0
 .IP \(bu 2
-\fBvarvalues\fP \-\- variable value dictionary
+\fBvarvalues\fP (\fI\%dict\fP <\fI\%str\fP , \fIany\fP>) \-\- variable value dictionary
 .IP \(bu 2
-\fBms\fP \-\- macroserver
+\fBms\fP (\fI\%str\fP) \-\- macroserver
 .UNINDENT
 .UNINDENT
 .UNINDENT
@@ -3489,9 +4201,9 @@ unsets environment variable
 .B Parameters
 .INDENT 7.0
 .IP \(bu 2
-\fBvar\fP \-\- variable name
+\fBvar\fP (\fI\%str\fP) \-\- variable name
 .IP \(bu 2
-\fBms\fP \-\- macroserver
+\fBms\fP (\fI\%str\fP) \-\- macroserver
 .UNINDENT
 .UNINDENT
 .UNINDENT
@@ -3511,13 +4223,16 @@ provides channels of given pools
 .B Parameters
 .INDENT 7.0
 .IP \(bu 2
-\fBpools\fP \-\- list of pool devices
+\fBpools\fP (\fI\%list\fP <\fI\%PyTango.DeviceProxy\fP>) \-\- list of pool devices
 .IP \(bu 2
-\fBfilters\fP \-\- device name filter list
+\fBfilters\fP (\fI\%list\fP <\fI\%str\fP>) \-\- device name filter list
 .UNINDENT
 .TP
 .B Returns
-list of timer names
+list of channel names
+.TP
+.B Return type
+\fI\%list\fP <\fI\%str\fP>
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -3529,13 +4244,16 @@ find aliases from fullnames
 .B Parameters
 .INDENT 7.0
 .IP \(bu 2
-\fBpools\fP \-\- list of pool devices
+\fBpools\fP (\fI\%list\fP <\fI\%PyTango.DeviceProxy\fP>) \-\- list of pool devices
 .IP \(bu 2
-\fBnames\fP \-\- fullnames if None returns all aliases
+\fBnames\fP (\fI\%list\fP <\fI\%str\fP>) \-\- fullnames if None returns all aliases
 .UNINDENT
 .TP
 .B Returns
 full device name
+.TP
+.B Return type
+\fI\%dict\fP <\fI\%str\fP, \fI\%str\fP>
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -3547,13 +4265,16 @@ provides channel sources
 .B Parameters
 .INDENT 7.0
 .IP \(bu 2
-\fBpools\fP \-\- list of pool devices
+\fBpools\fP (\fI\%list\fP <\fI\%PyTango.DeviceProxy\fP>) \-\- list of pool devices
 .IP \(bu 2
-\fBdevices\fP \-\- alias names
+\fBdevices\fP (\fI\%list\fP <\fI\%str\fP>) \-\- alias names
 .UNINDENT
 .TP
 .B Returns
 device sources
+.TP
+.B Return type
+\fI\%dict\fP <\fI\%str\fP, \fI\%str\fP>
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -3565,13 +4286,16 @@ provides device controller full names
 .B Parameters
 .INDENT 7.0
 .IP \(bu 2
-\fBpools\fP \-\- list of pool devices
+\fBpools\fP (\fI\%list\fP <\fI\%PyTango.DeviceProxy\fP>) \-\- list of pool devices
 .IP \(bu 2
-\fBdevices\fP \-\- alias names
+\fBdevices\fP (\fI\%list\fP <\fI\%str\fP>) \-\- alias names
 .UNINDENT
 .TP
 .B Returns
 device controller full names
+.TP
+.B Return type
+\fI\%dict\fP <\fI\%str\fP, \fI\%str\fP>
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -3583,13 +4307,16 @@ provides experimental Channels
 .B Parameters
 .INDENT 7.0
 .IP \(bu 2
-\fBpools\fP \-\- list of pool devices
+\fBpools\fP (\fI\%list\fP <\fI\%PyTango.DeviceProxy\fP>) \-\- list of pool devices
 .IP \(bu 2
-\fBlistattr\fP \-\- pool attribute with list
+\fBlistattr\fP (\fI\%str\fP) \-\- pool attribute with list
 .UNINDENT
 .TP
 .B Returns
 names from given pool listattr
+.TP
+.B Return type
+\fI\%list\fP <\fI\%str\fP>
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -3601,13 +4328,16 @@ find device names from aliases
 .B Parameters
 .INDENT 7.0
 .IP \(bu 2
-\fBpools\fP \-\- list of pool devices
+\fBpools\fP (\fI\%list\fP <\fI\%PyTango.DeviceProxy\fP>) \-\- list of pool devices
 .IP \(bu 2
-\fBnames\fP \-\- alias names if None returns name for all aliases
+\fBnames\fP (\fI\%list\fP <\fI\%str\fP>) \-\- alias names if None returns name for all aliases
 .UNINDENT
 .TP
 .B Returns
 full device name
+.TP
+.B Return type
+\fI\%dict\fP <\fI\%str\fP, \fI\%str\fP>
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -3619,13 +4349,16 @@ find measurement group name from alias
 .B Parameters
 .INDENT 7.0
 .IP \(bu 2
-\fBpools\fP \-\- list of pool devices
+\fBpools\fP (\fI\%list\fP <\fI\%PyTango.DeviceProxy\fP>) \-\- list of pool devices
 .IP \(bu 2
-\fBalias\fP \-\- mntgrp alias
+\fBalias\fP (\fI\%str\fP) \-\- mntgrp alias
 .UNINDENT
 .TP
 .B Returns
 full name of the measurement group alias
+.TP
+.B Return type
+\fI\%str\fP
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -3635,10 +4368,13 @@ provides datasource from pool device
 .INDENT 7.0
 .TP
 .B Parameters
-\fBname\fP \-\- pool device name
+\fBname\fP (\fI\%str\fP) \-\- pool device name
 .TP
 .B Returns
 source of pool device
+.TP
+.B Return type
+\fI\%str\fP
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -3650,13 +4386,16 @@ provides tiemrs of given pools
 .B Parameters
 .INDENT 7.0
 .IP \(bu 2
-\fBpools\fP \-\- list of pool devices
+\fBpools\fP (\fI\%list\fP <\fI\%PyTango.DeviceProxy\fP>) \-\- list of pool devices
 .IP \(bu 2
-\fBfilters\fP \-\- device name filter list
+\fBfilters\fP (\fI\%list\fP <\fI\%str\fP>) \-\- device name filter list
 .UNINDENT
 .TP
 .B Returns
 list of timer names
+.TP
+.B Return type
+\fI\%list\fP <\fI\%str\fP>
 .UNINDENT
 .UNINDENT
 .UNINDENT
@@ -3675,15 +4414,18 @@ executes command on server on python package
 .B Parameters
 .INDENT 7.0
 .IP \(bu 2
-\fBserver\fP \-\- tango server name or package name
+\fBserver\fP (\fI\%PyTango.DeviceProxy\fP              or \fI\%nxsconfigserver.XMLConfigurator.XMLConfigurator\fP) \-\- tango server name or package name
 .IP \(bu 2
-\fBcommand\fP \-\- command name
+\fBcommand\fP (\fI\%str\fP) \-\- command name
 .IP \(bu 2
-\fBvar\fP \-\- command variable list
+\fBvar\fP ([ \fIany\fP ]) \-\- command variable list
 .UNINDENT
 .TP
 .B Returns
 command result
+.TP
+.B Return type
+\fIany\fP
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -3695,13 +4437,16 @@ finds device of give class
 .B Parameters
 .INDENT 7.0
 .IP \(bu 2
-\fBdb\fP \-\- tango database
+\fBdb\fP (\fI\%PyTango.DeviceProxy\fP) \-\- tango database
 .IP \(bu 2
-\fBcname\fP \-\- device class name
+\fBcname\fP (\fI\%str\fP) \-\- device class name
 .UNINDENT
 .TP
 .B Returns
 device name if exists
+.TP
+.B Return type
+\fI\%bool\fP
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -3711,10 +4456,13 @@ provides tango device full name with host and port
 .INDENT 7.0
 .TP
 .B Parameters
-\fBsource\fP \-\- string witg device name and its attribute
+\fBsource\fP (\fI\%str\fP) \-\- string witg device name and its attribute
 .TP
 .B Returns
-database host and port in tuple
+database host and port in url string
+.TP
+.B Return type
+\fI\%str\fP
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -3724,10 +4472,13 @@ provides proxies of given device names
 .INDENT 7.0
 .TP
 .B Parameters
-\fBnames\fP \-\- given device names
+\fBnames\fP (\fI\%list\fP <\fI\%str\fP>) \-\- given device names
 .TP
 .B Returns
 list of device DeviceProxies
+.TP
+.B Return type
+\fI\%list\fP <\fI\%PyTango.DeviceProxy\fP>
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -3737,10 +4488,13 @@ retrives shape type units for attribure
 .INDENT 7.0
 .TP
 .B Parameters
-\fBsource\fP \-\- string with device name and its attribute
+\fBsource\fP (\fI\%str\fP) \-\- string with device name and its attribute
 .TP
 .B Returns
 (shape, data_type, units)
+.TP
+.B Return type
+(\fI\%list\fP <\fI\%int\fP>, \fI\%str\fP, \fI\%str\fP)
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -3750,15 +4504,19 @@ opens device proxy of the given device
 .INDENT 7.0
 .TP
 .B Parameters
-\fBdevice\fP \-\- device name
+\fBdevice\fP (\fI\%str\fP) \-\- device name
 .TP
 .B Returns
 DeviceProxy of device
+.TP
+.B Return type
+\fI\%PyTango.DeviceProxy\fP
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
 .TP
 .B tTnp = {PyTango._PyTango.CmdArgType.DevBoolean: \(aqbool\(aq, PyTango._PyTango.CmdArgType.DevShort: \(aqint16\(aq, PyTango._PyTango.CmdArgType.DevLong: \(aqint32\(aq, PyTango._PyTango.CmdArgType.DevFloat: \(aqfloat32\(aq, PyTango._PyTango.CmdArgType.DevDouble: \(aqfloat64\(aq, PyTango._PyTango.CmdArgType.DevUShort: \(aquint16\(aq, PyTango._PyTango.CmdArgType.DevULong: \(aquint32\(aq, PyTango._PyTango.CmdArgType.DevString: \(aqstring\(aq, PyTango._PyTango.CmdArgType.DevUChar: \(aquint8\(aq, PyTango._PyTango.CmdArgType.DevLong64: \(aqint64\(aq, PyTango._PyTango.CmdArgType.DevULong64: \(aquint64\(aq, PyTango._PyTango.CmdArgType.DevEncoded: \(aqencoded\(aq}
+(\fI\%dict\fP <\fI\%PyTango.CmdArgType\fP, \fI\%str\fP>)
 map of Tango:Numpy types
 .UNINDENT
 .INDENT 7.0
@@ -3768,10 +4526,13 @@ waits for device proxy not running
 .INDENT 7.0
 .TP
 .B Parameters
-\fBproxy\fP \-\- device name
+\fBproxy\fP (\fI\%PyTango.DeviceProxy\fP) \-\- device proxy
 .TP
 .B Returns
-DeviceProxy of device
+if proxy device ready
+.TP
+.B Return type
+\fI\%str\fP
 .UNINDENT
 .UNINDENT
 .UNINDENT
@@ -3790,13 +4551,16 @@ copares two dictionaries
 .B Parameters
 .INDENT 7.0
 .IP \(bu 2
-\fBdct\fP \-\- first dictinary
+\fBdct\fP (\fI\%dict\fP) \-\- first dictinary
 .IP \(bu 2
-\fBdct2\fP \-\- second dictinary
+\fBdct2\fP (\fI\%dict\fP) \-\- second dictinary
 .UNINDENT
 .TP
 .B Returns
 if dictionaries are the same
+.TP
+.B Return type
+\fI\%bool\fP
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -3806,10 +4570,13 @@ provides datasource record from xml dom node
 .INDENT 7.0
 .TP
 .B Parameters
-\fBnode\fP \-\- xml DOM node
+\fBnode\fP (\fBxml.dom.minidom.Node\fP) \-\- xml DOM node
 .TP
 .B Returns
 datasource record
+.TP
+.B Return type
+\fI\%str\fP
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -3821,13 +4588,16 @@ converts string to json dictionary
 .B Parameters
 .INDENT 7.0
 .IP \(bu 2
-\fBstring\fP \-\- string with list of item or json dictionary
+\fBstring\fP (\fI\%str\fP) \-\- string with list of item or json dictionary
 .IP \(bu 2
-\fBtoBool\fP \-\- if true convert dictionary values to bool
+\fBtoBool\fP (\fI\%bool\fP) \-\- if true convert dictionary values to bool
 .UNINDENT
 .TP
 .B Returns
 json dictionary
+.TP
+.B Return type
+\fI\%str\fP
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -3837,10 +4607,13 @@ converts string to json list
 .INDENT 7.0
 .TP
 .B Parameters
-\fBstring\fP \-\- with list of item or json list
+\fBstring\fP (\fI\%str\fP) \-\- with list of item or json list
 .TP
 .B Returns
 json list
+.TP
+.B Return type
+\fI\%str\fP
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -3850,10 +4623,13 @@ converts list/dict/object of unicode/string to string object
 .INDENT 7.0
 .TP
 .B Parameters
-\fBobj\fP \-\- given unicode/string object
+\fBobj\fP (\fIany\fP) \-\- given unicode/string object
 .TP
 .B Returns
 string object
+.TP
+.B Return type
+\fI\%str\fP
 .UNINDENT
 .UNINDENT
 .UNINDENT
@@ -3867,7 +4643,7 @@ runs the TANGO server
 .INDENT 7.0
 .TP
 .B Parameters
-\fBargv\fP \-\- command\-line arguments
+\fBargv\fP (\fI\%list\fP <\fI\%str\fP>) \-\- command\-line arguments
 .UNINDENT
 .UNINDENT
 .INDENT 0.0
