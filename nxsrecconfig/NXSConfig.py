@@ -558,7 +558,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
     def PreselectComponents(self):
         """ PreselectComponents command
 
-        :brief: checks existing controllers of pools
+        :brief: Check existing devices of pools
         """
         self.debug_stream("In PreselectComponents()")
         try:
@@ -607,7 +607,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
     def DeleteAllProfiles(self):
         """ DeleteAllProfiles command
 
-        :brief: deletes all profiles from Configuration Server
+        :brief: Delete all profiles from Configuration Server
         """
         self.debug_stream("In DeleteAllProfiles()")
         try:
@@ -631,8 +631,8 @@ class NXSRecSelector(PyTango.Device_4Impl):
     def UpdateConfigVariables(self):
         """ UpdateConfigVariables command
 
-       :brief: sends ConfigVariables into ConfigServer
-            and updates serialno if appendEntry selected
+       :brief: Send ConfigVariables into ConfigServer
+            and update serialno if appendEntry selected
         """
         self.debug_stream("In UpdateConfigVariables()")
         try:
@@ -685,7 +685,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
 
         :brief:  returns mntgrp configuration
 
-        :returns: mntgrp configuration in json string
+        :returns: Provide mntgrp configuration in json string
         :rtype: :obj:`str`
         """
         self.debug_stream("In MntGrpConfiguration()")
@@ -712,7 +712,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
     def UpdateProfile(self):
         """ UpdateProfile command
 
-        :brief: updates mntgrp configuration
+        :brief: Update mntgrp configuration
         :returns: JSON string with mntgrp configuration info
         :rtype: :obj:`str`
         """
@@ -739,7 +739,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
     def UpdateMntGrp(self):
         """ UpdateMntGrp command
 
-        :brief: updates mntgrp configuration
+        :brief: Update mntgrp configuration
         :returns: mntgrp configuration string
         :rtype: :obj:`str`
         """
@@ -766,7 +766,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
     def SwitchProfile(self):
         """ SwitchProfile command
 
-        :brief: switchs mntgrp configuration
+        :brief: Switch mntgrp configuration
         """
         self.debug_stream("In SwitchProfile()")
         try:
@@ -790,7 +790,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
     def ImportMntGrp(self):
         """ ImportMntGrp command
 
-        :brief: imports active mntgrp configuration
+        :brief: Import active mntgrp configuration
         """
         self.debug_stream("In ImportMntGrp()")
         try:
@@ -814,7 +814,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
     def ImportEnvProfile(self):
         """  ImportEnvProfile command
 
-        :brief: imports all environment variables
+        :brief: Import all environment variables
         """
         self.debug_stream("In ImportEnvProfile()")
         try:
@@ -847,7 +847,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
     def ExportEnvProfile(self):
         """ ExportEnvProfile command
 
-        :brief: exports all environment variables
+        :brief: Export all environment variables
         """
         self.debug_stream("In ExportEnvProfile()")
         try:
@@ -900,7 +900,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
     def MutedChannels(self):
         """  MutedChannels command
 
-        :brief: Returns a list of muted channel names
+        :brief: Return a list of muted channel names
         :returns: DevVarStringArray    list of muted channel names
         :rtype: :obj:`list` <:obj:`str`>
         """
@@ -928,7 +928,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
     def AvailableComponents(self):
         """ AvailableComponents command
 
-        :brief: Returns a list of available component names
+        :brief: Return a list of available component names
         :returns: DevVarStringArray    list of available component names
         :rtype: :obj:`list` <:obj:`str`>
 
@@ -957,7 +957,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
     def ComponentDescription(self):
         """ ComponentDescription command
 
-        :brief: Returns a list of available component names
+        :brief: Return a list of available component names
         :returns: DevString   list of available component names
         :rtype: :obj:`str`
         """
@@ -985,7 +985,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
     def SetScanEnvVariables(self, argin):
         """ SetScanEnvVariables command
 
-        :brief: Stores ScanDir, ScanFile and NeXusSelectorDevice
+        :brief: Store ScanDir, ScanFile and NeXusSelectorDevice
                       in environment variables
         :param argin: json dictionary with environment data
         :type argin: :obj:`str`
@@ -1016,7 +1016,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
     def FullDeviceNames(self):
         """ FullDeviceNames command
 
-        :brief: Returns a JSON with full device names for all aliases
+        :brief: Return a JSON with full device names for all aliases
         :returns: DevString JSON dictionary with full device names
         :rtype: :obj:`str`
         """
@@ -1044,8 +1044,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
     def ScanEnvVariables(self):
         """ ScanEnvVariables command
 
-        :brief: Fetches ScanDir, ScanFile, ScanID and
-                      NeXusSelectorDevice
+        :brief: Fetch ScanDir, ScanFile, ScanID and NeXusSelectorDevice
                       in environment variables
         :returns: DevString    json dictionary with environment data
         :rtype: :obj:`str`
@@ -1103,7 +1102,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
     def AvailableProfiles(self):
         """ AvailableProfiles command
 
-        :brief: Returns a list of available selection names
+        :brief: Return a list of available selection names
         :returns: DevVarStringArray    list of available selection names
         :rtype: :obj:`list` <:obj:`str`>
         """
@@ -1131,7 +1130,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
     def AvailableMntGrps(self):
         """ AvailableMntGrps command
 
-        :brief: Returns a list of available mntgrp names
+        :brief: Return a list of available mntgrp names
         :returns: DevVarStringArray    list of available mntgrp names
         :rtype: :obj:`list` <:obj:`str`>
         """
@@ -1159,7 +1158,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
     def AvailableDataSources(self):
         """ AvailableDataSources command
 
-        :brief: Returns a list of available DataSource names
+        :brief: Return a list of available DataSource names
         :returns: DevVarStringArray    list of available DataSource names
         :rtype: :obj:`list` <:obj:`str`>
         """
@@ -1187,7 +1186,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
     def PoolElementNames(self, argin):
         """ PoolElementNames command
 
-        :brief: Returns a list of available pool channels
+        :brief: Return a list of available pool channels
 
         :param argin:  DevString            name of pool list attribute
         :type argin:  :obj:`str`
@@ -1218,7 +1217,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
     def ComponentDataSources(self):
         """ ComponentDataSources command
 
-        :brief: Provides the component datasources
+        :brief: Provide the component datasources
         :returns: DevVarStringArray    component names
         :rtype: :obj:`list` <:obj:`str`>
         """
@@ -1246,7 +1245,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
     def SelectedDataSources(self):
         """ SelectedDataSources command
 
-        :brief: Provides the selected datasources
+        :brief: Provide the selected datasources
         :returns: DevVarStringArray    component names
         :rtype: :obj:`list` <:obj:`str`>
         """
@@ -1271,7 +1270,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
     def AdministratorDataNames(self):
         """ AdministratorDataNames command
 
-        :brief: Provides Administrator Data Names
+        :brief: Provide Administrator Data Names
         :returns: DevVarStringArray    data record names
         :rtype: :obj:`list` <:obj:`str`>
         """
@@ -1299,7 +1298,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
     def MandatoryComponents(self):
         """ MandatoryComponents command
 
-        :brief: Sets the mandatory components
+        :brief: Set the mandatory components
         :returns: DevVarStringArray    component names
         :rtype: :obj:`list` <:obj:`str`>
         """
@@ -1327,7 +1326,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
     def SelectedComponents(self):
         """ SelectedComponents command
 
-        :brief: Sets the selected components
+        :brief: Provide the selected components
         :returns: DevVarStringArray    component names
         :rtype: :obj:`list` <:obj:`str`>
         """
@@ -1355,7 +1354,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
     def PreselectedComponents(self):
         """ PreselectedComponents command
 
-        :brief: Sets the preselected components
+        :brief: Provide the preselected components
         :returns: DevVarStringArray    component names
         :rtype: :obj:`list` <:obj:`str`>
         """
@@ -1383,7 +1382,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
     def PreselectedDataSources(self):
         """ PreselectedDataSources command
 
-        :brief: Sets the preselected components
+        :brief: Provide the preselected components
         :returns: DevVarStringArray    component names
         :rtype: :obj:`list` <:obj:`str`>
         """
@@ -1411,7 +1410,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
     def CreateDynamicComponent(self, argin):
         """ CreateDynamicComponent command
 
-        :brief: create dynamic component
+        :brief: Create dynamic component
         :param argin:  DevVarStringArray    list of datasource parameters
         :type argin: :obj:`list` <:obj:`str`>
         :returns: DevVarString         name of created dynamic component
@@ -1441,7 +1440,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
     def RemoveDynamicComponent(self, argin):
         """ RemoveDynamicComponent command
 
-        :brief: Deletes the given dynamic component
+        :brief: Delete the given dynamic component
         :param argin:  DevString  dynamic component name
         :type argin: :obj:`str`
         """
@@ -1467,7 +1466,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
     def DeleteProfile(self, argin):
         """ DeleteProfile command
 
-        :brief: Deletes the given mntgrp
+        :brief: Delete the given mntgrp
         :param argin:  DevString  measurement group name
         :type argin: :obj:`str`
         """
@@ -1493,7 +1492,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
     def ChannelProperties(self, argin):
         """ ChannelProperties command
 
-        :brief: JSON dictionary with channel properties
+        :brief: Provide JSON dictionary with channel properties
                       {channel:property}
         :param argin:  DevString    property type
         :type argin: :obj:`str`
@@ -1525,7 +1524,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
     def SetChannelProperties(self, argin):
         """ SetChannelProperties command SetChannelProperties
 
-        :brief: set Channel Properties of given type
+        :brief: Set Channel Properties of the given type
         :param argin: DevVarStringArray two element list with a property type
                       and JSON value dictionary {channel:property}
         :type argin: [:obj:`str`, :obj:`str`]
@@ -1555,7 +1554,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
     def ComponentClientSources(self, argin):
         """ ComponentClientSources command
 
-        :brief: describes client datasources from components
+        :brief: Describe client datasources from components
         :param argin:  DevVarStringArray    list of component names
         :type argin: :obj:`list` <:obj:`str`>
         :returns: DevVarString         description of component datasources
@@ -1585,7 +1584,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
     def DataSourceDescription(self, argin):
         """ DataSourceDescription command
 
-        :brief: descrive datasources
+        :brief: Provide datasource description
         :param argin:  DevVarStringArray    list of datasource names
         :type argin: :obj:`list` <:obj:`str`>
         :returns: DevVarStringArray    description of datasources
@@ -1616,7 +1615,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
     def CreateWriterConfiguration(self, argin):
         """ CreateWriterConfiguration command
 
-        :brief: create configuration from the given components
+        :brief: Create configuration from the given components
 
         :param argin:  DevVarStringArray    list of component names
         :type argin: :obj:`list` <:obj:`str`>
@@ -1733,7 +1732,7 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
              [PyTango.DevVoid, ""]],
         'MntGrpConfiguration':
             [[PyTango.DevVoid, ""],
-             [PyTango.DevString, " mntgrp configuration string"]],
+             [PyTango.DevString, "mntgrp configuration string"]],
         'IsMntGrpUpdated':
             [[PyTango.DevVoid, ""],
              [PyTango.DevBoolean, "true if mntgrp changed"]],
@@ -1792,7 +1791,7 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
              [PyTango.DevVarStringArray, "profile component datasources"]],
         'SelectedDataSources':
             [[PyTango.DevVoid, ""],
-             [PyTango.DevVarStringArray, "profile component datasources"]],
+             [PyTango.DevVarStringArray, "profile datasources"]],
         'AdministratorDataNames':
             [[PyTango.DevVoid, ""],
              [PyTango.DevVarStringArray, "administrator data names"]],
@@ -1870,8 +1869,8 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
               PyTango.SPECTRUM,
               PyTango.READ, 10000],
              {
-                 'label': "Description Component Errors",
-                 'description': "list of Description Component Errors",
+                 'label': "Descriptive Component Errors",
+                 'description': "list of Descriptive Component Errors",
             }],
         'Version':
             [[PyTango.DevString,
@@ -1895,7 +1894,7 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
               PyTango.READ_WRITE],
              {
                  'label': " Measurement Group",
-                 'description': " Measurement Group",
+                 'description': " Measurement Group name",
             }],
         'ScanDir':
             [[PyTango.DevString,
@@ -1927,7 +1926,7 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
               PyTango.READ_WRITE],
              {
                  'label': "Configuration Device",
-                 'description': "Configuration device",
+                 'description': "Configuration device name",
                  'Memorized': "true",
             }],
         'Door':
@@ -1936,7 +1935,7 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
               PyTango.READ_WRITE],
              {
                  'label': "Door",
-                 'description': "Door",
+                 'description': "Door device name",
                  'Memorized': "true",
             }],
         'WriterDevice':
@@ -1945,7 +1944,7 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
               PyTango.READ_WRITE],
              {
                  'label': "Writer Device",
-                 'description': "Writer device",
+                 'description': "Writer device device name",
             }],
         'UserData':
             [[PyTango.DevString,
@@ -1989,7 +1988,7 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
               PyTango.READ_WRITE],
              {
                  'label': "Append Entry",
-                 'description': "flag for entry  appending ",
+                 'description': "flag for entry appending",
             }],
         'ConfigVariables':
             [[PyTango.DevString,

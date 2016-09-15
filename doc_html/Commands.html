@@ -1,0 +1,335 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+<title> NXSRecSelector Tango Class Commands </title>
+</head>
+<body text="Black" bgcolor="White" link="Blue" vlink="Purple" alink="Red">
+<br><br><br><br>
+<Table Border=2 Cellpadding=3 CELLSPACING=0>
+	<tr bgcolor="#CCCCFF" class="TableHeadingColor">
+	<td colspan=5> <font size=+1> <center><b> NXSRecSelector Class Commands </b></font></center></td>
+	<tr bgcolor="#CCCCFF" class="TableHeadingColor">
+		<td> <center><b> Name </b></center> </td>
+		<td> <center><b> Input type </b></center> </td>
+		<td> <center><b> Output type </b></center> </td>
+		<td> <center><b> Level </b></center> </td>
+		<td> <center><b> Description </b></center> </td>
+	</tr>
+	<tr>
+		<td> <a href="CmdAvailableComponents.html"> AvailableComponents </a> </td>
+		<td> DEV_VOID </td>
+		<td> DEVVAR_STRINGARRAY </td>
+		<td> OPERATOR </td>
+		<td> Return a list of available component names </td>
+	</tr>
+	<tr>
+		<td> <a href="CmdAvailableDataSources.html"> AvailableDataSources </a> </td>
+		<td> DEV_VOID </td>
+		<td> DEVVAR_STRINGARRAY </td>
+		<td> OPERATOR </td>
+		<td> Return a list of available DataSource names </td>
+	</tr>
+	<tr>
+		<td> <a href="CmdAvailableMntGrps.html"> AvailableMntGrps </a> </td>
+		<td> DEV_VOID </td>
+		<td> DEVVAR_STRINGARRAY </td>
+		<td> OPERATOR </td>
+		<td> Return a list of available mntgrp names </td>
+	</tr>
+	<tr>
+		<td> <a href="CmdAvailableProfiles.html"> AvailableProfiles </a> </td>
+		<td> DEV_VOID </td>
+		<td> DEVVAR_STRINGARRAY </td>
+		<td> OPERATOR </td>
+		<td> Return a list of available selection names </td>
+	</tr>
+	<tr>
+		<td> <a href="CmdAvailableTimers.html"> AvailableTimers </a> </td>
+		<td> DEV_VOID </td>
+		<td> DEVVAR_STRINGARRAY </td>
+		<td> OPERATOR </td>
+		<td> Return a list of available component names </td>
+	</tr>
+	<tr>
+		<td> <a href="CmdChannelProperties.html"> ChannelProperties </a> </td>
+		<td> DEV_STRING </td>
+		<td> DEV_STRING </td>
+		<td> OPERATOR </td>
+		<td> Provide JSON dictionary with channel properties {channel:property} </td>
+	</tr>
+	<tr>
+		<td> <a href="CmdComponentClientSources.html"> ComponentClientSources </a> </td>
+		<td> DEVVAR_STRINGARRAY </td>
+		<td> DEV_STRING </td>
+		<td> OPERATOR </td>
+		<td> Describe client datasources from components </td>
+	</tr>
+	<tr>
+		<td> <a href="CmdComponentDataSources.html"> ComponentDataSources </a> </td>
+		<td> DEV_VOID </td>
+		<td> DEVVAR_STRINGARRAY </td>
+		<td> OPERATOR </td>
+		<td> Provide the component datasources </td>
+	</tr>
+	<tr>
+		<td> <a href="CmdComponentDescription.html"> ComponentDescription </a> </td>
+		<td> DEV_VOID </td>
+		<td> DEV_STRING </td>
+		<td> OPERATOR </td>
+		<td> Return a list of available component names </td>
+	</tr>
+	<tr>
+		<td> <a href="CmdCreateDynamicComponent.html"> CreateDynamicComponent </a> </td>
+		<td> DEVVAR_STRINGARRAY </td>
+		<td> DEV_STRING </td>
+		<td> OPERATOR </td>
+		<td> Create dynamic component </td>
+	</tr>
+	<tr>
+		<td> <a href="CmdCreateWriterConfiguration.html"> CreateWriterConfiguration </a> </td>
+		<td> DEVVAR_STRINGARRAY </td>
+		<td> DEV_VOID </td>
+		<td> OPERATOR </td>
+		<td> Create configuration from the given components </td>
+	</tr>
+	<tr>
+		<td> <a href="CmdDataSourceDescription.html"> DataSourceDescription </a> </td>
+		<td> DEVVAR_STRINGARRAY </td>
+		<td> DEVVAR_STRINGARRAY </td>
+		<td> OPERATOR </td>
+		<td> Provide datasource description </td>
+	</tr>
+	<tr>
+		<td> <a href="CmdDeleteAllProfiles.html"> DeleteAllProfiles </a> </td>
+		<td> DEV_VOID </td>
+		<td> DEV_VOID </td>
+		<td> OPERATOR </td>
+		<td> Delete all profiles from Configuration Server </td>
+	</tr>
+	<tr>
+		<td> <a href="CmdDeleteProfile.html"> DeleteProfile </a> </td>
+		<td> DEV_STRING </td>
+		<td> DEV_VOID </td>
+		<td> OPERATOR </td>
+		<td> Delete the given mntgrp </td>
+	</tr>
+	<tr>
+		<td> <a href="CmdExportEnvProfile.html"> ExportEnvProfile </a> </td>
+		<td> DEV_VOID </td>
+		<td> DEV_VOID </td>
+		<td> OPERATOR </td>
+		<td> Export all environment variables </td>
+	</tr>
+	<tr>
+		<td> <a href="CmdFetchProfile.html"> FetchProfile </a> </td>
+		<td> DEV_VOID </td>
+		<td> DEV_VOID </td>
+		<td> OPERATOR </td>
+		<td> Fetch server configuration </td>
+	</tr>
+	<tr>
+		<td> <a href="CmdFullDeviceNames.html"> FullDeviceNames </a> </td>
+		<td> DEV_VOID </td>
+		<td> DEV_STRING </td>
+		<td> OPERATOR </td>
+		<td> Return a JSON with full device names for all aliases </td>
+	</tr>
+	<tr>
+		<td> <a href="CmdImportEnvProfile.html"> ImportEnvProfile </a> </td>
+		<td> DEV_VOID </td>
+		<td> DEV_VOID </td>
+		<td> OPERATOR </td>
+		<td> Import all environment variables </td>
+	</tr>
+	<tr>
+		<td> <a href="CmdImportMntGrp.html"> ImportMntGrp </a> </td>
+		<td> DEV_VOID </td>
+		<td> DEV_VOID </td>
+		<td> OPERATOR </td>
+		<td> Import active mntgrp configuration </td>
+	</tr>
+	<tr>
+		<td> <a href="CmdIsMntGrpUpdated.html"> IsMntGrpUpdated </a> </td>
+		<td> DEV_VOID </td>
+		<td> DEV_BOOLEAN </td>
+		<td> OPERATOR </td>
+		<td> True if mntgrp was changed </td>
+	</tr>
+	<tr>
+		<td> <a href="CmdStatus.html"> Status </a> </td>
+		<td> DEV_VOID </td>
+		<td> CONST_DEV_STRING </td>
+		<td> OPERATOR </td>
+		<td> This command gets the device status (stored in its device_status data member) and returns it to the caller. </td>
+	</tr>
+	<tr>
+		<td> <a href="CmdState.html"> State </a> </td>
+		<td> DEV_VOID </td>
+		<td> DEV_STATE </td>
+		<td> OPERATOR </td>
+		<td> This command gets the device state (stored in its device_state data member) and returns it to the caller. </td>
+	</tr>
+	<tr>
+		<td> <a href="CmdAdministratorDataNames.html"> AdministratorDataNames </a> </td>
+		<td> DEV_VOID </td>
+		<td> DEVVAR_STRINGARRAY </td>
+		<td> OPERATOR </td>
+		<td> Provide Administrator Data Names </td>
+	</tr>
+	<tr>
+		<td> <a href="CmdLoadProfile.html"> LoadProfile </a> </td>
+		<td> DEV_VOID </td>
+		<td> DEV_VOID </td>
+		<td> OPERATOR </td>
+		<td> Load server configuration </td>
+	</tr>
+	<tr>
+		<td> <a href="CmdMandatoryComponents.html"> MandatoryComponents </a> </td>
+		<td> DEV_VOID </td>
+		<td> DEVVAR_STRINGARRAY </td>
+		<td> OPERATOR </td>
+		<td> Set the mandatory components </td>
+	</tr>
+	<tr>
+		<td> <a href="CmdMntGrpConfiguration.html"> MntGrpConfiguration </a> </td>
+		<td> DEV_VOID </td>
+		<td> DEV_STRING </td>
+		<td> OPERATOR </td>
+		<td> Provide mntgrp configuration in json string </td>
+	</tr>
+	<tr>
+		<td> <a href="CmdMutedChannels.html"> MutedChannels </a> </td>
+		<td> DEV_VOID </td>
+		<td> DEVVAR_STRINGARRAY </td>
+		<td> OPERATOR </td>
+		<td> Return a list of muted channel names </td>
+	</tr>
+	<tr>
+		<td> <a href="CmdPoolElementNames.html"> PoolElementNames </a> </td>
+		<td> DEV_STRING </td>
+		<td> DEVVAR_STRINGARRAY </td>
+		<td> OPERATOR </td>
+		<td> Return a list of available pool channels </td>
+	</tr>
+	<tr>
+		<td> <a href="CmdPreselectComponents.html"> PreselectComponents </a> </td>
+		<td> DEV_VOID </td>
+		<td> DEV_VOID </td>
+		<td> OPERATOR </td>
+		<td> Check existing devices of pools </td>
+	</tr>
+	<tr>
+		<td> <a href="CmdPreselectedComponents.html"> PreselectedComponents </a> </td>
+		<td> DEV_VOID </td>
+		<td> DEVVAR_STRINGARRAY </td>
+		<td> OPERATOR </td>
+		<td> Provide the preselected components </td>
+	</tr>
+	<tr>
+		<td> <a href="CmdPreselectedDataSources.html"> PreselectedDataSources </a> </td>
+		<td> DEV_VOID </td>
+		<td> DEVVAR_STRINGARRAY </td>
+		<td> OPERATOR </td>
+		<td> Provide the preselected components </td>
+	</tr>
+	<tr>
+		<td> <a href="CmdRemoveDynamicComponent.html"> RemoveDynamicComponent </a> </td>
+		<td> DEV_STRING </td>
+		<td> DEV_VOID </td>
+		<td> OPERATOR </td>
+		<td> Delete the given dynamic component </td>
+	</tr>
+	<tr>
+		<td> <a href="CmdResetPreselectedComponents.html"> ResetPreselectedComponents </a> </td>
+		<td> DEV_VOID </td>
+		<td> DEV_VOID </td>
+		<td> OPERATOR </td>
+		<td> Reset PreselectedComponents to DefaultPreselectedComponents </td>
+	</tr>
+	<tr>
+		<td> <a href="CmdSaveProfile.html"> SaveProfile </a> </td>
+		<td> DEV_VOID </td>
+		<td> DEV_VOID </td>
+		<td> OPERATOR </td>
+		<td> Save server configuration </td>
+	</tr>
+	<tr>
+		<td> <a href="CmdScanEnvVariables.html"> ScanEnvVariables </a> </td>
+		<td> DEV_VOID </td>
+		<td> DEV_STRING </td>
+		<td> OPERATOR </td>
+		<td> Fetch ScanDir, ScanFile, ScanID and NeXusSelectorDevice in environment variables </td>
+	</tr>
+	<tr>
+		<td> <a href="CmdSelectedComponents.html"> SelectedComponents </a> </td>
+		<td> DEV_VOID </td>
+		<td> DEVVAR_STRINGARRAY </td>
+		<td> OPERATOR </td>
+		<td> Provide the selected components </td>
+	</tr>
+	<tr>
+		<td> <a href="CmdSelectedDataSources.html"> SelectedDataSources </a> </td>
+		<td> DEV_VOID </td>
+		<td> DEVVAR_STRINGARRAY </td>
+		<td> OPERATOR </td>
+		<td> Provide the selected datasources </td>
+	</tr>
+	<tr>
+		<td> <a href="CmdSetChannelProperties.html"> SetChannelProperties </a> </td>
+		<td> DEVVAR_STRINGARRAY </td>
+		<td> DEV_VOID </td>
+		<td> OPERATOR </td>
+		<td> Set Channel Properties of the given type </td>
+	</tr>
+	<tr>
+		<td> <a href="CmdSetScanEnvVariables.html"> SetScanEnvVariables </a> </td>
+		<td> DEV_STRING </td>
+		<td> DEV_LONG </td>
+		<td> OPERATOR </td>
+		<td> Store ScanDir, ScanFile and NeXusSelectorDevice in environment variables </td>
+	</tr>
+	<tr>
+		<td> <a href="CmdStoreProfile.html"> StoreProfile </a> </td>
+		<td> DEV_VOID </td>
+		<td> DEV_VOID </td>
+		<td> OPERATOR </td>
+		<td> Store server configuration </td>
+	</tr>
+	<tr>
+		<td> <a href="CmdSwitchProfile.html"> SwitchProfile </a> </td>
+		<td> DEV_VOID </td>
+		<td> DEV_VOID </td>
+		<td> OPERATOR </td>
+		<td> Switch mntgrp configuration </td>
+	</tr>
+	<tr>
+		<td> <a href="CmdUpdateConfigVariables.html"> UpdateConfigVariables </a> </td>
+		<td> DEV_VOID </td>
+		<td> DEV_VOID </td>
+		<td> OPERATOR </td>
+		<td> Send ConfigVariables into ConfigServer and update serialno if appendEntry selected </td>
+	</tr>
+	<tr>
+		<td> <a href="CmdUpdateMntGrp.html"> UpdateMntGrp </a> </td>
+		<td> DEV_VOID </td>
+		<td> DEV_STRING </td>
+		<td> OPERATOR </td>
+		<td> Update mntgrp configuration </td>
+	</tr>
+	<tr>
+		<td> <a href="CmdUpdateProfile.html"> UpdateProfile </a> </td>
+		<td> DEV_VOID </td>
+		<td> DEV_STRING </td>
+		<td> OPERATOR </td>
+		<td> Update mntgrp configuration </td>
+	</tr>
+	<tr>
+		<td> <a href="CmdVariableComponents.html"> VariableComponents </a> </td>
+		<td> DEV_VOID </td>
+		<td> DEV_STRING </td>
+		<td> OPERATOR </td>
+		<td> Return a list of available component names </td>
+	</tr>
+</table>
+</body>
+</html>
