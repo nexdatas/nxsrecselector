@@ -78,6 +78,7 @@ class Utils(object):
         port = None
         dname = None
         rname = None
+        member = None
         device = node.getElementsByTagName("device")
         if device and len(device) > 0:
             if device[0].hasAttribute("hostname"):
@@ -86,6 +87,16 @@ class Utils(object):
                 port = device[0].attributes["port"].value
             if device[0].hasAttribute("name"):
                 dname = device[0].attributes["name"].value
+            if device[0].hasAttribute("member"):
+                member = device[0].attributes["member"].value
+
+        surfix = ""
+        prefix = ""
+        if member or member != 'attribute':
+            if member == 'property':
+                prefix = '@'
+            elif member == 'command':
+                prefix = '()'
 
         record = node.getElementsByTagName("record")
         if record and len(record) > 0:
@@ -95,9 +106,10 @@ class Utils(object):
                     if host:
                         if not port:
                             port = '10000'
-                        res = '%s:%s/%s/%s' % (host, port, dname, rname)
+                        res = '%s:%s/%s/%s%s%s' % (
+                            host, port, dname, prefix, rname, surfix)
                     else:
-                        res = '%s/%s' % (dname, rname)
+                        res = '%s/%s%s%s' % (dname, prefix, rname, surfix)
                 else:
                     res = rname
         return res

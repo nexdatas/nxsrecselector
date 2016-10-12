@@ -125,6 +125,10 @@ class CheckerThread(threading.Thread):
                     for gattr in ATTRIBUTESTOCHECK:
                         if hasattr(dp, gattr):
                             _ = getattr(dp, gattr)
+                elif ds.attr.startswith("@"):
+                    pass
+                elif ds.attr.endswith("()"):
+                    _ = getattr(dp, ds.attr[-2])
                 else:
                     _ = getattr(dp, ds.attr)
                 if state in [PyTango.DevState.ALARM]:

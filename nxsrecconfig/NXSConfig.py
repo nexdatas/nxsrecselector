@@ -1671,7 +1671,7 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
          []],
         'TimerFilters':
         [PyTango.DevVarStringArray,
-         "list of timer filters",
+         "list of timer device name filters",
          []],
         'MutedChannelFilters':
         [PyTango.DevVarStringArray,

@@ -1,3 +1,7 @@
+2016-10-12 Jan Kotanski <jankotan@gmail.com>
+	* fixes checker for properties
+	* tagged as v3.5.3
+
 2016-08-08 Jan Kotanski <jankotan@gmail.com>
 	* update docu
 	* fixes for Settings command parameter names
