@@ -5,7 +5,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>nxsrecconfig.NXSConfig &mdash; NXSRecSelector 3.5.2 documentation</title>
+    <title>nxsrecconfig.NXSConfig &mdash; NXSRecSelector 3.5.3 documentation</title>
     
     <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '3.5.2',
+        VERSION:     '3.5.3',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -29,7 +29,7 @@
     <script type="text/javascript" src="../../_static/js/jquery-fix.js"></script>
     <script type="text/javascript" src="../../_static/bootstrap-3.3.4/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../../_static/bootstrap-sphinx.js"></script>
-    <link rel="top" title="NXSRecSelector 3.5.2 documentation" href="../../index.html" />
+    <link rel="top" title="NXSRecSelector 3.5.3 documentation" href="../../index.html" />
     <link rel="up" title="nxsrecconfig" href="../nxsrecconfig.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
@@ -689,7 +689,7 @@
 <div class="viewcode-block" id="NXSRecSelector.PreselectComponents"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.PreselectComponents">[docs]</a>    <span class="k">def</span> <span class="nf">PreselectComponents</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; PreselectComponents command</span>
 
-<span class="sd">        :brief: checks existing controllers of pools</span>
+<span class="sd">        :brief: Check existing devices of pools</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">debug_stream</span><span class="p">(</span><span class="s">&quot;In PreselectComponents()&quot;</span><span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
@@ -738,7 +738,7 @@
 <div class="viewcode-block" id="NXSRecSelector.DeleteAllProfiles"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.DeleteAllProfiles">[docs]</a>    <span class="k">def</span> <span class="nf">DeleteAllProfiles</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; DeleteAllProfiles command</span>
 
-<span class="sd">        :brief: deletes all profiles from Configuration Server</span>
+<span class="sd">        :brief: Delete all profiles from Configuration Server</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">debug_stream</span><span class="p">(</span><span class="s">&quot;In DeleteAllProfiles()&quot;</span><span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
@@ -762,8 +762,8 @@
 <div class="viewcode-block" id="NXSRecSelector.UpdateConfigVariables"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.UpdateConfigVariables">[docs]</a>    <span class="k">def</span> <span class="nf">UpdateConfigVariables</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; UpdateConfigVariables command</span>
 
-<span class="sd">       :brief: sends ConfigVariables into ConfigServer</span>
-<span class="sd">            and updates serialno if appendEntry selected</span>
+<span class="sd">       :brief: Send ConfigVariables into ConfigServer</span>
+<span class="sd">            and update serialno if appendEntry selected</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">debug_stream</span><span class="p">(</span><span class="s">&quot;In UpdateConfigVariables()&quot;</span><span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
@@ -816,7 +816,7 @@
 
 <span class="sd">        :brief:  returns mntgrp configuration</span>
 
-<span class="sd">        :returns: mntgrp configuration in json string</span>
+<span class="sd">        :returns: Provide mntgrp configuration in json string</span>
 <span class="sd">        :rtype: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">debug_stream</span><span class="p">(</span><span class="s">&quot;In MntGrpConfiguration()&quot;</span><span class="p">)</span>
@@ -843,7 +843,7 @@
 <div class="viewcode-block" id="NXSRecSelector.UpdateProfile"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.UpdateProfile">[docs]</a>    <span class="k">def</span> <span class="nf">UpdateProfile</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; UpdateProfile command</span>
 
-<span class="sd">        :brief: updates mntgrp configuration</span>
+<span class="sd">        :brief: Update mntgrp configuration</span>
 <span class="sd">        :returns: JSON string with mntgrp configuration info</span>
 <span class="sd">        :rtype: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -870,7 +870,7 @@
 <div class="viewcode-block" id="NXSRecSelector.UpdateMntGrp"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.UpdateMntGrp">[docs]</a>    <span class="k">def</span> <span class="nf">UpdateMntGrp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; UpdateMntGrp command</span>
 
-<span class="sd">        :brief: updates mntgrp configuration</span>
+<span class="sd">        :brief: Update mntgrp configuration</span>
 <span class="sd">        :returns: mntgrp configuration string</span>
 <span class="sd">        :rtype: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -897,7 +897,7 @@
 <div class="viewcode-block" id="NXSRecSelector.SwitchProfile"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.SwitchProfile">[docs]</a>    <span class="k">def</span> <span class="nf">SwitchProfile</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; SwitchProfile command</span>
 
-<span class="sd">        :brief: switchs mntgrp configuration</span>
+<span class="sd">        :brief: Switch mntgrp configuration</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">debug_stream</span><span class="p">(</span><span class="s">&quot;In SwitchProfile()&quot;</span><span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
@@ -921,7 +921,7 @@
 <div class="viewcode-block" id="NXSRecSelector.ImportMntGrp"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.ImportMntGrp">[docs]</a>    <span class="k">def</span> <span class="nf">ImportMntGrp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; ImportMntGrp command</span>
 
-<span class="sd">        :brief: imports active mntgrp configuration</span>
+<span class="sd">        :brief: Import active mntgrp configuration</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">debug_stream</span><span class="p">(</span><span class="s">&quot;In ImportMntGrp()&quot;</span><span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
@@ -945,7 +945,7 @@
 <div class="viewcode-block" id="NXSRecSelector.ImportEnvProfile"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.ImportEnvProfile">[docs]</a>    <span class="k">def</span> <span class="nf">ImportEnvProfile</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;  ImportEnvProfile command</span>
 
-<span class="sd">        :brief: imports all environment variables</span>
+<span class="sd">        :brief: Import all environment variables</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">debug_stream</span><span class="p">(</span><span class="s">&quot;In ImportEnvProfile()&quot;</span><span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
@@ -978,7 +978,7 @@
 <div class="viewcode-block" id="NXSRecSelector.ExportEnvProfile"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.ExportEnvProfile">[docs]</a>    <span class="k">def</span> <span class="nf">ExportEnvProfile</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; ExportEnvProfile command</span>
 
-<span class="sd">        :brief: exports all environment variables</span>
+<span class="sd">        :brief: Export all environment variables</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">debug_stream</span><span class="p">(</span><span class="s">&quot;In ExportEnvProfile()&quot;</span><span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
@@ -1031,7 +1031,7 @@
 <div class="viewcode-block" id="NXSRecSelector.MutedChannels"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.MutedChannels">[docs]</a>    <span class="k">def</span> <span class="nf">MutedChannels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;  MutedChannels command</span>
 
-<span class="sd">        :brief: Returns a list of muted channel names</span>
+<span class="sd">        :brief: Return a list of muted channel names</span>
 <span class="sd">        :returns: DevVarStringArray    list of muted channel names</span>
 <span class="sd">        :rtype: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1059,7 +1059,7 @@
 <div class="viewcode-block" id="NXSRecSelector.AvailableComponents"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.AvailableComponents">[docs]</a>    <span class="k">def</span> <span class="nf">AvailableComponents</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; AvailableComponents command</span>
 
-<span class="sd">        :brief: Returns a list of available component names</span>
+<span class="sd">        :brief: Return a list of available component names</span>
 <span class="sd">        :returns: DevVarStringArray    list of available component names</span>
 <span class="sd">        :rtype: :obj:`list` &lt;:obj:`str`&gt;</span>
 
@@ -1088,7 +1088,7 @@
 <div class="viewcode-block" id="NXSRecSelector.ComponentDescription"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.ComponentDescription">[docs]</a>    <span class="k">def</span> <span class="nf">ComponentDescription</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; ComponentDescription command</span>
 
-<span class="sd">        :brief: Returns a list of available component names</span>
+<span class="sd">        :brief: Return a list of available component names</span>
 <span class="sd">        :returns: DevString   list of available component names</span>
 <span class="sd">        :rtype: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1116,7 +1116,7 @@
 <div class="viewcode-block" id="NXSRecSelector.SetScanEnvVariables"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.SetScanEnvVariables">[docs]</a>    <span class="k">def</span> <span class="nf">SetScanEnvVariables</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">argin</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; SetScanEnvVariables command</span>
 
-<span class="sd">        :brief: Stores ScanDir, ScanFile and NeXusSelectorDevice</span>
+<span class="sd">        :brief: Store ScanDir, ScanFile and NeXusSelectorDevice</span>
 <span class="sd">                      in environment variables</span>
 <span class="sd">        :param argin: json dictionary with environment data</span>
 <span class="sd">        :type argin: :obj:`str`</span>
@@ -1147,7 +1147,7 @@
 <div class="viewcode-block" id="NXSRecSelector.FullDeviceNames"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.FullDeviceNames">[docs]</a>    <span class="k">def</span> <span class="nf">FullDeviceNames</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; FullDeviceNames command</span>
 
-<span class="sd">        :brief: Returns a JSON with full device names for all aliases</span>
+<span class="sd">        :brief: Return a JSON with full device names for all aliases</span>
 <span class="sd">        :returns: DevString JSON dictionary with full device names</span>
 <span class="sd">        :rtype: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1175,8 +1175,7 @@
 <div class="viewcode-block" id="NXSRecSelector.ScanEnvVariables"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.ScanEnvVariables">[docs]</a>    <span class="k">def</span> <span class="nf">ScanEnvVariables</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; ScanEnvVariables command</span>
 
-<span class="sd">        :brief: Fetches ScanDir, ScanFile, ScanID and</span>
-<span class="sd">                      NeXusSelectorDevice</span>
+<span class="sd">        :brief: Fetch ScanDir, ScanFile, ScanID and NeXusSelectorDevice</span>
 <span class="sd">                      in environment variables</span>
 <span class="sd">        :returns: DevString    json dictionary with environment data</span>
 <span class="sd">        :rtype: :obj:`str`</span>
@@ -1234,7 +1233,7 @@
 <div class="viewcode-block" id="NXSRecSelector.AvailableProfiles"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.AvailableProfiles">[docs]</a>    <span class="k">def</span> <span class="nf">AvailableProfiles</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; AvailableProfiles command</span>
 
-<span class="sd">        :brief: Returns a list of available selection names</span>
+<span class="sd">        :brief: Return a list of available selection names</span>
 <span class="sd">        :returns: DevVarStringArray    list of available selection names</span>
 <span class="sd">        :rtype: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1262,7 +1261,7 @@
 <div class="viewcode-block" id="NXSRecSelector.AvailableMntGrps"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.AvailableMntGrps">[docs]</a>    <span class="k">def</span> <span class="nf">AvailableMntGrps</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; AvailableMntGrps command</span>
 
-<span class="sd">        :brief: Returns a list of available mntgrp names</span>
+<span class="sd">        :brief: Return a list of available mntgrp names</span>
 <span class="sd">        :returns: DevVarStringArray    list of available mntgrp names</span>
 <span class="sd">        :rtype: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1290,7 +1289,7 @@
 <div class="viewcode-block" id="NXSRecSelector.AvailableDataSources"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.AvailableDataSources">[docs]</a>    <span class="k">def</span> <span class="nf">AvailableDataSources</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; AvailableDataSources command</span>
 
-<span class="sd">        :brief: Returns a list of available DataSource names</span>
+<span class="sd">        :brief: Return a list of available DataSource names</span>
 <span class="sd">        :returns: DevVarStringArray    list of available DataSource names</span>
 <span class="sd">        :rtype: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1318,7 +1317,7 @@
 <div class="viewcode-block" id="NXSRecSelector.PoolElementNames"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.PoolElementNames">[docs]</a>    <span class="k">def</span> <span class="nf">PoolElementNames</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">argin</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; PoolElementNames command</span>
 
-<span class="sd">        :brief: Returns a list of available pool channels</span>
+<span class="sd">        :brief: Return a list of available pool channels</span>
 
 <span class="sd">        :param argin:  DevString            name of pool list attribute</span>
 <span class="sd">        :type argin:  :obj:`str`</span>
@@ -1349,7 +1348,7 @@
 <div class="viewcode-block" id="NXSRecSelector.ComponentDataSources"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.ComponentDataSources">[docs]</a>    <span class="k">def</span> <span class="nf">ComponentDataSources</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; ComponentDataSources command</span>
 
-<span class="sd">        :brief: Provides the component datasources</span>
+<span class="sd">        :brief: Provide the component datasources</span>
 <span class="sd">        :returns: DevVarStringArray    component names</span>
 <span class="sd">        :rtype: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1377,7 +1376,7 @@
 <div class="viewcode-block" id="NXSRecSelector.SelectedDataSources"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.SelectedDataSources">[docs]</a>    <span class="k">def</span> <span class="nf">SelectedDataSources</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; SelectedDataSources command</span>
 
-<span class="sd">        :brief: Provides the selected datasources</span>
+<span class="sd">        :brief: Provide the selected datasources</span>
 <span class="sd">        :returns: DevVarStringArray    component names</span>
 <span class="sd">        :rtype: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1402,7 +1401,7 @@
 <div class="viewcode-block" id="NXSRecSelector.AdministratorDataNames"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.AdministratorDataNames">[docs]</a>    <span class="k">def</span> <span class="nf">AdministratorDataNames</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; AdministratorDataNames command</span>
 
-<span class="sd">        :brief: Provides Administrator Data Names</span>
+<span class="sd">        :brief: Provide Administrator Data Names</span>
 <span class="sd">        :returns: DevVarStringArray    data record names</span>
 <span class="sd">        :rtype: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1430,7 +1429,7 @@
 <div class="viewcode-block" id="NXSRecSelector.MandatoryComponents"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.MandatoryComponents">[docs]</a>    <span class="k">def</span> <span class="nf">MandatoryComponents</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; MandatoryComponents command</span>
 
-<span class="sd">        :brief: Sets the mandatory components</span>
+<span class="sd">        :brief: Set the mandatory components</span>
 <span class="sd">        :returns: DevVarStringArray    component names</span>
 <span class="sd">        :rtype: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1458,7 +1457,7 @@
 <div class="viewcode-block" id="NXSRecSelector.SelectedComponents"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.SelectedComponents">[docs]</a>    <span class="k">def</span> <span class="nf">SelectedComponents</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; SelectedComponents command</span>
 
-<span class="sd">        :brief: Sets the selected components</span>
+<span class="sd">        :brief: Provide the selected components</span>
 <span class="sd">        :returns: DevVarStringArray    component names</span>
 <span class="sd">        :rtype: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1486,7 +1485,7 @@
 <div class="viewcode-block" id="NXSRecSelector.PreselectedComponents"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.PreselectedComponents">[docs]</a>    <span class="k">def</span> <span class="nf">PreselectedComponents</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; PreselectedComponents command</span>
 
-<span class="sd">        :brief: Sets the preselected components</span>
+<span class="sd">        :brief: Provide the preselected components</span>
 <span class="sd">        :returns: DevVarStringArray    component names</span>
 <span class="sd">        :rtype: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1514,7 +1513,7 @@
 <div class="viewcode-block" id="NXSRecSelector.PreselectedDataSources"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.PreselectedDataSources">[docs]</a>    <span class="k">def</span> <span class="nf">PreselectedDataSources</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; PreselectedDataSources command</span>
 
-<span class="sd">        :brief: Sets the preselected components</span>
+<span class="sd">        :brief: Provide the preselected components</span>
 <span class="sd">        :returns: DevVarStringArray    component names</span>
 <span class="sd">        :rtype: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1542,7 +1541,7 @@
 <div class="viewcode-block" id="NXSRecSelector.CreateDynamicComponent"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.CreateDynamicComponent">[docs]</a>    <span class="k">def</span> <span class="nf">CreateDynamicComponent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">argin</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; CreateDynamicComponent command</span>
 
-<span class="sd">        :brief: create dynamic component</span>
+<span class="sd">        :brief: Create dynamic component</span>
 <span class="sd">        :param argin:  DevVarStringArray    list of datasource parameters</span>
 <span class="sd">        :type argin: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        :returns: DevVarString         name of created dynamic component</span>
@@ -1572,7 +1571,7 @@
 <div class="viewcode-block" id="NXSRecSelector.RemoveDynamicComponent"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.RemoveDynamicComponent">[docs]</a>    <span class="k">def</span> <span class="nf">RemoveDynamicComponent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">argin</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; RemoveDynamicComponent command</span>
 
-<span class="sd">        :brief: Deletes the given dynamic component</span>
+<span class="sd">        :brief: Delete the given dynamic component</span>
 <span class="sd">        :param argin:  DevString  dynamic component name</span>
 <span class="sd">        :type argin: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1598,7 +1597,7 @@
 <div class="viewcode-block" id="NXSRecSelector.DeleteProfile"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.DeleteProfile">[docs]</a>    <span class="k">def</span> <span class="nf">DeleteProfile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">argin</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; DeleteProfile command</span>
 
-<span class="sd">        :brief: Deletes the given mntgrp</span>
+<span class="sd">        :brief: Delete the given mntgrp</span>
 <span class="sd">        :param argin:  DevString  measurement group name</span>
 <span class="sd">        :type argin: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1624,7 +1623,7 @@
 <div class="viewcode-block" id="NXSRecSelector.ChannelProperties"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.ChannelProperties">[docs]</a>    <span class="k">def</span> <span class="nf">ChannelProperties</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">argin</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; ChannelProperties command</span>
 
-<span class="sd">        :brief: JSON dictionary with channel properties</span>
+<span class="sd">        :brief: Provide JSON dictionary with channel properties</span>
 <span class="sd">                      {channel:property}</span>
 <span class="sd">        :param argin:  DevString    property type</span>
 <span class="sd">        :type argin: :obj:`str`</span>
@@ -1656,7 +1655,7 @@
 <div class="viewcode-block" id="NXSRecSelector.SetChannelProperties"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.SetChannelProperties">[docs]</a>    <span class="k">def</span> <span class="nf">SetChannelProperties</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">argin</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; SetChannelProperties command SetChannelProperties</span>
 
-<span class="sd">        :brief: set Channel Properties of given type</span>
+<span class="sd">        :brief: Set Channel Properties of the given type</span>
 <span class="sd">        :param argin: DevVarStringArray two element list with a property type</span>
 <span class="sd">                      and JSON value dictionary {channel:property}</span>
 <span class="sd">        :type argin: [:obj:`str`, :obj:`str`]</span>
@@ -1686,7 +1685,7 @@
 <div class="viewcode-block" id="NXSRecSelector.ComponentClientSources"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.ComponentClientSources">[docs]</a>    <span class="k">def</span> <span class="nf">ComponentClientSources</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">argin</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; ComponentClientSources command</span>
 
-<span class="sd">        :brief: describes client datasources from components</span>
+<span class="sd">        :brief: Describe client datasources from components</span>
 <span class="sd">        :param argin:  DevVarStringArray    list of component names</span>
 <span class="sd">        :type argin: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        :returns: DevVarString         description of component datasources</span>
@@ -1716,7 +1715,7 @@
 <div class="viewcode-block" id="NXSRecSelector.DataSourceDescription"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.DataSourceDescription">[docs]</a>    <span class="k">def</span> <span class="nf">DataSourceDescription</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">argin</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; DataSourceDescription command</span>
 
-<span class="sd">        :brief: descrive datasources</span>
+<span class="sd">        :brief: Provide datasource description</span>
 <span class="sd">        :param argin:  DevVarStringArray    list of datasource names</span>
 <span class="sd">        :type argin: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        :returns: DevVarStringArray    description of datasources</span>
@@ -1747,7 +1746,7 @@
 <div class="viewcode-block" id="NXSRecSelector.CreateWriterConfiguration"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.CreateWriterConfiguration">[docs]</a>    <span class="k">def</span> <span class="nf">CreateWriterConfiguration</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">argin</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; CreateWriterConfiguration command</span>
 
-<span class="sd">        :brief: create configuration from the given components</span>
+<span class="sd">        :brief: Create configuration from the given components</span>
 
 <span class="sd">        :param argin:  DevVarStringArray    list of component names</span>
 <span class="sd">        :type argin: :obj:`list` &lt;:obj:`str`&gt;</span>
@@ -1803,7 +1802,7 @@
          <span class="p">[]],</span>
         <span class="s">&#39;TimerFilters&#39;</span><span class="p">:</span>
         <span class="p">[</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevVarStringArray</span><span class="p">,</span>
-         <span class="s">&quot;list of timer filters&quot;</span><span class="p">,</span>
+         <span class="s">&quot;list of timer device name filters&quot;</span><span class="p">,</span>
          <span class="p">[]],</span>
         <span class="s">&#39;MutedChannelFilters&#39;</span><span class="p">:</span>
         <span class="p">[</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevVarStringArray</span><span class="p">,</span>
@@ -1864,7 +1863,7 @@
              <span class="p">[</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevVoid</span><span class="p">,</span> <span class="s">&quot;&quot;</span><span class="p">]],</span>
         <span class="s">&#39;MntGrpConfiguration&#39;</span><span class="p">:</span>
             <span class="p">[[</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevVoid</span><span class="p">,</span> <span class="s">&quot;&quot;</span><span class="p">],</span>
-             <span class="p">[</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevString</span><span class="p">,</span> <span class="s">&quot; mntgrp configuration string&quot;</span><span class="p">]],</span>
+             <span class="p">[</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevString</span><span class="p">,</span> <span class="s">&quot;mntgrp configuration string&quot;</span><span class="p">]],</span>
         <span class="s">&#39;IsMntGrpUpdated&#39;</span><span class="p">:</span>
             <span class="p">[[</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevVoid</span><span class="p">,</span> <span class="s">&quot;&quot;</span><span class="p">],</span>
              <span class="p">[</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevBoolean</span><span class="p">,</span> <span class="s">&quot;true if mntgrp changed&quot;</span><span class="p">]],</span>
@@ -1923,7 +1922,7 @@
              <span class="p">[</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevVarStringArray</span><span class="p">,</span> <span class="s">&quot;profile component datasources&quot;</span><span class="p">]],</span>
         <span class="s">&#39;SelectedDataSources&#39;</span><span class="p">:</span>
             <span class="p">[[</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevVoid</span><span class="p">,</span> <span class="s">&quot;&quot;</span><span class="p">],</span>
-             <span class="p">[</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevVarStringArray</span><span class="p">,</span> <span class="s">&quot;profile component datasources&quot;</span><span class="p">]],</span>
+             <span class="p">[</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevVarStringArray</span><span class="p">,</span> <span class="s">&quot;profile datasources&quot;</span><span class="p">]],</span>
         <span class="s">&#39;AdministratorDataNames&#39;</span><span class="p">:</span>
             <span class="p">[[</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevVoid</span><span class="p">,</span> <span class="s">&quot;&quot;</span><span class="p">],</span>
              <span class="p">[</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevVarStringArray</span><span class="p">,</span> <span class="s">&quot;administrator data names&quot;</span><span class="p">]],</span>
@@ -2001,8 +2000,8 @@
               <span class="n">PyTango</span><span class="o">.</span><span class="n">SPECTRUM</span><span class="p">,</span>
               <span class="n">PyTango</span><span class="o">.</span><span class="n">READ</span><span class="p">,</span> <span class="mi">10000</span><span class="p">],</span>
              <span class="p">{</span>
-                 <span class="s">&#39;label&#39;</span><span class="p">:</span> <span class="s">&quot;Description Component Errors&quot;</span><span class="p">,</span>
-                 <span class="s">&#39;description&#39;</span><span class="p">:</span> <span class="s">&quot;list of Description Component Errors&quot;</span><span class="p">,</span>
+                 <span class="s">&#39;label&#39;</span><span class="p">:</span> <span class="s">&quot;Descriptive Component Errors&quot;</span><span class="p">,</span>
+                 <span class="s">&#39;description&#39;</span><span class="p">:</span> <span class="s">&quot;list of Descriptive Component Errors&quot;</span><span class="p">,</span>
             <span class="p">}],</span>
         <span class="s">&#39;Version&#39;</span><span class="p">:</span>
             <span class="p">[[</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevString</span><span class="p">,</span>
@@ -2026,7 +2025,7 @@
               <span class="n">PyTango</span><span class="o">.</span><span class="n">READ_WRITE</span><span class="p">],</span>
              <span class="p">{</span>
                  <span class="s">&#39;label&#39;</span><span class="p">:</span> <span class="s">&quot; Measurement Group&quot;</span><span class="p">,</span>
-                 <span class="s">&#39;description&#39;</span><span class="p">:</span> <span class="s">&quot; Measurement Group&quot;</span><span class="p">,</span>
+                 <span class="s">&#39;description&#39;</span><span class="p">:</span> <span class="s">&quot; Measurement Group name&quot;</span><span class="p">,</span>
             <span class="p">}],</span>
         <span class="s">&#39;ScanDir&#39;</span><span class="p">:</span>
             <span class="p">[[</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevString</span><span class="p">,</span>
@@ -2058,7 +2057,7 @@
               <span class="n">PyTango</span><span class="o">.</span><span class="n">READ_WRITE</span><span class="p">],</span>
              <span class="p">{</span>
                  <span class="s">&#39;label&#39;</span><span class="p">:</span> <span class="s">&quot;Configuration Device&quot;</span><span class="p">,</span>
-                 <span class="s">&#39;description&#39;</span><span class="p">:</span> <span class="s">&quot;Configuration device&quot;</span><span class="p">,</span>
+                 <span class="s">&#39;description&#39;</span><span class="p">:</span> <span class="s">&quot;Configuration device name&quot;</span><span class="p">,</span>
                  <span class="s">&#39;Memorized&#39;</span><span class="p">:</span> <span class="s">&quot;true&quot;</span><span class="p">,</span>
             <span class="p">}],</span>
         <span class="s">&#39;Door&#39;</span><span class="p">:</span>
@@ -2067,7 +2066,7 @@
               <span class="n">PyTango</span><span class="o">.</span><span class="n">READ_WRITE</span><span class="p">],</span>
              <span class="p">{</span>
                  <span class="s">&#39;label&#39;</span><span class="p">:</span> <span class="s">&quot;Door&quot;</span><span class="p">,</span>
-                 <span class="s">&#39;description&#39;</span><span class="p">:</span> <span class="s">&quot;Door&quot;</span><span class="p">,</span>
+                 <span class="s">&#39;description&#39;</span><span class="p">:</span> <span class="s">&quot;Door device name&quot;</span><span class="p">,</span>
                  <span class="s">&#39;Memorized&#39;</span><span class="p">:</span> <span class="s">&quot;true&quot;</span><span class="p">,</span>
             <span class="p">}],</span>
         <span class="s">&#39;WriterDevice&#39;</span><span class="p">:</span>
@@ -2076,7 +2075,7 @@
               <span class="n">PyTango</span><span class="o">.</span><span class="n">READ_WRITE</span><span class="p">],</span>
              <span class="p">{</span>
                  <span class="s">&#39;label&#39;</span><span class="p">:</span> <span class="s">&quot;Writer Device&quot;</span><span class="p">,</span>
-                 <span class="s">&#39;description&#39;</span><span class="p">:</span> <span class="s">&quot;Writer device&quot;</span><span class="p">,</span>
+                 <span class="s">&#39;description&#39;</span><span class="p">:</span> <span class="s">&quot;Writer device device name&quot;</span><span class="p">,</span>
             <span class="p">}],</span>
         <span class="s">&#39;UserData&#39;</span><span class="p">:</span>
             <span class="p">[[</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevString</span><span class="p">,</span>
@@ -2120,7 +2119,7 @@
               <span class="n">PyTango</span><span class="o">.</span><span class="n">READ_WRITE</span><span class="p">],</span>
              <span class="p">{</span>
                  <span class="s">&#39;label&#39;</span><span class="p">:</span> <span class="s">&quot;Append Entry&quot;</span><span class="p">,</span>
-                 <span class="s">&#39;description&#39;</span><span class="p">:</span> <span class="s">&quot;flag for entry  appending &quot;</span><span class="p">,</span>
+                 <span class="s">&#39;description&#39;</span><span class="p">:</span> <span class="s">&quot;flag for entry appending&quot;</span><span class="p">,</span>
             <span class="p">}],</span>
         <span class="s">&#39;ConfigVariables&#39;</span><span class="p">:</span>
             <span class="p">[[</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevString</span><span class="p">,</span>
