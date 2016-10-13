@@ -233,6 +233,250 @@ class CheckerItemTest(unittest.TestCase):
 
     ## constructor test
     # \brief It tests default settings
+    def test_run_property(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        idn = self.__rnd.randint(1, 1231233)
+        cqueue = Queue.Queue()
+        self.assertTrue(cqueue.empty())
+        el = CheckerThread(idn, cqueue)
+        self.assertEqual(el.index, idn)
+        el.run()
+        self.assertTrue(cqueue.empty())
+
+        ci0 = CheckerItem("cp0")
+        ci0.append(TangoDSItem("ds0", None, None))
+        cqueue.put(ci0)
+
+        ci1 = CheckerItem("cp1")
+        ci1.append(TangoDSItem("ds1", "wrongsdfgdfg", None))
+        cqueue.put(ci1)
+
+        ci2 = CheckerItem("cp2")
+        ci2.append(TangoDSItem("ds2", self._simps3.new_device_info_writer.name,
+                               None))
+        cqueue.put(ci2)
+
+        ci3 = CheckerItem("cp3")
+        ci3.append(TangoDSItem("ds3", self._simps3.new_device_info_writer.name,
+                               '@ScalarDouble'))
+        ci3.append(TangoDSItem("ds4", self._simps3.new_device_info_writer.name,
+                               '@ScalarLong'))
+        ci3.append(TangoDSItem("ds5", self._simps3.new_device_info_writer.name,
+                               '@ScalarShort'))
+        ci3.append(TangoDSItem("ds6", self._simps3.new_device_info_writer.name,
+                               '@ScalarBoolean'))
+        cqueue.put(ci3)
+
+        ci4 = CheckerItem("cp4")
+        ci4.append(TangoDSItem("ds3", self._simps3.new_device_info_writer.name,
+                               '@ScalarDouble'))
+        ci4.append(TangoDSItem("ds4", self._simps3.new_device_info_writer.name,
+                               '@ScalarDoubleddd'))
+        cqueue.put(ci4)
+
+        ci5 = CheckerItem("cp5")
+        dp = PyTango.DeviceProxy(self._simps4.new_device_info_writer.name)
+        dp.SetState("ALARM")
+        ci5.append(TangoDSItem("ds3", self._simps4.new_device_info_writer.name,
+                               '@ScalarDouble'))
+        ci5.append(TangoDSItem("ds4", self._simps4.new_device_info_writer.name,
+                               '@ScalarShort'))
+        cqueue.put(ci5)
+
+        ci6 = CheckerItem("cp6")
+        dp = PyTango.DeviceProxy(self._simps4.new_device_info_writer.name)
+        dp.CreateAttribute("Position")
+        ci6.append(TangoDSItem("ds3", self._simps4.new_device_info_writer.name,
+                               None))
+        ci6.append(TangoDSItem("ds4", self._simps4.new_device_info_writer.name,
+                               '@ScalarShort'))
+        cqueue.put(ci6)
+
+        ci7 = CheckerItem("cp6")
+        dp = PyTango.DeviceProxy(self._simps.new_device_info_writer.name)
+        dp.CreateAttribute("Position")
+        ci7.append(TangoDSItem("ds3", self._simps.new_device_info_writer.name,
+                               None))
+        ci7.append(TangoDSItem("ds4", self._simps.new_device_info_writer.name,
+                               '@ScalarShort'))
+        cqueue.put(ci7)
+
+        ci8 = CheckerItem("cp8")
+        dp = PyTango.DeviceProxy(self._simps2.new_device_info_writer.name)
+        dp.SetState("FAULT")
+        ci8.append(TangoDSItem("ds3", self._simps2.new_device_info_writer.name,
+                               '@ScalarDouble'))
+        ci8.append(TangoDSItem("ds4", self._simps2.new_device_info_writer.name,
+                               '@ScalarShort'))
+        cqueue.put(ci8)
+
+        ci9 = CheckerItem("cp9")
+        ci9.append(TangoDSItem(
+            "ds3", self._simpsoff.new_device_info_writer.name,
+            '@ScalarDouble'))
+        ci9.append(TangoDSItem(
+            "ds4", self._simpsoff.new_device_info_writer.name,
+            '@ScalarShort'))
+        cqueue.put(ci9)
+
+        el.run()
+
+        self.assertTrue(ci0.message is not None)
+        self.assertEqual(ci0.errords, 'ds0')
+        self.assertTrue(not ci0.active)
+        self.assertTrue(ci1.message is not None)
+        self.assertEqual(ci1.errords, 'ds1')
+        self.assertTrue(not ci1.active)
+        self.assertEqual(ci2.errords, None)
+        self.assertEqual(ci2.message, None)
+        self.assertTrue(ci2.active)
+        self.assertEqual(ci3.errords, None)
+        self.assertEqual(ci3.message, None)
+        self.assertTrue(ci3.active)
+        self.assertEqual(ci4.errords, None)
+        self.assertEqual(ci4.message, None)
+        self.assertTrue(ci4.active)
+        self.assertEqual(ci5.errords, 'ds4')
+        self.assertEqual(ci5.message, 'ALARM_STATE')
+        self.assertTrue(ci5.active)
+        self.assertEqual(ci6.errords, "ds4")
+        self.assertEqual(ci6.message, 'ALARM_STATE')
+        self.assertTrue(ci6.active)
+        self.assertEqual(ci7.errords, None)
+        self.assertEqual(ci7.message, None)
+        self.assertTrue(ci7.active, None)
+        self.assertEqual(ci8.errords, "ds3")
+        self.assertEqual(ci8.message, 'FAULT STATE')
+        self.assertTrue(not ci8.active)
+        self.assertEqual(ci9.errords, "ds3")
+        self.assertTrue(ci9.message is not None)
+        self.assertTrue(not ci9.active)
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_run_command(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        idn = self.__rnd.randint(1, 1231233)
+        cqueue = Queue.Queue()
+        self.assertTrue(cqueue.empty())
+        el = CheckerThread(idn, cqueue)
+        self.assertEqual(el.index, idn)
+        el.run()
+        self.assertTrue(cqueue.empty())
+
+        ci0 = CheckerItem("cp0")
+        ci0.append(TangoDSItem("ds0", None, None))
+        cqueue.put(ci0)
+
+        ci1 = CheckerItem("cp1")
+        ci1.append(TangoDSItem("ds1", "wrongsdfgdfg", None))
+        cqueue.put(ci1)
+
+        ci2 = CheckerItem("cp2")
+        ci2.append(TangoDSItem("ds2", self._simps3.new_device_info_writer.name,
+                               None))
+        cqueue.put(ci2)
+
+        ci3 = CheckerItem("cp3")
+        ci3.append(TangoDSItem("ds3", self._simps3.new_device_info_writer.name,
+                               'GetDouble()'))
+        ci3.append(TangoDSItem("ds4", self._simps3.new_device_info_writer.name,
+                               'GetLong()'))
+        ci3.append(TangoDSItem("ds5", self._simps3.new_device_info_writer.name,
+                               'GetShort()'))
+        ci3.append(TangoDSItem("ds6", self._simps3.new_device_info_writer.name,
+                               'GetBoolean()'))
+        cqueue.put(ci3)
+
+        ci4 = CheckerItem("cp4")
+        ci4.append(TangoDSItem("ds3", self._simps3.new_device_info_writer.name,
+                               'GetDouble()'))
+        ci4.append(TangoDSItem("ds4", self._simps3.new_device_info_writer.name,
+                               'GetDoubleddd()'))
+        cqueue.put(ci4)
+
+        ci5 = CheckerItem("cp5")
+        dp = PyTango.DeviceProxy(self._simps4.new_device_info_writer.name)
+        dp.SetState("ALARM")
+        ci5.append(TangoDSItem("ds3", self._simps4.new_device_info_writer.name,
+                               'GetDouble()'))
+        ci5.append(TangoDSItem("ds4", self._simps4.new_device_info_writer.name,
+                               'GetShort()'))
+        cqueue.put(ci5)
+
+        ci6 = CheckerItem("cp6")
+        dp = PyTango.DeviceProxy(self._simps4.new_device_info_writer.name)
+        dp.CreateAttribute("Position")
+        ci6.append(TangoDSItem("ds3", self._simps4.new_device_info_writer.name,
+                               None))
+        ci6.append(TangoDSItem("ds4", self._simps4.new_device_info_writer.name,
+                               'GetShort()'))
+        cqueue.put(ci6)
+
+        ci7 = CheckerItem("cp6")
+        dp = PyTango.DeviceProxy(self._simps.new_device_info_writer.name)
+        dp.CreateAttribute("Position")
+        ci7.append(TangoDSItem("ds3", self._simps.new_device_info_writer.name,
+                               None))
+        ci7.append(TangoDSItem("ds4", self._simps.new_device_info_writer.name,
+                               'GetShort()'))
+        cqueue.put(ci7)
+
+        ci8 = CheckerItem("cp8")
+        dp = PyTango.DeviceProxy(self._simps2.new_device_info_writer.name)
+        dp.SetState("FAULT")
+        ci8.append(TangoDSItem("ds3", self._simps2.new_device_info_writer.name,
+                               'GetDouble()'))
+        ci8.append(TangoDSItem("ds4", self._simps2.new_device_info_writer.name,
+                               'GetShort()'))
+        cqueue.put(ci8)
+
+        ci9 = CheckerItem("cp9")
+        ci9.append(TangoDSItem(
+            "ds3", self._simpsoff.new_device_info_writer.name,
+            'GetDouble()'))
+        ci9.append(TangoDSItem(
+            "ds4", self._simpsoff.new_device_info_writer.name,
+            'GetShort()'))
+        cqueue.put(ci9)
+
+        el.run()
+
+        self.assertTrue(ci0.message is not None)
+        self.assertEqual(ci0.errords, 'ds0')
+        self.assertTrue(not ci0.active)
+        self.assertTrue(ci1.message is not None)
+        self.assertEqual(ci1.errords, 'ds1')
+        self.assertTrue(not ci1.active)
+        self.assertEqual(ci2.errords, None)
+        self.assertEqual(ci2.message, None)
+        self.assertTrue(ci2.active)
+        self.assertEqual(ci3.errords, None)
+        self.assertEqual(ci3.message, None)
+        self.assertTrue(ci3.active)
+        self.assertEqual(ci4.errords, 'ds4')
+        self.assertEqual(ci4.message, 'GetDoubleddd')
+        self.assertTrue(not ci4.active)
+        self.assertEqual(ci5.errords, 'ds4')
+        self.assertEqual(ci5.message, 'ALARM_STATE')
+        self.assertTrue(ci5.active)
+        self.assertEqual(ci6.errords, "ds4")
+        self.assertEqual(ci6.message, 'ALARM_STATE')
+        self.assertTrue(ci6.active)
+        self.assertEqual(ci7.errords, None)
+        self.assertEqual(ci7.message, None)
+        self.assertTrue(ci7.active, None)
+        self.assertEqual(ci8.errords, "ds3")
+        self.assertEqual(ci8.message, 'FAULT STATE')
+        self.assertTrue(not ci8.active)
+        self.assertEqual(ci9.errords, "ds3")
+        self.assertTrue(ci9.message is not None)
+        self.assertTrue(not ci9.active)
+
+    ## constructor test
+    # \brief It tests default settings
     def test_run_attr(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)

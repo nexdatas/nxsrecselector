@@ -128,7 +128,7 @@ class CheckerThread(threading.Thread):
                 elif ds.attr.startswith("@"):
                     pass
                 elif ds.attr.endswith("()"):
-                    _ = getattr(dp, ds.attr[-2])
+                    _ = getattr(dp, ds.attr[:-2])
                 else:
                     _ = getattr(dp, ds.attr)
                 if state in [PyTango.DevState.ALARM]:

@@ -1219,6 +1219,10 @@ class TestServerClass(PyTango.DeviceClass):
 
     #    Device Properties
     device_property_list = {
+        'StringList':
+            [PyTango.DevVarStringArray,
+             "element names",
+             []],
     }
 
     #    Command definitions

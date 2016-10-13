@@ -292,6 +292,13 @@ class MacroServerPoolsTest(unittest.TestCase):
                 '<field name="short">'
                 '$datasources.client_short<strategy mode="STEP"/></field>'
                 '</group></definition>'),
+            'smycppc1': (
+                '<definition><group type="NXcollection" name="ddddntcp">'
+                '<field name="long">'
+                '$datasources.string_list<strategy mode="FINAL"/></field>'
+                '<field name="short">'
+                '$datasources.get_float<strategy mode="STEP"/></field>'
+                '</group></definition>'),
         }
 
         self.smycps2 = {
@@ -323,7 +330,15 @@ class MacroServerPoolsTest(unittest.TestCase):
                 '<field name="short">'
                 '$datasources.client2_short<strategy mode="STEP"/></field>'
                 '</group></definition>'),
+            's2mycppc1': (
+                '<definition><group type="NXcollection" name="ddddntcp">'
+                '<field name="long">'
+                '$datasources.string2_list<strategy mode="FINAL"/></field>'
+                '<field name="short">'
+                '$datasources.get2_float<strategy mode="STEP"/></field>'
+                '</group></definition>'),
         }
+
 
         self.specps = {
             'pyeval0': (
@@ -649,6 +664,16 @@ class MacroServerPoolsTest(unittest.TestCase):
                 '<definition><datasource type="CLIENT" name="client_short">'
                 '<record name="ClientShort"/>'
                 '</datasource></definition>'),
+            'string_list': (
+                '<definition><datasource type="TANGO" name="string_list">'
+                '<record name="StringList"/>'
+                '<device member="property" name="ttestp09/testts/t1r228"/>'
+                '</datasource></definition>'),
+            'get_float': (
+                '<definition><datasource type="TANGO" name="get_float">'
+                '<record name="GetFloat"/>'
+                '<device member="command" name="ttestp09/testts/t1r228"/>'
+                '</datasource></definition>'),
         }
 
         self.smydss2 = {
@@ -841,6 +866,16 @@ class MacroServerPoolsTest(unittest.TestCase):
             'client2_short': (
                 '<definition><datasource type="CLIENT" name="client2_short">'
                 '<record name="Client2Short"/>'
+                '</datasource></definition>'),
+            'string2_list': (
+                '<definition><datasource type="TANGO" name="string2_list">'
+                '<record name="StringList"/>'
+                '<device member="property" name="ttestp09/testts/t2r228"/>'
+                '</datasource></definition>'),
+            'get2_float': (
+                '<definition><datasource type="TANGO" name="get2_float">'
+                '<record name="GetFloat"/>'
+                '<device member="command" name="ttestp09/testts/t2r228"/>'
                 '</datasource></definition>'),
         }
 
@@ -1578,6 +1613,127 @@ class MacroServerPoolsTest(unittest.TestCase):
              "DataSources",
              "DataSources"])
 
+    ## constructor test
+    # \brief It tests default settings
+    def test_checkChannels_wds_cp_true(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        msp = MacroServerPools(0)
+        msp = MacroServerPools(10)
+        channelerrors = []
+        poolchannels = []
+        componentgroup = {"smycppc1": True}
+        datasourcegroup = {"string_list": True, "get_float": True}
+
+        self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.smycps)])
+        self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
+
+        res, res2 = msp.checkChannels(self._ms.door.keys()[0],
+                                      self._cf.dp,
+                                      poolchannels,
+                                      componentgroup,
+                                      datasourcegroup,
+                                      channelerrors)
+
+        print res
+        self.myAssertDict(json.loads(res), {"smycppc1": True})
+        self.assertEqual(componentgroup, {"smycppc1": True})
+        self.myAssertDict(json.loads(res2), {"string_list": True, "get_float": True})
+        self.assertEqual(datasourcegroup, {"string_list": True, "get_float": True})
+        self.assertEqual(channelerrors, [])
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_checkChannels_wds_cp(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        msp = MacroServerPools(0)
+        msp = MacroServerPools(10)
+        channelerrors = []
+        poolchannels = []
+        componentgroup = {"smycppc1": None}
+        datasourcegroup = {"string_list": None, "get_float": None}
+
+        self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.smycps)])
+        self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
+
+        res, res2 = msp.checkChannels(self._ms.door.keys()[0],
+                                      self._cf.dp,
+                                      poolchannels,
+                                      componentgroup,
+                                      datasourcegroup,
+                                      channelerrors)
+
+        print res
+        self.myAssertDict(json.loads(res), {"smycppc1": True})
+        self.assertEqual(componentgroup, {"smycppc1": True})
+        self.myAssertDict(json.loads(res2), {"string_list": True, "get_float": True})
+        self.assertEqual(datasourcegroup, {"string_list": True, "get_float": True})
+        self.assertEqual(channelerrors, [])
+
+    def test_checkChannels_wds_cp_false(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        msp = MacroServerPools(0)
+        msp = MacroServerPools(10)
+        channelerrors = []
+        poolchannels = []
+        componentgroup = {"smycppc1": False}
+        datasourcegroup = {"string_list": False, "get_float": False}
+
+        self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.smycps)])
+        self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
+
+        res, res2 = msp.checkChannels(self._ms.door.keys()[0],
+                                      self._cf.dp,
+                                      poolchannels,
+                                      componentgroup,
+                                      datasourcegroup,
+                                      channelerrors)
+
+        print res
+        self.myAssertDict(json.loads(res), {"smycppc1": False})
+        self.assertEqual(componentgroup, {"smycppc1": False})
+        self.myAssertDict(json.loads(res2), {"string_list": False, "get_float": False})
+        self.assertEqual(datasourcegroup, {"string_list": False, "get_float": False})
+        self.assertEqual(channelerrors, [])
+
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_checkChannels_wds_cp2(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        simps2 = TestServerSetUp.TestServerSetUp(
+            "ttestp09/testts/t2r228", "S2")
+        try:
+            simps2.add()
+            msp = MacroServerPools(1)
+            channelerrors = []
+            poolchannels = []
+            componentgroup = {"s2mycppc1": None}
+            datasourcegroup = {"string2_list": None, "get2_float": None}
+            
+            self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.smycps2)])
+            self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss2)])
+
+            res, res2 = msp.checkChannels(self._ms.door.keys()[0],
+                                          self._cf.dp,
+                                          poolchannels,
+                                          componentgroup,
+                                          datasourcegroup,
+                                          channelerrors)
+
+            print res
+            self.myAssertDict(json.loads(res), {"s2mycppc1": None})
+            self.assertEqual(componentgroup, {"s2mycppc1": None})
+            self.myAssertDict(json.loads(res2), {"string2_list": None, "get2_float": None})
+            self.assertEqual(datasourcegroup, {"string2_list": None, "get2_float": None})
+            self.assertEqual(len(channelerrors), 3)
+        finally:
+            simps2.delete()
+
+        
     ## constructor test
     # \brief It tests default settings
     def test_checkChannels_wds_t(self):

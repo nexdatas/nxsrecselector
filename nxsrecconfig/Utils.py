@@ -96,7 +96,7 @@ class Utils(object):
             if member == 'property':
                 prefix = '@'
             elif member == 'command':
-                prefix = '()'
+                surfix = '()'
 
         record = node.getElementsByTagName("record")
         if record and len(record) > 0:
