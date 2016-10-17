@@ -7,6 +7,8 @@ Introduction
 
 Tango server with Sardana Recorder settings
 
+Tango Server API: https://nexdatas.github.io/recselector/doc_html
+
 | Source code: https://github.com/nexdatas/recselector
 | Web page: https://nexdatas.github.io/recselector
 | NexDaTaS Web page: https://nexdatas.github.io
