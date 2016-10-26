@@ -1,3 +1,7 @@
+2016-10-26 Jan Kotanski <jankotan@gmail.com>
+	* fixes removing properties from Snapshot
+	* tagged as v3.5.4
+
 2016-10-13 Jan Kotanski <jankotan@gmail.com>
 	* fixes checker for properties
 	* tagged as v3.5.3
