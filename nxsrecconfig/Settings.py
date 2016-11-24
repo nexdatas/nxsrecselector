@@ -70,7 +70,7 @@ class Settings(object):
         self.__db = PyTango.Database()
 
         #: (:obj:`list` <:obj:`str`>) timer filters
-        self.timerFilters = ["*dgg*", "*/ctctrl0*"]
+        self.timerFilters = ["*dgg*", "*/timer/*", "*/ctctrl0*"]
         #:  (:obj:`list` <:obj:`str`>) timer filters
         self.mutedChannelFilters = ["*tip551*"]
         #: (:obj:`str`) default device groups

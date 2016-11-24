@@ -629,7 +629,7 @@ class PoolUtils(object):
                 lst += pool.ExpChannelList
 
         if not filters or not hasattr(filters, '__iter__'):
-            filters = ["*dgg*", "*/ctctrl0*"]
+            filters = ["*dgg*", "*/timer/*", "*/ctctrl0*"]
         for elm in lst:
             chan = json.loads(elm)
             inter = chan['interfaces']

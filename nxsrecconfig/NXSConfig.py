@@ -89,7 +89,8 @@ class NXSRecSelector(PyTango.Device_4Impl):
         self.__stg = STG(self, numberofthreads)
         self.set_state(PyTango.DevState.ON)
         self.__stg.poolBlacklist = self.PoolBlacklist or []
-        self.__stg.timerFilters = self.TimerFilters or ["*dgg*", "*/ctctrl0*"]
+        self.__stg.timerFilters = self.TimerFilters or [
+            "*dgg*","*/timer/*", "*/ctctrl0*"]
         self.__stg.mutedChannelFilters = self.MutedChannelFilters \
             or ["*tip551*"]
         self.__stg.adminDataNames = self.AdminDataNames or []

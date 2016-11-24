@@ -2286,7 +2286,8 @@ class SettingsTest(unittest.TestCase):
         amntgrp = MSUtils.getEnv('ActiveMntGrp', msp.getMacroServer(idoor))
         print "ActiveMntGrp", amntgrp
         self.assertEqual(rs.numberOfThreads, 20)
-        self.assertEqual(rs.timerFilters, ["*dgg*", "*/ctctrl0*"])
+        self.assertEqual(rs.timerFilters,
+                         ["*dgg*", "*/timer/*", "*/ctctrl0*"])
         # memorize attirbutes
         self.assertEqual(
             rs.deviceGroups,
