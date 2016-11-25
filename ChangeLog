@@ -1,6 +1,6 @@
-2016-11-XX Jan Kotanski <jankotan@gmail.com>
+2016-11-25 Jan Kotanski <jankotan@gmail.com>
 	* add */timer/* to default timer filter
-	* tagged as v3.6.0
+	* tagged as v3.5.5
 
 2016-10-26 Jan Kotanski <jankotan@gmail.com>
 	* fixes removing properties from Snapshot
