@@ -775,7 +775,7 @@ class ProfileManager(object):
                             TangoUtils.getFullAttrName(ds.record)
         snapshot = [(devattr, dsname)
                     for dsname, devattr in initsources.items()
-                    if ('@' not in devattr  and '()' not in devattr)]
+                    if ('@' not in devattr and '()' not in devattr)]
 
         for tm in timers:
             if tm in dontdisplay:
