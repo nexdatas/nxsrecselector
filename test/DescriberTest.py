@@ -27,6 +27,7 @@ import json
 import random
 import struct
 import binascii
+import re
 #import subprocess
 
 from nxsrecconfig.Describer import Describer
@@ -66,6 +67,17 @@ class NoServer(object):
         self.commands.append("components")
         return [self.cpdict[nm] for nm in names if nm in self.cpdict.keys()]
 
+    def dependentComponents(self, names):
+        self.vars.append(names)
+        self.commands.append("dependentComponents")
+        res = []
+        for name in names:
+            res.append(name)
+            cp = self.cpdict[name]
+            res.extend(self.__findText(cp, "$components."))
+        return res
+
+    
     def instantiatedComponents(self, names):
         if self.checkvariables != self.variables:
             raise Exception("Variables not set")
@@ -82,7 +94,24 @@ class NoServer(object):
         self.vars.append(None)
         self.commands.append("mandatoryComponents")
         return list(self.mcplist)
-
+    
+    def __findText(self, text, label):
+        variables = []
+        index = text.find(label)
+        while index != -1:
+            try:
+                subc = re.finditer(
+                    r"[\w]+",
+                    text[(index + len(label)):]
+                ).next().group(0)
+            except Exception as e:
+                print("Error: %s" % str(e))
+                subc = ""
+            name = subc.strip() if subc else ""
+            if name:
+                variables.append(name)
+            index = text.find(label, index + 1)
+        return variables
 
 class Server(NoServer):
     def __init__(self, value=None):
@@ -350,10 +379,18 @@ class DescriberTest(unittest.TestCase):
             ),
             'pyeval2b': (
                 '<definition><group type="NXentry">'
-                '<field type="NX_FLOAT64" name="field1">'
+                '<field type="NX_FLOAT64" name="field2">'
                 '$datasources.pyeval2bds'
                 '<strategy mode="FINAL"/>'
                 '</field></group>'
+                '</definition>'
+            ),
+            'pyeval2b2': (
+                '<definition>$components.pyeval2b'
+                '</definition>'
+            ),
+            'pyeval2b3': (
+                '<definition>$components.pyeval2b\n$components.pyeval2a'
                 '</definition>'
             ),
         }
@@ -432,6 +469,13 @@ class DescriberTest(unittest.TestCase):
             'pyeval2b': {
                 'pyeval2bds': [('FINAL', 'PYEVAL', '', 'NX_FLOAT64', None)],
             },
+            'pyeval2b2': {
+                'pyeval2bds': [('FINAL', 'PYEVAL', '', 'NX_FLOAT64', None)],
+            },
+            'pyeval2b3': {
+                'pyeval2ads': [('STEP', 'PYEVAL', '', 'NX_FLOAT', None)],
+                'pyeval2bds': [('FINAL', 'PYEVAL', '', 'NX_FLOAT64', None)],
+            },
         }
 
         self.rescps_pfs = {
@@ -454,6 +498,24 @@ class DescriberTest(unittest.TestCase):
                 'pyeval2bds': [('FINAL', 'PYEVAL', '', 'NX_FLOAT64', None)],
                 'tann0': [
                     ('FINAL', 'TANGO', 'sf:12345/dsff/myattr', 'NX_FLOAT64',
+                     None)],
+            },
+            'pyeval2b2': {
+                'pyeval2bds': [('FINAL', 'PYEVAL', '', 'NX_FLOAT64', None)],
+                'tann0': [
+                    ('FINAL', 'TANGO', 'sf:12345/dsff/myattr', 'NX_FLOAT64',
+                     None)],
+            },
+            'pyeval2b3': {
+                'pyeval2bds': [('FINAL', 'PYEVAL', '', 'NX_FLOAT64', None)],
+                'tann0': [
+                    ('FINAL', 'TANGO', 'sf:12345/dsff/myattr', 'NX_FLOAT64',
+                     None),
+                    ('STEP', 'TANGO', 'sf:12345/dsff/myattr', 'NX_FLOAT',
+                     None)],
+                'pyeval2ads': [('STEP', 'PYEVAL', '', 'NX_FLOAT', None)],
+                'tann1c': [
+                    ('STEP', 'TANGO', 'dsf/sd/we/myattr2', 'NX_FLOAT',
                      None)],
             },
         }

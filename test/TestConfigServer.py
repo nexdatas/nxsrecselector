@@ -255,6 +255,28 @@ class NXSConfigServer(PyTango.Device_4Impl):
             index = text.find(label, index + 1)
         return variables
 
+    def DependentComponents(self, argin):
+        """ DependentComponents command
+
+        :brief: returns a list of dependent component names
+            for a given components
+
+        :param argin:  DevVarStringArray    component names
+        :type argin: :obj:`list` <:obj:`str`>
+        :returns: DevVarStringArray    list of component names
+        :rtype: :obj:`list` <:obj:`str`>
+        """
+        self.debug_stream("In DependentComponents()")
+        self.cmd["VARS"].append(argin)
+        self.cmd["COMMANDS"].append("DependentComponents")
+        res = []
+        for name in argin:
+            res.append(name)
+            cp = self.cmd["CPDICT"][name]
+            res.extend(self.__findText(cp, "$components."))
+        return res
+
+    
     #------------------------------------------------------------------
     #    Selections command:
     #
@@ -575,6 +597,9 @@ class NXSConfigServerClass(PyTango.DeviceClass):
         'ComponentVariables':
             [[PyTango.DevString, "component name"],
              [PyTango.DevVarStringArray, "list of variable names"]],
+        'DependentComponents':
+            [[PyTango.DevVarStringArray, "component names"],
+             [PyTango.DevVarStringArray, "list of component names"]],
     }
 
     #    Attribute definitions

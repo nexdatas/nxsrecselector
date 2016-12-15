@@ -4043,6 +4043,7 @@ class SelectorTest(unittest.TestCase):
             json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
             ["AvailableComponents", "AvailableDataSources",
              "AvailableComponents", "AvailableDataSources",
+             "DependentComponents",
              "Components",
              "DataSources",
              "DataSources",
@@ -4053,7 +4054,7 @@ class SelectorTest(unittest.TestCase):
         self.assertEqual(
             json.loads(self._cf.dp.GetCommandVariable("VARS")),
             [None, None, None, None,
-             ['mycp'], ['ann5'], ['ann5'], ['ann2'], ['ann2'],
+             ['mycp'], ['mycp'], ['ann5'], ['ann5'], ['ann2'], ['ann2'],
              None, val["MntGrp"]])
 
         self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
@@ -4112,6 +4113,7 @@ class SelectorTest(unittest.TestCase):
              "AvailableDataSources",
              "AvailableComponents",
              "AvailableDataSources",
+             "DependentComponents",
              "Components",
              "DataSources",
              "DataSources",
@@ -4121,7 +4123,7 @@ class SelectorTest(unittest.TestCase):
         self.assertEqual(
             json.loads(self._cf.dp.GetCommandVariable("VARS")),
             [None, None, None, None,
-             ['mycp'], ['ann5'], ['ann5'], ['ann2'], ['ann2']])
+             ['mycp'], ['mycp'], ['ann5'], ['ann5'], ['ann2'], ['ann2']])
 
         self.assertTrue(val["MntGrp"] not in self._cf.dp.availableSelections())
 
@@ -4163,6 +4165,7 @@ class SelectorTest(unittest.TestCase):
             json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
             ["AvailableComponents", "AvailableDataSources",
              "AvailableComponents", "AvailableDataSources",
+             "DependentComponents",
              "Components",
              "DataSources",
              "DataSources",
@@ -4171,7 +4174,7 @@ class SelectorTest(unittest.TestCase):
         self.assertEqual(
             json.loads(self._cf.dp.GetCommandVariable("VARS")),
             [None, None, None, None,
-             ['mycp'], ['ann5'], ['ann5'], ['ann2'], ['ann2']])
+             ['mycp'], ['mycp'], ['ann5'], ['ann5'], ['ann2'], ['ann2']])
 
         self.assertTrue(val["MntGrp"] not in self._cf.dp.availableSelections())
 
@@ -4258,6 +4261,7 @@ class SelectorTest(unittest.TestCase):
             json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
             ["AvailableComponents", "AvailableDataSources",
              "AvailableComponents", "AvailableDataSources",
+             "DependentComponents",
              "Components",
              "DataSources",
              "DataSources",
@@ -4265,7 +4269,7 @@ class SelectorTest(unittest.TestCase):
              "StoreSelection"])
         self.assertEqual(json.loads(self._cf.dp.GetCommandVariable("VARS")),
                          [None, None, None, None,
-                          ['mycp'], [u'ann2'], [u'ann2'],
+                          ['mycp'], ['mycp'], [u'ann2'], [u'ann2'],
                           None, val["MntGrp"]])
         self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
         sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
@@ -4325,11 +4329,12 @@ class SelectorTest(unittest.TestCase):
             json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
             ["AvailableComponents", "AvailableDataSources",
              "AvailableComponents", "AvailableDataSources",
+             "DependentComponents",
              "Components",
              "DataSources", "DataSources"])
         self.assertEqual(json.loads(self._cf.dp.GetCommandVariable("VARS")),
                          [None, None, None, None,
-                          ['mycp'], ['ann3'], ['ann3']])
+                          ['mycp'], ['mycp'], ['ann3'], ['ann3']])
         self.assertTrue(val["MntGrp"] not in self._cf.dp.availableSelections())
 
     ## test
@@ -4371,10 +4376,12 @@ class SelectorTest(unittest.TestCase):
             json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
             ["AvailableComponents", "AvailableDataSources",
              "AvailableComponents", "AvailableDataSources",
+             "DependentComponents",
              "Components",
              "DataSources", "DataSources"])
         self.assertEqual(json.loads(self._cf.dp.GetCommandVariable("VARS")),
-                         [None, None, None, None, ['mycp'], ['ann3'], ['ann3']])
+                         [None, None, None, None,
+                          ['mycp'], ['mycp'], ['ann3'], ['ann3']])
         self.assertTrue(val["MntGrp"] not in self._cf.dp.availableSelections())
 
     ## test
@@ -4416,6 +4423,7 @@ class SelectorTest(unittest.TestCase):
             json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
             ["AvailableComponents", "AvailableDataSources",
              "AvailableComponents", "AvailableDataSources",
+             "DependentComponents",
              "Components", "DataSources", "DataSources",
              "DataSources", "DataSources", "DataSources"])
         self.assertTrue(val["MntGrp"] not in self._cf.dp.availableSelections())
@@ -4458,6 +4466,7 @@ class SelectorTest(unittest.TestCase):
             json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
             ["AvailableComponents", "AvailableDataSources",
              "AvailableComponents", "AvailableDataSources",
+             "DependentComponents",
              "Components", "DataSources", "DataSources",
              "DataSources",
              "DataSources",
@@ -4465,6 +4474,7 @@ class SelectorTest(unittest.TestCase):
              "StoreSelection"])
         self.assertEqual(json.loads(self._cf.dp.GetCommandVariable("VARS")),
                          [None, None, None, None,
+                          [u'smycp'],
                           [u'smycp'],
                           [u'scalar_long'],
                           [u'scalar_short'],
@@ -4530,10 +4540,12 @@ class SelectorTest(unittest.TestCase):
             json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
             ["AvailableComponents", "AvailableDataSources",
              "AvailableComponents", "AvailableDataSources",
+             "DependentComponents",
              "Components", "DataSources", "DataSources",
              "DataSources", "DataSources", "DataSources"])
         self.assertEqual(json.loads(self._cf.dp.GetCommandVariable("VARS")),
                          [None, None, None, None,
+                          [u'smycp'],
                           [u'smycp'],
                           [u'scalar_long'],
                           [u'scalar_short'],
@@ -4587,8 +4599,11 @@ class SelectorTest(unittest.TestCase):
             json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
             ["AvailableComponents", "AvailableDataSources",
              "AvailableComponents", "AvailableDataSources",
+             "DependentComponents",
              "Components", "DataSources", "DataSources", "DataSources",
+             "DependentComponents",
              "Components", "DataSources", "DataSources", "DataSources",
+             "DependentComponents",
              "Components", "DataSources", "DataSources", "DataSources",
              "DataSources",
              "DataSources",
@@ -4684,11 +4699,17 @@ class SelectorTest(unittest.TestCase):
                 [
                     "AvailableComponents", "AvailableDataSources",
                     "AvailableComponents", "AvailableDataSources",
+                    "DependentComponents",
                     "Components", "DataSources", "DataSources", "DataSources",
+                    "DependentComponents",
                     "Components", "DataSources", "DataSources", "DataSources",
+                    "DependentComponents",
                     "Components", "DataSources", "DataSources", "DataSources",
+                    "DependentComponents",
                     "Components", "DataSources", "DataSources", "DataSources",
+                    "DependentComponents",
                     "Components", "DataSources", "DataSources", "DataSources",
+                    "DependentComponents",
                     "Components", "DataSources", "DataSources", "DataSources",
                     "DataSources", "DataSources", "DataSources", "DataSources",
                     "DataSources", "DataSources",
@@ -4782,11 +4803,17 @@ class SelectorTest(unittest.TestCase):
                 json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
                 ["AvailableComponents", "AvailableDataSources",
                  "AvailableComponents", "AvailableDataSources",
+                 "DependentComponents",
                  "Components", "DataSources", "DataSources", "DataSources",
+                 "DependentComponents",
                  "Components", "DataSources", "DataSources", "DataSources",
+                 "DependentComponents",
                  "Components", "DataSources", "DataSources", "DataSources",
+                 "DependentComponents",
                  "Components", "DataSources", "DataSources", "DataSources",
+                 "DependentComponents",
                  "Components", "DataSources", "DataSources", "DataSources",
+                 "DependentComponents",
                  "Components", "DataSources", "DataSources", "DataSources",
                  "DataSources", "DataSources", "DataSources", "DataSources",
                  "DataSources", "DataSources",
@@ -4879,11 +4906,17 @@ class SelectorTest(unittest.TestCase):
                 [
                     "AvailableComponents", "AvailableDataSources",
                     "AvailableComponents", "AvailableDataSources",
+                    "DependentComponents",
                     "Components", "DataSources", "DataSources", "DataSources",
+                    "DependentComponents",
                     "Components", "DataSources", "DataSources", "DataSources",
+                    "DependentComponents",
                     "Components", "DataSources", "DataSources", "DataSources",
+                    "DependentComponents",
                     "Components", "DataSources", "DataSources", "DataSources",
+                    "DependentComponents",
                     "Components", "DataSources", "DataSources", "DataSources",
+                    "DependentComponents",
                     "Components", "DataSources", "DataSources", "DataSources",
                     "DataSources", "DataSources", "DataSources",
                     "DataSources", "DataSources", "DataSources",
@@ -5392,11 +5425,17 @@ class SelectorTest(unittest.TestCase):
             [
                 "AvailableComponents", "AvailableDataSources",
                 "AvailableComponents", "AvailableDataSources",
+                "DependentComponents",
                 "Components", "DataSources", "DataSources", "DataSources",
+                "DependentComponents",
                 "Components", "DataSources", "DataSources", "DataSources",
+                "DependentComponents",
                 "Components", "DataSources", "DataSources", "DataSources",
+                "DependentComponents",
                 "Components", "DataSources", "DataSources", "DataSources",
+                "DependentComponents",
                 "Components", "DataSources", "DataSources", "DataSources",
+                "DependentComponents",
                 "Components", "DataSources", "DataSources", "DataSources",
                 "DataSources", "DataSources", "DataSources",
                 "DataSources", "DataSources", "DataSources",

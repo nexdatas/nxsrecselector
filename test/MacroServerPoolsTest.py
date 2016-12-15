@@ -1340,11 +1340,12 @@ class MacroServerPoolsTest(unittest.TestCase):
             json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
             ["AvailableComponents", "AvailableDataSources",
              "AvailableComponents", "AvailableDataSources",
+             "DependentComponents",
              "Components",
              "DataSources", "DataSources"])
         self.assertEqual(
             json.loads(self._cf.dp.GetCommandVariable("VARS")),
-            [None, None, None, None, ['mycp'], ['ann2'], ['ann2']])
+            [None, None, None, None, ['mycp'], ['mycp'], ['ann2'], ['ann2']])
 
     ## constructor test
     # \brief It tests default settings
@@ -1378,11 +1379,12 @@ class MacroServerPoolsTest(unittest.TestCase):
             json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
             ["AvailableComponents", "AvailableDataSources",
              "AvailableComponents", "AvailableDataSources",
+             "DependentComponents",
              "Components",
              "DataSources", "DataSources"])
         self.assertEqual(
             json.loads(self._cf.dp.GetCommandVariable("VARS")),
-            [None, None, None, None, ['mycp'], ['ann2'], ['ann2']])
+            [None, None, None, None, ['mycp'], ['mycp'], ['ann2'], ['ann2']])
 
     ## constructor test
     # \brief It tests default settings
@@ -1416,12 +1418,13 @@ class MacroServerPoolsTest(unittest.TestCase):
             json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
             ["AvailableComponents", "AvailableDataSources",
              "AvailableComponents", "AvailableDataSources",
+             "DependentComponents",
              "Components", "DataSources",
              "DataSources"])
         self.assertEqual(
             json.loads(self._cf.dp.GetCommandVariable("VARS")),
             [None, None, None, None,
-             ['mycp'], ['ann2'], ['ann2']])
+             ['mycp'], ['mycp'], ['ann2'], ['ann2']])
 #        print self._cf.dp.availableComponents()
 
     ## constructor test
@@ -1493,11 +1496,12 @@ class MacroServerPoolsTest(unittest.TestCase):
             json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
             ["AvailableComponents", "AvailableDataSources",
              "AvailableComponents", "AvailableDataSources",
+             "DependentComponents",
              "Components",
              "DataSources", "DataSources"])
         self.assertEqual(json.loads(self._cf.dp.GetCommandVariable("VARS")),
                          [None, None, None, None,
-                          ['mycp'], ['ann2'], ['ann2']])
+                          ['mycp'], ['mycp'], ['ann2'], ['ann2']])
 
     ## constructor test
     # \brief It tests default settings
@@ -1530,11 +1534,13 @@ class MacroServerPoolsTest(unittest.TestCase):
         self.assertEqual(
             json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
             ["AvailableComponents", "AvailableDataSources",
-             "AvailableComponents", "AvailableDataSources", "Components",
+             "AvailableComponents", "AvailableDataSources",
+             "DependentComponents",
+             "Components",
              "DataSources", "DataSources"])
         self.assertEqual(json.loads(self._cf.dp.GetCommandVariable("VARS")),
                          [None, None, None, None,
-                          ['mycp'], ['ann2'], ['ann2']])
+                          ['mycp'], ['mycp'], ['ann2'], ['ann2']])
 
     ## constructor test
     # \brief It tests default settings
@@ -1568,11 +1574,12 @@ class MacroServerPoolsTest(unittest.TestCase):
             json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
             ["AvailableComponents", "AvailableDataSources",
              "AvailableComponents",  "AvailableDataSources",
+             "DependentComponents",
              "Components", "DataSources",
              "DataSources"])
         self.assertEqual(json.loads(self._cf.dp.GetCommandVariable("VARS")),
                          [None, None, None, None,
-                          ['mycp'], ['ann2'], ['ann2']])
+                          ['mycp'], ['mycp'], ['ann2'], ['ann2']])
 
     ## constructor test
     # \brief It tests default settings
@@ -1608,6 +1615,7 @@ class MacroServerPoolsTest(unittest.TestCase):
             json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
             ["AvailableComponents", "AvailableDataSources",
              "AvailableComponents", "AvailableDataSources",
+             "DependentComponents",
              "Components", "DataSources", "DataSources",
              "DataSources",
              "DataSources",
@@ -1768,6 +1776,7 @@ class MacroServerPoolsTest(unittest.TestCase):
             json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
             ["AvailableComponents", "AvailableDataSources",
              "AvailableComponents", "AvailableDataSources",
+             "DependentComponents",
              "Components", "DataSources", "DataSources",
              "DataSources",
              "DataSources",
@@ -1807,6 +1816,7 @@ class MacroServerPoolsTest(unittest.TestCase):
             json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
             ["AvailableComponents", "AvailableDataSources",
              "AvailableComponents", "AvailableDataSources",
+             "DependentComponents",
              "Components", "DataSources", "DataSources",
              "DataSources",
              "DataSources",
@@ -1851,8 +1861,11 @@ class MacroServerPoolsTest(unittest.TestCase):
             json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
             ["AvailableComponents", "AvailableDataSources",
              "AvailableComponents", "AvailableDataSources",
+             "DependentComponents",
              "Components", "DataSources", "DataSources", "DataSources",
+             "DependentComponents",
              "Components", "DataSources", "DataSources", "DataSources",
+             "DependentComponents",
              "Components", "DataSources", "DataSources", "DataSources",
              "DataSources",
              "DataSources",
@@ -1921,11 +1934,17 @@ class MacroServerPoolsTest(unittest.TestCase):
                 json.loads(self._cf.dp.GetCommandVariable("COMMANDS")), [
                     "AvailableComponents", "AvailableDataSources",
                     "AvailableComponents", "AvailableDataSources",
+                    "DependentComponents",
                     "Components", "DataSources", "DataSources", "DataSources",
+                    "DependentComponents",
                     "Components", "DataSources", "DataSources", "DataSources",
+                    "DependentComponents",
                     "Components", "DataSources", "DataSources", "DataSources",
+                    "DependentComponents",
                     "Components", "DataSources", "DataSources", "DataSources",
+                    "DependentComponents",
                     "Components", "DataSources", "DataSources", "DataSources",
+                    "DependentComponents",
                     "Components", "DataSources", "DataSources", "DataSources",
                     "DataSources", "DataSources",
                     "DataSources", "DataSources",
@@ -1996,11 +2015,17 @@ class MacroServerPoolsTest(unittest.TestCase):
                 json.loads(self._cf.dp.GetCommandVariable("COMMANDS")), [
                     "AvailableComponents", "AvailableDataSources",
                     "AvailableComponents", "AvailableDataSources",
+                    "DependentComponents",
                     "Components", "DataSources", "DataSources", "DataSources",
+                    "DependentComponents",
                     "Components", "DataSources", "DataSources", "DataSources",
+                    "DependentComponents",
                     "Components", "DataSources", "DataSources", "DataSources",
+                    "DependentComponents",
                     "Components", "DataSources", "DataSources", "DataSources",
+                    "DependentComponents",
                     "Components", "DataSources", "DataSources", "DataSources",
+                    "DependentComponents",
                     "Components", "DataSources", "DataSources", "DataSources",
                     "DataSources", "DataSources",
                     "DataSources", "DataSources",
@@ -2071,11 +2096,17 @@ class MacroServerPoolsTest(unittest.TestCase):
                 json.loads(self._cf.dp.GetCommandVariable("COMMANDS")), [
                     "AvailableComponents", "AvailableDataSources",
                     "AvailableComponents", "AvailableDataSources",
+                    "DependentComponents",
                     "Components", "DataSources", "DataSources", "DataSources",
+                    "DependentComponents",
                     "Components", "DataSources", "DataSources", "DataSources",
+                    "DependentComponents",
                     "Components", "DataSources", "DataSources", "DataSources",
+                    "DependentComponents",
                     "Components", "DataSources", "DataSources", "DataSources",
+                    "DependentComponents",
                     "Components", "DataSources", "DataSources", "DataSources",
+                    "DependentComponents",
                     "Components", "DataSources", "DataSources", "DataSources",
                     "DataSources",
                     "DataSources", "DataSources",
@@ -2452,11 +2483,17 @@ class MacroServerPoolsTest(unittest.TestCase):
             self._cf.dp.GetCommandVariable("COMMANDS")), [
                 "AvailableComponents", "AvailableDataSources",
                 "AvailableComponents", "AvailableDataSources",
+                "DependentComponents",
                 "Components", "DataSources", "DataSources", "DataSources",
+                "DependentComponents",
                 "Components", "DataSources", "DataSources", "DataSources",
+                "DependentComponents",
                 "Components", "DataSources", "DataSources", "DataSources",
+                "DependentComponents",
                 "Components", "DataSources", "DataSources", "DataSources",
+                "DependentComponents",
                 "Components", "DataSources", "DataSources", "DataSources",
+                "DependentComponents",
                 "Components", "DataSources", "DataSources", "DataSources",
                 "DataSources", "DataSources", "DataSources",
                 "DataSources", "DataSources", "DataSources",
