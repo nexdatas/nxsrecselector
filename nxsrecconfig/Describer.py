@@ -434,11 +434,13 @@ class Describer(object):
         :returns: datasource ExDSDict
         :rtype: :class:`ExDSDict`
         """
+        dcps = TangoUtils.command(self.__nexusconfig_device,
+                                  "dependentComponents", [cp])
         xmlc = TangoUtils.command(self.__nexusconfig_device,
-                                  "components", [cp])
+                                  "components", dcps)
         if not len(xmlc) > 0:
             return ExDSDict()
-        return self.__getDSFromXML(xmlc[0])
+        return self.__getDSFromXML(xmlc)
 
     def __getInstDataSourceAttributes(self, cp, cfvars=None):
         """ provides datasource ExDSDict of given instantiated component
@@ -456,60 +458,64 @@ class Describer(object):
             if sv and isinstance(sv, dict):
                 cv.update(sv)
             self.__nexusconfig_device.variables = json.dumps(cv)
+        dcps = TangoUtils.command(self.__nexusconfig_device,
+                                  "dependentComponents", [cp])
         xmlc = TangoUtils.command(self.__nexusconfig_device,
-                                  "instantiatedComponents", [cp])
+                                  "instantiatedComponents", dcps)
         if not len(xmlc) > 0:
             return ExDSDict()
-        return self.__getDSFromXML(xmlc[0])
+        return self.__getDSFromXML(xmlc)
 
-    def __getDSFromXML(self, cpxml):
+    def __getDSFromXML(self, cpxmls):
         """ provides datasource ExDSDict of given component xml
 
-        :param cpxml : component xml
-        :type cpxml : :obj:`str`
+        :param cpxml : list of component xmls
+        :type cpxml : :obj:`list` < obj:`str`>
         :returns: datasource ExDSDict
         :rtype: :class:`ExDSDict`
         """
-        indom = xml.dom.minidom.parseString(cpxml)
-        strategy = indom.getElementsByTagName("strategy")
-
         dss = ExDSDict()
-        for sg in strategy:
-            if sg.hasAttribute("mode"):
-                mode = sg.attributes["mode"].value
-                name = None
-                nxtype = None
-                dset = sg.parentNode
-                if dset.hasAttribute("type"):
-                    nxtype = dset.attributes["type"].value
 
-                nxt = sg.nextSibling
-                loop = True
-                shape = None
-                while nxt and loop:
-                    if nxt.nodeName == 'dimensions':
-                        shape = self.__getShape(nxt)
-                        loop = False
-                    nxt = nxt.nextSibling
+        for cpxml in cpxmls:
+            indom = xml.dom.minidom.parseString(cpxml)
+            strategy = indom.getElementsByTagName("strategy")
 
-                prev = sg.previousSibling
-                while prev and loop:
-                    if prev.nodeName == 'dimensions':
-                        shape = self.__getShape(prev)
-                        loop = False
-                    prev = prev.previousSibling
+            for sg in strategy:
+                if sg.hasAttribute("mode"):
+                    mode = sg.attributes["mode"].value
+                    name = None
+                    nxtype = None
+                    dset = sg.parentNode
+                    if dset.hasAttribute("type"):
+                        nxtype = dset.attributes["type"].value
 
-                nxt = sg.nextSibling
-                while nxt and not name:
-                    name = dss.appendDSList(self.__getDSFromNode(nxt),
-                                            mode, nxtype, shape)
-                    nxt = nxt.nextSibling
+                    nxt = sg.nextSibling
+                    loop = True
+                    shape = None
+                    while nxt and loop:
+                        if nxt.nodeName == 'dimensions':
+                            shape = self.__getShape(nxt)
+                            loop = False
+                        nxt = nxt.nextSibling
 
-                prev = sg.previousSibling
-                while prev and not name:
-                    name = dss.appendDSList(self.__getDSFromNode(prev),
-                                            mode, nxtype, shape)
-                    prev = prev.previousSibling
+                    prev = sg.previousSibling
+                    while prev and loop:
+                        if prev.nodeName == 'dimensions':
+                            shape = self.__getShape(prev)
+                            loop = False
+                        prev = prev.previousSibling
+
+                    nxt = sg.nextSibling
+                    while nxt and not name:
+                        name = dss.appendDSList(self.__getDSFromNode(nxt),
+                                                mode, nxtype, shape)
+                        nxt = nxt.nextSibling
+
+                    prev = sg.previousSibling
+                    while prev and not name:
+                        name = dss.appendDSList(self.__getDSFromNode(prev),
+                                                mode, nxtype, shape)
+                        prev = prev.previousSibling
 
         return dss
 

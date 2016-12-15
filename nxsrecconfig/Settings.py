@@ -1007,6 +1007,9 @@ class Settings(object):
             else:
                 dcpcreator.setInitDSources(self.preselectedDataSources())
 
+        # pools = self.__selector.getPools()
+        # channelsources = PoolUtils.getChannelSources(self.__pools, aliases)
+
         withoutLinks = self.components
         links = json.loads(self.channelProperties("link"))
         for ds in withoutLinks:
