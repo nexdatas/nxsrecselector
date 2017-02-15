@@ -39,10 +39,14 @@ logger = logging.getLogger()
 import TestServerSetUp
 import TestMacroServerSetUp
 
+
 from nxsrecconfig.Utils import Utils, TangoUtils, MSUtils, PoolUtils
 
 ## if 64-bit machione
 IS64BIT = (struct.calcsize("P") == 8)
+
+#: tango version
+TGVER = PyTango.__version_info__[0]
 
 
 class Datum(object):
@@ -289,8 +293,11 @@ class UtilsTest(unittest.TestCase):
     def checkstu(self, par, shape, dtype, unit):
         self.assertEqual(shape, par[0])
         self.assertEqual(dtype, par[1])
-        self.assertEqual(unit if unit else 'No unit', par[2])
-
+        if TGVER < 9:
+            self.assertEqual(unit if unit else 'No unit', par[2])
+        else:
+            self.assertEqual(unit, par[2])
+            
     ## constructor test
     # \brief It tests default settings
     def test_constructor(self):
@@ -1994,6 +2001,7 @@ class UtilsTest(unittest.TestCase):
         self._simps.dp.ScalarString = self._bools[0]
         self._simps.dp.ScalarULong64 = long(abs(self._counter[0]))
 
+        print "TGVER", TGVER
         arr = {
             'ScalarBoolean': [[], 'bool', 'No unit'],
             'ScalarUChar': [[], 'uint8', 'mm'],
@@ -2005,11 +2013,11 @@ class UtilsTest(unittest.TestCase):
             'ScalarFloat': [[], 'float32', 'eV'],
             'ScalarDouble': [[], 'float64', 'GeV'],
             'ScalarString': [[], 'string', 'mm N'],
-            'ScalarULong64': [[], 'uint64', ''],
+            'ScalarULong64': [[], 'uint64', ''  if TGVER < 9 else 'No unit'],
         }
 
         arr2 = {
-            'ScalarEncoded': [[], 'encoded', 'No unit'],
+            'ScalarEncoded': [[], 'encoded', 'No unit'  if TGVER < 9 else ''],
         }
 
         for k, ar in arr.items():
@@ -2019,12 +2027,14 @@ class UtilsTest(unittest.TestCase):
             ap.set_config(ac)
 
         for k, ar in arr.items():
+            print ar
             self.checkstu(
                 TangoUtils.getShapeTypeUnit(
                     "ttestp09/testts/t1r228/%s" % k),
                 ar[0], ar[1], ar[2])
 
         for k, ar in arr2.items():
+            print ar
             self.checkstu(
                 TangoUtils.getShapeTypeUnit(
                     "ttestp09/testts/t1r228/%s" % k),

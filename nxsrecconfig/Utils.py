@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #   This file is part of nxsrecconfig - NeXus Sardana Recorder Settings
 #
-#    Copyright (C) 2014-2016 DESY, Jan Kotanski <jkotan@mail.desy.de>
+#    Copyright (C) 2014-2017 DESY, Jan Kotanski <jkotan@mail.desy.de>
 #
 #    nexdatas is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -321,7 +321,7 @@ class TangoUtils(object):
         vl = None
         shp = []
         dt = 'float64'
-        ut = 'No units'
+        ut = 'No unit'
         ap = PyTango.AttributeProxy(source)
         da = None
         ac = None
