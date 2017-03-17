@@ -33,4 +33,4 @@ install:
   - python setup.py -q install
 
 script:
-  - python setup.py test
+  - python setup.py test > /dev/null
