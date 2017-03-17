@@ -1558,6 +1558,7 @@ if __name__ == '__main__':
         py.add_class(TestServerClass, TestServer, 'TestServer')
 
         U = PyTango.Util.instance()
+        
         U.server_init()
         U.server_run()
 
