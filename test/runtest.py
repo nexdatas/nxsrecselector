@@ -87,77 +87,85 @@ def main():
     ts = None
 
     ## test suit
-    suite = unittest.TestSuite()
+    basicsuite = unittest.TestSuite()
+    profilesuite = unittest.TestSuite()
+    settingssuite = unittest.TestSuite()
+    serversuite = unittest.TestSuite()
 
-    suite.addTests(
+    basicsuite.addTests(
         unittest.defaultTestLoader.loadTestsFromModule(SelectionTest))
-    suite.addTests(
+    basicsuite.addTests(
         unittest.defaultTestLoader.loadTestsFromModule(SelectorTest))
-    suite.addTests(
-        unittest.defaultTestLoader.loadTestsFromModule(ProfileManagerTest))
-
-    suite.addTests(
+    basicsuite.addTests(
         unittest.defaultTestLoader.loadTestsFromModule(TangoDSItemTest))
-    suite.addTests(
+    basicsuite.addTests(
         unittest.defaultTestLoader.loadTestsFromModule(CheckerItemTest))
-
-    suite.addTests(
+    basicsuite.addTests(
         unittest.defaultTestLoader.loadTestsFromModule(DSItemTest))
-
-    suite.addTests(
+    basicsuite.addTests(
         unittest.defaultTestLoader.loadTestsFromModule(ExDSItemTest))
-    suite.addTests(
+    basicsuite.addTests(
         unittest.defaultTestLoader.loadTestsFromModule(ExDSDictTest))
-
-    suite.addTests(
+    basicsuite.addTests(
         unittest.defaultTestLoader.loadTestsFromModule(DescriberTest))
-
-    suite.addTests(
+    basicsuite.addTests(
         unittest.defaultTestLoader.loadTestsFromModule(UtilsTest))
-
-    suite.addTests(
+    basicsuite.addTests(
         unittest.defaultTestLoader.loadTestsFromModule(StreamsTest))
-
-    suite.addTests(
+    basicsuite.addTests(
         unittest.defaultTestLoader.loadTestsFromModule(ConverterTest))
-
-    suite.addTests(
+    basicsuite.addTests(
         unittest.defaultTestLoader.loadTestsFromModule(ConverterXtoYTest))
-
-    suite.addTests(
+    basicsuite.addTests(
         unittest.defaultTestLoader.loadTestsFromModule(Converter1to2Test))
-
-    suite.addTests(
+    basicsuite.addTests(
         unittest.defaultTestLoader.loadTestsFromModule(Converter2to1Test))
-
-    suite.addTests(
+    basicsuite.addTests(
         unittest.defaultTestLoader.loadTestsFromModule(Converter3to2Test))
-
-    suite.addTests(
+    basicsuite.addTests(
         unittest.defaultTestLoader.loadTestsFromModule(Converter2to3Test))
-
-    suite.addTests(
+    basicsuite.addTests(
         unittest.defaultTestLoader.loadTestsFromModule(CheckerThreadTest))
-
-    suite.addTests(
+    basicsuite.addTests(
         unittest.defaultTestLoader.loadTestsFromModule(MacroServerPoolsTest))
-
-    suite.addTests(
+    basicsuite.addTests(
         unittest.defaultTestLoader.loadTestsFromModule(DynamicComponentTest))
 
-    suite.addTests(
+    profilesuite.addTests(
+        unittest.defaultTestLoader.loadTestsFromModule(ProfileManagerTest))
+
+    settingssuite.addTests(
         unittest.defaultTestLoader.loadTestsFromModule(SettingsTest))
 
-    suite.addTests(
+
+    serversuite.addTests(
         unittest.defaultTestLoader.loadTestsFromModule(NXSRecSelectorTest))
 
     ## test runner
     runner = unittest.TextTestRunner()
+
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument('args', metavar='name', type=str, nargs='*',
+                        help='suite names: all, basic, profile, settings, server')
+    options = parser.parse_args()
+
+    namesuite = {
+        "basic": basicsuite,
+        "profile": profilesuite,
+        "settings": settingssuite,
+        "server": serversuite,
+    }
+    
+    print options.args
+    if not options.args or 'all' in options.args:
+        options.args = namesuite.keys()
+
+    suite = unittest.TestSuite(
+        [namesuite[nm] for nm in options.args if nm in namesuite.keys()])
+    
     ## test result
     result = runner.run(suite)
-
-    #   if ts:
-    #       ts.tearDown()
 
 if __name__ == "__main__":
     main()

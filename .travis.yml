@@ -9,6 +9,12 @@ python:
 services:
   - mysql
 
+env:
+  - TEST_SUITE=basic
+  - TEST_SUITE=profile
+  - TEST_SUITE=settings
+  - TEST_SUITE=server
+
 before_install:
   - sudo add-apt-repository "deb http://repos.pni-hdri.de/apt/debian jessie main" -y
 #  - sudo add-apt-repository "deb http://security.debian.org/ jessie/updates main" -y
@@ -33,4 +39,4 @@ install:
   - python setup.py -q install
 
 script:
-  - python setup.py test > /dev/null
+  - python test/runtest.py $TEST_SUITE > /dev/null
