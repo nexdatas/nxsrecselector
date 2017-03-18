@@ -66,13 +66,14 @@ class MacroServer(PyTango.Device_4Impl):
     #    Device destructor
     #------------------------------------------------------------------
     def delete_device(self):
-        print "[Device delete_device method] for device", self.get_name()
+#        print "[Device delete_device method] for device", self.get_name()
+        """ """
 
     #------------------------------------------------------------------
     #    Device initialization
     #------------------------------------------------------------------
     def init_device(self):
-        print "In ", self.get_name(), "::init_device()"
+#        print "In ", self.get_name(), "::init_device()"
         self.set_state(PyTango.DevState.ON)
         self.get_device_properties(self.get_device_class())
         env = {'new': {'ActiveMntGrp': 'nxsmntgrp',
@@ -103,7 +104,7 @@ class MacroServer(PyTango.Device_4Impl):
     #    Read DoorList attribute
     #------------------------------------------------------------------
     def read_DoorList(self, attr):
-        print "In ", self.get_name(), "::read_DoorList()"
+#        print "In ", self.get_name(), "::read_DoorList()"
 
         #    Add your own code here
 
@@ -113,18 +114,18 @@ class MacroServer(PyTango.Device_4Impl):
     #    Write DoorList attribute
     #------------------------------------------------------------------
     def write_DoorList(self, attr):
-        print "In ", self.get_name(), "::write_DoorList()"
+#        print "In ", self.get_name(), "::write_DoorList()"
 
         #    Add your own code here
 
         self.attr_DoorList = attr.get_write_value()
-        print "Attribute value = ", self.attr_DoorList
+#        print "Attribute value = ", self.attr_DoorList
 
     #------------------------------------------------------------------
     #    Read Environment attribute
     #------------------------------------------------------------------
     def read_Environment(self, attr):
-        print "In ", self.get_name(), "::read_Environment()"
+#        print "In ", self.get_name(), "::read_Environment()"
 
         #    Add your own code here
 
@@ -134,7 +135,7 @@ class MacroServer(PyTango.Device_4Impl):
     #    Write Environment attribute
     #------------------------------------------------------------------
     def write_Environment(self, attr):
-        print "In ", self.get_name(), "::write_Environment()"
+#        print "In ", self.get_name(), "::write_Environment()"
 
         #    Add your own code here
 
@@ -160,7 +161,7 @@ class MacroServer(PyTango.Device_4Impl):
                 if ed in newdict.keys():
                     newdict.pop(ed)
             self.attr_Environment = ("pickle", pickle.dumps(envdict))
-        print "Attribute value = ", self.attr_Environment
+#        print "Attribute value = ", self.attr_Environment
 
     #
     #==================================================================
@@ -177,7 +178,7 @@ class MacroServer(PyTango.Device_4Impl):
     #    argin: DevString     tango state
     #------------------------------------------------------------------
     def SetState(self, state):
-        print "In ", self.get_name(), "::SetState()"
+#        print "In ", self.get_name(), "::SetState()"
         if state == "RUNNING":
             self.set_state(PyTango.DevState.RUNNING)
         elif state == "FAULT":
@@ -239,7 +240,7 @@ class MacroServerClass(PyTango.DeviceClass):
     def __init__(self, name):
         PyTango.DeviceClass.__init__(self, name)
         self.set_type(name)
-        print "In TestMacroServerClass  constructor"
+#        print "In TestMacroServerClass  constructor"
 
 
 #==================================================================
@@ -270,14 +271,14 @@ class Door(PyTango.Device_4Impl):
     #    Device destructor
     #------------------------------------------------------------------
     def delete_device(self):
-        print "[Device delete_device method] for device", \
+#        print "[Device delete_device method] for device", \
             self.get_name()
 
     #------------------------------------------------------------------
     #    Device initialization
     #------------------------------------------------------------------
     def init_device(self):
-        print "In ", self.get_name(), "::init_device()"
+#        print "In ", self.get_name(), "::init_device()"
         self.set_state(PyTango.DevState.ON)
         self.get_device_properties(self.get_device_class())
 
@@ -308,7 +309,7 @@ class Door(PyTango.Device_4Impl):
     #    argin: DevString     tango state
     #------------------------------------------------------------------
     def SetState(self, state):
-        print "In ", self.get_name(), "::SetState()"
+#        print "In ", self.get_name(), "::SetState()"
         if state == "RUNNING":
             self.set_state(PyTango.DevState.RUNNING)
         elif state == "FAULT":
@@ -351,7 +352,7 @@ class DoorClass(PyTango.DeviceClass):
     def __init__(self, name):
         PyTango.DeviceClass.__init__(self, name)
         self.set_type(name)
-        print "In TestDoorClass  constructor"
+#        print "In TestDoorClass  constructor"
 
 
 #==================================================================
