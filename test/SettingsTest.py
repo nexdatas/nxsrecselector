@@ -126,7 +126,7 @@ class SettingsTest(unittest.TestCase):
         except NotImplementedError:
             self.__seed = long(time.time() * 256)
 
-        self.__rnd = random.Random(self.__seed)
+        self._rnd = random.Random(self.__seed)
 
         self.__dump = {}
 
@@ -2151,8 +2151,8 @@ class SettingsTest(unittest.TestCase):
 
     def getRandomName(self, maxsize):
         letters = string.lowercase + string.uppercase + string.digits
-        size = self.__rnd.randint(1, maxsize)
-        return ''.join(self.__rnd.choice(letters) for _ in range(size))
+        size = self._rnd.randint(1, maxsize)
+        return ''.join(self._rnd.choice(letters) for _ in range(size))
 
     @classmethod
     def findElement(cls, cp, ds, vds, rv):

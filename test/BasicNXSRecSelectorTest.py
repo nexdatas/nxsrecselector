@@ -55,7 +55,7 @@ class BasicNXSRecSelectorTest(BasicSettingsTest.BasicSettingsTest):
     ## test starter
     # \brief Common set up of Tango Server
     def setUp(self):
-        SettingsTest.SettingsTest.setUp(self)
+        BasicSettingsTest.BasicSettingsTest.setUp(self)
         self._sv.setUp()
 
     ## test starter
@@ -67,7 +67,7 @@ class BasicNXSRecSelectorTest(BasicSettingsTest.BasicSettingsTest):
     # \brief Common tear down oif Tango Server
     def tearDown(self):
         self._sv.tearDown()
-        SettingsTest.SettingsTest.tearDown(self)
+        BasicSettingsTest.BasicSettingsTest.tearDown(self)
 
     ## test closer
     # \brief Common tear down oif Tango Server

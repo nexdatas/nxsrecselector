@@ -21,6 +21,7 @@
 #
 
 import os
+import sys
 import unittest
 
 import logging
@@ -178,7 +179,8 @@ def main():
         [namesuite[nm] for nm in options.args if nm in namesuite.keys()])
     
     ## test result
-    result = runner.run(suite)
-
+    result = runner.run(suite).wasSuccessful()
+    sys.exit(result)
+    
 if __name__ == "__main__":
     main()
