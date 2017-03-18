@@ -70,13 +70,14 @@ class NXSDataWriter(PyTango.Device_4Impl):
     #    Device destructor
     #------------------------------------------------------------------
     def delete_device(self):
-        print "[Device delete_device method] for device", self.get_name()
+        """ """
+#        print "[Device delete_device method] for device", self.get_name()
 
     #------------------------------------------------------------------
     #    Device initialization
     #------------------------------------------------------------------
     def init_device(self):
-        print "In ", self.get_name(), "::init_device()"
+#        print "In ", self.get_name(), "::init_device()"
         self.set_state(PyTango.DevState.ON)
         self.get_device_properties(self.get_device_class())
 
@@ -84,7 +85,7 @@ class NXSDataWriter(PyTango.Device_4Impl):
     #    Always excuted hook method
     #------------------------------------------------------------------
     def always_executed_hook(self):
-        print "In ", self.get_name(), "::always_excuted_hook()"
+#        print "In ", self.get_name(), "::always_excuted_hook()"
 
 #
 #==================================================================
@@ -107,7 +108,7 @@ class NXSDataWriter(PyTango.Device_4Impl):
     #    argin: DevString     tango state
     #------------------------------------------------------------------
     def SetState(self, state):
-        print "In ", self.get_name(), "::SetState()"
+#        print "In ", self.get_name(), "::SetState()"
         if state == "RUNNING":
             self.set_state(PyTango.DevState.RUNNING)
         elif state == "FAULT":
@@ -150,7 +151,7 @@ class NXSDataWriterClass(PyTango.DeviceClass):
     def __init__(self, name):
         PyTango.DeviceClass.__init__(self, name)
         self.set_type(name)
-        print "In TestWriterClass  constructor"
+#        print "In TestWriterClass  constructor"
 
 #==================================================================
 #

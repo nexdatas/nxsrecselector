@@ -75,7 +75,7 @@ class ExtraNXSRecSelectorTest(ExtraSettingsTest.ExtraSettingsTest):
         self._sv2.tearDown()
 
     def value(self, rs, name):
-        print "VAL", json.loads(rs.profileConfiguration)
+#        print "VAL", json.loads(rs.profileConfiguration)
         return json.loads(rs.profileConfiguration)[name]
 
     def names(self, rs):

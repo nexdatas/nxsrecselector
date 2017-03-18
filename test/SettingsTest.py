@@ -2092,7 +2092,7 @@ class SettingsTest(unittest.TestCase):
 #        print "SE4", el["TimeZone"]
         self.assertEqual(dks, eks)
         for key in dks:
-            print " K:", key,
+#            print " K:", key,
             if self._dump[name][key] != self.value(el, key):
                 print "COMP", key
             self.assertEqual(self._dump[name][key], self.value(el, key))
@@ -2115,7 +2115,7 @@ class SettingsTest(unittest.TestCase):
         eks = set(self.names(el)) - exc
         self.assertEqual(dks, eks)
         for key in dks:
-            print " K:", key,
+#            print " K:", key,
             try:
                 w1 = json.loads(self._dump[name][key])
                 w2 = json.loads(self.value(el, key))
