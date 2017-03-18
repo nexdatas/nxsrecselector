@@ -122,23 +122,23 @@ class SettingsTest(unittest.TestCase):
         self._simps = TestServerSetUp.TestServerSetUp()
 
         try:
-            self.__seed = long(binascii.hexlify(os.urandom(16)), 16)
+            self._seed = long(binascii.hexlify(os.urandom(16)), 16)
         except NotImplementedError:
-            self.__seed = long(time.time() * 256)
+            self._seed = long(time.time() * 256)
 
-        self._rnd = random.Random(self.__seed)
+        self._rnd = random.Random(self._seed)
 
-        self.__dump = {}
+        self._dump = {}
 
         ## default zone
-        self.__defaultzone = 'Europe/Berlin'
+        self._defaultzone = 'Europe/Berlin'
         ## default mntgrp
-        self.__defaultmntgrp = 'nxsmntgrp'
+        self._defaultmntgrp = 'nxsmntgrp'
         ## default path
-        self.__defaultpath = \
+        self._defaultpath = \
             '/entry$var.serialno:NXentry/NXinstrument/collection'
 
-        self.__npTn = {"float32": "NX_FLOAT32", "float64": "NX_FLOAT64",
+        self._npTn = {"float32": "NX_FLOAT32", "float64": "NX_FLOAT64",
                        "float": "NX_FLOAT32", "double": "NX_FLOAT64",
                        "int": "NX_INT", "int64": "NX_INT64",
                        "int32": "NX_INT32", "int16": "NX_INT16",
@@ -146,7 +146,7 @@ class SettingsTest(unittest.TestCase):
                        "uint32": "NX_UINT32", "uint16": "NX_UINT16",
                        "uint8": "NX_UINT8", "uint": "NX_UINT64",
                        "string": "NX_CHAR", "bool": "NX_BOOLEAN"}
-        self.__npTn2 = {"float32": "NX_FLOAT32", "float64": "NX_FLOAT64",
+        self._npTn2 = {"float32": "NX_FLOAT32", "float64": "NX_FLOAT64",
                         "float": "NX_FLOAT32", "double": "NX_FLOAT64",
                         "long": "NX_INT32",
                         "long64": "NX_INT64",
@@ -190,8 +190,8 @@ class SettingsTest(unittest.TestCase):
             ("ChannelProperties", '{}'),
             ("DynamicComponents", True),
             ("DefaultDynamicLinks", True),
-            ("DefaultDynamicPath", self.__defaultpath),
-            ("TimeZone", self.__defaultzone),
+            ("DefaultDynamicPath", self._defaultpath),
+            ("TimeZone", self._defaultzone),
             ("ConfigDevice", ''),
             ("WriterDevice", ''),
             ("Door", ''),
@@ -1987,7 +1987,7 @@ class SettingsTest(unittest.TestCase):
     ## test starter
     # \brief Common set up
     def setUp(self):
-        print "SEED =", self.__seed
+        print "SEED =", self._seed
         self._wr.setUp()
         self._ms.setUp()
         self._cf.setUp()
@@ -2080,25 +2080,25 @@ class SettingsTest(unittest.TestCase):
                         sorted(vl[ds]))
 
     def dump(self, el, name="default"):
-        self.__dump[name] = {}
+        self._dump[name] = {}
 
         for key in self.names(el):
-            self.__dump[name][key] = self.value(el, key)
+            self._dump[name][key] = self.value(el, key)
 
     def compareToDump(self, el, excluded=None, name="default"):
         exc = set(excluded or [])
-        dks = set(self.__dump[name].keys()) - exc
+        dks = set(self._dump[name].keys()) - exc
         eks = set(self.names(el)) - exc
 #        print "SE4", el["TimeZone"]
         self.assertEqual(dks, eks)
         for key in dks:
             print " K:", key,
-            if self.__dump[name][key] != self.value(el, key):
+            if self._dump[name][key] != self.value(el, key):
                 print "COMP", key
-            self.assertEqual(self.__dump[name][key], self.value(el, key))
+            self.assertEqual(self._dump[name][key], self.value(el, key))
 
     def getDump(self, key, name="default"):
-        return self.__dump[name][key]
+        return self._dump[name][key]
 
     def value(self, rs, name):
         return rs.value(name)
@@ -2111,42 +2111,42 @@ class SettingsTest(unittest.TestCase):
 
     def compareToDumpJSON(self, el, excluded=None, name="default"):
         exc = set(excluded or [])
-        dks = set(self.__dump[name].keys()) - exc
+        dks = set(self._dump[name].keys()) - exc
         eks = set(self.names(el)) - exc
         self.assertEqual(dks, eks)
         for key in dks:
             print " K:", key,
             try:
-                w1 = json.loads(self.__dump[name][key])
+                w1 = json.loads(self._dump[name][key])
                 w2 = json.loads(self.value(el, key))
             except:
-                self.assertEqual(self.__dump[name][key], self.value(el, key))
+                self.assertEqual(self._dump[name][key], self.value(el, key))
             else:
                 if isinstance(w1, dict):
                     self.myAssertDict(w1, w2)
                 else:
-                    if self.__dump[name][key] != self.value(el, key):
+                    if self._dump[name][key] != self.value(el, key):
                         print "COMP", key
                     self.assertEqual(
-                        self.__dump[name][key],
+                        self._dump[name][key],
                         self.value(el, key))
 
     def compareToDumpJSONSets(self, el, sets, name="default"):
         exc = set(sets or [])
         for key in exc:
             try:
-                w1 = json.loads(self.__dump[name][key])
+                w1 = json.loads(self._dump[name][key])
                 w2 = json.loads(self.value(el, key))
             except:
-                self.assertEqual(self.__dump[name][key], self.value(el, key))
+                self.assertEqual(self._dump[name][key], self.value(el, key))
             else:
                 if isinstance(w1, dict):
                     self.myAssertDict(w1, w2)
                 else:
-                    if set(self.__dump[name][key]) != set(self.value(el, key)):
+                    if set(self._dump[name][key]) != set(self.value(el, key)):
                         print "COMP", key
                     self.assertEqual(
-                        set(self.__dump[name][key]),
+                        set(self._dump[name][key]),
                         set(self.value(el, key)))
 
     def getRandomName(self, maxsize):

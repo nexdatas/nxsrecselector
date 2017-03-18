@@ -1170,10 +1170,10 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                             myct = ("ctrl_%s" % tm).replace("_", "/")
                             timers[myct] = tm
                             ctrls.append(myct)
-                        print "TIMERSL", tms
-                        print "TIMERSD", timers
+#                        print "TIMERSL", tms
+#                        print "TIMERSD", timers
                         ltimers[mg] = timers.values()
-                        print "LTIMER", ltimers[mg]
+#                        print "LTIMER", ltimers[mg]
 
                         for ds, vl in self.smychsXX.items():
                             if vl:
@@ -1459,7 +1459,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                         for tm in ltimers[mg]:
                             if tm in lhe2[mg]:
                                 if tm in adss[mg].keys():
-                                    print "DES", tm
+#                                    print "DES", tm
                                     adss[mg][tm] = False
 
                         jpcnf = rs[mg].updateMntGrp()
@@ -1610,7 +1610,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                         rs[mg].profileConfiguration = str(json.dumps({}))
                         rs[mg].configDevice = val["ConfigDevice"]
                         rs[mg].door = val["Door"]
-                        print "MG", mg
+#                        print "MG", mg
                         rs[mg].mntGrp = mg
                         rs[mg].fetchProfile()
                         mp[mg] = json.loads(rs[mg].profileConfiguration)
@@ -1635,7 +1635,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                         self.assertEqual(
                             set(json.loads(mp[mg]["PreselectingDataSources"])),
                             set(aadss[mg]))
-                        print "PDS1", set(aadss[mg])
+#                        print "PDS1", set(aadss[mg])
                         self.assertEqual(
                             set(json.loads(mp[mg]["UnplottedComponents"])),
                             set(lhe2[mg]))
@@ -1649,7 +1649,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
 
                     # check profile commands
                     mg1, mg2, mg3, mg4 = tuple(self._rnd.sample(mgs, 4))
-                    print "MGS", mg1, mg2, mg3, mg4
+#                    print "MGS", mg1, mg2, mg3, mg4
 
                     self.compareToDumpJSON(
                         rs[mg1],
@@ -1717,7 +1717,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                         set(json.loads(lmp["Timer"])), set(ltimers[mg1]))
                     self.assertEqual(lmp["MntGrp"], mg1)
 
-                    print "MGS", mg1, mg2, mg3, mg4
+#                    print "MGS", mg1, mg2, mg3, mg4
 
                     # import mntgrp another defined by selector MntGrp
                     lrs.mntGrp = mg2
@@ -1735,7 +1735,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                     ltmpcf = json.loads(lrs.mntGrpConfiguration())
 #                    self.myAssertDict(tmpcf1, ltmpcf)
                     self.myAssertDict(tmpcf2, ltmpcf)
-                    print "RSmg2",
+#                    print "RSmg2",
                     self.compareToDumpJSON(
                         rs[mg2],
                         ["DataSourceSelection",
@@ -1854,9 +1854,9 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                                     if tm in llhe:
                                         llhe.remove(tm)
 
-                    print "T1", json.loads(mp[mg1]["Timer"])
-                    print "T2", json.loads(mp[mg2]["Timer"])
-                    print "LT", json.loads(lmp["Timer"])
+#                    print "T1", json.loads(mp[mg1]["Timer"])
+#                    print "T2", json.loads(mp[mg2]["Timer"])
+#                    print "LT", json.loads(lmp["Timer"])
                     self.myAssertDict(
                         json.loads(lmp["DataSourceSelection"]), ladss)
 
@@ -1875,7 +1875,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                     tmpcf['label'] = mg2
                     mgdp = PyTango.DeviceProxy(
                         tmg[mg2].new_device_info_writer.name)
-                    print "name", tmg[mg2].new_device_info_writer.name
+#                    print "name", tmg[mg2].new_device_info_writer.name
                     mgdp.Configuration = json.dumps(tmpcf)
                     self.assertTrue(not lrs.isMntGrpUpdated())
                     self.assertTrue(not lrs.isMntGrpUpdated())
@@ -2413,8 +2413,8 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
 
         self.maxDiff = None
         self.tearDown()
-        print "DOWN"
-        print "UP"
+#        print "DOWN"
+#        print "UP"
         try:
             for j in range(10):
                 self.setUp()
@@ -2452,15 +2452,15 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                              i for i in range(1, 37)])
 
                 try:
-                    print "SIMP2 SETUP"
+#                    print "SIMP2 SETUP"
                     simp2.setUp()
 
                     # create mntgrps
 
                     for i, mg in enumerate(mgs):
-                        print "OPEN RS"
+#                        print "OPEN RS"
                         ors = self.openRecSelector()
-                        print "OPEN RS END"
+#                        print "OPEN RS END"
                         ors.configDevice = val["ConfigDevice"]
                         ors.door = val["Door"]
                         ors.mntGrp = mg
@@ -2488,10 +2488,10 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                             myct = ("ctrl_%s" % tm).replace("_", "/")
                             timers[myct] = tm
                             ctrls.append(myct)
-                        print "TIMERSL", tms
-                        print "TIMERSD", timers
+#                        print "TIMERSL", tms
+#                        print "TIMERSD", timers
                         ltimers[mg] = timers.values()
-                        print "LTIMER", ltimers[mg]
+#                        print "LTIMER", ltimers[mg]
 
                         for ds, vl in self.smychsXX.items():
                             if vl:
@@ -2776,7 +2776,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                         for tm in ltimers[mg]:
                             if tm in lhe2[mg]:
                                 if tm in adss[mg].keys():
-                                    print "DES", tm
+#                                    print "DES", tm
                                     adss[mg][tm] = False
 
                         jpcnf = ors.updateMntGrp()
@@ -2927,7 +2927,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                         ors.profileConfiguration = str(json.dumps({}))
                         ors.configDevice = val["ConfigDevice"]
                         ors.door = val["Door"]
-                        print "MG", mg
+#                        print "MG", mg
                         ors.mntGrp = mg
                         ors.fetchProfile()
                         mp[mg] = json.loads(ors.profileConfiguration)
@@ -2952,7 +2952,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                         self.assertEqual(
                             set(json.loads(mp[mg]["PreselectingDataSources"])),
                             set(aadss[mg]))
-                        print "PDS1", set(aadss[mg])
+#                        print "PDS1", set(aadss[mg])
                         self.assertEqual(
                             set(json.loads(mp[mg]["UnplottedComponents"])),
                             set(lhe2[mg]))
@@ -2963,7 +2963,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                         self.assertEqual(
                             json.loads(mp[mg]["Timer"]), ltimers[mg])
                         self.assertEqual(mp[mg]["MntGrp"], mg)
-                        print "WWWMG", mg
+#                        print "WWWMG", mg
                         self.compareToDumpJSON(
                             ors,
                             ["DataSourceSelection",
@@ -2973,7 +2973,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
 
                     # check profile commands
                     mg1, mg2, mg3, mg4 = tuple(self._rnd.sample(mgs, 4))
-                    print "MGS", mg1, mg2, mg3, mg4
+#                    print "MGS", mg1, mg2, mg3, mg4
                     ors.profileConfiguration = str(json.dumps(mp[mg1]))
                     self.compareToDumpJSON(
                         ors,
@@ -3045,7 +3045,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                         set(json.loads(lmp["Timer"])), set(ltimers[mg1]))
                     self.assertEqual(lmp["MntGrp"], mg1)
 
-                    print "MGS", mg1, mg2, mg3, mg4
+#                    print "MGS", mg1, mg2, mg3, mg4
 
                     # import mntgrp another defined by selector MntGrp
                     lrs.mntGrp = mg2
@@ -3065,7 +3065,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                     ltmpcf = json.loads(lrs.mntGrpConfiguration())
 #                    self.myAssertDict(tmpcf1, ltmpcf)
                     self.myAssertDict(tmpcf2, ltmpcf)
-                    print "RSmg2",
+#                    print "RSmg2",
                     ors.profileConfiguration = str(json.dumps(mp[mg2]))
                     self.compareToDumpJSON(
                         ors,
@@ -3172,9 +3172,9 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                                     if tm in llhe:
                                         llhe.remove(tm)
 
-                    print "T1", json.loads(mp[mg1]["Timer"])
-                    print "T2", json.loads(mp[mg2]["Timer"])
-                    print "LT", json.loads(lmp["Timer"])
+#                    print "T1", json.loads(mp[mg1]["Timer"])
+#                    print "T2", json.loads(mp[mg2]["Timer"])
+#                    print "LT", json.loads(lmp["Timer"])
                     # ???
                     self.myAssertDict(
                         json.loads(lmp["DataSourceSelection"]), ladss)
@@ -3196,7 +3196,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                     tmpcf['label'] = mg2
                     mgdp = PyTango.DeviceProxy(
                         tmg[mg2].new_device_info_writer.name)
-                    print "name", tmg[mg2].new_device_info_writer.name
+#                    print "name", tmg[mg2].new_device_info_writer.name
                     mgdp.Configuration = json.dumps(tmpcf)
                     self.assertTrue(not lrs.isMntGrpUpdated())
                     self.assertTrue(not lrs.isMntGrpUpdated())
@@ -4004,7 +4004,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
             cnf["ComponentPreselection"] = json.dumps(acps)
             cnf["ComponentSelection"] = json.dumps(cps)
             rs.profileConfiguration = json.dumps(cnf)
-            print "CPS", rs.components
+#            print "CPS", rs.components
 
             res = rs.componentClientSources([])
             res = json.loads(
@@ -4210,7 +4210,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
         }
         dname = "__dynamic_component__"
         for lb, ds in dsdict.items():
-            print ds
+#            print ds
             cpname = rs.createDynamicComponent(["", str(json.dumps(ds))])
             comp = self._cf.dp.Components([cpname])[0]
             self.assertEqual(cps[lb], comp)
@@ -4243,7 +4243,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
             '</group>\n</group>\n</definition>\n',
         }
         dname = "__dynamic_component__"
-        for tp, nxstp in self.__npTn.items():
+        for tp, nxstp in self._npTn.items():
             cpname = rs.createDynamicComponent([
                 "", str(json.dumps([{"name": "ds1", "dtype": tp}]))])
             comp = self._cf.dp.Components([cpname])[0]
@@ -4364,13 +4364,13 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
             for i, ar in enumerate(arr):
                 if '/' in ar["full_name"]:
                     db.put_device_alias(ar["full_name"], ar["name"])
-                for tp, nxstp in self.__npTn.items():
+                for tp, nxstp in self._npTn.items():
                     lbl = self.getRandomName(20)
                     ms = [self._rnd.randint(0, 3000)
                           for _ in range(self._rnd.randint(0, 3))]
                     ms2 = [self._rnd.randint(0, 3000)
                            for _ in range(self._rnd.randint(0, 3))]
-                    tmptp = self._rnd.choice(self.__npTn.keys())
+                    tmptp = self._rnd.choice(self._npTn.keys())
                     cnf = dict(cnfdef)
                     labels = {}
                     paths = {}
@@ -4380,42 +4380,42 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
 
                     if i == 0:
                         cnf["DefaultDynamicLinks"] = False
-                        cnf["DefaultDynamicPath"] = self.__defaultpath
+                        cnf["DefaultDynamicPath"] = self._defaultpath
                     elif i == 1:
                         cnf["DefaultDynamicLinks"] = True
-                        cnf["DefaultDynamicPath"] = self.__defaultpath
+                        cnf["DefaultDynamicPath"] = self._defaultpath
                     elif i == 2:
                         links = {ar["name"]: False}
                     elif i == 3:
                         links = {ar["name"]: True}
                     elif i == 4:
                         cnf["DefaultDynamicLinks"] = True
-                        cnf["DefaultDynamicPath"] = self.__defaultpath
+                        cnf["DefaultDynamicPath"] = self._defaultpath
                         links = {ar["name"]: False}
                     elif i == 5:
                         cnf["DefaultDynamicLinks"] = False
-                        cnf["DefaultDynamicPath"] = self.__defaultpath
+                        cnf["DefaultDynamicPath"] = self._defaultpath
                         links = {ar["name"]: True}
                     elif i == 6:
                         cnf["DefaultDynamicLinks"] = False
-                        cnf["DefaultDynamicPath"] = self.__defaultpath
+                        cnf["DefaultDynamicPath"] = self._defaultpath
                         links = {ar["full_name"]: True}
                         shapes = {ar["name"]: ms2}
                     elif i == 7:
                         types = {ar["name"]: tmptp}
                     elif i == 8:
                         cnf["DefaultDynamicLinks"] = True
-                        cnf["DefaultDynamicPath"] = self.__defaultpath
+                        cnf["DefaultDynamicPath"] = self._defaultpath
                         labels = {ar["name"]: lbl}
                         links = {lbl: False}
                     elif i == 9:
                         cnf["DefaultDynamicLinks"] = False
-                        cnf["DefaultDynamicPath"] = self.__defaultpath
+                        cnf["DefaultDynamicPath"] = self._defaultpath
                         labels = {ar["name"]: lbl}
                         links = {lbl: True}
                     elif i == 10:
                         cnf["DefaultDynamicLinks"] = False
-                        cnf["DefaultDynamicPath"] = self.__defaultpath
+                        cnf["DefaultDynamicPath"] = self._defaultpath
                         labels = {ar["name"]: lbl}
                         links = {ar["full_name"]: True}
                         shapes = {lbl: ms2}
@@ -4432,7 +4432,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                             "shape": shapes
                         }
                     )
-                    print "I = ", i
+#                    print "I = ", i
                     rs.profileConfiguration = str(json.dumps(cnf))
                     cpname = rs.createDynamicComponent([
                         "", str(json.dumps([{"name": ar["full_name"],
@@ -4527,8 +4527,8 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
             for i, ar in enumerate(arr):
                 if '/' in ar["full_name"]:
                     db.put_device_alias(ar["full_name"], ar["name"])
-                print "I = ", i
-                for tp, nxstp in self.__npTn.items():
+#                print "I = ", i
+                for tp, nxstp in self._npTn.items():
                     cnf = dict(cnfdef)
                     labels = {}
                     paths = {}
@@ -4567,7 +4567,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                           for _ in range(self._rnd.randint(0, 3))]
                     ms2 = [self._rnd.randint(0, 3000)
                            for _ in range(self._rnd.randint(0, 3))]
-                    tmptp = self._rnd.choice(self.__npTn.keys())
+                    tmptp = self._rnd.choice(self._npTn.keys())
                     if i == 0:
                         cnf["DefaultDynamicLinks"] = False
                         cnf["DefaultDynamicPath"] = mypath
@@ -4605,7 +4605,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                             "shape": shapes
                         }
                     )
-                    print "I = ", i
+#                    print "I = ", i
                     rs.profileConfiguration = str(json.dumps(cnf))
                     cpname = rs.createDynamicComponent([
                         "", str(json.dumps([{"name": ar["full_name"],
@@ -4668,9 +4668,9 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
 #                        print "FIRST"
                     else:
                         if i % 4 < 2:
-                            lk = link % (ds, self.__defaultpath, ds)
+                            lk = link % (ds, self._defaultpath, ds)
                         else:
-                            lk = link % (fieldname.lower(), self.__defaultpath,
+                            lk = link % (fieldname.lower(), self._defaultpath,
                                          fieldname.lower())
                         mycps = cps["shapetype"] % (
                             fd,
@@ -4768,7 +4768,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
             simps4.dp.DataSource = arr[3]["source"]
 
             for i, ar in enumerate(arr):
-                print "I = ", i, ar["name"]
+#                print "I = ", i, ar["name"]
                 db.put_device_alias(ar["full_name"], ar["name"])
 
                 cpname = rs.createDynamicComponent([
@@ -4784,7 +4784,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                 else:
                     mycps += dsclient % (ar["name"], ar["full_name"])
                 mycps += fieldend + groupend + groupend
-                mycps += link % (ar["name"], self.__defaultpath,
+                mycps += link % (ar["name"], self._defaultpath,
                                  ar["name"])
                 mycps += groupend + defend
 
@@ -5005,7 +5005,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
             cnf["DataSourceSelection"] = json.dumps(
                 dict((dd, True) for dd in ds))
             rs.profileConfiguration = str(json.dumps(cnf))
-            print rs.selectedDataSources()
+            _ =  rs.selectedDataSources()
             cpname = rs.createDynamicComponent([])
             comp = self._cf.dp.Components([cpname])[0]
             self.assertEqual(cps["empty"], comp)
@@ -5039,7 +5039,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
             '</group>\n</group>\n</definition>\n',
         }
         dname = "__dynamic_component__"
-        for tp, nxstp in self.__npTn.items():
+        for tp, nxstp in self._npTn.items():
             cpname = rs.createDynamicComponent([
                 str(json.dumps(["ds1"]))])
 
@@ -5075,7 +5075,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
             '</group>\n</group>\n</definition>\n',
         }
         dname = "__dynamic_component__"
-        for tp, nxstp in self.__npTn.items():
+        for tp, nxstp in self._npTn.items():
             cpname = rs.createDynamicComponent([
                 "", "",
                 str(json.dumps(["ds1"]))])
@@ -5112,7 +5112,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
             '</group>\n</group>\n</definition>\n',
         }
         dname = "__dynamic_component__"
-        for tp, nxstp in self.__npTn.items():
+        for tp, nxstp in self._npTn.items():
             cnf = dict(cnfdef)
             cnf["ChannelProperties"] = json.dumps(
                 {
@@ -5162,7 +5162,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
             '</group>\n</group>\n</definition>\n',
         }
         dname = "__dynamic_component__"
-        for tp, nxstp in self.__npTn.items():
+        for tp, nxstp in self._npTn.items():
             cnf = dict(cnfdef)
             cnf["ChannelProperties"] = json.dumps(
                 {
@@ -5361,13 +5361,13 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
         db = PyTango.Database()
         try:
             for i, ar in enumerate(arr):
-                for tp, nxstp in self.__npTn.items():
+                for tp, nxstp in self._npTn.items():
                     lbl = self.getRandomName(20)
                     ms = [self._rnd.randint(0, 3000)
                           for _ in range(self._rnd.randint(0, 3))]
                     ms2 = [self._rnd.randint(0, 3000)
                            for _ in range(self._rnd.randint(0, 3))]
-                    tmptp = self._rnd.choice(self.__npTn.keys())
+                    tmptp = self._rnd.choice(self._npTn.keys())
                     cnf = dict(cnfdef)
                     labels = {}
                     paths = {}
@@ -5377,12 +5377,12 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
 
                     if i == 0:
                         cnf["DefaultDynamicLinks"] = False
-                        cnf["DefaultDynamicPath"] = self.__defaultpath
+                        cnf["DefaultDynamicPath"] = self._defaultpath
                         types = {ar["name"]: nxstp}
                         shapes = {ar["name"]: ms}
                     elif i == 1:
                         cnf["DefaultDynamicLinks"] = True
-                        cnf["DefaultDynamicPath"] = self.__defaultpath
+                        cnf["DefaultDynamicPath"] = self._defaultpath
                         types = {ar["name"]: nxstp}
                         shapes = {ar["name"]: ms}
                     elif i == 2:
@@ -5395,19 +5395,19 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                         shapes = {ar["name"]: ms}
                     elif i == 4:
                         cnf["DefaultDynamicLinks"] = True
-                        cnf["DefaultDynamicPath"] = self.__defaultpath
+                        cnf["DefaultDynamicPath"] = self._defaultpath
                         links = {ar["name"]: False}
                         types = {ar["name"]: nxstp}
                         shapes = {ar["name"]: ms}
                     elif i == 5:
                         cnf["DefaultDynamicLinks"] = False
-                        cnf["DefaultDynamicPath"] = self.__defaultpath
+                        cnf["DefaultDynamicPath"] = self._defaultpath
                         links = {ar["name"]: True}
                         types = {ar["name"]: nxstp}
                         shapes = {ar["name"]: ms}
                     elif i == 6:
                         cnf["DefaultDynamicLinks"] = False
-                        cnf["DefaultDynamicPath"] = self.__defaultpath
+                        cnf["DefaultDynamicPath"] = self._defaultpath
                         links = {"dssd": True}
                         types = {ar["name"]: nxstp}
                         shapes = {ar["name"]: ms}
@@ -5418,13 +5418,13 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                     elif i == 8:
                         pass
                         cnf["DefaultDynamicLinks"] = False
-                        cnf["DefaultDynamicPath"] = self.__defaultpath
+                        cnf["DefaultDynamicPath"] = self._defaultpath
                         labels = {ar["name"]: lbl}
                         types = {ar["name"]: nxstp}
                         shapes = {ar["name"]: ms}
                     elif i == 9:
                         cnf["DefaultDynamicLinks"] = True
-                        cnf["DefaultDynamicPath"] = self.__defaultpath
+                        cnf["DefaultDynamicPath"] = self._defaultpath
                         labels = {ar["name"]: lbl}
                         types = {ar["name"]: nxstp}
                         shapes = {ar["name"]: ms}
@@ -5440,21 +5440,21 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                         shapes = {ar["name"]: ms}
                     elif i == 12:
                         cnf["DefaultDynamicLinks"] = True
-                        cnf["DefaultDynamicPath"] = self.__defaultpath
+                        cnf["DefaultDynamicPath"] = self._defaultpath
                         labels = {ar["name"]: lbl}
                         links = {lbl: False}
                         types = {ar["name"]: nxstp}
                         shapes = {ar["name"]: ms}
                     elif i == 13:
                         cnf["DefaultDynamicLinks"] = False
-                        cnf["DefaultDynamicPath"] = self.__defaultpath
+                        cnf["DefaultDynamicPath"] = self._defaultpath
                         labels = {ar["name"]: lbl}
                         links = {lbl: True}
                         types = {ar["name"]: nxstp}
                         shapes = {ar["name"]: ms}
                     elif i == 14:
                         cnf["DefaultDynamicLinks"] = False
-                        cnf["DefaultDynamicPath"] = self.__defaultpath
+                        cnf["DefaultDynamicPath"] = self._defaultpath
                         labels = {ar["name"]: lbl}
                         links = {"dssd": True}
                         types = {ar["name"]: nxstp}
@@ -5473,7 +5473,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                             "shape": shapes
                         }
                     )
-                    print "I = ", i
+#                    print "I = ", i
                     rs.profileConfiguration = str(json.dumps(cnf))
                     cpname = rs.createDynamicComponent([
                         str(json.dumps([ar["name"]]))])
@@ -5555,14 +5555,14 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
         db = PyTango.Database()
         try:
             for i, ar in enumerate(arr):
-                for tp, nxstp in self.__npTn.items():
+                for tp, nxstp in self._npTn.items():
                     lbl = self.getRandomName(20)
 #                    print "TP = ", tp, i
                     ms = [self._rnd.randint(0, 3000)
                           for _ in range(self._rnd.randint(0, 3))]
                     ms2 = [self._rnd.randint(0, 3000)
                            for _ in range(self._rnd.randint(0, 3))]
-                    tmptp = self._rnd.choice(self.__npTn.keys())
+                    tmptp = self._rnd.choice(self._npTn.keys())
                     cnf = dict(cnfdef)
                     labels = {}
                     paths = {}
@@ -5572,12 +5572,12 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
 
                     if i == 0:
                         cnf["DefaultDynamicLinks"] = False
-                        cnf["DefaultDynamicPath"] = self.__defaultpath
+                        cnf["DefaultDynamicPath"] = self._defaultpath
                         types = {ar["name"]: nxstp}
                         shapes = {ar["name"]: ms}
                     elif i == 1:
                         cnf["DefaultDynamicLinks"] = True
-                        cnf["DefaultDynamicPath"] = self.__defaultpath
+                        cnf["DefaultDynamicPath"] = self._defaultpath
                         types = {ar["name"]: nxstp}
                         shapes = {ar["name"]: ms}
                     elif i == 2:
@@ -5590,19 +5590,19 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                         shapes = {ar["name"]: ms}
                     elif i == 4:
                         cnf["DefaultDynamicLinks"] = True
-                        cnf["DefaultDynamicPath"] = self.__defaultpath
+                        cnf["DefaultDynamicPath"] = self._defaultpath
                         links = {ar["name"]: False}
                         types = {ar["name"]: nxstp}
                         shapes = {ar["name"]: ms}
                     elif i == 5:
                         cnf["DefaultDynamicLinks"] = False
-                        cnf["DefaultDynamicPath"] = self.__defaultpath
+                        cnf["DefaultDynamicPath"] = self._defaultpath
                         links = {ar["name"]: True}
                         types = {ar["name"]: nxstp}
                         shapes = {ar["name"]: ms}
                     elif i == 6:
                         cnf["DefaultDynamicLinks"] = False
-                        cnf["DefaultDynamicPath"] = self.__defaultpath
+                        cnf["DefaultDynamicPath"] = self._defaultpath
                         links = {"dssd": True}
                         types = {ar["name"]: nxstp}
                         shapes = {ar["name"]: ms}
@@ -5613,13 +5613,13 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                     elif i == 8:
                         pass
                         cnf["DefaultDynamicLinks"] = False
-                        cnf["DefaultDynamicPath"] = self.__defaultpath
+                        cnf["DefaultDynamicPath"] = self._defaultpath
                         labels = {ar["name"]: lbl}
                         types = {ar["name"]: nxstp}
                         shapes = {ar["name"]: ms}
                     elif i == 9:
                         cnf["DefaultDynamicLinks"] = True
-                        cnf["DefaultDynamicPath"] = self.__defaultpath
+                        cnf["DefaultDynamicPath"] = self._defaultpath
                         labels = {ar["name"]: lbl}
                         types = {ar["name"]: nxstp}
                         shapes = {ar["name"]: ms}
@@ -5635,21 +5635,21 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                         shapes = {ar["name"]: ms}
                     elif i == 12:
                         cnf["DefaultDynamicLinks"] = True
-                        cnf["DefaultDynamicPath"] = self.__defaultpath
+                        cnf["DefaultDynamicPath"] = self._defaultpath
                         labels = {ar["name"]: lbl}
                         links = {lbl: False}
                         types = {ar["name"]: nxstp}
                         shapes = {ar["name"]: ms}
                     elif i == 13:
                         cnf["DefaultDynamicLinks"] = False
-                        cnf["DefaultDynamicPath"] = self.__defaultpath
+                        cnf["DefaultDynamicPath"] = self._defaultpath
                         labels = {ar["name"]: lbl}
                         links = {lbl: True}
                         types = {ar["name"]: nxstp}
                         shapes = {ar["name"]: ms}
                     elif i == 14:
                         cnf["DefaultDynamicLinks"] = False
-                        cnf["DefaultDynamicPath"] = self.__defaultpath
+                        cnf["DefaultDynamicPath"] = self._defaultpath
                         labels = {ar["name"]: lbl}
                         links = {"dssd": True}
                         types = {ar["name"]: nxstp}
@@ -5668,7 +5668,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                             "shape": shapes
                         }
                     )
-                    print "I = ", i
+#                    print "I = ", i
                     rs.profileConfiguration = str(json.dumps(cnf))
                     cpname = rs.createDynamicComponent([
                         "", "",
@@ -5743,10 +5743,10 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
 
                 if i == 0:
                     cnf["DefaultDynamicLinks"] = False
-                    cnf["DefaultDynamicPath"] = self.__defaultpath
+                    cnf["DefaultDynamicPath"] = self._defaultpath
                 elif i == 1:
                     cnf["DefaultDynamicLinks"] = True
-                    cnf["DefaultDynamicPath"] = self.__defaultpath
+                    cnf["DefaultDynamicPath"] = self._defaultpath
                 elif i == 2:
                     links = {ds: False}
                 elif i == 3:
@@ -5777,7 +5777,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
 
                 mycps += mstr
                 mycps += fieldend + groupend + groupend
-                lk = link % (ds.lower(), self.__defaultpath,
+                lk = link % (ds.lower(), self._defaultpath,
                              ds.lower())
                 mycps += lk if i % 2 else ""
                 mycps += groupend + defend
@@ -5867,7 +5867,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                 else:
                     mycps += dsclient % (ar["name"], ar["name"])
                 mycps += fieldend + groupend + groupend
-                mycps += link % (ar["name"], self.__defaultpath,
+                mycps += link % (ar["name"], self._defaultpath,
                                  ar["name"])
                 mycps += groupend + defend
 
@@ -5964,7 +5964,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                 else:
                     mycps += dsclient % (ar["name"], ar["name"])
                 mycps += fieldend + groupend + groupend
-                mycps += link % (ar["name"], self.__defaultpath,
+                mycps += link % (ar["name"], self._defaultpath,
                                  ar["name"])
                 mycps += groupend + defend
 
@@ -6028,10 +6028,10 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
 
                 if i == 0:
                     cnf["DefaultDynamicLinks"] = False
-                    cnf["DefaultDynamicPath"] = self.__defaultpath
+                    cnf["DefaultDynamicPath"] = self._defaultpath
                 elif i == 1:
                     cnf["DefaultDynamicLinks"] = True
-                    cnf["DefaultDynamicPath"] = self.__defaultpath
+                    cnf["DefaultDynamicPath"] = self._defaultpath
                 elif i == 2:
                     links = {ds: False}
                 elif i == 3:
@@ -6061,7 +6061,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
 
                 mycps += mstr
                 mycps += fieldend + groupend + groupend
-                lk = link % (ds.lower(), self.__defaultpath,
+                lk = link % (ds.lower(), self._defaultpath,
                              ds.lower())
                 mycps += lk if i % 2 else ""
                 mycps += groupend + defend
@@ -6116,15 +6116,15 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
 
                 if i == 0:
                     cnf["DefaultDynamicLinks"] = False
-                    cnf["DefaultDynamicPath"] = self.__defaultpath
+                    cnf["DefaultDynamicPath"] = self._defaultpath
                 elif i == 1:
                     cnf["DefaultDynamicLinks"] = True
-                    cnf["DefaultDynamicPath"] = self.__defaultpath
+                    cnf["DefaultDynamicPath"] = self._defaultpath
                 elif i == 2:
                     links = {ds: False}
                 elif i == 3:
                     links = {ds: True}
-                print "I = ", i
+#                print "I = ", i
                 cnf["ChannelProperties"] = json.dumps(
                     {
                         "label": labels,
@@ -6142,7 +6142,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                 indom = xml.dom.minidom.parseString(dsxml)
                 dss = indom.getElementsByTagName("datasource")
                 if not ds.startswith("client_") and sds[1] != 'encoded':
-                    nxstype = self.__npTn2[tp]
+                    nxstype = self._npTn2[tp]
                 else:
                     nxstype = 'NX_CHAR'
                 mycps = defbg + groupbg + fieldbg % (
@@ -6158,7 +6158,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
 
                 mycps += mstr
                 mycps += fieldend + groupend + groupend
-                lk = link % (ds.lower(), self.__defaultpath,
+                lk = link % (ds.lower(), self._defaultpath,
                              ds.lower())
                 mycps += lk if i % 2 else ""
                 mycps += groupend + defend
@@ -6213,15 +6213,15 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
 
                 if i == 0:
                     cnf["DefaultDynamicLinks"] = False
-                    cnf["DefaultDynamicPath"] = self.__defaultpath
+                    cnf["DefaultDynamicPath"] = self._defaultpath
                 elif i == 1:
                     cnf["DefaultDynamicLinks"] = True
-                    cnf["DefaultDynamicPath"] = self.__defaultpath
+                    cnf["DefaultDynamicPath"] = self._defaultpath
                 elif i == 2:
                     links = {ds: False}
                 elif i == 3:
                     links = {ds: True}
-                print "I = ", i
+#                print "I = ", i
                 cnf["ChannelProperties"] = json.dumps(
                     {
                         "label": labels,
@@ -6239,7 +6239,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                 indom = xml.dom.minidom.parseString(dsxml)
                 dss = indom.getElementsByTagName("datasource")
                 if not ds.startswith("client_") and sds[1] != 'encoded':
-                    nxstype = self.__npTn2[tp]
+                    nxstype = self._npTn2[tp]
                 else:
                     nxstype = 'NX_CHAR'
                 mycps = defbg + groupbg + fieldbg % (
@@ -6255,7 +6255,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
 
                 mycps += mstr
                 mycps += fieldend + groupend + groupend
-                lk = link % (ds.lower(), self.__defaultpath,
+                lk = link % (ds.lower(), self._defaultpath,
                              ds.lower())
                 mycps += lk if i % 2 else ""
                 mycps += groupend + defend
@@ -6309,10 +6309,10 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
 
                 if i == 0:
                     cnf["DefaultDynamicLinks"] = False
-                    cnf["DefaultDynamicPath"] = self.__defaultpath
+                    cnf["DefaultDynamicPath"] = self._defaultpath
                 elif i == 1:
                     cnf["DefaultDynamicLinks"] = True
-                    cnf["DefaultDynamicPath"] = self.__defaultpath
+                    cnf["DefaultDynamicPath"] = self._defaultpath
                 elif i == 2:
                     links = {ds: False}
                 elif i == 3:
@@ -6338,7 +6338,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                 indom = xml.dom.minidom.parseString(dsxml)
                 dss = indom.getElementsByTagName("datasource")
                 if not ds.startswith("client_") and sds[1] != 'encoded':
-                    nxstype = self.__npTn2[tp]
+                    nxstype = self._npTn2[tp]
                 else:
                     nxstype = 'NX_CHAR'
                 mycps = defbg + groupbg + fieldbg % (
@@ -6354,7 +6354,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
 
                 mycps += mstr
                 mycps += fieldend + groupend + groupend
-                lk = link % (ds.lower(), self.__defaultpath,
+                lk = link % (ds.lower(), self._defaultpath,
                              ds.lower())
                 mycps += lk if i % 2 else ""
                 mycps += groupend + defend
@@ -6394,7 +6394,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
         dimend = '</dimensions>\n'
 
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
-        for i, nxstp in enumerate(self.__npTn.values()):
+        for i, nxstp in enumerate(self._npTn.values()):
             for ds, dsxml in self.smydss.items():
                 ms = self.smydsspar[ds]
                 ms2 = [self._rnd.randint(0, 3000)
@@ -6411,12 +6411,12 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
 
                 if i == 0:
                     cnf["DefaultDynamicLinks"] = False
-                    cnf["DefaultDynamicPath"] = self.__defaultpath
+                    cnf["DefaultDynamicPath"] = self._defaultpath
                     types = {ds: nxstp}
                     shapes = {ds: ms2}
                 elif i == 1:
                     cnf["DefaultDynamicLinks"] = True
-                    cnf["DefaultDynamicPath"] = self.__defaultpath
+                    cnf["DefaultDynamicPath"] = self._defaultpath
                     types = {ds: nxstp}
                     shapes = {ds: ms2}
                 elif i == 2:
@@ -6429,19 +6429,19 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                     shapes = {ds: ms2}
                 elif i == 4:
                     cnf["DefaultDynamicLinks"] = True
-                    cnf["DefaultDynamicPath"] = self.__defaultpath
+                    cnf["DefaultDynamicPath"] = self._defaultpath
                     links = {ds: False}
                     types = {ds: nxstp}
                     shapes = {ds: ms2}
                 elif i == 5:
                     cnf["DefaultDynamicLinks"] = False
-                    cnf["DefaultDynamicPath"] = self.__defaultpath
+                    cnf["DefaultDynamicPath"] = self._defaultpath
                     links = {ds: True}
                     types = {ds: nxstp}
                     shapes = {ds: ms2}
                 elif i == 6:
                     cnf["DefaultDynamicLinks"] = False
-                    cnf["DefaultDynamicPath"] = self.__defaultpath
+                    cnf["DefaultDynamicPath"] = self._defaultpath
                     links = {"dssd": True}
                     types = {ds: nxstp}
                     shapes = {ds: ms2}
@@ -6452,13 +6452,13 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                 elif i == 8:
                     pass
                     cnf["DefaultDynamicLinks"] = False
-                    cnf["DefaultDynamicPath"] = self.__defaultpath
+                    cnf["DefaultDynamicPath"] = self._defaultpath
                     labels = {ds: lbl}
                     types = {ds: nxstp}
                     shapes = {ds: ms2}
                 elif i == 9:
                     cnf["DefaultDynamicLinks"] = True
-                    cnf["DefaultDynamicPath"] = self.__defaultpath
+                    cnf["DefaultDynamicPath"] = self._defaultpath
                     labels = {ds: lbl}
                     types = {ds: nxstp}
                     shapes = {ds: ms2}
@@ -6474,21 +6474,21 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                     shapes = {ds: ms2}
                 elif i == 12:
                     cnf["DefaultDynamicLinks"] = True
-                    cnf["DefaultDynamicPath"] = self.__defaultpath
+                    cnf["DefaultDynamicPath"] = self._defaultpath
                     labels = {ds: lbl}
                     links = {lbl: False}
                     types = {ds: nxstp}
                     shapes = {ds: ms2}
                 elif i == 13:
                     cnf["DefaultDynamicLinks"] = False
-                    cnf["DefaultDynamicPath"] = self.__defaultpath
+                    cnf["DefaultDynamicPath"] = self._defaultpath
                     labels = {ds: lbl}
                     links = {lbl: True}
                     types = {ds: nxstp}
                     shapes = {ds: ms2}
                 elif i == 14:
                     cnf["DefaultDynamicLinks"] = False
-                    cnf["DefaultDynamicPath"] = self.__defaultpath
+                    cnf["DefaultDynamicPath"] = self._defaultpath
                     labels = {ds: lbl}
                     links = {"dssd": True}
                     types = {ds: nxstp}
@@ -6507,7 +6507,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                         "shape": shapes
                     }
                 )
-                print "I = ", i
+#                print "I = ", i
                 cnf["DataSourceSelection"] = json.dumps({ds: True})
                 rs.profileConfiguration = str(json.dumps(cnf))
                 cpname = rs.createDynamicComponent([])
@@ -6532,7 +6532,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
 
                 mycps += mstr
                 mycps += fieldend + groupend + groupend
-                lk = link % (ds.lower(), self.__defaultpath,
+                lk = link % (ds.lower(), self._defaultpath,
                              ds.lower())
                 mycps += lk if i % 2 else ""
                 mycps += groupend + defend
@@ -6572,7 +6572,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
         dimend = '</dimensions>\n'
 
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
-        for i, nxstp in enumerate(self.__npTn.values()):
+        for i, nxstp in enumerate(self._npTn.values()):
             for ds, dsxml in self.smydss.items():
                 ms = self.smydsspar[ds]
                 ms2 = [self._rnd.randint(0, 3000)
@@ -6589,12 +6589,12 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
 
                 if i == 0:
                     cnf["DefaultDynamicLinks"] = False
-                    cnf["DefaultDynamicPath"] = self.__defaultpath
+                    cnf["DefaultDynamicPath"] = self._defaultpath
                     types = {ds: nxstp}
                     shapes = {ds: ms2}
                 elif i == 1:
                     cnf["DefaultDynamicLinks"] = True
-                    cnf["DefaultDynamicPath"] = self.__defaultpath
+                    cnf["DefaultDynamicPath"] = self._defaultpath
                     types = {ds: nxstp}
                     shapes = {ds: ms2}
                 elif i == 2:
@@ -6607,19 +6607,19 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                     shapes = {ds: ms2}
                 elif i == 4:
                     cnf["DefaultDynamicLinks"] = True
-                    cnf["DefaultDynamicPath"] = self.__defaultpath
+                    cnf["DefaultDynamicPath"] = self._defaultpath
                     links = {ds: False}
                     types = {ds: nxstp}
                     shapes = {ds: ms2}
                 elif i == 5:
                     cnf["DefaultDynamicLinks"] = False
-                    cnf["DefaultDynamicPath"] = self.__defaultpath
+                    cnf["DefaultDynamicPath"] = self._defaultpath
                     links = {ds: True}
                     types = {ds: nxstp}
                     shapes = {ds: ms2}
                 elif i == 6:
                     cnf["DefaultDynamicLinks"] = False
-                    cnf["DefaultDynamicPath"] = self.__defaultpath
+                    cnf["DefaultDynamicPath"] = self._defaultpath
                     links = {"dssd": True}
                     types = {ds: nxstp}
                     shapes = {ds: ms2}
@@ -6630,13 +6630,13 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                 elif i == 8:
                     pass
                     cnf["DefaultDynamicLinks"] = False
-                    cnf["DefaultDynamicPath"] = self.__defaultpath
+                    cnf["DefaultDynamicPath"] = self._defaultpath
                     labels = {ds: lbl}
                     types = {ds: nxstp}
                     shapes = {ds: ms2}
                 elif i == 9:
                     cnf["DefaultDynamicLinks"] = True
-                    cnf["DefaultDynamicPath"] = self.__defaultpath
+                    cnf["DefaultDynamicPath"] = self._defaultpath
                     labels = {ds: lbl}
                     types = {ds: nxstp}
                     shapes = {ds: ms2}
@@ -6652,21 +6652,21 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                     shapes = {ds: ms2}
                 elif i == 12:
                     cnf["DefaultDynamicLinks"] = True
-                    cnf["DefaultDynamicPath"] = self.__defaultpath
+                    cnf["DefaultDynamicPath"] = self._defaultpath
                     labels = {ds: lbl}
                     links = {lbl: False}
                     types = {ds: nxstp}
                     shapes = {ds: ms2}
                 elif i == 13:
                     cnf["DefaultDynamicLinks"] = False
-                    cnf["DefaultDynamicPath"] = self.__defaultpath
+                    cnf["DefaultDynamicPath"] = self._defaultpath
                     labels = {ds: lbl}
                     links = {lbl: True}
                     types = {ds: nxstp}
                     shapes = {ds: ms2}
                 elif i == 14:
                     cnf["DefaultDynamicLinks"] = False
-                    cnf["DefaultDynamicPath"] = self.__defaultpath
+                    cnf["DefaultDynamicPath"] = self._defaultpath
                     labels = {ds: lbl}
                     links = {"dssd": True}
                     types = {ds: nxstp}
@@ -6685,7 +6685,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                         "shape": shapes
                     }
                 )
-                print "I = ", i
+#                print "I = ", i
                 rs.profileConfiguration = str(json.dumps(cnf))
                 cpname = rs.createDynamicComponent([
                     str(json.dumps([ds]))])
@@ -6710,7 +6710,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
 
                 mycps += mstr
                 mycps += fieldend + groupend + groupend
-                lk = link % (ds.lower(), self.__defaultpath,
+                lk = link % (ds.lower(), self._defaultpath,
                              ds.lower())
                 mycps += lk if i % 2 else ""
                 mycps += groupend + defend
@@ -6750,7 +6750,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
         dimend = '</dimensions>\n'
 
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
-        for i, nxstp in enumerate(self.__npTn.values()):
+        for i, nxstp in enumerate(self._npTn.values()):
             for ds, dsxml in self.smydss.items():
                 ms = self.smydsspar[ds]
                 ms2 = [self._rnd.randint(0, 3000)
@@ -6766,12 +6766,12 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                 shapes = {}
                 if i == 0:
                     cnf["DefaultDynamicLinks"] = False
-                    cnf["DefaultDynamicPath"] = self.__defaultpath
+                    cnf["DefaultDynamicPath"] = self._defaultpath
                     types = {ds: nxstp}
                     shapes = {ds: ms2}
                 elif i == 1:
                     cnf["DefaultDynamicLinks"] = True
-                    cnf["DefaultDynamicPath"] = self.__defaultpath
+                    cnf["DefaultDynamicPath"] = self._defaultpath
                     types = {ds: nxstp}
                     shapes = {ds: ms2}
                 elif i == 2:
@@ -6784,19 +6784,19 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                     shapes = {ds: ms2}
                 elif i == 4:
                     cnf["DefaultDynamicLinks"] = True
-                    cnf["DefaultDynamicPath"] = self.__defaultpath
+                    cnf["DefaultDynamicPath"] = self._defaultpath
                     links = {ds: False}
                     types = {ds: nxstp}
                     shapes = {ds: ms2}
                 elif i == 5:
                     cnf["DefaultDynamicLinks"] = False
-                    cnf["DefaultDynamicPath"] = self.__defaultpath
+                    cnf["DefaultDynamicPath"] = self._defaultpath
                     links = {ds: True}
                     types = {ds: nxstp}
                     shapes = {ds: ms2}
                 elif i == 6:
                     cnf["DefaultDynamicLinks"] = False
-                    cnf["DefaultDynamicPath"] = self.__defaultpath
+                    cnf["DefaultDynamicPath"] = self._defaultpath
                     links = {"dssd": True}
                     types = {ds: nxstp}
                     shapes = {ds: ms2}
@@ -6807,13 +6807,13 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                 elif i == 8:
                     pass
                     cnf["DefaultDynamicLinks"] = False
-                    cnf["DefaultDynamicPath"] = self.__defaultpath
+                    cnf["DefaultDynamicPath"] = self._defaultpath
                     labels = {ds: lbl}
                     types = {ds: nxstp}
                     shapes = {ds: ms2}
                 elif i == 9:
                     cnf["DefaultDynamicLinks"] = True
-                    cnf["DefaultDynamicPath"] = self.__defaultpath
+                    cnf["DefaultDynamicPath"] = self._defaultpath
                     labels = {ds: lbl}
                     types = {ds: nxstp}
                     shapes = {ds: ms2}
@@ -6829,21 +6829,21 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                     shapes = {ds: ms2}
                 elif i == 12:
                     cnf["DefaultDynamicLinks"] = True
-                    cnf["DefaultDynamicPath"] = self.__defaultpath
+                    cnf["DefaultDynamicPath"] = self._defaultpath
                     labels = {ds: lbl}
                     links = {lbl: False}
                     types = {ds: nxstp}
                     shapes = {ds: ms2}
                 elif i == 13:
                     cnf["DefaultDynamicLinks"] = False
-                    cnf["DefaultDynamicPath"] = self.__defaultpath
+                    cnf["DefaultDynamicPath"] = self._defaultpath
                     labels = {ds: lbl}
                     links = {lbl: True}
                     types = {ds: nxstp}
                     shapes = {ds: ms2}
                 elif i == 14:
                     cnf["DefaultDynamicLinks"] = False
-                    cnf["DefaultDynamicPath"] = self.__defaultpath
+                    cnf["DefaultDynamicPath"] = self._defaultpath
                     labels = {ds: lbl}
                     links = {"dssd": True}
                     types = {ds: nxstp}
@@ -6862,7 +6862,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                         "shape": shapes
                     }
                 )
-                print "I = ", i
+#                print "I = ", i
                 rs.profileConfiguration = str(json.dumps(cnf))
                 cpname = rs.createDynamicComponent([
                     "", "",
@@ -6885,7 +6885,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
 
                 mycps += mstr
                 mycps += fieldend + groupend + groupend
-                lk = link % (ds.lower(), self.__defaultpath,
+                lk = link % (ds.lower(), self._defaultpath,
                              ds.lower())
                 mycps += lk if i % 2 else ""
                 mycps += groupend + defend
@@ -6926,7 +6926,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
 
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.smydss)])
-        for i, nxstp in enumerate(self.__npTn.values()):
+        for i, nxstp in enumerate(self._npTn.values()):
             for ds, dsxml in self.smydss.items():
                 ms = self.smydsspar[ds]
                 ms2 = [self._rnd.randint(0, 3000)
@@ -6941,12 +6941,12 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                 types = {}
                 shapes = {}
                 if i == 0:
-                    cnf["DefaultDynamicPath"] = self.__defaultpath
+                    cnf["DefaultDynamicPath"] = self._defaultpath
                     types = {ds: nxstp}
                     shapes = {ds: ms2}
                 elif i == 1:
                     cnf["DefaultDynamicLinks"] = True
-                    cnf["DefaultDynamicPath"] = self.__defaultpath
+                    cnf["DefaultDynamicPath"] = self._defaultpath
                     types = {ds: nxstp}
                     shapes = {ds: ms2}
                 elif i == 2:
@@ -6957,17 +6957,17 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                     types = {ds: nxstp}
                     shapes = {ds: ms2}
                 elif i == 4:
-                    cnf["DefaultDynamicPath"] = self.__defaultpath
+                    cnf["DefaultDynamicPath"] = self._defaultpath
                     types = {ds: nxstp}
                     shapes = {ds: ms2}
                 elif i == 5:
                     cnf["DefaultDynamicLinks"] = False
-                    cnf["DefaultDynamicPath"] = self.__defaultpath
+                    cnf["DefaultDynamicPath"] = self._defaultpath
                     links = {ds: True}
                     types = {ds: nxstp}
                     shapes = {ds: ms2}
                 elif i == 6:
-                    cnf["DefaultDynamicPath"] = self.__defaultpath
+                    cnf["DefaultDynamicPath"] = self._defaultpath
                     links = {"dssd": True}
                     types = {ds: nxstp}
                     shapes = {ds: ms2}
@@ -6977,13 +6977,13 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                     shapes = {ds: ms2}
                 elif i == 8:
                     pass
-                    cnf["DefaultDynamicPath"] = self.__defaultpath
+                    cnf["DefaultDynamicPath"] = self._defaultpath
                     labels = {ds: lbl}
                     types = {ds: nxstp}
                     shapes = {ds: ms2}
                 elif i == 9:
                     cnf["DefaultDynamicLinks"] = True
-                    cnf["DefaultDynamicPath"] = self.__defaultpath
+                    cnf["DefaultDynamicPath"] = self._defaultpath
                     labels = {ds: lbl}
                     types = {ds: nxstp}
                     shapes = {ds: ms2}
@@ -6998,19 +6998,19 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                     shapes = {ds: ms2}
                 elif i == 12:
                     cnf["DefaultDynamicLinks"] = True
-                    cnf["DefaultDynamicPath"] = self.__defaultpath
+                    cnf["DefaultDynamicPath"] = self._defaultpath
                     labels = {ds: lbl}
                     types = {ds: nxstp}
                     shapes = {ds: ms2}
                 elif i == 13:
                     cnf["DefaultDynamicLinks"] = False
-                    cnf["DefaultDynamicPath"] = self.__defaultpath
+                    cnf["DefaultDynamicPath"] = self._defaultpath
                     labels = {ds: lbl}
                     links = {lbl: True}
                     types = {ds: nxstp}
                     shapes = {ds: ms2}
                 elif i == 14:
-                    cnf["DefaultDynamicPath"] = self.__defaultpath
+                    cnf["DefaultDynamicPath"] = self._defaultpath
                     labels = {ds: lbl}
                     links = {"dssd": True}
                     types = {ds: nxstp}
@@ -7029,7 +7029,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                         "shape": shapes
                     }
                 )
-                print "I = ", i
+#                print "I = ", i
                 if i % 2 == 0:
                     cnf["ComponentSelection"] = str(json.dumps({ds: True}))
                 rs.profileConfiguration = str(json.dumps(cnf))
@@ -7054,7 +7054,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
 
                 mycps += mstr
                 mycps += fieldend + groupend + groupend
-                lk = link % (ds.lower(), self.__defaultpath,
+                lk = link % (ds.lower(), self._defaultpath,
                              ds.lower())
                 mycps += lk if i % 2 else ""
                 mycps += groupend + defend
@@ -7109,7 +7109,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
         db = PyTango.Database()
         try:
             for i in range(8):
-                print "I = ", i
+#                print "I = ", i
                 for ds, dsxml in self.smydss.items():
                     ms = self.smydsspar[ds]
                     sds = ds.split("_")
@@ -7117,7 +7117,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                     indom = xml.dom.minidom.parseString(dsxml)
                     dss = indom.getElementsByTagName("datasource")
                     if not ds.startswith("client_") and sds[1] != 'encoded':
-                        nxstp = self.__npTn2[tp]
+                        nxstp = self._npTn2[tp]
                     else:
                         nxstp = 'NX_CHAR'
 #                    dc = DynamicComponent(self._cf.dp)
@@ -7149,7 +7149,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
 #                    print "path2", path, len(path)
 #                    print "PATH", path, mypath
 #                    print "TP = ", tp
-                    tmptp = self._rnd.choice(self.__npTn.keys())
+                    tmptp = self._rnd.choice(self._npTn.keys())
                     cnf = dict(cnfdef)
                     labels = {}
                     paths = {}
@@ -7194,7 +7194,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                             "shape": shapes
                         }
                     )
-                    print "I = ", i
+#                    print "I = ", i
                     rs.profileConfiguration = str(json.dumps(cnf))
                     cpname = rs.createDynamicComponent([
                         str(json.dumps([ds]))])
@@ -7254,9 +7254,9 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                     else:
                         if i % 4 < 2:
                             lk = link % (ds.lower(),
-                                         self.__defaultpath, ds.lower())
+                                         self._defaultpath, ds.lower())
                         else:
-                            lk = link % (fieldname.lower(), self.__defaultpath,
+                            lk = link % (fieldname.lower(), self._defaultpath,
                                          fieldname.lower())
                         mycps = cps["shapetype"] % (
                             fd,
@@ -7317,7 +7317,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
         db = PyTango.Database()
         try:
             for i in range(8):
-                print "I = ", i
+#                print "I = ", i
                 for ds, dsxml in self.smydss.items():
                     ms = self.smydsspar[ds]
                     sds = ds.split("_")
@@ -7325,7 +7325,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                     indom = xml.dom.minidom.parseString(dsxml)
                     dss = indom.getElementsByTagName("datasource")
                     if not ds.startswith("client_") and sds[1] != 'encoded':
-                        nxstp = self.__npTn2[tp]
+                        nxstp = self._npTn2[tp]
                     else:
                         nxstp = 'NX_CHAR'
 #                    dc = DynamicComponent(self._cf.dp)
@@ -7357,7 +7357,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
 #                    print "path2", path, len(path)
 #                    print "PATH", path, mypath
 #                    print "TP = ", tp
-                    tmptp = self._rnd.choice(self.__npTn.keys())
+                    tmptp = self._rnd.choice(self._npTn.keys())
                     cnf = dict(cnfdef)
                     labels = {}
                     paths = {}
@@ -7404,7 +7404,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                     )
                     cnf["DataSourceSelection"] = json.dumps({ds: True})
 
-                    print "I = ", i
+#                    print "I = ", i
                     rs.profileConfiguration = str(json.dumps(cnf))
                     cpname = rs.createDynamicComponent([])
                     mstr = ""
@@ -7463,9 +7463,9 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                     else:
                         if i % 4 < 2:
                             lk = link % (ds.lower(),
-                                         self.__defaultpath, ds.lower())
+                                         self._defaultpath, ds.lower())
                         else:
-                            lk = link % (fieldname.lower(), self.__defaultpath,
+                            lk = link % (fieldname.lower(), self._defaultpath,
                                          fieldname.lower())
                         mycps = cps["shapetype"] % (
                             fd,
@@ -7526,7 +7526,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
         db = PyTango.Database()
         try:
             for i in range(8):
-                print "I = ", i
+#                print "I = ", i
                 for ds, dsxml in self.smydss.items():
                     ms = self.smydsspar[ds]
                     sds = ds.split("_")
@@ -7534,7 +7534,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                     indom = xml.dom.minidom.parseString(dsxml)
                     dss = indom.getElementsByTagName("datasource")
                     if not ds.startswith("client_") and sds[1] != 'encoded':
-                        nxstp = self.__npTn2[tp]
+                        nxstp = self._npTn2[tp]
                     else:
                         nxstp = 'NX_CHAR'
 
@@ -7565,7 +7565,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
 #                    print "path2", path, len(path)
 #                    print "PATH", path, mypath
 #                    print "TP = ", tp
-                    tmptp = self._rnd.choice(self.__npTn.keys())
+                    tmptp = self._rnd.choice(self._npTn.keys())
                     cnf = dict(cnfdef)
                     labels = {}
                     paths = {}
@@ -7610,7 +7610,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                             "shape": shapes
                         }
                     )
-                    print "I = ", i
+#                    print "I = ", i
                     rs.profileConfiguration = str(json.dumps(cnf))
 
                     cpname = rs.createDynamicComponent([
@@ -7671,9 +7671,9 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                     else:
                         if i % 4 < 2:
                             lk = link % (ds.lower(),
-                                         self.__defaultpath, ds.lower())
+                                         self._defaultpath, ds.lower())
                         else:
-                            lk = link % (fieldname.lower(), self.__defaultpath,
+                            lk = link % (fieldname.lower(), self._defaultpath,
                                          fieldname.lower())
                         mycps = cps["shapetype"] % (
                             fd,
@@ -7735,7 +7735,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
         db = PyTango.Database()
         try:
             for i in range(8):
-                print "I = ", i
+#                print "I = ", i
                 for ds, dsxml in self.smydss.items():
                     ms = self.smydsspar[ds]
                     sds = ds.split("_")
@@ -7743,7 +7743,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                     indom = xml.dom.minidom.parseString(dsxml)
                     dss = indom.getElementsByTagName("datasource")
                     if not ds.startswith("client_") and sds[1] != 'encoded':
-                        nxstp = self.__npTn2[tp]
+                        nxstp = self._npTn2[tp]
                     else:
                         nxstp = 'NX_CHAR'
 
@@ -7774,7 +7774,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
 #                    print "path2", path, len(path)
 #                    print "PATH", path, mypath
 #                    print "TP = ", tp
-                    tmptp = self._rnd.choice(self.__npTn.keys())
+                    tmptp = self._rnd.choice(self._npTn.keys())
                     cnf = dict(cnfdef)
                     labels = {}
                     paths = {}
@@ -7815,7 +7815,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                             "shape": shapes
                         }
                     )
-                    print "I = ", i
+#                    print "I = ", i
                     if i % 2 == 0:
                         cnf["ComponentSelection"] = str(json.dumps({ds: True}))
                     rs.profileConfiguration = str(json.dumps(cnf))
@@ -7878,9 +7878,9 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                     else:
                         if i % 4 < 2:
                             lk = link % (ds.lower(),
-                                         self.__defaultpath, ds.lower())
+                                         self._defaultpath, ds.lower())
                         else:
-                            lk = link % (fieldname.lower(), self.__defaultpath,
+                            lk = link % (fieldname.lower(), self._defaultpath,
                                          fieldname.lower())
                         mycps = cps["shapetype"] % (
                             fd,
@@ -8129,8 +8129,8 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                 self._cf.dp.xmlstring = res2
                 res = rs.createWriterConfiguration([])
                 cmds = self._cf.dp.GetCommandVariable("COMMANDS")
-                print cmds
-                print res
+#                print cmds
+#                print res
                 self._cf.dp.xmlstring = res2
                 res3 = self._cf.dp.createConfiguration(components)
                 cmds = json.loads(self._cf.dp.GetCommandVariable("COMMANDS"))
