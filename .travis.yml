@@ -39,4 +39,4 @@ install:
   - python setup.py -q install
 
 script:
-  - python test/runtest.py $TEST_SUITE > /dev/null
+  - python test/runtest.py $TEST_SUITE
