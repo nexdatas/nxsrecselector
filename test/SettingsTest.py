@@ -2334,5 +2334,292 @@ class SettingsTest(unittest.TestCase):
         print "DeviceGroups", rs.deviceGroups
         print "AdminDataNames", rs.adminDataNames
 
+    def generateProfile(self, door, mg, cfdv, wrdv):
+        msp = MacroServerPools(10)
+        se = Selector(msp, "3.0.0")
+        se["Door"] = door
+        se["ConfigDevice"] = cfdv
+        se["WriterDevice"] = wrdv
+        se["MntGrp"] = mg
+        msp.updateMacroServer(self._ms.door.keys()[0])
+        wrong = []
+
+        cps = {}
+        lcp = self._rnd.randint(1, 10)
+        for _ in range(lcp):
+            cps[self.getRandomName(10)] = self.getRandomName(
+                self._rnd.randint(1, 10))
+        se["UserData"] = str(json.dumps(cps))
+
+        cps = {}
+        lcp = self._rnd.randint(1, 10)
+        for _ in range(lcp):
+            cps[self.getRandomName(10)] = self.getRandomName(
+                self._rnd.randint(1, 10))
+        se["ConfigVariables"] = str(json.dumps(cps))
+        se["DefaultDynamicPath"] = self.getRandomName(10)
+        se["TimeZone"] = self.getRandomName(10)
+        se["AppendEntry"] = bool(self._rnd.randint(0, 1))
+        se["DynamicComponents"] = bool(self._rnd.randint(0, 1))
+        se["DefaultDynamicLinks"] = bool(self._rnd.randint(0, 1))
+        se["ComponentsFromMntGrp"] = bool(self._rnd.randint(0, 1))
+        scalar_ctrl = 'ttestp09/testts/t1r228'
+        spectrum_ctrl = 'ttestp09/testts/t2r228'
+        image_ctrl = 'ttestp09/testts/t3r228'
+        ctrls = [scalar_ctrl, spectrum_ctrl, image_ctrl,
+                 "__tango__"]
+        expch = []
+        pdss = []
+        mgt = ProfileManager(se)
+
+        pool = self._pool.dp
+        timers = {}
+        ntms = self._rnd.randint(1, 5)
+        tms = self._rnd.sample(set(
+            [ch for ch in self.smychsXX.keys()
+             if not ch.startswith("client")]), ntms)
+        for tm in tms:
+            myct = ("ctrl_%s" % tm).replace("_", "/")
+            timers[myct] = tm
+            ctrls.append(myct)
+        ltimers = timers.values()
+        se["Timer"] = json.dumps(ltimers)
+
+        for ds, vl in self.smychsXX.items():
+            if vl:
+                exp = {}
+                exp["name"] = ds
+                exp["source"] = vl["source"]
+                myct = None
+                for ct, ch in timers.items():
+                    if ds == ch:
+                        myct = ct
+                        break
+
+                if myct:
+                    exp["controller"] = myct
+                elif ds.startswith("image"):
+                    exp["controller"] = image_ctrl
+                elif ds.startswith("spectrum"):
+                    exp["controller"] = spectrum_ctrl
+                else:
+                    exp["controller"] = scalar_ctrl
+                expch.append(exp)
+                pdss.append(ds)
+        pdss = sorted(pdss)
+        self._rnd.shuffle(pdss)
+
+        acqch = [
+            {"full_name": "test/ct/01/Value", "name": "ct01"},
+            {"full_name": "test/ct/02/Value", "name": "ct02"},
+            {"full_name": "test/ct/03/value", "name": "ct03"},
+            {"full_name": "test/ct/04/value", "name": "ct04"},
+            {"full_name": "null/val", "name": "mntgrp_04"}
+        ]
+
+        for ch in expch:
+            ach = {}
+            ach["name"] = ch["name"]
+            ach["full_name"] = ch["source"]
+            acqch.append(ach)
+
+        pool.AcqChannelList = [json.dumps(a) for a in acqch]
+        pool.ExpChannelList = [json.dumps(a) for a in expch]
+        amycps = dict(self.smycps2)
+        amycps.update(self.smycps)
+        amydss = dict(self.smydssXX)
+        amydss.update(self.smydss)
+        amycpsstep = dict(self.smycpsstep)
+        amycpsstep.update(self.smycpsstep2)
+        self._cf.dp.SetCommandVariable(
+            ["CPDICT", json.dumps(amycps)])
+        self._cf.dp.SetCommandVariable(
+            ["DSDICT", json.dumps(amydss)])
+
+        cps = {}
+        acps = {}
+        dss = {}
+        lcp = self._rnd.randint(1, 40)
+        lds = self._rnd.randint(1, 40)
+
+        self._cf.dp.SetCommandVariable(
+            ["CPDICT", json.dumps(amycps)])
+        self._cf.dp.SetCommandVariable(
+            ["DSDICT", json.dumps(amydss)])
+        comps = set()
+
+        ncps = self._rnd.randint(1, len(amycps) - 1)
+        lcps = self._rnd.sample(set(amycps.keys()), ncps)
+        for cp in lcps:
+            if cp not in wrong:
+                cps[cp] = bool(self._rnd.randint(0, 1))
+                if cps[cp]:
+                    comps.add(cp)
+
+        ancps = self._rnd.randint(1, len(amycps.keys()) - 1)
+        alcps = self._rnd.sample(set(amycps.keys()), ancps)
+        for cp in alcps:
+            if cp not in wrong:
+                acps[cp] = bool(self._rnd.randint(0, 1))
+                if acps[cp]:
+                    comps.add(cp)
+
+        ndss = self._rnd.randint(1, len(amycps.keys()) - 1)
+        ldss = self._rnd.sample(set(amycps.keys()), ndss)
+        for ds in ldss:
+            if ds in amydss.keys():
+                if ds not in wrong:
+                    dss[ds] = bool(self._rnd.randint(0, 1))
+
+        ndss = self._rnd.randint(1, len(amydss.keys()) - 1)
+        ldss = self._rnd.sample(set(amydss.keys()), ndss)
+        for ds in ldss:
+            if ds in amydss.keys():
+                if ds not in wrong:
+                    dss[ds] = bool(self._rnd.randint(0, 1))
+
+        nadss = self._rnd.randint(1, len(amydss.keys()) - 1)
+        indss = [ds for ds in self._rnd.sample(
+            set(amydss.keys()), nadss)]
+
+        aindss = {}
+        for cp in indss:
+            if cp not in wrong:
+                aindss[cp] = bool(self._rnd.randint(0, 1))
+
+        nadss = self._rnd.randint(1, len(amydss.keys()) - 1)
+        aadss = [ds for ds in self._rnd.sample(
+            set(amydss.keys()), nadss)]
+
+        for tm in ltimers:
+            dss[tm] = bool(self._rnd.randint(0, 1))
+
+        mncps = self._rnd.randint(1, len(amycps.keys()) - 1)
+        mcps = [cp for cp in self._rnd.sample(
+                set(amycps.keys()), mncps) if cp not in wrong]
+        oncps = self._rnd.randint(1, len(amycps.keys()) - 1)
+        ocps = [cp for cp in self._rnd.sample(
+                set(amycps.keys()), oncps) if cp not in wrong]
+        for cp in mcps:
+            comps.add(cp)
+
+        adss = dict(dss)
+        for ch in expch:
+            if ch["name"] not in adss.keys():
+                adss[ch["name"]] = False
+        se["ComponentSelection"] = json.dumps(cps)
+        se["ComponentPreselection"] = json.dumps(
+            acps)
+        se["DataSourceSelection"] = json.dumps(dss)
+        se["PreselectingDataSources"] = \
+            json.dumps(aadss)
+        se["OptionalComponents"] = json.dumps(ocps)
+        se["DataSourcePreselection"] = json.dumps(aindss)
+        se["AppendEntry"] = bool(self._rnd.randint(0, 1))
+        se["ComponentsFromMntGrp"] = bool(
+            self._rnd.randint(0, 1))
+        se["DynamicComponents"] = bool(
+            self._rnd.randint(0, 1))
+        se["DefaultDynamicLinks"] = \
+            bool(self._rnd.randint(0, 1))
+        se["DefaultDynamicPath"] = self.getRandomName(20)
+        se["TimeZone"] = self.getRandomName(20)
+
+        se["ConfigVariables"] = json.dumps(dict(
+            (self.getRandomName(10),
+             self.getRandomName(15)) for _ in
+            range(self._rnd.randint(1, 40))))
+        se["ChannelProperties"] = self.generateChannelProperties()
+        self._cf.dp.SetCommandVariable(["MCPLIST",
+                                        json.dumps(mcps)])
+
+        records = {}
+        describer = Describer(self._cf.dp, True)
+        cpres = describer.components(dstype='CLIENT')
+        for grp in cpres:
+            for idss in grp.values():
+                for idsrs in idss.values():
+                    for idsr in idsrs:
+                        records[str(idsr[2])] = "1234"
+        dsres = describer.dataSources(
+            dss.keys(), dstype='CLIENT')[0]
+        for dsr in dsres.values():
+            records[str(dsr.record)] = '2345'
+
+        se["Timer"] = json.dumps(ltimers)
+        se["UserData"] = json.dumps(records)
+
+        tmg = TestMGSetUp.TestMeasurementGroupSetUp(
+            name=mg)
+#                    dv = "/".join(ar["full_name"].split("/")[0:-1])
+        chds = [ds for ds in mgt.dataSources()
+                if not ds.startswith('client')]
+        chds1 = list(chds)
+        chds2 = [ds for ds in mgt.componentDataSources()
+                 if not ds.startswith('client')]
+        chds.extend(chds2)
+        bchds = list(chds)
+        chds.extend(ltimers)
+        tmpchds = sorted(list(set(chds)))
+        chds = []
+        for ds in pdss:
+            if ds in tmpchds:
+                chds.append(ds)
+        for ds in tmpchds:
+            if ds not in pdss:
+                chds.append(ds)
+
+        lheds = []
+        if chds:
+            nhe = self._rnd.randint(0, len(set(chds)) - 1)
+            lheds = self._rnd.sample(set(chds), nhe)
+
+        lhecp = []
+        if comps:
+            nhe = self._rnd.randint(0, len(set(comps)) - 1)
+            lhecp = self._rnd.sample(set(comps), nhe)
+
+        lhe = lheds + lhecp
+
+        se["UnplottedComponents"] = json.dumps(lhe)
+        se["OrderedChannels"] = json.dumps(pdss)
+
+        se.preselect()
+        return str(json.dumps(se.get()))
+
+    def generateChannelProperties(self):
+        paths = dict(
+            (self.getRandomName(10),
+             self.getRandomName(15)) for _ in
+            range(self._rnd.randint(1, 40)))
+        labels = dict(
+            (self.getRandomName(10),
+             self.getRandomName(15)) for _ in
+            range(self._rnd.randint(1, 40)))
+        links = dict(
+            (self.getRandomName(10),
+             bool(self._rnd.randint(0, 1))) for _ in
+            range(self._rnd.randint(1, 40)))
+        types = dict(
+            (self.getRandomName(10),
+             self.getRandomName(15)) for _ in
+            range(self._rnd.randint(1, 40)))
+        shapes = dict(
+            (self.getRandomName(10),
+             [self._rnd.randint(1, 40)
+              for _ in range(self._rnd.randint(0, 3))])
+            for _ in range(self._rnd.randint(1, 40)))
+
+        return json.dumps(
+            {
+                "label": labels,
+                "nexus_path": paths,
+                "link": links,
+                "data_type": types,
+                "shape": shapes
+            }
+        )
+
+    
 if __name__ == '__main__':
     unittest.main()
