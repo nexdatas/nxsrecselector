@@ -85,6 +85,7 @@ class NXSDataWriter(PyTango.Device_4Impl):
     #    Always excuted hook method
     #------------------------------------------------------------------
     def always_executed_hook(self):
+        """ """
 #        print "In ", self.get_name(), "::always_excuted_hook()"
 
 #
@@ -108,7 +109,7 @@ class NXSDataWriter(PyTango.Device_4Impl):
     #    argin: DevString     tango state
     #------------------------------------------------------------------
     def SetState(self, state):
-#        print "In ", self.get_name(), "::SetState()"
+        #        print "In ", self.get_name(), "::SetState()"
         if state == "RUNNING":
             self.set_state(PyTango.DevState.RUNNING)
         elif state == "FAULT":
