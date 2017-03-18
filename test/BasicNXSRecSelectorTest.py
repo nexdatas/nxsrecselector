@@ -29,7 +29,7 @@ import PyTango
 import json
 
 import ServerSetUp
-import SettingsTest
+import BasicSettingsTest
 from nxsrecconfig import Settings
 import nxsrecconfig
 
@@ -40,12 +40,12 @@ from nxsrecconfig.Utils import TangoUtils, MSUtils
 
 
 ## test fixture
-class NXSRecSelectorTest(SettingsTest.SettingsTest):
+class BasicNXSRecSelectorTest(BasicSettingsTest.BasicSettingsTest):
 
     ## constructor
     # \param methodName name of the test method
     def __init__(self, methodName):
-        SettingsTest.SettingsTest.__init__(self, methodName)
+        BasicSettingsTest.BasicSettingsTest.__init__(self, methodName)
 
         self._sv = ServerSetUp.ServerSetUp()
         self._sv2 = ServerSetUp.ServerSetUp(
@@ -191,6 +191,7 @@ class NXSRecSelectorTest(SettingsTest.SettingsTest):
 
     def subtest_switchProfile_importMntGrp(self):
         pass
+
 
 if __name__ == '__main__':
     unittest.main()

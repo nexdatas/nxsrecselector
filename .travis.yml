@@ -12,8 +12,10 @@ services:
 env:
   - TEST_SUITE=basic
   - TEST_SUITE=profile
-  - TEST_SUITE=settings
-  - TEST_SUITE=server
+  - TEST_SUITE=basicsettings
+  - TEST_SUITE=basicserver
+  - TEST_SUITE=extrasettings
+  - TEST_SUITE=extraserver
 
 before_install:
   - sudo add-apt-repository "deb http://repos.pni-hdri.de/apt/debian jessie main" -y

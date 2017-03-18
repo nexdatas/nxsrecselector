@@ -48,8 +48,10 @@ import MacroServerPoolsTest
 import DynamicComponentTest
 import UtilsTest
 import ProfileManagerTest
-import SettingsTest
-import NXSRecSelectorTest
+import BasicSettingsTest
+import ExtraSettingsTest
+import BasicNXSRecSelectorTest
+import ExtraNXSRecSelectorTest
 import ConverterTest
 import ConverterXtoYTest
 import Converter1to2Test
@@ -89,8 +91,10 @@ def main():
     ## test suit
     basicsuite = unittest.TestSuite()
     profilesuite = unittest.TestSuite()
-    settingssuite = unittest.TestSuite()
-    serversuite = unittest.TestSuite()
+    settingssuite1 = unittest.TestSuite()
+    serversuite1 = unittest.TestSuite()
+    settingssuite2 = unittest.TestSuite()
+    serversuite2 = unittest.TestSuite()
 
     basicsuite.addTests(
         unittest.defaultTestLoader.loadTestsFromModule(SelectionTest))
@@ -134,12 +138,18 @@ def main():
     profilesuite.addTests(
         unittest.defaultTestLoader.loadTestsFromModule(ProfileManagerTest))
 
-    settingssuite.addTests(
-        unittest.defaultTestLoader.loadTestsFromModule(SettingsTest))
+    settingssuite1.addTests(
+        unittest.defaultTestLoader.loadTestsFromModule(BasicSettingsTest))
+
+    settingssuite2.addTests(
+        unittest.defaultTestLoader.loadTestsFromModule(ExtraSettingsTest))
 
 
-    serversuite.addTests(
-        unittest.defaultTestLoader.loadTestsFromModule(NXSRecSelectorTest))
+    serversuite1.addTests(
+        unittest.defaultTestLoader.loadTestsFromModule(BasicNXSRecSelectorTest))
+
+    serversuite2.addTests(
+        unittest.defaultTestLoader.loadTestsFromModule(ExtraNXSRecSelectorTest))
 
     ## test runner
     runner = unittest.TextTestRunner()
@@ -147,14 +157,17 @@ def main():
     import argparse
     parser = argparse.ArgumentParser()
     parser.add_argument('args', metavar='name', type=str, nargs='*',
-                        help='suite names: all, basic, profile, settings, server')
+                        help='suite names: all, basic, profile, basicsettings,'
+                        ' basicserver, extrasettings, extraserver')
     options = parser.parse_args()
 
     namesuite = {
         "basic": basicsuite,
         "profile": profilesuite,
-        "settings": settingssuite,
-        "server": serversuite,
+        "basicsettings": settingssuite1,
+        "basicserver": serversuite1,
+        "extrasettings": settingssuite2,
+        "extraserver": serversuite2,
     }
     
     print options.args
