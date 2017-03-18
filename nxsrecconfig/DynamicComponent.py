@@ -30,12 +30,16 @@ class DynamicComponent(object):
     """ Creates dynamic component
         of given component """
 
-    def __init__(self, nexusconfig_device):
+    def __init__(self, nexusconfig_device,
+                 defaultpath="/scan$var.serialno:NXentry/"
+                 "NXinstrument/collection"):
         """ constructor
 
         :param nexusconfig_device: configserver configuration server
         :type  nexusconfig_device: :obj:`PyTango.DeviceProxy` \
              or :class:`nxsconfigserver.XMLConfigurator.XMLConfigurator`
+        :param defaultpath:  default dynamic component path
+        :type defaultpath: :obj:`str`
         """
         #: (:class:`PyTango.DeviceProxy` \
         #: or :class:`nxsconfigserver.XMLConfigurator.XMLConfigurator`) \
@@ -73,10 +77,9 @@ class DynamicComponent(object):
         self.__db = PyTango.Database()
 
         #: (:obj:`str`) default dynamic component path
-        self.__ldefaultpath = \
-            "/entry$var.serialno:NXentry/NXinstrument/collection"
+        self.__ldefaultpath = defaultpath
         #: (:obj:`str`) standard dynamic component path
-        self.__defaultpath = self.__ldefaultpath
+        self.__defaultpath = defaultpath
         #: (:obj:`bool`) standard dynamic component path
         self.__links = True
 

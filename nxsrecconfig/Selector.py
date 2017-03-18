@@ -31,7 +31,9 @@ class Selector(object):
     """ access class to Selection dictionary and Config Device """
 
     ##
-    def __init__(self, macroserverpools, version):
+    def __init__(self, macroserverpools, version,
+                 defaultpath="/scan$var.serialno:NXentry/"
+                 "NXinstrument/collection"):
         """ constructor
 
         :param macroserverpools: MacroServerPools object
@@ -39,6 +41,8 @@ class Selector(object):
             :class:`nxsrecconfig.MacroServerPools.MacroServerPools`
         :param version: selector version
         :type version: :obj:`str`
+        :param defaultpath:  default dynamic component path
+        :type defaultpath: :obj:`str`
         """
 
         #: (:class:`nxsrecconfig.MacroServerPools.MacroServerPools`) \
@@ -47,7 +51,10 @@ class Selector(object):
 
         #: (:class:`nxsrecconfig.Selection.Selection`) \
         #:  selection dictionary with Settings
-        self.__selection = Selection(Version=version)
+        self.__selection = Selection(
+            Version=version,
+            DefaultDynamicPath=defaultpath
+        )
         #: (:class:`nxsrecconfig.Converter.Converter`) \
         #:  selection dictionary with Settings
         self.__converter = Converter(version)

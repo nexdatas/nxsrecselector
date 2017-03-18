@@ -88,6 +88,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         numberofthreads = self.NumberOfThreads or None
         self.__stg = STG(self, numberofthreads)
         self.set_state(PyTango.DevState.ON)
+        self.__stg.defaultNeXusPath = DefaultNeXusPath
         self.__stg.poolBlacklist = self.PoolBlacklist or []
         self.__stg.timerFilters = self.TimerFilters or [
             "*dgg*", "*/timer/*", "*/ctctrl0*"]
@@ -1666,6 +1667,10 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
         [PyTango.DevLong,
          "maximal number of threads",
          [20]],
+        'DefaultNeXusPath':
+        [PyTango.DevString,
+         "default Nexus path",
+         ["/scan$var.serialno:NXentry/NXinstrument/collection"]],
         'PoolBlacklist':
         [PyTango.DevVarStringArray,
          "blacklist of pools",

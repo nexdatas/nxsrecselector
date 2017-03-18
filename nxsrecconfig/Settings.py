@@ -57,7 +57,8 @@ class Settings(object):
 
         #: (:class:`nxsrecconfg.Selector.Selector`) \
         #:   configuration selector
-        self.__selector = Selector(self.__msp, self.version)
+        self.__selector = Selector(
+            self.__msp, self.version, self.defaultNeXusPath)
 
         #: (:class:`nxsrecconfg.ProfileManager.ProfileManager) \
         #: profile
@@ -84,6 +85,9 @@ class Settings(object):
         #: (:obj:`list` <:obj:`str`>) administator data
         self.adminDataNames = []
 
+        #: (:obj:`str`) default NeXus path
+        self.defaultNeXusPath = "/scan$var.serialno:NXentry/NXinstrument/collection"
+        
         if server:
             if hasattr(self.__server, "log_fatal"):
                 Streams.log_fatal = server.log_fatal
@@ -993,7 +997,8 @@ class Settings(object):
         :rtype: :obj:`str`
         """
         nexusconfig_device = self.__selector.setConfigInstance()
-        dcpcreator = DynamicComponent(nexusconfig_device)
+        dcpcreator = DynamicComponent(
+            nexusconfig_device, self.defaultNeXusPath)
         if isinstance(params, (list, tuple)):
             if len(params) > 0 and params[0]:
                 dcpcreator.setStepDSources(

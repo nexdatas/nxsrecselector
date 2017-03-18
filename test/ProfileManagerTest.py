@@ -133,7 +133,7 @@ class ProfileManagerTest(unittest.TestCase):
         self.__defaultmntgrp = 'nxsmntgrp'
         ## default path
         self.__defaultpath = \
-            '/entry$var.serialno:NXentry/NXinstrument/collection'
+            '/scan$var.serialno:NXentry/NXinstrument/collection'
 
         ## selection version
         self.__version = nxsrecconfig.__version__
