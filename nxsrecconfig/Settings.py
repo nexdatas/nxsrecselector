@@ -38,7 +38,8 @@ class Settings(object):
     """ NeXus Sardana Recorder settings
     """
 
-    def __init__(self, server=None, numberofthreads=None, defaultnexuspath=None):
+    def __init__(self, server=None, numberofthreads=None, defaultnexuspath=None,
+                 defaulttimezone=None, defaultmntgrp=None):
         """ contructor
 
         :param server: NXSRecSelector server
@@ -57,6 +58,12 @@ class Settings(object):
         self.defaultNeXusPath = defaultnexuspath or \
             "/scan$var.serialno:NXentry/NXinstrument/collection"
 
+        #: (:obj:`str`) default time zone
+        self.defaultTimeZone = defaulttimezone or "Europe/Berlin"
+
+        #: (:obj:`str`) default measurement group
+        self.defaultMntGrp = defaultmntgrp or "nxsmntgrp"
+
         #: (:class:`nxsrecconfg.MacroServerPools.MacroServerPools`) \
         #:     configuration selection
         self.__msp = MacroServerPools(self.numberOfThreads)
@@ -64,7 +71,8 @@ class Settings(object):
         #: (:class:`nxsrecconfg.Selector.Selector`) \
         #:   configuration selector
         self.__selector = Selector(
-            self.__msp, self.version, self.defaultNeXusPath)
+            self.__msp, self.version, self.defaultNeXusPath,
+            self.defaultTimeZone, self.defaultMntGrp)
 
         #: (:class:`nxsrecconfg.ProfileManager.ProfileManager) \
         #: profile

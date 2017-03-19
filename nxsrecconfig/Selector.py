@@ -33,7 +33,9 @@ class Selector(object):
     ##
     def __init__(self, macroserverpools, version,
                  defaultpath="/scan$var.serialno:NXentry/"
-                 "NXinstrument/collection"):
+                 "NXinstrument/collection",
+                 defaulttimezone="Europe/Berlin",
+                 defaultmntgrp="nxsmntgrp"):
         """ constructor
 
         :param macroserverpools: MacroServerPools object
@@ -43,6 +45,12 @@ class Selector(object):
         :type version: :obj:`str`
         :param defaultpath:  default dynamic component path
         :type defaultpath: :obj:`str`
+        :param defaultpath:  default dynamic component path
+        :type defaultpath: :obj:`str`
+        :param defaulttimezone:  default time zone
+        :type defaulttimezone: :obj:`str`
+        :param defaultmntgrp:  default measurement group name
+        :type defaultmntgrp: :obj:`str`
         """
 
         #: (:class:`nxsrecconfig.MacroServerPools.MacroServerPools`) \
@@ -53,6 +61,8 @@ class Selector(object):
         #:  selection dictionary with Settings
         self.__selection = Selection(
             Version=version,
+            MntGrp=defaultmntgrp,
+            TimeZone=defaulttimezone,
             DefaultDynamicPath=defaultpath
         )
         #: (:class:`nxsrecconfig.Converter.Converter`) \

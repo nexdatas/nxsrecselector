@@ -65,12 +65,15 @@ class Selection(dict):
         super(Selection, self).__init__(*args, **kw)
 
         #: (:obj:`str`) default zone
-        self.__defaultzone = 'Europe/Berlin'
+        self.__defaultzone = self['TimeZone'] \
+            if 'TimeZone' in self else 'Europe/Berlin'
 
         #: (:obj:`str`) default mntgrp
-        self.__defaultmntgrp = 'nxsmntgrp'
+        self.__defaultmntgrp = self['MntGrp'] \
+            if 'MntGrp' in self else 'nxsmntgrp'
         #: (:obj:`str`) version string
-        self.__version = self["Version"] if "Version" in self else "1.0.0"
+        self.__version = self["Version"] \
+            if "Version" in self else "1.0.0"
         self.reset()
 
     def reset(self):

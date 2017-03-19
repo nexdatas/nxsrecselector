@@ -87,7 +87,10 @@ class NXSRecSelector(PyTango.Device_4Impl):
         self.get_device_properties(self.get_device_class())
         numberofthreads = self.NumberOfThreads or None
         defaultpath = self.DefaultNeXusPath or None
-        self.__stg = STG(self, numberofthreads, defaultpath)
+        defaultzone = self.DefaultTimeZone or None
+        defaultmntgrp = self.DefaultMntGrp or None
+        self.__stg = STG(self, numberofthreads, defaultpath,
+                         defaultzone, defaultmntgrp)
         self.set_state(PyTango.DevState.ON)
         self.__stg.poolBlacklist = self.PoolBlacklist or []
         self.__stg.timerFilters = self.TimerFilters or [
@@ -1671,6 +1674,14 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
         [PyTango.DevString,
          "default Nexus path",
          ["/scan$var.serialno:NXentry/NXinstrument/collection"]],
+        'DefaultTimeZone':
+        [PyTango.DevString,
+         "default Time Zone",
+         ["Europe/Berlin"]],
+        'DefaultMntGrp':
+        [PyTango.DevString,
+         "default measurement group name",
+         ["nxsmntgrp"]],
         'PoolBlacklist':
         [PyTango.DevVarStringArray,
          "blacklist of pools",
