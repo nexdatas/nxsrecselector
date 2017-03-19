@@ -1,6 +1,6 @@
 .\" Man page generated from reStructuredText.
 .
-.TH "NXSRECCONFIG" "1" "February 15, 2017" "3.6" "NXSRecSelector"
+.TH "NXSRECCONFIG" "1" "March 19, 2017" "3.7" "NXSRecSelector"
 .SH NAME
 nxsrecconfig \- nxsrecconfig Documentation
 .
@@ -875,7 +875,7 @@ constructor
 Dynamic Component
 .INDENT 0.0
 .TP
-.B class nxsrecconfig.DynamicComponent.DynamicComponent(nexusconfig_device)
+.B class nxsrecconfig.DynamicComponent.DynamicComponent(nexusconfig_device, defaultpath=\(aq/scan$var.serialno:NXentry/NXinstrument/collection\(aq)
 Bases: \fI\%object\fP
 .sp
 Creates dynamic component
@@ -885,7 +885,12 @@ constructor
 .INDENT 7.0
 .TP
 .B Parameters
+.INDENT 7.0
+.IP \(bu 2
 \fBnexusconfig_device\fP (\fI\%PyTango.DeviceProxy\fP              or \fI\%nxsconfigserver.XMLConfigurator.XMLConfigurator\fP) \-\- configserver configuration server
+.IP \(bu 2
+\fBdefaultpath\fP (\fI\%str\fP) \-\- default dynamic component path
+.UNINDENT
 .UNINDENT
 .INDENT 7.0
 .TP
@@ -2752,7 +2757,7 @@ Command definitions
 .UNINDENT
 .INDENT 7.0
 .TP
-.B device_property_list = {\(aqMutedChannelFilters\(aq: [tango._tango.CmdArgType.DevVarStringArray, \(aqlist of muted channel filters\(aq, []], \(aqPoolBlacklist\(aq: [tango._tango.CmdArgType.DevVarStringArray, \(aqblacklist of pools\(aq, []], \(aqNumberOfThreads\(aq: [tango._tango.CmdArgType.DevLong, \(aqmaximal number of threads\(aq, [20]], \(aqAdminDataNames\(aq: [tango._tango.CmdArgType.DevVarStringArray, \(aqlist of administrator data names\(aq, []], \(aqTimerFilters\(aq: [tango._tango.CmdArgType.DevVarStringArray, \(aqlist of timer device name filters\(aq, []], \(aqDefaultPreselectedComponents\(aq: [tango._tango.CmdArgType.DevVarStringArray, \(aqlist of default preselected components\(aq, []]}
+.B device_property_list = {\(aqNumberOfThreads\(aq: [tango._tango.CmdArgType.DevLong, \(aqmaximal number of threads\(aq, [20]], \(aqDefaultTimeZone\(aq: [tango._tango.CmdArgType.DevString, \(aqdefault Time Zone\(aq, [\(aqEurope/Berlin\(aq]], \(aqDefaultMntGrp\(aq: [tango._tango.CmdArgType.DevString, \(aqdefault measurement group name\(aq, [\(aqnxsmntgrp\(aq]], \(aqAdminDataNames\(aq: [tango._tango.CmdArgType.DevVarStringArray, \(aqlist of administrator data names\(aq, []], \(aqMutedChannelFilters\(aq: [tango._tango.CmdArgType.DevVarStringArray, \(aqlist of muted channel filters\(aq, []], \(aqPoolBlacklist\(aq: [tango._tango.CmdArgType.DevVarStringArray, \(aqblacklist of pools\(aq, []], \(aqTimerFilters\(aq: [tango._tango.CmdArgType.DevVarStringArray, \(aqlist of timer device name filters\(aq, []], \(aqDefaultNeXusPath\(aq: [tango._tango.CmdArgType.DevString, \(aqdefault Nexus path\(aq, [\(aq/scan$var.serialno:NXentry/NXinstrument/collection\(aq]], \(aqDefaultPreselectedComponents\(aq: [tango._tango.CmdArgType.DevVarStringArray, \(aqlist of default preselected components\(aq, []]}
 .INDENT 7.0
 .TP
 .B (\fI\%dict\fP <\fI\%str\fP, 
@@ -3110,7 +3115,7 @@ appends new datasources to Preselected DataSources
 Selection state
 .INDENT 0.0
 .TP
-.B class nxsrecconfig.Selector.Selector(macroserverpools, version)
+.B class nxsrecconfig.Selector.Selector(macroserverpools, version, defaultpath=\(aq/scan$var.serialno:NXentry/NXinstrument/collection\(aq, defaulttimezone=\(aqEurope/Berlin\(aq, defaultmntgrp=\(aqnxsmntgrp\(aq)
 Bases: \fI\%object\fP
 .sp
 access class to Selection dictionary and Config Device
@@ -3124,6 +3129,14 @@ constructor
 \fBmacroserverpools\fP (\fBnxsrecconfig.MacroServerPools.MacroServerPools\fP) \-\- MacroServerPools object
 .IP \(bu 2
 \fBversion\fP (\fI\%str\fP) \-\- selector version
+.IP \(bu 2
+\fBdefaultpath\fP (\fI\%str\fP) \-\- default dynamic component path
+.IP \(bu 2
+\fBdefaultpath\fP \-\- default dynamic component path
+.IP \(bu 2
+\fBdefaulttimezone\fP (\fI\%str\fP) \-\- default time zone
+.IP \(bu 2
+\fBdefaultmntgrp\fP (\fI\%str\fP) \-\- default measurement group name
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -3355,7 +3368,7 @@ saves configuration
 NeXus Sardana Recorder Settings implementation
 .INDENT 0.0
 .TP
-.B class nxsrecconfig.Settings.Settings(server=None, numberofthreads=None)
+.B class nxsrecconfig.Settings.Settings(server=None, numberofthreads=None, defaultnexuspath=None, defaulttimezone=None, defaultmntgrp=None)
 Bases: \fI\%object\fP
 .sp
 NeXus Sardana Recorder settings
@@ -3369,6 +3382,8 @@ contructor
 \fBserver\fP (\fBnxsrecconfig.NXSConfig.NXSRecSelector\fP) \-\- NXSRecSelector server
 .IP \(bu 2
 \fBnumberofthreads\fP (\fI\%str\fP) \-\- number of threads used to check device state
+.IP \(bu 2
+\fBdefaultnexuspath\fP (\fI\%str\fP) \-\- default dynamic component path
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -3587,8 +3602,23 @@ list of dictionary with description of datasources
 .UNINDENT
 .INDENT 7.0
 .TP
+.B defaultMntGrp = None
+(\fI\%str\fP) default measurement group
+.UNINDENT
+.INDENT 7.0
+.TP
+.B defaultNeXusPath = None
+(\fI\%str\fP) default NeXus path
+.UNINDENT
+.INDENT 7.0
+.TP
 .B defaultPreselectedComponents
 (\fI\%list\fP <\fI\%str\fP>) default PreselectedComponents
+.UNINDENT
+.INDENT 7.0
+.TP
+.B defaultTimeZone = None
+(\fI\%str\fP) default time zone
 .UNINDENT
 .INDENT 7.0
 .TP
