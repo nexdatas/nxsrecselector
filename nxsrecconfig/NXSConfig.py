@@ -1672,7 +1672,7 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
          [20]],
         'DefaultNeXusPath':
         [PyTango.DevString,
-         "default Nexus path",
+         "default NeXus path",
          ["/scan$var.serialno:NXentry/NXinstrument/collection"]],
         'DefaultTimeZone':
         [PyTango.DevString,
