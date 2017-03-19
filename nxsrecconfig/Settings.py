@@ -38,18 +38,24 @@ class Settings(object):
     """ NeXus Sardana Recorder settings
     """
 
-    def __init__(self, server=None, numberofthreads=None):
+    def __init__(self, server=None, numberofthreads=None, defaultnexuspath=None):
         """ contructor
 
         :param server: NXSRecSelector server
         :type server: :class:`nxsrecconfig.NXSConfig.NXSRecSelector`
         :param numberofthreads: number of threads used to check device state
         :type numberofthreads: :obj:`str`
+        :param defaultnexuspath:  default dynamic component path
+        :type defaultnexuspath: :obj:`str`
         """
         #: (:class:`nxsrecconfig.NXSConfig.NXSRecSelector`) Tango server
         self.__server = server
         #: (:obj:`int`) number of threads
         self.numberOfThreads = numberofthreads or 20
+
+        #: (:obj:`str`) default NeXus path
+        self.defaultNeXusPath = defaultnexuspath or \
+            "/scan$var.serialno:NXentry/NXinstrument/collection"
 
         #: (:class:`nxsrecconfg.MacroServerPools.MacroServerPools`) \
         #:     configuration selection
@@ -85,9 +91,6 @@ class Settings(object):
         #: (:obj:`list` <:obj:`str`>) administator data
         self.adminDataNames = []
 
-        #: (:obj:`str`) default NeXus path
-        self.defaultNeXusPath = "/scan$var.serialno:NXentry/NXinstrument/collection"
-        
         if server:
             if hasattr(self.__server, "log_fatal"):
                 Streams.log_fatal = server.log_fatal

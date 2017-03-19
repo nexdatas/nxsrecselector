@@ -86,9 +86,9 @@ class NXSRecSelector(PyTango.Device_4Impl):
             self.__stg = None
         self.get_device_properties(self.get_device_class())
         numberofthreads = self.NumberOfThreads or None
-        self.__stg = STG(self, numberofthreads)
+        defaultpath = self.DefaultNeXusPath or None
+        self.__stg = STG(self, numberofthreads, defaultpath)
         self.set_state(PyTango.DevState.ON)
-        self.__stg.defaultNeXusPath = DefaultNeXusPath
         self.__stg.poolBlacklist = self.PoolBlacklist or []
         self.__stg.timerFilters = self.TimerFilters or [
             "*dgg*", "*/timer/*", "*/ctctrl0*"]
