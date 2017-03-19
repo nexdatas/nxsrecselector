@@ -1,4 +1,4 @@
-2017-03-XX Jan Kotanski <jankotan@gmail.com>
+2017-03-19 Jan Kotanski <jankotan@gmail.com>
 	* add DefaultNexusPath, DefaultTimeZone, DefaultMntGrp properties
 	* change entryname to scan
 	* tagged as v3.7.0
