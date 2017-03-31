@@ -10698,6 +10698,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
         self.assertEqual(rs.configDevice, val["ConfigDevice"])
         self.assertEqual(rs.door, val["Door"])
         self.assertEqual(rs.stepdatasources, '[]')
+        self.assertEqual(rs.linkdatasources, '[]')
 
         for _ in range(20):
             lcp = self._rnd.randint(1, 10)
@@ -10716,6 +10717,44 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             self._cf.dp.stepdatasources = str(json.dumps(anames))
             mds2 = json.loads(self._cf.dp.stepdatasources)
             mds = json.loads(rs.stepdatasources)
+            self.assertEqual(set(mds), set(anames))
+            self.assertEqual(set(mds2), set(anames))
+
+    ## test
+    def test_linkdatasources(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+
+        rs = self.openRecSelector()
+        rs.configDevice = val["ConfigDevice"]
+        rs.door = val["Door"]
+        rs.mntGrp = val["MntGrp"]
+        self.assertEqual(rs.configDevice, val["ConfigDevice"])
+        self.assertEqual(rs.door, val["Door"])
+        self.assertEqual(rs.stepdatasources, '[]')
+        self.assertEqual(rs.linkdatasources, '[]')
+
+        for _ in range(20):
+            lcp = self._rnd.randint(1, 10)
+            anames = list(set([self.getRandomName(
+                self._rnd.randint(1, 10)) for _ in range(lcp)]))
+            rs.linkdatasources = str(json.dumps(anames))
+            mds2 = json.loads(self._cf.dp.linkdatasources)
+            mds = json.loads(rs.linkdatasources)
+            self.assertEqual(set(mds), set(anames))
+            self.assertEqual(set(mds2), set(anames))
+
+        for _ in range(20):
+            lcp = self._rnd.randint(1, 10)
+            anames = list(set([self.getRandomName(
+                self._rnd.randint(1, 10)) for _ in range(lcp)]))
+            self._cf.dp.linkdatasources = str(json.dumps(anames))
+            mds2 = json.loads(self._cf.dp.linkdatasources)
+            mds = json.loads(rs.linkdatasources)
             self.assertEqual(set(mds), set(anames))
             self.assertEqual(set(mds2), set(anames))
 
@@ -12673,8 +12712,8 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                     except:
                         print ds, cnt
                         raise
-
-                smg = {"controllers":
+                if tgc:
+                    smg = {"controllers":
                        {'__tango__':
                         {'units':
                          {'0':
@@ -12687,6 +12726,14 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                        "description": "Measurement Group",
                        "timer": "%s" % dv,
                        "label": "nxsmntgrp2"}
+                else:
+                    smg = {"controllers":
+                           {},
+                           "monitor": "%s" % dv,
+                           "description": "Measurement Group",
+                           "timer": "%s" % dv,
+                           "label": "nxsmntgrp2"}
+                    
 #                print "SMG", smg
                 self.myAssertDict(smg, pcnf)
                 self.myAssertDict(pcnf, cnf)
