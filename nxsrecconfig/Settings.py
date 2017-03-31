@@ -896,9 +896,9 @@ class Settings(object):
             cp = self.components
         TangoUtils.command(
             nexusconfig_device, "createConfiguration", cp)
-       nexusconfig_device.stepdatasources = '[]'
-       nexusconfig_device.linkdatasources = '[]'
-       return str(nexusconfig_device.xmlstring)
+        nexusconfig_device.stepdatasources = "[]"
+        nexusconfig_device.linkdatasources = "[]"
+        return str(nexusconfig_device.xmlstring)
 
     def updateConfigVariables(self):
         """  sends ConfigVariables into ConfigServer
