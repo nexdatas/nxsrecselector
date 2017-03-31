@@ -1,3 +1,7 @@
+2017-03-XX Jan Kotanski <jankotan@gmail.com>
+	* add LinkDataSources attribute
+	* tagged as v3.8.0
+
 2017-03-19 Jan Kotanski <jankotan@gmail.com>
 	* add DefaultNexusPath, DefaultTimeZone, DefaultMntGrp properties
 	* change entryname to scan

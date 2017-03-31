@@ -203,6 +203,39 @@ class NXSRecSelector(PyTango.Device_4Impl):
             return False
         return True
 
+    def read_LinkDataSources(self, attr):
+        """ Read LinkDataSources attribute
+
+        :param attr: read attribute
+        :type attr: :class:`PyTango.Attribute`
+        """
+        self.debug_stream("In read_LinkDataSources()")
+        attr.set_value(self.__stg.linkdatasources or "")
+
+    def write_LinkDataSources(self, attr):
+        """ Write LinkDataSources attribute
+
+        :param attr: written attribute
+        :type attr: :class:`PyTango.Attribute`
+        """
+        self.debug_stream("In write_LinkDataSources()")
+        if self.is_LinkDataSources_write_allowed():
+            self.__stg.linkdatasources = attr.get_write_value() or ""
+        else:
+            self.warn_stream("To change the settings please close the server.")
+            raise Exception(
+                "To change the settings please close the server.")
+
+    def is_LinkDataSources_write_allowed(self):
+        """ LinkDataSources attribute Write State Machine
+
+        :returns: True if the operation allowed
+        :rtype: :obj:`bool`
+        """
+        if self.get_state() in [PyTango.DevState.RUNNING]:
+            return False
+        return True
+
     def read_ConfigDevice(self, attr):
         """ Read ConfigDevice attribute
 
@@ -1879,6 +1912,15 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
                  'label': "list of datasources to be switch into step mode",
                  'description': "list of datasources to be switched" +
                  " into step mode",
+                 'Display level': PyTango.DispLevel.EXPERT,
+            }],
+        'LinkDataSources':
+            [[PyTango.DevString,
+              PyTango.SCALAR,
+              PyTango.READ_WRITE],
+             {
+                 'label': "list of datasources to which a link will be added",
+                 'description': "list of datasources to which a link will be added",
                  'Display level': PyTango.DispLevel.EXPERT,
             }],
         'DescriptionErrors':

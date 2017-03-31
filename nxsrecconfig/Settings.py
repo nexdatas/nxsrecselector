@@ -489,6 +489,32 @@ class Settings(object):
         __setStepDatSources,
         doc='step datasource list')
 
+    def __getLinkDatSources(self):
+        """ get method for dataSourceGroup attribute
+
+        :returns: names of link dataSources
+        :rtype: :obj:`str`
+        """
+        inst = self.__selector.setConfigInstance()
+        if inst.linkdatasources:
+            return inst.linkdatasources
+        else:
+            return "[]"
+
+    def __setLinkDatSources(self, names):
+        """ set method for dataSourceGroup attribute
+        :param names: names of link dataSources
+        :type names: :obj:`str`
+        """
+        inst = self.__selector.setConfigInstance()
+        inst.linkdatasources = names
+
+    #: (:obj:`str`) the json data string
+    linkdatasources = property(
+        __getLinkDatSources,
+        __setLinkDatSources,
+        doc='link datasource list')
+
     def channelProperties(self, ptype):
         """ provides channel properties of the given type
 
@@ -856,7 +882,7 @@ class Settings(object):
         return jdc
 
     def createWriterConfiguration(self, cps):
-        """ create configuration
+        """ create configuration and clean stepdatasources and linkdatasources
 
         :param cps: component names
         :type cps: :obj:`list` <:obj:`str`>
@@ -868,10 +894,11 @@ class Settings(object):
             cp = cps
         else:
             cp = self.components
-        TangoUtils.command(nexusconfig_device,
-                           "createConfiguration",
-                           cp)
-        return str(nexusconfig_device.xmlstring)
+        TangoUtils.command(
+            nexusconfig_device, "createConfiguration", cp)
+       nexusconfig_device.stepdatasources = '[]'
+       nexusconfig_device.linkdatasources = '[]'
+       return str(nexusconfig_device.xmlstring)
 
     def updateConfigVariables(self):
         """  sends ConfigVariables into ConfigServer
