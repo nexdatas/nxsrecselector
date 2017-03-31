@@ -80,8 +80,10 @@ class DynamicComponent(object):
         self.__ldefaultpath = defaultpath
         #: (:obj:`str`) standard dynamic component path
         self.__defaultpath = defaultpath
-        #: (:obj:`bool`) standard dynamic component path
+        #: (:obj:`bool`) standard dynamic link flag
         self.__links = True
+        #: (:obj:`bool`) standard dynamic link flag for INIT strategy
+        self.__ilinks = False
 
         #: (:obj:`dict` <:obj:`str` , :obj:`str`> ) \
         #:    map of numpy types : NEXUS
@@ -268,7 +270,8 @@ class DynamicComponent(object):
 
                 link = self.__getProp(
                     self.__nexuslinks, self.__nexuslabels, ds,
-                    self.__links)
+                    self.__ilinks if strategy == 'INIT'
+                    else self.__links )
                 (parent, nxdata) = self.__createGroupTree(
                     root, definition, path, link)
                 created.append(ds)
