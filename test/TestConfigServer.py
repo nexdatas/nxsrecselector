@@ -82,6 +82,7 @@ class NXSConfigServer(PyTango.Device_4Impl):
         self.attr_Selection = ""
         self.attr_JSONSettings = ""
         self.attr_STEPDataSources = ""
+        self.attr_LinkDataSources = ""
         self.attr_Variables = "{}"
 
         self.cmd = {}
@@ -168,6 +169,22 @@ class NXSConfigServer(PyTango.Device_4Impl):
         print >> self.log_info, "In ", self.get_name(), \
             "::write_STEPDataSources()"
         self.attr_STEPDataSources = attr.get_write_value()
+
+    #------------------------------------------------------------------
+    #    Read LinkDataSources attribute
+    #------------------------------------------------------------------
+    def read_LinkDataSources(self, attr):
+        print >> self.log_info, "In ", self.get_name(), \
+            "::read_LinkDataSources()"
+        attr.set_value(self.attr_LinkDataSources)
+
+    #------------------------------------------------------------------
+    #    Write LinkDataSources attribute
+    #------------------------------------------------------------------
+    def write_LinkDataSources(self, attr):
+        print >> self.log_info, "In ", self.get_name(), \
+            "::write_LinkDataSources()"
+        self.attr_LinkDataSources = attr.get_write_value()
 
     #------------------------------------------------------------------
     def read_Variables(self, attr):
@@ -656,6 +673,15 @@ class NXSConfigServerClass(PyTango.DeviceClass):
                  'label': "datasources to be switched into STEP mode",
                  'description': "datasources to be switched "
                  "into STEP mode during creating configuration process",
+            }],
+        'LinkDataSources':
+            [[PyTango.DevString,
+              PyTango.SCALAR,
+              PyTango.READ_WRITE],
+             {
+                 'label': "datasources to be switched into Link mode",
+                 'description': "datasources to be switched "
+                 "into Link mode during creating configuration process",
             }],
         'Version':
             [[PyTango.DevString,
