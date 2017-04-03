@@ -184,7 +184,8 @@ class DynamicComponent(object):
         if not isinstance(self.__nexusshapes, dict):
             self.__nexusshapes = {}
 
-    def setDefaultLinkPath(self, dynamicLinks, dynamicPath):
+    def setDefaultLinkPath(self, dynamicLinks, dynamicPath,
+                           dynamicInitLinks=None):
         """ sets default nexus path and link flag for dynamic components
 
         :brief: if dynamicPath is None or "" it is reset to default one
@@ -192,8 +193,11 @@ class DynamicComponent(object):
         :type dynamicPath: :obj:`str`
         :param dynamicLinks: default link flag
         :type dynamicLinks: :obj:`bool`
+        :param dynamicInitLinks: default link flag
+        :type dynamicInitLinks: :obj:`bool`
         """
         self.__links = dynamicLinks
+        self.__ilinks = dynamicInitLinks
         self.__defaultpath = dynamicPath
         if not self.__defaultpath:
             self.__defaultpath = self.__ldefaultpath

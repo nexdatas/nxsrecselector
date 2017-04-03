@@ -5069,9 +5069,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
             '<field name="ds1" type="%s">\n<strategy mode="INIT"/>\n'
             '<datasource name="ds1" type="CLIENT">\n'
             '<record name="ds1"/>\n</datasource>\n</field>\n'
-            '</group>\n</group>\n<group name="data" type="NXdata">\n'
-            '<link name="ds1" target="/scan$var.serialno:'
-            'NXentry/NXinstrument/collection/ds1"/>\n'
+            '</group>\n'
             '</group>\n</group>\n</definition>\n',
         }
         dname = "__dynamic_component__"
@@ -5156,9 +5154,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
             '<field name="ds1" type="%s">\n<strategy mode="INIT"/>\n'
             '<datasource name="ds1" type="CLIENT">\n'
             '<record name="ds1"/>\n</datasource>\n</field>\n'
-            '</group>\n</group>\n<group name="data" type="NXdata">\n'
-            '<link name="ds1" target="/scan$var.serialno:'
-            'NXentry/NXinstrument/collection/ds1"/>\n'
+            '</group>\n'
             '</group>\n</group>\n</definition>\n',
         }
         dname = "__dynamic_component__"
@@ -5264,9 +5260,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
             '<field name="ds2" type="NX_CHAR">\n<strategy mode="INIT"/>\n'
             '<datasource name="ds2" type="CLIENT">\n'
             '<record name="ds2"/>\n</datasource>\n%s</field>\n'
-            '</group>\n</group>\n<group name="data" type="NXdata">\n'
-            '<link name="ds2" target="/scan$var.serialno:'
-            'NXentry/NXinstrument/collection/ds2"/>\n'
+            '</group>\n'
             '</group>\n</group>\n</definition>\n',
         }
 
@@ -5578,6 +5572,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                     elif i == 1:
                         cnf["DefaultDynamicLinks"] = True
                         cnf["DefaultDynamicPath"] = self._defaultpath
+                        links = {ar["name"]: True}
                         types = {ar["name"]: nxstp}
                         shapes = {ar["name"]: ms}
                     elif i == 2:
@@ -5610,6 +5605,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                         labels = {ar["name"]: lbl}
                         types = {ar["name"]: nxstp}
                         shapes = {ar["name"]: ms}
+                        links = {ar["name"]: True}
                     elif i == 8:
                         pass
                         cnf["DefaultDynamicLinks"] = False
@@ -5623,6 +5619,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                         labels = {ar["name"]: lbl}
                         types = {ar["name"]: nxstp}
                         shapes = {ar["name"]: ms}
+                        links = {ar["name"]: True}
                     elif i == 10:
                         labels = {ar["name"]: lbl}
                         links = {lbl: False}
@@ -5658,6 +5655,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                         labels = {ar["name"]: lbl}
                         types = {ar["name"]: nxstp}
                         shapes = {ar["name"]: ms}
+                        links = {ar["name"]: True}
 
                     cnf["ChannelProperties"] = json.dumps(
                         {
@@ -5914,7 +5912,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
 
         link = '<group name="data" type="NXdata">\n' + \
             '<link name="%s" target="%s/%s"/>\n</group>\n'
-
+        link = ''
         dimbg = '<dimensions rank="%s">\n'
         dim = '<dim index="%s" value="%s"/>\n'
         dimend = '</dimensions>\n'
@@ -5964,8 +5962,8 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                 else:
                     mycps += dsclient % (ar["name"], ar["name"])
                 mycps += fieldend + groupend + groupend
-                mycps += link % (ar["name"], self._defaultpath,
-                                 ar["name"])
+                mycps += link #% (ar["name"], self._defaultpath,
+                              #   ar["name"])
                 mycps += groupend + defend
 
                 self.assertEqual(comp, mycps)
@@ -6032,6 +6030,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                 elif i == 1:
                     cnf["DefaultDynamicLinks"] = True
                     cnf["DefaultDynamicPath"] = self._defaultpath
+                    links = {ds: True}
                 elif i == 2:
                     links = {ds: False}
                 elif i == 3:
@@ -6068,298 +6067,6 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
 
                 self.assertEqual(comp, mycps)
 
-    ## constructor test
-    # \brief It tests default settings
-    def test_create_sel_typeshape_tango(self):
-        fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
-        val = {"ConfigDevice": self._cf.dp.name(),
-               "WriterDevice": self._wr.dp.name(),
-               "Door": 'doortestp09/testts/t1r228',
-               "MntGrp": 'nxsmntgrp'}
-        rs = self.openRecSelector()
-        rs.configDevice = val["ConfigDevice"]
-        rs.door = val["Door"]
-        rs.mntGrp = val["MntGrp"]
-        cnfdef = json.loads(rs.profileConfiguration)
-
-        defbg = '<?xml version="1.0" ?>\n<definition>\n'
-        defend = '</definition>\n'
-        groupbg = '<group name="scan$var.serialno" type="NXentry">\n' + \
-            '<group name="instrument" type="NXinstrument">\n' + \
-            '<group name="collection" type="NXcollection">\n'
-        groupend = '</group>\n'
-
-        fieldbg = '<field name="%s" type="%s">\n<strategy mode="STEP"/>\n'
-        fieldend = '</field>\n'
-
-        link = '<group name="data" type="NXdata">\n' + \
-            '<link name="%s" target="%s/%s"/>\n</group>\n'
-
-        dimbg = '<dimensions rank="%s">\n'
-        dim = '<dim index="%s" value="%s"/>\n'
-        dimend = '</dimensions>\n'
-
-        self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
-#        dc = DynamicComponent(self._cf.dp)
-        for i in range(4):
-            for ds, dsxml in self.smydss.items():
-                ms = self.smydsspar[ds]
-                sds = ds.split("_")
-                tp = sds[1]
-                cnf = dict(cnfdef)
-                labels = {}
-                paths = {}
-                links = {}
-                types = {}
-                shapes = {}
-
-                if i == 0:
-                    cnf["DefaultDynamicLinks"] = False
-                    cnf["DefaultDynamicPath"] = self._defaultpath
-                elif i == 1:
-                    cnf["DefaultDynamicLinks"] = True
-                    cnf["DefaultDynamicPath"] = self._defaultpath
-                elif i == 2:
-                    links = {ds: False}
-                elif i == 3:
-                    links = {ds: True}
-#                print "I = ", i
-                cnf["ChannelProperties"] = json.dumps(
-                    {
-                        "label": labels,
-                        "nexus_path": paths,
-                        "link": links,
-                        "data_type": types,
-                        "shape": shapes
-                    }
-                )
-                cnf["DataSourceSelection"] = json.dumps({ds: True})
-                rs.profileConfiguration = str(json.dumps(cnf))
-                cpname = rs.createDynamicComponent([])
-                comp = self._cf.dp.Components([cpname])[0]
-
-                indom = xml.dom.minidom.parseString(dsxml)
-                dss = indom.getElementsByTagName("datasource")
-                if not ds.startswith("client_") and sds[1] != 'encoded':
-                    nxstype = self._npTn2[tp]
-                else:
-                    nxstype = 'NX_CHAR'
-                mycps = defbg + groupbg + fieldbg % (
-                    ds.lower(), nxstype)
-
-                mycps += dss[0].toprettyxml(indent="")
-                mstr = ""
-                if ms:
-                    mstr += dimbg % len(ms)
-                    for ind, val in enumerate(ms):
-                        mstr += dim % (ind + 1, val)
-                    mstr += dimend
-
-                mycps += mstr
-                mycps += fieldend + groupend + groupend
-                lk = link % (ds.lower(), self._defaultpath,
-                             ds.lower())
-                mycps += lk if i % 2 else ""
-                mycps += groupend + defend
-
-                self.assertEqual(comp, mycps)
-
-    ## constructor test
-    # \brief It tests default settings
-    def test_create_step_typeshape_tango(self):
-        fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
-        val = {"ConfigDevice": self._cf.dp.name(),
-               "WriterDevice": self._wr.dp.name(),
-               "Door": 'doortestp09/testts/t1r228',
-               "MntGrp": 'nxsmntgrp'}
-        rs = self.openRecSelector()
-        rs.configDevice = val["ConfigDevice"]
-        rs.door = val["Door"]
-        rs.mntGrp = val["MntGrp"]
-        cnfdef = json.loads(rs.profileConfiguration)
-
-        defbg = '<?xml version="1.0" ?>\n<definition>\n'
-        defend = '</definition>\n'
-        groupbg = '<group name="scan$var.serialno" type="NXentry">\n' + \
-            '<group name="instrument" type="NXinstrument">\n' + \
-            '<group name="collection" type="NXcollection">\n'
-        groupend = '</group>\n'
-
-        fieldbg = '<field name="%s" type="%s">\n<strategy mode="STEP"/>\n'
-        fieldend = '</field>\n'
-
-        link = '<group name="data" type="NXdata">\n' + \
-            '<link name="%s" target="%s/%s"/>\n</group>\n'
-
-        dimbg = '<dimensions rank="%s">\n'
-        dim = '<dim index="%s" value="%s"/>\n'
-        dimend = '</dimensions>\n'
-
-        self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
-#        dc = DynamicComponent(self._cf.dp)
-        for i in range(4):
-            for ds, dsxml in self.smydss.items():
-                ms = self.smydsspar[ds]
-                sds = ds.split("_")
-                tp = sds[1]
-                cnf = dict(cnfdef)
-                labels = {}
-                paths = {}
-                links = {}
-                types = {}
-                shapes = {}
-
-                if i == 0:
-                    cnf["DefaultDynamicLinks"] = False
-                    cnf["DefaultDynamicPath"] = self._defaultpath
-                elif i == 1:
-                    cnf["DefaultDynamicLinks"] = True
-                    cnf["DefaultDynamicPath"] = self._defaultpath
-                elif i == 2:
-                    links = {ds: False}
-                elif i == 3:
-                    links = {ds: True}
-#                print "I = ", i
-                cnf["ChannelProperties"] = json.dumps(
-                    {
-                        "label": labels,
-                        "nexus_path": paths,
-                        "link": links,
-                        "data_type": types,
-                        "shape": shapes
-                    }
-                )
-                rs.profileConfiguration = str(json.dumps(cnf))
-                cpname = rs.createDynamicComponent([
-                    str(json.dumps([ds]))])
-                comp = self._cf.dp.Components([cpname])[0]
-
-                indom = xml.dom.minidom.parseString(dsxml)
-                dss = indom.getElementsByTagName("datasource")
-                if not ds.startswith("client_") and sds[1] != 'encoded':
-                    nxstype = self._npTn2[tp]
-                else:
-                    nxstype = 'NX_CHAR'
-                mycps = defbg + groupbg + fieldbg % (
-                    ds.lower(), nxstype)
-
-                mycps += dss[0].toprettyxml(indent="")
-                mstr = ""
-                if ms:
-                    mstr += dimbg % len(ms)
-                    for ind, val in enumerate(ms):
-                        mstr += dim % (ind + 1, val)
-                    mstr += dimend
-
-                mycps += mstr
-                mycps += fieldend + groupend + groupend
-                lk = link % (ds.lower(), self._defaultpath,
-                             ds.lower())
-                mycps += lk if i % 2 else ""
-                mycps += groupend + defend
-
-                self.assertEqual(comp, mycps)
-
-    ## constructor test
-    # \brief It tests default settings
-    def test_create_init_typeshape_tango(self):
-        fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
-        val = {"ConfigDevice": self._cf.dp.name(),
-               "WriterDevice": self._wr.dp.name(),
-               "Door": 'doortestp09/testts/t1r228',
-               "MntGrp": 'nxsmntgrp'}
-        rs = self.openRecSelector()
-        rs.configDevice = val["ConfigDevice"]
-        rs.door = val["Door"]
-        rs.mntGrp = val["MntGrp"]
-        cnfdef = json.loads(rs.profileConfiguration)
-
-        defbg = '<?xml version="1.0" ?>\n<definition>\n'
-        defend = '</definition>\n'
-        groupbg = '<group name="scan$var.serialno" type="NXentry">\n' + \
-            '<group name="instrument" type="NXinstrument">\n' + \
-            '<group name="collection" type="NXcollection">\n'
-        groupend = '</group>\n'
-
-        fieldbg = '<field name="%s" type="%s">\n<strategy mode="INIT"/>\n'
-        fieldend = '</field>\n'
-
-        link = '<group name="data" type="NXdata">\n' + \
-            '<link name="%s" target="%s/%s"/>\n</group>\n'
-
-        dimbg = '<dimensions rank="%s">\n'
-        dim = '<dim index="%s" value="%s"/>\n'
-        dimend = '</dimensions>\n'
-
-        self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
-        for i in range(4):
-            for ds, dsxml in self.smydss.items():
-                ms = self.smydsspar[ds]
-                sds = ds.split("_")
-                tp = sds[1]
-                cnf = dict(cnfdef)
-                labels = {}
-                paths = {}
-                links = {}
-                types = {}
-                shapes = {}
-
-                if i == 0:
-                    cnf["DefaultDynamicLinks"] = False
-                    cnf["DefaultDynamicPath"] = self._defaultpath
-                elif i == 1:
-                    cnf["DefaultDynamicLinks"] = True
-                    cnf["DefaultDynamicPath"] = self._defaultpath
-                elif i == 2:
-                    links = {ds: False}
-                elif i == 3:
-                    links = {ds: True}
-                cnf["ChannelProperties"] = json.dumps(
-                    {
-                        "label": labels,
-                        "nexus_path": paths,
-                        "link": links,
-                        "data_type": types,
-                        "shape": shapes
-                    }
-                )
-                rs.profileConfiguration = str(json.dumps(cnf))
-                cpname = rs.createDynamicComponent([
-                    "", "",
-                    str(json.dumps([ds]))])
-
-#                dc.setInitDSources([ds])
-#                cpname = dc.create()
-                comp = self._cf.dp.Components([cpname])[0]
-
-                indom = xml.dom.minidom.parseString(dsxml)
-                dss = indom.getElementsByTagName("datasource")
-                if not ds.startswith("client_") and sds[1] != 'encoded':
-                    nxstype = self._npTn2[tp]
-                else:
-                    nxstype = 'NX_CHAR'
-                mycps = defbg + groupbg + fieldbg % (
-                    ds.lower(), nxstype)
-
-                mycps += dss[0].toprettyxml(indent="")
-                mstr = ""
-                if ms:
-                    mstr += dimbg % len(ms)
-                    for ind, val in enumerate(ms):
-                        mstr += dim % (ind + 1, val)
-                    mstr += dimend
-
-                mycps += mstr
-                mycps += fieldend + groupend + groupend
-                lk = link % (ds.lower(), self._defaultpath,
-                             ds.lower())
-                mycps += lk if i % 2 else ""
-                mycps += groupend + defend
-
-                self.assertEqual(comp, mycps)
 
     ## constructor test
     # \brief It tests default settings
@@ -6774,6 +6481,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                     cnf["DefaultDynamicPath"] = self._defaultpath
                     types = {ds: nxstp}
                     shapes = {ds: ms2}
+                    links = {ds: True}
                 elif i == 2:
                     links = {ds: False}
                     types = {ds: nxstp}
@@ -6804,6 +6512,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                     labels = {ds: lbl}
                     types = {ds: nxstp}
                     shapes = {ds: ms2}
+                    links = {ds: True}
                 elif i == 8:
                     pass
                     cnf["DefaultDynamicLinks"] = False
@@ -6812,6 +6521,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                     types = {ds: nxstp}
                     shapes = {ds: ms2}
                 elif i == 9:
+                    links = {ds: True}
                     cnf["DefaultDynamicLinks"] = True
                     cnf["DefaultDynamicPath"] = self._defaultpath
                     labels = {ds: lbl}
@@ -6850,6 +6560,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                     shapes = {ds: ms2}
                 elif i == 15:
                     labels = {ds: lbl}
+                    links = {ds: True}
                     types = {ds: nxstp}
                     shapes = {ds: ms2}
 
@@ -6927,6 +6638,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.smydss)])
         for i, nxstp in enumerate(self._npTn.values()):
+            print i
             for ds, dsxml in self.smydss.items():
                 ms = self.smydsspar[ds]
                 ms2 = [self._rnd.randint(0, 3000)
@@ -6946,6 +6658,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                     shapes = {ds: ms2}
                 elif i == 1:
                     cnf["DefaultDynamicLinks"] = True
+                    links = {ds: True}
                     cnf["DefaultDynamicPath"] = self._defaultpath
                     types = {ds: nxstp}
                     shapes = {ds: ms2}
@@ -6973,6 +6686,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                     shapes = {ds: ms2}
                 elif i == 7:
                     labels = {ds: lbl}
+                    links = {ds: True}
                     types = {ds: nxstp}
                     shapes = {ds: ms2}
                 elif i == 8:
@@ -6982,6 +6696,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                     types = {ds: nxstp}
                     shapes = {ds: ms2}
                 elif i == 9:
+                    links = {ds: True}
                     cnf["DefaultDynamicLinks"] = True
                     cnf["DefaultDynamicPath"] = self._defaultpath
                     labels = {ds: lbl}
@@ -7017,6 +6732,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                     shapes = {ds: ms2}
                 elif i == 15:
                     labels = {ds: lbl}
+                    links = {ds: True}
                     types = {ds: nxstp}
                     shapes = {ds: ms2}
 
@@ -7526,7 +7242,6 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
         db = PyTango.Database()
         try:
             for i in range(8):
-#                print "I = ", i
                 for ds, dsxml in self.smydss.items():
                     ms = self.smydsspar[ds]
                     sds = ds.split("_")
@@ -7577,6 +7292,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                         cnf["DefaultDynamicLinks"] = False
                         cnf["DefaultDynamicPath"] = mypath
                     elif i == 1:
+                        links = {ds: True}
                         cnf["DefaultDynamicLinks"] = True
                         cnf["DefaultDynamicPath"] = mypath
                     elif i == 2:
@@ -7592,6 +7308,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                     elif i == 5:
                         cnf["DefaultDynamicLinks"] = True
                         cnf["DefaultDynamicPath"] = mypath
+                        links = {ds: True}
                         labels = {ds: lbl}
                     elif i == 6:
                         labels = {ds: lbl}
@@ -7787,6 +7504,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                     elif i == 1:
                         cnf["DefaultDynamicLinks"] = True
                         cnf["DefaultDynamicPath"] = mypath
+                        links = {ds: True}
                     elif i == 2:
                         paths = {ds: mypath + "/" + fieldname}
                     elif i == 3:
@@ -7798,6 +7516,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                     elif i == 5:
                         cnf["DefaultDynamicLinks"] = True
                         cnf["DefaultDynamicPath"] = mypath
+                        links = {ds: True}
                         labels = {ds: lbl}
                     elif i == 6:
                         labels = {ds: lbl}

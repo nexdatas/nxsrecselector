@@ -1479,7 +1479,7 @@ class DynamicComponentTest(unittest.TestCase):
             for i, ar in enumerate(arr):
                 if '/' in ar["full_name"]:
                     db.put_device_alias(ar["full_name"], ar["name"])
-                print "I = ", i
+#                print "I = ", i
                 for tp, nxstp in self.__npTn.items():
                     dc = DynamicComponent(self._cf.dp)
 
@@ -1972,9 +1972,7 @@ class DynamicComponentTest(unittest.TestCase):
             '<field name="ds1" type="%s">\n<strategy mode="INIT"/>\n'
             '<datasource name="ds1" type="CLIENT">\n'
             '<record name="ds1"/>\n</datasource>\n</field>\n'
-            '</group>\n</group>\n<group name="data" type="NXdata">\n'
-            '<link name="ds1" target="/scan$var.serialno:'
-            'NXentry/NXinstrument/collection/ds1"/>\n'
+            '</group>\n'
             '</group>\n</group>\n</definition>\n',
         }
         dname = "__dynamic_component__"
@@ -2031,10 +2029,7 @@ class DynamicComponentTest(unittest.TestCase):
             '<field name="ds1" type="%s">\n<strategy mode="INIT"/>\n'
             '<datasource name="ds1" type="CLIENT">\n'
             '<record name="ds1"/>\n</datasource>\n</field>\n'
-            '</group>\n</group>\n<group name="data" type="NXdata">\n'
-            '<link name="ds1" target="/scan$var.serialno:'
-            'NXentry/NXinstrument/collection/ds1"/>\n'
-            '</group>\n</group>\n</definition>\n',
+            '</group>\n</group>\n</group>\n</definition>\n',
         }
         dname = "__dynamic_component__"
         dc = DynamicComponent(self._cf.dp)
@@ -2105,10 +2100,7 @@ class DynamicComponentTest(unittest.TestCase):
             '<field name="ds2" type="NX_CHAR">\n<strategy mode="INIT"/>\n'
             '<datasource name="ds2" type="CLIENT">\n'
             '<record name="ds2"/>\n</datasource>\n%s</field>\n'
-            '</group>\n</group>\n<group name="data" type="NXdata">\n'
-            '<link name="ds2" target="/scan$var.serialno:'
-            'NXentry/NXinstrument/collection/ds2"/>\n'
-            '</group>\n</group>\n</definition>\n',
+            '</group>\n</group>\n</group>\n</definition>\n',
         }
 
         dimbg = '<dimensions rank="%s">\n'
@@ -2331,7 +2323,7 @@ class DynamicComponentTest(unittest.TestCase):
         link = '<group name="data" type="NXdata">\n' + \
             '<link name="%s" target="/scan$var.serialno:' + \
             'NXentry/NXinstrument/collection/%s"/>\n</group>\n'
-
+        
         dimbg = '<dimensions rank="%s">\n'
         dim = '<dim index="%s" value="%s"/>\n'
         dimend = '</dimensions>\n'
@@ -2371,12 +2363,12 @@ class DynamicComponentTest(unittest.TestCase):
                            for _ in range(self.__rnd.randint(0, 3))]
                     tmptp = self.__rnd.choice(self.__npTn.keys())
                     if i == 0:
-                        dc.setDefaultLinkPath(False, self.__defaultpath)
+                        dc.setDefaultLinkPath(True, self.__defaultpath, False)
                         dc.setLabelParams("{}", "{}", "{}",
                                           json.dumps({ar["name"]: nxstp}),
                                           json.dumps({ar["name"]: ms}))
                     elif i == 1:
-                        dc.setDefaultLinkPath(True, self.__defaultpath)
+                        dc.setDefaultLinkPath(False, self.__defaultpath, True)
                         dc.setLabelParams("{}", "{}", "{}",
                                           json.dumps({ar["name"]: nxstp}),
                                           json.dumps({ar["name"]: ms}))
@@ -2409,19 +2401,18 @@ class DynamicComponentTest(unittest.TestCase):
                                           json.dumps({ar["name"]: nxstp}),
                                           json.dumps({ar["name"]: ms}))
                     elif i == 7:
+                        dc.setDefaultLinkPath(False, self.__defaultpath)
+                        dc.setLabelParams("{}", "{}",
+                                          json.dumps({ar["name"]: True}),
+                                          json.dumps({ar["name"]: nxstp}),
+                                          json.dumps({ar["name"]: ms}))
+                    elif i == 8:
                         dc.setLabelParams(json.dumps({ar["name"]: lbl}),
                                           "{}", "{}",
                                           json.dumps({ar["name"]: nxstp}),
                                           json.dumps({ar["name"]: ms}))
-                    elif i == 8:
-                        pass
-                        dc.setDefaultLinkPath(False, self.__defaultpath)
-                        dc.setLabelParams(json.dumps({ar["name"]: lbl}),
-                                          "{}", "{}",
-                                          json.dumps({lbl: nxstp}),
-                                          json.dumps({lbl: ms}))
                     elif i == 9:
-                        dc.setDefaultLinkPath(True, self.__defaultpath)
+                        dc.setDefaultLinkPath(True, self.__defaultpath, True)
                         dc.setLabelParams(json.dumps({ar["name"]: lbl}),
                                           "{}", "{}",
                                           json.dumps({lbl: nxstp}),
@@ -2439,27 +2430,28 @@ class DynamicComponentTest(unittest.TestCase):
                                           json.dumps({lbl: nxstp}),
                                           json.dumps({lbl: ms}))
                     elif i == 12:
-                        dc.setDefaultLinkPath(True, self.__defaultpath)
+                        dc.setDefaultLinkPath(True, self.__defaultpath, True)
                         dc.setLabelParams(json.dumps({ar["name"]: lbl}),
                                           "{}",
                                           json.dumps({lbl: False}),
                                           json.dumps({lbl: nxstp}),
                                           json.dumps({lbl: ms}))
                     elif i == 13:
-                        dc.setDefaultLinkPath(False, self.__defaultpath)
+                        dc.setDefaultLinkPath(False, self.__defaultpath, False)
                         dc.setLabelParams(json.dumps({ar["name"]: lbl}),
                                           "{}",
                                           json.dumps({lbl: True}),
                                           json.dumps({lbl: nxstp}),
                                           json.dumps({lbl: ms}))
                     elif i == 14:
-                        dc.setDefaultLinkPath(False, self.__defaultpath)
+                        dc.setDefaultLinkPath(False, self.__defaultpath, False)
                         dc.setLabelParams(json.dumps({ar["name"]: lbl}),
                                           "{}",
                                           json.dumps({"dssd": True}),
                                           json.dumps({lbl: nxstp}),
                                           json.dumps({lbl: ms}))
                     elif i == 15:
+                        dc.setDefaultLinkPath(False, self.__defaultpath, True)
                         dc.setLabelParams(json.dumps({ar["name"]: lbl}),
                                           "{}", "{}",
                                           json.dumps({lbl: nxstp}),
@@ -2476,7 +2468,7 @@ class DynamicComponentTest(unittest.TestCase):
 
                     comp = self._cf.dp.Components([cpname])[0]
                     ds = ar["name"]
-                    lk = link % (ds, ds)
+                    lk = link  % (ds, ds)
                     self.assertEqual(
                         cps["shapetype"] % (
                             ds,
@@ -2667,6 +2659,7 @@ class DynamicComponentTest(unittest.TestCase):
 
         link = '<group name="data" type="NXdata">\n' + \
             '<link name="%s" target="%s/%s"/>\n</group>\n'
+        link = ''
 
         dimbg = '<dimensions rank="%s">\n'
         dim = '<dim index="%s" value="%s"/>\n'
@@ -2719,8 +2712,8 @@ class DynamicComponentTest(unittest.TestCase):
                 else:
                     mycps += dsclient % (ar["name"], ar["name"])
                 mycps += fieldend + groupend + groupend
-                mycps += link % (ar["name"], self.__defaultpath,
-                                 ar["name"])
+                mycps += link #% (ar["name"], self.__defaultpath,
+                              #   ar["name"])
                 mycps += groupend + defend
 
                 self.assertEqual(comp, mycps)
@@ -2770,10 +2763,10 @@ class DynamicComponentTest(unittest.TestCase):
                 dc.setInitDSources([ds])
 
                 if i == 0:
-                    dc.setDefaultLinkPath(False, self.__defaultpath)
+                    dc.setDefaultLinkPath(False, self.__defaultpath, False)
                     dc.setLabelParams("{}", "{}", "{}", "{}", "{}")
                 elif i == 1:
-                    dc.setDefaultLinkPath(True, self.__defaultpath)
+                    dc.setDefaultLinkPath(True, self.__defaultpath, True)
                     dc.setLabelParams("{}", "{}", "{}", "{}", "{}")
                 elif i == 2:
                     dc.setLabelParams("{}", "{}",
@@ -2791,154 +2784,6 @@ class DynamicComponentTest(unittest.TestCase):
 
                 mycps += dsclient % (ds, ds)
                 mstr = ""
-
-                mycps += mstr
-                mycps += fieldend + groupend + groupend
-                lk = link % (ds.lower(), self.__defaultpath,
-                             ds.lower())
-                mycps += lk if i % 2 else ""
-                mycps += groupend + defend
-
-                self.assertEqual(comp, mycps)
-
-    ## constructor test
-    # \brief It tests default settings
-    def test_create_step_typeshape_tango(self):
-        fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
-
-        defbg = '<?xml version="1.0" ?>\n<definition>\n'
-        defend = '</definition>\n'
-        groupbg = '<group name="scan$var.serialno" type="NXentry">\n' + \
-            '<group name="instrument" type="NXinstrument">\n' + \
-            '<group name="collection" type="NXcollection">\n'
-        groupend = '</group>\n'
-
-        fieldbg = '<field name="%s" type="%s">\n<strategy mode="STEP"/>\n'
-        fieldend = '</field>\n'
-
-        link = '<group name="data" type="NXdata">\n' + \
-            '<link name="%s" target="%s/%s"/>\n</group>\n'
-
-        dimbg = '<dimensions rank="%s">\n'
-        dim = '<dim index="%s" value="%s"/>\n'
-        dimend = '</dimensions>\n'
-
-        self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
-        dc = DynamicComponent(self._cf.dp)
-        for i in range(4):
-            for ds, dsxml in self.smydss.items():
-                ms = self.smydsspar[ds]
-                sds = ds.split("_")
-                tp = sds[1]
-                dc.setStepDSources([ds])
-
-                if i == 0:
-                    dc.setDefaultLinkPath(False, self.__defaultpath)
-                    dc.setLabelParams("{}", "{}", "{}", "{}", "{}")
-                elif i == 1:
-                    dc.setDefaultLinkPath(True, self.__defaultpath)
-                    dc.setLabelParams("{}", "{}", "{}", "{}", "{}")
-                elif i == 2:
-                    dc.setLabelParams("{}", "{}",
-                                      json.dumps({ds: False}), "{}", "{}")
-                elif i == 3:
-                    dc.setLabelParams("{}", "{}",
-                                      json.dumps({ds: True}), "{}", "{}")
-
-                cpname = dc.create()
-                comp = self._cf.dp.Components([cpname])[0]
-
-                indom = xml.dom.minidom.parseString(dsxml)
-                dss = indom.getElementsByTagName("datasource")
-                if not ds.startswith("client_") and sds[1] != 'Encoded':
-                    nxstype = self.__npTn2[tp]
-                else:
-                    nxstype = 'NX_CHAR'
-                mycps = defbg + groupbg + fieldbg % (
-                    ds.lower(), nxstype)
-
-                mycps += dss[0].toprettyxml(indent="")
-                mstr = ""
-                if ms:
-                    mstr += dimbg % len(ms)
-                    for ind, val in enumerate(ms):
-                        mstr += dim % (ind + 1, val)
-                    mstr += dimend
-
-                mycps += mstr
-                mycps += fieldend + groupend + groupend
-                lk = link % (ds.lower(), self.__defaultpath,
-                             ds.lower())
-                mycps += lk if i % 2 else ""
-                mycps += groupend + defend
-
-                self.assertEqual(comp, mycps)
-
-    ## constructor test
-    # \brief It tests default settings
-    def test_create_init_typeshape_tango(self):
-        fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
-
-        defbg = '<?xml version="1.0" ?>\n<definition>\n'
-        defend = '</definition>\n'
-        groupbg = '<group name="scan$var.serialno" type="NXentry">\n' + \
-            '<group name="instrument" type="NXinstrument">\n' + \
-            '<group name="collection" type="NXcollection">\n'
-        groupend = '</group>\n'
-
-        fieldbg = '<field name="%s" type="%s">\n<strategy mode="INIT"/>\n'
-        fieldend = '</field>\n'
-
-        link = '<group name="data" type="NXdata">\n' + \
-            '<link name="%s" target="%s/%s"/>\n</group>\n'
-
-        dimbg = '<dimensions rank="%s">\n'
-        dim = '<dim index="%s" value="%s"/>\n'
-        dimend = '</dimensions>\n'
-
-        self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
-        dc = DynamicComponent(self._cf.dp)
-        for i in range(4):
-            for ds, dsxml in self.smydss.items():
-                ms = self.smydsspar[ds]
-                sds = ds.split("_")
-                tp = sds[1]
-                dc.setInitDSources([ds])
-
-                if i == 0:
-                    dc.setDefaultLinkPath(False, self.__defaultpath)
-                    dc.setLabelParams("{}", "{}", "{}", "{}", "{}")
-                elif i == 1:
-                    dc.setDefaultLinkPath(True, self.__defaultpath)
-                    dc.setLabelParams("{}", "{}", "{}", "{}", "{}")
-                elif i == 2:
-                    dc.setLabelParams("{}", "{}",
-                                      json.dumps({ds: False}), "{}", "{}")
-                elif i == 3:
-                    dc.setLabelParams("{}", "{}",
-                                      json.dumps({ds: True}), "{}", "{}")
-
-                cpname = dc.create()
-                comp = self._cf.dp.Components([cpname])[0]
-
-                indom = xml.dom.minidom.parseString(dsxml)
-                dss = indom.getElementsByTagName("datasource")
-                if not ds.startswith("client_") and sds[1] != 'Encoded':
-                    nxstype = self.__npTn2[tp]
-                else:
-                    nxstype = 'NX_CHAR'
-                mycps = defbg + groupbg + fieldbg % (
-                    ds.lower(), nxstype)
-
-                mycps += dss[0].toprettyxml(indent="")
-                mstr = ""
-                if ms:
-                    mstr += dimbg % len(ms)
-                    for ind, val in enumerate(ms):
-                        mstr += dim % (ind + 1, val)
-                    mstr += dimend
 
                 mycps += mstr
                 mycps += fieldend + groupend + groupend
@@ -3146,7 +2991,7 @@ class DynamicComponentTest(unittest.TestCase):
                                       json.dumps({ds: nxstp}),
                                       json.dumps({ds: ms2}))
                 elif i == 1:
-                    dc.setDefaultLinkPath(True, self.__defaultpath)
+                    dc.setDefaultLinkPath(True, self.__defaultpath, True)
                     dc.setLabelParams("{}", "{}", "{}",
                                       json.dumps({ds: nxstp}),
                                       json.dumps({ds: ms2}))
@@ -3179,19 +3024,18 @@ class DynamicComponentTest(unittest.TestCase):
                                       json.dumps({ds: nxstp}),
                                       json.dumps({ds: ms2}))
                 elif i == 7:
+                    dc.setDefaultLinkPath(False, self.__defaultpath,False)
+                    dc.setLabelParams("{}", "{}",
+                                      json.dumps({ds: True}),
+                                      json.dumps({ds: nxstp}),
+                                      json.dumps({ds: ms2}))
+                elif i == 8:
                     dc.setLabelParams(json.dumps({ds: lbl}),
                                       "{}", "{}",
                                       json.dumps({ds: nxstp}),
                                       json.dumps({ds: ms2}))
-                elif i == 8:
-                    pass
-                    dc.setDefaultLinkPath(False, self.__defaultpath)
-                    dc.setLabelParams(json.dumps({ds: lbl}),
-                                      "{}", "{}",
-                                      json.dumps({lbl: nxstp}),
-                                      json.dumps({lbl: ms2}))
                 elif i == 9:
-                    dc.setDefaultLinkPath(True, self.__defaultpath)
+                    dc.setDefaultLinkPath(True, self.__defaultpath, True)
                     dc.setLabelParams(json.dumps({ds: lbl}),
                                       "{}", "{}",
                                       json.dumps({lbl: nxstp}),
@@ -3230,6 +3074,7 @@ class DynamicComponentTest(unittest.TestCase):
                                       json.dumps({lbl: nxstp}),
                                       json.dumps({lbl: ms2}))
                 elif i == 15:
+                    dc.setDefaultLinkPath(False, self.__defaultpath, True)
                     dc.setLabelParams(json.dumps({ds: lbl}),
                                       "{}", "{}",
                                       json.dumps({lbl: nxstp}),
@@ -3494,7 +3339,6 @@ class DynamicComponentTest(unittest.TestCase):
         db = PyTango.Database()
         try:
             for i in range(8):
-                print "I = ", i
                 for ds, dsxml in self.smydss.items():
                     ms = self.smydsspar[ds]
                     sds = ds.split("_")
@@ -3536,9 +3380,9 @@ class DynamicComponentTest(unittest.TestCase):
 #                    print "TP = ", tp
                     tmptp = self.__rnd.choice(self.__npTn.keys())
                     if i == 0:
-                        dc.setDefaultLinkPath(False, mypath)
+                        dc.setDefaultLinkPath(False, mypath, False)
                     elif i == 1:
-                        dc.setDefaultLinkPath(True, mypath)
+                        dc.setDefaultLinkPath(True, mypath, True)
                     elif i == 2:
                         dc.setLabelParams(
                             "{}",
@@ -3552,12 +3396,12 @@ class DynamicComponentTest(unittest.TestCase):
                             json.dumps({ds: True}),
                             "{}", "{}")
                     elif i == 4:
-                        dc.setDefaultLinkPath(False, mypath)
+                        dc.setDefaultLinkPath(False, mypath, False)
                         dc.setLabelParams(
                             json.dumps({ds: lbl}),
                             "{}", "{}", "{}", "{}")
                     elif i == 5:
-                        dc.setDefaultLinkPath(True, mypath)
+                        dc.setDefaultLinkPath(True, mypath, True)
                         dc.setLabelParams(
                             json.dumps({ds: lbl}),
                             "{}", "{}", "{}", "{}")
@@ -3586,7 +3430,7 @@ class DynamicComponentTest(unittest.TestCase):
                         mstr += dimend
 
                     comp = self._cf.dp.Components([cpname])[0]
-                    lk = link % (ds, mypath, ds)
+                    lk = link #% (ds, mypath, ds)
                     if i % 4 < 2:
                         fd = fieldbg % (ds.lower(), nxstp)
                     else:
