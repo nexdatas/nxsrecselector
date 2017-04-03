@@ -493,6 +493,16 @@
       <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
       <excludedStates>RUNNING</excludedStates>
     </commands>
+    <commands name="ComponentSources" description="Describe datasources from components" execMethod="component_sources" displayLevel="OPERATOR" polledPeriod="0" isDynamic="false">
+      <argin description="list of required components">
+        <type xsi:type="pogoDsl:StringArrayType"/>
+      </argin>
+      <argout description="JSON with description of  Datasources">
+        <type xsi:type="pogoDsl:StringType"/>
+      </argout>
+      <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
+      <excludedStates>RUNNING</excludedStates>
+    </commands>
     <attributes name="StepDataSources" attType="Scalar" rwType="READ_WRITE" displayLevel="EXPERT" polledPeriod="0" maxX="" maxY="" allocReadMember="true" isDynamic="false">
       <dataType xsi:type="pogoDsl:StringType"/>
       <changeEvent fire="false" libCheckCriteria="false"/>

@@ -881,6 +881,24 @@ class Settings(object):
         jdc = json.dumps(dc)
         return jdc
 
+    def componentSources(self, cps):
+        """ provides description of datasources
+
+        :param cps: component names
+        :type cps: :obj:`list` <:obj:`str`>
+        :returns: JSON string with description of client datasources
+        :rtype: :obj:`str`
+        """
+        nexusconfig_device = self.__selector.setConfigInstance()
+        describer = Describer(nexusconfig_device)
+        if cps:
+            cp = cps
+        else:
+            cp = self.components
+        dc = describer.components(cp, '', '', self.configVariables)
+        jdc = json.dumps(dc)
+        return jdc
+
     def createWriterConfiguration(self, cps):
         """ create configuration and clean stepdatasources and linkdatasources
 

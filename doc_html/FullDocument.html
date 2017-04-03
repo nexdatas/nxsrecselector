@@ -105,6 +105,7 @@
 				<li> <a href="FullDocument.html#cmdUpdateMntGrp"> UpdateMntGrp </a>
 				<li> <a href="FullDocument.html#cmdUpdateProfile"> UpdateProfile </a>
 				<li> <a href="FullDocument.html#cmdVariableComponents"> VariableComponents </a>
+				<li> <a href="FullDocument.html#cmdComponentSources"> ComponentSources </a>
 			</ul>
 			<li> <a href="FullDocument.html#attributes">   Attributes   </a>
 			<ul>
@@ -591,6 +592,13 @@
 		<td> DEV_STRING </td>
 		<td> OPERATOR </td>
 		<td> Return a list of available component names </td>
+	</tr>
+	<tr>
+		<td> <a href="CmdComponentSources.html"> ComponentSources </a> </td>
+		<td> DEVVAR_STRINGARRAY </td>
+		<td> DEV_STRING </td>
+		<td> OPERATOR </td>
+		<td> Describe datasources from components </td>
 	</tr>
 </table>
 <br><br><hr>
@@ -2770,6 +2778,55 @@
 		<td> Output Argument </td>
 		<td> Tango::DEV_STRING </td>
 		<td> JSON Dictionary with all Components for configuration variable </td>
+	</tr>
+	<tr>
+		<td> DisplayLevel </td>
+		<td> OPERATOR </td>
+		<td> .. </td>
+	</tr>
+	<tr>
+		<td> Inherited </td>
+		<td> false </td>
+		<td> .. </td>
+	</tr>
+	<tr>
+		<td> Abstract </td>
+		<td> false </td>
+		<td> .. </td>
+	</tr>
+	<tr>
+		<td> Polling Period </td>
+		<td> Not polled </td>
+		<td> .. </td>
+	</tr>
+<Tr BGCOLOR="#CCCCFF"><Td><Hr></Td><Td><Hr></Td><Td><Hr></Td></Tr>
+	<tr>
+		<td> Command NOT allowed for </td>
+		<td> <font size="-1">  <li> RUNNING </li> </font> </td>
+		<td> .. </td>
+	</tr>
+</table>
+<br><br><hr>
+<a name="cmdComponentSources"> </a>
+<br><br><br>
+<font size="+1"><u><b> Command ComponentSources : </b></u></font>
+<ul>
+	Describe datasources from components
+</ul>
+<br><br><br>
+<Table Border=2 Cellpadding=3 CELLSPACING=0>
+	<tr bgcolor="#CCCCFF" class="TableHeadingColor">
+	<td colspan=0> <font size=+1> <center><b> ComponentSources Definition </b></font></center></td>
+	</tr>
+	<tr>
+		<td> Input Argument </td>
+		<td> Tango::DEVVAR_STRINGARRAY </td>
+		<td> list of required components </td>
+	</tr>
+	<tr>
+		<td> Output Argument </td>
+		<td> Tango::DEV_STRING </td>
+		<td> JSON with description of  Datasources </td>
 	</tr>
 	<tr>
 		<td> DisplayLevel </td>

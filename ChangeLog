@@ -1,4 +1,5 @@
 2017-03-XX Jan Kotanski <jankotan@gmail.com>
+	* add componentSources command
 	* add LinkDataSources attribute
 	* make INIT dynamic components by default without links
 	* tagged as v3.8.0

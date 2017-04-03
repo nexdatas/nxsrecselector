@@ -1619,6 +1619,36 @@ class NXSRecSelector(PyTango.Device_4Impl):
             return False
         return True
 
+    def ComponentSources(self, argin):
+        """ ComponentSources command
+
+        :brief: Describe datasources from components
+        :param argin:  DevVarStringArray    list of component names
+        :type argin: :obj:`list` <:obj:`str`>
+        :returns: DevVarString         description of component datasources
+        :rtype: :obj:`str`
+        """
+        self.debug_stream("In ComponentSources()")
+        try:
+            self.set_state(PyTango.DevState.RUNNING)
+            argout = self.__stg.componentSources(argin)
+            self.set_state(PyTango.DevState.ON)
+        finally:
+            if self.get_state() == PyTango.DevState.RUNNING:
+                self.set_state(PyTango.DevState.ON)
+
+        return argout
+
+    def is_ComponentSources_allowed(self):
+        """ ComponentSources command State Machine
+
+        :returns: True if the operation allowed
+        :rtype: :obj:`bool`
+        """
+        if self.get_state() in [PyTango.DevState.RUNNING]:
+            return False
+        return True
+
     def DataSourceDescription(self, argin):
         """ DataSourceDescription command
 
@@ -1869,9 +1899,14 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
              [PyTango.DevVarStringArray,
               "list of JSON with description of CLIENT Datasources"]],
         'ComponentClientSources':
-            [[PyTango.DevVarStringArray, "list of required components"],
+            [[PyTango.DevVarStringArray, "list of component "
+              "client datasources"],
              [PyTango.DevString,
-              "JSON with description of CLIENT Datasources"]],
+              "JSON with description of component CLIENT Datasources"]],
+        'ComponentSources':
+            [[PyTango.DevVarStringArray, "list of components"],
+             [PyTango.DevString,
+              "JSON with description of component Datasources"]],
         'ChannelProperties':
             [[PyTango.DevString, "property type"],
              [PyTango.DevString,
