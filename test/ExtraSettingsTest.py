@@ -4017,6 +4017,197 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
 
     ## constructor test
     # \brief It tests default settings
+    def test_componentSources_unknown(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        dsdict = {
+            "ann": self.mydss["ann"]
+        }
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        rs = self.openRecSelector()
+        rs.configDevice = val["ConfigDevice"]
+        rs.door = val["Door"]
+        rs.mntGrp = val["MntGrp"]
+        self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dsdict)])
+
+        self.assertEqual(rs.componentSources([]), '[]')
+        self.assertEqual(rs.componentSources(["unknown"]), '[]')
+
+        self.assertEqual(rs.componentSources([]), '[]')
+        self.assertEqual(rs.componentSources(["unknown"]), '[]')
+        if isinstance(rs, Settings):
+            self.assertEqual(rs.componentSources(None), '[]')
+            self.assertEqual(rs.componentSources(["unknown"]), '[]')
+
+            self.assertEqual(rs.componentSources(None), '[]')
+            self.assertEqual(rs.componentSources(["unknown"]), '[]')
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_componentSources_dstype(self):
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        rs = self.openRecSelector()
+        rs.configDevice = val["ConfigDevice"]
+        rs.door = val["Door"]
+        rs.mntGrp = val["MntGrp"]
+        self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
+        self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
+
+        for cp in self.mycps.keys():
+            res = json.loads(rs.componentSources([cp]))
+            self.checkICP(res, [cp],
+                          strategy=None, dstype=None)
+        res = json.loads(rs.componentSources(self.mycps.keys()))
+        self.checkICP(res, self.rescps.keys(),
+                      strategy=None, dstype=None)
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_componentSources_mem(self):
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        rs = self.openRecSelector()
+        rs.configDevice = val["ConfigDevice"]
+        rs.door = val["Door"]
+        rs.mntGrp = val["MntGrp"]
+        for i in range(20):
+            self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
+            self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
+            nmem = self._rnd.randint(1, len(self.mycps.keys()) - 1)
+            mem = self._rnd.sample(set(self.mycps.keys()), nmem)
+            self._cf.dp.SetCommandVariable(["MCPLIST", json.dumps(mem)])
+
+            for cp in self.mycps.keys():
+                res = json.loads(rs.componentSources([cp]))
+                self.checkICP(res, [cp],
+                              strategy=None)
+            res = json.loads(rs.componentSources(self.mycps.keys()))
+            self.checkICP(res, self.rescps.keys(),
+                          strategy=None)
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_componentSources_cps(self):
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        rs = self.openRecSelector()
+        rs.configDevice = val["ConfigDevice"]
+        rs.door = val["Door"]
+        rs.mntGrp = val["MntGrp"]
+        for i in range(20):
+            self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
+            self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
+            nmem = self._rnd.randint(1, len(self.mycps.keys()) - 1)
+            mem = self._rnd.sample(set(self.mycps.keys()), nmem)
+
+            res = json.loads(rs.componentSources(mem))
+            self.checkICP(res, mem,
+                          strategy=None)
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_componentSources_components(self):
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        rs = self.openRecSelector()
+        rs.configDevice = val["ConfigDevice"]
+        rs.door = val["Door"]
+        rs.mntGrp = val["MntGrp"]
+        for i in range(100):
+            self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
+            self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
+            nmem = self._rnd.randint(1, len(self.mycps.keys()) - 1)
+            mem = self._rnd.sample(set(self.mycps.keys()), nmem)
+            self._cf.dp.SetCommandVariable(["MCPLIST", json.dumps(mem)])
+
+            nccp = self._rnd.randint(1, len(self.mycps.keys()) - 1)
+            ccp = self._rnd.sample(set(self.mycps.keys()), nccp)
+            cps = {}
+            for cp in ccp:
+                cps[cp] = bool(self._rnd.randint(0, 1))
+
+            nacp = self._rnd.randint(1, len(self.mycps.keys()) - 1)
+            acp = self._rnd.sample(set(self.mycps.keys()), nacp)
+            acps = {}
+            for cp in acp:
+                acps[cp] = bool(self._rnd.randint(0, 1))
+
+            cnf = json.loads(rs.profileConfiguration)
+            cnf["ComponentPreselection"] = json.dumps(acps)
+            cnf["ComponentSelection"] = json.dumps(cps)
+            rs.profileConfiguration = json.dumps(cnf)
+            # print "CPS", rs.components
+
+            res = json.loads(rs.componentSources([]))
+            self.checkICP(res, rs.components,
+                          strategy=None)
+
+    ## constructor test
+    # \brief It tests default settings
+    def test_componentSources_components_var(self):
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+        rs = self.openRecSelector()
+        rs.configDevice = val["ConfigDevice"]
+        rs.door = val["Door"]
+        rs.mntGrp = val["MntGrp"]
+        for i in range(100):
+            self._cf.dp.SetCommandVariable(
+                ["DSDICT", json.dumps(self.mydss)])
+            self._cf.dp.SetCommandVariable(
+                ["CPDICT", json.dumps(self.mycpsvar)])
+            nmem = self._rnd.randint(1, len(self.mycpsvar.keys()) - 1)
+            mem = self._rnd.sample(set(self.mycpsvar.keys()), nmem)
+            self._cf.dp.SetCommandVariable(["MCPLIST", json.dumps(mem)])
+
+            nccp = self._rnd.randint(1, len(self.mycpsvar.keys()) - 1)
+            ccp = self._rnd.sample(set(self.mycpsvar.keys()), nccp)
+            cps = {}
+            for cp in ccp:
+                cps[cp] = bool(self._rnd.randint(0, 1))
+            rs.configVariables = '{"c01": "exp_c01", "c02": "exp_c02", ' + \
+                                 '"mca": "p09/mca/exp.02"}'
+            self._cf.dp.SetCommandVariable(["CHECKVARIABLES",
+                                            json.dumps(rs.configVariables)])
+            nacp = self._rnd.randint(1, len(self.mycpsvar.keys()) - 1)
+            acp = self._rnd.sample(set(self.mycpsvar.keys()), nacp)
+            acps = {}
+            for cp in acp:
+                acps[cp] = bool(self._rnd.randint(0, 1))
+
+            cnf = json.loads(rs.profileConfiguration)
+            cnf["ComponentPreselection"] = json.dumps(acps)
+            cnf["ComponentSelection"] = json.dumps(cps)
+            rs.profileConfiguration = json.dumps(cnf)
+#            print "CPS", rs.components
+
+            res = rs.componentSources([])
+            res = json.loads(
+                res.replace(
+                    "$var.c01", "exp_c01").replace(
+                        "$var.c02", "exp_c02").replace(
+                            "$var.mca", "p09/mca/exp.02"))
+            self.checkICP(res, rs.components,
+                          strategy=None)
+
+
+            
+    ## constructor test
+    # \brief It tests default settings
     def test_create_remove_DynamicComponent(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
