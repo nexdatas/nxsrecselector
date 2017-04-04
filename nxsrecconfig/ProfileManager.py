@@ -1039,7 +1039,7 @@ class ProfileManager(object):
         return index
 
 
-    def __addController(cls, cnf, ctrl, fulltimer):
+    def __addController(self, cnf, ctrl, fulltimer):
         """ adds controller into mntgrp configuration dictionary
 
         :param cnf: mntgrp configuration dictionary
@@ -1050,10 +1050,11 @@ class ProfileManager(object):
         :rtype: :obj:`str`
         """
         if self.__withsynch:
-            self.__addController1(cls, cnf, ctrl, fulltimer)
+            self.__addController1(cnf, ctrl, fulltimer)
         else:
-            self.__addController2(cls, cnf, ctrl, fulltimer)
+            self.__addController2(cnf, ctrl, fulltimer)
 
+    @classmethod
     def __addController1(cls, cnf, ctrl, fulltimer):
         """ adds controller into mntgrp configuration dictionary
 
@@ -1080,6 +1081,7 @@ class ProfileManager(object):
             cnf['controllers'][ctrl]['units']['0'][
                 u'trigger_type'] = 0
 
+    @classmethod
     def __addController2(cls, cnf, ctrl, fulltimer):
         """ adds controller into mntgrp configuration dictionary
 

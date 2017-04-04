@@ -122,8 +122,8 @@ class Settings(object):
         pools = self.__selector.getPools()
         if pools:
             return hasattr(pools[0], "TriggerGateList")
-        return True    
-                
+        return True
+
     def __setupSelection(self):
         """ sets up the current selection from ActiveMntGrp
         """
