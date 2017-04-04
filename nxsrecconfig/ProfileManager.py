@@ -63,7 +63,7 @@ class ProfileManager(object):
         self.defaultPreselectedComponents = []
 
         #: (:obj:`bool`) mntgrp with synchronization
-        self.withsynch = withsynch
+        self.withsynch = True
 
     def __updateMacroServer(self):
         """ updatas MacroServer name
