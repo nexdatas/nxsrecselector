@@ -41,13 +41,11 @@ DEFAULT_RECORD_KEYS = ['serialno', 'end_time', 'start_time',
 class ProfileManager(object):
     """  Manages Measurement Group and Profile from Selector"""
 
-    def __init__(self, selector, withsynch=True):
+    def __init__(self, selector):
         """ constructor
 
         :param selector: selector object
         :type selector: :class:`nxsrecconfig.Selector.Selector`
-        :param withsynch: mntgrp with synchronization
-        :type withsynch: :obj:`bool`
         """
         #: (:class:`nxsrecconfig.Selector.Selector`) configuration selector
         self.__selector = selector
@@ -64,7 +62,8 @@ class ProfileManager(object):
         #: (:obj:`list` <:obj:`str`>) default preselectedComponents
         self.defaultPreselectedComponents = []
 
-        self.__withsynch = withsynch
+        #: (:obj:`bool`) mntgrp with synchronization
+        self.withsynch = withsynch
 
     def __updateMacroServer(self):
         """ updatas MacroServer name
@@ -1049,7 +1048,7 @@ class ProfileManager(object):
         :param fulltimer: full timer name
         :rtype: :obj:`str`
         """
-        if self.__withsynch:
+        if self.withsynch:
             self.__addController1(cnf, ctrl, fulltimer)
         else:
             self.__addController2(cnf, ctrl, fulltimer)

@@ -76,7 +76,8 @@ class Settings(object):
 
         #: (:class:`nxsrecconfg.ProfileManager.ProfileManager) \
         #: profile
-        self.__profileManager = ProfileManager(self.__selector, self.__hassynch())
+        self.__profileManager = ProfileManager(self.__selector)
+        self.__profileManager.withsynch = self.__hassynch()
 
         #: (:obj:`str`) configuration file
         self.profileFile = '/tmp/nxsrecconfig.cfg'
@@ -595,6 +596,7 @@ class Settings(object):
         """
         self.__selector["Door"] = name
         self.__msp.updateMacroServer(self.__selector["Door"])
+        self.__profileManager.withsynch = self.__hassynch()
 
     #: (:obj:`str`) the json data string
     door = property(__getDoor, __setDoor,
