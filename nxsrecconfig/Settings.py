@@ -76,7 +76,7 @@ class Settings(object):
 
         #: (:class:`nxsrecconfg.ProfileManager.ProfileManager) \
         #: profile
-        self.__profileManager = ProfileManager(self.__selector)
+        self.__profileManager = ProfileManager(self.__selector, self.__hassynch())
 
         #: (:obj:`str`) configuration file
         self.profileFile = '/tmp/nxsrecconfig.cfg'
@@ -113,6 +113,17 @@ class Settings(object):
 
         self.__setupSelection()
 
+    def __hassynch(self):
+        """ check if pool devices has TriggerGateList
+
+        :returns: if pool devices has TriggerGateList
+        :rtype: :obj:`bool`
+        """
+        pools = self.__selector.getPools()
+        if pools:
+            return hasattr(pools[0], "TriggerGateList")
+        return True    
+                
     def __setupSelection(self):
         """ sets up the current selection from ActiveMntGrp
         """

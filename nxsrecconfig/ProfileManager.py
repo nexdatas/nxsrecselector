@@ -41,11 +41,13 @@ DEFAULT_RECORD_KEYS = ['serialno', 'end_time', 'start_time',
 class ProfileManager(object):
     """  Manages Measurement Group and Profile from Selector"""
 
-    def __init__(self, selector):
+    def __init__(self, selector, withsynch=True):
         """ constructor
 
         :param selector: selector object
         :type selector: :class:`nxsrecconfig.Selector.Selector`
+        :param withsynch: mntgrp with synchronization
+        :type withsynch: :obj:`bool`
         """
         #: (:class:`nxsrecconfig.Selector.Selector`) configuration selector
         self.__selector = selector
@@ -61,6 +63,8 @@ class ProfileManager(object):
 
         #: (:obj:`list` <:obj:`str`>) default preselectedComponents
         self.defaultPreselectedComponents = []
+
+        self.__withsynch = withsynch
 
     def __updateMacroServer(self):
         """ updatas MacroServer name
@@ -524,20 +528,23 @@ class ProfileManager(object):
         for ctrl in conf["controllers"].values():
             if 'units' in ctrl.keys() and \
                     '0' in ctrl['units'].keys():
-                if 'timer' in ctrl['units']['0'].keys():
-                    timers[ctrl['units']['0']['timer']] = ''
-                if 'channels' in ctrl['units']['0'].keys():
-                    for ch in ctrl['units']['0']['channels'].values():
-                        if '_controller_name' in ch.keys() and \
-                                ch['_controller_name'] == '__tango__':
-                            tangods.append(
-                                [ch['name'], ch['label'], ch["source"]])
-                        else:
-                            dsg[ch['name']] = True
-                            if not bool(ch['plot_type']):
-                                hel.add(ch['name'])
-                            elif ch['name'] in hel:
-                                hel.remove(ch['name'])
+                uctrl = ctrl['units']['0']
+            else:
+                uctrl = ctrl
+            if 'timer' in uctrl.keys():
+                timers[uctrl['timer']] = ''
+            if 'channels' in uctrl.keys():
+                for ch in uctrl['channels'].values():
+                    if '_controller_name' in ch.keys() and \
+                            ch['_controller_name'] == '__tango__':
+                        tangods.append(
+                            [ch['name'], ch['label'], ch["source"]])
+                    else:
+                        dsg[ch['name']] = True
+                        if not bool(ch['plot_type']):
+                            hel.add(ch['name'])
+                        elif ch['name'] in hel:
+                            hel.remove(ch['name'])
 
         return tangods
 
@@ -559,17 +566,20 @@ class ProfileManager(object):
             for ctrl in conf["controllers"].values():
                 if 'units' in ctrl.keys() and \
                         '0' in ctrl['units'].keys():
-                    if 'channels' in ctrl['units']['0'].keys():
-                        for ch in ctrl['units']['0']['channels'].values():
-                            if '_controller_name' in ch.keys() and \
-                                    ch['_controller_name'] == '__tango__':
-                                if ch["source"] in jds.keys():
-                                    name = jds[ch["source"]]
-                                    dsg[name] = True
-                                    if not bool(ch['plot_type']):
-                                        hel.add(name)
-                                    elif ch['name'] in hel:
-                                        hel.remove(name)
+                    uctrl = ctrl['units']['0']
+                else:
+                    uctrl = ctrl
+                if 'channels' in uctrl.keys():
+                    for ch in uctrl['channels'].values():
+                        if '_controller_name' in ch.keys() and \
+                                ch['_controller_name'] == '__tango__':
+                            if ch["source"] in jds.keys():
+                                name = jds[ch["source"]]
+                                dsg[name] = True
+                                if not bool(ch['plot_type']):
+                                    hel.add(name)
+                                elif ch['name'] in hel:
+                                    hel.remove(name)
 
     def __reorderTimers(self, conf, timers, dsg, hel):
         """ reads timer aliases and reoder it according to mntgrp
@@ -1028,8 +1038,23 @@ class ProfileManager(object):
 
         return index
 
-    @classmethod
+
     def __addController(cls, cnf, ctrl, fulltimer):
+        """ adds controller into mntgrp configuration dictionary
+
+        :param cnf: mntgrp configuration dictionary
+        :type cnf: :obj:`dict` <:obj:`str`, `any`>
+        :param ctrl: controller device name
+        :type ctrl: :obj:`str`
+        :param fulltimer: full timer name
+        :rtype: :obj:`str`
+        """
+        if self.__withsynch:
+            self.__addController1(cls, cnf, ctrl, fulltimer)
+        else:
+            self.__addController2(cls, cnf, ctrl, fulltimer)
+
+    def __addController1(cls, cnf, ctrl, fulltimer):
         """ adds controller into mntgrp configuration dictionary
 
         :param cnf: mntgrp configuration dictionary
@@ -1055,6 +1080,27 @@ class ProfileManager(object):
             cnf['controllers'][ctrl]['units']['0'][
                 u'trigger_type'] = 0
 
+    def __addController2(cls, cnf, ctrl, fulltimer):
+        """ adds controller into mntgrp configuration dictionary
+
+        :param cnf: mntgrp configuration dictionary
+        :type cnf: :obj:`dict` <:obj:`str`, `any`>
+        :param ctrl: controller device name
+        :type ctrl: :obj:`str`
+        :param fulltimer: full timer name
+        :rtype: :obj:`str`
+        """
+        if 'controllers' not in cnf.keys():
+            cnf['controllers'] = {}
+        if ctrl not in cnf['controllers'].keys():
+            cnf['controllers'][ctrl] = {}
+            cnf['controllers'][ctrl][u'channels'] = {}
+            cnf['controllers'][ctrl][u'monitor'] = fulltimer
+            cnf['controllers'][ctrl][u'timer'] = fulltimer
+            # 0 old trigger_type
+            cnf['controllers'][ctrl][u'synchronization'] = 'Trigger'
+            cnf['controllers'][ctrl][u'synchronizer'] = 'software'
+
     @classmethod
     def __addChannel(cls, cnf, ctrl, device, fullname, dontdisplay, index,
                      source):
@@ -1077,8 +1123,11 @@ class ProfileManager(object):
         :returns: next index
         :rtype: :obj:`int`
         """
-        ctrlChannels = cnf['controllers'][ctrl]['units']['0'][
-            u'channels']
+        if 'units' in cnf['controllers'][ctrl].keys():
+            ctrlChannels = cnf['controllers'][ctrl]['units']['0'][
+                u'channels']
+        else:
+            ctrlChannels = cnf['controllers'][ctrl][u'channels']
         if fullname not in ctrlChannels.keys():
             dsource = source.encode() or PoolUtils.getSource(fullname)
             if not dsource:
@@ -1141,8 +1190,11 @@ class ProfileManager(object):
         :rtype: :obj:`int`
         """
 
-        ctrlChannels = cnf['controllers'][ctrl]['units']['0'][
-            u'channels']
+        if 'units' in cnf['controllers'][ctrl].keys():
+            ctrlChannels = cnf['controllers'][ctrl]['units']['0'][
+                u'channels']
+        else:
+            ctrlChannels = cnf['controllers'][ctrl][u'channels']
         fullname = "tango://%s" % record
         srecord = record.split("/")
         if srecord and len(srecord) > 1 and ":" in srecord[0]:
