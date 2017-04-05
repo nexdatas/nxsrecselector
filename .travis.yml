@@ -18,6 +18,8 @@ env:
   - TEST_SUITE=basicserver2
   - TEST_SUITE=extrasettings
   - TEST_SUITE=extraserver
+  - TEST_SUITE=extrasettings2
+  - TEST_SUITE=extraserver2
 
 before_install:
   - sudo add-apt-repository "deb http://repos.pni-hdri.de/apt/debian jessie main" -y
