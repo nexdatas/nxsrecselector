@@ -12,9 +12,10 @@ services:
 env:
   - TEST_SUITE=basic
   - TEST_SUITE=profile
-  - TEST_SUITE=profile2
   - TEST_SUITE=basicsettings
   - TEST_SUITE=basicserver
+  - TEST_SUITE=basicsettings2
+  - TEST_SUITE=basicserver2
   - TEST_SUITE=extrasettings
   - TEST_SUITE=extraserver
 

@@ -53,9 +53,13 @@ import UtilsTest
 import ProfileManagerTest
 import ProfileManager2Test
 import BasicSettingsTest
+import BasicSettings2Test
 import ExtraSettingsTest
+import ExtraSettings2Test
 import BasicNXSRecSelectorTest
+import BasicNXSRecSelector2Test
 import ExtraNXSRecSelectorTest
+import ExtraNXSRecSelector2Test
 import ConverterTest
 import ConverterXtoYTest
 import Converter1to2Test
@@ -95,11 +99,14 @@ def main():
     ## test suit
     basicsuite = unittest.TestSuite()
     profilesuite = unittest.TestSuite()
-    profile2suite = unittest.TestSuite()
     settingssuite1 = unittest.TestSuite()
     serversuite1 = unittest.TestSuite()
+    settingssuite1b = unittest.TestSuite()
+    serversuite1b = unittest.TestSuite()
     settingssuite2 = unittest.TestSuite()
     serversuite2 = unittest.TestSuite()
+    settingssuite2b = unittest.TestSuite()
+    serversuite2b = unittest.TestSuite()
 
     basicsuite.addTests(
         unittest.defaultTestLoader.loadTestsFromModule(SelectionTest))
@@ -147,21 +154,33 @@ def main():
     profilesuite.addTests(
         unittest.defaultTestLoader.loadTestsFromModule(ProfileManagerTest))
 
-    profile2suite.addTests(
+    profilesuite.addTests(
         unittest.defaultTestLoader.loadTestsFromModule(ProfileManager2Test))
 
     settingssuite1.addTests(
         unittest.defaultTestLoader.loadTestsFromModule(BasicSettingsTest))
 
+    settingssuite1a.addTests(
+        unittest.defaultTestLoader.loadTestsFromModule(BasicSettings2Test))
+
     settingssuite2.addTests(
         unittest.defaultTestLoader.loadTestsFromModule(ExtraSettingsTest))
+
+    settingssuite2b.addTests(
+        unittest.defaultTestLoader.loadTestsFromModule(ExtraSettings2Test))
 
 
     serversuite1.addTests(
         unittest.defaultTestLoader.loadTestsFromModule(BasicNXSRecSelectorTest))
 
+    serversuite1a.addTests(
+        unittest.defaultTestLoader.loadTestsFromModule(BasicNXSRecSelector2Test))
+
     serversuite2.addTests(
         unittest.defaultTestLoader.loadTestsFromModule(ExtraNXSRecSelectorTest))
+
+    serversuite2b.addTests(
+        unittest.defaultTestLoader.loadTestsFromModule(ExtraNXSRecSelector2Test))
 
     ## test runner
     runner = unittest.TextTestRunner()
@@ -169,19 +188,25 @@ def main():
     import argparse
     parser = argparse.ArgumentParser()
     parser.add_argument('args', metavar='name', type=str, nargs='*',
-                        help='suite names: all, basic, profile, profile2,'
-                        ' basicsettings,'
-                        ' basicserver, extrasettings, extraserver')
+                        help='suite names: all, basic, profile, '
+                        'basicsettings, basicserver, '
+                        'basicsettings2, basicserver2, '
+                        'extrasettings, extraserver, '
+                        'extrasettings2, extraserver2',
+                    )
     options = parser.parse_args()
 
     namesuite = {
         "basic": basicsuite,
         "profile": profilesuite,
-        "profile2": profile2suite,
         "basicsettings": settingssuite1,
         "basicserver": serversuite1,
+        "basicsettings2": settingssuite1a,
+        "basicserver2": serversuite1a,
         "extrasettings": settingssuite2,
         "extraserver": serversuite2,
+        "extrasettings2": settingssuite2b,
+        "extraserver2": serversuite2b,
     }
     
     print options.args
