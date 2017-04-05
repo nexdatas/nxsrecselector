@@ -45,7 +45,7 @@ import TestServerSetUp
 import TestConfigServerSetUp
 import TestWriterSetUp
 import TestMGSetUp
-import SettingsTest
+import Settings2Test
 
 
 from nxsrecconfig.MacroServerPools import MacroServerPools

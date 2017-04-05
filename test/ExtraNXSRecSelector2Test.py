@@ -29,7 +29,7 @@ import PyTango
 import json
 
 import ServerSetUp
-import ExtraSettingsTest
+import ExtraSettings2Test
 from nxsrecconfig import Settings
 import nxsrecconfig
 
