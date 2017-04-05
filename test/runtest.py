@@ -160,7 +160,7 @@ def main():
     settingssuite1.addTests(
         unittest.defaultTestLoader.loadTestsFromModule(BasicSettingsTest))
 
-    settingssuite1a.addTests(
+    settingssuite1b.addTests(
         unittest.defaultTestLoader.loadTestsFromModule(BasicSettings2Test))
 
     settingssuite2.addTests(
@@ -173,7 +173,7 @@ def main():
     serversuite1.addTests(
         unittest.defaultTestLoader.loadTestsFromModule(BasicNXSRecSelectorTest))
 
-    serversuite1a.addTests(
+    serversuite1b.addTests(
         unittest.defaultTestLoader.loadTestsFromModule(BasicNXSRecSelector2Test))
 
     serversuite2.addTests(
@@ -201,8 +201,8 @@ def main():
         "profile": profilesuite,
         "basicsettings": settingssuite1,
         "basicserver": serversuite1,
-        "basicsettings2": settingssuite1a,
-        "basicserver2": serversuite1a,
+        "basicsettings2": settingssuite1b,
+        "basicserver2": serversuite1b,
         "extrasettings": settingssuite2,
         "extraserver": serversuite2,
         "extrasettings2": settingssuite2b,
