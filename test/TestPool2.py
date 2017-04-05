@@ -217,7 +217,7 @@ class Pool(PyTango.Device_4Impl):
             "attr_MeasurementGroupList",
             "attr_AcqChannelList",
             "attr_ExpChannelList",
-            "attr_MotorList"
+            "attr_MotorList",
             "attr_TriggerGateList"
         ]
         for attr in attrs:

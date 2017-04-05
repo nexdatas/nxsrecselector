@@ -51,6 +51,7 @@ import MacroServerPools2Test
 import DynamicComponentTest
 import UtilsTest
 import ProfileManagerTest
+import ProfileManager2Test
 import BasicSettingsTest
 import ExtraSettingsTest
 import BasicNXSRecSelectorTest
@@ -94,6 +95,7 @@ def main():
     ## test suit
     basicsuite = unittest.TestSuite()
     profilesuite = unittest.TestSuite()
+    profile2suite = unittest.TestSuite()
     settingssuite1 = unittest.TestSuite()
     serversuite1 = unittest.TestSuite()
     settingssuite2 = unittest.TestSuite()
@@ -145,6 +147,9 @@ def main():
     profilesuite.addTests(
         unittest.defaultTestLoader.loadTestsFromModule(ProfileManagerTest))
 
+    profile2suite.addTests(
+        unittest.defaultTestLoader.loadTestsFromModule(ProfileManager2Test))
+
     settingssuite1.addTests(
         unittest.defaultTestLoader.loadTestsFromModule(BasicSettingsTest))
 
@@ -164,13 +169,15 @@ def main():
     import argparse
     parser = argparse.ArgumentParser()
     parser.add_argument('args', metavar='name', type=str, nargs='*',
-                        help='suite names: all, basic, profile, basicsettings,'
+                        help='suite names: all, basic, profile, profile2,'
+                        ' basicsettings,'
                         ' basicserver, extrasettings, extraserver')
     options = parser.parse_args()
 
     namesuite = {
         "basic": basicsuite,
         "profile": profilesuite,
+        "profile2": profile2suite,
         "basicsettings": settingssuite1,
         "basicserver": serversuite1,
         "extrasettings": settingssuite2,
