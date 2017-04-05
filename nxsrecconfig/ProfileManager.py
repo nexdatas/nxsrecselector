@@ -63,12 +63,13 @@ class ProfileManager(object):
         self.defaultPreselectedComponents = []
 
         #: (:obj:`bool`) mntgrp with synchronization
-        self.withsynch = True
+        self.__withsynch = True
 
     def __updateMacroServer(self):
         """ updatas MacroServer name
         """
         self.__macroServerName = self.__selector.getMacroServer()
+        self.__withsynch = self.__hassynch()
 
     def __updateConfigServer(self):
         """ update configuration server device proxy
@@ -79,6 +80,17 @@ class ProfileManager(object):
         """ update device pool proxy list
         """
         self.__pools = self.__selector.getPools()
+        self.__withsynch = self.__hassynch()
+
+    def __hassynch(self):
+        """ check if pool devices has TriggerGateList
+
+        :returns: if pool devices has TriggerGateList
+        :rtype: :obj:`bool`
+        """
+        if self.__pools:
+            return hasattr(self.__pools[0], "TriggerGateList")
+        return True
 
     def availableMntGrps(self):
         """ available mntgrps
@@ -1048,7 +1060,7 @@ class ProfileManager(object):
         :param fulltimer: full timer name
         :rtype: :obj:`str`
         """
-        if self.withsynch:
+        if not self.__withsynch:
             self.__addController1(cnf, ctrl, fulltimer)
         else:
             self.__addController2(cnf, ctrl, fulltimer)

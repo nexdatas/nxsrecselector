@@ -13774,6 +13774,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
         rs = self.openRecSelector()
         rs.configDevice = val["ConfigDevice"]
         rs.door = val["Door"]
+        print "DOOR", rs.door
         rs.mntGrp = val["MntGrp"]
         rs.writerDevice = val["WriterDevice"]
         self.assertEqual(rs.configDevice, val["ConfigDevice"])
@@ -14018,6 +14019,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                             for ds in mdss.keys():
                                 adss[ds] = True
 
+                    print "UPGRAGE MNT"            
                     jpcnf = rs.updateMntGrp()
                     pcnf = json.loads(jpcnf)
                     mgdp = PyTango.DeviceProxy(tmg.new_device_info_writer.name)
