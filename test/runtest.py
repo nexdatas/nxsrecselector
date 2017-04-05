@@ -45,7 +45,9 @@ import CheckerItemTest
 import CheckerThreadTest
 import SelectionTest
 import SelectorTest
+import Selector2Test
 import MacroServerPoolsTest
+import MacroServerPools2Test
 import DynamicComponentTest
 import UtilsTest
 import ProfileManagerTest
@@ -100,6 +102,8 @@ def main():
     basicsuite.addTests(
         unittest.defaultTestLoader.loadTestsFromModule(SelectionTest))
     basicsuite.addTests(
+        unittest.defaultTestLoader.loadTestsFromModule(Selector2Test))
+    basicsuite.addTests(
         unittest.defaultTestLoader.loadTestsFromModule(SelectorTest))
     basicsuite.addTests(
         unittest.defaultTestLoader.loadTestsFromModule(TangoDSItemTest))
@@ -133,6 +137,8 @@ def main():
         unittest.defaultTestLoader.loadTestsFromModule(CheckerThreadTest))
     basicsuite.addTests(
         unittest.defaultTestLoader.loadTestsFromModule(MacroServerPoolsTest))
+    basicsuite.addTests(
+        unittest.defaultTestLoader.loadTestsFromModule(MacroServerPools2Test))
     basicsuite.addTests(
         unittest.defaultTestLoader.loadTestsFromModule(DynamicComponentTest))
 

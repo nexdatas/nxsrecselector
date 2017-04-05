@@ -1111,7 +1111,7 @@ class ProfileManager(object):
             cnf['controllers'][ctrl][u'monitor'] = fulltimer
             cnf['controllers'][ctrl][u'timer'] = fulltimer
             # 0 old trigger_type
-            cnf['controllers'][ctrl][u'synchronization'] = 'Trigger'
+            cnf['controllers'][ctrl][u'synchronization'] = 0
             cnf['controllers'][ctrl][u'synchronizer'] = 'software'
 
     @classmethod

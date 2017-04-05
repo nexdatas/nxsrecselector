@@ -39,7 +39,6 @@ import logging
 logger = logging.getLogger()
 
 import TestMacroServerSetUp
-import TestPoolSetUp
 import TestServerSetUp
 import TestConfigServerSetUp
 import TestWriterSetUp
@@ -106,10 +105,7 @@ class DynamicComponentTest(unittest.TestCase):
         self._buint = "uint64" if IS64BIT else "uint32"
         self._bfloat = "float64" if IS64BIT else "float32"
 
-#        self._ms = TestMacroServerSetUp.TestMacroServerSetUp()
         self._cf = TestConfigServerSetUp.TestConfigServerSetUp()
-#        self._wr = TestWriterSetUp.TestWriterSetUp()
-#        self._pool = TestPoolSetUp.TestPoolSetUp()
         self._simps = TestServerSetUp.TestServerSetUp()
 
         try:
@@ -963,10 +959,7 @@ class DynamicComponentTest(unittest.TestCase):
     # \brief Common set up
     def setUp(self):
         print "SEED =", self.__seed
-#        self._wr.setUp()
-#        self._ms.setUp()
         self._cf.setUp()
-#        self._pool.setUp()
         self._simps.setUp()
         print "\nsetting up..."
 
@@ -975,10 +968,7 @@ class DynamicComponentTest(unittest.TestCase):
     def tearDown(self):
         print "tearing down ..."
         self._simps.tearDown()
-#        self._pool.tearDown()
         self._cf.tearDown()
-#        self._ms.tearDown()
-#        self._wr.tearDown()
 
     def getRandomName(self, maxsize):
         letters = string.lowercase + string.uppercase + string.digits
