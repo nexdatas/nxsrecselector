@@ -1017,9 +1017,9 @@ class Settings(object):
                for ds in cpdss if ds["strategy"] in ['INIT', 'FINAL']]
 
         dsources = set(datasources or [])
-        found = list(dsources & set(dss))
+        found = json.dumps(list(dsources & set(dss)))
         notfound = list(dsources - set(dss))
-        inst.stepdatasources = found
+        inst.stepdatasources =found
         inst.linkdatasources = found
         return notfound
 
