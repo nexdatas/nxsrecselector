@@ -290,6 +290,28 @@ class Settings(object):
         __setDefaultPreselectedComponents,
         doc='default Preselected components')
 
+    def __getClientRecordKeys(self):
+        """ get method for clientRecordKeys attribute
+
+        :returns: list of components
+        :rtype: :obj:`list` <:obj:`str`>
+        """
+        return self.__profileManager.clientRecordKeys
+
+    def __setClientRecordKeys(self, components):
+        """ set method for clientRecordKeys attribute
+
+        :param components: list of components
+        :type components: :obj:`list` <:obj:`str`>
+        """
+        self.__profileManager.clientRecordKeys = components
+
+    #: (:obj:`list` <:obj:`str`>) client record keys
+    clientRecordKeys = property(
+        __getClientRecordKeys,
+        __setClientRecordKeys,
+        doc='clientRecordKeys')
+
     def __getConfigDevice(self):
         """ get method for configDevice attribute
 

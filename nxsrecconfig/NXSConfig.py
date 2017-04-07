@@ -100,6 +100,8 @@ class NXSRecSelector(PyTango.Device_4Impl):
         self.__stg.adminDataNames = self.AdminDataNames or []
         self.__stg.defaultPreselectedComponents = \
             self.DefaultPreselectedComponents or []
+        self.__stg.clientRecordKeys = \
+            self.ClientRecordKeys or []
 
     def always_executed_hook(self):
         """ Always excuted hook method
@@ -1764,6 +1766,10 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
         'DefaultPreselectedComponents':
         [PyTango.DevVarStringArray,
          "list of default preselected components",
+         []],
+        'ClientRecordKeys':
+        [PyTango.DevVarStringArray,
+         "list of record keys for CLIENT datasources",
          []],
     }
 

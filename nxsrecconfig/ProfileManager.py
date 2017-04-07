@@ -62,6 +62,9 @@ class ProfileManager(object):
         #: (:obj:`list` <:obj:`str`>) default preselectedComponents
         self.defaultPreselectedComponents = []
 
+        #: (:obj:`list` <:obj:`str`>) client record keys
+        self.clientRecordKeys = []
+
         #: (:obj:`bool`) mntgrp with synchronization
         self.__withsynch = True
 
@@ -434,10 +437,18 @@ class ProfileManager(object):
         index = 0
         fullnames = PoolUtils.getFullDeviceNames(self.__pools, aliases)
         sources = PoolUtils.getChannelSources(self.__pools, aliases)
+        props = json.loads(self.__selector["ChannelProperties"])
+        synchronizer = props["synchronizer"] \
+                       if "synchronizer" in props.keys() else {}
+        synchronization = props["synchronization"] \
+                          if "synchronization" in props.keys() else {}
         for al in aliases:
             index = self.__addDevice(
                 al, dontdisplay, cnf,
-                al if al in ltimers else timer, index, fullnames, sources)
+                al if al in ltimers else timer, index, fullnames, sources,
+                synchronizer[al] if al in synchronizer.keys() else None,
+                int(synchronization[al]) if al in synchronization.keys() else None
+            )
         conf = json.dumps(cnf)
 
         mginfo = {
@@ -649,6 +660,7 @@ class ProfileManager(object):
         precords = frecords.values()
         missing = sorted(set(records)
                          - set(DEFAULT_RECORD_KEYS)
+                         - set(self.clientRecordKeys)
                          - set(urecords)
                          - set(precords))
         if missing:
@@ -1000,7 +1012,9 @@ class ProfileManager(object):
         return jds
 
     def __addDevice(self, device, dontdisplay, cnf,
-                    timer, index, fullnames=None, sources=None):
+                    timer, index, fullnames=None, sources=None,
+                    synchronization=None, synchronizer=None
+                ):
         """ adds device into configuration dictionary
 
         :param device: device alias
@@ -1015,6 +1029,12 @@ class ProfileManager(object):
         :type index: :obj:`int`
         :param fullnames: dictionary with full names
         :type fullnames: :obj:`dict` <:obj:`str`, :obj:`str`>
+        :param sources: dictionary with source names
+        :type sources: :obj:`dict` <:obj:`str`, :obj:`str`>
+        :param synchronizer: name of trigger or gate device
+        :type synchronizer: :obj:`str`
+        :param synchronization: trigger:0 or gate:1
+        :type synchronization: :obj:`int` 
         :returns: next device index
         :rtype: :obj:`int`
         """
@@ -1046,9 +1066,12 @@ class ProfileManager(object):
                     index = self.__addTangoChannel(
                         cnf, ctrl, device, str(js["record"]),
                         dontdisplay, index)
-
+        if synchronization is not None:            
+            cnf['controllers'][ctrl][u'synchronization'] = \
+                int(synchronization)
+        if synchronizer is not None:            
+            cnf['controllers'][ctrl][u'synchronizer'] = synchronizer
         return index
-
 
     def __addController(self, cnf, ctrl, fulltimer):
         """ adds controller into mntgrp configuration dictionary
