@@ -1672,6 +1672,27 @@ class NXSRecSelector(PyTango.Device_4Impl):
 
         return argout
 
+    def AddStepDataSources(self, argin):
+        """ AddStepDataSources command
+
+        :brief: Provide datasource description
+        :param argin:  DevVarStringArray    list of datasource names
+        :type argin: :obj:`list` <:obj:`str`>
+        :returns: DevVarStringArray list of datasources not found in components
+        :rtypes: :obj:`list` <:obj:`str`>
+
+        """
+        self.debug_stream("In AddStepDataSources()")
+        try:
+            self.set_state(PyTango.DevState.RUNNING)
+            argout = self.__stg.addStepDataSources(argin)
+            self.set_state(PyTango.DevState.ON)
+        finally:
+            if self.get_state() == PyTango.DevState.RUNNING:
+                self.set_state(PyTango.DevState.ON)
+
+        return argout
+
     def is_DataSourceDescription_allowed(self):
         """ DataSourceDescription command State Machine
 
@@ -1904,6 +1925,10 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
             [[PyTango.DevVarStringArray, "list of required datasources"],
              [PyTango.DevVarStringArray,
               "list of JSON with description of CLIENT Datasources"]],
+        'AddStepDataSources':
+            [[PyTango.DevVarStringArray, "list of required datasources"],
+             [PyTango.DevVarStringArray,
+              "list of datasources not found in components"]],
         'ComponentClientSources':
             [[PyTango.DevVarStringArray, "list of component "
               "client datasources"],

@@ -1001,6 +1001,28 @@ class Settings(object):
         describer = Describer(nexusconfig_device)
         return describer.dataSources(datasources)
 
+    def addStepDataSources(self, datasources):
+        """ describe datasources
+
+        :param datasources: list for datasource names
+        :type datasources: :obj:`list` <:obj:`str`>
+        :returns: list of datasources not found in components
+        :rtype: :obj:`list` <:obj:`str`>
+        """
+        inst = self.__selector.setConfigInstance()
+        describer = Describer(inst)
+        cp = self.components
+        cpdss = describer.components(cp, '', '', self.configVariables)
+        dss = [ds["dsname"]
+               for ds in cpdss if ds["strategy"] in ['INIT', 'FINAL']]
+
+        dsources = set(datasources or [])
+        found = list(dsources & set(dss))
+        notfound = list(dsources - set(dss))
+        inst.stepdatasources = found
+        inst.linkdatasources = found
+        return notfound
+
 # MntGrp methods
 
     def deleteProfile(self, name):

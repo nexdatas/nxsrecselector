@@ -1,5 +1,8 @@
 2017-04-XX Jan Kotanski <jankotan@gmail.com>
+	* add addStepDataSources
 	* add new mntgrp support
+	* add synchronizer and synchronization channelproperties
+	* add ClientRecordKeys property
 	* tagged as v3.9.0
 
 2017-04-04 Jan Kotanski <jankotan@gmail.com>
