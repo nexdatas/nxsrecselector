@@ -1066,6 +1066,8 @@ class ProfileManager(object):
                     index = self.__addTangoChannel(
                         cnf, ctrl, device, str(js["record"]),
                         dontdisplay, index)
+        synchronization =  synchronization  or None
+        synchronizer =  synchronizer  or None
         if synchronization is not None:            
             cnf['controllers'][ctrl][u'synchronization'] = \
                 int(synchronization)
