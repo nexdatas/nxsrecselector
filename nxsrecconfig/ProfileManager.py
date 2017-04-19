@@ -442,10 +442,15 @@ class ProfileManager(object):
                        if "synchronizer" in props.keys() else {}
         synchronization = props["synchronization"] \
                           if "synchronization" in props.keys() else {}
+        tchannels = set(PoolUtils.getElementNames(
+            self.__pools, 'ExpChannelList',
+            ['CTExpChannel', 'OneDExpChannel', 'TwoDExpChannel']))
+        tchannels = tchannels | ltimers
+
         for al in aliases:
             index = self.__addDevice(
                 al, dontdisplay, cnf,
-                al if al in ltimers else timer, index, fullnames, sources,
+                al if al in tchannels else timer, index, fullnames, sources,
                 synchronizer[al] if al in synchronizer.keys() else None,
                 int(synchronization[al]) if al in synchronization.keys() else None
             )
@@ -1034,7 +1039,7 @@ class ProfileManager(object):
         :param synchronizer: name of trigger or gate device
         :type synchronizer: :obj:`str`
         :param synchronization: trigger:0 or gate:1
-        :type synchronization: :obj:`int` 
+        :type synchronization: :obj:`int`
         :returns: next device index
         :rtype: :obj:`int`
         """
@@ -1068,10 +1073,10 @@ class ProfileManager(object):
                         dontdisplay, index)
         synchronization =  synchronization  or None
         synchronizer =  synchronizer  or None
-        if synchronization is not None:            
+        if synchronization is not None:
             cnf['controllers'][ctrl][u'synchronization'] = \
                 int(synchronization)
-        if synchronizer is not None:            
+        if synchronizer is not None:
             cnf['controllers'][ctrl][u'synchronizer'] = synchronizer
         return index
 

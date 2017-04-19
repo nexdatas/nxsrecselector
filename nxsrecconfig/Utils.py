@@ -517,13 +517,15 @@ class PoolUtils(object):
         return srs
 
     @classmethod
-    def getElementNames(cls, pools, listattr):
+    def getElementNames(cls, pools, listattr, typefilter=None):
         """ provides experimental Channels
 
         :param pools: list of pool devices
         :type pools: :obj:`list` <:class:`PyTango.DeviceProxy`>
         :param listattr: pool attribute with list
         :type listattr: :obj:`str`
+        :param typefilter: pool attribute with list
+        :type typefilter: :obj:`list` <:obj:`str`>
         :returns: names from given pool listattr
         :rtype: :obj:`list` <:obj:`str`>
         """
@@ -538,6 +540,9 @@ class PoolUtils(object):
             if elm:
                 chan = json.loads(elm)
                 if chan and isinstance(chan, dict):
+                    if typefilter:
+                        if chan['type'] not in typefilter:
+                            continue
                     elements.append(chan['name'])
         return elements
 
