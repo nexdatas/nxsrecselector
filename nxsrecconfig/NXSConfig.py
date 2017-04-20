@@ -1986,7 +1986,8 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
               PyTango.READ_WRITE],
              {
                  'label': "list of datasources to which a link will be added",
-                 'description': "list of datasources to which a link will be added",
+                 'description': "list of datasources to which "
+                 "a link will be added",
                  'Display level': PyTango.DispLevel.EXPERT,
             }],
         'DescriptionErrors':

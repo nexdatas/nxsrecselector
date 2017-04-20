@@ -275,7 +275,7 @@ class DynamicComponent(object):
                 link = self.__getProp(
                     self.__nexuslinks, self.__nexuslabels, ds,
                     self.__ilinks if strategy == 'INIT'
-                    else self.__links )
+                    else self.__links)
                 (parent, nxdata) = self.__createGroupTree(
                     root, definition, path, link)
                 created.append(ds)

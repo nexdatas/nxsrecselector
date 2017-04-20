@@ -1841,7 +1841,7 @@ class ProfileManagerTest(unittest.TestCase):
             else:
                 logger.debug("%s , %s" % (str(v), str(dct2[k])))
                 if v != dct2[k]:
-                    print 'VALUES', k, v, dct2[k]
+                    print 'VALUES!! ', k, v, dct2[k]
                 self.assertEqual(v, dct2[k])
 
     ## constructor test
@@ -3824,10 +3824,13 @@ class ProfileManagerTest(unittest.TestCase):
                     exp["source"] = vl["source"]
                     if ds.startswith("image"):
                         exp["controller"] = image_ctrl
+                        exp["type"] = "TwoDExpChannel"
                     if ds.startswith("spectrum"):
                         exp["controller"] = spectrum_ctrl
+                        exp["type"] = "OneDExpChannel"
                     else:
                         exp["controller"] = scalar_ctrl
+                        exp["type"] = "CTExpChannel"
                     expch.append(exp)
                     pdss.append(ds)
             pdss = sorted(pdss)
@@ -3975,6 +3978,8 @@ class ProfileManagerTest(unittest.TestCase):
                     myctrls = {}
                     for cl in ctrls:
                         tgc = {}
+                        ttdv = None
+                        idmax = 10000
                         for exp in expch:
                             ds = exp["name"]
                             if ds in chds and cl == exp['controller']:
@@ -3983,6 +3988,9 @@ class ProfileManagerTest(unittest.TestCase):
                                 try:
                                     tdv = "/".join(
                                         cnt['source'].split("/")[:-1])
+                                    if i < idmax:
+                                        idmax = i
+                                        ttdv = tdv
                                     chn = {'ndim': 0,
                                            'index': i,
                                            'name': str(ds),
@@ -4009,9 +4017,9 @@ class ProfileManagerTest(unittest.TestCase):
                             myctrls[cl] = {'units':
                                            {'0':
                                             {'channels': tgc,
-                                             'monitor': dv,
+                                             'monitor': ttdv,
                                              'id': 0,
-                                             'timer': dv,
+                                             'timer': ttdv,
                                              'trigger_type': 0}}}
 
                     smg = {"controllers": myctrls,
@@ -4099,10 +4107,13 @@ class ProfileManagerTest(unittest.TestCase):
                     exp["source"] = vl["source"]
                     if ds.startswith("image"):
                         exp["controller"] = image_ctrl
+                        exp["type"] = "TwoDExpChannel"
                     if ds.startswith("spectrum"):
                         exp["controller"] = spectrum_ctrl
+                        exp["type"] = "OneDExpChannel"
                     else:
                         exp["controller"] = scalar_ctrl
+                        exp["type"] = "CTExpChannel"
                     expch.append(exp)
                     pdss.append(ds)
             pdss = sorted(pdss)
@@ -4300,6 +4311,8 @@ class ProfileManagerTest(unittest.TestCase):
                     myctrls = {}
                     for cl in ctrls:
                         tgc = {}
+                        ttdv = None
+                        idmax = 10000
                         for exp in expch:
                             ds = exp["name"]
                             if ds in chds and cl == exp['controller']:
@@ -4309,6 +4322,9 @@ class ProfileManagerTest(unittest.TestCase):
                                 try:
                                     tdv = "/".join(
                                         cnt['source'].split("/")[:-1])
+                                    if i < idmax:
+                                        idmax = i
+                                        ttdv = tdv
                                     chn = {'ndim': 0,
                                            'index': i,
                                            'name': str(ds),
@@ -4340,9 +4356,9 @@ class ProfileManagerTest(unittest.TestCase):
                                 'units':
                                     {'0':
                                      {'channels': tgc,
-                                      'monitor': dv,
+                                      'monitor': ttdv,
                                       'id': 0,
-                                      'timer': dv,
+                                      'timer': ttdv,
                                       'trigger_type': 0}}}
 
                     smg = {"controllers": myctrls,
@@ -4434,10 +4450,13 @@ class ProfileManagerTest(unittest.TestCase):
                     exp["source"] = vl["source"]
                     if ds.startswith("image"):
                         exp["controller"] = image_ctrl
+                        exp["type"] = "TwoDExpChannel"
                     if ds.startswith("spectrum"):
                         exp["controller"] = spectrum_ctrl
+                        exp["type"] = "OneDExpChannel"
                     else:
                         exp["controller"] = scalar_ctrl
+                        exp["type"] = "CTExpChannel"
                     expch.append(exp)
                     pdss.append(ds)
             pdss = sorted(pdss)
@@ -4648,6 +4667,8 @@ class ProfileManagerTest(unittest.TestCase):
                     myctrls = {}
                     for cl in ctrls:
                         tgc = {}
+                        ttdv = None
+                        idmax = 10000
                         for exp in expch:
                             ds = exp["name"]
                             if ds in chds and cl == exp['controller']:
@@ -4658,6 +4679,9 @@ class ProfileManagerTest(unittest.TestCase):
                                     try:
                                         tdv = "/".join(
                                             cnt['source'].split("/")[:-1])
+                                        if i < idmax:
+                                            idmax = i
+                                            ttdv = tdv
                                         chn = {'ndim': 0,
                                                'index': i,
                                                'name': str(ds),
@@ -4688,9 +4712,9 @@ class ProfileManagerTest(unittest.TestCase):
                             myctrls[cl] = {'units':
                                            {'0':
                                             {'channels': tgc,
-                                             'monitor': dv,
+                                             'monitor': ttdv,
                                              'id': 0,
-                                             'timer': dv,
+                                             'timer': ttdv,
                                              'trigger_type': 0}}}
 
                     tgc = {}
@@ -4825,10 +4849,13 @@ class ProfileManagerTest(unittest.TestCase):
                     exp["source"] = vl["source"]
                     if ds.startswith("image"):
                         exp["controller"] = image_ctrl
+                        exp["type"] = "TwoDExpChannel"
                     if ds.startswith("spectrum"):
                         exp["controller"] = spectrum_ctrl
+                        exp["type"] = "OneDExpChannel"
                     else:
                         exp["controller"] = scalar_ctrl
+                        exp["type"] = "CTExpChannel"
                     expch.append(exp)
                     pdss.append(ds)
             pdss = sorted(pdss)
@@ -5040,6 +5067,8 @@ class ProfileManagerTest(unittest.TestCase):
                     myctrls = {}
                     for cl in ctrls:
                         tgc = {}
+                        ttdv = None
+                        idmax = 10000
                         for exp in expch:
                             ds = exp["name"]
                             if ds in chds and cl == exp['controller']:
@@ -5050,6 +5079,9 @@ class ProfileManagerTest(unittest.TestCase):
                                     try:
                                         tdv = "/".join(
                                             cnt['source'].split("/")[:-1])
+                                        if i < idmax:
+                                            idmax = i
+                                            ttdv = tdv
                                         chn = {'ndim': 0,
                                                'index': i,
                                                'name': str(ds),
@@ -5080,9 +5112,9 @@ class ProfileManagerTest(unittest.TestCase):
                             myctrls[cl] = {'units':
                                            {'0':
                                             {'channels': tgc,
-                                             'monitor': dv,
+                                             'monitor': ttdv,
                                              'id': 0,
-                                             'timer': dv,
+                                             'timer': ttdv,
                                              'trigger_type': 0}}}
 
                     tgc = {}
@@ -5237,12 +5269,16 @@ class ProfileManagerTest(unittest.TestCase):
 
                         if myct:
                             exp["controller"] = myct
+                            exp["type"] = "CTExpChannel"
                         elif ds.startswith("image"):
                             exp["controller"] = image_ctrl
+                            exp["type"] = "TwoDExpChannel"
                         elif ds.startswith("spectrum"):
                             exp["controller"] = spectrum_ctrl
+                            exp["type"] = "OneDExpChannel"
                         else:
                             exp["controller"] = scalar_ctrl
+                            exp["type"] = "CTExpChannel"
                         expch.append(exp)
                         pdss.append(ds)
                 pdss = sorted(pdss)
@@ -5461,6 +5497,8 @@ class ProfileManagerTest(unittest.TestCase):
                             "/")[:-1])
                     for cl in ctrls:
                         tgc = {}
+                        ttdv = None
+                        idmax = 10000
                         for exp in expch:
                             ds = exp["name"]
                             if ds in chds and cl == exp['controller']:
@@ -5470,6 +5508,9 @@ class ProfileManagerTest(unittest.TestCase):
                                     try:
                                         tdv = "/".join(
                                             cnt['source'].split("/")[:-1])
+                                        if i < idmax:
+                                            idmax = i
+                                            ttdv = tdv
                                         chn = {'ndim': 0,
                                                'index': i,
                                                'name': str(ds),
@@ -5511,9 +5552,9 @@ class ProfileManagerTest(unittest.TestCase):
                                     {'0':
                                      {
                                          'channels': tgc,
-                                         'monitor': fltm,
+                                         'monitor': ttdv,
                                          'id': 0,
-                                         'timer': fltm,
+                                         'timer': ttdv,
                                          'trigger_type': 0}}}
 
                     tgc = {}
@@ -5670,12 +5711,16 @@ class ProfileManagerTest(unittest.TestCase):
 
                         if myct:
                             exp["controller"] = myct
+                            exp["type"] = "CTExpChannel"
                         elif ds.startswith("image"):
                             exp["controller"] = image_ctrl
+                            exp["type"] = "TwoDExpChannel"
                         elif ds.startswith("spectrum"):
                             exp["controller"] = spectrum_ctrl
+                            exp["type"] = "OneDExpChannel"
                         else:
                             exp["controller"] = scalar_ctrl
+                            exp["type"] = "CTExpChannel"
                         expch.append(exp)
                         pdss.append(ds)
                 pdss = sorted(pdss)
@@ -5958,6 +6003,8 @@ class ProfileManagerTest(unittest.TestCase):
                             "/")[:-1])
                     for cl in ctrls:
                         tgc = {}
+                        ttdv = None
+                        idmax = 10000
                         for exp in expch:
                             ds = exp["name"]
 #                            if cl == exp['controller']:
@@ -5970,6 +6017,9 @@ class ProfileManagerTest(unittest.TestCase):
                                     try:
                                         tdv = "/".join(
                                             cnt['source'].split("/")[:-1])
+                                        if i < idmax:
+                                            idmax = i
+                                            ttdv = tdv
                                         chn = {'ndim': 0,
                                                'index': i,
                                                'name': str(ds),
@@ -6011,9 +6061,9 @@ class ProfileManagerTest(unittest.TestCase):
                                     {'0':
                                      {
                                          'channels': tgc,
-                                         'monitor': fltm,
+                                         'monitor': ttdv,
                                          'id': 0,
-                                         'timer': fltm,
+                                         'timer': ttdv,
                                          'trigger_type': 0}}}
 
                     tgc = {}
@@ -6209,12 +6259,17 @@ class ProfileManagerTest(unittest.TestCase):
 
                                 if myct:
                                     exp["controller"] = myct
+                                    exp["type"] = "CTExpChannel"
                                 elif ds.startswith("image"):
                                     exp["controller"] = image_ctrl
+                                    exp["type"] = "TwoDExpChannel"
                                 elif ds.startswith("spectrum"):
                                     exp["controller"] = spectrum_ctrl
+                                    exp["type"] = "OneDExpChannel"
                                 else:
                                     exp["controller"] = scalar_ctrl
+                                    exp["type"] = "CTExpChannel"
+                                exp["interfaces"] = [exp["type"]]
                                 expch.append(exp)
                                 pdss[mg].append(ds)
                         pdss[mg] = sorted(pdss[mg])
@@ -6498,6 +6553,9 @@ class ProfileManagerTest(unittest.TestCase):
                                 "/")[:-1])
                         for cl in ctrls:
                             tgc = {}
+                            ttdv = None
+                            ttds = None
+                            idmax = 10000
                             for exp in expch:
                                 ds = exp["name"]
                                 if ds in chds and cl == exp['controller']:
@@ -6507,6 +6565,10 @@ class ProfileManagerTest(unittest.TestCase):
                                         try:
                                             tdv = "/".join(
                                                 cnt['source'].split("/")[:-1])
+                                            if i < idmax:
+                                                idmax = i
+                                                ttdv = tdv
+                                                ttds = ds
                                             chn = {'ndim': 0,
                                                    'index': i,
                                                    'name': str(ds),
@@ -6550,11 +6612,12 @@ class ProfileManagerTest(unittest.TestCase):
                                         {'0':
                                          {
                                              'channels': tgc,
-                                             'monitor': fltm,
+                                             'monitor': ttdv,
                                              'id': 0,
-                                             'timer': fltm,
+                                             'timer': ttdv,
                                              'trigger_type': 0}}}
-
+#                                ltimers[mg].append(ttds)
+                                
                         tgc = {}
                         for ds in chds:
                             if ds in self.smychs:
@@ -6672,6 +6735,8 @@ class ProfileManagerTest(unittest.TestCase):
                     self.assertEqual(
                         set(json.loads(lse["PreselectingDataSources"])),
                         set(aadss[mg1]))
+                    adtimers =  set(json.loads(lse["Timer"])) - set(ltimers[mg1])
+                    print "ADD TIME", adtimers
                     self.myAssertDict(
                         json.loads(lse["DataSourceSelection"]), adss[mg1])
                     self.assertEqual(

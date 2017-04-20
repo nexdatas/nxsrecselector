@@ -185,12 +185,16 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
 
                         if myct:
                             exp["controller"] = myct
+                            exp["type"] = "CTExpChannel"
                         elif ds.startswith("image"):
                             exp["controller"] = image_ctrl
+                            exp["type"] = "TwoDExpChannel"
                         elif ds.startswith("spectrum"):
                             exp["controller"] = spectrum_ctrl
+                            exp["type"] = "OneDExpChannel"
                         else:
                             exp["controller"] = scalar_ctrl
+                            exp["type"] = "CTExpChannel"
                         expch.append(exp)
                         pdss.append(ds)
                 pdss = sorted(pdss)
@@ -423,6 +427,8 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
                             "/")[:-1])
                     for cl in ctrls:
                         tgc = {}
+                        ttdv = None
+                        idmax = 10000
                         for exp in expch:
                             ds = exp["name"]
                             if ds in chds and cl == exp['controller']:
@@ -432,6 +438,9 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
                                     try:
                                         tdv = "/".join(
                                             cnt['source'].split("/")[:-1])
+                                        if i < idmax:
+                                            idmax = i
+                                            ttdv = tdv
                                         chn = {'ndim': 0,
                                                'index': i,
                                                'name': str(ds),
@@ -470,8 +479,8 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
                                     "/")[:-1])
                             myctrls[cl] = {
                                 'channels': tgc,
-                                'monitor': fltm,
-                                'timer': fltm,
+                                'monitor': ttdv,
+                                'timer': ttdv,
                                 'synchronization': 0,
                                 'synchronizer': 'software',
                             }
@@ -632,12 +641,16 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
 
                         if myct:
                             exp["controller"] = myct
+                            exp["type"] = "CTExpChannel"
                         elif ds.startswith("image"):
                             exp["controller"] = image_ctrl
+                            exp["type"] = "TwoDExpChannel"
                         elif ds.startswith("spectrum"):
                             exp["controller"] = spectrum_ctrl
+                            exp["type"] = "OneDExpChannel"
                         else:
                             exp["controller"] = scalar_ctrl
+                            exp["type"] = "CTExpChannel"
                         expch.append(exp)
                         pdss.append(ds)
                 pdss = sorted(pdss)
@@ -922,6 +935,8 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
                             "/")[:-1])
                     for cl in ctrls:
                         tgc = {}
+                        ttdv = None
+                        idmax = 10000
                         for exp in expch:
                             ds = exp["name"]
 #                            if cl == exp['controller']:
@@ -934,6 +949,9 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
                                     try:
                                         tdv = "/".join(
                                             cnt['source'].split("/")[:-1])
+                                        if i < idmax:
+                                            idmax = i
+                                            ttdv = tdv
                                         chn = {'ndim': 0,
                                                'index': i,
                                                'name': str(ds),
@@ -974,8 +992,8 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
                                 'channels': tgc,
                                 'synchronization': 0,
                                 'synchronizer': 'software',
-                                'monitor': fltm,
-                                'timer': fltm,}
+                                'monitor': ttdv,
+                                'timer': ttdv,}
 
                     tgc = {}
                     for ds in chds:
@@ -1180,12 +1198,17 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
 
                                 if myct:
                                     exp["controller"] = myct
+                                    exp["type"] = "CTExpChannel"
                                 elif ds.startswith("image"):
                                     exp["controller"] = image_ctrl
+                                    exp["type"] = "TwoDExpChannel"
                                 elif ds.startswith("spectrum"):
                                     exp["controller"] = spectrum_ctrl
+                                    exp["type"] = "OneDExpChannel"
                                 else:
                                     exp["controller"] = scalar_ctrl
+                                    exp["type"] = "CTExpChannel"
+                                exp["interfaces"] = [exp["type"]]    
                                 expch.append(exp)
                                 pdss[mg].append(ds)
                         pdss[mg] = sorted(pdss[mg])
@@ -1488,6 +1511,8 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
                                 "/")[:-1])
                         for cl in ctrls:
                             tgc = {}
+                            ttdv = None
+                            idmax = 10000
                             for exp in expch:
                                 ds = exp["name"]
                                 if ds in chds and cl == exp['controller']:
@@ -1497,6 +1522,9 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
                                         try:
                                             tdv = "/".join(
                                                 cnt['source'].split("/")[:-1])
+                                            if i < idmax:
+                                                idmax = i
+                                                ttdv = tdv
                                             chn = {'ndim': 0,
                                                    'index': i,
                                                    'name': str(ds),
@@ -1537,10 +1565,10 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
                                         "/")[:-1])
                                 myctrls[cl] = {
                                     'channels': tgc,
-                                    'monitor': fltm,
+                                    'monitor': ttdv,
                                     'synchronization': 0,
                                     'synchronizer': 'software',
-                                    'timer': fltm}
+                                    'timer': ttdv}
 
                         tgc = {}
                         for ds in chds:
@@ -2493,12 +2521,17 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
 
                                 if myct:
                                     exp["controller"] = myct
+                                    exp["type"] = "CTExpChannel"
                                 elif ds.startswith("image"):
                                     exp["controller"] = image_ctrl
+                                    exp["type"] = "TwoDExpChannel"
                                 elif ds.startswith("spectrum"):
                                     exp["controller"] = spectrum_ctrl
+                                    exp["type"] = "OneDExpChannel"
                                 else:
                                     exp["controller"] = scalar_ctrl
+                                    exp["type"] = "CTExpChannel"
+                                exp["interfaces"] = [exp["type"]]    
                                 expch.append(exp)
                                 pdss[mg].append(ds)
                         pdss[mg] = sorted(pdss[mg])
@@ -2800,6 +2833,8 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
                                 "/")[:-1])
                         for cl in ctrls:
                             tgc = {}
+                            ttdv = None
+                            idmax = 10000
                             for exp in expch:
                                 ds = exp["name"]
                                 if ds in chds and cl == exp['controller']:
@@ -2809,6 +2844,9 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
                                         try:
                                             tdv = "/".join(
                                                 cnt['source'].split("/")[:-1])
+                                            if i < idmax:
+                                                idmax = i
+                                                ttdv = tdv
                                             chn = {'ndim': 0,
                                                    'index': i,
                                                    'name': str(ds),
@@ -2849,10 +2887,10 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
                                         "/")[:-1])
                                 myctrls[cl] = {
                                     'channels': tgc,
-                                    'monitor': fltm,
+                                    'monitor': ttdv,
                                     'synchronization': 0,
                                     'synchronizer': 'software',
-                                    'timer': fltm}
+                                    'timer': ttdv}
 
                         tgc = {}
                         for ds in chds:

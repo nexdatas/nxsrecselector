@@ -65,6 +65,9 @@ class ProfileManager(object):
         #: (:obj:`list` <:obj:`str`>) client record keys
         self.clientRecordKeys = []
 
+        #: (:obj:`list` <:obj:`str`>) timer filters
+        self.timerFilters = ["*dgg*", "*/timer/*", "*/ctctrl0*"]
+
         #: (:obj:`bool`) mntgrp with synchronization
         self.__withsynch = True
 
@@ -439,9 +442,9 @@ class ProfileManager(object):
         sources = PoolUtils.getChannelSources(self.__pools, aliases)
         props = json.loads(self.__selector["ChannelProperties"])
         synchronizer = props["synchronizer"] \
-                       if "synchronizer" in props.keys() else {}
+            if "synchronizer" in props.keys() else {}
         synchronization = props["synchronization"] \
-                          if "synchronization" in props.keys() else {}
+            if "synchronization" in props.keys() else {}
         tchannels = set(PoolUtils.getElementNames(
             self.__pools, 'ExpChannelList',
             ['CTExpChannel', 'OneDExpChannel', 'TwoDExpChannel']))
@@ -452,7 +455,8 @@ class ProfileManager(object):
                 al, dontdisplay, cnf,
                 al if al in tchannels else timer, index, fullnames, sources,
                 synchronizer[al] if al in synchronizer.keys() else None,
-                int(synchronization[al]) if al in synchronization.keys() else None
+                int(synchronization[al]) if al in synchronization.keys()
+                else None
             )
         conf = json.dumps(cnf)
 
@@ -485,9 +489,10 @@ class ProfileManager(object):
 
         # fill in dsg, timers hel
         if "timer" in conf.keys() and "controllers" in conf.keys():
+            avtimers = PoolUtils.getTimers(self.__pools, self.timerFilters)
             tangods = self.__readChannels(conf, timers, dsg, hel)
             self.__readTangoChannels(conf, tangods, dsg, hel)
-            otimers = self.__reorderTimers(conf, timers, dsg, hel)
+            otimers = self.__reorderTimers(conf, timers, dsg, hel, avtimers)
 
         changed = False
         jdsg = json.dumps(dsg)
@@ -608,7 +613,7 @@ class ProfileManager(object):
                                 elif ch['name'] in hel:
                                     hel.remove(name)
 
-    def __reorderTimers(self, conf, timers, dsg, hel):
+    def __reorderTimers(self, conf, timers, dsg, hel, avtimers=None):
         """ reads timer aliases and reoder it according to mntgrp
 
         :param conf: mntgrp configuration
@@ -619,12 +624,16 @@ class ProfileManager(object):
         :type dsg: :obj:`dict` <:obj:`str`, :obj:`bool` or `None`>
         :param hel: list of hidden elements
         :type hel: :obj:`list` <:obj:`str`>
+        :param avtimers: available timers
+        :type avtimers :obj:`list` <:obj:`str`>
         :returns: timer alias list
         :rtype: :obj:`list` <:obj:`str`>
         """
         dtimers = PoolUtils.getAliases(self.__pools, timers)
-        otimers = list(dtimers.values())
-        otimers.remove(dtimers[conf["timer"]])
+        avtimers = avtimers or []
+        otimers = [tm for tm in dtimers.values() if tm in avtimers]
+        if dtimers[conf["timer"]] in otimers:
+            otimers.remove(dtimers[conf["timer"]])
         otimers.insert(0, dtimers[conf["timer"]])
 
         tms = json.loads(self.__selector["Timer"])
@@ -733,6 +742,10 @@ class ProfileManager(object):
         :rtype: :obj:`str`
         """
         mtimers = json.loads(self.__selector["Timer"])
+        #   avtimers = PoolUtils.getTimers(self.__pools, self.timerFilters)
+        #   mtimers = mtimers or []
+        #   mtimers = [tm for tm in mtimers if tm in avtimers]
+
         timer = mtimers[0] if mtimers else ''
         if not timer:
             raise Exception(
@@ -1018,8 +1031,7 @@ class ProfileManager(object):
 
     def __addDevice(self, device, dontdisplay, cnf,
                     timer, index, fullnames=None, sources=None,
-                    synchronization=None, synchronizer=None
-                ):
+                    synchronization=None, synchronizer=None):
         """ adds device into configuration dictionary
 
         :param device: device alias
@@ -1071,8 +1083,8 @@ class ProfileManager(object):
                     index = self.__addTangoChannel(
                         cnf, ctrl, device, str(js["record"]),
                         dontdisplay, index)
-        synchronization =  synchronization  or None
-        synchronizer =  synchronizer  or None
+        synchronization = synchronization or None
+        synchronizer = synchronizer or None
         if synchronization is not None:
             cnf['controllers'][ctrl][u'synchronization'] = \
                 int(synchronization)

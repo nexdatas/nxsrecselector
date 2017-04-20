@@ -12806,10 +12806,13 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                     exp["source"] = vl["source"]
                     if ds.startswith("image"):
                         exp["controller"] = image_ctrl
+                        exp["type"] = "TwoDExpChannel"
                     if ds.startswith("spectrum"):
                         exp["controller"] = spectrum_ctrl
+                        exp["type"] = "OneDExpChannel"
                     else:
                         exp["controller"] = scalar_ctrl
+                        exp["type"] = "CTExpChannel"
                     expch.append(exp)
                     pdss.append(ds)
             pdss = sorted(pdss)
@@ -12969,6 +12972,8 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                     myctrls = {}
                     for cl in ctrls:
                         tgc = {}
+                        ttdv = None
+                        idmax = 10000
                         for exp in expch:
                             ds = exp["name"]
                             if ds in chds and cl == exp['controller']:
@@ -12977,6 +12982,9 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                                 try:
                                     tdv = "/".join(
                                         cnt['source'].split("/")[:-1])
+                                    if i < idmax:
+                                        idmax = i
+                                        ttdv = tdv
                                     chn = {'ndim': 0,
                                            'index': i,
                                            'name': str(ds),
@@ -13003,9 +13011,9 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                             myctrls[cl] = {'units':
                                            {'0':
                                             {'channels': tgc,
-                                             'monitor': dv,
+                                             'monitor': ttdv,
                                              'id': 0,
-                                             'timer': dv,
+                                             'timer': ttdv,
                                              'trigger_type': 0}}}
 
                     smg = {"controllers": myctrls,
@@ -13088,10 +13096,13 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                     exp["source"] = vl["source"]
                     if ds.startswith("image"):
                         exp["controller"] = image_ctrl
+                        exp["type"] = "TwoDExpChannel"
                     if ds.startswith("spectrum"):
                         exp["controller"] = spectrum_ctrl
+                        exp["type"] = "OneDExpChannel"
                     else:
                         exp["controller"] = scalar_ctrl
+                        exp["type"] = "CTExpChannel"
                     expch.append(exp)
                     pdss.append(ds)
             pdss = sorted(pdss)
@@ -13291,6 +13302,8 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                     myctrls = {}
                     for cl in ctrls:
                         tgc = {}
+                        ttdv = None
+                        idmax = 10000
                         for exp in expch:
                             ds = exp["name"]
                             if ds in chds and cl == exp['controller']:
@@ -13300,6 +13313,9 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                                 try:
                                     tdv = "/".join(
                                         cnt['source'].split("/")[:-1])
+                                    if i < idmax:
+                                        idmax = i
+                                        ttdv = tdv
                                     chn = {'ndim': 0,
                                            'index': i,
                                            'name': str(ds),
@@ -13331,9 +13347,9 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                                 'units':
                                     {'0':
                                      {'channels': tgc,
-                                      'monitor': dv,
+                                      'monitor': ttdv,
                                       'id': 0,
-                                      'timer': dv,
+                                      'timer': ttdv,
                                       'trigger_type': 0}}}
 
                     smg = {"controllers": myctrls,
@@ -13419,10 +13435,13 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                     exp["source"] = vl["source"]
                     if ds.startswith("image"):
                         exp["controller"] = image_ctrl
+                        exp["type"] = "TwoDExpChannel"
                     if ds.startswith("spectrum"):
                         exp["controller"] = spectrum_ctrl
+                        exp["type"] = "OneDExpChannel"
                     else:
                         exp["controller"] = scalar_ctrl
+                        exp["type"] = "CTExpChannel"
                     expch.append(exp)
                     pdss.append(ds)
             pdss = sorted(pdss)
@@ -13635,6 +13654,8 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                     myctrls = {}
                     for cl in ctrls:
                         tgc = {}
+                        ttdv = None
+                        idmax = 10000
                         for exp in expch:
                             ds = exp["name"]
                             if ds in chds and cl == exp['controller']:
@@ -13645,6 +13666,9 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                                     try:
                                         tdv = "/".join(
                                             cnt['source'].split("/")[:-1])
+                                        if i < idmax:
+                                            idmax = i
+                                            ttdv = tdv
                                         chn = {'ndim': 0,
                                                'index': i,
                                                'name': str(ds),
@@ -13675,9 +13699,9 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                             myctrls[cl] = {'units':
                                            {'0':
                                             {'channels': tgc,
-                                             'monitor': dv,
+                                             'monitor': ttdv,
                                              'id': 0,
-                                             'timer': dv,
+                                             'timer': ttdv,
                                              'trigger_type': 0}}}
 
                     tgc = {}
@@ -13816,10 +13840,13 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                     exp["source"] = vl["source"]
                     if ds.startswith("image"):
                         exp["controller"] = image_ctrl
+                        exp["type"] = "TwoDExpChannel"
                     if ds.startswith("spectrum"):
                         exp["controller"] = spectrum_ctrl
+                        exp["type"] = "OneDExpChannel"
                     else:
                         exp["controller"] = scalar_ctrl
+                        exp["type"] = "CTExpChannel"
                     expch.append(exp)
                     pdss.append(ds)
             pdss = sorted(pdss)
@@ -14045,6 +14072,8 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                     myctrls = {}
                     for cl in ctrls:
                         tgc = {}
+                        ttdv = None
+                        idmax = 10000
                         for exp in expch:
                             ds = exp["name"]
                             if ds in chds and cl == exp['controller']:
@@ -14055,6 +14084,9 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                                     try:
                                         tdv = "/".join(
                                             cnt['source'].split("/")[:-1])
+                                        if i < idmax:
+                                            idmax = i
+                                            ttdv = tdv
                                         chn = {'ndim': 0,
                                                'index': i,
                                                'name': str(ds),
@@ -14085,9 +14117,9 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                             myctrls[cl] = {'units':
                                            {'0':
                                             {'channels': tgc,
-                                             'monitor': dv,
+                                             'monitor': ttdv,
                                              'id': 0,
-                                             'timer': dv,
+                                             'timer': ttdv,
                                              'trigger_type': 0}}}
 
                     tgc = {}

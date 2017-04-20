@@ -38,7 +38,8 @@ class Settings(object):
     """ NeXus Sardana Recorder settings
     """
 
-    def __init__(self, server=None, numberofthreads=None, defaultnexuspath=None,
+    def __init__(self, server=None, numberofthreads=None,
+                 defaultnexuspath=None,
                  defaulttimezone=None, defaultmntgrp=None):
         """ contructor
 
@@ -84,8 +85,6 @@ class Settings(object):
         #: (:class:`PyTango.Database`) tango database
         self.__db = PyTango.Database()
 
-        #: (:obj:`list` <:obj:`str`>) timer filters
-        self.timerFilters = ["*dgg*", "*/timer/*", "*/ctctrl0*"]
         #:  (:obj:`list` <:obj:`str`>) timer filters
         self.mutedChannelFilters = ["*tip551*"]
         #: (:obj:`str`) default device groups
@@ -311,6 +310,28 @@ class Settings(object):
         __getClientRecordKeys,
         __setClientRecordKeys,
         doc='clientRecordKeys')
+
+    def __getTimerFilters(self):
+        """ get method for clientRecordKeys attribute
+
+        :returns: list of timer filters
+        :rtype: :obj:`list` <:obj:`str`>
+        """
+        return self.__profileManager.timerFilters
+
+    def __setTimerFilters(self, filters):
+        """ set method for clientRecordKeys attribute
+
+        :param components: list of filters
+        :type components: :obj:`list` <:obj:`str`>
+        """
+        self.__profileManager.timerFilters = filters
+
+    #: (:obj:`list` <:obj:`str`>) timer filters
+    timerFilters = property(
+        __getTimerFilters,
+        __setTimerFilters,
+        doc='timerFilters')
 
     def __getConfigDevice(self):
         """ get method for configDevice attribute
@@ -1019,7 +1040,7 @@ class Settings(object):
         dsources = set(datasources or [])
         found = json.dumps(list(dsources & set(dss)))
         notfound = list(dsources - set(dss))
-        inst.stepdatasources =found
+        inst.stepdatasources = found
         inst.linkdatasources = found
         return notfound
 
