@@ -6216,7 +6216,7 @@ class ProfileManager2Test(unittest.TestCase):
                         pdss[mg] = []
 
                         timers = {}
-                        ntms = self.__rnd.randint(1, 5)
+                        ntms = 1 # self.__rnd.randint(1, 5)
                         tms = self.__rnd.sample(set(
                             [ch for ch in self.smychsXX.keys()
                              if not ch.startswith("client")]), ntms)
@@ -6252,6 +6252,7 @@ class ProfileManager2Test(unittest.TestCase):
                                 else:
                                     exp["controller"] = scalar_ctrl
                                     exp["type"] = "CTExpChannel"
+                                exp["interfaces"] = [exp["type"]]
                                 expch.append(exp)
                                 pdss[mg].append(ds)
                         pdss[mg] = sorted(pdss[mg])

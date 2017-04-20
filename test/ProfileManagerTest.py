@@ -6233,7 +6233,7 @@ class ProfileManagerTest(unittest.TestCase):
                         pdss[mg] = []
 
                         timers = {}
-                        ntms = self.__rnd.randint(1, 5)
+                        ntms = 1 #self.__rnd.randint(1, 5)
                         tms = self.__rnd.sample(set(
                             [ch for ch in self.smychsXX.keys()
                              if not ch.startswith("client")]), ntms)
@@ -6745,6 +6745,7 @@ class ProfileManagerTest(unittest.TestCase):
                         json.loads(lse["UserData"]), records[mg1])
                     self.assertEqual(
                         json.loads(lse["Timer"])[0], ltimers[mg1][0])
+                    print "TIME" , set(json.loads(lse["Timer"])), set(ltimers[mg1])
                     self.assertEqual(
                         set(json.loads(lse["Timer"])), set(ltimers[mg1]))
                     self.assertEqual(lse["MntGrp"], mg1)
@@ -7107,7 +7108,7 @@ class ProfileManagerTest(unittest.TestCase):
                             "UnplottedComponents",
                             "PreselectingDataSources",
                             "Timer"],
-                        name=mg3)
+                        name=mg3) 
                     self.myAssertDict(json.loads(lse["DataSourceSelection"]),
                                       adss[mg3])
                     self.assertEqual(

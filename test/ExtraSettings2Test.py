@@ -162,7 +162,7 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
                 pdss = []
 
                 timers = {}
-                ntms = self._rnd.randint(1, 5)
+                ntms = 1 # self._rnd.randint(1, 5)
                 tms = self._rnd.sample(set(
                     [ch for ch in self.smychsXX.keys()
                      if not ch.startswith("client")]), ntms)
@@ -618,7 +618,7 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
                 pdss = []
 
                 timers = {}
-                ntms = self._rnd.randint(1, 5)
+                ntms = 1 # self._rnd.randint(1, 5)
                 tms = self._rnd.sample(set(
                     [ch for ch in self.smychsXX.keys()
                      if not ch.startswith("client")]), ntms)
