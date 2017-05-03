@@ -3070,13 +3070,22 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
                     # import mntgrp another defined by selector MntGrp
                     lrs.mntGrp = mg2
 
+                    myoldmg = json.loads(lrs.mntGrpConfiguration())
                     self.assertTrue(not lrs.isMntGrpUpdated())
                     self.assertTrue(not lrs.isMntGrpUpdated())
 
                     lrs.importMntGrp()
+                    mynewmg = json.loads(lrs.mntGrpConfiguration())
                     lmp = json.loads(lrs.profileConfiguration)
-                    self.assertTrue(not lrs.isMntGrpUpdated())
-                    self.assertTrue(not lrs.isMntGrpUpdated())
+
+                    try:
+                        self.myCompDict(mynewmg, myoldmg)
+                        self.assertTrue(lrs.isMntGrpUpdated())
+                        self.assertTrue(lrs.isMntGrpUpdated())
+                    except:
+                        self.assertTrue(not lrs.isMntGrpUpdated())
+                        self.assertTrue(not lrs.isMntGrpUpdated())
+                        
 
                     ors.profileConfiguration = str(json.dumps(mp[mg1]))
                     tmpcf1 = json.loads(ors.mntGrpConfiguration())
