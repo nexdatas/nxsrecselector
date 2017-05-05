@@ -22,6 +22,7 @@
 import json
 import PyTango
 import getpass
+from os.path import expanduser
 from .Utils import TangoUtils, PoolUtils
 from .Selection import Selection
 from .Converter import Converter
@@ -353,10 +354,11 @@ class Selector(object):
                 configDevice.open()
                 configDevice.availableComponents()
             except DatabaseError:
+                home = expanduser("~")
                 user = getpass.getuser()
                 dbp = '{"host":"localhost","db":"nxsconfig",' \
                     + '"use_unicode":true,' \
-                    + '"read_default_file":"/home/%s/.my.cnf"}' % user
+                    + '"read_default_file":"%s/.my.cnf"}' % home
                 configDevice.jsonsettings = dbp
                 configDevice.open()
                 configDevice.availableComponents()
