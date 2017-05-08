@@ -12466,7 +12466,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                            "monitor": "%s" % dv,
                            "description": "Measurement Group",
                            "timer": "%s" % dv,
-                           "label": "nxsmntgrp"}
+                           "label": "nxsmntgrp2"}
 #                print "SMG", smg
                 self.myAssertDict(smg, pcnf)
                 self.myAssertDict(pcnf, cnf)

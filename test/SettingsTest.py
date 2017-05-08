@@ -126,7 +126,8 @@ class SettingsTest(unittest.TestCase):
         except NotImplementedError:
             self._seed = long(time.time() * 256)
 
-            #        self._seed = 133807022068754062020588864622821989794
+        #        self._seed = 133807022068754062020588864622821989794
+        #        self._seed = 252610957556978915330732248482858942194
         self._rnd = random.Random(self._seed)
 
         self._dump = {}
