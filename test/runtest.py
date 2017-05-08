@@ -188,37 +188,34 @@ def main():
     import argparse
     parser = argparse.ArgumentParser()
     parser.add_argument('args', metavar='name', type=str, nargs='*',
-                        help='suite names: all, basic, profile, '
+                        help='suite names: all, basic, '
                         'basicsettings, basicserver, '
-                        'basicsettings2, basicserver2, '
-                        'extrasettings, extraserver, '
-                        'extrasettings2, extraserver2',
+                        'extrasettings, extraserver '
                     )
     options = parser.parse_args()
 
     namesuite = {
-        "basic": basicsuite,
-        "profile": profilesuite,
-        "basicsettings": settingssuite1,
-        "basicserver": serversuite1,
-        "basicsettings2": settingssuite1b,
-        "basicserver2": serversuite1b,
-        "extrasettings": settingssuite2,
-        "extraserver": serversuite2,
-        "extrasettings2": settingssuite2b,
-        "extraserver2": serversuite2b,
+        "basic": [basicsuite, profilesuite],
+        "basicsettings": [settingssuite1, settingssuite1b],
+        "basicserver": [serversuite1, serversuite1b],
+        "extrasettings": [settingssuite2, settingssuite2b],
+        "extraserver": [serversuite2, serversuite2b],
     }
-    
+
     print options.args
     if not options.args or 'all' in options.args:
         options.args = namesuite.keys()
 
-    suite = unittest.TestSuite(
-        [namesuite[nm] for nm in options.args if nm in namesuite.keys()])
-    
+    ts = []
+    for nm in options.args:
+        if nm in namesuite.keys():
+            ts.extend(namesuite[nm])
+
+    suite = unittest.TestSuite(ts)
+
     ## test result
     result = runner.run(suite).wasSuccessful()
     sys.exit(not result)
-    
+
 if __name__ == "__main__":
     main()

@@ -3,46 +3,43 @@ language: python
 sudo: required
 dist: trusty
 
+env:
+  - TEST_SUITE=basic OS_TYPE=debian8
+  - TEST_SUITE=extraserver OS_TYPE=debian8
+  - TEST_SUITE=extrasettings OS_TYPE=debian8
+  - TEST_SUITE=basicserver OS_TYPE=debian8
+  - TEST_SUITE=basicsettings OS_TYPE=debian8
+  - TEST_SUITE=basic OS_TYPE=debian9
+  - TEST_SUITE=extraserver OS_TYPE=debian9
+  - TEST_SUITE=extrasettings OS_TYPE=debian9
+  - TEST_SUITE=basicserver OS_TYPE=debian9
+  - TEST_SUITE=basicsettings OS_TYPE=debian9
+  - TEST_SUITE=basic OS_TYPE=ubuntu16.04
+  - TEST_SUITE=extraserver OS_TYPE=ubuntu16.04
+  - TEST_SUITE=extrasettings OS_TYPE=ubuntu16.04
+  - TEST_SUITE=basicserver OS_TYPE=ubuntu16.04
+  - TEST_SUITE=basicsettings OS_TYPE=ubuntu16.04
+
+
+services:
+  - docker
+
 python:
   - "2.7"
-  
-services:
-  - mysql
 
-env:
-  - TEST_SUITE=basic
-  - TEST_SUITE=profile
-  - TEST_SUITE=basicsettings
-  - TEST_SUITE=basicserver
-  - TEST_SUITE=basicsettings2
-  - TEST_SUITE=basicserver2
-  - TEST_SUITE=extrasettings
-  - TEST_SUITE=extraserver
-  - TEST_SUITE=extrasettings2
-  - TEST_SUITE=extraserver2
 
 before_install:
-  - sudo add-apt-repository "deb http://repos.pni-hdri.de/apt/debian jessie main" -y
-#  - sudo add-apt-repository "deb http://security.debian.org/ jessie/updates main" -y
-#  - sudo add-apt-repository "deb http://ftp.de.debian.org/debian/ jessie main" -y
-  - curl http://repos.pni-hdri.de/debian_repo.pub.gpg | sudo apt-key add -
-  - sudo apt-get -qq update
-# - sudo apt-get install -y  mysql-server mysql-client mysql-client-5.5  mysql-server-5.5
-  - sudo apt-get install -y  --force-yes tango-db tango-common 
-  - sleep 10
-  - sudo apt-get install -y  --force-yes  tango-starter tango-test python-sardana liblog4j1.2-java 
-  - sleep 10
-#  - sudo apt-get install -y   --force-yes python-pni
-  - sudo apt-get install -y   --force-yes python-h5py
-  - sudo apt-get install -y   --force-yes nxsconfigserver-db
-  - sleep 10
-  - sudo apt-get install -y    python-sphinx
-  - sudo apt-get install -y   --force-yes python-pytango python-nxstools python-nxsconfigserver python-nxswriter
-  - sleep 10
-  - export PYTHONPATH=$PYTHONPATH:$(pwd):/usr/lib/python2.7/dist-packages
+  - chmod +x .travis/run.sh
+  - chmod +x .travis/install.sh
 
-install:
-  - python setup.py -q install
+before_script:
+  - docker build -t ndts .travis/${OS_TYPE}
+  - docker run  --name  ndts -d -it -v `pwd`:/home/tango  ndts
+  - .travis/install.sh ${OS_TYPE}
 
 script:
-  - python test/runtest.py $TEST_SUITE
+  - .travis/run.sh $TEST_SUITE
+
+after-script:
+  - docker stop ndts
+  - docker rm ndts

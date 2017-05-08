@@ -12446,20 +12446,27 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                     except:
                         print ds, cnt
                         raise
-
-                smg = {"controllers":
-                       {'__tango__':
-                        {'units':
-                         {'0':
-                          {'channels': tgc,
-                           'monitor': dv,
-                           'id': 0,
-                           'timer': dv,
-                           'trigger_type': 0}}}},
-                       "monitor": "%s" % dv,
-                       "description": "Measurement Group",
-                       "timer": "%s" % dv,
-                       "label": "nxsmntgrp2"}
+                if tgc:    
+                    smg = {"controllers":
+                           {'__tango__':
+                            {'units':
+                             {'0':
+                              {'channels': tgc,
+                               'monitor': dv,
+                               'id': 0,
+                               'timer': dv,
+                               'trigger_type': 0}}}},
+                           "monitor": "%s" % dv,
+                           "description": "Measurement Group",
+                           "timer": "%s" % dv,
+                           "label": "nxsmntgrp2"}
+                else:
+                    smg = {"controllers":
+                           {},
+                           "monitor": "%s" % dv,
+                           "description": "Measurement Group",
+                           "timer": "%s" % dv,
+                           "label": "nxsmntgrp"}
 #                print "SMG", smg
                 self.myAssertDict(smg, pcnf)
                 self.myAssertDict(pcnf, cnf)

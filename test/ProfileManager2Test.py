@@ -3461,23 +3461,30 @@ class ProfileManager2Test(unittest.TestCase):
                     except:
                         print ds, cnt
                         raise
-
-                smg = {
-                    "controllers":
-                    {
-                        '__tango__':
+                if tgc:
+                    smg = {
+                        "controllers":
                         {
-                        'channels': tgc,
-                        'monitor': dv,
-                        'timer': dv,
-                        'synchronization': 0,
-                        'synchronizer': 'software',
-                        }
-                    },
-                       "monitor": "%s" % dv,
-                       "description": "Measurement Group",
-                       "timer": "%s" % dv,
-                       "label": "nxsmntgrp"}
+                            '__tango__':
+                            {
+                                'channels': tgc,
+                                'monitor': dv,
+                                'timer': dv,
+                                'synchronization': 0,
+                                'synchronizer': 'software',
+                            }
+                        },
+                        "monitor": "%s" % dv,
+                        "description": "Measurement Group",
+                        "timer": "%s" % dv,
+                        "label": "nxsmntgrp"}
+                else:
+                    smg = {"controllers":
+                           {},
+                           "monitor": "%s" % dv,
+                           "description": "Measurement Group",
+                           "timer": "%s" % dv,
+                           "label": "nxsmntgrp"}
 #                print "SMG", smg
                 self.myAssertDict(smg, pcnf)
                 self.myAssertDict(pcnf, cnf)

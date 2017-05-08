@@ -123,6 +123,7 @@ class ProfileManagerTest(unittest.TestCase):
         except NotImplementedError:
             self.__seed = long(time.time() * 256)
         # self.__seed  = 244826915137294083694874616207392554673
+        # self.__seed  = 337589427218504574960819174792358025904
         self.__rnd = random.Random(self.__seed)
 
         self.__dump = {}
@@ -3462,20 +3463,29 @@ class ProfileManagerTest(unittest.TestCase):
                         print ds, cnt
                         raise
 
-                smg = {"controllers":
-                       {'__tango__':
-                        {'units':
-                         {'0':
-                          {'channels': tgc,
-                           'monitor': dv,
-                           'id': 0,
-                           'timer': dv,
-                           'trigger_type': 0}}}},
-                       "monitor": "%s" % dv,
-                       "description": "Measurement Group",
-                       "timer": "%s" % dv,
-                       "label": "nxsmntgrp"}
-#                print "SMG", smg
+                if tgc:
+                    smg = {"controllers":
+                           {'__tango__':
+                            {'units':
+                             {'0':
+                              {'channels': tgc,
+                               'monitor': dv,
+                               'id': 0,
+                               'timer': dv,
+                               'trigger_type': 0}}}},
+                           "monitor": "%s" % dv,
+                           "description": "Measurement Group",
+                           "timer": "%s" % dv,
+                           "label": "nxsmntgrp"}
+                else:
+                    smg = {"controllers":
+                           {},
+                           "monitor": "%s" % dv,
+                           "description": "Measurement Group",
+                           "timer": "%s" % dv,
+                           "label": "nxsmntgrp"}
+                #                    print "SMG", smg
+                #                print "SMG", pcnf
                 self.myAssertDict(smg, pcnf)
                 self.myAssertDict(pcnf, cnf)
                 se.reset()
