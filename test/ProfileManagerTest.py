@@ -138,7 +138,7 @@ class ProfileManagerTest(unittest.TestCase):
 
         ## selection version
         self.__version = nxsrecconfig.__version__
-        print self.__version
+        # print self.__version
 
         self._keys = [
             ("Timer", '[]'),
@@ -1910,7 +1910,7 @@ class ProfileManagerTest(unittest.TestCase):
 
             MSUtils.setEnv('ActiveMntGrp', ar["name"],
                            self._ms.ms.keys()[0])
-            print MSUtils.getEnv('ActiveMntGrp', self._ms.ms.keys()[0])
+            # print MSUtils.getEnv('ActiveMntGrp', self._ms.ms.keys()[0])
             dd = mgt.availableMntGrps()
             self.assertEqual(dd[0], ar["name"])
             self.assertEqual(set(dd), set([a["name"] for a in arr]))
@@ -2052,7 +2052,7 @@ class ProfileManagerTest(unittest.TestCase):
 
         dl = []
         mgs = [ar["name"] for ar in arr] + self.mysel2.keys()
-        print mgs
+        # print mgs
         for ar in mgs:
             MSUtils.setEnv('ActiveMntGrp', ar, self._ms.ms.keys()[0])
             mgt.deleteProfile(ar)
@@ -2862,12 +2862,12 @@ class ProfileManagerTest(unittest.TestCase):
                 self.myAssertDict(json.loads(se["UserData"]), records)
                 self.assertEqual(json.loads(se["Timer"]), [ar["name"]])
                 self.assertEqual(se["MntGrp"], "nxsmntgrp")
-                print "COMP", mgt.components()
-                print "ACOMP", mgt.preselectedComponents()
-                print "MCP", mcps
-                print "DS", mgt.dataSources()
-                print "DDS", mgt.componentDataSources()
-                print "TIMER", ar["name"]
+                # print "COMP", mgt.components()
+                # print "ACOMP", mgt.preselectedComponents()
+                # print "MCP", mcps
+                # print "DS", mgt.dataSources()
+                # print "DDS", mgt.componentDataSources()
+                # print "TIMER", ar["name"]
                 res = mgt.cpdescription()
                 acp = self._cf.dp.AvailableComponents()
                 mdds = set()
@@ -3021,10 +3021,10 @@ class ProfileManagerTest(unittest.TestCase):
                 self.myAssertDict(json.loads(se["UserData"]), records)
                 self.assertEqual(json.loads(se["Timer"]), [ar["name"]])
                 self.assertEqual(se["MntGrp"], "nxsmntgrp")
-                print "COMP", mgt.components()
-                print "ACOMP", mgt.preselectedComponents()
-                print "MCP", mcps
-                print "DS", mgt.dataSources()
+                # print "COMP", mgt.components()
+                # print "ACOMP", mgt.preselectedComponents()
+                # print "MCP", mcps
+                # print "DS", mgt.dataSources()
                 self.myAssertRaise(Exception, mgt.updateProfile)
             finally:
                 mgt.deleteProfile("nxsmntgrp")
@@ -3143,10 +3143,10 @@ class ProfileManagerTest(unittest.TestCase):
                 self.myAssertDict(json.loads(se["UserData"]), records)
                 self.assertEqual(json.loads(se["Timer"]), [ar["name"]])
                 self.assertEqual(se["MntGrp"], "nxsmntgrp")
-                print "COMP", mgt.components()
-                print "ACOMP", mgt.preselectedComponents()
-                print "MCP", mcps
-                print "DS", mgt.dataSources()
+                # print "COMP", mgt.components()
+                # print "ACOMP", mgt.preselectedComponents()
+                # print "MCP", mcps
+                # print "DS", mgt.dataSources()
                 self.myAssertRaise(Exception, mgt.updateProfile)
 #                mgt.updateProfile()
             finally:
@@ -3266,10 +3266,10 @@ class ProfileManagerTest(unittest.TestCase):
                 self.myAssertDict(json.loads(se["UserData"]), records)
                 self.assertEqual(json.loads(se["Timer"]), [ar["name"]])
                 self.assertEqual(se["MntGrp"], "nxsmntgrp")
-                print "COMP", mgt.components()
-                print "ACOMP", mgt.preselectedComponents()
-                print "MCP", mcps
-                print "DS", mgt.dataSources()
+                # print "COMP", mgt.components()
+                # print "ACOMP", mgt.preselectedComponents()
+                # print "MCP", mcps
+                # print "DS", mgt.dataSources()
 #                mgt.updateProfile()
                 self.myAssertRaise(Exception, mgt.updateProfile)
             finally:
@@ -3460,7 +3460,7 @@ class ProfileManagerTest(unittest.TestCase):
                                'source': cnt['source']}
                         tgc[chn["full_name"]] = chn
                     except:
-                        print ds, cnt
+                        # print ds, cnt
                         raise
 
                 if tgc:
@@ -3731,7 +3731,7 @@ class ProfileManagerTest(unittest.TestCase):
                                'source': cnt['source']}
                         tgc[chn["full_name"]] = chn
                     except:
-                        print ds, cnt
+                        # print ds, cnt
                         raise
                 if tgc:
                     smg = {"controllers":
@@ -4264,10 +4264,10 @@ class ProfileManagerTest(unittest.TestCase):
                         if not found:
                             lhe2.append(el)
 
-                    print "LHE", lhe
-                    print "LHE2", lhe2
-                    print "LHECP", lhecp
-                    print "COMPS", comps
+                    # print "LHE", lhe
+                    # print "LHE2", lhe2
+                    # print "LHECP", lhecp
+                    # print "COMPS", comps
 
 #                    print "COMP", mgt.components()
 #                    print "ACOMP", mgt.preselectedComponents()
@@ -6124,7 +6124,7 @@ class ProfileManagerTest(unittest.TestCase):
                            "description": "Measurement Group",
                            "timer": "%s" % fgtm,
                            "label": "mg2"}
-                    print "SMG", smg
+#                    print "SMG", smg
 #                    self.myAssertDict(smg, pcnf)
                     self.myAssertDict(pcnf, cnf)
                     se.reset()
@@ -6251,10 +6251,10 @@ class ProfileManagerTest(unittest.TestCase):
                             myct = ("ctrl_%s" % tm).replace("_", "/")
                             timers[myct] = tm
                             ctrls.append(myct)
-                        print "TIMERSL", tms
-                        print "TIMERSD", timers
+                        # print "TIMERSL", tms
+                        # print "TIMERSD", timers
                         ltimers[mg] = timers.values()
-                        print "LTIMER", ltimers[mg]
+                        # print "LTIMER", ltimers[mg]
 
                         for ds, vl in self.smychsXX.items():
                             if vl:
@@ -6527,7 +6527,7 @@ class ProfileManagerTest(unittest.TestCase):
                         for tm in ltimers[mg]:
                             if tm in lhe2[mg]:
                                 if tm in adss[mg].keys():
-                                    print "DES", tm
+                                    # print "DES", tm
                                     adss[mg][tm] = False
 
                         jpcnf = mgt[mg].updateProfile()
@@ -6746,7 +6746,7 @@ class ProfileManagerTest(unittest.TestCase):
                         set(json.loads(lse["PreselectingDataSources"])),
                         set(aadss[mg1]))
                     adtimers =  set(json.loads(lse["Timer"])) - set(ltimers[mg1])
-                    print "ADD TIME", adtimers
+                    # print "ADD TIME", adtimers
                     self.myAssertDict(
                         json.loads(lse["DataSourceSelection"]), adss[mg1])
                     self.assertEqual(
@@ -6755,12 +6755,12 @@ class ProfileManagerTest(unittest.TestCase):
                         json.loads(lse["UserData"]), records[mg1])
                     self.assertEqual(
                         json.loads(lse["Timer"])[0], ltimers[mg1][0])
-                    print "TIME" , set(json.loads(lse["Timer"])), set(ltimers[mg1])
+                    # print "TIME" , set(json.loads(lse["Timer"])), set(ltimers[mg1])
                     self.assertEqual(
                         set(json.loads(lse["Timer"])), set(ltimers[mg1]))
                     self.assertEqual(lse["MntGrp"], mg1)
 
-                    print "MGS", mg1, mg2, mg3, mg4
+                    # print "MGS", mg1, mg2, mg3, mg4
 
                     # import mntgrp another defined by selector MntGrp
                     lse["MntGrp"] = mg2
@@ -6894,9 +6894,9 @@ class ProfileManagerTest(unittest.TestCase):
                                     if tm in llhe:
                                         llhe.remove(tm)
 
-                    print "T1", json.loads(se[mg1]["Timer"])
-                    print "T2", json.loads(se[mg2]["Timer"])
-                    print "LT", json.loads(lse["Timer"])
+                    # print "T1", json.loads(se[mg1]["Timer"])
+                    # print "T2", json.loads(se[mg2]["Timer"])
+                    # print "LT", json.loads(lse["Timer"])
                     self.myAssertDict(
                         json.loads(lse["DataSourceSelection"]), ladss)
                     self.assertEqual(
@@ -6913,7 +6913,7 @@ class ProfileManagerTest(unittest.TestCase):
                     tmpcf['label'] = mg2
                     mgdp = PyTango.DeviceProxy(
                         tmg[mg2].new_device_info_writer.name)
-                    print "name", tmg[mg2].new_device_info_writer.name
+                    # print "name", tmg[mg2].new_device_info_writer.name
                     mgdp.Configuration = json.dumps(tmpcf)
                     self.assertTrue(not lmgt.isMntGrpUpdated())
                     self.assertTrue(not lmgt.isMntGrpUpdated())
@@ -7270,7 +7270,7 @@ class ProfileManagerTest(unittest.TestCase):
                     self.assertEqual(set(json.loads(lse["Timer"])),
                                      set(ltimers[mg3]))
                     self.assertEqual(lse["MntGrp"], wmg)
-                    print "MYLHE", mylhe
+                    # print "MYLHE", mylhe
                     ## fetch non-existing selection
                     self._cf.dp.deleteSelection(mg4)
                     lse["MntGrp"] = mg4

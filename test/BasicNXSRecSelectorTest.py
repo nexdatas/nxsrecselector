@@ -161,10 +161,10 @@ class BasicNXSRecSelectorTest(BasicSettingsTest.BasicSettingsTest):
         se["ConfigDevice"] = rs.configDevice
         pm = ProfileManager(se)
         amgs = pm.availableMntGrps()
-        print "AMGs", amgs
+        # print "AMGs", amgs
         cf = PyTango.DeviceProxy(rs.configDevice)
-        print "AvSels", cf.availableSelections()
-        print "AMGs", amgs
+        # print "AvSels", cf.availableSelections()
+        # print "AMGs", amgs
         amntgrp = MSUtils.getEnv('ActiveMntGrp', msp.getMacroServer(rs.door))
         if amntgrp in pm.availableMntGrps():
             self.assertEqual(rs.mntGrp, amntgrp)

@@ -2316,9 +2316,9 @@ class SettingsTest(unittest.TestCase):
         se = Selector(msp, self.version)
         pm = ProfileManager(se)
         amgs = pm.availableMntGrps()
-        print "AMGs", amgs
+        # print "AMGs", amgs
         amntgrp = MSUtils.getEnv('ActiveMntGrp', msp.getMacroServer(idoor))
-        print "ActiveMntGrp", amntgrp
+        # print "ActiveMntGrp", amntgrp
         self.assertEqual(rs.numberOfThreads, 20)
         self.assertEqual(rs.timerFilters,
                          ["*dgg*", "*/timer/*", "*/ctctrl0*"])
@@ -2336,8 +2336,8 @@ class SettingsTest(unittest.TestCase):
         self.assertEqual(
             cf.availableSelections(),
             rs.availableProfiles())
-        print "AMGs", pm.availableMntGrps()
-        print "AvSels", cf.availableSelections()
+        # print "AMGs", pm.availableMntGrps()
+        # print "AvSels", cf.availableSelections()
         if amntgrp in pm.availableMntGrps():
             self.assertEqual(rs.mntGrp, amntgrp)
         elif cf.availableSelections():

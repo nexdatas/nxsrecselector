@@ -1891,7 +1891,7 @@ class UtilsTest(unittest.TestCase):
              {u'asdf': u'asdfasdf', u'asdf123': u'asdfasdf'}],
         ]
         for ar in arg:
-            print ar
+            # print ar
             self.assertEqual(Utils.toString(ar[1]), ar[0])
             for ke, vl in ar[0].items():
                 self.assertTrue(isinstance(Utils.toString(ke), str))
@@ -1909,7 +1909,7 @@ class UtilsTest(unittest.TestCase):
              [{u'asdf': u'asdfasdf', u'asdf123': u'asdfasdf'}]],
         ]
         for ar in arg:
-            print ar
+            # print ar
             self.assertEqual(Utils.toString(ar[1]), ar[0])
             for aa in ar[0]:
                 for ke, vl in aa.items():
@@ -2001,7 +2001,7 @@ class UtilsTest(unittest.TestCase):
         self._simps.dp.ScalarString = self._bools[0]
         self._simps.dp.ScalarULong64 = long(abs(self._counter[0]))
 
-        print "TGVER", TGVER
+        # print "TGVER", TGVER
         arr = {
             'ScalarBoolean': [[], 'bool', 'No unit'],
             'ScalarUChar': [[], 'uint8', 'mm'],
@@ -2027,14 +2027,14 @@ class UtilsTest(unittest.TestCase):
             ap.set_config(ac)
 
         for k, ar in arr.items():
-            print ar
+            # print ar
             self.checkstu(
                 TangoUtils.getShapeTypeUnit(
                     "ttestp09/testts/t1r228/%s" % k),
                 ar[0], ar[1], ar[2])
 
         for k, ar in arr2.items():
-            print ar
+            # print ar
             self.checkstu(
                 TangoUtils.getShapeTypeUnit(
                     "ttestp09/testts/t1r228/%s" % k),
@@ -2130,7 +2130,7 @@ class UtilsTest(unittest.TestCase):
             ap.set_config(ac)
 
         for k, ar in arr.items():
-            print k, ar
+            # print k, ar
             self.checkstu(TangoUtils.getShapeTypeUnit(
                 "ttestp09/testts/t1r228/%s" % k
             ), ar[0], ar[1], ar[2])

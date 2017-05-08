@@ -1182,14 +1182,14 @@ class SelectorTest(unittest.TestCase):
 
                 se["Door"] = doors[i]
 #                msp.updateMacroServer(doors[i])
-                print "door", se["Door"]
+                # print "door", se["Door"]
                 pools = se.getPools()
                 self.assertEqual(len(pools), 1)
                 self.assertTrue(isinstance(pools[0], PyTango.DeviceProxy))
                 self.assertEqual(pools[0].name(), self._pool.dp.name())
                 self.assertEqual(msp.getMacroServer(doors[i]),
                                  ms2.ms.keys()[0])
-                print "door", se["Door"]
+                # print "door", se["Door"]
                 self.assertEqual(se.getMacroServer(), ms2.ms.keys()[0])
 
         finally:
@@ -1227,13 +1227,13 @@ class SelectorTest(unittest.TestCase):
                 self.myAssertRaise(Exception, se.getPools, "")
                 se["Door"] = doors[i]
 #                msp.updateMacroServer(doors[i])
-                print "door", se["Door"]
+                # print "door", se["Door"]
                 pools = se.getPools()
                 self.assertEqual(len(pools), 1)
                 self.assertTrue(isinstance(pools[0], PyTango.DeviceProxy))
                 self.assertEqual(pools[0].name(), self._pool.dp.name())
                 self.assertEqual(msp.getMacroServer(doors[i]), ms)
-                print "door", se["Door"]
+                # print "door", se["Door"]
                 self.assertEqual(se.getMacroServer(), ms)
 
         finally:
@@ -1291,7 +1291,7 @@ class SelectorTest(unittest.TestCase):
         res = [a[0] for a in arr2]
         self.assertEqual(dd, res)
 
-        print se.poolElementNames('MotorList')
+        # print se.poolElementNames('MotorList')
 
         self.assertEqual(len(pools), 1)
         self.assertTrue(isinstance(pools[0], PyTango.DeviceProxy))
@@ -1350,7 +1350,7 @@ class SelectorTest(unittest.TestCase):
         res = [a[0] for a in arr2]
         self.assertEqual(dd, res)
 
-        print se.poolElementNames('ExpChannelList')
+        # print se.poolElementNames('ExpChannelList')
 
         self.assertEqual(len(pools), 1)
         self.assertTrue(isinstance(pools[0], PyTango.DeviceProxy))
@@ -1793,7 +1793,7 @@ class SelectorTest(unittest.TestCase):
 
         se["ConfigDevice"] = 'module'
         if DB_AVAILABLE:
-            print "DB AVAILABLE:", DB_AVAILABLE
+            # print "DB AVAILABLE:", DB_AVAILABLE
             inst = se.setConfigInstance()
             self.assertTrue(isinstance(inst, XMLConfigurator))
 
@@ -1973,8 +1973,8 @@ class SelectorTest(unittest.TestCase):
         cps = inst.availableComponents() or []
         dss = inst.availableDataSources() or []
         sls = inst.availableSelections() or []
-        print "CPS !!!!", cps
-        print "DSS !!!!", dss
+        # print "CPS !!!!", cps
+        # print "DSS !!!!", dss
 
         for i in range(5):
             arg2 = [
@@ -1996,7 +1996,7 @@ class SelectorTest(unittest.TestCase):
             ]
 
             for ar in arg2:
-                print "ARR", ar
+                # print "ARR", ar
                 se = Selector(msp, self.__version)
                 se["ConfigDevice"] = 'module'
                 try:
@@ -2174,7 +2174,7 @@ class SelectorTest(unittest.TestCase):
             self.dump(se)
 
             ads = se["OrderedChannels"]
-            print "OCS:", ads
+            # print "OCS:", ads
 
             self.compareToDumpJSON(se, ["OrderedChannels"])
 
@@ -2228,7 +2228,7 @@ class SelectorTest(unittest.TestCase):
                 se.fetchSelection()
 
             ads = se["OrderedChannels"]
-            print "OCS:", ads
+            # print "OCS:", ads
 
             self.compareToDumpJSON(se, ["OrderedChannels"])
 
@@ -2457,7 +2457,7 @@ class SelectorTest(unittest.TestCase):
 
             ndss = json.loads(se["DataSourceSelection"])
             existing = set(dssn) & (set(chs) | set(cdss))
-            print "existing", existing
+            # print "existing", existing
             for key, value in ndss.items():
                 if key in existing:
                     self.assertEqual(ndss[key], dss[key])
@@ -2558,7 +2558,7 @@ class SelectorTest(unittest.TestCase):
 
             ndss = json.loads(se["DataSourceSelection"])
             existing = set(dssn) & (set(chs) | set(cdss))
-            print "existing", existing
+            # print "existing", existing
             for key, value in ndss.items():
                 if key in existing:
                     self.assertEqual(ndss[key], dss[key])
@@ -3665,7 +3665,7 @@ class SelectorTest(unittest.TestCase):
             se["AppendEntry"] = cps
 
             self.dump(se)
-            print "SE", se["TimeZone"]
+            # print "SE", se["TimeZone"]
             mydict = {}
             if (i / 2) % 2:
                 mydict = se.get()
@@ -3688,15 +3688,15 @@ class SelectorTest(unittest.TestCase):
                 se["MntGrp"] = val["MntGrp"]
                 se.storeSelection()
 
-            print "SE2", se["TimeZone"]
-            print "SE3", se["TimeZone"]
+            # print "SE2", se["TimeZone"]
+            # print "SE3", se["TimeZone"]
             self.compareToDump(se, ["AppendEntry"])
             self.assertEqual(se["AppendEntry"], cps)
 
             se.reset()
             self.assertEqual(se["AppendEntry"], False)
-            print "ISE2", se["TimeZone"]
-            print "ISE3", se["TimeZone"]
+            # print "ISE2", se["TimeZone"]
+            # print "ISE3", se["TimeZone"]
 
             mydata = {}
             if (i / 2) % 2:
@@ -3711,8 +3711,8 @@ class SelectorTest(unittest.TestCase):
                 se["MntGrp"] = val["MntGrp"]
                 se.fetchSelection()
 
-            print "WSE2", se["TimeZone"]
-            print "WSE3", se["TimeZone"]
+            # print "WSE2", se["TimeZone"]
+            # print "WSE3", se["TimeZone"]
             self.compareToDump(se, ["AppendEntry"])
             self.assertEqual(se["AppendEntry"], cps)
 
@@ -4273,7 +4273,7 @@ class SelectorTest(unittest.TestCase):
                           None, val["MntGrp"]])
         self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
         sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-        print sed
+        # print sed
         self.assertEqual(len(sed.keys()), len(self._keys))
         for key, vl in self._keys:
             self.assertTrue(key in sed.keys())
@@ -4986,7 +4986,7 @@ class SelectorTest(unittest.TestCase):
             res = se["ComponentPreselection"]
             resd = se["DataSourcePreselection"]
 
-            print res
+            # print res
             self.myAssertDict(json.loads(res), {
                 u'pyeval1a': True, u'pyeval2a': None, u'pyeval2c': None,
                 u'pyeval2b': True, u'pyeval2': True, u'pyeval0': True,
@@ -5062,7 +5062,7 @@ class SelectorTest(unittest.TestCase):
             res = se["ComponentPreselection"]
             resd = se["DataSourcePreselection"]
 
-            print res
+            # print res
             self.myAssertDict(json.loads(res), {
                 u'pyeval1a': True, u'pyeval2a': True, u'pyeval2c': True,
                 u'pyeval2b': True, u'pyeval2': True, u'pyeval0': True,
@@ -5138,7 +5138,7 @@ class SelectorTest(unittest.TestCase):
             res = se["ComponentPreselection"]
             resd = se["DataSourcePreselection"]
 
-            print res
+            # print res
             self.myAssertDict(json.loads(res), {
                 u'pyeval1a': True, u'pyeval2a': True, u'pyeval2c': True,
                 u'pyeval2b': True, u'pyeval2': True, u'pyeval0': True,
@@ -5196,7 +5196,7 @@ class SelectorTest(unittest.TestCase):
             res = se["ComponentPreselection"]
             resd = se["DataSourcePreselection"]
 
-            print res
+            # print res
             self.myAssertDict(json.loads(res), {
                 u'pyeval1a': False, u'pyeval2a': False, u'pyeval2c': False,
                 u'pyeval2b': False, u'pyeval2': False, u'pyeval0': False,
@@ -5255,7 +5255,7 @@ class SelectorTest(unittest.TestCase):
             res = se["ComponentPreselection"]
             resd = se["DataSourcePreselection"]
 
-            print res
+            # print res
             self.myAssertDict(json.loads(res), {
                 u'pyeval1a': True, u'pyeval2a': None, u'pyeval2c': None,
                 u'pyeval2b': True, u'pyeval2': True, u'pyeval0': True,
@@ -5589,12 +5589,12 @@ class SelectorTest(unittest.TestCase):
             se.preselect()
             res = se["ComponentPreselection"]
 
-            print res
+            # print res
             self.myAssertDict(json.loads(res), {
                 "smycp": True, "smycp2": False, "smycp3": True,
                 "s2mycp": None, "s2mycp2": None, "s2mycp3": None})
             resd = se["DataSourcePreselection"]
-            print resd
+            # print resd
             self.myAssertDict(json.loads(resd), {
                 "scalar_uchar": True, "scalar_string": True,
                 "scalar_ulong": False,
@@ -5766,7 +5766,7 @@ class SelectorTest(unittest.TestCase):
                 "s2mycp": True, "s2mycp2": True, "s2mycp3": False,
                 "smycpnt1": None})
             resd = se["DataSourcePreselection"]
-            print resd
+            # print resd
             self.myAssertDict(json.loads(resd), {
                 "scalar_uchar": True, "scalar_string": True,
                 "scalar_ulong": False,
@@ -5853,7 +5853,7 @@ class SelectorTest(unittest.TestCase):
                 "s2mycp": True, "s2mycp2": True, "s2mycp3": False,
                 "smycpnt1": None})
             resd = se["DataSourcePreselection"]
-            print resd
+            # print resd
             self.myAssertDict(json.loads(resd), {
                 "scalar_uchar": True, "scalar_string": True,
                 "scalar_ulong": False,
@@ -5930,7 +5930,7 @@ class SelectorTest(unittest.TestCase):
 
             msp.updateMacroServer(self._ms.door.keys()[0])
             pools = msp.getPools(self._ms.door.keys()[0])
-            print "POOLS", pools
+            # print "POOLS", pools
 
             se["PreselectingDataSources"] = json.dumps(poolchannels)
             se["ComponentPreselection"] = json.dumps(componentgroup)
@@ -5944,7 +5944,7 @@ class SelectorTest(unittest.TestCase):
                 "s2mycp": True, "s2mycp2": True, "s2mycp3": False,
                 "smycpnt1": None})
             resd = se["DataSourcePreselection"]
-            print resd
+            # print resd
             self.myAssertDict(json.loads(resd), {
                 "scalar_uchar": True, "scalar_string": True,
                 "scalar_ulong": False,
@@ -6021,7 +6021,7 @@ class SelectorTest(unittest.TestCase):
 
             msp.updateMacroServer(self._ms.door.keys()[0])
             pools = msp.getPools(self._ms.door.keys()[0])
-            print "POOLS", pools
+            # print "POOLS", pools
 
             se["PreselectingDataSources"] = json.dumps(poolchannels)
             se["ComponentPreselection"] = json.dumps(componentgroup)
@@ -6035,7 +6035,7 @@ class SelectorTest(unittest.TestCase):
                 "s2mycp": True, "s2mycp2": True, "s2mycp3": False,
                 "smycpnt1": None})
             resd = se["DataSourcePreselection"]
-            print resd
+            # print resd
             self.myAssertDict(json.loads(resd), {
                 "scalar_uchar": True, "scalar_string": True,
                 "scalar_ulong": False,
@@ -6123,7 +6123,7 @@ class SelectorTest(unittest.TestCase):
             msp.updateMacroServer(self._ms.door.keys()[0])
             pools = msp.getPools(self._ms.door.keys()[0])
             pools[0].AcqChannelList = [json.dumps(a) for a in arr]
-            print "POOLS", pools
+            # print "POOLS", pools
 
             se["PreselectingDataSources"] = json.dumps(poolchannels)
             se["ComponentPreselection"] = json.dumps(componentgroup)
@@ -6138,7 +6138,7 @@ class SelectorTest(unittest.TestCase):
                 "smycpnt1": True})
             self.assertEqual(len(se.descErrors), 0)
             resd = se["DataSourcePreselection"]
-            print resd
+            # print resd
             self.myAssertDict(json.loads(resd), {
                 "scalar_uchar": True, "scalar_string": True,
                 "scalar_ulong": False,
@@ -6225,7 +6225,7 @@ class SelectorTest(unittest.TestCase):
             msp.updateMacroServer(self._ms.door.keys()[0])
             pools = msp.getPools(self._ms.door.keys()[0])
             pools[0].AcqChannelList = [json.dumps(a) for a in arr]
-            print "POOLS", pools
+            # print "POOLS", pools
 
             se["PreselectingDataSources"] = json.dumps(poolchannels)
             se["ComponentPreselection"] = json.dumps(componentgroup)
@@ -6239,7 +6239,7 @@ class SelectorTest(unittest.TestCase):
                 "s2mycp": True, "s2mycp2": False, "s2mycp3": True,
                 "smycpnt1": False})
             resd = se["DataSourcePreselection"]
-            print resd
+            # print resd
             self.myAssertDict(json.loads(resd), {
                 "scalar_uchar": True, "scalar_string": True,
                 "scalar_ulong": False,
@@ -6329,7 +6329,7 @@ class SelectorTest(unittest.TestCase):
             msp.updateMacroServer(self._ms.door.keys()[0])
             pools = msp.getPools(self._ms.door.keys()[0])
             pools[0].AcqChannelList = [json.dumps(a) for a in arr]
-            print "POOLS", pools
+            # print "POOLS", pools
 
             se["PreselectingDataSources"] = json.dumps(poolchannels)
             se["ComponentPreselection"] = json.dumps(componentgroup)
@@ -6343,7 +6343,7 @@ class SelectorTest(unittest.TestCase):
                 "s2mycp": False, "s2mycp2": True, "s2mycp3": True,
                 "smycpnt1": None})
             resd = se["DataSourcePreselection"]
-            print resd
+            # print resd
             self.myAssertDict(json.loads(resd), {
                 "scalar_uchar": True, "scalar_string": True,
                 "scalar_ulong": False,
@@ -6433,7 +6433,7 @@ class SelectorTest(unittest.TestCase):
             msp.updateMacroServer(self._ms.door.keys()[0])
             pools = msp.getPools(self._ms.door.keys()[0])
             pools[0].AcqChannelList = [json.dumps(a) for a in arr]
-            print "POOLS", pools
+            # print "POOLS", pools
 
             se["PreselectingDataSources"] = json.dumps(poolchannels)
             se["ComponentPreselection"] = json.dumps(componentgroup)
@@ -6442,7 +6442,7 @@ class SelectorTest(unittest.TestCase):
             se.preselect()
             res = se["ComponentPreselection"]
 
-            print res
+            # print res
     #        print channelerrors
 
             self.myAssertDict(json.loads(res), {
@@ -6450,7 +6450,7 @@ class SelectorTest(unittest.TestCase):
                 "s2mycp": False, "s2mycp2": True, "s2mycp3": True,
                 "smycpnt1": None})
             resd = se["DataSourcePreselection"]
-            print resd
+            # print resd
             self.myAssertDict(json.loads(resd), {
                 "scalar_uchar": True, "scalar_string": True,
                 "scalar_ulong": False,
@@ -6539,7 +6539,7 @@ class SelectorTest(unittest.TestCase):
             msp.updateMacroServer(self._ms.door.keys()[0])
             pools = msp.getPools(self._ms.door.keys()[0])
             pools[0].AcqChannelList = [json.dumps(a) for a in arr]
-            print "POOLS", pools
+            # print "POOLS", pools
             self._simps.dp.ChangeValueType("ScalarShort")
             self._simps.dp.Value = 43
 
@@ -6555,7 +6555,7 @@ class SelectorTest(unittest.TestCase):
                 "s2mycp": False, "s2mycp2": True, "s2mycp3": True,
                 "smycpnt1": None})
             resd = se["DataSourcePreselection"]
-            print resd
+            # print resd
             self.myAssertDict(json.loads(resd), {
                 "scalar_uchar": True, "scalar_string": True,
                 "scalar_ulong": False,
@@ -6642,7 +6642,7 @@ class SelectorTest(unittest.TestCase):
             msp.updateMacroServer(self._ms.door.keys()[0])
             pools = msp.getPools(self._ms.door.keys()[0])
             pools[0].AcqChannelList = [json.dumps(a) for a in arr]
-            print "POOLS", pools
+            # print "POOLS", pools
             self._simps.dp.ChangeValueType("ScalarShort")
             self._simps.dp.Value = 43
 
@@ -6745,7 +6745,7 @@ class SelectorTest(unittest.TestCase):
             msp.updateMacroServer(self._ms.door.keys()[0])
             pools = msp.getPools(self._ms.door.keys()[0])
             pools[0].AcqChannelList = [json.dumps(a) for a in arr]
-            print "POOLS", pools
+            # print "POOLS", pools
             self._simps.dp.ChangeValueType("ScalarShort")
             self._simps.dp.Value = 43
 
@@ -6761,7 +6761,7 @@ class SelectorTest(unittest.TestCase):
                 "s2mycp": True, "s2mycp2": True, "s2mycp3": False,
                 "smycpnt1": True})
             resd = se["DataSourcePreselection"]
-            print resd
+            # print resd
             self.myAssertDict(json.loads(resd), {
                 "scalar_uchar": True, "scalar_string": True,
                 "scalar_ulong": False,
@@ -6840,7 +6840,7 @@ class SelectorTest(unittest.TestCase):
             msp.updateMacroServer(self._ms.door.keys()[0])
             pools = msp.getPools(self._ms.door.keys()[0])
             pools[0].AcqChannelList = [json.dumps(a) for a in arr]
-            print "POOLS", pools
+            # print "POOLS", pools
             self._simps.dp.ChangeValueType("ScalarShort")
             self._simps.dp.Value = 43
 
@@ -6922,7 +6922,7 @@ class SelectorTest(unittest.TestCase):
             msp.updateMacroServer(self._ms.door.keys()[0])
             pools = msp.getPools(self._ms.door.keys()[0])
             pools[0].AcqChannelList = [json.dumps(a) for a in arr]
-            print "POOLS", pools
+            # print "POOLS", pools
 
             se["PreselectingDataSources"] = json.dumps(poolchannels)
             se["ComponentPreselection"] = json.dumps(componentgroup)
@@ -7003,7 +7003,7 @@ class SelectorTest(unittest.TestCase):
             msp.updateMacroServer(self._ms.door.keys()[0])
             pools = msp.getPools(self._ms.door.keys()[0])
             pools[0].AcqChannelList = [json.dumps(a) for a in arr]
-            print "POOLS", pools
+            # print "POOLS", pools
 
             se["PreselectingDataSources"] = json.dumps(poolchannels)
             se["ComponentPreselection"] = json.dumps(componentgroup)
@@ -7084,7 +7084,7 @@ class SelectorTest(unittest.TestCase):
             msp.updateMacroServer(self._ms.door.keys()[0])
             pools = msp.getPools(self._ms.door.keys()[0])
             pools[0].AcqChannelList = [json.dumps(a) for a in arr]
-            print "POOLS", pools
+            # print "POOLS", pools
             se["PreselectingDataSources"] = json.dumps(poolchannels)
             se["ComponentPreselection"] = json.dumps(componentgroup)
             se.descErrors = []
@@ -7163,7 +7163,7 @@ class SelectorTest(unittest.TestCase):
             msp.updateMacroServer(self._ms.door.keys()[0])
             pools = msp.getPools(self._ms.door.keys()[0])
             pools[0].AcqChannelList = [json.dumps(a) for a in arr]
-            print "POOLS", pools
+            # print "POOLS", pools
             se["PreselectingDataSources"] = json.dumps(poolchannels)
             se["ComponentPreselection"] = json.dumps(componentgroup)
             se.descErrors = []
@@ -8005,7 +8005,7 @@ class SelectorTest(unittest.TestCase):
         se.setScanEnvVariables("{}")
         for i, dt in enumerate(edats):
             sid = se.setScanEnvVariables(json.dumps(dt))
-            print "I = ", i, sid
+            # print "I = ", i, sid
             self.assertEqual(sid, sids[i])
             data = {}
             env = pickle.loads(
@@ -8243,7 +8243,7 @@ class SelectorTest(unittest.TestCase):
         se.setScanEnvVariables("{}")
         for i, dt in enumerate(edats):
             sid = se.setScanEnvVariables(json.dumps(dt))
-            print "I = ", i, sid
+            # print "I = ", i, sid
             self.assertEqual(sid, sids[i])
             data = {}
             env = pickle.loads(
@@ -8395,16 +8395,16 @@ class SelectorTest(unittest.TestCase):
         for i, dt in enumerate(edats):
             env = pickle.loads(
                 self._ms.dps[self._ms.ms.keys()[0]].Environment[1])
-            print "env0", env
+            # print "env0", env
             sid = se.setScanEnvVariables(
                 dt if not isinstance(dt, dict) else json.dumps(dt))
-            print "I = ", i, sid
+            # print "I = ", i, sid
             self.assertEqual(sid, sids[i])
             data = {}
             env = pickle.loads(
                 self._ms.dps[self._ms.ms.keys()[0]].Environment[1])
-            print "env", env
-            print "ei", envs[i]
+            # print "env", env
+            # print "ei", envs[i]
             self.myAssertDict(envs[i], env)
 
 

@@ -625,7 +625,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         rs.profileConfiguration = json.dumps(cnf)
         rs.preselectComponents()
         res = self.value(rs, "ComponentPreselection")
-        print res
+        # print res
         res2 = self.value(rs, "DataSourcePreselection")
         self.myAssertDict(json.loads(res), {"mycp": True})
         self.myAssertDict(json.loads(res2), {"ann2": True})
@@ -685,7 +685,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         rs.profileConfiguration = json.dumps(cnf)
         rs.preselectComponents()
         res = self.value(rs, "ComponentPreselection")
-        print res
+        # print res
         res2 = self.value(rs, "DataSourcePreselection")
         self.myAssertDict(json.loads(res), {"mycp": False})
         self.myAssertDict(json.loads(res2), {"ann2": False})
@@ -745,7 +745,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         rs.profileConfiguration = json.dumps(cnf)
         rs.preselectComponents()
         res = self.value(rs, "ComponentPreselection")
-        print res
+        # print res
         res2 = self.value(rs, "DataSourcePreselection")
         self.myAssertDict(json.loads(res), {"mycp": True})
         self.myAssertDict(json.loads(res2), {"ann2": True})
@@ -859,7 +859,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         print self._cf.dp.GetCommandVariable("COMMANDS")
         self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
         sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-        print sed
+        # print sed
         self.assertEqual(len(sed.keys()), len(self._keys))
         for key, vl in self._keys:
             self.assertTrue(key in sed.keys())
@@ -921,7 +921,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         print self._cf.dp.GetCommandVariable("COMMANDS")
         self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
         sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-        print sed
+        # print sed
         self.assertEqual(len(sed.keys()), len(self._keys))
         for key, vl in self._keys:
             self.assertTrue(key in sed.keys())
@@ -983,7 +983,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         print self._cf.dp.GetCommandVariable("COMMANDS")
         self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
         sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-        print sed
+        # print sed
         self.assertEqual(len(sed.keys()), len(self._keys))
         for key, vl in self._keys:
             self.assertTrue(key in sed.keys())
@@ -4617,7 +4617,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         self.dump(rs)
         sed1 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
         rs.resetPreselectedComponents()
-        print "VALUE"
+        # print "VALUE"
         res = self.value(rs, "ComponentPreselection")
         res2 = self.value(rs, "DataSourcePreselection")
         self.compareToDump(
@@ -4843,7 +4843,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         print self._cf.dp.GetCommandVariable("COMMANDS")
         self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
         sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-        print sed
+        # print sed
         self.assertEqual(len(sed.keys()), len(self._keys))
         for key, vl in self._keys:
             self.assertTrue(key in sed.keys())
@@ -4914,7 +4914,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         print self._cf.dp.GetCommandVariable("COMMANDS")
         self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
         sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-        print sed
+        # print sed
         self.assertEqual(len(sed.keys()), len(self._keys))
         for key, vl in self._keys:
             self.assertTrue(key in sed.keys())
@@ -4985,7 +4985,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         print self._cf.dp.GetCommandVariable("COMMANDS")
         self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
         sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-        print sed
+        # print sed
         self.assertEqual(len(sed.keys()), len(self._keys))
         for key, vl in self._keys:
             self.assertTrue(key in sed.keys())
@@ -6176,12 +6176,12 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                 rs, ["ComponentPreselection", "DataSourcePreselection"])
             self.myAssertDict(json.loads(resd), {})
 
-            print res
+            # print res
             self.myAssertDict(json.loads(res), {
                 "smycp": True, "smycp2": True, "smycp3": True,
                 "s2mycp": None, "s2mycp2": None, "s2mycp3": None})
             self.assertEqual(len(rs.descriptionErrors), 3)
-            print "DES", rs.descriptionErrors
+            # print "DES", rs.descriptionErrors
 
             res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
@@ -9211,7 +9211,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
 
         for vl in arr:
             rs.scanFile = json.dumps(vl[1])
-            print "SF", rs.scanFile
+            # print "SF", rs.scanFile
             self.assertEqual(
                 self._ms.dps[self._ms.ms.keys()[0]].Environment[0],
                 'pickle')
@@ -9812,7 +9812,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             db = PyTango.Database()
             db.put_device_property(ms2.ms.keys()[0],
                                    {'PoolNames': self._pool.dp.name()})
-            print "KKKK", ms2.dps.keys()
+            # print "KKKK", ms2.dps.keys()
             ms2.dps[ms2.ms.keys()[0]].Init()
             self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.smycps)])
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
@@ -9839,7 +9839,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
 
                 self.dump(rs)
 
-                print "I", i
+                # print "I", i
                 mydict = {}
                 if (i / 2) % 2:
                     mydict = json.loads(rs.profileConfiguration)
@@ -10594,7 +10594,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         rs.setScanEnvVariables("{}")
         for i, dt in enumerate(edats):
             sid = rs.setScanEnvVariables(json.dumps(dt))
-            print "I = ", i, sid
+            # print "I = ", i, sid
             self.assertEqual(sid, sids[i])
             data = {}
             env = pickle.loads(
@@ -10968,7 +10968,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
 
         dl = []
         mgs = [ar["name"] for ar in arr] + self.mysel2.keys()
-        print mgs
+        # print mgs
         for ar in mgs:
             MSUtils.setEnv('ActiveMntGrp', ar, self._ms.ms.keys()[0])
             rs.deleteProfile(ar)
@@ -11780,7 +11780,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             {"full_name": "null/val", "name": "mntgrp_04"},
         ]
         pool.AcqChannelList = [json.dumps(a) for a in arr]
-        print "pool", pool.name()
+        # print "pool", pool.name()
 #        if ct0? exists no error
 #        self.myAssertRaise(Exception, rs.updateMntGrp)
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
@@ -12444,7 +12444,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                                'source': cnt['source']}
                         tgc[chn["full_name"]] = chn
                     except:
-                        print ds, cnt
+                        # print ds, cnt
                         raise
                 if tgc:
                     smg = {"controllers":
@@ -12716,7 +12716,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                                'source': cnt['source']}
                         tgc[chn["full_name"]] = chn
                     except:
-                        print ds, cnt
+                        # print ds, cnt
                         raise
                 if tgc:
                     smg = {"controllers":
@@ -13794,7 +13794,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         rs = self.openRecSelector()
         rs.configDevice = val["ConfigDevice"]
         rs.door = val["Door"]
-        print "DOOR", rs.door
+        # print "DOOR", rs.door
         rs.mntGrp = val["MntGrp"]
         rs.writerDevice = val["WriterDevice"]
         self.assertEqual(rs.configDevice, val["ConfigDevice"])
@@ -14042,7 +14042,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                             for ds in mdss.keys():
                                 adss[ds] = True
 
-                    print "UPGRAGE MNT"            
+                    # print "UPGRAGE MNT"            
                     jpcnf = rs.updateMntGrp()
                     pcnf = json.loads(jpcnf)
                     mgdp = PyTango.DeviceProxy(tmg.new_device_info_writer.name)

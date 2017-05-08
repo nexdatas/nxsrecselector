@@ -161,10 +161,10 @@ class ExtraNXSRecSelectorTest(ExtraSettingsTest.ExtraSettingsTest):
         se["ConfigDevice"] = rs.configDevice
         pm = ProfileManager(se)
         amgs = pm.availableMntGrps()
-        print "AMGs", amgs
+        # print "AMGs", amgs
         cf = PyTango.DeviceProxy(rs.configDevice)
-        print "AvSels", cf.availableSelections()
-        print "AMGs", amgs
+        # print "AvSels", cf.availableSelections()
+        # print "AMGs", amgs
         amntgrp = MSUtils.getEnv('ActiveMntGrp', msp.getMacroServer(rs.door))
         if amntgrp in pm.availableMntGrps():
             self.assertEqual(rs.mntGrp, amntgrp)
@@ -175,11 +175,11 @@ class ExtraNXSRecSelectorTest(ExtraSettingsTest.ExtraSettingsTest):
         else:
             self.assertEqual('nxsmntgrp', amntgrp)
 
-        print "MntGrp", rs.mntGrp
+        # print "MntGrp", rs.mntGrp
         # memorize attirbutes
-        print "ConfigDevice", rs.configDevice
-        print "Door", rs.door
-        print "DeviceGroups", rs.deviceGroups
+        # print "ConfigDevice", rs.configDevice
+        # print "Door", rs.door
+        # print "DeviceGroups", rs.deviceGroups
 
     def switchProfile(self, rs, flag):
         if flag:

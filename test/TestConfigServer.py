@@ -68,13 +68,14 @@ class NXSConfigServer(PyTango.Device_4Impl):
     #    Device destructor
     #------------------------------------------------------------------
     def delete_device(self):
-        print "[Device delete_device method] for device", self.get_name()
+        """ """
+        # print "[Device delete_device method] for device", self.get_name()
 
     #------------------------------------------------------------------
     #    Device initialization
     #------------------------------------------------------------------
     def init_device(self):
-        print "In ", self.get_name(), "::init_device()"
+        # print "In ", self.get_name(), "::init_device()"
         self.set_state(PyTango.DevState.ON)
 
         self.attr_XMLString = ""
@@ -108,49 +109,49 @@ class NXSConfigServer(PyTango.Device_4Impl):
     #    Read Version attribute
     #------------------------------------------------------------------
     def read_Version(self, attr):
-        print >> self.log_info, "In ", self.get_name(), "::read_Version"
+        # print >> self.log_info, "In ", self.get_name(), "::read_Version"
         attr.set_value(self.attr_Version)
 
     #------------------------------------------------------------------
     #    Read XMLString attribute
     #------------------------------------------------------------------
     def read_XMLString(self, attr):
-        print >> self.log_info, "In ", self.get_name(), "::read_XMLString()"
+        # print >> self.log_info, "In ", self.get_name(), "::read_XMLString()"
         attr.set_value(self.attr_XMLString)
 
     #------------------------------------------------------------------
     #    Write XMLString attribute
     #------------------------------------------------------------------
     def write_XMLString(self, attr):
-        print >> self.log_info, "In ", self.get_name(), "::write_XMLString()"
+        # print >> self.log_info, "In ", self.get_name(), "::write_XMLString()"
         self.attr_XMLString = attr.get_write_value()
 
     #------------------------------------------------------------------
     #    Read Selection attribute
     #------------------------------------------------------------------
     def read_Selection(self, attr):
-        print >> self.log_info, "In ", self.get_name(), "::read_Selection()"
+        # print >> self.log_info, "In ", self.get_name(), "::read_Selection()"
         attr.set_value(self.attr_Selection)
 
     #------------------------------------------------------------------
     #    Write Selection attribute
     #------------------------------------------------------------------
     def write_Selection(self, attr):
-        print >> self.log_info, "In ", self.get_name(), "::write_Selection()"
+        # print >> self.log_info, "In ", self.get_name(), "::write_Selection()"
         self.attr_Selection = attr.get_write_value()
 
     #------------------------------------------------------------------
     #    Read JSONSettings attribute
     #------------------------------------------------------------------
     def read_JSONSettings(self, attr):
-        print >> self.log_info, "In ", self.get_name(), "::read_JSONSettings()"
+        # print >> self.log_info, "In ", self.get_name(), "::read_JSONSettings()"
         attr.set_value(self.attr_JSONSettings)
 
     #------------------------------------------------------------------
     #    Write JSONSettings attribute
     #------------------------------------------------------------------
     def write_JSONSettings(self, attr):
-        print >> self.log_info, "In ", self.get_name(), \
+        # print >> self.log_info, "In ", self.get_name(), \
             "::write_JSONSettings()"
         self.attr_JSONSettings = attr.get_write_value()
 
@@ -158,7 +159,7 @@ class NXSConfigServer(PyTango.Device_4Impl):
     #    Read STEPDataSources attribute
     #------------------------------------------------------------------
     def read_STEPDataSources(self, attr):
-        print >> self.log_info, "In ", self.get_name(), \
+        # print >> self.log_info, "In ", self.get_name(), \
             "::read_STEPDataSources()"
         attr.set_value(self.attr_STEPDataSources)
 
@@ -166,7 +167,7 @@ class NXSConfigServer(PyTango.Device_4Impl):
     #    Write STEPDataSources attribute
     #------------------------------------------------------------------
     def write_STEPDataSources(self, attr):
-        print >> self.log_info, "In ", self.get_name(), \
+        # print >> self.log_info, "In ", self.get_name(), \
             "::write_STEPDataSources()"
         self.attr_STEPDataSources = attr.get_write_value()
 
@@ -174,7 +175,7 @@ class NXSConfigServer(PyTango.Device_4Impl):
     #    Read LinkDataSources attribute
     #------------------------------------------------------------------
     def read_LinkDataSources(self, attr):
-        print >> self.log_info, "In ", self.get_name(), \
+        # print >> self.log_info, "In ", self.get_name(), \
             "::read_LinkDataSources()"
         attr.set_value(self.attr_LinkDataSources)
 
@@ -182,20 +183,20 @@ class NXSConfigServer(PyTango.Device_4Impl):
     #    Write LinkDataSources attribute
     #------------------------------------------------------------------
     def write_LinkDataSources(self, attr):
-        print >> self.log_info, "In ", self.get_name(), \
+        # print >> self.log_info, "In ", self.get_name(), \
             "::write_LinkDataSources()"
         self.attr_LinkDataSources = attr.get_write_value()
 
     #------------------------------------------------------------------
     def read_Variables(self, attr):
-        print >> self.log_info, "In ", self.get_name(), "::read_Variables()"
+        # print >> self.log_info, "In ", self.get_name(), "::read_Variables()"
         attr.set_value(self.attr_Variables)
 
     #------------------------------------------------------------------
     #    Write Variables attribute
     #------------------------------------------------------------------
     def write_Variables(self, attr):
-        print >> self.log_info, "In ", self.get_name(), "::write_Variables()"
+        # print >> self.log_info, "In ", self.get_name(), "::write_Variables()"
         self.attr_Variables = attr.get_write_value()
 
     #
@@ -212,7 +213,8 @@ class NXSConfigServer(PyTango.Device_4Impl):
     #
     #------------------------------------------------------------------
     def Open(self):
-        print >> self.log_info, "In ", self.get_name(), "::Open()"
+        # print >> self.log_info, "In ", self.get_name(), "::Open()"\
+        """ """
 
     #------------------------------------------------------------------
     #    Close command:
@@ -221,8 +223,9 @@ class NXSConfigServer(PyTango.Device_4Impl):
     #
     #------------------------------------------------------------------
     def Close(self):
-        print >> self.log_info, "In ", self.get_name(), "::Close()"
-
+        """ """
+        # print >> self.log_info, "In ", self.get_name(), "::Close()"
+ 
     #------------------------------------------------------------------
     #    Components command:
     #
@@ -232,7 +235,7 @@ class NXSConfigServer(PyTango.Device_4Impl):
     #    argout: DevVarStringArray    list of required components
     #------------------------------------------------------------------
     def Components(self, names):
-        print >> self.log_info, "In ", self.get_name(), "::Components()"
+        # print >> self.log_info, "In ", self.get_name(), "::Components()"
         self.cmd["VARS"].append(names)
         self.cmd["COMMANDS"].append("Components")
         return [self.cmd["CPDICT"][nm] for nm in names
@@ -247,7 +250,7 @@ class NXSConfigServer(PyTango.Device_4Impl):
     #    argout: DevVarStringArray    list of required componentVariables
     #------------------------------------------------------------------
     def ComponentVariables(self, name):
-        print >> self.log_info, "In ", self.get_name(), \
+        # print >> self.log_info, "In ", self.get_name(), \
             "::ComponentVariables()"
         self.cmd["VARS"].append(name)
         self.cmd["COMMANDS"].append("ComponentVariables")
@@ -303,7 +306,7 @@ class NXSConfigServer(PyTango.Device_4Impl):
     #    argout: DevVarStringArray    list of required selections
     #------------------------------------------------------------------
     def Selections(self, names):
-        print >> self.log_info, "In ", self.get_name(), "::Selections()"
+        # print >> self.log_info, "In ", self.get_name(), "::Selections()"
         self.cmd["VARS"].append(names)
         self.cmd["COMMANDS"].append("Selections")
         return [self.cmd["SELDICT"][nm] for nm in names
@@ -318,11 +321,11 @@ class NXSConfigServer(PyTango.Device_4Impl):
     #    argout: DevVarStringArray    list of instantiated components
     #------------------------------------------------------------------
     def InstantiatedComponents(self, names):
-        print >> self.log_info, "In ", self.get_name(), \
+        # print >> self.log_info, "In ", self.get_name(), \
             "::InstantiateComponents()"
         if self.cmd["CHECKVARIABLES"] != self.attr_Variables:
-            print "CMD", self.cmd["CHECKVARIABLES"]
-            print self.attr_Variables
+            # print "CMD", self.cmd["CHECKVARIABLES"]
+            # print self.attr_Variables
             raise Exception("Variables not set")
         self.cmd["VARS"].append(names)
         self.cmd["COMMANDS"].append("InstantiatedComponents")
@@ -338,7 +341,7 @@ class NXSConfigServer(PyTango.Device_4Impl):
     #    argout: DevVarStringArray    list of required DataSources
     #------------------------------------------------------------------
     def DataSources(self, names):
-        print >> self.log_info, "In ", self.get_name(), "::DataSources()"
+        # print >> self.log_info, "In ", self.get_name(), "::DataSources()"
         self.cmd["VARS"].append(names)
         self.cmd["COMMANDS"].append("DataSources")
         return [self.cmd["DSDICT"][nm] for nm in names
@@ -352,7 +355,7 @@ class NXSConfigServer(PyTango.Device_4Impl):
     #    argout: DevVarStringArray    list of available component names
     #------------------------------------------------------------------
     def AvailableComponents(self):
-        print >> self.log_info, "In ", self.get_name(), \
+        # print >> self.log_info, "In ", self.get_name(), \
             "::AvailableComponents()"
         self.cmd["VARS"].append(None)
         self.cmd["COMMANDS"].append("AvailableComponents")
@@ -366,7 +369,7 @@ class NXSConfigServer(PyTango.Device_4Impl):
     #    argout: DevVarStringArray    list of available selection names
     #------------------------------------------------------------------
     def AvailableSelections(self):
-        print >> self.log_info, "In ", self.get_name(), \
+        # print >> self.log_info, "In ", self.get_name(), \
             "::AvailableSelections()"
         self.cmd["VARS"].append(None)
         self.cmd["COMMANDS"].append("AvailableSelections")
@@ -380,7 +383,7 @@ class NXSConfigServer(PyTango.Device_4Impl):
     #    argout: DevVarStringArray    list of available DataSource names
     #------------------------------------------------------------------
     def AvailableDataSources(self):
-        print >> self.log_info, "In ", self.get_name(), \
+        # print >> self.log_info, "In ", self.get_name(), \
             "::AvailableDataSources()"
         self.cmd["VARS"].append(None)
         self.cmd["COMMANDS"].append("AvailableDataSources")
@@ -394,7 +397,7 @@ class NXSConfigServer(PyTango.Device_4Impl):
     #    argout: DevVarStringArray    component names
     #------------------------------------------------------------------
     def MandatoryComponents(self):
-        print >> self.log_info, "In ", self.get_name(), \
+        # print >> self.log_info, "In ", self.get_name(), \
             "::MandatoryComponents()"
         #    Add your own code here
 
@@ -410,7 +413,7 @@ class NXSConfigServer(PyTango.Device_4Impl):
     #    argin:  DevString    selection name
     #------------------------------------------------------------------
     def StoreSelection(self, argin):
-        print >> self.log_info, "In ", self.get_name(), "::StoreSelection()"
+        # print >> self.log_info, "In ", self.get_name(), "::StoreSelection()"
         self.cmd["VARS"].append(argin)
         self.cmd["COMMANDS"].append("StoreSelection")
         self.cmd["SELDICT"][str(argin)] = self.attr_Selection
@@ -423,7 +426,7 @@ class NXSConfigServer(PyTango.Device_4Impl):
     #    argin:  DevString    selection name
     #------------------------------------------------------------------
     def StoreDataSource(self, argin):
-        print >> self.log_info, "In ", self.get_name(), "::StoreDataSource()"
+        # print >> self.log_info, "In ", self.get_name(), "::StoreDataSource()"
         self.cmd["VARS"].append(argin)
         self.cmd["COMMANDS"].append("StoreDataSource")
         self.cmd["DSDICT"][str(argin)] = self.attr_XMLString
@@ -436,7 +439,7 @@ class NXSConfigServer(PyTango.Device_4Impl):
     #    argin:  DevString    component name
     #------------------------------------------------------------------
     def StoreComponent(self, argin):
-        print >> self.log_info, "In ", self.get_name(), "::StoreComponent()"
+        # print >> self.log_info, "In ", self.get_name(), "::StoreComponent()"
         self.cmd["VARS"].append(argin)
         self.cmd["COMMANDS"].append("StoreComponent")
         self.cmd["CPDICT"][str(argin)] = self.attr_XMLString
@@ -449,7 +452,7 @@ class NXSConfigServer(PyTango.Device_4Impl):
     #    argin:  DevString    component name
     #------------------------------------------------------------------
     def DeleteComponent(self, argin):
-        print >> self.log_info, "In ", self.get_name(), "::DeleteComponent()"
+        # print >> self.log_info, "In ", self.get_name(), "::DeleteComponent()"
         self.cmd["VARS"].append(argin)
         self.cmd["COMMANDS"].append("DeleteComponent")
         self.cmd["CPDICT"].pop(str(argin))
@@ -462,7 +465,7 @@ class NXSConfigServer(PyTango.Device_4Impl):
     #    argin:  DevString    selection name
     #------------------------------------------------------------------
     def DeleteSelection(self, argin):
-        print >> self.log_info, "In ", self.get_name(), "::DeleteSelection()"
+        # print >> self.log_info, "In ", self.get_name(), "::DeleteSelection()"
         self.cmd["VARS"].append(argin)
         self.cmd["COMMANDS"].append("DeleteSelection")
         self.cmd["SELDICT"].pop(str(argin))
@@ -475,7 +478,7 @@ class NXSConfigServer(PyTango.Device_4Impl):
     #    argin:  DevString    datasource name
     #------------------------------------------------------------------
     def DeleteDataSource(self, argin):
-        print >> self.log_info, "In ", self.get_name(), "::DeleteDataSource()"
+        # print >> self.log_info, "In ", self.get_name(), "::DeleteDataSource()"
         self.cmd["VARS"].append(argin)
         self.cmd["COMMANDS"].append("DeleteDataSource")
         self.cmd["DSDICT"].pop(str(argin))
@@ -489,7 +492,7 @@ class NXSConfigServer(PyTango.Device_4Impl):
     #    argin:  DevVarStringArray    list of component names
     #------------------------------------------------------------------
     def CreateConfiguration(self, argin):
-        print >> self.log_info, "In ", self.get_name(), \
+        # print >> self.log_info, "In ", self.get_name(), \
             "::CreateConfiguration()"
         self.cmd["VARS"].append(argin)
         self.cmd["COMMANDS"].append("CreateConfiguration")
@@ -502,7 +505,7 @@ class NXSConfigServer(PyTango.Device_4Impl):
     #    argin: DevString     tango state
     #------------------------------------------------------------------
     def SetState(self, state):
-        print "In ", self.get_name(), "::SetState()"
+        # print "In ", self.get_name(), "::SetState()"
         if state == "RUNNING":
             self.set_state(PyTango.DevState.RUNNING)
         elif state == "FAULT":
@@ -699,7 +702,7 @@ class NXSConfigServerClass(PyTango.DeviceClass):
     def __init__(self, name):
         PyTango.DeviceClass.__init__(self, name)
         self.set_type(name)
-        print "In TestConfigServerClass  constructor"
+        # print "In TestConfigServerClass  constructor"
 
 #==================================================================
 #
