@@ -152,7 +152,7 @@ class NXSConfigServer(PyTango.Device_4Impl):
     #------------------------------------------------------------------
     def write_JSONSettings(self, attr):
         # print >> self.log_info, "In ", self.get_name(), \
-            "::write_JSONSettings()"
+        #    "::write_JSONSettings()"
         self.attr_JSONSettings = attr.get_write_value()
 
     #------------------------------------------------------------------
@@ -160,7 +160,7 @@ class NXSConfigServer(PyTango.Device_4Impl):
     #------------------------------------------------------------------
     def read_STEPDataSources(self, attr):
         # print >> self.log_info, "In ", self.get_name(), \
-            "::read_STEPDataSources()"
+        #    "::read_STEPDataSources()"
         attr.set_value(self.attr_STEPDataSources)
 
     #------------------------------------------------------------------
@@ -168,7 +168,7 @@ class NXSConfigServer(PyTango.Device_4Impl):
     #------------------------------------------------------------------
     def write_STEPDataSources(self, attr):
         # print >> self.log_info, "In ", self.get_name(), \
-            "::write_STEPDataSources()"
+        #    "::write_STEPDataSources()"
         self.attr_STEPDataSources = attr.get_write_value()
 
     #------------------------------------------------------------------
@@ -176,7 +176,7 @@ class NXSConfigServer(PyTango.Device_4Impl):
     #------------------------------------------------------------------
     def read_LinkDataSources(self, attr):
         # print >> self.log_info, "In ", self.get_name(), \
-            "::read_LinkDataSources()"
+        #    "::read_LinkDataSources()"
         attr.set_value(self.attr_LinkDataSources)
 
     #------------------------------------------------------------------
@@ -184,7 +184,7 @@ class NXSConfigServer(PyTango.Device_4Impl):
     #------------------------------------------------------------------
     def write_LinkDataSources(self, attr):
         # print >> self.log_info, "In ", self.get_name(), \
-            "::write_LinkDataSources()"
+        #    "::write_LinkDataSources()"
         self.attr_LinkDataSources = attr.get_write_value()
 
     #------------------------------------------------------------------
@@ -251,7 +251,7 @@ class NXSConfigServer(PyTango.Device_4Impl):
     #------------------------------------------------------------------
     def ComponentVariables(self, name):
         # print >> self.log_info, "In ", self.get_name(), \
-            "::ComponentVariables()"
+        #    "::ComponentVariables()"
         self.cmd["VARS"].append(name)
         self.cmd["COMMANDS"].append("ComponentVariables")
         cp = self.cmd["CPDICT"][name]
@@ -322,7 +322,7 @@ class NXSConfigServer(PyTango.Device_4Impl):
     #------------------------------------------------------------------
     def InstantiatedComponents(self, names):
         # print >> self.log_info, "In ", self.get_name(), \
-            "::InstantiateComponents()"
+        #    "::InstantiateComponents()"
         if self.cmd["CHECKVARIABLES"] != self.attr_Variables:
             # print "CMD", self.cmd["CHECKVARIABLES"]
             # print self.attr_Variables
@@ -356,7 +356,7 @@ class NXSConfigServer(PyTango.Device_4Impl):
     #------------------------------------------------------------------
     def AvailableComponents(self):
         # print >> self.log_info, "In ", self.get_name(), \
-            "::AvailableComponents()"
+        #    "::AvailableComponents()"
         self.cmd["VARS"].append(None)
         self.cmd["COMMANDS"].append("AvailableComponents")
         return list(self.cmd["CPDICT"].keys())
@@ -370,7 +370,7 @@ class NXSConfigServer(PyTango.Device_4Impl):
     #------------------------------------------------------------------
     def AvailableSelections(self):
         # print >> self.log_info, "In ", self.get_name(), \
-            "::AvailableSelections()"
+        #    "::AvailableSelections()"
         self.cmd["VARS"].append(None)
         self.cmd["COMMANDS"].append("AvailableSelections")
         return list(self.cmd["SELDICT"].keys())
@@ -384,7 +384,7 @@ class NXSConfigServer(PyTango.Device_4Impl):
     #------------------------------------------------------------------
     def AvailableDataSources(self):
         # print >> self.log_info, "In ", self.get_name(), \
-            "::AvailableDataSources()"
+        #    "::AvailableDataSources()"
         self.cmd["VARS"].append(None)
         self.cmd["COMMANDS"].append("AvailableDataSources")
         return list(self.cmd["DSDICT"].keys())
@@ -398,7 +398,7 @@ class NXSConfigServer(PyTango.Device_4Impl):
     #------------------------------------------------------------------
     def MandatoryComponents(self):
         # print >> self.log_info, "In ", self.get_name(), \
-            "::MandatoryComponents()"
+        #    "::MandatoryComponents()"
         #    Add your own code here
 
         self.cmd["VARS"].append(None)
@@ -493,7 +493,7 @@ class NXSConfigServer(PyTango.Device_4Impl):
     #------------------------------------------------------------------
     def CreateConfiguration(self, argin):
         # print >> self.log_info, "In ", self.get_name(), \
-            "::CreateConfiguration()"
+        #    "::CreateConfiguration()"
         self.cmd["VARS"].append(argin)
         self.cmd["COMMANDS"].append("CreateConfiguration")
 
