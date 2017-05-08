@@ -5,18 +5,18 @@ dist: trusty
 
 env:
   - TEST_SUITE=basic OS_TYPE=debian8
-  - TEST_SUITE=extraserver OS_TYPE=debian8
   - TEST_SUITE=extrasettings OS_TYPE=debian8
+  - TEST_SUITE=extraserver OS_TYPE=debian8
   - TEST_SUITE=basicserver OS_TYPE=debian8
   - TEST_SUITE=basicsettings OS_TYPE=debian8
   - TEST_SUITE=basic OS_TYPE=debian9
-  - TEST_SUITE=extraserver OS_TYPE=debian9
   - TEST_SUITE=extrasettings OS_TYPE=debian9
+  - TEST_SUITE=extraserver OS_TYPE=debian9
   - TEST_SUITE=basicserver OS_TYPE=debian9
   - TEST_SUITE=basicsettings OS_TYPE=debian9
   - TEST_SUITE=basic OS_TYPE=ubuntu16.04
-  - TEST_SUITE=extraserver OS_TYPE=ubuntu16.04
   - TEST_SUITE=extrasettings OS_TYPE=ubuntu16.04
+  - TEST_SUITE=extraserver OS_TYPE=ubuntu16.04
   - TEST_SUITE=basicserver OS_TYPE=ubuntu16.04
   - TEST_SUITE=basicsettings OS_TYPE=ubuntu16.04
 
