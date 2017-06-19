@@ -27,11 +27,12 @@ from .Utils import Utils, TangoUtils
 
 
 class DSItem(object):
+
     """ Basic DataSource item
     """
     __slots__ = 'name', 'dstype', 'record'
 
-    ##
+    #
     def __init__(self, name=None, dstype=None, record=None, dsitem=None):
         """ constructor
 
@@ -58,11 +59,12 @@ class DSItem(object):
 
 
 class ExDSItem(DSItem):
+
     """ Extended DataSource item
     """
     __slots__ = 'mode', 'nxtype', 'shape'
 
-    ##
+    #
     def __init__(self, dsitem=None, mode=None, nxtype=None, shape=None):
         """ constructor
 
@@ -85,6 +87,7 @@ class ExDSItem(DSItem):
 
 
 class ExDSDict(dict):
+
     """ Extended DataSource Dictionary
     """
 
@@ -138,6 +141,7 @@ class ExDSDict(dict):
 
 
 class Describer(object):
+
     """ Lists datasources, strategy, dstype and record name
         of given component """
 

@@ -21,7 +21,7 @@
 
 import json
 import PyTango
-import getpass
+# import getpass
 from os.path import expanduser
 from .Utils import TangoUtils, PoolUtils
 from .Selection import Selection
@@ -29,9 +29,11 @@ from .Converter import Converter
 
 
 class Selector(object):
+
     """ access class to Selection dictionary and Config Device """
 
-    ##
+    #
+
     def __init__(self, macroserverpools, version,
                  defaultpath="/scan$var.serialno:NXentry/"
                  "NXinstrument/collection",
@@ -133,7 +135,7 @@ class Selector(object):
                 getattr(self, "_Selector__preGet" + key)()
         return dict(self.__selection)
 
-    ##
+    #
     def __getitem__(self, key):
         """ provides value of selection item
 
@@ -355,7 +357,7 @@ class Selector(object):
                 configDevice.availableComponents()
             except DatabaseError:
                 home = expanduser("~")
-                user = getpass.getuser()
+                # user = getpass.getuser()
                 dbp = '{"host":"localhost","db":"nxsconfig",' \
                     + '"use_unicode":true,' \
                     + '"read_default_file":"%s/.my.cnf"}' % home

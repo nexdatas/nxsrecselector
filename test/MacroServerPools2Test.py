@@ -15,8 +15,8 @@
 #
 #    You should have received a copy of the GNU General Public License
 #    along with nexdatas.  If not, see <http://www.gnu.org/licenses/>.
-## \package test nexdatas
-## \file MacroServerPools2Test.py
+# \package test nexdatas
+# \file MacroServerPools2Test.py
 # unittests for field Tags running Tango Server
 #
 import unittest
@@ -25,14 +25,15 @@ import TestPool2SetUp
 import MacroServerPoolsTest
 
 
-## test fixture
+# test fixture
 class MacroServerPools2Test(MacroServerPoolsTest.MacroServerPoolsTest):
 
-    ## constructor
+    # constructor
     # \param methodName name of the test method
+
     def __init__(self, methodName):
         MacroServerPoolsTest.MacroServerPoolsTest.__init__(self, methodName)
-        
+
         self._pool = TestPool2SetUp.TestPool2SetUp()
 
 

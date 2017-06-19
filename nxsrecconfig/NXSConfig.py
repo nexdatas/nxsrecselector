@@ -40,6 +40,7 @@ from .Settings import Settings as STG
 
 
 class NXSRecSelector(PyTango.Device_4Impl):
+
     """ NXSRecSelector server interface
 
     :brief: Tango Server for Nexus Sardana Recorder Settings.

@@ -15,8 +15,8 @@
 #
 #    You should have received a copy of the GNU General Public License
 #    along with nexdatas.  If not, see <http://www.gnu.org/licenses/>.
-## \package test nexdatas
-## \file MacroServerPoolTest.py
+# \package test nexdatas
+# \file MacroServerPoolTest.py
 # unittests for TangoDsItemTest running Tango Server
 #
 import unittest
@@ -45,15 +45,16 @@ import TestConfigServerSetUp
 from nxsrecconfig.MacroServerPools import MacroServerPools
 
 
-## if 64-bit machione
+# if 64-bit machione
 IS64BIT = (struct.calcsize("P") == 8)
 
 
-## test fixture
+# test fixture
 class MacroServerPoolsTest(unittest.TestCase):
 
-    ## constructor
+    # constructor
     # \param methodName name of the test method
+
     def __init__(self, methodName):
         unittest.TestCase.__init__(self, methodName)
 
@@ -338,7 +339,6 @@ class MacroServerPoolsTest(unittest.TestCase):
                 '$datasources.get2_float<strategy mode="STEP"/></field>'
                 '</group></definition>'),
         }
-
 
         self.specps = {
             'pyeval0': (
@@ -949,7 +949,7 @@ class MacroServerPoolsTest(unittest.TestCase):
             ),
         }
 
-    ## test starter
+    # test starter
     # \brief Common set up
     def setUp(self):
         print "SEED =", self.__seed
@@ -964,7 +964,7 @@ class MacroServerPoolsTest(unittest.TestCase):
 #        self._simpsoff.add()
         print "\nsetting up..."
 
-    ## test closer
+    # test closer
     # \brief Common tear down
     def tearDown(self):
         print "tearing down ..."
@@ -978,7 +978,7 @@ class MacroServerPoolsTest(unittest.TestCase):
         self._cf.tearDown()
         self._ms.tearDown()
 
-    ## Exception tester
+    # Exception tester
     # \param exception expected exception
     # \param method called method
     # \param args list with method arguments
@@ -1010,7 +1010,7 @@ class MacroServerPoolsTest(unittest.TestCase):
                 logger.debug("%s , %s" % (str(v), str(dct2[k])))
                 self.assertEqual(v, dct2[k])
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_constructor(self):
         fun = sys._getframe().f_code.co_name
@@ -1018,7 +1018,7 @@ class MacroServerPoolsTest(unittest.TestCase):
         msp = MacroServerPools(0)
         msp = MacroServerPools(10)
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_getMacroServer(self):
         fun = sys._getframe().f_code.co_name
@@ -1052,7 +1052,7 @@ class MacroServerPoolsTest(unittest.TestCase):
         self.myAssertRaise(Exception, msp.getMacroServer, "")
         self.myAssertRaise(Exception, msp.getPools, self._ms.door.keys()[0])
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_getPool(self):
         fun = sys._getframe().f_code.co_name
@@ -1106,7 +1106,7 @@ class MacroServerPoolsTest(unittest.TestCase):
 
         self.myAssertRaise(Exception, msp.getPools, self._ms.door.keys()[0])
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_getPool_1to3(self):
         fun = sys._getframe().f_code.co_name
@@ -1174,7 +1174,7 @@ class MacroServerPoolsTest(unittest.TestCase):
         finally:
             ms2.tearDown()
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_getPool_3to3(self):
         fun = sys._getframe().f_code.co_name
@@ -1243,7 +1243,7 @@ class MacroServerPoolsTest(unittest.TestCase):
         finally:
             ms3.tearDown()
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_checkChannels_simple(self):
         fun = sys._getframe().f_code.co_name
@@ -1272,7 +1272,7 @@ class MacroServerPoolsTest(unittest.TestCase):
         self.assertEqual(json.loads(
             self._cf.dp.GetCommandVariable("VARS")), [None, None, None, None])
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_checkChannels_withcf(self):
         fun = sys._getframe().f_code.co_name
@@ -1308,7 +1308,7 @@ class MacroServerPoolsTest(unittest.TestCase):
             [None, None, None, None])
 #        print self._cf.dp.availableComponents()
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_checkChannels_withcf_cps(self):
         fun = sys._getframe().f_code.co_name
@@ -1347,7 +1347,7 @@ class MacroServerPoolsTest(unittest.TestCase):
             json.loads(self._cf.dp.GetCommandVariable("VARS")),
             [None, None, None, None, ['mycp'], ['mycp'], ['ann2'], ['ann2']])
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_checkChannels_withcf_cps_t(self):
         fun = sys._getframe().f_code.co_name
@@ -1386,7 +1386,7 @@ class MacroServerPoolsTest(unittest.TestCase):
             json.loads(self._cf.dp.GetCommandVariable("VARS")),
             [None, None, None, None, ['mycp'], ['mycp'], ['ann2'], ['ann2']])
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_checkChannels_withcf_cps_False(self):
         fun = sys._getframe().f_code.co_name
@@ -1427,7 +1427,7 @@ class MacroServerPoolsTest(unittest.TestCase):
              ['mycp'], ['mycp'], ['ann2'], ['ann2']])
 #        print self._cf.dp.availableComponents()
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_checkChannels_withcf_nocps(self):
         fun = sys._getframe().f_code.co_name
@@ -1464,7 +1464,7 @@ class MacroServerPoolsTest(unittest.TestCase):
             [None, None, None, None])
 
 #        print self._cf.dp.availableComponents()
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_checkChannels_withcf_nochnnel(self):
         fun = sys._getframe().f_code.co_name
@@ -1503,7 +1503,7 @@ class MacroServerPoolsTest(unittest.TestCase):
                          [None, None, None, None,
                           ['mycp'], ['mycp'], ['ann2'], ['ann2']])
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_checkChannels_withcf_nochnnel_t(self):
         fun = sys._getframe().f_code.co_name
@@ -1542,7 +1542,7 @@ class MacroServerPoolsTest(unittest.TestCase):
                          [None, None, None, None,
                           ['mycp'], ['mycp'], ['ann2'], ['ann2']])
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_checkChannels_withcf_nochnnel_False(self):
         fun = sys._getframe().f_code.co_name
@@ -1581,7 +1581,7 @@ class MacroServerPoolsTest(unittest.TestCase):
                          [None, None, None, None,
                           ['mycp'], ['mycp'], ['ann2'], ['ann2']])
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_checkChannels_wds(self):
         fun = sys._getframe().f_code.co_name
@@ -1621,7 +1621,7 @@ class MacroServerPoolsTest(unittest.TestCase):
              "DataSources",
              "DataSources"])
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_checkChannels_wds_cp_true(self):
         fun = sys._getframe().f_code.co_name
@@ -1646,11 +1646,13 @@ class MacroServerPoolsTest(unittest.TestCase):
         # print res
         self.myAssertDict(json.loads(res), {"smycppc1": True})
         self.assertEqual(componentgroup, {"smycppc1": True})
-        self.myAssertDict(json.loads(res2), {"string_list": True, "get_float": True})
-        self.assertEqual(datasourcegroup, {"string_list": True, "get_float": True})
+        self.myAssertDict(
+            json.loads(res2), {"string_list": True, "get_float": True})
+        self.assertEqual(
+            datasourcegroup, {"string_list": True, "get_float": True})
         self.assertEqual(channelerrors, [])
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_checkChannels_wds_cp(self):
         fun = sys._getframe().f_code.co_name
@@ -1675,8 +1677,10 @@ class MacroServerPoolsTest(unittest.TestCase):
         # print res
         self.myAssertDict(json.loads(res), {"smycppc1": True})
         self.assertEqual(componentgroup, {"smycppc1": True})
-        self.myAssertDict(json.loads(res2), {"string_list": True, "get_float": True})
-        self.assertEqual(datasourcegroup, {"string_list": True, "get_float": True})
+        self.myAssertDict(
+            json.loads(res2), {"string_list": True, "get_float": True})
+        self.assertEqual(
+            datasourcegroup, {"string_list": True, "get_float": True})
         self.assertEqual(channelerrors, [])
 
     def test_checkChannels_wds_cp_false(self):
@@ -1702,12 +1706,13 @@ class MacroServerPoolsTest(unittest.TestCase):
         # print res
         self.myAssertDict(json.loads(res), {"smycppc1": False})
         self.assertEqual(componentgroup, {"smycppc1": False})
-        self.myAssertDict(json.loads(res2), {"string_list": False, "get_float": False})
-        self.assertEqual(datasourcegroup, {"string_list": False, "get_float": False})
+        self.myAssertDict(
+            json.loads(res2), {"string_list": False, "get_float": False})
+        self.assertEqual(
+            datasourcegroup, {"string_list": False, "get_float": False})
         self.assertEqual(channelerrors, [])
 
-
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_checkChannels_wds_cp2(self):
         fun = sys._getframe().f_code.co_name
@@ -1721,9 +1726,11 @@ class MacroServerPoolsTest(unittest.TestCase):
             poolchannels = []
             componentgroup = {"s2mycppc1": None}
             datasourcegroup = {"string2_list": None, "get2_float": None}
-            
-            self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.smycps2)])
-            self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss2)])
+
+            self._cf.dp.SetCommandVariable(
+                ["CPDICT", json.dumps(self.smycps2)])
+            self._cf.dp.SetCommandVariable(
+                ["DSDICT", json.dumps(self.smydss2)])
 
             res, res2 = msp.checkChannels(self._ms.door.keys()[0],
                                           self._cf.dp,
@@ -1735,14 +1742,15 @@ class MacroServerPoolsTest(unittest.TestCase):
             # print res
             self.myAssertDict(json.loads(res), {"s2mycppc1": None})
             self.assertEqual(componentgroup, {"s2mycppc1": None})
-            self.myAssertDict(json.loads(res2), {"string2_list": None, "get2_float": None})
-            self.assertEqual(datasourcegroup, {"string2_list": None, "get2_float": None})
+            self.myAssertDict(
+                json.loads(res2), {"string2_list": None, "get2_float": None})
+            self.assertEqual(
+                datasourcegroup, {"string2_list": None, "get2_float": None})
             self.assertEqual(len(channelerrors), 3)
         finally:
             simps2.delete()
 
-        
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_checkChannels_wds_t(self):
         fun = sys._getframe().f_code.co_name
@@ -1782,7 +1790,7 @@ class MacroServerPoolsTest(unittest.TestCase):
              "DataSources",
              "DataSources"])
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_checkChannels_wds_false(self):
         fun = sys._getframe().f_code.co_name
@@ -1822,7 +1830,7 @@ class MacroServerPoolsTest(unittest.TestCase):
              "DataSources",
              "DataSources"])
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_checkChannels_wds2(self):
         fun = sys._getframe().f_code.co_name
@@ -1875,7 +1883,7 @@ class MacroServerPoolsTest(unittest.TestCase):
              "DataSources"])
         res = json.loads(self._cf.dp.GetCommandVariable("VARS"))
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_checkChannels_2wds(self):
         fun = sys._getframe().f_code.co_name
@@ -1956,7 +1964,7 @@ class MacroServerPoolsTest(unittest.TestCase):
         finally:
             simps2.tearDown()
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_checkChannels_2wds_false(self):
         fun = sys._getframe().f_code.co_name
@@ -2038,7 +2046,7 @@ class MacroServerPoolsTest(unittest.TestCase):
         finally:
             simps2.tearDown()
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_checkChannels_2wds_dvnorunning(self):
         fun = sys._getframe().f_code.co_name
@@ -2119,7 +2127,7 @@ class MacroServerPoolsTest(unittest.TestCase):
         finally:
             simps2.delete()
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_checkChannels_2wds_dvnorunning_pe(self):
         fun = sys._getframe().f_code.co_name
@@ -2171,7 +2179,7 @@ class MacroServerPoolsTest(unittest.TestCase):
         finally:
             simps2.delete()
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_checkChannels_2wds2_dvnorunning_pe(self):
         fun = sys._getframe().f_code.co_name
@@ -2223,7 +2231,7 @@ class MacroServerPoolsTest(unittest.TestCase):
         finally:
             simps2.tearDown()
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_checkChannels_2wds2_dvnorunning_pe_true(self):
         fun = sys._getframe().f_code.co_name
@@ -2275,7 +2283,7 @@ class MacroServerPoolsTest(unittest.TestCase):
         finally:
             simps2.tearDown()
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_checkChannels_2wds2_dvnorunning_pe_false(self):
         fun = sys._getframe().f_code.co_name
@@ -2327,7 +2335,7 @@ class MacroServerPoolsTest(unittest.TestCase):
         finally:
             simps2.tearDown()
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_checkChannels_2wds_dvnorunning_pe_true(self):
         fun = sys._getframe().f_code.co_name
@@ -2378,8 +2386,9 @@ class MacroServerPoolsTest(unittest.TestCase):
 
         finally:
             simps2.delete()
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
+
     def test_checkChannels_2wds_dvnorunning_pe_false(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -2430,7 +2439,7 @@ class MacroServerPoolsTest(unittest.TestCase):
         finally:
             simps2.delete()
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_checkChannels_2wds_dvnodef(self):
         fun = sys._getframe().f_code.co_name
@@ -2502,7 +2511,7 @@ class MacroServerPoolsTest(unittest.TestCase):
                 "DataSources"])
         res = json.loads(self._cf.dp.GetCommandVariable("VARS"))
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_checkChannels_2wds_nods(self):
         fun = sys._getframe().f_code.co_name
@@ -2548,7 +2557,7 @@ class MacroServerPoolsTest(unittest.TestCase):
 #                "smycp": False, "smycp2": True, "smycp3": True,
 #                "s2mycp": False, "s2mycp2": True, "s2mycp3": True})
             self.myAssertDict(componentgroup, json.loads(res))
-            self.myAssertDict(datasourcegroup, json.loads(res2)) 
+            self.myAssertDict(datasourcegroup, json.loads(res2))
             self.myAssertDict(json.loads(res2), {
                 "scalar_uchar": False, "scalar_string": True,
                 "scalar_ulong": True,
@@ -2562,7 +2571,7 @@ class MacroServerPoolsTest(unittest.TestCase):
         finally:
             simps2.tearDown()
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_checkChannels_2wds_nodspool(self):
         fun = sys._getframe().f_code.co_name
@@ -2621,7 +2630,7 @@ class MacroServerPoolsTest(unittest.TestCase):
         finally:
             simps2.tearDown()
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_checkChannels_2wds_notangods(self):
         fun = sys._getframe().f_code.co_name
@@ -2684,7 +2693,7 @@ class MacroServerPoolsTest(unittest.TestCase):
         finally:
             simps2.tearDown()
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_checkChannels_2wds_notangodsnopool(self):
         fun = sys._getframe().f_code.co_name
@@ -2748,7 +2757,7 @@ class MacroServerPoolsTest(unittest.TestCase):
         finally:
             simps2.tearDown()
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_checkChannels_2wds_notangodsnopool_False(self):
         fun = sys._getframe().f_code.co_name
@@ -2812,7 +2821,7 @@ class MacroServerPoolsTest(unittest.TestCase):
         finally:
             simps2.tearDown()
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_checkChannels_2wds_notangodsnopool2(self):
         fun = sys._getframe().f_code.co_name
@@ -2881,7 +2890,7 @@ class MacroServerPoolsTest(unittest.TestCase):
         finally:
             simps2.tearDown()
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_checkChannels_2wds_notangodsnopool2_False(self):
         fun = sys._getframe().f_code.co_name
@@ -2950,7 +2959,7 @@ class MacroServerPoolsTest(unittest.TestCase):
         finally:
             simps2.tearDown()
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_checkChannels_2wds_notangods2(self):
         fun = sys._getframe().f_code.co_name
@@ -3024,7 +3033,7 @@ class MacroServerPoolsTest(unittest.TestCase):
         finally:
             simps2.tearDown()
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_checkChannels_2wds_notangods2_false(self):
         fun = sys._getframe().f_code.co_name
@@ -3098,7 +3107,7 @@ class MacroServerPoolsTest(unittest.TestCase):
         finally:
             simps2.tearDown()
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_checkChannels_2wds_notangodspool_error(self):
         fun = sys._getframe().f_code.co_name
@@ -3179,7 +3188,7 @@ class MacroServerPoolsTest(unittest.TestCase):
         finally:
             simps2.tearDown()
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_checkChannels_2wds_notangodspool_error_false(self):
         fun = sys._getframe().f_code.co_name
@@ -3260,7 +3269,7 @@ class MacroServerPoolsTest(unittest.TestCase):
         finally:
             simps2.tearDown()
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_checkChannels_2wds_notangodspool(self):
         fun = sys._getframe().f_code.co_name
@@ -3338,7 +3347,7 @@ class MacroServerPoolsTest(unittest.TestCase):
         finally:
             simps2.tearDown()
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_checkChannels_2wds_notangodspool_alias(self):
         fun = sys._getframe().f_code.co_name
@@ -3403,7 +3412,7 @@ class MacroServerPoolsTest(unittest.TestCase):
             db.delete_device_alias(arr[0]["name"])
             simps2.tearDown()
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_checkChannels_2wds_notangodspool_alias_value(self):
         fun = sys._getframe().f_code.co_name
@@ -3468,7 +3477,7 @@ class MacroServerPoolsTest(unittest.TestCase):
             db.delete_device_alias(arr[0]["name"])
             simps2.tearDown()
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_checkChannels_2wds_notangodspool_alias_novalue(self):
         fun = sys._getframe().f_code.co_name
@@ -3527,7 +3536,7 @@ class MacroServerPoolsTest(unittest.TestCase):
             db.delete_device_alias(arr[0]["name"])
             simps2.tearDown()
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_checkChannels_2wds_nocomponents(self):
         fun = sys._getframe().f_code.co_name
@@ -3568,7 +3577,7 @@ class MacroServerPoolsTest(unittest.TestCase):
         finally:
             simps2.tearDown()
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_getSelectorEnv_noenv(self):
         fun = sys._getframe().f_code.co_name
@@ -3608,7 +3617,7 @@ class MacroServerPoolsTest(unittest.TestCase):
             dwt = msp.getScanEnv(self._ms.door.keys()[0])
             self.myAssertDict(data, dt)
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_getSelectorEnv(self):
         fun = sys._getframe().f_code.co_name
@@ -3737,7 +3746,7 @@ class MacroServerPoolsTest(unittest.TestCase):
             msp.getSelectorEnv(self._ms.door.keys()[0], enms[i], data)
             self.myAssertDict(data, dt)
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_setSelectorEnv(self):
         fun = sys._getframe().f_code.co_name
@@ -3974,7 +3983,7 @@ class MacroServerPoolsTest(unittest.TestCase):
 #            print "ei", envs[i]
             self.myAssertDict(envs[i], env)
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_getScanEnv(self):
         fun = sys._getframe().f_code.co_name
@@ -4096,7 +4105,7 @@ class MacroServerPoolsTest(unittest.TestCase):
             dwt = msp.getScanEnv(self._ms.door.keys()[0])
             self.myAssertDict(edats[i], json.loads(dt))
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_setScanEnv(self):
         fun = sys._getframe().f_code.co_name
@@ -4296,7 +4305,7 @@ class MacroServerPoolsTest(unittest.TestCase):
 #            print "ei", envs[i]
             self.myAssertDict(envs[i], env)
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_setScanEnv_scanid(self):
         fun = sys._getframe().f_code.co_name
@@ -4328,7 +4337,7 @@ class MacroServerPoolsTest(unittest.TestCase):
         self._ms.dps[self._ms.ms.keys()[0]].Environment = ('pickle', envs[1])
         self.assertEqual(msp.setScanEnv(self._ms.door.keys()[0], "{}"), 12)
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_setScanEnv2(self):
         fun = sys._getframe().f_code.co_name
@@ -4528,7 +4537,7 @@ class MacroServerPoolsTest(unittest.TestCase):
                 self._ms.dps[self._ms.ms.keys()[0]].Environment[1])
             self.myAssertDict(envs[i], env)
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_setScanEnv_dtlist(self):
         fun = sys._getframe().f_code.co_name

@@ -15,8 +15,8 @@
 #
 #    You should have received a copy of the GNU General Public License
 #    along with nexdatas.  If not, see <http://www.gnu.org/licenses/>.
-## \package test nexdatas
-## \file Settings2Test.py
+# \package test nexdatas
+# \file Settings2Test.py
 # unittests for TangoDsItemTest running Tango Server
 #
 import unittest
@@ -56,10 +56,10 @@ from nxsrecconfig.Utils import TangoUtils, MSUtils
 from nxsconfigserver.XMLConfigurator import XMLConfigurator
 from nxsrecconfig.Utils import TangoUtils, MSUtils, Utils
 
-## if 64-bit machione
+# if 64-bit machione
 IS64BIT = (struct.calcsize("P") == 8)
 
-## list of available databases
+# list of available databases
 DB_AVAILABLE = []
 
 #: tango version
@@ -67,17 +67,17 @@ TGVER = PyTango.__version_info__[0]
 
 try:
     import MySQLdb
-    ## connection arguments to MYSQL DB
+    # connection arguments to MYSQL DB
     mydb = MySQLdb.connect({})
     mydb.close()
     DB_AVAILABLE.append("MYSQL")
 except:
     try:
         import MySQLdb
-    ## connection arguments to MYSQL DB
+    # connection arguments to MYSQL DB
         args = {'host': 'localhost', 'db': 'nxsconfig',
                 'read_default_file': '/etc/my.cnf', 'use_unicode': True}
-    ## inscance of MySQLdb
+    # inscance of MySQLdb
         mydb = MySQLdb.connect(**args)
         mydb.close()
         DB_AVAILABLE.append("MYSQL")
@@ -86,11 +86,11 @@ except:
             import MySQLdb
             from os.path import expanduser
             home = expanduser("~")
-        ## connection arguments to MYSQL DB
+        # connection arguments to MYSQL DB
             args2 = {'host': 'localhost', 'db': 'nxsconfig',
                      'read_default_file': '%s/.my.cnf' % home,
                      'use_unicode': True}
-        ## inscance of MySQLdb
+        # inscance of MySQLdb
             mydb = MySQLdb.connect(**args2)
             mydb.close()
             DB_AVAILABLE.append("MYSQL")
@@ -103,15 +103,16 @@ except:
             print "MYSQL not available"
 
 
-## test fixture
+# test fixture
 class BasicSettings2Test(Settings2Test.Settings2Test):
-        
-    ## constructor
+
+    # constructor
     # \param methodName name of the test method
+
     def __init__(self, methodName):
         Settings2Test.Settings2Test.__init__(self, methodName)
 
-    ## test
+    # test
     def test_constructor(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -122,7 +123,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
 
         self.subtest_constructor()
 
-    ## test
+    # test
     def test_constructor_configDevice_door(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -141,7 +142,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         self.assertEqual(rs.macroServer, self._ms.ms.keys()[0])
         self.assertEqual(rs.mntGrp, val["MntGrp"])
 
-    ## test
+    # test
     def test_mandatory_components(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -175,7 +176,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         self._cf.dp.SetCommandVariable(["MCPLIST", json.dumps(mcps)])
         self.assertEqual(set(rs.mandatoryComponents()), set(mcps))
 
-    ## test
+    # test
     def test_mandatory_components(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -209,7 +210,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         self._cf.dp.SetCommandVariable(["MCPLIST", json.dumps(mcps)])
         self.assertEqual(set(rs.mandatoryComponents()), set(mcps))
 
-    ## available components and datasources
+    # available components and datasources
     def test_available_components_datasources(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -280,7 +281,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         self.assertEqual(set(rs.availableComponents()), set())
         self.assertEqual(set(rs.availableDataSources()), set())
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_poolChannels(self):
         fun = sys._getframe().f_code.co_name
@@ -339,7 +340,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
 
         print rs.poolElementNames('ExpChannelList')
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_poolChannels_bl(self):
         fun = sys._getframe().f_code.co_name
@@ -402,7 +403,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
 
         print rs.poolElementNames('ExpChannelList')
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_poolMotors(self):
         fun = sys._getframe().f_code.co_name
@@ -461,7 +462,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
 
         print rs.poolElementNames('MotorList')
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_poolMotors_bl(self):
         fun = sys._getframe().f_code.co_name
@@ -524,7 +525,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
 
         print rs.poolElementNames('MotorList')
 
-    ## preselectComponents test
+    # preselectComponents test
     # \brief It tests default settings
     def test_preselectComponents_simple(self):
         fun = sys._getframe().f_code.co_name
@@ -552,7 +553,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         self.assertEqual(res2, '{}')
         print self._cf.dp.GetCommandVariable("COMMANDS")
 
-    ## preselectComponents test
+    # preselectComponents test
     # \brief It tests default settings
     def test_preselectComponents_withcf(self):
         fun = sys._getframe().f_code.co_name
@@ -589,7 +590,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         self.assertEqual(channelerrors, [])
         print self._cf.dp.GetCommandVariable("COMMANDS")
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_preselectComponents_withcf_cps(self):
         fun = sys._getframe().f_code.co_name
@@ -649,7 +650,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             else:
                 self.assertEqual(sed[key], vl)
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_preselectComponents_withcf_cps_false(self):
         fun = sys._getframe().f_code.co_name
@@ -709,7 +710,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             else:
                 self.assertEqual(sed[key], vl)
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_preselectComponents_withcf_cps_true(self):
         fun = sys._getframe().f_code.co_name
@@ -769,7 +770,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             else:
                 self.assertEqual(sed[key], vl)
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_preselectComponents_withcf_nocps(self):
         fun = sys._getframe().f_code.co_name
@@ -814,7 +815,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
 
         self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_preselectComponents_withcf_nochnnel(self):
         fun = sys._getframe().f_code.co_name
@@ -876,7 +877,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             else:
                 self.assertEqual(sed[key], vl)
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_preselectComponents_withcf_nochnnel_false(self):
         fun = sys._getframe().f_code.co_name
@@ -938,7 +939,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             else:
                 self.assertEqual(sed[key], vl)
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_preselectComponents_withcf_nochnnel_true(self):
         fun = sys._getframe().f_code.co_name
@@ -1000,7 +1001,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             else:
                 self.assertEqual(sed[key], vl)
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_preselectComponents_wds_t(self):
         fun = sys._getframe().f_code.co_name
@@ -1044,7 +1045,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
 
         self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_preselectComponents_wds_false(self):
         fun = sys._getframe().f_code.co_name
@@ -1105,7 +1106,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             else:
                 self.assertEqual(sed[key], vl)
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_preselectComponents_wds(self):
         fun = sys._getframe().f_code.co_name
@@ -1166,7 +1167,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             else:
                 self.assertEqual(sed[key], vl)
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_preselectComponents_wds2(self):
         fun = sys._getframe().f_code.co_name
@@ -1233,7 +1234,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             else:
                 self.assertEqual(sed[key], vl)
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_preselectComponents_2wds(self):
         fun = sys._getframe().f_code.co_name
@@ -1322,7 +1323,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         finally:
             simps2.tearDown()
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_preselectComponents_2wds_false(self):
         fun = sys._getframe().f_code.co_name
@@ -1410,7 +1411,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         finally:
             simps2.tearDown()
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_preselectComponents_2wds_dvnorunning(self):
         fun = sys._getframe().f_code.co_name
@@ -1497,7 +1498,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         finally:
             simps2.delete()
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_preselectComponents_2wds_dvnorunning_pe(self):
         fun = sys._getframe().f_code.co_name
@@ -1659,7 +1660,6 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         finally:
             simps2.tearDown()
 
-
     def test_preselectComponents_2wds2_dvnorunning_pe_true(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -1820,7 +1820,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         finally:
             simps2.tearDown()
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_preselectComponents_2wds_dvnorunning_pe_false(self):
         fun = sys._getframe().f_code.co_name
@@ -1902,7 +1902,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         finally:
             simps2.delete()
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_preselectComponents_2wds_dvnorunning_pe_true(self):
         fun = sys._getframe().f_code.co_name
@@ -1984,7 +1984,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         finally:
             simps2.delete()
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_preselectComponents_2wds_dvnodef(self):
         fun = sys._getframe().f_code.co_name
@@ -2064,7 +2064,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             else:
                 self.assertEqual(sed[key], vl)
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_preselectComponents_2wds_nods(self):
         fun = sys._getframe().f_code.co_name
@@ -2151,7 +2151,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         finally:
             simps2.tearDown()
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_preselectComponents_2wds_nodspool(self):
         fun = sys._getframe().f_code.co_name
@@ -2237,7 +2237,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         finally:
             simps2.tearDown()
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_preselectComponents_2wds_notangods(self):
         fun = sys._getframe().f_code.co_name
@@ -2329,7 +2329,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         finally:
             simps2.tearDown()
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_preselectComponents_2wds_notangodsnopool(self):
         fun = sys._getframe().f_code.co_name
@@ -2511,7 +2511,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         finally:
             simps2.tearDown()
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_preselectComponents_2wds_notangodsnopool2(self):
         fun = sys._getframe().f_code.co_name
@@ -2604,7 +2604,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         finally:
             simps2.tearDown()
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_preselectComponents_2wds_notangodsnopool2_false(self):
         fun = sys._getframe().f_code.co_name
@@ -2697,7 +2697,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         finally:
             simps2.tearDown()
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_preselectComponents_2wds_notangods2(self):
         fun = sys._getframe().f_code.co_name
@@ -2802,7 +2802,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         finally:
             simps2.tearDown()
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_preselectComponents_2wds_notangods2_false(self):
         fun = sys._getframe().f_code.co_name
@@ -2907,7 +2907,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         finally:
             simps2.tearDown()
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_preselectComponents_2wds_notangods2_bl(self):
         fun = sys._getframe().f_code.co_name
@@ -3014,7 +3014,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         finally:
             simps2.tearDown()
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_preselectComponents_2wds_notangodspool_error(self):
         fun = sys._getframe().f_code.co_name
@@ -3123,7 +3123,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         finally:
             simps2.tearDown()
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_preselectComponents_2wds_notangodspool_error_false(self):
         fun = sys._getframe().f_code.co_name
@@ -3232,7 +3232,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         finally:
             simps2.tearDown()
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_preselectComponents_2wds_notangodspool_error_bl(self):
         fun = sys._getframe().f_code.co_name
@@ -3343,7 +3343,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         finally:
             simps2.tearDown()
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_preselectComponents_2wds_notangodspool(self):
         fun = sys._getframe().f_code.co_name
@@ -3451,7 +3451,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         finally:
             simps2.tearDown()
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_preselectComponents_2wds_notangodspool_false(self):
         fun = sys._getframe().f_code.co_name
@@ -3559,7 +3559,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         finally:
             simps2.tearDown()
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_preselectComponents_2wds_notangodspool_alias(self):
         fun = sys._getframe().f_code.co_name
@@ -3668,7 +3668,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             db.delete_device_alias(arr[0]["name"])
             simps2.tearDown()
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_preselectComponents_2wds_notangodspool_alias_false(self):
         fun = sys._getframe().f_code.co_name
@@ -3777,7 +3777,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             db.delete_device_alias(arr[0]["name"])
             simps2.tearDown()
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_preselectComponents_2wds_notangodspool_alias_bl(self):
         fun = sys._getframe().f_code.co_name
@@ -3888,7 +3888,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             db.delete_device_alias(arr[0]["name"])
             simps2.tearDown()
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_preselectComponents_2wds_notangodspool_alias_value(self):
         fun = sys._getframe().f_code.co_name
@@ -3974,7 +3974,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             db.delete_device_alias(arr[0]["name"])
             simps2.tearDown()
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_preselectComponents_2wds_notangodspool_alias_value_false(self):
         fun = sys._getframe().f_code.co_name
@@ -4060,7 +4060,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             db.delete_device_alias(arr[0]["name"])
             simps2.tearDown()
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_preselectComponents_2wds_notangodspool_alias_value_bl(self):
         fun = sys._getframe().f_code.co_name
@@ -4148,7 +4148,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             db.delete_device_alias(arr[0]["name"])
             simps2.tearDown()
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_preselectComponents_2wds_notangodspool_alias_novalue(self):
         fun = sys._getframe().f_code.co_name
@@ -4234,7 +4234,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             db.delete_device_alias(arr[0]["name"])
             simps2.tearDown()
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_preselectComponents_2wds_notangodspool_alias_novalue_false(self):
         fun = sys._getframe().f_code.co_name
@@ -4320,7 +4320,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             db.delete_device_alias(arr[0]["name"])
             simps2.tearDown()
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_preselectComponents_2wds_notangodspool_alias_novalue_bl(self):
         fun = sys._getframe().f_code.co_name
@@ -4408,7 +4408,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             db.delete_device_alias(arr[0]["name"])
             simps2.tearDown()
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_preselectComponents_2wds_nocomponents(self):
         fun = sys._getframe().f_code.co_name
@@ -4484,7 +4484,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         finally:
             simps2.tearDown()
 
-    ## resetPreselectedComponents test
+    # resetPreselectedComponents test
     # \brief It tests default settings
     def test_resetPreselectedComponents_simple(self):
         fun = sys._getframe().f_code.co_name
@@ -4527,7 +4527,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         self.assertEqual(self.value(rs, "Timer"), '[]')
         self.assertEqual(self.value(rs, "PreselectingDataSources"), '[]')
 
-    ## resetPreselectedComponents test
+    # resetPreselectedComponents test
     # \brief It tests default settings
     def test_resetPreselectedComponents_withcf(self):
         fun = sys._getframe().f_code.co_name
@@ -4577,7 +4577,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         res = self.value(rs, "ComponentPreselection")
         self.assertEqual(res, '{}')
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_resetPreselectedComponents_withcf_cps(self):
         fun = sys._getframe().f_code.co_name
@@ -4648,7 +4648,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                 self.assertEqual(sed[key], vl)
                 self.assertEqual(sed1[key], vl)
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_resetPreselectedComponents_withcf_cps_t(self):
         fun = sys._getframe().f_code.co_name
@@ -4697,7 +4697,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
 
         self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_resetPreselectedComponents_withcf_cps_false(self):
         fun = sys._getframe().f_code.co_name
@@ -4746,7 +4746,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
 
         self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_resetPreselectedComponents_withcf_nocps(self):
         fun = sys._getframe().f_code.co_name
@@ -4793,7 +4793,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
 
         self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_resetPreselectedComponents_withcf_nochnnel_false(self):
         fun = sys._getframe().f_code.co_name
@@ -4864,7 +4864,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                 self.assertEqual(sed[key], vl)
                 self.assertEqual(sed1[key], vl)
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_resetPreselectedComponents_withcf_nochnnel_true(self):
         fun = sys._getframe().f_code.co_name
@@ -4935,7 +4935,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                 self.assertEqual(sed[key], vl)
                 self.assertEqual(sed1[key], vl)
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_resetPreselectedComponents_withcf_nochnnel(self):
         fun = sys._getframe().f_code.co_name
@@ -5006,7 +5006,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                 self.assertEqual(sed[key], vl)
                 self.assertEqual(sed1[key], vl)
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_resetPreselectedComponents_wds_t(self):
         fun = sys._getframe().f_code.co_name
@@ -5056,7 +5056,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
 
         self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_resetPreselectedComponents_wds_false(self):
         fun = sys._getframe().f_code.co_name
@@ -5106,7 +5106,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
 
         self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_resetPreselectedComponents_wds(self):
         fun = sys._getframe().f_code.co_name
@@ -5153,7 +5153,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
 
         self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_resetPreselectedComponents_wds2(self):
         fun = sys._getframe().f_code.co_name
@@ -5228,7 +5228,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                 self.assertEqual(sed[key], vl)
                 self.assertEqual(sed1[key], vl)
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_resetPreselectedComponents_2wds(self):
         fun = sys._getframe().f_code.co_name
@@ -5321,7 +5321,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         finally:
             simps2.tearDown()
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_resetPreselectedComponents_2wds_dvnorunning_pe(self):
         fun = sys._getframe().f_code.co_name
@@ -5409,7 +5409,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         finally:
             simps2.delete()
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_resetPreselectedComponents_2wds2_dvnorunning_pe(self):
         fun = sys._getframe().f_code.co_name
@@ -5497,7 +5497,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         finally:
             simps2.tearDown()
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_resetPreselectedComponents_2wds2_dvnorunning_pe_true(self):
         fun = sys._getframe().f_code.co_name
@@ -5585,7 +5585,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         finally:
             simps2.tearDown()
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_resetPreselectedComponents_2wds2_dvnorunning_pe_false(self):
         fun = sys._getframe().f_code.co_name
@@ -5673,7 +5673,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         finally:
             simps2.tearDown()
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_resetPreselectedComponents_2wds_dvnorunning_pe_true(self):
         fun = sys._getframe().f_code.co_name
@@ -5761,7 +5761,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         finally:
             simps2.delete()
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_resetPreselectedComponents_2wds_dvnorunning_pe_false(self):
         fun = sys._getframe().f_code.co_name
@@ -5849,7 +5849,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         finally:
             simps2.delete()
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_resetPreselectedComponents_2wds_dvnorunning(self):
         fun = sys._getframe().f_code.co_name
@@ -5942,7 +5942,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         finally:
             simps2.delete()
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_resetPreselectedComponents_2wds_dvnodef(self):
         fun = sys._getframe().f_code.co_name
@@ -6024,7 +6024,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                 self.assertEqual(sed[key], vl)
                 self.assertEqual(sed1[key], vl)
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_resetPreselectedComponents_2wds_nods(self):
         fun = sys._getframe().f_code.co_name
@@ -6116,7 +6116,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         finally:
             simps2.tearDown()
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_resetPreselectedComponents_2wds_nodspool(self):
         fun = sys._getframe().f_code.co_name
@@ -6209,7 +6209,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         finally:
             simps2.tearDown()
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_resetPreselectedComponents_2wds_notangods(self):
         fun = sys._getframe().f_code.co_name
@@ -6303,7 +6303,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         finally:
             simps2.tearDown()
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_resetPreselectedComponents_2wds_notangodsnopool(self):
         fun = sys._getframe().f_code.co_name
@@ -6399,7 +6399,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         finally:
             simps2.tearDown()
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_resetPreselectedComponents_2wds_notangodsnopool_false(self):
         fun = sys._getframe().f_code.co_name
@@ -6495,7 +6495,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         finally:
             simps2.tearDown()
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_resetPreselectedComponents_2wds_notangodsnopool_true(self):
         fun = sys._getframe().f_code.co_name
@@ -6591,7 +6591,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         finally:
             simps2.tearDown()
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_resetPreselectedComponents_2wds_notangodsnopool2(self):
         fun = sys._getframe().f_code.co_name
@@ -6685,7 +6685,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         finally:
             simps2.tearDown()
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_resetPreselectedComponents_2wds_notangodsnopool2_true(self):
         fun = sys._getframe().f_code.co_name
@@ -6779,7 +6779,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         finally:
             simps2.tearDown()
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_resetPreselectedComponents_2wds_notangodsnopool2_false(self):
         fun = sys._getframe().f_code.co_name
@@ -6873,7 +6873,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         finally:
             simps2.tearDown()
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_resetPreselectedComponents_2wds_notangods2(self):
         fun = sys._getframe().f_code.co_name
@@ -6981,7 +6981,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         finally:
             simps2.tearDown()
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_resetPreselectedComponents_2wds_notangods2_bl(self):
         fun = sys._getframe().f_code.co_name
@@ -7076,7 +7076,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         finally:
             simps2.tearDown()
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_resetPreselectedComponents_2wds_notangodspool_error(self):
         fun = sys._getframe().f_code.co_name
@@ -7172,7 +7172,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         finally:
             simps2.tearDown()
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_resetPreselectedComponents_2wds_notangodspool(self):
         fun = sys._getframe().f_code.co_name
@@ -7267,7 +7267,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         finally:
             simps2.tearDown()
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_resetPreselectedComponents_2wds_notangodspool_alias(self):
         fun = sys._getframe().f_code.co_name
@@ -7364,7 +7364,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             db.delete_device_alias(arr[0]["name"])
             simps2.tearDown()
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_resetPreselectedComponents_2wds_notangodspool_alias_bl(self):
         fun = sys._getframe().f_code.co_name
@@ -7463,7 +7463,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             db.delete_device_alias(arr[0]["name"])
             simps2.tearDown()
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_resetPreselectedComponents_2wds_notangodspool_alias_value(self):
         fun = sys._getframe().f_code.co_name
@@ -7558,7 +7558,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             db.delete_device_alias(arr[0]["name"])
             simps2.tearDown()
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_resetPreselectedComponents_2wds_ntp_alias_value_bl(self):
         fun = sys._getframe().f_code.co_name
@@ -7655,7 +7655,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             db.delete_device_alias(arr[0]["name"])
             simps2.tearDown()
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_resetPreselectedComponents_2wds_notngdspool_alias_novalue(self):
         fun = sys._getframe().f_code.co_name
@@ -7750,7 +7750,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             db.delete_device_alias(arr[0]["name"])
             simps2.tearDown()
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_resetPreselectedComponents_2wds_nocomponents(self):
         fun = sys._getframe().f_code.co_name
@@ -7834,7 +7834,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         finally:
             simps2.tearDown()
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_availableTimers_empty(self):
         fun = sys._getframe().f_code.co_name
@@ -7853,7 +7853,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
 
 #            rs = self.openRecSelector()
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_availableTimers_pool1(self):
         fun = sys._getframe().f_code.co_name
@@ -7901,7 +7901,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         dd = rs.availableTimers()
         self.assertEqual(set(dd), set(lst))
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_availableTimers_pool1_bl(self):
         fun = sys._getframe().f_code.co_name
@@ -7951,7 +7951,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         dd = rs.availableTimers()
         self.assertTrue(not dd)
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_availableTimers_pool1_filter(self):
         fun = sys._getframe().f_code.co_name
@@ -8001,7 +8001,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         dd = rs.availableTimers()
         self.assertEqual(set(dd), set(lst))
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_availableTimers_2pools(self):
         fun = sys._getframe().f_code.co_name
@@ -8082,7 +8082,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         finally:
             tpool2.tearDown()
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_availableTimers_2pools_bl(self):
         fun = sys._getframe().f_code.co_name
@@ -8165,7 +8165,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         finally:
             tpool2.tearDown()
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_availableTimers_2pools_filter_bl(self):
         fun = sys._getframe().f_code.co_name
@@ -8255,7 +8255,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         finally:
             tpool2.tearDown()
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_availableTimers_2pools_filter(self):
         fun = sys._getframe().f_code.co_name
@@ -8343,7 +8343,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         finally:
             tpool2.tearDown()
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_mutedChannels_empty(self):
         fun = sys._getframe().f_code.co_name
@@ -8362,7 +8362,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
 
 #            rs = self.openRecSelector()
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_mutedChannels_pool1(self):
         fun = sys._getframe().f_code.co_name
@@ -8410,7 +8410,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         dd = rs.mutedChannels()
         self.assertEqual(set(dd), set(lst))
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_mutedChannels_pool1_bl(self):
         fun = sys._getframe().f_code.co_name
@@ -8459,7 +8459,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         dd = rs.mutedChannels()
         self.assertTrue(not dd)
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_mutedChannels_pool1_filter_config(self):
         fun = sys._getframe().f_code.co_name
@@ -8513,7 +8513,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                          set(lst + self.smydss.keys())
                          - set(['client_long', 'client_short']))
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_mutedChannels_pool1_filter(self):
         fun = sys._getframe().f_code.co_name
@@ -8564,7 +8564,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         dd = rs.mutedChannels()
         self.assertEqual(set(dd), set(lst))
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_mutedChannels_2pools(self):
         fun = sys._getframe().f_code.co_name
@@ -8644,7 +8644,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         finally:
             tpool2.tearDown()
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_mutedChannels_2pools_bl(self):
         fun = sys._getframe().f_code.co_name
@@ -8726,7 +8726,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         finally:
             tpool2.tearDown()
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_mutedChannels_2pools_filter_bl(self):
         fun = sys._getframe().f_code.co_name
@@ -8809,7 +8809,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         finally:
             tpool2.tearDown()
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_mutedChannels_2pools_filter(self):
         fun = sys._getframe().f_code.co_name
@@ -8894,7 +8894,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         finally:
             tpool2.tearDown()
 
-    ## getDeviceName test
+    # getDeviceName test
     def test_fullDeviceNames_empty(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -8914,7 +8914,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
 
         self.assertEqual({}, json.loads(rs.fullDeviceNames()))
 
-    ## getDeviceName test
+    # getDeviceName test
     def test_fullDeviceNames_pool1(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -9086,7 +9086,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         finally:
             tpool2.tearDown()
 
-    ## setEnv test
+    # setEnv test
     def test_scanDir(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -9132,7 +9132,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             self.assertEqual(en['ScanDir'], rs.scanDir)
             self.assertEqual(vl[1], rs.scanDir)
 
-    ## setEnv test
+    # setEnv test
     def test_scanID(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -9177,7 +9177,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             self.assertEqual(en['ScanID'], rs.scanID)
             self.assertEqual(int(vl[1]), rs.scanID)
 
-    ## scanfile test
+    # scanfile test
     def test_scanFile(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -9235,7 +9235,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                 sc = [sc]
             self.assertEqual(list(vl[1]), sc)
 
-    ## configvariables test
+    # configvariables test
     def test_configVariables(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -9353,7 +9353,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                 self.assertEqual(ndss[ds], cps[ds])
         os.remove(filename)
 
-    ## userdata test
+    # userdata test
     def test_userData(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -9469,7 +9469,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                 self.assertEqual(ndss[ds], cps[ds])
         os.remove(filename)
 
-    ## mntgrp test
+    # mntgrp test
     def test_mntGrp(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -9574,7 +9574,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
 
         os.remove(filename)
 
-    ## appendentry test
+    # appendentry test
     def test_appendEntry(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -9683,7 +9683,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
 
         os.remove(filename)
 
-    ## test
+    # test
     def test_writerDevice(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -9791,7 +9791,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
 
         os.remove(filename)
 
-    ## test
+    # test
     def test_door(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -9897,7 +9897,8 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                     rs.fetchProfile()
 
                 self.compareToDump(rs, ["PreselectingDataSources"])
-                self.assertEqual(set(self.value(rs, "PreselectingDataSources")),
+                self.assertEqual(
+                    set(self.value(rs, "PreselectingDataSources")),
                                  set(self.getDump("PreselectingDataSources")))
                 self.assertEqual(rs.door, doors[i % 3])
                 self.assertEqual(rs.macroServer, ms2.ms.keys()[0])
@@ -9905,7 +9906,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         finally:
             ms2.tearDown()
 
-    ## test
+    # test
     def test_configDevice(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -10015,8 +10016,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
 
         os.remove(filename)
 
-
-    ## userdata test
+    # userdata test
     def test_channelProperties(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -10134,7 +10134,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         finally:
             simp2.tearDown()
 
-    ## userdata test
+    # userdata test
     def test_profileConfiguration(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -10258,7 +10258,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         finally:
             simp2.tearDown()
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_scanEnvVariables(self):
         fun = sys._getframe().f_code.co_name
@@ -10394,7 +10394,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             self.myAssertDict(edats[i], dt)
             self.myAssertDict(edats[i], json.loads(dwt))
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_setScanEnvVariables(self):
         fun = sys._getframe().f_code.co_name
@@ -10601,7 +10601,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                 self._ms.dps[self._ms.ms.keys()[0]].Environment[1])
             self.myAssertDict(envs[i], env)
 
-    ## test
+    # test
     def test_administratorDataNames(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -10626,7 +10626,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                          anames)
             self.assertEqual(rs.administratorDataNames(), anames)
 
-    ## test
+    # test
     def test_getDeviceGroups(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -10682,7 +10682,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                     else:
                         self.assertEqual(rs.deviceGroups, ddg)
 
-    ## test
+    # test
     def test_stepdatasources(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -10720,7 +10720,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             self.assertEqual(set(mds), set(anames))
             self.assertEqual(set(mds2), set(anames))
 
-    ## test
+    # test
     def test_linkdatasources(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -10758,7 +10758,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             self.assertEqual(set(mds), set(anames))
             self.assertEqual(set(mds2), set(anames))
 
-    ## test
+    # test
     def test_deleteAllProfiles(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -10790,7 +10790,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         sl2 = self._cf.dp.availableSelections()
         self.assertEqual(set(sl2), set())
 
-    ## availableMntGrps test
+    # availableMntGrps test
     def test_availableMntGrps(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -10838,7 +10838,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             self.assertEqual(dd[0], ar["name"])
             self.assertEqual(set(dd), set([a["name"] for a in arr]))
 
-    ## availableMntGrps test
+    # availableMntGrps test
     def test_availableMntGrps_twopools(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -10925,7 +10925,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         finally:
             tpool2.tearDown()
 
-    ## deleteProfile test
+    # deleteProfile test
     def test_deleteProfile(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -10980,7 +10980,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             sl = self._cf.dp.availableSelections()
             self.assertEqual(set(sl), set(sl2) - set(dl))
 
-    ## deleteProfile test
+    # deleteProfile test
     def test_deleteProfile_twopools(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -11089,7 +11089,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         finally:
             tpool2.tearDown()
 
-    ## test
+    # test
     def test_preselectedComponents(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -11133,7 +11133,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
 
             self.assertEqual(set(ac), set(acp))
 
-    ## test
+    # test
     def test_selectedcomponents(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -11208,7 +11208,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             mfcp = set(tcps) | (set(tdss) & set(ac))
             self.assertEqual(set(pmcp), set(mfcp))
 
-    ## test
+    # test
     def test_componentDescription_unknown(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -11274,7 +11274,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         self._cf.dp.SetCommandVariable(["MCPLIST", json.dumps(["unknown"])])
         self.assertEqual(rs.componentDescription(), '[{}]')
 
-    ## test
+    # test
     def test_componentDescription_full(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -11341,7 +11341,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             res = json.loads(rs.componentDescription())
             self.checkCP(res, self.rescps.keys())
 
-    ## updateProfile test
+    # updateProfile test
     def test_componentdatasources(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -11419,7 +11419,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             self.assertEqual(len(mdds), len(dds))
             self.assertEqual(mdds, set(dds))
 
-    ## updateProfile test
+    # updateProfile test
     def test_selectedDatasources(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -11492,7 +11492,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             self.assertEqual(set(tdss), set(rdss))
             self.assertEqual(len(tdss), len(rdss))
 
-    ## updateProfile test
+    # updateProfile test
     def test_datasources(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -11564,7 +11564,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
 
             self.assertEqual(set(mds), set(dds) | set(rdss))
 
-    ## test
+    # test
     def test_selectedcomponents(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -11644,7 +11644,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
 
             self.assertEqual(set(rcp), set(mcp) | set(scp) | set(pcp))
 
-    ## updateMntGrp test
+    # updateMntGrp test
     def test_updateMntGrp_empty(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -11742,7 +11742,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                 rs.deleteProfile(val["MntGrp"])
                 tmg.tearDown()
 
-    ## updateMntGrp test
+    # updateMntGrp test
     def test_updateMntGrp_components_nopool(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -11911,7 +11911,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                 except:
                     pass
 
-    ## updateMntGrp test
+    # updateMntGrp test
     def test_updateMntGrp_nodevice(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -12031,7 +12031,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                 except:
                     pass
 
-    ## updateMntGrp test
+    # updateMntGrp test
     def test_updateMntGrp_nodevice_cp(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -12148,7 +12148,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                 except:
                     pass
 
-    ## updateMntGrp test
+    # updateMntGrp test
     def test_updateMntGrp_wrongdevice(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -12265,7 +12265,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                 except:
                     pass
 
-    ## updateMntGrp test
+    # updateMntGrp test
     def test_updateMntGrp_components_nopool_tango(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -12454,7 +12454,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                              'timer': dv,
                              'synchronizer': 'software',
                              'synchronization': 0}
-                        },
+                            },
                            "monitor": "%s" % dv,
                            "description": "Measurement Group",
                            "timer": "%s" % dv,
@@ -12492,7 +12492,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                 except:
                     pass
 
-    ## updateProfile test
+    # updateProfile test
     def test_updateMntGrp_components_nopool_tango_unplottedcomponents(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -12720,17 +12720,17 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                         raise
                 if tgc:
                     smg = {"controllers":
-                       {'__tango__':
-                          {'channels': tgc,
-                           'monitor': dv,
-                           'synchronizer': 'software',
-                           'synchronization': 0,
-                           'timer': dv,
-                       }},
-                       "monitor": "%s" % dv,
-                       "description": "Measurement Group",
-                       "timer": "%s" % dv,
-                       "label": "nxsmntgrp2"}
+                           {'__tango__':
+                            {'channels': tgc,
+                             'monitor': dv,
+                             'synchronizer': 'software',
+                             'synchronization': 0,
+                             'timer': dv,
+                             }},
+                           "monitor": "%s" % dv,
+                           "description": "Measurement Group",
+                           "timer": "%s" % dv,
+                           "label": "nxsmntgrp2"}
                 else:
                     smg = {"controllers":
                            {},
@@ -12738,7 +12738,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                            "description": "Measurement Group",
                            "timer": "%s" % dv,
                            "label": "nxsmntgrp2"}
-                    
+
 #                print "SMG", smg
                 self.myAssertDict(smg, pcnf)
                 self.myAssertDict(pcnf, cnf)
@@ -12766,7 +12766,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                 except:
                     pass
 
-    ## updateMntGrp test
+    # updateMntGrp test
     def test_updateMntGrp_components_pool_tango(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -13054,7 +13054,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         finally:
             simp2.tearDown()
 
-    ## updateMntGrp test
+    # updateMntGrp test
     def test_updateMntGrp_components_pool_tango_unplottedcomponents(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -13390,7 +13390,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         finally:
             simp2.tearDown()
 
-    ## updateMntGrp test
+    # updateMntGrp test
     def test_updateMntGrp_components_mixed_tango_unplottedcomponents(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -13781,7 +13781,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         finally:
             simp2.tearDown()
 
-    ## updateMntGrp test
+    # updateMntGrp test
     def test_updateMntGrp_components_mixed_tango_orderedchannels(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -14042,7 +14042,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                             for ds in mdss.keys():
                                 adss[ds] = True
 
-                    # print "UPGRAGE MNT"            
+                    # print "UPGRAGE MNT"
                     jpcnf = rs.updateMntGrp()
                     pcnf = json.loads(jpcnf)
                     mgdp = PyTango.DeviceProxy(tmg.new_device_info_writer.name)

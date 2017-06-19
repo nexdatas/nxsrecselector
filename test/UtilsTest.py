@@ -15,8 +15,8 @@
 #
 #    You should have received a copy of the GNU General Public License
 #    along with nexdatas.  If not, see <http://www.gnu.org/licenses/>.
-## \package test nexdatas
-## \file UtilsTest.py
+# \package test nexdatas
+# \file UtilsTest.py
 # unittests for field Tags running Tango Server
 #
 import unittest
@@ -42,7 +42,7 @@ import TestMacroServerSetUp
 
 from nxsrecconfig.Utils import Utils, TangoUtils, MSUtils, PoolUtils
 
-## if 64-bit machione
+# if 64-bit machione
 IS64BIT = (struct.calcsize("P") == 8)
 
 #: tango version
@@ -50,12 +50,14 @@ TGVER = PyTango.__version_info__[0]
 
 
 class Datum(object):
+
     def __init__(self, device, value_string=None):
         self.device = device
         self.value_string = value_string if value_string else []
 
 
 class DB(object):
+
     def __init__(self):
         self.classdevices = {
             "NXSDataWriter": ['test/nxsdatawriter/01',
@@ -127,11 +129,12 @@ class NoServer(object):
         return self.value
 
 
-## test fixture
+# test fixture
 class UtilsTest(unittest.TestCase):
 
-    ## constructor
+    # constructor
     # \param methodName name of the test method
+
     def __init__(self, methodName):
         unittest.TestCase.__init__(self, methodName)
 
@@ -239,7 +242,7 @@ class UtilsTest(unittest.TestCase):
         self._buint = "uint64" if IS64BIT else "uint32"
         self._bfloat = "float64" if IS64BIT else "float32"
 
-    ## test starter
+    # test starter
     # \brief Common set up
     def setUp(self):
         print "SEED =", self.__seed
@@ -249,7 +252,7 @@ class UtilsTest(unittest.TestCase):
         self._simps3.setUp()
         self._simps4.setUp()
 
-    ## test closer
+    # test closer
     # \brief Common tear down
     def tearDown(self):
         self._simps4.tearDown()
@@ -258,7 +261,7 @@ class UtilsTest(unittest.TestCase):
         self._simps.tearDown()
         self._ms.tearDown()
 
-    ## Exception tester
+    # Exception tester
     # \param exception expected exception
     # \param method called method
     # \param args list with method arguments
@@ -297,8 +300,8 @@ class UtilsTest(unittest.TestCase):
             self.assertEqual(unit if unit else 'No unit', par[2])
         else:
             self.assertEqual(unit, par[2])
-            
-    ## constructor test
+
+    # constructor test
     # \brief It tests default settings
     def test_constructor(self):
         fun = sys._getframe().f_code.co_name
@@ -314,7 +317,7 @@ class UtilsTest(unittest.TestCase):
 
         self.myAssertDict(tTnp, TangoUtils.tTnp)
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_getFullAttrName(self):
         fun = sys._getframe().f_code.co_name
@@ -339,7 +342,7 @@ class UtilsTest(unittest.TestCase):
             self.assertEqual(TangoUtils.getFullAttrName(at),
                              "tango://%s:%s/%s" % (host, port, at))
 
-    ## openProxy test
+    # openProxy test
     # \brief It tests default settings
     def test_openProxy(self):
         fun = sys._getframe().f_code.co_name
@@ -356,8 +359,9 @@ class UtilsTest(unittest.TestCase):
 
         self.myAssertRaise(PyTango.DevFailed, TangoUtils.openProxy,
                            self._simps.new_device_info_writer.name)
-    ## openProxy test
+    # openProxy test
     # \brief It tests default settings
+
     def test_wait(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -375,7 +379,7 @@ class UtilsTest(unittest.TestCase):
         self.myAssertRaise(AttributeError, TangoUtils.wait,
                            self._simps.new_device_info_writer)
 
-    ## getEnv test
+    # getEnv test
     def test_getsetEnv(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -398,7 +402,8 @@ class UtilsTest(unittest.TestCase):
                            self._simps.new_device_info_writer.name)
             self.assertEqual(vl[1], MSUtils.getEnv(
                 k, self._simps.new_device_info_writer.name))
-    ## getEnv test
+    # getEnv test
+
     def test_getsetEnvs(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -416,13 +421,13 @@ class UtilsTest(unittest.TestCase):
                 vl[0], MSUtils.getEnv(
                     k, self._simps.new_device_info_writer.name))
 
-        MSUtils.setEnvs(dict((key,arr[key][1]) for key in arr.keys()),
-                       self._simps.new_device_info_writer.name)
+        MSUtils.setEnvs(dict((key, arr[key][1]) for key in arr.keys()),
+                        self._simps.new_device_info_writer.name)
         for k, vl in arr.items():
             self.assertEqual(vl[1], MSUtils.getEnv(
                 k, self._simps.new_device_info_writer.name))
 
-    ## getEnv test
+    # getEnv test
     def test_getEnv(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -451,7 +456,7 @@ class UtilsTest(unittest.TestCase):
             self.assertEqual(vl[1], MSUtils.getEnv(
                 k, self._simps.new_device_info_writer.name))
 
-    ## getEnv test
+    # getEnv test
     def test_getEnv_2(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -482,8 +487,7 @@ class UtilsTest(unittest.TestCase):
             self.assertEqual(vl[1], MSUtils.getEnv(
                 k, self._ms.ms.keys()[0]))
 
-            
-    ## setEnv test
+    # setEnv test
     def test_setEnv_2(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -501,7 +505,7 @@ class UtilsTest(unittest.TestCase):
             self.assertEqual(
                 vl[0], MSUtils.getEnv(
                     k, self._ms.ms.keys()[0]))
-            
+
         msdp = self._ms.dps[self._ms.ms.keys()[0]]
 
         for k, vl in arr.items():
@@ -511,7 +515,7 @@ class UtilsTest(unittest.TestCase):
             en = pickle.loads(msdp.Environment[1])['new']
             self.assertEqual(en[k], MSUtils.getEnv(k, self._ms.ms.keys()[0]))
 
-    ## setEnv test
+    # setEnv test
     def test_setEnv(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -539,7 +543,7 @@ class UtilsTest(unittest.TestCase):
             self.assertEqual(en[k], MSUtils.getEnv(
                 k, self._simps.new_device_info_writer.name))
 
-    ## setEnv test
+    # setEnv test
     def test_setEnvs_2(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -559,7 +563,7 @@ class UtilsTest(unittest.TestCase):
                 vl[0], MSUtils.getEnv(
                     k, self._ms.ms.keys()[0]))
 
-        MSUtils.setEnvs(dict((key,arr[key][1]) for key in arr.keys()),
+        MSUtils.setEnvs(dict((key, arr[key][1]) for key in arr.keys()),
                         self._ms.ms.keys()[0])
         for k, vl in arr.items():
 
@@ -567,7 +571,8 @@ class UtilsTest(unittest.TestCase):
             en = pickle.loads(msdp.Environment[1])['new']
             self.assertEqual(en[k], MSUtils.getEnv(
                 k, self._ms.ms.keys()[0]))
-    ## setEnv test
+    # setEnv test
+
     def test_setEnvs(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -586,7 +591,7 @@ class UtilsTest(unittest.TestCase):
                 vl[0], MSUtils.getEnv(
                     k, self._simps.new_device_info_writer.name))
 
-        MSUtils.setEnvs(dict((key,arr[key][1]) for key in arr.keys()),
+        MSUtils.setEnvs(dict((key, arr[key][1]) for key in arr.keys()),
                         self._simps.new_device_info_writer.name)
         for k, vl in arr.items():
 
@@ -595,7 +600,7 @@ class UtilsTest(unittest.TestCase):
             self.assertEqual(en[k], MSUtils.getEnv(
                 k, self._simps.new_device_info_writer.name))
 
-    ## setEnv test
+    # setEnv test
     def test_usetEnv(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -613,7 +618,7 @@ class UtilsTest(unittest.TestCase):
                 vl[0], MSUtils.getEnv(
                     k, self._ms.ms.keys()[0]))
         msdp = self._ms.dps[self._ms.ms.keys()[0]]
-            
+
         for k, vl in arr.items():
             MSUtils.usetEnv(k, self._ms.ms.keys()[0])
 
@@ -622,7 +627,7 @@ class UtilsTest(unittest.TestCase):
             self.assertEqual('', MSUtils.getEnv(
                 k, self._ms.ms.keys()[0]))
 
-    ## getProxies test
+    # getProxies test
     def test_getProxies(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -646,7 +651,7 @@ class UtilsTest(unittest.TestCase):
         self.assertEqual(dpl[1].name(),
                          self._simps2.new_device_info_writer.name)
 
-    ## getDeviceName test
+    # getDeviceName test
     def test_getDeviceName(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -670,7 +675,7 @@ class UtilsTest(unittest.TestCase):
                     pass
             self.assertEqual(dd, dv)
 
-    ## getDeviceName test
+    # getDeviceName test
     def test_getDeviceName_OK(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -685,7 +690,7 @@ class UtilsTest(unittest.TestCase):
             dv = src[0] if len(src) else ''
             self.assertEqual(dd, dv)
 
-    ## getDeviceName test
+    # getDeviceName test
     def test_getDeviceName_db(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -709,7 +714,7 @@ class UtilsTest(unittest.TestCase):
                     pass
             self.assertEqual(dd, dv)
 
-    ## getDeviceName test
+    # getDeviceName test
     def test_getMacroServer(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -733,7 +738,7 @@ class UtilsTest(unittest.TestCase):
             ms = MSUtils.getMacroServer(db, ar[1])
             self.assertEqual(ms, ar[0])
 
-    ## getDeviceName test
+    # getDeviceName test
     def test_getMacroServer_db(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -766,7 +771,7 @@ class UtilsTest(unittest.TestCase):
                     self.assertEqual(ms, sr)
                 alldoors.update(sdoors)
 
-    ## getDeviceName test
+    # getDeviceName test
     def test_getFullDeviceNames_empty(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -791,7 +796,7 @@ class UtilsTest(unittest.TestCase):
         dd = PoolUtils.getFullDeviceNames([pool], [arr[4]["name"]])
         self.assertEqual(dd, {"null": ""})
 
-    ## getDeviceName test
+    # getDeviceName test
     def test_getFullDeviceNames_pool1(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -874,7 +879,7 @@ class UtilsTest(unittest.TestCase):
         dd = PoolUtils.getFullDeviceNames([pool, pool2], lst)
         self.assertEqual(dd, res)
 
-    ## getDeviceName test
+    # getDeviceName test
     def test_getAliases_empty(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -899,7 +904,7 @@ class UtilsTest(unittest.TestCase):
         dd = PoolUtils.getAliases([pool], [arr[4]["full_name"]])
         self.assertEqual(dd, {})
 
-    ## getDeviceName test
+    # getDeviceName test
     def test_getAliases_pool1(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -982,7 +987,7 @@ class UtilsTest(unittest.TestCase):
         dd = PoolUtils.getAliases([pool, pool2], lst)
         self.assertEqual(dd, res)
 
-    ## getDeviceName test
+    # getDeviceName test
     def test_getMntGrpName_empty(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -1067,7 +1072,7 @@ class UtilsTest(unittest.TestCase):
         dd = PoolUtils.getMntGrpName([pool, pool2], "adsasd")
         self.assertEqual(dd, '')
 
-    ## getDeviceName test
+    # getDeviceName test
     def test_getMntGrps(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -1107,7 +1112,7 @@ class UtilsTest(unittest.TestCase):
         res.extend([a["name"] for a in arr2])
         self.assertEqual(dd, res)
 
-    ## getDeviceControllers test
+    # getDeviceControllers test
     def test_getDeviceControllers_empty(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -1135,7 +1140,7 @@ class UtilsTest(unittest.TestCase):
         dd = PoolUtils.getDeviceControllers([pool], "sdfds")
         self.assertEqual(dd, {})
 
-    ## getDeviceControllers test
+    # getDeviceControllers test
     def test_getDeviceControllers_pool1(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -1206,7 +1211,7 @@ class UtilsTest(unittest.TestCase):
         dd = PoolUtils.getDeviceControllers([pool, pool2], lst)
         self.assertEqual(dd, res)
 
-    ## getChannelSources test
+    # getChannelSources test
     def test_getChannelSources_empty(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -1234,7 +1239,7 @@ class UtilsTest(unittest.TestCase):
         dd = PoolUtils.getChannelSources([pool], "sdfds")
         self.assertEqual(dd, {})
 
-    ## getChannelSources test
+    # getChannelSources test
     def test_getChannelSources_pool1(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -1305,7 +1310,7 @@ class UtilsTest(unittest.TestCase):
         dd = PoolUtils.getChannelSources([pool, pool2], lst)
         self.assertEqual(dd, res)
 
-    ## getExperimentalChannels test
+    # getExperimentalChannels test
     def test_getExperimentalChannels_pool1(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -1345,7 +1350,7 @@ class UtilsTest(unittest.TestCase):
         res.extend([a[0] for a in arr2])
         self.assertEqual(dd, res)
 
-    ## getMotorpNames test
+    # getMotorpNames test
     def test_getMotorNames_pool1(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -1600,7 +1605,6 @@ class UtilsTest(unittest.TestCase):
         self.assertEqual(Utils.getRecord(node[0]),
                          "%s:%s/%s/%s" % (host, port, dev, rec))
 
-        
     def test_getRecord_property(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -1735,7 +1739,6 @@ class UtilsTest(unittest.TestCase):
         self.assertEqual(Utils.getRecord(node[0]),
                          "%s:%s/%s/%s()" % (host, port, dev, rec))
 
-        
     def test_stringToDictJson(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -2013,11 +2016,11 @@ class UtilsTest(unittest.TestCase):
             'ScalarFloat': [[], 'float32', 'eV'],
             'ScalarDouble': [[], 'float64', 'GeV'],
             'ScalarString': [[], 'string', 'mm N'],
-            'ScalarULong64': [[], 'uint64', ''  if TGVER < 9 else 'No unit'],
+            'ScalarULong64': [[], 'uint64', '' if TGVER < 9 else 'No unit'],
         }
 
         arr2 = {
-            'ScalarEncoded': [[], 'encoded', 'No unit'  if TGVER < 9 else ''],
+            'ScalarEncoded': [[], 'encoded', 'No unit' if TGVER < 9 else ''],
         }
 
         for k, ar in arr.items():

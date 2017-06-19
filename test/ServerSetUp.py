@@ -15,8 +15,8 @@
 #
 #    You should have received a copy of the GNU General Public License
 #    along with nexdatas.  If not, see <http://www.gnu.org/licenses/>.
-## \package test nexdatas
-## \file ServerSetUp.py
+# \package test nexdatas
+# \file ServerSetUp.py
 # class with server settings
 #
 import unittest
@@ -28,23 +28,24 @@ import PyTango
 import time
 
 
-## test fixture
+# test fixture
 class ServerSetUp(object):
 
-    ## constructor
+    # constructor
     # \brief defines server parameters
+
     def __init__(self, device="testp09/testnrs/testr228", instance="NRSTEST"):
-        ## information about tango writer
+        # information about tango writer
         self.new_device_info_writer = PyTango.DbDevInfo()
         self.new_device_info_writer._class = "NXSRecSelector"
         self.new_device_info_writer.server = "NXSRecSelector/%s" % instance
         self.new_device_info_writer.name = device
-        ## server instance
+        # server instance
         self.instance = instance
 
         self._psub = None
 
-    ## test starter
+    # test starter
     # \brief Common set up of Tango Server
     def setUp(self):
         print "tearing down ..."
@@ -78,7 +79,7 @@ class ServerSetUp(object):
             cnt += 1
         print ""
 
-    ## test closer
+    # test closer
     # \brief Common tear down oif Tango Server
     def tearDown(self):
         print "tearing down ..."

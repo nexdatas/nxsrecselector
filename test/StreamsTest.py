@@ -15,8 +15,8 @@
 #
 #    You should have received a copy of the GNU General Public License
 #    along with nexdatas.  If not, see <http://www.gnu.org/licenses/>.
-## \package test nexdatas
-## \file StreamsTest.py
+# \package test nexdatas
+# \file StreamsTest.py
 # unittests for field Tags running Tango Server
 #
 import unittest
@@ -31,15 +31,16 @@ from cStringIO import StringIO
 
 from nxsrecconfig import Streams
 
-## if 64-bit machione
+# if 64-bit machione
 IS64BIT = (struct.calcsize("P") == 8)
 
 
-## test fixture
+# test fixture
 class StreamsTest(unittest.TestCase):
 
-    ## constructor
+    # constructor
     # \param methodName name of the test method
+
     def __init__(self, methodName):
         unittest.TestCase.__init__(self, methodName)
         try:
@@ -64,7 +65,7 @@ class StreamsTest(unittest.TestCase):
         size = self.__rnd.randint(1, maxsize)
         return ''.join(self.__rnd.choice(letters) for _ in range(size))
 
-    ## test starter
+    # test starter
     # \brief Common set up
     def setUp(self):
         print "SEED =", self.__seed
@@ -80,7 +81,7 @@ class StreamsTest(unittest.TestCase):
         Streams.log_info = None
         Streams.log_debug = None
 
-    ## test closer
+    # test closer
     # \brief Common tear down
     def tearDown(self):
         sys.stdout = self.old_stdout
@@ -193,7 +194,7 @@ class StreamsTest(unittest.TestCase):
             sys.stdout = self.old_stdout
             sys.stderr = self.old_stderr
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_error_log(self):
         fun = sys._getframe().f_code.co_name
@@ -329,7 +330,7 @@ class StreamsTest(unittest.TestCase):
             sys.stdout = self.old_stdout
             sys.stderr = self.old_stderr
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_info_log(self):
         fun = sys._getframe().f_code.co_name
@@ -398,7 +399,7 @@ class StreamsTest(unittest.TestCase):
             sys.stdout = self.old_stdout
             sys.stderr = self.old_stderr
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_debug_log(self):
         fun = sys._getframe().f_code.co_name

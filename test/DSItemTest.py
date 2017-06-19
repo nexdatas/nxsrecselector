@@ -15,29 +15,30 @@
 #
 #    You should have received a copy of the GNU General Public License
 #    along with nexdatas.  If not, see <http://www.gnu.org/licenses/>.
-## \package test nexdatas
-## \file DSItemTest.py
+# \package test nexdatas
+# \file DSItemTest.py
 # unittests for field Tags running Tango Server
 #
 import unittest
-#import os
+# import os
 import sys
-#import subprocess
-#import random
+# import subprocess
+# import random
 import struct
 
 from nxsrecconfig.Describer import DSItem
 
 
-## if 64-bit machione
+# if 64-bit machione
 IS64BIT = (struct.calcsize("P") == 8)
 
 
-## test fixture
+# test fixture
 class DSItemTest(unittest.TestCase):
 
-    ## constructor
+    # constructor
     # \param methodName name of the test method
+
     def __init__(self, methodName):
         unittest.TestCase.__init__(self, methodName)
 
@@ -49,17 +50,17 @@ class DSItemTest(unittest.TestCase):
         self._buint = "uint64" if IS64BIT else "uint32"
         self._bfloat = "float64" if IS64BIT else "float32"
 
-    ## test starter
+    # test starter
     # \brief Common set up
     def setUp(self):
         print "\nsetting up..."
 
-    ## test closer
+    # test closer
     # \brief Common tear down
     def tearDown(self):
         print "tearing down ..."
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_constructor(self):
         fun = sys._getframe().f_code.co_name
@@ -109,7 +110,7 @@ class DSItemTest(unittest.TestCase):
         self.assertEqual(el.dstype, "1")
         self.assertEqual(el.record, "1.234")
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_constructor_dsitem(self):
         fun = sys._getframe().f_code.co_name

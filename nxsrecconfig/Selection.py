@@ -23,6 +23,7 @@ import json
 
 
 class Selection(dict):
+
     """ Selection Dictionary which contains the following records:
     {
     "Timer":  '[]',

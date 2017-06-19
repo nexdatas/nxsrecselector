@@ -40,6 +40,7 @@ def read(fname):
 
 
 class TestCommand(Command):
+
     """ test command class
     """
 

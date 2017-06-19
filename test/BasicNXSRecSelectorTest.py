@@ -15,8 +15,8 @@
 #
 #    You should have received a copy of the GNU General Public License
 #    along with nexdatas.  If not, see <http://www.gnu.org/licenses/>.
-## \package test nexdatas
-## \file NXSRecSelectorTest.py
+# \package test nexdatas
+# \file NXSRecSelectorTest.py
 # unittests for field Tags running Tango Server
 #
 import unittest
@@ -39,11 +39,12 @@ from nxsrecconfig.ProfileManager import ProfileManager
 from nxsrecconfig.Utils import TangoUtils, MSUtils
 
 
-## test fixture
+# test fixture
 class BasicNXSRecSelectorTest(BasicSettingsTest.BasicSettingsTest):
 
-    ## constructor
+    # constructor
     # \param methodName name of the test method
+
     def __init__(self, methodName):
         BasicSettingsTest.BasicSettingsTest.__init__(self, methodName)
 
@@ -52,24 +53,24 @@ class BasicNXSRecSelectorTest(BasicSettingsTest.BasicSettingsTest):
             device="testp09/testnrs2/testr228",
             instance="NRS2TEST")
 
-    ## test starter
+    # test starter
     # \brief Common set up of Tango Server
     def setUp(self):
         BasicSettingsTest.BasicSettingsTest.setUp(self)
         self._sv.setUp()
 
-    ## test starter
+    # test starter
     # \brief Common set up of Tango Server
     def mySetUp(self):
         self._sv2.setUp()
 
-    ## test closer
+    # test closer
     # \brief Common tear down oif Tango Server
     def tearDown(self):
         self._sv.tearDown()
         BasicSettingsTest.BasicSettingsTest.tearDown(self)
 
-    ## test closer
+    # test closer
     # \brief Common tear down oif Tango Server
     def myTearDown(self):
         self._sv2.tearDown()
@@ -89,7 +90,7 @@ class BasicNXSRecSelectorTest(BasicSettingsTest.BasicSettingsTest):
             {name: value})
         rc.Init()
 
-    ## opens config server
+    # opens config server
     # \param args connection arguments
     # \returns NXSConfigServer instance
     def openRecSelector(self):
@@ -121,7 +122,7 @@ class BasicNXSRecSelectorTest(BasicSettingsTest.BasicSettingsTest):
         self.assertEqual(xmlc.state(), PyTango.DevState.ON)
         return xmlc
 
-    ## opens config server
+    # opens config server
     # \param args connection arguments
     # \returns NXSConfigServer instance
     def openRecSelector2(self):

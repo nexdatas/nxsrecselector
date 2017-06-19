@@ -15,8 +15,8 @@
 #
 #    You should have received a copy of the GNU General Public License
 #    along with nexdatas.  If not, see <http://www.gnu.org/licenses/>.
-## \package test nexdatas
-## \file ExDSItemTest.py
+# \package test nexdatas
+# \file ExDSItemTest.py
 # unittests for field Tags running Tango Server
 #
 import unittest
@@ -29,15 +29,16 @@ import struct
 from nxsrecconfig.Describer import DSItem, ExDSItem
 
 
-## if 64-bit machione
+# if 64-bit machione
 IS64BIT = (struct.calcsize("P") == 8)
 
 
-## test fixture
+# test fixture
 class ExDSItemTest(unittest.TestCase):
 
-    ## constructor
+    # constructor
     # \param methodName name of the test method
+
     def __init__(self, methodName):
         unittest.TestCase.__init__(self, methodName)
 
@@ -49,17 +50,17 @@ class ExDSItemTest(unittest.TestCase):
         self._buint = "uint64" if IS64BIT else "uint32"
         self._bfloat = "float64" if IS64BIT else "float32"
 
-    ## test starter
+    # test starter
     # \brief Common set up
     def setUp(self):
         print "\nsetting up..."
 
-    ## test closer
+    # test closer
     # \brief Common tear down
     def tearDown(self):
         print "tearing down ..."
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_constructor(self):
         fun = sys._getframe().f_code.co_name

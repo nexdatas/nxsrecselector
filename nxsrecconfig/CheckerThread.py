@@ -30,6 +30,7 @@ ATTRIBUTESTOCHECK = ["Value", "Position", "Counts", "Data",
 
 
 class TangoDSItem(object):
+
     """ Tango DataSource item
     """
     __slots__ = 'name', 'device', 'attr'
@@ -53,6 +54,7 @@ class TangoDSItem(object):
 
 
 class CheckerItem(list):
+
     """ Checker list Item
     """
 
@@ -74,6 +76,7 @@ class CheckerItem(list):
 
 
 class CheckerThread(threading.Thread):
+
     """ Single CheckerThread
     """
 
@@ -144,10 +147,12 @@ class CheckerThread(threading.Thread):
 
 
 class AlarmStateError(Exception):
+
     """ Alarm State Exception class
     """
 
 
 class FaultStateError(Exception):
+
     """ Fault State Exception class
     """

@@ -57,6 +57,7 @@ class TestServer(PyTango.Device_4Impl):
     #------------------------------------------------------------------
     #    Device constructor
     #------------------------------------------------------------------
+
     def __init__(self, cl, name):
         PyTango.Device_4Impl.__init__(self, cl, name)
 
@@ -181,6 +182,7 @@ class TestServer(PyTango.Device_4Impl):
     #------------------------------------------------------------------
     #    Device initialization
     #------------------------------------------------------------------
+
     def init_device(self):
 #        print "In ", self.get_name(), "::init_device()"
         self.set_state(PyTango.DevState.ON)
@@ -988,21 +990,21 @@ class TestServer(PyTango.Device_4Impl):
     #    Write ImageULong64 attribute
     #------------------------------------------------------------------
     def write_ImageULong64(self, attr):
-#        print "In ", self.get_name(), "::write_ImageULong64()"
+        #        print "In ", self.get_name(), "::write_ImageULong64()"
 
         #    Add your own code here
         self.attr_ImageULong64 = attr.get_write_value()
-#        print "Attribute value = ", self.attr_ImageULong64
+        #        print "Attribute value = ", self.attr_ImageULong64
 
     #------------------------------------------------------------------
     #    Read ImageFloat attribute
     #------------------------------------------------------------------
     def read_ImageFloat(self, attr):
-#        print "In ", self.get_name(), "::read_ImageFloat()"
+        #        print "In ", self.get_name(), "::read_ImageFloat()"
 
         #    Add your own code here
         attr.set_value(self.attr_ImageFloat)
-#        print self.attr_ImageFloat
+        #        print self.attr_ImageFloat
 
     #------------------------------------------------------------------
     #    Write ImageFloat attribute
@@ -1018,41 +1020,41 @@ class TestServer(PyTango.Device_4Impl):
     #    Read ImageDouble attribute
     #------------------------------------------------------------------
     def read_ImageDouble(self, attr):
-#        print "In ", self.get_name(), "::read_ImageDouble()"
+        #        print "In ", self.get_name(), "::read_ImageDouble()"
 
         #    Add your own code here
         attr.set_value(self.attr_ImageDouble)
-#        print self.attr_ImageDouble
+        #        print self.attr_ImageDouble
 
     #------------------------------------------------------------------
     #    Write ImageDouble attribute
     #------------------------------------------------------------------
     def write_ImageDouble(self, attr):
-#        print "In ", self.get_name(), "::write_ImageDouble()"
+        #        print "In ", self.get_name(), "::write_ImageDouble()"
 
         #    Add your own code here
         self.attr_ImageDouble = attr.get_write_value()
-#        print "Attribute value = ", self.attr_ImageDouble
+        #        print "Attribute value = ", self.attr_ImageDouble
 
     #------------------------------------------------------------------
     #    Read ImageString attribute
     #------------------------------------------------------------------
     def read_ImageString(self, attr):
-#        print "In ", self.get_name(), "::read_ImageString()"
+        #        print "In ", self.get_name(), "::read_ImageString()"
 
         #    Add your own code here
         attr.set_value(self.attr_ImageString)
-#        print self.attr_ImageString
+        #        print self.attr_ImageString
 
     #------------------------------------------------------------------
     #    Write ImageString attribute
     #------------------------------------------------------------------
     def write_ImageString(self, attr):
-#        print "In ", self.get_name(), "::write_ImageString()"
+        #        print "In ", self.get_name(), "::write_ImageString()"
 
         #    Add your own code here
         self.attr_ImageString = attr.get_write_value()
-#        print "Attribute value = ", self.attr_ImageString
+        #        print "Attribute value = ", self.attr_ImageString
 
     #==================================================================
     #
@@ -1068,7 +1070,7 @@ class TestServer(PyTango.Device_4Impl):
     #    argout: DevBoolean    ScalarBoolean
     #------------------------------------------------------------------
     def GetBoolean(self):
-#        print "In ", self.get_name(), "::GetBoolean()"
+        #        print "In ", self.get_name(), "::GetBoolean()"
         #    Add your own code here
 
         return self.attr_ScalarBoolean
@@ -1081,7 +1083,7 @@ class TestServer(PyTango.Device_4Impl):
     #    argout: DevShort    ScalarShort
     #------------------------------------------------------------------
     def GetShort(self):
-#        print "In ", self.get_name(), "::GetShort()"
+        #        print "In ", self.get_name(), "::GetShort()"
         #    Add your own code here
 
         return self.attr_ScalarShort
@@ -1094,7 +1096,7 @@ class TestServer(PyTango.Device_4Impl):
     #    argout: DevLong    ScalarLong
     #------------------------------------------------------------------
     def GetLong(self):
-#        print "In ", self.get_name(), "::GetLong()"
+        #        print "In ", self.get_name(), "::GetLong()"
         #    Add your own code here
 
         return self.attr_ScalarLong
@@ -1120,7 +1122,7 @@ class TestServer(PyTango.Device_4Impl):
     #    argout: DevFloat    ScalarFloat
     #------------------------------------------------------------------
     def GetFloat(self):
-#        print "In ", self.get_name(), "::GetFloat()"
+        #        print "In ", self.get_name(), "::GetFloat()"
         #    Add your own code here
 
         return self.attr_ScalarFloat
@@ -1146,7 +1148,7 @@ class TestServer(PyTango.Device_4Impl):
     #    argout: DevUShort    ScalarUShort
     #------------------------------------------------------------------
     def GetUShort(self):
-#        print "In ", self.get_name(), "::GetUShort()"
+        #        print "In ", self.get_name(), "::GetUShort()"
         #    Add your own code here
 
         return self.attr_ScalarUShort
@@ -1159,7 +1161,7 @@ class TestServer(PyTango.Device_4Impl):
     #    argout: DevULong    ScalarULong
     #------------------------------------------------------------------
     def GetULong(self):
-#        print "In ", self.get_name(), "::GetULong()"
+        #        print "In ", self.get_name(), "::GetULong()"
         #    Add your own code here
 
         return self.attr_ScalarULong
@@ -1185,7 +1187,7 @@ class TestServer(PyTango.Device_4Impl):
     #    argout: DevString    ScalarString
     #------------------------------------------------------------------
     def GetString(self):
-#        print "In ", self.get_name(), "::GetString()"
+        #        print "In ", self.get_name(), "::GetString()"
         #    Add your own code here
 
         return self.attr_ScalarString
@@ -1195,7 +1197,7 @@ class TestServer(PyTango.Device_4Impl):
     #
     #------------------------------------------------------------------
     def CreateAttribute(self, name):
-#        print "In ", self.get_name(), "::CreateDataSource()"
+        #        print "In ", self.get_name(), "::CreateDataSource()"
         #    Add your own code here
         attr = PyTango.Attr(name, PyTango.DevString, PyTango.READ_WRITE)
         self.add_attribute(attr, self.read_General, self.write_General)
@@ -1546,7 +1548,7 @@ class TestServerClass(PyTango.DeviceClass):
     def __init__(self, name):
         PyTango.DeviceClass.__init__(self, name)
         self.set_type(name)
-#        print "In TestServerClass  constructor"
+        #        print "In TestServerClass  constructor"
 
 #==================================================================
 #
@@ -1559,7 +1561,7 @@ if __name__ == '__main__':
         py.add_class(TestServerClass, TestServer, 'TestServer')
 
         U = PyTango.Util.instance()
-        
+
         U.server_init()
         U.server_run()
 

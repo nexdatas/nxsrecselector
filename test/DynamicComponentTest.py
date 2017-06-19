@@ -15,8 +15,8 @@
 #
 #    You should have received a copy of the GNU General Public License
 #    along with nexdatas.  If not, see <http://www.gnu.org/licenses/>.
-## \package test nexdatas
-## \file DynamicComponentTest.py
+# \package test nexdatas
+# \file DynamicComponentTest.py
 # unittests for TangoDsItemTest running Tango Server
 #
 import unittest
@@ -49,25 +49,25 @@ from nxsrecconfig.DynamicComponent import DynamicComponent
 from nxsrecconfig.Utils import TangoUtils, MSUtils
 from nxsconfigserver.XMLConfigurator import XMLConfigurator
 
-## if 64-bit machione
+# if 64-bit machione
 IS64BIT = (struct.calcsize("P") == 8)
 
-## list of available databases
+# list of available databases
 DB_AVAILABLE = []
 
 try:
     import MySQLdb
-    ## connection arguments to MYSQL DB
+    # connection arguments to MYSQL DB
     mydb = MySQLdb.connect({})
     mydb.close()
     DB_AVAILABLE.append("MYSQL")
 except:
     try:
         import MySQLdb
-    ## connection arguments to MYSQL DB
+    # connection arguments to MYSQL DB
         args = {'host': u'localhost', 'db': u'nxsconfig',
                 'read_default_file': u'/etc/my.cnf', 'use_unicode': True}
-    ## inscance of MySQLdb
+    # inscance of MySQLdb
         mydb = MySQLdb.connect(**args)
         mydb.close()
         DB_AVAILABLE.append("MYSQL")
@@ -76,11 +76,11 @@ except:
             import MySQLdb
             from os.path import expanduser
             home = expanduser("~")
-        ## connection arguments to MYSQL DB
+        # connection arguments to MYSQL DB
             args2 = {'host': u'localhost', 'db': u'nxsconfig',
                      'read_default_file': u'%s/.my.cnf' % home,
                      'use_unicode': True}
-        ## inscance of MySQLdb
+        # inscance of MySQLdb
             mydb = MySQLdb.connect(**args2)
             mydb.close()
             DB_AVAILABLE.append("MYSQL")
@@ -93,11 +93,12 @@ except:
             print "MYSQL not available"
 
 
-## test fixture
+# test fixture
 class DynamicComponentTest(unittest.TestCase):
 
-    ## constructor
+    # constructor
     # \param methodName name of the test method
+
     def __init__(self, methodName):
         unittest.TestCase.__init__(self, methodName)
 
@@ -148,11 +149,11 @@ class DynamicComponentTest(unittest.TestCase):
                         "uint": "NX_UINT64",
                         "string": "NX_CHAR",
                         "bool": "NX_BOOLEAN"}
-        ## default zone
+        # default zone
         self.__defaultzone = 'Europe/Berlin'
-        ## default mntgrp
+        # default mntgrp
         self.__defaultmntgrp = 'nxsmntgrp'
-        ## default path
+        # default path
         self.__defaultpath = \
             '/scan$var.serialno:NXentry/NXinstrument/collection'
 
@@ -955,7 +956,7 @@ class DynamicComponentTest(unittest.TestCase):
             ),
         }
 
-    ## test starter
+    # test starter
     # \brief Common set up
     def setUp(self):
         print "SEED =", self.__seed
@@ -963,7 +964,7 @@ class DynamicComponentTest(unittest.TestCase):
         self._simps.setUp()
         print "\nsetting up..."
 
-    ## test closer
+    # test closer
     # \brief Common tear down
     def tearDown(self):
         print "tearing down ..."
@@ -975,7 +976,7 @@ class DynamicComponentTest(unittest.TestCase):
         size = self.__rnd.randint(1, maxsize)
         return ''.join(self.__rnd.choice(letters) for _ in range(size))
 
-    ## Exception tester
+    # Exception tester
     # \param exception expected exception
     # \param method called method
     # \param args list with method arguments
@@ -1007,7 +1008,7 @@ class DynamicComponentTest(unittest.TestCase):
                 logger.debug("%s , %s" % (str(v), str(dct2[k])))
                 self.assertEqual(v, dct2[k])
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_create_remove(self):
         fun = sys._getframe().f_code.co_name
@@ -1063,7 +1064,7 @@ class DynamicComponentTest(unittest.TestCase):
 
         self.myAssertRaise(Exception, dc.remove, "sdfsdf")
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_create_dict(self):
         fun = sys._getframe().f_code.co_name
@@ -1193,7 +1194,7 @@ class DynamicComponentTest(unittest.TestCase):
             comp = self._cf.dp.Components([cpname])[0]
             self.assertEqual(cps[lb], comp)
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_create_dict_type(self):
         fun = sys._getframe().f_code.co_name
@@ -1220,7 +1221,7 @@ class DynamicComponentTest(unittest.TestCase):
             comp = self._cf.dp.Components([cpname])[0]
             self.assertEqual(cps["type"] % nxstp, comp)
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_create_dict_shape(self):
         fun = sys._getframe().f_code.co_name
@@ -1261,7 +1262,7 @@ class DynamicComponentTest(unittest.TestCase):
             comp = self._cf.dp.Components([cpname])[0]
             self.assertEqual(cps["shape"] % mstr, comp)
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_create_dict_shapetype(self):
         fun = sys._getframe().f_code.co_name
@@ -1413,7 +1414,7 @@ class DynamicComponentTest(unittest.TestCase):
             simps3.tearDown()
             simps2.tearDown()
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_create_dict_fieldpath(self):
         fun = sys._getframe().f_code.co_name
@@ -1624,7 +1625,7 @@ class DynamicComponentTest(unittest.TestCase):
             simps3.tearDown()
             simps2.tearDown()
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_create_dict_datasource_attr(self):
         fun = sys._getframe().f_code.co_name
@@ -1726,7 +1727,7 @@ class DynamicComponentTest(unittest.TestCase):
             simps3.tearDown()
             simps2.tearDown()
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_create_step(self):
         fun = sys._getframe().f_code.co_name
@@ -1822,7 +1823,7 @@ class DynamicComponentTest(unittest.TestCase):
 #            print "COMP", comp
             self.assertEqual(cps[lb], comp)
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_create_step_init(self):
         fun = sys._getframe().f_code.co_name
@@ -1919,7 +1920,7 @@ class DynamicComponentTest(unittest.TestCase):
 #            print "COMP", comp
             self.assertEqual(cps[lb], comp)
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_create_step_no_type(self):
         fun = sys._getframe().f_code.co_name
@@ -1948,7 +1949,7 @@ class DynamicComponentTest(unittest.TestCase):
 #            self.assertEqual(cps["type"] % nxstp, comp)
             self.assertEqual(cps["type"] % "NX_CHAR", comp)
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_create_init_no_type(self):
         fun = sys._getframe().f_code.co_name
@@ -1975,7 +1976,7 @@ class DynamicComponentTest(unittest.TestCase):
 #            self.assertEqual(cps["type"] % nxstp, comp)
             self.assertEqual(cps["type"] % "NX_CHAR", comp)
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_create_step_type_param(self):
         fun = sys._getframe().f_code.co_name
@@ -2005,7 +2006,7 @@ class DynamicComponentTest(unittest.TestCase):
             comp = self._cf.dp.Components([cpname])[0]
             self.assertEqual(cps["type"] % nxstp, comp)
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_create_init_type_param(self):
         fun = sys._getframe().f_code.co_name
@@ -2032,7 +2033,7 @@ class DynamicComponentTest(unittest.TestCase):
             comp = self._cf.dp.Components([cpname])[0]
             self.assertEqual(cps["type"] % nxstp, comp)
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_create_step_shape(self):
         fun = sys._getframe().f_code.co_name
@@ -2076,7 +2077,7 @@ class DynamicComponentTest(unittest.TestCase):
             comp = self._cf.dp.Components([cpname])[0]
             self.assertEqual(cps["shape"] % mstr, comp)
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_create_init_shape(self):
         fun = sys._getframe().f_code.co_name
@@ -2117,7 +2118,7 @@ class DynamicComponentTest(unittest.TestCase):
             comp = self._cf.dp.Components([cpname])[0]
             self.assertEqual(cps["shape"] % mstr, comp)
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_create_step_shapetype(self):
         fun = sys._getframe().f_code.co_name
@@ -2292,7 +2293,7 @@ class DynamicComponentTest(unittest.TestCase):
         finally:
             pass
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_create_init_shapetype(self):
         fun = sys._getframe().f_code.co_name
@@ -2313,7 +2314,7 @@ class DynamicComponentTest(unittest.TestCase):
         link = '<group name="data" type="NXdata">\n' + \
             '<link name="%s" target="/scan$var.serialno:' + \
             'NXentry/NXinstrument/collection/%s"/>\n</group>\n'
-        
+
         dimbg = '<dimensions rank="%s">\n'
         dim = '<dim index="%s" value="%s"/>\n'
         dimend = '</dimensions>\n'
@@ -2458,7 +2459,7 @@ class DynamicComponentTest(unittest.TestCase):
 
                     comp = self._cf.dp.Components([cpname])[0]
                     ds = ar["name"]
-                    lk = link  % (ds, ds)
+                    lk = link % (ds, ds)
                     self.assertEqual(
                         cps["shapetype"] % (
                             ds,
@@ -2468,7 +2469,7 @@ class DynamicComponentTest(unittest.TestCase):
         finally:
             pass
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_create_step_typeshape_tango_nods(self):
         fun = sys._getframe().f_code.co_name
@@ -2535,7 +2536,7 @@ class DynamicComponentTest(unittest.TestCase):
 
                 self.assertEqual(comp, mycps)
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_create_step_typeshape_tango_nods_attr(self):
         fun = sys._getframe().f_code.co_name
@@ -2625,7 +2626,7 @@ class DynamicComponentTest(unittest.TestCase):
             simps3.tearDown()
             simps2.tearDown()
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_create_init_typeshape_tango_nods_attr(self):
         fun = sys._getframe().f_code.co_name
@@ -2702,7 +2703,7 @@ class DynamicComponentTest(unittest.TestCase):
                 else:
                     mycps += dsclient % (ar["name"], ar["name"])
                 mycps += fieldend + groupend + groupend
-                mycps += link #% (ar["name"], self.__defaultpath,
+                mycps += link  # % (ar["name"], self.__defaultpath,
                               #   ar["name"])
                 mycps += groupend + defend
 
@@ -2717,7 +2718,7 @@ class DynamicComponentTest(unittest.TestCase):
             simps3.tearDown()
             simps2.tearDown()
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_create_init_typeshape_tango_nods(self):
         fun = sys._getframe().f_code.co_name
@@ -2784,7 +2785,7 @@ class DynamicComponentTest(unittest.TestCase):
 
                 self.assertEqual(comp, mycps)
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_create_step_typeshape_tango(self):
         fun = sys._getframe().f_code.co_name
@@ -2940,7 +2941,7 @@ class DynamicComponentTest(unittest.TestCase):
 
                 self.assertEqual(comp, mycps)
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_create_init_typeshape_tango(self):
         fun = sys._getframe().f_code.co_name
@@ -3014,7 +3015,7 @@ class DynamicComponentTest(unittest.TestCase):
                                       json.dumps({ds: nxstp}),
                                       json.dumps({ds: ms2}))
                 elif i == 7:
-                    dc.setDefaultLinkPath(False, self.__defaultpath,False)
+                    dc.setDefaultLinkPath(False, self.__defaultpath, False)
                     dc.setLabelParams("{}", "{}",
                                       json.dumps({ds: True}),
                                       json.dumps({ds: nxstp}),
@@ -3096,7 +3097,7 @@ class DynamicComponentTest(unittest.TestCase):
 
                 self.assertEqual(comp, mycps)
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_create_step_fieldpath(self):
         fun = sys._getframe().f_code.co_name
@@ -3290,7 +3291,7 @@ class DynamicComponentTest(unittest.TestCase):
         finally:
             pass
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_create_init_fieldpath(self):
         fun = sys._getframe().f_code.co_name
@@ -3420,7 +3421,7 @@ class DynamicComponentTest(unittest.TestCase):
                         mstr += dimend
 
                     comp = self._cf.dp.Components([cpname])[0]
-                    lk = link #% (ds, mypath, ds)
+                    lk = link  # % (ds, mypath, ds)
                     if i % 4 < 2:
                         fd = fieldbg % (ds.lower(), nxstp)
                     else:

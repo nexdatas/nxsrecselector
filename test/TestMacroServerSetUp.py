@@ -15,8 +15,8 @@
 #
 #    You should have received a copy of the GNU General Public License
 #    along with nexdatas.  If not, see <http://www.gnu.org/licenses/>.
-## \package test nexdatas
-## \file ServerSetUp.py
+# \package test nexdatas
+# \file ServerSetUp.py
 # class with server settings
 #
 import unittest
@@ -29,21 +29,22 @@ import time
 import TestMacroServer
 
 
-## test fixture
+# test fixture
 class TestMacroServerSetUp(object):
 
-    ## constructor
+    # constructor
     # \brief defines server parameters
+
     def __init__(self, instance="MSTESTS1", msdevices=None, doordevices=None):
         if not isinstance(msdevices, list):
             msdevices = ["mstestp09/testts/t1r228"]
         if not isinstance(doordevices, list):
             doordevices = ["doortestp09/testts/t1r228"]
-        ## information about tango writer
+        # information about tango writer
         self.server = "MacroServer/%s" % instance
         self.door = {}
         self.ms = {}
-        ## device proxy
+        # device proxy
         self.dps = {}
         for dv in msdevices:
             self.ms[dv] = PyTango.DbDevInfo()
@@ -57,11 +58,11 @@ class TestMacroServerSetUp(object):
             self.door[dv].server = self.server
             self.door[dv].name = dv
 
-        ## server instance
+        # server instance
         self.instance = instance
         self._psub = None
 
-    ## test starter
+    # test starter
     # \brief Common set up of Tango Server
     def setUp(self):
         print "\nsetting up..."
@@ -79,7 +80,7 @@ class TestMacroServerSetUp(object):
         if devices:
             db.add_server(self.server, devices)
 
-    ## starts server
+    # starts server
     def start(self):
         path = os.path.dirname(TestMacroServer.__file__)
         if not path:
@@ -110,7 +111,7 @@ class TestMacroServerSetUp(object):
             cnt += 1
         print ""
 
-    ## test closer
+    # test closer
     # \brief Common tear down of Tango Server
     def tearDown(self):
         print "tearing down ..."
@@ -121,7 +122,7 @@ class TestMacroServerSetUp(object):
         db = PyTango.Database()
         db.delete_server(self.server)
 
-    ## stops server
+    # stops server
     def stop(self):
         output = ""
         pipe = subprocess.Popen(

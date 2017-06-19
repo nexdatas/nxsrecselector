@@ -39,6 +39,7 @@ DEFAULT_RECORD_KEYS = ['serialno', 'end_time', 'start_time',
 
 
 class ProfileManager(object):
+
     """  Manages Measurement Group and Profile from Selector"""
 
     def __init__(self, selector):

@@ -15,8 +15,8 @@
 #
 #    You should have received a copy of the GNU General Public License
 #    along with nexdatas.  If not, see <http://www.gnu.org/licenses/>.
-## \package test nexdatas
-## \file runtest.py
+# \package test nexdatas
+# \file runtest.py
 # the unittest runner
 #
 
@@ -27,12 +27,12 @@ import unittest
 import logging
 from optparse import OptionParser
 
-#import TangoDataWriterTest
-#import DescriberTest
+# import TangoDataWriterTest
+# import DescriberTest
 
 import PyTango
 
-## list of available databases
+# list of available databases
 DB_AVAILABLE = []
 
 
@@ -68,10 +68,10 @@ import Converter3to2Test
 import Converter2to3Test
 import StreamsTest
 
-#import TestServerSetUp
+# import TestServerSetUp
 
 
-## main function
+# main function
 def main():
     levels = {'debug': logging.DEBUG,
               'info': logging.INFO,
@@ -93,10 +93,10 @@ def main():
         level = levels.get(level_name, logging.NOTSET)
         logging.basicConfig(level=level)
 
-    ## test server
+    # test server
     ts = None
 
-    ## test suit
+    # test suit
     basicsuite = unittest.TestSuite()
     profilesuite = unittest.TestSuite()
     settingssuite1 = unittest.TestSuite()
@@ -169,7 +169,6 @@ def main():
     settingssuite2b.addTests(
         unittest.defaultTestLoader.loadTestsFromModule(ExtraSettings2Test))
 
-
     serversuite1.addTests(
         unittest.defaultTestLoader.loadTestsFromModule(BasicNXSRecSelectorTest))
 
@@ -182,7 +181,7 @@ def main():
     serversuite2b.addTests(
         unittest.defaultTestLoader.loadTestsFromModule(ExtraNXSRecSelector2Test))
 
-    ## test runner
+    # test runner
     runner = unittest.TextTestRunner()
 
     import argparse
@@ -191,7 +190,7 @@ def main():
                         help='suite names: all, basic, '
                         'basicsettings, basicserver, '
                         'extrasettings, extraserver '
-                    )
+                        )
     options = parser.parse_args()
 
     namesuite = {
@@ -213,7 +212,7 @@ def main():
 
     suite = unittest.TestSuite(ts)
 
-    ## test result
+    # test result
     result = runner.run(suite).wasSuccessful()
     sys.exit(not result)
 
