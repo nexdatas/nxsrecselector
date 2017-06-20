@@ -1745,7 +1745,7 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
                     lrs.importMntGrp()
                     mynewmg = json.loads(lrs.mntGrpConfiguration())
                     lmp = json.loads(lrs.profileConfiguration)
-                    
+
                     try:
                         self.myCompDict(mynewmg, myoldmg)
                         self.assertTrue(lrs.isMntGrpUpdated())

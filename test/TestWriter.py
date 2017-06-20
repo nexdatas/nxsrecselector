@@ -72,7 +72,7 @@ class NXSDataWriter(PyTango.Device_4Impl):
     #------------------------------------------------------------------
     def delete_device(self):
         """ """
-        #        print "[Device delete_device method] for device", self.get_name()
+        # print "[Device delete_device method] for device", self.get_name()
 
     #------------------------------------------------------------------
     #    Device initialization
