@@ -66,7 +66,7 @@ import Converter1to2Test
 import Converter2to1Test
 import Converter3to2Test
 import Converter2to3Test
-import StreamsTest
+import StreamSetTest
 
 # import TestServerSetUp
 
@@ -129,7 +129,7 @@ def main():
     basicsuite.addTests(
         unittest.defaultTestLoader.loadTestsFromModule(UtilsTest))
     basicsuite.addTests(
-        unittest.defaultTestLoader.loadTestsFromModule(StreamsTest))
+        unittest.defaultTestLoader.loadTestsFromModule(StreamSetTest))
     basicsuite.addTests(
         unittest.defaultTestLoader.loadTestsFromModule(ConverterTest))
     basicsuite.addTests(
