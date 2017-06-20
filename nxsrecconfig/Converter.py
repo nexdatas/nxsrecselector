@@ -23,6 +23,7 @@ import json
 
 
 class ConverterXtoY(object):
+
     """ virtual selection version converter
     """
 
@@ -44,6 +45,7 @@ class ConverterXtoY(object):
 
 
 class Converter2to3(ConverterXtoY):
+
     """ Selection converter from version 2 to 3
     """
 
@@ -92,6 +94,7 @@ class Converter2to3(ConverterXtoY):
 
 
 class Converter3to2(ConverterXtoY):
+
     """ Selection converter from version 3 to 2
     """
 
@@ -149,6 +152,7 @@ class Converter3to2(ConverterXtoY):
 
 
 class Converter1to2(ConverterXtoY):
+
     """ Selection converter from version 1 to 2
     """
 
@@ -194,6 +198,7 @@ class Converter1to2(ConverterXtoY):
 
 
 class Converter2to1(ConverterXtoY):
+
     """ Selection converter from version 2 to 1
     """
 
@@ -241,6 +246,7 @@ class Converter2to1(ConverterXtoY):
 
 
 class Converter(object):
+
     """ selection version converter """
 
     def __init__(self, ver):

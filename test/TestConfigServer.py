@@ -58,6 +58,7 @@ class NXSConfigServer(PyTango.Device_4Impl):
     #------------------------------------------------------------------
     #    Device constructor
     #------------------------------------------------------------------
+
     def __init__(self, cl, name):
         PyTango.Device_4Impl.__init__(self, cl, name)
 
@@ -74,6 +75,7 @@ class NXSConfigServer(PyTango.Device_4Impl):
     #------------------------------------------------------------------
     #    Device initialization
     #------------------------------------------------------------------
+
     def init_device(self):
         # print "In ", self.get_name(), "::init_device()"
         self.set_state(PyTango.DevState.ON)
@@ -144,7 +146,8 @@ class NXSConfigServer(PyTango.Device_4Impl):
     #    Read JSONSettings attribute
     #------------------------------------------------------------------
     def read_JSONSettings(self, attr):
-        # print >> self.log_info, "In ", self.get_name(), "::read_JSONSettings()"
+        # print >> self.log_info, "In ", self.get_name(),
+        # "::read_JSONSettings()"
         attr.set_value(self.attr_JSONSettings)
 
     #------------------------------------------------------------------
@@ -222,10 +225,11 @@ class NXSConfigServer(PyTango.Device_4Impl):
     #    Description: Closes connection into the database
     #
     #------------------------------------------------------------------
+
     def Close(self):
         """ """
         # print >> self.log_info, "In ", self.get_name(), "::Close()"
- 
+
     #------------------------------------------------------------------
     #    Components command:
     #
@@ -234,6 +238,7 @@ class NXSConfigServer(PyTango.Device_4Impl):
     #    argin:  DevVarStringArray    list of component names
     #    argout: DevVarStringArray    list of required components
     #------------------------------------------------------------------
+
     def Components(self, names):
         # print >> self.log_info, "In ", self.get_name(), "::Components()"
         self.cmd["VARS"].append(names)
@@ -296,7 +301,6 @@ class NXSConfigServer(PyTango.Device_4Impl):
             res.extend(self.__findText(cp, "$components."))
         return res
 
-    
     #------------------------------------------------------------------
     #    Selections command:
     #
@@ -478,7 +482,8 @@ class NXSConfigServer(PyTango.Device_4Impl):
     #    argin:  DevString    datasource name
     #------------------------------------------------------------------
     def DeleteDataSource(self, argin):
-        # print >> self.log_info, "In ", self.get_name(), "::DeleteDataSource()"
+        # print >> self.log_info, "In ", self.get_name(),
+        # "::DeleteDataSource()"
         self.cmd["VARS"].append(argin)
         self.cmd["COMMANDS"].append("DeleteDataSource")
         self.cmd["DSDICT"].pop(str(argin))

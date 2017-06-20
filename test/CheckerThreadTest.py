@@ -15,8 +15,8 @@
 #
 #    You should have received a copy of the GNU General Public License
 #    along with nexdatas.  If not, see <http://www.gnu.org/licenses/>.
-## \package test nexdatas
-## \file CheckerThreadTest.py
+# \package test nexdatas
+# \file CheckerThreadTest.py
 # unittests for TangoDsItemTest running Tango Server
 #
 import unittest
@@ -37,15 +37,16 @@ from nxsrecconfig.CheckerThread import (
     CheckerThread, CheckerItem, TangoDSItem, ATTRIBUTESTOCHECK)
 
 
-## if 64-bit machione
+# if 64-bit machione
 IS64BIT = (struct.calcsize("P") == 8)
 
 
-## test fixture
+# test fixture
 class CheckerItemTest(unittest.TestCase):
 
-    ## constructor
+    # constructor
     # \param methodName name of the test method
+
     def __init__(self, methodName):
         unittest.TestCase.__init__(self, methodName)
 
@@ -70,7 +71,7 @@ class CheckerItemTest(unittest.TestCase):
 
         self.__rnd = random.Random(self.__seed)
 
-    ## test starter
+    # test starter
     # \brief Common set up
     def setUp(self):
         print "SEED =", self.__seed
@@ -81,7 +82,7 @@ class CheckerItemTest(unittest.TestCase):
         self._simpsoff.add()
         print "\nsetting up..."
 
-    ## test closer
+    # test closer
     # \brief Common tear down
     def tearDown(self):
         print "tearing down ..."
@@ -91,7 +92,7 @@ class CheckerItemTest(unittest.TestCase):
         self._simps2.tearDown()
         self._simps.tearDown()
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_constructor(self):
         fun = sys._getframe().f_code.co_name
@@ -109,7 +110,7 @@ class CheckerItemTest(unittest.TestCase):
         self.assertTrue(isinstance(el, threading.Thread))
         self.assertEqual(el.index, idn)
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_run(self):
         fun = sys._getframe().f_code.co_name
@@ -231,7 +232,7 @@ class CheckerItemTest(unittest.TestCase):
         self.assertTrue(ci9.message is not None)
         self.assertTrue(not ci9.active)
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_run_property(self):
         fun = sys._getframe().f_code.co_name
@@ -353,7 +354,7 @@ class CheckerItemTest(unittest.TestCase):
         self.assertTrue(ci9.message is not None)
         self.assertTrue(not ci9.active)
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_run_command(self):
         fun = sys._getframe().f_code.co_name
@@ -475,7 +476,7 @@ class CheckerItemTest(unittest.TestCase):
         self.assertTrue(ci9.message is not None)
         self.assertTrue(not ci9.active)
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_run_attr(self):
         fun = sys._getframe().f_code.co_name

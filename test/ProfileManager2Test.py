@@ -15,8 +15,8 @@
 #
 #    You should have received a copy of the GNU General Public License
 #    along with nexdatas.  If not, see <http://www.gnu.org/licenses/>.
-## \package test nexdatas
-## \file ProfileManagerTest.py
+# \package test nexdatas
+# \file ProfileManagerTest.py
 # unittests for TangoDsItemTest running Tango Server
 #
 import unittest
@@ -53,28 +53,28 @@ from nxsrecconfig.ProfileManager import ProfileManager
 from nxsrecconfig.Utils import TangoUtils, MSUtils, Utils
 from nxsconfigserver.XMLConfigurator import XMLConfigurator
 
-## if 64-bit machione
+# if 64-bit machione
 IS64BIT = (struct.calcsize("P") == 8)
 
 #: tango version
 TGVER = PyTango.__version_info__[0]
 
-## list of available databases
+# list of available databases
 DB_AVAILABLE = []
 
 try:
     import MySQLdb
-    ## connection arguments to MYSQL DB
+    # connection arguments to MYSQL DB
     mydb = MySQLdb.connect({})
     mydb.close()
     DB_AVAILABLE.append("MYSQL")
 except:
     try:
         import MySQLdb
-    ## connection arguments to MYSQL DB
+    # connection arguments to MYSQL DB
         args = {'host': 'localhost', 'db': 'nxsconfig',
                 'read_default_file': '/etc/my.cnf', 'use_unicode': True}
-    ## inscance of MySQLdb
+    # inscance of MySQLdb
         mydb = MySQLdb.connect(**args)
         mydb.close()
         DB_AVAILABLE.append("MYSQL")
@@ -83,11 +83,11 @@ except:
             import MySQLdb
             from os.path import expanduser
             home = expanduser("~")
-        ## connection arguments to MYSQL DB
+        # connection arguments to MYSQL DB
             args2 = {'host': 'localhost', 'db': 'nxsconfig',
                      'read_default_file': '%s/.my.cnf' % home,
                      'use_unicode': True}
-        ## inscance of MySQLdb
+        # inscance of MySQLdb
             mydb = MySQLdb.connect(**args2)
             mydb.close()
             DB_AVAILABLE.append("MYSQL")
@@ -100,11 +100,12 @@ except:
             print "MYSQL not available"
 
 
-## test fixture
+# test fixture
 class ProfileManager2Test(unittest.TestCase):
 
-    ## constructor
+    # constructor
     # \param methodName name of the test method
+
     def __init__(self, methodName):
         unittest.TestCase.__init__(self, methodName)
 
@@ -127,15 +128,15 @@ class ProfileManager2Test(unittest.TestCase):
 
         self.__dump = {}
 
-        ## default zone
+        # default zone
         self.__defaultzone = 'Europe/Berlin'
-        ## default mntgrp
+        # default mntgrp
         self.__defaultmntgrp = 'nxsmntgrp'
-        ## default path
+        # default path
         self.__defaultpath = \
             '/scan$var.serialno:NXentry/NXinstrument/collection'
 
-        ## selection version
+        # selection version
         self.__version = nxsrecconfig.__version__
         # print self.__version
 
@@ -395,9 +396,9 @@ class ProfileManager2Test(unittest.TestCase):
             'dim4': {'tann1c': [
                 ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8',
                  ['$datasources.ann2'])],
-                     'ann2': [
-                         ('CONFIG', 'CLIENT', '', None, None)],
-                 },
+                'ann2': [
+                    ('CONFIG', 'CLIENT', '', None, None)],
+            },
             'dim5': {
                 'tann1c': [
                     ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8',
@@ -1697,7 +1698,7 @@ class ProfileManager2Test(unittest.TestCase):
             'slt1vgap': ('slt1vgap', "CLIENT", "p02/slt/exp.07"),
         }
 
-    ## test starter
+    # test starter
     # \brief Common set up
     def setUp(self):
         print "SEED =", self.__seed
@@ -1713,7 +1714,7 @@ class ProfileManager2Test(unittest.TestCase):
 #        self._simpsoff.add()
         print "\nsetting up..."
 
-    ## test closer
+    # test closer
     # \brief Common tear down
     def tearDown(self):
         print "tearing down ..."
@@ -1803,7 +1804,7 @@ class ProfileManager2Test(unittest.TestCase):
         size = self.__rnd.randint(1, maxsize)
         return ''.join(self.__rnd.choice(letters) for _ in range(size))
 
-    ## Exception tester
+    # Exception tester
     # \param exception expected exception
     # \param method called method
     # \param args list with method arguments
@@ -1844,7 +1845,7 @@ class ProfileManager2Test(unittest.TestCase):
                     print 'VALUES', k, v, dct2[k]
                 self.assertEqual(v, dct2[k])
 
-    ## constructor test
+    # constructor test
     def test_constructor_keys(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -1862,7 +1863,7 @@ class ProfileManager2Test(unittest.TestCase):
         se = Selector(msp, self.__version)
         mgt = ProfileManager(se)
 
-    ## availableMntGrps test
+    # availableMntGrps test
     def test_availableMntGrps(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -1914,7 +1915,7 @@ class ProfileManager2Test(unittest.TestCase):
             self.assertEqual(dd[0], ar["name"])
             self.assertEqual(set(dd), set([a["name"] for a in arr]))
 
-    ## availableMntGrps test
+    # availableMntGrps test
     def test_availableMntGrps_twopools(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -2001,7 +2002,7 @@ class ProfileManager2Test(unittest.TestCase):
         finally:
             tpool2.tearDown()
 
-    ## deleteProfile test
+    # deleteProfile test
     def test_deleteProfile(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -2063,7 +2064,7 @@ class ProfileManager2Test(unittest.TestCase):
             sl = self._cf.dp.availableSelections()
             self.assertEqual(set(sl), set(sl2) - set(dl))
 
-    ## deleteProfile test
+    # deleteProfile test
     def test_deleteProfile_twopools(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -2177,7 +2178,7 @@ class ProfileManager2Test(unittest.TestCase):
         finally:
             tpool2.tearDown()
 
-    ## test
+    # test
     def test_preselectedComponents(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -2215,7 +2216,7 @@ class ProfileManager2Test(unittest.TestCase):
 
             self.assertEqual(set(ac), set(acp))
 
-    ## test
+    # test
     def test_components(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -2282,7 +2283,7 @@ class ProfileManager2Test(unittest.TestCase):
             mfcp = set(tcps) | (set(tdss) & set(ac))
             self.assertEqual(set(pmcp), set(mfcp))
 
-    ## test
+    # test
     def test_cpdescritpion_unknown(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -2338,7 +2339,7 @@ class ProfileManager2Test(unittest.TestCase):
         self._cf.dp.SetCommandVariable(["MCPLIST", json.dumps(["unknown"])])
         self.assertEqual(pm.cpdescription(), [{}])
 
-    ## test
+    # test
     def test_cpdescritpion_full(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -2384,7 +2385,7 @@ class ProfileManager2Test(unittest.TestCase):
         res = pm.cpdescription(True)
         self.checkCP(res, self.rescps.keys())
 
-    ## test
+    # test
     def test_cpdescritpion_comp_nods(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -2440,7 +2441,7 @@ class ProfileManager2Test(unittest.TestCase):
             self.checkCP(res, list(set(tcps) | set(tdss) | set(mcps)),
                          strategy='STEP')
 
-    ## test
+    # test
     def test_cpdescritpion_comp_ds(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -2502,7 +2503,7 @@ class ProfileManager2Test(unittest.TestCase):
             self.checkCP(res, list(set(tcps) | set(tdss) | set(mcps)),
                          strategy='STEP')
 
-    ## test
+    # test
     def test_componentdatasources(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -2571,7 +2572,7 @@ class ProfileManager2Test(unittest.TestCase):
             self.assertEqual(mdds, set(dds))
             self.assertEqual(len(mdds), len(dds))
 
-    ## test
+    # test
     def test_datasources(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -2639,7 +2640,7 @@ class ProfileManager2Test(unittest.TestCase):
             self.assertEqual(set(tdss), set(rdss))
             self.assertEqual(len(tdss), len(rdss))
 
-    ## updateProfile test
+    # updateProfile test
     def test_updateProfile_empty(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -2734,7 +2735,7 @@ class ProfileManager2Test(unittest.TestCase):
                 mgt.deleteProfile("nxsmntgrp")
                 tmg.tearDown()
 
-    ## updateProfile test
+    # updateProfile test
     def test_updateProfile_components_nopool(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -2908,7 +2909,7 @@ class ProfileManager2Test(unittest.TestCase):
                 except:
                     pass
 
-    ## updateProfile test
+    # updateProfile test
     def test_updateProfile_nodevice(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -3032,7 +3033,7 @@ class ProfileManager2Test(unittest.TestCase):
                 except:
                     pass
 
-    ## updateProfile test
+    # updateProfile test
     def test_updateProfile_nodevice_cp(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -3155,7 +3156,7 @@ class ProfileManager2Test(unittest.TestCase):
                 except:
                     pass
 
-    ## updateProfile test
+    # updateProfile test
     def test_updateProfile_wrongdevice(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -3278,7 +3279,7 @@ class ProfileManager2Test(unittest.TestCase):
                 except:
                     pass
 
-    ## updateProfile test
+    # updateProfile test
     def test_updateProfile_components_nopool_tango(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -3509,7 +3510,7 @@ class ProfileManager2Test(unittest.TestCase):
                 except:
                     pass
 
-    ## updateProfile test
+    # updateProfile test
     def test_updateProfile_components_nopool_tango_unplottedcomponents(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -3736,12 +3737,12 @@ class ProfileManager2Test(unittest.TestCase):
                 if tgc:
                     smg = {"controllers":
                            {'__tango__':
-                              {'channels': tgc,
-                               'monitor': dv,
-                               'timer': dv,
-                               'synchronization': 0,
-                               'synchronizer': 'software',
-                           }},
+                            {'channels': tgc,
+                             'monitor': dv,
+                             'timer': dv,
+                             'synchronization': 0,
+                             'synchronizer': 'software',
+                             }},
                            "monitor": "%s" % dv,
                            "description": "Measurement Group",
                            "timer": "%s" % dv,
@@ -3753,7 +3754,7 @@ class ProfileManager2Test(unittest.TestCase):
                            "description": "Measurement Group",
                            "timer": "%s" % dv,
                            "label": "nxsmntgrp"}
-                
+
                 # print "SMG", smg
                 # print "PCNF", pcnf
                 # print "CNF", cnf
@@ -3781,7 +3782,7 @@ class ProfileManager2Test(unittest.TestCase):
                 except:
                     pass
 
-    ## updateProfile test
+    # updateProfile test
     def test_updateProfile_components_pool_tango(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -4023,12 +4024,12 @@ class ProfileManager2Test(unittest.TestCase):
                                 except:
                                     raise
                         if tgc:
-                            myctrls[cl] =  {'channels': tgc,
-                                            'monitor': ttdv,
-                                            'synchronization': 0,
-                                            'synchronizer': 'software',
-                                            'timer': ttdv,
-                                        }
+                            myctrls[cl] = {'channels': tgc,
+                                           'monitor': ttdv,
+                                           'synchronization': 0,
+                                           'synchronizer': 'software',
+                                           'timer': ttdv,
+                                           }
 
                     smg = {"controllers": myctrls,
                            "monitor": "%s" % dv,
@@ -4063,7 +4064,7 @@ class ProfileManager2Test(unittest.TestCase):
         finally:
             simp2.tearDown()
 
-    ## updateProfile test
+    # updateProfile test
     def test_updateProfile_components_pool_tango_unplottedcomponents(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -4366,7 +4367,7 @@ class ProfileManager2Test(unittest.TestCase):
                                 'timer': ttdv,
                                 'synchronization': 0,
                                 'synchronizer': 'software',
-                                }
+                            }
 
                     smg = {"controllers": myctrls,
                            "monitor": "%s" % dv,
@@ -4404,7 +4405,7 @@ class ProfileManager2Test(unittest.TestCase):
         finally:
             simp2.tearDown()
 
-    ## updateProfile test
+    # updateProfile test
     def test_updateProfile_components_mixed_tango_unplottedcomponents(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -4721,7 +4722,7 @@ class ProfileManager2Test(unittest.TestCase):
                                            'timer': ttdv,
                                            'synchronization': 0,
                                            'synchronizer': 'software',
-                                       }
+                                           }
 
                     tgc = {}
                     for ds in chds:
@@ -4763,7 +4764,7 @@ class ProfileManager2Test(unittest.TestCase):
                                                 'timer': dv,
                                                 'synchronization': 0,
                                                 'synchronizer': 'software'
-                                            }
+                                                }
 
                     smg = {"controllers": myctrls,
                            "monitor": "%s" % dv,
@@ -4801,7 +4802,7 @@ class ProfileManager2Test(unittest.TestCase):
         finally:
             simp2.tearDown()
 
-    ## updateProfile test
+    # updateProfile test
     def test_updateProfile_components_mixed_tango_orderedchannels(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -5156,11 +5157,11 @@ class ProfileManager2Test(unittest.TestCase):
                                 raise
 
                     if tgc:
-                        myctrls['__tango__'] =   {'channels': tgc,
-                                                  'monitor': dv,
-                                                  'synchronization': 0,
-                                                  'synchronizer': 'software',
-                                                  'timer': dv}
+                        myctrls['__tango__'] = {'channels': tgc,
+                                                'monitor': dv,
+                                                'synchronization': 0,
+                                                'synchronizer': 'software',
+                                                'timer': dv}
 
                     smg = {"controllers": myctrls,
                            "monitor": "%s" % dv,
@@ -5198,7 +5199,7 @@ class ProfileManager2Test(unittest.TestCase):
         finally:
             simp2.tearDown()
 
-    ## updateProfile test
+    # updateProfile test
     def test_updateProfile_components_mixed_tango_timers(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -5635,7 +5636,7 @@ class ProfileManager2Test(unittest.TestCase):
         finally:
             simp2.tearDown()
 
-    ## updateProfile test
+    # updateProfile test
     def test_updateProfile_mntGrpConfiguration_isMntGrpUpdated(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -6094,11 +6095,11 @@ class ProfileManager2Test(unittest.TestCase):
                                 raise
 
                     if tgc:
-                        myctrls['__tango__'] =  {'channels': tgc,
-                                                 'synchronization': 0,
-                                                 'synchronizer': 'software',
-                                                 'monitor': fgtm,
-                                                 'timer': fgtm,}
+                        myctrls['__tango__'] = {'channels': tgc,
+                                                'synchronization': 0,
+                                                'synchronizer': 'software',
+                                                'monitor': fgtm,
+                                                'timer': fgtm, }
                     smg = {"controllers": myctrls,
                            "monitor": "%s" % fgtm,
                            "description": "Measurement Group",
@@ -6152,7 +6153,7 @@ class ProfileManager2Test(unittest.TestCase):
         finally:
             simp2.tearDown()
 
-    ## updateProfile test
+    # updateProfile test
     def test_switchProfile_importMntGrp(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -6223,7 +6224,7 @@ class ProfileManager2Test(unittest.TestCase):
                         pdss[mg] = []
 
                         timers = {}
-                        ntms = 1 # self.__rnd.randint(1, 5)
+                        ntms = 1  # self.__rnd.randint(1, 5)
                         tms = self.__rnd.sample(set(
                             [ch for ch in self.smychsXX.keys()
                              if not ch.startswith("client")]), ntms)
@@ -6643,7 +6644,7 @@ class ProfileManager2Test(unittest.TestCase):
                                 'monitor': fgtm,
                                 'synchronization': 0,
                                 'synchronizer': 'software',
-                                'timer': fgtm,}
+                                'timer': fgtm, }
 
                         smg = {"controllers": myctrls,
                                "monitor": "%s" % fgtm,
@@ -6717,7 +6718,8 @@ class ProfileManager2Test(unittest.TestCase):
                     self.assertEqual(
                         set(json.loads(lse["PreselectingDataSources"])),
                         set(aadss[mg1]))
-                    # print "ADAA", json.loads(lse["DataSourceSelection"]), adss[mg1]
+                    # print "ADAA", json.loads(lse["DataSourceSelection"]),
+                    # adss[mg1]
                     self.myAssertDict(
                         json.loads(lse["DataSourceSelection"]), adss[mg1])
                     self.assertEqual(
@@ -6781,7 +6783,8 @@ class ProfileManager2Test(unittest.TestCase):
                         set(json.loads(lse["Timer"])), set(ltimers[mg2]))
                     self.assertEqual(lse["MntGrp"], mg2)
 
-                    # print "ADDS", json.loads(se[mg1]["DataSourceSelection"]), adss[mg1]
+                    # print "ADDS", json.loads(se[mg1]["DataSourceSelection"]),
+                    # adss[mg1]
                     self.myAssertDict(
                         json.loads(se[mg1]["DataSourceSelection"]),
                         adss[mg1])
@@ -7204,7 +7207,7 @@ class ProfileManager2Test(unittest.TestCase):
                                      set(ltimers[mg3]))
                     self.assertEqual(lse["MntGrp"], mg3)
 
-                    ## fetch non-existing mg
+                    # fetch non-existing mg
                     wmg = "wrong_mg2"
                     lse["MntGrp"] = wmg
                     lmgt.fetchProfile()
@@ -7244,7 +7247,7 @@ class ProfileManager2Test(unittest.TestCase):
                                      set(ltimers[mg3]))
                     self.assertEqual(lse["MntGrp"], wmg)
                     # print "MYLHE", mylhe
-                    ## fetch non-existing selection
+                    # fetch non-existing selection
                     self._cf.dp.deleteSelection(mg4)
                     lse["MntGrp"] = mg4
                     self.assertTrue(

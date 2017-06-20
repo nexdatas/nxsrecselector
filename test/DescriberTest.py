@@ -15,8 +15,8 @@
 #
 #    You should have received a copy of the GNU General Public License
 #    along with nexdatas.  If not, see <http://www.gnu.org/licenses/>.
-## \package test nexdatas
-## \file DescriberTest.py
+# \package test nexdatas
+# \file DescriberTest.py
 # unittests for field Tags running Tango Server
 #
 import unittest
@@ -28,12 +28,12 @@ import random
 import struct
 import binascii
 import re
-#import subprocess
+# import subprocess
 
 from nxsrecconfig.Describer import Describer
 
 
-## if 64-bit machione
+# if 64-bit machione
 IS64BIT = (struct.calcsize("P") == 8)
 
 
@@ -77,7 +77,6 @@ class NoServer(object):
             res.extend(self.__findText(cp, "$components."))
         return res
 
-    
     def instantiatedComponents(self, names):
         if self.checkvariables != self.variables:
             raise Exception("Variables not set")
@@ -94,7 +93,7 @@ class NoServer(object):
         self.vars.append(None)
         self.commands.append("mandatoryComponents")
         return list(self.mcplist)
-    
+
     def __findText(self, text, label):
         variables = []
         index = text.find(label)
@@ -113,7 +112,9 @@ class NoServer(object):
             index = text.find(label, index + 1)
         return variables
 
+
 class Server(NoServer):
+
     def __init__(self, value=None):
         NoServer.__init__(self, value)
 
@@ -131,11 +132,12 @@ class Server(NoServer):
         return self.value
 
 
-## test fixture
+# test fixture
 class DescriberTest(unittest.TestCase):
 
-    ## constructor
+    # constructor
     # \param methodName name of the test method
+
     def __init__(self, methodName):
         unittest.TestCase.__init__(self, methodName)
 
@@ -413,9 +415,9 @@ class DescriberTest(unittest.TestCase):
             'dim4': {'tann1c': [
                 ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8',
                  ['$datasources.ann2'])],
-                     'ann2': [
-                         ('CONFIG', 'CLIENT', '', None, None)],
-                 },
+                'ann2': [
+                    ('CONFIG', 'CLIENT', '', None, None)],
+            },
             'dim5': {
                 'tann1c': [
                     ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8',
@@ -657,8 +659,8 @@ class DescriberTest(unittest.TestCase):
             'P1M_fileDir': ("P1M_fileDir", None, None),
             'P1M_filePostfix': ("P1M_filePostfix", None, None),
             'P1M_filePrefix': ("P1M_filePrefix", None, None),
-        }    
-        
+        }
+
         self.resdss = {
             'nn': ("nn", "TANGO", ""),
             'nn2': ("", "TANGO", ""),
@@ -683,7 +685,7 @@ class DescriberTest(unittest.TestCase):
             'pyeval2bds': ('pyeval2bds', "PYEVAL", ""),
         }
 
-    ## Exception tester
+    # Exception tester
     # \param exception expected exception
     # \param method called method
     # \param args list with method arguments
@@ -699,13 +701,13 @@ class DescriberTest(unittest.TestCase):
         self.assertEqual(error, True)
         return err
 
-    ## test starter
+    # test starter
     # \brief Common set up
     def setUp(self):
         print "\nsetting up..."
         print "SEED =", self.__seed
 
-    ## test closer
+    # test closer
     # \brief Common tear down
     def tearDown(self):
         print "tearing down ..."
@@ -810,7 +812,7 @@ class DescriberTest(unittest.TestCase):
                     dscnt += 1
         self.assertEqual(dscnt, len(rv))
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_constructor(self):
         fun = sys._getframe().f_code.co_name
@@ -821,7 +823,7 @@ class DescriberTest(unittest.TestCase):
         self.myAssertRaise(Exception, Describer, None, True, True)
         self.myAssertRaise(Exception, Describer, None, True, False)
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_datasources(self):
         fun = sys._getframe().f_code.co_name
@@ -850,8 +852,7 @@ class DescriberTest(unittest.TestCase):
         res = des.dataSources(["ann"], "CLIENT")
         self.checkDSList(res, [])
 
-
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_datasources_server(self):
         fun = sys._getframe().f_code.co_name
@@ -880,7 +881,7 @@ class DescriberTest(unittest.TestCase):
         res = des.dataSources(["ann"], "CLIENT")
         self.checkDSList(res, [])
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_datasources_noargs(self):
         fun = sys._getframe().f_code.co_name
@@ -893,7 +894,7 @@ class DescriberTest(unittest.TestCase):
         res = des.dataSources()
         self.checkDSList(res, self.resdss.keys())
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_datasources_noargs_pfs(self):
         fun = sys._getframe().f_code.co_name
@@ -908,7 +909,7 @@ class DescriberTest(unittest.TestCase):
         res2.update(self.resdss_pfs)
         self.checkDSList(res, res2.keys(), dct=res2)
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_datasources_noargs_server_pfs(self):
         fun = sys._getframe().f_code.co_name
@@ -923,7 +924,7 @@ class DescriberTest(unittest.TestCase):
         res2.update(self.resdss_pfs)
         self.checkDSList(res, res2.keys(), dct=res2)
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_datasources_noargs_server(self):
         fun = sys._getframe().f_code.co_name
@@ -936,7 +937,7 @@ class DescriberTest(unittest.TestCase):
         res = des.dataSources()
         self.checkDSList(res, self.resdss.keys())
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_datasources_dstype(self):
         fun = sys._getframe().f_code.co_name
@@ -981,7 +982,7 @@ class DescriberTest(unittest.TestCase):
             res,
             [k for k in self.resdss.keys() if self.resdss[k][1] == 'UNKNOWN'])
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_datasources_dstype_server(self):
         fun = sys._getframe().f_code.co_name
@@ -1026,7 +1027,7 @@ class DescriberTest(unittest.TestCase):
             res,
             [k for k in self.resdss.keys() if self.resdss[k][1] == 'UNKNOWN'])
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_datasources_names(self):
         fun = sys._getframe().f_code.co_name
@@ -1049,7 +1050,7 @@ class DescriberTest(unittest.TestCase):
             res = des.dataSources(names)
             self.checkDSList(res, names)
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_datasources_names_server(self):
         fun = sys._getframe().f_code.co_name
@@ -1072,7 +1073,7 @@ class DescriberTest(unittest.TestCase):
             res = des.dataSources(names)
             self.checkDSList(res, names)
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_datasources_tree(self):
         fun = sys._getframe().f_code.co_name
@@ -1101,7 +1102,7 @@ class DescriberTest(unittest.TestCase):
         res = des.dataSources(["ann"], "CLIENT")[0]
         self.checkDS(res, [])
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_datasources_server_tree(self):
         fun = sys._getframe().f_code.co_name
@@ -1130,7 +1131,7 @@ class DescriberTest(unittest.TestCase):
         res = des.dataSources(["ann"], "CLIENT")[0]
         self.checkDS(res, [])
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_datasources_noargs_tree(self):
         fun = sys._getframe().f_code.co_name
@@ -1143,7 +1144,7 @@ class DescriberTest(unittest.TestCase):
         res = des.dataSources()[0]
         self.checkDS(res, self.resdss.keys())
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_datasources_noargs_tree_pfs(self):
         fun = sys._getframe().f_code.co_name
@@ -1158,7 +1159,7 @@ class DescriberTest(unittest.TestCase):
         res2.update(self.resdss_pfs)
         self.checkDS(res, res2.keys(), dct=res2)
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_datasources_noargs_server_tree(self):
         fun = sys._getframe().f_code.co_name
@@ -1171,7 +1172,7 @@ class DescriberTest(unittest.TestCase):
         res = des.dataSources()[0]
         self.checkDS(res, self.resdss.keys())
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_datasources_noargs_server_tree_pfs(self):
         fun = sys._getframe().f_code.co_name
@@ -1186,7 +1187,7 @@ class DescriberTest(unittest.TestCase):
         res2.update(self.resdss_pfs)
         self.checkDS(res, res2.keys(), dct=res2)
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_datasources_dstype_tree(self):
         fun = sys._getframe().f_code.co_name
@@ -1231,7 +1232,7 @@ class DescriberTest(unittest.TestCase):
             res,
             [k for k in self.resdss.keys() if self.resdss[k][1] == 'UNKNOWN'])
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_datasources_dstype_server_tree(self):
         fun = sys._getframe().f_code.co_name
@@ -1276,7 +1277,7 @@ class DescriberTest(unittest.TestCase):
             res,
             [k for k in self.resdss.keys() if self.resdss[k][1] == 'UNKNOWN'])
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_datasources_names_tree(self):
         fun = sys._getframe().f_code.co_name
@@ -1299,7 +1300,7 @@ class DescriberTest(unittest.TestCase):
             res = des.dataSources(names)[0]
             self.checkDS(res, names)
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_datasources_names_server_tree(self):
         fun = sys._getframe().f_code.co_name
@@ -1322,7 +1323,7 @@ class DescriberTest(unittest.TestCase):
             res = des.dataSources(names)[0]
             self.checkDS(res, names)
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_components_unknown(self):
         fun = sys._getframe().f_code.co_name
@@ -1367,7 +1368,7 @@ class DescriberTest(unittest.TestCase):
         self.assertEqual(des.components(), [])
         self.assertEqual(des.components(["unknown"]), [])
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_components_noarg(self):
         server = NoServer()
@@ -1377,7 +1378,7 @@ class DescriberTest(unittest.TestCase):
         res = des.components()
         self.checkICP(res, self.rescps.keys())
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_components_noarg_pfs(self):
         server = NoServer()
@@ -1389,7 +1390,7 @@ class DescriberTest(unittest.TestCase):
         res2.update(self.rescps_pfs)
         self.checkICP(res, res2.keys(), dct=res2)
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_components_noarg_tree(self):
         server = NoServer()
@@ -1399,7 +1400,7 @@ class DescriberTest(unittest.TestCase):
         res = des.components()
         self.checkCP(res, self.rescps.keys())
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_components_noarg_tree_pfs(self):
         server = NoServer()
@@ -1411,7 +1412,7 @@ class DescriberTest(unittest.TestCase):
         res2.update(self.rescps_pfs)
         self.checkCP(res, self.rescps.keys(), dct=res2)
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_components_noarg_server(self):
         server = Server()
@@ -1421,7 +1422,7 @@ class DescriberTest(unittest.TestCase):
         res = des.components()
         self.checkICP(res, self.rescps.keys())
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_components_noarg_server_pfs(self):
         server = Server()
@@ -1433,7 +1434,7 @@ class DescriberTest(unittest.TestCase):
         res2.update(self.rescps_pfs)
         self.checkICP(res, self.rescps.keys(), dct=res2)
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_components_noarg_tree_server(self):
         server = Server()
@@ -1443,7 +1444,7 @@ class DescriberTest(unittest.TestCase):
         res = des.components()
         self.checkCP(res, self.rescps.keys())
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_components_noarg_tree_server_pfs(self):
         server = Server()
@@ -1455,7 +1456,7 @@ class DescriberTest(unittest.TestCase):
         res2.update(self.rescps_pfs)
         self.checkCP(res, self.rescps.keys(), dct=res2)
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_components_strategy_dstype(self):
         server = NoServer()
@@ -1472,7 +1473,7 @@ class DescriberTest(unittest.TestCase):
                 self.checkICP(res, self.rescps.keys(),
                               strategy=st, dstype=dst)
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_components_strategy_dstype_pfs(self):
         server = NoServer()
@@ -1491,7 +1492,7 @@ class DescriberTest(unittest.TestCase):
                 self.checkICP(res, self.rescps.keys(),
                               strategy=st, dstype=dst, dct=res2)
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_components_strategy_dstype_server(self):
         server = Server()
@@ -1508,7 +1509,7 @@ class DescriberTest(unittest.TestCase):
                 self.checkICP(res, self.rescps.keys(),
                               strategy=st, dstype=dst)
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_components_strategy_dstype_server_pfs(self):
         server = Server()
@@ -1527,7 +1528,7 @@ class DescriberTest(unittest.TestCase):
                 self.checkICP(res, self.rescps.keys(),
                               strategy=st, dstype=dst, dct=res2)
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_components_strategy_dstype_tree_pfs(self):
         server = NoServer()
@@ -1546,7 +1547,7 @@ class DescriberTest(unittest.TestCase):
                 self.checkCP(res, self.rescps.keys(),
                              strategy=st, dstype=dst, dct=res2)
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_components_strategy_dstype_tree(self):
         server = NoServer()
@@ -1563,7 +1564,7 @@ class DescriberTest(unittest.TestCase):
                 self.checkCP(res, self.rescps.keys(),
                              strategy=st, dstype=dst)
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_components_strategy_dstype_server_tree(self):
         server = Server()
@@ -1580,7 +1581,7 @@ class DescriberTest(unittest.TestCase):
                 self.checkCP(res, self.rescps.keys(),
                              strategy=st, dstype=dst)
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_components_strategy_dstype_server_tree_pfs(self):
         server = Server()
@@ -1599,7 +1600,7 @@ class DescriberTest(unittest.TestCase):
                 self.checkCP(res, self.rescps.keys(),
                              strategy=st, dstype=dst, dct=res2)
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_components_noarg_mem(self):
         dstypes = [None, 'CLIENT', 'TANGO', 'PYEVAL', 'NEW', 'UNKNOWN']
@@ -1620,7 +1621,7 @@ class DescriberTest(unittest.TestCase):
                 self.checkICP(res, self.rescps.keys(),
                               strategy=st, dstype=dst)
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_components_noarg_mem_tree(self):
 
@@ -1641,7 +1642,7 @@ class DescriberTest(unittest.TestCase):
                 self.checkCP(res, self.rescps.keys(),
                              strategy=st, dstype=dst)
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_components_noarg_mem_server(self):
         dstypes = [None, 'CLIENT', 'TANGO', 'PYEVAL', 'NEW', 'UNKNOWN']
@@ -1662,7 +1663,7 @@ class DescriberTest(unittest.TestCase):
                 self.checkICP(res, self.rescps.keys(),
                               strategy=st, dstype=dst)
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_components_noarg_mem_tree_server(self):
 
@@ -1683,7 +1684,7 @@ class DescriberTest(unittest.TestCase):
                 self.checkCP(res, self.rescps.keys(),
                              strategy=st, dstype=dst)
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_components_noarg_comp(self):
         dstypes = [None, 'CLIENT', 'TANGO', 'PYEVAL', 'NEW', 'UNKNOWN']
@@ -1703,7 +1704,7 @@ class DescriberTest(unittest.TestCase):
                 self.checkICP(res, cps,
                               strategy=st, dstype=dst)
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_components_noarg_comp_pfs(self):
         dstypes = [None, 'CLIENT', 'TANGO', 'PYEVAL', 'NEW', 'UNKNOWN']
@@ -1725,7 +1726,7 @@ class DescriberTest(unittest.TestCase):
                 self.checkICP(res, cps,
                               strategy=st, dstype=dst, dct=res2)
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_components_noarg_tree_comp(self):
 
@@ -1745,7 +1746,7 @@ class DescriberTest(unittest.TestCase):
                 self.checkCP(res, cps,
                              strategy=st, dstype=dst)
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_components_noarg_tree_comp_pfs(self):
 
@@ -1767,7 +1768,7 @@ class DescriberTest(unittest.TestCase):
                 self.checkCP(res, cps,
                              strategy=st, dstype=dst, dct=res2)
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_components_noarg_comp_server(self):
         dstypes = [None, 'CLIENT', 'TANGO', 'PYEVAL', 'NEW', 'UNKNOWN']
@@ -1787,7 +1788,7 @@ class DescriberTest(unittest.TestCase):
                 self.checkICP(res, cps,
                               strategy=st, dstype=dst)
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_components_noarg_comp_server_pfs(self):
         dstypes = [None, 'CLIENT', 'TANGO', 'PYEVAL', 'NEW', 'UNKNOWN']
@@ -1809,7 +1810,7 @@ class DescriberTest(unittest.TestCase):
                 self.checkICP(res, cps,
                               strategy=st, dstype=dst, dct=res2)
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_components_noarg_tree_comp_server(self):
 
@@ -1829,7 +1830,7 @@ class DescriberTest(unittest.TestCase):
                 self.checkCP(res, cps,
                              strategy=st, dstype=dst)
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_components_noarg_tree_comp_server_pfs(self):
 
@@ -1851,7 +1852,7 @@ class DescriberTest(unittest.TestCase):
                 self.checkCP(res, cps,
                              strategy=st, dstype=dst, dct=res2)
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_components_noarg_mem_comp(self):
         dstypes = [None, 'CLIENT', 'TANGO', 'PYEVAL', 'NEW', 'UNKNOWN']
@@ -1874,7 +1875,7 @@ class DescriberTest(unittest.TestCase):
                 self.checkICP(res, cps,
                               strategy=st, dstype=dst)
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_components_noarg_mem_tree_comp(self):
 

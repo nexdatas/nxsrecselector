@@ -15,8 +15,8 @@
 #
 #    You should have received a copy of the GNU General Public License
 #    along with nexdatas.  If not, see <http://www.gnu.org/licenses/>.
-## \package test nexdatas
-## \file ConverterXtoYTest.py
+# \package test nexdatas
+# \file ConverterXtoYTest.py
 # unittests for field Tags running Tango Server
 #
 import unittest
@@ -30,15 +30,16 @@ import string
 
 from nxsrecconfig.Converter import ConverterXtoY
 
-## if 64-bit machione
+# if 64-bit machione
 IS64BIT = (struct.calcsize("P") == 8)
 
 
-## test fixture
+# test fixture
 class ConverterXtoYTest(unittest.TestCase):
 
-    ## constructor
+    # constructor
     # \param methodName name of the test method
+
     def __init__(self, methodName):
         unittest.TestCase.__init__(self, methodName)
         try:
@@ -48,7 +49,7 @@ class ConverterXtoYTest(unittest.TestCase):
 
         self.__rnd = random.Random(self.__seed)
 
-    ## Exception tester
+    # Exception tester
     # \param exception expected exception
     # \param method called method
     # \param args list with method arguments
@@ -89,13 +90,13 @@ class ConverterXtoYTest(unittest.TestCase):
         size = self.__rnd.randint(1, maxsize)
         return ''.join(self.__rnd.choice(letters) for _ in range(size))
 
-    ## test starter
+    # test starter
     # \brief Common set up
     def setUp(self):
         print "SEED =", self.__seed
         print "\nsetting up..."
 
-    ## test closer
+    # test closer
     # \brief Common tear down
     def tearDown(self):
         print "tearing down ..."

@@ -27,6 +27,7 @@ from .Utils import Utils, TangoUtils, PoolUtils
 
 
 class DynamicComponent(object):
+
     """ Creates dynamic component
         of given component """
 
@@ -142,7 +143,7 @@ class DynamicComponent(object):
         if not isinstance(self.__stepdsources, list):
             self.__stepdsources = []
 
-    ##
+    #
     def setInitDSources(self, dsources):
         """ sets init datasources
 
@@ -153,7 +154,7 @@ class DynamicComponent(object):
         if not isinstance(self.__initdsources, list):
             self.__initdsources = []
 
-    ##
+    #
     def setLabelParams(self, labels, paths, links, types, shapes):
         """ sets label parameters for specific dynamic components
 

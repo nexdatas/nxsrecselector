@@ -56,6 +56,7 @@ class MacroServer(PyTango.Device_4Impl):
     #------------------------------------------------------------------
     #    Device constructor
     #------------------------------------------------------------------
+
     def __init__(self, cl, name):
         PyTango.Device_4Impl.__init__(self, cl, name)
 
@@ -72,6 +73,7 @@ class MacroServer(PyTango.Device_4Impl):
     #------------------------------------------------------------------
     #    Device initialization
     #------------------------------------------------------------------
+
     def init_device(self):
 #        print "In ", self.get_name(), "::init_device()"
         self.set_state(PyTango.DevState.ON)
@@ -155,8 +157,8 @@ class MacroServer(PyTango.Device_4Impl):
             if 'new' not in envdict.keys():
                 envdict['new'] = {}
             newdict = envdict['new']
-            newdict.update(envnew)    
-            newdict.update(envchange)    
+            newdict.update(envnew)
+            newdict.update(envchange)
             for ed in envdel:
                 if ed in newdict.keys():
                     newdict.pop(ed)
@@ -261,6 +263,7 @@ class Door(PyTango.Device_4Impl):
     #------------------------------------------------------------------
     #    Device constructor
     #------------------------------------------------------------------
+
     def __init__(self, cl, name):
         PyTango.Device_4Impl.__init__(self, cl, name)
 

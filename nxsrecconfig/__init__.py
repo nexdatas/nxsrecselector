@@ -22,6 +22,8 @@
 #: package version
 from .Release import __version__
 
+__all__ = ["__version__", "run"]
+
 
 def run(argv):
     """ runs the TANGO server

@@ -15,8 +15,8 @@
 #
 #    You should have received a copy of the GNU General Public License
 #    along with nexdatas.  If not, see <http://www.gnu.org/licenses/>.
-## \package test nexdatas
-## \file SelectionTest.py
+# \package test nexdatas
+# \file SelectionTest.py
 # unittests for field Tags running Tango Server
 #
 import unittest
@@ -34,15 +34,16 @@ import nxsrecconfig
 from nxsrecconfig.Selection import Selection
 
 
-## if 64-bit machione
+# if 64-bit machione
 IS64BIT = (struct.calcsize("P") == 8)
 
 
-## test fixture
+# test fixture
 class SelectionTest(unittest.TestCase):
 
-    ## constructor
+    # constructor
     # \param methodName name of the test method
+
     def __init__(self, methodName):
         unittest.TestCase.__init__(self, methodName)
 
@@ -50,11 +51,11 @@ class SelectionTest(unittest.TestCase):
         self._tfname = "group"
         self._fattrs = {"short_name": "test", "units": "m"}
 
-        ## default zone
+        # default zone
         self.__defaultzone = 'Europe/Berlin'
-        ## default mntgrp
+        # default mntgrp
         self.__defaultmntgrp = 'nxsmntgrp'
-        ## selection version
+        # selection version
         self.__version = nxsrecconfig.__version__
 
         self._bint = "int64" if IS64BIT else "int32"
@@ -97,13 +98,13 @@ class SelectionTest(unittest.TestCase):
 
         self.__rnd = random.Random(self.__seed)
 
-    ## test starter
+    # test starter
     # \brief Common set up
     def setUp(self):
         print "SEED =", self.__seed
         print "\nsetting up..."
 
-    ## test closer
+    # test closer
     # \brief Common tear down
     def tearDown(self):
         print "tearing down ..."
@@ -121,7 +122,7 @@ class SelectionTest(unittest.TestCase):
         for key in dks:
             self.assertEqual(self.__dump[key], el[key])
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_constructor(self):
         fun = sys._getframe().f_code.co_name
@@ -133,7 +134,7 @@ class SelectionTest(unittest.TestCase):
             self.assertTrue(key in el.keys())
             self.assertEqual(el[key], vl)
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_reset(self):
         fun = sys._getframe().f_code.co_name
@@ -153,7 +154,7 @@ class SelectionTest(unittest.TestCase):
         size = self.__rnd.randint(1, maxsize)
         return ''.join(self.__rnd.choice(letters) for _ in range(size))
 
-    ## deselect test
+    # deselect test
     def test_deselect(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -205,7 +206,7 @@ class SelectionTest(unittest.TestCase):
                                     "DataSourcePreselection",
                                     "UnplottedComponents"])
 
-    ## updatePreselectingDataSources test
+    # updatePreselectingDataSources test
     def test_updatePreselectingDataSources(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -240,7 +241,7 @@ class SelectionTest(unittest.TestCase):
 
             self.compareToDump(el, ["PreselectingDataSources"])
 
-    ## updateOrderedChannels test
+    # updateOrderedChannels test
     def test_updateOrderedChannels(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -287,7 +288,7 @@ class SelectionTest(unittest.TestCase):
             self.assertEqual(ndss[:len(dss2)], odss[:len(dss2)])
             self.assertEqual(set(ndss), set(odss))
 
-    ## deselect test
+    # deselect test
     def test_updateComponentSelection(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -327,7 +328,7 @@ class SelectionTest(unittest.TestCase):
                     self.assertEqual(ncps[key], cps[key])
             self.compareToDump(el, ["ComponentSelection"])
 
-    ## deselect test
+    # deselect test
     def test_updateDataSourceSelection(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -366,7 +367,7 @@ class SelectionTest(unittest.TestCase):
                     self.assertTrue(not value)
             self.compareToDump(el, ["DataSourceSelection"])
 
-    ## deselect test
+    # deselect test
     def test_resetMntGrp(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -399,7 +400,7 @@ class SelectionTest(unittest.TestCase):
         el.resetMntGrp()
         self.assertEqual(el["MntGrp"], self.__defaultmntgrp)
 
-    ## deselect test
+    # deselect test
     def test_resetTimeZone(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -432,7 +433,7 @@ class SelectionTest(unittest.TestCase):
         el.resetTimeZone()
         self.assertEqual(el["TimeZone"], self.__defaultzone)
 
-    ## updateOrderedChannels test
+    # updateOrderedChannels test
     def test_resetPreselectedComponents(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)

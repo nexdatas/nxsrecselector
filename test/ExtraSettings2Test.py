@@ -15,8 +15,8 @@
 #
 #    You should have received a copy of the GNU General Public License
 #    along with nexdatas.  If not, see <http://www.gnu.org/licenses/>.
-## \package test nexdatas
-## \file Settings2Test.py
+# \package test nexdatas
+# \file Settings2Test.py
 # unittests for TangoDsItemTest running Tango Server
 #
 import unittest
@@ -57,10 +57,10 @@ from nxsrecconfig.Utils import TangoUtils, MSUtils
 from nxsconfigserver.XMLConfigurator import XMLConfigurator
 from nxsrecconfig.Utils import TangoUtils, MSUtils, Utils
 
-## if 64-bit machione
+# if 64-bit machione
 IS64BIT = (struct.calcsize("P") == 8)
 
-## list of available databases
+# list of available databases
 DB_AVAILABLE = []
 
 #: tango version
@@ -68,17 +68,17 @@ TGVER = PyTango.__version_info__[0]
 
 try:
     import MySQLdb
-    ## connection arguments to MYSQL DB
+    # connection arguments to MYSQL DB
     mydb = MySQLdb.connect({})
     mydb.close()
     DB_AVAILABLE.append("MYSQL")
 except:
     try:
         import MySQLdb
-    ## connection arguments to MYSQL DB
+    # connection arguments to MYSQL DB
         args = {'host': 'localhost', 'db': 'nxsconfig',
                 'read_default_file': '/etc/my.cnf', 'use_unicode': True}
-    ## inscance of MySQLdb
+    # inscance of MySQLdb
         mydb = MySQLdb.connect(**args)
         mydb.close()
         DB_AVAILABLE.append("MYSQL")
@@ -87,11 +87,11 @@ except:
             import MySQLdb
             from os.path import expanduser
             home = expanduser("~")
-        ## connection arguments to MYSQL DB
+        # connection arguments to MYSQL DB
             args2 = {'host': 'localhost', 'db': 'nxsconfig',
                      'read_default_file': '%s/.my.cnf' % home,
                      'use_unicode': True}
-        ## inscance of MySQLdb
+        # inscance of MySQLdb
             mydb = MySQLdb.connect(**args2)
             mydb.close()
             DB_AVAILABLE.append("MYSQL")
@@ -104,15 +104,16 @@ except:
             print "MYSQL not available"
 
 
-## test fixture
+# test fixture
 class ExtraSettings2Test(Settings2Test.Settings2Test):
 
-    ## constructor
+    # constructor
     # \param methodName name of the test method
+
     def __init__(self, methodName):
         Settings2Test.Settings2Test.__init__(self, methodName)
 
-    ## updateMntGrp test
+    # updateMntGrp test
     def test_updateMntGrp_components_mixed_tango_timers(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -568,7 +569,7 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
         finally:
             simp2.tearDown()
 
-    ## updateMntGrp test
+    # updateMntGrp test
     def test_updateMntGrp_mntGrpConfiguration_isMntGrpUpdated(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -993,7 +994,7 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
                                 'synchronization': 0,
                                 'synchronizer': 'software',
                                 'monitor': ttdv,
-                                'timer': ttdv,}
+                                'timer': ttdv, }
 
                     tgc = {}
                     for ds in chds:
@@ -1094,13 +1095,13 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
     def switchProfile(self, rs, flag):
         rs.switchProfile(flag)
 
-    ## test
+    # test
     def test_switchProfile_importMntGrp(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
         self.subtest_switchProfile_importMntGrp()
 
-    ## test
+    # test
     def subtest_switchProfile_importMntGrp(self):
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
@@ -1172,7 +1173,7 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
                         pdss[mg] = []
 
                         timers = {}
-                        ntms = 1 # self._rnd.randint(1, 5)
+                        ntms = 1  # self._rnd.randint(1, 5)
                         tms = self._rnd.sample(set(
                             [ch for ch in self.smychsXX.keys()
                              if not ch.startswith("client")]), ntms)
@@ -1208,7 +1209,7 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
                                 else:
                                     exp["controller"] = scalar_ctrl
                                     exp["type"] = "CTExpChannel"
-                                exp["interfaces"] = [exp["type"]]    
+                                exp["interfaces"] = [exp["type"]]
                                 expch.append(exp)
                                 pdss[mg].append(ds)
                         pdss[mg] = sorted(pdss[mg])
@@ -1739,11 +1740,19 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
 
                     self.assertTrue(not lrs.isMntGrpUpdated())
                     self.assertTrue(not lrs.isMntGrpUpdated())
+                    myoldmg = json.loads(lrs.mntGrpConfiguration())
 
                     lrs.importMntGrp()
+                    mynewmg = json.loads(lrs.mntGrpConfiguration())
                     lmp = json.loads(lrs.profileConfiguration)
-                    self.assertTrue(not lrs.isMntGrpUpdated())
-                    self.assertTrue(not lrs.isMntGrpUpdated())
+
+                    try:
+                        self.myCompDict(mynewmg, myoldmg)
+                        self.assertTrue(lrs.isMntGrpUpdated())
+                        self.assertTrue(lrs.isMntGrpUpdated())
+                    except:
+                        self.assertTrue(not lrs.isMntGrpUpdated())
+                        self.assertTrue(not lrs.isMntGrpUpdated())
 
                     tmpcf1 = json.loads(rs[mg1].mntGrpConfiguration())
                     tmpcf2 = json.loads(rs[mg2].mntGrpConfiguration())
@@ -2214,7 +2223,7 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
                                      set(ltimers[mg3]))
                     self.assertEqual(lmp["MntGrp"], mg3)
 
-                    ## fetch non-existing mg
+                    # fetch non-existing mg
                     wmg = "wrong_mg2"
                     lrs.mntGrp = wmg
                     lrs.fetchProfile()
@@ -2255,7 +2264,7 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
                                      set(ltimers[mg3]))
                     self.assertEqual(lmp["MntGrp"], wmg)
 
-                    ## fetch non-existing selection
+                    # fetch non-existing selection
                     self._cf.dp.deleteSelection(mg4)
                     lrs.mntGrp = mg4
                     self.assertTrue(
@@ -2417,7 +2426,7 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
             except:
                 pass
 
-    ## updateMntGrp test
+    # updateMntGrp test
     def test_myswitchProfile_importMntGrp(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -2495,7 +2504,7 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
                         pdss[mg] = []
 
                         timers = {}
-                        ntms = 1 # self._rnd.randint(1, 5)
+                        ntms = 1  # self._rnd.randint(1, 5)
                         tms = self._rnd.sample(set(
                             [ch for ch in self.smychsXX.keys()
                              if not ch.startswith("client")]), ntms)
@@ -2531,7 +2540,7 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
                                 else:
                                     exp["controller"] = scalar_ctrl
                                     exp["type"] = "CTExpChannel"
-                                exp["interfaces"] = [exp["type"]]    
+                                exp["interfaces"] = [exp["type"]]
                                 expch.append(exp)
                                 pdss[mg].append(ds)
                         pdss[mg] = sorted(pdss[mg])
@@ -3085,7 +3094,6 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
                     except:
                         self.assertTrue(not lrs.isMntGrpUpdated())
                         self.assertTrue(not lrs.isMntGrpUpdated())
-                        
 
                     ors.profileConfiguration = str(json.dumps(mp[mg1]))
                     tmpcf1 = json.loads(ors.mntGrpConfiguration())
@@ -3570,7 +3578,7 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
                                      set(ltimers[mg3]))
                     self.assertEqual(lmp["MntGrp"], mg3)
 
-                    ## fetch non-existing mg
+                    # fetch non-existing mg
                     wmg = "wrong_mg2"
                     lrs.mntGrp = wmg
                     lrs.fetchProfile()
@@ -3614,7 +3622,7 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
                                      set(ltimers[mg3]))
                     self.assertEqual(lmp["MntGrp"], wmg)
 
-                    ## fetch non-existing selection
+                    # fetch non-existing selection
                     self._cf.dp.deleteSelection(mg4)
                     lrs.mntGrp = mg4
                     self.assertTrue(
@@ -3781,7 +3789,7 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
             except:
                 pass
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_dataSourceDescription(self):
         fun = sys._getframe().f_code.co_name
@@ -3805,7 +3813,7 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
         res = rs.dataSourceDescription(["ann"])
         self.checkDSList(res, ["ann"])
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_dataSourceDescription_noargs(self):
         fun = sys._getframe().f_code.co_name
@@ -3826,7 +3834,7 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
         res = rs.dataSourceDescription(self.mydss.keys())
         self.checkDSList(res, self.resdss.keys())
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_dataSourceDescription_names(self):
         fun = sys._getframe().f_code.co_name
@@ -3855,7 +3863,7 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
             res = rs.dataSourceDescription(names)
             self.checkDSList(res, names)
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_componentClientSources_unknown(self):
         fun = sys._getframe().f_code.co_name
@@ -3885,7 +3893,7 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
             self.assertEqual(rs.componentClientSources(None), '[]')
             self.assertEqual(rs.componentClientSources(["unknown"]), '[]')
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_componentClientSources_dstype(self):
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -3907,7 +3915,7 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
         self.checkICP(res, self.rescps.keys(),
                       strategy=None, dstype='CLIENT')
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_componentClientSources_mem(self):
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -3933,7 +3941,7 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
             self.checkICP(res, self.rescps.keys(),
                           strategy=None, dstype='CLIENT')
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_componentClientSources_cps(self):
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -3954,7 +3962,7 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
             self.checkICP(res, mem,
                           strategy=None, dstype='CLIENT')
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_componentClientSources_components(self):
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -3994,7 +4002,7 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
             self.checkICP(res, rs.components,
                           strategy=None, dstype='CLIENT')
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_componentClientSources_components_var(self):
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -4044,7 +4052,7 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
             self.checkICP(res, rs.components,
                           strategy=None, dstype='CLIENT')
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_componentSources_unknown(self):
         fun = sys._getframe().f_code.co_name
@@ -4074,7 +4082,7 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
             self.assertEqual(rs.componentSources(None), '[]')
             self.assertEqual(rs.componentSources(["unknown"]), '[]')
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_componentSources_dstype(self):
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -4096,7 +4104,7 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
         self.checkICP(res, self.rescps.keys(),
                       strategy=None, dstype=None)
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_componentSources_mem(self):
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -4122,7 +4130,7 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
             self.checkICP(res, self.rescps.keys(),
                           strategy=None)
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_componentSources_cps(self):
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -4143,7 +4151,7 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
             self.checkICP(res, mem,
                           strategy=None)
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_componentSources_components(self):
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -4183,7 +4191,7 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
             self.checkICP(res, rs.components,
                           strategy=None)
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_componentSources_components_var(self):
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -4233,9 +4241,7 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
             self.checkICP(res, rs.components,
                           strategy=None)
 
-
-            
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_create_remove_DynamicComponent(self):
         fun = sys._getframe().f_code.co_name
@@ -4298,7 +4304,7 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
 
         self.myAssertRaise(Exception, rs.removeDynamicComponent, "sdfsdf")
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_create_dict(self):
         fun = sys._getframe().f_code.co_name
@@ -4435,7 +4441,7 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
             comp = self._cf.dp.Components([cpname])[0]
             self.assertEqual(cps[lb], comp)
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_create_dict_type(self):
         fun = sys._getframe().f_code.co_name
@@ -4469,7 +4475,7 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
             comp = self._cf.dp.Components([cpname])[0]
             self.assertEqual(cps["type"] % nxstp, comp)
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_create_dict_shape(self):
         fun = sys._getframe().f_code.co_name
@@ -4518,7 +4524,7 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
             comp = self._cf.dp.Components([cpname])[0]
             self.assertEqual(cps["shape"] % mstr, comp)
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_create_dict_shapetype(self):
         fun = sys._getframe().f_code.co_name
@@ -4682,7 +4688,7 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
             simps3.tearDown()
             simps2.tearDown()
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_create_dict_fieldpath(self):
         fun = sys._getframe().f_code.co_name
@@ -4908,7 +4914,7 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
             simps3.tearDown()
             simps2.tearDown()
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_create_dict_datasource_attr(self):
         fun = sys._getframe().f_code.co_name
@@ -5019,7 +5025,7 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
             simps3.tearDown()
             simps2.tearDown()
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_create_step(self):
         fun = sys._getframe().f_code.co_name
@@ -5123,7 +5129,7 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
             comp = self._cf.dp.Components([cpname])[0]
             self.assertEqual(cps[lb], comp)
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_create_sel(self):
         fun = sys._getframe().f_code.co_name
@@ -5225,12 +5231,12 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
             cnf["DataSourceSelection"] = json.dumps(
                 dict((dd, True) for dd in ds))
             rs.profileConfiguration = str(json.dumps(cnf))
-            _ =  rs.selectedDataSources()
+            _ = rs.selectedDataSources()
             cpname = rs.createDynamicComponent([])
             comp = self._cf.dp.Components([cpname])[0]
             self.assertEqual(cps["empty"], comp)
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_create_step_no_type(self):
         fun = sys._getframe().f_code.co_name
@@ -5266,7 +5272,7 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
             comp = self._cf.dp.Components([cpname])[0]
             self.assertEqual(cps["type"] % "NX_CHAR", comp)
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_create_init_no_type(self):
         fun = sys._getframe().f_code.co_name
@@ -5301,7 +5307,7 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
             comp = self._cf.dp.Components([cpname])[0]
             self.assertEqual(cps["type"] % "NX_CHAR", comp)
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_create_step_type_param(self):
         fun = sys._getframe().f_code.co_name
@@ -5351,7 +5357,7 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
             comp = self._cf.dp.Components([cpname])[0]
             self.assertEqual(cps["type"] % nxstp, comp)
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_create_init_type_param(self):
         fun = sys._getframe().f_code.co_name
@@ -5396,7 +5402,7 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
             comp = self._cf.dp.Components([cpname])[0]
             self.assertEqual(cps["type"] % nxstp, comp)
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_create_step_shape(self):
         fun = sys._getframe().f_code.co_name
@@ -5457,7 +5463,7 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
             comp = self._cf.dp.Components([cpname])[0]
             self.assertEqual(cps["shape"] % mstr, comp)
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_create_init_shape(self):
         fun = sys._getframe().f_code.co_name
@@ -5516,7 +5522,7 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
             comp = self._cf.dp.Components([cpname])[0]
             self.assertEqual(cps["shape"] % mstr, comp)
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_create_step_shapetype(self):
         fun = sys._getframe().f_code.co_name
@@ -5710,7 +5716,7 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
         finally:
             pass
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_create_init_shapetype(self):
         fun = sys._getframe().f_code.co_name
@@ -5910,7 +5916,7 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
         finally:
             pass
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_create_step_typeshape_tango_nods(self):
         fun = sys._getframe().f_code.co_name
@@ -6002,7 +6008,7 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
 
                 self.assertEqual(comp, mycps)
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_create_step_typeshape_tango_nods_attr(self):
         fun = sys._getframe().f_code.co_name
@@ -6099,7 +6105,7 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
             simps3.tearDown()
             simps2.tearDown()
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_create_init_typeshape_tango_nods_attr(self):
         fun = sys._getframe().f_code.co_name
@@ -6182,7 +6188,7 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
                 else:
                     mycps += dsclient % (ar["name"], ar["name"])
                 mycps += fieldend + groupend + groupend
-                mycps += link #% (ar["name"], self._defaultpath,
+                mycps += link  # % (ar["name"], self._defaultpath,
                               #   ar["name"])
                 mycps += groupend + defend
 
@@ -6197,7 +6203,7 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
             simps3.tearDown()
             simps2.tearDown()
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_create_init_typeshape_tango_nods(self):
         fun = sys._getframe().f_code.co_name
@@ -6287,8 +6293,7 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
 
                 self.assertEqual(comp, mycps)
 
-
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_create_sel_typeshape_tango(self):
         fun = sys._getframe().f_code.co_name
@@ -6466,7 +6471,7 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
 
                 self.assertEqual(comp, mycps)
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_create_step_typeshape_tango(self):
         fun = sys._getframe().f_code.co_name
@@ -6644,7 +6649,7 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
 
                 self.assertEqual(comp, mycps)
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_create_init_typeshape_tango(self):
         fun = sys._getframe().f_code.co_name
@@ -6823,7 +6828,7 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
 
                 self.assertEqual(comp, mycps)
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_create_init_typeshape_tango_wol(self):
         fun = sys._getframe().f_code.co_name
@@ -6997,7 +7002,7 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
 
                 self.assertEqual(comp, mycps)
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_create_step_fieldpath(self):
         fun = sys._getframe().f_code.co_name
@@ -7205,7 +7210,7 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
         finally:
             pass
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_create_sel_fieldpath(self):
         fun = sys._getframe().f_code.co_name
@@ -7414,7 +7419,7 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
         finally:
             pass
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_create_init_fieldpath(self):
         fun = sys._getframe().f_code.co_name
@@ -7623,7 +7628,7 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
         finally:
             pass
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_create_init_fieldpath_wol(self):
         fun = sys._getframe().f_code.co_name
@@ -7832,7 +7837,7 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
         finally:
             pass
 
-    ## test
+    # test
     def test_variableComponents_empty(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -7855,7 +7860,7 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
         self.assertEqual(rs.variableComponents(), '{}')
 
-    ## test
+    # test
     def test_variableComponents_cpvar(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -7880,7 +7885,7 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
             {"c01": ["scan3"], "c02": ["scan"], "mca": ["scan2"]}
         )
 
-    ## test
+    # test
     def test_variableComponents_mixed(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -7954,7 +7959,7 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
 
             self.myAssertDictJSON(res, res2)
 
-    ## test
+    # test
     def test_createWriterConfiguration_default(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -8013,7 +8018,7 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
         finally:
             simp2.tearDown()
 
-    ## test
+    # test
     def test_createWriterConfiguration_given(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -8080,7 +8085,7 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
         finally:
             simp2.tearDown()
 
-    ## test
+    # test
     def test_updateConfigVariables_noserialno(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -8126,7 +8131,7 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
                 rscv["serialno"] = "1"
             self.myAssertDict(json.loads(res), rscv)
 
-    ## test
+    # test
     def test_updateConfigVariables_rsserialno(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -8172,7 +8177,7 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
             res = self._cf.dp.variables
             self.myAssertDict(json.loads(res), rscv)
 
-    ## test
+    # test
     def test_updateConfigVariables_cfserialno(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -8220,7 +8225,7 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
                 rscv["serialno"] = str(slno + 1)
             self.myAssertDict(json.loads(res), rscv)
 
-    ## test
+    # test
     def test_updateConfigVariables_rscfserialno(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)

@@ -15,8 +15,8 @@
 #
 #    You should have received a copy of the GNU General Public License
 #    along with nexdatas.  If not, see <http://www.gnu.org/licenses/>.
-## \package test nexdatas
-## \file SelectorTest.py
+# \package test nexdatas
+# \file SelectorTest.py
 # unittests for TangoDsItemTest running Tango Server
 #
 import unittest
@@ -50,25 +50,25 @@ from nxsrecconfig.Selector import Selector
 from nxsrecconfig.Utils import TangoUtils, MSUtils
 from nxsconfigserver.XMLConfigurator import XMLConfigurator
 
-## if 64-bit machione
+# if 64-bit machione
 IS64BIT = (struct.calcsize("P") == 8)
 
-## list of available databases
+# list of available databases
 DB_AVAILABLE = []
 
 try:
     import MySQLdb
-    ## connection arguments to MYSQL DB
+    # connection arguments to MYSQL DB
     mydb = MySQLdb.connect({})
     mydb.close()
     DB_AVAILABLE.append("MYSQL")
 except:
     try:
         import MySQLdb
-    ## connection arguments to MYSQL DB
+    # connection arguments to MYSQL DB
         args = {'host': u'localhost', 'db': u'nxsconfig',
                 'read_default_file': u'/etc/my.cnf', 'use_unicode': True}
-    ## inscance of MySQLdb
+    # inscance of MySQLdb
         mydb = MySQLdb.connect(**args)
         mydb.close()
         DB_AVAILABLE.append("MYSQL")
@@ -77,11 +77,11 @@ except:
             import MySQLdb
             from os.path import expanduser
             home = expanduser("~")
-        ## connection arguments to MYSQL DB
+        # connection arguments to MYSQL DB
             args2 = {'host': u'localhost', 'db': u'nxsconfig',
                      'read_default_file': u'%s/.my.cnf' % home,
                      'use_unicode': True}
-        ## inscance of MySQLdb
+        # inscance of MySQLdb
             mydb = MySQLdb.connect(**args2)
             mydb.close()
             DB_AVAILABLE.append("MYSQL")
@@ -94,11 +94,12 @@ except:
             print "MYSQL not available"
 
 
-## test fixture
+# test fixture
 class SelectorTest(unittest.TestCase):
 
-    ## constructor
+    # constructor
     # \param methodName name of the test method
+
     def __init__(self, methodName):
         unittest.TestCase.__init__(self, methodName)
 
@@ -121,15 +122,15 @@ class SelectorTest(unittest.TestCase):
 
         self.__dump = {}
 
-        ## default zone
+        # default zone
         self.__defaultzone = 'Europe/Berlin'
-        ## default mntgrp
+        # default mntgrp
         self.__defaultmntgrp = 'nxsmntgrp'
-        ## default path
+        # default path
         self.__defaultpath = \
             '/scan$var.serialno:NXentry/NXinstrument/collection'
 
-        ## selection version
+        # selection version
         self.__version = nxsrecconfig.__version__
 
         self._keys = [
@@ -943,7 +944,6 @@ class SelectorTest(unittest.TestCase):
                  '</datasource></definition>'),
         }
 
-        
         self.mydss = {
             'nn':
             ('<?xml version=\'1.0\'?><definition><datasource type="TANGO">'
@@ -1014,7 +1014,7 @@ class SelectorTest(unittest.TestCase):
             ),
         }
 
-    ## test starter
+    # test starter
     # \brief Common set up
     def setUp(self):
         print "SEED =", self.__seed
@@ -1030,7 +1030,7 @@ class SelectorTest(unittest.TestCase):
 #        self._simpsoff.add()
         print "\nsetting up..."
 
-    ## test closer
+    # test closer
     # \brief Common tear down
     def tearDown(self):
         print "tearing down ..."
@@ -1080,7 +1080,7 @@ class SelectorTest(unittest.TestCase):
         size = self.__rnd.randint(1, maxsize)
         return ''.join(self.__rnd.choice(letters) for _ in range(size))
 
-    ## Exception tester
+    # Exception tester
     # \param exception expected exception
     # \param method called method
     # \param args list with method arguments
@@ -1112,7 +1112,7 @@ class SelectorTest(unittest.TestCase):
                 logger.debug("%s , %s" % (str(v), str(dct2[k])))
                 self.assertEqual(v, dct2[k])
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_constructor_keys(self):
         fun = sys._getframe().f_code.co_name
@@ -1147,7 +1147,7 @@ class SelectorTest(unittest.TestCase):
         self.assertEqual(pools[0].name(), self._pool.dp.name())
         self.assertEqual(se.getMacroServer(), self._ms.ms.keys()[0])
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_se_getPool_1to3(self):
         fun = sys._getframe().f_code.co_name
@@ -1195,7 +1195,7 @@ class SelectorTest(unittest.TestCase):
         finally:
             ms2.tearDown()
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_se_getPool_3to3(self):
         fun = sys._getframe().f_code.co_name
@@ -1239,7 +1239,7 @@ class SelectorTest(unittest.TestCase):
         finally:
             ms3.tearDown()
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_poolMotors(self):
         fun = sys._getframe().f_code.co_name
@@ -1298,7 +1298,7 @@ class SelectorTest(unittest.TestCase):
         self.assertEqual(pools[0].name(), self._pool.dp.name())
         self.assertEqual(se.getMacroServer(), self._ms.ms.keys()[0])
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_poolChannels(self):
         fun = sys._getframe().f_code.co_name
@@ -1357,7 +1357,7 @@ class SelectorTest(unittest.TestCase):
         self.assertEqual(pools[0].name(), self._pool.dp.name())
         self.assertEqual(se.getMacroServer(), self._ms.ms.keys()[0])
 
-    ## updateOrderedChannels test
+    # updateOrderedChannels test
     def test_resetPreselectedComponents(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -1403,7 +1403,7 @@ class SelectorTest(unittest.TestCase):
                 se.reset()
                 self.assertEqual(se["ComponentPreselection"], "{}")
 
-    ## updateOrderedChannels test
+    # updateOrderedChannels test
     def test_ConfigServer(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -1476,7 +1476,7 @@ class SelectorTest(unittest.TestCase):
 
             self.assertTrue(se["ConfigDevice"], val["ConfigDevice"])
 
-    ## updateOrderedChannels test
+    # updateOrderedChannels test
     def test_WriterDevice(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -1550,7 +1550,7 @@ class SelectorTest(unittest.TestCase):
     def setDoor(self, se, door):
         se["Door"] = door
 
-    ## updateOrderedChannels test
+    # updateOrderedChannels test
     def test_Door(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -1626,7 +1626,7 @@ class SelectorTest(unittest.TestCase):
             self.assertEqual(se["Door"], val["Door"])
             self.assertEqual(se.getMacroServer(), msname)
 
-    ## deselect test
+    # deselect test
     def test_MntGrp(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -1689,7 +1689,7 @@ class SelectorTest(unittest.TestCase):
 
             self.assertEqual(se["MntGrp"], mg)
 
-    ## deselect test
+    # deselect test
     def test_TimeZone(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -1750,7 +1750,7 @@ class SelectorTest(unittest.TestCase):
 
             self.assertEqual(se["TimeZone"], mg)
 
-    ## deselect test
+    # deselect test
     def test_setConfigInstance(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -2007,7 +2007,7 @@ class SelectorTest(unittest.TestCase):
                     res = se.configCommand(ar[0], ar[1])
                     self.assertEqual(res, mres)
 
-    ## updateOrderedChannels test
+    # updateOrderedChannels test
     def test_PreselectingDataSources(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -2117,7 +2117,7 @@ class SelectorTest(unittest.TestCase):
                              set(ads))
             self.compareToDump(se, ["PreselectingDataSources"])
 
-    ## updateOrderedChannels test
+    # updateOrderedChannels test
     def test_OrderedChannels(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -2242,7 +2242,7 @@ class SelectorTest(unittest.TestCase):
             self.assertEqual(ndss[:len(dss2)], odss[:len(dss2)])
             self.assertEqual(set(ndss), set(odss))
 
-    ## ComponentSelection test
+    # ComponentSelection test
     def test_ComponentSelection(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -2403,7 +2403,7 @@ class SelectorTest(unittest.TestCase):
                     self.assertEqual(ncps[key], cps[key])
             self.compareToDumpJSON(se, ["ComponentSelection"])
 
-    ## DataSourceSelection test
+    # DataSourceSelection test
     def test_DataSourceSelection(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -2567,7 +2567,7 @@ class SelectorTest(unittest.TestCase):
                     self.assertTrue(not value)
             self.compareToDumpJSON(se, ["DataSourceSelection"])
 
-    ## updateOrderedChannels test
+    # updateOrderedChannels test
     def test_ComponentPreselection(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -2657,7 +2657,7 @@ class SelectorTest(unittest.TestCase):
                 self.assertTrue(ds in ndss.keys())
                 self.assertEqual(ndss[ds], cps[ds])
 
-    ## userData test
+    # userData test
     def test_UserData(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -2741,7 +2741,7 @@ class SelectorTest(unittest.TestCase):
                 self.assertTrue(ds in ndss.keys())
                 self.assertEqual(ndss[ds], cps[ds])
 
-    ## labels test
+    # labels test
     def test_Labels(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -2828,7 +2828,7 @@ class SelectorTest(unittest.TestCase):
                 self.assertTrue(ds in ndss.keys())
                 self.assertEqual(ndss[ds], cps[ds])
 
-    ## labelpaths test
+    # labelpaths test
     def test_LabelPaths(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -2916,7 +2916,7 @@ class SelectorTest(unittest.TestCase):
                 self.assertTrue(ds in ndss.keys())
                 self.assertEqual(ndss[ds], cps[ds])
 
-    ## labellinks test
+    # labellinks test
     def test_LabelLinks(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -3003,7 +3003,7 @@ class SelectorTest(unittest.TestCase):
                 self.assertTrue(ds in ndss.keys())
                 self.assertEqual(ndss[ds], cps[ds])
 
-    ## labeltypes test
+    # labeltypes test
     def test_LabelTypes(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -3090,7 +3090,7 @@ class SelectorTest(unittest.TestCase):
                 self.assertTrue(ds in ndss.keys())
                 self.assertEqual(ndss[ds], cps[ds])
 
-    ## labelshapes test
+    # labelshapes test
     def test_LabelShapes(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -3181,7 +3181,7 @@ class SelectorTest(unittest.TestCase):
                 self.assertTrue(ds in ndss.keys())
                 self.assertEqual(ndss[ds], cps[ds])
 
-    ## configvariables test
+    # configvariables test
     def test_ConfigVariables(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -3262,7 +3262,7 @@ class SelectorTest(unittest.TestCase):
                 self.assertTrue(ds in ndss.keys())
                 self.assertEqual(ndss[ds], cps[ds])
 
-    ## timers test
+    # timers test
     def test_Timer(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -3335,7 +3335,7 @@ class SelectorTest(unittest.TestCase):
             ndss = json.loads(se["Timer"])
             self.assertEqual(ndss, cps)
 
-    ## DataSourcePreselection test
+    # DataSourcePreselection test
     def test_DataSourcePreselection(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -3410,7 +3410,7 @@ class SelectorTest(unittest.TestCase):
             ndss = json.loads(se["DataSourcePreselection"])
             self.assertEqual(ndss, cps)
 
-    ## OptionalComponents test
+    # OptionalComponents test
     def test_OptionalComponents(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -3484,7 +3484,7 @@ class SelectorTest(unittest.TestCase):
             ndss = json.loads(se["OptionalComponents"])
             self.assertEqual(ndss, cps)
 
-    ## UnplottedComponents test
+    # UnplottedComponents test
     def test_UnplottedComponents(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -3562,7 +3562,7 @@ class SelectorTest(unittest.TestCase):
             ndss = json.loads(se["UnplottedComponents"])
             self.assertEqual(ndss, [])
 
-    ## DefaultDynamicPath test
+    # DefaultDynamicPath test
     def test_DefaultDynamicPath(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -3636,7 +3636,7 @@ class SelectorTest(unittest.TestCase):
             self.compareToDump(se, ["DefaultDynamicPath"])
             self.assertEqual(se["DefaultDynamicPath"], cps)
 
-    ## AppendEntry test
+    # AppendEntry test
     def test_AppendEntry(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -3716,7 +3716,7 @@ class SelectorTest(unittest.TestCase):
             self.compareToDump(se, ["AppendEntry"])
             self.assertEqual(se["AppendEntry"], cps)
 
-    ## ComponentsFromMntGrp test
+    # ComponentsFromMntGrp test
     def test_ComponentsFromMntGrp(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -3788,7 +3788,7 @@ class SelectorTest(unittest.TestCase):
             self.compareToDump(se, ["ComponentsFromMntGrp"])
             self.assertEqual(se["ComponentsFromMntGrp"], cps)
 
-    ## DynamicComponents test
+    # DynamicComponents test
     def test_DynamicComponents(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -3860,7 +3860,7 @@ class SelectorTest(unittest.TestCase):
             self.compareToDump(se, ["DynamicComponents"])
             self.assertEqual(se["DynamicComponents"], cps)
 
-    ## DefaultDynamicLinks test
+    # DefaultDynamicLinks test
     def test_DefaultDynamicLinks(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -3932,7 +3932,7 @@ class SelectorTest(unittest.TestCase):
             self.compareToDump(se, ["DefaultDynamicLinks"])
             self.assertEqual(se["DefaultDynamicLinks"], cps)
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_preselect_simple(self):
         fun = sys._getframe().f_code.co_name
@@ -3963,7 +3963,7 @@ class SelectorTest(unittest.TestCase):
         self.assertEqual(json.loads(
             self._cf.dp.GetCommandVariable("VARS")), [None, None, None, None])
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_preselect_withcf(self):
         fun = sys._getframe().f_code.co_name
@@ -4005,7 +4005,7 @@ class SelectorTest(unittest.TestCase):
             [None, None, None, None])
 #        print self._cf.dp.availableComponents()
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_preselect_withcf_cps(self):
         fun = sys._getframe().f_code.co_name
@@ -4075,7 +4075,7 @@ class SelectorTest(unittest.TestCase):
             else:
                 self.assertEqual(sed[key], vl)
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_preselect_withcf_cps_False(self):
         fun = sys._getframe().f_code.co_name
@@ -4119,7 +4119,7 @@ class SelectorTest(unittest.TestCase):
              "DataSources",
              "DataSources",
              "DataSources"
-         ])
+             ])
         self.assertEqual(
             json.loads(self._cf.dp.GetCommandVariable("VARS")),
             [None, None, None, None,
@@ -4127,7 +4127,7 @@ class SelectorTest(unittest.TestCase):
 
         self.assertTrue(val["MntGrp"] not in self._cf.dp.availableSelections())
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_preselect_withcf_cps_t(self):
         fun = sys._getframe().f_code.co_name
@@ -4178,7 +4178,7 @@ class SelectorTest(unittest.TestCase):
 
         self.assertTrue(val["MntGrp"] not in self._cf.dp.availableSelections())
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_preselect_withcf_nocps(self):
         fun = sys._getframe().f_code.co_name
@@ -4222,7 +4222,7 @@ class SelectorTest(unittest.TestCase):
 
         self.assertTrue(val["MntGrp"] not in self._cf.dp.availableSelections())
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_preselect_withcf_nochannel(self):
         fun = sys._getframe().f_code.co_name
@@ -4290,7 +4290,7 @@ class SelectorTest(unittest.TestCase):
             else:
                 self.assertEqual(sed[key], vl)
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_preselect_withcf_nochannel_False(self):
         fun = sys._getframe().f_code.co_name
@@ -4337,7 +4337,7 @@ class SelectorTest(unittest.TestCase):
                           ['mycp'], ['mycp'], ['ann3'], ['ann3']])
         self.assertTrue(val["MntGrp"] not in self._cf.dp.availableSelections())
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_preselect_withcf_nochannel_t(self):
         fun = sys._getframe().f_code.co_name
@@ -4384,7 +4384,7 @@ class SelectorTest(unittest.TestCase):
                           ['mycp'], ['mycp'], ['ann3'], ['ann3']])
         self.assertTrue(val["MntGrp"] not in self._cf.dp.availableSelections())
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_preselect_wds_t(self):
         fun = sys._getframe().f_code.co_name
@@ -4428,7 +4428,7 @@ class SelectorTest(unittest.TestCase):
              "DataSources", "DataSources", "DataSources"])
         self.assertTrue(val["MntGrp"] not in self._cf.dp.availableSelections())
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_preselect_wds(self):
         fun = sys._getframe().f_code.co_name
@@ -4501,7 +4501,7 @@ class SelectorTest(unittest.TestCase):
             else:
                 self.assertEqual(sed[key], vl)
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_preselect_wds_False(self):
         fun = sys._getframe().f_code.co_name
@@ -4552,10 +4552,10 @@ class SelectorTest(unittest.TestCase):
                           [u'scalar_long', u'scalar_short'],
                           [u'scalar_uchar'],
                           [u'scalar_uchar']
-                      ])
+                          ])
         self.assertTrue(val["MntGrp"] not in self._cf.dp.availableSelections())
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_preselect_wds2(self):
         fun = sys._getframe().f_code.co_name
@@ -4633,7 +4633,7 @@ class SelectorTest(unittest.TestCase):
             else:
                 self.assertEqual(sed[key], vl)
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_preselect_2wds(self):
         fun = sys._getframe().f_code.co_name
@@ -4739,7 +4739,7 @@ class SelectorTest(unittest.TestCase):
         finally:
             simps2.tearDown()
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_preselect_2wds_False(self):
         fun = sys._getframe().f_code.co_name
@@ -4843,7 +4843,7 @@ class SelectorTest(unittest.TestCase):
         finally:
             simps2.tearDown()
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_preselect_2wds_dvnorunning(self):
         fun = sys._getframe().f_code.co_name
@@ -4945,7 +4945,7 @@ class SelectorTest(unittest.TestCase):
         finally:
             simps2.delete()
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_preselect_2wds_dvnorunning_pe(self):
         fun = sys._getframe().f_code.co_name
@@ -5021,7 +5021,7 @@ class SelectorTest(unittest.TestCase):
         finally:
             simps2.delete()
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_preselect_2wds2_dvnorunning_pe(self):
         fun = sys._getframe().f_code.co_name
@@ -5097,7 +5097,7 @@ class SelectorTest(unittest.TestCase):
         finally:
             simps2.tearDown()
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_preselect_2wds2_dvnorunning_pe_true(self):
         fun = sys._getframe().f_code.co_name
@@ -5152,11 +5152,13 @@ class SelectorTest(unittest.TestCase):
 
     #        print self._cf.dp.GetCommandVariable("COMMANDS")
             res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
-            self.assertTrue(not val["MntGrp"] in self._cf.dp.availableSelections())
+            self.assertTrue(
+                not val["MntGrp"] in self._cf.dp.availableSelections())
         finally:
             simps2.tearDown()
-    ## test
+    # test
     # \brief It tests default settings
+
     def test_preselect_2wds2_dvnorunning_pe_false(self):
         fun = sys._getframe().f_code.co_name
         print "Run: %s.%s() " % (self.__class__.__name__, fun)
@@ -5210,11 +5212,12 @@ class SelectorTest(unittest.TestCase):
 
     #        print self._cf.dp.GetCommandVariable("COMMANDS")
             res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
-            self.assertTrue(not val["MntGrp"] in self._cf.dp.availableSelections())
+            self.assertTrue(
+                not val["MntGrp"] in self._cf.dp.availableSelections())
         finally:
             simps2.tearDown()
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_preselect_2wds_dvnorunning_pe_true(self):
         fun = sys._getframe().f_code.co_name
@@ -5290,7 +5293,7 @@ class SelectorTest(unittest.TestCase):
         finally:
             simps2.delete()
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_preselect_2wds_dvnorunning_pe_false(self):
         fun = sys._getframe().f_code.co_name
@@ -5366,7 +5369,7 @@ class SelectorTest(unittest.TestCase):
         finally:
             simps2.delete()
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_preselect_2wds_dvnodef(self):
         fun = sys._getframe().f_code.co_name
@@ -5418,7 +5421,6 @@ class SelectorTest(unittest.TestCase):
         })
         self.assertEqual(len(se.descErrors), 6)
 
-        
         self.assertEqual(
             json.loads(
                 self._cf.dp.GetCommandVariable("COMMANDS")),
@@ -5464,7 +5466,7 @@ class SelectorTest(unittest.TestCase):
             else:
                 self.assertEqual(sed[key], vl)
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_preselect_2wds_nods(self):
         fun = sys._getframe().f_code.co_name
@@ -5543,7 +5545,7 @@ class SelectorTest(unittest.TestCase):
         finally:
             simps2.tearDown()
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_preselect_2wds_nodspool(self):
         fun = sys._getframe().f_code.co_name
@@ -5626,7 +5628,7 @@ class SelectorTest(unittest.TestCase):
         finally:
             simps2.tearDown()
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_preselect_2wds_notangods(self):
         fun = sys._getframe().f_code.co_name
@@ -5712,7 +5714,7 @@ class SelectorTest(unittest.TestCase):
         finally:
             simps2.tearDown()
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_preselect_2wds_notangodsnopool(self):
         fun = sys._getframe().f_code.co_name
@@ -5799,7 +5801,7 @@ class SelectorTest(unittest.TestCase):
         finally:
             simps2.tearDown()
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_preselect_2wds_notangodsnopool_False(self):
         fun = sys._getframe().f_code.co_name
@@ -5886,7 +5888,7 @@ class SelectorTest(unittest.TestCase):
         finally:
             simps2.tearDown()
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_preselect_2wds_notangodsnopool2(self):
         fun = sys._getframe().f_code.co_name
@@ -5977,7 +5979,7 @@ class SelectorTest(unittest.TestCase):
         finally:
             simps2.tearDown()
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_preselect_2wds_notangodsnopool2_False(self):
         fun = sys._getframe().f_code.co_name
@@ -6068,7 +6070,7 @@ class SelectorTest(unittest.TestCase):
         finally:
             simps2.tearDown()
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_preselect_2wds_notangods2(self):
         fun = sys._getframe().f_code.co_name
@@ -6170,7 +6172,7 @@ class SelectorTest(unittest.TestCase):
         finally:
             simps2.tearDown()
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_preselect_2wds_notangods2_False(self):
         fun = sys._getframe().f_code.co_name
@@ -6272,7 +6274,7 @@ class SelectorTest(unittest.TestCase):
         finally:
             simps2.tearDown()
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_preselect_2wds_notangodspool_error(self):
         fun = sys._getframe().f_code.co_name
@@ -6376,7 +6378,7 @@ class SelectorTest(unittest.TestCase):
         finally:
             simps2.tearDown()
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_preselect_2wds_notangodspool_error_False(self):
         fun = sys._getframe().f_code.co_name
@@ -6483,7 +6485,7 @@ class SelectorTest(unittest.TestCase):
         finally:
             simps2.tearDown()
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_preselect_2wds_notangodspool(self):
         fun = sys._getframe().f_code.co_name
@@ -6588,7 +6590,7 @@ class SelectorTest(unittest.TestCase):
         finally:
             simps2.tearDown()
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_preselect_2wds_notangodspool_False(self):
         fun = sys._getframe().f_code.co_name
@@ -6690,7 +6692,7 @@ class SelectorTest(unittest.TestCase):
         finally:
             simps2.tearDown()
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_preselect_2wds_notangodspool_alias(self):
         fun = sys._getframe().f_code.co_name
@@ -6794,7 +6796,7 @@ class SelectorTest(unittest.TestCase):
             db.delete_device_alias(arr[0]["name"])
             simps2.tearDown()
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_preselect_2wds_notangodspool_alias_False(self):
         fun = sys._getframe().f_code.co_name
@@ -6876,7 +6878,7 @@ class SelectorTest(unittest.TestCase):
             db.delete_device_alias(arr[0]["name"])
             simps2.tearDown()
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_preselect_2wds_notangodspool_alias_value(self):
         fun = sys._getframe().f_code.co_name
@@ -6957,7 +6959,7 @@ class SelectorTest(unittest.TestCase):
             db.delete_device_alias(arr[0]["name"])
             simps2.tearDown()
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_preselect_2wds_notangodspool_alias_value_False(self):
         fun = sys._getframe().f_code.co_name
@@ -7038,7 +7040,7 @@ class SelectorTest(unittest.TestCase):
             db.delete_device_alias(arr[0]["name"])
             simps2.tearDown()
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_preselect_2wds_ntdsp_alias_novalue(self):
         fun = sys._getframe().f_code.co_name
@@ -7117,7 +7119,7 @@ class SelectorTest(unittest.TestCase):
             db.delete_device_alias(arr[0]["name"])
             simps2.tearDown()
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_preselect_2wds_ntdsp_alias_novalue_False(self):
         fun = sys._getframe().f_code.co_name
@@ -7196,7 +7198,7 @@ class SelectorTest(unittest.TestCase):
             db.delete_device_alias(arr[0]["name"])
             simps2.tearDown()
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_preselect_2wds_nocomponents(self):
         fun = sys._getframe().f_code.co_name
@@ -7267,7 +7269,7 @@ class SelectorTest(unittest.TestCase):
         finally:
             simps2.tearDown()
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_importEnv_noenv(self):
         fun = sys._getframe().f_code.co_name
@@ -7314,7 +7316,7 @@ class SelectorTest(unittest.TestCase):
             dwt = se.getScanEnvVariables()
             self.myAssertDict(data, dt)
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_importEnv(self):
         fun = sys._getframe().f_code.co_name
@@ -7450,10 +7452,10 @@ class SelectorTest(unittest.TestCase):
                 'pickle', envs[i])
             se.importEnv(enms[i], data)
             dwt = se.getScanEnvVariables()
-            
+
             self.myAssertDict(data, dt)
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_exportEnv(self):
         fun = sys._getframe().f_code.co_name
@@ -7688,7 +7690,7 @@ class SelectorTest(unittest.TestCase):
 #            print "ei", envs[i]
             self.myAssertDict(envs[i], env)
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_getScanEnvVariables(self):
         fun = sys._getframe().f_code.co_name
@@ -7815,7 +7817,7 @@ class SelectorTest(unittest.TestCase):
             self.myAssertDict(edats[i], json.loads(dwt))
             self.myAssertDict(edats[i], dt)
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_setScanEnvVariables(self):
         fun = sys._getframe().f_code.co_name
@@ -8014,7 +8016,7 @@ class SelectorTest(unittest.TestCase):
 #            print "ei", envs[i]
             self.myAssertDict(envs[i], env)
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_setScanEnv_scanid(self):
         fun = sys._getframe().f_code.co_name
@@ -8053,7 +8055,7 @@ class SelectorTest(unittest.TestCase):
         self._ms.dps[self._ms.ms.keys()[0]].Environment = ('pickle', envs[1])
         self.assertEqual(se.setScanEnvVariables("{}"), 12)
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_setScanEnv2(self):
         fun = sys._getframe().f_code.co_name
@@ -8252,7 +8254,7 @@ class SelectorTest(unittest.TestCase):
 #            print "ei", envs[i]
             self.myAssertDict(envs[i], env)
 
-    ## test
+    # test
     # \brief It tests default settings
     def test_setScanEnv_dtlist(self):
         fun = sys._getframe().f_code.co_name

@@ -58,6 +58,7 @@ class Pool(PyTango.Device_4Impl):
     #------------------------------------------------------------------
     #    Device constructor
     #------------------------------------------------------------------
+
     def __init__(self, cl, name):
         PyTango.Device_4Impl.__init__(self, cl, name)
 

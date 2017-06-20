@@ -29,9 +29,11 @@ from .CheckerThread import CheckerThread, TangoDSItem, CheckerItem
 
 
 class MacroServerPools(object):
+
     """ sardanamacro server and pools """
 
-    ##
+    #
+
     def __init__(self, numberOfThreads):
         """ constructor
 

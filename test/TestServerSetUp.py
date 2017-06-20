@@ -15,8 +15,8 @@
 #
 #    You should have received a copy of the GNU General Public License
 #    along with nexdatas.  If not, see <http://www.gnu.org/licenses/>.
-## \package test nexdatas
-## \file ServerSetUp.py
+# \package test nexdatas
+# \file ServerSetUp.py
 # class with server settings
 #
 import unittest
@@ -29,27 +29,28 @@ import time
 import TestServer
 
 
-## test fixture
+# test fixture
 class TestServerSetUp(object):
 
-    ## constructor
+    # constructor
     # \brief defines server parameters
+
     def __init__(self, device="ttestp09/testts/t1r228", instance="S1"):
-        ## information about tango writer
+        # information about tango writer
         self.new_device_info_writer = PyTango.DbDevInfo()
-        ## information about tango writer class
+        # information about tango writer class
         self.new_device_info_writer._class = "TestServer"
-        ## information about tango writer server
+        # information about tango writer server
         self.new_device_info_writer.server = "TestServer/%s" % instance
-        ## information about tango writer name
+        # information about tango writer name
         self.new_device_info_writer.name = device
 
-        ## server instance
+        # server instance
         self.instance = instance
         self._psub = None
-        ## device proxy
+        # device proxy
         self.dp = None
-        ## device properties
+        # device properties
         self.device_prop = {
             'DeviceBoolean': False,
             'DeviceShort': 12,
@@ -61,7 +62,7 @@ class TestServerSetUp(object):
             'DeviceString': "My Sting"
         }
 
-        ##  class properties
+        # class properties
         self.class_prop = {
             'ClassBoolean': True,
             'ClassShort': 1,
@@ -73,7 +74,7 @@ class TestServerSetUp(object):
             'ClassString': "My ClassString",
         }
 
-    ## test starter
+    # test starter
     # \brief Common set up of Tango Server
     def setUp(self):
         print "\nsetting up..."
@@ -90,7 +91,7 @@ class TestServerSetUp(object):
         db.put_class_property(self.new_device_info_writer._class,
                               self.class_prop)
 
-    ## starts server
+    # starts server
     def start(self):
         path = os.path.dirname(TestServer.__file__)
         if not path:
@@ -116,7 +117,7 @@ class TestServerSetUp(object):
             cnt += 1
         print ""
 
-    ## test closer
+    # test closer
     # \brief Common tear down of Tango Server
     def tearDown(self):
         print "tearing down ..."
@@ -127,7 +128,7 @@ class TestServerSetUp(object):
         db = PyTango.Database()
         db.delete_server(self.new_device_info_writer.server)
 
-    ## stops server
+    # stops server
     def stop(self):
         output = ""
         pipe = subprocess.Popen(
@@ -142,19 +143,20 @@ class TestServerSetUp(object):
                     "kill -9 %s" % sr[1], stderr=subprocess.PIPE, shell=True)
 
 
-## test fixture
+# test fixture
 class MultiTestServerSetUp(object):
 
-    ## constructor
+    # constructor
     # \brief defines server parameters
+
     def __init__(self, instance="MTS01", devices=None):
         if not isinstance(devices, list):
             devices = ["ttestp09/testts/mt1r228"]
 
-        ## information about tango writer
+        # information about tango writer
         self.server = "TestServer/%s" % instance
         self.ts = {}
-        ## device proxy
+        # device proxy
         self.dps = {}
         for dv in devices:
             self.ts[dv] = PyTango.DbDevInfo()
@@ -162,11 +164,11 @@ class MultiTestServerSetUp(object):
             self.ts[dv].server = self.server
             self.ts[dv].name = dv
 
-        ## server instance
+        # server instance
         self.instance = instance
         self._psub = None
 
-        ## device properties
+        # device properties
         self.device_prop = {
             'DeviceBoolean': False,
             'DeviceShort': 12,
@@ -178,7 +180,7 @@ class MultiTestServerSetUp(object):
             'DeviceString': "My Sting"
         }
 
-        ##  class properties
+        # class properties
         self.class_prop = {
             'ClassBoolean': True,
             'ClassShort': 1,
@@ -190,7 +192,7 @@ class MultiTestServerSetUp(object):
             'ClassString': "My ClassString",
         }
 
-    ## test starter
+    # test starter
     # \brief Common set up of Tango Server
     def setUp(self):
         print "\nsetting up..."
@@ -210,7 +212,7 @@ class MultiTestServerSetUp(object):
         if devices:
             db.add_server(self.server, devices)
 
-    ## starts server
+    # starts server
     def start(self):
         path = os.path.dirname(TestServer.__file__)
         if not path:
@@ -240,7 +242,7 @@ class MultiTestServerSetUp(object):
             cnt += 1
         print ""
 
-    ## test closer
+    # test closer
     # \brief Common tear down of Tango Server
     def tearDown(self):
         print "tearing down ..."
@@ -251,7 +253,7 @@ class MultiTestServerSetUp(object):
         db = PyTango.Database()
         db.delete_server(self.server)
 
-    ## stops server
+    # stops server
     def stop(self):
         output = ""
         pipe = subprocess.Popen(

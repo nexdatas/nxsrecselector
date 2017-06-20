@@ -29,9 +29,10 @@ import fnmatch
 
 
 class Utils(object):
+
     """  Miscellaneous Utilities """
 
-    ##
+    #
     @classmethod
     def compareDict(cls, dct, dct2):
         """ copares two dictionaries
@@ -186,6 +187,7 @@ class Utils(object):
 
 
 class TangoUtils(object):
+
     """  Tango Utilities """
 
     #: (:obj:`dict` <:class:`PyTango.CmdArgType`, :obj:`str`>)
@@ -372,6 +374,7 @@ class TangoUtils(object):
 
 
 class MSUtils(object):
+
     """  MacroServer Utilities """
 
     @classmethod
@@ -470,6 +473,7 @@ class MSUtils(object):
 
 
 class PoolUtils(object):
+
     """  Pool Utilities """
 
     @classmethod
@@ -697,7 +701,9 @@ class PoolUtils(object):
             if hasattr(dp, 'DataSource'):
                 ds = dp.DataSource
                 sds = ds.split("://")
-                _ = PyTango.AttributeProxy(sds[-1])
+                ap = PyTango.AttributeProxy(sds[-1])
+                if ap is None:
+                    raise Exception("Empty proxy")
                 source = sds[-1]
         except (PyTango.DevFailed, PyTango.Except, PyTango.DevError):
             pass

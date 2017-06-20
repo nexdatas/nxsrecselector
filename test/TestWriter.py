@@ -56,6 +56,7 @@ class NXSDataWriter(PyTango.Device_4Impl):
     #------------------------------------------------------------------
     #    Device constructor
     #------------------------------------------------------------------
+
     def __init__(self, cl, name):
         PyTango.Device_4Impl.__init__(self, cl, name)
 
@@ -71,13 +72,14 @@ class NXSDataWriter(PyTango.Device_4Impl):
     #------------------------------------------------------------------
     def delete_device(self):
         """ """
-#        print "[Device delete_device method] for device", self.get_name()
+        # print "[Device delete_device method] for device", self.get_name()
 
     #------------------------------------------------------------------
     #    Device initialization
     #------------------------------------------------------------------
+
     def init_device(self):
-#        print "In ", self.get_name(), "::init_device()"
+        #        print "In ", self.get_name(), "::init_device()"
         self.set_state(PyTango.DevState.ON)
         self.get_device_properties(self.get_device_class())
 
@@ -108,6 +110,7 @@ class NXSDataWriter(PyTango.Device_4Impl):
     #
     #    argin: DevString     tango state
     #------------------------------------------------------------------
+
     def SetState(self, state):
         #        print "In ", self.get_name(), "::SetState()"
         if state == "RUNNING":

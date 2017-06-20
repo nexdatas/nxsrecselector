@@ -15,8 +15,8 @@
 #
 #    You should have received a copy of the GNU General Public License
 #    along with nexdatas.  If not, see <http://www.gnu.org/licenses/>.
-## \package test nexdatas
-## \file SettingsTest.py
+# \package test nexdatas
+# \file SettingsTest.py
 # unittests for TangoDsItemTest running Tango Server
 #
 import unittest
@@ -56,10 +56,10 @@ from nxsrecconfig.Utils import TangoUtils, MSUtils
 from nxsconfigserver.XMLConfigurator import XMLConfigurator
 from nxsrecconfig.Utils import TangoUtils, MSUtils, Utils
 
-## if 64-bit machione
+# if 64-bit machione
 IS64BIT = (struct.calcsize("P") == 8)
 
-## list of available databases
+# list of available databases
 DB_AVAILABLE = []
 
 #: tango version
@@ -67,17 +67,17 @@ TGVER = PyTango.__version_info__[0]
 
 try:
     import MySQLdb
-    ## connection arguments to MYSQL DB
+    # connection arguments to MYSQL DB
     mydb = MySQLdb.connect({})
     mydb.close()
     DB_AVAILABLE.append("MYSQL")
 except:
     try:
         import MySQLdb
-    ## connection arguments to MYSQL DB
+    # connection arguments to MYSQL DB
         args = {'host': 'localhost', 'db': 'nxsconfig',
                 'read_default_file': '/etc/my.cnf', 'use_unicode': True}
-    ## inscance of MySQLdb
+    # inscance of MySQLdb
         mydb = MySQLdb.connect(**args)
         mydb.close()
         DB_AVAILABLE.append("MYSQL")
@@ -86,11 +86,11 @@ except:
             import MySQLdb
             from os.path import expanduser
             home = expanduser("~")
-        ## connection arguments to MYSQL DB
+        # connection arguments to MYSQL DB
             args2 = {'host': 'localhost', 'db': 'nxsconfig',
                      'read_default_file': '%s/.my.cnf' % home,
                      'use_unicode': True}
-        ## inscance of MySQLdb
+        # inscance of MySQLdb
             mydb = MySQLdb.connect(**args2)
             mydb.close()
             DB_AVAILABLE.append("MYSQL")
@@ -103,11 +103,12 @@ except:
             print "MYSQL not available"
 
 
-## test fixture
+# test fixture
 class SettingsTest(unittest.TestCase):
 
-    ## constructor
+    # constructor
     # \param methodName name of the test method
+
     def __init__(self, methodName):
         unittest.TestCase.__init__(self, methodName)
 
@@ -128,51 +129,52 @@ class SettingsTest(unittest.TestCase):
 
         #        self._seed = 133807022068754062020588864622821989794
         #        self._seed = 252610957556978915330732248482858942194
+        #        self._seed = 46552883294733194407855569822890540222
         self._rnd = random.Random(self._seed)
 
         self._dump = {}
 
-        ## default zone
+        # default zone
         self._defaultzone = 'Europe/Berlin'
-        ## default mntgrp
+        # default mntgrp
         self._defaultmntgrp = 'nxsmntgrp'
-        ## default path
+        # default path
         self._defaultpath = \
             '/scan$var.serialno:NXentry/NXinstrument/collection'
 
         self._npTn = {"float32": "NX_FLOAT32", "float64": "NX_FLOAT64",
-                       "float": "NX_FLOAT32", "double": "NX_FLOAT64",
-                       "int": "NX_INT", "int64": "NX_INT64",
-                       "int32": "NX_INT32", "int16": "NX_INT16",
-                       "int8": "NX_INT8", "uint64": "NX_UINT64",
-                       "uint32": "NX_UINT32", "uint16": "NX_UINT16",
-                       "uint8": "NX_UINT8", "uint": "NX_UINT64",
-                       "string": "NX_CHAR", "bool": "NX_BOOLEAN"}
+                      "float": "NX_FLOAT32", "double": "NX_FLOAT64",
+                      "int": "NX_INT", "int64": "NX_INT64",
+                      "int32": "NX_INT32", "int16": "NX_INT16",
+                      "int8": "NX_INT8", "uint64": "NX_UINT64",
+                      "uint32": "NX_UINT32", "uint16": "NX_UINT16",
+                      "uint8": "NX_UINT8", "uint": "NX_UINT64",
+                      "string": "NX_CHAR", "bool": "NX_BOOLEAN"}
         self._npTn2 = {"float32": "NX_FLOAT32", "float64": "NX_FLOAT64",
-                        "float": "NX_FLOAT32", "double": "NX_FLOAT64",
-                        "long": "NX_INT32",
-                        "long64": "NX_INT64",
-                        "long32": "NX_INT32",
-                        "ulong64": "NX_UINT64",
-                        "ulong32": "NX_UINT32",
-                        "ulong": "NX_UINT32",
-                        "ushort": "NX_UINT16",
-                        "uchar": "NX_UINT8",
-                        "short": "NX_INT16",
-                        "int": "NX_INT",
-                        "int64": "NX_INT64",
-                        "int32": "NX_INT32",
-                        "int16": "NX_INT16",
-                        "int8": "NX_INT8",
-                        "uint64": "NX_UINT64",
-                        "uint32": "NX_UINT32",
-                        "uint16": "NX_UINT16",
-                        "uint8": "NX_UINT8",
-                        "uint": "NX_UINT64",
-                        "string": "NX_CHAR",
-                        "bool": "NX_BOOLEAN"}
+                       "float": "NX_FLOAT32", "double": "NX_FLOAT64",
+                       "long": "NX_INT32",
+                       "long64": "NX_INT64",
+                       "long32": "NX_INT32",
+                       "ulong64": "NX_UINT64",
+                       "ulong32": "NX_UINT32",
+                       "ulong": "NX_UINT32",
+                       "ushort": "NX_UINT16",
+                       "uchar": "NX_UINT8",
+                       "short": "NX_INT16",
+                       "int": "NX_INT",
+                       "int64": "NX_INT64",
+                       "int32": "NX_INT32",
+                       "int16": "NX_INT16",
+                       "int8": "NX_INT8",
+                       "uint64": "NX_UINT64",
+                       "uint32": "NX_UINT32",
+                       "uint16": "NX_UINT16",
+                       "uint8": "NX_UINT8",
+                       "uint": "NX_UINT64",
+                       "string": "NX_CHAR",
+                       "bool": "NX_BOOLEAN"}
 
-        ## selection version
+        # selection version
         self.version = nxsrecconfig.__version__
 
         self._keys = [
@@ -634,10 +636,10 @@ class SettingsTest(unittest.TestCase):
             'dim4': {
                 'tann1c': [
                     ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8',
-                 ['$datasources.ann2'])],
+                     ['$datasources.ann2'])],
                      'ann2': [
                          ('CONFIG', 'CLIENT', '', None, None)],
-                 },
+            },
             'dim5': {
                 'tann1c': [
                     ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8',
@@ -1986,7 +1988,7 @@ class SettingsTest(unittest.TestCase):
             'slt1vgap': ('slt1vgap', "CLIENT", "p02/slt/exp.07"),
         }
 
-    ## test starter
+    # test starter
     # \brief Common set up
     def setUp(self):
         print "SEED =", self._seed
@@ -2002,7 +2004,7 @@ class SettingsTest(unittest.TestCase):
 #        self._simpsoff.add()
         print "\nsetting up..."
 
-    ## test closer
+    # test closer
     # \brief Common tear down
     def tearDown(self):
         print "tearing down ..."
@@ -2188,17 +2190,17 @@ class SettingsTest(unittest.TestCase):
                     dscnt += 1
         self.assertEqual(dscnt, len(rv))
 
-    ## test starter
+    # test starter
     # \brief Common set up of Tango Server
     def mySetUp(self):
         pass
 
-    ## test closer
+    # test closer
     # \brief Common tear down oif Tango Server
     def myTearDown(self):
         pass
 
-    ## Exception tester
+    # Exception tester
     # \param exception expected exception
     # \param method called method
     # \param args list with method arguments
@@ -2253,20 +2255,20 @@ class SettingsTest(unittest.TestCase):
             print 'DCT', dct.keys()
             print 'DCT2', dct2.keys()
             print "DIFF", set(dct.keys()) ^ set(dct2.keys())
-        if len(dct.keys()) !=  len(dct2.keys()):
-            raise Exception("LEN %s %s" %(dct, dct2))
-               
+        if len(dct.keys()) != len(dct2.keys()):
+            raise Exception("LEN %s %s" % (dct, dct2))
+
         for k, v in dct.items():
             logger.debug("%s  in %s" % (str(k), str(dct2.keys())))
             if k not in dct2.keys():
-                raise Exception("%s not in %s"  % (k, dct2 ))
+                raise Exception("%s not in %s" % (k, dct2))
             if isinstance(v, dict):
                 self.myCompDict(v, dct2[k])
             else:
                 logger.debug("%s , %s" % (str(v), str(dct2[k])))
                 if v != dct2[k]:
                     print 'VALUES', k, v, dct2[k]
-                    raise Exception( "VALUE %s %s %s" % (k,v,dct2[k]) )
+                    raise Exception("VALUE %s %s %s" % (k, v, dct2[k]))
 
     def myAssertDictJSON(self, dct, dct2):
         logger.debug('dict %s' % type(dct))
@@ -2651,6 +2653,6 @@ class SettingsTest(unittest.TestCase):
             }
         )
 
-    
+
 if __name__ == '__main__':
     unittest.main()

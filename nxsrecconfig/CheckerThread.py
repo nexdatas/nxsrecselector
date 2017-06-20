@@ -30,6 +30,7 @@ ATTRIBUTESTOCHECK = ["Value", "Position", "Counts", "Data",
 
 
 class TangoDSItem(object):
+
     """ Tango DataSource item
     """
     __slots__ = 'name', 'device', 'attr'
@@ -53,6 +54,7 @@ class TangoDSItem(object):
 
 
 class CheckerItem(list):
+
     """ Checker list Item
     """
 
@@ -74,6 +76,7 @@ class CheckerItem(list):
 
 
 class CheckerThread(threading.Thread):
+
     """ Single CheckerThread
     """
 
@@ -124,13 +127,19 @@ class CheckerThread(threading.Thread):
                 if not ds.attr:
                     for gattr in ATTRIBUTESTOCHECK:
                         if hasattr(dp, gattr):
-                            _ = getattr(dp, gattr)
+                            at = getattr(dp, gattr)
+                            if at is None:
+                                raise Exception("Empty Attribute")
                 elif ds.attr.startswith("@"):
                     pass
                 elif ds.attr.endswith("()"):
-                    _ = getattr(dp, ds.attr[:-2])
+                    at = getattr(dp, ds.attr[:-2])
+                    if at is None:
+                        raise Exception("Empty Attribute")
                 else:
-                    _ = getattr(dp, ds.attr)
+                    at = getattr(dp, ds.attr)
+                    if at is None:
+                        raise Exception("Empty Attribute")
                 if state in [PyTango.DevState.ALARM]:
                     raise AlarmStateError("ALARM STATE")
             except AlarmStateError as e:
@@ -144,10 +153,12 @@ class CheckerThread(threading.Thread):
 
 
 class AlarmStateError(Exception):
+
     """ Alarm State Exception class
     """
 
 
 class FaultStateError(Exception):
+
     """ Fault State Exception class
     """

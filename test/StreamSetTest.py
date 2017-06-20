@@ -15,8 +15,8 @@
 #
 #    You should have received a copy of the GNU General Public License
 #    along with nexdatas.  If not, see <http://www.gnu.org/licenses/>.
-## \package test nexdatas
-## \file StreamsTest.py
+# \package test nexdatas
+# \file StreamSetTest.py
 # unittests for field Tags running Tango Server
 #
 import unittest
@@ -29,17 +29,18 @@ import binascii
 import string
 from cStringIO import StringIO
 
-from nxsrecconfig import Streams
+from nxsrecconfig import StreamSet
 
-## if 64-bit machione
+# if 64-bit machione
 IS64BIT = (struct.calcsize("P") == 8)
 
 
-## test fixture
-class StreamsTest(unittest.TestCase):
+# test fixture
+class StreamSetTest(unittest.TestCase):
 
-    ## constructor
+    # constructor
     # \param methodName name of the test method
+
     def __init__(self, methodName):
         unittest.TestCase.__init__(self, methodName)
         try:
@@ -58,34 +59,58 @@ class StreamsTest(unittest.TestCase):
         self.mystd3 = StringIO()
         self.mystd4 = StringIO()
         self.mystd5 = StringIO()
+        self.streams = None
 
     def getRandomString(self, maxsize):
         letters = [chr(i) for i in range(256)]
         size = self.__rnd.randint(1, maxsize)
         return ''.join(self.__rnd.choice(letters) for _ in range(size))
 
-    ## test starter
+    # test starter
     # \brief Common set up
     def setUp(self):
         print "SEED =", self.__seed
         print "\nsetting up..."
-        hasattr(Streams, "log_fatal")
-        hasattr(Streams, "log_error")
-        hasattr(Streams, "log_warn")
-        hasattr(Streams, "log_info")
-        hasattr(Streams, "log_debug")
-        Streams.log_fatal = None
-        Streams.log_error = None
-        Streams.log_warn = None
-        Streams.log_info = None
-        Streams.log_debug = None
+        self.streams = StreamSet.StreamSet(None)
+        hasattr(self.streams, "log_fatal")
+        hasattr(self.streams, "log_error")
+        hasattr(self.streams, "log_warn")
+        hasattr(self.streams, "log_info")
+        hasattr(self.streams, "log_debug")
+        self.streams.log_fatal = None
+        self.streams.log_error = None
+        self.streams.log_warn = None
+        self.streams.log_info = None
+        self.streams.log_debug = None
 
-    ## test closer
+    # test closer
     # \brief Common tear down
     def tearDown(self):
         sys.stdout = self.old_stdout
         sys.stderr = self.old_stderr
         print "tearing down ..."
+
+    def test_constructor(self):
+        fun = sys._getframe().f_code.co_name
+        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        streams = StreamSet.StreamSet(None)
+        self.assertEqual(streams.log_fatal, None)
+        self.assertEqual(streams.log_error, None)
+        self.assertEqual(streams.log_warn, None)
+        self.assertEqual(streams.log_info, None)
+        self.assertEqual(streams.log_debug, None)
+        for i in range(20):
+            self.streams.log_fatal = self.mystd1 = self.getRandomString(100)
+            self.streams.log_error = self.mystd2 = self.getRandomString(100)
+            self.streams.log_warn = self.mystd3 = self.getRandomString(100)
+            self.streams.log_info = self.mystd4 = self.getRandomString(100)
+            self.streams.log_debug = self.mystd5 = self.getRandomString(100)
+            streams = StreamSet.StreamSet(self.streams)
+            self.assertEqual(streams.log_fatal, self.mystd1)
+            self.assertEqual(streams.log_error, self.mystd2)
+            self.assertEqual(streams.log_warn, self.mystd3)
+            self.assertEqual(streams.log_info, self.mystd4)
+            self.assertEqual(streams.log_debug, self.mystd5)
 
     def test_fatal(self):
         fun = sys._getframe().f_code.co_name
@@ -95,14 +120,14 @@ class StreamsTest(unittest.TestCase):
             sys.stdout = self.mystdout = StringIO()
             sys.stderr = self.mystderr = StringIO()
             if i % 2:
-                Streams.fatal(name)
+                self.streams.fatal(name)
             else:
-                Streams.fatal(name, std=True)
-            self.assertEqual(Streams.log_fatal, None)
-            self.assertEqual(Streams.log_error, None)
-            self.assertEqual(Streams.log_warn, None)
-            self.assertEqual(Streams.log_info, None)
-            self.assertEqual(Streams.log_debug, None)
+                self.streams.fatal(name, std=True)
+            self.assertEqual(self.streams.log_fatal, None)
+            self.assertEqual(self.streams.log_error, None)
+            self.assertEqual(self.streams.log_warn, None)
+            self.assertEqual(self.streams.log_info, None)
+            self.assertEqual(self.streams.log_debug, None)
             self.assertEqual(self.mystdout.getvalue(), "")
             self.assertEqual(self.mystderr.getvalue(), name + '\n')
             sys.stdout = self.old_stdout
@@ -115,12 +140,12 @@ class StreamsTest(unittest.TestCase):
             name = self.getRandomString(100)
             sys.stdout = self.mystdout = StringIO()
             sys.stderr = self.mystderr = StringIO()
-            Streams.fatal(name, std=False)
-            self.assertEqual(Streams.log_fatal, None)
-            self.assertEqual(Streams.log_error, None)
-            self.assertEqual(Streams.log_warn, None)
-            self.assertEqual(Streams.log_info, None)
-            self.assertEqual(Streams.log_debug, None)
+            self.streams.fatal(name, std=False)
+            self.assertEqual(self.streams.log_fatal, None)
+            self.assertEqual(self.streams.log_error, None)
+            self.assertEqual(self.streams.log_warn, None)
+            self.assertEqual(self.streams.log_info, None)
+            self.assertEqual(self.streams.log_debug, None)
             self.assertEqual(self.mystdout.getvalue(), "")
             self.assertEqual(self.mystderr.getvalue(), "")
             sys.stdout = self.old_stdout
@@ -133,22 +158,22 @@ class StreamsTest(unittest.TestCase):
             name = self.getRandomString(100)
             sys.stdout = self.mystdout = StringIO()
             sys.stderr = self.mystderr = StringIO()
-            Streams.log_fatal = self.mystd1 = StringIO()
-            Streams.log_error = self.mystd2 = StringIO()
-            Streams.log_warn = self.mystd3 = StringIO()
-            Streams.log_info = self.mystd4 = StringIO()
-            Streams.log_debug = self.mystd5 = StringIO()
+            self.streams.log_fatal = self.mystd1 = StringIO()
+            self.streams.log_error = self.mystd2 = StringIO()
+            self.streams.log_warn = self.mystd3 = StringIO()
+            self.streams.log_info = self.mystd4 = StringIO()
+            self.streams.log_debug = self.mystd5 = StringIO()
             if i % 3 == 0:
-                Streams.fatal(name)
+                self.streams.fatal(name)
             elif i % 3 == 1:
-                Streams.fatal(name, std=False)
+                self.streams.fatal(name, std=False)
             elif i % 3 == 2:
-                Streams.fatal(name, std=True)
-            self.assertEqual(Streams.log_fatal.getvalue(), name + '\n')
-            self.assertEqual(Streams.log_error.getvalue(), "")
-            self.assertEqual(Streams.log_warn.getvalue(), "")
-            self.assertEqual(Streams.log_info.getvalue(), "")
-            self.assertEqual(Streams.log_debug.getvalue(), "")
+                self.streams.fatal(name, std=True)
+            self.assertEqual(self.streams.log_fatal.getvalue(), name + '\n')
+            self.assertEqual(self.streams.log_error.getvalue(), "")
+            self.assertEqual(self.streams.log_warn.getvalue(), "")
+            self.assertEqual(self.streams.log_info.getvalue(), "")
+            self.assertEqual(self.streams.log_debug.getvalue(), "")
             self.assertEqual(self.mystdout.getvalue(), "")
             self.assertEqual(self.mystderr.getvalue(), "")
             sys.stdout = self.old_stdout
@@ -162,14 +187,14 @@ class StreamsTest(unittest.TestCase):
             sys.stdout = self.mystdout = StringIO()
             sys.stderr = self.mystderr = StringIO()
             if i % 2:
-                Streams.error(name)
+                self.streams.error(name)
             else:
-                Streams.error(name, std=True)
-            self.assertEqual(Streams.log_fatal, None)
-            self.assertEqual(Streams.log_error, None)
-            self.assertEqual(Streams.log_warn, None)
-            self.assertEqual(Streams.log_info, None)
-            self.assertEqual(Streams.log_debug, None)
+                self.streams.error(name, std=True)
+            self.assertEqual(self.streams.log_fatal, None)
+            self.assertEqual(self.streams.log_error, None)
+            self.assertEqual(self.streams.log_warn, None)
+            self.assertEqual(self.streams.log_info, None)
+            self.assertEqual(self.streams.log_debug, None)
             self.assertEqual(self.mystdout.getvalue(), "")
             self.assertEqual(self.mystderr.getvalue(), name + '\n')
             sys.stdout = self.old_stdout
@@ -182,18 +207,18 @@ class StreamsTest(unittest.TestCase):
             name = self.getRandomString(100)
             sys.stdout = self.mystdout = StringIO()
             sys.stderr = self.mystderr = StringIO()
-            Streams.error(name, std=False)
-            self.assertEqual(Streams.log_fatal, None)
-            self.assertEqual(Streams.log_error, None)
-            self.assertEqual(Streams.log_warn, None)
-            self.assertEqual(Streams.log_info, None)
-            self.assertEqual(Streams.log_debug, None)
+            self.streams.error(name, std=False)
+            self.assertEqual(self.streams.log_fatal, None)
+            self.assertEqual(self.streams.log_error, None)
+            self.assertEqual(self.streams.log_warn, None)
+            self.assertEqual(self.streams.log_info, None)
+            self.assertEqual(self.streams.log_debug, None)
             self.assertEqual(self.mystdout.getvalue(), "")
             self.assertEqual(self.mystderr.getvalue(), "")
             sys.stdout = self.old_stdout
             sys.stderr = self.old_stderr
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_error_log(self):
         fun = sys._getframe().f_code.co_name
@@ -202,22 +227,22 @@ class StreamsTest(unittest.TestCase):
             name = self.getRandomString(100)
             sys.stdout = self.mystdout = StringIO()
             sys.stderr = self.mystderr = StringIO()
-            Streams.log_fatal = self.mystd1 = StringIO()
-            Streams.log_error = self.mystd2 = StringIO()
-            Streams.log_warn = self.mystd3 = StringIO()
-            Streams.log_info = self.mystd4 = StringIO()
-            Streams.log_debug = self.mystd5 = StringIO()
+            self.streams.log_fatal = self.mystd1 = StringIO()
+            self.streams.log_error = self.mystd2 = StringIO()
+            self.streams.log_warn = self.mystd3 = StringIO()
+            self.streams.log_info = self.mystd4 = StringIO()
+            self.streams.log_debug = self.mystd5 = StringIO()
             if i % 3 == 0:
-                Streams.error(name)
+                self.streams.error(name)
             elif i % 3 == 1:
-                Streams.error(name, std=False)
+                self.streams.error(name, std=False)
             elif i % 3 == 2:
-                Streams.error(name, std=True)
-            self.assertEqual(Streams.log_fatal.getvalue(), "")
-            self.assertEqual(Streams.log_error.getvalue(), name + '\n')
-            self.assertEqual(Streams.log_warn.getvalue(), "")
-            self.assertEqual(Streams.log_info.getvalue(), "")
-            self.assertEqual(Streams.log_debug.getvalue(), "")
+                self.streams.error(name, std=True)
+            self.assertEqual(self.streams.log_fatal.getvalue(), "")
+            self.assertEqual(self.streams.log_error.getvalue(), name + '\n')
+            self.assertEqual(self.streams.log_warn.getvalue(), "")
+            self.assertEqual(self.streams.log_info.getvalue(), "")
+            self.assertEqual(self.streams.log_debug.getvalue(), "")
             self.assertEqual(self.mystdout.getvalue(), "")
             self.assertEqual(self.mystderr.getvalue(), "")
             sys.stdout = self.old_stdout
@@ -231,14 +256,14 @@ class StreamsTest(unittest.TestCase):
             sys.stdout = self.mystdout = StringIO()
             sys.stderr = self.mystderr = StringIO()
             if i % 2:
-                Streams.warn(name)
+                self.streams.warn(name)
             else:
-                Streams.warn(name, std=True)
-            self.assertEqual(Streams.log_fatal, None)
-            self.assertEqual(Streams.log_error, None)
-            self.assertEqual(Streams.log_warn, None)
-            self.assertEqual(Streams.log_info, None)
-            self.assertEqual(Streams.log_debug, None)
+                self.streams.warn(name, std=True)
+            self.assertEqual(self.streams.log_fatal, None)
+            self.assertEqual(self.streams.log_error, None)
+            self.assertEqual(self.streams.log_warn, None)
+            self.assertEqual(self.streams.log_info, None)
+            self.assertEqual(self.streams.log_debug, None)
             self.assertEqual(self.mystdout.getvalue(), "")
             self.assertEqual(self.mystderr.getvalue(), name + '\n')
             sys.stdout = self.old_stdout
@@ -251,12 +276,12 @@ class StreamsTest(unittest.TestCase):
             name = self.getRandomString(100)
             sys.stdout = self.mystdout = StringIO()
             sys.stderr = self.mystderr = StringIO()
-            Streams.warn(name, std=False)
-            self.assertEqual(Streams.log_fatal, None)
-            self.assertEqual(Streams.log_error, None)
-            self.assertEqual(Streams.log_warn, None)
-            self.assertEqual(Streams.log_info, None)
-            self.assertEqual(Streams.log_debug, None)
+            self.streams.warn(name, std=False)
+            self.assertEqual(self.streams.log_fatal, None)
+            self.assertEqual(self.streams.log_error, None)
+            self.assertEqual(self.streams.log_warn, None)
+            self.assertEqual(self.streams.log_info, None)
+            self.assertEqual(self.streams.log_debug, None)
             self.assertEqual(self.mystdout.getvalue(), "")
             self.assertEqual(self.mystderr.getvalue(), "")
             sys.stdout = self.old_stdout
@@ -269,22 +294,22 @@ class StreamsTest(unittest.TestCase):
             name = self.getRandomString(100)
             sys.stdout = self.mystdout = StringIO()
             sys.stderr = self.mystderr = StringIO()
-            Streams.log_fatal = self.mystd1 = StringIO()
-            Streams.log_error = self.mystd2 = StringIO()
-            Streams.log_warn = self.mystd3 = StringIO()
-            Streams.log_info = self.mystd4 = StringIO()
-            Streams.log_debug = self.mystd5 = StringIO()
+            self.streams.log_fatal = self.mystd1 = StringIO()
+            self.streams.log_error = self.mystd2 = StringIO()
+            self.streams.log_warn = self.mystd3 = StringIO()
+            self.streams.log_info = self.mystd4 = StringIO()
+            self.streams.log_debug = self.mystd5 = StringIO()
             if i % 3 == 0:
-                Streams.warn(name)
+                self.streams.warn(name)
             elif i % 3 == 1:
-                Streams.warn(name, std=False)
+                self.streams.warn(name, std=False)
             elif i % 3 == 2:
-                Streams.warn(name, std=True)
-            self.assertEqual(Streams.log_fatal.getvalue(), "")
-            self.assertEqual(Streams.log_error.getvalue(), "")
-            self.assertEqual(Streams.log_warn.getvalue(), name + '\n')
-            self.assertEqual(Streams.log_info.getvalue(), "")
-            self.assertEqual(Streams.log_debug.getvalue(), "")
+                self.streams.warn(name, std=True)
+            self.assertEqual(self.streams.log_fatal.getvalue(), "")
+            self.assertEqual(self.streams.log_error.getvalue(), "")
+            self.assertEqual(self.streams.log_warn.getvalue(), name + '\n')
+            self.assertEqual(self.streams.log_info.getvalue(), "")
+            self.assertEqual(self.streams.log_debug.getvalue(), "")
             self.assertEqual(self.mystdout.getvalue(), "")
             self.assertEqual(self.mystderr.getvalue(), "")
             sys.stdout = self.old_stdout
@@ -298,14 +323,14 @@ class StreamsTest(unittest.TestCase):
             sys.stdout = self.mystdout = StringIO()
             sys.stderr = self.mystderr = StringIO()
             if i % 2:
-                Streams.info(name)
+                self.streams.info(name)
             else:
-                Streams.info(name, std=True)
-            self.assertEqual(Streams.log_fatal, None)
-            self.assertEqual(Streams.log_error, None)
-            self.assertEqual(Streams.log_warn, None)
-            self.assertEqual(Streams.log_info, None)
-            self.assertEqual(Streams.log_debug, None)
+                self.streams.info(name, std=True)
+            self.assertEqual(self.streams.log_fatal, None)
+            self.assertEqual(self.streams.log_error, None)
+            self.assertEqual(self.streams.log_warn, None)
+            self.assertEqual(self.streams.log_info, None)
+            self.assertEqual(self.streams.log_debug, None)
             self.assertEqual(self.mystdout.getvalue(), name + '\n')
             self.assertEqual(self.mystderr.getvalue(), "")
             sys.stdout = self.old_stdout
@@ -318,18 +343,18 @@ class StreamsTest(unittest.TestCase):
             name = self.getRandomString(100)
             sys.stdout = self.mystdout = StringIO()
             sys.stderr = self.mystderr = StringIO()
-            Streams.info(name, std=False)
-            self.assertEqual(Streams.log_fatal, None)
-            self.assertEqual(Streams.log_error, None)
-            self.assertEqual(Streams.log_warn, None)
-            self.assertEqual(Streams.log_info, None)
-            self.assertEqual(Streams.log_debug, None)
+            self.streams.info(name, std=False)
+            self.assertEqual(self.streams.log_fatal, None)
+            self.assertEqual(self.streams.log_error, None)
+            self.assertEqual(self.streams.log_warn, None)
+            self.assertEqual(self.streams.log_info, None)
+            self.assertEqual(self.streams.log_debug, None)
             self.assertEqual(self.mystdout.getvalue(), "")
             self.assertEqual(self.mystderr.getvalue(), "")
             sys.stdout = self.old_stdout
             sys.stderr = self.old_stderr
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_info_log(self):
         fun = sys._getframe().f_code.co_name
@@ -338,22 +363,22 @@ class StreamsTest(unittest.TestCase):
             name = self.getRandomString(100)
             sys.stdout = self.mystdout = StringIO()
             sys.stderr = self.mystderr = StringIO()
-            Streams.log_fatal = self.mystd1 = StringIO()
-            Streams.log_error = self.mystd2 = StringIO()
-            Streams.log_warn = self.mystd3 = StringIO()
-            Streams.log_info = self.mystd4 = StringIO()
-            Streams.log_debug = self.mystd5 = StringIO()
+            self.streams.log_fatal = self.mystd1 = StringIO()
+            self.streams.log_error = self.mystd2 = StringIO()
+            self.streams.log_warn = self.mystd3 = StringIO()
+            self.streams.log_info = self.mystd4 = StringIO()
+            self.streams.log_debug = self.mystd5 = StringIO()
             if i % 3 == 0:
-                Streams.info(name)
+                self.streams.info(name)
             elif i % 3 == 1:
-                Streams.info(name, std=False)
+                self.streams.info(name, std=False)
             elif i % 3 == 2:
-                Streams.info(name, std=True)
-            self.assertEqual(Streams.log_fatal.getvalue(), "")
-            self.assertEqual(Streams.log_error.getvalue(), "")
-            self.assertEqual(Streams.log_warn.getvalue(), "")
-            self.assertEqual(Streams.log_info.getvalue(), name + '\n')
-            self.assertEqual(Streams.log_debug.getvalue(), "")
+                self.streams.info(name, std=True)
+            self.assertEqual(self.streams.log_fatal.getvalue(), "")
+            self.assertEqual(self.streams.log_error.getvalue(), "")
+            self.assertEqual(self.streams.log_warn.getvalue(), "")
+            self.assertEqual(self.streams.log_info.getvalue(), name + '\n')
+            self.assertEqual(self.streams.log_debug.getvalue(), "")
             self.assertEqual(self.mystdout.getvalue(), "")
             self.assertEqual(self.mystderr.getvalue(), "")
             sys.stdout = self.old_stdout
@@ -367,14 +392,14 @@ class StreamsTest(unittest.TestCase):
             sys.stdout = self.mystdout = StringIO()
             sys.stderr = self.mystderr = StringIO()
             if i % 2:
-                Streams.debug(name)
+                self.streams.debug(name)
             else:
-                Streams.debug(name, std=True)
-            self.assertEqual(Streams.log_fatal, None)
-            self.assertEqual(Streams.log_error, None)
-            self.assertEqual(Streams.log_warn, None)
-            self.assertEqual(Streams.log_info, None)
-            self.assertEqual(Streams.log_debug, None)
+                self.streams.debug(name, std=True)
+            self.assertEqual(self.streams.log_fatal, None)
+            self.assertEqual(self.streams.log_error, None)
+            self.assertEqual(self.streams.log_warn, None)
+            self.assertEqual(self.streams.log_info, None)
+            self.assertEqual(self.streams.log_debug, None)
             self.assertEqual(self.mystdout.getvalue(), name + '\n')
             self.assertEqual(self.mystderr.getvalue(), "")
             sys.stdout = self.old_stdout
@@ -387,18 +412,18 @@ class StreamsTest(unittest.TestCase):
             name = self.getRandomString(100)
             sys.stdout = self.mystdout = StringIO()
             sys.stderr = self.mystderr = StringIO()
-            Streams.debug(name, std=False)
-            self.assertEqual(Streams.log_fatal, None)
-            self.assertEqual(Streams.log_error, None)
-            self.assertEqual(Streams.log_warn, None)
-            self.assertEqual(Streams.log_info, None)
-            self.assertEqual(Streams.log_debug, None)
+            self.streams.debug(name, std=False)
+            self.assertEqual(self.streams.log_fatal, None)
+            self.assertEqual(self.streams.log_error, None)
+            self.assertEqual(self.streams.log_warn, None)
+            self.assertEqual(self.streams.log_info, None)
+            self.assertEqual(self.streams.log_debug, None)
             self.assertEqual(self.mystdout.getvalue(), "")
             self.assertEqual(self.mystderr.getvalue(), "")
             sys.stdout = self.old_stdout
             sys.stderr = self.old_stderr
 
-    ## constructor test
+    # constructor test
     # \brief It tests default settings
     def test_debug_log(self):
         fun = sys._getframe().f_code.co_name
@@ -407,22 +432,22 @@ class StreamsTest(unittest.TestCase):
             name = self.getRandomString(100)
             sys.stdout = self.mystdout = StringIO()
             sys.stderr = self.mystderr = StringIO()
-            Streams.log_fatal = self.mystd1 = StringIO()
-            Streams.log_error = self.mystd2 = StringIO()
-            Streams.log_warn = self.mystd3 = StringIO()
-            Streams.log_info = self.mystd4 = StringIO()
-            Streams.log_debug = self.mystd5 = StringIO()
+            self.streams.log_fatal = self.mystd1 = StringIO()
+            self.streams.log_error = self.mystd2 = StringIO()
+            self.streams.log_warn = self.mystd3 = StringIO()
+            self.streams.log_info = self.mystd4 = StringIO()
+            self.streams.log_debug = self.mystd5 = StringIO()
             if i % 3 == 0:
-                Streams.debug(name)
+                self.streams.debug(name)
             elif i % 3 == 1:
-                Streams.debug(name, std=False)
+                self.streams.debug(name, std=False)
             elif i % 3 == 2:
-                Streams.debug(name, std=True)
-            self.assertEqual(Streams.log_fatal.getvalue(), "")
-            self.assertEqual(Streams.log_error.getvalue(), "")
-            self.assertEqual(Streams.log_warn.getvalue(), "")
-            self.assertEqual(Streams.log_info.getvalue(), "")
-            self.assertEqual(Streams.log_debug.getvalue(), name + '\n')
+                self.streams.debug(name, std=True)
+            self.assertEqual(self.streams.log_fatal.getvalue(), "")
+            self.assertEqual(self.streams.log_error.getvalue(), "")
+            self.assertEqual(self.streams.log_warn.getvalue(), "")
+            self.assertEqual(self.streams.log_info.getvalue(), "")
+            self.assertEqual(self.streams.log_debug.getvalue(), name + '\n')
             self.assertEqual(self.mystdout.getvalue(), "")
             self.assertEqual(self.mystderr.getvalue(), "")
             sys.stdout = self.old_stdout
