@@ -1,3 +1,7 @@
+2017-06-30 Jan Kotanski <jankotan@gmail.com>
+	* move Streams module into StreamSet.StreamSet class
+	* tagged as v3.10.0
+
 2017-05-05 Jan Kotanski <jankotan@gmail.com>
 	* allow home directory not to be in /home/
 	* tagged as v3.9.1
