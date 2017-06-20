@@ -60,7 +60,7 @@ class StreamSet(object):
         :param message: error message
         :type message: :obj:`str`
         :param std: True if it writes to sys stream
-        when log stream does not exist
+                    when log stream does not exist
         :type std: :obj:`bool`
         """
         if self.log_fatal:
