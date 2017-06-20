@@ -127,13 +127,19 @@ class CheckerThread(threading.Thread):
                 if not ds.attr:
                     for gattr in ATTRIBUTESTOCHECK:
                         if hasattr(dp, gattr):
-                            _ = getattr(dp, gattr)
+                            at = getattr(dp, gattr)
+                            if at is None:
+                                raise Exception("Empty Attribute")
                 elif ds.attr.startswith("@"):
                     pass
                 elif ds.attr.endswith("()"):
-                    _ = getattr(dp, ds.attr[:-2])
+                    at = getattr(dp, ds.attr[:-2])
+                    if at is None:
+                        raise Exception("Empty Attribute")
                 else:
-                    _ = getattr(dp, ds.attr)
+                    at = getattr(dp, ds.attr)
+                    if at is None:
+                        raise Exception("Empty Attribute")
                 if state in [PyTango.DevState.ALARM]:
                     raise AlarmStateError("ALARM STATE")
             except AlarmStateError as e:

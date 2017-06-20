@@ -701,7 +701,9 @@ class PoolUtils(object):
             if hasattr(dp, 'DataSource'):
                 ds = dp.DataSource
                 sds = ds.split("://")
-                _ = PyTango.AttributeProxy(sds[-1])
+                ap = PyTango.AttributeProxy(sds[-1])
+                if ap is None:
+                    raise Exception("Empty proxy")
                 source = sds[-1]
         except (PyTango.DevFailed, PyTango.Except, PyTango.DevError):
             pass
