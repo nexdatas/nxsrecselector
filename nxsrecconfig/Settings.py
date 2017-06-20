@@ -31,7 +31,7 @@ from .ProfileManager import ProfileManager
 from .Selector import Selector
 from .Release import __version__
 from .MacroServerPools import MacroServerPools
-from . import Streams
+from .StreamSet import StreamSet
 
 
 class Settings(object):
@@ -55,6 +55,9 @@ class Settings(object):
         self.__server = server
         #: (:obj:`int`) number of threads
         self.numberOfThreads = numberofthreads or 20
+
+        #: (:class:`StreamSet` or :class:`PyTango.Device_4Impl`) stream set
+        self._streams = StreamSet(server)
 
         #: (:obj:`str`) default NeXus path
         self.defaultNeXusPath = defaultnexuspath or \
@@ -99,18 +102,6 @@ class Settings(object):
         #: (:obj:`list` <:obj:`str`>) administator data
         self.adminDataNames = []
 
-        if server:
-            if hasattr(self.__server, "log_fatal"):
-                Streams.log_fatal = server.log_fatal
-            if hasattr(self.__server, "log_error"):
-                Streams.log_error = server.log_error
-            if hasattr(self.__server, "log_warn"):
-                Streams.log_warn = server.log_warn
-            if hasattr(self.__server, "log_info"):
-                Streams.log_info = server.log_info
-            if hasattr(self.__server, "log_debug"):
-                Streams.log_debug = server.log_debug
-
         self.__setupSelection()
 
     def __setupSelection(self):
@@ -134,9 +125,9 @@ class Settings(object):
             info = sys.exc_info()
             message = str(info[1].__str__()) + "\n " + (" ").join(
                 traceback.format_tb(sys.exc_info()[2]))
-            Streams.error("Error in fetching profile: %s"
+            self._streams.error("Error in fetching profile: %s"
                           % self.__selector["MntGrp"])
-            Streams.error(str(message))
+            self._streams.error(str(message))
 
     def value(self, name):
         """ provides values of the required variable
