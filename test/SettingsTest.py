@@ -129,6 +129,7 @@ class SettingsTest(unittest.TestCase):
 
         #        self._seed = 133807022068754062020588864622821989794
         #        self._seed = 252610957556978915330732248482858942194
+        #        self._seed = 46552883294733194407855569822890540222
         self._rnd = random.Random(self._seed)
 
         self._dump = {}
