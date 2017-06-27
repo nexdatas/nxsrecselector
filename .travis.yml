@@ -2,6 +2,7 @@ language: python
 
 sudo: required
 dist: trusty
+group: deprecated-2017Q2
 
 env:
   - TEST_SUITE=basic OS_TYPE=debian8
