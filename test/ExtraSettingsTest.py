@@ -1766,11 +1766,11 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
 
                     try:
                         self.myCompDict(mynewmg, myoldmg)
-                        self.assertTrue(lrs.isMntGrpUpdated())
-                        self.assertTrue(lrs.isMntGrpUpdated())
+                        self.assertTrue(not lrs.isMntGrpUpdated())
+                        self.assertTrue(not lrs.isMntGrpUpdated())
                     except SettingsTest.NotEqualException as e:
-                        self.assertTrue(not lrs.isMntGrpUpdated())
-                        self.assertTrue(not lrs.isMntGrpUpdated())
+                        self.assertTrue(lrs.isMntGrpUpdated())
+                        self.assertTrue(lrs.isMntGrpUpdated())
                     tmpcf1 = json.loads(rs[mg1].mntGrpConfiguration())
                     tmpcf2 = json.loads(rs[mg2].mntGrpConfiguration())
                     ltmpcf = json.loads(lrs.mntGrpConfiguration())
@@ -3112,11 +3112,11 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
 
                     try:
                         self.myCompDict(mynewmg, myoldmg)
-                        self.assertTrue(lrs.isMntGrpUpdated())
-                        self.assertTrue(lrs.isMntGrpUpdated())
+                        self.assertTrue(not lrs.isMntGrpUpdated())
+                        self.assertTrue(not lrs.isMntGrpUpdated())
                     except SettingsTest.NotEqualException as e:
-                        self.assertTrue(not lrs.isMntGrpUpdated())
-                        self.assertTrue(not lrs.isMntGrpUpdated())
+                        self.assertTrue(lrs.isMntGrpUpdated())
+                        self.assertTrue(lrs.isMntGrpUpdated())
 
                     ors.profileConfiguration = str(json.dumps(mp[mg1]))
                     tmpcf1 = json.loads(ors.mntGrpConfiguration())

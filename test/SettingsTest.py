@@ -2267,14 +2267,14 @@ class SettingsTest(unittest.TestCase):
         for k, v in dct.items():
             logger.debug("%s  in %s" % (str(k), str(dct2.keys())))
             if k not in dct2.keys():
-                raise Exception("%s not in %s" % (k, dct2))
+                raise NotEqualException("%s not in %s" % (k, dct2))
             if isinstance(v, dict):
                 self.myCompDict(v, dct2[k])
             else:
                 logger.debug("%s , %s" % (str(v), str(dct2[k])))
                 if v != dct2[k]:
                     print 'VALUES', k, v, dct2[k]
-                    raise Exception("VALUE %s %s %s" % (k, v, dct2[k]))
+                    raise NotEqualException("VALUE %s %s %s" % (k, v, dct2[k]))
 
     def myAssertDictJSON(self, dct, dct2):
         logger.debug('dict %s' % type(dct))
