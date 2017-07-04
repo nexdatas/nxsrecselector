@@ -911,10 +911,13 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                             if tm in adss.keys():
                                 adss[tm] = False
 
+
                     jpcnf = rs.updateMntGrp()
                     self.dump(rs)
+
                     self.assertTrue(rs.isMntGrpUpdated())
                     self.assertTrue(rs.isMntGrpUpdated())
+
                     pcnf = json.loads(jpcnf)
                     mgdp = PyTango.DeviceProxy(tmg.new_device_info_writer.name)
                     jcnf = rs.mntGrpConfiguration()
@@ -1765,7 +1768,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                         self.myCompDict(mynewmg, myoldmg)
                         self.assertTrue(lrs.isMntGrpUpdated())
                         self.assertTrue(lrs.isMntGrpUpdated())
-                    except:
+                    except SettingsTest.NotEqualException as e:
                         self.assertTrue(not lrs.isMntGrpUpdated())
                         self.assertTrue(not lrs.isMntGrpUpdated())
                     tmpcf1 = json.loads(rs[mg1].mntGrpConfiguration())
@@ -3111,7 +3114,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                         self.myCompDict(mynewmg, myoldmg)
                         self.assertTrue(lrs.isMntGrpUpdated())
                         self.assertTrue(lrs.isMntGrpUpdated())
-                    except:
+                    except SettingsTest.NotEqualException as e:
                         self.assertTrue(not lrs.isMntGrpUpdated())
                         self.assertTrue(not lrs.isMntGrpUpdated())
 

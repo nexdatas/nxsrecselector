@@ -65,6 +65,12 @@ DB_AVAILABLE = []
 #: tango version
 TGVER = PyTango.__version_info__[0]
 
+
+
+class NotEqualException(Exception):
+    pass
+
+
 try:
     import MySQLdb
     # connection arguments to MYSQL DB
@@ -2245,18 +2251,18 @@ class SettingsTest(unittest.TestCase):
         logger.debug('dict %s' % type(dct))
         logger.debug("\n%s\n%s" % (dct, dct2))
         if not isinstance(dct, dict):
-            raise Exception("DCT1 %s" % dct)
+            raise NotEqualException("DCT1 %s" % dct)
         if not isinstance(dct2, dict):
             print "NOT DICT", type(dct2), dct2
             print "DICT", type(dct), dct
-            raise Exception("DCT2 %s" % dct2)
+            raise NotEqualException("DCT2 %s" % dct2)
         logger.debug("%s %s" % (len(dct.keys()), len(dct2.keys())))
         if set(dct.keys()) ^ set(dct2.keys()):
             print 'DCT', dct.keys()
             print 'DCT2', dct2.keys()
             print "DIFF", set(dct.keys()) ^ set(dct2.keys())
         if len(dct.keys()) != len(dct2.keys()):
-            raise Exception("LEN %s %s" % (dct, dct2))
+            raise NotEqualException("LEN %s %s" % (dct, dct2))
 
         for k, v in dct.items():
             logger.debug("%s  in %s" % (str(k), str(dct2.keys())))

@@ -1750,7 +1750,7 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
                         self.myCompDict(mynewmg, myoldmg)
                         self.assertTrue(lrs.isMntGrpUpdated())
                         self.assertTrue(lrs.isMntGrpUpdated())
-                    except:
+                    except SettingsTest.NotEqualException as e:
                         self.assertTrue(not lrs.isMntGrpUpdated())
                         self.assertTrue(not lrs.isMntGrpUpdated())
 
@@ -3091,7 +3091,7 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
                         self.myCompDict(mynewmg, myoldmg)
                         self.assertTrue(lrs.isMntGrpUpdated())
                         self.assertTrue(lrs.isMntGrpUpdated())
-                    except:
+                    except SettingsTest.NotEqualException as e:
                         self.assertTrue(not lrs.isMntGrpUpdated())
                         self.assertTrue(not lrs.isMntGrpUpdated())
 
