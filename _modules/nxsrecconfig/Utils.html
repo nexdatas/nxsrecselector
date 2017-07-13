@@ -5,7 +5,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>nxsrecconfig.Utils &mdash; NXSRecSelector 3.6.0 documentation</title>
+    <title>nxsrecconfig.Utils &mdash; NXSRecSelector 3.10.0 documentation</title>
     
     <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '3.6.0',
+        VERSION:     '3.10.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -29,7 +29,7 @@
     <script type="text/javascript" src="../../_static/js/jquery-fix.js"></script>
     <script type="text/javascript" src="../../_static/bootstrap-3.3.4/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../../_static/bootstrap-sphinx.js"></script>
-    <link rel="top" title="NXSRecSelector 3.6.0 documentation" href="../../index.html" />
+    <link rel="top" title="NXSRecSelector 3.10.0 documentation" href="../../index.html" />
     <link rel="up" title="nxsrecconfig" href="../nxsrecconfig.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
@@ -50,7 +50,7 @@
         </button>
         <a class="navbar-brand" href="../../index.html">
           NXSRecSelector</a>
-        <span class="navbar-text navbar-version pull-left"><b>3.6</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>3.10</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -79,7 +79,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Selection">nxsrecconfig.Selection module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Selector">nxsrecconfig.Selector module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Settings">nxsrecconfig.Settings module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Streams">nxsrecconfig.Streams module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.StreamSet">nxsrecconfig.StreamSet module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Utils">nxsrecconfig.Utils module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig">Module contents</a></li>
 </ul>
@@ -132,7 +132,7 @@
 <span class="c">#!/usr/bin/env python</span>
 <span class="c">#   This file is part of nxsrecconfig - NeXus Sardana Recorder Settings</span>
 <span class="c">#</span>
-<span class="c">#    Copyright (C) 2014-2016 DESY, Jan Kotanski &lt;jkotan@mail.desy.de&gt;</span>
+<span class="c">#    Copyright (C) 2014-2017 DESY, Jan Kotanski &lt;jkotan@mail.desy.de&gt;</span>
 <span class="c">#</span>
 <span class="c">#    nexdatas is free software: you can redistribute it and/or modify</span>
 <span class="c">#    it under the terms of the GNU General Public License as published by</span>
@@ -160,9 +160,10 @@
 
 
 <div class="viewcode-block" id="Utils"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.Utils">[docs]</a><span class="k">class</span> <span class="nc">Utils</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
     <span class="sd">&quot;&quot;&quot;  Miscellaneous Utilities &quot;&quot;&quot;</span>
 
-    <span class="c">##</span>
+    <span class="c">#</span>
     <span class="nd">@classmethod</span>
 <div class="viewcode-block" id="Utils.compareDict"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.Utils.compareDict">[docs]</a>    <span class="k">def</span> <span class="nf">compareDict</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">dct</span><span class="p">,</span> <span class="n">dct2</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; copares two dictionaries</span>
@@ -179,6 +180,7 @@
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dct2</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
             <span class="k">return</span> <span class="bp">False</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">dct</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">dct2</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+
             <span class="k">return</span> <span class="bp">False</span>
         <span class="n">status</span> <span class="o">=</span> <span class="bp">True</span>
         <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">dct</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
@@ -317,6 +319,7 @@
 
 </div></div>
 <div class="viewcode-block" id="TangoUtils"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.TangoUtils">[docs]</a><span class="k">class</span> <span class="nc">TangoUtils</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
     <span class="sd">&quot;&quot;&quot;  Tango Utilities &quot;&quot;&quot;</span>
 
     <span class="c">#: (:obj:`dict` &lt;:class:`PyTango.CmdArgType`, :obj:`str`&gt;)</span>
@@ -452,7 +455,7 @@
         <span class="n">vl</span> <span class="o">=</span> <span class="bp">None</span>
         <span class="n">shp</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">dt</span> <span class="o">=</span> <span class="s">&#39;float64&#39;</span>
-        <span class="n">ut</span> <span class="o">=</span> <span class="s">&#39;No units&#39;</span>
+        <span class="n">ut</span> <span class="o">=</span> <span class="s">&#39;No unit&#39;</span>
         <span class="n">ap</span> <span class="o">=</span> <span class="n">PyTango</span><span class="o">.</span><span class="n">AttributeProxy</span><span class="p">(</span><span class="n">source</span><span class="p">)</span>
         <span class="n">da</span> <span class="o">=</span> <span class="bp">None</span>
         <span class="n">ac</span> <span class="o">=</span> <span class="bp">None</span>
@@ -503,6 +506,7 @@
 
 </div></div>
 <div class="viewcode-block" id="MSUtils"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.MSUtils">[docs]</a><span class="k">class</span> <span class="nc">MSUtils</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
     <span class="sd">&quot;&quot;&quot;  MacroServer Utilities &quot;&quot;&quot;</span>
 
     <span class="nd">@classmethod</span>
@@ -601,6 +605,7 @@
 
 </div></div>
 <div class="viewcode-block" id="PoolUtils"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.PoolUtils">[docs]</a><span class="k">class</span> <span class="nc">PoolUtils</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
     <span class="sd">&quot;&quot;&quot;  Pool Utilities &quot;&quot;&quot;</span>
 
     <span class="nd">@classmethod</span>
@@ -648,13 +653,15 @@
         <span class="k">return</span> <span class="n">srs</span>
 </div>
     <span class="nd">@classmethod</span>
-<div class="viewcode-block" id="PoolUtils.getElementNames"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.PoolUtils.getElementNames">[docs]</a>    <span class="k">def</span> <span class="nf">getElementNames</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">pools</span><span class="p">,</span> <span class="n">listattr</span><span class="p">):</span>
+<div class="viewcode-block" id="PoolUtils.getElementNames"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Utils.PoolUtils.getElementNames">[docs]</a>    <span class="k">def</span> <span class="nf">getElementNames</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">pools</span><span class="p">,</span> <span class="n">listattr</span><span class="p">,</span> <span class="n">typefilter</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; provides experimental Channels</span>
 
 <span class="sd">        :param pools: list of pool devices</span>
 <span class="sd">        :type pools: :obj:`list` &lt;:class:`PyTango.DeviceProxy`&gt;</span>
 <span class="sd">        :param listattr: pool attribute with list</span>
 <span class="sd">        :type listattr: :obj:`str`</span>
+<span class="sd">        :param typefilter: pool attribute with list</span>
+<span class="sd">        :type typefilter: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        :returns: names from given pool listattr</span>
 <span class="sd">        :rtype: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -669,6 +676,9 @@
             <span class="k">if</span> <span class="n">elm</span><span class="p">:</span>
                 <span class="n">chan</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">elm</span><span class="p">)</span>
                 <span class="k">if</span> <span class="n">chan</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">chan</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="n">typefilter</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">chan</span><span class="p">[</span><span class="s">&#39;type&#39;</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">typefilter</span><span class="p">:</span>
+                            <span class="k">continue</span>
                     <span class="n">elements</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">chan</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">])</span>
         <span class="k">return</span> <span class="n">elements</span>
 </div>
@@ -823,7 +833,9 @@
             <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">dp</span><span class="p">,</span> <span class="s">&#39;DataSource&#39;</span><span class="p">):</span>
                 <span class="n">ds</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">DataSource</span>
                 <span class="n">sds</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&quot;://&quot;</span><span class="p">)</span>
-                <span class="n">_</span> <span class="o">=</span> <span class="n">PyTango</span><span class="o">.</span><span class="n">AttributeProxy</span><span class="p">(</span><span class="n">sds</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+                <span class="n">ap</span> <span class="o">=</span> <span class="n">PyTango</span><span class="o">.</span><span class="n">AttributeProxy</span><span class="p">(</span><span class="n">sds</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+                <span class="k">if</span> <span class="n">ap</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s">&quot;Empty proxy&quot;</span><span class="p">)</span>
                 <span class="n">source</span> <span class="o">=</span> <span class="n">sds</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
         <span class="k">except</span> <span class="p">(</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevFailed</span><span class="p">,</span> <span class="n">PyTango</span><span class="o">.</span><span class="n">Except</span><span class="p">,</span> <span class="n">PyTango</span><span class="o">.</span><span class="n">DevError</span><span class="p">):</span>
             <span class="k">pass</span>
@@ -841,7 +853,7 @@
       
     </p>
     <p>
-        &copy; Copyright 2012-2016 DESY, Jan Kotanski &lt;jkotan@mail.desy.de&gt;
+        &copy; Copyright 2012-2017 DESY, Jan Kotanski &lt;jkotan@mail.desy.de&gt;
 
 GNU GENERAL PUBLIC LICENSE, version 3.<br/>
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.<br/>

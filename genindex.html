@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Index &mdash; NXSRecSelector 3.6.0 documentation</title>
+    <title>Index &mdash; NXSRecSelector 3.10.0 documentation</title>
     
     <link rel="stylesheet" href="_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -17,7 +17,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '3.6.0',
+        VERSION:     '3.10.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -30,7 +30,7 @@
     <script type="text/javascript" src="_static/js/jquery-fix.js"></script>
     <script type="text/javascript" src="_static/bootstrap-3.3.4/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
-    <link rel="top" title="NXSRecSelector 3.6.0 documentation" href="index.html" />
+    <link rel="top" title="NXSRecSelector 3.10.0 documentation" href="index.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
@@ -50,7 +50,7 @@
         </button>
         <a class="navbar-brand" href="index.html">
           NXSRecSelector</a>
-        <span class="navbar-text navbar-version pull-left"><b>3.6</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>3.10</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -79,7 +79,7 @@
 <li class="toctree-l2"><a class="reference internal" href="nxsrecconfig.html#module-nxsrecconfig.Selection">nxsrecconfig.Selection module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="nxsrecconfig.html#module-nxsrecconfig.Selector">nxsrecconfig.Selector module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="nxsrecconfig.html#module-nxsrecconfig.Settings">nxsrecconfig.Settings module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="nxsrecconfig.html#module-nxsrecconfig.Streams">nxsrecconfig.Streams module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nxsrecconfig.html#module-nxsrecconfig.StreamSet">nxsrecconfig.StreamSet module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="nxsrecconfig.html#module-nxsrecconfig.Utils">nxsrecconfig.Utils module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="nxsrecconfig.html#module-nxsrecconfig">Module contents</a></li>
 </ul>
@@ -161,6 +161,14 @@
   </dt>
 
       
+  <dt><a href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.AddStepDataSources">AddStepDataSources() (nxsrecconfig.NXSConfig.NXSRecSelector method)</a>
+  </dt>
+
+      
+  <dt><a href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.addStepDataSources">addStepDataSources() (nxsrecconfig.Settings.Settings method)</a>
+  </dt>
+
+      
   <dt><a href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.adminDataNames">adminDataNames (nxsrecconfig.Settings.Settings attribute)</a>
   </dt>
 
@@ -196,12 +204,12 @@
   <dt><a href="nxsrecconfig.html#nxsrecconfig.CheckerThread.TangoDSItem.attr">attr (nxsrecconfig.CheckerThread.TangoDSItem attribute)</a>
   </dt>
 
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelectorClass.attr_list">attr_list (nxsrecconfig.NXSConfig.NXSRecSelectorClass attribute)</a>
   </dt>
 
-  </dl></td>
-  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="nxsrecconfig.html#nxsrecconfig.CheckerThread.ATTRIBUTESTOCHECK">ATTRIBUTESTOCHECK (in module nxsrecconfig.CheckerThread)</a>
   </dt>
@@ -283,6 +291,16 @@
   </dt>
 
       
+  <dt><a href="nxsrecconfig.html#nxsrecconfig.ProfileManager.ProfileManager.clientRecordKeys">clientRecordKeys (nxsrecconfig.ProfileManager.ProfileManager attribute)</a>
+  </dt>
+
+      <dd><dl>
+        
+  <dt><a href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.clientRecordKeys">(nxsrecconfig.Settings.Settings attribute)</a>
+  </dt>
+
+      </dl></dd>
+      
   <dt><a href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelectorClass.cmd_list">cmd_list (nxsrecconfig.NXSConfig.NXSRecSelectorClass attribute)</a>
   </dt>
 
@@ -340,6 +358,14 @@
       </dl></dd>
   </dl></td>
   <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.ComponentSources">ComponentSources() (nxsrecconfig.NXSConfig.NXSRecSelector method)</a>
+  </dt>
+
+      
+  <dt><a href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.componentSources">componentSources() (nxsrecconfig.Settings.Settings method)</a>
+  </dt>
+
       
   <dt><a href="nxsrecconfig.html#nxsrecconfig.Selector.Selector.configCommand">configCommand() (nxsrecconfig.Selector.Selector method)</a>
   </dt>
@@ -455,11 +481,19 @@
 
       </dl></dd>
       
-  <dt><a href="nxsrecconfig.html#nxsrecconfig.Streams.debug">debug() (in module nxsrecconfig.Streams)</a>
+  <dt><a href="nxsrecconfig.html#nxsrecconfig.StreamSet.StreamSet.debug">debug() (nxsrecconfig.StreamSet.StreamSet method)</a>
   </dt>
 
       
   <dt><a href="nxsrecconfig.html#nxsrecconfig.ProfileManager.DEFAULT_RECORD_KEYS">DEFAULT_RECORD_KEYS (in module nxsrecconfig.ProfileManager)</a>
+  </dt>
+
+      
+  <dt><a href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.defaultMntGrp">defaultMntGrp (nxsrecconfig.Settings.Settings attribute)</a>
+  </dt>
+
+      
+  <dt><a href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.defaultNeXusPath">defaultNeXusPath (nxsrecconfig.Settings.Settings attribute)</a>
   </dt>
 
       
@@ -472,6 +506,10 @@
   </dt>
 
       </dl></dd>
+      
+  <dt><a href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.defaultTimeZone">defaultTimeZone (nxsrecconfig.Settings.Settings attribute)</a>
+  </dt>
+
       
   <dt><a href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.delete_device">delete_device() (nxsrecconfig.NXSConfig.NXSRecSelector method)</a>
   </dt>
@@ -488,6 +526,8 @@
   <dt><a href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.DeleteProfile">DeleteProfile() (nxsrecconfig.NXSConfig.NXSRecSelector method)</a>
   </dt>
 
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="nxsrecconfig.html#nxsrecconfig.ProfileManager.ProfileManager.deleteProfile">deleteProfile() (nxsrecconfig.ProfileManager.ProfileManager method)</a>
   </dt>
@@ -498,8 +538,6 @@
   </dt>
 
       </dl></dd>
-  </dl></td>
-  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="nxsrecconfig.html#nxsrecconfig.Selector.Selector.descErrors">descErrors (nxsrecconfig.Selector.Selector attribute)</a>
   </dt>
@@ -561,7 +599,7 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="nxsrecconfig.html#nxsrecconfig.Streams.error">error() (in module nxsrecconfig.Streams)</a>
+  <dt><a href="nxsrecconfig.html#nxsrecconfig.StreamSet.StreamSet.error">error() (nxsrecconfig.StreamSet.StreamSet method)</a>
   </dt>
 
       
@@ -597,7 +635,7 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="nxsrecconfig.html#nxsrecconfig.Streams.fatal">fatal() (in module nxsrecconfig.Streams)</a>
+  <dt><a href="nxsrecconfig.html#nxsrecconfig.StreamSet.StreamSet.fatal">fatal() (nxsrecconfig.StreamSet.StreamSet method)</a>
   </dt>
 
       
@@ -777,7 +815,7 @@
   </dt>
 
       
-  <dt><a href="nxsrecconfig.html#nxsrecconfig.Streams.info">info() (in module nxsrecconfig.Streams)</a>
+  <dt><a href="nxsrecconfig.html#nxsrecconfig.StreamSet.StreamSet.info">info() (nxsrecconfig.StreamSet.StreamSet method)</a>
   </dt>
 
       
@@ -825,6 +863,10 @@
   </dt>
 
       
+  <dt><a href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_ComponentSources_allowed">is_ComponentSources_allowed() (nxsrecconfig.NXSConfig.NXSRecSelector method)</a>
+  </dt>
+
+      
   <dt><a href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_CreateDynamicComponent_allowed">is_CreateDynamicComponent_allowed() (nxsrecconfig.NXSConfig.NXSRecSelector method)</a>
   </dt>
 
@@ -868,6 +910,10 @@
 
       
   <dt><a href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_IsMntGrpUpdated_allowed">is_IsMntGrpUpdated_allowed() (nxsrecconfig.NXSConfig.NXSRecSelector method)</a>
+  </dt>
+
+      
+  <dt><a href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_LinkDataSources_write_allowed">is_LinkDataSources_write_allowed() (nxsrecconfig.NXSConfig.NXSRecSelector method)</a>
   </dt>
 
       
@@ -993,6 +1039,10 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%" valign="top"><dl>
       
+  <dt><a href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.linkdatasources">linkdatasources (nxsrecconfig.Settings.Settings attribute)</a>
+  </dt>
+
+      
   <dt><a href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.LoadProfile">LoadProfile() (nxsrecconfig.NXSConfig.NXSRecSelector method)</a>
   </dt>
 
@@ -1001,25 +1051,25 @@
   </dt>
 
       
-  <dt><a href="nxsrecconfig.html#nxsrecconfig.Streams.log_debug">log_debug (in module nxsrecconfig.Streams)</a>
-  </dt>
-
-      
-  <dt><a href="nxsrecconfig.html#nxsrecconfig.Streams.log_error">log_error (in module nxsrecconfig.Streams)</a>
+  <dt><a href="nxsrecconfig.html#nxsrecconfig.StreamSet.StreamSet.log_debug">log_debug (nxsrecconfig.StreamSet.StreamSet attribute)</a>
   </dt>
 
   </dl></td>
   <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="nxsrecconfig.html#nxsrecconfig.Streams.log_fatal">log_fatal (in module nxsrecconfig.Streams)</a>
+  <dt><a href="nxsrecconfig.html#nxsrecconfig.StreamSet.StreamSet.log_error">log_error (nxsrecconfig.StreamSet.StreamSet attribute)</a>
   </dt>
 
       
-  <dt><a href="nxsrecconfig.html#nxsrecconfig.Streams.log_info">log_info (in module nxsrecconfig.Streams)</a>
+  <dt><a href="nxsrecconfig.html#nxsrecconfig.StreamSet.StreamSet.log_fatal">log_fatal (nxsrecconfig.StreamSet.StreamSet attribute)</a>
   </dt>
 
       
-  <dt><a href="nxsrecconfig.html#nxsrecconfig.Streams.log_warn">log_warn (in module nxsrecconfig.Streams)</a>
+  <dt><a href="nxsrecconfig.html#nxsrecconfig.StreamSet.StreamSet.log_info">log_info (nxsrecconfig.StreamSet.StreamSet attribute)</a>
+  </dt>
+
+      
+  <dt><a href="nxsrecconfig.html#nxsrecconfig.StreamSet.StreamSet.log_warn">log_warn (nxsrecconfig.StreamSet.StreamSet attribute)</a>
   </dt>
 
   </dl></td>
@@ -1201,7 +1251,7 @@
   </dt>
 
       
-  <dt><a href="nxsrecconfig.html#module-nxsrecconfig.Streams">nxsrecconfig.Streams (module)</a>
+  <dt><a href="nxsrecconfig.html#module-nxsrecconfig.StreamSet">nxsrecconfig.StreamSet (module)</a>
   </dt>
 
       
@@ -1376,6 +1426,10 @@
 
       
   <dt><a href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.read_Door">read_Door() (nxsrecconfig.NXSConfig.NXSRecSelector method)</a>
+  </dt>
+
+      
+  <dt><a href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.read_LinkDataSources">read_LinkDataSources() (nxsrecconfig.NXSConfig.NXSRecSelector method)</a>
   </dt>
 
       
@@ -1649,6 +1703,10 @@
   </dt>
 
       
+  <dt><a href="nxsrecconfig.html#nxsrecconfig.StreamSet.StreamSet">StreamSet (class in nxsrecconfig.StreamSet)</a>
+  </dt>
+
+      
   <dt><a href="nxsrecconfig.html#nxsrecconfig.Utils.Utils.stringToDictJson">stringToDictJson() (nxsrecconfig.Utils.Utils class method)</a>
   </dt>
 
@@ -1685,9 +1743,15 @@
   </dt>
 
       
-  <dt><a href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.timerFilters">timerFilters (nxsrecconfig.Settings.Settings attribute)</a>
+  <dt><a href="nxsrecconfig.html#nxsrecconfig.ProfileManager.ProfileManager.timerFilters">timerFilters (nxsrecconfig.ProfileManager.ProfileManager attribute)</a>
   </dt>
 
+      <dd><dl>
+        
+  <dt><a href="nxsrecconfig.html#nxsrecconfig.Settings.Settings.timerFilters">(nxsrecconfig.Settings.Settings attribute)</a>
+  </dt>
+
+      </dl></dd>
   </dl></td>
   <td style="width: 33%" valign="top"><dl>
       
@@ -1811,7 +1875,7 @@
   </dt>
 
       
-  <dt><a href="nxsrecconfig.html#nxsrecconfig.Streams.warn">warn() (in module nxsrecconfig.Streams)</a>
+  <dt><a href="nxsrecconfig.html#nxsrecconfig.StreamSet.StreamSet.warn">warn() (nxsrecconfig.StreamSet.StreamSet method)</a>
   </dt>
 
       
@@ -1835,15 +1899,19 @@
   </dt>
 
       
-  <dt><a href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.write_MntGrp">write_MntGrp() (nxsrecconfig.NXSConfig.NXSRecSelector method)</a>
+  <dt><a href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.write_LinkDataSources">write_LinkDataSources() (nxsrecconfig.NXSConfig.NXSRecSelector method)</a>
   </dt>
 
       
-  <dt><a href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.write_ProfileConfiguration">write_ProfileConfiguration() (nxsrecconfig.NXSConfig.NXSRecSelector method)</a>
+  <dt><a href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.write_MntGrp">write_MntGrp() (nxsrecconfig.NXSConfig.NXSRecSelector method)</a>
   </dt>
 
   </dl></td>
   <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.write_ProfileConfiguration">write_ProfileConfiguration() (nxsrecconfig.NXSConfig.NXSRecSelector method)</a>
+  </dt>
+
       
   <dt><a href="nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.write_ProfileFile">write_ProfileFile() (nxsrecconfig.NXSConfig.NXSRecSelector method)</a>
   </dt>
@@ -1892,7 +1960,7 @@
       
     </p>
     <p>
-        &copy; Copyright 2012-2016 DESY, Jan Kotanski &lt;jkotan@mail.desy.de&gt;
+        &copy; Copyright 2012-2017 DESY, Jan Kotanski &lt;jkotan@mail.desy.de&gt;
 
 GNU GENERAL PUBLIC LICENSE, version 3.<br/>
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.<br/>

@@ -105,6 +105,7 @@
 				<li> <a href="FullDocument.html#cmdUpdateMntGrp"> UpdateMntGrp </a>
 				<li> <a href="FullDocument.html#cmdUpdateProfile"> UpdateProfile </a>
 				<li> <a href="FullDocument.html#cmdVariableComponents"> VariableComponents </a>
+				<li> <a href="FullDocument.html#cmdComponentSources"> ComponentSources </a>
 			</ul>
 			<li> <a href="FullDocument.html#attributes">   Attributes   </a>
 			<ul>
@@ -124,6 +125,7 @@
 				<li> <a href="FullDocument.html#attrAppendEntry"> AppendEntry </a>
 				<li> <a href="FullDocument.html#attrConfigVariables"> ConfigVariables </a>
 				<li> <a href="FullDocument.html#attrProfileFile"> ProfileFile </a>
+				<li> <a href="FullDocument.html#attrLinkDataSources"> LinkDataSources </a>
 				<li> <a href="FullDocument.html#attrComponents"> Components </a>
 				<li> <a href="FullDocument.html#attrDescriptionErrors"> DescriptionErrors </a>
 				<li> <a href="FullDocument.html#attrDataSources"> DataSources </a>
@@ -164,7 +166,7 @@
 			</Table>
 		</ul></td>
 		<td>
-			<ul><li> <a href="http://www.esrf.fr/computing/cs/tango/tango_doc/kernel_doc/" target="new"> Tango::DeviceImpl</a></li>
+			<ul><li> <a href="http://www.esrf.eu/computing/cs/tango/tango_doc/kernel_doc/" target="new"> Tango::DeviceImpl</a></li>
 			<ul> <li> NXSRecSelector</li>
 			<br>
 			<br>
@@ -242,6 +244,24 @@
 		<td> list of default preselected components </td>
 		<td> String[] </td>
 		<td> none </td>
+	</tr>
+	<tr>
+		<td> DefaultNeXusPath </td>
+		<td> default NeXus path </td>
+		<td> String </td>
+		<td> /scan$var.serialno:NXentry/NXinstrument/collection <br> </td>
+	</tr>
+	<tr>
+		<td> DefaultTimeZone </td>
+		<td> default time zone </td>
+		<td> String </td>
+		<td> Europe/Berlin <br> </td>
+	</tr>
+	<tr>
+		<td> DefaultMntGrp </td>
+		<td> defaultmeasurement group name </td>
+		<td> String </td>
+		<td> nxsmntgrp <br> </td>
 	</tr>
 </table>
 <br><br>
@@ -572,6 +592,13 @@
 		<td> DEV_STRING </td>
 		<td> OPERATOR </td>
 		<td> Return a list of available component names </td>
+	</tr>
+	<tr>
+		<td> <a href="CmdComponentSources.html"> ComponentSources </a> </td>
+		<td> DEVVAR_STRINGARRAY </td>
+		<td> DEV_STRING </td>
+		<td> OPERATOR </td>
+		<td> Describe datasources from components </td>
 	</tr>
 </table>
 <br><br><hr>
@@ -2779,6 +2806,55 @@
 		<td> .. </td>
 	</tr>
 </table>
+<br><br><hr>
+<a name="cmdComponentSources"> </a>
+<br><br><br>
+<font size="+1"><u><b> Command ComponentSources : </b></u></font>
+<ul>
+	Describe datasources from components
+</ul>
+<br><br><br>
+<Table Border=2 Cellpadding=3 CELLSPACING=0>
+	<tr bgcolor="#CCCCFF" class="TableHeadingColor">
+	<td colspan=0> <font size=+1> <center><b> ComponentSources Definition </b></font></center></td>
+	</tr>
+	<tr>
+		<td> Input Argument </td>
+		<td> Tango::DEVVAR_STRINGARRAY </td>
+		<td> list of required components </td>
+	</tr>
+	<tr>
+		<td> Output Argument </td>
+		<td> Tango::DEV_STRING </td>
+		<td> JSON with description of  Datasources </td>
+	</tr>
+	<tr>
+		<td> DisplayLevel </td>
+		<td> OPERATOR </td>
+		<td> .. </td>
+	</tr>
+	<tr>
+		<td> Inherited </td>
+		<td> false </td>
+		<td> .. </td>
+	</tr>
+	<tr>
+		<td> Abstract </td>
+		<td> false </td>
+		<td> .. </td>
+	</tr>
+	<tr>
+		<td> Polling Period </td>
+		<td> Not polled </td>
+		<td> .. </td>
+	</tr>
+<Tr BGCOLOR="#CCCCFF"><Td><Hr></Td><Td><Hr></Td><Td><Hr></Td></Tr>
+	<tr>
+		<td> Command NOT allowed for </td>
+		<td> <font size="-1">  <li> RUNNING </li> </font> </td>
+		<td> .. </td>
+	</tr>
+</table>
 <br><br>
 <hr>
 <a name="attributes"> </a>
@@ -2955,6 +3031,16 @@
 		<td> Tango::DEV_STRING </td>
 		<td> OPERATOR </td>
 		<td> config file with its full path </td>
+	</tr>
+	<tr>
+		<td> <a href="AttrLinkDataSources.html"> LinkDataSources </a> </td>
+		<td> false </td>
+		<td> false </td>
+		<td> Scalar </td>
+		<td> READ_WRITE </td>
+		<td> Tango::DEV_STRING </td>
+		<td> EXPERT </td>
+		<td> list of datasources  to which a link will be added </td>
 	</tr>
 	<tr>
 		<td> <a href="AttrComponents.html"> Components </a> </td>
@@ -5571,6 +5657,173 @@
 				<tr>
 					<td> label </td>
 					<td> Profile File with its Path </td>
+				</tr>
+				<tr>
+					<td> unit </td>
+					<td>  </td>
+				</tr>
+				<tr>
+					<td> standard unit </td>
+					<td>  </td>
+				</tr>
+				<tr>
+					<td> display unit </td>
+					<td>  </td>
+				</tr>
+				<tr>
+					<td> format </td>
+					<td>  </td>
+				</tr>
+				<tr>
+					<td> max_value </td>
+					<td>  </td>
+				</tr>
+				<tr>
+					<td> min_value </td>
+					<td>  </td>
+				</tr>
+				<tr>
+					<td> max_alarm </td>
+					<td>  </td>
+				</tr>
+				<tr>
+					<td> min_alarm </td>
+					<td>  </td>
+				</tr>
+				<tr>
+					<td> max_warning </td>
+					<td>  </td>
+				</tr>
+				<tr>
+					<td> min_warning </td>
+					<td>  </td>
+				</tr>
+				<tr>
+					<td> delta_time </td>
+					<td>  </td>
+				</tr>
+				<tr>
+					<td> delta_val </td>
+					<td>  </td>
+				</tr>
+			</table>
+		</td>
+		<TD ALIGN="Right" VALIGN=top>
+			<Table Border=2 Cellpadding=3 CELLSPACING=0>
+				<tr bgcolor="#CCCCFF" class="TableHeadingColor">
+				<td colspan=0> <font size=+1> <center><b> Attribute Event Criteria </b></font></center></td>
+				</tr>
+				<tr>
+					<td> Periodic </td>
+					<td> Not set </td>
+				</tr>
+				<tr>
+					<td> Relative Change </td>
+					<td> Not set </td>
+				</tr>
+				<tr>
+					<td> Absolute Change </td>
+					<td> Not set </td>
+				</tr>
+			<Tr BGCOLOR="#CCCCFF"><Td><Hr></Td><Td><Hr></Td></Tr>
+				<tr>
+					<td> Archive Periodic </td>
+					<td> Not set </td>
+				</tr>
+				<tr>
+					<td> Archive Relative Change </td>
+					<td> Not set </td>
+				</tr>
+				<tr>
+					<td> Archive Absolute Change </td>
+					<td> Not set </td>
+				</tr>
+			<Tr BGCOLOR="#CCCCFF"><Td><Hr></Td><Td><Hr></Td></Tr>
+				<tr>
+					<td> Push Change event by user code </td>
+					<td> false </td>
+				</tr>
+			<Tr BGCOLOR="#CCCCFF"><Td> </Td><Td> </Td></Tr>
+				<tr>
+					<td> Push Archive event by user code </td>
+					<td> false </td>
+				</tr>
+			<Tr BGCOLOR="#CCCCFF"><Td> </Td><Td> </Td></Tr>
+				<tr>
+					<td> Push DataReady event by user code </td>
+					<td> false </td>
+				</tr>
+			</table>
+		</td>
+	</TR>
+</table>
+<br><br>
+<hr>
+<a name="attrLinkDataSources"> </a>
+<br><br><br>
+<font size="+1"><u><b> Attribute LinkDataSources : </b></u></font>
+<ul>
+	list of datasources  to which a link will be added
+</ul>
+<br><br><br>
+<Table Border=0 Cellpadding=0 CELLSPACING=20>
+	<TR>
+		<TD ALIGN="left" VALIGN=top>
+			<Table Border=2 Cellpadding=3 CELLSPACING=0>
+				<tr bgcolor="#CCCCFF" class="TableHeadingColor">
+				<td colspan=0> <font size=+1> <center><b> Attribute Definition </b></font></center></td>
+				</tr>
+				<tr>
+					<td> Attribute Type </td>
+					<td> Scalar </td>
+				</tr>
+				<tr>
+					<td> R/W Type </td>
+					<td> READ_WRITE </td>
+				</tr>
+				<tr>
+					<td> Data Type </td>
+					<td> Tango::DEV_STRING </td>
+				</tr>
+				<tr>
+					<td> Display Level </td>
+					<td> EXPERT </td>
+				</tr>
+				<tr>
+					<td> Inherited </td>
+					<td> false </td>
+				</tr>
+				<tr>
+					<td> Abstract </td>
+					<td> false </td>
+				</tr>
+				<tr>
+					<td> Polling Period </td>
+					<td> Not polled </td>
+				</tr>
+				<tr>
+					<td> Memorized </td>
+					<td> Not set </td>
+				</tr>
+			<Tr BGCOLOR="#CCCCFF"><Td><Hr></Td><Td><Hr></Td></Tr>
+				<tr>
+					<td> Read allowed for </td>
+					<td> All states </td>
+				</tr>
+				<tr>
+					<td> Write allowed for </td>
+					<td> All states </td>
+				</tr>
+			</table>
+		</td>
+		<TD ALIGN="Center" VALIGN=top>
+			<Table Border=2 Cellpadding=3 CELLSPACING=0>
+				<tr bgcolor="#CCCCFF" class="TableHeadingColor">
+				<td colspan=0> <font size=+1> <center><b> Attribute Properties </b></font></center></td>
+				</tr>
+				<tr>
+					<td> label </td>
+					<td> list of datasources to which a link will be added </td>
 				</tr>
 				<tr>
 					<td> unit </td>

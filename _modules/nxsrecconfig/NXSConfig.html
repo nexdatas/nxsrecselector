@@ -5,7 +5,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>nxsrecconfig.NXSConfig &mdash; NXSRecSelector 3.6.0 documentation</title>
+    <title>nxsrecconfig.NXSConfig &mdash; NXSRecSelector 3.10.0 documentation</title>
     
     <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '3.6.0',
+        VERSION:     '3.10.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -29,7 +29,7 @@
     <script type="text/javascript" src="../../_static/js/jquery-fix.js"></script>
     <script type="text/javascript" src="../../_static/bootstrap-3.3.4/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../../_static/bootstrap-sphinx.js"></script>
-    <link rel="top" title="NXSRecSelector 3.6.0 documentation" href="../../index.html" />
+    <link rel="top" title="NXSRecSelector 3.10.0 documentation" href="../../index.html" />
     <link rel="up" title="nxsrecconfig" href="../nxsrecconfig.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
@@ -50,7 +50,7 @@
         </button>
         <a class="navbar-brand" href="../../index.html">
           NXSRecSelector</a>
-        <span class="navbar-text navbar-version pull-left"><b>3.6</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>3.10</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -79,7 +79,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Selection">nxsrecconfig.Selection module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Selector">nxsrecconfig.Selector module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Settings">nxsrecconfig.Settings module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Streams">nxsrecconfig.Streams module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.StreamSet">nxsrecconfig.StreamSet module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Utils">nxsrecconfig.Utils module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig">Module contents</a></li>
 </ul>
@@ -171,6 +171,7 @@
 
 
 <div class="viewcode-block" id="NXSRecSelector"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector">[docs]</a><span class="k">class</span> <span class="nc">NXSRecSelector</span><span class="p">(</span><span class="n">PyTango</span><span class="o">.</span><span class="n">Device_4Impl</span><span class="p">):</span>
+
     <span class="sd">&quot;&quot;&quot; NXSRecSelector server interface</span>
 
 <span class="sd">    :brief: Tango Server for Nexus Sardana Recorder Settings.</span>
@@ -217,7 +218,11 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">__stg</span> <span class="o">=</span> <span class="bp">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">get_device_properties</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_device_class</span><span class="p">())</span>
         <span class="n">numberofthreads</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">NumberOfThreads</span> <span class="ow">or</span> <span class="bp">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__stg</span> <span class="o">=</span> <span class="n">STG</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">numberofthreads</span><span class="p">)</span>
+        <span class="n">defaultpath</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">DefaultNeXusPath</span> <span class="ow">or</span> <span class="bp">None</span>
+        <span class="n">defaultzone</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">DefaultTimeZone</span> <span class="ow">or</span> <span class="bp">None</span>
+        <span class="n">defaultmntgrp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">DefaultMntGrp</span> <span class="ow">or</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__stg</span> <span class="o">=</span> <span class="n">STG</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">numberofthreads</span><span class="p">,</span> <span class="n">defaultpath</span><span class="p">,</span>
+                         <span class="n">defaultzone</span><span class="p">,</span> <span class="n">defaultmntgrp</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set_state</span><span class="p">(</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevState</span><span class="o">.</span><span class="n">ON</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__stg</span><span class="o">.</span><span class="n">poolBlacklist</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">PoolBlacklist</span> <span class="ow">or</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__stg</span><span class="o">.</span><span class="n">timerFilters</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">TimerFilters</span> <span class="ow">or</span> <span class="p">[</span>
@@ -227,6 +232,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__stg</span><span class="o">.</span><span class="n">adminDataNames</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">AdminDataNames</span> <span class="ow">or</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__stg</span><span class="o">.</span><span class="n">defaultPreselectedComponents</span> <span class="o">=</span> \
             <span class="bp">self</span><span class="o">.</span><span class="n">DefaultPreselectedComponents</span> <span class="ow">or</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__stg</span><span class="o">.</span><span class="n">clientRecordKeys</span> <span class="o">=</span> \
+            <span class="bp">self</span><span class="o">.</span><span class="n">ClientRecordKeys</span> <span class="ow">or</span> <span class="p">[]</span>
 </div>
 <div class="viewcode-block" id="NXSRecSelector.always_executed_hook"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.always_executed_hook">[docs]</a>    <span class="k">def</span> <span class="nf">always_executed_hook</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Always excuted hook method</span>
@@ -322,6 +329,39 @@
 </div>
 <div class="viewcode-block" id="NXSRecSelector.is_StepDataSources_write_allowed"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_StepDataSources_write_allowed">[docs]</a>    <span class="k">def</span> <span class="nf">is_StepDataSources_write_allowed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; StepDataSources attribute Write State Machine</span>
+
+<span class="sd">        :returns: True if the operation allowed</span>
+<span class="sd">        :rtype: :obj:`bool`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_state</span><span class="p">()</span> <span class="ow">in</span> <span class="p">[</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevState</span><span class="o">.</span><span class="n">RUNNING</span><span class="p">]:</span>
+            <span class="k">return</span> <span class="bp">False</span>
+        <span class="k">return</span> <span class="bp">True</span>
+</div>
+<div class="viewcode-block" id="NXSRecSelector.read_LinkDataSources"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.read_LinkDataSources">[docs]</a>    <span class="k">def</span> <span class="nf">read_LinkDataSources</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Read LinkDataSources attribute</span>
+
+<span class="sd">        :param attr: read attribute</span>
+<span class="sd">        :type attr: :class:`PyTango.Attribute`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">debug_stream</span><span class="p">(</span><span class="s">&quot;In read_LinkDataSources()&quot;</span><span class="p">)</span>
+        <span class="n">attr</span><span class="o">.</span><span class="n">set_value</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__stg</span><span class="o">.</span><span class="n">linkdatasources</span> <span class="ow">or</span> <span class="s">&quot;&quot;</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="NXSRecSelector.write_LinkDataSources"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.write_LinkDataSources">[docs]</a>    <span class="k">def</span> <span class="nf">write_LinkDataSources</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Write LinkDataSources attribute</span>
+
+<span class="sd">        :param attr: written attribute</span>
+<span class="sd">        :type attr: :class:`PyTango.Attribute`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">debug_stream</span><span class="p">(</span><span class="s">&quot;In write_LinkDataSources()&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_LinkDataSources_write_allowed</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__stg</span><span class="o">.</span><span class="n">linkdatasources</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">get_write_value</span><span class="p">()</span> <span class="ow">or</span> <span class="s">&quot;&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">warn_stream</span><span class="p">(</span><span class="s">&quot;To change the settings please close the server.&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
+                <span class="s">&quot;To change the settings please close the server.&quot;</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="NXSRecSelector.is_LinkDataSources_write_allowed"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_LinkDataSources_write_allowed">[docs]</a>    <span class="k">def</span> <span class="nf">is_LinkDataSources_write_allowed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; LinkDataSources attribute Write State Machine</span>
 
 <span class="sd">        :returns: True if the operation allowed</span>
 <span class="sd">        :rtype: :obj:`bool`</span>
@@ -1713,6 +1753,36 @@
             <span class="k">return</span> <span class="bp">False</span>
         <span class="k">return</span> <span class="bp">True</span>
 </div>
+<div class="viewcode-block" id="NXSRecSelector.ComponentSources"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.ComponentSources">[docs]</a>    <span class="k">def</span> <span class="nf">ComponentSources</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">argin</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; ComponentSources command</span>
+
+<span class="sd">        :brief: Describe datasources from components</span>
+<span class="sd">        :param argin:  DevVarStringArray    list of component names</span>
+<span class="sd">        :type argin: :obj:`list` &lt;:obj:`str`&gt;</span>
+<span class="sd">        :returns: DevVarString         description of component datasources</span>
+<span class="sd">        :rtype: :obj:`str`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">debug_stream</span><span class="p">(</span><span class="s">&quot;In ComponentSources()&quot;</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_state</span><span class="p">(</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevState</span><span class="o">.</span><span class="n">RUNNING</span><span class="p">)</span>
+            <span class="n">argout</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__stg</span><span class="o">.</span><span class="n">componentSources</span><span class="p">(</span><span class="n">argin</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_state</span><span class="p">(</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevState</span><span class="o">.</span><span class="n">ON</span><span class="p">)</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_state</span><span class="p">()</span> <span class="o">==</span> <span class="n">PyTango</span><span class="o">.</span><span class="n">DevState</span><span class="o">.</span><span class="n">RUNNING</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">set_state</span><span class="p">(</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevState</span><span class="o">.</span><span class="n">ON</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">argout</span>
+</div>
+<div class="viewcode-block" id="NXSRecSelector.is_ComponentSources_allowed"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.is_ComponentSources_allowed">[docs]</a>    <span class="k">def</span> <span class="nf">is_ComponentSources_allowed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; ComponentSources command State Machine</span>
+
+<span class="sd">        :returns: True if the operation allowed</span>
+<span class="sd">        :rtype: :obj:`bool`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_state</span><span class="p">()</span> <span class="ow">in</span> <span class="p">[</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevState</span><span class="o">.</span><span class="n">RUNNING</span><span class="p">]:</span>
+            <span class="k">return</span> <span class="bp">False</span>
+        <span class="k">return</span> <span class="bp">True</span>
+</div>
 <div class="viewcode-block" id="NXSRecSelector.DataSourceDescription"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.DataSourceDescription">[docs]</a>    <span class="k">def</span> <span class="nf">DataSourceDescription</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">argin</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; DataSourceDescription command</span>
 
@@ -1727,6 +1797,27 @@
         <span class="k">try</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">set_state</span><span class="p">(</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevState</span><span class="o">.</span><span class="n">RUNNING</span><span class="p">)</span>
             <span class="n">argout</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__stg</span><span class="o">.</span><span class="n">dataSourceDescription</span><span class="p">(</span><span class="n">argin</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_state</span><span class="p">(</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevState</span><span class="o">.</span><span class="n">ON</span><span class="p">)</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_state</span><span class="p">()</span> <span class="o">==</span> <span class="n">PyTango</span><span class="o">.</span><span class="n">DevState</span><span class="o">.</span><span class="n">RUNNING</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">set_state</span><span class="p">(</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevState</span><span class="o">.</span><span class="n">ON</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">argout</span>
+</div>
+<div class="viewcode-block" id="NXSRecSelector.AddStepDataSources"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.NXSConfig.NXSRecSelector.AddStepDataSources">[docs]</a>    <span class="k">def</span> <span class="nf">AddStepDataSources</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">argin</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; AddStepDataSources command</span>
+
+<span class="sd">        :brief: Provide datasource description</span>
+<span class="sd">        :param argin:  DevVarStringArray    list of datasource names</span>
+<span class="sd">        :type argin: :obj:`list` &lt;:obj:`str`&gt;</span>
+<span class="sd">        :returns: DevVarStringArray list of datasources not found in components</span>
+<span class="sd">        :rtypes: :obj:`list` &lt;:obj:`str`&gt;</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">debug_stream</span><span class="p">(</span><span class="s">&quot;In AddStepDataSources()&quot;</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_state</span><span class="p">(</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevState</span><span class="o">.</span><span class="n">RUNNING</span><span class="p">)</span>
+            <span class="n">argout</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__stg</span><span class="o">.</span><span class="n">addStepDataSources</span><span class="p">(</span><span class="n">argin</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">set_state</span><span class="p">(</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevState</span><span class="o">.</span><span class="n">ON</span><span class="p">)</span>
         <span class="k">finally</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_state</span><span class="p">()</span> <span class="o">==</span> <span class="n">PyTango</span><span class="o">.</span><span class="n">DevState</span><span class="o">.</span><span class="n">RUNNING</span><span class="p">:</span>
@@ -1797,6 +1888,18 @@
         <span class="p">[</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevLong</span><span class="p">,</span>
          <span class="s">&quot;maximal number of threads&quot;</span><span class="p">,</span>
          <span class="p">[</span><span class="mi">20</span><span class="p">]],</span>
+        <span class="s">&#39;DefaultNeXusPath&#39;</span><span class="p">:</span>
+        <span class="p">[</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevString</span><span class="p">,</span>
+         <span class="s">&quot;default NeXus path&quot;</span><span class="p">,</span>
+         <span class="p">[</span><span class="s">&quot;/scan$var.serialno:NXentry/NXinstrument/collection&quot;</span><span class="p">]],</span>
+        <span class="s">&#39;DefaultTimeZone&#39;</span><span class="p">:</span>
+        <span class="p">[</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevString</span><span class="p">,</span>
+         <span class="s">&quot;default Time Zone&quot;</span><span class="p">,</span>
+         <span class="p">[</span><span class="s">&quot;Europe/Berlin&quot;</span><span class="p">]],</span>
+        <span class="s">&#39;DefaultMntGrp&#39;</span><span class="p">:</span>
+        <span class="p">[</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevString</span><span class="p">,</span>
+         <span class="s">&quot;default measurement group name&quot;</span><span class="p">,</span>
+         <span class="p">[</span><span class="s">&quot;nxsmntgrp&quot;</span><span class="p">]],</span>
         <span class="s">&#39;PoolBlacklist&#39;</span><span class="p">:</span>
         <span class="p">[</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevVarStringArray</span><span class="p">,</span>
          <span class="s">&quot;blacklist of pools&quot;</span><span class="p">,</span>
@@ -1816,6 +1919,10 @@
         <span class="s">&#39;DefaultPreselectedComponents&#39;</span><span class="p">:</span>
         <span class="p">[</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevVarStringArray</span><span class="p">,</span>
          <span class="s">&quot;list of default preselected components&quot;</span><span class="p">,</span>
+         <span class="p">[]],</span>
+        <span class="s">&#39;ClientRecordKeys&#39;</span><span class="p">:</span>
+        <span class="p">[</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevVarStringArray</span><span class="p">,</span>
+         <span class="s">&quot;list of record keys for CLIENT datasources&quot;</span><span class="p">,</span>
          <span class="p">[]],</span>
     <span class="p">}</span>
 
@@ -1950,10 +2057,19 @@
             <span class="p">[[</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevVarStringArray</span><span class="p">,</span> <span class="s">&quot;list of required datasources&quot;</span><span class="p">],</span>
              <span class="p">[</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevVarStringArray</span><span class="p">,</span>
               <span class="s">&quot;list of JSON with description of CLIENT Datasources&quot;</span><span class="p">]],</span>
+        <span class="s">&#39;AddStepDataSources&#39;</span><span class="p">:</span>
+            <span class="p">[[</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevVarStringArray</span><span class="p">,</span> <span class="s">&quot;list of required datasources&quot;</span><span class="p">],</span>
+             <span class="p">[</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevVarStringArray</span><span class="p">,</span>
+              <span class="s">&quot;list of datasources not found in components&quot;</span><span class="p">]],</span>
         <span class="s">&#39;ComponentClientSources&#39;</span><span class="p">:</span>
-            <span class="p">[[</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevVarStringArray</span><span class="p">,</span> <span class="s">&quot;list of required components&quot;</span><span class="p">],</span>
+            <span class="p">[[</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevVarStringArray</span><span class="p">,</span> <span class="s">&quot;list of component &quot;</span>
+              <span class="s">&quot;client datasources&quot;</span><span class="p">],</span>
              <span class="p">[</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevString</span><span class="p">,</span>
-              <span class="s">&quot;JSON with description of CLIENT Datasources&quot;</span><span class="p">]],</span>
+              <span class="s">&quot;JSON with description of component CLIENT Datasources&quot;</span><span class="p">]],</span>
+        <span class="s">&#39;ComponentSources&#39;</span><span class="p">:</span>
+            <span class="p">[[</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevVarStringArray</span><span class="p">,</span> <span class="s">&quot;list of components&quot;</span><span class="p">],</span>
+             <span class="p">[</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevString</span><span class="p">,</span>
+              <span class="s">&quot;JSON with description of component Datasources&quot;</span><span class="p">]],</span>
         <span class="s">&#39;ChannelProperties&#39;</span><span class="p">:</span>
             <span class="p">[[</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevString</span><span class="p">,</span> <span class="s">&quot;property type&quot;</span><span class="p">],</span>
              <span class="p">[</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevString</span><span class="p">,</span>
@@ -1994,6 +2110,16 @@
                  <span class="s">&#39;label&#39;</span><span class="p">:</span> <span class="s">&quot;list of datasources to be switch into step mode&quot;</span><span class="p">,</span>
                  <span class="s">&#39;description&#39;</span><span class="p">:</span> <span class="s">&quot;list of datasources to be switched&quot;</span> <span class="o">+</span>
                  <span class="s">&quot; into step mode&quot;</span><span class="p">,</span>
+                 <span class="s">&#39;Display level&#39;</span><span class="p">:</span> <span class="n">PyTango</span><span class="o">.</span><span class="n">DispLevel</span><span class="o">.</span><span class="n">EXPERT</span><span class="p">,</span>
+            <span class="p">}],</span>
+        <span class="s">&#39;LinkDataSources&#39;</span><span class="p">:</span>
+            <span class="p">[[</span><span class="n">PyTango</span><span class="o">.</span><span class="n">DevString</span><span class="p">,</span>
+              <span class="n">PyTango</span><span class="o">.</span><span class="n">SCALAR</span><span class="p">,</span>
+              <span class="n">PyTango</span><span class="o">.</span><span class="n">READ_WRITE</span><span class="p">],</span>
+             <span class="p">{</span>
+                 <span class="s">&#39;label&#39;</span><span class="p">:</span> <span class="s">&quot;list of datasources to which a link will be added&quot;</span><span class="p">,</span>
+                 <span class="s">&#39;description&#39;</span><span class="p">:</span> <span class="s">&quot;list of datasources to which &quot;</span>
+                 <span class="s">&quot;a link will be added&quot;</span><span class="p">,</span>
                  <span class="s">&#39;Display level&#39;</span><span class="p">:</span> <span class="n">PyTango</span><span class="o">.</span><span class="n">DispLevel</span><span class="o">.</span><span class="n">EXPERT</span><span class="p">,</span>
             <span class="p">}],</span>
         <span class="s">&#39;DescriptionErrors&#39;</span><span class="p">:</span>
@@ -2170,7 +2296,7 @@
       
     </p>
     <p>
-        &copy; Copyright 2012-2016 DESY, Jan Kotanski &lt;jkotan@mail.desy.de&gt;
+        &copy; Copyright 2012-2017 DESY, Jan Kotanski &lt;jkotan@mail.desy.de&gt;
 
 GNU GENERAL PUBLIC LICENSE, version 3.<br/>
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.<br/>

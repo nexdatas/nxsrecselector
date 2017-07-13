@@ -92,10 +92,10 @@ nxsrecconfig.Settings module
     :undoc-members:
     :show-inheritance:
 
-nxsrecconfig.Streams module
----------------------------
+nxsrecconfig.StreamSet module
+-----------------------------
 
-.. automodule:: nxsrecconfig.Streams
+.. automodule:: nxsrecconfig.StreamSet
     :members:
     :undoc-members:
     :show-inheritance:

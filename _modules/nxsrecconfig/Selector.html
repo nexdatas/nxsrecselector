@@ -5,7 +5,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>nxsrecconfig.Selector &mdash; NXSRecSelector 3.6.0 documentation</title>
+    <title>nxsrecconfig.Selector &mdash; NXSRecSelector 3.10.0 documentation</title>
     
     <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '3.6.0',
+        VERSION:     '3.10.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -29,7 +29,7 @@
     <script type="text/javascript" src="../../_static/js/jquery-fix.js"></script>
     <script type="text/javascript" src="../../_static/bootstrap-3.3.4/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../../_static/bootstrap-sphinx.js"></script>
-    <link rel="top" title="NXSRecSelector 3.6.0 documentation" href="../../index.html" />
+    <link rel="top" title="NXSRecSelector 3.10.0 documentation" href="../../index.html" />
     <link rel="up" title="nxsrecconfig" href="../nxsrecconfig.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
@@ -50,7 +50,7 @@
         </button>
         <a class="navbar-brand" href="../../index.html">
           NXSRecSelector</a>
-        <span class="navbar-text navbar-version pull-left"><b>3.6</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>3.10</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -79,7 +79,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Selection">nxsrecconfig.Selection module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Selector">nxsrecconfig.Selector module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Settings">nxsrecconfig.Settings module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Streams">nxsrecconfig.Streams module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.StreamSet">nxsrecconfig.StreamSet module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Utils">nxsrecconfig.Utils module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig">Module contents</a></li>
 </ul>
@@ -132,7 +132,7 @@
 <span class="c">#!/usr/bin/env python</span>
 <span class="c">#   This file is part of nxsrecconfig - NeXus Sardana Recorder Settings</span>
 <span class="c">#</span>
-<span class="c">#    Copyright (C) 2014-2016 DESY, Jan Kotanski &lt;jkotan@mail.desy.de&gt;</span>
+<span class="c">#    Copyright (C) 2014-2017 DESY, Jan Kotanski &lt;jkotan@mail.desy.de&gt;</span>
 <span class="c">#</span>
 <span class="c">#    nexdatas is free software: you can redistribute it and/or modify</span>
 <span class="c">#    it under the terms of the GNU General Public License as published by</span>
@@ -152,17 +152,24 @@
 
 <span class="kn">import</span> <span class="nn">json</span>
 <span class="kn">import</span> <span class="nn">PyTango</span>
-<span class="kn">import</span> <span class="nn">getpass</span>
+<span class="c"># import getpass</span>
+<span class="kn">from</span> <span class="nn">os.path</span> <span class="kn">import</span> <span class="n">expanduser</span>
 <span class="kn">from</span> <span class="nn">.Utils</span> <span class="kn">import</span> <span class="n">TangoUtils</span><span class="p">,</span> <span class="n">PoolUtils</span>
 <span class="kn">from</span> <span class="nn">.Selection</span> <span class="kn">import</span> <span class="n">Selection</span>
 <span class="kn">from</span> <span class="nn">.Converter</span> <span class="kn">import</span> <span class="n">Converter</span>
 
 
 <div class="viewcode-block" id="Selector"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Selector.Selector">[docs]</a><span class="k">class</span> <span class="nc">Selector</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
     <span class="sd">&quot;&quot;&quot; access class to Selection dictionary and Config Device &quot;&quot;&quot;</span>
 
-    <span class="c">##</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">macroserverpools</span><span class="p">,</span> <span class="n">version</span><span class="p">):</span>
+    <span class="c">#</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">macroserverpools</span><span class="p">,</span> <span class="n">version</span><span class="p">,</span>
+                 <span class="n">defaultpath</span><span class="o">=</span><span class="s">&quot;/scan$var.serialno:NXentry/&quot;</span>
+                 <span class="s">&quot;NXinstrument/collection&quot;</span><span class="p">,</span>
+                 <span class="n">defaulttimezone</span><span class="o">=</span><span class="s">&quot;Europe/Berlin&quot;</span><span class="p">,</span>
+                 <span class="n">defaultmntgrp</span><span class="o">=</span><span class="s">&quot;nxsmntgrp&quot;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; constructor</span>
 
 <span class="sd">        :param macroserverpools: MacroServerPools object</span>
@@ -170,6 +177,14 @@
 <span class="sd">            :class:`nxsrecconfig.MacroServerPools.MacroServerPools`</span>
 <span class="sd">        :param version: selector version</span>
 <span class="sd">        :type version: :obj:`str`</span>
+<span class="sd">        :param defaultpath:  default dynamic component path</span>
+<span class="sd">        :type defaultpath: :obj:`str`</span>
+<span class="sd">        :param defaultpath:  default dynamic component path</span>
+<span class="sd">        :type defaultpath: :obj:`str`</span>
+<span class="sd">        :param defaulttimezone:  default time zone</span>
+<span class="sd">        :type defaulttimezone: :obj:`str`</span>
+<span class="sd">        :param defaultmntgrp:  default measurement group name</span>
+<span class="sd">        :type defaultmntgrp: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="c">#: (:class:`nxsrecconfig.MacroServerPools.MacroServerPools`) \</span>
@@ -178,7 +193,12 @@
 
         <span class="c">#: (:class:`nxsrecconfig.Selection.Selection`) \</span>
         <span class="c">#:  selection dictionary with Settings</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__selection</span> <span class="o">=</span> <span class="n">Selection</span><span class="p">(</span><span class="n">Version</span><span class="o">=</span><span class="n">version</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__selection</span> <span class="o">=</span> <span class="n">Selection</span><span class="p">(</span>
+            <span class="n">Version</span><span class="o">=</span><span class="n">version</span><span class="p">,</span>
+            <span class="n">MntGrp</span><span class="o">=</span><span class="n">defaultmntgrp</span><span class="p">,</span>
+            <span class="n">TimeZone</span><span class="o">=</span><span class="n">defaulttimezone</span><span class="p">,</span>
+            <span class="n">DefaultDynamicPath</span><span class="o">=</span><span class="n">defaultpath</span>
+        <span class="p">)</span>
         <span class="c">#: (:class:`nxsrecconfig.Converter.Converter`) \</span>
         <span class="c">#:  selection dictionary with Settings</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__converter</span> <span class="o">=</span> <span class="n">Converter</span><span class="p">(</span><span class="n">version</span><span class="p">)</span>
@@ -246,7 +266,7 @@
                 <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s">&quot;_Selector__preGet&quot;</span> <span class="o">+</span> <span class="n">key</span><span class="p">)()</span>
         <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__selection</span><span class="p">)</span>
 
-    <span class="c">##</span></div>
+    <span class="c">#</span></div>
     <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; provides value of selection item</span>
 
@@ -467,10 +487,11 @@
                 <span class="n">configDevice</span><span class="o">.</span><span class="n">open</span><span class="p">()</span>
                 <span class="n">configDevice</span><span class="o">.</span><span class="n">availableComponents</span><span class="p">()</span>
             <span class="k">except</span> <span class="n">DatabaseError</span><span class="p">:</span>
-                <span class="n">user</span> <span class="o">=</span> <span class="n">getpass</span><span class="o">.</span><span class="n">getuser</span><span class="p">()</span>
+                <span class="n">home</span> <span class="o">=</span> <span class="n">expanduser</span><span class="p">(</span><span class="s">&quot;~&quot;</span><span class="p">)</span>
+                <span class="c"># user = getpass.getuser()</span>
                 <span class="n">dbp</span> <span class="o">=</span> <span class="s">&#39;{&quot;host&quot;:&quot;localhost&quot;,&quot;db&quot;:&quot;nxsconfig&quot;,&#39;</span> \
                     <span class="o">+</span> <span class="s">&#39;&quot;use_unicode&quot;:true,&#39;</span> \
-                    <span class="o">+</span> <span class="s">&#39;&quot;read_default_file&quot;:&quot;/home/</span><span class="si">%s</span><span class="s">/.my.cnf&quot;}&#39;</span> <span class="o">%</span> <span class="n">user</span>
+                    <span class="o">+</span> <span class="s">&#39;&quot;read_default_file&quot;:&quot;</span><span class="si">%s</span><span class="s">/.my.cnf&quot;}&#39;</span> <span class="o">%</span> <span class="n">home</span>
                 <span class="n">configDevice</span><span class="o">.</span><span class="n">jsonsettings</span> <span class="o">=</span> <span class="n">dbp</span>
                 <span class="n">configDevice</span><span class="o">.</span><span class="n">open</span><span class="p">()</span>
                 <span class="n">configDevice</span><span class="o">.</span><span class="n">availableComponents</span><span class="p">()</span>
@@ -577,7 +598,7 @@
       
     </p>
     <p>
-        &copy; Copyright 2012-2016 DESY, Jan Kotanski &lt;jkotan@mail.desy.de&gt;
+        &copy; Copyright 2012-2017 DESY, Jan Kotanski &lt;jkotan@mail.desy.de&gt;
 
 GNU GENERAL PUBLIC LICENSE, version 3.<br/>
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.<br/>

@@ -5,7 +5,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>nxsrecconfig.ProfileManager &mdash; NXSRecSelector 3.6.0 documentation</title>
+    <title>nxsrecconfig.ProfileManager &mdash; NXSRecSelector 3.10.0 documentation</title>
     
     <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '3.6.0',
+        VERSION:     '3.10.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -29,7 +29,7 @@
     <script type="text/javascript" src="../../_static/js/jquery-fix.js"></script>
     <script type="text/javascript" src="../../_static/bootstrap-3.3.4/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../../_static/bootstrap-sphinx.js"></script>
-    <link rel="top" title="NXSRecSelector 3.6.0 documentation" href="../../index.html" />
+    <link rel="top" title="NXSRecSelector 3.10.0 documentation" href="../../index.html" />
     <link rel="up" title="nxsrecconfig" href="../nxsrecconfig.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
@@ -50,7 +50,7 @@
         </button>
         <a class="navbar-brand" href="../../index.html">
           NXSRecSelector</a>
-        <span class="navbar-text navbar-version pull-left"><b>3.6</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>3.10</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -79,7 +79,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Selection">nxsrecconfig.Selection module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Selector">nxsrecconfig.Selector module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Settings">nxsrecconfig.Settings module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Streams">nxsrecconfig.Streams module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.StreamSet">nxsrecconfig.StreamSet module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Utils">nxsrecconfig.Utils module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig">Module contents</a></li>
 </ul>
@@ -132,7 +132,7 @@
 <span class="c">#!/usr/bin/env python</span>
 <span class="c">#   This file is part of nxsrecconfig - NeXus Sardana Recorder Settings</span>
 <span class="c">#</span>
-<span class="c">#    Copyright (C) 2014-2016 DESY, Jan Kotanski &lt;jkotan@mail.desy.de&gt;</span>
+<span class="c">#    Copyright (C) 2014-2017 DESY, Jan Kotanski &lt;jkotan@mail.desy.de&gt;</span>
 <span class="c">#</span>
 <span class="c">#    nexdatas is free software: you can redistribute it and/or modify</span>
 <span class="c">#    it under the terms of the GNU General Public License as published by</span>
@@ -170,6 +170,7 @@
 
 
 <div class="viewcode-block" id="ProfileManager"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.ProfileManager.ProfileManager">[docs]</a><span class="k">class</span> <span class="nc">ProfileManager</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
     <span class="sd">&quot;&quot;&quot;  Manages Measurement Group and Profile from Selector&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">selector</span><span class="p">):</span>
@@ -193,10 +194,20 @@
         <span class="c">#: (:obj:`list` &lt;:obj:`str`&gt;) default preselectedComponents</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">defaultPreselectedComponents</span> <span class="o">=</span> <span class="p">[]</span>
 
+        <span class="c">#: (:obj:`list` &lt;:obj:`str`&gt;) client record keys</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">clientRecordKeys</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c">#: (:obj:`list` &lt;:obj:`str`&gt;) timer filters</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">timerFilters</span> <span class="o">=</span> <span class="p">[</span><span class="s">&quot;*dgg*&quot;</span><span class="p">,</span> <span class="s">&quot;*/timer/*&quot;</span><span class="p">,</span> <span class="s">&quot;*/ctctrl0*&quot;</span><span class="p">]</span>
+
+        <span class="c">#: (:obj:`bool`) mntgrp with synchronization</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__withsynch</span> <span class="o">=</span> <span class="bp">True</span>
+
     <span class="k">def</span> <span class="nf">__updateMacroServer</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; updatas MacroServer name</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__macroServerName</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="o">.</span><span class="n">getMacroServer</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__withsynch</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__hassynch</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">__updateConfigServer</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; update configuration server device proxy</span>
@@ -207,6 +218,17 @@
         <span class="sd">&quot;&quot;&quot; update device pool proxy list</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__pools</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="o">.</span><span class="n">getPools</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__withsynch</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__hassynch</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">__hassynch</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; check if pool devices has TriggerGateList</span>
+
+<span class="sd">        :returns: if pool devices has TriggerGateList</span>
+<span class="sd">        :rtype: :obj:`bool`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__pools</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__pools</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s">&quot;TriggerGateList&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">True</span>
 
 <div class="viewcode-block" id="ProfileManager.availableMntGrps"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.ProfileManager.ProfileManager.availableMntGrps">[docs]</a>    <span class="k">def</span> <span class="nf">availableMntGrps</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; available mntgrps</span>
@@ -550,10 +572,24 @@
         <span class="n">index</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="n">fullnames</span> <span class="o">=</span> <span class="n">PoolUtils</span><span class="o">.</span><span class="n">getFullDeviceNames</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__pools</span><span class="p">,</span> <span class="n">aliases</span><span class="p">)</span>
         <span class="n">sources</span> <span class="o">=</span> <span class="n">PoolUtils</span><span class="o">.</span><span class="n">getChannelSources</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__pools</span><span class="p">,</span> <span class="n">aliases</span><span class="p">)</span>
+        <span class="n">props</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="p">[</span><span class="s">&quot;ChannelProperties&quot;</span><span class="p">])</span>
+        <span class="n">synchronizer</span> <span class="o">=</span> <span class="n">props</span><span class="p">[</span><span class="s">&quot;synchronizer&quot;</span><span class="p">]</span> \
+            <span class="k">if</span> <span class="s">&quot;synchronizer&quot;</span> <span class="ow">in</span> <span class="n">props</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="k">else</span> <span class="p">{}</span>
+        <span class="n">synchronization</span> <span class="o">=</span> <span class="n">props</span><span class="p">[</span><span class="s">&quot;synchronization&quot;</span><span class="p">]</span> \
+            <span class="k">if</span> <span class="s">&quot;synchronization&quot;</span> <span class="ow">in</span> <span class="n">props</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="k">else</span> <span class="p">{}</span>
+        <span class="n">tchannels</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">PoolUtils</span><span class="o">.</span><span class="n">getElementNames</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__pools</span><span class="p">,</span> <span class="s">&#39;ExpChannelList&#39;</span><span class="p">,</span>
+            <span class="p">[</span><span class="s">&#39;CTExpChannel&#39;</span><span class="p">,</span> <span class="s">&#39;OneDExpChannel&#39;</span><span class="p">,</span> <span class="s">&#39;TwoDExpChannel&#39;</span><span class="p">]))</span>
+        <span class="n">tchannels</span> <span class="o">=</span> <span class="n">tchannels</span> <span class="o">|</span> <span class="n">ltimers</span>
+
         <span class="k">for</span> <span class="n">al</span> <span class="ow">in</span> <span class="n">aliases</span><span class="p">:</span>
             <span class="n">index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__addDevice</span><span class="p">(</span>
                 <span class="n">al</span><span class="p">,</span> <span class="n">dontdisplay</span><span class="p">,</span> <span class="n">cnf</span><span class="p">,</span>
-                <span class="n">al</span> <span class="k">if</span> <span class="n">al</span> <span class="ow">in</span> <span class="n">ltimers</span> <span class="k">else</span> <span class="n">timer</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">fullnames</span><span class="p">,</span> <span class="n">sources</span><span class="p">)</span>
+                <span class="n">al</span> <span class="k">if</span> <span class="n">al</span> <span class="ow">in</span> <span class="n">tchannels</span> <span class="k">else</span> <span class="n">timer</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">fullnames</span><span class="p">,</span> <span class="n">sources</span><span class="p">,</span>
+                <span class="n">synchronizer</span><span class="p">[</span><span class="n">al</span><span class="p">]</span> <span class="k">if</span> <span class="n">al</span> <span class="ow">in</span> <span class="n">synchronizer</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="k">else</span> <span class="bp">None</span><span class="p">,</span>
+                <span class="nb">int</span><span class="p">(</span><span class="n">synchronization</span><span class="p">[</span><span class="n">al</span><span class="p">])</span> <span class="k">if</span> <span class="n">al</span> <span class="ow">in</span> <span class="n">synchronization</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+                <span class="k">else</span> <span class="bp">None</span>
+            <span class="p">)</span>
         <span class="n">conf</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">cnf</span><span class="p">)</span>
 
         <span class="n">mginfo</span> <span class="o">=</span> <span class="p">{</span>
@@ -585,9 +621,10 @@
 
         <span class="c"># fill in dsg, timers hel</span>
         <span class="k">if</span> <span class="s">&quot;timer&quot;</span> <span class="ow">in</span> <span class="n">conf</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="ow">and</span> <span class="s">&quot;controllers&quot;</span> <span class="ow">in</span> <span class="n">conf</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">avtimers</span> <span class="o">=</span> <span class="n">PoolUtils</span><span class="o">.</span><span class="n">getTimers</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__pools</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">timerFilters</span><span class="p">)</span>
             <span class="n">tangods</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__readChannels</span><span class="p">(</span><span class="n">conf</span><span class="p">,</span> <span class="n">timers</span><span class="p">,</span> <span class="n">dsg</span><span class="p">,</span> <span class="n">hel</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__readTangoChannels</span><span class="p">(</span><span class="n">conf</span><span class="p">,</span> <span class="n">tangods</span><span class="p">,</span> <span class="n">dsg</span><span class="p">,</span> <span class="n">hel</span><span class="p">)</span>
-            <span class="n">otimers</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__reorderTimers</span><span class="p">(</span><span class="n">conf</span><span class="p">,</span> <span class="n">timers</span><span class="p">,</span> <span class="n">dsg</span><span class="p">,</span> <span class="n">hel</span><span class="p">)</span>
+            <span class="n">otimers</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__reorderTimers</span><span class="p">(</span><span class="n">conf</span><span class="p">,</span> <span class="n">timers</span><span class="p">,</span> <span class="n">dsg</span><span class="p">,</span> <span class="n">hel</span><span class="p">,</span> <span class="n">avtimers</span><span class="p">)</span>
 
         <span class="n">changed</span> <span class="o">=</span> <span class="bp">False</span>
         <span class="n">jdsg</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">dsg</span><span class="p">)</span>
@@ -655,20 +692,23 @@
         <span class="k">for</span> <span class="n">ctrl</span> <span class="ow">in</span> <span class="n">conf</span><span class="p">[</span><span class="s">&quot;controllers&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
             <span class="k">if</span> <span class="s">&#39;units&#39;</span> <span class="ow">in</span> <span class="n">ctrl</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="ow">and</span> \
                     <span class="s">&#39;0&#39;</span> <span class="ow">in</span> <span class="n">ctrl</span><span class="p">[</span><span class="s">&#39;units&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-                <span class="k">if</span> <span class="s">&#39;timer&#39;</span> <span class="ow">in</span> <span class="n">ctrl</span><span class="p">[</span><span class="s">&#39;units&#39;</span><span class="p">][</span><span class="s">&#39;0&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-                    <span class="n">timers</span><span class="p">[</span><span class="n">ctrl</span><span class="p">[</span><span class="s">&#39;units&#39;</span><span class="p">][</span><span class="s">&#39;0&#39;</span><span class="p">][</span><span class="s">&#39;timer&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
-                <span class="k">if</span> <span class="s">&#39;channels&#39;</span> <span class="ow">in</span> <span class="n">ctrl</span><span class="p">[</span><span class="s">&#39;units&#39;</span><span class="p">][</span><span class="s">&#39;0&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-                    <span class="k">for</span> <span class="n">ch</span> <span class="ow">in</span> <span class="n">ctrl</span><span class="p">[</span><span class="s">&#39;units&#39;</span><span class="p">][</span><span class="s">&#39;0&#39;</span><span class="p">][</span><span class="s">&#39;channels&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
-                        <span class="k">if</span> <span class="s">&#39;_controller_name&#39;</span> <span class="ow">in</span> <span class="n">ch</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="ow">and</span> \
-                                <span class="n">ch</span><span class="p">[</span><span class="s">&#39;_controller_name&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;__tango__&#39;</span><span class="p">:</span>
-                            <span class="n">tangods</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-                                <span class="p">[</span><span class="n">ch</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">],</span> <span class="n">ch</span><span class="p">[</span><span class="s">&#39;label&#39;</span><span class="p">],</span> <span class="n">ch</span><span class="p">[</span><span class="s">&quot;source&quot;</span><span class="p">]])</span>
-                        <span class="k">else</span><span class="p">:</span>
-                            <span class="n">dsg</span><span class="p">[</span><span class="n">ch</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">True</span>
-                            <span class="k">if</span> <span class="ow">not</span> <span class="nb">bool</span><span class="p">(</span><span class="n">ch</span><span class="p">[</span><span class="s">&#39;plot_type&#39;</span><span class="p">]):</span>
-                                <span class="n">hel</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">ch</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">])</span>
-                            <span class="k">elif</span> <span class="n">ch</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">]</span> <span class="ow">in</span> <span class="n">hel</span><span class="p">:</span>
-                                <span class="n">hel</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">ch</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">])</span>
+                <span class="n">uctrl</span> <span class="o">=</span> <span class="n">ctrl</span><span class="p">[</span><span class="s">&#39;units&#39;</span><span class="p">][</span><span class="s">&#39;0&#39;</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">uctrl</span> <span class="o">=</span> <span class="n">ctrl</span>
+            <span class="k">if</span> <span class="s">&#39;timer&#39;</span> <span class="ow">in</span> <span class="n">uctrl</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="n">timers</span><span class="p">[</span><span class="n">uctrl</span><span class="p">[</span><span class="s">&#39;timer&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
+            <span class="k">if</span> <span class="s">&#39;channels&#39;</span> <span class="ow">in</span> <span class="n">uctrl</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="k">for</span> <span class="n">ch</span> <span class="ow">in</span> <span class="n">uctrl</span><span class="p">[</span><span class="s">&#39;channels&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+                    <span class="k">if</span> <span class="s">&#39;_controller_name&#39;</span> <span class="ow">in</span> <span class="n">ch</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="ow">and</span> \
+                            <span class="n">ch</span><span class="p">[</span><span class="s">&#39;_controller_name&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;__tango__&#39;</span><span class="p">:</span>
+                        <span class="n">tangods</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                            <span class="p">[</span><span class="n">ch</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">],</span> <span class="n">ch</span><span class="p">[</span><span class="s">&#39;label&#39;</span><span class="p">],</span> <span class="n">ch</span><span class="p">[</span><span class="s">&quot;source&quot;</span><span class="p">]])</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">dsg</span><span class="p">[</span><span class="n">ch</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">True</span>
+                        <span class="k">if</span> <span class="ow">not</span> <span class="nb">bool</span><span class="p">(</span><span class="n">ch</span><span class="p">[</span><span class="s">&#39;plot_type&#39;</span><span class="p">]):</span>
+                            <span class="n">hel</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">ch</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">])</span>
+                        <span class="k">elif</span> <span class="n">ch</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">]</span> <span class="ow">in</span> <span class="n">hel</span><span class="p">:</span>
+                            <span class="n">hel</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">ch</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">])</span>
 
         <span class="k">return</span> <span class="n">tangods</span>
 
@@ -690,19 +730,22 @@
             <span class="k">for</span> <span class="n">ctrl</span> <span class="ow">in</span> <span class="n">conf</span><span class="p">[</span><span class="s">&quot;controllers&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
                 <span class="k">if</span> <span class="s">&#39;units&#39;</span> <span class="ow">in</span> <span class="n">ctrl</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="ow">and</span> \
                         <span class="s">&#39;0&#39;</span> <span class="ow">in</span> <span class="n">ctrl</span><span class="p">[</span><span class="s">&#39;units&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-                    <span class="k">if</span> <span class="s">&#39;channels&#39;</span> <span class="ow">in</span> <span class="n">ctrl</span><span class="p">[</span><span class="s">&#39;units&#39;</span><span class="p">][</span><span class="s">&#39;0&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-                        <span class="k">for</span> <span class="n">ch</span> <span class="ow">in</span> <span class="n">ctrl</span><span class="p">[</span><span class="s">&#39;units&#39;</span><span class="p">][</span><span class="s">&#39;0&#39;</span><span class="p">][</span><span class="s">&#39;channels&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
-                            <span class="k">if</span> <span class="s">&#39;_controller_name&#39;</span> <span class="ow">in</span> <span class="n">ch</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="ow">and</span> \
-                                    <span class="n">ch</span><span class="p">[</span><span class="s">&#39;_controller_name&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;__tango__&#39;</span><span class="p">:</span>
-                                <span class="k">if</span> <span class="n">ch</span><span class="p">[</span><span class="s">&quot;source&quot;</span><span class="p">]</span> <span class="ow">in</span> <span class="n">jds</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-                                    <span class="n">name</span> <span class="o">=</span> <span class="n">jds</span><span class="p">[</span><span class="n">ch</span><span class="p">[</span><span class="s">&quot;source&quot;</span><span class="p">]]</span>
-                                    <span class="n">dsg</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
-                                    <span class="k">if</span> <span class="ow">not</span> <span class="nb">bool</span><span class="p">(</span><span class="n">ch</span><span class="p">[</span><span class="s">&#39;plot_type&#39;</span><span class="p">]):</span>
-                                        <span class="n">hel</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
-                                    <span class="k">elif</span> <span class="n">ch</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">]</span> <span class="ow">in</span> <span class="n">hel</span><span class="p">:</span>
-                                        <span class="n">hel</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+                    <span class="n">uctrl</span> <span class="o">=</span> <span class="n">ctrl</span><span class="p">[</span><span class="s">&#39;units&#39;</span><span class="p">][</span><span class="s">&#39;0&#39;</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">uctrl</span> <span class="o">=</span> <span class="n">ctrl</span>
+                <span class="k">if</span> <span class="s">&#39;channels&#39;</span> <span class="ow">in</span> <span class="n">uctrl</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                    <span class="k">for</span> <span class="n">ch</span> <span class="ow">in</span> <span class="n">uctrl</span><span class="p">[</span><span class="s">&#39;channels&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+                        <span class="k">if</span> <span class="s">&#39;_controller_name&#39;</span> <span class="ow">in</span> <span class="n">ch</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="ow">and</span> \
+                                <span class="n">ch</span><span class="p">[</span><span class="s">&#39;_controller_name&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;__tango__&#39;</span><span class="p">:</span>
+                            <span class="k">if</span> <span class="n">ch</span><span class="p">[</span><span class="s">&quot;source&quot;</span><span class="p">]</span> <span class="ow">in</span> <span class="n">jds</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                                <span class="n">name</span> <span class="o">=</span> <span class="n">jds</span><span class="p">[</span><span class="n">ch</span><span class="p">[</span><span class="s">&quot;source&quot;</span><span class="p">]]</span>
+                                <span class="n">dsg</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
+                                <span class="k">if</span> <span class="ow">not</span> <span class="nb">bool</span><span class="p">(</span><span class="n">ch</span><span class="p">[</span><span class="s">&#39;plot_type&#39;</span><span class="p">]):</span>
+                                    <span class="n">hel</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+                                <span class="k">elif</span> <span class="n">ch</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">]</span> <span class="ow">in</span> <span class="n">hel</span><span class="p">:</span>
+                                    <span class="n">hel</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">__reorderTimers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">conf</span><span class="p">,</span> <span class="n">timers</span><span class="p">,</span> <span class="n">dsg</span><span class="p">,</span> <span class="n">hel</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__reorderTimers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">conf</span><span class="p">,</span> <span class="n">timers</span><span class="p">,</span> <span class="n">dsg</span><span class="p">,</span> <span class="n">hel</span><span class="p">,</span> <span class="n">avtimers</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; reads timer aliases and reoder it according to mntgrp</span>
 
 <span class="sd">        :param conf: mntgrp configuration</span>
@@ -713,12 +756,16 @@
 <span class="sd">        :type dsg: :obj:`dict` &lt;:obj:`str`, :obj:`bool` or `None`&gt;</span>
 <span class="sd">        :param hel: list of hidden elements</span>
 <span class="sd">        :type hel: :obj:`list` &lt;:obj:`str`&gt;</span>
+<span class="sd">        :param avtimers: available timers</span>
+<span class="sd">        :type avtimers :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        :returns: timer alias list</span>
 <span class="sd">        :rtype: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">dtimers</span> <span class="o">=</span> <span class="n">PoolUtils</span><span class="o">.</span><span class="n">getAliases</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__pools</span><span class="p">,</span> <span class="n">timers</span><span class="p">)</span>
-        <span class="n">otimers</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">dtimers</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
-        <span class="n">otimers</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">dtimers</span><span class="p">[</span><span class="n">conf</span><span class="p">[</span><span class="s">&quot;timer&quot;</span><span class="p">]])</span>
+        <span class="n">avtimers</span> <span class="o">=</span> <span class="n">avtimers</span> <span class="ow">or</span> <span class="p">[]</span>
+        <span class="n">otimers</span> <span class="o">=</span> <span class="p">[</span><span class="n">tm</span> <span class="k">for</span> <span class="n">tm</span> <span class="ow">in</span> <span class="n">dtimers</span><span class="o">.</span><span class="n">values</span><span class="p">()</span> <span class="k">if</span> <span class="n">tm</span> <span class="ow">in</span> <span class="n">avtimers</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">dtimers</span><span class="p">[</span><span class="n">conf</span><span class="p">[</span><span class="s">&quot;timer&quot;</span><span class="p">]]</span> <span class="ow">in</span> <span class="n">otimers</span><span class="p">:</span>
+            <span class="n">otimers</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">dtimers</span><span class="p">[</span><span class="n">conf</span><span class="p">[</span><span class="s">&quot;timer&quot;</span><span class="p">]])</span>
         <span class="n">otimers</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">dtimers</span><span class="p">[</span><span class="n">conf</span><span class="p">[</span><span class="s">&quot;timer&quot;</span><span class="p">]])</span>
 
         <span class="n">tms</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="p">[</span><span class="s">&quot;Timer&quot;</span><span class="p">])</span>
@@ -759,6 +806,7 @@
         <span class="n">precords</span> <span class="o">=</span> <span class="n">frecords</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
         <span class="n">missing</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">records</span><span class="p">)</span>
                          <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="n">DEFAULT_RECORD_KEYS</span><span class="p">)</span>
+                         <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">clientRecordKeys</span><span class="p">)</span>
                          <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="n">urecords</span><span class="p">)</span>
                          <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="n">precords</span><span class="p">))</span>
         <span class="k">if</span> <span class="n">missing</span><span class="p">:</span>
@@ -826,6 +874,10 @@
 <span class="sd">        :rtype: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">mtimers</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__selector</span><span class="p">[</span><span class="s">&quot;Timer&quot;</span><span class="p">])</span>
+        <span class="c">#   avtimers = PoolUtils.getTimers(self.__pools, self.timerFilters)</span>
+        <span class="c">#   mtimers = mtimers or []</span>
+        <span class="c">#   mtimers = [tm for tm in mtimers if tm in avtimers]</span>
+
         <span class="n">timer</span> <span class="o">=</span> <span class="n">mtimers</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="n">mtimers</span> <span class="k">else</span> <span class="s">&#39;&#39;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">timer</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
@@ -1110,7 +1162,8 @@
         <span class="k">return</span> <span class="n">jds</span>
 
     <span class="k">def</span> <span class="nf">__addDevice</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="n">dontdisplay</span><span class="p">,</span> <span class="n">cnf</span><span class="p">,</span>
-                    <span class="n">timer</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">fullnames</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">sources</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+                    <span class="n">timer</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">fullnames</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">sources</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+                    <span class="n">synchronization</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">synchronizer</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; adds device into configuration dictionary</span>
 
 <span class="sd">        :param device: device alias</span>
@@ -1125,6 +1178,12 @@
 <span class="sd">        :type index: :obj:`int`</span>
 <span class="sd">        :param fullnames: dictionary with full names</span>
 <span class="sd">        :type fullnames: :obj:`dict` &lt;:obj:`str`, :obj:`str`&gt;</span>
+<span class="sd">        :param sources: dictionary with source names</span>
+<span class="sd">        :type sources: :obj:`dict` &lt;:obj:`str`, :obj:`str`&gt;</span>
+<span class="sd">        :param synchronizer: name of trigger or gate device</span>
+<span class="sd">        :type synchronizer: :obj:`str`</span>
+<span class="sd">        :param synchronization: trigger:0 or gate:1</span>
+<span class="sd">        :type synchronization: :obj:`int`</span>
 <span class="sd">        :returns: next device index</span>
 <span class="sd">        :rtype: :obj:`int`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1156,11 +1215,32 @@
                     <span class="n">index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__addTangoChannel</span><span class="p">(</span>
                         <span class="n">cnf</span><span class="p">,</span> <span class="n">ctrl</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">js</span><span class="p">[</span><span class="s">&quot;record&quot;</span><span class="p">]),</span>
                         <span class="n">dontdisplay</span><span class="p">,</span> <span class="n">index</span><span class="p">)</span>
-
+        <span class="n">synchronization</span> <span class="o">=</span> <span class="n">synchronization</span> <span class="ow">or</span> <span class="bp">None</span>
+        <span class="n">synchronizer</span> <span class="o">=</span> <span class="n">synchronizer</span> <span class="ow">or</span> <span class="bp">None</span>
+        <span class="k">if</span> <span class="n">synchronization</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">cnf</span><span class="p">[</span><span class="s">&#39;controllers&#39;</span><span class="p">][</span><span class="n">ctrl</span><span class="p">][</span><span class="s">u&#39;synchronization&#39;</span><span class="p">]</span> <span class="o">=</span> \
+                <span class="nb">int</span><span class="p">(</span><span class="n">synchronization</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">synchronizer</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">cnf</span><span class="p">[</span><span class="s">&#39;controllers&#39;</span><span class="p">][</span><span class="n">ctrl</span><span class="p">][</span><span class="s">u&#39;synchronizer&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">synchronizer</span>
         <span class="k">return</span> <span class="n">index</span>
 
+    <span class="k">def</span> <span class="nf">__addController</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cnf</span><span class="p">,</span> <span class="n">ctrl</span><span class="p">,</span> <span class="n">fulltimer</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; adds controller into mntgrp configuration dictionary</span>
+
+<span class="sd">        :param cnf: mntgrp configuration dictionary</span>
+<span class="sd">        :type cnf: :obj:`dict` &lt;:obj:`str`, `any`&gt;</span>
+<span class="sd">        :param ctrl: controller device name</span>
+<span class="sd">        :type ctrl: :obj:`str`</span>
+<span class="sd">        :param fulltimer: full timer name</span>
+<span class="sd">        :rtype: :obj:`str`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__withsynch</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__addController1</span><span class="p">(</span><span class="n">cnf</span><span class="p">,</span> <span class="n">ctrl</span><span class="p">,</span> <span class="n">fulltimer</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__addController2</span><span class="p">(</span><span class="n">cnf</span><span class="p">,</span> <span class="n">ctrl</span><span class="p">,</span> <span class="n">fulltimer</span><span class="p">)</span>
+
     <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">__addController</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">cnf</span><span class="p">,</span> <span class="n">ctrl</span><span class="p">,</span> <span class="n">fulltimer</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__addController1</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">cnf</span><span class="p">,</span> <span class="n">ctrl</span><span class="p">,</span> <span class="n">fulltimer</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; adds controller into mntgrp configuration dictionary</span>
 
 <span class="sd">        :param cnf: mntgrp configuration dictionary</span>
@@ -1187,6 +1267,28 @@
                 <span class="s">u&#39;trigger_type&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
 
     <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">__addController2</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">cnf</span><span class="p">,</span> <span class="n">ctrl</span><span class="p">,</span> <span class="n">fulltimer</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; adds controller into mntgrp configuration dictionary</span>
+
+<span class="sd">        :param cnf: mntgrp configuration dictionary</span>
+<span class="sd">        :type cnf: :obj:`dict` &lt;:obj:`str`, `any`&gt;</span>
+<span class="sd">        :param ctrl: controller device name</span>
+<span class="sd">        :type ctrl: :obj:`str`</span>
+<span class="sd">        :param fulltimer: full timer name</span>
+<span class="sd">        :rtype: :obj:`str`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="s">&#39;controllers&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">cnf</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">cnf</span><span class="p">[</span><span class="s">&#39;controllers&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">if</span> <span class="n">ctrl</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">cnf</span><span class="p">[</span><span class="s">&#39;controllers&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">cnf</span><span class="p">[</span><span class="s">&#39;controllers&#39;</span><span class="p">][</span><span class="n">ctrl</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="n">cnf</span><span class="p">[</span><span class="s">&#39;controllers&#39;</span><span class="p">][</span><span class="n">ctrl</span><span class="p">][</span><span class="s">u&#39;channels&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="n">cnf</span><span class="p">[</span><span class="s">&#39;controllers&#39;</span><span class="p">][</span><span class="n">ctrl</span><span class="p">][</span><span class="s">u&#39;monitor&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fulltimer</span>
+            <span class="n">cnf</span><span class="p">[</span><span class="s">&#39;controllers&#39;</span><span class="p">][</span><span class="n">ctrl</span><span class="p">][</span><span class="s">u&#39;timer&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fulltimer</span>
+            <span class="c"># 0 old trigger_type</span>
+            <span class="n">cnf</span><span class="p">[</span><span class="s">&#39;controllers&#39;</span><span class="p">][</span><span class="n">ctrl</span><span class="p">][</span><span class="s">u&#39;synchronization&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">cnf</span><span class="p">[</span><span class="s">&#39;controllers&#39;</span><span class="p">][</span><span class="n">ctrl</span><span class="p">][</span><span class="s">u&#39;synchronizer&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;software&#39;</span>
+
+    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">__addChannel</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">cnf</span><span class="p">,</span> <span class="n">ctrl</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="n">fullname</span><span class="p">,</span> <span class="n">dontdisplay</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span>
                      <span class="n">source</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; adds channel into mngrp configuration dictionary</span>
@@ -1208,8 +1310,11 @@
 <span class="sd">        :returns: next index</span>
 <span class="sd">        :rtype: :obj:`int`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">ctrlChannels</span> <span class="o">=</span> <span class="n">cnf</span><span class="p">[</span><span class="s">&#39;controllers&#39;</span><span class="p">][</span><span class="n">ctrl</span><span class="p">][</span><span class="s">&#39;units&#39;</span><span class="p">][</span><span class="s">&#39;0&#39;</span><span class="p">][</span>
-            <span class="s">u&#39;channels&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="s">&#39;units&#39;</span> <span class="ow">in</span> <span class="n">cnf</span><span class="p">[</span><span class="s">&#39;controllers&#39;</span><span class="p">][</span><span class="n">ctrl</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">ctrlChannels</span> <span class="o">=</span> <span class="n">cnf</span><span class="p">[</span><span class="s">&#39;controllers&#39;</span><span class="p">][</span><span class="n">ctrl</span><span class="p">][</span><span class="s">&#39;units&#39;</span><span class="p">][</span><span class="s">&#39;0&#39;</span><span class="p">][</span>
+                <span class="s">u&#39;channels&#39;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">ctrlChannels</span> <span class="o">=</span> <span class="n">cnf</span><span class="p">[</span><span class="s">&#39;controllers&#39;</span><span class="p">][</span><span class="n">ctrl</span><span class="p">][</span><span class="s">u&#39;channels&#39;</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">fullname</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">ctrlChannels</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="n">dsource</span> <span class="o">=</span> <span class="n">source</span><span class="o">.</span><span class="n">encode</span><span class="p">()</span> <span class="ow">or</span> <span class="n">PoolUtils</span><span class="o">.</span><span class="n">getSource</span><span class="p">(</span><span class="n">fullname</span><span class="p">)</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">dsource</span><span class="p">:</span>
@@ -1272,8 +1377,11 @@
 <span class="sd">        :rtype: :obj:`int`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="n">ctrlChannels</span> <span class="o">=</span> <span class="n">cnf</span><span class="p">[</span><span class="s">&#39;controllers&#39;</span><span class="p">][</span><span class="n">ctrl</span><span class="p">][</span><span class="s">&#39;units&#39;</span><span class="p">][</span><span class="s">&#39;0&#39;</span><span class="p">][</span>
-            <span class="s">u&#39;channels&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="s">&#39;units&#39;</span> <span class="ow">in</span> <span class="n">cnf</span><span class="p">[</span><span class="s">&#39;controllers&#39;</span><span class="p">][</span><span class="n">ctrl</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">ctrlChannels</span> <span class="o">=</span> <span class="n">cnf</span><span class="p">[</span><span class="s">&#39;controllers&#39;</span><span class="p">][</span><span class="n">ctrl</span><span class="p">][</span><span class="s">&#39;units&#39;</span><span class="p">][</span><span class="s">&#39;0&#39;</span><span class="p">][</span>
+                <span class="s">u&#39;channels&#39;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">ctrlChannels</span> <span class="o">=</span> <span class="n">cnf</span><span class="p">[</span><span class="s">&#39;controllers&#39;</span><span class="p">][</span><span class="n">ctrl</span><span class="p">][</span><span class="s">u&#39;channels&#39;</span><span class="p">]</span>
         <span class="n">fullname</span> <span class="o">=</span> <span class="s">&quot;tango://</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">record</span>
         <span class="n">srecord</span> <span class="o">=</span> <span class="n">record</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&quot;/&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">srecord</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">srecord</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">and</span> <span class="s">&quot;:&quot;</span> <span class="ow">in</span> <span class="n">srecord</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
@@ -1332,7 +1440,7 @@
       
     </p>
     <p>
-        &copy; Copyright 2012-2016 DESY, Jan Kotanski &lt;jkotan@mail.desy.de&gt;
+        &copy; Copyright 2012-2017 DESY, Jan Kotanski &lt;jkotan@mail.desy.de&gt;
 
 GNU GENERAL PUBLIC LICENSE, version 3.<br/>
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.<br/>

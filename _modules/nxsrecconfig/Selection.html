@@ -5,7 +5,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>nxsrecconfig.Selection &mdash; NXSRecSelector 3.6.0 documentation</title>
+    <title>nxsrecconfig.Selection &mdash; NXSRecSelector 3.10.0 documentation</title>
     
     <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '3.6.0',
+        VERSION:     '3.10.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -29,7 +29,7 @@
     <script type="text/javascript" src="../../_static/js/jquery-fix.js"></script>
     <script type="text/javascript" src="../../_static/bootstrap-3.3.4/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../../_static/bootstrap-sphinx.js"></script>
-    <link rel="top" title="NXSRecSelector 3.6.0 documentation" href="../../index.html" />
+    <link rel="top" title="NXSRecSelector 3.10.0 documentation" href="../../index.html" />
     <link rel="up" title="nxsrecconfig" href="../nxsrecconfig.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
@@ -50,7 +50,7 @@
         </button>
         <a class="navbar-brand" href="../../index.html">
           NXSRecSelector</a>
-        <span class="navbar-text navbar-version pull-left"><b>3.6</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>3.10</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -79,7 +79,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Selection">nxsrecconfig.Selection module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Selector">nxsrecconfig.Selector module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Settings">nxsrecconfig.Settings module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Streams">nxsrecconfig.Streams module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.StreamSet">nxsrecconfig.StreamSet module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig.Utils">nxsrecconfig.Utils module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nxsrecconfig.html#module-nxsrecconfig">Module contents</a></li>
 </ul>
@@ -132,7 +132,7 @@
 <span class="c">#!/usr/bin/env python</span>
 <span class="c">#   This file is part of nxsrecconfig - NeXus Sardana Recorder Settings</span>
 <span class="c">#</span>
-<span class="c">#    Copyright (C) 2014-2016 DESY, Jan Kotanski &lt;jkotan@mail.desy.de&gt;</span>
+<span class="c">#    Copyright (C) 2014-2017 DESY, Jan Kotanski &lt;jkotan@mail.desy.de&gt;</span>
 <span class="c">#</span>
 <span class="c">#    nexdatas is free software: you can redistribute it and/or modify</span>
 <span class="c">#    it under the terms of the GNU General Public License as published by</span>
@@ -154,6 +154,7 @@
 
 
 <div class="viewcode-block" id="Selection"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Selection.Selection">[docs]</a><span class="k">class</span> <span class="nc">Selection</span><span class="p">(</span><span class="nb">dict</span><span class="p">):</span>
+
     <span class="sd">&quot;&quot;&quot; Selection Dictionary which contains the following records:</span>
 <span class="sd">    {</span>
 <span class="sd">    &quot;Timer&quot;:  &#39;[]&#39;,</span>
@@ -173,7 +174,7 @@
 <span class="sd">    &quot;DynamicComponents&quot;:  True,</span>
 <span class="sd">    &quot;DefaultDynamicLinks&quot;:  True,</span>
 <span class="sd">    &quot;DefaultDynamicPath&quot;:  \</span>
-<span class="sd">    &#39;/entry$var.serialno:NXentry/NXinstrument/collection&#39;,</span>
+<span class="sd">    &#39;/scan$var.serialno:NXentry/NXinstrument/collection&#39;,</span>
 <span class="sd">    &quot;TimeZone&quot;:  self.__defaultzone,</span>
 <span class="sd">    &quot;ConfigDevice&quot;:  &#39;&#39;,</span>
 <span class="sd">    &quot;WriterDevice&quot;:  &#39;&#39;,</span>
@@ -196,12 +197,15 @@
         <span class="nb">super</span><span class="p">(</span><span class="n">Selection</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
 
         <span class="c">#: (:obj:`str`) default zone</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__defaultzone</span> <span class="o">=</span> <span class="s">&#39;Europe/Berlin&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__defaultzone</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="s">&#39;TimeZone&#39;</span><span class="p">]</span> \
+            <span class="k">if</span> <span class="s">&#39;TimeZone&#39;</span> <span class="ow">in</span> <span class="bp">self</span> <span class="k">else</span> <span class="s">&#39;Europe/Berlin&#39;</span>
 
         <span class="c">#: (:obj:`str`) default mntgrp</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__defaultmntgrp</span> <span class="o">=</span> <span class="s">&#39;nxsmntgrp&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__defaultmntgrp</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="s">&#39;MntGrp&#39;</span><span class="p">]</span> \
+            <span class="k">if</span> <span class="s">&#39;MntGrp&#39;</span> <span class="ow">in</span> <span class="bp">self</span> <span class="k">else</span> <span class="s">&#39;nxsmntgrp&#39;</span>
         <span class="c">#: (:obj:`str`) version string</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__version</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="s">&quot;Version&quot;</span><span class="p">]</span> <span class="k">if</span> <span class="s">&quot;Version&quot;</span> <span class="ow">in</span> <span class="bp">self</span> <span class="k">else</span> <span class="s">&quot;1.0.0&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__version</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="s">&quot;Version&quot;</span><span class="p">]</span> \
+            <span class="k">if</span> <span class="s">&quot;Version&quot;</span> <span class="ow">in</span> <span class="bp">self</span> <span class="k">else</span> <span class="s">&quot;1.0.0&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
 
 <div class="viewcode-block" id="Selection.reset"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.Selection.Selection.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -242,7 +246,7 @@
         <span class="bp">self</span><span class="p">[</span><span class="s">&quot;DefaultDynamicLinks&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
         <span class="c"># path for dynamic components</span>
         <span class="bp">self</span><span class="p">[</span><span class="s">&quot;DefaultDynamicPath&quot;</span><span class="p">]</span> <span class="o">=</span> \
-            <span class="s">&#39;/entry$var.serialno:NXentry/NXinstrument/collection&#39;</span>
+            <span class="s">&#39;/scan$var.serialno:NXentry/NXinstrument/collection&#39;</span>
         <span class="c"># timezone</span>
         <span class="bp">self</span><span class="p">[</span><span class="s">&quot;TimeZone&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__defaultzone</span>
         <span class="c"># Configuration Server device name</span>
@@ -368,7 +372,7 @@
       
     </p>
     <p>
-        &copy; Copyright 2012-2016 DESY, Jan Kotanski &lt;jkotan@mail.desy.de&gt;
+        &copy; Copyright 2012-2017 DESY, Jan Kotanski &lt;jkotan@mail.desy.de&gt;
 
 GNU GENERAL PUBLIC LICENSE, version 3.<br/>
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.<br/>
