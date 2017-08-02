@@ -43,7 +43,7 @@ class Selection(dict):
     "DynamicComponents":  True,
     "DefaultDynamicLinks":  True,
     "DefaultDynamicPath":  \
-    '/scan$var.serialno:NXentry/NXinstrument/collection',
+    '/$var.entryname#'scan'$var.serialno:NXentry/NXinstrument/collection',
     "TimeZone":  self.__defaultzone,
     "ConfigDevice":  '',
     "WriterDevice":  '',
@@ -115,7 +115,8 @@ class Selection(dict):
         self["DefaultDynamicLinks"] = True
         # path for dynamic components
         self["DefaultDynamicPath"] = \
-            '/scan$var.serialno:NXentry/NXinstrument/collection'
+            "/$var.entryname#'scan'$var.serialno:NXentry" \
+            "/NXinstrument/collection"
         # timezone
         self["TimeZone"] = self.__defaultzone
         # Configuration Server device name

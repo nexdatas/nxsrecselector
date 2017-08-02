@@ -49,6 +49,7 @@ class Utils(object):
         if not isinstance(dct2, dict):
             return False
         if len(dct.keys()) != len(dct2.keys()):
+
             return False
         status = True
         for k, v in dct.items():

@@ -53,6 +53,11 @@ from nxsrecconfig.ProfileManager import ProfileManager
 from nxsrecconfig.Utils import TangoUtils, MSUtils, Utils
 from nxsconfigserver.XMLConfigurator import XMLConfigurator
 
+
+class NotEqualException(Exception):
+    pass
+
+
 # if 64-bit machione
 IS64BIT = (struct.calcsize("P") == 8)
 
@@ -125,6 +130,7 @@ class ProfileManagerTest(unittest.TestCase):
             self.__seed = long(time.time() * 256)
         # self.__seed  = 244826915137294083694874616207392554673
         # self.__seed  = 337589427218504574960819174792358025904
+        # self.__seed  = 171720102041281689442418387294614295423
         self.__rnd = random.Random(self.__seed)
 
         self.__dump = {}
@@ -135,7 +141,7 @@ class ProfileManagerTest(unittest.TestCase):
         self.__defaultmntgrp = 'nxsmntgrp'
         # default path
         self.__defaultpath = \
-            '/scan$var.serialno:NXentry/NXinstrument/collection'
+            '/$var.entryname#\'scan\'$var.serialno:NXentry/NXinstrument/collection'
 
         # selection version
         self.__version = nxsrecconfig.__version__
@@ -1845,6 +1851,36 @@ class ProfileManagerTest(unittest.TestCase):
                 if v != dct2[k]:
                     print 'VALUES!! ', k, v, dct2[k]
                 self.assertEqual(v, dct2[k])
+
+    def myCompDict(self, dct, dct2):
+        logger.debug('dict %s' % type(dct))
+        logger.debug("\n%s\n%s" % (dct, dct2))
+        if not isinstance(dct, dict):
+            raise NotEqualException("DCT1 %s" % dct)
+        if not isinstance(dct2, dict):
+            print "NOT DICT", type(dct2), dct2
+            print "DICT", type(dct), dct
+            raise NotEqualException("DCT2 %s" % dct2)
+        logger.debug("%s %s" % (len(dct.keys()), len(dct2.keys())))
+        if set(dct.keys()) ^ set(dct2.keys()):
+            print 'DCT', dct.keys()
+            print 'DCT2', dct2.keys()
+            print "DIFF", set(dct.keys()) ^ set(dct2.keys())
+        print "L1",  dct.keys(), dct2.keys()
+        if len(dct.keys()) != len(dct2.keys()):
+            raise NotEqualException("LEN %s %s" % (dct, dct2))
+
+        for k, v in dct.items():
+            logger.debug("%s  in %s" % (str(k), str(dct2.keys())))
+            if k not in dct2.keys():
+                raise NotEqualException("%s not in %s" % (k, dct2))
+            if isinstance(v, dict):
+                self.myCompDict(v, dct2[k])
+            else:
+                logger.debug("%s , %s" % (str(v), str(dct2[k])))
+                if v != dct2[k]:
+                    print 'VALUES', k, v, dct2[k]
+                    raise NotEqualException("VALUE %s %s %s" % (k, v, dct2[k]))
 
     # constructor test
     def test_constructor_keys(self):
@@ -6766,13 +6802,13 @@ class ProfileManagerTest(unittest.TestCase):
                     # print "MGS", mg1, mg2, mg3, mg4
 
                     # import mntgrp another defined by selector MntGrp
+                    # print "NAMES MG", lse["MntGrp"], mg2
                     lse["MntGrp"] = mg2
                     self.assertTrue(not lmgt.isMntGrpUpdated())
                     self.assertTrue(not lmgt.isMntGrpUpdated())
-
                     lmgt.importMntGrp()
-                    self.assertTrue(not lmgt.isMntGrpUpdated())
-                    self.assertTrue(not lmgt.isMntGrpUpdated())
+                    #  self.assertTrue(not lmgt.isMntGrpUpdated())
+                    #  self.assertTrue(not lmgt.isMntGrpUpdated())
 
                     tmpcf1 = json.loads(mgt[mg1].mntGrpConfiguration())
                     tmpcf2 = json.loads(mgt[mg2].mntGrpConfiguration())

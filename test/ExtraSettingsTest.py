@@ -913,8 +913,10 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
 
                     jpcnf = rs.updateMntGrp()
                     self.dump(rs)
+
                     self.assertTrue(rs.isMntGrpUpdated())
                     self.assertTrue(rs.isMntGrpUpdated())
+
                     pcnf = json.loads(jpcnf)
                     mgdp = PyTango.DeviceProxy(tmg.new_device_info_writer.name)
                     jcnf = rs.mntGrpConfiguration()
@@ -1763,11 +1765,11 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
 
                     try:
                         self.myCompDict(mynewmg, myoldmg)
-                        self.assertTrue(lrs.isMntGrpUpdated())
-                        self.assertTrue(lrs.isMntGrpUpdated())
-                    except:
                         self.assertTrue(not lrs.isMntGrpUpdated())
                         self.assertTrue(not lrs.isMntGrpUpdated())
+                    except SettingsTest.NotEqualException as e:
+                        self.assertTrue(lrs.isMntGrpUpdated())
+                        self.assertTrue(lrs.isMntGrpUpdated())
                     tmpcf1 = json.loads(rs[mg1].mntGrpConfiguration())
                     tmpcf2 = json.loads(rs[mg2].mntGrpConfiguration())
                     ltmpcf = json.loads(lrs.mntGrpConfiguration())
@@ -3109,11 +3111,11 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
 
                     try:
                         self.myCompDict(mynewmg, myoldmg)
-                        self.assertTrue(lrs.isMntGrpUpdated())
-                        self.assertTrue(lrs.isMntGrpUpdated())
-                    except:
                         self.assertTrue(not lrs.isMntGrpUpdated())
                         self.assertTrue(not lrs.isMntGrpUpdated())
+                    except SettingsTest.NotEqualException as e:
+                        self.assertTrue(lrs.isMntGrpUpdated())
+                        self.assertTrue(lrs.isMntGrpUpdated())
 
                     ors.profileConfiguration = str(json.dumps(mp[mg1]))
                     tmpcf1 = json.loads(ors.mntGrpConfiguration())
@@ -4342,82 +4344,82 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                 '<?xml version="1.0" ?>\n<definition/>\n',
             "one":
                 '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="scan$var.serialno" type="NXentry">\n'
+            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n'
             '<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n'
             '<field name="onename" type="NX_CHAR">\n<strategy mode="STEP"/>\n'
             '<datasource name="onename" type="CLIENT">\n'
             '<record name="onename"/>\n</datasource>\n</field>\n'
             '</group>\n</group>\n<group name="data" type="NXdata">\n'
-            '<link name="onename" target="/scan$var.serialno:'
+            '<link name="onename" target="/$var.entryname#\'scan\'$var.serialno:'
             'NXentry/NXinstrument/collection/onename"/>\n'
             '</group>\n</group>\n</definition>\n',
             "two":
                 '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="scan$var.serialno" type="NXentry">\n'
+            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n'
             '<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n'
             '<field name="ds1" type="NX_CHAR">\n<strategy mode="STEP"/>\n'
             '<datasource name="ds1" type="CLIENT">\n<record name="ds1"/>\n'
             '</datasource>\n</field>\n</group>\n</group>\n'
             '<group name="data" type="NXdata">\n'
-            '<link name="ds1" target="/scan$var.serialno:'
+            '<link name="ds1" target="/$var.entryname#\'scan\'$var.serialno:'
             'NXentry/NXinstrument/collection/ds1"/>\n</group>\n</group>\n'
-            '<group name="scan$var.serialno" type="NXentry">'
+            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">'
             '\n<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n'
             '<field name="ds2" type="NX_CHAR">\n<strategy mode="STEP"/>\n'
             '<datasource name="ds2" type="CLIENT">\n<record name="ds2"/>\n'
             '</datasource>\n</field>\n</group>\n</group>\n'
             '<group name="data" type="NXdata">\n'
-            '<link name="ds2" target="/scan$var.serialno:'
+            '<link name="ds2" target="/$var.entryname#\'scan\'$var.serialno:'
             'NXentry/NXinstrument/collection/ds2"/>\n</group>\n'
             '</group>\n</definition>\n',
             "three":
                 '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="scan$var.serialno" type="NXentry">\n'
+            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n'
             '<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n'
             '<field name="ds1" type="NX_CHAR">\n<strategy mode="STEP"/>\n'
             '<datasource name="ds1" type="CLIENT">\n<record name="ds1"/>\n'
             '</datasource>\n</field>\n</group>\n</group>\n'
             '<group name="data" type="NXdata">\n'
-            '<link name="ds1" target="/scan$var.serialno:'
+            '<link name="ds1" target="/$var.entryname#\'scan\'$var.serialno:'
             'NXentry/NXinstrument/collection/ds1"/>\n</group>\n</group>\n'
-            '<group name="scan$var.serialno" type="NXentry">'
+            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">'
             '\n<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n'
             '<field name="ds2" type="NX_CHAR">\n<strategy mode="STEP"/>\n'
             '<datasource name="ds2" type="CLIENT">\n<record name="ds2"/>\n'
             '</datasource>\n</field>\n</group>\n</group>\n'
             '<group name="data" type="NXdata">\n'
-            '<link name="ds2" target="/scan$var.serialno:'
+            '<link name="ds2" target="/$var.entryname#\'scan\'$var.serialno:'
             'NXentry/NXinstrument/collection/ds2"/>\n</group>\n</group>\n'
-            '<group name="scan$var.serialno" type="NXentry">'
+            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">'
             '\n<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n'
             '<field name="ds3" type="NX_CHAR">\n<strategy mode="STEP"/>\n'
             '<datasource name="ds3" type="CLIENT">\n<record name="ds3"/>\n'
             '</datasource>\n</field>\n</group>\n</group>\n'
             '<group name="data" type="NXdata">\n'
-            '<link name="ds3" target="/scan$var.serialno:'
+            '<link name="ds3" target="/$var.entryname#\'scan\'$var.serialno:'
             'NXentry/NXinstrument/collection/ds3"/>\n</group>\n</group>\n'
             '</definition>\n',
             "type":
                 '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="scan$var.serialno" type="NXentry">\n'
+            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n'
             '<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n'
             '<field name="ds1" type="NX_INT">\n<strategy mode="STEP"/>\n'
             '<datasource name="ds1" type="CLIENT">\n'
             '<record name="ds1"/>\n</datasource>\n</field>\n'
             '</group>\n</group>\n<group name="data" type="NXdata">\n'
-            '<link name="ds1" target="/scan$var.serialno:'
+            '<link name="ds1" target="/$var.entryname#\'scan\'$var.serialno:'
             'NXentry/NXinstrument/collection/ds1"/>\n'
             '</group>\n</group>\n</definition>\n',
             "shape":
                 '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="scan$var.serialno" type="NXentry">\n'
+            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n'
             '<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n'
             '<field name="ds2" type="NX_CHAR">\n<strategy mode="STEP"/>\n'
@@ -4426,12 +4428,12 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
             '<dimensions rank="1">\n<dim index="1" value="34"/>\n'
             '</dimensions>\n</field>\n'
             '</group>\n</group>\n<group name="data" type="NXdata">\n'
-            '<link name="ds2" target="/scan$var.serialno:'
+            '<link name="ds2" target="/$var.entryname#\'scan\'$var.serialno:'
             'NXentry/NXinstrument/collection/ds2"/>\n'
             '</group>\n</group>\n</definition>\n',
             "shapetype":
                 '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="scan$var.serialno" type="NXentry">\n'
+            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n'
             '<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n'
             '<field name="ds3" type="NX_FLOAT64">\n<strategy mode="STEP"/>\n'
@@ -4440,7 +4442,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
             '<dimensions rank="2">\n<dim index="1" value="3"/>\n'
             '<dim index="2" value="56"/>\n</dimensions>\n</field>\n'
             '</group>\n</group>\n<group name="data" type="NXdata">\n'
-            '<link name="ds3" target="/scan$var.serialno:'
+            '<link name="ds3" target="/$var.entryname#\'scan\'$var.serialno:'
             'NXentry/NXinstrument/collection/ds3"/>\n'
             '</group>\n</group>\n</definition>\n',
         }
@@ -4477,14 +4479,14 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
         cps = {
             "type":
                 '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="scan$var.serialno" type="NXentry">\n'
+            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n'
             '<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n'
             '<field name="ds1" type="%s">\n<strategy mode="STEP"/>\n'
             '<datasource name="ds1" type="CLIENT">\n'
             '<record name="ds1"/>\n</datasource>\n</field>\n'
             '</group>\n</group>\n<group name="data" type="NXdata">\n'
-            '<link name="ds1" target="/scan$var.serialno:'
+            '<link name="ds1" target="/$var.entryname#\'scan\'$var.serialno:'
             'NXentry/NXinstrument/collection/ds1"/>\n'
             '</group>\n</group>\n</definition>\n',
         }
@@ -4511,14 +4513,14 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
         cps = {
             "shape":
                 '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="scan$var.serialno" type="NXentry">\n'
+            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n'
             '<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n'
             '<field name="ds2" type="NX_CHAR">\n<strategy mode="STEP"/>\n'
             '<datasource name="ds2" type="CLIENT">\n'
             '<record name="ds2"/>\n</datasource>\n%s</field>\n'
             '</group>\n</group>\n<group name="data" type="NXdata">\n'
-            '<link name="ds2" target="/scan$var.serialno:'
+            '<link name="ds2" target="/$var.entryname#\'scan\'$var.serialno:'
             'NXentry/NXinstrument/collection/ds2"/>\n'
             '</group>\n</group>\n</definition>\n',
         }
@@ -4562,7 +4564,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
         cps = {
             "shapetype":
                 '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="scan$var.serialno" type="NXentry">\n'
+            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n'
             '<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n'
             '<field name="%s" type="%s">\n<strategy mode="STEP"/>\n'
@@ -4573,7 +4575,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
         }
 
         link = '<group name="data" type="NXdata">\n' + \
-            '<link name="%s" target="/scan$var.serialno:' + \
+            '<link name="%s" target="/$var.entryname#\'scan\'$var.serialno:' + \
             'NXentry/NXinstrument/collection/%s"/>\n</group>\n'
 
         dimbg = '<dimensions rank="%s">\n'
@@ -4725,7 +4727,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
         cps = {
             "shapetype":
             '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="scan$var.serialno" type="NXentry">\n'
+            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n'
             '<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n%s'
             '</group>\n</group>\n%s</group>\n</definition>\n',
@@ -4956,7 +4958,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
 
         defbg = '<?xml version="1.0" ?>\n<definition>\n'
         defend = '</definition>\n'
-        groupbg = '<group name="scan$var.serialno" type="NXentry">\n' + \
+        groupbg = '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n' + \
             '<group name="instrument" type="NXinstrument">\n' + \
             '<group name="collection" type="NXcollection">\n'
         groupend = '</group>\n'
@@ -5064,7 +5066,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                 '<?xml version="1.0" ?>\n<definition/>\n',
             "one":
                 '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="scan$var.serialno" type="NXentry">\n'
+            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n'
             '<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n'
             '<field name="one" type="NX_CHAR">\n<strategy mode="STEP"/>\n'
@@ -5072,13 +5074,13 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
             '</datasource>\n</field>\n'
             '</group>\n</group>\n'
             '<group name="data" type="NXdata">\n'
-            '<link name="one" target="/scan$var.serialno:'
+            '<link name="one" target="/$var.entryname#\'scan\'$var.serialno:'
             'NXentry/NXinstrument/collection/one"/>\n'
             '</group>\n</group>\n'
             '</definition>\n',
             "two":
                 '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="scan$var.serialno" type="NXentry">\n'
+            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n'
             '<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n'
             '<field name="d1" type="NX_CHAR">\n<strategy mode="STEP"/>\n'
@@ -5086,23 +5088,23 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
             '</datasource>\n</field>\n'
             '</group>\n</group>\n'
             '<group name="data" type="NXdata">\n'
-            '<link name="d1" target="/scan$var.serialno:'
+            '<link name="d1" target="/$var.entryname#\'scan\'$var.serialno:'
             'NXentry/NXinstrument/collection/d1"/>\n'
             '</group>\n</group>\n'
-            '<group name="scan$var.serialno" type="NXentry">\n'
+            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n'
             '<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n'
             '<field name="d2" type="NX_CHAR">\n<strategy mode="STEP"/>\n'
             '<datasource name="d2" type="CLIENT">\n<record name="d2"/>\n'
             '</datasource>\n</field>\n</group>\n</group>\n'
             '<group name="data" type="NXdata">\n'
-            '<link name="d2" target="/scan$var.serialno:'
+            '<link name="d2" target="/$var.entryname#\'scan\'$var.serialno:'
             'NXentry/NXinstrument/collection/d2"/>\n'
             '</group>\n</group>\n'
             '</definition>\n',
             "three":
                 '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="scan$var.serialno" type="NXentry">\n'
+            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n'
             '<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n'
             '<field name="ds1" type="NX_CHAR">\n<strategy mode="STEP"/>\n'
@@ -5110,27 +5112,27 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
             '</datasource>\n</field>\n'
             '</group>\n</group>\n'
             '<group name="data" type="NXdata">\n'
-            '<link name="ds1" target="/scan$var.serialno:'
+            '<link name="ds1" target="/$var.entryname#\'scan\'$var.serialno:'
             'NXentry/NXinstrument/collection/ds1"/>\n'
             '</group>\n</group>\n'
-            '<group name="scan$var.serialno" type="NXentry">\n'
+            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n'
             '<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n'
             '<field name="ds2" type="NX_CHAR">\n<strategy mode="STEP"/>\n'
             '<datasource name="ds2" type="CLIENT">\n<record name="ds2"/>\n'
             '</datasource>\n</field>\n</group>\n</group>\n'
             '<group name="data" type="NXdata">\n'
-            '<link name="ds2" target="/scan$var.serialno:'
+            '<link name="ds2" target="/$var.entryname#\'scan\'$var.serialno:'
             'NXentry/NXinstrument/collection/ds2"/>\n'
             '</group>\n</group>\n'
-            '<group name="scan$var.serialno" type="NXentry">\n'
+            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n'
             '<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n'
             '<field name="ds3" type="NX_CHAR">\n<strategy mode="STEP"/>\n'
             '<datasource name="ds3" type="CLIENT">\n<record name="ds3"/>\n'
             '</datasource>\n</field>\n</group>\n</group>\n'
             '<group name="data" type="NXdata">\n'
-            '<link name="ds3" target="/scan$var.serialno:'
+            '<link name="ds3" target="/$var.entryname#\'scan\'$var.serialno:'
             'NXentry/NXinstrument/collection/ds3"/>\n'
             '</group>\n</group>\n'
             '</definition>\n'
@@ -5168,7 +5170,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                 '<?xml version="1.0" ?>\n<definition/>\n',
             "one":
                 '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="scan$var.serialno" type="NXentry">\n'
+            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n'
             '<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n'
             '<field name="one" type="NX_CHAR">\n<strategy mode="STEP"/>\n'
@@ -5176,13 +5178,13 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
             '</datasource>\n</field>\n'
             '</group>\n</group>\n'
             '<group name="data" type="NXdata">\n'
-            '<link name="one" target="/scan$var.serialno:'
+            '<link name="one" target="/$var.entryname#\'scan\'$var.serialno:'
             'NXentry/NXinstrument/collection/one"/>\n'
             '</group>\n</group>\n'
             '</definition>\n',
             "two":
                 '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="scan$var.serialno" type="NXentry">\n'
+            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n'
             '<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n'
             '<field name="d1" type="NX_CHAR">\n<strategy mode="STEP"/>\n'
@@ -5190,23 +5192,23 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
             '</datasource>\n</field>\n'
             '</group>\n</group>\n'
             '<group name="data" type="NXdata">\n'
-            '<link name="d1" target="/scan$var.serialno:'
+            '<link name="d1" target="/$var.entryname#\'scan\'$var.serialno:'
             'NXentry/NXinstrument/collection/d1"/>\n'
             '</group>\n</group>\n'
-            '<group name="scan$var.serialno" type="NXentry">\n'
+            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n'
             '<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n'
             '<field name="d2" type="NX_CHAR">\n<strategy mode="STEP"/>\n'
             '<datasource name="d2" type="CLIENT">\n<record name="d2"/>\n'
             '</datasource>\n</field>\n</group>\n</group>\n'
             '<group name="data" type="NXdata">\n'
-            '<link name="d2" target="/scan$var.serialno:'
+            '<link name="d2" target="/$var.entryname#\'scan\'$var.serialno:'
             'NXentry/NXinstrument/collection/d2"/>\n'
             '</group>\n</group>\n'
             '</definition>\n',
             "three":
                 '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="scan$var.serialno" type="NXentry">\n'
+            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n'
             '<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n'
             '<field name="ds1" type="NX_CHAR">\n<strategy mode="STEP"/>\n'
@@ -5214,27 +5216,27 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
             '</datasource>\n</field>\n'
             '</group>\n</group>\n'
             '<group name="data" type="NXdata">\n'
-            '<link name="ds1" target="/scan$var.serialno:'
+            '<link name="ds1" target="/$var.entryname#\'scan\'$var.serialno:'
             'NXentry/NXinstrument/collection/ds1"/>\n'
             '</group>\n</group>\n'
-            '<group name="scan$var.serialno" type="NXentry">\n'
+            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n'
             '<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n'
             '<field name="ds2" type="NX_CHAR">\n<strategy mode="STEP"/>\n'
             '<datasource name="ds2" type="CLIENT">\n<record name="ds2"/>\n'
             '</datasource>\n</field>\n</group>\n</group>\n'
             '<group name="data" type="NXdata">\n'
-            '<link name="ds2" target="/scan$var.serialno:'
+            '<link name="ds2" target="/$var.entryname#\'scan\'$var.serialno:'
             'NXentry/NXinstrument/collection/ds2"/>\n'
             '</group>\n</group>\n'
-            '<group name="scan$var.serialno" type="NXentry">\n'
+            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n'
             '<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n'
             '<field name="ds3" type="NX_CHAR">\n<strategy mode="STEP"/>\n'
             '<datasource name="ds3" type="CLIENT">\n<record name="ds3"/>\n'
             '</datasource>\n</field>\n</group>\n</group>\n'
             '<group name="data" type="NXdata">\n'
-            '<link name="ds3" target="/scan$var.serialno:'
+            '<link name="ds3" target="/$var.entryname#\'scan\'$var.serialno:'
             'NXentry/NXinstrument/collection/ds3"/>\n'
             '</group>\n</group>\n'
             '</definition>\n'
@@ -5273,14 +5275,14 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
         cps = {
             "type":
                 '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="scan$var.serialno" type="NXentry">\n'
+            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n'
             '<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n'
             '<field name="ds1" type="%s">\n<strategy mode="STEP"/>\n'
             '<datasource name="ds1" type="CLIENT">\n'
             '<record name="ds1"/>\n</datasource>\n</field>\n'
             '</group>\n</group>\n<group name="data" type="NXdata">\n'
-            '<link name="ds1" target="/scan$var.serialno:'
+            '<link name="ds1" target="/$var.entryname#\'scan\'$var.serialno:'
             'NXentry/NXinstrument/collection/ds1"/>\n'
             '</group>\n</group>\n</definition>\n',
         }
@@ -5309,7 +5311,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
         cps = {
             "type":
                 '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="scan$var.serialno" type="NXentry">\n'
+            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n'
             '<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n'
             '<field name="ds1" type="%s">\n<strategy mode="INIT"/>\n'
@@ -5344,14 +5346,14 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
         cps = {
             "type":
                 '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="scan$var.serialno" type="NXentry">\n'
+            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n'
             '<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n'
             '<field name="ds1" type="%s">\n<strategy mode="STEP"/>\n'
             '<datasource name="ds1" type="CLIENT">\n'
             '<record name="ds1"/>\n</datasource>\n</field>\n'
             '</group>\n</group>\n<group name="data" type="NXdata">\n'
-            '<link name="ds1" target="/scan$var.serialno:'
+            '<link name="ds1" target="/$var.entryname#\'scan\'$var.serialno:'
             'NXentry/NXinstrument/collection/ds1"/>\n'
             '</group>\n</group>\n</definition>\n',
         }
@@ -5394,7 +5396,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
         cps = {
             "type":
                 '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="scan$var.serialno" type="NXentry">\n'
+            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n'
             '<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n'
             '<field name="ds1" type="%s">\n<strategy mode="INIT"/>\n'
@@ -5439,14 +5441,14 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
         cps = {
             "shape":
                 '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="scan$var.serialno" type="NXentry">\n'
+            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n'
             '<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n'
             '<field name="ds2" type="NX_CHAR">\n<strategy mode="STEP"/>\n'
             '<datasource name="ds2" type="CLIENT">\n'
             '<record name="ds2"/>\n</datasource>\n%s</field>\n'
             '</group>\n</group>\n<group name="data" type="NXdata">\n'
-            '<link name="ds2" target="/scan$var.serialno:'
+            '<link name="ds2" target="/$var.entryname#\'scan\'$var.serialno:'
             'NXentry/NXinstrument/collection/ds2"/>\n'
             '</group>\n</group>\n</definition>\n',
         }
@@ -5500,7 +5502,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
         cps = {
             "shape":
                 '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="scan$var.serialno" type="NXentry">\n'
+            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n'
             '<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n'
             '<field name="ds2" type="NX_CHAR">\n<strategy mode="INIT"/>\n'
@@ -5559,7 +5561,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
         cps = {
             "shapetype":
                 '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="scan$var.serialno" type="NXentry">\n'
+            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n'
             '<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n'
             '<field name="%s" type="%s">\n<strategy mode="STEP"/>\n'
@@ -5570,7 +5572,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
         }
 
         link = '<group name="data" type="NXdata">\n' + \
-            '<link name="%s" target="/scan$var.serialno:' + \
+            '<link name="%s" target="/$var.entryname#\'scan\'$var.serialno:' + \
             'NXentry/NXinstrument/collection/%s"/>\n</group>\n'
 
         dimbg = '<dimensions rank="%s">\n'
@@ -5753,7 +5755,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
         cps = {
             "shapetype":
                 '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="scan$var.serialno" type="NXentry">\n'
+            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n'
             '<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n'
             '<field name="%s" type="%s">\n<strategy mode="INIT"/>\n'
@@ -5764,7 +5766,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
         }
 
         link = '<group name="data" type="NXdata">\n' + \
-            '<link name="%s" target="/scan$var.serialno:' + \
+            '<link name="%s" target="/$var.entryname#\'scan\'$var.serialno:' + \
             'NXentry/NXinstrument/collection/%s"/>\n</group>\n'
 
         dimbg = '<dimensions rank="%s">\n'
@@ -5953,7 +5955,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
 
         defbg = '<?xml version="1.0" ?>\n<definition>\n'
         defend = '</definition>\n'
-        groupbg = '<group name="scan$var.serialno" type="NXentry">\n' + \
+        groupbg = '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n' + \
             '<group name="instrument" type="NXinstrument">\n' + \
             '<group name="collection" type="NXcollection">\n'
         groupend = '</group>\n'
@@ -6045,7 +6047,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
 
         defbg = '<?xml version="1.0" ?>\n<definition>\n'
         defend = '</definition>\n'
-        groupbg = '<group name="scan$var.serialno" type="NXentry">\n' + \
+        groupbg = '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n' + \
             '<group name="instrument" type="NXinstrument">\n' + \
             '<group name="collection" type="NXcollection">\n'
         groupend = '</group>\n'
@@ -6142,7 +6144,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
 
         defbg = '<?xml version="1.0" ?>\n<definition>\n'
         defend = '</definition>\n'
-        groupbg = '<group name="scan$var.serialno" type="NXentry">\n' + \
+        groupbg = '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n' + \
             '<group name="instrument" type="NXinstrument">\n' + \
             '<group name="collection" type="NXcollection">\n'
         groupend = '</group>\n'
@@ -6240,7 +6242,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
 
         defbg = '<?xml version="1.0" ?>\n<definition>\n'
         defend = '</definition>\n'
-        groupbg = '<group name="scan$var.serialno" type="NXentry">\n' + \
+        groupbg = '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n' + \
             '<group name="instrument" type="NXinstrument">\n' + \
             '<group name="collection" type="NXcollection">\n'
         groupend = '</group>\n'
@@ -6330,7 +6332,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
 
         defbg = '<?xml version="1.0" ?>\n<definition>\n'
         defend = '</definition>\n'
-        groupbg = '<group name="scan$var.serialno" type="NXentry">\n' + \
+        groupbg = '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n' + \
             '<group name="instrument" type="NXinstrument">\n' + \
             '<group name="collection" type="NXcollection">\n'
         groupend = '</group>\n'
@@ -6508,7 +6510,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
 
         defbg = '<?xml version="1.0" ?>\n<definition>\n'
         defend = '</definition>\n'
-        groupbg = '<group name="scan$var.serialno" type="NXentry">\n' + \
+        groupbg = '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n' + \
             '<group name="instrument" type="NXinstrument">\n' + \
             '<group name="collection" type="NXcollection">\n'
         groupend = '</group>\n'
@@ -6686,7 +6688,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
 
         defbg = '<?xml version="1.0" ?>\n<definition>\n'
         defend = '</definition>\n'
-        groupbg = '<group name="scan$var.serialno" type="NXentry">\n' + \
+        groupbg = '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n' + \
             '<group name="instrument" type="NXinstrument">\n' + \
             '<group name="collection" type="NXcollection">\n'
         groupend = '</group>\n'
@@ -6865,7 +6867,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
 
         defbg = '<?xml version="1.0" ?>\n<definition>\n'
         defend = '</definition>\n'
-        groupbg = '<group name="scan$var.serialno" type="NXentry">\n' + \
+        groupbg = '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n' + \
             '<group name="instrument" type="NXinstrument">\n' + \
             '<group name="collection" type="NXcollection">\n'
         groupend = '</group>\n'
@@ -7039,7 +7041,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
         cps = {
             "shapetype":
             '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="scan$var.serialno" type="NXentry">\n'
+            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n'
             '<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n%s'
             '</group>\n</group>\n%s</group>\n</definition>\n',
@@ -7247,7 +7249,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
         cps = {
             "shapetype":
             '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="scan$var.serialno" type="NXentry">\n'
+            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n'
             '<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n%s'
             '</group>\n</group>\n%s</group>\n</definition>\n',
@@ -7456,7 +7458,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
         cps = {
             "shapetype":
                 '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="scan$var.serialno" type="NXentry">\n'
+            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n'
             '<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n%s'
             '</group>\n</group>\n%s</group>\n</definition>\n',
@@ -7665,7 +7667,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
         cps = {
             "shapetype":
                 '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="scan$var.serialno" type="NXentry">\n'
+            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n'
             '<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n%s'
             '</group>\n</group>\n%s</group>\n</definition>\n',

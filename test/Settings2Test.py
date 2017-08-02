@@ -65,6 +65,11 @@ DB_AVAILABLE = []
 #: tango version
 TGVER = PyTango.__version_info__[0]
 
+
+class NotEqualException(Exception):
+    pass
+
+
 try:
     import MySQLdb
     # connection arguments to MYSQL DB
@@ -137,7 +142,7 @@ class Settings2Test(unittest.TestCase):
         self._defaultmntgrp = 'nxsmntgrp'
         # default path
         self._defaultpath = \
-            '/scan$var.serialno:NXentry/NXinstrument/collection'
+            '/$var.entryname#\'scan\'$var.serialno:NXentry/NXinstrument/collection'
 
         self._npTn = {"float32": "NX_FLOAT32", "float64": "NX_FLOAT64",
                       "float": "NX_FLOAT32", "double": "NX_FLOAT64",
@@ -2237,6 +2242,35 @@ class Settings2Test(unittest.TestCase):
                 if v != dct2[k]:
                     print 'VALUES', k, v, dct2[k]
                 self.assertEqual(v, dct2[k])
+
+    def myCompDict(self, dct, dct2):
+        logger.debug('dict %s' % type(dct))
+        logger.debug("\n%s\n%s" % (dct, dct2))
+        if not isinstance(dct, dict):
+            raise NotEqualException("DCT1 %s" % dct)
+        if not isinstance(dct2, dict):
+            print "NOT DICT", type(dct2), dct2
+            print "DICT", type(dct), dct
+            raise NotEqualException("DCT2 %s" % dct2)
+        logger.debug("%s %s" % (len(dct.keys()), len(dct2.keys())))
+        if set(dct.keys()) ^ set(dct2.keys()):
+            print 'DCT', dct.keys()
+            print 'DCT2', dct2.keys()
+            print "DIFF", set(dct.keys()) ^ set(dct2.keys())
+        if len(dct.keys()) != len(dct2.keys()):
+            raise NotEqualException("LEN %s %s" % (dct, dct2))
+
+        for k, v in dct.items():
+            logger.debug("%s  in %s" % (str(k), str(dct2.keys())))
+            if k not in dct2.keys():
+                raise NotEqualException("%s not in %s" % (k, dct2))
+            if isinstance(v, dict):
+                self.myCompDict(v, dct2[k])
+            else:
+                logger.debug("%s , %s" % (str(v), str(dct2[k])))
+                if v != dct2[k]:
+                    print 'VALUES', k, v, dct2[k]
+                    raise NotEqualException("VALUE %s %s %s" % (k, v, dct2[k]))
 
     def myAssertDictJSON(self, dct, dct2):
         logger.debug('dict %s' % type(dct))
