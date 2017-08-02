@@ -1,6 +1,6 @@
 .\" Man page generated from reStructuredText.
 .
-.TH "NXSRECCONFIG" "1" "July 13, 2017" "3.10" "NXSRecSelector"
+.TH "NXSRECCONFIG" "1" "August 02, 2017" "3.11" "NXSRecSelector"
 .SH NAME
 nxsrecconfig \- nxsrecconfig Documentation
 .
@@ -875,7 +875,7 @@ constructor
 Dynamic Component
 .INDENT 0.0
 .TP
-.B class nxsrecconfig.DynamicComponent.DynamicComponent(nexusconfig_device, defaultpath=\(aq/scan$var.serialno:NXentry/NXinstrument/collection\(aq)
+.B class nxsrecconfig.DynamicComponent.DynamicComponent(nexusconfig_device, defaultpath="/$var.entryname#\(aqscan\(aq$var.serialno:NXentry/NXinstrument/collection")
 Bases: \fI\%object\fP
 .sp
 Creates dynamic component
@@ -2843,7 +2843,7 @@ Command definitions
 .UNINDENT
 .INDENT 7.0
 .TP
-.B device_property_list = {\(aqNumberOfThreads\(aq: [tango._tango.CmdArgType.DevLong, \(aqmaximal number of threads\(aq, [20]], \(aqDefaultTimeZone\(aq: [tango._tango.CmdArgType.DevString, \(aqdefault Time Zone\(aq, [\(aqEurope/Berlin\(aq]], \(aqDefaultMntGrp\(aq: [tango._tango.CmdArgType.DevString, \(aqdefault measurement group name\(aq, [\(aqnxsmntgrp\(aq]], \(aqAdminDataNames\(aq: [tango._tango.CmdArgType.DevVarStringArray, \(aqlist of administrator data names\(aq, []], \(aqMutedChannelFilters\(aq: [tango._tango.CmdArgType.DevVarStringArray, \(aqlist of muted channel filters\(aq, []], \(aqPoolBlacklist\(aq: [tango._tango.CmdArgType.DevVarStringArray, \(aqblacklist of pools\(aq, []], \(aqTimerFilters\(aq: [tango._tango.CmdArgType.DevVarStringArray, \(aqlist of timer device name filters\(aq, []], \(aqDefaultNeXusPath\(aq: [tango._tango.CmdArgType.DevString, \(aqdefault NeXus path\(aq, [\(aq/scan$var.serialno:NXentry/NXinstrument/collection\(aq]], \(aqClientRecordKeys\(aq: [tango._tango.CmdArgType.DevVarStringArray, \(aqlist of record keys for CLIENT datasources\(aq, []], \(aqDefaultPreselectedComponents\(aq: [tango._tango.CmdArgType.DevVarStringArray, \(aqlist of default preselected components\(aq, []]}
+.B device_property_list = {\(aqNumberOfThreads\(aq: [tango._tango.CmdArgType.DevLong, \(aqmaximal number of threads\(aq, [20]], \(aqDefaultTimeZone\(aq: [tango._tango.CmdArgType.DevString, \(aqdefault Time Zone\(aq, [\(aqEurope/Berlin\(aq]], \(aqDefaultMntGrp\(aq: [tango._tango.CmdArgType.DevString, \(aqdefault measurement group name\(aq, [\(aqnxsmntgrp\(aq]], \(aqAdminDataNames\(aq: [tango._tango.CmdArgType.DevVarStringArray, \(aqlist of administrator data names\(aq, []], \(aqMutedChannelFilters\(aq: [tango._tango.CmdArgType.DevVarStringArray, \(aqlist of muted channel filters\(aq, []], \(aqPoolBlacklist\(aq: [tango._tango.CmdArgType.DevVarStringArray, \(aqblacklist of pools\(aq, []], \(aqTimerFilters\(aq: [tango._tango.CmdArgType.DevVarStringArray, \(aqlist of timer device name filters\(aq, []], \(aqDefaultNeXusPath\(aq: [tango._tango.CmdArgType.DevString, \(aqdefault NeXus path\(aq, ["/$var.entryname#\(aqscan\(aq$var.serialno:NXentry/NXinstrument/collection"]], \(aqClientRecordKeys\(aq: [tango._tango.CmdArgType.DevVarStringArray, \(aqlist of record keys for CLIENT datasources\(aq, []], \(aqDefaultPreselectedComponents\(aq: [tango._tango.CmdArgType.DevVarStringArray, \(aqlist of default preselected components\(aq, []]}
 .INDENT 7.0
 .TP
 .B (\fI\%dict\fP <\fI\%str\fP, 
@@ -3090,7 +3090,7 @@ Selection Dictionary which contains the following records:
 "UnplottedComponents":  \(aq[]\(aq,
 "DynamicComponents":  True,
 "DefaultDynamicLinks":  True,
-"DefaultDynamicPath":      \(aq/scan$var.serialno:NXentry/NXinstrument/collection\(aq,
+"DefaultDynamicPath":      \(aq/$var.entryname#\(aqscan\(aq$var.serialno:NXentry/NXinstrument/collection\(aq,
 "TimeZone":  self.__defaultzone,
 "ConfigDevice":  \(aq\(aq,
 "WriterDevice":  \(aq\(aq,
@@ -3211,7 +3211,7 @@ appends new datasources to Preselected DataSources
 Selection state
 .INDENT 0.0
 .TP
-.B class nxsrecconfig.Selector.Selector(macroserverpools, version, defaultpath=\(aq/scan$var.serialno:NXentry/NXinstrument/collection\(aq, defaulttimezone=\(aqEurope/Berlin\(aq, defaultmntgrp=\(aqnxsmntgrp\(aq)
+.B class nxsrecconfig.Selector.Selector(macroserverpools, version, defaultpath="/$var.entryname#\(aqscan\(aq$var.serialno:NXentry/NXinstrument/collection", defaulttimezone=\(aqEurope/Berlin\(aq, defaultmntgrp=\(aqnxsmntgrp\(aq)
 Bases: \fI\%object\fP
 .sp
 access class to Selection dictionary and Config Device
