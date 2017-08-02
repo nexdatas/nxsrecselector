@@ -66,7 +66,6 @@ DB_AVAILABLE = []
 TGVER = PyTango.__version_info__[0]
 
 
-
 class NotEqualException(Exception):
     pass
 
@@ -146,7 +145,7 @@ class SettingsTest(unittest.TestCase):
         self._defaultmntgrp = 'nxsmntgrp'
         # default path
         self._defaultpath = \
-            '/scan$var.serialno:NXentry/NXinstrument/collection'
+            '/$var.entryname#\'scan\'$var.serialno:NXentry/NXinstrument/collection'
 
         self._npTn = {"float32": "NX_FLOAT32", "float64": "NX_FLOAT64",
                       "float": "NX_FLOAT32", "double": "NX_FLOAT64",

@@ -35,7 +35,7 @@ class Selector(object):
     #
 
     def __init__(self, macroserverpools, version,
-                 defaultpath="/scan$var.serialno:NXentry/"
+                 defaultpath="/$var.entryname#'scan'$var.serialno:NXentry/"
                  "NXinstrument/collection",
                  defaulttimezone="Europe/Berlin",
                  defaultmntgrp="nxsmntgrp"):

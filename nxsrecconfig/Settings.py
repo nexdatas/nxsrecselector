@@ -61,7 +61,8 @@ class Settings(object):
 
         #: (:obj:`str`) default NeXus path
         self.defaultNeXusPath = defaultnexuspath or \
-            "/scan$var.serialno:NXentry/NXinstrument/collection"
+            "/$var.entryname#'scan'$var.serialno:NXentry/" \
+            "NXinstrument/collection"
 
         #: (:obj:`str`) default time zone
         self.defaultTimeZone = defaulttimezone or "Europe/Berlin"

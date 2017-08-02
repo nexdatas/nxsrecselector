@@ -128,7 +128,7 @@ class SelectorTest(unittest.TestCase):
         self.__defaultmntgrp = 'nxsmntgrp'
         # default path
         self.__defaultpath = \
-            '/scan$var.serialno:NXentry/NXinstrument/collection'
+            '/$var.entryname#\'scan\'$var.serialno:NXentry/NXinstrument/collection'
 
         # selection version
         self.__version = nxsrecconfig.__version__

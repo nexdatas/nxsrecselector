@@ -53,6 +53,7 @@ from nxsrecconfig.ProfileManager import ProfileManager
 from nxsrecconfig.Utils import TangoUtils, MSUtils, Utils
 from nxsconfigserver.XMLConfigurator import XMLConfigurator
 
+
 class NotEqualException(Exception):
     pass
 
@@ -140,7 +141,7 @@ class ProfileManagerTest(unittest.TestCase):
         self.__defaultmntgrp = 'nxsmntgrp'
         # default path
         self.__defaultpath = \
-            '/scan$var.serialno:NXentry/NXinstrument/collection'
+            '/$var.entryname#\'scan\'$var.serialno:NXentry/NXinstrument/collection'
 
         # selection version
         self.__version = nxsrecconfig.__version__

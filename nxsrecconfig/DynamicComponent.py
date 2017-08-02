@@ -32,7 +32,7 @@ class DynamicComponent(object):
         of given component """
 
     def __init__(self, nexusconfig_device,
-                 defaultpath="/scan$var.serialno:NXentry/"
+                 defaultpath="/$var.entryname#'scan'$var.serialno:NXentry/"
                  "NXinstrument/collection"):
         """ constructor
 
