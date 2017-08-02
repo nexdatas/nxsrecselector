@@ -3109,7 +3109,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                     mynewmg = json.loads(lrs.mntGrpConfiguration())
                     lmp = json.loads(lrs.profileConfiguration)
 
-                    # try:        
+                    # try:
                     #     self.myCompDict(mynewmg, myoldmg)
                     #     self.assertTrue(not lrs.isMntGrpUpdated())
                     #     self.assertTrue(not lrs.isMntGrpUpdated())
