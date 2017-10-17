@@ -1,3 +1,7 @@
+2017-10-17 Jan Kotanski <jankotan@gmail.com>
+	* fix for timeout problem
+	* tagged as v3.11.1
+
 2017-08-02 Jan Kotanski <jankotan@gmail.com>
 	* add $var.entryname variable
 	* tagged as v3.11.0
