@@ -951,11 +951,11 @@ class Settings(object):
         try:
             TangoUtils.command(
                 nexusconfig_device, "createConfiguration", cp)
-            except PyTango.CommunicationFailed as e:
-                if e[-1].reason == "API_DeviceTimedOut":
-                    TangoUtils.wait(nexusconfig_device)
-                else:
-                    raise
+        except PyTango.CommunicationFailed as e:
+            if e[-1].reason == "API_DeviceTimedOut":
+                TangoUtils.wait(nexusconfig_device)
+            else:
+                raise
         nexusconfig_device.stepdatasources = "[]"
         nexusconfig_device.linkdatasources = "[]"
         return str(nexusconfig_device.xmlstring)
