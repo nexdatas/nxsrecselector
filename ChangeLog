@@ -1,3 +1,7 @@
+2017-10-18 Jan Kotanski <jankotan@gmail.com>
+	* fix for synch parameter order
+	* tagged as v3.11.2
+
 2017-10-17 Jan Kotanski <jankotan@gmail.com>
 	* fix for timeout problem
 	* tagged as v3.11.1
