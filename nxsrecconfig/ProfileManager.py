@@ -486,14 +486,26 @@ class ProfileManager(object):
 
         dsg = json.loads(self.__selector["DataSourceSelection"])
         hel = set(json.loads(self.__selector["UnplottedComponents"]))
+        props = json.loads(self.__selector["ChannelProperties"])
+        # synchronizer = props["synchronizer"] \
+        #     if "synchronizer" in props.keys() else {}
+        synchronizer = {}
+        # synchronization = props["synchronization"] \
+        #     if "synchronization" in props.keys() else {}
+        synchronization = {}
         self.__clearChannels(dsg, hel, compdatasources)
 
         # fill in dsg, timers hel
         if "timer" in conf.keys() and "controllers" in conf.keys():
             avtimers = PoolUtils.getTimers(self.__pools, self.timerFilters)
-            tangods = self.__readChannels(conf, timers, dsg, hel)
-            self.__readTangoChannels(conf, tangods, dsg, hel)
+            tangods = self.__readChannels(
+                conf, timers, dsg, hel, synchronizer, synchronization)
+            self.__readTangoChannels(
+                conf, tangods, dsg, hel, synchronizer, synchronization)
             otimers = self.__reorderTimers(conf, timers, dsg, hel, avtimers)
+
+        props["synchronizer"] = synchronizer
+        props["synchronization"] = synchronization
 
         changed = False
         jdsg = json.dumps(dsg)
@@ -501,9 +513,15 @@ class ProfileManager(object):
             self.__selector["DataSourceSelection"] = jdsg
             changed = True
 
+        jprops = json.dumps(props)
+        if self.__selector["ChannelProperties"] != jprops:
+            self.__selector["ChannelProperties"] = jprops
+            changed = True
+
         if set(json.loads(self.__selector["UnplottedComponents"])) != hel:
             self.__selector["UnplottedComponents"] = json.dumps(list(hel))
             changed = True
+
         if otimers is not None:
             jtimers = json.dumps(otimers)
             if self.__selector["Timer"] != jtimers:
@@ -542,7 +560,8 @@ class ProfileManager(object):
                 hel.remove(ch)
 
     @classmethod
-    def __readChannels(cls, conf, timers, dsg, hel):
+    def __readChannels(cls, conf, timers, dsg, hel, synchronizer,
+                       synchronization):
         """ reads channels from mntgrp configutation
 
         :param conf: mntgrp configuration
@@ -553,6 +572,10 @@ class ProfileManager(object):
         :type dsg: :obj:`dict` <:obj:`str`, :obj:`bool` or `None`>
         :param hel: list of hidden elements
         :type hel: :obj:`list` <:obj:`str`>
+        :param synchronizer: channel synchronizer, default = 'software'
+        :type synchronizer: :obj:`dict` <:obj:`str`, :obj:`str`>
+        :param synchronization: channel synchronization, i.e. Trigger=0, Gate=1
+        :type synchronization: :obj:`dict` <:obj:`str`, :obj:`int`>
         :returns: tango datasources list with elements (name, label, source)
         :rtype: :obj:`list` < [:obj:`str` , :obj:`str` , :obj:`str` ] >
         """
@@ -578,10 +601,18 @@ class ProfileManager(object):
                             hel.add(ch['name'])
                         elif ch['name'] in hel:
                             hel.remove(ch['name'])
+                        if 'synchronizer' in ctrl \
+                           and ctrl['synchronizer'].lower() != 'software':
+                            synchronizer[ch['name']] = ctrl['synchronizer']
+                        if 'synchronization' in ctrl \
+                           and ctrl['synchronization'] != 0:
+                            synchronization[ch['name']] = ctrl['synchronization']
+
 
         return tangods
 
-    def __readTangoChannels(self, conf, tangods, dsg, hel):
+    def __readTangoChannels(self, conf, tangods, dsg, hel, synchronizer,
+                            synchronization):
         """ reads Tango channels from mntgrp configutation
 
         :param conf: mntgrp configuration
@@ -591,6 +622,10 @@ class ProfileManager(object):
         :type tangods: :obj:`list` < [:obj:`str` , :obj:`str` , :obj:`str` ] >
         :param dsg: datasource selection dictionary
         :type dsg: :obj:`dict` <:obj:`str`, :obj:`bool` or `None`>
+        :param synchronizer: channel synchronizer, default = 'software'
+        :type synchronizer: :obj:`dict` <:obj:`str`, :obj:`str`>
+        :param synchronization: channel synchronization, i.e. Trigger=0, Gate=1
+        :type synchronization: :obj:`dict` <:obj:`str`, :obj:`int`>
         :param hel: list of hidden elements
         :type hel: :obj:`list` <:obj:`str`>
         """
@@ -613,6 +648,14 @@ class ProfileManager(object):
                                     hel.add(name)
                                 elif ch['name'] in hel:
                                     hel.remove(name)
+                                if 'synchronizer' in ctrl and \
+                                   ctrl['synchronizer'].lower() != 'software':
+                                    synchronizer[name] = \
+                                        ctrl['synchronizer']
+                                if 'synchronization' in ctrl and \
+                                   ctrl['synchronization'] != 0:
+                                    synchronization[name] = \
+                                        ctrl['synchronization']
 
     def __reorderTimers(self, conf, timers, dsg, hel, avtimers=None):
         """ reads timer aliases and reoder it according to mntgrp
@@ -1032,7 +1075,7 @@ class ProfileManager(object):
 
     def __addDevice(self, device, dontdisplay, cnf,
                     timer, index, fullnames=None, sources=None,
-                    synchronization=None, synchronizer=None):
+                    synchronizer=None, synchronization=None):
         """ adds device into configuration dictionary
 
         :param device: device alias
