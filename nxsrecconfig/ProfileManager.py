@@ -1032,7 +1032,7 @@ class ProfileManager(object):
 
     def __addDevice(self, device, dontdisplay, cnf,
                     timer, index, fullnames=None, sources=None,
-                    synchronization=None, synchronizer=None):
+                    synchronizer=None, synchronization=None):
         """ adds device into configuration dictionary
 
         :param device: device alias
