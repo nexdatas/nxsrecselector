@@ -6465,6 +6465,8 @@ class ProfileManagerTest(unittest.TestCase):
                                 "nexus_path": paths,
                                 "link": links,
                                 "data_type": types,
+                                "synchronizer": {},
+                                "synchronization": {},
                                 "shape": shapes
                             }
                         )

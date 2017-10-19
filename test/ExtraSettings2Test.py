@@ -1364,6 +1364,8 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
                                 "nexus_path": paths,
                                 "link": links,
                                 "data_type": types,
+                                "synchronizer": {},
+                                "synchronization": {},
                                 "shape": shapes
                             }
                         )
@@ -2694,6 +2696,8 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
                                 "nexus_path": paths,
                                 "link": links,
                                 "data_type": types,
+                                "synchronizer": {},
+                                "synchronization": {},
                                 "shape": shapes
                             }
                         )
