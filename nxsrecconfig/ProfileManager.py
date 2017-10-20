@@ -606,9 +606,8 @@ class ProfileManager(object):
                             synchronizer[ch['name']] = ctrl['synchronizer']
                         if 'synchronization' in ctrl \
                            and ctrl['synchronization'] != 0:
-                            synchronization[ch['name']] = ctrl['synchronization']
-
-
+                            synchronization[ch['name']] = \
+                                ctrl['synchronization']
         return tangods
 
     def __readTangoChannels(self, conf, tangods, dsg, hel, synchronizer,
