@@ -170,15 +170,20 @@ class Selection(dict):
         ordchannels.extend(sorted(uordchannels))
         self["OrderedChannels"] = json.dumps(ordchannels)
 
-    def updateChannelProperties(self, devicecontrollers):
+    def updateChannelProperties(self, devicecontrollers, triggergate):
         """ update method for orderedChannels attribute
 
         :brief: sets pool channels in order defined by OrderedChannels
         :param devicecontrollers: device controller dictionary
         :type devicecontrollers: :obj:`dict` <:obj:`str`, :obj:`str`>
+        :param triggergate: trigger gate list
+        :type triggergate: :obj:`list` <:obj:`str`>
         """
         props = json.loads(self["ChannelProperties"])
-        props["__controllers__"] = devicecontrollers
+        if devicecontrollers:
+            props["__controllers__"] = devicecontrollers
+        if triggergate:
+            props["__triggergatelist__"] = triggergate
         self["ChannelProperties"] = json.dumps(props)
 
     def updateComponentSelection(self):
