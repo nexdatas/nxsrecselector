@@ -240,7 +240,8 @@ class Selector(object):
         """
         pools = self.getPools()
         try:
-            triggergate = PoolUtils.getElementNames(pools, 'TriggerGateList')
+            triggergate = PoolUtils.getElementNames(
+                pools, 'TriggerGateList')
         except:
             triggergate = []
         self.__selection.updateChannelProperties(
