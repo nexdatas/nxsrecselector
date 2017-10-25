@@ -1,6 +1,6 @@
 .\" Man page generated from reStructuredText.
 .
-.TH "NXSRECCONFIG" "1" "August 02, 2017" "3.11" "NXSRecSelector"
+.TH "NXSRECCONFIG" "1" "October 25, 2017" "3.12" "NXSRecSelector"
 .SH NAME
 nxsrecconfig \- nxsrecconfig Documentation
 .
@@ -718,7 +718,7 @@ constructor
 .B Parameters
 .INDENT 7.0
 .IP \(bu 2
-\fBnexusconfig_device\fP (\fI\%PyTango.DeviceProxy\fP              or \fI\%nxsconfigserver.XMLConfigurator.XMLConfigurator\fP) \-\- configserver configuration server
+\fBnexusconfig_device\fP (\fBPyTango.DeviceProxy\fP              or \fI\%nxsconfigserver.XMLConfigurator.XMLConfigurator\fP) \-\- configserver configuration server
 .IP \(bu 2
 \fBtree\fP (\fI\%bool\fP) \-\- flag for output tree dictionary
 .IP \(bu 2
@@ -887,7 +887,7 @@ constructor
 .B Parameters
 .INDENT 7.0
 .IP \(bu 2
-\fBnexusconfig_device\fP (\fI\%PyTango.DeviceProxy\fP              or \fI\%nxsconfigserver.XMLConfigurator.XMLConfigurator\fP) \-\- configserver configuration server
+\fBnexusconfig_device\fP (\fBPyTango.DeviceProxy\fP              or \fI\%nxsconfigserver.XMLConfigurator.XMLConfigurator\fP) \-\- configserver configuration server
 .IP \(bu 2
 \fBdefaultpath\fP (\fI\%str\fP) \-\- default dynamic component path
 .UNINDENT
@@ -1015,7 +1015,7 @@ checks component channels
 .IP \(bu 2
 \fBdoor\fP (\fI\%str\fP) \-\- door device name
 .IP \(bu 2
-\fBconfigdevice\fP (\fI\%PyTango.DeviceProxy\fP              or \fI\%nxsconfigserver.XMLConfigurator.XMLConfigurator\fP) \-\- configuration server
+\fBconfigdevice\fP (\fBPyTango.DeviceProxy\fP              or \fI\%nxsconfigserver.XMLConfigurator.XMLConfigurator\fP) \-\- configuration server
 .IP \(bu 2
 \fBchannels\fP (\fBlist\fP <\fI\%str\fP>) \-\- pool channels
 .IP \(bu 2
@@ -1060,7 +1060,7 @@ door pool device proxies
 pool device proxies
 .TP
 .B Return type
-\fBlist\fP <\fI\%PyTango.DeviceProxy\fP>
+\fBlist\fP <\fBPyTango.DeviceProxy\fP>
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -2454,7 +2454,7 @@ Read AppendEntry attribute
 .INDENT 7.0
 .TP
 .B Parameters
-\fBattr\fP (\fI\%PyTango.Attribute\fP) \-\- read attribute
+\fBattr\fP (\fBPyTango.Attribute\fP) \-\- read attribute
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -2464,7 +2464,7 @@ Read Components attribute
 .INDENT 7.0
 .TP
 .B Parameters
-\fBattr\fP (\fI\%PyTango.Attribute\fP) \-\- read attribute
+\fBattr\fP (\fBPyTango.Attribute\fP) \-\- read attribute
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -2474,7 +2474,7 @@ Read ConfigDevice attribute
 .INDENT 7.0
 .TP
 .B Parameters
-\fBattr\fP (\fI\%PyTango.Attribute\fP) \-\- read attribute
+\fBattr\fP (\fBPyTango.Attribute\fP) \-\- read attribute
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -2484,7 +2484,7 @@ Read ConfigVariables attribute
 .INDENT 7.0
 .TP
 .B Parameters
-\fBattr\fP (\fI\%PyTango.Attribute\fP) \-\- read attribute
+\fBattr\fP (\fBPyTango.Attribute\fP) \-\- read attribute
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -2494,7 +2494,7 @@ Read DataSources attribute
 .INDENT 7.0
 .TP
 .B Parameters
-\fBattr\fP (\fI\%PyTango.Attribute\fP) \-\- read attribute
+\fBattr\fP (\fBPyTango.Attribute\fP) \-\- read attribute
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -2504,7 +2504,7 @@ Read DescriptionErrors attribute
 .INDENT 7.0
 .TP
 .B Parameters
-\fBattr\fP (\fI\%PyTango.Attribute\fP) \-\- read attribute
+\fBattr\fP (\fBPyTango.Attribute\fP) \-\- read attribute
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -2514,7 +2514,7 @@ Read DeviceGroups attribute
 .INDENT 7.0
 .TP
 .B Parameters
-\fBattr\fP (\fI\%PyTango.Attribute\fP) \-\- read attribute
+\fBattr\fP (\fBPyTango.Attribute\fP) \-\- read attribute
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -2524,7 +2524,7 @@ Read Door attribute
 .INDENT 7.0
 .TP
 .B Parameters
-\fBattr\fP (\fI\%PyTango.Attribute\fP) \-\- read attribute
+\fBattr\fP (\fBPyTango.Attribute\fP) \-\- read attribute
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -2534,7 +2534,7 @@ Read LinkDataSources attribute
 .INDENT 7.0
 .TP
 .B Parameters
-\fBattr\fP (\fI\%PyTango.Attribute\fP) \-\- read attribute
+\fBattr\fP (\fBPyTango.Attribute\fP) \-\- read attribute
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -2544,7 +2544,7 @@ Read MacroServer attribute
 .INDENT 7.0
 .TP
 .B Parameters
-\fBattr\fP (\fI\%PyTango.Attribute\fP) \-\- read attribute
+\fBattr\fP (\fBPyTango.Attribute\fP) \-\- read attribute
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -2554,7 +2554,7 @@ Read MntGrp attribute
 .INDENT 7.0
 .TP
 .B Parameters
-\fBattr\fP (\fI\%PyTango.Attribute\fP) \-\- read attribute
+\fBattr\fP (\fBPyTango.Attribute\fP) \-\- read attribute
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -2564,7 +2564,7 @@ Read ProfileConfiguration attribute
 .INDENT 7.0
 .TP
 .B Parameters
-\fBattr\fP (\fI\%PyTango.Attribute\fP) \-\- read attribute
+\fBattr\fP (\fBPyTango.Attribute\fP) \-\- read attribute
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -2574,7 +2574,7 @@ Read ProfileFile attribute
 .INDENT 7.0
 .TP
 .B Parameters
-\fBattr\fP (\fI\%PyTango.Attribute\fP) \-\- read attribute
+\fBattr\fP (\fBPyTango.Attribute\fP) \-\- read attribute
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -2584,7 +2584,7 @@ Read ScanDir attribute
 .INDENT 7.0
 .TP
 .B Parameters
-\fBattr\fP (\fI\%PyTango.Attribute\fP) \-\- read attribute
+\fBattr\fP (\fBPyTango.Attribute\fP) \-\- read attribute
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -2594,7 +2594,7 @@ Read ScanFile attribute
 .INDENT 7.0
 .TP
 .B Parameters
-\fBattr\fP (\fI\%PyTango.Attribute\fP) \-\- read attribute
+\fBattr\fP (\fBPyTango.Attribute\fP) \-\- read attribute
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -2604,7 +2604,7 @@ Read ScanID attribute
 .INDENT 7.0
 .TP
 .B Parameters
-\fBattr\fP (\fI\%PyTango.Attribute\fP) \-\- read attribute
+\fBattr\fP (\fBPyTango.Attribute\fP) \-\- read attribute
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -2614,7 +2614,7 @@ Read StepDataSources attribute
 .INDENT 7.0
 .TP
 .B Parameters
-\fBattr\fP (\fI\%PyTango.Attribute\fP) \-\- read attribute
+\fBattr\fP (\fBPyTango.Attribute\fP) \-\- read attribute
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -2624,7 +2624,7 @@ Read UserData attribute
 .INDENT 7.0
 .TP
 .B Parameters
-\fBattr\fP (\fI\%PyTango.Attribute\fP) \-\- read attribute
+\fBattr\fP (\fBPyTango.Attribute\fP) \-\- read attribute
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -2634,7 +2634,7 @@ Read Version attribute
 .INDENT 7.0
 .TP
 .B Parameters
-\fBattr\fP (\fI\%PyTango.Attribute\fP) \-\- read attribute
+\fBattr\fP (\fBPyTango.Attribute\fP) \-\- read attribute
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -2644,7 +2644,7 @@ Read WriterDevice attribute
 .INDENT 7.0
 .TP
 .B Parameters
-\fBattr\fP (\fI\%PyTango.Attribute\fP) \-\- read attribute
+\fBattr\fP (\fBPyTango.Attribute\fP) \-\- read attribute
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -2659,7 +2659,7 @@ Write AppendEntry attribute
 .INDENT 7.0
 .TP
 .B Parameters
-\fBattr\fP (\fI\%PyTango.Attribute\fP) \-\- written attribute
+\fBattr\fP (\fBPyTango.Attribute\fP) \-\- written attribute
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -2669,7 +2669,7 @@ Write ConfigDevice attribute
 .INDENT 7.0
 .TP
 .B Parameters
-\fBattr\fP (\fI\%PyTango.Attribute\fP) \-\- written attribute
+\fBattr\fP (\fBPyTango.Attribute\fP) \-\- written attribute
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -2679,7 +2679,7 @@ Write ConfigVariables attribute
 .INDENT 7.0
 .TP
 .B Parameters
-\fBattr\fP (\fI\%PyTango.Attribute\fP) \-\- written attribute
+\fBattr\fP (\fBPyTango.Attribute\fP) \-\- written attribute
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -2689,7 +2689,7 @@ Write DeviceGroups attribute
 .INDENT 7.0
 .TP
 .B Parameters
-\fBattr\fP (\fI\%PyTango.Attribute\fP) \-\- written attribute
+\fBattr\fP (\fBPyTango.Attribute\fP) \-\- written attribute
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -2699,7 +2699,7 @@ Write Door attribute
 .INDENT 7.0
 .TP
 .B Parameters
-\fBattr\fP (\fI\%PyTango.Attribute\fP) \-\- written attribute
+\fBattr\fP (\fBPyTango.Attribute\fP) \-\- written attribute
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -2709,7 +2709,7 @@ Write LinkDataSources attribute
 .INDENT 7.0
 .TP
 .B Parameters
-\fBattr\fP (\fI\%PyTango.Attribute\fP) \-\- written attribute
+\fBattr\fP (\fBPyTango.Attribute\fP) \-\- written attribute
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -2719,7 +2719,7 @@ Write MntGrp attribute
 .INDENT 7.0
 .TP
 .B Parameters
-\fBattr\fP (\fI\%PyTango.Attribute\fP) \-\- written attribute
+\fBattr\fP (\fBPyTango.Attribute\fP) \-\- written attribute
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -2729,7 +2729,7 @@ Write ProfileConfiguration attribute
 .INDENT 7.0
 .TP
 .B Parameters
-\fBattr\fP (\fI\%PyTango.Attribute\fP) \-\- written attribute
+\fBattr\fP (\fBPyTango.Attribute\fP) \-\- written attribute
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -2739,7 +2739,7 @@ Write ProfileFile attribute
 .INDENT 7.0
 .TP
 .B Parameters
-\fBattr\fP (\fI\%PyTango.Attribute\fP) \-\- written attribute
+\fBattr\fP (\fBPyTango.Attribute\fP) \-\- written attribute
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -2749,7 +2749,7 @@ Write ScanDir attribute
 .INDENT 7.0
 .TP
 .B Parameters
-\fBattr\fP (\fI\%PyTango.Attribute\fP) \-\- written attribute
+\fBattr\fP (\fBPyTango.Attribute\fP) \-\- written attribute
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -2759,7 +2759,7 @@ Write ScanFile attribute
 .INDENT 7.0
 .TP
 .B Parameters
-\fBattr\fP (\fI\%PyTango.Attribute\fP) \-\- written attribute
+\fBattr\fP (\fBPyTango.Attribute\fP) \-\- written attribute
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -2769,7 +2769,7 @@ Write ScanID attribute
 .INDENT 7.0
 .TP
 .B Parameters
-\fBattr\fP (\fI\%PyTango.Attribute\fP) \-\- written attribute
+\fBattr\fP (\fBPyTango.Attribute\fP) \-\- written attribute
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -2779,7 +2779,7 @@ Write StepDataSources attribute
 .INDENT 7.0
 .TP
 .B Parameters
-\fBattr\fP (\fI\%PyTango.Attribute\fP) \-\- written attribute
+\fBattr\fP (\fBPyTango.Attribute\fP) \-\- written attribute
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -2789,7 +2789,7 @@ Write UserData attribute
 .INDENT 7.0
 .TP
 .B Parameters
-\fBattr\fP (\fI\%PyTango.Attribute\fP) \-\- written attribute
+\fBattr\fP (\fBPyTango.Attribute\fP) \-\- written attribute
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -2799,7 +2799,7 @@ Write WriterDevice attribute
 .INDENT 7.0
 .TP
 .B Parameters
-\fBattr\fP (\fI\%PyTango.Attribute\fP) \-\- written attribute
+\fBattr\fP (\fBPyTango.Attribute\fP) \-\- written attribute
 .UNINDENT
 .UNINDENT
 .UNINDENT
@@ -2817,8 +2817,8 @@ NXSRecSelectorclass Constructor
 .B (\fI\%dict\fP <\fI\%str\fP, 
 .INDENT 7.0
 .TP
-.B [[ \fI\%PyTango.CmdArgType\fP, 
-\fI\%PyTango.AttrDataFormat\fP, \fI\%PyTango.AttrWriteType\fP ], \fI\%dict\fP <\fI\%str\fP , any> ] > ) Attribute definitions
+.B [[ \fBPyTango.CmdArgType\fP, 
+\fBPyTango.AttrDataFormat\fP, \fBPyTango.AttrWriteType\fP ], \fI\%dict\fP <\fI\%str\fP , any> ] > ) Attribute definitions
 .UNINDENT
 .UNINDENT
 .UNINDENT
@@ -2828,7 +2828,7 @@ NXSRecSelectorclass Constructor
 .INDENT 7.0
 .TP
 .B (\fI\%dict\fP <\fI\%str\fP, 
-[ \fI\%str\fP, \fI\%PyTango.CmdArgType\fP, [ \fBlist\fP <\fI\%int\fP> ] ] > ) Class Properties
+[ \fI\%str\fP, \fBPyTango.CmdArgType\fP, [ \fBlist\fP <\fI\%int\fP> ] ] > ) Class Properties
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -2837,7 +2837,7 @@ NXSRecSelectorclass Constructor
 .INDENT 7.0
 .TP
 .B (\fI\%dict\fP <\fI\%str\fP, 
-[[ \fI\%PyTango.CmdArgType\fP, \fI\%str\fP]] >)
+[[ \fBPyTango.CmdArgType\fP, \fI\%str\fP]] >)
 Command definitions
 .UNINDENT
 .UNINDENT
@@ -2847,7 +2847,7 @@ Command definitions
 .INDENT 7.0
 .TP
 .B (\fI\%dict\fP <\fI\%str\fP, 
-[ \fI\%str\fP, \fI\%PyTango.CmdArgType\fP, [ \fBlist\fP <\fI\%int\fP> ] ] > ) Device Properties
+[ \fI\%str\fP, \fBPyTango.CmdArgType\fP, [ \fBlist\fP <\fI\%int\fP> ] ] > ) Device Properties
 .UNINDENT
 .UNINDENT
 .UNINDENT
@@ -3151,6 +3151,24 @@ If TimeZone not defined set it to default value
 .UNINDENT
 .INDENT 7.0
 .TP
+.B updateChannelProperties(devicecontrollers, triggergate)
+update method for orderedChannels attribute
+.INDENT 7.0
+.TP
+.B Brief
+sets pool channels in order defined by OrderedChannels
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBdevicecontrollers\fP (\fI\%dict\fP <\fI\%str\fP, \fI\%str\fP>) \-\- device controller dictionary
+.IP \(bu 2
+\fBtriggergate\fP (\fBlist\fP <\fI\%str\fP>) \-\- trigger gate list
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
 .B updateComponentSelection()
 update method for componentGroup attribute
 .INDENT 7.0
@@ -3330,7 +3348,7 @@ provides pool proxies
 list of pool proxies
 .TP
 .B Return type
-\fBlist\fP <\fI\%PyTango.DeviceProxy\fP>
+\fBlist\fP <\fBPyTango.DeviceProxy\fP>
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -3440,7 +3458,7 @@ sets config instances
 set config instance
 .TP
 .B Return type
-\fI\%PyTango.DeviceProxy\fP              or \fI\%nxsconfigserver.XMLConfigurator.XMLConfigurator\fP
+\fBPyTango.DeviceProxy\fP              or \fI\%nxsconfigserver.XMLConfigurator.XMLConfigurator\fP
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -4182,7 +4200,7 @@ streamset constractor
 .INDENT 7.0
 .TP
 .B Parameters
-\fBstreams\fP (\fBStreamSet\fP or \fI\%PyTango.Device_4Impl\fP) \-\- tango\-like steamset class
+\fBstreams\fP (\fBStreamSet\fP or \fBPyTango.Device_4Impl\fP) \-\- tango\-like steamset class
 .UNINDENT
 .INDENT 7.0
 .TP
@@ -4329,7 +4347,7 @@ provides macro server of given door
 .B Parameters
 .INDENT 7.0
 .IP \(bu 2
-\fBdb\fP (\fI\%PyTango.Database\fP) \-\- tango database
+\fBdb\fP (\fBPyTango.Database\fP) \-\- tango database
 .IP \(bu 2
 \fBdoor\fP (\fI\%str\fP) \-\- given door
 .UNINDENT
@@ -4404,7 +4422,7 @@ provides channels of given pools
 .B Parameters
 .INDENT 7.0
 .IP \(bu 2
-\fBpools\fP (\fBlist\fP <\fI\%PyTango.DeviceProxy\fP>) \-\- list of pool devices
+\fBpools\fP (\fBlist\fP <\fBPyTango.DeviceProxy\fP>) \-\- list of pool devices
 .IP \(bu 2
 \fBfilters\fP (\fBlist\fP <\fI\%str\fP>) \-\- device name filter list
 .UNINDENT
@@ -4425,7 +4443,7 @@ find aliases from fullnames
 .B Parameters
 .INDENT 7.0
 .IP \(bu 2
-\fBpools\fP (\fBlist\fP <\fI\%PyTango.DeviceProxy\fP>) \-\- list of pool devices
+\fBpools\fP (\fBlist\fP <\fBPyTango.DeviceProxy\fP>) \-\- list of pool devices
 .IP \(bu 2
 \fBnames\fP (\fBlist\fP <\fI\%str\fP>) \-\- fullnames if None returns all aliases
 .UNINDENT
@@ -4446,7 +4464,7 @@ provides channel sources
 .B Parameters
 .INDENT 7.0
 .IP \(bu 2
-\fBpools\fP (\fBlist\fP <\fI\%PyTango.DeviceProxy\fP>) \-\- list of pool devices
+\fBpools\fP (\fBlist\fP <\fBPyTango.DeviceProxy\fP>) \-\- list of pool devices
 .IP \(bu 2
 \fBdevices\fP (\fBlist\fP <\fI\%str\fP>) \-\- alias names
 .UNINDENT
@@ -4460,14 +4478,14 @@ device sources
 .UNINDENT
 .INDENT 7.0
 .TP
-.B classmethod getDeviceControllers(pools, devices)
+.B classmethod getDeviceControllers(pools, devices=None)
 provides device controller full names
 .INDENT 7.0
 .TP
 .B Parameters
 .INDENT 7.0
 .IP \(bu 2
-\fBpools\fP (\fBlist\fP <\fI\%PyTango.DeviceProxy\fP>) \-\- list of pool devices
+\fBpools\fP (\fBlist\fP <\fBPyTango.DeviceProxy\fP>) \-\- list of pool devices
 .IP \(bu 2
 \fBdevices\fP (\fBlist\fP <\fI\%str\fP>) \-\- alias names
 .UNINDENT
@@ -4488,7 +4506,7 @@ provides experimental Channels
 .B Parameters
 .INDENT 7.0
 .IP \(bu 2
-\fBpools\fP (\fBlist\fP <\fI\%PyTango.DeviceProxy\fP>) \-\- list of pool devices
+\fBpools\fP (\fBlist\fP <\fBPyTango.DeviceProxy\fP>) \-\- list of pool devices
 .IP \(bu 2
 \fBlistattr\fP (\fI\%str\fP) \-\- pool attribute with list
 .IP \(bu 2
@@ -4511,7 +4529,7 @@ find device names from aliases
 .B Parameters
 .INDENT 7.0
 .IP \(bu 2
-\fBpools\fP (\fBlist\fP <\fI\%PyTango.DeviceProxy\fP>) \-\- list of pool devices
+\fBpools\fP (\fBlist\fP <\fBPyTango.DeviceProxy\fP>) \-\- list of pool devices
 .IP \(bu 2
 \fBnames\fP (\fBlist\fP <\fI\%str\fP>) \-\- alias names if None returns name for all aliases
 .UNINDENT
@@ -4532,7 +4550,7 @@ find measurement group name from alias
 .B Parameters
 .INDENT 7.0
 .IP \(bu 2
-\fBpools\fP (\fBlist\fP <\fI\%PyTango.DeviceProxy\fP>) \-\- list of pool devices
+\fBpools\fP (\fBlist\fP <\fBPyTango.DeviceProxy\fP>) \-\- list of pool devices
 .IP \(bu 2
 \fBalias\fP (\fI\%str\fP) \-\- mntgrp alias
 .UNINDENT
@@ -4569,7 +4587,7 @@ provides tiemrs of given pools
 .B Parameters
 .INDENT 7.0
 .IP \(bu 2
-\fBpools\fP (\fBlist\fP <\fI\%PyTango.DeviceProxy\fP>) \-\- list of pool devices
+\fBpools\fP (\fBlist\fP <\fBPyTango.DeviceProxy\fP>) \-\- list of pool devices
 .IP \(bu 2
 \fBfilters\fP (\fBlist\fP <\fI\%str\fP>) \-\- device name filter list
 .UNINDENT
@@ -4597,7 +4615,7 @@ executes command on server on python package
 .B Parameters
 .INDENT 7.0
 .IP \(bu 2
-\fBserver\fP (\fI\%PyTango.DeviceProxy\fP              or \fI\%nxsconfigserver.XMLConfigurator.XMLConfigurator\fP) \-\- tango server name or package name
+\fBserver\fP (\fBPyTango.DeviceProxy\fP              or \fI\%nxsconfigserver.XMLConfigurator.XMLConfigurator\fP) \-\- tango server name or package name
 .IP \(bu 2
 \fBcommand\fP (\fI\%str\fP) \-\- command name
 .IP \(bu 2
@@ -4620,7 +4638,7 @@ finds device of give class
 .B Parameters
 .INDENT 7.0
 .IP \(bu 2
-\fBdb\fP (\fI\%PyTango.DeviceProxy\fP) \-\- tango database
+\fBdb\fP (\fBPyTango.DeviceProxy\fP) \-\- tango database
 .IP \(bu 2
 \fBcname\fP (\fI\%str\fP) \-\- device class name
 .UNINDENT
@@ -4661,7 +4679,7 @@ provides proxies of given device names
 list of device DeviceProxies
 .TP
 .B Return type
-\fBlist\fP <\fI\%PyTango.DeviceProxy\fP>
+\fBlist\fP <\fBPyTango.DeviceProxy\fP>
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
@@ -4693,13 +4711,13 @@ opens device proxy of the given device
 DeviceProxy of device
 .TP
 .B Return type
-\fI\%PyTango.DeviceProxy\fP
+\fBPyTango.DeviceProxy\fP
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
 .TP
 .B tTnp = {tango._tango.CmdArgType.DevBoolean: \(aqbool\(aq, tango._tango.CmdArgType.DevShort: \(aqint16\(aq, tango._tango.CmdArgType.DevLong: \(aqint32\(aq, tango._tango.CmdArgType.DevFloat: \(aqfloat32\(aq, tango._tango.CmdArgType.DevDouble: \(aqfloat64\(aq, tango._tango.CmdArgType.DevUShort: \(aquint16\(aq, tango._tango.CmdArgType.DevULong: \(aquint32\(aq, tango._tango.CmdArgType.DevString: \(aqstring\(aq, tango._tango.CmdArgType.DevUChar: \(aquint8\(aq, tango._tango.CmdArgType.DevLong64: \(aqint64\(aq, tango._tango.CmdArgType.DevULong64: \(aquint64\(aq, tango._tango.CmdArgType.DevEncoded: \(aqencoded\(aq}
-(\fI\%dict\fP <\fI\%PyTango.CmdArgType\fP, \fI\%str\fP>)
+(\fI\%dict\fP <\fBPyTango.CmdArgType\fP, \fI\%str\fP>)
 map of Tango:Numpy types
 .UNINDENT
 .INDENT 7.0
@@ -4709,7 +4727,7 @@ waits for device proxy not running
 .INDENT 7.0
 .TP
 .B Parameters
-\fBproxy\fP (\fI\%PyTango.DeviceProxy\fP) \-\- device proxy
+\fBproxy\fP (\fBPyTango.DeviceProxy\fP) \-\- device proxy
 .TP
 .B Returns
 if proxy device ready
