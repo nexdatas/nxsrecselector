@@ -2412,8 +2412,10 @@ class SelectorTest(unittest.TestCase):
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp',
                "OrderedChannels": "[]",
+               "ChannelProperties": "{}",
                "DataSourceSelection": "{}"}
         for i in range(20):
+            val["ChannelProperties"] = json.dumps({})
             msp = MacroServerPools(10)
             se = Selector(msp, self.__version)
             db = PyTango.Database()
@@ -2449,7 +2451,10 @@ class SelectorTest(unittest.TestCase):
             pool = self._pool.dp
             pool.ExpChannelList = [json.dumps(
                 {"name": mn, "controller": ("ctrl" + mn)}) for mn in chs]
-
+            chprop = {}
+            chprop["__controllers__"] = dict((mn, ("ctrl" + mn)) for mn in chs)
+            if chprop["__controllers__"]:
+                val["ChannelProperties"] = json.dumps(chprop)
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(
                 {key: self.smydss["scalar_long"] for key in cdss}
             )])

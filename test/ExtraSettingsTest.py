@@ -1146,6 +1146,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                 lhe2 = {}
                 records = {}
                 ltimers = {}
+                pools = {}
 
                 pool = self._pool.dp
                 self._ms.dps[self._ms.ms.keys()[0]].Init()
@@ -1242,6 +1243,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
 
                         pool.AcqChannelList = [json.dumps(a) for a in acqch]
                         pool.ExpChannelList = [json.dumps(a) for a in expch]
+                        pools[mg] = [pool.AcqChannelList, pool.ExpChannelList]
 
                         amycps = dict(self.smycps2)
                         amycps.update(self.smycps)
@@ -1375,6 +1377,8 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                                 "nexus_path": paths,
                                 "link": links,
                                 "data_type": types,
+                                "synchronizer": {},
+                                "synchronization": {},
                                 "shape": shapes
                             }
                         )
@@ -1682,25 +1686,32 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                     # check profile commands
                     mg1, mg2, mg3, mg4 = tuple(self._rnd.sample(mgs, 4))
 #                    print "MGS", mg1, mg2, mg3, mg4
-
+                    pool.AcqChannelList = pools[mg1][0]
+                    pool.ExpChannelList = pools[mg1][1]
                     self.compareToDumpJSON(
                         rs[mg1],
                         ["DataSourceSelection",
                          "UnplottedComponents",
                          "PreselectingDataSources"],
                         name=mg1)
+                    pool.AcqChannelList = pools[mg2][0]
+                    pool.ExpChannelList = pools[mg2][1]
                     self.compareToDumpJSON(
                         rs[mg2],
                         ["DataSourceSelection",
                          "UnplottedComponents",
                          "PreselectingDataSources"],
                         name=mg2)
+                    pool.AcqChannelList = pools[mg3][0]
+                    pool.ExpChannelList = pools[mg3][1]
                     self.compareToDumpJSON(
                         rs[mg3],
                         ["DataSourceSelection",
                          "UnplottedComponents",
                          "PreselectingDataSources"],
                         name=mg3)
+                    pool.AcqChannelList = pools[mg4][0]
+                    pool.ExpChannelList = pools[mg4][1]
                     self.compareToDumpJSON(
                         rs[mg4],
                         ["DataSourceSelection",
@@ -1712,6 +1723,8 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                     lrs.configDevice = val["ConfigDevice"]
                     lrs.door = val["Door"]
                     lrs.mntGrp = mg1
+                    pool.AcqChannelList = pools[mg1][0]
+                    pool.ExpChannelList = pools[mg1][1]
                     self.assertEqual(lrs.configDevice, val["ConfigDevice"])
 
                     self.assertEqual(lrs.door, val["Door"])
@@ -1754,6 +1767,8 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                     # import mntgrp another defined by selector MntGrp
                     lrs.mntGrp = mg2
 
+                    pool.AcqChannelList = pools[mg2][0]
+                    pool.ExpChannelList = pools[mg2][1]
                     myoldmg = json.loads(lrs.mntGrpConfiguration())
                     self.assertTrue(not lrs.isMntGrpUpdated())
                     self.assertTrue(not lrs.isMntGrpUpdated())
@@ -1776,12 +1791,16 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
 #                    self.myAssertDict(tmpcf1, ltmpcf)
                     self.myAssertDict(tmpcf2, ltmpcf)
 #                    print "RSmg2",
+                    pool.AcqChannelList = pools[mg2][0]
+                    pool.ExpChannelList = pools[mg2][1]
                     self.compareToDumpJSON(
                         rs[mg2],
                         ["DataSourceSelection",
                          "UnplottedComponents",
                          "PreselectingDataSources"],
                         name=mg2)
+                    pool.AcqChannelList = pools[mg1][0]
+                    pool.ExpChannelList = pools[mg1][1]
                     self.compareToDumpJSON(
                         lrs,
                         ["DataSourceSelection",
@@ -1951,7 +1970,19 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                          "MntGrp"],
                         name=mg1)
 
+                    pool.AcqChannelList = pools[mg2][0]
+                    pool.ExpChannelList = pools[mg2][1]
                     self.compareToDump(
+                        rs[mg2],
+                        ["ComponentPreselection",
+                         "ComponentSelection",
+                         "DataSourceSelection",
+                         "UnplottedComponents",
+                         "ChannelProperties",
+                         "PreselectingDataSources",
+                         "Timer"],
+                        name=mg2)
+                    self.compareToDumpJSON(
                         rs[mg2],
                         ["ComponentPreselection",
                          "ComponentSelection",
@@ -1985,6 +2016,8 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
 
                     # switch to active profile mg3
                     lrs.mntGrp = mg2
+                    pool.AcqChannelList = pools[mg2][0]
+                    pool.ExpChannelList = pools[mg2][1]
                     MSUtils.setEnv('ActiveMntGrp', mg3, self._ms.ms.keys()[0])
 
                     tmpcf1 = json.loads(rs[mg1].mntGrpConfiguration())
@@ -2004,6 +2037,8 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                     self.myAssertDict(tmpcf3, ltmpcf)
 #                    self.myAssertDict(tmpcf1, ltmpcf)
 #                    self.myAssertDict(tmpcf2, ltmpcf)
+                    pool.AcqChannelList = pools[mg3][0]
+                    pool.ExpChannelList = pools[mg3][1]
 
                     self.compareToDumpJSON(
                         lrs,
@@ -2482,6 +2517,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                 lhe2 = {}
                 records = {}
                 ltimers = {}
+                pools = {}
 
                 pool = self._pool.dp
                 self._ms.dps[self._ms.ms.keys()[0]].Init()
@@ -2579,6 +2615,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
 
                         pool.AcqChannelList = [json.dumps(a) for a in acqch]
                         pool.ExpChannelList = [json.dumps(a) for a in expch]
+                        pools[mg] = [pool.AcqChannelList, pool.ExpChannelList]
 
                         amycps = dict(self.smycps2)
                         amycps.update(self.smycps)
@@ -2711,6 +2748,8 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                                 "nexus_path": paths,
                                 "link": links,
                                 "data_type": types,
+                                "synchronizer": {},
+                                "synchronization": {},
                                 "shape": shapes
                             }
                         )
@@ -3024,7 +3063,9 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
 
                     # check profile commands
                     mg1, mg2, mg3, mg4 = tuple(self._rnd.sample(mgs, 4))
-#                    print "MGS", mg1, mg2, mg3, mg4
+                    #                    print "MGS", mg1, mg2, mg3, mg4
+                    pool.AcqChannelList = pools[mg1][0]
+                    pool.ExpChannelList = pools[mg1][1]
                     ors.profileConfiguration = str(json.dumps(mp[mg1]))
                     self.compareToDumpJSON(
                         ors,
@@ -3032,6 +3073,8 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                          "UnplottedComponents",
                          "PreselectingDataSources"],
                         name=mg1)
+                    pool.AcqChannelList = pools[mg2][0]
+                    pool.ExpChannelList = pools[mg2][1]
                     ors.profileConfiguration = str(json.dumps(mp[mg2]))
                     self.compareToDumpJSON(
                         ors,
@@ -3039,6 +3082,8 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                          "UnplottedComponents",
                          "PreselectingDataSources"],
                         name=mg2)
+                    pool.AcqChannelList = pools[mg3][0]
+                    pool.ExpChannelList = pools[mg3][1]
                     ors.profileConfiguration = str(json.dumps(mp[mg3]))
                     self.compareToDumpJSON(
                         ors,
@@ -3046,6 +3091,8 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                          "UnplottedComponents",
                          "PreselectingDataSources"],
                         name=mg3)
+                    pool.AcqChannelList = pools[mg4][0]
+                    pool.ExpChannelList = pools[mg4][1]
                     ors.profileConfiguration = str(json.dumps(mp[mg4]))
                     self.compareToDumpJSON(
                         ors,
@@ -3058,6 +3105,8 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                     lrs.configDevice = val["ConfigDevice"]
                     lrs.door = val["Door"]
                     lrs.mntGrp = mg1
+                    pool.AcqChannelList = pools[mg1][0]
+                    pool.ExpChannelList = pools[mg1][1]
                     self.assertEqual(lrs.configDevice, val["ConfigDevice"])
 
                     self.assertEqual(lrs.door, val["Door"])
@@ -3126,12 +3175,16 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                     self.myAssertDict(tmpcf2, ltmpcf)
 #                    print "RSmg2",
                     ors.profileConfiguration = str(json.dumps(mp[mg2]))
+                    pool.AcqChannelList = pools[mg2][0]
+                    pool.ExpChannelList = pools[mg2][1]
                     self.compareToDumpJSON(
                         ors,
                         ["DataSourceSelection",
                          "UnplottedComponents",
                          "PreselectingDataSources"],
                         name=mg2)
+                    pool.AcqChannelList = pools[mg1][0]
+                    pool.ExpChannelList = pools[mg1][1]
                     self.compareToDumpJSON(
                         lrs,
                         ["DataSourceSelection",

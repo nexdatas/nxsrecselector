@@ -6244,6 +6244,7 @@ class ProfileManagerTest(unittest.TestCase):
                 lhe2 = {}
                 records = {}
                 ltimers = {}
+                pools = {}
 
                 pool = self._pool.dp
                 self._ms.dps[self._ms.ms.keys()[0]].Init()
@@ -6338,6 +6339,7 @@ class ProfileManagerTest(unittest.TestCase):
 
                         pool.AcqChannelList = [json.dumps(a) for a in acqch]
                         pool.ExpChannelList = [json.dumps(a) for a in expch]
+                        pools[mg] = [pool.AcqChannelList, pool.ExpChannelList]
 
                         amycps = dict(self.smycps2)
                         amycps.update(self.smycps)
@@ -6465,6 +6467,8 @@ class ProfileManagerTest(unittest.TestCase):
                                 "nexus_path": paths,
                                 "link": links,
                                 "data_type": types,
+                                "synchronizer": {},
+                                "synchronization": {},
                                 "shape": shapes
                             }
                         )
@@ -6761,11 +6765,14 @@ class ProfileManagerTest(unittest.TestCase):
                     lse["ConfigDevice"] = val["ConfigDevice"]
                     # switch from empty profile to mg1
                     lse["MntGrp"] = mg1
+                    pool.AcqChannelList = pools[mg1][0]
+                    pool.ExpChannelList = pools[mg1][1]
                     lmgt = ProfileManager(lse)
                     self.myAssertRaise(Exception, lmgt.isMntGrpUpdated)
 
                     lmgt.switchProfile(False)
-
+                    #print "lse", json.loads(lse["ChannelProperties"])["__controllers__"]
+                    #print "DUMP", json.loads(self.__dump[mg1]["ChannelProperties"])["__controllers__"]
                     self.compareToDumpJSON(
                         lse, [
                             "DataSourceSelection",
@@ -6804,6 +6811,8 @@ class ProfileManagerTest(unittest.TestCase):
                     # import mntgrp another defined by selector MntGrp
                     # print "NAMES MG", lse["MntGrp"], mg2
                     lse["MntGrp"] = mg2
+                    pool.AcqChannelList = pools[mg2][0]
+                    pool.ExpChannelList = pools[mg2][1]
                     self.assertTrue(not lmgt.isMntGrpUpdated())
                     self.assertTrue(not lmgt.isMntGrpUpdated())
                     lmgt.importMntGrp()
@@ -6822,6 +6831,8 @@ class ProfileManagerTest(unittest.TestCase):
                          "PreselectingDataSources"],
                         name=mg2)
 
+                    pool.AcqChannelList = pools[mg1][0]
+                    pool.ExpChannelList = pools[mg1][1]
                     self.compareToDumpJSON(
                         lse,
                         ["DataSourceSelection",
@@ -6988,7 +6999,19 @@ class ProfileManagerTest(unittest.TestCase):
                          "MntGrp"],
                         name=mg1)
 
+                    pool.AcqChannelList = pools[mg2][0]
+                    pool.ExpChannelList = pools[mg2][1]
                     self.compareToDump(
+                        se[mg2],
+                        ["ComponentPreselection",
+                         "ComponentSelection",
+                         "DataSourceSelection",
+                         "UnplottedComponents",
+                         "ChannelProperties",
+                         "PreselectingDataSources",
+                         "Timer"],
+                        name=mg2)
+                    self.compareToDumpJSON(
                         se[mg2],
                         ["ComponentPreselection",
                          "ComponentSelection",
@@ -7022,7 +7045,11 @@ class ProfileManagerTest(unittest.TestCase):
 
                     # switch to active profile mg3
                     lse["MntGrp"] = mg2
+                    pool.AcqChannelList = pools[mg2][0]
+                    pool.ExpChannelList = pools[mg2][1]
                     MSUtils.setEnv('ActiveMntGrp', mg3, self._ms.ms.keys()[0])
+                    pool.AcqChannelList = pools[mg3][0]
+                    pool.ExpChannelList = pools[mg3][1]
 
                     tmpcf1 = json.loads(mgt[mg1].mntGrpConfiguration())
                     tmpcf2 = json.loads(mgt[mg2].mntGrpConfiguration())

@@ -1,3 +1,7 @@
+2017-10-25 Jan Kotanski <jankotan@gmail.com>
+	* add synchornizer and synchronization into ChannelProperties
+	* tagged as v3.12.0
+
 2017-10-18 Jan Kotanski <jankotan@gmail.com>
 	* fix for synch parameter order
 	* tagged as v3.11.2

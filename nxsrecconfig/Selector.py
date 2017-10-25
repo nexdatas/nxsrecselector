@@ -235,6 +235,18 @@ class Selector(object):
         self.__selection.updateOrderedChannels(
             self.poolElementNames('ExpChannelList'))
 
+    def __preGetChannelProperties(self):
+        """ update method for orderedChannels attribute
+        """
+        pools = self.getPools()
+        try:
+            triggergate = PoolUtils.getElementNames(
+                pools, 'TriggerGateList')
+        except:
+            triggergate = []
+        self.__selection.updateChannelProperties(
+            PoolUtils.getDeviceControllers(pools), triggergate)
+
     def __preGetMntGrp(self):
         """ update method for mntGrp attribute
         """

@@ -478,7 +478,7 @@ class PoolUtils(object):
     """  Pool Utilities """
 
     @classmethod
-    def getDeviceControllers(cls, pools, devices):
+    def getDeviceControllers(cls, pools, devices=None):
         """ provides device controller full names
 
         :param pools: list of pool devices
@@ -495,7 +495,7 @@ class PoolUtils(object):
         ctrls = {}
         for elm in lst:
             chan = json.loads(elm)
-            if chan['name'] in devices:
+            if devices is None or chan['name'] in devices:
                 ctrls[chan['name']] = chan['controller']
         return ctrls
 
