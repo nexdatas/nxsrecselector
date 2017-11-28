@@ -121,6 +121,9 @@ class CheckerThread(threading.Thread):
         for ds in checkeritem:
             try:
                 dp = PyTango.DeviceProxy(ds.device or ds.name)
+                # read real value (not polled)
+                dp.set_source(PyTango.DevSource.DEV)
+                # wait when DeviceProxy is ready
                 TangoUtils.wait(dp, state=None)
                 state = dp.command_inout("State")
                 if state in [PyTango.DevState.FAULT]:
