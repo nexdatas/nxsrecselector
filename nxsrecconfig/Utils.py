@@ -229,7 +229,7 @@ class TangoUtils(object):
         return cnfServer
 
     @classmethod
-    def wait(cls, proxy, counter=100):
+    def wait(cls, proxy, counter=100, state="RUNNING"):
         """waits for device proxy not running
 
         :param proxy: device proxy
@@ -237,13 +237,19 @@ class TangoUtils(object):
         :returns: if proxy device ready
         :rtype: :obj:`str`
         """
+        
+        dstate = getattr(PyTango.DevState, state) if state else None
         found = False
         cnt = 0
         while not found and cnt < counter:
             if cnt > 1:
                 time.sleep(0.01)
             try:
-                if proxy.State() != PyTango.DevState.RUNNING:
+                pstate = proxy.State()
+                if dstate :
+                    if pstate != dstate:
+                        found = True
+                else:
                     found = True
             except (PyTango.DevFailed, PyTango.Except, PyTango.DevError):
                 time.sleep(0.01)
@@ -461,14 +467,20 @@ class MSUtils(object):
             "MacroServer").value_string
         ms = ""
         sdoor = door.split("/")
+        hostname = None
         if len(sdoor) > 1 and ":" in sdoor[0]:
             door = "/".join(sdoor[1:])
+            hostname = sdoor[0]
         for server in servers:
-            dp = PyTango.DeviceProxy(str(server))
+            if hostname:
+                mserver = "%s/%s" % (hostname, str(server))
+            else:
+                mserver = str(server)
+            dp = PyTango.DeviceProxy(str(mserver))
             if hasattr(dp, "DoorList"):
                 lst = dp.DoorList
                 if lst and door in lst:
-                    ms = server
+                    ms = mserver
                     break
         return ms
 

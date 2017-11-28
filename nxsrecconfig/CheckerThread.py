@@ -22,6 +22,7 @@
 import Queue
 import PyTango
 import threading
+from .Utils import TangoUtils
 
 
 #: (:obj:`list` < :obj:`str`>) default attributes to check
@@ -120,6 +121,7 @@ class CheckerThread(threading.Thread):
         for ds in checkeritem:
             try:
                 dp = PyTango.DeviceProxy(ds.device or ds.name)
+                TangoUtils.wait(dp, state=None)
                 state = dp.command_inout("State")
                 if state in [PyTango.DevState.FAULT]:
                     raise FaultStateError("FAULT STATE")

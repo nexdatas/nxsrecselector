@@ -78,15 +78,26 @@ class MacroServerPools(object):
         """
         self.__macroserver = ""
         self.__pools = []
+        host = None
+        port = None
         if not door:
             raise Exception("Door '%s' cannot be found" % door)
-        macroserver = MSUtils.getMacroServer(self.__db, door)
+        if ":" in door.split("/")[0] and len(door.split("/")) > 1:
+            host, port = door.split("/")[0].split(":")
+            db = PyTango.Database(host, int(port))
+            macroserver = MSUtils.getMacroServer(db, door)
+        else:
+            macroserver = MSUtils.getMacroServer(self.__db, door)
         msp = TangoUtils.openProxy(macroserver)
         pnames = msp.get_property("PoolNames")["PoolNames"]
         if not pnames:
             pnames = []
         poolNames = list(
             set(pnames) - set(self.poolBlacklist))
+        poolNames = ["%s/%s" % (door.split("/")[0], pn)
+                     if (host and ":" not in pn)
+                     else pn
+                     for pn in poolNames]
         self.__pools = TangoUtils.getProxies(poolNames)
         self.__macroserver = macroserver
 
