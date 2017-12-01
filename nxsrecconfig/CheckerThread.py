@@ -24,7 +24,6 @@ import PyTango
 import threading
 from .Utils import TangoUtils
 
-
 #: (:obj:`list` < :obj:`str`>) default attributes to check
 ATTRIBUTESTOCHECK = ["Value", "Position", "Counts", "Data",
                      "Voltage", "Energy", "SampleTime"]
@@ -125,6 +124,7 @@ class CheckerThread(threading.Thread):
                 dp.set_source(PyTango.DevSource.DEV)
                 # wait when DeviceProxy is ready
                 TangoUtils.wait(dp, state=None)
+                dp.set_timeout_millis(10000)
                 state = dp.command_inout("State")
                 if state in [PyTango.DevState.FAULT]:
                     raise FaultStateError("FAULT STATE")
@@ -142,8 +142,8 @@ class CheckerThread(threading.Thread):
                     if at is None:
                         raise Exception("Empty Attribute")
                 else:
-                    at = getattr(dp, ds.attr)
-                    if at is None:
+                    v = dp.read_attributes([ds.attr])
+                    if v[0].has_failed or v[0].value is None:
                         raise Exception("Empty Attribute")
                 if state in [PyTango.DevState.ALARM]:
                     raise AlarmStateError("ALARM STATE")
