@@ -237,7 +237,7 @@ class TangoUtils(object):
         :returns: if proxy device ready
         :rtype: :obj:`str`
         """
-        
+
         dstate = getattr(PyTango.DevState, state) if state else None
         found = False
         cnt = 0
@@ -246,7 +246,7 @@ class TangoUtils(object):
                 time.sleep(0.01)
             try:
                 pstate = proxy.State()
-                if dstate :
+                if dstate:
                     if pstate != dstate:
                         found = True
                 else:
