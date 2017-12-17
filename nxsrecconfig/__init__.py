@@ -42,7 +42,7 @@ def run(argv):
         U.server_init()
         U.server_run()
 
-    except PyTango.DevFailed, e:
+    except PyTango.DevFailed as e:
         print('-------> Received a DevFailed exception: %s' % e)
-    except Exception, e:
+    except Exception as e:
         print('-------> An unforeseen exception occured.... %s' % e)

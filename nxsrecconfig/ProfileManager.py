@@ -867,9 +867,10 @@ class ProfileManager(object):
                     if ds.dstype == 'TANGO':
                         initsources[ds.name] = \
                             TangoUtils.getFullAttrName(ds.record)
-        snapshot = [(devattr, dsname)
-                    for dsname, devattr in initsources.items()
-                    if ('@' not in devattr and '()' not in devattr)]
+        snapshot = [(initsources[dsname], dsname)
+                    for dsname in sorted(initsources.keys())
+                    if ('@' not in initsources[dsname] and
+                        '()' not in initsources[dsname])]
 
         for tm in timers:
             if tm in dontdisplay:

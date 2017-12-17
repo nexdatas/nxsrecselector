@@ -2146,6 +2146,7 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
         self.set_type(name)
         print("In NXSRecSelectorClass constructor")
 
+
 # ==================================================================
 #
 #    NXSRecSelector class main method
