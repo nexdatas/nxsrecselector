@@ -105,6 +105,8 @@ class DynamicComponent(object):
         :returns: device alias
         :rtype: :obj:`str`
         """
+        if name.startswith("tango://"):
+            name = name[8:]
         # if name does not contain a "/" it's probably an alias
         if name.find("/") == -1:
             return name
