@@ -857,7 +857,8 @@ class ProfileManager(object):
                             elif param[0] in ['FINAL', 'INIT'] and \
                                     param[1] in ['TANGO']:
                                 initsources[str(ds)] = \
-                                    TangoUtils.getFullAttrName(param[2])
+                                    TangoUtils.getFullAttrName(
+                                        param[2], self.__withsynch)
 
         devices = self.preselectedDataSources()
         if devices:
@@ -866,7 +867,8 @@ class ProfileManager(object):
                 for ds in sds[0].values():
                     if ds.dstype == 'TANGO':
                         initsources[ds.name] = \
-                            TangoUtils.getFullAttrName(ds.record)
+                            TangoUtils.getFullAttrName(
+                                ds.record, self.__withsynch)
         snapshot = [(initsources[dsname], dsname)
                     for dsname in sorted(initsources.keys())
                     if ('@' not in initsources[dsname] and

@@ -26,6 +26,7 @@ import json
 import pickle
 import numpy
 import fnmatch
+import socket
 
 
 class Utils(object):
@@ -303,19 +304,30 @@ class TangoUtils(object):
         return device
 
     @classmethod
-    def getFullAttrName(cls, source):
+    def getFullAttrName(cls, source, fqdn=False):
         """ provides tango device full name with host and port
 
-        :param source: string witg device name and its attribute
+        :param source: string with device name and its attribute
         :type source: :obj:`str`
+        :param fqdn: if true adds fqdn host name
+        :type fqdn: :obj:`bool`
         :returns: database host and port in url string
         :rtype: :obj:`str`
         """
         if ':' in source:
-            return "tango://%s" % source
+            if not fqdn:
+                return "tango://%s" % source
+            else:
+                lsource = source.split(":")
+                lsource[0] = socket.getfqdn(lsource[0])
+
+                return "tango://%s" % ":".join(lsource)
+
         else:
             db = PyTango.Database()
             host, port = db.get_db_host(), db.get_db_port()
+            if fqdn:
+                host = socket.getfqdn(host)
             return "tango://%s:%s/%s" % (host, port, source)
 
     @classmethod
