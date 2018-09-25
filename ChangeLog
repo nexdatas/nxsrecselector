@@ -1,3 +1,7 @@
+2018-09-25 Jan Kotanski <jankotan@gmail.com>
+	* add support for fqdn in PreScanSnapshot
+	* tagged as v3.13.0
+
 2018-04-10 Jan Kotanski <jankotan@gmail.com>
 	* extends get_alias
 	* tagged as v3.12.5
