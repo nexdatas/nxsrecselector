@@ -99,7 +99,7 @@ class BasicNXSRecSelector2Test(BasicSettings2Test.BasicSettings2Test):
         cnt = 0
         while not found and cnt < 1000:
             try:
-                print "\b.",
+                sys.stdout.write(".")
                 xmlc = PyTango.DeviceProxy(
                     self._sv.new_device_info_writer.name)
                 time.sleep(0.01)
@@ -131,7 +131,7 @@ class BasicNXSRecSelector2Test(BasicSettings2Test.BasicSettings2Test):
         cnt = 0
         while not found and cnt < 1000:
             try:
-                print "\b.",
+                sys.stdout.write(".")
                 xmlc = PyTango.DeviceProxy(
                     self._sv2.new_device_info_writer.name)
                 time.sleep(0.01)

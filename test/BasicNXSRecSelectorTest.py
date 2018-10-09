@@ -99,7 +99,7 @@ class BasicNXSRecSelectorTest(BasicSettingsTest.BasicSettingsTest):
         cnt = 0
         while not found and cnt < 1000:
             try:
-                print "\b.",
+                sys.stdout.write(".")
                 xmlc = PyTango.DeviceProxy(
                     self._sv.new_device_info_writer.name)
                 time.sleep(0.01)
@@ -131,7 +131,7 @@ class BasicNXSRecSelectorTest(BasicSettingsTest.BasicSettingsTest):
         cnt = 0
         while not found and cnt < 1000:
             try:
-                print "\b.",
+                sys.stdout.write(".")
                 xmlc = PyTango.DeviceProxy(
                     self._sv2.new_device_info_writer.name)
                 time.sleep(0.01)
@@ -176,11 +176,11 @@ class BasicNXSRecSelectorTest(BasicSettingsTest.BasicSettingsTest):
         else:
             self.assertEqual('nxsmntgrp', amntgrp)
 
-        print "MntGrp", rs.mntGrp
-        # memorize attirbutes
-        print "ConfigDevice", rs.configDevice
-        print "Door", rs.door
-        print "DeviceGroups", rs.deviceGroups
+        # print "MntGrp", rs.mntGrp
+        # # memorize attirbutes
+        # print "ConfigDevice", rs.configDevice
+        # print "Door", rs.door
+        # print "DeviceGroups", rs.deviceGroups
 
     def switchProfile(self, rs, flag):
         if flag:

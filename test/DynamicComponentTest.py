@@ -86,11 +86,11 @@ except:
             DB_AVAILABLE.append("MYSQL")
 
         except ImportError as e:
-            print "MYSQL not available: %s" % e
+            print("MYSQL not available: %s" % e)
         except Exception as e:
-            print "MYSQL not available: %s" % e
+            print("MYSQL not available: %s" % e)
         except:
-            print "MYSQL not available"
+            print("MYSQL not available")
 
 
 # test fixture
@@ -959,15 +959,15 @@ class DynamicComponentTest(unittest.TestCase):
     # test starter
     # \brief Common set up
     def setUp(self):
-        print "SEED =", self.__seed
+        print("SEED = %s" % self.__seed)
         self._cf.setUp()
         self._simps.setUp()
-        print "\nsetting up..."
+        print("\nsetting up...")
 
     # test closer
     # \brief Common tear down
     def tearDown(self):
-        print "tearing down ..."
+        print("tearing down ...")
         self._simps.tearDown()
         self._cf.tearDown()
 
@@ -1012,7 +1012,7 @@ class DynamicComponentTest(unittest.TestCase):
     # \brief It tests default settings
     def test_create_remove(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         cps = {"empty":
                '<?xml version="1.0" ?>\n<definition/>\n'}
         dname = "__dynamic_component__"
@@ -1068,7 +1068,7 @@ class DynamicComponentTest(unittest.TestCase):
     # \brief It tests default settings
     def test_create_dict(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         cps = {
             "empty":
                 '<?xml version="1.0" ?>\n<definition/>\n',
@@ -1198,7 +1198,7 @@ class DynamicComponentTest(unittest.TestCase):
     # \brief It tests default settings
     def test_create_dict_type(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         cps = {
             "type":
                 '<?xml version="1.0" ?>\n<definition>\n'
@@ -1225,7 +1225,7 @@ class DynamicComponentTest(unittest.TestCase):
     # \brief It tests default settings
     def test_create_dict_shape(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         cps = {
             "shape":
                 '<?xml version="1.0" ?>\n<definition>\n'
@@ -1266,7 +1266,7 @@ class DynamicComponentTest(unittest.TestCase):
     # \brief It tests default settings
     def test_create_dict_shapetype(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         cps = {
             "shapetype":
                 '<?xml version="1.0" ?>\n<definition>\n'
@@ -1418,7 +1418,7 @@ class DynamicComponentTest(unittest.TestCase):
     # \brief It tests default settings
     def test_create_dict_fieldpath(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         cps = {
             "shapetype":
                 '<?xml version="1.0" ?>\n<definition>\n'
@@ -1629,7 +1629,7 @@ class DynamicComponentTest(unittest.TestCase):
     # \brief It tests default settings
     def test_create_dict_datasource_attr(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         cps = {
             "shapetype":
                 '<?xml version="1.0" ?>\n<definition>\n%s'
@@ -1696,7 +1696,7 @@ class DynamicComponentTest(unittest.TestCase):
             simps4.dp.DataSource = arr[3]["source"]
 
             for i, ar in enumerate(arr):
-                print "I = ", i, ar["name"]
+                # print "I = ", i, ar["name"]
                 db.put_device_alias(ar["full_name"], ar["name"])
 
                 dc = DynamicComponent(self._cf.dp)
@@ -1731,7 +1731,7 @@ class DynamicComponentTest(unittest.TestCase):
     # \brief It tests default settings
     def test_create_step(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         cps = {
             "empty":
                 '<?xml version="1.0" ?>\n<definition/>\n',
@@ -1827,7 +1827,7 @@ class DynamicComponentTest(unittest.TestCase):
     # \brief It tests default settings
     def test_create_step_init(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         cps = {
             "empty":
                 '<?xml version="1.0" ?>\n<definition/>\n',
@@ -1924,7 +1924,7 @@ class DynamicComponentTest(unittest.TestCase):
     # \brief It tests default settings
     def test_create_step_no_type(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         cps = {
             "type":
                 '<?xml version="1.0" ?>\n<definition>\n'
@@ -1953,7 +1953,7 @@ class DynamicComponentTest(unittest.TestCase):
     # \brief It tests default settings
     def test_create_init_no_type(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         cps = {
             "type":
                 '<?xml version="1.0" ?>\n<definition>\n'
@@ -1980,7 +1980,7 @@ class DynamicComponentTest(unittest.TestCase):
     # \brief It tests default settings
     def test_create_step_type_param(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         cps = {
             "type":
                 '<?xml version="1.0" ?>\n<definition>\n'
@@ -2010,7 +2010,7 @@ class DynamicComponentTest(unittest.TestCase):
     # \brief It tests default settings
     def test_create_init_type_param(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         cps = {
             "type":
                 '<?xml version="1.0" ?>\n<definition>\n'
@@ -2037,7 +2037,7 @@ class DynamicComponentTest(unittest.TestCase):
     # \brief It tests default settings
     def test_create_step_shape(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         cps = {
             "shape":
                 '<?xml version="1.0" ?>\n<definition>\n'
@@ -2081,7 +2081,7 @@ class DynamicComponentTest(unittest.TestCase):
     # \brief It tests default settings
     def test_create_init_shape(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         cps = {
             "shape":
                 '<?xml version="1.0" ?>\n<definition>\n'
@@ -2122,7 +2122,7 @@ class DynamicComponentTest(unittest.TestCase):
     # \brief It tests default settings
     def test_create_step_shapetype(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         cps = {
             "shapetype":
                 '<?xml version="1.0" ?>\n<definition>\n'
@@ -2297,7 +2297,7 @@ class DynamicComponentTest(unittest.TestCase):
     # \brief It tests default settings
     def test_create_init_shapetype(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         cps = {
             "shapetype":
                 '<?xml version="1.0" ?>\n<definition>\n'
@@ -2473,7 +2473,7 @@ class DynamicComponentTest(unittest.TestCase):
     # \brief It tests default settings
     def test_create_step_typeshape_tango_nods(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
         defbg = '<?xml version="1.0" ?>\n<definition>\n'
         defend = '</definition>\n'
@@ -2540,7 +2540,7 @@ class DynamicComponentTest(unittest.TestCase):
     # \brief It tests default settings
     def test_create_step_typeshape_tango_nods_attr(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
         defbg = '<?xml version="1.0" ?>\n<definition>\n'
         defend = '</definition>\n'
@@ -2630,7 +2630,7 @@ class DynamicComponentTest(unittest.TestCase):
     # \brief It tests default settings
     def test_create_init_typeshape_tango_nods_attr(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
         defbg = '<?xml version="1.0" ?>\n<definition>\n'
         defend = '</definition>\n'
@@ -2722,7 +2722,7 @@ class DynamicComponentTest(unittest.TestCase):
     # \brief It tests default settings
     def test_create_init_typeshape_tango_nods(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
         defbg = '<?xml version="1.0" ?>\n<definition>\n'
         defend = '</definition>\n'
@@ -2789,7 +2789,7 @@ class DynamicComponentTest(unittest.TestCase):
     # \brief It tests default settings
     def test_create_step_typeshape_tango(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
         defbg = '<?xml version="1.0" ?>\n<definition>\n'
         defend = '</definition>\n'
@@ -2945,7 +2945,7 @@ class DynamicComponentTest(unittest.TestCase):
     # \brief It tests default settings
     def test_create_init_typeshape_tango(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
         defbg = '<?xml version="1.0" ?>\n<definition>\n'
         defend = '</definition>\n'
@@ -3101,7 +3101,7 @@ class DynamicComponentTest(unittest.TestCase):
     # \brief It tests default settings
     def test_create_step_fieldpath(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         cps = {
             "shapetype":
                 '<?xml version="1.0" ?>\n<definition>\n'
@@ -3136,7 +3136,7 @@ class DynamicComponentTest(unittest.TestCase):
         db = PyTango.Database()
         try:
             for i in range(8):
-                print "I = ", i
+                # print "I = ", i
                 for ds, dsxml in self.smydss.items():
                     ms = self.smydsspar[ds]
                     sds = ds.split("_")
@@ -3295,7 +3295,7 @@ class DynamicComponentTest(unittest.TestCase):
     # \brief It tests default settings
     def test_create_init_fieldpath(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         cps = {
             "shapetype":
                 '<?xml version="1.0" ?>\n<definition>\n'

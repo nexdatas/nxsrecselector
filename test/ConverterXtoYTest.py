@@ -67,22 +67,22 @@ class ConverterXtoYTest(unittest.TestCase):
 
     def myAssertDict(self, dct, dct2):
         self.assertTrue(isinstance(dct, dict))
-        if not isinstance(dct2, dict):
-            print "NOT DICT", type(dct2), dct2
-            print "DICT", type(dct), dct
+        # if not isinstance(dct2, dict):
+        #     print "NOT DICT", type(dct2), dct2
+        #     print "DICT", type(dct), dct
         self.assertTrue(isinstance(dct2, dict))
-        if set(dct.keys()) ^ set(dct2.keys()):
-            print 'DCT', dct.keys()
-            print 'DCT2', dct2.keys()
-            print "DIFF", set(dct.keys()) ^ set(dct2.keys())
+        # if set(dct.keys()) ^ set(dct2.keys()):
+        #     print 'DCT', dct.keys()
+        #     print 'DCT2', dct2.keys()
+        #     print "DIFF", set(dct.keys()) ^ set(dct2.keys())
         self.assertEqual(len(dct.keys()), len(dct2.keys()))
         for k, v in dct.items():
             self.assertTrue(k in dct2.keys())
             if isinstance(v, dict):
                 self.myAssertDict(v, dct2[k])
             else:
-                if v != dct2[k]:
-                    print 'VALUES', k, v, dct2[k]
+                # if v != dct2[k]:
+                #     print 'VALUES', k, v, dct2[k]
                 self.assertEqual(v, dct2[k])
 
     def getRandomName(self, maxsize):
@@ -93,17 +93,17 @@ class ConverterXtoYTest(unittest.TestCase):
     # test starter
     # \brief Common set up
     def setUp(self):
-        print "SEED =", self.__seed
-        print "\nsetting up..."
+        print("SEED = %s" % self.__seed)
+        print("\nsetting up...")
 
     # test closer
     # \brief Common tear down
     def tearDown(self):
-        print "tearing down ..."
+        print("tearing down ...")
 
     def test_convert(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
         mysel = {}
         cv = ConverterXtoY()

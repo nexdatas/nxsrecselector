@@ -97,15 +97,15 @@ class ConverterTest(unittest.TestCase):
         logger.debug('dict %s' % type(dct))
         logger.debug("\n%s\n%s" % (dct, dct2))
         self.assertTrue(isinstance(dct, dict))
-        if not isinstance(dct2, dict):
-            print "NOT DICT", type(dct2), dct2
-            print "DICT", type(dct), dct
+        # if not isinstance(dct2, dict):
+        #     print "NOT DICT", type(dct2), dct2
+        #     print "DICT", type(dct), dct
         self.assertTrue(isinstance(dct2, dict))
         logger.debug("%s %s" % (len(dct.keys()), len(dct2.keys())))
-        if set(dct.keys()) ^ set(dct2.keys()):
-            print 'DCT', dct.keys()
-            print 'DCT2', dct2.keys()
-            print "DIFF", set(dct.keys()) ^ set(dct2.keys())
+        # if set(dct.keys()) ^ set(dct2.keys()):
+        #     print 'DCT', dct.keys()
+        #     print 'DCT2', dct2.keys()
+        #     print "DIFF", set(dct.keys()) ^ set(dct2.keys())
         self.assertEqual(len(dct.keys()), len(dct2.keys()))
         for k, v in dct.items():
             logger.debug("%s  in %s" % (str(k), str(dct2.keys())))
@@ -114,8 +114,8 @@ class ConverterTest(unittest.TestCase):
                 self.myAssertDict(v, dct2[k])
             else:
                 logger.debug("%s , %s" % (str(v), str(dct2[k])))
-                if v != dct2[k]:
-                    print 'VALUES', k, v, dct2[k]
+                # if v != dct2[k]:
+                #     print 'VALUES', k, v, dct2[k]
                 self.assertEqual(v, dct2[k])
 
     def getRandomString(self, maxsize):
@@ -126,17 +126,17 @@ class ConverterTest(unittest.TestCase):
     # test starter
     # \brief Common set up
     def setUp(self):
-        print "SEED =", self.__seed
-        print "\nsetting up..."
+        print("SEED = %s" % self.__seed)
+        print("\nsetting up...")
 
     # test closer
     # \brief Common tear down
     def tearDown(self):
-        print "tearing down ..."
+        print("tearing down ...")
 
     def test_constructor(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
         arr = {
             "1.2.3": [1, 2, 3],
@@ -165,7 +165,7 @@ class ConverterTest(unittest.TestCase):
 
     def test_version(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
         arr = {
             "1.2.3": [1, 2, 3],
@@ -189,7 +189,7 @@ class ConverterTest(unittest.TestCase):
 
     def test_convert(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         histlog = []
         myver = "1.2.3"
         cv = Converter(myver)
@@ -255,7 +255,7 @@ class ConverterTest(unittest.TestCase):
 
     def test_allkeys(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         histlog = []
         myver = "1.2.3"
         cv = Converter(myver)

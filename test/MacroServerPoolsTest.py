@@ -22,19 +22,13 @@
 import unittest
 import os
 import sys
-import subprocess
 import random
 import struct
-import threading
 import binascii
-import Queue
 import PyTango
 import time
 import json
 import pickle
-
-import logging
-logger = logging.getLogger()
 
 import TestMacroServerSetUp
 import TestPoolSetUp
@@ -44,6 +38,11 @@ import TestConfigServerSetUp
 
 from nxsrecconfig.MacroServerPools import MacroServerPools
 
+import logging
+logger = logging.getLogger()
+
+if sys.version_info > (3,):
+    long = int
 
 # if 64-bit machione
 IS64BIT = (struct.calcsize("P") == 8)
@@ -952,7 +951,7 @@ class MacroServerPoolsTest(unittest.TestCase):
     # test starter
     # \brief Common set up
     def setUp(self):
-        print "SEED =", self.__seed
+        print("SEED = %s" % self.__seed)
         self._ms.setUp()
         self._cf.setUp()
         self._pool.setUp()
@@ -962,12 +961,12 @@ class MacroServerPoolsTest(unittest.TestCase):
 #        self._simps3.setUp()
 #        self._simps4.setUp()
 #        self._simpsoff.add()
-        print "\nsetting up..."
+        print("\nsetting up...")
 
     # test closer
     # \brief Common tear down
     def tearDown(self):
-        print "tearing down ..."
+        print("tearing down ...")
 #        self._simpsoff.delete()
 #        self._simps4.tearDown()
 #        self._simps3.tearDown()
@@ -1014,15 +1013,17 @@ class MacroServerPoolsTest(unittest.TestCase):
     # \brief It tests default settings
     def test_constructor(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
-        msp = MacroServerPools(0)
-        msp = MacroServerPools(10)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
+        # msp =
+        MacroServerPools(0)
+        # msp =
+        MacroServerPools(10)
 
     # constructor test
     # \brief It tests default settings
     def test_getMacroServer(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         msp = MacroServerPools(0)
         msp = MacroServerPools(10)
         self.myAssertRaise(Exception, msp.updateMacroServer,
@@ -1056,7 +1057,7 @@ class MacroServerPoolsTest(unittest.TestCase):
     # \brief It tests default settings
     def test_getPool(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         msp = MacroServerPools(10)
         db = PyTango.Database()
         db.put_device_property(self._ms.ms.keys()[0],
@@ -1110,7 +1111,7 @@ class MacroServerPoolsTest(unittest.TestCase):
     # \brief It tests default settings
     def test_getPool_1to3(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         doors = ["door2testp09/testts/t1r228",
                  "door2testp09/testts/t2r228",
                  "door2testp09/testts/t3r228"]
@@ -1178,7 +1179,7 @@ class MacroServerPoolsTest(unittest.TestCase):
     # \brief It tests default settings
     def test_getPool_3to3(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         doors = ["door3testp09/testts/t1r228",
                  "door3testp09/testts/t2r228",
                  "door3testp09/testts/t3r228"]
@@ -1247,7 +1248,7 @@ class MacroServerPoolsTest(unittest.TestCase):
     # \brief It tests default settings
     def test_checkChannels_simple(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         msp = MacroServerPools(0)
         msp = MacroServerPools(10)
         channelerrors = []
@@ -1276,7 +1277,7 @@ class MacroServerPoolsTest(unittest.TestCase):
     # \brief It tests default settings
     def test_checkChannels_withcf(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         msp = MacroServerPools(0)
         msp = MacroServerPools(10)
         channelerrors = []
@@ -1312,7 +1313,7 @@ class MacroServerPoolsTest(unittest.TestCase):
     # \brief It tests default settings
     def test_checkChannels_withcf_cps(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         msp = MacroServerPools(0)
         msp = MacroServerPools(10)
         channelerrors = []
@@ -1351,7 +1352,7 @@ class MacroServerPoolsTest(unittest.TestCase):
     # \brief It tests default settings
     def test_checkChannels_withcf_cps_t(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         msp = MacroServerPools(0)
         msp = MacroServerPools(10)
         channelerrors = []
@@ -1374,7 +1375,7 @@ class MacroServerPoolsTest(unittest.TestCase):
         self.assertEqual(datasourcegroup, {"ann2": True})
         self.assertEqual(channelerrors, [])
 
-        print self._cf.dp.GetCommandVariable("COMMANDS")
+        print(self._cf.dp.GetCommandVariable("COMMANDS"))
         self.assertEqual(
             json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
             ["AvailableComponents", "AvailableDataSources",
@@ -1390,7 +1391,7 @@ class MacroServerPoolsTest(unittest.TestCase):
     # \brief It tests default settings
     def test_checkChannels_withcf_cps_False(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         msp = MacroServerPools(0)
         msp = MacroServerPools(10)
         channelerrors = []
@@ -1413,7 +1414,7 @@ class MacroServerPoolsTest(unittest.TestCase):
         self.assertEqual(datasourcegroup, {"ann2": False})
         self.assertEqual(channelerrors, [])
 
-        print self._cf.dp.GetCommandVariable("COMMANDS")
+        print(self._cf.dp.GetCommandVariable("COMMANDS"))
         self.assertEqual(
             json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
             ["AvailableComponents", "AvailableDataSources",
@@ -1431,7 +1432,7 @@ class MacroServerPoolsTest(unittest.TestCase):
     # \brief It tests default settings
     def test_checkChannels_withcf_nocps(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         msp = MacroServerPools(0)
         msp = MacroServerPools(10)
         channelerrors = []
@@ -1454,7 +1455,7 @@ class MacroServerPoolsTest(unittest.TestCase):
         self.assertEqual(datasourcegroup, {})
         self.assertEqual(channelerrors, [])
 
-        print self._cf.dp.GetCommandVariable("COMMANDS")
+        print(self._cf.dp.GetCommandVariable("COMMANDS"))
         self.assertEqual(
             json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
             ["AvailableComponents", "AvailableDataSources",
@@ -1468,7 +1469,7 @@ class MacroServerPoolsTest(unittest.TestCase):
     # \brief It tests default settings
     def test_checkChannels_withcf_nochnnel(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         msp = MacroServerPools(0)
         msp = MacroServerPools(10)
         channelerrors = []
@@ -1491,7 +1492,7 @@ class MacroServerPoolsTest(unittest.TestCase):
         self.assertEqual(datasourcegroup, {"ann2": True})
         self.assertEqual(channelerrors, [])
 
-        print self._cf.dp.GetCommandVariable("COMMANDS")
+        print(self._cf.dp.GetCommandVariable("COMMANDS"))
         self.assertEqual(
             json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
             ["AvailableComponents", "AvailableDataSources",
@@ -1507,7 +1508,7 @@ class MacroServerPoolsTest(unittest.TestCase):
     # \brief It tests default settings
     def test_checkChannels_withcf_nochnnel_t(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         msp = MacroServerPools(0)
         msp = MacroServerPools(10)
         channelerrors = []
@@ -1530,7 +1531,7 @@ class MacroServerPoolsTest(unittest.TestCase):
         self.assertEqual(datasourcegroup, {"ann2": True})
         self.assertEqual(channelerrors, [])
 
-        print self._cf.dp.GetCommandVariable("COMMANDS")
+        print(self._cf.dp.GetCommandVariable("COMMANDS"))
         self.assertEqual(
             json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
             ["AvailableComponents", "AvailableDataSources",
@@ -1546,7 +1547,7 @@ class MacroServerPoolsTest(unittest.TestCase):
     # \brief It tests default settings
     def test_checkChannels_withcf_nochnnel_False(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         msp = MacroServerPools(0)
         msp = MacroServerPools(10)
         channelerrors = []
@@ -1569,7 +1570,7 @@ class MacroServerPoolsTest(unittest.TestCase):
         self.assertEqual(datasourcegroup, {"ann2": False})
         self.assertEqual(channelerrors, [])
 
-        print self._cf.dp.GetCommandVariable("COMMANDS")
+        print(self._cf.dp.GetCommandVariable("COMMANDS"))
         self.assertEqual(
             json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
             ["AvailableComponents", "AvailableDataSources",
@@ -1585,7 +1586,7 @@ class MacroServerPoolsTest(unittest.TestCase):
     # \brief It tests default settings
     def test_checkChannels_wds(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         msp = MacroServerPools(0)
         msp = MacroServerPools(10)
         channelerrors = []
@@ -1625,7 +1626,7 @@ class MacroServerPoolsTest(unittest.TestCase):
     # \brief It tests default settings
     def test_checkChannels_wds_cp_true(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         msp = MacroServerPools(0)
         msp = MacroServerPools(10)
         channelerrors = []
@@ -1656,7 +1657,7 @@ class MacroServerPoolsTest(unittest.TestCase):
     # \brief It tests default settings
     def test_checkChannels_wds_cp(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         msp = MacroServerPools(0)
         msp = MacroServerPools(10)
         channelerrors = []
@@ -1685,7 +1686,7 @@ class MacroServerPoolsTest(unittest.TestCase):
 
     def test_checkChannels_wds_cp_false(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         msp = MacroServerPools(0)
         msp = MacroServerPools(10)
         channelerrors = []
@@ -1716,7 +1717,7 @@ class MacroServerPoolsTest(unittest.TestCase):
     # \brief It tests default settings
     def test_checkChannels_wds_cp2(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         simps2 = TestServerSetUp.TestServerSetUp(
             "ttestp09/testts/t2r228", "S2")
         try:
@@ -1754,7 +1755,7 @@ class MacroServerPoolsTest(unittest.TestCase):
     # \brief It tests default settings
     def test_checkChannels_wds_t(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         msp = MacroServerPools(0)
         msp = MacroServerPools(10)
         channelerrors = []
@@ -1779,7 +1780,7 @@ class MacroServerPoolsTest(unittest.TestCase):
         self.assertEqual(datasourcegroup, {"scalar_uchar": True})
         self.assertEqual(channelerrors, [])
 
-        print self._cf.dp.GetCommandVariable("COMMANDS")
+        print(self._cf.dp.GetCommandVariable("COMMANDS"))
         self.assertEqual(
             json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
             ["AvailableComponents", "AvailableDataSources",
@@ -1794,7 +1795,7 @@ class MacroServerPoolsTest(unittest.TestCase):
     # \brief It tests default settings
     def test_checkChannels_wds_false(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         msp = MacroServerPools(0)
         msp = MacroServerPools(10)
         channelerrors = []
@@ -1834,7 +1835,7 @@ class MacroServerPoolsTest(unittest.TestCase):
     # \brief It tests default settings
     def test_checkChannels_wds2(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         msp = MacroServerPools(0)
         msp = MacroServerPools(10)
         channelerrors = []
@@ -1887,7 +1888,7 @@ class MacroServerPoolsTest(unittest.TestCase):
     # \brief It tests default settings
     def test_checkChannels_2wds(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         simps2 = TestServerSetUp.TestServerSetUp(
             "ttestp09/testts/t2r228", "S2")
         try:
@@ -1968,7 +1969,7 @@ class MacroServerPoolsTest(unittest.TestCase):
     # \brief It tests default settings
     def test_checkChannels_2wds_false(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         simps2 = TestServerSetUp.TestServerSetUp(
             "ttestp09/testts/t2r228", "S2")
         try:
@@ -2050,7 +2051,7 @@ class MacroServerPoolsTest(unittest.TestCase):
     # \brief It tests default settings
     def test_checkChannels_2wds_dvnorunning(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         simps2 = TestServerSetUp.TestServerSetUp(
             "ttestp09/testts/t2r228", "S2")
         try:
@@ -2131,7 +2132,7 @@ class MacroServerPoolsTest(unittest.TestCase):
     # \brief It tests default settings
     def test_checkChannels_2wds_dvnorunning_pe(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         simps2 = TestServerSetUp.TestServerSetUp(
             "ttestp09/testts/t2r228", "S2")
         try:
@@ -2183,7 +2184,7 @@ class MacroServerPoolsTest(unittest.TestCase):
     # \brief It tests default settings
     def test_checkChannels_2wds2_dvnorunning_pe(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         simps2 = TestServerSetUp.TestServerSetUp(
             "ttestp09/testts/t2r228", "S2")
         try:
@@ -2235,7 +2236,7 @@ class MacroServerPoolsTest(unittest.TestCase):
     # \brief It tests default settings
     def test_checkChannels_2wds2_dvnorunning_pe_true(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         simps2 = TestServerSetUp.TestServerSetUp(
             "ttestp09/testts/t2r228", "S2")
         try:
@@ -2287,7 +2288,7 @@ class MacroServerPoolsTest(unittest.TestCase):
     # \brief It tests default settings
     def test_checkChannels_2wds2_dvnorunning_pe_false(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         simps2 = TestServerSetUp.TestServerSetUp(
             "ttestp09/testts/t2r228", "S2")
         try:
@@ -2325,7 +2326,8 @@ class MacroServerPoolsTest(unittest.TestCase):
                 u'pyeval1': False})
             self.myAssertDict(datasourcegroup, json.loads(res2))
             self.myAssertDict(json.loads(res2), {
-                u'pyeval1ads': False, u'pyeval2ads': False, u'pyeval2bds': False,
+                u'pyeval1ads': False, u'pyeval2ads': False,
+                u'pyeval2bds': False,
                 u'pyeval2cds': False, u'pyeval0ds': False, u'pyeval1ds': False,
                 u'pyeval2ds': False}
             )
@@ -2339,7 +2341,7 @@ class MacroServerPoolsTest(unittest.TestCase):
     # \brief It tests default settings
     def test_checkChannels_2wds_dvnorunning_pe_true(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         simps2 = TestServerSetUp.TestServerSetUp(
             "ttestp09/testts/t2r228", "S2")
         try:
@@ -2391,7 +2393,7 @@ class MacroServerPoolsTest(unittest.TestCase):
 
     def test_checkChannels_2wds_dvnorunning_pe_false(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         simps2 = TestServerSetUp.TestServerSetUp(
             "ttestp09/testts/t2r228", "S2")
         try:
@@ -2429,7 +2431,8 @@ class MacroServerPoolsTest(unittest.TestCase):
                 u'pyeval1': False})
             self.myAssertDict(datasourcegroup, json.loads(res2))
             self.myAssertDict(json.loads(res2), {
-                u'pyeval1ads': False, u'pyeval2ads': None, u'pyeval2bds': False,
+                u'pyeval1ads': False, u'pyeval2ads': None,
+                u'pyeval2bds': False,
                 u'pyeval2cds': None, u'pyeval0ds': False, u'pyeval1ds': False,
                 u'pyeval2ds': False}
             )
@@ -2443,7 +2446,7 @@ class MacroServerPoolsTest(unittest.TestCase):
     # \brief It tests default settings
     def test_checkChannels_2wds_dvnodef(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         msp = MacroServerPools(1)
         channelerrors = []
         poolchannels = []
@@ -2515,7 +2518,7 @@ class MacroServerPoolsTest(unittest.TestCase):
     # \brief It tests default settings
     def test_checkChannels_2wds_nods(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         simps2 = TestServerSetUp.TestServerSetUp(
             "ttestp09/testts/t2r228", "S2")
         try:
@@ -2575,7 +2578,7 @@ class MacroServerPoolsTest(unittest.TestCase):
     # \brief It tests default settings
     def test_checkChannels_2wds_nodspool(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         simps2 = TestServerSetUp.TestServerSetUp(
             "ttestp09/testts/t2r228", "S2")
         try:
@@ -2634,7 +2637,7 @@ class MacroServerPoolsTest(unittest.TestCase):
     # \brief It tests default settings
     def test_checkChannels_2wds_notangods(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         simps2 = TestServerSetUp.TestServerSetUp(
             "ttestp09/testts/t2r228", "S2")
         try:
@@ -2697,7 +2700,7 @@ class MacroServerPoolsTest(unittest.TestCase):
     # \brief It tests default settings
     def test_checkChannels_2wds_notangodsnopool(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         simps2 = TestServerSetUp.TestServerSetUp(
             "ttestp09/testts/t2r228", "S2")
         try:
@@ -2761,7 +2764,7 @@ class MacroServerPoolsTest(unittest.TestCase):
     # \brief It tests default settings
     def test_checkChannels_2wds_notangodsnopool_False(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         simps2 = TestServerSetUp.TestServerSetUp(
             "ttestp09/testts/t2r228", "S2")
         try:
@@ -2825,7 +2828,7 @@ class MacroServerPoolsTest(unittest.TestCase):
     # \brief It tests default settings
     def test_checkChannels_2wds_notangodsnopool2(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         simps2 = TestServerSetUp.TestServerSetUp(
             "ttestp09/testts/t2r228", "S2")
         try:
@@ -2858,7 +2861,8 @@ class MacroServerPoolsTest(unittest.TestCase):
             self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
             msp.updateMacroServer(self._ms.door.keys()[0])
-            pools = msp.getPools(self._ms.door.keys()[0])
+            # pools =
+            msp.getPools(self._ms.door.keys()[0])
             # print "POOLS", pools
 
             res, res2 = msp.checkChannels(self._ms.door.keys()[0],
@@ -2894,7 +2898,7 @@ class MacroServerPoolsTest(unittest.TestCase):
     # \brief It tests default settings
     def test_checkChannels_2wds_notangodsnopool2_False(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         simps2 = TestServerSetUp.TestServerSetUp(
             "ttestp09/testts/t2r228", "S2")
         try:
@@ -2927,7 +2931,8 @@ class MacroServerPoolsTest(unittest.TestCase):
             self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
             msp.updateMacroServer(self._ms.door.keys()[0])
-            pools = msp.getPools(self._ms.door.keys()[0])
+            # pools =
+            msp.getPools(self._ms.door.keys()[0])
             # print "POOLS", pools
 
             res, res2 = msp.checkChannels(self._ms.door.keys()[0],
@@ -2963,7 +2968,7 @@ class MacroServerPoolsTest(unittest.TestCase):
     # \brief It tests default settings
     def test_checkChannels_2wds_notangods2(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         simps2 = TestServerSetUp.TestServerSetUp(
             "ttestp09/testts/t2r228", "S2")
 
@@ -3037,7 +3042,7 @@ class MacroServerPoolsTest(unittest.TestCase):
     # \brief It tests default settings
     def test_checkChannels_2wds_notangods2_false(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         simps2 = TestServerSetUp.TestServerSetUp(
             "ttestp09/testts/t2r228", "S2")
 
@@ -3111,7 +3116,7 @@ class MacroServerPoolsTest(unittest.TestCase):
     # \brief It tests default settings
     def test_checkChannels_2wds_notangodspool_error(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         simps2 = TestServerSetUp.TestServerSetUp(
             "ttestp09/testts/t2r228", "S2")
 
@@ -3192,7 +3197,7 @@ class MacroServerPoolsTest(unittest.TestCase):
     # \brief It tests default settings
     def test_checkChannels_2wds_notangodspool_error_false(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         simps2 = TestServerSetUp.TestServerSetUp(
             "ttestp09/testts/t2r228", "S2")
 
@@ -3273,7 +3278,7 @@ class MacroServerPoolsTest(unittest.TestCase):
     # \brief It tests default settings
     def test_checkChannels_2wds_notangodspool(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         simps2 = TestServerSetUp.TestServerSetUp(
             "ttestp09/testts/t2r228", "S2")
 
@@ -3351,7 +3356,7 @@ class MacroServerPoolsTest(unittest.TestCase):
     # \brief It tests default settings
     def test_checkChannels_2wds_notangodspool_alias(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         simps2 = TestServerSetUp.TestServerSetUp(
             "ttestp09/testts/t2r228", "S2")
         db = PyTango.Database()
@@ -3416,7 +3421,7 @@ class MacroServerPoolsTest(unittest.TestCase):
     # \brief It tests default settings
     def test_checkChannels_2wds_notangodspool_alias_value(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         simps2 = TestServerSetUp.TestServerSetUp(
             "ttestp09/testts/t2r228", "S2")
         db = PyTango.Database()
@@ -3481,7 +3486,7 @@ class MacroServerPoolsTest(unittest.TestCase):
     # \brief It tests default settings
     def test_checkChannels_2wds_notangodspool_alias_novalue(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         simps2 = TestServerSetUp.TestServerSetUp(
             "ttestp09/testts/t2r228", "S2")
         db = PyTango.Database()
@@ -3540,7 +3545,7 @@ class MacroServerPoolsTest(unittest.TestCase):
     # \brief It tests default settings
     def test_checkChannels_2wds_nocomponents(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         simps2 = TestServerSetUp.TestServerSetUp(
             "ttestp09/testts/t2r228", "S2")
         try:
@@ -3581,7 +3586,7 @@ class MacroServerPoolsTest(unittest.TestCase):
     # \brief It tests default settings
     def test_getSelectorEnv_noenv(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
         envs = [
             pickle.dumps(
@@ -3621,7 +3626,7 @@ class MacroServerPoolsTest(unittest.TestCase):
     # \brief It tests default settings
     def test_getSelectorEnv(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
         envs = [
             pickle.dumps(
@@ -3750,7 +3755,7 @@ class MacroServerPoolsTest(unittest.TestCase):
     # \brief It tests default settings
     def test_setSelectorEnv(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
         envs = [
             {
@@ -3976,7 +3981,7 @@ class MacroServerPoolsTest(unittest.TestCase):
         for i, dt in enumerate(edats):
             msp.setSelectorEnv(self._ms.door.keys()[0], dt, cmds[i])
 #            print "I = ",i
-            data = {}
+            # data = {}
             env = pickle.loads(
                 self._ms.dps[self._ms.ms.keys()[0]].Environment[1])
 #            print "env", env
@@ -3987,7 +3992,7 @@ class MacroServerPoolsTest(unittest.TestCase):
     # \brief It tests default settings
     def test_getScanEnv(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
         envs = [
             pickle.dumps(
@@ -4109,7 +4114,7 @@ class MacroServerPoolsTest(unittest.TestCase):
     # \brief It tests default settings
     def test_setScanEnv(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
         envs = [
             {
@@ -4298,7 +4303,7 @@ class MacroServerPoolsTest(unittest.TestCase):
             sid = msp.setScanEnv(self._ms.door.keys()[0], json.dumps(dt))
             # print "I = ", i, sid
             self.assertEqual(sid, sids[i])
-            data = {}
+            # data = {}
             env = pickle.loads(
                 self._ms.dps[self._ms.ms.keys()[0]].Environment[1])
 #            print "env", env
@@ -4309,7 +4314,7 @@ class MacroServerPoolsTest(unittest.TestCase):
     # \brief It tests default settings
     def test_setScanEnv_scanid(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
         envs = [
             pickle.dumps(
@@ -4341,7 +4346,7 @@ class MacroServerPoolsTest(unittest.TestCase):
     # \brief It tests default settings
     def test_setScanEnv2(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
         envs = [
             {
@@ -4532,7 +4537,7 @@ class MacroServerPoolsTest(unittest.TestCase):
             sid = msp.setScanEnv(self._ms.door.keys()[0], json.dumps(dt))
             # print "I = ", i, sid
             self.assertEqual(sid, sids[i])
-            data = {}
+            # data = {}
             env = pickle.loads(
                 self._ms.dps[self._ms.ms.keys()[0]].Environment[1])
             self.myAssertDict(envs[i], env)
@@ -4541,7 +4546,7 @@ class MacroServerPoolsTest(unittest.TestCase):
     # \brief It tests default settings
     def test_setScanEnv_dtlist(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
         envs = [
             {
@@ -4676,7 +4681,7 @@ class MacroServerPoolsTest(unittest.TestCase):
                 dt if not isinstance(dt, dict) else json.dumps(dt))
             # print "I = ", i, sid
             self.assertEqual(sid, sids[i])
-            data = {}
+            # data = {}
             env = pickle.loads(
                 self._ms.dps[self._ms.ms.keys()[0]].Environment[1])
             # print "env", env

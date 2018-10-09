@@ -53,18 +53,18 @@ class DSItemTest(unittest.TestCase):
     # test starter
     # \brief Common set up
     def setUp(self):
-        print "\nsetting up..."
+        print("\nsetting up...")
 
     # test closer
     # \brief Common tear down
     def tearDown(self):
-        print "tearing down ..."
+        print("tearing down ...")
 
     # constructor test
     # \brief It tests default settings
     def test_constructor(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         el = DSItem()
         self.assertEqual(el.name, None)
         self.assertEqual(el.dstype, None)
@@ -114,7 +114,7 @@ class DSItemTest(unittest.TestCase):
     # \brief It tests default settings
     def test_constructor_dsitem(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         el = DSItem("myname3", "mytype3", "myrecord3")
         self.assertEqual(el.name, "myname3")
         self.assertEqual(el.dstype, "mytype3")

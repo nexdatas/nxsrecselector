@@ -96,11 +96,11 @@ except:
             DB_AVAILABLE.append("MYSQL")
 
         except ImportError as e:
-            print "MYSQL not available: %s" % e
+            print("MYSQL not available: %s" % e)
         except Exception as e:
-            print "MYSQL not available: %s" % e
+            print("MYSQL not available: %s" % e)
         except:
-            print "MYSQL not available"
+            print("MYSQL not available")
 
 
 # test fixture
@@ -115,7 +115,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # test
     def test_constructor(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -126,7 +126,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # test
     def test_constructor_configDevice_door(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -145,7 +145,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # test
     def test_mandatory_components(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -179,7 +179,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # test
     def test_mandatory_components(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -213,7 +213,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # available components and datasources
     def test_available_components_datasources(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -244,7 +244,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
 
     def test_available_selections(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -285,7 +285,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # \brief It tests default settings
     def test_poolChannels(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -338,13 +338,13 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         res = [a[0] for a in arr2]
         self.assertEqual(dd, res)
 
-        print rs.poolElementNames('ExpChannelList')
+        # print rs.poolElementNames('ExpChannelList')
 
     # test
     # \brief It tests default settings
     def test_poolChannels_bl(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -401,13 +401,13 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         res = []
         self.assertEqual(dd, res)
 
-        print rs.poolElementNames('ExpChannelList')
+        # print rs.poolElementNames('ExpChannelList')
 
     # test
     # \brief It tests default settings
     def test_poolMotors(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -460,13 +460,13 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         res = [a[0] for a in arr2]
         self.assertEqual(dd, res)
 
-        print rs.poolElementNames('MotorList')
+        # print rs.poolElementNames('MotorList')
 
     # test
     # \brief It tests default settings
     def test_poolMotors_bl(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -523,13 +523,13 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         res = []
         self.assertEqual(dd, res)
 
-        print rs.poolElementNames('MotorList')
+        # print rs.poolElementNames('MotorList')
 
     # preselectComponents test
     # \brief It tests default settings
     def test_preselectComponents_simple(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -551,13 +551,13 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         self.assertEqual(res, '{}')
         res2 = self.value(rs, "DataSourcePreselection")
         self.assertEqual(res2, '{}')
-        print self._cf.dp.GetCommandVariable("COMMANDS")
+        # print self._cf.dp.GetCommandVariable("COMMANDS")
 
     # preselectComponents test
     # \brief It tests default settings
     def test_preselectComponents_withcf(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -588,13 +588,13 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         self.assertEqual(res2, '{}')
         self.assertEqual(componentgroup, {})
         self.assertEqual(channelerrors, [])
-        print self._cf.dp.GetCommandVariable("COMMANDS")
+        # print self._cf.dp.GetCommandVariable("COMMANDS")
 
     # test
     # \brief It tests default settings
     def test_preselectComponents_withcf_cps(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -654,7 +654,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # \brief It tests default settings
     def test_preselectComponents_withcf_cps_false(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -714,7 +714,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # \brief It tests default settings
     def test_preselectComponents_withcf_cps_true(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -774,7 +774,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # \brief It tests default settings
     def test_preselectComponents_withcf_nocps(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -811,7 +811,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         self.myAssertDict(json.loads(res2), {})
         self.assertEqual(channelerrors, [])
 
-        print self._cf.dp.GetCommandVariable("COMMANDS")
+        # print self._cf.dp.GetCommandVariable("COMMANDS")
 
         self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
 
@@ -819,7 +819,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # \brief It tests default settings
     def test_preselectComponents_withcf_nochnnel(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -857,7 +857,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         self.myAssertDict(json.loads(res2), {"ann2": True})
         self.assertEqual(channelerrors, [])
 
-        print self._cf.dp.GetCommandVariable("COMMANDS")
+        # print self._cf.dp.GetCommandVariable("COMMANDS")
         self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
         sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
         # print sed
@@ -881,7 +881,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # \brief It tests default settings
     def test_preselectComponents_withcf_nochnnel_false(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -919,7 +919,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         self.myAssertDict(json.loads(res2), {"ann2": False})
         self.assertEqual(channelerrors, [])
 
-        print self._cf.dp.GetCommandVariable("COMMANDS")
+        # print self._cf.dp.GetCommandVariable("COMMANDS")
         self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
         sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
         # print sed
@@ -943,7 +943,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # \brief It tests default settings
     def test_preselectComponents_withcf_nochnnel_true(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -981,7 +981,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         self.myAssertDict(json.loads(res2), {"ann2": True})
         self.assertEqual(channelerrors, [])
 
-        print self._cf.dp.GetCommandVariable("COMMANDS")
+        # print self._cf.dp.GetCommandVariable("COMMANDS")
         self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
         sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
         # print sed
@@ -1005,7 +1005,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # \brief It tests default settings
     def test_preselectComponents_wds_t(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -1049,7 +1049,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # \brief It tests default settings
     def test_preselectComponents_wds_false(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -1110,7 +1110,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # \brief It tests default settings
     def test_preselectComponents_wds(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -1171,7 +1171,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # \brief It tests default settings
     def test_preselectComponents_wds2(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -1238,7 +1238,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # \brief It tests default settings
     def test_preselectComponents_2wds(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -1327,7 +1327,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # \brief It tests default settings
     def test_preselectComponents_2wds_false(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -1415,7 +1415,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # \brief It tests default settings
     def test_preselectComponents_2wds_dvnorunning(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -1502,7 +1502,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # \brief It tests default settings
     def test_preselectComponents_2wds_dvnorunning_pe(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -1582,7 +1582,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
 
     def test_preselectComponents_2wds2_dvnorunning_pe(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -1662,7 +1662,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
 
     def test_preselectComponents_2wds2_dvnorunning_pe_true(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -1742,7 +1742,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
 
     def test_preselectComponents_2wds2_dvnorunning_pe_false(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -1824,7 +1824,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # \brief It tests default settings
     def test_preselectComponents_2wds_dvnorunning_pe_false(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -1906,7 +1906,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # \brief It tests default settings
     def test_preselectComponents_2wds_dvnorunning_pe_true(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -1988,7 +1988,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # \brief It tests default settings
     def test_preselectComponents_2wds_dvnodef(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -2068,7 +2068,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # \brief It tests default settings
     def test_preselectComponents_2wds_nods(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -2155,7 +2155,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # \brief It tests default settings
     def test_preselectComponents_2wds_nodspool(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -2241,7 +2241,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # \brief It tests default settings
     def test_preselectComponents_2wds_notangods(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -2306,7 +2306,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             })
             self.assertTrue(not rs.descriptionErrors)
 
-    #        print self._cf.dp.GetCommandVariable("COMMANDS")
+    #        # print self._cf.dp.GetCommandVariable("COMMANDS")
             res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
@@ -2333,7 +2333,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # \brief It tests default settings
     def test_preselectComponents_2wds_notangodsnopool(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -2423,7 +2423,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
 
     def test_preselectComponents_2wds_notangodsnopool_false(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -2515,7 +2515,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # \brief It tests default settings
     def test_preselectComponents_2wds_notangodsnopool2(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -2608,7 +2608,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # \brief It tests default settings
     def test_preselectComponents_2wds_notangodsnopool2_false(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -2701,7 +2701,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # \brief It tests default settings
     def test_preselectComponents_2wds_notangods2(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -2806,7 +2806,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # \brief It tests default settings
     def test_preselectComponents_2wds_notangods2_false(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -2911,7 +2911,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # \brief It tests default settings
     def test_preselectComponents_2wds_notangods2_bl(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -3018,7 +3018,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # \brief It tests default settings
     def test_preselectComponents_2wds_notangodspool_error(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -3127,7 +3127,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # \brief It tests default settings
     def test_preselectComponents_2wds_notangodspool_error_false(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -3236,7 +3236,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # \brief It tests default settings
     def test_preselectComponents_2wds_notangodspool_error_bl(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -3347,7 +3347,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # \brief It tests default settings
     def test_preselectComponents_2wds_notangodspool(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -3455,7 +3455,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # \brief It tests default settings
     def test_preselectComponents_2wds_notangodspool_false(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -3563,7 +3563,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # \brief It tests default settings
     def test_preselectComponents_2wds_notangodspool_alias(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -3672,7 +3672,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # \brief It tests default settings
     def test_preselectComponents_2wds_notangodspool_alias_false(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -3781,7 +3781,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # \brief It tests default settings
     def test_preselectComponents_2wds_notangodspool_alias_bl(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -3892,7 +3892,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # \brief It tests default settings
     def test_preselectComponents_2wds_notangodspool_alias_value(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -3978,7 +3978,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # \brief It tests default settings
     def test_preselectComponents_2wds_notangodspool_alias_value_false(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -4064,7 +4064,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # \brief It tests default settings
     def test_preselectComponents_2wds_notangodspool_alias_value_bl(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -4152,7 +4152,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # \brief It tests default settings
     def test_preselectComponents_2wds_notangodspool_alias_novalue(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -4238,7 +4238,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # \brief It tests default settings
     def test_preselectComponents_2wds_notangodspool_alias_novalue_false(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -4324,7 +4324,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # \brief It tests default settings
     def test_preselectComponents_2wds_notangodspool_alias_novalue_bl(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -4412,7 +4412,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # \brief It tests default settings
     def test_preselectComponents_2wds_nocomponents(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -4488,7 +4488,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # \brief It tests default settings
     def test_resetPreselectedComponents_simple(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -4531,7 +4531,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # \brief It tests default settings
     def test_resetPreselectedComponents_withcf(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -4567,7 +4567,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         self.assertEqual(res2, '{}')
         self.assertEqual(componentgroup, {})
         self.assertEqual(channelerrors, [])
-        print self._cf.dp.GetCommandVariable("COMMANDS")
+        # print self._cf.dp.GetCommandVariable("COMMANDS")
 
         rs.profileConfiguration = '{}'
         rs.configDevice = val["ConfigDevice"]
@@ -4581,7 +4581,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # \brief It tests default settings
     def test_resetPreselectedComponents_withcf_cps(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -4652,7 +4652,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # \brief It tests default settings
     def test_resetPreselectedComponents_withcf_cps_t(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -4701,7 +4701,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # \brief It tests default settings
     def test_resetPreselectedComponents_withcf_cps_false(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -4750,7 +4750,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # \brief It tests default settings
     def test_resetPreselectedComponents_withcf_nocps(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -4789,7 +4789,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         self.myAssertDict(json.loads(res), {})
         self.assertEqual(channelerrors, [])
 
-        print self._cf.dp.GetCommandVariable("COMMANDS")
+        # print self._cf.dp.GetCommandVariable("COMMANDS")
 
         self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
 
@@ -4797,7 +4797,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # \brief It tests default settings
     def test_resetPreselectedComponents_withcf_nochnnel_false(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -4840,7 +4840,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         self.myAssertDict(json.loads(res2), {})
         self.assertEqual(channelerrors, [])
 
-        print self._cf.dp.GetCommandVariable("COMMANDS")
+        # print self._cf.dp.GetCommandVariable("COMMANDS")
         self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
         sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
         # print sed
@@ -4868,7 +4868,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # \brief It tests default settings
     def test_resetPreselectedComponents_withcf_nochnnel_true(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -4911,7 +4911,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         self.myAssertDict(json.loads(res2), {})
         self.assertEqual(channelerrors, [])
 
-        print self._cf.dp.GetCommandVariable("COMMANDS")
+        # print self._cf.dp.GetCommandVariable("COMMANDS")
         self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
         sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
         # print sed
@@ -4939,7 +4939,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # \brief It tests default settings
     def test_resetPreselectedComponents_withcf_nochnnel(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -4982,7 +4982,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         self.myAssertDict(json.loads(res2), {})
         self.assertEqual(channelerrors, [])
 
-        print self._cf.dp.GetCommandVariable("COMMANDS")
+        # print self._cf.dp.GetCommandVariable("COMMANDS")
         self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
         sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
         # print sed
@@ -5010,7 +5010,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # \brief It tests default settings
     def test_resetPreselectedComponents_wds_t(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -5060,7 +5060,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # \brief It tests default settings
     def test_resetPreselectedComponents_wds_false(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -5110,7 +5110,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # \brief It tests default settings
     def test_resetPreselectedComponents_wds(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -5157,7 +5157,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # \brief It tests default settings
     def test_resetPreselectedComponents_wds2(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -5232,7 +5232,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # \brief It tests default settings
     def test_resetPreselectedComponents_2wds(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -5325,7 +5325,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # \brief It tests default settings
     def test_resetPreselectedComponents_2wds_dvnorunning_pe(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -5413,7 +5413,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # \brief It tests default settings
     def test_resetPreselectedComponents_2wds2_dvnorunning_pe(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -5501,7 +5501,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # \brief It tests default settings
     def test_resetPreselectedComponents_2wds2_dvnorunning_pe_true(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -5589,7 +5589,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # \brief It tests default settings
     def test_resetPreselectedComponents_2wds2_dvnorunning_pe_false(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -5677,7 +5677,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # \brief It tests default settings
     def test_resetPreselectedComponents_2wds_dvnorunning_pe_true(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -5765,7 +5765,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # \brief It tests default settings
     def test_resetPreselectedComponents_2wds_dvnorunning_pe_false(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -5853,7 +5853,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # \brief It tests default settings
     def test_resetPreselectedComponents_2wds_dvnorunning(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -5946,7 +5946,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # \brief It tests default settings
     def test_resetPreselectedComponents_2wds_dvnodef(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -6028,7 +6028,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # \brief It tests default settings
     def test_resetPreselectedComponents_2wds_nods(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -6120,7 +6120,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # \brief It tests default settings
     def test_resetPreselectedComponents_2wds_nodspool(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -6213,7 +6213,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # \brief It tests default settings
     def test_resetPreselectedComponents_2wds_notangods(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -6307,7 +6307,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # \brief It tests default settings
     def test_resetPreselectedComponents_2wds_notangodsnopool(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -6403,7 +6403,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # \brief It tests default settings
     def test_resetPreselectedComponents_2wds_notangodsnopool_false(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -6499,7 +6499,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # \brief It tests default settings
     def test_resetPreselectedComponents_2wds_notangodsnopool_true(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -6595,7 +6595,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # \brief It tests default settings
     def test_resetPreselectedComponents_2wds_notangodsnopool2(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -6689,7 +6689,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # \brief It tests default settings
     def test_resetPreselectedComponents_2wds_notangodsnopool2_true(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -6783,7 +6783,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # \brief It tests default settings
     def test_resetPreselectedComponents_2wds_notangodsnopool2_false(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -6877,7 +6877,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # \brief It tests default settings
     def test_resetPreselectedComponents_2wds_notangods2(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -6985,7 +6985,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # \brief It tests default settings
     def test_resetPreselectedComponents_2wds_notangods2_bl(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -7080,7 +7080,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # \brief It tests default settings
     def test_resetPreselectedComponents_2wds_notangodspool_error(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -7176,7 +7176,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # \brief It tests default settings
     def test_resetPreselectedComponents_2wds_notangodspool(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -7271,7 +7271,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # \brief It tests default settings
     def test_resetPreselectedComponents_2wds_notangodspool_alias(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -7368,7 +7368,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # \brief It tests default settings
     def test_resetPreselectedComponents_2wds_notangodspool_alias_bl(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -7467,7 +7467,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # \brief It tests default settings
     def test_resetPreselectedComponents_2wds_notangodspool_alias_value(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -7562,7 +7562,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # \brief It tests default settings
     def test_resetPreselectedComponents_2wds_ntp_alias_value_bl(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -7659,7 +7659,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # \brief It tests default settings
     def test_resetPreselectedComponents_2wds_notngdspool_alias_novalue(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -7754,7 +7754,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # \brief It tests default settings
     def test_resetPreselectedComponents_2wds_nocomponents(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -7838,7 +7838,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # \brief It tests default settings
     def test_availableTimers_empty(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -7857,7 +7857,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # \brief It tests default settings
     def test_availableTimers_pool1(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -7905,7 +7905,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # \brief It tests default settings
     def test_availableTimers_pool1_bl(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -7955,7 +7955,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # \brief It tests default settings
     def test_availableTimers_pool1_filter(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -8005,7 +8005,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # \brief It tests default settings
     def test_availableTimers_2pools(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -8086,7 +8086,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # \brief It tests default settings
     def test_availableTimers_2pools_bl(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -8169,7 +8169,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # \brief It tests default settings
     def test_availableTimers_2pools_filter_bl(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -8259,7 +8259,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # \brief It tests default settings
     def test_availableTimers_2pools_filter(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -8347,7 +8347,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # \brief It tests default settings
     def test_mutedChannels_empty(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -8366,7 +8366,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # \brief It tests default settings
     def test_mutedChannels_pool1(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -8414,7 +8414,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # \brief It tests default settings
     def test_mutedChannels_pool1_bl(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -8463,7 +8463,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # \brief It tests default settings
     def test_mutedChannels_pool1_filter_config(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -8517,7 +8517,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # \brief It tests default settings
     def test_mutedChannels_pool1_filter(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -8568,7 +8568,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # \brief It tests default settings
     def test_mutedChannels_2pools(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -8648,7 +8648,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # \brief It tests default settings
     def test_mutedChannels_2pools_bl(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -8730,7 +8730,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # \brief It tests default settings
     def test_mutedChannels_2pools_filter_bl(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -8813,7 +8813,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # \brief It tests default settings
     def test_mutedChannels_2pools_filter(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -8897,7 +8897,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # getDeviceName test
     def test_fullDeviceNames_empty(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -8917,7 +8917,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # getDeviceName test
     def test_fullDeviceNames_pool1(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -8958,7 +8958,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
 
     def test_fullDeviceNames_pool2(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -9022,7 +9022,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
 
     def test_fullDeviceNames_pool2_bl(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -9089,7 +9089,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # setEnv test
     def test_scanDir(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
@@ -9135,7 +9135,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # setEnv test
     def test_scanID(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
@@ -9180,7 +9180,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # scanfile test
     def test_scanFile(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
@@ -9238,7 +9238,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # configvariables test
     def test_configVariables(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -9356,7 +9356,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # userdata test
     def test_userData(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -9472,7 +9472,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # mntgrp test
     def test_mntGrp(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -9577,7 +9577,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # appendentry test
     def test_appendEntry(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -9686,7 +9686,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # test
     def test_writerDevice(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -9794,7 +9794,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # test
     def test_door(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -9909,7 +9909,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # test
     def test_configDevice(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -10019,7 +10019,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # userdata test
     def test_channelProperties(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         self.maxDiff = None
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
@@ -10137,7 +10137,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # userdata test
     def test_profileConfiguration(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         self.maxDiff = None
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
@@ -10262,7 +10262,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # \brief It tests default settings
     def test_scanEnvVariables(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -10398,7 +10398,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # \brief It tests default settings
     def test_setScanEnvVariables(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -10604,7 +10604,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # test
     def test_administratorDataNames(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -10629,7 +10629,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # test
     def test_getDeviceGroups(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -10685,7 +10685,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # test
     def test_stepdatasources(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -10723,7 +10723,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # test
     def test_linkdatasources(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -10761,7 +10761,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # test
     def test_deleteAllProfiles(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -10793,7 +10793,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # availableMntGrps test
     def test_availableMntGrps(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -10833,7 +10833,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
 
             MSUtils.setEnv('ActiveMntGrp', ar["name"],
                            self._ms.ms.keys()[0])
-            print MSUtils.getEnv('ActiveMntGrp', self._ms.ms.keys()[0])
+            MSUtils.getEnv('ActiveMntGrp', self._ms.ms.keys()[0])
             dd = rs.availableMntGrps()
             self.assertEqual(dd[0], ar["name"])
             self.assertEqual(set(dd), set([a["name"] for a in arr]))
@@ -10841,7 +10841,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # availableMntGrps test
     def test_availableMntGrps_twopools(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -10928,7 +10928,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # deleteProfile test
     def test_deleteProfile(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -10983,7 +10983,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # deleteProfile test
     def test_deleteProfile_twopools(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -11092,7 +11092,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # test
     def test_preselectedComponents(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -11136,7 +11136,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # test
     def test_selectedcomponents(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -11211,7 +11211,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # test
     def test_componentDescription_unknown(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -11277,7 +11277,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # test
     def test_componentDescription_full(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -11344,7 +11344,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # updateProfile test
     def test_componentdatasources(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -11422,7 +11422,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # updateProfile test
     def test_selectedDatasources(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -11495,7 +11495,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # updateProfile test
     def test_datasources(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -11567,7 +11567,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # test
     def test_selectedcomponents(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -11647,7 +11647,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # updateMntGrp test
     def test_updateMntGrp_empty(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -11745,7 +11745,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # updateMntGrp test
     def test_updateMntGrp_components_nopool(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -11914,7 +11914,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # updateMntGrp test
     def test_updateMntGrp_nodevice(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -12034,7 +12034,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # updateMntGrp test
     def test_updateMntGrp_nodevice_cp(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -12151,7 +12151,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # updateMntGrp test
     def test_updateMntGrp_wrongdevice(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -12268,7 +12268,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # updateMntGrp test
     def test_updateMntGrp_components_nopool_tango(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -12495,7 +12495,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # updateProfile test
     def test_updateMntGrp_components_nopool_tango_unplottedcomponents(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -12769,7 +12769,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # updateMntGrp test
     def test_updateMntGrp_components_pool_tango(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -13057,7 +13057,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # updateMntGrp test
     def test_updateMntGrp_components_pool_tango_unplottedcomponents(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -13393,7 +13393,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # updateMntGrp test
     def test_updateMntGrp_components_mixed_tango_unplottedcomponents(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -13784,7 +13784,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     # updateMntGrp test
     def test_updateMntGrp_components_mixed_tango_orderedchannels(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',

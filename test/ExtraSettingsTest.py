@@ -36,9 +36,6 @@ import time
 import nxsrecconfig
 import xml
 
-import logging
-logger = logging.getLogger()
-
 import TestMacroServerSetUp
 import TestPoolSetUp
 import TestServerSetUp
@@ -56,6 +53,9 @@ from nxsrecconfig.Settings import Settings
 from nxsrecconfig.Utils import TangoUtils, MSUtils
 from nxsconfigserver.XMLConfigurator import XMLConfigurator
 from nxsrecconfig.Utils import TangoUtils, MSUtils, Utils
+
+import logging
+logger = logging.getLogger()
 
 # if 64-bit machione
 IS64BIT = (struct.calcsize("P") == 8)
@@ -97,11 +97,11 @@ except:
             DB_AVAILABLE.append("MYSQL")
 
         except ImportError as e:
-            print "MYSQL not available: %s" % e
+            print("MYSQL not available: %s" % e)
         except Exception as e:
-            print "MYSQL not available: %s" % e
+            print("MYSQL not available: %s" % e)
         except:
-            print "MYSQL not available"
+            print("MYSQL not available")
 
 
 # test fixture
@@ -116,7 +116,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
     # updateMntGrp test
     def test_updateMntGrp_components_mixed_tango_timers(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -575,7 +575,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
     # updateMntGrp test
     def test_updateMntGrp_mntGrpConfiguration_isMntGrpUpdated(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -1109,7 +1109,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
     # test
     def test_switchProfile_importMntGrp(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         self.subtest_switchProfile_importMntGrp()
 
     # test
@@ -2480,7 +2480,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
     # updateMntGrp test
     def test_myswitchProfile_importMntGrp(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -2488,11 +2488,9 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
 
         self.maxDiff = None
         self.tearDown()
-#        print "DOWN"
-#        print "UP"
         try:
             for j in range(10):
-                print "JJJ:", j
+                # print "JJJ:", j
                 self.setUp()
                 self.mySetUp()
                 db = PyTango.Database()
@@ -3868,7 +3866,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
     # \brief It tests default settings
     def test_dataSourceDescription(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         dsdict = {
             "ann": self.mydss["ann"]
         }
@@ -3892,7 +3890,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
     # \brief It tests default settings
     def test_dataSourceDescription_noargs(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -3913,7 +3911,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
     # \brief It tests default settings
     def test_dataSourceDescription_names(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
@@ -3942,7 +3940,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
     # \brief It tests default settings
     def test_componentClientSources_unknown(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         dsdict = {
             "ann": self.mydss["ann"]
         }
@@ -4131,7 +4129,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
     # \brief It tests default settings
     def test_componentSources_unknown(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         dsdict = {
             "ann": self.mydss["ann"]
         }
@@ -4320,7 +4318,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
     # \brief It tests default settings
     def test_create_remove_DynamicComponent(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -4383,7 +4381,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
     # \brief It tests default settings
     def test_create_dict(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -4520,7 +4518,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
     # \brief It tests default settings
     def test_create_dict_type(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -4554,7 +4552,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
     # \brief It tests default settings
     def test_create_dict_shape(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -4603,7 +4601,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
     # \brief It tests default settings
     def test_create_dict_shapetype(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -4767,7 +4765,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
     # \brief It tests default settings
     def test_create_dict_fieldpath(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -4993,7 +4991,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
     # \brief It tests default settings
     def test_create_dict_datasource_attr(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -5104,7 +5102,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
     # \brief It tests default settings
     def test_create_step(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -5208,7 +5206,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
     # \brief It tests default settings
     def test_create_sel(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -5315,7 +5313,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
     # \brief It tests default settings
     def test_create_step_no_type(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -5351,7 +5349,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
     # \brief It tests default settings
     def test_create_init_no_type(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -5386,7 +5384,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
     # \brief It tests default settings
     def test_create_step_type_param(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -5436,7 +5434,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
     # \brief It tests default settings
     def test_create_init_type_param(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -5481,7 +5479,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
     # \brief It tests default settings
     def test_create_step_shape(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -5542,7 +5540,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
     # \brief It tests default settings
     def test_create_init_shape(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -5601,7 +5599,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
     # \brief It tests default settings
     def test_create_step_shapetype(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -5614,7 +5612,8 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
         cps = {
             "shapetype":
                 '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n'
+            '<group name="$var.entryname#\'scan\'$var.serialno" '
+            'type="NXentry">\n'
             '<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n'
             '<field name="%s" type="%s">\n<strategy mode="STEP"/>\n'
@@ -5624,9 +5623,10 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
             '</group>\n</group>\n%s</group>\n</definition>\n',
         }
 
-        link = '<group name="data" type="NXdata">\n' + \
-            '<link name="%s" target="/$var.entryname#\'scan\'$var.serialno:' + \
-            'NXentry/NXinstrument/collection/%s"/>\n</group>\n'
+        link = '<group name="data" type="NXdata">\n' \
+               '<link name="%s" ' \
+               'target="/$var.entryname#\'scan\'$var.serialno:' \
+               'NXentry/NXinstrument/collection/%s"/>\n</group>\n'
 
         dimbg = '<dimensions rank="%s">\n'
         dim = '<dim index="%s" value="%s"/>\n'
@@ -5795,7 +5795,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
     # \brief It tests default settings
     def test_create_init_shapetype(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -5808,7 +5808,8 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
         cps = {
             "shapetype":
                 '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n'
+            '<group name="$var.entryname#\'scan\'$var.serialno" '
+            'type="NXentry">\n'
             '<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n'
             '<field name="%s" type="%s">\n<strategy mode="INIT"/>\n'
@@ -5818,9 +5819,10 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
             '</group>\n</group>\n%s</group>\n</definition>\n',
         }
 
-        link = '<group name="data" type="NXdata">\n' + \
-            '<link name="%s" target="/$var.entryname#\'scan\'$var.serialno:' + \
-            'NXentry/NXinstrument/collection/%s"/>\n</group>\n'
+        link = '<group name="data" type="NXdata">\n' \
+               '<link name="%s" ' \
+               'target="/$var.entryname#\'scan\'$var.serialno:' \
+               'NXentry/NXinstrument/collection/%s"/>\n</group>\n'
 
         dimbg = '<dimensions rank="%s">\n'
         dim = '<dim index="%s" value="%s"/>\n'
@@ -5995,7 +5997,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
     # \brief It tests default settings
     def test_create_step_typeshape_tango_nods(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -6008,9 +6010,10 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
 
         defbg = '<?xml version="1.0" ?>\n<definition>\n'
         defend = '</definition>\n'
-        groupbg = '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n' + \
-            '<group name="instrument" type="NXinstrument">\n' + \
-            '<group name="collection" type="NXcollection">\n'
+        groupbg = '<group name="$var.entryname#\'scan\'$var.serialno" ' \
+                  'type="NXentry">\n' \
+                  '<group name="instrument" type="NXinstrument">\n' \
+                  '<group name="collection" type="NXcollection">\n'
         groupend = '</group>\n'
 
         fieldbg = '<field name="%s" type="%s">\n<strategy mode="STEP"/>\n'
@@ -6087,7 +6090,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
     # \brief It tests default settings
     def test_create_step_typeshape_tango_nods_attr(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -6100,9 +6103,10 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
 
         defbg = '<?xml version="1.0" ?>\n<definition>\n'
         defend = '</definition>\n'
-        groupbg = '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n' + \
-            '<group name="instrument" type="NXinstrument">\n' + \
-            '<group name="collection" type="NXcollection">\n'
+        groupbg = '<group name="$var.entryname#\'scan\'$var.serialno" ' \
+                  'type="NXentry">\n' \
+                  '<group name="instrument" type="NXinstrument">\n' \
+                  '<group name="collection" type="NXcollection">\n'
         groupend = '</group>\n'
 
         fieldbg = '<field name="%s" type="%s">\n<strategy mode="STEP"/>\n'
@@ -6184,7 +6188,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
     # \brief It tests default settings
     def test_create_init_typeshape_tango_nods_attr(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -6197,9 +6201,10 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
 
         defbg = '<?xml version="1.0" ?>\n<definition>\n'
         defend = '</definition>\n'
-        groupbg = '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n' + \
-            '<group name="instrument" type="NXinstrument">\n' + \
-            '<group name="collection" type="NXcollection">\n'
+        groupbg = '<group name="$var.entryname#\'scan\'$var.serialno" ' \
+                  'type="NXentry">\n' \
+                  '<group name="instrument" type="NXinstrument">\n' \
+                  '<group name="collection" type="NXcollection">\n'
         groupend = '</group>\n'
 
         fieldbg = '<field name="%s" type="%s">\n<strategy mode="INIT"/>\n'
@@ -6264,7 +6269,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                     mycps += dsclient % (ar["name"], ar["name"])
                 mycps += fieldend + groupend + groupend
                 mycps += link  # % (ar["name"], self._defaultpath,
-                              #   ar["name"])
+                #   ar["name"])
                 mycps += groupend + defend
 
                 self.assertEqual(comp, mycps)
@@ -6282,7 +6287,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
     # \brief It tests default settings
     def test_create_init_typeshape_tango_nods(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -6295,9 +6300,10 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
 
         defbg = '<?xml version="1.0" ?>\n<definition>\n'
         defend = '</definition>\n'
-        groupbg = '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n' + \
-            '<group name="instrument" type="NXinstrument">\n' + \
-            '<group name="collection" type="NXcollection">\n'
+        groupbg = '<group name="$var.entryname#\'scan\'$var.serialno" ' \
+                  'type="NXentry">\n' \
+                  '<group name="instrument" type="NXinstrument">\n' \
+                  '<group name="collection" type="NXcollection">\n'
         groupend = '</group>\n'
 
         fieldbg = '<field name="%s" type="%s">\n<strategy mode="INIT"/>\n'
@@ -6372,7 +6378,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
     # \brief It tests default settings
     def test_create_sel_typeshape_tango(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -6385,9 +6391,10 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
 
         defbg = '<?xml version="1.0" ?>\n<definition>\n'
         defend = '</definition>\n'
-        groupbg = '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n' + \
-            '<group name="instrument" type="NXinstrument">\n' + \
-            '<group name="collection" type="NXcollection">\n'
+        groupbg = '<group name="$var.entryname#\'scan\'$var.serialno" ' \
+                  'type="NXentry">\n' \
+                  '<group name="instrument" type="NXinstrument">\n' \
+                  '<group name="collection" type="NXcollection">\n'
         groupend = '</group>\n'
 
         fieldbg = '<field name="%s" type="%s">\n<strategy mode="STEP"/>\n'
@@ -6550,7 +6557,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
     # \brief It tests default settings
     def test_create_step_typeshape_tango(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -6563,9 +6570,10 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
 
         defbg = '<?xml version="1.0" ?>\n<definition>\n'
         defend = '</definition>\n'
-        groupbg = '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n' + \
-            '<group name="instrument" type="NXinstrument">\n' + \
-            '<group name="collection" type="NXcollection">\n'
+        groupbg = '<group name="$var.entryname#\'scan\'$var.serialno" ' \
+                  'type="NXentry">\n' \
+                  '<group name="instrument" type="NXinstrument">\n' \
+                  '<group name="collection" type="NXcollection">\n'
         groupend = '</group>\n'
 
         fieldbg = '<field name="%s" type="%s">\n<strategy mode="STEP"/>\n'
@@ -6728,7 +6736,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
     # \brief It tests default settings
     def test_create_init_typeshape_tango(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -6741,9 +6749,10 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
 
         defbg = '<?xml version="1.0" ?>\n<definition>\n'
         defend = '</definition>\n'
-        groupbg = '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n' + \
-            '<group name="instrument" type="NXinstrument">\n' + \
-            '<group name="collection" type="NXcollection">\n'
+        groupbg = '<group name="$var.entryname#\'scan\'$var.serialno" ' \
+                  'type="NXentry">\n' \
+                  '<group name="instrument" type="NXinstrument">\n' \
+                  '<group name="collection" type="NXcollection">\n'
         groupend = '</group>\n'
 
         fieldbg = '<field name="%s" type="%s">\n<strategy mode="INIT"/>\n'
@@ -6907,7 +6916,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
     # \brief It tests default settings
     def test_create_init_typeshape_tango_wol(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -6920,9 +6929,10 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
 
         defbg = '<?xml version="1.0" ?>\n<definition>\n'
         defend = '</definition>\n'
-        groupbg = '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n' + \
-            '<group name="instrument" type="NXinstrument">\n' + \
-            '<group name="collection" type="NXcollection">\n'
+        groupbg = '<group name="$var.entryname#\'scan\'$var.serialno" ' \
+                  'type="NXentry">\n' \
+                  '<group name="instrument" type="NXinstrument">\n' \
+                  '<group name="collection" type="NXcollection">\n'
         groupend = '</group>\n'
 
         fieldbg = '<field name="%s" type="%s">\n<strategy mode="INIT"/>\n'
@@ -6938,7 +6948,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.smydss)])
         for i, nxstp in enumerate(self._npTn.values()):
-            print i
+            # print i
             for ds, dsxml in self.smydss.items():
                 ms = self.smydsspar[ds]
                 ms2 = [self._rnd.randint(0, 3000)
@@ -7081,7 +7091,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
     # \brief It tests default settings
     def test_create_step_fieldpath(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -7094,7 +7104,8 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
         cps = {
             "shapetype":
             '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n'
+            '<group name="$var.entryname#\'scan\'$var.serialno" '
+            'type="NXentry">\n'
             '<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n%s'
             '</group>\n</group>\n%s</group>\n</definition>\n',
@@ -7125,7 +7136,6 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
         db = PyTango.Database()
         try:
             for i in range(8):
-#                print "I = ", i
                 for ds, dsxml in self.smydss.items():
                     ms = self.smydsspar[ds]
                     sds = ds.split("_")
@@ -7289,7 +7299,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
     # \brief It tests default settings
     def test_create_sel_fieldpath(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -7302,7 +7312,8 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
         cps = {
             "shapetype":
             '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n'
+            '<group name="$var.entryname#\'scan\'$var.serialno" '
+            'type="NXentry">\n'
             '<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n%s'
             '</group>\n</group>\n%s</group>\n</definition>\n',
@@ -7333,7 +7344,6 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
         db = PyTango.Database()
         try:
             for i in range(8):
-#                print "I = ", i
                 for ds, dsxml in self.smydss.items():
                     ms = self.smydsspar[ds]
                     sds = ds.split("_")
@@ -7498,7 +7508,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
     # \brief It tests default settings
     def test_create_init_fieldpath(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -7511,7 +7521,8 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
         cps = {
             "shapetype":
                 '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n'
+            '<group name="$var.entryname#\'scan\'$var.serialno" '
+            'type="NXentry">\n'
             '<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n%s'
             '</group>\n</group>\n%s</group>\n</definition>\n',
@@ -7707,7 +7718,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
     # \brief It tests default settings
     def test_create_init_fieldpath_wol(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -7720,7 +7731,8 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
         cps = {
             "shapetype":
                 '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n'
+            '<group name="$var.entryname#\'scan\'$var.serialno" '
+            'type="NXentry">\n'
             '<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n%s'
             '</group>\n</group>\n%s</group>\n</definition>\n',
@@ -7752,7 +7764,6 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
         db = PyTango.Database()
         try:
             for i in range(8):
-#                print "I = ", i
                 for ds, dsxml in self.smydss.items():
                     ms = self.smydsspar[ds]
                     sds = ds.split("_")
@@ -7915,7 +7926,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
     # test
     def test_variableComponents_empty(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -7938,7 +7949,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
     # test
     def test_variableComponents_cpvar(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -7963,7 +7974,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
     # test
     def test_variableComponents_mixed(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -8037,7 +8048,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
     # test
     def test_createWriterConfiguration_default(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         self.maxDiff = None
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
@@ -8096,7 +8107,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
     # test
     def test_createWriterConfiguration_given(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         self.maxDiff = None
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
@@ -8163,7 +8174,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
     # test
     def test_updateConfigVariables_noserialno(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -8209,7 +8220,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
     # test
     def test_updateConfigVariables_rsserialno(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -8255,7 +8266,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
     # test
     def test_updateConfigVariables_cfserialno(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -8303,7 +8314,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
     # test
     def test_updateConfigVariables_rscfserialno(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
