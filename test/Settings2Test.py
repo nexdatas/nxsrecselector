@@ -100,9 +100,9 @@ except:
             mydb.close()
             DB_AVAILABLE.append("MYSQL")
 
-        except ImportError, e:
+        except ImportError as e:
             print "MYSQL not available: %s" % e
-        except Exception, e:
+        except Exception as e:
             print "MYSQL not available: %s" % e
         except:
             print "MYSQL not available"
@@ -2212,7 +2212,7 @@ class Settings2Test(unittest.TestCase):
         try:
             error = False
             method(*args, **kwargs)
-        except exception, e:
+        except exception as e:
             error = True
             err = e
         self.assertEqual(error, True)

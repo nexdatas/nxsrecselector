@@ -23,7 +23,6 @@ import unittest
 import os
 import time
 import sys
-import subprocess
 import random
 import struct
 import PyTango
@@ -32,21 +31,24 @@ import json
 from xml.dom import minidom
 import binascii
 
-import logging
-logger = logging.getLogger()
-
-
 import TestServerSetUp
 import TestMacroServerSetUp
 
 
 from nxsrecconfig.Utils import Utils, TangoUtils, MSUtils, PoolUtils
 
+import logging
+logger = logging.getLogger()
+
+
 # if 64-bit machione
 IS64BIT = (struct.calcsize("P") == 8)
 
 #: tango version
 TGVER = PyTango.__version_info__[0]
+
+if sys.version_info > (3,):
+    long = int
 
 
 class Datum(object):
@@ -245,7 +247,7 @@ class UtilsTest(unittest.TestCase):
     # test starter
     # \brief Common set up
     def setUp(self):
-        print "SEED =", self.__seed
+        print("SEED = %s" % self.__seed)
         self._ms.setUp()
         self._simps.setUp()
         self._simps2.setUp()
@@ -271,7 +273,7 @@ class UtilsTest(unittest.TestCase):
         try:
             error = False
             method(*args, **kwargs)
-        except exception, e:
+        except exception as e:
             error = True
             err = e
         self.assertEqual(error, True)
@@ -305,8 +307,8 @@ class UtilsTest(unittest.TestCase):
     # \brief It tests default settings
     def test_constructor(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
-        el = Utils()
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
+        Utils()
 
         tTnp = {PyTango.DevLong64: "int64", PyTango.DevLong: "int32",
                 PyTango.DevShort: "int16", PyTango.DevUChar: "uint8",
@@ -321,7 +323,7 @@ class UtilsTest(unittest.TestCase):
     # \brief It tests default settings
     def test_getFullAttrName(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         db = PyTango.Database()
         host, port = db.get_db_host(), db.get_db_port()
         attrs = [
@@ -346,7 +348,7 @@ class UtilsTest(unittest.TestCase):
     # \brief It tests default settings
     def test_openProxy(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         self.myAssertRaise(PyTango.DevFailed, TangoUtils.openProxy,
                            "sdf/testtestsf/d")
 
@@ -364,7 +366,7 @@ class UtilsTest(unittest.TestCase):
 
     def test_wait(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         self.myAssertRaise(PyTango.DevFailed, TangoUtils.openProxy,
                            "sdf/testtestsf/d")
 
@@ -382,7 +384,7 @@ class UtilsTest(unittest.TestCase):
     # getEnv test
     def test_getsetEnv(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
         arr = {
             "ScanDir": [u'/tmp/', "/tmp/sardana/"],
@@ -406,7 +408,7 @@ class UtilsTest(unittest.TestCase):
 
     def test_getsetEnvs(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
         arr = {
             "ScanDir": [u'/tmp/', "/tmp/sardana/"],
@@ -430,7 +432,7 @@ class UtilsTest(unittest.TestCase):
     # getEnv test
     def test_getEnv(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
         arr = {
             "ScanDir": [u'/tmp/', "/tmp/sardana/"],
@@ -459,7 +461,7 @@ class UtilsTest(unittest.TestCase):
     # getEnv test
     def test_getEnv_2(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
         arr = {
             "ScanDir": [u'/tmp/', "/tmp/sardana/"],
@@ -490,11 +492,11 @@ class UtilsTest(unittest.TestCase):
     # setEnv test
     def test_setEnv_2(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
         arr = {
             "ScanDir": [u'/tmp/', "/tmp/sardana/"],
-            "ScanFile": [[u'sar4r.nxs'], [u'sar4r.nxs', u'sar5r.nxs']],
+            # "ScanFile": [[u'sar4r.nxs'], [u'sar4r.nxs', u'sar5r.nxs']],
             "ScanFile": [[u'sar4r.nxs'], [u'sar5r.nxs']],
             "ScanID": [192, 123],
             "ScanNone": ["", "Something new"],
@@ -518,11 +520,11 @@ class UtilsTest(unittest.TestCase):
     # setEnv test
     def test_setEnv(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
         arr = {
             "ScanDir": [u'/tmp/', "/tmp/sardana/"],
-            "ScanFile": [[u'sar4r.nxs'], [u'sar4r.nxs', u'sar5r.nxs']],
+            # "ScanFile": [[u'sar4r.nxs'], [u'sar4r.nxs', u'sar5r.nxs']],
             "ScanFile": [[u'sar4r.nxs'], [u'sar5r.nxs']],
             "ScanID": [192, 123],
             "ScanNone": ["", "Something new"],
@@ -546,11 +548,11 @@ class UtilsTest(unittest.TestCase):
     # setEnv test
     def test_setEnvs_2(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
         arr = {
             "ScanDir": [u'/tmp/', "/tmp/sardana/"],
-            "ScanFile": [[u'sar4r.nxs'], [u'sar4r.nxs', u'sar5r.nxs']],
+            # "ScanFile": [[u'sar4r.nxs'], [u'sar4r.nxs', u'sar5r.nxs']],
             "ScanFile": [[u'sar4r.nxs'], [u'sar5r.nxs']],
             "ScanID": [192, 123],
             "ScanNone": ["", "Something new"],
@@ -575,11 +577,11 @@ class UtilsTest(unittest.TestCase):
 
     def test_setEnvs(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
         arr = {
             "ScanDir": [u'/tmp/', "/tmp/sardana/"],
-            "ScanFile": [[u'sar4r.nxs'], [u'sar4r.nxs', u'sar5r.nxs']],
+            # "ScanFile": [[u'sar4r.nxs'], [u'sar4r.nxs', u'sar5r.nxs']],
             "ScanFile": [[u'sar4r.nxs'], [u'sar5r.nxs']],
             "ScanID": [192, 123],
             "ScanNone": ["", "Something new"],
@@ -603,7 +605,7 @@ class UtilsTest(unittest.TestCase):
     # setEnv test
     def test_usetEnv(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
         arr = {
             "ScanDir": [u'/tmp/', "/tmp/sardana/"],
@@ -623,14 +625,14 @@ class UtilsTest(unittest.TestCase):
             MSUtils.usetEnv(k, self._ms.ms.keys()[0])
 
             self.assertEqual(msdp.Environment[0], 'pickle')
-            en = pickle.loads(msdp.Environment[1])['new']
+            # en = pickle.loads(msdp.Environment[1])['new']
             self.assertEqual('', MSUtils.getEnv(
                 k, self._ms.ms.keys()[0]))
 
     # getProxies test
     def test_getProxies(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         self.assertEqual(TangoUtils.getProxies([]), [])
         self.myAssertRaise(PyTango.DevFailed, TangoUtils.getProxies,
                            ["bleble"])
@@ -654,7 +656,7 @@ class UtilsTest(unittest.TestCase):
     # getDeviceName test
     def test_getDeviceName(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
         arr = ["NXSDataWriter", "", "NXSConfigServer", "Door",
                "MacroServer", "bleble"]
@@ -678,7 +680,7 @@ class UtilsTest(unittest.TestCase):
     # getDeviceName test
     def test_getDeviceName_OK(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
         arr = ["TestServer"]
 
@@ -693,7 +695,7 @@ class UtilsTest(unittest.TestCase):
     # getDeviceName test
     def test_getDeviceName_db(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
         arr = ["NXSDataWriter", "", "NXSConfigServer", "Door",
                "MacroServer", "bleble"]
@@ -717,7 +719,7 @@ class UtilsTest(unittest.TestCase):
     # getDeviceName test
     def test_getMacroServer(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
         arr = [
             [self._simps.new_device_info_writer.name, 'test/door/1'],
@@ -741,14 +743,14 @@ class UtilsTest(unittest.TestCase):
     # getDeviceName test
     def test_getMacroServer_db(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
-        arr = [
-            [self._simps.new_device_info_writer.name, 'test/door/1'],
-            [self._simps.new_device_info_writer.name, 'test/door/2'],
-            [self._simps2.new_device_info_writer.name, 'test/door/3'],
-            ["", 'test/door/4'],
-        ]
+        # arr = [
+        #     [self._simps.new_device_info_writer.name, 'test/door/1'],
+        #     [self._simps.new_device_info_writer.name, 'test/door/2'],
+        #     [self._simps2.new_device_info_writer.name, 'test/door/3'],
+        #     ["", 'test/door/4'],
+        # ]
 
         self._simps2.dp.DoorList = [
             'test/door/2', 'test/door/3'
@@ -774,7 +776,7 @@ class UtilsTest(unittest.TestCase):
     # getDeviceName test
     def test_getFullDeviceNames_empty(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
         arr = [
             {"name": "test/ct/01", "full_name": "counter_01/Value"},
@@ -787,7 +789,6 @@ class UtilsTest(unittest.TestCase):
         pool = Pool()
         pool.AcqChannelList = [json.dumps(a) for a in arr]
 
-        import nxsrecconfig
         dd = PoolUtils.getFullDeviceNames([])
         self.assertEqual(dd, {})
 
@@ -799,7 +800,7 @@ class UtilsTest(unittest.TestCase):
     # getDeviceName test
     def test_getFullDeviceNames_pool1(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
         arr = [
             ["test/ct/01", "counter_01", "Value"],
@@ -827,7 +828,7 @@ class UtilsTest(unittest.TestCase):
 
     def test_getFullDeviceNames_pool2(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
         arr = [
             ["test/ct/01", "counter_01", "Value"],
@@ -882,7 +883,7 @@ class UtilsTest(unittest.TestCase):
     # getDeviceName test
     def test_getAliases_empty(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
         arr = [
             {"name": "test/ct/01", "full_name": "counter_01/Value"},
@@ -895,7 +896,6 @@ class UtilsTest(unittest.TestCase):
         pool = Pool()
         pool.AcqChannelList = [json.dumps(a) for a in arr]
 
-        import nxsrecconfig
         dd = PoolUtils.getAliases([])
         self.assertEqual(dd, {})
 
@@ -907,7 +907,7 @@ class UtilsTest(unittest.TestCase):
     # getDeviceName test
     def test_getAliases_pool1(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
         arr = [
             ["test/ct/01", "counter_01", "Value"],
@@ -935,7 +935,7 @@ class UtilsTest(unittest.TestCase):
 
     def test_getAliases_pool2(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
         arr = [
             ["test/ct/01", "counter_01", "Value"],
@@ -990,7 +990,7 @@ class UtilsTest(unittest.TestCase):
     # getDeviceName test
     def test_getMntGrpName_empty(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
         arr = [
             {"name": "test/ct/01", "full_name": "mntgrp_01e"},
@@ -1003,7 +1003,6 @@ class UtilsTest(unittest.TestCase):
         pool = Pool()
         pool.MeasurementGroupList = [json.dumps(a) for a in arr]
 
-        import nxsrecconfig
         dd = PoolUtils.getFullDeviceNames([])
         self.assertEqual(dd, {})
 
@@ -1014,7 +1013,7 @@ class UtilsTest(unittest.TestCase):
 
     def test_getMntGrpName_pool1(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
         arr = [
             ["test/ct/01", "mntgrp_01Value"],
@@ -1037,7 +1036,7 @@ class UtilsTest(unittest.TestCase):
 
     def test_getMntGrpName_pool2(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
         arr = [
             ["test/ct/01", "mntgrp_01Value"],
@@ -1075,7 +1074,7 @@ class UtilsTest(unittest.TestCase):
     # getDeviceName test
     def test_getMntGrps(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
         arr = [
             {"name": "test/ct/01", "full_name": "mntgrp_01e"},
@@ -1097,7 +1096,6 @@ class UtilsTest(unittest.TestCase):
         pool.MeasurementGroupList = [json.dumps(a) for a in arr]
         pool2 = Pool()
         pool2.MeasurementGroupList = [json.dumps(a) for a in arr2]
-        import nxsrecconfig
         dd = PoolUtils.getFullDeviceNames([])
         self.assertEqual(dd, {})
 
@@ -1115,7 +1113,7 @@ class UtilsTest(unittest.TestCase):
     # getDeviceControllers test
     def test_getDeviceControllers_empty(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
         arr = [
             {"name": "test/ct/01", "controller": "counter_01/Value"},
@@ -1128,7 +1126,6 @@ class UtilsTest(unittest.TestCase):
         pool = Pool()
         pool.ExpChannelList = [json.dumps(a) for a in arr]
 
-        import nxsrecconfig
         dd = PoolUtils.getDeviceControllers([], "test/ct/01")
         self.assertEqual(dd, {})
 
@@ -1143,7 +1140,7 @@ class UtilsTest(unittest.TestCase):
     # getDeviceControllers test
     def test_getDeviceControllers_pool1(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
         arr = [
             ["test/ct/01", "counter_01"],
@@ -1166,7 +1163,7 @@ class UtilsTest(unittest.TestCase):
 
     def test_getDeviceControllers_pool2(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
         arr = [
             ["test/ct/01", "counter_01Value"],
@@ -1214,7 +1211,7 @@ class UtilsTest(unittest.TestCase):
     # getChannelSources test
     def test_getChannelSources_empty(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
         arr = [
             {"name": "test/ct/01", "source": "counter_01/Value"},
@@ -1227,7 +1224,6 @@ class UtilsTest(unittest.TestCase):
         pool = Pool()
         pool.ExpChannelList = [json.dumps(a) for a in arr]
 
-        import nxsrecconfig
         dd = PoolUtils.getChannelSources([], "test/ct/01")
         self.assertEqual(dd, {})
 
@@ -1242,7 +1238,7 @@ class UtilsTest(unittest.TestCase):
     # getChannelSources test
     def test_getChannelSources_pool1(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
         arr = [
             ["test/ct/01", "counter_01"],
@@ -1265,7 +1261,7 @@ class UtilsTest(unittest.TestCase):
 
     def test_getChannelSources_pool2(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
         arr = [
             ["test/ct/01", "counter_01Value"],
@@ -1313,7 +1309,7 @@ class UtilsTest(unittest.TestCase):
     # getExperimentalChannels test
     def test_getExperimentalChannels_pool1(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
         arr = [
             {"name": "test/ct/01", "controller": "counter_01/Value"},
@@ -1336,7 +1332,6 @@ class UtilsTest(unittest.TestCase):
         pool2.ExpChannelList = [json.dumps(
             {"name": a[0], "controller": a[1]}) for a in arr2]
 
-        import nxsrecconfig
         dd = PoolUtils.getElementNames([], 'ExpChannelList')
         self.assertEqual(dd, [])
 
@@ -1353,7 +1348,7 @@ class UtilsTest(unittest.TestCase):
     # getMotorpNames test
     def test_getMotorNames_pool1(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
         arr = [
             {"name": "test/ct/01", "controller": "counter_01/Value"},
@@ -1376,7 +1371,6 @@ class UtilsTest(unittest.TestCase):
         pool2.MotorList = [json.dumps(
             {"name": a[0], "controller": a[1]}) for a in arr2]
 
-        import nxsrecconfig
         dd = PoolUtils.getElementNames([], 'MotorList')
         self.assertEqual(dd, [])
 
@@ -1392,7 +1386,7 @@ class UtilsTest(unittest.TestCase):
 
     def test_getTimers(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
         arr = [
             ["test/ct/01", ["CTExpChannel"],
@@ -1441,7 +1435,7 @@ class UtilsTest(unittest.TestCase):
 
     def test_filterNames_empty(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
         arr = [
             ["test/ct/01",
@@ -1489,7 +1483,7 @@ class UtilsTest(unittest.TestCase):
 
     def test_filterNames_filter(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
         arr = [
             ["test/ct/01",
@@ -1540,7 +1534,7 @@ class UtilsTest(unittest.TestCase):
 
     def test_getRecord(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
         dom = minidom.parseString("<tag></tag>")
         node = dom.getElementsByTagName("tag")
@@ -1607,7 +1601,7 @@ class UtilsTest(unittest.TestCase):
 
     def test_getRecord_property(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
         dom = minidom.parseString("<tag></tag>")
         node = dom.getElementsByTagName("tag")
@@ -1619,7 +1613,8 @@ class UtilsTest(unittest.TestCase):
 
         host = 'haso2' * self.__rnd.randint(1, 3)
         dom = minidom.parseString(
-            '<tag><device hostname="%s" member="property"></device></tag>' % (host))
+            '<tag><device hostname="%s" member="property"></device></tag>'
+            % (host))
         node = dom.getElementsByTagName("tag")
         self.assertEqual(Utils.getRecord(node[0]), '')
 
@@ -1635,7 +1630,8 @@ class UtilsTest(unittest.TestCase):
         rec = 'recfv' * self.__rnd.randint(1, 3)
         dev = 'devfv/' * self.__rnd.randint(1, 3)
         dom = minidom.parseString(
-            '<tag><device name="%s" member="property"/><record name="%s" /></tag>' % (dev, rec))
+            '<tag><device name="%s" member="property"/><record name="%s" />'
+            '</tag>' % (dev, rec))
         node = dom.getElementsByTagName("tag")
         self.assertEqual(Utils.getRecord(node[0]), "%s/@%s" % (dev, rec))
 
@@ -1665,7 +1661,8 @@ class UtilsTest(unittest.TestCase):
         dev = 'devfv/' * self.__rnd.randint(1, 3)
         port = 10000 * self.__rnd.randint(1, 3)
         dom = minidom.parseString(
-            '<tag><device name="%s" hostname="%s" port="%s" member="property"/>'
+            '<tag><device name="%s" hostname="%s" port="%s" '
+            'member="property"/>'
             '<record name="%s" /></tag>' % (
                 dev, host, port, rec))
         node = dom.getElementsByTagName("tag")
@@ -1674,7 +1671,7 @@ class UtilsTest(unittest.TestCase):
 
     def test_getRecord_command(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
         dom = minidom.parseString("<tag></tag>")
         node = dom.getElementsByTagName("tag")
@@ -1686,7 +1683,8 @@ class UtilsTest(unittest.TestCase):
 
         host = 'haso2' * self.__rnd.randint(1, 3)
         dom = minidom.parseString(
-            '<tag><device hostname="%s" member="command"></device></tag>' % (host))
+            '<tag><device hostname="%s" member="command"></device>'
+            '</tag>' % (host))
         node = dom.getElementsByTagName("tag")
         self.assertEqual(Utils.getRecord(node[0]), '')
 
@@ -1702,7 +1700,8 @@ class UtilsTest(unittest.TestCase):
         rec = 'recfv' * self.__rnd.randint(1, 3)
         dev = 'devfv/' * self.__rnd.randint(1, 3)
         dom = minidom.parseString(
-            '<tag><device name="%s" member="command"/><record name="%s" /></tag>' % (dev, rec))
+            '<tag><device name="%s" member="command"/><record name="%s" />'
+            '</tag>' % (dev, rec))
         node = dom.getElementsByTagName("tag")
         self.assertEqual(Utils.getRecord(node[0]), "%s/%s()" % (dev, rec))
 
@@ -1741,10 +1740,10 @@ class UtilsTest(unittest.TestCase):
 
     def test_stringToDictJson(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
-        fac = self.__rnd.randint(2, 10)
-        fac2 = self.__rnd.randint(2, 10)
+        # fac = self.__rnd.randint(2, 10)
+        # fac2 = self.__rnd.randint(2, 10)
         arg = [
             ["", {}],
             ["Not initialised", {}],
@@ -1774,10 +1773,10 @@ class UtilsTest(unittest.TestCase):
 
     def test_stringToDictJson_tobool(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
-        fac = self.__rnd.randint(2, 10)
-        fac2 = self.__rnd.randint(2, 10)
+        # fac = self.__rnd.randint(2, 10)
+        # fac2 = self.__rnd.randint(2, 10)
         arg = [
             ["", {}],
             ["Not initialised", {}],
@@ -1801,7 +1800,7 @@ class UtilsTest(unittest.TestCase):
 
     def test_stringToListJson(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
         arg = [
             ["", []],
@@ -1825,7 +1824,7 @@ class UtilsTest(unittest.TestCase):
 
     def test_compareDict(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
         arg = [
             [{}, {}, True],
@@ -1853,7 +1852,7 @@ class UtilsTest(unittest.TestCase):
 
     def test_toString_string(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
         arg = [
             ["", ""],
@@ -1867,7 +1866,7 @@ class UtilsTest(unittest.TestCase):
 
     def test_toString_list(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
         arg = [
             [["asd"], ["asd"]],
@@ -1884,7 +1883,7 @@ class UtilsTest(unittest.TestCase):
 
     def test_toString_dict(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
         arg = [
             [{"asd": "asdfd"}, {"asd": "asdfd"}],
@@ -1894,7 +1893,7 @@ class UtilsTest(unittest.TestCase):
              {u'asdf': u'asdfasdf', u'asdf123': u'asdfasdf'}],
         ]
         for ar in arg:
-            # print ar
+            # print(ar
             self.assertEqual(Utils.toString(ar[1]), ar[0])
             for ke, vl in ar[0].items():
                 self.assertTrue(isinstance(Utils.toString(ke), str))
@@ -1902,7 +1901,7 @@ class UtilsTest(unittest.TestCase):
 
     def test_toString_listdict(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
         arg = [
             [[{"asd": "asdfd"}], [{"asd": "asdfd"}]],
@@ -1912,7 +1911,7 @@ class UtilsTest(unittest.TestCase):
              [{u'asdf': u'asdfasdf', u'asdf123': u'asdfasdf'}]],
         ]
         for ar in arg:
-            # print ar
+            # print(ar
             self.assertEqual(Utils.toString(ar[1]), ar[0])
             for aa in ar[0]:
                 for ke, vl in aa.items():
@@ -1921,7 +1920,7 @@ class UtilsTest(unittest.TestCase):
 
     def test_command(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
         arg = [
             ["mycommand", None, "return"],
@@ -1952,7 +1951,7 @@ class UtilsTest(unittest.TestCase):
 
     def test_command_noserver(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
         arg = [
             [None, "return"],
@@ -1983,14 +1982,14 @@ class UtilsTest(unittest.TestCase):
 
     def test_command_getShapeTypeUnit(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         self.myAssertRaise(Exception,
                            TangoUtils.getShapeTypeUnit,
                            "ttestp09/testts/t1r228/sdfffffffffffffffffffsdfs")
 
     def test_command_getShapeTypeUnit_scalar(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
         self._simps.dp.ScalarBoolean = bool(self._bools[0])
         self._simps.dp.ScalarUChar = abs(self._counter[0])
@@ -2004,7 +2003,7 @@ class UtilsTest(unittest.TestCase):
         self._simps.dp.ScalarString = self._bools[0]
         self._simps.dp.ScalarULong64 = long(abs(self._counter[0]))
 
-        # print "TGVER", TGVER
+        # print("TGVER", TGVER
         arr = {
             'ScalarBoolean': [[], 'bool', 'No unit'],
             'ScalarUChar': [[], 'uint8', 'mm'],
@@ -2030,14 +2029,14 @@ class UtilsTest(unittest.TestCase):
             ap.set_config(ac)
 
         for k, ar in arr.items():
-            # print ar
+            # print(ar
             self.checkstu(
                 TangoUtils.getShapeTypeUnit(
                     "ttestp09/testts/t1r228/%s" % k),
                 ar[0], ar[1], ar[2])
 
         for k, ar in arr2.items():
-            # print ar
+            # print(ar
             self.checkstu(
                 TangoUtils.getShapeTypeUnit(
                     "ttestp09/testts/t1r228/%s" % k),
@@ -2045,7 +2044,7 @@ class UtilsTest(unittest.TestCase):
 
     def test_command_getShapeTypeUnit_spectrum(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
         self._simps.dp.SpectrumBoolean = self._logical[0]
         self._simps.dp.SpectrumUChar = self._mca2[0]
@@ -2086,7 +2085,7 @@ class UtilsTest(unittest.TestCase):
 
     def test_command_getShapeTypeUnit_image(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
         self._simps.dp.ImageBoolean = self._logical2[0]
         self._simps.dp.ImageUChar = self._pco1[0]
@@ -2133,14 +2132,14 @@ class UtilsTest(unittest.TestCase):
             ap.set_config(ac)
 
         for k, ar in arr.items():
-            # print k, ar
+            # print(k, ar
             self.checkstu(TangoUtils.getShapeTypeUnit(
                 "ttestp09/testts/t1r228/%s" % k
             ), ar[0], ar[1], ar[2])
 
     def test_getSource(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
         self.assertEqual(PoolUtils.getSource("ttestp09/testts/t1r228"),
                          None)
@@ -2166,6 +2165,7 @@ class UtilsTest(unittest.TestCase):
 
         self.assertEqual(PoolUtils.getSource("ttestp09/testts/t1r228"),
                          None)
+
 
 if __name__ == '__main__':
     unittest.main()

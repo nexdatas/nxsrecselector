@@ -725,7 +725,7 @@ if __name__ == '__main__':
         U.server_init()
         U.server_run()
 
-    except PyTango.DevFailed, e:
+    except PyTango.DevFailed as e:
         print '-------> Received a DevFailed exception:', e
-    except Exception, e:
+    except Exception as e:
         print '-------> An unforeseen exception occured....', e

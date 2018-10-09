@@ -95,9 +95,9 @@ except:
             mydb.close()
             DB_AVAILABLE.append("MYSQL")
 
-        except ImportError, e:
+        except ImportError as e:
             print "MYSQL not available: %s" % e
-        except Exception, e:
+        except Exception as e:
             print "MYSQL not available: %s" % e
         except:
             print "MYSQL not available"
