@@ -27,6 +27,10 @@ import pickle
 import numpy
 import fnmatch
 import socket
+import sys
+
+if sys.version_info > (3,):
+    unicode = str
 
 
 class Utils(object):

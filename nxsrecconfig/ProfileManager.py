@@ -20,10 +20,11 @@
 """  ProfileManager """
 
 import json
+import sys
+import PyTango
 
 from .Utils import TangoUtils, PoolUtils, MSUtils, Utils
 from .Describer import Describer
-import PyTango
 
 try:
     from nxstools.nxsxml import (XMLFile, NDSource)
@@ -31,6 +32,10 @@ try:
     NXSTOOLS = True
 except ImportError:
     NXSTOOLS = False
+
+if sys.version_info > (3,):
+    unicode = str
+
 
 #: (:obj:`list` <:obj:`str`>) default data names
 DEFAULT_RECORD_KEYS = ['serialno', 'end_time', 'start_time',
@@ -42,11 +47,13 @@ class ProfileManager(object):
 
     """  Manages Measurement Group and Profile from Selector"""
 
-    def __init__(self, selector):
+    def __init__(self, selector, syncdescription=False):
         """ constructor
 
         :param selector: selector object
         :type selector: :class:`nxsrecconfig.Selector.Selector`
+        :param syncdescription: preselection merges current ScanSnapshot
+        :type syncdescription: :obj:`bool`
         """
         #: (:class:`nxsrecconfig.Selector.Selector`) configuration selector
         self.__selector = selector
@@ -71,6 +78,9 @@ class ProfileManager(object):
 
         #: (:obj:`bool`) mntgrp with synchronization
         self.__withsynch = True
+
+        #: (:obj:`bool`) preselection merges current ScanSnapshot
+        self.__syncdescription = syncdescription
 
     def __updateMacroServer(self):
         """ updatas MacroServer name
@@ -389,6 +399,66 @@ class ProfileManager(object):
         if self.__setFromMntGrpConf(jconf):
             self.__selector.storeSelection()
 
+    def __addPreselectedComponents(self, components):
+        """ add preselected components to set of given components
+
+        :param components: new selection preselected components
+        :type components: :obj:`list` <:obj:`str`>
+        """
+        if not self.__macroServerName:
+            self.__updateMacroServer()
+        snapshot = MSUtils.getEnv(
+            'PreScanSnapshot', self.__macroServerName)
+        tangods = [[ds[1], ds[1], ds[0]] for ds in snapshot]
+        snpds = dict([(ds[1], False) for ds in snapshot])
+        mydsg = {}
+        jres = self.__createDataSources(tangods, mydsg)
+        jpcps = json.loads(self.__selector["ComponentPreselection"])
+        jpdss = json.loads(self.__selector["DataSourcePreselection"])
+        predss = set(json.loads(self.__selector["PreselectingDataSources"]))
+        changed = False
+        for cp in components:
+            if cp not in jpcps.keys():
+                jpcps[cp] = False
+        cps = set(self.__selector.configCommand("mandatoryComponents") or []) \
+             | set(list(jpcps.keys()))
+
+        describer = Describer(self.__configServer, True)
+        description = describer.components(list(cps), '', '')
+        for cp, dss in description[0].items():
+            dsfound = []
+            if isinstance(dss, dict):
+                cpdss = set()
+                fdss = set()
+                for ds, params in dss.items():
+                    for param in params:
+                        if param and len(param) > 2:
+                            if param[0] in ['INIT', 'FINAL']:
+                                if param[1] == 'TANGO' or ds in predss:
+                                    cpdss.add(ds)
+                                    if ds in snpds.keys():
+                                        fdss.add(ds)
+
+                if fdss:
+                    if not (cpdss - fdss):
+                        if cp in jpcps.keys() and jpcps[cp] is False:
+                            jpcps[cp] = None
+                        for ds in fdss:
+                            snpds[ds] = True
+        for ds, val in snpds.items():
+            if val is not True:
+                jpdss[ds] = None
+        pcps = json.dumps(jpcps)
+        pdss = json.dumps(jpdss)
+        if pcps != self.__selector["ComponentPreselection"]:
+            self.__selector["ComponentPreselection"] = pcps
+            changed = True
+        if pdss != self.__selector["DataSourcePreselection"]:
+            self.__selector["DataSourcePreselection"] = pdss
+            changed = True
+        # print(changed)    
+        return changed
+
     def fetchProfile(self):
         """ fetches the profile configuration
         """
@@ -398,9 +468,19 @@ class ProfileManager(object):
             if self.__selector["MntGrp"] in avmg:
                 self.__selector.deselect()
                 self.importMntGrp()
+                if self.__syncdescription:
+                    # print("FETCH")
+                    self.__addPreselectedComponents(
+                        self.defaultPreselectedComponents)
                 self.__selector.resetPreselectedComponents(
                     self.defaultPreselectedComponents)
                 self.__selector.preselect()
+        elif self.__syncdescription:
+                # print("FETCH 2")
+                changed = self.__addPreselectedComponents(
+                    self.defaultPreselectedComponents)
+                if changed:
+                    self.__selector.preselect()
 
     def __createMntGrpConf(self, datasources,
                            componentdatasources, description):
@@ -812,8 +892,6 @@ class ProfileManager(object):
         """ fetches component channels from config server
             and preselect datasources
 
-        :param components: component list
-        :type components: :obj:`list` <:obj:`int`>
         :param datasources: datasource list
         :type datasources: :obj:`list` <:obj:`int`>
         :param componentdatasources: component datasources

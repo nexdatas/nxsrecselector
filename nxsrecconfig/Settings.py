@@ -23,6 +23,7 @@ import json
 import gc
 import PyTango
 import xml.dom.minidom
+import sys
 
 from .Describer import Describer
 from .DynamicComponent import DynamicComponent
@@ -33,6 +34,9 @@ from .Release import __version__
 from .MacroServerPools import MacroServerPools
 from .StreamSet import StreamSet
 
+if sys.version_info > (3,):
+    unicode = str
+
 
 class Settings(object):
 
@@ -41,7 +45,8 @@ class Settings(object):
 
     def __init__(self, server=None, numberofthreads=None,
                  defaultnexuspath=None,
-                 defaulttimezone=None, defaultmntgrp=None):
+                 defaulttimezone=None, defaultmntgrp=None,
+                 syncdescription=False):
         """ contructor
 
         :param server: NXSRecSelector server
@@ -50,6 +55,8 @@ class Settings(object):
         :type numberofthreads: :obj:`str`
         :param defaultnexuspath:  default dynamic component path
         :type defaultnexuspath: :obj:`str`
+        :param syncdescription: preselection merges current ScanSnapshot
+        :type syncdescription: :obj:`bool`
         """
         #: (:class:`nxsrecconfig.NXSConfig.NXSRecSelector`) Tango server
         self.__server = server
@@ -70,6 +77,9 @@ class Settings(object):
         #: (:obj:`str`) default measurement group
         self.defaultMntGrp = defaultmntgrp or "nxsmntgrp"
 
+        #: (:obj:`bool`) preselection merges current ScanSnapshot
+        self.syncDescription = syncdescription
+
         #: (:class:`nxsrecconfg.MacroServerPools.MacroServerPools`) \
         #:     configuration selection
         self.__msp = MacroServerPools(self.numberOfThreads)
@@ -82,7 +92,10 @@ class Settings(object):
 
         #: (:class:`nxsrecconfg.ProfileManager.ProfileManager) \
         #: profile
-        self.__profileManager = ProfileManager(self.__selector)
+        self.__profileManager = ProfileManager(
+            self.__selector,
+            syncdescription=syncdescription
+        )
 
         #: (:obj:`str`) configuration file
         self.profileFile = '/tmp/nxsrecconfig.cfg'

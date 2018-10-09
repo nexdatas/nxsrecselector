@@ -90,8 +90,9 @@ class NXSRecSelector(PyTango.Device_4Impl):
         defaultpath = self.DefaultNeXusPath or None
         defaultzone = self.DefaultTimeZone or None
         defaultmntgrp = self.DefaultMntGrp or None
+        syncdescription = bool(self.SyncDescription)
         self.__stg = STG(self, numberofthreads, defaultpath,
-                         defaultzone, defaultmntgrp)
+                         defaultzone, defaultmntgrp, syncdescription)
         self.set_state(PyTango.DevState.ON)
         self.__stg.poolBlacklist = self.PoolBlacklist or []
         self.__stg.timerFilters = self.TimerFilters or [
@@ -1794,6 +1795,10 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
         [PyTango.DevVarStringArray,
          "list of record keys for CLIENT datasources",
          []],
+        'SyncDescription':
+        [PyTango.DevBoolean,
+         "preselection merges the current ScanSnapshot",
+         [False]],
     }
 
     #: (:obj:`dict` <:obj:`str`, \

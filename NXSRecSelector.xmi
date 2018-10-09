@@ -45,6 +45,11 @@
       <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
       <DefaultPropValue>nxsmntgrp</DefaultPropValue>
     </deviceProperties>
+    <deviceProperties name="SyncDescription" description="preselection merges the current ScanSnapshot">
+      <type xsi:type="pogoDsl:BooleanType"/>
+      <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
+      <DefaultPropValue>False</DefaultPropValue>
+    </deviceProperties>
     <commands name="AvailableComponents" description="Return a list of available component names" execMethod="available_components" displayLevel="OPERATOR" polledPeriod="0">
       <argin description="">
         <type xsi:type="pogoDsl:VoidType"/>
