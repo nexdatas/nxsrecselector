@@ -19,7 +19,6 @@
 # \file ServerSetUp.py
 # class with server settings
 #
-import unittest
 import os
 import sys
 import subprocess
@@ -57,7 +56,7 @@ class TestMeasurementGroupSetUp(object):
     # test starter
     # \brief Common set up of Tango Server
     def setUp(self):
-        print "\nsetting up..."
+        print("\nsetting up...")
         self.add()
         self.start()
 
@@ -77,13 +76,13 @@ class TestMeasurementGroupSetUp(object):
             "cd %s;  python ./TestMG.py %s &" % (path, self.instance),
             stdout=None,
             stderr=None, shell=True)
-        print "waiting for simple server",
+        sys.stdout.write("waiting for simple server")
 
         found = False
         cnt = 0
         while not found and cnt < 1000:
             try:
-                print "\b.",
+                sys.stdout.write(".")
                 self.dp = PyTango.DeviceProxy(self.new_device_info_writer.name)
                 time.sleep(0.01)
                 if self.dp.state() == PyTango.DevState.ON:
@@ -91,12 +90,12 @@ class TestMeasurementGroupSetUp(object):
             except:
                 found = False
             cnt += 1
-        print ""
+        print("")
 
     # test closer
     # \brief Common tear down of Tango Server
     def tearDown(self):
-        print "tearing down ..."
+        print("tearing down ...")
         self.delete()
         self.stop()
 
@@ -106,7 +105,6 @@ class TestMeasurementGroupSetUp(object):
 
     # stops server
     def stop(self):
-        output = ""
         pipe = subprocess.Popen(
             "ps -ef | grep 'TestMG.py %s'" % self.instance,
             stdout=subprocess.PIPE, shell=True).stdout
@@ -118,8 +116,9 @@ class TestMeasurementGroupSetUp(object):
                 subprocess.call(
                     "kill -9 %s" % sr[1], stderr=subprocess.PIPE, shell=True)
 
+
 if __name__ == "__main__":
     simps = TestMeasurementGroupSetUp()
     simps.setUp()
-    print simps.dp.status()
+    print(simps.dp.status())
     simps.tearDown()

@@ -22,21 +22,15 @@
 import unittest
 import os
 import sys
-import subprocess
 import random
 import struct
-import threading
 import binascii
-import Queue
 import PyTango
 import json
 import pickle
 import string
 import time
 import nxsrecconfig
-
-import logging
-logger = logging.getLogger()
 
 import TestMacroServerSetUp
 import TestPoolSetUp
@@ -49,6 +43,13 @@ from nxsrecconfig.MacroServerPools import MacroServerPools
 from nxsrecconfig.Selector import Selector
 from nxsrecconfig.Utils import TangoUtils, MSUtils
 from nxsconfigserver.XMLConfigurator import XMLConfigurator
+
+import logging
+logger = logging.getLogger()
+
+if sys.version_info > (3,):
+    long = int
+
 
 # if 64-bit machione
 IS64BIT = (struct.calcsize("P") == 8)
@@ -87,11 +88,11 @@ except:
             DB_AVAILABLE.append("MYSQL")
 
         except ImportError as e:
-            print "MYSQL not available: %s" % e
+            print("MYSQL not available: %s" % e)
         except Exception as e:
-            print "MYSQL not available: %s" % e
+            print("MYSQL not available: %s" % e)
         except:
-            print "MYSQL not available"
+            print("MYSQL not available")
 
 
 # test fixture
@@ -128,7 +129,8 @@ class SelectorTest(unittest.TestCase):
         self.__defaultmntgrp = 'nxsmntgrp'
         # default path
         self.__defaultpath = \
-            '/$var.entryname#\'scan\'$var.serialno:NXentry/NXinstrument/collection'
+            '/$var.entryname#\'scan\'$var.serialno:NXentry/NXinstrument/' \
+            'collection'
 
         # selection version
         self.__version = nxsrecconfig.__version__
@@ -1017,7 +1019,7 @@ class SelectorTest(unittest.TestCase):
     # test starter
     # \brief Common set up
     def setUp(self):
-        print "SEED =", self.__seed
+        print("SEED = %s" % self.__seed)
         self._wr.setUp()
         self._ms.setUp()
         self._cf.setUp()
@@ -1028,12 +1030,12 @@ class SelectorTest(unittest.TestCase):
 #        self._simps3.setUp()
 #        self._simps4.setUp()
 #        self._simpsoff.add()
-        print "\nsetting up..."
+        print("\nsetting up...")
 
     # test closer
     # \brief Common tear down
     def tearDown(self):
-        print "tearing down ..."
+        print("tearing down ...")
 #        self._simpsoff.delete()
 #        self._simps4.tearDown()
 #        self._simps3.tearDown()
@@ -1116,7 +1118,7 @@ class SelectorTest(unittest.TestCase):
     # \brief It tests default settings
     def test_constructor_keys(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -1128,8 +1130,6 @@ class SelectorTest(unittest.TestCase):
         db.put_device_property(self._ms.ms.keys()[0], {})
         se = Selector(msp, self.__version)
         self.assertEqual(se.moduleLabel, 'module')
-#        print se.keys()
-#        print [rc[0] for rc in self._keys]
         self.assertEqual(sorted(se.keys()),
                          sorted([rc[0] for rc in self._keys])
                          )
@@ -1151,7 +1151,7 @@ class SelectorTest(unittest.TestCase):
     # \brief It tests default settings
     def test_se_getPool_1to3(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         doors = ["door2testp09/testts/t1r228",
                  "door2testp09/testts/t2r228",
                  "door2testp09/testts/t3r228"]
@@ -1178,7 +1178,7 @@ class SelectorTest(unittest.TestCase):
                 self.myAssertRaise(Exception, msp.getPools, "")
                 self.myAssertRaise(Exception, se.getMacroServer, "")
                 self.myAssertRaise(Exception, se.getPools, "")
-                print doors[i]
+                print(doors[i])
 
                 se["Door"] = doors[i]
 #                msp.updateMacroServer(doors[i])
@@ -1189,7 +1189,6 @@ class SelectorTest(unittest.TestCase):
                 self.assertEqual(pools[0].name(), self._pool.dp.name())
                 self.assertEqual(msp.getMacroServer(doors[i]),
                                  ms2.ms.keys()[0])
-                # print "door", se["Door"]
                 self.assertEqual(se.getMacroServer(), ms2.ms.keys()[0])
 
         finally:
@@ -1199,7 +1198,7 @@ class SelectorTest(unittest.TestCase):
     # \brief It tests default settings
     def test_se_getPool_3to3(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         doors = ["door3testp09/testts/t1r228",
                  "door3testp09/testts/t2r228",
                  "door3testp09/testts/t3r228"]
@@ -1222,18 +1221,14 @@ class SelectorTest(unittest.TestCase):
 
             for i, ms in enumerate(mss):
                 ms3.dps[ms].DoorList = [doors[i]]
-#                print "ms", ms, "doors", doors[i]
                 self.myAssertRaise(Exception, se.getMacroServer, "")
                 self.myAssertRaise(Exception, se.getPools, "")
                 se["Door"] = doors[i]
-#                msp.updateMacroServer(doors[i])
-                # print "door", se["Door"]
                 pools = se.getPools()
                 self.assertEqual(len(pools), 1)
                 self.assertTrue(isinstance(pools[0], PyTango.DeviceProxy))
                 self.assertEqual(pools[0].name(), self._pool.dp.name())
                 self.assertEqual(msp.getMacroServer(doors[i]), ms)
-                # print "door", se["Door"]
                 self.assertEqual(se.getMacroServer(), ms)
 
         finally:
@@ -1243,7 +1238,7 @@ class SelectorTest(unittest.TestCase):
     # \brief It tests default settings
     def test_poolMotors(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -1291,8 +1286,6 @@ class SelectorTest(unittest.TestCase):
         res = [a[0] for a in arr2]
         self.assertEqual(dd, res)
 
-        # print se.poolElementNames('MotorList')
-
         self.assertEqual(len(pools), 1)
         self.assertTrue(isinstance(pools[0], PyTango.DeviceProxy))
         self.assertEqual(pools[0].name(), self._pool.dp.name())
@@ -1302,7 +1295,7 @@ class SelectorTest(unittest.TestCase):
     # \brief It tests default settings
     def test_poolChannels(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -1350,8 +1343,6 @@ class SelectorTest(unittest.TestCase):
         res = [a[0] for a in arr2]
         self.assertEqual(dd, res)
 
-        # print se.poolElementNames('ExpChannelList')
-
         self.assertEqual(len(pools), 1)
         self.assertTrue(isinstance(pools[0], PyTango.DeviceProxy))
         self.assertEqual(pools[0].name(), self._pool.dp.name())
@@ -1360,7 +1351,7 @@ class SelectorTest(unittest.TestCase):
     # updateOrderedChannels test
     def test_resetPreselectedComponents(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -1406,7 +1397,7 @@ class SelectorTest(unittest.TestCase):
     # updateOrderedChannels test
     def test_ConfigServer(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -1479,7 +1470,7 @@ class SelectorTest(unittest.TestCase):
     # updateOrderedChannels test
     def test_WriterDevice(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -1518,16 +1509,13 @@ class SelectorTest(unittest.TestCase):
                 se["MntGrp"] = val["MntGrp"]
                 se.storeSelection()
 
-    #        print "se", se["WriterDevice"]
             se["WriterDevice"] = "dfd"
             self.assertTrue(se["WriterDevice"], "dfd")
             se["WriterDevice"] = "module"
             self.assertTrue(se["WriterDevice"], "module")
-    #        print "se", se["WriterDevice"]
             se["WriterDevice"] = ""
             self.assertTrue(se["WriterDevice"],
                             TangoUtils.getDeviceName(db, "NXSDataWriter"))
-    #        print "se", se["WriterDevice"]
             se.reset()
             self.assertTrue(se["WriterDevice"],
                             TangoUtils.getDeviceName(db, "NXSDataWriter"))
@@ -1553,7 +1541,7 @@ class SelectorTest(unittest.TestCase):
     # updateOrderedChannels test
     def test_Door(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         msname = self._ms.ms.keys()[0]
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
@@ -1585,26 +1573,21 @@ class SelectorTest(unittest.TestCase):
             self.myAssertRaise(Exception, self.setDoor, se, "dfd")
             self.assertTrue(se["Door"], "dfd")
             self.myAssertRaise(Exception, se.getMacroServer)
-    #        se["Door"] = "module"
             self.myAssertRaise(Exception, self.setDoor, se, "module")
             self.myAssertRaise(Exception, se.getMacroServer)
             self.assertTrue(se["Door"], "module")
             self.myAssertRaise(Exception, se.getMacroServer)
-    #        print "se", se["Door"]
-    #        self.assertEqual(se.getMacroServer(), msname)
             se["Door"] = ""
             door = TangoUtils.getDeviceName(db, "Door")
             ms = MSUtils.getMacroServer(db, door)
             self.assertEqual(se.getMacroServer(), ms)
             self.assertTrue(se["Door"],
                             TangoUtils.getDeviceName(db, "Door"))
-    #        print "se", se["Door"]
             self.assertEqual(se.getMacroServer(), ms)
             se.reset()
             self.assertEqual(se.getMacroServer(), ms)
             self.assertEqual(se["Door"],
                              TangoUtils.getDeviceName(db, "Door"))
-#            print "se", se["Door"]
             self.assertEqual(se.getMacroServer(), ms)
 
             mydata = {}
@@ -1629,7 +1612,7 @@ class SelectorTest(unittest.TestCase):
     # deselect test
     def test_MntGrp(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -1692,7 +1675,7 @@ class SelectorTest(unittest.TestCase):
     # deselect test
     def test_TimeZone(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -1753,7 +1736,7 @@ class SelectorTest(unittest.TestCase):
     # deselect test
     def test_setConfigInstance(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -1793,7 +1776,6 @@ class SelectorTest(unittest.TestCase):
 
         se["ConfigDevice"] = 'module'
         if DB_AVAILABLE:
-            # print "DB AVAILABLE:", DB_AVAILABLE
             inst = se.setConfigInstance()
             self.assertTrue(isinstance(inst, XMLConfigurator))
 
@@ -1809,14 +1791,14 @@ class SelectorTest(unittest.TestCase):
 
     def test_configCommand(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
         msp = MacroServerPools(10)
         se = Selector(msp, self.__version)
-        db = PyTango.Database()
+        # db = PyTango.Database()
 
         se["Door"] = val["Door"]
         se["ConfigDevice"] = val["ConfigDevice"]
@@ -1843,7 +1825,7 @@ class SelectorTest(unittest.TestCase):
             self._cf.dp.SetCommandVariable(["MCPLIST", json.dumps(mcp)])
             se = Selector(msp, self.__version)
             res = se.configCommand(ar[0])
-            print self._cf.dp.GetCommandVariable("COMMANDS")
+            print(self._cf.dp.GetCommandVariable("COMMANDS"))
             self.assertEqual(
                 [c.lower() for c in
                  json.loads(self._cf.dp.GetCommandVariable("COMMANDS"))],
@@ -1856,14 +1838,14 @@ class SelectorTest(unittest.TestCase):
 
     def test_configCommand_arg(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
         msp = MacroServerPools(10)
         se = Selector(msp, self.__version)
-        db = PyTango.Database()
+        # db = PyTango.Database()
 
         se["ConfigDevice"] = val["ConfigDevice"]
         for i in range(5):
@@ -1916,10 +1898,8 @@ class SelectorTest(unittest.TestCase):
                 self._cf.dp.SetCommandVariable(
                     ["SELDICT", json.dumps(self.mysel)])
                 se = Selector(msp, self.__version)
-#                print "COM", ar[0]
-#                print "VAR", ar[1]
                 res = se.configCommand(ar[0], ar[1])
-                print self._cf.dp.GetCommandVariable("COMMANDS")
+                print(self._cf.dp.GetCommandVariable("COMMANDS"))
                 self.assertEqual(
                     [c.lower() for c in
                      json.loads(self._cf.dp.GetCommandVariable("COMMANDS"))],
@@ -1932,14 +1912,14 @@ class SelectorTest(unittest.TestCase):
 
     def test_configCommand_module(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
-        val = {"ConfigDevice": self._cf.dp.name(),
-               "WriterDevice": self._wr.dp.name(),
-               "Door": 'doortestp09/testts/t1r228',
-               "MntGrp": 'nxsmntgrp'}
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
+        # val = {"ConfigDevice": self._cf.dp.name(),
+        #        "WriterDevice": self._wr.dp.name(),
+        #        "Door": 'doortestp09/testts/t1r228',
+        #        "MntGrp": 'nxsmntgrp'}
         msp = MacroServerPools(10)
         se = Selector(msp, self.__version)
-        db = PyTango.Database()
+        # db = PyTango.Database()
 
         if DB_AVAILABLE:
 
@@ -1959,22 +1939,20 @@ class SelectorTest(unittest.TestCase):
 
     def test_configCommand_arg_module(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
-        val = {"ConfigDevice": self._cf.dp.name(),
-               "WriterDevice": self._wr.dp.name(),
-               "Door": 'doortestp09/testts/t1r228',
-               "MntGrp": 'nxsmntgrp'}
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
+        # val = {"ConfigDevice": self._cf.dp.name(),
+        #        "WriterDevice": self._wr.dp.name(),
+        #        "Door": 'doortestp09/testts/t1r228',
+        #        "MntGrp": 'nxsmntgrp'}
         msp = MacroServerPools(10)
         se = Selector(msp, self.__version)
-        db = PyTango.Database()
+        # db = PyTango.Database()
 
         se["ConfigDevice"] = 'module'
         inst = se.setConfigInstance()
         cps = inst.availableComponents() or []
         dss = inst.availableDataSources() or []
         sls = inst.availableSelections() or []
-        # print "CPS !!!!", cps
-        # print "DSS !!!!", dss
 
         for i in range(5):
             arg2 = [
@@ -1996,7 +1974,6 @@ class SelectorTest(unittest.TestCase):
             ]
 
             for ar in arg2:
-                # print "ARR", ar
                 se = Selector(msp, self.__version)
                 se["ConfigDevice"] = 'module'
                 try:
@@ -2010,7 +1987,7 @@ class SelectorTest(unittest.TestCase):
     # updateOrderedChannels test
     def test_PreselectingDataSources(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -2027,7 +2004,7 @@ class SelectorTest(unittest.TestCase):
             pool.MotorList = []
             se["PreselectingDataSources"] = json.dumps([])
             self._ms.dps[self._ms.ms.keys()[0]].Init()
-            print "Motors", se.poolElementNames('MotorList')
+            print("Motors %s" % str(se.poolElementNames('MotorList')))
             se["ConfigDevice"] = val["ConfigDevice"]
             se["WriterDevice"] = val["WriterDevice"]
             self.assertEqual(len(se.keys()), len(self._keys))
@@ -2120,7 +2097,7 @@ class SelectorTest(unittest.TestCase):
     # updateOrderedChannels test
     def test_OrderedChannels(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -2173,8 +2150,8 @@ class SelectorTest(unittest.TestCase):
             se["OrderedChannels"] = json.dumps(dss)
             self.dump(se)
 
-            ads = se["OrderedChannels"]
-            # print "OCS:", ads
+            # ads =
+            se["OrderedChannels"]
 
             self.compareToDumpJSON(se, ["OrderedChannels"])
 
@@ -2227,8 +2204,8 @@ class SelectorTest(unittest.TestCase):
                 se["MntGrp"] = val["MntGrp"]
                 se.fetchSelection()
 
-            ads = se["OrderedChannels"]
-            # print "OCS:", ads
+            # ads =
+            se["OrderedChannels"]
 
             self.compareToDumpJSON(se, ["OrderedChannels"])
 
@@ -2245,7 +2222,7 @@ class SelectorTest(unittest.TestCase):
     # ComponentSelection test
     def test_ComponentSelection(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -2406,7 +2383,7 @@ class SelectorTest(unittest.TestCase):
     # DataSourceSelection test
     def test_DataSourceSelection(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -2462,7 +2439,6 @@ class SelectorTest(unittest.TestCase):
 
             ndss = json.loads(se["DataSourceSelection"])
             existing = set(dssn) & (set(chs) | set(cdss))
-            # print "existing", existing
             for key, value in ndss.items():
                 if key in existing:
                     self.assertEqual(ndss[key], dss[key])
@@ -2563,7 +2539,6 @@ class SelectorTest(unittest.TestCase):
 
             ndss = json.loads(se["DataSourceSelection"])
             existing = set(dssn) & (set(chs) | set(cdss))
-            # print "existing", existing
             for key, value in ndss.items():
                 if key in existing:
                     self.assertEqual(ndss[key], dss[key])
@@ -2575,7 +2550,7 @@ class SelectorTest(unittest.TestCase):
     # updateOrderedChannels test
     def test_ComponentPreselection(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -2594,7 +2569,7 @@ class SelectorTest(unittest.TestCase):
                 else:
                     self.assertEqual(se[key], val[key])
 
-            lds1 = self.__rnd.randint(1, 40)
+            # lds1 = self.__rnd.randint(1, 40)
 
             cps = {}
             lcp = self.__rnd.randint(1, 40)
@@ -2665,7 +2640,7 @@ class SelectorTest(unittest.TestCase):
     # userData test
     def test_UserData(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -2684,7 +2659,7 @@ class SelectorTest(unittest.TestCase):
                 else:
                     self.assertEqual(se[key], val[key])
 
-            lds1 = self.__rnd.randint(1, 40)
+            # lds1 = self.__rnd.randint(1, 40)
 
             cps = {}
             lcp = self.__rnd.randint(1, 40)
@@ -2749,7 +2724,7 @@ class SelectorTest(unittest.TestCase):
     # labels test
     def test_Labels(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -2768,7 +2743,7 @@ class SelectorTest(unittest.TestCase):
                 else:
                     self.assertEqual(se[key], val[key])
 
-            lds1 = self.__rnd.randint(1, 40)
+            # lds1 = self.__rnd.randint(1, 40)
 
             cps = {}
             lcp = self.__rnd.randint(1, 40)
@@ -2836,7 +2811,7 @@ class SelectorTest(unittest.TestCase):
     # labelpaths test
     def test_LabelPaths(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -2855,7 +2830,7 @@ class SelectorTest(unittest.TestCase):
                 else:
                     self.assertEqual(se[key], val[key])
 
-            lds1 = self.__rnd.randint(1, 40)
+            # lds1 = self.__rnd.randint(1, 40)
 
             cps = {}
             lcp = self.__rnd.randint(1, 40)
@@ -2924,7 +2899,7 @@ class SelectorTest(unittest.TestCase):
     # labellinks test
     def test_LabelLinks(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -2943,7 +2918,7 @@ class SelectorTest(unittest.TestCase):
                 else:
                     self.assertEqual(se[key], val[key])
 
-            lds1 = self.__rnd.randint(1, 40)
+            # lds1 = self.__rnd.randint(1, 40)
 
             cps = {}
             lcp = self.__rnd.randint(1, 40)
@@ -3011,7 +2986,7 @@ class SelectorTest(unittest.TestCase):
     # labeltypes test
     def test_LabelTypes(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -3030,7 +3005,7 @@ class SelectorTest(unittest.TestCase):
                 else:
                     self.assertEqual(se[key], val[key])
 
-            lds1 = self.__rnd.randint(1, 40)
+            # lds1 = self.__rnd.randint(1, 40)
 
             cps = {}
             lcp = self.__rnd.randint(1, 40)
@@ -3075,6 +3050,7 @@ class SelectorTest(unittest.TestCase):
             prop = json.loads(se["ChannelProperties"])
             self.assertEqual(prop, {})
 
+            mydata = {}
             if (i / 2) % 2:
                 if (i / 2) % 4:
                     se.set(mydict)
@@ -3098,7 +3074,7 @@ class SelectorTest(unittest.TestCase):
     # labelshapes test
     def test_LabelShapes(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -3117,7 +3093,7 @@ class SelectorTest(unittest.TestCase):
                 else:
                     self.assertEqual(se[key], val[key])
 
-            lds1 = self.__rnd.randint(1, 40)
+            # lds1 = self.__rnd.randint(1, 40)
 
             cps = {}
             lcp = self.__rnd.randint(1, 40)
@@ -3189,7 +3165,7 @@ class SelectorTest(unittest.TestCase):
     # configvariables test
     def test_ConfigVariables(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -3208,7 +3184,7 @@ class SelectorTest(unittest.TestCase):
                 else:
                     self.assertEqual(se[key], val[key])
 
-            lds1 = self.__rnd.randint(1, 40)
+            # lds1 = self.__rnd.randint(1, 40)
 
             cps = {}
             lcp = self.__rnd.randint(1, 40)
@@ -3270,7 +3246,7 @@ class SelectorTest(unittest.TestCase):
     # timers test
     def test_Timer(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -3289,7 +3265,7 @@ class SelectorTest(unittest.TestCase):
                 else:
                     self.assertEqual(se[key], val[key])
 
-            lds1 = self.__rnd.randint(1, 40)
+            # lds1 = self.__rnd.randint(1, 40)
 
             lcp = self.__rnd.randint(1, 40)
             cps = [self.getRandomName(10) for _ in range(lcp)]
@@ -3343,7 +3319,7 @@ class SelectorTest(unittest.TestCase):
     # DataSourcePreselection test
     def test_DataSourcePreselection(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -3362,7 +3338,7 @@ class SelectorTest(unittest.TestCase):
                 else:
                     self.assertEqual(se[key], val[key])
 
-            lds1 = self.__rnd.randint(1, 40)
+            # lds1 = self.__rnd.randint(1, 40)
 
             cps = {}
             lcp = self.__rnd.randint(1, 40)
@@ -3418,7 +3394,7 @@ class SelectorTest(unittest.TestCase):
     # OptionalComponents test
     def test_OptionalComponents(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -3437,7 +3413,7 @@ class SelectorTest(unittest.TestCase):
                 else:
                     self.assertEqual(se[key], val[key])
 
-            lds1 = self.__rnd.randint(1, 40)
+            # lds1 = self.__rnd.randint(1, 40)
 
             lcp = self.__rnd.randint(1, 40)
             cps = [self.getRandomName(10) for _ in range(lcp)]
@@ -3492,7 +3468,7 @@ class SelectorTest(unittest.TestCase):
     # UnplottedComponents test
     def test_UnplottedComponents(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -3511,7 +3487,7 @@ class SelectorTest(unittest.TestCase):
                 else:
                     self.assertEqual(se[key], val[key])
 
-            lds1 = self.__rnd.randint(1, 40)
+            # lds1 = self.__rnd.randint(1, 40)
 
             lcp = self.__rnd.randint(1, 40)
             cps = [self.getRandomName(10) for _ in range(lcp)]
@@ -3570,7 +3546,7 @@ class SelectorTest(unittest.TestCase):
     # DefaultDynamicPath test
     def test_DefaultDynamicPath(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -3589,9 +3565,9 @@ class SelectorTest(unittest.TestCase):
                 else:
                     self.assertEqual(se[key], val[key])
 
-            lds1 = self.__rnd.randint(1, 40)
+            # lds1 = self.__rnd.randint(1, 40)
 
-            lcp = self.__rnd.randint(1, 40)
+            # lcp = self.__rnd.randint(1, 40)
             cps = self.getRandomName(10)
             se["DefaultDynamicPath"] = cps
 
@@ -3644,7 +3620,7 @@ class SelectorTest(unittest.TestCase):
     # AppendEntry test
     def test_AppendEntry(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -3664,13 +3640,12 @@ class SelectorTest(unittest.TestCase):
                 else:
                     self.assertEqual(se[key], val[key])
 
-            lds1 = self.__rnd.randint(1, 40)
+            # lds1 = self.__rnd.randint(1, 40)
 
             cps = bool(self.__rnd.randint(0, 1))
             se["AppendEntry"] = cps
 
             self.dump(se)
-            # print "SE", se["TimeZone"]
             mydict = {}
             if (i / 2) % 2:
                 mydict = se.get()
@@ -3693,15 +3668,11 @@ class SelectorTest(unittest.TestCase):
                 se["MntGrp"] = val["MntGrp"]
                 se.storeSelection()
 
-            # print "SE2", se["TimeZone"]
-            # print "SE3", se["TimeZone"]
             self.compareToDump(se, ["AppendEntry"])
             self.assertEqual(se["AppendEntry"], cps)
 
             se.reset()
             self.assertEqual(se["AppendEntry"], False)
-            # print "ISE2", se["TimeZone"]
-            # print "ISE3", se["TimeZone"]
 
             mydata = {}
             if (i / 2) % 2:
@@ -3716,15 +3687,13 @@ class SelectorTest(unittest.TestCase):
                 se["MntGrp"] = val["MntGrp"]
                 se.fetchSelection()
 
-            # print "WSE2", se["TimeZone"]
-            # print "WSE3", se["TimeZone"]
             self.compareToDump(se, ["AppendEntry"])
             self.assertEqual(se["AppendEntry"], cps)
 
     # ComponentsFromMntGrp test
     def test_ComponentsFromMntGrp(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -3743,7 +3712,7 @@ class SelectorTest(unittest.TestCase):
                 else:
                     self.assertEqual(se[key], val[key])
 
-            lds1 = self.__rnd.randint(1, 40)
+            # lds1 = self.__rnd.randint(1, 40)
 
             cps = bool(self.__rnd.randint(0, 1))
             se["ComponentsFromMntGrp"] = cps
@@ -3796,7 +3765,7 @@ class SelectorTest(unittest.TestCase):
     # DynamicComponents test
     def test_DynamicComponents(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -3815,7 +3784,7 @@ class SelectorTest(unittest.TestCase):
                 else:
                     self.assertEqual(se[key], val[key])
 
-            lds1 = self.__rnd.randint(1, 40)
+            # lds1 = self.__rnd.randint(1, 40)
 
             cps = bool(self.__rnd.randint(0, 1))
             se["DynamicComponents"] = cps
@@ -3868,7 +3837,7 @@ class SelectorTest(unittest.TestCase):
     # DefaultDynamicLinks test
     def test_DefaultDynamicLinks(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -3887,7 +3856,7 @@ class SelectorTest(unittest.TestCase):
                 else:
                     self.assertEqual(se[key], val[key])
 
-            lds1 = self.__rnd.randint(1, 40)
+            # lds1 = self.__rnd.randint(1, 40)
 
             cps = bool(self.__rnd.randint(0, 1))
             se["DefaultDynamicLinks"] = cps
@@ -3941,7 +3910,7 @@ class SelectorTest(unittest.TestCase):
     # \brief It tests default settings
     def test_preselect_simple(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -3951,7 +3920,7 @@ class SelectorTest(unittest.TestCase):
         se["Door"] = val["Door"]
         se["ConfigDevice"] = val["ConfigDevice"]
         se["WriterDevice"] = val["WriterDevice"]
-        channelerrors = []
+        # channelerrors = []
         se.descErrors = None
         self.myAssertRaise(Exception, se.preselect)
         se.descErrors = []
@@ -3960,7 +3929,7 @@ class SelectorTest(unittest.TestCase):
         self.assertEqual(res, '{}')
         res2 = se["DataSourcePreselection"]
         self.assertEqual(res2, '{}')
-        print self._cf.dp.GetCommandVariable("COMMANDS")
+        print(self._cf.dp.GetCommandVariable("COMMANDS"))
         self.assertEqual(
             json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
             ['AvailableComponents', 'AvailableDataSources',
@@ -3972,7 +3941,7 @@ class SelectorTest(unittest.TestCase):
     # \brief It tests default settings
     def test_preselect_withcf(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -3983,7 +3952,7 @@ class SelectorTest(unittest.TestCase):
         se["ConfigDevice"] = val["ConfigDevice"]
         se["WriterDevice"] = val["WriterDevice"]
         channelerrors = []
-        poolchannels = []
+        # poolchannels = []
         componentgroup = {}
         datasourcegroup = {}
 
@@ -4000,7 +3969,7 @@ class SelectorTest(unittest.TestCase):
         self.assertEqual(componentgroup, {})
         self.assertEqual(datasourcegroup, {})
         self.assertEqual(channelerrors, [])
-        print self._cf.dp.GetCommandVariable("COMMANDS")
+        print(self._cf.dp.GetCommandVariable("COMMANDS"))
         self.assertEqual(
             json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
             ["AvailableComponents", "AvailableDataSources",
@@ -4008,13 +3977,12 @@ class SelectorTest(unittest.TestCase):
         self.assertEqual(
             json.loads(self._cf.dp.GetCommandVariable("VARS")),
             [None, None, None, None])
-#        print self._cf.dp.availableComponents()
 
     # test
     # \brief It tests default settings
     def test_preselect_withcf_cps(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -4043,7 +4011,7 @@ class SelectorTest(unittest.TestCase):
         self.myAssertDict(json.loads(res2), {"ann2": True, "ann5": True})
         self.assertEqual(channelerrors, [])
 
-        print self._cf.dp.GetCommandVariable("COMMANDS")
+        print(self._cf.dp.GetCommandVariable("COMMANDS"))
         self.assertEqual(
             json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
             ["AvailableComponents", "AvailableDataSources",
@@ -4084,7 +4052,7 @@ class SelectorTest(unittest.TestCase):
     # \brief It tests default settings
     def test_preselect_withcf_cps_False(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -4111,7 +4079,6 @@ class SelectorTest(unittest.TestCase):
         self.myAssertDict(json.loads(res), {"mycp": False})
         self.assertEqual(channelerrors, [])
 
-        #        print self._cf.dp.GetCommandVariable("COMMANDS")
         self.assertEqual(
             json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
             ["AvailableComponents",
@@ -4136,7 +4103,7 @@ class SelectorTest(unittest.TestCase):
     # \brief It tests default settings
     def test_preselect_withcf_cps_t(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -4165,7 +4132,7 @@ class SelectorTest(unittest.TestCase):
         self.myAssertDict(json.loads(res2), {"ann2": True, "ann5": True})
         self.assertEqual(channelerrors, [])
 
-        print self._cf.dp.GetCommandVariable("COMMANDS")
+        print(self._cf.dp.GetCommandVariable("COMMANDS"))
         self.assertEqual(
             json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
             ["AvailableComponents", "AvailableDataSources",
@@ -4187,7 +4154,7 @@ class SelectorTest(unittest.TestCase):
     # \brief It tests default settings
     def test_preselect_withcf_nocps(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -4216,7 +4183,7 @@ class SelectorTest(unittest.TestCase):
         self.myAssertDict(json.loads(res2), {})
         self.assertEqual(channelerrors, [])
 
-        print self._cf.dp.GetCommandVariable("COMMANDS")
+        print(self._cf.dp.GetCommandVariable("COMMANDS"))
         self.assertEqual(
             json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
             ["AvailableComponents", "AvailableDataSources",
@@ -4231,7 +4198,7 @@ class SelectorTest(unittest.TestCase):
     # \brief It tests default settings
     def test_preselect_withcf_nochannel(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -4261,7 +4228,7 @@ class SelectorTest(unittest.TestCase):
 
         self.assertEqual(channelerrors, [])
 
-        print self._cf.dp.GetCommandVariable("COMMANDS")
+        print(self._cf.dp.GetCommandVariable("COMMANDS"))
         self.assertEqual(
             json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
             ["AvailableComponents", "AvailableDataSources",
@@ -4278,7 +4245,6 @@ class SelectorTest(unittest.TestCase):
                           None, val["MntGrp"]])
         self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
         sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-        # print sed
         self.assertEqual(len(sed.keys()), len(self._keys))
         for key, vl in self._keys:
             self.assertTrue(key in sed.keys())
@@ -4299,7 +4265,7 @@ class SelectorTest(unittest.TestCase):
     # \brief It tests default settings
     def test_preselect_withcf_nochannel_False(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -4329,7 +4295,7 @@ class SelectorTest(unittest.TestCase):
         self.myAssertDict(json.loads(res2), {"ann3": False})
         self.assertEqual(channelerrors, [])
 
-        print self._cf.dp.GetCommandVariable("COMMANDS")
+        print(self._cf.dp.GetCommandVariable("COMMANDS"))
         self.assertEqual(
             json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
             ["AvailableComponents", "AvailableDataSources",
@@ -4346,7 +4312,7 @@ class SelectorTest(unittest.TestCase):
     # \brief It tests default settings
     def test_preselect_withcf_nochannel_t(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -4376,7 +4342,7 @@ class SelectorTest(unittest.TestCase):
 
         self.assertEqual(channelerrors, [])
 
-        print self._cf.dp.GetCommandVariable("COMMANDS")
+        print(self._cf.dp.GetCommandVariable("COMMANDS"))
         self.assertEqual(
             json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
             ["AvailableComponents", "AvailableDataSources",
@@ -4393,7 +4359,7 @@ class SelectorTest(unittest.TestCase):
     # \brief It tests default settings
     def test_preselect_wds_t(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -4423,7 +4389,7 @@ class SelectorTest(unittest.TestCase):
 
         self.assertEqual(channelerrors, [])
 
-        print self._cf.dp.GetCommandVariable("COMMANDS")
+        print(self._cf.dp.GetCommandVariable("COMMANDS"))
         self.assertEqual(
             json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
             ["AvailableComponents", "AvailableDataSources",
@@ -4437,7 +4403,7 @@ class SelectorTest(unittest.TestCase):
     # \brief It tests default settings
     def test_preselect_wds(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -4466,7 +4432,7 @@ class SelectorTest(unittest.TestCase):
         self.myAssertDict(json.loads(res2), {"scalar_uchar": True})
         self.assertEqual(channelerrors, [])
 
-        print self._cf.dp.GetCommandVariable("COMMANDS")
+        print(self._cf.dp.GetCommandVariable("COMMANDS"))
         self.assertEqual(
             json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
             ["AvailableComponents", "AvailableDataSources",
@@ -4510,7 +4476,7 @@ class SelectorTest(unittest.TestCase):
     # \brief It tests default settings
     def test_preselect_wds_False(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -4540,7 +4506,7 @@ class SelectorTest(unittest.TestCase):
         self.myAssertDict(json.loads(res2), {"scalar_uchar": False})
         self.assertEqual(channelerrors, [])
 
-        print self._cf.dp.GetCommandVariable("COMMANDS")
+        print(self._cf.dp.GetCommandVariable("COMMANDS"))
         self.assertEqual(
             json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
             ["AvailableComponents", "AvailableDataSources",
@@ -4564,7 +4530,7 @@ class SelectorTest(unittest.TestCase):
     # \brief It tests default settings
     def test_preselect_wds2(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -4599,7 +4565,7 @@ class SelectorTest(unittest.TestCase):
                                              "scalar_ulong": True})
         self.assertEqual(channelerrors, [])
 
-        print self._cf.dp.GetCommandVariable("COMMANDS")
+        print(self._cf.dp.GetCommandVariable("COMMANDS"))
         self.assertEqual(
             json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
             ["AvailableComponents", "AvailableDataSources",
@@ -4618,7 +4584,8 @@ class SelectorTest(unittest.TestCase):
              "DataSources",
              "AvailableDataSources", "StoreSelection"
              ])
-        res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+        # res2 =
+        json.loads(self._cf.dp.GetCommandVariable("VARS"))
         self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
         sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
         self.assertEqual(len(sed.keys()), len(self._keys))
@@ -4642,7 +4609,7 @@ class SelectorTest(unittest.TestCase):
     # \brief It tests default settings
     def test_preselect_2wds(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -4697,7 +4664,6 @@ class SelectorTest(unittest.TestCase):
             })
             self.assertEqual(len(channelerrors), 0)
 
-            # print self._cf.dp.GetCommandVariable("COMMANDS")
             # self.maxDiff = None
             self.assertEqual(
                 json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
@@ -4722,7 +4688,8 @@ class SelectorTest(unittest.TestCase):
                     "DataSources", "DataSources",
                     "AvailableDataSources", "StoreSelection"
                 ])
-            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            # res2 =
+            json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
             self.assertEqual(len(sed.keys()), len(self._keys))
@@ -4748,7 +4715,7 @@ class SelectorTest(unittest.TestCase):
     # \brief It tests default settings
     def test_preselect_2wds_False(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -4803,7 +4770,7 @@ class SelectorTest(unittest.TestCase):
             })
             self.assertEqual(len(channelerrors), 0)
 
-            print self._cf.dp.GetCommandVariable("COMMANDS")
+            print(self._cf.dp.GetCommandVariable("COMMANDS"))
             self.assertEqual(
                 json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
                 ["AvailableComponents", "AvailableDataSources",
@@ -4826,7 +4793,8 @@ class SelectorTest(unittest.TestCase):
                  "DataSources", "DataSources",
                  "AvailableDataSources", "StoreSelection"]
             )
-            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            # res2 =
+            json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
             self.assertEqual(len(sed.keys()), len(self._keys))
@@ -4852,7 +4820,7 @@ class SelectorTest(unittest.TestCase):
     # \brief It tests default settings
     def test_preselect_2wds_dvnorunning(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -4866,7 +4834,7 @@ class SelectorTest(unittest.TestCase):
             se["Door"] = val["Door"]
             se["ConfigDevice"] = val["ConfigDevice"]
             se["WriterDevice"] = val["WriterDevice"]
-            channelerrors = []
+            # channelerrors = []
             poolchannels = []
             componentgroup = {
                 "smycp": True, "smycp2": False, "smycp3": None,
@@ -4905,7 +4873,6 @@ class SelectorTest(unittest.TestCase):
             })
             self.assertEqual(len(se.descErrors), 6)
 
-    #        print self._cf.dp.GetCommandVariable("COMMANDS")
             self.assertEqual(
                 json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
                 [
@@ -4928,7 +4895,8 @@ class SelectorTest(unittest.TestCase):
                     "DataSources", "DataSources", "DataSources",
                     "DataSources", "DataSources", "DataSources",
                     "AvailableDataSources", "StoreSelection"])
-            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            # res2 =
+            json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
             self.assertEqual(len(sed.keys()), len(self._keys))
@@ -4954,7 +4922,7 @@ class SelectorTest(unittest.TestCase):
     # \brief It tests default settings
     def test_preselect_2wds_dvnorunning_pe(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -4968,7 +4936,7 @@ class SelectorTest(unittest.TestCase):
             se["Door"] = val["Door"]
             se["ConfigDevice"] = val["ConfigDevice"]
             se["WriterDevice"] = val["WriterDevice"]
-            channelerrors = []
+            # channelerrors = []
             poolchannels = []
             componentgroup = dict((k, None) for k in self.specps.keys())
             datasourcegroup = dict((k, None) for k in self.spedss.keys())
@@ -4991,7 +4959,6 @@ class SelectorTest(unittest.TestCase):
             res = se["ComponentPreselection"]
             resd = se["DataSourcePreselection"]
 
-            # print res
             self.myAssertDict(json.loads(res), {
                 u'pyeval1a': True, u'pyeval2a': None, u'pyeval2c': None,
                 u'pyeval2b': True, u'pyeval2': True, u'pyeval0': True,
@@ -5003,8 +4970,8 @@ class SelectorTest(unittest.TestCase):
             )
             self.assertEqual(len(se.descErrors), 4)
 
-    #        print self._cf.dp.GetCommandVariable("COMMANDS")
-            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            # res2 =
+            json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
             self.assertEqual(len(sed.keys()), len(self._keys))
@@ -5030,7 +4997,7 @@ class SelectorTest(unittest.TestCase):
     # \brief It tests default settings
     def test_preselect_2wds2_dvnorunning_pe(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -5044,7 +5011,7 @@ class SelectorTest(unittest.TestCase):
             se["Door"] = val["Door"]
             se["ConfigDevice"] = val["ConfigDevice"]
             se["WriterDevice"] = val["WriterDevice"]
-            channelerrors = []
+            # channelerrors = []
             poolchannels = []
             componentgroup = dict((k, None) for k in self.specps.keys())
             datasourcegroup = dict((k, None) for k in self.spedss.keys())
@@ -5067,7 +5034,6 @@ class SelectorTest(unittest.TestCase):
             res = se["ComponentPreselection"]
             resd = se["DataSourcePreselection"]
 
-            # print res
             self.myAssertDict(json.loads(res), {
                 u'pyeval1a': True, u'pyeval2a': True, u'pyeval2c': True,
                 u'pyeval2b': True, u'pyeval2': True, u'pyeval0': True,
@@ -5079,8 +5045,8 @@ class SelectorTest(unittest.TestCase):
             )
             self.assertEqual(len(se.descErrors), 0)
 
-    #        print self._cf.dp.GetCommandVariable("COMMANDS")
-            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            # res2 =
+            json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
             self.assertEqual(len(sed.keys()), len(self._keys))
@@ -5106,7 +5072,7 @@ class SelectorTest(unittest.TestCase):
     # \brief It tests default settings
     def test_preselect_2wds2_dvnorunning_pe_true(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -5120,7 +5086,7 @@ class SelectorTest(unittest.TestCase):
             se["Door"] = val["Door"]
             se["ConfigDevice"] = val["ConfigDevice"]
             se["WriterDevice"] = val["WriterDevice"]
-            channelerrors = []
+            # channelerrors = []
             poolchannels = []
             componentgroup = dict((k, True) for k in self.specps.keys())
             datasourcegroup = dict((k, True) for k in self.spedss.keys())
@@ -5143,7 +5109,6 @@ class SelectorTest(unittest.TestCase):
             res = se["ComponentPreselection"]
             resd = se["DataSourcePreselection"]
 
-            # print res
             self.myAssertDict(json.loads(res), {
                 u'pyeval1a': True, u'pyeval2a': True, u'pyeval2c': True,
                 u'pyeval2b': True, u'pyeval2': True, u'pyeval0': True,
@@ -5155,8 +5120,8 @@ class SelectorTest(unittest.TestCase):
             )
             self.assertEqual(len(se.descErrors), 0)
 
-    #        print self._cf.dp.GetCommandVariable("COMMANDS")
-            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            # res2 =
+            json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(
                 not val["MntGrp"] in self._cf.dp.availableSelections())
         finally:
@@ -5166,7 +5131,7 @@ class SelectorTest(unittest.TestCase):
 
     def test_preselect_2wds2_dvnorunning_pe_false(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -5180,7 +5145,7 @@ class SelectorTest(unittest.TestCase):
             se["Door"] = val["Door"]
             se["ConfigDevice"] = val["ConfigDevice"]
             se["WriterDevice"] = val["WriterDevice"]
-            channelerrors = []
+            # channelerrors = []
             poolchannels = []
             componentgroup = dict((k, False) for k in self.specps.keys())
             datasourcegroup = dict((k, False) for k in self.spedss.keys())
@@ -5203,20 +5168,20 @@ class SelectorTest(unittest.TestCase):
             res = se["ComponentPreselection"]
             resd = se["DataSourcePreselection"]
 
-            # print res
             self.myAssertDict(json.loads(res), {
                 u'pyeval1a': False, u'pyeval2a': False, u'pyeval2c': False,
                 u'pyeval2b': False, u'pyeval2': False, u'pyeval0': False,
                 u'pyeval1': False})
             self.myAssertDict(json.loads(resd), {
-                u'pyeval1ads': False, u'pyeval2ads': False, u'pyeval2bds': False,
+                u'pyeval1ads': False, u'pyeval2ads': False,
+                u'pyeval2bds': False,
                 u'pyeval2cds': False, u'pyeval0ds': False, u'pyeval1ds': False,
                 u'pyeval2ds': False}
             )
             self.assertEqual(len(se.descErrors), 0)
 
-    #        print self._cf.dp.GetCommandVariable("COMMANDS")
-            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            # res2 =
+            json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(
                 not val["MntGrp"] in self._cf.dp.availableSelections())
         finally:
@@ -5226,7 +5191,7 @@ class SelectorTest(unittest.TestCase):
     # \brief It tests default settings
     def test_preselect_2wds_dvnorunning_pe_true(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -5240,7 +5205,7 @@ class SelectorTest(unittest.TestCase):
             se["Door"] = val["Door"]
             se["ConfigDevice"] = val["ConfigDevice"]
             se["WriterDevice"] = val["WriterDevice"]
-            channelerrors = []
+            # channelerrors = []
             poolchannels = []
             componentgroup = dict((k, True) for k in self.specps.keys())
             datasourcegroup = dict((k, True) for k in self.spedss.keys())
@@ -5263,7 +5228,6 @@ class SelectorTest(unittest.TestCase):
             res = se["ComponentPreselection"]
             resd = se["DataSourcePreselection"]
 
-            # print res
             self.myAssertDict(json.loads(res), {
                 u'pyeval1a': True, u'pyeval2a': None, u'pyeval2c': None,
                 u'pyeval2b': True, u'pyeval2': True, u'pyeval0': True,
@@ -5275,8 +5239,8 @@ class SelectorTest(unittest.TestCase):
             )
             self.assertEqual(len(se.descErrors), 4)
 
-    #        print self._cf.dp.GetCommandVariable("COMMANDS")
-            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            # res2 =
+            json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
             self.assertEqual(len(sed.keys()), len(self._keys))
@@ -5302,7 +5266,7 @@ class SelectorTest(unittest.TestCase):
     # \brief It tests default settings
     def test_preselect_2wds_dvnorunning_pe_false(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -5316,7 +5280,7 @@ class SelectorTest(unittest.TestCase):
             se["Door"] = val["Door"]
             se["ConfigDevice"] = val["ConfigDevice"]
             se["WriterDevice"] = val["WriterDevice"]
-            channelerrors = []
+            # channelerrors = []
             poolchannels = []
             componentgroup = dict((k, False) for k in self.specps.keys())
             datasourcegroup = dict((k, False) for k in self.spedss.keys())
@@ -5345,14 +5309,16 @@ class SelectorTest(unittest.TestCase):
                 "pyeval1": False}
             )
             self.myAssertDict(json.loads(resd), {
-                u'pyeval1ads': False, u'pyeval2ads': None, u'pyeval2bds': False,
-                u'pyeval2cds': None, u'pyeval0ds': False, u'pyeval1ds': False,
+                u'pyeval1ads': False, u'pyeval2ads': None,
+                u'pyeval2bds': False,
+                u'pyeval2cds': None, u'pyeval0ds': False,
+                u'pyeval1ds': False,
                 u'pyeval2ds': False}
             )
             self.assertEqual(len(se.descErrors), 4)
 
-    #        print self._cf.dp.GetCommandVariable("COMMANDS")
-            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            # res2 =
+            json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
             self.assertEqual(len(sed.keys()), len(self._keys))
@@ -5378,7 +5344,7 @@ class SelectorTest(unittest.TestCase):
     # \brief It tests default settings
     def test_preselect_2wds_dvnodef(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -5388,7 +5354,7 @@ class SelectorTest(unittest.TestCase):
         se["Door"] = val["Door"]
         se["ConfigDevice"] = val["ConfigDevice"]
         se["WriterDevice"] = val["WriterDevice"]
-        channelerrors = []
+        # channelerrors = []
         poolchannels = []
         componentgroup = {"smycp": None, "smycp2": False, "smycp3": True,
                           "s2mycp": None, "s2mycp2": False, "s2mycp3": True}
@@ -5451,7 +5417,8 @@ class SelectorTest(unittest.TestCase):
                 "AvailableDataSources", "StoreSelection"
             ]
         )
-        res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+        # res2 =
+        json.loads(self._cf.dp.GetCommandVariable("VARS"))
         self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
         sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
         self.assertEqual(len(sed.keys()), len(self._keys))
@@ -5475,7 +5442,7 @@ class SelectorTest(unittest.TestCase):
     # \brief It tests default settings
     def test_preselect_2wds_nods(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -5489,7 +5456,7 @@ class SelectorTest(unittest.TestCase):
             se["Door"] = val["Door"]
             se["ConfigDevice"] = val["ConfigDevice"]
             se["WriterDevice"] = val["WriterDevice"]
-            channelerrors = []
+            # channelerrors = []
             poolchannels = []
             componentgroup = {
                 "smycp": False, "smycp2": None, "smycp3": True,
@@ -5528,7 +5495,8 @@ class SelectorTest(unittest.TestCase):
             })
             self.assertEqual(len(se.descErrors), 6)
 
-            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            # res2 =
+            json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
             self.assertEqual(len(sed.keys()), len(self._keys))
@@ -5554,7 +5522,7 @@ class SelectorTest(unittest.TestCase):
     # \brief It tests default settings
     def test_preselect_2wds_nodspool(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -5568,7 +5536,7 @@ class SelectorTest(unittest.TestCase):
             se["Door"] = val["Door"]
             se["ConfigDevice"] = val["ConfigDevice"]
             se["WriterDevice"] = val["WriterDevice"]
-            channelerrors = []
+            # channelerrors = []
             poolchannels = ["scalar2_long", "spectrum2_short",
                             "scalar2_uchar", "scalar2_string"]
             componentgroup = {
@@ -5596,12 +5564,10 @@ class SelectorTest(unittest.TestCase):
             se.preselect()
             res = se["ComponentPreselection"]
 
-            # print res
             self.myAssertDict(json.loads(res), {
                 "smycp": True, "smycp2": False, "smycp3": True,
                 "s2mycp": None, "s2mycp2": None, "s2mycp3": None})
             resd = se["DataSourcePreselection"]
-            # print resd
             self.myAssertDict(json.loads(resd), {
                 "scalar_uchar": True, "scalar_string": True,
                 "scalar_ulong": False,
@@ -5610,8 +5576,8 @@ class SelectorTest(unittest.TestCase):
             })
             self.assertEqual(len(se.descErrors), 6)
 
-    #        print self._cf.dp.GetCommandVariable("COMMANDS")
-            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            # res2 =
+            json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
             self.assertEqual(len(sed.keys()), len(self._keys))
@@ -5637,7 +5603,7 @@ class SelectorTest(unittest.TestCase):
     # \brief It tests default settings
     def test_preselect_2wds_notangods(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -5696,8 +5662,8 @@ class SelectorTest(unittest.TestCase):
             })
             self.assertEqual(len(channelerrors), 0)
 
-    #        print self._cf.dp.GetCommandVariable("COMMANDS")
-            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            # res2 =
+            json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
             self.assertEqual(len(sed.keys()), len(self._keys))
@@ -5723,7 +5689,7 @@ class SelectorTest(unittest.TestCase):
     # \brief It tests default settings
     def test_preselect_2wds_notangodsnopool(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -5737,7 +5703,7 @@ class SelectorTest(unittest.TestCase):
             se["Door"] = val["Door"]
             se["ConfigDevice"] = val["ConfigDevice"]
             se["WriterDevice"] = val["WriterDevice"]
-            channelerrors = []
+            # channelerrors = []
             poolchannels = ["scalar2_long", "spectrum2_short", "client_long",
                             "scalar2_uchar", "scalar2_string", "ann3"]
             componentgroup = {"smycp": None, "smycp2": True,
@@ -5773,7 +5739,6 @@ class SelectorTest(unittest.TestCase):
                 "s2mycp": True, "s2mycp2": True, "s2mycp3": False,
                 "smycpnt1": None})
             resd = se["DataSourcePreselection"]
-            # print resd
             self.myAssertDict(json.loads(resd), {
                 "scalar_uchar": True, "scalar_string": True,
                 "scalar_ulong": False,
@@ -5783,8 +5748,8 @@ class SelectorTest(unittest.TestCase):
             })
             self.assertEqual(len(se.descErrors), 2)
 
-    #        print self._cf.dp.GetCommandVariable("COMMANDS")
-            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            # res2 =
+            json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
             self.assertEqual(len(sed.keys()), len(self._keys))
@@ -5810,7 +5775,7 @@ class SelectorTest(unittest.TestCase):
     # \brief It tests default settings
     def test_preselect_2wds_notangodsnopool_False(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -5824,7 +5789,7 @@ class SelectorTest(unittest.TestCase):
             se["Door"] = val["Door"]
             se["ConfigDevice"] = val["ConfigDevice"]
             se["WriterDevice"] = val["WriterDevice"]
-            channelerrors = []
+            # channelerrors = []
             poolchannels = ["scalar2_long", "spectrum2_short", "client_long",
                             "scalar2_uchar", "scalar2_string", "ann3"]
             componentgroup = {"smycp": None, "smycp2": True,
@@ -5860,7 +5825,6 @@ class SelectorTest(unittest.TestCase):
                 "s2mycp": True, "s2mycp2": True, "s2mycp3": False,
                 "smycpnt1": None})
             resd = se["DataSourcePreselection"]
-            # print resd
             self.myAssertDict(json.loads(resd), {
                 "scalar_uchar": True, "scalar_string": True,
                 "scalar_ulong": False,
@@ -5870,8 +5834,8 @@ class SelectorTest(unittest.TestCase):
             })
             self.assertEqual(len(se.descErrors), 2)
 
-    #        print self._cf.dp.GetCommandVariable("COMMANDS")
-            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            # res2 =
+            json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
             self.assertEqual(len(sed.keys()), len(self._keys))
@@ -5897,7 +5861,7 @@ class SelectorTest(unittest.TestCase):
     # \brief It tests default settings
     def test_preselect_2wds_notangodsnopool2(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -5911,7 +5875,7 @@ class SelectorTest(unittest.TestCase):
             se["Door"] = val["Door"]
             se["ConfigDevice"] = val["ConfigDevice"]
             se["WriterDevice"] = val["WriterDevice"]
-            channelerrors = []
+            # channelerrors = []
             poolchannels = ["scalar2_long", "spectrum2_short", "client_long",
                             "scalar2_uchar", "scalar2_string", "ann3"]
             componentgroup = {"smycp": False, "smycp2": True,
@@ -5936,8 +5900,8 @@ class SelectorTest(unittest.TestCase):
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
 
             msp.updateMacroServer(self._ms.door.keys()[0])
-            pools = msp.getPools(self._ms.door.keys()[0])
-            # print "POOLS", pools
+            # pools =
+            msp.getPools(self._ms.door.keys()[0])
 
             se["PreselectingDataSources"] = json.dumps(poolchannels)
             se["ComponentPreselection"] = json.dumps(componentgroup)
@@ -5951,7 +5915,6 @@ class SelectorTest(unittest.TestCase):
                 "s2mycp": True, "s2mycp2": True, "s2mycp3": False,
                 "smycpnt1": None})
             resd = se["DataSourcePreselection"]
-            # print resd
             self.myAssertDict(json.loads(resd), {
                 "scalar_uchar": True, "scalar_string": True,
                 "scalar_ulong": False,
@@ -5961,8 +5924,8 @@ class SelectorTest(unittest.TestCase):
             })
             self.assertEqual(len(se.descErrors), 2)
 
-    #        print self._cf.dp.GetCommandVariable("COMMANDS")
-            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            # res2 =
+            json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
             self.assertEqual(len(sed.keys()), len(self._keys))
@@ -5988,7 +5951,7 @@ class SelectorTest(unittest.TestCase):
     # \brief It tests default settings
     def test_preselect_2wds_notangodsnopool2_False(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -6002,7 +5965,7 @@ class SelectorTest(unittest.TestCase):
             se["Door"] = val["Door"]
             se["ConfigDevice"] = val["ConfigDevice"]
             se["WriterDevice"] = val["WriterDevice"]
-            channelerrors = []
+            # channelerrors = []
             poolchannels = ["scalar2_long", "spectrum2_short", "client_long",
                             "scalar2_uchar", "scalar2_string", "ann3"]
             componentgroup = {"smycp": False, "smycp2": True,
@@ -6027,8 +5990,8 @@ class SelectorTest(unittest.TestCase):
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
 
             msp.updateMacroServer(self._ms.door.keys()[0])
-            pools = msp.getPools(self._ms.door.keys()[0])
-            # print "POOLS", pools
+            # pools =
+            msp.getPools(self._ms.door.keys()[0])
 
             se["PreselectingDataSources"] = json.dumps(poolchannels)
             se["ComponentPreselection"] = json.dumps(componentgroup)
@@ -6042,7 +6005,6 @@ class SelectorTest(unittest.TestCase):
                 "s2mycp": True, "s2mycp2": True, "s2mycp3": False,
                 "smycpnt1": None})
             resd = se["DataSourcePreselection"]
-            # print resd
             self.myAssertDict(json.loads(resd), {
                 "scalar_uchar": True, "scalar_string": True,
                 "scalar_ulong": False,
@@ -6052,8 +6014,8 @@ class SelectorTest(unittest.TestCase):
             })
             self.assertEqual(len(se.descErrors), 2)
 
-    #        print self._cf.dp.GetCommandVariable("COMMANDS")
-            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            # res2 =
+            json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
             self.assertEqual(len(sed.keys()), len(self._keys))
@@ -6079,7 +6041,7 @@ class SelectorTest(unittest.TestCase):
     # \brief It tests default settings
     def test_preselect_2wds_notangods2(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -6104,7 +6066,7 @@ class SelectorTest(unittest.TestCase):
             db = PyTango.Database()
             db.put_device_property(self._ms.ms.keys()[0],
                                    {'PoolNames': self._pool.dp.name()})
-            channelerrors = []
+            # channelerrors = []
             poolchannels = []
             componentgroup = {"smycp": False, "smycp2": None,
                               "smycp3": True, "smycpnt1": None,
@@ -6130,7 +6092,6 @@ class SelectorTest(unittest.TestCase):
             msp.updateMacroServer(self._ms.door.keys()[0])
             pools = msp.getPools(self._ms.door.keys()[0])
             pools[0].AcqChannelList = [json.dumps(a) for a in arr]
-            # print "POOLS", pools
 
             se["PreselectingDataSources"] = json.dumps(poolchannels)
             se["ComponentPreselection"] = json.dumps(componentgroup)
@@ -6145,7 +6106,6 @@ class SelectorTest(unittest.TestCase):
                 "smycpnt1": True})
             self.assertEqual(len(se.descErrors), 0)
             resd = se["DataSourcePreselection"]
-            # print resd
             self.myAssertDict(json.loads(resd), {
                 "scalar_uchar": True, "scalar_string": True,
                 "scalar_ulong": False,
@@ -6154,8 +6114,8 @@ class SelectorTest(unittest.TestCase):
                 "ann3": True,
             })
 
-    #        print self._cf.dp.GetCommandVariable("COMMANDS")
-            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            # res2 =
+            json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
             self.assertEqual(len(sed.keys()), len(self._keys))
@@ -6181,7 +6141,7 @@ class SelectorTest(unittest.TestCase):
     # \brief It tests default settings
     def test_preselect_2wds_notangods2_False(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -6206,7 +6166,7 @@ class SelectorTest(unittest.TestCase):
             db = PyTango.Database()
             db.put_device_property(self._ms.ms.keys()[0],
                                    {'PoolNames': self._pool.dp.name()})
-            channelerrors = []
+            # channelerrors = []
             poolchannels = []
             componentgroup = {"smycp": False, "smycp2": None,
                               "smycp3": True, "smycpnt1": False,
@@ -6232,7 +6192,6 @@ class SelectorTest(unittest.TestCase):
             msp.updateMacroServer(self._ms.door.keys()[0])
             pools = msp.getPools(self._ms.door.keys()[0])
             pools[0].AcqChannelList = [json.dumps(a) for a in arr]
-            # print "POOLS", pools
 
             se["PreselectingDataSources"] = json.dumps(poolchannels)
             se["ComponentPreselection"] = json.dumps(componentgroup)
@@ -6246,7 +6205,6 @@ class SelectorTest(unittest.TestCase):
                 "s2mycp": True, "s2mycp2": False, "s2mycp3": True,
                 "smycpnt1": False})
             resd = se["DataSourcePreselection"]
-            # print resd
             self.myAssertDict(json.loads(resd), {
                 "scalar_uchar": True, "scalar_string": True,
                 "scalar_ulong": False,
@@ -6256,8 +6214,8 @@ class SelectorTest(unittest.TestCase):
             })
             self.assertEqual(len(se.descErrors), 0)
 
-    #        print self._cf.dp.GetCommandVariable("COMMANDS")
-            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            # res2 =
+            json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
             self.assertEqual(len(sed.keys()), len(self._keys))
@@ -6283,7 +6241,7 @@ class SelectorTest(unittest.TestCase):
     # \brief It tests default settings
     def test_preselect_2wds_notangodspool_error(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -6308,7 +6266,7 @@ class SelectorTest(unittest.TestCase):
             db = PyTango.Database()
             db.put_device_property(self._ms.ms.keys()[0],
                                    {'PoolNames': self._pool.dp.name()})
-            channelerrors = []
+            # channelerrors = []
             poolchannels = ["scalar2_long", "spectrum2_short", "client_long",
                             "client_short",
                             "scalar2_uchar", "scalar2_string", "ann3"]
@@ -6336,7 +6294,6 @@ class SelectorTest(unittest.TestCase):
             msp.updateMacroServer(self._ms.door.keys()[0])
             pools = msp.getPools(self._ms.door.keys()[0])
             pools[0].AcqChannelList = [json.dumps(a) for a in arr]
-            # print "POOLS", pools
 
             se["PreselectingDataSources"] = json.dumps(poolchannels)
             se["ComponentPreselection"] = json.dumps(componentgroup)
@@ -6350,7 +6307,6 @@ class SelectorTest(unittest.TestCase):
                 "s2mycp": False, "s2mycp2": True, "s2mycp3": True,
                 "smycpnt1": None})
             resd = se["DataSourcePreselection"]
-            # print resd
             self.myAssertDict(json.loads(resd), {
                 "scalar_uchar": True, "scalar_string": True,
                 "scalar_ulong": False,
@@ -6360,8 +6316,8 @@ class SelectorTest(unittest.TestCase):
             })
             self.assertEqual(len(se.descErrors), 2)
 
-    #        print self._cf.dp.GetCommandVariable("COMMANDS")
-            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            # res2 =
+            json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
             self.assertEqual(len(sed.keys()), len(self._keys))
@@ -6387,7 +6343,7 @@ class SelectorTest(unittest.TestCase):
     # \brief It tests default settings
     def test_preselect_2wds_notangodspool_error_False(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -6412,7 +6368,7 @@ class SelectorTest(unittest.TestCase):
             db = PyTango.Database()
             db.put_device_property(self._ms.ms.keys()[0],
                                    {'PoolNames': self._pool.dp.name()})
-            channelerrors = []
+            # channelerrors = []
             poolchannels = ["scalar2_long", "spectrum2_short", "client_long",
                             "client_short",
                             "scalar2_uchar", "scalar2_string", "ann3"]
@@ -6440,7 +6396,6 @@ class SelectorTest(unittest.TestCase):
             msp.updateMacroServer(self._ms.door.keys()[0])
             pools = msp.getPools(self._ms.door.keys()[0])
             pools[0].AcqChannelList = [json.dumps(a) for a in arr]
-            # print "POOLS", pools
 
             se["PreselectingDataSources"] = json.dumps(poolchannels)
             se["ComponentPreselection"] = json.dumps(componentgroup)
@@ -6449,15 +6404,11 @@ class SelectorTest(unittest.TestCase):
             se.preselect()
             res = se["ComponentPreselection"]
 
-            # print res
-    #        print channelerrors
-
             self.myAssertDict(json.loads(res), {
                 "smycp": False, "smycp2": True, "smycp3": True,
                 "s2mycp": False, "s2mycp2": True, "s2mycp3": True,
                 "smycpnt1": None})
             resd = se["DataSourcePreselection"]
-            # print resd
             self.myAssertDict(json.loads(resd), {
                 "scalar_uchar": True, "scalar_string": True,
                 "scalar_ulong": False,
@@ -6467,8 +6418,8 @@ class SelectorTest(unittest.TestCase):
             })
             self.assertEqual(len(se.descErrors), 2)
 
-    #        print self._cf.dp.GetCommandVariable("COMMANDS")
-            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            # res2 =
+            json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
             self.assertEqual(len(sed.keys()), len(self._keys))
@@ -6494,7 +6445,7 @@ class SelectorTest(unittest.TestCase):
     # \brief It tests default settings
     def test_preselect_2wds_notangodspool(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -6516,7 +6467,7 @@ class SelectorTest(unittest.TestCase):
             db = PyTango.Database()
             db.put_device_property(self._ms.ms.keys()[0],
                                    {'PoolNames': self._pool.dp.name()})
-            channelerrors = []
+            # channelerrors = []
 
             poolchannels = ["scalar2_long", "spectrum2_short", "client_short",
                             "scalar2_uchar", "scalar2_string", "ann3"]
@@ -6541,12 +6492,9 @@ class SelectorTest(unittest.TestCase):
 
             self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
-    #        print "MDSS", self._cf.dp.availableDataSources()
-    #        print "XDSS", self._cf.dp.dataSources(["scalar_long"])
             msp.updateMacroServer(self._ms.door.keys()[0])
             pools = msp.getPools(self._ms.door.keys()[0])
             pools[0].AcqChannelList = [json.dumps(a) for a in arr]
-            # print "POOLS", pools
             self._simps.dp.ChangeValueType("ScalarShort")
             self._simps.dp.Value = 43
 
@@ -6562,7 +6510,6 @@ class SelectorTest(unittest.TestCase):
                 "s2mycp": False, "s2mycp2": True, "s2mycp3": True,
                 "smycpnt1": None})
             resd = se["DataSourcePreselection"]
-            # print resd
             self.myAssertDict(json.loads(resd), {
                 "scalar_uchar": True, "scalar_string": True,
                 "scalar_ulong": False,
@@ -6572,8 +6519,8 @@ class SelectorTest(unittest.TestCase):
             })
             self.assertEqual(len(se.descErrors), 2)
 
-    #        print self._cf.dp.GetCommandVariable("COMMANDS")
-            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            # res2 =
+            json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
             self.assertEqual(len(sed.keys()), len(self._keys))
@@ -6599,7 +6546,7 @@ class SelectorTest(unittest.TestCase):
     # \brief It tests default settings
     def test_preselect_2wds_notangodspool_False(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -6621,7 +6568,7 @@ class SelectorTest(unittest.TestCase):
             db = PyTango.Database()
             db.put_device_property(self._ms.ms.keys()[0],
                                    {'PoolNames': self._pool.dp.name()})
-            channelerrors = []
+            # channelerrors = []
 
             poolchannels = ["scalar2_long", "spectrum2_short", "client_short",
                             "scalar2_uchar", "scalar2_string", "ann3"]
@@ -6649,7 +6596,6 @@ class SelectorTest(unittest.TestCase):
             msp.updateMacroServer(self._ms.door.keys()[0])
             pools = msp.getPools(self._ms.door.keys()[0])
             pools[0].AcqChannelList = [json.dumps(a) for a in arr]
-            # print "POOLS", pools
             self._simps.dp.ChangeValueType("ScalarShort")
             self._simps.dp.Value = 43
 
@@ -6674,8 +6620,8 @@ class SelectorTest(unittest.TestCase):
             })
             self.assertEqual(len(se.descErrors), 2)
 
-    #        print self._cf.dp.GetCommandVariable("COMMANDS")
-            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            # res2 =
+            json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
             self.assertEqual(len(sed.keys()), len(self._keys))
@@ -6701,7 +6647,7 @@ class SelectorTest(unittest.TestCase):
     # \brief It tests default settings
     def test_preselect_2wds_notangodspool_alias(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -6725,7 +6671,7 @@ class SelectorTest(unittest.TestCase):
             db.put_device_property(self._ms.ms.keys()[0],
                                    {'PoolNames': self._pool.dp.name()})
 
-            channelerrors = []
+            # channelerrors = []
             poolchannels = ["scalar2_long", "spectrum2_short", "client_short",
                             "scalar2_uchar", "scalar2_string", "ann3"]
             componentgroup = {
@@ -6752,7 +6698,6 @@ class SelectorTest(unittest.TestCase):
             msp.updateMacroServer(self._ms.door.keys()[0])
             pools = msp.getPools(self._ms.door.keys()[0])
             pools[0].AcqChannelList = [json.dumps(a) for a in arr]
-            # print "POOLS", pools
             self._simps.dp.ChangeValueType("ScalarShort")
             self._simps.dp.Value = 43
 
@@ -6768,7 +6713,6 @@ class SelectorTest(unittest.TestCase):
                 "s2mycp": True, "s2mycp2": True, "s2mycp3": False,
                 "smycpnt1": True})
             resd = se["DataSourcePreselection"]
-            # print resd
             self.myAssertDict(json.loads(resd), {
                 "scalar_uchar": True, "scalar_string": True,
                 "scalar_ulong": False,
@@ -6778,7 +6722,8 @@ class SelectorTest(unittest.TestCase):
             })
             self.assertEqual(len(se.descErrors), 1)
 
-            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            # res2 =
+            json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
             self.assertEqual(len(sed.keys()), len(self._keys))
@@ -6805,7 +6750,7 @@ class SelectorTest(unittest.TestCase):
     # \brief It tests default settings
     def test_preselect_2wds_notangodspool_alias_False(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -6829,7 +6774,7 @@ class SelectorTest(unittest.TestCase):
             db.put_device_property(self._ms.ms.keys()[0],
                                    {'PoolNames': self._pool.dp.name()})
 
-            channelerrors = []
+            # channelerrors = []
             poolchannels = ["scalar2_long", "spectrum2_short", "client_short"]
             componentgroup = {
                 "smycp": False, "smycp2": True, "smycp3": None,
@@ -6847,7 +6792,6 @@ class SelectorTest(unittest.TestCase):
             msp.updateMacroServer(self._ms.door.keys()[0])
             pools = msp.getPools(self._ms.door.keys()[0])
             pools[0].AcqChannelList = [json.dumps(a) for a in arr]
-            # print "POOLS", pools
             self._simps.dp.ChangeValueType("ScalarShort")
             self._simps.dp.Value = 43
 
@@ -6863,7 +6807,8 @@ class SelectorTest(unittest.TestCase):
                 "smycpnt1": False})
             self.assertEqual(len(se.descErrors), 0)
 
-            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            # res2 =
+            json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
             self.assertEqual(len(sed.keys()), len(self._keys))
@@ -6887,7 +6832,7 @@ class SelectorTest(unittest.TestCase):
     # \brief It tests default settings
     def test_preselect_2wds_notangodspool_alias_value(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -6911,7 +6856,7 @@ class SelectorTest(unittest.TestCase):
             db.put_device_property(self._ms.ms.keys()[0],
                                    {'PoolNames': self._pool.dp.name()})
 
-            channelerrors = []
+            # channelerrors = []
             poolchannels = ["scalar2_long", "spectrum2_short", "client_short"]
             componentgroup = {
                 "smycp": False, "smycp2": True, "smycp3": None,
@@ -6929,7 +6874,6 @@ class SelectorTest(unittest.TestCase):
             msp.updateMacroServer(self._ms.door.keys()[0])
             pools = msp.getPools(self._ms.door.keys()[0])
             pools[0].AcqChannelList = [json.dumps(a) for a in arr]
-            # print "POOLS", pools
 
             se["PreselectingDataSources"] = json.dumps(poolchannels)
             se["ComponentPreselection"] = json.dumps(componentgroup)
@@ -6943,8 +6887,8 @@ class SelectorTest(unittest.TestCase):
                 "smycpnt1": True})
             self.assertEqual(len(se.descErrors), 0)
 
-    #        print self._cf.dp.GetCommandVariable("COMMANDS")
-            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            # res2 =
+            json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
             self.assertEqual(len(sed.keys()), len(self._keys))
@@ -6968,7 +6912,7 @@ class SelectorTest(unittest.TestCase):
     # \brief It tests default settings
     def test_preselect_2wds_notangodspool_alias_value_False(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -6992,7 +6936,7 @@ class SelectorTest(unittest.TestCase):
             db.put_device_property(self._ms.ms.keys()[0],
                                    {'PoolNames': self._pool.dp.name()})
 
-            channelerrors = []
+            # channelerrors = []
             poolchannels = ["scalar2_long", "spectrum2_short", "client_short"]
             componentgroup = {
                 "smycp": None, "smycp2": False, "smycp3": True,
@@ -7010,7 +6954,6 @@ class SelectorTest(unittest.TestCase):
             msp.updateMacroServer(self._ms.door.keys()[0])
             pools = msp.getPools(self._ms.door.keys()[0])
             pools[0].AcqChannelList = [json.dumps(a) for a in arr]
-            # print "POOLS", pools
 
             se["PreselectingDataSources"] = json.dumps(poolchannels)
             se["ComponentPreselection"] = json.dumps(componentgroup)
@@ -7024,8 +6967,8 @@ class SelectorTest(unittest.TestCase):
                 "smycpnt1": False})
             self.assertEqual(len(se.descErrors), 0)
 
-    #        print self._cf.dp.GetCommandVariable("COMMANDS")
-            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            # res2 =
+            json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
             self.assertEqual(len(sed.keys()), len(self._keys))
@@ -7049,7 +6992,7 @@ class SelectorTest(unittest.TestCase):
     # \brief It tests default settings
     def test_preselect_2wds_ntdsp_alias_novalue(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -7073,7 +7016,7 @@ class SelectorTest(unittest.TestCase):
             db.put_device_property(self._ms.ms.keys()[0],
                                    {'PoolNames': self._pool.dp.name()})
 
-            channelerrors = []
+            # channelerrors = []
             poolchannels = ["scalar2_long", "spectrum2_short", "client2_short"]
             componentgroup = {
                 "smycp": False, "smycp2": True, "smycp3": None,
@@ -7091,7 +7034,6 @@ class SelectorTest(unittest.TestCase):
             msp.updateMacroServer(self._ms.door.keys()[0])
             pools = msp.getPools(self._ms.door.keys()[0])
             pools[0].AcqChannelList = [json.dumps(a) for a in arr]
-            # print "POOLS", pools
             se["PreselectingDataSources"] = json.dumps(poolchannels)
             se["ComponentPreselection"] = json.dumps(componentgroup)
             se.descErrors = []
@@ -7103,8 +7045,8 @@ class SelectorTest(unittest.TestCase):
                 "s2mycpnt1": None})
             self.assertEqual(len(se.descErrors), 1)
 
-    #        print self._cf.dp.GetCommandVariable("COMMANDS")
-            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            # res2 =
+            json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
             self.assertEqual(len(sed.keys()), len(self._keys))
@@ -7128,7 +7070,7 @@ class SelectorTest(unittest.TestCase):
     # \brief It tests default settings
     def test_preselect_2wds_ntdsp_alias_novalue_False(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -7152,7 +7094,7 @@ class SelectorTest(unittest.TestCase):
             db.put_device_property(self._ms.ms.keys()[0],
                                    {'PoolNames': self._pool.dp.name()})
 
-            channelerrors = []
+            # channelerrors = []
             poolchannels = ["scalar2_long", "spectrum2_short", "client2_short"]
             componentgroup = {
                 "smycp": False, "smycp2": True, "smycp3": None,
@@ -7170,7 +7112,6 @@ class SelectorTest(unittest.TestCase):
             msp.updateMacroServer(self._ms.door.keys()[0])
             pools = msp.getPools(self._ms.door.keys()[0])
             pools[0].AcqChannelList = [json.dumps(a) for a in arr]
-            # print "POOLS", pools
             se["PreselectingDataSources"] = json.dumps(poolchannels)
             se["ComponentPreselection"] = json.dumps(componentgroup)
             se.descErrors = []
@@ -7182,8 +7123,8 @@ class SelectorTest(unittest.TestCase):
                 "s2mycpnt1": None})
             self.assertEqual(len(se.descErrors), 1)
 
-    #        print self._cf.dp.GetCommandVariable("COMMANDS")
-            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            # res2 =
+            json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
             self.assertEqual(len(sed.keys()), len(self._keys))
@@ -7207,7 +7148,7 @@ class SelectorTest(unittest.TestCase):
     # \brief It tests default settings
     def test_preselect_2wds_nocomponents(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -7215,12 +7156,12 @@ class SelectorTest(unittest.TestCase):
         simps2 = TestServerSetUp.TestServerSetUp(
             "ttestp09/testts/t2r228", "S2")
 
-        arr = [
-            {"name": "client_short", "full_name": "ttestp09/testts/t1r228"},
-        ]
+        # arr = [
+        #     {"name": "client_short", "full_name": "ttestp09/testts/t1r228"},
+        # ]
 
         try:
-            db = PyTango.Database()
+            # db = PyTango.Database()
             simps2.setUp()
             msp = MacroServerPools(1)
             se = Selector(msp, self.__version)
@@ -7228,21 +7169,19 @@ class SelectorTest(unittest.TestCase):
             se["ConfigDevice"] = val["ConfigDevice"]
             se["WriterDevice"] = val["WriterDevice"]
 
-            channelerrors = []
+            # channelerrors = []
             poolchannels = []
             componentgroup = {
                 "smycp": False, "smycp2": True, "smycp3": None,
                 "s2mycp": False, "s2mycp2": True, "s2mycp3": None}
 
             cps = dict(self.smycps)
-#            cps.update(self.smycps2)
+            #            cps.update(self.smycps2)
             dss = dict(self.smydss)
-#            dss.update(self.smydss2)
+            #            dss.update(self.smydss2)
 
             self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
-    #        print "MDSS", self._cf.dp.availableDataSources()
-    #        print "XDSS", self._cf.dp.dataSources(["scalar_long"])
             se["PreselectingDataSources"] = json.dumps(poolchannels)
             se["ComponentPreselection"] = json.dumps(componentgroup)
             se.descErrors = []
@@ -7254,8 +7193,8 @@ class SelectorTest(unittest.TestCase):
                 "s2mycp": None, "s2mycp2": None, "s2mycp3": None})
             self.assertEqual(len(se.descErrors), 3)
 
-    #        print self._cf.dp.GetCommandVariable("COMMANDS")
-            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            # res2 =
+            json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
             self.assertEqual(len(sed.keys()), len(self._keys))
@@ -7278,7 +7217,7 @@ class SelectorTest(unittest.TestCase):
     # \brief It tests default settings
     def test_importEnv_noenv(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -7317,7 +7256,6 @@ class SelectorTest(unittest.TestCase):
             self._ms.dps[self._ms.ms.keys()[0]].Environment = (
                 'pickle', envs[0])
             se.importEnv(enms[i], data)
-#            print "data",data
             dwt = se.getScanEnvVariables()
             self.myAssertDict(data, dt)
 
@@ -7325,7 +7263,7 @@ class SelectorTest(unittest.TestCase):
     # \brief It tests default settings
     def test_importEnv(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -7464,7 +7402,7 @@ class SelectorTest(unittest.TestCase):
     # \brief It tests default settings
     def test_exportEnv(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
@@ -7687,19 +7625,16 @@ class SelectorTest(unittest.TestCase):
         se.exportEnv({}, {})
         for i, dt in enumerate(edats):
             se.exportEnv(dt, cmds[i])
-#            print "I = ",i
-            data = {}
+            # data = {}
             env = pickle.loads(
                 self._ms.dps[self._ms.ms.keys()[0]].Environment[1])
-#            print "env", env
-#            print "ei", envs[i]
             self.myAssertDict(envs[i], env)
 
     # test
     # \brief It tests default settings
     def test_getScanEnvVariables(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -7826,7 +7761,7 @@ class SelectorTest(unittest.TestCase):
     # \brief It tests default settings
     def test_setScanEnvVariables(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -8012,20 +7947,17 @@ class SelectorTest(unittest.TestCase):
         se.setScanEnvVariables("{}")
         for i, dt in enumerate(edats):
             sid = se.setScanEnvVariables(json.dumps(dt))
-            # print "I = ", i, sid
             self.assertEqual(sid, sids[i])
-            data = {}
+            # data = {}
             env = pickle.loads(
                 self._ms.dps[self._ms.ms.keys()[0]].Environment[1])
-#            print "env", env
-#            print "ei", envs[i]
             self.myAssertDict(envs[i], env)
 
     # test
     # \brief It tests default settings
     def test_setScanEnv_scanid(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -8064,7 +7996,7 @@ class SelectorTest(unittest.TestCase):
     # \brief It tests default settings
     def test_setScanEnv2(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -8250,20 +8182,17 @@ class SelectorTest(unittest.TestCase):
         se.setScanEnvVariables("{}")
         for i, dt in enumerate(edats):
             sid = se.setScanEnvVariables(json.dumps(dt))
-            # print "I = ", i, sid
             self.assertEqual(sid, sids[i])
-            data = {}
+            # data = {}
             env = pickle.loads(
                 self._ms.dps[self._ms.ms.keys()[0]].Environment[1])
-#            print "env", env
-#            print "ei", envs[i]
             self.myAssertDict(envs[i], env)
 
     # test
     # \brief It tests default settings
     def test_setScanEnv_dtlist(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -8402,16 +8331,12 @@ class SelectorTest(unittest.TestCase):
         for i, dt in enumerate(edats):
             env = pickle.loads(
                 self._ms.dps[self._ms.ms.keys()[0]].Environment[1])
-            # print "env0", env
             sid = se.setScanEnvVariables(
                 dt if not isinstance(dt, dict) else json.dumps(dt))
-            # print "I = ", i, sid
             self.assertEqual(sid, sids[i])
-            data = {}
+            # data = {}
             env = pickle.loads(
                 self._ms.dps[self._ms.ms.keys()[0]].Environment[1])
-            # print "env", env
-            # print "ei", envs[i]
             self.myAssertDict(envs[i], env)
 
 

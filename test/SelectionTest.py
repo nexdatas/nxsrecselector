@@ -22,7 +22,6 @@
 import unittest
 import os
 import sys
-import subprocess
 import random
 import struct
 import binascii
@@ -32,6 +31,9 @@ import time
 import nxsrecconfig
 
 from nxsrecconfig.Selection import Selection
+
+if sys.version_info > (3,):
+    long = int
 
 
 # if 64-bit machione
@@ -80,7 +82,8 @@ class SelectionTest(unittest.TestCase):
             ("DynamicComponents", True),
             ("DefaultDynamicLinks", True),
             ("DefaultDynamicPath",
-             '/$var.entryname#\'scan\'$var.serialno:NXentry/NXinstrument/collection'),
+             '/$var.entryname#\'scan\'$var.serialno:NXentry/NXinstrument/'
+             'collection'),
             ("TimeZone", self.__defaultzone),
             ("ConfigDevice", ''),
             ("WriterDevice", ''),
@@ -101,13 +104,13 @@ class SelectionTest(unittest.TestCase):
     # test starter
     # \brief Common set up
     def setUp(self):
-        print "SEED =", self.__seed
-        print "\nsetting up..."
+        print("SEED = %s" % self.__seed)
+        print("\nsetting up...")
 
     # test closer
     # \brief Common tear down
     def tearDown(self):
-        print "tearing down ..."
+        print("tearing down ...")
 
     def dump(self, el):
         self.__dump = {}
@@ -126,7 +129,7 @@ class SelectionTest(unittest.TestCase):
     # \brief It tests default settings
     def test_constructor(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         el = Selection(Version=self.__version)
         self.assertTrue(isinstance(el, dict))
         self.assertEqual(len(el.keys()), len(self._keys))
@@ -138,7 +141,7 @@ class SelectionTest(unittest.TestCase):
     # \brief It tests default settings
     def test_reset(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         el = Selection(Version=self.__version)
         el.clear()
         self.assertEqual(len(el.keys()), 0)
@@ -157,7 +160,7 @@ class SelectionTest(unittest.TestCase):
     # deselect test
     def test_deselect(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         for i in range(20):
             el = Selection(Version=self.__version)
             el.deselect()
@@ -209,7 +212,7 @@ class SelectionTest(unittest.TestCase):
     # updatePreselectingDataSources test
     def test_updatePreselectingDataSources(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         for i in range(20):
             el = Selection(Version=self.__version)
             el.updatePreselectingDataSources(None)
@@ -244,7 +247,7 @@ class SelectionTest(unittest.TestCase):
     # updateOrderedChannels test
     def test_updateOrderedChannels(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         for i in range(20):
             el = Selection(Version=self.__version)
             el.updateOrderedChannels([])
@@ -291,7 +294,7 @@ class SelectionTest(unittest.TestCase):
     # deselect test
     def test_updateComponentSelection(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         for i in range(20):
             el = Selection(Version=self.__version)
             el.deselect()
@@ -319,7 +322,8 @@ class SelectionTest(unittest.TestCase):
             el.updateComponentSelection()
 
             ncps = json.loads(el["ComponentSelection"])
-            ndss = json.loads(el["DataSourceSelection"])
+            # ndss =
+            json.loads(el["DataSourceSelection"])
 
             self.assertEqual(len(cps), len(ncps) + len(common))
             for key in cps.keys():
@@ -331,7 +335,7 @@ class SelectionTest(unittest.TestCase):
     # deselect test
     def test_updateDataSourceSelection(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         for i in range(20):
             el = Selection(Version=self.__version)
             el.deselect()
@@ -370,7 +374,7 @@ class SelectionTest(unittest.TestCase):
     # deselect test
     def test_resetMntGrp(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         el = Selection(Version=self.__version)
         el.deselect()
         self.assertEqual(len(el.keys()), len(self._keys))
@@ -403,7 +407,7 @@ class SelectionTest(unittest.TestCase):
     # deselect test
     def test_resetTimeZone(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         el = Selection(Version=self.__version)
         el.deselect()
         self.assertEqual(len(el.keys()), len(self._keys))
@@ -436,7 +440,7 @@ class SelectionTest(unittest.TestCase):
     # updateOrderedChannels test
     def test_resetPreselectedComponents(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         for i in range(20):
             el = Selection(Version=self.__version)
             self.assertEqual(len(el.keys()), len(self._keys))

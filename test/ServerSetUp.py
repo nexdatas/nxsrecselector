@@ -19,7 +19,6 @@
 # \file ServerSetUp.py
 # class with server settings
 #
-import unittest
 import os
 import sys
 import subprocess
@@ -48,7 +47,7 @@ class ServerSetUp(object):
     # test starter
     # \brief Common set up of Tango Server
     def setUp(self):
-        print "tearing down ..."
+        print("tearing down ...")
         db = PyTango.Database()
         db.add_device(self.new_device_info_writer)
         db.add_server(self.new_device_info_writer.server,
@@ -62,13 +61,13 @@ class ServerSetUp(object):
             self._psub = subprocess.call(
                 "NXSRecSelector %s &" % self.instance, stdout=None,
                 stderr=None, shell=True)
-        print "waiting for server",
+        sys.stdout.write("waiting for server")
 
         found = False
         cnt = 0
         while not found and cnt < 1000:
             try:
-                print "\b.",
+                sys.stdout.write(".")
                 dp = PyTango.DeviceProxy(self.new_device_info_writer.name)
                 time.sleep(0.01)
                 if dp.state() == PyTango.DevState.ON:
@@ -77,16 +76,15 @@ class ServerSetUp(object):
             except:
                 found = False
             cnt += 1
-        print ""
+        print("")
 
     # test closer
     # \brief Common tear down oif Tango Server
     def tearDown(self):
-        print "tearing down ..."
+        print("tearing down ...")
         db = PyTango.Database()
         db.delete_server(self.new_device_info_writer.server)
 
-        output = ""
         pipe = subprocess.Popen(
             "ps -ef | grep 'NXSRecSelector %s'" % self.instance,
             stdout=subprocess.PIPE, shell=True).stdout

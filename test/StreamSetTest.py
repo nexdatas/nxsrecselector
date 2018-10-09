@@ -22,17 +22,21 @@
 import unittest
 import os
 import sys
-import subprocess
 import random
 import struct
 import binascii
-import string
+import time
+
+
 from cStringIO import StringIO
 
 from nxsrecconfig import StreamSet
 
 # if 64-bit machione
 IS64BIT = (struct.calcsize("P") == 8)
+
+if sys.version_info > (3,):
+    long = int
 
 
 # test fixture
@@ -69,8 +73,8 @@ class StreamSetTest(unittest.TestCase):
     # test starter
     # \brief Common set up
     def setUp(self):
-        print "SEED =", self.__seed
-        print "\nsetting up..."
+        print("SEED = %s" % self.__seed)
+        print("\nsetting up...")
         self.streams = StreamSet.StreamSet(None)
         hasattr(self.streams, "log_fatal")
         hasattr(self.streams, "log_error")
@@ -88,11 +92,11 @@ class StreamSetTest(unittest.TestCase):
     def tearDown(self):
         sys.stdout = self.old_stdout
         sys.stderr = self.old_stderr
-        print "tearing down ..."
+        print("tearing down ...")
 
     def test_constructor(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         streams = StreamSet.StreamSet(None)
         self.assertEqual(streams.log_fatal, None)
         self.assertEqual(streams.log_error, None)
@@ -114,7 +118,7 @@ class StreamSetTest(unittest.TestCase):
 
     def test_fatal(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         for i in range(20):
             name = self.getRandomString(100)
             sys.stdout = self.mystdout = StringIO()
@@ -135,7 +139,7 @@ class StreamSetTest(unittest.TestCase):
 
     def test_fatal_nostd(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         for i in range(20):
             name = self.getRandomString(100)
             sys.stdout = self.mystdout = StringIO()
@@ -153,7 +157,7 @@ class StreamSetTest(unittest.TestCase):
 
     def test_fatal_log(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         for i in range(20):
             name = self.getRandomString(100)
             sys.stdout = self.mystdout = StringIO()
@@ -181,7 +185,7 @@ class StreamSetTest(unittest.TestCase):
 
     def test_error(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         for i in range(20):
             name = self.getRandomString(100)
             sys.stdout = self.mystdout = StringIO()
@@ -202,7 +206,7 @@ class StreamSetTest(unittest.TestCase):
 
     def test_error_nostd(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         for i in range(20):
             name = self.getRandomString(100)
             sys.stdout = self.mystdout = StringIO()
@@ -222,7 +226,7 @@ class StreamSetTest(unittest.TestCase):
     # \brief It tests default settings
     def test_error_log(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         for i in range(20):
             name = self.getRandomString(100)
             sys.stdout = self.mystdout = StringIO()
@@ -250,7 +254,7 @@ class StreamSetTest(unittest.TestCase):
 
     def test_warn(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         for i in range(20):
             name = self.getRandomString(100)
             sys.stdout = self.mystdout = StringIO()
@@ -271,7 +275,7 @@ class StreamSetTest(unittest.TestCase):
 
     def test_warn_nostd(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         for i in range(20):
             name = self.getRandomString(100)
             sys.stdout = self.mystdout = StringIO()
@@ -289,7 +293,7 @@ class StreamSetTest(unittest.TestCase):
 
     def test_warn_log(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         for i in range(20):
             name = self.getRandomString(100)
             sys.stdout = self.mystdout = StringIO()
@@ -317,7 +321,7 @@ class StreamSetTest(unittest.TestCase):
 
     def test_info(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         for i in range(20):
             name = self.getRandomString(100)
             sys.stdout = self.mystdout = StringIO()
@@ -338,7 +342,7 @@ class StreamSetTest(unittest.TestCase):
 
     def test_info_nostd(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         for i in range(20):
             name = self.getRandomString(100)
             sys.stdout = self.mystdout = StringIO()
@@ -358,7 +362,7 @@ class StreamSetTest(unittest.TestCase):
     # \brief It tests default settings
     def test_info_log(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         for i in range(20):
             name = self.getRandomString(100)
             sys.stdout = self.mystdout = StringIO()
@@ -386,7 +390,7 @@ class StreamSetTest(unittest.TestCase):
 
     def test_debug(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         for i in range(20):
             name = self.getRandomString(100)
             sys.stdout = self.mystdout = StringIO()
@@ -407,7 +411,7 @@ class StreamSetTest(unittest.TestCase):
 
     def test_debug_nostd(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         for i in range(20):
             name = self.getRandomString(100)
             sys.stdout = self.mystdout = StringIO()
@@ -427,7 +431,7 @@ class StreamSetTest(unittest.TestCase):
     # \brief It tests default settings
     def test_debug_log(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         for i in range(20):
             name = self.getRandomString(100)
             sys.stdout = self.mystdout = StringIO()
