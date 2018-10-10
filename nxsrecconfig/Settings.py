@@ -1041,7 +1041,8 @@ class Settings(object):
                              {``dsname``: ``tangosource``, ...}
         :type datasources: :obj:`str`
         """
-        jdss = json.loads(datasources)
+        jvar = Utils.stringToDictJson(datasources)
+        jdss = json.loads(jvar)
         tangods = [[name, name, source] for name, source in jdss.items()]
         self.__profileManager.createDataSources(tangods)
 
