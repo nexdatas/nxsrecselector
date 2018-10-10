@@ -1816,8 +1816,8 @@ class MacroServerPoolsTest(unittest.TestCase):
         self.assertEqual(
             json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
             ["AvailableComponents", "AvailableDataSources",
-             "AvailableComponents", "AvailableDataSources"
-            ])
+             "AvailableComponents", "AvailableDataSources"]
+        )
 
     # constructor test
     # \brief It tests default settings
@@ -2451,9 +2451,11 @@ class MacroServerPoolsTest(unittest.TestCase):
         self.assertEqual(
             json.loads(
                 self._cf.dp.GetCommandVariable("COMMANDS")),
-            ["AvailableComponents", "AvailableDataSources", "AvailableComponents",
+            ["AvailableComponents", "AvailableDataSources",
+             "AvailableComponents",
              "AvailableDataSources", "DependentComponents", "Components",
-             "DataSources", "DataSources", "DataSources", "DependentComponents",
+             "DataSources", "DataSources", "DataSources",
+             "DependentComponents",
              "Components", "DataSources", "DataSources", "DataSources",
              "DependentComponents", "Components", "DataSources", "DataSources",
              "DataSources", "DependentComponents", "Components", "DataSources",
@@ -2551,8 +2553,8 @@ class MacroServerPoolsTest(unittest.TestCase):
 
             self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
-    #        print "MDSS", self._cf.dp.availableDataSources()
-    #        print "XDSS", self._cf.dp.dataSources(["scalar_long"])
+            #        print "MDSS", self._cf.dp.availableDataSources()
+            #        print "XDSS", self._cf.dp.dataSources(["scalar_long"])
             res, res2 = msp.checkChannels(self._ms.door.keys()[0],
                                           self._cf.dp,
                                           poolchannels,

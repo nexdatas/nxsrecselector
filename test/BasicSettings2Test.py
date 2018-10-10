@@ -535,7 +535,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
 
-        db = PyTango.Database()
+        # db = PyTango.Database()
         self._ms.dps[self._ms.ms.keys()[0]].Init()
         rs = self.openRecSelector()
         rs.configDevice = val["ConfigDevice"]
@@ -563,7 +563,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
 
-        db = PyTango.Database()
+        # db = PyTango.Database()
         self._ms.dps[self._ms.ms.keys()[0]].Init()
         rs = self.openRecSelector()
         rs.configDevice = val["ConfigDevice"]
@@ -600,7 +600,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
 
-        db = PyTango.Database()
+        # db = PyTango.Database()
         self._ms.dps[self._ms.ms.keys()[0]].Init()
         rs = self.openRecSelector()
         rs.configDevice = val["ConfigDevice"]
@@ -660,7 +660,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
 
-        db = PyTango.Database()
+        # db = PyTango.Database()
         self._ms.dps[self._ms.ms.keys()[0]].Init()
         rs = self.openRecSelector()
         rs.configDevice = val["ConfigDevice"]
@@ -720,7 +720,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
 
-        db = PyTango.Database()
+        # db = PyTango.Database()
         self._ms.dps[self._ms.ms.keys()[0]].Init()
         rs = self.openRecSelector()
         rs.configDevice = val["ConfigDevice"]
@@ -780,7 +780,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
 
-        db = PyTango.Database()
+        # db = PyTango.Database()
         self._ms.dps[self._ms.ms.keys()[0]].Init()
         rs = self.openRecSelector()
         rs.configDevice = val["ConfigDevice"]
@@ -825,7 +825,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
 
-        db = PyTango.Database()
+        # db = PyTango.Database()
         self._ms.dps[self._ms.ms.keys()[0]].Init()
         rs = self.openRecSelector()
         rs.configDevice = val["ConfigDevice"]
@@ -887,7 +887,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
 
-        db = PyTango.Database()
+        # db = PyTango.Database()
         self._ms.dps[self._ms.ms.keys()[0]].Init()
         rs = self.openRecSelector()
         rs.configDevice = val["ConfigDevice"]
@@ -949,7 +949,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
 
-        db = PyTango.Database()
+        # db = PyTango.Database()
         self._ms.dps[self._ms.ms.keys()[0]].Init()
         rs = self.openRecSelector()
         rs.configDevice = val["ConfigDevice"]
@@ -1011,7 +1011,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
 
-        db = PyTango.Database()
+        # db = PyTango.Database()
         self._ms.dps[self._ms.ms.keys()[0]].Init()
         rs = self.openRecSelector()
         rs.configDevice = val["ConfigDevice"]
@@ -1055,7 +1055,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
 
-        db = PyTango.Database()
+        # db = PyTango.Database()
         self._ms.dps[self._ms.ms.keys()[0]].Init()
         rs = self.openRecSelector()
         rs.configDevice = val["ConfigDevice"]
@@ -1116,7 +1116,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
 
-        db = PyTango.Database()
+        # db = PyTango.Database()
         self._ms.dps[self._ms.ms.keys()[0]].Init()
         rs = self.openRecSelector()
         rs.configDevice = val["ConfigDevice"]
@@ -1177,7 +1177,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
 
-        db = PyTango.Database()
+        # db = PyTango.Database()
         self._ms.dps[self._ms.ms.keys()[0]].Init()
         rs = self.openRecSelector()
         rs.configDevice = val["ConfigDevice"]
@@ -1337,7 +1337,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         try:
             simps2.setUp()
 
-            db = PyTango.Database()
+            # db = PyTango.Database()
             self._ms.dps[self._ms.ms.keys()[0]].Init()
             rs = self.openRecSelector()
             rs.configDevice = val["ConfigDevice"]
@@ -1425,7 +1425,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         try:
             simps2.add()
 
-            db = PyTango.Database()
+            # db = PyTango.Database()
             self._ms.dps[self._ms.ms.keys()[0]].Init()
             rs = self.openRecSelector()
             rs.configDevice = val["ConfigDevice"]
@@ -1512,7 +1512,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         try:
             simps2.add()
 
-            db = PyTango.Database()
+            # db = PyTango.Database()
             self._ms.dps[self._ms.ms.keys()[0]].Init()
             rs = self.openRecSelector()
             rs.configDevice = val["ConfigDevice"]
@@ -1592,7 +1592,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         try:
             simps2.setUp()
 
-            db = PyTango.Database()
+            # db = PyTango.Database()
             self._ms.dps[self._ms.ms.keys()[0]].Init()
             rs = self.openRecSelector()
             rs.configDevice = val["ConfigDevice"]
@@ -1672,7 +1672,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         try:
             simps2.setUp()
 
-            db = PyTango.Database()
+            # db = PyTango.Database()
             self._ms.dps[self._ms.ms.keys()[0]].Init()
             rs = self.openRecSelector()
             rs.configDevice = val["ConfigDevice"]
@@ -1752,7 +1752,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         try:
             simps2.setUp()
 
-            db = PyTango.Database()
+            # db = PyTango.Database()
             self._ms.dps[self._ms.ms.keys()[0]].Init()
             rs = self.openRecSelector()
             rs.configDevice = val["ConfigDevice"]
@@ -1834,7 +1834,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         try:
             simps2.add()
 
-            db = PyTango.Database()
+            # db = PyTango.Database()
             self._ms.dps[self._ms.ms.keys()[0]].Init()
             rs = self.openRecSelector()
             rs.configDevice = val["ConfigDevice"]
@@ -1917,7 +1917,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         try:
             simps2.add()
 
-            db = PyTango.Database()
+            # db = PyTango.Database()
             self._ms.dps[self._ms.ms.keys()[0]].Init()
             rs = self.openRecSelector()
             rs.configDevice = val["ConfigDevice"]
@@ -1995,7 +1995,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
 
-        db = PyTango.Database()
+        # db = PyTango.Database()
         self._ms.dps[self._ms.ms.keys()[0]].Init()
         rs = self.openRecSelector()
         rs.configDevice = val["ConfigDevice"]
@@ -2079,7 +2079,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         try:
             simps2.setUp()
 
-            db = PyTango.Database()
+            # db = PyTango.Database()
             self._ms.dps[self._ms.ms.keys()[0]].Init()
             rs = self.openRecSelector()
             rs.configDevice = val["ConfigDevice"]
@@ -2165,7 +2165,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             "ttestp09/testts/t2r228", "S2")
         try:
             simps2.setUp()
-            db = PyTango.Database()
+            # db = PyTango.Database()
             self._ms.dps[self._ms.ms.keys()[0]].Init()
             rs = self.openRecSelector()
             rs.configDevice = val["ConfigDevice"]
@@ -2252,7 +2252,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         try:
             simps2.setUp()
 
-            db = PyTango.Database()
+            # db = PyTango.Database()
             self._ms.dps[self._ms.ms.keys()[0]].Init()
             rs = self.openRecSelector()
             rs.configDevice = val["ConfigDevice"]
@@ -2344,7 +2344,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         try:
             simps2.setUp()
 
-            db = PyTango.Database()
+            # db = PyTango.Database()
             self._ms.dps[self._ms.ms.keys()[0]].Init()
             rs = self.openRecSelector()
             rs.configDevice = val["ConfigDevice"]
@@ -2434,7 +2434,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         try:
             simps2.setUp()
 
-            db = PyTango.Database()
+            # db = PyTango.Database()
             self._ms.dps[self._ms.ms.keys()[0]].Init()
             rs = self.openRecSelector()
             rs.configDevice = val["ConfigDevice"]
@@ -2526,7 +2526,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         try:
             simps2.setUp()
 
-            db = PyTango.Database()
+            # db = PyTango.Database()
             self._ms.dps[self._ms.ms.keys()[0]].Init()
             rs = self.openRecSelector()
             rs.configDevice = val["ConfigDevice"]
@@ -2619,7 +2619,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         try:
             simps2.setUp()
 
-            db = PyTango.Database()
+            # db = PyTango.Database()
             self._ms.dps[self._ms.ms.keys()[0]].Init()
             rs = self.openRecSelector()
             rs.configDevice = val["ConfigDevice"]
@@ -4426,7 +4426,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         ]
 
         try:
-            db = PyTango.Database()
+            # db = PyTango.Database()
             simps2.setUp()
 
             self._ms.dps[self._ms.ms.keys()[0]].Init()
@@ -4538,7 +4538,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
 
-        db = PyTango.Database()
+        # db = PyTango.Database()
         self._ms.dps[self._ms.ms.keys()[0]].Init()
         rs = self.openRecSelector()
         rs.configDevice = val["ConfigDevice"]
@@ -4596,7 +4596,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
 
-        db = PyTango.Database()
+        # db = PyTango.Database()
         self._ms.dps[self._ms.ms.keys()[0]].Init()
         rs = self.openRecSelector()
         self.setProp(rs, "defaultPreselectedComponents",
@@ -4659,7 +4659,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
 
-        db = PyTango.Database()
+        # db = PyTango.Database()
         self._ms.dps[self._ms.ms.keys()[0]].Init()
         self._ms.dps[self._ms.ms.keys()[0]].Init()
 
@@ -4708,7 +4708,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
 
-        db = PyTango.Database()
+        # db = PyTango.Database()
         self._ms.dps[self._ms.ms.keys()[0]].Init()
         self._ms.dps[self._ms.ms.keys()[0]].Init()
 
@@ -4757,7 +4757,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
 
-        db = PyTango.Database()
+        # db = PyTango.Database()
         self._ms.dps[self._ms.ms.keys()[0]].Init()
 
         self._ms.dps[self._ms.ms.keys()[0]].Init()
@@ -4804,7 +4804,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
 
-        db = PyTango.Database()
+        # db = PyTango.Database()
         self._ms.dps[self._ms.ms.keys()[0]].Init()
 
         channelerrors = []
@@ -4875,7 +4875,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
 
-        db = PyTango.Database()
+        # db = PyTango.Database()
         self._ms.dps[self._ms.ms.keys()[0]].Init()
 
         channelerrors = []
@@ -4946,7 +4946,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
 
-        db = PyTango.Database()
+        # db = PyTango.Database()
         self._ms.dps[self._ms.ms.keys()[0]].Init()
 
         channelerrors = []
@@ -5017,7 +5017,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
 
-        db = PyTango.Database()
+        # db = PyTango.Database()
         self._ms.dps[self._ms.ms.keys()[0]].Init()
         channelerrors = []
         poolchannels = []
@@ -5067,7 +5067,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
 
-        db = PyTango.Database()
+        # db = PyTango.Database()
         self._ms.dps[self._ms.ms.keys()[0]].Init()
         channelerrors = []
         poolchannels = []
@@ -5117,7 +5117,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
 
-        db = PyTango.Database()
+        # db = PyTango.Database()
         self._ms.dps[self._ms.ms.keys()[0]].Init()
         channelerrors = []
         poolchannels = []
@@ -5164,7 +5164,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
 
-        db = PyTango.Database()
+        # db = PyTango.Database()
         self._ms.dps[self._ms.ms.keys()[0]].Init()
 
         channelerrors = []
@@ -5243,7 +5243,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         try:
             simps2.setUp()
 
-            db = PyTango.Database()
+            # db = PyTango.Database()
             self._ms.dps[self._ms.ms.keys()[0]].Init()
 
             channelerrors = []
@@ -5336,7 +5336,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         try:
             simps2.add()
 
-            db = PyTango.Database()
+            # db = PyTango.Database()
             self._ms.dps[self._ms.ms.keys()[0]].Init()
 
             channelerrors = []
@@ -5424,7 +5424,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         try:
             simps2.setUp()
 
-            db = PyTango.Database()
+            # db = PyTango.Database()
             self._ms.dps[self._ms.ms.keys()[0]].Init()
 
             channelerrors = []
@@ -5512,7 +5512,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         try:
             simps2.setUp()
 
-            db = PyTango.Database()
+            # db = PyTango.Database()
             self._ms.dps[self._ms.ms.keys()[0]].Init()
 
             channelerrors = []
@@ -5600,7 +5600,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         try:
             simps2.setUp()
 
-            db = PyTango.Database()
+            # db = PyTango.Database()
             self._ms.dps[self._ms.ms.keys()[0]].Init()
 
             channelerrors = []
@@ -5688,7 +5688,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         try:
             simps2.add()
 
-            db = PyTango.Database()
+            # db = PyTango.Database()
             self._ms.dps[self._ms.ms.keys()[0]].Init()
 
             channelerrors = []
@@ -5776,7 +5776,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         try:
             simps2.add()
 
-            db = PyTango.Database()
+            # db = PyTango.Database()
             self._ms.dps[self._ms.ms.keys()[0]].Init()
 
             channelerrors = []
@@ -5864,7 +5864,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         try:
             simps2.add()
 
-            db = PyTango.Database()
+            # db = PyTango.Database()
             self._ms.dps[self._ms.ms.keys()[0]].Init()
 
             channelerrors = []
@@ -5953,7 +5953,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
 
-        db = PyTango.Database()
+        # db = PyTango.Database()
         self._ms.dps[self._ms.ms.keys()[0]].Init()
         channelerrors = []
         poolchannels = []
@@ -6039,7 +6039,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         try:
             simps2.setUp()
 
-            db = PyTango.Database()
+            # db = PyTango.Database()
             self._ms.dps[self._ms.ms.keys()[0]].Init()
 
             channelerrors = []
@@ -6130,7 +6130,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             "ttestp09/testts/t2r228", "S2")
         try:
             simps2.setUp()
-            db = PyTango.Database()
+            # db = PyTango.Database()
             self._ms.dps[self._ms.ms.keys()[0]].Init()
 
             poolchannels = ["scalar2_long", "spectrum2_short",
@@ -6224,7 +6224,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         try:
             simps2.setUp()
 
-            db = PyTango.Database()
+            # db = PyTango.Database()
             self._ms.dps[self._ms.ms.keys()[0]].Init()
             poolchannels = ["scalar2_long", "spectrum2_short"]
             componentgroup = {"smycp": False, "smycp2": False,
@@ -6318,7 +6318,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         try:
             simps2.setUp()
 
-            db = PyTango.Database()
+            # db = PyTango.Database()
             self._ms.dps[self._ms.ms.keys()[0]].Init()
 
             poolchannels = ["scalar2_long", "spectrum2_short", "client_long"]
@@ -6414,7 +6414,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         try:
             simps2.setUp()
 
-            db = PyTango.Database()
+            # db = PyTango.Database()
             self._ms.dps[self._ms.ms.keys()[0]].Init()
 
             poolchannels = ["scalar2_long", "spectrum2_short", "client_long"]
@@ -6510,7 +6510,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         try:
             simps2.setUp()
 
-            db = PyTango.Database()
+            # db = PyTango.Database()
             self._ms.dps[self._ms.ms.keys()[0]].Init()
 
             poolchannels = ["scalar2_long", "spectrum2_short", "client_long"]
@@ -6606,7 +6606,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         try:
             simps2.setUp()
 
-            db = PyTango.Database()
+            # db = PyTango.Database()
             self._ms.dps[self._ms.ms.keys()[0]].Init()
             poolchannels = ["scalar2_long", "spectrum2_short", "client_long"]
             componentgroup = {"smycp": False, "smycp2": True,
@@ -6700,7 +6700,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         try:
             simps2.setUp()
 
-            db = PyTango.Database()
+            # db = PyTango.Database()
             self._ms.dps[self._ms.ms.keys()[0]].Init()
             poolchannels = ["scalar2_long", "spectrum2_short", "client_long"]
             componentgroup = {"smycp": False, "smycp2": True,
@@ -6794,7 +6794,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         try:
             simps2.setUp()
 
-            db = PyTango.Database()
+            # db = PyTango.Database()
             self._ms.dps[self._ms.ms.keys()[0]].Init()
             poolchannels = ["scalar2_long", "spectrum2_short", "client_long"]
             componentgroup = {"smycp": False, "smycp2": True,
@@ -7768,7 +7768,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         ]
 
         try:
-            db = PyTango.Database()
+            # db = PyTango.Database()
             simps2.setUp()
 
             self._ms.dps[self._ms.ms.keys()[0]].Init()
@@ -9337,7 +9337,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
 
             self.assertEqual(rs.configVariables, "{}")
 
-            mydata = {}
+            # mydata = {}
             if (i / 2) % 2:
                 rs.profileConfiguration = str(json.dumps(mydict))
             elif (i / 2) % 4 == 0:
@@ -9453,7 +9453,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
 
             self.assertEqual(rs.userData, "{}")
 
-            mydata = {}
+            # mydata = {}
             if (i / 2) % 2:
                 rs.profileConfiguration = str(json.dumps(mydict))
             elif (i / 2) % 4 == 0:
@@ -9557,7 +9557,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
 
             self.assertEqual(rs.mntGrp, val["MntGrp"])
 
-            mydata = {}
+            # mydata = {}
             if (i / 2) % 2:
                 rs.profileConfiguration = str(json.dumps(mydict))
             elif (i / 2) % 4 == 0:
@@ -9666,7 +9666,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
 
             self.assertEqual(rs.appendEntry, False)
 
-            mydata = {}
+            # mydata = {}
             if (i / 2) % 2:
                 rs.profileConfiguration = str(json.dumps(mydict))
             elif (i / 2) % 4 == 0:
@@ -9774,7 +9774,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
 
             self.assertEqual(rs.mntGrp, val["MntGrp"])
 
-            mydata = {}
+            # mydata = {}
             if (i / 2) % 2:
                 rs.profileConfiguration = str(json.dumps(mydict))
             elif (i / 2) % 4 == 0:
@@ -9885,7 +9885,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
 
                 self.assertEqual(rs.mntGrp, val["MntGrp"])
 
-                mydata = {}
+                # mydata = {}
                 if (i / 2) % 2:
                     rs.profileConfiguration = str(json.dumps(mydict))
                 elif (i / 2) % 4 == 0:
@@ -9999,7 +9999,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
 
             self.assertEqual(rs.mntGrp, val["MntGrp"])
 
-            mydata = {}
+            # mydata = {}
             if (i / 2) % 2:
                 rs.profileConfiguration = str(json.dumps(mydict))
             elif (i / 2) % 4 == 0:
@@ -10114,7 +10114,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
 
                 self.assertEqual(rs.userData, "{}")
 
-                mydata = {}
+                # mydata = {}
                 if (i / 2) % 2:
                     rs.profileConfiguration = str(json.dumps(mydict))
                 elif (i / 2) % 4 == 0:
@@ -10235,7 +10235,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
 
                 self.assertEqual(rs.userData, "{}")
 
-                mydata = {}
+                # mydata = {}
                 if (i / 2) % 2:
                     rs.profileConfiguration = str(json.dumps(mydict))
                 elif (i / 2) % 4 == 0:
@@ -11238,8 +11238,8 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
 
         cps = {}
         dss = {}
-        lcp = self._rnd.randint(1, 40)
-        lds = self._rnd.randint(1, 40)
+        # lcp = self._rnd.randint(1, 40)
+        # lds = self._rnd.randint(1, 40)
 
         dsdict = {
             "ann": self.mydss["ann"]
@@ -11261,7 +11261,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         ncps = json.loads(mp["ComponentSelection"])
         ndss = json.loads(mp["DataSourceSelection"])
         tdss = [ds for ds in ndss if ndss[ds]]
-        tcps = [cp for cp in ncps if ncps[cp]]
+        # tcps = [cp for cp in ncps if ncps[cp]]
 
         self.assertEqual(rs.componentDescription(), '[{}]')
         mp = json.loads(rs.profileConfiguration)
@@ -11309,8 +11309,8 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
 
             cps = {}
             dss = {}
-            lcp = self._rnd.randint(1, 40)
-            lds = self._rnd.randint(1, 40)
+            # lcp = self._rnd.randint(1, 40)
+            # lds = self._rnd.randint(1, 40)
 
             self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
@@ -11372,7 +11372,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
 
             cps = {}
             dss = {}
-            lcp = self._rnd.randint(1, 40)
+            # lcp = self._rnd.randint(1, 40)
             lds = self._rnd.randint(1, 40)
 
             self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
@@ -11450,8 +11450,8 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
 
             cps = {}
             dss = {}
-            lcp = self._rnd.randint(1, 40)
-            lds = self._rnd.randint(1, 40)
+            # lcp = self._rnd.randint(1, 40)
+            # lds = self._rnd.randint(1, 40)
 
             self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
@@ -11523,8 +11523,8 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
 
             cps = {}
             dss = {}
-            lcp = self._rnd.randint(1, 40)
-            lds = self._rnd.randint(1, 40)
+            # lcp = self._rnd.randint(1, 40)
+            # lds = self._rnd.randint(1, 40)
 
             self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
@@ -11630,13 +11630,13 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             mp = json.loads(rs.profileConfiguration)
 
             ndss = json.loads(mp["DataSourceSelection"])
-            common = set(cps.keys()) & set(dss.keys())
+            # common = set(cps.keys()) & set(dss.keys())
             self.dump(rs)
 
             ncps = json.loads(mp["ComponentSelection"])
             ndss = json.loads(mp["DataSourceSelection"])
             tdss = [ds for ds in ndss if ndss[ds]]
-            tcps = [cp for cp in ncps if ncps[cp]]
+            # tcps = [cp for cp in ncps if ncps[cp]]
 
             rcp = rs.components
             mcp = rs.mandatoryComponents()
@@ -11791,8 +11791,8 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             cps = {}
             acps = {}
             dss = {}
-            lcp = self._rnd.randint(1, 40)
-            lds = self._rnd.randint(1, 40)
+            # lcp = self._rnd.randint(1, 40)
+            # lds = self._rnd.randint(1, 40)
 
             self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
@@ -11870,7 +11870,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                 self.myAssertDict(json.loads(mp["UserData"]), records)
                 self.assertEqual(json.loads(mp["Timer"]), [ar["name"]])
                 self.assertEqual(mp["MntGrp"], "nxsmntgrp2")
-                mdds = set()
+                # mdds = set()
 
                 jpcnf = rs.updateMntGrp()
                 pcnf = json.loads(jpcnf)
@@ -11959,8 +11959,8 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         cps = {}
         acps = {}
         dss = {}
-        lcp = self._rnd.randint(1, 40)
-        lds = self._rnd.randint(1, 40)
+        # lcp = self._rnd.randint(1, 40)
+        # lds = self._rnd.randint(1, 40)
 
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
@@ -12008,12 +12008,12 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             mp = json.loads(rs.profileConfiguration)
 
             tmg = TestMGSetUp.TestMeasurementGroupSetUp(name='nxsmntgrp2')
-            dv = "/".join(ar["full_name"].split("/")[0:-1])
-            smg = {"controllers": {},
-                   "monitor": "%s" % dv,
-                   "description": "Measurement Group",
-                   "timer": "%s" % dv,
-                   "label": "nxsmntgrp2"}
+            # dv = "/".join(ar["full_name"].split("/")[0:-1])
+            # smg = {"controllers": {},
+            #        "monitor": "%s" % dv,
+            #        "description": "Measurement Group",
+            #        "timer": "%s" % dv,
+            #        "label": "nxsmntgrp2"}
             try:
                 self.myAssertDict(json.loads(mp["ComponentPreselection"]),
                                   acps)
@@ -12077,8 +12077,8 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         cps = {}
         acps = {}
         dss = {}
-        lcp = self._rnd.randint(1, 40)
-        lds = self._rnd.randint(1, 40)
+        # lcp = self._rnd.randint(1, 40)
+        # lds = self._rnd.randint(1, 40)
 
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
@@ -12126,12 +12126,12 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             mp = json.loads(rs.profileConfiguration)
 
             tmg = TestMGSetUp.TestMeasurementGroupSetUp(name='nxsmntgrp2')
-            dv = "/".join(ar["full_name"].split("/")[0:-1])
-            smg = {"controllers": {},
-                   "monitor": "%s" % dv,
-                   "description": "Measurement Group",
-                   "timer": "%s" % dv,
-                   "label": "nxsmntgrp2"}
+            # dv = "/".join(ar["full_name"].split("/")[0:-1])
+            # smg = {"controllers": {},
+            #        "monitor": "%s" % dv,
+            #        "description": "Measurement Group",
+            #        "timer": "%s" % dv,
+            #        "label": "nxsmntgrp2"}
             try:
                 self.myAssertDict(json.loads(mp["ComponentPreselection"]),
                                   acps)
@@ -12194,8 +12194,8 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         cps = {}
         acps = {}
         dss = {}
-        lcp = self._rnd.randint(1, 40)
-        lds = self._rnd.randint(1, 40)
+        # lcp = self._rnd.randint(1, 40)
+        # lds = self._rnd.randint(1, 40)
 
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
@@ -12243,12 +12243,12 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             mp = json.loads(rs.profileConfiguration)
 
             tmg = TestMGSetUp.TestMeasurementGroupSetUp(name='nxsmntgrp2')
-            dv = "/".join(ar["full_name"].split("/")[0:-1])
-            smg = {"controllers": {},
-                   "monitor": "%s" % dv,
-                   "description": "Measurement Group",
-                   "timer": "%s" % dv,
-                   "label": "nxsmntgrp2"}
+            # dv = "/".join(ar["full_name"].split("/")[0:-1])
+            # smg = {"controllers": {},
+            #        "monitor": "%s" % dv,
+            #        "description": "Measurement Group",
+            #        "timer": "%s" % dv,
+            #        "label": "nxsmntgrp2"}
             try:
                 self.myAssertDict(json.loads(mp["ComponentPreselection"]),
                                   acps)
@@ -12312,8 +12312,8 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             cps = {}
             acps = {}
             dss = {}
-            lcp = self._rnd.randint(1, 40)
-            lds = self._rnd.randint(1, 40)
+            # lcp = self._rnd.randint(1, 40)
+            # lds = self._rnd.randint(1, 40)
 
             self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.smycps)])
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
@@ -12397,7 +12397,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                 describer = Describer(self._cf.dp, True)
                 res = describer.components(wwcp, "STEP", "")
 
-                mdds = set()
+                # mdds = set()
                 for mdss in res[0].values():
                     if isinstance(mdss, dict):
                         for ds in mdss.keys():
@@ -12539,8 +12539,8 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             cps = {}
             acps = {}
             dss = {}
-            lcp = self._rnd.randint(1, 40)
-            lds = self._rnd.randint(1, 40)
+            # lcp = self._rnd.randint(1, 40)
+            # lds = self._rnd.randint(1, 40)
 
             self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.smycps)])
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
@@ -12613,7 +12613,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             dv = "/".join(ar["full_name"].split("/")[0:-1])
             chds = [ds for ds in rs.selectedDataSources()
                     if not ds.startswith('client')]
-            chds1 = list(chds)
+            # chds1 = list(chds)
             chds2 = [ds for ds in rs.componentDataSources()
                      if not ds.startswith('client')]
             chds.extend(chds2)
@@ -12664,7 +12664,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                 describer = Describer(self._cf.dp, True)
                 res = describer.components(wwcp, "STEP", "")
 
-                mdds = set()
+                # mdds = set()
                 for mdss in res[0].values():
                     if isinstance(mdss, dict):
                         for ds in mdss.keys():
@@ -12852,8 +12852,8 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                     cps = {}
                     acps = {}
                     dss = {}
-                    lcp = self._rnd.randint(1, 40)
-                    lds = self._rnd.randint(1, 40)
+                    # lcp = self._rnd.randint(1, 40)
+                    # lds = self._rnd.randint(1, 40)
 
                     self._cf.dp.SetCommandVariable(
                         ["CPDICT", json.dumps(self.smycps2)])
@@ -12951,7 +12951,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                     describer = Describer(self._cf.dp, True)
                     res = describer.components(wwcp, "STEP", "")
 
-                    mdds = set()
+                    # mdds = set()
                     for mdss in res[0].values():
                         if isinstance(mdss, dict):
                             for ds in mdss.keys():
@@ -13140,8 +13140,8 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                     cps = {}
                     acps = {}
                     dss = {}
-                    lcp = self._rnd.randint(1, 40)
-                    lds = self._rnd.randint(1, 40)
+                    # lcp = self._rnd.randint(1, 40)
+                    # lds = self._rnd.randint(1, 40)
 
                     self._cf.dp.SetCommandVariable(
                         ["CPDICT", json.dumps(self.smycps2)])
@@ -13223,7 +13223,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                     dv = "/".join(ar["full_name"].split("/")[0:-1])
                     chds = [ds for ds in rs.selectedDataSources()
                             if not ds.startswith('client')]
-                    chds1 = list(chds)
+                    # chds1 = list(chds)
                     chds2 = [ds for ds in rs.componentDataSources()
                              if not ds.startswith('client')]
                     chds.extend(chds2)
@@ -13275,7 +13275,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                     describer = Describer(self._cf.dp, True)
                     res = describer.components(wwcp, "STEP", "")
 
-                    mdds = set()
+                    # mdds = set()
                     for mdss in res[0].values():
                         if isinstance(mdss, dict):
                             for ds in mdss.keys():
@@ -13482,8 +13482,8 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                     cps = {}
                     acps = {}
                     dss = {}
-                    lcp = self._rnd.randint(1, 40)
-                    lds = self._rnd.randint(1, 40)
+                    # lcp = self._rnd.randint(1, 40)
+                    # lds = self._rnd.randint(1, 40)
 
                     self._cf.dp.SetCommandVariable(
                         ["CPDICT", json.dumps(amycps)])
@@ -13564,7 +13564,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                     dv = "/".join(ar["full_name"].split("/")[0:-1])
                     chds = [ds for ds in rs.selectedDataSources()
                             if not ds.startswith('client')]
-                    chds1 = list(chds)
+                    # chds1 = list(chds)
                     chds2 = [ds for ds in rs.componentDataSources()
                              if not ds.startswith('client')]
                     chds.extend(chds2)
@@ -13624,7 +13624,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                     describer = Describer(self._cf.dp, True)
                     res = describer.components(wwcp, "STEP", "")
 
-                    mdds = set()
+                    # mdds = set()
                     for mdss in res[0].values():
                         if isinstance(mdss, dict):
                             for ds in mdss.keys():
@@ -13884,8 +13884,8 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                     cps = {}
                     acps = {}
                     dss = {}
-                    lcp = self._rnd.randint(1, 40)
-                    lds = self._rnd.randint(1, 40)
+                    # lcp = self._rnd.randint(1, 40)
+                    # lds = self._rnd.randint(1, 40)
 
                     self._cf.dp.SetCommandVariable(
                         ["CPDICT", json.dumps(amycps)])
@@ -13966,7 +13966,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                     dv = "/".join(ar["full_name"].split("/")[0:-1])
                     chds = [ds for ds in rs.selectedDataSources()
                             if not ds.startswith('client')]
-                    chds1 = list(chds)
+                    # chds1 = list(chds)
                     chds2 = [ds for ds in rs.componentDataSources()
                              if not ds.startswith('client')]
                     chds.extend(chds2)
@@ -14037,7 +14037,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                     describer = Describer(self._cf.dp, True)
                     res = describer.components(wwcp, "STEP", "")
 
-                    mdds = set()
+                    # mdds = set()
                     for mdss in res[0].values():
                         if isinstance(mdss, dict):
                             for ds in mdss.keys():
@@ -14196,6 +14196,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                         pass
         finally:
             simp2.tearDown()
+
 
 if __name__ == '__main__':
     unittest.main()

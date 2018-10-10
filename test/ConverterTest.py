@@ -22,15 +22,20 @@
 import unittest
 import os
 import sys
-import subprocess
 import random
 import struct
 import binascii
-import string
+import time
 
 from nxsrecconfig.Converter import (
     Converter, Converter1to2, Converter2to1,
     Converter2to3, Converter3to2)
+
+import logging
+logger = logging.getLogger()
+
+if sys.version_info > (3,):
+    long = int
 
 # if 64-bit machione
 IS64BIT = (struct.calcsize("P") == 8)

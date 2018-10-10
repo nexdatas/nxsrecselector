@@ -23,14 +23,12 @@ import unittest
 import os
 import sys
 import time
-import subprocess
 import random
 import struct
 import threading
 import binascii
 import Queue
 import PyTango
-
 import TestServerSetUp
 
 from nxsrecconfig.CheckerThread import (
@@ -39,6 +37,9 @@ from nxsrecconfig.CheckerThread import (
 
 # if 64-bit machione
 IS64BIT = (struct.calcsize("P") == 8)
+
+if sys.version_info > (3,):
+    long = int
 
 
 # test fixture
@@ -739,7 +740,7 @@ class CheckerItemTest(unittest.TestCase):
     def test_start_five(self):
         fun = sys._getframe().f_code.co_name
         print("Run: %s.%s() " % (self.__class__.__name__, fun))
-        idn = self.__rnd.randint(1, 1231233)
+        # idn = self.__rnd.randint(1, 1231233)
         cqueue = Queue.Queue()
         self.assertTrue(cqueue.empty())
         ths = []

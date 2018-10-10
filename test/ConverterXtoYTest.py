@@ -22,16 +22,19 @@
 import unittest
 import os
 import sys
-import subprocess
 import random
 import struct
 import binascii
 import string
+import time
 
 from nxsrecconfig.Converter import ConverterXtoY
 
 # if 64-bit machione
 IS64BIT = (struct.calcsize("P") == 8)
+
+if sys.version_info > (3,):
+    long = int
 
 
 # test fixture

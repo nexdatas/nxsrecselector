@@ -22,32 +22,26 @@
 import unittest
 import os
 import sys
-import subprocess
 import random
 import struct
-import threading
 import binascii
-import Queue
 import PyTango
 import json
-import pickle
 import string
 import time
 import xml.dom.minidom
 
+import TestServerSetUp
+import TestConfigServerSetUp
+
+
+from nxsrecconfig.DynamicComponent import DynamicComponent
+
 import logging
 logger = logging.getLogger()
 
-import TestMacroServerSetUp
-import TestServerSetUp
-import TestConfigServerSetUp
-import TestWriterSetUp
-
-
-from nxsrecconfig.MacroServerPools import MacroServerPools
-from nxsrecconfig.DynamicComponent import DynamicComponent
-from nxsrecconfig.Utils import TangoUtils, MSUtils
-from nxsconfigserver.XMLConfigurator import XMLConfigurator
+if sys.version_info > (3,):
+    long = int
 
 # if 64-bit machione
 IS64BIT = (struct.calcsize("P") == 8)
@@ -155,7 +149,8 @@ class DynamicComponentTest(unittest.TestCase):
         self.__defaultmntgrp = 'nxsmntgrp'
         # default path
         self.__defaultpath = \
-            "/$var.entryname#'scan'$var.serialno:NXentry/NXinstrument/collection"
+            "/$var.entryname#'scan'$var.serialno:NXentry/" \
+            "NXinstrument/collection"
 
         self._keys = [
             ("Timer", '[]'),
@@ -1074,19 +1069,22 @@ class DynamicComponentTest(unittest.TestCase):
                 '<?xml version="1.0" ?>\n<definition/>\n',
             "one":
                 '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n'
+            '<group name="$var.entryname#\'scan\'$var.serialno" '
+            'type="NXentry">\n'
             '<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n'
             '<field name="onename" type="NX_CHAR">\n<strategy mode="STEP"/>\n'
             '<datasource name="onename" type="CLIENT">\n'
             '<record name="onename"/>\n</datasource>\n</field>\n'
             '</group>\n</group>\n<group name="data" type="NXdata">\n'
-            '<link name="onename" target="/$var.entryname#\'scan\'$var.serialno:'
+            '<link name="onename" '
+            'target="/$var.entryname#\'scan\'$var.serialno:'
             'NXentry/NXinstrument/collection/onename"/>\n'
             '</group>\n</group>\n</definition>\n',
             "two":
                 '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n'
+            '<group name="$var.entryname#\'scan\'$var.serialno" '
+            'type="NXentry">\n'
             '<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n'
             '<field name="ds1" type="NX_CHAR">\n<strategy mode="STEP"/>\n'
@@ -1095,7 +1093,8 @@ class DynamicComponentTest(unittest.TestCase):
             '<group name="data" type="NXdata">\n'
             '<link name="ds1" target="/$var.entryname#\'scan\'$var.serialno:'
             'NXentry/NXinstrument/collection/ds1"/>\n</group>\n</group>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">'
+            '<group name="$var.entryname#\'scan\'$var.serialno" '
+            'type="NXentry">'
             '\n<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n'
             '<field name="ds2" type="NX_CHAR">\n<strategy mode="STEP"/>\n'
@@ -1107,7 +1106,8 @@ class DynamicComponentTest(unittest.TestCase):
             '</group>\n</definition>\n',
             "three":
                 '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n'
+            '<group name="$var.entryname#\'scan\'$var.serialno" '
+            'type="NXentry">\n'
             '<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n'
             '<field name="ds1" type="NX_CHAR">\n<strategy mode="STEP"/>\n'
@@ -1116,7 +1116,8 @@ class DynamicComponentTest(unittest.TestCase):
             '<group name="data" type="NXdata">\n'
             '<link name="ds1" target="/$var.entryname#\'scan\'$var.serialno:'
             'NXentry/NXinstrument/collection/ds1"/>\n</group>\n</group>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">'
+            '<group name="$var.entryname#\'scan\'$var.serialno" '
+            'type="NXentry">'
             '\n<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n'
             '<field name="ds2" type="NX_CHAR">\n<strategy mode="STEP"/>\n'
@@ -1125,7 +1126,8 @@ class DynamicComponentTest(unittest.TestCase):
             '<group name="data" type="NXdata">\n'
             '<link name="ds2" target="/$var.entryname#\'scan\'$var.serialno:'
             'NXentry/NXinstrument/collection/ds2"/>\n</group>\n</group>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">'
+            '<group name="$var.entryname#\'scan\'$var.serialno" '
+            'type="NXentry">'
             '\n<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n'
             '<field name="ds3" type="NX_CHAR">\n<strategy mode="STEP"/>\n'
@@ -1137,7 +1139,8 @@ class DynamicComponentTest(unittest.TestCase):
             '</definition>\n',
             "type":
                 '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n'
+            '<group name="$var.entryname#\'scan\'$var.serialno" '
+            'type="NXentry">\n'
             '<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n'
             '<field name="ds1" type="NX_INT">\n<strategy mode="STEP"/>\n'
@@ -1149,7 +1152,8 @@ class DynamicComponentTest(unittest.TestCase):
             '</group>\n</group>\n</definition>\n',
             "shape":
                 '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n'
+            '<group name="$var.entryname#\'scan\'$var.serialno" '
+            'type="NXentry">\n'
             '<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n'
             '<field name="ds2" type="NX_CHAR">\n<strategy mode="STEP"/>\n'
@@ -1163,7 +1167,8 @@ class DynamicComponentTest(unittest.TestCase):
             '</group>\n</group>\n</definition>\n',
             "shapetype":
                 '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n'
+            '<group name="$var.entryname#\'scan\'$var.serialno" '
+            'type="NXentry">\n'
             '<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n'
             '<field name="ds3" type="NX_FLOAT64">\n<strategy mode="STEP"/>\n'
@@ -1186,7 +1191,7 @@ class DynamicComponentTest(unittest.TestCase):
             "shapetype": [{"name": "ds3", "dtype": "float64",
                            "shape": [3, 56]}],
         }
-        dname = "__dynamic_component__"
+        # dname = "__dynamic_component__"
         dc = DynamicComponent(self._cf.dp)
         for lb, ds in dsdict.items():
             dc.setStepDictDSources(ds)
@@ -1202,7 +1207,8 @@ class DynamicComponentTest(unittest.TestCase):
         cps = {
             "type":
                 '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n'
+            '<group name="$var.entryname#\'scan\'$var.serialno" '
+            'type="NXentry">\n'
             '<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n'
             '<field name="ds1" type="%s">\n<strategy mode="STEP"/>\n'
@@ -1213,7 +1219,7 @@ class DynamicComponentTest(unittest.TestCase):
             'NXentry/NXinstrument/collection/ds1"/>\n'
             '</group>\n</group>\n</definition>\n',
         }
-        dname = "__dynamic_component__"
+        # dname = "__dynamic_component__"
         dc = DynamicComponent(self._cf.dp)
         for tp, nxstp in self.__npTn.items():
             dc.setStepDictDSources([{"name": "ds1", "dtype": tp}])
@@ -1229,7 +1235,8 @@ class DynamicComponentTest(unittest.TestCase):
         cps = {
             "shape":
                 '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n'
+            '<group name="$var.entryname#\'scan\'$var.serialno" '
+            'type="NXentry">\n'
             '<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n'
             '<field name="ds2" type="NX_CHAR">\n<strategy mode="STEP"/>\n'
@@ -1245,7 +1252,7 @@ class DynamicComponentTest(unittest.TestCase):
         dim = '<dim index="%s" value="%s"/>\n'
         dimend = '</dimensions>\n'
 
-        dname = "__dynamic_component__"
+        # dname = "__dynamic_component__"
         dc = DynamicComponent(self._cf.dp)
         for i in range(50):
             ms = [self.__rnd.randint(0, 3000)
@@ -1270,7 +1277,8 @@ class DynamicComponentTest(unittest.TestCase):
         cps = {
             "shapetype":
                 '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n'
+            '<group name="$var.entryname#\'scan\'$var.serialno" '
+            'type="NXentry">\n'
             '<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n'
             '<field name="%s" type="%s">\n<strategy mode="STEP"/>\n'
@@ -1280,15 +1288,16 @@ class DynamicComponentTest(unittest.TestCase):
             '</group>\n</group>\n%s</group>\n</definition>\n',
         }
 
-        link = '<group name="data" type="NXdata">\n' + \
-            '<link name="%s" target="/$var.entryname#\'scan\'$var.serialno:' + \
-            'NXentry/NXinstrument/collection/%s"/>\n</group>\n'
+        link = '<group name="data" type="NXdata">\n' \
+               '<link name="%s" ' \
+               'target="/$var.entryname#\'scan\'$var.serialno:' \
+               'NXentry/NXinstrument/collection/%s"/>\n</group>\n'
 
         dimbg = '<dimensions rank="%s">\n'
         dim = '<dim index="%s" value="%s"/>\n'
         dimend = '</dimensions>\n'
 
-        dname = "__dynamic_component__"
+        # dname = "__dynamic_component__"
 
         arr = [
             {"name": "client", "full_name": "client"},
@@ -1422,7 +1431,8 @@ class DynamicComponentTest(unittest.TestCase):
         cps = {
             "shapetype":
                 '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n'
+            '<group name="$var.entryname#\'scan\'$var.serialno" '
+            'type="NXentry">\n'
             '<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n%s'
             '</group>\n</group>\n%s</group>\n</definition>\n',
@@ -1444,7 +1454,7 @@ class DynamicComponentTest(unittest.TestCase):
         dim = '<dim index="%s" value="%s"/>\n'
         dimend = '</dimensions>\n'
 
-        dname = "__dynamic_component__"
+        # dname = "__dynamic_component__"
 
         arr = [
             {"name": "client", "full_name": "client"},
@@ -1503,9 +1513,9 @@ class DynamicComponentTest(unittest.TestCase):
 #                    print "TP = ", tp
                     ms = [self.__rnd.randint(0, 3000)
                           for _ in range(self.__rnd.randint(0, 3))]
-                    ms2 = [self.__rnd.randint(0, 3000)
-                           for _ in range(self.__rnd.randint(0, 3))]
-                    tmptp = self.__rnd.choice(self.__npTn.keys())
+                    # ms2 = [self.__rnd.randint(0, 3000)
+                    #        for _ in range(self.__rnd.randint(0, 3))]
+                    # tmptp = self.__rnd.choice(self.__npTn.keys())
                     if i == 0:
                         dc.setDefaultLinkPath(False, mypath)
                     elif i == 1:
@@ -1561,7 +1571,7 @@ class DynamicComponentTest(unittest.TestCase):
                     if i % 4 < 2:
                         fd = field % (ds, nxstp, ds, ar["full_name"], mstr)
                     else:
-                        fname = fieldname.lower()
+                        # fname = fieldname.lower()
                         fd = field % (fieldname.lower(), nxstp, ds,
                                       ar["full_name"], mstr)
 
@@ -1630,17 +1640,18 @@ class DynamicComponentTest(unittest.TestCase):
     def test_create_dict_datasource_attr(self):
         fun = sys._getframe().f_code.co_name
         print("Run: %s.%s() " % (self.__class__.__name__, fun))
-        cps = {
-            "shapetype":
-                '<?xml version="1.0" ?>\n<definition>\n%s'
-            '</group>\n</group>\n%s</group>\n</definition>\n',
-        }
+        # cps = {
+        #     "shapetype":
+        #         '<?xml version="1.0" ?>\n<definition>\n%s'
+        #     '</group>\n</group>\n%s</group>\n</definition>\n',
+        # }
 
         defbg = '<?xml version="1.0" ?>\n<definition>\n'
         defend = '</definition>\n'
-        groupbg = '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n' + \
-            '<group name="instrument" type="NXinstrument">\n' + \
-            '<group name="collection" type="NXcollection">\n'
+        groupbg = '<group name="$var.entryname#\'scan\'$var.serialno" ' \
+                  'type="NXentry">\n' \
+                  '<group name="instrument" type="NXinstrument">\n' \
+                  '<group name="collection" type="NXcollection">\n'
         groupend = '</group>\n'
 
         fieldbg = '<field name="%s" type="%s">\n<strategy mode="STEP"/>\n'
@@ -1648,20 +1659,20 @@ class DynamicComponentTest(unittest.TestCase):
         dsclient = '<datasource name="%s" type="CLIENT">\n' + \
             '<record name="%s"/>\n</datasource>\n'
 
-        dstango = '<datasource name="%s" type="TANGO">\n' + \
-            '<device member="attribute" name="%s"/>\n' + \
-            '<record name="%s"/>\n</datasource>\n'
+        # dstango = '<datasource name="%s" type="TANGO">\n' + \
+        #     '<device member="attribute" name="%s"/>\n' + \
+        #     '<record name="%s"/>\n</datasource>\n'
 
         fieldend = '</field>\n'
 
         link = '<group name="data" type="NXdata">\n' + \
             '<link name="%s" target="%s/%s"/>\n</group>\n'
 
-        dimbg = '<dimensions rank="%s">\n'
-        dim = '<dim index="%s" value="%s"/>\n'
-        dimend = '</dimensions>\n'
+        # dimbg = '<dimensions rank="%s">\n'
+        # dim = '<dim index="%s" value="%s"/>\n'
+        # dimend = '</dimensions>\n'
 
-        dname = "__dynamic_component__"
+        # dname = "__dynamic_component__"
 
         arr = [
             {"name": "client_short", "full_name": "ttestp09/testts/t1r228",
@@ -1705,9 +1716,9 @@ class DynamicComponentTest(unittest.TestCase):
                 comp = self._cf.dp.Components([cpname])[0]
                 mycps = defbg + groupbg + fieldbg % (ar["name"], "NX_CHAR")
                 if i % 2:
-                    sso = ar["source"].split("/")
-#                    mycps += dstango % (
-#                        ar["name"], "/".join(sso[:-1]), sso[-1])
+                    # sso = ar["source"].split("/")
+                    #     mycps += dstango % (
+                    #         ar["name"], "/".join(sso[:-1]), sso[-1])
                     mycps += dsclient % (ar["name"], ar["full_name"])
                 else:
                     mycps += dsclient % (ar["name"], ar["full_name"])
@@ -1737,7 +1748,8 @@ class DynamicComponentTest(unittest.TestCase):
                 '<?xml version="1.0" ?>\n<definition/>\n',
             "one":
                 '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n'
+            '<group name="$var.entryname#\'scan\'$var.serialno" '
+            'type="NXentry">\n'
             '<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n'
             '<field name="one" type="NX_CHAR">\n<strategy mode="STEP"/>\n'
@@ -1751,7 +1763,8 @@ class DynamicComponentTest(unittest.TestCase):
             '</definition>\n',
             "two":
                 '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n'
+            '<group name="$var.entryname#\'scan\'$var.serialno" '
+            'type="NXentry">\n'
             '<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n'
             '<field name="d1" type="NX_CHAR">\n<strategy mode="STEP"/>\n'
@@ -1762,7 +1775,8 @@ class DynamicComponentTest(unittest.TestCase):
             '<link name="d1" target="/$var.entryname#\'scan\'$var.serialno:'
             'NXentry/NXinstrument/collection/d1"/>\n'
             '</group>\n</group>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n'
+            '<group name="$var.entryname#\'scan\'$var.serialno" '
+            'type="NXentry">\n'
             '<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n'
             '<field name="d2" type="NX_CHAR">\n<strategy mode="STEP"/>\n'
@@ -1775,7 +1789,8 @@ class DynamicComponentTest(unittest.TestCase):
             '</definition>\n',
             "three":
                 '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n'
+            '<group name="$var.entryname#\'scan\'$var.serialno" '
+            'type="NXentry">\n'
             '<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n'
             '<field name="ds1" type="NX_CHAR">\n<strategy mode="STEP"/>\n'
@@ -1786,7 +1801,8 @@ class DynamicComponentTest(unittest.TestCase):
             '<link name="ds1" target="/$var.entryname#\'scan\'$var.serialno:'
             'NXentry/NXinstrument/collection/ds1"/>\n'
             '</group>\n</group>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n'
+            '<group name="$var.entryname#\'scan\'$var.serialno" '
+            'type="NXentry">\n'
             '<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n'
             '<field name="ds2" type="NX_CHAR">\n<strategy mode="STEP"/>\n'
@@ -1796,7 +1812,8 @@ class DynamicComponentTest(unittest.TestCase):
             '<link name="ds2" target="/$var.entryname#\'scan\'$var.serialno:'
             'NXentry/NXinstrument/collection/ds2"/>\n'
             '</group>\n</group>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n'
+            '<group name="$var.entryname#\'scan\'$var.serialno" '
+            'type="NXentry">\n'
             '<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n'
             '<field name="ds3" type="NX_CHAR">\n<strategy mode="STEP"/>\n'
@@ -1814,7 +1831,7 @@ class DynamicComponentTest(unittest.TestCase):
             "two": ["d1", "d2"],
             "three": ["ds1", "ds2", "ds3"],
         }
-        dname = "__dynamic_component__"
+        # dname = "__dynamic_component__"
         dc = DynamicComponent(self._cf.dp)
         for lb, ds in dsdict.items():
             dc.setStepDSources(ds)
@@ -1833,7 +1850,8 @@ class DynamicComponentTest(unittest.TestCase):
                 '<?xml version="1.0" ?>\n<definition/>\n',
             "one":
                 '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n'
+            '<group name="$var.entryname#\'scan\'$var.serialno" '
+            'type="NXentry">\n'
             '<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n'
             '<field name="one" type="NX_CHAR">\n<strategy mode="STEP"/>\n'
@@ -1847,7 +1865,8 @@ class DynamicComponentTest(unittest.TestCase):
             '</definition>\n',
             "two":
                 '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n'
+            '<group name="$var.entryname#\'scan\'$var.serialno" '
+            'type="NXentry">\n'
             '<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n'
             '<field name="d1" type="NX_CHAR">\n<strategy mode="STEP"/>\n'
@@ -1858,7 +1877,8 @@ class DynamicComponentTest(unittest.TestCase):
             '<link name="d1" target="/$var.entryname#\'scan\'$var.serialno:'
             'NXentry/NXinstrument/collection/d1"/>\n'
             '</group>\n</group>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n'
+            '<group name="$var.entryname#\'scan\'$var.serialno" '
+            'type="NXentry">\n'
             '<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n'
             '<field name="d2" type="NX_CHAR">\n<strategy mode="STEP"/>\n'
@@ -1871,7 +1891,8 @@ class DynamicComponentTest(unittest.TestCase):
             '</definition>\n',
             "three":
                 '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n'
+            '<group name="$var.entryname#\'scan\'$var.serialno" '
+            'type="NXentry">\n'
             '<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n'
             '<field name="ds1" type="NX_CHAR">\n<strategy mode="STEP"/>\n'
@@ -1882,7 +1903,8 @@ class DynamicComponentTest(unittest.TestCase):
             '<link name="ds1" target="/$var.entryname#\'scan\'$var.serialno:'
             'NXentry/NXinstrument/collection/ds1"/>\n'
             '</group>\n</group>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n'
+            '<group name="$var.entryname#\'scan\'$var.serialno" '
+            'type="NXentry">\n'
             '<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n'
             '<field name="ds2" type="NX_CHAR">\n<strategy mode="STEP"/>\n'
@@ -1892,7 +1914,8 @@ class DynamicComponentTest(unittest.TestCase):
             '<link name="ds2" target="/$var.entryname#\'scan\'$var.serialno:'
             'NXentry/NXinstrument/collection/ds2"/>\n'
             '</group>\n</group>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n'
+            '<group name="$var.entryname#\'scan\'$var.serialno" '
+            'type="NXentry">\n'
             '<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n'
             '<field name="ds3" type="NX_CHAR">\n<strategy mode="STEP"/>\n'
@@ -1910,7 +1933,7 @@ class DynamicComponentTest(unittest.TestCase):
             "two": ["d1", "d2"],
             "three": ["ds1", "ds2", "ds3"],
         }
-        dname = "__dynamic_component__"
+        # dname = "__dynamic_component__"
         dc = DynamicComponent(self._cf.dp)
         for lb, ds in dsdict.items():
             dc.setStepDSources(ds)
@@ -1928,7 +1951,8 @@ class DynamicComponentTest(unittest.TestCase):
         cps = {
             "type":
                 '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n'
+            '<group name="$var.entryname#\'scan\'$var.serialno" '
+            'type="NXentry">\n'
             '<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n'
             '<field name="ds1" type="%s">\n<strategy mode="STEP"/>\n'
@@ -1939,7 +1963,7 @@ class DynamicComponentTest(unittest.TestCase):
             'NXentry/NXinstrument/collection/ds1"/>\n'
             '</group>\n</group>\n</definition>\n',
         }
-        dname = "__dynamic_component__"
+        # dname = "__dynamic_component__"
         dc = DynamicComponent(self._cf.dp)
         for tp, nxstp in self.__npTn.items():
             dc.setStepDSources(["ds1"])
@@ -1957,7 +1981,8 @@ class DynamicComponentTest(unittest.TestCase):
         cps = {
             "type":
                 '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n'
+            '<group name="$var.entryname#\'scan\'$var.serialno" '
+            'type="NXentry">\n'
             '<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n'
             '<field name="ds1" type="%s">\n<strategy mode="INIT"/>\n'
@@ -1966,7 +1991,7 @@ class DynamicComponentTest(unittest.TestCase):
             '</group>\n'
             '</group>\n</group>\n</definition>\n',
         }
-        dname = "__dynamic_component__"
+        # dname = "__dynamic_component__"
         dc = DynamicComponent(self._cf.dp)
         for tp, nxstp in self.__npTn.items():
             dc.setInitDSources(["ds1"])
@@ -1984,7 +2009,8 @@ class DynamicComponentTest(unittest.TestCase):
         cps = {
             "type":
                 '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n'
+            '<group name="$var.entryname#\'scan\'$var.serialno" '
+            'type="NXentry">\n'
             '<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n'
             '<field name="ds1" type="%s">\n<strategy mode="STEP"/>\n'
@@ -1995,7 +2021,7 @@ class DynamicComponentTest(unittest.TestCase):
             'NXentry/NXinstrument/collection/ds1"/>\n'
             '</group>\n</group>\n</definition>\n',
         }
-        dname = "__dynamic_component__"
+        # dname = "__dynamic_component__"
         dc = DynamicComponent(self._cf.dp)
         for tp, nxstp in self.__npTn.items():
             dc.setStepDSources(["ds1"])
@@ -2014,7 +2040,8 @@ class DynamicComponentTest(unittest.TestCase):
         cps = {
             "type":
                 '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n'
+            '<group name="$var.entryname#\'scan\'$var.serialno" '
+            'type="NXentry">\n'
             '<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n'
             '<field name="ds1" type="%s">\n<strategy mode="INIT"/>\n'
@@ -2022,7 +2049,7 @@ class DynamicComponentTest(unittest.TestCase):
             '<record name="ds1"/>\n</datasource>\n</field>\n'
             '</group>\n</group>\n</group>\n</definition>\n',
         }
-        dname = "__dynamic_component__"
+        # dname = "__dynamic_component__"
         dc = DynamicComponent(self._cf.dp)
         for tp, nxstp in self.__npTn.items():
             dc.setInitDSources(["ds1"])
@@ -2041,7 +2068,8 @@ class DynamicComponentTest(unittest.TestCase):
         cps = {
             "shape":
                 '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n'
+            '<group name="$var.entryname#\'scan\'$var.serialno" '
+            'type="NXentry">\n'
             '<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n'
             '<field name="ds2" type="NX_CHAR">\n<strategy mode="STEP"/>\n'
@@ -2057,7 +2085,7 @@ class DynamicComponentTest(unittest.TestCase):
         dim = '<dim index="%s" value="%s"/>\n'
         dimend = '</dimensions>\n'
 
-        dname = "__dynamic_component__"
+        # dname = "__dynamic_component__"
         dc = DynamicComponent(self._cf.dp)
         for i in range(50):
             ms = [self.__rnd.randint(0, 3000)
@@ -2085,7 +2113,8 @@ class DynamicComponentTest(unittest.TestCase):
         cps = {
             "shape":
                 '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n'
+            '<group name="$var.entryname#\'scan\'$var.serialno" '
+            'type="NXentry">\n'
             '<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n'
             '<field name="ds2" type="NX_CHAR">\n<strategy mode="INIT"/>\n'
@@ -2098,7 +2127,7 @@ class DynamicComponentTest(unittest.TestCase):
         dim = '<dim index="%s" value="%s"/>\n'
         dimend = '</dimensions>\n'
 
-        dname = "__dynamic_component__"
+        # dname = "__dynamic_component__"
         dc = DynamicComponent(self._cf.dp)
         for i in range(50):
             ms = [self.__rnd.randint(0, 3000)
@@ -2126,7 +2155,8 @@ class DynamicComponentTest(unittest.TestCase):
         cps = {
             "shapetype":
                 '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n'
+            '<group name="$var.entryname#\'scan\'$var.serialno" '
+            'type="NXentry">\n'
             '<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n'
             '<field name="%s" type="%s">\n<strategy mode="STEP"/>\n'
@@ -2136,15 +2166,16 @@ class DynamicComponentTest(unittest.TestCase):
             '</group>\n</group>\n%s</group>\n</definition>\n',
         }
 
-        link = '<group name="data" type="NXdata">\n' + \
-            '<link name="%s" target="/$var.entryname#\'scan\'$var.serialno:' + \
-            'NXentry/NXinstrument/collection/%s"/>\n</group>\n'
+        link = '<group name="data" type="NXdata">\n' \
+               '<link name="%s" ' \
+               'target="/$var.entryname#\'scan\'$var.serialno:' \
+               'NXentry/NXinstrument/collection/%s"/>\n</group>\n'
 
         dimbg = '<dimensions rank="%s">\n'
         dim = '<dim index="%s" value="%s"/>\n'
         dimend = '</dimensions>\n'
 
-        dname = "__dynamic_component__"
+        # dname = "__dynamic_component__"
 
         arr = [
             {"name": "client"},
@@ -2165,7 +2196,7 @@ class DynamicComponentTest(unittest.TestCase):
             {"name": "myclient_long"},
         ]
 
-        db = PyTango.Database()
+        # db = PyTango.Database()
         try:
             dc = DynamicComponent(self._cf.dp)
             for i, ar in enumerate(arr):
@@ -2174,9 +2205,9 @@ class DynamicComponentTest(unittest.TestCase):
                     dc = DynamicComponent(self._cf.dp)
                     ms = [self.__rnd.randint(0, 3000)
                           for _ in range(self.__rnd.randint(0, 3))]
-                    ms2 = [self.__rnd.randint(0, 3000)
-                           for _ in range(self.__rnd.randint(0, 3))]
-                    tmptp = self.__rnd.choice(self.__npTn.keys())
+                    # ms2 = [self.__rnd.randint(0, 3000)
+                    #        for _ in range(self.__rnd.randint(0, 3))]
+                    # tmptp = self.__rnd.choice(self.__npTn.keys())
                     if i == 0:
                         dc.setDefaultLinkPath(False, self.__defaultpath)
                         dc.setLabelParams("{}", "{}", "{}",
@@ -2301,7 +2332,8 @@ class DynamicComponentTest(unittest.TestCase):
         cps = {
             "shapetype":
                 '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n'
+            '<group name="$var.entryname#\'scan\'$var.serialno" '
+            'type="NXentry">\n'
             '<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n'
             '<field name="%s" type="%s">\n<strategy mode="INIT"/>\n'
@@ -2311,15 +2343,16 @@ class DynamicComponentTest(unittest.TestCase):
             '</group>\n</group>\n%s</group>\n</definition>\n',
         }
 
-        link = '<group name="data" type="NXdata">\n' + \
-            '<link name="%s" target="/$var.entryname#\'scan\'$var.serialno:' + \
-            'NXentry/NXinstrument/collection/%s"/>\n</group>\n'
+        link = '<group name="data" type="NXdata">\n' \
+               '<link name="%s" ' \
+               'target="/$var.entryname#\'scan\'$var.serialno:' \
+               'NXentry/NXinstrument/collection/%s"/>\n</group>\n'
 
         dimbg = '<dimensions rank="%s">\n'
         dim = '<dim index="%s" value="%s"/>\n'
         dimend = '</dimensions>\n'
 
-        dname = "__dynamic_component__"
+        # dname = "__dynamic_component__"
 
         arr = [
             {"name": "client"},
@@ -2340,7 +2373,7 @@ class DynamicComponentTest(unittest.TestCase):
             {"name": "myclient_long"},
         ]
 
-        db = PyTango.Database()
+        # db = PyTango.Database()
         try:
             dc = DynamicComponent(self._cf.dp)
             for i, ar in enumerate(arr):
@@ -2350,9 +2383,9 @@ class DynamicComponentTest(unittest.TestCase):
 #                    print "TP = ", tp, i
                     ms = [self.__rnd.randint(0, 3000)
                           for _ in range(self.__rnd.randint(0, 3))]
-                    ms2 = [self.__rnd.randint(0, 3000)
-                           for _ in range(self.__rnd.randint(0, 3))]
-                    tmptp = self.__rnd.choice(self.__npTn.keys())
+                    # ms2 = [self.__rnd.randint(0, 3000)
+                    #        for _ in range(self.__rnd.randint(0, 3))]
+                    # tmptp = self.__rnd.choice(self.__npTn.keys())
                     if i == 0:
                         dc.setDefaultLinkPath(True, self.__defaultpath, False)
                         dc.setLabelParams("{}", "{}", "{}",
@@ -2477,9 +2510,10 @@ class DynamicComponentTest(unittest.TestCase):
 
         defbg = '<?xml version="1.0" ?>\n<definition>\n'
         defend = '</definition>\n'
-        groupbg = '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n' + \
-            '<group name="instrument" type="NXinstrument">\n' + \
-            '<group name="collection" type="NXcollection">\n'
+        groupbg = '<group name="$var.entryname#\'scan\'$var.serialno" ' \
+                  'type="NXentry">\n' \
+                  '<group name="instrument" type="NXinstrument">\n' \
+                  '<group name="collection" type="NXcollection">\n'
         groupend = '</group>\n'
 
         fieldbg = '<field name="%s" type="%s">\n<strategy mode="STEP"/>\n'
@@ -2491,17 +2525,17 @@ class DynamicComponentTest(unittest.TestCase):
         link = '<group name="data" type="NXdata">\n' + \
             '<link name="%s" target="%s/%s"/>\n</group>\n'
 
-        dimbg = '<dimensions rank="%s">\n'
-        dim = '<dim index="%s" value="%s"/>\n'
-        dimend = '</dimensions>\n'
+        # dimbg = '<dimensions rank="%s">\n'
+        # dim = '<dim index="%s" value="%s"/>\n'
+        # dimend = '</dimensions>\n'
 
 #        self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
         dc = DynamicComponent(self._cf.dp)
         for i in range(4):
             for ds, dsxml in self.smydss.items():
-                ms = self.smydsspar[ds]
-                sds = ds.split("_")
-                tp = sds[1]
+                # ms = self.smydsspar[ds]
+                # sds = ds.split("_")
+                # tp = sds[1]
                 dc.setStepDSources([ds])
 
                 if i == 0:
@@ -2544,9 +2578,10 @@ class DynamicComponentTest(unittest.TestCase):
 
         defbg = '<?xml version="1.0" ?>\n<definition>\n'
         defend = '</definition>\n'
-        groupbg = '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n' + \
-            '<group name="instrument" type="NXinstrument">\n' + \
-            '<group name="collection" type="NXcollection">\n'
+        groupbg = '<group name="$var.entryname#\'scan\'$var.serialno" ' \
+                  'type="NXentry">\n' \
+                  '<group name="instrument" type="NXinstrument">\n' \
+                  '<group name="collection" type="NXcollection">\n'
         groupend = '</group>\n'
 
         fieldbg = '<field name="%s" type="%s">\n<strategy mode="STEP"/>\n'
@@ -2561,9 +2596,9 @@ class DynamicComponentTest(unittest.TestCase):
         link = '<group name="data" type="NXdata">\n' + \
             '<link name="%s" target="%s/%s"/>\n</group>\n'
 
-        dimbg = '<dimensions rank="%s">\n'
-        dim = '<dim index="%s" value="%s"/>\n'
-        dimend = '</dimensions>\n'
+        # dimbg = '<dimensions rank="%s">\n'
+        # dim = '<dim index="%s" value="%s"/>\n'
+        # dimend = '</dimensions>\n'
 
         arr = [
             {"name": "client_short", "full_name": "ttestp09/testts/t1r228",
@@ -2634,9 +2669,10 @@ class DynamicComponentTest(unittest.TestCase):
 
         defbg = '<?xml version="1.0" ?>\n<definition>\n'
         defend = '</definition>\n'
-        groupbg = '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n' + \
-            '<group name="instrument" type="NXinstrument">\n' + \
-            '<group name="collection" type="NXcollection">\n'
+        groupbg = '<group name="$var.entryname#\'scan\'$var.serialno" ' \
+                  'type="NXentry">\n' \
+                  '<group name="instrument" type="NXinstrument">\n' \
+                  '<group name="collection" type="NXcollection">\n'
         groupend = '</group>\n'
 
         fieldbg = '<field name="%s" type="%s">\n<strategy mode="INIT"/>\n'
@@ -2652,9 +2688,9 @@ class DynamicComponentTest(unittest.TestCase):
             '<link name="%s" target="%s/%s"/>\n</group>\n'
         link = ''
 
-        dimbg = '<dimensions rank="%s">\n'
-        dim = '<dim index="%s" value="%s"/>\n'
-        dimend = '</dimensions>\n'
+        # dimbg = '<dimensions rank="%s">\n'
+        # dim = '<dim index="%s" value="%s"/>\n'
+        # dimend = '</dimensions>\n'
 
         arr = [
             {"name": "client_short", "full_name": "ttestp09/testts/t1r228",
@@ -2703,8 +2739,7 @@ class DynamicComponentTest(unittest.TestCase):
                 else:
                     mycps += dsclient % (ar["name"], ar["name"])
                 mycps += fieldend + groupend + groupend
-                mycps += link  # % (ar["name"], self.__defaultpath,
-                              #   ar["name"])
+                mycps += link  # % (ar["name"], self.__defaultpath, ar["name"])
                 mycps += groupend + defend
 
                 self.assertEqual(comp, mycps)
@@ -2726,9 +2761,10 @@ class DynamicComponentTest(unittest.TestCase):
 
         defbg = '<?xml version="1.0" ?>\n<definition>\n'
         defend = '</definition>\n'
-        groupbg = '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n' + \
-            '<group name="instrument" type="NXinstrument">\n' + \
-            '<group name="collection" type="NXcollection">\n'
+        groupbg = '<group name="$var.entryname#\'scan\'$var.serialno" ' \
+                  'type="NXentry">\n' \
+                  '<group name="instrument" type="NXinstrument">\n' \
+                  '<group name="collection" type="NXcollection">\n'
         groupend = '</group>\n'
 
         fieldbg = '<field name="%s" type="%s">\n<strategy mode="INIT"/>\n'
@@ -2740,17 +2776,17 @@ class DynamicComponentTest(unittest.TestCase):
         link = '<group name="data" type="NXdata">\n' + \
             '<link name="%s" target="%s/%s"/>\n</group>\n'
 
-        dimbg = '<dimensions rank="%s">\n'
-        dim = '<dim index="%s" value="%s"/>\n'
-        dimend = '</dimensions>\n'
+        # dimbg = '<dimensions rank="%s">\n'
+        # dim = '<dim index="%s" value="%s"/>\n'
+        # dimend = '</dimensions>\n'
 
 #        self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
         dc = DynamicComponent(self._cf.dp)
         for i in range(4):
             for ds, dsxml in self.smydss.items():
-                ms = self.smydsspar[ds]
-                sds = ds.split("_")
-                tp = sds[1]
+                # ms = self.smydsspar[ds]
+                # sds = ds.split("_")
+                # tp = sds[1]
                 dc.setInitDSources([ds])
 
                 if i == 0:
@@ -2793,9 +2829,10 @@ class DynamicComponentTest(unittest.TestCase):
 
         defbg = '<?xml version="1.0" ?>\n<definition>\n'
         defend = '</definition>\n'
-        groupbg = '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n' + \
-            '<group name="instrument" type="NXinstrument">\n' + \
-            '<group name="collection" type="NXcollection">\n'
+        groupbg = '<group name="$var.entryname#\'scan\'$var.serialno" ' \
+                  'type="NXentry">\n' \
+                  '<group name="instrument" type="NXinstrument">\n' \
+                  '<group name="collection" type="NXcollection">\n'
         groupend = '</group>\n'
 
         fieldbg = '<field name="%s" type="%s">\n<strategy mode="STEP"/>\n'
@@ -2812,12 +2849,12 @@ class DynamicComponentTest(unittest.TestCase):
         for i, nxstp in enumerate(self.__npTn.values()):
             for ds, dsxml in self.smydss.items():
                 dc = DynamicComponent(self._cf.dp)
-                ms = self.smydsspar[ds]
+                # ms = self.smydsspar[ds]
                 ms2 = [self.__rnd.randint(0, 3000)
                        for _ in range(self.__rnd.randint(0, 3))]
                 lbl = self.getRandomName(20)
-                sds = ds.split("_")
-                tp = sds[1]
+                # sds = ds.split("_")
+                # tp = sds[1]
                 dc.setStepDSources([ds])
 
                 if i == 0:
@@ -2949,9 +2986,10 @@ class DynamicComponentTest(unittest.TestCase):
 
         defbg = '<?xml version="1.0" ?>\n<definition>\n'
         defend = '</definition>\n'
-        groupbg = '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n' + \
-            '<group name="instrument" type="NXinstrument">\n' + \
-            '<group name="collection" type="NXcollection">\n'
+        groupbg = '<group name="$var.entryname#\'scan\'$var.serialno" ' \
+                  'type="NXentry">\n' \
+                  '<group name="instrument" type="NXinstrument">\n' \
+                  '<group name="collection" type="NXcollection">\n'
         groupend = '</group>\n'
 
         fieldbg = '<field name="%s" type="%s">\n<strategy mode="INIT"/>\n'
@@ -2968,12 +3006,12 @@ class DynamicComponentTest(unittest.TestCase):
         for i, nxstp in enumerate(self.__npTn.values()):
             for ds, dsxml in self.smydss.items():
                 dc = DynamicComponent(self._cf.dp)
-                ms = self.smydsspar[ds]
+                # ms = self.smydsspar[ds]
                 ms2 = [self.__rnd.randint(0, 3000)
                        for _ in range(self.__rnd.randint(0, 3))]
                 lbl = self.getRandomName(20)
-                sds = ds.split("_")
-                tp = sds[1]
+                # sds = ds.split("_")
+                # tp = sds[1]
                 dc.setInitDSources([ds])
 
                 if i == 0:
@@ -3105,7 +3143,8 @@ class DynamicComponentTest(unittest.TestCase):
         cps = {
             "shapetype":
                 '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n'
+            '<group name="$var.entryname#\'scan\'$var.serialno"'
+            ' type="NXentry">\n'
             '<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n%s'
             '</group>\n</group>\n%s</group>\n</definition>\n',
@@ -3116,9 +3155,9 @@ class DynamicComponentTest(unittest.TestCase):
         groupbg = '<group name="%s" type="%s">\n'
         groupend = '</group>\n'
 
-        field = '<field name="%s" type="%s">\n<strategy mode="STEP"/>\n' + \
-            '<datasource name="%s" type="CLIENT">\n' + \
-            '<record name="%s"/>\n</datasource>\n%s</field>\n'
+        # field = '<field name="%s" type="%s">\n<strategy mode="STEP"/>\n' \
+        #     '<datasource name="%s" type="CLIENT">\n' + \
+        #     '<record name="%s"/>\n</datasource>\n%s</field>\n'
         fieldbg = '<field name="%s" type="%s">\n<strategy mode="STEP"/>\n'
         fieldend = '</field>\n'
 
@@ -3129,11 +3168,11 @@ class DynamicComponentTest(unittest.TestCase):
         dim = '<dim index="%s" value="%s"/>\n'
         dimend = '</dimensions>\n'
 
-        dname = "__dynamic_component__"
+        # dname = "__dynamic_component__"
 
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
 
-        db = PyTango.Database()
+        # db = PyTango.Database()
         try:
             for i in range(8):
                 # print "I = ", i
@@ -3176,7 +3215,7 @@ class DynamicComponentTest(unittest.TestCase):
 #                    print "path2", path, len(path)
 #                    print "PATH", path, mypath
 #                    print "TP = ", tp
-                    tmptp = self.__rnd.choice(self.__npTn.keys())
+                    # tmptp = self.__rnd.choice(self.__npTn.keys())
                     if i == 0:
                         dc.setDefaultLinkPath(False, mypath)
                     elif i == 1:
@@ -3215,7 +3254,7 @@ class DynamicComponentTest(unittest.TestCase):
                             json.dumps({lbl: mypath + "/" + fieldname}),
                             json.dumps({lbl: True}),
                             "{}", "{}")
-#@                    dc.setStepDSources([{"name": ar["full_name"],
+#                    dc.setStepDSources([{"name": ar["full_name"],
 #                                             "shape": ms,
 #                                             "dtype": tp}])
                     dc.setStepDSources([ds])
@@ -3232,7 +3271,7 @@ class DynamicComponentTest(unittest.TestCase):
                     if i % 4 < 2:
                         fd = fieldbg % (ds.lower(), nxstp)
                     else:
-                        fname = fieldname.lower()
+                        # fname = fieldname.lower()
                         fd = fieldbg % (fieldname.lower(), nxstp)
                     fd += dss[0].toprettyxml(indent="") + mstr + fieldend
 
@@ -3299,7 +3338,8 @@ class DynamicComponentTest(unittest.TestCase):
         cps = {
             "shapetype":
                 '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n'
+            '<group name="$var.entryname#\'scan\'$var.serialno" '
+            'type="NXentry">\n'
             '<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n%s'
             '</group>\n</group>\n%s</group>\n</definition>\n',
@@ -3310,9 +3350,9 @@ class DynamicComponentTest(unittest.TestCase):
         groupbg = '<group name="%s" type="%s">\n'
         groupend = '</group>\n'
 
-        field = '<field name="%s" type="%s">\n<strategy mode="INIT"/>\n' + \
-            '<datasource name="%s" type="CLIENT">\n' + \
-            '<record name="%s"/>\n</datasource>\n%s</field>\n'
+        # field = '<field name="%s" type="%s">\n<strategy mode="INIT"/>\n' \
+        #     '<datasource name="%s" type="CLIENT">\n' + \
+        #     '<record name="%s"/>\n</datasource>\n%s</field>\n'
         fieldbg = '<field name="%s" type="%s">\n<strategy mode="INIT"/>\n'
         fieldend = '</field>\n'
 
@@ -3323,11 +3363,11 @@ class DynamicComponentTest(unittest.TestCase):
         dim = '<dim index="%s" value="%s"/>\n'
         dimend = '</dimensions>\n'
 
-        dname = "__dynamic_component__"
+        # dname = "__dynamic_component__"
 
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
 
-        db = PyTango.Database()
+        # db = PyTango.Database()
         try:
             for i in range(8):
                 for ds, dsxml in self.smydss.items():
@@ -3369,7 +3409,7 @@ class DynamicComponentTest(unittest.TestCase):
 #                    print "path2", path, len(path)
 #                    print "PATH", path, mypath
 #                    print "TP = ", tp
-                    tmptp = self.__rnd.choice(self.__npTn.keys())
+                    # tmptp = self.__rnd.choice(self.__npTn.keys())
                     if i == 0:
                         dc.setDefaultLinkPath(False, mypath, False)
                     elif i == 1:
@@ -3408,7 +3448,7 @@ class DynamicComponentTest(unittest.TestCase):
                             json.dumps({lbl: mypath + "/" + fieldname}),
                             json.dumps({lbl: True}),
                             "{}", "{}")
-#@                    dc.setInitDSources([{"name": ar["full_name"],
+#                    dc.setInitDSources([{"name": ar["full_name"],
 #                                             "shape": ms,
 #                                             "dtype": tp}])
                     dc.setInitDSources([ds])
@@ -3425,7 +3465,7 @@ class DynamicComponentTest(unittest.TestCase):
                     if i % 4 < 2:
                         fd = fieldbg % (ds.lower(), nxstp)
                     else:
-                        fname = fieldname.lower()
+                        # fname = fieldname.lower()
                         fd = fieldbg % (fieldname.lower(), nxstp)
                     fd += dss[0].toprettyxml(indent="") + mstr + fieldend
 
@@ -3470,7 +3510,8 @@ class DynamicComponentTest(unittest.TestCase):
                             lk = link % (ds.lower(),
                                          self.__defaultpath, ds.lower())
                         else:
-                            lk = link % (fieldname.lower(), self.__defaultpath,
+                            lk = link % (fieldname.lower(),
+                                         self.__defaultpath,
                                          fieldname.lower())
                         mycps = cps["shapetype"] % (
                             fd,
@@ -3482,6 +3523,7 @@ class DynamicComponentTest(unittest.TestCase):
                         self.assertEqual(comp, mycps)
         finally:
             pass
+
 
 if __name__ == '__main__':
     unittest.main()

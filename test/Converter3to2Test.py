@@ -22,17 +22,20 @@
 import unittest
 import os
 import sys
-import subprocess
 import random
 import struct
 import binascii
 import string
 import json
+import time
 
 from nxsrecconfig.Converter import Converter3to2, ConverterXtoY
 
 # if 64-bit machione
 IS64BIT = (struct.calcsize("P") == 8)
+
+if sys.version_info > (3,):
+    long = int
 
 
 # test fixture
@@ -132,7 +135,7 @@ class Converter3to2Test(unittest.TestCase):
         fun = sys._getframe().f_code.co_name
         print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
-        mysel = {}
+        # mysel = {}
         cv = Converter3to2()
         self.assertTrue(isinstance(cv, ConverterXtoY))
         self.myAssertDict(cv.names, {

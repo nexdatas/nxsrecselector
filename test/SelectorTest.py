@@ -4292,8 +4292,8 @@ class SelectorTest(unittest.TestCase):
         self.assertEqual(
             json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
             ["AvailableComponents", "AvailableDataSources",
-             "AvailableComponents", "AvailableDataSources"
-            ])
+             "AvailableComponents", "AvailableDataSources"]
+        )
         self.assertEqual(json.loads(self._cf.dp.GetCommandVariable("VARS")),
                          [None, None, None, None])
         self.assertTrue(val["MntGrp"] not in self._cf.dp.availableSelections())
@@ -5272,7 +5272,8 @@ class SelectorTest(unittest.TestCase):
             self.assertEqual(len(se.descErrors), 0)
             # res2 =
             json.loads(self._cf.dp.GetCommandVariable("VARS"))
-            self.assertTrue(not val["MntGrp"] in self._cf.dp.availableSelections())
+            self.assertTrue(
+                not val["MntGrp"] in self._cf.dp.availableSelections())
             # sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
             # self.assertEqual(len(sed.keys()), len(self._keys))
             # for key, vl in self._keys:
