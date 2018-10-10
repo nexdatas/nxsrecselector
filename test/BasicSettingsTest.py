@@ -1878,7 +1878,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                 u'pyeval2cds': False, u'pyeval0ds': False, u'pyeval1ds': False,
                 u'pyeval2ds': False}
             )
-            self.assertEqual(len(rs.descriptionErrors), 0)
+            self.assertEqual(len(rs.descriptionErrors or []), 0)
 
             res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
@@ -2486,7 +2486,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                 "scalar2_ulong": False,
                 "ann3": False,
             })
-            self.assertEqual(len(rs.descriptionErrors), 0)
+            self.assertEqual(len(rs.descriptionErrors or []), 0)
 
     #        # print self._cf.dp.GetCommandVariable("COMMANDS")
             res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
@@ -2672,7 +2672,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                 "scalar2_ulong": False,
                 "ann3": False,
             })
-            self.assertEqual(len(rs.descriptionErrors), 0)
+            self.assertEqual(len(rs.descriptionErrors or []), 0)
 
     #        print self._cf.dp.GetCommandVariable("COMMANDS")
             res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
@@ -3207,7 +3207,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                 "scalar2_ulong": False,
                 "ann3": False,
             })
-            self.assertEqual(len(rs.descriptionErrors), 0)
+            self.assertEqual(len(rs.descriptionErrors or []), 0)
 
     #        print self._cf.dp.GetCommandVariable("COMMANDS")
             res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
@@ -3535,7 +3535,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                 "scalar2_ulong": False,
                 "ann3": False,
             })
-            self.assertEqual(len(rs.descriptionErrors), 0)
+            self.assertEqual(len(rs.descriptionErrors or []), 0)
 
             res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
@@ -3752,7 +3752,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                 "scalar2_ulong": False,
                 "ann3": False
             })
-            self.assertEqual(len(rs.descriptionErrors), 0)
+            self.assertEqual(len(rs.descriptionErrors or []), 0)
 
             res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
@@ -4297,7 +4297,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             self.myAssertDict(json.loads(res), {
                 "smycp": False, "smycp2": True, "smycp3": True,
                 "s2mycpnt1": False})
-            self.assertEqual(len(rs.descriptionErrors), 0)
+            self.assertEqual(len(rs.descriptionErrors or []), 0)
 
     #        print self._cf.dp.GetCommandVariable("COMMANDS")
             res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))

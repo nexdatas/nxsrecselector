@@ -1467,14 +1467,14 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
 
             self.myAssertDict(json.loads(res), {
                 "smycp": True, "smycp2": False, "smycp3": True,
-                "s2mycp": None, "s2mycp2": None, "s2mycp3": None})
+                "s2mycp": None, "s2mycp2": False, "s2mycp3": None})
             self.myAssertDict(json.loads(resd), {
                 "scalar_uchar": True, "scalar_string": True,
                 "scalar_ulong": False,
                 "scalar2_uchar": None, "scalar2_string": None,
-                "scalar2_ulong": None,
+                "scalar2_ulong": False,
             })
-            self.assertEqual(len(rs.descriptionErrors), 6)
+            self.assertEqual(len(rs.descriptionErrors), 4)
 
             res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
@@ -1870,15 +1870,16 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             resd = self.value(rs, "DataSourcePreselection")
 
             self.myAssertDict(json.loads(res), {
-                u'pyeval1a': False, u'pyeval2a': None, u'pyeval2c': None,
+                u'pyeval1a': False, u'pyeval2a': False, u'pyeval2c': False,
                 u'pyeval2b': False, u'pyeval2': False, u'pyeval0': False,
                 u'pyeval1': False})
             self.myAssertDict(json.loads(resd), {
-                u'pyeval1ads': False, u'pyeval2ads': None, u'pyeval2bds': False,
-                u'pyeval2cds': None, u'pyeval0ds': False, u'pyeval1ds': False,
+                u'pyeval1ads': False, u'pyeval2ads': False,
+                u'pyeval2bds': False,
+                u'pyeval2cds': False, u'pyeval0ds': False, u'pyeval1ds': False,
                 u'pyeval2ds': False}
             )
-            self.assertEqual(len(rs.descriptionErrors), 4)
+            self.assertEqual(len(rs.descriptionErrors or []), 0)
 
             res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
@@ -2035,14 +2036,14 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
 
         self.myAssertDict(json.loads(res), {
             "smycp": True, "smycp2": False, "smycp3": True,
-            "s2mycp": None, "s2mycp2": None, "s2mycp3": None})
+            "s2mycp": None, "s2mycp2": False, "s2mycp3": None})
         self.myAssertDict(json.loads(resd), {
             "scalar_uchar": True, "scalar_string": True,
             "scalar_ulong": False,
             "scalar2_uchar": None, "scalar2_string": None,
-            "scalar2_ulong": None,
+            "scalar2_ulong": False,
         })
-        self.assertEqual(len(rs.descriptionErrors), 6)
+        self.assertEqual(len(rs.descriptionErrors), 4)
 
         res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
         self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
@@ -2120,14 +2121,14 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
 
             self.myAssertDict(json.loads(res), {
                 "smycp": False, "smycp2": True, "smycp3": True,
-                "s2mycp": None, "s2mycp2": None, "s2mycp3": None})
+                "s2mycp": False, "s2mycp2": None, "s2mycp3": None})
             self.myAssertDict(json.loads(resd), {
                 "scalar_uchar": True, "scalar_string": True,
                 "scalar_ulong": False,
                 "scalar2_uchar": None, "scalar2_string": None,
-                "scalar2_ulong": None,
+                "scalar2_ulong": False,
             })
-            self.assertEqual(len(rs.descriptionErrors), 6)
+            self.assertEqual(len(rs.descriptionErrors), 4)
 
             res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
@@ -2206,14 +2207,14 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
 
             self.myAssertDict(json.loads(res), {
                 "smycp": True, "smycp2": False, "smycp3": True,
-                "s2mycp": None, "s2mycp2": None, "s2mycp3": None})
+                "s2mycp": None, "s2mycp2": False, "s2mycp3": None})
             self.myAssertDict(json.loads(resd), {
                 "scalar_uchar": True, "scalar_string": True,
                 "scalar_ulong": False,
                 "scalar2_uchar": None, "scalar2_string": None,
-                "scalar2_ulong": None
+                "scalar2_ulong": False
             })
-            self.assertEqual(len(rs.descriptionErrors), 6)
+            self.assertEqual(len(rs.descriptionErrors), 4)
 
             res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
@@ -2478,15 +2479,15 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             self.myAssertDict(json.loads(res), {
                 "smycp": True, "smycp2": True, "smycp3": True,
                 "s2mycp": True, "s2mycp2": True, "s2mycp3": False,
-                "smycpnt1": None})
+                "smycpnt1": False})
             self.myAssertDict(json.loads(resd), {
                 "scalar_uchar": True, "scalar_string": True,
                 "scalar_ulong": False,
                 "scalar2_uchar": True, "scalar2_string": True,
                 "scalar2_ulong": False,
-                "ann3": None,
+                "ann3": False,
             })
-            self.assertEqual(len(rs.descriptionErrors), 2)
+            self.assertEqual(len(rs.descriptionErrors or []), 0)
 
     #        print self._cf.dp.GetCommandVariable("COMMANDS")
             res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
@@ -2664,15 +2665,15 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             self.myAssertDict(json.loads(res), {
                 "smycp": False, "smycp2": True, "smycp3": True,
                 "s2mycp": True, "s2mycp2": True, "s2mycp3": False,
-                "smycpnt1": None})
+                "smycpnt1": False})
             self.myAssertDict(json.loads(resd), {
                 "scalar_uchar": True, "scalar_string": True,
                 "scalar_ulong": False,
                 "scalar2_uchar": True, "scalar2_string": True,
                 "scalar2_ulong": False,
-                "ann3": None,
+                "ann3": False,
             })
-            self.assertEqual(len(rs.descriptionErrors), 2)
+            self.assertEqual(len(rs.descriptionErrors or []), 0)
 
     #        print self._cf.dp.GetCommandVariable("COMMANDS")
             res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
@@ -3199,15 +3200,15 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             self.myAssertDict(json.loads(res), {
                 "smycp": False, "smycp2": True, "smycp3": True,
                 "s2mycp": False, "s2mycp2": True, "s2mycp3": True,
-                "smycpnt1": None})
+                "smycpnt1": False})
             self.myAssertDict(json.loads(resd), {
                 "scalar_uchar": True, "scalar_string": True,
                 "scalar_ulong": False,
                 "scalar2_uchar": True, "scalar2_string": True,
                 "scalar2_ulong": False,
-                "ann3": None,
+                "ann3": False,
             })
-            self.assertEqual(len(rs.descriptionErrors), 2)
+            self.assertEqual(len(rs.descriptionErrors or []), 0)
 
     #        print self._cf.dp.GetCommandVariable("COMMANDS")
             res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
@@ -3527,15 +3528,15 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             self.myAssertDict(json.loads(res), {
                 "smycp": True, "smycp2": False, "smycp3": True,
                 "s2mycp": False, "s2mycp2": True, "s2mycp3": True,
-                "smycpnt1": None})
+                "smycpnt1": False})
             self.myAssertDict(json.loads(resd), {
                 "scalar_uchar": True, "scalar_string": True,
                 "scalar_ulong": False,
                 "scalar2_uchar": True, "scalar2_string": True,
                 "scalar2_ulong": False,
-                "ann3": None,
+                "ann3": False,
             })
-            self.assertEqual(len(rs.descriptionErrors), 2)
+            self.assertEqual(len(rs.descriptionErrors or []), 0)
 
             res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
@@ -3750,9 +3751,9 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                 "scalar_ulong": False,
                 "scalar2_uchar": True, "scalar2_string": True,
                 "scalar2_ulong": False,
-                "ann3": None
+                "ann3": False
             })
-            self.assertEqual(len(rs.descriptionErrors), 1)
+            self.assertEqual(len(rs.descriptionErrors or []), 0)
 
             res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
@@ -4296,8 +4297,8 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
 
             self.myAssertDict(json.loads(res), {
                 "smycp": False, "smycp2": True, "smycp3": True,
-                "s2mycpnt1": None})
-            self.assertEqual(len(rs.descriptionErrors), 1)
+                "s2mycpnt1": False})
+            self.assertEqual(len(rs.descriptionErrors or []), 0)
 
     #        print self._cf.dp.GetCommandVariable("COMMANDS")
             res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
@@ -4461,8 +4462,8 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
 
             self.myAssertDict(json.loads(res), {
                 "smycp": False, "smycp2": True, "smycp3": True,
-                "s2mycp": None, "s2mycp2": None, "s2mycp3": None})
-            self.assertEqual(len(rs.descriptionErrors), 3)
+                "s2mycp": False, "s2mycp2": None, "s2mycp3": None})
+            self.assertEqual(len(rs.descriptionErrors), 2)
 
     #        print self._cf.dp.GetCommandVariable("COMMANDS")
             res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
