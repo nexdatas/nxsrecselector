@@ -276,7 +276,7 @@ class MacroServerPools(object):
             [cp for cp in componentgroup.keys()
              if componentgroup[cp] is not False],
             [ds for ds in datasourcegroup.keys()
-              if datasourcegroup[ds] is not False],
+             if datasourcegroup[ds] is not False],
             channels, nonexisting)
 
         cqueue = Queue.Queue()
