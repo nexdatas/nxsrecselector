@@ -20,23 +20,18 @@
 # unittests for field Tags running Tango Server
 #
 import unittest
-import os
 import sys
-import subprocess
-import random
 import time
 import PyTango
 import json
 
 import ServerSetUp
 import BasicSettingsTest
-from nxsrecconfig import Settings
-import nxsrecconfig
 
 from nxsrecconfig.MacroServerPools import MacroServerPools
 from nxsrecconfig.Selector import Selector
 from nxsrecconfig.ProfileManager import ProfileManager
-from nxsrecconfig.Utils import TangoUtils, MSUtils
+from nxsrecconfig.Utils import MSUtils
 
 
 # test fixture
@@ -76,7 +71,7 @@ class BasicNXSRecSelectorTest(BasicSettingsTest.BasicSettingsTest):
         self._sv2.tearDown()
 
     def value(self, rs, name):
-#        print "VAL", json.loads(rs.profileConfiguration)
+        #    print "VAL", json.loads(rs.profileConfiguration)
         return json.loads(rs.profileConfiguration)[name]
 
     def names(self, rs):

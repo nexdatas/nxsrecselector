@@ -22,39 +22,25 @@
 import unittest
 import os
 import sys
-import subprocess
-import random
 import struct
-import threading
-import binascii
-import Queue
 import PyTango
 import json
 import pickle
-import string
-import time
-import nxsrecconfig
-import xml
-
-import logging
-logger = logging.getLogger()
 
 import TestMacroServerSetUp
 import TestPool2SetUp
 import TestServerSetUp
-import TestConfigServerSetUp
-import TestWriterSetUp
 import TestMGSetUp
 import Settings2Test
 
-from nxsrecconfig.MacroServerPools import MacroServerPools
-from nxsrecconfig.Selector import Selector
-from nxsrecconfig.ProfileManager import ProfileManager
 from nxsrecconfig.Describer import Describer
-from nxsrecconfig.Settings import Settings
 from nxsrecconfig.Utils import TangoUtils, MSUtils
-from nxsconfigserver.XMLConfigurator import XMLConfigurator
-from nxsrecconfig.Utils import TangoUtils, MSUtils, Utils
+
+import logging
+logger = logging.getLogger()
+
+if sys.version_info > (3,):
+    unicode = str
 
 # if 64-bit machione
 IS64BIT = (struct.calcsize("P") == 8)
@@ -116,10 +102,10 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
     def test_constructor(self):
         fun = sys._getframe().f_code.co_name
         print("Run: %s.%s() " % (self.__class__.__name__, fun))
-        val = {"ConfigDevice": self._cf.dp.name(),
-               "WriterDevice": self._wr.dp.name(),
-               "Door": 'doortestp09/testts/t1r228',
-               "MntGrp": 'nxsmntgrp'}
+        # val = {"ConfigDevice": self._cf.dp.name(),
+        #        "WriterDevice": self._wr.dp.name(),
+        #        "Door": 'doortestp09/testts/t1r228',
+        #        "MntGrp": 'nxsmntgrp'}
 
         self.subtest_constructor()
 
@@ -177,7 +163,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         self.assertEqual(set(rs.mandatoryComponents()), set(mcps))
 
     # test
-    def test_mandatory_components(self):
+    def test_mandatory_components2(self):
         fun = sys._getframe().f_code.co_name
         print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -219,7 +205,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
 
-        wrong = []
+        # wrong = []
 
         rs = self.openRecSelector()
         rs.configDevice = val["ConfigDevice"]
@@ -250,7 +236,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
 
-        wrong = []
+        # wrong = []
 
         db = PyTango.Database()
         db.put_device_property(self._ms.ms.keys()[0],
@@ -545,7 +531,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         self._ms.dps[self._ms.ms.keys()[0]].Init()
         self.assertEqual(rs.macroServer, self._ms.ms.keys()[0])
 
-        channelerrors = []
+        # channelerrors = []
         rs.preselectComponents()
         res = self.value(rs, "ComponentPreselection")
         self.assertEqual(res, '{}')
@@ -574,7 +560,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
 
         self.assertEqual(rs.macroServer, self._ms.ms.keys()[0])
         channelerrors = []
-        poolchannels = []
+        # poolchannels = []
         componentgroup = {}
 
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
@@ -1214,7 +1200,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                                              "scalar_ulong": True})
         self.assertEqual(channelerrors, [])
 
-        res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+        # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
         self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
         sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
         self.assertEqual(len(sed.keys()), len(self._keys))
@@ -1301,7 +1287,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             })
             self.assertEqual(len(channelerrors), 0)
 
-            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
             self.assertEqual(len(sed.keys()), len(self._keys))
@@ -1389,7 +1375,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             })
             self.assertEqual(len(channelerrors), 0)
 
-            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
             self.assertEqual(len(sed.keys()), len(self._keys))
@@ -1435,7 +1421,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
 
             self._ms.dps[self._ms.ms.keys()[0]].Init()
 
-            channelerrors = []
+            # channelerrors = []
             poolchannels = []
             componentgroup = {
                 "smycp": True, "smycp2": False, "smycp3": None,
@@ -1476,7 +1462,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             })
             self.assertEqual(len(rs.descriptionErrors), 4)
 
-            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
             self.assertEqual(len(sed.keys()), len(self._keys))
@@ -1522,7 +1508,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
 
             self._ms.dps[self._ms.ms.keys()[0]].Init()
 
-            channelerrors = []
+            # channelerrors = []
             poolchannels = []
             componentgroup = dict((k, None) for k in self.specps.keys())
             datasourcegroup = dict((k, None) for k in self.spedss.keys())
@@ -1558,7 +1544,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             )
             self.assertEqual(len(rs.descriptionErrors), 4)
 
-            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
             self.assertEqual(len(sed.keys()), len(self._keys))
@@ -1602,7 +1588,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
 
             self._ms.dps[self._ms.ms.keys()[0]].Init()
 
-            channelerrors = []
+            # channelerrors = []
             poolchannels = []
             componentgroup = dict((k, None) for k in self.specps.keys())
             datasourcegroup = dict((k, None) for k in self.spedss.keys())
@@ -1638,7 +1624,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             )
             self.assertTrue(not rs.descriptionErrors)
 
-            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
             self.assertEqual(len(sed.keys()), len(self._keys))
@@ -1682,7 +1668,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
 
             self._ms.dps[self._ms.ms.keys()[0]].Init()
 
-            channelerrors = []
+            # channelerrors = []
             poolchannels = []
             componentgroup = dict((k, True) for k in self.specps.keys())
             datasourcegroup = dict((k, True) for k in self.spedss.keys())
@@ -1718,7 +1704,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             )
             self.assertTrue(not rs.descriptionErrors)
 
-            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
             self.assertEqual(len(sed.keys()), len(self._keys))
@@ -1762,7 +1748,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
 
             self._ms.dps[self._ms.ms.keys()[0]].Init()
 
-            channelerrors = []
+            # channelerrors = []
             poolchannels = []
             componentgroup = dict((k, False) for k in self.specps.keys())
             datasourcegroup = dict((k, False) for k in self.spedss.keys())
@@ -1792,13 +1778,15 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                 u'pyeval2b': False, u'pyeval2': False, u'pyeval0': False,
                 u'pyeval1': False})
             self.myAssertDict(json.loads(resd), {
-                u'pyeval1ads': False, u'pyeval2ads': False, u'pyeval2bds': False,
-                u'pyeval2cds': False, u'pyeval0ds': False, u'pyeval1ds': False,
+                u'pyeval1ads': False, u'pyeval2ads': False,
+                u'pyeval2bds': False,
+                u'pyeval2cds': False, u'pyeval0ds': False,
+                u'pyeval1ds': False,
                 u'pyeval2ds': False}
             )
             self.assertTrue(not rs.descriptionErrors)
 
-            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
             self.assertEqual(len(sed.keys()), len(self._keys))
@@ -1844,7 +1832,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
 
             self._ms.dps[self._ms.ms.keys()[0]].Init()
 
-            channelerrors = []
+            # channelerrors = []
             poolchannels = []
             componentgroup = dict((k, False) for k in self.specps.keys())
             datasourcegroup = dict((k, False) for k in self.spedss.keys())
@@ -1881,7 +1869,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             )
             self.assertEqual(len(rs.descriptionErrors or []), 0)
 
-            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
             self.assertEqual(len(sed.keys()), len(self._keys))
@@ -1927,7 +1915,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
 
             self._ms.dps[self._ms.ms.keys()[0]].Init()
 
-            channelerrors = []
+            # channelerrors = []
             poolchannels = []
             componentgroup = dict((k, True) for k in self.specps.keys())
             datasourcegroup = dict((k, True) for k in self.spedss.keys())
@@ -1963,7 +1951,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             )
             self.assertEqual(len(rs.descriptionErrors), 4)
 
-            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
             self.assertEqual(len(sed.keys()), len(self._keys))
@@ -2005,7 +1993,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
 
         self._ms.dps[self._ms.ms.keys()[0]].Init()
 
-        channelerrors = []
+        # channelerrors = []
         poolchannels = []
         componentgroup = {"smycp": None, "smycp2": False, "smycp3": True,
                           "s2mycp": None, "s2mycp2": False, "s2mycp3": True}
@@ -2045,7 +2033,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         })
         self.assertEqual(len(rs.descriptionErrors), 4)
 
-        res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+        # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
         self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
         sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
         self.assertEqual(len(sed.keys()), len(self._keys))
@@ -2089,7 +2077,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
 
             self._ms.dps[self._ms.ms.keys()[0]].Init()
 
-            channelerrors = []
+            # channelerrors = []
             poolchannels = []
             componentgroup = {
                 "smycp": False, "smycp2": None, "smycp3": True,
@@ -2130,7 +2118,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             })
             self.assertEqual(len(rs.descriptionErrors), 4)
 
-            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
             self.assertEqual(len(sed.keys()), len(self._keys))
@@ -2216,7 +2204,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             })
             self.assertEqual(len(rs.descriptionErrors), 4)
 
-            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
             self.assertEqual(len(sed.keys()), len(self._keys))
@@ -2308,7 +2296,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             self.assertTrue(not rs.descriptionErrors)
 
     #        # print self._cf.dp.GetCommandVariable("COMMANDS")
-            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
             self.assertEqual(len(sed.keys()), len(self._keys))
@@ -2400,7 +2388,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             self.assertEqual(len(rs.descriptionErrors), 2)
 
     #        print self._cf.dp.GetCommandVariable("COMMANDS")
-            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
             self.assertEqual(len(sed.keys()), len(self._keys))
@@ -2490,7 +2478,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             self.assertEqual(len(rs.descriptionErrors or []), 0)
 
     #        print self._cf.dp.GetCommandVariable("COMMANDS")
-            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
             self.assertEqual(len(sed.keys()), len(self._keys))
@@ -2583,7 +2571,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             self.assertEqual(len(rs.descriptionErrors), 2)
 
     #        print self._cf.dp.GetCommandVariable("COMMANDS")
-            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
             self.assertEqual(len(sed.keys()), len(self._keys))
@@ -2676,7 +2664,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             self.assertEqual(len(rs.descriptionErrors or []), 0)
 
     #        print self._cf.dp.GetCommandVariable("COMMANDS")
-            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
             self.assertEqual(len(sed.keys()), len(self._keys))
@@ -2732,7 +2720,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
 
             self._ms.dps[self._ms.ms.keys()[0]].Init()
 
-            channelerrors = []
+            # channelerrors = []
             poolchannels = []
             componentgroup = {"smycp": False, "smycp2": None,
                               "smycp3": True, "smycpnt1": None,
@@ -2781,7 +2769,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
 
             self.assertTrue(not rs.descriptionErrors)
 
-            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
             self.assertEqual(len(sed.keys()), len(self._keys))
@@ -2837,7 +2825,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
 
             self._ms.dps[self._ms.ms.keys()[0]].Init()
 
-            channelerrors = []
+            # channelerrors = []
             poolchannels = []
             componentgroup = {"smycp": False, "smycp2": None,
                               "smycp3": True, "smycpnt1": False,
@@ -2886,7 +2874,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
 
             self.assertTrue(not rs.descriptionErrors)
 
-            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
             self.assertEqual(len(sed.keys()), len(self._keys))
@@ -2944,7 +2932,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
 
             self._ms.dps[self._ms.ms.keys()[0]].Init()
 
-            channelerrors = []
+            # channelerrors = []
             poolchannels = []
             componentgroup = {"smycp": False, "smycp2": None,
                               "smycp3": True, "smycpnt1": None,
@@ -2993,7 +2981,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             })
             self.assertTrue(not rs.descriptionErrors)
 
-            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
             self.assertEqual(len(sed.keys()), len(self._keys))
@@ -3049,7 +3037,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
 
             self._ms.dps[self._ms.ms.keys()[0]].Init()
 
-            channelerrors = []
+            # channelerrors = []
             poolchannels = ["scalar2_long", "spectrum2_short", "client_long",
                             "client_short",
                             "scalar2_uchar", "scalar2_string", "ann3"]
@@ -3102,7 +3090,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             self.assertEqual(len(rs.descriptionErrors), 2)
 
     #        print self._cf.dp.GetCommandVariable("COMMANDS")
-            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
             self.assertEqual(len(sed.keys()), len(self._keys))
@@ -3158,7 +3146,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
 
             self._ms.dps[self._ms.ms.keys()[0]].Init()
 
-            channelerrors = []
+            # channelerrors = []
             poolchannels = ["scalar2_long", "spectrum2_short", "client_long",
                             "client_short",
                             "scalar2_uchar", "scalar2_string", "ann3"]
@@ -3211,7 +3199,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             self.assertEqual(len(rs.descriptionErrors or []), 0)
 
     #        print self._cf.dp.GetCommandVariable("COMMANDS")
-            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
             self.assertEqual(len(sed.keys()), len(self._keys))
@@ -3269,7 +3257,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
 
             self._ms.dps[self._ms.ms.keys()[0]].Init()
 
-            channelerrors = []
+            # channelerrors = []
             poolchannels = ["scalar2_long", "spectrum2_short", "client_long",
                             "client_short",
                             "scalar2_uchar", "scalar2_string", "ann3"]
@@ -3322,7 +3310,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             self.assertEqual(len(rs.descriptionErrors), 2)
 
     #        print self._cf.dp.GetCommandVariable("COMMANDS")
-            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
             self.assertEqual(len(sed.keys()), len(self._keys))
@@ -3375,7 +3363,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
 
             self._ms.dps[self._ms.ms.keys()[0]].Init()
 
-            channelerrors = []
+            # channelerrors = []
 
             poolchannels = ["scalar2_long", "spectrum2_short", "client_short",
                             "scalar2_uchar", "scalar2_string", "ann3"]
@@ -3430,7 +3418,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             })
             self.assertEqual(len(rs.descriptionErrors), 2)
 
-            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
             self.assertEqual(len(sed.keys()), len(self._keys))
@@ -3483,7 +3471,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
 
             self._ms.dps[self._ms.ms.keys()[0]].Init()
 
-            channelerrors = []
+            # channelerrors = []
 
             poolchannels = ["scalar2_long", "spectrum2_short", "client_short",
                             "scalar2_uchar", "scalar2_string", "ann3"]
@@ -3538,7 +3526,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             })
             self.assertEqual(len(rs.descriptionErrors or []), 0)
 
-            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
             self.assertEqual(len(sed.keys()), len(self._keys))
@@ -3592,7 +3580,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
 
             self._ms.dps[self._ms.ms.keys()[0]].Init()
 
-            channelerrors = []
+            # channelerrors = []
             poolchannels = ["scalar2_long", "spectrum2_short", "client_short",
                             "scalar2_uchar", "scalar2_string", "ann3"]
             componentgroup = {
@@ -3646,7 +3634,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             })
             self.assertEqual(len(rs.descriptionErrors), 1)
 
-            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
             self.assertEqual(len(sed.keys()), len(self._keys))
@@ -3701,7 +3689,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
 
             self._ms.dps[self._ms.ms.keys()[0]].Init()
 
-            channelerrors = []
+            # channelerrors = []
             poolchannels = ["scalar2_long", "spectrum2_short", "client_short",
                             "scalar2_uchar", "scalar2_string", "ann3"]
             componentgroup = {
@@ -3755,7 +3743,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             })
             self.assertEqual(len(rs.descriptionErrors or []), 0)
 
-            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
             self.assertEqual(len(sed.keys()), len(self._keys))
@@ -3812,7 +3800,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
 
             self._ms.dps[self._ms.ms.keys()[0]].Init()
 
-            channelerrors = []
+            # channelerrors = []
             poolchannels = ["scalar2_long", "spectrum2_short", "client_short",
                             "scalar2_uchar", "scalar2_string", "ann3"]
             componentgroup = {
@@ -3866,7 +3854,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             })
             self.assertEqual(len(rs.descriptionErrors), 2)
 
-            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
             self.assertEqual(len(sed.keys()), len(self._keys))
@@ -3922,7 +3910,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
 
             self._ms.dps[self._ms.ms.keys()[0]].Init()
 
-            channelerrors = []
+            # channelerrors = []
             poolchannels = ["scalar2_long", "spectrum2_short", "client_short"]
             componentgroup = {
                 "smycp": False, "smycp2": True, "smycp3": None,
@@ -3955,7 +3943,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             self.assertTrue(not rs.descriptionErrors)
 
     #        print self._cf.dp.GetCommandVariable("COMMANDS")
-            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
             self.assertEqual(len(sed.keys()), len(self._keys))
@@ -4008,7 +3996,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
 
             self._ms.dps[self._ms.ms.keys()[0]].Init()
 
-            channelerrors = []
+            # channelerrors = []
             poolchannels = ["scalar2_long", "spectrum2_short", "client_short"]
             componentgroup = {
                 "smycp": False, "smycp2": True, "smycp3": None,
@@ -4041,7 +4029,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             self.assertTrue(not rs.descriptionErrors)
 
     #        print self._cf.dp.GetCommandVariable("COMMANDS")
-            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
             self.assertEqual(len(sed.keys()), len(self._keys))
@@ -4096,7 +4084,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
 
             self._ms.dps[self._ms.ms.keys()[0]].Init()
 
-            channelerrors = []
+            # channelerrors = []
             poolchannels = ["scalar2_long", "spectrum2_short", "client_short"]
             componentgroup = {
                 "smycp": False, "smycp2": True, "smycp3": None,
@@ -4129,7 +4117,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             self.assertTrue(rs.descriptionErrors)
 
     #        print self._cf.dp.GetCommandVariable("COMMANDS")
-            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
             self.assertEqual(len(sed.keys()), len(self._keys))
@@ -4182,7 +4170,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
 
             self._ms.dps[self._ms.ms.keys()[0]].Init()
 
-            channelerrors = []
+            # channelerrors = []
             poolchannels = ["scalar2_long", "spectrum2_short", "client2_short"]
             componentgroup = {
                 "smycp": False, "smycp2": True, "smycp3": None,
@@ -4215,7 +4203,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             self.assertEqual(len(rs.descriptionErrors), 1)
 
     #        print self._cf.dp.GetCommandVariable("COMMANDS")
-            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
             self.assertEqual(len(sed.keys()), len(self._keys))
@@ -4268,7 +4256,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
 
             self._ms.dps[self._ms.ms.keys()[0]].Init()
 
-            channelerrors = []
+            # channelerrors = []
             poolchannels = ["scalar2_long", "spectrum2_short", "client2_short"]
             componentgroup = {
                 "smycp": False, "smycp2": True, "smycp3": None,
@@ -4301,7 +4289,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             self.assertEqual(len(rs.descriptionErrors or []), 0)
 
     #        print self._cf.dp.GetCommandVariable("COMMANDS")
-            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
             self.assertEqual(len(sed.keys()), len(self._keys))
@@ -4356,7 +4344,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
 
             self._ms.dps[self._ms.ms.keys()[0]].Init()
 
-            channelerrors = []
+            # channelerrors = []
             poolchannels = ["scalar2_long", "spectrum2_short", "client2_short"]
             componentgroup = {
                 "smycp": False, "smycp2": True, "smycp3": None,
@@ -4389,7 +4377,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             self.assertEqual(len(rs.descriptionErrors), 1)
 
     #        print self._cf.dp.GetCommandVariable("COMMANDS")
-            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
             self.assertEqual(len(sed.keys()), len(self._keys))
@@ -4421,9 +4409,9 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         simps2 = TestServerSetUp.TestServerSetUp(
             "ttestp09/testts/t2r228", "S2")
 
-        arr = [
-            {"name": "client_short", "full_name": "ttestp09/testts/t1r228"},
-        ]
+        # arr = [
+        #     {"name": "client_short", "full_name": "ttestp09/testts/t1r228"},
+        # ]
 
         try:
             # db = PyTango.Database()
@@ -4438,7 +4426,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
 
             self._ms.dps[self._ms.ms.keys()[0]].Init()
 
-            channelerrors = []
+            # channelerrors = []
             poolchannels = []
             componentgroup = {
                 "smycp": False, "smycp2": True, "smycp3": None,
@@ -4466,7 +4454,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             self.assertEqual(len(rs.descriptionErrors), 2)
 
     #        print self._cf.dp.GetCommandVariable("COMMANDS")
-            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
             self.assertEqual(len(sed.keys()), len(self._keys))
@@ -4506,10 +4494,11 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
 
         self._ms.dps[self._ms.ms.keys()[0]].Init()
 
-        channelerrors = []
+        # channelerrors = []
         self.dump(rs)
         rs.resetPreselectedComponents()
-        sed2 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
+        # sed2 =
+        json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
         res = self.value(rs, "ComponentPreselection")
         self.assertEqual(res, '{}')
         rs.profileConfiguration = '{}'
@@ -4548,7 +4537,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         self._ms.dps[self._ms.ms.keys()[0]].Init()
 
         channelerrors = []
-        poolchannels = []
+        # poolchannels = []
         componentgroup = {}
 
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
@@ -4556,7 +4545,8 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
 
         self.dump(rs)
         rs.resetPreselectedComponents()
-        sed2 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
+        # sed2 =
+        json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
         res = self.value(rs, "ComponentPreselection")
         res2 = self.value(rs, "DataSourcePreselection")
         self.compareToDump(rs, ["ComponentPreselection",
@@ -4685,9 +4675,11 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         cnf["DataSourcePreselection"] = json.dumps(datasourcegroup)
         rs.profileConfiguration = json.dumps(cnf)
         self.dump(rs)
-        sed1 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
+        # sed1 =
+        json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
         rs.resetPreselectedComponents()
-        sed2 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
+        # sed2 =
+        json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
         res = self.value(rs, "ComponentPreselection")
         res2 = self.value(rs, "DataSourcePreselection")
         self.compareToDump(
@@ -4734,9 +4726,11 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         cnf["DataSourcePreselection"] = json.dumps(datasourcegroup)
         rs.profileConfiguration = json.dumps(cnf)
         self.dump(rs)
-        sed1 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
+        # sed1 =
+        json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
         rs.resetPreselectedComponents()
-        sed2 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
+        # sed2 =
+        json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
         res = self.value(rs, "ComponentPreselection")
         res2 = self.value(rs, "DataSourcePreselection")
         self.compareToDump(
@@ -4781,9 +4775,11 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         cnf["PreselectingDataSources"] = json.dumps(poolchannels)
         rs.profileConfiguration = json.dumps(cnf)
         self.dump(rs)
-        sed1 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
+        # sed1 =
+        json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
         rs.resetPreselectedComponents()
-        sed2 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
+        # sed2 =
+        json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
         self.compareToDump(rs, ["ComponentPreselection"])
         res = self.value(rs, "ComponentPreselection")
 
@@ -5041,9 +5037,11 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         cnf["PreselectingDataSources"] = json.dumps(poolchannels)
         rs.profileConfiguration = json.dumps(cnf)
         self.dump(rs)
-        sed1 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
+        # sed1 =
+        json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
         rs.resetPreselectedComponents()
-        sed2 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
+        # sed2 =
+        json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
         res = self.value(rs, "ComponentPreselection")
         res2 = self.value(rs, "DataSourcePreselection")
         self.compareToDump(
@@ -5091,9 +5089,11 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         cnf["PreselectingDataSources"] = json.dumps(poolchannels)
         rs.profileConfiguration = json.dumps(cnf)
         self.dump(rs)
-        sed1 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
+        # sed1 =
+        json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
         rs.resetPreselectedComponents()
-        sed2 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
+        # sed2 =
+        json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
         res = self.value(rs, "ComponentPreselection")
         res2 = self.value(rs, "DataSourcePreselection")
         self.compareToDump(
@@ -5141,9 +5141,11 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         cnf["PreselectingDataSources"] = json.dumps(poolchannels)
         rs.profileConfiguration = json.dumps(cnf)
         self.dump(rs)
-        sed1 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
+        # sed1 =
+        json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
         rs.resetPreselectedComponents()
-        sed2 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
+        # sed2 =
+        json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
         res = self.value(rs, "ComponentPreselection")
         res2 = self.value(rs, "DataSourcePreselection")
         self.compareToDump(
@@ -5204,7 +5206,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             "smycp": True, "smycp2": True, "smycp3": True})
         self.assertEqual(channelerrors, [])
 
-        res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+        # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
         self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
         sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
         self.assertEqual(len(sed.keys()), len(self._keys))
@@ -5295,7 +5297,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                 "s2mycp": True, "s2mycp2": True, "s2mycp3": True})
             self.assertEqual(len(channelerrors), 0)
 
-            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
             self.assertEqual(len(sed.keys()), len(self._keys))
@@ -5339,7 +5341,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             # db = PyTango.Database()
             self._ms.dps[self._ms.ms.keys()[0]].Init()
 
-            channelerrors = []
+            # channelerrors = []
             poolchannels = []
             componentgroup = dict((k, None) for k in self.specps.keys())
             datasourcegroup = dict((k, None) for k in self.spedss.keys())
@@ -5384,7 +5386,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                 u'pyeval1': True})
             self.assertEqual(len(rs.descriptionErrors), 2)
 
-            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
             self.assertEqual(len(sed.keys()), len(self._keys))
@@ -5427,7 +5429,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             # db = PyTango.Database()
             self._ms.dps[self._ms.ms.keys()[0]].Init()
 
-            channelerrors = []
+            # channelerrors = []
             poolchannels = []
             componentgroup = dict((k, None) for k in self.specps.keys())
             datasourcegroup = dict((k, None) for k in self.spedss.keys())
@@ -5472,7 +5474,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                 u'pyeval1': True})
             self.assertTrue(not rs.descriptionErrors)
 
-            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
             self.assertEqual(len(sed.keys()), len(self._keys))
@@ -5515,7 +5517,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             # db = PyTango.Database()
             self._ms.dps[self._ms.ms.keys()[0]].Init()
 
-            channelerrors = []
+            # channelerrors = []
             poolchannels = []
             componentgroup = dict((k, True) for k in self.specps.keys())
             datasourcegroup = dict((k, True) for k in self.spedss.keys())
@@ -5560,7 +5562,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                 u'pyeval1': True})
             self.assertTrue(not rs.descriptionErrors)
 
-            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
             self.assertEqual(len(sed.keys()), len(self._keys))
@@ -5603,7 +5605,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             # db = PyTango.Database()
             self._ms.dps[self._ms.ms.keys()[0]].Init()
 
-            channelerrors = []
+            # channelerrors = []
             poolchannels = []
             componentgroup = dict((k, False) for k in self.specps.keys())
             datasourcegroup = dict((k, False) for k in self.spedss.keys())
@@ -5648,7 +5650,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                 u'pyeval1': True})
             self.assertTrue(not rs.descriptionErrors)
 
-            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
             self.assertEqual(len(sed.keys()), len(self._keys))
@@ -5691,7 +5693,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             # db = PyTango.Database()
             self._ms.dps[self._ms.ms.keys()[0]].Init()
 
-            channelerrors = []
+            # channelerrors = []
             poolchannels = []
             componentgroup = dict((k, True) for k in self.specps.keys())
             datasourcegroup = dict((k, True) for k in self.spedss.keys())
@@ -5736,7 +5738,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                 u'pyeval1': True})
             self.assertEqual(len(rs.descriptionErrors), 2)
 
-            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
             self.assertEqual(len(sed.keys()), len(self._keys))
@@ -5779,7 +5781,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             # db = PyTango.Database()
             self._ms.dps[self._ms.ms.keys()[0]].Init()
 
-            channelerrors = []
+            # channelerrors = []
             poolchannels = []
             componentgroup = dict((k, False) for k in self.specps.keys())
             datasourcegroup = dict((k, False) for k in self.spedss.keys())
@@ -5824,7 +5826,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                 u'pyeval1': True})
             self.assertEqual(len(rs.descriptionErrors), 2)
 
-            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
             self.assertEqual(len(sed.keys()), len(self._keys))
@@ -5867,7 +5869,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             # db = PyTango.Database()
             self._ms.dps[self._ms.ms.keys()[0]].Init()
 
-            channelerrors = []
+            # channelerrors = []
             poolchannels = []
             componentgroup = {
                 "smycp": False, "smycp2": False, "smycp3": False,
@@ -5917,7 +5919,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                 "s2mycp": None, "s2mycp2": None, "s2mycp3": None})
             self.assertEqual(len(rs.descriptionErrors), 3)
 
-            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
             self.assertEqual(len(sed.keys()), len(self._keys))
@@ -5955,7 +5957,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
 
         # db = PyTango.Database()
         self._ms.dps[self._ms.ms.keys()[0]].Init()
-        channelerrors = []
+        # channelerrors = []
         poolchannels = []
         componentgroup = {"smycp": None, "smycp2": False, "smycp3": True,
                           "s2mycp": None, "s2mycp2": False, "s2mycp3": True}
@@ -6001,7 +6003,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             "s2mycp": None, "s2mycp2": None, "s2mycp3": None})
         self.assertEqual(len(rs.descriptionErrors), 3)
 
-        res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+        # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
         self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
         sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
         self.assertEqual(len(sed.keys()), len(self._keys))
@@ -6042,7 +6044,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             # db = PyTango.Database()
             self._ms.dps[self._ms.ms.keys()[0]].Init()
 
-            channelerrors = []
+            # channelerrors = []
             poolchannels = []
             componentgroup = {
                 "smycp": False, "smycp2": None, "smycp3": True,
@@ -6091,7 +6093,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                 "s2mycp": None, "s2mycp2": None, "s2mycp3": None})
             self.assertEqual(len(rs.descriptionErrors), 3)
 
-            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
             self.assertEqual(len(sed.keys()), len(self._keys))
@@ -6184,7 +6186,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             self.assertEqual(len(rs.descriptionErrors), 3)
             # print "DES", rs.descriptionErrors
 
-            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
             self.assertEqual(len(sed.keys()), len(self._keys))
@@ -6278,7 +6280,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             self.assertTrue(not rs.descriptionErrors)
 
     #        print self._cf.dp.GetCommandVariable("COMMANDS")
-            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
             self.assertEqual(len(sed.keys()), len(self._keys))
@@ -6374,7 +6376,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             self.assertEqual(len(rs.descriptionErrors), 1)
 
     #        print self._cf.dp.GetCommandVariable("COMMANDS")
-            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
             self.assertEqual(len(sed.keys()), len(self._keys))
@@ -6470,7 +6472,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             self.assertEqual(len(rs.descriptionErrors), 1)
 
     #        print self._cf.dp.GetCommandVariable("COMMANDS")
-            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
             self.assertEqual(len(sed.keys()), len(self._keys))
@@ -6566,7 +6568,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             self.assertEqual(len(rs.descriptionErrors), 1)
 
     #        print self._cf.dp.GetCommandVariable("COMMANDS")
-            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
             self.assertEqual(len(sed.keys()), len(self._keys))
@@ -6660,7 +6662,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             self.assertEqual(len(rs.descriptionErrors), 1)
 
     #        print self._cf.dp.GetCommandVariable("COMMANDS")
-            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
             self.assertEqual(len(sed.keys()), len(self._keys))
@@ -6754,7 +6756,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             self.assertEqual(len(rs.descriptionErrors), 1)
 
     #        print self._cf.dp.GetCommandVariable("COMMANDS")
-            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
             self.assertEqual(len(sed.keys()), len(self._keys))
@@ -6848,7 +6850,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             self.assertEqual(len(rs.descriptionErrors), 1)
 
     #        print self._cf.dp.GetCommandVariable("COMMANDS")
-            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
             self.assertEqual(len(sed.keys()), len(self._keys))
@@ -6900,7 +6902,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             db.put_device_property(self._ms.ms.keys()[0],
                                    {'PoolNames': self._pool.dp.name()})
             self._ms.dps[self._ms.ms.keys()[0]].Init()
-            channelerrors = []
+            # channelerrors = []
             poolchannels = []
             componentgroup = {"smycp": False, "smycp2": None,
                               "smycp3": True, "smycpnt1": None,
@@ -6956,7 +6958,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                 "smycpnt1": True})
             self.assertTrue(not rs.descriptionErrors)
 
-            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
             self.assertEqual(len(sed.keys()), len(self._keys))
@@ -7008,7 +7010,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             db.put_device_property(self._ms.ms.keys()[0],
                                    {'PoolNames': self._pool.dp.name()})
             self._ms.dps[self._ms.ms.keys()[0]].Init()
-            channelerrors = []
+            # channelerrors = []
             poolchannels = []
             componentgroup = {"smycp": False, "smycp2": False,
                               "smycp3": False, "smycpnt1": False,
@@ -7054,7 +7056,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                 "smycpnt1": True})
             self.assertTrue(not rs.descriptionErrors)
 
-            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
             self.assertEqual(len(sed.keys()), len(self._keys))
@@ -7104,7 +7106,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                                    {'PoolNames': self._pool.dp.name()})
             self._ms.dps[self._ms.ms.keys()[0]].Init()
 
-            channelerrors = []
+            # channelerrors = []
             poolchannels = ["scalar2_long", "spectrum2_short", "client_long",
                             "client_short"]
             componentgroup = {
@@ -7150,7 +7152,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             self.assertEqual(len(rs.descriptionErrors), 1)
 
     #        print self._cf.dp.GetCommandVariable("COMMANDS")
-            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
             self.assertEqual(len(sed.keys()), len(self._keys))
@@ -7197,7 +7199,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                                    {'PoolNames': self._pool.dp.name()})
             self._ms.dps[self._ms.ms.keys()[0]].Init()
 
-            channelerrors = []
+            # channelerrors = []
 
             poolchannels = ["scalar2_long", "spectrum2_short", "client_short"]
             componentgroup = {
@@ -7245,7 +7247,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                 "smycpnt1": None})
             self.assertEqual(len(rs.descriptionErrors), 1)
 
-            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
             self.assertEqual(len(sed.keys()), len(self._keys))
@@ -7293,7 +7295,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
 
             self._ms.dps[self._ms.ms.keys()[0]].Init()
 
-            channelerrors = []
+            # channelerrors = []
             poolchannels = ["scalar2_long", "spectrum2_short", "client_short"]
             componentgroup = {
                 "smycp": False, "smycp2": False, "smycp3": False,
@@ -7340,7 +7342,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                 "smycpnt1": True})
             self.assertTrue(not rs.descriptionErrors)
 
-            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
             self.assertEqual(len(sed.keys()), len(self._keys))
@@ -7390,7 +7392,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
 
             self._ms.dps[self._ms.ms.keys()[0]].Init()
 
-            channelerrors = []
+            # channelerrors = []
             poolchannels = ["scalar2_long", "spectrum2_short", "client_short"]
             componentgroup = {
                 "smycp": False, "smycp2": False, "smycp3": False,
@@ -7439,7 +7441,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                 "smycpnt1": None})
             self.assertTrue(rs.descriptionErrors)
 
-            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
             self.assertEqual(len(sed.keys()), len(self._keys))
@@ -7489,7 +7491,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                                    {'PoolNames': self._pool.dp.name()})
 
             self._ms.dps[self._ms.ms.keys()[0]].Init()
-            channelerrors = []
+            # channelerrors = []
             poolchannels = ["scalar2_long", "spectrum2_short", "client_short"]
             componentgroup = {
                 "smycp": False, "smycp2": False, "smycp3": False,
@@ -7534,7 +7536,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             self.assertTrue(not rs.descriptionErrors)
 
     #        print self._cf.dp.GetCommandVariable("COMMANDS")
-            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
             self.assertEqual(len(sed.keys()), len(self._keys))
@@ -7584,7 +7586,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                                    {'PoolNames': self._pool.dp.name()})
 
             self._ms.dps[self._ms.ms.keys()[0]].Init()
-            channelerrors = []
+            # channelerrors = []
             poolchannels = ["scalar2_long", "spectrum2_short", "client_short"]
             componentgroup = {
                 "smycp": False, "smycp2": False, "smycp3": False,
@@ -7631,7 +7633,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             self.assertTrue(rs.descriptionErrors)
 
     #        print self._cf.dp.GetCommandVariable("COMMANDS")
-            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
             self.assertEqual(len(sed.keys()), len(self._keys))
@@ -7682,7 +7684,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
 
             self._ms.dps[self._ms.ms.keys()[0]].Init()
 
-            channelerrors = []
+            # channelerrors = []
             poolchannels = ["scalar2_long", "spectrum2_short", "client2_short"]
             componentgroup = {
                 "smycp": False, "smycp2": False, "smycp3": False,
@@ -7726,7 +7728,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             self.assertEqual(len(rs.descriptionErrors), 1)
 
     #        print self._cf.dp.GetCommandVariable("COMMANDS")
-            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
             self.assertEqual(len(sed.keys()), len(self._keys))
@@ -7763,16 +7765,16 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         simps2 = TestServerSetUp.TestServerSetUp(
             "ttestp09/testts/t2r228", "S2")
 
-        arr = [
-            {"name": "client_short", "full_name": "ttestp09/testts/t1r228"},
-        ]
+        # arr = [
+        #     {"name": "client_short", "full_name": "ttestp09/testts/t1r228"},
+        # ]
 
         try:
             # db = PyTango.Database()
             simps2.setUp()
 
             self._ms.dps[self._ms.ms.keys()[0]].Init()
-            channelerrors = []
+            # channelerrors = []
             poolchannels = []
             componentgroup = {
                 "smycp": False, "smycp2": False, "smycp3": False,
@@ -7811,7 +7813,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             self.assertEqual(len(rs.descriptionErrors), 3)
 
     #        print self._cf.dp.GetCommandVariable("COMMANDS")
-            res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
+            # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
             self.assertEqual(len(sed.keys()), len(self._keys))
@@ -7947,7 +7949,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         pool.ExpChannelList = [json.dumps(
             {"name": a[0], "interfaces": a[1], "source": a[2]}) for a in arr]
 
-        lst = [ar[0] for ar in arr if "CTExpChannel" in ar[1]]
+        # lst = [ar[0] for ar in arr if "CTExpChannel" in ar[1]]
 
         dd = rs.availableTimers()
         self.assertTrue(not dd)
@@ -8456,7 +8458,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         pool.AcqChannelList = [json.dumps(
             {"name": a[0], "full_name": a[1]}) for a in arr]
 
-        lst = [ar[0] for ar in arr if "tip551" in ar[1]]
+        # lst = [ar[0] for ar in arr if "tip551" in ar[1]]
         dd = rs.mutedChannels()
         self.assertTrue(not dd)
 
@@ -9079,9 +9081,9 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                     {"name": a[0], "full_name": "%s/%s" % (a[1], a[2])})
                 for a in arr2]
 
-            dct2 = dict((ar[0], ar[1]) for ar in arr2)
+            # dct2 = dict((ar[0], ar[1]) for ar in arr2)
             dd = json.loads(rs.fullDeviceNames())
-#            dct.update(dct2)
+            #            dct.update(dct2)
             self.myAssertDict(dd, dct)
 
         finally:
@@ -9900,7 +9902,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                 self.compareToDump(rs, ["PreselectingDataSources"])
                 self.assertEqual(
                     set(self.value(rs, "PreselectingDataSources")),
-                                 set(self.getDump("PreselectingDataSources")))
+                    set(self.getDump("PreselectingDataSources")))
                 self.assertEqual(rs.door, doors[i % 3])
                 self.assertEqual(rs.macroServer, ms2.ms.keys()[0])
             os.remove(filename)
@@ -10597,7 +10599,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             sid = rs.setScanEnvVariables(json.dumps(dt))
             # print "I = ", i, sid
             self.assertEqual(sid, sids[i])
-            data = {}
+            # data = {}
             env = pickle.loads(
                 self._ms.dps[self._ms.ms.keys()[0]].Environment[1])
             self.myAssertDict(envs[i], env)
@@ -11254,13 +11256,13 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         rs.profileConfiguration = str(json.dumps(mp))
         mp = json.loads(rs.profileConfiguration)
 
-        ndss = json.loads(mp["DataSourceSelection"])
-        common = set(cps) & set(dss)
+        # ndss = json.loads(mp["DataSourceSelection"])
+        # common = set(cps) & set(dss)
         self.dump(rs)
 
-        ncps = json.loads(mp["ComponentSelection"])
-        ndss = json.loads(mp["DataSourceSelection"])
-        tdss = [ds for ds in ndss if ndss[ds]]
+        # ncps = json.loads(mp["ComponentSelection"])
+        # ndss = json.loads(mp["DataSourceSelection"])
+        # tdss = [ds for ds in ndss if ndss[ds]]
         # tcps = [cp for cp in ncps if ncps[cp]]
 
         self.assertEqual(rs.componentDescription(), '[{}]')
@@ -11303,9 +11305,9 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             mp["OrderedChannels"] = json.dumps([])
             rs.profileConfiguration = str(json.dumps(mp))
 
-            dsdict = {
-                "ann": self.mydss["ann"]
-            }
+            # dsdict = {
+            #     "ann": self.mydss["ann"]
+            # }
 
             cps = {}
             dss = {}
@@ -11323,8 +11325,8 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             mncps = self._rnd.randint(1, len(self.mycps.keys()) - 1)
             mcps = self._rnd.sample(set(self.mycps.keys()), mncps)
 
-            tdss = [ds for ds in dss if dss[ds]]
-            tcps = [cp for cp in cps if cps[cp]]
+            # tdss = [ds for ds in dss if dss[ds]]
+            # tcps = [cp for cp in cps if cps[cp]]
 
             self._cf.dp.SetCommandVariable(["MCPLIST", json.dumps(mcps)])
             self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
@@ -11335,8 +11337,8 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             mp["DataSourceSelection"] = json.dumps(dss)
             rs.profileConfiguration = str(json.dumps(mp))
             mp = json.loads(rs.profileConfiguration)
-            ndss = json.loads(mp["DataSourceSelection"])
-            common = set(cps) & set(dss)
+            # ndss = json.loads(mp["DataSourceSelection"])
+            # common = set(cps) & set(dss)
             self.dump(rs)
 
             res = json.loads(rs.componentDescription())
@@ -11392,8 +11394,8 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             mncps = self._rnd.randint(1, len(self.mycps.keys()) - 1)
             mcps = self._rnd.sample(set(self.mycps.keys()), mncps)
 
-            tdss = [ds for ds in dss if dss[ds]]
-            tcps = [cp for cp in cps if cps[cp]]
+            # tdss = [ds for ds in dss if dss[ds]]
+            # tcps = [cp for cp in cps if cps[cp]]
             mp = json.loads(rs.profileConfiguration)
             mp["ComponentSelection"] = json.dumps(cps)
             mp["DataSourceSelection"] = json.dumps(dss)
@@ -11402,7 +11404,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
 
             self._cf.dp.SetCommandVariable(["MCPLIST", json.dumps(mcps)])
             ndss = json.loads(mp["DataSourceSelection"])
-            common = set(cps) & set(dss)
+            # common = set(cps) & set(dss)
             self.dump(rs)
 
             dds = rs.componentDataSources()
@@ -11483,7 +11485,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             mp = json.loads(rs.profileConfiguration)
             self._cf.dp.SetCommandVariable(["MCPLIST", json.dumps(mcps)])
             ndss = json.loads(mp["DataSourceSelection"])
-            common = set(cps) & set(dss)
+            # common = set(cps) & set(dss)
             self.dump(rs)
 
             dds = rs.componentDataSources()
@@ -11556,7 +11558,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             mp = json.loads(rs.profileConfiguration)
             self._cf.dp.SetCommandVariable(["MCPLIST", json.dumps(mcps)])
             ndss = json.loads(mp["DataSourceSelection"])
-            common = set(cps) & set(dss)
+            # common = set(cps) & set(dss)
             self.dump(rs)
 
             mds = rs.dataSources or []
@@ -11566,7 +11568,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             self.assertEqual(set(mds), set(dds) | set(rdss))
 
     # test
-    def test_selectedcomponents(self):
+    def test_selectedcomponents2(self):
         fun = sys._getframe().f_code.co_name
         print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
@@ -11626,16 +11628,18 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             mp["DataSourceSelection"] = json.dumps(dss)
             mp["ComponentPreselection"] = json.dumps(cps)
             rs.profileConfiguration = str(json.dumps(mp))
-            ac = rs.preselectedComponents()
+            # ac =
+            rs.preselectedComponents()
             mp = json.loads(rs.profileConfiguration)
 
-            ndss = json.loads(mp["DataSourceSelection"])
+            # ndss = json.loads(mp["DataSourceSelection"])
             # common = set(cps.keys()) & set(dss.keys())
             self.dump(rs)
 
-            ncps = json.loads(mp["ComponentSelection"])
-            ndss = json.loads(mp["DataSourceSelection"])
-            tdss = [ds for ds in ndss if ndss[ds]]
+            # ncps =
+            json.loads(mp["ComponentSelection"])
+            # ndss = json.loads(mp["DataSourceSelection"])
+            # tdss = [ds for ds in ndss if ndss[ds]]
             # tcps = [cp for cp in ncps if ncps[cp]]
 
             rcp = rs.components
