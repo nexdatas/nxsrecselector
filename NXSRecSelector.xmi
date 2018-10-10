@@ -45,7 +45,7 @@
       <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
       <DefaultPropValue>nxsmntgrp</DefaultPropValue>
     </deviceProperties>
-    <deviceProperties name="SyncDescription" description="preselection merges the current ScanSnapshot">
+    <deviceProperties name="SyncSnapshot" description="preselection merges the current ScanSnapshot">
       <type xsi:type="pogoDsl:BooleanType"/>
       <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
       <DefaultPropValue>False</DefaultPropValue>
@@ -507,6 +507,15 @@
       </argout>
       <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
       <excludedStates>RUNNING</excludedStates>
+    </commands>
+    <commands name="CreateDataSources" description="It creates new DataSources on the ConfigServer" execMethod="create_data_sources" displayLevel="OPERATOR" polledPeriod="0" isDynamic="false">
+      <argin description="JSON dictionary with {``dsname``: ``tangosource``, ...}">
+        <type xsi:type="pogoDsl:StringType"/>
+      </argin>
+      <argout description="">
+        <type xsi:type="pogoDsl:VoidType"/>
+      </argout>
+      <status abstract="false" inherited="false" concrete="true" concreteHere="true"/>
     </commands>
     <attributes name="StepDataSources" attType="Scalar" rwType="READ_WRITE" displayLevel="EXPERT" polledPeriod="0" maxX="" maxY="" allocReadMember="true" isDynamic="false">
       <dataType xsi:type="pogoDsl:StringType"/>

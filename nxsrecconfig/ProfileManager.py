@@ -47,13 +47,13 @@ class ProfileManager(object):
 
     """  Manages Measurement Group and Profile from Selector"""
 
-    def __init__(self, selector, syncdescription=False):
+    def __init__(self, selector, syncsnapshot=False):
         """ constructor
 
         :param selector: selector object
         :type selector: :class:`nxsrecconfig.Selector.Selector`
-        :param syncdescription: preselection merges current ScanSnapshot
-        :type syncdescription: :obj:`bool`
+        :param syncsnapshot: preselection merges current ScanSnapshot
+        :type syncsnapshot: :obj:`bool`
         """
         #: (:class:`nxsrecconfig.Selector.Selector`) configuration selector
         self.__selector = selector
@@ -80,7 +80,7 @@ class ProfileManager(object):
         self.__withsynch = True
 
         #: (:obj:`bool`) preselection merges current ScanSnapshot
-        self.__syncdescription = syncdescription
+        self.__syncsnapshot = syncsnapshot
 
     def __updateMacroServer(self):
         """ updatas MacroServer name
@@ -412,7 +412,7 @@ class ProfileManager(object):
         tangods = [[ds[1], ds[1], ds[0]] for ds in snapshot]
         snpds = dict([(ds[1], False) for ds in snapshot])
         mydsg = {}
-        jres = self.__createDataSources(tangods, mydsg)
+        self.createDataSources(tangods, mydsg)
         jpcps = json.loads(self.__selector["ComponentPreselection"])
         jpdss = json.loads(self.__selector["DataSourcePreselection"])
         predss = set(json.loads(self.__selector["PreselectingDataSources"]))
@@ -420,13 +420,12 @@ class ProfileManager(object):
         for cp in components:
             if cp not in jpcps.keys():
                 jpcps[cp] = False
-        cps = set(self.__selector.configCommand("mandatoryComponents") or []) \
-             | set(list(jpcps.keys()))
+        cps = set(self.__selector.configCommand("mandatoryComponents")
+                  or []) | set(list(jpcps.keys()))
 
         describer = Describer(self.__configServer, True)
         description = describer.components(list(cps), '', '')
         for cp, dss in description[0].items():
-            dsfound = []
             if isinstance(dss, dict):
                 cpdss = set()
                 fdss = set()
@@ -456,7 +455,7 @@ class ProfileManager(object):
         if pdss != self.__selector["DataSourcePreselection"]:
             self.__selector["DataSourcePreselection"] = pdss
             changed = True
-        # print(changed)    
+        # print(changed)
         return changed
 
     def fetchProfile(self):
@@ -468,14 +467,14 @@ class ProfileManager(object):
             if self.__selector["MntGrp"] in avmg:
                 self.__selector.deselect()
                 self.importMntGrp()
-                if self.__syncdescription:
+                if self.__syncsnapshot:
                     # print("FETCH")
                     self.__addPreselectedComponents(
                         self.defaultPreselectedComponents)
                 self.__selector.resetPreselectedComponents(
                     self.defaultPreselectedComponents)
                 self.__selector.preselect()
-        elif self.__syncdescription:
+        elif self.__syncsnapshot:
                 # print("FETCH 2")
                 changed = self.__addPreselectedComponents(
                     self.defaultPreselectedComponents)
@@ -709,7 +708,7 @@ class ProfileManager(object):
         :type hel: :obj:`list` <:obj:`str`>
         """
         if tangods and NXSTOOLS:
-            jds = self.__createDataSources(tangods, dsg)
+            jds = self.createDataSources(tangods, dsg)
             for ctrl in conf["controllers"].values():
                 if 'units' in ctrl.keys() and \
                         '0' in ctrl['units'].keys():
@@ -1129,7 +1128,7 @@ class ProfileManager(object):
                                        str(name))
                     jds[initsource] = name
 
-    def __createDataSources(self, tangods, dsg):
+    def createDataSources(self, tangods, dsg=None):
         """adds known and creates unknown datasources
 
         :param tangods: tango datasources list
@@ -1142,6 +1141,7 @@ class ProfileManager(object):
         """
         extangods = []
         exsource = {}
+        dsg = dsg or {}
 
         ads = TangoUtils.command(self.__configServer, "availableDataSources")
         if not ads:
