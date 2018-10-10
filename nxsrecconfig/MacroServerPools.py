@@ -273,12 +273,10 @@ class MacroServerPools(object):
 
         toCheck = self.__toCheck(
             configdevice, discomponentgroup,
-            componentgroup.keys(),
-            # [cp for cp in componentgroup.keys()
-            #  if componentgroup[cp] is not False],
-            datasourcegroup.keys(),
-            # [ds for ds in datasourcegroup.keys()
-            #  if datasourcegroup[ds] is not False],
+            [cp for cp in componentgroup.keys()
+             if componentgroup[cp] is not False],
+            [ds for ds in datasourcegroup.keys()
+              if datasourcegroup[ds] is not False],
             channels, nonexisting)
 
         cqueue = Queue.Queue()

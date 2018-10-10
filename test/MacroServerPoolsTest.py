@@ -1418,14 +1418,10 @@ class MacroServerPoolsTest(unittest.TestCase):
         self.assertEqual(
             json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
             ["AvailableComponents", "AvailableDataSources",
-             "AvailableComponents", "AvailableDataSources",
-             "DependentComponents",
-             "Components", "DataSources",
-             "DataSources"])
+             "AvailableComponents", "AvailableDataSources"])
         self.assertEqual(
             json.loads(self._cf.dp.GetCommandVariable("VARS")),
-            [None, None, None, None,
-             ['mycp'], ['mycp'], ['ann2'], ['ann2']])
+            [None, None, None, None])
 #        print self._cf.dp.availableComponents()
 
     # constructor test
@@ -1574,13 +1570,9 @@ class MacroServerPoolsTest(unittest.TestCase):
         self.assertEqual(
             json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
             ["AvailableComponents", "AvailableDataSources",
-             "AvailableComponents",  "AvailableDataSources",
-             "DependentComponents",
-             "Components", "DataSources",
-             "DataSources"])
+             "AvailableComponents",  "AvailableDataSources"])
         self.assertEqual(json.loads(self._cf.dp.GetCommandVariable("VARS")),
-                         [None, None, None, None,
-                          ['mycp'], ['mycp'], ['ann2'], ['ann2']])
+                         [None, None, None, None])
 
     # constructor test
     # \brief It tests default settings
@@ -1824,12 +1816,8 @@ class MacroServerPoolsTest(unittest.TestCase):
         self.assertEqual(
             json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
             ["AvailableComponents", "AvailableDataSources",
-             "AvailableComponents", "AvailableDataSources",
-             "DependentComponents",
-             "Components", "DataSources", "DataSources",
-             "DataSources",
-             "DataSources",
-             "DataSources"])
+             "AvailableComponents", "AvailableDataSources"
+            ])
 
     # constructor test
     # \brief It tests default settings
@@ -1865,23 +1853,16 @@ class MacroServerPoolsTest(unittest.TestCase):
         self.assertEqual(datasourcegroup, json.loads(res2))
         self.assertEqual(channelerrors, [])
 
-        # print self._cf.dp.GetCommandVariable("COMMANDS")
+        # print(self._cf.dp.GetCommandVariable("COMMANDS"))
         self.assertEqual(
             json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
             ["AvailableComponents", "AvailableDataSources",
              "AvailableComponents", "AvailableDataSources",
-             "DependentComponents",
-             "Components", "DataSources", "DataSources", "DataSources",
-             "DependentComponents",
-             "Components", "DataSources", "DataSources", "DataSources",
-             "DependentComponents",
-             "Components", "DataSources", "DataSources", "DataSources",
-             "DataSources",
-             "DataSources",
-             "DataSources",
-             "DataSources",
-             "DataSources",
-             "DataSources"])
+             "DependentComponents", "Components",
+             "DataSources", "DataSources", "DataSources",
+             "DependentComponents", "Components",
+             "DataSources", "DataSources", "DataSources",
+             "DataSources", "DataSources", "DataSources", "DataSources"])
         res = json.loads(self._cf.dp.GetCommandVariable("VARS"))
 
     # constructor test
@@ -2024,24 +2005,6 @@ class MacroServerPoolsTest(unittest.TestCase):
                 json.loads(self._cf.dp.GetCommandVariable("COMMANDS")), [
                     "AvailableComponents", "AvailableDataSources",
                     "AvailableComponents", "AvailableDataSources",
-                    "DependentComponents",
-                    "Components", "DataSources", "DataSources", "DataSources",
-                    "DependentComponents",
-                    "Components", "DataSources", "DataSources", "DataSources",
-                    "DependentComponents",
-                    "Components", "DataSources", "DataSources", "DataSources",
-                    "DependentComponents",
-                    "Components", "DataSources", "DataSources", "DataSources",
-                    "DependentComponents",
-                    "Components", "DataSources", "DataSources", "DataSources",
-                    "DependentComponents",
-                    "Components", "DataSources", "DataSources", "DataSources",
-                    "DataSources", "DataSources",
-                    "DataSources", "DataSources",
-                    "DataSources", "DataSources",
-                    "DataSources", "DataSources",
-                    "DataSources", "DataSources",
-                    "DataSources", "DataSources",
                 ])
             res = json.loads(self._cf.dp.GetCommandVariable("VARS"))
         finally:
@@ -2089,18 +2052,18 @@ class MacroServerPoolsTest(unittest.TestCase):
 
             self.myAssertDict(json.loads(res), {
                 "smycp": False, "smycp2": True, "smycp3": True,
-                "s2mycp": None, "s2mycp2": None, "s2mycp3": None})
+                "s2mycp": False, "s2mycp2": None, "s2mycp3": None})
             self.myAssertDict(datasourcegroup, json.loads(res2))
             self.myAssertDict(json.loads(res2), {
                 "scalar_uchar": False, "scalar_string": True,
                 "scalar_ulong": True,
-                "scalar2_uchar": None, "scalar2_string": None,
+                "scalar2_uchar": False, "scalar2_string": None,
                 "scalar2_ulong": None
             })
             self.myAssertDict(componentgroup, json.loads(res))
-            self.assertEqual(len(channelerrors), 6)
+            self.assertEqual(len(channelerrors), 4)
 
-    #        print self._cf.dp.GetCommandVariable("COMMANDS")
+            # print(self._cf.dp.GetCommandVariable("COMMANDS"))
             self.assertEqual(
                 json.loads(self._cf.dp.GetCommandVariable("COMMANDS")), [
                     "AvailableComponents", "AvailableDataSources",
@@ -2113,13 +2076,7 @@ class MacroServerPoolsTest(unittest.TestCase):
                     "Components", "DataSources", "DataSources", "DataSources",
                     "DependentComponents",
                     "Components", "DataSources", "DataSources", "DataSources",
-                    "DependentComponents",
-                    "Components", "DataSources", "DataSources", "DataSources",
-                    "DependentComponents",
-                    "Components", "DataSources", "DataSources", "DataSources",
                     "DataSources",
-                    "DataSources", "DataSources",
-                    "DataSources", "DataSources",
                     "DataSources", "DataSources",
                     "DataSources", "DataSources",
                     "DataSources", "DataSources",
@@ -2426,18 +2383,18 @@ class MacroServerPoolsTest(unittest.TestCase):
 #            print channelerrors
 
             self.myAssertDict(json.loads(res), {
-                u'pyeval1a': False, u'pyeval2a': None, u'pyeval2c': None,
+                u'pyeval1a': False, u'pyeval2a': False, u'pyeval2c': False,
                 u'pyeval2b': False, u'pyeval2': False, u'pyeval0': False,
                 u'pyeval1': False})
             self.myAssertDict(datasourcegroup, json.loads(res2))
             self.myAssertDict(json.loads(res2), {
-                u'pyeval1ads': False, u'pyeval2ads': None,
+                u'pyeval1ads': False, u'pyeval2ads': False,
                 u'pyeval2bds': False,
-                u'pyeval2cds': None, u'pyeval0ds': False, u'pyeval1ds': False,
+                u'pyeval2cds': False, u'pyeval0ds': False, u'pyeval1ds': False,
                 u'pyeval2ds': False}
             )
             self.myAssertDict(componentgroup, json.loads(res))
-            self.assertEqual(len(channelerrors), 4)
+            self.assertEqual(len(channelerrors), 0)
 
         finally:
             simps2.delete()
@@ -2479,39 +2436,30 @@ class MacroServerPoolsTest(unittest.TestCase):
 
         self.myAssertDict(json.loads(res), {
             "smycp": False, "smycp2": True, "smycp3": True,
-            "s2mycp": None, "s2mycp2": None, "s2mycp3": None})
+            "s2mycp": False, "s2mycp2": None, "s2mycp3": None})
         self.myAssertDict(componentgroup, json.loads(res))
         self.myAssertDict(datasourcegroup, json.loads(res2))
         self.myAssertDict(json.loads(res2), {
             "scalar_uchar": False, "scalar_string": True,
             "scalar_ulong": True,
-            "scalar2_uchar": None, "scalar2_string": None,
+            "scalar2_uchar": False, "scalar2_string": None,
             "scalar2_ulong": None
         })
-        self.assertEqual(len(channelerrors), 6)
+        self.assertEqual(len(channelerrors), 4)
 
-#        print self._cf.dp.GetCommandVariable("COMMANDS")
-        self.assertEqual(json.loads(
-            self._cf.dp.GetCommandVariable("COMMANDS")), [
-                "AvailableComponents", "AvailableDataSources",
-                "AvailableComponents", "AvailableDataSources",
-                "DependentComponents",
-                "Components", "DataSources", "DataSources", "DataSources",
-                "DependentComponents",
-                "Components", "DataSources", "DataSources", "DataSources",
-                "DependentComponents",
-                "Components", "DataSources", "DataSources", "DataSources",
-                "DependentComponents",
-                "Components", "DataSources", "DataSources", "DataSources",
-                "DependentComponents",
-                "Components", "DataSources", "DataSources", "DataSources",
-                "DependentComponents",
-                "Components", "DataSources", "DataSources", "DataSources",
-                "DataSources", "DataSources", "DataSources",
-                "DataSources", "DataSources", "DataSources",
-                "DataSources", "DataSources", "DataSources",
-                "DataSources", "DataSources",
-                "DataSources"])
+        # print(self._cf.dp.GetCommandVariable("COMMANDS"))
+        self.assertEqual(
+            json.loads(
+                self._cf.dp.GetCommandVariable("COMMANDS")),
+            ["AvailableComponents", "AvailableDataSources", "AvailableComponents",
+             "AvailableDataSources", "DependentComponents", "Components",
+             "DataSources", "DataSources", "DataSources", "DependentComponents",
+             "Components", "DataSources", "DataSources", "DataSources",
+             "DependentComponents", "Components", "DataSources", "DataSources",
+             "DataSources", "DependentComponents", "Components", "DataSources",
+             "DataSources", "DataSources", "DataSources", "DataSources",
+             "DataSources", "DataSources", "DataSources", "DataSources",
+             "DataSources", "DataSources"])
         res = json.loads(self._cf.dp.GetCommandVariable("VARS"))
 
     # constructor test
@@ -2556,7 +2504,7 @@ class MacroServerPoolsTest(unittest.TestCase):
 
             self.myAssertDict(json.loads(res), {
                 "smycp": False, "smycp2": True, "smycp3": True,
-                "s2mycp": None, "s2mycp2": None, "s2mycp3": None})
+                "s2mycp": False, "s2mycp2": None, "s2mycp3": None})
 #                "smycp": False, "smycp2": True, "smycp3": True,
 #                "s2mycp": False, "s2mycp2": True, "s2mycp3": True})
             self.myAssertDict(componentgroup, json.loads(res))
@@ -2564,10 +2512,10 @@ class MacroServerPoolsTest(unittest.TestCase):
             self.myAssertDict(json.loads(res2), {
                 "scalar_uchar": False, "scalar_string": True,
                 "scalar_ulong": True,
-                "scalar2_uchar": None, "scalar2_string": None,
+                "scalar2_uchar": False, "scalar2_string": None,
                 "scalar2_ulong": None
             })
-            self.assertEqual(len(channelerrors), 6)
+            self.assertEqual(len(channelerrors), 4)
 
     #        print self._cf.dp.GetCommandVariable("COMMANDS")
             res = json.loads(self._cf.dp.GetCommandVariable("VARS"))
@@ -2617,16 +2565,16 @@ class MacroServerPoolsTest(unittest.TestCase):
 
             self.myAssertDict(json.loads(res), {
                 "smycp": False, "smycp2": True, "smycp3": True,
-                "s2mycp": None, "s2mycp2": None, "s2mycp3": None})
+                "s2mycp": False, "s2mycp2": None, "s2mycp3": None})
             self.myAssertDict(componentgroup, json.loads(res))
             self.myAssertDict(datasourcegroup, json.loads(res2))
             self.myAssertDict(json.loads(res2), {
                 "scalar_uchar": False, "scalar_string": True,
                 "scalar_ulong": True,
-                "scalar2_uchar": None, "scalar2_string": None,
+                "scalar2_uchar": False, "scalar2_string": None,
                 "scalar2_ulong": None
             })
-            self.assertEqual(len(channelerrors), 6)
+            self.assertEqual(len(channelerrors), 4)
 
     #        print self._cf.dp.GetCommandVariable("COMMANDS")
             res = json.loads(self._cf.dp.GetCommandVariable("VARS"))
@@ -2807,7 +2755,7 @@ class MacroServerPoolsTest(unittest.TestCase):
             self.myAssertDict(json.loads(res), {
                 "smycp": True, "smycp2": True, "smycp3": True,
                 "s2mycp": True, "s2mycp2": True, "s2mycp3": False,
-                "smycpnt1": None})
+                "smycpnt1": False})
             self.myAssertDict(componentgroup, json.loads(res))
             self.myAssertDict(datasourcegroup, json.loads(res2))
             self.myAssertDict(json.loads(res2), {
@@ -2815,9 +2763,9 @@ class MacroServerPoolsTest(unittest.TestCase):
                 "scalar_ulong": False,
                 "scalar2_uchar": True, "scalar2_string": True,
                 "scalar2_ulong": False,
-                "ann3": None,
+                "ann3": False,
             })
-            self.assertEqual(len(channelerrors), 2)
+            self.assertEqual(len(channelerrors), 0)
 
     #        print self._cf.dp.GetCommandVariable("COMMANDS")
             res = json.loads(self._cf.dp.GetCommandVariable("VARS"))
@@ -2947,7 +2895,7 @@ class MacroServerPoolsTest(unittest.TestCase):
             self.myAssertDict(json.loads(res), {
                 "smycp": False, "smycp2": True, "smycp3": True,
                 "s2mycp": True, "s2mycp2": True, "s2mycp3": False,
-                "smycpnt1": None})
+                "smycpnt1": False})
             self.myAssertDict(componentgroup, json.loads(res))
             self.myAssertDict(datasourcegroup, json.loads(res2))
             self.myAssertDict(json.loads(res2), {
@@ -2955,9 +2903,9 @@ class MacroServerPoolsTest(unittest.TestCase):
                 "scalar_ulong": False,
                 "scalar2_uchar": True, "scalar2_string": True,
                 "scalar2_ulong": False,
-                "ann3": None,
+                "ann3": False,
             })
-            self.assertEqual(len(channelerrors), 2)
+            self.assertEqual(len(channelerrors), 0)
 
     #        print self._cf.dp.GetCommandVariable("COMMANDS")
             res = json.loads(self._cf.dp.GetCommandVariable("VARS"))
@@ -3257,7 +3205,7 @@ class MacroServerPoolsTest(unittest.TestCase):
             self.myAssertDict(json.loads(res), {
                 "smycp": False, "smycp2": True, "smycp3": True,
                 "s2mycp": False, "s2mycp2": True, "s2mycp3": True,
-                "smycpnt1": None})
+                "smycpnt1": False})
             self.myAssertDict(componentgroup, json.loads(res))
             self.myAssertDict(datasourcegroup, json.loads(res2))
             self.myAssertDict(json.loads(res2), {
@@ -3265,9 +3213,9 @@ class MacroServerPoolsTest(unittest.TestCase):
                 "scalar_ulong": False,
                 "scalar2_uchar": True, "scalar2_string": True,
                 "scalar2_ulong": False,
-                "ann3": None,
+                "ann3": False,
             })
-            self.assertEqual(len(channelerrors), 2)
+            self.assertEqual(len(channelerrors), 0)
 
     #        print self._cf.dp.GetCommandVariable("COMMANDS")
             res = json.loads(self._cf.dp.GetCommandVariable("VARS"))

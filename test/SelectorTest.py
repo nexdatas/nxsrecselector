@@ -4085,17 +4085,10 @@ class SelectorTest(unittest.TestCase):
              "AvailableDataSources",
              "AvailableComponents",
              "AvailableDataSources",
-             "DependentComponents",
-             "Components",
-             "DataSources",
-             "DataSources",
-             "DataSources",
-             "DataSources"
              ])
         self.assertEqual(
             json.loads(self._cf.dp.GetCommandVariable("VARS")),
-            [None, None, None, None,
-             ['mycp'], ['mycp'], ['ann5'], ['ann5'], ['ann2'], ['ann2']])
+            [None, None, None, None])
 
         self.assertTrue(val["MntGrp"] not in self._cf.dp.availableSelections())
 
@@ -4299,13 +4292,10 @@ class SelectorTest(unittest.TestCase):
         self.assertEqual(
             json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
             ["AvailableComponents", "AvailableDataSources",
-             "AvailableComponents", "AvailableDataSources",
-             "DependentComponents",
-             "Components",
-             "DataSources", "DataSources"])
+             "AvailableComponents", "AvailableDataSources"
+            ])
         self.assertEqual(json.loads(self._cf.dp.GetCommandVariable("VARS")),
-                         [None, None, None, None,
-                          ['mycp'], ['mycp'], ['ann3'], ['ann3']])
+                         [None, None, None, None])
         self.assertTrue(val["MntGrp"] not in self._cf.dp.availableSelections())
 
     # test
@@ -4510,20 +4500,9 @@ class SelectorTest(unittest.TestCase):
         self.assertEqual(
             json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
             ["AvailableComponents", "AvailableDataSources",
-             "AvailableComponents", "AvailableDataSources",
-             "DependentComponents",
-             "Components", "DataSources", "DataSources",
-             "DataSources", "DataSources", "DataSources"])
+             "AvailableComponents", "AvailableDataSources"])
         self.assertEqual(json.loads(self._cf.dp.GetCommandVariable("VARS")),
-                         [None, None, None, None,
-                          [u'smycp'],
-                          [u'smycp'],
-                          [u'scalar_long'],
-                          [u'scalar_short'],
-                          [u'scalar_long', u'scalar_short'],
-                          [u'scalar_uchar'],
-                          [u'scalar_uchar']
-                          ])
+                         [None, None, None, None])
         self.assertTrue(val["MntGrp"] not in self._cf.dp.availableSelections())
 
     # test
@@ -4565,7 +4544,7 @@ class SelectorTest(unittest.TestCase):
                                              "scalar_ulong": True})
         self.assertEqual(channelerrors, [])
 
-        print(self._cf.dp.GetCommandVariable("COMMANDS"))
+        # print(self._cf.dp.GetCommandVariable("COMMANDS"))
         self.assertEqual(
             json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
             ["AvailableComponents", "AvailableDataSources",
@@ -4574,10 +4553,6 @@ class SelectorTest(unittest.TestCase):
              "Components", "DataSources", "DataSources", "DataSources",
              "DependentComponents",
              "Components", "DataSources", "DataSources", "DataSources",
-             "DependentComponents",
-             "Components", "DataSources", "DataSources", "DataSources",
-             "DataSources",
-             "DataSources",
              "DataSources",
              "DataSources",
              "DataSources",
@@ -4775,22 +4750,6 @@ class SelectorTest(unittest.TestCase):
                 json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
                 ["AvailableComponents", "AvailableDataSources",
                  "AvailableComponents", "AvailableDataSources",
-                 "DependentComponents",
-                 "Components", "DataSources", "DataSources", "DataSources",
-                 "DependentComponents",
-                 "Components", "DataSources", "DataSources", "DataSources",
-                 "DependentComponents",
-                 "Components", "DataSources", "DataSources", "DataSources",
-                 "DependentComponents",
-                 "Components", "DataSources", "DataSources", "DataSources",
-                 "DependentComponents",
-                 "Components", "DataSources", "DataSources", "DataSources",
-                 "DependentComponents",
-                 "Components", "DataSources", "DataSources", "DataSources",
-                 "DataSources", "DataSources", "DataSources", "DataSources",
-                 "DataSources", "DataSources",
-                 "DataSources", "DataSources", "DataSources", "DataSources",
-                 "DataSources", "DataSources",
                  "AvailableDataSources", "StoreSelection"]
             )
             # res2 =
@@ -4864,14 +4823,14 @@ class SelectorTest(unittest.TestCase):
 
             self.myAssertDict(json.loads(res), {
                 "smycp": True, "smycp2": False, "smycp3": True,
-                "s2mycp": None, "s2mycp2": None, "s2mycp3": None})
+                "s2mycp": None, "s2mycp2": False, "s2mycp3": None})
             self.myAssertDict(json.loads(resd), {
                 "scalar_uchar": True, "scalar_string": True,
                 "scalar_ulong": False,
                 "scalar2_uchar": None, "scalar2_string": None,
-                "scalar2_ulong": None,
+                "scalar2_ulong": False,
             })
-            self.assertEqual(len(se.descErrors), 6)
+            self.assertEqual(len(se.descErrors), 4)
 
             self.assertEqual(
                 json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
@@ -4886,12 +4845,7 @@ class SelectorTest(unittest.TestCase):
                     "Components", "DataSources", "DataSources", "DataSources",
                     "DependentComponents",
                     "Components", "DataSources", "DataSources", "DataSources",
-                    "DependentComponents",
-                    "Components", "DataSources", "DataSources", "DataSources",
-                    "DependentComponents",
-                    "Components", "DataSources", "DataSources", "DataSources",
-                    "DataSources", "DataSources", "DataSources",
-                    "DataSources", "DataSources", "DataSources",
+                    "DataSources", "DataSources",
                     "DataSources", "DataSources", "DataSources",
                     "DataSources", "DataSources", "DataSources",
                     "AvailableDataSources", "StoreSelection"])
@@ -5304,39 +5258,38 @@ class SelectorTest(unittest.TestCase):
             resd = se["DataSourcePreselection"]
 
             self.myAssertDict(json.loads(res), {
-                "pyeval1a": False, "pyeval2a": None, "pyeval2c": None,
+                "pyeval1a": False, "pyeval2a": False, "pyeval2c": False,
                 "pyeval2b": False, "pyeval2": False, "pyeval0": False,
                 "pyeval1": False}
             )
             self.myAssertDict(json.loads(resd), {
-                u'pyeval1ads': False, u'pyeval2ads': None,
+                u'pyeval1ads': False, u'pyeval2ads': False,
                 u'pyeval2bds': False,
-                u'pyeval2cds': None, u'pyeval0ds': False,
+                u'pyeval2cds': False, u'pyeval0ds': False,
                 u'pyeval1ds': False,
                 u'pyeval2ds': False}
             )
-            self.assertEqual(len(se.descErrors), 4)
-
+            self.assertEqual(len(se.descErrors), 0)
             # res2 =
             json.loads(self._cf.dp.GetCommandVariable("VARS"))
-            self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
-            sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-            self.assertEqual(len(sed.keys()), len(self._keys))
-            for key, vl in self._keys:
-                self.assertTrue(key in sed.keys())
-                if key in val:
-                    self.assertEqual(sed[key], val[key])
-                elif key == 'ComponentPreselection':
-                    self.assertEqual(set(json.loads(sed[key])),
-                                     set(json.loads(res)))
-                elif key == 'DataSourcePreselection':
-                    self.assertEqual(set(json.loads(sed[key])),
-                                     set(json.loads(resd)))
-                elif key == 'PreselectingDataSources':
-                    self.assertEqual(set(json.loads(sed[key])),
-                                     set(poolchannels))
-                else:
-                    self.assertEqual(sed[key], vl)
+            self.assertTrue(not val["MntGrp"] in self._cf.dp.availableSelections())
+            # sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
+            # self.assertEqual(len(sed.keys()), len(self._keys))
+            # for key, vl in self._keys:
+            #     self.assertTrue(key in sed.keys())
+            #     if key in val:
+            #         self.assertEqual(sed[key], val[key])
+            #     elif key == 'ComponentPreselection':
+            #         self.assertEqual(set(json.loads(sed[key])),
+            #                          set(json.loads(res)))
+            #     elif key == 'DataSourcePreselection':
+            #         self.assertEqual(set(json.loads(sed[key])),
+            #                          set(json.loads(resd)))
+            #     elif key == 'PreselectingDataSources':
+            #         self.assertEqual(set(json.loads(sed[key])),
+            #                          set(poolchannels))
+            #     else:
+            #         self.assertEqual(sed[key], vl)
         finally:
             simps2.delete()
 
@@ -5382,15 +5335,15 @@ class SelectorTest(unittest.TestCase):
 
         self.myAssertDict(json.loads(res), {
             "smycp": True, "smycp2": False, "smycp3": True,
-            "s2mycp": None, "s2mycp2": None, "s2mycp3": None})
+            "s2mycp": None, "s2mycp2": False, "s2mycp3": None})
         resd = se["DataSourcePreselection"]
         self.myAssertDict(json.loads(resd), {
             "scalar_uchar": True, "scalar_string": True,
             "scalar_ulong": False,
             "scalar2_uchar": None, "scalar2_string": None,
-            "scalar2_ulong": None,
+            "scalar2_ulong": False,
         })
-        self.assertEqual(len(se.descErrors), 6)
+        self.assertEqual(len(se.descErrors), 4)
 
         self.assertEqual(
             json.loads(
@@ -5406,12 +5359,7 @@ class SelectorTest(unittest.TestCase):
                 "Components", "DataSources", "DataSources", "DataSources",
                 "DependentComponents",
                 "Components", "DataSources", "DataSources", "DataSources",
-                "DependentComponents",
-                "Components", "DataSources", "DataSources", "DataSources",
-                "DependentComponents",
-                "Components", "DataSources", "DataSources", "DataSources",
-                "DataSources", "DataSources", "DataSources",
-                "DataSources", "DataSources", "DataSources",
+                "DataSources", "DataSources",
                 "DataSources", "DataSources", "DataSources",
                 "DataSources", "DataSources", "DataSources",
                 "AvailableDataSources", "StoreSelection"
@@ -5486,14 +5434,14 @@ class SelectorTest(unittest.TestCase):
 
             self.myAssertDict(json.loads(res), {
                 "smycp": False, "smycp2": True, "smycp3": True,
-                "s2mycp": None, "s2mycp2": None, "s2mycp3": None})
+                "s2mycp": False, "s2mycp2": None, "s2mycp3": None})
             self.myAssertDict(json.loads(resd), {
                 "scalar_uchar": True, "scalar_string": True,
                 "scalar_ulong": False,
                 "scalar2_uchar": None, "scalar2_string": None,
-                "scalar2_ulong": None,
+                "scalar2_ulong": False,
             })
-            self.assertEqual(len(se.descErrors), 6)
+            self.assertEqual(len(se.descErrors), 4)
 
             # res2 =
             json.loads(self._cf.dp.GetCommandVariable("VARS"))
@@ -5566,15 +5514,15 @@ class SelectorTest(unittest.TestCase):
 
             self.myAssertDict(json.loads(res), {
                 "smycp": True, "smycp2": False, "smycp3": True,
-                "s2mycp": None, "s2mycp2": None, "s2mycp3": None})
+                "s2mycp": None, "s2mycp2": False, "s2mycp3": None})
             resd = se["DataSourcePreselection"]
             self.myAssertDict(json.loads(resd), {
                 "scalar_uchar": True, "scalar_string": True,
                 "scalar_ulong": False,
                 "scalar2_uchar": None, "scalar2_string": None,
-                "scalar2_ulong": None
+                "scalar2_ulong": False
             })
-            self.assertEqual(len(se.descErrors), 6)
+            self.assertEqual(len(se.descErrors), 4)
 
             # res2 =
             json.loads(self._cf.dp.GetCommandVariable("VARS"))
@@ -5823,16 +5771,16 @@ class SelectorTest(unittest.TestCase):
             self.myAssertDict(json.loads(res), {
                 "smycp": True, "smycp2": True, "smycp3": True,
                 "s2mycp": True, "s2mycp2": True, "s2mycp3": False,
-                "smycpnt1": None})
+                "smycpnt1": False})
             resd = se["DataSourcePreselection"]
             self.myAssertDict(json.loads(resd), {
                 "scalar_uchar": True, "scalar_string": True,
                 "scalar_ulong": False,
                 "scalar2_uchar": True, "scalar2_string": True,
                 "scalar2_ulong": False,
-                "ann3": None,
+                "ann3": False,
             })
-            self.assertEqual(len(se.descErrors), 2)
+            self.assertEqual(len(se.descErrors), 0)
 
             # res2 =
             json.loads(self._cf.dp.GetCommandVariable("VARS"))
@@ -6003,16 +5951,16 @@ class SelectorTest(unittest.TestCase):
             self.myAssertDict(json.loads(res), {
                 "smycp": False, "smycp2": True, "smycp3": True,
                 "s2mycp": True, "s2mycp2": True, "s2mycp3": False,
-                "smycpnt1": None})
+                "smycpnt1": False})
             resd = se["DataSourcePreselection"]
             self.myAssertDict(json.loads(resd), {
                 "scalar_uchar": True, "scalar_string": True,
                 "scalar_ulong": False,
                 "scalar2_uchar": True, "scalar2_string": True,
                 "scalar2_ulong": False,
-                "ann3": None,
+                "ann3": False,
             })
-            self.assertEqual(len(se.descErrors), 2)
+            self.assertEqual(len(se.descErrors), 0)
 
             # res2 =
             json.loads(self._cf.dp.GetCommandVariable("VARS"))
@@ -6407,16 +6355,16 @@ class SelectorTest(unittest.TestCase):
             self.myAssertDict(json.loads(res), {
                 "smycp": False, "smycp2": True, "smycp3": True,
                 "s2mycp": False, "s2mycp2": True, "s2mycp3": True,
-                "smycpnt1": None})
+                "smycpnt1": False})
             resd = se["DataSourcePreselection"]
             self.myAssertDict(json.loads(resd), {
                 "scalar_uchar": True, "scalar_string": True,
                 "scalar_ulong": False,
                 "scalar2_uchar": True, "scalar2_string": True,
                 "scalar2_ulong": False,
-                "ann3": None,
+                "ann3": False,
             })
-            self.assertEqual(len(se.descErrors), 2)
+            self.assertEqual(len(se.descErrors), 0)
 
             # res2 =
             json.loads(self._cf.dp.GetCommandVariable("VARS"))
@@ -6609,7 +6557,7 @@ class SelectorTest(unittest.TestCase):
             self.myAssertDict(json.loads(res), {
                 "smycp": True, "smycp2": False, "smycp3": True,
                 "s2mycp": False, "s2mycp2": True, "s2mycp3": True,
-                "smycpnt1": None})
+                "smycpnt1": False})
             resd = se["DataSourcePreselection"]
             self.myAssertDict(json.loads(resd), {
                 "scalar_uchar": True, "scalar_string": True,
@@ -6618,7 +6566,7 @@ class SelectorTest(unittest.TestCase):
                 "scalar2_ulong": False,
                 "ann3": None,
             })
-            self.assertEqual(len(se.descErrors), 2)
+            self.assertEqual(len(se.descErrors), 1)
 
             # res2 =
             json.loads(self._cf.dp.GetCommandVariable("VARS"))
@@ -7120,8 +7068,8 @@ class SelectorTest(unittest.TestCase):
 
             self.myAssertDict(json.loads(res), {
                 "smycp": False, "smycp2": True, "smycp3": True,
-                "s2mycpnt1": None})
-            self.assertEqual(len(se.descErrors), 1)
+                "s2mycpnt1": False})
+            self.assertEqual(len(se.descErrors), 0)
 
             # res2 =
             json.loads(self._cf.dp.GetCommandVariable("VARS"))
@@ -7190,8 +7138,8 @@ class SelectorTest(unittest.TestCase):
 
             self.myAssertDict(json.loads(res), {
                 "smycp": False, "smycp2": True, "smycp3": True,
-                "s2mycp": None, "s2mycp2": None, "s2mycp3": None})
-            self.assertEqual(len(se.descErrors), 3)
+                "s2mycp": False, "s2mycp2": None, "s2mycp3": None})
+            self.assertEqual(len(se.descErrors), 2)
 
             # res2 =
             json.loads(self._cf.dp.GetCommandVariable("VARS"))
