@@ -271,10 +271,13 @@ class MacroServerPools(object):
         fnames = PoolUtils.getFullDeviceNames(pools, channels)
         nonexisting = [dev for dev in channels if dev not in fnames.keys()]
 
-        toCheck = self.__toCheck(configdevice, discomponentgroup,
-                                 componentgroup.keys(),
-                                 datasourcegroup.keys(),
-                                 channels, nonexisting)
+        toCheck = self.__toCheck(
+            configdevice, discomponentgroup,
+            [cp for cp in componentgroup.keys()
+             if componentgroup[cp] is not False],
+            [ds for ds in datasourcegroup.keys()
+             if datasourcegroup[ds] is not False],
+            channels, nonexisting)
 
         cqueue = Queue.Queue()
         for checkeritem in toCheck:
