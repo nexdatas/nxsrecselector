@@ -200,7 +200,7 @@ class MultiTestServerSetUp(object):
     def add(self):
         db = PyTango.Database()
 
-        devices = self.ts.values()
+        devices = list(self.ts.values())
         for dv in devices:
             db.add_device(dv)
             # print dv.name
@@ -223,7 +223,7 @@ class MultiTestServerSetUp(object):
 
         found = False
         cnt = 0
-        devices = self.ts.values()
+        devices = list(self.ts.values())
         while not found and cnt < 1000:
             try:
                 sys.stdout.write(".")

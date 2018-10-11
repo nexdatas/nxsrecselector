@@ -106,12 +106,12 @@ class ConverterTest(unittest.TestCase):
         #     print "NOT DICT", type(dct2), dct2
         #     print "DICT", type(dct), dct
         self.assertTrue(isinstance(dct2, dict))
-        logger.debug("%s %s" % (len(dct.keys()), len(dct2.keys())))
+        logger.debug("%s %s" % (len(list(dct.keys())), len(list(dct2.keys()))))
         # if set(dct.keys()) ^ set(dct2.keys()):
         #     print 'DCT', dct.keys()
         #     print 'DCT2', dct2.keys()
         #     print "DIFF", set(dct.keys()) ^ set(dct2.keys())
-        self.assertEqual(len(dct.keys()), len(dct2.keys()))
+        self.assertEqual(len(list(dct.keys())), len(list(dct2.keys())))
         for k, v in dct.items():
             logger.debug("%s  in %s" % (str(k), str(dct2.keys())))
             self.assertTrue(k in dct2.keys())
@@ -306,8 +306,8 @@ class ConverterTest(unittest.TestCase):
                     names.pop(k)
             res = set(names.keys())
             for ll in lk:
-                res.update(ll.names.keys())
-                res.update(ll.names.values())
+                res.update(set(ll.names.keys()))
+                res.update(set(ll.names.values()))
             self.assertEqual(cv.allkeys(names), res)
 
 

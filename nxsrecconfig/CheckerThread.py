@@ -19,10 +19,17 @@
 
 """  Component CheckerThread - thread which checks tango server attributes"""
 
-import Queue
 import PyTango
 import threading
+import sys
+
 from .Utils import TangoUtils
+
+if sys.version_info > (3,):
+    import queue as Queue
+else:
+    import Queue
+
 
 #: (:obj:`list` < :obj:`str`>) default attributes to check
 ATTRIBUTESTOCHECK = ["Value", "Position", "Counts", "Data",

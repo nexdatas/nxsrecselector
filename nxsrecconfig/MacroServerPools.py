@@ -21,7 +21,6 @@
 
 import json
 import PyTango
-import Queue
 import pickle
 import sys
 
@@ -29,6 +28,10 @@ from .Utils import Utils, TangoUtils, MSUtils, PoolUtils
 from .Describer import Describer
 from .CheckerThread import CheckerThread, TangoDSItem, CheckerItem
 
+if sys.version_info > (3,):
+    import queue as Queue
+else:
+    import Queue
 
 if sys.version_info > (3,):
     unicode = str

@@ -21,6 +21,7 @@
 
 import xml.dom.minidom
 import json
+import sys
 import PyTango
 
 from .Utils import Utils, TangoUtils, PoolUtils
@@ -288,7 +289,11 @@ class DynamicComponent(object):
                     dsource = TangoUtils.command(
                         self.__nexusconfig_device, "dataSources",
                         [str(ds)])
-                    indom = xml.dom.minidom.parseString(dsource[0])
+                    if sys.version_info > (3,):
+                        indom = xml.dom.minidom.parseString(
+                            bytes(dsource[0], "UTF-8"))
+                    else:
+                        indom = xml.dom.minidom.parseString(dsource[0])
                     dss = indom.getElementsByTagName("datasource")
                     if dss and shape is None:
                         shape, nxtype = self.__shapeFromTango(dss[0])

@@ -20,6 +20,7 @@
 """  Component Describer """
 
 import re
+import sys
 import json
 import PyTango
 import xml.dom.minidom
@@ -359,7 +360,11 @@ class Describer(object):
         dslist = []
         result = ""
         label = 'datasources'
-        indom = xml.dom.minidom.parseString(dsxml)
+
+        if sys.version_info > (3,):
+            indom = xml.dom.minidom.parseString(bytes(dsxml, "UTF-8"))
+        else:
+            indom = xml.dom.minidom.parseString(dsxml)
         cnode = indom.getElementsByTagName("datasource")[0]
         for child in cnode.childNodes:
             if child.nodeName == 'result':
@@ -481,7 +486,10 @@ class Describer(object):
         dss = ExDSDict()
 
         for cpxml in cpxmls:
-            indom = xml.dom.minidom.parseString(cpxml)
+            if sys.version_info > (3,):
+                indom = xml.dom.minidom.parseString(bytes(cpxml, "UTF-8"))
+            else:
+                indom = xml.dom.minidom.parseString(cpxml)
             strategy = indom.getElementsByTagName("strategy")
 
             for sg in strategy:
@@ -601,7 +609,10 @@ class Describer(object):
         except (PyTango.DevFailed, PyTango.Except, PyTango.DevError):
             dsource = []
         if len(dsource) > 0:
-            indom = xml.dom.minidom.parseString(dsource[0])
+            if sys.version_info > (3,):
+                indom = xml.dom.minidom.parseString(bytes(dsource[0], "UTF-8"))
+            else:
+                indom = xml.dom.minidom.parseString(dsource[0])
             dss = indom.getElementsByTagName("datasource")
             for ds in dss:
                 if ds.nodeName == 'datasource':

@@ -204,7 +204,7 @@ def main():
 
     print(options.args)
     if not options.args or 'all' in options.args:
-        options.args = namesuite.keys()
+        options.args = list(namesuite.keys())
 
     ts = []
     for nm in options.args:

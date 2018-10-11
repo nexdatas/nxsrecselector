@@ -132,7 +132,7 @@ class SelectionTest(unittest.TestCase):
         print("Run: %s.%s() " % (self.__class__.__name__, fun))
         el = Selection(Version=self.__version)
         self.assertTrue(isinstance(el, dict))
-        self.assertEqual(len(el.keys()), len(self._keys))
+        self.assertEqual(len(list(el.keys())), len(list(self._keys)))
         for key, vl in self._keys:
             self.assertTrue(key in el.keys())
             self.assertEqual(el[key], vl)
@@ -144,10 +144,10 @@ class SelectionTest(unittest.TestCase):
         print("Run: %s.%s() " % (self.__class__.__name__, fun))
         el = Selection(Version=self.__version)
         el.clear()
-        self.assertEqual(len(el.keys()), 0)
+        self.assertEqual(len(list(el.keys())), 0)
         el.reset()
         self.assertTrue(isinstance(el, dict))
-        self.assertEqual(len(el.keys()), len(self._keys))
+        self.assertEqual(len(list(el.keys())), len(self._keys))
         for key, vl in self._keys:
             self.assertTrue(key in el.keys())
             self.assertEqual(el[key], vl)
@@ -164,7 +164,7 @@ class SelectionTest(unittest.TestCase):
         for i in range(20):
             el = Selection(Version=self.__version)
             el.deselect()
-            self.assertEqual(len(el.keys()), len(self._keys))
+            self.assertEqual(len(list(el.keys())), len(self._keys))
             for key, vl in self._keys:
                 self.assertTrue(key in el.keys())
                 self.assertEqual(el[key], vl)
@@ -216,7 +216,7 @@ class SelectionTest(unittest.TestCase):
         for i in range(20):
             el = Selection(Version=self.__version)
             el.updatePreselectingDataSources(None)
-            self.assertEqual(len(el.keys()), len(self._keys))
+            self.assertEqual(len(list(el.keys())), len(self._keys))
             for key, vl in self._keys:
                 self.assertTrue(key in el.keys())
                 self.assertEqual(el[key], vl)
@@ -251,7 +251,7 @@ class SelectionTest(unittest.TestCase):
         for i in range(20):
             el = Selection(Version=self.__version)
             el.updateOrderedChannels([])
-            self.assertEqual(len(el.keys()), len(self._keys))
+            self.assertEqual(len(list(el.keys())), len(self._keys))
             for key, vl in self._keys:
                 self.assertTrue(key in el.keys())
                 self.assertEqual(el[key], vl)
@@ -298,7 +298,7 @@ class SelectionTest(unittest.TestCase):
         for i in range(20):
             el = Selection(Version=self.__version)
             el.deselect()
-            self.assertEqual(len(el.keys()), len(self._keys))
+            self.assertEqual(len(list(el.keys())), len(self._keys))
             for key, vl in self._keys:
                 self.assertTrue(key in el.keys())
                 self.assertEqual(el[key], vl)
@@ -339,7 +339,7 @@ class SelectionTest(unittest.TestCase):
         for i in range(20):
             el = Selection(Version=self.__version)
             el.deselect()
-            self.assertEqual(len(el.keys()), len(self._keys))
+            self.assertEqual(len(list(el.keys())), len(self._keys))
             for key, vl in self._keys:
                 self.assertTrue(key in el.keys())
                 self.assertEqual(el[key], vl)
@@ -377,7 +377,7 @@ class SelectionTest(unittest.TestCase):
         print("Run: %s.%s() " % (self.__class__.__name__, fun))
         el = Selection(Version=self.__version)
         el.deselect()
-        self.assertEqual(len(el.keys()), len(self._keys))
+        self.assertEqual(len(list(el.keys())), len(self._keys))
         for key, vl in self._keys:
             self.assertTrue(key in el.keys())
             self.assertEqual(el[key], vl)
@@ -410,7 +410,7 @@ class SelectionTest(unittest.TestCase):
         print("Run: %s.%s() " % (self.__class__.__name__, fun))
         el = Selection(Version=self.__version)
         el.deselect()
-        self.assertEqual(len(el.keys()), len(self._keys))
+        self.assertEqual(len(list(el.keys())), len(self._keys))
         for key, vl in self._keys:
             self.assertTrue(key in el.keys())
             self.assertEqual(el[key], vl)
@@ -443,7 +443,7 @@ class SelectionTest(unittest.TestCase):
         print("Run: %s.%s() " % (self.__class__.__name__, fun))
         for i in range(20):
             el = Selection(Version=self.__version)
-            self.assertEqual(len(el.keys()), len(self._keys))
+            self.assertEqual(len(list(el.keys())), len(self._keys))
             for key, vl in self._keys:
                 self.assertTrue(key in el.keys())
                 self.assertEqual(el[key], vl)

@@ -821,7 +821,10 @@ class Settings(object):
                     pass
         lst = []
         for ds, dsxml in dsxmls.items():
-            indom = xml.dom.minidom.parseString(dsxml)
+            if sys.version_info > (3,):
+                indom = xml.dom.minidom.parseString(bytes(dsxml, "UTF-8"))
+            else:
+                indom = xml.dom.minidom.parseString(dsxml)
             nodes = indom.getElementsByTagName("datasource")
             if nodes:
                 record = Utils.getRecord(nodes[0])

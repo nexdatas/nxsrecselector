@@ -998,8 +998,8 @@ class MacroServerPoolsTest(unittest.TestCase):
         logger.debug("\n%s\n%s" % (dct, dct2))
         self.assertTrue(isinstance(dct, dict))
         self.assertTrue(isinstance(dct2, dict))
-        logger.debug("%s %s" % (len(dct.keys()), len(dct2.keys())))
-        self.assertEqual(len(dct.keys()), len(dct2.keys()))
+        logger.debug("%s %s" % (len(list(dct.keys())), len(list(dct2.keys()))))
+        self.assertEqual(len(list(dct.keys())), len(list(dct2.keys())))
         for k, v in dct.items():
             logger.debug("%s  in %s" % (str(k), str(dct2.keys())))
             self.assertTrue(k in dct2.keys())
@@ -1032,11 +1032,11 @@ class MacroServerPoolsTest(unittest.TestCase):
         self.myAssertRaise(Exception, msp.getMacroServer, "")
         self.myAssertRaise(Exception, msp.getPools, "")
 
-        msp.updateMacroServer(self._ms.door.keys()[0])
-        self.assertEqual(msp.getMacroServer(""), self._ms.ms.keys()[0])
-        self.assertEqual(msp.getMacroServer(self._ms.door.keys()[0]),
-                         self._ms.ms.keys()[0])
-        self.assertEqual(msp.getPools(self._ms.door.keys()[0]), [])
+        msp.updateMacroServer(list(self._ms.door.keys())[0])
+        self.assertEqual(msp.getMacroServer(""), list(self._ms.ms.keys())[0])
+        self.assertEqual(msp.getMacroServer(list(self._ms.door.keys())[0]),
+                         list(self._ms.ms.keys())[0])
+        self.assertEqual(msp.getPools(list(self._ms.door.keys())[0]), [])
         self.myAssertRaise(Exception, msp.getPools, "")
 
         self.myAssertRaise(Exception, msp.updateMacroServer,
@@ -1045,13 +1045,14 @@ class MacroServerPoolsTest(unittest.TestCase):
         self.myAssertRaise(Exception, msp.getMacroServer, "")
         self.myAssertRaise(Exception, msp.getPools, "")
 
-        self.assertEqual(msp.getPools(self._ms.door.keys()[0]), [])
+        self.assertEqual(msp.getPools(list(self._ms.door.keys())[0]), [])
 
-        self._ms.dps[self._ms.ms.keys()[0]].DoorList = []
+        self._ms.dps[list(self._ms.ms.keys())[0]].DoorList = []
         self.myAssertRaise(Exception, msp.updateMacroServer,
-                           self._ms.door.keys()[0])
+                           list(self._ms.door.keys())[0])
         self.myAssertRaise(Exception, msp.getMacroServer, "")
-        self.myAssertRaise(Exception, msp.getPools, self._ms.door.keys()[0])
+        self.myAssertRaise(Exception,
+                           msp.getPools, list(self._ms.door.keys())[0])
 
     # constructor test
     # \brief It tests default settings
@@ -1060,9 +1061,9 @@ class MacroServerPoolsTest(unittest.TestCase):
         print("Run: %s.%s() " % (self.__class__.__name__, fun))
         msp = MacroServerPools(10)
         db = PyTango.Database()
-        db.put_device_property(self._ms.ms.keys()[0],
+        db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
         self.myAssertRaise(Exception, msp.updateMacroServer,
                            "sfdsTESTdfdf/sdfsdf/sdffsf")
@@ -1070,11 +1071,11 @@ class MacroServerPoolsTest(unittest.TestCase):
         self.myAssertRaise(Exception, msp.getMacroServer, "")
         self.myAssertRaise(Exception, msp.getPools, "")
 
-        msp.updateMacroServer(self._ms.door.keys()[0])
-        self.assertEqual(msp.getMacroServer(""), self._ms.ms.keys()[0])
-        self.assertEqual(msp.getMacroServer(self._ms.door.keys()[0]),
-                         self._ms.ms.keys()[0])
-        pools = msp.getPools(self._ms.door.keys()[0])
+        msp.updateMacroServer(list(self._ms.door.keys())[0])
+        self.assertEqual(msp.getMacroServer(""), list(self._ms.ms.keys())[0])
+        self.assertEqual(msp.getMacroServer(list(self._ms.door.keys())[0]),
+                         list(self._ms.ms.keys())[0])
+        pools = msp.getPools(list(self._ms.door.keys())[0])
         self.assertEqual(len(pools), 1)
         self.assertTrue(isinstance(pools[0], PyTango.DeviceProxy))
         self.assertEqual(pools[0].name(), self._pool.dp.name())
@@ -1089,7 +1090,7 @@ class MacroServerPoolsTest(unittest.TestCase):
         self.myAssertRaise(Exception, msp.updateMacroServer, "")
         self.myAssertRaise(Exception, msp.getMacroServer, "")
 
-        pools = msp.getPools(self._ms.door.keys()[0])
+        pools = msp.getPools(list(self._ms.door.keys())[0])
         self.assertEqual(len(pools), 1)
         self.assertTrue(isinstance(pools[0], PyTango.DeviceProxy))
         self.assertEqual(pools[0].name(), self._pool.dp.name())
@@ -1099,13 +1100,14 @@ class MacroServerPoolsTest(unittest.TestCase):
         self.assertTrue(isinstance(pools[0], PyTango.DeviceProxy))
         self.assertEqual(pools[0].name(), self._pool.dp.name())
 
-        self._ms.dps[self._ms.ms.keys()[0]].DoorList = []
+        self._ms.dps[list(self._ms.ms.keys())[0]].DoorList = []
         self.myAssertRaise(Exception, msp.updateMacroServer,
-                           self._ms.door.keys()[0])
+                           list(self._ms.door.keys())[0])
         self.myAssertRaise(Exception, msp.getMacroServer, "")
         self.myAssertRaise(Exception, msp.getPools, "")
 
-        self.myAssertRaise(Exception, msp.getPools, self._ms.door.keys()[0])
+        self.myAssertRaise(Exception,
+                           msp.getPools, list(self._ms.door.keys())[0])
 
     # constructor test
     # \brief It tests default settings
@@ -1124,12 +1126,12 @@ class MacroServerPoolsTest(unittest.TestCase):
 
             msp = MacroServerPools(10)
             db = PyTango.Database()
-            db.put_device_property(ms2.ms.keys()[0],
+            db.put_device_property(list(ms2.ms.keys())[0],
                                    {'PoolNames': self._pool.dp.name()})
-            ms2.dps[ms2.ms.keys()[0]].Init()
+            ms2.dps[list(ms2.ms.keys())[0]].Init()
 
             for i in range(3):
-                ms2.dps[ms2.ms.keys()[0]].DoorList = doors
+                ms2.dps[list(ms2.ms.keys())[0]].DoorList = doors
                 # print "doors", doors[i]
                 self.myAssertRaise(Exception, msp.updateMacroServer,
                                    "sfdsTESTdfdf/sdfsdf/sdffsf")
@@ -1138,9 +1140,10 @@ class MacroServerPoolsTest(unittest.TestCase):
                 self.myAssertRaise(Exception, msp.getPools, "")
                 # print doors[i]
                 msp.updateMacroServer(doors[i])
-                self.assertEqual(msp.getMacroServer(""), ms2.ms.keys()[0])
+                self.assertEqual(
+                    msp.getMacroServer(""), list(ms2.ms.keys())[0])
                 self.assertEqual(msp.getMacroServer(doors[i]),
-                                 ms2.ms.keys()[0])
+                                 list(ms2.ms.keys())[0])
                 pools = msp.getPools(doors[i])
                 self.assertEqual(len(pools), 1)
                 self.assertTrue(isinstance(pools[0], PyTango.DeviceProxy))
@@ -1166,7 +1169,7 @@ class MacroServerPoolsTest(unittest.TestCase):
                 self.assertTrue(isinstance(pools[0], PyTango.DeviceProxy))
                 self.assertEqual(pools[0].name(), self._pool.dp.name())
 
-                ms2.dps[ms2.ms.keys()[0]].DoorList = []
+                ms2.dps[list(ms2.ms.keys())[0]].DoorList = []
                 self.myAssertRaise(Exception, msp.updateMacroServer, doors[i])
                 self.myAssertRaise(Exception, msp.getMacroServer, "")
                 self.myAssertRaise(Exception, msp.getPools, "")
@@ -1257,7 +1260,7 @@ class MacroServerPoolsTest(unittest.TestCase):
         datasourcegroup = {}
         self.myAssertRaise(Exception, msp.checkChannels,
                            None, None, None, None, None)
-        res, res2 = msp.checkChannels(self._ms.door.keys()[0],
+        res, res2 = msp.checkChannels(list(self._ms.door.keys())[0],
                                       self._cf.dp,
                                       poolchannels,
                                       componentgroup,
@@ -1288,7 +1291,7 @@ class MacroServerPoolsTest(unittest.TestCase):
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
 
-        res, res2 = msp.checkChannels(self._ms.door.keys()[0],
+        res, res2 = msp.checkChannels(list(self._ms.door.keys())[0],
                                       self._cf.dp,
                                       poolchannels,
                                       componentgroup,
@@ -1324,7 +1327,7 @@ class MacroServerPoolsTest(unittest.TestCase):
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
 
-        res, res2 = msp.checkChannels(self._ms.door.keys()[0],
+        res, res2 = msp.checkChannels(list(self._ms.door.keys())[0],
                                       self._cf.dp,
                                       poolchannels,
                                       componentgroup,
@@ -1363,7 +1366,7 @@ class MacroServerPoolsTest(unittest.TestCase):
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
 
-        res, res2 = msp.checkChannels(self._ms.door.keys()[0],
+        res, res2 = msp.checkChannels(list(self._ms.door.keys())[0],
                                       self._cf.dp,
                                       poolchannels,
                                       componentgroup,
@@ -1402,7 +1405,7 @@ class MacroServerPoolsTest(unittest.TestCase):
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
 
-        res, res2 = msp.checkChannels(self._ms.door.keys()[0],
+        res, res2 = msp.checkChannels(list(self._ms.door.keys())[0],
                                       self._cf.dp,
                                       poolchannels,
                                       componentgroup,
@@ -1439,7 +1442,7 @@ class MacroServerPoolsTest(unittest.TestCase):
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
 
-        res, res2 = msp.checkChannels(self._ms.door.keys()[0],
+        res, res2 = msp.checkChannels(list(self._ms.door.keys())[0],
                                       self._cf.dp,
                                       poolchannels,
                                       datasourcegroup,
@@ -1476,7 +1479,7 @@ class MacroServerPoolsTest(unittest.TestCase):
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
 
-        res, res2 = msp.checkChannels(self._ms.door.keys()[0],
+        res, res2 = msp.checkChannels(list(self._ms.door.keys())[0],
                                       self._cf.dp,
                                       poolchannels,
                                       componentgroup,
@@ -1515,7 +1518,7 @@ class MacroServerPoolsTest(unittest.TestCase):
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
 
-        res, res2 = msp.checkChannels(self._ms.door.keys()[0],
+        res, res2 = msp.checkChannels(list(self._ms.door.keys())[0],
                                       self._cf.dp,
                                       poolchannels,
                                       componentgroup,
@@ -1554,7 +1557,7 @@ class MacroServerPoolsTest(unittest.TestCase):
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
 
-        res, res2 = msp.checkChannels(self._ms.door.keys()[0],
+        res, res2 = msp.checkChannels(list(self._ms.door.keys())[0],
                                       self._cf.dp,
                                       poolchannels,
                                       componentgroup,
@@ -1589,7 +1592,7 @@ class MacroServerPoolsTest(unittest.TestCase):
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.smycps)])
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
 
-        res, res2 = msp.checkChannels(self._ms.door.keys()[0],
+        res, res2 = msp.checkChannels(list(self._ms.door.keys())[0],
                                       self._cf.dp,
                                       poolchannels,
                                       componentgroup,
@@ -1629,7 +1632,7 @@ class MacroServerPoolsTest(unittest.TestCase):
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.smycps)])
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
 
-        res, res2 = msp.checkChannels(self._ms.door.keys()[0],
+        res, res2 = msp.checkChannels(list(self._ms.door.keys())[0],
                                       self._cf.dp,
                                       poolchannels,
                                       componentgroup,
@@ -1660,7 +1663,7 @@ class MacroServerPoolsTest(unittest.TestCase):
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.smycps)])
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
 
-        res, res2 = msp.checkChannels(self._ms.door.keys()[0],
+        res, res2 = msp.checkChannels(list(self._ms.door.keys())[0],
                                       self._cf.dp,
                                       poolchannels,
                                       componentgroup,
@@ -1689,7 +1692,7 @@ class MacroServerPoolsTest(unittest.TestCase):
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.smycps)])
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
 
-        res, res2 = msp.checkChannels(self._ms.door.keys()[0],
+        res, res2 = msp.checkChannels(list(self._ms.door.keys())[0],
                                       self._cf.dp,
                                       poolchannels,
                                       componentgroup,
@@ -1725,7 +1728,7 @@ class MacroServerPoolsTest(unittest.TestCase):
             self._cf.dp.SetCommandVariable(
                 ["DSDICT", json.dumps(self.smydss2)])
 
-            res, res2 = msp.checkChannels(self._ms.door.keys()[0],
+            res, res2 = msp.checkChannels(list(self._ms.door.keys())[0],
                                           self._cf.dp,
                                           poolchannels,
                                           componentgroup,
@@ -1758,7 +1761,7 @@ class MacroServerPoolsTest(unittest.TestCase):
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.smycps)])
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
 
-        res, res2 = msp.checkChannels(self._ms.door.keys()[0],
+        res, res2 = msp.checkChannels(list(self._ms.door.keys())[0],
                                       self._cf.dp,
                                       poolchannels,
                                       componentgroup,
@@ -1798,7 +1801,7 @@ class MacroServerPoolsTest(unittest.TestCase):
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.smycps)])
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
 
-        res, res2 = msp.checkChannels(self._ms.door.keys()[0],
+        res, res2 = msp.checkChannels(list(self._ms.door.keys())[0],
                                       self._cf.dp,
                                       poolchannels,
                                       componentgroup,
@@ -1835,7 +1838,7 @@ class MacroServerPoolsTest(unittest.TestCase):
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.smycps)])
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
 
-        res, res2 = msp.checkChannels(self._ms.door.keys()[0],
+        res, res2 = msp.checkChannels(list(self._ms.door.keys())[0],
                                       self._cf.dp,
                                       poolchannels,
                                       componentgroup,
@@ -1896,7 +1899,7 @@ class MacroServerPoolsTest(unittest.TestCase):
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
     #        print "MDSS", self._cf.dp.availableDataSources()
     #        print "XDSS", self._cf.dp.dataSources(["scalar_long"])
-            res, res2 = msp.checkChannels(self._ms.door.keys()[0],
+            res, res2 = msp.checkChannels(list(self._ms.door.keys())[0],
                                           self._cf.dp,
                                           poolchannels,
                                           componentgroup,
@@ -1977,7 +1980,7 @@ class MacroServerPoolsTest(unittest.TestCase):
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
     #        print "MDSS", self._cf.dp.availableDataSources()
     #        print "XDSS", self._cf.dp.dataSources(["scalar_long"])
-            res, res2 = msp.checkChannels(self._ms.door.keys()[0],
+            res, res2 = msp.checkChannels(list(self._ms.door.keys())[0],
                                           self._cf.dp,
                                           poolchannels,
                                           componentgroup,
@@ -2041,7 +2044,7 @@ class MacroServerPoolsTest(unittest.TestCase):
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
     #        print "MDSS", self._cf.dp.availableDataSources()
     #        print "XDSS", self._cf.dp.dataSources(["scalar_long"])
-            res, res2 = msp.checkChannels(self._ms.door.keys()[0],
+            res, res2 = msp.checkChannels(list(self._ms.door.keys())[0],
                                           self._cf.dp,
                                           poolchannels,
                                           componentgroup,
@@ -2111,7 +2114,7 @@ class MacroServerPoolsTest(unittest.TestCase):
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
     #        print "MDSS", self._cf.dp.availableDataSources()
     #        print "XDSS", self._cf.dp.dataSources(["scalar_long"])
-            res, res2 = msp.checkChannels(self._ms.door.keys()[0],
+            res, res2 = msp.checkChannels(list(self._ms.door.keys())[0],
                                           self._cf.dp,
                                           poolchannels,
                                           componentgroup,
@@ -2163,7 +2166,7 @@ class MacroServerPoolsTest(unittest.TestCase):
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
     #        print "MDSS", self._cf.dp.availableDataSources()
     #        print "XDSS", self._cf.dp.dataSources(["scalar_long"])
-            res, res2 = msp.checkChannels(self._ms.door.keys()[0],
+            res, res2 = msp.checkChannels(list(self._ms.door.keys())[0],
                                           self._cf.dp,
                                           poolchannels,
                                           componentgroup,
@@ -2215,7 +2218,7 @@ class MacroServerPoolsTest(unittest.TestCase):
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
     #        print "MDSS", self._cf.dp.availableDataSources()
     #        print "XDSS", self._cf.dp.dataSources(["scalar_long"])
-            res, res2 = msp.checkChannels(self._ms.door.keys()[0],
+            res, res2 = msp.checkChannels(list(self._ms.door.keys())[0],
                                           self._cf.dp,
                                           poolchannels,
                                           componentgroup,
@@ -2267,7 +2270,7 @@ class MacroServerPoolsTest(unittest.TestCase):
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
     #        print "MDSS", self._cf.dp.availableDataSources()
     #        print "XDSS", self._cf.dp.dataSources(["scalar_long"])
-            res, res2 = msp.checkChannels(self._ms.door.keys()[0],
+            res, res2 = msp.checkChannels(list(self._ms.door.keys())[0],
                                           self._cf.dp,
                                           poolchannels,
                                           componentgroup,
@@ -2320,7 +2323,7 @@ class MacroServerPoolsTest(unittest.TestCase):
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
     #        print "MDSS", self._cf.dp.availableDataSources()
     #        print "XDSS", self._cf.dp.dataSources(["scalar_long"])
-            res, res2 = msp.checkChannels(self._ms.door.keys()[0],
+            res, res2 = msp.checkChannels(list(self._ms.door.keys())[0],
                                           self._cf.dp,
                                           poolchannels,
                                           componentgroup,
@@ -2372,7 +2375,7 @@ class MacroServerPoolsTest(unittest.TestCase):
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
     #        print "MDSS", self._cf.dp.availableDataSources()
     #        print "XDSS", self._cf.dp.dataSources(["scalar_long"])
-            res, res2 = msp.checkChannels(self._ms.door.keys()[0],
+            res, res2 = msp.checkChannels(list(self._ms.door.keys())[0],
                                           self._cf.dp,
                                           poolchannels,
                                           componentgroup,
@@ -2425,7 +2428,7 @@ class MacroServerPoolsTest(unittest.TestCase):
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
 #        print "MDSS", self._cf.dp.availableDataSources()
 #        print "XDSS", self._cf.dp.dataSources(["scalar_long"])
-        res, res2 = msp.checkChannels(self._ms.door.keys()[0],
+        res, res2 = msp.checkChannels(list(self._ms.door.keys())[0],
                                       self._cf.dp,
                                       poolchannels,
                                       componentgroup,
@@ -2495,7 +2498,7 @@ class MacroServerPoolsTest(unittest.TestCase):
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
     #        print "MDSS", self._cf.dp.availableDataSources()
     #        print "XDSS", self._cf.dp.dataSources(["scalar_long"])
-            res, res2 = msp.checkChannels(self._ms.door.keys()[0],
+            res, res2 = msp.checkChannels(list(self._ms.door.keys())[0],
                                           self._cf.dp,
                                           poolchannels,
                                           componentgroup,
@@ -2555,7 +2558,7 @@ class MacroServerPoolsTest(unittest.TestCase):
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
             #        print "MDSS", self._cf.dp.availableDataSources()
             #        print "XDSS", self._cf.dp.dataSources(["scalar_long"])
-            res, res2 = msp.checkChannels(self._ms.door.keys()[0],
+            res, res2 = msp.checkChannels(list(self._ms.door.keys())[0],
                                           self._cf.dp,
                                           poolchannels,
                                           componentgroup,
@@ -2617,7 +2620,7 @@ class MacroServerPoolsTest(unittest.TestCase):
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
     #        print "MDSS", self._cf.dp.availableDataSources()
     #        print "XDSS", self._cf.dp.dataSources(["scalar_long"])
-            res, res2 = msp.checkChannels(self._ms.door.keys()[0],
+            res, res2 = msp.checkChannels(list(self._ms.door.keys())[0],
                                           self._cf.dp,
                                           poolchannels,
                                           componentgroup,
@@ -2681,7 +2684,7 @@ class MacroServerPoolsTest(unittest.TestCase):
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
     #        print "MDSS", self._cf.dp.availableDataSources()
     #        print "XDSS", self._cf.dp.dataSources(["scalar_long"])
-            res, res2 = msp.checkChannels(self._ms.door.keys()[0],
+            res, res2 = msp.checkChannels(list(self._ms.door.keys())[0],
                                           self._cf.dp,
                                           poolchannels,
                                           componentgroup,
@@ -2745,7 +2748,7 @@ class MacroServerPoolsTest(unittest.TestCase):
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
     #        print "MDSS", self._cf.dp.availableDataSources()
     #        print "XDSS", self._cf.dp.dataSources(["scalar_long"])
-            res, res2 = msp.checkChannels(self._ms.door.keys()[0],
+            res, res2 = msp.checkChannels(list(self._ms.door.keys())[0],
                                           self._cf.dp,
                                           poolchannels,
                                           componentgroup,
@@ -2785,7 +2788,7 @@ class MacroServerPoolsTest(unittest.TestCase):
             simps2.setUp()
             msp = MacroServerPools(10)
             db = PyTango.Database()
-            db.put_device_property(self._ms.ms.keys()[0],
+            db.put_device_property(list(self._ms.ms.keys())[0],
                                    {'PoolNames': self._pool.dp.name()})
             channelerrors = []
             poolchannels = ["scalar2_long", "spectrum2_short", "client_long",
@@ -2810,12 +2813,12 @@ class MacroServerPoolsTest(unittest.TestCase):
 
             self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
-            msp.updateMacroServer(self._ms.door.keys()[0])
+            msp.updateMacroServer(list(self._ms.door.keys())[0])
             # pools =
-            msp.getPools(self._ms.door.keys()[0])
+            msp.getPools(list(self._ms.door.keys())[0])
             # print "POOLS", pools
 
-            res, res2 = msp.checkChannels(self._ms.door.keys()[0],
+            res, res2 = msp.checkChannels(list(self._ms.door.keys())[0],
                                           self._cf.dp,
                                           poolchannels,
                                           componentgroup,
@@ -2855,7 +2858,7 @@ class MacroServerPoolsTest(unittest.TestCase):
             simps2.setUp()
             msp = MacroServerPools(10)
             db = PyTango.Database()
-            db.put_device_property(self._ms.ms.keys()[0],
+            db.put_device_property(list(self._ms.ms.keys())[0],
                                    {'PoolNames': self._pool.dp.name()})
             channelerrors = []
             poolchannels = ["scalar2_long", "spectrum2_short", "client_long",
@@ -2880,12 +2883,12 @@ class MacroServerPoolsTest(unittest.TestCase):
 
             self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
-            msp.updateMacroServer(self._ms.door.keys()[0])
+            msp.updateMacroServer(list(self._ms.door.keys())[0])
             # pools =
-            msp.getPools(self._ms.door.keys()[0])
+            msp.getPools(list(self._ms.door.keys())[0])
             # print "POOLS", pools
 
-            res, res2 = msp.checkChannels(self._ms.door.keys()[0],
+            res, res2 = msp.checkChannels(list(self._ms.door.keys())[0],
                                           self._cf.dp,
                                           poolchannels,
                                           componentgroup,
@@ -2932,7 +2935,7 @@ class MacroServerPoolsTest(unittest.TestCase):
             simps2.setUp()
             msp = MacroServerPools(10)
             db = PyTango.Database()
-            db.put_device_property(self._ms.ms.keys()[0],
+            db.put_device_property(list(self._ms.ms.keys())[0],
                                    {'PoolNames': self._pool.dp.name()})
             channelerrors = []
             poolchannels = []
@@ -2956,12 +2959,12 @@ class MacroServerPoolsTest(unittest.TestCase):
 
             self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
-            msp.updateMacroServer(self._ms.door.keys()[0])
-            pools = msp.getPools(self._ms.door.keys()[0])
+            msp.updateMacroServer(list(self._ms.door.keys())[0])
+            pools = msp.getPools(list(self._ms.door.keys())[0])
             pools[0].AcqChannelList = [json.dumps(a) for a in arr]
             # print "POOLS", pools
 
-            res, res2 = msp.checkChannels(self._ms.door.keys()[0],
+            res, res2 = msp.checkChannels(list(self._ms.door.keys())[0],
                                           self._cf.dp,
                                           poolchannels,
                                           componentgroup,
@@ -3006,7 +3009,7 @@ class MacroServerPoolsTest(unittest.TestCase):
             simps2.setUp()
             msp = MacroServerPools(10)
             db = PyTango.Database()
-            db.put_device_property(self._ms.ms.keys()[0],
+            db.put_device_property(list(self._ms.ms.keys())[0],
                                    {'PoolNames': self._pool.dp.name()})
             channelerrors = []
             poolchannels = []
@@ -3030,12 +3033,12 @@ class MacroServerPoolsTest(unittest.TestCase):
 
             self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
-            msp.updateMacroServer(self._ms.door.keys()[0])
-            pools = msp.getPools(self._ms.door.keys()[0])
+            msp.updateMacroServer(list(self._ms.door.keys())[0])
+            pools = msp.getPools(list(self._ms.door.keys())[0])
             pools[0].AcqChannelList = [json.dumps(a) for a in arr]
             # print "POOLS", pools
 
-            res, res2 = msp.checkChannels(self._ms.door.keys()[0],
+            res, res2 = msp.checkChannels(list(self._ms.door.keys())[0],
                                           self._cf.dp,
                                           poolchannels,
                                           componentgroup,
@@ -3080,7 +3083,7 @@ class MacroServerPoolsTest(unittest.TestCase):
             simps2.setUp()
             msp = MacroServerPools(10)
             db = PyTango.Database()
-            db.put_device_property(self._ms.ms.keys()[0],
+            db.put_device_property(list(self._ms.ms.keys())[0],
                                    {'PoolNames': self._pool.dp.name()})
             channelerrors = []
             poolchannels = ["scalar2_long", "spectrum2_short", "client_long",
@@ -3109,12 +3112,12 @@ class MacroServerPoolsTest(unittest.TestCase):
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
     #        print "MDSS", self._cf.dp.availableDataSources()
     #        print "XDSS", self._cf.dp.dataSources(["scalar_long"])
-            msp.updateMacroServer(self._ms.door.keys()[0])
-            pools = msp.getPools(self._ms.door.keys()[0])
+            msp.updateMacroServer(list(self._ms.door.keys())[0])
+            pools = msp.getPools(list(self._ms.door.keys())[0])
             pools[0].AcqChannelList = [json.dumps(a) for a in arr]
             # print "POOLS", pools
 
-            res, res2 = msp.checkChannels(self._ms.door.keys()[0],
+            res, res2 = msp.checkChannels(list(self._ms.door.keys())[0],
                                           self._cf.dp,
                                           poolchannels,
                                           componentgroup,
@@ -3161,7 +3164,7 @@ class MacroServerPoolsTest(unittest.TestCase):
             simps2.setUp()
             msp = MacroServerPools(10)
             db = PyTango.Database()
-            db.put_device_property(self._ms.ms.keys()[0],
+            db.put_device_property(list(self._ms.ms.keys())[0],
                                    {'PoolNames': self._pool.dp.name()})
             channelerrors = []
             poolchannels = ["scalar2_long", "spectrum2_short", "client_long",
@@ -3190,12 +3193,12 @@ class MacroServerPoolsTest(unittest.TestCase):
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
     #        print "MDSS", self._cf.dp.availableDataSources()
     #        print "XDSS", self._cf.dp.dataSources(["scalar_long"])
-            msp.updateMacroServer(self._ms.door.keys()[0])
-            pools = msp.getPools(self._ms.door.keys()[0])
+            msp.updateMacroServer(list(self._ms.door.keys())[0])
+            pools = msp.getPools(list(self._ms.door.keys())[0])
             pools[0].AcqChannelList = [json.dumps(a) for a in arr]
             # print "POOLS", pools
 
-            res, res2 = msp.checkChannels(self._ms.door.keys()[0],
+            res, res2 = msp.checkChannels(list(self._ms.door.keys())[0],
                                           self._cf.dp,
                                           poolchannels,
                                           componentgroup,
@@ -3239,7 +3242,7 @@ class MacroServerPoolsTest(unittest.TestCase):
             simps2.setUp()
             msp = MacroServerPools(10)
             db = PyTango.Database()
-            db.put_device_property(self._ms.ms.keys()[0],
+            db.put_device_property(list(self._ms.ms.keys())[0],
                                    {'PoolNames': self._pool.dp.name()})
             channelerrors = []
             poolchannels = ["scalar2_long", "spectrum2_short", "client_short",
@@ -3267,13 +3270,13 @@ class MacroServerPoolsTest(unittest.TestCase):
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
     #        print "MDSS", self._cf.dp.availableDataSources()
     #        print "XDSS", self._cf.dp.dataSources(["scalar_long"])
-            msp.updateMacroServer(self._ms.door.keys()[0])
-            pools = msp.getPools(self._ms.door.keys()[0])
+            msp.updateMacroServer(list(self._ms.door.keys())[0])
+            pools = msp.getPools(list(self._ms.door.keys())[0])
             pools[0].AcqChannelList = [json.dumps(a) for a in arr]
             # print "POOLS", pools
             self._simps.dp.ChangeValueType("ScalarShort")
             self._simps.dp.Value = 43
-            res, res2 = msp.checkChannels(self._ms.door.keys()[0],
+            res, res2 = msp.checkChannels(list(self._ms.door.keys())[0],
                                           self._cf.dp,
                                           poolchannels,
                                           componentgroup,
@@ -3318,7 +3321,7 @@ class MacroServerPoolsTest(unittest.TestCase):
             simps2.setUp()
             msp = MacroServerPools(10)
             db.put_device_alias(arr[0]["full_name"], arr[0]["name"])
-            db.put_device_property(self._ms.ms.keys()[0],
+            db.put_device_property(list(self._ms.ms.keys())[0],
                                    {'PoolNames': self._pool.dp.name()})
             channelerrors = []
             poolchannels = ["scalar2_long", "spectrum2_short", "client_short"]
@@ -3336,13 +3339,13 @@ class MacroServerPoolsTest(unittest.TestCase):
 
             self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
-            msp.updateMacroServer(self._ms.door.keys()[0])
-            pools = msp.getPools(self._ms.door.keys()[0])
+            msp.updateMacroServer(list(self._ms.door.keys())[0])
+            pools = msp.getPools(list(self._ms.door.keys())[0])
             pools[0].AcqChannelList = [json.dumps(a) for a in arr]
             # print "POOLS", pools
             self._simps.dp.ChangeValueType("ScalarShort")
             self._simps.dp.Value = 43
-            res, res2 = msp.checkChannels(self._ms.door.keys()[0],
+            res, res2 = msp.checkChannels(list(self._ms.door.keys())[0],
                                           self._cf.dp,
                                           poolchannels,
                                           componentgroup,
@@ -3383,7 +3386,7 @@ class MacroServerPoolsTest(unittest.TestCase):
             simps2.setUp()
             msp = MacroServerPools(10)
             db.put_device_alias(arr[0]["full_name"], arr[0]["name"])
-            db.put_device_property(self._ms.ms.keys()[0],
+            db.put_device_property(list(self._ms.ms.keys())[0],
                                    {'PoolNames': self._pool.dp.name()})
             channelerrors = []
             poolchannels = ["scalar2_long", "spectrum2_short", "client_short"]
@@ -3401,13 +3404,13 @@ class MacroServerPoolsTest(unittest.TestCase):
 
             self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
-            msp.updateMacroServer(self._ms.door.keys()[0])
-            pools = msp.getPools(self._ms.door.keys()[0])
+            msp.updateMacroServer(list(self._ms.door.keys())[0])
+            pools = msp.getPools(list(self._ms.door.keys())[0])
             pools[0].AcqChannelList = [json.dumps(a) for a in arr]
             # print "POOLS", pools
 #            self._simps.dp.ChangeValueType("ScalarShort")
 #            self._simps.dp.Value = 43
-            res, res2 = msp.checkChannels(self._ms.door.keys()[0],
+            res, res2 = msp.checkChannels(list(self._ms.door.keys())[0],
                                           self._cf.dp,
                                           poolchannels,
                                           componentgroup,
@@ -3448,7 +3451,7 @@ class MacroServerPoolsTest(unittest.TestCase):
             simps2.add()
             msp = MacroServerPools(10)
             db.put_device_alias(arr[0]["full_name"], arr[0]["name"])
-            db.put_device_property(self._ms.ms.keys()[0],
+            db.put_device_property(list(self._ms.ms.keys())[0],
                                    {'PoolNames': self._pool.dp.name()})
             channelerrors = []
             poolchannels = ["scalar2_long", "spectrum2_short", "client2_short"]
@@ -3466,11 +3469,11 @@ class MacroServerPoolsTest(unittest.TestCase):
 
             self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
-            msp.updateMacroServer(self._ms.door.keys()[0])
-            pools = msp.getPools(self._ms.door.keys()[0])
+            msp.updateMacroServer(list(self._ms.door.keys())[0])
+            pools = msp.getPools(list(self._ms.door.keys())[0])
             pools[0].AcqChannelList = [json.dumps(a) for a in arr]
             # print "POOLS", pools
-            res, res2 = msp.checkChannels(self._ms.door.keys()[0],
+            res, res2 = msp.checkChannels(list(self._ms.door.keys())[0],
                                           self._cf.dp,
                                           poolchannels,
                                           componentgroup,
@@ -3513,7 +3516,7 @@ class MacroServerPoolsTest(unittest.TestCase):
 
             self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
-            res, res2 = msp.checkChannels(self._ms.door.keys()[0],
+            res, res2 = msp.checkChannels(list(self._ms.door.keys())[0],
                                           self._cf.dp,
                                           poolchannels,
                                           componentgroup,
@@ -3557,19 +3560,19 @@ class MacroServerPoolsTest(unittest.TestCase):
 
         msp = MacroServerPools(10)
         self.myAssertRaise(Exception, msp.getSelectorEnv, None, [], {})
-        msp.getSelectorEnv(self._ms.door.keys()[0], [], {})
-        dwt = msp.getScanEnv(self._ms.door.keys()[0])
+        msp.getSelectorEnv(list(self._ms.door.keys())[0], [], {})
+        dwt = msp.getScanEnv(list(self._ms.door.keys())[0])
         for i, dt in enumerate(edats):
 
-            edl = json.loads(dwt).keys()
+            edl = list(json.loads(dwt).keys())
             data = {}
-            self._ms.dps[self._ms.ms.keys()[0]].Environment = (
+            self._ms.dps[list(self._ms.ms.keys())[0]].Environment = (
                 'pickle', pickle.dumps({"del": edl}))
-            self._ms.dps[self._ms.ms.keys()[0]].Environment = (
+            self._ms.dps[list(self._ms.ms.keys())[0]].Environment = (
                 'pickle', envs[0])
-            msp.getSelectorEnv(self._ms.door.keys()[0], enms[i], data)
+            msp.getSelectorEnv(list(self._ms.door.keys())[0], enms[i], data)
 #            print "data",data
-            dwt = msp.getScanEnv(self._ms.door.keys()[0])
+            dwt = msp.getScanEnv(list(self._ms.door.keys())[0])
             self.myAssertDict(data, dt)
 
     # constructor test
@@ -3693,12 +3696,12 @@ class MacroServerPoolsTest(unittest.TestCase):
 
         msp = MacroServerPools(10)
         self.myAssertRaise(Exception, msp.getSelectorEnv, None, [], {})
-        msp.getSelectorEnv(self._ms.door.keys()[0], [], {})
+        msp.getSelectorEnv(list(self._ms.door.keys())[0], [], {})
         for i, dt in enumerate(edats):
             data = {}
-            self._ms.dps[self._ms.ms.keys()[0]].Environment = (
+            self._ms.dps[list(self._ms.ms.keys())[0]].Environment = (
                 'pickle', envs[i])
-            msp.getSelectorEnv(self._ms.door.keys()[0], enms[i], data)
+            msp.getSelectorEnv(list(self._ms.door.keys())[0], enms[i], data)
             self.myAssertDict(data, dt)
 
     # constructor test
@@ -3926,14 +3929,14 @@ class MacroServerPoolsTest(unittest.TestCase):
         msp = MacroServerPools(10)
         self.myAssertRaise(Exception, msp.setSelectorEnv, None, {})
         self.myAssertRaise(Exception, msp.setSelectorEnv, None, {}, {})
-        msp.setSelectorEnv(self._ms.door.keys()[0], {})
-        msp.setSelectorEnv(self._ms.door.keys()[0], {}, {})
+        msp.setSelectorEnv(list(self._ms.door.keys())[0], {})
+        msp.setSelectorEnv(list(self._ms.door.keys())[0], {}, {})
         for i, dt in enumerate(edats):
-            msp.setSelectorEnv(self._ms.door.keys()[0], dt, cmds[i])
+            msp.setSelectorEnv(list(self._ms.door.keys())[0], dt, cmds[i])
 #            print "I = ",i
             # data = {}
             env = pickle.loads(
-                self._ms.dps[self._ms.ms.keys()[0]].Environment[1])
+                self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1])
 #            print "env", env
 #            print "ei", envs[i]
             self.myAssertDict(envs[i], env)
@@ -4046,18 +4049,18 @@ class MacroServerPoolsTest(unittest.TestCase):
         data = {"ScanID": 192,
                 "NeXusSelectorDevice": "p09/nxsrecselector/1",
                 "ScanFile": ["sar4r.nxs"], "ScanDir": "/tmp/"}
-        res = msp.getScanEnv(self._ms.door.keys()[0])
+        res = msp.getScanEnv(list(self._ms.door.keys())[0])
         self.myAssertDict(json.loads(res), data)
-        dwt = msp.getScanEnv(self._ms.door.keys()[0])
+        dwt = msp.getScanEnv(list(self._ms.door.keys())[0])
         for i, dt in enumerate(edats):
             data = {}
-            edl = json.loads(dwt).keys()
-            self._ms.dps[self._ms.ms.keys()[0]].Environment = (
+            edl = list(json.loads(dwt).keys())
+            self._ms.dps[list(self._ms.ms.keys())[0]].Environment = (
                 'pickle', pickle.dumps({"del": edl}))
-            self._ms.dps[self._ms.ms.keys()[0]].Environment = (
+            self._ms.dps[list(self._ms.ms.keys())[0]].Environment = (
                 'pickle', envs[i])
-            dt = msp.getScanEnv(self._ms.door.keys()[0])
-            dwt = msp.getScanEnv(self._ms.door.keys()[0])
+            dt = msp.getScanEnv(list(self._ms.door.keys())[0])
+            dwt = msp.getScanEnv(list(self._ms.door.keys())[0])
             self.myAssertDict(edats[i], json.loads(dt))
 
     # constructor test
@@ -4248,14 +4251,14 @@ class MacroServerPoolsTest(unittest.TestCase):
 
         msp = MacroServerPools(10)
         self.myAssertRaise(Exception, msp.setScanEnv, None, "{}")
-        msp.setScanEnv(self._ms.door.keys()[0], "{}")
+        msp.setScanEnv(list(self._ms.door.keys())[0], "{}")
         for i, dt in enumerate(edats):
-            sid = msp.setScanEnv(self._ms.door.keys()[0], json.dumps(dt))
+            sid = msp.setScanEnv(list(self._ms.door.keys())[0], json.dumps(dt))
             # print "I = ", i, sid
             self.assertEqual(sid, sids[i])
             # data = {}
             env = pickle.loads(
-                self._ms.dps[self._ms.ms.keys()[0]].Environment[1])
+                self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1])
 #            print "env", env
 #            print "ei", envs[i]
             self.myAssertDict(envs[i], env)
@@ -4277,20 +4280,31 @@ class MacroServerPoolsTest(unittest.TestCase):
 
         msp = MacroServerPools(10)
         self.myAssertRaise(Exception, msp.setScanEnv, None, "{}")
-        self.assertEqual(msp.setScanEnv(self._ms.door.keys()[0], "{}"), 192)
-        self._ms.dps[self._ms.ms.keys()[0]].Environment = ('pickle', envs[0])
-        self.assertEqual(msp.setScanEnv(self._ms.door.keys()[0], "{}"), 192)
-        self._ms.dps[self._ms.ms.keys()[0]].Environment = (
+        self.assertEqual(
+            msp.setScanEnv(list(self._ms.door.keys())[0], "{}"), 192)
+        self._ms.dps[
+            list(self._ms.ms.keys())[0]].Environment = ('pickle', envs[0])
+        self.assertEqual(
+            msp.setScanEnv(list(self._ms.door.keys())[0], "{}"), 192)
+        self._ms.dps[list(self._ms.ms.keys())[0]].Environment = (
             'pickle', pickle.dumps({"del": ["ScanID"]}))
-        self._ms.dps[self._ms.ms.keys()[0]].Environment = ('pickle', envs[0])
-        self.assertEqual(msp.setScanEnv(self._ms.door.keys()[0], "{}"), -1)
-        self._ms.dps[self._ms.ms.keys()[0]].Environment = (
+        self._ms.dps[
+            list(self._ms.ms.keys())[0]].Environment = ('pickle', envs[0])
+        self.assertEqual(
+            msp.setScanEnv(list(self._ms.door.keys())[0], "{}"), -1)
+        self._ms.dps[
+            list(self._ms.ms.keys())[0]].Environment = (
             'pickle', pickle.dumps({"del": ["ScanID"]}))
-        self.assertEqual(msp.setScanEnv(self._ms.door.keys()[0], "{}"), -1)
-        self._ms.dps[self._ms.ms.keys()[0]].Environment = ('pickle', envs[0])
-        self.assertEqual(msp.setScanEnv(self._ms.door.keys()[0], "{}"), -1)
-        self._ms.dps[self._ms.ms.keys()[0]].Environment = ('pickle', envs[1])
-        self.assertEqual(msp.setScanEnv(self._ms.door.keys()[0], "{}"), 12)
+        self.assertEqual(
+            msp.setScanEnv(list(self._ms.door.keys())[0], "{}"), -1)
+        self._ms.dps[
+            list(self._ms.ms.keys())[0]].Environment = ('pickle', envs[0])
+        self.assertEqual(
+            msp.setScanEnv(list(self._ms.door.keys())[0], "{}"), -1)
+        self._ms.dps[
+            list(self._ms.ms.keys())[0]].Environment = ('pickle', envs[1])
+        self.assertEqual(
+            msp.setScanEnv(list(self._ms.door.keys())[0], "{}"), 12)
 
     # constructor test
     # \brief It tests default settings
@@ -4482,14 +4496,14 @@ class MacroServerPoolsTest(unittest.TestCase):
 
         msp = MacroServerPools(10)
         self.myAssertRaise(Exception, msp.setScanEnv, None, "{}")
-        msp.setScanEnv(self._ms.door.keys()[0], "{}")
+        msp.setScanEnv(list(self._ms.door.keys())[0], "{}")
         for i, dt in enumerate(edats):
-            sid = msp.setScanEnv(self._ms.door.keys()[0], json.dumps(dt))
+            sid = msp.setScanEnv(list(self._ms.door.keys())[0], json.dumps(dt))
             # print "I = ", i, sid
             self.assertEqual(sid, sids[i])
             # data = {}
             env = pickle.loads(
-                self._ms.dps[self._ms.ms.keys()[0]].Environment[1])
+                self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1])
             self.myAssertDict(envs[i], env)
 
     # constructor test
@@ -4621,19 +4635,19 @@ class MacroServerPoolsTest(unittest.TestCase):
 
         msp = MacroServerPools(10)
         self.myAssertRaise(Exception, msp.setScanEnv, None, "{}")
-        msp.setScanEnv(self._ms.door.keys()[0], "{}")
+        msp.setScanEnv(list(self._ms.door.keys())[0], "{}")
         for i, dt in enumerate(edats):
             env = pickle.loads(
-                self._ms.dps[self._ms.ms.keys()[0]].Environment[1])
+                self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1])
             # print "env0", env
             sid = msp.setScanEnv(
-                self._ms.door.keys()[0],
+                list(self._ms.door.keys())[0],
                 dt if not isinstance(dt, dict) else json.dumps(dt))
             # print "I = ", i, sid
             self.assertEqual(sid, sids[i])
             # data = {}
             env = pickle.loads(
-                self._ms.dps[self._ms.ms.keys()[0]].Environment[1])
+                self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1])
             # print "env", env
             # print "ei", envs[i]
             self.myAssertDict(envs[i], env)

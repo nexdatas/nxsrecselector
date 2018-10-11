@@ -71,8 +71,8 @@ class TestMacroServerSetUp(object):
     def add(self):
         db = PyTango.Database()
 #        db.add_device(self.new_device_info_writer)
-        devices = self.ms.values()
-        devices.extend(self.door.values())
+        devices = list(self.ms.values())
+        devices.extend(list(self.door.values()))
         for dv in devices:
             db.add_device(dv)
             print(dv.name)
@@ -99,8 +99,8 @@ class TestMacroServerSetUp(object):
 
         found = False
         cnt = 0
-        devices = self.ms.values()
-        devices.extend(self.door.values())
+        devices = list(self.ms.values())
+        devices.extend(list(self.door.values()))
         while not found and cnt < 1000:
             try:
                 sys.stdout.write(".")

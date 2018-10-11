@@ -74,14 +74,14 @@ class ExDSDictTest(unittest.TestCase):
         fun = sys._getframe().f_code.co_name
         print("Run: %s.%s() " % (self.__class__.__name__, fun))
         dl = ExDSDict()
-        self.assertEqual(len(dl.keys()), 0)
+        self.assertEqual(len(list(dl.keys())), 0)
 
         el = DSItem("myname3", "mytype3", "myrecord3")
         el4 = DSItem("myname4", "mytype4", "myrecord4")
         el5 = DSItem(None, "mytype5", "myrecord5")
 
         dl.appendDSList([el], "mymode2")
-        self.assertEqual(len(dl.keys()), 1)
+        self.assertEqual(len(list(dl.keys())), 1)
         self.assertEqual(len(dl["myname3"]), 1)
         self.assertEqual(dl["myname3"][0].name, "myname3")
         self.assertEqual(dl["myname3"][0].name, "myname3")
@@ -92,7 +92,7 @@ class ExDSDictTest(unittest.TestCase):
         self.assertEqual(dl["myname3"][0].shape, None)
 
         dl.appendDSList([el], "mymode3", "mynxtype3", [4, 5])
-        self.assertEqual(len(dl.keys()), 1)
+        self.assertEqual(len(list(dl.keys())), 1)
         self.assertEqual(len(dl["myname3"]), 2)
         self.assertEqual(dl["myname3"][0].name, "myname3")
         self.assertEqual(dl["myname3"][0].dstype, "mytype3")
@@ -108,7 +108,7 @@ class ExDSDictTest(unittest.TestCase):
         self.assertEqual(dl["myname3"][1].shape, [4, 5])
 
         dl.appendDSList([el4], "mymode4", "mynxtype4", [14, 15])
-        self.assertEqual(len(dl.keys()), 2)
+        self.assertEqual(len(list(dl.keys())), 2)
         self.assertEqual(len(dl["myname3"]), 2)
         self.assertEqual(dl["myname3"][0].name, "myname3")
         self.assertEqual(dl["myname3"][0].dstype, "mytype3")
@@ -131,7 +131,7 @@ class ExDSDictTest(unittest.TestCase):
         self.assertEqual(dl["myname4"][0].shape, [14, 15])
 
         dl.appendDSList([el5], "mymode5", "mynxtype5", [12, 2])
-        self.assertEqual(len(dl.keys()), 3)
+        self.assertEqual(len(list(dl.keys())), 3)
         self.assertEqual(len(dl["myname3"]), 2)
         self.assertEqual(dl["myname3"][0].name, "myname3")
         self.assertEqual(dl["myname3"][0].dstype, "mytype3")
@@ -162,7 +162,7 @@ class ExDSDictTest(unittest.TestCase):
 
         dl.appendDSList([el5], "mymode5a", "mynxtype5a", [2, 23])
         dl.appendDSList([el5], "mymode5b", "mynxtype5b", [123, 2])
-        self.assertEqual(len(dl.keys()), 5)
+        self.assertEqual(len(list(dl.keys())), 5)
         self.assertEqual(len(dl["__unnamed__2"]), 1)
         self.assertEqual(dl["__unnamed__2"][0].name, None)
         self.assertEqual(dl["__unnamed__2"][0].dstype, "mytype5")

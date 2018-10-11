@@ -51,6 +51,13 @@ if sys.version_info > (3,):
     long = int
 
 
+def miniparseString(text):
+    if sys.version_info > (3,):
+        return minidom.parseString(bytes(text, "UTF-8"))
+    else:
+        return minidom.parseString(text)
+
+
 class Datum(object):
 
     def __init__(self, device, value_string=None):
@@ -284,15 +291,15 @@ class UtilsTest(unittest.TestCase):
         logger.debug("\n%s\n%s" % (dct, dct2))
         self.assertTrue(isinstance(dct, dict))
         self.assertTrue(isinstance(dct2, dict))
-        logger.debug("%s %s" % (len(dct.keys()), len(dct2.keys())))
-        self.assertEqual(len(dct.keys()), len(dct2.keys()))
+        logger.debug("%s %s" % (len(list(dct.keys())), len(list(dct2.keys()))))
+        self.assertEqual(len(list(dct.keys())), len(list(dct2.keys())))
         for k, v in dct.items():
-            logger.debug("%s  in %s" % (str(k), str(dct2.keys())))
+            logger.debug("%s  in %s" % (str(k), str(list(dct2.keys()))))
             self.assertTrue(k in dct2.keys())
             if isinstance(v, dict):
                 self.myAssertDict(v, dct2[k])
             else:
-                logger.debug("%s , %s" % (str(v), str(dct2[k])))
+                logger.debug("%s , %s" % (str(v), str(list(dct2[k]))))
                 self.assertEqual(v, dct2[k])
 
     def checkstu(self, par, shape, dtype, unit):
@@ -474,9 +481,9 @@ class UtilsTest(unittest.TestCase):
         for k, vl in arr.items():
             self.assertEqual(
                 vl[0], MSUtils.getEnv(
-                    k, self._ms.ms.keys()[0]))
+                    k, list(self._ms.ms.keys())[0]))
 
-        msdp = self._ms.dps[self._ms.ms.keys()[0]]
+        msdp = self._ms.dps[list(self._ms.ms.keys())[0]]
 
         self.assertEqual(msdp.Environment[0], 'pickle')
         en = pickle.loads(msdp.Environment[1])['new']
@@ -487,7 +494,7 @@ class UtilsTest(unittest.TestCase):
                 'pickle',
                 pickle.dumps({'new': en}))
             self.assertEqual(vl[1], MSUtils.getEnv(
-                k, self._ms.ms.keys()[0]))
+                k, list(self._ms.ms.keys())[0]))
 
     # setEnv test
     def test_setEnv_2(self):
@@ -506,16 +513,17 @@ class UtilsTest(unittest.TestCase):
         for k, vl in arr.items():
             self.assertEqual(
                 vl[0], MSUtils.getEnv(
-                    k, self._ms.ms.keys()[0]))
+                    k, list(self._ms.ms.keys())[0]))
 
-        msdp = self._ms.dps[self._ms.ms.keys()[0]]
+        msdp = self._ms.dps[list(self._ms.ms.keys())[0]]
 
         for k, vl in arr.items():
-            MSUtils.setEnv(k, vl[1], self._ms.ms.keys()[0])
+            MSUtils.setEnv(k, vl[1], list(self._ms.ms.keys())[0])
 
             self.assertEqual(msdp.Environment[0], 'pickle')
             en = pickle.loads(msdp.Environment[1])['new']
-            self.assertEqual(en[k], MSUtils.getEnv(k, self._ms.ms.keys()[0]))
+            self.assertEqual(
+                en[k], MSUtils.getEnv(k, list(self._ms.ms.keys())[0]))
 
     # setEnv test
     def test_setEnv(self):
@@ -558,21 +566,21 @@ class UtilsTest(unittest.TestCase):
             "ScanNone": ["", "Something new"],
             "_ViewOptions": [{'ShowDial': True}, {'ShowDial': False}],
         }
-        msdp = self._ms.dps[self._ms.ms.keys()[0]]
+        msdp = self._ms.dps[list(self._ms.ms.keys())[0]]
 
         for k, vl in arr.items():
             self.assertEqual(
                 vl[0], MSUtils.getEnv(
-                    k, self._ms.ms.keys()[0]))
+                    k, list(self._ms.ms.keys())[0]))
 
         MSUtils.setEnvs(dict((key, arr[key][1]) for key in arr.keys()),
-                        self._ms.ms.keys()[0])
+                        list(self._ms.ms.keys())[0])
         for k, vl in arr.items():
 
             self.assertEqual(msdp.Environment[0], 'pickle')
             en = pickle.loads(msdp.Environment[1])['new']
             self.assertEqual(en[k], MSUtils.getEnv(
-                k, self._ms.ms.keys()[0]))
+                k, list(self._ms.ms.keys())[0]))
     # setEnv test
 
     def test_setEnvs(self):
@@ -618,16 +626,16 @@ class UtilsTest(unittest.TestCase):
         for k, vl in arr.items():
             self.assertEqual(
                 vl[0], MSUtils.getEnv(
-                    k, self._ms.ms.keys()[0]))
-        msdp = self._ms.dps[self._ms.ms.keys()[0]]
+                    k, list(self._ms.ms.keys())[0]))
+        msdp = self._ms.dps[list(self._ms.ms.keys())[0]]
 
         for k, vl in arr.items():
-            MSUtils.usetEnv(k, self._ms.ms.keys()[0])
+            MSUtils.usetEnv(k, list(self._ms.ms.keys())[0])
 
             self.assertEqual(msdp.Environment[0], 'pickle')
             # en = pickle.loads(msdp.Environment[1])['new']
             self.assertEqual('', MSUtils.getEnv(
-                k, self._ms.ms.keys()[0]))
+                k, list(self._ms.ms.keys())[0]))
 
     # getProxies test
     def test_getProxies(self):
@@ -1536,23 +1544,23 @@ class UtilsTest(unittest.TestCase):
         fun = sys._getframe().f_code.co_name
         print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
-        dom = minidom.parseString("<tag></tag>")
+        dom = miniparseString("<tag></tag>")
         node = dom.getElementsByTagName("tag")
         self.assertEqual(Utils.getRecord(node[0]), "")
 
-        dom = minidom.parseString("<tag><device/></tag>")
+        dom = miniparseString("<tag><device/></tag>")
         node = dom.getElementsByTagName("tag")
         self.assertEqual(Utils.getRecord(node[0]), "")
 
         host = 'haso2' * self.__rnd.randint(1, 3)
-        dom = minidom.parseString(
+        dom = miniparseString(
             '<tag><device hostname="%s"></device></tag>' % (host))
         node = dom.getElementsByTagName("tag")
         self.assertEqual(Utils.getRecord(node[0]), '')
 
         host = 'haso2' * self.__rnd.randint(1, 3)
         dev = 'defv' * self.__rnd.randint(1, 3)
-        dom = minidom.parseString(
+        dom = miniparseString(
             '<tag><device hostname="%s" />'
             '<record name="%s" /></tag>' % (host, dev))
         node = dom.getElementsByTagName("tag")
@@ -1561,7 +1569,7 @@ class UtilsTest(unittest.TestCase):
         host = 'haso2' * self.__rnd.randint(1, 3)
         rec = 'recfv' * self.__rnd.randint(1, 3)
         dev = 'devfv/' * self.__rnd.randint(1, 3)
-        dom = minidom.parseString(
+        dom = miniparseString(
             '<tag><device name="%s" /><record name="%s" /></tag>' % (dev, rec))
         node = dom.getElementsByTagName("tag")
         self.assertEqual(Utils.getRecord(node[0]), "%s/%s" % (dev, rec))
@@ -1570,7 +1578,7 @@ class UtilsTest(unittest.TestCase):
         rec = 'recfv' * self.__rnd.randint(1, 3)
         dev = 'devfv/' * self.__rnd.randint(1, 3)
         port = 10000
-        dom = minidom.parseString(
+        dom = miniparseString(
             '<tag><device name="%s" hostname="%s" />'
             '<record name="%s" /></tag>' % (dev, host, rec))
         node = dom.getElementsByTagName("tag")
@@ -1581,7 +1589,7 @@ class UtilsTest(unittest.TestCase):
         rec = 'recfv' * self.__rnd.randint(1, 3)
         dev = 'devfv/' * self.__rnd.randint(1, 3)
         port = 10000 * self.__rnd.randint(1, 3)
-        dom = minidom.parseString(
+        dom = miniparseString(
             '<tag><device name="%s" port="%s" />'
             '<record name="%s" /></tag>' % (dev, port, rec))
         node = dom.getElementsByTagName("tag")
@@ -1591,7 +1599,7 @@ class UtilsTest(unittest.TestCase):
         rec = 'recfv' * self.__rnd.randint(1, 3)
         dev = 'devfv/' * self.__rnd.randint(1, 3)
         port = 10000 * self.__rnd.randint(1, 3)
-        dom = minidom.parseString(
+        dom = miniparseString(
             '<tag><device name="%s" hostname="%s" port="%s"/>'
             '<record name="%s" /></tag>' % (
                 dev, host, port, rec))
@@ -1603,16 +1611,16 @@ class UtilsTest(unittest.TestCase):
         fun = sys._getframe().f_code.co_name
         print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
-        dom = minidom.parseString("<tag></tag>")
+        dom = miniparseString("<tag></tag>")
         node = dom.getElementsByTagName("tag")
         self.assertEqual(Utils.getRecord(node[0]), "")
 
-        dom = minidom.parseString("<tag><device member=\"property\"/></tag>")
+        dom = miniparseString("<tag><device member=\"property\"/></tag>")
         node = dom.getElementsByTagName("tag")
         self.assertEqual(Utils.getRecord(node[0]), "")
 
         host = 'haso2' * self.__rnd.randint(1, 3)
-        dom = minidom.parseString(
+        dom = miniparseString(
             '<tag><device hostname="%s" member="property"></device></tag>'
             % (host))
         node = dom.getElementsByTagName("tag")
@@ -1620,7 +1628,7 @@ class UtilsTest(unittest.TestCase):
 
         host = 'haso2' * self.__rnd.randint(1, 3)
         dev = 'defv' * self.__rnd.randint(1, 3)
-        dom = minidom.parseString(
+        dom = miniparseString(
             '<tag><device hostname="%s" member="property" />'
             '<record name="%s" /></tag>' % (host, dev))
         node = dom.getElementsByTagName("tag")
@@ -1629,7 +1637,7 @@ class UtilsTest(unittest.TestCase):
         host = 'haso2' * self.__rnd.randint(1, 3)
         rec = 'recfv' * self.__rnd.randint(1, 3)
         dev = 'devfv/' * self.__rnd.randint(1, 3)
-        dom = minidom.parseString(
+        dom = miniparseString(
             '<tag><device name="%s" member="property"/><record name="%s" />'
             '</tag>' % (dev, rec))
         node = dom.getElementsByTagName("tag")
@@ -1639,7 +1647,7 @@ class UtilsTest(unittest.TestCase):
         rec = 'recfv' * self.__rnd.randint(1, 3)
         dev = 'devfv/' * self.__rnd.randint(1, 3)
         port = 10000
-        dom = minidom.parseString(
+        dom = miniparseString(
             '<tag><device name="%s" hostname="%s" member="property"/>'
             '<record name="%s" /></tag>' % (dev, host, rec))
         node = dom.getElementsByTagName("tag")
@@ -1650,7 +1658,7 @@ class UtilsTest(unittest.TestCase):
         rec = 'recfv' * self.__rnd.randint(1, 3)
         dev = 'devfv/' * self.__rnd.randint(1, 3)
         port = 10000 * self.__rnd.randint(1, 3)
-        dom = minidom.parseString(
+        dom = miniparseString(
             '<tag><device name="%s" port="%s" member="property"/>'
             '<record name="%s" /></tag>' % (dev, port, rec))
         node = dom.getElementsByTagName("tag")
@@ -1660,7 +1668,7 @@ class UtilsTest(unittest.TestCase):
         rec = 'recfv' * self.__rnd.randint(1, 3)
         dev = 'devfv/' * self.__rnd.randint(1, 3)
         port = 10000 * self.__rnd.randint(1, 3)
-        dom = minidom.parseString(
+        dom = miniparseString(
             '<tag><device name="%s" hostname="%s" port="%s" '
             'member="property"/>'
             '<record name="%s" /></tag>' % (
@@ -1673,16 +1681,16 @@ class UtilsTest(unittest.TestCase):
         fun = sys._getframe().f_code.co_name
         print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
-        dom = minidom.parseString("<tag></tag>")
+        dom = miniparseString("<tag></tag>")
         node = dom.getElementsByTagName("tag")
         self.assertEqual(Utils.getRecord(node[0]), "")
 
-        dom = minidom.parseString("<tag><device member=\"command\"/></tag>")
+        dom = miniparseString("<tag><device member=\"command\"/></tag>")
         node = dom.getElementsByTagName("tag")
         self.assertEqual(Utils.getRecord(node[0]), "")
 
         host = 'haso2' * self.__rnd.randint(1, 3)
-        dom = minidom.parseString(
+        dom = miniparseString(
             '<tag><device hostname="%s" member="command"></device>'
             '</tag>' % (host))
         node = dom.getElementsByTagName("tag")
@@ -1690,7 +1698,7 @@ class UtilsTest(unittest.TestCase):
 
         host = 'haso2' * self.__rnd.randint(1, 3)
         dev = 'defv' * self.__rnd.randint(1, 3)
-        dom = minidom.parseString(
+        dom = miniparseString(
             '<tag><device hostname="%s" member="command" />'
             '<record name="%s" /></tag>' % (host, dev))
         node = dom.getElementsByTagName("tag")
@@ -1699,7 +1707,7 @@ class UtilsTest(unittest.TestCase):
         host = 'haso2' * self.__rnd.randint(1, 3)
         rec = 'recfv' * self.__rnd.randint(1, 3)
         dev = 'devfv/' * self.__rnd.randint(1, 3)
-        dom = minidom.parseString(
+        dom = miniparseString(
             '<tag><device name="%s" member="command"/><record name="%s" />'
             '</tag>' % (dev, rec))
         node = dom.getElementsByTagName("tag")
@@ -1709,7 +1717,7 @@ class UtilsTest(unittest.TestCase):
         rec = 'recfv' * self.__rnd.randint(1, 3)
         dev = 'devfv/' * self.__rnd.randint(1, 3)
         port = 10000
-        dom = minidom.parseString(
+        dom = miniparseString(
             '<tag><device name="%s" hostname="%s" member="command"/>'
             '<record name="%s" /></tag>' % (dev, host, rec))
         node = dom.getElementsByTagName("tag")
@@ -1720,7 +1728,7 @@ class UtilsTest(unittest.TestCase):
         rec = 'recfv' * self.__rnd.randint(1, 3)
         dev = 'devfv/' * self.__rnd.randint(1, 3)
         port = 10000 * self.__rnd.randint(1, 3)
-        dom = minidom.parseString(
+        dom = miniparseString(
             '<tag><device name="%s" port="%s" member="command"/>'
             '<record name="%s" /></tag>' % (dev, port, rec))
         node = dom.getElementsByTagName("tag")
@@ -1730,7 +1738,7 @@ class UtilsTest(unittest.TestCase):
         rec = 'recfv' * self.__rnd.randint(1, 3)
         dev = 'devfv/' * self.__rnd.randint(1, 3)
         port = 10000 * self.__rnd.randint(1, 3)
-        dom = minidom.parseString(
+        dom = miniparseString(
             '<tag><device name="%s" hostname="%s" port="%s" member="command"/>'
             '<record name="%s" /></tag>' % (
                 dev, host, port, rec))

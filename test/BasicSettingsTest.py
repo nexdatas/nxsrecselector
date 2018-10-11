@@ -125,7 +125,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
         self.assertEqual(rs.configDevice, val["ConfigDevice"])
         self.assertEqual(rs.door, val["Door"])
         self.assertEqual(rs.mntGrp, val["MntGrp"])
-        self.assertEqual(rs.macroServer, self._ms.ms.keys()[0])
+        self.assertEqual(rs.macroServer, list(self._ms.ms.keys())[0])
         self.assertEqual(rs.mntGrp, val["MntGrp"])
 
     # test
@@ -146,16 +146,16 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
         self.assertEqual(rs.configDevice, val["ConfigDevice"])
         self.assertEqual(rs.door, val["Door"])
         self.assertEqual(rs.mntGrp, val["MntGrp"])
-        self.assertEqual(rs.macroServer, self._ms.ms.keys()[0])
+        self.assertEqual(rs.macroServer, list(self._ms.ms.keys())[0])
 
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
 #        msp = MacroServerPools(10)
 
-#        self.assertEqual(msp.getMacroServer(), self._ms.ms.keys()[0])
+#        self.assertEqual(msp.getMacroServer(), list(self._ms.ms.keys())[0])
 
         self.assertEqual(set(rs.mandatoryComponents()), set())
-        mncps = self._rnd.randint(1, len(self.mycps.keys()) - 1)
+        mncps = self._rnd.randint(1, len(list(self.mycps.keys())) - 1)
         mcps = [cp for cp in self._rnd.sample(
                 set(self.mycps.keys()), mncps) if cp not in wrong]
 
@@ -180,16 +180,16 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
         self.assertEqual(rs.configDevice, val["ConfigDevice"])
         self.assertEqual(rs.door, val["Door"])
         self.assertEqual(rs.mntGrp, val["MntGrp"])
-        self.assertEqual(rs.macroServer, self._ms.ms.keys()[0])
+        self.assertEqual(rs.macroServer, list(self._ms.ms.keys())[0])
 
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
 #        msp = MacroServerPools(10)
 
-#        self.assertEqual(msp.getMacroServer(), self._ms.ms.keys()[0])
+#        self.assertEqual(msp.getMacroServer(), list(self._ms.ms.keys())[0])
 
         self.assertEqual(set(rs.mandatoryComponents()), set())
-        mncps = self._rnd.randint(1, len(self.mycps.keys()) - 1)
+        mncps = self._rnd.randint(1, len(list(self.mycps.keys())) - 1)
         mcps = [cp for cp in self._rnd.sample(
                 set(self.mycps.keys()), mncps) if cp not in wrong]
 
@@ -214,7 +214,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
         self.assertEqual(rs.configDevice, val["ConfigDevice"])
         self.assertEqual(rs.door, val["Door"])
         self.assertEqual(rs.mntGrp, val["MntGrp"])
-        self.assertEqual(rs.macroServer, self._ms.ms.keys()[0])
+        self.assertEqual(rs.macroServer, list(self._ms.ms.keys())[0])
         self.assertEqual(set(rs.availableComponents()), set())
         self.assertEqual(set(rs.availableDataSources()), set())
 
@@ -222,7 +222,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
 #        msp = MacroServerPools(10)
 
-#        self.assertEqual(msp.getMacroServer(), self._ms.ms.keys()[0])
+#        self.assertEqual(msp.getMacroServer(), list(self._ms.ms.keys())[0])
 
         self.assertEqual(set(rs.availableComponents()), set(self.mycps.keys()))
         self.assertEqual(set(rs.availableDataSources()),
@@ -239,9 +239,9 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
         # wrong = []
 
         db = PyTango.Database()
-        db.put_device_property(self._ms.ms.keys()[0],
+        db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
         rs = self.openRecSelector()
         rs.configDevice = val["ConfigDevice"]
         rs.door = val["Door"]
@@ -249,7 +249,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
 
         self.assertEqual(rs.configDevice, val["ConfigDevice"])
         self.assertEqual(rs.door, val["Door"])
-        self.assertEqual(rs.macroServer, self._ms.ms.keys()[0])
+        self.assertEqual(rs.macroServer, list(self._ms.ms.keys())[0])
         self.assertEqual(rs.mntGrp, val["MntGrp"])
         self.assertEqual(set(rs.availableComponents()), set())
         self.assertEqual(set(rs.availableDataSources()), set())
@@ -278,21 +278,21 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                "MntGrp": 'nxsmntgrp'}
 
         db = PyTango.Database()
-        db.put_device_property(self._ms.ms.keys()[0],
+        db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
         rs = self.openRecSelector()
         rs.configDevice = val["ConfigDevice"]
         rs.door = val["Door"]
         rs.mntGrp = val["MntGrp"]
 
         db = PyTango.Database()
-        db.put_device_property(self._ms.ms.keys()[0],
+        db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
 
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
-        self.assertEqual(rs.macroServer, self._ms.ms.keys()[0])
+        self.assertEqual(rs.macroServer, list(self._ms.ms.keys())[0])
         self.assertEqual(rs.poolElementNames('ExpChannelList'), [])
 
         arr = [
@@ -337,9 +337,9 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                "MntGrp": 'nxsmntgrp'}
 
         db = PyTango.Database()
-        db.put_device_property(self._ms.ms.keys()[0],
+        db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
         rs = self.openRecSelector()
         self.setProp(rs, "poolBlacklist",
                      [self._pool.dp.name()])
@@ -348,12 +348,12 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
         rs.mntGrp = val["MntGrp"]
 
         db = PyTango.Database()
-        db.put_device_property(self._ms.ms.keys()[0],
+        db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
 
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
-        self.assertEqual(rs.macroServer, self._ms.ms.keys()[0])
+        self.assertEqual(rs.macroServer, list(self._ms.ms.keys())[0])
         self.assertEqual(rs.poolElementNames('ExpChannelList'), [])
 
         arr = [
@@ -400,21 +400,21 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                "MntGrp": 'nxsmntgrp'}
 
         db = PyTango.Database()
-        db.put_device_property(self._ms.ms.keys()[0],
+        db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
         rs = self.openRecSelector()
         rs.configDevice = val["ConfigDevice"]
         rs.door = val["Door"]
         rs.mntGrp = val["MntGrp"]
 
         db = PyTango.Database()
-        db.put_device_property(self._ms.ms.keys()[0],
+        db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
 
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
-        self.assertEqual(rs.macroServer, self._ms.ms.keys()[0])
+        self.assertEqual(rs.macroServer, list(self._ms.ms.keys())[0])
         self.assertEqual(rs.poolElementNames('MotorList'), [])
 
         arr = [
@@ -459,9 +459,9 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                "MntGrp": 'nxsmntgrp'}
 
         db = PyTango.Database()
-        db.put_device_property(self._ms.ms.keys()[0],
+        db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
         rs = self.openRecSelector()
         self.setProp(rs, "poolBlacklist",
                      [self._pool.dp.name()])
@@ -470,12 +470,12 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
         rs.mntGrp = val["MntGrp"]
 
         db = PyTango.Database()
-        db.put_device_property(self._ms.ms.keys()[0],
+        db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
 
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
-        self.assertEqual(rs.macroServer, self._ms.ms.keys()[0])
+        self.assertEqual(rs.macroServer, list(self._ms.ms.keys())[0])
         self.assertEqual(rs.poolElementNames('MotorList'), [])
 
         arr = [
@@ -522,14 +522,14 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                "MntGrp": 'nxsmntgrp'}
 
         # db = PyTango.Database()
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
         rs = self.openRecSelector()
         rs.configDevice = val["ConfigDevice"]
         rs.door = val["Door"]
         rs.mntGrp = val["MntGrp"]
 
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
-        self.assertEqual(rs.macroServer, self._ms.ms.keys()[0])
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
+        self.assertEqual(rs.macroServer, list(self._ms.ms.keys())[0])
 
         # channelerrors = []
         rs.preselectComponents()
@@ -550,15 +550,15 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                "MntGrp": 'nxsmntgrp'}
 
         # db = PyTango.Database()
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
         rs = self.openRecSelector()
         rs.configDevice = val["ConfigDevice"]
         rs.door = val["Door"]
         rs.mntGrp = val["MntGrp"]
 
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
-        self.assertEqual(rs.macroServer, self._ms.ms.keys()[0])
+        self.assertEqual(rs.macroServer, list(self._ms.ms.keys())[0])
         channelerrors = []
         # poolchannels = []
         componentgroup = {}
@@ -587,14 +587,14 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                "MntGrp": 'nxsmntgrp'}
 
         # db = PyTango.Database()
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
         rs = self.openRecSelector()
         rs.configDevice = val["ConfigDevice"]
         rs.door = val["Door"]
         rs.mntGrp = val["MntGrp"]
         rs.writerDevice = val["WriterDevice"]
 
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
         channelerrors = []
         poolchannels = ["mycp"]
@@ -620,7 +620,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
 
         self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
         sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-        self.assertEqual(len(sed.keys()), len(self._keys))
+        self.assertEqual(len(list(sed.keys())), len(self._keys))
         for key, vl in self._keys:
             self.assertTrue(key in sed.keys())
             if key in val:
@@ -647,14 +647,14 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                "MntGrp": 'nxsmntgrp'}
 
         # db = PyTango.Database()
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
         rs = self.openRecSelector()
         rs.configDevice = val["ConfigDevice"]
         rs.door = val["Door"]
         rs.mntGrp = val["MntGrp"]
         rs.writerDevice = val["WriterDevice"]
 
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
         channelerrors = []
         poolchannels = ["mycp"]
@@ -680,7 +680,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
 
         self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
         sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-        self.assertEqual(len(sed.keys()), len(self._keys))
+        self.assertEqual(len(list(sed.keys())), len(self._keys))
         for key, vl in self._keys:
             self.assertTrue(key in sed.keys())
             if key in val:
@@ -707,14 +707,14 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                "MntGrp": 'nxsmntgrp'}
 
         # db = PyTango.Database()
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
         rs = self.openRecSelector()
         rs.configDevice = val["ConfigDevice"]
         rs.door = val["Door"]
         rs.mntGrp = val["MntGrp"]
         rs.writerDevice = val["WriterDevice"]
 
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
         channelerrors = []
         poolchannels = ["mycp"]
@@ -740,7 +740,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
 
         self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
         sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-        self.assertEqual(len(sed.keys()), len(self._keys))
+        self.assertEqual(len(list(sed.keys())), len(self._keys))
         for key, vl in self._keys:
             self.assertTrue(key in sed.keys())
             if key in val:
@@ -767,14 +767,14 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                "MntGrp": 'nxsmntgrp'}
 
         # db = PyTango.Database()
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
         rs = self.openRecSelector()
         rs.configDevice = val["ConfigDevice"]
         rs.door = val["Door"]
         rs.mntGrp = val["MntGrp"]
         rs.writerDevice = val["WriterDevice"]
 
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
         channelerrors = []
         poolchannels = ["mycp"]
@@ -812,14 +812,14 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                "MntGrp": 'nxsmntgrp'}
 
         # db = PyTango.Database()
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
         rs = self.openRecSelector()
         rs.configDevice = val["ConfigDevice"]
         rs.door = val["Door"]
         rs.mntGrp = val["MntGrp"]
         rs.writerDevice = val["WriterDevice"]
 
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
         channelerrors = []
         poolchannels = []
@@ -847,7 +847,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
         self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
         sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
         # print sed
-        self.assertEqual(len(sed.keys()), len(self._keys))
+        self.assertEqual(len(list(sed.keys())), len(self._keys))
         for key, vl in self._keys:
             self.assertTrue(key in sed.keys())
             if key in val:
@@ -874,14 +874,14 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                "MntGrp": 'nxsmntgrp'}
 
         # db = PyTango.Database()
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
         rs = self.openRecSelector()
         rs.configDevice = val["ConfigDevice"]
         rs.door = val["Door"]
         rs.mntGrp = val["MntGrp"]
         rs.writerDevice = val["WriterDevice"]
 
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
         channelerrors = []
         poolchannels = []
@@ -909,7 +909,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
         self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
         sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
         # print sed
-        self.assertEqual(len(sed.keys()), len(self._keys))
+        self.assertEqual(len(list(sed.keys())), len(self._keys))
         for key, vl in self._keys:
             self.assertTrue(key in sed.keys())
             if key in val:
@@ -936,14 +936,14 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                "MntGrp": 'nxsmntgrp'}
 
         # db = PyTango.Database()
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
         rs = self.openRecSelector()
         rs.configDevice = val["ConfigDevice"]
         rs.door = val["Door"]
         rs.mntGrp = val["MntGrp"]
         rs.writerDevice = val["WriterDevice"]
 
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
         channelerrors = []
         poolchannels = []
@@ -971,7 +971,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
         self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
         sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
         # print sed
-        self.assertEqual(len(sed.keys()), len(self._keys))
+        self.assertEqual(len(list(sed.keys())), len(self._keys))
         for key, vl in self._keys:
             self.assertTrue(key in sed.keys())
             if key in val:
@@ -998,14 +998,14 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                "MntGrp": 'nxsmntgrp'}
 
         # db = PyTango.Database()
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
         rs = self.openRecSelector()
         rs.configDevice = val["ConfigDevice"]
         rs.door = val["Door"]
         rs.mntGrp = val["MntGrp"]
         rs.writerDevice = val["WriterDevice"]
 
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
         channelerrors = []
         poolchannels = []
@@ -1042,14 +1042,14 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                "MntGrp": 'nxsmntgrp'}
 
         # db = PyTango.Database()
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
         rs = self.openRecSelector()
         rs.configDevice = val["ConfigDevice"]
         rs.door = val["Door"]
         rs.mntGrp = val["MntGrp"]
         rs.writerDevice = val["WriterDevice"]
 
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
         channelerrors = []
         poolchannels = []
@@ -1075,7 +1075,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
 
         self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
         sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-        self.assertEqual(len(sed.keys()), len(self._keys))
+        self.assertEqual(len(list(sed.keys())), len(self._keys))
         for key, vl in self._keys:
             self.assertTrue(key in sed.keys())
             if key in val:
@@ -1103,14 +1103,14 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                "MntGrp": 'nxsmntgrp'}
 
         # db = PyTango.Database()
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
         rs = self.openRecSelector()
         rs.configDevice = val["ConfigDevice"]
         rs.door = val["Door"]
         rs.mntGrp = val["MntGrp"]
         rs.writerDevice = val["WriterDevice"]
 
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
         channelerrors = []
         poolchannels = []
@@ -1136,7 +1136,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
 
         self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
         sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-        self.assertEqual(len(sed.keys()), len(self._keys))
+        self.assertEqual(len(list(sed.keys())), len(self._keys))
         for key, vl in self._keys:
             self.assertTrue(key in sed.keys())
             if key in val:
@@ -1164,14 +1164,14 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                "MntGrp": 'nxsmntgrp'}
 
         # db = PyTango.Database()
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
         rs = self.openRecSelector()
         rs.configDevice = val["ConfigDevice"]
         rs.door = val["Door"]
         rs.mntGrp = val["MntGrp"]
         rs.writerDevice = val["WriterDevice"]
 
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
         channelerrors = []
         poolchannels = []
@@ -1203,7 +1203,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
         # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
         self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
         sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-        self.assertEqual(len(sed.keys()), len(self._keys))
+        self.assertEqual(len(list(sed.keys())), len(self._keys))
         for key, vl in self._keys:
             self.assertTrue(key in sed.keys())
             if key in val:
@@ -1235,16 +1235,16 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             simps2.setUp()
 
             db = PyTango.Database()
-            db.put_device_property(self._ms.ms.keys()[0],
+            db.put_device_property(list(self._ms.ms.keys())[0],
                                    {'PoolNames': self._pool.dp.name()})
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
             rs = self.openRecSelector()
             rs.configDevice = val["ConfigDevice"]
             rs.door = val["Door"]
             rs.mntGrp = val["MntGrp"]
             rs.writerDevice = val["WriterDevice"]
 
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             channelerrors = []
             poolchannels = []
@@ -1290,7 +1290,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-            self.assertEqual(len(sed.keys()), len(self._keys))
+            self.assertEqual(len(list(sed.keys())), len(self._keys))
             for key, vl in self._keys:
                 self.assertTrue(key in sed.keys())
                 if key in val:
@@ -1324,14 +1324,14 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             simps2.setUp()
 
             # db = PyTango.Database()
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
             rs = self.openRecSelector()
             rs.configDevice = val["ConfigDevice"]
             rs.door = val["Door"]
             rs.mntGrp = val["MntGrp"]
             rs.writerDevice = val["WriterDevice"]
 
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             channelerrors = []
             poolchannels = []
@@ -1378,7 +1378,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-            self.assertEqual(len(sed.keys()), len(self._keys))
+            self.assertEqual(len(list(sed.keys())), len(self._keys))
             for key, vl in self._keys:
                 self.assertTrue(key in sed.keys())
                 if key in val:
@@ -1412,14 +1412,14 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             simps2.add()
 
             # db = PyTango.Database()
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
             rs = self.openRecSelector()
             rs.configDevice = val["ConfigDevice"]
             rs.door = val["Door"]
             rs.mntGrp = val["MntGrp"]
             rs.writerDevice = val["WriterDevice"]
 
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             # channelerrors = []
             poolchannels = []
@@ -1465,7 +1465,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-            self.assertEqual(len(sed.keys()), len(self._keys))
+            self.assertEqual(len(list(sed.keys())), len(self._keys))
             for key, vl in self._keys:
                 self.assertTrue(key in sed.keys())
                 if key in val:
@@ -1499,14 +1499,14 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             simps2.add()
 
             # db = PyTango.Database()
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
             rs = self.openRecSelector()
             rs.configDevice = val["ConfigDevice"]
             rs.door = val["Door"]
             rs.mntGrp = val["MntGrp"]
             rs.writerDevice = val["WriterDevice"]
 
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             # channelerrors = []
             poolchannels = []
@@ -1547,7 +1547,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-            self.assertEqual(len(sed.keys()), len(self._keys))
+            self.assertEqual(len(list(sed.keys())), len(self._keys))
             for key, vl in self._keys:
                 self.assertTrue(key in sed.keys())
                 if key in val:
@@ -1579,14 +1579,14 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             simps2.setUp()
 
             # db = PyTango.Database()
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
             rs = self.openRecSelector()
             rs.configDevice = val["ConfigDevice"]
             rs.door = val["Door"]
             rs.mntGrp = val["MntGrp"]
             rs.writerDevice = val["WriterDevice"]
 
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             # channelerrors = []
             poolchannels = []
@@ -1627,7 +1627,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-            self.assertEqual(len(sed.keys()), len(self._keys))
+            self.assertEqual(len(list(sed.keys())), len(self._keys))
             for key, vl in self._keys:
                 self.assertTrue(key in sed.keys())
                 if key in val:
@@ -1659,14 +1659,14 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             simps2.setUp()
 
             # db = PyTango.Database()
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
             rs = self.openRecSelector()
             rs.configDevice = val["ConfigDevice"]
             rs.door = val["Door"]
             rs.mntGrp = val["MntGrp"]
             rs.writerDevice = val["WriterDevice"]
 
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             # channelerrors = []
             poolchannels = []
@@ -1707,7 +1707,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-            self.assertEqual(len(sed.keys()), len(self._keys))
+            self.assertEqual(len(list(sed.keys())), len(self._keys))
             for key, vl in self._keys:
                 self.assertTrue(key in sed.keys())
                 if key in val:
@@ -1739,14 +1739,14 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             simps2.setUp()
 
             # db = PyTango.Database()
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
             rs = self.openRecSelector()
             rs.configDevice = val["ConfigDevice"]
             rs.door = val["Door"]
             rs.mntGrp = val["MntGrp"]
             rs.writerDevice = val["WriterDevice"]
 
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             # channelerrors = []
             poolchannels = []
@@ -1789,7 +1789,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-            self.assertEqual(len(sed.keys()), len(self._keys))
+            self.assertEqual(len(list(sed.keys())), len(self._keys))
             for key, vl in self._keys:
                 self.assertTrue(key in sed.keys())
                 if key in val:
@@ -1823,14 +1823,14 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             simps2.add()
 
             # db = PyTango.Database()
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
             rs = self.openRecSelector()
             rs.configDevice = val["ConfigDevice"]
             rs.door = val["Door"]
             rs.mntGrp = val["MntGrp"]
             rs.writerDevice = val["WriterDevice"]
 
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             # channelerrors = []
             poolchannels = []
@@ -1873,7 +1873,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-            self.assertEqual(len(sed.keys()), len(self._keys))
+            self.assertEqual(len(list(sed.keys())), len(self._keys))
             for key, vl in self._keys:
                 self.assertTrue(key in sed.keys())
                 if key in val:
@@ -1907,14 +1907,14 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             simps2.add()
 
             # db = PyTango.Database()
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
             rs = self.openRecSelector()
             rs.configDevice = val["ConfigDevice"]
             rs.door = val["Door"]
             rs.mntGrp = val["MntGrp"]
             rs.writerDevice = val["WriterDevice"]
 
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             # channelerrors = []
             poolchannels = []
@@ -1955,7 +1955,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-            self.assertEqual(len(sed.keys()), len(self._keys))
+            self.assertEqual(len(list(sed.keys())), len(self._keys))
             for key, vl in self._keys:
                 self.assertTrue(key in sed.keys())
                 if key in val:
@@ -1985,14 +1985,14 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                "MntGrp": 'nxsmntgrp'}
 
         # db = PyTango.Database()
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
         rs = self.openRecSelector()
         rs.configDevice = val["ConfigDevice"]
         rs.door = val["Door"]
         rs.mntGrp = val["MntGrp"]
         rs.writerDevice = val["WriterDevice"]
 
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
         # channelerrors = []
         poolchannels = []
@@ -2037,7 +2037,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
         # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
         self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
         sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-        self.assertEqual(len(sed.keys()), len(self._keys))
+        self.assertEqual(len(list(sed.keys())), len(self._keys))
         for key, vl in self._keys:
             self.assertTrue(key in sed.keys())
             if key in val:
@@ -2069,14 +2069,14 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             simps2.setUp()
 
             # db = PyTango.Database()
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
             rs = self.openRecSelector()
             rs.configDevice = val["ConfigDevice"]
             rs.door = val["Door"]
             rs.mntGrp = val["MntGrp"]
             rs.writerDevice = val["WriterDevice"]
 
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             # channelerrors = []
             poolchannels = []
@@ -2122,7 +2122,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-            self.assertEqual(len(sed.keys()), len(self._keys))
+            self.assertEqual(len(list(sed.keys())), len(self._keys))
             for key, vl in self._keys:
                 self.assertTrue(key in sed.keys())
                 if key in val:
@@ -2155,14 +2155,14 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
         try:
             simps2.setUp()
             # db = PyTango.Database()
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
             rs = self.openRecSelector()
             rs.configDevice = val["ConfigDevice"]
             rs.door = val["Door"]
             rs.mntGrp = val["MntGrp"]
             rs.writerDevice = val["WriterDevice"]
 
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             poolchannels = ["scalar2_long", "spectrum2_short",
                             "scalar2_uchar", "scalar2_string"]
@@ -2208,7 +2208,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-            self.assertEqual(len(sed.keys()), len(self._keys))
+            self.assertEqual(len(list(sed.keys())), len(self._keys))
             for key, vl in self._keys:
                 self.assertTrue(key in sed.keys())
                 if key in val:
@@ -2242,14 +2242,14 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             simps2.setUp()
 
             # db = PyTango.Database()
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
             rs = self.openRecSelector()
             rs.configDevice = val["ConfigDevice"]
             rs.door = val["Door"]
             rs.mntGrp = val["MntGrp"]
             rs.writerDevice = val["WriterDevice"]
 
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             poolchannels = ["scalar2_long", "spectrum2_short"]
             componentgroup = {
@@ -2300,7 +2300,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-            self.assertEqual(len(sed.keys()), len(self._keys))
+            self.assertEqual(len(list(sed.keys())), len(self._keys))
             for key, vl in self._keys:
                 self.assertTrue(key in sed.keys())
                 if key in val:
@@ -2334,14 +2334,14 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             simps2.setUp()
 
             # db = PyTango.Database()
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
             rs = self.openRecSelector()
             rs.configDevice = val["ConfigDevice"]
             rs.door = val["Door"]
             rs.mntGrp = val["MntGrp"]
             rs.writerDevice = val["WriterDevice"]
 
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             poolchannels = ["scalar2_long", "spectrum2_short", "client_long",
                             "scalar2_uchar", "scalar2_string", "ann3"]
@@ -2392,7 +2392,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-            self.assertEqual(len(sed.keys()), len(self._keys))
+            self.assertEqual(len(list(sed.keys())), len(self._keys))
             for key, vl in self._keys:
                 self.assertTrue(key in sed.keys())
                 if key in val:
@@ -2424,14 +2424,14 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             simps2.setUp()
 
             # db = PyTango.Database()
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
             rs = self.openRecSelector()
             rs.configDevice = val["ConfigDevice"]
             rs.door = val["Door"]
             rs.mntGrp = val["MntGrp"]
             rs.writerDevice = val["WriterDevice"]
 
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             poolchannels = ["scalar2_long", "spectrum2_short", "client_long",
                             "scalar2_uchar", "scalar2_string", "ann3"]
@@ -2482,7 +2482,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-            self.assertEqual(len(sed.keys()), len(self._keys))
+            self.assertEqual(len(list(sed.keys())), len(self._keys))
             for key, vl in self._keys:
                 self.assertTrue(key in sed.keys())
                 if key in val:
@@ -2516,14 +2516,14 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             simps2.setUp()
 
             # db = PyTango.Database()
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
             rs = self.openRecSelector()
             rs.configDevice = val["ConfigDevice"]
             rs.door = val["Door"]
             rs.mntGrp = val["MntGrp"]
             rs.writerDevice = val["WriterDevice"]
 
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             poolchannels = ["scalar2_long", "spectrum2_short", "client_long",
                             "scalar2_uchar", "scalar2_string", "ann3"]
@@ -2575,7 +2575,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-            self.assertEqual(len(sed.keys()), len(self._keys))
+            self.assertEqual(len(list(sed.keys())), len(self._keys))
             for key, vl in self._keys:
                 self.assertTrue(key in sed.keys())
                 if key in val:
@@ -2609,14 +2609,14 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             simps2.setUp()
 
             # db = PyTango.Database()
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
             rs = self.openRecSelector()
             rs.configDevice = val["ConfigDevice"]
             rs.door = val["Door"]
             rs.mntGrp = val["MntGrp"]
             rs.writerDevice = val["WriterDevice"]
 
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             poolchannels = ["scalar2_long", "spectrum2_short", "client_long",
                             "scalar2_uchar", "scalar2_string", "ann3"]
@@ -2668,7 +2668,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-            self.assertEqual(len(sed.keys()), len(self._keys))
+            self.assertEqual(len(list(sed.keys())), len(self._keys))
             for key, vl in self._keys:
                 self.assertTrue(key in sed.keys())
                 if key in val:
@@ -2710,16 +2710,16 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             simps2.setUp()
 
             db = PyTango.Database()
-            db.put_device_property(self._ms.ms.keys()[0],
+            db.put_device_property(list(self._ms.ms.keys())[0],
                                    {'PoolNames': self._pool.dp.name()})
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
             rs = self.openRecSelector()
             rs.configDevice = val["ConfigDevice"]
             rs.door = val["Door"]
             rs.mntGrp = val["MntGrp"]
             rs.writerDevice = val["WriterDevice"]
 
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             # channelerrors = []
             poolchannels = []
@@ -2773,7 +2773,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-            self.assertEqual(len(sed.keys()), len(self._keys))
+            self.assertEqual(len(list(sed.keys())), len(self._keys))
             for key, vl in self._keys:
                 self.assertTrue(key in sed.keys())
                 if key in val:
@@ -2815,16 +2815,16 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             simps2.setUp()
 
             db = PyTango.Database()
-            db.put_device_property(self._ms.ms.keys()[0],
+            db.put_device_property(list(self._ms.ms.keys())[0],
                                    {'PoolNames': self._pool.dp.name()})
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
             rs = self.openRecSelector()
             rs.configDevice = val["ConfigDevice"]
             rs.door = val["Door"]
             rs.mntGrp = val["MntGrp"]
             rs.writerDevice = val["WriterDevice"]
 
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             # channelerrors = []
             poolchannels = []
@@ -2878,7 +2878,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-            self.assertEqual(len(sed.keys()), len(self._keys))
+            self.assertEqual(len(list(sed.keys())), len(self._keys))
             for key, vl in self._keys:
                 self.assertTrue(key in sed.keys())
                 if key in val:
@@ -2920,9 +2920,9 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             simps2.setUp()
 
             db = PyTango.Database()
-            db.put_device_property(self._ms.ms.keys()[0],
+            db.put_device_property(list(self._ms.ms.keys())[0],
                                    {'PoolNames': self._pool.dp.name()})
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
             rs = self.openRecSelector()
             self.setProp(rs, "poolBlacklist",
                          [self._pool.dp.name()])
@@ -2931,7 +2931,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             rs.mntGrp = val["MntGrp"]
             rs.writerDevice = val["WriterDevice"]
 
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             # channelerrors = []
             poolchannels = []
@@ -2985,7 +2985,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-            self.assertEqual(len(sed.keys()), len(self._keys))
+            self.assertEqual(len(list(sed.keys())), len(self._keys))
             for key, vl in self._keys:
                 self.assertTrue(key in sed.keys())
                 if key in val:
@@ -3027,16 +3027,16 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             simps2.setUp()
 
             db = PyTango.Database()
-            db.put_device_property(self._ms.ms.keys()[0],
+            db.put_device_property(list(self._ms.ms.keys())[0],
                                    {'PoolNames': self._pool.dp.name()})
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
             rs = self.openRecSelector()
             rs.configDevice = val["ConfigDevice"]
             rs.door = val["Door"]
             rs.mntGrp = val["MntGrp"]
             rs.writerDevice = val["WriterDevice"]
 
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             # channelerrors = []
             poolchannels = ["scalar2_long", "spectrum2_short", "client_long",
@@ -3094,7 +3094,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-            self.assertEqual(len(sed.keys()), len(self._keys))
+            self.assertEqual(len(list(sed.keys())), len(self._keys))
             for key, vl in self._keys:
                 self.assertTrue(key in sed.keys())
                 if key in val:
@@ -3136,16 +3136,16 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             simps2.setUp()
 
             db = PyTango.Database()
-            db.put_device_property(self._ms.ms.keys()[0],
+            db.put_device_property(list(self._ms.ms.keys())[0],
                                    {'PoolNames': self._pool.dp.name()})
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
             rs = self.openRecSelector()
             rs.configDevice = val["ConfigDevice"]
             rs.door = val["Door"]
             rs.mntGrp = val["MntGrp"]
             rs.writerDevice = val["WriterDevice"]
 
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             # channelerrors = []
             poolchannels = ["scalar2_long", "spectrum2_short", "client_long",
@@ -3203,7 +3203,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-            self.assertEqual(len(sed.keys()), len(self._keys))
+            self.assertEqual(len(list(sed.keys())), len(self._keys))
             for key, vl in self._keys:
                 self.assertTrue(key in sed.keys())
                 if key in val:
@@ -3245,9 +3245,9 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             simps2.setUp()
 
             db = PyTango.Database()
-            db.put_device_property(self._ms.ms.keys()[0],
+            db.put_device_property(list(self._ms.ms.keys())[0],
                                    {'PoolNames': self._pool.dp.name()})
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
             rs = self.openRecSelector()
             self.setProp(rs, "poolBlacklist",
                          [self._pool.dp.name()])
@@ -3256,7 +3256,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             rs.mntGrp = val["MntGrp"]
             rs.writerDevice = val["WriterDevice"]
 
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             # channelerrors = []
             poolchannels = ["scalar2_long", "spectrum2_short", "client_long",
@@ -3314,7 +3314,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-            self.assertEqual(len(sed.keys()), len(self._keys))
+            self.assertEqual(len(list(sed.keys())), len(self._keys))
             for key, vl in self._keys:
                 self.assertTrue(key in sed.keys())
                 if key in val:
@@ -3353,16 +3353,16 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             simps2.setUp()
 
             db = PyTango.Database()
-            db.put_device_property(self._ms.ms.keys()[0],
+            db.put_device_property(list(self._ms.ms.keys())[0],
                                    {'PoolNames': self._pool.dp.name()})
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
             rs = self.openRecSelector()
             rs.configDevice = val["ConfigDevice"]
             rs.door = val["Door"]
             rs.mntGrp = val["MntGrp"]
             rs.writerDevice = val["WriterDevice"]
 
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             # channelerrors = []
 
@@ -3422,7 +3422,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-            self.assertEqual(len(sed.keys()), len(self._keys))
+            self.assertEqual(len(list(sed.keys())), len(self._keys))
             for key, vl in self._keys:
                 self.assertTrue(key in sed.keys())
                 if key in val:
@@ -3461,16 +3461,16 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             simps2.setUp()
 
             db = PyTango.Database()
-            db.put_device_property(self._ms.ms.keys()[0],
+            db.put_device_property(list(self._ms.ms.keys())[0],
                                    {'PoolNames': self._pool.dp.name()})
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
             rs = self.openRecSelector()
             rs.configDevice = val["ConfigDevice"]
             rs.door = val["Door"]
             rs.mntGrp = val["MntGrp"]
             rs.writerDevice = val["WriterDevice"]
 
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             # channelerrors = []
 
@@ -3530,7 +3530,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-            self.assertEqual(len(sed.keys()), len(self._keys))
+            self.assertEqual(len(list(sed.keys())), len(self._keys))
             for key, vl in self._keys:
                 self.assertTrue(key in sed.keys())
                 if key in val:
@@ -3569,17 +3569,17 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             db = PyTango.Database()
             simps2.setUp()
             db.put_device_alias(arr[0]["full_name"], arr[0]["name"])
-            db.put_device_property(self._ms.ms.keys()[0],
+            db.put_device_property(list(self._ms.ms.keys())[0],
                                    {'PoolNames': self._pool.dp.name()})
 
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
             rs = self.openRecSelector()
             rs.configDevice = val["ConfigDevice"]
             rs.door = val["Door"]
             rs.mntGrp = val["MntGrp"]
             rs.writerDevice = val["WriterDevice"]
 
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             # channelerrors = []
             poolchannels = ["scalar2_long", "spectrum2_short", "client_short",
@@ -3638,7 +3638,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-            self.assertEqual(len(sed.keys()), len(self._keys))
+            self.assertEqual(len(list(sed.keys())), len(self._keys))
             for key, vl in self._keys:
                 self.assertTrue(key in sed.keys())
                 if key in val:
@@ -3678,17 +3678,17 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             db = PyTango.Database()
             simps2.setUp()
             db.put_device_alias(arr[0]["full_name"], arr[0]["name"])
-            db.put_device_property(self._ms.ms.keys()[0],
+            db.put_device_property(list(self._ms.ms.keys())[0],
                                    {'PoolNames': self._pool.dp.name()})
 
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
             rs = self.openRecSelector()
             rs.configDevice = val["ConfigDevice"]
             rs.door = val["Door"]
             rs.mntGrp = val["MntGrp"]
             rs.writerDevice = val["WriterDevice"]
 
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             # channelerrors = []
             poolchannels = ["scalar2_long", "spectrum2_short", "client_short",
@@ -3747,7 +3747,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-            self.assertEqual(len(sed.keys()), len(self._keys))
+            self.assertEqual(len(list(sed.keys())), len(self._keys))
             for key, vl in self._keys:
                 self.assertTrue(key in sed.keys())
                 if key in val:
@@ -3787,10 +3787,10 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             db = PyTango.Database()
             simps2.setUp()
             db.put_device_alias(arr[0]["full_name"], arr[0]["name"])
-            db.put_device_property(self._ms.ms.keys()[0],
+            db.put_device_property(list(self._ms.ms.keys())[0],
                                    {'PoolNames': self._pool.dp.name()})
 
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
             rs = self.openRecSelector()
             self.setProp(rs, "poolBlacklist",
                          [self._pool.dp.name()])
@@ -3799,7 +3799,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             rs.mntGrp = val["MntGrp"]
             rs.writerDevice = val["WriterDevice"]
 
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             # channelerrors = []
             poolchannels = ["scalar2_long", "spectrum2_short", "client_short",
@@ -3858,7 +3858,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-            self.assertEqual(len(sed.keys()), len(self._keys))
+            self.assertEqual(len(list(sed.keys())), len(self._keys))
             for key, vl in self._keys:
                 self.assertTrue(key in sed.keys())
                 if key in val:
@@ -3899,17 +3899,17 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             simps2.setUp()
 
             db.put_device_alias(arr[0]["full_name"], arr[0]["name"])
-            db.put_device_property(self._ms.ms.keys()[0],
+            db.put_device_property(list(self._ms.ms.keys())[0],
                                    {'PoolNames': self._pool.dp.name()})
 
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
             rs = self.openRecSelector()
             rs.configDevice = val["ConfigDevice"]
             rs.door = val["Door"]
             rs.mntGrp = val["MntGrp"]
             rs.writerDevice = val["WriterDevice"]
 
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             # channelerrors = []
             poolchannels = ["scalar2_long", "spectrum2_short", "client_short"]
@@ -3947,7 +3947,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-            self.assertEqual(len(sed.keys()), len(self._keys))
+            self.assertEqual(len(list(sed.keys())), len(self._keys))
             for key, vl in self._keys:
                 self.assertTrue(key in sed.keys())
                 if key in val:
@@ -3985,17 +3985,17 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             simps2.setUp()
 
             db.put_device_alias(arr[0]["full_name"], arr[0]["name"])
-            db.put_device_property(self._ms.ms.keys()[0],
+            db.put_device_property(list(self._ms.ms.keys())[0],
                                    {'PoolNames': self._pool.dp.name()})
 
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
             rs = self.openRecSelector()
             rs.configDevice = val["ConfigDevice"]
             rs.door = val["Door"]
             rs.mntGrp = val["MntGrp"]
             rs.writerDevice = val["WriterDevice"]
 
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             # channelerrors = []
             poolchannels = ["scalar2_long", "spectrum2_short", "client_short"]
@@ -4033,7 +4033,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-            self.assertEqual(len(sed.keys()), len(self._keys))
+            self.assertEqual(len(list(sed.keys())), len(self._keys))
             for key, vl in self._keys:
                 self.assertTrue(key in sed.keys())
                 if key in val:
@@ -4071,10 +4071,10 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             simps2.setUp()
 
             db.put_device_alias(arr[0]["full_name"], arr[0]["name"])
-            db.put_device_property(self._ms.ms.keys()[0],
+            db.put_device_property(list(self._ms.ms.keys())[0],
                                    {'PoolNames': self._pool.dp.name()})
 
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
             rs = self.openRecSelector()
             self.setProp(rs, "poolBlacklist",
                          [self._pool.dp.name()])
@@ -4083,7 +4083,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             rs.mntGrp = val["MntGrp"]
             rs.writerDevice = val["WriterDevice"]
 
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             # channelerrors = []
             poolchannels = ["scalar2_long", "spectrum2_short", "client_short"]
@@ -4121,7 +4121,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-            self.assertEqual(len(sed.keys()), len(self._keys))
+            self.assertEqual(len(list(sed.keys())), len(self._keys))
             for key, vl in self._keys:
                 self.assertTrue(key in sed.keys())
                 if key in val:
@@ -4159,17 +4159,17 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             simps2.setUp()
 
             db.put_device_alias(arr[0]["full_name"], arr[0]["name"])
-            db.put_device_property(self._ms.ms.keys()[0],
+            db.put_device_property(list(self._ms.ms.keys())[0],
                                    {'PoolNames': self._pool.dp.name()})
 
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
             rs = self.openRecSelector()
             rs.configDevice = val["ConfigDevice"]
             rs.door = val["Door"]
             rs.mntGrp = val["MntGrp"]
             rs.writerDevice = val["WriterDevice"]
 
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             # channelerrors = []
             poolchannels = ["scalar2_long", "spectrum2_short", "client2_short"]
@@ -4207,7 +4207,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-            self.assertEqual(len(sed.keys()), len(self._keys))
+            self.assertEqual(len(list(sed.keys())), len(self._keys))
             for key, vl in self._keys:
                 self.assertTrue(key in sed.keys())
                 if key in val:
@@ -4245,17 +4245,17 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             simps2.setUp()
 
             db.put_device_alias(arr[0]["full_name"], arr[0]["name"])
-            db.put_device_property(self._ms.ms.keys()[0],
+            db.put_device_property(list(self._ms.ms.keys())[0],
                                    {'PoolNames': self._pool.dp.name()})
 
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
             rs = self.openRecSelector()
             rs.configDevice = val["ConfigDevice"]
             rs.door = val["Door"]
             rs.mntGrp = val["MntGrp"]
             rs.writerDevice = val["WriterDevice"]
 
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             # channelerrors = []
             poolchannels = ["scalar2_long", "spectrum2_short", "client2_short"]
@@ -4293,7 +4293,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-            self.assertEqual(len(sed.keys()), len(self._keys))
+            self.assertEqual(len(list(sed.keys())), len(self._keys))
             for key, vl in self._keys:
                 self.assertTrue(key in sed.keys())
                 if key in val:
@@ -4331,10 +4331,10 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             simps2.setUp()
 
             db.put_device_alias(arr[0]["full_name"], arr[0]["name"])
-            db.put_device_property(self._ms.ms.keys()[0],
+            db.put_device_property(list(self._ms.ms.keys())[0],
                                    {'PoolNames': self._pool.dp.name()})
 
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
             rs = self.openRecSelector()
             self.setProp(rs, "poolBlacklist",
                          [self._pool.dp.name()])
@@ -4343,7 +4343,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             rs.mntGrp = val["MntGrp"]
             rs.writerDevice = val["WriterDevice"]
 
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             # channelerrors = []
             poolchannels = ["scalar2_long", "spectrum2_short", "client2_short"]
@@ -4381,7 +4381,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-            self.assertEqual(len(sed.keys()), len(self._keys))
+            self.assertEqual(len(list(sed.keys())), len(self._keys))
             for key, vl in self._keys:
                 self.assertTrue(key in sed.keys())
                 if key in val:
@@ -4418,14 +4418,14 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             # db = PyTango.Database()
             simps2.setUp()
 
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
             rs = self.openRecSelector()
             rs.configDevice = val["ConfigDevice"]
             rs.door = val["Door"]
             rs.mntGrp = val["MntGrp"]
             rs.writerDevice = val["WriterDevice"]
 
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             # channelerrors = []
             poolchannels = []
@@ -4458,7 +4458,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-            self.assertEqual(len(sed.keys()), len(self._keys))
+            self.assertEqual(len(list(sed.keys())), len(self._keys))
             for key, vl in self._keys:
                 self.assertTrue(key in sed.keys())
                 if key in val:
@@ -4485,15 +4485,15 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                "MntGrp": 'nxsmntgrp'}
 
         db = PyTango.Database()
-        db.put_device_property(self._ms.ms.keys()[0],
+        db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
         rs = self.openRecSelector()
         rs.configDevice = val["ConfigDevice"]
         rs.door = val["Door"]
         rs.mntGrp = val["MntGrp"]
 
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
         # channelerrors = []
         self.dump(rs)
@@ -4529,13 +4529,13 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                "MntGrp": 'nxsmntgrp'}
 
         # db = PyTango.Database()
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
         rs = self.openRecSelector()
         rs.configDevice = val["ConfigDevice"]
         rs.door = val["Door"]
         rs.mntGrp = val["MntGrp"]
 
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
         channelerrors = []
         # poolchannels = []
@@ -4588,7 +4588,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
 
         # db = PyTango.Database()
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
         rs = self.openRecSelector()
         self.setProp(rs, "defaultPreselectedComponents",
                      list(componentgroup.keys()))
@@ -4597,7 +4597,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
         rs.mntGrp = val["MntGrp"]
         rs.writerDevice = val["WriterDevice"]
 
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
         cnf = json.loads(rs.profileConfiguration)
         cnf["Timer"] = '[]'
@@ -4620,7 +4620,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
 
         self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
         sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-        self.assertEqual(len(sed.keys()), len(self._keys))
+        self.assertEqual(len(list(sed.keys())), len(self._keys))
         for key, vl in self._keys:
             self.assertTrue(key in sed.keys())
             self.assertTrue(key in sed1.keys())
@@ -4651,8 +4651,8 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                "MntGrp": 'nxsmntgrp'}
 
         # db = PyTango.Database()
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
         channelerrors = []
         poolchannels = ["mycp"]
@@ -4702,8 +4702,8 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                "MntGrp": 'nxsmntgrp'}
 
         # db = PyTango.Database()
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
         channelerrors = []
         poolchannels = ["mycp"]
@@ -4753,9 +4753,9 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                "MntGrp": 'nxsmntgrp'}
 
         # db = PyTango.Database()
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
         channelerrors = []
         poolchannels = ["mycp"]
@@ -4802,7 +4802,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                "MntGrp": 'nxsmntgrp'}
 
         # db = PyTango.Database()
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
         channelerrors = []
         poolchannels = []
@@ -4819,7 +4819,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
         rs.mntGrp = val["MntGrp"]
         rs.writerDevice = val["WriterDevice"]
 
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
         cnf = json.loads(rs.profileConfiguration)
         cnf["Timer"] = '[]'
@@ -4842,7 +4842,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
         self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
         sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
         # print sed
-        self.assertEqual(len(sed.keys()), len(self._keys))
+        self.assertEqual(len(list(sed.keys())), len(self._keys))
         for key, vl in self._keys:
             self.assertTrue(key in sed.keys())
             if key in val:
@@ -4873,7 +4873,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                "MntGrp": 'nxsmntgrp'}
 
         # db = PyTango.Database()
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
         channelerrors = []
         poolchannels = []
@@ -4890,7 +4890,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
         rs.mntGrp = val["MntGrp"]
         rs.writerDevice = val["WriterDevice"]
 
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
         cnf = json.loads(rs.profileConfiguration)
         cnf["Timer"] = '[]'
@@ -4913,7 +4913,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
         self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
         sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
         # print sed
-        self.assertEqual(len(sed.keys()), len(self._keys))
+        self.assertEqual(len(list(sed.keys())), len(self._keys))
         for key, vl in self._keys:
             self.assertTrue(key in sed.keys())
             if key in val:
@@ -4944,7 +4944,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                "MntGrp": 'nxsmntgrp'}
 
         # db = PyTango.Database()
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
         channelerrors = []
         poolchannels = []
@@ -4961,7 +4961,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
         rs.mntGrp = val["MntGrp"]
         rs.writerDevice = val["WriterDevice"]
 
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
         cnf = json.loads(rs.profileConfiguration)
         cnf["Timer"] = '[]'
@@ -4984,7 +4984,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
         self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
         sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
         # print sed
-        self.assertEqual(len(sed.keys()), len(self._keys))
+        self.assertEqual(len(list(sed.keys())), len(self._keys))
         for key, vl in self._keys:
             self.assertTrue(key in sed.keys())
             if key in val:
@@ -5015,7 +5015,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                "MntGrp": 'nxsmntgrp'}
 
         # db = PyTango.Database()
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
         channelerrors = []
         poolchannels = []
         componentgroup = {"smycp": True}
@@ -5031,7 +5031,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
         rs.mntGrp = val["MntGrp"]
         rs.writerDevice = val["WriterDevice"]
 
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
         cnf = json.loads(rs.profileConfiguration)
         cnf["DataSourcePreselection"] = json.dumps(datasourcegroup)
@@ -5067,7 +5067,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                "MntGrp": 'nxsmntgrp'}
 
         # db = PyTango.Database()
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
         channelerrors = []
         poolchannels = []
         componentgroup = {"smycp": False}
@@ -5083,7 +5083,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
         rs.mntGrp = val["MntGrp"]
         rs.writerDevice = val["WriterDevice"]
 
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
         cnf = json.loads(rs.profileConfiguration)
         cnf["DataSourcePreselection"] = json.dumps(datasourcegroup)
@@ -5119,7 +5119,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                "MntGrp": 'nxsmntgrp'}
 
         # db = PyTango.Database()
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
         channelerrors = []
         poolchannels = []
         componentgroup = {"smycp": None}
@@ -5135,7 +5135,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
         rs.mntGrp = val["MntGrp"]
         rs.writerDevice = val["WriterDevice"]
 
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
         cnf = json.loads(rs.profileConfiguration)
         cnf["DataSourcePreselection"] = json.dumps(datasourcegroup)
@@ -5168,7 +5168,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                "MntGrp": 'nxsmntgrp'}
 
         # db = PyTango.Database()
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
         channelerrors = []
         poolchannels = []
@@ -5187,7 +5187,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
         rs.mntGrp = val["MntGrp"]
         rs.writerDevice = val["WriterDevice"]
 
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
         cnf = json.loads(rs.profileConfiguration)
         cnf["Timer"] = '[]'
@@ -5210,7 +5210,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
         # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
         self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
         sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-        self.assertEqual(len(sed.keys()), len(self._keys))
+        self.assertEqual(len(list(sed.keys())), len(self._keys))
         for key, vl in self._keys:
             self.assertTrue(key in sed.keys())
             if key in val:
@@ -5247,7 +5247,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             simps2.setUp()
 
             # db = PyTango.Database()
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             channelerrors = []
             poolchannels = []
@@ -5277,7 +5277,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             rs.mntGrp = val["MntGrp"]
             rs.writerDevice = val["WriterDevice"]
 
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             cnf = json.loads(rs.profileConfiguration)
             cnf["Timer"] = '[]'
@@ -5301,7 +5301,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-            self.assertEqual(len(sed.keys()), len(self._keys))
+            self.assertEqual(len(list(sed.keys())), len(self._keys))
             for key, vl in self._keys:
                 self.assertTrue(key in sed.keys())
                 if key in val:
@@ -5340,7 +5340,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             simps2.add()
 
             # db = PyTango.Database()
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             # channelerrors = []
             poolchannels = []
@@ -5365,7 +5365,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             rs.mntGrp = val["MntGrp"]
             rs.writerDevice = val["WriterDevice"]
 
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             cnf = json.loads(rs.profileConfiguration)
             cnf["Timer"] = '[]'
@@ -5390,7 +5390,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-            self.assertEqual(len(sed.keys()), len(self._keys))
+            self.assertEqual(len(list(sed.keys())), len(self._keys))
             for key, vl in self._keys:
                 self.assertTrue(key in sed.keys())
                 if key in val:
@@ -5428,7 +5428,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             simps2.setUp()
 
             # db = PyTango.Database()
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             # channelerrors = []
             poolchannels = []
@@ -5453,7 +5453,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             rs.mntGrp = val["MntGrp"]
             rs.writerDevice = val["WriterDevice"]
 
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             cnf = json.loads(rs.profileConfiguration)
             cnf["Timer"] = '[]'
@@ -5478,7 +5478,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-            self.assertEqual(len(sed.keys()), len(self._keys))
+            self.assertEqual(len(list(sed.keys())), len(self._keys))
             for key, vl in self._keys:
                 self.assertTrue(key in sed.keys())
                 if key in val:
@@ -5516,7 +5516,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             simps2.setUp()
 
             # db = PyTango.Database()
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             # channelerrors = []
             poolchannels = []
@@ -5541,7 +5541,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             rs.mntGrp = val["MntGrp"]
             rs.writerDevice = val["WriterDevice"]
 
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             cnf = json.loads(rs.profileConfiguration)
             cnf["Timer"] = '[]'
@@ -5566,7 +5566,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-            self.assertEqual(len(sed.keys()), len(self._keys))
+            self.assertEqual(len(list(sed.keys())), len(self._keys))
             for key, vl in self._keys:
                 self.assertTrue(key in sed.keys())
                 if key in val:
@@ -5604,7 +5604,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             simps2.setUp()
 
             # db = PyTango.Database()
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             # channelerrors = []
             poolchannels = []
@@ -5629,7 +5629,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             rs.mntGrp = val["MntGrp"]
             rs.writerDevice = val["WriterDevice"]
 
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             cnf = json.loads(rs.profileConfiguration)
             cnf["Timer"] = '[]'
@@ -5654,7 +5654,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-            self.assertEqual(len(sed.keys()), len(self._keys))
+            self.assertEqual(len(list(sed.keys())), len(self._keys))
             for key, vl in self._keys:
                 self.assertTrue(key in sed.keys())
                 if key in val:
@@ -5692,7 +5692,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             simps2.add()
 
             # db = PyTango.Database()
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             # channelerrors = []
             poolchannels = []
@@ -5717,7 +5717,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             rs.mntGrp = val["MntGrp"]
             rs.writerDevice = val["WriterDevice"]
 
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             cnf = json.loads(rs.profileConfiguration)
             cnf["Timer"] = '[]'
@@ -5742,7 +5742,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-            self.assertEqual(len(sed.keys()), len(self._keys))
+            self.assertEqual(len(list(sed.keys())), len(self._keys))
             for key, vl in self._keys:
                 self.assertTrue(key in sed.keys())
                 if key in val:
@@ -5780,7 +5780,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             simps2.add()
 
             # db = PyTango.Database()
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             # channelerrors = []
             poolchannels = []
@@ -5805,7 +5805,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             rs.mntGrp = val["MntGrp"]
             rs.writerDevice = val["WriterDevice"]
 
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             cnf = json.loads(rs.profileConfiguration)
             cnf["Timer"] = '[]'
@@ -5830,7 +5830,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-            self.assertEqual(len(sed.keys()), len(self._keys))
+            self.assertEqual(len(list(sed.keys())), len(self._keys))
             for key, vl in self._keys:
                 self.assertTrue(key in sed.keys())
                 if key in val:
@@ -5868,7 +5868,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             simps2.add()
 
             # db = PyTango.Database()
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             # channelerrors = []
             poolchannels = []
@@ -5899,7 +5899,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             rs.mntGrp = val["MntGrp"]
             rs.writerDevice = val["WriterDevice"]
 
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             cnf = json.loads(rs.profileConfiguration)
             cnf["Timer"] = '[]'
@@ -5923,7 +5923,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-            self.assertEqual(len(sed.keys()), len(self._keys))
+            self.assertEqual(len(list(sed.keys())), len(self._keys))
             for key, vl in self._keys:
                 self.assertTrue(key in sed.keys())
                 if key in val:
@@ -5957,7 +5957,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                "MntGrp": 'nxsmntgrp'}
 
         # db = PyTango.Database()
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
         # channelerrors = []
         poolchannels = []
         componentgroup = {"smycp": None, "smycp2": False, "smycp3": True,
@@ -5983,7 +5983,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
         rs.mntGrp = val["MntGrp"]
         rs.writerDevice = val["WriterDevice"]
 
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
         cnf = json.loads(rs.profileConfiguration)
         cnf["Timer"] = '[]'
@@ -6007,7 +6007,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
         # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
         self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
         sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-        self.assertEqual(len(sed.keys()), len(self._keys))
+        self.assertEqual(len(list(sed.keys())), len(self._keys))
         for key, vl in self._keys:
             self.assertTrue(key in sed.keys())
             if key in val:
@@ -6043,7 +6043,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             simps2.setUp()
 
             # db = PyTango.Database()
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             # channelerrors = []
             poolchannels = []
@@ -6070,7 +6070,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             rs.mntGrp = val["MntGrp"]
             rs.writerDevice = val["WriterDevice"]
 
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
@@ -6097,7 +6097,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-            self.assertEqual(len(sed.keys()), len(self._keys))
+            self.assertEqual(len(list(sed.keys())), len(self._keys))
             for key, vl in self._keys:
                 self.assertTrue(key in sed.keys())
                 if key in val:
@@ -6134,7 +6134,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
         try:
             simps2.setUp()
             # db = PyTango.Database()
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             poolchannels = ["scalar2_long", "spectrum2_short",
                             "scalar2_uchar", "scalar2_string"]
@@ -6164,7 +6164,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             rs.mntGrp = val["MntGrp"]
             rs.writerDevice = val["WriterDevice"]
 
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             cnf = json.loads(rs.profileConfiguration)
             cnf["Timer"] = '[]'
@@ -6190,7 +6190,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-            self.assertEqual(len(sed.keys()), len(self._keys))
+            self.assertEqual(len(list(sed.keys())), len(self._keys))
             for key, vl in self._keys:
                 self.assertTrue(key in sed.keys())
                 self.assertTrue(key in sed1.keys())
@@ -6228,7 +6228,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             simps2.setUp()
 
             # db = PyTango.Database()
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
             poolchannels = ["scalar2_long", "spectrum2_short"]
             componentgroup = {"smycp": False, "smycp2": False,
                               "smycp3": False, "smycpnt1": False,
@@ -6258,7 +6258,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             rs.mntGrp = val["MntGrp"]
             rs.writerDevice = val["WriterDevice"]
 
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             cnf = json.loads(rs.profileConfiguration)
             cnf["Timer"] = '[]'
@@ -6284,7 +6284,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-            self.assertEqual(len(sed.keys()), len(self._keys))
+            self.assertEqual(len(list(sed.keys())), len(self._keys))
             for key, vl in self._keys:
                 self.assertTrue(key in sed.keys())
                 if key in val:
@@ -6322,7 +6322,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             simps2.setUp()
 
             # db = PyTango.Database()
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             poolchannels = ["scalar2_long", "spectrum2_short", "client_long"]
             componentgroup = {"smycp": None, "smycp2": True,
@@ -6351,7 +6351,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             rs.mntGrp = val["MntGrp"]
             rs.writerDevice = val["WriterDevice"]
 
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
@@ -6380,7 +6380,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-            self.assertEqual(len(sed.keys()), len(self._keys))
+            self.assertEqual(len(list(sed.keys())), len(self._keys))
             for key, vl in self._keys:
                 self.assertTrue(key in sed.keys())
                 if key in val:
@@ -6418,7 +6418,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             simps2.setUp()
 
             # db = PyTango.Database()
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             poolchannels = ["scalar2_long", "spectrum2_short", "client_long"]
             componentgroup = {"smycp": None, "smycp2": True,
@@ -6447,7 +6447,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             rs.mntGrp = val["MntGrp"]
             rs.writerDevice = val["WriterDevice"]
 
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
@@ -6476,7 +6476,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-            self.assertEqual(len(sed.keys()), len(self._keys))
+            self.assertEqual(len(list(sed.keys())), len(self._keys))
             for key, vl in self._keys:
                 self.assertTrue(key in sed.keys())
                 if key in val:
@@ -6514,7 +6514,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             simps2.setUp()
 
             # db = PyTango.Database()
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             poolchannels = ["scalar2_long", "spectrum2_short", "client_long"]
             componentgroup = {"smycp": None, "smycp2": True,
@@ -6543,7 +6543,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             rs.mntGrp = val["MntGrp"]
             rs.writerDevice = val["WriterDevice"]
 
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(cps)])
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(dss)])
@@ -6572,7 +6572,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-            self.assertEqual(len(sed.keys()), len(self._keys))
+            self.assertEqual(len(list(sed.keys())), len(self._keys))
             for key, vl in self._keys:
                 self.assertTrue(key in sed.keys())
                 if key in val:
@@ -6610,7 +6610,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             simps2.setUp()
 
             # db = PyTango.Database()
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
             poolchannels = ["scalar2_long", "spectrum2_short", "client_long"]
             componentgroup = {"smycp": False, "smycp2": True,
                               "smycp3": True, "smycpnt1": None,
@@ -6640,7 +6640,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             rs.mntGrp = val["MntGrp"]
             rs.writerDevice = val["WriterDevice"]
 
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             cnf = json.loads(rs.profileConfiguration)
             cnf["Timer"] = '[]'
@@ -6666,7 +6666,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-            self.assertEqual(len(sed.keys()), len(self._keys))
+            self.assertEqual(len(list(sed.keys())), len(self._keys))
             for key, vl in self._keys:
                 self.assertTrue(key in sed.keys())
                 if key in val:
@@ -6704,7 +6704,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             simps2.setUp()
 
             # db = PyTango.Database()
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
             poolchannels = ["scalar2_long", "spectrum2_short", "client_long"]
             componentgroup = {"smycp": False, "smycp2": True,
                               "smycp3": True, "smycpnt1": True,
@@ -6734,7 +6734,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             rs.mntGrp = val["MntGrp"]
             rs.writerDevice = val["WriterDevice"]
 
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             cnf = json.loads(rs.profileConfiguration)
             cnf["Timer"] = '[]'
@@ -6760,7 +6760,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-            self.assertEqual(len(sed.keys()), len(self._keys))
+            self.assertEqual(len(list(sed.keys())), len(self._keys))
             for key, vl in self._keys:
                 self.assertTrue(key in sed.keys())
                 if key in val:
@@ -6798,7 +6798,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             simps2.setUp()
 
             # db = PyTango.Database()
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
             poolchannels = ["scalar2_long", "spectrum2_short", "client_long"]
             componentgroup = {"smycp": False, "smycp2": True,
                               "smycp3": True, "smycpnt1": False,
@@ -6828,7 +6828,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             rs.mntGrp = val["MntGrp"]
             rs.writerDevice = val["WriterDevice"]
 
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             cnf = json.loads(rs.profileConfiguration)
             cnf["Timer"] = '[]'
@@ -6854,7 +6854,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-            self.assertEqual(len(sed.keys()), len(self._keys))
+            self.assertEqual(len(list(sed.keys())), len(self._keys))
             for key, vl in self._keys:
                 self.assertTrue(key in sed.keys())
                 if key in val:
@@ -6900,9 +6900,9 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             simps2.setUp()
 
             db = PyTango.Database()
-            db.put_device_property(self._ms.ms.keys()[0],
+            db.put_device_property(list(self._ms.ms.keys())[0],
                                    {'PoolNames': self._pool.dp.name()})
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
             # channelerrors = []
             poolchannels = []
             componentgroup = {"smycp": False, "smycp2": None,
@@ -6934,7 +6934,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             rs.mntGrp = val["MntGrp"]
             rs.writerDevice = val["WriterDevice"]
 
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             pool = self._pool.dp
             pool.AcqChannelList = [json.dumps(a) for a in arr]
@@ -6962,7 +6962,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-            self.assertEqual(len(sed.keys()), len(self._keys))
+            self.assertEqual(len(list(sed.keys())), len(self._keys))
             for key, vl in self._keys:
                 self.assertTrue(key in sed.keys())
                 if key in val:
@@ -7008,9 +7008,9 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             simps2.setUp()
 
             db = PyTango.Database()
-            db.put_device_property(self._ms.ms.keys()[0],
+            db.put_device_property(list(self._ms.ms.keys())[0],
                                    {'PoolNames': self._pool.dp.name()})
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
             # channelerrors = []
             poolchannels = []
             componentgroup = {"smycp": False, "smycp2": False,
@@ -7036,7 +7036,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             rs.mntGrp = val["MntGrp"]
             rs.writerDevice = val["WriterDevice"]
 
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             pool = self._pool.dp
             pool.AcqChannelList = [json.dumps(a) for a in arr]
@@ -7060,7 +7060,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-            self.assertEqual(len(sed.keys()), len(self._keys))
+            self.assertEqual(len(list(sed.keys())), len(self._keys))
             for key, vl in self._keys:
                 self.assertTrue(key in sed.keys())
                 if key in val:
@@ -7103,9 +7103,9 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             simps2.setUp()
 
             db = PyTango.Database()
-            db.put_device_property(self._ms.ms.keys()[0],
+            db.put_device_property(list(self._ms.ms.keys())[0],
                                    {'PoolNames': self._pool.dp.name()})
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             # channelerrors = []
             poolchannels = ["scalar2_long", "spectrum2_short", "client_long",
@@ -7131,7 +7131,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             rs.mntGrp = val["MntGrp"]
             rs.writerDevice = val["WriterDevice"]
 
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             pool = self._pool.dp
             pool.AcqChannelList = [json.dumps(a) for a in arr]
@@ -7156,7 +7156,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-            self.assertEqual(len(sed.keys()), len(self._keys))
+            self.assertEqual(len(list(sed.keys())), len(self._keys))
             for key, vl in self._keys:
                 self.assertTrue(key in sed.keys())
                 if key in val:
@@ -7196,9 +7196,9 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             simps2.setUp()
 
             db = PyTango.Database()
-            db.put_device_property(self._ms.ms.keys()[0],
+            db.put_device_property(list(self._ms.ms.keys())[0],
                                    {'PoolNames': self._pool.dp.name()})
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             # channelerrors = []
 
@@ -7224,7 +7224,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             rs.mntGrp = val["MntGrp"]
             rs.writerDevice = val["WriterDevice"]
 
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             pool = self._pool.dp
             pool.AcqChannelList = [json.dumps(a) for a in arr]
@@ -7251,7 +7251,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-            self.assertEqual(len(sed.keys()), len(self._keys))
+            self.assertEqual(len(list(sed.keys())), len(self._keys))
             for key, vl in self._keys:
                 self.assertTrue(key in sed.keys())
                 if key in val:
@@ -7291,10 +7291,10 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             db = PyTango.Database()
             simps2.setUp()
             db.put_device_alias(arr[0]["full_name"], arr[0]["name"])
-            db.put_device_property(self._ms.ms.keys()[0],
+            db.put_device_property(list(self._ms.ms.keys())[0],
                                    {'PoolNames': self._pool.dp.name()})
 
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             # channelerrors = []
             poolchannels = ["scalar2_long", "spectrum2_short", "client_short"]
@@ -7320,7 +7320,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             rs.mntGrp = val["MntGrp"]
             rs.writerDevice = val["WriterDevice"]
 
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
             pool = self._pool.dp
             pool.AcqChannelList = [json.dumps(a) for a in arr]
 
@@ -7346,7 +7346,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-            self.assertEqual(len(sed.keys()), len(self._keys))
+            self.assertEqual(len(list(sed.keys())), len(self._keys))
             for key, vl in self._keys:
                 self.assertTrue(key in sed.keys())
                 self.assertTrue(key in sed1.keys())
@@ -7388,10 +7388,10 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             db = PyTango.Database()
             simps2.setUp()
             db.put_device_alias(arr[0]["full_name"], arr[0]["name"])
-            db.put_device_property(self._ms.ms.keys()[0],
+            db.put_device_property(list(self._ms.ms.keys())[0],
                                    {'PoolNames': self._pool.dp.name()})
 
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             # channelerrors = []
             poolchannels = ["scalar2_long", "spectrum2_short", "client_short"]
@@ -7419,7 +7419,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             rs.mntGrp = val["MntGrp"]
             rs.writerDevice = val["WriterDevice"]
 
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
             pool = self._pool.dp
             pool.AcqChannelList = [json.dumps(a) for a in arr]
 
@@ -7445,7 +7445,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-            self.assertEqual(len(sed.keys()), len(self._keys))
+            self.assertEqual(len(list(sed.keys())), len(self._keys))
             for key, vl in self._keys:
                 self.assertTrue(key in sed.keys())
                 self.assertTrue(key in sed1.keys())
@@ -7488,10 +7488,10 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             simps2.setUp()
 
             db.put_device_alias(arr[0]["full_name"], arr[0]["name"])
-            db.put_device_property(self._ms.ms.keys()[0],
+            db.put_device_property(list(self._ms.ms.keys())[0],
                                    {'PoolNames': self._pool.dp.name()})
 
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
             # channelerrors = []
             poolchannels = ["scalar2_long", "spectrum2_short", "client_short"]
             componentgroup = {
@@ -7515,7 +7515,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             rs.mntGrp = val["MntGrp"]
             rs.writerDevice = val["WriterDevice"]
 
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             pool = self._pool.dp
             pool.AcqChannelList = [json.dumps(a) for a in arr]
@@ -7540,7 +7540,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-            self.assertEqual(len(sed.keys()), len(self._keys))
+            self.assertEqual(len(list(sed.keys())), len(self._keys))
             for key, vl in self._keys:
                 self.assertTrue(key in sed.keys())
                 self.assertTrue(key in sed1.keys())
@@ -7583,10 +7583,10 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             simps2.setUp()
 
             db.put_device_alias(arr[0]["full_name"], arr[0]["name"])
-            db.put_device_property(self._ms.ms.keys()[0],
+            db.put_device_property(list(self._ms.ms.keys())[0],
                                    {'PoolNames': self._pool.dp.name()})
 
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
             # channelerrors = []
             poolchannels = ["scalar2_long", "spectrum2_short", "client_short"]
             componentgroup = {
@@ -7612,7 +7612,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             rs.mntGrp = val["MntGrp"]
             rs.writerDevice = val["WriterDevice"]
 
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             pool = self._pool.dp
             pool.AcqChannelList = [json.dumps(a) for a in arr]
@@ -7637,7 +7637,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-            self.assertEqual(len(sed.keys()), len(self._keys))
+            self.assertEqual(len(list(sed.keys())), len(self._keys))
             for key, vl in self._keys:
                 self.assertTrue(key in sed.keys())
                 self.assertTrue(key in sed1.keys())
@@ -7680,10 +7680,10 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             simps2.setUp()
 
             db.put_device_alias(arr[0]["full_name"], arr[0]["name"])
-            db.put_device_property(self._ms.ms.keys()[0],
+            db.put_device_property(list(self._ms.ms.keys())[0],
                                    {'PoolNames': self._pool.dp.name()})
 
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             # channelerrors = []
             poolchannels = ["scalar2_long", "spectrum2_short", "client2_short"]
@@ -7708,7 +7708,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             rs.mntGrp = val["MntGrp"]
             rs.writerDevice = val["WriterDevice"]
 
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             pool = self._pool.dp
             pool.AcqChannelList = [json.dumps(a) for a in arr]
@@ -7732,7 +7732,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-            self.assertEqual(len(sed.keys()), len(self._keys))
+            self.assertEqual(len(list(sed.keys())), len(self._keys))
             for key, vl in self._keys:
                 self.assertTrue(key in sed.keys())
                 self.assertTrue(key in sed1.keys())
@@ -7774,7 +7774,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             # db = PyTango.Database()
             simps2.setUp()
 
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
             # channelerrors = []
             poolchannels = []
             componentgroup = {
@@ -7797,7 +7797,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             rs.mntGrp = val["MntGrp"]
             rs.writerDevice = val["WriterDevice"]
 
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             cnf = json.loads(rs.profileConfiguration)
             cnf["PreselectingDataSources"] = json.dumps(poolchannels)
@@ -7817,7 +7817,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-            self.assertEqual(len(sed.keys()), len(self._keys))
+            self.assertEqual(len(list(sed.keys())), len(self._keys))
             for key, vl in self._keys:
                 self.assertTrue(key in sed.keys())
                 self.assertTrue(key in sed1.keys())
@@ -7868,19 +7868,19 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                "MntGrp": 'nxsmntgrp'}
 
         db = PyTango.Database()
-        db.put_device_property(self._ms.ms.keys()[0],
+        db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
         rs = self.openRecSelector()
         rs.configDevice = val["ConfigDevice"]
         rs.door = val["Door"]
         rs.mntGrp = val["MntGrp"]
 
         db = PyTango.Database()
-        db.put_device_property(self._ms.ms.keys()[0],
+        db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
 
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
         arr = [
             ["test/ct/01", ["CTExpChannel"],
@@ -7916,9 +7916,9 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                "MntGrp": 'nxsmntgrp'}
 
         db = PyTango.Database()
-        db.put_device_property(self._ms.ms.keys()[0],
+        db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
         rs = self.openRecSelector()
         self.setProp(rs, "poolBlacklist",
                      [self._pool.dp.name()])
@@ -7927,10 +7927,10 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
         rs.mntGrp = val["MntGrp"]
 
         db = PyTango.Database()
-        db.put_device_property(self._ms.ms.keys()[0],
+        db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
 
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
         arr = [
             ["test/ct/01", ["CTExpChannel"],
@@ -7966,9 +7966,9 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                "MntGrp": 'nxsmntgrp'}
 
         db = PyTango.Database()
-        db.put_device_property(self._ms.ms.keys()[0],
+        db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
         rs = self.openRecSelector()
         self.setProp(rs, "timerFilters",
                      ["*dgg2_exp_00*", "*dgg2_exp_01*"])
@@ -7977,10 +7977,10 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
         rs.mntGrp = val["MntGrp"]
 
         db = PyTango.Database()
-        db.put_device_property(self._ms.ms.keys()[0],
+        db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
 
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
         arr = [
             ["test/ct/01", ["CTExpChannel"],
@@ -8022,12 +8022,12 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
 
             db = PyTango.Database()
             db.put_device_property(
-                self._ms.ms.keys()[0],
+                list(self._ms.ms.keys())[0],
                 {'PoolNames': [
                     tpool2.dp.name(), self._pool.dp.name()]})
             pool = self._pool.dp
             pool2 = tpool2.dp
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             rs = self.openRecSelector()
             rs.configDevice = val["ConfigDevice"]
@@ -8103,12 +8103,12 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
 
             db = PyTango.Database()
             db.put_device_property(
-                self._ms.ms.keys()[0],
+                list(self._ms.ms.keys())[0],
                 {'PoolNames': [
                     tpool2.dp.name(), self._pool.dp.name()]})
             pool = self._pool.dp
             pool2 = tpool2.dp
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             rs = self.openRecSelector()
             self.setProp(rs, "poolBlacklist",
@@ -8186,12 +8186,12 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
 
             db = PyTango.Database()
             db.put_device_property(
-                self._ms.ms.keys()[0],
+                list(self._ms.ms.keys())[0],
                 {'PoolNames': [
                     tpool2.dp.name(), self._pool.dp.name()]})
             pool = self._pool.dp
             pool2 = tpool2.dp
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             rs = self.openRecSelector()
             self.setProp(rs, "timerFilters",
@@ -8276,12 +8276,12 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
 
             db = PyTango.Database()
             db.put_device_property(
-                self._ms.ms.keys()[0],
+                list(self._ms.ms.keys())[0],
                 {'PoolNames': [
                     tpool2.dp.name(), self._pool.dp.name()]})
             pool = self._pool.dp
             pool2 = tpool2.dp
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             rs = self.openRecSelector()
             self.setProp(rs, "timerFilters",
@@ -8377,19 +8377,19 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                "MntGrp": 'nxsmntgrp'}
 
         db = PyTango.Database()
-        db.put_device_property(self._ms.ms.keys()[0],
+        db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
         rs = self.openRecSelector()
         rs.configDevice = val["ConfigDevice"]
         rs.door = val["Door"]
         rs.mntGrp = val["MntGrp"]
 
         db = PyTango.Database()
-        db.put_device_property(self._ms.ms.keys()[0],
+        db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
 
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
         arr = [
             ["test/ct/01",
@@ -8425,9 +8425,9 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                "MntGrp": 'nxsmntgrp'}
 
         db = PyTango.Database()
-        db.put_device_property(self._ms.ms.keys()[0],
+        db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
         rs = self.openRecSelector()
         self.setProp(rs, "poolBlacklist",
                      [self._pool.dp.name()])
@@ -8436,10 +8436,10 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
         rs.mntGrp = val["MntGrp"]
 
         db = PyTango.Database()
-        db.put_device_property(self._ms.ms.keys()[0],
+        db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
 
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
         arr = [
             ["test/ct/01",
@@ -8474,9 +8474,9 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                "MntGrp": 'nxsmntgrp'}
 
         db = PyTango.Database()
-        db.put_device_property(self._ms.ms.keys()[0],
+        db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
         rs = self.openRecSelector()
         self.setProp(rs, "mutedChannelFilters",
                      ["*dgg2_exp_00*", "*dgg2_exp_01*", "*testts*"])
@@ -8486,10 +8486,10 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
 
         db = PyTango.Database()
-        db.put_device_property(self._ms.ms.keys()[0],
+        db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
 
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
         arr = [
             ["test/ct/01",
@@ -8528,9 +8528,9 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                "MntGrp": 'nxsmntgrp'}
 
         db = PyTango.Database()
-        db.put_device_property(self._ms.ms.keys()[0],
+        db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
         rs = self.openRecSelector()
         self.setProp(rs, "mutedChannelFilters",
                      ["*dgg2_exp_00*", "*dgg2_exp_01*"])
@@ -8539,10 +8539,10 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
         rs.mntGrp = val["MntGrp"]
 
         db = PyTango.Database()
-        db.put_device_property(self._ms.ms.keys()[0],
+        db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
 
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
         arr = [
             ["test/ct/01",
@@ -8585,12 +8585,12 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
 
             db = PyTango.Database()
             db.put_device_property(
-                self._ms.ms.keys()[0],
+                list(self._ms.ms.keys())[0],
                 {'PoolNames': [
                     tpool2.dp.name(), self._pool.dp.name()]})
             pool = self._pool.dp
             pool2 = tpool2.dp
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             rs = self.openRecSelector()
             rs.configDevice = val["ConfigDevice"]
@@ -8665,12 +8665,12 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
 
             db = PyTango.Database()
             db.put_device_property(
-                self._ms.ms.keys()[0],
+                list(self._ms.ms.keys())[0],
                 {'PoolNames': [
                     tpool2.dp.name(), self._pool.dp.name()]})
             pool = self._pool.dp
             pool2 = tpool2.dp
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             rs = self.openRecSelector()
             self.setProp(rs, "poolBlacklist",
@@ -8747,12 +8747,12 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
 
             db = PyTango.Database()
             db.put_device_property(
-                self._ms.ms.keys()[0],
+                list(self._ms.ms.keys())[0],
                 {'PoolNames': [
                     tpool2.dp.name(), self._pool.dp.name()]})
             pool = self._pool.dp
             pool2 = tpool2.dp
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             rs = self.openRecSelector()
             self.setProp(rs, "mutedChannelFilters",
@@ -8830,12 +8830,12 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
 
             db = PyTango.Database()
             db.put_device_property(
-                self._ms.ms.keys()[0],
+                list(self._ms.ms.keys())[0],
                 {'PoolNames': [
                     tpool2.dp.name(), self._pool.dp.name()]})
             pool = self._pool.dp
             pool2 = tpool2.dp
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             rs = self.openRecSelector()
             self.setProp(rs, "mutedChannelFilters",
@@ -8908,9 +8908,9 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                "MntGrp": 'nxsmntgrp'}
 
         db = PyTango.Database()
-        db.put_device_property(self._ms.ms.keys()[0],
+        db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
         rs = self.openRecSelector()
         rs.configDevice = val["ConfigDevice"]
         rs.door = val["Door"]
@@ -8928,19 +8928,19 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                "MntGrp": 'nxsmntgrp'}
 
         db = PyTango.Database()
-        db.put_device_property(self._ms.ms.keys()[0],
+        db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
         rs = self.openRecSelector()
         rs.configDevice = val["ConfigDevice"]
         rs.door = val["Door"]
         rs.mntGrp = val["MntGrp"]
 
         db = PyTango.Database()
-        db.put_device_property(self._ms.ms.keys()[0],
+        db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
 
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
         arr = [
             ["test/ct/01", "counter_01", "Value"],
@@ -8975,12 +8975,12 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
 
             db = PyTango.Database()
             db.put_device_property(
-                self._ms.ms.keys()[0],
+                list(self._ms.ms.keys())[0],
                 {'PoolNames': [
                     tpool2.dp.name(), self._pool.dp.name()]})
             pool = self._pool.dp
             pool2 = tpool2.dp
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             rs = self.openRecSelector()
             rs.configDevice = val["ConfigDevice"]
@@ -9039,12 +9039,12 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
 
             db = PyTango.Database()
             db.put_device_property(
-                self._ms.ms.keys()[0],
+                list(self._ms.ms.keys())[0],
                 {'PoolNames': [
                     tpool2.dp.name(), self._pool.dp.name()]})
             pool = self._pool.dp
             pool2 = tpool2.dp
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             rs = self.openRecSelector()
             self.setProp(rs, "poolBlacklist",
@@ -9101,19 +9101,19 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                "MntGrp": 'nxsmntgrp'}
 
         db = PyTango.Database()
-        db.put_device_property(self._ms.ms.keys()[0],
+        db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
         rs = self.openRecSelector()
         rs.configDevice = val["ConfigDevice"]
         rs.door = val["Door"]
         rs.mntGrp = val["MntGrp"]
 
         db = PyTango.Database()
-        db.put_device_property(self._ms.ms.keys()[0],
+        db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
 
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
         arr = [
             [u'/tmp/', "/tmp/sardana/"],
@@ -9128,10 +9128,10 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             rs.scanDir = vl[1]
 
             self.assertEqual(
-                self._ms.dps[self._ms.ms.keys()[0]].Environment[0],
+                self._ms.dps[list(self._ms.ms.keys())[0]].Environment[0],
                 'pickle')
             en = pickle.loads(
-                self._ms.dps[self._ms.ms.keys()[0]].Environment[1]
+                self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1]
             )['new']
             self.assertEqual(en['ScanDir'], rs.scanDir)
             self.assertEqual(vl[1], rs.scanDir)
@@ -9147,19 +9147,19 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                "MntGrp": 'nxsmntgrp'}
 
         db = PyTango.Database()
-        db.put_device_property(self._ms.ms.keys()[0],
+        db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
         rs = self.openRecSelector()
         rs.configDevice = val["ConfigDevice"]
         rs.door = val["Door"]
         rs.mntGrp = val["MntGrp"]
 
         db = PyTango.Database()
-        db.put_device_property(self._ms.ms.keys()[0],
+        db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
 
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
         arr = [
             [192, 123],
@@ -9173,10 +9173,10 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             rs.scanID = vl[1]
 
             self.assertEqual(
-                self._ms.dps[self._ms.ms.keys()[0]].Environment[0],
+                self._ms.dps[list(self._ms.ms.keys())[0]].Environment[0],
                 'pickle')
             en = pickle.loads(
-                self._ms.dps[self._ms.ms.keys()[0]].Environment[1]
+                self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1]
             )['new']
             self.assertEqual(en['ScanID'], rs.scanID)
             self.assertEqual(int(vl[1]), rs.scanID)
@@ -9192,19 +9192,19 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                "MntGrp": 'nxsmntgrp'}
 
         db = PyTango.Database()
-        db.put_device_property(self._ms.ms.keys()[0],
+        db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
         rs = self.openRecSelector()
         rs.configDevice = val["ConfigDevice"]
         rs.door = val["Door"]
         rs.mntGrp = val["MntGrp"]
 
         db = PyTango.Database()
-        db.put_device_property(self._ms.ms.keys()[0],
+        db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
 
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
         arr = [
             [[u'sar4r.nxs'], ['sar4r.nxs', 'sar5r.nxs']],
@@ -9217,10 +9217,10 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             rs.scanFile = json.dumps(vl[1])
             # print "SF", rs.scanFile
             self.assertEqual(
-                self._ms.dps[self._ms.ms.keys()[0]].Environment[0],
+                self._ms.dps[list(self._ms.ms.keys())[0]].Environment[0],
                 'pickle')
             en = pickle.loads(
-                self._ms.dps[self._ms.ms.keys()[0]].Environment[1]
+                self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1]
             )['new']
             if isinstance(en['ScanFile'], (str, unicode)):
                 try:
@@ -9249,9 +9249,9 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                "MntGrp": 'nxsmntgrp'}
 
         db = PyTango.Database()
-        db.put_device_property(self._ms.ms.keys()[0],
+        db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.smycps)])
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
 
@@ -9272,10 +9272,10 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             rs.profileFile = filename
 
             db = PyTango.Database()
-            db.put_device_property(self._ms.ms.keys()[0],
+            db.put_device_property(list(self._ms.ms.keys())[0],
                                    {'PoolNames': self._pool.dp.name()})
 
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             self.dump(rs)
 
@@ -9293,7 +9293,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             elif (i / 2) % 4 == 0:
                 rs.exportEnvProfile()
                 env = pickle.loads(
-                    self._ms.dps[self._ms.ms.keys()[0]].Environment[1])
+                    self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1])
                 jmd = json.loads(rs.profileConfiguration)
                 for k in self.names(rs):
                     if k == "PreselectingDataSources":
@@ -9367,9 +9367,9 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                "MntGrp": 'nxsmntgrp'}
 
         db = PyTango.Database()
-        db.put_device_property(self._ms.ms.keys()[0],
+        db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.smycps)])
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
 
@@ -9390,10 +9390,10 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             rs.profileFile = filename
 
             db = PyTango.Database()
-            db.put_device_property(self._ms.ms.keys()[0],
+            db.put_device_property(list(self._ms.ms.keys())[0],
                                    {'PoolNames': self._pool.dp.name()})
 
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             self.dump(rs)
 
@@ -9411,7 +9411,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             elif (i / 2) % 4 == 0:
                 rs.exportEnvProfile()
                 env = pickle.loads(
-                    self._ms.dps[self._ms.ms.keys()[0]].Environment[1])
+                    self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1])
                 jmd = json.loads(rs.profileConfiguration)
                 for k in self.names(rs):
                     if k == "PreselectingDataSources":
@@ -9483,9 +9483,9 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                "MntGrp": 'nxsmntgrp'}
 
         db = PyTango.Database()
-        db.put_device_property(self._ms.ms.keys()[0],
+        db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.smycps)])
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
 
@@ -9509,10 +9509,10 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             rs.profileFile = filename
 
             db = PyTango.Database()
-            db.put_device_property(self._ms.ms.keys()[0],
+            db.put_device_property(list(self._ms.ms.keys())[0],
                                    {'PoolNames': self._pool.dp.name()})
 
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             self.dump(rs)
 
@@ -9522,7 +9522,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             elif (i / 2) % 4 == 0:
                 rs.exportEnvProfile()
                 env = pickle.loads(
-                    self._ms.dps[self._ms.ms.keys()[0]].Environment[1])
+                    self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1])
                 jmd = json.loads(rs.profileConfiguration)
                 for k in self.names(rs):
                     if k == "PreselectingDataSources":
@@ -9588,9 +9588,9 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                "MntGrp": 'nxsmntgrp'}
 
         db = PyTango.Database()
-        db.put_device_property(self._ms.ms.keys()[0],
+        db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.smycps)])
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
 
@@ -9616,10 +9616,10 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             rs.profileFile = filename
 
             db = PyTango.Database()
-            db.put_device_property(self._ms.ms.keys()[0],
+            db.put_device_property(list(self._ms.ms.keys())[0],
                                    {'PoolNames': self._pool.dp.name()})
 
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             self.dump(rs)
 
@@ -9629,7 +9629,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             elif (i / 2) % 4 == 0:
                 rs.exportEnvProfile()
                 env = pickle.loads(
-                    self._ms.dps[self._ms.ms.keys()[0]].Environment[1])
+                    self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1])
                 jmd = json.loads(rs.profileConfiguration)
                 for k in self.names(rs):
                     if k == "PreselectingDataSources":
@@ -9697,9 +9697,9 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                "MntGrp": 'nxsmntgrp'}
 
         db = PyTango.Database()
-        db.put_device_property(self._ms.ms.keys()[0],
+        db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.smycps)])
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
 
@@ -9725,10 +9725,10 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             rs.profileFile = filename
 
             db = PyTango.Database()
-            db.put_device_property(self._ms.ms.keys()[0],
+            db.put_device_property(list(self._ms.ms.keys())[0],
                                    {'PoolNames': self._pool.dp.name()})
 
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             self.dump(rs)
 
@@ -9738,7 +9738,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             elif (i / 2) % 4 == 0:
                 rs.exportEnvProfile()
                 env = pickle.loads(
-                    self._ms.dps[self._ms.ms.keys()[0]].Environment[1])
+                    self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1])
                 jmd = json.loads(rs.profileConfiguration)
                 for k in self.names(rs):
                     if k == "PreselectingDataSources":
@@ -9814,13 +9814,13 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             ms2.setUp()
 
             db = PyTango.Database()
-            db.put_device_property(ms2.ms.keys()[0],
+            db.put_device_property(list(ms2.ms.keys())[0],
                                    {'PoolNames': self._pool.dp.name()})
             # print "KKKK", ms2.dps.keys()
-            ms2.dps[ms2.ms.keys()[0]].Init()
+            ms2.dps[list(ms2.ms.keys())[0]].Init()
             self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.smycps)])
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
-            ms2.dps[ms2.ms.keys()[0]].DoorList = doors
+            ms2.dps[list(ms2.ms.keys())[0]].DoorList = doors
 
             filename = "__testprofile__.json"
             while os.path.exists(filename):
@@ -9837,7 +9837,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                 rs.mntGrp = mg
                 self.assertEqual(rs.mntGrp, mg)
                 self.assertEqual(rs.door, doors[i % 3])
-                self.assertEqual(rs.macroServer, ms2.ms.keys()[0])
+                self.assertEqual(rs.macroServer, list(ms2.ms.keys())[0])
 
                 rs.profileFile = filename
 
@@ -9850,7 +9850,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                 elif (i / 2) % 4 == 0:
                     rs.exportEnvProfile()
                     env = pickle.loads(
-                        ms2.dps[ms2.ms.keys()[0]].Environment[1])
+                        ms2.dps[list(ms2.ms.keys())[0]].Environment[1])
                     jmd = json.loads(rs.profileConfiguration)
                     for k in self.names(rs):
                         if k == "PreselectingDataSources":
@@ -9905,7 +9905,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                     set(self.value(rs, "PreselectingDataSources")),
                     set(self.getDump("PreselectingDataSources")))
                 self.assertEqual(rs.door, doors[i % 3])
-                self.assertEqual(rs.macroServer, ms2.ms.keys()[0])
+                self.assertEqual(rs.macroServer, list(ms2.ms.keys())[0])
             os.remove(filename)
         finally:
             ms2.tearDown()
@@ -9920,9 +9920,9 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                "MntGrp": 'nxsmntgrp'}
 
         db = PyTango.Database()
-        db.put_device_property(self._ms.ms.keys()[0],
+        db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.smycps)])
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
 
@@ -9944,10 +9944,10 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             rs.profileFile = filename
 
             db = PyTango.Database()
-            db.put_device_property(self._ms.ms.keys()[0],
+            db.put_device_property(list(self._ms.ms.keys())[0],
                                    {'PoolNames': self._pool.dp.name()})
 
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             self.dump(rs)
 
@@ -9957,7 +9957,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             elif (i / 2) % 4 == 0:
                 rs.exportEnvProfile()
                 env = pickle.loads(
-                    self._ms.dps[self._ms.ms.keys()[0]].Environment[1])
+                    self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1])
                 jmd = json.loads(rs.profileConfiguration)
                 for k in self.names(rs):
                     if k == "PreselectingDataSources":
@@ -10031,9 +10031,9 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                "MntGrp": 'nxsmntgrp'}
 
         db = PyTango.Database()
-        db.put_device_property(self._ms.ms.keys()[0],
+        db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.smycps)])
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
 
@@ -10065,10 +10065,10 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
 
                 rs.profileFile = filename
                 db = PyTango.Database()
-                db.put_device_property(self._ms.ms.keys()[0],
+                db.put_device_property(list(self._ms.ms.keys())[0],
                                        {'PoolNames': self._pool.dp.name()})
 
-                self._ms.dps[self._ms.ms.keys()[0]].Init()
+                self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
                 self.dump(rs)
 
@@ -10078,7 +10078,8 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                 elif (i / 2) % 4 == 0:
                     rs.exportEnvProfile()
                     env = pickle.loads(
-                        self._ms.dps[self._ms.ms.keys()[0]].Environment[1])
+                        self._ms.dps[
+                            list(self._ms.ms.keys())[0]].Environment[1])
                     jmd = json.loads(rs.profileConfiguration)
                     for k in self.names(rs):
                         try:
@@ -10149,9 +10150,9 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                "MntGrp": 'nxsmntgrp'}
 
         db = PyTango.Database()
-        db.put_device_property(self._ms.ms.keys()[0],
+        db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.smycps)])
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
 
@@ -10183,10 +10184,10 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
 
                 rs.profileFile = filename
                 db = PyTango.Database()
-                db.put_device_property(self._ms.ms.keys()[0],
+                db.put_device_property(list(self._ms.ms.keys())[0],
                                        {'PoolNames': self._pool.dp.name()})
 
-                self._ms.dps[self._ms.ms.keys()[0]].Init()
+                self._ms.dps[list(self._ms.ms.keys())[0]].Init()
                 chprop = json.loads(self.generateChannelProperties())
                 for nm, vl in chprop.items():
                     rs.setChannelProperties([nm, json.dumps(vl)])
@@ -10199,7 +10200,8 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                 elif (i / 2) % 4 == 0:
                     rs.exportEnvProfile()
                     env = pickle.loads(
-                        self._ms.dps[self._ms.ms.keys()[0]].Environment[1])
+                        self._ms.dps[
+                            list(self._ms.ms.keys())[0]].Environment[1])
                     jmd = json.loads(rs.profileConfiguration)
                     for k in self.names(rs):
                         try:
@@ -10272,19 +10274,19 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
         db = PyTango.Database()
-        db.put_device_property(self._ms.ms.keys()[0],
+        db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
         rs = self.openRecSelector()
         rs.configDevice = val["ConfigDevice"]
         rs.door = val["Door"]
         rs.mntGrp = val["MntGrp"]
 
         db = PyTango.Database()
-        db.put_device_property(self._ms.ms.keys()[0],
+        db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
 
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
         envs = [
             pickle.dumps(
@@ -10388,10 +10390,10 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
 
         for i, dt in enumerate(edats):
             data = {}
-            edl = json.loads(res).keys()
-            self._ms.dps[self._ms.ms.keys()[0]].Environment = (
+            edl = list(json.loads(res).keys())
+            self._ms.dps[list(self._ms.ms.keys())[0]].Environment = (
                 'pickle', pickle.dumps({"del": edl}))
-            self._ms.dps[self._ms.ms.keys()[0]].Environment = (
+            self._ms.dps[list(self._ms.ms.keys())[0]].Environment = (
                 'pickle', envs[i])
             dwt = rs.scanEnvVariables()
             res = rs.scanEnvVariables()
@@ -10408,20 +10410,20 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
         db = PyTango.Database()
-        db.put_device_property(self._ms.ms.keys()[0],
+        db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
 
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
         rs = self.openRecSelector()
         rs.configDevice = val["ConfigDevice"]
         rs.door = val["Door"]
         rs.mntGrp = val["MntGrp"]
 
         db = PyTango.Database()
-        db.put_device_property(self._ms.ms.keys()[0],
+        db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
 
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
         envs = [
             {
@@ -10602,7 +10604,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             self.assertEqual(sid, sids[i])
             # data = {}
             env = pickle.loads(
-                self._ms.dps[self._ms.ms.keys()[0]].Environment[1])
+                self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1])
             self.myAssertDict(envs[i], env)
 
     # test
@@ -10813,10 +10815,10 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
         self.assertEqual(rs.availableMntGrps(), [])
 
         db = PyTango.Database()
-        db.put_device_property(self._ms.ms.keys()[0],
+        db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
         pool = self._pool.dp
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
         self.assertEqual(rs.availableMntGrps(), [])
 
@@ -10836,8 +10838,8 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
         for ar in arr:
 
             MSUtils.setEnv('ActiveMntGrp', ar["name"],
-                           self._ms.ms.keys()[0])
-            MSUtils.getEnv('ActiveMntGrp', self._ms.ms.keys()[0])
+                           list(self._ms.ms.keys())[0])
+            MSUtils.getEnv('ActiveMntGrp', list(self._ms.ms.keys())[0])
             dd = rs.availableMntGrps()
             self.assertEqual(dd[0], ar["name"])
             self.assertEqual(set(dd), set([a["name"] for a in arr]))
@@ -10867,12 +10869,12 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
 
             db = PyTango.Database()
             db.put_device_property(
-                self._ms.ms.keys()[0],
+                list(self._ms.ms.keys())[0],
                 {'PoolNames': [
                     tpool2.dp.name(), self._pool.dp.name()]})
             pool = self._pool.dp
             pool2 = tpool2.dp
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             self.assertEqual(rs.availableMntGrps(), [])
             arr1 = [
@@ -10895,7 +10897,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             pool2.MeasurementGroupList = [json.dumps(a) for a in arr2]
 
             pnames = self._ms.dps[
-                self._ms.ms.keys()[0]
+                list(self._ms.ms.keys())[0]
             ].get_property("PoolNames")["PoolNames"]
 
             if pnames[0] == "pooltestp09/testts/t2r228":
@@ -10909,7 +10911,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             for ar in arr1:
 
                 MSUtils.setEnv('ActiveMntGrp', ar["name"],
-                               self._ms.ms.keys()[0])
+                               list(self._ms.ms.keys())[0])
                 dd = rs.availableMntGrps()
                 self.assertEqual(dd[0], ar["name"])
                 if arr1 == arr or ar["name"] != 'null':
@@ -10919,7 +10921,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
 
             for ar in arr2:
                 MSUtils.setEnv('ActiveMntGrp', ar["name"],
-                               self._ms.ms.keys()[0])
+                               list(self._ms.ms.keys())[0])
                 dd = rs.availableMntGrps()
                 self.assertEqual(dd[0], ar["name"])
                 if arr2 == arr or ar["name"] != 'null':
@@ -10946,10 +10948,10 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
         self.assertEqual(rs.door, val["Door"])
 
         db = PyTango.Database()
-        db.put_device_property(self._ms.ms.keys()[0],
+        db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
         pool = self._pool.dp
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
         self.assertEqual(rs.availableMntGrps(), [])
 
@@ -10974,11 +10976,11 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
         mgs = [ar["name"] for ar in arr] + self.mysel2.keys()
         # print mgs
         for ar in mgs:
-            MSUtils.setEnv('ActiveMntGrp', ar, self._ms.ms.keys()[0])
+            MSUtils.setEnv('ActiveMntGrp', ar, list(self._ms.ms.keys())[0])
             rs.deleteProfile(ar)
             dl.append(ar)
             self.assertEqual(MSUtils.getEnv(
-                'ActiveMntGrp', self._ms.ms.keys()[0]), "")
+                'ActiveMntGrp', list(self._ms.ms.keys())[0]), "")
             dd = rs.availableMntGrps()
             self.assertEqual(set(dd), set(dd2) - set(dl))
             sl = self._cf.dp.availableSelections()
@@ -11009,13 +11011,13 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
 
             db = PyTango.Database()
             db.put_device_property(
-                self._ms.ms.keys()[0],
+                list(self._ms.ms.keys())[0],
                 {
                     'PoolNames': [
                         tpool2.dp.name(), self._pool.dp.name()]})
             pool = self._pool.dp
             pool2 = tpool2.dp
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             self.assertEqual(rs.availableMntGrps(), [])
 
@@ -11039,7 +11041,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             pool2.MeasurementGroupList = [json.dumps(a) for a in arr2]
 
             MSUtils.setEnv(
-                'ActiveMntGrp', arr[0]["name"], self._ms.ms.keys()[0])
+                'ActiveMntGrp', arr[0]["name"], list(self._ms.ms.keys())[0])
 
             dd1 = [json.loads(mg)["name"]
                    for mg in pool.MeasurementGroupList]
@@ -11056,11 +11058,11 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             dl = []
             mgs = [ar["name"] for ar in arr] + self.mysel2.keys()
             for ar in mgs:
-                MSUtils.setEnv('ActiveMntGrp', ar, self._ms.ms.keys()[0])
+                MSUtils.setEnv('ActiveMntGrp', ar, list(self._ms.ms.keys())[0])
                 rs.deleteProfile(ar)
                 dl.append(ar)
                 self.assertEqual(MSUtils.getEnv(
-                    'ActiveMntGrp', self._ms.ms.keys()[0]), "")
+                    'ActiveMntGrp', list(self._ms.ms.keys())[0]), "")
                 dd = [json.loads(mg)["name"]
                       for mg in pool.MeasurementGroupList]
                 dd_2 = [json.loads(mg)["name"]
@@ -11076,11 +11078,11 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             dd2 = [json.loads(mg)["name"] for mg in pool2.MeasurementGroupList]
             sl2 = self._cf.dp.availableSelections()
             for ar in mgs:
-                MSUtils.setEnv('ActiveMntGrp', ar, self._ms.ms.keys()[0])
+                MSUtils.setEnv('ActiveMntGrp', ar, list(self._ms.ms.keys())[0])
                 rs.deleteProfile(ar)
                 dl.append(ar)
                 self.assertEqual(MSUtils.getEnv(
-                    'ActiveMntGrp', self._ms.ms.keys()[0]), "")
+                    'ActiveMntGrp', list(self._ms.ms.keys())[0]), "")
                 dd = [json.loads(mg)["name"]
                       for mg in pool.MeasurementGroupList]
                 dd_2 = [json.loads(mg)["name"]
@@ -11156,11 +11158,11 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             self.assertEqual(rs.door, val["Door"])
 
             db = PyTango.Database()
-            db.put_device_property(self._ms.ms.keys()[0],
+            db.put_device_property(list(self._ms.ms.keys())[0],
                                    {'PoolNames': self._pool.dp.name()})
             pool = self._pool.dp
             pool.ExpChannelList = []
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             mp = json.loads(rs.profileConfiguration)
             mp["OrderedChannels"] = json.dumps([])
@@ -11175,7 +11177,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             for i in range(lds):
                 dss[self.getRandomName(10)] = bool(self._rnd.randint(0, 1))
             ddss = self._rnd.sample(dss, self._rnd.randint(
-                1, len(dss.keys())))
+                1, len(list(dss.keys()))))
             dcps = dict(cps)
             for ds in ddss:
                 dcps[ds] = bool(self._rnd.randint(0, 1))
@@ -11190,7 +11192,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             mp = json.loads(rs.profileConfiguration)
 
             ndss = json.loads(mp["DataSourceSelection"])
-            common = set(cps.keys()) & set(dss.keys())
+            common = set(cps.keys()) & set(list(dss.keys()))
             self.dump(rs)
 
             ncps = json.loads(mp["ComponentSelection"])
@@ -11229,11 +11231,11 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
         self.assertEqual(rs.configDevice, val["ConfigDevice"])
         self.assertEqual(rs.door, val["Door"])
         db = PyTango.Database()
-        db.put_device_property(self._ms.ms.keys()[0],
+        db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
         pool = self._pool.dp
         pool.ExpChannelList = []
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
         mp = json.loads(rs.profileConfiguration)
         mp["OrderedChannels"] = json.dumps([])
@@ -11299,11 +11301,11 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             self.assertEqual(rs.configDevice, val["ConfigDevice"])
             self.assertEqual(rs.door, val["Door"])
             db = PyTango.Database()
-            db.put_device_property(self._ms.ms.keys()[0],
+            db.put_device_property(list(self._ms.ms.keys())[0],
                                    {'PoolNames': self._pool.dp.name()})
             pool = self._pool.dp
             pool.ExpChannelList = []
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             mp = json.loads(rs.profileConfiguration)
             mp["OrderedChannels"] = json.dumps([])
@@ -11321,12 +11323,12 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
 
-            ncps = self._rnd.randint(1, len(self.mycps.keys()) - 1)
+            ncps = self._rnd.randint(1, len(list(self.mycps.keys())) - 1)
             lcps = self._rnd.sample(set(self.mycps.keys()), ncps)
             for cp in lcps:
                 cps[cp] = bool(self._rnd.randint(0, 1))
 
-            mncps = self._rnd.randint(1, len(self.mycps.keys()) - 1)
+            mncps = self._rnd.randint(1, len(list(self.mycps.keys())) - 1)
             mcps = self._rnd.sample(set(self.mycps.keys()), mncps)
 
             # tdss = [ds for ds in dss if dss[ds]]
@@ -11347,7 +11349,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             self.dump(rs)
 
             res = json.loads(rs.componentDescription())
-            self.checkCP(res, self.rescps.keys())
+            self.checkCP(res, list(self.rescps.keys()))
 
     # updateProfile test
     def test_componentdatasources(self):
@@ -11367,11 +11369,11 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             self.assertEqual(rs.configDevice, val["ConfigDevice"])
             self.assertEqual(rs.door, val["Door"])
             db = PyTango.Database()
-            db.put_device_property(self._ms.ms.keys()[0],
+            db.put_device_property(list(self._ms.ms.keys())[0],
                                    {'PoolNames': self._pool.dp.name()})
             pool = self._pool.dp
             pool.ExpChannelList = []
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             mp = json.loads(rs.profileConfiguration)
             mp["OrderedChannels"] = json.dumps([])
@@ -11385,18 +11387,18 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
 
-            ncps = self._rnd.randint(1, len(self.mycps.keys()) - 1)
+            ncps = self._rnd.randint(1, len(list(self.mycps.keys())) - 1)
             lcps = self._rnd.sample(set(self.mycps.keys()), ncps)
             for cp in lcps:
                 cps[cp] = bool(self._rnd.randint(0, 1))
 
-            ndss = self._rnd.randint(1, len(self.mycps.keys()) - 1)
+            ndss = self._rnd.randint(1, len(list(self.mycps.keys())) - 1)
             ldss = self._rnd.sample(set(self.mycps.keys()), ndss)
             for ds in ldss:
                 if ds in self.mydss.keys():
                     dss[ds] = bool(self._rnd.randint(0, 1))
 
-            mncps = self._rnd.randint(1, len(self.mycps.keys()) - 1)
+            mncps = self._rnd.randint(1, len(list(self.mycps.keys())) - 1)
             mcps = self._rnd.sample(set(self.mycps.keys()), mncps)
 
             # tdss = [ds for ds in dss if dss[ds]]
@@ -11445,11 +11447,11 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             self.assertEqual(rs.configDevice, val["ConfigDevice"])
             self.assertEqual(rs.door, val["Door"])
             db = PyTango.Database()
-            db.put_device_property(self._ms.ms.keys()[0],
+            db.put_device_property(list(self._ms.ms.keys())[0],
                                    {'PoolNames': self._pool.dp.name()})
             pool = self._pool.dp
             pool.ExpChannelList = []
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             mp = json.loads(rs.profileConfiguration)
             mp["OrderedChannels"] = json.dumps([])
@@ -11463,24 +11465,24 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
 
-            ncps = self._rnd.randint(1, len(self.mycps.keys()) - 1)
+            ncps = self._rnd.randint(1, len(list(self.mycps.keys())) - 1)
             lcps = self._rnd.sample(set(self.mycps.keys()), ncps)
             for cp in lcps:
                 cps[cp] = bool(self._rnd.randint(0, 1))
 
-            ndss = self._rnd.randint(1, len(self.mycps.keys()) - 1)
+            ndss = self._rnd.randint(1, len(list(self.mycps.keys())) - 1)
             ldss = self._rnd.sample(set(self.mycps.keys()), ndss)
             for ds in ldss:
                 if ds in self.mydss.keys():
                     dss[ds] = bool(self._rnd.randint(0, 1))
 
-            ndss = self._rnd.randint(1, len(self.mydss.keys()) - 1)
+            ndss = self._rnd.randint(1, len(list(self.mydss.keys())) - 1)
             ldss = self._rnd.sample(set(self.mydss.keys()), ndss)
             for ds in ldss:
                 if ds in self.mydss.keys():
                     dss[ds] = bool(self._rnd.randint(0, 1))
 
-            mncps = self._rnd.randint(1, len(self.mycps.keys()) - 1)
+            mncps = self._rnd.randint(1, len(list(self.mycps.keys())) - 1)
             mcps = self._rnd.sample(set(self.mycps.keys()), mncps)
 
             mp = json.loads(rs.profileConfiguration)
@@ -11518,11 +11520,11 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             self.assertEqual(rs.configDevice, val["ConfigDevice"])
             self.assertEqual(rs.door, val["Door"])
             db = PyTango.Database()
-            db.put_device_property(self._ms.ms.keys()[0],
+            db.put_device_property(list(self._ms.ms.keys())[0],
                                    {'PoolNames': self._pool.dp.name()})
             pool = self._pool.dp
             pool.ExpChannelList = []
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             mp = json.loads(rs.profileConfiguration)
             mp["OrderedChannels"] = json.dumps([])
@@ -11536,24 +11538,24 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
 
-            ncps = self._rnd.randint(1, len(self.mycps.keys()) - 1)
+            ncps = self._rnd.randint(1, len(list(self.mycps.keys())) - 1)
             lcps = self._rnd.sample(set(self.mycps.keys()), ncps)
             for cp in lcps:
                 cps[cp] = bool(self._rnd.randint(0, 1))
 
-            ndss = self._rnd.randint(1, len(self.mycps.keys()) - 1)
+            ndss = self._rnd.randint(1, len(list(self.mycps.keys())) - 1)
             ldss = self._rnd.sample(set(self.mycps.keys()), ndss)
             for ds in ldss:
                 if ds in self.mydss.keys():
                     dss[ds] = bool(self._rnd.randint(0, 1))
 
-            ndss = self._rnd.randint(1, len(self.mydss.keys()) - 1)
+            ndss = self._rnd.randint(1, len(list(self.mydss.keys())) - 1)
             ldss = self._rnd.sample(set(self.mydss.keys()), ndss)
             for ds in ldss:
                 if ds in self.mydss.keys():
                     dss[ds] = bool(self._rnd.randint(0, 1))
 
-            mncps = self._rnd.randint(1, len(self.mycps.keys()) - 1)
+            mncps = self._rnd.randint(1, len(list(self.mycps.keys())) - 1)
             mcps = self._rnd.sample(set(self.mycps.keys()), mncps)
 
             mp = json.loads(rs.profileConfiguration)
@@ -11591,17 +11593,17 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             self.assertEqual(rs.door, val["Door"])
 
             db = PyTango.Database()
-            db.put_device_property(self._ms.ms.keys()[0],
+            db.put_device_property(list(self._ms.ms.keys())[0],
                                    {'PoolNames': self._pool.dp.name()})
             pool = self._pool.dp
             pool.ExpChannelList = []
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             mp = json.loads(rs.profileConfiguration)
             mp["OrderedChannels"] = json.dumps([])
             rs.profileConfiguration = str(json.dumps(mp))
 
-            mncps = self._rnd.randint(1, len(self.mycps.keys()) - 1)
+            mncps = self._rnd.randint(1, len(list(self.mycps.keys())) - 1)
             mcps = [cp for cp in self._rnd.sample(
                 set(self.mycps.keys()), mncps)]
 
@@ -11614,7 +11616,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             for i in range(lds):
                 dss[self.getRandomName(10)] = bool(self._rnd.randint(0, 1))
             ddss = self._rnd.sample(dss, self._rnd.randint(
-                1, len(dss.keys())))
+                1, len(list(dss.keys()))))
             dcps = dict(cps)
             for ds in ddss:
                 dcps[ds] = bool(self._rnd.randint(0, 1))
@@ -11639,7 +11641,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
 
             # ndss =
             json.loads(mp["DataSourceSelection"])
-            # common = set(cps.keys()) & set(dss.keys())
+            # common = set(cps.keys()) & set(list(dss.keys()))
             self.dump(rs)
 
             # ncps =
@@ -11674,11 +11676,11 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
         self.assertEqual(rs.door, val["Door"])
 
         db = PyTango.Database()
-        db.put_device_property(self._ms.ms.keys()[0],
+        db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
         pool = self._pool.dp
         pool.ExpChannelList = []
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
         self.assertEqual(rs.availableMntGrps(), [])
 
@@ -11776,11 +11778,11 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
         self.assertEqual(rs.door, val["Door"])
 
         db = PyTango.Database()
-        db.put_device_property(self._ms.ms.keys()[0],
+        db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
         pool = self._pool.dp
         pool.ExpChannelList = []
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
         self.assertEqual(rs.availableMntGrps(), [])
 
@@ -11808,33 +11810,33 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
 
-            ncps = self._rnd.randint(1, len(self.mycps.keys()) - 1)
+            ncps = self._rnd.randint(1, len(list(self.mycps.keys())) - 1)
             lcps = self._rnd.sample(set(self.mycps.keys()), ncps)
             for cp in lcps:
                 if cp not in wrong:
                     cps[cp] = bool(self._rnd.randint(0, 1))
 
-            ancps = self._rnd.randint(1, len(self.mycps.keys()) - 1)
+            ancps = self._rnd.randint(1, len(list(self.mycps.keys())) - 1)
             alcps = self._rnd.sample(set(self.mycps.keys()), ancps)
             for cp in alcps:
                 if cp not in wrong:
                     acps[cp] = bool(self._rnd.randint(0, 1))
 
-            ndss = self._rnd.randint(1, len(self.mycps.keys()) - 1)
+            ndss = self._rnd.randint(1, len(list(self.mycps.keys())) - 1)
             ldss = self._rnd.sample(set(self.mycps.keys()), ndss)
             for ds in ldss:
                 if ds in self.mydss.keys():
                     if ds not in wrong:
                         dss[ds] = bool(self._rnd.randint(0, 1))
 
-            ndss = self._rnd.randint(1, len(self.mydss.keys()) - 1)
+            ndss = self._rnd.randint(1, len(list(self.mydss.keys())) - 1)
             ldss = self._rnd.sample(set(self.mydss.keys()), ndss)
             for ds in ldss:
                 if ds in self.mydss.keys():
                     if ds not in wrong:
                         dss[ds] = bool(self._rnd.randint(0, 1))
 
-            mncps = self._rnd.randint(1, len(self.mycps.keys()) - 1)
+            mncps = self._rnd.randint(1, len(list(self.mycps.keys())) - 1)
             mcps = [cp for cp in self._rnd.sample(
                     set(self.mycps.keys()), mncps) if cp not in wrong]
 
@@ -11854,7 +11856,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                     for idsrs in idss.values():
                         for idsr in idsrs:
                             records[str(idsr[2])] = "1234"
-            dsres = describer.dataSources(dss.keys(), dstype='CLIENT')[0]
+            dsres = describer.dataSources(list(dss.keys()), dstype='CLIENT')[0]
             for dsr in dsres.values():
                 records[str(dsr.record)] = '2345'
 
@@ -11944,11 +11946,11 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
         self.assertEqual(rs.door, val["Door"])
 
         db = PyTango.Database()
-        db.put_device_property(self._ms.ms.keys()[0],
+        db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
         pool = self._pool.dp
         pool.ExpChannelList = []
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
         self.assertEqual(rs.availableMntGrps(), [])
 
@@ -12008,7 +12010,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                     for idsrs in idss.values():
                         for idsr in idsrs:
                             records[str(idsr[2])] = "1234"
-            dsres = describer.dataSources(dss.keys(), dstype='CLIENT')[0]
+            dsres = describer.dataSources(list(dss.keys()), dstype='CLIENT')[0]
             for dsr in dsres.values():
                 records[str(dsr.record)] = '2345'
 
@@ -12062,11 +12064,11 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
         self.assertEqual(rs.door, val["Door"])
 
         db = PyTango.Database()
-        db.put_device_property(self._ms.ms.keys()[0],
+        db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
         pool = self._pool.dp
         pool.ExpChannelList = []
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
         self.assertEqual(rs.availableMntGrps(), [])
 
@@ -12126,7 +12128,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                     for idsrs in idss.values():
                         for idsr in idsrs:
                             records[str(idsr[2])] = "1234"
-            dsres = describer.dataSources(dss.keys(), dstype='CLIENT')[0]
+            dsres = describer.dataSources(list(dss.keys()), dstype='CLIENT')[0]
             for dsr in dsres.values():
                 records[str(dsr.record)] = '2345'
 
@@ -12179,11 +12181,11 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
         self.assertEqual(rs.door, val["Door"])
 
         db = PyTango.Database()
-        db.put_device_property(self._ms.ms.keys()[0],
+        db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
         pool = self._pool.dp
         pool.ExpChannelList = []
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
         self.assertEqual(rs.availableMntGrps(), [])
 
@@ -12243,7 +12245,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                     for idsrs in idss.values():
                         for idsr in idsrs:
                             records[str(idsr[2])] = "1234"
-            dsres = describer.dataSources(dss.keys(), dstype='CLIENT')[0]
+            dsres = describer.dataSources(list(dss.keys()), dstype='CLIENT')[0]
             for dsr in dsres.values():
                 records[str(dsr.record)] = '2345'
 
@@ -12296,11 +12298,11 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
         self.assertEqual(rs.door, val["Door"])
 
         db = PyTango.Database()
-        db.put_device_property(self._ms.ms.keys()[0],
+        db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
         pool = self._pool.dp
         pool.ExpChannelList = []
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
         self.assertEqual(rs.availableMntGrps(), [])
 
@@ -12329,33 +12331,33 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.smycps)])
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
 
-            ncps = self._rnd.randint(1, len(self.smycps.keys()) - 1)
+            ncps = self._rnd.randint(1, len(list(self.smycps.keys())) - 1)
             lcps = self._rnd.sample(set(self.smycps.keys()), ncps)
             for cp in lcps:
                 if cp not in wrong:
                     cps[cp] = bool(self._rnd.randint(0, 1))
 
-            ancps = self._rnd.randint(1, len(self.smycps.keys()) - 1)
+            ancps = self._rnd.randint(1, len(list(self.smycps.keys())) - 1)
             alcps = self._rnd.sample(set(self.smycps.keys()), ancps)
             for cp in alcps:
                 if cp not in wrong:
                     acps[cp] = bool(self._rnd.randint(0, 1))
 
-            ndss = self._rnd.randint(1, len(self.smycps.keys()) - 1)
+            ndss = self._rnd.randint(1, len(list(self.smycps.keys())) - 1)
             ldss = self._rnd.sample(set(self.smycps.keys()), ndss)
             for ds in ldss:
                 if ds in self.smydss.keys():
                     if ds not in wrong:
                         dss[ds] = bool(self._rnd.randint(0, 1))
 
-            ndss = self._rnd.randint(1, len(self.smydss.keys()) - 1)
+            ndss = self._rnd.randint(1, len(list(self.smydss.keys())) - 1)
             ldss = self._rnd.sample(set(self.smydss.keys()), ndss)
             for ds in ldss:
                 if ds in self.smydss.keys():
                     if ds not in wrong:
                         dss[ds] = bool(self._rnd.randint(0, 1))
 
-            mncps = self._rnd.randint(1, len(self.smycps.keys()) - 1)
+            mncps = self._rnd.randint(1, len(list(self.smycps.keys())) - 1)
             mcps = [cp for cp in self._rnd.sample(
                     set(self.smycps.keys()), mncps) if cp not in wrong]
 
@@ -12375,7 +12377,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                     for idsrs in idss.values():
                         for idsr in idsrs:
                             records[str(idsr[2])] = "1234"
-            dsres = describer.dataSources(dss.keys(), dstype='CLIENT')[0]
+            dsres = describer.dataSources(list(dss.keys()), dstype='CLIENT')[0]
             for dsr in dsres.values():
                 records[str(dsr.record)] = '2345'
 
@@ -12524,11 +12526,11 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
         self.assertEqual(rs.door, val["Door"])
 
         db = PyTango.Database()
-        db.put_device_property(self._ms.ms.keys()[0],
+        db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
         pool = self._pool.dp
         pool.ExpChannelList = []
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
         self.assertEqual(rs.availableMntGrps(), [])
 
@@ -12558,7 +12560,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
 
             comps = set()
-            ncps = self._rnd.randint(1, len(self.smycps.keys()) - 1)
+            ncps = self._rnd.randint(1, len(list(self.smycps.keys())) - 1)
             lcps = self._rnd.sample(set(self.smycps.keys()), ncps)
             for cp in lcps:
                 if cp not in wrong:
@@ -12566,7 +12568,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                     if cps[cp]:
                         comps.add(cp)
 
-            ancps = self._rnd.randint(1, len(self.smycps.keys()) - 1)
+            ancps = self._rnd.randint(1, len(list(self.smycps.keys())) - 1)
             alcps = self._rnd.sample(set(self.smycps.keys()), ancps)
             for cp in alcps:
                 if cp not in wrong:
@@ -12574,21 +12576,21 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                     if acps[cp]:
                         comps.add(cp)
 
-            ndss = self._rnd.randint(1, len(self.smycps.keys()) - 1)
+            ndss = self._rnd.randint(1, len(list(self.smycps.keys())) - 1)
             ldss = self._rnd.sample(set(self.smycps.keys()), ndss)
             for ds in ldss:
                 if ds in self.smydss.keys():
                     if ds not in wrong:
                         dss[ds] = bool(self._rnd.randint(0, 1))
 
-            ndss = self._rnd.randint(1, len(self.smydss.keys()) - 1)
+            ndss = self._rnd.randint(1, len(list(self.smydss.keys())) - 1)
             ldss = self._rnd.sample(set(self.smydss.keys()), ndss)
             for ds in ldss:
                 if ds in self.smydss.keys():
                     if ds not in wrong:
                         dss[ds] = bool(self._rnd.randint(0, 1))
 
-            mncps = self._rnd.randint(1, len(self.smycps.keys()) - 1)
+            mncps = self._rnd.randint(1, len(list(self.smycps.keys())) - 1)
             mcps = [cp for cp in self._rnd.sample(
                     set(self.smycps.keys()), mncps) if cp not in wrong]
             for cp in mcps:
@@ -12611,7 +12613,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                     for idsrs in idss.values():
                         for idsr in idsrs:
                             records[str(idsr[2])] = "1234"
-            dsres = describer.dataSources(dss.keys(), dstype='CLIENT')[0]
+            dsres = describer.dataSources(list(dss.keys()), dstype='CLIENT')[0]
             for dsr in dsres.values():
                 records[str(dsr.record)] = '2345'
 
@@ -12799,11 +12801,11 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
         self.assertEqual(rs.door, val["Door"])
 
         db = PyTango.Database()
-        db.put_device_property(self._ms.ms.keys()[0],
+        db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
         pool = self._pool.dp
         pool.ExpChannelList = []
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
         self.assertEqual(rs.availableMntGrps(), [])
         scalar_ctrl = 'ttestp09/testts/t1r228'
@@ -12873,33 +12875,38 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                     self._cf.dp.SetCommandVariable(
                         ["DSDICT", json.dumps(self.smydssXX)])
 
-                    ncps = self._rnd.randint(1, len(self.smycps2.keys()) - 1)
+                    ncps = self._rnd.randint(
+                        1, len(list(self.smycps2.keys())) - 1)
                     lcps = self._rnd.sample(set(self.smycps2.keys()), ncps)
                     for cp in lcps:
                         if cp not in wrong:
                             cps[cp] = bool(self._rnd.randint(0, 1))
 
-                    ancps = self._rnd.randint(1, len(self.smycps2.keys()) - 1)
+                    ancps = self._rnd.randint(
+                        1, len(list(self.smycps2.keys())) - 1)
                     alcps = self._rnd.sample(set(self.smycps2.keys()), ancps)
                     for cp in alcps:
                         if cp not in wrong:
                             acps[cp] = bool(self._rnd.randint(0, 1))
 
-                    ndss = self._rnd.randint(1, len(self.smycps2.keys()) - 1)
+                    ndss = self._rnd.randint(
+                        1, len(list(self.smycps2.keys())) - 1)
                     ldss = self._rnd.sample(set(self.smycps2.keys()), ndss)
                     for ds in ldss:
                         if ds in self.smydssXX.keys():
                             if ds not in wrong:
                                 dss[ds] = bool(self._rnd.randint(0, 1))
 
-                    ndss = self._rnd.randint(1, len(self.smydssXX.keys()) - 1)
+                    ndss = self._rnd.randint(
+                        1, len(list(self.smydssXX.keys())) - 1)
                     ldss = self._rnd.sample(set(self.smydssXX.keys()), ndss)
                     for ds in ldss:
                         if ds in self.smydssXX.keys():
                             if ds not in wrong:
                                 dss[ds] = bool(self._rnd.randint(0, 1))
 
-                    mncps = self._rnd.randint(1, len(self.smycps2.keys()) - 1)
+                    mncps = self._rnd.randint(
+                        1, len(list(self.smycps2.keys())) - 1)
                     mcps = [
                         cp for cp in self._rnd.sample(
                             set(self.smycps2.keys()), mncps)
@@ -12928,7 +12935,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                                 for idsr in idsrs:
                                     records[str(idsr[2])] = "1234"
                     dsres = describer.dataSources(
-                        dss.keys(), dstype='CLIENT')[0]
+                        list(dss.keys()), dstype='CLIENT')[0]
                     for dsr in dsres.values():
                         records[str(dsr.record)] = '2345'
 
@@ -13089,11 +13096,11 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
         self.assertEqual(rs.door, val["Door"])
 
         db = PyTango.Database()
-        db.put_device_property(self._ms.ms.keys()[0],
+        db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
         pool = self._pool.dp
         pool.ExpChannelList = []
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
         self.assertEqual(rs.availableMntGrps(), [])
         scalar_ctrl = 'ttestp09/testts/t1r228'
@@ -13164,7 +13171,8 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                         ["DSDICT", json.dumps(self.smydssXX)])
                     comps = set()
 
-                    ncps = self._rnd.randint(1, len(self.smycps2.keys()) - 1)
+                    ncps = self._rnd.randint(
+                        1, len(list(self.smycps2.keys())) - 1)
                     lcps = self._rnd.sample(set(self.smycps2.keys()), ncps)
                     for cp in lcps:
                         if cp not in wrong:
@@ -13172,7 +13180,8 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                             if cps[cp]:
                                 comps.add(cp)
 
-                    ancps = self._rnd.randint(1, len(self.smycps2.keys()) - 1)
+                    ancps = self._rnd.randint(
+                        1, len(list(self.smycps2.keys())) - 1)
                     alcps = self._rnd.sample(set(self.smycps2.keys()), ancps)
                     for cp in alcps:
                         if cp not in wrong:
@@ -13180,21 +13189,24 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                             if acps[cp]:
                                 comps.add(cp)
 
-                    ndss = self._rnd.randint(1, len(self.smycps2.keys()) - 1)
+                    ndss = self._rnd.randint(
+                        1, len(list(self.smycps2.keys())) - 1)
                     ldss = self._rnd.sample(set(self.smycps2.keys()), ndss)
                     for ds in ldss:
                         if ds in self.smydssXX.keys():
                             if ds not in wrong:
                                 dss[ds] = bool(self._rnd.randint(0, 1))
 
-                    ndss = self._rnd.randint(1, len(self.smydssXX.keys()) - 1)
+                    ndss = self._rnd.randint(
+                        1, len(list(self.smydssXX.keys())) - 1)
                     ldss = self._rnd.sample(set(self.smydssXX.keys()), ndss)
                     for ds in ldss:
                         if ds in self.smydssXX.keys():
                             if ds not in wrong:
                                 dss[ds] = bool(self._rnd.randint(0, 1))
 
-                    mncps = self._rnd.randint(1, len(self.smycps2.keys()) - 1)
+                    mncps = self._rnd.randint(
+                        1, len(list(self.smycps2.keys())) - 1)
                     mcps = [cp for cp in self._rnd.sample(
                             set(self.smycps2.keys()), mncps)
                             if cp not in wrong]
@@ -13223,7 +13235,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                                 for idsr in idsrs:
                                     records[str(idsr[2])] = "1234"
                     dsres = describer.dataSources(
-                        dss.keys(), dstype='CLIENT')[0]
+                        list(dss.keys()), dstype='CLIENT')[0]
                     for dsr in dsres.values():
                         records[str(dsr.record)] = '2345'
 
@@ -13428,11 +13440,11 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
         self.assertEqual(rs.door, val["Door"])
 
         db = PyTango.Database()
-        db.put_device_property(self._ms.ms.keys()[0],
+        db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
         pool = self._pool.dp
         pool.ExpChannelList = []
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
         self.assertEqual(rs.availableMntGrps(), [])
         scalar_ctrl = 'ttestp09/testts/t1r228'
@@ -13517,7 +13529,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                             if cps[cp]:
                                 comps.add(cp)
 
-                    ancps = self._rnd.randint(1, len(amycps.keys()) - 1)
+                    ancps = self._rnd.randint(1, len(list(amycps.keys())) - 1)
                     alcps = self._rnd.sample(set(amycps.keys()), ancps)
                     for cp in alcps:
                         if cp not in wrong:
@@ -13525,21 +13537,21 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                             if acps[cp]:
                                 comps.add(cp)
 
-                    ndss = self._rnd.randint(1, len(amycps.keys()) - 1)
+                    ndss = self._rnd.randint(1, len(list(amycps.keys())) - 1)
                     ldss = self._rnd.sample(set(amycps.keys()), ndss)
                     for ds in ldss:
                         if ds in amydss.keys():
                             if ds not in wrong:
                                 dss[ds] = bool(self._rnd.randint(0, 1))
 
-                    ndss = self._rnd.randint(1, len(amydss.keys()) - 1)
+                    ndss = self._rnd.randint(1, len(list(amydss.keys())) - 1)
                     ldss = self._rnd.sample(set(amydss.keys()), ndss)
                     for ds in ldss:
                         if ds in amydss.keys():
                             if ds not in wrong:
                                 dss[ds] = bool(self._rnd.randint(0, 1))
 
-                    mncps = self._rnd.randint(1, len(amycps.keys()) - 1)
+                    mncps = self._rnd.randint(1, len(list(amycps.keys())) - 1)
                     mcps = [cp for cp in self._rnd.sample(
                             set(amycps.keys()), mncps) if cp not in wrong]
                     for cp in mcps:
@@ -13567,7 +13579,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                                 for idsr in idsrs:
                                     records[str(idsr[2])] = "1234"
                     dsres = describer.dataSources(
-                        dss.keys(), dstype='CLIENT')[0]
+                        list(dss.keys()), dstype='CLIENT')[0]
                     for dsr in dsres.values():
                         records[str(dsr.record)] = '2345'
 
@@ -13824,20 +13836,20 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
         self.assertEqual(rs.door, val["Door"])
 
         db = PyTango.Database()
-        db.put_device_property(self._ms.ms.keys()[0],
+        db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
         pool = self._pool.dp
         pool.ExpChannelList = []
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
         self.assertEqual(rs.availableMntGrps(), [])
 #        self.myAssertRaise(Exception, rs.updateMntGrp)
 
         db = PyTango.Database()
-        db.put_device_property(self._ms.ms.keys()[0],
+        db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
         pool = self._pool.dp
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
         self.assertEqual(rs.availableMntGrps(), [])
         scalar_ctrl = 'ttestp09/testts/t1r228'
@@ -13923,7 +13935,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                             if cps[cp]:
                                 comps.add(cp)
 
-                    ancps = self._rnd.randint(1, len(amycps.keys()) - 1)
+                    ancps = self._rnd.randint(1, len(list(amycps.keys())) - 1)
                     alcps = self._rnd.sample(set(amycps.keys()), ancps)
                     for cp in alcps:
                         if cp not in wrong:
@@ -13931,21 +13943,21 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                             if acps[cp]:
                                 comps.add(cp)
 
-                    ndss = self._rnd.randint(1, len(amycps.keys()) - 1)
+                    ndss = self._rnd.randint(1, len(list(amycps.keys())) - 1)
                     ldss = self._rnd.sample(set(amycps.keys()), ndss)
                     for ds in ldss:
                         if ds in amydss.keys():
                             if ds not in wrong:
                                 dss[ds] = bool(self._rnd.randint(0, 1))
 
-                    ndss = self._rnd.randint(1, len(amydss.keys()) - 1)
+                    ndss = self._rnd.randint(1, len(list(amydss.keys())) - 1)
                     ldss = self._rnd.sample(set(amydss.keys()), ndss)
                     for ds in ldss:
                         if ds in amydss.keys():
                             if ds not in wrong:
                                 dss[ds] = bool(self._rnd.randint(0, 1))
 
-                    mncps = self._rnd.randint(1, len(amycps.keys()) - 1)
+                    mncps = self._rnd.randint(1, len(list(amycps.keys())) - 1)
                     mcps = [cp for cp in self._rnd.sample(
                         set(amycps.keys()), mncps) if cp not in wrong]
                     for cp in mcps:
@@ -13973,7 +13985,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                                 for idsr in idsrs:
                                     records[str(idsr[2])] = "1234"
                     dsres = describer.dataSources(
-                        dss.keys(), dstype='CLIENT')[0]
+                        list(dss.keys()), dstype='CLIENT')[0]
                     for dsr in dsres.values():
                         records[str(dsr.record)] = '2345'
 

@@ -78,7 +78,7 @@ class ConverterXtoYTest(unittest.TestCase):
         #     print 'DCT', dct.keys()
         #     print 'DCT2', dct2.keys()
         #     print "DIFF", set(dct.keys()) ^ set(dct2.keys())
-        self.assertEqual(len(dct.keys()), len(dct2.keys()))
+        self.assertEqual(len(list(dct.keys())), len(list(dct2.keys())))
         for k, v in dct.items():
             self.assertTrue(k in dct2.keys())
             if isinstance(v, dict):
@@ -126,8 +126,8 @@ class ConverterXtoYTest(unittest.TestCase):
             for k, vl in tnames.items():
                 names[vl] = k
             cv.names = dict(names)
-            keys1 = self.__rnd.sample(names.keys(), self.__rnd.randint(
-                0, len(names.keys())))
+            keys1 = self.__rnd.sample(list(names.keys()), self.__rnd.randint(
+                0, len(list(names.keys()))))
             keys2 = set([self.getRandomName(20) for _ in range(5)])
             keys2.update(keys1)
             for k in keys2:
