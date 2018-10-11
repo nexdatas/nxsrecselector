@@ -20,23 +20,18 @@
 # unittests for field Tags running Tango Server
 #
 import unittest
-import os
 import sys
-import subprocess
-import random
 import time
 import PyTango
 import json
 
 import ServerSetUp
 import BasicSettings2Test
-from nxsrecconfig import Settings
-import nxsrecconfig
 
 from nxsrecconfig.MacroServerPools import MacroServerPools
 from nxsrecconfig.Selector import Selector
 from nxsrecconfig.ProfileManager import ProfileManager
-from nxsrecconfig.Utils import TangoUtils, MSUtils
+from nxsrecconfig.Utils import MSUtils
 
 
 # test fixture
@@ -76,7 +71,7 @@ class BasicNXSRecSelector2Test(BasicSettings2Test.BasicSettings2Test):
         self._sv2.tearDown()
 
     def value(self, rs, name):
-#        print "VAL", json.loads(rs.profileConfiguration)
+        #     print "VAL", json.loads(rs.profileConfiguration)
         return json.loads(rs.profileConfiguration)[name]
 
     def names(self, rs):
@@ -99,7 +94,7 @@ class BasicNXSRecSelector2Test(BasicSettings2Test.BasicSettings2Test):
         cnt = 0
         while not found and cnt < 1000:
             try:
-                print "\b.",
+                sys.stdout.write(".")
                 xmlc = PyTango.DeviceProxy(
                     self._sv.new_device_info_writer.name)
                 time.sleep(0.01)
@@ -109,7 +104,7 @@ class BasicNXSRecSelector2Test(BasicSettings2Test.BasicSettings2Test):
             except Exception as e:
                 print("%s%s" % (self._sv.new_device_info_writer.name, e))
                 found = False
-            except:
+            except Exception:
                 found = False
 
             cnt += 1
@@ -131,7 +126,7 @@ class BasicNXSRecSelector2Test(BasicSettings2Test.BasicSettings2Test):
         cnt = 0
         while not found and cnt < 1000:
             try:
-                print "\b.",
+                sys.stdout.write(".")
                 xmlc = PyTango.DeviceProxy(
                     self._sv2.new_device_info_writer.name)
                 time.sleep(0.01)
@@ -141,7 +136,7 @@ class BasicNXSRecSelector2Test(BasicSettings2Test.BasicSettings2Test):
             except Exception as e:
                 print("%s%s" % (self._sv2.new_device_info_writer.name, e))
                 found = False
-            except:
+            except Exception:
                 found = False
 
             cnt += 1

@@ -90,8 +90,9 @@ class NXSRecSelector(PyTango.Device_4Impl):
         defaultpath = self.DefaultNeXusPath or None
         defaultzone = self.DefaultTimeZone or None
         defaultmntgrp = self.DefaultMntGrp or None
+        syncsnapshot = bool(self.SyncSnapshot)
         self.__stg = STG(self, numberofthreads, defaultpath,
-                         defaultzone, defaultmntgrp)
+                         defaultzone, defaultmntgrp, syncsnapshot)
         self.set_state(PyTango.DevState.ON)
         self.__stg.poolBlacklist = self.PoolBlacklist or []
         self.__stg.timerFilters = self.TimerFilters or [
@@ -1735,6 +1736,32 @@ class NXSRecSelector(PyTango.Device_4Impl):
             return False
         return True
 
+    def CreateDataSources(self, argin):
+        """ It creates new DataSources on the ConfigServer
+
+        :param argin: JSON dictionary with {``dsname``: ``tangosource``, ...}
+        :type argin: :obj:`str`
+        """
+        self.debug_stream("In createDataSources()")
+        try:
+            self.set_state(PyTango.DevState.RUNNING)
+            argout = self.__stg.createDataSources(argin)
+            self.set_state(PyTango.DevState.ON)
+        finally:
+            if self.get_state() == PyTango.DevState.RUNNING:
+                self.set_state(PyTango.DevState.ON)
+
+        return argout
+
+    def is_CreateDataSources_allowed(self):
+        """ CreateDataSources command State Machine
+
+        :returns: True if the operation allowed
+        :rtype: :obj:`bool`
+        """
+        state_ok = not(self.get_state() in [PyTango.DevState.RUNNING])
+        return state_ok
+
 
 # ==================================================================
 #
@@ -1794,6 +1821,10 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
         [PyTango.DevVarStringArray,
          "list of record keys for CLIENT datasources",
          []],
+        'SyncSnapshot':
+        [PyTango.DevBoolean,
+         "preselection merges the current ScanSnapshot",
+         [False]],
     }
 
     #: (:obj:`dict` <:obj:`str`, \
@@ -1955,6 +1986,10 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
               "XML Settinges"]],
         'RemoveDynamicComponent':
             [[PyTango.DevString, "name of dynamic Component"],
+             [PyTango.DevVoid, ""]],
+        'CreateDataSources':
+            [[PyTango.DevString,
+              "JSON dictionary with {``dsname``: ``tangosource``, ...}"],
              [PyTango.DevVoid, ""]],
     }
 

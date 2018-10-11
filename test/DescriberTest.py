@@ -36,6 +36,9 @@ from nxsrecconfig.Describer import Describer
 # if 64-bit machione
 IS64BIT = (struct.calcsize("P") == 8)
 
+if sys.version_info > (3,):
+    long = int
+
 
 class NoServer(object):
 
@@ -695,7 +698,7 @@ class DescriberTest(unittest.TestCase):
         try:
             error = False
             method(*args, **kwargs)
-        except exception, e:
+        except exception as e:
             error = True
             err = e
         self.assertEqual(error, True)
@@ -704,13 +707,13 @@ class DescriberTest(unittest.TestCase):
     # test starter
     # \brief Common set up
     def setUp(self):
-        print "\nsetting up..."
-        print "SEED =", self.__seed
+        print("\nsetting up...")
+        print("SEED = %s" % self.__seed)
 
     # test closer
     # \brief Common tear down
     def tearDown(self):
-        print "tearing down ..."
+        print("tearing down ...")
 
     def checkDS(self, rv, cv, dct=None):
         resdss = dct or self.resdss
@@ -792,7 +795,7 @@ class DescriberTest(unittest.TestCase):
                 found = True
                 break
         if not found:
-            print "NOT FOUND", cp, ds, vds, rv
+            print("NOT FOUND %s %s %s %s" % (cp, ds, vds, rv))
         return found
 
     def checkICP(self, rv, cv, strategy=None, dstype=None, dct=None):
@@ -816,7 +819,7 @@ class DescriberTest(unittest.TestCase):
     # \brief It tests default settings
     def test_constructor(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         self.myAssertRaise(Exception, Describer, None, None)
         self.myAssertRaise(Exception, Describer, None, False)
         self.myAssertRaise(Exception, Describer, None, True)
@@ -827,7 +830,7 @@ class DescriberTest(unittest.TestCase):
     # \brief It tests default settings
     def test_datasources(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         dsdict = {
             "ann": self.mydss["ann"]
         }
@@ -856,7 +859,7 @@ class DescriberTest(unittest.TestCase):
     # \brief It tests default settings
     def test_datasources_server(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         dsdict = {
             "ann": self.mydss["ann"]
         }
@@ -885,7 +888,7 @@ class DescriberTest(unittest.TestCase):
     # \brief It tests default settings
     def test_datasources_noargs(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
         server = NoServer()
         server.dsdict = self.mydss
@@ -898,7 +901,7 @@ class DescriberTest(unittest.TestCase):
     # \brief It tests default settings
     def test_datasources_noargs_pfs(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
         server = NoServer()
         server.dsdict = self.mydss
@@ -913,7 +916,7 @@ class DescriberTest(unittest.TestCase):
     # \brief It tests default settings
     def test_datasources_noargs_server_pfs(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
         server = Server()
         server.dsdict = self.mydss
@@ -928,7 +931,7 @@ class DescriberTest(unittest.TestCase):
     # \brief It tests default settings
     def test_datasources_noargs_server(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
         server = Server()
         server.dsdict = self.mydss
@@ -941,7 +944,7 @@ class DescriberTest(unittest.TestCase):
     # \brief It tests default settings
     def test_datasources_dstype(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
         server = NoServer()
         server.dsdict = self.mydss
@@ -986,7 +989,7 @@ class DescriberTest(unittest.TestCase):
     # \brief It tests default settings
     def test_datasources_dstype_server(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
         server = Server()
         server.dsdict = self.mydss
@@ -1031,7 +1034,7 @@ class DescriberTest(unittest.TestCase):
     # \brief It tests default settings
     def test_datasources_names(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
         server = NoServer()
         server.dsdict = self.mydss
@@ -1054,7 +1057,7 @@ class DescriberTest(unittest.TestCase):
     # \brief It tests default settings
     def test_datasources_names_server(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
         server = Server()
         server.dsdict = self.mydss
@@ -1077,7 +1080,7 @@ class DescriberTest(unittest.TestCase):
     # \brief It tests default settings
     def test_datasources_tree(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         dsdict = {
             "ann": self.mydss["ann"]
         }
@@ -1106,7 +1109,7 @@ class DescriberTest(unittest.TestCase):
     # \brief It tests default settings
     def test_datasources_server_tree(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         dsdict = {
             "ann": self.mydss["ann"]
         }
@@ -1135,7 +1138,7 @@ class DescriberTest(unittest.TestCase):
     # \brief It tests default settings
     def test_datasources_noargs_tree(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
         server = NoServer()
         server.dsdict = self.mydss
@@ -1148,7 +1151,7 @@ class DescriberTest(unittest.TestCase):
     # \brief It tests default settings
     def test_datasources_noargs_tree_pfs(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
         server = NoServer()
         server.dsdict = self.mydss
@@ -1163,7 +1166,7 @@ class DescriberTest(unittest.TestCase):
     # \brief It tests default settings
     def test_datasources_noargs_server_tree(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
         server = Server()
         server.dsdict = self.mydss
@@ -1176,7 +1179,7 @@ class DescriberTest(unittest.TestCase):
     # \brief It tests default settings
     def test_datasources_noargs_server_tree_pfs(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
         server = Server()
         server.dsdict = self.mydss
@@ -1191,7 +1194,7 @@ class DescriberTest(unittest.TestCase):
     # \brief It tests default settings
     def test_datasources_dstype_tree(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
         server = NoServer()
         server.dsdict = self.mydss
@@ -1236,7 +1239,7 @@ class DescriberTest(unittest.TestCase):
     # \brief It tests default settings
     def test_datasources_dstype_server_tree(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
         server = Server()
         server.dsdict = self.mydss
@@ -1281,7 +1284,7 @@ class DescriberTest(unittest.TestCase):
     # \brief It tests default settings
     def test_datasources_names_tree(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
         server = NoServer()
         server.dsdict = self.mydss
@@ -1304,7 +1307,7 @@ class DescriberTest(unittest.TestCase):
     # \brief It tests default settings
     def test_datasources_names_server_tree(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
         server = Server()
         server.dsdict = self.mydss
@@ -1327,7 +1330,7 @@ class DescriberTest(unittest.TestCase):
     # \brief It tests default settings
     def test_components_unknown(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         dsdict = {
             "ann": self.mydss["ann"]
         }

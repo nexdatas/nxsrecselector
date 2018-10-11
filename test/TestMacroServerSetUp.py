@@ -19,7 +19,6 @@
 # \file ServerSetUp.py
 # class with server settings
 #
-import unittest
 import os
 import sys
 import subprocess
@@ -65,7 +64,7 @@ class TestMacroServerSetUp(object):
     # test starter
     # \brief Common set up of Tango Server
     def setUp(self):
-        print "\nsetting up..."
+        print("\nsetting up...")
         self.add()
         self.start()
 
@@ -76,7 +75,7 @@ class TestMacroServerSetUp(object):
         devices.extend(self.door.values())
         for dv in devices:
             db.add_device(dv)
-            print dv.name
+            print(dv.name)
         if devices:
             db.add_server(self.server, devices)
 
@@ -86,10 +85,17 @@ class TestMacroServerSetUp(object):
         if not path:
             path = '.'
 
-        self._psub = subprocess.call(
-            "cd %s;  python ./TestMacroServer.py %s &" % (path, self.instance),
-            stdout=None, stderr=None, shell=True)
-        print "waiting for simple server",
+        if sys.version_info > (3,):
+            self._psub = subprocess.call(
+                "cd %s;  python3 ./TestMacroServer.py %s &" %
+                (path, self.instance),
+                stdout=None, stderr=None, shell=True)
+        else:
+            self._psub = subprocess.call(
+                "cd %s;  python ./TestMacroServer.py %s &" %
+                (path, self.instance),
+                stdout=None, stderr=None, shell=True)
+        sys.stdout.write("waiting for simple server")
 
         found = False
         cnt = 0
@@ -97,7 +103,7 @@ class TestMacroServerSetUp(object):
         devices.extend(self.door.values())
         while not found and cnt < 1000:
             try:
-                print "\b.",
+                sys.stdout.write(".")
                 dpcnt = 0
                 for dv in devices:
                     self.dps[dv.name] = PyTango.DeviceProxy(dv.name)
@@ -106,15 +112,15 @@ class TestMacroServerSetUp(object):
                         dpcnt += 1
                 if dpcnt == len(devices):
                     found = True
-            except Exception as e:
+            except Exception:
                 found = False
             cnt += 1
-        print ""
+        print("")
 
     # test closer
     # \brief Common tear down of Tango Server
     def tearDown(self):
-        print "tearing down ..."
+        print("tearing down ...")
         self.delete()
         self.stop()
 
@@ -124,17 +130,17 @@ class TestMacroServerSetUp(object):
 
     # stops server
     def stop(self):
-        output = ""
         pipe = subprocess.Popen(
             "ps -ef | grep 'TestMacroServer.py %s'" % self.instance,
             stdout=subprocess.PIPE, shell=True).stdout
 
-        res = pipe.read().split("\n")
+        res = str(pipe.read()).split("\n")
         for r in res:
             sr = r.split()
             if len(sr) > 2:
                 subprocess.call(
                     "kill -9 %s" % sr[1], stderr=subprocess.PIPE, shell=True)
+        pipe.close()
 
 
 if __name__ == "__main__":

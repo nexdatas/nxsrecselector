@@ -19,7 +19,6 @@
 # \file ServerSetUp.py
 # class with server settings
 #
-import unittest
 import os
 import sys
 import subprocess
@@ -77,7 +76,7 @@ class TestServerSetUp(object):
     # test starter
     # \brief Common set up of Tango Server
     def setUp(self):
-        print "\nsetting up..."
+        print("\nsetting up...")
         self.add()
         self.start()
 
@@ -101,26 +100,26 @@ class TestServerSetUp(object):
             self._psub = subprocess.call(
                 "cd %s; ./ST %s &" % (path, self.instance), stdout=None,
                 stderr=None, shell=True)
-        print "waiting for simple server",
+        sys.stdout.write("waiting for simple server")
 
         found = False
         cnt = 0
         while not found and cnt < 1000:
             try:
-                print "\b.",
+                sys.stdout.write(".")
                 self.dp = PyTango.DeviceProxy(self.new_device_info_writer.name)
                 time.sleep(0.01)
                 if self.dp.state() == PyTango.DevState.ON:
                     found = True
-            except:
+            except Exception:
                 found = False
             cnt += 1
-        print ""
+        print("")
 
     # test closer
     # \brief Common tear down of Tango Server
     def tearDown(self):
-        print "tearing down ..."
+        print("tearing down ...")
         self.delete()
         self.stop()
 
@@ -130,7 +129,6 @@ class TestServerSetUp(object):
 
     # stops server
     def stop(self):
-        output = ""
         pipe = subprocess.Popen(
             "ps -ef | grep 'TestServer.py %s'" % self.instance,
             stdout=subprocess.PIPE, shell=True).stdout
@@ -195,7 +193,7 @@ class MultiTestServerSetUp(object):
     # test starter
     # \brief Common set up of Tango Server
     def setUp(self):
-        print "\nsetting up..."
+        print("\nsetting up...")
         self.add()
         self.start()
 
@@ -205,7 +203,7 @@ class MultiTestServerSetUp(object):
         devices = self.ts.values()
         for dv in devices:
             db.add_device(dv)
-            print dv.name
+            # print dv.name
             db.put_device_property(dv.name, self.device_prop)
             db.put_class_property(dv._class, self.class_prop)
 
@@ -221,14 +219,14 @@ class MultiTestServerSetUp(object):
         self._psub = subprocess.call(
             "cd %s;  python ./TestServer.py %s &" % (path, self.instance),
             stdout=None, stderr=None, shell=True)
-        print "waiting for simple server",
+        sys.stdout.write("waiting for simple server")
 
         found = False
         cnt = 0
         devices = self.ts.values()
         while not found and cnt < 1000:
             try:
-                print "\b.",
+                sys.stdout.write(".")
                 dpcnt = 0
                 for dv in devices:
                     self.dps[dv.name] = PyTango.DeviceProxy(dv.name)
@@ -237,15 +235,15 @@ class MultiTestServerSetUp(object):
                         dpcnt += 1
                 if dpcnt == len(devices):
                     found = True
-            except Exception as e:
+            except Exception:
                 found = False
             cnt += 1
-        print ""
+        print("")
 
     # test closer
     # \brief Common tear down of Tango Server
     def tearDown(self):
-        print "tearing down ..."
+        print("tearing down ...")
         self.delete()
         self.stop()
 
@@ -255,7 +253,6 @@ class MultiTestServerSetUp(object):
 
     # stops server
     def stop(self):
-        output = ""
         pipe = subprocess.Popen(
             "ps -ef | grep 'TestServer.py %s'" % self.instance,
             stdout=subprocess.PIPE, shell=True).stdout
@@ -271,16 +268,16 @@ class MultiTestServerSetUp(object):
 if __name__ == "__main__":
     simps = TestServerSetUp()
     simps.setUp()
-    print simps.dp.status()
+    print(simps.dp.status())
     simps.tearDown()
     simps = MultiTestServerSetUp()
     simps.setUp()
     for dp in simps.dps.values():
-        print dp.status()
+        print(dp.status())
     simps.tearDown()
     simps = MultiTestServerSetUp(devices=[
         "tm2/dd/sr", "dsf/44/fgg", "sdffd/sdfsd/sfd"])
     simps.setUp()
     for dp in simps.dps.values():
-        print dp.status()
+        print(dp.status())
     simps.tearDown()

@@ -20,7 +20,7 @@ then
     exit -1
 fi
 echo "install tango servers"
-docker exec -it --user root ndts /bin/sh -c 'export DEBIAN_FRONTEND=noninteractive; apt-get -qq update; apt-get -qq install -y  tango-starter tango-test liblog4j1.2-java'
+docker exec -it --user root ndts /bin/sh -c 'export DEBIAN_FRONTEND=noninteractive;  apt-get -qq update; apt-get -qq install -y  tango-starter tango-test liblog4j1.2-java'
 if [ $? -ne "0" ]
 then
     exit -1
@@ -30,23 +30,39 @@ docker exec -it --user root ndts service tango-db restart
 docker exec -it --user root ndts service tango-starter restart
 
 
-echo "install python-pytango"
-docker exec -it --user root ndts /bin/sh -c 'export DEBIAN_FRONTEND=noninteractive; apt-get -qq update; apt-get -qq install -y   python-pytango'
+if [ $2 = "2" ]; then
+    echo "install python-pytango"
+    docker exec -it --user root ndts /bin/sh -c 'export DEBIAN_FRONTEND=noninteractive; apt-get -qq update; apt-get -qq install -y   python-pytango python-tz'
+else
+    echo "install python3-pytango"
+    docker exec -it --user root ndts /bin/sh -c 'export DEBIAN_FRONTEND=noninteractive; apt-get -qq update; apt-get -qq install -y   python3-pytango python3-tz'
+fi
+if [ $? -ne "0" ]
+then
+    exit -1
+fi
+
+if [ $2 = "2" ]; then
+    echo "install sardana, taurus and nexdatas"
+    docker exec -it --user root ndts /bin/sh -c 'export DEBIAN_FRONTEND=noninteractive; apt-get -qq update; apt-get -qq install -y  nxsconfigserver-db; sleep 10; apt-get -qq install -y  python-nxsconfigserver python-nxswriter'
+else
+    echo "install sardana, taurus and nexdatas"
+    docker exec -it --user root ndts /bin/sh -c 'export DEBIAN_FRONTEND=noninteractive; apt-get -qq update; apt-get -qq install -y  nxsconfigserver-db; sleep 10; apt-get -qq install -y  python3-nxsconfigserver python3-nxswriter'
+fi
 if [ $? -ne "0" ]
 then
     exit -1
 fi
 
 
-echo "install sardana, taurus and nexdatas"
-docker exec -it --user root ndts /bin/sh -c 'export DEBIAN_FRONTEND=noninteractive; apt-get -qq update; apt-get -qq install -y  nxsconfigserver-db; sleep 10; apt-get -qq install -y  python-sardana python-nxsconfigserver python-nxswriter python-nxstools'
-if [ $? -ne "0" ]
-then
-    exit -1
+if [ $2 = "2" ]; then
+    echo "install python-nxswriter"
+    echo "install python-nxsrecselector"
+    docker exec -it --user root ndts python setup.py -q install
+else
+    echo "install python3-nxsrecselector"
+    docker exec -it --user root ndts python3 setup.py -q install
 fi
-
-echo "install python-nxsrecselector"
-docker exec -it --user root ndts python setup.py -q install
 if [ $? -ne "0" ]
 then
     exit -1

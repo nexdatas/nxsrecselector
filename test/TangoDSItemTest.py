@@ -20,10 +20,7 @@
 # unittests for TangoDsItemTest running Tango Server
 #
 import unittest
-import os
 import sys
-import subprocess
-import random
 import struct
 
 from nxsrecconfig.CheckerThread import TangoDSItem
@@ -49,18 +46,18 @@ class TangoDSItemTest(unittest.TestCase):
     # test starter
     # \brief Common set up
     def setUp(self):
-        print "\nsetting up..."
+        print("\nsetting up...")
 
     # test closer
     # \brief Common tear down
     def tearDown(self):
-        print "tearing down ..."
+        print("tearing down ...")
 
     # constructor test
     # \brief It tests default settings
     def test_constructor(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         el = TangoDSItem()
         self.assertEqual(el.name, None)
         self.assertEqual(el.device, None)

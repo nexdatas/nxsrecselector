@@ -242,7 +242,7 @@ class Selector(object):
         try:
             triggergate = PoolUtils.getElementNames(
                 pools, 'TriggerGateList')
-        except:
+        except Exception:
             triggergate = []
         self.__selection.updateChannelProperties(
             PoolUtils.getDeviceControllers(pools), triggergate)

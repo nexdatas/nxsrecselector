@@ -23,14 +23,12 @@ import unittest
 import os
 import sys
 import time
-import subprocess
 import random
 import struct
 import threading
 import binascii
 import Queue
 import PyTango
-
 import TestServerSetUp
 
 from nxsrecconfig.CheckerThread import (
@@ -39,6 +37,9 @@ from nxsrecconfig.CheckerThread import (
 
 # if 64-bit machione
 IS64BIT = (struct.calcsize("P") == 8)
+
+if sys.version_info > (3,):
+    long = int
 
 
 # test fixture
@@ -74,18 +75,18 @@ class CheckerItemTest(unittest.TestCase):
     # test starter
     # \brief Common set up
     def setUp(self):
-        print "SEED =", self.__seed
+        print("SEED = %s" % self.__seed)
         self._simps.setUp()
         self._simps2.setUp()
         self._simps3.setUp()
         self._simps4.setUp()
         self._simpsoff.add()
-        print "\nsetting up..."
+        print("\nsetting up...")
 
     # test closer
     # \brief Common tear down
     def tearDown(self):
-        print "tearing down ..."
+        print("tearing down ...")
         self._simpsoff.delete()
         self._simps4.tearDown()
         self._simps3.tearDown()
@@ -96,7 +97,7 @@ class CheckerItemTest(unittest.TestCase):
     # \brief It tests default settings
     def test_constructor(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         el = CheckerThread(None, None)
         self.assertTrue(isinstance(el, threading.Thread))
         self.assertEqual(el.index, None)
@@ -114,7 +115,7 @@ class CheckerItemTest(unittest.TestCase):
     # \brief It tests default settings
     def test_run(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         idn = self.__rnd.randint(1, 1231233)
         cqueue = Queue.Queue()
         self.assertTrue(cqueue.empty())
@@ -236,7 +237,7 @@ class CheckerItemTest(unittest.TestCase):
     # \brief It tests default settings
     def test_run_property(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         idn = self.__rnd.randint(1, 1231233)
         cqueue = Queue.Queue()
         self.assertTrue(cqueue.empty())
@@ -358,7 +359,7 @@ class CheckerItemTest(unittest.TestCase):
     # \brief It tests default settings
     def test_run_command(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         idn = self.__rnd.randint(1, 1231233)
         cqueue = Queue.Queue()
         self.assertTrue(cqueue.empty())
@@ -480,7 +481,7 @@ class CheckerItemTest(unittest.TestCase):
     # \brief It tests default settings
     def test_run_attr(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         idn = self.__rnd.randint(1, 1231233)
         cqueue = Queue.Queue()
         self.assertTrue(cqueue.empty())
@@ -618,7 +619,7 @@ class CheckerItemTest(unittest.TestCase):
 
     def test_start(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         idn = self.__rnd.randint(1, 1231233)
         cqueue = Queue.Queue()
         self.assertTrue(cqueue.empty())
@@ -738,8 +739,8 @@ class CheckerItemTest(unittest.TestCase):
 
     def test_start_five(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
-        idn = self.__rnd.randint(1, 1231233)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
+        # idn = self.__rnd.randint(1, 1231233)
         cqueue = Queue.Queue()
         self.assertTrue(cqueue.empty())
         ths = []

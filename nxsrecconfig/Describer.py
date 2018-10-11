@@ -422,7 +422,7 @@ class Describer(object):
                                      if t.nodeType == t.TEXT_NODE)
                     try:
                         value = int(value)
-                    except:
+                    except Exception:
                         value = value.strip()
                         if not value:
                             value = None
@@ -548,7 +548,7 @@ class Describer(object):
                                           "dataSources", dss)
             else:
                 xmls = []
-        except:
+        except Exception:
             xmls = None
 
         dslist = []

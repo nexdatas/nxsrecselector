@@ -23,9 +23,15 @@ import json
 import PyTango
 import Queue
 import pickle
+import sys
+
 from .Utils import Utils, TangoUtils, MSUtils, PoolUtils
 from .Describer import Describer
 from .CheckerThread import CheckerThread, TangoDSItem, CheckerItem
+
+
+if sys.version_info > (3,):
+    unicode = str
 
 
 class MacroServerPools(object):
@@ -164,7 +170,7 @@ class MacroServerPools(object):
             discomponentgroup[str(k)].errords = k
             discomponentgroup[str(k)].active = False
             discomponentgroup[str(k)].message = \
-                "%s not defined in Configuration Server" % k
+                "%s not defined i<n Configuration Server" % k
         toCheck = {}
         cps = set(components) & set(availablecomponents)
         for acp in cps:
@@ -265,10 +271,13 @@ class MacroServerPools(object):
         fnames = PoolUtils.getFullDeviceNames(pools, channels)
         nonexisting = [dev for dev in channels if dev not in fnames.keys()]
 
-        toCheck = self.__toCheck(configdevice, discomponentgroup,
-                                 componentgroup.keys(),
-                                 datasourcegroup.keys(),
-                                 channels, nonexisting)
+        toCheck = self.__toCheck(
+            configdevice, discomponentgroup,
+            [cp for cp in componentgroup.keys()
+             if componentgroup[cp] is not False],
+            [ds for ds in datasourcegroup.keys()
+             if datasourcegroup[ds] is not False],
+            channels, nonexisting)
 
         cqueue = Queue.Queue()
         for checkeritem in toCheck:

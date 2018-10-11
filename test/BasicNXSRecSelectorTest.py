@@ -20,23 +20,18 @@
 # unittests for field Tags running Tango Server
 #
 import unittest
-import os
 import sys
-import subprocess
-import random
 import time
 import PyTango
 import json
 
 import ServerSetUp
 import BasicSettingsTest
-from nxsrecconfig import Settings
-import nxsrecconfig
 
 from nxsrecconfig.MacroServerPools import MacroServerPools
 from nxsrecconfig.Selector import Selector
 from nxsrecconfig.ProfileManager import ProfileManager
-from nxsrecconfig.Utils import TangoUtils, MSUtils
+from nxsrecconfig.Utils import MSUtils
 
 
 # test fixture
@@ -76,7 +71,7 @@ class BasicNXSRecSelectorTest(BasicSettingsTest.BasicSettingsTest):
         self._sv2.tearDown()
 
     def value(self, rs, name):
-#        print "VAL", json.loads(rs.profileConfiguration)
+        #    print "VAL", json.loads(rs.profileConfiguration)
         return json.loads(rs.profileConfiguration)[name]
 
     def names(self, rs):
@@ -99,7 +94,7 @@ class BasicNXSRecSelectorTest(BasicSettingsTest.BasicSettingsTest):
         cnt = 0
         while not found and cnt < 1000:
             try:
-                print "\b.",
+                sys.stdout.write(".")
                 xmlc = PyTango.DeviceProxy(
                     self._sv.new_device_info_writer.name)
                 time.sleep(0.01)
@@ -109,7 +104,7 @@ class BasicNXSRecSelectorTest(BasicSettingsTest.BasicSettingsTest):
             except Exception as e:
                 print("%s%s" % (self._sv.new_device_info_writer.name, e))
                 found = False
-            except:
+            except Exception:
                 found = False
 
             cnt += 1
@@ -131,7 +126,7 @@ class BasicNXSRecSelectorTest(BasicSettingsTest.BasicSettingsTest):
         cnt = 0
         while not found and cnt < 1000:
             try:
-                print "\b.",
+                sys.stdout.write(".")
                 xmlc = PyTango.DeviceProxy(
                     self._sv2.new_device_info_writer.name)
                 time.sleep(0.01)
@@ -141,7 +136,7 @@ class BasicNXSRecSelectorTest(BasicSettingsTest.BasicSettingsTest):
             except Exception as e:
                 print("%s%s" % (self._sv2.new_device_info_writer.name, e))
                 found = False
-            except:
+            except Exception:
                 found = False
 
             cnt += 1
@@ -176,11 +171,11 @@ class BasicNXSRecSelectorTest(BasicSettingsTest.BasicSettingsTest):
         else:
             self.assertEqual('nxsmntgrp', amntgrp)
 
-        print "MntGrp", rs.mntGrp
-        # memorize attirbutes
-        print "ConfigDevice", rs.configDevice
-        print "Door", rs.door
-        print "DeviceGroups", rs.deviceGroups
+        # print "MntGrp", rs.mntGrp
+        # # memorize attirbutes
+        # print "ConfigDevice", rs.configDevice
+        # print "Door", rs.door
+        # print "DeviceGroups", rs.deviceGroups
 
     def switchProfile(self, rs, flag):
         if flag:

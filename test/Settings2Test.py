@@ -22,22 +22,14 @@
 import unittest
 import os
 import sys
-import subprocess
 import random
 import struct
-import threading
 import binascii
-import Queue
 import PyTango
 import json
-import pickle
 import string
 import time
 import nxsrecconfig
-import xml
-
-import logging
-logger = logging.getLogger()
 
 import TestMacroServerSetUp
 import TestPool2SetUp
@@ -52,9 +44,12 @@ from nxsrecconfig.Selector import Selector
 from nxsrecconfig.ProfileManager import ProfileManager
 from nxsrecconfig.Describer import Describer
 from nxsrecconfig.Settings import Settings
+# from nxsconfigserver.XMLConfigurator import XMLConfigurator
 from nxsrecconfig.Utils import TangoUtils, MSUtils
-from nxsconfigserver.XMLConfigurator import XMLConfigurator
-from nxsrecconfig.Utils import TangoUtils, MSUtils, Utils
+
+
+import logging
+logger = logging.getLogger()
 
 # if 64-bit machione
 IS64BIT = (struct.calcsize("P") == 8)
@@ -64,6 +59,9 @@ DB_AVAILABLE = []
 
 #: tango version
 TGVER = PyTango.__version_info__[0]
+
+if sys.version_info > (3,):
+    long = int
 
 
 class NotEqualException(Exception):
@@ -76,7 +74,7 @@ try:
     mydb = MySQLdb.connect({})
     mydb.close()
     DB_AVAILABLE.append("MYSQL")
-except:
+except Exception:
     try:
         import MySQLdb
     # connection arguments to MYSQL DB
@@ -86,7 +84,7 @@ except:
         mydb = MySQLdb.connect(**args)
         mydb.close()
         DB_AVAILABLE.append("MYSQL")
-    except:
+    except Exception:
         try:
             import MySQLdb
             from os.path import expanduser
@@ -100,12 +98,12 @@ except:
             mydb.close()
             DB_AVAILABLE.append("MYSQL")
 
-        except ImportError, e:
-            print "MYSQL not available: %s" % e
-        except Exception, e:
-            print "MYSQL not available: %s" % e
-        except:
-            print "MYSQL not available"
+        except ImportError as e:
+            print("MYSQL not available: %s" % e)
+        except Exception as e:
+            print("MYSQL not available: %s" % e)
+        except Exception:
+            print("MYSQL not available")
 
 
 # test fixture
@@ -142,7 +140,8 @@ class Settings2Test(unittest.TestCase):
         self._defaultmntgrp = 'nxsmntgrp'
         # default path
         self._defaultpath = \
-            '/$var.entryname#\'scan\'$var.serialno:NXentry/NXinstrument/collection'
+            '/$var.entryname#\'scan\'$var.serialno:NXentry/NXinstrument/' \
+            'collection'
 
         self._npTn = {"float32": "NX_FLOAT32", "float64": "NX_FLOAT64",
                       "float": "NX_FLOAT32", "double": "NX_FLOAT64",
@@ -639,8 +638,8 @@ class Settings2Test(unittest.TestCase):
                 'tann1c': [
                     ('INIT', 'TANGO', 'dsf/sd/we/myattr2', 'NX_INT8',
                      ['$datasources.ann2'])],
-                     'ann2': [
-                         ('CONFIG', 'CLIENT', '', None, None)],
+                'ann2': [
+                    ('CONFIG', 'CLIENT', '', None, None)],
             },
             'dim5': {
                 'tann1c': [
@@ -1993,7 +1992,7 @@ class Settings2Test(unittest.TestCase):
     # test starter
     # \brief Common set up
     def setUp(self):
-        print "SEED =", self._seed
+        print("SEED =", self._seed)
         self._wr.setUp()
         self._ms.setUp()
         self._cf.setUp()
@@ -2004,12 +2003,12 @@ class Settings2Test(unittest.TestCase):
 #        self._simps3.setUp()
 #        self._simps4.setUp()
 #        self._simpsoff.add()
-        print "\nsetting up..."
+        print("\nsetting up...")
 
     # test closer
     # \brief Common tear down
     def tearDown(self):
-        print "tearing down ..."
+        print("tearing down ...")
 #        self._simpsoff.delete()
 #        self._simps4.tearDown()
 #        self._simps3.tearDown()
@@ -2054,7 +2053,6 @@ class Settings2Test(unittest.TestCase):
                     dsfound = True
                 if not stfound and ds[0] == strategy:
                     stfound = True
-#        print "FOUND", dslist, dsfound and stfound
         return dsfound and stfound
 
     @classmethod
@@ -2095,12 +2093,10 @@ class Settings2Test(unittest.TestCase):
         exc = set(excluded or [])
         dks = set(self._dump[name].keys()) - exc
         eks = set(self.names(el)) - exc
-#        print "SE4", el["TimeZone"]
         self.assertEqual(dks, eks)
         for key in dks:
-#            print " K:", key,
-            if self._dump[name][key] != self.value(el, key):
-                print "COMP", key
+            # if self._dump[name][key] != self.value(el, key):
+            #     print "COMP", key
             self.assertEqual(self._dump[name][key], self.value(el, key))
 
     def getDump(self, key, name="default"):
@@ -2121,18 +2117,17 @@ class Settings2Test(unittest.TestCase):
         eks = set(self.names(el)) - exc
         self.assertEqual(dks, eks)
         for key in dks:
-#            print " K:", key,
             try:
                 w1 = json.loads(self._dump[name][key])
                 w2 = json.loads(self.value(el, key))
-            except:
+            except Exception:
                 self.assertEqual(self._dump[name][key], self.value(el, key))
             else:
                 if isinstance(w1, dict):
                     self.myAssertDict(w1, w2)
                 else:
-                    if self._dump[name][key] != self.value(el, key):
-                        print "COMP", key
+                    # if self._dump[name][key] != self.value(el, key):
+                    #     print "COMP", key
                     self.assertEqual(
                         self._dump[name][key],
                         self.value(el, key))
@@ -2143,14 +2138,15 @@ class Settings2Test(unittest.TestCase):
             try:
                 w1 = json.loads(self._dump[name][key])
                 w2 = json.loads(self.value(el, key))
-            except:
+            except Exception:
                 self.assertEqual(self._dump[name][key], self.value(el, key))
             else:
                 if isinstance(w1, dict):
                     self.myAssertDict(w1, w2)
                 else:
-                    if set(self._dump[name][key]) != set(self.value(el, key)):
-                        print "COMP", key
+                    # if set(self._dump[name][key]) != \
+                    #    set(self.value(el, key)):
+                    #     print "COMP", key
                     self.assertEqual(
                         set(self._dump[name][key]),
                         set(self.value(el, key)))
@@ -2173,7 +2169,7 @@ class Settings2Test(unittest.TestCase):
                 found = True
                 break
         if not found:
-            print "NOT FOUND", cp, ds, vds, rv
+            print("NOT FOUND %s %s %s %s" % (cp, ds, vds, rv))
         return found
 
     def checkICP(self, rv, cv, strategy=None, dstype=None):
@@ -2212,7 +2208,7 @@ class Settings2Test(unittest.TestCase):
         try:
             error = False
             method(*args, **kwargs)
-        except exception, e:
+        except exception as e:
             error = True
             err = e
         self.assertEqual(error, True)
@@ -2222,15 +2218,15 @@ class Settings2Test(unittest.TestCase):
         logger.debug('dict %s' % type(dct))
         logger.debug("\n%s\n%s" % (dct, dct2))
         self.assertTrue(isinstance(dct, dict))
-        if not isinstance(dct2, dict):
-            print "NOT DICT", type(dct2), dct2
-            print "DICT", type(dct), dct
+        # if not isinstance(dct2, dict):
+        #     print "NOT DICT", type(dct2), dct2
+        #     print "DICT", type(dct), dct
         self.assertTrue(isinstance(dct2, dict))
         logger.debug("%s %s" % (len(dct.keys()), len(dct2.keys())))
-        if set(dct.keys()) ^ set(dct2.keys()):
-            print 'DCT', dct.keys()
-            print 'DCT2', dct2.keys()
-            print "DIFF", set(dct.keys()) ^ set(dct2.keys())
+        # if set(dct.keys()) ^ set(dct2.keys()):
+        #     print 'DCT', dct.keys()
+        #     print 'DCT2', dct2.keys()
+        #     print "DIFF", set(dct.keys()) ^ set(dct2.keys())
         self.assertEqual(len(dct.keys()), len(dct2.keys()))
         for k, v in dct.items():
             logger.debug("%s  in %s" % (str(k), str(dct2.keys())))
@@ -2239,8 +2235,8 @@ class Settings2Test(unittest.TestCase):
                 self.myAssertDict(v, dct2[k])
             else:
                 logger.debug("%s , %s" % (str(v), str(dct2[k])))
-                if v != dct2[k]:
-                    print 'VALUES', k, v, dct2[k]
+                # if v != dct2[k]:
+                #     print 'VALUES', k, v, dct2[k]
                 self.assertEqual(v, dct2[k])
 
     def myCompDict(self, dct, dct2):
@@ -2249,14 +2245,14 @@ class Settings2Test(unittest.TestCase):
         if not isinstance(dct, dict):
             raise NotEqualException("DCT1 %s" % dct)
         if not isinstance(dct2, dict):
-            print "NOT DICT", type(dct2), dct2
-            print "DICT", type(dct), dct
+            # print "NOT DICT", type(dct2), dct2
+            # print "DICT", type(dct), dct
             raise NotEqualException("DCT2 %s" % dct2)
         logger.debug("%s %s" % (len(dct.keys()), len(dct2.keys())))
-        if set(dct.keys()) ^ set(dct2.keys()):
-            print 'DCT', dct.keys()
-            print 'DCT2', dct2.keys()
-            print "DIFF", set(dct.keys()) ^ set(dct2.keys())
+        # if set(dct.keys()) ^ set(dct2.keys()):
+        #     print 'DCT', dct.keys()
+        #     print 'DCT2', dct2.keys()
+        #     print "DIFF", set(dct.keys()) ^ set(dct2.keys())
         if len(dct.keys()) != len(dct2.keys()):
             raise NotEqualException("LEN %s %s" % (dct, dct2))
 
@@ -2269,22 +2265,22 @@ class Settings2Test(unittest.TestCase):
             else:
                 logger.debug("%s , %s" % (str(v), str(dct2[k])))
                 if v != dct2[k]:
-                    print 'VALUES', k, v, dct2[k]
+                    # print 'VALUES', k, v, dct2[k]
                     raise NotEqualException("VALUE %s %s %s" % (k, v, dct2[k]))
 
     def myAssertDictJSON(self, dct, dct2):
         logger.debug('dict %s' % type(dct))
         logger.debug("\n%s\n%s" % (dct, dct2))
         self.assertTrue(isinstance(dct, dict))
-        if not isinstance(dct2, dict):
-            print "NOT DICT", type(dct2), dct2
-            print "DICT", type(dct), dct
+        # if not isinstance(dct2, dict):
+        #     print "NOT DICT", type(dct2), dct2
+        #     print "DICT", type(dct), dct
         self.assertTrue(isinstance(dct2, dict))
         logger.debug("%s %s" % (len(dct.keys()), len(dct2.keys())))
-        if set(dct.keys()) ^ set(dct2.keys()):
-            print 'DCT', dct.keys()
-            print 'DCT2', dct2.keys()
-            print "DIFF", set(dct.keys()) ^ set(dct2.keys())
+        # if set(dct.keys()) ^ set(dct2.keys()):
+        #     print 'DCT', dct.keys()
+        #     print 'DCT2', dct2.keys()
+        #     print "DIFF", set(dct.keys()) ^ set(dct2.keys())
         self.assertEqual(len(dct.keys()), len(dct2.keys()))
         for k, v in dct.items():
             logger.debug("%s  in %s" % (str(k), str(dct2.keys())))
@@ -2295,8 +2291,8 @@ class Settings2Test(unittest.TestCase):
                 self.assertEqual(set(v), set(dct2[k]))
             else:
                 logger.debug("%s , %s" % (str(v), str(dct2[k])))
-                if v != dct2[k]:
-                    print 'VALUES', k, v, dct2[k]
+                # if v != dct2[k]:
+                #     print 'VALUES', k, v, dct2[k]
                 self.assertEqual(v, dct2[k])
 
     def openRecSelector(self):
@@ -2320,9 +2316,7 @@ class Settings2Test(unittest.TestCase):
         se = Selector(msp, self.version)
         pm = ProfileManager(se)
         amgs = pm.availableMntGrps()
-        print "AMGs", amgs
         amntgrp = MSUtils.getEnv('ActiveMntGrp', msp.getMacroServer(idoor))
-        print "ActiveMntGrp", amntgrp
         self.assertEqual(rs.numberOfThreads, 20)
         self.assertEqual(rs.timerFilters,
                          ["*dgg*", "*/timer/*", "*/ctctrl0*"])
@@ -2340,8 +2334,6 @@ class Settings2Test(unittest.TestCase):
         self.assertEqual(
             cf.availableSelections(),
             rs.availableProfiles())
-        print "AMGs", pm.availableMntGrps()
-        print "AvSels", cf.availableSelections()
         if amntgrp in pm.availableMntGrps():
             self.assertEqual(rs.mntGrp, amntgrp)
         elif cf.availableSelections():
@@ -2358,16 +2350,16 @@ class Settings2Test(unittest.TestCase):
                           "DataSourceSelection",
                           "PreselectingDataSources"]:
                 if self.value(rs, nm) != se[nm]:
-                    print ("DICT NAME %s" % nm)
+                    print("DICT NAME %s" % nm)
                 self.assertEqual(self.value(rs, nm), se[nm])
         self.assertEqual(self.value(rs, "UNKNOWN_VARIABLE_34535"), '')
 
-        print "MntGrp", rs.mntGrp
-        # memorize attirbutes
-        print "ConfigDevice", rs.configDevice
-        print "Door", rs.door
-        print "DeviceGroups", rs.deviceGroups
-        print "AdminDataNames", rs.adminDataNames
+        # print "MntGrp", rs.mntGrp
+        # # memorize attirbutes
+        # print "ConfigDevice", rs.configDevice
+        # print "Door", rs.door
+        # print "DeviceGroups", rs.deviceGroups
+        # print "AdminDataNames", rs.adminDataNames
 
     def generateProfile(self, door, mg, cfdv, wrdv):
         msp = MacroServerPools(10)
@@ -2475,7 +2467,7 @@ class Settings2Test(unittest.TestCase):
         acps = {}
         dss = {}
         lcp = self._rnd.randint(1, 40)
-        lds = self._rnd.randint(1, 40)
+        # lds = self._rnd.randint(1, 40)
 
         self._cf.dp.SetCommandVariable(
             ["CPDICT", json.dumps(amycps)])
@@ -2584,16 +2576,17 @@ class Settings2Test(unittest.TestCase):
         se["Timer"] = json.dumps(ltimers)
         se["UserData"] = json.dumps(records)
 
-        tmg = TestMGSetUp.TestMeasurementGroupSetUp(
+        # tmg =
+        TestMGSetUp.TestMeasurementGroupSetUp(
             name=mg)
 #                    dv = "/".join(ar["full_name"].split("/")[0:-1])
         chds = [ds for ds in mgt.dataSources()
                 if not ds.startswith('client')]
-        chds1 = list(chds)
+        # chds1 = list(chds)
         chds2 = [ds for ds in mgt.componentDataSources()
                  if not ds.startswith('client')]
         chds.extend(chds2)
-        bchds = list(chds)
+        # bchds = list(chds)
         chds.extend(ltimers)
         tmpchds = sorted(list(set(chds)))
         chds = []

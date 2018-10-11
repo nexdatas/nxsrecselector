@@ -19,7 +19,6 @@
 # \file ServerSetUp.py
 # class with server settings
 #
-import unittest
 import os
 import sys
 import subprocess
@@ -56,7 +55,7 @@ class TestConfigServerSetUp(object):
     # test starter
     # \brief Common set up of Tango Server
     def setUp(self):
-        print "\nsetting up..."
+        print("\nsetting up...")
         self.add()
         self.start()
 
@@ -72,30 +71,36 @@ class TestConfigServerSetUp(object):
         if not path:
             path = '.'
 
-        self._psub = subprocess.call(
-            "cd %s;  python ./TestConfigServer.py %s &" %
-            (path, self.instance),
-            stdout=None, stderr=None, shell=True)
-        print "waiting for simple server",
+        if sys.version_info > (3,):
+            self._psub = subprocess.call(
+                "cd %s;  python3 ./TestConfigServer.py %s &" %
+                (path, self.instance),
+                stdout=None, stderr=None, shell=True)
+        else:
+            self._psub = subprocess.call(
+                "cd %s;  python ./TestConfigServer.py %s &" %
+                (path, self.instance),
+                stdout=None, stderr=None, shell=True)
+        sys.stdout.write("waiting for simple server")
 
         found = False
         cnt = 0
         while not found and cnt < 1000:
             try:
-                print "\b.",
+                sys.stdout.write(".")
                 self.dp = PyTango.DeviceProxy(self.new_device_info_writer.name)
                 time.sleep(0.01)
                 if self.dp.state() == PyTango.DevState.ON:
                     found = True
-            except:
+            except Exception:
                 found = False
             cnt += 1
-        print ""
+        print("")
 
     # test closer
     # \brief Common tear down of Tango Server
     def tearDown(self):
-        print "tearing down ..."
+        print("tearing down ...")
         self.delete()
         self.stop()
 
@@ -105,17 +110,18 @@ class TestConfigServerSetUp(object):
 
     # stops server
     def stop(self):
-        output = ""
         pipe = subprocess.Popen(
             "ps -ef | grep 'TestConfigServer.py %s'" % self.instance,
             stdout=subprocess.PIPE, shell=True).stdout
 
-        res = pipe.read().split("\n")
+        res = str(pipe.read()).split("\n")
         for r in res:
             sr = r.split()
             if len(sr) > 2:
                 subprocess.call(
                     "kill -9 %s" % sr[1], stderr=subprocess.PIPE, shell=True)
+        pipe.close()
+
 
 if __name__ == "__main__":
     simps = TestConfigServerSetUp()
@@ -123,5 +129,5 @@ if __name__ == "__main__":
 #    import time
 #    time.sleep(30)
 
-    print simps.dp.status()
+    print(simps.dp.status())
     simps.tearDown()

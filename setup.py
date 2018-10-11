@@ -23,12 +23,13 @@
 import os
 from distutils.core import setup, Command
 
+from sphinx.setup_command import BuildDoc
+
+
 #: package name
 NDTS = "nxsrecconfig"
 #: nxswriter imported package
 INDTS = __import__(NDTS)
-
-from sphinx.setup_command import BuildDoc
 
 
 def read(fname):

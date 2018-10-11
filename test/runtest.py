@@ -20,7 +20,6 @@
 # the unittest runner
 #
 
-import os
 import sys
 import unittest
 
@@ -29,12 +28,6 @@ from optparse import OptionParser
 
 # import TangoDataWriterTest
 # import DescriberTest
-
-import PyTango
-
-# list of available databases
-DB_AVAILABLE = []
-
 
 import DSItemTest
 import ExDSItemTest
@@ -67,6 +60,10 @@ import Converter2to1Test
 import Converter3to2Test
 import Converter2to3Test
 import StreamSetTest
+
+# list of available databases
+DB_AVAILABLE = []
+
 
 # import TestServerSetUp
 
@@ -170,16 +167,20 @@ def main():
         unittest.defaultTestLoader.loadTestsFromModule(ExtraSettings2Test))
 
     serversuite1.addTests(
-        unittest.defaultTestLoader.loadTestsFromModule(BasicNXSRecSelectorTest))
+        unittest.defaultTestLoader.loadTestsFromModule(
+            BasicNXSRecSelectorTest))
 
     serversuite1b.addTests(
-        unittest.defaultTestLoader.loadTestsFromModule(BasicNXSRecSelector2Test))
+        unittest.defaultTestLoader.loadTestsFromModule(
+            BasicNXSRecSelector2Test))
 
     serversuite2.addTests(
-        unittest.defaultTestLoader.loadTestsFromModule(ExtraNXSRecSelectorTest))
+        unittest.defaultTestLoader.loadTestsFromModule(
+            ExtraNXSRecSelectorTest))
 
     serversuite2b.addTests(
-        unittest.defaultTestLoader.loadTestsFromModule(ExtraNXSRecSelector2Test))
+        unittest.defaultTestLoader.loadTestsFromModule(
+            ExtraNXSRecSelector2Test))
 
     # test runner
     runner = unittest.TextTestRunner()
@@ -201,7 +202,7 @@ def main():
         "extraserver": [serversuite2, serversuite2b],
     }
 
-    print options.args
+    print(options.args)
     if not options.args or 'all' in options.args:
         options.args = namesuite.keys()
 
@@ -215,6 +216,7 @@ def main():
     # test result
     result = runner.run(suite).wasSuccessful()
     sys.exit(not result)
+
 
 if __name__ == "__main__":
     main()

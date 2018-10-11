@@ -22,21 +22,14 @@
 import unittest
 import os
 import sys
-import subprocess
 import random
 import struct
-import threading
 import binascii
-import Queue
 import PyTango
 import json
-import pickle
 import string
 import time
 import nxsrecconfig
-
-import logging
-logger = logging.getLogger()
 
 import TestMacroServerSetUp
 import TestPoolSetUp
@@ -50,8 +43,13 @@ from nxsrecconfig.MacroServerPools import MacroServerPools
 from nxsrecconfig.Selector import Selector
 from nxsrecconfig.Describer import Describer
 from nxsrecconfig.ProfileManager import ProfileManager
-from nxsrecconfig.Utils import TangoUtils, MSUtils, Utils
-from nxsconfigserver.XMLConfigurator import XMLConfigurator
+from nxsrecconfig.Utils import MSUtils, Utils
+
+import logging
+logger = logging.getLogger()
+
+if sys.version_info > (3,):
+    long = int
 
 
 class NotEqualException(Exception):
@@ -73,7 +71,7 @@ try:
     mydb = MySQLdb.connect({})
     mydb.close()
     DB_AVAILABLE.append("MYSQL")
-except:
+except Exception:
     try:
         import MySQLdb
     # connection arguments to MYSQL DB
@@ -83,7 +81,7 @@ except:
         mydb = MySQLdb.connect(**args)
         mydb.close()
         DB_AVAILABLE.append("MYSQL")
-    except:
+    except Exception:
         try:
             import MySQLdb
             from os.path import expanduser
@@ -97,12 +95,12 @@ except:
             mydb.close()
             DB_AVAILABLE.append("MYSQL")
 
-        except ImportError, e:
-            print "MYSQL not available: %s" % e
-        except Exception, e:
-            print "MYSQL not available: %s" % e
-        except:
-            print "MYSQL not available"
+        except ImportError as e:
+            print("MYSQL not available: %s" % e)
+        except Exception as e:
+            print("MYSQL not available: %s" % e)
+        except Exception:
+            print("MYSQL not available")
 
 
 # test fixture
@@ -141,11 +139,11 @@ class ProfileManagerTest(unittest.TestCase):
         self.__defaultmntgrp = 'nxsmntgrp'
         # default path
         self.__defaultpath = \
-            '/$var.entryname#\'scan\'$var.serialno:NXentry/NXinstrument/collection'
+            '/$var.entryname#\'scan\'$var.serialno:NXentry/NXinstrument/' \
+            'collection'
 
         # selection version
         self.__version = nxsrecconfig.__version__
-        # print self.__version
 
         self._keys = [
             ("Timer", '[]'),
@@ -1708,7 +1706,7 @@ class ProfileManagerTest(unittest.TestCase):
     # test starter
     # \brief Common set up
     def setUp(self):
-        print "SEED =", self.__seed
+        print("SEED = %s" % self.__seed)
         self._wr.setUp()
         self._ms.setUp()
         self._cf.setUp()
@@ -1719,12 +1717,12 @@ class ProfileManagerTest(unittest.TestCase):
 #        self._simps3.setUp()
 #        self._simps4.setUp()
 #        self._simpsoff.add()
-        print "\nsetting up..."
+        print("\nsetting up...")
 
     # test closer
     # \brief Common tear down
     def tearDown(self):
-        print "tearing down ..."
+        print("tearing down ...")
 #        self._simpsoff.delete()
 #        self._simps4.tearDown()
 #        self._simps3.tearDown()
@@ -1768,18 +1766,16 @@ class ProfileManagerTest(unittest.TestCase):
         self.__dump[name] = {}
 
         for key in el.keys():
-#            print "key", key, el[key]
             self.__dump[name][key] = el[key]
 
     def compareToDump(self, el, excluded=None, name="default"):
         exc = set(excluded or [])
         dks = set(self.__dump[name].keys()) - exc
         eks = set(el.keys()) - exc
-#        print "SE4", el["TimeZone"]
         self.assertEqual(dks, eks)
         for key in dks:
-            if self.__dump[name][key] != el[key]:
-                print "COMP", key
+            # if self.__dump[name][key] != el[key]:
+            #     print "COMP", key
             self.assertEqual(self.__dump[name][key], el[key])
 
     def getDump(self, key, name="default"):
@@ -1794,16 +1790,16 @@ class ProfileManagerTest(unittest.TestCase):
             try:
                 w1 = json.loads(self.__dump[name][key])
                 w2 = json.loads(el[key])
-            except:
-                if self.__dump[name][key] != el[key]:
-                    print key
+            except Exception:
+                # if self.__dump[name][key] != el[key]:
+                #     print key
                 self.assertEqual(self.__dump[name][key], el[key])
             else:
                 if isinstance(w1, dict):
                     self.myAssertDict(w1, w2)
                 else:
-                    if self.__dump[name][key] != el[key]:
-                        print "COMP", key
+                    # if self.__dump[name][key] != el[key]:
+                    #     print "COMP", key
                     self.assertEqual(self.__dump[name][key], el[key])
 
     def getRandomName(self, maxsize):
@@ -1821,7 +1817,7 @@ class ProfileManagerTest(unittest.TestCase):
         try:
             error = False
             method(*args, **kwargs)
-        except exception, e:
+        except exception as e:
             error = True
             err = e
         self.assertEqual(error, True)
@@ -1831,15 +1827,15 @@ class ProfileManagerTest(unittest.TestCase):
         logger.debug('dict %s' % type(dct))
         logger.debug("\n%s\n%s" % (dct, dct2))
         self.assertTrue(isinstance(dct, dict))
-        if not isinstance(dct2, dict):
-            print "NOT DICT", type(dct2), dct2
-            print "DICT", type(dct), dct
+        # if not isinstance(dct2, dict):
+        #     print "NOT DICT", type(dct2), dct2
+        #     print "DICT", type(dct), dct
         self.assertTrue(isinstance(dct2, dict))
         logger.debug("%s %s" % (len(dct.keys()), len(dct2.keys())))
-        if set(dct.keys()) ^ set(dct2.keys()):
-            print 'DCT', dct.keys()
-            print 'DCT2', dct2.keys()
-            print "DIFF", set(dct.keys()) ^ set(dct2.keys())
+        # if set(dct.keys()) ^ set(dct2.keys()):
+        #     print 'DCT', dct.keys()
+        #     print 'DCT2', dct2.keys()
+        #     print "DIFF", set(dct.keys()) ^ set(dct2.keys())
         self.assertEqual(len(dct.keys()), len(dct2.keys()))
         for k, v in dct.items():
             logger.debug("%s  in %s" % (str(k), str(dct2.keys())))
@@ -1848,8 +1844,8 @@ class ProfileManagerTest(unittest.TestCase):
                 self.myAssertDict(v, dct2[k])
             else:
                 logger.debug("%s , %s" % (str(v), str(dct2[k])))
-                if v != dct2[k]:
-                    print 'VALUES!! ', k, v, dct2[k]
+                # if v != dct2[k]:
+                #     print 'VALUES!! ', k, v, dct2[k]
                 self.assertEqual(v, dct2[k])
 
     def myCompDict(self, dct, dct2):
@@ -1858,15 +1854,15 @@ class ProfileManagerTest(unittest.TestCase):
         if not isinstance(dct, dict):
             raise NotEqualException("DCT1 %s" % dct)
         if not isinstance(dct2, dict):
-            print "NOT DICT", type(dct2), dct2
-            print "DICT", type(dct), dct
+            # print "NOT DICT", type(dct2), dct2
+            # print "DICT", type(dct), dct
             raise NotEqualException("DCT2 %s" % dct2)
         logger.debug("%s %s" % (len(dct.keys()), len(dct2.keys())))
-        if set(dct.keys()) ^ set(dct2.keys()):
-            print 'DCT', dct.keys()
-            print 'DCT2', dct2.keys()
-            print "DIFF", set(dct.keys()) ^ set(dct2.keys())
-        print "L1",  dct.keys(), dct2.keys()
+        # if set(dct.keys()) ^ set(dct2.keys()):
+        #     print 'DCT', dct.keys()
+        #     print 'DCT2', dct2.keys()
+        #     print "DIFF", set(dct.keys()) ^ set(dct2.keys())
+        # print "L1",  dct.keys(), dct2.keys()
         if len(dct.keys()) != len(dct2.keys()):
             raise NotEqualException("LEN %s %s" % (dct, dct2))
 
@@ -1879,31 +1875,34 @@ class ProfileManagerTest(unittest.TestCase):
             else:
                 logger.debug("%s , %s" % (str(v), str(dct2[k])))
                 if v != dct2[k]:
-                    print 'VALUES', k, v, dct2[k]
+                    # print 'VALUES', k, v, dct2[k]
                     raise NotEqualException("VALUE %s %s %s" % (k, v, dct2[k]))
 
     # constructor test
     def test_constructor_keys(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
-        val = {"ConfigDevice": self._cf.dp.name(),
-               "WriterDevice": self._wr.dp.name(),
-               "Door": 'doortestp09/testts/t1r228',
-               "MntGrp": 'nxsmntgrp'}
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
+        # val = {"ConfigDevice": self._cf.dp.name(),
+        #        "WriterDevice": self._wr.dp.name(),
+        #        "Door": 'doortestp09/testts/t1r228',
+        #        "MntGrp": 'nxsmntgrp'}
 
-        mgt = ProfileManager(None)
+        # mgt =
+        ProfileManager(None)
 
         se = Selector(None, self.__version)
-        mgt = ProfileManager(se)
+        # mgt =
+        ProfileManager(se)
 
         msp = MacroServerPools(10)
         se = Selector(msp, self.__version)
-        mgt = ProfileManager(se)
+        # mgt =
+        ProfileManager(se)
 
     # availableMntGrps test
     def test_availableMntGrps(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -1955,7 +1954,7 @@ class ProfileManagerTest(unittest.TestCase):
     # availableMntGrps test
     def test_availableMntGrps_twopools(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -2042,7 +2041,7 @@ class ProfileManagerTest(unittest.TestCase):
     # deleteProfile test
     def test_deleteProfile(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -2104,7 +2103,7 @@ class ProfileManagerTest(unittest.TestCase):
     # deleteProfile test
     def test_deleteProfile_twopools(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -2218,7 +2217,7 @@ class ProfileManagerTest(unittest.TestCase):
     # test
     def test_preselectedComponents(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -2256,7 +2255,7 @@ class ProfileManagerTest(unittest.TestCase):
     # test
     def test_components(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -2323,7 +2322,7 @@ class ProfileManagerTest(unittest.TestCase):
     # test
     def test_cpdescritpion_unknown(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -2347,8 +2346,8 @@ class ProfileManagerTest(unittest.TestCase):
 
         cps = {}
         dss = {}
-        lcp = self.__rnd.randint(1, 40)
-        lds = self.__rnd.randint(1, 40)
+        # lcp = self.__rnd.randint(1, 40)
+        # lds = self.__rnd.randint(1, 40)
 
         dsdict = {
             "ann": self.mydss["ann"]
@@ -2359,14 +2358,18 @@ class ProfileManagerTest(unittest.TestCase):
 
         se["ComponentSelection"] = json.dumps(cps)
         se["DataSourceSelection"] = json.dumps(dss)
-        ndss = json.loads(se["DataSourceSelection"])
-        common = set(cps) & set(dss)
+        # ndss =
+        json.loads(se["DataSourceSelection"])
+        # common =
+        set(cps) & set(dss)
         self.dump(se)
 
-        ncps = json.loads(se["ComponentSelection"])
-        ndss = json.loads(se["DataSourceSelection"])
-        tdss = [ds for ds in ndss if ndss[ds]]
-        tcps = [cp for cp in ncps if ncps[cp]]
+        # ncps =
+        json.loads(se["ComponentSelection"])
+        # ndss =
+        json.loads(se["DataSourceSelection"])
+        # tdss = [ds for ds in ndss if ndss[ds]]
+        # tcps = [cp for cp in ncps if ncps[cp]]
 
         self.assertEqual(pm.cpdescription(), [{}])
         se["ComponentSelection"] = json.dumps({"unknown": True})
@@ -2379,7 +2382,7 @@ class ProfileManagerTest(unittest.TestCase):
     # test
     def test_cpdescritpion_full(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -2403,20 +2406,22 @@ class ProfileManagerTest(unittest.TestCase):
 
         cps = {}
         dss = {}
-        lcp = self.__rnd.randint(1, 40)
-        lds = self.__rnd.randint(1, 40)
+        # lcp = self.__rnd.randint(1, 40)
+        # lds = self.__rnd.randint(1, 40)
 
-        dsdict = {
-            "ann": self.mydss["ann"]
-        }
+        # dsdict = {
+        #     "ann": self.mydss["ann"]
+        # }
 
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
 
         se["ComponentSelection"] = json.dumps({})
         se["DataSourceSelection"] = json.dumps({})
-        ndss = json.loads(se["DataSourceSelection"])
-        common = set(cps) & set(dss)
+        # ndss =
+        json.loads(se["DataSourceSelection"])
+        # common =
+        set(cps) & set(dss)
         self.dump(se)
 
         res = pm.cpdescription(True)
@@ -2425,7 +2430,7 @@ class ProfileManagerTest(unittest.TestCase):
     # test
     def test_cpdescritpion_comp_nods(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -2450,8 +2455,10 @@ class ProfileManagerTest(unittest.TestCase):
 
             cps = {}
             dss = {}
-            lcp = self.__rnd.randint(1, 40)
-            lds = self.__rnd.randint(1, 40)
+            # lcp =
+            self.__rnd.randint(1, 40)
+            # lds =
+            self.__rnd.randint(1, 40)
 
             self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
@@ -2470,8 +2477,10 @@ class ProfileManagerTest(unittest.TestCase):
             se["ComponentSelection"] = json.dumps(cps)
             se["DataSourceSelection"] = json.dumps(dss)
             self._cf.dp.SetCommandVariable(["MCPLIST", json.dumps(mcps)])
-            ndss = json.loads(se["DataSourceSelection"])
-            common = set(cps) & set(dss)
+            # ndss =
+            json.loads(se["DataSourceSelection"])
+            # common =
+            set(cps) & set(dss)
             self.dump(se)
 
             res = pm.cpdescription()
@@ -2481,7 +2490,7 @@ class ProfileManagerTest(unittest.TestCase):
     # test
     def test_cpdescritpion_comp_ds(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -2506,8 +2515,8 @@ class ProfileManagerTest(unittest.TestCase):
 
             cps = {}
             dss = {}
-            lcp = self.__rnd.randint(1, 40)
-            lds = self.__rnd.randint(1, 40)
+            # lcp = self.__rnd.randint(1, 40)
+            # lds = self.__rnd.randint(1, 40)
 
             self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
@@ -2533,7 +2542,8 @@ class ProfileManagerTest(unittest.TestCase):
             se["DataSourceSelection"] = json.dumps(dss)
             self._cf.dp.SetCommandVariable(["MCPLIST", json.dumps(mcps)])
             ndss = json.loads(se["DataSourceSelection"])
-            common = set(cps) & set(dss)
+            # common =
+            set(cps) & set(dss)
             self.dump(se)
 
             res = pm.cpdescription()
@@ -2543,7 +2553,7 @@ class ProfileManagerTest(unittest.TestCase):
     # test
     def test_componentdatasources(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -2568,8 +2578,8 @@ class ProfileManagerTest(unittest.TestCase):
 
             cps = {}
             dss = {}
-            lcp = self.__rnd.randint(1, 40)
-            lds = self.__rnd.randint(1, 40)
+            # lcp = self.__rnd.randint(1, 40)
+            # lds = self.__rnd.randint(1, 40)
 
             self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
@@ -2588,14 +2598,15 @@ class ProfileManagerTest(unittest.TestCase):
             mncps = self.__rnd.randint(1, len(self.mycps.keys()) - 1)
             mcps = self.__rnd.sample(set(self.mycps.keys()), mncps)
 
-            tdss = [ds for ds in dss if dss[ds]]
-            tcps = [cp for cp in cps if cps[cp]]
+            # tdss = [ds for ds in dss if dss[ds]]
+            # tcps = [cp for cp in cps if cps[cp]]
 
             se["ComponentSelection"] = json.dumps(cps)
             se["DataSourceSelection"] = json.dumps(dss)
             self._cf.dp.SetCommandVariable(["MCPLIST", json.dumps(mcps)])
             ndss = json.loads(se["DataSourceSelection"])
-            common = set(cps) & set(dss)
+            # common =
+            set(cps) & set(dss)
             self.dump(se)
 
             dds = pm.componentDataSources()
@@ -2612,7 +2623,7 @@ class ProfileManagerTest(unittest.TestCase):
     # test
     def test_datasources(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -2637,8 +2648,8 @@ class ProfileManagerTest(unittest.TestCase):
 
             cps = {}
             dss = {}
-            lcp = self.__rnd.randint(1, 40)
-            lds = self.__rnd.randint(1, 40)
+            # lcp = self.__rnd.randint(1, 40)
+            # lds = self.__rnd.randint(1, 40)
 
             self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
@@ -2667,7 +2678,8 @@ class ProfileManagerTest(unittest.TestCase):
             se["DataSourceSelection"] = json.dumps(dss)
             self._cf.dp.SetCommandVariable(["MCPLIST", json.dumps(mcps)])
             ndss = json.loads(se["DataSourceSelection"])
-            common = set(cps) & set(dss)
+            # common =
+            set(cps) & set(dss)
             self.dump(se)
 
             dds = pm.componentDataSources()
@@ -2680,7 +2692,7 @@ class ProfileManagerTest(unittest.TestCase):
     # updateProfile test
     def test_updateProfile_empty(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -2775,7 +2787,7 @@ class ProfileManagerTest(unittest.TestCase):
     # updateProfile test
     def test_updateProfile_components_nopool(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -2826,8 +2838,8 @@ class ProfileManagerTest(unittest.TestCase):
             cps = {}
             acps = {}
             dss = {}
-            lcp = self.__rnd.randint(1, 40)
-            lds = self.__rnd.randint(1, 40)
+            # lcp = self.__rnd.randint(1, 40)
+            # lds = self.__rnd.randint(1, 40)
 
             self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
@@ -2905,9 +2917,11 @@ class ProfileManagerTest(unittest.TestCase):
                 # print "DS", mgt.dataSources()
                 # print "DDS", mgt.componentDataSources()
                 # print "TIMER", ar["name"]
-                res = mgt.cpdescription()
-                acp = self._cf.dp.AvailableComponents()
-                mdds = set()
+                # res =
+                mgt.cpdescription()
+                # acp =
+                self._cf.dp.AvailableComponents()
+                # mdds = set()
 
                 jpcnf = mgt.updateProfile()
                 pcnf = json.loads(jpcnf)
@@ -2943,13 +2957,13 @@ class ProfileManagerTest(unittest.TestCase):
                 mgt.deleteProfile("nxsmntgrp")
                 try:
                     tmg.tearDown()
-                except:
+                except Exception:
                     pass
 
     # updateProfile test
     def test_updateProfile_nodevice(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -2999,8 +3013,8 @@ class ProfileManagerTest(unittest.TestCase):
         cps = {}
         acps = {}
         dss = {}
-        lcp = self.__rnd.randint(1, 40)
-        lds = self.__rnd.randint(1, 40)
+        # lcp = self.__rnd.randint(1, 40)
+        # lds = self.__rnd.randint(1, 40)
 
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
@@ -3042,12 +3056,12 @@ class ProfileManagerTest(unittest.TestCase):
             se["UserData"] = json.dumps(records)
 
             tmg = TestMGSetUp.TestMeasurementGroupSetUp(name='nxsmntgrp')
-            dv = "/".join(ar["full_name"].split("/")[0:-1])
-            smg = {"controllers": {},
-                   "monitor": "%s" % dv,
-                   "description": "Measurement Group",
-                   "timer": "%s" % dv,
-                   "label": "nxsmntgrp"}
+            # dv = "/".join(ar["full_name"].split("/")[0:-1])
+            # smg = {"controllers": {},
+            #        "monitor": "%s" % dv,
+            #        "description": "Measurement Group",
+            #        "timer": "%s" % dv,
+            #        "label": "nxsmntgrp"}
             try:
                 self.myAssertDict(json.loads(se["ComponentPreselection"]),
                                   acps)
@@ -3067,13 +3081,13 @@ class ProfileManagerTest(unittest.TestCase):
                 mgt.deleteProfile("nxsmntgrp")
                 try:
                     tmg.tearDown()
-                except:
+                except Exception:
                     pass
 
     # updateProfile test
     def test_updateProfile_nodevice_cp(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -3121,8 +3135,8 @@ class ProfileManagerTest(unittest.TestCase):
         cps = {}
         acps = {}
         dss = {}
-        lcp = self.__rnd.randint(1, 40)
-        lds = self.__rnd.randint(1, 40)
+        # lcp = self.__rnd.randint(1, 40)
+        # lds = self.__rnd.randint(1, 40)
 
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
@@ -3164,12 +3178,12 @@ class ProfileManagerTest(unittest.TestCase):
             se["UserData"] = json.dumps(records)
 
             tmg = TestMGSetUp.TestMeasurementGroupSetUp(name='nxsmntgrp')
-            dv = "/".join(ar["full_name"].split("/")[0:-1])
-            smg = {"controllers": {},
-                   "monitor": "%s" % dv,
-                   "description": "Measurement Group",
-                   "timer": "%s" % dv,
-                   "label": "nxsmntgrp"}
+            # dv = "/".join(ar["full_name"].split("/")[0:-1])
+            # smg = {"controllers": {},
+            #        "monitor": "%s" % dv,
+            #        "description": "Measurement Group",
+            #        "timer": "%s" % dv,
+            #        "label": "nxsmntgrp"}
             try:
                 self.myAssertDict(json.loads(se["ComponentPreselection"]),
                                   acps)
@@ -3190,13 +3204,13 @@ class ProfileManagerTest(unittest.TestCase):
                 mgt.deleteProfile("nxsmntgrp")
                 try:
                     tmg.tearDown()
-                except:
+                except Exception:
                     pass
 
     # updateProfile test
     def test_updateProfile_wrongdevice(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -3244,8 +3258,8 @@ class ProfileManagerTest(unittest.TestCase):
         cps = {}
         acps = {}
         dss = {}
-        lcp = self.__rnd.randint(1, 40)
-        lds = self.__rnd.randint(1, 40)
+        # lcp = self.__rnd.randint(1, 40)
+        # lds = self.__rnd.randint(1, 40)
 
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
@@ -3287,12 +3301,12 @@ class ProfileManagerTest(unittest.TestCase):
             se["UserData"] = json.dumps(records)
 
             tmg = TestMGSetUp.TestMeasurementGroupSetUp(name='nxsmntgrp')
-            dv = "/".join(ar["full_name"].split("/")[0:-1])
-            smg = {"controllers": {},
-                   "monitor": "%s" % dv,
-                   "description": "Measurement Group",
-                   "timer": "%s" % dv,
-                   "label": "nxsmntgrp"}
+            # dv = "/".join(ar["full_name"].split("/")[0:-1])
+            # smg = {"controllers": {},
+            #        "monitor": "%s" % dv,
+            #        "description": "Measurement Group",
+            #        "timer": "%s" % dv,
+            #        "label": "nxsmntgrp"}
             try:
                 self.myAssertDict(json.loads(se["ComponentPreselection"]),
                                   acps)
@@ -3313,13 +3327,13 @@ class ProfileManagerTest(unittest.TestCase):
                 mgt.deleteProfile("nxsmntgrp")
                 try:
                     tmg.tearDown()
-                except:
+                except Exception:
                     pass
 
     # updateProfile test
     def test_updateProfile_components_nopool_tango(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -3369,8 +3383,8 @@ class ProfileManagerTest(unittest.TestCase):
             cps = {}
             acps = {}
             dss = {}
-            lcp = self.__rnd.randint(1, 40)
-            lds = self.__rnd.randint(1, 40)
+            # lcp = self.__rnd.randint(1, 40)
+            # lds = self.__rnd.randint(1, 40)
 
             self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.smycps)])
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
@@ -3450,7 +3464,7 @@ class ProfileManagerTest(unittest.TestCase):
 #                print "DDS", mgt.componentDataSources()
 
                 res = mgt.cpdescription()
-                mdds = set()
+                # mdds = set()
                 for mdss in res[0].values():
                     if isinstance(mdss, dict):
                         for ds in mdss.keys():
@@ -3496,7 +3510,7 @@ class ProfileManagerTest(unittest.TestCase):
                                'normalization': 0,
                                'source': cnt['source']}
                         tgc[chn["full_name"]] = chn
-                    except:
+                    except Exception:
                         # print ds, cnt
                         raise
 
@@ -3543,13 +3557,13 @@ class ProfileManagerTest(unittest.TestCase):
                 mgt.deleteProfile("nxsmntgrp")
                 try:
                     tmg.tearDown()
-                except:
+                except Exception:
                     pass
 
     # updateProfile test
     def test_updateProfile_components_nopool_tango_unplottedcomponents(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -3599,8 +3613,8 @@ class ProfileManagerTest(unittest.TestCase):
             cps = {}
             acps = {}
             dss = {}
-            lcp = self.__rnd.randint(1, 40)
-            lds = self.__rnd.randint(1, 40)
+            # lcp = self.__rnd.randint(1, 40)
+            # lds = self.__rnd.randint(1, 40)
 
             self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.smycps)])
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
@@ -3666,7 +3680,7 @@ class ProfileManagerTest(unittest.TestCase):
             dv = "/".join(ar["full_name"].split("/")[0:-1])
             chds = [ds for ds in mgt.dataSources()
                     if not ds.startswith('client')]
-            chds1 = list(chds)
+            # chds1 = list(chds)
             chds2 = [ds for ds in mgt.componentDataSources()
                      if not ds.startswith('client')]
             chds.extend(chds2)
@@ -3716,7 +3730,7 @@ class ProfileManagerTest(unittest.TestCase):
 #                print "DDS", mgt.componentDataSources()
 
                 res = mgt.cpdescription()
-                mdds = set()
+                # mdds = set()
                 for mdss in res[0].values():
                     if isinstance(mdss, dict):
                         for ds in mdss.keys():
@@ -3737,8 +3751,6 @@ class ProfileManagerTest(unittest.TestCase):
                 self.myAssertDict(json.loads(se["UserData"]), records)
                 self.assertEqual(json.loads(se["Timer"]), [ar["name"]])
                 self.assertEqual(se["MntGrp"], "nxsmntgrp")
-#                print "CNF", cnf
-#                print "CHDS", chds
                 for i, ds in enumerate(chds):
                     cnt = self.smychs[str(ds)]
                     try:
@@ -3767,8 +3779,7 @@ class ProfileManagerTest(unittest.TestCase):
                                'normalization': 0,
                                'source': cnt['source']}
                         tgc[chn["full_name"]] = chn
-                    except:
-                        # print ds, cnt
+                    except Exception:
                         raise
                 if tgc:
                     smg = {"controllers":
@@ -3816,13 +3827,13 @@ class ProfileManagerTest(unittest.TestCase):
                 mgt.deleteProfile("nxsmntgrp")
                 try:
                     tmg.tearDown()
-                except:
+                except Exception:
                     pass
 
     # updateProfile test
     def test_updateProfile_components_pool_tango(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -3911,8 +3922,8 @@ class ProfileManagerTest(unittest.TestCase):
                     cps = {}
                     acps = {}
                     dss = {}
-                    lcp = self.__rnd.randint(1, 40)
-                    lds = self.__rnd.randint(1, 40)
+                    # lcp = self.__rnd.randint(1, 40)
+                    # lds = self.__rnd.randint(1, 40)
 
                     self._cf.dp.SetCommandVariable(
                         ["CPDICT", json.dumps(self.smycps2)])
@@ -3999,7 +4010,7 @@ class ProfileManagerTest(unittest.TestCase):
                     self.assertEqual(se["MntGrp"], "nxsmntgrp")
 
                     res = mgt.cpdescription()
-                    mdds = set()
+                    # mdds = set()
                     for mdss in res[0].values():
                         if isinstance(mdss, dict):
                             for ds in mdss.keys():
@@ -4058,7 +4069,7 @@ class ProfileManagerTest(unittest.TestCase):
                                            'normalization': 0,
                                            'source': cnt['source']}
                                     tgc[tdv] = chn
-                                except:
+                                except Exception:
                                     raise
                         if tgc:
                             myctrls[cl] = {'units':
@@ -4097,7 +4108,7 @@ class ProfileManagerTest(unittest.TestCase):
                     mgt.deleteProfile("nxsmntgrp")
                     try:
                         tmg.tearDown()
-                    except:
+                    except Exception:
                         pass
         finally:
             simp2.tearDown()
@@ -4105,7 +4116,7 @@ class ProfileManagerTest(unittest.TestCase):
     # updateProfile test
     def test_updateProfile_components_pool_tango_unplottedcomponents(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -4194,8 +4205,8 @@ class ProfileManagerTest(unittest.TestCase):
                     cps = {}
                     acps = {}
                     dss = {}
-                    lcp = self.__rnd.randint(1, 40)
-                    lds = self.__rnd.randint(1, 40)
+                    # lcp = self.__rnd.randint(1, 40)
+                    # lds = self.__rnd.randint(1, 40)
 
                     self._cf.dp.SetCommandVariable(
                         ["CPDICT", json.dumps(self.smycps2)])
@@ -4271,7 +4282,7 @@ class ProfileManagerTest(unittest.TestCase):
                     dv = "/".join(ar["full_name"].split("/")[0:-1])
                     chds = [ds for ds in mgt.dataSources()
                             if not ds.startswith('client')]
-                    chds1 = list(chds)
+                    # chds1 = list(chds)
                     chds2 = [ds for ds in mgt.componentDataSources()
                              if not ds.startswith('client')]
                     chds.extend(chds2)
@@ -4306,12 +4317,6 @@ class ProfileManagerTest(unittest.TestCase):
                     # print "LHECP", lhecp
                     # print "COMPS", comps
 
-#                    print "COMP", mgt.components()
-#                    print "ACOMP", mgt.preselectedComponents()
-#                    print "MCP", mcps
-#                    print "DS", mgt.dataSources()
-#                    print "DDS", mgt.componentDataSources()
-
                     self.myAssertDict(
                         json.loads(se["ComponentPreselection"]),
                         acps)
@@ -4328,7 +4333,7 @@ class ProfileManagerTest(unittest.TestCase):
                     self.assertEqual(se["MntGrp"], "nxsmntgrp")
 
                     res = mgt.cpdescription()
-                    mdds = set()
+                    # mdds = set()
                     for mdss in res[0].values():
                         if isinstance(mdss, dict):
                             for ds in mdss.keys():
@@ -4396,7 +4401,7 @@ class ProfileManagerTest(unittest.TestCase):
                                            'normalization': 0,
                                            'source': cnt['source']}
                                     tgc[tdv] = chn
-                                except:
+                                except Exception:
                                     raise
                         if tgc:
                             myctrls[cl] = {
@@ -4439,7 +4444,7 @@ class ProfileManagerTest(unittest.TestCase):
                     mgt.deleteProfile("nxsmntgrp")
                     try:
                         tmg.tearDown()
-                    except:
+                    except Exception:
                         pass
         finally:
             simp2.tearDown()
@@ -4447,7 +4452,7 @@ class ProfileManagerTest(unittest.TestCase):
     # updateProfile test
     def test_updateProfile_components_mixed_tango_unplottedcomponents(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -4543,8 +4548,8 @@ class ProfileManagerTest(unittest.TestCase):
                     cps = {}
                     acps = {}
                     dss = {}
-                    lcp = self.__rnd.randint(1, 40)
-                    lds = self.__rnd.randint(1, 40)
+                    # lcp = self.__rnd.randint(1, 40)
+                    # lds = self.__rnd.randint(1, 40)
 
                     self._cf.dp.SetCommandVariable(
                         ["CPDICT", json.dumps(amycps)])
@@ -4619,7 +4624,7 @@ class ProfileManagerTest(unittest.TestCase):
                     dv = "/".join(ar["full_name"].split("/")[0:-1])
                     chds = [ds for ds in mgt.dataSources()
                             if not ds.startswith('client')]
-                    chds1 = list(chds)
+                    # chds1 = list(chds)
                     chds2 = [ds for ds in mgt.componentDataSources()
                              if not ds.startswith('client')]
                     chds.extend(chds2)
@@ -4684,7 +4689,7 @@ class ProfileManagerTest(unittest.TestCase):
                     self.assertEqual(se["MntGrp"], "nxsmntgrp2")
 
                     res = mgt.cpdescription()
-                    mdds = set()
+                    # mdds = set()
                     for mdss in res[0].values():
                         if isinstance(mdss, dict):
                             for ds in mdss.keys():
@@ -4753,7 +4758,7 @@ class ProfileManagerTest(unittest.TestCase):
                                                'normalization': 0,
                                                'source': cnt['source']}
                                         tgc[tdv] = chn
-                                    except:
+                                    except Exception:
                                         raise
                         if tgc:
                             myctrls[cl] = {'units':
@@ -4796,7 +4801,7 @@ class ProfileManagerTest(unittest.TestCase):
                                        'normalization': 0,
                                        'source': cnt['source']}
                                 tgc[chn["full_name"]] = chn
-                            except:
+                            except Exception:
                                 raise
                     if tgc:
                         myctrls['__tango__'] = {'units':
@@ -4838,7 +4843,7 @@ class ProfileManagerTest(unittest.TestCase):
                     mgt.deleteProfile("nxsmntgrp2")
                     try:
                         tmg.tearDown()
-                    except:
+                    except Exception:
                         pass
         finally:
             simp2.tearDown()
@@ -4846,7 +4851,7 @@ class ProfileManagerTest(unittest.TestCase):
     # updateProfile test
     def test_updateProfile_components_mixed_tango_orderedchannels(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -4943,8 +4948,8 @@ class ProfileManagerTest(unittest.TestCase):
                     cps = {}
                     acps = {}
                     dss = {}
-                    lcp = self.__rnd.randint(1, 40)
-                    lds = self.__rnd.randint(1, 40)
+                    # lcp = self.__rnd.randint(1, 40)
+                    # lds = self.__rnd.randint(1, 40)
 
                     self._cf.dp.SetCommandVariable(
                         ["CPDICT", json.dumps(amycps)])
@@ -5019,7 +5024,7 @@ class ProfileManagerTest(unittest.TestCase):
                     dv = "/".join(ar["full_name"].split("/")[0:-1])
                     chds = [ds for ds in mgt.dataSources()
                             if not ds.startswith('client')]
-                    chds1 = list(chds)
+                    # chds1 = list(chds)
                     chds2 = [ds for ds in mgt.componentDataSources()
                              if not ds.startswith('client')]
                     chds.extend(chds2)
@@ -5084,7 +5089,7 @@ class ProfileManagerTest(unittest.TestCase):
                     self.assertEqual(se["MntGrp"], "mg2")
 
                     res = mgt.cpdescription()
-                    mdds = set()
+                    # mdds = set()
                     for mdss in res[0].values():
                         if isinstance(mdss, dict):
                             for ds in mdss.keys():
@@ -5153,7 +5158,7 @@ class ProfileManagerTest(unittest.TestCase):
                                                'normalization': 0,
                                                'source': cnt['source']}
                                         tgc[tdv] = chn
-                                    except:
+                                    except Exception:
                                         raise
                         if tgc:
                             myctrls[cl] = {'units':
@@ -5196,7 +5201,7 @@ class ProfileManagerTest(unittest.TestCase):
                                        'normalization': 0,
                                        'source': cnt['source']}
                                 tgc[chn["full_name"]] = chn
-                            except:
+                            except Exception:
                                 raise
 
                     if tgc:
@@ -5239,7 +5244,7 @@ class ProfileManagerTest(unittest.TestCase):
                     mgt.deleteProfile("mg2")
                     try:
                         tmg.tearDown()
-                    except:
+                    except Exception:
                         pass
         finally:
             simp2.tearDown()
@@ -5247,7 +5252,7 @@ class ProfileManagerTest(unittest.TestCase):
     # updateProfile test
     def test_updateProfile_components_mixed_tango_timers(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -5363,8 +5368,8 @@ class ProfileManagerTest(unittest.TestCase):
                     cps = {}
                     acps = {}
                     dss = {}
-                    lcp = self.__rnd.randint(1, 40)
-                    lds = self.__rnd.randint(1, 40)
+                    # lcp = self.__rnd.randint(1, 40)
+                    # lds = self.__rnd.randint(1, 40)
 
                     self._cf.dp.SetCommandVariable(
                         ["CPDICT", json.dumps(amycps)])
@@ -5442,7 +5447,7 @@ class ProfileManagerTest(unittest.TestCase):
 #                    dv = "/".join(ar["full_name"].split("/")[0:-1])
                     chds = [ds for ds in mgt.dataSources()
                             if not ds.startswith('client')]
-                    chds1 = list(chds)
+                    # chds1 = list(chds)
                     chds2 = [ds for ds in mgt.componentDataSources()
                              if not ds.startswith('client')]
                     chds.extend(chds2)
@@ -5509,7 +5514,7 @@ class ProfileManagerTest(unittest.TestCase):
                     self.assertEqual(se["MntGrp"], "mg2")
 
                     res = mgt.cpdescription()
-                    mdds = set()
+                    # mdds = set()
                     for mdss in res[0].values():
                         if isinstance(mdss, dict):
                             for ds in mdss.keys():
@@ -5586,12 +5591,13 @@ class ProfileManagerTest(unittest.TestCase):
                                                'normalization': 0,
                                                'source': cnt['source']}
                                         tgc[tdv] = chn
-                                    except:
+                                    except Exception:
                                         raise
                         if tgc:
                             ltm = timers[cl] if cl in timers.keys() \
                                 else ltimers[0]
-                            fltm = "/".join(
+                            # fltm =
+                            "/".join(
                                 self.smychsXX[str(ltm)]['source'].split(
                                     "/")[:-1])
                             myctrls[cl] = {
@@ -5635,7 +5641,7 @@ class ProfileManagerTest(unittest.TestCase):
                                        'normalization': 0,
                                        'source': cnt['source']}
                                 tgc[chn["full_name"]] = chn
-                            except:
+                            except Exception:
                                 raise
 
                     if tgc:
@@ -5677,11 +5683,11 @@ class ProfileManagerTest(unittest.TestCase):
                 finally:
                     try:
                         mgt.deleteProfile("mg2")
-                    except:
+                    except Exception:
                         pass
                     try:
                         tmg.tearDown()
-                    except:
+                    except Exception:
                         pass
         finally:
             simp2.tearDown()
@@ -5689,7 +5695,7 @@ class ProfileManagerTest(unittest.TestCase):
     # updateProfile test
     def test_updateProfile_mntGrpConfiguration_isMntGrpUpdated(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -5805,8 +5811,8 @@ class ProfileManagerTest(unittest.TestCase):
                     cps = {}
                     acps = {}
                     dss = {}
-                    lcp = self.__rnd.randint(1, 40)
-                    lds = self.__rnd.randint(1, 40)
+                    # lcp = self.__rnd.randint(1, 40)
+                    # lds = self.__rnd.randint(1, 40)
 
                     self._cf.dp.SetCommandVariable(
                         ["CPDICT", json.dumps(amycps)])
@@ -5941,7 +5947,7 @@ class ProfileManagerTest(unittest.TestCase):
 #                    dv = "/".join(ar["full_name"].split("/")[0:-1])
                     chds = [ds for ds in mgt.dataSources()
                             if not ds.startswith('client')]
-                    chds1 = list(chds)
+                    # chds1 = list(chds)
                     chds2 = [ds for ds in mgt.componentDataSources()
                              if not ds.startswith('client')]
                     chds.extend(chds2)
@@ -6011,7 +6017,7 @@ class ProfileManagerTest(unittest.TestCase):
                     self.assertTrue(not mgt.isMntGrpUpdated())
 
                     res = mgt.cpdescription()
-                    mdds = set()
+                    # mdds = set()
                     for mdss in res[0].values():
                         if isinstance(mdss, dict):
                             for ds in mdss.keys():
@@ -6027,7 +6033,8 @@ class ProfileManagerTest(unittest.TestCase):
                     self.assertTrue(mgt.isMntGrpUpdated())
                     self.assertTrue(mgt.isMntGrpUpdated())
                     pcnf = json.loads(jpcnf)
-                    mgdp = PyTango.DeviceProxy(tmg.new_device_info_writer.name)
+                    # mgdp =
+                    PyTango.DeviceProxy(tmg.new_device_info_writer.name)
                     jcnf = mgt.mntGrpConfiguration()
                     cnf = json.loads(jcnf)
                     self.myAssertDict(
@@ -6095,12 +6102,13 @@ class ProfileManagerTest(unittest.TestCase):
                                                'normalization': 0,
                                                'source': cnt['source']}
                                         tgc[tdv] = chn
-                                    except:
+                                    except Exception:
                                         raise
                         if tgc:
                             ltm = timers[cl] if cl in timers.keys() \
                                 else ltimers[0]
-                            fltm = "/".join(
+                            # fltm =
+                            "/".join(
                                 self.smychsXX[str(ltm)]['source'].split(
                                     "/")[:-1])
                             myctrls[cl] = {
@@ -6144,7 +6152,7 @@ class ProfileManagerTest(unittest.TestCase):
                                        'normalization': 0,
                                        'source': cnt['source']}
                                 tgc[chn["full_name"]] = chn
-                            except:
+                            except Exception:
                                 raise
 
                     if tgc:
@@ -6156,13 +6164,11 @@ class ProfileManagerTest(unittest.TestCase):
                                                   'timer': fgtm,
                                                   'trigger_type': 0}}}
 
-                    smg = {"controllers": myctrls,
-                           "monitor": "%s" % fgtm,
-                           "description": "Measurement Group",
-                           "timer": "%s" % fgtm,
-                           "label": "mg2"}
-#                    print "SMG", smg
-#                    self.myAssertDict(smg, pcnf)
+                    # smg = {"controllers": myctrls,
+                    #        "monitor": "%s" % fgtm,
+                    #        "description": "Measurement Group",
+                    #        "timer": "%s" % fgtm,
+                    #        "label": "mg2"}
                     self.myAssertDict(pcnf, cnf)
                     se.reset()
                     se["Door"] = val["Door"]
@@ -6200,11 +6206,11 @@ class ProfileManagerTest(unittest.TestCase):
                 finally:
                     try:
                         mgt.deleteProfile("mg2")
-                    except:
+                    except Exception:
                         pass
                     try:
                         tmg.tearDown()
-                    except:
+                    except Exception:
                         pass
         finally:
             simp2.tearDown()
@@ -6212,7 +6218,7 @@ class ProfileManagerTest(unittest.TestCase):
     # updateProfile test
     def test_switchProfile_importMntGrp(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -6355,8 +6361,8 @@ class ProfileManagerTest(unittest.TestCase):
                         cps[mg] = {}
                         acps[mg] = {}
                         dss = {}
-                        lcp = self.__rnd.randint(1, 40)
-                        lds = self.__rnd.randint(1, 40)
+                        # lcp = self.__rnd.randint(1, 40)
+                        # lds = self.__rnd.randint(1, 40)
 
                         self._cf.dp.SetCommandVariable(
                             ["CPDICT", json.dumps(amycps)])
@@ -6497,7 +6503,7 @@ class ProfileManagerTest(unittest.TestCase):
         #                    dv = "/".join(ar["full_name"].split("/")[0:-1])
                         chds = [ds for ds in mgt[mg].dataSources()
                                 if not ds.startswith('client')]
-                        chds1 = list(chds)
+                        # chds1 = list(chds)
                         chds2 = [ds for ds in mgt[mg].componentDataSources()
                                  if not ds.startswith('client')]
                         chds.extend(chds2)
@@ -6560,7 +6566,7 @@ class ProfileManagerTest(unittest.TestCase):
                         self.assertTrue(not mgt[mg].isMntGrpUpdated())
 
                         res = mgt[mg].cpdescription()
-                        mdds = set()
+                        # mdds = set()
                         for mdss in res[0].values():
                             if isinstance(mdss, dict):
                                 for ds in mdss.keys():
@@ -6605,7 +6611,7 @@ class ProfileManagerTest(unittest.TestCase):
                         for cl in ctrls:
                             tgc = {}
                             ttdv = None
-                            ttds = None
+                            # ttds = None
                             idmax = 10000
                             for exp in expch:
                                 ds = exp["name"]
@@ -6619,7 +6625,7 @@ class ProfileManagerTest(unittest.TestCase):
                                             if i < idmax:
                                                 idmax = i
                                                 ttdv = tdv
-                                                ttds = ds
+                                                # ttds = ds
                                             chn = {'ndim': 0,
                                                    'index': i,
                                                    'name': str(ds),
@@ -6650,12 +6656,13 @@ class ProfileManagerTest(unittest.TestCase):
                                                    'normalization': 0,
                                                    'source': cnt['source']}
                                             tgc[tdv] = chn
-                                        except:
+                                        except Exception:
                                             raise
                             if tgc:
                                 ltm = timers[cl] if cl in timers.keys() \
                                     else ltimers[mg][0]
-                                fltm = "/".join(
+                                # fltm =
+                                "/".join(
                                     self.smychsXX[str(ltm)]['source'].split(
                                         "/")[:-1])
                                 myctrls[cl] = {
@@ -6701,7 +6708,7 @@ class ProfileManagerTest(unittest.TestCase):
                                            'normalization': 0,
                                            'source': cnt['source']}
                                     tgc[chn["full_name"]] = chn
-                                except:
+                                except Exception:
                                     raise
 
                         if tgc:
@@ -6771,8 +6778,6 @@ class ProfileManagerTest(unittest.TestCase):
                     self.myAssertRaise(Exception, lmgt.isMntGrpUpdated)
 
                     lmgt.switchProfile(False)
-                    #print "lse", json.loads(lse["ChannelProperties"])["__controllers__"]
-                    #print "DUMP", json.loads(self.__dump[mg1]["ChannelProperties"])["__controllers__"]
                     self.compareToDumpJSON(
                         lse, [
                             "DataSourceSelection",
@@ -6789,7 +6794,9 @@ class ProfileManagerTest(unittest.TestCase):
                     self.assertEqual(
                         set(json.loads(lse["PreselectingDataSources"])),
                         set(aadss[mg1]))
-                    adtimers = set(
+
+                    # adtimers =
+                    set(
                         json.loads(lse["Timer"])) - set(ltimers[mg1])
                     # print "ADD TIME", adtimers
                     self.myAssertDict(
@@ -6819,7 +6826,8 @@ class ProfileManagerTest(unittest.TestCase):
                     #  self.assertTrue(not lmgt.isMntGrpUpdated())
                     #  self.assertTrue(not lmgt.isMntGrpUpdated())
 
-                    tmpcf1 = json.loads(mgt[mg1].mntGrpConfiguration())
+                    # tmpcf1 =
+                    json.loads(mgt[mg1].mntGrpConfiguration())
                     tmpcf2 = json.loads(mgt[mg2].mntGrpConfiguration())
                     ltmpcf = json.loads(lmgt.mntGrpConfiguration())
 #                    self.myAssertDict(tmpcf1, ltmpcf)
@@ -6968,7 +6976,8 @@ class ProfileManagerTest(unittest.TestCase):
                     self.assertTrue(not lmgt.isMntGrpUpdated())
                     self.assertTrue(not lmgt.isMntGrpUpdated())
 
-                    tmpcf1 = json.loads(mgt[mg1].mntGrpConfiguration())
+                    # tmpcf1 =
+                    json.loads(mgt[mg1].mntGrpConfiguration())
                     tmpcf2 = json.loads(mgt[mg2].mntGrpConfiguration())
                     ltmpcf = json.loads(lmgt.mntGrpConfiguration())
 #                    self.myAssertDict(tmpcf1, ltmpcf)
@@ -6982,7 +6991,8 @@ class ProfileManagerTest(unittest.TestCase):
                         self.assertTrue(not lmgt.isMntGrpUpdated())
                         self.assertTrue(not lmgt.isMntGrpUpdated())
 
-                    tmpcf1 = json.loads(mgt[mg1].mntGrpConfiguration())
+                    # tmpcf1 =
+                    json.loads(mgt[mg1].mntGrpConfiguration())
                     tmpcf2 = json.loads(mgt[mg2].mntGrpConfiguration())
                     ltmpcf = json.loads(lmgt.mntGrpConfiguration())
 #                    self.myAssertDict(tmpcf1, ltmpcf)
@@ -7051,7 +7061,8 @@ class ProfileManagerTest(unittest.TestCase):
                     pool.AcqChannelList = pools[mg3][0]
                     pool.ExpChannelList = pools[mg3][1]
 
-                    tmpcf1 = json.loads(mgt[mg1].mntGrpConfiguration())
+                    # tmpcf1 =
+                    json.loads(mgt[mg1].mntGrpConfiguration())
                     tmpcf2 = json.loads(mgt[mg2].mntGrpConfiguration())
                     tmpcf3 = json.loads(mgt[mg3].mntGrpConfiguration())
                     ltmpcf = json.loads(lmgt.mntGrpConfiguration())
@@ -7061,7 +7072,8 @@ class ProfileManagerTest(unittest.TestCase):
 
                     lmgt.switchProfile()
 
-                    tmpcf1 = json.loads(mgt[mg1].mntGrpConfiguration())
+                    # tmpcf1 =
+                    json.loads(mgt[mg1].mntGrpConfiguration())
                     tmpcf2 = json.loads(mgt[mg2].mntGrpConfiguration())
                     tmpcf3 = json.loads(mgt[mg3].mntGrpConfiguration())
                     ltmpcf = json.loads(lmgt.mntGrpConfiguration())
@@ -7159,7 +7171,8 @@ class ProfileManagerTest(unittest.TestCase):
                     self.assertTrue(not lmgt.isMntGrpUpdated())
                     MSUtils.setEnv('ActiveMntGrp', mg3, self._ms.ms.keys()[0])
 
-                    tmpcf1 = json.loads(mgt[mg1].mntGrpConfiguration())
+                    # tmpcf1 =
+                    json.loads(mgt[mg1].mntGrpConfiguration())
                     tmpcf2 = json.loads(mgt[mg2].mntGrpConfiguration())
                     tmpcf3 = json.loads(mgt[mg3].mntGrpConfiguration())
                     ltmpcf = json.loads(lmgt.mntGrpConfiguration())
@@ -7169,7 +7182,8 @@ class ProfileManagerTest(unittest.TestCase):
 
                     lmgt.switchProfile(True)
 
-                    tmpcf1 = json.loads(mgt[mg1].mntGrpConfiguration())
+                    # tmpcf1 =
+                    json.loads(mgt[mg1].mntGrpConfiguration())
                     tmpcf2 = json.loads(mgt[mg2].mntGrpConfiguration())
                     tmpcf3 = json.loads(mgt[mg3].mntGrpConfiguration())
                     ltmpcf = json.loads(lmgt.mntGrpConfiguration())
@@ -7217,7 +7231,8 @@ class ProfileManagerTest(unittest.TestCase):
                         wmg,
                         MSUtils.getEnv('ActiveMntGrp', self._ms.ms.keys()[0]))
 
-                    tmpcf1 = json.loads(mgt[mg1].mntGrpConfiguration())
+                    # tmpcf1 =
+                    json.loads(mgt[mg1].mntGrpConfiguration())
                     tmpcf2 = json.loads(mgt[mg2].mntGrpConfiguration())
                     tmpcf3 = json.loads(mgt[mg3].mntGrpConfiguration())
                     ltmpcf = json.loads(lmgt.mntGrpConfiguration())
@@ -7262,7 +7277,8 @@ class ProfileManagerTest(unittest.TestCase):
                     MSUtils.usetEnv('ActiveMntGrp', self._ms.ms.keys()[0])
                     lmgt.switchProfile()
 
-                    tmpcf1 = json.loads(mgt[mg1].mntGrpConfiguration())
+                    # tmpcf1 =
+                    json.loads(mgt[mg1].mntGrpConfiguration())
                     tmpcf2 = json.loads(mgt[mg2].mntGrpConfiguration())
                     tmpcf3 = json.loads(mgt[mg3].mntGrpConfiguration())
                     ltmpcf = json.loads(lmgt.mntGrpConfiguration())
@@ -7302,7 +7318,8 @@ class ProfileManagerTest(unittest.TestCase):
                     lse["MntGrp"] = wmg
                     lmgt.fetchProfile()
 
-                    tmpcf1 = json.loads(mgt[mg1].mntGrpConfiguration())
+                    # tmpcf1 =
+                    json.loads(mgt[mg1].mntGrpConfiguration())
                     tmpcf2 = json.loads(mgt[mg2].mntGrpConfiguration())
                     tmpcf3 = json.loads(mgt[mg3].mntGrpConfiguration())
                     ltmpcf = json.loads(lmgt.mntGrpConfiguration())
@@ -7349,7 +7366,8 @@ class ProfileManagerTest(unittest.TestCase):
                                             ).keys())
 
                     lmgt.fetchProfile()
-                    tmpcf1 = json.loads(mgt[mg1].mntGrpConfiguration())
+                    # tmpcf1 =
+                    json.loads(mgt[mg1].mntGrpConfiguration())
                     tmpcf2 = json.loads(mgt[mg2].mntGrpConfiguration())
                     tmpcf3 = json.loads(mgt[mg3].mntGrpConfiguration())
                     tmpcf4 = json.loads(mgt[mg4].mntGrpConfiguration())
@@ -7480,22 +7498,22 @@ class ProfileManagerTest(unittest.TestCase):
                     for mg in mgt.keys():
                         try:
                             mgt[mg].deleteProfile(mgs[mg])
-                        except:
+                        except Exception:
                             pass
                     for mg in tmg.keys():
                         try:
                             tmg[mg].tearDown()
-                        except:
+                        except Exception:
                             pass
                     simp2.tearDown()
                     try:
                         self.tearDown()
-                    except:
+                    except Exception:
                         pass
         finally:
             try:
                 self.setUp()
-            except:
+            except Exception:
                 pass
 
 

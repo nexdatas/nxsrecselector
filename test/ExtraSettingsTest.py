@@ -22,40 +22,22 @@
 import unittest
 import os
 import sys
-import subprocess
-import random
 import struct
-import threading
-import binascii
-import Queue
 import PyTango
 import json
-import pickle
-import string
-import time
-import nxsrecconfig
 import xml
 
-import logging
-logger = logging.getLogger()
-
-import TestMacroServerSetUp
-import TestPoolSetUp
 import TestServerSetUp
-import TestConfigServerSetUp
-import TestWriterSetUp
 import TestMGSetUp
 import SettingsTest
 
 
-from nxsrecconfig.MacroServerPools import MacroServerPools
-from nxsrecconfig.Selector import Selector
-from nxsrecconfig.ProfileManager import ProfileManager
 from nxsrecconfig.Describer import Describer
 from nxsrecconfig.Settings import Settings
-from nxsrecconfig.Utils import TangoUtils, MSUtils
-from nxsconfigserver.XMLConfigurator import XMLConfigurator
-from nxsrecconfig.Utils import TangoUtils, MSUtils, Utils
+from nxsrecconfig.Utils import MSUtils, Utils
+
+import logging
+logger = logging.getLogger()
 
 # if 64-bit machione
 IS64BIT = (struct.calcsize("P") == 8)
@@ -72,7 +54,7 @@ try:
     mydb = MySQLdb.connect({})
     mydb.close()
     DB_AVAILABLE.append("MYSQL")
-except:
+except Exception:
     try:
         import MySQLdb
     # connection arguments to MYSQL DB
@@ -82,7 +64,7 @@ except:
         mydb = MySQLdb.connect(**args)
         mydb.close()
         DB_AVAILABLE.append("MYSQL")
-    except:
+    except Exception:
         try:
             import MySQLdb
             from os.path import expanduser
@@ -96,12 +78,12 @@ except:
             mydb.close()
             DB_AVAILABLE.append("MYSQL")
 
-        except ImportError, e:
-            print "MYSQL not available: %s" % e
-        except Exception, e:
-            print "MYSQL not available: %s" % e
-        except:
-            print "MYSQL not available"
+        except ImportError as e:
+            print("MYSQL not available: %s" % e)
+        except Exception as e:
+            print("MYSQL not available: %s" % e)
+        except Exception:
+            print("MYSQL not available")
 
 
 # test fixture
@@ -116,7 +98,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
     # updateMntGrp test
     def test_updateMntGrp_components_mixed_tango_timers(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -233,8 +215,8 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                     cps = {}
                     acps = {}
                     dss = {}
-                    lcp = self._rnd.randint(1, 40)
-                    lds = self._rnd.randint(1, 40)
+                    # lcp = self._rnd.randint(1, 40)
+                    # lds = self._rnd.randint(1, 40)
 
                     self._cf.dp.SetCommandVariable(
                         ["CPDICT", json.dumps(amycps)])
@@ -318,7 +300,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
 #                    dv = "/".join(ar["full_name"].split("/")[0:-1])
                     chds = [ds for ds in rs.selectedDataSources()
                             if not ds.startswith('client')]
-                    chds1 = list(chds)
+                    # chds1 = list(chds)
                     chds2 = [ds for ds in rs.componentDataSources()
                              if not ds.startswith('client')]
                     chds.extend(chds2)
@@ -391,7 +373,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                     describer = Describer(self._cf.dp, True)
                     res = describer.components(wwcp, "STEP", "")
 
-                    mdds = set()
+                    # mdds = set()
                     for mdss in res[0].values():
                         if isinstance(mdss, dict):
                             for ds in mdss.keys():
@@ -470,12 +452,13 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                                                'normalization': 0,
                                                'source': cnt['source']}
                                         tgc[tdv] = chn
-                                    except:
+                                    except Exception:
                                         raise
                         if tgc:
                             ltm = timers[cl] if cl in timers.keys() \
                                 else ltimers[0]
-                            fltm = "/".join(
+                            # fltm =
+                            "/".join(
                                 self.smychsXX[str(ltm)]['source'].split(
                                     "/")[:-1])
                             myctrls[cl] = {
@@ -519,7 +502,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                                        'normalization': 0,
                                        'source': cnt['source']}
                                 tgc[chn["full_name"]] = chn
-                            except:
+                            except Exception:
                                 raise
 
                     if tgc:
@@ -563,11 +546,11 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                 finally:
                     try:
                         rs.deleteProfile("mg2")
-                    except:
+                    except Exception:
                         pass
                     try:
                         tmg.tearDown()
-                    except:
+                    except Exception:
                         pass
         finally:
             simp2.tearDown()
@@ -575,7 +558,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
     # updateMntGrp test
     def test_updateMntGrp_mntGrpConfiguration_isMntGrpUpdated(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -693,8 +676,8 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                     cps = {}
                     acps = {}
                     dss = {}
-                    lcp = self._rnd.randint(1, 40)
-                    lds = self._rnd.randint(1, 40)
+                    # lcp = self._rnd.randint(1, 40)
+                    # lds = self._rnd.randint(1, 40)
 
                     self._cf.dp.SetCommandVariable(
                         ["CPDICT", json.dumps(amycps)])
@@ -835,7 +818,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
 #                    dv = "/".join(ar["full_name"].split("/")[0:-1])
                     chds = [ds for ds in rs.selectedDataSources()
                             if not ds.startswith('client')]
-                    chds1 = list(chds)
+                    # chds1 = list(chds)
                     chds2 = [ds for ds in rs.componentDataSources()
                              if not ds.startswith('client')]
                     chds.extend(chds2)
@@ -900,7 +883,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                     describer = Describer(self._cf.dp, True)
                     res = describer.components(wwcp, "STEP", "")
 
-                    mdds = set()
+                    # mdds = set()
                     for mdss in res[0].values():
                         if isinstance(mdss, dict):
                             for ds in mdss.keys():
@@ -918,7 +901,8 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                     self.assertTrue(rs.isMntGrpUpdated())
 
                     pcnf = json.loads(jpcnf)
-                    mgdp = PyTango.DeviceProxy(tmg.new_device_info_writer.name)
+                    # mgdp =
+                    PyTango.DeviceProxy(tmg.new_device_info_writer.name)
                     jcnf = rs.mntGrpConfiguration()
                     cnf = json.loads(jcnf)
                     mp = json.loads(rs.profileConfiguration)
@@ -987,12 +971,13 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                                                'normalization': 0,
                                                'source': cnt['source']}
                                         tgc[tdv] = chn
-                                    except:
+                                    except Exception:
                                         raise
                         if tgc:
                             ltm = timers[cl] if cl in timers.keys() \
                                 else ltimers[0]
-                            fltm = "/".join(
+                            # fltm =
+                            "/".join(
                                 self.smychsXX[str(ltm)]['source'].split(
                                     "/")[:-1])
                             myctrls[cl] = {
@@ -1036,7 +1021,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                                        'normalization': 0,
                                        'source': cnt['source']}
                                 tgc[chn["full_name"]] = chn
-                            except:
+                            except Exception:
                                 raise
 
                     if tgc:
@@ -1094,11 +1079,11 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                 finally:
                     try:
                         rs.deleteProfile("mg2")
-                    except:
+                    except Exception:
                         pass
                     try:
                         tmg.tearDown()
-                    except:
+                    except Exception:
                         pass
         finally:
             simp2.tearDown()
@@ -1109,7 +1094,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
     # test
     def test_switchProfile_importMntGrp(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         self.subtest_switchProfile_importMntGrp()
 
     # test
@@ -1136,7 +1121,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                 ]
                 rs = {}
                 mp = {}
-                msp = {}
+                # msp = {}
                 tmg = {}
                 cps = {}
                 acps = {}
@@ -1259,8 +1244,8 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                         cps[mg] = {}
                         acps[mg] = {}
                         dss = {}
-                        lcp = self._rnd.randint(1, 40)
-                        lds = self._rnd.randint(1, 40)
+                        # lcp = self._rnd.randint(1, 40)
+                        # lds = self._rnd.randint(1, 40)
 
                         self._cf.dp.SetCommandVariable(
                             ["CPDICT", json.dumps(amycps)])
@@ -1412,7 +1397,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
         #                    dv = "/".join(ar["full_name"].split("/")[0:-1])
                         chds = [ds for ds in rs[mg].selectedDataSources()
                                 if not ds.startswith('client')]
-                        chds1 = list(chds)
+                        # chds1 = list(chds)
                         chds2 = [ds for ds in rs[mg].componentDataSources()
                                  if not ds.startswith('client')]
                         chds.extend(chds2)
@@ -1481,7 +1466,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                         describer = Describer(self._cf.dp, True)
                         res = describer.components(wwcp, "STEP", "")
 
-                        mdds = set()
+                        # mdds = set()
                         for mdss in res[0].values():
                             if isinstance(mdss, dict):
                                 for ds in mdss.keys():
@@ -1490,7 +1475,6 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                         for tm in ltimers[mg]:
                             if tm in lhe2[mg]:
                                 if tm in adss[mg].keys():
-#                                    print "DES", tm
                                     adss[mg][tm] = False
 
                         jpcnf = rs[mg].updateMntGrp()
@@ -1571,12 +1555,13 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                                                    'normalization': 0,
                                                    'source': cnt['source']}
                                             tgc[tdv] = chn
-                                        except:
+                                        except Exception:
                                             raise
                             if tgc:
                                 ltm = timers[cl] if cl in timers.keys() \
                                     else ltimers[mg][0]
-                                fltm = "/".join(
+                                # fltm =
+                                "/".join(
                                     self.smychsXX[str(ltm)]['source'].split(
                                         "/")[:-1])
                                 myctrls[cl] = {
@@ -1621,7 +1606,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                                            'normalization': 0,
                                            'source': cnt['source']}
                                     tgc[chn["full_name"]] = chn
-                                except:
+                                except Exception:
                                     raise
 
                         if tgc:
@@ -1769,13 +1754,15 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
 
                     pool.AcqChannelList = pools[mg2][0]
                     pool.ExpChannelList = pools[mg2][1]
-                    myoldmg = json.loads(lrs.mntGrpConfiguration())
+                    # myoldmg =
+                    json.loads(lrs.mntGrpConfiguration())
                     self.assertTrue(not lrs.isMntGrpUpdated())
                     self.assertTrue(not lrs.isMntGrpUpdated())
 
                     lrs.importMntGrp()
 
-                    mynewmg = json.loads(lrs.mntGrpConfiguration())
+                    # mynewmg =
+                    json.loads(lrs.mntGrpConfiguration())
                     lmp = json.loads(lrs.profileConfiguration)
 
                     # try:
@@ -1785,7 +1772,8 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                     # except SettingsTest.NotEqualException as e:
                     #     self.assertTrue(lrs.isMntGrpUpdated())
                     #     self.assertTrue(lrs.isMntGrpUpdated())
-                    tmpcf1 = json.loads(rs[mg1].mntGrpConfiguration())
+                    # tmpcf1 =
+                    json.loads(rs[mg1].mntGrpConfiguration())
                     tmpcf2 = json.loads(rs[mg2].mntGrpConfiguration())
                     ltmpcf = json.loads(lrs.mntGrpConfiguration())
 #                    self.myAssertDict(tmpcf1, ltmpcf)
@@ -1939,7 +1927,8 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                     self.assertTrue(not lrs.isMntGrpUpdated())
                     self.assertTrue(not lrs.isMntGrpUpdated())
 
-                    tmpcf1 = json.loads(rs[mg1].mntGrpConfiguration())
+                    # tmpcf1 =
+                    json.loads(rs[mg1].mntGrpConfiguration())
                     tmpcf2 = json.loads(rs[mg2].mntGrpConfiguration())
                     ltmpcf = json.loads(lrs.mntGrpConfiguration())
 #                    self.myAssertDict(tmpcf1, ltmpcf)
@@ -1953,7 +1942,8 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                         self.assertTrue(not lrs.isMntGrpUpdated())
                         self.assertTrue(not lrs.isMntGrpUpdated())
 
-                    tmpcf1 = json.loads(rs[mg1].mntGrpConfiguration())
+                    # tmpcf1 =
+                    json.loads(rs[mg1].mntGrpConfiguration())
                     tmpcf2 = json.loads(rs[mg2].mntGrpConfiguration())
                     ltmpcf = json.loads(lrs.mntGrpConfiguration())
 #                    self.myAssertDict(tmpcf1, ltmpcf)
@@ -2020,7 +2010,8 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                     pool.ExpChannelList = pools[mg2][1]
                     MSUtils.setEnv('ActiveMntGrp', mg3, self._ms.ms.keys()[0])
 
-                    tmpcf1 = json.loads(rs[mg1].mntGrpConfiguration())
+                    # tmpcf1 =
+                    json.loads(rs[mg1].mntGrpConfiguration())
                     tmpcf2 = json.loads(rs[mg2].mntGrpConfiguration())
                     tmpcf3 = json.loads(rs[mg3].mntGrpConfiguration())
                     ltmpcf = json.loads(lrs.mntGrpConfiguration())
@@ -2030,7 +2021,8 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
 
                     lrs.switchProfile()
 
-                    tmpcf1 = json.loads(rs[mg1].mntGrpConfiguration())
+                    # tmpcf1 =
+                    json.loads(rs[mg1].mntGrpConfiguration())
                     tmpcf2 = json.loads(rs[mg2].mntGrpConfiguration())
                     tmpcf3 = json.loads(rs[mg3].mntGrpConfiguration())
                     ltmpcf = json.loads(lrs.mntGrpConfiguration())
@@ -2133,7 +2125,8 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                     self.assertTrue(not lrs.isMntGrpUpdated())
                     MSUtils.setEnv('ActiveMntGrp', mg3, self._ms.ms.keys()[0])
 
-                    tmpcf1 = json.loads(rs[mg1].mntGrpConfiguration())
+                    # tmpcf1 =
+                    json.loads(rs[mg1].mntGrpConfiguration())
                     tmpcf2 = json.loads(rs[mg2].mntGrpConfiguration())
                     tmpcf3 = json.loads(rs[mg3].mntGrpConfiguration())
                     ltmpcf = json.loads(lrs.mntGrpConfiguration())
@@ -2143,7 +2136,8 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
 
                     self.switchProfile(lrs, True)
 
-                    tmpcf1 = json.loads(rs[mg1].mntGrpConfiguration())
+                    # tmpcf1 =
+                    json.loads(rs[mg1].mntGrpConfiguration())
                     tmpcf2 = json.loads(rs[mg2].mntGrpConfiguration())
                     tmpcf3 = json.loads(rs[mg3].mntGrpConfiguration())
                     ltmpcf = json.loads(lrs.mntGrpConfiguration())
@@ -2192,7 +2186,8 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                         wmg,
                         MSUtils.getEnv('ActiveMntGrp', self._ms.ms.keys()[0]))
 
-                    tmpcf1 = json.loads(rs[mg1].mntGrpConfiguration())
+                    # tmpcf1 =
+                    json.loads(rs[mg1].mntGrpConfiguration())
                     tmpcf2 = json.loads(rs[mg2].mntGrpConfiguration())
                     tmpcf3 = json.loads(rs[mg3].mntGrpConfiguration())
                     ltmpcf = json.loads(lrs.mntGrpConfiguration())
@@ -2238,7 +2233,8 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                     MSUtils.usetEnv('ActiveMntGrp', self._ms.ms.keys()[0])
                     lrs.switchProfile()
 
-                    tmpcf1 = json.loads(rs[mg1].mntGrpConfiguration())
+                    # tmpcf1 =
+                    json.loads(rs[mg1].mntGrpConfiguration())
                     tmpcf2 = json.loads(rs[mg2].mntGrpConfiguration())
                     tmpcf3 = json.loads(rs[mg3].mntGrpConfiguration())
                     ltmpcf = json.loads(lrs.mntGrpConfiguration())
@@ -2279,7 +2275,8 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                     lrs.mntGrp = wmg
                     lrs.fetchProfile()
 
-                    tmpcf1 = json.loads(rs[mg1].mntGrpConfiguration())
+                    # tmpcf1 =
+                    json.loads(rs[mg1].mntGrpConfiguration())
                     tmpcf2 = json.loads(rs[mg2].mntGrpConfiguration())
                     tmpcf3 = json.loads(rs[mg3].mntGrpConfiguration())
                     ltmpcf = json.loads(lrs.mntGrpConfiguration())
@@ -2327,7 +2324,8 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                                             ).keys())
 
                     lrs.fetchProfile()
-                    tmpcf1 = json.loads(rs[mg1].mntGrpConfiguration())
+                    # tmpcf1 =
+                    json.loads(rs[mg1].mntGrpConfiguration())
                     tmpcf2 = json.loads(rs[mg2].mntGrpConfiguration())
                     tmpcf3 = json.loads(rs[mg3].mntGrpConfiguration())
                     tmpcf4 = json.loads(rs[mg4].mntGrpConfiguration())
@@ -2459,28 +2457,28 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                     for mg in rs.keys():
                         try:
                             rs[mg].deleteProfile(mgs[mg])
-                        except:
+                        except Exception:
                             pass
                     for mg in tmg.keys():
                         try:
                             tmg[mg].tearDown()
-                        except:
+                        except Exception:
                             pass
                     simp2.tearDown()
                     try:
                         self.tearDown()
-                    except:
+                    except Exception:
                         pass
         finally:
             try:
                 self.setUp()
-            except:
+            except Exception:
                 pass
 
     # updateMntGrp test
     def test_myswitchProfile_importMntGrp(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -2488,11 +2486,9 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
 
         self.maxDiff = None
         self.tearDown()
-#        print "DOWN"
-#        print "UP"
         try:
             for j in range(10):
-                print "JJJ:", j
+                # print "JJJ:", j
                 self.setUp()
                 self.mySetUp()
                 db = PyTango.Database()
@@ -2507,7 +2503,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                 ors = None
 
                 mp = {}
-                msp = {}
+                # msp = {}
                 tmg = {}
                 cps = {}
                 acps = {}
@@ -2529,15 +2525,15 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                              i for i in range(1, 37)])
 
                 try:
-#                    print "SIMP2 SETUP"
+                    #                    print "SIMP2 SETUP"
                     simp2.setUp()
 
                     # create mntgrps
 
                     for i, mg in enumerate(mgs):
-#                        print "OPEN RS"
+                        #                        print "OPEN RS"
                         ors = self.openRecSelector()
-#                        print "OPEN RS END"
+                        #                        print "OPEN RS END"
                         ors.configDevice = val["ConfigDevice"]
                         ors.door = val["Door"]
                         ors.mntGrp = mg
@@ -2631,8 +2627,8 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                         cps[mg] = {}
                         acps[mg] = {}
                         dss = {}
-                        lcp = self._rnd.randint(1, 40)
-                        lds = self._rnd.randint(1, 40)
+                        # lcp = self._rnd.randint(1, 40)
+                        # lds = self._rnd.randint(1, 40)
 
                         self._cf.dp.SetCommandVariable(
                             ["CPDICT", json.dumps(amycps)])
@@ -2783,7 +2779,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
         #                    dv = "/".join(ar["full_name"].split("/")[0:-1])
                         chds = [ds for ds in ors.selectedDataSources()
                                 if not ds.startswith('client')]
-                        chds1 = list(chds)
+                        # chds1 = list(chds)
                         chds2 = [ds for ds in ors.componentDataSources()
                                  if not ds.startswith('client')]
                         chds.extend(chds2)
@@ -2852,7 +2848,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                         describer = Describer(self._cf.dp, True)
                         res = describer.components(wwcp, "STEP", "")
 
-                        mdds = set()
+                        # mdds = set()
                         for mdss in res[0].values():
                             if isinstance(mdss, dict):
                                 for ds in mdss.keys():
@@ -2861,7 +2857,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                         for tm in ltimers[mg]:
                             if tm in lhe2[mg]:
                                 if tm in adss[mg].keys():
-#                                    print "DES", tm
+                                    #          print "DES", tm
                                     adss[mg][tm] = False
 
                         jpcnf = ors.updateMntGrp()
@@ -2942,12 +2938,13 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                                                    'normalization': 0,
                                                    'source': cnt['source']}
                                             tgc[tdv] = chn
-                                        except:
+                                        except Exception:
                                             raise
                             if tgc:
                                 ltm = timers[cl] if cl in timers.keys() \
                                     else ltimers[mg][0]
-                                fltm = "/".join(
+                                # fltm =
+                                "/".join(
                                     self.smychsXX[str(ltm)]['source'].split(
                                         "/")[:-1])
                                 myctrls[cl] = {
@@ -2992,7 +2989,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                                            'normalization': 0,
                                            'source': cnt['source']}
                                     tgc[chn["full_name"]] = chn
-                                except:
+                                except Exception:
                                     raise
 
                         if tgc:
@@ -3150,12 +3147,14 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                     # import mntgrp another defined by selector MntGrp
                     lrs.mntGrp = mg2
 
-                    myoldmg = json.loads(lrs.mntGrpConfiguration())
+                    # myoldmg =
+                    json.loads(lrs.mntGrpConfiguration())
                     self.assertTrue(not lrs.isMntGrpUpdated())
                     self.assertTrue(not lrs.isMntGrpUpdated())
 
                     lrs.importMntGrp()
-                    mynewmg = json.loads(lrs.mntGrpConfiguration())
+                    # mynewmg =
+                    json.loads(lrs.mntGrpConfiguration())
                     lmp = json.loads(lrs.profileConfiguration)
 
                     # try:
@@ -3167,7 +3166,8 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                     #     self.assertTrue(lrs.isMntGrpUpdated())
 
                     ors.profileConfiguration = str(json.dumps(mp[mg1]))
-                    tmpcf1 = json.loads(ors.mntGrpConfiguration())
+                    # tmpcf1 =
+                    json.loads(ors.mntGrpConfiguration())
                     ors.profileConfiguration = str(json.dumps(mp[mg2]))
                     tmpcf2 = json.loads(ors.mntGrpConfiguration())
                     ltmpcf = json.loads(lrs.mntGrpConfiguration())
@@ -3314,7 +3314,8 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                     self.assertTrue(not lrs.isMntGrpUpdated())
 
                     ors.profileConfiguration = str(json.dumps(mp[mg1]))
-                    tmpcf1 = json.loads(ors.mntGrpConfiguration())
+                    # tmpcf1 =
+                    json.loads(ors.mntGrpConfiguration())
                     ors.profileConfiguration = str(json.dumps(mp[mg2]))
                     tmpcf2 = json.loads(ors.mntGrpConfiguration())
                     ltmpcf = json.loads(lrs.mntGrpConfiguration())
@@ -3330,7 +3331,8 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                         self.assertTrue(not lrs.isMntGrpUpdated())
 
                     ors.profileConfiguration = str(json.dumps(mp[mg1]))
-                    tmpcf1 = json.loads(ors.mntGrpConfiguration())
+                    # tmpcf1 =
+                    json.loads(ors.mntGrpConfiguration())
                     ors.profileConfiguration = str(json.dumps(mp[mg2]))
                     tmpcf2 = json.loads(ors.mntGrpConfiguration())
                     ltmpcf = json.loads(lrs.mntGrpConfiguration())
@@ -3386,7 +3388,8 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                     MSUtils.setEnv('ActiveMntGrp', mg3, self._ms.ms.keys()[0])
 
                     ors.profileConfiguration = str(json.dumps(mp[mg1]))
-                    tmpcf1 = json.loads(ors.mntGrpConfiguration())
+                    # tmpcf1 =
+                    json.loads(ors.mntGrpConfiguration())
                     ors.profileConfiguration = str(json.dumps(mp[mg2]))
                     tmpcf2 = json.loads(ors.mntGrpConfiguration())
                     ors.profileConfiguration = str(json.dumps(mp[mg3]))
@@ -3399,7 +3402,8 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                     lrs.switchProfile()
 
                     ors.profileConfiguration = str(json.dumps(mp[mg1]))
-                    tmpcf1 = json.loads(ors.mntGrpConfiguration())
+                    # tmpcf1 =
+                    json.loads(ors.mntGrpConfiguration())
                     ors.profileConfiguration = str(json.dumps(mp[mg2]))
                     tmpcf2 = json.loads(ors.mntGrpConfiguration())
                     ors.profileConfiguration = str(json.dumps(mp[mg3]))
@@ -3501,7 +3505,8 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                     MSUtils.setEnv('ActiveMntGrp', mg3, self._ms.ms.keys()[0])
 
                     ors.profileConfiguration = str(json.dumps(mp[mg1]))
-                    tmpcf1 = json.loads(ors.mntGrpConfiguration())
+                    # tmpcf1 =
+                    json.loads(ors.mntGrpConfiguration())
                     ors.profileConfiguration = str(json.dumps(mp[mg2]))
                     tmpcf2 = json.loads(ors.mntGrpConfiguration())
                     ors.profileConfiguration = str(json.dumps(mp[mg3]))
@@ -3514,7 +3519,8 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                     self.switchProfile(lrs, True)
 
                     ors.profileConfiguration = str(json.dumps(mp[mg1]))
-                    tmpcf1 = json.loads(ors.mntGrpConfiguration())
+                    # tmpcf1 =
+                    json.loads(ors.mntGrpConfiguration())
                     ors.profileConfiguration = str(json.dumps(mp[mg2]))
                     tmpcf2 = json.loads(ors.mntGrpConfiguration())
                     ors.profileConfiguration = str(json.dumps(mp[mg3]))
@@ -3566,7 +3572,8 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                         MSUtils.getEnv('ActiveMntGrp', self._ms.ms.keys()[0]))
 
                     ors.profileConfiguration = str(json.dumps(mp[mg1]))
-                    tmpcf1 = json.loads(ors.mntGrpConfiguration())
+                    # tmpcf1 =
+                    json.loads(ors.mntGrpConfiguration())
                     ors.profileConfiguration = str(json.dumps(mp[mg2]))
                     tmpcf2 = json.loads(ors.mntGrpConfiguration())
                     ors.profileConfiguration = str(json.dumps(mp[mg3]))
@@ -3615,7 +3622,8 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                     lrs.switchProfile()
 
                     ors.profileConfiguration = str(json.dumps(mp[mg1]))
-                    tmpcf1 = json.loads(ors.mntGrpConfiguration())
+                    # tmpcf1 =
+                    json.loads(ors.mntGrpConfiguration())
                     ors.profileConfiguration = str(json.dumps(mp[mg2]))
                     tmpcf2 = json.loads(ors.mntGrpConfiguration())
                     ors.profileConfiguration = str(json.dumps(mp[mg3]))
@@ -3659,7 +3667,8 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                     lrs.fetchProfile()
 
                     ors.profileConfiguration = str(json.dumps(mp[mg1]))
-                    tmpcf1 = json.loads(ors.mntGrpConfiguration())
+                    # tmpcf1 =
+                    json.loads(ors.mntGrpConfiguration())
                     ors.profileConfiguration = str(json.dumps(mp[mg2]))
                     tmpcf2 = json.loads(ors.mntGrpConfiguration())
                     ors.profileConfiguration = str(json.dumps(mp[mg3]))
@@ -3710,7 +3719,8 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
 
                     lrs.fetchProfile()
                     ors.profileConfiguration = str(json.dumps(mp[mg1]))
-                    tmpcf1 = json.loads(ors.mntGrpConfiguration())
+                    # tmpcf1 =
+                    json.loads(ors.mntGrpConfiguration())
                     ors.profileConfiguration = str(json.dumps(mp[mg2]))
                     tmpcf2 = json.loads(ors.mntGrpConfiguration())
                     ors.profileConfiguration = str(json.dumps(mp[mg3]))
@@ -3845,30 +3855,30 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                     for mg in mp.keys():
                         try:
                             ors.deleteProfile(mgs[mg])
-                        except:
+                        except Exception:
                             pass
                     for mg in tmg.keys():
                         try:
                             tmg[mg].tearDown()
-                        except:
+                        except Exception:
                             pass
                     simp2.tearDown()
                     try:
                         self.tearDown()
                         self.myTearDown()
-                    except:
+                    except Exception:
                         pass
         finally:
             try:
                 self.setUp()
-            except:
+            except Exception:
                 pass
 
     # constructor test
     # \brief It tests default settings
     def test_dataSourceDescription(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         dsdict = {
             "ann": self.mydss["ann"]
         }
@@ -3892,7 +3902,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
     # \brief It tests default settings
     def test_dataSourceDescription_noargs(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -3913,7 +3923,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
     # \brief It tests default settings
     def test_dataSourceDescription_names(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
@@ -3942,7 +3952,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
     # \brief It tests default settings
     def test_componentClientSources_unknown(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         dsdict = {
             "ann": self.mydss["ann"]
         }
@@ -4131,7 +4141,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
     # \brief It tests default settings
     def test_componentSources_unknown(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         dsdict = {
             "ann": self.mydss["ann"]
         }
@@ -4320,7 +4330,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
     # \brief It tests default settings
     def test_create_remove_DynamicComponent(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -4383,7 +4393,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
     # \brief It tests default settings
     def test_create_dict(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -4397,19 +4407,22 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                 '<?xml version="1.0" ?>\n<definition/>\n',
             "one":
                 '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n'
+            '<group name="$var.entryname#\'scan\'$var.serialno" '
+            'type="NXentry">\n'
             '<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n'
             '<field name="onename" type="NX_CHAR">\n<strategy mode="STEP"/>\n'
             '<datasource name="onename" type="CLIENT">\n'
             '<record name="onename"/>\n</datasource>\n</field>\n'
             '</group>\n</group>\n<group name="data" type="NXdata">\n'
-            '<link name="onename" target="/$var.entryname#\'scan\'$var.serialno:'
+            '<link name="onename" '
+            'target="/$var.entryname#\'scan\'$var.serialno:'
             'NXentry/NXinstrument/collection/onename"/>\n'
             '</group>\n</group>\n</definition>\n',
             "two":
                 '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n'
+            '<group name="$var.entryname#\'scan\'$var.serialno" '
+            'type="NXentry">\n'
             '<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n'
             '<field name="ds1" type="NX_CHAR">\n<strategy mode="STEP"/>\n'
@@ -4418,7 +4431,8 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
             '<group name="data" type="NXdata">\n'
             '<link name="ds1" target="/$var.entryname#\'scan\'$var.serialno:'
             'NXentry/NXinstrument/collection/ds1"/>\n</group>\n</group>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">'
+            '<group name="$var.entryname#\'scan\'$var.serialno" '
+            'type="NXentry">'
             '\n<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n'
             '<field name="ds2" type="NX_CHAR">\n<strategy mode="STEP"/>\n'
@@ -4430,7 +4444,8 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
             '</group>\n</definition>\n',
             "three":
                 '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n'
+            '<group name="$var.entryname#\'scan\'$var.serialno" '
+            'type="NXentry">\n'
             '<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n'
             '<field name="ds1" type="NX_CHAR">\n<strategy mode="STEP"/>\n'
@@ -4439,7 +4454,8 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
             '<group name="data" type="NXdata">\n'
             '<link name="ds1" target="/$var.entryname#\'scan\'$var.serialno:'
             'NXentry/NXinstrument/collection/ds1"/>\n</group>\n</group>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">'
+            '<group name="$var.entryname#\'scan\'$var.serialno" '
+            'type="NXentry">'
             '\n<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n'
             '<field name="ds2" type="NX_CHAR">\n<strategy mode="STEP"/>\n'
@@ -4448,7 +4464,8 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
             '<group name="data" type="NXdata">\n'
             '<link name="ds2" target="/$var.entryname#\'scan\'$var.serialno:'
             'NXentry/NXinstrument/collection/ds2"/>\n</group>\n</group>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">'
+            '<group name="$var.entryname#\'scan\'$var.serialno" '
+            'type="NXentry">'
             '\n<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n'
             '<field name="ds3" type="NX_CHAR">\n<strategy mode="STEP"/>\n'
@@ -4460,7 +4477,8 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
             '</definition>\n',
             "type":
                 '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n'
+            '<group name="$var.entryname#\'scan\'$var.serialno" '
+            'type="NXentry">\n'
             '<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n'
             '<field name="ds1" type="NX_INT">\n<strategy mode="STEP"/>\n'
@@ -4472,7 +4490,8 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
             '</group>\n</group>\n</definition>\n',
             "shape":
                 '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n'
+            '<group name="$var.entryname#\'scan\'$var.serialno" '
+            'type="NXentry">\n'
             '<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n'
             '<field name="ds2" type="NX_CHAR">\n<strategy mode="STEP"/>\n'
@@ -4486,7 +4505,8 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
             '</group>\n</group>\n</definition>\n',
             "shapetype":
                 '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n'
+            '<group name="$var.entryname#\'scan\'$var.serialno" '
+            'type="NXentry">\n'
             '<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n'
             '<field name="ds3" type="NX_FLOAT64">\n<strategy mode="STEP"/>\n'
@@ -4509,9 +4529,9 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
             "shapetype": [{"name": "ds3", "dtype": "float64",
                            "shape": [3, 56]}],
         }
-        dname = "__dynamic_component__"
+        # dname = "__dynamic_component__"
         for lb, ds in dsdict.items():
-#            print ds
+            #            print ds
             cpname = rs.createDynamicComponent(["", str(json.dumps(ds))])
             comp = self._cf.dp.Components([cpname])[0]
             self.assertEqual(cps[lb], comp)
@@ -4520,7 +4540,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
     # \brief It tests default settings
     def test_create_dict_type(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -4532,7 +4552,8 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
         cps = {
             "type":
                 '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n'
+            '<group name="$var.entryname#\'scan\'$var.serialno" '
+            'type="NXentry">\n'
             '<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n'
             '<field name="ds1" type="%s">\n<strategy mode="STEP"/>\n'
@@ -4543,7 +4564,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
             'NXentry/NXinstrument/collection/ds1"/>\n'
             '</group>\n</group>\n</definition>\n',
         }
-        dname = "__dynamic_component__"
+        # dname = "__dynamic_component__"
         for tp, nxstp in self._npTn.items():
             cpname = rs.createDynamicComponent([
                 "", str(json.dumps([{"name": "ds1", "dtype": tp}]))])
@@ -4554,7 +4575,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
     # \brief It tests default settings
     def test_create_dict_shape(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -4566,7 +4587,8 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
         cps = {
             "shape":
                 '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n'
+            '<group name="$var.entryname#\'scan\'$var.serialno" '
+            'type="NXentry">\n'
             '<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n'
             '<field name="ds2" type="NX_CHAR">\n<strategy mode="STEP"/>\n'
@@ -4582,7 +4604,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
         dim = '<dim index="%s" value="%s"/>\n'
         dimend = '</dimensions>\n'
 
-        dname = "__dynamic_component__"
+        # dname = "__dynamic_component__"
         for i in range(50):
             ms = [self._rnd.randint(0, 3000)
                   for _ in range(self._rnd.randint(0, 3))]
@@ -4603,7 +4625,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
     # \brief It tests default settings
     def test_create_dict_shapetype(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -4617,7 +4639,8 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
         cps = {
             "shapetype":
                 '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n'
+            '<group name="$var.entryname#\'scan\'$var.serialno" '
+            'type="NXentry">\n'
             '<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n'
             '<field name="%s" type="%s">\n<strategy mode="STEP"/>\n'
@@ -4627,15 +4650,16 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
             '</group>\n</group>\n%s</group>\n</definition>\n',
         }
 
-        link = '<group name="data" type="NXdata">\n' + \
-            '<link name="%s" target="/$var.entryname#\'scan\'$var.serialno:' + \
-            'NXentry/NXinstrument/collection/%s"/>\n</group>\n'
+        link = '<group name="data" type="NXdata">\n' \
+               '<link name="%s" ' \
+               'target="/$var.entryname#\'scan\'$var.serialno:' \
+               'NXentry/NXinstrument/collection/%s"/>\n</group>\n'
 
         dimbg = '<dimensions rank="%s">\n'
         dim = '<dim index="%s" value="%s"/>\n'
         dimend = '</dimensions>\n'
 
-        dname = "__dynamic_component__"
+        # dname = "__dynamic_component__"
 
         arr = [
             {"name": "client", "full_name": "client"},
@@ -4767,7 +4791,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
     # \brief It tests default settings
     def test_create_dict_fieldpath(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -4780,7 +4804,8 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
         cps = {
             "shapetype":
             '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n'
+            '<group name="$var.entryname#\'scan\'$var.serialno" '
+            'type="NXentry">\n'
             '<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n%s'
             '</group>\n</group>\n%s</group>\n</definition>\n',
@@ -4802,7 +4827,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
         dim = '<dim index="%s" value="%s"/>\n'
         dimend = '</dimensions>\n'
 
-        dname = "__dynamic_component__"
+        # dname = "__dynamic_component__"
 
         arr = [
             {"name": "client", "full_name": "client"},
@@ -4866,9 +4891,9 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
 #                    print "TP = ", tp
                     ms = [self._rnd.randint(0, 3000)
                           for _ in range(self._rnd.randint(0, 3))]
-                    ms2 = [self._rnd.randint(0, 3000)
-                           for _ in range(self._rnd.randint(0, 3))]
-                    tmptp = self._rnd.choice(self._npTn.keys())
+                    # ms2 = [self._rnd.randint(0, 3000)
+                    #        for _ in range(self._rnd.randint(0, 3))]
+                    # tmptp = self._rnd.choice(self._npTn.keys())
                     if i == 0:
                         cnf["DefaultDynamicLinks"] = False
                         cnf["DefaultDynamicPath"] = mypath
@@ -4925,7 +4950,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                     if i % 4 < 2:
                         fd = field % (ds, nxstp, ds, ar["full_name"], mstr)
                     else:
-                        fname = fieldname.lower()
+                        # fname = fieldname.lower()
                         fd = field % (fieldname.lower(), nxstp, ds,
                                       ar["full_name"], mstr)
 
@@ -4979,7 +5004,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                         mycps2 = mycps
                     try:
                         self.assertEqual(comp, mycps)
-                    except:
+                    except Exception:
                         self.assertEqual(comp, mycps2)
         finally:
             for ar in arr:
@@ -4993,7 +5018,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
     # \brief It tests default settings
     def test_create_dict_datasource_attr(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -5002,39 +5027,41 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
         rs.configDevice = val["ConfigDevice"]
         rs.door = val["Door"]
         rs.mntGrp = val["MntGrp"]
-        cnfdef = json.loads(rs.profileConfiguration)
-        cps = {
-            "shapetype":
-                '<?xml version="1.0" ?>\n<definition>\n%s'
-            '</group>\n</group>\n%s</group>\n</definition>\n',
-        }
+        # cnfdef =
+        json.loads(rs.profileConfiguration)
+        # cps = {
+        #     "shapetype":
+        #         '<?xml version="1.0" ?>\n<definition>\n%s'
+        #     '</group>\n</group>\n%s</group>\n</definition>\n',
+        # }
 
         defbg = '<?xml version="1.0" ?>\n<definition>\n'
         defend = '</definition>\n'
-        groupbg = '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n' + \
-            '<group name="instrument" type="NXinstrument">\n' + \
-            '<group name="collection" type="NXcollection">\n'
+        groupbg = '<group name="$var.entryname#\'scan\'$var.serialno" ' \
+                  'type="NXentry">\n' \
+                  '<group name="instrument" type="NXinstrument">\n' \
+                  '<group name="collection" type="NXcollection">\n'
         groupend = '</group>\n'
 
         fieldbg = '<field name="%s" type="%s">\n<strategy mode="STEP"/>\n'
 
-        dsclient = '<datasource name="%s" type="CLIENT">\n' + \
-            '<record name="%s"/>\n</datasource>\n'
+        dsclient = '<datasource name="%s" type="CLIENT">\n' \
+                   '<record name="%s"/>\n</datasource>\n'
 
-        dstango = '<datasource name="%s" type="TANGO">\n' + \
-            '<device member="attribute" name="%s"/>\n' + \
-            '<record name="%s"/>\n</datasource>\n'
+        # dstango = '<datasource name="%s" type="TANGO">\n' \
+        #           '<device member="attribute" name="%s"/>\n' \
+        #           '<record name="%s"/>\n</datasource>\n'
 
         fieldend = '</field>\n'
 
         link = '<group name="data" type="NXdata">\n' + \
             '<link name="%s" target="%s/%s"/>\n</group>\n'
 
-        dimbg = '<dimensions rank="%s">\n'
-        dim = '<dim index="%s" value="%s"/>\n'
-        dimend = '</dimensions>\n'
+        # dimbg = '<dimensions rank="%s">\n'
+        # dim = '<dim index="%s" value="%s"/>\n'
+        # dimend = '</dimensions>\n'
 
-        dname = "__dynamic_component__"
+        # dname = "__dynamic_component__"
 
         arr = [
             {"name": "client_short", "full_name": "ttestp09/testts/t1r228",
@@ -5069,7 +5096,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
             simps4.dp.DataSource = arr[3]["source"]
 
             for i, ar in enumerate(arr):
-#                print "I = ", i, ar["name"]
+                #                print "I = ", i, ar["name"]
                 db.put_device_alias(ar["full_name"], ar["name"])
 
                 cpname = rs.createDynamicComponent([
@@ -5078,9 +5105,9 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                 comp = self._cf.dp.Components([cpname])[0]
                 mycps = defbg + groupbg + fieldbg % (ar["name"], "NX_CHAR")
                 if i % 2:
-                    sso = ar["source"].split("/")
-#                    mycps += dstango % (
-#                        ar["name"], "/".join(sso[:-1]), sso[-1])
+                    # sso = ar["source"].split("/")
+                    # mycps += dstango % (
+                    #   ar["name"], "/".join(sso[:-1]), sso[-1])
                     mycps += dsclient % (ar["name"], ar["full_name"])
                 else:
                     mycps += dsclient % (ar["name"], ar["full_name"])
@@ -5104,7 +5131,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
     # \brief It tests default settings
     def test_create_step(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -5113,13 +5140,15 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
         rs.configDevice = val["ConfigDevice"]
         rs.door = val["Door"]
         rs.mntGrp = val["MntGrp"]
-        cnfdef = json.loads(rs.profileConfiguration)
+        # cnfdef =
+        json.loads(rs.profileConfiguration)
         cps = {
             "empty":
                 '<?xml version="1.0" ?>\n<definition/>\n',
             "one":
                 '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n'
+            '<group name="$var.entryname#\'scan\'$var.serialno" '
+            'type="NXentry">\n'
             '<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n'
             '<field name="one" type="NX_CHAR">\n<strategy mode="STEP"/>\n'
@@ -5133,7 +5162,8 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
             '</definition>\n',
             "two":
                 '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n'
+            '<group name="$var.entryname#\'scan\'$var.serialno" '
+            'type="NXentry">\n'
             '<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n'
             '<field name="d1" type="NX_CHAR">\n<strategy mode="STEP"/>\n'
@@ -5144,7 +5174,8 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
             '<link name="d1" target="/$var.entryname#\'scan\'$var.serialno:'
             'NXentry/NXinstrument/collection/d1"/>\n'
             '</group>\n</group>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n'
+            '<group name="$var.entryname#\'scan\'$var.serialno" '
+            'type="NXentry">\n'
             '<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n'
             '<field name="d2" type="NX_CHAR">\n<strategy mode="STEP"/>\n'
@@ -5157,7 +5188,8 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
             '</definition>\n',
             "three":
                 '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n'
+            '<group name="$var.entryname#\'scan\'$var.serialno" '
+            'type="NXentry">\n'
             '<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n'
             '<field name="ds1" type="NX_CHAR">\n<strategy mode="STEP"/>\n'
@@ -5168,7 +5200,8 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
             '<link name="ds1" target="/$var.entryname#\'scan\'$var.serialno:'
             'NXentry/NXinstrument/collection/ds1"/>\n'
             '</group>\n</group>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n'
+            '<group name="$var.entryname#\'scan\'$var.serialno" '
+            'type="NXentry">\n'
             '<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n'
             '<field name="ds2" type="NX_CHAR">\n<strategy mode="STEP"/>\n'
@@ -5178,7 +5211,8 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
             '<link name="ds2" target="/$var.entryname#\'scan\'$var.serialno:'
             'NXentry/NXinstrument/collection/ds2"/>\n'
             '</group>\n</group>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n'
+            '<group name="$var.entryname#\'scan\'$var.serialno" '
+            'type="NXentry">\n'
             '<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n'
             '<field name="ds3" type="NX_CHAR">\n<strategy mode="STEP"/>\n'
@@ -5196,7 +5230,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
             "two": ["d1", "d2"],
             "three": ["ds1", "ds2", "ds3"],
         }
-        dname = "__dynamic_component__"
+        # dname = "__dynamic_component__"
         for lb, ds in dsdict.items():
 
             cpname = rs.createDynamicComponent([
@@ -5208,7 +5242,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
     # \brief It tests default settings
     def test_create_sel(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -5223,7 +5257,8 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                 '<?xml version="1.0" ?>\n<definition/>\n',
             "one":
                 '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n'
+            '<group name="$var.entryname#\'scan\'$var.serialno" '
+            'type="NXentry">\n'
             '<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n'
             '<field name="one" type="NX_CHAR">\n<strategy mode="STEP"/>\n'
@@ -5237,7 +5272,8 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
             '</definition>\n',
             "two":
                 '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n'
+            '<group name="$var.entryname#\'scan\'$var.serialno" '
+            'type="NXentry">\n'
             '<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n'
             '<field name="d1" type="NX_CHAR">\n<strategy mode="STEP"/>\n'
@@ -5248,7 +5284,8 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
             '<link name="d1" target="/$var.entryname#\'scan\'$var.serialno:'
             'NXentry/NXinstrument/collection/d1"/>\n'
             '</group>\n</group>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n'
+            '<group name="$var.entryname#\'scan\'$var.serialno" '
+            'type="NXentry">\n'
             '<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n'
             '<field name="d2" type="NX_CHAR">\n<strategy mode="STEP"/>\n'
@@ -5261,7 +5298,8 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
             '</definition>\n',
             "three":
                 '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n'
+            '<group name="$var.entryname#\'scan\'$var.serialno" '
+            'type="NXentry">\n'
             '<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n'
             '<field name="ds1" type="NX_CHAR">\n<strategy mode="STEP"/>\n'
@@ -5272,7 +5310,8 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
             '<link name="ds1" target="/$var.entryname#\'scan\'$var.serialno:'
             'NXentry/NXinstrument/collection/ds1"/>\n'
             '</group>\n</group>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n'
+            '<group name="$var.entryname#\'scan\'$var.serialno" '
+            'type="NXentry">\n'
             '<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n'
             '<field name="ds2" type="NX_CHAR">\n<strategy mode="STEP"/>\n'
@@ -5282,7 +5321,8 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
             '<link name="ds2" target="/$var.entryname#\'scan\'$var.serialno:'
             'NXentry/NXinstrument/collection/ds2"/>\n'
             '</group>\n</group>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n'
+            '<group name="$var.entryname#\'scan\'$var.serialno" '
+            'type="NXentry">\n'
             '<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n'
             '<field name="ds3" type="NX_CHAR">\n<strategy mode="STEP"/>\n'
@@ -5300,13 +5340,13 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
             "two": ["d1", "d2"],
             "three": ["ds1", "ds2", "ds3"],
         }
-        dname = "__dynamic_component__"
+        # dname = "__dynamic_component__"
         for lb, ds in dsdict.items():
             cnf = dict(cnfdef)
             cnf["DataSourceSelection"] = json.dumps(
                 dict((dd, True) for dd in ds))
             rs.profileConfiguration = str(json.dumps(cnf))
-            _ = rs.selectedDataSources()
+            rs.selectedDataSources()
             cpname = rs.createDynamicComponent([])
             comp = self._cf.dp.Components([cpname])[0]
             self.assertEqual(cps["empty"], comp)
@@ -5315,7 +5355,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
     # \brief It tests default settings
     def test_create_step_no_type(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -5324,11 +5364,13 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
         rs.configDevice = val["ConfigDevice"]
         rs.door = val["Door"]
         rs.mntGrp = val["MntGrp"]
-        cnfdef = json.loads(rs.profileConfiguration)
+        # cnfdef =
+        json.loads(rs.profileConfiguration)
         cps = {
             "type":
                 '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n'
+            '<group name="$var.entryname#\'scan\'$var.serialno" '
+            'type="NXentry">\n'
             '<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n'
             '<field name="ds1" type="%s">\n<strategy mode="STEP"/>\n'
@@ -5339,7 +5381,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
             'NXentry/NXinstrument/collection/ds1"/>\n'
             '</group>\n</group>\n</definition>\n',
         }
-        dname = "__dynamic_component__"
+        # dname = "__dynamic_component__"
         for tp, nxstp in self._npTn.items():
             cpname = rs.createDynamicComponent([
                 str(json.dumps(["ds1"]))])
@@ -5351,7 +5393,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
     # \brief It tests default settings
     def test_create_init_no_type(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -5360,11 +5402,13 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
         rs.configDevice = val["ConfigDevice"]
         rs.door = val["Door"]
         rs.mntGrp = val["MntGrp"]
-        cnfdef = json.loads(rs.profileConfiguration)
+        # cnfdef =
+        json.loads(rs.profileConfiguration)
         cps = {
             "type":
                 '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n'
+            '<group name="$var.entryname#\'scan\'$var.serialno" '
+            'type="NXentry">\n'
             '<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n'
             '<field name="ds1" type="%s">\n<strategy mode="INIT"/>\n'
@@ -5373,7 +5417,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
             '</group>\n'
             '</group>\n</group>\n</definition>\n',
         }
-        dname = "__dynamic_component__"
+        # dname = "__dynamic_component__"
         for tp, nxstp in self._npTn.items():
             cpname = rs.createDynamicComponent([
                 "", "",
@@ -5386,7 +5430,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
     # \brief It tests default settings
     def test_create_step_type_param(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -5399,7 +5443,8 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
         cps = {
             "type":
                 '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n'
+            '<group name="$var.entryname#\'scan\'$var.serialno" '
+            'type="NXentry">\n'
             '<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n'
             '<field name="ds1" type="%s">\n<strategy mode="STEP"/>\n'
@@ -5410,7 +5455,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
             'NXentry/NXinstrument/collection/ds1"/>\n'
             '</group>\n</group>\n</definition>\n',
         }
-        dname = "__dynamic_component__"
+        # dname = "__dynamic_component__"
         for tp, nxstp in self._npTn.items():
             cnf = dict(cnfdef)
             cnf["ChannelProperties"] = json.dumps(
@@ -5436,7 +5481,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
     # \brief It tests default settings
     def test_create_init_type_param(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -5449,7 +5494,8 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
         cps = {
             "type":
                 '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n'
+            '<group name="$var.entryname#\'scan\'$var.serialno" '
+            'type="NXentry">\n'
             '<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n'
             '<field name="ds1" type="%s">\n<strategy mode="INIT"/>\n'
@@ -5458,7 +5504,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
             '</group>\n'
             '</group>\n</group>\n</definition>\n',
         }
-        dname = "__dynamic_component__"
+        # dname = "__dynamic_component__"
         for tp, nxstp in self._npTn.items():
             cnf = dict(cnfdef)
             cnf["ChannelProperties"] = json.dumps(
@@ -5481,7 +5527,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
     # \brief It tests default settings
     def test_create_step_shape(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -5494,7 +5540,8 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
         cps = {
             "shape":
                 '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n'
+            '<group name="$var.entryname#\'scan\'$var.serialno" '
+            'type="NXentry">\n'
             '<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n'
             '<field name="ds2" type="NX_CHAR">\n<strategy mode="STEP"/>\n'
@@ -5510,7 +5557,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
         dim = '<dim index="%s" value="%s"/>\n'
         dimend = '</dimensions>\n'
 
-        dname = "__dynamic_component__"
+        # dname = "__dynamic_component__"
         for i in range(50):
             ms = [self._rnd.randint(0, 3000)
                   for _ in range(self._rnd.randint(0, 3))]
@@ -5542,7 +5589,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
     # \brief It tests default settings
     def test_create_init_shape(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -5555,7 +5602,8 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
         cps = {
             "shape":
                 '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n'
+            '<group name="$var.entryname#\'scan\'$var.serialno" '
+            'type="NXentry">\n'
             '<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n'
             '<field name="ds2" type="NX_CHAR">\n<strategy mode="INIT"/>\n'
@@ -5569,7 +5617,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
         dim = '<dim index="%s" value="%s"/>\n'
         dimend = '</dimensions>\n'
 
-        dname = "__dynamic_component__"
+        # dname = "__dynamic_component__"
         for i in range(50):
             ms = [self._rnd.randint(0, 3000)
                   for _ in range(self._rnd.randint(0, 3))]
@@ -5601,7 +5649,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
     # \brief It tests default settings
     def test_create_step_shapetype(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -5614,7 +5662,8 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
         cps = {
             "shapetype":
                 '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n'
+            '<group name="$var.entryname#\'scan\'$var.serialno" '
+            'type="NXentry">\n'
             '<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n'
             '<field name="%s" type="%s">\n<strategy mode="STEP"/>\n'
@@ -5624,15 +5673,16 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
             '</group>\n</group>\n%s</group>\n</definition>\n',
         }
 
-        link = '<group name="data" type="NXdata">\n' + \
-            '<link name="%s" target="/$var.entryname#\'scan\'$var.serialno:' + \
-            'NXentry/NXinstrument/collection/%s"/>\n</group>\n'
+        link = '<group name="data" type="NXdata">\n' \
+               '<link name="%s" ' \
+               'target="/$var.entryname#\'scan\'$var.serialno:' \
+               'NXentry/NXinstrument/collection/%s"/>\n</group>\n'
 
         dimbg = '<dimensions rank="%s">\n'
         dim = '<dim index="%s" value="%s"/>\n'
         dimend = '</dimensions>\n'
 
-        dname = "__dynamic_component__"
+        # dname = "__dynamic_component__"
 
         arr = [
             {"name": "client"},
@@ -5653,16 +5703,16 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
             {"name": "myclient_long"},
         ]
 
-        db = PyTango.Database()
+        # db = PyTango.Database()
         try:
             for i, ar in enumerate(arr):
                 for tp, nxstp in self._npTn.items():
                     lbl = self.getRandomName(20)
                     ms = [self._rnd.randint(0, 3000)
                           for _ in range(self._rnd.randint(0, 3))]
-                    ms2 = [self._rnd.randint(0, 3000)
-                           for _ in range(self._rnd.randint(0, 3))]
-                    tmptp = self._rnd.choice(self._npTn.keys())
+                    # ms2 = [self._rnd.randint(0, 3000)
+                    #        for _ in range(self._rnd.randint(0, 3))]
+                    # tmptp = self._rnd.choice(self._npTn.keys())
                     cnf = dict(cnfdef)
                     labels = {}
                     paths = {}
@@ -5795,7 +5845,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
     # \brief It tests default settings
     def test_create_init_shapetype(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -5808,7 +5858,8 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
         cps = {
             "shapetype":
                 '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n'
+            '<group name="$var.entryname#\'scan\'$var.serialno" '
+            'type="NXentry">\n'
             '<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n'
             '<field name="%s" type="%s">\n<strategy mode="INIT"/>\n'
@@ -5818,15 +5869,16 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
             '</group>\n</group>\n%s</group>\n</definition>\n',
         }
 
-        link = '<group name="data" type="NXdata">\n' + \
-            '<link name="%s" target="/$var.entryname#\'scan\'$var.serialno:' + \
-            'NXentry/NXinstrument/collection/%s"/>\n</group>\n'
+        link = '<group name="data" type="NXdata">\n' \
+               '<link name="%s" ' \
+               'target="/$var.entryname#\'scan\'$var.serialno:' \
+               'NXentry/NXinstrument/collection/%s"/>\n</group>\n'
 
         dimbg = '<dimensions rank="%s">\n'
         dim = '<dim index="%s" value="%s"/>\n'
         dimend = '</dimensions>\n'
 
-        dname = "__dynamic_component__"
+        # dname = "__dynamic_component__"
 
         arr = [
             {"name": "client"},
@@ -5847,7 +5899,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
             {"name": "myclient_long"},
         ]
 
-        db = PyTango.Database()
+        # db = PyTango.Database()
         try:
             for i, ar in enumerate(arr):
                 for tp, nxstp in self._npTn.items():
@@ -5855,9 +5907,9 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
 #                    print "TP = ", tp, i
                     ms = [self._rnd.randint(0, 3000)
                           for _ in range(self._rnd.randint(0, 3))]
-                    ms2 = [self._rnd.randint(0, 3000)
-                           for _ in range(self._rnd.randint(0, 3))]
-                    tmptp = self._rnd.choice(self._npTn.keys())
+                    # ms2 = [self._rnd.randint(0, 3000)
+                    #        for _ in range(self._rnd.randint(0, 3))]
+                    # tmptp = self._rnd.choice(self._npTn.keys())
                     cnf = dict(cnfdef)
                     labels = {}
                     paths = {}
@@ -5995,7 +6047,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
     # \brief It tests default settings
     def test_create_step_typeshape_tango_nods(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -6008,9 +6060,10 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
 
         defbg = '<?xml version="1.0" ?>\n<definition>\n'
         defend = '</definition>\n'
-        groupbg = '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n' + \
-            '<group name="instrument" type="NXinstrument">\n' + \
-            '<group name="collection" type="NXcollection">\n'
+        groupbg = '<group name="$var.entryname#\'scan\'$var.serialno" ' \
+                  'type="NXentry">\n' \
+                  '<group name="instrument" type="NXinstrument">\n' \
+                  '<group name="collection" type="NXcollection">\n'
         groupend = '</group>\n'
 
         fieldbg = '<field name="%s" type="%s">\n<strategy mode="STEP"/>\n'
@@ -6022,17 +6075,17 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
         link = '<group name="data" type="NXdata">\n' + \
             '<link name="%s" target="%s/%s"/>\n</group>\n'
 
-        dimbg = '<dimensions rank="%s">\n'
-        dim = '<dim index="%s" value="%s"/>\n'
-        dimend = '</dimensions>\n'
+        # dimbg = '<dimensions rank="%s">\n'
+        # dim = '<dim index="%s" value="%s"/>\n'
+        # dimend = '</dimensions>\n'
 
 #        self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
 #        dc = DynamicComponent(self._cf.dp)
         for i in range(4):
             for ds, dsxml in self.smydss.items():
-                ms = self.smydsspar[ds]
-                sds = ds.split("_")
-                tp = sds[1]
+                # ms = self.smydsspar[ds]
+                # sds = ds.split("_")
+                # tp = sds[1]
                 cnf = dict(cnfdef)
                 labels = {}
                 paths = {}
@@ -6087,7 +6140,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
     # \brief It tests default settings
     def test_create_step_typeshape_tango_nods_attr(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -6096,13 +6149,15 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
         rs.configDevice = val["ConfigDevice"]
         rs.door = val["Door"]
         rs.mntGrp = val["MntGrp"]
-        cnfdef = json.loads(rs.profileConfiguration)
+        # cnfdef =
+        json.loads(rs.profileConfiguration)
 
         defbg = '<?xml version="1.0" ?>\n<definition>\n'
         defend = '</definition>\n'
-        groupbg = '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n' + \
-            '<group name="instrument" type="NXinstrument">\n' + \
-            '<group name="collection" type="NXcollection">\n'
+        groupbg = '<group name="$var.entryname#\'scan\'$var.serialno" ' \
+                  'type="NXentry">\n' \
+                  '<group name="instrument" type="NXinstrument">\n' \
+                  '<group name="collection" type="NXcollection">\n'
         groupend = '</group>\n'
 
         fieldbg = '<field name="%s" type="%s">\n<strategy mode="STEP"/>\n'
@@ -6117,9 +6172,9 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
         link = '<group name="data" type="NXdata">\n' + \
             '<link name="%s" target="%s/%s"/>\n</group>\n'
 
-        dimbg = '<dimensions rank="%s">\n'
-        dim = '<dim index="%s" value="%s"/>\n'
-        dimend = '</dimensions>\n'
+        # dimbg = '<dimensions rank="%s">\n'
+        # dim = '<dim index="%s" value="%s"/>\n'
+        # dimend = '</dimensions>\n'
 
         arr = [
             {"name": "client_short", "full_name": "ttestp09/testts/t1r228",
@@ -6184,7 +6239,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
     # \brief It tests default settings
     def test_create_init_typeshape_tango_nods_attr(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -6193,13 +6248,15 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
         rs.configDevice = val["ConfigDevice"]
         rs.door = val["Door"]
         rs.mntGrp = val["MntGrp"]
-        cnfdef = json.loads(rs.profileConfiguration)
+        # cnfdef =
+        json.loads(rs.profileConfiguration)
 
         defbg = '<?xml version="1.0" ?>\n<definition>\n'
         defend = '</definition>\n'
-        groupbg = '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n' + \
-            '<group name="instrument" type="NXinstrument">\n' + \
-            '<group name="collection" type="NXcollection">\n'
+        groupbg = '<group name="$var.entryname#\'scan\'$var.serialno" ' \
+                  'type="NXentry">\n' \
+                  '<group name="instrument" type="NXinstrument">\n' \
+                  '<group name="collection" type="NXcollection">\n'
         groupend = '</group>\n'
 
         fieldbg = '<field name="%s" type="%s">\n<strategy mode="INIT"/>\n'
@@ -6214,9 +6271,9 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
         link = '<group name="data" type="NXdata">\n' + \
             '<link name="%s" target="%s/%s"/>\n</group>\n'
         link = ''
-        dimbg = '<dimensions rank="%s">\n'
-        dim = '<dim index="%s" value="%s"/>\n'
-        dimend = '</dimensions>\n'
+        # dimbg = '<dimensions rank="%s">\n'
+        # dim = '<dim index="%s" value="%s"/>\n'
+        # dimend = '</dimensions>\n'
 
         arr = [
             {"name": "client_short", "full_name": "ttestp09/testts/t1r228",
@@ -6264,7 +6321,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                     mycps += dsclient % (ar["name"], ar["name"])
                 mycps += fieldend + groupend + groupend
                 mycps += link  # % (ar["name"], self._defaultpath,
-                              #   ar["name"])
+                #   ar["name"])
                 mycps += groupend + defend
 
                 self.assertEqual(comp, mycps)
@@ -6282,7 +6339,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
     # \brief It tests default settings
     def test_create_init_typeshape_tango_nods(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -6295,9 +6352,10 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
 
         defbg = '<?xml version="1.0" ?>\n<definition>\n'
         defend = '</definition>\n'
-        groupbg = '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n' + \
-            '<group name="instrument" type="NXinstrument">\n' + \
-            '<group name="collection" type="NXcollection">\n'
+        groupbg = '<group name="$var.entryname#\'scan\'$var.serialno" ' \
+                  'type="NXentry">\n' \
+                  '<group name="instrument" type="NXinstrument">\n' \
+                  '<group name="collection" type="NXcollection">\n'
         groupend = '</group>\n'
 
         fieldbg = '<field name="%s" type="%s">\n<strategy mode="INIT"/>\n'
@@ -6309,15 +6367,15 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
         link = '<group name="data" type="NXdata">\n' + \
             '<link name="%s" target="%s/%s"/>\n</group>\n'
 
-        dimbg = '<dimensions rank="%s">\n'
-        dim = '<dim index="%s" value="%s"/>\n'
-        dimend = '</dimensions>\n'
+        # dimbg = '<dimensions rank="%s">\n'
+        # dim = '<dim index="%s" value="%s"/>\n'
+        # dimend = '</dimensions>\n'
 
         for i in range(4):
             for ds, dsxml in self.smydss.items():
-                ms = self.smydsspar[ds]
-                sds = ds.split("_")
-                tp = sds[1]
+                # ms = self.smydsspar[ds]
+                # sds = ds.split("_")
+                # tp = sds[1]
                 cnf = dict(cnfdef)
                 labels = {}
                 paths = {}
@@ -6372,7 +6430,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
     # \brief It tests default settings
     def test_create_sel_typeshape_tango(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -6385,9 +6443,10 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
 
         defbg = '<?xml version="1.0" ?>\n<definition>\n'
         defend = '</definition>\n'
-        groupbg = '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n' + \
-            '<group name="instrument" type="NXinstrument">\n' + \
-            '<group name="collection" type="NXcollection">\n'
+        groupbg = '<group name="$var.entryname#\'scan\'$var.serialno" ' \
+                  'type="NXentry">\n' \
+                  '<group name="instrument" type="NXinstrument">\n' \
+                  '<group name="collection" type="NXcollection">\n'
         groupend = '</group>\n'
 
         fieldbg = '<field name="%s" type="%s">\n<strategy mode="STEP"/>\n'
@@ -6403,12 +6462,12 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
         for i, nxstp in enumerate(self._npTn.values()):
             for ds, dsxml in self.smydss.items():
-                ms = self.smydsspar[ds]
+                # ms = self.smydsspar[ds]
                 ms2 = [self._rnd.randint(0, 3000)
                        for _ in range(self._rnd.randint(0, 3))]
                 lbl = self.getRandomName(20)
-                sds = ds.split("_")
-                tp = sds[1]
+                # sds = ds.split("_")
+                # tp = sds[1]
                 cnf = dict(cnfdef)
                 labels = {}
                 paths = {}
@@ -6550,7 +6609,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
     # \brief It tests default settings
     def test_create_step_typeshape_tango(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -6563,9 +6622,10 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
 
         defbg = '<?xml version="1.0" ?>\n<definition>\n'
         defend = '</definition>\n'
-        groupbg = '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n' + \
-            '<group name="instrument" type="NXinstrument">\n' + \
-            '<group name="collection" type="NXcollection">\n'
+        groupbg = '<group name="$var.entryname#\'scan\'$var.serialno" ' \
+                  'type="NXentry">\n' \
+                  '<group name="instrument" type="NXinstrument">\n' \
+                  '<group name="collection" type="NXcollection">\n'
         groupend = '</group>\n'
 
         fieldbg = '<field name="%s" type="%s">\n<strategy mode="STEP"/>\n'
@@ -6581,12 +6641,12 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
         for i, nxstp in enumerate(self._npTn.values()):
             for ds, dsxml in self.smydss.items():
-                ms = self.smydsspar[ds]
+                # ms = self.smydsspar[ds]
                 ms2 = [self._rnd.randint(0, 3000)
                        for _ in range(self._rnd.randint(0, 3))]
                 lbl = self.getRandomName(20)
-                sds = ds.split("_")
-                tp = sds[1]
+                # sds = ds.split("_")
+                # tp = sds[1]
                 cnf = dict(cnfdef)
                 labels = {}
                 paths = {}
@@ -6728,7 +6788,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
     # \brief It tests default settings
     def test_create_init_typeshape_tango(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -6741,9 +6801,10 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
 
         defbg = '<?xml version="1.0" ?>\n<definition>\n'
         defend = '</definition>\n'
-        groupbg = '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n' + \
-            '<group name="instrument" type="NXinstrument">\n' + \
-            '<group name="collection" type="NXcollection">\n'
+        groupbg = '<group name="$var.entryname#\'scan\'$var.serialno" ' \
+                  'type="NXentry">\n' \
+                  '<group name="instrument" type="NXinstrument">\n' \
+                  '<group name="collection" type="NXcollection">\n'
         groupend = '</group>\n'
 
         fieldbg = '<field name="%s" type="%s">\n<strategy mode="INIT"/>\n'
@@ -6759,12 +6820,12 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
         for i, nxstp in enumerate(self._npTn.values()):
             for ds, dsxml in self.smydss.items():
-                ms = self.smydsspar[ds]
+                # ms = self.smydsspar[ds]
                 ms2 = [self._rnd.randint(0, 3000)
                        for _ in range(self._rnd.randint(0, 3))]
                 lbl = self.getRandomName(20)
-                sds = ds.split("_")
-                tp = sds[1]
+                # sds = ds.split("_")
+                # tp = sds[1]
                 cnf = dict(cnfdef)
                 labels = {}
                 paths = {}
@@ -6907,7 +6968,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
     # \brief It tests default settings
     def test_create_init_typeshape_tango_wol(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -6920,9 +6981,10 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
 
         defbg = '<?xml version="1.0" ?>\n<definition>\n'
         defend = '</definition>\n'
-        groupbg = '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n' + \
-            '<group name="instrument" type="NXinstrument">\n' + \
-            '<group name="collection" type="NXcollection">\n'
+        groupbg = '<group name="$var.entryname#\'scan\'$var.serialno" ' \
+                  'type="NXentry">\n' \
+                  '<group name="instrument" type="NXinstrument">\n' \
+                  '<group name="collection" type="NXcollection">\n'
         groupend = '</group>\n'
 
         fieldbg = '<field name="%s" type="%s">\n<strategy mode="INIT"/>\n'
@@ -6938,14 +7000,14 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.smydss)])
         for i, nxstp in enumerate(self._npTn.values()):
-            print i
+            # print i
             for ds, dsxml in self.smydss.items():
-                ms = self.smydsspar[ds]
+                # ms = self.smydsspar[ds]
                 ms2 = [self._rnd.randint(0, 3000)
                        for _ in range(self._rnd.randint(0, 3))]
                 lbl = self.getRandomName(20)
-                sds = ds.split("_")
-                tp = sds[1]
+                # sds = ds.split("_")
+                # tp = sds[1]
                 cnf = dict(cnfdef)
                 labels = {}
                 paths = {}
@@ -7081,7 +7143,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
     # \brief It tests default settings
     def test_create_step_fieldpath(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -7094,7 +7156,8 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
         cps = {
             "shapetype":
             '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n'
+            '<group name="$var.entryname#\'scan\'$var.serialno" '
+            'type="NXentry">\n'
             '<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n%s'
             '</group>\n</group>\n%s</group>\n</definition>\n',
@@ -7105,9 +7168,9 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
         groupbg = '<group name="%s" type="%s">\n'
         groupend = '</group>\n'
 
-        field = '<field name="%s" type="%s">\n<strategy mode="STEP"/>\n' + \
-            '<datasource name="%s" type="CLIENT">\n' + \
-            '<record name="%s"/>\n</datasource>\n%s</field>\n'
+        # field = '<field name="%s" type="%s">\n<strategy mode="STEP"/>\n' \
+        #     '<datasource name="%s" type="CLIENT">\n' \
+        #    '<record name="%s"/>\n</datasource>\n%s</field>\n'
         fieldbg = '<field name="%s" type="%s">\n<strategy mode="STEP"/>\n'
         fieldend = '</field>\n'
 
@@ -7118,14 +7181,13 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
         dim = '<dim index="%s" value="%s"/>\n'
         dimend = '</dimensions>\n'
 
-        dname = "__dynamic_component__"
+        # dname = "__dynamic_component__"
 
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
 
-        db = PyTango.Database()
+        # db = PyTango.Database()
         try:
             for i in range(8):
-#                print "I = ", i
                 for ds, dsxml in self.smydss.items():
                     ms = self.smydsspar[ds]
                     sds = ds.split("_")
@@ -7165,7 +7227,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
 #                    print "path2", path, len(path)
 #                    print "PATH", path, mypath
 #                    print "TP = ", tp
-                    tmptp = self._rnd.choice(self._npTn.keys())
+                    # tmptp = self._rnd.choice(self._npTn.keys())
                     cnf = dict(cnfdef)
                     labels = {}
                     paths = {}
@@ -7226,7 +7288,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                     if i % 4 < 2:
                         fd = fieldbg % (ds.lower(), nxstp)
                     else:
-                        fname = fieldname.lower()
+                        # fname = fieldname.lower()
                         fd = fieldbg % (fieldname.lower(), nxstp)
                     fd += dss[0].toprettyxml(indent="") + mstr + fieldend
 
@@ -7280,7 +7342,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                         mycps2 = mycps
                     try:
                         self.assertEqual(comp, mycps2)
-                    except:
+                    except Exception:
                         self.assertEqual(comp, mycps)
         finally:
             pass
@@ -7289,7 +7351,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
     # \brief It tests default settings
     def test_create_sel_fieldpath(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -7302,7 +7364,8 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
         cps = {
             "shapetype":
             '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n'
+            '<group name="$var.entryname#\'scan\'$var.serialno" '
+            'type="NXentry">\n'
             '<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n%s'
             '</group>\n</group>\n%s</group>\n</definition>\n',
@@ -7313,9 +7376,9 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
         groupbg = '<group name="%s" type="%s">\n'
         groupend = '</group>\n'
 
-        field = '<field name="%s" type="%s">\n<strategy mode="STEP"/>\n' + \
-            '<datasource name="%s" type="CLIENT">\n' + \
-            '<record name="%s"/>\n</datasource>\n%s</field>\n'
+        # field = '<field name="%s" type="%s">\n<strategy mode="STEP"/>\n' \
+        #         '<datasource name="%s" type="CLIENT">\n' \
+        #         '<record name="%s"/>\n</datasource>\n%s</field>\n'
         fieldbg = '<field name="%s" type="%s">\n<strategy mode="STEP"/>\n'
         fieldend = '</field>\n'
 
@@ -7326,14 +7389,13 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
         dim = '<dim index="%s" value="%s"/>\n'
         dimend = '</dimensions>\n'
 
-        dname = "__dynamic_component__"
+        # dname = "__dynamic_component__"
 
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
 
-        db = PyTango.Database()
+        # db = PyTango.Database()
         try:
             for i in range(8):
-#                print "I = ", i
                 for ds, dsxml in self.smydss.items():
                     ms = self.smydsspar[ds]
                     sds = ds.split("_")
@@ -7373,7 +7435,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
 #                    print "path2", path, len(path)
 #                    print "PATH", path, mypath
 #                    print "TP = ", tp
-                    tmptp = self._rnd.choice(self._npTn.keys())
+                    # tmptp = self._rnd.choice(self._npTn.keys())
                     cnf = dict(cnfdef)
                     labels = {}
                     paths = {}
@@ -7435,7 +7497,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                     if i % 4 < 2:
                         fd = fieldbg % (ds.lower(), nxstp)
                     else:
-                        fname = fieldname.lower()
+                        # fname = fieldname.lower()
                         fd = fieldbg % (fieldname.lower(), nxstp)
                     fd += dss[0].toprettyxml(indent="") + mstr + fieldend
 
@@ -7489,7 +7551,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                         mycps2 = mycps
                     try:
                         self.assertEqual(comp, mycps2)
-                    except:
+                    except Exception:
                         self.assertEqual(comp, mycps)
         finally:
             pass
@@ -7498,7 +7560,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
     # \brief It tests default settings
     def test_create_init_fieldpath(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -7511,7 +7573,8 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
         cps = {
             "shapetype":
                 '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n'
+            '<group name="$var.entryname#\'scan\'$var.serialno" '
+            'type="NXentry">\n'
             '<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n%s'
             '</group>\n</group>\n%s</group>\n</definition>\n',
@@ -7522,9 +7585,9 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
         groupbg = '<group name="%s" type="%s">\n'
         groupend = '</group>\n'
 
-        field = '<field name="%s" type="%s">\n<strategy mode="INIT"/>\n' + \
-            '<datasource name="%s" type="CLIENT">\n' + \
-            '<record name="%s"/>\n</datasource>\n%s</field>\n'
+        # field = '<field name="%s" type="%s">\n<strategy mode="INIT"/>\n' \
+        #         '<datasource name="%s" type="CLIENT">\n' \
+        #         '<record name="%s"/>\n</datasource>\n%s</field>\n'
         fieldbg = '<field name="%s" type="%s">\n<strategy mode="INIT"/>\n'
         fieldend = '</field>\n'
 
@@ -7535,11 +7598,11 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
         dim = '<dim index="%s" value="%s"/>\n'
         dimend = '</dimensions>\n'
 
-        dname = "__dynamic_component__"
+        # dname = "__dynamic_component__"
 
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
 
-        db = PyTango.Database()
+        # db = PyTango.Database()
         try:
             for i in range(8):
                 for ds, dsxml in self.smydss.items():
@@ -7580,7 +7643,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
 #                    print "path2", path, len(path)
 #                    print "PATH", path, mypath
 #                    print "TP = ", tp
-                    tmptp = self._rnd.choice(self._npTn.keys())
+                    # tmptp = self._rnd.choice(self._npTn.keys())
                     cnf = dict(cnfdef)
                     labels = {}
                     paths = {}
@@ -7645,7 +7708,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                     if i % 4 < 2:
                         fd = fieldbg % (ds.lower(), nxstp)
                     else:
-                        fname = fieldname.lower()
+                        # fname = fieldname.lower()
                         fd = fieldbg % (fieldname.lower(), nxstp)
                     fd += dss[0].toprettyxml(indent="") + mstr + fieldend
 
@@ -7698,7 +7761,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                         mycps2 = mycps
                     try:
                         self.assertEqual(comp, mycps2)
-                    except:
+                    except Exception:
                         self.assertEqual(comp, mycps)
         finally:
             pass
@@ -7707,7 +7770,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
     # \brief It tests default settings
     def test_create_init_fieldpath_wol(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
@@ -7720,7 +7783,8 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
         cps = {
             "shapetype":
                 '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" type="NXentry">\n'
+            '<group name="$var.entryname#\'scan\'$var.serialno" '
+            'type="NXentry">\n'
             '<group name="instrument" type="NXinstrument">\n'
             '<group name="collection" type="NXcollection">\n%s'
             '</group>\n</group>\n%s</group>\n</definition>\n',
@@ -7731,9 +7795,9 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
         groupbg = '<group name="%s" type="%s">\n'
         groupend = '</group>\n'
 
-        field = '<field name="%s" type="%s">\n<strategy mode="INIT"/>\n' + \
-            '<datasource name="%s" type="CLIENT">\n' + \
-            '<record name="%s"/>\n</datasource>\n%s</field>\n'
+        # field = '<field name="%s" type="%s">\n<strategy mode="INIT"/>\n' \
+        #         '<datasource name="%s" type="CLIENT">\n' \
+        #         '<record name="%s"/>\n</datasource>\n%s</field>\n'
         fieldbg = '<field name="%s" type="%s">\n<strategy mode="INIT"/>\n'
         fieldend = '</field>\n'
 
@@ -7744,15 +7808,14 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
         dim = '<dim index="%s" value="%s"/>\n'
         dimend = '</dimensions>\n'
 
-        dname = "__dynamic_component__"
+        # dname = "__dynamic_component__"
 
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.smydss)])
 
-        db = PyTango.Database()
+        # db = PyTango.Database()
         try:
             for i in range(8):
-#                print "I = ", i
                 for ds, dsxml in self.smydss.items():
                     ms = self.smydsspar[ds]
                     sds = ds.split("_")
@@ -7791,7 +7854,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
 #                    print "path2", path, len(path)
 #                    print "PATH", path, mypath
 #                    print "TP = ", tp
-                    tmptp = self._rnd.choice(self._npTn.keys())
+                    # tmptp = self._rnd.choice(self._npTn.keys())
                     cnf = dict(cnfdef)
                     labels = {}
                     paths = {}
@@ -7854,7 +7917,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                     if i % 4 < 2:
                         fd = fieldbg % (ds.lower(), nxstp)
                     else:
-                        fname = fieldname.lower()
+                        # fname = fieldname.lower()
                         fd = fieldbg % (fieldname.lower(), nxstp)
                     fd += dss[0].toprettyxml(indent="") + mstr + fieldend
 
@@ -7907,7 +7970,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                         mycps2 = mycps
                     try:
                         self.assertEqual(comp, mycps2)
-                    except:
+                    except Exception:
                         self.assertEqual(comp, mycps)
         finally:
             pass
@@ -7915,13 +7978,13 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
     # test
     def test_variableComponents_empty(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
 
-        wrong = []
+        # wrong = []
 
         rs = self.openRecSelector()
         rs.configDevice = val["ConfigDevice"]
@@ -7938,13 +8001,13 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
     # test
     def test_variableComponents_cpvar(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
 
-        wrong = []
+        # wrong = []
 
         rs = self.openRecSelector()
         rs.configDevice = val["ConfigDevice"]
@@ -7963,13 +8026,13 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
     # test
     def test_variableComponents_mixed(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
 
-        wrong = []
+        # wrong = []
         mycps = {
             'mycp': (
                 '<?xml version=\'1.0\'?>'
@@ -8037,7 +8100,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
     # test
     def test_createWriterConfiguration_default(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         self.maxDiff = None
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
@@ -8061,7 +8124,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
         simp2 = TestServerSetUp.MultiTestServerSetUp(
             devices=['ttestp09/testts/t%02dr228' %
                      i for i in range(1, 37)])
-        sets = ["PreselectingDataSources"]
+        # sets = ["PreselectingDataSources"]
         try:
             simp2.setUp()
 
@@ -8096,7 +8159,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
     # test
     def test_createWriterConfiguration_given(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         self.maxDiff = None
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
@@ -8120,7 +8183,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
         simp2 = TestServerSetUp.MultiTestServerSetUp(
             devices=['ttestp09/testts/t%02dr228' %
                      i for i in range(1, 37)])
-        sets = ["PreselectingDataSources"]
+        # sets = ["PreselectingDataSources"]
         try:
             simp2.setUp()
 
@@ -8148,10 +8211,11 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                 self._cf.dp.xmlstring = str(res2)
                 res = rs.createWriterConfiguration([])
                 cmds = self._cf.dp.GetCommandVariable("COMMANDS")
-#                print cmds
-#                print res
+                #                print cmds
+                #                print res
                 self._cf.dp.xmlstring = str(res2)
-                res3 = self._cf.dp.createConfiguration(components)
+                # res3 =
+                self._cf.dp.createConfiguration(components)
                 cmds = json.loads(self._cf.dp.GetCommandVariable("COMMANDS"))
                 vrs = json.loads(self._cf.dp.GetCommandVariable("VARS"))
                 self.assertEqual(cmds[-1], "CreateConfiguration")
@@ -8163,13 +8227,13 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
     # test
     def test_updateConfigVariables_noserialno(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
 
-        wrong = []
+        # wrong = []
 
         rs = self.openRecSelector()
         rs.configDevice = val["ConfigDevice"]
@@ -8209,13 +8273,13 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
     # test
     def test_updateConfigVariables_rsserialno(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
 
-        wrong = []
+        # wrong = []
 
         rs = self.openRecSelector()
         rs.configDevice = val["ConfigDevice"]
@@ -8255,13 +8319,13 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
     # test
     def test_updateConfigVariables_cfserialno(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
 
-        wrong = []
+        # wrong = []
 
         rs = self.openRecSelector()
         rs.configDevice = val["ConfigDevice"]
@@ -8303,13 +8367,13 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
     # test
     def test_updateConfigVariables_rscfserialno(self):
         fun = sys._getframe().f_code.co_name
-        print "Run: %s.%s() " % (self.__class__.__name__, fun)
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
         val = {"ConfigDevice": self._cf.dp.name(),
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
 
-        wrong = []
+        # wrong = []
 
         rs = self.openRecSelector()
         rs.configDevice = val["ConfigDevice"]
