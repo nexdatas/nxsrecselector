@@ -792,8 +792,8 @@ class ProfileManager(object):
                         if dsr[1] == 'CLIENT':
                             records.append(str(dsr[2]))
 
-        urecords = json.loads(self.__selector["UserData"]).keys()
-        precords = frecords.values()
+        urecords = list(json.loads(self.__selector["UserData"]).keys())
+        precords = list(frecords.values())
         missing = sorted(set(records)
                          - set(DEFAULT_RECORD_KEYS)
                          - set(self.clientRecordKeys)
@@ -1149,7 +1149,7 @@ class ProfileManager(object):
         describer = Describer(self.__configServer)
         sds = describer.dataSources(ads)
         self.__findSources(tangods, extangods, exsource)
-        jds = self.__addKnownSources(extangods, sds, dsg.keys())
+        jds = self.__addKnownSources(extangods, sds, list(dsg.keys()))
         self.__createUnknownSources(extangods, exsource, ads, jds)
         return jds
 

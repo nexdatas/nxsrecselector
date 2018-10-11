@@ -53,7 +53,7 @@ class Utils(object):
             return False
         if not isinstance(dct2, dict):
             return False
-        if len(dct.keys()) != len(dct2.keys()):
+        if len(list(dct.keys())) != len(list(dct2.keys())):
 
             return False
         status = True

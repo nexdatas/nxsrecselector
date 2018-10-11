@@ -192,7 +192,7 @@ class Selection(dict):
         :brief: It removes datasource components from component group
         """
         cpg = json.loads(self["ComponentSelection"])
-        dss = json.loads(self["DataSourceSelection"]).keys()
+        dss = list(json.loads(self["DataSourceSelection"]).keys())
         for cp in set(cpg.keys()):
             if cp in dss:
                 cpg.pop(cp)

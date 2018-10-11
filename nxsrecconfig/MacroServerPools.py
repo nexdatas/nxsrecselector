@@ -194,7 +194,7 @@ class MacroServerPools(object):
                 res[0][ads] = None
             cls.__createCheckItem(ads, res[0], toCheck, nonexisting,
                                   discomponentgroup, channels, describer)
-        return toCheck.values()
+        return list(toCheck.values())
 
     @classmethod
     def __createCheckItem(cls, name, dss, toCheck, nonexisting,
@@ -219,7 +219,7 @@ class MacroServerPools(object):
         :type describer: :class:`nxsrecconfig.Describer.Describer`
         """
         if isinstance(dss, dict):
-            tgds = describer.dataSources(dss.keys(), 'TANGO')[0]
+            tgds = describer.dataSources(list(dss.keys()), 'TANGO')[0]
             for ds in dss.keys():
                 if ds in tgds.keys():
                     if name not in toCheck.keys():

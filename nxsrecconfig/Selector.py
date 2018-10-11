@@ -122,7 +122,7 @@ class Selector(object):
         :returns: selection keys
         :rtype: :obj:`list` <:obj:`str`>
         """
-        return self.__selection.keys()
+        return list(self.__selection.keys())
 
     def get(self):
         """ provides selection data

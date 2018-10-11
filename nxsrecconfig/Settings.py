@@ -164,7 +164,7 @@ class Settings(object):
         :returns:  all names of variables
         :rtypes: :obj:`list` <:obj:`str`>
         """
-        return self.__selector.keys()
+        return list(self.__selector.keys())
 
     def __version(self):
         """ provides server version
