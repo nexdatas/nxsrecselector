@@ -235,7 +235,7 @@ class MultiTestServerSetUp(object):
                         dpcnt += 1
                 if dpcnt == len(devices):
                     found = True
-            except Exception as e:
+            except Exception:
                 found = False
             cnt += 1
         print("")

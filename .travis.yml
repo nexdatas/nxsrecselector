@@ -55,18 +55,18 @@ services:
 before_install:
   - if [ $TEST == "flake8" ]; then sudo apt-get update -qq ; fi
   - if [ $TEST == "flake8" ]; then sudo pip install flake8; fi
-  - if [ $TEST == "testsuit" ]; then chmod +x .travis/run.sh; fi
-  - if [ $TEST == "testsuit" ]; then chmod +x .travis/install.sh; fi
+  - if [ $TEST != "flake8" ]; then chmod +x .travis/run.sh; fi
+  - if [ $TEST != "flake8" ]; then chmod +x .travis/install.sh; fi
 
 before_script:
-  - if [ $TEST == "testsuit" ]; then docker build -t ndts .travis/${OS_TYPE}_py${PYTHON}; fi
-  - if [ $TEST == "testsuit" ]; then docker run  --name  ndts -d -it -v `pwd`:/home/tango  ndts; fi
-  - if [ $TEST == "testsuit" ]; then .travis/install.sh ${OS_TYPE} ${PYTHON}; fi
+  - if [ $TEST != "flake8" ]; then docker build -t ndts .travis/${OS_TYPE}_py${PYTHON}; fi
+  - if [ $TEST != "flake8" ]; then docker run  --name  ndts -d -it -v `pwd`:/home/tango  ndts; fi
+  - if [ $TEST != "flake8" ]; then .travis/install.sh ${OS_TYPE} ${PYTHON}; fi
 
 script:
-  - if [ $TEST == "testsuit" ]; then .travis/run.sh ${TEST} ${PYTHON}; fi
+  - if [ $TEST != "flake8" ]; then .travis/run.sh ${TEST} ${PYTHON}; fi
   - if [ $TEST == "flake8" ]; then flake8; fi
 
 after-script:
-  - if [ $TEST == "testsuit" ]; then docker stop ndts; fi
-  - if [ $TEST == "testsuit" ]; then docker rm ndts; fi
+  - if [ $TEST != "flake8" ]; then docker stop ndts; fi
+  - if [ $TEST != "flake8" ]; then docker rm ndts; fi
