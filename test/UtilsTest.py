@@ -673,7 +673,7 @@ class UtilsTest(unittest.TestCase):
                     dp.ping()
                     dv = server
                     break
-                except:
+                except Exception:
                     pass
             self.assertEqual(dd, dv)
 
@@ -712,7 +712,7 @@ class UtilsTest(unittest.TestCase):
                     dp.ping()
                     dv = server
                     break
-                except:
+                except Exception:
                     pass
             self.assertEqual(dd, dv)
 
@@ -763,7 +763,7 @@ class UtilsTest(unittest.TestCase):
         for sr in servers:
             try:
                 dp = PyTango.DeviceProxy(sr)
-            except:
+            except Exception:
                 dp = None
             if dp:
                 doors = dp.DoorList

@@ -110,7 +110,7 @@ class Converter2to3Test(unittest.TestCase):
                     dc = json.loads(dct2[k])
                     if isinstance(vv, dict):
                         self.myAssertDict(vv, dc)
-                except:
+                except Exception:
                     # if v != dct2[k]:
                     #     print 'VALUES', k, v, dct2[k]
                     self.assertEqual(v, dct2[k])

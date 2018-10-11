@@ -73,7 +73,7 @@ class ServerSetUp(object):
                 if dp.state() == PyTango.DevState.ON:
                     found = True
                 found = True
-            except:
+            except Exception:
                 found = False
             cnt += 1
         print("")

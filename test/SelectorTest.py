@@ -63,7 +63,7 @@ try:
     mydb = MySQLdb.connect({})
     mydb.close()
     DB_AVAILABLE.append("MYSQL")
-except:
+except Exception:
     try:
         import MySQLdb
     # connection arguments to MYSQL DB
@@ -73,7 +73,7 @@ except:
         mydb = MySQLdb.connect(**args)
         mydb.close()
         DB_AVAILABLE.append("MYSQL")
-    except:
+    except Exception:
         try:
             import MySQLdb
             from os.path import expanduser
@@ -91,7 +91,7 @@ except:
             print("MYSQL not available: %s" % e)
         except Exception as e:
             print("MYSQL not available: %s" % e)
-        except:
+        except Exception:
             print("MYSQL not available")
 
 
@@ -1069,7 +1069,7 @@ class SelectorTest(unittest.TestCase):
             try:
                 w1 = json.loads(self.__dump[key])
                 w2 = json.loads(el[key])
-            except:
+            except Exception:
                 self.assertEqual(self.__dump[key], el[key])
             else:
                 if isinstance(w1, dict):
@@ -1426,7 +1426,7 @@ class SelectorTest(unittest.TestCase):
                         self.assertEqual(
                             json.loads(se[k]),
                             env["new"]["NeXusConfiguration"][k])
-                    except:
+                    except Exception:
                         self.assertEqual(
                             se[k],
                             env["new"]["NeXusConfiguration"][k])
@@ -1501,7 +1501,7 @@ class SelectorTest(unittest.TestCase):
                         self.assertEqual(
                             json.loads(se[k]),
                             env["new"]["NeXusConfiguration"][k])
-                    except:
+                    except Exception:
                         self.assertEqual(
                             se[k],
                             env["new"]["NeXusConfiguration"][k])
@@ -1647,7 +1647,7 @@ class SelectorTest(unittest.TestCase):
                         self.assertEqual(
                             json.loads(se[k]),
                             env["new"]["NeXusConfiguration"][k])
-                    except:
+                    except Exception:
                         self.assertEqual(
                             se[k],
                             env["new"]["NeXusConfiguration"][k])
@@ -1708,7 +1708,7 @@ class SelectorTest(unittest.TestCase):
                         self.assertEqual(
                             json.loads(se[k]),
                             env["new"]["NeXusConfiguration"][k])
-                    except:
+                    except Exception:
                         self.assertEqual(
                             se[k],
                             env["new"]["NeXusConfiguration"][k])
@@ -1978,7 +1978,7 @@ class SelectorTest(unittest.TestCase):
                 se["ConfigDevice"] = 'module'
                 try:
                     mres = getattr(inst, ar[0])(ar[1])
-                except:
+                except Exception:
                     pass
                 else:
                     res = se.configCommand(ar[0], ar[1])
@@ -2060,7 +2060,7 @@ class SelectorTest(unittest.TestCase):
                             self.assertEqual(
                                 json.loads(se[k]),
                                 env["new"]["NeXusConfiguration"][k])
-                        except:
+                        except Exception:
                             self.assertEqual(
                                 se[k],
                                 env["new"]["NeXusConfiguration"][k])
@@ -2179,7 +2179,7 @@ class SelectorTest(unittest.TestCase):
                         self.assertEqual(
                             json.loads(se[k]),
                             env["new"]["NeXusConfiguration"][k])
-                    except:
+                    except Exception:
                         self.assertEqual(
                             se[k],
                             env["new"]["NeXusConfiguration"][k])
@@ -2308,7 +2308,7 @@ class SelectorTest(unittest.TestCase):
                         self.assertEqual(
                             json.loads(se[k]),
                             env["new"]["NeXusConfiguration"][k])
-                    except:
+                    except Exception:
                         self.assertEqual(
                             se[k],
                             env["new"]["NeXusConfiguration"][k])
@@ -2474,7 +2474,7 @@ class SelectorTest(unittest.TestCase):
                         self.assertEqual(
                             json.loads(se[k]),
                             env["new"]["NeXusConfiguration"][k])
-                    except:
+                    except Exception:
                         self.assertEqual(
                             se[k],
                             env["new"]["NeXusConfiguration"][k])
@@ -2610,7 +2610,7 @@ class SelectorTest(unittest.TestCase):
                         self.assertEqual(
                             json.loads(se[k]),
                             env["new"]["NeXusConfiguration"][k])
-                    except:
+                    except Exception:
                         self.assertEqual(
                             se[k],
                             env["new"]["NeXusConfiguration"][k])
@@ -2684,7 +2684,7 @@ class SelectorTest(unittest.TestCase):
                         self.assertEqual(
                             json.loads(se[k]),
                             env["new"]["NeXusConfiguration"][k])
-                    except:
+                    except Exception:
                         self.assertEqual(
                             se[k],
                             env["new"]["NeXusConfiguration"][k])
@@ -2769,7 +2769,7 @@ class SelectorTest(unittest.TestCase):
                         self.assertEqual(
                             json.loads(se[k]),
                             env["new"]["NeXusConfiguration"][k])
-                    except:
+                    except Exception:
                         self.assertEqual(
                             se[k],
                             env["new"]["NeXusConfiguration"][k])
@@ -2857,7 +2857,7 @@ class SelectorTest(unittest.TestCase):
                         self.assertEqual(
                             json.loads(se[k]),
                             env["new"]["NeXusConfiguration"][k])
-                    except:
+                    except Exception:
                         self.assertEqual(
                             se[k],
                             env["new"]["NeXusConfiguration"][k])
@@ -2943,7 +2943,7 @@ class SelectorTest(unittest.TestCase):
                         self.assertEqual(
                             json.loads(se[k]),
                             env["new"]["NeXusConfiguration"][k])
-                    except:
+                    except Exception:
                         self.assertEqual(
                             se[k],
                             env["new"]["NeXusConfiguration"][k])
@@ -3031,7 +3031,7 @@ class SelectorTest(unittest.TestCase):
                         self.assertEqual(
                             json.loads(se[k]),
                             env["new"]["NeXusConfiguration"][k])
-                    except:
+                    except Exception:
                         self.assertEqual(
                             se[k],
                             env["new"]["NeXusConfiguration"][k])
@@ -3121,7 +3121,7 @@ class SelectorTest(unittest.TestCase):
                         self.assertEqual(
                             json.loads(se[k]),
                             env["new"]["NeXusConfiguration"][k])
-                    except:
+                    except Exception:
                         self.assertEqual(
                             se[k],
                             env["new"]["NeXusConfiguration"][k])
@@ -3208,7 +3208,7 @@ class SelectorTest(unittest.TestCase):
                         self.assertEqual(
                             json.loads(se[k]),
                             env["new"]["NeXusConfiguration"][k])
-                    except:
+                    except Exception:
                         self.assertEqual(
                             se[k],
                             env["new"]["NeXusConfiguration"][k])
@@ -3286,7 +3286,7 @@ class SelectorTest(unittest.TestCase):
                         self.assertEqual(
                             json.loads(se[k]),
                             env["new"]["NeXusConfiguration"][k])
-                    except:
+                    except Exception:
                         self.assertEqual(
                             se[k],
                             env["new"]["NeXusConfiguration"][k])
@@ -3360,7 +3360,7 @@ class SelectorTest(unittest.TestCase):
                         self.assertEqual(
                             json.loads(se[k]),
                             env["new"]["NeXusConfiguration"][k])
-                    except:
+                    except Exception:
                         self.assertEqual(
                             se[k],
                             env["new"]["NeXusConfiguration"][k])
@@ -3434,7 +3434,7 @@ class SelectorTest(unittest.TestCase):
                         self.assertEqual(
                             json.loads(se[k]),
                             env["new"]["NeXusConfiguration"][k])
-                    except:
+                    except Exception:
                         self.assertEqual(
                             se[k],
                             env["new"]["NeXusConfiguration"][k])
@@ -3508,7 +3508,7 @@ class SelectorTest(unittest.TestCase):
                         self.assertEqual(
                             json.loads(se[k]),
                             env["new"]["NeXusConfiguration"][k])
-                    except:
+                    except Exception:
                         self.assertEqual(
                             se[k],
                             env["new"]["NeXusConfiguration"][k])
@@ -3586,7 +3586,7 @@ class SelectorTest(unittest.TestCase):
                         self.assertEqual(
                             json.loads(se[k]),
                             env["new"]["NeXusConfiguration"][k])
-                    except:
+                    except Exception:
                         self.assertEqual(
                             se[k],
                             env["new"]["NeXusConfiguration"][k])
@@ -3660,7 +3660,7 @@ class SelectorTest(unittest.TestCase):
                         self.assertEqual(
                             json.loads(se[k]),
                             env["new"]["NeXusConfiguration"][k])
-                    except:
+                    except Exception:
                         self.assertEqual(
                             se[k],
                             env["new"]["NeXusConfiguration"][k])
@@ -3732,7 +3732,7 @@ class SelectorTest(unittest.TestCase):
                         self.assertEqual(
                             json.loads(se[k]),
                             env["new"]["NeXusConfiguration"][k])
-                    except:
+                    except Exception:
                         self.assertEqual(
                             se[k],
                             env["new"]["NeXusConfiguration"][k])
@@ -3804,7 +3804,7 @@ class SelectorTest(unittest.TestCase):
                         self.assertEqual(
                             json.loads(se[k]),
                             env["new"]["NeXusConfiguration"][k])
-                    except:
+                    except Exception:
                         self.assertEqual(
                             se[k],
                             env["new"]["NeXusConfiguration"][k])
@@ -3876,7 +3876,7 @@ class SelectorTest(unittest.TestCase):
                         self.assertEqual(
                             json.loads(se[k]),
                             env["new"]["NeXusConfiguration"][k])
-                    except:
+                    except Exception:
                         self.assertEqual(
                             se[k],
                             env["new"]["NeXusConfiguration"][k])

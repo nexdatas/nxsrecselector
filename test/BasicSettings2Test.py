@@ -57,7 +57,7 @@ try:
     mydb = MySQLdb.connect({})
     mydb.close()
     DB_AVAILABLE.append("MYSQL")
-except:
+except Exception:
     try:
         import MySQLdb
     # connection arguments to MYSQL DB
@@ -67,7 +67,7 @@ except:
         mydb = MySQLdb.connect(**args)
         mydb.close()
         DB_AVAILABLE.append("MYSQL")
-    except:
+    except Exception:
         try:
             import MySQLdb
             from os.path import expanduser
@@ -85,7 +85,7 @@ except:
             print("MYSQL not available: %s" % e)
         except Exception as e:
             print("MYSQL not available: %s" % e)
-        except:
+        except Exception:
             print("MYSQL not available")
 
 
@@ -255,7 +255,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
         self.assertEqual(set(rs.availableDataSources()), set())
         try:
             self.assertEqual(set(rs.availableProfiles()), set())
-        except:
+        except Exception:
             self.assertEqual(set(rs.availableProfiles()),
                              set([val["MntGrp"]]))
 
@@ -9224,7 +9224,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             if isinstance(en['ScanFile'], (str, unicode)):
                 try:
                     sc = json.loads(rs.scanFile)[0]
-                except:
+                except Exception:
                     sc = rs.scanFile
                 if len(sc) == 1:
                     sc = sc[0]
@@ -9305,7 +9305,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                         self.assertEqual(
                             json.loads(jmd[k]),
                             env["new"]["NeXusConfiguration"][k])
-                    except:
+                    except Exception:
                         self.assertEqual(
                             jmd[k],
                             env["new"]["NeXusConfiguration"][k])
@@ -9422,7 +9422,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                         self.assertEqual(
                             json.loads(jmd[k]),
                             env["new"]["NeXusConfiguration"][k])
-                    except:
+                    except Exception:
                         self.assertEqual(
                             jmd[k],
                             env["new"]["NeXusConfiguration"][k])
@@ -9533,7 +9533,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                         self.assertEqual(
                             json.loads(jmd[k]),
                             env["new"]["NeXusConfiguration"][k])
-                    except:
+                    except Exception:
                         self.assertEqual(
                             jmd[k],
                             env["new"]["NeXusConfiguration"][k])
@@ -9641,7 +9641,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                         self.assertEqual(
                             json.loads(jmd[k]),
                             env["new"]["NeXusConfiguration"][k])
-                    except:
+                    except Exception:
                         self.assertEqual(
                             jmd[k],
                             env["new"]["NeXusConfiguration"][k])
@@ -9749,7 +9749,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                         self.assertEqual(
                             json.loads(jmd[k]),
                             env["new"]["NeXusConfiguration"][k])
-                    except:
+                    except Exception:
                         self.assertEqual(
                             jmd[k],
                             env["new"]["NeXusConfiguration"][k])
@@ -9861,7 +9861,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                             self.assertEqual(
                                 json.loads(jmd[k]),
                                 env["new"]["NeXusConfiguration"][k])
-                        except:
+                        except Exception:
                             self.assertEqual(
                                 jmd[k],
                                 env["new"]["NeXusConfiguration"][k])
@@ -9969,7 +9969,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                         self.assertEqual(
                             json.loads(jmd[k]),
                             env["new"]["NeXusConfiguration"][k])
-                    except:
+                    except Exception:
                         self.assertEqual(
                             jmd[k],
                             env["new"]["NeXusConfiguration"][k])
@@ -10084,7 +10084,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                             self.assertEqual(
                                 jmd[k],
                                 env["new"]["NeXusConfiguration"][k])
-                        except:
+                        except Exception:
                             if k in sets:
                                 self.assertEqual(
                                     set(json.loads(jmd[k])),
@@ -10205,7 +10205,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                             self.assertEqual(
                                 jmd[k],
                                 env["new"]["NeXusConfiguration"][k])
-                        except:
+                        except Exception:
                             if k in sets:
                                 self.assertEqual(
                                     set(json.loads(jmd[k])),
@@ -10669,7 +10669,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             rs.deviceGroups = rnm
             try:
                 ld = json.loads(rnm)
-            except:
+            except Exception:
                 self.assertEqual(rs.deviceGroups, ddg)
             else:
                 good = True
@@ -11913,7 +11913,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                 rs.deleteProfile("nxsmntgrp2")
                 try:
                     tmg.tearDown()
-                except:
+                except Exception:
                     pass
 
     # updateMntGrp test
@@ -12033,7 +12033,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                 rs.deleteProfile("nxsmntgrp2")
                 try:
                     tmg.tearDown()
-                except:
+                except Exception:
                     pass
 
     # updateMntGrp test
@@ -12150,7 +12150,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             finally:
                 try:
                     tmg.tearDown()
-                except:
+                except Exception:
                     pass
 
     # updateMntGrp test
@@ -12267,7 +12267,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             finally:
                 try:
                     tmg.tearDown()
-                except:
+                except Exception:
                     pass
 
     # updateMntGrp test
@@ -12448,7 +12448,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                                'normalization': 0,
                                'source': cnt['source']}
                         tgc[chn["full_name"]] = chn
-                    except:
+                    except Exception:
                         # print ds, cnt
                         raise
                 if tgc:
@@ -12494,7 +12494,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                 rs.deleteProfile("nxsmntgrp2")
                 try:
                     tmg.tearDown()
-                except:
+                except Exception:
                     pass
 
     # updateProfile test
@@ -12720,7 +12720,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                                'normalization': 0,
                                'source': cnt['source']}
                         tgc[chn["full_name"]] = chn
-                    except:
+                    except Exception:
                         # print ds, cnt
                         raise
                 if tgc:
@@ -12768,7 +12768,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                 rs.deleteProfile("nxsmntgrp2")
                 try:
                     tmg.tearDown()
-                except:
+                except Exception:
                     pass
 
     # updateMntGrp test
@@ -13015,7 +13015,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                                            'normalization': 0,
                                            'source': cnt['source']}
                                     tgc[tdv] = chn
-                                except:
+                                except Exception:
                                     raise
                         if tgc:
                             myctrls[cl] = {'channels': tgc,
@@ -13054,7 +13054,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                     rs.deleteProfile("nxsmntgrp2")
                     try:
                         tmg.tearDown()
-                    except:
+                    except Exception:
                         pass
         finally:
             simp2.tearDown()
@@ -13348,7 +13348,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                                            'normalization': 0,
                                            'source': cnt['source']}
                                     tgc[tdv] = chn
-                                except:
+                                except Exception:
                                     raise
                         if tgc:
                             myctrls[cl] = {'channels': tgc,
@@ -13390,7 +13390,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                     rs.deleteProfile("nxsmntgrp2")
                     try:
                         tmg.tearDown()
-                    except:
+                    except Exception:
                         pass
         finally:
             simp2.tearDown()
@@ -13698,7 +13698,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                                                'normalization': 0,
                                                'source': cnt['source']}
                                         tgc[tdv] = chn
-                                    except:
+                                    except Exception:
                                         raise
                         if tgc:
                             myctrls[cl] = {'channels': tgc,
@@ -13739,7 +13739,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                                        'normalization': 0,
                                        'source': cnt['source']}
                                 tgc[chn["full_name"]] = chn
-                            except:
+                            except Exception:
                                 raise
                     if tgc:
                         myctrls['__tango__'] = {'channels': tgc,
@@ -13781,7 +13781,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                     rs.deleteProfile("nxsmntgrp2")
                     try:
                         tmg.tearDown()
-                    except:
+                    except Exception:
                         pass
         finally:
             simp2.tearDown()
@@ -14112,7 +14112,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                                                'normalization': 0,
                                                'source': cnt['source']}
                                         tgc[tdv] = chn
-                                    except:
+                                    except Exception:
                                         raise
                         if tgc:
                             myctrls[cl] = {'channels': tgc,
@@ -14153,7 +14153,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                                        'normalization': 0,
                                        'source': cnt['source']}
                                 tgc[chn["full_name"]] = chn
-                            except:
+                            except Exception:
                                 raise
 
                     if tgc:
@@ -14196,7 +14196,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                     rs.deleteProfile("mg2")
                     try:
                         tmg.tearDown()
-                    except:
+                    except Exception:
                         pass
         finally:
             simp2.tearDown()

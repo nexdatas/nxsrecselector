@@ -104,7 +104,7 @@ class BasicNXSRecSelectorTest(BasicSettingsTest.BasicSettingsTest):
             except Exception as e:
                 print("%s%s" % (self._sv.new_device_info_writer.name, e))
                 found = False
-            except:
+            except Exception:
                 found = False
 
             cnt += 1
@@ -136,7 +136,7 @@ class BasicNXSRecSelectorTest(BasicSettingsTest.BasicSettingsTest):
             except Exception as e:
                 print("%s%s" % (self._sv2.new_device_info_writer.name, e))
                 found = False
-            except:
+            except Exception:
                 found = False
 
             cnt += 1

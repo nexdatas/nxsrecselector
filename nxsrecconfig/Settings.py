@@ -810,14 +810,14 @@ class Settings(object):
             xmls = TangoUtils.command(
                 nexusconfig_device, "dataSources")
             dsxmls = dict(zip(avds, xmls))
-        except:
+        except Exception:
             dsxmls = {}
             for ds in avds:
                 try:
                     dsxmls[str(ds)] = TangoUtils.command(
                         nexusconfig_device, "dataSources",
                         [str(ds)])[0]
-                except:
+                except Exception:
                     pass
         lst = []
         for ds, dsxml in dsxmls.items():

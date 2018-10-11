@@ -71,7 +71,7 @@ try:
     mydb = MySQLdb.connect({})
     mydb.close()
     DB_AVAILABLE.append("MYSQL")
-except:
+except Exception:
     try:
         import MySQLdb
     # connection arguments to MYSQL DB
@@ -81,7 +81,7 @@ except:
         mydb = MySQLdb.connect(**args)
         mydb.close()
         DB_AVAILABLE.append("MYSQL")
-    except:
+    except Exception:
         try:
             import MySQLdb
             from os.path import expanduser
@@ -99,7 +99,7 @@ except:
             print("MYSQL not available: %s" % e)
         except Exception as e:
             print("MYSQL not available: %s" % e)
-        except:
+        except Exception:
             print("MYSQL not available")
 
 
@@ -1790,7 +1790,7 @@ class ProfileManagerTest(unittest.TestCase):
             try:
                 w1 = json.loads(self.__dump[name][key])
                 w2 = json.loads(el[key])
-            except:
+            except Exception:
                 # if self.__dump[name][key] != el[key]:
                 #     print key
                 self.assertEqual(self.__dump[name][key], el[key])
@@ -2957,7 +2957,7 @@ class ProfileManagerTest(unittest.TestCase):
                 mgt.deleteProfile("nxsmntgrp")
                 try:
                     tmg.tearDown()
-                except:
+                except Exception:
                     pass
 
     # updateProfile test
@@ -3081,7 +3081,7 @@ class ProfileManagerTest(unittest.TestCase):
                 mgt.deleteProfile("nxsmntgrp")
                 try:
                     tmg.tearDown()
-                except:
+                except Exception:
                     pass
 
     # updateProfile test
@@ -3204,7 +3204,7 @@ class ProfileManagerTest(unittest.TestCase):
                 mgt.deleteProfile("nxsmntgrp")
                 try:
                     tmg.tearDown()
-                except:
+                except Exception:
                     pass
 
     # updateProfile test
@@ -3327,7 +3327,7 @@ class ProfileManagerTest(unittest.TestCase):
                 mgt.deleteProfile("nxsmntgrp")
                 try:
                     tmg.tearDown()
-                except:
+                except Exception:
                     pass
 
     # updateProfile test
@@ -3510,7 +3510,7 @@ class ProfileManagerTest(unittest.TestCase):
                                'normalization': 0,
                                'source': cnt['source']}
                         tgc[chn["full_name"]] = chn
-                    except:
+                    except Exception:
                         # print ds, cnt
                         raise
 
@@ -3557,7 +3557,7 @@ class ProfileManagerTest(unittest.TestCase):
                 mgt.deleteProfile("nxsmntgrp")
                 try:
                     tmg.tearDown()
-                except:
+                except Exception:
                     pass
 
     # updateProfile test
@@ -3779,7 +3779,7 @@ class ProfileManagerTest(unittest.TestCase):
                                'normalization': 0,
                                'source': cnt['source']}
                         tgc[chn["full_name"]] = chn
-                    except:
+                    except Exception:
                         raise
                 if tgc:
                     smg = {"controllers":
@@ -3827,7 +3827,7 @@ class ProfileManagerTest(unittest.TestCase):
                 mgt.deleteProfile("nxsmntgrp")
                 try:
                     tmg.tearDown()
-                except:
+                except Exception:
                     pass
 
     # updateProfile test
@@ -4069,7 +4069,7 @@ class ProfileManagerTest(unittest.TestCase):
                                            'normalization': 0,
                                            'source': cnt['source']}
                                     tgc[tdv] = chn
-                                except:
+                                except Exception:
                                     raise
                         if tgc:
                             myctrls[cl] = {'units':
@@ -4108,7 +4108,7 @@ class ProfileManagerTest(unittest.TestCase):
                     mgt.deleteProfile("nxsmntgrp")
                     try:
                         tmg.tearDown()
-                    except:
+                    except Exception:
                         pass
         finally:
             simp2.tearDown()
@@ -4401,7 +4401,7 @@ class ProfileManagerTest(unittest.TestCase):
                                            'normalization': 0,
                                            'source': cnt['source']}
                                     tgc[tdv] = chn
-                                except:
+                                except Exception:
                                     raise
                         if tgc:
                             myctrls[cl] = {
@@ -4444,7 +4444,7 @@ class ProfileManagerTest(unittest.TestCase):
                     mgt.deleteProfile("nxsmntgrp")
                     try:
                         tmg.tearDown()
-                    except:
+                    except Exception:
                         pass
         finally:
             simp2.tearDown()
@@ -4758,7 +4758,7 @@ class ProfileManagerTest(unittest.TestCase):
                                                'normalization': 0,
                                                'source': cnt['source']}
                                         tgc[tdv] = chn
-                                    except:
+                                    except Exception:
                                         raise
                         if tgc:
                             myctrls[cl] = {'units':
@@ -4801,7 +4801,7 @@ class ProfileManagerTest(unittest.TestCase):
                                        'normalization': 0,
                                        'source': cnt['source']}
                                 tgc[chn["full_name"]] = chn
-                            except:
+                            except Exception:
                                 raise
                     if tgc:
                         myctrls['__tango__'] = {'units':
@@ -4843,7 +4843,7 @@ class ProfileManagerTest(unittest.TestCase):
                     mgt.deleteProfile("nxsmntgrp2")
                     try:
                         tmg.tearDown()
-                    except:
+                    except Exception:
                         pass
         finally:
             simp2.tearDown()
@@ -5158,7 +5158,7 @@ class ProfileManagerTest(unittest.TestCase):
                                                'normalization': 0,
                                                'source': cnt['source']}
                                         tgc[tdv] = chn
-                                    except:
+                                    except Exception:
                                         raise
                         if tgc:
                             myctrls[cl] = {'units':
@@ -5201,7 +5201,7 @@ class ProfileManagerTest(unittest.TestCase):
                                        'normalization': 0,
                                        'source': cnt['source']}
                                 tgc[chn["full_name"]] = chn
-                            except:
+                            except Exception:
                                 raise
 
                     if tgc:
@@ -5244,7 +5244,7 @@ class ProfileManagerTest(unittest.TestCase):
                     mgt.deleteProfile("mg2")
                     try:
                         tmg.tearDown()
-                    except:
+                    except Exception:
                         pass
         finally:
             simp2.tearDown()
@@ -5591,7 +5591,7 @@ class ProfileManagerTest(unittest.TestCase):
                                                'normalization': 0,
                                                'source': cnt['source']}
                                         tgc[tdv] = chn
-                                    except:
+                                    except Exception:
                                         raise
                         if tgc:
                             ltm = timers[cl] if cl in timers.keys() \
@@ -5641,7 +5641,7 @@ class ProfileManagerTest(unittest.TestCase):
                                        'normalization': 0,
                                        'source': cnt['source']}
                                 tgc[chn["full_name"]] = chn
-                            except:
+                            except Exception:
                                 raise
 
                     if tgc:
@@ -5683,11 +5683,11 @@ class ProfileManagerTest(unittest.TestCase):
                 finally:
                     try:
                         mgt.deleteProfile("mg2")
-                    except:
+                    except Exception:
                         pass
                     try:
                         tmg.tearDown()
-                    except:
+                    except Exception:
                         pass
         finally:
             simp2.tearDown()
@@ -6102,7 +6102,7 @@ class ProfileManagerTest(unittest.TestCase):
                                                'normalization': 0,
                                                'source': cnt['source']}
                                         tgc[tdv] = chn
-                                    except:
+                                    except Exception:
                                         raise
                         if tgc:
                             ltm = timers[cl] if cl in timers.keys() \
@@ -6152,7 +6152,7 @@ class ProfileManagerTest(unittest.TestCase):
                                        'normalization': 0,
                                        'source': cnt['source']}
                                 tgc[chn["full_name"]] = chn
-                            except:
+                            except Exception:
                                 raise
 
                     if tgc:
@@ -6206,11 +6206,11 @@ class ProfileManagerTest(unittest.TestCase):
                 finally:
                     try:
                         mgt.deleteProfile("mg2")
-                    except:
+                    except Exception:
                         pass
                     try:
                         tmg.tearDown()
-                    except:
+                    except Exception:
                         pass
         finally:
             simp2.tearDown()
@@ -6656,7 +6656,7 @@ class ProfileManagerTest(unittest.TestCase):
                                                    'normalization': 0,
                                                    'source': cnt['source']}
                                             tgc[tdv] = chn
-                                        except:
+                                        except Exception:
                                             raise
                             if tgc:
                                 ltm = timers[cl] if cl in timers.keys() \
@@ -6708,7 +6708,7 @@ class ProfileManagerTest(unittest.TestCase):
                                            'normalization': 0,
                                            'source': cnt['source']}
                                     tgc[chn["full_name"]] = chn
-                                except:
+                                except Exception:
                                     raise
 
                         if tgc:
@@ -7498,22 +7498,22 @@ class ProfileManagerTest(unittest.TestCase):
                     for mg in mgt.keys():
                         try:
                             mgt[mg].deleteProfile(mgs[mg])
-                        except:
+                        except Exception:
                             pass
                     for mg in tmg.keys():
                         try:
                             tmg[mg].tearDown()
-                        except:
+                        except Exception:
                             pass
                     simp2.tearDown()
                     try:
                         self.tearDown()
-                    except:
+                    except Exception:
                         pass
         finally:
             try:
                 self.setUp()
-            except:
+            except Exception:
                 pass
 
 

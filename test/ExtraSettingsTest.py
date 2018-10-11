@@ -54,7 +54,7 @@ try:
     mydb = MySQLdb.connect({})
     mydb.close()
     DB_AVAILABLE.append("MYSQL")
-except:
+except Exception:
     try:
         import MySQLdb
     # connection arguments to MYSQL DB
@@ -64,7 +64,7 @@ except:
         mydb = MySQLdb.connect(**args)
         mydb.close()
         DB_AVAILABLE.append("MYSQL")
-    except:
+    except Exception:
         try:
             import MySQLdb
             from os.path import expanduser
@@ -82,7 +82,7 @@ except:
             print("MYSQL not available: %s" % e)
         except Exception as e:
             print("MYSQL not available: %s" % e)
-        except:
+        except Exception:
             print("MYSQL not available")
 
 
@@ -452,7 +452,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                                                'normalization': 0,
                                                'source': cnt['source']}
                                         tgc[tdv] = chn
-                                    except:
+                                    except Exception:
                                         raise
                         if tgc:
                             ltm = timers[cl] if cl in timers.keys() \
@@ -502,7 +502,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                                        'normalization': 0,
                                        'source': cnt['source']}
                                 tgc[chn["full_name"]] = chn
-                            except:
+                            except Exception:
                                 raise
 
                     if tgc:
@@ -546,11 +546,11 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                 finally:
                     try:
                         rs.deleteProfile("mg2")
-                    except:
+                    except Exception:
                         pass
                     try:
                         tmg.tearDown()
-                    except:
+                    except Exception:
                         pass
         finally:
             simp2.tearDown()
@@ -971,7 +971,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                                                'normalization': 0,
                                                'source': cnt['source']}
                                         tgc[tdv] = chn
-                                    except:
+                                    except Exception:
                                         raise
                         if tgc:
                             ltm = timers[cl] if cl in timers.keys() \
@@ -1021,7 +1021,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                                        'normalization': 0,
                                        'source': cnt['source']}
                                 tgc[chn["full_name"]] = chn
-                            except:
+                            except Exception:
                                 raise
 
                     if tgc:
@@ -1079,11 +1079,11 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                 finally:
                     try:
                         rs.deleteProfile("mg2")
-                    except:
+                    except Exception:
                         pass
                     try:
                         tmg.tearDown()
-                    except:
+                    except Exception:
                         pass
         finally:
             simp2.tearDown()
@@ -1555,7 +1555,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                                                    'normalization': 0,
                                                    'source': cnt['source']}
                                             tgc[tdv] = chn
-                                        except:
+                                        except Exception:
                                             raise
                             if tgc:
                                 ltm = timers[cl] if cl in timers.keys() \
@@ -1606,7 +1606,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                                            'normalization': 0,
                                            'source': cnt['source']}
                                     tgc[chn["full_name"]] = chn
-                                except:
+                                except Exception:
                                     raise
 
                         if tgc:
@@ -2457,22 +2457,22 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                     for mg in rs.keys():
                         try:
                             rs[mg].deleteProfile(mgs[mg])
-                        except:
+                        except Exception:
                             pass
                     for mg in tmg.keys():
                         try:
                             tmg[mg].tearDown()
-                        except:
+                        except Exception:
                             pass
                     simp2.tearDown()
                     try:
                         self.tearDown()
-                    except:
+                    except Exception:
                         pass
         finally:
             try:
                 self.setUp()
-            except:
+            except Exception:
                 pass
 
     # updateMntGrp test
@@ -2938,7 +2938,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                                                    'normalization': 0,
                                                    'source': cnt['source']}
                                             tgc[tdv] = chn
-                                        except:
+                                        except Exception:
                                             raise
                             if tgc:
                                 ltm = timers[cl] if cl in timers.keys() \
@@ -2989,7 +2989,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                                            'normalization': 0,
                                            'source': cnt['source']}
                                     tgc[chn["full_name"]] = chn
-                                except:
+                                except Exception:
                                     raise
 
                         if tgc:
@@ -3855,23 +3855,23 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                     for mg in mp.keys():
                         try:
                             ors.deleteProfile(mgs[mg])
-                        except:
+                        except Exception:
                             pass
                     for mg in tmg.keys():
                         try:
                             tmg[mg].tearDown()
-                        except:
+                        except Exception:
                             pass
                     simp2.tearDown()
                     try:
                         self.tearDown()
                         self.myTearDown()
-                    except:
+                    except Exception:
                         pass
         finally:
             try:
                 self.setUp()
-            except:
+            except Exception:
                 pass
 
     # constructor test
@@ -5004,7 +5004,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                         mycps2 = mycps
                     try:
                         self.assertEqual(comp, mycps)
-                    except:
+                    except Exception:
                         self.assertEqual(comp, mycps2)
         finally:
             for ar in arr:
@@ -7342,7 +7342,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                         mycps2 = mycps
                     try:
                         self.assertEqual(comp, mycps2)
-                    except:
+                    except Exception:
                         self.assertEqual(comp, mycps)
         finally:
             pass
@@ -7551,7 +7551,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                         mycps2 = mycps
                     try:
                         self.assertEqual(comp, mycps2)
-                    except:
+                    except Exception:
                         self.assertEqual(comp, mycps)
         finally:
             pass
@@ -7761,7 +7761,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                         mycps2 = mycps
                     try:
                         self.assertEqual(comp, mycps2)
-                    except:
+                    except Exception:
                         self.assertEqual(comp, mycps)
         finally:
             pass
@@ -7970,7 +7970,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                         mycps2 = mycps
                     try:
                         self.assertEqual(comp, mycps2)
-                    except:
+                    except Exception:
                         self.assertEqual(comp, mycps)
         finally:
             pass

@@ -72,7 +72,7 @@ try:
     mydb = MySQLdb.connect({})
     mydb.close()
     DB_AVAILABLE.append("MYSQL")
-except:
+except Exception:
     try:
         import MySQLdb
     # connection arguments to MYSQL DB
@@ -82,7 +82,7 @@ except:
         mydb = MySQLdb.connect(**args)
         mydb.close()
         DB_AVAILABLE.append("MYSQL")
-    except:
+    except Exception:
         try:
             import MySQLdb
             from os.path import expanduser
@@ -100,7 +100,7 @@ except:
             print("MYSQL not available: %s" % e)
         except Exception as e:
             print("MYSQL not available: %s" % e)
-        except:
+        except Exception:
             print("MYSQL not available")
 
 
@@ -2122,7 +2122,7 @@ class SettingsTest(unittest.TestCase):
             try:
                 w1 = json.loads(self._dump[name][key])
                 w2 = json.loads(self.value(el, key))
-            except:
+            except Exception:
                 self.assertEqual(self._dump[name][key], self.value(el, key))
             else:
                 if isinstance(w1, dict):
@@ -2138,7 +2138,7 @@ class SettingsTest(unittest.TestCase):
             try:
                 w1 = json.loads(self._dump[name][key])
                 w2 = json.loads(self.value(el, key))
-            except:
+            except Exception:
                 self.assertEqual(self._dump[name][key], self.value(el, key))
             else:
                 if isinstance(w1, dict):

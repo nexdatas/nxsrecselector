@@ -55,7 +55,7 @@ try:
     mydb = MySQLdb.connect({})
     mydb.close()
     DB_AVAILABLE.append("MYSQL")
-except:
+except Exception:
     try:
         import MySQLdb
     # connection arguments to MYSQL DB
@@ -65,7 +65,7 @@ except:
         mydb = MySQLdb.connect(**args)
         mydb.close()
         DB_AVAILABLE.append("MYSQL")
-    except:
+    except Exception:
         try:
             import MySQLdb
             from os.path import expanduser
@@ -83,7 +83,7 @@ except:
             print("MYSQL not available: %s" % e)
         except Exception as e:
             print("MYSQL not available: %s" % e)
-        except:
+        except Exception:
             print("MYSQL not available")
 
 
@@ -1625,7 +1625,7 @@ class DynamicComponentTest(unittest.TestCase):
                         mycps2 = mycps
                     try:
                         self.assertEqual(comp, mycps)
-                    except:
+                    except Exception:
                         self.assertEqual(comp, mycps2)
         finally:
             for ar in arr:
@@ -3325,7 +3325,7 @@ class DynamicComponentTest(unittest.TestCase):
                         mycps2 = mycps
                     try:
                         self.assertEqual(comp, mycps2)
-                    except:
+                    except Exception:
                         self.assertEqual(comp, mycps)
         finally:
             pass
@@ -3519,7 +3519,7 @@ class DynamicComponentTest(unittest.TestCase):
                         mycps2 = mycps
                     try:
                         self.assertEqual(comp, mycps2)
-                    except:
+                    except Exception:
                         self.assertEqual(comp, mycps)
         finally:
             pass
