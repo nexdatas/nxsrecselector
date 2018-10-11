@@ -6,6 +6,16 @@ group: deprecated-2017Q2
 
 env:
   - TEST="flake8"
+  - TEST=basic OS_TYPE=debian8 PYTHON=3
+  - TEST=extrasettings OS_TYPE=debian8 PYTHON=3
+  - TEST=extraserver OS_TYPE=debian8 PYTHON=3
+  - TEST=basicserver OS_TYPE=debian8 PYTHON=3
+  - TEST=basicsettings OS_TYPE=debian8 PYTHON=3
+  - TEST=basic OS_TYPE=debian9 PYTHON=3
+  - TEST=extrasettings OS_TYPE=debian9 PYTHON=3
+  - TEST=extraserver OS_TYPE=debian9 PYTHON=3
+  - TEST=basicserver OS_TYPE=debian9 PYTHON=3
+  - TEST=basicsettings OS_TYPE=debian9 PYTHON=3
   - TEST=basic OS_TYPE=debian9 PYTHON=2
   - TEST=extrasettings OS_TYPE=debian9 PYTHON=2
   - TEST=extraserver OS_TYPE=debian9 PYTHON=2
@@ -16,26 +26,16 @@ env:
   - TEST=extraserver OS_TYPE=debian8 PYTHON=2
   - TEST=basicserver OS_TYPE=debian8 PYTHON=2
   - TEST=basicsettings OS_TYPE=debian8 PYTHON=2
-  - TEST=basic OS_TYPE=ubuntu16.04 PYTHON=2
-  - TEST=extrasettings OS_TYPE=ubuntu16.04 PYTHON=2
-  - TEST=extraserver OS_TYPE=ubuntu16.04 PYTHON=2
-  - TEST=basicserver OS_TYPE=ubuntu16.04 PYTHON=2
-  - TEST=basicsettings OS_TYPE=ubuntu16.04 PYTHON=2
+  # - TEST=basic OS_TYPE=ubuntu16.04 PYTHON=2
+  # - TEST=extrasettings OS_TYPE=ubuntu16.04 PYTHON=2
+  # - TEST=extraserver OS_TYPE=ubuntu16.04 PYTHON=2
+  # - TEST=basicserver OS_TYPE=ubuntu16.04 PYTHON=2
+  # - TEST=basicsettings OS_TYPE=ubuntu16.04 PYTHON=2
   # - TEST=basic OS_TYPE=ubuntu18.04 PYTHON=2
   # - TEST=extrasettings OS_TYPE=ubuntu18.04 PYTHON=2
   # - TEST=extraserver OS_TYPE=ubuntu18.04 PYTHON=2
   # - TEST=basicserver OS_TYPE=ubuntu18.04 PYTHON=2
   # - TEST=basicsettings OS_TYPE=ubuntu18.04 PYTHON=2
-  # - TEST=basic OS_TYPE=debian8 PYTHON=3
-  # - TEST=extrasettings OS_TYPE=debian8 PYTHON=3
-  # - TEST=extraserver OS_TYPE=debian8 PYTHON=3
-  # - TEST=basicserver OS_TYPE=debian8 PYTHON=3
-  # - TEST=basicsettings OS_TYPE=debian8 PYTHON=3
-  # - TEST=basic OS_TYPE=debian9 PYTHON=3
-  # - TEST=extrasettings OS_TYPE=debian9 PYTHON=3
-  # - TEST=extraserver OS_TYPE=debian9 PYTHON=3
-  # - TEST=basicserver OS_TYPE=debian9 PYTHON=3
-  # - TEST=basicsettings OS_TYPE=debian9 PYTHON=3
   # - TEST=basic OS_TYPE=ubuntu16.04 PYTHON=3
   # - TEST=extrasettings OS_TYPE=ubuntu16.04 PYTHON=3
   # - TEST=extraserver OS_TYPE=ubuntu16.04 PYTHON=3
