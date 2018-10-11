@@ -53,15 +53,26 @@ class ServerSetUp(object):
         db.add_server(self.new_device_info_writer.server,
                       self.new_device_info_writer)
 
-        if os.path.isfile("../NXSRecSelector"):
-            self._psub = subprocess.call(
-                "cd ..; ./NXSRecSelector %s &" % self.instance, stdout=None,
-                stderr=None, shell=True)
+        if sys.version_info > (3,):
+            if os.path.isfile("../NXSRecSelector"):
+                self._psub = subprocess.call(
+                    "cd ..; python3 ./NXSRecSelector %s &" % self.instance,
+                    stdout=None,
+                    stderr=None, shell=True)
+            else:
+                self._psub = subprocess.call(
+                    "python3 NXSRecSelector %s &" % self.instance, stdout=None,
+                    stderr=None, shell=True)
         else:
-            self._psub = subprocess.call(
-                "NXSRecSelector %s &" % self.instance, stdout=None,
-                stderr=None, shell=True)
-        sys.stdout.write("waiting for server")
+            if os.path.isfile("../NXSRecSelector"):
+                self._psub = subprocess.call(
+                    "cd ..; ./NXSRecSelector %s &" % self.instance, stdout=None,
+                    stderr=None, shell=True)
+            else:
+                self._psub = subprocess.call(
+                    "NXSRecSelector %s &" % self.instance, stdout=None,
+                    stderr=None, shell=True)
+        sys.stdout.write("waiting for server ")
 
         found = False
         cnt = 0
@@ -89,10 +100,11 @@ class ServerSetUp(object):
             "ps -ef | grep 'NXSRecSelector %s'" % self.instance,
             stdout=subprocess.PIPE, shell=True).stdout
 
-        res = pipe.read().split("\n")
+        res = str(pipe.read()).split("\n")
         for r in res:
             sr = r.split()
             if len(sr) > 2:
                 subprocess.call(
                     "kill -9 %s" % sr[1],
                     stderr=subprocess.PIPE, shell=True)
+        pipe.close()
