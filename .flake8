@@ -1,0 +1,14 @@
+[flake8]
+exclude=
+    .git,
+    doc_html,
+    .travis,
+    XMLExamples,
+    doc,
+    leaks,
+    dist,
+    __pycache__,
+    build,
+
+# max-complexity = 10
+# ignore = F401, F403, E722, F601

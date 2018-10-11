@@ -1987,6 +1987,10 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
         'RemoveDynamicComponent':
             [[PyTango.DevString, "name of dynamic Component"],
              [PyTango.DevVoid, ""]],
+        'CreateDataSources':
+            [[PyTango.DevString,
+              "JSON dictionary with {``dsname``: ``tangosource``, ...}"],
+             [PyTango.DevVoid, ""]],
     }
 
     #: (:obj:`dict` <:obj:`str`, \
