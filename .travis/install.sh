@@ -29,7 +29,6 @@ fi
 docker exec -it --user root ndts service tango-db restart
 docker exec -it --user root ndts service tango-starter restart
 
-
 if [ $2 = "2" ]; then
     echo "install python-pytango"
     docker exec -it --user root ndts /bin/sh -c 'export DEBIAN_FRONTEND=noninteractive; apt-get -qq update; apt-get -qq install -y   python-pytango python-tz; apt-get -qq install -y nxsconfigserver-db; sleep 10'
@@ -40,6 +39,13 @@ fi
 if [ $? -ne "0" ]
 then
     exit -1
+fi
+
+if [ $1 = "debian8" ]; then
+    if [ $2 = "3" ]; then
+	echo "install python3-mysqldb"
+	docker exec -it --user root ndts /bin/sh -c 'export DEBIAN_FRONTEND=noninteractive; apt-get -qq update; apt-get install -y -t=jessie-backports  python3-mysqldb'
+    fi
 fi
 
 if [ $2 = "2" ]; then
