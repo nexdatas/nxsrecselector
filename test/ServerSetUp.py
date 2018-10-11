@@ -66,7 +66,8 @@ class ServerSetUp(object):
         else:
             if os.path.isfile("../NXSRecSelector"):
                 self._psub = subprocess.call(
-                    "cd ..; ./NXSRecSelector %s &" % self.instance, stdout=None,
+                    "cd ..; ./NXSRecSelector %s &" % self.instance,
+                    stdout=None,
                     stderr=None, shell=True)
             else:
                 self._psub = subprocess.call(
