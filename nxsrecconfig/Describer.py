@@ -319,9 +319,15 @@ class Describer(object):
             index = dstxt.find("$%s." % label)
             while index != -1:
                 try:
-                    subc = re.finditer(
-                        r"[\w]+",
-                        dstxt[(index + len(label) + 2):]).next().group(0)
+                    if sys.version_info > (3,):
+                        subc = re.finditer(
+                            r"[\w]+",
+                            dstxt[(index + len(label) + 2):]
+                        ).__next__().group(0)
+                    else:
+                        subc = re.finditer(
+                            r"[\w]+",
+                            dstxt[(index + len(label) + 2):]).next().group(0)
                 except (StopIteration, IndexError):
                     subc = ''
                 name = subc.strip() if subc else ""
@@ -375,9 +381,14 @@ class Describer(object):
         index = dsxml.find("$%s." % label)
         while index != -1:
             try:
-                subc = re.finditer(
-                    r"[\w]+",
-                    dsxml[(index + len(label) + 2):]).next().group(0)
+                if sys.version_info > (3,):
+                    subc = re.finditer(
+                        r"[\w]+",
+                        dsxml[(index + len(label) + 2):]).__next__().group(0)
+                else:
+                    subc = re.finditer(
+                        r"[\w]+",
+                        dsxml[(index + len(label) + 2):]).next().group(0)
             except (StopIteration, IndexError):
                 subc = ''
             name = subc.strip() if subc else ""

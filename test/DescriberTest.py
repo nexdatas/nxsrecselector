@@ -102,10 +102,17 @@ class NoServer(object):
         index = text.find(label)
         while index != -1:
             try:
-                subc = re.finditer(
-                    r"[\w]+",
-                    text[(index + len(label)):]
-                ).next().group(0)
+                if sys.version_info > (3,):
+                    subc = re.finditer(
+                        r"[\w]+",
+                        text[(index + len(label)):]
+                    ).next().__group__(0)
+                else:
+                    subc = re.finditer(
+                        r"[\w]+",
+                        text[(index + len(label)):]
+                    ).next().group(0)
+
             except Exception as e:
                 print("Error: %s" % str(e))
                 subc = ""

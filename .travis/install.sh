@@ -44,10 +44,10 @@ fi
 
 if [ $2 = "2" ]; then
     echo "install sardana, taurus and nexdatas"
-    docker exec -it --user root ndts /bin/sh -c 'export DEBIAN_FRONTEND=noninteractive; apt-get -qq update; apt-get -qq install -y  python-nxsconfigserver python-nxswriter'
+    docker exec -it --user root ndts /bin/sh -c 'export DEBIAN_FRONTEND=noninteractive; apt-get -qq update; apt-get install -y  python-nxsconfigserver python-nxswriter'
 else
     echo "install sardana, taurus and nexdatas"
-    docker exec -it --user root ndts /bin/sh -c 'export DEBIAN_FRONTEND=noninteractive; apt-get -qq update; apt-get -qq install -y  python3-nxsconfigserver python3-nxswriter'
+    docker exec -it --user root ndts /bin/sh -c 'export DEBIAN_FRONTEND=noninteractive; apt-get -qq update; apt-get install -y  python3-nxsconfigserver python3-nxswriter'
 fi
 if [ $? -ne "0" ]
 then
