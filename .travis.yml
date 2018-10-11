@@ -5,42 +5,68 @@ dist: trusty
 group: deprecated-2017Q2
 
 env:
-  - TEST_SUITE=basic OS_TYPE=debian8
-  - TEST_SUITE=extrasettings OS_TYPE=debian8
-  - TEST_SUITE=extraserver OS_TYPE=debian8
-  - TEST_SUITE=basicserver OS_TYPE=debian8
-  - TEST_SUITE=basicsettings OS_TYPE=debian8
-  - TEST_SUITE=basic OS_TYPE=debian9
-  - TEST_SUITE=extrasettings OS_TYPE=debian9
-  - TEST_SUITE=extraserver OS_TYPE=debian9
-  - TEST_SUITE=basicserver OS_TYPE=debian9
-  - TEST_SUITE=basicsettings OS_TYPE=debian9
-  - TEST_SUITE=basic OS_TYPE=ubuntu16.04
-  - TEST_SUITE=extrasettings OS_TYPE=ubuntu16.04
-  - TEST_SUITE=extraserver OS_TYPE=ubuntu16.04
-  - TEST_SUITE=basicserver OS_TYPE=ubuntu16.04
-  - TEST_SUITE=basicsettings OS_TYPE=ubuntu16.04
+  - TEST="flake8"
+  - TEST=basic OS_TYPE=debian8 PYTHON=2
+  - TEST=extrasettings OS_TYPE=debian8 PYTHON=2
+  - TEST=extraserver OS_TYPE=debian8 PYTHON=2
+  - TEST=basicserver OS_TYPE=debian8 PYTHON=2
+  - TEST=basicsettings OS_TYPE=debian8 PYTHON=2
+  - TEST=basic OS_TYPE=debian9 PYTHON=2
+  - TEST=extrasettings OS_TYPE=debian9 PYTHON=2
+  - TEST=extraserver OS_TYPE=debian9 PYTHON=2
+  - TEST=basicserver OS_TYPE=debian9 PYTHON=2
+  - TEST=basicsettings OS_TYPE=debian9 PYTHON=2
+  - TEST=basic OS_TYPE=ubuntu16.04 PYTHON=2
+  - TEST=extrasettings OS_TYPE=ubuntu16.04 PYTHON=2
+  - TEST=extraserver OS_TYPE=ubuntu16.04 PYTHON=2
+  - TEST=basicserver OS_TYPE=ubuntu16.04 PYTHON=2
+  - TEST=basicsettings OS_TYPE=ubuntu16.04 PYTHON=2
+  - TEST=basic OS_TYPE=ubuntu18.04 PYTHON=2
+  - TEST=extrasettings OS_TYPE=ubuntu18.04 PYTHON=2
+  - TEST=extraserver OS_TYPE=ubuntu18.04 PYTHON=2
+  - TEST=basicserver OS_TYPE=ubuntu18.04 PYTHON=2
+  - TEST=basicsettings OS_TYPE=ubuntu18.04 PYTHON=2
+  # - TEST=basic OS_TYPE=debian8 PYTHON=3
+  # - TEST=extrasettings OS_TYPE=debian8 PYTHON=3
+  # - TEST=extraserver OS_TYPE=debian8 PYTHON=3
+  # - TEST=basicserver OS_TYPE=debian8 PYTHON=3
+  # - TEST=basicsettings OS_TYPE=debian8 PYTHON=3
+  # - TEST=basic OS_TYPE=debian9 PYTHON=3
+  # - TEST=extrasettings OS_TYPE=debian9 PYTHON=3
+  # - TEST=extraserver OS_TYPE=debian9 PYTHON=3
+  # - TEST=basicserver OS_TYPE=debian9 PYTHON=3
+  # - TEST=basicsettings OS_TYPE=debian9 PYTHON=3
+  # - TEST=basic OS_TYPE=ubuntu16.04 PYTHON=3
+  # - TEST=extrasettings OS_TYPE=ubuntu16.04 PYTHON=3
+  # - TEST=extraserver OS_TYPE=ubuntu16.04 PYTHON=3
+  # - TEST=basicserver OS_TYPE=ubuntu16.04 PYTHON=3
+  # - TEST=basicsettings OS_TYPE=ubuntu16.04 PYTHON=3
+  # - TEST=basic OS_TYPE=ubuntu18.04 PYTHON=3
+  # - TEST=extrasettings OS_TYPE=ubuntu18.04 PYTHON=3
+  # - TEST=extraserver OS_TYPE=ubuntu18.04 PYTHON=3
+  # - TEST=basicserver OS_TYPE=ubuntu18.04 PYTHON=3
+  # - TEST=basicsettings OS_TYPE=ubuntu18.04 PYTHON=3
 
 
 services:
   - docker
 
-python:
-  - "2.7"
-
 
 before_install:
-  - chmod +x .travis/run.sh
-  - chmod +x .travis/install.sh
+  - if [ $TEST == "flake8" ]; then sudo apt-get update -qq ; fi
+  - if [ $TEST == "flake8" ]; then sudo pip install flake8; fi
+  - if [ $TEST == "testsuit" ]; then chmod +x .travis/run.sh; fi
+  - if [ $TEST == "testsuit" ]; then chmod +x .travis/install.sh; fi
 
 before_script:
-  - docker build -t ndts .travis/${OS_TYPE}
-  - docker run  --name  ndts -d -it -v `pwd`:/home/tango  ndts
-  - .travis/install.sh ${OS_TYPE}
+  - if [ $TEST == "testsuit" ]; then docker build -t ndts .travis/${OS_TYPE}_py${PYTHON}; fi
+  - if [ $TEST == "testsuit" ]; then docker run  --name  ndts -d -it -v `pwd`:/home/tango  ndts; fi
+  - if [ $TEST == "testsuit" ]; then .travis/install.sh ${OS_TYPE} ${PYTHON}; fi
 
 script:
-  - .travis/run.sh $TEST_SUITE
+  - if [ $TEST == "testsuit" ]; then .travis/run.sh ${TEST} ${PYTHON}; fi
+  - if [ $TEST == "flake8" ]; then flake8; fi
 
 after-script:
-  - docker stop ndts
-  - docker rm ndts
+  - if [ $TEST == "testsuit" ]; then docker stop ndts; fi
+  - if [ $TEST == "testsuit" ]; then docker rm ndts; fi
