@@ -71,10 +71,16 @@ class TestConfigServerSetUp(object):
         if not path:
             path = '.'
 
-        self._psub = subprocess.call(
-            "cd %s;  python ./TestConfigServer.py %s &" %
-            (path, self.instance),
-            stdout=None, stderr=None, shell=True)
+        if sys.version_info > (3,):
+            self._psub = subprocess.call(
+                "cd %s;  python3 ./TestConfigServer.py %s &" %
+                (path, self.instance),
+                stdout=None, stderr=None, shell=True)
+        else:
+            self._psub = subprocess.call(
+                "cd %s;  python ./TestConfigServer.py %s &" %
+                (path, self.instance),
+                stdout=None, stderr=None, shell=True)
         sys.stdout.write("waiting for simple server")
 
         found = False
@@ -108,12 +114,13 @@ class TestConfigServerSetUp(object):
             "ps -ef | grep 'TestConfigServer.py %s'" % self.instance,
             stdout=subprocess.PIPE, shell=True).stdout
 
-        res = pipe.read().split("\n")
+        res = str(pipe.read()).split("\n")
         for r in res:
             sr = r.split()
             if len(sr) > 2:
                 subprocess.call(
                     "kill -9 %s" % sr[1], stderr=subprocess.PIPE, shell=True)
+        pipe.close()
 
 
 if __name__ == "__main__":
