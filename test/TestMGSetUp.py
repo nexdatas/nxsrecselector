@@ -124,7 +124,7 @@ class TestMeasurementGroupSetUp(object):
             res = str(pipe.read(), "utf8").split("\n")
         else:
             res = str(pipe.read()).split("\n")
-            
+
         for r in res:
             sr = r.split()
             if len(sr) > 2:

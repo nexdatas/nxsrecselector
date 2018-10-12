@@ -115,7 +115,8 @@ class TestConfigServerSetUp(object):
     # stops server
     def stop(self):
         pipe = subprocess.Popen(
-            "ps -ef | grep 'TestConfigServer.py %s'" % self.instance,
+            "ps -ef | grep 'TestConfigServer.py %s' | grep -v grep" %
+            self.instance,
             stdout=subprocess.PIPE, shell=True).stdout
 
         if sys.version_info > (3,):

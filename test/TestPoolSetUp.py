@@ -117,7 +117,7 @@ class TestPoolSetUp(object):
     # stops server
     def stop(self):
         pipe = subprocess.Popen(
-            "ps -ef | grep 'TestPool.py %s'" % self.instance,
+            "ps -ef | grep 'TestPool.py %s' | grep -v grep" % self.instance,
             stdout=subprocess.PIPE, shell=True).stdout
 
         if sys.version_info > (3,):
