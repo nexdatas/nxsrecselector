@@ -116,7 +116,10 @@ class TestPool2SetUp(object):
             "ps -ef | grep 'TestPool2.py %s'" % self.instance,
             stdout=subprocess.PIPE, shell=True).stdout
 
-        res = str(pipe.read()).split("\n")
+        if sys.version_info > (3,):
+            res = str(pipe.read(), "utf8").split("\n")
+        else:
+            res = str(pipe.read()).split("\n")
         for r in res:
             sr = r.split()
             if len(sr) > 2:
