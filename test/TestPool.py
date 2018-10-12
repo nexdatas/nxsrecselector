@@ -36,7 +36,7 @@ import sys
 import json
 try:
     import TestMGSetUp
-except:
+except Exception:
     from . import TestMGSetUp
 
 # =================================================================

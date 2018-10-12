@@ -27,7 +27,7 @@ import PyTango
 import time
 try:
     import TestMacroServer
-except:
+except Exception:
     from . import TestMacroServer
 
 

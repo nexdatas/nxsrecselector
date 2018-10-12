@@ -27,7 +27,7 @@ import PyTango
 import time
 try:
     import TestPool
-except:
+except Exception:
     from . import TestPool
 
 

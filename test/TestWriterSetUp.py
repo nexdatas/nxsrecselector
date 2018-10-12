@@ -28,7 +28,7 @@ import time
 
 try:
     import TestWriter
-except:
+except Exception:
     from . import TestWriter
 
 

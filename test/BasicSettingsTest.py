@@ -29,23 +29,23 @@ import pickle
 
 try:
     import TestMacroServerSetUp
-except:
+except Exception:
     from . import TestMacroServerSetUp
 try:
     import TestPoolSetUp
-except:
+except Exception:
     from . import TestPoolSetUp
 try:
     import TestServerSetUp
-except:
+except Exception:
     from . import TestServerSetUp
 try:
     import TestMGSetUp
-except:
+except Exception:
     from . import TestMGSetUp
 try:
     import SettingsTest
-except:
+except Exception:
     from . import SettingsTest
 
 from nxsrecconfig.Describer import Describer

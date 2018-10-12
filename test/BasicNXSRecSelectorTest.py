@@ -27,12 +27,12 @@ import json
 
 try:
     import ServerSetUp
-except:
+except Exception:
     from . import ServerSetUp
 
 try:
     import BasicSettingsTest
-except:
+except Exception:
     from . import BasicSettingsTest
 
 from nxsrecconfig.MacroServerPools import MacroServerPools

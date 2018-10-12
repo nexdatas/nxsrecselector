@@ -27,7 +27,7 @@ import PyTango
 import time
 try:
     import TestMG
-except:
+except Exception:
     from . import TestMG
 
 

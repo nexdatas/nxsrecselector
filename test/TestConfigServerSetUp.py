@@ -28,7 +28,7 @@ import time
 
 try:
     import TestConfigServer
-except:
+except Exception:
     from . import TestConfigServer
 
 

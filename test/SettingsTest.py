@@ -40,32 +40,32 @@ from nxsrecconfig.Utils import TangoUtils, MSUtils
 
 try:
     import TestMacroServerSetUp
-except:
+except Exception:
     from . import TestMacroServerSetUp
 
 try:
     import TestPoolSetUp
-except:
+except Exception:
     from . import TestPoolSetUp
 
 try:
     import TestServerSetUp
-except:
+except Exception:
     from . import TestServerSetUp
 
 try:
     import TestConfigServerSetUp
-except:
+except Exception:
     from . import TestConfigServerSetUp
 
 try:
     import TestWriterSetUp
-except:
+except Exception:
     from . import TestWriterSetUp
 
 try:
     import TestMGSetUp
-except:
+except Exception:
     from . import TestMGSetUp
 
 import logging
