@@ -1965,16 +1965,16 @@ class SelectorTest(unittest.TestCase):
             arg2 = [
                 ["components", self.__rnd.sample(
                     cps,
-                    self.__rnd.randint(0, len(cps)))],
+                    self.__rnd.randint(0, len(list(cps.keys()))))],
                 ["instantiatedComponents", self.__rnd.sample(
                     cps,
-                    self.__rnd.randint(0, len(cps)))],
+                    self.__rnd.randint(0, len(list(cps.keys()))))],
                 ["createConfiguration", self.__rnd.sample(
                     cps,
-                    self.__rnd.randint(0, len(cps)))],
+                    self.__rnd.randint(0, len(list(cps.keys()))))],
                 ["dataSources", self.__rnd.sample(
                     dss,
-                    self.__rnd.randint(0, len(dss)))],
+                    self.__rnd.randint(0, len(list(dss.keys()))))],
                 ["selections", self.__rnd.sample(
                     sls,
                     self.__rnd.randint(0, len(sls)))],
@@ -2265,7 +2265,7 @@ class SelectorTest(unittest.TestCase):
                 cps[self.getRandomName(10)] = bool(self.__rnd.randint(0, 1))
             for i in range(lds):
                 dss[self.getRandomName(10)] = bool(self.__rnd.randint(0, 1))
-            ccps = self.__rnd.sample(cps, self.__rnd.randint(
+            ccps = self.__rnd.sample(set(cps.keys()), self.__rnd.randint(
                 1, len(list(cps.keys()))))
             for cp in ccps:
                 dss[cp] = bool(self.__rnd.randint(0, 1))
@@ -2281,7 +2281,8 @@ class SelectorTest(unittest.TestCase):
             ncps = json.loads(se["ComponentSelection"])
             ndss = json.loads(se["DataSourceSelection"])
 
-            self.assertEqual(len(cps), len(ncps) + len(common))
+            self.assertEqual(len(list(cps.keys())),
+                             len(list(ncps.keys())) + len(common))
             for key in cps.keys():
                 if key not in common:
                     self.assertTrue(key in ncps.keys())
@@ -2291,11 +2292,11 @@ class SelectorTest(unittest.TestCase):
             mydict = {}
             nenv = {
                 "Components": self.__rnd.sample(
-                    cps, self.__rnd.randint(1, len(cps))),
+                    cps, self.__rnd.randint(1, len(list(cps.keys())))),
                 "PreselectedComponents": self.__rnd.sample(
-                    cps, self.__rnd.randint(1, len(cps))),
+                    cps, self.__rnd.randint(1, len(list(cps.keys())))),
                 "DataSources": self.__rnd.sample(
-                    cps, self.__rnd.randint(1, len(cps)))
+                    cps, self.__rnd.randint(1, len(list(cps.keys()))))
             }
 
             if (i / 2) % 2:
@@ -2380,7 +2381,8 @@ class SelectorTest(unittest.TestCase):
             ncps = json.loads(se["ComponentSelection"])
             ndss = json.loads(se["DataSourceSelection"])
 
-            self.assertEqual(len(cps), len(ncps) + len(common))
+            self.assertEqual(len(list(cps.keys())),
+                             len(list(ncps.keys())) + len(common))
             for key in cps.keys():
                 if key not in common:
                     self.assertTrue(key in ncps.keys())

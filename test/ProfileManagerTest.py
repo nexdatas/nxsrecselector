@@ -2290,7 +2290,7 @@ class ProfileManagerTest(unittest.TestCase):
                 cps[self.getRandomName(10)] = bool(self.__rnd.randint(0, 1))
             for i in range(lds):
                 dss[self.getRandomName(10)] = bool(self.__rnd.randint(0, 1))
-            ddss = self.__rnd.sample(dss, self.__rnd.randint(
+            ddss = self.__rnd.sample(set(dss.keys()), self.__rnd.randint(
                 1, len(list(dss.keys()))))
             dcps = dict(cps)
             for ds in ddss:

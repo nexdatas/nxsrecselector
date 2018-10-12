@@ -161,8 +161,8 @@ class Converter3to2Test(unittest.TestCase):
             tnames = dict(
                 (self.getRandomName(20), self.getRandomName(20))
                 for _ in range(self.__rnd.randint(1, 20)))
-            for k in tnames.keys():
-                if k in tnames.values():
+            for k in list(tnames.keys()):
+                if k in list(tnames.values()):
                     tnames.pop(k)
             names = {}
             for k, vl in tnames.items():
@@ -174,7 +174,7 @@ class Converter3to2Test(unittest.TestCase):
             keys2.update(keys1)
             for k in keys2:
                 mysel[k] = self.getRandomName(20)
-            for k in mysel.keys():
+            for k in list(mysel.keys()):
                 if k in names.values():
                     mysel.pop(k)
                     keys2.remove(k)
@@ -203,8 +203,8 @@ class Converter3to2Test(unittest.TestCase):
             tnames = dict(
                 (self.getRandomName(20), self.getRandomName(20))
                 for _ in range(self.__rnd.randint(1, 20)))
-            for k in tnames.keys():
-                if k in tnames.values():
+            for k in list(tnames.keys()):
+                if k in list(tnames.values()):
                     tnames.pop(k)
             names = {}
             for k, vl in tnames.items():
@@ -216,7 +216,7 @@ class Converter3to2Test(unittest.TestCase):
             keys2.update(keys1)
             for k in keys2:
                 mysel[k] = self.getRandomName(20)
-            for k in mysel.keys():
+            for k in list(mysel.keys()):
                 if k in names.values():
                     mysel.pop(k)
                     keys2.remove(k)

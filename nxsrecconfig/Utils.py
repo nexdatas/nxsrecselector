@@ -187,7 +187,7 @@ class Utils(object):
             return [cls.toString(el) for el in obj]
         elif isinstance(obj, dict):
             return dict([(cls.toString(key), cls.toString(value))
-                         for key, value in obj.iteritems()])
+                         for key, value in obj.items()])
         else:
             return obj
 

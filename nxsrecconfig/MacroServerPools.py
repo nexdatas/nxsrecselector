@@ -240,7 +240,7 @@ class MacroServerPools(object):
                     discomponentgroup[name].message = \
                         "%s not defined in Pool" % ds
 
-                    if name in toCheck.keys():
+                    if name in list(toCheck.keys()):
                         toCheck.pop(name)
                     break
                 elif ds in channels:

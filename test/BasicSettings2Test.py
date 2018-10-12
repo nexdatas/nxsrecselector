@@ -11175,7 +11175,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                 cps[self.getRandomName(10)] = bool(self._rnd.randint(0, 1))
             for i in range(lds):
                 dss[self.getRandomName(10)] = bool(self._rnd.randint(0, 1))
-            ddss = self._rnd.sample(dss, self._rnd.randint(
+            ddss = self._rnd.sample(set(dss.keys()), self._rnd.randint(
                 1, len(list(dss.keys()))))
             dcps = dict(cps)
             for ds in ddss:
@@ -11610,7 +11610,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                 cps[self.getRandomName(10)] = bool(self._rnd.randint(0, 1))
             for i in range(lds):
                 dss[self.getRandomName(10)] = bool(self._rnd.randint(0, 1))
-            ddss = self._rnd.sample(dss, self._rnd.randint(
+            ddss = self._rnd.sample(set(dss.keys()), self._rnd.randint(
                 1, len(list(dss.keys()))))
             dcps = dict(cps)
             for ds in ddss:

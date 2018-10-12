@@ -40,7 +40,7 @@ class ConverterXtoY(object):
         :type selection: :obj:`dict` <:obj:`str`, `any`>
         """
         for old, new in self.names.items():
-            if old in selection.keys():
+            if old in list(selection.keys()):
                 selection[new] = selection.pop(old)
 
 
@@ -192,7 +192,7 @@ class Converter1to2(ConverterXtoY):
         super(Converter1to2, self).convert(selection)
         props = {}
         for var, pn in self.pnames.items():
-            if var in selection:
+            if var in list(selection.keys()):
                 props[pn] = json.loads(selection.pop(var))
         selection["ChannelProperties"] = json.dumps(props)
 

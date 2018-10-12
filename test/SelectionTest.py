@@ -187,7 +187,8 @@ class SelectionTest(unittest.TestCase):
             el["ComponentSelection"] = json.dumps(cps)
             el["DataSourceSelection"] = json.dumps(dss)
             el["UnplottedComponents"] = json.dumps(
-                self.__rnd.sample(dss, self.__rnd.randint(1, len(dss))))
+                self.__rnd.sample(set(dss.keys()), self.__rnd.randint(
+                    1, len(list(dss.keys())))))
             el["DataSourcePreselection"] = json.dumps(pdss)
             self.dump(el)
 
@@ -198,8 +199,8 @@ class SelectionTest(unittest.TestCase):
 
             self.assertEqual(el["UnplottedComponents"], '[]')
             self.assertEqual(el["DataSourcePreselection"], '{}')
-            self.assertEqual(len(cps), len(ncps))
-            self.assertEqual(len(dss), len(ndss))
+            self.assertEqual(len(list(cps.keys())), len(list(ncps.keys())))
+            self.assertEqual(len(list(dss.keys())), len(list(ndss.keys())))
             for key in cps.keys():
                 self.assertTrue(key in ncps.keys())
                 self.assertEqual(ncps[key], False)
@@ -314,7 +315,8 @@ class SelectionTest(unittest.TestCase):
                 cps[self.getRandomName(10)] = bool(self.__rnd.randint(0, 1))
             for i in range(lds):
                 dss[self.getRandomName(10)] = bool(self.__rnd.randint(0, 1))
-            ccps = self.__rnd.sample(cps, self.__rnd.randint(1, len(cps)))
+            ccps = self.__rnd.sample(set(cps.keys()), self.__rnd.randint(
+                1, len(list(cps.keys()))))
             for cp in ccps:
                 dss[cp] = bool(self.__rnd.randint(0, 1))
             el["ComponentSelection"] = json.dumps(cps)
@@ -328,7 +330,8 @@ class SelectionTest(unittest.TestCase):
             # ndss =
             json.loads(el["DataSourceSelection"])
 
-            self.assertEqual(len(cps), len(ncps) + len(common))
+            self.assertEqual(len(list(cps.keys())),
+                             len(list(ncps.keys())) + len(common))
             for key in cps.keys():
                 if key not in common:
                     self.assertTrue(key in ncps.keys())
