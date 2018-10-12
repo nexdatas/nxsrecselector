@@ -40,6 +40,9 @@ import pickle
 
 if sys.version_info > (3,):
     long = int
+    # unicode = str
+else:
+    bytes = str
 
 
 # =================================================================
@@ -89,7 +92,7 @@ class TestServer(PyTango.Device_4Impl):
         self.defaults["ScalarString"] = [
             "Hello!", PyTango.SCALAR, PyTango.DevString]
         self.defaults["ScalarEncoded"] = [
-            ("UTF8", "Hello UTF8! Pr\xc3\xb3ba \xe6\xb5\x8b"),
+            ("UTF8", b"Hello UTF8! Pr\xc3\xb3ba \xe6\xb5\x8b"),
             PyTango.SCALAR, PyTango.DevEncoded]
 
         self.dtype = None
@@ -106,7 +109,7 @@ class TestServer(PyTango.Device_4Impl):
         self.attr_ScalarDouble = 1.233
         self.attr_ScalarString = "Hello!"
         self.attr_ScalarEncoded = \
-            "UTF8", "Hello UTF8! Pr\xc3\xb3ba \xe6\xb5\x8b"
+            "UTF8", b"Hello UTF8! Pr\xc3\xb3ba \xe6\xb5\x8b"
 
         self.attr_SpectrumBoolean = [True, False]
         self.attr_SpectrumUChar = [1, 2]
@@ -121,7 +124,7 @@ class TestServer(PyTango.Device_4Impl):
         self.attr_SpectrumDouble = [1.123, 23.435, 3.5, 3.345]
         self.attr_SpectrumString = ["Hello", "Word", "!", "!!"]
         self.attr_SpectrumEncoded = [
-            "INT32", "\x00\x01\x03\x04\x20\x31\x43\x54\x10\x11\x13\x14"]
+            "INT32", b"\x00\x01\x03\x04\x20\x31\x43\x54\x10\x11\x13\x14"]
         self.attr_SpectrumEncoded = self.encodeSpectrum()
 
         self.attr_ImageBoolean = numpy.array([[True]], dtype='int16')
@@ -151,25 +154,26 @@ class TestServer(PyTango.Device_4Impl):
         # uint32 I
         #        mode = 2
         fspectrum = numpy.array(self.attr_SpectrumULong, dtype='int32')
-        ibuffer = struct.pack('i' * fspectrum.size, *fspectrum)
+        ibuffer = bytes(struct.pack('i' * fspectrum.size, *fspectrum))
         return [format, ibuffer]
 
     def encodeImage(self):
         format = 'VIDEO_IMAGE'
         # uint8 B
         mode = 0
-    # uint16 H
-    #        mode = 1
+        # uint16 H
+        #  mode = 1
         width, height = self.attr_ImageUChar.shape
         version = 1
-        endian = ord(struct.pack('=H', 1)[-1])
+        endian = sys.byteorder == u'big'
+        # endian = ord(str(struct.pack('=H', 1)[-1]))
         hsize = struct.calcsize('!IHHqiiHHHH')
         header = struct.pack(
             '!IHHqiiHHHH', 0x5644454f, version, mode, -1,
             width, height, endian, hsize, 0, 0)
         fimage = self.attr_ImageUChar.flatten()
         ibuffer = struct.pack('B' * fimage.size, *fimage)
-        return [format, header + ibuffer]
+        return [format, bytes(header + ibuffer)]
 
     # -----------------------------------------------------------------
     #    Device destructor
