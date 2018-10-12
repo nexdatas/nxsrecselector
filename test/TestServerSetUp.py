@@ -96,17 +96,16 @@ class TestServerSetUp(object):
         if not path:
             path = '.'
 
-        if os.path.isfile("%s/ST" % path):
-            if sys.version_info > (3,):
-                self._psub = subprocess.call(
-                    "cd %s; python3 ./TestServer.py %s &" %
-                    (path, self.instance), stdout=None,
-                    stderr=None, shell=True)
-            else:
-                self._psub = subprocess.call(
-                    "cd %s; python ./TestServer.py %s &" %
-                    (path, self.instance), stdout=None,
-                    stderr=None, shell=True)
+        if sys.version_info > (3,):
+            self._psub = subprocess.call(
+                "cd %s; python3 ./TestServer.py %s &" %
+                (path, self.instance), stdout=None,
+                stderr=None, shell=True)
+        else:
+            self._psub = subprocess.call(
+                "cd %s; python ./TestServer.py %s &" %
+                (path, self.instance), stdout=None,
+                stderr=None, shell=True)
 
         sys.stdout.write("waiting for simple server")
 
