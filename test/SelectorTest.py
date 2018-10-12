@@ -1111,7 +1111,7 @@ class SelectorTest(unittest.TestCase):
             if isinstance(v, dict):
                 self.myAssertDict(v, dct2[k])
             else:
-                logger.debug("%s , %s" % (str(v), str(list(dct2[k]))))
+                logger.debug("%s , %s" % (str(v), str(dct2[k])))
                 self.assertEqual(v, dct2[k])
 
     # test
