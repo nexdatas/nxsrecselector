@@ -107,7 +107,7 @@ class TestServerSetUp(object):
                     "cd %s; python ./TestServer.py %s &" %
                     (path, self.instance), stdout=None,
                     stderr=None, shell=True)
-                
+
         sys.stdout.write("waiting for simple server")
 
         found = False
