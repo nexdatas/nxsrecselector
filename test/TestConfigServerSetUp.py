@@ -25,7 +25,11 @@ import subprocess
 
 import PyTango
 import time
-import TestConfigServer
+
+try:
+    import TestConfigServer
+except:
+    from . import TestConfigServer
 
 
 # test fixture

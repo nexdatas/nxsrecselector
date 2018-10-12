@@ -1965,16 +1965,16 @@ class SelectorTest(unittest.TestCase):
             arg2 = [
                 ["components", self.__rnd.sample(
                     cps,
-                    self.__rnd.randint(0, len(list(cps.keys()))))],
+                    self.__rnd.randint(0, len(cps)))],
                 ["instantiatedComponents", self.__rnd.sample(
                     cps,
-                    self.__rnd.randint(0, len(list(cps.keys()))))],
+                    self.__rnd.randint(0, len(cps)))],
                 ["createConfiguration", self.__rnd.sample(
                     cps,
-                    self.__rnd.randint(0, len(list(cps.keys()))))],
+                    self.__rnd.randint(0, len(cps)))],
                 ["dataSources", self.__rnd.sample(
                     dss,
-                    self.__rnd.randint(0, len(list(dss.keys()))))],
+                    self.__rnd.randint(0, len(dss)))],
                 ["selections", self.__rnd.sample(
                     sls,
                     self.__rnd.randint(0, len(sls)))],
@@ -2292,11 +2292,14 @@ class SelectorTest(unittest.TestCase):
             mydict = {}
             nenv = {
                 "Components": self.__rnd.sample(
-                    cps, self.__rnd.randint(1, len(list(cps.keys())))),
+                    list(cps.keys()), self.__rnd.randint(
+                        1, len(list(cps.keys())))),
                 "PreselectedComponents": self.__rnd.sample(
-                    cps, self.__rnd.randint(1, len(list(cps.keys())))),
+                    list(cps.keys()), self.__rnd.randint(
+                        1, len(list(cps.keys())))),
                 "DataSources": self.__rnd.sample(
-                    cps, self.__rnd.randint(1, len(list(cps.keys()))))
+                    list(cps.keys()), self.__rnd.randint(
+                        1, len(list(cps.keys()))))
             }
 
             if (i / 2) % 2:

@@ -38,12 +38,35 @@ from nxsrecconfig.Describer import Describer
 from nxsrecconfig.Settings import Settings
 from nxsrecconfig.Utils import TangoUtils, MSUtils
 
-import TestMacroServerSetUp
-import TestPoolSetUp
-import TestServerSetUp
-import TestConfigServerSetUp
-import TestWriterSetUp
-import TestMGSetUp
+try:
+    import TestMacroServerSetUp
+except:
+    from . import TestMacroServerSetUp
+
+try:
+    import TestPoolSetUp
+except:
+    from . import TestPoolSetUp
+
+try:
+    import TestServerSetUp
+except:
+    from . import TestServerSetUp
+
+try:
+    import TestConfigServerSetUp
+except:
+    from . import TestConfigServerSetUp
+
+try:
+    import TestWriterSetUp
+except:
+    from . import TestWriterSetUp
+
+try:
+    import TestMGSetUp
+except:
+    from . import TestMGSetUp
 
 import logging
 logger = logging.getLogger()
@@ -2372,7 +2395,7 @@ class SettingsTest(unittest.TestCase):
         se["ConfigDevice"] = cfdv
         se["WriterDevice"] = wrdv
         se["MntGrp"] = mg
-        msp.updateMacroServer(self._ms.door.keys()[0])
+        msp.updateMacroServer(list(self._ms.door.keys())[0])
         wrong = []
 
         cps = {}

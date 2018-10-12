@@ -27,11 +27,26 @@ import PyTango
 import json
 import pickle
 
-import TestMacroServerSetUp
-import TestPoolSetUp
-import TestServerSetUp
-import TestMGSetUp
-import SettingsTest
+try:
+    import TestMacroServerSetUp
+except:
+    from . import TestMacroServerSetUp
+try:
+    import TestPoolSetUp
+except:
+    from . import TestPoolSetUp
+try:
+    import TestServerSetUp
+except:
+    from . import TestServerSetUp
+try:
+    import TestMGSetUp
+except:
+    from . import TestMGSetUp
+try:
+    import SettingsTest
+except:
+    from . import SettingsTest
 
 from nxsrecconfig.Describer import Describer
 from nxsrecconfig.Utils import TangoUtils, MSUtils
@@ -8514,7 +8529,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
 
         dd = rs.mutedChannels()
         self.assertEqual(set(dd),
-                         set(lst + self.smydss.keys())
+                         set(lst + list(self.smydss.keys()))
                          - set(['client_long', 'client_short']))
 
     # test
@@ -10973,7 +10988,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
         sl2 = self._cf.dp.availableSelections()
 
         dl = []
-        mgs = [ar["name"] for ar in arr] + self.mysel2.keys()
+        mgs = [ar["name"] for ar in arr] + list(self.mysel2.keys())
         # print mgs
         for ar in mgs:
             MSUtils.setEnv('ActiveMntGrp', ar, list(self._ms.ms.keys())[0])
@@ -11056,7 +11071,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             sl2 = self._cf.dp.availableSelections()
 
             dl = []
-            mgs = [ar["name"] for ar in arr] + self.mysel2.keys()
+            mgs = [ar["name"] for ar in arr] + list(self.mysel2.keys())
             for ar in mgs:
                 MSUtils.setEnv('ActiveMntGrp', ar, list(self._ms.ms.keys())[0])
                 rs.deleteProfile(ar)
@@ -11073,7 +11088,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                 self.assertEqual(set(sl), set(sl2) - set(dl))
 
             dl = []
-            mgs = [ar["name"] for ar in arr2] + self.mysel2.keys()
+            mgs = [ar["name"] for ar in arr2] + list(self.mysel2.keys())
             dd1 = [json.loads(mg)["name"] for mg in pool.MeasurementGroupList]
             dd2 = [json.loads(mg)["name"] for mg in pool2.MeasurementGroupList]
             sl2 = self._cf.dp.availableSelections()

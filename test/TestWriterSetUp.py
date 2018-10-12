@@ -25,7 +25,11 @@ import subprocess
 
 import PyTango
 import time
-import TestWriter
+
+try:
+    import TestWriter
+except:
+    from . import TestWriter
 
 
 # test fixture

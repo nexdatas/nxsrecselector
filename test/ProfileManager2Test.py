@@ -2051,7 +2051,7 @@ class ProfileManager2Test(unittest.TestCase):
         sl2 = self._cf.dp.availableSelections()
 
         dl = []
-        mgs = [ar["name"] for ar in arr] + self.mysel2.keys()
+        mgs = [ar["name"] for ar in arr] + list(self.mysel2.keys())
         # print mgs
         for ar in mgs:
             MSUtils.setEnv('ActiveMntGrp', ar, list(self._ms.ms.keys())[0])
@@ -2139,7 +2139,7 @@ class ProfileManager2Test(unittest.TestCase):
             sl2 = self._cf.dp.availableSelections()
 
             dl = []
-            mgs = [ar["name"] for ar in arr] + self.mysel2.keys()
+            mgs = [ar["name"] for ar in arr] + list(self.mysel2.keys())
             for ar in mgs:
                 MSUtils.setEnv('ActiveMntGrp', ar, list(self._ms.ms.keys())[0])
                 mgt.deleteProfile(ar)
@@ -2156,7 +2156,7 @@ class ProfileManager2Test(unittest.TestCase):
                 self.assertEqual(set(sl), set(sl2) - set(dl))
 
             dl = []
-            mgs = [ar["name"] for ar in arr2] + self.mysel2.keys()
+            mgs = [ar["name"] for ar in arr2] + list(self.mysel2.keys())
             dd1 = [json.loads(mg)["name"] for mg in pool.MeasurementGroupList]
             dd2 = [json.loads(mg)["name"] for mg in pool2.MeasurementGroupList]
             sl2 = self._cf.dp.availableSelections()

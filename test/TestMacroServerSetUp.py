@@ -25,7 +25,10 @@ import subprocess
 
 import PyTango
 import time
-import TestMacroServer
+try:
+    import TestMacroServer
+except:
+    from . import TestMacroServer
 
 
 # test fixture

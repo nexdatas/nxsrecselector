@@ -25,7 +25,10 @@ import subprocess
 
 import PyTango
 import time
-import TestMG
+try:
+    import TestMG
+except:
+    from . import TestMG
 
 
 # test fixture

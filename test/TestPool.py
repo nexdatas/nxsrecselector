@@ -34,7 +34,10 @@
 import PyTango
 import sys
 import json
-import TestMGSetUp
+try:
+    import TestMGSetUp
+except:
+    from . import TestMGSetUp
 
 # =================================================================
 #   TestPool Class Description:
