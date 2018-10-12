@@ -116,7 +116,10 @@ class Converter3to2Test(unittest.TestCase):
                     self.assertEqual(v, dct2[k])
 
     def getRandomName(self, maxsize):
-        letters = string.lowercase + string.uppercase + string.digits
+        if sys.version_info > (3,):
+            letters = string.ascii_letters + string.digits
+        else:
+            letters = string.letters + string.digits
         size = self.__rnd.randint(1, maxsize)
         return ''.join(self.__rnd.choice(letters) for _ in range(size))
 

@@ -2152,7 +2152,10 @@ class Settings2Test(unittest.TestCase):
                         set(self.value(el, key)))
 
     def getRandomName(self, maxsize):
-        letters = string.lowercase + string.uppercase + string.digits
+        if sys.version_info > (3,):
+            letters = string.ascii_letters + string.digits
+        else:
+            letters = string.letters + string.digits
         size = self._rnd.randint(1, maxsize)
         return ''.join(self._rnd.choice(letters) for _ in range(size))
 
