@@ -619,7 +619,7 @@ class Describer(object):
                     "dataSources", [Utils.tostr(name)])
             else:
                 dsource = [dsxml]
-        except (PyTango.DevFailed, PyTango.Except, PyTango.DevError):
+        except (PyTango.DevFailed, PyTango.Error):
             dsource = []
         if len(dsource) > 0:
             if sys.version_info > (3,):
