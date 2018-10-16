@@ -2737,8 +2737,10 @@ class ProfileManager2Test(unittest.TestCase):
                 self.assertEqual(json.loads(se["Timer"]), [ar["name"]])
                 self.assertEqual(se["MntGrp"], "nxsmntgrp")
             finally:
-                mgt.deleteProfile("nxsmntgrp")
-                tmg.tearDown()
+                try:
+                    mgt.deleteProfile("nxsmntgrp")
+                finally:
+                    tmg.tearDown()
 
     # updateProfile test
     def test_updateProfile_components_nopool(self):
@@ -2910,11 +2912,10 @@ class ProfileManager2Test(unittest.TestCase):
                 self.assertEqual(json.loads(se["Timer"]), [ar["name"]])
                 self.assertEqual(se["MntGrp"], "nxsmntgrp")
             finally:
-                mgt.deleteProfile("nxsmntgrp")
                 try:
+                    mgt.deleteProfile("nxsmntgrp")
+                finally:
                     tmg.tearDown()
-                except Exception:
-                    pass
 
     # updateProfile test
     def test_updateProfile_nodevice(self):
@@ -3034,11 +3035,10 @@ class ProfileManager2Test(unittest.TestCase):
                 # print "DS", mgt.dataSources()
                 self.myAssertRaise(Exception, mgt.updateProfile)
             finally:
-                mgt.deleteProfile("nxsmntgrp")
                 try:
+                    mgt.deleteProfile("nxsmntgrp")
+                finally:
                     tmg.tearDown()
-                except Exception:
-                    pass
 
     # updateProfile test
     def test_updateProfile_nodevice_cp(self):
@@ -3157,11 +3157,10 @@ class ProfileManager2Test(unittest.TestCase):
                 self.myAssertRaise(Exception, mgt.updateProfile)
 #                mgt.updateProfile()
             finally:
-                mgt.deleteProfile("nxsmntgrp")
                 try:
+                    mgt.deleteProfile("nxsmntgrp")
+                finally:
                     tmg.tearDown()
-                except Exception:
-                    pass
 
     # updateProfile test
     def test_updateProfile_wrongdevice(self):
@@ -3280,11 +3279,10 @@ class ProfileManager2Test(unittest.TestCase):
 #                mgt.updateProfile()
                 self.myAssertRaise(Exception, mgt.updateProfile)
             finally:
-                mgt.deleteProfile("nxsmntgrp")
                 try:
+                    mgt.deleteProfile("nxsmntgrp")
+                finally:
                     tmg.tearDown()
-                except Exception:
-                    pass
 
     # updateProfile test
     def test_updateProfile_components_nopool_tango(self):
@@ -3511,11 +3509,10 @@ class ProfileManager2Test(unittest.TestCase):
                 self.assertEqual(json.loads(se["Timer"]), [ar["name"]])
                 self.assertEqual(se["MntGrp"], "nxsmntgrp")
             finally:
-                mgt.deleteProfile("nxsmntgrp")
                 try:
+                    mgt.deleteProfile("nxsmntgrp")
+                finally:
                     tmg.tearDown()
-                except Exception:
-                    pass
 
     # updateProfile test
     def test_updateProfile_components_nopool_tango_unplottedcomponents(self):
@@ -3776,11 +3773,10 @@ class ProfileManager2Test(unittest.TestCase):
                 self.assertEqual(json.loads(se["Timer"]), [ar["name"]])
                 self.assertEqual(se["MntGrp"], "nxsmntgrp")
             finally:
-                mgt.deleteProfile("nxsmntgrp")
                 try:
+                    mgt.deleteProfile("nxsmntgrp")
+                finally:
                     tmg.tearDown()
-                except Exception:
-                    pass
 
     # updateProfile test
     def test_updateProfile_components_pool_tango(self):
@@ -4061,11 +4057,10 @@ class ProfileManager2Test(unittest.TestCase):
                     self.assertEqual(json.loads(se["Timer"]), [ar["name"]])
                     self.assertEqual(se["MntGrp"], "nxsmntgrp")
                 finally:
-                    mgt.deleteProfile("nxsmntgrp")
                     try:
+                        mgt.deleteProfile("nxsmntgrp")
+                    finally:
                         tmg.tearDown()
-                    except Exception:
-                        pass
         finally:
             simp2.tearDown()
 
@@ -4392,11 +4387,10 @@ class ProfileManager2Test(unittest.TestCase):
                     self.assertEqual(json.loads(se["Timer"]), [ar["name"]])
                     self.assertEqual(se["MntGrp"], "nxsmntgrp")
                 finally:
-                    mgt.deleteProfile("nxsmntgrp")
                     try:
+                        mgt.deleteProfile("nxsmntgrp")
+                    finally:
                         tmg.tearDown()
-                    except Exception:
-                        pass
         finally:
             simp2.tearDown()
 
@@ -4773,11 +4767,10 @@ class ProfileManager2Test(unittest.TestCase):
                     self.assertEqual(json.loads(se["Timer"]), [ar["name"]])
                     self.assertEqual(se["MntGrp"], "nxsmntgrp2")
                 finally:
-                    mgt.deleteProfile("nxsmntgrp2")
                     try:
+                        mgt.deleteProfile("nxsmntgrp2")
+                    finally:
                         tmg.tearDown()
-                    except Exception:
-                        pass
         finally:
             simp2.tearDown()
 
