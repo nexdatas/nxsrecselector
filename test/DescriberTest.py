@@ -106,7 +106,7 @@ class NoServer(object):
                     subc = re.finditer(
                         r"[\w]+",
                         text[(index + len(label)):]
-                    ).next().__group__(0)
+                    ).__next__().group(0)
                 else:
                     subc = re.finditer(
                         r"[\w]+",
