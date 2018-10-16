@@ -37,7 +37,22 @@ class Utils(object):
 
     """  Miscellaneous Utilities """
 
-    #
+    @classmethod
+    def tostr(cls, text):
+        """ convert bytestr or unicode to python str
+        :param text: text to convert
+        :type text: :obj:`bytes` or :obj:`unicode` or :obj:`str`
+        :returns: converted text
+        :rtype: :obj:`str`
+        """
+        if isinstance(text, str):
+            return text
+        else:
+            if sys.version_info > (3,):
+                return str(text, "utf8")
+            else:
+                return str(text)
+
     @classmethod
     def compareDict(cls, dct, dct2):
         """ copares two dictionaries
@@ -181,8 +196,8 @@ class Utils(object):
         :returns: string object
         :rtype: :obj:`str`
         """
-        if isinstance(obj, unicode):
-            return str(obj)
+        if isinstance(obj, unicode) or isinstance(obj, bytes):
+            return Utils.tostr(obj)
         elif isinstance(obj, list):
             return [cls.toString(el) for el in obj]
         elif isinstance(obj, dict):
@@ -216,7 +231,7 @@ class TangoUtils(object):
         """
         found = False
         cnt = 0
-        cnfServer = PyTango.DeviceProxy(str(device))
+        cnfServer = PyTango.DeviceProxy(Utils.tostr(device))
 
         while not found and cnt < counter:
             if cnt > 1:
@@ -275,7 +290,7 @@ class TangoUtils(object):
         """
         dps = []
         for name in names:
-            dp = PyTango.DeviceProxy(str(name))
+            dp = PyTango.DeviceProxy(Utils.tostr(name))
             try:
                 dp.ping()
                 dps.append(dp)
@@ -299,7 +314,7 @@ class TangoUtils(object):
         device = ''
         for server in servers:
             try:
-                dp = PyTango.DeviceProxy(str(server))
+                dp = PyTango.DeviceProxy(Utils.tostr(server))
                 dp.ping()
                 device = server
                 break
@@ -489,10 +504,10 @@ class MSUtils(object):
             hostname = sdoor[0]
         for server in servers:
             if hostname:
-                mserver = "%s/%s" % (hostname, str(server))
+                mserver = "%s/%s" % (hostname, Utils.tostr(server))
             else:
-                mserver = str(server)
-            dp = PyTango.DeviceProxy(str(mserver))
+                mserver = Utils.tostr(server)
+            dp = PyTango.DeviceProxy(Utils.tostr(mserver))
             if hasattr(dp, "DoorList"):
                 lst = dp.DoorList
                 if lst and door in lst:
@@ -726,7 +741,7 @@ class PoolUtils(object):
         """
         source = None
         try:
-            dp = PyTango.DeviceProxy(str(name))
+            dp = PyTango.DeviceProxy(Utils.tostr(name))
             if hasattr(dp, 'DataSource'):
                 ds = dp.DataSource
                 sds = ds.split("://")

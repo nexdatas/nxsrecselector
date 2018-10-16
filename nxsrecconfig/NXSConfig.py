@@ -37,6 +37,7 @@
 
 import PyTango
 from .Settings import Settings as STG
+from .Utils import Utils
 
 
 class NXSRecSelector(PyTango.Device_4Impl):
@@ -411,12 +412,13 @@ class NXSRecSelector(PyTango.Device_4Impl):
         self.debug_stream("In write_ProfileConfiguration()")
         self.__stg.profileConfiguration = attr.get_write_value()
         try:
-            self.__dp = self.__dp or PyTango.DeviceProxy(str(self.get_name()))
+            self.__dp = self.__dp or PyTango.DeviceProxy(
+                Utils.tostr(self.get_name()))
             for var in self.__toupdate:
                 if var in self.__stg.names():
                     if hasattr(self.__dp, var):
                         self.__dp.write_attribute(
-                            str(var), self.__stg.value(var))
+                            Utils.tostr(var), self.__stg.value(var))
 
             self.set_state(PyTango.DevState.ON)
         finally:
@@ -494,12 +496,13 @@ class NXSRecSelector(PyTango.Device_4Impl):
             self.__stg.loadProfile()
 
             # updating memorized attributes
-            self.__dp = self.__dp or PyTango.DeviceProxy(str(self.get_name()))
+            self.__dp = self.__dp or PyTango.DeviceProxy(
+                Utils.tostr(self.get_name()))
             for var in self.__toupdate:
                 if var in self.__stg.names():
                     if hasattr(self.__dp, var):
                         self.__dp.write_attribute(
-                            str(var), self.__stg.value(var))
+                            Utils.tostr(var), self.__stg.value(var))
 
             self.set_state(PyTango.DevState.ON)
         finally:
@@ -527,12 +530,13 @@ class NXSRecSelector(PyTango.Device_4Impl):
             self.__stg.fetchProfile()
 
             # updating memorized attributes
-            self.__dp = self.__dp or PyTango.DeviceProxy(str(self.get_name()))
+            self.__dp = self.__dp or PyTango.DeviceProxy(
+                Utils.tostr(self.get_name()))
             for var in self.__toupdate:
                 if var in self.__stg.names():
                     if hasattr(self.__dp, var):
                         self.__dp.write_attribute(
-                            str(var), self.__stg.value(var))
+                            Utils.tostr(var), self.__stg.value(var))
 
             self.set_state(PyTango.DevState.ON)
         finally:
@@ -733,7 +737,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         self.debug_stream("In MntGrpConfiguration()")
         try:
             self.set_state(PyTango.DevState.RUNNING)
-            conf = str(self.__stg.mntGrpConfiguration())
+            conf = Utils.tostr(self.__stg.mntGrpConfiguration())
             self.set_state(PyTango.DevState.ON)
         finally:
             if self.get_state() == PyTango.DevState.RUNNING:
@@ -761,7 +765,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         self.debug_stream("In UpdateProfile()")
         try:
             self.set_state(PyTango.DevState.RUNNING)
-            conf = str(self.__stg.updateProfile())
+            conf = Utils.tostr(self.__stg.updateProfile())
             self.set_state(PyTango.DevState.ON)
         finally:
             if self.get_state() == PyTango.DevState.RUNNING:
@@ -788,7 +792,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         self.debug_stream("In UpdateMntGrp()")
         try:
             self.set_state(PyTango.DevState.RUNNING)
-            conf = str(self.__stg.updateMntGrp())
+            conf = Utils.tostr(self.__stg.updateMntGrp())
             self.set_state(PyTango.DevState.ON)
         finally:
             if self.get_state() == PyTango.DevState.RUNNING:
@@ -864,12 +868,13 @@ class NXSRecSelector(PyTango.Device_4Impl):
             self.__stg.importEnvProfile()
 
             # updating memorized attributes
-            self.__dp = self.__dp or PyTango.DeviceProxy(str(self.get_name()))
+            self.__dp = self.__dp or PyTango.DeviceProxy(
+                Utils.tostr(self.get_name()))
             for var in self.__toupdate:
                 if var in self.__stg.names():
                     if hasattr(self.__dp, var):
                         self.__dp.write_attribute(
-                            str(var), self.__stg.value(var))
+                            Utils.tostr(var), self.__stg.value(var))
 
             self.set_state(PyTango.DevState.ON)
         finally:
@@ -1095,7 +1100,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         self.debug_stream("In ScanEnvVariables()")
         try:
             self.set_state(PyTango.DevState.RUNNING)
-            argout = str(self.__stg.scanEnvVariables())
+            argout = Utils.tostr(self.__stg.scanEnvVariables())
             self.set_state(PyTango.DevState.ON)
         finally:
             if self.get_state() == PyTango.DevState.RUNNING:

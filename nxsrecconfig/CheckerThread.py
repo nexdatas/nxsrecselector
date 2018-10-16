@@ -23,7 +23,7 @@ import PyTango
 import threading
 import sys
 
-from .Utils import TangoUtils
+from .Utils import TangoUtils, Utils
 
 if sys.version_info > (3,):
     import queue as Queue
@@ -53,11 +53,11 @@ class TangoDSItem(object):
         :type attr: :obj:`str`
         """
         #: (:obj:`str`) datasource name
-        self.name = str(name) if name is not None else None
+        self.name = Utils.tostr(name) if name is not None else None
         #: (:obj:`str`) datasource device
-        self.device = str(device) if device is not None else None
+        self.device = Utils.tostr(device) if device is not None else None
         #: (:obj:`str`) datasource device attribute
-        self.attr = str(attr) if attr is not None else None
+        self.attr = Utils.tostr(attr) if attr is not None else None
 
 
 class CheckerItem(list):
@@ -158,7 +158,7 @@ class CheckerThread(threading.Thread):
                 checkeritem.message = "ALARM_STATE"
                 checkeritem.errords = ds.name
             except Exception as e:
-                checkeritem.message = str(e)
+                checkeritem.message = Utils.tostr(e)
                 checkeritem.errords = ds.name
                 checkeritem.active = False
                 break

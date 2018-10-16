@@ -54,9 +54,9 @@ class DSItem(object):
             #: (:obj:`str`) datasource record
             self.record = dsitem.record
         else:
-            self.name = str(name) if name is not None else None
-            self.dstype = str(dstype) if dstype is not None else None
-            self.record = str(record) if record is not None else None
+            self.name = Utils.tostr(name) if name is not None else None
+            self.dstype = Utils.tostr(dstype) if dstype is not None else None
+            self.record = Utils.tostr(record) if record is not None else None
 
 
 class ExDSItem(DSItem):
@@ -80,9 +80,9 @@ class ExDSItem(DSItem):
         """
         DSItem.__init__(self, dsitem=dsitem)
         #: (:obj:`str`) writing strategy mode
-        self.mode = str(mode) if mode is not None else None
+        self.mode = Utils.tostr(mode) if mode is not None else None
         #: (:obj:`str`) nexus type
-        self.nxtype = str(nxtype) if nxtype is not None else None
+        self.nxtype = Utils.tostr(nxtype) if nxtype is not None else None
         #: (:obj:`list` <:obj:`int`>) datasource shape
         self.shape = shape
 
@@ -129,9 +129,9 @@ class ExDSDict(dict):
                     self[name] = []
                 self[name].append(ExDSItem(dsitem, mode, nxtype, shape))
             elif dsitem.dstype:
-                name = self.__prefix + str(self.__counter)
+                name = self.__prefix + Utils.tostr(self.__counter)
                 while name in self.keys():
-                    name = self.__prefix + str(self.__counter)
+                    name = self.__prefix + Utils.tostr(self.__counter)
                     self.__counter = self.__counter + 1
                 self[name] = []
                 self[name].append(ExDSItem(dsitem, mode, nxtype, shape))
@@ -331,9 +331,10 @@ class Describer(object):
                 except (StopIteration, IndexError):
                     subc = ''
                 name = subc.strip() if subc else ""
-                if str(name) in self.__availableDataSources:
-                    dsxmls = TangoUtils.command(self.__nexusconfig_device,
-                                                "dataSources", [str(name)])
+                if Utils.tostr(name) in self.__availableDataSources:
+                    dsxmls = TangoUtils.command(
+                        self.__nexusconfig_device,
+                        "dataSources", [Utils.tostr(name)])
                 else:
                     dsxmls = None
                     dsitem = DSItem(name, "__ERROR__", "__ERROR__")
@@ -346,7 +347,7 @@ class Describer(object):
                     dsitem = DSItem(name, None, None)
                 index = dstxt.find("$%s." % label, index + 1)
             dslist.append(dsitem)
-        if name and str(dstype) == 'PYEVAL':
+        if name and Utils.tostr(dstype) == 'PYEVAL':
             if dsxmls and self.__pyevalfromscript:
                 dslist.extend(self.__findsubdatasources(dsxmls[0]))
             else:
@@ -376,7 +377,7 @@ class Describer(object):
             if child.nodeName == 'result':
                 for content in child.childNodes:
                     if content.nodeType == content.TEXT_NODE:
-                        result += str(content.data)
+                        result += Utils.tostr(content.data)
 
         index = dsxml.find("$%s." % label)
         while index != -1:
@@ -395,7 +396,7 @@ class Describer(object):
             if name in result:
                 chdsxml = TangoUtils.command(
                     self.__nexusconfig_device,
-                    "dataSources", [str(name)])
+                    "dataSources", [Utils.tostr(name)])
                 if chdsxml:
                     dsitem = self.__describeDataSource(name, chdsxml[0])
                     if dsitem.dstype:
@@ -423,7 +424,7 @@ class Describer(object):
                 try:
                     value = int(dim.attributes["value"].value)
                 except ValueError:
-                    value = str(dim.attributes["value"].value)
+                    value = Utils.tostr(dim.attributes["value"].value)
                 shape[index - 1] = value
             else:
                 dss = node.getElementsByTagName("datasource")
@@ -596,7 +597,7 @@ class Describer(object):
                     elem["dsname"] = ds.name
                     elem["dstype"] = ds.dstype
                     elem["record"] = ds.record
-                    dslist.append(str(json.dumps(elem)))
+                    dslist.append(Utils.tostr(json.dumps(elem)))
         return dslist
 
     def __describeDataSource(self, name, dsxml=None):
@@ -613,8 +614,9 @@ class Describer(object):
         record = None
         try:
             if not dsxml:
-                dsource = TangoUtils.command(self.__nexusconfig_device,
-                                             "dataSources", [str(name)])
+                dsource = TangoUtils.command(
+                    self.__nexusconfig_device,
+                    "dataSources", [Utils.tostr(name)])
             else:
                 dsource = [dsxml]
         except (PyTango.DevFailed, PyTango.Except, PyTango.DevError):

@@ -31,8 +31,15 @@ import json
 from xml.dom import minidom
 import binascii
 
-import TestServerSetUp
-import TestMacroServerSetUp
+try:
+    import TestServerSetUp
+except Exception:
+    from . import TestServerSetUp
+
+try:
+    import TestMacroServerSetUp
+except Exception:
+    from . import TestMacroServerSetUp
 
 
 from nxsrecconfig.Utils import Utils, TangoUtils, MSUtils, PoolUtils

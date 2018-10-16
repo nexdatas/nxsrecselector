@@ -112,7 +112,7 @@ class Settings(object):
             + '"adc": ["*exp_adc*"], "motor": ["*exp_mot*"]}'
 
         #: (:obj:`str`) device groups
-        self.__deviceGroups = str(self.__defaultDeviceGroups)
+        self.__deviceGroups = Utils.tostr(self.__defaultDeviceGroups)
         #: (:obj:`list` <:obj:`str`>) administator data
         self.adminDataNames = []
 
@@ -137,11 +137,11 @@ class Settings(object):
             import sys
             import traceback
             info = sys.exc_info()
-            message = str(info[1].__str__()) + "\n " + (" ").join(
+            message = Utils.tostr(info[1].__str__()) + "\n " + (" ").join(
                 traceback.format_tb(sys.exc_info()[2]))
             self._streams.error("Error in fetching profile: %s"
                                 % self.__selector["MntGrp"])
-            self._streams.error(str(message))
+            self._streams.error(Utils.tostr(message))
 
     def value(self, name):
         """ provides values of the required variable
@@ -155,7 +155,7 @@ class Settings(object):
         if name in self.__selector.keys():
             vl = self.__selector[name]
             if isinstance(vl, unicode):
-                vl = str(vl)
+                vl = Utils.tostr(vl)
         return vl
 
     def names(self):
@@ -678,7 +678,7 @@ class Settings(object):
         :rtype: :obj:`str`
         """
         ms = self.__selector.getMacroServer()
-        return str(MSUtils.getEnv('ScanDir', ms))
+        return Utils.tostr(MSUtils.getEnv('ScanDir', ms))
 
     def __setScanDir(self, name):
         """ set method for ScanDir attribute
@@ -687,7 +687,7 @@ class Settings(object):
         :type name: :obj:`str`
         """
         ms = self.__selector.getMacroServer()
-        MSUtils.setEnv('ScanDir', str(name), ms)
+        MSUtils.setEnv('ScanDir', Utils.tostr(name), ms)
 
     #: the json data string
     scanDir = property(__getScanDir, __setScanDir,
@@ -814,9 +814,9 @@ class Settings(object):
             dsxmls = {}
             for ds in avds:
                 try:
-                    dsxmls[str(ds)] = TangoUtils.command(
+                    dsxmls[Utils.tostr(ds)] = TangoUtils.command(
                         nexusconfig_device, "dataSources",
-                        [str(ds)])[0]
+                        [Utils.tostr(ds)])[0]
                 except Exception:
                     pass
         lst = []
@@ -974,7 +974,7 @@ class Settings(object):
                 raise
         nexusconfig_device.stepdatasources = "[]"
         nexusconfig_device.linkdatasources = "[]"
-        return str(nexusconfig_device.xmlstring)
+        return Utils.tostr(nexusconfig_device.xmlstring)
 
     def updateConfigVariables(self):
         """  sends ConfigVariables into ConfigServer
@@ -991,14 +991,14 @@ class Settings(object):
                 try:
                     sn = int(cvars["serialno"])
                     sn += 1
-                    cvars["serialno"] = str(sn)
+                    cvars["serialno"] = Utils.tostr(sn)
                 except ValueError:
                     pass
             else:
-                cvars["serialno"] = str(1)
+                cvars["serialno"] = Utils.tostr(1)
             jvars["serialno"] = cvars["serialno"]
             confvars = json.dumps(jvars)
-        nexusconfig_device.variables = str(confvars)
+        nexusconfig_device.variables = Utils.tostr(confvars)
 
     def preselectComponents(self):
         """ checks existing controllers of pools
@@ -1176,7 +1176,7 @@ class Settings(object):
             self.channelProperties("shape"))
         dcpcreator.setDefaultLinkPath(
             bool(self.__selector["DefaultDynamicLinks"]),
-            str(self.__selector["DefaultDynamicPath"]))
+            Utils.tostr(self.__selector["DefaultDynamicPath"]))
 
         return dcpcreator.create()
 
@@ -1223,5 +1223,5 @@ class Settings(object):
         }
         for attr, name in commands.items():
             vl = getattr(self, attr)
-            nenv[str(name)] = vl
+            nenv[Utils.tostr(name)] = vl
         self.__selector.exportEnv(cmddata=nenv)

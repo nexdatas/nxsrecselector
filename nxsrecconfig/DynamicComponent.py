@@ -220,7 +220,7 @@ class DynamicComponent(object):
         if ds.hasAttribute("type"):
             dstype = ds.attributes["type"].value
         if dstype == 'TANGO':
-            source = str(Utils.getRecord(ds))
+            source = Utils.tostr(Utils.getRecord(ds))
             shape, dt, _ = TangoUtils.getShapeTypeUnit(source)
             nxtype = self.__npTn[dt] \
                 if dt in self.__npTn.keys() else nxtype
@@ -237,7 +237,7 @@ class DynamicComponent(object):
         :type definition: :class:`xml.dom.minidom.Node`
         """
         for dd in self.__stepdsourcesDict:
-            alias = self.__get_alias(str(dd["name"]))
+            alias = self.__get_alias(Utils.tostr(dd["name"]))
             path, field = self.__getPathField(
                 self.__nexuspaths, self.__nexuslabels,
                 alias, self.__defaultpath)
@@ -288,7 +288,7 @@ class DynamicComponent(object):
                 if ds in avds:
                     dsource = TangoUtils.command(
                         self.__nexusconfig_device, "dataSources",
-                        [str(ds)])
+                        [Utils.tostr(ds)])
                     if sys.version_info > (3,):
                         indom = xml.dom.minidom.parseString(
                             bytes(dsource[0], "UTF-8"))
@@ -339,9 +339,10 @@ class DynamicComponent(object):
         self.__createNonSardanaNodes(created, avds, root, definition, 'STEP')
         self.__createNonSardanaNodes(created, avds, root, definition, 'INIT')
 
-        self.__nexusconfig_device.xmlstring = str(root.toprettyxml(indent=""))
+        self.__nexusconfig_device.xmlstring = Utils.tostr(
+            root.toprettyxml(indent=""))
         TangoUtils.command(self.__nexusconfig_device, "storeComponent",
-                           str(self.__dynamicCP))
+                           Utils.tostr(self.__dynamicCP))
 #        print("Dynamic Component:\n%s" % root.toprettyxml(indent="  "))
 
         return self.__dynamicCP
@@ -519,13 +520,13 @@ class DynamicComponent(object):
         field.appendChild(dsource)
         if shape:
             dm = root.createElement("dimensions")
-            dm.setAttribute("rank", str(len(shape)))
+            dm.setAttribute("rank", Utils.tostr(len(shape)))
             field.appendChild(dm)
             for i in range(len(shape)):
                 dim = root.createElement("dim")
                 dm.appendChild(dim)
-                dim.setAttribute("index", str(i + 1))
-                dim.setAttribute("value", str(shape[i]))
+                dim.setAttribute("index", Utils.tostr(i + 1))
+                dim.setAttribute("value", Utils.tostr(shape[i]))
 
     def remove(self, name):
         """ removes dynamic component
@@ -540,7 +541,7 @@ class DynamicComponent(object):
                                  "availableComponents")
         if name in cps:
             TangoUtils.command(self.__nexusconfig_device,
-                               "deleteComponent", str(name))
+                               "deleteComponent", Utils.tostr(name))
 
     @classmethod
     def __createGroupTree(cls, root, definition, path, links=False):
