@@ -48,7 +48,8 @@ class Utils(object):
         if isinstance(text, str):
             return text
         else:
-            if sys.version_info > (3,):
+            if sys.version_info > (3,) and \
+               isinstance(text, bytes) or isinstance(text, unicode):
                 return str(text, "utf8")
             else:
                 return str(text)

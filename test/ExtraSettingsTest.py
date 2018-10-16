@@ -27,9 +27,18 @@ import PyTango
 import json
 import xml
 
-import TestServerSetUp
-import TestMGSetUp
-import SettingsTest
+try:
+    import TestServerSetUp
+except Exception:
+    from . import TestServerSetUp
+try:
+    import TestMGSetUp
+except Exception:
+    from . import TestMGSetUp
+try:
+    import SettingsTest
+except Exception:
+    from . import SettingsTest
 
 
 from nxsrecconfig.Describer import Describer
