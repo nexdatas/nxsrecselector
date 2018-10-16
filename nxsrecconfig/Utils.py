@@ -240,7 +240,7 @@ class TangoUtils(object):
             try:
                 cnfServer.ping()
                 found = True
-            except (PyTango.DevFailed, PyTango.Error):
+            except (PyTango.DevFailed, PyTango.Error)<:
                 time.sleep(0.01)
                 found = False
                 if cnt == counter - 1:
@@ -272,7 +272,7 @@ class TangoUtils(object):
                         found = True
                 else:
                     found = True
-            except (PyTango.DevFailed, PyTango.Error):
+            except PyTango.DevFailed:
                 time.sleep(0.01)
                 found = False
                 if cnt == counter - 1:
@@ -295,7 +295,7 @@ class TangoUtils(object):
             try:
                 dp.ping()
                 dps.append(dp)
-            except (PyTango.DevFailed, PyTango.Error):
+            except PyTango.DevFailed:
                 pass
         return dps
 
@@ -319,7 +319,7 @@ class TangoUtils(object):
                 dp.ping()
                 device = server
                 break
-            except (PyTango.DevFailed, PyTango.Error):
+            except PyTango.DevFailed:
                 pass
         return device
 
@@ -372,7 +372,7 @@ class TangoUtils(object):
             if ac.data_format != PyTango.AttrDataFormat.SCALAR:
                 da = ap.read()
                 vl = da.value
-        except (PyTango.DevFailed, PyTango.Error):
+        except PyTango.DevFailed:
             if ac and ac.data_format != PyTango.AttrDataFormat.SCALAR \
                     and (da is None or not hasattr(da, 'dim_x')):
                 raise
@@ -750,6 +750,6 @@ class PoolUtils(object):
                 if ap is None:
                     raise Exception("Empty proxy")
                 source = sds[-1]
-        except (PyTango.DevFailed, PyTango.Error):
+        except PyTango.DevFailed:
             pass
         return source
