@@ -2436,7 +2436,7 @@ class SettingsTest(unittest.TestCase):
             myct = ("ctrl_%s" % tm).replace("_", "/")
             timers[myct] = tm
             ctrls.append(myct)
-        ltimers = timers.values()
+        ltimers = list(timers.values())
         se["Timer"] = json.dumps(ltimers)
 
         for ds, vl in self.smychsXX.items():
