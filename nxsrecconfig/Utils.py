@@ -240,7 +240,7 @@ class TangoUtils(object):
             try:
                 cnfServer.ping()
                 found = True
-            except (PyTango.DevFailed, PyTango.Error)<:
+            except PyTango.DevFailed:
                 time.sleep(0.01)
                 found = False
                 if cnt == counter - 1:
