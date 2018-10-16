@@ -267,17 +267,14 @@ class NXSConfigServer(PyTango.Device_4Impl):
         :returns: DevVarStringArray    list of component names
         :rtype: :obj:`list` <:obj:`str`>
         """
-        print("D1")
         self.debug_stream("In DependentComponents()")
         self.cmd["VARS"].append(argin)
         self.cmd["COMMANDS"].append("DependentComponents")
-        print("D2")
         res = []
         for name in argin:
             res.append(name)
             cp = self.cmd["CPDICT"][name]
             res.extend(self.__findText(cp, "$components."))
-        print("D3")
         return res
 
     # -----------------------------------------------------------------
