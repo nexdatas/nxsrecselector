@@ -27,14 +27,23 @@ import PyTango
 import json
 import xml
 
-import TestServerSetUp
-import TestMGSetUp
-import Settings2Test
-
-
 from nxsrecconfig.Describer import Describer
 from nxsrecconfig.Settings import Settings
 from nxsrecconfig.Utils import MSUtils, Utils
+
+try:
+    import TestServerSetUp
+except Exception:
+    from . import TestServerSetUp
+try:
+    import TestMGSetUp
+except Exception:
+    from . import TestMGSetUp
+try:
+    import Settings2Test
+except Exception:
+    from . import Settings2Test
+
 
 import logging
 logger = logging.getLogger()

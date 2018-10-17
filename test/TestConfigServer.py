@@ -300,7 +300,18 @@ class NXSConfigServer(PyTango.Device_4Impl):
     #    argout: DevVarStringArray    list of instantiated components
     # -----------------------------------------------------------------
     def InstantiatedComponents(self, names):
-        if self.cmd["CHECKVARIABLES"] != self.attr_Variables:
+        if self.attr_Variables and self.cmd["CHECKVARIABLES"]:
+            d1 = json.loads(self.cmd["CHECKVARIABLES"])
+            d2 = json.loads(self.attr_Variables)
+            if len(d1) != len(d2):
+                raise Exception("Variables not set")
+            for ky, vl in d1.items():
+                if ky not in d2.keys():
+                    raise Exception("Variables not set")
+                if d1[ky] != d2[ky]:
+                    raise Exception("Variables not set")
+                    
+        elif self.cmd["CHECKVARIABLES"] != self.attr_Variables:
             raise Exception("Variables not set")
         self.cmd["VARS"].append(names)
         self.cmd["COMMANDS"].append("InstantiatedComponents")

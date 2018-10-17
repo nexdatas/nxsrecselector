@@ -27,11 +27,27 @@ import PyTango
 import json
 import pickle
 
-import TestMacroServerSetUp
-import TestPool2SetUp
-import TestServerSetUp
-import TestMGSetUp
-import Settings2Test
+
+try:
+    import TestMacroServerSetUp
+except Exception:
+    from . import TestMacroServerSetUp
+try:
+    import TestPool2SetUp
+except Exception:
+    from . import TestPool2SetUp
+try:
+    import TestServerSetUp
+except Exception:
+    from . import TestServerSetUp
+try:
+    import TestMGSetUp
+except Exception:
+    from . import TestMGSetUp
+try:
+    import Settings2Test
+except Exception:
+    from . import Settings2Test
 
 from nxsrecconfig.Describer import Describer
 from nxsrecconfig.Utils import TangoUtils, MSUtils
@@ -10891,21 +10907,20 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                 {"name": "test/ct/041", "full_name": "mntgrp_04/131"},
                 {"name": "null", "full_name": "mntgrp_041"},
             ]
-
+            
             pool.MeasurementGroupList = [json.dumps(a) for a in arr1]
             pool2.MeasurementGroupList = [json.dumps(a) for a in arr2]
-
             pnames = self._ms.dps[
                 list(self._ms.ms.keys())[0]
             ].get_property("PoolNames")["PoolNames"]
-
-            if pnames[0] == "pooltestp09/testts/t2r228":
-                arr = arr2
-            else:
-                arr = arr1
-
             dd = rs.availableMntGrps()
-            self.assertEqual(set(dd), set([a["name"] for a in arr]))
+
+            if set(dd) == set([a["name"] for a in arr1]):
+                arr = arr1
+                self.assertEqual(set(dd), set([a["name"] for a in arr]))
+            else:
+                arr = arr2
+                self.assertEqual(set(dd), set([a["name"] for a in arr]))
 
             for ar in arr1:
 

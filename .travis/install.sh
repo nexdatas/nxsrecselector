@@ -50,10 +50,10 @@ fi
 
 if [ $2 = "2" ]; then
     echo "install sardana, taurus and nexdatas"
-    docker exec -it --user root ndts /bin/sh -c 'export DEBIAN_FRONTEND=noninteractive; apt-get -qq update; apt-get install -y  python-nxsconfigserver python-nxswriter'
+    docker exec -it --user root ndts /bin/sh -c 'export DEBIAN_FRONTEND=noninteractive; apt-get -qq update; apt-get install -y  python-nxsconfigserver python-nxswriter python-nxstools'
 else
     echo "install sardana, taurus and nexdatas"
-    docker exec -it --user root ndts /bin/sh -c 'export DEBIAN_FRONTEND=noninteractive; apt-get -qq update; apt-get install -y  python3-nxsconfigserver python3-nxswriter'
+    docker exec -it --user root ndts /bin/sh -c 'export DEBIAN_FRONTEND=noninteractive; apt-get -qq update; apt-get install -y  python3-nxsconfigserver python3-nxswriter python3-nxstools'
 fi
 if [ $? -ne "0" ]
 then
@@ -62,7 +62,6 @@ fi
 
 
 if [ $2 = "2" ]; then
-    echo "install python-nxswriter"
     echo "install python-nxsrecselector"
     docker exec -it --user root ndts python setup.py -q install
 else

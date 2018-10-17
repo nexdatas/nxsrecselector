@@ -32,11 +32,28 @@ import string
 import time
 import nxsrecconfig
 
-import TestMacroServerSetUp
-import TestPoolSetUp
-import TestServerSetUp
-import TestConfigServerSetUp
-import TestWriterSetUp
+try:
+    import TestMacroServerSetUp
+except Exception:
+    from . import TestMacroServerSetUp
+try:
+    import TestPoolSetUp
+except Exception:
+    from . import TestPoolSetUp
+try:
+    import TestServerSetUp
+except Exception:
+    from . import TestServerSetUp
+
+try:
+    import TestConfigServerSetUp
+except Exception:
+    from . import TestConfigServerSetUp
+
+try:
+    import TestWriterSetUp
+except Exception:
+    from . import TestWriterSetUp
 
 
 from nxsrecconfig.MacroServerPools import MacroServerPools

@@ -10914,14 +10914,14 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             pnames = self._ms.dps[
                 list(self._ms.ms.keys())[0]
             ].get_property("PoolNames")["PoolNames"]
-
-            if pnames[0] == "pooltestp09/testts/t2r228":
-                arr = arr2
-            else:
-                arr = arr1
-
             dd = rs.availableMntGrps()
-            self.assertEqual(set(dd), set([a["name"] for a in arr]))
+
+            if set(dd) == set([a["name"] for a in arr1]):
+                arr = arr1
+                self.assertEqual(set(dd), set([a["name"] for a in arr]))
+            else:
+                arr = arr2
+                self.assertEqual(set(dd), set([a["name"] for a in arr]))
 
             for ar in arr1:
 
