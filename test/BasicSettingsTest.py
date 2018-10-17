@@ -10911,7 +10911,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             pool.MeasurementGroupList = [json.dumps(a) for a in arr1]
             pool2.MeasurementGroupList = [json.dumps(a) for a in arr2]
 
-            pnames = self._ms.dps[
+            self._ms.dps[
                 list(self._ms.ms.keys())[0]
             ].get_property("PoolNames")["PoolNames"]
             dd = rs.availableMntGrps()

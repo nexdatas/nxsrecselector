@@ -310,7 +310,7 @@ class NXSConfigServer(PyTango.Device_4Impl):
                     raise Exception("Variables not set")
                 if d1[ky] != d2[ky]:
                     raise Exception("Variables not set")
-                    
+
         elif self.cmd["CHECKVARIABLES"] != self.attr_Variables:
             raise Exception("Variables not set")
         self.cmd["VARS"].append(names)

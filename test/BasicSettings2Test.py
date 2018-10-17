@@ -10907,10 +10907,10 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                 {"name": "test/ct/041", "full_name": "mntgrp_04/131"},
                 {"name": "null", "full_name": "mntgrp_041"},
             ]
-            
+
             pool.MeasurementGroupList = [json.dumps(a) for a in arr1]
             pool2.MeasurementGroupList = [json.dumps(a) for a in arr2]
-            pnames = self._ms.dps[
+            self._ms.dps[
                 list(self._ms.ms.keys())[0]
             ].get_property("PoolNames")["PoolNames"]
             dd = rs.availableMntGrps()
