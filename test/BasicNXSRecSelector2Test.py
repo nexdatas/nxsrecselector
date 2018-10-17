@@ -25,13 +25,19 @@ import time
 import PyTango
 import json
 
-import ServerSetUp
-import BasicSettings2Test
-
 from nxsrecconfig.MacroServerPools import MacroServerPools
 from nxsrecconfig.Selector import Selector
 from nxsrecconfig.ProfileManager import ProfileManager
 from nxsrecconfig.Utils import MSUtils
+
+try:
+    import ServerSetUp
+except Exception:
+    from . import ServerSetUp
+try:
+    import BasicSettings2Test
+except Exception:
+    from . import BasicSettings2Test
 
 
 # test fixture
