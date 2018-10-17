@@ -409,7 +409,6 @@ class MacroServerPools(object):
                     for name, value in cmddata.items():
                         nenv[Utils.tostr(name)] = value
                 pk = pickle.dumps(dc)
-                print(pk)
                 msp.Environment = ['pickle', pk]
 
     def getScanEnv(self, door):
