@@ -27,14 +27,23 @@ import PyTango
 import json
 import xml
 
-import TestServerSetUp
-import TestMGSetUp
-import Settings2Test
-
-
 from nxsrecconfig.Describer import Describer
 from nxsrecconfig.Settings import Settings
 from nxsrecconfig.Utils import MSUtils, Utils
+
+try:
+    import TestServerSetUp
+except Exception:
+    from . import TestServerSetUp
+try:
+    import TestMGSetUp
+except Exception:
+    from . import TestMGSetUp
+try:
+    import Settings2Test
+except Exception:
+    from . import Settings2Test
+
 
 import logging
 logger = logging.getLogger()
@@ -86,6 +95,13 @@ except Exception:
             print("MYSQL not available")
 
 
+def miniparseString(text):
+    if sys.version_info > (3,):
+        return xml.dom.minidom.parseString(bytes(text, "UTF-8"))
+    else:
+        return xml.dom.minidom.parseString(text)
+
+
 # test fixture
 class ExtraSettings2Test(Settings2Test.Settings2Test):
 
@@ -114,20 +130,20 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
         self.assertEqual(rs.door, val["Door"])
 
         db = PyTango.Database()
-        db.put_device_property(self._ms.ms.keys()[0],
+        db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
         pool = self._pool.dp
         pool.ExpChannelList = []
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
         self.assertEqual(rs.availableMntGrps(), [])
         self.myAssertRaise(Exception, rs.updateMntGrp)
 
         db = PyTango.Database()
-        db.put_device_property(self._ms.ms.keys()[0],
+        db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
         pool = self._pool.dp
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
         self.assertEqual(rs.availableMntGrps(), [])
         scalar_ctrl = 'ttestp09/testts/t1r228'
@@ -153,7 +169,7 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
                     myct = ("ctrl_%s" % tm).replace("_", "/")
                     timers[myct] = tm
                     ctrls.append(myct)
-                ltimers = timers.values()
+                ltimers = list(timers.values())
 
                 for ds, vl in self.smychsXX.items():
                     if vl:
@@ -232,7 +248,7 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
                             if cps[cp]:
                                 comps.add(cp)
 
-                    ancps = self._rnd.randint(1, len(amycps.keys()) - 1)
+                    ancps = self._rnd.randint(1, len(list(amycps.keys())) - 1)
                     alcps = self._rnd.sample(set(amycps.keys()), ancps)
                     for cp in alcps:
                         if cp not in wrong:
@@ -240,14 +256,14 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
                             if acps[cp]:
                                 comps.add(cp)
 
-                    ndss = self._rnd.randint(1, len(amycps.keys()) - 1)
+                    ndss = self._rnd.randint(1, len(list(amycps.keys())) - 1)
                     ldss = self._rnd.sample(set(amycps.keys()), ndss)
                     for ds in ldss:
                         if ds in amydss.keys():
                             if ds not in wrong:
                                 dss[ds] = bool(self._rnd.randint(0, 1))
 
-                    ndss = self._rnd.randint(1, len(amydss.keys()) - 1)
+                    ndss = self._rnd.randint(1, len(list(amydss.keys())) - 1)
                     ldss = self._rnd.sample(set(amydss.keys()), ndss)
                     for ds in ldss:
                         if ds in amydss.keys():
@@ -257,7 +273,7 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
                     for tm in ltimers:
                         dss[tm] = bool(self._rnd.randint(0, 1))
 
-                    mncps = self._rnd.randint(1, len(amycps.keys()) - 1)
+                    mncps = self._rnd.randint(1, len(list(amycps.keys())) - 1)
                     mcps = [cp for cp in self._rnd.sample(
                             set(amycps.keys()), mncps) if cp not in wrong]
                     for cp in mcps:
@@ -285,7 +301,7 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
                                 for idsr in idsrs:
                                     records[str(idsr[2])] = "1234"
                     dsres = describer.dataSources(
-                        dss.keys(), dstype='CLIENT')[0]
+                        list(dss.keys()), dstype='CLIENT')[0]
                     for dsr in dsres.values():
                         records[str(dsr.record)] = '2345'
 
@@ -571,20 +587,20 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
         self.assertEqual(rs.door, val["Door"])
 
         db = PyTango.Database()
-        db.put_device_property(self._ms.ms.keys()[0],
+        db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
         pool = self._pool.dp
         pool.ExpChannelList = []
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
         self.assertEqual(rs.availableMntGrps(), [])
         self.myAssertRaise(Exception, rs.updateMntGrp)
 
         db = PyTango.Database()
-        db.put_device_property(self._ms.ms.keys()[0],
+        db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
         pool = self._pool.dp
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
         self.assertEqual(rs.availableMntGrps(), [])
         scalar_ctrl = 'ttestp09/testts/t1r228'
@@ -610,7 +626,7 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
                     myct = ("ctrl_%s" % tm).replace("_", "/")
                     timers[myct] = tm
                     ctrls.append(myct)
-                ltimers = timers.values()
+                ltimers = list(timers.values())
 
                 for ds, vl in self.smychsXX.items():
                     if vl:
@@ -689,7 +705,7 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
                             if cps[cp]:
                                 comps.add(cp)
 
-                    ancps = self._rnd.randint(1, len(amycps.keys()) - 1)
+                    ancps = self._rnd.randint(1, len(list(amycps.keys())) - 1)
                     alcps = self._rnd.sample(set(amycps.keys()), ancps)
                     for cp in alcps:
                         if cp not in wrong:
@@ -697,34 +713,34 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
                             if acps[cp]:
                                 comps.add(cp)
 
-                    ndss = self._rnd.randint(1, len(amycps.keys()) - 1)
+                    ndss = self._rnd.randint(1, len(list(amycps.keys())) - 1)
                     ldss = self._rnd.sample(set(amycps.keys()), ndss)
                     for ds in ldss:
                         if ds in amydss.keys():
                             if ds not in wrong:
                                 dss[ds] = bool(self._rnd.randint(0, 1))
 
-                    ndss = self._rnd.randint(1, len(amydss.keys()) - 1)
+                    ndss = self._rnd.randint(1, len(list(amydss.keys())) - 1)
                     ldss = self._rnd.sample(set(amydss.keys()), ndss)
                     for ds in ldss:
                         if ds in amydss.keys():
                             if ds not in wrong:
                                 dss[ds] = bool(self._rnd.randint(0, 1))
 
-                    nadss = self._rnd.randint(1, len(amydss.keys()) - 1)
+                    nadss = self._rnd.randint(1, len(list(amydss.keys())) - 1)
                     aadss = [ds for ds in self._rnd.sample(
                         set(amydss.keys()), nadss)]
-                    nadss = self._rnd.randint(1, len(amydss.keys()) - 1)
+                    nadss = self._rnd.randint(1, len(list(amydss.keys())) - 1)
                     indss = [ds for ds in self._rnd.sample(
                         set(amydss.keys()), nadss)]
 
                     for tm in ltimers:
                         dss[tm] = bool(self._rnd.randint(0, 1))
 
-                    mncps = self._rnd.randint(1, len(amycps.keys()) - 1)
+                    mncps = self._rnd.randint(1, len(list(amycps.keys())) - 1)
                     mcps = [cp for cp in self._rnd.sample(
                         set(amycps.keys()), mncps) if cp not in wrong]
-                    oncps = self._rnd.randint(1, len(amycps.keys()) - 1)
+                    oncps = self._rnd.randint(1, len(list(amycps.keys())) - 1)
                     ocps = [cp for cp in self._rnd.sample(
                         set(amycps.keys()), oncps) if cp not in wrong]
                     for cp in mcps:
@@ -799,7 +815,7 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
                                 for idsr in idsrs:
                                     records[str(idsr[2])] = "1234"
                     dsres = describer.dataSources(
-                        dss.keys(), dstype='CLIENT')[0]
+                        list(dss.keys()), dstype='CLIENT')[0]
                     for dsr in dsres.values():
                         records[str(dsr.record)] = '2345'
 
@@ -1099,7 +1115,7 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
             for j in range(10):
                 self.setUp()
                 db = PyTango.Database()
-                db.put_device_property(self._ms.ms.keys()[0],
+                db.put_device_property(list(self._ms.ms.keys())[0],
                                        {'PoolNames': self._pool.dp.name()})
 
                 wrong = []
@@ -1123,7 +1139,7 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
                 pools = {}
 
                 pool = self._pool.dp
-                self._ms.dps[self._ms.ms.keys()[0]].Init()
+                self._ms.dps[list(self._ms.ms.keys())[0]].Init()
                 scalar_ctrl = 'ttestp09/testts/t1r228'
                 spectrum_ctrl = 'ttestp09/testts/t2r228'
                 image_ctrl = 'ttestp09/testts/t3r228'
@@ -1169,7 +1185,7 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
                             ctrls.append(myct)
 #                        print "TIMERSL", tms
 #                        print "TIMERSD", timers
-                        ltimers[mg] = timers.values()
+                        ltimers[mg] = list(timers.values())
 #                        print "LTIMER", ltimers[mg]
 
                         for ds, vl in self.smychsXX.items():
@@ -1250,7 +1266,8 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
                                 if cps[mg][cp]:
                                     comps.add(cp)
 
-                        ancps = self._rnd.randint(1, len(amycps.keys()) - 1)
+                        ancps = self._rnd.randint(
+                            1, len(list(amycps.keys())) - 1)
                         alcps = self._rnd.sample(set(amycps.keys()), ancps)
                         for cp in alcps:
                             if cp not in wrong:
@@ -1258,24 +1275,28 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
                                 if acps[mg][cp]:
                                     comps.add(cp)
 
-                        ndss = self._rnd.randint(1, len(amycps.keys()) - 1)
+                        ndss = self._rnd.randint(
+                            1, len(list(amycps.keys())) - 1)
                         ldss = self._rnd.sample(set(amycps.keys()), ndss)
                         for ds in ldss:
                             if ds in amydss.keys():
                                 if ds not in wrong:
                                     dss[ds] = bool(self._rnd.randint(0, 1))
 
-                        ndss = self._rnd.randint(1, len(amydss.keys()) - 1)
+                        ndss = self._rnd.randint(
+                            1, len(list(amydss.keys())) - 1)
                         ldss = self._rnd.sample(set(amydss.keys()), ndss)
                         for ds in ldss:
                             if ds in amydss.keys():
                                 if ds not in wrong:
                                     dss[ds] = bool(self._rnd.randint(0, 1))
 
-                        nadss = self._rnd.randint(1, len(amydss.keys()) - 1)
+                        nadss = self._rnd.randint(
+                            1, len(list(amydss.keys())) - 1)
                         aadss[mg] = [ds for ds in self._rnd.sample(
                             set(amydss.keys()), nadss)]
-                        nadss = self._rnd.randint(1, len(amydss.keys()) - 1)
+                        nadss = self._rnd.randint(
+                            1, len(list(amydss.keys())) - 1)
                         indss = [ds for ds in self._rnd.sample(
                             set(amydss.keys()), nadss)]
 
@@ -1287,10 +1308,12 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
                         for tm in ltimers[mg]:
                             dss[tm] = bool(self._rnd.randint(0, 1))
 
-                        mncps = self._rnd.randint(1, len(amycps.keys()) - 1)
+                        mncps = self._rnd.randint(
+                            1, len(list(amycps.keys())) - 1)
                         mcps = [cp for cp in self._rnd.sample(
                                 set(amycps.keys()), mncps) if cp not in wrong]
-                        oncps = self._rnd.randint(1, len(amycps.keys()) - 1)
+                        oncps = self._rnd.randint(
+                            1, len(list(amycps.keys())) - 1)
                         ocps = [cp for cp in self._rnd.sample(
                                 set(amycps.keys()), oncps) if cp not in wrong]
                         for cp in mcps:
@@ -1371,7 +1394,7 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
                                     for idsr in idsrs:
                                         records[mg][str(idsr[2])] = "1234"
                         dsres = describer.dataSources(
-                            dss.keys(), dstype='CLIENT')[0]
+                            list(dss.keys()), dstype='CLIENT')[0]
                         for dsr in dsres.values():
                             records[mg][str(dsr.record)] = '2345'
 
@@ -1993,7 +2016,8 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
                     lrs.mntGrp = mg2
                     pool.AcqChannelList = pools[mg2][0]
                     pool.ExpChannelList = pools[mg2][1]
-                    MSUtils.setEnv('ActiveMntGrp', mg3, self._ms.ms.keys()[0])
+                    MSUtils.setEnv(
+                        'ActiveMntGrp', mg3, list(self._ms.ms.keys())[0])
 
                     # tmpcf1 =
                     json.loads(rs[mg1].mntGrpConfiguration())
@@ -2059,11 +2083,13 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
 #                    self.assertTrue(lrs.isMntGrpUpdated())
                     wmg = "wrong_mg"
                     lrs.mntGrp = mg3
-                    MSUtils.setEnv('ActiveMntGrp', wmg, self._ms.ms.keys()[0])
+                    MSUtils.setEnv(
+                        'ActiveMntGrp', wmg, list(self._ms.ms.keys())[0])
                     lrs.switchProfile()
                     self.assertEqual(
                         wmg,
-                        MSUtils.getEnv('ActiveMntGrp', self._ms.ms.keys()[0]))
+                        MSUtils.getEnv(
+                            'ActiveMntGrp', list(self._ms.ms.keys())[0]))
 
                     self.compareToDumpJSON(
                         lrs,
@@ -2108,7 +2134,8 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
                     lrs.mntGrp = mg2
                     self.assertTrue(not lrs.isMntGrpUpdated())
                     self.assertTrue(not lrs.isMntGrpUpdated())
-                    MSUtils.setEnv('ActiveMntGrp', mg3, self._ms.ms.keys()[0])
+                    MSUtils.setEnv(
+                        'ActiveMntGrp', mg3, list(self._ms.ms.keys())[0])
 
                     # tmpcf1 =
                     json.loads(rs[mg1].mntGrpConfiguration())
@@ -2165,11 +2192,13 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
 #                    self.assertTrue(lrs.isMntGrpUpdated())
                     wmg = ""
                     lrs.mntGrp = mg3
-                    MSUtils.setEnv('ActiveMntGrp', wmg, self._ms.ms.keys()[0])
+                    MSUtils.setEnv(
+                        'ActiveMntGrp', wmg, list(self._ms.ms.keys())[0])
                     lrs.switchProfile()
                     self.assertEqual(
                         wmg,
-                        MSUtils.getEnv('ActiveMntGrp', self._ms.ms.keys()[0]))
+                        MSUtils.getEnv(
+                            'ActiveMntGrp', list(self._ms.ms.keys())[0]))
 
                     # tmpcf1 =
                     json.loads(rs[mg1].mntGrpConfiguration())
@@ -2215,7 +2244,8 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
 #                    self.assertTrue(lrs.isMntGrpUpdated())
                     wmg = ""
                     lrs.mntGrp = mg3
-                    MSUtils.usetEnv('ActiveMntGrp', self._ms.ms.keys()[0])
+                    MSUtils.usetEnv(
+                        'ActiveMntGrp', list(self._ms.ms.keys())[0])
                     lrs.switchProfile()
 
                     # tmpcf1 =
@@ -2344,7 +2374,8 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
 
                     if j % 2:
 
-                        cpgood = self.smycps.keys() + self.smycps2.keys()
+                        cpgood = list(self.smycps.keys()) + \
+                                 list(self.smycps2.keys())
                         if "client_long" in aadss[mg3] \
                                 or "client_short" in aadss[mg3]:
                             cpgood.remove("smycpnt1")
@@ -2478,7 +2509,7 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
                 self.setUp()
                 self.mySetUp()
                 db = PyTango.Database()
-                db.put_device_property(self._ms.ms.keys()[0],
+                db.put_device_property(list(self._ms.ms.keys())[0],
                                        {'PoolNames': self._pool.dp.name()})
 
                 wrong = []
@@ -2502,7 +2533,7 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
                 pools = {}
 
                 pool = self._pool.dp
-                self._ms.dps[self._ms.ms.keys()[0]].Init()
+                self._ms.dps[list(self._ms.ms.keys())[0]].Init()
                 scalar_ctrl = 'ttestp09/testts/t1r228'
                 spectrum_ctrl = 'ttestp09/testts/t2r228'
                 image_ctrl = 'ttestp09/testts/t3r228'
@@ -2546,7 +2577,7 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
                             ctrls.append(myct)
 #                        print "TIMERSL", tms
 #                        print "TIMERSD", timers
-                        ltimers[mg] = timers.values()
+                        ltimers[mg] = list(timers.values())
 #                        print "LTIMER", ltimers[mg]
 
                         for ds, vl in self.smychsXX.items():
@@ -2627,7 +2658,8 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
                                 if cps[mg][cp]:
                                     comps.add(cp)
 
-                        ancps = self._rnd.randint(1, len(amycps.keys()) - 1)
+                        ancps = self._rnd.randint(
+                            1, len(list(amycps.keys())) - 1)
                         alcps = self._rnd.sample(set(amycps.keys()), ancps)
                         for cp in alcps:
                             if cp not in wrong:
@@ -2635,24 +2667,28 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
                                 if acps[mg][cp]:
                                     comps.add(cp)
 
-                        ndss = self._rnd.randint(1, len(amycps.keys()) - 1)
+                        ndss = self._rnd.randint(
+                            1, len(list(amycps.keys())) - 1)
                         ldss = self._rnd.sample(set(amycps.keys()), ndss)
                         for ds in ldss:
                             if ds in amydss.keys():
                                 if ds not in wrong:
                                     dss[ds] = bool(self._rnd.randint(0, 1))
 
-                        ndss = self._rnd.randint(1, len(amydss.keys()) - 1)
+                        ndss = self._rnd.randint(
+                            1, len(list(amydss.keys())) - 1)
                         ldss = self._rnd.sample(set(amydss.keys()), ndss)
                         for ds in ldss:
                             if ds in amydss.keys():
                                 if ds not in wrong:
                                     dss[ds] = bool(self._rnd.randint(0, 1))
 
-                        nadss = self._rnd.randint(1, len(amydss.keys()) - 1)
+                        nadss = self._rnd.randint(
+                            1, len(list(amydss.keys())) - 1)
                         aadss[mg] = [ds for ds in self._rnd.sample(
                             set(amydss.keys()), nadss)]
-                        nadss = self._rnd.randint(1, len(amydss.keys()) - 1)
+                        nadss = self._rnd.randint(
+                            1, len(list(amydss.keys())) - 1)
                         indss = [ds for ds in self._rnd.sample(
                             set(amydss.keys()), nadss)]
                         aindss = {}
@@ -2663,10 +2699,12 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
                         for tm in ltimers[mg]:
                             dss[tm] = bool(self._rnd.randint(0, 1))
 
-                        mncps = self._rnd.randint(1, len(amycps.keys()) - 1)
+                        mncps = self._rnd.randint(
+                            1, len(list(amycps.keys())) - 1)
                         mcps = [cp for cp in self._rnd.sample(
                                 set(amycps.keys()), mncps) if cp not in wrong]
-                        oncps = self._rnd.randint(1, len(amycps.keys()) - 1)
+                        oncps = self._rnd.randint(
+                            1, len(list(amycps.keys())) - 1)
                         ocps = [cp for cp in self._rnd.sample(
                                 set(amycps.keys()), oncps) if cp not in wrong]
                         for cp in mcps:
@@ -2747,7 +2785,7 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
                                     for idsr in idsrs:
                                         records[mg][str(idsr[2])] = "1234"
                         dsres = describer.dataSources(
-                            dss.keys(), dstype='CLIENT')[0]
+                            list(dss.keys()), dstype='CLIENT')[0]
                         for dsr in dsres.values():
                             records[mg][str(dsr.record)] = '2345'
 
@@ -3363,7 +3401,8 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
 
                     # switch to active profile mg3
                     lrs.mntGrp = mg2
-                    MSUtils.setEnv('ActiveMntGrp', mg3, self._ms.ms.keys()[0])
+                    MSUtils.setEnv(
+                        'ActiveMntGrp', mg3, list(self._ms.ms.keys())[0])
 
                     ors.profileConfiguration = str(json.dumps(mp[mg1]))
                     # tmpcf1 =
@@ -3433,11 +3472,13 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
 #                    self.assertTrue(lrs.isMntGrpUpdated())
                     wmg = "wrong_mg"
                     lrs.mntGrp = mg3
-                    MSUtils.setEnv('ActiveMntGrp', wmg, self._ms.ms.keys()[0])
+                    MSUtils.setEnv(
+                        'ActiveMntGrp', wmg, list(self._ms.ms.keys())[0])
                     lrs.switchProfile()
                     self.assertEqual(
                         wmg,
-                        MSUtils.getEnv('ActiveMntGrp', self._ms.ms.keys()[0]))
+                        MSUtils.getEnv(
+                            'ActiveMntGrp', list(self._ms.ms.keys())[0]))
 
                     self.compareToDumpJSON(
                         lrs,
@@ -3480,7 +3521,8 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
                     lrs.mntGrp = mg2
                     self.assertTrue(not lrs.isMntGrpUpdated())
                     self.assertTrue(not lrs.isMntGrpUpdated())
-                    MSUtils.setEnv('ActiveMntGrp', mg3, self._ms.ms.keys()[0])
+                    MSUtils.setEnv(
+                        'ActiveMntGrp', mg3, list(self._ms.ms.keys())[0])
 
                     ors.profileConfiguration = str(json.dumps(mp[mg1]))
                     # tmpcf1 =
@@ -3543,11 +3585,13 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
 #                    self.assertTrue(lrs.isMntGrpUpdated())
                     wmg = ""
                     lrs.mntGrp = mg3
-                    MSUtils.setEnv('ActiveMntGrp', wmg, self._ms.ms.keys()[0])
+                    MSUtils.setEnv(
+                        'ActiveMntGrp', wmg, list(self._ms.ms.keys())[0])
                     lrs.switchProfile()
                     self.assertEqual(
                         wmg,
-                        MSUtils.getEnv('ActiveMntGrp', self._ms.ms.keys()[0]))
+                        MSUtils.getEnv(
+                            'ActiveMntGrp', list(self._ms.ms.keys())[0]))
 
                     ors.profileConfiguration = str(json.dumps(mp[mg1]))
                     # tmpcf1 =
@@ -3596,7 +3640,8 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
 #                    self.assertTrue(lrs.isMntGrpUpdated())
                     wmg = ""
                     lrs.mntGrp = mg3
-                    MSUtils.usetEnv('ActiveMntGrp', self._ms.ms.keys()[0])
+                    MSUtils.usetEnv(
+                        'ActiveMntGrp', list(self._ms.ms.keys())[0])
                     lrs.switchProfile()
 
                     ors.profileConfiguration = str(json.dumps(mp[mg1]))
@@ -3735,7 +3780,8 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
 
                     if j % 2:
 
-                        cpgood = self.smycps.keys() + self.smycps2.keys()
+                        cpgood = list(self.smycps.keys()) + \
+                                 list(self.smycps2.keys())
                         if "client_long" in aadss[mg3] \
                                 or "client_short" in aadss[mg3]:
                             cpgood.remove("smycpnt1")
@@ -3893,9 +3939,9 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
 
         if isinstance(rs, Settings):
             res = rs.dataSourceDescription(None)
-            self.checkDSList(res, self.resdss.keys())
-        res = rs.dataSourceDescription(self.mydss.keys())
-        self.checkDSList(res, self.resdss.keys())
+            self.checkDSList(res, list(self.resdss.keys()))
+        res = rs.dataSourceDescription(list(self.mydss.keys()))
+        self.checkDSList(res, list(self.resdss.keys()))
 
     # constructor test
     # \brief It tests default settings
@@ -3974,8 +4020,8 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
             res = json.loads(rs.componentClientSources([cp]))
             self.checkICP(res, [cp],
                           strategy=None, dstype='CLIENT')
-        res = json.loads(rs.componentClientSources(self.mycps.keys()))
-        self.checkICP(res, self.rescps.keys(),
+        res = json.loads(rs.componentClientSources(list(self.mycps.keys())))
+        self.checkICP(res, list(self.rescps.keys()),
                       strategy=None, dstype='CLIENT')
 
     # constructor test
@@ -3992,7 +4038,7 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
         for i in range(20):
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
             self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
-            nmem = self._rnd.randint(1, len(self.mycps.keys()) - 1)
+            nmem = self._rnd.randint(1, len(list(self.mycps.keys())) - 1)
             mem = self._rnd.sample(set(self.mycps.keys()), nmem)
             self._cf.dp.SetCommandVariable(["MCPLIST", json.dumps(mem)])
 
@@ -4000,8 +4046,9 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
                 res = json.loads(rs.componentClientSources([cp]))
                 self.checkICP(res, [cp],
                               strategy=None, dstype='CLIENT')
-            res = json.loads(rs.componentClientSources(self.mycps.keys()))
-            self.checkICP(res, self.rescps.keys(),
+            res = json.loads(
+                rs.componentClientSources(list(self.mycps.keys())))
+            self.checkICP(res, list(self.rescps.keys()),
                           strategy=None, dstype='CLIENT')
 
     # constructor test
@@ -4018,7 +4065,7 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
         for i in range(20):
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
             self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
-            nmem = self._rnd.randint(1, len(self.mycps.keys()) - 1)
+            nmem = self._rnd.randint(1, len(list(self.mycps.keys())) - 1)
             mem = self._rnd.sample(set(self.mycps.keys()), nmem)
 
             res = json.loads(rs.componentClientSources(mem))
@@ -4039,17 +4086,17 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
         for i in range(100):
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
             self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
-            nmem = self._rnd.randint(1, len(self.mycps.keys()) - 1)
+            nmem = self._rnd.randint(1, len(list(self.mycps.keys())) - 1)
             mem = self._rnd.sample(set(self.mycps.keys()), nmem)
             self._cf.dp.SetCommandVariable(["MCPLIST", json.dumps(mem)])
 
-            nccp = self._rnd.randint(1, len(self.mycps.keys()) - 1)
+            nccp = self._rnd.randint(1, len(list(self.mycps.keys())) - 1)
             ccp = self._rnd.sample(set(self.mycps.keys()), nccp)
             cps = {}
             for cp in ccp:
                 cps[cp] = bool(self._rnd.randint(0, 1))
 
-            nacp = self._rnd.randint(1, len(self.mycps.keys()) - 1)
+            nacp = self._rnd.randint(1, len(list(self.mycps.keys())) - 1)
             acp = self._rnd.sample(set(self.mycps.keys()), nacp)
             acps = {}
             for cp in acp:
@@ -4081,11 +4128,11 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
                 ["DSDICT", json.dumps(self.mydss)])
             self._cf.dp.SetCommandVariable(
                 ["CPDICT", json.dumps(self.mycpsvar)])
-            nmem = self._rnd.randint(1, len(self.mycpsvar.keys()) - 1)
+            nmem = self._rnd.randint(1, len(list(self.mycpsvar.keys())) - 1)
             mem = self._rnd.sample(set(self.mycpsvar.keys()), nmem)
             self._cf.dp.SetCommandVariable(["MCPLIST", json.dumps(mem)])
 
-            nccp = self._rnd.randint(1, len(self.mycpsvar.keys()) - 1)
+            nccp = self._rnd.randint(1, len(list(self.mycpsvar.keys())) - 1)
             ccp = self._rnd.sample(set(self.mycpsvar.keys()), nccp)
             cps = {}
             for cp in ccp:
@@ -4094,7 +4141,7 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
                                  '"mca": "p09/mca/exp.02"}'
             self._cf.dp.SetCommandVariable(["CHECKVARIABLES",
                                             json.dumps(rs.configVariables)])
-            nacp = self._rnd.randint(1, len(self.mycpsvar.keys()) - 1)
+            nacp = self._rnd.randint(1, len(list(self.mycpsvar.keys())) - 1)
             acp = self._rnd.sample(set(self.mycpsvar.keys()), nacp)
             acps = {}
             for cp in acp:
@@ -4163,8 +4210,8 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
             res = json.loads(rs.componentSources([cp]))
             self.checkICP(res, [cp],
                           strategy=None, dstype=None)
-        res = json.loads(rs.componentSources(self.mycps.keys()))
-        self.checkICP(res, self.rescps.keys(),
+        res = json.loads(rs.componentSources(list(self.mycps.keys())))
+        self.checkICP(res, list(self.rescps.keys()),
                       strategy=None, dstype=None)
 
     # constructor test
@@ -4181,7 +4228,7 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
         for i in range(20):
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
             self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
-            nmem = self._rnd.randint(1, len(self.mycps.keys()) - 1)
+            nmem = self._rnd.randint(1, len(list(self.mycps.keys())) - 1)
             mem = self._rnd.sample(set(self.mycps.keys()), nmem)
             self._cf.dp.SetCommandVariable(["MCPLIST", json.dumps(mem)])
 
@@ -4189,8 +4236,8 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
                 res = json.loads(rs.componentSources([cp]))
                 self.checkICP(res, [cp],
                               strategy=None)
-            res = json.loads(rs.componentSources(self.mycps.keys()))
-            self.checkICP(res, self.rescps.keys(),
+            res = json.loads(rs.componentSources(list(self.mycps.keys())))
+            self.checkICP(res, list(self.rescps.keys()),
                           strategy=None)
 
     # constructor test
@@ -4207,7 +4254,7 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
         for i in range(20):
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
             self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
-            nmem = self._rnd.randint(1, len(self.mycps.keys()) - 1)
+            nmem = self._rnd.randint(1, len(list(self.mycps.keys())) - 1)
             mem = self._rnd.sample(set(self.mycps.keys()), nmem)
 
             res = json.loads(rs.componentSources(mem))
@@ -4228,17 +4275,17 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
         for i in range(100):
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
             self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
-            nmem = self._rnd.randint(1, len(self.mycps.keys()) - 1)
+            nmem = self._rnd.randint(1, len(list(self.mycps.keys())) - 1)
             mem = self._rnd.sample(set(self.mycps.keys()), nmem)
             self._cf.dp.SetCommandVariable(["MCPLIST", json.dumps(mem)])
 
-            nccp = self._rnd.randint(1, len(self.mycps.keys()) - 1)
+            nccp = self._rnd.randint(1, len(list(self.mycps.keys())) - 1)
             ccp = self._rnd.sample(set(self.mycps.keys()), nccp)
             cps = {}
             for cp in ccp:
                 cps[cp] = bool(self._rnd.randint(0, 1))
 
-            nacp = self._rnd.randint(1, len(self.mycps.keys()) - 1)
+            nacp = self._rnd.randint(1, len(list(self.mycps.keys())) - 1)
             acp = self._rnd.sample(set(self.mycps.keys()), nacp)
             acps = {}
             for cp in acp:
@@ -4270,11 +4317,11 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
                 ["DSDICT", json.dumps(self.mydss)])
             self._cf.dp.SetCommandVariable(
                 ["CPDICT", json.dumps(self.mycpsvar)])
-            nmem = self._rnd.randint(1, len(self.mycpsvar.keys()) - 1)
+            nmem = self._rnd.randint(1, len(list(self.mycpsvar.keys())) - 1)
             mem = self._rnd.sample(set(self.mycpsvar.keys()), nmem)
             self._cf.dp.SetCommandVariable(["MCPLIST", json.dumps(mem)])
 
-            nccp = self._rnd.randint(1, len(self.mycpsvar.keys()) - 1)
+            nccp = self._rnd.randint(1, len(list(self.mycpsvar.keys())) - 1)
             ccp = self._rnd.sample(set(self.mycpsvar.keys()), nccp)
             cps = {}
             for cp in ccp:
@@ -4283,7 +4330,7 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
                                  '"mca": "p09/mca/exp.02"}'
             self._cf.dp.SetCommandVariable(["CHECKVARIABLES",
                                             json.dumps(rs.configVariables)])
-            nacp = self._rnd.randint(1, len(self.mycpsvar.keys()) - 1)
+            nacp = self._rnd.randint(1, len(list(self.mycpsvar.keys())) - 1)
             acp = self._rnd.sample(set(self.mycpsvar.keys()), nacp)
             acps = {}
             for cp in acp:
@@ -4672,7 +4719,7 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
                           for _ in range(self._rnd.randint(0, 3))]
                     ms2 = [self._rnd.randint(0, 3000)
                            for _ in range(self._rnd.randint(0, 3))]
-                    tmptp = self._rnd.choice(self._npTn.keys())
+                    tmptp = self._rnd.choice(list(self._npTn.keys()))
                     cnf = dict(cnfdef)
                     labels = {}
                     paths = {}
@@ -6553,7 +6600,7 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
 #                cpname = dc.create()
                 comp = self._cf.dp.Components([cpname])[0]
 
-                indom = xml.dom.minidom.parseString(dsxml)
+                indom = miniparseString(dsxml)
                 dss = indom.getElementsByTagName("datasource")
                 nxstype = nxstp
                 mycps = defbg + groupbg + fieldbg % (
@@ -6732,7 +6779,7 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
 #                cpname = dc.create()
                 comp = self._cf.dp.Components([cpname])[0]
 
-                indom = xml.dom.minidom.parseString(dsxml)
+                indom = miniparseString(dsxml)
                 dss = indom.getElementsByTagName("datasource")
                 nxstype = nxstp
                 mycps = defbg + groupbg + fieldbg % (
@@ -6912,7 +6959,7 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
                     str(json.dumps([ds]))])
                 comp = self._cf.dp.Components([cpname])[0]
 
-                indom = xml.dom.minidom.parseString(dsxml)
+                indom = miniparseString(dsxml)
                 dss = indom.getElementsByTagName("datasource")
                 nxstype = nxstp
                 mycps = defbg + groupbg + fieldbg % (
@@ -7087,7 +7134,7 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
                     str(json.dumps([ds]))])
                 comp = self._cf.dp.Components([cpname])[0]
 
-                indom = xml.dom.minidom.parseString(dsxml)
+                indom = miniparseString(dsxml)
                 dss = indom.getElementsByTagName("datasource")
                 nxstype = nxstp
                 mycps = defbg + groupbg + fieldbg % (
@@ -7164,7 +7211,7 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
                     ms = self.smydsspar[ds]
                     sds = ds.split("_")
                     tp = sds[1]
-                    indom = xml.dom.minidom.parseString(dsxml)
+                    indom = miniparseString(dsxml)
                     dss = indom.getElementsByTagName("datasource")
                     if not ds.startswith("client_") and sds[1] != 'encoded':
                         nxstp = self._npTn2[tp]
@@ -7373,7 +7420,7 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
                     ms = self.smydsspar[ds]
                     sds = ds.split("_")
                     tp = sds[1]
-                    indom = xml.dom.minidom.parseString(dsxml)
+                    indom = miniparseString(dsxml)
                     dss = indom.getElementsByTagName("datasource")
                     if not ds.startswith("client_") and sds[1] != 'encoded':
                         nxstp = self._npTn2[tp]
@@ -7582,7 +7629,7 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
                     ms = self.smydsspar[ds]
                     sds = ds.split("_")
                     tp = sds[1]
-                    indom = xml.dom.minidom.parseString(dsxml)
+                    indom = miniparseString(dsxml)
                     dss = indom.getElementsByTagName("datasource")
                     if not ds.startswith("client_") and sds[1] != 'encoded':
                         nxstp = self._npTn2[tp]
@@ -7794,7 +7841,7 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
                     ms = self.smydsspar[ds]
                     sds = ds.split("_")
                     tp = sds[1]
-                    indom = xml.dom.minidom.parseString(dsxml)
+                    indom = miniparseString(dsxml)
                     dss = indom.getElementsByTagName("datasource")
                     if not ds.startswith("client_") and sds[1] != 'encoded':
                         nxstp = self._npTn2[tp]
@@ -8053,7 +8100,7 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
         self.assertEqual(rs.mntGrp, val["MntGrp"])
 
         for i in range(20):
-            mncps = self._rnd.randint(0, len(mycps.keys()))
+            mncps = self._rnd.randint(0, len(list(mycps.keys())))
             mcps = [
                 cp for cp in self._rnd.sample(set(mycps.keys()), mncps)
             ]
@@ -8082,9 +8129,9 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
                "MntGrp": 'nxsmntgrp'}
 
         db = PyTango.Database()
-        db.put_device_property(self._ms.ms.keys()[0],
+        db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.smycps)])
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
 
@@ -8141,9 +8188,9 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
                "MntGrp": 'nxsmntgrp'}
 
         db = PyTango.Database()
-        db.put_device_property(self._ms.ms.keys()[0],
+        db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.smycps)])
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
 
@@ -8168,7 +8215,7 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
                 rs.door = val["Door"]
                 rs.mntGrp = mg
 
-                mncps = self._rnd.randint(0, len(self.smycps.keys()))
+                mncps = self._rnd.randint(0, len(list(self.smycps.keys())))
                 components = [
                     cp for cp in self._rnd.sample(
                         set(self.smycps.keys()),

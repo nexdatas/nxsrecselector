@@ -132,7 +132,7 @@ class SelectionTest(unittest.TestCase):
         print("Run: %s.%s() " % (self.__class__.__name__, fun))
         el = Selection(Version=self.__version)
         self.assertTrue(isinstance(el, dict))
-        self.assertEqual(len(el.keys()), len(self._keys))
+        self.assertEqual(len(list(el.keys())), len(list(self._keys)))
         for key, vl in self._keys:
             self.assertTrue(key in el.keys())
             self.assertEqual(el[key], vl)
@@ -144,16 +144,19 @@ class SelectionTest(unittest.TestCase):
         print("Run: %s.%s() " % (self.__class__.__name__, fun))
         el = Selection(Version=self.__version)
         el.clear()
-        self.assertEqual(len(el.keys()), 0)
+        self.assertEqual(len(list(el.keys())), 0)
         el.reset()
         self.assertTrue(isinstance(el, dict))
-        self.assertEqual(len(el.keys()), len(self._keys))
+        self.assertEqual(len(list(el.keys())), len(self._keys))
         for key, vl in self._keys:
             self.assertTrue(key in el.keys())
             self.assertEqual(el[key], vl)
 
     def getRandomName(self, maxsize):
-        letters = string.lowercase + string.uppercase + string.digits
+        if sys.version_info > (3,):
+            letters = string.ascii_letters + string.digits
+        else:
+            letters = string.letters + string.digits
         size = self.__rnd.randint(1, maxsize)
         return ''.join(self.__rnd.choice(letters) for _ in range(size))
 
@@ -164,7 +167,7 @@ class SelectionTest(unittest.TestCase):
         for i in range(20):
             el = Selection(Version=self.__version)
             el.deselect()
-            self.assertEqual(len(el.keys()), len(self._keys))
+            self.assertEqual(len(list(el.keys())), len(self._keys))
             for key, vl in self._keys:
                 self.assertTrue(key in el.keys())
                 self.assertEqual(el[key], vl)
@@ -184,7 +187,8 @@ class SelectionTest(unittest.TestCase):
             el["ComponentSelection"] = json.dumps(cps)
             el["DataSourceSelection"] = json.dumps(dss)
             el["UnplottedComponents"] = json.dumps(
-                self.__rnd.sample(dss, self.__rnd.randint(1, len(dss))))
+                self.__rnd.sample(set(dss.keys()), self.__rnd.randint(
+                    1, len(list(dss.keys())))))
             el["DataSourcePreselection"] = json.dumps(pdss)
             self.dump(el)
 
@@ -195,8 +199,8 @@ class SelectionTest(unittest.TestCase):
 
             self.assertEqual(el["UnplottedComponents"], '[]')
             self.assertEqual(el["DataSourcePreselection"], '{}')
-            self.assertEqual(len(cps), len(ncps))
-            self.assertEqual(len(dss), len(ndss))
+            self.assertEqual(len(list(cps.keys())), len(list(ncps.keys())))
+            self.assertEqual(len(list(dss.keys())), len(list(ndss.keys())))
             for key in cps.keys():
                 self.assertTrue(key in ncps.keys())
                 self.assertEqual(ncps[key], False)
@@ -216,7 +220,7 @@ class SelectionTest(unittest.TestCase):
         for i in range(20):
             el = Selection(Version=self.__version)
             el.updatePreselectingDataSources(None)
-            self.assertEqual(len(el.keys()), len(self._keys))
+            self.assertEqual(len(list(el.keys())), len(self._keys))
             for key, vl in self._keys:
                 self.assertTrue(key in el.keys())
                 self.assertEqual(el[key], vl)
@@ -251,7 +255,7 @@ class SelectionTest(unittest.TestCase):
         for i in range(20):
             el = Selection(Version=self.__version)
             el.updateOrderedChannels([])
-            self.assertEqual(len(el.keys()), len(self._keys))
+            self.assertEqual(len(list(el.keys())), len(self._keys))
             for key, vl in self._keys:
                 self.assertTrue(key in el.keys())
                 self.assertEqual(el[key], vl)
@@ -298,7 +302,7 @@ class SelectionTest(unittest.TestCase):
         for i in range(20):
             el = Selection(Version=self.__version)
             el.deselect()
-            self.assertEqual(len(el.keys()), len(self._keys))
+            self.assertEqual(len(list(el.keys())), len(self._keys))
             for key, vl in self._keys:
                 self.assertTrue(key in el.keys())
                 self.assertEqual(el[key], vl)
@@ -311,7 +315,8 @@ class SelectionTest(unittest.TestCase):
                 cps[self.getRandomName(10)] = bool(self.__rnd.randint(0, 1))
             for i in range(lds):
                 dss[self.getRandomName(10)] = bool(self.__rnd.randint(0, 1))
-            ccps = self.__rnd.sample(cps, self.__rnd.randint(1, len(cps)))
+            ccps = self.__rnd.sample(set(cps.keys()), self.__rnd.randint(
+                1, len(list(cps.keys()))))
             for cp in ccps:
                 dss[cp] = bool(self.__rnd.randint(0, 1))
             el["ComponentSelection"] = json.dumps(cps)
@@ -325,7 +330,8 @@ class SelectionTest(unittest.TestCase):
             # ndss =
             json.loads(el["DataSourceSelection"])
 
-            self.assertEqual(len(cps), len(ncps) + len(common))
+            self.assertEqual(len(list(cps.keys())),
+                             len(list(ncps.keys())) + len(common))
             for key in cps.keys():
                 if key not in common:
                     self.assertTrue(key in ncps.keys())
@@ -339,7 +345,7 @@ class SelectionTest(unittest.TestCase):
         for i in range(20):
             el = Selection(Version=self.__version)
             el.deselect()
-            self.assertEqual(len(el.keys()), len(self._keys))
+            self.assertEqual(len(list(el.keys())), len(self._keys))
             for key, vl in self._keys:
                 self.assertTrue(key in el.keys())
                 self.assertEqual(el[key], vl)
@@ -377,7 +383,7 @@ class SelectionTest(unittest.TestCase):
         print("Run: %s.%s() " % (self.__class__.__name__, fun))
         el = Selection(Version=self.__version)
         el.deselect()
-        self.assertEqual(len(el.keys()), len(self._keys))
+        self.assertEqual(len(list(el.keys())), len(self._keys))
         for key, vl in self._keys:
             self.assertTrue(key in el.keys())
             self.assertEqual(el[key], vl)
@@ -410,7 +416,7 @@ class SelectionTest(unittest.TestCase):
         print("Run: %s.%s() " % (self.__class__.__name__, fun))
         el = Selection(Version=self.__version)
         el.deselect()
-        self.assertEqual(len(el.keys()), len(self._keys))
+        self.assertEqual(len(list(el.keys())), len(self._keys))
         for key, vl in self._keys:
             self.assertTrue(key in el.keys())
             self.assertEqual(el[key], vl)
@@ -443,7 +449,7 @@ class SelectionTest(unittest.TestCase):
         print("Run: %s.%s() " % (self.__class__.__name__, fun))
         for i in range(20):
             el = Selection(Version=self.__version)
-            self.assertEqual(len(el.keys()), len(self._keys))
+            self.assertEqual(len(list(el.keys())), len(self._keys))
             for key, vl in self._keys:
                 self.assertTrue(key in el.keys())
                 self.assertEqual(el[key], vl)

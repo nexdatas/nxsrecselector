@@ -23,7 +23,7 @@ import json
 import PyTango
 # import getpass
 from os.path import expanduser
-from .Utils import TangoUtils, PoolUtils
+from .Utils import TangoUtils, PoolUtils, Utils
 from .Selection import Selection
 from .Converter import Converter
 
@@ -122,7 +122,7 @@ class Selector(object):
         :returns: selection keys
         :rtype: :obj:`list` <:obj:`str`>
         """
-        return self.__selection.keys()
+        return list(self.__selection.keys())
 
     def get(self):
         """ provides selection data
@@ -376,7 +376,7 @@ class Selector(object):
                 configDevice.jsonsettings = dbp
                 configDevice.open()
                 configDevice.availableComponents()
-        cnfmajor = int(str(configDevice.version).split(".")[0])
+        cnfmajor = int(Utils.tostr(configDevice.version).split(".")[0])
         if cnfmajor < 2:
             raise Exception("NXSConfigServer (%s) version below 2.0.0" %
                             self.__selection["ConfigDevice"])
@@ -445,7 +445,7 @@ class Selector(object):
         """ saves configuration
         """
         inst = self.setConfigInstance()
-        conf = str(json.dumps(self.get()))
+        conf = Utils.tostr(json.dumps(self.get()))
         inst.selection = conf
         inst.storeSelection(self["MntGrp"])
 
@@ -462,7 +462,7 @@ class Selector(object):
         if self["MntGrp"] in avsl:
             confs = inst.selections([self["MntGrp"]])
         if confs is not None:
-            self.set(json.loads(str(confs[0])))
+            self.set(json.loads(Utils.tostr(confs[0])))
             self["ConfigDevice"] = cnfdv
             return True
         return False

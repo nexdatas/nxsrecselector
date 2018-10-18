@@ -38,12 +38,35 @@ from nxsrecconfig.Describer import Describer
 from nxsrecconfig.Settings import Settings
 from nxsrecconfig.Utils import TangoUtils, MSUtils
 
-import TestMacroServerSetUp
-import TestPoolSetUp
-import TestServerSetUp
-import TestConfigServerSetUp
-import TestWriterSetUp
-import TestMGSetUp
+try:
+    import TestMacroServerSetUp
+except Exception:
+    from . import TestMacroServerSetUp
+
+try:
+    import TestPoolSetUp
+except Exception:
+    from . import TestPoolSetUp
+
+try:
+    import TestServerSetUp
+except Exception:
+    from . import TestServerSetUp
+
+try:
+    import TestConfigServerSetUp
+except Exception:
+    from . import TestConfigServerSetUp
+
+try:
+    import TestWriterSetUp
+except Exception:
+    from . import TestWriterSetUp
+
+try:
+    import TestMGSetUp
+except Exception:
+    from . import TestMGSetUp
 
 import logging
 logger = logging.getLogger()
@@ -2149,7 +2172,10 @@ class SettingsTest(unittest.TestCase):
                         set(self.value(el, key)))
 
     def getRandomName(self, maxsize):
-        letters = string.lowercase + string.uppercase + string.digits
+        if sys.version_info > (3,):
+            letters = string.ascii_letters + string.digits
+        else:
+            letters = string.letters + string.digits
         size = self._rnd.randint(1, maxsize)
         return ''.join(self._rnd.choice(letters) for _ in range(size))
 
@@ -2369,7 +2395,7 @@ class SettingsTest(unittest.TestCase):
         se["ConfigDevice"] = cfdv
         se["WriterDevice"] = wrdv
         se["MntGrp"] = mg
-        msp.updateMacroServer(self._ms.door.keys()[0])
+        msp.updateMacroServer(list(self._ms.door.keys())[0])
         wrong = []
 
         cps = {}
@@ -2410,7 +2436,7 @@ class SettingsTest(unittest.TestCase):
             myct = ("ctrl_%s" % tm).replace("_", "/")
             timers[myct] = tm
             ctrls.append(myct)
-        ltimers = timers.values()
+        ltimers = list(timers.values())
         se["Timer"] = json.dumps(ltimers)
 
         for ds, vl in self.smychsXX.items():

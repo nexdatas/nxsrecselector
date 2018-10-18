@@ -74,7 +74,7 @@ class ExtraNXSRecSelectorTest(ExtraSettingsTest.ExtraSettingsTest):
         return json.loads(rs.profileConfiguration)[name]
 
     def names(self, rs):
-        return json.loads(rs.profileConfiguration).keys()
+        return list(json.loads(rs.profileConfiguration).keys())
 
     def setProp(self, rc, name, value):
         db = PyTango.Database()

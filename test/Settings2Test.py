@@ -31,12 +31,35 @@ import string
 import time
 import nxsrecconfig
 
-import TestMacroServerSetUp
-import TestPool2SetUp
-import TestServerSetUp
-import TestConfigServerSetUp
-import TestWriterSetUp
-import TestMGSetUp
+try:
+    import TestMacroServerSetUp
+except Exception:
+    from . import TestMacroServerSetUp
+
+try:
+    import TestPool2SetUp
+except Exception:
+    from . import TestPool2SetUp
+
+try:
+    import TestServerSetUp
+except Exception:
+    from . import TestServerSetUp
+
+try:
+    import TestConfigServerSetUp
+except Exception:
+    from . import TestConfigServerSetUp
+
+try:
+    import TestWriterSetUp
+except Exception:
+    from . import TestWriterSetUp
+
+try:
+    import TestMGSetUp
+except Exception:
+    from . import TestMGSetUp
 
 
 from nxsrecconfig.MacroServerPools import MacroServerPools
@@ -2152,7 +2175,10 @@ class Settings2Test(unittest.TestCase):
                         set(self.value(el, key)))
 
     def getRandomName(self, maxsize):
-        letters = string.lowercase + string.uppercase + string.digits
+        if sys.version_info > (3,):
+            letters = string.ascii_letters + string.digits
+        else:
+            letters = string.letters + string.digits
         size = self._rnd.randint(1, maxsize)
         return ''.join(self._rnd.choice(letters) for _ in range(size))
 
@@ -2222,14 +2248,14 @@ class Settings2Test(unittest.TestCase):
         #     print "NOT DICT", type(dct2), dct2
         #     print "DICT", type(dct), dct
         self.assertTrue(isinstance(dct2, dict))
-        logger.debug("%s %s" % (len(dct.keys()), len(dct2.keys())))
-        # if set(dct.keys()) ^ set(dct2.keys()):
-        #     print 'DCT', dct.keys()
-        #     print 'DCT2', dct2.keys()
-        #     print "DIFF", set(dct.keys()) ^ set(dct2.keys())
-        self.assertEqual(len(dct.keys()), len(dct2.keys()))
+        logger.debug("%s %s" % (len(list(dct.keys())), len(list(dct2.keys()))))
+        # if set(list(dct.keys())) ^ set(list(dct2.keys())):
+        #     print 'DCT', list(dct.keys())
+        #     print 'DCT2', list(dct2.keys())
+        #     print "DIFF", set(list(dct.keys())) ^ set(list(dct2.keys()))
+        self.assertEqual(len(list(dct.keys())), len(list(dct2.keys())))
         for k, v in dct.items():
-            logger.debug("%s  in %s" % (str(k), str(dct2.keys())))
+            logger.debug("%s  in %s" % (str(k), str(list(dct2.keys()))))
             self.assertTrue(k in dct2.keys())
             if isinstance(v, dict):
                 self.myAssertDict(v, dct2[k])
@@ -2248,16 +2274,16 @@ class Settings2Test(unittest.TestCase):
             # print "NOT DICT", type(dct2), dct2
             # print "DICT", type(dct), dct
             raise NotEqualException("DCT2 %s" % dct2)
-        logger.debug("%s %s" % (len(dct.keys()), len(dct2.keys())))
-        # if set(dct.keys()) ^ set(dct2.keys()):
-        #     print 'DCT', dct.keys()
-        #     print 'DCT2', dct2.keys()
-        #     print "DIFF", set(dct.keys()) ^ set(dct2.keys())
-        if len(dct.keys()) != len(dct2.keys()):
+        logger.debug("%s %s" % (len(list(dct.keys())), len(list(dct2.keys()))))
+        # if set(list(dct.keys())) ^ set(list(dct2.keys())):
+        #     print 'DCT', list(dct.keys())
+        #     print 'DCT2', list(dct2.keys())
+        #     print "DIFF", set(list(dct.keys())) ^ set(list(dct2.keys()))
+        if len(list(dct.keys())) != len(list(dct2.keys())):
             raise NotEqualException("LEN %s %s" % (dct, dct2))
 
         for k, v in dct.items():
-            logger.debug("%s  in %s" % (str(k), str(dct2.keys())))
+            logger.debug("%s  in %s" % (str(k), str(list(dct2.keys()))))
             if k not in dct2.keys():
                 raise NotEqualException("%s not in %s" % (k, dct2))
             if isinstance(v, dict):
@@ -2276,14 +2302,14 @@ class Settings2Test(unittest.TestCase):
         #     print "NOT DICT", type(dct2), dct2
         #     print "DICT", type(dct), dct
         self.assertTrue(isinstance(dct2, dict))
-        logger.debug("%s %s" % (len(dct.keys()), len(dct2.keys())))
-        # if set(dct.keys()) ^ set(dct2.keys()):
-        #     print 'DCT', dct.keys()
-        #     print 'DCT2', dct2.keys()
-        #     print "DIFF", set(dct.keys()) ^ set(dct2.keys())
-        self.assertEqual(len(dct.keys()), len(dct2.keys()))
+        logger.debug("%s %s" % (len(list(dct.keys())), len(list(dct2.keys()))))
+        # if set(list(dct.keys())) ^ set(list(dct2.keys())):
+        #     print 'DCT', list(dct.keys())
+        #     print 'DCT2', list(dct2.keys())
+        #     print "DIFF", set(list(dct.keys())) ^ set(list(dct2.keys()))
+        self.assertEqual(len(list(dct.keys())), len(list(dct2.keys())))
         for k, v in dct.items():
-            logger.debug("%s  in %s" % (str(k), str(dct2.keys())))
+            logger.debug("%s  in %s" % (str(k), str(list(dct2.keys()))))
             self.assertTrue(k in dct2.keys())
             if isinstance(v, dict):
                 self.myAssertDictJSON(v, dct2[k])
@@ -2368,7 +2394,7 @@ class Settings2Test(unittest.TestCase):
         se["ConfigDevice"] = cfdv
         se["WriterDevice"] = wrdv
         se["MntGrp"] = mg
-        msp.updateMacroServer(self._ms.door.keys()[0])
+        msp.updateMacroServer(list(self._ms.door.keys())[0])
         wrong = []
 
         cps = {}
@@ -2409,7 +2435,7 @@ class Settings2Test(unittest.TestCase):
             myct = ("ctrl_%s" % tm).replace("_", "/")
             timers[myct] = tm
             ctrls.append(myct)
-        ltimers = timers.values()
+        ltimers = list(timers.values())
         se["Timer"] = json.dumps(ltimers)
 
         for ds, vl in self.smychsXX.items():
@@ -2483,7 +2509,7 @@ class Settings2Test(unittest.TestCase):
                 if cps[cp]:
                     comps.add(cp)
 
-        ancps = self._rnd.randint(1, len(amycps.keys()) - 1)
+        ancps = self._rnd.randint(1, len(list(amycps.keys())) - 1)
         alcps = self._rnd.sample(set(amycps.keys()), ancps)
         for cp in alcps:
             if cp not in wrong:
@@ -2491,21 +2517,21 @@ class Settings2Test(unittest.TestCase):
                 if acps[cp]:
                     comps.add(cp)
 
-        ndss = self._rnd.randint(1, len(amycps.keys()) - 1)
+        ndss = self._rnd.randint(1, len(list(amycps.keys())) - 1)
         ldss = self._rnd.sample(set(amycps.keys()), ndss)
         for ds in ldss:
             if ds in amydss.keys():
                 if ds not in wrong:
                     dss[ds] = bool(self._rnd.randint(0, 1))
 
-        ndss = self._rnd.randint(1, len(amydss.keys()) - 1)
+        ndss = self._rnd.randint(1, len(list(amydss.keys())) - 1)
         ldss = self._rnd.sample(set(amydss.keys()), ndss)
         for ds in ldss:
             if ds in amydss.keys():
                 if ds not in wrong:
                     dss[ds] = bool(self._rnd.randint(0, 1))
 
-        nadss = self._rnd.randint(1, len(amydss.keys()) - 1)
+        nadss = self._rnd.randint(1, len(list(amydss.keys())) - 1)
         indss = [ds for ds in self._rnd.sample(
             set(amydss.keys()), nadss)]
 
@@ -2514,17 +2540,17 @@ class Settings2Test(unittest.TestCase):
             if cp not in wrong:
                 aindss[cp] = bool(self._rnd.randint(0, 1))
 
-        nadss = self._rnd.randint(1, len(amydss.keys()) - 1)
+        nadss = self._rnd.randint(1, len(list(amydss.keys())) - 1)
         aadss = [ds for ds in self._rnd.sample(
             set(amydss.keys()), nadss)]
 
         for tm in ltimers:
             dss[tm] = bool(self._rnd.randint(0, 1))
 
-        mncps = self._rnd.randint(1, len(amycps.keys()) - 1)
+        mncps = self._rnd.randint(1, len(list(amycps.keys())) - 1)
         mcps = [cp for cp in self._rnd.sample(
                 set(amycps.keys()), mncps) if cp not in wrong]
-        oncps = self._rnd.randint(1, len(amycps.keys()) - 1)
+        oncps = self._rnd.randint(1, len(list(amycps.keys())) - 1)
         ocps = [cp for cp in self._rnd.sample(
                 set(amycps.keys()), oncps) if cp not in wrong]
         for cp in mcps:
@@ -2569,7 +2595,7 @@ class Settings2Test(unittest.TestCase):
                     for idsr in idsrs:
                         records[str(idsr[2])] = "1234"
         dsres = describer.dataSources(
-            dss.keys(), dstype='CLIENT')[0]
+            list(dss.keys()), dstype='CLIENT')[0]
         for dsr in dsres.values():
             records[str(dsr.record)] = '2345'
 

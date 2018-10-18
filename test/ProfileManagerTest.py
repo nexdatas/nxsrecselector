@@ -31,12 +31,31 @@ import string
 import time
 import nxsrecconfig
 
-import TestMacroServerSetUp
-import TestPoolSetUp
-import TestServerSetUp
-import TestConfigServerSetUp
-import TestWriterSetUp
-import TestMGSetUp
+try:
+    import TestMacroServerSetUp
+except Exception:
+    from . import TestMacroServerSetUp
+
+try:
+    import TestPoolSetUp
+except Exception:
+    from . import TestPoolSetUp
+try:
+    import TestServerSetUp
+except Exception:
+    from . import TestServerSetUp
+try:
+    import TestConfigServerSetUp
+except Exception:
+    from . import TestConfigServerSetUp
+try:
+    import TestWriterSetUp
+except Exception:
+    from . import TestWriterSetUp
+try:
+    import TestMGSetUp
+except Exception:
+    from . import TestMGSetUp
 
 
 from nxsrecconfig.MacroServerPools import MacroServerPools
@@ -1803,7 +1822,10 @@ class ProfileManagerTest(unittest.TestCase):
                     self.assertEqual(self.__dump[name][key], el[key])
 
     def getRandomName(self, maxsize):
-        letters = string.lowercase + string.uppercase + string.digits
+        if sys.version_info > (3,):
+            letters = string.ascii_letters + string.digits
+        else:
+            letters = string.letters + string.digits
         size = self.__rnd.randint(1, maxsize)
         return ''.join(self.__rnd.choice(letters) for _ in range(size))
 
@@ -1831,12 +1853,12 @@ class ProfileManagerTest(unittest.TestCase):
         #     print "NOT DICT", type(dct2), dct2
         #     print "DICT", type(dct), dct
         self.assertTrue(isinstance(dct2, dict))
-        logger.debug("%s %s" % (len(dct.keys()), len(dct2.keys())))
+        logger.debug("%s %s" % (len(list(dct.keys())), len(list(dct2.keys()))))
         # if set(dct.keys()) ^ set(dct2.keys()):
         #     print 'DCT', dct.keys()
         #     print 'DCT2', dct2.keys()
         #     print "DIFF", set(dct.keys()) ^ set(dct2.keys())
-        self.assertEqual(len(dct.keys()), len(dct2.keys()))
+        self.assertEqual(len(list(dct.keys())), len(list(dct2.keys())))
         for k, v in dct.items():
             logger.debug("%s  in %s" % (str(k), str(dct2.keys())))
             self.assertTrue(k in dct2.keys())
@@ -1857,13 +1879,14 @@ class ProfileManagerTest(unittest.TestCase):
             # print "NOT DICT", type(dct2), dct2
             # print "DICT", type(dct), dct
             raise NotEqualException("DCT2 %s" % dct2)
-        logger.debug("%s %s" % (len(dct.keys()), len(dct2.keys())))
+        logger.debug(
+            "%s %s" % (len(list(dct.keys())), len(list(dct2.keys()))))
         # if set(dct.keys()) ^ set(dct2.keys()):
         #     print 'DCT', dct.keys()
         #     print 'DCT2', dct2.keys()
         #     print "DIFF", set(dct.keys()) ^ set(dct2.keys())
         # print "L1",  dct.keys(), dct2.keys()
-        if len(dct.keys()) != len(dct2.keys()):
+        if len(list(dct.keys())) != len(list(dct2.keys())):
             raise NotEqualException("LEN %s %s" % (dct, dct2))
 
         for k, v in dct.items():
@@ -1922,10 +1945,10 @@ class ProfileManagerTest(unittest.TestCase):
         self.assertEqual(mgt.availableMntGrps(), [])
 
         db = PyTango.Database()
-        db.put_device_property(self._ms.ms.keys()[0],
+        db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
         pool = self._pool.dp
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
         self.assertEqual(mgt.availableMntGrps(), [])
 
@@ -1945,8 +1968,8 @@ class ProfileManagerTest(unittest.TestCase):
         for ar in arr:
 
             MSUtils.setEnv('ActiveMntGrp', ar["name"],
-                           self._ms.ms.keys()[0])
-            # print MSUtils.getEnv('ActiveMntGrp', self._ms.ms.keys()[0])
+                           list(self._ms.ms.keys())[0])
+            # print MSUtils.getEnv('ActiveMntGrp', list(self._ms.ms.keys())[0])
             dd = mgt.availableMntGrps()
             self.assertEqual(dd[0], ar["name"])
             self.assertEqual(set(dd), set([a["name"] for a in arr]))
@@ -1980,12 +2003,12 @@ class ProfileManagerTest(unittest.TestCase):
 
             db = PyTango.Database()
             db.put_device_property(
-                self._ms.ms.keys()[0],
+                list(self._ms.ms.keys())[0],
                 {'PoolNames': [
                     tpool2.dp.name(), self._pool.dp.name()]})
             pool = self._pool.dp
             pool2 = tpool2.dp
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             self.assertEqual(mgt.availableMntGrps(), [])
             arr1 = [
@@ -2018,7 +2041,7 @@ class ProfileManagerTest(unittest.TestCase):
             for ar in arr1:
 
                 MSUtils.setEnv('ActiveMntGrp', ar["name"],
-                               self._ms.ms.keys()[0])
+                               list(self._ms.ms.keys())[0])
                 dd = mgt.availableMntGrps()
                 self.assertEqual(dd[0], ar["name"])
                 if arr1 == arr or ar["name"] != 'null':
@@ -2028,7 +2051,7 @@ class ProfileManagerTest(unittest.TestCase):
 
             for ar in arr2:
                 MSUtils.setEnv('ActiveMntGrp', ar["name"],
-                               self._ms.ms.keys()[0])
+                               list(self._ms.ms.keys())[0])
                 dd = mgt.availableMntGrps()
                 self.assertEqual(dd[0], ar["name"])
                 if arr2 == arr or ar["name"] != 'null':
@@ -2062,10 +2085,10 @@ class ProfileManagerTest(unittest.TestCase):
         self.assertEqual(mgt.availableMntGrps(), [])
 
         db = PyTango.Database()
-        db.put_device_property(self._ms.ms.keys()[0],
+        db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
         pool = self._pool.dp
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
         self.assertEqual(mgt.availableMntGrps(), [])
 
@@ -2087,14 +2110,14 @@ class ProfileManagerTest(unittest.TestCase):
         sl2 = self._cf.dp.availableSelections()
 
         dl = []
-        mgs = [ar["name"] for ar in arr] + self.mysel2.keys()
+        mgs = [ar["name"] for ar in arr] + list(self.mysel2.keys())
         # print mgs
         for ar in mgs:
-            MSUtils.setEnv('ActiveMntGrp', ar, self._ms.ms.keys()[0])
+            MSUtils.setEnv('ActiveMntGrp', ar, list(self._ms.ms.keys())[0])
             mgt.deleteProfile(ar)
             dl.append(ar)
             self.assertEqual(MSUtils.getEnv(
-                'ActiveMntGrp', self._ms.ms.keys()[0]), "")
+                'ActiveMntGrp', list(self._ms.ms.keys())[0]), "")
             dd = mgt.availableMntGrps()
             self.assertEqual(set(dd), set(dd2) - set(dl))
             sl = self._cf.dp.availableSelections()
@@ -2130,13 +2153,13 @@ class ProfileManagerTest(unittest.TestCase):
 
             db = PyTango.Database()
             db.put_device_property(
-                self._ms.ms.keys()[0],
+                list(self._ms.ms.keys())[0],
                 {
                     'PoolNames': [
                         tpool2.dp.name(), self._pool.dp.name()]})
             pool = self._pool.dp
             pool2 = tpool2.dp
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             self.assertEqual(mgt.availableMntGrps(), [])
 
@@ -2160,7 +2183,7 @@ class ProfileManagerTest(unittest.TestCase):
             pool2.MeasurementGroupList = [json.dumps(a) for a in arr2]
 
             MSUtils.setEnv(
-                'ActiveMntGrp', arr[0]["name"], self._ms.ms.keys()[0])
+                'ActiveMntGrp', arr[0]["name"], list(self._ms.ms.keys())[0])
 
             dd1 = [json.loads(mg)["name"]
                    for mg in pool.MeasurementGroupList]
@@ -2175,13 +2198,13 @@ class ProfileManagerTest(unittest.TestCase):
             sl2 = self._cf.dp.availableSelections()
 
             dl = []
-            mgs = [ar["name"] for ar in arr] + self.mysel2.keys()
+            mgs = [ar["name"] for ar in arr] + list(self.mysel2.keys())
             for ar in mgs:
-                MSUtils.setEnv('ActiveMntGrp', ar, self._ms.ms.keys()[0])
+                MSUtils.setEnv('ActiveMntGrp', ar, list(self._ms.ms.keys())[0])
                 mgt.deleteProfile(ar)
                 dl.append(ar)
                 self.assertEqual(MSUtils.getEnv(
-                    'ActiveMntGrp', self._ms.ms.keys()[0]), "")
+                    'ActiveMntGrp', list(self._ms.ms.keys())[0]), "")
                 dd = [json.loads(mg)["name"]
                       for mg in pool.MeasurementGroupList]
                 dd_2 = [json.loads(mg)["name"]
@@ -2192,16 +2215,16 @@ class ProfileManagerTest(unittest.TestCase):
                 self.assertEqual(set(sl), set(sl2) - set(dl))
 
             dl = []
-            mgs = [ar["name"] for ar in arr2] + self.mysel2.keys()
+            mgs = [ar["name"] for ar in arr2] + list(self.mysel2.keys())
             dd1 = [json.loads(mg)["name"] for mg in pool.MeasurementGroupList]
             dd2 = [json.loads(mg)["name"] for mg in pool2.MeasurementGroupList]
             sl2 = self._cf.dp.availableSelections()
             for ar in mgs:
-                MSUtils.setEnv('ActiveMntGrp', ar, self._ms.ms.keys()[0])
+                MSUtils.setEnv('ActiveMntGrp', ar, list(self._ms.ms.keys())[0])
                 mgt.deleteProfile(ar)
                 dl.append(ar)
                 self.assertEqual(MSUtils.getEnv(
-                    'ActiveMntGrp', self._ms.ms.keys()[0]), "")
+                    'ActiveMntGrp', list(self._ms.ms.keys())[0]), "")
                 dd = [json.loads(mg)["name"]
                       for mg in pool.MeasurementGroupList]
                 dd_2 = [json.loads(mg)["name"]
@@ -2267,11 +2290,11 @@ class ProfileManagerTest(unittest.TestCase):
             se["Door"] = val["Door"]
             se["OrderedChannels"] = json.dumps([])
             db = PyTango.Database()
-            db.put_device_property(self._ms.ms.keys()[0],
+            db.put_device_property(list(self._ms.ms.keys())[0],
                                    {'PoolNames': self._pool.dp.name()})
             pool = self._pool.dp
             pool.ExpChannelList = []
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             se["Door"] = val["Door"]
             se["ConfigDevice"] = val["ConfigDevice"]
@@ -2286,8 +2309,8 @@ class ProfileManagerTest(unittest.TestCase):
                 cps[self.getRandomName(10)] = bool(self.__rnd.randint(0, 1))
             for i in range(lds):
                 dss[self.getRandomName(10)] = bool(self.__rnd.randint(0, 1))
-            ddss = self.__rnd.sample(dss, self.__rnd.randint(
-                1, len(dss.keys())))
+            ddss = self.__rnd.sample(set(dss.keys()), self.__rnd.randint(
+                1, len(list(dss.keys()))))
             dcps = dict(cps)
             for ds in ddss:
                 dcps[ds] = bool(self.__rnd.randint(0, 1))
@@ -2333,11 +2356,11 @@ class ProfileManagerTest(unittest.TestCase):
         se["Door"] = val["Door"]
         se["OrderedChannels"] = json.dumps([])
         db = PyTango.Database()
-        db.put_device_property(self._ms.ms.keys()[0],
+        db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
         pool = self._pool.dp
         pool.ExpChannelList = []
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
         se["Door"] = val["Door"]
         se["ConfigDevice"] = val["ConfigDevice"]
@@ -2393,11 +2416,11 @@ class ProfileManagerTest(unittest.TestCase):
         se["Door"] = val["Door"]
         se["OrderedChannels"] = json.dumps([])
         db = PyTango.Database()
-        db.put_device_property(self._ms.ms.keys()[0],
+        db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
         pool = self._pool.dp
         pool.ExpChannelList = []
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
         se["Door"] = val["Door"]
         se["ConfigDevice"] = val["ConfigDevice"]
@@ -2425,7 +2448,7 @@ class ProfileManagerTest(unittest.TestCase):
         self.dump(se)
 
         res = pm.cpdescription(True)
-        self.checkCP(res, self.rescps.keys())
+        self.checkCP(res, list(self.rescps.keys()))
 
     # test
     def test_cpdescritpion_comp_nods(self):
@@ -2442,11 +2465,11 @@ class ProfileManagerTest(unittest.TestCase):
             se["Door"] = val["Door"]
             se["OrderedChannels"] = json.dumps([])
             db = PyTango.Database()
-            db.put_device_property(self._ms.ms.keys()[0],
+            db.put_device_property(list(self._ms.ms.keys())[0],
                                    {'PoolNames': self._pool.dp.name()})
             pool = self._pool.dp
             pool.ExpChannelList = []
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             se["Door"] = val["Door"]
             se["ConfigDevice"] = val["ConfigDevice"]
@@ -2463,12 +2486,12 @@ class ProfileManagerTest(unittest.TestCase):
             self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
 
-            ncps = self.__rnd.randint(1, len(self.mycps.keys()) - 1)
+            ncps = self.__rnd.randint(1, len(list(self.mycps.keys())) - 1)
             lcps = self.__rnd.sample(set(self.mycps.keys()), ncps)
             for cp in lcps:
                 cps[cp] = bool(self.__rnd.randint(0, 1))
 
-            mncps = self.__rnd.randint(1, len(self.mycps.keys()) - 1)
+            mncps = self.__rnd.randint(1, len(list(self.mycps.keys())) - 1)
             mcps = self.__rnd.sample(set(self.mycps.keys()), mncps)
 
             tdss = [ds for ds in dss if dss[ds]]
@@ -2502,11 +2525,11 @@ class ProfileManagerTest(unittest.TestCase):
             se["Door"] = val["Door"]
             se["OrderedChannels"] = json.dumps([])
             db = PyTango.Database()
-            db.put_device_property(self._ms.ms.keys()[0],
+            db.put_device_property(list(self._ms.ms.keys())[0],
                                    {'PoolNames': self._pool.dp.name()})
             pool = self._pool.dp
             pool.ExpChannelList = []
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             se["Door"] = val["Door"]
             se["ConfigDevice"] = val["ConfigDevice"]
@@ -2521,18 +2544,18 @@ class ProfileManagerTest(unittest.TestCase):
             self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
 
-            ncps = self.__rnd.randint(1, len(self.mycps.keys()) - 1)
+            ncps = self.__rnd.randint(1, len(list(self.mycps.keys())) - 1)
             lcps = self.__rnd.sample(set(self.mycps.keys()), ncps)
             for cp in lcps:
                 cps[cp] = bool(self.__rnd.randint(0, 1))
 
-            ndss = self.__rnd.randint(1, len(self.mycps.keys()) - 1)
+            ndss = self.__rnd.randint(1, len(list(self.mycps.keys())) - 1)
             ldss = self.__rnd.sample(set(self.mycps.keys()), ndss)
             for ds in ldss:
                 if ds in self.mydss.keys():
                     dss[ds] = bool(self.__rnd.randint(0, 1))
 
-            mncps = self.__rnd.randint(1, len(self.mycps.keys()) - 1)
+            mncps = self.__rnd.randint(1, len(list(self.mycps.keys())) - 1)
             mcps = self.__rnd.sample(set(self.mycps.keys()), mncps)
 
             tdss = [ds for ds in dss if dss[ds]]
@@ -2565,11 +2588,11 @@ class ProfileManagerTest(unittest.TestCase):
             se["Door"] = val["Door"]
             se["OrderedChannels"] = json.dumps([])
             db = PyTango.Database()
-            db.put_device_property(self._ms.ms.keys()[0],
+            db.put_device_property(list(self._ms.ms.keys())[0],
                                    {'PoolNames': self._pool.dp.name()})
             pool = self._pool.dp
             pool.ExpChannelList = []
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             se["Door"] = val["Door"]
             se["ConfigDevice"] = val["ConfigDevice"]
@@ -2584,18 +2607,18 @@ class ProfileManagerTest(unittest.TestCase):
             self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
 
-            ncps = self.__rnd.randint(1, len(self.mycps.keys()) - 1)
+            ncps = self.__rnd.randint(1, len(list(self.mycps.keys())) - 1)
             lcps = self.__rnd.sample(set(self.mycps.keys()), ncps)
             for cp in lcps:
                 cps[cp] = bool(self.__rnd.randint(0, 1))
 
-            ndss = self.__rnd.randint(1, len(self.mycps.keys()) - 1)
+            ndss = self.__rnd.randint(1, len(list(self.mycps.keys())) - 1)
             ldss = self.__rnd.sample(set(self.mycps.keys()), ndss)
             for ds in ldss:
                 if ds in self.mydss.keys():
                     dss[ds] = bool(self.__rnd.randint(0, 1))
 
-            mncps = self.__rnd.randint(1, len(self.mycps.keys()) - 1)
+            mncps = self.__rnd.randint(1, len(list(self.mycps.keys())) - 1)
             mcps = self.__rnd.sample(set(self.mycps.keys()), mncps)
 
             # tdss = [ds for ds in dss if dss[ds]]
@@ -2635,11 +2658,11 @@ class ProfileManagerTest(unittest.TestCase):
             se["Door"] = val["Door"]
             se["OrderedChannels"] = json.dumps([])
             db = PyTango.Database()
-            db.put_device_property(self._ms.ms.keys()[0],
+            db.put_device_property(list(self._ms.ms.keys())[0],
                                    {'PoolNames': self._pool.dp.name()})
             pool = self._pool.dp
             pool.ExpChannelList = []
-            self._ms.dps[self._ms.ms.keys()[0]].Init()
+            self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             se["Door"] = val["Door"]
             se["ConfigDevice"] = val["ConfigDevice"]
@@ -2654,24 +2677,24 @@ class ProfileManagerTest(unittest.TestCase):
             self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
 
-            ncps = self.__rnd.randint(1, len(self.mycps.keys()) - 1)
+            ncps = self.__rnd.randint(1, len(list(self.mycps.keys())) - 1)
             lcps = self.__rnd.sample(set(self.mycps.keys()), ncps)
             for cp in lcps:
                 cps[cp] = bool(self.__rnd.randint(0, 1))
 
-            ndss = self.__rnd.randint(1, len(self.mycps.keys()) - 1)
+            ndss = self.__rnd.randint(1, len(list(self.mycps.keys())) - 1)
             ldss = self.__rnd.sample(set(self.mycps.keys()), ndss)
             for ds in ldss:
                 if ds in self.mydss.keys():
                     dss[ds] = bool(self.__rnd.randint(0, 1))
 
-            ndss = self.__rnd.randint(1, len(self.mydss.keys()) - 1)
+            ndss = self.__rnd.randint(1, len(list(self.mydss.keys())) - 1)
             ldss = self.__rnd.sample(set(self.mydss.keys()), ndss)
             for ds in ldss:
                 if ds in self.mydss.keys():
                     dss[ds] = bool(self.__rnd.randint(0, 1))
 
-            mncps = self.__rnd.randint(1, len(self.mycps.keys()) - 1)
+            mncps = self.__rnd.randint(1, len(list(self.mycps.keys())) - 1)
             mcps = self.__rnd.sample(set(self.mycps.keys()), mncps)
 
             se["ComponentSelection"] = json.dumps(cps)
@@ -2715,10 +2738,10 @@ class ProfileManagerTest(unittest.TestCase):
         self.myAssertRaise(Exception, mgt.updateProfile)
 
         db = PyTango.Database()
-        db.put_device_property(self._ms.ms.keys()[0],
+        db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
         pool = self._pool.dp
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
         self.assertEqual(mgt.availableMntGrps(), [])
 
@@ -2781,8 +2804,10 @@ class ProfileManagerTest(unittest.TestCase):
                 self.assertEqual(json.loads(se["Timer"]), [ar["name"]])
                 self.assertEqual(se["MntGrp"], "nxsmntgrp")
             finally:
-                mgt.deleteProfile("nxsmntgrp")
-                tmg.tearDown()
+                try:
+                    mgt.deleteProfile("nxsmntgrp")
+                finally:
+                    tmg.tearDown()
 
     # updateProfile test
     def test_updateProfile_components_nopool(self):
@@ -2813,10 +2838,10 @@ class ProfileManagerTest(unittest.TestCase):
         self.myAssertRaise(Exception, mgt.updateProfile)
 
         db = PyTango.Database()
-        db.put_device_property(self._ms.ms.keys()[0],
+        db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
         pool = self._pool.dp
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
         self.assertEqual(mgt.availableMntGrps(), [])
 
@@ -2844,33 +2869,33 @@ class ProfileManagerTest(unittest.TestCase):
             self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
 
-            ncps = self.__rnd.randint(1, len(self.mycps.keys()) - 1)
+            ncps = self.__rnd.randint(1, len(list(self.mycps.keys())) - 1)
             lcps = self.__rnd.sample(set(self.mycps.keys()), ncps)
             for cp in lcps:
                 if cp not in wrong:
                     cps[cp] = bool(self.__rnd.randint(0, 1))
 
-            ancps = self.__rnd.randint(1, len(self.mycps.keys()) - 1)
+            ancps = self.__rnd.randint(1, len(list(self.mycps.keys())) - 1)
             alcps = self.__rnd.sample(set(self.mycps.keys()), ancps)
             for cp in alcps:
                 if cp not in wrong:
                     acps[cp] = bool(self.__rnd.randint(0, 1))
 
-            ndss = self.__rnd.randint(1, len(self.mycps.keys()) - 1)
+            ndss = self.__rnd.randint(1, len(list(self.mycps.keys())) - 1)
             ldss = self.__rnd.sample(set(self.mycps.keys()), ndss)
             for ds in ldss:
                 if ds in self.mydss.keys():
                     if ds not in wrong:
                         dss[ds] = bool(self.__rnd.randint(0, 1))
 
-            ndss = self.__rnd.randint(1, len(self.mydss.keys()) - 1)
+            ndss = self.__rnd.randint(1, len(list(self.mydss.keys())) - 1)
             ldss = self.__rnd.sample(set(self.mydss.keys()), ndss)
             for ds in ldss:
                 if ds in self.mydss.keys():
                     if ds not in wrong:
                         dss[ds] = bool(self.__rnd.randint(0, 1))
 
-            mncps = self.__rnd.randint(1, len(self.mycps.keys()) - 1)
+            mncps = self.__rnd.randint(1, len(list(self.mycps.keys())) - 1)
             mcps = [cp for cp in self.__rnd.sample(
                     set(self.mycps.keys()), mncps) if cp not in wrong]
 
@@ -2887,7 +2912,7 @@ class ProfileManagerTest(unittest.TestCase):
                     for idsrs in idss.values():
                         for idsr in idsrs:
                             records[str(idsr[2])] = "1234"
-            dsres = describer.dataSources(dss.keys(), dstype='CLIENT')[0]
+            dsres = describer.dataSources(list(dss.keys()), dstype='CLIENT')[0]
             for dsr in dsres.values():
                 records[str(dsr.record)] = '2345'
 
@@ -2954,11 +2979,10 @@ class ProfileManagerTest(unittest.TestCase):
                 self.assertEqual(json.loads(se["Timer"]), [ar["name"]])
                 self.assertEqual(se["MntGrp"], "nxsmntgrp")
             finally:
-                mgt.deleteProfile("nxsmntgrp")
                 try:
+                    mgt.deleteProfile("nxsmntgrp")
+                finally:
                     tmg.tearDown()
-                except Exception:
-                    pass
 
     # updateProfile test
     def test_updateProfile_nodevice(self):
@@ -2988,10 +3012,10 @@ class ProfileManagerTest(unittest.TestCase):
         self.myAssertRaise(Exception, mgt.updateProfile)
 
         db = PyTango.Database()
-        db.put_device_property(self._ms.ms.keys()[0],
+        db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
         pool = self._pool.dp
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
         self.assertEqual(mgt.availableMntGrps(), [])
 
@@ -3048,7 +3072,7 @@ class ProfileManagerTest(unittest.TestCase):
                     for idsrs in idss.values():
                         for idsr in idsrs:
                             records[str(idsr[2])] = "1234"
-            dsres = describer.dataSources(dss.keys(), dstype='CLIENT')[0]
+            dsres = describer.dataSources(list(dss.keys()), dstype='CLIENT')[0]
             for dsr in dsres.values():
                 records[str(dsr.record)] = '2345'
 
@@ -3078,11 +3102,10 @@ class ProfileManagerTest(unittest.TestCase):
                 # print "DS", mgt.dataSources()
                 self.myAssertRaise(Exception, mgt.updateProfile)
             finally:
-                mgt.deleteProfile("nxsmntgrp")
                 try:
+                    mgt.deleteProfile("nxsmntgrp")
+                finally:
                     tmg.tearDown()
-                except Exception:
-                    pass
 
     # updateProfile test
     def test_updateProfile_nodevice_cp(self):
@@ -3110,10 +3133,10 @@ class ProfileManagerTest(unittest.TestCase):
         self.myAssertRaise(Exception, mgt.updateProfile)
 
         db = PyTango.Database()
-        db.put_device_property(self._ms.ms.keys()[0],
+        db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
         pool = self._pool.dp
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
         self.assertEqual(mgt.availableMntGrps(), [])
 
@@ -3170,7 +3193,7 @@ class ProfileManagerTest(unittest.TestCase):
                     for idsrs in idss.values():
                         for idsr in idsrs:
                             records[str(idsr[2])] = "1234"
-            dsres = describer.dataSources(dss.keys(), dstype='CLIENT')[0]
+            dsres = describer.dataSources(list(dss.keys()), dstype='CLIENT')[0]
             for dsr in dsres.values():
                 records[str(dsr.record)] = '2345'
 
@@ -3201,11 +3224,10 @@ class ProfileManagerTest(unittest.TestCase):
                 self.myAssertRaise(Exception, mgt.updateProfile)
 #                mgt.updateProfile()
             finally:
-                mgt.deleteProfile("nxsmntgrp")
                 try:
+                    mgt.deleteProfile("nxsmntgrp")
+                finally:
                     tmg.tearDown()
-                except Exception:
-                    pass
 
     # updateProfile test
     def test_updateProfile_wrongdevice(self):
@@ -3233,10 +3255,10 @@ class ProfileManagerTest(unittest.TestCase):
         self.myAssertRaise(Exception, mgt.updateProfile)
 
         db = PyTango.Database()
-        db.put_device_property(self._ms.ms.keys()[0],
+        db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
         pool = self._pool.dp
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
         self.assertEqual(mgt.availableMntGrps(), [])
 
@@ -3293,7 +3315,7 @@ class ProfileManagerTest(unittest.TestCase):
                     for idsrs in idss.values():
                         for idsr in idsrs:
                             records[str(idsr[2])] = "1234"
-            dsres = describer.dataSources(dss.keys(), dstype='CLIENT')[0]
+            dsres = describer.dataSources(list(dss.keys()), dstype='CLIENT')[0]
             for dsr in dsres.values():
                 records[str(dsr.record)] = '2345'
 
@@ -3324,11 +3346,10 @@ class ProfileManagerTest(unittest.TestCase):
 #                mgt.updateProfile()
                 self.myAssertRaise(Exception, mgt.updateProfile)
             finally:
-                mgt.deleteProfile("nxsmntgrp")
                 try:
+                    mgt.deleteProfile("nxsmntgrp")
+                finally:
                     tmg.tearDown()
-                except Exception:
-                    pass
 
     # updateProfile test
     def test_updateProfile_components_nopool_tango(self):
@@ -3357,10 +3378,10 @@ class ProfileManagerTest(unittest.TestCase):
         self.myAssertRaise(Exception, mgt.updateProfile)
 
         db = PyTango.Database()
-        db.put_device_property(self._ms.ms.keys()[0],
+        db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
         pool = self._pool.dp
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
         self.assertEqual(mgt.availableMntGrps(), [])
 
@@ -3389,33 +3410,33 @@ class ProfileManagerTest(unittest.TestCase):
             self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.smycps)])
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
 
-            ncps = self.__rnd.randint(1, len(self.smycps.keys()) - 1)
+            ncps = self.__rnd.randint(1, len(list(self.smycps.keys())) - 1)
             lcps = self.__rnd.sample(set(self.smycps.keys()), ncps)
             for cp in lcps:
                 if cp not in wrong:
                     cps[cp] = bool(self.__rnd.randint(0, 1))
 
-            ancps = self.__rnd.randint(1, len(self.smycps.keys()) - 1)
+            ancps = self.__rnd.randint(1, len(list(self.smycps.keys())) - 1)
             alcps = self.__rnd.sample(set(self.smycps.keys()), ancps)
             for cp in alcps:
                 if cp not in wrong:
                     acps[cp] = bool(self.__rnd.randint(0, 1))
 
-            ndss = self.__rnd.randint(1, len(self.smycps.keys()) - 1)
+            ndss = self.__rnd.randint(1, len(list(self.smycps.keys())) - 1)
             ldss = self.__rnd.sample(set(self.smycps.keys()), ndss)
             for ds in ldss:
                 if ds in self.smydss.keys():
                     if ds not in wrong:
                         dss[ds] = bool(self.__rnd.randint(0, 1))
 
-            ndss = self.__rnd.randint(1, len(self.smydss.keys()) - 1)
+            ndss = self.__rnd.randint(1, len(list(self.smydss.keys())) - 1)
             ldss = self.__rnd.sample(set(self.smydss.keys()), ndss)
             for ds in ldss:
                 if ds in self.smydss.keys():
                     if ds not in wrong:
                         dss[ds] = bool(self.__rnd.randint(0, 1))
 
-            mncps = self.__rnd.randint(1, len(self.smycps.keys()) - 1)
+            mncps = self.__rnd.randint(1, len(list(self.smycps.keys())) - 1)
             mcps = [cp for cp in self.__rnd.sample(
                     set(self.smycps.keys()), mncps) if cp not in wrong]
 
@@ -3432,7 +3453,7 @@ class ProfileManagerTest(unittest.TestCase):
                     for idsrs in idss.values():
                         for idsr in idsrs:
                             records[str(idsr[2])] = "1234"
-            dsres = describer.dataSources(dss.keys(), dstype='CLIENT')[0]
+            dsres = describer.dataSources(list(dss.keys()), dstype='CLIENT')[0]
             for dsr in dsres.values():
                 records[str(dsr.record)] = '2345'
 
@@ -3554,11 +3575,10 @@ class ProfileManagerTest(unittest.TestCase):
                 self.assertEqual(json.loads(se["Timer"]), [ar["name"]])
                 self.assertEqual(se["MntGrp"], "nxsmntgrp")
             finally:
-                mgt.deleteProfile("nxsmntgrp")
                 try:
+                    mgt.deleteProfile("nxsmntgrp")
+                finally:
                     tmg.tearDown()
-                except Exception:
-                    pass
 
     # updateProfile test
     def test_updateProfile_components_nopool_tango_unplottedcomponents(self):
@@ -3587,10 +3607,10 @@ class ProfileManagerTest(unittest.TestCase):
         self.myAssertRaise(Exception, mgt.updateProfile)
 
         db = PyTango.Database()
-        db.put_device_property(self._ms.ms.keys()[0],
+        db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
         pool = self._pool.dp
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
         self.assertEqual(mgt.availableMntGrps(), [])
 
@@ -3620,7 +3640,7 @@ class ProfileManagerTest(unittest.TestCase):
             self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
 
             comps = set()
-            ncps = self.__rnd.randint(1, len(self.smycps.keys()) - 1)
+            ncps = self.__rnd.randint(1, len(list(self.smycps.keys())) - 1)
             lcps = self.__rnd.sample(set(self.smycps.keys()), ncps)
             for cp in lcps:
                 if cp not in wrong:
@@ -3628,7 +3648,7 @@ class ProfileManagerTest(unittest.TestCase):
                     if cps[cp]:
                         comps.add(cp)
 
-            ancps = self.__rnd.randint(1, len(self.smycps.keys()) - 1)
+            ancps = self.__rnd.randint(1, len(list(self.smycps.keys())) - 1)
             alcps = self.__rnd.sample(set(self.smycps.keys()), ancps)
             for cp in alcps:
                 if cp not in wrong:
@@ -3636,21 +3656,21 @@ class ProfileManagerTest(unittest.TestCase):
                     if acps[cp]:
                         comps.add(cp)
 
-            ndss = self.__rnd.randint(1, len(self.smycps.keys()) - 1)
+            ndss = self.__rnd.randint(1, len(list(self.smycps.keys())) - 1)
             ldss = self.__rnd.sample(set(self.smycps.keys()), ndss)
             for ds in ldss:
                 if ds in self.smydss.keys():
                     if ds not in wrong:
                         dss[ds] = bool(self.__rnd.randint(0, 1))
 
-            ndss = self.__rnd.randint(1, len(self.smydss.keys()) - 1)
+            ndss = self.__rnd.randint(1, len(list(self.smydss.keys())) - 1)
             ldss = self.__rnd.sample(set(self.smydss.keys()), ndss)
             for ds in ldss:
                 if ds in self.smydss.keys():
                     if ds not in wrong:
                         dss[ds] = bool(self.__rnd.randint(0, 1))
 
-            mncps = self.__rnd.randint(1, len(self.smycps.keys()) - 1)
+            mncps = self.__rnd.randint(1, len(list(self.smycps.keys())) - 1)
             mcps = [cp for cp in self.__rnd.sample(
                     set(self.smycps.keys()), mncps) if cp not in wrong]
             for cp in mcps:
@@ -3669,7 +3689,7 @@ class ProfileManagerTest(unittest.TestCase):
                     for idsrs in idss.values():
                         for idsr in idsrs:
                             records[str(idsr[2])] = "1234"
-            dsres = describer.dataSources(dss.keys(), dstype='CLIENT')[0]
+            dsres = describer.dataSources(list(dss.keys()), dstype='CLIENT')[0]
             for dsr in dsres.values():
                 records[str(dsr.record)] = '2345'
 
@@ -3824,11 +3844,10 @@ class ProfileManagerTest(unittest.TestCase):
                 self.assertEqual(json.loads(se["Timer"]), [ar["name"]])
                 self.assertEqual(se["MntGrp"], "nxsmntgrp")
             finally:
-                mgt.deleteProfile("nxsmntgrp")
                 try:
+                    mgt.deleteProfile("nxsmntgrp")
+                finally:
                     tmg.tearDown()
-                except Exception:
-                    pass
 
     # updateProfile test
     def test_updateProfile_components_pool_tango(self):
@@ -3857,10 +3876,10 @@ class ProfileManagerTest(unittest.TestCase):
         self.myAssertRaise(Exception, mgt.updateProfile)
 
         db = PyTango.Database()
-        db.put_device_property(self._ms.ms.keys()[0],
+        db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
         pool = self._pool.dp
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
         self.assertEqual(mgt.availableMntGrps(), [])
         scalar_ctrl = 'ttestp09/testts/t1r228'
@@ -3930,33 +3949,38 @@ class ProfileManagerTest(unittest.TestCase):
                     self._cf.dp.SetCommandVariable(
                         ["DSDICT", json.dumps(self.smydssXX)])
 
-                    ncps = self.__rnd.randint(1, len(self.smycps2.keys()) - 1)
+                    ncps = self.__rnd.randint(
+                        1, len(list(self.smycps2.keys())) - 1)
                     lcps = self.__rnd.sample(set(self.smycps2.keys()), ncps)
                     for cp in lcps:
                         if cp not in wrong:
                             cps[cp] = bool(self.__rnd.randint(0, 1))
 
-                    ancps = self.__rnd.randint(1, len(self.smycps2.keys()) - 1)
+                    ancps = self.__rnd.randint(
+                        1, len(list(self.smycps2.keys())) - 1)
                     alcps = self.__rnd.sample(set(self.smycps2.keys()), ancps)
                     for cp in alcps:
                         if cp not in wrong:
                             acps[cp] = bool(self.__rnd.randint(0, 1))
 
-                    ndss = self.__rnd.randint(1, len(self.smycps2.keys()) - 1)
+                    ndss = self.__rnd.randint(
+                        1, len(list(self.smycps2.keys())) - 1)
                     ldss = self.__rnd.sample(set(self.smycps2.keys()), ndss)
                     for ds in ldss:
                         if ds in self.smydssXX.keys():
                             if ds not in wrong:
                                 dss[ds] = bool(self.__rnd.randint(0, 1))
 
-                    ndss = self.__rnd.randint(1, len(self.smydssXX.keys()) - 1)
+                    ndss = self.__rnd.randint(
+                        1, len(list(self.smydssXX.keys())) - 1)
                     ldss = self.__rnd.sample(set(self.smydssXX.keys()), ndss)
                     for ds in ldss:
                         if ds in self.smydssXX.keys():
                             if ds not in wrong:
                                 dss[ds] = bool(self.__rnd.randint(0, 1))
 
-                    mncps = self.__rnd.randint(1, len(self.smycps2.keys()) - 1)
+                    mncps = self.__rnd.randint(
+                        1, len(list(self.smycps2.keys())) - 1)
                     mcps = [
                         cp for cp in self.__rnd.sample(
                             set(self.smycps2.keys()), mncps)
@@ -3981,7 +4005,7 @@ class ProfileManagerTest(unittest.TestCase):
                                 for idsr in idsrs:
                                     records[str(idsr[2])] = "1234"
                     dsres = describer.dataSources(
-                        dss.keys(), dstype='CLIENT')[0]
+                        list(dss.keys()), dstype='CLIENT')[0]
                     for dsr in dsres.values():
                         records[str(dsr.record)] = '2345'
 
@@ -4105,11 +4129,10 @@ class ProfileManagerTest(unittest.TestCase):
                     self.assertEqual(json.loads(se["Timer"]), [ar["name"]])
                     self.assertEqual(se["MntGrp"], "nxsmntgrp")
                 finally:
-                    mgt.deleteProfile("nxsmntgrp")
                     try:
+                        mgt.deleteProfile("nxsmntgrp")
+                    finally:
                         tmg.tearDown()
-                    except Exception:
-                        pass
         finally:
             simp2.tearDown()
 
@@ -4140,10 +4163,10 @@ class ProfileManagerTest(unittest.TestCase):
         self.myAssertRaise(Exception, mgt.updateProfile)
 
         db = PyTango.Database()
-        db.put_device_property(self._ms.ms.keys()[0],
+        db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
         pool = self._pool.dp
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
         self.assertEqual(mgt.availableMntGrps(), [])
         scalar_ctrl = 'ttestp09/testts/t1r228'
@@ -4214,7 +4237,8 @@ class ProfileManagerTest(unittest.TestCase):
                         ["DSDICT", json.dumps(self.smydssXX)])
                     comps = set()
 
-                    ncps = self.__rnd.randint(1, len(self.smycps2.keys()) - 1)
+                    ncps = self.__rnd.randint(
+                        1, len(list(self.smycps2.keys())) - 1)
                     lcps = self.__rnd.sample(set(self.smycps2.keys()), ncps)
                     for cp in lcps:
                         if cp not in wrong:
@@ -4222,7 +4246,8 @@ class ProfileManagerTest(unittest.TestCase):
                             if cps[cp]:
                                 comps.add(cp)
 
-                    ancps = self.__rnd.randint(1, len(self.smycps2.keys()) - 1)
+                    ancps = self.__rnd.randint(
+                        1, len(list(self.smycps2.keys())) - 1)
                     alcps = self.__rnd.sample(set(self.smycps2.keys()), ancps)
                     for cp in alcps:
                         if cp not in wrong:
@@ -4230,21 +4255,24 @@ class ProfileManagerTest(unittest.TestCase):
                             if acps[cp]:
                                 comps.add(cp)
 
-                    ndss = self.__rnd.randint(1, len(self.smycps2.keys()) - 1)
+                    ndss = self.__rnd.randint(
+                        1, len(list(self.smycps2.keys())) - 1)
                     ldss = self.__rnd.sample(set(self.smycps2.keys()), ndss)
                     for ds in ldss:
                         if ds in self.smydssXX.keys():
                             if ds not in wrong:
                                 dss[ds] = bool(self.__rnd.randint(0, 1))
 
-                    ndss = self.__rnd.randint(1, len(self.smydssXX.keys()) - 1)
+                    ndss = self.__rnd.randint(
+                        1, len(list(self.smydssXX.keys())) - 1)
                     ldss = self.__rnd.sample(set(self.smydssXX.keys()), ndss)
                     for ds in ldss:
                         if ds in self.smydssXX.keys():
                             if ds not in wrong:
                                 dss[ds] = bool(self.__rnd.randint(0, 1))
 
-                    mncps = self.__rnd.randint(1, len(self.smycps2.keys()) - 1)
+                    mncps = self.__rnd.randint(
+                        1, len(list(self.smycps2.keys())) - 1)
                     mcps = [cp for cp in self.__rnd.sample(
                             set(self.smycps2.keys()), mncps)
                             if cp not in wrong]
@@ -4270,7 +4298,7 @@ class ProfileManagerTest(unittest.TestCase):
                                 for idsr in idsrs:
                                     records[str(idsr[2])] = "1234"
                     dsres = describer.dataSources(
-                        dss.keys(), dstype='CLIENT')[0]
+                        list(dss.keys()), dstype='CLIENT')[0]
                     for dsr in dsres.values():
                         records[str(dsr.record)] = '2345'
 
@@ -4441,11 +4469,10 @@ class ProfileManagerTest(unittest.TestCase):
                     self.assertEqual(json.loads(se["Timer"]), [ar["name"]])
                     self.assertEqual(se["MntGrp"], "nxsmntgrp")
                 finally:
-                    mgt.deleteProfile("nxsmntgrp")
                     try:
+                        mgt.deleteProfile("nxsmntgrp")
+                    finally:
                         tmg.tearDown()
-                    except Exception:
-                        pass
         finally:
             simp2.tearDown()
 
@@ -4477,10 +4504,10 @@ class ProfileManagerTest(unittest.TestCase):
         self.myAssertRaise(Exception, mgt.updateProfile)
 
         db = PyTango.Database()
-        db.put_device_property(self._ms.ms.keys()[0],
+        db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
         pool = self._pool.dp
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
         self.assertEqual(mgt.availableMntGrps(), [])
         scalar_ctrl = 'ttestp09/testts/t1r228'
@@ -4565,7 +4592,7 @@ class ProfileManagerTest(unittest.TestCase):
                             if cps[cp]:
                                 comps.add(cp)
 
-                    ancps = self.__rnd.randint(1, len(amycps.keys()) - 1)
+                    ancps = self.__rnd.randint(1, len(list(amycps.keys())) - 1)
                     alcps = self.__rnd.sample(set(amycps.keys()), ancps)
                     for cp in alcps:
                         if cp not in wrong:
@@ -4573,21 +4600,21 @@ class ProfileManagerTest(unittest.TestCase):
                             if acps[cp]:
                                 comps.add(cp)
 
-                    ndss = self.__rnd.randint(1, len(amycps.keys()) - 1)
+                    ndss = self.__rnd.randint(1, len(list(amycps.keys())) - 1)
                     ldss = self.__rnd.sample(set(amycps.keys()), ndss)
                     for ds in ldss:
                         if ds in amydss.keys():
                             if ds not in wrong:
                                 dss[ds] = bool(self.__rnd.randint(0, 1))
 
-                    ndss = self.__rnd.randint(1, len(amydss.keys()) - 1)
+                    ndss = self.__rnd.randint(1, len(list(amydss.keys())) - 1)
                     ldss = self.__rnd.sample(set(amydss.keys()), ndss)
                     for ds in ldss:
                         if ds in amydss.keys():
                             if ds not in wrong:
                                 dss[ds] = bool(self.__rnd.randint(0, 1))
 
-                    mncps = self.__rnd.randint(1, len(amycps.keys()) - 1)
+                    mncps = self.__rnd.randint(1, len(list(amycps.keys())) - 1)
                     mcps = [cp for cp in self.__rnd.sample(
                             set(amycps.keys()), mncps) if cp not in wrong]
                     for cp in mcps:
@@ -4612,7 +4639,7 @@ class ProfileManagerTest(unittest.TestCase):
                                 for idsr in idsrs:
                                     records[str(idsr[2])] = "1234"
                     dsres = describer.dataSources(
-                        dss.keys(), dstype='CLIENT')[0]
+                        list(dss.keys()), dstype='CLIENT')[0]
                     for dsr in dsres.values():
                         records[str(dsr.record)] = '2345'
 
@@ -4840,11 +4867,10 @@ class ProfileManagerTest(unittest.TestCase):
                     self.assertEqual(json.loads(se["Timer"]), [ar["name"]])
                     self.assertEqual(se["MntGrp"], "nxsmntgrp2")
                 finally:
-                    mgt.deleteProfile("nxsmntgrp2")
                     try:
+                        mgt.deleteProfile("nxsmntgrp2")
+                    finally:
                         tmg.tearDown()
-                    except Exception:
-                        pass
         finally:
             simp2.tearDown()
 
@@ -4876,10 +4902,10 @@ class ProfileManagerTest(unittest.TestCase):
         self.myAssertRaise(Exception, mgt.updateProfile)
 
         db = PyTango.Database()
-        db.put_device_property(self._ms.ms.keys()[0],
+        db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
         pool = self._pool.dp
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
         self.assertEqual(mgt.availableMntGrps(), [])
         scalar_ctrl = 'ttestp09/testts/t1r228'
@@ -4965,7 +4991,7 @@ class ProfileManagerTest(unittest.TestCase):
                             if cps[cp]:
                                 comps.add(cp)
 
-                    ancps = self.__rnd.randint(1, len(amycps.keys()) - 1)
+                    ancps = self.__rnd.randint(1, len(list(amycps.keys())) - 1)
                     alcps = self.__rnd.sample(set(amycps.keys()), ancps)
                     for cp in alcps:
                         if cp not in wrong:
@@ -4973,21 +4999,21 @@ class ProfileManagerTest(unittest.TestCase):
                             if acps[cp]:
                                 comps.add(cp)
 
-                    ndss = self.__rnd.randint(1, len(amycps.keys()) - 1)
+                    ndss = self.__rnd.randint(1, len(list(amycps.keys())) - 1)
                     ldss = self.__rnd.sample(set(amycps.keys()), ndss)
                     for ds in ldss:
                         if ds in amydss.keys():
                             if ds not in wrong:
                                 dss[ds] = bool(self.__rnd.randint(0, 1))
 
-                    ndss = self.__rnd.randint(1, len(amydss.keys()) - 1)
+                    ndss = self.__rnd.randint(1, len(list(amydss.keys())) - 1)
                     ldss = self.__rnd.sample(set(amydss.keys()), ndss)
                     for ds in ldss:
                         if ds in amydss.keys():
                             if ds not in wrong:
                                 dss[ds] = bool(self.__rnd.randint(0, 1))
 
-                    mncps = self.__rnd.randint(1, len(amycps.keys()) - 1)
+                    mncps = self.__rnd.randint(1, len(list(amycps.keys())) - 1)
                     mcps = [cp for cp in self.__rnd.sample(
                         set(amycps.keys()), mncps) if cp not in wrong]
                     for cp in mcps:
@@ -5012,7 +5038,7 @@ class ProfileManagerTest(unittest.TestCase):
                                 for idsr in idsrs:
                                     records[str(idsr[2])] = "1234"
                     dsres = describer.dataSources(
-                        dss.keys(), dstype='CLIENT')[0]
+                        list(dss.keys()), dstype='CLIENT')[0]
                     for dsr in dsres.values():
                         records[str(dsr.record)] = '2345'
 
@@ -5241,11 +5267,10 @@ class ProfileManagerTest(unittest.TestCase):
                     self.assertEqual(json.loads(se["Timer"]), [ar["name"]])
                     self.assertEqual(se["MntGrp"], "mg2")
                 finally:
-                    mgt.deleteProfile("mg2")
                     try:
+                        mgt.deleteProfile("mg2")
+                    finally:
                         tmg.tearDown()
-                    except Exception:
-                        pass
         finally:
             simp2.tearDown()
 
@@ -5277,10 +5302,10 @@ class ProfileManagerTest(unittest.TestCase):
         self.myAssertRaise(Exception, mgt.updateProfile)
 
         db = PyTango.Database()
-        db.put_device_property(self._ms.ms.keys()[0],
+        db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
         pool = self._pool.dp
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
         self.assertEqual(mgt.availableMntGrps(), [])
         scalar_ctrl = 'ttestp09/testts/t1r228'
@@ -5306,7 +5331,7 @@ class ProfileManagerTest(unittest.TestCase):
                     myct = ("ctrl_%s" % tm).replace("_", "/")
                     timers[myct] = tm
                     ctrls.append(myct)
-                ltimers = timers.values()
+                ltimers = list(timers.values())
 
                 for ds, vl in self.smychsXX.items():
                     if vl:
@@ -5385,7 +5410,7 @@ class ProfileManagerTest(unittest.TestCase):
                             if cps[cp]:
                                 comps.add(cp)
 
-                    ancps = self.__rnd.randint(1, len(amycps.keys()) - 1)
+                    ancps = self.__rnd.randint(1, len(list(amycps.keys())) - 1)
                     alcps = self.__rnd.sample(set(amycps.keys()), ancps)
                     for cp in alcps:
                         if cp not in wrong:
@@ -5393,14 +5418,14 @@ class ProfileManagerTest(unittest.TestCase):
                             if acps[cp]:
                                 comps.add(cp)
 
-                    ndss = self.__rnd.randint(1, len(amycps.keys()) - 1)
+                    ndss = self.__rnd.randint(1, len(list(amycps.keys())) - 1)
                     ldss = self.__rnd.sample(set(amycps.keys()), ndss)
                     for ds in ldss:
                         if ds in amydss.keys():
                             if ds not in wrong:
                                 dss[ds] = bool(self.__rnd.randint(0, 1))
 
-                    ndss = self.__rnd.randint(1, len(amydss.keys()) - 1)
+                    ndss = self.__rnd.randint(1, len(list(amydss.keys())) - 1)
                     ldss = self.__rnd.sample(set(amydss.keys()), ndss)
                     for ds in ldss:
                         if ds in amydss.keys():
@@ -5410,7 +5435,7 @@ class ProfileManagerTest(unittest.TestCase):
                     for tm in ltimers:
                         dss[tm] = bool(self.__rnd.randint(0, 1))
 
-                    mncps = self.__rnd.randint(1, len(amycps.keys()) - 1)
+                    mncps = self.__rnd.randint(1, len(list(amycps.keys())) - 1)
                     mcps = [cp for cp in self.__rnd.sample(
                             set(amycps.keys()), mncps) if cp not in wrong]
                     for cp in mcps:
@@ -5435,7 +5460,7 @@ class ProfileManagerTest(unittest.TestCase):
                                 for idsr in idsrs:
                                     records[str(idsr[2])] = "1234"
                     dsres = describer.dataSources(
-                        dss.keys(), dstype='CLIENT')[0]
+                        list(dss.keys()), dstype='CLIENT')[0]
                     for dsr in dsres.values():
                         records[str(dsr.record)] = '2345'
 
@@ -5720,10 +5745,10 @@ class ProfileManagerTest(unittest.TestCase):
         self.myAssertRaise(Exception, mgt.updateProfile)
 
         db = PyTango.Database()
-        db.put_device_property(self._ms.ms.keys()[0],
+        db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
         pool = self._pool.dp
-        self._ms.dps[self._ms.ms.keys()[0]].Init()
+        self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
         self.assertEqual(mgt.availableMntGrps(), [])
         scalar_ctrl = 'ttestp09/testts/t1r228'
@@ -5749,7 +5774,7 @@ class ProfileManagerTest(unittest.TestCase):
                     myct = ("ctrl_%s" % tm).replace("_", "/")
                     timers[myct] = tm
                     ctrls.append(myct)
-                ltimers = timers.values()
+                ltimers = list(timers.values())
 
                 for ds, vl in self.smychsXX.items():
                     if vl:
@@ -5828,7 +5853,7 @@ class ProfileManagerTest(unittest.TestCase):
                             if cps[cp]:
                                 comps.add(cp)
 
-                    ancps = self.__rnd.randint(1, len(amycps.keys()) - 1)
+                    ancps = self.__rnd.randint(1, len(list(amycps.keys())) - 1)
                     alcps = self.__rnd.sample(set(amycps.keys()), ancps)
                     for cp in alcps:
                         if cp not in wrong:
@@ -5836,34 +5861,34 @@ class ProfileManagerTest(unittest.TestCase):
                             if acps[cp]:
                                 comps.add(cp)
 
-                    ndss = self.__rnd.randint(1, len(amycps.keys()) - 1)
+                    ndss = self.__rnd.randint(1, len(list(amycps.keys())) - 1)
                     ldss = self.__rnd.sample(set(amycps.keys()), ndss)
                     for ds in ldss:
                         if ds in amydss.keys():
                             if ds not in wrong:
                                 dss[ds] = bool(self.__rnd.randint(0, 1))
 
-                    ndss = self.__rnd.randint(1, len(amydss.keys()) - 1)
+                    ndss = self.__rnd.randint(1, len(list(amydss.keys())) - 1)
                     ldss = self.__rnd.sample(set(amydss.keys()), ndss)
                     for ds in ldss:
                         if ds in amydss.keys():
                             if ds not in wrong:
                                 dss[ds] = bool(self.__rnd.randint(0, 1))
 
-                    nadss = self.__rnd.randint(1, len(amydss.keys()) - 1)
+                    nadss = self.__rnd.randint(1, len(list(amydss.keys())) - 1)
                     aadss = [ds for ds in self.__rnd.sample(
                         set(amydss.keys()), nadss)]
-                    nadss = self.__rnd.randint(1, len(amydss.keys()) - 1)
+                    nadss = self.__rnd.randint(1, len(list(amydss.keys())) - 1)
                     indss = dict((ds, True) for ds in self.__rnd.sample(
                         set(amydss.keys()), nadss))
 
                     for tm in ltimers:
                         dss[tm] = bool(self.__rnd.randint(0, 1))
 
-                    mncps = self.__rnd.randint(1, len(amycps.keys()) - 1)
+                    mncps = self.__rnd.randint(1, len(list(amycps.keys())) - 1)
                     mcps = [cp for cp in self.__rnd.sample(
                         set(amycps.keys()), mncps) if cp not in wrong]
-                    oncps = self.__rnd.randint(1, len(amycps.keys()) - 1)
+                    oncps = self.__rnd.randint(1, len(list(amycps.keys())) - 1)
                     ocps = [cp for cp in self.__rnd.sample(
                         set(amycps.keys()), oncps) if cp not in wrong]
                     for cp in mcps:
@@ -5935,7 +5960,7 @@ class ProfileManagerTest(unittest.TestCase):
                                 for idsr in idsrs:
                                     records[str(idsr[2])] = "1234"
                     dsres = describer.dataSources(
-                        dss.keys(), dstype='CLIENT')[0]
+                        list(dss.keys()), dstype='CLIENT')[0]
                     for dsr in dsres.values():
                         records[str(dsr.record)] = '2345'
 
@@ -6230,7 +6255,7 @@ class ProfileManagerTest(unittest.TestCase):
             for j in range(10):
                 self.setUp()
                 db = PyTango.Database()
-                db.put_device_property(self._ms.ms.keys()[0],
+                db.put_device_property(list(self._ms.ms.keys())[0],
                                        {'PoolNames': self._pool.dp.name()})
 
                 wrong = []
@@ -6253,7 +6278,7 @@ class ProfileManagerTest(unittest.TestCase):
                 pools = {}
 
                 pool = self._pool.dp
-                self._ms.dps[self._ms.ms.keys()[0]].Init()
+                self._ms.dps[list(self._ms.ms.keys())[0]].Init()
                 scalar_ctrl = 'ttestp09/testts/t1r228'
                 spectrum_ctrl = 'ttestp09/testts/t2r228'
                 image_ctrl = 'ttestp09/testts/t3r228'
@@ -6297,7 +6322,7 @@ class ProfileManagerTest(unittest.TestCase):
                             ctrls.append(myct)
                         # print "TIMERSL", tms
                         # print "TIMERSD", timers
-                        ltimers[mg] = timers.values()
+                        ltimers[mg] = list(timers.values())
                         # print "LTIMER", ltimers[mg]
 
                         for ds, vl in self.smychsXX.items():
@@ -6370,7 +6395,8 @@ class ProfileManagerTest(unittest.TestCase):
                             ["DSDICT", json.dumps(amydss)])
                         comps = set()
 
-                        ncps = self.__rnd.randint(1, len(amycps) - 1)
+                        ncps = self.__rnd.randint(
+                            1, len(amycps) - 1)
                         lcps = self.__rnd.sample(set(amycps.keys()), ncps)
                         for cp in lcps:
                             if cp not in wrong:
@@ -6378,7 +6404,8 @@ class ProfileManagerTest(unittest.TestCase):
                                 if cps[mg][cp]:
                                     comps.add(cp)
 
-                        ancps = self.__rnd.randint(1, len(amycps.keys()) - 1)
+                        ancps = self.__rnd.randint(
+                            1, len(list(amycps.keys())) - 1)
                         alcps = self.__rnd.sample(set(amycps.keys()), ancps)
                         for cp in alcps:
                             if cp not in wrong:
@@ -6386,34 +6413,40 @@ class ProfileManagerTest(unittest.TestCase):
                                 if acps[mg][cp]:
                                     comps.add(cp)
 
-                        ndss = self.__rnd.randint(1, len(amycps.keys()) - 1)
+                        ndss = self.__rnd.randint(
+                            1, len(list(amycps.keys())) - 1)
                         ldss = self.__rnd.sample(set(amycps.keys()), ndss)
                         for ds in ldss:
                             if ds in amydss.keys():
                                 if ds not in wrong:
                                     dss[ds] = bool(self.__rnd.randint(0, 1))
 
-                        ndss = self.__rnd.randint(1, len(amydss.keys()) - 1)
+                        ndss = self.__rnd.randint(
+                            1, len(list(amydss.keys())) - 1)
                         ldss = self.__rnd.sample(set(amydss.keys()), ndss)
                         for ds in ldss:
                             if ds in amydss.keys():
                                 if ds not in wrong:
                                     dss[ds] = bool(self.__rnd.randint(0, 1))
 
-                        nadss = self.__rnd.randint(1, len(amydss.keys()) - 1)
+                        nadss = self.__rnd.randint(
+                            1, len(list(amydss.keys())) - 1)
                         aadss[mg] = [ds for ds in self.__rnd.sample(
                             set(amydss.keys()), nadss)]
-                        nadss = self.__rnd.randint(1, len(amydss.keys()) - 1)
+                        nadss = self.__rnd.randint(
+                            1, len(list(amydss.keys())) - 1)
                         indss = dict((ds, True) for ds in self.__rnd.sample(
                             set(amydss.keys()), nadss))
 
                         for tm in ltimers[mg]:
                             dss[tm] = bool(self.__rnd.randint(0, 1))
 
-                        mncps = self.__rnd.randint(1, len(amycps.keys()) - 1)
+                        mncps = self.__rnd.randint(
+                            1, len(list(amycps.keys())) - 1)
                         mcps = [cp for cp in self.__rnd.sample(
                                 set(amycps.keys()), mncps) if cp not in wrong]
-                        oncps = self.__rnd.randint(1, len(amycps.keys()) - 1)
+                        oncps = self.__rnd.randint(
+                            1, len(list(amycps.keys())) - 1)
                         ocps = [cp for cp in self.__rnd.sample(
                                 set(amycps.keys()), oncps) if cp not in wrong]
                         for cp in mcps:
@@ -6491,7 +6524,7 @@ class ProfileManagerTest(unittest.TestCase):
                                     for idsr in idsrs:
                                         records[mg][str(idsr[2])] = "1234"
                         dsres = describer.dataSources(
-                            dss.keys(), dstype='CLIENT')[0]
+                            list(dss.keys()), dstype='CLIENT')[0]
                         for dsr in dsres.values():
                             records[mg][str(dsr.record)] = '2345'
 
@@ -7057,7 +7090,8 @@ class ProfileManagerTest(unittest.TestCase):
                     lse["MntGrp"] = mg2
                     pool.AcqChannelList = pools[mg2][0]
                     pool.ExpChannelList = pools[mg2][1]
-                    MSUtils.setEnv('ActiveMntGrp', mg3, self._ms.ms.keys()[0])
+                    MSUtils.setEnv(
+                        'ActiveMntGrp', mg3, list(self._ms.ms.keys())[0])
                     pool.AcqChannelList = pools[mg3][0]
                     pool.ExpChannelList = pools[mg3][1]
 
@@ -7121,11 +7155,13 @@ class ProfileManagerTest(unittest.TestCase):
 #                    self.assertTrue(lmgt.isMntGrpUpdated())
                     wmg = "wrong_mg"
                     lse["MntGrp"] = mg3
-                    MSUtils.setEnv('ActiveMntGrp', wmg, self._ms.ms.keys()[0])
+                    MSUtils.setEnv(
+                        'ActiveMntGrp', wmg, list(self._ms.ms.keys())[0])
                     lmgt.switchProfile()
                     self.assertEqual(
                         wmg,
-                        MSUtils.getEnv('ActiveMntGrp', self._ms.ms.keys()[0]))
+                        MSUtils.getEnv(
+                            'ActiveMntGrp', list(self._ms.ms.keys())[0]))
 
                     self.compareToDumpJSON(
                         lse,
@@ -7169,7 +7205,8 @@ class ProfileManagerTest(unittest.TestCase):
                     lse["MntGrp"] = mg2
                     self.assertTrue(not lmgt.isMntGrpUpdated())
                     self.assertTrue(not lmgt.isMntGrpUpdated())
-                    MSUtils.setEnv('ActiveMntGrp', mg3, self._ms.ms.keys()[0])
+                    MSUtils.setEnv(
+                        'ActiveMntGrp', mg3, list(self._ms.ms.keys())[0])
 
                     # tmpcf1 =
                     json.loads(mgt[mg1].mntGrpConfiguration())
@@ -7225,11 +7262,13 @@ class ProfileManagerTest(unittest.TestCase):
 #                    self.assertTrue(lmgt.isMntGrpUpdated())
                     wmg = ""
                     lse["MntGrp"] = mg3
-                    MSUtils.setEnv('ActiveMntGrp', wmg, self._ms.ms.keys()[0])
+                    MSUtils.setEnv(
+                        'ActiveMntGrp', wmg, list(self._ms.ms.keys())[0])
                     lmgt.switchProfile()
                     self.assertEqual(
                         wmg,
-                        MSUtils.getEnv('ActiveMntGrp', self._ms.ms.keys()[0]))
+                        MSUtils.getEnv(
+                            'ActiveMntGrp', list(self._ms.ms.keys())[0]))
 
                     # tmpcf1 =
                     json.loads(mgt[mg1].mntGrpConfiguration())
@@ -7274,7 +7313,8 @@ class ProfileManagerTest(unittest.TestCase):
 #                    self.assertTrue(lmgt.isMntGrpUpdated())
                     wmg = ""
                     lse["MntGrp"] = mg3
-                    MSUtils.usetEnv('ActiveMntGrp', self._ms.ms.keys()[0])
+                    MSUtils.usetEnv(
+                        'ActiveMntGrp', list(self._ms.ms.keys())[0])
                     lmgt.switchProfile()
 
                     # tmpcf1 =
@@ -7400,7 +7440,8 @@ class ProfileManagerTest(unittest.TestCase):
 
                     if j % 2:
 
-                        cpgood = self.smycps.keys() + self.smycps2.keys()
+                        cpgood = list(self.smycps.keys()) + \
+                                 list(self.smycps2.keys())
                         if "client_long" in aadss[mg3] \
                                 or "client_short" in aadss[mg3]:
                             cpgood.remove("smycpnt1")

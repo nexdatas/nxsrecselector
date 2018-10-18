@@ -21,8 +21,15 @@
 #
 import unittest
 
-import TestPool2SetUp
-import SelectorTest
+try:
+    import TestPool2SetUp
+except Exception:
+    from . import TestPool2SetUp
+
+try:
+    import SelectorTest
+except Exception:
+    from . import SelectorTest
 
 
 # test fixture

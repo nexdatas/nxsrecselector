@@ -25,7 +25,10 @@ import subprocess
 
 import PyTango
 import time
-import TestPool
+try:
+    import TestPool
+except Exception:
+    from . import TestPool
 
 
 # test fixture
@@ -114,10 +117,13 @@ class TestPoolSetUp(object):
     # stops server
     def stop(self):
         pipe = subprocess.Popen(
-            "ps -ef | grep 'TestPool.py %s'" % self.instance,
+            "ps -ef | grep 'TestPool.py %s' | grep -v grep" % self.instance,
             stdout=subprocess.PIPE, shell=True).stdout
 
-        res = str(pipe.read()).split("\n")
+        if sys.version_info > (3,):
+            res = str(pipe.read(), "utf8").split("\n")
+        else:
+            res = str(pipe.read()).split("\n")
         for r in res:
             sr = r.split()
             if len(sr) > 2:

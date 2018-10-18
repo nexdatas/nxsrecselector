@@ -1,3 +1,7 @@
+2018-10-18 Jan Kotanski <jankotan@gmail.com>
+	* bump version for splitting purpose
+	* tagged as v3.15.0
+
 2018-10-11 Jan Kotanski <jankotan@gmail.com>
 	* add createDataSources command
 	* add SyncSnapshot property

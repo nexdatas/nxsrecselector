@@ -21,7 +21,6 @@
 
 import json
 import PyTango
-import Queue
 import pickle
 import sys
 
@@ -29,6 +28,10 @@ from .Utils import Utils, TangoUtils, MSUtils, PoolUtils
 from .Describer import Describer
 from .CheckerThread import CheckerThread, TangoDSItem, CheckerItem
 
+if sys.version_info > (3,):
+    import queue as Queue
+else:
+    import Queue
 
 if sys.version_info > (3,):
     unicode = str
@@ -160,16 +163,16 @@ class MacroServerPools(object):
             configdevice, "availableDataSources")
 
         for k in set(components) - set(availablecomponents):
-            discomponentgroup[str(k)] = CheckerItem(str(k))
-            discomponentgroup[str(k)].errords = "..."
-            discomponentgroup[str(k)].active = False
-            discomponentgroup[str(k)].message = \
+            discomponentgroup[Utils.tostr(k)] = CheckerItem(Utils.tostr(k))
+            discomponentgroup[Utils.tostr(k)].errords = "..."
+            discomponentgroup[Utils.tostr(k)].active = False
+            discomponentgroup[Utils.tostr(k)].message = \
                 "%s not defined in Configuration Server" % k
         for k in set(datasources) - set(availabledatasouces):
-            discomponentgroup[str(k)] = CheckerItem(str(k))
-            discomponentgroup[str(k)].errords = k
-            discomponentgroup[str(k)].active = False
-            discomponentgroup[str(k)].message = \
+            discomponentgroup[Utils.tostr(k)] = CheckerItem(Utils.tostr(k))
+            discomponentgroup[Utils.tostr(k)].errords = k
+            discomponentgroup[Utils.tostr(k)].active = False
+            discomponentgroup[Utils.tostr(k)].message = \
                 "%s not defined i<n Configuration Server" % k
         toCheck = {}
         cps = set(components) & set(availablecomponents)
@@ -178,10 +181,11 @@ class MacroServerPools(object):
             for cp, dss in res[0].items():
                 for ds in dss.keys():
                     if ds not in availabledatasouces:
-                        discomponentgroup[str(cp)] = CheckerItem(str(cp))
-                        discomponentgroup[str(cp)].errords = ds
-                        discomponentgroup[str(cp)].active = False
-                        discomponentgroup[str(cp)].message = \
+                        discomponentgroup[Utils.tostr(cp)] = CheckerItem(
+                            Utils.tostr(cp))
+                        discomponentgroup[Utils.tostr(cp)].errords = ds
+                        discomponentgroup[Utils.tostr(cp)].active = False
+                        discomponentgroup[Utils.tostr(cp)].message = \
                             "%s of %s not defined in Configuration Server" \
                             % (ds, cp)
                         break
@@ -194,7 +198,7 @@ class MacroServerPools(object):
                 res[0][ads] = None
             cls.__createCheckItem(ads, res[0], toCheck, nonexisting,
                                   discomponentgroup, channels, describer)
-        return toCheck.values()
+        return list(toCheck.values())
 
     @classmethod
     def __createCheckItem(cls, name, dss, toCheck, nonexisting,
@@ -219,7 +223,7 @@ class MacroServerPools(object):
         :type describer: :class:`nxsrecconfig.Describer.Describer`
         """
         if isinstance(dss, dict):
-            tgds = describer.dataSources(dss.keys(), 'TANGO')[0]
+            tgds = describer.dataSources(list(dss.keys()), 'TANGO')[0]
             for ds in dss.keys():
                 if ds in tgds.keys():
                     if name not in toCheck.keys():
@@ -227,9 +231,9 @@ class MacroServerPools(object):
                     srec = tgds[ds].record.split("/")
                     attr = srec[-1]
                     toCheck[name].append(
-                        TangoDSItem(str(ds),
-                                    str("/".join(srec[:-1])),
-                                    str(attr)))
+                        TangoDSItem(Utils.tostr(ds),
+                                    Utils.tostr("/".join(srec[:-1])),
+                                    Utils.tostr(attr)))
                 elif ds in nonexisting:
                     discomponentgroup[name] = CheckerItem(name)
                     discomponentgroup[name].errords = ds
@@ -237,13 +241,13 @@ class MacroServerPools(object):
                     discomponentgroup[name].message = \
                         "%s not defined in Pool" % ds
 
-                    if name in toCheck.keys():
+                    if name in list(toCheck.keys()):
                         toCheck.pop(name)
                     break
                 elif ds in channels:
                     if name not in toCheck.keys():
                         toCheck[name] = CheckerItem(name)
-                    toCheck[name].append(TangoDSItem(str(ds)))
+                    toCheck[name].append(TangoDSItem(Utils.tostr(ds)))
 
     def checkChannels(self, door, configdevice, channels,
                       componentgroup, datasourcegroup,
@@ -320,9 +324,9 @@ class MacroServerPools(object):
             if acp in disgroup.keys():
                 checkeritem = disgroup[acp]
                 channelerrors.append(json.dumps(
-                    {"component": str(acp),
-                     "datasource": str(checkeritem.errords),
-                     "message": str(checkeritem.message)}
+                    {"component": Utils.tostr(acp),
+                     "datasource": Utils.tostr(checkeritem.errords),
+                     "message": Utils.tostr(checkeritem.message)}
                 ))
                 if checkeritem.active is False:
                     group[acp] = None
@@ -397,13 +401,13 @@ class MacroServerPools(object):
                         except (ValueError, TypeError):
                             vl = data[var]
                     if var in params:
-                        dc['new'][str(var)] = vl
+                        dc['new'][Utils.tostr(var)] = vl
                     else:
                         nenv[("%s" % var)] = vl
 
                 if cmddata:
                     for name, value in cmddata.items():
-                        nenv[str(name)] = value
+                        nenv[Utils.tostr(name)] = value
                 pk = pickle.dumps(dc)
                 msp.Environment = ['pickle', pk]
 
@@ -448,7 +452,7 @@ class MacroServerPools(object):
             dc = pickle.loads(rec[1])
             if 'new' in dc.keys():
                 for var in data.keys():
-                    dc['new'][str(var)] = Utils.toString(data[var])
+                    dc['new'][Utils.tostr(var)] = Utils.toString(data[var])
                 pk = pickle.dumps(dc)
                 if 'ScanID' in dc['new'].keys():
                     scanID = int(dc['new']["ScanID"])

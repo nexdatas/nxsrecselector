@@ -25,7 +25,10 @@ import subprocess
 
 import PyTango
 import time
-import TestServer
+try:
+    import TestServer
+except Exception:
+    from . import TestServer
 
 
 # test fixture
@@ -96,10 +99,17 @@ class TestServerSetUp(object):
         if not path:
             path = '.'
 
-        if os.path.isfile("%s/ST" % path):
+        if sys.version_info > (3,):
             self._psub = subprocess.call(
-                "cd %s; ./ST %s &" % (path, self.instance), stdout=None,
+                "cd %s; python3 ./TestServer.py %s &" %
+                (path, self.instance), stdout=None,
                 stderr=None, shell=True)
+        else:
+            self._psub = subprocess.call(
+                "cd %s; python ./TestServer.py %s &" %
+                (path, self.instance), stdout=None,
+                stderr=None, shell=True)
+
         sys.stdout.write("waiting for simple server")
 
         found = False
@@ -130,15 +140,19 @@ class TestServerSetUp(object):
     # stops server
     def stop(self):
         pipe = subprocess.Popen(
-            "ps -ef | grep 'TestServer.py %s'" % self.instance,
+            "ps -ef | grep 'TestServer.py %s' | grep -v grep" % self.instance,
             stdout=subprocess.PIPE, shell=True).stdout
 
-        res = pipe.read().split("\n")
+        if sys.version_info > (3,):
+            res = str(pipe.read(), "utf8").split("\n")
+        else:
+            res = str(pipe.read()).split("\n")
         for r in res:
             sr = r.split()
             if len(sr) > 2:
                 subprocess.call(
                     "kill -9 %s" % sr[1], stderr=subprocess.PIPE, shell=True)
+        pipe.close()
 
 
 # test fixture
@@ -200,7 +214,7 @@ class MultiTestServerSetUp(object):
     def add(self):
         db = PyTango.Database()
 
-        devices = self.ts.values()
+        devices = list(self.ts.values())
         for dv in devices:
             db.add_device(dv)
             # print dv.name
@@ -216,14 +230,19 @@ class MultiTestServerSetUp(object):
         if not path:
             path = '.'
 
-        self._psub = subprocess.call(
-            "cd %s;  python ./TestServer.py %s &" % (path, self.instance),
-            stdout=None, stderr=None, shell=True)
+        if sys.version_info > (3,):
+            self._psub = subprocess.call(
+                "cd %s;  python3 ./TestServer.py %s &" % (path, self.instance),
+                stdout=None, stderr=None, shell=True)
+        else:
+            self._psub = subprocess.call(
+                "cd %s;  python ./TestServer.py %s &" % (path, self.instance),
+                stdout=None, stderr=None, shell=True)
         sys.stdout.write("waiting for simple server")
 
         found = False
         cnt = 0
-        devices = self.ts.values()
+        devices = list(self.ts.values())
         while not found and cnt < 1000:
             try:
                 sys.stdout.write(".")
@@ -254,15 +273,19 @@ class MultiTestServerSetUp(object):
     # stops server
     def stop(self):
         pipe = subprocess.Popen(
-            "ps -ef | grep 'TestServer.py %s'" % self.instance,
+            "ps -ef | grep 'TestServer.py %s' | grep -v grep" % self.instance,
             stdout=subprocess.PIPE, shell=True).stdout
 
-        res = pipe.read().split("\n")
+        if sys.version_info > (3,):
+            res = str(pipe.read(), "utf8").split("\n")
+        else:
+            res = str(pipe.read()).split("\n")
         for r in res:
             sr = r.split()
             if len(sr) > 2:
                 subprocess.call(
                     "kill -9 %s" % sr[1], stderr=subprocess.PIPE, shell=True)
+        pipe.close()
 
 
 if __name__ == "__main__":

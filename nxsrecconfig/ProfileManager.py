@@ -271,7 +271,7 @@ class ProfileManager(object):
             mntgrps = PoolUtils.getElementNames([pool], 'MeasurementGroupList')
             if name in mntgrps:
                 TangoUtils.command(
-                    pool, "DeleteElement", str(name))
+                    pool, "DeleteElement", Utils.tostr(name))
         if MSUtils.getEnv('ActiveMntGrp', self.__macroServerName) == name:
             MSUtils.usetEnv("ActiveMntGrp", self.__macroServerName)
         inst = self.__selector.setConfigInstance()
@@ -302,9 +302,9 @@ class ProfileManager(object):
         mginfo = self.__createMntGrpConf(
             datasources, componentdatasources, description)
         conf = mginfo['configuration']
-        dpmg = TangoUtils.openProxy(str(mginfo['device']))
+        dpmg = TangoUtils.openProxy(Utils.tostr(mginfo['device']))
         dpmg.Configuration = conf
-        conf = str(dpmg.configuration)
+        conf = Utils.tostr(dpmg.configuration)
         self.__selector['MntGrpConfiguration'] = conf
         mginfo['configuration'] = conf
         if sync:
@@ -343,11 +343,12 @@ class ProfileManager(object):
         self.__updatePools()
         self.__updateMacroServer()
         mntGrpName = self.__selector["MntGrp"]
-        fullname = str(PoolUtils.getMntGrpName(self.__pools, mntGrpName))
+        fullname = Utils.tostr(PoolUtils.getMntGrpName(
+            self.__pools, mntGrpName))
         dpmg = TangoUtils.openProxy(fullname) if fullname else None
         if not dpmg:
             return "{}"
-        return str(dpmg.Configuration)
+        return Utils.tostr(dpmg.Configuration)
 
     def isMntGrpUpdated(self):
         """ check if active measurement group was changed
@@ -374,15 +375,16 @@ class ProfileManager(object):
             datasources, componentdatasources, description)
         llconf = mginfo["configuration"]
 
-        dpmg = TangoUtils.openProxy(str(mginfo['device']))
-        oldconf = str(dpmg.configuration)
+        dpmg = TangoUtils.openProxy(Utils.tostr(mginfo['device']))
+        oldconf = Utils.tostr(dpmg.configuration)
         dpmg.Configuration = llconf
-        llconf = str(dpmg.configuration)
+        llconf = Utils.tostr(dpmg.configuration)
         dpmg.Configuration = oldconf
 
         amg2 = MSUtils.getEnv('ActiveMntGrp', self.__macroServerName)
         if amg != amg2:
-            MSUtils.setEnv('ActiveMntGrp', str(amg), self.__macroServerName)
+            MSUtils.setEnv(
+                'ActiveMntGrp', Utils.tostr(amg), self.__macroServerName)
         state2 = self.__selector.get()
         if json.dumps(state) != json.dumps(state2):
             self.__selector.set(state)
@@ -541,9 +543,9 @@ class ProfileManager(object):
         conf = json.dumps(cnf)
 
         mginfo = {
-            "alias": str(cnf['label']),
+            "alias": Utils.tostr(cnf['label']),
             "device": mfullname,
-            "configuration": str(conf),
+            "configuration": Utils.tostr(conf),
             "snapshot": snapshot
         }
         return mginfo
@@ -626,7 +628,7 @@ class ProfileManager(object):
         describer = Describer(self.__configServer, True)
         ads = TangoUtils.command(self.__configServer, "availableDataSources")
         dsres = describer.dataSources(ads, 'TANGO')[0]
-        tangods = [str(dsr.name) for dsr in dsres.values()
+        tangods = [Utils.tostr(dsr.name) for dsr in dsres.values()
                    if dsr.name not in compdatasources]
         channels = set(
             PoolUtils.getElementNames(self.__pools, 'ExpChannelList') or [])
@@ -783,17 +785,17 @@ class ProfileManager(object):
         frecords = PoolUtils.getFullDeviceNames(self.__pools)
         dsres = describer.dataSources(
             set(datasources) - set(frecords.keys()), 'CLIENT')[0]
-        records = [str(dsr.record) for dsr in dsres.values()]
+        records = [Utils.tostr(dsr.record) for dsr in dsres.values()]
 
         for grp in description:
             for dss in grp.values():
                 for dsrs in dss.values():
                     for dsr in dsrs:
                         if dsr[1] == 'CLIENT':
-                            records.append(str(dsr[2]))
+                            records.append(Utils.tostr(dsr[2]))
 
-        urecords = json.loads(self.__selector["UserData"]).keys()
-        precords = frecords.values()
+        urecords = list(json.loads(self.__selector["UserData"]).keys())
+        precords = list(frecords.values())
         missing = sorted(set(records)
                          - set(DEFAULT_RECORD_KEYS)
                          - set(self.clientRecordKeys)
@@ -801,7 +803,7 @@ class ProfileManager(object):
                          - set(precords))
         if missing:
             raise Exception(
-                "User Data not defined %s" % str(missing))
+                "User Data not defined %s" % Utils.tostr(missing))
 
     def __getActivePool(self, mntgrp=None):
         """ get the active pool
@@ -850,7 +852,8 @@ class ProfileManager(object):
                     TangoUtils.wait(apool)
                 else:
                     raise
-            mfullname = str(PoolUtils.getMntGrpName(self.__pools, mntGrpName))
+            mfullname = Utils.tostr(PoolUtils.getMntGrpName(
+                self.__pools, mntGrpName))
         return mfullname
 
     def __prepareTimers(self, cnf, ltimers):
@@ -927,13 +930,13 @@ class ProfileManager(object):
                         if param and len(param) > 2:
                             if param[0] == 'STEP' \
                                and param[1] in ['TANGO', 'CLIENT']:
-                                aliases.append(str(ds))
-                                dsg[str(ds)] = True
-                                if not ndcp and str(ds) in dontdisplay:
-                                    dontdisplay.remove(str(ds))
+                                aliases.append(Utils.tostr(ds))
+                                dsg[Utils.tostr(ds)] = True
+                                if not ndcp and Utils.tostr(ds) in dontdisplay:
+                                    dontdisplay.remove(Utils.tostr(ds))
                             elif param[0] in ['FINAL', 'INIT'] and \
                                     param[1] in ['TANGO']:
-                                initsources[str(ds)] = \
+                                initsources[Utils.tostr(ds)] = \
                                     TangoUtils.getFullAttrName(
                                         param[2], self.__withsynch)
 
@@ -954,10 +957,11 @@ class ProfileManager(object):
         for tm in timers:
             if tm in dontdisplay:
                 if tm in dsg.keys():
-                    dsg[str(tm)] = False
+                    dsg[Utils.tostr(tm)] = False
 
         self.__selector["DataSourceSelection"] = json.dumps(dsg)
-        self.__selector["UnplottedComponents"] = json.dumps(list(dontdisplay))
+        self.__selector["UnplottedComponents"] = json.dumps(
+            list(dontdisplay))
         aliases = list(set(aliases))
 
         for tm in timers:
@@ -981,7 +985,8 @@ class ProfileManager(object):
         :rtype: :obj:`str`
         """
         mntGrpName = self.__selector["MntGrp"]
-        mfullname = str(PoolUtils.getMntGrpName(self.__pools, mntGrpName))
+        mfullname = Utils.tostr(PoolUtils.getMntGrpName(
+            self.__pools, mntGrpName))
 
         if not mfullname:
             mfullname = self.__createMntGrpDevice(mntGrpName, timer)
@@ -1049,11 +1054,11 @@ class ProfileManager(object):
                 for _, initsource, source, msource in extangods:
                     if source == js["record"]:
                         jds[initsource] = js["dsname"]
-                        found.add(str(js["record"]))
+                        found.add(Utils.tostr(js["record"]))
                         break
                     elif msource == js["record"]:
                         jds[initsource] = js["dsname"]
-                        found.add(str(js["record"]))
+                        found.add(Utils.tostr(js["record"]))
                         break
         for ds in sds:
             js = json.loads(ds)
@@ -1062,11 +1067,11 @@ class ProfileManager(object):
                 for _, initsource, source, msource in extangods:
                     if source == js["record"]:
                         jds[initsource] = js["dsname"]
-                        found.add(str(js["dsname"]))
+                        found.add(Utils.tostr(js["dsname"]))
                         break
                     elif msource == js["record"]:
                         jds[initsource] = js["dsname"]
-                        found.add(str(js["dsname"]))
+                        found.add(Utils.tostr(js["dsname"]))
                         break
         return jds
 
@@ -1123,9 +1128,9 @@ class ProfileManager(object):
                 name = nname
                 if source in exsource:
                     xml = self.__createXMLSource(name, source, exsource)
-                    self.__configServer.xmlstring = str(xml)
+                    self.__configServer.xmlstring = Utils.tostr(xml)
                     TangoUtils.command(self.__configServer, "storeDataSource",
-                                       str(name))
+                                       Utils.tostr(name))
                     jds[initsource] = name
 
     def createDataSources(self, tangods, dsg=None):
@@ -1149,7 +1154,7 @@ class ProfileManager(object):
         describer = Describer(self.__configServer)
         sds = describer.dataSources(ads)
         self.__findSources(tangods, extangods, exsource)
-        jds = self.__addKnownSources(extangods, sds, dsg.keys())
+        jds = self.__addKnownSources(extangods, sds, list(dsg.keys()))
         self.__createUnknownSources(extangods, exsource, ads, jds)
         return jds
 
@@ -1205,7 +1210,7 @@ class ProfileManager(object):
                     ctrl = "__tango__"
                     self.__addController(cnf, ctrl, fulltimer)
                     index = self.__addTangoChannel(
-                        cnf, ctrl, device, str(js["record"]),
+                        cnf, ctrl, device, Utils.tostr(js["record"]),
                         dontdisplay, index)
         synchronization = synchronization or None
         synchronizer = synchronizer or None
@@ -1313,7 +1318,7 @@ class ProfileManager(object):
                 dsource = '%s/%s' % (fullname.encode(), 'Value')
             shp, dt, ut = TangoUtils.getShapeTypeUnit(dsource)
             dct = {}
-            dct['_controller_name'] = unicode(ctrl)
+            dct['_controller_name'] = Utils.tostr(ctrl)
             dct['_unit_id'] = u'0'
             dct['conditioning'] = u''
             dct['data_type'] = dt
@@ -1323,8 +1328,8 @@ class ProfileManager(object):
             dct['index'] = index
             index += 1
             dct['instrument'] = None
-            dct['label'] = unicode(device)
-            dct['name'] = unicode(device)
+            dct['label'] = Utils.tostr(device)
+            dct['name'] = Utils.tostr(device)
             dct['ndim'] = 0
             dct['nexus_path'] = u''
             dct['normalization'] = 0
@@ -1344,7 +1349,7 @@ class ProfileManager(object):
                 dct['plot_axes'] = ['<mov>']
                 dct['plot_type'] = 1
 
-            dct['source'] = dsource
+            dct['source'] = Utils.tostr(dsource)
             ctrlChannels[fullname] = dct
 
         return index
@@ -1384,7 +1389,7 @@ class ProfileManager(object):
             source = record
             shp, dt, ut = TangoUtils.getShapeTypeUnit(source)
             dct = {}
-            dct['_controller_name'] = unicode(ctrl)
+            dct['_controller_name'] = Utils.tostr(ctrl)
             dct['_unit_id'] = u'0'
             dct['conditioning'] = u''
             dct['data_type'] = dt
@@ -1394,8 +1399,8 @@ class ProfileManager(object):
             dct['index'] = index
             index += 1
             dct['instrument'] = None
-            dct['label'] = unicode(label)
-            dct['name'] = unicode(device)
+            dct['label'] = Utils.tostr(label)
+            dct['name'] = Utils.tostr(device)
             dct['ndim'] = 0
             dct['nexus_path'] = u''
             dct['normalization'] = 0
@@ -1415,7 +1420,7 @@ class ProfileManager(object):
                 dct['plot_axes'] = ['<mov>']
                 dct['plot_type'] = 1
 
-            dct['source'] = source
+            dct['source'] = Utils.tostr(source)
             ctrlChannels[fullname] = dct
 
         return index

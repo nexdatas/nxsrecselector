@@ -37,7 +37,23 @@ class Utils(object):
 
     """  Miscellaneous Utilities """
 
-    #
+    @classmethod
+    def tostr(cls, text):
+        """ convert bytestr or unicode to python str
+        :param text: text to convert
+        :type text: :obj:`bytes` or :obj:`unicode` or :obj:`str`
+        :returns: converted text
+        :rtype: :obj:`str`
+        """
+        if isinstance(text, str):
+            return text
+        else:
+            if sys.version_info > (3,) and \
+               (isinstance(text, bytes) or isinstance(text, unicode)):
+                return str(text, "utf8")
+            else:
+                return str(text)
+
     @classmethod
     def compareDict(cls, dct, dct2):
         """ copares two dictionaries
@@ -53,7 +69,7 @@ class Utils(object):
             return False
         if not isinstance(dct2, dict):
             return False
-        if len(dct.keys()) != len(dct2.keys()):
+        if len(list(dct.keys())) != len(list(dct2.keys())):
 
             return False
         status = True
@@ -181,13 +197,13 @@ class Utils(object):
         :returns: string object
         :rtype: :obj:`str`
         """
-        if isinstance(obj, unicode):
-            return str(obj)
+        if isinstance(obj, unicode) or isinstance(obj, bytes):
+            return Utils.tostr(obj)
         elif isinstance(obj, list):
             return [cls.toString(el) for el in obj]
         elif isinstance(obj, dict):
             return dict([(cls.toString(key), cls.toString(value))
-                         for key, value in obj.iteritems()])
+                         for key, value in obj.items()])
         else:
             return obj
 
@@ -216,7 +232,7 @@ class TangoUtils(object):
         """
         found = False
         cnt = 0
-        cnfServer = PyTango.DeviceProxy(str(device))
+        cnfServer = PyTango.DeviceProxy(Utils.tostr(device))
 
         while not found and cnt < counter:
             if cnt > 1:
@@ -224,7 +240,7 @@ class TangoUtils(object):
             try:
                 cnfServer.ping()
                 found = True
-            except (PyTango.DevFailed, PyTango.Except, PyTango.DevError):
+            except PyTango.DevFailed:
                 time.sleep(0.01)
                 found = False
                 if cnt == counter - 1:
@@ -256,7 +272,7 @@ class TangoUtils(object):
                         found = True
                 else:
                     found = True
-            except (PyTango.DevFailed, PyTango.Except, PyTango.DevError):
+            except PyTango.DevFailed:
                 time.sleep(0.01)
                 found = False
                 if cnt == counter - 1:
@@ -275,11 +291,11 @@ class TangoUtils(object):
         """
         dps = []
         for name in names:
-            dp = PyTango.DeviceProxy(str(name))
+            dp = PyTango.DeviceProxy(Utils.tostr(name))
             try:
                 dp.ping()
                 dps.append(dp)
-            except (PyTango.DevFailed, PyTango.Except, PyTango.DevError):
+            except PyTango.DevFailed:
                 pass
         return dps
 
@@ -299,11 +315,11 @@ class TangoUtils(object):
         device = ''
         for server in servers:
             try:
-                dp = PyTango.DeviceProxy(str(server))
+                dp = PyTango.DeviceProxy(Utils.tostr(server))
                 dp.ping()
                 device = server
                 break
-            except (PyTango.DevFailed, PyTango.Except, PyTango.DevError):
+            except PyTango.DevFailed:
                 pass
         return device
 
@@ -356,7 +372,7 @@ class TangoUtils(object):
             if ac.data_format != PyTango.AttrDataFormat.SCALAR:
                 da = ap.read()
                 vl = da.value
-        except (PyTango.DevFailed, PyTango.Except, PyTango.DevError):
+        except PyTango.DevFailed:
             if ac and ac.data_format != PyTango.AttrDataFormat.SCALAR \
                     and (da is None or not hasattr(da, 'dim_x')):
                 raise
@@ -489,10 +505,10 @@ class MSUtils(object):
             hostname = sdoor[0]
         for server in servers:
             if hostname:
-                mserver = "%s/%s" % (hostname, str(server))
+                mserver = "%s/%s" % (hostname, Utils.tostr(server))
             else:
-                mserver = str(server)
-            dp = PyTango.DeviceProxy(str(mserver))
+                mserver = Utils.tostr(server)
+            dp = PyTango.DeviceProxy(Utils.tostr(mserver))
             if hasattr(dp, "DoorList"):
                 lst = dp.DoorList
                 if lst and door in lst:
@@ -726,7 +742,7 @@ class PoolUtils(object):
         """
         source = None
         try:
-            dp = PyTango.DeviceProxy(str(name))
+            dp = PyTango.DeviceProxy(Utils.tostr(name))
             if hasattr(dp, 'DataSource'):
                 ds = dp.DataSource
                 sds = ds.split("://")
@@ -734,6 +750,6 @@ class PoolUtils(object):
                 if ap is None:
                     raise Exception("Empty proxy")
                 source = sds[-1]
-        except (PyTango.DevFailed, PyTango.Except, PyTango.DevError):
+        except PyTango.DevFailed:
             pass
         return source

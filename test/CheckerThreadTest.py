@@ -27,12 +27,16 @@ import random
 import struct
 import threading
 import binascii
-import Queue
 import PyTango
 import TestServerSetUp
 
 from nxsrecconfig.CheckerThread import (
     CheckerThread, CheckerItem, TangoDSItem, ATTRIBUTESTOCHECK)
+
+if sys.version_info > (3,):
+    import queue as Queue
+else:
+    import Queue
 
 
 # if 64-bit machione

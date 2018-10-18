@@ -25,7 +25,10 @@ import subprocess
 
 import PyTango
 import time
-import TestMacroServer
+try:
+    import TestMacroServer
+except Exception:
+    from . import TestMacroServer
 
 
 # test fixture
@@ -71,8 +74,8 @@ class TestMacroServerSetUp(object):
     def add(self):
         db = PyTango.Database()
 #        db.add_device(self.new_device_info_writer)
-        devices = self.ms.values()
-        devices.extend(self.door.values())
+        devices = list(self.ms.values())
+        devices.extend(list(self.door.values()))
         for dv in devices:
             db.add_device(dv)
             print(dv.name)
@@ -99,8 +102,8 @@ class TestMacroServerSetUp(object):
 
         found = False
         cnt = 0
-        devices = self.ms.values()
-        devices.extend(self.door.values())
+        devices = list(self.ms.values())
+        devices.extend(list(self.door.values()))
         while not found and cnt < 1000:
             try:
                 sys.stdout.write(".")
@@ -131,10 +134,14 @@ class TestMacroServerSetUp(object):
     # stops server
     def stop(self):
         pipe = subprocess.Popen(
-            "ps -ef | grep 'TestMacroServer.py %s'" % self.instance,
+            "ps -ef | grep 'TestMacroServer.py %s' | grep -v grep" %
+            self.instance,
             stdout=subprocess.PIPE, shell=True).stdout
 
-        res = str(pipe.read()).split("\n")
+        if sys.version_info > (3,):
+            res = str(pipe.read(), "utf8").split("\n")
+        else:
+            res = str(pipe.read()).split("\n")
         for r in res:
             sr = r.split()
             if len(sr) > 2:

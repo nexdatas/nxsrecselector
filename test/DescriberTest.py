@@ -102,10 +102,17 @@ class NoServer(object):
         index = text.find(label)
         while index != -1:
             try:
-                subc = re.finditer(
-                    r"[\w]+",
-                    text[(index + len(label)):]
-                ).next().group(0)
+                if sys.version_info > (3,):
+                    subc = re.finditer(
+                        r"[\w]+",
+                        text[(index + len(label)):]
+                    ).__next__().group(0)
+                else:
+                    subc = re.finditer(
+                        r"[\w]+",
+                        text[(index + len(label)):]
+                    ).next().group(0)
+
             except Exception as e:
                 print("Error: %s" % str(e))
                 subc = ""
@@ -895,7 +902,7 @@ class DescriberTest(unittest.TestCase):
 
         des = Describer(server)
         res = des.dataSources()
-        self.checkDSList(res, self.resdss.keys())
+        self.checkDSList(res, list(self.resdss.keys()))
 
     # constructor test
     # \brief It tests default settings
@@ -910,7 +917,7 @@ class DescriberTest(unittest.TestCase):
         res = des.dataSources()
         res2 = dict(self.resdss)
         res2.update(self.resdss_pfs)
-        self.checkDSList(res, res2.keys(), dct=res2)
+        self.checkDSList(res, list(res2.keys()), dct=res2)
 
     # constructor test
     # \brief It tests default settings
@@ -925,7 +932,7 @@ class DescriberTest(unittest.TestCase):
         res = des.dataSources()
         res2 = dict(self.resdss)
         res2.update(self.resdss_pfs)
-        self.checkDSList(res, res2.keys(), dct=res2)
+        self.checkDSList(res, list(res2.keys()), dct=res2)
 
     # constructor test
     # \brief It tests default settings
@@ -938,7 +945,7 @@ class DescriberTest(unittest.TestCase):
 
         des = Describer(server)
         res = des.dataSources()
-        self.checkDSList(res, self.resdss.keys())
+        self.checkDSList(res, list(self.resdss.keys()))
 
     # constructor test
     # \brief It tests default settings
@@ -1145,7 +1152,7 @@ class DescriberTest(unittest.TestCase):
 
         des = Describer(server, True)
         res = des.dataSources()[0]
-        self.checkDS(res, self.resdss.keys())
+        self.checkDS(res, list(self.resdss.keys()))
 
     # constructor test
     # \brief It tests default settings
@@ -1160,7 +1167,7 @@ class DescriberTest(unittest.TestCase):
         res = des.dataSources()[0]
         res2 = dict(self.resdss)
         res2.update(self.resdss_pfs)
-        self.checkDS(res, res2.keys(), dct=res2)
+        self.checkDS(res, list(res2.keys()), dct=res2)
 
     # constructor test
     # \brief It tests default settings
@@ -1173,7 +1180,7 @@ class DescriberTest(unittest.TestCase):
 
         des = Describer(server, True)
         res = des.dataSources()[0]
-        self.checkDS(res, self.resdss.keys())
+        self.checkDS(res, list(self.resdss.keys()))
 
     # constructor test
     # \brief It tests default settings
@@ -1188,7 +1195,7 @@ class DescriberTest(unittest.TestCase):
         res = des.dataSources()[0]
         res2 = dict(self.resdss)
         res2.update(self.resdss_pfs)
-        self.checkDS(res, res2.keys(), dct=res2)
+        self.checkDS(res, list(res2.keys()), dct=res2)
 
     # constructor test
     # \brief It tests default settings
@@ -1379,7 +1386,7 @@ class DescriberTest(unittest.TestCase):
         server.cpdict = self.mycps
         des = Describer(server)
         res = des.components()
-        self.checkICP(res, self.rescps.keys())
+        self.checkICP(res, list(self.rescps.keys()))
 
     # constructor test
     # \brief It tests default settings
@@ -1391,7 +1398,7 @@ class DescriberTest(unittest.TestCase):
         res = des.components()
         res2 = dict(self.rescps)
         res2.update(self.rescps_pfs)
-        self.checkICP(res, res2.keys(), dct=res2)
+        self.checkICP(res, list(res2.keys()), dct=res2)
 
     # constructor test
     # \brief It tests default settings
@@ -1401,7 +1408,7 @@ class DescriberTest(unittest.TestCase):
         server.cpdict = self.mycps
         des = Describer(server, True)
         res = des.components()
-        self.checkCP(res, self.rescps.keys())
+        self.checkCP(res, list(self.rescps.keys()))
 
     # constructor test
     # \brief It tests default settings
@@ -1413,7 +1420,7 @@ class DescriberTest(unittest.TestCase):
         res = des.components()
         res2 = dict(self.rescps)
         res2.update(self.rescps_pfs)
-        self.checkCP(res, self.rescps.keys(), dct=res2)
+        self.checkCP(res, list(self.rescps.keys()), dct=res2)
 
     # constructor test
     # \brief It tests default settings
@@ -1423,7 +1430,7 @@ class DescriberTest(unittest.TestCase):
         server.cpdict = self.mycps
         des = Describer(server)
         res = des.components()
-        self.checkICP(res, self.rescps.keys())
+        self.checkICP(res, list(self.rescps.keys()))
 
     # constructor test
     # \brief It tests default settings
@@ -1435,7 +1442,7 @@ class DescriberTest(unittest.TestCase):
         res = des.components()
         res2 = dict(self.rescps)
         res2.update(self.rescps_pfs)
-        self.checkICP(res, self.rescps.keys(), dct=res2)
+        self.checkICP(res, list(self.rescps.keys()), dct=res2)
 
     # constructor test
     # \brief It tests default settings
@@ -1445,7 +1452,7 @@ class DescriberTest(unittest.TestCase):
         server.cpdict = self.mycps
         des = Describer(server, True)
         res = des.components()
-        self.checkCP(res, self.rescps.keys())
+        self.checkCP(res, list(self.rescps.keys()))
 
     # constructor test
     # \brief It tests default settings
@@ -1457,7 +1464,7 @@ class DescriberTest(unittest.TestCase):
         res = des.components()
         res2 = dict(self.rescps)
         res2.update(self.rescps_pfs)
-        self.checkCP(res, self.rescps.keys(), dct=res2)
+        self.checkCP(res, list(self.rescps.keys()), dct=res2)
 
     # constructor test
     # \brief It tests default settings
@@ -1473,7 +1480,7 @@ class DescriberTest(unittest.TestCase):
             for st in strategies:
                 des = Describer(server)
                 res = des.components(strategy=st, dstype=dst)
-                self.checkICP(res, self.rescps.keys(),
+                self.checkICP(res, list(self.rescps.keys()),
                               strategy=st, dstype=dst)
 
     # constructor test
@@ -1492,7 +1499,7 @@ class DescriberTest(unittest.TestCase):
                 res = des.components(strategy=st, dstype=dst)
                 res2 = dict(self.rescps)
                 res2.update(self.rescps_pfs)
-                self.checkICP(res, self.rescps.keys(),
+                self.checkICP(res, list(self.rescps.keys()),
                               strategy=st, dstype=dst, dct=res2)
 
     # constructor test
@@ -1509,7 +1516,7 @@ class DescriberTest(unittest.TestCase):
             for st in strategies:
                 des = Describer(server)
                 res = des.components(strategy=st, dstype=dst)
-                self.checkICP(res, self.rescps.keys(),
+                self.checkICP(res, list(self.rescps.keys()),
                               strategy=st, dstype=dst)
 
     # constructor test
@@ -1528,7 +1535,7 @@ class DescriberTest(unittest.TestCase):
                 res = des.components(strategy=st, dstype=dst)
                 res2 = dict(self.rescps)
                 res2.update(self.rescps_pfs)
-                self.checkICP(res, self.rescps.keys(),
+                self.checkICP(res, list(self.rescps.keys()),
                               strategy=st, dstype=dst, dct=res2)
 
     # constructor test
@@ -1547,7 +1554,7 @@ class DescriberTest(unittest.TestCase):
                 res = des.components(strategy=st, dstype=dst)
                 res2 = dict(self.rescps)
                 res2.update(self.rescps_pfs)
-                self.checkCP(res, self.rescps.keys(),
+                self.checkCP(res, list(self.rescps.keys()),
                              strategy=st, dstype=dst, dct=res2)
 
     # constructor test
@@ -1564,7 +1571,7 @@ class DescriberTest(unittest.TestCase):
             for st in strategies:
                 des = Describer(server, True)
                 res = des.components(strategy=st, dstype=dst)
-                self.checkCP(res, self.rescps.keys(),
+                self.checkCP(res, list(self.rescps.keys()),
                              strategy=st, dstype=dst)
 
     # constructor test
@@ -1581,7 +1588,7 @@ class DescriberTest(unittest.TestCase):
             for st in strategies:
                 des = Describer(server, True)
                 res = des.components(strategy=st, dstype=dst)
-                self.checkCP(res, self.rescps.keys(),
+                self.checkCP(res, list(self.rescps.keys()),
                              strategy=st, dstype=dst)
 
     # constructor test
@@ -1600,7 +1607,7 @@ class DescriberTest(unittest.TestCase):
                 res = des.components(strategy=st, dstype=dst)
                 res2 = dict(self.rescps)
                 res2.update(self.rescps_pfs)
-                self.checkCP(res, self.rescps.keys(),
+                self.checkCP(res, list(self.rescps.keys()),
                              strategy=st, dstype=dst, dct=res2)
 
     # constructor test
@@ -1612,7 +1619,7 @@ class DescriberTest(unittest.TestCase):
         for dst in dstypes:
             for st in strategies:
 
-                nmem = self.__rnd.randint(1, len(self.mycps.keys()) - 1)
+                nmem = self.__rnd.randint(1, len(list(self.mycps.keys())) - 1)
                 mem = self.__rnd.sample(set(self.mycps.keys()), nmem)
 
                 server = NoServer()
@@ -1621,7 +1628,7 @@ class DescriberTest(unittest.TestCase):
                 server.mcplist = list(mem)
                 des = Describer(server)
                 res = des.components(strategy=st, dstype=dst)
-                self.checkICP(res, self.rescps.keys(),
+                self.checkICP(res, list(self.rescps.keys()),
                               strategy=st, dstype=dst)
 
     # constructor test
@@ -1633,7 +1640,7 @@ class DescriberTest(unittest.TestCase):
 
         for dst in dstypes:
             for st in strategies:
-                nmem = self.__rnd.randint(1, len(self.mycps.keys()) - 1)
+                nmem = self.__rnd.randint(1, len(list(self.mycps.keys())) - 1)
                 mem = self.__rnd.sample(set(self.mycps.keys()), nmem)
 
                 server = NoServer()
@@ -1642,7 +1649,7 @@ class DescriberTest(unittest.TestCase):
                 server.mcplist = list(mem)
                 des = Describer(server, True)
                 res = des.components(strategy=st, dstype=dst)
-                self.checkCP(res, self.rescps.keys(),
+                self.checkCP(res, list(self.rescps.keys()),
                              strategy=st, dstype=dst)
 
     # constructor test
@@ -1654,7 +1661,8 @@ class DescriberTest(unittest.TestCase):
         for dst in dstypes:
             for st in strategies:
 
-                nmem = self.__rnd.randint(1, len(self.mydss.keys()) - 1)
+                nmem = self.__rnd.randint(
+                    1, len(list(self.mydss.keys())) - 1)
                 mem = self.__rnd.sample(set(self.mydss.keys()), nmem)
 
                 server = Server()
@@ -1663,7 +1671,7 @@ class DescriberTest(unittest.TestCase):
                 server.mcplist = list(mem)
                 des = Describer(server)
                 res = des.components(strategy=st, dstype=dst)
-                self.checkICP(res, self.rescps.keys(),
+                self.checkICP(res, list(self.rescps.keys()),
                               strategy=st, dstype=dst)
 
     # constructor test
@@ -1675,7 +1683,7 @@ class DescriberTest(unittest.TestCase):
 
         for dst in dstypes:
             for st in strategies:
-                nmem = self.__rnd.randint(1, len(self.mycps.keys()) - 1)
+                nmem = self.__rnd.randint(1, len(list(self.mycps.keys())) - 1)
                 mem = self.__rnd.sample(set(self.mycps.keys()), nmem)
 
                 server = Server()
@@ -1684,7 +1692,7 @@ class DescriberTest(unittest.TestCase):
                 server.mcplist = list(mem)
                 des = Describer(server, True)
                 res = des.components(strategy=st, dstype=dst)
-                self.checkCP(res, self.rescps.keys(),
+                self.checkCP(res, list(self.rescps.keys()),
                              strategy=st, dstype=dst)
 
     # constructor test
@@ -1696,7 +1704,7 @@ class DescriberTest(unittest.TestCase):
         for dst in dstypes:
             for st in strategies:
 
-                ncps = self.__rnd.randint(1, len(self.mycps.keys()) - 1)
+                ncps = self.__rnd.randint(1, len(list(self.mycps.keys())) - 1)
                 cps = self.__rnd.sample(set(self.mycps.keys()), ncps)
 
                 server = NoServer()
@@ -1716,7 +1724,7 @@ class DescriberTest(unittest.TestCase):
         for dst in dstypes:
             for st in strategies:
 
-                ncps = self.__rnd.randint(1, len(self.mycps.keys()) - 1)
+                ncps = self.__rnd.randint(1, len(list(self.mycps.keys())) - 1)
                 cps = self.__rnd.sample(set(self.mycps.keys()), ncps)
 
                 server = NoServer()
@@ -1738,7 +1746,7 @@ class DescriberTest(unittest.TestCase):
 
         for dst in dstypes:
             for st in strategies:
-                ncps = self.__rnd.randint(1, len(self.mycps.keys()) - 1)
+                ncps = self.__rnd.randint(1, len(list(self.mycps.keys())) - 1)
                 cps = self.__rnd.sample(set(self.mycps.keys()), ncps)
 
                 server = NoServer()
@@ -1758,7 +1766,7 @@ class DescriberTest(unittest.TestCase):
 
         for dst in dstypes:
             for st in strategies:
-                ncps = self.__rnd.randint(1, len(self.mycps.keys()) - 1)
+                ncps = self.__rnd.randint(1, len(list(self.mycps.keys())) - 1)
                 cps = self.__rnd.sample(set(self.mycps.keys()), ncps)
 
                 server = NoServer()
@@ -1780,7 +1788,7 @@ class DescriberTest(unittest.TestCase):
         for dst in dstypes:
             for st in strategies:
 
-                ncps = self.__rnd.randint(1, len(self.mycps.keys()) - 1)
+                ncps = self.__rnd.randint(1, len(list(self.mycps.keys())) - 1)
                 cps = self.__rnd.sample(set(self.mycps.keys()), ncps)
 
                 server = Server()
@@ -1800,7 +1808,7 @@ class DescriberTest(unittest.TestCase):
         for dst in dstypes:
             for st in strategies:
 
-                ncps = self.__rnd.randint(1, len(self.mycps.keys()) - 1)
+                ncps = self.__rnd.randint(1, len(list(self.mycps.keys())) - 1)
                 cps = self.__rnd.sample(set(self.mycps.keys()), ncps)
 
                 server = Server()
@@ -1822,7 +1830,7 @@ class DescriberTest(unittest.TestCase):
 
         for dst in dstypes:
             for st in strategies:
-                ncps = self.__rnd.randint(1, len(self.mycps.keys()) - 1)
+                ncps = self.__rnd.randint(1, len(list(self.mycps.keys())) - 1)
                 cps = self.__rnd.sample(set(self.mycps.keys()), ncps)
 
                 server = Server()
@@ -1842,7 +1850,7 @@ class DescriberTest(unittest.TestCase):
 
         for dst in dstypes:
             for st in strategies:
-                ncps = self.__rnd.randint(1, len(self.mycps.keys()) - 1)
+                ncps = self.__rnd.randint(1, len(list(self.mycps.keys())) - 1)
                 cps = self.__rnd.sample(set(self.mycps.keys()), ncps)
 
                 server = Server()
@@ -1864,10 +1872,10 @@ class DescriberTest(unittest.TestCase):
         for dst in dstypes:
             for st in strategies:
 
-                ncps = self.__rnd.randint(1, len(self.mycps.keys()) - 1)
+                ncps = self.__rnd.randint(1, len(list(self.mycps.keys())) - 1)
                 cps = self.__rnd.sample(set(self.mycps.keys()), ncps)
 
-                nmem = self.__rnd.randint(1, len(self.mycps.keys()) - 1)
+                nmem = self.__rnd.randint(1, len(list(self.mycps.keys())) - 1)
                 mem = self.__rnd.sample(set(self.mycps.keys()), nmem)
                 server = NoServer()
                 server.dsdict = self.mydss
@@ -1887,10 +1895,10 @@ class DescriberTest(unittest.TestCase):
 
         for dst in dstypes:
             for st in strategies:
-                ncps = self.__rnd.randint(1, len(self.mycps.keys()) - 1)
+                ncps = self.__rnd.randint(1, len(list(self.mycps.keys())) - 1)
                 cps = self.__rnd.sample(set(self.mycps.keys()), ncps)
 
-                nmem = self.__rnd.randint(1, len(self.mycps.keys()) - 1)
+                nmem = self.__rnd.randint(1, len(list(self.mycps.keys())) - 1)
                 mem = self.__rnd.sample(set(self.mycps.keys()), nmem)
                 server = NoServer()
                 server.dsdict = self.mydss

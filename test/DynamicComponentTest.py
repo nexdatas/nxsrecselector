@@ -87,6 +87,13 @@ except Exception:
             print("MYSQL not available")
 
 
+def miniparseString(text):
+    if sys.version_info > (3,):
+        return xml.dom.minidom.parseString(bytes(text, "UTF-8"))
+    else:
+        return xml.dom.minidom.parseString(text)
+
+
 # test fixture
 class DynamicComponentTest(unittest.TestCase):
 
@@ -967,7 +974,10 @@ class DynamicComponentTest(unittest.TestCase):
         self._cf.tearDown()
 
     def getRandomName(self, maxsize):
-        letters = string.lowercase + string.uppercase + string.digits
+        if sys.version_info > (3,):
+            letters = string.ascii_letters + string.digits
+        else:
+            letters = string.letters + string.digits
         size = self.__rnd.randint(1, maxsize)
         return ''.join(self.__rnd.choice(letters) for _ in range(size))
 
@@ -992,8 +1002,8 @@ class DynamicComponentTest(unittest.TestCase):
         logger.debug("\n%s\n%s" % (dct, dct2))
         self.assertTrue(isinstance(dct, dict))
         self.assertTrue(isinstance(dct2, dict))
-        logger.debug("%s %s" % (len(dct.keys()), len(dct2.keys())))
-        self.assertEqual(len(dct.keys()), len(dct2.keys()))
+        logger.debug("%s %s" % (len(list(dct.keys())), len(list(dct2.keys()))))
+        self.assertEqual(len(list(dct.keys())), len(list(dct2.keys())))
         for k, v in dct.items():
             logger.debug("%s  in %s" % (str(k), str(dct2.keys())))
             self.assertTrue(k in dct2.keys())
@@ -1337,7 +1347,7 @@ class DynamicComponentTest(unittest.TestCase):
                           for _ in range(self.__rnd.randint(0, 3))]
                     ms2 = [self.__rnd.randint(0, 3000)
                            for _ in range(self.__rnd.randint(0, 3))]
-                    tmptp = self.__rnd.choice(self.__npTn.keys())
+                    tmptp = self.__rnd.choice(list(self.__npTn.keys()))
                     if i == 0:
                         pass
                         dc.setDefaultLinkPath(False, self.__defaultpath)
@@ -2955,7 +2965,7 @@ class DynamicComponentTest(unittest.TestCase):
                 cpname = dc.create()
                 comp = self._cf.dp.Components([cpname])[0]
 
-                indom = xml.dom.minidom.parseString(dsxml)
+                indom = miniparseString(dsxml)
                 dss = indom.getElementsByTagName("datasource")
                 nxstype = nxstp
                 mycps = defbg + groupbg + fieldbg % (
@@ -3112,7 +3122,7 @@ class DynamicComponentTest(unittest.TestCase):
                 cpname = dc.create()
                 comp = self._cf.dp.Components([cpname])[0]
 
-                indom = xml.dom.minidom.parseString(dsxml)
+                indom = miniparseString(dsxml)
                 dss = indom.getElementsByTagName("datasource")
                 nxstype = nxstp
                 mycps = defbg + groupbg + fieldbg % (
@@ -3180,7 +3190,7 @@ class DynamicComponentTest(unittest.TestCase):
                     ms = self.smydsspar[ds]
                     sds = ds.split("_")
                     tp = sds[1]
-                    indom = xml.dom.minidom.parseString(dsxml)
+                    indom = miniparseString(dsxml)
                     dss = indom.getElementsByTagName("datasource")
                     if not ds.startswith("client_") and sds[1] != 'Encoded':
                         nxstp = self.__npTn2[tp]
@@ -3374,7 +3384,7 @@ class DynamicComponentTest(unittest.TestCase):
                     ms = self.smydsspar[ds]
                     sds = ds.split("_")
                     tp = sds[1]
-                    indom = xml.dom.minidom.parseString(dsxml)
+                    indom = miniparseString(dsxml)
                     dss = indom.getElementsByTagName("datasource")
                     if not ds.startswith("client_") and sds[1] != 'Encoded':
                         nxstp = self.__npTn2[tp]

@@ -25,13 +25,19 @@ import time
 import PyTango
 import json
 
-import ServerSetUp
-import BasicSettings2Test
-
 from nxsrecconfig.MacroServerPools import MacroServerPools
 from nxsrecconfig.Selector import Selector
 from nxsrecconfig.ProfileManager import ProfileManager
 from nxsrecconfig.Utils import MSUtils
+
+try:
+    import ServerSetUp
+except Exception:
+    from . import ServerSetUp
+try:
+    import BasicSettings2Test
+except Exception:
+    from . import BasicSettings2Test
 
 
 # test fixture
@@ -75,7 +81,7 @@ class BasicNXSRecSelector2Test(BasicSettings2Test.BasicSettings2Test):
         return json.loads(rs.profileConfiguration)[name]
 
     def names(self, rs):
-        return json.loads(rs.profileConfiguration).keys()
+        return list(json.loads(rs.profileConfiguration).keys())
 
     def setProp(self, rc, name, value):
         db = PyTango.Database()
@@ -182,7 +188,7 @@ class BasicNXSRecSelector2Test(BasicSettings2Test.BasicSettings2Test):
             rs.switchProfile()
         else:
             mg = rs.mntGrp
-            MSUtils.setEnv('ActiveMntGrp', mg, self._ms.ms.keys()[0])
+            MSUtils.setEnv('ActiveMntGrp', mg, list(self._ms.ms.keys())[0])
             rs.switchProfile()
 
     def subtest_switchProfile_importMntGrp(self):
