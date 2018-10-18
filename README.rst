@@ -37,7 +37,7 @@ Extract the sources and run
 Debian packages
 ^^^^^^^^^^^^^^^
 
-Debian Jessie (and Wheezy) packages can be found in the HDRI repository.
+Debian stretch (and jessie, wheezy) or ubuntu bionic nad xenial packages can be found in the HDRI repository.
 
 To install the debian packages, add the PGP repository key
 
@@ -51,14 +51,21 @@ and then download the corresponding source list
 .. code-block:: console
 
 	  $ cd /etc/apt/sources.list.d
-	  $ wget http://repos.pni-hdri.de/jessie-pni-hdri.list
+	  $ wget http://repos.pni-hdri.de/stretch-pni-hdri.list
 
-Finally,
+Finally, install module
 
 .. code-block:: console
 
 	  $ apt-get update
 	  $ apt-get install python-nxsrecselector
+
+and the NXSRecSelector tango server
+
+.. code-block:: console
+
+	  $ apt-get update
+	  $ apt-get install nxsrecselector
 
 To instal other NexDaTaS packages
 

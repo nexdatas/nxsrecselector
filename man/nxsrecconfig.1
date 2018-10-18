@@ -71,7 +71,7 @@ $ python setup.py install
 .UNINDENT
 .SS Debian packages
 .sp
-Debian Jessie (and Wheezy) packages can be found in the HDRI repository.
+Debian stretch (and jessie, wheezy) or ubuntu bionic nad xenial packages can be found in the HDRI repository.
 .sp
 To install the debian packages, add the PGP repository key
 .INDENT 0.0
@@ -93,13 +93,13 @@ and then download the corresponding source list
 .nf
 .ft C
 $ cd /etc/apt/sources.list.d
-$ wget http://repos.pni\-hdri.de/jessie\-pni\-hdri.list
+$ wget http://repos.pni\-hdri.de/stretch\-pni\-hdri.list
 .ft P
 .fi
 .UNINDENT
 .UNINDENT
 .sp
-Finally,
+Finally, install module
 .INDENT 0.0
 .INDENT 3.5
 .sp
@@ -107,6 +107,19 @@ Finally,
 .ft C
 $ apt\-get update
 $ apt\-get install python\-nxsrecselector
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+and the NXSRecSelector tango server
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+$ apt\-get update
+$ apt\-get install nxsrecselector
 .ft P
 .fi
 .UNINDENT
