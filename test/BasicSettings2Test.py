@@ -6285,8 +6285,15 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             rs.resetPreselectedComponents()
             res = self.value(rs, "ComponentPreselection")
             resd = self.value(rs, "DataSourcePreselection")
+            pds = self.value(rs, "PreselectingDataSources")
             self.compareToDump(
-                rs, ["ComponentPreselection", "DataSourcePreselection"])
+                rs, ["ComponentPreselection",
+                     "DataSourcePreselection",
+                     "PreselectingDataSources"])
+
+            self.assertEqual(
+                set(json.loads(self.getDump("PreselectingDataSources"))),
+                set(json.loads(pds)))
             self.myAssertDict(json.loads(resd), {})
 
             self.myAssertDict(json.loads(res), {
@@ -7159,8 +7166,13 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             sed1 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
             rs.resetPreselectedComponents()
             res = self.value(rs, "ComponentPreselection")
-            self.compareToDump(rs, ["ComponentPreselection"])
+            self.compareToDump(rs, ["ComponentPreselection",
+                                    "PreselectingDataSources"])
 
+            pds = self.value(rs, "PreselectingDataSources")
+            self.assertEqual(
+                set(json.loads(self.getDump("PreselectingDataSources"))),
+                set(json.loads(pds)))
             self.myAssertDict(json.loads(res), {
                 "smycp": True, "smycp2": True, "smycp3": True,
                 "s2mycp": True, "s2mycp2": True, "s2mycp3": True,
@@ -7350,7 +7362,13 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             sed1 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
             rs.resetPreselectedComponents()
             res = self.value(rs, "ComponentPreselection")
-            self.compareToDump(rs, ["ComponentPreselection"])
+            self.compareToDump(rs, ["ComponentPreselection",
+                                    "PreselectingDataSources"])
+
+            pds = self.value(rs, "PreselectingDataSources")
+            self.assertEqual(
+                set(json.loads(self.getDump("PreselectingDataSources"))),
+                set(json.loads(pds)))
 
             self.myAssertDict(json.loads(res), {
                 "smycp": True, "smycp2": True, "smycp3": True,
@@ -7449,7 +7467,13 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             sed1 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
             rs.resetPreselectedComponents()
             res = self.value(rs, "ComponentPreselection")
-            self.compareToDump(rs, ["ComponentPreselection"])
+            self.compareToDump(rs, ["ComponentPreselection",
+                                    "PreselectingDataSources"])
+
+            pds = self.value(rs, "PreselectingDataSources")
+            self.assertEqual(
+                set(json.loads(self.getDump("PreselectingDataSources"))),
+                set(json.loads(pds)))
 
             self.myAssertDict(json.loads(res), {
                 "smycp": True, "smycp2": True, "smycp3": True,

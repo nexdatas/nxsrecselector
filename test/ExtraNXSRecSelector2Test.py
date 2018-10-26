@@ -181,7 +181,7 @@ class ExtraNXSRecSelector2Test(ExtraSettings2Test.ExtraSettings2Test):
             rs.switchProfile()
         else:
             mg = rs.mntGrp
-            MSUtils.setEnv('ActiveMntGrp', mg, self._ms.ms.keys()[0])
+            MSUtils.setEnv('ActiveMntGrp', mg, list(self._ms.ms.keys())[0])
             rs.switchProfile()
 
     def subtest_switchProfile_importMntGrp(self):

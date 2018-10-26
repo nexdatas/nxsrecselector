@@ -30,10 +30,22 @@ import time
 import json
 import pickle
 
-import TestMacroServerSetUp
-import TestPoolSetUp
-import TestServerSetUp
-import TestConfigServerSetUp
+try:
+    import TestMacroServerSetUp
+except Exception:
+    from . import TestMacroServerSetUp
+try:
+    import TestPoolSetUp
+except Exception:
+    from . import TestPoolSetUp
+try:
+    import TestServerSetUp
+except Exception:
+    from . import TestServerSetUp
+try:
+    import TestConfigServerSetUp
+except Exception:
+    from . import TestConfigServerSetUp
 
 
 from nxsrecconfig.MacroServerPools import MacroServerPools

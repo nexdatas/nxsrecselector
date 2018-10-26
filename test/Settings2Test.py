@@ -2119,7 +2119,7 @@ class Settings2Test(unittest.TestCase):
         self.assertEqual(dks, eks)
         for key in dks:
             # if self._dump[name][key] != self.value(el, key):
-            #     print "COMP", key
+            #     print("COMP %s" % key)
             self.assertEqual(self._dump[name][key], self.value(el, key))
 
     def getDump(self, key, name="default"):
