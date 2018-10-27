@@ -968,7 +968,7 @@ class Settings(object):
             TangoUtils.command(
                 nexusconfig_device, "createConfiguration", cp)
         except PyTango.CommunicationFailed as e:
-            if hasattr(e, "__len__")  and len(e) and \
+            if hasattr(e, "__len__") and len(e) and \
                hasattr(e[-1], "reason") and \
                e[-1].reason == "API_DeviceTimedOut":
                 TangoUtils.wait(nexusconfig_device)
