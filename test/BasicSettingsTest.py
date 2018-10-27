@@ -4632,7 +4632,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             rs, ["ComponentPreselection",
                  "DataSourcePreselection",
                  "PreselectingDataSources"])
-        
+
         self.assertEqual(
             set(json.loads(self.getDump("PreselectingDataSources"))),
             set(json.loads(pds)))
@@ -4710,7 +4710,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             rs, ["ComponentPreselection",
                  "DataSourcePreselection",
                  "PreselectingDataSources"])
-        
+
         self.assertEqual(
             set(json.loads(self.getDump("PreselectingDataSources"))),
             set(json.loads(pds)))
@@ -4768,7 +4768,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             rs, ["ComponentPreselection",
                  "DataSourcePreselection",
                  "PreselectingDataSources"])
-        
+
         self.assertEqual(
             set(json.loads(self.getDump("PreselectingDataSources"))),
             set(json.loads(pds)))
@@ -4823,7 +4823,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             rs, ["ComponentPreselection",
                  "DataSourcePreselection",
                  "PreselectingDataSources"])
-        
+
         self.assertEqual(
             set(json.loads(self.getDump("PreselectingDataSources"))),
             set(json.loads(pds)))
@@ -4878,7 +4878,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             rs, ["ComponentPreselection",
                  "DataSourcePreselection",
                  "PreselectingDataSources"])
-        
+
         self.assertEqual(
             set(json.loads(self.getDump("PreselectingDataSources"))),
             set(json.loads(pds)))
@@ -4956,7 +4956,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             rs, ["ComponentPreselection",
                  "DataSourcePreselection",
                  "PreselectingDataSources"])
-        
+
         self.assertEqual(
             set(json.loads(self.getDump("PreselectingDataSources"))),
             set(json.loads(pds)))
@@ -5034,7 +5034,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             rs, ["ComponentPreselection",
                  "DataSourcePreselection",
                  "PreselectingDataSources"])
-        
+
         self.assertEqual(
             set(json.loads(self.getDump("PreselectingDataSources"))),
             set(json.loads(pds)))
@@ -5114,7 +5114,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             rs, ["ComponentPreselection",
                  "DataSourcePreselection",
                  "PreselectingDataSources"])
-        
+
         self.assertEqual(
             set(json.loads(self.getDump("PreselectingDataSources"))),
             set(json.loads(pds)))
@@ -5170,7 +5170,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             rs, ["ComponentPreselection",
                  "DataSourcePreselection",
                  "PreselectingDataSources"])
-        
+
         self.assertEqual(
             set(json.loads(self.getDump("PreselectingDataSources"))),
             set(json.loads(pds)))
@@ -5226,7 +5226,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             rs, ["ComponentPreselection",
                  "DataSourcePreselection",
                  "PreselectingDataSources"])
-        
+
         self.assertEqual(
             set(json.loads(self.getDump("PreselectingDataSources"))),
             set(json.loads(pds)))
@@ -5283,7 +5283,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             rs, ["ComponentPreselection",
                  "DataSourcePreselection",
                  "PreselectingDataSources"])
-        
+
         self.assertEqual(
             set(json.loads(self.getDump("PreselectingDataSources"))),
             set(json.loads(pds)))
@@ -5380,7 +5380,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                 rs, ["ComponentPreselection",
                      "DataSourcePreselection",
                      "PreselectingDataSources"])
-            
+
             self.assertEqual(
                 set(json.loads(self.getDump("PreselectingDataSources"))),
                 set(json.loads(pds)))
@@ -5475,7 +5475,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                 rs, ["ComponentPreselection",
                      "DataSourcePreselection",
                      "PreselectingDataSources"])
-            
+
             self.assertEqual(
                 set(json.loads(self.getDump("PreselectingDataSources"))),
                 set(json.loads(pds)))
@@ -5570,7 +5570,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                 rs, ["ComponentPreselection",
                      "DataSourcePreselection",
                      "PreselectingDataSources"])
-            
+
             self.assertEqual(
                 set(json.loads(self.getDump("PreselectingDataSources"))),
                 set(json.loads(pds)))
@@ -5665,7 +5665,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                 rs, ["ComponentPreselection",
                      "DataSourcePreselection",
                      "PreselectingDataSources"])
-            
+
             self.assertEqual(
                 set(json.loads(self.getDump("PreselectingDataSources"))),
                 set(json.loads(pds)))
@@ -5760,7 +5760,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                 rs, ["ComponentPreselection",
                      "DataSourcePreselection",
                      "PreselectingDataSources"])
-            
+
             self.assertEqual(
                 set(json.loads(self.getDump("PreselectingDataSources"))),
                 set(json.loads(pds)))
@@ -5855,7 +5855,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                 rs, ["ComponentPreselection",
                      "DataSourcePreselection",
                      "PreselectingDataSources"])
-            
+
             self.assertEqual(
                 set(json.loads(self.getDump("PreselectingDataSources"))),
                 set(json.loads(pds)))
@@ -5950,7 +5950,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                 rs, ["ComponentPreselection",
                      "DataSourcePreselection",
                      "PreselectingDataSources"])
-            
+
             self.assertEqual(
                 set(json.loads(self.getDump("PreselectingDataSources"))),
                 set(json.loads(pds)))
@@ -6051,7 +6051,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                 rs, ["ComponentPreselection",
                      "DataSourcePreselection",
                      "PreselectingDataSources"])
-            
+
             self.assertEqual(
                 set(json.loads(self.getDump("PreselectingDataSources"))),
                 set(json.loads(pds)))
@@ -6142,7 +6142,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             rs, ["ComponentPreselection",
                  "DataSourcePreselection",
                  "PreselectingDataSources"])
-        
+
         self.assertEqual(
             set(json.loads(self.getDump("PreselectingDataSources"))),
             set(json.loads(pds)))
@@ -6239,7 +6239,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                 rs, ["ComponentPreselection",
                      "DataSourcePreselection",
                      "PreselectingDataSources"])
-            
+
             self.assertEqual(
                 set(json.loads(self.getDump("PreselectingDataSources"))),
                 set(json.loads(pds)))
@@ -6337,7 +6337,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                 rs, ["ComponentPreselection",
                      "DataSourcePreselection",
                      "PreselectingDataSources"])
-            
+
             self.assertEqual(
                 set(json.loads(self.getDump("PreselectingDataSources"))),
                 set(json.loads(pds)))
@@ -6849,7 +6849,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                 rs, ["ComponentPreselection",
                      "DataSourcePreselection",
                      "PreselectingDataSources"])
-            
+
             self.assertEqual(
                 set(json.loads(self.getDump("PreselectingDataSources"))),
                 set(json.loads(pds)))
@@ -6950,7 +6950,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                 rs, ["ComponentPreselection",
                      "DataSourcePreselection",
                      "PreselectingDataSources"])
-            
+
             self.assertEqual(
                 set(json.loads(self.getDump("PreselectingDataSources"))),
                 set(json.loads(pds)))
@@ -7051,7 +7051,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                 rs, ["ComponentPreselection",
                      "DataSourcePreselection",
                      "PreselectingDataSources"])
-            
+
             self.assertEqual(
                 set(json.loads(self.getDump("PreselectingDataSources"))),
                 set(json.loads(pds)))
@@ -7167,7 +7167,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                 rs, ["ComponentPreselection",
                      "DataSourcePreselection",
                      "PreselectingDataSources"])
-            
+
             self.assertEqual(
                 set(json.loads(self.getDump("PreselectingDataSources"))),
                 set(json.loads(pds)))
@@ -7274,7 +7274,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                 rs, ["ComponentPreselection",
                      "DataSourcePreselection",
                      "PreselectingDataSources"])
-            
+
             self.assertEqual(
                 set(json.loads(self.getDump("PreselectingDataSources"))),
                 set(json.loads(pds)))
@@ -7479,7 +7479,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                 rs, ["ComponentPreselection",
                      "DataSourcePreselection",
                      "PreselectingDataSources"])
-            
+
             self.assertEqual(
                 set(json.loads(self.getDump("PreselectingDataSources"))),
                 set(json.loads(pds)))
@@ -7787,7 +7787,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                 rs, ["ComponentPreselection",
                      "DataSourcePreselection",
                      "PreselectingDataSources"])
-            
+
             self.assertEqual(
                 set(json.loads(self.getDump("PreselectingDataSources"))),
                 set(json.loads(pds)))
@@ -7892,7 +7892,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                 rs, ["ComponentPreselection",
                      "DataSourcePreselection",
                      "PreselectingDataSources"])
-            
+
             self.assertEqual(
                 set(json.loads(self.getDump("PreselectingDataSources"))),
                 set(json.loads(pds)))
@@ -7996,7 +7996,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                 rs, ["ComponentPreselection",
                      "DataSourcePreselection",
                      "PreselectingDataSources"])
-            
+
             self.assertEqual(
                 set(json.loads(self.getDump("PreselectingDataSources"))),
                 set(json.loads(pds)))
