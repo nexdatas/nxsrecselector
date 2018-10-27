@@ -301,7 +301,7 @@ class ConverterTest(unittest.TestCase):
             names = dict(
                 (self.getRandomString(20), self.getRandomString(20))
                 for _ in range(self.__rnd.randint(0, 20)))
-            for k in names.keys():
+            for k in list(names.keys()):
                 if k in names.values():
                     names.pop(k)
             res = set(names.keys())

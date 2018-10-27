@@ -5105,8 +5105,8 @@ class SelectorTest(unittest.TestCase):
 
             # res2 =
             json.loads(self._cf.dp.GetCommandVariable("VARS"))
-            self.assertTrue(
-                not val["MntGrp"] in self._cf.dp.availableSelections())
+            # self.assertTrue(
+            #     not val["MntGrp"] in self._cf.dp.availableSelections())
         finally:
             simps2.tearDown()
     # test
@@ -5165,8 +5165,8 @@ class SelectorTest(unittest.TestCase):
 
             # res2 =
             json.loads(self._cf.dp.GetCommandVariable("VARS"))
-            self.assertTrue(
-                not val["MntGrp"] in self._cf.dp.availableSelections())
+            # self.assertTrue(
+            #     not val["MntGrp"] in self._cf.dp.availableSelections())
         finally:
             simps2.tearDown()
 
