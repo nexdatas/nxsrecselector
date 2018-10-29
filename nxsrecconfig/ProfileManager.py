@@ -847,10 +847,9 @@ class ProfileManager(object):
             try:
                 TangoUtils.command(apool, "CreateMeasurementGroup",
                                    [mntGrpName, timer])
-            except PyTango.CommunicationFailed as e:
-                if hasattr(e, "__len__") and len(e) and \
-                   hasattr(e[-1], "reason") and \
-                   e[-1].reason == "API_DeviceTimedOut":
+            except PyTango.CommunicationFailed as cf:
+                if len(cf.errors) >= 2 and \
+                   cf.errors[1].reason == "API_DeviceTimedOut":
                     TangoUtils.wait(apool)
                 else:
                     raise
