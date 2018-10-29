@@ -60,6 +60,7 @@ class MacroServer(PyTango.Device_4Impl):
 
         self.attr_value = ""
         MacroServer.init_device(self)
+        self.attr_DoorList = ['doortestp09/testts/t1r228']
 
     # -----------------------------------------------------------------
     #    Device destructor
@@ -103,7 +104,7 @@ class MacroServer(PyTango.Device_4Impl):
     def read_DoorList(self, attr):
         #    Add your own code here
 
-        attr.set_value(self.attr_DoorList)
+        attr.set_value(self.attr_DoorList or [])
 
     # -----------------------------------------------------------------
     #    Write DoorList attribute
