@@ -968,8 +968,8 @@ class Settings(object):
             TangoUtils.command(
                 nexusconfig_device, "createConfiguration", cp)
         except PyTango.CommunicationFailed as cf:
-            if len(cf.errors) >= 2 and \
-               cf.errors[1].reason == "API_DeviceTimedOut":
+            if len(cf.args) >= 2 and \
+               cf.args[1].reason == "API_DeviceTimedOut":
                 TangoUtils.wait(nexusconfig_device)
             else:
                 raise
