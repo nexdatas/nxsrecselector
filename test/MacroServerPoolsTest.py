@@ -1005,7 +1005,8 @@ class MacroServerPoolsTest(unittest.TestCase):
         self.assertEqual(error, True)
         return err
 
-    def myAssertDict(self, dct, dct2):
+    def myAssertDict(self, dct, dct2, excluded = []):
+        exc = set(excluded or [])
         logger.debug('dict %s' % type(dct))
         logger.debug("\n%s\n%s" % (dct, dct2))
         self.assertTrue(isinstance(dct, dict))
@@ -1015,11 +1016,12 @@ class MacroServerPoolsTest(unittest.TestCase):
         for k, v in dct.items():
             logger.debug("%s  in %s" % (str(k), str(dct2.keys())))
             self.assertTrue(k in dct2.keys())
-            if isinstance(v, dict):
-                self.myAssertDict(v, dct2[k])
-            else:
-                logger.debug("%s , %s" % (str(v), str(dct2[k])))
-                self.assertEqual(v, dct2[k])
+            for k, v in dct.items():
+                if isinstance(v, dict):
+                    self.myAssertDict(v, dct2[k])
+                else:
+                    logger.debug("%s , %s" % (str(v), str(dct2[k])))
+                    self.assertEqual(v, dct2[k])
 
     # constructor test
     # \brief It tests default settings
@@ -3714,7 +3716,10 @@ class MacroServerPoolsTest(unittest.TestCase):
             self._ms.dps[list(self._ms.ms.keys())[0]].Environment = (
                 'pickle', envs[i])
             msp.getSelectorEnv(list(self._ms.door.keys())[0], enms[i], data)
-            self.myAssertDict(data, dt)
+            self.myAssertDict(data, dt, ['Dict'])
+            if 'Dict' in dt.keys():
+                self.myAssertDict(
+                    json.loads(data['Dict']), json.loads(dt['Dict']))
 
     # constructor test
     # \brief It tests default settings

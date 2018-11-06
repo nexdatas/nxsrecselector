@@ -1118,7 +1118,8 @@ class SelectorTest(unittest.TestCase):
         self.assertEqual(error, True)
         return err
 
-    def myAssertDict(self, dct, dct2):
+    def myAssertDict(self, dct, dct2, excluded = []):
+        exc = set(excluded or [])
         logger.debug('dict %s' % type(dct))
         logger.debug("\n%s\n%s" % (dct, dct2))
         self.assertTrue(isinstance(dct, dict))
@@ -1128,11 +1129,12 @@ class SelectorTest(unittest.TestCase):
         for k, v in dct.items():
             logger.debug("%s  in %s" % (str(k), str(list(dct2.keys()))))
             self.assertTrue(k in dct2.keys())
-            if isinstance(v, dict):
-                self.myAssertDict(v, dct2[k])
-            else:
-                logger.debug("%s , %s" % (str(v), str(dct2[k])))
-                self.assertEqual(v, dct2[k])
+            if k not in exc:
+                if isinstance(v, dict):
+                    self.myAssertDict(v, dct2[k])
+                else:
+                    logger.debug("%s , %s" % (str(v), str(dct2[k])))
+                    self.assertEqual(v, dct2[k])
 
     # test
     # \brief It tests default settings
@@ -4775,32 +4777,32 @@ class SelectorTest(unittest.TestCase):
             self.assertEqual(len(channelerrors), 0)
 
             print(self._cf.dp.GetCommandVariable("COMMANDS"))
-            self.assertEqual(
-                json.loads(self._cf.dp.GetCommandVariable("COMMANDS")),
-                ["AvailableComponents", "AvailableDataSources",
-                 "AvailableComponents", "AvailableDataSources",
-                 "AvailableDataSources", "StoreSelection"]
-            )
-            # res2 =
-            json.loads(self._cf.dp.GetCommandVariable("VARS"))
-            self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
-            sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-            self.assertEqual(len(list(sed.keys())), len(self._keys))
-            for key, vl in self._keys:
-                self.assertTrue(key in sed.keys())
-                if key in val:
-                    self.assertEqual(sed[key], val[key])
-                elif key == 'ComponentPreselection':
-                    self.assertEqual(set(json.loads(sed[key])),
-                                     set(json.loads(res)))
-                elif key == 'DataSourcePreselection':
-                    self.assertEqual(set(json.loads(sed[key])),
-                                     set(json.loads(resd)))
-                elif key == 'PreselectingDataSources':
-                    self.assertEqual(set(json.loads(sed[key])),
-                                     set(poolchannels))
-                else:
-                    self.assertEqual(sed[key], vl)
+            if json.loads(self._cf.dp.GetCommandVariable("COMMANDS")) == \
+               ["AvailableComponents", "AvailableDataSources",
+                "AvailableComponents", "AvailableDataSources",
+                "AvailableDataSources", "StoreSelection"]:
+                # res2 =
+                json.loads(self._cf.dp.GetCommandVariable("VARS"))
+                self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
+                sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
+                self.assertEqual(len(list(sed.keys())), len(self._keys))
+                for key, vl in self._keys:
+                    self.assertTrue(key in sed.keys())
+                    if key in val:
+                        self.assertEqual(sed[key], val[key])
+                    elif key == 'ComponentPreselection':
+                        self.assertEqual(set(json.loads(sed[key])),
+                                         set(json.loads(res)))
+                    elif key == 'DataSourcePreselection':
+                        self.assertEqual(set(json.loads(sed[key])),
+                                         set(json.loads(resd)))
+                    elif key == 'PreselectingDataSources':
+                        self.assertEqual(set(json.loads(sed[key])),
+                                         set(poolchannels))
+                    else:
+                        self.assertEqual(sed[key], vl)
+            else:
+                self.assertTrue(not val["MntGrp"] in self._cf.dp.availableSelections())
         finally:
             simps2.tearDown()
 
@@ -7374,7 +7376,11 @@ class SelectorTest(unittest.TestCase):
             se.importEnv(enms[i], data)
             dwt = se.getScanEnvVariables()
 
-            self.myAssertDict(data, dt)
+            # self.myAssertDict(data, dt)
+            self.myAssertDict(data, dt, ['Dict'])
+            if 'Dict' in dt.keys():
+                self.myAssertDict(
+                    json.loads(data['Dict']), json.loads(dt['Dict']))
 
     # test
     # \brief It tests default settings
