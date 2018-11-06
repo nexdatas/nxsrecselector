@@ -97,6 +97,7 @@ class ExtraNXSRecSelector2Test(ExtraSettings2Test.ExtraSettings2Test):
                 xmlc = PyTango.DeviceProxy(
                     self._sv.new_device_info_writer.name)
                 time.sleep(0.01)
+                xmlc.set_timeout_millis(25000)
                 if xmlc.state() == PyTango.DevState.ON:
                     found = True
                 found = True
@@ -129,6 +130,7 @@ class ExtraNXSRecSelector2Test(ExtraSettings2Test.ExtraSettings2Test):
                 xmlc = PyTango.DeviceProxy(
                     self._sv2.new_device_info_writer.name)
                 time.sleep(0.01)
+                xmlc.set_timeout_millis(25000)
                 if xmlc.state() == PyTango.DevState.ON:
                     found = True
                 found = True
