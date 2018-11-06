@@ -1118,7 +1118,7 @@ class SelectorTest(unittest.TestCase):
         self.assertEqual(error, True)
         return err
 
-    def myAssertDict(self, dct, dct2, excluded = []):
+    def myAssertDict(self, dct, dct2, excluded=None):
         exc = set(excluded or [])
         logger.debug('dict %s' % type(dct))
         logger.debug("\n%s\n%s" % (dct, dct2))
@@ -4778,12 +4778,15 @@ class SelectorTest(unittest.TestCase):
 
             print(self._cf.dp.GetCommandVariable("COMMANDS"))
             if json.loads(self._cf.dp.GetCommandVariable("COMMANDS")) == \
-               ["AvailableComponents", "AvailableDataSources",
-                "AvailableComponents", "AvailableDataSources",
-                "AvailableDataSources", "StoreSelection"]:
+               [
+                   "AvailableComponents", "AvailableDataSources",
+                   "AvailableComponents", "AvailableDataSources",
+                   "AvailableDataSources", "StoreSelection"
+               ]:
                 # res2 =
                 json.loads(self._cf.dp.GetCommandVariable("VARS"))
-                self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
+                self.assertTrue(
+                    val["MntGrp"] in self._cf.dp.availableSelections())
                 sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
                 self.assertEqual(len(list(sed.keys())), len(self._keys))
                 for key, vl in self._keys:
@@ -4802,7 +4805,8 @@ class SelectorTest(unittest.TestCase):
                     else:
                         self.assertEqual(sed[key], vl)
             else:
-                self.assertTrue(not val["MntGrp"] in self._cf.dp.availableSelections())
+                self.assertTrue(
+                    not val["MntGrp"] in self._cf.dp.availableSelections())
         finally:
             simps2.tearDown()
 

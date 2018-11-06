@@ -1005,7 +1005,7 @@ class MacroServerPoolsTest(unittest.TestCase):
         self.assertEqual(error, True)
         return err
 
-    def myAssertDict(self, dct, dct2, excluded = []):
+    def myAssertDict(self, dct, dct2, excluded=None):
         exc = set(excluded or [])
         logger.debug('dict %s' % type(dct))
         logger.debug("\n%s\n%s" % (dct, dct2))
@@ -1016,7 +1016,7 @@ class MacroServerPoolsTest(unittest.TestCase):
         for k, v in dct.items():
             logger.debug("%s  in %s" % (str(k), str(dct2.keys())))
             self.assertTrue(k in dct2.keys())
-            for k, v in dct.items():
+            if k not in exc:
                 if isinstance(v, dict):
                     self.myAssertDict(v, dct2[k])
                 else:
