@@ -5,42 +5,68 @@ dist: trusty
 group: deprecated-2017Q2
 
 env:
-  - TEST_SUITE=basic OS_TYPE=debian8
-  - TEST_SUITE=extrasettings OS_TYPE=debian8
-  - TEST_SUITE=extraserver OS_TYPE=debian8
-  - TEST_SUITE=basicserver OS_TYPE=debian8
-  - TEST_SUITE=basicsettings OS_TYPE=debian8
-  - TEST_SUITE=basic OS_TYPE=debian9
-  - TEST_SUITE=extrasettings OS_TYPE=debian9
-  - TEST_SUITE=extraserver OS_TYPE=debian9
-  - TEST_SUITE=basicserver OS_TYPE=debian9
-  - TEST_SUITE=basicsettings OS_TYPE=debian9
-  - TEST_SUITE=basic OS_TYPE=ubuntu16.04
-  - TEST_SUITE=extrasettings OS_TYPE=ubuntu16.04
-  - TEST_SUITE=extraserver OS_TYPE=ubuntu16.04
-  - TEST_SUITE=basicserver OS_TYPE=ubuntu16.04
-  - TEST_SUITE=basicsettings OS_TYPE=ubuntu16.04
+  - TEST="flake8"
+  - TEST=basic OS=debian9 PY=2
+  - TEST=extrasettings OS=debian9 PY=2
+  - TEST=extraserver OS=debian9 PY=2
+  - TEST=basicserver OS=debian9 PY=2
+  - TEST=basicsettings OS=debian9 PY=2
+  - TEST=basic OS=debian8 PY=2
+  - TEST=extrasettings OS=debian8 PY=2
+  - TEST=extraserver OS=debian8 PY=2
+  - TEST=basicserver OS=debian8 PY=2
+  - TEST=basicsettings OS=debian8 PY=2
+  - TEST=extrasettings OS=ubuntu18.04 PY=2
+  - TEST=extraserver OS=ubuntu18.04 PY=2
+  - TEST=basicserver OS=ubuntu18.04 PY=2
+  - TEST=basicsettings OS=ubuntu18.04 PY=2
+  - TEST=basic OS=ubuntu18.04 PY=2
+  # - TEST=extrasettings OS=ubuntu16.04 PY=2
+  # - TEST=extraserver OS=ubuntu16.04 PY=2
+  # - TEST=basicserver OS=ubuntu16.04 PY=2
+  # - TEST=basicsettings OS=ubuntu16.04 PY=2
+  # - TEST=basic OS=ubuntu16.04 PY=2
+  # - TEST=basic OS=debian9 PY=3
+  # - TEST=extrasettings OS=debian9 PY=3
+  # - TEST=extraserver OS=debian9 PY=3
+  # - TEST=basicserver OS=debian9 PY=3
+  # - TEST=basicsettings OS=debian9 PY=3
+  # - TEST=basic OS=debian8 PY=3
+  # - TEST=extrasettings OS=debian8 PY=3
+  # - TEST=extraserver OS=debian8 PY=3
+  # - TEST=basicserver OS=debian8 PY=3
+  # - TEST=basicsettings OS=debian8 PY=3
+  # - TEST=basic OS=ubuntu16.04 PY=3
+  # - TEST=extrasettings OS=ubuntu16.04 PY=3
+  # - TEST=extraserver OS=ubuntu16.04 PY=3
+  # - TEST=basicserver OS=ubuntu16.04 PY=3
+  # - TEST=basicsettings OS=ubuntu16.04 PY=3
+  # - TEST=basic OS=ubuntu18.04 PY=3
+  # - TEST=extrasettings OS=ubuntu18.04 PY=3
+  # - TEST=extraserver OS=ubuntu18.04 PY=3
+  # - TEST=basicserver OS=ubuntu18.04 PY=3
+  # - TEST=basicsettings OS=ubuntu18.04 PY=3
 
 
 services:
   - docker
 
-python:
-  - "2.7"
-
 
 before_install:
-  - chmod +x .travis/run.sh
-  - chmod +x .travis/install.sh
+  - if [ $TEST == "flake8" ]; then sudo apt-get update -qq ; fi
+  - if [ $TEST == "flake8" ]; then sudo pip install flake8; fi
+  - if [ $TEST != "flake8" ]; then chmod +x .travis/run.sh; fi
+  - if [ $TEST != "flake8" ]; then chmod +x .travis/install.sh; fi
 
 before_script:
-  - docker build -t ndts .travis/${OS_TYPE}
-  - docker run  --name  ndts -d -it -v `pwd`:/home/tango  ndts
-  - .travis/install.sh ${OS_TYPE}
+  - if [ $TEST != "flake8" ]; then docker build -t ndts .travis/${OS}_py${PY}; fi
+  - if [ $TEST != "flake8" ]; then docker run  --name  ndts -d -it -v `pwd`:/home/tango  ndts; fi
+  - if [ $TEST != "flake8" ]; then .travis/install.sh ${OS} ${PY}; fi
 
 script:
-  - .travis/run.sh $TEST_SUITE
+  - if [ $TEST != "flake8" ]; then .travis/run.sh ${TEST} ${PY}; fi
+  - if [ $TEST == "flake8" ]; then flake8; fi
 
 after-script:
-  - docker stop ndts
-  - docker rm ndts
+  - if [ $TEST != "flake8" ]; then docker stop ndts; fi
+  - if [ $TEST != "flake8" ]; then docker rm ndts; fi
