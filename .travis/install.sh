@@ -34,7 +34,7 @@ if [ $2 = "2" ]; then
     docker exec -it --user root ndts /bin/sh -c 'export DEBIAN_FRONTEND=noninteractive; apt-get -qq update; apt-get -qq install -y   python-pytango python-tz; apt-get -qq install -y nxsconfigserver-db; sleep 10'
 else
     echo "install python3-pytango"
-    docker exec -it --user root ndts /bin/sh -c 'export DEBIAN_FRONTEND=noninteractive; apt-get -qq update; apt-get -qq install -y git setuptools libtango-dev libboost-python-dev  python3-pytango python3-tz; apt-get -qq install -y nxsconfigserver-db; sleep 10'
+    docker exec -it --user root ndts /bin/sh -c 'export DEBIAN_FRONTEND=noninteractive; apt-get -qq update; apt-get install -y git setuptools libtango-dev libboost-python-dev  python3-pytango python3-tz; apt-get -qq install -y nxsconfigserver-db; sleep 10'
     docker exec -it --user root ndts /bin/sh -c 'git clone https://github.com/tango-controls/pytango pytango'
     docker exec -it --user root ndts /bin/sh -c 'cd pytango; python3 setup.py install'
 fi
