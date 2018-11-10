@@ -27,7 +27,8 @@ import sys
 
 from .Describer import Describer
 from .DynamicComponent import DynamicComponent
-from .Utils import Utils, TangoUtils, MSUtils, PoolUtils
+from .Utils import (
+    Utils, TangoUtils, MSUtils, PoolUtils, PYTG_BUG_213)
 from .ProfileManager import ProfileManager
 from .Selector import Selector
 from .Release import __version__
@@ -79,6 +80,12 @@ class Settings(object):
 
         #: (:obj:`bool`) preselection merges current ScanSnapshot
         self.syncSnapshot = syncsnapshot
+        if PYTG_BUG_213:
+            self._streams.error(
+                "Settings::Settings() - "
+                "Reading/Writinh Encoded Attributes for python3 and "
+                "PyTango < 9.2.5"
+                " is not supported ")
 
         #: (:class:`nxsrecconfg.MacroServerPools.MacroServerPools`) \
         #:     configuration selection

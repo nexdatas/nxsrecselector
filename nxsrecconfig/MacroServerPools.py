@@ -24,7 +24,8 @@ import PyTango
 import pickle
 import sys
 
-from .Utils import Utils, TangoUtils, MSUtils, PoolUtils
+from .Utils import (
+    Utils, TangoUtils, MSUtils, PoolUtils, OldTangoError, PYTG_BUG_213)
 from .Describer import Describer
 from .CheckerThread import CheckerThread, TangoDSItem, CheckerItem
 
@@ -350,6 +351,9 @@ class MacroServerPools(object):
                   "ScanFile"]
 
         msp = TangoUtils.openProxy(self.getMacroServer(door))
+        if PYTG_BUG_213:
+            raise OldTangoError(
+                "Reading Encoded Attributes not supported in PyTango < 9.2.5")
         rec = msp.Environment
         nenv = {}
         vl = None
@@ -384,6 +388,9 @@ class MacroServerPools(object):
                   "ScanFile"]
 
         msp = TangoUtils.openProxy(self.getMacroServer(door))
+        if PYTG_BUG_213:
+            raise OldTangoError(
+                "Reading Encoded Attributes not supported in PyTango < 9.2.5")
         rec = msp.Environment
         if rec[0] == 'pickle':
             dc = pickle.loads(rec[1])
@@ -409,6 +416,10 @@ class MacroServerPools(object):
                     for name, value in cmddata.items():
                         nenv[Utils.tostr(name)] = value
                 pk = pickle.dumps(dc)
+                if PYTG_BUG_213:
+                    raise OldTangoError(
+                        "Writing Encoded Attributes not supported in "
+                        "PyTango < 9.2.5")
                 msp.Environment = ['pickle', pk]
 
     def getScanEnv(self, door):
@@ -426,6 +437,10 @@ class MacroServerPools(object):
                   "NeXusSelectorDevice"]
         res = {}
         msp = TangoUtils.openProxy(self.getMacroServer(door))
+        if PYTG_BUG_213:
+            raise OldTangoError(
+                "Reading Encoded Attributes not supported in "
+                "PyTango < 9.2.5")
         rec = msp.Environment
         if rec[0] == 'pickle':
             dc = pickle.loads(rec[1])
@@ -447,6 +462,10 @@ class MacroServerPools(object):
         data = json.loads(jdata)
         scanID = -1
         msp = TangoUtils.openProxy(self.getMacroServer(door))
+        if PYTG_BUG_213:
+            raise OldTangoError(
+                "Reading Encoded Attributes not supported in "
+                "PyTango < 9.2.5")
         rec = msp.Environment
         if rec[0] == 'pickle':
             dc = pickle.loads(rec[1])
@@ -456,5 +475,9 @@ class MacroServerPools(object):
                 pk = pickle.dumps(dc)
                 if 'ScanID' in dc['new'].keys():
                     scanID = int(dc['new']["ScanID"])
+                if PYTG_BUG_213:
+                    raise OldTangoError(
+                        "Writing Encoded Attributes not supported in "
+                        "PyTango < 9.2.5")
                 msp.Environment = ['pickle', pk]
         return scanID
