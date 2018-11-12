@@ -1442,8 +1442,7 @@ class SelectorTest(unittest.TestCase):
             elif (i / 2) % 4 == 0:
                 se.exportEnv()
                 env = pickle.loads(
-                    self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1],
-                    protocol=2)
+                    self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1])
                 for k in se.keys():
                     try:
                         self.assertEqual(
@@ -1518,8 +1517,7 @@ class SelectorTest(unittest.TestCase):
             elif (i / 2) % 4 == 0:
                 se.exportEnv()
                 env = pickle.loads(
-                    self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1],
-                    protocol=2)
+                    self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1])
                 for k in se.keys():
                     try:
                         self.assertEqual(
@@ -1665,8 +1663,7 @@ class SelectorTest(unittest.TestCase):
             elif (i / 2) % 4 == 0:
                 se.exportEnv()
                 env = pickle.loads(
-                    self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1],
-                    protocol=2)
+                    self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1])
                 for k in se.keys():
                     try:
                         self.assertEqual(
@@ -2082,8 +2079,7 @@ class SelectorTest(unittest.TestCase):
             elif (i / 2) % 4 == 0:
                 se.exportEnv()
                 env = pickle.loads(
-                    self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1],
-                    protocol=2)
+                    self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1])
                 for k in se.keys():
                     if k not in ["PreselectingDataSources"]:
                         try:
@@ -2203,8 +2199,7 @@ class SelectorTest(unittest.TestCase):
             elif (i / 2) % 4 == 0:
                 se.exportEnv()
                 env = pickle.loads(
-                    self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1],
-                    protocol=2)
+                    self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1])
                 for k in se.keys():
                     try:
                         self.assertEqual(
@@ -2337,8 +2332,7 @@ class SelectorTest(unittest.TestCase):
             elif (i / 2) % 4 == 0:
                 se.exportEnv()
                 env = pickle.loads(
-                    self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1],
-                    protocol=2)
+                    self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1])
                 for k in se.keys():
                     try:
                         self.assertEqual(
@@ -2505,8 +2499,7 @@ class SelectorTest(unittest.TestCase):
             elif (i / 2) % 4 == 0:
                 se.exportEnv()
                 env = pickle.loads(
-                    self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1],
-                    protocol=2)
+                    self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1])
                 for k in se.keys():
                     try:
                         self.assertEqual(
@@ -2642,8 +2635,7 @@ class SelectorTest(unittest.TestCase):
             else:
                 se.exportEnv()
                 env = pickle.loads(
-                    self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1],
-                    protocol=2)
+                    self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1])
                 for k in se.keys():
                     try:
                         self.assertEqual(
@@ -2717,8 +2709,7 @@ class SelectorTest(unittest.TestCase):
             elif (i / 2) % 4 == 0:
                 se.exportEnv()
                 env = pickle.loads(
-                    self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1],
-                    protocol=2)
+                    self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1])
                 for k in se.keys():
                     try:
                         self.assertEqual(
@@ -2803,8 +2794,7 @@ class SelectorTest(unittest.TestCase):
             elif (i / 2) % 4 == 0:
                 se.exportEnv()
                 env = pickle.loads(
-                    self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1],
-                    protocol=2)
+                    self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1])
                 for k in se.keys():
                     try:
                         self.assertEqual(
@@ -2892,8 +2882,7 @@ class SelectorTest(unittest.TestCase):
             elif (i / 2) % 4 == 0:
                 se.exportEnv()
                 env = pickle.loads(
-                    self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1],
-                    protocol=2)
+                    self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1])
                 for k in se.keys():
                     try:
                         self.assertEqual(
@@ -2979,8 +2968,7 @@ class SelectorTest(unittest.TestCase):
             elif (i / 2) % 4 == 0:
                 se.exportEnv()
                 env = pickle.loads(
-                    self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1],
-                    protocol=2)
+                    self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1])
                 for k in se.keys():
                     try:
                         self.assertEqual(
@@ -3068,8 +3056,7 @@ class SelectorTest(unittest.TestCase):
             elif (i / 2) % 4 == 0:
                 se.exportEnv()
                 env = pickle.loads(
-                    self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1],
-                    protocol=2)
+                    self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1])
                 for k in se.keys():
                     try:
                         self.assertEqual(
@@ -3159,8 +3146,7 @@ class SelectorTest(unittest.TestCase):
             elif (i / 2) % 4 == 0:
                 se.exportEnv()
                 env = pickle.loads(
-                    self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1],
-                    protocol=2)
+                    self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1])
                 for k in se.keys():
                     try:
                         self.assertEqual(
@@ -3247,8 +3233,7 @@ class SelectorTest(unittest.TestCase):
             elif (i / 2) % 4 == 0:
                 se.exportEnv()
                 env = pickle.loads(
-                    self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1],
-                    protocol=2)
+                    self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1])
                 for k in se.keys():
                     try:
                         self.assertEqual(
@@ -3326,8 +3311,7 @@ class SelectorTest(unittest.TestCase):
             elif (i / 2) % 4 == 0:
                 se.exportEnv()
                 env = pickle.loads(
-                    self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1],
-                    protocol=2)
+                    self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1])
                 for k in se.keys():
                     try:
                         self.assertEqual(
@@ -3401,8 +3385,7 @@ class SelectorTest(unittest.TestCase):
             elif (i / 2) % 4 == 0:
                 se.exportEnv()
                 env = pickle.loads(
-                    self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1],
-                    protocol=2)
+                    self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1])
                 for k in se.keys():
                     try:
                         self.assertEqual(
@@ -3476,8 +3459,7 @@ class SelectorTest(unittest.TestCase):
             elif (i / 2) % 4 == 0:
                 se.exportEnv()
                 env = pickle.loads(
-                    self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1],
-                    protocol=2)
+                    self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1])
                 for k in se.keys():
                     try:
                         self.assertEqual(
@@ -3551,8 +3533,7 @@ class SelectorTest(unittest.TestCase):
             elif (i / 2) % 4 == 0:
                 se.exportEnv()
                 env = pickle.loads(
-                    self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1],
-                    protocol=2)
+                    self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1])
                 for k in se.keys():
                     try:
                         self.assertEqual(
@@ -3630,8 +3611,7 @@ class SelectorTest(unittest.TestCase):
             elif (i / 2) % 4 == 0:
                 se.exportEnv()
                 env = pickle.loads(
-                    self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1],
-                    protocol=2)
+                    self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1])
                 for k in se.keys():
                     try:
                         self.assertEqual(
@@ -3705,8 +3685,7 @@ class SelectorTest(unittest.TestCase):
             elif (i / 2) % 4 == 0:
                 se.exportEnv()
                 env = pickle.loads(
-                    self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1],
-                    protocol=2)
+                    self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1])
                 for k in se.keys():
                     try:
                         self.assertEqual(
@@ -3778,8 +3757,7 @@ class SelectorTest(unittest.TestCase):
             elif (i / 2) % 4 == 0:
                 se.exportEnv()
                 env = pickle.loads(
-                    self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1],
-                    protocol=2)
+                    self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1])
                 for k in se.keys():
                     try:
                         self.assertEqual(
@@ -3851,8 +3829,7 @@ class SelectorTest(unittest.TestCase):
             elif (i / 2) % 4 == 0:
                 se.exportEnv()
                 env = pickle.loads(
-                    self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1],
-                    protocol=2)
+                    self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1])
                 for k in se.keys():
                     try:
                         self.assertEqual(
@@ -3924,8 +3901,7 @@ class SelectorTest(unittest.TestCase):
             elif (i / 2) % 4 == 0:
                 se.exportEnv()
                 env = pickle.loads(
-                    self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1],
-                    protocol=2)
+                    self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1])
                 for k in se.keys():
                     try:
                         self.assertEqual(
@@ -7639,8 +7615,7 @@ class SelectorTest(unittest.TestCase):
             se.exportEnv(dt, cmds[i])
             # data = {}
             env = pickle.loads(
-                self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1],
-                protocol=2)
+                self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1])
             self.myAssertDict(envs[i], env)
 
     # test
@@ -7963,8 +7938,7 @@ class SelectorTest(unittest.TestCase):
             self.assertEqual(sid, sids[i])
             # data = {}
             env = pickle.loads(
-                self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1],
-                protocol=2)
+                self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1])
             self.myAssertDict(envs[i], env)
 
     # test
@@ -8202,8 +8176,7 @@ class SelectorTest(unittest.TestCase):
             self.assertEqual(sid, sids[i])
             # data = {}
             env = pickle.loads(
-                self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1],
-                protocol=2)
+                self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1])
             self.myAssertDict(envs[i], env)
 
     # test
@@ -8348,15 +8321,13 @@ class SelectorTest(unittest.TestCase):
         msp.setScanEnv(list(self._ms.door.keys())[0], "{}")
         for i, dt in enumerate(edats):
             env = pickle.loads(
-                self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1],
-                protocol=2)
+                self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1])
             sid = se.setScanEnvVariables(
                 dt if not isinstance(dt, dict) else json.dumps(dt))
             self.assertEqual(sid, sids[i])
             # data = {}
             env = pickle.loads(
-                self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1],
-                protocol=2)
+                self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1])
             self.myAssertDict(envs[i], env)
 
 

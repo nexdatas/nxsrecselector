@@ -462,7 +462,7 @@ class UtilsTest(unittest.TestCase):
                     k, self._simps.new_device_info_writer.name))
 
         self.assertEqual(self._simps.dp.Environment[0], 'pickle')
-        en = pickle.loads(self._simps.dp.Environment[1], protocol=2)['new']
+        en = pickle.loads(self._simps.dp.Environment[1])['new']
 
         for k, vl in arr.items():
             en[k] = vl[1]
@@ -493,7 +493,7 @@ class UtilsTest(unittest.TestCase):
         msdp = self._ms.dps[list(self._ms.ms.keys())[0]]
 
         self.assertEqual(msdp.Environment[0], 'pickle')
-        en = pickle.loads(msdp.Environment[1], protocol=2)['new']
+        en = pickle.loads(msdp.Environment[1])['new']
 
         for k, vl in arr.items():
             en[k] = vl[1]
@@ -528,7 +528,7 @@ class UtilsTest(unittest.TestCase):
             MSUtils.setEnv(k, vl[1], list(self._ms.ms.keys())[0])
 
             self.assertEqual(msdp.Environment[0], 'pickle')
-            en = pickle.loads(msdp.Environment[1], protocol=2)['new']
+            en = pickle.loads(msdp.Environment[1])['new']
             self.assertEqual(
                 en[k], MSUtils.getEnv(k, list(self._ms.ms.keys())[0]))
 
@@ -557,7 +557,7 @@ class UtilsTest(unittest.TestCase):
 
             self.assertEqual(self._simps.dp.Environment[0], 'pickle')
             en = pickle.loads(
-                self._simps.dp.Environment[1], protocol=2)['new']
+                self._simps.dp.Environment[1])['new']
             self.assertEqual(en[k], MSUtils.getEnv(
                 k, self._simps.new_device_info_writer.name))
 
@@ -586,7 +586,7 @@ class UtilsTest(unittest.TestCase):
         for k, vl in arr.items():
 
             self.assertEqual(msdp.Environment[0], 'pickle')
-            en = pickle.loads(msdp.Environment[1], protocol=2)['new']
+            en = pickle.loads(msdp.Environment[1])['new']
             self.assertEqual(en[k], MSUtils.getEnv(
                 k, list(self._ms.ms.keys())[0]))
     # setEnv test
@@ -615,7 +615,7 @@ class UtilsTest(unittest.TestCase):
 
             self.assertEqual(self._simps.dp.Environment[0], 'pickle')
             en = pickle.loads(
-                self._simps.dp.Environment[1], protocol=2)['new']
+                self._simps.dp.Environment[1])['new']
             self.assertEqual(en[k], MSUtils.getEnv(
                 k, self._simps.new_device_info_writer.name))
 

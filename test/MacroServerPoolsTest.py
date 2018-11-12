@@ -3954,8 +3954,7 @@ class MacroServerPoolsTest(unittest.TestCase):
 #            print "I = ",i
             # data = {}
             env = pickle.loads(
-                self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1],
-                protocol=2)
+                self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1])
 #            print "env", env
 #            print "ei", envs[i]
             self.myAssertDict(envs[i], env)
@@ -4277,8 +4276,7 @@ class MacroServerPoolsTest(unittest.TestCase):
             self.assertEqual(sid, sids[i])
             # data = {}
             env = pickle.loads(
-                self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1],
-                protocol=2)
+                self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1])
 #            print "env", env
 #            print "ei", envs[i]
             self.myAssertDict(envs[i], env)
@@ -4523,8 +4521,7 @@ class MacroServerPoolsTest(unittest.TestCase):
             self.assertEqual(sid, sids[i])
             # data = {}
             env = pickle.loads(
-                self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1],
-                protocol=2)
+                self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1])
             self.myAssertDict(envs[i], env)
 
     # constructor test
@@ -4659,8 +4656,7 @@ class MacroServerPoolsTest(unittest.TestCase):
         msp.setScanEnv(list(self._ms.door.keys())[0], "{}")
         for i, dt in enumerate(edats):
             env = pickle.loads(
-                self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1],
-                protocol=2)
+                self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1])
             # print "env0", env
             sid = msp.setScanEnv(
                 list(self._ms.door.keys())[0],
@@ -4669,8 +4665,7 @@ class MacroServerPoolsTest(unittest.TestCase):
             self.assertEqual(sid, sids[i])
             # data = {}
             env = pickle.loads(
-                self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1],
-                protocol=2)
+                self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1])
             # print "env", env
             # print "ei", envs[i]
             self.myAssertDict(envs[i], env)

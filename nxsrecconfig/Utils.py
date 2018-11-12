@@ -458,7 +458,7 @@ class MSUtils(object):
                 "Reading Encoded Attributes not supported in PyTango < 9.2.5")
         rec = dp.Environment
         if rec[0] == 'pickle':
-            dc = pickle.loads(rec[1], protocol=2)
+            dc = pickle.loads(rec[1])
             if 'new' in dc.keys() and \
                     var in dc['new'].keys():
                 active = dc['new'][var]

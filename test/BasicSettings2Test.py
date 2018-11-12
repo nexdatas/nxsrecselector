@@ -9421,8 +9421,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                 self._ms.dps[list(self._ms.ms.keys())[0]].Environment[0],
                 'pickle')
             en = pickle.loads(
-                self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1],
-                protocol=2
+                self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1]
             )['new']
             self.assertEqual(en['ScanDir'], rs.scanDir)
             self.assertEqual(vl[1], rs.scanDir)
@@ -9467,8 +9466,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                 self._ms.dps[list(self._ms.ms.keys())[0]].Environment[0],
                 'pickle')
             en = pickle.loads(
-                self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1],
-                protocol=2
+                self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1]
             )['new']
             self.assertEqual(en['ScanID'], rs.scanID)
             self.assertEqual(int(vl[1]), rs.scanID)
@@ -9512,8 +9510,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                 self._ms.dps[list(self._ms.ms.keys())[0]].Environment[0],
                 'pickle')
             en = pickle.loads(
-                self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1],
-                protocol=2
+                self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1]
             )['new']
             if isinstance(en['ScanFile'], (str, unicode)):
                 try:
@@ -9586,8 +9583,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             elif (i / 2) % 4 == 0:
                 rs.exportEnvProfile()
                 env = pickle.loads(
-                    self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1],
-                    protocol=2)
+                    self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1])
                 jmd = json.loads(rs.profileConfiguration)
                 for k in self.names(rs):
                     if k == "PreselectingDataSources":
@@ -9705,8 +9701,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             elif (i / 2) % 4 == 0:
                 rs.exportEnvProfile()
                 env = pickle.loads(
-                    self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1],
-                    protocol=2)
+                    self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1])
                 jmd = json.loads(rs.profileConfiguration)
                 for k in self.names(rs):
                     if k == "PreselectingDataSources":
@@ -9817,8 +9812,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             elif (i / 2) % 4 == 0:
                 rs.exportEnvProfile()
                 env = pickle.loads(
-                    self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1],
-                    protocol=2)
+                    self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1])
                 jmd = json.loads(rs.profileConfiguration)
                 for k in self.names(rs):
                     if k == "PreselectingDataSources":
@@ -9925,8 +9919,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             elif (i / 2) % 4 == 0:
                 rs.exportEnvProfile()
                 env = pickle.loads(
-                    self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1],
-                    protocol=2)
+                    self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1])
                 jmd = json.loads(rs.profileConfiguration)
                 for k in self.names(rs):
                     if k == "PreselectingDataSources":
@@ -10035,8 +10028,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             elif (i / 2) % 4 == 0:
                 rs.exportEnvProfile()
                 env = pickle.loads(
-                    self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1],
-                    protocol=2)
+                    self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1])
                 jmd = json.loads(rs.profileConfiguration)
                 for k in self.names(rs):
                     if k == "PreselectingDataSources":
@@ -10148,8 +10140,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                 elif (i / 2) % 4 == 0:
                     rs.exportEnvProfile()
                     env = pickle.loads(
-                        ms2.dps[list(ms2.ms.keys())[0]].Environment[1],
-                        protocol=2)
+                        ms2.dps[list(ms2.ms.keys())[0]].Environment[1])
                     jmd = json.loads(rs.profileConfiguration)
                     for k in self.names(rs):
                         if k == "PreselectingDataSources":
@@ -10256,8 +10247,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             elif (i / 2) % 4 == 0:
                 rs.exportEnvProfile()
                 env = pickle.loads(
-                    self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1],
-                    protocol=2)
+                    self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1])
                 jmd = json.loads(rs.profileConfiguration)
                 for k in self.names(rs):
                     if k == "PreselectingDataSources":
@@ -10379,8 +10369,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                     rs.exportEnvProfile()
                     env = pickle.loads(
                         self._ms.dps[
-                            list(self._ms.ms.keys())[0]].Environment[1],
-                        protocol=2)
+                            list(self._ms.ms.keys())[0]].Environment[1])
                     jmd = json.loads(rs.profileConfiguration)
                     for k in self.names(rs):
                         try:
@@ -10502,8 +10491,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                     rs.exportEnvProfile()
                     env = pickle.loads(
                         self._ms.dps[
-                            list(self._ms.ms.keys())[0]].Environment[1],
-                        protocol=2)
+                            list(self._ms.ms.keys())[0]].Environment[1])
                     jmd = json.loads(rs.profileConfiguration)
                     for k in self.names(rs):
                         try:
@@ -10906,8 +10894,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             self.assertEqual(sid, sids[i])
             # data = {}
             env = pickle.loads(
-                self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1],
-                protocol=2)
+                self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1])
             self.myAssertDict(envs[i], env)
 
     # test
