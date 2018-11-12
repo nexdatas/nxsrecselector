@@ -458,7 +458,7 @@ class MSUtils(object):
                 "Reading Encoded Attributes not supported in PyTango < 9.2.5")
         rec = dp.Environment
         if rec[0] == 'pickle':
-            dc = pickle.loads(rec[1])
+            dc = pickle.loads(rec[1], protocol=2)
             if 'new' in dc.keys() and \
                     var in dc['new'].keys():
                 active = dc['new'][var]
@@ -478,7 +478,7 @@ class MSUtils(object):
         dp = TangoUtils.openProxy(ms)
         dc = {'new': {}}
         dc['new'][var] = value
-        pk = pickle.dumps(dc)
+        pk = pickle.dumps(dc, protocol=2)
         if PYTG_BUG_213:
             raise OldTangoError(
                 "Writing Encoded Attributes not supported in PyTango < 9.2.5")
@@ -497,7 +497,7 @@ class MSUtils(object):
         dc = {'new': {}}
         for var, value in varvalues.items():
             dc['new'][var] = value
-        pk = pickle.dumps(dc)
+        pk = pickle.dumps(dc, protocol=2)
         if PYTG_BUG_213:
             raise OldTangoError(
                 "Writing Encoded Attributes not supported in PyTango < 9.2.5")
@@ -514,7 +514,7 @@ class MSUtils(object):
         """
         dp = TangoUtils.openProxy(ms)
         dc = {'del': [var]}
-        pk = pickle.dumps(dc)
+        pk = pickle.dumps(dc, protocol=2)
         if PYTG_BUG_213:
             raise OldTangoError(
                 "Writing Encoded Attributes not supported in PyTango < 9.2.5")

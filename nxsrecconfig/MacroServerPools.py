@@ -358,7 +358,7 @@ class MacroServerPools(object):
         nenv = {}
         vl = None
         if rec[0] == 'pickle':
-            dc = pickle.loads(rec[1])
+            dc = pickle.loads(rec[1], protocol=2)
             if 'new' in dc.keys():
                 if self.__nxsenv in dc['new'].keys():
                     nenv = dc['new'][self.__nxsenv]
@@ -393,7 +393,7 @@ class MacroServerPools(object):
                 "Reading Encoded Attributes not supported in PyTango < 9.2.5")
         rec = msp.Environment
         if rec[0] == 'pickle':
-            dc = pickle.loads(rec[1])
+            dc = pickle.loads(rec[1], protocol=2)
             if 'new' in dc.keys():
                 if self.__nxsenv not in dc['new'].keys() \
                         or not isinstance(dc['new'][self.__nxsenv], dict):
@@ -415,7 +415,7 @@ class MacroServerPools(object):
                 if cmddata:
                     for name, value in cmddata.items():
                         nenv[Utils.tostr(name)] = value
-                pk = pickle.dumps(dc)
+                pk = pickle.dumps(dc, protocol=2)
                 if PYTG_BUG_213:
                     raise OldTangoError(
                         "Writing Encoded Attributes not supported in "
@@ -443,7 +443,7 @@ class MacroServerPools(object):
                 "PyTango < 9.2.5")
         rec = msp.Environment
         if rec[0] == 'pickle':
-            dc = pickle.loads(rec[1])
+            dc = pickle.loads(rec[1], protocol=2)
             if 'new' in dc.keys():
                 for var in params:
                     if var in dc['new'].keys():
@@ -468,11 +468,11 @@ class MacroServerPools(object):
                 "PyTango < 9.2.5")
         rec = msp.Environment
         if rec[0] == 'pickle':
-            dc = pickle.loads(rec[1])
+            dc = pickle.loads(rec[1], protocol=2)
             if 'new' in dc.keys():
                 for var in data.keys():
                     dc['new'][Utils.tostr(var)] = Utils.toString(data[var])
-                pk = pickle.dumps(dc)
+                pk = pickle.dumps(dc, protocol=2)
                 if 'ScanID' in dc['new'].keys():
                     scanID = int(dc['new']["ScanID"])
                 if PYTG_BUG_213:

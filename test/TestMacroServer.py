@@ -83,7 +83,7 @@ class MacroServer(PyTango.Device_4Impl):
                        'ScanID': 192,
                        '_ViewOptions': {'ShowDial': True}}}
 
-        self.attr_Environment = ("pickle", pickle.dumps(env))
+        self.attr_Environment = ("pickle", pickle.dumps(env, protocol=2))
         self.attr_DoorList = ['doortestp09/testts/t1r228']
 
     # -----------------------------------------------------------------
@@ -133,14 +133,14 @@ class MacroServer(PyTango.Device_4Impl):
         envchange = {}
         envdel = []
         if env[0] == 'pickle':
-            edict = pickle.loads(env[1])
+            edict = pickle.loads(env[1], protocol=2)
             if 'new' in edict.keys():
                 envnew = edict['new']
             if 'change' in edict.keys():
                 envchange = edict['change']
             if 'del' in edict.keys():
                 envdel = edict['del']
-            envdict = pickle.loads(self.attr_Environment[1])
+            envdict = pickle.loads(self.attr_Environment[1], protocol=2)
             if 'new' not in envdict.keys():
                 envdict['new'] = {}
             newdict = envdict['new']
@@ -149,7 +149,9 @@ class MacroServer(PyTango.Device_4Impl):
             for ed in envdel:
                 if ed in newdict.keys():
                     newdict.pop(ed)
-            self.attr_Environment = ("pickle", pickle.dumps(envdict))
+            self.attr_Environment = (
+                "pickle",
+                pickle.dumps(envdict, protocol=2))
 
     #
     # =================================================================

@@ -3557,7 +3557,7 @@ class MacroServerPoolsTest(unittest.TestCase):
 
         envs = [
             pickle.dumps(
-                {"new": {}}
+                {"new": {}}, protocol=2
             )
         ]
         enms = [
@@ -3581,7 +3581,7 @@ class MacroServerPoolsTest(unittest.TestCase):
             edl = list(json.loads(dwt).keys())
             data = {}
             self._ms.dps[list(self._ms.ms.keys())[0]].Environment = (
-                'pickle', pickle.dumps({"del": edl}))
+                'pickle', pickle.dumps({"del": edl}, protocol=2))
             self._ms.dps[list(self._ms.ms.keys())[0]].Environment = (
                 'pickle', envs[0])
             msp.getSelectorEnv(list(self._ms.door.keys())[0], enms[i], data)
@@ -3597,13 +3597,14 @@ class MacroServerPoolsTest(unittest.TestCase):
 
         envs = [
             pickle.dumps(
-                {"new": {"ScanDir": "/tmp"}}
+                {"new": {"ScanDir": "/tmp"}}, protocol=2
             ),
             pickle.dumps(
-                {"new": {"ScanDir": "/tmp"}}
+                {"new": {"ScanDir": "/tmp"}}, protocol=2
             ),
             pickle.dumps(
-                {"new": {"ScanDir": "/tmp", "ScanFile": ["file.nxs"]}}
+                {"new": {"ScanDir": "/tmp", "ScanFile": ["file.nxs"]}},
+                protocol=2
             ),
             pickle.dumps(
                 {
@@ -3613,7 +3614,7 @@ class MacroServerPoolsTest(unittest.TestCase):
                         "ScanFile": ["file.nxs"],
                         "NeXusConfigServer": "ptr/ert/ert",
                     }
-                }
+                }, protocol=2
             ),
             pickle.dumps(
                 {
@@ -3623,7 +3624,7 @@ class MacroServerPoolsTest(unittest.TestCase):
                         "ScanFile": ["file.nxs", "file2.nxs"],
                         "NeXusConfiguration": {"ConfigServer": "ptr/ert/ert2"},
                     }
-                }
+                }, protocol=2
             ),
             pickle.dumps(
                 {
@@ -3634,7 +3635,7 @@ class MacroServerPoolsTest(unittest.TestCase):
                         "NeXusConfigServer": "ptr/ert/ert",
                         "NeXusConfiguration": {"ConfigServer": "ptr/ert/ert2"},
                     }
-                }
+                }, protocol=2
             ),
             pickle.dumps(
                 {
@@ -3649,7 +3650,7 @@ class MacroServerPoolsTest(unittest.TestCase):
                         "NeXusSomething": ("dgfg",),
                         "NeXusDict": {"dgfg": 123, "sdf": "345"},
                     }
-                }
+                }, protocol=2
             ),
             pickle.dumps(
                 {
@@ -3664,7 +3665,7 @@ class MacroServerPoolsTest(unittest.TestCase):
                             "Something": ("dgfg",),
                             "Dict": {"dgfg": 123, "sdf": "345"}}
                     }
-                }
+                }, protocol=2
             ),
         ]
         enms = [
@@ -3953,7 +3954,8 @@ class MacroServerPoolsTest(unittest.TestCase):
 #            print "I = ",i
             # data = {}
             env = pickle.loads(
-                self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1])
+                self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1],
+                protocol=2)
 #            print "env", env
 #            print "ei", envs[i]
             self.myAssertDict(envs[i], env)
@@ -3968,17 +3970,17 @@ class MacroServerPoolsTest(unittest.TestCase):
             pickle.dumps(
                 {
                     "new": {"ScanDir": "/tmp"}
-                }
+                }, protocol=2
             ),
             pickle.dumps(
                 {
                     "new": {"ScanDir": "/tmp", "ScanID": 11}
-                }
+                }, protocol=2
             ),
             pickle.dumps(
                 {
                     "new": {"ScanDir": "/tmp", "ScanFile": ["file.nxs"]}
-                }
+                }, protocol=2
             ),
             pickle.dumps(
                 {
@@ -3987,7 +3989,7 @@ class MacroServerPoolsTest(unittest.TestCase):
                         "ScanFile": ["file.nxs"],
                         "NeXusConfigServer": "ptr/ert/ert",
                     }
-                }
+                }, protocol=2
             ),
             pickle.dumps(
                 {
@@ -3997,7 +3999,7 @@ class MacroServerPoolsTest(unittest.TestCase):
                         "NeXusSelectorDevice": "p09/nxsrecselector/1",
                         "NeXusConfiguration": {"ConfigServer": "ptr/ert/ert2"},
                     }
-                }
+                }, protocol=2
             ),
             pickle.dumps(
                 {
@@ -4009,7 +4011,7 @@ class MacroServerPoolsTest(unittest.TestCase):
                         "NeXusConfigServer": "ptr/ert/ert",
                         "NeXusConfiguration": {"ConfigServer": "ptr/ert/ert2"},
                     }
-                }
+                }, protocol=2
             ),
             pickle.dumps(
                 {
@@ -4025,7 +4027,7 @@ class MacroServerPoolsTest(unittest.TestCase):
                         "NeXusSomething": ("dgfg",),
                         "NeXusDict": {"dgfg": 123, "sdf": "345"},
                     }
-                }
+                }, protocol=2
             ),
             pickle.dumps(
                 {
@@ -4042,7 +4044,7 @@ class MacroServerPoolsTest(unittest.TestCase):
                             "Something": ("dgfg",),
                             "Dict": {"dgfg": 123, "sdf": "345"}}
                     }
-                }
+                }, protocol=2
             ),
         ]
 
@@ -4073,7 +4075,7 @@ class MacroServerPoolsTest(unittest.TestCase):
             data = {}
             edl = list(json.loads(dwt).keys())
             self._ms.dps[list(self._ms.ms.keys())[0]].Environment = (
-                'pickle', pickle.dumps({"del": edl}))
+                'pickle', pickle.dumps({"del": edl}, protocol=2))
             self._ms.dps[list(self._ms.ms.keys())[0]].Environment = (
                 'pickle', envs[i])
             dt = msp.getScanEnv(list(self._ms.door.keys())[0])
@@ -4275,7 +4277,8 @@ class MacroServerPoolsTest(unittest.TestCase):
             self.assertEqual(sid, sids[i])
             # data = {}
             env = pickle.loads(
-                self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1])
+                self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1],
+                protocol=2)
 #            print "env", env
 #            print "ei", envs[i]
             self.myAssertDict(envs[i], env)
@@ -4288,10 +4291,10 @@ class MacroServerPoolsTest(unittest.TestCase):
 
         envs = [
             pickle.dumps(
-                {"new": {}}
+                {"new": {}}, protocol=2
             ),
             pickle.dumps(
-                {"new": {"ScanID": 12}}
+                {"new": {"ScanID": 12}}, protocol=2
             )
         ]
 
@@ -4304,14 +4307,14 @@ class MacroServerPoolsTest(unittest.TestCase):
         self.assertEqual(
             msp.setScanEnv(list(self._ms.door.keys())[0], "{}"), 192)
         self._ms.dps[list(self._ms.ms.keys())[0]].Environment = (
-            'pickle', pickle.dumps({"del": ["ScanID"]}))
+            'pickle', pickle.dumps({"del": ["ScanID"]}, protocol=2))
         self._ms.dps[
             list(self._ms.ms.keys())[0]].Environment = ('pickle', envs[0])
         self.assertEqual(
             msp.setScanEnv(list(self._ms.door.keys())[0], "{}"), -1)
         self._ms.dps[
             list(self._ms.ms.keys())[0]].Environment = (
-            'pickle', pickle.dumps({"del": ["ScanID"]}))
+            'pickle', pickle.dumps({"del": ["ScanID"]}, protocol=2))
         self.assertEqual(
             msp.setScanEnv(list(self._ms.door.keys())[0], "{}"), -1)
         self._ms.dps[
@@ -4520,7 +4523,8 @@ class MacroServerPoolsTest(unittest.TestCase):
             self.assertEqual(sid, sids[i])
             # data = {}
             env = pickle.loads(
-                self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1])
+                self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1],
+                protocol=2)
             self.myAssertDict(envs[i], env)
 
     # constructor test
@@ -4655,7 +4659,8 @@ class MacroServerPoolsTest(unittest.TestCase):
         msp.setScanEnv(list(self._ms.door.keys())[0], "{}")
         for i, dt in enumerate(edats):
             env = pickle.loads(
-                self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1])
+                self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1],
+                protocol=2)
             # print "env0", env
             sid = msp.setScanEnv(
                 list(self._ms.door.keys())[0],
@@ -4664,7 +4669,8 @@ class MacroServerPoolsTest(unittest.TestCase):
             self.assertEqual(sid, sids[i])
             # data = {}
             env = pickle.loads(
-                self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1])
+                self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1],
+                protocol=2)
             # print "env", env
             # print "ei", envs[i]
             self.myAssertDict(envs[i], env)
