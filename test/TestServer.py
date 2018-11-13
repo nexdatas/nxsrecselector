@@ -196,7 +196,7 @@ class TestServer(PyTango.Device_4Impl):
                        'ScanID': 192,
                        '_ViewOptions': {'ShowDial': True}}}
 
-        self.attr_Environment = ("pickle", pickle.dumps(env))
+        self.attr_Environment = ("pickle", pickle.dumps(env, protocol=2))
         self.ChangeValueType("ScalarDouble")
         self.attr_DoorList = ['test/door/1', 'test/door/2']
 

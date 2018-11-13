@@ -10570,17 +10570,17 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             pickle.dumps(
                 {
                     "new": {"ScanDir": "/tmp"}
-                }
+                }, protocol=2
             ),
             pickle.dumps(
                 {
                     "new": {"ScanDir": "/tmp", "ScanID": 11}
-                }
+                }, protocol=2
             ),
             pickle.dumps(
                 {
                     "new": {"ScanDir": "/tmp", "ScanFile": ["file.nxs"]}
-                }
+                }, protocol=2
             ),
             pickle.dumps(
                 {
@@ -10589,7 +10589,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                         "ScanFile": ["file.nxs"],
                         "NeXusConfigServer": "ptr/ert/ert",
                     }
-                }
+                }, protocol=2
             ),
             pickle.dumps(
                 {
@@ -10599,7 +10599,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                         "NeXusSelectorDevice": "p09/nxsrecselector/1",
                         "NeXusConfiguration": {"ConfigServer": "ptr/ert/ert2"},
                     }
-                }
+                }, protocol=2
             ),
             pickle.dumps(
                 {
@@ -10610,7 +10610,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                         "NeXusConfigServer": "ptr/ert/ert",
                         "NeXusConfiguration": {"ConfigServer": "ptr/ert/ert2"},
                     }
-                }
+                }, protocol=2
             ),
             pickle.dumps(
                 {
@@ -10625,7 +10625,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                         "NeXusSomething": ("dgfg",),
                         "NeXusDict": {"dgfg": 123, "sdf": "345"},
                     }
-                }
+                }, protocol=2
             ),
             pickle.dumps(
                 {
@@ -10641,7 +10641,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                             "Something": ("dgfg",),
                             "Dict": {"dgfg": 123, "sdf": "345"}}
                     }
-                }
+                }, protocol=2
             ),
         ]
 
@@ -10670,7 +10670,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             data = {}
             edl = list(json.loads(res).keys())
             self._ms.dps[list(self._ms.ms.keys())[0]].Environment = (
-                'pickle', pickle.dumps({"del": edl}))
+                'pickle', pickle.dumps({"del": edl}, protocol=2))
             self._ms.dps[list(self._ms.ms.keys())[0]].Environment = (
                 'pickle', envs[i])
             dwt = rs.scanEnvVariables()

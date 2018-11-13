@@ -33,6 +33,30 @@ if sys.version_info > (3,):
     unicode = str
 
 
+#: (:obj:`bool`) PyTango bug #213 flag related to EncodedAttributes in python3
+PYTG_BUG_213 = False
+if sys.version_info > (3,):
+    try:
+        PYTGMAJOR, PYTGMINOR, PYTGPATCH = list(
+            map(int, PyTango.__version__.split(".")[:3]))
+        if PYTGMAJOR <= 9:
+            if PYTGMAJOR == 9:
+                if PYTGMINOR < 2:
+                    PYTG_BUG_213 = True
+                elif PYTGMINOR == 2 and PYTGPATCH < 4:
+                    PYTG_BUG_213 = True
+            else:
+                PYTG_BUG_213 = True
+    except Exception:
+        pass
+
+
+class OldTangoError(Exception):
+
+    """ Old Tango version Exception class
+    """
+
+
 class Utils(object):
 
     """  Miscellaneous Utilities """
@@ -429,6 +453,9 @@ class MSUtils(object):
         """
         active = ""
         dp = TangoUtils.openProxy(ms)
+        if PYTG_BUG_213:
+            raise OldTangoError(
+                "Reading Encoded Attributes not supported in PyTango < 9.2.5")
         rec = dp.Environment
         if rec[0] == 'pickle':
             dc = pickle.loads(rec[1])
@@ -451,7 +478,10 @@ class MSUtils(object):
         dp = TangoUtils.openProxy(ms)
         dc = {'new': {}}
         dc['new'][var] = value
-        pk = pickle.dumps(dc)
+        pk = pickle.dumps(dc, protocol=2)
+        if PYTG_BUG_213:
+            raise OldTangoError(
+                "Writing Encoded Attributes not supported in PyTango < 9.2.5")
         dp.Environment = ['pickle', pk]
 
     @classmethod
@@ -467,7 +497,10 @@ class MSUtils(object):
         dc = {'new': {}}
         for var, value in varvalues.items():
             dc['new'][var] = value
-        pk = pickle.dumps(dc)
+        pk = pickle.dumps(dc, protocol=2)
+        if PYTG_BUG_213:
+            raise OldTangoError(
+                "Writing Encoded Attributes not supported in PyTango < 9.2.5")
         dp.Environment = ['pickle', pk]
 
     @classmethod
@@ -481,7 +514,10 @@ class MSUtils(object):
         """
         dp = TangoUtils.openProxy(ms)
         dc = {'del': [var]}
-        pk = pickle.dumps(dc)
+        pk = pickle.dumps(dc, protocol=2)
+        if PYTG_BUG_213:
+            raise OldTangoError(
+                "Writing Encoded Attributes not supported in PyTango < 9.2.5")
         dp.Environment = ['pickle', pk]
 
     @classmethod
