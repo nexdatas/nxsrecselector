@@ -4030,7 +4030,8 @@ class MacroServerPoolsTest(unittest.TestCase):
 
     # constructor test
     # \brief It tests default settings
-    def test_setgetSelectorEnv_py3(self):
+    def postpone_test_setgetSelectorEnv_py3(self):
+        """postpone until we can easly install python3-pytango >= 9.2.5"""
         fun = sys._getframe().f_code.co_name
         print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
