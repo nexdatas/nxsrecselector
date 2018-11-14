@@ -35,7 +35,18 @@ import PyTango
 import sys
 import pickle
 
-from nxsrecconfig.Utils import Utils
+
+def pickleloads(bytestr):
+    """ loads pickle byte string
+    :param bytestr: byte string to convert
+    :type bytesstr: :obj:`bytes`
+    :returns: loaded bytestring
+    :rtype: :obj:`any`
+    """
+    if sys.version_info > (3,):
+        return pickle.loads(bytestr, encoding='latin1')
+    else:
+        return pickle.loads(bytestr)
 
 # =================================================================
 #   TestMacroServer Class Description:
@@ -135,14 +146,14 @@ class MacroServer(PyTango.Device_4Impl):
         envchange = {}
         envdel = []
         if env[0] == 'pickle':
-            edict = Utils.pickleloads(env[1])
+            edict = pickleloads(env[1])
             if 'new' in edict.keys():
                 envnew = edict['new']
             if 'change' in edict.keys():
                 envchange = edict['change']
             if 'del' in edict.keys():
                 envdel = edict['del']
-            envdict = Utils.pickleloads(self.attr_Environment[1])
+            envdict = pickleloads(self.attr_Environment[1])
             if 'new' not in envdict.keys():
                 envdict['new'] = {}
             newdict = envdict['new']

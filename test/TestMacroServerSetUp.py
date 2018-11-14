@@ -90,7 +90,8 @@ class TestMacroServerSetUp(object):
         if not path:
             path = '.'
 
-        if sys.version_info > (3,) or self.python in [None, 3]:
+        if (sys.version_info > (3,) and self.python is None) or \
+           self.python == 3:
             self._psub = subprocess.call(
                 "cd %s;  python3 ./TestMacroServer.py %s &" %
                 (path, self.instance),
