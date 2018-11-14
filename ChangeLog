@@ -1,3 +1,7 @@
+2018-11-18 Jan Kotanski <jankotan@gmail.com>
+	* add support for python3 with pytango >= 9.2.5
+	* tagged as v3.16.0
+
 2018-10-18 Jan Kotanski <jankotan@gmail.com>
 	* bump version for splitting purpose
 	* tagged as v3.15.0
