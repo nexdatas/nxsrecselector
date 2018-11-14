@@ -49,6 +49,7 @@ except Exception:
 
 
 from nxsrecconfig.MacroServerPools import MacroServerPools
+from nxsrecconfig.Utils import Utils
 
 import logging
 logger = logging.getLogger()
