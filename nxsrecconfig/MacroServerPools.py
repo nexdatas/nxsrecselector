@@ -469,8 +469,10 @@ class MacroServerPools(object):
         rec = msp.Environment
         if rec[0] == 'pickle':
             dc = Utils.pickleloads(rec[1])
+            print(dc.keys())
             if 'new' in dc.keys():
                 for var in data.keys():
+                    print("%s %s" % (var, type(var)))
                     dc['new'][Utils.tostr(var)] = Utils.toString(data[var])
                 pk = pickle.dumps(dc, protocol=2)
                 if 'ScanID' in dc['new'].keys():

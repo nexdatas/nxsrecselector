@@ -507,9 +507,10 @@ class MSUtils(object):
         :type ms: :obj:`str`
         """
         dp = TangoUtils.openProxy(ms)
-        dc = {'new': {}}
+        dc = {b'new': {}}
         for var, value in varvalues.items():
-            dc['new'][var] = value
+            dc[b'new'][var] = value
+        print(dc)    
         pk = pickle.dumps(dc, protocol=2)
         if PYTG_BUG_213:
             raise OldTangoError(

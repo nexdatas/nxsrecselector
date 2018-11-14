@@ -439,6 +439,7 @@ class Selector(object):
         :param jdata: JSON String with important variables
         :type jdata: :obj:`str`
         """
+        print("SET %s " % jdata)
         return self.__msp.setScanEnv(self["Door"], jdata)
 
     def storeSelection(self):
