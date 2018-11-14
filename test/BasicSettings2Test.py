@@ -50,7 +50,7 @@ except Exception:
     from . import Settings2Test
 
 from nxsrecconfig.Describer import Describer
-from nxsrecconfig.Utils import TangoUtils, MSUtils
+from nxsrecconfig.Utils import TangoUtils, MSUtils, Utils
 
 import logging
 logger = logging.getLogger()
@@ -9420,7 +9420,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             self.assertEqual(
                 self._ms.dps[list(self._ms.ms.keys())[0]].Environment[0],
                 'pickle')
-            en = pickle.loads(
+            en = Utils.pickleloads(
                 self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1]
             )['new']
             self.assertEqual(en['ScanDir'], rs.scanDir)
@@ -9465,7 +9465,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             self.assertEqual(
                 self._ms.dps[list(self._ms.ms.keys())[0]].Environment[0],
                 'pickle')
-            en = pickle.loads(
+            en = Utils.pickleloads(
                 self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1]
             )['new']
             self.assertEqual(en['ScanID'], rs.scanID)
@@ -9509,7 +9509,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             self.assertEqual(
                 self._ms.dps[list(self._ms.ms.keys())[0]].Environment[0],
                 'pickle')
-            en = pickle.loads(
+            en = Utils.pickleloads(
                 self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1]
             )['new']
             if isinstance(en['ScanFile'], (str, unicode)):
@@ -9582,7 +9582,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                 mydict = json.loads(rs.profileConfiguration)
             elif (i / 2) % 4 == 0:
                 rs.exportEnvProfile()
-                env = pickle.loads(
+                env = Utils.pickleloads(
                     self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1])
                 jmd = json.loads(rs.profileConfiguration)
                 for k in self.names(rs):
@@ -9700,7 +9700,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                 mydict = json.loads(rs.profileConfiguration)
             elif (i / 2) % 4 == 0:
                 rs.exportEnvProfile()
-                env = pickle.loads(
+                env = Utils.pickleloads(
                     self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1])
                 jmd = json.loads(rs.profileConfiguration)
                 for k in self.names(rs):
@@ -9811,7 +9811,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                 mydict = json.loads(rs.profileConfiguration)
             elif (i / 2) % 4 == 0:
                 rs.exportEnvProfile()
-                env = pickle.loads(
+                env = Utils.pickleloads(
                     self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1])
                 jmd = json.loads(rs.profileConfiguration)
                 for k in self.names(rs):
@@ -9918,7 +9918,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                 mydict = json.loads(rs.profileConfiguration)
             elif (i / 2) % 4 == 0:
                 rs.exportEnvProfile()
-                env = pickle.loads(
+                env = Utils.pickleloads(
                     self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1])
                 jmd = json.loads(rs.profileConfiguration)
                 for k in self.names(rs):
@@ -10027,7 +10027,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                 mydict = json.loads(rs.profileConfiguration)
             elif (i / 2) % 4 == 0:
                 rs.exportEnvProfile()
-                env = pickle.loads(
+                env = Utils.pickleloads(
                     self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1])
                 jmd = json.loads(rs.profileConfiguration)
                 for k in self.names(rs):
@@ -10139,7 +10139,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                     mydict = json.loads(rs.profileConfiguration)
                 elif (i / 2) % 4 == 0:
                     rs.exportEnvProfile()
-                    env = pickle.loads(
+                    env = Utils.pickleloads(
                         ms2.dps[list(ms2.ms.keys())[0]].Environment[1])
                     jmd = json.loads(rs.profileConfiguration)
                     for k in self.names(rs):
@@ -10246,7 +10246,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                 mydict = json.loads(rs.profileConfiguration)
             elif (i / 2) % 4 == 0:
                 rs.exportEnvProfile()
-                env = pickle.loads(
+                env = Utils.pickleloads(
                     self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1])
                 jmd = json.loads(rs.profileConfiguration)
                 for k in self.names(rs):
@@ -10367,7 +10367,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                     mydict = json.loads(rs.profileConfiguration)
                 elif (i / 2) % 4 == 0:
                     rs.exportEnvProfile()
-                    env = pickle.loads(
+                    env = Utils.pickleloads(
                         self._ms.dps[
                             list(self._ms.ms.keys())[0]].Environment[1])
                     jmd = json.loads(rs.profileConfiguration)
@@ -10489,7 +10489,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
                     mydict = json.loads(rs.profileConfiguration)
                 elif (i / 2) % 4 == 0:
                     rs.exportEnvProfile()
-                    env = pickle.loads(
+                    env = Utils.pickleloads(
                         self._ms.dps[
                             list(self._ms.ms.keys())[0]].Environment[1])
                     jmd = json.loads(rs.profileConfiguration)
@@ -10893,7 +10893,7 @@ class BasicSettings2Test(Settings2Test.Settings2Test):
             # print "I = ", i, sid
             self.assertEqual(sid, sids[i])
             # data = {}
-            env = pickle.loads(
+            env = Utils.pickleloads(
                 self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1])
             self.myAssertDict(envs[i], env)
 

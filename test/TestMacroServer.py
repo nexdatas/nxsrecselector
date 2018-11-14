@@ -35,6 +35,8 @@ import PyTango
 import sys
 import pickle
 
+from nxsrecconfig.Utils import Utils
+
 # =================================================================
 #   TestMacroServer Class Description:
 #
@@ -133,14 +135,14 @@ class MacroServer(PyTango.Device_4Impl):
         envchange = {}
         envdel = []
         if env[0] == 'pickle':
-            edict = pickle.loads(env[1])
+            edict = Utils.pickleloads(env[1])
             if 'new' in edict.keys():
                 envnew = edict['new']
             if 'change' in edict.keys():
                 envchange = edict['change']
             if 'del' in edict.keys():
                 envdel = edict['del']
-            envdict = pickle.loads(self.attr_Environment[1])
+            envdict = Utils.pickleloads(self.attr_Environment[1])
             if 'new' not in envdict.keys():
                 envdict['new'] = {}
             newdict = envdict['new']

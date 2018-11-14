@@ -358,7 +358,7 @@ class MacroServerPools(object):
         nenv = {}
         vl = None
         if rec[0] == 'pickle':
-            dc = pickle.loads(rec[1])
+            dc = Utils.pickleloads(rec[1])
             if 'new' in dc.keys():
                 if self.__nxsenv in dc['new'].keys():
                     nenv = dc['new'][self.__nxsenv]
@@ -393,7 +393,7 @@ class MacroServerPools(object):
                 "Reading Encoded Attributes not supported in PyTango < 9.2.5")
         rec = msp.Environment
         if rec[0] == 'pickle':
-            dc = pickle.loads(rec[1])
+            dc = Utils.pickleloads(rec[1])
             if 'new' in dc.keys():
                 if self.__nxsenv not in dc['new'].keys() \
                         or not isinstance(dc['new'][self.__nxsenv], dict):
@@ -443,7 +443,7 @@ class MacroServerPools(object):
                 "PyTango < 9.2.5")
         rec = msp.Environment
         if rec[0] == 'pickle':
-            dc = pickle.loads(rec[1])
+            dc = Utils.pickleloads(rec[1])
             if 'new' in dc.keys():
                 for var in params:
                     if var in dc['new'].keys():
@@ -468,7 +468,7 @@ class MacroServerPools(object):
                 "PyTango < 9.2.5")
         rec = msp.Environment
         if rec[0] == 'pickle':
-            dc = pickle.loads(rec[1])
+            dc = Utils.pickleloads(rec[1])
             if 'new' in dc.keys():
                 for var in data.keys():
                     dc['new'][Utils.tostr(var)] = Utils.toString(data[var])

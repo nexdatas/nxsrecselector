@@ -79,6 +79,19 @@ class Utils(object):
                 return str(text)
 
     @classmethod
+    def pickleloads(cls, bytestr):
+        """ loads pickle byte string
+        :param bytestr: byte string to convert
+        :type bytesstr: :obj:`bytes` 
+        :returns: loaded bytestring
+        :rtype: :obj:`any`
+        """
+        if sys.version_info > (3,):
+            return pickle.loads(bytestr, encoding='latin1')
+        else:
+            return pickle.loads(bytestr)
+
+    @classmethod
     def compareDict(cls, dct, dct2):
         """ copares two dictionaries
 
@@ -458,7 +471,7 @@ class MSUtils(object):
                 "Reading Encoded Attributes not supported in PyTango < 9.2.5")
         rec = dp.Environment
         if rec[0] == 'pickle':
-            dc = pickle.loads(rec[1])
+            dc = Utils.pickleloads(rec[1])
             if 'new' in dc.keys() and \
                     var in dc['new'].keys():
                 active = dc['new'][var]

@@ -3953,7 +3953,7 @@ class MacroServerPoolsTest(unittest.TestCase):
             msp.setSelectorEnv(list(self._ms.door.keys())[0], dt, cmds[i])
 #            print "I = ",i
             # data = {}
-            env = pickle.loads(
+            env = Utils.pickleloads(
                 self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1])
 #            print "env", env
 #            print "ei", envs[i]
@@ -4275,7 +4275,7 @@ class MacroServerPoolsTest(unittest.TestCase):
             # print "I = ", i, sid
             self.assertEqual(sid, sids[i])
             # data = {}
-            env = pickle.loads(
+            env = Utils.pickleloads(
                 self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1])
 #            print "env", env
 #            print "ei", envs[i]
@@ -4520,7 +4520,7 @@ class MacroServerPoolsTest(unittest.TestCase):
             # print "I = ", i, sid
             self.assertEqual(sid, sids[i])
             # data = {}
-            env = pickle.loads(
+            env = Utils.pickleloads(
                 self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1])
             self.myAssertDict(envs[i], env)
 
@@ -4655,7 +4655,7 @@ class MacroServerPoolsTest(unittest.TestCase):
         self.myAssertRaise(Exception, msp.setScanEnv, None, "{}")
         msp.setScanEnv(list(self._ms.door.keys())[0], "{}")
         for i, dt in enumerate(edats):
-            env = pickle.loads(
+            env = Utils.pickleloads(
                 self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1])
             # print "env0", env
             sid = msp.setScanEnv(
@@ -4664,7 +4664,7 @@ class MacroServerPoolsTest(unittest.TestCase):
             # print "I = ", i, sid
             self.assertEqual(sid, sids[i])
             # data = {}
-            env = pickle.loads(
+            env = Utils.pickleloads(
                 self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1])
             # print "env", env
             # print "ei", envs[i]

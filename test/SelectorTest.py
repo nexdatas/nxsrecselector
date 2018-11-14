@@ -58,7 +58,7 @@ except Exception:
 
 from nxsrecconfig.MacroServerPools import MacroServerPools
 from nxsrecconfig.Selector import Selector
-from nxsrecconfig.Utils import TangoUtils, MSUtils
+from nxsrecconfig.Utils import TangoUtils, MSUtils, Utils
 from nxsconfigserver.XMLConfigurator import XMLConfigurator
 
 import logging
@@ -1441,7 +1441,7 @@ class SelectorTest(unittest.TestCase):
                     se.exportEnv(mydict)
             elif (i / 2) % 4 == 0:
                 se.exportEnv()
-                env = pickle.loads(
+                env = Utils.pickleloads(
                     self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1])
                 for k in se.keys():
                     try:
@@ -1516,7 +1516,7 @@ class SelectorTest(unittest.TestCase):
                     se.exportEnv(mydict)
             elif (i / 2) % 4 == 0:
                 se.exportEnv()
-                env = pickle.loads(
+                env = Utils.pickleloads(
                     self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1])
                 for k in se.keys():
                     try:
@@ -1662,7 +1662,7 @@ class SelectorTest(unittest.TestCase):
                     se.exportEnv(mydict)
             elif (i / 2) % 4 == 0:
                 se.exportEnv()
-                env = pickle.loads(
+                env = Utils.pickleloads(
                     self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1])
                 for k in se.keys():
                     try:
@@ -1723,7 +1723,7 @@ class SelectorTest(unittest.TestCase):
                     se.exportEnv(mydict)
             elif (i / 2) % 4 == 0:
                 se.exportEnv()
-                env = pickle.loads(
+                env = Utils.pickleloads(
                     self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1])
                 for k in se.keys():
                     try:
@@ -2078,7 +2078,7 @@ class SelectorTest(unittest.TestCase):
                     se.exportEnv(mydict)
             elif (i / 2) % 4 == 0:
                 se.exportEnv()
-                env = pickle.loads(
+                env = Utils.pickleloads(
                     self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1])
                 for k in se.keys():
                     if k not in ["PreselectingDataSources"]:
@@ -2198,7 +2198,7 @@ class SelectorTest(unittest.TestCase):
                     se.exportEnv(mydict)
             elif (i / 2) % 4 == 0:
                 se.exportEnv()
-                env = pickle.loads(
+                env = Utils.pickleloads(
                     self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1])
                 for k in se.keys():
                     try:
@@ -2331,7 +2331,7 @@ class SelectorTest(unittest.TestCase):
                     se.exportEnv(mydict)
             elif (i / 2) % 4 == 0:
                 se.exportEnv()
-                env = pickle.loads(
+                env = Utils.pickleloads(
                     self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1])
                 for k in se.keys():
                     try:
@@ -2498,7 +2498,7 @@ class SelectorTest(unittest.TestCase):
                     se.exportEnv(mydict)
             elif (i / 2) % 4 == 0:
                 se.exportEnv()
-                env = pickle.loads(
+                env = Utils.pickleloads(
                     self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1])
                 for k in se.keys():
                     try:
@@ -2634,7 +2634,7 @@ class SelectorTest(unittest.TestCase):
                     se.exportEnv(mydict)
             else:
                 se.exportEnv()
-                env = pickle.loads(
+                env = Utils.pickleloads(
                     self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1])
                 for k in se.keys():
                     try:
@@ -2708,7 +2708,7 @@ class SelectorTest(unittest.TestCase):
                     se.exportEnv(mydict)
             elif (i / 2) % 4 == 0:
                 se.exportEnv()
-                env = pickle.loads(
+                env = Utils.pickleloads(
                     self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1])
                 for k in se.keys():
                     try:
@@ -2793,7 +2793,7 @@ class SelectorTest(unittest.TestCase):
                     se.exportEnv(mydict)
             elif (i / 2) % 4 == 0:
                 se.exportEnv()
-                env = pickle.loads(
+                env = Utils.pickleloads(
                     self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1])
                 for k in se.keys():
                     try:
@@ -2881,7 +2881,7 @@ class SelectorTest(unittest.TestCase):
                     se.exportEnv(mydict)
             elif (i / 2) % 4 == 0:
                 se.exportEnv()
-                env = pickle.loads(
+                env = Utils.pickleloads(
                     self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1])
                 for k in se.keys():
                     try:
@@ -2967,7 +2967,7 @@ class SelectorTest(unittest.TestCase):
                     se.exportEnv(mydict)
             elif (i / 2) % 4 == 0:
                 se.exportEnv()
-                env = pickle.loads(
+                env = Utils.pickleloads(
                     self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1])
                 for k in se.keys():
                     try:
@@ -3055,7 +3055,7 @@ class SelectorTest(unittest.TestCase):
                     se.exportEnv(mydict)
             elif (i / 2) % 4 == 0:
                 se.exportEnv()
-                env = pickle.loads(
+                env = Utils.pickleloads(
                     self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1])
                 for k in se.keys():
                     try:
@@ -3145,7 +3145,7 @@ class SelectorTest(unittest.TestCase):
                     se.exportEnv(mydict)
             elif (i / 2) % 4 == 0:
                 se.exportEnv()
-                env = pickle.loads(
+                env = Utils.pickleloads(
                     self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1])
                 for k in se.keys():
                     try:
@@ -3232,7 +3232,7 @@ class SelectorTest(unittest.TestCase):
                     se.exportEnv(mydict)
             elif (i / 2) % 4 == 0:
                 se.exportEnv()
-                env = pickle.loads(
+                env = Utils.pickleloads(
                     self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1])
                 for k in se.keys():
                     try:
@@ -3310,7 +3310,7 @@ class SelectorTest(unittest.TestCase):
                     se.exportEnv(mydict)
             elif (i / 2) % 4 == 0:
                 se.exportEnv()
-                env = pickle.loads(
+                env = Utils.pickleloads(
                     self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1])
                 for k in se.keys():
                     try:
@@ -3384,7 +3384,7 @@ class SelectorTest(unittest.TestCase):
                     se.exportEnv(mydict)
             elif (i / 2) % 4 == 0:
                 se.exportEnv()
-                env = pickle.loads(
+                env = Utils.pickleloads(
                     self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1])
                 for k in se.keys():
                     try:
@@ -3458,7 +3458,7 @@ class SelectorTest(unittest.TestCase):
                     se.exportEnv(mydict)
             elif (i / 2) % 4 == 0:
                 se.exportEnv()
-                env = pickle.loads(
+                env = Utils.pickleloads(
                     self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1])
                 for k in se.keys():
                     try:
@@ -3532,7 +3532,7 @@ class SelectorTest(unittest.TestCase):
                     se.exportEnv(mydict)
             elif (i / 2) % 4 == 0:
                 se.exportEnv()
-                env = pickle.loads(
+                env = Utils.pickleloads(
                     self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1])
                 for k in se.keys():
                     try:
@@ -3610,7 +3610,7 @@ class SelectorTest(unittest.TestCase):
                     se.exportEnv(mydict)
             elif (i / 2) % 4 == 0:
                 se.exportEnv()
-                env = pickle.loads(
+                env = Utils.pickleloads(
                     self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1])
                 for k in se.keys():
                     try:
@@ -3684,7 +3684,7 @@ class SelectorTest(unittest.TestCase):
                     se.exportEnv(mydict)
             elif (i / 2) % 4 == 0:
                 se.exportEnv()
-                env = pickle.loads(
+                env = Utils.pickleloads(
                     self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1])
                 for k in se.keys():
                     try:
@@ -3756,7 +3756,7 @@ class SelectorTest(unittest.TestCase):
                     se.exportEnv(mydict)
             elif (i / 2) % 4 == 0:
                 se.exportEnv()
-                env = pickle.loads(
+                env = Utils.pickleloads(
                     self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1])
                 for k in se.keys():
                     try:
@@ -3828,7 +3828,7 @@ class SelectorTest(unittest.TestCase):
                     se.exportEnv(mydict)
             elif (i / 2) % 4 == 0:
                 se.exportEnv()
-                env = pickle.loads(
+                env = Utils.pickleloads(
                     self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1])
                 for k in se.keys():
                     try:
@@ -3900,7 +3900,7 @@ class SelectorTest(unittest.TestCase):
                     se.exportEnv(mydict)
             elif (i / 2) % 4 == 0:
                 se.exportEnv()
-                env = pickle.loads(
+                env = Utils.pickleloads(
                     self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1])
                 for k in se.keys():
                     try:
@@ -7616,7 +7616,7 @@ class SelectorTest(unittest.TestCase):
         for i, dt in enumerate(edats):
             se.exportEnv(dt, cmds[i])
             # data = {}
-            env = pickle.loads(
+            env = Utils.pickleloads(
                 self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1])
             self.myAssertDict(envs[i], env)
 
@@ -7939,7 +7939,7 @@ class SelectorTest(unittest.TestCase):
             sid = se.setScanEnvVariables(json.dumps(dt))
             self.assertEqual(sid, sids[i])
             # data = {}
-            env = pickle.loads(
+            env = Utils.pickleloads(
                 self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1])
             self.myAssertDict(envs[i], env)
 
@@ -8177,7 +8177,7 @@ class SelectorTest(unittest.TestCase):
             sid = se.setScanEnvVariables(json.dumps(dt))
             self.assertEqual(sid, sids[i])
             # data = {}
-            env = pickle.loads(
+            env = Utils.pickleloads(
                 self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1])
             self.myAssertDict(envs[i], env)
 
@@ -8322,13 +8322,13 @@ class SelectorTest(unittest.TestCase):
 
         msp.setScanEnv(list(self._ms.door.keys())[0], "{}")
         for i, dt in enumerate(edats):
-            env = pickle.loads(
+            env = Utils.pickleloads(
                 self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1])
             sid = se.setScanEnvVariables(
                 dt if not isinstance(dt, dict) else json.dumps(dt))
             self.assertEqual(sid, sids[i])
             # data = {}
-            env = pickle.loads(
+            env = Utils.pickleloads(
                 self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1])
             self.myAssertDict(envs[i], env)
 
