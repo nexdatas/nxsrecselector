@@ -1,4 +1,8 @@
 2018-11-18 Jan Kotanski <jankotan@gmail.com>
+	* add pickleloads for makes py2 py3 compatibility
+	* tagged as v3.16.1
+
+2018-11-18 Jan Kotanski <jankotan@gmail.com>
 	* add support for python3 with pytango >= 9.2.5
 	* tagged as v3.16.0
 

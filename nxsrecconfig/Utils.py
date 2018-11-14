@@ -82,7 +82,7 @@ class Utils(object):
     def pickleloads(cls, bytestr):
         """ loads pickle byte string
         :param bytestr: byte string to convert
-        :type bytesstr: :obj:`bytes` 
+        :type bytesstr: :obj:`bytes`
         :returns: loaded bytestring
         :rtype: :obj:`any`
         """

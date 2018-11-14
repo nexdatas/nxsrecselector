@@ -37,13 +37,15 @@ class TestMacroServerSetUp(object):
     # constructor
     # \brief defines server parameters
 
-    def __init__(self, instance="MSTESTS1", msdevices=None, doordevices=None):
+    def __init__(self, instance="MSTESTS1", msdevices=None, doordevices=None,
+                 python=None):
         if not isinstance(msdevices, list):
             msdevices = ["mstestp09/testts/t1r228"]
         if not isinstance(doordevices, list):
             doordevices = ["doortestp09/testts/t1r228"]
         # information about tango writer
         self.server = "MacroServer/%s" % instance
+        self.python = python
         self.door = {}
         self.ms = {}
         # device proxy
@@ -88,7 +90,7 @@ class TestMacroServerSetUp(object):
         if not path:
             path = '.'
 
-        if sys.version_info > (3,):
+        if sys.version_info > (3,) or self.python in [None, 3]:
             self._psub = subprocess.call(
                 "cd %s;  python3 ./TestMacroServer.py %s &" %
                 (path, self.instance),

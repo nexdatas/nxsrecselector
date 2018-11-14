@@ -3952,15 +3952,154 @@ class MacroServerPoolsTest(unittest.TestCase):
         msp.setSelectorEnv(list(self._ms.door.keys())[0], {}, {})
         for i, dt in enumerate(edats):
             msp.setSelectorEnv(list(self._ms.door.keys())[0], dt, cmds[i])
-#            print "I = ",i
-            # data = {}
             env = Utils.pickleloads(
                 self._ms.dps[list(self._ms.ms.keys())[0]].Environment[1])
-#            print "env", env
-#            print "ei", envs[i]
             self.myAssertDict(envs[i], env)
 
     # constructor test
+    # \brief It tests default settings
+    def test_setgetSelectorEnv_py2(self):
+        fun = sys._getframe().f_code.co_name
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
+
+        envs = [
+            {
+                "new":
+                {
+                    "ScanDir": "/tmp",
+                    'ScanID': 192,
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1',
+                    "NeXusConfiguration": {
+                        "ConfigServer": 'ptr/ert/ert',
+                        "Bool": True,
+                        "Int": 234,
+                        "Float": 123.124,
+                        "Something": ["dgfg"],
+                        "Dict": {"dgfg": 123, "sdf": "345"},
+                        "CConfigServer": 'ptr/ert/ert',
+                        "CBool": True,
+                        "CInt": 234,
+                        "CFloat": 123.124,
+                        "CSomething": json.dumps(["dgfg"]),
+                        "CDict": json.dumps({"dgfg": 123, "sdf": "345"})
+                    },
+                    'ActiveMntGrp': 'nxsmntgrp',
+                    '_ViewOptions': {'ShowDial': True},
+                    'DataCompressionRank': 0,
+                    "ScanFile": ["file.nxs"],
+                }
+            },
+        ]
+
+        edats = [
+            {"ScanDir": "/tmp", "ScanFile": ["file.nxs"],
+             "ConfigServer": "ptr/ert/ert",
+             "Bool": True, "Int": 234, "Float": 123.124, "Something": ["dgfg"],
+             "Dict": {"dgfg": 123, "sdf": "345"},
+             },
+        ]
+
+        cmds = [
+            {"CConfigServer": 'ptr/ert/ert',
+             "CBool": True,
+             "CInt": 234,
+             "CFloat": 123.124,
+             "CSomething": json.dumps(["dgfg"]),
+             "CDict": json.dumps({"dgfg": 123, "sdf": "345"})},
+        ]
+
+        ms2 = TestMacroServerSetUp.TestMacroServerSetUp(
+            instance="MSTESTS2",
+            msdevices=['mstestp09/testts2/t1r228'],
+            doordevices=['doortestp09/testts2/t1r228'], python=2)
+        ms2.setUp()
+        ms2.dps[list(ms2.ms.keys())[0]].DoorList = list(ms2.door.keys())
+        try:
+            msp = MacroServerPools(10)
+            msp.updateMacroServer(list(ms2.door.keys())[0])
+            msp.setSelectorEnv(list(ms2.door.keys())[0], {})
+            msp.setSelectorEnv(list(ms2.door.keys())[0], {}, {})
+            for i, dt in enumerate(edats):
+                msp.setSelectorEnv(list(ms2.door.keys())[0], dt, cmds[i])
+                env = Utils.pickleloads(
+                    ms2.dps[list(ms2.ms.keys())[0]].Environment[1])
+                self.myAssertDict(envs[i], env)
+
+        finally:
+            ms2.tearDown()
+
+    # constructor test
+    # \brief It tests default settings
+    def test_setgetSelectorEnv_py3(self):
+        fun = sys._getframe().f_code.co_name
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
+
+        envs = [
+            {
+                "new":
+                {
+                    "ScanDir": "/tmp",
+                    'ScanID': 192,
+                    'NeXusSelectorDevice': u'p09/nxsrecselector/1',
+                    "NeXusConfiguration": {
+                        "ConfigServer": 'ptr/ert/ert',
+                        "Bool": True,
+                        "Int": 234,
+                        "Float": 123.124,
+                        "Something": ["dgfg"],
+                        "Dict": {"dgfg": 123, "sdf": "345"},
+                        "CConfigServer": 'ptr/ert/ert',
+                        "CBool": True,
+                        "CInt": 234,
+                        "CFloat": 123.124,
+                        "CSomething": json.dumps(["dgfg"]),
+                        "CDict": json.dumps({"dgfg": 123, "sdf": "345"})
+                    },
+                    'ActiveMntGrp': 'nxsmntgrp',
+                    '_ViewOptions': {'ShowDial': True},
+                    'DataCompressionRank': 0,
+                    "ScanFile": ["file.nxs"],
+                }
+            },
+        ]
+
+        edats = [
+            {"ScanDir": "/tmp", "ScanFile": ["file.nxs"],
+             "ConfigServer": "ptr/ert/ert",
+             "Bool": True, "Int": 234, "Float": 123.124, "Something": ["dgfg"],
+             "Dict": {"dgfg": 123, "sdf": "345"},
+             },
+        ]
+
+        cmds = [
+            {"CConfigServer": 'ptr/ert/ert',
+             "CBool": True,
+             "CInt": 234,
+             "CFloat": 123.124,
+             "CSomething": json.dumps(["dgfg"]),
+             "CDict": json.dumps({"dgfg": 123, "sdf": "345"})},
+        ]
+        ms2 = TestMacroServerSetUp.TestMacroServerSetUp(
+            instance="MSTESTS2",
+            msdevices=['mstestp09/testts2/t1r228'],
+            doordevices=['doortestp09/testts2/t1r228'], python=3)
+        ms2.setUp()
+        ms2.dps[list(ms2.ms.keys())[0]].DoorList = list(ms2.door.keys())
+        try:
+            msp = MacroServerPools(10)
+            msp.updateMacroServer(list(ms2.door.keys())[0])
+            msp.setSelectorEnv(list(ms2.door.keys())[0], {})
+            msp.setSelectorEnv(list(ms2.door.keys())[0], {}, {})
+            for i, dt in enumerate(edats):
+                msp.setSelectorEnv(list(ms2.door.keys())[0], dt, cmds[i])
+                env = Utils.pickleloads(
+                    ms2.dps[list(ms2.ms.keys())[0]].Environment[1])
+                self.myAssertDict(envs[i], env)
+
+        finally:
+            ms2.tearDown()
+
+    # CONSTRUCTOR4 test
     # \brief It tests default settings
     def test_getScanEnv(self):
         fun = sys._getframe().f_code.co_name
