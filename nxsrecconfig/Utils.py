@@ -491,11 +491,7 @@ class MSUtils(object):
         dp = TangoUtils.openProxy(ms)
         dc = {'new': {}}
         dc['new'][var] = value
-        pk = pickle.dumps(dc, protocol=2)
-        if PYTG_BUG_213:
-            raise OldTangoError(
-                "Writing Encoded Attributes not supported in PyTango < 9.2.5")
-        dp.Environment = ['pickle', pk]
+        MSUtils.writeEnvAttr(dc, dp)
 
     @classmethod
     def setEnvs(cls, varvalues, ms):
@@ -510,12 +506,7 @@ class MSUtils(object):
         dc = {b'new': {}}
         for var, value in varvalues.items():
             dc[b'new'][var] = value
-        print(dc)    
-        pk = pickle.dumps(dc, protocol=2)
-        if PYTG_BUG_213:
-            raise OldTangoError(
-                "Writing Encoded Attributes not supported in PyTango < 9.2.5")
-        dp.Environment = ['pickle', pk]
+        MSUtils.writeEnvAttr(dc, dp)
 
     @classmethod
     def usetEnv(cls, var, ms):
@@ -528,11 +519,7 @@ class MSUtils(object):
         """
         dp = TangoUtils.openProxy(ms)
         dc = {'del': [var]}
-        pk = pickle.dumps(dc, protocol=2)
-        if PYTG_BUG_213:
-            raise OldTangoError(
-                "Writing Encoded Attributes not supported in PyTango < 9.2.5")
-        dp.Environment = ['pickle', pk]
+        MSUtils.writeEnvAttr(dc, dp)
 
     @classmethod
     def getMacroServer(cls, db, door):
@@ -565,6 +552,42 @@ class MSUtils(object):
                     ms = mserver
                     break
         return ms
+
+    @classmethod
+    def writeEnvAttr(cls, value, dp):
+        """ sets environment variable value
+
+        :param value: variable value dictionary
+        :type value: :obj:`dict` <:obj:`str` , `any`> or `any`
+        :param dp: macroserver
+        :type dp: :obj:`str`
+        """
+        if PYTG_BUG_213:
+            raise OldTangoError(
+                "Writing Encoded Attributes not supported in PyTango < 9.2.5")
+        try:
+            pk = pickle.dumps(value, protocol=2)
+            dp.Environment = ['pickle', pk]
+        except:
+            if sys.version_info < (3,):
+                raise
+            if isinstance(value, dict):
+                newvalue = {}
+                for key, vl in value.items():
+                    if isinstance(vl, dict):
+                        nvl = {}
+                        for ky, it in vl.items():
+                            nvl[bytes(ky, "utf8")
+                                if isinstance(ky, unicode) else ky] = it
+                        newvalue[bytes(key, "utf8")
+                                 if isinstance(key, unicode) else key] = nvl
+                    else:
+                        newvalue[bytes(key, "utf8")
+                                 if isinstance(key, unicode) else key] = vl
+            else:
+                newvalue = value
+            pk = pickle.dumps(newvalue, protocol=2)
+            dp.Environment = ['pickle', pk]
 
 
 class PoolUtils(object):
