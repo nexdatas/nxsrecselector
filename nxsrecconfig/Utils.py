@@ -503,9 +503,9 @@ class MSUtils(object):
         :type ms: :obj:`str`
         """
         dp = TangoUtils.openProxy(ms)
-        dc = {b'new': {}}
+        dc = {'new': {}}
         for var, value in varvalues.items():
-            dc[b'new'][var] = value
+            dc['new'][var] = value
         MSUtils.writeEnvAttr(dc, dp)
 
     @classmethod
