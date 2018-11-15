@@ -1,12 +1,16 @@
-2018-11-18 Jan Kotanski <jankotan@gmail.com>
+2018-11-15 Jan Kotanski <jankotan@gmail.com>
+	* add MSUtils.writeEnvAttr as a workaround for sardana #981
+	* tagged as v3.16.2
+
+2018-11-14 Jan Kotanski <jankotan@gmail.com>
 	* add pickleloads for makes py2 py3 compatibility
 	* tagged as v3.16.1
 
-2018-11-18 Jan Kotanski <jankotan@gmail.com>
+2018-11-14 Jan Kotanski <jankotan@gmail.com>
 	* add support for python3 with pytango >= 9.2.5
 	* tagged as v3.16.0
 
-2018-10-18 Jan Kotanski <jankotan@gmail.com>
+2018-10-14 Jan Kotanski <jankotan@gmail.com>
 	* bump version for splitting purpose
 	* tagged as v3.15.0
 
