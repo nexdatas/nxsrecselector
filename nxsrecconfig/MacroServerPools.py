@@ -21,7 +21,6 @@
 
 import json
 import PyTango
-import pickle
 import sys
 
 from .Utils import (
