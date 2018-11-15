@@ -568,7 +568,7 @@ class MSUtils(object):
         try:
             pk = pickle.dumps(value, protocol=2)
             dp.Environment = ['pickle', pk]
-        except:
+        except Exception:
             if sys.version_info < (3,):
                 raise
             if isinstance(value, dict):
