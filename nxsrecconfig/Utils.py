@@ -43,7 +43,7 @@ if sys.version_info > (3,):
             if PYTGMAJOR == 9:
                 if PYTGMINOR < 2:
                     PYTG_BUG_213 = True
-                elif PYTGMINOR == 2 and PYTGPATCH < 4:
+                elif PYTGMINOR == 2 and PYTGPATCH <= 4:
                     PYTG_BUG_213 = True
             else:
                 PYTG_BUG_213 = True
