@@ -6,13 +6,8 @@ if [ $1 = "ubuntu16.04" ]; then
 fi
 
 echo "restart mysql"
-if [ $1 = "debian9" ]; then
-    # workaround for a bug in debian9, i.e. starting mysql hangs
-    docker exec -it --user root ndts service mysql stop
-    docker exec -it --user root ndts /bin/sh -c '$(service mysql start &) && sleep 30'
-else
-    docker exec -it --user root ndts service mysql restart
-fi
+docker exec -it --user root ndts service mysql stop
+docker exec -it --user root ndts /bin/sh -c '$(service mysql start &) && sleep 30'
 
 docker exec -it --user root ndts /bin/sh -c 'export DEBIAN_FRONTEND=noninteractive; apt-get -qq update; apt-get -qq install -y   tango-db tango-common; sleep 10'
 if [ $? -ne "0" ]
