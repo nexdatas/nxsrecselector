@@ -154,7 +154,7 @@ class CheckerThread(threading.Thread):
                         raise Exception("Empty Attribute")
                 if state in [PyTango.DevState.ALARM]:
                     raise AlarmStateError("ALARM STATE")
-            except AlarmStateError as e:
+            except AlarmStateError:
                 checkeritem.message = "ALARM_STATE"
                 checkeritem.errords = ds.name
             except Exception as e:

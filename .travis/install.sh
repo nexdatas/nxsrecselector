@@ -6,13 +6,8 @@ if [ $1 = "ubuntu16.04" ]; then
 fi
 
 echo "restart mysql"
-if [ $1 = "debian9" ]; then
-    # workaround for a bug in debian9, i.e. starting mysql hangs
-    docker exec -it --user root ndts service mysql stop
-    docker exec -it --user root ndts /bin/sh -c '$(service mysql start &) && sleep 30'
-else
-    docker exec -it --user root ndts service mysql restart
-fi
+docker exec -it --user root ndts service mysql stop
+docker exec -it --user root ndts /bin/sh -c '$(service mysql start &) && sleep 30'
 
 docker exec -it --user root ndts /bin/sh -c 'export DEBIAN_FRONTEND=noninteractive; apt-get -qq update; apt-get -qq install -y   tango-db tango-common; sleep 10'
 if [ $? -ne "0" ]
@@ -31,10 +26,10 @@ docker exec -it --user root ndts service tango-starter restart
 
 if [ $2 = "2" ]; then
     echo "install python-pytango"
-    docker exec -it --user root ndts /bin/sh -c 'export DEBIAN_FRONTEND=noninteractive; apt-get -qq update; apt-get -qq install -y   python-pytango python-tz; apt-get -qq install -y nxsconfigserver-db; sleep 10'
+    docker exec -it --user root ndts /bin/sh -c 'export DEBIAN_FRONTEND=noninteractive; apt-get -qq update; apt-get -qq install -y python-enum34 python-pytango python-tz; apt-get -qq install -y nxsconfigserver-db; sleep 10'
 else
     echo "install python3-pytango"
-    docker exec -it --user root ndts /bin/sh -c 'export DEBIAN_FRONTEND=noninteractive; apt-get -qq update; apt-get install -y git python3-six python3-numpy graphviz python3-sphinx g++ build-essential python3-dev pkg-config python3-all-dev  python3-setuptools libtango-dev python3-pytango python3-tz python-pytango; apt-get -qq install -y nxsconfigserver-db; sleep 10'
+    docker exec -it --user root ndts /bin/sh -c 'export DEBIAN_FRONTEND=noninteractive; apt-get -qq update; apt-get install -y git python3-six python3-numpy graphviz python3-sphinx g++ build-essential python3-dev pkg-config python3-all-dev  python3-setuptools libtango-dev python3-pytango python3-tz python-pytango python-enum34; apt-get -qq install -y nxsconfigserver-db; sleep 10'
     if [ $1 = "debian10" ]; then
 	docker exec -it --user root ndts /bin/sh -c 'export DEBIAN_FRONTEND=noninteractive; apt-get -qq update; apt-get install -y libboost-python1.62-dev libboost1.62-dev'
     else

@@ -116,20 +116,35 @@ class TestPool2SetUp(object):
 
     # stops server
     def stop(self):
-        pipe = subprocess.Popen(
-            "ps -ef | grep 'TestPool2.py %s' | grep -v grep" % self.instance,
-            stdout=subprocess.PIPE, shell=True).stdout
-
         if sys.version_info > (3,):
-            res = str(pipe.read(), "utf8").split("\n")
+            with subprocess.Popen(
+                    "ps -ef | grep 'TestPool2.py %s' | grep -v grep" %
+                    self.instance,
+                    stdout=subprocess.PIPE, shell=True) as proc:
+
+                pipe = proc.stdout
+                res = str(pipe.read(), "utf8").split("\n")
+                for r in res:
+                    sr = r.split()
+                    if len(sr) > 2:
+                        subprocess.call(
+                            "kill -9 %s" % sr[1], stderr=subprocess.PIPE,
+                            shell=True)
+                pipe.close()
         else:
+            pipe = subprocess.Popen(
+                "ps -ef | grep 'TestPool2.py %s' | grep -v grep" %
+                self.instance,
+                stdout=subprocess.PIPE, shell=True).stdout
+
             res = str(pipe.read()).split("\n")
-        for r in res:
-            sr = r.split()
-            if len(sr) > 2:
-                subprocess.call(
-                    "kill -9 %s" % sr[1], stderr=subprocess.PIPE, shell=True)
-        pipe.close()
+            for r in res:
+                sr = r.split()
+                if len(sr) > 2:
+                    subprocess.call(
+                        "kill -9 %s" % sr[1], stderr=subprocess.PIPE,
+                        shell=True)
+            pipe.close()
 
 
 if __name__ == "__main__":

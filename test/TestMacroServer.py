@@ -30,10 +30,17 @@
 # ============================================================================
 #
 
-
-import PyTango
 import sys
 import pickle
+
+import PyTango
+
+# # workaround for problems when pytango locally compiled
+# if sys.version_info[0] == 2:
+#     sys.path = [pth for pth in sys.path if 'python3' not in pth]
+# else:
+#     sys.path = [pth for pth in sys.path if 'python2' not in pth]
+# PyTango = __import__("PyTango")
 
 
 def pickleloads(bytestr):

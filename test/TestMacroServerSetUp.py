@@ -98,7 +98,7 @@ class TestMacroServerSetUp(object):
                 stdout=None, stderr=None, shell=True)
         else:
             self._psub = subprocess.call(
-                "cd %s;  python ./TestMacroServer.py %s &" %
+                "cd %s;  python2 ./TestMacroServer.py %s &" %
                 (path, self.instance),
                 stdout=None, stderr=None, shell=True)
         sys.stdout.write("waiting for simple server")
@@ -136,21 +136,33 @@ class TestMacroServerSetUp(object):
 
     # stops server
     def stop(self):
-        pipe = subprocess.Popen(
-            "ps -ef | grep 'TestMacroServer.py %s' | grep -v grep" %
-            self.instance,
-            stdout=subprocess.PIPE, shell=True).stdout
-
         if sys.version_info > (3,):
-            res = str(pipe.read(), "utf8").split("\n")
+            with subprocess.Popen(
+                    "ps -ef | grep 'TestMacroServer.py %s' | grep -v grep" %
+                    self.instance,
+                    stdout=subprocess.PIPE, shell=True) as proc:
+                pipe = proc.stdout
+                res = str(pipe.read(), "utf8").split("\n")
+                for r in res:
+                    sr = r.split()
+                    if len(sr) > 2:
+                        subprocess.call(
+                            "kill -9 %s" % sr[1], stderr=subprocess.PIPE,
+                            shell=True)
+                pipe.close()
         else:
+            pipe = subprocess.Popen(
+                "ps -ef | grep 'TestMacroServer.py %s' | grep -v grep" %
+                self.instance,
+                stdout=subprocess.PIPE, shell=True).stdout
             res = str(pipe.read()).split("\n")
-        for r in res:
-            sr = r.split()
-            if len(sr) > 2:
-                subprocess.call(
-                    "kill -9 %s" % sr[1], stderr=subprocess.PIPE, shell=True)
-        pipe.close()
+            for r in res:
+                sr = r.split()
+                if len(sr) > 2:
+                    subprocess.call(
+                        "kill -9 %s" % sr[1], stderr=subprocess.PIPE,
+                        shell=True)
+            pipe.close()
 
 
 if __name__ == "__main__":
