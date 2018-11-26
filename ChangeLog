@@ -1,3 +1,7 @@
+2018-11-26 Jan Kotanski <jankotan@gmail.com>
+	* workaround for brouken pipe in StreamSet
+	* tagged as v3.16.4
+
 2018-11-22 Jan Kotanski <jankotan@gmail.com>
 	* fix for PYTG_BUG_213
 	* tagged as v3.16.3
