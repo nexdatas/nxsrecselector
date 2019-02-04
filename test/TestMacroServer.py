@@ -280,7 +280,7 @@ class Door(PyTango.Device_4Impl):
     #    Device destructor
     # -----------------------------------------------------------------
     def delete_device(self):
-            self.get_name()
+        self.get_name()
 
     # -----------------------------------------------------------------
     #    Device initialization
