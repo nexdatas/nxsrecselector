@@ -25,6 +25,7 @@ import subprocess
 
 import PyTango
 import time
+
 try:
     import TestPool
 except Exception:
