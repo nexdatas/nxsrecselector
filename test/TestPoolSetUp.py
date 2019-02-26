@@ -25,11 +25,11 @@ import subprocess
 
 import PyTango
 import time
+
 try:
     import TestPool
 except Exception:
     from . import TestPool
-
 
 # test fixture
 class TestPoolSetUp(object):
