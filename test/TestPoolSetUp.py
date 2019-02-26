@@ -31,6 +31,7 @@ try:
 except Exception:
     from . import TestPool
 
+
 # test fixture
 class TestPoolSetUp(object):
 
