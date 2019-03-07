@@ -95,6 +95,7 @@ class TestServerSetUp(object):
 
     # starts server
     def start(self):
+        db = PyTango.Database()
         path = os.path.dirname(TestServer.__file__)
         if not path:
             path = '.'
@@ -114,10 +115,17 @@ class TestServerSetUp(object):
 
         found = False
         cnt = 0
+        dvname = self.new_device_info_writer.name
         while not found and cnt < 1000:
             try:
                 sys.stdout.write(".")
-                self.dp = PyTango.DeviceProxy(self.new_device_info_writer.name)
+                sys.stdout.flush()
+                exl = db.get_device_exported(dvname)
+                if dvname not in exl.value_string:
+                    time.sleep(0.01)
+                    cnt += 1
+                    continue
+                self.dp = PyTango.DeviceProxy(dvname)
                 time.sleep(0.01)
                 if self.dp.state() == PyTango.DevState.ON:
                     found = True
@@ -241,6 +249,7 @@ class MultiTestServerSetUp(object):
 
     # starts server
     def start(self):
+        db = PyTango.Database()
         path = os.path.dirname(TestServer.__file__)
         if not path:
             path = '.'
@@ -261,8 +270,14 @@ class MultiTestServerSetUp(object):
         while not found and cnt < 1000:
             try:
                 sys.stdout.write(".")
+                sys.stdout.flush()
                 dpcnt = 0
                 for dv in devices:
+                    exl = db.get_device_exported(dv.name)
+                    if dv.name not in exl.value_string:
+                        time.sleep(0.01)
+                        cnt += 1
+                        continue
                     self.dps[dv.name] = PyTango.DeviceProxy(dv.name)
                     time.sleep(0.01)
                     if self.dps[dv.name].state() == PyTango.DevState.ON:
