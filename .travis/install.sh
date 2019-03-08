@@ -37,7 +37,7 @@ else
     fi
 
     if [ $1 -ne "debian10" ]; then
-	docker exec -it --user root ndts /bin/sh -c 'git clone https://github.com/tango-controls/pytango pytango'
+	docker exec -it --user root ndts /bin/sh -c 'git clone https://github.com/tango-controls/pytango pytango; git checkout tags/v9.2.5 -b b9.2.5'
 	docker exec -it --user root ndts /bin/sh -c 'cd pytango; python3 setup.py install'
     fi
 fi
