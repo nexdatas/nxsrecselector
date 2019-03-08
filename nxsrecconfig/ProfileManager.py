@@ -477,11 +477,11 @@ class ProfileManager(object):
                     self.defaultPreselectedComponents)
                 self.__selector.preselect()
         elif self.__syncsnapshot:
-                # print("FETCH 2")
-                changed = self.__addPreselectedComponents(
-                    self.defaultPreselectedComponents)
-                if changed:
-                    self.__selector.preselect()
+            # print("FETCH 2")
+            changed = self.__addPreselectedComponents(
+                self.defaultPreselectedComponents)
+            if changed:
+                self.__selector.preselect()
 
     def __createMntGrpConf(self, datasources,
                            componentdatasources, description):
