@@ -65,6 +65,7 @@ then
     exit -1
 fi
 
+docker exec -it --user root ndts chown -R tango:tango .
 
 if [ $2 = "2" ]; then
     echo "install python-nxsrecselector"

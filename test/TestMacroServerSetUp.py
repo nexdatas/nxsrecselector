@@ -86,6 +86,7 @@ class TestMacroServerSetUp(object):
 
     # starts server
     def start(self):
+        db = PyTango.Database()
         path = os.path.dirname(TestMacroServer.__file__)
         if not path:
             path = '.'
@@ -110,8 +111,14 @@ class TestMacroServerSetUp(object):
         while not found and cnt < 1000:
             try:
                 sys.stdout.write(".")
+                sys.stdout.flush()
                 dpcnt = 0
                 for dv in devices:
+                    exl = db.get_device_exported(dv.name)
+                    if dv.name not in exl.value_string:
+                        time.sleep(0.01)
+                        cnt += 1
+                        continue
                     self.dps[dv.name] = PyTango.DeviceProxy(dv.name)
                     time.sleep(0.01)
                     if self.dps[dv.name].state() == PyTango.DevState.ON:
