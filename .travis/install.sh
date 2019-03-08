@@ -34,8 +34,6 @@ else
 	docker exec -it --user root ndts /bin/sh -c 'export DEBIAN_FRONTEND=noninteractive; apt-get -qq update; apt-get install -y libboost-python1.62-dev libboost1.62-dev'
     else
 	docker exec -it --user root ndts /bin/sh -c 'export DEBIAN_FRONTEND=noninteractive; apt-get -qq update; apt-get install -y libboost-python-dev libboost-dev'
-	docker exec -it --user root ndts /bin/sh -c 'git clone https://github.com/tango-controls/pytango pytango; git checkout tags/v9.2.5 -b b9.2.5'
-	docker exec -it --user root ndts /bin/sh -c 'cd pytango; python3 setup.py install'
     fi
 
 fi
@@ -43,6 +41,9 @@ if [ $? -ne "0" ]
 then
     exit -1
 fi
+
+docker exec -it --user root ndts /bin/sh -c 'git clone https://github.com/tango-controls/pytango pytango; git checkout tags/v9.2.5 -b b9.2.5'
+docker exec -it --user root ndts /bin/sh -c 'cd pytango; python3 setup.py install'
 
 if [ $1 = "debian8" ]; then
     if [ $2 = "3" ]; then
