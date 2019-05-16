@@ -8350,6 +8350,9 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
             slno = str(self._rnd.randint(1, 40))
             rscv["serialno"] = str(slno)
             rs.configVariables = str(json.dumps(rscv))
+            rs.setChannelProperties(
+                ("canfail",
+                 json.dumps({"mot%s" % i: True, "exp_c%s" % i: True})))
 
             cscv = {}
             lcp = self._rnd.randint(1, 40)
@@ -8364,6 +8367,9 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
 
             res = self._cf.dp.variables
             self.myAssertDict(json.loads(res), rscv)
+            res = self._cf.dp.canfaildatasources
+            self.myAssertDict(json.loads(res),
+                              {"mot%s" % i: True, "exp_c%s" % i: True})
 
     # test
     def test_updateConfigVariables_cfserialno(self):
@@ -8412,6 +8418,8 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
             if i % 2:
                 rscv["serialno"] = str(slno + 1)
             self.myAssertDict(json.loads(res), rscv)
+            res = self._cf.dp.canfaildatasources
+            self.myAssertDict(json.loads(res), {})
 
     # test
     def test_updateConfigVariables_rscfserialno(self):
@@ -8428,6 +8436,9 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
         rs.configDevice = val["ConfigDevice"]
         rs.door = val["Door"]
         rs.mntGrp = val["MntGrp"]
+        rs.setChannelProperties(
+            ("canfail",
+             json.dumps({"mot01": True, "exp_c02": True})))
         self.assertEqual(rs.configDevice, val["ConfigDevice"])
         self.assertEqual(rs.door, val["Door"])
         self.assertEqual(rs.mntGrp, val["MntGrp"])
@@ -8460,6 +8471,9 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
 
             res = self._cf.dp.variables
             self.myAssertDict(json.loads(res), rscv)
+            res = self._cf.dp.canfaildatasources
+            self.myAssertDict(json.loads(res),
+                              {"mot01": True, "exp_c02": True})
 
 
 if __name__ == '__main__':

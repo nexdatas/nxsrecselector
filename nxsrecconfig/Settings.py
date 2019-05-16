@@ -571,6 +571,32 @@ class Settings(object):
         __setLinkDatSources,
         doc='link datasource list')
 
+    def __getCanFailDatSources(self):
+        """ get method for dataSourceGroup attribute
+
+        :returns: names of canfail dataSources
+        :rtype: :obj:`str`
+        """
+        inst = self.__selector.setConfigInstance()
+        if inst.canfaildatasources:
+            return inst.canfaildatasources
+        else:
+            return "[]"
+
+    def __setCanFailDatSources(self, names):
+        """ set method for dataSourceGroup attribute
+        :param names: names of canfail dataSources
+        :type names: :obj:`str`
+        """
+        inst = self.__selector.setConfigInstance()
+        inst.canfaildatasources = names
+
+    #: (:obj:`str`) the json data string
+    canfaildatasources = property(
+        __getCanFailDatSources,
+        __setCanFailDatSources,
+        doc='canfail datasource list')
+
     def channelProperties(self, ptype):
         """ provides channel properties of the given type
 
@@ -1007,6 +1033,8 @@ class Settings(object):
             jvars["serialno"] = cvars["serialno"]
             confvars = json.dumps(jvars)
         nexusconfig_device.variables = Utils.tostr(confvars)
+        nexusconfig_device.canfaildatasources = \
+            self.channelProperties("canfail")
 
     def preselectComponents(self):
         """ checks existing controllers of pools
