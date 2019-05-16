@@ -8368,8 +8368,8 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
             res = self._cf.dp.variables
             self.myAssertDict(json.loads(res), rscv)
             res = self._cf.dp.canfaildatasources
-            self.myAssertDict(json.loads(res),
-                              {"mot%s" % i: True, "exp_c%s" % i: True})
+            self.assertEqual(sorted(json.loads(res)),
+                             sorted(["mot%s" % i, "exp_c%s" % i]))
 
     # test
     def test_updateConfigVariables_cfserialno(self):
@@ -8419,7 +8419,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
                 rscv["serialno"] = str(slno + 1)
             self.myAssertDict(json.loads(res), rscv)
             res = self._cf.dp.canfaildatasources
-            self.myAssertDict(json.loads(res), {})
+            self.assertEqual(json.loads(res), [])
 
     # test
     def test_updateConfigVariables_rscfserialno(self):
@@ -8438,7 +8438,9 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
         rs.mntGrp = val["MntGrp"]
         rs.setChannelProperties(
             ("canfail",
-             json.dumps({"mot01": True, "exp_c02": True})))
+             json.dumps({"mot01": True,
+                         "exp_c02": False,
+                         "exp_c03": True})))
         self.assertEqual(rs.configDevice, val["ConfigDevice"])
         self.assertEqual(rs.door, val["Door"])
         self.assertEqual(rs.mntGrp, val["MntGrp"])
@@ -8472,8 +8474,8 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
             res = self._cf.dp.variables
             self.myAssertDict(json.loads(res), rscv)
             res = self._cf.dp.canfaildatasources
-            self.myAssertDict(json.loads(res),
-                              {"mot01": True, "exp_c02": True})
+            self.assertEqual(sorted(json.loads(res)),
+                             sorted(["mot01", "exp_c03"]))
 
 
 if __name__ == '__main__':

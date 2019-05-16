@@ -1033,8 +1033,9 @@ class Settings(object):
             jvars["serialno"] = cvars["serialno"]
             confvars = json.dumps(jvars)
         nexusconfig_device.variables = Utils.tostr(confvars)
-        nexusconfig_device.canfaildatasources = \
-            self.channelProperties("canfail")
+        props = json.loads(self.channelProperties("canfail"))
+        lprops = [ky for ky, vl in props.items() if vl]
+        nexusconfig_device.canfaildatasources = json.dumps(lprops)
 
     def preselectComponents(self):
         """ checks existing controllers of pools
