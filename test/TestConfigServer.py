@@ -80,6 +80,7 @@ class NXSConfigServer(PyTango.Device_4Impl):
         self.attr_Selection = ""
         self.attr_JSONSettings = ""
         self.attr_STEPDataSources = ""
+        self.attr_CanFailDataSources = ""
         self.attr_LinkDataSources = ""
         self.attr_Variables = "{}"
 
@@ -154,6 +155,18 @@ class NXSConfigServer(PyTango.Device_4Impl):
     # -----------------------------------------------------------------
     def write_STEPDataSources(self, attr):
         self.attr_STEPDataSources = attr.get_write_value()
+
+    # -----------------------------------------------------------------
+    #    Read CanFailDataSources attribute
+    # -----------------------------------------------------------------
+    def read_CanFailDataSources(self, attr):
+        attr.set_value(self.attr_CanFailDataSources)
+
+    # -----------------------------------------------------------------
+    #    Write CanFailDataSources attribute
+    # -----------------------------------------------------------------
+    def write_CanFailDataSources(self, attr):
+        self.attr_CanFailDataSources = attr.get_write_value()
 
     # -----------------------------------------------------------------
     #    Read LinkDataSources attribute
@@ -644,6 +657,15 @@ class NXSConfigServerClass(PyTango.DeviceClass):
                  'label': "datasources to be switched into STEP mode",
                  'description': "datasources to be switched "
                  "into STEP mode during creating configuration process",
+            }],
+        'CanFailDataSources':
+            [[PyTango.DevString,
+              PyTango.SCALAR,
+              PyTango.READ_WRITE],
+             {
+                 'label': "datasources to be switched into CanFail mode",
+                 'description': "datasources to be switched "
+                 "into CanFail mode during creating configuration process",
             }],
         'LinkDataSources':
             [[PyTango.DevString,

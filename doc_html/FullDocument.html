@@ -126,7 +126,7 @@
 				<li> <a href="FullDocument.html#attrAppendEntry"> AppendEntry </a>
 				<li> <a href="FullDocument.html#attrConfigVariables"> ConfigVariables </a>
 				<li> <a href="FullDocument.html#attrProfileFile"> ProfileFile </a>
-				<li> <a href="FullDocument.html#attrLinkDataSources"> LinkDataSources </a>
+				<li> <a href="FullDocument.html#attrCanFailDataSources"> CanFailDataSources </a>
 				<li> <a href="FullDocument.html#attrComponents"> Components </a>
 				<li> <a href="FullDocument.html#attrDescriptionErrors"> DescriptionErrors </a>
 				<li> <a href="FullDocument.html#attrDataSources"> DataSources </a>
@@ -269,6 +269,12 @@
 		<td> preselection merges the current ScanSnapshot </td>
 		<td> boolean </td>
 		<td> False <br> </td>
+	</tr>
+	<tr>
+		<td> DefaultCanFailDataSources </td>
+		<td> list of default datasources in the CanFail mode </td>
+		<td> String[] </td>
+		<td> none </td>
 	</tr>
 </table>
 <br><br>
@@ -1629,7 +1635,7 @@
 	</tr>
 	<tr>
 		<td> Abstract </td>
-		<td> true </td>
+		<td> false </td>
 		<td> .. </td>
 	</tr>
 	<tr>
@@ -1678,7 +1684,7 @@
 	</tr>
 	<tr>
 		<td> Abstract </td>
-		<td> true </td>
+		<td> false </td>
 		<td> .. </td>
 	</tr>
 	<tr>
@@ -3096,14 +3102,14 @@
 		<td> config file with its full path </td>
 	</tr>
 	<tr>
-		<td> <a href="AttrLinkDataSources.html"> LinkDataSources </a> </td>
+		<td> <a href="AttrCanFailDataSources.html"> CanFailDataSources </a> </td>
 		<td> false </td>
 		<td> false </td>
 		<td> Scalar </td>
 		<td> READ_WRITE </td>
 		<td> Tango::DEV_STRING </td>
 		<td> EXPERT </td>
-		<td> list of datasources  to which a link will be added </td>
+		<td> list of datasources  to to switch to canfail mode </td>
 	</tr>
 	<tr>
 		<td> <a href="AttrComponents.html"> Components </a> </td>
@@ -5822,11 +5828,11 @@
 </table>
 <br><br>
 <hr>
-<a name="attrLinkDataSources"> </a>
+<a name="attrCanFailDataSources"> </a>
 <br><br><br>
-<font size="+1"><u><b> Attribute LinkDataSources : </b></u></font>
+<font size="+1"><u><b> Attribute CanFailDataSources : </b></u></font>
 <ul>
-	list of datasources  to which a link will be added
+	list of datasources  to to switch to canfail mode
 </ul>
 <br><br><br>
 <Table Border=0 Cellpadding=0 CELLSPACING=20>
@@ -5886,7 +5892,7 @@
 				</tr>
 				<tr>
 					<td> label </td>
-					<td> list of datasources to which a link will be added </td>
+					<td> list of datasources to switch to canfail mode </td>
 				</tr>
 				<tr>
 					<td> unit </td>

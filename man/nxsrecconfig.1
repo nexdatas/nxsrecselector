@@ -1,6 +1,6 @@
 .\" Man page generated from reStructuredText.
 .
-.TH "NXSRECCONFIG" "1" "Nov 14, 2018" "3.16" "NXSRecSelector"
+.TH "NXSRECCONFIG" "1" "May 17, 2019" "3.17" "NXSRecSelector"
 .SH NAME
 nxsrecconfig \- nxsrecconfig Documentation
 .
@@ -1193,7 +1193,7 @@ AddStepDataSources command
 .INDENT 7.0
 .TP
 .B Brief
-Provide datasource description
+switch datasources to step mode
 .TP
 .B Parameters
 \fBargin\fP (\fBlist\fP <\fI\%str\fP>) – DevVarStringArray    list of datasource names
@@ -1960,6 +1960,19 @@ True if the operation allowed
 .UNINDENT
 .INDENT 7.0
 .TP
+.B is_CanFailDataSources_write_allowed()
+CanFailDataSources attribute Write State Machine
+.INDENT 7.0
+.TP
+.B Returns
+True if the operation allowed
+.TP
+.B Return type
+\fI\%bool\fP
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
 .B is_ChannelProperties_allowed()
 ChannelProperties command State Machine
 .INDENT 7.0
@@ -2495,6 +2508,16 @@ Read AppendEntry attribute
 .UNINDENT
 .INDENT 7.0
 .TP
+.B read_CanFailDataSources(attr)
+Read CanFailDataSources attribute
+.INDENT 7.0
+.TP
+.B Parameters
+\fBattr\fP (\fBPyTango.Attribute\fP) – read attribute
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
 .B read_Components(attr)
 Read Components attribute
 .INDENT 7.0
@@ -2700,6 +2723,16 @@ Write AppendEntry attribute
 .UNINDENT
 .INDENT 7.0
 .TP
+.B write_CanFailDataSources(attr)
+Write CanFailDataSources attribute
+.INDENT 7.0
+.TP
+.B Parameters
+\fBattr\fP (\fBPyTango.Attribute\fP) – written attribute
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
 .B write_ConfigDevice(attr)
 Write ConfigDevice attribute
 .INDENT 7.0
@@ -2847,7 +2880,7 @@ Bases: \fBtango._tango.DeviceClass\fP
 NXSRecSelectorclass Constructor
 .INDENT 7.0
 .TP
-.B attr_list = {\(aqAppendEntry\(aq: [[tango._tango.CmdArgType.DevBoolean, tango._tango.AttrDataFormat.SCALAR, tango._tango.AttrWriteType.READ_WRITE], {\(aqdescription\(aq: \(aqflag for entry appending\(aq, \(aqlabel\(aq: \(aqAppend Entry\(aq}], \(aqComponents\(aq: [[tango._tango.CmdArgType.DevString, tango._tango.AttrDataFormat.SPECTRUM, tango._tango.AttrWriteType.READ, 10000], {\(aqdescription\(aq: \(aqlist of Selected Components\(aq, \(aqlabel\(aq: \(aqSelected Components\(aq}], \(aqConfigDevice\(aq: [[tango._tango.CmdArgType.DevString, tango._tango.AttrDataFormat.SCALAR, tango._tango.AttrWriteType.READ_WRITE], {\(aqMemorized\(aq: \(aqtrue\(aq, \(aqdescription\(aq: \(aqConfiguration device name\(aq, \(aqlabel\(aq: \(aqConfiguration Device\(aq}], \(aqConfigVariables\(aq: [[tango._tango.CmdArgType.DevString, tango._tango.AttrDataFormat.SCALAR, tango._tango.AttrWriteType.READ_WRITE], {\(aqdescription\(aq: \(aqJSON dictionary with configuration variablesfor templated components\(aq, \(aqDisplay level\(aq: tango._tango.DispLevel.EXPERT, \(aqlabel\(aq: \(aqConfiguration Variables\(aq}], \(aqDataSources\(aq: [[tango._tango.CmdArgType.DevString, tango._tango.AttrDataFormat.SPECTRUM, tango._tango.AttrWriteType.READ, 10000], {\(aqdescription\(aq: \(aqlist of Selected Datasources\(aq, \(aqlabel\(aq: \(aqSelected Datasources\(aq}], \(aqDescriptionErrors\(aq: [[tango._tango.CmdArgType.DevString, tango._tango.AttrDataFormat.SPECTRUM, tango._tango.AttrWriteType.READ, 10000], {\(aqdescription\(aq: \(aqlist of Descriptive Component Errors\(aq, \(aqlabel\(aq: \(aqDescriptive Component Errors\(aq}], \(aqDeviceGroups\(aq: [[tango._tango.CmdArgType.DevString, tango._tango.AttrDataFormat.SCALAR, tango._tango.AttrWriteType.READ_WRITE], {\(aqMemorized\(aq: \(aqtrue\(aq, \(aqdescription\(aq: \(aqJSON dictionary with device groups\(aq, \(aqDisplay level\(aq: tango._tango.DispLevel.EXPERT, \(aqlabel\(aq: \(aqDevice groups\(aq}], \(aqDoor\(aq: [[tango._tango.CmdArgType.DevString, tango._tango.AttrDataFormat.SCALAR, tango._tango.AttrWriteType.READ_WRITE], {\(aqMemorized\(aq: \(aqtrue\(aq, \(aqdescription\(aq: \(aqDoor device name\(aq, \(aqlabel\(aq: \(aqDoor\(aq}], \(aqLinkDataSources\(aq: [[tango._tango.CmdArgType.DevString, tango._tango.AttrDataFormat.SCALAR, tango._tango.AttrWriteType.READ_WRITE], {\(aqdescription\(aq: \(aqlist of datasources to which a link will be added\(aq, \(aqDisplay level\(aq: tango._tango.DispLevel.EXPERT, \(aqlabel\(aq: \(aqlist of datasources to which a link will be added\(aq}], \(aqMacroServer\(aq: [[tango._tango.CmdArgType.DevString, tango._tango.AttrDataFormat.SCALAR, tango._tango.AttrWriteType.READ], {\(aqdescription\(aq: \(aqMacro Server device name\(aq, \(aqlabel\(aq: \(aqMacroServer\(aq}], \(aqMntGrp\(aq: [[tango._tango.CmdArgType.DevString, tango._tango.AttrDataFormat.SCALAR, tango._tango.AttrWriteType.READ_WRITE], {\(aqdescription\(aq: \(aq Measurement Group name\(aq, \(aqlabel\(aq: \(aq Measurement Group\(aq}], \(aqProfileConfiguration\(aq: [[tango._tango.CmdArgType.DevString, tango._tango.AttrDataFormat.SCALAR, tango._tango.AttrWriteType.READ_WRITE], {\(aqdescription\(aq: \(aqJSON dict of server configuration\(aq, \(aqDisplay level\(aq: tango._tango.DispLevel.EXPERT, \(aqlabel\(aq: \(aqProfile Configuration\(aq}], \(aqProfileFile\(aq: [[tango._tango.CmdArgType.DevString, tango._tango.AttrDataFormat.SCALAR, tango._tango.AttrWriteType.READ_WRITE], {\(aqMemorized\(aq: \(aqtrue\(aq, \(aqdescription\(aq: \(aqconfig file with its full path\(aq, \(aqlabel\(aq: \(aqProfile File with its Path\(aq}], \(aqScanDir\(aq: [[tango._tango.CmdArgType.DevString, tango._tango.AttrDataFormat.SCALAR, tango._tango.AttrWriteType.READ_WRITE], {\(aqdescription\(aq: \(aqScan Directory\(aq, \(aqlabel\(aq: \(aqScan Directory\(aq}], \(aqScanFile\(aq: [[tango._tango.CmdArgType.DevString, tango._tango.AttrDataFormat.SCALAR, tango._tango.AttrWriteType.READ_WRITE], {\(aqdescription\(aq: \(aqScan File(s)\(aq, \(aqlabel\(aq: \(aqScan File(s)\(aq}], \(aqScanID\(aq: [[tango._tango.CmdArgType.DevLong, tango._tango.AttrDataFormat.SCALAR, tango._tango.AttrWriteType.READ_WRITE], {\(aqdescription\(aq: \(aqScan ID\(aq, \(aqlabel\(aq: \(aqScan ID\(aq}], \(aqStepDataSources\(aq: [[tango._tango.CmdArgType.DevString, tango._tango.AttrDataFormat.SCALAR, tango._tango.AttrWriteType.READ_WRITE], {\(aqdescription\(aq: \(aqlist of datasources to be switched into step mode\(aq, \(aqDisplay level\(aq: tango._tango.DispLevel.EXPERT, \(aqlabel\(aq: \(aqlist of datasources to be switch into step mode\(aq}], \(aqUserData\(aq: [[tango._tango.CmdArgType.DevString, tango._tango.AttrDataFormat.SCALAR, tango._tango.AttrWriteType.READ_WRITE], {\(aqdescription\(aq: \(aqJSON dictionary with User Data\(aq, \(aqDisplay level\(aq: tango._tango.DispLevel.EXPERT, \(aqlabel\(aq: \(aqClient Data\(aq}], \(aqVersion\(aq: [[tango._tango.CmdArgType.DevString, tango._tango.AttrDataFormat.SCALAR, tango._tango.AttrWriteType.READ], {\(aqdescription\(aq: \(aqserver version\(aq, \(aqlabel\(aq: \(aqVersion\(aq}], \(aqWriterDevice\(aq: [[tango._tango.CmdArgType.DevString, tango._tango.AttrDataFormat.SCALAR, tango._tango.AttrWriteType.READ_WRITE], {\(aqdescription\(aq: \(aqWriter device device name\(aq, \(aqlabel\(aq: \(aqWriter Device\(aq}]}
+.B attr_list = {\(aqAppendEntry\(aq: [[tango._tango.CmdArgType.DevBoolean, tango._tango.AttrDataFormat.SCALAR, tango._tango.AttrWriteType.READ_WRITE], {\(aqdescription\(aq: \(aqflag for entry appending\(aq, \(aqlabel\(aq: \(aqAppend Entry\(aq}], \(aqCanFailDataSources\(aq: [[tango._tango.CmdArgType.DevString, tango._tango.AttrDataFormat.SCALAR, tango._tango.AttrWriteType.READ_WRITE], {\(aqdescription\(aq: \(aqlist of datasources to be switched into canfail mode\(aq, \(aqDisplay level\(aq: tango._tango.DispLevel.EXPERT, \(aqlabel\(aq: \(aqlist of datasources to be switch into canfail mode\(aq}], \(aqComponents\(aq: [[tango._tango.CmdArgType.DevString, tango._tango.AttrDataFormat.SPECTRUM, tango._tango.AttrWriteType.READ, 10000], {\(aqdescription\(aq: \(aqlist of Selected Components\(aq, \(aqlabel\(aq: \(aqSelected Components\(aq}], \(aqConfigDevice\(aq: [[tango._tango.CmdArgType.DevString, tango._tango.AttrDataFormat.SCALAR, tango._tango.AttrWriteType.READ_WRITE], {\(aqMemorized\(aq: \(aqtrue\(aq, \(aqdescription\(aq: \(aqConfiguration device name\(aq, \(aqlabel\(aq: \(aqConfiguration Device\(aq}], \(aqConfigVariables\(aq: [[tango._tango.CmdArgType.DevString, tango._tango.AttrDataFormat.SCALAR, tango._tango.AttrWriteType.READ_WRITE], {\(aqdescription\(aq: \(aqJSON dictionary with configuration variablesfor templated components\(aq, \(aqDisplay level\(aq: tango._tango.DispLevel.EXPERT, \(aqlabel\(aq: \(aqConfiguration Variables\(aq}], \(aqDataSources\(aq: [[tango._tango.CmdArgType.DevString, tango._tango.AttrDataFormat.SPECTRUM, tango._tango.AttrWriteType.READ, 10000], {\(aqdescription\(aq: \(aqlist of Selected Datasources\(aq, \(aqlabel\(aq: \(aqSelected Datasources\(aq}], \(aqDescriptionErrors\(aq: [[tango._tango.CmdArgType.DevString, tango._tango.AttrDataFormat.SPECTRUM, tango._tango.AttrWriteType.READ, 10000], {\(aqdescription\(aq: \(aqlist of Descriptive Component Errors\(aq, \(aqlabel\(aq: \(aqDescriptive Component Errors\(aq}], \(aqDeviceGroups\(aq: [[tango._tango.CmdArgType.DevString, tango._tango.AttrDataFormat.SCALAR, tango._tango.AttrWriteType.READ_WRITE], {\(aqMemorized\(aq: \(aqtrue\(aq, \(aqdescription\(aq: \(aqJSON dictionary with device groups\(aq, \(aqDisplay level\(aq: tango._tango.DispLevel.EXPERT, \(aqlabel\(aq: \(aqDevice groups\(aq}], \(aqDoor\(aq: [[tango._tango.CmdArgType.DevString, tango._tango.AttrDataFormat.SCALAR, tango._tango.AttrWriteType.READ_WRITE], {\(aqMemorized\(aq: \(aqtrue\(aq, \(aqdescription\(aq: \(aqDoor device name\(aq, \(aqlabel\(aq: \(aqDoor\(aq}], \(aqLinkDataSources\(aq: [[tango._tango.CmdArgType.DevString, tango._tango.AttrDataFormat.SCALAR, tango._tango.AttrWriteType.READ_WRITE], {\(aqdescription\(aq: \(aqlist of datasources to which a link will be added\(aq, \(aqDisplay level\(aq: tango._tango.DispLevel.EXPERT, \(aqlabel\(aq: \(aqlist of datasources to which a link will be added\(aq}], \(aqMacroServer\(aq: [[tango._tango.CmdArgType.DevString, tango._tango.AttrDataFormat.SCALAR, tango._tango.AttrWriteType.READ], {\(aqdescription\(aq: \(aqMacro Server device name\(aq, \(aqlabel\(aq: \(aqMacroServer\(aq}], \(aqMntGrp\(aq: [[tango._tango.CmdArgType.DevString, tango._tango.AttrDataFormat.SCALAR, tango._tango.AttrWriteType.READ_WRITE], {\(aqdescription\(aq: \(aq Measurement Group name\(aq, \(aqlabel\(aq: \(aq Measurement Group\(aq}], \(aqProfileConfiguration\(aq: [[tango._tango.CmdArgType.DevString, tango._tango.AttrDataFormat.SCALAR, tango._tango.AttrWriteType.READ_WRITE], {\(aqdescription\(aq: \(aqJSON dict of server configuration\(aq, \(aqDisplay level\(aq: tango._tango.DispLevel.EXPERT, \(aqlabel\(aq: \(aqProfile Configuration\(aq}], \(aqProfileFile\(aq: [[tango._tango.CmdArgType.DevString, tango._tango.AttrDataFormat.SCALAR, tango._tango.AttrWriteType.READ_WRITE], {\(aqMemorized\(aq: \(aqtrue\(aq, \(aqdescription\(aq: \(aqconfig file with its full path\(aq, \(aqlabel\(aq: \(aqProfile File with its Path\(aq}], \(aqScanDir\(aq: [[tango._tango.CmdArgType.DevString, tango._tango.AttrDataFormat.SCALAR, tango._tango.AttrWriteType.READ_WRITE], {\(aqdescription\(aq: \(aqScan Directory\(aq, \(aqlabel\(aq: \(aqScan Directory\(aq}], \(aqScanFile\(aq: [[tango._tango.CmdArgType.DevString, tango._tango.AttrDataFormat.SCALAR, tango._tango.AttrWriteType.READ_WRITE], {\(aqdescription\(aq: \(aqScan File(s)\(aq, \(aqlabel\(aq: \(aqScan File(s)\(aq}], \(aqScanID\(aq: [[tango._tango.CmdArgType.DevLong, tango._tango.AttrDataFormat.SCALAR, tango._tango.AttrWriteType.READ_WRITE], {\(aqdescription\(aq: \(aqScan ID\(aq, \(aqlabel\(aq: \(aqScan ID\(aq}], \(aqStepDataSources\(aq: [[tango._tango.CmdArgType.DevString, tango._tango.AttrDataFormat.SCALAR, tango._tango.AttrWriteType.READ_WRITE], {\(aqdescription\(aq: \(aqlist of datasources to be switched into step mode\(aq, \(aqDisplay level\(aq: tango._tango.DispLevel.EXPERT, \(aqlabel\(aq: \(aqlist of datasources to be switch into step mode\(aq}], \(aqUserData\(aq: [[tango._tango.CmdArgType.DevString, tango._tango.AttrDataFormat.SCALAR, tango._tango.AttrWriteType.READ_WRITE], {\(aqdescription\(aq: \(aqJSON dictionary with User Data\(aq, \(aqDisplay level\(aq: tango._tango.DispLevel.EXPERT, \(aqlabel\(aq: \(aqClient Data\(aq}], \(aqVersion\(aq: [[tango._tango.CmdArgType.DevString, tango._tango.AttrDataFormat.SCALAR, tango._tango.AttrWriteType.READ], {\(aqdescription\(aq: \(aqserver version\(aq, \(aqlabel\(aq: \(aqVersion\(aq}], \(aqWriterDevice\(aq: [[tango._tango.CmdArgType.DevString, tango._tango.AttrDataFormat.SCALAR, tango._tango.AttrWriteType.READ_WRITE], {\(aqdescription\(aq: \(aqWriter device device name\(aq, \(aqlabel\(aq: \(aqWriter Device\(aq}]}
 .UNINDENT
 .INDENT 7.0
 .TP
@@ -2862,7 +2895,7 @@ Command definitions
 .UNINDENT
 .INDENT 7.0
 .TP
-.B device_property_list = {\(aqAdminDataNames\(aq: [tango._tango.CmdArgType.DevVarStringArray, \(aqlist of administrator data names\(aq, []], \(aqClientRecordKeys\(aq: [tango._tango.CmdArgType.DevVarStringArray, \(aqlist of record keys for CLIENT datasources\(aq, []], \(aqDefaultMntGrp\(aq: [tango._tango.CmdArgType.DevString, \(aqdefault measurement group name\(aq, [\(aqnxsmntgrp\(aq]], \(aqDefaultNeXusPath\(aq: [tango._tango.CmdArgType.DevString, \(aqdefault NeXus path\(aq, ["/$var.entryname#\(aqscan\(aq$var.serialno:NXentry/NXinstrument/collection"]], \(aqDefaultPreselectedComponents\(aq: [tango._tango.CmdArgType.DevVarStringArray, \(aqlist of default preselected components\(aq, []], \(aqDefaultTimeZone\(aq: [tango._tango.CmdArgType.DevString, \(aqdefault Time Zone\(aq, [\(aqEurope/Berlin\(aq]], \(aqMutedChannelFilters\(aq: [tango._tango.CmdArgType.DevVarStringArray, \(aqlist of muted channel filters\(aq, []], \(aqNumberOfThreads\(aq: [tango._tango.CmdArgType.DevLong, \(aqmaximal number of threads\(aq, [20]], \(aqPoolBlacklist\(aq: [tango._tango.CmdArgType.DevVarStringArray, \(aqblacklist of pools\(aq, []], \(aqSyncSnapshot\(aq: [tango._tango.CmdArgType.DevBoolean, \(aqpreselection merges the current ScanSnapshot\(aq, [False]], \(aqTimerFilters\(aq: [tango._tango.CmdArgType.DevVarStringArray, \(aqlist of timer device name filters\(aq, []]}
+.B device_property_list = {\(aqAdminDataNames\(aq: [tango._tango.CmdArgType.DevVarStringArray, \(aqlist of administrator data names\(aq, []], \(aqClientRecordKeys\(aq: [tango._tango.CmdArgType.DevVarStringArray, \(aqlist of record keys for CLIENT datasources\(aq, []], \(aqDefaultCanFailDataSources\(aq: [tango._tango.CmdArgType.DevVarStringArray, \(aqlist of default datasources in the CanFail mode\(aq, []], \(aqDefaultMntGrp\(aq: [tango._tango.CmdArgType.DevString, \(aqdefault measurement group name\(aq, [\(aqnxsmntgrp\(aq]], \(aqDefaultNeXusPath\(aq: [tango._tango.CmdArgType.DevString, \(aqdefault NeXus path\(aq, ["/$var.entryname#\(aqscan\(aq$var.serialno:NXentry/NXinstrument/collection"]], \(aqDefaultPreselectedComponents\(aq: [tango._tango.CmdArgType.DevVarStringArray, \(aqlist of default preselected components\(aq, []], \(aqDefaultTimeZone\(aq: [tango._tango.CmdArgType.DevString, \(aqdefault Time Zone\(aq, [\(aqEurope/Berlin\(aq]], \(aqMutedChannelFilters\(aq: [tango._tango.CmdArgType.DevVarStringArray, \(aqlist of muted channel filters\(aq, []], \(aqNumberOfThreads\(aq: [tango._tango.CmdArgType.DevLong, \(aqmaximal number of threads\(aq, [20]], \(aqPoolBlacklist\(aq: [tango._tango.CmdArgType.DevVarStringArray, \(aqblacklist of pools\(aq, []], \(aqSyncSnapshot\(aq: [tango._tango.CmdArgType.DevBoolean, \(aqpreselection merges the current ScanSnapshot\(aq, [False]], \(aqTimerFilters\(aq: [tango._tango.CmdArgType.DevVarStringArray, \(aqlist of timer device name filters\(aq, []]}
 (\fI\%dict\fP <\fI\%str\fP, [ \fI\%str\fP, \fBPyTango.CmdArgType\fP, [ \fBlist\fP <\fI\%int\fP> ] ] > ) Device Properties
 .UNINDENT
 .UNINDENT
@@ -3650,6 +3683,11 @@ available Timers from MacroServer pools
 .UNINDENT
 .INDENT 7.0
 .TP
+.B canfaildatasources
+(\fI\%str\fP) the json data string
+.UNINDENT
+.INDENT 7.0
+.TP
 .B channelProperties(ptype)
 provides channel properties of the given type
 .INDENT 7.0
@@ -3805,6 +3843,11 @@ list of dictionary with description of datasources
 .TP
 .B dataSources
 (\fBlist\fP <\fI\%str\fP>) provides all selected data sources
+.UNINDENT
+.INDENT 7.0
+.TP
+.B defaultCanFailDataSources = None
+(\fI\%str\fP) default CanFail DataSources
 .UNINDENT
 .INDENT 7.0
 .TP
@@ -4462,6 +4505,21 @@ unsets environment variable
 .UNINDENT
 .UNINDENT
 .UNINDENT
+.INDENT 7.0
+.TP
+.B classmethod writeEnvAttr(value, dp)
+sets environment variable value
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBvalue\fP (\fI\%dict\fP <\fI\%str\fP , \fIany\fP> or \fIany\fP) – variable value dictionary
+.IP \(bu 2
+\fBdp\fP (\fI\%str\fP) – macroserver
+.UNINDENT
+.UNINDENT
+.UNINDENT
 .UNINDENT
 .INDENT 0.0
 .TP
@@ -4852,6 +4910,15 @@ datasource record
 .B Return type
 \fI\%str\fP
 .UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B classmethod pickleloads(bytestr)
+loads pickle byte string
+:param bytestr: byte string to convert
+:type bytesstr: \fBbytes\fP
+:returns: loaded bytestring
+:rtype: \fI\%any\fP
 .UNINDENT
 .INDENT 7.0
 .TP

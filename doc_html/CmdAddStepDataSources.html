@@ -1,28 +1,28 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
 <html>
 <head>
-<title> NXSRecSelector Tango Class Command State </title>
+<title> NXSRecSelector Tango Class Command AddStepDataSources </title>
 </head>
 <body text="Black" bgcolor="White" link="Blue" vlink="Purple" alink="Red">
 <br><br><br>
-<font size="+1"><u><b> Command State : </b></u></font>
+<font size="+1"><u><b> Command AddStepDataSources : </b></u></font>
 <ul>
-	This command gets the device state (stored in its device_state data member) and returns it to the caller.
+	switch datasources to step mode
 </ul>
 <br><br><br>
 <Table Border=2 Cellpadding=3 CELLSPACING=0>
 	<tr bgcolor="#CCCCFF" class="TableHeadingColor">
-	<td colspan=0> <font size=+1> <center><b> State Definition </b></font></center></td>
+	<td colspan=0> <font size=+1> <center><b> AddStepDataSources Definition </b></font></center></td>
 	</tr>
 	<tr>
 		<td> Input Argument </td>
-		<td> Tango::DEV_VOID </td>
-		<td> none </td>
+		<td> Tango::DEVVAR_STRINGARRAY </td>
+		<td> list of datasource names </td>
 	</tr>
 	<tr>
 		<td> Output Argument </td>
-		<td> Tango::DEV_STATE </td>
-		<td> Device state </td>
+		<td> Tango::DEVVAR_STRINGARRAY </td>
+		<td> list of datasources not found in components </td>
 	</tr>
 	<tr>
 		<td> DisplayLevel </td>
@@ -31,7 +31,7 @@
 	</tr>
 	<tr>
 		<td> Inherited </td>
-		<td> true </td>
+		<td> false </td>
 		<td> .. </td>
 	</tr>
 	<tr>

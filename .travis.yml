@@ -3,7 +3,6 @@ dist: xenial
 
 env:
   - TEST="flake8"
-  - TEST=basic OS=debian10 PY=3
   - TEST=extrasettings OS=debian10 PY=3
   - TEST=extraserver OS=debian10 PY=3
   - TEST=basicserver OS=debian10 PY=3
@@ -18,11 +17,6 @@ env:
   # - TEST=extraserver OS=debian9 PY=2
   # - TEST=basicserver OS=debian9 PY=2
   # - TEST=basicsettings OS=debian9 PY=2
-  # - TEST=basic OS=ubuntu18.04 PY=2
-  # - TEST=extrasettings OS=ubuntu18.04 PY=2
-  # - TEST=extraserver OS=ubuntu18.04 PY=2
-  # - TEST=basicserver OS=ubuntu18.04 PY=2
-  # - TEST=basicsettings OS=ubuntu18.04 PY=2
   # - TEST=basic OS=debian9 PY=3
   # - TEST=extrasettings OS=debian9 PY=3
   # - TEST=extraserver OS=debian9 PY=3
@@ -33,6 +27,11 @@ env:
   # - TEST=extraserver OS=debian8 PY=2
   # - TEST=basicserver OS=debian8 PY=2
   # - TEST=basicsettings OS=debian8 PY=2
+  # - TEST=basic OS=ubuntu18.04 PY=2
+  # - TEST=extrasettings OS=ubuntu18.04 PY=2
+  # - TEST=extraserver OS=ubuntu18.04 PY=2
+  # - TEST=basicserver OS=ubuntu18.04 PY=2
+  # - TEST=basicsettings OS=ubuntu18.04 PY=2
   # - TEST=basic OS=ubuntu18.04 PY=3
   # - TEST=extrasettings OS=ubuntu18.04 PY=3
   # - TEST=extraserver OS=ubuntu18.04 PY=3
@@ -53,6 +52,7 @@ env:
   # - TEST=extraserver OS=debian8 PY=3
   # - TEST=basicserver OS=debian8 PY=3
   # - TEST=basicsettings OS=debian8 PY=3
+  # - TEST=basic OS=debian10 PY=3
 
 
 services:
