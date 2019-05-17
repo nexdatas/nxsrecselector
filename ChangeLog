@@ -1,5 +1,6 @@
 2019-05-16 Jan Kotanski <jankotan@gmail.com>
 	* add support for canfail property
+	* add DefaultCanFailDataSources property
 	* works only with Tango NXSConfigServer (>= 2.11.0)
 	* tagged as v3.17.0
 
