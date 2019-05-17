@@ -72,6 +72,9 @@ class Settings(object):
             "/$var.entryname#'scan'$var.serialno:NXentry/" \
             "NXinstrument/collection"
 
+        #: (:obj:`str`) default CanFail DataSources
+        self.defaultCanFailDataSources = []
+
         #: (:obj:`str`) default time zone
         self.defaultTimeZone = defaulttimezone or "Europe/Berlin"
 
@@ -589,7 +592,8 @@ class Settings(object):
         :type names: :obj:`str`
         """
         inst = self.__selector.setConfigInstance()
-        inst.canfaildatasources = names
+        inst.canfaildatasources = json.dumps(list(
+            set(self.defaultCanFailDataSources) | set(names)))
 
     #: (:obj:`str`) the json data string
     canfaildatasources = property(
@@ -1034,8 +1038,9 @@ class Settings(object):
             confvars = json.dumps(jvars)
         nexusconfig_device.variables = Utils.tostr(confvars)
         props = json.loads(self.channelProperties("canfail"))
-        lprops = [ky for ky, vl in props.items() if vl]
-        nexusconfig_device.canfaildatasources = json.dumps(lprops)
+        sprops = set([ky for ky, vl in props.items() if vl])
+        nexusconfig_device.canfaildatasources = json.dumps(
+            list(sprops | set(self.defaultCanFailDataSources)))
 
     def preselectComponents(self):
         """ checks existing controllers of pools
