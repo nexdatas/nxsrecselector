@@ -103,6 +103,8 @@ class NXSRecSelector(PyTango.Device_4Impl):
         self.__stg.adminDataNames = self.AdminDataNames or []
         self.__stg.defaultPreselectedComponents = \
             self.DefaultPreselectedComponents or []
+        self.__stg.defaultCanFailDataSources = \
+            self.DefaultCanFailDataSources or []
         self.__stg.clientRecordKeys = \
             self.ClientRecordKeys or []
 
@@ -1863,6 +1865,10 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
         [PyTango.DevBoolean,
          "preselection merges the current ScanSnapshot",
          [False]],
+        'DefaultCanFailDataSources':
+        [PyTango.DevVarStringArray,
+         "list of default datasources in the CanFail mode",
+         []],
     }
 
     #: (:obj:`dict` <:obj:`str`, \
