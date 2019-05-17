@@ -208,6 +208,39 @@ class NXSRecSelector(PyTango.Device_4Impl):
             return False
         return True
 
+    def read_CanFailDataSources(self, attr):
+        """ Read CanFailDataSources attribute
+
+        :param attr: read attribute
+        :type attr: :class:`PyTango.Attribute`
+        """
+        self.debug_stream("In read_CanFailDataSources()")
+        attr.set_value(self.__stg.canfaildatasources or "")
+
+    def write_CanFailDataSources(self, attr):
+        """ Write CanFailDataSources attribute
+
+        :param attr: written attribute
+        :type attr: :class:`PyTango.Attribute`
+        """
+        self.debug_stream("In write_CanFailDataSources()")
+        if self.is_CanFailDataSources_write_allowed():
+            self.__stg.canfaildatasources = attr.get_write_value() or ""
+        else:
+            self.warn_stream("To change the settings please close the server.")
+            raise Exception(
+                "To change the settings please close the server.")
+
+    def is_CanFailDataSources_write_allowed(self):
+        """ CanFailDataSources attribute Write State Machine
+
+        :returns: True if the operation allowed
+        :rtype: :obj:`bool`
+        """
+        if self.get_state() in [PyTango.DevState.RUNNING]:
+            return False
+        return True
+
     def read_LinkDataSources(self, attr):
         """ Read LinkDataSources attribute
 
@@ -1682,7 +1715,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
     def AddStepDataSources(self, argin):
         """ AddStepDataSources command
 
-        :brief: Provide datasource description
+        :brief: switch datasources to step mode
         :param argin:  DevVarStringArray    list of datasource names
         :type argin: :obj:`list` <:obj:`str`>
         :returns: DevVarStringArray list of datasources not found in components
@@ -2020,6 +2053,16 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
                  'label': "list of datasources to be switch into step mode",
                  'description': "list of datasources to be switched" +
                  " into step mode",
+                 'Display level': PyTango.DispLevel.EXPERT,
+            }],
+        'CanFailDataSources':
+            [[PyTango.DevString,
+              PyTango.SCALAR,
+              PyTango.READ_WRITE],
+             {
+                 'label': "list of datasources to be switch into canfail mode",
+                 'description': "list of datasources to be switched" +
+                 " into canfail mode",
                  'Display level': PyTango.DispLevel.EXPERT,
             }],
         'LinkDataSources':
