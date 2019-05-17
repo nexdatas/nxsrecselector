@@ -8433,6 +8433,8 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
         # wrong = []
 
         rs = self.openRecSelector()
+        self.setProp(rs, "defaultCanFailDataSources",
+                     ["exp_mca01", "exp_adc02"])
         rs.configDevice = val["ConfigDevice"]
         rs.door = val["Door"]
         rs.mntGrp = val["MntGrp"]
@@ -8474,8 +8476,48 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
             res = self._cf.dp.variables
             self.myAssertDict(json.loads(res), rscv)
             res = self._cf.dp.canfaildatasources
-            self.assertEqual(sorted(json.loads(res)),
-                             sorted(["mot01", "exp_c03"]))
+            self.assertEqual(
+                sorted(json.loads(res)),
+                sorted(["mot01", "exp_c03", "exp_mca01", "exp_adc02"]))
+            res = rs.canfaildatasources
+            self.assertEqual(
+                sorted(json.loads(res)),
+                sorted(["mot01", "exp_c03", "exp_mca01", "exp_adc02"]))
+
+    # test
+    def test_updateConfigVariables_canfaildatasources(self):
+        fun = sys._getframe().f_code.co_name
+        print("Run: %s.%s() " % (self.__class__.__name__, fun))
+        val = {"ConfigDevice": self._cf.dp.name(),
+               "WriterDevice": self._wr.dp.name(),
+               "Door": 'doortestp09/testts/t1r228',
+               "MntGrp": 'nxsmntgrp'}
+
+        # wrong = []
+
+        rs = self.openRecSelector()
+        cfprop = ["exp_mca01", "exp_adc02"]
+        self.setProp(rs, "defaultCanFailDataSources",
+                     cfprop)
+        rs.configDevice = val["ConfigDevice"]
+        rs.door = val["Door"]
+        rs.mntGrp = val["MntGrp"]
+        self.assertEqual(rs.configDevice, val["ConfigDevice"])
+        self.assertEqual(rs.door, val["Door"])
+        self.assertEqual(rs.mntGrp, val["MntGrp"])
+
+        for i in range(20):
+            cfds = ["mot%s" % i, "exp_c%s" % i, "exp_c%s" % i]
+            rs.canfaildatasources = json.dumps(cfds)
+
+            res = self._cf.dp.canfaildatasources
+            self.assertEqual(
+                sorted(json.loads(res)),
+                sorted(list(set(cfds) | set(cfprop))))
+            res = rs.canfaildatasources
+            self.assertEqual(
+                sorted(json.loads(res)),
+                sorted(list(set(cfds) | set(cfprop))))
 
 
 if __name__ == '__main__':
