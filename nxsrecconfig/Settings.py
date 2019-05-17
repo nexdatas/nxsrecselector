@@ -593,7 +593,8 @@ class Settings(object):
         """
         inst = self.__selector.setConfigInstance()
         inst.canfaildatasources = json.dumps(list(
-            set(self.defaultCanFailDataSources) | set(names)))
+            set(self.defaultCanFailDataSources) |
+            set(json.loads(names))))
 
     #: (:obj:`str`) the json data string
     canfaildatasources = property(

@@ -8508,7 +8508,7 @@ class ExtraSettingsTest(SettingsTest.SettingsTest):
 
         for i in range(20):
             cfds = ["mot%s" % i, "exp_c%s" % i, "exp_c%s" % i]
-            rs.canfaildatasources = cfds
+            rs.canfaildatasources = json.dumps(cfds)
 
             res = self._cf.dp.canfaildatasources
             self.assertEqual(
