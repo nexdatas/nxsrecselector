@@ -303,7 +303,7 @@ class TangoUtils(object):
             if cnt > 1:
                 time.sleep(0.01)
             try:
-                pstate = proxy.State()
+                pstate = proxy.state()
                 if dstate:
                     if pstate != dstate:
                         found = True
