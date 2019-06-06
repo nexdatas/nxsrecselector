@@ -132,7 +132,7 @@ class CheckerThread(threading.Thread):
                 # wait when DeviceProxy is ready
                 TangoUtils.wait(dp, state=None)
                 dp.set_timeout_millis(10000)
-                state = dp.command_inout("State")
+                state = dp.state()
                 if state in [PyTango.DevState.FAULT]:
                     raise FaultStateError("FAULT STATE")
                 dp.ping()
