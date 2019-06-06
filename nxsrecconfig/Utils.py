@@ -283,7 +283,7 @@ class TangoUtils(object):
                 if cnt == counter - 1:
                     raise
             cnt += 1
-
+        cnfServer.set_source(PyTango.DevSource.DEV)
         return cnfServer
 
     @classmethod
