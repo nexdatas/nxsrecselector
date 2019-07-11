@@ -20,6 +20,7 @@
 """ labels to Tango Streams """
 
 import sys
+import weakref
 
 
 class StreamSet(object):
@@ -42,17 +43,21 @@ class StreamSet(object):
         #: (:class:`PyTango.log4tango.TangoStream`) Tango debug log stream
         self.log_debug = None
         #: (:obj:`set <:obj:`str` >`) if tango server
-        if streams:
-            if hasattr(streams, "log_fatal"):
-                self.log_fatal = streams.log_fatal
-            if hasattr(streams, "log_error"):
-                self.log_error = streams.log_error
-            if hasattr(streams, "log_warn"):
-                self.log_warn = streams.log_warn
-            if hasattr(streams, "log_info"):
-                self.log_info = streams.log_info
-            if hasattr(streams, "log_debug"):
-                self.log_debug = streams.log_debug
+        if not hasattr(streams, "__call__"):
+            streams = weakref.ref(streams) \
+                if streams is not None else (lambda: None)
+
+        if streams():
+            if hasattr(streams(), "log_fatal"):
+                self.log_fatal = streams().log_fatal
+            if hasattr(streams(), "log_error"):
+                self.log_error = streams().log_error
+            if hasattr(streams(), "log_warn"):
+                self.log_warn = streams().log_warn
+            if hasattr(streams(), "log_info"):
+                self.log_info = streams().log_info
+            if hasattr(streams(), "log_debug"):
+                self.log_debug = streams().log_debug
 
     def fatal(self, message, std=True):
         """ writes fatal error message

@@ -24,6 +24,7 @@ import gc
 import PyTango
 import xml.dom.minidom
 import sys
+import weakref
 
 from .Describer import Describer
 from .DynamicComponent import DynamicComponent
@@ -65,7 +66,7 @@ class Settings(object):
         self.numberOfThreads = numberofthreads or 20
 
         #: (:class:`StreamSet` or :class:`PyTango.Device_4Impl`) stream set
-        self._streams = StreamSet(server)
+        self._streams = StreamSet(weakref.ref(server) if server else None)
 
         #: (:obj:`str`) default NeXus path
         self.defaultNeXusPath = defaultnexuspath or \
@@ -1013,6 +1014,9 @@ class Settings(object):
                 raise
         nexusconfig_device.stepdatasources = "[]"
         nexusconfig_device.linkdatasources = "[]"
+
+        # JKR tests
+        gccheck()
         return Utils.tostr(nexusconfig_device.xmlstring)
 
     def updateConfigVariables(self):
@@ -1268,3 +1272,20 @@ class Settings(object):
             vl = getattr(self, attr)
             nenv[Utils.tostr(name)] = vl
         self.__selector.exportEnv(cmddata=nenv)
+
+
+def gccheck():
+    import gc
+    gc.set_debug(gc.DEBUG_LEAK)
+    n = gc.collect()
+    print("UNREACHABLE %s" % n)
+    gres = gc.garbage
+    print("GARBAGE %s" % len(gres))
+    # res = str(gres)
+    # import time
+    # fname = "/tmp/cfgcdump-%s.gc" % str(time.time())
+    # print(fname)
+    # fl = open(fname, "w")
+    # fl.write(res)
+    # fl.close()
+
