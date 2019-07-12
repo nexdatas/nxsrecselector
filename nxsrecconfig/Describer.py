@@ -315,7 +315,7 @@ class Describer(object):
         for node in nodes:
             dstype = node.get("type")
             name = node.get("name")
-            record = self.getRecord(node)
+            record = Utils.getRecord(node)
             dslist.append(DSItem(name, dstype, record))
             if name and Utils.tostr(dstype) == 'PYEVAL':
                 if dsxmls and self.__pyevalfromscript:
@@ -323,7 +323,7 @@ class Describer(object):
                 else:
                     self.__getDSFromNode(node, dslist)
         if not name and not dslist:
-            dstxt = self.__getText(parent)
+            dstxt = Utils.getText(parent)
             dsitem = DSItem()
             index = dstxt.find("$%s." % label)
             while index != -1:
@@ -384,7 +384,7 @@ class Describer(object):
         if cnode:
             for child in cnode[0]:
                 if child.tag == 'result':
-                    result = self.__getText(child)
+                    result = Utils.getText(child)
         index = dsxml.find("$%s." % label)
         while index != -1:
             try:
@@ -417,7 +417,7 @@ class Describer(object):
         """ provides shape from node
 
         :param node: xml node
-        :type node: :class:`xml.dom.minidom.Node`
+        :type node: :class:`lxml.etree.Element`
         :returns: shape of node
         :rtype :obj:`list` <:obj:`int`>
         """
@@ -441,7 +441,7 @@ class Describer(object):
                         value = '__unnamed__'
                     shape[index - 1] = "$datasources.%s" % value
                 else:
-                    value = cls.__getText(dim)
+                    value = Utils.getText(dim)
                     try:
                         value = int(value)
                     except Exception:
@@ -624,64 +624,5 @@ class Describer(object):
                     if "name" in ds.attrib.keys():
                         name = ds.get("name")
                     dstype = ds.get("type")
-                    record = self.getRecord(ds)
+                    record = Utils.getRecord(ds)
         return DSItem(name, dstype, record)
-
-    @classmethod
-    def getRecord(cls, node):
-        """ provides datasource record from xml dom node
-
-        :param node: xml DOM node
-        :type node: :class:`lxml.etree.Element`
-        :returns: datasource record
-        :rtype: :obj:`str`
-        """
-        res = ''
-        host = None
-        port = None
-        dname = None
-        rname = None
-        member = None
-        device = node.findall("device")
-        if device is not None and len(device) > 0:
-            host = device[0].get("hostname")
-            port = device[0].get("port")
-            dname = device[0].get("name")
-            member = device[0].get("member")
-
-        surfix = ""
-        prefix = ""
-        if member or member != 'attribute':
-            if member == 'property':
-                prefix = '@'
-            elif member == 'command':
-                surfix = '()'
-
-        record = node.findall("record")
-        if record is not None and len(record) > 0:
-            rname = record[0].get("name")
-            if rname:
-                if dname:
-                    if host:
-                        if not port:
-                            port = '10000'
-                        res = '%s:%s/%s/%s%s%s' % (
-                            host, port, dname, prefix, rname, surfix)
-                    else:
-                        res = '%s/%s%s%s' % (dname, prefix, rname, surfix)
-                else:
-                    res = rname
-        return res
-
-    @classmethod
-    def __getText(cls, node):
-        """ collects text from text child nodes
-
-        :param node: parent node
-        :type node: :obj:`xml.etree.ElementTree.Element`
-        """
-        if node is not None:
-            tnodes = ([node.text] if node.text else []) \
-                     + [child.tail for child in node if child.tail]
-            return unicode("".join(tnodes)).strip()
-        return ""

@@ -129,7 +129,7 @@ class Utils(object):
         """ provides datasource record from xml dom node
 
         :param node: xml DOM node
-        :type node: :class:`xml.dom.minidom.Node`
+        :type node: :class:`lxml.etree.Element`
         :returns: datasource record
         :rtype: :obj:`str`
         """
@@ -139,16 +139,12 @@ class Utils(object):
         dname = None
         rname = None
         member = None
-        device = node.getElementsByTagName("device")
-        if device and len(device) > 0:
-            if device[0].hasAttribute("hostname"):
-                host = device[0].attributes["hostname"].value
-            if device[0].hasAttribute("port"):
-                port = device[0].attributes["port"].value
-            if device[0].hasAttribute("name"):
-                dname = device[0].attributes["name"].value
-            if device[0].hasAttribute("member"):
-                member = device[0].attributes["member"].value
+        device = node.findall("device")
+        if device is not None and len(device) > 0:
+            host = device[0].get("hostname")
+            port = device[0].get("port")
+            dname = device[0].get("name")
+            member = device[0].get("member")
 
         surfix = ""
         prefix = ""
@@ -158,10 +154,10 @@ class Utils(object):
             elif member == 'command':
                 surfix = '()'
 
-        record = node.getElementsByTagName("record")
-        if record and len(record) > 0:
-            if record[0].hasAttribute("name"):
-                rname = record[0].attributes["name"].value
+        record = node.findall("record")
+        if record is not None and len(record) > 0:
+            rname = record[0].get("name")
+            if rname:
                 if dname:
                     if host:
                         if not port:
@@ -173,6 +169,19 @@ class Utils(object):
                 else:
                     res = rname
         return res
+
+    @classmethod
+    def getText(cls, node):
+        """ collects text from text child nodes
+
+        :param node: parent node
+        :type node: :obj:`xml.etree.ElementTree.Element`
+        """
+        if node is not None:
+            tnodes = ([node.text] if node.text else []) \
+                     + [child.tail for child in node if child.tail]
+            return unicode("".join(tnodes)).strip()
+        return ""
 
     @classmethod
     def stringToDictJson(cls, string, toBool=False):

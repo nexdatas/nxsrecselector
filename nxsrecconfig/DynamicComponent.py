@@ -19,10 +19,12 @@
 
 """  Dynamic Component """
 
-import xml.dom.minidom
 import json
 import sys
 import PyTango
+import lxml.etree
+import xml.etree.ElementTree as et
+from lxml.etree import XMLParser
 
 from .Utils import Utils, TangoUtils, PoolUtils
 
@@ -215,10 +217,8 @@ class DynamicComponent(object):
         :returns: (:obj:`list` <:obj:`int`>, :obj:`str`) tuple
         """
         nxtype = None
-        dstype = None
         shape = None
-        if ds.hasAttribute("type"):
-            dstype = ds.attributes["type"].value
+        dstype = ds.get("type")
         if dstype == 'TANGO':
             source = Utils.tostr(Utils.getRecord(ds))
             shape, dt, _ = TangoUtils.getShapeTypeUnit(source)
@@ -226,15 +226,13 @@ class DynamicComponent(object):
                 if dt in self.__npTn.keys() else nxtype
         return shape, nxtype
 
-    def __createSardanaNodes(self, created, root, definition):
+    def __createSardanaNodes(self, created, definition):
         """ creates XML nodes for sardana devices
 
         :param created: list of created devices
         :type created: :obj:`list` <:obj:`str`>
-        :param root: root node
-        :type root: :class:`xml.dom.minidom.Node`
         :param definition: definition node
-        :type definition: :class:`xml.dom.minidom.Node`
+        :type definition: :class:`lxml.etree.Element`
         """
         for dd in self.__stepdsourcesDict:
             alias = self.__get_alias(Utils.tostr(dd["name"]))
@@ -245,17 +243,17 @@ class DynamicComponent(object):
                 self.__nexuslinks, self.__nexuslabels,
                 alias, self.__links)
             (parent, nxdata) = self.__createGroupTree(
-                root, definition, path, link)
+                definition, path, link)
             created.append(alias)
             nxtype = self.__npTn[dd["dtype"]] \
                 if dd["dtype"] in self.__npTn.keys() else 'NX_CHAR'
             self.__createField(
-                root, parent, field, nxtype, alias,
+                parent, field, nxtype, alias,
                 dd["name"], dd["shape"], dstype='CLIENT')
             if link:
-                self.__createLink(root, nxdata, path, field)
+                self.__createLink(nxdata, path, field)
 
-    def __createNonSardanaNodes(self, created, avds, root, definition,
+    def __createNonSardanaNodes(self, created, avds, definition,
                                 strategy="STEP"):
         """ creates XML nodes for non sardana devices
 
@@ -263,10 +261,8 @@ class DynamicComponent(object):
         :type created: :obj:`list` <:obj:`str`>
         :param avds: available datasources
         :type avds: :obj:`list` <:obj:`str`>
-        :param root: root node
-        :type root: :class:`xml.dom.minidom.Node`
         :param definition: definition node
-        :type definition: :class:`xml.dom.minidom.Node`
+        :type definition: :class:`lxml.etree.Element`
         """
         dsources = self.__initdsources \
             if strategy == 'INIT' else self.__stepdsources
@@ -281,7 +277,7 @@ class DynamicComponent(object):
                     self.__ilinks if strategy == 'INIT'
                     else self.__links)
                 (parent, nxdata) = self.__createGroupTree(
-                    root, definition, path, link)
+                    definition, path, link)
                 created.append(ds)
 
                 shape, nxtype = None, 'NX_CHAR'
@@ -290,11 +286,14 @@ class DynamicComponent(object):
                         self.__nexusconfig_device, "dataSources",
                         [Utils.tostr(ds)])
                     if sys.version_info > (3,):
-                        indom = xml.dom.minidom.parseString(
-                            bytes(dsource[0], "UTF-8"))
+                        root = et.fromstring(
+                            bytes(dsource[0], "UTF-8"),
+                            parser=XMLParser(collect_ids=False))
                     else:
-                        indom = xml.dom.minidom.parseString(dsource[0])
-                    dss = indom.getElementsByTagName("datasource")
+                        root = et.fromstring(
+                            dsource[0],
+                            parser=XMLParser(collect_ids=False))
+                    dss = root.findall(".//datasource")
                     if dss and shape is None:
                         shape, nxtype = self.__shapeFromTango(dss[0])
                         if not nxtype:
@@ -307,13 +306,13 @@ class DynamicComponent(object):
 
                 if ds in avds:
                     self.__createField(
-                        root, parent, field, nxtype, ds,
+                        parent, field, nxtype, ds,
                         dsnode=dss[0], shape=shape, strategy=strategy)
                 else:
-                    self.__createField(root, parent, field, nxtype, ds,
+                    self.__createField(parent, field, nxtype, ds,
                                        ds, shape, strategy=strategy)
                 if link:
-                    self.__createLink(root, nxdata, path, field)
+                    self.__createLink(nxdata, path, field)
 
     def create(self):
         """ creates dynamic component
@@ -328,19 +327,25 @@ class DynamicComponent(object):
             name = name + "x"
         self.__dynamicCP = name
 
-        root = xml.dom.minidom.Document()
-        definition = root.createElement("definition")
-        root.appendChild(definition)
+        definition = lxml.etree.Element("definition")
         avds = TangoUtils.command(self.__nexusconfig_device,
                                   "availableDataSources")
 
         created = []
-        self.__createSardanaNodes(created, root, definition)
-        self.__createNonSardanaNodes(created, avds, root, definition, 'STEP')
-        self.__createNonSardanaNodes(created, avds, root, definition, 'INIT')
+        self.__createSardanaNodes(created, definition)
+        self.__createNonSardanaNodes(created, avds, definition, 'STEP')
+        self.__createNonSardanaNodes(created, avds, definition, 'INIT')
 
-        self.__nexusconfig_device.xmlstring = Utils.tostr(
-            root.toprettyxml(indent=""))
+        xmls = Utils.tostr(
+            lxml.etree.tostring(
+                definition, encoding='utf8',
+                method='xml', pretty_print=True))
+        if xmls.startswith("<?xml"):
+            self.__nexusconfig_device.xmlstring = xmls
+        else:
+            self.__nexusconfig_device.xmlstring = \
+                "<?xml version='1.0' encoding='utf8'?>\n" + xmls
+
         TangoUtils.command(self.__nexusconfig_device, "storeComponent",
                            Utils.tostr(self.__dynamicCP))
 #        print("Dynamic Component:\n%s" % root.toprettyxml(indent="  "))
@@ -398,23 +403,23 @@ class DynamicComponent(object):
                         ";", "_").lower())
 
     @classmethod
-    def __createLink(cls, root, entry, path, name):
+    def __createLink(cls, entry, path, name):
         """ creates XML node for nexus link
 
         :param root: root node
-        :type root: :class:`xml.dom.minidom.Node`
+        :type root: :class:`lxml.etree.Element`
         :param entry: entry node
-        :type entry: :class:`xml.dom.minidom.Node`
+        :type entry: :class:`lxml.etree.Element`
         :param path: nexus path
         :type path: :obj:`str`
         :param name: link name
         :type name: :obj:`str`
         """
-        if name and entry:
-            link = root.createElement("link")
-            entry.appendChild(link)
-            link.setAttribute("target", "%s/%s" % (path, name))
-            link.setAttribute("name", name)
+        if name is not None and entry is not None:
+            link = lxml.etree.Element("link")
+            entry.append(link)
+            link.attrib["target"] = "%s/%s" % (path, name)
+            link.attrib["name"] = name
 
     @classmethod
     def __findDataSource(cls, name):
@@ -452,15 +457,13 @@ class DynamicComponent(object):
         return (attr, device, host, port)
 
     @classmethod
-    def __createField(cls, root, parent, fname, nxtype, sname,
+    def __createField(cls, parent, fname, nxtype, sname,
                       record=None, shape=None, dsnode=None,
                       strategy='STEP', dstype=None):
         """ creates XML node for NeXus field
 
-        :param root: root node
-        :type root: :class:`xml.dom.minidom.Node`
         :param parent: parent node
-        :type parent: :class:`xml.dom.minidom.Node`
+        :type parent: :class:`lxml.etree.Element`
         :param fname: field name
         :type fname: :obj:`str`
         :param nxtype: field NeXus type
@@ -478,17 +481,17 @@ class DynamicComponent(object):
         :param dstype: datasource type
         :type dstyp: :obj:`str`
         """
-        field = root.createElement("field")
-        parent.appendChild(field)
-        field.setAttribute("type", nxtype)
-        field.setAttribute("name", fname)
+        field = lxml.etree.Element("field")
+        parent.append(field)
+        field.attrib["type"] = nxtype
+        field.attrib["name"] = fname
 
-        strategynode = root.createElement("strategy")
-        field.appendChild(strategynode)
-        strategynode.setAttribute("mode", strategy)
+        strategynode = lxml.etree.Element("strategy")
+        field.append(strategynode)
+        strategynode.attrib["mode"] = strategy
 
-        if dsnode:
-            dsource = root.importNode(dsnode, True)
+        if dsnode is not None:
+            dsource = dsnode
         else:
             if dstype == 'CLIENT' and record:
                 device = None
@@ -496,37 +499,37 @@ class DynamicComponent(object):
             else:
                 (attr, device, host, port) = cls.__findDataSource(sname)
             if device and attr:
-                dsource = root.createElement("datasource")
-                dsource.setAttribute("name", sname)
-                dsource.setAttribute("type", "TANGO")
-                dev = root.createElement("device")
-                dsource.appendChild(dev)
-                dev.setAttribute("member", "attribute")
-                dev.setAttribute("name", device)
+                dsource = lxml.etree.Element("datasource")
+                dsource.attrib["name"] = sname
+                dsource.attrib["type"] = "TANGO"
+                dev = lxml.etree.Element("device")
+                dsource.append(dev)
+                dev.attrib["member"] = "attribute"
+                dev.attrib["name"] = device
                 if host and port:
-                    dev.setAttribute("hostname", host)
-                    dev.setAttribute("port", port)
-                rec = root.createElement("record")
-                dsource.appendChild(rec)
-                rec.setAttribute("name", attr)
+                    dev.attrib["hostname"] = host
+                    dev.attrib["port"] = port
+                rec = lxml.etree.Element("record")
+                dsource.append(rec)
+                rec.attrib["name"] = attr
             else:
-                dsource = root.createElement("datasource")
-                dsource.setAttribute("name", sname)
-                dsource.setAttribute("type", "CLIENT")
-                rec = root.createElement("record")
-                dsource.appendChild(rec)
-                rec.setAttribute("name", record)
+                dsource = lxml.etree.Element("datasource")
+                dsource.attrib["name"] = sname
+                dsource.attrib["type"] = "CLIENT"
+                rec = lxml.etree.Element("record")
+                dsource.append(rec)
+                rec.attrib["name"] = record
 
-        field.appendChild(dsource)
+        field.append(dsource)
         if shape:
-            dm = root.createElement("dimensions")
-            dm.setAttribute("rank", Utils.tostr(len(shape)))
-            field.appendChild(dm)
+            dm = lxml.etree.Element("dimensions")
+            dm.attrib["rank"] = Utils.tostr(len(shape))
+            field.append(dm)
             for i in range(len(shape)):
-                dim = root.createElement("dim")
-                dm.appendChild(dim)
-                dim.setAttribute("index", Utils.tostr(i + 1))
-                dim.setAttribute("value", Utils.tostr(shape[i]))
+                dim = lxml.etree.Element("dim")
+                dm.append(dim)
+                dim.attrib["index"] = Utils.tostr(i + 1)
+                dim.attrib["value"] = Utils.tostr(shape[i])
 
     def remove(self, name):
         """ removes dynamic component
@@ -544,30 +547,27 @@ class DynamicComponent(object):
                                "deleteComponent", Utils.tostr(name))
 
     @classmethod
-    def __createGroupTree(cls, root, definition, path, links=False):
+    def __createGroupTree(cls, definition, path, links=False):
         """ creates group tree
 
-        :param root: root node
-        :type root: :class:`xml.dom.minidom.Node`
         :param definition: definition node
-        :type definition: :class:`xml.dom.minidom.Node`
+        :type definition: :class:`lxml.etree.Element`
         :param path: NeXus path
         :type path: :obj:`str`
         :param links: if NXdata should be created
         :type links: :obj:`bool`
         :returns (last group node, nxdata group node) tuple
-        :rtype (:class:`xml.dom.minidom.Node`, :class:`xml.dom.minidom.Node`)
+        :rtype (:class:`lxml.etree.Element`, :class:`lxml.etree.Element`)
         """
-
         spath = path.split('/')
         entry = None
         parent = definition
         nxdata = None
         for dr in spath:
             if dr.strip():
-                node = root.createElement("group")
-                parent.appendChild(node)
-                if not entry:
+                node = lxml.etree.Element("group")
+                parent.append(node)
+                if entry is None:
                     entry = node
 
                 w = dr.split(':')
@@ -576,13 +576,13 @@ class DynamicComponent(object):
                         w.insert(0, w[0][2:])
                     else:
                         w.append("NX" + w[0])
-                node.setAttribute("type", w[1])
-                node.setAttribute("name", w[0])
+                node.attrib["type"] = w[1]
+                node.attrib["name"] = w[0]
                 parent = node
-        if links and entry:
-            nxdata = root.createElement("group")
-            entry.appendChild(nxdata)
-            nxdata.setAttribute("type", "NXdata")
-            nxdata.setAttribute("name", "data")
+        if links and entry is not None:
+            nxdata = lxml.etree.Element("group")
+            entry.append(nxdata)
+            nxdata.attrib["type"] = "NXdata"
+            nxdata.attrib["name"] = "data"
 
         return parent, nxdata

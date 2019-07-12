@@ -22,7 +22,9 @@
 import json
 import gc
 import PyTango
-import xml.dom.minidom
+import xml.etree.ElementTree as et
+from lxml.etree import XMLParser
+# from lxml import etree
 import sys
 import weakref
 
@@ -861,10 +863,12 @@ class Settings(object):
         lst = []
         for ds, dsxml in dsxmls.items():
             if sys.version_info > (3,):
-                indom = xml.dom.minidom.parseString(bytes(dsxml, "UTF-8"))
+                root = et.fromstring(bytes(dsxml, "UTF-8"),
+                                     parser=XMLParser(collect_ids=False))
             else:
-                indom = xml.dom.minidom.parseString(dsxml)
-            nodes = indom.getElementsByTagName("datasource")
+                root = et.fromstring(dsxml,
+                                     parser=XMLParser(collect_ids=False))
+            nodes = root.findall(".//datasource")
             if nodes:
                 record = Utils.getRecord(nodes[0])
                 lst.append(json.dumps({"name": ds, "full_name": record}))
