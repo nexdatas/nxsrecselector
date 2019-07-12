@@ -810,8 +810,11 @@ class DescriberTest(unittest.TestCase):
         dscnt = 0
         tcv = [k for k in cv if rescps[k]]
         for cp in tcv:
+            print(cp)
             for ds, dss in rescps[cp].items():
+                print("DS %s" % ds)
                 for vds in dss:
+                    print(vds)
                     if strategy is not None:
                         if vds[0] != strategy:
                             continue
@@ -820,6 +823,8 @@ class DescriberTest(unittest.TestCase):
                             continue
                     self.assertTrue(self.findElement(cp, ds, vds, rv))
                     dscnt += 1
+        print(len(rescps))
+        print(rv)
         self.assertEqual(dscnt, len(rv))
 
     # constructor test
