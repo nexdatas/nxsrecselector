@@ -3253,7 +3253,7 @@ class DynamicComponentTest(unittest.TestCase):
                     ds.lower(), nxstype)
 
                 mycps += Utils.tostr(lxml.etree.tostring(
-                    dss[0], encoding = 'utf8',
+                    dss[0], encoding='utf8',
                     method='xml', pretty_print=True))
                 mstr = ""
                 if ms2:
@@ -3412,7 +3412,7 @@ class DynamicComponentTest(unittest.TestCase):
                     ds.lower(), nxstype)
 
                 mycps += Utils.tostr(lxml.etree.tostring(
-                    dss[0], encoding = 'utf8',
+                    dss[0], encoding='utf8',
                     method='xml', pretty_print=True))
                 mstr = ""
                 if ms2:
@@ -3572,7 +3572,7 @@ class DynamicComponentTest(unittest.TestCase):
                         # fname = fieldname.lower()
                         fd = fieldbg % (fieldname.lower(), nxstp)
                     fd += Utils.tostr(lxml.etree.tostring(
-                        dss[0], encoding = 'utf8',
+                        dss[0], encoding='utf8',
                         method='xml', pretty_print=True))
 
                     fd += mstr + fieldend
@@ -3773,7 +3773,7 @@ class DynamicComponentTest(unittest.TestCase):
                         # fname = fieldname.lower()
                         fd = fieldbg % (fieldname.lower(), nxstp)
                     fd += Utils.tostr(lxml.etree.tostring(
-                        dss[0], encoding = 'utf8',
+                        dss[0], encoding='utf8',
                         method='xml', pretty_print=True))
                     fd += mstr + fieldend
 

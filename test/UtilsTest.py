@@ -28,7 +28,8 @@ import struct
 import PyTango
 import pickle
 import json
-from xml.dom import minidom
+import xml.etree.ElementTree as et
+from lxml.etree import XMLParser
 import binascii
 
 try:
@@ -60,9 +61,11 @@ if sys.version_info > (3,):
 
 def miniparseString(text):
     if sys.version_info > (3,):
-        return minidom.parseString(bytes(text, "UTF-8"))
+        return et.fromstring(bytes(text, "UTF-8"),
+                             parser=XMLParser(collect_ids=False))
     else:
-        return minidom.parseString(text)
+        return et.fromstring(text,
+                             parser=XMLParser(collect_ids=False))
 
 
 class Datum(object):
@@ -1553,206 +1556,182 @@ class UtilsTest(unittest.TestCase):
         fun = sys._getframe().f_code.co_name
         print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
-        dom = miniparseString("<tag></tag>")
-        node = dom.getElementsByTagName("tag")
-        self.assertEqual(Utils.getRecord(node[0]), "")
+        node = miniparseString("<tag></tag>")
+        self.assertEqual(Utils.getRecord(node), "")
 
-        dom = miniparseString("<tag><device/></tag>")
-        node = dom.getElementsByTagName("tag")
-        self.assertEqual(Utils.getRecord(node[0]), "")
+        node = miniparseString("<tag><device/></tag>")
+        self.assertEqual(Utils.getRecord(node), "")
 
         host = 'haso2' * self.__rnd.randint(1, 3)
-        dom = miniparseString(
+        node = miniparseString(
             '<tag><device hostname="%s"></device></tag>' % (host))
-        node = dom.getElementsByTagName("tag")
-        self.assertEqual(Utils.getRecord(node[0]), '')
+        self.assertEqual(Utils.getRecord(node), '')
 
         host = 'haso2' * self.__rnd.randint(1, 3)
         dev = 'defv' * self.__rnd.randint(1, 3)
-        dom = miniparseString(
+        node = miniparseString(
             '<tag><device hostname="%s" />'
             '<record name="%s" /></tag>' % (host, dev))
-        node = dom.getElementsByTagName("tag")
-        self.assertEqual(Utils.getRecord(node[0]), dev)
+        self.assertEqual(Utils.getRecord(node), dev)
 
         host = 'haso2' * self.__rnd.randint(1, 3)
         rec = 'recfv' * self.__rnd.randint(1, 3)
         dev = 'devfv/' * self.__rnd.randint(1, 3)
-        dom = miniparseString(
+        node = miniparseString(
             '<tag><device name="%s" /><record name="%s" /></tag>' % (dev, rec))
-        node = dom.getElementsByTagName("tag")
-        self.assertEqual(Utils.getRecord(node[0]), "%s/%s" % (dev, rec))
+        self.assertEqual(Utils.getRecord(node), "%s/%s" % (dev, rec))
 
         host = 'haso2' * self.__rnd.randint(1, 3)
         rec = 'recfv' * self.__rnd.randint(1, 3)
         dev = 'devfv/' * self.__rnd.randint(1, 3)
         port = 10000
-        dom = miniparseString(
+        node = miniparseString(
             '<tag><device name="%s" hostname="%s" />'
             '<record name="%s" /></tag>' % (dev, host, rec))
-        node = dom.getElementsByTagName("tag")
-        self.assertEqual(Utils.getRecord(node[0]),
+        self.assertEqual(Utils.getRecord(node),
                          "%s:%s/%s/%s" % (host, port, dev, rec))
 
         host = 'haso2' * self.__rnd.randint(1, 3)
         rec = 'recfv' * self.__rnd.randint(1, 3)
         dev = 'devfv/' * self.__rnd.randint(1, 3)
         port = 10000 * self.__rnd.randint(1, 3)
-        dom = miniparseString(
+        node = miniparseString(
             '<tag><device name="%s" port="%s" />'
             '<record name="%s" /></tag>' % (dev, port, rec))
-        node = dom.getElementsByTagName("tag")
-        self.assertEqual(Utils.getRecord(node[0]), "%s/%s" % (dev, rec))
+        self.assertEqual(Utils.getRecord(node), "%s/%s" % (dev, rec))
 
         host = 'haso2' * self.__rnd.randint(1, 3)
         rec = 'recfv' * self.__rnd.randint(1, 3)
         dev = 'devfv/' * self.__rnd.randint(1, 3)
         port = 10000 * self.__rnd.randint(1, 3)
-        dom = miniparseString(
+        node = miniparseString(
             '<tag><device name="%s" hostname="%s" port="%s"/>'
             '<record name="%s" /></tag>' % (
                 dev, host, port, rec))
-        node = dom.getElementsByTagName("tag")
-        self.assertEqual(Utils.getRecord(node[0]),
+        self.assertEqual(Utils.getRecord(node),
                          "%s:%s/%s/%s" % (host, port, dev, rec))
 
     def test_getRecord_property(self):
         fun = sys._getframe().f_code.co_name
         print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
-        dom = miniparseString("<tag></tag>")
-        node = dom.getElementsByTagName("tag")
-        self.assertEqual(Utils.getRecord(node[0]), "")
+        node = miniparseString("<tag></tag>")
+        self.assertEqual(Utils.getRecord(node), "")
 
-        dom = miniparseString("<tag><device member=\"property\"/></tag>")
-        node = dom.getElementsByTagName("tag")
-        self.assertEqual(Utils.getRecord(node[0]), "")
+        node = miniparseString("<tag><device member=\"property\"/></tag>")
+        self.assertEqual(Utils.getRecord(node), "")
 
         host = 'haso2' * self.__rnd.randint(1, 3)
-        dom = miniparseString(
+        node = miniparseString(
             '<tag><device hostname="%s" member="property"></device></tag>'
             % (host))
-        node = dom.getElementsByTagName("tag")
-        self.assertEqual(Utils.getRecord(node[0]), '')
+        self.assertEqual(Utils.getRecord(node), '')
 
         host = 'haso2' * self.__rnd.randint(1, 3)
         dev = 'defv' * self.__rnd.randint(1, 3)
-        dom = miniparseString(
+        node = miniparseString(
             '<tag><device hostname="%s" member="property" />'
             '<record name="%s" /></tag>' % (host, dev))
-        node = dom.getElementsByTagName("tag")
-        self.assertEqual(Utils.getRecord(node[0]), dev)
+        self.assertEqual(Utils.getRecord(node), dev)
 
         host = 'haso2' * self.__rnd.randint(1, 3)
         rec = 'recfv' * self.__rnd.randint(1, 3)
         dev = 'devfv/' * self.__rnd.randint(1, 3)
-        dom = miniparseString(
+        node = miniparseString(
             '<tag><device name="%s" member="property"/><record name="%s" />'
             '</tag>' % (dev, rec))
-        node = dom.getElementsByTagName("tag")
-        self.assertEqual(Utils.getRecord(node[0]), "%s/@%s" % (dev, rec))
+        self.assertEqual(Utils.getRecord(node), "%s/@%s" % (dev, rec))
 
         host = 'haso2' * self.__rnd.randint(1, 3)
         rec = 'recfv' * self.__rnd.randint(1, 3)
         dev = 'devfv/' * self.__rnd.randint(1, 3)
         port = 10000
-        dom = miniparseString(
+        node = miniparseString(
             '<tag><device name="%s" hostname="%s" member="property"/>'
             '<record name="%s" /></tag>' % (dev, host, rec))
-        node = dom.getElementsByTagName("tag")
-        self.assertEqual(Utils.getRecord(node[0]),
+        self.assertEqual(Utils.getRecord(node),
                          "%s:%s/%s/@%s" % (host, port, dev, rec))
 
         host = 'haso2' * self.__rnd.randint(1, 3)
         rec = 'recfv' * self.__rnd.randint(1, 3)
         dev = 'devfv/' * self.__rnd.randint(1, 3)
         port = 10000 * self.__rnd.randint(1, 3)
-        dom = miniparseString(
+        node = miniparseString(
             '<tag><device name="%s" port="%s" member="property"/>'
             '<record name="%s" /></tag>' % (dev, port, rec))
-        node = dom.getElementsByTagName("tag")
-        self.assertEqual(Utils.getRecord(node[0]), "%s/@%s" % (dev, rec))
+        self.assertEqual(Utils.getRecord(node), "%s/@%s" % (dev, rec))
 
         host = 'haso2' * self.__rnd.randint(1, 3)
         rec = 'recfv' * self.__rnd.randint(1, 3)
         dev = 'devfv/' * self.__rnd.randint(1, 3)
         port = 10000 * self.__rnd.randint(1, 3)
-        dom = miniparseString(
+        node = miniparseString(
             '<tag><device name="%s" hostname="%s" port="%s" '
             'member="property"/>'
             '<record name="%s" /></tag>' % (
                 dev, host, port, rec))
-        node = dom.getElementsByTagName("tag")
-        self.assertEqual(Utils.getRecord(node[0]),
+        self.assertEqual(Utils.getRecord(node),
                          "%s:%s/%s/@%s" % (host, port, dev, rec))
 
     def test_getRecord_command(self):
         fun = sys._getframe().f_code.co_name
         print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
-        dom = miniparseString("<tag></tag>")
-        node = dom.getElementsByTagName("tag")
-        self.assertEqual(Utils.getRecord(node[0]), "")
+        node = miniparseString("<tag></tag>")
+        self.assertEqual(Utils.getRecord(node), "")
 
-        dom = miniparseString("<tag><device member=\"command\"/></tag>")
-        node = dom.getElementsByTagName("tag")
-        self.assertEqual(Utils.getRecord(node[0]), "")
+        node = miniparseString("<tag><device member=\"command\"/></tag>")
+        self.assertEqual(Utils.getRecord(node), "")
 
         host = 'haso2' * self.__rnd.randint(1, 3)
-        dom = miniparseString(
+        node = miniparseString(
             '<tag><device hostname="%s" member="command"></device>'
             '</tag>' % (host))
-        node = dom.getElementsByTagName("tag")
-        self.assertEqual(Utils.getRecord(node[0]), '')
+        self.assertEqual(Utils.getRecord(node), '')
 
         host = 'haso2' * self.__rnd.randint(1, 3)
         dev = 'defv' * self.__rnd.randint(1, 3)
-        dom = miniparseString(
+        node = miniparseString(
             '<tag><device hostname="%s" member="command" />'
             '<record name="%s" /></tag>' % (host, dev))
-        node = dom.getElementsByTagName("tag")
-        self.assertEqual(Utils.getRecord(node[0]), dev)
+        self.assertEqual(Utils.getRecord(node), dev)
 
         host = 'haso2' * self.__rnd.randint(1, 3)
         rec = 'recfv' * self.__rnd.randint(1, 3)
         dev = 'devfv/' * self.__rnd.randint(1, 3)
-        dom = miniparseString(
+        node = miniparseString(
             '<tag><device name="%s" member="command"/><record name="%s" />'
             '</tag>' % (dev, rec))
-        node = dom.getElementsByTagName("tag")
-        self.assertEqual(Utils.getRecord(node[0]), "%s/%s()" % (dev, rec))
+        self.assertEqual(Utils.getRecord(node), "%s/%s()" % (dev, rec))
 
         host = 'haso2' * self.__rnd.randint(1, 3)
         rec = 'recfv' * self.__rnd.randint(1, 3)
         dev = 'devfv/' * self.__rnd.randint(1, 3)
         port = 10000
-        dom = miniparseString(
+        node = miniparseString(
             '<tag><device name="%s" hostname="%s" member="command"/>'
             '<record name="%s" /></tag>' % (dev, host, rec))
-        node = dom.getElementsByTagName("tag")
-        self.assertEqual(Utils.getRecord(node[0]),
+        self.assertEqual(Utils.getRecord(node),
                          "%s:%s/%s/%s()" % (host, port, dev, rec))
 
         host = 'haso2' * self.__rnd.randint(1, 3)
         rec = 'recfv' * self.__rnd.randint(1, 3)
         dev = 'devfv/' * self.__rnd.randint(1, 3)
         port = 10000 * self.__rnd.randint(1, 3)
-        dom = miniparseString(
+        node = miniparseString(
             '<tag><device name="%s" port="%s" member="command"/>'
             '<record name="%s" /></tag>' % (dev, port, rec))
-        node = dom.getElementsByTagName("tag")
-        self.assertEqual(Utils.getRecord(node[0]), "%s/%s()" % (dev, rec))
+        self.assertEqual(Utils.getRecord(node), "%s/%s()" % (dev, rec))
 
         host = 'haso2' * self.__rnd.randint(1, 3)
         rec = 'recfv' * self.__rnd.randint(1, 3)
         dev = 'devfv/' * self.__rnd.randint(1, 3)
         port = 10000 * self.__rnd.randint(1, 3)
-        dom = miniparseString(
+        node = miniparseString(
             '<tag><device name="%s" hostname="%s" port="%s" member="command"/>'
             '<record name="%s" /></tag>' % (
                 dev, host, port, rec))
-        node = dom.getElementsByTagName("tag")
-        self.assertEqual(Utils.getRecord(node[0]),
+        self.assertEqual(Utils.getRecord(node),
                          "%s:%s/%s/%s()" % (host, port, dev, rec))
 
     def test_stringToDictJson(self):
