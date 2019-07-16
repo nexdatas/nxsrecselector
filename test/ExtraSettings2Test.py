@@ -25,7 +25,9 @@ import sys
 import struct
 import PyTango
 import json
-import xml
+import lxml
+import xml.etree.ElementTree as et
+from lxml.etree import XMLParser
 
 from nxsrecconfig.Describer import Describer
 from nxsrecconfig.Settings import Settings
@@ -97,9 +99,11 @@ except Exception:
 
 def miniparseString(text):
     if sys.version_info > (3,):
-        return xml.dom.minidom.parseString(bytes(text, "UTF-8"))
+        return et.fromstring(bytes(text, "UTF-8"),
+                             parser=XMLParser(collect_ids=False))
     else:
-        return xml.dom.minidom.parseString(text)
+        return et.fromstring(text,
+                             parser=XMLParser(collect_ids=False))
 
 
 # test fixture
@@ -4366,7 +4370,7 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
         rs.mntGrp = val["MntGrp"]
 
         cps = {"empty":
-               '<?xml version="1.0" ?>\n<definition/>\n'}
+               '<?xml version=\'1.0\' encoding=\'utf8\'?>\n<definition/>\n'}
         dname = "__dynamic_component__"
 
         cpname = rs.createDynamicComponent([])
@@ -4429,120 +4433,200 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
         rs.mntGrp = val["MntGrp"]
         cps = {
             "empty":
-                '<?xml version="1.0" ?>\n<definition/>\n',
+                '<?xml version=\'1.0\' encoding=\'utf8\'?>\n'
+            '<definition/>\n',
             "one":
-                '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" '
-            'type="NXentry">\n'
-            '<group name="instrument" type="NXinstrument">\n'
-            '<group name="collection" type="NXcollection">\n'
-            '<field name="onename" type="NX_CHAR">\n<strategy mode="STEP"/>\n'
-            '<datasource name="onename" type="CLIENT">\n'
-            '<record name="onename"/>\n</datasource>\n</field>\n'
-            '</group>\n</group>\n<group name="data" type="NXdata">\n'
-            '<link name="onename" '
-            'target="/$var.entryname#\'scan\'$var.serialno:'
-            'NXentry/NXinstrument/collection/onename"/>\n'
-            '</group>\n</group>\n</definition>\n',
+            '<?xml version=\'1.0\' encoding=\'utf8\'?>\n'
+            '<definition>\n'
+            '  <group type="NXentry"'
+            ' name="$var.entryname#\'scan\'$var.serialno">\n'
+            '    <group type="NXinstrument" name="instrument">\n'
+            '      <group type="NXcollection" name="collection">\n'
+            '        <field type="NX_CHAR" name="onename">\n'
+            '          <strategy mode="STEP"/>\n'
+            '          <datasource name="onename" type="CLIENT">\n'
+            '            <record name="onename"/>\n'
+            '          </datasource>\n'
+            '        </field>\n'
+            '      </group>\n'
+            '    </group>\n'
+            '    <group type="NXdata" name="data">\n'
+            '      <link '
+            'target="/$var.entryname#\'scan\'$var.serialno:NXentry/'
+            'NXinstrument/collection/onename" name="onename"/>\n'
+            '    </group>\n'
+            '  </group>\n'
+            '</definition>\n',
             "two":
-                '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" '
-            'type="NXentry">\n'
-            '<group name="instrument" type="NXinstrument">\n'
-            '<group name="collection" type="NXcollection">\n'
-            '<field name="ds1" type="NX_CHAR">\n<strategy mode="STEP"/>\n'
-            '<datasource name="ds1" type="CLIENT">\n<record name="ds1"/>\n'
-            '</datasource>\n</field>\n</group>\n</group>\n'
-            '<group name="data" type="NXdata">\n'
-            '<link name="ds1" target="/$var.entryname#\'scan\'$var.serialno:'
-            'NXentry/NXinstrument/collection/ds1"/>\n</group>\n</group>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" '
-            'type="NXentry">'
-            '\n<group name="instrument" type="NXinstrument">\n'
-            '<group name="collection" type="NXcollection">\n'
-            '<field name="ds2" type="NX_CHAR">\n<strategy mode="STEP"/>\n'
-            '<datasource name="ds2" type="CLIENT">\n<record name="ds2"/>\n'
-            '</datasource>\n</field>\n</group>\n</group>\n'
-            '<group name="data" type="NXdata">\n'
-            '<link name="ds2" target="/$var.entryname#\'scan\'$var.serialno:'
-            'NXentry/NXinstrument/collection/ds2"/>\n</group>\n'
-            '</group>\n</definition>\n',
+            '<?xml version=\'1.0\' encoding=\'utf8\'?>\n'
+            '<definition>\n'
+            '  <group type="NXentry" '
+            'name="$var.entryname#\'scan\'$var.serialno">\n'
+            '    <group type="NXinstrument" name="instrument">\n'
+            '      <group type="NXcollection" name="collection">\n'
+            '        <field type="NX_CHAR" name="ds1">\n'
+            '          <strategy mode="STEP"/>\n'
+            '          <datasource name="ds1" type="CLIENT">\n'
+            '            <record name="ds1"/>\n'
+            '          </datasource>\n'
+            '        </field>\n'
+            '      </group>\n'
+            '    </group>\n'
+            '    <group type="NXdata" name="data">\n'
+            '      <link '
+            'target="/$var.entryname#\'scan\'$var.serialno:NXentry/'
+            'NXinstrument/collection/ds1" name="ds1"/>\n'
+            '    </group>\n'
+            '  </group>\n'
+            '  <group type="NXentry" '
+            'name="$var.entryname#\'scan\'$var.serialno">\n'
+            '    <group type="NXinstrument" name="instrument">\n'
+            '      <group type="NXcollection" name="collection">\n'
+            '        <field type="NX_CHAR" name="ds2">\n'
+            '          <strategy mode="STEP"/>\n'
+            '          <datasource name="ds2" type="CLIENT">\n'
+            '            <record name="ds2"/>\n'
+            '          </datasource>\n'
+            '        </field>\n'
+            '      </group>\n'
+            '    </group>\n'
+            '    <group type="NXdata" name="data">\n'
+            '      <link '
+            'target="/$var.entryname#\'scan\'$var.serialno:NXentry/'
+            'NXinstrument/collection/ds2" name="ds2"/>\n'
+            '    </group>\n'
+            '  </group>\n'
+            '</definition>\n',
             "three":
-                '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" '
-            'type="NXentry">\n'
-            '<group name="instrument" type="NXinstrument">\n'
-            '<group name="collection" type="NXcollection">\n'
-            '<field name="ds1" type="NX_CHAR">\n<strategy mode="STEP"/>\n'
-            '<datasource name="ds1" type="CLIENT">\n<record name="ds1"/>\n'
-            '</datasource>\n</field>\n</group>\n</group>\n'
-            '<group name="data" type="NXdata">\n'
-            '<link name="ds1" target="/$var.entryname#\'scan\'$var.serialno:'
-            'NXentry/NXinstrument/collection/ds1"/>\n</group>\n</group>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" '
-            'type="NXentry">'
-            '\n<group name="instrument" type="NXinstrument">\n'
-            '<group name="collection" type="NXcollection">\n'
-            '<field name="ds2" type="NX_CHAR">\n<strategy mode="STEP"/>\n'
-            '<datasource name="ds2" type="CLIENT">\n<record name="ds2"/>\n'
-            '</datasource>\n</field>\n</group>\n</group>\n'
-            '<group name="data" type="NXdata">\n'
-            '<link name="ds2" target="/$var.entryname#\'scan\'$var.serialno:'
-            'NXentry/NXinstrument/collection/ds2"/>\n</group>\n</group>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" '
-            'type="NXentry">'
-            '\n<group name="instrument" type="NXinstrument">\n'
-            '<group name="collection" type="NXcollection">\n'
-            '<field name="ds3" type="NX_CHAR">\n<strategy mode="STEP"/>\n'
-            '<datasource name="ds3" type="CLIENT">\n<record name="ds3"/>\n'
-            '</datasource>\n</field>\n</group>\n</group>\n'
-            '<group name="data" type="NXdata">\n'
-            '<link name="ds3" target="/$var.entryname#\'scan\'$var.serialno:'
-            'NXentry/NXinstrument/collection/ds3"/>\n</group>\n</group>\n'
+            '<?xml version=\'1.0\' encoding=\'utf8\'?>\n'
+            '<definition>\n'
+            '  <group type="NXentry" '
+            'name="$var.entryname#\'scan\'$var.serialno">\n'
+            '    <group type="NXinstrument" name="instrument">\n'
+            '      <group type="NXcollection" name="collection">\n'
+            '        <field type="NX_CHAR" name="ds1">\n'
+            '          <strategy mode="STEP"/>\n'
+            '          <datasource name="ds1" type="CLIENT">\n'
+            '            <record name="ds1"/>\n'
+            '          </datasource>\n'
+            '        </field>\n'
+            '      </group>\n'
+            '    </group>\n'
+            '    <group type="NXdata" name="data">\n'
+            '      <link '
+            'target="/$var.entryname#\'scan\'$var.serialno:NXentry/'
+            'NXinstrument/collection/ds1" name="ds1"/>\n'
+            '    </group>\n'
+            '  </group>\n'
+            '  <group type="NXentry" '
+            'name="$var.entryname#\'scan\'$var.serialno">\n'
+            '    <group type="NXinstrument" name="instrument">\n'
+            '      <group type="NXcollection" name="collection">\n'
+            '        <field type="NX_CHAR" name="ds2">\n'
+            '          <strategy mode="STEP"/>\n'
+            '          <datasource name="ds2" type="CLIENT">\n'
+            '            <record name="ds2"/>\n'
+            '          </datasource>\n'
+            '        </field>\n'
+            '      </group>\n'
+            '    </group>\n'
+            '    <group type="NXdata" name="data">\n'
+            '      <link '
+            'target="/$var.entryname#\'scan\'$var.serialno:NXentry/'
+            'NXinstrument/collection/ds2" name="ds2"/>\n'
+            '    </group>\n'
+            '  </group>\n'
+            '  <group type="NXentry" '
+            'name="$var.entryname#\'scan\'$var.serialno">\n'
+            '    <group type="NXinstrument" name="instrument">\n'
+            '      <group type="NXcollection" name="collection">\n'
+            '        <field type="NX_CHAR" name="ds3">\n'
+            '          <strategy mode="STEP"/>\n'
+            '          <datasource name="ds3" type="CLIENT">\n'
+            '            <record name="ds3"/>\n'
+            '          </datasource>\n'
+            '        </field>\n'
+            '      </group>\n'
+            '    </group>\n'
+            '    <group type="NXdata" name="data">\n'
+            '      <link '
+            'target="/$var.entryname#\'scan\'$var.serialno:NXentry/'
+            'NXinstrument/collection/ds3" name="ds3"/>\n'
+            '    </group>\n'
+            '  </group>\n'
             '</definition>\n',
             "type":
-                '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" '
-            'type="NXentry">\n'
-            '<group name="instrument" type="NXinstrument">\n'
-            '<group name="collection" type="NXcollection">\n'
-            '<field name="ds1" type="NX_INT">\n<strategy mode="STEP"/>\n'
-            '<datasource name="ds1" type="CLIENT">\n'
-            '<record name="ds1"/>\n</datasource>\n</field>\n'
-            '</group>\n</group>\n<group name="data" type="NXdata">\n'
-            '<link name="ds1" target="/$var.entryname#\'scan\'$var.serialno:'
-            'NXentry/NXinstrument/collection/ds1"/>\n'
-            '</group>\n</group>\n</definition>\n',
-            "shape":
-                '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" '
-            'type="NXentry">\n'
-            '<group name="instrument" type="NXinstrument">\n'
-            '<group name="collection" type="NXcollection">\n'
-            '<field name="ds2" type="NX_CHAR">\n<strategy mode="STEP"/>\n'
-            '<datasource name="ds2" type="CLIENT">\n'
-            '<record name="ds2"/>\n</datasource>\n'
-            '<dimensions rank="1">\n<dim index="1" value="34"/>\n'
-            '</dimensions>\n</field>\n'
-            '</group>\n</group>\n<group name="data" type="NXdata">\n'
-            '<link name="ds2" target="/$var.entryname#\'scan\'$var.serialno:'
-            'NXentry/NXinstrument/collection/ds2"/>\n'
-            '</group>\n</group>\n</definition>\n',
+            '<?xml version=\'1.0\' encoding=\'utf8\'?>\n'
+            '<definition>\n'
+            '  <group type="NXentry" '
+            'name="$var.entryname#\'scan\'$var.serialno">\n'
+            '    <group type="NXinstrument" name="instrument">\n'
+            '      <group type="NXcollection" name="collection">\n'
+            '        <field type="NX_INT" name="ds1">\n'
+            '          <strategy mode="STEP"/>\n'
+            '          <datasource name="ds1" type="CLIENT">\n'
+            '            <record name="ds1"/>\n'
+            '          </datasource>\n'
+            '        </field>\n'
+            '      </group>\n'
+            '    </group>\n'
+            '    <group type="NXdata" name="data">\n'
+            '      <link '
+            'target="/$var.entryname#\'scan\'$var.serialno:NXentry/'
+            'NXinstrument/collection/ds1" name="ds1"/>\n'
+            '    </group>\n'
+            '  </group>\n'
+            '</definition>\n',
+            "shape": '<?xml version=\'1.0\' encoding=\'utf8\'?>\n'
+            '<definition>\n'
+            '  <group type="NXentry" '
+            'name="$var.entryname#\'scan\'$var.serialno">\n'
+            '    <group type="NXinstrument" name="instrument">\n'
+            '      <group type="NXcollection" name="collection">\n'
+            '        <field type="NX_CHAR" name="ds2">\n'
+            '          <strategy mode="STEP"/>\n'
+            '          <datasource name="ds2" type="CLIENT">\n'
+            '            <record name="ds2"/>\n'
+            '          </datasource>\n'
+            '          <dimensions rank="1">\n'
+            '            <dim index="1" value="34"/>\n'
+            '          </dimensions>\n'
+            '        </field>\n'
+            '      </group>\n'
+            '    </group>\n'
+            '    <group type="NXdata" name="data">\n'
+            '      <link '
+            'target="/$var.entryname#\'scan\'$var.serialno:NXentry/'
+            'NXinstrument/collection/ds2" name="ds2"/>\n'
+            '    </group>\n'
+            '  </group>\n'
+            '</definition>\n',
             "shapetype":
-                '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" '
-            'type="NXentry">\n'
-            '<group name="instrument" type="NXinstrument">\n'
-            '<group name="collection" type="NXcollection">\n'
-            '<field name="ds3" type="NX_FLOAT64">\n<strategy mode="STEP"/>\n'
-            '<datasource name="ds3" type="CLIENT">\n'
-            '<record name="ds3"/>\n</datasource>\n'
-            '<dimensions rank="2">\n<dim index="1" value="3"/>\n'
-            '<dim index="2" value="56"/>\n</dimensions>\n</field>\n'
-            '</group>\n</group>\n<group name="data" type="NXdata">\n'
-            '<link name="ds3" target="/$var.entryname#\'scan\'$var.serialno:'
-            'NXentry/NXinstrument/collection/ds3"/>\n'
-            '</group>\n</group>\n</definition>\n',
+            '<?xml version=\'1.0\' encoding=\'utf8\'?>\n'
+            '<definition>\n'
+            '  <group type="NXentry" '
+            'name="$var.entryname#\'scan\'$var.serialno">\n'
+            '    <group type="NXinstrument" name="instrument">\n'
+            '      <group type="NXcollection" name="collection">\n'
+            '        <field type="NX_FLOAT64" name="ds3">\n'
+            '          <strategy mode="STEP"/>\n'
+            '          <datasource name="ds3" type="CLIENT">\n'
+            '            <record name="ds3"/>\n'
+            '          </datasource>\n'
+            '          <dimensions rank="2">\n'
+            '            <dim index="1" value="3"/>\n'
+            '            <dim index="2" value="56"/>\n'
+            '          </dimensions>\n'
+            '        </field>\n'
+            '      </group>\n'
+            '    </group>\n'
+            '    <group type="NXdata" name="data">\n'
+            '      <link '
+            'target="/$var.entryname#\'scan\'$var.serialno:NXentry/'
+            'NXinstrument/collection/ds3" name="ds3"/>\n'
+            '    </group>\n'
+            '  </group>\n'
+            '</definition>\n',
         }
         dsdict = {
             "empty": [],
@@ -4575,18 +4659,27 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
         rs.mntGrp = val["MntGrp"]
         cps = {
             "type":
-                '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" '
-            'type="NXentry">\n'
-            '<group name="instrument" type="NXinstrument">\n'
-            '<group name="collection" type="NXcollection">\n'
-            '<field name="ds1" type="%s">\n<strategy mode="STEP"/>\n'
-            '<datasource name="ds1" type="CLIENT">\n'
-            '<record name="ds1"/>\n</datasource>\n</field>\n'
-            '</group>\n</group>\n<group name="data" type="NXdata">\n'
-            '<link name="ds1" target="/$var.entryname#\'scan\'$var.serialno:'
-            'NXentry/NXinstrument/collection/ds1"/>\n'
-            '</group>\n</group>\n</definition>\n',
+            '<?xml version=\'1.0\' encoding=\'utf8\'?>\n'
+            '<definition>\n'
+            '  <group type="NXentry" '
+            'name="$var.entryname#\'scan\'$var.serialno">\n'
+            '    <group type="NXinstrument" name="instrument">\n'
+            '      <group type="NXcollection" name="collection">\n'
+            '        <field type="%s" name="ds1">\n'
+            '          <strategy mode="STEP"/>\n'
+            '          <datasource name="ds1" type="CLIENT">\n'
+            '            <record name="ds1"/>\n'
+            '          </datasource>\n'
+            '        </field>\n'
+            '      </group>\n'
+            '    </group>\n'
+            '    <group type="NXdata" name="data">\n'
+            '      <link '
+            'target="/$var.entryname#\'scan\'$var.serialno:NXentry/'
+            'NXinstrument/collection/ds1" name="ds1"/>\n'
+            '    </group>\n'
+            '  </group>\n'
+            '</definition>\n',
         }
         # dname = "__dynamic_component__"
         for tp, nxstp in self._npTn.items():
@@ -4610,23 +4703,32 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
         rs.mntGrp = val["MntGrp"]
         cps = {
             "shape":
-                '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" '
-            'type="NXentry">\n'
-            '<group name="instrument" type="NXinstrument">\n'
-            '<group name="collection" type="NXcollection">\n'
-            '<field name="ds2" type="NX_CHAR">\n<strategy mode="STEP"/>\n'
-            '<datasource name="ds2" type="CLIENT">\n'
-            '<record name="ds2"/>\n</datasource>\n%s</field>\n'
-            '</group>\n</group>\n<group name="data" type="NXdata">\n'
-            '<link name="ds2" target="/$var.entryname#\'scan\'$var.serialno:'
-            'NXentry/NXinstrument/collection/ds2"/>\n'
-            '</group>\n</group>\n</definition>\n',
+            '<?xml version=\'1.0\' encoding=\'utf8\'?>\n'
+            '<definition>\n'
+            '  <group type="NXentry" '
+            'name="$var.entryname#\'scan\'$var.serialno">\n'
+            '    <group type="NXinstrument" name="instrument">\n'
+            '      <group type="NXcollection" name="collection">\n'
+            '        <field type="NX_CHAR" name="ds2">\n'
+            '          <strategy mode="STEP"/>\n'
+            '          <datasource name="ds2" type="CLIENT">\n'
+            '            <record name="ds2"/>\n'
+            '          </datasource>\n%s'
+            '        </field>\n'
+            '      </group>\n'
+            '    </group>\n'
+            '    <group type="NXdata" name="data">\n'
+            '      <link '
+            'target="/$var.entryname#\'scan\'$var.serialno:NXentry/'
+            'NXinstrument/collection/ds2" name="ds2"/>\n'
+            '    </group>\n'
+            '  </group>\n'
+            '</definition>\n',
         }
 
-        dimbg = '<dimensions rank="%s">\n'
-        dim = '<dim index="%s" value="%s"/>\n'
-        dimend = '</dimensions>\n'
+        dimbg = '          <dimensions rank="%s">\n'
+        dim = '            <dim index="%s" value="%s"/>\n'
+        dimend = '          </dimensions>\n'
 
         # dname = "__dynamic_component__"
         for i in range(50):
@@ -4662,26 +4764,33 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
 
         cps = {
             "shapetype":
-                '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" '
-            'type="NXentry">\n'
-            '<group name="instrument" type="NXinstrument">\n'
-            '<group name="collection" type="NXcollection">\n'
-            '<field name="%s" type="%s">\n<strategy mode="STEP"/>\n'
-            '<datasource name="%s" type="CLIENT">\n'
-            '<record name="%s"/>\n</datasource>\n'
-            '%s</field>\n'
-            '</group>\n</group>\n%s</group>\n</definition>\n',
+                '<?xml version=\'1.0\' encoding=\'utf8\'?>\n'
+            '<definition>\n'
+            '  <group type="NXentry" '
+            'name="$var.entryname#\'scan\'$var.serialno">\n'
+            '    <group type="NXinstrument" name="instrument">\n'
+            '      <group type="NXcollection" name="collection">\n'
+            '        <field type="%s" name="%s">\n'
+            '          <strategy mode="STEP"/>\n'
+            '          <datasource name="%s" type="CLIENT">\n'
+            '            <record name="%s"/>\n'
+            '          </datasource>\n%s'
+            '        </field>\n'
+            '      </group>\n'
+            '    </group>\n%s'
+            '  </group>\n'
+            '</definition>\n',
         }
 
-        link = '<group name="data" type="NXdata">\n' \
-               '<link name="%s" ' \
+        link = '    <group type="NXdata" name="data">\n' \
+               '      <link ' \
                'target="/$var.entryname#\'scan\'$var.serialno:' \
-               'NXentry/NXinstrument/collection/%s"/>\n</group>\n'
+               'NXentry/NXinstrument/collection/%s" name="%s"/>\n' \
+               '    </group>\n'
 
-        dimbg = '<dimensions rank="%s">\n'
-        dim = '<dim index="%s" value="%s"/>\n'
-        dimend = '</dimensions>\n'
+        dimbg = '          <dimensions rank="%s">\n'
+        dim = '            <dim index="%s" value="%s"/>\n'
+        dimend = '          </dimensions>\n'
 
         # dname = "__dynamic_component__"
 
@@ -4799,8 +4908,7 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
                     lk = link % (ds, ds)
                     self.assertEqual(
                         cps["shapetype"] % (
-                            ds,
-                            nxstp, ds, ar["full_name"], mstr,
+                            nxstp, ds, ds, ar["full_name"], mstr,
                             lk if i % 2 else ""),
                         comp)
         finally:
@@ -4827,29 +4935,38 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
         cnfdef = json.loads(rs.profileConfiguration)
         cps = {
             "shapetype":
-            '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" '
-            'type="NXentry">\n'
-            '<group name="instrument" type="NXinstrument">\n'
-            '<group name="collection" type="NXcollection">\n%s'
-            '</group>\n</group>\n%s</group>\n</definition>\n',
+                '<?xml version=\'1.0\' encoding=\'utf8\'?>\n'
+            '<definition>\n'
+            '  <group '
+            'type="NXentry" '
+            'name="$var.entryname#\'scan\'$var.serialno"'
+            '>\n'
+            '    <group type="NXinstrument" name="instrument">\n'
+            '      <group type="NXcollection" name="collection">\n%s'
+            '      </group>\n'
+            '    </group>\n%s'
+            '  </group>\n'
+            '</definition>\n',
         }
 
-        defbg = '<?xml version="1.0" ?>\n<definition>\n'
+        defbg = '<?xml version=\'1.0\' encoding=\'utf8\'?>\n<definition>\n'
         defend = '</definition>\n'
-        groupbg = '<group name="%s" type="%s">\n'
+        groupbg = '<group type="%s" name="%s">\n'
         groupend = '</group>\n'
 
-        field = '<field name="%s" type="%s">\n<strategy mode="STEP"/>\n' + \
-            '<datasource name="%s" type="CLIENT">\n' + \
-            '<record name="%s"/>\n</datasource>\n%s</field>\n'
+        field = '<field type="%s" name="%s">\n' \
+                '  <strategy mode="STEP"/>\n'\
+                '  <datasource name="%s" type="CLIENT">\n' \
+                '    <record name="%s"/>\n' \
+                '  </datasource>\n%s' \
+                '</field>\n'
 
-        link = '<group name="data" type="NXdata">\n' + \
-            '<link name="%s" target="%s/%s"/>\n</group>\n'
+        link = '    <group type="NXdata" name="data">\n' + \
+            '      <link target="%s/%s" name="%s"/>\n    </group>\n'
 
-        dimbg = '<dimensions rank="%s">\n'
-        dim = '<dim index="%s" value="%s"/>\n'
-        dimend = '</dimensions>\n'
+        dimbg = '  <dimensions rank="%s">\n'
+        dim = '    <dim index="%s" value="%s"/>\n'
+        dimend = '  </dimensions>\n'
 
         # dname = "__dynamic_component__"
 
@@ -4970,35 +5087,44 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
 
                     comp = self._cf.dp.Components([cpname])[0]
                     ds = ar["name"]
-                    lk = link % (ds, mypath, ds)
+                    lk = link % (mypath, ds, ds)
                     if i % 4 < 2:
-                        fd = field % (ds, nxstp, ds, ar["full_name"], mstr)
+                        fd = field % (nxstp, ds, ds, ar["full_name"], mstr)
                     else:
                         # fname = fieldname.lower()
-                        fd = field % (fieldname.lower(), nxstp, ds,
+                        fd = field % (nxstp, fieldname.lower(), ds,
                                       ar["full_name"], mstr)
 
 #                    print "path3", path, len(path), bool(path)
                     if path or i % 4 > 1:
-
+                        kk = 0
                         if i % 4 < 2:
-                            lk = link % (ds, mypath, ds)
+                            lk = link % (mypath, ds, ds)
                         else:
-                            lk = link % (fieldname.lower(), mypath,
-                                         fieldname.lower())
+                            lk = link % (mypath,
+                                         fieldname.lower(), fieldname.lower())
                         mycps = defbg
-                        for nm, gtp in path:
+                        for k, (nm, gtp) in enumerate(path):
                             if not nm:
                                 nm = gtp[2:]
                             if not gtp:
                                 gtp = 'NX' + nm
-                            mycps += groupbg % (nm, gtp)
-                        mycps += fd
+                            mycps += "  " * (k + 1) + groupbg % (gtp, nm)
+                            kk = k
+                        if len(path):
+                            mycps += "  " * (kk + 2) + \
+                                     fd.replace("\n", "\n" + "  " * (kk + 2))
+                            mycps = mycps[:(-2*kk-4)]
+                        else:
+                            mycps += "  " * (kk + 1) + \
+                                     fd.replace("\n", "\n" + "  " * (kk + 1))
+                            mycps = mycps[:(-2*kk-2)]
 
-                        for j in range(len(path) - 1):
-                            mycps += groupend
-                        mycps += lk if i % 2 else ""
-                        mycps += groupend
+                        if len(path):
+                            for j in range(len(path) - 1):
+                                mycps += "  " * (len(path) - j) + groupend
+                            mycps += lk if i % 2 else ""
+                            mycps += "  " + groupend
                         mycps += defend
 
                         mycps2 = defbg
@@ -5007,25 +5133,38 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
                                 nm = gtp[2:]
                             if not gtp:
                                 gtp = 'NX' + nm
-                            mycps2 += groupbg % (nm, gtp)
+                            mycps2 += "  " * (k + 1) + groupbg % (gtp, nm)
                             if not k:
                                 mycps2 += lk if i % 2 else ""
-                        mycps2 += fd
-
-                        for _ in path:
-                            mycps2 += groupend
+                            kk = k
+                        if len(path):
+                            mycps2 += "  " * (kk + 2) + \
+                                      fd.replace("\n", "\n" + "  " * (kk + 2))
+                            mycps2 = mycps2[:(-2*kk-4)]
+                        else:
+                            mycps2 += "  " * (kk + 1) + \
+                                      fd.replace("\n", "\n" + "  " * (kk + 1))
+                            mycps2 = mycps2[:(-2*kk-2)]
+                        if len(path):
+                            for j in range(len(path) - 1):
+                                mycps2 += "  " * (len(path) - j) + groupend
+                            mycps2 += "  " + groupend
                         mycps2 += defend
 #                        print "FIRST"
                     else:
                         if i % 4 < 2:
-                            lk = link % (ds, self._defaultpath, ds)
+                            lk = link % (self._defaultpath, ds, ds)
                         else:
-                            lk = link % (fieldname.lower(), self._defaultpath,
-                                         fieldname.lower())
+                            lk = link % (self._defaultpath,
+                                         fieldname.lower(), fieldname.lower())
+                        fd = "  " * 4 + fd.replace(
+                            "\n", "\n" + "  " * (4))[:-8]
+
                         mycps = cps["shapetype"] % (
                             fd,
                             lk if i % 2 else "")
                         mycps2 = mycps
+
                     try:
                         self.assertEqual(comp, mycps)
                     except Exception:
@@ -5059,33 +5198,32 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
         #     '</group>\n</group>\n%s</group>\n</definition>\n',
         # }
 
-        defbg = '<?xml version="1.0" ?>\n<definition>\n'
+        defbg = '<?xml version=\'1.0\' encoding=\'utf8\'?>\n<definition>\n'
         defend = '</definition>\n'
-        groupbg = '<group name="$var.entryname#\'scan\'$var.serialno" ' \
-                  'type="NXentry">\n' \
-            '<group name="instrument" type="NXinstrument">\n' \
-            '<group name="collection" type="NXcollection">\n'
-        groupend = '</group>\n'
+        groupbg = '  <group type="NXentry" ' \
+                  'name="$var.entryname#\'scan\'$var.serialno">\n' \
+                  '    <group type="NXinstrument" name="instrument">\n' \
+                  '      <group type="NXcollection" name="collection">\n'
+        groupend1 = '  </group>\n'
+        groupend2 = '    </group>\n'
+        groupend3 = '      </group>\n'
 
-        fieldbg = '<field name="%s" type="%s">\n<strategy mode="STEP"/>\n'
+        fieldbg = '        <field type="%s" name="%s">\n' \
+                  '          <strategy mode="STEP"/>\n'
 
-        dsclient = '<datasource name="%s" type="CLIENT">\n' + \
-            '<record name="%s"/>\n</datasource>\n'
+        dsclient = '          <datasource name="%s" type="CLIENT">\n' \
+                   '            <record name="%s"/>\n' \
+                   '          </datasource>\n'
 
-        # dstango = '<datasource name="%s" type="TANGO">\n' \
-        #           '<device member="attribute" name="%s"/>\n' \
-        #           '<record name="%s"/>\n</datasource>\n'
+        # dstango = '<datasource name="%s" type="TANGO">\n' + \
+        #     '<device member="attribute" name="%s"/>\n' + \
+        #     '<record name="%s"/>\n</datasource>\n'
 
-        fieldend = '</field>\n'
+        fieldend = '        </field>\n'
 
-        link = '<group name="data" type="NXdata">\n' + \
-            '<link name="%s" target="%s/%s"/>\n</group>\n'
-
-        # dimbg = '<dimensions rank="%s">\n'
-        # dim = '<dim index="%s" value="%s"/>\n'
-        # dimend = '</dimensions>\n'
-
-        # dname = "__dynamic_component__"
+        link = '    <group type="NXdata" name="data">\n' \
+               '      <link target="%s/%s" name="%s"/>\n' \
+               '    </group>\n'
 
         arr = [
             {"name": "client_short", "full_name": "ttestp09/testts/t1r228",
@@ -5126,20 +5264,21 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
                     "", str(json.dumps([{"name": ar["full_name"]}]))])
 
                 comp = self._cf.dp.Components([cpname])[0]
-                mycps = defbg + groupbg + fieldbg % (ar["name"], "NX_CHAR")
+                mycps = defbg + groupbg + fieldbg % ("NX_CHAR", ar["name"])
                 if i % 2:
                     # sso = ar["source"].split("/")
                     # mycps += dstango % (
-                    #     ar["name"], "/".join(sso[:-1]), sso[-1])
+                    #   ar["name"], "/".join(sso[:-1]), sso[-1])
                     mycps += dsclient % (ar["name"], ar["full_name"])
                 else:
                     mycps += dsclient % (ar["name"], ar["full_name"])
-                mycps += fieldend + groupend + groupend
-                mycps += link % (ar["name"], self._defaultpath,
-                                 ar["name"])
-                mycps += groupend + defend
+                mycps += fieldend + groupend3 + groupend2
+                mycps += link % (self._defaultpath,
+                                 ar["name"], ar["name"])
+                mycps += groupend1 + defend
 
                 self.assertEqual(comp, mycps)
+#                print comp
 #                print comp
         finally:
             for ar in arr:
@@ -5166,84 +5305,121 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
         # cnfdef = json.loads(rs.profileConfiguration)
         cps = {
             "empty":
-                '<?xml version="1.0" ?>\n<definition/>\n',
+                '<?xml version=\'1.0\' encoding=\'utf8\'?>\n'
+            '<definition/>\n',
             "one":
-                '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" '
-            'type="NXentry">\n'
-            '<group name="instrument" type="NXinstrument">\n'
-            '<group name="collection" type="NXcollection">\n'
-            '<field name="one" type="NX_CHAR">\n<strategy mode="STEP"/>\n'
-            '<datasource name="one" type="CLIENT">\n<record name="one"/>\n'
-            '</datasource>\n</field>\n'
-            '</group>\n</group>\n'
-            '<group name="data" type="NXdata">\n'
-            '<link name="one" target="/$var.entryname#\'scan\'$var.serialno:'
-            'NXentry/NXinstrument/collection/one"/>\n'
-            '</group>\n</group>\n'
+            '<?xml version=\'1.0\' encoding=\'utf8\'?>\n'
+            '<definition>\n'
+            '  <group type="NXentry" '
+            'name="$var.entryname#\'scan\'$var.serialno">\n'
+            '    <group type="NXinstrument" name="instrument">\n'
+            '      <group type="NXcollection" name="collection">\n'
+            '        <field type="NX_CHAR" name="one">\n'
+            '          <strategy mode="STEP"/>\n'
+            '          <datasource name="one" type="CLIENT">\n'
+            '            <record name="one"/>\n'
+            '          </datasource>\n'
+            '        </field>\n'
+            '      </group>\n'
+            '    </group>\n'
+            '    <group type="NXdata" name="data">\n'
+            '      <link target="/$var.entryname#\'scan\'$var.serialno:'
+            'NXentry/NXinstrument/collection/one" name="one"/>\n'
+            '    </group>\n'
+            '  </group>\n'
             '</definition>\n',
             "two":
-                '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" '
-            'type="NXentry">\n'
-            '<group name="instrument" type="NXinstrument">\n'
-            '<group name="collection" type="NXcollection">\n'
-            '<field name="d1" type="NX_CHAR">\n<strategy mode="STEP"/>\n'
-            '<datasource name="d1" type="CLIENT">\n<record name="d1"/>\n'
-            '</datasource>\n</field>\n'
-            '</group>\n</group>\n'
-            '<group name="data" type="NXdata">\n'
-            '<link name="d1" target="/$var.entryname#\'scan\'$var.serialno:'
-            'NXentry/NXinstrument/collection/d1"/>\n'
-            '</group>\n</group>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" '
-            'type="NXentry">\n'
-            '<group name="instrument" type="NXinstrument">\n'
-            '<group name="collection" type="NXcollection">\n'
-            '<field name="d2" type="NX_CHAR">\n<strategy mode="STEP"/>\n'
-            '<datasource name="d2" type="CLIENT">\n<record name="d2"/>\n'
-            '</datasource>\n</field>\n</group>\n</group>\n'
-            '<group name="data" type="NXdata">\n'
-            '<link name="d2" target="/$var.entryname#\'scan\'$var.serialno:'
-            'NXentry/NXinstrument/collection/d2"/>\n'
-            '</group>\n</group>\n'
+            '<?xml version=\'1.0\' encoding=\'utf8\'?>\n'
+            '<definition>\n'
+            '  <group type="NXentry" '
+            'name="$var.entryname#\'scan\'$var.serialno">\n'
+            '    <group type="NXinstrument" name="instrument">\n'
+            '      <group type="NXcollection" name="collection">\n'
+            '        <field type="NX_CHAR" name="d1">\n'
+            '          <strategy mode="STEP"/>\n'
+            '          <datasource name="d1" type="CLIENT">\n'
+            '            <record name="d1"/>\n'
+            '          </datasource>\n'
+            '        </field>\n'
+            '      </group>\n'
+            '    </group>\n'
+            '    <group type="NXdata" name="data">\n'
+            '      <link target="/$var.entryname#\'scan\'$var.serialno:'
+            'NXentry/NXinstrument/collection/d1" name="d1"/>\n'
+            '    </group>\n'
+            '  </group>\n'
+            '  <group type="NXentry" '
+            'name="$var.entryname#\'scan\'$var.serialno">\n'
+            '    <group type="NXinstrument" name="instrument">\n'
+            '      <group type="NXcollection" name="collection">\n'
+            '        <field type="NX_CHAR" name="d2">\n'
+            '          <strategy mode="STEP"/>\n'
+            '          <datasource name="d2" type="CLIENT">\n'
+            '            <record name="d2"/>\n'
+            '          </datasource>\n'
+            '        </field>\n'
+            '      </group>\n'
+            '    </group>\n'
+            '    <group type="NXdata" name="data">\n'
+            '      <link target="/$var.entryname#\'scan\'$var.serialno:'
+            'NXentry/NXinstrument/collection/d2" name="d2"/>\n'
+            '    </group>\n'
+            '  </group>\n'
             '</definition>\n',
             "three":
-                '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" '
-            'type="NXentry">\n'
-            '<group name="instrument" type="NXinstrument">\n'
-            '<group name="collection" type="NXcollection">\n'
-            '<field name="ds1" type="NX_CHAR">\n<strategy mode="STEP"/>\n'
-            '<datasource name="ds1" type="CLIENT">\n<record name="ds1"/>\n'
-            '</datasource>\n</field>\n'
-            '</group>\n</group>\n'
-            '<group name="data" type="NXdata">\n'
-            '<link name="ds1" target="/$var.entryname#\'scan\'$var.serialno:'
-            'NXentry/NXinstrument/collection/ds1"/>\n'
-            '</group>\n</group>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" '
-            'type="NXentry">\n'
-            '<group name="instrument" type="NXinstrument">\n'
-            '<group name="collection" type="NXcollection">\n'
-            '<field name="ds2" type="NX_CHAR">\n<strategy mode="STEP"/>\n'
-            '<datasource name="ds2" type="CLIENT">\n<record name="ds2"/>\n'
-            '</datasource>\n</field>\n</group>\n</group>\n'
-            '<group name="data" type="NXdata">\n'
-            '<link name="ds2" target="/$var.entryname#\'scan\'$var.serialno:'
-            'NXentry/NXinstrument/collection/ds2"/>\n'
-            '</group>\n</group>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" '
-            'type="NXentry">\n'
-            '<group name="instrument" type="NXinstrument">\n'
-            '<group name="collection" type="NXcollection">\n'
-            '<field name="ds3" type="NX_CHAR">\n<strategy mode="STEP"/>\n'
-            '<datasource name="ds3" type="CLIENT">\n<record name="ds3"/>\n'
-            '</datasource>\n</field>\n</group>\n</group>\n'
-            '<group name="data" type="NXdata">\n'
-            '<link name="ds3" target="/$var.entryname#\'scan\'$var.serialno:'
-            'NXentry/NXinstrument/collection/ds3"/>\n'
-            '</group>\n</group>\n'
+            '<?xml version=\'1.0\' encoding=\'utf8\'?>\n'
+            '<definition>\n'
+            '  <group type="NXentry" '
+            'name="$var.entryname#\'scan\'$var.serialno">\n'
+            '    <group type="NXinstrument" name="instrument">\n'
+            '      <group type="NXcollection" name="collection">\n'
+            '        <field type="NX_CHAR" name="ds1">\n'
+            '          <strategy mode="STEP"/>\n'
+            '          <datasource name="ds1" type="CLIENT">\n'
+            '            <record name="ds1"/>\n'
+            '          </datasource>\n'
+            '        </field>\n'
+            '      </group>\n'
+            '    </group>\n'
+            '    <group type="NXdata" name="data">\n'
+            '      <link target="/$var.entryname#\'scan\'$var.serialno:'
+            'NXentry/NXinstrument/collection/ds1" name="ds1"/>\n'
+            '    </group>\n'
+            '  </group>\n'
+            '  <group type="NXentry" '
+            'name="$var.entryname#\'scan\'$var.serialno">\n'
+            '    <group type="NXinstrument" name="instrument">\n'
+            '      <group type="NXcollection" name="collection">\n'
+            '        <field type="NX_CHAR" name="ds2">\n'
+            '          <strategy mode="STEP"/>\n'
+            '          <datasource name="ds2" type="CLIENT">\n'
+            '            <record name="ds2"/>\n'
+            '          </datasource>\n'
+            '        </field>\n'
+            '      </group>\n'
+            '    </group>\n'
+            '    <group type="NXdata" name="data">\n'
+            '      <link target="/$var.entryname#\'scan\'$var.serialno:'
+            'NXentry/NXinstrument/collection/ds2" name="ds2"/>\n'
+            '    </group>\n'
+            '  </group>\n'
+            '  <group type="NXentry" '
+            'name="$var.entryname#\'scan\'$var.serialno">\n'
+            '    <group type="NXinstrument" name="instrument">\n'
+            '      <group type="NXcollection" name="collection">\n'
+            '        <field type="NX_CHAR" name="ds3">\n'
+            '          <strategy mode="STEP"/>\n'
+            '          <datasource name="ds3" type="CLIENT">\n'
+            '            <record name="ds3"/>\n'
+            '          </datasource>\n'
+            '        </field>\n'
+            '      </group>\n'
+            '    </group>\n'
+            '    <group type="NXdata" name="data">\n'
+            '      <link target="/$var.entryname#\'scan\'$var.serialno:'
+            'NXentry/NXinstrument/collection/ds3" name="ds3"/>\n'
+            '    </group>\n'
+            '  </group>\n'
             '</definition>\n'
         }
         dsdict = {
@@ -5276,84 +5452,121 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
         cnfdef = json.loads(rs.profileConfiguration)
         cps = {
             "empty":
-                '<?xml version="1.0" ?>\n<definition/>\n',
+                '<?xml version=\'1.0\' encoding=\'utf8\'?>\n'
+            '<definition/>\n',
             "one":
-                '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" '
-            'type="NXentry">\n'
-            '<group name="instrument" type="NXinstrument">\n'
-            '<group name="collection" type="NXcollection">\n'
-            '<field name="one" type="NX_CHAR">\n<strategy mode="STEP"/>\n'
-            '<datasource name="one" type="CLIENT">\n<record name="one"/>\n'
-            '</datasource>\n</field>\n'
-            '</group>\n</group>\n'
-            '<group name="data" type="NXdata">\n'
-            '<link name="one" target="/$var.entryname#\'scan\'$var.serialno:'
-            'NXentry/NXinstrument/collection/one"/>\n'
-            '</group>\n</group>\n'
+            '<?xml version=\'1.0\' encoding=\'utf8\'?>\n'
+            '<definition>\n'
+            '  <group type="NXentry" '
+            'name="$var.entryname#\'scan\'$var.serialno">\n'
+            '    <group type="NXinstrument" name="instrument">\n'
+            '      <group type="NXcollection" name="collection">\n'
+            '        <field type="NX_CHAR" name="one">\n'
+            '          <strategy mode="STEP"/>\n'
+            '          <datasource name="one" type="CLIENT">\n'
+            '            <record name="one"/>\n'
+            '          </datasource>\n'
+            '        </field>\n'
+            '      </group>\n'
+            '    </group>\n'
+            '    <group type="NXdata" name="data">\n'
+            '      <link target="/$var.entryname#\'scan\'$var.serialno:'
+            'NXentry/NXinstrument/collection/one" name="one"/>\n'
+            '    </group>\n'
+            '  </group>\n'
             '</definition>\n',
             "two":
-                '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" '
-            'type="NXentry">\n'
-            '<group name="instrument" type="NXinstrument">\n'
-            '<group name="collection" type="NXcollection">\n'
-            '<field name="d1" type="NX_CHAR">\n<strategy mode="STEP"/>\n'
-            '<datasource name="d1" type="CLIENT">\n<record name="d1"/>\n'
-            '</datasource>\n</field>\n'
-            '</group>\n</group>\n'
-            '<group name="data" type="NXdata">\n'
-            '<link name="d1" target="/$var.entryname#\'scan\'$var.serialno:'
-            'NXentry/NXinstrument/collection/d1"/>\n'
-            '</group>\n</group>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" '
-            'type="NXentry">\n'
-            '<group name="instrument" type="NXinstrument">\n'
-            '<group name="collection" type="NXcollection">\n'
-            '<field name="d2" type="NX_CHAR">\n<strategy mode="STEP"/>\n'
-            '<datasource name="d2" type="CLIENT">\n<record name="d2"/>\n'
-            '</datasource>\n</field>\n</group>\n</group>\n'
-            '<group name="data" type="NXdata">\n'
-            '<link name="d2" target="/$var.entryname#\'scan\'$var.serialno:'
-            'NXentry/NXinstrument/collection/d2"/>\n'
-            '</group>\n</group>\n'
+            '<?xml version=\'1.0\' encoding=\'utf8\'?>\n'
+            '<definition>\n'
+            '  <group type="NXentry" '
+            'name="$var.entryname#\'scan\'$var.serialno">\n'
+            '    <group type="NXinstrument" name="instrument">\n'
+            '      <group type="NXcollection" name="collection">\n'
+            '        <field type="NX_CHAR" name="d1">\n'
+            '          <strategy mode="STEP"/>\n'
+            '          <datasource name="d1" type="CLIENT">\n'
+            '            <record name="d1"/>\n'
+            '          </datasource>\n'
+            '        </field>\n'
+            '      </group>\n'
+            '    </group>\n'
+            '    <group type="NXdata" name="data">\n'
+            '      <link target="/$var.entryname#\'scan\'$var.serialno:'
+            'NXentry/NXinstrument/collection/d1" name="d1"/>\n'
+            '    </group>\n'
+            '  </group>\n'
+            '  <group type="NXentry" '
+            'name="$var.entryname#\'scan\'$var.serialno">\n'
+            '    <group type="NXinstrument" name="instrument">\n'
+            '      <group type="NXcollection" name="collection">\n'
+            '        <field type="NX_CHAR" name="d2">\n'
+            '          <strategy mode="STEP"/>\n'
+            '          <datasource name="d2" type="CLIENT">\n'
+            '            <record name="d2"/>\n'
+            '          </datasource>\n'
+            '        </field>\n'
+            '      </group>\n'
+            '    </group>\n'
+            '    <group type="NXdata" name="data">\n'
+            '      <link target="/$var.entryname#\'scan\'$var.serialno:'
+            'NXentry/NXinstrument/collection/d2" name="d2"/>\n'
+            '    </group>\n'
+            '  </group>\n'
             '</definition>\n',
             "three":
-                '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" '
-            'type="NXentry">\n'
-            '<group name="instrument" type="NXinstrument">\n'
-            '<group name="collection" type="NXcollection">\n'
-            '<field name="ds1" type="NX_CHAR">\n<strategy mode="STEP"/>\n'
-            '<datasource name="ds1" type="CLIENT">\n<record name="ds1"/>\n'
-            '</datasource>\n</field>\n'
-            '</group>\n</group>\n'
-            '<group name="data" type="NXdata">\n'
-            '<link name="ds1" target="/$var.entryname#\'scan\'$var.serialno:'
-            'NXentry/NXinstrument/collection/ds1"/>\n'
-            '</group>\n</group>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" '
-            'type="NXentry">\n'
-            '<group name="instrument" type="NXinstrument">\n'
-            '<group name="collection" type="NXcollection">\n'
-            '<field name="ds2" type="NX_CHAR">\n<strategy mode="STEP"/>\n'
-            '<datasource name="ds2" type="CLIENT">\n<record name="ds2"/>\n'
-            '</datasource>\n</field>\n</group>\n</group>\n'
-            '<group name="data" type="NXdata">\n'
-            '<link name="ds2" target="/$var.entryname#\'scan\'$var.serialno:'
-            'NXentry/NXinstrument/collection/ds2"/>\n'
-            '</group>\n</group>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" '
-            'type="NXentry">\n'
-            '<group name="instrument" type="NXinstrument">\n'
-            '<group name="collection" type="NXcollection">\n'
-            '<field name="ds3" type="NX_CHAR">\n<strategy mode="STEP"/>\n'
-            '<datasource name="ds3" type="CLIENT">\n<record name="ds3"/>\n'
-            '</datasource>\n</field>\n</group>\n</group>\n'
-            '<group name="data" type="NXdata">\n'
-            '<link name="ds3" target="/$var.entryname#\'scan\'$var.serialno:'
-            'NXentry/NXinstrument/collection/ds3"/>\n'
-            '</group>\n</group>\n'
+            '<?xml version=\'1.0\' encoding=\'utf8\'?>\n'
+            '<definition>\n'
+            '  <group type="NXentry" '
+            'name="$var.entryname#\'scan\'$var.serialno">\n'
+            '    <group type="NXinstrument" name="instrument">\n'
+            '      <group type="NXcollection" name="collection">\n'
+            '        <field type="NX_CHAR" name="ds1">\n'
+            '          <strategy mode="STEP"/>\n'
+            '          <datasource name="ds1" type="CLIENT">\n'
+            '            <record name="ds1"/>\n'
+            '          </datasource>\n'
+            '        </field>\n'
+            '      </group>\n'
+            '    </group>\n'
+            '    <group type="NXdata" name="data">\n'
+            '      <link target="/$var.entryname#\'scan\'$var.serialno:'
+            'NXentry/NXinstrument/collection/ds1" name="ds1"/>\n'
+            '    </group>\n'
+            '  </group>\n'
+            '  <group type="NXentry" '
+            'name="$var.entryname#\'scan\'$var.serialno">\n'
+            '    <group type="NXinstrument" name="instrument">\n'
+            '      <group type="NXcollection" name="collection">\n'
+            '        <field type="NX_CHAR" name="ds2">\n'
+            '          <strategy mode="STEP"/>\n'
+            '          <datasource name="ds2" type="CLIENT">\n'
+            '            <record name="ds2"/>\n'
+            '          </datasource>\n'
+            '        </field>\n'
+            '      </group>\n'
+            '    </group>\n'
+            '    <group type="NXdata" name="data">\n'
+            '      <link target="/$var.entryname#\'scan\'$var.serialno:'
+            'NXentry/NXinstrument/collection/ds2" name="ds2"/>\n'
+            '    </group>\n'
+            '  </group>\n'
+            '  <group type="NXentry" '
+            'name="$var.entryname#\'scan\'$var.serialno">\n'
+            '    <group type="NXinstrument" name="instrument">\n'
+            '      <group type="NXcollection" name="collection">\n'
+            '        <field type="NX_CHAR" name="ds3">\n'
+            '          <strategy mode="STEP"/>\n'
+            '          <datasource name="ds3" type="CLIENT">\n'
+            '            <record name="ds3"/>\n'
+            '          </datasource>\n'
+            '        </field>\n'
+            '      </group>\n'
+            '    </group>\n'
+            '    <group type="NXdata" name="data">\n'
+            '      <link target="/$var.entryname#\'scan\'$var.serialno:'
+            'NXentry/NXinstrument/collection/ds3" name="ds3"/>\n'
+            '    </group>\n'
+            '  </group>\n'
             '</definition>\n'
         }
         dsdict = {
@@ -5389,18 +5602,26 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
         # cnfdef = json.loads(rs.profileConfiguration)
         cps = {
             "type":
-                '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" '
-            'type="NXentry">\n'
-            '<group name="instrument" type="NXinstrument">\n'
-            '<group name="collection" type="NXcollection">\n'
-            '<field name="ds1" type="%s">\n<strategy mode="STEP"/>\n'
-            '<datasource name="ds1" type="CLIENT">\n'
-            '<record name="ds1"/>\n</datasource>\n</field>\n'
-            '</group>\n</group>\n<group name="data" type="NXdata">\n'
-            '<link name="ds1" target="/$var.entryname#\'scan\'$var.serialno:'
-            'NXentry/NXinstrument/collection/ds1"/>\n'
-            '</group>\n</group>\n</definition>\n',
+                '<?xml version=\'1.0\' encoding=\'utf8\'?>\n'
+            '<definition>\n'
+            '  <group type="NXentry" '
+            'name="$var.entryname#\'scan\'$var.serialno">\n'
+            '    <group type="NXinstrument" name="instrument">\n'
+            '      <group type="NXcollection" name="collection">\n'
+            '        <field type="%s" name="ds1">\n'
+            '          <strategy mode="STEP"/>\n'
+            '          <datasource name="ds1" type="CLIENT">\n'
+            '            <record name="ds1"/>\n'
+            '          </datasource>\n'
+            '        </field>\n'
+            '      </group>\n'
+            '    </group>\n'
+            '    <group type="NXdata" name="data">\n'
+            '      <link target="/$var.entryname#\'scan\'$var.serialno:'
+            'NXentry/NXinstrument/collection/ds1" name="ds1"/>\n'
+            '    </group>\n'
+            '  </group>\n'
+            '</definition>\n',
         }
         # dname = "__dynamic_component__"
         for tp, nxstp in self._npTn.items():
@@ -5426,16 +5647,22 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
         # cnfdef = json.loads(rs.profileConfiguration)
         cps = {
             "type":
-                '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" '
-            'type="NXentry">\n'
-            '<group name="instrument" type="NXinstrument">\n'
-            '<group name="collection" type="NXcollection">\n'
-            '<field name="ds1" type="%s">\n<strategy mode="INIT"/>\n'
-            '<datasource name="ds1" type="CLIENT">\n'
-            '<record name="ds1"/>\n</datasource>\n</field>\n'
-            '</group>\n'
-            '</group>\n</group>\n</definition>\n',
+                '<?xml version=\'1.0\' encoding=\'utf8\'?>\n'
+            '<definition>\n'
+            '  <group type="NXentry" '
+            'name="$var.entryname#\'scan\'$var.serialno">\n'
+            '    <group type="NXinstrument" name="instrument">\n'
+            '      <group type="NXcollection" name="collection">\n'
+            '        <field type="%s" name="ds1">\n'
+            '          <strategy mode="INIT"/>\n'
+            '          <datasource name="ds1" type="CLIENT">\n'
+            '            <record name="ds1"/>\n'
+            '          </datasource>\n'
+            '        </field>\n'
+            '      </group>\n'
+            '    </group>\n'
+            '  </group>\n'
+            '</definition>\n',
         }
         # dname = "__dynamic_component__"
         for tp, nxstp in self._npTn.items():
@@ -5462,18 +5689,26 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
         cnfdef = json.loads(rs.profileConfiguration)
         cps = {
             "type":
-                '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" '
-            'type="NXentry">\n'
-            '<group name="instrument" type="NXinstrument">\n'
-            '<group name="collection" type="NXcollection">\n'
-            '<field name="ds1" type="%s">\n<strategy mode="STEP"/>\n'
-            '<datasource name="ds1" type="CLIENT">\n'
-            '<record name="ds1"/>\n</datasource>\n</field>\n'
-            '</group>\n</group>\n<group name="data" type="NXdata">\n'
-            '<link name="ds1" target="/$var.entryname#\'scan\'$var.serialno:'
-            'NXentry/NXinstrument/collection/ds1"/>\n'
-            '</group>\n</group>\n</definition>\n',
+                '<?xml version=\'1.0\' encoding=\'utf8\'?>\n'
+            '<definition>\n'
+            '  <group type="NXentry" '
+            'name="$var.entryname#\'scan\'$var.serialno">\n'
+            '    <group type="NXinstrument" name="instrument">\n'
+            '      <group type="NXcollection" name="collection">\n'
+            '        <field type="%s" name="ds1">\n'
+            '          <strategy mode="STEP"/>\n'
+            '          <datasource name="ds1" type="CLIENT">\n'
+            '            <record name="ds1"/>\n'
+            '          </datasource>\n'
+            '        </field>\n'
+            '      </group>\n'
+            '    </group>\n'
+            '    <group type="NXdata" name="data">\n'
+            '      <link target="/$var.entryname#\'scan\'$var.serialno:'
+            'NXentry/NXinstrument/collection/ds1" name="ds1"/>\n'
+            '    </group>\n'
+            '  </group>\n'
+            '</definition>\n',
         }
         # dname = "__dynamic_component__"
         for tp, nxstp in self._npTn.items():
@@ -5513,16 +5748,22 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
         cnfdef = json.loads(rs.profileConfiguration)
         cps = {
             "type":
-                '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" '
-            'type="NXentry">\n'
-            '<group name="instrument" type="NXinstrument">\n'
-            '<group name="collection" type="NXcollection">\n'
-            '<field name="ds1" type="%s">\n<strategy mode="INIT"/>\n'
-            '<datasource name="ds1" type="CLIENT">\n'
-            '<record name="ds1"/>\n</datasource>\n</field>\n'
-            '</group>\n'
-            '</group>\n</group>\n</definition>\n',
+                '<?xml version=\'1.0\' encoding=\'utf8\'?>\n'
+            '<definition>\n'
+            '  <group type="NXentry" '
+            'name="$var.entryname#\'scan\'$var.serialno">\n'
+            '    <group type="NXinstrument" name="instrument">\n'
+            '      <group type="NXcollection" name="collection">\n'
+            '        <field type="%s" name="ds1">\n'
+            '          <strategy mode="INIT"/>\n'
+            '          <datasource name="ds1" type="CLIENT">\n'
+            '            <record name="ds1"/>\n'
+            '          </datasource>\n'
+            '        </field>\n'
+            '      </group>\n'
+            '    </group>\n'
+            '  </group>\n'
+            '</definition>\n',
         }
         # dname = "__dynamic_component__"
         for tp, nxstp in self._npTn.items():
@@ -5559,23 +5800,31 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
         cnfdef = json.loads(rs.profileConfiguration)
         cps = {
             "shape":
-                '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" '
-            'type="NXentry">\n'
-            '<group name="instrument" type="NXinstrument">\n'
-            '<group name="collection" type="NXcollection">\n'
-            '<field name="ds2" type="NX_CHAR">\n<strategy mode="STEP"/>\n'
-            '<datasource name="ds2" type="CLIENT">\n'
-            '<record name="ds2"/>\n</datasource>\n%s</field>\n'
-            '</group>\n</group>\n<group name="data" type="NXdata">\n'
-            '<link name="ds2" target="/$var.entryname#\'scan\'$var.serialno:'
-            'NXentry/NXinstrument/collection/ds2"/>\n'
-            '</group>\n</group>\n</definition>\n',
+                '<?xml version=\'1.0\' encoding=\'utf8\'?>\n'
+            '<definition>\n'
+            '  <group type="NXentry" '
+            'name="$var.entryname#\'scan\'$var.serialno">\n'
+            '    <group type="NXinstrument" name="instrument">\n'
+            '      <group type="NXcollection" name="collection">\n'
+            '        <field type="NX_CHAR" name="ds2">\n'
+            '          <strategy mode="STEP"/>\n'
+            '          <datasource name="ds2" type="CLIENT">\n'
+            '            <record name="ds2"/>\n'
+            '          </datasource>\n%s'
+            '        </field>\n'
+            '      </group>\n'
+            '    </group>\n'
+            '    <group type="NXdata" name="data">\n'
+            '      <link target="/$var.entryname#\'scan\'$var.serialno:'
+            'NXentry/NXinstrument/collection/ds2" name="ds2"/>\n'
+            '    </group>\n'
+            '  </group>\n'
+            '</definition>\n',
         }
 
-        dimbg = '<dimensions rank="%s">\n'
-        dim = '<dim index="%s" value="%s"/>\n'
-        dimend = '</dimensions>\n'
+        dimbg = '          <dimensions rank="%s">\n'
+        dim = '            <dim index="%s" value="%s"/>\n'
+        dimend = '          </dimensions>\n'
 
         # dname = "__dynamic_component__"
         for i in range(50):
@@ -5621,21 +5870,27 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
         cnfdef = json.loads(rs.profileConfiguration)
         cps = {
             "shape":
-                '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" '
-            'type="NXentry">\n'
-            '<group name="instrument" type="NXinstrument">\n'
-            '<group name="collection" type="NXcollection">\n'
-            '<field name="ds2" type="NX_CHAR">\n<strategy mode="INIT"/>\n'
-            '<datasource name="ds2" type="CLIENT">\n'
-            '<record name="ds2"/>\n</datasource>\n%s</field>\n'
-            '</group>\n'
-            '</group>\n</group>\n</definition>\n',
+                '<?xml version=\'1.0\' encoding=\'utf8\'?>\n'
+            '<definition>\n'
+            '  <group type="NXentry" '
+            'name="$var.entryname#\'scan\'$var.serialno">\n'
+            '    <group type="NXinstrument" name="instrument">\n'
+            '      <group type="NXcollection" name="collection">\n'
+            '        <field type="NX_CHAR" name="ds2">\n'
+            '          <strategy mode="INIT"/>\n'
+            '          <datasource name="ds2" type="CLIENT">\n'
+            '            <record name="ds2"/>\n'
+            '          </datasource>\n%s'
+            '        </field>\n'
+            '      </group>\n'
+            '    </group>\n'
+            '  </group>\n'
+            '</definition>\n',
         }
 
-        dimbg = '<dimensions rank="%s">\n'
-        dim = '<dim index="%s" value="%s"/>\n'
-        dimend = '</dimensions>\n'
+        dimbg = '          <dimensions rank="%s">\n'
+        dim = '            <dim index="%s" value="%s"/>\n'
+        dimend = '          </dimensions>\n'
 
         # dname = "__dynamic_component__"
         for i in range(50):
@@ -5681,26 +5936,33 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
         cnfdef = json.loads(rs.profileConfiguration)
         cps = {
             "shapetype":
-                '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" '
-            'type="NXentry">\n'
-            '<group name="instrument" type="NXinstrument">\n'
-            '<group name="collection" type="NXcollection">\n'
-            '<field name="%s" type="%s">\n<strategy mode="STEP"/>\n'
-            '<datasource name="%s" type="CLIENT">\n'
-            '<record name="%s"/>\n</datasource>\n'
-            '%s</field>\n'
-            '</group>\n</group>\n%s</group>\n</definition>\n',
+                '<?xml version=\'1.0\' encoding=\'utf8\'?>\n'
+            '<definition>\n'
+            '  <group type="NXentry" '
+            'name="$var.entryname#\'scan\'$var.serialno">\n'
+            '    <group type="NXinstrument" name="instrument">\n'
+            '      <group type="NXcollection" name="collection">\n'
+            '        <field type="%s" name="%s">\n'
+            '          <strategy mode="STEP"/>\n'
+            '          <datasource name="%s" type="CLIENT">\n'
+            '            <record name="%s"/>\n'
+            '          </datasource>\n%s'
+            '        </field>\n'
+            '      </group>\n'
+            '    </group>\n%s'
+            '  </group>\n'
+            '</definition>\n',
         }
 
-        link = '<group name="data" type="NXdata">\n' \
-               '<link name="%s" ' \
+        link = '    <group type="NXdata" name="data">\n' \
+               '      <link ' \
                'target="/$var.entryname#\'scan\'$var.serialno:' \
-               'NXentry/NXinstrument/collection/%s"/>\n</group>\n'
+               'NXentry/NXinstrument/collection/%s" name="%s"/>\n' \
+               '    </group>\n'
 
-        dimbg = '<dimensions rank="%s">\n'
-        dim = '<dim index="%s" value="%s"/>\n'
-        dimend = '</dimensions>\n'
+        dimbg = '          <dimensions rank="%s">\n'
+        dim = '            <dim index="%s" value="%s"/>\n'
+        dimend = '          </dimensions>\n'
 
         # dname = "__dynamic_component__"
 
@@ -5854,8 +6116,7 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
                     lk = link % (ds, ds)
                     self.assertEqual(
                         cps["shapetype"] % (
-                            ds,
-                            nxstp, ds, ar["name"], mstr,
+                            nxstp, ds, ds, ar["name"], mstr,
                             lk if i % 2 else ""),
                         comp)
         finally:
@@ -5877,26 +6138,33 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
         cnfdef = json.loads(rs.profileConfiguration)
         cps = {
             "shapetype":
-                '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" '
-            'type="NXentry">\n'
-            '<group name="instrument" type="NXinstrument">\n'
-            '<group name="collection" type="NXcollection">\n'
-            '<field name="%s" type="%s">\n<strategy mode="INIT"/>\n'
-            '<datasource name="%s" type="CLIENT">\n'
-            '<record name="%s"/>\n</datasource>\n'
-            '%s</field>\n'
-            '</group>\n</group>\n%s</group>\n</definition>\n',
+                '<?xml version=\'1.0\' encoding=\'utf8\'?>\n'
+            '<definition>\n'
+            '  <group type="NXentry" '
+            'name="$var.entryname#\'scan\'$var.serialno">\n'
+            '    <group type="NXinstrument" name="instrument">\n'
+            '      <group type="NXcollection" name="collection">\n'
+            '        <field type="%s" name="%s">\n'
+            '          <strategy mode="INIT"/>\n'
+            '          <datasource name="%s" type="CLIENT">\n'
+            '            <record name="%s"/>\n'
+            '          </datasource>\n%s'
+            '        </field>\n'
+            '      </group>\n'
+            '    </group>\n%s'
+            '  </group>\n'
+            '</definition>\n',
         }
 
-        link = '<group name="data" type="NXdata">\n' \
-               '<link name="%s" ' \
+        link = '    <group type="NXdata" name="data">\n' \
+               '      <link ' \
                'target="/$var.entryname#\'scan\'$var.serialno:' \
-               'NXentry/NXinstrument/collection/%s"/>\n</group>\n'
+               'NXentry/NXinstrument/collection/%s" name="%s"/>\n' \
+               '    </group>\n'
 
-        dimbg = '<dimensions rank="%s">\n'
-        dim = '<dim index="%s" value="%s"/>\n'
-        dimend = '</dimensions>\n'
+        dimbg = '          <dimensions rank="%s">\n'
+        dim = '            <dim index="%s" value="%s"/>\n'
+        dimend = '          </dimensions>\n'
 
         # dname = "__dynamic_component__"
 
@@ -6056,8 +6324,7 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
                     lk = link % (ds, ds)
                     self.assertEqual(
                         cps["shapetype"] % (
-                            ds,
-                            nxstp, ds, ar["name"], mstr,
+                            nxstp, ds, ds, ar["name"], mstr,
                             lk if i % 2 else ""),
                         comp)
         finally:
@@ -6078,22 +6345,25 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
         rs.mntGrp = val["MntGrp"]
         cnfdef = json.loads(rs.profileConfiguration)
 
-        defbg = '<?xml version="1.0" ?>\n<definition>\n'
+        defbg = '<?xml version=\'1.0\' encoding=\'utf8\'?>\n<definition>\n'
         defend = '</definition>\n'
-        groupbg = '<group name="$var.entryname#\'scan\'$var.serialno" ' \
-                  'type="NXentry">\n' \
-                  '<group name="instrument" type="NXinstrument">\n' \
-                  '<group name="collection" type="NXcollection">\n'
+        groupbg = '  <group type="NXentry" ' \
+                  'name="$var.entryname#\'scan\'$var.serialno">\n' \
+                  '    <group type="NXinstrument" name="instrument">\n' \
+                  '      <group type="NXcollection" name="collection">\n'
         groupend = '</group>\n'
 
-        fieldbg = '<field name="%s" type="%s">\n<strategy mode="STEP"/>\n'
-        fieldend = '</field>\n'
+        fieldbg = '        <field type="%s" name="%s">\n' \
+                  '          <strategy mode="STEP"/>\n'
+        fieldend = '        </field>\n'
 
-        dsclient = '<datasource name="%s" type="CLIENT">\n' + \
-            '<record name="%s"/>\n</datasource>\n'
+        dsclient = '          <datasource name="%s" type="CLIENT">\n' \
+                   '            <record name="%s"/>\n' \
+                   '          </datasource>\n'
 
-        link = '<group name="data" type="NXdata">\n' + \
-            '<link name="%s" target="%s/%s"/>\n</group>\n'
+        link = '    <group type="NXdata" name="data">\n' \
+               '      <link target="%s/%s" name="%s"/>\n' \
+               '    </group>\n'
 
         # dimbg = '<dimensions rank="%s">\n'
         # dim = '<dim index="%s" value="%s"/>\n'
@@ -6141,18 +6411,17 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
                 comp = self._cf.dp.Components([cpname])[0]
 
                 nxstype = 'NX_CHAR'
-                mycps = defbg + groupbg + fieldbg % (
-                    ds.lower(), nxstype)
+                mycps = defbg + groupbg + fieldbg % (nxstype, ds.lower())
 
                 mycps += dsclient % (ds, ds)
                 mstr = ""
 
                 mycps += mstr
-                mycps += fieldend + groupend + groupend
-                lk = link % (ds.lower(), self._defaultpath,
-                             ds.lower())
+                mycps += fieldend + "  " * 3 + groupend + "  " * 2 + groupend
+                lk = link % (self._defaultpath,
+                             ds.lower(), ds.lower())
                 mycps += lk if i % 2 else ""
-                mycps += groupend + defend
+                mycps += "  " + groupend + defend
 
                 self.assertEqual(comp, mycps)
 
@@ -6171,29 +6440,29 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
         rs.mntGrp = val["MntGrp"]
         # cnfdef = json.loads(rs.profileConfiguration)
 
-        defbg = '<?xml version="1.0" ?>\n<definition>\n'
+        defbg = '<?xml version=\'1.0\' encoding=\'utf8\'?>\n<definition>\n'
         defend = '</definition>\n'
-        groupbg = '<group name="$var.entryname#\'scan\'$var.serialno" ' \
-                  'type="NXentry">\n' \
-                  '<group name="instrument" type="NXinstrument">\n' \
-                  '<group name="collection" type="NXcollection">\n'
+        groupbg = '  <group type="NXentry" ' \
+                  'name="$var.entryname#\'scan\'$var.serialno">\n' \
+                  '    <group type="NXinstrument" name="instrument">\n' \
+                  '      <group type="NXcollection" name="collection">\n'
         groupend = '</group>\n'
 
-        fieldbg = '<field name="%s" type="%s">\n<strategy mode="STEP"/>\n'
-        fieldend = '</field>\n'
+        fieldbg = '        <field type="%s" name="%s">\n' \
+                  '          <strategy mode="STEP"/>\n'
+        fieldend = '        </field>\n'
 
-        dsclient = '<datasource name="%s" type="CLIENT">\n' + \
-            '<record name="%s"/>\n</datasource>\n'
-        dstango = '<datasource name="%s" type="TANGO">\n' + \
-            '<device member="attribute" name="%s"/>\n' + \
-            '<record name="%s"/>\n</datasource>\n'
+        dstango = '          <datasource name="%s" type="TANGO">\n' \
+                  '            <device member="attribute" name="%s"/>\n' \
+                  '            <record name="%s"/>\n' \
+                  '          </datasource>\n'
+        dsclient = '          <datasource name="%s" type="CLIENT">\n' \
+                   '            <record name="%s"/>\n' \
+                   '          </datasource>\n'
 
-        link = '<group name="data" type="NXdata">\n' + \
-            '<link name="%s" target="%s/%s"/>\n</group>\n'
-
-        # dimbg = '<dimensions rank="%s">\n'
-        # dim = '<dim index="%s" value="%s"/>\n'
-        # dimend = '</dimensions>\n'
+        link = '    <group type="NXdata" name="data">\n' \
+               '      <link target="%s/%s" name="%s"/>\n' \
+               '    </group>\n'
 
         arr = [
             {"name": "client_short", "full_name": "ttestp09/testts/t1r228",
@@ -6232,17 +6501,17 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
                     str(json.dumps([ar["name"]]))])
 
                 comp = self._cf.dp.Components([cpname])[0]
-                mycps = defbg + groupbg + fieldbg % (ar["name"], "NX_CHAR")
+                mycps = defbg + groupbg + fieldbg % ("NX_CHAR", ar["name"])
                 if i % 2:
                     sso = ar["source"].split("/")
                     mycps += dstango % (
                         ar["name"], "/".join(sso[:-1]), sso[-1])
                 else:
                     mycps += dsclient % (ar["name"], ar["name"])
-                mycps += fieldend + groupend + groupend
-                mycps += link % (ar["name"], self._defaultpath,
-                                 ar["name"])
-                mycps += groupend + defend
+                mycps += fieldend + "  " * 3 + groupend + "  " * 2 + groupend
+                mycps += link % (self._defaultpath,
+                                 ar["name"], ar["name"])
+                mycps += "  " + groupend + defend
 
                 self.assertEqual(comp, mycps)
         finally:
@@ -6269,29 +6538,30 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
         rs.mntGrp = val["MntGrp"]
         # cnfdef = json.loads(rs.profileConfiguration)
 
-        defbg = '<?xml version="1.0" ?>\n<definition>\n'
+        defbg = '<?xml version=\'1.0\' encoding=\'utf8\'?>\n<definition>\n'
         defend = '</definition>\n'
-        groupbg = '<group name="$var.entryname#\'scan\'$var.serialno" ' \
-                  'type="NXentry">\n' \
-                  '<group name="instrument" type="NXinstrument">\n' \
-                  '<group name="collection" type="NXcollection">\n'
+        groupbg = '  <group type="NXentry" ' \
+                  'name="$var.entryname#\'scan\'$var.serialno">\n' \
+                  '    <group type="NXinstrument" name="instrument">\n' \
+                  '      <group type="NXcollection" name="collection">\n'
         groupend = '</group>\n'
 
-        fieldbg = '<field name="%s" type="%s">\n<strategy mode="INIT"/>\n'
-        fieldend = '</field>\n'
+        fieldbg = '        <field type="%s" name="%s">\n' \
+                  '          <strategy mode="INIT"/>\n'
+        fieldend = '        </field>\n'
 
-        dsclient = '<datasource name="%s" type="CLIENT">\n' + \
-            '<record name="%s"/>\n</datasource>\n'
-        dstango = '<datasource name="%s" type="TANGO">\n' + \
-            '<device member="attribute" name="%s"/>\n' + \
-            '<record name="%s"/>\n</datasource>\n'
+        dstango = '          <datasource name="%s" type="TANGO">\n' \
+                  '            <device member="attribute" name="%s"/>\n' \
+                  '            <record name="%s"/>\n' \
+                  '          </datasource>\n'
+        dsclient = '          <datasource name="%s" type="CLIENT">\n' \
+                   '            <record name="%s"/>\n' \
+                   '          </datasource>\n'
 
-        link = '<group name="data" type="NXdata">\n' + \
-            '<link name="%s" target="%s/%s"/>\n</group>\n'
+        link = '    <group type="NXdata" name="data">\n' \
+               '      <link target="%s/%s" name="%s"/>\n' \
+               '    </group>\n'
         link = ''
-        # dimbg = '<dimensions rank="%s">\n'
-        # dim = '<dim index="%s" value="%s"/>\n'
-        # dimend = '</dimensions>\n'
 
         arr = [
             {"name": "client_short", "full_name": "ttestp09/testts/t1r228",
@@ -6330,20 +6600,18 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
                     "", "",
                     str(json.dumps([ar["name"]]))])
                 comp = self._cf.dp.Components([cpname])[0]
-                mycps = defbg + groupbg + fieldbg % (ar["name"], "NX_CHAR")
+                mycps = defbg + groupbg + fieldbg % ("NX_CHAR", ar["name"])
                 if i % 2:
                     sso = ar["source"].split("/")
                     mycps += dstango % (
                         ar["name"], "/".join(sso[:-1]), sso[-1])
                 else:
                     mycps += dsclient % (ar["name"], ar["name"])
-                mycps += fieldend + groupend + groupend
-                mycps += link  # % (ar["name"], self._defaultpath,
-                #   ar["name"])
-                mycps += groupend + defend
+                mycps += fieldend + "  " * 3 + groupend + "  " * 2 + groupend
+                mycps += link  # % (ar["name"], self.__defaultpath, ar["name"])
+                mycps += "  " + groupend + defend
 
                 self.assertEqual(comp, mycps)
-#                print comp
         finally:
             for ar in arr:
                 if '/' in ar["full_name"]:
@@ -6368,26 +6636,25 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
         rs.mntGrp = val["MntGrp"]
         cnfdef = json.loads(rs.profileConfiguration)
 
-        defbg = '<?xml version="1.0" ?>\n<definition>\n'
+        defbg = '<?xml version=\'1.0\' encoding=\'utf8\'?>\n<definition>\n'
         defend = '</definition>\n'
-        groupbg = '<group name="$var.entryname#\'scan\'$var.serialno" ' \
-                  'type="NXentry">\n' \
-                  '<group name="instrument" type="NXinstrument">\n' \
-                  '<group name="collection" type="NXcollection">\n'
+        groupbg = '  <group type="NXentry" ' \
+                  'name="$var.entryname#\'scan\'$var.serialno">\n' \
+                  '    <group type="NXinstrument" name="instrument">\n' \
+                  '      <group type="NXcollection" name="collection">\n'
         groupend = '</group>\n'
 
-        fieldbg = '<field name="%s" type="%s">\n<strategy mode="INIT"/>\n'
-        fieldend = '</field>\n'
+        fieldbg = '        <field type="%s" name="%s">\n' \
+                  '          <strategy mode="INIT"/>\n'
+        fieldend = '        </field>\n'
 
-        dsclient = '<datasource name="%s" type="CLIENT">\n' + \
-            '<record name="%s"/>\n</datasource>\n'
+        dsclient = '          <datasource name="%s" type="CLIENT">\n' \
+                   '            <record name="%s"/>\n' \
+                   '          </datasource>\n'
 
-        link = '<group name="data" type="NXdata">\n' + \
-            '<link name="%s" target="%s/%s"/>\n</group>\n'
-
-        # dimbg = '<dimensions rank="%s">\n'
-        # dim = '<dim index="%s" value="%s"/>\n'
-        # dimend = '</dimensions>\n'
+        link = '    <group type="NXdata" name="data">\n' \
+               '      <link target="%s/%s" name="%s"/>\n' \
+               '    </group>\n'
 
         for i in range(4):
             for ds, dsxml in self.smydss.items():
@@ -6430,17 +6697,17 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
 
                 nxstype = 'NX_CHAR'
                 mycps = defbg + groupbg + fieldbg % (
-                    ds.lower(), nxstype)
+                    nxstype, ds.lower())
 
                 mycps += dsclient % (ds, ds)
                 mstr = ""
 
                 mycps += mstr
-                mycps += fieldend + groupend + groupend
-                lk = link % (ds.lower(), self._defaultpath,
-                             ds.lower())
+                mycps += fieldend + " " * 6 + groupend + " " * 4 + groupend
+                lk = link % (self._defaultpath,
+                             ds.lower(), ds.lower())
                 mycps += lk if i % 2 else ""
-                mycps += groupend + defend
+                mycps += "  " + groupend + defend
 
                 self.assertEqual(comp, mycps)
 
@@ -6459,23 +6726,25 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
         rs.mntGrp = val["MntGrp"]
         cnfdef = json.loads(rs.profileConfiguration)
 
-        defbg = '<?xml version="1.0" ?>\n<definition>\n'
+        defbg = '<?xml version=\'1.0\' encoding=\'utf8\'?>\n<definition>\n'
         defend = '</definition>\n'
-        groupbg = '<group name="$var.entryname#\'scan\'$var.serialno" '\
-                  'type="NXentry">\n' \
-                  '<group name="instrument" type="NXinstrument">\n' \
-                  '<group name="collection" type="NXcollection">\n'
+        groupbg = '  <group type="NXentry" ' \
+                  'name="$var.entryname#\'scan\'$var.serialno">\n' \
+                  '    <group type="NXinstrument" name="instrument">\n' \
+                  '      <group type="NXcollection" name="collection">\n'
         groupend = '</group>\n'
 
-        fieldbg = '<field name="%s" type="%s">\n<strategy mode="STEP"/>\n'
-        fieldend = '</field>\n'
+        fieldbg = '        <field type="%s" name="%s">\n' \
+                  '          <strategy mode="STEP"/>\n'
+        fieldend = '        </field>\n'
 
-        link = '<group name="data" type="NXdata">\n' + \
-            '<link name="%s" target="%s/%s"/>\n</group>\n'
+        link = '    <group type="NXdata" name="data">\n' \
+               '      <link target="%s/%s" name="%s"/>\n' \
+               '    </group>\n'
 
-        dimbg = '<dimensions rank="%s">\n'
-        dim = '<dim index="%s" value="%s"/>\n'
-        dimend = '</dimensions>\n'
+        dimbg = '          <dimensions rank="%s">\n'
+        dim = '            <dim index="%s" value="%s"/>\n'
+        dimend = '          </dimensions>\n'
 
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
         for i, nxstp in enumerate(self._npTn.values()):
@@ -6601,12 +6870,16 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
                 comp = self._cf.dp.Components([cpname])[0]
 
                 indom = miniparseString(dsxml)
-                dss = indom.getElementsByTagName("datasource")
+                dss = indom.findall(".//datasource")
                 nxstype = nxstp
-                mycps = defbg + groupbg + fieldbg % (
-                    ds.lower(), nxstype)
+                mycps = defbg + groupbg + fieldbg % (nxstype, ds.lower())
 
-                mycps += dss[0].toprettyxml(indent="")
+                xds = " " * 10 + Utils.tostr(lxml.etree.tostring(
+                    dss[0], encoding='utf8',
+                    method='xml', pretty_print=True)).replace(
+                        "\n", "\n" + " " * 10)
+                xds = xds[:-10]
+                mycps += xds
                 mstr = ""
                 if ms2:
                     mstr += dimbg % len(ms2)
@@ -6615,11 +6888,11 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
                     mstr += dimend
 
                 mycps += mstr
-                mycps += fieldend + groupend + groupend
-                lk = link % (ds.lower(), self._defaultpath,
-                             ds.lower())
+                mycps += fieldend + " " * 6 + groupend + " " * 4 + groupend
+                lk = link % (self._defaultpath,
+                             ds.lower(), ds.lower())
                 mycps += lk if i % 2 else ""
-                mycps += groupend + defend
+                mycps += "  " + groupend + defend
 
                 self.assertEqual(comp, mycps)
 
@@ -6638,23 +6911,25 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
         rs.mntGrp = val["MntGrp"]
         cnfdef = json.loads(rs.profileConfiguration)
 
-        defbg = '<?xml version="1.0" ?>\n<definition>\n'
+        defbg = '<?xml version=\'1.0\' encoding=\'utf8\'?>\n<definition>\n'
         defend = '</definition>\n'
-        groupbg = '<group name="$var.entryname#\'scan\'$var.serialno" ' \
-                  'type="NXentry">\n' \
-                  '<group name="instrument" type="NXinstrument">\n' \
-                  '<group name="collection" type="NXcollection">\n'
+        groupbg = '  <group type="NXentry" ' \
+                  'name="$var.entryname#\'scan\'$var.serialno">\n' \
+                  '    <group type="NXinstrument" name="instrument">\n' \
+                  '      <group type="NXcollection" name="collection">\n'
         groupend = '</group>\n'
 
-        fieldbg = '<field name="%s" type="%s">\n<strategy mode="STEP"/>\n'
-        fieldend = '</field>\n'
+        fieldbg = '        <field type="%s" name="%s">\n' \
+                  '          <strategy mode="STEP"/>\n'
+        fieldend = '        </field>\n'
 
-        link = '<group name="data" type="NXdata">\n' + \
-            '<link name="%s" target="%s/%s"/>\n</group>\n'
+        link = '    <group type="NXdata" name="data">\n' \
+               '      <link target="%s/%s" name="%s"/>\n' \
+               '    </group>\n'
 
-        dimbg = '<dimensions rank="%s">\n'
-        dim = '<dim index="%s" value="%s"/>\n'
-        dimend = '</dimensions>\n'
+        dimbg = '          <dimensions rank="%s">\n'
+        dim = '            <dim index="%s" value="%s"/>\n'
+        dimend = '          </dimensions>\n'
 
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
         for i, nxstp in enumerate(self._npTn.values()):
@@ -6780,12 +7055,16 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
                 comp = self._cf.dp.Components([cpname])[0]
 
                 indom = miniparseString(dsxml)
-                dss = indom.getElementsByTagName("datasource")
+                dss = indom.findall(".//datasource")
                 nxstype = nxstp
-                mycps = defbg + groupbg + fieldbg % (
-                    ds.lower(), nxstype)
+                mycps = defbg + groupbg + fieldbg % (nxstype, ds.lower())
 
-                mycps += dss[0].toprettyxml(indent="")
+                xds = " " * 10 + Utils.tostr(lxml.etree.tostring(
+                    dss[0], encoding='utf8',
+                    method='xml', pretty_print=True)).replace(
+                        "\n", "\n" + " " * 10)
+                xds = xds[:-10]
+                mycps += xds
                 mstr = ""
                 if ms2:
                     mstr += dimbg % len(ms2)
@@ -6794,11 +7073,11 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
                     mstr += dimend
 
                 mycps += mstr
-                mycps += fieldend + groupend + groupend
-                lk = link % (ds.lower(), self._defaultpath,
-                             ds.lower())
+                mycps += fieldend + " " * 6 + groupend + " " * 4 + groupend
+                lk = link % (self._defaultpath,
+                             ds.lower(), ds.lower())
                 mycps += lk if i % 2 else ""
-                mycps += groupend + defend
+                mycps += "  " + groupend + defend
 
                 self.assertEqual(comp, mycps)
 
@@ -6817,23 +7096,25 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
         rs.mntGrp = val["MntGrp"]
         cnfdef = json.loads(rs.profileConfiguration)
 
-        defbg = '<?xml version="1.0" ?>\n<definition>\n'
+        defbg = '<?xml version=\'1.0\' encoding=\'utf8\'?>\n<definition>\n'
         defend = '</definition>\n'
-        groupbg = '<group name="$var.entryname#\'scan\'$var.serialno" ' \
-                  'type="NXentry">\n' \
-                  '<group name="instrument" type="NXinstrument">\n' \
-                  '<group name="collection" type="NXcollection">\n'
+        groupbg = '  <group type="NXentry" ' \
+                  'name="$var.entryname#\'scan\'$var.serialno">\n' \
+                  '    <group type="NXinstrument" name="instrument">\n' \
+                  '      <group type="NXcollection" name="collection">\n'
         groupend = '</group>\n'
 
-        fieldbg = '<field name="%s" type="%s">\n<strategy mode="INIT"/>\n'
-        fieldend = '</field>\n'
+        fieldbg = '        <field type="%s" name="%s">\n' \
+                  '          <strategy mode="INIT"/>\n'
+        fieldend = '        </field>\n'
 
-        link = '<group name="data" type="NXdata">\n' + \
-            '<link name="%s" target="%s/%s"/>\n</group>\n'
+        link = '    <group type="NXdata" name="data">\n' \
+               '      <link target="%s/%s" name="%s"/>\n' \
+               '    </group>\n'
 
-        dimbg = '<dimensions rank="%s">\n'
-        dim = '<dim index="%s" value="%s"/>\n'
-        dimend = '</dimensions>\n'
+        dimbg = '          <dimensions rank="%s">\n'
+        dim = '            <dim index="%s" value="%s"/>\n'
+        dimend = '          </dimensions>\n'
 
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
         for i, nxstp in enumerate(self._npTn.values()):
@@ -6960,12 +7241,16 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
                 comp = self._cf.dp.Components([cpname])[0]
 
                 indom = miniparseString(dsxml)
-                dss = indom.getElementsByTagName("datasource")
+                dss = indom.findall(".//datasource")
                 nxstype = nxstp
-                mycps = defbg + groupbg + fieldbg % (
-                    ds.lower(), nxstype)
+                mycps = defbg + groupbg + fieldbg % (nxstype, ds.lower())
 
-                mycps += dss[0].toprettyxml(indent="")
+                xds = " " * 10 + Utils.tostr(lxml.etree.tostring(
+                    dss[0], encoding='utf8',
+                    method='xml', pretty_print=True)).replace(
+                        "\n", "\n" + " " * 10)
+                xds = xds[:-10]
+                mycps += xds
                 mstr = ""
                 if ms2:
                     mstr += dimbg % len(ms2)
@@ -6974,11 +7259,11 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
                     mstr += dimend
 
                 mycps += mstr
-                mycps += fieldend + groupend + groupend
-                lk = link % (ds.lower(), self._defaultpath,
-                             ds.lower())
+                mycps += fieldend + " " * 6 + groupend + " " * 4 + groupend
+                lk = link % (self._defaultpath,
+                             ds.lower(), ds.lower())
                 mycps += lk if i % 2 else ""
-                mycps += groupend + defend
+                mycps += "  " + groupend + defend
 
                 self.assertEqual(comp, mycps)
 
@@ -6997,23 +7282,25 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
         rs.mntGrp = val["MntGrp"]
         cnfdef = json.loads(rs.profileConfiguration)
 
-        defbg = '<?xml version="1.0" ?>\n<definition>\n'
+        defbg = '<?xml version=\'1.0\' encoding=\'utf8\'?>\n<definition>\n'
         defend = '</definition>\n'
-        groupbg = '<group name="$var.entryname#\'scan\'$var.serialno" ' \
-                  'type="NXentry">\n' \
-                  '<group name="instrument" type="NXinstrument">\n' \
-                  '<group name="collection" type="NXcollection">\n'
+        groupbg = '  <group type="NXentry" ' \
+                  'name="$var.entryname#\'scan\'$var.serialno">\n' \
+                  '    <group type="NXinstrument" name="instrument">\n' \
+                  '      <group type="NXcollection" name="collection">\n'
         groupend = '</group>\n'
 
-        fieldbg = '<field name="%s" type="%s">\n<strategy mode="INIT"/>\n'
-        fieldend = '</field>\n'
+        fieldbg = '        <field type="%s" name="%s">\n' \
+                  '          <strategy mode="INIT"/>\n'
+        fieldend = '        </field>\n'
 
-        link = '<group name="data" type="NXdata">\n' + \
-            '<link name="%s" target="%s/%s"/>\n</group>\n'
+        link = '    <group type="NXdata" name="data">\n' \
+               '      <link target="%s/%s" name="%s"/>\n' \
+               '    </group>\n'
 
-        dimbg = '<dimensions rank="%s">\n'
-        dim = '<dim index="%s" value="%s"/>\n'
-        dimend = '</dimensions>\n'
+        dimbg = '          <dimensions rank="%s">\n'
+        dim = '            <dim index="%s" value="%s"/>\n'
+        dimend = '          </dimensions>\n'
 
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.smydss)])
@@ -7135,12 +7422,16 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
                 comp = self._cf.dp.Components([cpname])[0]
 
                 indom = miniparseString(dsxml)
-                dss = indom.getElementsByTagName("datasource")
+                dss = indom.findall(".//datasource")
                 nxstype = nxstp
-                mycps = defbg + groupbg + fieldbg % (
-                    ds.lower(), nxstype)
+                mycps = defbg + groupbg + fieldbg % (nxstype, ds.lower())
 
-                mycps += dss[0].toprettyxml(indent="")
+                xds = " " * 10 + Utils.tostr(lxml.etree.tostring(
+                    dss[0], encoding='utf8',
+                    method='xml', pretty_print=True)).replace(
+                        "\n", "\n" + " " * 10)
+                xds = xds[:-10]
+                mycps += xds
                 mstr = ""
                 if ms2:
                     mstr += dimbg % len(ms2)
@@ -7149,11 +7440,11 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
                     mstr += dimend
 
                 mycps += mstr
-                mycps += fieldend + groupend + groupend
-                lk = link % (ds.lower(), self._defaultpath,
-                             ds.lower())
+                mycps += fieldend + " " * 6 + groupend + " " * 4 + groupend
+                lk = link % (self._defaultpath,
+                             ds.lower(), ds.lower())
                 mycps += lk if i % 2 else ""
-                mycps += groupend + defend
+                mycps += "  " + groupend + defend
 
                 self.assertEqual(comp, mycps)
 
@@ -7173,31 +7464,35 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
         cnfdef = json.loads(rs.profileConfiguration)
         cps = {
             "shapetype":
-            '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" '
-            'type="NXentry">\n'
-            '<group name="instrument" type="NXinstrument">\n'
-            '<group name="collection" type="NXcollection">\n%s'
-            '</group>\n</group>\n%s</group>\n</definition>\n',
+                '<?xml version=\'1.0\' encoding=\'utf8\'?>\n'
+            '<definition>\n'
+            '  <group '
+            'type="NXentry" '
+            'name="$var.entryname#\'scan\'$var.serialno"'
+            '>\n'
+            '    <group type="NXinstrument" name="instrument">\n'
+            '      <group type="NXcollection" name="collection">\n%s'
+            '      </group>\n'
+            '    </group>\n%s'
+            '  </group>\n'
+            '</definition>\n',
         }
 
-        defbg = '<?xml version="1.0" ?>\n<definition>\n'
+        defbg = '<?xml version=\'1.0\' encoding=\'utf8\'?>\n<definition>\n'
         defend = '</definition>\n'
-        groupbg = '<group name="%s" type="%s">\n'
+        groupbg = '<group type="%s" name="%s">\n'
         groupend = '</group>\n'
 
-        # field = '<field name="%s" type="%s">\n<strategy mode="STEP"/>\n' + \
-        #     '<datasource name="%s" type="CLIENT">\n' + \
-        #     '<record name="%s"/>\n</datasource>\n%s</field>\n'
-        fieldbg = '<field name="%s" type="%s">\n<strategy mode="STEP"/>\n'
+        fieldbg = '<field type="%s" name="%s">\n' \
+                  '  <strategy mode="STEP"/>\n'
         fieldend = '</field>\n'
 
-        link = '<group name="data" type="NXdata">\n' + \
-            '<link name="%s" target="%s/%s"/>\n</group>\n'
+        link = '    <group type="NXdata" name="data">\n' + \
+            '      <link target="%s/%s" name="%s"/>\n    </group>\n'
 
-        dimbg = '<dimensions rank="%s">\n'
-        dim = '<dim index="%s" value="%s"/>\n'
-        dimend = '</dimensions>\n'
+        dimbg = '  <dimensions rank="%s">\n'
+        dim = '    <dim index="%s" value="%s"/>\n'
+        dimend = '  </dimensions>\n'
 
         # dname = "__dynamic_component__"
 
@@ -7212,7 +7507,7 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
                     sds = ds.split("_")
                     tp = sds[1]
                     indom = miniparseString(dsxml)
-                    dss = indom.getElementsByTagName("datasource")
+                    dss = indom.findall(".//datasource")
                     if not ds.startswith("client_") and sds[1] != 'encoded':
                         nxstp = self._npTn2[tp]
                     else:
@@ -7304,33 +7599,50 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
 
                     comp = self._cf.dp.Components([cpname])[0]
                     lk = link % (ds, mypath, ds)
+                    lnph = 2
                     if i % 4 < 2:
-                        fd = fieldbg % (ds.lower(), nxstp)
+                        fd = fieldbg % (nxstp, ds.lower())
                     else:
                         # fname = fieldname.lower()
-                        fd = fieldbg % (fieldname.lower(), nxstp)
-                    fd += dss[0].toprettyxml(indent="") + mstr + fieldend
+                        fd = fieldbg % (nxstp, fieldname.lower())
+                    xds = " " * lnph + Utils.tostr(lxml.etree.tostring(
+                        dss[0], encoding='utf8',
+                        method='xml', pretty_print=True)).replace(
+                            "\n", "\n" + " " * lnph)
+                    xds = xds[:-2]
+                    fd += xds
+
+                    fd += mstr + fieldend
 
                     if path or i % 4 > 1:
-
+                        kk = 0
                         if i % 4 < 2:
-                            lk = link % (ds.lower(), mypath, ds.lower())
+                            lk = link % (mypath, ds.lower(), ds.lower())
                         else:
-                            lk = link % (fieldname.lower(), mypath,
-                                         fieldname.lower())
+                            lk = link % (mypath,
+                                         fieldname.lower(), fieldname.lower())
                         mycps = defbg
-                        for nm, gtp in path:
+                        for k, (nm, gtp) in enumerate(path):
                             if not nm:
                                 nm = gtp[2:]
                             if not gtp:
                                 gtp = 'NX' + nm
-                            mycps += groupbg % (nm, gtp)
-                        mycps += fd
+                            mycps += "  " * (k + 1) + groupbg % (gtp, nm)
+                            kk = k
+                        if len(path):
+                            mycps += "  " * (kk + 2) + \
+                                     fd.replace("\n", "\n" + "  " * (kk + 2))
+                            mycps = mycps[:(-2*kk-4)]
+                        else:
+                            mycps += "  " * (kk + 1) + \
+                                     fd.replace("\n", "\n" + "  " * (kk + 1))
+                            mycps = mycps[:(-2*kk-2)]
 
-                        for j in range(len(path) - 1):
-                            mycps += groupend
-                        mycps += lk if i % 2 else ""
-                        mycps += groupend
+                        if len(path):
+                            for j in range(len(path) - 1):
+                                mycps += "  " * (len(path) - j) + groupend
+                            mycps += lk if i % 2 else ""
+                            mycps += "  " + groupend
                         mycps += defend
 
                         mycps2 = defbg
@@ -7339,22 +7651,34 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
                                 nm = gtp[2:]
                             if not gtp:
                                 gtp = 'NX' + nm
-                            mycps2 += groupbg % (nm, gtp)
+                            mycps2 += "  " * (k + 1) + groupbg % (gtp, nm)
                             if not k:
                                 mycps2 += lk if i % 2 else ""
-                        mycps2 += fd
-
-                        for _ in path:
-                            mycps2 += groupend
+                            kk = k
+                        if len(path):
+                            mycps2 += "  " * (kk + 2) + \
+                                      fd.replace("\n", "\n" + "  " * (kk + 2))
+                            mycps2 = mycps2[:(-2*kk-4)]
+                        else:
+                            mycps2 += "  " * (kk + 1) + \
+                                      fd.replace("\n", "\n" + "  " * (kk + 1))
+                            mycps2 = mycps2[:(-2*kk-2)]
+                        if len(path):
+                            for j in range(len(path) - 1):
+                                mycps2 += "  " * (len(path) - j) + groupend
+                            mycps2 += "  " + groupend
                         mycps2 += defend
 #                        print "FIRST"
                     else:
                         if i % 4 < 2:
-                            lk = link % (ds.lower(),
-                                         self._defaultpath, ds.lower())
+                            lk = link % (self._defaultpath,
+                                         ds.lower(), ds.lower())
                         else:
-                            lk = link % (fieldname.lower(), self._defaultpath,
-                                         fieldname.lower())
+                            lk = link % (self._defaultpath,
+                                         fieldname.lower(), fieldname.lower())
+                        fd = "  " * 4 + fd.replace(
+                            "\n", "\n" + "  " * (4))[:-8]
+
                         mycps = cps["shapetype"] % (
                             fd,
                             lk if i % 2 else "")
@@ -7382,32 +7706,35 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
         cnfdef = json.loads(rs.profileConfiguration)
         cps = {
             "shapetype":
-            '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" '
-            'type="NXentry">\n'
-            '<group name="instrument" type="NXinstrument">\n'
-            '<group name="collection" type="NXcollection">\n%s'
-            '</group>\n</group>\n%s</group>\n</definition>\n',
+                '<?xml version=\'1.0\' encoding=\'utf8\'?>\n'
+            '<definition>\n'
+            '  <group '
+            'type="NXentry" '
+            'name="$var.entryname#\'scan\'$var.serialno"'
+            '>\n'
+            '    <group type="NXinstrument" name="instrument">\n'
+            '      <group type="NXcollection" name="collection">\n%s'
+            '      </group>\n'
+            '    </group>\n%s'
+            '  </group>\n'
+            '</definition>\n',
         }
 
-        defbg = '<?xml version="1.0" ?>\n<definition>\n'
+        defbg = '<?xml version=\'1.0\' encoding=\'utf8\'?>\n<definition>\n'
         defend = '</definition>\n'
-        groupbg = '<group name="%s" type="%s">\n'
+        groupbg = '<group type="%s" name="%s">\n'
         groupend = '</group>\n'
 
-        # field = '<field name="%s" type="%s">\n<strategy mode="STEP"/>\n' + \
-        #     '<datasource name="%s" type="CLIENT">\n' + \
-        #     '<record name="%s"/>\n</datasource>\n%s</field>\n'
-        fieldbg = '<field name="%s" type="%s">\n<strategy mode="STEP"/>\n'
+        fieldbg = '<field type="%s" name="%s">\n' \
+                  '  <strategy mode="STEP"/>\n'
         fieldend = '</field>\n'
 
-        link = '<group name="data" type="NXdata">\n' + \
-            '<link name="%s" target="%s/%s"/>\n</group>\n'
+        link = '    <group type="NXdata" name="data">\n' + \
+            '      <link target="%s/%s" name="%s"/>\n    </group>\n'
 
-        dimbg = '<dimensions rank="%s">\n'
-        dim = '<dim index="%s" value="%s"/>\n'
-        dimend = '</dimensions>\n'
-
+        dimbg = '  <dimensions rank="%s">\n'
+        dim = '    <dim index="%s" value="%s"/>\n'
+        dimend = '  </dimensions>\n'
         # dname = "__dynamic_component__"
 
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
@@ -7421,7 +7748,7 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
                     sds = ds.split("_")
                     tp = sds[1]
                     indom = miniparseString(dsxml)
-                    dss = indom.getElementsByTagName("datasource")
+                    dss = indom.findall(".//datasource")
                     if not ds.startswith("client_") and sds[1] != 'encoded':
                         nxstp = self._npTn2[tp]
                     else:
@@ -7514,33 +7841,50 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
 
                     comp = self._cf.dp.Components([cpname])[0]
                     lk = link % (ds, mypath, ds)
+                    lnph = 2
                     if i % 4 < 2:
-                        fd = fieldbg % (ds.lower(), nxstp)
+                        fd = fieldbg % (nxstp, ds.lower())
                     else:
                         # fname = fieldname.lower()
-                        fd = fieldbg % (fieldname.lower(), nxstp)
-                    fd += dss[0].toprettyxml(indent="") + mstr + fieldend
+                        fd = fieldbg % (nxstp, fieldname.lower())
+                    xds = " " * lnph + Utils.tostr(lxml.etree.tostring(
+                        dss[0], encoding='utf8',
+                        method='xml', pretty_print=True)).replace(
+                            "\n", "\n" + " " * lnph)
+                    xds = xds[:-2]
+                    fd += xds
+
+                    fd += mstr + fieldend
 
                     if path or i % 4 > 1:
-
+                        kk = 0
                         if i % 4 < 2:
-                            lk = link % (ds.lower(), mypath, ds.lower())
+                            lk = link % (mypath, ds.lower(), ds.lower())
                         else:
-                            lk = link % (fieldname.lower(), mypath,
-                                         fieldname.lower())
+                            lk = link % (mypath,
+                                         fieldname.lower(), fieldname.lower())
                         mycps = defbg
-                        for nm, gtp in path:
+                        for k, (nm, gtp) in enumerate(path):
                             if not nm:
                                 nm = gtp[2:]
                             if not gtp:
                                 gtp = 'NX' + nm
-                            mycps += groupbg % (nm, gtp)
-                        mycps += fd
+                            mycps += "  " * (k + 1) + groupbg % (gtp, nm)
+                            kk = k
+                        if len(path):
+                            mycps += "  " * (kk + 2) + \
+                                     fd.replace("\n", "\n" + "  " * (kk + 2))
+                            mycps = mycps[:(-2*kk-4)]
+                        else:
+                            mycps += "  " * (kk + 1) + \
+                                     fd.replace("\n", "\n" + "  " * (kk + 1))
+                            mycps = mycps[:(-2*kk-2)]
 
-                        for j in range(len(path) - 1):
-                            mycps += groupend
-                        mycps += lk if i % 2 else ""
-                        mycps += groupend
+                        if len(path):
+                            for j in range(len(path) - 1):
+                                mycps += "  " * (len(path) - j) + groupend
+                            mycps += lk if i % 2 else ""
+                            mycps += "  " + groupend
                         mycps += defend
 
                         mycps2 = defbg
@@ -7549,22 +7893,34 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
                                 nm = gtp[2:]
                             if not gtp:
                                 gtp = 'NX' + nm
-                            mycps2 += groupbg % (nm, gtp)
+                            mycps2 += "  " * (k + 1) + groupbg % (gtp, nm)
                             if not k:
                                 mycps2 += lk if i % 2 else ""
-                        mycps2 += fd
-
-                        for _ in path:
-                            mycps2 += groupend
+                            kk = k
+                        if len(path):
+                            mycps2 += "  " * (kk + 2) + \
+                                      fd.replace("\n", "\n" + "  " * (kk + 2))
+                            mycps2 = mycps2[:(-2*kk-4)]
+                        else:
+                            mycps2 += "  " * (kk + 1) + \
+                                      fd.replace("\n", "\n" + "  " * (kk + 1))
+                            mycps2 = mycps2[:(-2*kk-2)]
+                        if len(path):
+                            for j in range(len(path) - 1):
+                                mycps2 += "  " * (len(path) - j) + groupend
+                            mycps2 += "  " + groupend
                         mycps2 += defend
 #                        print "FIRST"
                     else:
                         if i % 4 < 2:
-                            lk = link % (ds.lower(),
-                                         self._defaultpath, ds.lower())
+                            lk = link % (self._defaultpath,
+                                         ds.lower(), ds.lower())
                         else:
-                            lk = link % (fieldname.lower(), self._defaultpath,
-                                         fieldname.lower())
+                            lk = link % (self._defaultpath,
+                                         fieldname.lower(), fieldname.lower())
+                        fd = "  " * 4 + fd.replace(
+                            "\n", "\n" + "  " * (4))[:-8]
+
                         mycps = cps["shapetype"] % (
                             fd,
                             lk if i % 2 else "")
@@ -7592,31 +7948,35 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
         cnfdef = json.loads(rs.profileConfiguration)
         cps = {
             "shapetype":
-                '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" '
-            'type="NXentry">\n'
-            '<group name="instrument" type="NXinstrument">\n'
-            '<group name="collection" type="NXcollection">\n%s'
-            '</group>\n</group>\n%s</group>\n</definition>\n',
+                '<?xml version=\'1.0\' encoding=\'utf8\'?>\n'
+            '<definition>\n'
+            '  <group '
+            'type="NXentry" '
+            'name="$var.entryname#\'scan\'$var.serialno"'
+            '>\n'
+            '    <group type="NXinstrument" name="instrument">\n'
+            '      <group type="NXcollection" name="collection">\n%s'
+            '      </group>\n'
+            '    </group>\n%s'
+            '  </group>\n'
+            '</definition>\n',
         }
 
-        defbg = '<?xml version="1.0" ?>\n<definition>\n'
+        defbg = '<?xml version=\'1.0\' encoding=\'utf8\'?>\n<definition>\n'
         defend = '</definition>\n'
-        groupbg = '<group name="%s" type="%s">\n'
+        groupbg = '<group type="%s" name="%s">\n'
         groupend = '</group>\n'
 
-        # field = '<field name="%s" type="%s">\n<strategy mode="INIT"/>\n' + \
-        #     '<datasource name="%s" type="CLIENT">\n' + \
-        #     '<record name="%s"/>\n</datasource>\n%s</field>\n'
-        fieldbg = '<field name="%s" type="%s">\n<strategy mode="INIT"/>\n'
+        fieldbg = '<field type="%s" name="%s">\n' \
+                  '  <strategy mode="INIT"/>\n'
         fieldend = '</field>\n'
 
-        link = '<group name="data" type="NXdata">\n' + \
-            '<link name="%s" target="%s/%s"/>\n</group>\n'
+        link = '    <group type="NXdata" name="data">\n' + \
+            '      <link target="%s/%s" name="%s"/>\n    </group>\n'
 
-        dimbg = '<dimensions rank="%s">\n'
-        dim = '<dim index="%s" value="%s"/>\n'
-        dimend = '</dimensions>\n'
+        dimbg = '  <dimensions rank="%s">\n'
+        dim = '    <dim index="%s" value="%s"/>\n'
+        dimend = '  </dimensions>\n'
 
         # dname = "__dynamic_component__"
 
@@ -7630,7 +7990,7 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
                     sds = ds.split("_")
                     tp = sds[1]
                     indom = miniparseString(dsxml)
-                    dss = indom.getElementsByTagName("datasource")
+                    dss = indom.findall(".//datasource")
                     if not ds.startswith("client_") and sds[1] != 'encoded':
                         nxstp = self._npTn2[tp]
                     else:
@@ -7724,34 +8084,50 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
                         mstr += dimend
 
                     comp = self._cf.dp.Components([cpname])[0]
-                    lk = link % (ds, mypath, ds)
+                    lk = link  # % (ds, mypath, ds)
+                    lnph = 2
                     if i % 4 < 2:
-                        fd = fieldbg % (ds.lower(), nxstp)
+                        fd = fieldbg % (nxstp, ds.lower())
                     else:
                         # fname = fieldname.lower()
-                        fd = fieldbg % (fieldname.lower(), nxstp)
-                    fd += dss[0].toprettyxml(indent="") + mstr + fieldend
+                        fd = fieldbg % (nxstp, fieldname.lower())
+                    xds = " " * lnph + Utils.tostr(lxml.etree.tostring(
+                        dss[0], encoding='utf8',
+                        method='xml', pretty_print=True)).replace(
+                            "\n", "\n" + " " * lnph)
+                    xds = xds[:-2]
+                    fd += xds
+                    fd += mstr + fieldend
 
                     if path or i % 4 > 1:
-
+                        kk = 0
                         if i % 4 < 2:
-                            lk = link % (ds.lower(), mypath, ds.lower())
+                            lk = link % (mypath, ds.lower(), ds.lower())
                         else:
-                            lk = link % (fieldname.lower(), mypath,
-                                         fieldname.lower())
+                            lk = link % (mypath,
+                                         fieldname.lower(), fieldname.lower())
                         mycps = defbg
-                        for nm, gtp in path:
+                        for k, (nm, gtp) in enumerate(path):
                             if not nm:
                                 nm = gtp[2:]
                             if not gtp:
                                 gtp = 'NX' + nm
-                            mycps += groupbg % (nm, gtp)
-                        mycps += fd
+                            mycps += "  " * (k + 1) + groupbg % (gtp, nm)
+                            kk = k
+                        if len(path):
+                            mycps += "  " * (kk + 2) + \
+                                     fd.replace("\n", "\n" + "  " * (kk + 2))
+                            mycps = mycps[:(-2*kk-4)]
+                        else:
+                            mycps += "  " * (kk + 1) + \
+                                     fd.replace("\n", "\n" + "  " * (kk + 1))
+                            mycps = mycps[:(-2*kk-2)]
 
-                        for j in range(len(path) - 1):
-                            mycps += groupend
-                        mycps += lk if i % 2 else ""
-                        mycps += groupend
+                        if len(path):
+                            for j in range(len(path) - 1):
+                                mycps += "  " * (len(path) - j) + groupend
+                            mycps += lk if i % 2 else ""
+                            mycps += "  " + groupend
                         mycps += defend
 
                         mycps2 = defbg
@@ -7760,25 +8136,39 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
                                 nm = gtp[2:]
                             if not gtp:
                                 gtp = 'NX' + nm
-                            mycps2 += groupbg % (nm, gtp)
+                            mycps2 += "  " * (k + 1) + groupbg % (gtp, nm)
                             if not k:
                                 mycps2 += lk if i % 2 else ""
-                        mycps2 += fd
-
-                        for _ in path:
-                            mycps2 += groupend
+                            kk = k
+                        if len(path):
+                            mycps2 += "  " * (kk + 2) + \
+                                      fd.replace("\n", "\n" + "  " * (kk + 2))
+                            mycps2 = mycps2[:(-2*kk-4)]
+                        else:
+                            mycps2 += "  " * (kk + 1) + \
+                                      fd.replace("\n", "\n" + "  " * (kk + 1))
+                            mycps2 = mycps2[:(-2*kk-2)]
+                        if len(path):
+                            for j in range(len(path) - 1):
+                                mycps2 += "  " * (len(path) - j) + groupend
+                            mycps2 += "  " + groupend
                         mycps2 += defend
+#                        print "FIRST"
                     else:
                         if i % 4 < 2:
-                            lk = link % (ds.lower(),
-                                         self._defaultpath, ds.lower())
+                            lk = link % (self._defaultpath,
+                                         ds.lower(), ds.lower())
                         else:
-                            lk = link % (fieldname.lower(), self._defaultpath,
-                                         fieldname.lower())
+                            lk = link % (self._defaultpath,
+                                         fieldname.lower(), fieldname.lower())
+                        fd = "  " * 4 + fd.replace(
+                            "\n", "\n" + "  " * (4))[:-8]
+
                         mycps = cps["shapetype"] % (
                             fd,
                             lk if i % 2 else "")
                         mycps2 = mycps
+
                     try:
                         self.assertEqual(comp, mycps2)
                     except Exception:
@@ -7802,31 +8192,35 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
         cnfdef = json.loads(rs.profileConfiguration)
         cps = {
             "shapetype":
-            '<?xml version="1.0" ?>\n<definition>\n'
-            '<group name="$var.entryname#\'scan\'$var.serialno" '
-            'type="NXentry">\n'
-            '<group name="instrument" type="NXinstrument">\n'
-            '<group name="collection" type="NXcollection">\n%s'
-            '</group>\n</group>\n%s</group>\n</definition>\n',
+                '<?xml version=\'1.0\' encoding=\'utf8\'?>\n'
+            '<definition>\n'
+            '  <group '
+            'type="NXentry" '
+            'name="$var.entryname#\'scan\'$var.serialno"'
+            '>\n'
+            '    <group type="NXinstrument" name="instrument">\n'
+            '      <group type="NXcollection" name="collection">\n%s'
+            '      </group>\n'
+            '    </group>\n%s'
+            '  </group>\n'
+            '</definition>\n',
         }
 
-        defbg = '<?xml version="1.0" ?>\n<definition>\n'
+        defbg = '<?xml version=\'1.0\' encoding=\'utf8\'?>\n<definition>\n'
         defend = '</definition>\n'
-        groupbg = '<group name="%s" type="%s">\n'
+        groupbg = '<group type="%s" name="%s">\n'
         groupend = '</group>\n'
 
-        # field = '<field name="%s" type="%s">\n<strategy mode="INIT"/>\n' + \
-        #     '<datasource name="%s" type="CLIENT">\n' + \
-        #     '<record name="%s"/>\n</datasource>\n%s</field>\n'
-        fieldbg = '<field name="%s" type="%s">\n<strategy mode="INIT"/>\n'
+        fieldbg = '<field type="%s" name="%s">\n' \
+                  '  <strategy mode="INIT"/>\n'
         fieldend = '</field>\n'
 
-        link = '<group name="data" type="NXdata">\n' + \
-            '<link name="%s" target="%s/%s"/>\n</group>\n'
+        link = '    <group type="NXdata" name="data">\n' + \
+            '      <link target="%s/%s" name="%s"/>\n    </group>\n'
 
-        dimbg = '<dimensions rank="%s">\n'
-        dim = '<dim index="%s" value="%s"/>\n'
-        dimend = '</dimensions>\n'
+        dimbg = '  <dimensions rank="%s">\n'
+        dim = '    <dim index="%s" value="%s"/>\n'
+        dimend = '  </dimensions>\n'
 
         # dname = "__dynamic_component__"
 
@@ -7842,7 +8236,7 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
                     sds = ds.split("_")
                     tp = sds[1]
                     indom = miniparseString(dsxml)
-                    dss = indom.getElementsByTagName("datasource")
+                    dss = indom.findall(".//datasource")
                     if not ds.startswith("client_") and sds[1] != 'encoded':
                         nxstp = self._npTn2[tp]
                     else:
@@ -7934,34 +8328,50 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
                         mstr += dimend
 
                     comp = self._cf.dp.Components([cpname])[0]
-                    lk = link % (ds, mypath, ds)
+                    lk = link % (mypath, ds, ds)
+                    lnph = 2
                     if i % 4 < 2:
-                        fd = fieldbg % (ds.lower(), nxstp)
+                        fd = fieldbg % (nxstp, ds.lower())
                     else:
                         # fname = fieldname.lower()
-                        fd = fieldbg % (fieldname.lower(), nxstp)
-                    fd += dss[0].toprettyxml(indent="") + mstr + fieldend
+                        fd = fieldbg % (nxstp, fieldname.lower())
+                    xds = " " * lnph + Utils.tostr(lxml.etree.tostring(
+                        dss[0], encoding='utf8',
+                        method='xml', pretty_print=True)).replace(
+                            "\n", "\n" + " " * lnph)
+                    xds = xds[:-2]
+                    fd += xds
+                    fd += mstr + fieldend
 
                     if path or i % 4 > 1:
-
+                        kk = 0
                         if i % 4 < 2:
-                            lk = link % (ds.lower(), mypath, ds.lower())
+                            lk = link % (mypath, ds.lower(), ds.lower())
                         else:
-                            lk = link % (fieldname.lower(), mypath,
-                                         fieldname.lower())
+                            lk = link % (mypath,
+                                         fieldname.lower(), fieldname.lower())
                         mycps = defbg
-                        for nm, gtp in path:
+                        for k, (nm, gtp) in enumerate(path):
                             if not nm:
                                 nm = gtp[2:]
                             if not gtp:
                                 gtp = 'NX' + nm
-                            mycps += groupbg % (nm, gtp)
-                        mycps += fd
+                            mycps += "  " * (k + 1) + groupbg % (gtp, nm)
+                            kk = k
+                        if len(path):
+                            mycps += "  " * (kk + 2) + \
+                                     fd.replace("\n", "\n" + "  " * (kk + 2))
+                            mycps = mycps[:(-2*kk-4)]
+                        else:
+                            mycps += "  " * (kk + 1) + \
+                                     fd.replace("\n", "\n" + "  " * (kk + 1))
+                            mycps = mycps[:(-2*kk-2)]
 
-                        for j in range(len(path) - 1):
-                            mycps += groupend
-                        mycps += lk if i % 2 else ""
-                        mycps += groupend
+                        if len(path):
+                            for j in range(len(path) - 1):
+                                mycps += "  " * (len(path) - j) + groupend
+                            mycps += lk if i % 2 else ""
+                            mycps += "  " + groupend
                         mycps += defend
 
                         mycps2 = defbg
@@ -7970,25 +8380,39 @@ class ExtraSettings2Test(Settings2Test.Settings2Test):
                                 nm = gtp[2:]
                             if not gtp:
                                 gtp = 'NX' + nm
-                            mycps2 += groupbg % (nm, gtp)
+                            mycps2 += "  " * (k + 1) + groupbg % (gtp, nm)
                             if not k:
                                 mycps2 += lk if i % 2 else ""
-                        mycps2 += fd
-
-                        for _ in path:
-                            mycps2 += groupend
+                            kk = k
+                        if len(path):
+                            mycps2 += "  " * (kk + 2) + \
+                                      fd.replace("\n", "\n" + "  " * (kk + 2))
+                            mycps2 = mycps2[:(-2*kk-4)]
+                        else:
+                            mycps2 += "  " * (kk + 1) + \
+                                      fd.replace("\n", "\n" + "  " * (kk + 1))
+                            mycps2 = mycps2[:(-2*kk-2)]
+                        if len(path):
+                            for j in range(len(path) - 1):
+                                mycps2 += "  " * (len(path) - j) + groupend
+                            mycps2 += "  " + groupend
                         mycps2 += defend
+#                        print "FIRST"
                     else:
                         if i % 4 < 2:
-                            lk = link % (ds.lower(),
-                                         self._defaultpath, ds.lower())
+                            lk = link % (self._defaultpath,
+                                         ds.lower(), ds.lower())
                         else:
-                            lk = link % (fieldname.lower(), self._defaultpath,
-                                         fieldname.lower())
+                            lk = link % (self._defaultpath,
+                                         fieldname.lower(), fieldname.lower())
+                        fd = "  " * 4 + fd.replace(
+                            "\n", "\n" + "  " * (4))[:-8]
+
                         mycps = cps["shapetype"] % (
                             fd,
                             lk if i % 2 else "")
                         mycps2 = mycps
+
                     try:
                         self.assertEqual(comp, mycps2)
                     except Exception:

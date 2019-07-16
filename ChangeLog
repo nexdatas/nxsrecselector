@@ -1,3 +1,8 @@
+2019-07-16 Jan Kotanski <jankotan@gmail.com>
+	* change minidom to etree
+	* fix memory leaks
+	* tagged as v3.18.0
+
 2019-06-06 Jan Kotanski <jankotan@gmail.com>
 	* change State() to state()
 	* tagged as v3.17.1

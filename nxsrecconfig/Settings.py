@@ -1019,8 +1019,6 @@ class Settings(object):
         nexusconfig_device.stepdatasources = "[]"
         nexusconfig_device.linkdatasources = "[]"
 
-        # JKR tests
-        gccheck()
         return Utils.tostr(nexusconfig_device.xmlstring)
 
     def updateConfigVariables(self):
@@ -1276,19 +1274,3 @@ class Settings(object):
             vl = getattr(self, attr)
             nenv[Utils.tostr(name)] = vl
         self.__selector.exportEnv(cmddata=nenv)
-
-
-def gccheck():
-    import gc
-    gc.set_debug(gc.DEBUG_LEAK)
-    n = gc.collect()
-    print("UNREACHABLE %s" % n)
-    gres = gc.garbage
-    print("GARBAGE %s" % len(gres))
-    # res = str(gres)
-    # import time
-    # fname = "/tmp/cfgcdump-%s.gc" % str(time.time())
-    # print(fname)
-    # fl = open(fname, "w")
-    # fl.write(res)
-    # fl.close()
