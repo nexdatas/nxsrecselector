@@ -3303,23 +3303,6 @@ class DynamicComponentTest(unittest.TestCase):
         dimbg = '          <dimensions rank="%s">\n'
         dim = '            <dim index="%s" value="%s"/>\n'
         dimend = '          </dimensions>\n'
-        # defbg = '<?xml version=\'1.0\' encoding=\'utf8\'?>\n<definition>\n'
-        # defend = '</definition>\n'
-        # groupbg = '<group name="$var.entryname#\'scan\'$var.serialno" ' \
-        #           'type="NXentry">\n' \
-        #           '<group name="instrument" type="NXinstrument">\n' \
-        #           '<group name="collection" type="NXcollection">\n'
-        # groupend = '</group>\n'
-
-        # fieldbg = '<field name="%s" type="%s">\n<strategy mode="INIT"/>\n'
-        # fieldend = '</field>\n'
-
-        # link = '<group name="data" type="NXdata">\n' + \
-        #     '<link name="%s" target="%s/%s"/>\n</group>\n'
-
-        # dimbg = '<dimensions rank="%s">\n'
-        # dim = '<dim index="%s" value="%s"/>\n'
-        # dimend = '</dimensions>\n'
 
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
         for i, nxstp in enumerate(self.__npTn.values()):
