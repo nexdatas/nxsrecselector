@@ -23,8 +23,14 @@ import re
 import sys
 import json
 import PyTango
-import xml.dom.minidom
+import xml.etree.ElementTree as et
+from lxml.etree import XMLParser
+# from lxml import etree
 from .Utils import Utils, TangoUtils
+
+
+if sys.version_info > (3,):
+    unicode = str
 
 
 class DSItem(object):
@@ -288,11 +294,11 @@ class Describer(object):
             result[cp] = tr
         return result
 
-    def __getDSFromNode(self, node, dsl=None):
+    def __getDSFromNode(self, parent, dsl=None):
         """ provides datasource item from XML node
 
         :param node: xml node
-        :type node: :class:`xml.dom.minidom.Node`
+        :type node: :class:`lxml.etree.Element`
         :param dsl: list with datasource items (DSItem)
         :type dsl: :obj:`list` <:class:`DSItem`>
         :returns: list with datasource items (DSItem)
@@ -305,17 +311,20 @@ class Describer(object):
         dslist = dsl if dsl else []
         dsxmls = None
 
-        if node.nodeName == 'datasource':
-            if node.hasAttribute("type"):
-                dstype = node.attributes["type"].value
-            if node.hasAttribute("name"):
-                name = node.attributes["name"].value
+        nodes = parent.findall("datasource")
+        for node in nodes:
+            dstype = node.get("type")
+            name = node.get("name")
             record = Utils.getRecord(node)
             dslist.append(DSItem(name, dstype, record))
-
-        elif node.nodeType == node.TEXT_NODE:
+            if name and Utils.tostr(dstype) == 'PYEVAL':
+                if dsxmls and self.__pyevalfromscript:
+                    dslist.extend(self.__findsubdatasources(dsxmls[0]))
+                else:
+                    self.__getDSFromNode(node, dslist)
+        if not name and not dslist:
+            dstxt = Utils.getText(parent)
             dsitem = DSItem()
-            dstxt = node.data
             index = dstxt.find("$%s." % label)
             while index != -1:
                 try:
@@ -347,12 +356,9 @@ class Describer(object):
                     dsitem = DSItem(name, None, None)
                 index = dstxt.find("$%s." % label, index + 1)
             dslist.append(dsitem)
-        if name and Utils.tostr(dstype) == 'PYEVAL':
-            if dsxmls and self.__pyevalfromscript:
-                dslist.extend(self.__findsubdatasources(dsxmls[0]))
-            else:
-                for child in node.childNodes:
-                    self.__getDSFromNode(child, dslist)
+            if name and Utils.tostr(dstype) == 'PYEVAL':
+                if dsxmls and self.__pyevalfromscript:
+                    dslist.extend(self.__findsubdatasources(dsxmls[0]))
 
         return dslist
 
@@ -367,18 +373,18 @@ class Describer(object):
         dslist = []
         result = ""
         label = 'datasources'
-
         if sys.version_info > (3,):
-            indom = xml.dom.minidom.parseString(bytes(dsxml, "UTF-8"))
+            root = et.fromstring(bytes(dsxml, "UTF-8"),
+                                 parser=XMLParser(collect_ids=False))
         else:
-            indom = xml.dom.minidom.parseString(dsxml)
-        cnode = indom.getElementsByTagName("datasource")[0]
-        for child in cnode.childNodes:
-            if child.nodeName == 'result':
-                for content in child.childNodes:
-                    if content.nodeType == content.TEXT_NODE:
-                        result += Utils.tostr(content.data)
+            root = et.fromstring(dsxml,
+                                 parser=XMLParser(collect_ids=False))
 
+        cnode = root.findall("datasource")
+        if cnode:
+            for child in cnode[0]:
+                if child.tag == 'result':
+                    result = Utils.getText(child)
         index = dsxml.find("$%s." % label)
         while index != -1:
             try:
@@ -411,32 +417,31 @@ class Describer(object):
         """ provides shape from node
 
         :param node: xml node
-        :type node: :class:`xml.dom.minidom.Node`
+        :type node: :class:`lxml.etree.Element`
         :returns: shape of node
         :rtype :obj:`list` <:obj:`int`>
         """
-        rank = int(node.attributes["rank"].value)
+        rank = int(node.get("rank"))
         shape = [None] * rank
-        dims = node.getElementsByTagName("dim")
+        dims = node.findall("dim")
         for dim in dims:
-            index = int(dim.attributes["index"].value)
-            if dim.hasAttribute("value"):
+            index = int(dim.get("index"))
+            value = dim.get("value")
+            if value is not None:
                 try:
-                    value = int(dim.attributes["value"].value)
+                    value = int(value)
                 except ValueError:
-                    value = Utils.tostr(dim.attributes["value"].value)
+                    value = Utils.tostr(value)
                 shape[index - 1] = value
             else:
-                dss = node.getElementsByTagName("datasource")
+                dss = dim.findall("datasource")
                 if dss:
-                    if dss[0].hasAttribute("name"):
-                        value = dss[0].attributes["name"].value
-                    else:
+                    value = dss[0].get("name")
+                    if value is None:
                         value = '__unnamed__'
                     shape[index - 1] = "$datasources.%s" % value
                 else:
-                    value = " ".join(t.nodeValue for t in dim.childNodes
-                                     if t.nodeType == t.TEXT_NODE)
+                    value = Utils.getText(dim)
                     try:
                         value = int(value)
                     except Exception:
@@ -496,51 +501,36 @@ class Describer(object):
         :rtype: :class:`ExDSDict`
         """
         dss = ExDSDict()
-
         for cpxml in cpxmls:
             if sys.version_info > (3,):
-                indom = xml.dom.minidom.parseString(bytes(cpxml, "UTF-8"))
+                root = et.fromstring(bytes(cpxml, "UTF-8"),
+                                     parser=XMLParser(collect_ids=False))
             else:
-                indom = xml.dom.minidom.parseString(cpxml)
-            strategy = indom.getElementsByTagName("strategy")
+                root = et.fromstring(cpxml,
+                                     parser=XMLParser(collect_ids=False))
+            parents = root.findall(".//field")
+            attrs = root.findall(".//attribute")
+            dims = root.findall(".//dim")
+            parents.extend(attrs if attrs else [])
+            parents.extend(dims if dims else [])
+            for parent in parents:
+                strategy = parent.findall("strategy")
+                for sg in strategy:
+                    mode = sg.get("mode")
+                    if mode:
+                        name = None
+                        nxtype = None
+                        dset = parent
+                        nxtype = dset.get("type")
+                        shape = None
+                        dimensions = parent.findall("dimensions")
+                        if dimensions:
+                            shape = self.__getShape(dimensions[0])
 
-            for sg in strategy:
-                if sg.hasAttribute("mode"):
-                    mode = sg.attributes["mode"].value
-                    name = None
-                    nxtype = None
-                    dset = sg.parentNode
-                    if dset.hasAttribute("type"):
-                        nxtype = dset.attributes["type"].value
-
-                    nxt = sg.nextSibling
-                    loop = True
-                    shape = None
-                    while nxt and loop:
-                        if nxt.nodeName == 'dimensions':
-                            shape = self.__getShape(nxt)
-                            loop = False
-                        nxt = nxt.nextSibling
-
-                    prev = sg.previousSibling
-                    while prev and loop:
-                        if prev.nodeName == 'dimensions':
-                            shape = self.__getShape(prev)
-                            loop = False
-                        prev = prev.previousSibling
-
-                    nxt = sg.nextSibling
-                    while nxt and not name:
-                        name = dss.appendDSList(self.__getDSFromNode(nxt),
+                        name = dss.appendDSList(self.__getDSFromNode(parent),
                                                 mode, nxtype, shape)
-                        nxt = nxt.nextSibling
-
-                    prev = sg.previousSibling
-                    while prev and not name:
-                        name = dss.appendDSList(self.__getDSFromNode(prev),
-                                                mode, nxtype, shape)
-                        prev = prev.previousSibling
-
+                        if name:
+                            break
         return dss
 
     def dataSources(self, names=None, dstype=''):
@@ -623,15 +613,16 @@ class Describer(object):
             dsource = []
         if len(dsource) > 0:
             if sys.version_info > (3,):
-                indom = xml.dom.minidom.parseString(bytes(dsource[0], "UTF-8"))
+                root = et.fromstring(bytes(dsource[0], "UTF-8"),
+                                     parser=XMLParser(collect_ids=False))
             else:
-                indom = xml.dom.minidom.parseString(dsource[0])
-            dss = indom.getElementsByTagName("datasource")
+                root = et.fromstring(dsource[0],
+                                     parser=XMLParser(collect_ids=False))
+            dss = root.findall(".//datasource")
             for ds in dss:
-                if ds.nodeName == 'datasource':
-                    if ds.hasAttribute("type"):
-                        dstype = ds.attributes["type"].value
-                    if ds.hasAttribute("name"):
-                        name = ds.attributes["name"].value
+                if ds.tag == 'datasource':
+                    if "name" in ds.attrib.keys():
+                        name = ds.get("name")
+                    dstype = ds.get("type")
                     record = Utils.getRecord(ds)
         return DSItem(name, dstype, record)
