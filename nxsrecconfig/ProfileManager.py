@@ -655,7 +655,8 @@ class ProfileManager(object):
         :type hel: :obj:`list` <:obj:`str`>
         :param synchronizer: channel synchronizer, default = 'software'
         :type synchronizer: :obj:`dict` <:obj:`str`, :obj:`str`>
-        :param synchronization: channel synchronization, i.e. Trigger=0, Gate=1
+        :param synchronization: channel synchronization,
+                i.e. Trigger=0, Gate=1, Start=2
         :type synchronization: :obj:`dict` <:obj:`str`, :obj:`int`>
         :returns: tango datasources list with elements (name, label, source)
         :rtype: :obj:`list` < [:obj:`str` , :obj:`str` , :obj:`str` ] >

@@ -1,6 +1,6 @@
 .\" Man page generated from reStructuredText.
 .
-.TH "NXSRECCONFIG" "1" "May 17, 2019" "3.17" "NXSRecSelector"
+.TH "NXSRECCONFIG" "1" "Jul 17, 2019" "3.18" "NXSRecSelector"
 .SH NAME
 nxsrecconfig \- nxsrecconfig Documentation
 .
@@ -4902,13 +4902,23 @@ provides datasource record from xml dom node
 .INDENT 7.0
 .TP
 .B Parameters
-\fBnode\fP (\fBxml.dom.minidom.Node\fP) – xml DOM node
+\fBnode\fP (\fBlxml.etree.Element\fP) – xml DOM node
 .TP
 .B Returns
 datasource record
 .TP
 .B Return type
 \fI\%str\fP
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B classmethod getText(node)
+collects text from text child nodes
+.INDENT 7.0
+.TP
+.B Parameters
+\fBnode\fP (\fI\%xml.etree.ElementTree.Element\fP) – parent node
 .UNINDENT
 .UNINDENT
 .INDENT 7.0
