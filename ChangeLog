@@ -1,3 +1,7 @@
+2019-07-18 Jan Kotanski <jankotan@gmail.com>
+	* fix for get Record
+	* tagged as v3.18.1
+
 2019-07-16 Jan Kotanski <jankotan@gmail.com>
 	* change minidom to etree
 	* fix memory leaks
