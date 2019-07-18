@@ -168,7 +168,7 @@ class Utils(object):
                         res = '%s/%s%s%s' % (dname, prefix, rname, surfix)
                 else:
                     res = rname
-                return res
+        return res
 
     @classmethod
     def getText(cls, node):
