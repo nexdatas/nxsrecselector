@@ -1,3 +1,7 @@
+2019-08-22 Jan Kotanski <jankotan@gmail.com>
+	* add check for controllers key for find __tango__
+	* tagged as v3.18.2
+
 2019-07-18 Jan Kotanski <jankotan@gmail.com>
 	* fix for get Record
 	* tagged as v3.18.1
