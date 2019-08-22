@@ -1,5 +1,5 @@
 2019-08-22 Jan Kotanski <jankotan@gmail.com>
-	* add check for controllers key for find __tango__
+	* add check for controllers key to find __tango__
 	* tagged as v3.18.2
 
 2019-07-18 Jan Kotanski <jankotan@gmail.com>
