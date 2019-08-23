@@ -663,7 +663,7 @@ class ProfileManager(object):
         """
         tangods = []
         timers[conf["timer"]] = ''
-        for ctrl in conf["controllers"].values():
+        for ctrlname, ctrl in conf["controllers"].items():
             if 'units' in ctrl.keys() and \
                     '0' in ctrl['units'].keys():
                 uctrl = ctrl['units']['0']
@@ -673,8 +673,9 @@ class ProfileManager(object):
                 timers[uctrl['timer']] = ''
             if 'channels' in uctrl.keys():
                 for ch in uctrl['channels'].values():
-                    if '_controller_name' in ch.keys() and \
-                            ch['_controller_name'] == '__tango__':
+                    if ctrlname == "__tango__" or \
+                      ('_controller_name' in ch.keys() and
+                       ch['_controller_name'] == '__tango__'):
                         tangods.append(
                             [ch['name'], ch['label'], ch["source"]])
                     else:
@@ -712,7 +713,7 @@ class ProfileManager(object):
         """
         if tangods and NXSTOOLS:
             jds = self.createDataSources(tangods, dsg)
-            for ctrl in conf["controllers"].values():
+            for ctrlname, ctrl in conf["controllers"].items():
                 if 'units' in ctrl.keys() and \
                         '0' in ctrl['units'].keys():
                     uctrl = ctrl['units']['0']
@@ -720,8 +721,9 @@ class ProfileManager(object):
                     uctrl = ctrl
                 if 'channels' in uctrl.keys():
                     for ch in uctrl['channels'].values():
-                        if '_controller_name' in ch.keys() and \
-                                ch['_controller_name'] == '__tango__':
+                        if ctrlname == "__tango__" or \
+                          ('_controller_name' in ch.keys() and
+                           ch['_controller_name'] == '__tango__'):
                             if ch["source"] in jds.keys():
                                 name = jds[ch["source"]]
                                 dsg[name] = True
