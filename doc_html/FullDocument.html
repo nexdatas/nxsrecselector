@@ -106,6 +106,7 @@
 				<li> <a href="FullDocument.html#cmdUpdateProfile"> UpdateProfile </a>
 				<li> <a href="FullDocument.html#cmdVariableComponents"> VariableComponents </a>
 				<li> <a href="FullDocument.html#cmdComponentSources"> ComponentSources </a>
+				<li> <a href="FullDocument.html#cmdCreateDataSources"> CreateDataSources </a>
 			</ul>
 			<li> <a href="FullDocument.html#attributes">   Attributes   </a>
 			<ul>
@@ -125,7 +126,7 @@
 				<li> <a href="FullDocument.html#attrAppendEntry"> AppendEntry </a>
 				<li> <a href="FullDocument.html#attrConfigVariables"> ConfigVariables </a>
 				<li> <a href="FullDocument.html#attrProfileFile"> ProfileFile </a>
-				<li> <a href="FullDocument.html#attrLinkDataSources"> LinkDataSources </a>
+				<li> <a href="FullDocument.html#attrCanFailDataSources"> CanFailDataSources </a>
 				<li> <a href="FullDocument.html#attrComponents"> Components </a>
 				<li> <a href="FullDocument.html#attrDescriptionErrors"> DescriptionErrors </a>
 				<li> <a href="FullDocument.html#attrDataSources"> DataSources </a>
@@ -262,6 +263,18 @@
 		<td> defaultmeasurement group name </td>
 		<td> String </td>
 		<td> nxsmntgrp <br> </td>
+	</tr>
+	<tr>
+		<td> SyncSnapshot </td>
+		<td> preselection merges the current ScanSnapshot </td>
+		<td> boolean </td>
+		<td> False <br> </td>
+	</tr>
+	<tr>
+		<td> DefaultCanFailDataSources </td>
+		<td> list of default datasources in the CanFail mode </td>
+		<td> String[] </td>
+		<td> none </td>
 	</tr>
 </table>
 <br><br>
@@ -599,6 +612,13 @@
 		<td> DEV_STRING </td>
 		<td> OPERATOR </td>
 		<td> Describe datasources from components </td>
+	</tr>
+	<tr>
+		<td> <a href="CmdCreateDataSources.html"> CreateDataSources </a> </td>
+		<td> DEV_STRING </td>
+		<td> DEV_VOID </td>
+		<td> OPERATOR </td>
+		<td> It creates new DataSources on the ConfigServer </td>
 	</tr>
 </table>
 <br><br><hr>
@@ -1615,7 +1635,7 @@
 	</tr>
 	<tr>
 		<td> Abstract </td>
-		<td> true </td>
+		<td> false </td>
 		<td> .. </td>
 	</tr>
 	<tr>
@@ -1664,7 +1684,7 @@
 	</tr>
 	<tr>
 		<td> Abstract </td>
-		<td> true </td>
+		<td> false </td>
 		<td> .. </td>
 	</tr>
 	<tr>
@@ -2855,6 +2875,55 @@
 		<td> .. </td>
 	</tr>
 </table>
+<br><br><hr>
+<a name="cmdCreateDataSources"> </a>
+<br><br><br>
+<font size="+1"><u><b> Command CreateDataSources : </b></u></font>
+<ul>
+	It creates new DataSources on the ConfigServer
+</ul>
+<br><br><br>
+<Table Border=2 Cellpadding=3 CELLSPACING=0>
+	<tr bgcolor="#CCCCFF" class="TableHeadingColor">
+	<td colspan=0> <font size=+1> <center><b> CreateDataSources Definition </b></font></center></td>
+	</tr>
+	<tr>
+		<td> Input Argument </td>
+		<td> Tango::DEV_STRING </td>
+		<td> JSON dictionary with {``dsname``: ``tangosource``, ...} </td>
+	</tr>
+	<tr>
+		<td> Output Argument </td>
+		<td> Tango::DEV_VOID </td>
+		<td>  </td>
+	</tr>
+	<tr>
+		<td> DisplayLevel </td>
+		<td> OPERATOR </td>
+		<td> .. </td>
+	</tr>
+	<tr>
+		<td> Inherited </td>
+		<td> false </td>
+		<td> .. </td>
+	</tr>
+	<tr>
+		<td> Abstract </td>
+		<td> false </td>
+		<td> .. </td>
+	</tr>
+	<tr>
+		<td> Polling Period </td>
+		<td> Not polled </td>
+		<td> .. </td>
+	</tr>
+<Tr BGCOLOR="#CCCCFF"><Td><Hr></Td><Td><Hr></Td><Td><Hr></Td></Tr>
+	<tr>
+		<td> Command allowed for </td>
+		<td> All states </td>
+		<td> .. </td>
+	</tr>
+</table>
 <br><br>
 <hr>
 <a name="attributes"> </a>
@@ -3033,14 +3102,14 @@
 		<td> config file with its full path </td>
 	</tr>
 	<tr>
-		<td> <a href="AttrLinkDataSources.html"> LinkDataSources </a> </td>
+		<td> <a href="AttrCanFailDataSources.html"> CanFailDataSources </a> </td>
 		<td> false </td>
 		<td> false </td>
 		<td> Scalar </td>
 		<td> READ_WRITE </td>
 		<td> Tango::DEV_STRING </td>
 		<td> EXPERT </td>
-		<td> list of datasources  to which a link will be added </td>
+		<td> list of datasources  to to switch to canfail mode </td>
 	</tr>
 	<tr>
 		<td> <a href="AttrComponents.html"> Components </a> </td>
@@ -5759,11 +5828,11 @@
 </table>
 <br><br>
 <hr>
-<a name="attrLinkDataSources"> </a>
+<a name="attrCanFailDataSources"> </a>
 <br><br><br>
-<font size="+1"><u><b> Attribute LinkDataSources : </b></u></font>
+<font size="+1"><u><b> Attribute CanFailDataSources : </b></u></font>
 <ul>
-	list of datasources  to which a link will be added
+	list of datasources  to to switch to canfail mode
 </ul>
 <br><br><br>
 <Table Border=0 Cellpadding=0 CELLSPACING=20>
@@ -5823,7 +5892,7 @@
 				</tr>
 				<tr>
 					<td> label </td>
-					<td> list of datasources to which a link will be added </td>
+					<td> list of datasources to switch to canfail mode </td>
 				</tr>
 				<tr>
 					<td> unit </td>

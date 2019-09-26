@@ -1,43 +1,31 @@
 <!DOCTYPE html>
 
-
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>nxsrecconfig.DynamicComponent &mdash; NXSRecSelector 3.10.0 documentation</title>
-    
+    <title>nxsrecconfig.DynamicComponent &#8212; NXSRecSelector 3.18.2 documentation</title>
     <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/bootstrap-3.3.4/css/bootstrap.min.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/bootstrap-3.3.4/css/bootstrap-theme.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/bootstrap-3.3.6/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/bootstrap-3.3.6/css/bootstrap-theme.min.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
-    
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../',
-        VERSION:     '3.10.0',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
-      };
-    </script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <script type="text/javascript" src="../../_static/js/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="../../_static/js/jquery-fix.js"></script>
-    <script type="text/javascript" src="../../_static/bootstrap-3.3.4/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../../_static/bootstrap-sphinx.js"></script>
-    <link rel="top" title="NXSRecSelector 3.10.0 documentation" href="../../index.html" />
-    <link rel="up" title="nxsrecconfig" href="../nxsrecconfig.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
 <meta name="apple-mobile-web-app-capable" content="yes">
 
-  </head>
-  <body>
+  </head><body>
 
   <div id="navbar" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -50,7 +38,7 @@
         </button>
         <a class="navbar-brand" href="../../index.html">
           NXSRecSelector</a>
-        <span class="navbar-text navbar-version pull-left"><b>3.10</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>3.18</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -126,35 +114,49 @@
 
 <div class="container">
   <div class="row">
-    <div class="col-md-12 content">
+      <div class="col-md-3">
+        <div id="sidebar" class="bs-sidenav" role="complementary">
+<form action="../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+        </div>
+      </div>
+    <div class="col-md-9 content">
       
   <h1>Source code for nxsrecconfig.DynamicComponent</h1><div class="highlight"><pre>
-<span class="c">#!/usr/bin/env python</span>
-<span class="c">#   This file is part of nxsrecconfig - NeXus Sardana Recorder Settings</span>
-<span class="c">#</span>
-<span class="c">#    Copyright (C) 2014-2017 DESY, Jan Kotanski &lt;jkotan@mail.desy.de&gt;</span>
-<span class="c">#</span>
-<span class="c">#    nexdatas is free software: you can redistribute it and/or modify</span>
-<span class="c">#    it under the terms of the GNU General Public License as published by</span>
-<span class="c">#    the Free Software Foundation, either version 3 of the License, or</span>
-<span class="c">#    (at your option) any later version.</span>
-<span class="c">#</span>
-<span class="c">#    nexdatas is distributed in the hope that it will be useful,</span>
-<span class="c">#    but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
-<span class="c">#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
-<span class="c">#    GNU General Public License for more details.</span>
-<span class="c">#</span>
-<span class="c">#    You should have received a copy of the GNU General Public License</span>
-<span class="c">#    along with nexdatas.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
-<span class="c">#</span>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="c1">#   This file is part of nxsrecconfig - NeXus Sardana Recorder Settings</span>
+<span class="c1">#</span>
+<span class="c1">#    Copyright (C) 2014-2017 DESY, Jan Kotanski &lt;jkotan@mail.desy.de&gt;</span>
+<span class="c1">#</span>
+<span class="c1">#    nexdatas is free software: you can redistribute it and/or modify</span>
+<span class="c1">#    it under the terms of the GNU General Public License as published by</span>
+<span class="c1">#    the Free Software Foundation, either version 3 of the License, or</span>
+<span class="c1">#    (at your option) any later version.</span>
+<span class="c1">#</span>
+<span class="c1">#    nexdatas is distributed in the hope that it will be useful,</span>
+<span class="c1">#    but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c1">#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="c1">#    GNU General Public License for more details.</span>
+<span class="c1">#</span>
+<span class="c1">#    You should have received a copy of the GNU General Public License</span>
+<span class="c1">#    along with nexdatas.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+<span class="c1">#</span>
 
 <span class="sd">&quot;&quot;&quot;  Dynamic Component &quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">xml.dom.minidom</span>
 <span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">PyTango</span>
+<span class="kn">import</span> <span class="nn">lxml.etree</span>
+<span class="kn">import</span> <span class="nn">xml.etree.ElementTree</span> <span class="k">as</span> <span class="nn">et</span>
+<span class="kn">from</span> <span class="nn">lxml.etree</span> <span class="k">import</span> <span class="n">XMLParser</span>
 
-<span class="kn">from</span> <span class="nn">.Utils</span> <span class="kn">import</span> <span class="n">Utils</span><span class="p">,</span> <span class="n">TangoUtils</span><span class="p">,</span> <span class="n">PoolUtils</span>
+<span class="kn">from</span> <span class="nn">.Utils</span> <span class="k">import</span> <span class="n">Utils</span><span class="p">,</span> <span class="n">TangoUtils</span><span class="p">,</span> <span class="n">PoolUtils</span>
 
 
 <div class="viewcode-block" id="DynamicComponent"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.DynamicComponent.DynamicComponent">[docs]</a><span class="k">class</span> <span class="nc">DynamicComponent</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -163,8 +165,8 @@
 <span class="sd">        of given component &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nexusconfig_device</span><span class="p">,</span>
-                 <span class="n">defaultpath</span><span class="o">=</span><span class="s">&quot;/scan$var.serialno:NXentry/&quot;</span>
-                 <span class="s">&quot;NXinstrument/collection&quot;</span><span class="p">):</span>
+                 <span class="n">defaultpath</span><span class="o">=</span><span class="s2">&quot;/$var.entryname#&#39;scan&#39;$var.serialno:NXentry/&quot;</span>
+                 <span class="s2">&quot;NXinstrument/collection&quot;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; constructor</span>
 
 <span class="sd">        :param nexusconfig_device: configserver configuration server</span>
@@ -173,60 +175,60 @@
 <span class="sd">        :param defaultpath:  default dynamic component path</span>
 <span class="sd">        :type defaultpath: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c">#: (:class:`PyTango.DeviceProxy` \</span>
-        <span class="c">#: or :class:`nxsconfigserver.XMLConfigurator.XMLConfigurator`) \</span>
-        <span class="c">#:    configuration server</span>
+        <span class="c1">#: (:class:`PyTango.DeviceProxy` \</span>
+        <span class="c1">#: or :class:`nxsconfigserver.XMLConfigurator.XMLConfigurator`) \</span>
+        <span class="c1">#:    configuration server</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__nexusconfig_device</span> <span class="o">=</span> <span class="n">nexusconfig_device</span>
 
-        <span class="c">#: (:obj:`list` &lt;:obj:`dict` &lt;:obj:`str` , `any`&gt; &gt;) \</span>
-        <span class="c">#:    step datasources</span>
+        <span class="c1">#: (:obj:`list` &lt;:obj:`dict` &lt;:obj:`str` , `any`&gt; &gt;) \</span>
+        <span class="c1">#:    step datasources</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__stepdsourcesDict</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="c">#: (:obj:`list` &lt;:obj:`str`&gt;) step datasources</span>
+        <span class="c1">#: (:obj:`list` &lt;:obj:`str`&gt;) step datasources</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__stepdsources</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="c">#: (:obj:`list` &lt;:obj:`str`&gt;) init datasources</span>
+        <span class="c1">#: (:obj:`list` &lt;:obj:`str`&gt;) init datasources</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__initdsources</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="c">#: (:obj:`str`) default dynamic component name</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__defaultCP</span> <span class="o">=</span> <span class="s">&quot;__dynamic_component__&quot;</span>
-        <span class="c">#: (:obj:`str`) dynamic component name</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__dynamicCP</span> <span class="o">=</span> <span class="s">&quot;&quot;</span>
-        <span class="c">#: (:obj:`dict` &lt;:obj:`str` , :obj:`str`&gt; ) \</span>
-        <span class="c">#:       alias label dictionary</span>
+        <span class="c1">#: (:obj:`str`) default dynamic component name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__defaultCP</span> <span class="o">=</span> <span class="s2">&quot;__dynamic_component__&quot;</span>
+        <span class="c1">#: (:obj:`str`) dynamic component name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__dynamicCP</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="c1">#: (:obj:`dict` &lt;:obj:`str` , :obj:`str`&gt; ) \</span>
+        <span class="c1">#:       alias label dictionary</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__nexuslabels</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="c">#: (:obj:`dict` &lt;:obj:`str` , :obj:`str`&gt; ) \</span>
-        <span class="c">#:       alias path dictionary</span>
+        <span class="c1">#: (:obj:`dict` &lt;:obj:`str` , :obj:`str`&gt; ) \</span>
+        <span class="c1">#:       alias path dictionary</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__nexuspaths</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="c">#: (:obj:`dict` &lt;:obj:`str` , :obj:`bool`&gt; ) \</span>
-        <span class="c">#:       alias link dictionary</span>
+        <span class="c1">#: (:obj:`dict` &lt;:obj:`str` , :obj:`bool`&gt; ) \</span>
+        <span class="c1">#:       alias link dictionary</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__nexuslinks</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="c">#: (:obj:`dict` &lt;:obj:`str` , :obj:`str`&gt; ) \</span>
-        <span class="c">#:       alias nexus types dictionary</span>
+        <span class="c1">#: (:obj:`dict` &lt;:obj:`str` , :obj:`str`&gt; ) \</span>
+        <span class="c1">#:       alias nexus types dictionary</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__nexustypes</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="c">#: (:obj:`dict` &lt;:obj:`str` , :obj:`list` &lt;:obj:`int`&gt; &gt; ) \</span>
-        <span class="c">#:       alias nexus types dictionary</span>
+        <span class="c1">#: (:obj:`dict` &lt;:obj:`str` , :obj:`list` &lt;:obj:`int`&gt; &gt; ) \</span>
+        <span class="c1">#:       alias nexus types dictionary</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__nexusshapes</span> <span class="o">=</span> <span class="p">{}</span>
 
-        <span class="c">#: (:class:`PyTango.Database` ) pytango database server</span>
+        <span class="c1">#: (:class:`PyTango.Database` ) pytango database server</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__db</span> <span class="o">=</span> <span class="n">PyTango</span><span class="o">.</span><span class="n">Database</span><span class="p">()</span>
 
-        <span class="c">#: (:obj:`str`) default dynamic component path</span>
+        <span class="c1">#: (:obj:`str`) default dynamic component path</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__ldefaultpath</span> <span class="o">=</span> <span class="n">defaultpath</span>
-        <span class="c">#: (:obj:`str`) standard dynamic component path</span>
+        <span class="c1">#: (:obj:`str`) standard dynamic component path</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__defaultpath</span> <span class="o">=</span> <span class="n">defaultpath</span>
-        <span class="c">#: (:obj:`bool`) standard dynamic link flag</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__links</span> <span class="o">=</span> <span class="bp">True</span>
-        <span class="c">#: (:obj:`bool`) standard dynamic link flag for INIT strategy</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__ilinks</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="c1">#: (:obj:`bool`) standard dynamic link flag</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__links</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="c1">#: (:obj:`bool`) standard dynamic link flag for INIT strategy</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__ilinks</span> <span class="o">=</span> <span class="kc">False</span>
 
-        <span class="c">#: (:obj:`dict` &lt;:obj:`str` , :obj:`str`&gt; ) \</span>
-        <span class="c">#:    map of numpy types : NEXUS</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__npTn</span> <span class="o">=</span> <span class="p">{</span><span class="s">&quot;float32&quot;</span><span class="p">:</span> <span class="s">&quot;NX_FLOAT32&quot;</span><span class="p">,</span> <span class="s">&quot;float64&quot;</span><span class="p">:</span> <span class="s">&quot;NX_FLOAT64&quot;</span><span class="p">,</span>
-                       <span class="s">&quot;float&quot;</span><span class="p">:</span> <span class="s">&quot;NX_FLOAT32&quot;</span><span class="p">,</span> <span class="s">&quot;double&quot;</span><span class="p">:</span> <span class="s">&quot;NX_FLOAT64&quot;</span><span class="p">,</span>
-                       <span class="s">&quot;int&quot;</span><span class="p">:</span> <span class="s">&quot;NX_INT&quot;</span><span class="p">,</span> <span class="s">&quot;int64&quot;</span><span class="p">:</span> <span class="s">&quot;NX_INT64&quot;</span><span class="p">,</span>
-                       <span class="s">&quot;int32&quot;</span><span class="p">:</span> <span class="s">&quot;NX_INT32&quot;</span><span class="p">,</span> <span class="s">&quot;int16&quot;</span><span class="p">:</span> <span class="s">&quot;NX_INT16&quot;</span><span class="p">,</span>
-                       <span class="s">&quot;int8&quot;</span><span class="p">:</span> <span class="s">&quot;NX_INT8&quot;</span><span class="p">,</span> <span class="s">&quot;uint64&quot;</span><span class="p">:</span> <span class="s">&quot;NX_UINT64&quot;</span><span class="p">,</span>
-                       <span class="s">&quot;uint32&quot;</span><span class="p">:</span> <span class="s">&quot;NX_UINT32&quot;</span><span class="p">,</span> <span class="s">&quot;uint16&quot;</span><span class="p">:</span> <span class="s">&quot;NX_UINT16&quot;</span><span class="p">,</span>
-                       <span class="s">&quot;uint8&quot;</span><span class="p">:</span> <span class="s">&quot;NX_UINT8&quot;</span><span class="p">,</span> <span class="s">&quot;uint&quot;</span><span class="p">:</span> <span class="s">&quot;NX_UINT64&quot;</span><span class="p">,</span>
-                       <span class="s">&quot;string&quot;</span><span class="p">:</span> <span class="s">&quot;NX_CHAR&quot;</span><span class="p">,</span> <span class="s">&quot;bool&quot;</span><span class="p">:</span> <span class="s">&quot;NX_BOOLEAN&quot;</span><span class="p">}</span>
+        <span class="c1">#: (:obj:`dict` &lt;:obj:`str` , :obj:`str`&gt; ) \</span>
+        <span class="c1">#:    map of numpy types : NEXUS</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__npTn</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;float32&quot;</span><span class="p">:</span> <span class="s2">&quot;NX_FLOAT32&quot;</span><span class="p">,</span> <span class="s2">&quot;float64&quot;</span><span class="p">:</span> <span class="s2">&quot;NX_FLOAT64&quot;</span><span class="p">,</span>
+                       <span class="s2">&quot;float&quot;</span><span class="p">:</span> <span class="s2">&quot;NX_FLOAT32&quot;</span><span class="p">,</span> <span class="s2">&quot;double&quot;</span><span class="p">:</span> <span class="s2">&quot;NX_FLOAT64&quot;</span><span class="p">,</span>
+                       <span class="s2">&quot;int&quot;</span><span class="p">:</span> <span class="s2">&quot;NX_INT&quot;</span><span class="p">,</span> <span class="s2">&quot;int64&quot;</span><span class="p">:</span> <span class="s2">&quot;NX_INT64&quot;</span><span class="p">,</span>
+                       <span class="s2">&quot;int32&quot;</span><span class="p">:</span> <span class="s2">&quot;NX_INT32&quot;</span><span class="p">,</span> <span class="s2">&quot;int16&quot;</span><span class="p">:</span> <span class="s2">&quot;NX_INT16&quot;</span><span class="p">,</span>
+                       <span class="s2">&quot;int8&quot;</span><span class="p">:</span> <span class="s2">&quot;NX_INT8&quot;</span><span class="p">,</span> <span class="s2">&quot;uint64&quot;</span><span class="p">:</span> <span class="s2">&quot;NX_UINT64&quot;</span><span class="p">,</span>
+                       <span class="s2">&quot;uint32&quot;</span><span class="p">:</span> <span class="s2">&quot;NX_UINT32&quot;</span><span class="p">,</span> <span class="s2">&quot;uint16&quot;</span><span class="p">:</span> <span class="s2">&quot;NX_UINT16&quot;</span><span class="p">,</span>
+                       <span class="s2">&quot;uint8&quot;</span><span class="p">:</span> <span class="s2">&quot;NX_UINT8&quot;</span><span class="p">,</span> <span class="s2">&quot;uint&quot;</span><span class="p">:</span> <span class="s2">&quot;NX_UINT64&quot;</span><span class="p">,</span>
+                       <span class="s2">&quot;string&quot;</span><span class="p">:</span> <span class="s2">&quot;NX_CHAR&quot;</span><span class="p">,</span> <span class="s2">&quot;bool&quot;</span><span class="p">:</span> <span class="s2">&quot;NX_BOOLEAN&quot;</span><span class="p">}</span>
 
     <span class="k">def</span> <span class="nf">__get_alias</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; provides a device alias</span>
@@ -236,14 +238,16 @@
 <span class="sd">        :returns: device alias</span>
 <span class="sd">        :rtype: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c"># if name does not contain a &quot;/&quot; it&#39;s probably an alias</span>
-        <span class="k">if</span> <span class="n">name</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s">&quot;/&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;tango://&quot;</span><span class="p">):</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="n">name</span><span class="p">[</span><span class="mi">8</span><span class="p">:]</span>
+        <span class="c1"># if name does not contain a &quot;/&quot; it&#39;s probably an alias</span>
+        <span class="k">if</span> <span class="n">name</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">name</span>
 
-        <span class="c"># haso107klx:10000/expchan/hasysis3820ctrl/1</span>
-        <span class="k">if</span> <span class="n">name</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s">&#39;:&#39;</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">lst</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&quot;/&quot;</span><span class="p">)</span>
-            <span class="n">name</span> <span class="o">=</span> <span class="s">&quot;/&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lst</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
+        <span class="c1"># haso107klx:10000/expchan/hasysis3820ctrl/1</span>
+        <span class="k">if</span> <span class="n">name</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">lst</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;/&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lst</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__db</span><span class="o">.</span><span class="n">get_alias</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
 
 <div class="viewcode-block" id="DynamicComponent.setStepDictDSources"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.DynamicComponent.DynamicComponent.setStepDictDSources">[docs]</a>    <span class="k">def</span> <span class="nf">setStepDictDSources</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dctlist</span><span class="p">):</span>
@@ -256,14 +260,14 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__stepdsourcesDict</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dctlist</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
             <span class="k">for</span> <span class="n">dct</span> <span class="ow">in</span> <span class="n">dctlist</span><span class="p">:</span>
-                <span class="k">if</span> <span class="s">&quot;name&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dct</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="k">if</span> <span class="s2">&quot;name&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dct</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
                     <span class="k">continue</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">__stepdsourcesDict</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dct</span><span class="p">)</span>
-                <span class="k">if</span> <span class="s">&quot;dtype&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dct</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">__stepdsourcesDict</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="s">&quot;dtype&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&quot;string&quot;</span>
-                <span class="k">if</span> <span class="s">&quot;shape&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dct</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">__stepdsourcesDict</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="s">&quot;shape&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
-</div>
+                <span class="k">if</span> <span class="s2">&quot;dtype&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dct</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__stepdsourcesDict</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;dtype&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;string&quot;</span>
+                <span class="k">if</span> <span class="s2">&quot;shape&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dct</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__stepdsourcesDict</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;shape&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span></div>
+
 <div class="viewcode-block" id="DynamicComponent.setStepDSources"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.DynamicComponent.DynamicComponent.setStepDSources">[docs]</a>    <span class="k">def</span> <span class="nf">setStepDSources</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dsources</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; sets step datasources</span>
 
@@ -272,9 +276,9 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__stepdsources</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">dsources</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__stepdsources</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__stepdsources</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__stepdsources</span> <span class="o">=</span> <span class="p">[]</span></div>
 
-    <span class="c">#</span></div>
+    <span class="c1">#</span>
 <div class="viewcode-block" id="DynamicComponent.setInitDSources"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.DynamicComponent.DynamicComponent.setInitDSources">[docs]</a>    <span class="k">def</span> <span class="nf">setInitDSources</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dsources</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; sets init datasources</span>
 
@@ -283,9 +287,9 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__initdsources</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">dsources</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__initdsources</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__initdsources</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__initdsources</span> <span class="o">=</span> <span class="p">[]</span></div>
 
-    <span class="c">#</span></div>
+    <span class="c1">#</span>
 <div class="viewcode-block" id="DynamicComponent.setLabelParams"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.DynamicComponent.DynamicComponent.setLabelParams">[docs]</a>    <span class="k">def</span> <span class="nf">setLabelParams</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">paths</span><span class="p">,</span> <span class="n">links</span><span class="p">,</span> <span class="n">types</span><span class="p">,</span> <span class="n">shapes</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; sets label parameters for specific dynamic components</span>
 
@@ -314,10 +318,10 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">__nexustypes</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__nexusshapes</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">shapes</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__nexusshapes</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__nexusshapes</span> <span class="o">=</span> <span class="p">{}</span>
-</div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__nexusshapes</span> <span class="o">=</span> <span class="p">{}</span></div>
+
 <div class="viewcode-block" id="DynamicComponent.setDefaultLinkPath"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.DynamicComponent.DynamicComponent.setDefaultLinkPath">[docs]</a>    <span class="k">def</span> <span class="nf">setDefaultLinkPath</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dynamicLinks</span><span class="p">,</span> <span class="n">dynamicPath</span><span class="p">,</span>
-                           <span class="n">dynamicInitLinks</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+                           <span class="n">dynamicInitLinks</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; sets default nexus path and link flag for dynamic components</span>
 
 <span class="sd">        :brief: if dynamicPath is None or &quot;&quot; it is reset to default one</span>
@@ -332,8 +336,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__ilinks</span> <span class="o">=</span> <span class="n">dynamicInitLinks</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__defaultpath</span> <span class="o">=</span> <span class="n">dynamicPath</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__defaultpath</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__defaultpath</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ldefaultpath</span>
-</div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__defaultpath</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ldefaultpath</span></div>
+
     <span class="k">def</span> <span class="nf">__shapeFromTango</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ds</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; provices datasource shape and NeXus type from Tango device</span>
 
@@ -342,30 +346,26 @@
 <span class="sd">        :returns: (shape, NeXus type) tuple</span>
 <span class="sd">        :returns: (:obj:`list` &lt;:obj:`int`&gt;, :obj:`str`) tuple</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">nxtype</span> <span class="o">=</span> <span class="bp">None</span>
-        <span class="n">dstype</span> <span class="o">=</span> <span class="bp">None</span>
-        <span class="n">shape</span> <span class="o">=</span> <span class="bp">None</span>
-        <span class="k">if</span> <span class="n">ds</span><span class="o">.</span><span class="n">hasAttribute</span><span class="p">(</span><span class="s">&quot;type&quot;</span><span class="p">):</span>
-            <span class="n">dstype</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">attributes</span><span class="p">[</span><span class="s">&quot;type&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
-        <span class="k">if</span> <span class="n">dstype</span> <span class="o">==</span> <span class="s">&#39;TANGO&#39;</span><span class="p">:</span>
-            <span class="n">source</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">Utils</span><span class="o">.</span><span class="n">getRecord</span><span class="p">(</span><span class="n">ds</span><span class="p">))</span>
+        <span class="n">nxtype</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">shape</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">dstype</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;type&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">dstype</span> <span class="o">==</span> <span class="s1">&#39;TANGO&#39;</span><span class="p">:</span>
+            <span class="n">source</span> <span class="o">=</span> <span class="n">Utils</span><span class="o">.</span><span class="n">tostr</span><span class="p">(</span><span class="n">Utils</span><span class="o">.</span><span class="n">getRecord</span><span class="p">(</span><span class="n">ds</span><span class="p">))</span>
             <span class="n">shape</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">TangoUtils</span><span class="o">.</span><span class="n">getShapeTypeUnit</span><span class="p">(</span><span class="n">source</span><span class="p">)</span>
             <span class="n">nxtype</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__npTn</span><span class="p">[</span><span class="n">dt</span><span class="p">]</span> \
                 <span class="k">if</span> <span class="n">dt</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__npTn</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="k">else</span> <span class="n">nxtype</span>
         <span class="k">return</span> <span class="n">shape</span><span class="p">,</span> <span class="n">nxtype</span>
 
-    <span class="k">def</span> <span class="nf">__createSardanaNodes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">created</span><span class="p">,</span> <span class="n">root</span><span class="p">,</span> <span class="n">definition</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__createSardanaNodes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">created</span><span class="p">,</span> <span class="n">definition</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; creates XML nodes for sardana devices</span>
 
 <span class="sd">        :param created: list of created devices</span>
 <span class="sd">        :type created: :obj:`list` &lt;:obj:`str`&gt;</span>
-<span class="sd">        :param root: root node</span>
-<span class="sd">        :type root: :class:`xml.dom.minidom.Node`</span>
 <span class="sd">        :param definition: definition node</span>
-<span class="sd">        :type definition: :class:`xml.dom.minidom.Node`</span>
+<span class="sd">        :type definition: :class:`lxml.etree.Element`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">dd</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__stepdsourcesDict</span><span class="p">:</span>
-            <span class="n">alias</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__get_alias</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">dd</span><span class="p">[</span><span class="s">&quot;name&quot;</span><span class="p">]))</span>
+            <span class="n">alias</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__get_alias</span><span class="p">(</span><span class="n">Utils</span><span class="o">.</span><span class="n">tostr</span><span class="p">(</span><span class="n">dd</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]))</span>
             <span class="n">path</span><span class="p">,</span> <span class="n">field</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__getPathField</span><span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">__nexuspaths</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__nexuslabels</span><span class="p">,</span>
                 <span class="n">alias</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__defaultpath</span><span class="p">)</span>
@@ -373,31 +373,29 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">__nexuslinks</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__nexuslabels</span><span class="p">,</span>
                 <span class="n">alias</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__links</span><span class="p">)</span>
             <span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="n">nxdata</span><span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__createGroupTree</span><span class="p">(</span>
-                <span class="n">root</span><span class="p">,</span> <span class="n">definition</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">link</span><span class="p">)</span>
+                <span class="n">definition</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">link</span><span class="p">)</span>
             <span class="n">created</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">alias</span><span class="p">)</span>
-            <span class="n">nxtype</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__npTn</span><span class="p">[</span><span class="n">dd</span><span class="p">[</span><span class="s">&quot;dtype&quot;</span><span class="p">]]</span> \
-                <span class="k">if</span> <span class="n">dd</span><span class="p">[</span><span class="s">&quot;dtype&quot;</span><span class="p">]</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__npTn</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="k">else</span> <span class="s">&#39;NX_CHAR&#39;</span>
+            <span class="n">nxtype</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__npTn</span><span class="p">[</span><span class="n">dd</span><span class="p">[</span><span class="s2">&quot;dtype&quot;</span><span class="p">]]</span> \
+                <span class="k">if</span> <span class="n">dd</span><span class="p">[</span><span class="s2">&quot;dtype&quot;</span><span class="p">]</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__npTn</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="k">else</span> <span class="s1">&#39;NX_CHAR&#39;</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__createField</span><span class="p">(</span>
-                <span class="n">root</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">nxtype</span><span class="p">,</span> <span class="n">alias</span><span class="p">,</span>
-                <span class="n">dd</span><span class="p">[</span><span class="s">&quot;name&quot;</span><span class="p">],</span> <span class="n">dd</span><span class="p">[</span><span class="s">&quot;shape&quot;</span><span class="p">],</span> <span class="n">dstype</span><span class="o">=</span><span class="s">&#39;CLIENT&#39;</span><span class="p">)</span>
+                <span class="n">parent</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">nxtype</span><span class="p">,</span> <span class="n">alias</span><span class="p">,</span>
+                <span class="n">dd</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">],</span> <span class="n">dd</span><span class="p">[</span><span class="s2">&quot;shape&quot;</span><span class="p">],</span> <span class="n">dstype</span><span class="o">=</span><span class="s1">&#39;CLIENT&#39;</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">link</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">__createLink</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">nxdata</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">field</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__createLink</span><span class="p">(</span><span class="n">nxdata</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">field</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">__createNonSardanaNodes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">created</span><span class="p">,</span> <span class="n">avds</span><span class="p">,</span> <span class="n">root</span><span class="p">,</span> <span class="n">definition</span><span class="p">,</span>
-                                <span class="n">strategy</span><span class="o">=</span><span class="s">&quot;STEP&quot;</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__createNonSardanaNodes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">created</span><span class="p">,</span> <span class="n">avds</span><span class="p">,</span> <span class="n">definition</span><span class="p">,</span>
+                                <span class="n">strategy</span><span class="o">=</span><span class="s2">&quot;STEP&quot;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; creates XML nodes for non sardana devices</span>
 
 <span class="sd">        :param created: list of created devices</span>
 <span class="sd">        :type created: :obj:`list` &lt;:obj:`str`&gt;</span>
 <span class="sd">        :param avds: available datasources</span>
 <span class="sd">        :type avds: :obj:`list` &lt;:obj:`str`&gt;</span>
-<span class="sd">        :param root: root node</span>
-<span class="sd">        :type root: :class:`xml.dom.minidom.Node`</span>
 <span class="sd">        :param definition: definition node</span>
-<span class="sd">        :type definition: :class:`xml.dom.minidom.Node`</span>
+<span class="sd">        :type definition: :class:`lxml.etree.Element`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">dsources</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__initdsources</span> \
-            <span class="k">if</span> <span class="n">strategy</span> <span class="o">==</span> <span class="s">&#39;INIT&#39;</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">__stepdsources</span>
+            <span class="k">if</span> <span class="n">strategy</span> <span class="o">==</span> <span class="s1">&#39;INIT&#39;</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">__stepdsources</span>
         <span class="k">for</span> <span class="n">ds</span> <span class="ow">in</span> <span class="n">dsources</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">ds</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">created</span><span class="p">:</span>
                 <span class="n">path</span><span class="p">,</span> <span class="n">field</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__getPathField</span><span class="p">(</span>
@@ -406,23 +404,30 @@
 
                 <span class="n">link</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__getProp</span><span class="p">(</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">__nexuslinks</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__nexuslabels</span><span class="p">,</span> <span class="n">ds</span><span class="p">,</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">__ilinks</span> <span class="k">if</span> <span class="n">strategy</span> <span class="o">==</span> <span class="s">&#39;INIT&#39;</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__ilinks</span> <span class="k">if</span> <span class="n">strategy</span> <span class="o">==</span> <span class="s1">&#39;INIT&#39;</span>
                     <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">__links</span><span class="p">)</span>
                 <span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="n">nxdata</span><span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__createGroupTree</span><span class="p">(</span>
-                    <span class="n">root</span><span class="p">,</span> <span class="n">definition</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">link</span><span class="p">)</span>
+                    <span class="n">definition</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">link</span><span class="p">)</span>
                 <span class="n">created</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ds</span><span class="p">)</span>
 
-                <span class="n">shape</span><span class="p">,</span> <span class="n">nxtype</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span> <span class="s">&#39;NX_CHAR&#39;</span>
+                <span class="n">shape</span><span class="p">,</span> <span class="n">nxtype</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;NX_CHAR&#39;</span>
                 <span class="k">if</span> <span class="n">ds</span> <span class="ow">in</span> <span class="n">avds</span><span class="p">:</span>
                     <span class="n">dsource</span> <span class="o">=</span> <span class="n">TangoUtils</span><span class="o">.</span><span class="n">command</span><span class="p">(</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">__nexusconfig_device</span><span class="p">,</span> <span class="s">&quot;dataSources&quot;</span><span class="p">,</span>
-                        <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">ds</span><span class="p">)])</span>
-                    <span class="n">indom</span> <span class="o">=</span> <span class="n">xml</span><span class="o">.</span><span class="n">dom</span><span class="o">.</span><span class="n">minidom</span><span class="o">.</span><span class="n">parseString</span><span class="p">(</span><span class="n">dsource</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-                    <span class="n">dss</span> <span class="o">=</span> <span class="n">indom</span><span class="o">.</span><span class="n">getElementsByTagName</span><span class="p">(</span><span class="s">&quot;datasource&quot;</span><span class="p">)</span>
-                    <span class="k">if</span> <span class="n">dss</span> <span class="ow">and</span> <span class="n">shape</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">__nexusconfig_device</span><span class="p">,</span> <span class="s2">&quot;dataSources&quot;</span><span class="p">,</span>
+                        <span class="p">[</span><span class="n">Utils</span><span class="o">.</span><span class="n">tostr</span><span class="p">(</span><span class="n">ds</span><span class="p">)])</span>
+                    <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span> <span class="o">&gt;</span> <span class="p">(</span><span class="mi">3</span><span class="p">,):</span>
+                        <span class="n">root</span> <span class="o">=</span> <span class="n">et</span><span class="o">.</span><span class="n">fromstring</span><span class="p">(</span>
+                            <span class="nb">bytes</span><span class="p">(</span><span class="n">dsource</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;UTF-8&quot;</span><span class="p">),</span>
+                            <span class="n">parser</span><span class="o">=</span><span class="n">XMLParser</span><span class="p">(</span><span class="n">collect_ids</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">root</span> <span class="o">=</span> <span class="n">et</span><span class="o">.</span><span class="n">fromstring</span><span class="p">(</span>
+                            <span class="n">dsource</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                            <span class="n">parser</span><span class="o">=</span><span class="n">XMLParser</span><span class="p">(</span><span class="n">collect_ids</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>
+                    <span class="n">dss</span> <span class="o">=</span> <span class="n">root</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="s2">&quot;.//datasource&quot;</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">dss</span> <span class="ow">and</span> <span class="n">shape</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                         <span class="n">shape</span><span class="p">,</span> <span class="n">nxtype</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__shapeFromTango</span><span class="p">(</span><span class="n">dss</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
                         <span class="k">if</span> <span class="ow">not</span> <span class="n">nxtype</span><span class="p">:</span>
-                            <span class="n">nxtype</span> <span class="o">=</span> <span class="s">&#39;NX_CHAR&#39;</span>
+                            <span class="n">nxtype</span> <span class="o">=</span> <span class="s1">&#39;NX_CHAR&#39;</span>
 
                 <span class="n">nxtype</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__getProp</span><span class="p">(</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">__nexustypes</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__nexuslabels</span><span class="p">,</span> <span class="n">ds</span><span class="p">,</span> <span class="n">nxtype</span><span class="p">)</span>
@@ -431,13 +436,13 @@
 
                 <span class="k">if</span> <span class="n">ds</span> <span class="ow">in</span> <span class="n">avds</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">__createField</span><span class="p">(</span>
-                        <span class="n">root</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">nxtype</span><span class="p">,</span> <span class="n">ds</span><span class="p">,</span>
+                        <span class="n">parent</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">nxtype</span><span class="p">,</span> <span class="n">ds</span><span class="p">,</span>
                         <span class="n">dsnode</span><span class="o">=</span><span class="n">dss</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">shape</span><span class="o">=</span><span class="n">shape</span><span class="p">,</span> <span class="n">strategy</span><span class="o">=</span><span class="n">strategy</span><span class="p">)</span>
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">__createField</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">nxtype</span><span class="p">,</span> <span class="n">ds</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__createField</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">nxtype</span><span class="p">,</span> <span class="n">ds</span><span class="p">,</span>
                                        <span class="n">ds</span><span class="p">,</span> <span class="n">shape</span><span class="p">,</span> <span class="n">strategy</span><span class="o">=</span><span class="n">strategy</span><span class="p">)</span>
                 <span class="k">if</span> <span class="n">link</span><span class="p">:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">__createLink</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">nxdata</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">field</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__createLink</span><span class="p">(</span><span class="n">nxdata</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">field</span><span class="p">)</span>
 
 <div class="viewcode-block" id="DynamicComponent.create"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.DynamicComponent.DynamicComponent.create">[docs]</a>    <span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; creates dynamic component</span>
@@ -446,32 +451,39 @@
 <span class="sd">        :rtype: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">cps</span> <span class="o">=</span> <span class="n">TangoUtils</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__nexusconfig_device</span><span class="p">,</span>
-                                 <span class="s">&quot;availableComponents&quot;</span><span class="p">)</span>
+                                 <span class="s2">&quot;availableComponents&quot;</span><span class="p">)</span>
         <span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__defaultCP</span>
         <span class="k">while</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">cps</span><span class="p">:</span>
-            <span class="n">name</span> <span class="o">=</span> <span class="n">name</span> <span class="o">+</span> <span class="s">&quot;x&quot;</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="n">name</span> <span class="o">+</span> <span class="s2">&quot;x&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__dynamicCP</span> <span class="o">=</span> <span class="n">name</span>
 
-        <span class="n">root</span> <span class="o">=</span> <span class="n">xml</span><span class="o">.</span><span class="n">dom</span><span class="o">.</span><span class="n">minidom</span><span class="o">.</span><span class="n">Document</span><span class="p">()</span>
-        <span class="n">definition</span> <span class="o">=</span> <span class="n">root</span><span class="o">.</span><span class="n">createElement</span><span class="p">(</span><span class="s">&quot;definition&quot;</span><span class="p">)</span>
-        <span class="n">root</span><span class="o">.</span><span class="n">appendChild</span><span class="p">(</span><span class="n">definition</span><span class="p">)</span>
+        <span class="n">definition</span> <span class="o">=</span> <span class="n">lxml</span><span class="o">.</span><span class="n">etree</span><span class="o">.</span><span class="n">Element</span><span class="p">(</span><span class="s2">&quot;definition&quot;</span><span class="p">)</span>
         <span class="n">avds</span> <span class="o">=</span> <span class="n">TangoUtils</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__nexusconfig_device</span><span class="p">,</span>
-                                  <span class="s">&quot;availableDataSources&quot;</span><span class="p">)</span>
+                                  <span class="s2">&quot;availableDataSources&quot;</span><span class="p">)</span>
 
         <span class="n">created</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__createSardanaNodes</span><span class="p">(</span><span class="n">created</span><span class="p">,</span> <span class="n">root</span><span class="p">,</span> <span class="n">definition</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__createNonSardanaNodes</span><span class="p">(</span><span class="n">created</span><span class="p">,</span> <span class="n">avds</span><span class="p">,</span> <span class="n">root</span><span class="p">,</span> <span class="n">definition</span><span class="p">,</span> <span class="s">&#39;STEP&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__createNonSardanaNodes</span><span class="p">(</span><span class="n">created</span><span class="p">,</span> <span class="n">avds</span><span class="p">,</span> <span class="n">root</span><span class="p">,</span> <span class="n">definition</span><span class="p">,</span> <span class="s">&#39;INIT&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__createSardanaNodes</span><span class="p">(</span><span class="n">created</span><span class="p">,</span> <span class="n">definition</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__createNonSardanaNodes</span><span class="p">(</span><span class="n">created</span><span class="p">,</span> <span class="n">avds</span><span class="p">,</span> <span class="n">definition</span><span class="p">,</span> <span class="s1">&#39;STEP&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__createNonSardanaNodes</span><span class="p">(</span><span class="n">created</span><span class="p">,</span> <span class="n">avds</span><span class="p">,</span> <span class="n">definition</span><span class="p">,</span> <span class="s1">&#39;INIT&#39;</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">__nexusconfig_device</span><span class="o">.</span><span class="n">xmlstring</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">root</span><span class="o">.</span><span class="n">toprettyxml</span><span class="p">(</span><span class="n">indent</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="p">))</span>
-        <span class="n">TangoUtils</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__nexusconfig_device</span><span class="p">,</span> <span class="s">&quot;storeComponent&quot;</span><span class="p">,</span>
-                           <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__dynamicCP</span><span class="p">))</span>
-<span class="c">#        print(&quot;Dynamic Component:\n%s&quot; % root.toprettyxml(indent=&quot;  &quot;))</span>
+        <span class="n">xmls</span> <span class="o">=</span> <span class="n">Utils</span><span class="o">.</span><span class="n">tostr</span><span class="p">(</span>
+            <span class="n">lxml</span><span class="o">.</span><span class="n">etree</span><span class="o">.</span><span class="n">tostring</span><span class="p">(</span>
+                <span class="n">definition</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf8&#39;</span><span class="p">,</span>
+                <span class="n">method</span><span class="o">=</span><span class="s1">&#39;xml&#39;</span><span class="p">,</span> <span class="n">pretty_print</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">xmls</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;&lt;?xml&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__nexusconfig_device</span><span class="o">.</span><span class="n">xmlstring</span> <span class="o">=</span> <span class="n">xmls</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__nexusconfig_device</span><span class="o">.</span><span class="n">xmlstring</span> <span class="o">=</span> \
+                <span class="s2">&quot;&lt;?xml version=&#39;1.0&#39; encoding=&#39;utf8&#39;?&gt;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">xmls</span>
 
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__dynamicCP</span>
-</div>
+        <span class="n">TangoUtils</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__nexusconfig_device</span><span class="p">,</span> <span class="s2">&quot;storeComponent&quot;</span><span class="p">,</span>
+                           <span class="n">Utils</span><span class="o">.</span><span class="n">tostr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__dynamicCP</span><span class="p">))</span>
+<span class="c1">#        print(&quot;Dynamic Component:\n%s&quot; % root.toprettyxml(indent=&quot;  &quot;))</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__dynamicCP</span></div>
+
     <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">__getProp</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">nexusprop</span><span class="p">,</span> <span class="n">nexuslabels</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">default</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__getProp</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">nexusprop</span><span class="p">,</span> <span class="n">nexuslabels</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">default</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; gets the property value for the given datasource</span>
 
 <span class="sd">        :param nexusprop: nexus property dictionary</span>
@@ -483,13 +495,13 @@
 <span class="sd">        :returns: propery value</span>
 <span class="sd">        :rtype: `any`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">prop</span> <span class="o">=</span> <span class="n">nexusprop</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">nexuslabels</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="s">&quot;&quot;</span><span class="p">),</span> <span class="bp">None</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">prop</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">prop</span> <span class="o">=</span> <span class="n">nexusprop</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">nexuslabels</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">),</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">prop</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">prop</span> <span class="o">=</span> <span class="n">nexusprop</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">default</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">prop</span>
 
     <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">__getPathField</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">nexuspaths</span><span class="p">,</span> <span class="n">nexuslabels</span><span class="p">,</span> <span class="n">alias</span><span class="p">,</span> <span class="n">defaultpath</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__getPathField</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">nexuspaths</span><span class="p">,</span> <span class="n">nexuslabels</span><span class="p">,</span> <span class="n">alias</span><span class="p">,</span> <span class="n">defaultpath</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; gets the Nexus path and for the given datasource</span>
 
 <span class="sd">        :param nexuspaths: nexus property path dictionary</span>
@@ -503,44 +515,44 @@
 <span class="sd">        :returns: (path, fieldname)</span>
 <span class="sd">        :rtype: (:obj:`str` , :obj:`str`)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">path</span> <span class="o">=</span> <span class="n">nexuspaths</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">nexuslabels</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">alias</span><span class="p">,</span> <span class="s">&quot;&quot;</span><span class="p">),</span> <span class="s">&quot;&quot;</span><span class="p">)</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="n">nexuspaths</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">nexuslabels</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">alias</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">),</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">path</span><span class="p">:</span>
-            <span class="n">path</span> <span class="o">=</span> <span class="n">nexuspaths</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">alias</span><span class="p">,</span> <span class="s">&quot;&quot;</span><span class="p">)</span>
+            <span class="n">path</span> <span class="o">=</span> <span class="n">nexuspaths</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">alias</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">path</span><span class="p">:</span>
-            <span class="n">spath</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;/&#39;</span><span class="p">)</span>
+            <span class="n">spath</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span>
             <span class="n">field</span> <span class="o">=</span> <span class="n">spath</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-            <span class="n">path</span> <span class="o">=</span> <span class="s">&#39;/&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">spath</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">spath</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">else</span> <span class="n">defaultpath</span>
+            <span class="n">path</span> <span class="o">=</span> <span class="s1">&#39;/&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">spath</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">spath</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">else</span> <span class="n">defaultpath</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">path</span> <span class="o">=</span> <span class="n">defaultpath</span>
             <span class="n">field</span> <span class="o">=</span> <span class="n">alias</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">field</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">12</span> <span class="ow">and</span> <span class="n">field</span><span class="p">[:</span><span class="mi">8</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;tango://&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">field</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">12</span> <span class="ow">and</span> <span class="n">field</span><span class="p">[:</span><span class="mi">8</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;tango://&#39;</span><span class="p">:</span>
             <span class="n">field</span> <span class="o">=</span> <span class="n">field</span><span class="p">[</span><span class="mi">8</span><span class="p">:]</span>
         <span class="k">return</span> <span class="p">(</span><span class="n">path</span><span class="p">,</span>
-                <span class="n">field</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&quot; &quot;</span><span class="p">,</span> <span class="s">&quot;_&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&quot;/&quot;</span><span class="p">,</span> <span class="s">&quot;_&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span>
-                    <span class="s">&quot;:&quot;</span><span class="p">,</span> <span class="s">&quot;_&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&quot;.&quot;</span><span class="p">,</span> <span class="s">&quot;_&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&quot;</span><span class="se">\\</span><span class="s">&quot;</span><span class="p">,</span> <span class="s">&quot;_&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span>
-                        <span class="s">&quot;;&quot;</span><span class="p">,</span> <span class="s">&quot;_&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span>
+                <span class="n">field</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span>
+                    <span class="s2">&quot;:&quot;</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span>
+                        <span class="s2">&quot;;&quot;</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span>
 
     <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">__createLink</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">root</span><span class="p">,</span> <span class="n">entry</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__createLink</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">entry</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; creates XML node for nexus link</span>
 
 <span class="sd">        :param root: root node</span>
-<span class="sd">        :type root: :class:`xml.dom.minidom.Node`</span>
+<span class="sd">        :type root: :class:`lxml.etree.Element`</span>
 <span class="sd">        :param entry: entry node</span>
-<span class="sd">        :type entry: :class:`xml.dom.minidom.Node`</span>
+<span class="sd">        :type entry: :class:`lxml.etree.Element`</span>
 <span class="sd">        :param path: nexus path</span>
 <span class="sd">        :type path: :obj:`str`</span>
 <span class="sd">        :param name: link name</span>
 <span class="sd">        :type name: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">name</span> <span class="ow">and</span> <span class="n">entry</span><span class="p">:</span>
-            <span class="n">link</span> <span class="o">=</span> <span class="n">root</span><span class="o">.</span><span class="n">createElement</span><span class="p">(</span><span class="s">&quot;link&quot;</span><span class="p">)</span>
-            <span class="n">entry</span><span class="o">.</span><span class="n">appendChild</span><span class="p">(</span><span class="n">link</span><span class="p">)</span>
-            <span class="n">link</span><span class="o">.</span><span class="n">setAttribute</span><span class="p">(</span><span class="s">&quot;target&quot;</span><span class="p">,</span> <span class="s">&quot;</span><span class="si">%s</span><span class="s">/</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">name</span><span class="p">))</span>
-            <span class="n">link</span><span class="o">.</span><span class="n">setAttribute</span><span class="p">(</span><span class="s">&quot;name&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">entry</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">link</span> <span class="o">=</span> <span class="n">lxml</span><span class="o">.</span><span class="n">etree</span><span class="o">.</span><span class="n">Element</span><span class="p">(</span><span class="s2">&quot;link&quot;</span><span class="p">)</span>
+            <span class="n">entry</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">link</span><span class="p">)</span>
+            <span class="n">link</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s2">&quot;target&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">/</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+            <span class="n">link</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">name</span>
 
     <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">__findDataSource</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__findDataSource</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; finds datasource details:</span>
 <span class="sd">        (attribute name, device name, host, port) tuple</span>
 
@@ -549,41 +561,39 @@
 <span class="sd">        :returns: (attribute name, device name, host, port) tuple</span>
 <span class="sd">        :rtype: (:obj:`str`, :obj:`str`, :obj:`str`)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">attr</span> <span class="o">=</span> <span class="bp">None</span>
-        <span class="n">device</span> <span class="o">=</span> <span class="bp">None</span>
-        <span class="n">host</span> <span class="o">=</span> <span class="bp">None</span>
-        <span class="n">port</span> <span class="o">=</span> <span class="bp">None</span>
-        <span class="n">source</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="n">attr</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">device</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">host</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">port</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">source</span> <span class="o">=</span> <span class="kc">None</span>
 
-        <span class="n">sname</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&quot;://&quot;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">name</span> <span class="ow">and</span> <span class="n">sname</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;tango&#39;</span> <span class="ow">and</span> <span class="n">sname</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s">&#39;/&#39;</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="n">sname</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;://&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">and</span> <span class="n">sname</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;tango&#39;</span> <span class="ow">and</span> <span class="n">sname</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
             <span class="n">source</span> <span class="o">=</span> <span class="n">sname</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">source</span> <span class="o">=</span> <span class="n">PoolUtils</span><span class="o">.</span><span class="n">getSource</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">source</span><span class="p">:</span>
-            <span class="n">arr</span> <span class="o">=</span> <span class="n">source</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&quot;/&quot;</span><span class="p">)</span>
-            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">4</span> <span class="ow">and</span> <span class="s">&quot;:&quot;</span> <span class="ow">in</span> <span class="n">arr</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
-                <span class="n">device</span> <span class="o">=</span> <span class="s">&quot;/&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">arr</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+            <span class="n">arr</span> <span class="o">=</span> <span class="n">source</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">4</span> <span class="ow">and</span> <span class="s2">&quot;:&quot;</span> <span class="ow">in</span> <span class="n">arr</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+                <span class="n">device</span> <span class="o">=</span> <span class="s2">&quot;/&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">arr</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
                 <span class="n">attr</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-                <span class="n">hat</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&quot;:&quot;</span><span class="p">)</span>
+                <span class="n">hat</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">)</span>
                 <span class="k">if</span> <span class="n">hat</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
                     <span class="n">host</span> <span class="o">=</span> <span class="n">hat</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
                     <span class="n">port</span> <span class="o">=</span> <span class="n">hat</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
             <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">3</span><span class="p">:</span>
-                <span class="n">device</span> <span class="o">=</span> <span class="s">&quot;/&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">arr</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+                <span class="n">device</span> <span class="o">=</span> <span class="s2">&quot;/&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">arr</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
                 <span class="n">attr</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
         <span class="k">return</span> <span class="p">(</span><span class="n">attr</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="p">)</span>
 
     <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">__createField</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">root</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">fname</span><span class="p">,</span> <span class="n">nxtype</span><span class="p">,</span> <span class="n">sname</span><span class="p">,</span>
-                      <span class="n">record</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">dsnode</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
-                      <span class="n">strategy</span><span class="o">=</span><span class="s">&#39;STEP&#39;</span><span class="p">,</span> <span class="n">dstype</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__createField</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">fname</span><span class="p">,</span> <span class="n">nxtype</span><span class="p">,</span> <span class="n">sname</span><span class="p">,</span>
+                      <span class="n">record</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dsnode</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                      <span class="n">strategy</span><span class="o">=</span><span class="s1">&#39;STEP&#39;</span><span class="p">,</span> <span class="n">dstype</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; creates XML node for NeXus field</span>
 
-<span class="sd">        :param root: root node</span>
-<span class="sd">        :type root: :class:`xml.dom.minidom.Node`</span>
 <span class="sd">        :param parent: parent node</span>
-<span class="sd">        :type parent: :class:`xml.dom.minidom.Node`</span>
+<span class="sd">        :type parent: :class:`lxml.etree.Element`</span>
 <span class="sd">        :param fname: field name</span>
 <span class="sd">        :type fname: :obj:`str`</span>
 <span class="sd">        :param nxtype: field NeXus type</span>
@@ -601,55 +611,55 @@
 <span class="sd">        :param dstype: datasource type</span>
 <span class="sd">        :type dstyp: :obj:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">field</span> <span class="o">=</span> <span class="n">root</span><span class="o">.</span><span class="n">createElement</span><span class="p">(</span><span class="s">&quot;field&quot;</span><span class="p">)</span>
-        <span class="n">parent</span><span class="o">.</span><span class="n">appendChild</span><span class="p">(</span><span class="n">field</span><span class="p">)</span>
-        <span class="n">field</span><span class="o">.</span><span class="n">setAttribute</span><span class="p">(</span><span class="s">&quot;type&quot;</span><span class="p">,</span> <span class="n">nxtype</span><span class="p">)</span>
-        <span class="n">field</span><span class="o">.</span><span class="n">setAttribute</span><span class="p">(</span><span class="s">&quot;name&quot;</span><span class="p">,</span> <span class="n">fname</span><span class="p">)</span>
+        <span class="n">field</span> <span class="o">=</span> <span class="n">lxml</span><span class="o">.</span><span class="n">etree</span><span class="o">.</span><span class="n">Element</span><span class="p">(</span><span class="s2">&quot;field&quot;</span><span class="p">)</span>
+        <span class="n">parent</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">field</span><span class="p">)</span>
+        <span class="n">field</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nxtype</span>
+        <span class="n">field</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fname</span>
 
-        <span class="n">strategynode</span> <span class="o">=</span> <span class="n">root</span><span class="o">.</span><span class="n">createElement</span><span class="p">(</span><span class="s">&quot;strategy&quot;</span><span class="p">)</span>
-        <span class="n">field</span><span class="o">.</span><span class="n">appendChild</span><span class="p">(</span><span class="n">strategynode</span><span class="p">)</span>
-        <span class="n">strategynode</span><span class="o">.</span><span class="n">setAttribute</span><span class="p">(</span><span class="s">&quot;mode&quot;</span><span class="p">,</span> <span class="n">strategy</span><span class="p">)</span>
+        <span class="n">strategynode</span> <span class="o">=</span> <span class="n">lxml</span><span class="o">.</span><span class="n">etree</span><span class="o">.</span><span class="n">Element</span><span class="p">(</span><span class="s2">&quot;strategy&quot;</span><span class="p">)</span>
+        <span class="n">field</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">strategynode</span><span class="p">)</span>
+        <span class="n">strategynode</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s2">&quot;mode&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">strategy</span>
 
-        <span class="k">if</span> <span class="n">dsnode</span><span class="p">:</span>
-            <span class="n">dsource</span> <span class="o">=</span> <span class="n">root</span><span class="o">.</span><span class="n">importNode</span><span class="p">(</span><span class="n">dsnode</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">dsnode</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">dsource</span> <span class="o">=</span> <span class="n">dsnode</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">dstype</span> <span class="o">==</span> <span class="s">&#39;CLIENT&#39;</span> <span class="ow">and</span> <span class="n">record</span><span class="p">:</span>
-                <span class="n">device</span> <span class="o">=</span> <span class="bp">None</span>
-                <span class="n">attr</span> <span class="o">=</span> <span class="bp">None</span>
+            <span class="k">if</span> <span class="n">dstype</span> <span class="o">==</span> <span class="s1">&#39;CLIENT&#39;</span> <span class="ow">and</span> <span class="n">record</span><span class="p">:</span>
+                <span class="n">device</span> <span class="o">=</span> <span class="kc">None</span>
+                <span class="n">attr</span> <span class="o">=</span> <span class="kc">None</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="p">(</span><span class="n">attr</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="p">)</span> <span class="o">=</span> <span class="n">cls</span><span class="o">.</span><span class="n">__findDataSource</span><span class="p">(</span><span class="n">sname</span><span class="p">)</span>
+                <span class="p">(</span><span class="n">attr</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="p">)</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">__findDataSource</span><span class="p">(</span><span class="n">sname</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">device</span> <span class="ow">and</span> <span class="n">attr</span><span class="p">:</span>
-                <span class="n">dsource</span> <span class="o">=</span> <span class="n">root</span><span class="o">.</span><span class="n">createElement</span><span class="p">(</span><span class="s">&quot;datasource&quot;</span><span class="p">)</span>
-                <span class="n">dsource</span><span class="o">.</span><span class="n">setAttribute</span><span class="p">(</span><span class="s">&quot;name&quot;</span><span class="p">,</span> <span class="n">sname</span><span class="p">)</span>
-                <span class="n">dsource</span><span class="o">.</span><span class="n">setAttribute</span><span class="p">(</span><span class="s">&quot;type&quot;</span><span class="p">,</span> <span class="s">&quot;TANGO&quot;</span><span class="p">)</span>
-                <span class="n">dev</span> <span class="o">=</span> <span class="n">root</span><span class="o">.</span><span class="n">createElement</span><span class="p">(</span><span class="s">&quot;device&quot;</span><span class="p">)</span>
-                <span class="n">dsource</span><span class="o">.</span><span class="n">appendChild</span><span class="p">(</span><span class="n">dev</span><span class="p">)</span>
-                <span class="n">dev</span><span class="o">.</span><span class="n">setAttribute</span><span class="p">(</span><span class="s">&quot;member&quot;</span><span class="p">,</span> <span class="s">&quot;attribute&quot;</span><span class="p">)</span>
-                <span class="n">dev</span><span class="o">.</span><span class="n">setAttribute</span><span class="p">(</span><span class="s">&quot;name&quot;</span><span class="p">,</span> <span class="n">device</span><span class="p">)</span>
+                <span class="n">dsource</span> <span class="o">=</span> <span class="n">lxml</span><span class="o">.</span><span class="n">etree</span><span class="o">.</span><span class="n">Element</span><span class="p">(</span><span class="s2">&quot;datasource&quot;</span><span class="p">)</span>
+                <span class="n">dsource</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sname</span>
+                <span class="n">dsource</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;TANGO&quot;</span>
+                <span class="n">dev</span> <span class="o">=</span> <span class="n">lxml</span><span class="o">.</span><span class="n">etree</span><span class="o">.</span><span class="n">Element</span><span class="p">(</span><span class="s2">&quot;device&quot;</span><span class="p">)</span>
+                <span class="n">dsource</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dev</span><span class="p">)</span>
+                <span class="n">dev</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s2">&quot;member&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;attribute&quot;</span>
+                <span class="n">dev</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">device</span>
                 <span class="k">if</span> <span class="n">host</span> <span class="ow">and</span> <span class="n">port</span><span class="p">:</span>
-                    <span class="n">dev</span><span class="o">.</span><span class="n">setAttribute</span><span class="p">(</span><span class="s">&quot;hostname&quot;</span><span class="p">,</span> <span class="n">host</span><span class="p">)</span>
-                    <span class="n">dev</span><span class="o">.</span><span class="n">setAttribute</span><span class="p">(</span><span class="s">&quot;port&quot;</span><span class="p">,</span> <span class="n">port</span><span class="p">)</span>
-                <span class="n">rec</span> <span class="o">=</span> <span class="n">root</span><span class="o">.</span><span class="n">createElement</span><span class="p">(</span><span class="s">&quot;record&quot;</span><span class="p">)</span>
-                <span class="n">dsource</span><span class="o">.</span><span class="n">appendChild</span><span class="p">(</span><span class="n">rec</span><span class="p">)</span>
-                <span class="n">rec</span><span class="o">.</span><span class="n">setAttribute</span><span class="p">(</span><span class="s">&quot;name&quot;</span><span class="p">,</span> <span class="n">attr</span><span class="p">)</span>
+                    <span class="n">dev</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s2">&quot;hostname&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">host</span>
+                    <span class="n">dev</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s2">&quot;port&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">port</span>
+                <span class="n">rec</span> <span class="o">=</span> <span class="n">lxml</span><span class="o">.</span><span class="n">etree</span><span class="o">.</span><span class="n">Element</span><span class="p">(</span><span class="s2">&quot;record&quot;</span><span class="p">)</span>
+                <span class="n">dsource</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rec</span><span class="p">)</span>
+                <span class="n">rec</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">attr</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">dsource</span> <span class="o">=</span> <span class="n">root</span><span class="o">.</span><span class="n">createElement</span><span class="p">(</span><span class="s">&quot;datasource&quot;</span><span class="p">)</span>
-                <span class="n">dsource</span><span class="o">.</span><span class="n">setAttribute</span><span class="p">(</span><span class="s">&quot;name&quot;</span><span class="p">,</span> <span class="n">sname</span><span class="p">)</span>
-                <span class="n">dsource</span><span class="o">.</span><span class="n">setAttribute</span><span class="p">(</span><span class="s">&quot;type&quot;</span><span class="p">,</span> <span class="s">&quot;CLIENT&quot;</span><span class="p">)</span>
-                <span class="n">rec</span> <span class="o">=</span> <span class="n">root</span><span class="o">.</span><span class="n">createElement</span><span class="p">(</span><span class="s">&quot;record&quot;</span><span class="p">)</span>
-                <span class="n">dsource</span><span class="o">.</span><span class="n">appendChild</span><span class="p">(</span><span class="n">rec</span><span class="p">)</span>
-                <span class="n">rec</span><span class="o">.</span><span class="n">setAttribute</span><span class="p">(</span><span class="s">&quot;name&quot;</span><span class="p">,</span> <span class="n">record</span><span class="p">)</span>
+                <span class="n">dsource</span> <span class="o">=</span> <span class="n">lxml</span><span class="o">.</span><span class="n">etree</span><span class="o">.</span><span class="n">Element</span><span class="p">(</span><span class="s2">&quot;datasource&quot;</span><span class="p">)</span>
+                <span class="n">dsource</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sname</span>
+                <span class="n">dsource</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;CLIENT&quot;</span>
+                <span class="n">rec</span> <span class="o">=</span> <span class="n">lxml</span><span class="o">.</span><span class="n">etree</span><span class="o">.</span><span class="n">Element</span><span class="p">(</span><span class="s2">&quot;record&quot;</span><span class="p">)</span>
+                <span class="n">dsource</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rec</span><span class="p">)</span>
+                <span class="n">rec</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">record</span>
 
-        <span class="n">field</span><span class="o">.</span><span class="n">appendChild</span><span class="p">(</span><span class="n">dsource</span><span class="p">)</span>
+        <span class="n">field</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dsource</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">shape</span><span class="p">:</span>
-            <span class="n">dm</span> <span class="o">=</span> <span class="n">root</span><span class="o">.</span><span class="n">createElement</span><span class="p">(</span><span class="s">&quot;dimensions&quot;</span><span class="p">)</span>
-            <span class="n">dm</span><span class="o">.</span><span class="n">setAttribute</span><span class="p">(</span><span class="s">&quot;rank&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">shape</span><span class="p">)))</span>
-            <span class="n">field</span><span class="o">.</span><span class="n">appendChild</span><span class="p">(</span><span class="n">dm</span><span class="p">)</span>
+            <span class="n">dm</span> <span class="o">=</span> <span class="n">lxml</span><span class="o">.</span><span class="n">etree</span><span class="o">.</span><span class="n">Element</span><span class="p">(</span><span class="s2">&quot;dimensions&quot;</span><span class="p">)</span>
+            <span class="n">dm</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s2">&quot;rank&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Utils</span><span class="o">.</span><span class="n">tostr</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">shape</span><span class="p">))</span>
+            <span class="n">field</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dm</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">shape</span><span class="p">)):</span>
-                <span class="n">dim</span> <span class="o">=</span> <span class="n">root</span><span class="o">.</span><span class="n">createElement</span><span class="p">(</span><span class="s">&quot;dim&quot;</span><span class="p">)</span>
-                <span class="n">dm</span><span class="o">.</span><span class="n">appendChild</span><span class="p">(</span><span class="n">dim</span><span class="p">)</span>
-                <span class="n">dim</span><span class="o">.</span><span class="n">setAttribute</span><span class="p">(</span><span class="s">&quot;index&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
-                <span class="n">dim</span><span class="o">.</span><span class="n">setAttribute</span><span class="p">(</span><span class="s">&quot;value&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">shape</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+                <span class="n">dim</span> <span class="o">=</span> <span class="n">lxml</span><span class="o">.</span><span class="n">etree</span><span class="o">.</span><span class="n">Element</span><span class="p">(</span><span class="s2">&quot;dim&quot;</span><span class="p">)</span>
+                <span class="n">dm</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dim</span><span class="p">)</span>
+                <span class="n">dim</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s2">&quot;index&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Utils</span><span class="o">.</span><span class="n">tostr</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+                <span class="n">dim</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Utils</span><span class="o">.</span><span class="n">tostr</span><span class="p">(</span><span class="n">shape</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
 
 <div class="viewcode-block" id="DynamicComponent.remove"><a class="viewcode-back" href="../../nxsrecconfig.html#nxsrecconfig.DynamicComponent.DynamicComponent.remove">[docs]</a>    <span class="k">def</span> <span class="nf">remove</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; removes dynamic component</span>
@@ -659,54 +669,51 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__defaultCP</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">name</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
-                <span class="s">&quot;Dynamic component name should contain: </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">__defaultCP</span><span class="p">)</span>
+                <span class="s2">&quot;Dynamic component name should contain: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">__defaultCP</span><span class="p">)</span>
         <span class="n">cps</span> <span class="o">=</span> <span class="n">TangoUtils</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__nexusconfig_device</span><span class="p">,</span>
-                                 <span class="s">&quot;availableComponents&quot;</span><span class="p">)</span>
+                                 <span class="s2">&quot;availableComponents&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">cps</span><span class="p">:</span>
             <span class="n">TangoUtils</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__nexusconfig_device</span><span class="p">,</span>
-                               <span class="s">&quot;deleteComponent&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
-</div>
+                               <span class="s2">&quot;deleteComponent&quot;</span><span class="p">,</span> <span class="n">Utils</span><span class="o">.</span><span class="n">tostr</span><span class="p">(</span><span class="n">name</span><span class="p">))</span></div>
+
     <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">__createGroupTree</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">root</span><span class="p">,</span> <span class="n">definition</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">links</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__createGroupTree</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">definition</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">links</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; creates group tree</span>
 
-<span class="sd">        :param root: root node</span>
-<span class="sd">        :type root: :class:`xml.dom.minidom.Node`</span>
 <span class="sd">        :param definition: definition node</span>
-<span class="sd">        :type definition: :class:`xml.dom.minidom.Node`</span>
+<span class="sd">        :type definition: :class:`lxml.etree.Element`</span>
 <span class="sd">        :param path: NeXus path</span>
 <span class="sd">        :type path: :obj:`str`</span>
 <span class="sd">        :param links: if NXdata should be created</span>
 <span class="sd">        :type links: :obj:`bool`</span>
 <span class="sd">        :returns (last group node, nxdata group node) tuple</span>
-<span class="sd">        :rtype (:class:`xml.dom.minidom.Node`, :class:`xml.dom.minidom.Node`)</span>
+<span class="sd">        :rtype (:class:`lxml.etree.Element`, :class:`lxml.etree.Element`)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="n">spath</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;/&#39;</span><span class="p">)</span>
-        <span class="n">entry</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="n">spath</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span>
+        <span class="n">entry</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="n">parent</span> <span class="o">=</span> <span class="n">definition</span>
-        <span class="n">nxdata</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="n">nxdata</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">for</span> <span class="n">dr</span> <span class="ow">in</span> <span class="n">spath</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">dr</span><span class="o">.</span><span class="n">strip</span><span class="p">():</span>
-                <span class="n">node</span> <span class="o">=</span> <span class="n">root</span><span class="o">.</span><span class="n">createElement</span><span class="p">(</span><span class="s">&quot;group&quot;</span><span class="p">)</span>
-                <span class="n">parent</span><span class="o">.</span><span class="n">appendChild</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
-                <span class="k">if</span> <span class="ow">not</span> <span class="n">entry</span><span class="p">:</span>
+                <span class="n">node</span> <span class="o">=</span> <span class="n">lxml</span><span class="o">.</span><span class="n">etree</span><span class="o">.</span><span class="n">Element</span><span class="p">(</span><span class="s2">&quot;group&quot;</span><span class="p">)</span>
+                <span class="n">parent</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">entry</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                     <span class="n">entry</span> <span class="o">=</span> <span class="n">node</span>
 
-                <span class="n">w</span> <span class="o">=</span> <span class="n">dr</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;:&#39;</span><span class="p">)</span>
+                <span class="n">w</span> <span class="o">=</span> <span class="n">dr</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">)</span>
                 <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">w</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-                    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">w</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">2</span> <span class="ow">and</span> <span class="n">w</span><span class="p">[</span><span class="mi">0</span><span class="p">][:</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;NX&#39;</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">w</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">2</span> <span class="ow">and</span> <span class="n">w</span><span class="p">[</span><span class="mi">0</span><span class="p">][:</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;NX&#39;</span><span class="p">:</span>
                         <span class="n">w</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">w</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">2</span><span class="p">:])</span>
                     <span class="k">else</span><span class="p">:</span>
-                        <span class="n">w</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&quot;NX&quot;</span> <span class="o">+</span> <span class="n">w</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-                <span class="n">node</span><span class="o">.</span><span class="n">setAttribute</span><span class="p">(</span><span class="s">&quot;type&quot;</span><span class="p">,</span> <span class="n">w</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-                <span class="n">node</span><span class="o">.</span><span class="n">setAttribute</span><span class="p">(</span><span class="s">&quot;name&quot;</span><span class="p">,</span> <span class="n">w</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                        <span class="n">w</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;NX&quot;</span> <span class="o">+</span> <span class="n">w</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                <span class="n">node</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">w</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                <span class="n">node</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">w</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
                 <span class="n">parent</span> <span class="o">=</span> <span class="n">node</span>
-        <span class="k">if</span> <span class="n">links</span> <span class="ow">and</span> <span class="n">entry</span><span class="p">:</span>
-            <span class="n">nxdata</span> <span class="o">=</span> <span class="n">root</span><span class="o">.</span><span class="n">createElement</span><span class="p">(</span><span class="s">&quot;group&quot;</span><span class="p">)</span>
-            <span class="n">entry</span><span class="o">.</span><span class="n">appendChild</span><span class="p">(</span><span class="n">nxdata</span><span class="p">)</span>
-            <span class="n">nxdata</span><span class="o">.</span><span class="n">setAttribute</span><span class="p">(</span><span class="s">&quot;type&quot;</span><span class="p">,</span> <span class="s">&quot;NXdata&quot;</span><span class="p">)</span>
-            <span class="n">nxdata</span><span class="o">.</span><span class="n">setAttribute</span><span class="p">(</span><span class="s">&quot;name&quot;</span><span class="p">,</span> <span class="s">&quot;data&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">links</span> <span class="ow">and</span> <span class="n">entry</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">nxdata</span> <span class="o">=</span> <span class="n">lxml</span><span class="o">.</span><span class="n">etree</span><span class="o">.</span><span class="n">Element</span><span class="p">(</span><span class="s2">&quot;group&quot;</span><span class="p">)</span>
+            <span class="n">entry</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">nxdata</span><span class="p">)</span>
+            <span class="n">nxdata</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;NXdata&quot;</span>
+            <span class="n">nxdata</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;data&quot;</span>
 
         <span class="k">return</span> <span class="n">parent</span><span class="p">,</span> <span class="n">nxdata</span></div>
 </pre></div>
@@ -725,7 +732,7 @@
         &copy; Copyright 2012-2017 DESY, Jan Kotanski &lt;jkotan@mail.desy.de&gt;
 
 GNU GENERAL PUBLIC LICENSE, version 3.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.9.<br/>
     </p>
   </div>
 </footer>
