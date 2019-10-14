@@ -26,40 +26,40 @@ import unittest
 import logging
 from optparse import OptionParser
 
-# import TangoDataWriterTest
-# import DescriberTest
+# import TangoDataWriter_test
+# import Describer_test
 
-import DSItemTest
-import ExDSItemTest
-import ExDSDictTest
-import DescriberTest
-import TangoDSItemTest
-import CheckerItemTest
-import CheckerThreadTest
-import SelectionTest
-import SelectorTest
-import Selector2Test
-import MacroServerPoolsTest
-import MacroServerPools2Test
-import DynamicComponentTest
-import UtilsTest
-import ProfileManagerTest
-import ProfileManager2Test
-import BasicSettingsTest
-import BasicSettings2Test
-import ExtraSettingsTest
-import ExtraSettings2Test
-import BasicNXSRecSelectorTest
-import BasicNXSRecSelector2Test
-import ExtraNXSRecSelectorTest
-import ExtraNXSRecSelector2Test
-import ConverterTest
-import ConverterXtoYTest
-import Converter1to2Test
-import Converter2to1Test
-import Converter3to2Test
-import Converter2to3Test
-import StreamSetTest
+import DSItem_test
+import ExDSItem_test
+import ExDSDict_test
+import Describer_test
+import TangoDSItem_test
+import CheckerItem_test
+import CheckerThread_test
+import Selection_test
+import Selector_test
+import Selector2_test
+import MacroServerPools_test
+import MacroServerPools2_test
+import DynamicComponent_test
+import Utils_test
+import ProfileManager_test
+import ProfileManager2_test
+import BasicSettings_test
+import BasicSettings2_test
+import ExtraSettings_test
+import ExtraSettings2_test
+import BasicNXSRecSelector_test
+import BasicNXSRecSelector2_test
+import ExtraNXSRecSelector_test
+import ExtraNXSRecSelector2_test
+import Converter_test
+import ConverterXtoY_test
+import Converter1to2_test
+import Converter2to1_test
+import Converter3to2_test
+import Converter2to3_test
+import StreamSet_test
 
 # list of available databases
 DB_AVAILABLE = []
@@ -106,81 +106,81 @@ def main():
     serversuite2b = unittest.TestSuite()
 
     basicsuite.addTests(
-        unittest.defaultTestLoader.loadTestsFromModule(SelectionTest))
+        unittest.defaultTestLoader.loadTestsFromModule(Selection_test))
     basicsuite.addTests(
-        unittest.defaultTestLoader.loadTestsFromModule(Selector2Test))
+        unittest.defaultTestLoader.loadTestsFromModule(Selector2_test))
     basicsuite.addTests(
-        unittest.defaultTestLoader.loadTestsFromModule(SelectorTest))
+        unittest.defaultTestLoader.loadTestsFromModule(Selector_test))
     basicsuite.addTests(
-        unittest.defaultTestLoader.loadTestsFromModule(TangoDSItemTest))
+        unittest.defaultTestLoader.loadTestsFromModule(TangoDSItem_test))
     basicsuite.addTests(
-        unittest.defaultTestLoader.loadTestsFromModule(CheckerItemTest))
+        unittest.defaultTestLoader.loadTestsFromModule(CheckerItem_test))
     basicsuite.addTests(
-        unittest.defaultTestLoader.loadTestsFromModule(DSItemTest))
+        unittest.defaultTestLoader.loadTestsFromModule(DSItem_test))
     basicsuite.addTests(
-        unittest.defaultTestLoader.loadTestsFromModule(ExDSItemTest))
+        unittest.defaultTestLoader.loadTestsFromModule(ExDSItem_test))
     basicsuite.addTests(
-        unittest.defaultTestLoader.loadTestsFromModule(ExDSDictTest))
+        unittest.defaultTestLoader.loadTestsFromModule(ExDSDict_test))
     basicsuite.addTests(
-        unittest.defaultTestLoader.loadTestsFromModule(DescriberTest))
+        unittest.defaultTestLoader.loadTestsFromModule(Describer_test))
     basicsuite.addTests(
-        unittest.defaultTestLoader.loadTestsFromModule(UtilsTest))
+        unittest.defaultTestLoader.loadTestsFromModule(Utils_test))
     basicsuite.addTests(
-        unittest.defaultTestLoader.loadTestsFromModule(StreamSetTest))
+        unittest.defaultTestLoader.loadTestsFromModule(StreamSet_test))
     basicsuite.addTests(
-        unittest.defaultTestLoader.loadTestsFromModule(ConverterTest))
+        unittest.defaultTestLoader.loadTestsFromModule(Converter_test))
     basicsuite.addTests(
-        unittest.defaultTestLoader.loadTestsFromModule(ConverterXtoYTest))
+        unittest.defaultTestLoader.loadTestsFromModule(ConverterXtoY_test))
     basicsuite.addTests(
-        unittest.defaultTestLoader.loadTestsFromModule(Converter1to2Test))
+        unittest.defaultTestLoader.loadTestsFromModule(Converter1to2_test))
     basicsuite.addTests(
-        unittest.defaultTestLoader.loadTestsFromModule(Converter2to1Test))
+        unittest.defaultTestLoader.loadTestsFromModule(Converter2to1_test))
     basicsuite.addTests(
-        unittest.defaultTestLoader.loadTestsFromModule(Converter3to2Test))
+        unittest.defaultTestLoader.loadTestsFromModule(Converter3to2_test))
     basicsuite.addTests(
-        unittest.defaultTestLoader.loadTestsFromModule(Converter2to3Test))
+        unittest.defaultTestLoader.loadTestsFromModule(Converter2to3_test))
     basicsuite.addTests(
-        unittest.defaultTestLoader.loadTestsFromModule(CheckerThreadTest))
+        unittest.defaultTestLoader.loadTestsFromModule(CheckerThread_test))
     basicsuite.addTests(
-        unittest.defaultTestLoader.loadTestsFromModule(MacroServerPoolsTest))
+        unittest.defaultTestLoader.loadTestsFromModule(MacroServerPools_test))
     basicsuite.addTests(
-        unittest.defaultTestLoader.loadTestsFromModule(MacroServerPools2Test))
+        unittest.defaultTestLoader.loadTestsFromModule(MacroServerPools2_test))
     basicsuite.addTests(
-        unittest.defaultTestLoader.loadTestsFromModule(DynamicComponentTest))
+        unittest.defaultTestLoader.loadTestsFromModule(DynamicComponent_test))
 
     profilesuite.addTests(
-        unittest.defaultTestLoader.loadTestsFromModule(ProfileManagerTest))
+        unittest.defaultTestLoader.loadTestsFromModule(ProfileManager_test))
 
     profilesuite.addTests(
-        unittest.defaultTestLoader.loadTestsFromModule(ProfileManager2Test))
+        unittest.defaultTestLoader.loadTestsFromModule(ProfileManager2_test))
 
     settingssuite1.addTests(
-        unittest.defaultTestLoader.loadTestsFromModule(BasicSettingsTest))
+        unittest.defaultTestLoader.loadTestsFromModule(BasicSettings_test))
 
     settingssuite1b.addTests(
-        unittest.defaultTestLoader.loadTestsFromModule(BasicSettings2Test))
+        unittest.defaultTestLoader.loadTestsFromModule(BasicSettings2_test))
 
     settingssuite2.addTests(
-        unittest.defaultTestLoader.loadTestsFromModule(ExtraSettingsTest))
+        unittest.defaultTestLoader.loadTestsFromModule(ExtraSettings_test))
 
     settingssuite2b.addTests(
-        unittest.defaultTestLoader.loadTestsFromModule(ExtraSettings2Test))
+        unittest.defaultTestLoader.loadTestsFromModule(ExtraSettings2_test))
 
     serversuite1.addTests(
         unittest.defaultTestLoader.loadTestsFromModule(
-            BasicNXSRecSelectorTest))
+            BasicNXSRecSelector_test))
 
     serversuite1b.addTests(
         unittest.defaultTestLoader.loadTestsFromModule(
-            BasicNXSRecSelector2Test))
+            BasicNXSRecSelector2_test))
 
     serversuite2.addTests(
         unittest.defaultTestLoader.loadTestsFromModule(
-            ExtraNXSRecSelectorTest))
+            ExtraNXSRecSelector_test))
 
     serversuite2b.addTests(
         unittest.defaultTestLoader.loadTestsFromModule(
-            ExtraNXSRecSelector2Test))
+            ExtraNXSRecSelector2_test))
 
     # test runner
     runner = unittest.TextTestRunner()

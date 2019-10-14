@@ -16,7 +16,7 @@
 #    You should have received a copy of the GNU General Public License
 #    along with nexdatas.  If not, see <http://www.gnu.org/licenses/>.
 # \package test nexdatas
-# \file NXSRecSelectorTest.py
+# \file NXSRecSelector_test.py
 # unittests for field Tags running Tango Server
 #
 import unittest
@@ -35,19 +35,19 @@ try:
 except Exception:
     from . import ServerSetUp
 try:
-    import BasicSettings2Test
+    import BasicSettings2_test
 except Exception:
-    from . import BasicSettings2Test
+    from . import BasicSettings2_test
 
 
 # test fixture
-class BasicNXSRecSelector2Test(BasicSettings2Test.BasicSettings2Test):
+class BasicNXSRecSelector2Test(BasicSettings2_test.BasicSettings2Test):
 
     # constructor
     # \param methodName name of the test method
 
     def __init__(self, methodName):
-        BasicSettings2Test.BasicSettings2Test.__init__(self, methodName)
+        BasicSettings2_test.BasicSettings2Test.__init__(self, methodName)
 
         self._sv = ServerSetUp.ServerSetUp()
         self._sv2 = ServerSetUp.ServerSetUp(
@@ -57,7 +57,7 @@ class BasicNXSRecSelector2Test(BasicSettings2Test.BasicSettings2Test):
     # test starter
     # \brief Common set up of Tango Server
     def setUp(self):
-        BasicSettings2Test.BasicSettings2Test.setUp(self)
+        BasicSettings2_test.BasicSettings2Test.setUp(self)
         self._sv.setUp()
 
     # test starter
@@ -69,7 +69,7 @@ class BasicNXSRecSelector2Test(BasicSettings2Test.BasicSettings2Test):
     # \brief Common tear down oif Tango Server
     def tearDown(self):
         self._sv.tearDown()
-        BasicSettings2Test.BasicSettings2Test.tearDown(self)
+        BasicSettings2_test.BasicSettings2Test.tearDown(self)
 
     # test closer
     # \brief Common tear down oif Tango Server
