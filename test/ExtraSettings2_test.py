@@ -16,7 +16,7 @@
 #    You should have received a copy of the GNU General Public License
 #    along with nexdatas.  If not, see <http://www.gnu.org/licenses/>.
 # \package test nexdatas
-# \file Settings2Test.py
+# \file Settings2_test.py
 # unittests for TangoDsItemTest running Tango Server
 #
 import unittest
@@ -42,9 +42,9 @@ try:
 except Exception:
     from . import TestMGSetUp
 try:
-    import Settings2Test
+    import Settings2_test
 except Exception:
-    from . import Settings2Test
+    from . import Settings2_test
 
 
 import logging
@@ -107,13 +107,13 @@ def miniparseString(text):
 
 
 # test fixture
-class ExtraSettings2Test(Settings2Test.Settings2Test):
+class ExtraSettings2Test(Settings2_test.Settings2Test):
 
     # constructor
     # \param methodName name of the test method
 
     def __init__(self, methodName):
-        Settings2Test.Settings2Test.__init__(self, methodName)
+        Settings2_test.Settings2Test.__init__(self, methodName)
 
     # updateMntGrp test
     def test_updateMntGrp_components_mixed_tango_timers(self):

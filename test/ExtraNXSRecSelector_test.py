@@ -16,7 +16,7 @@
 #    You should have received a copy of the GNU General Public License
 #    along with nexdatas.  If not, see <http://www.gnu.org/licenses/>.
 # \package test nexdatas
-# \file NXSRecSelectorTest.py
+# \file NXSRecSelector_test.py
 # unittests for field Tags running Tango Server
 #
 import unittest
@@ -26,7 +26,7 @@ import PyTango
 import json
 
 import ServerSetUp
-import ExtraSettingsTest
+import ExtraSettings_test
 
 from nxsrecconfig.MacroServerPools import MacroServerPools
 from nxsrecconfig.Selector import Selector
@@ -35,13 +35,13 @@ from nxsrecconfig.Utils import MSUtils
 
 
 # test fixture
-class ExtraNXSRecSelectorTest(ExtraSettingsTest.ExtraSettingsTest):
+class ExtraNXSRecSelectorTest(ExtraSettings_test.ExtraSettingsTest):
 
     # constructor
     # \param methodName name of the test method
 
     def __init__(self, methodName):
-        ExtraSettingsTest.ExtraSettingsTest.__init__(self, methodName)
+        ExtraSettings_test.ExtraSettingsTest.__init__(self, methodName)
 
         self._sv = ServerSetUp.ServerSetUp()
         self._sv2 = ServerSetUp.ServerSetUp(
@@ -51,7 +51,7 @@ class ExtraNXSRecSelectorTest(ExtraSettingsTest.ExtraSettingsTest):
     # test starter
     # \brief Common set up of Tango Server
     def setUp(self):
-        ExtraSettingsTest.ExtraSettingsTest.setUp(self)
+        ExtraSettings_test.ExtraSettingsTest.setUp(self)
         self._sv.setUp()
 
     # test starter
@@ -63,7 +63,7 @@ class ExtraNXSRecSelectorTest(ExtraSettingsTest.ExtraSettingsTest):
     # \brief Common tear down oif Tango Server
     def tearDown(self):
         self._sv.tearDown()
-        ExtraSettingsTest.ExtraSettingsTest.tearDown(self)
+        ExtraSettings_test.ExtraSettingsTest.tearDown(self)
 
     # test closer
     # \brief Common tear down oif Tango Server

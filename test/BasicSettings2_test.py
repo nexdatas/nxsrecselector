@@ -16,8 +16,8 @@
 #    You should have received a copy of the GNU General Public License
 #    along with nexdatas.  If not, see <http://www.gnu.org/licenses/>.
 # \package test nexdatas
-# \file SettingsTest.py
-# unittests for TangoDsItemTest running Tango Server
+# \file Settings2_test.py
+# unittests for TangoDsItem_test running Tango Server
 #
 import unittest
 import os
@@ -27,14 +27,15 @@ import PyTango
 import json
 import pickle
 
+
 try:
     import TestMacroServerSetUp
 except Exception:
     from . import TestMacroServerSetUp
 try:
-    import TestPoolSetUp
+    import TestPool2SetUp
 except Exception:
-    from . import TestPoolSetUp
+    from . import TestPool2SetUp
 try:
     import TestServerSetUp
 except Exception:
@@ -44,9 +45,9 @@ try:
 except Exception:
     from . import TestMGSetUp
 try:
-    import SettingsTest
+    import Settings2_test
 except Exception:
-    from . import SettingsTest
+    from . import Settings2_test
 
 from nxsrecconfig.Describer import Describer
 from nxsrecconfig.Utils import TangoUtils, MSUtils, Utils
@@ -105,13 +106,13 @@ except Exception:
 
 
 # test fixture
-class BasicSettingsTest(SettingsTest.SettingsTest):
+class BasicSettings2Test(Settings2_test.Settings2Test):
 
     # constructor
     # \param methodName name of the test method
 
     def __init__(self, methodName):
-        SettingsTest.SettingsTest.__init__(self, methodName)
+        Settings2_test.Settings2Test.__init__(self, methodName)
 
     # test
     def test_constructor(self):
@@ -1879,8 +1880,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             self.myAssertDict(json.loads(resd), {
                 u'pyeval1ads': False, u'pyeval2ads': False,
                 u'pyeval2bds': False,
-                u'pyeval2cds': False, u'pyeval0ds': False,
-                u'pyeval1ds': False,
+                u'pyeval2cds': False, u'pyeval0ds': False, u'pyeval1ds': False,
                 u'pyeval2ds': False}
             )
             self.assertEqual(len(rs.descriptionErrors or []), 0)
@@ -2403,7 +2403,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             })
             self.assertEqual(len(rs.descriptionErrors), 2)
 
-    #        # print self._cf.dp.GetCommandVariable("COMMANDS")
+    #        print self._cf.dp.GetCommandVariable("COMMANDS")
             # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
@@ -2493,7 +2493,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             })
             self.assertEqual(len(rs.descriptionErrors or []), 0)
 
-    #        # print self._cf.dp.GetCommandVariable("COMMANDS")
+    #        print self._cf.dp.GetCommandVariable("COMMANDS")
             # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
@@ -4565,8 +4565,15 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
         json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
         res = self.value(rs, "ComponentPreselection")
         res2 = self.value(rs, "DataSourcePreselection")
-        self.compareToDump(rs, ["ComponentPreselection",
-                                "PreselectingDataSources"])
+        pds = self.value(rs, "PreselectingDataSources")
+        self.compareToDump(
+            rs, ["ComponentPreselection",
+                 "DataSourcePreselection",
+                 "PreselectingDataSources"])
+
+        self.assertEqual(
+            set(json.loads(self.getDump("PreselectingDataSources"))),
+            set(json.loads(pds)))
         self.assertEqual(set(self.value(rs, "PreselectingDataSources")),
                          set(self.getDump("PreselectingDataSources")))
 
@@ -4817,7 +4824,6 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
         rs.resetPreselectedComponents()
         # sed2 =
         json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
-        res = self.value(rs, "ComponentPreselection")
         pds = self.value(rs, "PreselectingDataSources")
         self.compareToDump(
             rs, ["ComponentPreselection",
@@ -4827,6 +4833,8 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
         self.assertEqual(
             set(json.loads(self.getDump("PreselectingDataSources"))),
             set(json.loads(pds)))
+        res = self.value(rs, "ComponentPreselection")
+
         self.myAssertDict(json.loads(res), {})
         self.assertEqual(channelerrors, [])
 
@@ -6442,7 +6450,6 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             self.assertEqual(
                 set(json.loads(self.getDump("PreselectingDataSources"))),
                 set(json.loads(pds)))
-
             self.myAssertDict(json.loads(resd), {})
 
             self.myAssertDict(json.loads(res), {
@@ -6451,7 +6458,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                 "smycpnt1": True})
             self.assertTrue(not rs.descriptionErrors)
 
-    #        # print self._cf.dp.GetCommandVariable("COMMANDS")
+    #        print self._cf.dp.GetCommandVariable("COMMANDS")
             # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
@@ -7372,14 +7379,20 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             sed1 = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
             rs.resetPreselectedComponents()
             res = self.value(rs, "ComponentPreselection")
-            self.compareToDump(rs, ["ComponentPreselection",
-                                    "PreselectingDataSources"])
+            pds = self.value(rs, "PreselectingDataSources")
+            self.compareToDump(
+                rs, ["ComponentPreselection",
+                     "DataSourcePreselection",
+                     "PreselectingDataSources"])
+
+            self.assertEqual(
+                set(json.loads(self.getDump("PreselectingDataSources"))),
+                set(json.loads(pds)))
 
             pds = self.value(rs, "PreselectingDataSources")
             self.assertEqual(
                 set(json.loads(self.getDump("PreselectingDataSources"))),
                 set(json.loads(pds)))
-
             self.myAssertDict(json.loads(res), {
                 "smycp": True, "smycp2": True, "smycp3": True,
                 "s2mycp": True, "s2mycp2": True, "s2mycp3": True,
@@ -7483,7 +7496,6 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             self.assertEqual(
                 set(json.loads(self.getDump("PreselectingDataSources"))),
                 set(json.loads(pds)))
-
             self.myAssertDict(json.loads(res), {
                 "smycp": True, "smycp2": True, "smycp3": True,
                 "s2mycp": True, "s2mycp2": True, "s2mycp3": True,
@@ -8091,7 +8103,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                 "s2mycp": None, "s2mycp2": None, "s2mycp3": None})
             self.assertEqual(len(rs.descriptionErrors), 3)
 
-            #        print self._cf.dp.GetCommandVariable("COMMANDS")
+    #        print self._cf.dp.GetCommandVariable("COMMANDS")
             # res2 = json.loads(self._cf.dp.GetCommandVariable("VARS"))
             self.assertTrue(val["MntGrp"] in self._cf.dp.availableSelections())
             sed = json.loads(self._cf.dp.selections([val["MntGrp"]])[0])
@@ -8294,7 +8306,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                "MntGrp": 'nxsmntgrp'}
 
         try:
-            tpool2 = TestPoolSetUp.TestPoolSetUp(
+            tpool2 = TestPool2SetUp.TestPool2SetUp(
                 "pooltestp09/testts/t2r228", "POOLTESTS2")
             tpool2.setUp()
 
@@ -8375,7 +8387,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                "MntGrp": 'nxsmntgrp'}
 
         try:
-            tpool2 = TestPoolSetUp.TestPoolSetUp(
+            tpool2 = TestPool2SetUp.TestPool2SetUp(
                 "pooltestp09/testts/t2r228", "POOLTESTS2")
             tpool2.setUp()
 
@@ -8458,7 +8470,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                "MntGrp": 'nxsmntgrp'}
 
         try:
-            tpool2 = TestPoolSetUp.TestPoolSetUp(
+            tpool2 = TestPool2SetUp.TestPool2SetUp(
                 "pooltestp09/testts/t2r228", "POOLTESTS2")
             tpool2.setUp()
 
@@ -8548,7 +8560,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                "MntGrp": 'nxsmntgrp'}
 
         try:
-            tpool2 = TestPoolSetUp.TestPoolSetUp(
+            tpool2 = TestPool2SetUp.TestPool2SetUp(
                 "pooltestp09/testts/t2r228", "POOLTESTS2")
             tpool2.setUp()
 
@@ -8857,7 +8869,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                "MntGrp": 'nxsmntgrp'}
 
         try:
-            tpool2 = TestPoolSetUp.TestPoolSetUp(
+            tpool2 = TestPool2SetUp.TestPool2SetUp(
                 "pooltestp09/testts/t2r228", "POOLTESTS2")
             tpool2.setUp()
 
@@ -8937,7 +8949,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                "MntGrp": 'nxsmntgrp'}
 
         try:
-            tpool2 = TestPoolSetUp.TestPoolSetUp(
+            tpool2 = TestPool2SetUp.TestPool2SetUp(
                 "pooltestp09/testts/t2r228", "POOLTESTS2")
             tpool2.setUp()
 
@@ -9019,7 +9031,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                "MntGrp": 'nxsmntgrp'}
 
         try:
-            tpool2 = TestPoolSetUp.TestPoolSetUp(
+            tpool2 = TestPool2SetUp.TestPool2SetUp(
                 "pooltestp09/testts/t2r228", "POOLTESTS2")
             tpool2.setUp()
 
@@ -9102,7 +9114,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                "MntGrp": 'nxsmntgrp'}
 
         try:
-            tpool2 = TestPoolSetUp.TestPoolSetUp(
+            tpool2 = TestPool2SetUp.TestPool2SetUp(
                 "pooltestp09/testts/t2r228", "POOLTESTS2")
             tpool2.setUp()
 
@@ -9247,7 +9259,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                "MntGrp": 'nxsmntgrp'}
 
         try:
-            tpool2 = TestPoolSetUp.TestPoolSetUp(
+            tpool2 = TestPool2SetUp.TestPool2SetUp(
                 "pooltestp09/testts/t2r228", "POOLTESTS2")
             tpool2.setUp()
 
@@ -9311,7 +9323,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                "MntGrp": 'nxsmntgrp'}
 
         try:
-            tpool2 = TestPoolSetUp.TestPoolSetUp(
+            tpool2 = TestPool2SetUp.TestPool2SetUp(
                 "pooltestp09/testts/t2r228", "POOLTESTS2")
             tpool2.setUp()
 
@@ -11141,7 +11153,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
         self.assertEqual(rs.availableMntGrps(), [])
 
         try:
-            tpool2 = TestPoolSetUp.TestPoolSetUp(
+            tpool2 = TestPool2SetUp.TestPool2SetUp(
                 "pooltestp09/testts/t2r228", "POOLTESTS2")
             tpool2.setUp()
 
@@ -11173,7 +11185,6 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
 
             pool.MeasurementGroupList = [json.dumps(a) for a in arr1]
             pool2.MeasurementGroupList = [json.dumps(a) for a in arr2]
-
             self._ms.dps[
                 list(self._ms.ms.keys())[0]
             ].get_property("PoolNames")["PoolNames"]
@@ -11283,7 +11294,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
         self.assertEqual(rs.availableMntGrps(), [])
 
         try:
-            tpool2 = TestPoolSetUp.TestPoolSetUp(
+            tpool2 = TestPool2SetUp.TestPool2SetUp(
                 "pooltestp09/testts/t2r228", "POOLTESTS2")
             tpool2.setUp()
 
@@ -11470,7 +11481,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             mp = json.loads(rs.profileConfiguration)
 
             ndss = json.loads(mp["DataSourceSelection"])
-            common = set(cps.keys()) & set(list(dss.keys()))
+            common = set(cps.keys()) & set(dss.keys())
             self.dump(rs)
 
             ncps = json.loads(mp["ComponentSelection"])
@@ -11537,15 +11548,12 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
         rs.profileConfiguration = str(json.dumps(mp))
         mp = json.loads(rs.profileConfiguration)
 
-        # ndss =
-        json.loads(mp["DataSourceSelection"])
+        # ndss = json.loads(mp["DataSourceSelection"])
         # common = set(cps) & set(dss)
         self.dump(rs)
 
-        # ncps =
-        json.loads(mp["ComponentSelection"])
-        # ndss =
-        json.loads(mp["DataSourceSelection"])
+        # ncps = json.loads(mp["ComponentSelection"])
+        # ndss = json.loads(mp["DataSourceSelection"])
         # tdss = [ds for ds in ndss if ndss[ds]]
         # tcps = [cp for cp in ncps if ncps[cp]]
 
@@ -11621,8 +11629,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             mp["DataSourceSelection"] = json.dumps(dss)
             rs.profileConfiguration = str(json.dumps(mp))
             mp = json.loads(rs.profileConfiguration)
-            # ndss =
-            json.loads(mp["DataSourceSelection"])
+            # ndss = json.loads(mp["DataSourceSelection"])
             # common = set(cps) & set(dss)
             self.dump(rs)
 
@@ -11917,15 +11924,13 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
             rs.preselectedComponents()
             mp = json.loads(rs.profileConfiguration)
 
-            # ndss =
-            json.loads(mp["DataSourceSelection"])
+            # ndss = json.loads(mp["DataSourceSelection"])
             # common = set(cps.keys()) & set(list(dss.keys()))
             self.dump(rs)
 
             # ncps =
             json.loads(mp["ComponentSelection"])
-            # ndss =
-            json.loads(mp["DataSourceSelection"])
+            # ndss = json.loads(mp["DataSourceSelection"])
             # tdss = [ds for ds in ndss if ndss[ds]]
             # tcps = [cp for cp in ncps if ncps[cp]]
 
@@ -12741,13 +12746,12 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                 if tgc:
                     smg = {"controllers":
                            {'__tango__':
-                            {'units':
-                             {'0':
-                              {'channels': tgc,
-                               'monitor': dv,
-                               'id': 0,
-                               'timer': dv,
-                               'trigger_type': 0}}}},
+                            {'channels': tgc,
+                             'monitor': dv,
+                             'timer': dv,
+                             'synchronizer': 'software',
+                             'synchronization': 0}
+                            },
                            "monitor": "%s" % dv,
                            "description": "Measurement Group",
                            "timer": "%s" % dv,
@@ -13014,13 +13018,12 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                 if tgc:
                     smg = {"controllers":
                            {'__tango__':
-                            {'units':
-                             {'0':
-                              {'channels': tgc,
-                               'monitor': dv,
-                               'id': 0,
-                               'timer': dv,
-                               'trigger_type': 0}}}},
+                            {'channels': tgc,
+                             'monitor': dv,
+                             'synchronizer': 'software',
+                             'synchronization': 0,
+                             'timer': dv,
+                             }},
                            "monitor": "%s" % dv,
                            "description": "Measurement Group",
                            "timer": "%s" % dv,
@@ -13312,13 +13315,11 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                                 except Exception:
                                     raise
                         if tgc:
-                            myctrls[cl] = {'units':
-                                           {'0':
-                                            {'channels': tgc,
-                                             'monitor': ttdv,
-                                             'id': 0,
-                                             'timer': ttdv,
-                                             'trigger_type': 0}}}
+                            myctrls[cl] = {'channels': tgc,
+                                           'monitor': ttdv,
+                                           'synchronizer': 'software',
+                                           'synchronization': 0,
+                                           'timer': ttdv}
 
                     smg = {"controllers": myctrls,
                            "monitor": "%s" % dv,
@@ -13652,14 +13653,11 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                                 except Exception:
                                     raise
                         if tgc:
-                            myctrls[cl] = {
-                                'units':
-                                    {'0':
-                                     {'channels': tgc,
-                                      'monitor': ttdv,
-                                      'id': 0,
-                                      'timer': ttdv,
-                                      'trigger_type': 0}}}
+                            myctrls[cl] = {'channels': tgc,
+                                           'synchronizer': 'software',
+                                           'synchronization': 0,
+                                           'monitor': ttdv,
+                                           'timer': ttdv}
 
                     smg = {"controllers": myctrls,
                            "monitor": "%s" % dv,
@@ -13816,7 +13814,7 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                                 comps.add(cp)
 
                     ndss = self._rnd.randint(1, len(list(amycps.keys())) - 1)
-                    ldss = self._rnd.sample(set(amycps.keys()), ndss)
+                    ldss = self._rnd.sample(set(list(amycps.keys())), ndss)
                     for ds in ldss:
                         if ds in amydss.keys():
                             if ds not in wrong:
@@ -14005,13 +14003,11 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                                     except Exception:
                                         raise
                         if tgc:
-                            myctrls[cl] = {'units':
-                                           {'0':
-                                            {'channels': tgc,
-                                             'monitor': ttdv,
-                                             'id': 0,
-                                             'timer': ttdv,
-                                             'trigger_type': 0}}}
+                            myctrls[cl] = {'channels': tgc,
+                                           'monitor': ttdv,
+                                           'synchronizer': 'software',
+                                           'synchronization': 0,
+                                           'timer': ttdv}
 
                     tgc = {}
                     for ds in chds:
@@ -14048,13 +14044,11 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                             except Exception:
                                 raise
                     if tgc:
-                        myctrls['__tango__'] = {'units':
-                                                {'0':
-                                                 {'channels': tgc,
-                                                  'monitor': dv,
-                                                  'id': 0,
-                                                  'timer': dv,
-                                                  'trigger_type': 0}}}
+                        myctrls['__tango__'] = {'channels': tgc,
+                                                'monitor': dv,
+                                                'synchronizer': 'software',
+                                                'synchronization': 0,
+                                                'timer': dv}
 
                     smg = {"controllers": myctrls,
                            "monitor": "%s" % dv,
@@ -14423,13 +14417,11 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                                     except Exception:
                                         raise
                         if tgc:
-                            myctrls[cl] = {'units':
-                                           {'0':
-                                            {'channels': tgc,
-                                             'monitor': ttdv,
-                                             'id': 0,
-                                             'timer': ttdv,
-                                             'trigger_type': 0}}}
+                            myctrls[cl] = {'channels': tgc,
+                                           'monitor': ttdv,
+                                           'synchronizer': 'software',
+                                           'synchronization': 0,
+                                           'timer': ttdv}
 
                     tgc = {}
                     for ds in chds:
@@ -14467,13 +14459,11 @@ class BasicSettingsTest(SettingsTest.SettingsTest):
                                 raise
 
                     if tgc:
-                        myctrls['__tango__'] = {'units':
-                                                {'0':
-                                                 {'channels': tgc,
-                                                  'monitor': dv,
-                                                  'id': 0,
-                                                  'timer': dv,
-                                                  'trigger_type': 0}}}
+                        myctrls['__tango__'] = {'channels': tgc,
+                                                'monitor': dv,
+                                                'synchronizer': 'software',
+                                                'synchronization': 0,
+                                                'timer': dv}
 
                     smg = {"controllers": myctrls,
                            "monitor": "%s" % dv,
