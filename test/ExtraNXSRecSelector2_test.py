@@ -16,7 +16,7 @@
 #    You should have received a copy of the GNU General Public License
 #    along with nexdatas.  If not, see <http://www.gnu.org/licenses/>.
 # \package test nexdatas
-# \file NXSRecSelectorTest.py
+# \file NXSRecSelector_test.py
 # unittests for field Tags running Tango Server
 #
 import unittest
@@ -25,15 +25,8 @@ import time
 import PyTango
 import json
 
-try:
-    import ServerSetUp
-except Exception:
-    from . import ServerSetUp
-
-try:
-    import BasicSettingsTest
-except Exception:
-    from . import BasicSettingsTest
+import ServerSetUp
+import ExtraSettings2_test
 
 from nxsrecconfig.MacroServerPools import MacroServerPools
 from nxsrecconfig.Selector import Selector
@@ -42,13 +35,13 @@ from nxsrecconfig.Utils import MSUtils
 
 
 # test fixture
-class BasicNXSRecSelectorTest(BasicSettingsTest.BasicSettingsTest):
+class ExtraNXSRecSelector2Test(ExtraSettings2_test.ExtraSettings2Test):
 
     # constructor
     # \param methodName name of the test method
 
     def __init__(self, methodName):
-        BasicSettingsTest.BasicSettingsTest.__init__(self, methodName)
+        ExtraSettings2_test.ExtraSettings2Test.__init__(self, methodName)
 
         self._sv = ServerSetUp.ServerSetUp()
         self._sv2 = ServerSetUp.ServerSetUp(
@@ -58,7 +51,7 @@ class BasicNXSRecSelectorTest(BasicSettingsTest.BasicSettingsTest):
     # test starter
     # \brief Common set up of Tango Server
     def setUp(self):
-        BasicSettingsTest.BasicSettingsTest.setUp(self)
+        ExtraSettings2_test.ExtraSettings2Test.setUp(self)
         self._sv.setUp()
 
     # test starter
@@ -70,7 +63,7 @@ class BasicNXSRecSelectorTest(BasicSettingsTest.BasicSettingsTest):
     # \brief Common tear down oif Tango Server
     def tearDown(self):
         self._sv.tearDown()
-        BasicSettingsTest.BasicSettingsTest.tearDown(self)
+        ExtraSettings2_test.ExtraSettings2Test.tearDown(self)
 
     # test closer
     # \brief Common tear down oif Tango Server
@@ -78,7 +71,6 @@ class BasicNXSRecSelectorTest(BasicSettingsTest.BasicSettingsTest):
         self._sv2.tearDown()
 
     def value(self, rs, name):
-        #    print "VAL", json.loads(rs.profileConfiguration)
         return json.loads(rs.profileConfiguration)[name]
 
     def names(self, rs):
@@ -181,7 +173,7 @@ class BasicNXSRecSelectorTest(BasicSettingsTest.BasicSettingsTest):
             self.assertEqual('nxsmntgrp', amntgrp)
 
         # print "MntGrp", rs.mntGrp
-        # # memorize attirbutes
+        # memorize attirbutes
         # print "ConfigDevice", rs.configDevice
         # print "Door", rs.door
         # print "DeviceGroups", rs.deviceGroups

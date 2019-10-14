@@ -16,7 +16,7 @@
 #    You should have received a copy of the GNU General Public License
 #    along with nexdatas.  If not, see <http://www.gnu.org/licenses/>.
 # \package test nexdatas
-# \file NXSRecSelectorTest.py
+# \file NXSRecSelector_test.py
 # unittests for field Tags running Tango Server
 #
 import unittest
@@ -25,8 +25,15 @@ import time
 import PyTango
 import json
 
-import ServerSetUp
-import ExtraSettings2Test
+try:
+    import ServerSetUp
+except Exception:
+    from . import ServerSetUp
+
+try:
+    import BasicSettings_test
+except Exception:
+    from . import BasicSettings_test
 
 from nxsrecconfig.MacroServerPools import MacroServerPools
 from nxsrecconfig.Selector import Selector
@@ -35,13 +42,13 @@ from nxsrecconfig.Utils import MSUtils
 
 
 # test fixture
-class ExtraNXSRecSelector2Test(ExtraSettings2Test.ExtraSettings2Test):
+class BasicNXSRecSelectorTest(BasicSettings_test.BasicSettingsTest):
 
     # constructor
     # \param methodName name of the test method
 
     def __init__(self, methodName):
-        ExtraSettings2Test.ExtraSettings2Test.__init__(self, methodName)
+        BasicSettings_test.BasicSettingsTest.__init__(self, methodName)
 
         self._sv = ServerSetUp.ServerSetUp()
         self._sv2 = ServerSetUp.ServerSetUp(
@@ -51,7 +58,7 @@ class ExtraNXSRecSelector2Test(ExtraSettings2Test.ExtraSettings2Test):
     # test starter
     # \brief Common set up of Tango Server
     def setUp(self):
-        ExtraSettings2Test.ExtraSettings2Test.setUp(self)
+        BasicSettings_test.BasicSettingsTest.setUp(self)
         self._sv.setUp()
 
     # test starter
@@ -63,7 +70,7 @@ class ExtraNXSRecSelector2Test(ExtraSettings2Test.ExtraSettings2Test):
     # \brief Common tear down oif Tango Server
     def tearDown(self):
         self._sv.tearDown()
-        ExtraSettings2Test.ExtraSettings2Test.tearDown(self)
+        BasicSettings_test.BasicSettingsTest.tearDown(self)
 
     # test closer
     # \brief Common tear down oif Tango Server
@@ -71,6 +78,7 @@ class ExtraNXSRecSelector2Test(ExtraSettings2Test.ExtraSettings2Test):
         self._sv2.tearDown()
 
     def value(self, rs, name):
+        #    print "VAL", json.loads(rs.profileConfiguration)
         return json.loads(rs.profileConfiguration)[name]
 
     def names(self, rs):
@@ -173,7 +181,7 @@ class ExtraNXSRecSelector2Test(ExtraSettings2Test.ExtraSettings2Test):
             self.assertEqual('nxsmntgrp', amntgrp)
 
         # print "MntGrp", rs.mntGrp
-        # memorize attirbutes
+        # # memorize attirbutes
         # print "ConfigDevice", rs.configDevice
         # print "Door", rs.door
         # print "DeviceGroups", rs.deviceGroups

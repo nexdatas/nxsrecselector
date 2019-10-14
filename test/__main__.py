@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #   This file is part of nexdatas - Tango Server for NeXus data writer
 #
-#    Copyright (C) 2012-2017 DESY, Jan Kotanski <jkotan@mail.desy.de>
+#    Copyright (C) 2012-2018 DESY, Jan Kotanski <jkotan@mail.desy.de>
 #
 #    nexdatas is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -16,33 +16,12 @@
 #    You should have received a copy of the GNU General Public License
 #    along with nexdatas.  If not, see <http://www.gnu.org/licenses/>.
 # \package test nexdatas
-# \file NXSRecSelectorTest.py
-# unittests for field Tags running Tango Server
+# \file runtest.py
+# the unittest runner
 #
-import unittest
 
-try:
-    import TestPool2SetUp
-except Exception:
-    from . import TestPool2SetUp
-
-try:
-    import SelectorTest
-except Exception:
-    from . import SelectorTest
+import main
 
 
-# test fixture
-class Selector2Test(SelectorTest.SelectorTest):
-
-    # constructor
-    # \param methodName name of the test method
-
-    def __init__(self, methodName):
-        SelectorTest.SelectorTest.__init__(self, methodName)
-
-        self._pool = TestPool2SetUp.TestPool2SetUp()
-
-
-if __name__ == '__main__':
-    unittest.main()
+if __name__ == "__main__":
+    main.main()
