@@ -394,9 +394,13 @@ class MacroServerPools(object):
         if rec[0] == 'pickle':
             dc = Utils.pickleloads(rec[1])
             if 'new' in dc.keys():
+                dc = {'new': {}}
                 if self.__nxsenv not in dc['new'].keys() \
                         or not isinstance(dc['new'][self.__nxsenv], dict):
-                    dc['new'][self.__nxsenv] = {}
+                    dc = {'new': {self.__nxsenv: {}}}
+                else:
+                    dc = {'new': {self.__nxsenv: dc['new'][self.__nxsenv]}}
+
                 nenv = dc['new'][self.__nxsenv]
                 for var in data.keys():
                     if var in self.__pureVar:
@@ -464,9 +468,12 @@ class MacroServerPools(object):
         if rec[0] == 'pickle':
             dc = Utils.pickleloads(rec[1])
             if 'new' in dc.keys():
-                for var in data.keys():
-                    dc['new'][Utils.tostr(var)] = Utils.toString(data[var])
                 if 'ScanID' in dc['new'].keys():
                     scanID = int(dc['new']["ScanID"])
-                MSUtils.writeEnvAttr(dc, msp)
+            dc = {'new': {}}
+            for var in data.keys():
+                dc['new'][Utils.tostr(var)] = Utils.toString(data[var])
+            if 'ScanID' in dc['new'].keys():
+                scanID = int(dc['new']["ScanID"])
+            MSUtils.writeEnvAttr(dc, msp)
         return scanID

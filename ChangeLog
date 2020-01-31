@@ -1,3 +1,7 @@
+2020-0-31 Jan Kotanski <jankotan@gmail.com>
+	* improve setScanEnv
+	* tagged as v3.18.4
+
 2019-10-14 Jan Kotanski <jankotan@gmail.com>
 	* change to setuptools
 	* add support for pip
