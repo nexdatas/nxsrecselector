@@ -464,9 +464,10 @@ class MacroServerPools(object):
         if rec[0] == 'pickle':
             dc = Utils.pickleloads(rec[1])
             if 'new' in dc.keys():
-                for var in data.keys():
-                    dc['new'][Utils.tostr(var)] = Utils.toString(data[var])
                 if 'ScanID' in dc['new'].keys():
                     scanID = int(dc['new']["ScanID"])
-                MSUtils.writeEnvAttr(dc, msp)
+            dc = {'new': {}}
+            for var in data.keys():
+                dc['new'][Utils.tostr(var)] = Utils.toString(data[var])
+            MSUtils.writeEnvAttr(dc, msp)
         return scanID
