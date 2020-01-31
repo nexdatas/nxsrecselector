@@ -397,9 +397,9 @@ class MacroServerPools(object):
                 dc = {'new': {}}
                 if self.__nxsenv not in dc['new'].keys() \
                         or not isinstance(dc['new'][self.__nxsenv], dict):
-                    dc = {'new': {'self.__nxsenv': {}}}
+                    dc = {'new': {self.__nxsenv: {}}}
                 else:
-                    dc = {'new': {'self.__nxsenv': dc['new'][self.__nxsenv]}}
+                    dc = {'new': {self.__nxsenv: dc['new'][self.__nxsenv]}}
 
                 nenv = dc['new'][self.__nxsenv]
                 for var in data.keys():
