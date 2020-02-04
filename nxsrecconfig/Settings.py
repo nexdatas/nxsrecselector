@@ -742,11 +742,14 @@ class Settings(object):
         """
         ms = self.__selector.getMacroServer()
         sid = MSUtils.getEnv('ScanID', ms)
-        if sid:
+        try:
             return int(sid)
-        else:
-            MSUtils.setEnv('ScanID', 0, ms)
-            return 0
+        except Exception as e:
+            self._streams.error(
+                "Settings::Settings() - "
+                "ScanID not defined")
+            return -1
+            # print(str(e))
 
     def __setScanID(self, name):
         """ set method for ScanID attribute

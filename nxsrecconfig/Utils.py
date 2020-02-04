@@ -484,6 +484,16 @@ class MSUtils(object):
             if 'new' in dc.keys() and \
                     var in dc['new'].keys():
                 active = dc['new'][var]
+            else:
+                raise Exception(
+                    "Utils::MSUtils() - "
+                    "%s not defined in MacroServer.Environment" % var)
+
+        else:
+            raise Exception(
+                "Utils::MSUtils() - "
+                "MacroServer.Environment attribute is not pickle")
+
         return active
 
     @classmethod
