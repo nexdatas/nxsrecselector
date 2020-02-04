@@ -744,7 +744,7 @@ class Settings(object):
         sid = MSUtils.getEnv('ScanID', ms)
         try:
             return int(sid)
-        except Exception as e:
+        except Exception:
             self._streams.error(
                 "Settings::Settings() - "
                 "ScanID not defined")
