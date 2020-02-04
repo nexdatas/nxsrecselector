@@ -1,4 +1,8 @@
-2020-0-31 Jan Kotanski <jankotan@gmail.com>
+2020-02-04 Jan Kotanski <jankotan@gmail.com>
+	* do not change scanid when it is not set
+	* tagged as v3.18.5
+
+2020-01-31 Jan Kotanski <jankotan@gmail.com>
 	* improve setScanEnv
 	* tagged as v3.18.4
 
