@@ -747,7 +747,7 @@ class Settings(object):
         except Exception:
             self._streams.error(
                 "Settings::Settings() - "
-                "ScanID not defined")
+                "ScanID wrongly defined (%s)" % sid)
             return -1
             # print(str(e))
 
