@@ -1,3 +1,7 @@
+2020-02-27 Jan Kotanski <jankotan@gmail.com>
+	* make door name non-case-sensitive
+	* tagged as v3.18.6
+
 2020-02-04 Jan Kotanski <jankotan@gmail.com>
 	* do not change scanid when it is not set
 	* tagged as v3.18.5

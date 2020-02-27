@@ -555,9 +555,9 @@ class MSUtils(object):
             else:
                 mserver = Utils.tostr(server)
             dp = PyTango.DeviceProxy(Utils.tostr(mserver))
-            if hasattr(dp, "DoorList"):
-                lst = dp.DoorList
-                if lst and door in lst:
+            if hasattr(dp, "DoorList") and dp.DoorList:
+                lst = [str(dr).lower() for dr in dp.DoorList]
+                if lst and door.lower() in lst:
                     ms = mserver
                     break
         return ms
