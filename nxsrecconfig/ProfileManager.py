@@ -761,7 +761,9 @@ class ProfileManager(object):
         otimers = [tm for tm in dtimers.values() if tm in avtimers]
         if dtimers[conf["timer"]] in otimers:
             otimers.remove(dtimers[conf["timer"]])
-        otimers.insert(0, dtimers[conf["timer"]])
+            otimers.insert(0, dtimers[conf["timer"]])
+        elif not otimers:
+            otimers.insert(0, dtimers[conf["timer"]])
 
         tms = json.loads(self.__selector["Timer"])
         tms.extend(otimers)
