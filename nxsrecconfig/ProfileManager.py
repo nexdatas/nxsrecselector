@@ -872,17 +872,12 @@ class ProfileManager(object):
         :returns: master timer
         :rtype: :obj:`str`
         """
-        oldtimers = json.loads(self.__selector["Timer"])
-        avtimers = PoolUtils.getTimers(self.__pools, self.timerFilters)
-        mtimers = oldtimers or []
-        mtimers = [tm for tm in mtimers if tm in avtimers]
+        mtimers = json.loads(self.__selector["Timer"])
+        #   avtimers = PoolUtils.getTimers(self.__pools, self.timerFilters)
+        #   mtimers = mtimers or []
+        #   mtimers = [tm for tm in mtimers if tm in avtimers]
 
-        if mtimers:
-            timer = mtimers[0]
-        elif oldtimers:
-            timer = oldtimers[0]
-        else:
-            timer = ''
+        timer = mtimers[0] if mtimers else ''
         if not timer:
             raise Exception(
                 "Timer or Monitor not defined")
