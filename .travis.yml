@@ -12,6 +12,7 @@ env:
   - TEST=extraserver OS=debian10 PY=2
   - TEST=basicserver OS=debian10 PY=2
   - TEST=basicsettings OS=debian10 PY=2
+  - TEST=basic OS=debian10 PY=3
   # - TEST=basic OS=debian9 PY=2
   # - TEST=extrasettings OS=debian9 PY=2
   # - TEST=extraserver OS=debian9 PY=2
