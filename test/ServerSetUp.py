@@ -59,6 +59,11 @@ class ServerSetUp(object):
                     "cd ..; python3 ./NXSRecSelector %s &" % self.instance,
                     stdout=None,
                     stderr=None, shell=True)
+            if os.path.isfile("./NXSRecSelector"):
+                self._psub = subprocess.call(
+                    "python3 ./NXSRecSelector %s &" % self.instance,
+                    stdout=None,
+                    stderr=None, shell=True)
             else:
                 self._psub = subprocess.call(
                     "python3 NXSRecSelector %s &" % self.instance, stdout=None,
@@ -67,6 +72,11 @@ class ServerSetUp(object):
             if os.path.isfile("../NXSRecSelector"):
                 self._psub = subprocess.call(
                     "cd ..; ./NXSRecSelector %s &" % self.instance,
+                    stdout=None,
+                    stderr=None, shell=True)
+            if os.path.isfile("./NXSRecSelector"):
+                self._psub = subprocess.call(
+                    "./NXSRecSelector %s &" % self.instance,
                     stdout=None,
                     stderr=None, shell=True)
             else:

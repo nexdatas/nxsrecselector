@@ -1,4 +1,8 @@
 2020-06-02 Jan Kotanski <jankotan@gmail.com>
+	* add information about tango device attribute to errords
+	* tagged as v3.19.0
+
+2020-06-02 Jan Kotanski <jankotan@gmail.com>
 	* filter slave timer out
 	* tagged as v3.18.7
 

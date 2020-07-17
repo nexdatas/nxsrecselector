@@ -126,6 +126,10 @@ class CheckerThread(threading.Thread):
         """
         for ds in checkeritem:
             try:
+                if ds.attr:
+                    dvat = "%s/%s" % (ds.device or ds.name, ds.attr)
+                else:
+                    dvat = "%s" % (ds.device or ds.name)
                 dp = PyTango.DeviceProxy(ds.device or ds.name)
                 # read real value (not polled)
                 dp.set_source(PyTango.DevSource.DEV)
@@ -156,10 +160,16 @@ class CheckerThread(threading.Thread):
                     raise AlarmStateError("ALARM STATE")
             except AlarmStateError:
                 checkeritem.message = "ALARM_STATE"
-                checkeritem.errords = ds.name
+                if ds.name != dvat:
+                    checkeritem.errords = "%s [%s]" % (ds.name, dvat)
+                else:
+                    checkeritem.errords = ds.name
             except Exception as e:
                 checkeritem.message = Utils.tostr(e)
-                checkeritem.errords = ds.name
+                if ds.name != dvat:
+                    checkeritem.errords = "%s [%s]" % (ds.name, dvat)
+                else:
+                    checkeritem.errords = ds.name
                 checkeritem.active = False
                 break
 
