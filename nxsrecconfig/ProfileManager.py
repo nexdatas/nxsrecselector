@@ -809,7 +809,7 @@ class ProfileManager(object):
         if missing:
             raise Exception(
                 "User Data not defined %s\n"
-                "Please set it with the `nxsetudata` macro,"
+                "Please set it with the `nxsetudata` macro, "
                 "the `nxselector` gui or the NXSRecSelector tango server"
                 % Utils.tostr(missing))
 
