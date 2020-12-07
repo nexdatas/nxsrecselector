@@ -5915,9 +5915,9 @@ class ProfileManager2Test(unittest.TestCase):
                     self.assertEqual(json.loads(se["Timer"]), ltimers)
                     self.assertEqual(se["MntGrp"], "mg2")
                     myctrls = {}
-                    fgtm = "/".join(
-                        self.smychsXX[str(ltimers[0])]['source'].split(
-                            "/")[:-1])
+                    # fgtm = "/".join(
+                    #     self.smychsXX[str(ltimers[0])]['source'].split(
+                    #         "/")[:-1])
                     for cl in ctrls:
                         tgc = {}
                         ttdv = None
