@@ -12747,9 +12747,6 @@ class BasicSettings2Test(Settings2_test.Settings2Test):
                     smg = {"controllers":
                            {'__tango__':
                             {'channels': tgc,
-                             'monitor': dv,
-                             'timer': dv,
-                             'synchronizer': 'software',
                              'synchronization': 0}
                             },
                            "monitor": "%s" % dv,
@@ -13019,10 +13016,7 @@ class BasicSettings2Test(Settings2_test.Settings2Test):
                     smg = {"controllers":
                            {'__tango__':
                             {'channels': tgc,
-                             'monitor': dv,
-                             'synchronizer': 'software',
                              'synchronization': 0,
-                             'timer': dv,
                              }},
                            "monitor": "%s" % dv,
                            "description": "Measurement Group",
@@ -14045,10 +14039,7 @@ class BasicSettings2Test(Settings2_test.Settings2Test):
                                 raise
                     if tgc:
                         myctrls['__tango__'] = {'channels': tgc,
-                                                'monitor': dv,
-                                                'synchronizer': 'software',
-                                                'synchronization': 0,
-                                                'timer': dv}
+                                                'synchronization': 0}
 
                     smg = {"controllers": myctrls,
                            "monitor": "%s" % dv,
@@ -14460,10 +14451,7 @@ class BasicSettings2Test(Settings2_test.Settings2Test):
 
                     if tgc:
                         myctrls['__tango__'] = {'channels': tgc,
-                                                'monitor': dv,
-                                                'synchronizer': 'software',
-                                                'synchronization': 0,
-                                                'timer': dv}
+                                                'synchronization': 0}
 
                     smg = {"controllers": myctrls,
                            "monitor": "%s" % dv,
