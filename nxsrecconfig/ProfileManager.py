@@ -1226,7 +1226,7 @@ class ProfileManager(object):
         if synchronization is not None:
             cnf['controllers'][ctrl][u'synchronization'] = \
                 int(synchronization)
-        if synchronizer is not None:
+        if synchronizer is not None and ctrl not in ['__tango__']:
             cnf['controllers'][ctrl][u'synchronizer'] = synchronizer
         return index
 
@@ -1288,11 +1288,12 @@ class ProfileManager(object):
         if ctrl not in cnf['controllers'].keys():
             cnf['controllers'][ctrl] = {}
             cnf['controllers'][ctrl][u'channels'] = {}
-            cnf['controllers'][ctrl][u'monitor'] = fulltimer
-            cnf['controllers'][ctrl][u'timer'] = fulltimer
             # 0 old trigger_type
             cnf['controllers'][ctrl][u'synchronization'] = 0
-            cnf['controllers'][ctrl][u'synchronizer'] = 'software'
+            if ctrl not in ['__tango__']:
+                cnf['controllers'][ctrl][u'monitor'] = fulltimer
+                cnf['controllers'][ctrl][u'timer'] = fulltimer
+                cnf['controllers'][ctrl][u'synchronizer'] = 'software'
 
     @classmethod
     def __addChannel(cls, cnf, ctrl, device, fullname, dontdisplay, index,

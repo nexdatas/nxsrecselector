@@ -3474,10 +3474,7 @@ class ProfileManager2Test(unittest.TestCase):
                             '__tango__':
                             {
                                 'channels': tgc,
-                                'monitor': dv,
-                                'timer': dv,
                                 'synchronization': 0,
-                                'synchronizer': 'software',
                             }
                         },
                         "monitor": "%s" % dv,
@@ -3735,10 +3732,7 @@ class ProfileManager2Test(unittest.TestCase):
                     smg = {"controllers":
                            {'__tango__':
                             {'channels': tgc,
-                             'monitor': dv,
-                             'timer': dv,
                              'synchronization': 0,
-                             'synchronizer': 'software',
                              }},
                            "monitor": "%s" % dv,
                            "description": "Measurement Group",
@@ -4734,10 +4728,7 @@ class ProfileManager2Test(unittest.TestCase):
                                 raise
                     if tgc:
                         myctrls['__tango__'] = {'channels': tgc,
-                                                'monitor': dv,
-                                                'timer': dv,
                                                 'synchronization': 0,
-                                                'synchronizer': 'software'
                                                 }
 
                     smg = {"controllers": myctrls,
@@ -5115,10 +5106,7 @@ class ProfileManager2Test(unittest.TestCase):
 
                     if tgc:
                         myctrls['__tango__'] = {'channels': tgc,
-                                                'monitor': dv,
-                                                'synchronization': 0,
-                                                'synchronizer': 'software',
-                                                'timer': dv}
+                                                'synchronization': 0}
 
                     smg = {"controllers": myctrls,
                            "monitor": "%s" % dv,
@@ -5538,10 +5526,7 @@ class ProfileManager2Test(unittest.TestCase):
 
                     if tgc:
                         myctrls['__tango__'] = {'channels': tgc,
-                                                'monitor': fgtm,
-                                                'timer': fgtm,
-                                                'synchronization': 0,
-                                                'synchronizer': 'software'}
+                                                'synchronization': 0}
 
                     smg = {"controllers": myctrls,
                            "monitor": "%s" % fgtm,
@@ -5930,9 +5915,9 @@ class ProfileManager2Test(unittest.TestCase):
                     self.assertEqual(json.loads(se["Timer"]), ltimers)
                     self.assertEqual(se["MntGrp"], "mg2")
                     myctrls = {}
-                    fgtm = "/".join(
-                        self.smychsXX[str(ltimers[0])]['source'].split(
-                            "/")[:-1])
+                    # fgtm = "/".join(
+                    #     self.smychsXX[str(ltimers[0])]['source'].split(
+                    #         "/")[:-1])
                     for cl in ctrls:
                         tgc = {}
                         ttdv = None
@@ -6028,10 +6013,7 @@ class ProfileManager2Test(unittest.TestCase):
 
                     if tgc:
                         myctrls['__tango__'] = {'channels': tgc,
-                                                'synchronization': 0,
-                                                'synchronizer': 'software',
-                                                'monitor': fgtm,
-                                                'timer': fgtm, }
+                                                'synchronization': 0}
                     # smg = {"controllers": myctrls,
                     #        "monitor": "%s" % fgtm,
                     #        "description": "Measurement Group",
@@ -6585,10 +6567,7 @@ class ProfileManager2Test(unittest.TestCase):
                         if tgc:
                             myctrls['__tango__'] = {
                                 'channels': tgc,
-                                'monitor': fgtm,
-                                'synchronization': 0,
-                                'synchronizer': 'software',
-                                'timer': fgtm, }
+                                'synchronization': 0}
 
                         smg = {"controllers": myctrls,
                                "monitor": "%s" % fgtm,

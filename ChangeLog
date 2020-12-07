@@ -1,3 +1,7 @@
+2020-12-07 Jan Kotanski <jankotan@gmail.com>
+	* remove timer monitor and synchronizer for __tango__ ctrl
+	* tagged as v3.20.0
+
 2020-11-09 Jan Kotanski <jankotan@gmail.com>
 	* extend an error message for user data
 	* tagged as v3.19.1
