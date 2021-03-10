@@ -419,6 +419,7 @@ class TangoUtils(object):
                 da = ap.read()
                 vl = da.value
         except PyTango.DevFailed:
+            pass
             # if ac and ac.data_format != PyTango.AttrDataFormat.SCALAR \
             #         and (da is None or not hasattr(da, 'dim_x')):
             #     raise
