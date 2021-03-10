@@ -1,3 +1,7 @@
+2021-03-10 Jan Kotanski <jankotan@gmail.com>
+	* read shape from properties if attribute cannot be read
+	* tagged as v3.21.0
+
 2020-12-07 Jan Kotanski <jankotan@gmail.com>
 	* remove timer monitor and synchronizer for __tango__ ctrl
 	* tagged as v3.20.0

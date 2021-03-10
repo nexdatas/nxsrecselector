@@ -419,18 +419,25 @@ class TangoUtils(object):
                 da = ap.read()
                 vl = da.value
         except PyTango.DevFailed:
-            if ac and ac.data_format != PyTango.AttrDataFormat.SCALAR \
-                    and (da is None or not hasattr(da, 'dim_x')):
-                raise
+            pass
+            # if ac and ac.data_format != PyTango.AttrDataFormat.SCALAR \
+            #         and (da is None or not hasattr(da, 'dim_x')):
+            #     raise
 
         if vl is not None:
             shp = list(numpy.shape(vl))
-        elif ac is not None:
+        elif da is not None:
             if ac.data_format != PyTango.AttrDataFormat.SCALAR:
                 if da.dim_x and da.dim_x > 1:
                     shp = [da.dim_y, da.dim_x] \
                         if da.dim_y \
                         else [da.dim_x]
+        elif ac is not None:
+            if ac.data_format != PyTango.AttrDataFormat.SCALAR:
+                if ac.max_dim_x and ac.max_dim_x > 1:
+                    shp = [ac.max_dim_y, ac.max_dim_x] \
+                        if ac.max_dim_y \
+                        else [ac.max_dim_x]
         if ac is not None:
             dt = cls.tTnp[ac.data_type]
             ut = ac.unit
