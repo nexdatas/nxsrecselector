@@ -1,4 +1,8 @@
-2021-03-10 Jan Kotanski <jankotan@gmail.com>
+2021-03-11 Jan Kotanski <jankotan@gmail.com>
+	* fix typo
+	* tagged as v3.21.2
+
+2021-03-11 Jan Kotanski <jankotan@gmail.com>
 	* add workaround for setting timer and monitor, i.e. sardana issue  #1516
 	* tagged as v3.21.1
 

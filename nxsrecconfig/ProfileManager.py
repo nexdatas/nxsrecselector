@@ -543,7 +543,7 @@ class ProfileManager(object):
                 else None
             )
             if al == timer:
-                curindex = index
+                index = curindex
 
 
         conf = json.dumps(cnf)
