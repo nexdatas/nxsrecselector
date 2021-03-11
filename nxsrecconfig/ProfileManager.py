@@ -470,14 +470,12 @@ class ProfileManager(object):
                 self.__selector.deselect()
                 self.importMntGrp()
                 if self.__syncsnapshot:
-                    # print("FETCH")
                     self.__addPreselectedComponents(
                         self.defaultPreselectedComponents)
                 self.__selector.resetPreselectedComponents(
                     self.defaultPreselectedComponents)
                 self.__selector.preselect()
         elif self.__syncsnapshot:
-            # print("FETCH 2")
             changed = self.__addPreselectedComponents(
                 self.defaultPreselectedComponents)
             if changed:
@@ -513,7 +511,6 @@ class ProfileManager(object):
 
         ltimers = set()
         timer = self.__prepareTimers(cnf, ltimers)
-
         aliases, snapshot = self.__fetchChannels(
             datasources, componentdatasources,
             dontdisplay, set(ltimers) | set([timer]), description)
@@ -532,7 +529,12 @@ class ProfileManager(object):
             ['CTExpChannel', 'OneDExpChannel', 'TwoDExpChannel']))
         tchannels = tchannels | ltimers
 
+        if timer:
+            index = 1
         for al in aliases:
+            if al == timer:
+                curindex = index
+                index = 0
             index = self.__addDevice(
                 al, dontdisplay, cnf,
                 al if al in tchannels else timer, index, fullnames, sources,
@@ -540,6 +542,10 @@ class ProfileManager(object):
                 int(synchronization[al]) if al in synchronization.keys()
                 else None
             )
+            if al == timer:
+                curindex = index
+
+
         conf = json.dumps(cnf)
 
         mginfo = {
