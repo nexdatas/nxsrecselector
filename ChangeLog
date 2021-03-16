@@ -1,3 +1,15 @@
+2021-03-11 Jan Kotanski <jankotan@gmail.com>
+	* add MasterTimerFirst property flag if sardana PR #1521 for IS #1516 not applied
+	* tagged as v3.22.0
+
+2021-03-11 Jan Kotanski <jankotan@gmail.com>
+	* fix typo
+	* tagged as v3.21.2
+
+2021-03-11 Jan Kotanski <jankotan@gmail.com>
+	* add workaround for setting timer and monitor, i.e. sardana issue  #1516
+	* tagged as v3.21.1
+
 2021-03-10 Jan Kotanski <jankotan@gmail.com>
 	* read shape from properties if attribute cannot be read
 	* tagged as v3.21.0
