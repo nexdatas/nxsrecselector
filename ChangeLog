@@ -1,4 +1,8 @@
 2021-03-11 Jan Kotanski <jankotan@gmail.com>
+	* add MasterTimerFirst property flag if sardana PR #1521 for IS #1516 not applied
+	* tagged as v3.22.0
+
+2021-03-11 Jan Kotanski <jankotan@gmail.com>
 	* fix typo
 	* tagged as v3.21.2
 

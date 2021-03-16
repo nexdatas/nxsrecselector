@@ -76,6 +76,8 @@ class ProfileManager(object):
         #: (:obj:`list` <:obj:`str`>) timer filters
         self.timerFilters = ["*dgg*", "*/timer/*", "*/ctctrl0*"]
 
+        #: (:obj:`bool` ) master timer/monitor with the first index
+        self.masterTimerFirst = False
         #: (:obj:`bool`) mntgrp with synchronization
         self.__withsynch = True
 
@@ -529,22 +531,22 @@ class ProfileManager(object):
             ['CTExpChannel', 'OneDExpChannel', 'TwoDExpChannel']))
         tchannels = tchannels | ltimers
 
-        if timer:
+        if self.masterTimerFirst and timer and timer in aliases:
             index = 1
         for al in aliases:
-            if al == timer:
+            if self.masterTimerFirst and al == timer:
                 curindex = index
                 index = 0
             index = self.__addDevice(
                 al, dontdisplay, cnf,
-                al if al in tchannels else timer, index, fullnames, sources,
+                al if al in tchannels else timer, index,
+                fullnames, sources,
                 synchronizer[al] if al in synchronizer.keys() else None,
                 int(synchronization[al]) if al in synchronization.keys()
                 else None
             )
-            if al == timer:
+            if self.masterTimerFirst and al == timer:
                 index = curindex
-
 
         conf = json.dumps(cnf)
 

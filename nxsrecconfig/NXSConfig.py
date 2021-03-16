@@ -98,6 +98,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         self.__stg.poolBlacklist = self.PoolBlacklist or []
         self.__stg.timerFilters = self.TimerFilters or [
             "*dgg*", "*/timer/*", "*/ctctrl0*"]
+        self.__stg.masterTimerFirst = self.masterTimerFirst or False
         self.__stg.mutedChannelFilters = self.MutedChannelFilters \
             or ["*tip551*"]
         self.__stg.adminDataNames = self.AdminDataNames or []
@@ -1864,6 +1865,10 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
         'SyncSnapshot':
         [PyTango.DevBoolean,
          "preselection merges the current ScanSnapshot",
+         [False]],
+        'MasterTimerFirst':
+        [PyTango.DevBoolean,
+         "master timer channels with the 0 index",
          [False]],
         'DefaultCanFailDataSources':
         [PyTango.DevVarStringArray,
