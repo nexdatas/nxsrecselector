@@ -331,7 +331,7 @@ class Settings(object):
         doc='clientRecordKeys')
 
     def __getTimerFilters(self):
-        """ get method for clientRecordKeys attribute
+        """ get method for  timeFilters attribute
 
         :returns: list of timer filters
         :rtype: :obj:`list` <:obj:`str`>
@@ -339,10 +339,10 @@ class Settings(object):
         return self.__profileManager.timerFilters
 
     def __setTimerFilters(self, filters):
-        """ set method for clientRecordKeys attribute
+        """ set method for timeFilters attribute
 
-        :param components: list of filters
-        :type components: :obj:`list` <:obj:`str`>
+        :param filters: list of filters
+        :type filters: :obj:`list` <:obj:`str`>
         """
         self.__profileManager.timerFilters = filters
 
@@ -351,6 +351,28 @@ class Settings(object):
         __getTimerFilters,
         __setTimerFilters,
         doc='timerFilters')
+
+    def __getMasterTimerFirst(self):
+        """ get method for masterTimerFirst attribute
+
+        :returns: master channels with the 0 index
+        :rtype: :obj:`bool`
+        """
+        return self.__profileManager.masterTimerFirst
+
+    def __setMasterTimerFirst(self, flag):
+        """ set method for masterTimerFirst attribute
+
+        :param components: master channels with the 0 index
+        :type components: :obj:`bool`
+        """
+        self.__profileManager.masterTimerFirst = flag
+
+    #: (:obj:`bool`) master channels with the 0 index
+    masterTimerFirst = property(
+        __getMasterTimerFirst,
+        __setMasterTimerFirst,
+        doc='master timer channels with the 0 index')
 
     def __getConfigDevice(self):
         """ get method for configDevice attribute
