@@ -36,7 +36,6 @@ if [ "$2" = "2" ]; then
     docker exec --user root ndts /bin/sh -c 'export DEBIAN_FRONTEND=noninteractive; apt-get -qq update; apt-get -qq install -y  python-setuptools python-enum34 python-pytango python-tz; apt-get -qq install -y nxsconfigserver-db; sleep 10'
 else
     echo "install python3-pytango"
-    docker exec --user root ndts /bin/sh -c 'export DEBIAN_FRONTEND=noninteractive; apt-get -qq update; apt-get install -y git python3-six python3-numpy graphviz python3-sphinx g++ build-essential python3-dev pkg-config python3-all-dev  python3-setuptools libtango-dev python3-tz python-pytango python-enum34; apt-get -qq install -y nxsconfigserver-db; sleep 10'
     docker exec --user root ndts /bin/sh -c 'export DEBIAN_FRONTEND=noninteractive; apt-get -qq update; apt-get install -y libboost-python-dev libboost-dev'
     if [ "$1" = "debian10" ] || [ "$1" = "ubuntu20.10" ] || [ "$1" = "debian11" ]; then
 	echo " "
