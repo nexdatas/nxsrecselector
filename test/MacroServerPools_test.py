@@ -3958,7 +3958,7 @@ class MacroServerPoolsTest(unittest.TestCase):
 
     # constructor test
     # \brief It tests default settings
-    def test_setgetSelectorEnv_py2(self):
+    def ttest_setgetSelectorEnv_py2(self):
         fun = sys._getframe().f_code.co_name
         print("Run: %s.%s() " % (self.__class__.__name__, fun))
 
