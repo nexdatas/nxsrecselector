@@ -28,7 +28,11 @@ import struct
 import threading
 import binascii
 import PyTango
-import TestServerSetUp
+
+try:
+    import TestServerSetUp
+except Exception:
+    from . import TestServerSetUp
 
 from nxsrecconfig.CheckerThread import (
     CheckerThread, CheckerItem, TangoDSItem, ATTRIBUTESTOCHECK)

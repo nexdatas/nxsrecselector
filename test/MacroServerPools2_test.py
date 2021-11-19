@@ -21,8 +21,14 @@
 #
 import unittest
 
-import TestPool2SetUp
-import MacroServerPools_test
+try:
+    import TestPool2SetUp
+except Exception:
+    from . import TestPool2SetUp
+try:
+    import MacroServerPools_test
+except Exception:
+    from . import MacroServerPools_test
 
 
 # test fixture
