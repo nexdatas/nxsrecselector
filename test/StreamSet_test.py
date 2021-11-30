@@ -22,23 +22,27 @@
 import unittest
 import os
 import sys
+# import subprocess
 import random
 import struct
 import binascii
 import time
 
-try:
-    from cStringIO import StringIO
-except ImportError:
-    from io import StringIO
-
 from nxsrecconfig import StreamSet
 
-# if 64-bit machione
-IS64BIT = (struct.calcsize("P") == 8)
+# import string
+if sys.version_info > (3,):
+    from io import StringIO
+else:
+    from StringIO import StringIO
+
 
 if sys.version_info > (3,):
     long = int
+
+
+# if 64-bit machione
+IS64BIT = (struct.calcsize("P") == 8)
 
 
 # test fixture
@@ -75,7 +79,7 @@ class StreamSetTest(unittest.TestCase):
     # test starter
     # \brief Common set up
     def setUp(self):
-        print("SEED = %s" % self.__seed)
+        print("SEED =%s" % self.__seed)
         print("\nsetting up...")
         self.streams = StreamSet.StreamSet(None)
         hasattr(self.streams, "log_fatal")
@@ -328,10 +332,7 @@ class StreamSetTest(unittest.TestCase):
             name = self.getRandomString(100)
             sys.stdout = self.mystdout = StringIO()
             sys.stderr = self.mystderr = StringIO()
-            if i % 2:
-                self.streams.info(name)
-            else:
-                self.streams.info(name, std=True)
+            self.streams.info(name, std=True)
             self.assertEqual(self.streams.log_fatal, None)
             self.assertEqual(self.streams.log_error, None)
             self.assertEqual(self.streams.log_warn, None)
@@ -349,7 +350,10 @@ class StreamSetTest(unittest.TestCase):
             name = self.getRandomString(100)
             sys.stdout = self.mystdout = StringIO()
             sys.stderr = self.mystderr = StringIO()
-            self.streams.info(name, std=False)
+            if i % 2 == 0:
+                self.streams.info(name)
+            else:
+                self.streams.info(name, std=False)
             self.assertEqual(self.streams.log_fatal, None)
             self.assertEqual(self.streams.log_error, None)
             self.assertEqual(self.streams.log_warn, None)
@@ -397,10 +401,7 @@ class StreamSetTest(unittest.TestCase):
             name = self.getRandomString(100)
             sys.stdout = self.mystdout = StringIO()
             sys.stderr = self.mystderr = StringIO()
-            if i % 2:
-                self.streams.debug(name)
-            else:
-                self.streams.debug(name, std=True)
+            self.streams.debug(name, std=True)
             self.assertEqual(self.streams.log_fatal, None)
             self.assertEqual(self.streams.log_error, None)
             self.assertEqual(self.streams.log_warn, None)
@@ -418,7 +419,10 @@ class StreamSetTest(unittest.TestCase):
             name = self.getRandomString(100)
             sys.stdout = self.mystdout = StringIO()
             sys.stderr = self.mystderr = StringIO()
-            self.streams.debug(name, std=False)
+            if i % 2:
+                self.streams.debug(name)
+            else:
+                self.streams.debug(name, std=False)
             self.assertEqual(self.streams.log_fatal, None)
             self.assertEqual(self.streams.log_error, None)
             self.assertEqual(self.streams.log_warn, None)
