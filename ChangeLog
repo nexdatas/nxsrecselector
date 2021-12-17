@@ -1,4 +1,8 @@
 2021-11-30 Jan Kotanski <jankotan@gmail.com>
+	* add MutedPreScanAttrFilters property
+	* tagged as v3.24.0
+
+2021-11-30 Jan Kotanski <jankotan@gmail.com>
 	* add stdoutflag and stderrflag for stderr and stdout streams
 	* tagged as v3.23.0
 

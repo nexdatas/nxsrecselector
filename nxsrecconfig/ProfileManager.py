@@ -76,6 +76,9 @@ class ProfileManager(object):
         #: (:obj:`list` <:obj:`str`>) timer filters
         self.timerFilters = ["*dgg*", "*/timer/*", "*/ctctrl0*"]
 
+        #:  (:obj:`list` <:obj:`str`>) muted PreScan attribute filters
+        self.mutedPreScanAttrFilters = []
+
         #: (:obj:`bool` ) master timer/monitor with the first index
         self.masterTimerFirst = False
         #: (:obj:`bool`) mntgrp with synchronization
@@ -312,6 +315,10 @@ class ProfileManager(object):
         if sync:
             self.__setFromMntGrpConf(conf, componentdatasources)
         self.__selector.storeSelection()
+
+        if self.mutedPreScanAttrFilters:
+            mginfo['snapshot'] = PoolUtils.filterOutTango(
+                mginfo['snapshot'], self.mutedPreScanAttrFilters)
         MSUtils.setEnvs(
             {'PreScanSnapshot': mginfo['snapshot'],
              'ActiveMntGrp': mginfo['alias']},

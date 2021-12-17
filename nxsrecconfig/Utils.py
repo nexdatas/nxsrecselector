@@ -821,6 +821,40 @@ class PoolUtils(object):
         return res
 
     @classmethod
+    def filterOutTango(cls, lst, filters=None):
+        """ provides channels of given pools
+
+        :param lst: list of strings to filter out
+        :type lst: :obj:`list` <:obj:`str` or (:obj:`str`, :obj:`str`)>
+        :param filters: device name filter list
+        :type filters: :obj:`list` <:obj:`str`>
+        :returns: list of channel names
+        :rtype: :obj:`list` <:obj:`str`>
+        """
+        res = []
+        lst = lst or []
+
+        if filters is None or not hasattr(filters, '__iter__'):
+            return lst
+
+        for item in lst:
+            found = False
+            for df in filters:
+                if not isinstance(item, tuple):
+                    ilst = [item]
+                else:
+                    ilst = item
+                for name in ilst:
+                    found = fnmatch.fnmatch(name, df)
+                    if found:
+                        break
+                if found:
+                    break
+            if not found:
+                res.append(item)
+        return res
+
+    @classmethod
     def getSource(cls, name):
         """ provides datasource from pool device
 

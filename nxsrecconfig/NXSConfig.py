@@ -101,6 +101,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         self.__stg.masterTimerFirst = bool(self.MasterTimerFirst)
         self.__stg.mutedChannelFilters = self.MutedChannelFilters \
             or ["*tip551*"]
+        self.__stg.mutedPreScanAttrFilters = self.MutedPreScanAttrFilters or []
         self.__stg.adminDataNames = self.AdminDataNames or []
         self.__stg.defaultPreselectedComponents = \
             self.DefaultPreselectedComponents or []
@@ -1849,6 +1850,10 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
         'MutedChannelFilters':
         [PyTango.DevVarStringArray,
          "list of muted channel filters",
+         []],
+        'MutedPreScanAttrFilters':
+        [PyTango.DevVarStringArray,
+         "list of muted attribute channel filters for PreScanSnapshot",
          []],
         'AdminDataNames':
         [PyTango.DevVarStringArray,
