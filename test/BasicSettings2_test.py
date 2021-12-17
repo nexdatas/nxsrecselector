@@ -10196,6 +10196,9 @@ class BasicSettings2Test(Settings2_test.Settings2Test):
                     set(self.getDump("PreselectingDataSources")))
                 self.assertEqual(rs.door, doors[i % 3])
                 self.assertEqual(rs.macroServer, list(ms2.ms.keys())[0])
+                self.assertEqual(
+                    MSUtils.getEnv('ActiveMntGrp', list(ms2.ms.keys())[0]),
+                    'nxsmntgrp')
             os.remove(filename)
         finally:
             ms2.tearDown()
@@ -14090,6 +14093,9 @@ class BasicSettings2Test(Settings2_test.Settings2Test):
 
         wrong = []
         rs = self.openRecSelector()
+        self.setProp(rs, "mutedPreScanAttrFilters",
+                     ["spectrum_long",
+                      "tango://*:10000/ttestp09/testts/t15r228/SpectrumShort"])
         rs.configDevice = val["ConfigDevice"]
         rs.door = val["Door"]
         # print "DOOR", rs.door
@@ -14106,7 +14112,7 @@ class BasicSettings2Test(Settings2_test.Settings2Test):
         self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
         self.assertEqual(rs.availableMntGrps(), [])
-#        self.myAssertRaise(Exception, rs.updateMntGrp)
+        # self.myAssertRaise(Exception, rs.updateMntGrp)
 
         db = PyTango.Database()
         db.put_device_property(list(self._ms.ms.keys())[0],
@@ -14482,6 +14488,17 @@ class BasicSettings2Test(Settings2_test.Settings2Test):
                     self.myAssertDict(json.loads(mp["UserData"]), records)
                     self.assertEqual(json.loads(mp["Timer"]), [ar["name"]])
                     self.assertEqual(mp["MntGrp"], "mg2")
+                    pss = MSUtils.getEnv(
+                        'PreScanSnapshot', list(self._ms.ms.keys())[0]) or []
+                    for ps in pss:
+                        if isinstance(ps, tuple) and len(ps) == 2:
+                            self.assertTrue(ps[1] != "spectrum_long")
+                            self.assertTrue(not ps[0].endswith(
+                                "10000/ttestp09/testts/t15r228/SpectrumShort"))
+                        else:
+                            self.assertTrue(ps != "spectrum_long")
+                            self.assertTrue(not ps.endswith(
+                                "10000/ttestp09/testts/t15r228/SpectrumShort"))
                 finally:
                     rs.deleteProfile("mg2")
                     try:

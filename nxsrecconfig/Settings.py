@@ -116,7 +116,7 @@ class Settings(object):
         #: (:class:`PyTango.Database`) tango database
         self.__db = PyTango.Database()
 
-        #:  (:obj:`list` <:obj:`str`>) timer filters
+        #:  (:obj:`list` <:obj:`str`>) muted channel filters
         self.mutedChannelFilters = ["*tip551*"]
         #: (:obj:`str`) default device groups
         self.__defaultDeviceGroups = \
@@ -350,7 +350,29 @@ class Settings(object):
     timerFilters = property(
         __getTimerFilters,
         __setTimerFilters,
-        doc='timerFilters')
+        doc='timer filters')
+
+    def __getMutedPreScanAttrFilters(self):
+        """ get method for  timeFilters attribute
+
+        :returns: list of timer filters
+        :rtype: :obj:`list` <:obj:`str`>
+        """
+        return self.__profileManager.mutedPreScanAttrFilters
+
+    def __setMutedPreScanAttrFilters(self, filters):
+        """ set method for timeFilters attribute
+
+        :param filters: list of filters
+        :type filters: :obj:`list` <:obj:`str`>
+        """
+        self.__profileManager.mutedPreScanAttrFilters = filters
+
+    #: (:obj:`list` <:obj:`str`>) muted prescan attribute filters
+    mutedPreScanAttrFilters = property(
+        __getMutedPreScanAttrFilters,
+        __setMutedPreScanAttrFilters,
+        doc='muted prescan attribute filters')
 
     def __getMasterTimerFirst(self):
         """ get method for masterTimerFirst attribute
@@ -964,8 +986,8 @@ class Settings(object):
     def saveProfile(self):
         """ saves configuration
         """
-        fl = open(self.profileFile, "w+")
-        json.dump(self.__selector.get(), fl)
+        with open(self.profileFile, "w+") as fl:
+            json.dump(self.__selector.get(), fl)
 
     def storeProfile(self):
         """ saves configuration
@@ -980,8 +1002,8 @@ class Settings(object):
     def loadProfile(self):
         """ loads configuration
         """
-        fl = open(self.profileFile, "r")
-        self.__selector.set(json.load(fl))
+        with open(self.profileFile, "r") as fl:
+            self.__selector.set(json.load(fl))
 
     def componentClientSources(self, cps):
         """ provides description of client datasources

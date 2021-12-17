@@ -789,35 +789,37 @@ class PoolUtils(object):
         return res
 
     @classmethod
-    def filterNames(cls, pools, filters=None, lst=None):
+    def filterOutTango(cls, lst, filters=None):
         """ provides channels of given pools
 
-        :param pools: list of pool devices
-        :type pools: :obj:`list` <:class:`PyTango.DeviceProxy`>
+        :param lst: list of strings to filter out
+        :type lst: :obj:`list` <:obj:`str` or (:obj:`str`, :obj:`str`)>
         :param filters: device name filter list
         :type filters: :obj:`list` <:obj:`str`>
         :returns: list of channel names
         :rtype: :obj:`list` <:obj:`str`>
         """
         res = []
-        if lst is None:
-            lst = []
-            for pool in pools:
-                if pool.AcqChannelList:
-                    lst += pool.AcqChannelList
+        lst = lst or []
 
         if filters is None or not hasattr(filters, '__iter__'):
-            filters = ["*"]
-        for elm in lst:
-            chan = json.loads(elm)
-            fullname = chan['full_name']
+            return lst
+
+        for item in lst:
             found = False
             for df in filters:
-                found = fnmatch.filter([fullname], df)
+                if not isinstance(item, tuple):
+                    ilst = [item]
+                else:
+                    ilst = item
+                for name in ilst:
+                    found = fnmatch.fnmatch(name, df)
+                    if found:
+                        break
                 if found:
                     break
-            if found:
-                res.append(chan['name'])
+            if not found:
+                res.append(item)
         return res
 
     @classmethod
