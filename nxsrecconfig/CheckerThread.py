@@ -140,7 +140,7 @@ class CheckerThread(threading.Thread):
                 if state in [PyTango.DevState.FAULT]:
                     raise FaultStateError("FAULT STATE")
                 if state in [PyTango.DevState.OFF]:
-                    raise FaultStateError("OFF STATE")
+                    raise OffStateError("OFF STATE")
                 dp.ping()
                 if not ds.attr:
                     for gattr in ATTRIBUTESTOCHECK:
@@ -185,4 +185,8 @@ class AlarmStateError(Exception):
 class FaultStateError(Exception):
 
     """ Fault State Exception class
+    """
+class OffStateError(Exception):
+
+    """ Off State Exception class
     """
