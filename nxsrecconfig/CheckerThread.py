@@ -186,6 +186,8 @@ class FaultStateError(Exception):
 
     """ Fault State Exception class
     """
+
+
 class OffStateError(Exception):
 
     """ Off State Exception class
