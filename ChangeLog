@@ -1,3 +1,7 @@
+2022-03-22 Jan Kotanski <jankotan@gmail.com>
+	* switch off a component if the corresponding device is off
+	* tagged as v3.25.0
+
 2021-11-30 Jan Kotanski <jankotan@gmail.com>
 	* add MutedPreScanAttrFilters property
 	* tagged as v3.24.0
