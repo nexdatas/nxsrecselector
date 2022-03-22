@@ -137,10 +137,15 @@ class CheckerThread(threading.Thread):
                 TangoUtils.wait(dp, state=None)
                 dp.set_timeout_millis(10000)
                 state = dp.state()
-                if state in [PyTango.DevState.FAULT]:
-                    raise FaultStateError("FAULT STATE")
-                if state in [PyTango.DevState.OFF]:
-                    raise OffStateError("OFF STATE")
+                if state in [PyTango.DevState.FAULT,
+                             PyTango.DevState.DISABLE]:
+                    raise FaultStateError("%s STATE" % state)
+                if state in [PyTango.DevState.OFF,
+                             PyTango.DevState.INIT,
+                             PyTango.DevState.INSERT,
+                             PyTango.DevState.CLOSE,
+                             PyTango.DevState.UNKNOWN]:
+                    raise OffStateError("%s STATE" % state)
                 dp.ping()
                 if not ds.attr:
                     for gattr in ATTRIBUTESTOCHECK:
