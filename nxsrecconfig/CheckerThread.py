@@ -139,6 +139,8 @@ class CheckerThread(threading.Thread):
                 state = dp.state()
                 if state in [PyTango.DevState.FAULT]:
                     raise FaultStateError("FAULT STATE")
+                if state in [PyTango.DevState.OFF]:
+                    raise FaultStateError("OFF STATE")
                 dp.ping()
                 if not ds.attr:
                     for gattr in ATTRIBUTESTOCHECK:
