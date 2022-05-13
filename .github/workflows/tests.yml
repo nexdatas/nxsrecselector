@@ -24,7 +24,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        os: [debian11, debian10]
+        os: [debian11, debian10, ubuntu22.04]
         test: [extrasettings, extraserver, basicserver, basicsettings, basic]
     steps:
       - uses: actions/checkout@v2
