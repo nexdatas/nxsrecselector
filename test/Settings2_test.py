@@ -101,7 +101,7 @@ except Exception:
     try:
         import MySQLdb
     # connection arguments to MYSQL DB
-        args = {'host': 'localhost', 'db': 'nxsconfig',
+        args = {'db': 'nxsconfig',
                 'read_default_file': '/etc/my.cnf', 'use_unicode': True}
     # inscance of MySQLdb
         mydb = MySQLdb.connect(**args)
@@ -113,7 +113,7 @@ except Exception:
             from os.path import expanduser
             home = expanduser("~")
         # connection arguments to MYSQL DB
-            args2 = {'host': 'localhost', 'db': 'nxsconfig',
+            args2 = {'db': 'nxsconfig',
                      'read_default_file': '%s/.my.cnf' % home,
                      'use_unicode': True}
         # inscance of MySQLdb
