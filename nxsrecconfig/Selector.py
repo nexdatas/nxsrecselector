@@ -370,7 +370,7 @@ class Selector(object):
             except DatabaseError:
                 home = expanduser("~")
                 # user = getpass.getuser()
-                dbp = '{"host":"localhost","db":"nxsconfig",' \
+                dbp = '{"db":"nxsconfig",' \
                     + '"use_unicode":true,' \
                     + '"read_default_file":"%s/.my.cnf"}' % home
                 configDevice.jsonsettings = dbp

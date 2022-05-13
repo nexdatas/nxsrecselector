@@ -1,3 +1,7 @@
+2022-05-13 Jan Kotanski <jankotan@gmail.com>
+	* remove default mysql local host
+	* tagged as v3.26.0
+
 2022-03-22 Jan Kotanski <jankotan@gmail.com>
 	* switch off a component if the corresponding device is off
 	* tagged as v3.25.0
