@@ -10,7 +10,7 @@ RUN add-apt-repository "deb http://repos.pni-hdri.de/apt/debian jammy main" -y
 
 RUN apt-get -qq update && apt-get -qq -y dist-upgrade
 ENV RUNLEVEL=1
-RUN apt-get -qq update && apt-get -qq install -y mysql-client  python3-h5py  python3-mysqldb python3-sphinx  apt-utils debconf-utils net-tools  omniidl libomniorb4-dev libcos4-dev libomnithread4-dev libzmq3-dev python3-pninexus python3-argcomplete python3-tz python3-lxml python3-pytest hdf5-plugin-bshuf hdf5-plugin-bz2 hdf5-plugin-lz4  liblog4j1.2-java python3-whichcraft python3-fabio python3-setuptools  python3-test python3-lxml
+RUN apt-get -qq update && apt-get -qq install -y mysql-client  python3-h5py  python3-mysqldb python3-sphinx  apt-utils debconf-utils net-tools  omniidl libomniorb4-dev libcos4-dev libomnithread4-dev libzmq3-dev python3-pninexus python3-argcomplete python3-tz python3-lxml python3-pytest hdf5-plugin-bshuf hdf5-plugin-bz2 hdf5-plugin-lz4  liblog4j1.2-java python3-whichcraft python3-fabio python3-setuptools  python3-pytest python3-lxml
 
 RUN useradd -ms /bin/bash tango
 RUN  /bin/bash -c 'export DEBIAN_FRONTEND=noninteractive; debconf-set-selections <<< "mysql-server mysql-server/root_password password rootpw"; debconf-set-selections <<< "mysql-server mysql-server/root_password_again password rootpw"; debconf-set-selections <<< "mariadb-server mysql-server/root_password password rootpw"; debconf-set-selections <<< "mariadb-server mysql-server/root_password_again password rootpw"; debconf-get-selections |grep mysql '
