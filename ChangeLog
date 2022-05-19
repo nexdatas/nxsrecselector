@@ -1,4 +1,8 @@
 2022-05-13 Jan Kotanski <jankotan@gmail.com>
+	* add checks if Door is not RUNNING before MG update 
+	* tagged as v3.26.0
+
+2022-05-13 Jan Kotanski <jankotan@gmail.com>
 	* remove default mysql local host
 	* tagged as v3.26.0
 
