@@ -1199,7 +1199,11 @@ class Settings(object):
         :returns: string with mntgrp configuration
         :rtype: :obj:`str`
         """
-        return self.__profileManager.updateProfile(False)
+        if not self.__msp.isDoorRunning(self.__selector.getMacroServer()):
+            return self.__profileManager.updateProfile(False)
+        else:
+            raise Exception(
+                "Door is RUNNING. Cannot update the Measurement Group")
 
     def switchProfile(self, toActive=True):
         """ switch to active measurement
@@ -1215,7 +1219,11 @@ class Settings(object):
         :returns: string with mntgrp configuration
         :rtype: :obj:`str`
         """
-        return self.__profileManager.updateProfile(True)
+        if not self.__msp.isDoorRunning(self.__selector.getMacroServer()):
+            return self.__profileManager.updateProfile(True)
+        else:
+            raise Exception(
+                "Door is RUNNING. Cannot update the Measurement Group")
 
     def importMntGrp(self):
         """ import setting from active measurement

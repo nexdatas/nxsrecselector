@@ -336,6 +336,32 @@ class MacroServerPools(object):
                 if group[acp] is not False:
                     group[acp] = True
 
+    def isDoorRunning(self, ms):
+        """ check if any door server is running
+
+        :param ms: macroserver device name
+        :type ms: :obj:`str`
+        :returns: if any door running
+        :rtype: :obj:`bool`
+        """
+        status = False
+        error = None
+        if ms:
+            msp = TangoUtils.openProxy(ms)
+            doors = msp.doorList
+            for door in doors:
+                try:
+                    dp = PyTango.DeviceProxy(door)
+                    if dp.state() == PyTango.DevState.RUNNING:
+                        status = True
+                        break
+                except Exception as e:
+                    error = str(e)
+                if error:
+                    raise Exception(
+                        "Cannot connect to the door: %s" % error)
+        return status
+
     def getSelectorEnv(self, door, names, data):
         """ imports Environment Data
 
