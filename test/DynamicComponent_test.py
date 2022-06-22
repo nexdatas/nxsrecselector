@@ -105,6 +105,17 @@ def miniparseString(text):
                              parser=XMLParser(collect_ids=False))
 
 
+def tostring(node):
+    if sys.version_info > (3,):
+        return Utils.tostr(lxml.etree.tostring(
+            node, encoding='unicode',
+            method='xml', pretty_print=True))
+    else:
+        return Utils.tostr(lxml.etree.tostring(
+            node, encoding='utf8',
+            method='xml', pretty_print=True))
+
+
 # test fixture
 class DynamicComponentTest(unittest.TestCase):
 
@@ -3256,9 +3267,7 @@ class DynamicComponentTest(unittest.TestCase):
                 nxstype = nxstp
                 mycps = defbg + groupbg + fieldbg % (nxstype, ds.lower())
 
-                xds = " " * 10 + Utils.tostr(lxml.etree.tostring(
-                    dss[0], encoding='utf8',
-                    method='xml', pretty_print=True)).replace(
+                xds = " " * 10 + tostring(dss[0]).replace(
                         "\n", "\n" + " " * 10)
                 xds = xds[:-10]
                 mycps += xds
@@ -3419,9 +3428,7 @@ class DynamicComponentTest(unittest.TestCase):
                 nxstype = nxstp
                 mycps = defbg + groupbg + fieldbg % (nxstype, ds.lower())
 
-                xds = " " * 10 + Utils.tostr(lxml.etree.tostring(
-                    dss[0], encoding='utf8',
-                    method='xml', pretty_print=True)).replace(
+                xds = " " * 10 + tostring(dss[0]).replace(
                         "\n", "\n" + " " * 10)
                 xds = xds[:-10]
                 mycps += xds
@@ -3582,9 +3589,7 @@ class DynamicComponentTest(unittest.TestCase):
                     else:
                         # fname = fieldname.lower()
                         fd = fieldbg % (nxstp, fieldname.lower())
-                    xds = " " * lnph + Utils.tostr(lxml.etree.tostring(
-                        dss[0], encoding='utf8',
-                        method='xml', pretty_print=True)).replace(
+                    xds = " " * lnph + tostring(dss[0]).replace(
                             "\n", "\n" + " " * lnph)
                     xds = xds[:-2]
                     fd += xds
@@ -3807,9 +3812,7 @@ class DynamicComponentTest(unittest.TestCase):
                     else:
                         # fname = fieldname.lower()
                         fd = fieldbg % (nxstp, fieldname.lower())
-                    xds = " " * lnph + Utils.tostr(lxml.etree.tostring(
-                        dss[0], encoding='utf8',
-                        method='xml', pretty_print=True)).replace(
+                    xds = " " * lnph + tostring(dss[0]).replace(
                             "\n", "\n" + " " * lnph)
                     xds = xds[:-2]
                     fd += xds
