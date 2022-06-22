@@ -336,10 +336,16 @@ class DynamicComponent(object):
         self.__createNonSardanaNodes(created, avds, definition, 'STEP')
         self.__createNonSardanaNodes(created, avds, definition, 'INIT')
 
-        xmls = Utils.tostr(
-            lxml.etree.tostring(
-                definition, encoding='utf8',
-                method='xml', pretty_print=True))
+        if sys.version_info > (3,):
+            xmls = Utils.tostr(
+                lxml.etree.tostring(
+                    definition, encoding='unicode',
+                    method='xml', pretty_print=True))
+        else:
+            xmls = Utils.tostr(
+                lxml.etree.tostring(
+                    definition, encoding='utf8',
+                    method='xml', pretty_print=True))
         if xmls.startswith("<?xml"):
             self.__nexusconfig_device.xmlstring = xmls
         else:
