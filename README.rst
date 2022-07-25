@@ -7,12 +7,12 @@ Welcome to nxsrecconfig's documentation!
 |Pypi Version|
 |Python Versions|
 
-.. |github workflow| image:: https://github.com/nexdatas/recselector/actions/workflows/tests.yml/badge.svg
-   :target: https://github.com/nexdatas/recselector/actions
+.. |github workflow| image:: https://github.com/nexdatas/nxsrecselector/actions/workflows/tests.yml/badge.svg
+   :target: https://github.com/nexdatas/nxsrecselector/actions
    :alt:
 
 .. |docs| image:: https://img.shields.io/badge/Documentation-webpages-ADD8E6.svg
-   :target: https://nexdatas.github.io/recselector/index.html
+   :target: https://nexdatas.github.io/nxsrecselector/index.html
    :alt:
 
 .. |Pypi Version| image:: https://img.shields.io/pypi/v/nxsrecselector.svg
@@ -28,10 +28,10 @@ Introduction
 
 Tango server with Sardana Recorder settings
 
-Tango Server API: https://nexdatas.github.io/recselector/doc_html
+Tango Server API: https://nexdatas.github.io/nxsrecselector/doc_html
 
-| Source code: https://github.com/nexdatas/recselector
-| Web page: https://nexdatas.github.io/recselector
+| Source code: https://github.com/nexdatas/nxsrecselector
+| Web page: https://nexdatas.github.io/nxsrecselector
 | NexDaTaS Web page: https://nexdatas.github.io
 
 ------------
@@ -47,7 +47,7 @@ From sources
 
 Download the latest version of NeXuS Configuration Server from
 
-|    https://github.com/nexdatas/recselector
+|    https://github.com/nexdatas/nxsrecselector
 
 Extract the sources and run
 
