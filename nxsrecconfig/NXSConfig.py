@@ -1801,7 +1801,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         :returns: True if the operation allowed
         :rtype: :obj:`bool`
         """
-        state_ok = not(self.get_state() in [PyTango.DevState.RUNNING])
+        state_ok = not (self.get_state() in [PyTango.DevState.RUNNING])
         return state_ok
 
 
