@@ -1805,7 +1805,7 @@ class NXSRecSelector(tango.Device_4Impl):
         :returns: True if the operation allowed
         :rtype: :obj:`bool`
         """
-        state_ok = not(self.get_state() in [tango.DevState.RUNNING])
+        state_ok = not (self.get_state() in [tango.DevState.RUNNING])
         return state_ok
 
 
