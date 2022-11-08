@@ -40,7 +40,7 @@ Installation
 
 Install the dependencies:
 
-|    Sardana, PyTango, sphinx
+|    sardana, tango, sphinx
 
 From sources
 ^^^^^^^^^^^^

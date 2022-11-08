@@ -35,12 +35,16 @@
 # ==================================================================
 # ==================================================================
 
-import PyTango
+try:
+    import tango
+except Exception:
+    import PyTango as tango
+
 from .Settings import Settings as STG
 from .Utils import Utils
 
 
-class NXSRecSelector(PyTango.Device_4Impl):
+class NXSRecSelector(tango.Device_4Impl):
 
     """ NXSRecSelector server interface
 
@@ -58,12 +62,12 @@ class NXSRecSelector(PyTango.Device_4Impl):
         :param name: device name
         :type name: :obj:`str`
         """
-        PyTango.Device_4Impl.__init__(self, cl, name)
+        tango.Device_4Impl.__init__(self, cl, name)
         self.debug_stream("In __init__()")
         #: (:class:`nxsrecconfig.Settings.Settings`) \
         #:     Recorder Settings
         self.__stg = None
-        #: (:class:`PyTango.DeviceProxy`) self device proxy
+        #: (:class:`tango.DeviceProxy`) self device proxy
         self.__dp = None
         #: (:obj:`list` <:obj:`str`>) \
         #:     memorize attribute to be updated on conf change
@@ -77,7 +81,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         if hasattr(self, 'stg') and self.__stg:
             del self.__stg
             self.__stg = None
-        self.set_state(PyTango.DevState.OFF)
+        self.set_state(tango.DevState.OFF)
 
     def init_device(self):
         """ Device initialization
@@ -94,7 +98,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         syncsnapshot = bool(self.SyncSnapshot)
         self.__stg = STG(self, numberofthreads, defaultpath,
                          defaultzone, defaultmntgrp, syncsnapshot)
-        self.set_state(PyTango.DevState.ON)
+        self.set_state(tango.DevState.ON)
         self.__stg.poolBlacklist = self.PoolBlacklist or []
         self.__stg.timerFilters = self.TimerFilters or [
             "*dgg*", "*/timer/*", "*/ctctrl0*"]
@@ -129,7 +133,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         """ Read Components attribute
 
         :param attr: read attribute
-        :type attr: :class:`PyTango.Attribute`
+        :type attr: :class:`tango.Attribute`
         """
         self.debug_stream("In read_Components()")
         attr.set_value(self.__stg.components)
@@ -138,7 +142,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         """ Read DescriptionErrors attribute
 
         :param attr: read attribute
-        :type attr: :class:`PyTango.Attribute`
+        :type attr: :class:`tango.Attribute`
         """
         self.debug_stream("In read_DescriptionErrors()")
         attr.set_value(self.__stg.descriptionErrors)
@@ -147,7 +151,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         """ Read Version attribute
 
         :param attr: read attribute
-        :type attr: :class:`PyTango.Attribute`
+        :type attr: :class:`tango.Attribute`
         """
         self.debug_stream("In read_Version()")
         attr.set_value(self.__stg.version)
@@ -156,7 +160,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         """ Read MacroServer attribute
 
         :param attr: read attribute
-        :type attr: :class:`PyTango.Attribute`
+        :type attr: :class:`tango.Attribute`
         """
         self.debug_stream("In read_MacroServer()")
         attr.set_value(self.__stg.macroServer)
@@ -165,7 +169,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         """ Read Door attribute
 
         :param attr: read attribute
-        :type attr: :class:`PyTango.Attribute`
+        :type attr: :class:`tango.Attribute`
         """
         self.debug_stream("In read_Door()")
         attr.set_value(self.__stg.door)
@@ -174,7 +178,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         """ Write Door attribute
 
         :param attr: written attribute
-        :type attr: :class:`PyTango.Attribute`
+        :type attr: :class:`tango.Attribute`
         """
         self.debug_stream("In write_Door()")
         self.__stg.door = attr.get_write_value()
@@ -183,7 +187,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         """ Read StepDataSources attribute
 
         :param attr: read attribute
-        :type attr: :class:`PyTango.Attribute`
+        :type attr: :class:`tango.Attribute`
         """
         self.debug_stream("In read_StepDataSources()")
         attr.set_value(self.__stg.stepdatasources or "")
@@ -192,7 +196,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         """ Write StepDataSources attribute
 
         :param attr: written attribute
-        :type attr: :class:`PyTango.Attribute`
+        :type attr: :class:`tango.Attribute`
         """
         self.debug_stream("In write_StepDataSources()")
         if self.is_StepDataSources_write_allowed():
@@ -208,7 +212,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         :returns: True if the operation allowed
         :rtype: :obj:`bool`
         """
-        if self.get_state() in [PyTango.DevState.RUNNING]:
+        if self.get_state() in [tango.DevState.RUNNING]:
             return False
         return True
 
@@ -216,7 +220,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         """ Read CanFailDataSources attribute
 
         :param attr: read attribute
-        :type attr: :class:`PyTango.Attribute`
+        :type attr: :class:`tango.Attribute`
         """
         self.debug_stream("In read_CanFailDataSources()")
         attr.set_value(self.__stg.canfaildatasources or "")
@@ -225,7 +229,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         """ Write CanFailDataSources attribute
 
         :param attr: written attribute
-        :type attr: :class:`PyTango.Attribute`
+        :type attr: :class:`tango.Attribute`
         """
         self.debug_stream("In write_CanFailDataSources()")
         if self.is_CanFailDataSources_write_allowed():
@@ -241,7 +245,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         :returns: True if the operation allowed
         :rtype: :obj:`bool`
         """
-        if self.get_state() in [PyTango.DevState.RUNNING]:
+        if self.get_state() in [tango.DevState.RUNNING]:
             return False
         return True
 
@@ -249,7 +253,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         """ Read LinkDataSources attribute
 
         :param attr: read attribute
-        :type attr: :class:`PyTango.Attribute`
+        :type attr: :class:`tango.Attribute`
         """
         self.debug_stream("In read_LinkDataSources()")
         attr.set_value(self.__stg.linkdatasources or "")
@@ -258,7 +262,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         """ Write LinkDataSources attribute
 
         :param attr: written attribute
-        :type attr: :class:`PyTango.Attribute`
+        :type attr: :class:`tango.Attribute`
         """
         self.debug_stream("In write_LinkDataSources()")
         if self.is_LinkDataSources_write_allowed():
@@ -274,7 +278,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         :returns: True if the operation allowed
         :rtype: :obj:`bool`
         """
-        if self.get_state() in [PyTango.DevState.RUNNING]:
+        if self.get_state() in [tango.DevState.RUNNING]:
             return False
         return True
 
@@ -282,7 +286,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         """ Read ConfigDevice attribute
 
         :param attr: read attribute
-        :type attr: :class:`PyTango.Attribute`
+        :type attr: :class:`tango.Attribute`
         """
         self.debug_stream("In read_ConfigDevice()")
         attr.set_value(self.__stg.configDevice)
@@ -291,7 +295,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         """ Write ConfigDevice attribute
 
         :param attr: written attribute
-        :type attr: :class:`PyTango.Attribute`
+        :type attr: :class:`tango.Attribute`
         """
         self.debug_stream("In write_ConfigDevice()")
         self.__stg.configDevice = attr.get_write_value()
@@ -300,7 +304,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         """ Read MntGrp attribute
 
         :param attr: read attribute
-        :type attr: :class:`PyTango.Attribute`
+        :type attr: :class:`tango.Attribute`
         """
         self.debug_stream("In read_MntGrp()")
         attr.set_value(self.__stg.mntGrp)
@@ -309,7 +313,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         """ Write MntGrp attribute
 
         :param attr: written attribute
-        :type attr: :class:`PyTango.Attribute`
+        :type attr: :class:`tango.Attribute`
         """
         self.debug_stream("In write_MntGrp()")
         self.__stg.mntGrp = attr.get_write_value()
@@ -318,7 +322,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         """ Read ScanDir attribute
 
         :param attr: read attribute
-        :type attr: :class:`PyTango.Attribute`
+        :type attr: :class:`tango.Attribute`
         """
         self.debug_stream("In read_ScanDir()")
         attr.set_value(self.__stg.scanDir)
@@ -327,7 +331,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         """ Write ScanDir attribute
 
         :param attr: written attribute
-        :type attr: :class:`PyTango.Attribute`
+        :type attr: :class:`tango.Attribute`
         """
         self.debug_stream("In write_ScanDir()")
         self.__stg.scanDir = attr.get_write_value()
@@ -336,7 +340,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         """ Read ScanFile attribute
 
         :param attr: read attribute
-        :type attr: :class:`PyTango.Attribute`
+        :type attr: :class:`tango.Attribute`
         """
         self.debug_stream("In read_ScanFile()")
         attr.set_value(self.__stg.scanFile or "")
@@ -345,7 +349,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         """ Write ScanFile attribute
 
         :param attr: written attribute
-        :type attr: :class:`PyTango.Attribute`
+        :type attr: :class:`tango.Attribute`
         """
         self.debug_stream("In write_ScanFile()")
         self.__stg.scanFile = attr.get_write_value() or ""
@@ -354,7 +358,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         """ Read ScanID attribute
 
         :param attr: read attribute
-        :type attr: :class:`PyTango.Attribute`
+        :type attr: :class:`tango.Attribute`
         """
         self.debug_stream("In read_ScanID()")
         attr.set_value(self.__stg.scanID)
@@ -363,7 +367,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         """ Write ScanID attribute
 
         :param attr: written attribute
-        :type attr: :class:`PyTango.Attribute`
+        :type attr: :class:`tango.Attribute`
         """
         self.debug_stream("In write_ScanID()")
         self.__stg.scanID = attr.get_write_value()
@@ -372,7 +376,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         """ Read WriterDevice attribute
 
         :param attr: read attribute
-        :type attr: :class:`PyTango.Attribute`
+        :type attr: :class:`tango.Attribute`
         """
         self.debug_stream("In read_WriterDevice()")
         attr.set_value(self.__stg.writerDevice)
@@ -381,7 +385,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         """ Write WriterDevice attribute
 
         :param attr: written attribute
-        :type attr: :class:`PyTango.Attribute`
+        :type attr: :class:`tango.Attribute`
         """
         self.debug_stream("In write_WriterDevice()")
         self.__stg.writerDevice = attr.get_write_value()
@@ -390,7 +394,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         """ Read DeviceGroups attribute
 
         :param attr: read attribute
-        :type attr: :class:`PyTango.Attribute`
+        :type attr: :class:`tango.Attribute`
         """
         self.debug_stream("In read_DeviceGroups()")
         attr.set_value(self.__stg.deviceGroups)
@@ -399,7 +403,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         """ Write DeviceGroups attribute
 
         :param attr: written attribute
-        :type attr: :class:`PyTango.Attribute`
+        :type attr: :class:`tango.Attribute`
         """
         self.debug_stream("In write_DeviceGroups()")
         self.__stg.deviceGroups = attr.get_write_value()
@@ -408,7 +412,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         """ Read UserData attribute
 
         :param attr: read attribute
-        :type attr: :class:`PyTango.Attribute`
+        :type attr: :class:`tango.Attribute`
         """
         self.debug_stream("In read_UserData()")
         attr.set_value(self.__stg.userData)
@@ -417,7 +421,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         """ Write UserData attribute
 
         :param attr: written attribute
-        :type attr: :class:`PyTango.Attribute`
+        :type attr: :class:`tango.Attribute`
         """
         self.debug_stream("In write_UserData()")
         self.__stg.userData = attr.get_write_value()
@@ -426,7 +430,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         """ Read DataSources attribute
 
         :param attr: read attribute
-        :type attr: :class:`PyTango.Attribute`
+        :type attr: :class:`tango.Attribute`
         """
         self.debug_stream("In read_DataSources()")
         attr.set_value(self.__stg.dataSources)
@@ -435,7 +439,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         """ Read ProfileConfiguration attribute
 
         :param attr: read attribute
-        :type attr: :class:`PyTango.Attribute`
+        :type attr: :class:`tango.Attribute`
         """
         self.debug_stream("In read_DataSources()")
         attr.set_value(self.__stg.profileConfiguration)
@@ -444,12 +448,12 @@ class NXSRecSelector(PyTango.Device_4Impl):
         """ Write ProfileConfiguration attribute
 
         :param attr: written attribute
-        :type attr: :class:`PyTango.Attribute`
+        :type attr: :class:`tango.Attribute`
         """
         self.debug_stream("In write_ProfileConfiguration()")
         self.__stg.profileConfiguration = attr.get_write_value()
         try:
-            self.__dp = self.__dp or PyTango.DeviceProxy(
+            self.__dp = self.__dp or tango.DeviceProxy(
                 Utils.tostr(self.get_name()))
             for var in self.__toupdate:
                 if var in self.__stg.names():
@@ -457,16 +461,16 @@ class NXSRecSelector(PyTango.Device_4Impl):
                         self.__dp.write_attribute(
                             Utils.tostr(var), self.__stg.value(var))
 
-            self.set_state(PyTango.DevState.ON)
+            self.set_state(tango.DevState.ON)
         finally:
-            if self.get_state() == PyTango.DevState.RUNNING:
-                self.set_state(PyTango.DevState.ON)
+            if self.get_state() == tango.DevState.RUNNING:
+                self.set_state(tango.DevState.ON)
 
     def read_AppendEntry(self, attr):
         """ Read AppendEntry attribute
 
         :param attr: read attribute
-        :type attr: :class:`PyTango.Attribute`
+        :type attr: :class:`tango.Attribute`
         """
         self.debug_stream("In read_AppendEntry()")
         attr.set_value(self.__stg.appendEntry)
@@ -475,7 +479,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         """ Write AppendEntry attribute
 
         :param attr: written attribute
-        :type attr: :class:`PyTango.Attribute`
+        :type attr: :class:`tango.Attribute`
         """
         self.debug_stream("In write_AppendEntry()")
         self.__stg.appendEntry = attr.get_write_value()
@@ -484,7 +488,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         """ Read ConfigVariables attribute
 
         :param attr: read attribute
-        :type attr: :class:`PyTango.Attribute`
+        :type attr: :class:`tango.Attribute`
         """
         self.debug_stream("In read_ConfigVariables()")
         attr.set_value(self.__stg.configVariables)
@@ -493,7 +497,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         """ Write ConfigVariables attribute
 
         :param attr: written attribute
-        :type attr: :class:`PyTango.Attribute`
+        :type attr: :class:`tango.Attribute`
         """
         self.debug_stream("In write_ConfigVariables()")
         self.__stg.configVariables = attr.get_write_value()
@@ -502,7 +506,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         """ Read ProfileFile attribute
 
         :param attr: read attribute
-        :type attr: :class:`PyTango.Attribute`
+        :type attr: :class:`tango.Attribute`
         """
         self.debug_stream("In read_ProfileFile()")
         attr.set_value(self.__stg.profileFile)
@@ -511,7 +515,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         """ Write ProfileFile attribute
 
         :param attr: written attribute
-        :type attr: :class:`PyTango.Attribute`
+        :type attr: :class:`tango.Attribute`
         """
         self.debug_stream("In write_ProfileFile()")
         self.__stg.profileFile = attr.get_write_value()
@@ -529,11 +533,11 @@ class NXSRecSelector(PyTango.Device_4Impl):
         """
         self.debug_stream("In LoadProfile()")
         try:
-            self.set_state(PyTango.DevState.RUNNING)
+            self.set_state(tango.DevState.RUNNING)
             self.__stg.loadProfile()
 
             # updating memorized attributes
-            self.__dp = self.__dp or PyTango.DeviceProxy(
+            self.__dp = self.__dp or tango.DeviceProxy(
                 Utils.tostr(self.get_name()))
             for var in self.__toupdate:
                 if var in self.__stg.names():
@@ -541,10 +545,10 @@ class NXSRecSelector(PyTango.Device_4Impl):
                         self.__dp.write_attribute(
                             Utils.tostr(var), self.__stg.value(var))
 
-            self.set_state(PyTango.DevState.ON)
+            self.set_state(tango.DevState.ON)
         finally:
-            if self.get_state() == PyTango.DevState.RUNNING:
-                self.set_state(PyTango.DevState.ON)
+            if self.get_state() == tango.DevState.RUNNING:
+                self.set_state(tango.DevState.ON)
 
     def is_LoadProfile_allowed(self):
         """ LoadProfile command State Machine
@@ -552,7 +556,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         :returns: True if the operation allowed
         :rtype: :obj:`bool`
         """
-        if self.get_state() in [PyTango.DevState.RUNNING]:
+        if self.get_state() in [tango.DevState.RUNNING]:
             return False
         return True
 
@@ -563,11 +567,11 @@ class NXSRecSelector(PyTango.Device_4Impl):
         """
         self.debug_stream("In FetchProfile()")
         try:
-            self.set_state(PyTango.DevState.RUNNING)
+            self.set_state(tango.DevState.RUNNING)
             self.__stg.fetchProfile()
 
             # updating memorized attributes
-            self.__dp = self.__dp or PyTango.DeviceProxy(
+            self.__dp = self.__dp or tango.DeviceProxy(
                 Utils.tostr(self.get_name()))
             for var in self.__toupdate:
                 if var in self.__stg.names():
@@ -575,10 +579,10 @@ class NXSRecSelector(PyTango.Device_4Impl):
                         self.__dp.write_attribute(
                             Utils.tostr(var), self.__stg.value(var))
 
-            self.set_state(PyTango.DevState.ON)
+            self.set_state(tango.DevState.ON)
         finally:
-            if self.get_state() == PyTango.DevState.RUNNING:
-                self.set_state(PyTango.DevState.ON)
+            if self.get_state() == tango.DevState.RUNNING:
+                self.set_state(tango.DevState.ON)
 
     def is_FetchProfile_allowed(self):
         """ FetchProfile command State Machine
@@ -586,7 +590,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         :returns: True if the operation allowed
         :rtype: :obj:`bool`
         """
-        if self.get_state() in [PyTango.DevState.RUNNING]:
+        if self.get_state() in [tango.DevState.RUNNING]:
             return False
         return True
 
@@ -597,12 +601,12 @@ class NXSRecSelector(PyTango.Device_4Impl):
         """
         self.debug_stream("In SaveProfile()")
         try:
-            self.set_state(PyTango.DevState.RUNNING)
+            self.set_state(tango.DevState.RUNNING)
             self.__stg.saveProfile()
-            self.set_state(PyTango.DevState.ON)
+            self.set_state(tango.DevState.ON)
         finally:
-            if self.get_state() == PyTango.DevState.RUNNING:
-                self.set_state(PyTango.DevState.ON)
+            if self.get_state() == tango.DevState.RUNNING:
+                self.set_state(tango.DevState.ON)
 
     def is_SaveProfile_allowed(self):
         """ SaveProfile command State Machine
@@ -610,7 +614,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         :returns: True if the operation allowed
         :rtype: :obj:`bool`
         """
-        if self.get_state() in [PyTango.DevState.RUNNING]:
+        if self.get_state() in [tango.DevState.RUNNING]:
             return False
         return True
 
@@ -621,12 +625,12 @@ class NXSRecSelector(PyTango.Device_4Impl):
         """
         self.debug_stream("In StoreProfile()")
         try:
-            self.set_state(PyTango.DevState.RUNNING)
+            self.set_state(tango.DevState.RUNNING)
             self.__stg.storeProfile()
-            self.set_state(PyTango.DevState.ON)
+            self.set_state(tango.DevState.ON)
         finally:
-            if self.get_state() == PyTango.DevState.RUNNING:
-                self.set_state(PyTango.DevState.ON)
+            if self.get_state() == tango.DevState.RUNNING:
+                self.set_state(tango.DevState.ON)
 
     def is_StoreProfile_allowed(self):
         """ StoreProfile command State Machine
@@ -634,7 +638,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         :returns: True if the operation allowed
         :rtype: :obj:`bool`
         """
-        if self.get_state() in [PyTango.DevState.RUNNING]:
+        if self.get_state() in [tango.DevState.RUNNING]:
             return False
         return True
 
@@ -645,12 +649,12 @@ class NXSRecSelector(PyTango.Device_4Impl):
         """
         self.debug_stream("In PreselectComponents()")
         try:
-            self.set_state(PyTango.DevState.RUNNING)
+            self.set_state(tango.DevState.RUNNING)
             self.__stg.preselectComponents()
-            self.set_state(PyTango.DevState.ON)
+            self.set_state(tango.DevState.ON)
         finally:
-            if self.get_state() == PyTango.DevState.RUNNING:
-                self.set_state(PyTango.DevState.ON)
+            if self.get_state() == tango.DevState.RUNNING:
+                self.set_state(tango.DevState.ON)
 
     def is_PreselectComponents_allowed(self):
         """ PreselectComponents command State Machine
@@ -658,7 +662,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         :returns: True if the operation allowed
         :rtype: :obj:`bool`
         """
-        if self.get_state() in [PyTango.DevState.RUNNING]:
+        if self.get_state() in [tango.DevState.RUNNING]:
             return False
         return True
 
@@ -670,12 +674,12 @@ class NXSRecSelector(PyTango.Device_4Impl):
         """
         self.debug_stream("In ResetPreselectedComponents()")
         try:
-            self.set_state(PyTango.DevState.RUNNING)
+            self.set_state(tango.DevState.RUNNING)
             self.__stg.resetPreselectedComponents()
-            self.set_state(PyTango.DevState.ON)
+            self.set_state(tango.DevState.ON)
         finally:
-            if self.get_state() == PyTango.DevState.RUNNING:
-                self.set_state(PyTango.DevState.ON)
+            if self.get_state() == tango.DevState.RUNNING:
+                self.set_state(tango.DevState.ON)
 
     def is_ResetPreselectedComponents_allowed(self):
         """ ResetPreselectedComponents command State Machine
@@ -683,7 +687,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         :returns: True if the operation allowed
         :rtype: :obj:`bool`
         """
-        if self.get_state() in [PyTango.DevState.RUNNING]:
+        if self.get_state() in [tango.DevState.RUNNING]:
             return False
         return True
 
@@ -694,12 +698,12 @@ class NXSRecSelector(PyTango.Device_4Impl):
         """
         self.debug_stream("In DeleteAllProfiles()")
         try:
-            self.set_state(PyTango.DevState.RUNNING)
+            self.set_state(tango.DevState.RUNNING)
             self.__stg.deleteAllProfiles()
-            self.set_state(PyTango.DevState.ON)
+            self.set_state(tango.DevState.ON)
         finally:
-            if self.get_state() == PyTango.DevState.RUNNING:
-                self.set_state(PyTango.DevState.ON)
+            if self.get_state() == tango.DevState.RUNNING:
+                self.set_state(tango.DevState.ON)
 
     def is_DeleteAllProfiles_allowed(self):
         """ DeleteAllProfiles command State Machine
@@ -707,7 +711,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         :returns: True if the operation allowed
         :rtype: :obj:`bool`
         """
-        if self.get_state() in [PyTango.DevState.RUNNING]:
+        if self.get_state() in [tango.DevState.RUNNING]:
             return False
         return True
 
@@ -719,12 +723,12 @@ class NXSRecSelector(PyTango.Device_4Impl):
         """
         self.debug_stream("In UpdateConfigVariables()")
         try:
-            self.set_state(PyTango.DevState.RUNNING)
+            self.set_state(tango.DevState.RUNNING)
             self.__stg.updateConfigVariables()
-            self.set_state(PyTango.DevState.ON)
+            self.set_state(tango.DevState.ON)
         finally:
-            if self.get_state() == PyTango.DevState.RUNNING:
-                self.set_state(PyTango.DevState.ON)
+            if self.get_state() == tango.DevState.RUNNING:
+                self.set_state(tango.DevState.ON)
 
     def is_UpdateConfigVariables_allowed(self):
         """ UpdateConfigVariables command State Machine
@@ -732,7 +736,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         :returns: True if the operation allowed
         :rtype: :obj:`bool`
         """
-        if self.get_state() in [PyTango.DevState.RUNNING]:
+        if self.get_state() in [tango.DevState.RUNNING]:
             return False
         return True
 
@@ -744,12 +748,12 @@ class NXSRecSelector(PyTango.Device_4Impl):
         """
         self.debug_stream("In IsMntGrpUpdated()")
         try:
-            self.set_state(PyTango.DevState.RUNNING)
+            self.set_state(tango.DevState.RUNNING)
             conf = bool(self.__stg.isMntGrpUpdated())
-            self.set_state(PyTango.DevState.ON)
+            self.set_state(tango.DevState.ON)
         finally:
-            if self.get_state() == PyTango.DevState.RUNNING:
-                self.set_state(PyTango.DevState.ON)
+            if self.get_state() == tango.DevState.RUNNING:
+                self.set_state(tango.DevState.ON)
 
         return conf
 
@@ -759,7 +763,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         :returns: True if the operation allowed
         :rtype: :obj:`bool`
         """
-        if self.get_state() in [PyTango.DevState.RUNNING]:
+        if self.get_state() in [tango.DevState.RUNNING]:
             return False
         return True
 
@@ -773,12 +777,12 @@ class NXSRecSelector(PyTango.Device_4Impl):
         """
         self.debug_stream("In MntGrpConfiguration()")
         try:
-            self.set_state(PyTango.DevState.RUNNING)
+            self.set_state(tango.DevState.RUNNING)
             conf = Utils.tostr(self.__stg.mntGrpConfiguration())
-            self.set_state(PyTango.DevState.ON)
+            self.set_state(tango.DevState.ON)
         finally:
-            if self.get_state() == PyTango.DevState.RUNNING:
-                self.set_state(PyTango.DevState.ON)
+            if self.get_state() == tango.DevState.RUNNING:
+                self.set_state(tango.DevState.ON)
 
         return conf
 
@@ -788,7 +792,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         :returns: True if the operation allowed
         :rtype: :obj:`bool`
         """
-        if self.get_state() in [PyTango.DevState.RUNNING]:
+        if self.get_state() in [tango.DevState.RUNNING]:
             return False
         return True
 
@@ -801,12 +805,12 @@ class NXSRecSelector(PyTango.Device_4Impl):
         """
         self.debug_stream("In UpdateProfile()")
         try:
-            self.set_state(PyTango.DevState.RUNNING)
+            self.set_state(tango.DevState.RUNNING)
             conf = Utils.tostr(self.__stg.updateProfile())
-            self.set_state(PyTango.DevState.ON)
+            self.set_state(tango.DevState.ON)
         finally:
-            if self.get_state() == PyTango.DevState.RUNNING:
-                self.set_state(PyTango.DevState.ON)
+            if self.get_state() == tango.DevState.RUNNING:
+                self.set_state(tango.DevState.ON)
         return conf
 
     def is_UpdateProfile_allowed(self):
@@ -815,7 +819,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         :returns: True if the operation allowed
         :rtype: :obj:`bool`
         """
-        if self.get_state() in [PyTango.DevState.RUNNING]:
+        if self.get_state() in [tango.DevState.RUNNING]:
             return False
         return True
 
@@ -828,12 +832,12 @@ class NXSRecSelector(PyTango.Device_4Impl):
         """
         self.debug_stream("In UpdateMntGrp()")
         try:
-            self.set_state(PyTango.DevState.RUNNING)
+            self.set_state(tango.DevState.RUNNING)
             conf = Utils.tostr(self.__stg.updateMntGrp())
-            self.set_state(PyTango.DevState.ON)
+            self.set_state(tango.DevState.ON)
         finally:
-            if self.get_state() == PyTango.DevState.RUNNING:
-                self.set_state(PyTango.DevState.ON)
+            if self.get_state() == tango.DevState.RUNNING:
+                self.set_state(tango.DevState.ON)
         return conf
 
     def is_UpdateMntGrp_allowed(self):
@@ -842,7 +846,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         :returns: True if the operation allowed
         :rtype: :obj:`bool`
         """
-        if self.get_state() in [PyTango.DevState.RUNNING]:
+        if self.get_state() in [tango.DevState.RUNNING]:
             return False
         return True
 
@@ -853,12 +857,12 @@ class NXSRecSelector(PyTango.Device_4Impl):
         """
         self.debug_stream("In SwitchProfile()")
         try:
-            self.set_state(PyTango.DevState.RUNNING)
+            self.set_state(tango.DevState.RUNNING)
             self.__stg.switchProfile()
-            self.set_state(PyTango.DevState.ON)
+            self.set_state(tango.DevState.ON)
         finally:
-            if self.get_state() == PyTango.DevState.RUNNING:
-                self.set_state(PyTango.DevState.ON)
+            if self.get_state() == tango.DevState.RUNNING:
+                self.set_state(tango.DevState.ON)
 
     def is_SwitchProfile_allowed(self):
         """ SwitchProfile command State Machine
@@ -866,7 +870,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         :returns: True if the operation allowed
         :rtype: :obj:`bool`
         """
-        if self.get_state() in [PyTango.DevState.RUNNING]:
+        if self.get_state() in [tango.DevState.RUNNING]:
             return False
         return True
 
@@ -877,12 +881,12 @@ class NXSRecSelector(PyTango.Device_4Impl):
         """
         self.debug_stream("In ImportMntGrp()")
         try:
-            self.set_state(PyTango.DevState.RUNNING)
+            self.set_state(tango.DevState.RUNNING)
             self.__stg.importMntGrp()
-            self.set_state(PyTango.DevState.ON)
+            self.set_state(tango.DevState.ON)
         finally:
-            if self.get_state() == PyTango.DevState.RUNNING:
-                self.set_state(PyTango.DevState.ON)
+            if self.get_state() == tango.DevState.RUNNING:
+                self.set_state(tango.DevState.ON)
 
     def is_ImportMntGrp_allowed(self):
         """ ImportMntGrp command State Machine
@@ -890,7 +894,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         :returns: True if the operation allowed
         :rtype: :obj:`bool`
         """
-        if self.get_state() in [PyTango.DevState.RUNNING]:
+        if self.get_state() in [tango.DevState.RUNNING]:
             return False
         return True
 
@@ -901,11 +905,11 @@ class NXSRecSelector(PyTango.Device_4Impl):
         """
         self.debug_stream("In ImportEnvProfile()")
         try:
-            self.set_state(PyTango.DevState.RUNNING)
+            self.set_state(tango.DevState.RUNNING)
             self.__stg.importEnvProfile()
 
             # updating memorized attributes
-            self.__dp = self.__dp or PyTango.DeviceProxy(
+            self.__dp = self.__dp or tango.DeviceProxy(
                 Utils.tostr(self.get_name()))
             for var in self.__toupdate:
                 if var in self.__stg.names():
@@ -913,10 +917,10 @@ class NXSRecSelector(PyTango.Device_4Impl):
                         self.__dp.write_attribute(
                             Utils.tostr(var), self.__stg.value(var))
 
-            self.set_state(PyTango.DevState.ON)
+            self.set_state(tango.DevState.ON)
         finally:
-            if self.get_state() == PyTango.DevState.RUNNING:
-                self.set_state(PyTango.DevState.ON)
+            if self.get_state() == tango.DevState.RUNNING:
+                self.set_state(tango.DevState.ON)
 
     def is_ImportEnv_allowed(self):
         """ ImportMntGrp command State Machine
@@ -924,7 +928,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         :returns: True if the operation allowed
         :rtype: :obj:`bool`
         """
-        if self.get_state() in [PyTango.DevState.RUNNING]:
+        if self.get_state() in [tango.DevState.RUNNING]:
             return False
         return True
 
@@ -935,12 +939,12 @@ class NXSRecSelector(PyTango.Device_4Impl):
         """
         self.debug_stream("In ExportEnvProfile()")
         try:
-            self.set_state(PyTango.DevState.RUNNING)
+            self.set_state(tango.DevState.RUNNING)
             self.__stg.exportEnvProfile()
-            self.set_state(PyTango.DevState.ON)
+            self.set_state(tango.DevState.ON)
         finally:
-            if self.get_state() == PyTango.DevState.RUNNING:
-                self.set_state(PyTango.DevState.ON)
+            if self.get_state() == tango.DevState.RUNNING:
+                self.set_state(tango.DevState.ON)
 
     def is_ExportEnv_allowed(self):
         """ ExportMntGrp command State Machine
@@ -948,7 +952,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         :returns: True if the operation allowed
         :rtype: :obj:`bool`
         """
-        if self.get_state() in [PyTango.DevState.RUNNING]:
+        if self.get_state() in [tango.DevState.RUNNING]:
             return False
         return True
 
@@ -962,12 +966,12 @@ class NXSRecSelector(PyTango.Device_4Impl):
         """
         self.debug_stream("In AvailableTimers()")
         try:
-            self.set_state(PyTango.DevState.RUNNING)
+            self.set_state(tango.DevState.RUNNING)
             argout = self.__stg.availableTimers()
-            self.set_state(PyTango.DevState.ON)
+            self.set_state(tango.DevState.ON)
         finally:
-            if self.get_state() == PyTango.DevState.RUNNING:
-                self.set_state(PyTango.DevState.ON)
+            if self.get_state() == tango.DevState.RUNNING:
+                self.set_state(tango.DevState.ON)
 
         return argout
 
@@ -977,7 +981,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         :returns: True if the operation allowed
         :rtype: :obj:`bool`
         """
-        if self.get_state() in [PyTango.DevState.RUNNING]:
+        if self.get_state() in [tango.DevState.RUNNING]:
             return False
         return True
 
@@ -990,12 +994,12 @@ class NXSRecSelector(PyTango.Device_4Impl):
         """
         self.debug_stream("In MutedChannels()")
         try:
-            self.set_state(PyTango.DevState.RUNNING)
+            self.set_state(tango.DevState.RUNNING)
             argout = self.__stg.mutedChannels()
-            self.set_state(PyTango.DevState.ON)
+            self.set_state(tango.DevState.ON)
         finally:
-            if self.get_state() == PyTango.DevState.RUNNING:
-                self.set_state(PyTango.DevState.ON)
+            if self.get_state() == tango.DevState.RUNNING:
+                self.set_state(tango.DevState.ON)
 
         return argout
 
@@ -1005,7 +1009,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         :returns: True if the operation allowed
         :rtype: :obj:`bool`
         """
-        if self.get_state() in [PyTango.DevState.RUNNING]:
+        if self.get_state() in [tango.DevState.RUNNING]:
             return False
         return True
 
@@ -1019,12 +1023,12 @@ class NXSRecSelector(PyTango.Device_4Impl):
         """
         self.debug_stream("In AvailableComponents()")
         try:
-            self.set_state(PyTango.DevState.RUNNING)
+            self.set_state(tango.DevState.RUNNING)
             argout = self.__stg.availableComponents()
-            self.set_state(PyTango.DevState.ON)
+            self.set_state(tango.DevState.ON)
         finally:
-            if self.get_state() == PyTango.DevState.RUNNING:
-                self.set_state(PyTango.DevState.ON)
+            if self.get_state() == tango.DevState.RUNNING:
+                self.set_state(tango.DevState.ON)
 
         return argout
 
@@ -1034,7 +1038,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         :returns: True if the operation allowed
         :rtype: :obj:`bool`
         """
-        if self.get_state() in [PyTango.DevState.RUNNING]:
+        if self.get_state() in [tango.DevState.RUNNING]:
             return False
         return True
 
@@ -1047,12 +1051,12 @@ class NXSRecSelector(PyTango.Device_4Impl):
         """
         self.debug_stream("In ComponentDescription()")
         try:
-            self.set_state(PyTango.DevState.RUNNING)
+            self.set_state(tango.DevState.RUNNING)
             argout = self.__stg.componentDescription()
-            self.set_state(PyTango.DevState.ON)
+            self.set_state(tango.DevState.ON)
         finally:
-            if self.get_state() == PyTango.DevState.RUNNING:
-                self.set_state(PyTango.DevState.ON)
+            if self.get_state() == tango.DevState.RUNNING:
+                self.set_state(tango.DevState.ON)
 
         return argout
 
@@ -1062,7 +1066,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         :returns: True if the operation allowed
         :rtype: :obj:`bool`
         """
-        if self.get_state() in [PyTango.DevState.RUNNING]:
+        if self.get_state() in [tango.DevState.RUNNING]:
             return False
         return True
 
@@ -1078,12 +1082,12 @@ class NXSRecSelector(PyTango.Device_4Impl):
         """
         self.debug_stream("In SetScanEnvVariables()")
         try:
-            self.set_state(PyTango.DevState.RUNNING)
+            self.set_state(tango.DevState.RUNNING)
             argout = int(self.__stg.setScanEnvVariables(argin))
-            self.set_state(PyTango.DevState.ON)
+            self.set_state(tango.DevState.ON)
         finally:
-            if self.get_state() == PyTango.DevState.RUNNING:
-                self.set_state(PyTango.DevState.ON)
+            if self.get_state() == tango.DevState.RUNNING:
+                self.set_state(tango.DevState.ON)
 
         return argout
 
@@ -1093,7 +1097,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         :returns: True if the operation allowed
         :rtype: :obj:`bool`
         """
-        if self.get_state() in [PyTango.DevState.RUNNING]:
+        if self.get_state() in [tango.DevState.RUNNING]:
             return False
         return True
 
@@ -1106,12 +1110,12 @@ class NXSRecSelector(PyTango.Device_4Impl):
         """
         self.debug_stream("In FullDeviceNames()")
         try:
-            self.set_state(PyTango.DevState.RUNNING)
+            self.set_state(tango.DevState.RUNNING)
             argout = self.__stg.fullDeviceNames()
-            self.set_state(PyTango.DevState.ON)
+            self.set_state(tango.DevState.ON)
         finally:
-            if self.get_state() == PyTango.DevState.RUNNING:
-                self.set_state(PyTango.DevState.ON)
+            if self.get_state() == tango.DevState.RUNNING:
+                self.set_state(tango.DevState.ON)
 
         return argout
 
@@ -1121,7 +1125,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         :returns: True if the operation allowed
         :rtype: :obj:`bool`
         """
-        if self.get_state() in [PyTango.DevState.RUNNING]:
+        if self.get_state() in [tango.DevState.RUNNING]:
             return False
         return True
 
@@ -1136,12 +1140,12 @@ class NXSRecSelector(PyTango.Device_4Impl):
 
         self.debug_stream("In ScanEnvVariables()")
         try:
-            self.set_state(PyTango.DevState.RUNNING)
+            self.set_state(tango.DevState.RUNNING)
             argout = Utils.tostr(self.__stg.scanEnvVariables())
-            self.set_state(PyTango.DevState.ON)
+            self.set_state(tango.DevState.ON)
         finally:
-            if self.get_state() == PyTango.DevState.RUNNING:
-                self.set_state(PyTango.DevState.ON)
+            if self.get_state() == tango.DevState.RUNNING:
+                self.set_state(tango.DevState.ON)
 
         return argout
 
@@ -1151,7 +1155,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         :returns: True if the operation allowed
         :rtype: :obj:`bool`
         """
-        if self.get_state() in [PyTango.DevState.RUNNING]:
+        if self.get_state() in [tango.DevState.RUNNING]:
             return False
         return True
 
@@ -1164,12 +1168,12 @@ class NXSRecSelector(PyTango.Device_4Impl):
         """
         self.debug_stream("In VariableComponents()")
         try:
-            self.set_state(PyTango.DevState.RUNNING)
+            self.set_state(tango.DevState.RUNNING)
             argout = self.__stg.variableComponents()
-            self.set_state(PyTango.DevState.ON)
+            self.set_state(tango.DevState.ON)
         finally:
-            if self.get_state() == PyTango.DevState.RUNNING:
-                self.set_state(PyTango.DevState.ON)
+            if self.get_state() == tango.DevState.RUNNING:
+                self.set_state(tango.DevState.ON)
 
         return argout
 
@@ -1179,7 +1183,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         :returns: True if the operation allowed
         :rtype: :obj:`bool`
         """
-        if self.get_state() in [PyTango.DevState.RUNNING]:
+        if self.get_state() in [tango.DevState.RUNNING]:
             return False
         return True
 
@@ -1192,12 +1196,12 @@ class NXSRecSelector(PyTango.Device_4Impl):
         """
         self.debug_stream("In AvailableProfiles()")
         try:
-            self.set_state(PyTango.DevState.RUNNING)
+            self.set_state(tango.DevState.RUNNING)
             argout = self.__stg.availableProfiles()
-            self.set_state(PyTango.DevState.ON)
+            self.set_state(tango.DevState.ON)
         finally:
-            if self.get_state() == PyTango.DevState.RUNNING:
-                self.set_state(PyTango.DevState.ON)
+            if self.get_state() == tango.DevState.RUNNING:
+                self.set_state(tango.DevState.ON)
 
         return argout
 
@@ -1207,7 +1211,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         :returns: True if the operation allowed
         :rtype: :obj:`bool`
         """
-        if self.get_state() in [PyTango.DevState.RUNNING]:
+        if self.get_state() in [tango.DevState.RUNNING]:
             return False
         return True
 
@@ -1220,12 +1224,12 @@ class NXSRecSelector(PyTango.Device_4Impl):
         """
         self.debug_stream("In AvailableMntGrps()")
         try:
-            self.set_state(PyTango.DevState.RUNNING)
+            self.set_state(tango.DevState.RUNNING)
             argout = self.__stg.availableMntGrps()
-            self.set_state(PyTango.DevState.ON)
+            self.set_state(tango.DevState.ON)
         finally:
-            if self.get_state() == PyTango.DevState.RUNNING:
-                self.set_state(PyTango.DevState.ON)
+            if self.get_state() == tango.DevState.RUNNING:
+                self.set_state(tango.DevState.ON)
 
         return argout
 
@@ -1235,7 +1239,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         :returns: True if the operation allowed
         :rtype: :obj:`bool`
         """
-        if self.get_state() in [PyTango.DevState.RUNNING]:
+        if self.get_state() in [tango.DevState.RUNNING]:
             return False
         return True
 
@@ -1248,12 +1252,12 @@ class NXSRecSelector(PyTango.Device_4Impl):
         """
         self.debug_stream("In AvailableDataSources()")
         try:
-            self.set_state(PyTango.DevState.RUNNING)
+            self.set_state(tango.DevState.RUNNING)
             argout = self.__stg.availableDataSources()
-            self.set_state(PyTango.DevState.ON)
+            self.set_state(tango.DevState.ON)
         finally:
-            if self.get_state() == PyTango.DevState.RUNNING:
-                self.set_state(PyTango.DevState.ON)
+            if self.get_state() == tango.DevState.RUNNING:
+                self.set_state(tango.DevState.ON)
 
         return argout
 
@@ -1263,7 +1267,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         :returns: True if the operation allowed
         :rtype: :obj:`bool`
         """
-        if self.get_state() in [PyTango.DevState.RUNNING]:
+        if self.get_state() in [tango.DevState.RUNNING]:
             return False
         return True
 
@@ -1279,12 +1283,12 @@ class NXSRecSelector(PyTango.Device_4Impl):
         """
         self.debug_stream("In PoolElementNames()")
         try:
-            self.set_state(PyTango.DevState.RUNNING)
+            self.set_state(tango.DevState.RUNNING)
             argout = self.__stg.poolElementNames(argin)
-            self.set_state(PyTango.DevState.ON)
+            self.set_state(tango.DevState.ON)
         finally:
-            if self.get_state() == PyTango.DevState.RUNNING:
-                self.set_state(PyTango.DevState.ON)
+            if self.get_state() == tango.DevState.RUNNING:
+                self.set_state(tango.DevState.ON)
 
         return argout
 
@@ -1294,7 +1298,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         :returns: True if the operation allowed
         :rtype: :obj:`bool`
         """
-        if self.get_state() in [PyTango.DevState.RUNNING]:
+        if self.get_state() in [tango.DevState.RUNNING]:
             return False
         return True
 
@@ -1308,12 +1312,12 @@ class NXSRecSelector(PyTango.Device_4Impl):
         self.debug_stream("In ComponentDataSources()")
 
         try:
-            self.set_state(PyTango.DevState.RUNNING)
+            self.set_state(tango.DevState.RUNNING)
             argout = self.__stg.componentDataSources()
-            self.set_state(PyTango.DevState.ON)
+            self.set_state(tango.DevState.ON)
         finally:
-            if self.get_state() == PyTango.DevState.RUNNING:
-                self.set_state(PyTango.DevState.ON)
+            if self.get_state() == tango.DevState.RUNNING:
+                self.set_state(tango.DevState.ON)
         return argout
 
     def is_ComponentDataSources_allowed(self):
@@ -1322,7 +1326,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         :returns: True if the operation allowed
         :rtype: :obj:`bool`
         """
-        if self.get_state() in [PyTango.DevState.RUNNING]:
+        if self.get_state() in [tango.DevState.RUNNING]:
             return False
         return True
 
@@ -1336,18 +1340,18 @@ class NXSRecSelector(PyTango.Device_4Impl):
         self.debug_stream("In SelectedDataSources()")
 
         try:
-            self.set_state(PyTango.DevState.RUNNING)
+            self.set_state(tango.DevState.RUNNING)
             argout = self.__stg.selectedDataSources()
-            self.set_state(PyTango.DevState.ON)
+            self.set_state(tango.DevState.ON)
         finally:
-            if self.get_state() == PyTango.DevState.RUNNING:
-                self.set_state(PyTango.DevState.ON)
+            if self.get_state() == tango.DevState.RUNNING:
+                self.set_state(tango.DevState.ON)
         return argout
 
     def is_SelectedDataSources_allowed(self):
         """ SelectedDataSources command State Machine
         """
-        if self.get_state() in [PyTango.DevState.RUNNING]:
+        if self.get_state() in [tango.DevState.RUNNING]:
             return False
         return True
 
@@ -1361,12 +1365,12 @@ class NXSRecSelector(PyTango.Device_4Impl):
         self.debug_stream("In AdministratorDataNames()")
 
         try:
-            self.set_state(PyTango.DevState.RUNNING)
+            self.set_state(tango.DevState.RUNNING)
             argout = self.__stg.administratorDataNames()
-            self.set_state(PyTango.DevState.ON)
+            self.set_state(tango.DevState.ON)
         finally:
-            if self.get_state() == PyTango.DevState.RUNNING:
-                self.set_state(PyTango.DevState.ON)
+            if self.get_state() == tango.DevState.RUNNING:
+                self.set_state(tango.DevState.ON)
         return argout
 
     def is_AdministratorDataNames_allowed(self):
@@ -1375,7 +1379,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         :returns: True if the operation allowed
         :rtype: :obj:`bool`
         """
-        if self.get_state() in [PyTango.DevState.RUNNING]:
+        if self.get_state() in [tango.DevState.RUNNING]:
             return False
         return True
 
@@ -1389,12 +1393,12 @@ class NXSRecSelector(PyTango.Device_4Impl):
         self.debug_stream("In MandatoryComponents()")
 
         try:
-            self.set_state(PyTango.DevState.RUNNING)
+            self.set_state(tango.DevState.RUNNING)
             argout = self.__stg.mandatoryComponents()
-            self.set_state(PyTango.DevState.ON)
+            self.set_state(tango.DevState.ON)
         finally:
-            if self.get_state() == PyTango.DevState.RUNNING:
-                self.set_state(PyTango.DevState.ON)
+            if self.get_state() == tango.DevState.RUNNING:
+                self.set_state(tango.DevState.ON)
         return argout
 
     def is_MandatoryComponents_allowed(self):
@@ -1403,7 +1407,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         :returns: True if the operation allowed
         :rtype: :obj:`bool`
         """
-        if self.get_state() in [PyTango.DevState.RUNNING]:
+        if self.get_state() in [tango.DevState.RUNNING]:
             return False
         return True
 
@@ -1417,12 +1421,12 @@ class NXSRecSelector(PyTango.Device_4Impl):
         self.debug_stream("In SelectedComponents()")
 
         try:
-            self.set_state(PyTango.DevState.RUNNING)
+            self.set_state(tango.DevState.RUNNING)
             argout = self.__stg.selectedComponents()
-            self.set_state(PyTango.DevState.ON)
+            self.set_state(tango.DevState.ON)
         finally:
-            if self.get_state() == PyTango.DevState.RUNNING:
-                self.set_state(PyTango.DevState.ON)
+            if self.get_state() == tango.DevState.RUNNING:
+                self.set_state(tango.DevState.ON)
         return argout
 
     def is_SelectedComponents_allowed(self):
@@ -1431,7 +1435,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         :returns: True if the operation allowed
         :rtype: :obj:`bool`
         """
-        if self.get_state() in [PyTango.DevState.RUNNING]:
+        if self.get_state() in [tango.DevState.RUNNING]:
             return False
         return True
 
@@ -1445,12 +1449,12 @@ class NXSRecSelector(PyTango.Device_4Impl):
         self.debug_stream("In PreselectedComponents()")
 
         try:
-            self.set_state(PyTango.DevState.RUNNING)
+            self.set_state(tango.DevState.RUNNING)
             argout = self.__stg.preselectedComponents()
-            self.set_state(PyTango.DevState.ON)
+            self.set_state(tango.DevState.ON)
         finally:
-            if self.get_state() == PyTango.DevState.RUNNING:
-                self.set_state(PyTango.DevState.ON)
+            if self.get_state() == tango.DevState.RUNNING:
+                self.set_state(tango.DevState.ON)
         return argout
 
     def is_PreselectedComponents_allowed(self):
@@ -1459,7 +1463,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         :returns: True if the operation allowed
         :rtype: :obj:`bool`
         """
-        if self.get_state() in [PyTango.DevState.RUNNING]:
+        if self.get_state() in [tango.DevState.RUNNING]:
             return False
         return True
 
@@ -1473,12 +1477,12 @@ class NXSRecSelector(PyTango.Device_4Impl):
         self.debug_stream("In PreselectedDataSources()")
 
         try:
-            self.set_state(PyTango.DevState.RUNNING)
+            self.set_state(tango.DevState.RUNNING)
             argout = self.__stg.preselectedDataSources()
-            self.set_state(PyTango.DevState.ON)
+            self.set_state(tango.DevState.ON)
         finally:
-            if self.get_state() == PyTango.DevState.RUNNING:
-                self.set_state(PyTango.DevState.ON)
+            if self.get_state() == tango.DevState.RUNNING:
+                self.set_state(tango.DevState.ON)
         return argout
 
     def is_PreselectedDataSources_allowed(self):
@@ -1487,7 +1491,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         :returns: True if the operation allowed
         :rtype: :obj:`bool`
         """
-        if self.get_state() in [PyTango.DevState.RUNNING]:
+        if self.get_state() in [tango.DevState.RUNNING]:
             return False
         return True
 
@@ -1502,12 +1506,12 @@ class NXSRecSelector(PyTango.Device_4Impl):
         """
         self.debug_stream("In CreateDynamicComponent()")
         try:
-            self.set_state(PyTango.DevState.RUNNING)
+            self.set_state(tango.DevState.RUNNING)
             argout = self.__stg.createDynamicComponent(argin)
-            self.set_state(PyTango.DevState.ON)
+            self.set_state(tango.DevState.ON)
         finally:
-            if self.get_state() == PyTango.DevState.RUNNING:
-                self.set_state(PyTango.DevState.ON)
+            if self.get_state() == tango.DevState.RUNNING:
+                self.set_state(tango.DevState.ON)
 
         return argout
 
@@ -1517,7 +1521,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         :returns: True if the operation allowed
         :rtype: :obj:`bool`
         """
-        if self.get_state() in [PyTango.DevState.RUNNING]:
+        if self.get_state() in [tango.DevState.RUNNING]:
             return False
         return True
 
@@ -1530,12 +1534,12 @@ class NXSRecSelector(PyTango.Device_4Impl):
         """
         self.debug_stream("In RemoveDynamicComponent()")
         try:
-            self.set_state(PyTango.DevState.RUNNING)
+            self.set_state(tango.DevState.RUNNING)
             self.__stg.removeDynamicComponent(argin)
-            self.set_state(PyTango.DevState.ON)
+            self.set_state(tango.DevState.ON)
         finally:
-            if self.get_state() == PyTango.DevState.RUNNING:
-                self.set_state(PyTango.DevState.ON)
+            if self.get_state() == tango.DevState.RUNNING:
+                self.set_state(tango.DevState.ON)
 
     def is_RemoveDynamicComponent_allowed(self):
         """ RemoveDynamicComponent command State Machine
@@ -1543,7 +1547,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         :returns: True if the operation allowed
         :rtype: :obj:`bool`
         """
-        if self.get_state() in [PyTango.DevState.RUNNING]:
+        if self.get_state() in [tango.DevState.RUNNING]:
             return False
         return True
 
@@ -1556,12 +1560,12 @@ class NXSRecSelector(PyTango.Device_4Impl):
         """
         self.debug_stream("In DeleteProfile()")
         try:
-            self.set_state(PyTango.DevState.RUNNING)
+            self.set_state(tango.DevState.RUNNING)
             self.__stg.deleteProfile(argin)
-            self.set_state(PyTango.DevState.ON)
+            self.set_state(tango.DevState.ON)
         finally:
-            if self.get_state() == PyTango.DevState.RUNNING:
-                self.set_state(PyTango.DevState.ON)
+            if self.get_state() == tango.DevState.RUNNING:
+                self.set_state(tango.DevState.ON)
 
     def is_DeleteProfile_allowed(self):
         """ DeleteProfile command State Machine
@@ -1569,7 +1573,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         :returns: True if the operation allowed
         :rtype: :obj:`bool`
         """
-        if self.get_state() in [PyTango.DevState.RUNNING]:
+        if self.get_state() in [tango.DevState.RUNNING]:
             return False
         return True
 
@@ -1586,12 +1590,12 @@ class NXSRecSelector(PyTango.Device_4Impl):
         """
         self.debug_stream("In ChannelProperties()")
         try:
-            self.set_state(PyTango.DevState.RUNNING)
+            self.set_state(tango.DevState.RUNNING)
             argout = self.__stg.channelProperties(argin)
-            self.set_state(PyTango.DevState.ON)
+            self.set_state(tango.DevState.ON)
         finally:
-            if self.get_state() == PyTango.DevState.RUNNING:
-                self.set_state(PyTango.DevState.ON)
+            if self.get_state() == tango.DevState.RUNNING:
+                self.set_state(tango.DevState.ON)
 
         return argout
 
@@ -1601,7 +1605,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         :returns: True if the operation allowed
         :rtype: :obj:`bool`
         """
-        if self.get_state() in [PyTango.DevState.RUNNING]:
+        if self.get_state() in [tango.DevState.RUNNING]:
             return False
         return True
 
@@ -1616,12 +1620,12 @@ class NXSRecSelector(PyTango.Device_4Impl):
         """
         self.debug_stream("In SetChannelProperties()")
         try:
-            self.set_state(PyTango.DevState.RUNNING)
+            self.set_state(tango.DevState.RUNNING)
             argout = self.__stg.setChannelProperties(argin)
-            self.set_state(PyTango.DevState.ON)
+            self.set_state(tango.DevState.ON)
         finally:
-            if self.get_state() == PyTango.DevState.RUNNING:
-                self.set_state(PyTango.DevState.ON)
+            if self.get_state() == tango.DevState.RUNNING:
+                self.set_state(tango.DevState.ON)
 
         return argout
 
@@ -1631,7 +1635,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         :returns: True if the operation allowed
         :rtype: :obj:`bool`
         """
-        if self.get_state() in [PyTango.DevState.RUNNING]:
+        if self.get_state() in [tango.DevState.RUNNING]:
             return False
         return True
 
@@ -1646,12 +1650,12 @@ class NXSRecSelector(PyTango.Device_4Impl):
         """
         self.debug_stream("In ComponentClientSources()")
         try:
-            self.set_state(PyTango.DevState.RUNNING)
+            self.set_state(tango.DevState.RUNNING)
             argout = self.__stg.componentClientSources(argin)
-            self.set_state(PyTango.DevState.ON)
+            self.set_state(tango.DevState.ON)
         finally:
-            if self.get_state() == PyTango.DevState.RUNNING:
-                self.set_state(PyTango.DevState.ON)
+            if self.get_state() == tango.DevState.RUNNING:
+                self.set_state(tango.DevState.ON)
 
         return argout
 
@@ -1661,7 +1665,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         :returns: True if the operation allowed
         :rtype: :obj:`bool`
         """
-        if self.get_state() in [PyTango.DevState.RUNNING]:
+        if self.get_state() in [tango.DevState.RUNNING]:
             return False
         return True
 
@@ -1676,12 +1680,12 @@ class NXSRecSelector(PyTango.Device_4Impl):
         """
         self.debug_stream("In ComponentSources()")
         try:
-            self.set_state(PyTango.DevState.RUNNING)
+            self.set_state(tango.DevState.RUNNING)
             argout = self.__stg.componentSources(argin)
-            self.set_state(PyTango.DevState.ON)
+            self.set_state(tango.DevState.ON)
         finally:
-            if self.get_state() == PyTango.DevState.RUNNING:
-                self.set_state(PyTango.DevState.ON)
+            if self.get_state() == tango.DevState.RUNNING:
+                self.set_state(tango.DevState.ON)
 
         return argout
 
@@ -1691,7 +1695,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         :returns: True if the operation allowed
         :rtype: :obj:`bool`
         """
-        if self.get_state() in [PyTango.DevState.RUNNING]:
+        if self.get_state() in [tango.DevState.RUNNING]:
             return False
         return True
 
@@ -1707,12 +1711,12 @@ class NXSRecSelector(PyTango.Device_4Impl):
         """
         self.debug_stream("In DataSourceDescription()")
         try:
-            self.set_state(PyTango.DevState.RUNNING)
+            self.set_state(tango.DevState.RUNNING)
             argout = self.__stg.dataSourceDescription(argin)
-            self.set_state(PyTango.DevState.ON)
+            self.set_state(tango.DevState.ON)
         finally:
-            if self.get_state() == PyTango.DevState.RUNNING:
-                self.set_state(PyTango.DevState.ON)
+            if self.get_state() == tango.DevState.RUNNING:
+                self.set_state(tango.DevState.ON)
 
         return argout
 
@@ -1728,12 +1732,12 @@ class NXSRecSelector(PyTango.Device_4Impl):
         """
         self.debug_stream("In AddStepDataSources()")
         try:
-            self.set_state(PyTango.DevState.RUNNING)
+            self.set_state(tango.DevState.RUNNING)
             argout = self.__stg.addStepDataSources(argin)
-            self.set_state(PyTango.DevState.ON)
+            self.set_state(tango.DevState.ON)
         finally:
-            if self.get_state() == PyTango.DevState.RUNNING:
-                self.set_state(PyTango.DevState.ON)
+            if self.get_state() == tango.DevState.RUNNING:
+                self.set_state(tango.DevState.ON)
 
         return argout
 
@@ -1743,7 +1747,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         :returns: True if the operation allowed
         :rtype: :obj:`bool`
         """
-        if self.get_state() in [PyTango.DevState.RUNNING]:
+        if self.get_state() in [tango.DevState.RUNNING]:
             return False
         return True
 
@@ -1759,12 +1763,12 @@ class NXSRecSelector(PyTango.Device_4Impl):
         """
         self.debug_stream("In CreateWriterConfiguration()")
         try:
-            self.set_state(PyTango.DevState.RUNNING)
+            self.set_state(tango.DevState.RUNNING)
             argout = self.__stg.createWriterConfiguration(argin)
-            self.set_state(PyTango.DevState.ON)
+            self.set_state(tango.DevState.ON)
         finally:
-            if self.get_state() == PyTango.DevState.RUNNING:
-                self.set_state(PyTango.DevState.ON)
+            if self.get_state() == tango.DevState.RUNNING:
+                self.set_state(tango.DevState.ON)
 
         return argout
 
@@ -1774,7 +1778,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         :returns: True if the operation allowed
         :rtype: :obj:`bool`
         """
-        if self.get_state() in [PyTango.DevState.RUNNING]:
+        if self.get_state() in [tango.DevState.RUNNING]:
             return False
         return True
 
@@ -1786,12 +1790,12 @@ class NXSRecSelector(PyTango.Device_4Impl):
         """
         self.debug_stream("In createDataSources()")
         try:
-            self.set_state(PyTango.DevState.RUNNING)
+            self.set_state(tango.DevState.RUNNING)
             argout = self.__stg.createDataSources(argin)
-            self.set_state(PyTango.DevState.ON)
+            self.set_state(tango.DevState.ON)
         finally:
-            if self.get_state() == PyTango.DevState.RUNNING:
-                self.set_state(PyTango.DevState.ON)
+            if self.get_state() == tango.DevState.RUNNING:
+                self.set_state(tango.DevState.ON)
 
         return argout
 
@@ -1801,7 +1805,7 @@ class NXSRecSelector(PyTango.Device_4Impl):
         :returns: True if the operation allowed
         :rtype: :obj:`bool`
         """
-        state_ok = not (self.get_state() in [PyTango.DevState.RUNNING])
+        state_ok = not (self.get_state() in [tango.DevState.RUNNING])
         return state_ok
 
 
@@ -1810,427 +1814,427 @@ class NXSRecSelector(PyTango.Device_4Impl):
 #    NXSRecSelectorClass class definition
 #
 # ==================================================================
-class NXSRecSelectorClass(PyTango.DeviceClass):
+class NXSRecSelectorClass(tango.DeviceClass):
 
     #: (:obj:`dict` <:obj:`str`, \
-    #:       [ :obj:`str`, :class:`PyTango.CmdArgType`, \
+    #:       [ :obj:`str`, :class:`tango.CmdArgType`, \
     #:       [ :obj:`list` <:obj:`int`> ] ] > ) Class Properties
     class_property_list = {
     }
 
     #: (:obj:`dict` <:obj:`str`, \
-    #:       [ :obj:`str`, :class:`PyTango.CmdArgType`, \
+    #:       [ :obj:`str`, :class:`tango.CmdArgType`, \
     #:       [ :obj:`list` <:obj:`int`> ] ] > ) Device Properties
     device_property_list = {
         'NumberOfThreads':
-        [PyTango.DevLong,
+        [tango.DevLong,
          "maximal number of threads",
          [20]],
         'DefaultNeXusPath':
-        [PyTango.DevString,
+        [tango.DevString,
          "default NeXus path",
          ["/$var.entryname#'scan'$var.serialno:NXentry/"
           "NXinstrument/collection"]],
         'DefaultTimeZone':
-        [PyTango.DevString,
+        [tango.DevString,
          "default Time Zone",
          ["Europe/Berlin"]],
         'DefaultMntGrp':
-        [PyTango.DevString,
+        [tango.DevString,
          "default measurement group name",
          ["nxsmntgrp"]],
         'PoolBlacklist':
-        [PyTango.DevVarStringArray,
+        [tango.DevVarStringArray,
          "blacklist of pools",
          []],
         'TimerFilters':
-        [PyTango.DevVarStringArray,
+        [tango.DevVarStringArray,
          "list of timer device name filters",
          []],
         'MutedChannelFilters':
-        [PyTango.DevVarStringArray,
+        [tango.DevVarStringArray,
          "list of muted channel filters",
          []],
         'MutedPreScanAttrFilters':
-        [PyTango.DevVarStringArray,
+        [tango.DevVarStringArray,
          "list of muted attribute channel filters for PreScanSnapshot",
          []],
         'AdminDataNames':
-        [PyTango.DevVarStringArray,
+        [tango.DevVarStringArray,
          "list of administrator data names",
          []],
         'DefaultPreselectedComponents':
-        [PyTango.DevVarStringArray,
+        [tango.DevVarStringArray,
          "list of default preselected components",
          []],
         'ClientRecordKeys':
-        [PyTango.DevVarStringArray,
+        [tango.DevVarStringArray,
          "list of record keys for CLIENT datasources",
          []],
         'SyncSnapshot':
-        [PyTango.DevBoolean,
+        [tango.DevBoolean,
          "preselection merges the current ScanSnapshot",
          [False]],
         'MasterTimerFirst':
-        [PyTango.DevBoolean,
+        [tango.DevBoolean,
          "the master timer channel of MG with the index: 0",
          [False]],
         'DefaultCanFailDataSources':
-        [PyTango.DevVarStringArray,
+        [tango.DevVarStringArray,
          "list of default datasources in the CanFail mode",
          []],
     }
 
     #: (:obj:`dict` <:obj:`str`, \
-    #:       [[ :class:`PyTango.CmdArgType`, :obj:`str`]] >)
+    #:       [[ :class:`tango.CmdArgType`, :obj:`str`]] >)
     #:       Command definitions
     cmd_list = {
         'SetScanEnvVariables':
-            [[PyTango.DevString, "environment data"],
-             [PyTango.DevLong, "scanID"]],
+            [[tango.DevString, "environment data"],
+             [tango.DevLong, "scanID"]],
         'ScanEnvVariables':
-            [[PyTango.DevVoid, ""],
-             [PyTango.DevString, "environment data"]],
+            [[tango.DevVoid, ""],
+             [tango.DevString, "environment data"]],
         'LoadProfile':
-            [[PyTango.DevVoid, ""],
-             [PyTango.DevVoid, ""]],
+            [[tango.DevVoid, ""],
+             [tango.DevVoid, ""]],
         'SaveProfile':
-            [[PyTango.DevVoid, ""],
-             [PyTango.DevVoid, ""]],
+            [[tango.DevVoid, ""],
+             [tango.DevVoid, ""]],
         'FetchProfile':
-            [[PyTango.DevVoid, ""],
-             [PyTango.DevVoid, ""]],
+            [[tango.DevVoid, ""],
+             [tango.DevVoid, ""]],
         'StoreProfile':
-            [[PyTango.DevVoid, ""],
-             [PyTango.DevVoid, ""]],
+            [[tango.DevVoid, ""],
+             [tango.DevVoid, ""]],
         'DeleteProfile':
-            [[PyTango.DevString, "mntgrp name"],
-             [PyTango.DevVoid, ""]],
+            [[tango.DevString, "mntgrp name"],
+             [tango.DevVoid, ""]],
         'ImportMntGrp':
-            [[PyTango.DevVoid, ""],
-             [PyTango.DevVoid, ""]],
+            [[tango.DevVoid, ""],
+             [tango.DevVoid, ""]],
         'ImportEnvProfile':
-            [[PyTango.DevVoid, ""],
-             [PyTango.DevVoid, ""]],
+            [[tango.DevVoid, ""],
+             [tango.DevVoid, ""]],
         'ExportEnvProfile':
-            [[PyTango.DevVoid, ""],
-             [PyTango.DevVoid, ""]],
+            [[tango.DevVoid, ""],
+             [tango.DevVoid, ""]],
         'UpdateMntGrp':
-            [[PyTango.DevVoid, ""],
-             [PyTango.DevString, "configuration"]],
+            [[tango.DevVoid, ""],
+             [tango.DevString, "configuration"]],
         'UpdateProfile':
-            [[PyTango.DevVoid, ""],
-             [PyTango.DevString, "mntgrp configuration string"]],
+            [[tango.DevVoid, ""],
+             [tango.DevString, "mntgrp configuration string"]],
         'SwitchProfile':
-            [[PyTango.DevVoid, ""],
-             [PyTango.DevVoid, ""]],
+            [[tango.DevVoid, ""],
+             [tango.DevVoid, ""]],
         'MntGrpConfiguration':
-            [[PyTango.DevVoid, ""],
-             [PyTango.DevString, "mntgrp configuration string"]],
+            [[tango.DevVoid, ""],
+             [tango.DevString, "mntgrp configuration string"]],
         'IsMntGrpUpdated':
-            [[PyTango.DevVoid, ""],
-             [PyTango.DevBoolean, "true if mntgrp changed"]],
+            [[tango.DevVoid, ""],
+             [tango.DevBoolean, "true if mntgrp changed"]],
         'PreselectComponents':
-            [[PyTango.DevVoid, ""],
-             [PyTango.DevVoid, ""]],
+            [[tango.DevVoid, ""],
+             [tango.DevVoid, ""]],
         'ResetPreselectedComponents':
-            [[PyTango.DevVoid, ""],
-             [PyTango.DevVoid, ""]],
+            [[tango.DevVoid, ""],
+             [tango.DevVoid, ""]],
         'DeleteAllProfiles':
-            [[PyTango.DevVoid, ""],
-             [PyTango.DevVoid, ""]],
+            [[tango.DevVoid, ""],
+             [tango.DevVoid, ""]],
         'UpdateConfigVariables':
-            [[PyTango.DevVoid, ""],
-             [PyTango.DevVoid, ""]],
+            [[tango.DevVoid, ""],
+             [tango.DevVoid, ""]],
         'AvailableComponents':
-            [[PyTango.DevVoid, ""],
-             [PyTango.DevVarStringArray,
+            [[tango.DevVoid, ""],
+             [tango.DevVarStringArray,
               "list of available component names"]],
         'AvailableProfiles':
-            [[PyTango.DevVoid, ""],
-             [PyTango.DevVarStringArray,
+            [[tango.DevVoid, ""],
+             [tango.DevVarStringArray,
               "list of available selection names"]],
         'AvailableMntGrps':
-            [[PyTango.DevVoid, ""],
-             [PyTango.DevVarStringArray,
+            [[tango.DevVoid, ""],
+             [tango.DevVarStringArray,
               "list of available mntgrp names"]],
         'AvailableDataSources':
-            [[PyTango.DevVoid, ""],
-             [PyTango.DevVarStringArray,
+            [[tango.DevVoid, ""],
+             [tango.DevVarStringArray,
               "list of available DataSource names"]],
         'AvailableTimers':
-            [[PyTango.DevVoid, ""],
-             [PyTango.DevVarStringArray,
+            [[tango.DevVoid, ""],
+             [tango.DevVarStringArray,
               "list of available timers"]],
         'MutedChannels':
-            [[PyTango.DevVoid, ""],
-             [PyTango.DevVarStringArray,
+            [[tango.DevVoid, ""],
+             [tango.DevVarStringArray,
               "list of muted channels"]],
         'ComponentDescription':
-            [[PyTango.DevVoid, ""],
-             [PyTango.DevString,
+            [[tango.DevVoid, ""],
+             [tango.DevString,
               "JSON component description"]],
         'VariableComponents':
-            [[PyTango.DevVoid, ""],
-             [PyTango.DevString,
+            [[tango.DevVoid, ""],
+             [tango.DevString,
               "JSON Dictionary with all Components for "
                  + "  configuration variable"]],
         'FullDeviceNames':
-            [[PyTango.DevVoid, ""],
-             [PyTango.DevString,
+            [[tango.DevVoid, ""],
+             [tango.DevString,
               "JSON Dictionary with full device names for "
                  + " all aliases "]],
         'ComponentDataSources':
-            [[PyTango.DevVoid, ""],
-             [PyTango.DevVarStringArray, "profile component datasources"]],
+            [[tango.DevVoid, ""],
+             [tango.DevVarStringArray, "profile component datasources"]],
         'SelectedDataSources':
-            [[PyTango.DevVoid, ""],
-             [PyTango.DevVarStringArray, "profile datasources"]],
+            [[tango.DevVoid, ""],
+             [tango.DevVarStringArray, "profile datasources"]],
         'AdministratorDataNames':
-            [[PyTango.DevVoid, ""],
-             [PyTango.DevVarStringArray, "administrator data names"]],
+            [[tango.DevVoid, ""],
+             [tango.DevVarStringArray, "administrator data names"]],
         'PoolElementNames':
-            [[PyTango.DevString, "pool list attribute name"],
-             [PyTango.DevVarStringArray, "list of available pool elements"]],
+            [[tango.DevString, "pool list attribute name"],
+             [tango.DevVarStringArray, "list of available pool elements"]],
         'MandatoryComponents':
-            [[PyTango.DevVoid, ""],
-             [PyTango.DevVarStringArray, "component names"]],
+            [[tango.DevVoid, ""],
+             [tango.DevVarStringArray, "component names"]],
         'SelectedComponents':
-            [[PyTango.DevVoid, ""],
-             [PyTango.DevVarStringArray, "component names"]],
+            [[tango.DevVoid, ""],
+             [tango.DevVarStringArray, "component names"]],
         'PreselectedComponents':
-            [[PyTango.DevVoid, ""],
-             [PyTango.DevVarStringArray, "component names"]],
+            [[tango.DevVoid, ""],
+             [tango.DevVarStringArray, "component names"]],
         'PreselectedDataSources':
-            [[PyTango.DevVoid, ""],
-             [PyTango.DevVarStringArray, "datasources names"]],
+            [[tango.DevVoid, ""],
+             [tango.DevVarStringArray, "datasources names"]],
         'CreateDynamicComponent':
-            [[PyTango.DevVarStringArray,
+            [[tango.DevVarStringArray,
               "list of JSON strings with datasource parameters"],
-             [PyTango.DevString, "name of dynamic Component"]],
+             [tango.DevString, "name of dynamic Component"]],
         'DataSourceDescription':
-            [[PyTango.DevVarStringArray, "list of required datasources"],
-             [PyTango.DevVarStringArray,
+            [[tango.DevVarStringArray, "list of required datasources"],
+             [tango.DevVarStringArray,
               "list of JSON with description of CLIENT Datasources"]],
         'AddStepDataSources':
-            [[PyTango.DevVarStringArray, "list of required datasources"],
-             [PyTango.DevVarStringArray,
+            [[tango.DevVarStringArray, "list of required datasources"],
+             [tango.DevVarStringArray,
               "list of datasources not found in components"]],
         'ComponentClientSources':
-            [[PyTango.DevVarStringArray, "list of component "
+            [[tango.DevVarStringArray, "list of component "
               "client datasources"],
-             [PyTango.DevString,
+             [tango.DevString,
               "JSON with description of component CLIENT Datasources"]],
         'ComponentSources':
-            [[PyTango.DevVarStringArray, "list of components"],
-             [PyTango.DevString,
+            [[tango.DevVarStringArray, "list of components"],
+             [tango.DevString,
               "JSON with description of component Datasources"]],
         'ChannelProperties':
-            [[PyTango.DevString, "property type"],
-             [PyTango.DevString,
+            [[tango.DevString, "property type"],
+             [tango.DevString,
               "JSON dictionary with channel properties {channel:property}"]],
         'SetChannelProperties':
-            [[PyTango.DevVarStringArray,
+            [[tango.DevVarStringArray,
               "a two element list with a property type and "
               "JSON value dictionary {channel:property}"],
-             [PyTango.DevVoid, ""]],
+             [tango.DevVoid, ""]],
         'CreateWriterConfiguration':
-            [[PyTango.DevVarStringArray, "list of required components"],
-             [PyTango.DevString,
+            [[tango.DevVarStringArray, "list of required components"],
+             [tango.DevString,
               "XML Settinges"]],
         'RemoveDynamicComponent':
-            [[PyTango.DevString, "name of dynamic Component"],
-             [PyTango.DevVoid, ""]],
+            [[tango.DevString, "name of dynamic Component"],
+             [tango.DevVoid, ""]],
         'CreateDataSources':
-            [[PyTango.DevString,
+            [[tango.DevString,
               "JSON dictionary with {``dsname``: ``tangosource``, ...}"],
-             [PyTango.DevVoid, ""]],
+             [tango.DevVoid, ""]],
     }
 
     #: (:obj:`dict` <:obj:`str`, \
-    #       [[ :class:`PyTango.CmdArgType`, \
-    #          :class:`PyTango.AttrDataFormat`, \
-    #          :class:`PyTango.AttrWriteType` ], \
+    #       [[ :class:`tango.CmdArgType`, \
+    #          :class:`tango.AttrDataFormat`, \
+    #          :class:`tango.AttrWriteType` ], \
     #          :obj:`dict` <:obj:`str` , any> ] > ) Attribute definitions
     attr_list = {
         'Components':
-            [[PyTango.DevString,
-              PyTango.SPECTRUM,
-              PyTango.READ, 10000],
+            [[tango.DevString,
+              tango.SPECTRUM,
+              tango.READ, 10000],
              {
                  'label': "Selected Components",
                  'description': "list of Selected Components",
             }],
         'StepDataSources':
-            [[PyTango.DevString,
-              PyTango.SCALAR,
-              PyTango.READ_WRITE],
+            [[tango.DevString,
+              tango.SCALAR,
+              tango.READ_WRITE],
              {
                  'label': "list of datasources to be switch into step mode",
                  'description': "list of datasources to be switched" +
                  " into step mode",
-                 'Display level': PyTango.DispLevel.EXPERT,
+                 'Display level': tango.DispLevel.EXPERT,
             }],
         'CanFailDataSources':
-            [[PyTango.DevString,
-              PyTango.SCALAR,
-              PyTango.READ_WRITE],
+            [[tango.DevString,
+              tango.SCALAR,
+              tango.READ_WRITE],
              {
                  'label': "list of datasources to be switch into canfail mode",
                  'description': "list of datasources to be switched" +
                  " into canfail mode",
-                 'Display level': PyTango.DispLevel.EXPERT,
+                 'Display level': tango.DispLevel.EXPERT,
             }],
         'LinkDataSources':
-            [[PyTango.DevString,
-              PyTango.SCALAR,
-              PyTango.READ_WRITE],
+            [[tango.DevString,
+              tango.SCALAR,
+              tango.READ_WRITE],
              {
                  'label': "list of datasources to which a link will be added",
                  'description': "list of datasources to which "
                  "a link will be added",
-                 'Display level': PyTango.DispLevel.EXPERT,
+                 'Display level': tango.DispLevel.EXPERT,
             }],
         'DescriptionErrors':
-            [[PyTango.DevString,
-              PyTango.SPECTRUM,
-              PyTango.READ, 10000],
+            [[tango.DevString,
+              tango.SPECTRUM,
+              tango.READ, 10000],
              {
                  'label': "Descriptive Component Errors",
                  'description': "list of Descriptive Component Errors",
             }],
         'Version':
-            [[PyTango.DevString,
-              PyTango.SCALAR,
-              PyTango.READ],
+            [[tango.DevString,
+              tango.SCALAR,
+              tango.READ],
              {
                  'label': "Version",
                  'description': "server version",
             }],
         'MacroServer':
-            [[PyTango.DevString,
-              PyTango.SCALAR,
-              PyTango.READ],
+            [[tango.DevString,
+              tango.SCALAR,
+              tango.READ],
              {
                  'label': "MacroServer",
                  'description': "Macro Server device name",
             }],
         'MntGrp':
-            [[PyTango.DevString,
-              PyTango.SCALAR,
-              PyTango.READ_WRITE],
+            [[tango.DevString,
+              tango.SCALAR,
+              tango.READ_WRITE],
              {
                  'label': " Measurement Group",
                  'description': " Measurement Group name",
             }],
         'ScanDir':
-            [[PyTango.DevString,
-              PyTango.SCALAR,
-              PyTango.READ_WRITE],
+            [[tango.DevString,
+              tango.SCALAR,
+              tango.READ_WRITE],
              {
                  'label': "Scan Directory",
                  'description': "Scan Directory",
             }],
         'ScanID':
-            [[PyTango.DevLong,
-              PyTango.SCALAR,
-              PyTango.READ_WRITE],
+            [[tango.DevLong,
+              tango.SCALAR,
+              tango.READ_WRITE],
              {
                  'label': "Scan ID",
                  'description': "Scan ID",
             }],
         'ScanFile':
-            [[PyTango.DevString,
-              PyTango.SCALAR,
-              PyTango.READ_WRITE],
+            [[tango.DevString,
+              tango.SCALAR,
+              tango.READ_WRITE],
              {
                  'label': "Scan File(s)",
                  'description': "Scan File(s)",
             }],
         'ConfigDevice':
-            [[PyTango.DevString,
-              PyTango.SCALAR,
-              PyTango.READ_WRITE],
+            [[tango.DevString,
+              tango.SCALAR,
+              tango.READ_WRITE],
              {
                  'label': "Configuration Device",
                  'description': "Configuration device name",
                  'Memorized': "true",
             }],
         'Door':
-            [[PyTango.DevString,
-              PyTango.SCALAR,
-              PyTango.READ_WRITE],
+            [[tango.DevString,
+              tango.SCALAR,
+              tango.READ_WRITE],
              {
                  'label': "Door",
                  'description': "Door device name",
                  'Memorized': "true",
             }],
         'WriterDevice':
-            [[PyTango.DevString,
-              PyTango.SCALAR,
-              PyTango.READ_WRITE],
+            [[tango.DevString,
+              tango.SCALAR,
+              tango.READ_WRITE],
              {
                  'label': "Writer Device",
                  'description': "Writer device device name",
             }],
         'UserData':
-            [[PyTango.DevString,
-              PyTango.SCALAR,
-              PyTango.READ_WRITE],
+            [[tango.DevString,
+              tango.SCALAR,
+              tango.READ_WRITE],
              {
                  'label': "Client Data",
                  'description': "JSON dictionary with User Data",
-                 'Display level': PyTango.DispLevel.EXPERT,
+                 'Display level': tango.DispLevel.EXPERT,
             }],
         'DeviceGroups':
-            [[PyTango.DevString,
-              PyTango.SCALAR,
-              PyTango.READ_WRITE],
+            [[tango.DevString,
+              tango.SCALAR,
+              tango.READ_WRITE],
              {
                  'label': "Device groups",
                  'description': "JSON dictionary with device groups",
                  'Memorized': "true",
-                 'Display level': PyTango.DispLevel.EXPERT,
+                 'Display level': tango.DispLevel.EXPERT,
             }],
         'DataSources':
-            [[PyTango.DevString,
-              PyTango.SPECTRUM,
-              PyTango.READ, 10000],
+            [[tango.DevString,
+              tango.SPECTRUM,
+              tango.READ, 10000],
              {
                  'label': "Selected Datasources",
                  'description': "list of Selected Datasources",
             }],
         'ProfileConfiguration':
-            [[PyTango.DevString,
-              PyTango.SCALAR,
-              PyTango.READ_WRITE],
+            [[tango.DevString,
+              tango.SCALAR,
+              tango.READ_WRITE],
              {
                  'label': "Profile Configuration",
                  'description': "JSON dict of server configuration",
-                 'Display level': PyTango.DispLevel.EXPERT,
+                 'Display level': tango.DispLevel.EXPERT,
             }],
         'AppendEntry':
-            [[PyTango.DevBoolean,
-              PyTango.SCALAR,
-              PyTango.READ_WRITE],
+            [[tango.DevBoolean,
+              tango.SCALAR,
+              tango.READ_WRITE],
              {
                  'label': "Append Entry",
                  'description': "flag for entry appending",
             }],
         'ConfigVariables':
-            [[PyTango.DevString,
-              PyTango.SCALAR,
-              PyTango.READ_WRITE],
+            [[tango.DevString,
+              tango.SCALAR,
+              tango.READ_WRITE],
              {
                  'label': "Configuration Variables",
                 'description': "JSON dictionary with configuration variables"
                  + "for templated components",
-                 'Display level': PyTango.DispLevel.EXPERT,
+                 'Display level': tango.DispLevel.EXPERT,
             }],
         'ProfileFile':
-            [[PyTango.DevString,
-              PyTango.SCALAR,
-              PyTango.READ_WRITE],
+            [[tango.DevString,
+              tango.SCALAR,
+              tango.READ_WRITE],
              {
                  'label': "Profile File with its Path",
                  'description': "config file with its full path",
@@ -2241,7 +2245,7 @@ class NXSRecSelectorClass(PyTango.DeviceClass):
     def __init__(self, name):
         """ NXSRecSelectorclass Constructor
         """
-        PyTango.DeviceClass.__init__(self, name)
+        tango.DeviceClass.__init__(self, name)
         self.set_type(name)
         print("In NXSRecSelectorClass constructor")
 

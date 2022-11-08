@@ -30,9 +30,12 @@
 # ============================================================================
 #
 
-
-import PyTango
 import sys
+
+try:
+    import tango
+except Exception:
+    import PyTango as tango
 
 # =================================================================
 #   TestWriter Class Description:
@@ -46,7 +49,7 @@ import sys
 # =================================================================
 
 
-class NXSDataWriter(PyTango.Device_4Impl):
+class NXSDataWriter(tango.Device_4Impl):
 
     # --------- Add you global variables here --------------------------
 
@@ -55,7 +58,7 @@ class NXSDataWriter(PyTango.Device_4Impl):
     # ------------------------------------------------------------------
 
     def __init__(self, cl, name):
-        PyTango.Device_4Impl.__init__(self, cl, name)
+        tango.Device_4Impl.__init__(self, cl, name)
 
         self.attr_value = ""
         self.attr_AcqChannelList = []
@@ -75,7 +78,7 @@ class NXSDataWriter(PyTango.Device_4Impl):
     # ------------------------------------------------------------------
 
     def init_device(self):
-        self.set_state(PyTango.DevState.ON)
+        self.set_state(tango.DevState.ON)
         self.get_device_properties(self.get_device_class())
 
     # ------------------------------------------------------------------
@@ -107,13 +110,13 @@ class NXSDataWriter(PyTango.Device_4Impl):
 
     def SetState(self, state):
         if state == "RUNNING":
-            self.set_state(PyTango.DevState.RUNNING)
+            self.set_state(tango.DevState.RUNNING)
         elif state == "FAULT":
-            self.set_state(PyTango.DevState.FAULT)
+            self.set_state(tango.DevState.FAULT)
         elif state == "ALARM":
-            self.set_state(PyTango.DevState.ALARM)
+            self.set_state(tango.DevState.ALARM)
         else:
-            self.set_state(PyTango.DevState.ON)
+            self.set_state(tango.DevState.ON)
 
 
 # =================================================================
@@ -121,7 +124,7 @@ class NXSDataWriter(PyTango.Device_4Impl):
 #    WriterClass class definition
 #
 # =================================================================
-class NXSDataWriterClass(PyTango.DeviceClass):
+class NXSDataWriterClass(tango.DeviceClass):
 
     #    Class Properties
     class_property_list = {
@@ -134,8 +137,8 @@ class NXSDataWriterClass(PyTango.DeviceClass):
     #    Command definitions
     cmd_list = {
         'SetState':
-        [[PyTango.DevString, "ScalarString"],
-         [PyTango.DevVoid, ""]],
+        [[tango.DevString, "ScalarString"],
+         [tango.DevVoid, ""]],
     }
 
     #    Attribute definitions
@@ -146,7 +149,7 @@ class NXSDataWriterClass(PyTango.DeviceClass):
 #    WriterClass Constructor
 # ------------------------------------------------------------------
     def __init__(self, name):
-        PyTango.DeviceClass.__init__(self, name)
+        tango.DeviceClass.__init__(self, name)
         self.set_type(name)
 
 
@@ -159,14 +162,14 @@ if __name__ == '__main__':
     try:
         argv = list(sys.argv)
         argv[0] = "NXSDataWriter"
-        py = PyTango.Util(argv)
+        py = tango.Util(argv)
         py.add_class(NXSDataWriterClass, NXSDataWriter)
 
-        U = PyTango.Util.instance()
+        U = tango.Util.instance()
         U.server_init()
         U.server_run()
 
-    except PyTango.DevFailed as e:
+    except tango.DevFailed as e:
         print('-------> Received a DevFailed exception: %s' % e)
     except Exception as e:
         print('-------> An unforeseen exception occured.... %s' % e)

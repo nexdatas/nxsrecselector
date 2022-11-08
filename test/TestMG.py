@@ -31,8 +31,13 @@
 #
 
 
-import PyTango
 import sys
+
+try:
+    import tango
+except Exception:
+    import PyTango as tango
+
 
 # =================================================================
 #   TestMeasurementGroup Class Description:
@@ -46,7 +51,7 @@ import sys
 # =================================================================
 
 
-class MeasurementGroup(PyTango.Device_4Impl):
+class MeasurementGroup(tango.Device_4Impl):
 
     # -------- Add you global variables here --------------------------
 
@@ -55,7 +60,7 @@ class MeasurementGroup(PyTango.Device_4Impl):
     # -----------------------------------------------------------------
 
     def __init__(self, cl, name):
-        PyTango.Device_4Impl.__init__(self, cl, name)
+        tango.Device_4Impl.__init__(self, cl, name)
 
         self.attr_value = ""
         self.attr_Configuration = "{}"
@@ -71,7 +76,7 @@ class MeasurementGroup(PyTango.Device_4Impl):
     #    Device initialization
     # -----------------------------------------------------------------
     def init_device(self):
-        self.set_state(PyTango.DevState.ON)
+        self.set_state(tango.DevState.ON)
         self.get_device_properties(self.get_device_class())
 
     # -----------------------------------------------------------------
@@ -114,13 +119,13 @@ class MeasurementGroup(PyTango.Device_4Impl):
     # -----------------------------------------------------------------
     def SetState(self, state):
         if state == "RUNNING":
-            self.set_state(PyTango.DevState.RUNNING)
+            self.set_state(tango.DevState.RUNNING)
         elif state == "FAULT":
-            self.set_state(PyTango.DevState.FAULT)
+            self.set_state(tango.DevState.FAULT)
         elif state == "ALARM":
-            self.set_state(PyTango.DevState.ALARM)
+            self.set_state(tango.DevState.ALARM)
         else:
-            self.set_state(PyTango.DevState.ON)
+            self.set_state(tango.DevState.ON)
 
 
 # =================================================================
@@ -128,7 +133,7 @@ class MeasurementGroup(PyTango.Device_4Impl):
 #    MeasurementGroupClass class definition
 #
 # =================================================================
-class MeasurementGroupClass(PyTango.DeviceClass):
+class MeasurementGroupClass(tango.DeviceClass):
 
     #    Class Properties
     class_property_list = {
@@ -141,16 +146,16 @@ class MeasurementGroupClass(PyTango.DeviceClass):
     #    Command definitions
     cmd_list = {
         'SetState':
-            [[PyTango.DevString, "ScalarString"],
-             [PyTango.DevVoid, ""]],
+            [[tango.DevString, "ScalarString"],
+             [tango.DevVoid, ""]],
     }
 
     #    Attribute definitions
     attr_list = {
         'Configuration':
-            [[PyTango.DevString,
-              PyTango.SCALAR,
-              PyTango.READ_WRITE],
+            [[tango.DevString,
+              tango.SCALAR,
+              tango.READ_WRITE],
              {
                  'label': "",
                  'description': " "
@@ -161,7 +166,7 @@ class MeasurementGroupClass(PyTango.DeviceClass):
 #    MeasurementGroupClass Constructor
 # -----------------------------------------------------------------
     def __init__(self, name):
-        PyTango.DeviceClass.__init__(self, name)
+        tango.DeviceClass.__init__(self, name)
         self.set_type(name)
 
 
@@ -174,14 +179,14 @@ if __name__ == '__main__':
     try:
         argv = list(sys.argv)
         argv[0] = "MeasurementGroup"
-        py = PyTango.Util(argv)
+        py = tango.Util(argv)
         py.add_class(MeasurementGroupClass, MeasurementGroup)
 
-        U = PyTango.Util.instance()
+        U = tango.Util.instance()
         U.server_init()
         U.server_run()
 
-    except PyTango.DevFailed as e:
+    except tango.DevFailed as e:
         print('-------> Received a DevFailed exception: %s' % e)
     except Exception as e:
         print('-------> An unforeseen exception occured.... %s' % e)

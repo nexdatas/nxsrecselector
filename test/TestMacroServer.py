@@ -33,14 +33,17 @@
 import sys
 import pickle
 
-import PyTango
+try:
+    import tango
+except Exception:
+    import PyTango as tango
 
 # # workaround for problems when pytango locally compiled
 # if sys.version_info[0] == 2:
 #     sys.path = [pth for pth in sys.path if 'python3' not in pth]
 # else:
 #     sys.path = [pth for pth in sys.path if 'python2' not in pth]
-# PyTango = __import__("PyTango")
+# tango = __import__("tango")
 
 
 def pickleloads(bytestr):
@@ -67,7 +70,7 @@ def pickleloads(bytestr):
 # =================================================================
 
 
-class MacroServer(PyTango.Device_4Impl):
+class MacroServer(tango.Device_4Impl):
 
     # -------- Add you global variables here --------------------------
 
@@ -76,7 +79,7 @@ class MacroServer(PyTango.Device_4Impl):
     # -----------------------------------------------------------------
 
     def __init__(self, cl, name):
-        PyTango.Device_4Impl.__init__(self, cl, name)
+        tango.Device_4Impl.__init__(self, cl, name)
 
         self.attr_value = ""
         MacroServer.init_device(self)
@@ -93,7 +96,7 @@ class MacroServer(PyTango.Device_4Impl):
     # -----------------------------------------------------------------
 
     def init_device(self):
-        self.set_state(PyTango.DevState.ON)
+        self.set_state(tango.DevState.ON)
         self.get_device_properties(self.get_device_class())
         env = {'new': {'ActiveMntGrp': 'nxsmntgrp',
                        'DataCompressionRank': 0,
@@ -189,13 +192,13 @@ class MacroServer(PyTango.Device_4Impl):
     # -----------------------------------------------------------------
     def SetState(self, state):
         if state == "RUNNING":
-            self.set_state(PyTango.DevState.RUNNING)
+            self.set_state(tango.DevState.RUNNING)
         elif state == "FAULT":
-            self.set_state(PyTango.DevState.FAULT)
+            self.set_state(tango.DevState.FAULT)
         elif state == "ALARM":
-            self.set_state(PyTango.DevState.ALARM)
+            self.set_state(tango.DevState.ALARM)
         else:
-            self.set_state(PyTango.DevState.ON)
+            self.set_state(tango.DevState.ON)
 
 
 # =================================================================
@@ -203,7 +206,7 @@ class MacroServer(PyTango.Device_4Impl):
 #    MacroServerClass class definition
 #
 # =================================================================
-class MacroServerClass(PyTango.DeviceClass):
+class MacroServerClass(tango.DeviceClass):
 
     #    Class Properties
     class_property_list = {
@@ -212,7 +215,7 @@ class MacroServerClass(PyTango.DeviceClass):
     #    Device Properties
     device_property_list = {
         'PoolNames':
-            [PyTango.DevVarStringArray,
+            [tango.DevVarStringArray,
              "pool names",
              []],
     }
@@ -220,23 +223,23 @@ class MacroServerClass(PyTango.DeviceClass):
     #    Command definitions
     cmd_list = {
         'SetState':
-            [[PyTango.DevString, "ScalarString"],
-             [PyTango.DevVoid, ""]],
+            [[tango.DevString, "ScalarString"],
+             [tango.DevVoid, ""]],
     }
 
     #    Attribute definitions
     attr_list = {
         'Environment':
-            [[PyTango.DevEncoded,
-              PyTango.SCALAR,
-              PyTango.READ_WRITE],
+            [[tango.DevEncoded,
+              tango.SCALAR,
+              tango.READ_WRITE],
              {
                  'description': "Environment attribute",
             }],
         'DoorList':
-            [[PyTango.DevString,
-              PyTango.SPECTRUM,
-              PyTango.READ_WRITE,
+            [[tango.DevString,
+              tango.SPECTRUM,
+              tango.READ_WRITE,
               256],
              {
                  'description': "Environment attribute",
@@ -247,7 +250,7 @@ class MacroServerClass(PyTango.DeviceClass):
 #    MacroServerClass Constructor
 # -----------------------------------------------------------------
     def __init__(self, name):
-        PyTango.DeviceClass.__init__(self, name)
+        tango.DeviceClass.__init__(self, name)
         self.set_type(name)
 
 
@@ -262,7 +265,7 @@ class MacroServerClass(PyTango.DeviceClass):
 #   DevState.ON :  Server On
 # =================================================================
 
-class Door(PyTango.Device_4Impl):
+class Door(tango.Device_4Impl):
 
     # -------- Add you global variables here --------------------------
 
@@ -271,7 +274,7 @@ class Door(PyTango.Device_4Impl):
     # -----------------------------------------------------------------
 
     def __init__(self, cl, name):
-        PyTango.Device_4Impl.__init__(self, cl, name)
+        tango.Device_4Impl.__init__(self, cl, name)
 
         self.attr_value = ""
         Door.init_device(self)
@@ -286,7 +289,7 @@ class Door(PyTango.Device_4Impl):
     #    Device initialization
     # -----------------------------------------------------------------
     def init_device(self):
-        self.set_state(PyTango.DevState.ON)
+        self.set_state(tango.DevState.ON)
         self.get_device_properties(self.get_device_class())
 
     # -----------------------------------------------------------------
@@ -316,13 +319,13 @@ class Door(PyTango.Device_4Impl):
     # -----------------------------------------------------------------
     def SetState(self, state):
         if state == "RUNNING":
-            self.set_state(PyTango.DevState.RUNNING)
+            self.set_state(tango.DevState.RUNNING)
         elif state == "FAULT":
-            self.set_state(PyTango.DevState.FAULT)
+            self.set_state(tango.DevState.FAULT)
         elif state == "ALARM":
-            self.set_state(PyTango.DevState.ALARM)
+            self.set_state(tango.DevState.ALARM)
         else:
-            self.set_state(PyTango.DevState.ON)
+            self.set_state(tango.DevState.ON)
 
 
 # =================================================================
@@ -330,7 +333,7 @@ class Door(PyTango.Device_4Impl):
 #    DoorClass class definition
 #
 # =================================================================
-class DoorClass(PyTango.DeviceClass):
+class DoorClass(tango.DeviceClass):
 
     #    Class Properties
     class_property_list = {
@@ -343,8 +346,8 @@ class DoorClass(PyTango.DeviceClass):
     #    Command definitions
     cmd_list = {
         'SetState':
-            [[PyTango.DevString, "ScalarString"],
-             [PyTango.DevVoid, ""]],
+            [[tango.DevString, "ScalarString"],
+             [tango.DevVoid, ""]],
     }
 
     #    Attribute definitions
@@ -355,7 +358,7 @@ class DoorClass(PyTango.DeviceClass):
 #    DoorClass Constructor
 # -----------------------------------------------------------------
     def __init__(self, name):
-        PyTango.DeviceClass.__init__(self, name)
+        tango.DeviceClass.__init__(self, name)
         self.set_type(name)
 
 
@@ -368,15 +371,15 @@ if __name__ == '__main__':
     try:
         argv = list(sys.argv)
         argv[0] = "MacroServer"
-        py = PyTango.Util(argv)
+        py = tango.Util(argv)
         py.add_class(MacroServerClass, MacroServer)
         py.add_class(DoorClass, Door)
 
-        U = PyTango.Util.instance()
+        U = tango.Util.instance()
         U.server_init()
         U.server_run()
 
-    except PyTango.DevFailed as e:
+    except tango.DevFailed as e:
         print('-------> Received a DevFailed exception: %s' % e)
     except Exception as e:
         print('-------> An unforeseen exception occured.... %s' % e)

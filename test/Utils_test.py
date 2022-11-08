@@ -25,12 +25,16 @@ import time
 import sys
 import random
 import struct
-import PyTango
 import pickle
 import json
 import xml.etree.ElementTree as et
 from lxml.etree import XMLParser
 import binascii
+
+try:
+    import tango
+except Exception:
+    import PyTango as tango
 
 try:
     import TestServerSetUp
@@ -53,7 +57,7 @@ logger = logging.getLogger()
 IS64BIT = (struct.calcsize("P") == 8)
 
 #: tango version
-TGVER = PyTango.__version_info__[0]
+TGVER = tango.__version_info__[0]
 
 if sys.version_info > (3,):
     long = int
@@ -327,12 +331,12 @@ class UtilsTest(unittest.TestCase):
         print("Run: %s.%s() " % (self.__class__.__name__, fun))
         Utils()
 
-        tTnp = {PyTango.DevLong64: "int64", PyTango.DevLong: "int32",
-                PyTango.DevShort: "int16", PyTango.DevUChar: "uint8",
-                PyTango.DevULong64: "uint64", PyTango.DevULong: "uint32",
-                PyTango.DevUShort: "uint16", PyTango.DevDouble: "float64",
-                PyTango.DevFloat: "float32", PyTango.DevString: "string",
-                PyTango.DevBoolean: "bool", PyTango.DevEncoded: "encoded"}
+        tTnp = {tango.DevLong64: "int64", tango.DevLong: "int32",
+                tango.DevShort: "int16", tango.DevUChar: "uint8",
+                tango.DevULong64: "uint64", tango.DevULong: "uint32",
+                tango.DevUShort: "uint16", tango.DevDouble: "float64",
+                tango.DevFloat: "float32", tango.DevString: "string",
+                tango.DevBoolean: "bool", tango.DevEncoded: "encoded"}
 
         self.myAssertDict(tTnp, TangoUtils.tTnp)
 
@@ -341,7 +345,7 @@ class UtilsTest(unittest.TestCase):
     def test_getFullAttrName(self):
         fun = sys._getframe().f_code.co_name
         print("Run: %s.%s() " % (self.__class__.__name__, fun))
-        db = PyTango.Database()
+        db = tango.Database()
         host, port = db.get_db_host(), db.get_db_port()
         attrs = [
             "sdfs/dasf/sdf",
@@ -366,17 +370,17 @@ class UtilsTest(unittest.TestCase):
     def test_openProxy(self):
         fun = sys._getframe().f_code.co_name
         print("Run: %s.%s() " % (self.__class__.__name__, fun))
-        self.myAssertRaise(PyTango.DevFailed, TangoUtils.openProxy,
+        self.myAssertRaise(tango.DevFailed, TangoUtils.openProxy,
                            "sdf/testtestsf/d")
 
         dp = TangoUtils.openProxy(self._simps.new_device_info_writer.name)
-        self.assertTrue(isinstance(dp, PyTango.DeviceProxy))
+        self.assertTrue(isinstance(dp, tango.DeviceProxy))
         self.assertEqual(dp.name(), self._simps.new_device_info_writer.name)
         dp.setState("RUNNING")
         dp = TangoUtils.openProxy(self._simps.new_device_info_writer.name)
         self._simps.stop()
 
-        self.myAssertRaise(PyTango.DevFailed, TangoUtils.openProxy,
+        self.myAssertRaise(tango.DevFailed, TangoUtils.openProxy,
                            self._simps.new_device_info_writer.name)
     # openProxy test
     # \brief It tests default settings
@@ -384,11 +388,11 @@ class UtilsTest(unittest.TestCase):
     def test_wait(self):
         fun = sys._getframe().f_code.co_name
         print("Run: %s.%s() " % (self.__class__.__name__, fun))
-        self.myAssertRaise(PyTango.DevFailed, TangoUtils.openProxy,
+        self.myAssertRaise(tango.DevFailed, TangoUtils.openProxy,
                            "sdf/testtestsf/d")
 
         dp = TangoUtils.openProxy(self._simps.new_device_info_writer.name)
-        self.assertTrue(isinstance(dp, PyTango.DeviceProxy))
+        self.assertTrue(isinstance(dp, tango.DeviceProxy))
         self.assertEqual(dp.name(), self._simps.new_device_info_writer.name)
         self.assertTrue(TangoUtils.wait(dp))
         dp.setState("RUNNING")
@@ -654,11 +658,11 @@ class UtilsTest(unittest.TestCase):
         fun = sys._getframe().f_code.co_name
         print("Run: %s.%s() " % (self.__class__.__name__, fun))
         self.assertEqual(TangoUtils.getProxies([]), [])
-        self.myAssertRaise(PyTango.DevFailed, TangoUtils.getProxies,
+        self.myAssertRaise(tango.DevFailed, TangoUtils.getProxies,
                            ["bleble"])
         dpl = TangoUtils.getProxies([self._simps.new_device_info_writer.name])
         self.assertEqual(len(dpl), 1)
-        self.assertEqual(type(dpl[0]), PyTango.DeviceProxy)
+        self.assertEqual(type(dpl[0]), tango.DeviceProxy)
         self.assertEqual(dpl[0].name(),
                          self._simps.new_device_info_writer.name)
 
@@ -666,8 +670,8 @@ class UtilsTest(unittest.TestCase):
             self._simps.new_device_info_writer.name,
             self._simps2.new_device_info_writer.name])
         self.assertEqual(len(dpl), 2)
-        self.assertEqual(type(dpl[0]), PyTango.DeviceProxy)
-        self.assertEqual(type(dpl[1]), PyTango.DeviceProxy)
+        self.assertEqual(type(dpl[0]), tango.DeviceProxy)
+        self.assertEqual(type(dpl[1]), tango.DeviceProxy)
         self.assertEqual(dpl[0].name(),
                          self._simps.new_device_info_writer.name)
         self.assertEqual(dpl[1].name(),
@@ -689,7 +693,7 @@ class UtilsTest(unittest.TestCase):
             dv = ''
             for server in src:
                 try:
-                    dp = PyTango.DeviceProxy(server)
+                    dp = tango.DeviceProxy(server)
                     dp.ping()
                     dv = server
                     break
@@ -720,7 +724,7 @@ class UtilsTest(unittest.TestCase):
         arr = ["NXSDataWriter", "", "NXSConfigServer", "Door",
                "MacroServer", "bleble"]
 
-        db = PyTango.Database()
+        db = tango.Database()
 
         for ar in arr:
             dd = TangoUtils.getDeviceName(db, ar)
@@ -728,7 +732,7 @@ class UtilsTest(unittest.TestCase):
             dv = ''
             for server in src:
                 try:
-                    dp = PyTango.DeviceProxy(server)
+                    dp = tango.DeviceProxy(server)
                     dp.ping()
                     dv = server
                     break
@@ -782,7 +786,7 @@ class UtilsTest(unittest.TestCase):
         alldoors = set()
         for sr in servers:
             try:
-                dp = PyTango.DeviceProxy(sr)
+                dp = tango.DeviceProxy(sr)
             except Exception:
                 dp = None
             if dp:
@@ -2019,7 +2023,7 @@ class UtilsTest(unittest.TestCase):
         }
 
         for k, ar in arr.items():
-            ap = PyTango.AttributeProxy("ttestp09/testts/t1r228/%s" % k)
+            ap = tango.AttributeProxy("ttestp09/testts/t1r228/%s" % k)
             ac = ap.get_config()
             ac.unit = ar[2]
             ap.set_config(ac)
@@ -2069,7 +2073,7 @@ class UtilsTest(unittest.TestCase):
         }
 
         for k, ar in arr.items():
-            ap = PyTango.AttributeProxy("ttestp09/testts/t1r228/%s" % k)
+            ap = tango.AttributeProxy("ttestp09/testts/t1r228/%s" % k)
             ac = ap.get_config()
             ac.unit = ar[2]
             ap.set_config(ac)
@@ -2122,7 +2126,7 @@ class UtilsTest(unittest.TestCase):
         }
 
         for k, ar in arr.items():
-            ap = PyTango.AttributeProxy("ttestp09/testts/t1r228/%s" % k)
+            ap = tango.AttributeProxy("ttestp09/testts/t1r228/%s" % k)
             ac = ap.get_config()
             ac.unit = ar[2]
             ap.set_config(ac)

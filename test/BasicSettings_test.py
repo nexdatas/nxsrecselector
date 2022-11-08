@@ -23,9 +23,13 @@ import unittest
 import os
 import sys
 import struct
-import PyTango
 import json
 import pickle
+
+try:
+    import tango
+except Exception:
+    import PyTango as tango
 
 try:
     import TestMacroServerSetUp
@@ -64,7 +68,7 @@ IS64BIT = (struct.calcsize("P") == 8)
 DB_AVAILABLE = []
 
 #: tango version
-TGVER = PyTango.__version_info__[0]
+TGVER = tango.__version_info__[0]
 
 try:
     import MySQLdb
@@ -253,7 +257,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
 
         # wrong = []
 
-        db = PyTango.Database()
+        db = tango.Database()
         db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
         self._ms.dps[list(self._ms.ms.keys())[0]].Init()
@@ -292,7 +296,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
 
-        db = PyTango.Database()
+        db = tango.Database()
         db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
         self._ms.dps[list(self._ms.ms.keys())[0]].Init()
@@ -301,7 +305,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
         rs.door = val["Door"]
         rs.mntGrp = val["MntGrp"]
 
-        db = PyTango.Database()
+        db = tango.Database()
         db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
 
@@ -351,7 +355,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
 
-        db = PyTango.Database()
+        db = tango.Database()
         db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
         self._ms.dps[list(self._ms.ms.keys())[0]].Init()
@@ -362,7 +366,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
         rs.door = val["Door"]
         rs.mntGrp = val["MntGrp"]
 
-        db = PyTango.Database()
+        db = tango.Database()
         db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
 
@@ -414,7 +418,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
 
-        db = PyTango.Database()
+        db = tango.Database()
         db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
         self._ms.dps[list(self._ms.ms.keys())[0]].Init()
@@ -423,7 +427,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
         rs.door = val["Door"]
         rs.mntGrp = val["MntGrp"]
 
-        db = PyTango.Database()
+        db = tango.Database()
         db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
 
@@ -473,7 +477,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
 
-        db = PyTango.Database()
+        db = tango.Database()
         db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
         self._ms.dps[list(self._ms.ms.keys())[0]].Init()
@@ -484,7 +488,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
         rs.door = val["Door"]
         rs.mntGrp = val["MntGrp"]
 
-        db = PyTango.Database()
+        db = tango.Database()
         db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
 
@@ -536,7 +540,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
 
-        # db = PyTango.Database()
+        # db = tango.Database()
         self._ms.dps[list(self._ms.ms.keys())[0]].Init()
         rs = self.openRecSelector()
         rs.configDevice = val["ConfigDevice"]
@@ -564,7 +568,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
 
-        # db = PyTango.Database()
+        # db = tango.Database()
         self._ms.dps[list(self._ms.ms.keys())[0]].Init()
         rs = self.openRecSelector()
         rs.configDevice = val["ConfigDevice"]
@@ -601,7 +605,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
 
-        # db = PyTango.Database()
+        # db = tango.Database()
         self._ms.dps[list(self._ms.ms.keys())[0]].Init()
         rs = self.openRecSelector()
         rs.configDevice = val["ConfigDevice"]
@@ -661,7 +665,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
 
-        # db = PyTango.Database()
+        # db = tango.Database()
         self._ms.dps[list(self._ms.ms.keys())[0]].Init()
         rs = self.openRecSelector()
         rs.configDevice = val["ConfigDevice"]
@@ -721,7 +725,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
 
-        # db = PyTango.Database()
+        # db = tango.Database()
         self._ms.dps[list(self._ms.ms.keys())[0]].Init()
         rs = self.openRecSelector()
         rs.configDevice = val["ConfigDevice"]
@@ -781,7 +785,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
 
-        # db = PyTango.Database()
+        # db = tango.Database()
         self._ms.dps[list(self._ms.ms.keys())[0]].Init()
         rs = self.openRecSelector()
         rs.configDevice = val["ConfigDevice"]
@@ -826,7 +830,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
 
-        # db = PyTango.Database()
+        # db = tango.Database()
         self._ms.dps[list(self._ms.ms.keys())[0]].Init()
         rs = self.openRecSelector()
         rs.configDevice = val["ConfigDevice"]
@@ -888,7 +892,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
 
-        # db = PyTango.Database()
+        # db = tango.Database()
         self._ms.dps[list(self._ms.ms.keys())[0]].Init()
         rs = self.openRecSelector()
         rs.configDevice = val["ConfigDevice"]
@@ -950,7 +954,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
 
-        # db = PyTango.Database()
+        # db = tango.Database()
         self._ms.dps[list(self._ms.ms.keys())[0]].Init()
         rs = self.openRecSelector()
         rs.configDevice = val["ConfigDevice"]
@@ -1012,7 +1016,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
 
-        # db = PyTango.Database()
+        # db = tango.Database()
         self._ms.dps[list(self._ms.ms.keys())[0]].Init()
         rs = self.openRecSelector()
         rs.configDevice = val["ConfigDevice"]
@@ -1056,7 +1060,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
 
-        # db = PyTango.Database()
+        # db = tango.Database()
         self._ms.dps[list(self._ms.ms.keys())[0]].Init()
         rs = self.openRecSelector()
         rs.configDevice = val["ConfigDevice"]
@@ -1117,7 +1121,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
 
-        # db = PyTango.Database()
+        # db = tango.Database()
         self._ms.dps[list(self._ms.ms.keys())[0]].Init()
         rs = self.openRecSelector()
         rs.configDevice = val["ConfigDevice"]
@@ -1178,7 +1182,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
 
-        # db = PyTango.Database()
+        # db = tango.Database()
         self._ms.dps[list(self._ms.ms.keys())[0]].Init()
         rs = self.openRecSelector()
         rs.configDevice = val["ConfigDevice"]
@@ -1249,7 +1253,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
         try:
             simps2.setUp()
 
-            db = PyTango.Database()
+            db = tango.Database()
             db.put_device_property(list(self._ms.ms.keys())[0],
                                    {'PoolNames': self._pool.dp.name()})
             self._ms.dps[list(self._ms.ms.keys())[0]].Init()
@@ -1338,7 +1342,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
         try:
             simps2.setUp()
 
-            # db = PyTango.Database()
+            # db = tango.Database()
             self._ms.dps[list(self._ms.ms.keys())[0]].Init()
             rs = self.openRecSelector()
             rs.configDevice = val["ConfigDevice"]
@@ -1426,7 +1430,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
         try:
             simps2.add()
 
-            # db = PyTango.Database()
+            # db = tango.Database()
             self._ms.dps[list(self._ms.ms.keys())[0]].Init()
             rs = self.openRecSelector()
             rs.configDevice = val["ConfigDevice"]
@@ -1513,7 +1517,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
         try:
             simps2.add()
 
-            # db = PyTango.Database()
+            # db = tango.Database()
             self._ms.dps[list(self._ms.ms.keys())[0]].Init()
             rs = self.openRecSelector()
             rs.configDevice = val["ConfigDevice"]
@@ -1593,7 +1597,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
         try:
             simps2.setUp()
 
-            # db = PyTango.Database()
+            # db = tango.Database()
             self._ms.dps[list(self._ms.ms.keys())[0]].Init()
             rs = self.openRecSelector()
             rs.configDevice = val["ConfigDevice"]
@@ -1673,7 +1677,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
         try:
             simps2.setUp()
 
-            # db = PyTango.Database()
+            # db = tango.Database()
             self._ms.dps[list(self._ms.ms.keys())[0]].Init()
             rs = self.openRecSelector()
             rs.configDevice = val["ConfigDevice"]
@@ -1753,7 +1757,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
         try:
             simps2.setUp()
 
-            # db = PyTango.Database()
+            # db = tango.Database()
             self._ms.dps[list(self._ms.ms.keys())[0]].Init()
             rs = self.openRecSelector()
             rs.configDevice = val["ConfigDevice"]
@@ -1837,7 +1841,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
         try:
             simps2.add()
 
-            # db = PyTango.Database()
+            # db = tango.Database()
             self._ms.dps[list(self._ms.ms.keys())[0]].Init()
             rs = self.openRecSelector()
             rs.configDevice = val["ConfigDevice"]
@@ -1921,7 +1925,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
         try:
             simps2.add()
 
-            # db = PyTango.Database()
+            # db = tango.Database()
             self._ms.dps[list(self._ms.ms.keys())[0]].Init()
             rs = self.openRecSelector()
             rs.configDevice = val["ConfigDevice"]
@@ -1999,7 +2003,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
 
-        # db = PyTango.Database()
+        # db = tango.Database()
         self._ms.dps[list(self._ms.ms.keys())[0]].Init()
         rs = self.openRecSelector()
         rs.configDevice = val["ConfigDevice"]
@@ -2083,7 +2087,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
         try:
             simps2.setUp()
 
-            # db = PyTango.Database()
+            # db = tango.Database()
             self._ms.dps[list(self._ms.ms.keys())[0]].Init()
             rs = self.openRecSelector()
             rs.configDevice = val["ConfigDevice"]
@@ -2169,7 +2173,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
             "ttestp09/testts/t2r228", "S2")
         try:
             simps2.setUp()
-            # db = PyTango.Database()
+            # db = tango.Database()
             self._ms.dps[list(self._ms.ms.keys())[0]].Init()
             rs = self.openRecSelector()
             rs.configDevice = val["ConfigDevice"]
@@ -2256,7 +2260,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
         try:
             simps2.setUp()
 
-            # db = PyTango.Database()
+            # db = tango.Database()
             self._ms.dps[list(self._ms.ms.keys())[0]].Init()
             rs = self.openRecSelector()
             rs.configDevice = val["ConfigDevice"]
@@ -2348,7 +2352,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
         try:
             simps2.setUp()
 
-            # db = PyTango.Database()
+            # db = tango.Database()
             self._ms.dps[list(self._ms.ms.keys())[0]].Init()
             rs = self.openRecSelector()
             rs.configDevice = val["ConfigDevice"]
@@ -2438,7 +2442,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
         try:
             simps2.setUp()
 
-            # db = PyTango.Database()
+            # db = tango.Database()
             self._ms.dps[list(self._ms.ms.keys())[0]].Init()
             rs = self.openRecSelector()
             rs.configDevice = val["ConfigDevice"]
@@ -2530,7 +2534,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
         try:
             simps2.setUp()
 
-            # db = PyTango.Database()
+            # db = tango.Database()
             self._ms.dps[list(self._ms.ms.keys())[0]].Init()
             rs = self.openRecSelector()
             rs.configDevice = val["ConfigDevice"]
@@ -2623,7 +2627,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
         try:
             simps2.setUp()
 
-            # db = PyTango.Database()
+            # db = tango.Database()
             self._ms.dps[list(self._ms.ms.keys())[0]].Init()
             rs = self.openRecSelector()
             rs.configDevice = val["ConfigDevice"]
@@ -2724,7 +2728,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
         try:
             simps2.setUp()
 
-            db = PyTango.Database()
+            db = tango.Database()
             db.put_device_property(list(self._ms.ms.keys())[0],
                                    {'PoolNames': self._pool.dp.name()})
             self._ms.dps[list(self._ms.ms.keys())[0]].Init()
@@ -2829,7 +2833,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
         try:
             simps2.setUp()
 
-            db = PyTango.Database()
+            db = tango.Database()
             db.put_device_property(list(self._ms.ms.keys())[0],
                                    {'PoolNames': self._pool.dp.name()})
             self._ms.dps[list(self._ms.ms.keys())[0]].Init()
@@ -2934,7 +2938,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
         try:
             simps2.setUp()
 
-            db = PyTango.Database()
+            db = tango.Database()
             db.put_device_property(list(self._ms.ms.keys())[0],
                                    {'PoolNames': self._pool.dp.name()})
             self._ms.dps[list(self._ms.ms.keys())[0]].Init()
@@ -3041,7 +3045,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
         try:
             simps2.setUp()
 
-            db = PyTango.Database()
+            db = tango.Database()
             db.put_device_property(list(self._ms.ms.keys())[0],
                                    {'PoolNames': self._pool.dp.name()})
             self._ms.dps[list(self._ms.ms.keys())[0]].Init()
@@ -3150,7 +3154,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
         try:
             simps2.setUp()
 
-            db = PyTango.Database()
+            db = tango.Database()
             db.put_device_property(list(self._ms.ms.keys())[0],
                                    {'PoolNames': self._pool.dp.name()})
             self._ms.dps[list(self._ms.ms.keys())[0]].Init()
@@ -3259,7 +3263,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
         try:
             simps2.setUp()
 
-            db = PyTango.Database()
+            db = tango.Database()
             db.put_device_property(list(self._ms.ms.keys())[0],
                                    {'PoolNames': self._pool.dp.name()})
             self._ms.dps[list(self._ms.ms.keys())[0]].Init()
@@ -3367,7 +3371,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
         try:
             simps2.setUp()
 
-            db = PyTango.Database()
+            db = tango.Database()
             db.put_device_property(list(self._ms.ms.keys())[0],
                                    {'PoolNames': self._pool.dp.name()})
             self._ms.dps[list(self._ms.ms.keys())[0]].Init()
@@ -3475,7 +3479,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
         try:
             simps2.setUp()
 
-            db = PyTango.Database()
+            db = tango.Database()
             db.put_device_property(list(self._ms.ms.keys())[0],
                                    {'PoolNames': self._pool.dp.name()})
             self._ms.dps[list(self._ms.ms.keys())[0]].Init()
@@ -3581,7 +3585,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
         ]
 
         try:
-            db = PyTango.Database()
+            db = tango.Database()
             simps2.setUp()
             db.put_device_alias(arr[0]["full_name"], arr[0]["name"])
             db.put_device_property(list(self._ms.ms.keys())[0],
@@ -3690,7 +3694,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
         ]
 
         try:
-            db = PyTango.Database()
+            db = tango.Database()
             simps2.setUp()
             db.put_device_alias(arr[0]["full_name"], arr[0]["name"])
             db.put_device_property(list(self._ms.ms.keys())[0],
@@ -3799,7 +3803,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
         ]
 
         try:
-            db = PyTango.Database()
+            db = tango.Database()
             simps2.setUp()
             db.put_device_alias(arr[0]["full_name"], arr[0]["name"])
             db.put_device_property(list(self._ms.ms.keys())[0],
@@ -3910,7 +3914,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
         ]
 
         try:
-            db = PyTango.Database()
+            db = tango.Database()
             simps2.setUp()
 
             db.put_device_alias(arr[0]["full_name"], arr[0]["name"])
@@ -3996,7 +4000,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
         ]
 
         try:
-            db = PyTango.Database()
+            db = tango.Database()
             simps2.setUp()
 
             db.put_device_alias(arr[0]["full_name"], arr[0]["name"])
@@ -4082,7 +4086,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
         ]
 
         try:
-            db = PyTango.Database()
+            db = tango.Database()
             simps2.setUp()
 
             db.put_device_alias(arr[0]["full_name"], arr[0]["name"])
@@ -4170,7 +4174,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
         ]
 
         try:
-            db = PyTango.Database()
+            db = tango.Database()
             simps2.setUp()
 
             db.put_device_alias(arr[0]["full_name"], arr[0]["name"])
@@ -4256,7 +4260,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
         ]
 
         try:
-            db = PyTango.Database()
+            db = tango.Database()
             simps2.setUp()
 
             db.put_device_alias(arr[0]["full_name"], arr[0]["name"])
@@ -4342,7 +4346,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
         ]
 
         try:
-            db = PyTango.Database()
+            db = tango.Database()
             simps2.setUp()
 
             db.put_device_alias(arr[0]["full_name"], arr[0]["name"])
@@ -4430,7 +4434,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
         # ]
 
         try:
-            # db = PyTango.Database()
+            # db = tango.Database()
             simps2.setUp()
 
             self._ms.dps[list(self._ms.ms.keys())[0]].Init()
@@ -4499,7 +4503,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
 
-        db = PyTango.Database()
+        db = tango.Database()
         db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
         self._ms.dps[list(self._ms.ms.keys())[0]].Init()
@@ -4543,7 +4547,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
 
-        # db = PyTango.Database()
+        # db = tango.Database()
         self._ms.dps[list(self._ms.ms.keys())[0]].Init()
         rs = self.openRecSelector()
         rs.configDevice = val["ConfigDevice"]
@@ -4602,7 +4606,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
         self._cf.dp.SetCommandVariable(["CPDICT", json.dumps(self.mycps)])
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.mydss)])
 
-        # db = PyTango.Database()
+        # db = tango.Database()
         self._ms.dps[list(self._ms.ms.keys())[0]].Init()
         rs = self.openRecSelector()
         self.setProp(rs, "defaultPreselectedComponents",
@@ -4672,7 +4676,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
 
-        # db = PyTango.Database()
+        # db = tango.Database()
         self._ms.dps[list(self._ms.ms.keys())[0]].Init()
         self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
@@ -4730,7 +4734,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
 
-        # db = PyTango.Database()
+        # db = tango.Database()
         self._ms.dps[list(self._ms.ms.keys())[0]].Init()
         self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
@@ -4788,7 +4792,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
 
-        # db = PyTango.Database()
+        # db = tango.Database()
         self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
         self._ms.dps[list(self._ms.ms.keys())[0]].Init()
@@ -4844,7 +4848,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
 
-        # db = PyTango.Database()
+        # db = tango.Database()
         self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
         channelerrors = []
@@ -4922,7 +4926,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
 
-        # db = PyTango.Database()
+        # db = tango.Database()
         self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
         channelerrors = []
@@ -5000,7 +5004,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
 
-        # db = PyTango.Database()
+        # db = tango.Database()
         self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
         channelerrors = []
@@ -5078,7 +5082,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
 
-        # db = PyTango.Database()
+        # db = tango.Database()
         self._ms.dps[list(self._ms.ms.keys())[0]].Init()
         channelerrors = []
         poolchannels = []
@@ -5134,7 +5138,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
 
-        # db = PyTango.Database()
+        # db = tango.Database()
         self._ms.dps[list(self._ms.ms.keys())[0]].Init()
         channelerrors = []
         poolchannels = []
@@ -5190,7 +5194,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
 
-        # db = PyTango.Database()
+        # db = tango.Database()
         self._ms.dps[list(self._ms.ms.keys())[0]].Init()
         channelerrors = []
         poolchannels = []
@@ -5246,7 +5250,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
 
-        # db = PyTango.Database()
+        # db = tango.Database()
         self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
         channelerrors = []
@@ -5332,7 +5336,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
         try:
             simps2.setUp()
 
-            # db = PyTango.Database()
+            # db = tango.Database()
             self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             channelerrors = []
@@ -5432,7 +5436,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
         try:
             simps2.add()
 
-            # db = PyTango.Database()
+            # db = tango.Database()
             self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             # channelerrors = []
@@ -5527,7 +5531,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
         try:
             simps2.setUp()
 
-            # db = PyTango.Database()
+            # db = tango.Database()
             self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             # channelerrors = []
@@ -5622,7 +5626,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
         try:
             simps2.setUp()
 
-            # db = PyTango.Database()
+            # db = tango.Database()
             self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             # channelerrors = []
@@ -5717,7 +5721,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
         try:
             simps2.setUp()
 
-            # db = PyTango.Database()
+            # db = tango.Database()
             self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             # channelerrors = []
@@ -5812,7 +5816,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
         try:
             simps2.add()
 
-            # db = PyTango.Database()
+            # db = tango.Database()
             self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             # channelerrors = []
@@ -5907,7 +5911,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
         try:
             simps2.add()
 
-            # db = PyTango.Database()
+            # db = tango.Database()
             self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             # channelerrors = []
@@ -6002,7 +6006,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
         try:
             simps2.add()
 
-            # db = PyTango.Database()
+            # db = tango.Database()
             self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             # channelerrors = []
@@ -6098,7 +6102,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
 
-        # db = PyTango.Database()
+        # db = tango.Database()
         self._ms.dps[list(self._ms.ms.keys())[0]].Init()
         # channelerrors = []
         poolchannels = []
@@ -6191,7 +6195,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
         try:
             simps2.setUp()
 
-            # db = PyTango.Database()
+            # db = tango.Database()
             self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             # channelerrors = []
@@ -6289,7 +6293,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
             "ttestp09/testts/t2r228", "S2")
         try:
             simps2.setUp()
-            # db = PyTango.Database()
+            # db = tango.Database()
             self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             poolchannels = ["scalar2_long", "spectrum2_short",
@@ -6390,7 +6394,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
         try:
             simps2.setUp()
 
-            # db = PyTango.Database()
+            # db = tango.Database()
             self._ms.dps[list(self._ms.ms.keys())[0]].Init()
             poolchannels = ["scalar2_long", "spectrum2_short"]
             componentgroup = {"smycp": False, "smycp2": False,
@@ -6492,7 +6496,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
         try:
             simps2.setUp()
 
-            # db = PyTango.Database()
+            # db = tango.Database()
             self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             poolchannels = ["scalar2_long", "spectrum2_short", "client_long"]
@@ -6595,7 +6599,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
         try:
             simps2.setUp()
 
-            # db = PyTango.Database()
+            # db = tango.Database()
             self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             poolchannels = ["scalar2_long", "spectrum2_short", "client_long"]
@@ -6698,7 +6702,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
         try:
             simps2.setUp()
 
-            # db = PyTango.Database()
+            # db = tango.Database()
             self._ms.dps[list(self._ms.ms.keys())[0]].Init()
 
             poolchannels = ["scalar2_long", "spectrum2_short", "client_long"]
@@ -6801,7 +6805,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
         try:
             simps2.setUp()
 
-            # db = PyTango.Database()
+            # db = tango.Database()
             self._ms.dps[list(self._ms.ms.keys())[0]].Init()
             poolchannels = ["scalar2_long", "spectrum2_short", "client_long"]
             componentgroup = {"smycp": False, "smycp2": True,
@@ -6902,7 +6906,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
         try:
             simps2.setUp()
 
-            # db = PyTango.Database()
+            # db = tango.Database()
             self._ms.dps[list(self._ms.ms.keys())[0]].Init()
             poolchannels = ["scalar2_long", "spectrum2_short", "client_long"]
             componentgroup = {"smycp": False, "smycp2": True,
@@ -7003,7 +7007,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
         try:
             simps2.setUp()
 
-            # db = PyTango.Database()
+            # db = tango.Database()
             self._ms.dps[list(self._ms.ms.keys())[0]].Init()
             poolchannels = ["scalar2_long", "spectrum2_short", "client_long"]
             componentgroup = {"smycp": False, "smycp2": True,
@@ -7112,7 +7116,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
         try:
             simps2.setUp()
 
-            db = PyTango.Database()
+            db = tango.Database()
             db.put_device_property(list(self._ms.ms.keys())[0],
                                    {'PoolNames': self._pool.dp.name()})
             self._ms.dps[list(self._ms.ms.keys())[0]].Init()
@@ -7227,7 +7231,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
         try:
             simps2.setUp()
 
-            db = PyTango.Database()
+            db = tango.Database()
             db.put_device_property(list(self._ms.ms.keys())[0],
                                    {'PoolNames': self._pool.dp.name()})
             self._ms.dps[list(self._ms.ms.keys())[0]].Init()
@@ -7330,7 +7334,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
         try:
             simps2.setUp()
 
-            db = PyTango.Database()
+            db = tango.Database()
             db.put_device_property(list(self._ms.ms.keys())[0],
                                    {'PoolNames': self._pool.dp.name()})
             self._ms.dps[list(self._ms.ms.keys())[0]].Init()
@@ -7429,7 +7433,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
         try:
             simps2.setUp()
 
-            db = PyTango.Database()
+            db = tango.Database()
             db.put_device_property(list(self._ms.ms.keys())[0],
                                    {'PoolNames': self._pool.dp.name()})
             self._ms.dps[list(self._ms.ms.keys())[0]].Init()
@@ -7530,7 +7534,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
         ]
 
         try:
-            db = PyTango.Database()
+            db = tango.Database()
             simps2.setUp()
             db.put_device_alias(arr[0]["full_name"], arr[0]["name"])
             db.put_device_property(list(self._ms.ms.keys())[0],
@@ -7633,7 +7637,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
         ]
 
         try:
-            db = PyTango.Database()
+            db = tango.Database()
             simps2.setUp()
             db.put_device_alias(arr[0]["full_name"], arr[0]["name"])
             db.put_device_property(list(self._ms.ms.keys())[0],
@@ -7738,7 +7742,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
         ]
 
         try:
-            db = PyTango.Database()
+            db = tango.Database()
             simps2.setUp()
 
             db.put_device_alias(arr[0]["full_name"], arr[0]["name"])
@@ -7841,7 +7845,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
         ]
 
         try:
-            db = PyTango.Database()
+            db = tango.Database()
             simps2.setUp()
 
             db.put_device_alias(arr[0]["full_name"], arr[0]["name"])
@@ -7946,7 +7950,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
         ]
 
         try:
-            db = PyTango.Database()
+            db = tango.Database()
             simps2.setUp()
 
             db.put_device_alias(arr[0]["full_name"], arr[0]["name"])
@@ -8049,7 +8053,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
         # ]
 
         try:
-            # db = PyTango.Database()
+            # db = tango.Database()
             simps2.setUp()
 
             self._ms.dps[list(self._ms.ms.keys())[0]].Init()
@@ -8145,7 +8149,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
 
-        db = PyTango.Database()
+        db = tango.Database()
         db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
         self._ms.dps[list(self._ms.ms.keys())[0]].Init()
@@ -8154,7 +8158,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
         rs.door = val["Door"]
         rs.mntGrp = val["MntGrp"]
 
-        db = PyTango.Database()
+        db = tango.Database()
         db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
 
@@ -8193,7 +8197,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
 
-        db = PyTango.Database()
+        db = tango.Database()
         db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
         self._ms.dps[list(self._ms.ms.keys())[0]].Init()
@@ -8204,7 +8208,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
         rs.door = val["Door"]
         rs.mntGrp = val["MntGrp"]
 
-        db = PyTango.Database()
+        db = tango.Database()
         db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
 
@@ -8243,7 +8247,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
 
-        db = PyTango.Database()
+        db = tango.Database()
         db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
         self._ms.dps[list(self._ms.ms.keys())[0]].Init()
@@ -8254,7 +8258,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
         rs.door = val["Door"]
         rs.mntGrp = val["MntGrp"]
 
-        db = PyTango.Database()
+        db = tango.Database()
         db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
 
@@ -8298,7 +8302,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
                 "pooltestp09/testts/t2r228", "POOLTESTS2")
             tpool2.setUp()
 
-            db = PyTango.Database()
+            db = tango.Database()
             db.put_device_property(
                 list(self._ms.ms.keys())[0],
                 {'PoolNames': [
@@ -8379,7 +8383,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
                 "pooltestp09/testts/t2r228", "POOLTESTS2")
             tpool2.setUp()
 
-            db = PyTango.Database()
+            db = tango.Database()
             db.put_device_property(
                 list(self._ms.ms.keys())[0],
                 {'PoolNames': [
@@ -8462,7 +8466,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
                 "pooltestp09/testts/t2r228", "POOLTESTS2")
             tpool2.setUp()
 
-            db = PyTango.Database()
+            db = tango.Database()
             db.put_device_property(
                 list(self._ms.ms.keys())[0],
                 {'PoolNames': [
@@ -8552,7 +8556,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
                 "pooltestp09/testts/t2r228", "POOLTESTS2")
             tpool2.setUp()
 
-            db = PyTango.Database()
+            db = tango.Database()
             db.put_device_property(
                 list(self._ms.ms.keys())[0],
                 {'PoolNames': [
@@ -8654,7 +8658,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
 
-        db = PyTango.Database()
+        db = tango.Database()
         db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
         self._ms.dps[list(self._ms.ms.keys())[0]].Init()
@@ -8663,7 +8667,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
         rs.door = val["Door"]
         rs.mntGrp = val["MntGrp"]
 
-        db = PyTango.Database()
+        db = tango.Database()
         db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
 
@@ -8702,7 +8706,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
 
-        db = PyTango.Database()
+        db = tango.Database()
         db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
         self._ms.dps[list(self._ms.ms.keys())[0]].Init()
@@ -8713,7 +8717,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
         rs.door = val["Door"]
         rs.mntGrp = val["MntGrp"]
 
-        db = PyTango.Database()
+        db = tango.Database()
         db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
 
@@ -8751,7 +8755,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
 
-        db = PyTango.Database()
+        db = tango.Database()
         db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
         self._ms.dps[list(self._ms.ms.keys())[0]].Init()
@@ -8763,7 +8767,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
         rs.mntGrp = val["MntGrp"]
         self._cf.dp.SetCommandVariable(["DSDICT", json.dumps(self.smydss)])
 
-        db = PyTango.Database()
+        db = tango.Database()
         db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
 
@@ -8805,7 +8809,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
 
-        db = PyTango.Database()
+        db = tango.Database()
         db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
         self._ms.dps[list(self._ms.ms.keys())[0]].Init()
@@ -8816,7 +8820,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
         rs.door = val["Door"]
         rs.mntGrp = val["MntGrp"]
 
-        db = PyTango.Database()
+        db = tango.Database()
         db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
 
@@ -8861,7 +8865,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
                 "pooltestp09/testts/t2r228", "POOLTESTS2")
             tpool2.setUp()
 
-            db = PyTango.Database()
+            db = tango.Database()
             db.put_device_property(
                 list(self._ms.ms.keys())[0],
                 {'PoolNames': [
@@ -8941,7 +8945,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
                 "pooltestp09/testts/t2r228", "POOLTESTS2")
             tpool2.setUp()
 
-            db = PyTango.Database()
+            db = tango.Database()
             db.put_device_property(
                 list(self._ms.ms.keys())[0],
                 {'PoolNames': [
@@ -9023,7 +9027,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
                 "pooltestp09/testts/t2r228", "POOLTESTS2")
             tpool2.setUp()
 
-            db = PyTango.Database()
+            db = tango.Database()
             db.put_device_property(
                 list(self._ms.ms.keys())[0],
                 {'PoolNames': [
@@ -9106,7 +9110,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
                 "pooltestp09/testts/t2r228", "POOLTESTS2")
             tpool2.setUp()
 
-            db = PyTango.Database()
+            db = tango.Database()
             db.put_device_property(
                 list(self._ms.ms.keys())[0],
                 {'PoolNames': [
@@ -9185,7 +9189,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
 
-        db = PyTango.Database()
+        db = tango.Database()
         db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
         self._ms.dps[list(self._ms.ms.keys())[0]].Init()
@@ -9205,7 +9209,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
 
-        db = PyTango.Database()
+        db = tango.Database()
         db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
         self._ms.dps[list(self._ms.ms.keys())[0]].Init()
@@ -9214,7 +9218,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
         rs.door = val["Door"]
         rs.mntGrp = val["MntGrp"]
 
-        db = PyTango.Database()
+        db = tango.Database()
         db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
 
@@ -9251,7 +9255,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
                 "pooltestp09/testts/t2r228", "POOLTESTS2")
             tpool2.setUp()
 
-            db = PyTango.Database()
+            db = tango.Database()
             db.put_device_property(
                 list(self._ms.ms.keys())[0],
                 {'PoolNames': [
@@ -9315,7 +9319,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
                 "pooltestp09/testts/t2r228", "POOLTESTS2")
             tpool2.setUp()
 
-            db = PyTango.Database()
+            db = tango.Database()
             db.put_device_property(
                 list(self._ms.ms.keys())[0],
                 {'PoolNames': [
@@ -9378,7 +9382,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
 
-        db = PyTango.Database()
+        db = tango.Database()
         db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
         self._ms.dps[list(self._ms.ms.keys())[0]].Init()
@@ -9387,7 +9391,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
         rs.door = val["Door"]
         rs.mntGrp = val["MntGrp"]
 
-        db = PyTango.Database()
+        db = tango.Database()
         db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
 
@@ -9424,7 +9428,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
 
-        db = PyTango.Database()
+        db = tango.Database()
         db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
         self._ms.dps[list(self._ms.ms.keys())[0]].Init()
@@ -9433,7 +9437,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
         rs.door = val["Door"]
         rs.mntGrp = val["MntGrp"]
 
-        db = PyTango.Database()
+        db = tango.Database()
         db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
 
@@ -9469,7 +9473,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
 
-        db = PyTango.Database()
+        db = tango.Database()
         db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
         self._ms.dps[list(self._ms.ms.keys())[0]].Init()
@@ -9478,7 +9482,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
         rs.door = val["Door"]
         rs.mntGrp = val["MntGrp"]
 
-        db = PyTango.Database()
+        db = tango.Database()
         db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
 
@@ -9526,7 +9530,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
 
-        db = PyTango.Database()
+        db = tango.Database()
         db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
         self._ms.dps[list(self._ms.ms.keys())[0]].Init()
@@ -9549,7 +9553,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
 
             rs.profileFile = filename
 
-            db = PyTango.Database()
+            db = tango.Database()
             db.put_device_property(list(self._ms.ms.keys())[0],
                                    {'PoolNames': self._pool.dp.name()})
 
@@ -9644,7 +9648,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
 
-        db = PyTango.Database()
+        db = tango.Database()
         db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
         self._ms.dps[list(self._ms.ms.keys())[0]].Init()
@@ -9667,7 +9671,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
 
             rs.profileFile = filename
 
-            db = PyTango.Database()
+            db = tango.Database()
             db.put_device_property(list(self._ms.ms.keys())[0],
                                    {'PoolNames': self._pool.dp.name()})
 
@@ -9760,7 +9764,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
 
-        db = PyTango.Database()
+        db = tango.Database()
         db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
         self._ms.dps[list(self._ms.ms.keys())[0]].Init()
@@ -9786,7 +9790,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
 
             rs.profileFile = filename
 
-            db = PyTango.Database()
+            db = tango.Database()
             db.put_device_property(list(self._ms.ms.keys())[0],
                                    {'PoolNames': self._pool.dp.name()})
 
@@ -9865,7 +9869,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
 
-        db = PyTango.Database()
+        db = tango.Database()
         db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
         self._ms.dps[list(self._ms.ms.keys())[0]].Init()
@@ -9893,7 +9897,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
 
             rs.profileFile = filename
 
-            db = PyTango.Database()
+            db = tango.Database()
             db.put_device_property(list(self._ms.ms.keys())[0],
                                    {'PoolNames': self._pool.dp.name()})
 
@@ -9974,7 +9978,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
 
-        db = PyTango.Database()
+        db = tango.Database()
         db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
         self._ms.dps[list(self._ms.ms.keys())[0]].Init()
@@ -10002,7 +10006,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
 
             rs.profileFile = filename
 
-            db = PyTango.Database()
+            db = tango.Database()
             db.put_device_property(list(self._ms.ms.keys())[0],
                                    {'PoolNames': self._pool.dp.name()})
 
@@ -10091,7 +10095,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
                 "MSTESTS1TO3", [msname], doors)
             ms2.setUp()
 
-            db = PyTango.Database()
+            db = tango.Database()
             db.put_device_property(list(ms2.ms.keys())[0],
                                    {'PoolNames': self._pool.dp.name()})
             # print "KKKK", ms2.dps.keys()
@@ -10197,7 +10201,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
 
-        db = PyTango.Database()
+        db = tango.Database()
         db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
         self._ms.dps[list(self._ms.ms.keys())[0]].Init()
@@ -10221,7 +10225,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
 
             rs.profileFile = filename
 
-            db = PyTango.Database()
+            db = tango.Database()
             db.put_device_property(list(self._ms.ms.keys())[0],
                                    {'PoolNames': self._pool.dp.name()})
 
@@ -10308,7 +10312,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
 
-        db = PyTango.Database()
+        db = tango.Database()
         db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
         self._ms.dps[list(self._ms.ms.keys())[0]].Init()
@@ -10342,7 +10346,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
                 rs.profileConfiguration = profconf
 
                 rs.profileFile = filename
-                db = PyTango.Database()
+                db = tango.Database()
                 db.put_device_property(list(self._ms.ms.keys())[0],
                                        {'PoolNames': self._pool.dp.name()})
 
@@ -10427,7 +10431,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
 
-        db = PyTango.Database()
+        db = tango.Database()
         db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
         self._ms.dps[list(self._ms.ms.keys())[0]].Init()
@@ -10461,7 +10465,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
                 rs.profileConfiguration = profconf
 
                 rs.profileFile = filename
-                db = PyTango.Database()
+                db = tango.Database()
                 db.put_device_property(list(self._ms.ms.keys())[0],
                                        {'PoolNames': self._pool.dp.name()})
 
@@ -10551,7 +10555,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
-        db = PyTango.Database()
+        db = tango.Database()
         db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
         self._ms.dps[list(self._ms.ms.keys())[0]].Init()
@@ -10560,7 +10564,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
         rs.door = val["Door"]
         rs.mntGrp = val["MntGrp"]
 
-        db = PyTango.Database()
+        db = tango.Database()
         db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
 
@@ -10687,7 +10691,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
                "WriterDevice": self._wr.dp.name(),
                "Door": 'doortestp09/testts/t1r228',
                "MntGrp": 'nxsmntgrp'}
-        db = PyTango.Database()
+        db = tango.Database()
         db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
 
@@ -10697,7 +10701,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
         rs.door = val["Door"]
         rs.mntGrp = val["MntGrp"]
 
-        db = PyTango.Database()
+        db = tango.Database()
         db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
 
@@ -11092,7 +11096,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
 
         self.assertEqual(rs.availableMntGrps(), [])
 
-        db = PyTango.Database()
+        db = tango.Database()
         db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
         pool = self._pool.dp
@@ -11145,7 +11149,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
                 "pooltestp09/testts/t2r228", "POOLTESTS2")
             tpool2.setUp()
 
-            db = PyTango.Database()
+            db = tango.Database()
             db.put_device_property(
                 list(self._ms.ms.keys())[0],
                 {'PoolNames': [
@@ -11225,7 +11229,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
         self.assertEqual(rs.configDevice, val["ConfigDevice"])
         self.assertEqual(rs.door, val["Door"])
 
-        db = PyTango.Database()
+        db = tango.Database()
         db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
         pool = self._pool.dp
@@ -11287,7 +11291,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
                 "pooltestp09/testts/t2r228", "POOLTESTS2")
             tpool2.setUp()
 
-            db = PyTango.Database()
+            db = tango.Database()
             db.put_device_property(
                 list(self._ms.ms.keys())[0],
                 {
@@ -11435,7 +11439,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
             self.assertEqual(rs.configDevice, val["ConfigDevice"])
             self.assertEqual(rs.door, val["Door"])
 
-            db = PyTango.Database()
+            db = tango.Database()
             db.put_device_property(list(self._ms.ms.keys())[0],
                                    {'PoolNames': self._pool.dp.name()})
             pool = self._pool.dp
@@ -11508,7 +11512,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
         rs.writerDevice = val["WriterDevice"]
         self.assertEqual(rs.configDevice, val["ConfigDevice"])
         self.assertEqual(rs.door, val["Door"])
-        db = PyTango.Database()
+        db = tango.Database()
         db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
         pool = self._pool.dp
@@ -11578,7 +11582,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
             rs.writerDevice = val["WriterDevice"]
             self.assertEqual(rs.configDevice, val["ConfigDevice"])
             self.assertEqual(rs.door, val["Door"])
-            db = PyTango.Database()
+            db = tango.Database()
             db.put_device_property(list(self._ms.ms.keys())[0],
                                    {'PoolNames': self._pool.dp.name()})
             pool = self._pool.dp
@@ -11646,7 +11650,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
             rs.writerDevice = val["WriterDevice"]
             self.assertEqual(rs.configDevice, val["ConfigDevice"])
             self.assertEqual(rs.door, val["Door"])
-            db = PyTango.Database()
+            db = tango.Database()
             db.put_device_property(list(self._ms.ms.keys())[0],
                                    {'PoolNames': self._pool.dp.name()})
             pool = self._pool.dp
@@ -11724,7 +11728,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
             rs.writerDevice = val["WriterDevice"]
             self.assertEqual(rs.configDevice, val["ConfigDevice"])
             self.assertEqual(rs.door, val["Door"])
-            db = PyTango.Database()
+            db = tango.Database()
             db.put_device_property(list(self._ms.ms.keys())[0],
                                    {'PoolNames': self._pool.dp.name()})
             pool = self._pool.dp
@@ -11797,7 +11801,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
             rs.writerDevice = val["WriterDevice"]
             self.assertEqual(rs.configDevice, val["ConfigDevice"])
             self.assertEqual(rs.door, val["Door"])
-            db = PyTango.Database()
+            db = tango.Database()
             db.put_device_property(list(self._ms.ms.keys())[0],
                                    {'PoolNames': self._pool.dp.name()})
             pool = self._pool.dp
@@ -11870,7 +11874,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
             self.assertEqual(rs.configDevice, val["ConfigDevice"])
             self.assertEqual(rs.door, val["Door"])
 
-            db = PyTango.Database()
+            db = tango.Database()
             db.put_device_property(list(self._ms.ms.keys())[0],
                                    {'PoolNames': self._pool.dp.name()})
             pool = self._pool.dp
@@ -11953,7 +11957,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
         self.assertEqual(rs.configDevice, val["ConfigDevice"])
         self.assertEqual(rs.door, val["Door"])
 
-        db = PyTango.Database()
+        db = tango.Database()
         db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
         pool = self._pool.dp
@@ -11996,7 +12000,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
                 self.assertEqual(mp["MntGrp"], val["MntGrp"])
                 jpcnf = rs.updateMntGrp()
                 pcnf = json.loads(jpcnf)
-                mgdp = PyTango.DeviceProxy(tmg.new_device_info_writer.name)
+                mgdp = tango.DeviceProxy(tmg.new_device_info_writer.name)
                 jcnf = mgdp.Configuration
                 cnf = json.loads(jcnf)
                 mp = json.loads(rs.profileConfiguration)
@@ -12055,7 +12059,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
         self.assertEqual(rs.configDevice, val["ConfigDevice"])
         self.assertEqual(rs.door, val["Door"])
 
-        db = PyTango.Database()
+        db = tango.Database()
         db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
         pool = self._pool.dp
@@ -12165,7 +12169,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
 
                 jpcnf = rs.updateMntGrp()
                 pcnf = json.loads(jpcnf)
-                mgdp = PyTango.DeviceProxy(tmg.new_device_info_writer.name)
+                mgdp = tango.DeviceProxy(tmg.new_device_info_writer.name)
                 jcnf = mgdp.Configuration
                 cnf = json.loads(jcnf)
                 mp = json.loads(rs.profileConfiguration)
@@ -12223,7 +12227,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
         self.assertEqual(rs.configDevice, val["ConfigDevice"])
         self.assertEqual(rs.door, val["Door"])
 
-        db = PyTango.Database()
+        db = tango.Database()
         db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
         pool = self._pool.dp
@@ -12341,7 +12345,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
         self.assertEqual(rs.configDevice, val["ConfigDevice"])
         self.assertEqual(rs.door, val["Door"])
 
-        db = PyTango.Database()
+        db = tango.Database()
         db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
         pool = self._pool.dp
@@ -12458,7 +12462,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
         self.assertEqual(rs.configDevice, val["ConfigDevice"])
         self.assertEqual(rs.door, val["Door"])
 
-        db = PyTango.Database()
+        db = tango.Database()
         db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
         pool = self._pool.dp
@@ -12576,7 +12580,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
         self.assertEqual(rs.configDevice, val["ConfigDevice"])
         self.assertEqual(rs.door, val["Door"])
 
-        db = PyTango.Database()
+        db = tango.Database()
         db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
         pool = self._pool.dp
@@ -12697,7 +12701,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
 
                 jpcnf = rs.updateMntGrp()
                 pcnf = json.loads(jpcnf)
-                mgdp = PyTango.DeviceProxy(tmg.new_device_info_writer.name)
+                mgdp = tango.DeviceProxy(tmg.new_device_info_writer.name)
                 jcnf = mgdp.Configuration
                 cnf = json.loads(jcnf)
                 mp = json.loads(rs.profileConfiguration)
@@ -12812,7 +12816,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
         self.assertEqual(rs.configDevice, val["ConfigDevice"])
         self.assertEqual(rs.door, val["Door"])
 
-        db = PyTango.Database()
+        db = tango.Database()
         db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
         pool = self._pool.dp
@@ -12933,7 +12937,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
 
                 jpcnf = rs.updateMntGrp()
                 pcnf = json.loads(jpcnf)
-                mgdp = PyTango.DeviceProxy(tmg.new_device_info_writer.name)
+                mgdp = tango.DeviceProxy(tmg.new_device_info_writer.name)
                 jcnf = mgdp.Configuration
                 cnf = json.loads(jcnf)
                 mp = json.loads(rs.profileConfiguration)
@@ -13040,7 +13044,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
         self.assertEqual(rs.configDevice, val["ConfigDevice"])
         self.assertEqual(rs.door, val["Door"])
 
-        db = PyTango.Database()
+        db = tango.Database()
         db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
         pool = self._pool.dp
@@ -13201,7 +13205,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
 
                 jpcnf = rs.updateMntGrp()
                 pcnf = json.loads(jpcnf)
-                mgdp = PyTango.DeviceProxy(tmg.new_device_info_writer.name)
+                mgdp = tango.DeviceProxy(tmg.new_device_info_writer.name)
                 jcnf = mgdp.Configuration
                 cnf = json.loads(jcnf)
                 mp = json.loads(rs.profileConfiguration)
@@ -13315,7 +13319,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
         self.assertEqual(rs.configDevice, val["ConfigDevice"])
         self.assertEqual(rs.door, val["Door"])
 
-        db = PyTango.Database()
+        db = tango.Database()
         db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
         pool = self._pool.dp
@@ -13494,7 +13498,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
 
                     jpcnf = rs.updateMntGrp()
                     pcnf = json.loads(jpcnf)
-                    mgdp = PyTango.DeviceProxy(tmg.new_device_info_writer.name)
+                    mgdp = tango.DeviceProxy(tmg.new_device_info_writer.name)
                     jcnf = mgdp.Configuration
                     cnf = json.loads(jcnf)
                     mp = json.loads(rs.profileConfiguration)
@@ -13610,7 +13614,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
         self.assertEqual(rs.configDevice, val["ConfigDevice"])
         self.assertEqual(rs.door, val["Door"])
 
-        db = PyTango.Database()
+        db = tango.Database()
         db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
         pool = self._pool.dp
@@ -13825,7 +13829,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
 
                     jpcnf = rs.updateMntGrp()
                     pcnf = json.loads(jpcnf)
-                    mgdp = PyTango.DeviceProxy(tmg.new_device_info_writer.name)
+                    mgdp = tango.DeviceProxy(tmg.new_device_info_writer.name)
                     jcnf = mgdp.Configuration
                     cnf = json.loads(jcnf)
                     mp = json.loads(rs.profileConfiguration)
@@ -13954,7 +13958,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
         self.assertEqual(rs.configDevice, val["ConfigDevice"])
         self.assertEqual(rs.door, val["Door"])
 
-        db = PyTango.Database()
+        db = tango.Database()
         db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
         pool = self._pool.dp
@@ -14177,7 +14181,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
 
                     jpcnf = rs.updateMntGrp()
                     pcnf = json.loads(jpcnf)
-                    mgdp = PyTango.DeviceProxy(tmg.new_device_info_writer.name)
+                    mgdp = tango.DeviceProxy(tmg.new_device_info_writer.name)
                     jcnf = mgdp.Configuration
                     cnf = json.loads(jcnf)
                     mp = json.loads(rs.profileConfiguration)
@@ -14350,7 +14354,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
         self.assertEqual(rs.configDevice, val["ConfigDevice"])
         self.assertEqual(rs.door, val["Door"])
 
-        db = PyTango.Database()
+        db = tango.Database()
         db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
         pool = self._pool.dp
@@ -14360,7 +14364,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
         self.assertEqual(rs.availableMntGrps(), [])
 #        self.myAssertRaise(Exception, rs.updateMntGrp)
 
-        db = PyTango.Database()
+        db = tango.Database()
         db.put_device_property(list(self._ms.ms.keys())[0],
                                {'PoolNames': self._pool.dp.name()})
         pool = self._pool.dp
@@ -14595,7 +14599,7 @@ class BasicSettingsTest(Settings_test.SettingsTest):
                     # print "UPGRAGE MNT"
                     jpcnf = rs.updateMntGrp()
                     pcnf = json.loads(jpcnf)
-                    mgdp = PyTango.DeviceProxy(tmg.new_device_info_writer.name)
+                    mgdp = tango.DeviceProxy(tmg.new_device_info_writer.name)
                     jcnf = mgdp.Configuration
                     cnf = json.loads(jcnf)
                     mp = json.loads(rs.profileConfiguration)

@@ -31,18 +31,21 @@ def run(argv):
     :param argv: command-line arguments
     :type argv: :obj:`list` <:obj:`str`>
     """
-    import PyTango
+    try:
+        import tango
+    except Exception:
+        import PyTango as tango
     from .NXSConfig import NXSRecSelector as NXSRecConfig
     from .NXSConfig import NXSRecSelectorClass as NXSRecConfigClass
     try:
-        py = PyTango.Util(argv)
+        py = tango.Util(argv)
         py.add_class(NXSRecConfigClass, NXSRecConfig)
 
-        U = PyTango.Util.instance()
+        U = tango.Util.instance()
         U.server_init()
         U.server_run()
 
-    except PyTango.DevFailed as e:
+    except tango.DevFailed as e:
         print('-------> Received a DevFailed exception: %s' % e)
     except Exception as e:
         print('-------> An unforeseen exception occured.... %s' % e)

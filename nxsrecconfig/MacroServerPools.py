@@ -20,8 +20,13 @@
 """  Selection state """
 
 import json
-import PyTango
 import sys
+
+try:
+    import tango
+except Exception:
+    import PyTango as tango
+
 
 from .Utils import (
     Utils, TangoUtils, MSUtils, PoolUtils, OldTangoError, PYTG_BUG_213)
@@ -51,15 +56,15 @@ class MacroServerPools(object):
         """
         self.__numberOfThreads = numberOfThreads
 
-        #: (:class:`PyTango.Database`) tango database
-        self.__db = PyTango.Database()
+        #: (:class:`tango.Database`) tango database
+        self.__db = tango.Database()
 
         #: (:obj:`str`) nexus configuration variable name in ms
         self.__nxsenv = "NeXusConfiguration"
 
         #: (:obj:`str`) macro server device name
         self.__macroserver = ""
-        #: (:obj:`list` <:obj:`PyTango.DeviceProxy`>) pool instances
+        #: (:obj:`list` <:obj:`tango.DeviceProxy`>) pool instances
         self.__pools = []
         #: (:obj:`list` <:obj:`str`>) black list of pools
         self.poolBlacklist = []
@@ -93,7 +98,7 @@ class MacroServerPools(object):
             raise Exception("Door '%s' cannot be found" % door)
         if ":" in door.split("/")[0] and len(door.split("/")) > 1:
             host, port = door.split("/")[0].split(":")
-            db = PyTango.Database(host, int(port))
+            db = tango.Database(host, int(port))
             macroserver = MSUtils.getMacroServer(db, door)
         else:
             macroserver = MSUtils.getMacroServer(self.__db, door)
@@ -128,7 +133,7 @@ class MacroServerPools(object):
         :param door: door device name
         :type door: :obj:`str`
         :returns: pool device proxies
-        :rtype: :obj:`list` <:obj:`PyTango.DeviceProxy`>
+        :rtype: :obj:`list` <:obj:`tango.DeviceProxy`>
         """
         if not self.__pools:
             self.updateMacroServer(door)
@@ -140,7 +145,7 @@ class MacroServerPools(object):
         """ prepares list of channels to check
 
         :param configdevice: configuration device proxy
-        :type configdevice: :class:`PyTango.DeviceProxy` \
+        :type configdevice: :class:`tango.DeviceProxy` \
              or :class:`nxsconfigserver.XMLConfigurator.XMLConfigurator`
         :param discomponentgroup: name dictionary of checker items
         :type discomponentgroup: :obj:`dict` <:obj:`str` ,
@@ -257,7 +262,7 @@ class MacroServerPools(object):
         :param door: door device name
         :type door: :obj:`str`
         :param configdevice: configuration server
-        :type configdevice: :class:`PyTango.DeviceProxy` \
+        :type configdevice: :class:`tango.DeviceProxy` \
              or :class:`nxsconfigserver.XMLConfigurator.XMLConfigurator`
         :param channels: pool channels
         :type channels: :obj:`list` <:obj:`str`>
@@ -351,8 +356,8 @@ class MacroServerPools(object):
             doors = msp.doorList
             for door in doors:
                 try:
-                    dp = PyTango.DeviceProxy(door)
-                    if dp.state() == PyTango.DevState.RUNNING:
+                    dp = tango.DeviceProxy(door)
+                    if dp.state() == tango.DevState.RUNNING:
                         status = True
                         break
                 except Exception as e:
@@ -378,7 +383,7 @@ class MacroServerPools(object):
         msp = TangoUtils.openProxy(self.getMacroServer(door))
         if PYTG_BUG_213:
             raise OldTangoError(
-                "Reading Encoded Attributes not supported in PyTango < 9.2.5")
+                "Reading Encoded Attributes not supported in tango < 9.2.5")
         rec = msp.Environment
         nenv = {}
         vl = None
@@ -415,7 +420,7 @@ class MacroServerPools(object):
         msp = TangoUtils.openProxy(self.getMacroServer(door))
         if PYTG_BUG_213:
             raise OldTangoError(
-                "Reading Encoded Attributes not supported in PyTango < 9.2.5")
+                "Reading Encoded Attributes not supported in tango < 9.2.5")
         rec = msp.Environment
         if rec[0] == 'pickle':
             dc = Utils.pickleloads(rec[1])
@@ -464,7 +469,7 @@ class MacroServerPools(object):
         if PYTG_BUG_213:
             raise OldTangoError(
                 "Reading Encoded Attributes not supported in "
-                "PyTango < 9.2.5")
+                "tango < 9.2.5")
         rec = msp.Environment
         if rec[0] == 'pickle':
             dc = Utils.pickleloads(rec[1])
@@ -489,7 +494,7 @@ class MacroServerPools(object):
         if PYTG_BUG_213:
             raise OldTangoError(
                 "Reading Encoded Attributes not supported in "
-                "PyTango < 9.2.5")
+                "tango < 9.2.5")
         rec = msp.Environment
         if rec[0] == 'pickle':
             dc = Utils.pickleloads(rec[1])

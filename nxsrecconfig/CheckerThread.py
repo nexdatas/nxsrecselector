@@ -19,9 +19,13 @@
 
 """  Component CheckerThread - thread which checks tango server attributes"""
 
-import PyTango
 import threading
 import sys
+
+try:
+    import tango
+except Exception:
+    import PyTango as tango
 
 from .Utils import TangoUtils, Utils
 
@@ -130,21 +134,21 @@ class CheckerThread(threading.Thread):
                     dvat = "%s/%s" % (ds.device or ds.name, ds.attr)
                 else:
                     dvat = "%s" % (ds.device or ds.name)
-                dp = PyTango.DeviceProxy(ds.device or ds.name)
+                dp = tango.DeviceProxy(ds.device or ds.name)
                 # read real value (not polled)
-                dp.set_source(PyTango.DevSource.DEV)
+                dp.set_source(tango.DevSource.DEV)
                 # wait when DeviceProxy is ready
                 TangoUtils.wait(dp, state=None)
                 dp.set_timeout_millis(10000)
                 state = dp.state()
-                if state in [PyTango.DevState.FAULT,
-                             PyTango.DevState.DISABLE]:
+                if state in [tango.DevState.FAULT,
+                             tango.DevState.DISABLE]:
                     raise FaultStateError("%s STATE" % state)
-                if state in [PyTango.DevState.OFF,
-                             PyTango.DevState.INIT,
-                             PyTango.DevState.INSERT,
-                             PyTango.DevState.CLOSE,
-                             PyTango.DevState.UNKNOWN]:
+                if state in [tango.DevState.OFF,
+                             tango.DevState.INIT,
+                             tango.DevState.INSERT,
+                             tango.DevState.CLOSE,
+                             tango.DevState.UNKNOWN]:
                     raise OffStateError("%s STATE" % state)
                 dp.ping()
                 if not ds.attr:
@@ -163,7 +167,7 @@ class CheckerThread(threading.Thread):
                     v = dp.read_attributes([ds.attr])
                     if v[0].has_failed or v[0].value is None:
                         raise Exception("Empty Attribute")
-                if state in [PyTango.DevState.ALARM]:
+                if state in [tango.DevState.ALARM]:
                     raise AlarmStateError("ALARM STATE")
             except AlarmStateError:
                 checkeritem.message = "ALARM_STATE"

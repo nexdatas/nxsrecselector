@@ -22,9 +22,12 @@
 import os
 import sys
 import subprocess
-
-import PyTango
 import time
+
+try:
+    import tango
+except Exception:
+    import PyTango as tango
 
 try:
     import TestPool2
@@ -41,7 +44,7 @@ class TestPool2SetUp(object):
     def __init__(self, device="pooltestp09/testts/t1r228",
                  instance="POOLTESTS1"):
         # information about tango writer
-        self.new_device_info_writer = PyTango.DbDevInfo()
+        self.new_device_info_writer = tango.DbDevInfo()
         # information about tango writer class
         self.new_device_info_writer._class = "Pool"
         # information about tango writer server
@@ -64,14 +67,14 @@ class TestPool2SetUp(object):
         self.start()
 
     def add(self):
-        db = PyTango.Database()
+        db = tango.Database()
         db.add_device(self.new_device_info_writer)
         db.add_server(self.new_device_info_writer.server,
                       self.new_device_info_writer)
 
     # starts server
     def start(self):
-        db = PyTango.Database()
+        db = tango.Database()
         path = os.path.dirname(TestPool2.__file__)
         if not path:
             path = '.'
@@ -102,9 +105,9 @@ class TestPool2SetUp(object):
                     time.sleep(0.01)
                     cnt += 1
                     continue
-                self.dp = PyTango.DeviceProxy(dvname)
+                self.dp = tango.DeviceProxy(dvname)
                 time.sleep(0.01)
-                if self.dp.state() == PyTango.DevState.ON:
+                if self.dp.state() == tango.DevState.ON:
                     found = True
             except Exception:
                 found = False
@@ -119,7 +122,7 @@ class TestPool2SetUp(object):
         self.stop()
 
     def delete(self):
-        db = PyTango.Database()
+        db = tango.Database()
         db.delete_server(self.new_device_info_writer.server)
 
     # stops server

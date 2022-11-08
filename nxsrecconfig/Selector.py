@@ -20,7 +20,12 @@
 """  Selection state """
 
 import json
-import PyTango
+
+try:
+    import tango
+except Exception:
+    import PyTango as tango
+
 # import getpass
 from os.path import expanduser
 from .Utils import TangoUtils, PoolUtils, Utils
@@ -75,8 +80,8 @@ class Selector(object):
         #: (:obj:`str`) selection dictionary with Settings
         self.__version = version
 
-        #: (:class:`PyTango.Database`) tango database
-        self.__db = PyTango.Database()
+        #: (:class:`tango.Database`) tango database
+        self.__db = tango.Database()
 
         #: (:obj:`str`) module label
         self.moduleLabel = 'module'
@@ -313,7 +318,7 @@ class Selector(object):
         """ provides pool proxies
 
         :returns: list of pool proxies
-        :rtype: :obj:`list` <:obj:`PyTango.DeviceProxy`>
+        :rtype: :obj:`list` <:obj:`tango.DeviceProxy`>
         """
         return self.__msp.getPools(self["Door"])
 
@@ -339,7 +344,7 @@ class Selector(object):
         """ sets config instances
 
         :returns: set config instance
-        :rtype: :class:`PyTango.DeviceProxy` \
+        :rtype: :class:`tango.DeviceProxy` \
              or :class:`nxsconfigserver.XMLConfigurator.XMLConfigurator`
         """
         configDevice = None
